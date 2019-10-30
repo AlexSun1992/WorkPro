@@ -1,13 +1,21 @@
 <template>
-    $END$
+  <div>
+    <p>Hi from {{ name }}</p>
+    <NLink to="/">
+      Home page
+    </NLink>
+  </div>
 </template>
 
 <script>
   export default {
-    name: 'about'
+    asyncData () {
+      return {
+        name: process.static ? 'static' : (process.server ? 'server' : 'client')
+      }
+    },
+    head: {
+      title: 'About page'
+    }
   }
 </script>
-
-<style scoped>
-
-</style>
