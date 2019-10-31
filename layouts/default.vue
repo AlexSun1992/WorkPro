@@ -13,6 +13,8 @@
   </div>
 </template>
 <script>
+  import ruMessages from 'devextreme/localization/messages/ru.json';
+  import { locale, loadMessages, formatMessage } from "devextreme/localization";
   import nav from './menu'
   import Header from '~/components/Header/Header';
   import Footer from '~/components/Footer';
@@ -28,6 +30,10 @@
       return {
         nav: nav.items
       }
+    },
+    created () {
+      loadMessages(ruMessages);
+      locale('ru');
     },
     computed: {
       name () {
