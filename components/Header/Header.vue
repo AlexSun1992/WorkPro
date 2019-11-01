@@ -8,15 +8,20 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <b-navbar-nav class="d-md-down-none">
-      <b-nav-item class="px-3">Dashboard</b-nav-item>
-      <b-nav-item class="px-3">Users</b-nav-item>
-      <b-nav-item class="px-3">Settings</b-nav-item>
+      <NLink class="px-3" to="/">
+        Главная
+      </NLink>
+      <NLink class="px-3" to="/about">
+        О компании
+      </NLink>
+      <NLink class="px-3" to="/calculator">
+        Калькулятор
+      </NLink>
+      <NLink class="px-3" to="/feedback">
+        Обратная связь
+      </NLink>
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto">
-      <b-nav-item class="d-md-down-none">
-        <i class="icon-bell"></i>
-        <b-badge pill variant="danger">5</b-badge>
-      </b-nav-item>
       <b-nav-item class="d-md-down-none">
         <i class="icon-list"></i>
       </b-nav-item>
@@ -25,9 +30,6 @@
       </b-nav-item>
       <HeaderDropdown/>
     </b-navbar-nav>
-    <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" @click="asideToggle">
-      <span class="navbar-toggler-icon"></span>
-    </button>
   </header>
 </template>
 

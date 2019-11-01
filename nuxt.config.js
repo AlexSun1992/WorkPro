@@ -58,7 +58,9 @@ module.exports = {
   },
   proxy: {
     // Simple proxy
-    '/free': 'http://172.17.0.33:8080'
+    '/wp-json': 'http://192.168.200.89:8080',
+    '/free': 'http://172.17.0.33:8080',
+
   },
   server: {
     port: 8000, // default: 3000

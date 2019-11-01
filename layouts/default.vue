@@ -21,6 +21,9 @@
   import Sidebar from '~/components/Sidebar/Sidebar';
   export default {
     name: 'full',
+    head: {
+      title: 'РЕСО-Гарантия'
+    },
     components: {
       Header,
       Sidebar,
@@ -34,14 +37,6 @@
     created () {
       loadMessages(ruMessages);
       locale('ru');
-    },
-    computed: {
-      name () {
-        return this.$route.name
-      },
-      list () {
-        return this.$route.matched
-      }
     }
   }
 </script>

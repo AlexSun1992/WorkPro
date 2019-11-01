@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import MyPage from '~/components/Logo'
-import About from '~/components/about'
+import Main from '~/components/Main'
+import About from '~/components/About'
 
 Vue.use(Router)
 
@@ -12,7 +12,7 @@ export function createRouter() {
     routes: [
       {
         path: '/',
-        component: MyPage
+        component: Main
       },
       {
         path: '/about',
