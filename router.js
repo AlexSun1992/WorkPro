@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Main from '~/components/Main'
-import About from '~/components/About'
+import Main from '~/components/Pages/Main'
+import About from '~/components/Pages/About'
+import Feedback from '~/components/Pages/Feedback'
+import Calculator from '~/components/Pages/Calculator'
 
 Vue.use(Router)
 
@@ -11,12 +13,24 @@ export function createRouter() {
     mode: 'history',
     routes: [
       {
+        meta: 'Главная',
         path: '/',
         component: Main
       },
       {
+        meta: 'О компании',
         path: '/about',
         component: About
+      },
+      {
+        meta: 'Обратная связь',
+        path: '/feedback',
+        component: Feedback
+      },
+      {
+        meta: 'Калькулятор',
+        path: '/calculator',
+        component: Calculator
       }
     ]
   })

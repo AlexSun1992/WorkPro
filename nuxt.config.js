@@ -9,7 +9,7 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: '' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -23,6 +23,12 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    /* Import Font Awesome Icons Set */
+    '~/node_modules/flag-icon-css/css/flag-icon.min.css',
+    /* Import Font Awesome Icons Set */
+    '~/node_modules/font-awesome/css/font-awesome.min.css',
+    /* Import Simple Line Icons Set */
+    '~/node_modules/simple-line-icons/css/simple-line-icons.css',
     { src: '~/assets/scss/style.scss', lang: 'scss' }
   ],
   /*

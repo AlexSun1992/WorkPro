@@ -4,6 +4,7 @@
     <div class="app-body">
       <Sidebar :navItems="nav"/>
       <main class="main">
+        <breadcrumb :list="list"/>
         <div class="container-fluid">
           <nuxt />
         </div>
@@ -13,12 +14,11 @@
   </div>
 </template>
 <script>
-  import ruMessages from 'devextreme/localization/messages/ru.json';
-  import { locale, loadMessages, formatMessage } from "devextreme/localization";
   import nav from './menu'
   import Header from '~/components/Header/Header';
   import Footer from '~/components/Footer';
   import Sidebar from '~/components/Sidebar/Sidebar';
+  import Breadcrumb from '~/components/Breadcrumb';
   export default {
     name: 'full',
     head: {
@@ -27,16 +27,21 @@
     components: {
       Header,
       Sidebar,
-      Footer
+      Footer,
+      Breadcrumb
     },
     data () {
       return {
         nav: nav.items
       }
     },
-    created () {
-      loadMessages(ruMessages);
-      locale('ru');
+    computed: {
+      name () {
+        return this.$route.name
+      },
+      list () {
+        return this.$route.matched
+      }
     }
   }
 </script>

@@ -22,7 +22,7 @@
       return {content:data.content.rendered}
     },
     head: {
-      title: 'О компании'
+      title: 'РЕСО-Гарантия'
     }
   }
 </script>
