@@ -15,10 +15,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
   export default {
-    async asyncData () {
-      const {data} = await axios.get('http://192.168.200.89:8080/wp-json/wp/v2/pages/74')
+    async asyncData ({ $axios }) {
+      const data = await $axios.$get('/wp-json/wp/v2/pages/74')
       return {content:data.content.rendered}
     },
     head: {

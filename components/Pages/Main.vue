@@ -19,10 +19,16 @@
   export default {
     async asyncData () {
       const {data} = await axios.get('http://192.168.200.89:8080/wp-json/wp/v2/posts/14')
-      return {content:data.content.rendered}
+      return {title:data.title.rendered, content:data.content.rendered}
     },
-    head: {
-      title: 'РЕСО-Гарантия'
+    head () {
+      return {
+        title: this.title,
+        meta: [
+          // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+          { hid: 'description', name: 'description', content: 'My custom description' }
+        ]
+      }
     }
   }
 </script>

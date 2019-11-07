@@ -49,7 +49,9 @@ module.exports = {
   */
   modules: [
     // Doc: https://bootstrap-vue.js.org
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
+    ['@nuxtjs/axios', { proxy: true }],
+    '@nuxtjs/auth'
   ],
   /*
   ** Build configuration
@@ -66,7 +68,40 @@ module.exports = {
     // Simple proxy
     '/wp-json': 'http://192.168.200.89:8080',
     '/free': 'http://172.17.0.33:8080',
+    '/am': 'http://172.17.0.33:8080',
 
+  },
+  auth: {
+    strategies: {
+      local: {
+        _scheme: 'refresh',
+        autoRefresh: {
+          enable: true
+        },
+        token: {
+          property: 'ACCESS_TOKEN',
+          maxAge: 5
+        },
+        refreshToken: {
+          property: 'REFRESH_TOKEN'
+        },
+        user: '',
+        endpoints: {
+          login: { url: '/am/auth/v2/authorize', method: 'get' },
+          refresh: { url: '/am/auth/v2/token_refresh', method: 'post' },
+          user: { url: '/am/main/v2/userinfo', method: 'get' },
+          logout: false
+        }
+      }
+    },
+    resetOnError: true,
+    fullPathRedirect: false,
+    redirect: {
+      login: false,
+      logout: false,
+      home: false,
+      user: false,
+    }
   },
   server: {
     port: 8000, // default: 3000

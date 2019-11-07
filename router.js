@@ -15,7 +15,7 @@ export function createRouter() {
       {
         meta: 'Главная',
         path: '/',
-        component: Main
+        component: Main,
       },
       {
         meta: 'О компании',
