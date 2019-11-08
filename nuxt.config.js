@@ -78,9 +78,14 @@ module.exports = {
         autoRefresh: {
           enable: true
         },
+        dataRefreshToken: 'REFRESH_TOKEN',
+        clientId: false,
+        dataClientId: false,
+        grantType: false,
+        dataGrantType: false,
         token: {
           property: 'ACCESS_TOKEN',
-          maxAge: 5
+          maxAge: 1800
         },
         refreshToken: {
           property: 'REFRESH_TOKEN'
@@ -88,7 +93,7 @@ module.exports = {
         user: '',
         endpoints: {
           login: { url: '/am/auth/v2/authorize', method: 'get' },
-          refresh: { url: '/am/auth/v2/token_refresh', method: 'post' },
+          refresh: { url: '/am/auth/v2/token_update', method: 'post' },
           user: { url: '/am/main/v2/userinfo', method: 'get' },
           logout: false
         }

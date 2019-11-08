@@ -1,40 +1,37 @@
 <template>
-      <b-nav-item-dropdown right no-caret>
-        <template slot="button-content">
-          <img src="~static/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-        </template>
-        <b-dropdown-header tag="div" class="text-center"><strong>Account</strong></b-dropdown-header>
-        <b-dropdown-item><i class="fa fa-bell-o"></i> Updates<b-badge variant="info">{{itemsCount}}</b-badge></b-dropdown-item>
-        <b-dropdown-item><i class="fa fa-envelope-o"></i> Messages<b-badge variant="success">{{itemsCount}}</b-badge></b-dropdown-item>
-        <b-dropdown-item><i class="fa fa-tasks"></i> Tasks<b-badge variant="danger">{{itemsCount}}</b-badge></b-dropdown-item>
-        <b-dropdown-item><i class="fa fa-comments"></i> Comments<b-badge variant="warning">{{itemsCount}}</b-badge></b-dropdown-item>
-        <b-dropdown-header tag="div" class="text-center"><strong>Settings</strong></b-dropdown-header>
-        <b-dropdown-item><i class="fa fa-user"></i> Profile</b-dropdown-item>
-        <b-dropdown-item><i class="fa fa-wrench"></i> Settings</b-dropdown-item>
-        <b-dropdown-item><i class="fa fa-usd"></i> Payments<b-badge variant="secondary">{{itemsCount}}</b-badge></b-dropdown-item>
-        <b-dropdown-item><i class="fa fa-file"></i> Projects<b-badge variant="primary">{{itemsCount}}</b-badge></b-dropdown-item>
-        <b-dropdown-divider></b-dropdown-divider>
-        <b-dropdown-item><i class="fa fa-shield"></i> Lock Account</b-dropdown-item>
-        <b-dropdown-item @click="logout"><i class="fa fa-lock"></i> Logout</b-dropdown-item>
-      </b-nav-item-dropdown>
+  <div>
+    <b-button v-if="!isAuthenticated" size="bg" class="my-2 my-sm-0" type="submit"  variant="success">Войти</b-button>
+    <b-nav-item-dropdown v-else right no-caret variant="primary">
+      <template slot="button-content">
+        <header-user-name :user-data="loggedInUser"></header-user-name>
+      </template>
+      <b-dropdown-item @click="goInCabinet"><i class="fa fa-home"></i> Личный кабинет</b-dropdown-item>
+      <b-dropdown-item @click="logout"><i class="fa fa-lock"></i> Выход</b-dropdown-item>
+    </b-nav-item-dropdown>
+  </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+  import HeaderUserName from './HeaderUserName'
   export default {
     name: 'header-dropdown',
-    data: () => {
-      return { itemsCount: 42 }
-    },
+    components: {HeaderUserName},
     methods: {
       async logout() {
         try {
-          this.$store.dispatch('logout').then(() => {
-            this.$router.push('/login')
-          })
+          this.$auth.logout()
+          this.$router.push('/')
         } catch (e) {
-          this.formError = e.message
+          console.log(e)
         }
+      },
+      goInCabinet() {
+        this.$router.push('/cabinet')
       }
+    },
+    computed: {
+      ...mapGetters(['isAuthenticated','loggedInUser']),
     }
   }
 </script>

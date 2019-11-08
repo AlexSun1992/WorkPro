@@ -6,6 +6,10 @@ import About from '~/components/Pages/About'
 import Feedback from '~/components/Pages/Feedback'
 import Calculator from '~/components/Pages/Calculator'
 
+import Cabinet from '~/components/Pages/Cabinet/Full'
+import Profile from '~/components/Pages/Cabinet/Profile'
+import RegPolicy from '~/components/Pages/Cabinet/RegPolicy'
+
 Vue.use(Router)
 
 export function createRouter() {
@@ -31,6 +35,24 @@ export function createRouter() {
         meta: 'Калькулятор',
         path: '/calculator',
         component: Calculator
+      },
+      {
+        meta: 'Кабинет',
+        path: '/cabinet',
+        component: Cabinet,
+        redirect: '/cabinet/profile',
+        children: [
+          {
+            meta: 'Профиль',
+            path: 'profile',
+            component: Profile
+          },
+          {
+            meta: 'Оформление полиса',
+            path: 'reg-policy/:calcId',
+            component: RegPolicy
+          }
+        ]
       }
     ]
   })

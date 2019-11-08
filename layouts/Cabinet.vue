@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-  import nav from './menu'
+  import nav from './cabinet-menu'
   import Header from '~/components/Header/Header';
   import Footer from '~/components/Footer';
   import Sidebar from '~/components/Sidebar/Sidebar';

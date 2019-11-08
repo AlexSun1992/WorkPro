@@ -21,13 +21,7 @@
         Обратная связь
       </NLink>
     </b-navbar-nav>
-    <b-navbar-nav class="ml-auto">
-      <b-nav-item class="d-md-down-none">
-        <i class="icon-list"></i>
-      </b-nav-item>
-      <b-nav-item class="d-md-down-none">
-        <i class="icon-location-pin"></i>
-      </b-nav-item>
+    <b-navbar-nav class="ml-auto header-dropdown-button">
       <HeaderDropdown/>
     </b-navbar-nav>
   </header>
@@ -61,3 +55,8 @@
     }
   }
 </script>
+<style scoped>
+.header-dropdown-button {
+  padding-right: 40px;
+}
+</style>
