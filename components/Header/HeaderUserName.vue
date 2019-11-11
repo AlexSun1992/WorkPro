@@ -1,5 +1,5 @@
 <template>
-    <div>{{user}}</div>
+    <div>{{user}} <i class="fa fa-chevron-down" aria-hidden="true"></i></div>
 </template>
 
 <script>
@@ -12,8 +12,7 @@
     },
     computed: {
       user () {
-        console.log(this.userData)
-        return this.userData[0]._data[0]['SFIRSTNAME'];
+        return `${this.userData[0]._data[0]['SFIRSTNAME']} ${this.userData[0]._data[0]['SSECONDNAME']}`;
       }
     }
   }

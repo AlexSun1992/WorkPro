@@ -1,6 +1,7 @@
 <template>
   <div>
-    <b-button v-if="!isAuthenticated" size="bg" class="my-2 my-sm-0" type="submit"  variant="success">Войти</b-button>
+    <LoginModal  ref="refLogin"/>
+    <b-button v-if="!isAuthenticated" v-on:click="login" size="bg" class="my-2 my-sm-0" type="submit"  variant="success">Войти</b-button>
     <b-nav-item-dropdown v-else right no-caret variant="primary">
       <template slot="button-content">
         <header-user-name :user-data="loggedInUser"></header-user-name>
@@ -14,11 +15,15 @@
 <script>
   import { mapGetters } from 'vuex';
   import HeaderUserName from './HeaderUserName'
+  import LoginModal from '../Login/LoginModal'
   export default {
     name: 'header-dropdown',
-    components: {HeaderUserName},
+    components: {HeaderUserName, LoginModal},
     methods: {
-      async logout() {
+      login () {
+        this.$refs['refLogin'].showLoginModal()
+      },
+      logout() {
         try {
           this.$auth.logout()
           this.$router.push('/')
@@ -27,7 +32,7 @@
         }
       },
       goInCabinet() {
-        this.$router.push('/cabinet')
+       this.$router.push('/cabinet')
       }
     },
     computed: {

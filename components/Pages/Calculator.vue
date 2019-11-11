@@ -1,16 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="animated fadeIn">
-      <b-modal ref="auth-modal"  title="Авторизация" cancel-title="Отмена" @ok="login" no-fade>
-        <div class="form-group">
-          <label>Телефон</label>
-          <input v-model="user.login"  type="tel" class="form-control"  placeholder="Введите 10 цифр Вашего телефона">
-        </div>
-        <div class="form-group">
-          <label>Пароль</label>
-          <input v-model="user.password" type="password" class="form-control"  placeholder="Пароль">
-        </div>
-      </b-modal>
+      <LoginModal :on-auth="regPolicy" ref="refLogin"/>
       <b-row>
         <b-col lg="12">
           <b-card>
@@ -47,8 +38,10 @@
 
 <script>
   import { mapGetters } from 'vuex';
+  import LoginModal from '../Login/LoginModal'
   export default {
     name: 'Calculator',
+    components: {LoginModal},
     head: {
       title: 'Калькулятор'
     },
@@ -70,19 +63,7 @@
       ...mapGetters(['isAuthenticated'])
     },
     methods: {
-      async login() {
-        try {
-          let password = this.user.login + ':' + `{mode:2, pass: "${this.user.password}"}`
-          var basicAuth = 'Basic ' + btoa(password)
-          await this.$auth.loginWith('local', {
-            headers: { 'Authorization': basicAuth }
-          });
-          this.regPolicy()
-        } catch (e) {
-          console.log(e)
-        }
-      },
-      async calculate() {
+      calculate() {
         let min = Math.ceil(5000);
         let max = Math.floor(1000);
         this.calcId =  Math.floor(Math.random() * (max - min)) + min
@@ -90,7 +71,7 @@
       },
       regPolicy() {
         if(!this.isAuthenticated){
-          this.$refs['auth-modal'].show()
+          this.$refs['refLogin'].showLoginModal()
         }
         else{
           this.$router.push(`/cabinet/reg-policy/${this.calcId}`)

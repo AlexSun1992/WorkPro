@@ -4,7 +4,7 @@
       <b-row>
         <b-col lg="12">
           <b-card>
-           Профиль
+            Агенты
           </b-card>
         </b-col>
       </b-row>
@@ -14,7 +14,7 @@
 
 <script>
   export default {
-    name: 'Profile'
+    name: 'Agents'
   }
 </script>
 

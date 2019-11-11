@@ -9,6 +9,8 @@ import Calculator from '~/components/Pages/Calculator'
 import Cabinet from '~/components/Pages/Cabinet/Full'
 import Profile from '~/components/Pages/Cabinet/Profile'
 import RegPolicy from '~/components/Pages/Cabinet/RegPolicy'
+import Policies from '~/components/Pages/Cabinet/Policies'
+import Agents from '~/components/Pages/Cabinet/Agents'
 
 Vue.use(Router)
 
@@ -46,6 +48,16 @@ export function createRouter() {
             meta: 'Профиль',
             path: 'profile',
             component: Profile
+          },
+          {
+            meta: 'Полисы',
+            path: 'policies',
+            component: Policies
+          },
+          {
+            meta: 'Агенты',
+            path: 'agents',
+            component: Agents
           },
           {
             meta: 'Оформление полиса',
