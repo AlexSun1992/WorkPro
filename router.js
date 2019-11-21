@@ -42,7 +42,7 @@ export function createRouter() {
         meta: 'Кабинет',
         path: '/cabinet',
         component: Cabinet,
-        redirect: '/cabinet/profile',
+        redirect: '/cabinet/policies',
         children: [
           {
             meta: 'Профиль',

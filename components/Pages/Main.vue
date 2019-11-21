@@ -21,8 +21,8 @@
   import axios from 'axios'
   import { mapGetters } from 'vuex';
   export default {
-    async asyncData () {
-      const {data} = await axios.get('http://192.168.200.89:8080/wp-json/wp/v2/posts/14')
+    async asyncData ({ $axios }) {
+      const data = await  $axios.$get('/wp-json/wp/v2/posts/14')
       return {title:data.title.rendered, content:data.content.rendered}
     },
     head () {

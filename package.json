@@ -33,7 +33,8 @@
     "sass-loader": "^8.0.0",
     "simple-line-icons": "^2.4.1",
     "stylus": "^0.54.7",
-    "stylus-loader": "^3.0.2"
+    "stylus-loader": "^3.0.2",
+    "v-runtime-template": "^1.9.0"
   },
   "devDependencies": {
     "@nuxtjs/proxy": "^1.3.3",

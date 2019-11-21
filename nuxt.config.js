@@ -18,7 +18,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#3ea662' },
   /*
   ** Global CSS
   */
@@ -62,6 +62,7 @@ module.exports = {
     */
     vendor: ['axios'],
     extend (config, ctx) {
+      config.resolve.alias["vue"] = "vue/dist/vue.common";
     }
   },
   proxy: {
@@ -100,10 +101,10 @@ module.exports = {
       }
     },
     resetOnError: true,
-    fullPathRedirect: false,
+    fullPathRedirect: true,
     redirect: {
       login: false,
-      logout: false,
+      logout: '/',
       home: false,
       user: false,
     }
