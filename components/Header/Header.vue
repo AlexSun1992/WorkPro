@@ -4,21 +4,18 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <b-link class="navbar-brand" to="/"></b-link>
-    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" @click="sidebarToggle">
-      <span class="navbar-toggler-icon"></span>
-    </button>
     <b-navbar-nav class="d-md-down-none">
       <NLink class="px-3" to="/">
-        Главная
+        Купить полис
       </NLink>
-      <NLink class="px-3" to="/about">
-        О компании
+      <NLink class="px-3" to="/">
+        Ближайший офис
       </NLink>
-      <NLink class="px-3" to="/calculator">
-        Калькулятор
+      <NLink class="px-3" to="/">
+        Справочный офис
       </NLink>
       <NLink class="px-3" to="/feedback">
-        Обратная связь
+       РЕСО для бизнеса
       </NLink>
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto header-dropdown-button">
@@ -58,5 +55,11 @@
 <style scoped>
 .header-dropdown-button {
   padding-right: 40px;
+}
+.app-header.navbar {
+  border-bottom: 1px solid #f0f3f5;
+}
+.app-header.navbar .navbar-brand {
+  border-bottom: 1px solid #f0f3f5;
 }
 </style>

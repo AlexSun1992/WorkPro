@@ -2,6 +2,7 @@
     <div>
       <div v-html="content"></div>
       <v-runtime-template :template="content"></v-runtime-template>
+      {{car}}
       <ul>
         <li v-for="todo in todos">
           <input type="checkbox" :checked="todo.done" @change="toggle(todo)">
@@ -24,7 +25,7 @@
       return {content: "<b-card></b-card>"}
     },
     async fetch({store}) {
-      await store.dispatch("cars/get", "74")
+      await store.dispatch("cars/get", "177")
     },
     components: {VRuntimeTemplate},
     computed: {

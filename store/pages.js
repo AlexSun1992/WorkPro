@@ -1,5 +1,5 @@
 export const state = () => ({
-  car: {}
+  page: {}
 })
 
 export const actions = {
@@ -14,7 +14,7 @@ export const actions = {
 }
 
 export const mutations = {
-  set(state, cars) {
-    state.car = cars
+  set(state, page) {
+    state.page = page.acf
   }
 }

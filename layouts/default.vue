@@ -2,9 +2,9 @@
   <div class="app">
     <Header/>
     <div class="app-body">
-      <Sidebar :navItems="nav"/>
       <main class="main">
-        <breadcrumb :list="list"/>
+        <!--<breadcrumb :list="list"/>-->
+        <p class="mb-10 mt-3"></p>
         <div class="container-fluid">
           <nuxt />
         </div>

@@ -1,29 +1,36 @@
 <template>
   <div class="wrapper">
     <div class="animated fadeIn">
-      <b-row>
-        <b-col lg="12">
-          <b-card v-if="isAuthenticated">
-            <div><span style="color: red"><b>Вы авторизованы!</b></span> Перейти в  <NLink  to="/cabinet">личный кабинет</NLink>.</div>
-          </b-card>
-          <b-card>
-            <div
-              v-html="content"
-            />
-          </b-card>
-        </b-col>
-      </b-row>
+      <div class="container">
+        <div class="row justify-content-lg-center">
+          <products
+            :items="products"
+          />
+          <about
+            :data="about"
+          />
+          <offers
+            :items="offers"
+          />
+          <banners
+            :items="banners"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import axios from 'axios'
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapState } from 'vuex';
+  import Products from '../LandingPage/Products'
+  import About from '../LandingPage/About'
+  import Offers from '../LandingPage/Offers'
+  import Banners from '../LandingPage/Banners'
   export default {
-    async asyncData ({ $axios }) {
-      const data = await  $axios.$get('/wp-json/wp/v2/posts/14')
-      return {title:data.title.rendered, content:data.content.rendered}
+    components: {Banners, Offers, About, Products},
+    async fetch({store}) {
+      await store.dispatch("pages/get", "177")
     },
     head () {
       return {
@@ -35,7 +42,13 @@
       }
     },
     computed: {
-      ...mapGetters(['isAuthenticated'])
+      ...mapGetters(['isAuthenticated']),
+      ...mapState({
+        products: state => state.pages.page.products,
+        about: state => state.pages.page.about,
+        offers: state => state.pages.page.offers,
+        banners: state => state.pages.page.banners
+      })
     },
   }
 </script>
