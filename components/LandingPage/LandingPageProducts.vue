@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <b-row class="card-content">
+  <b-row class="card-content">
       <b-col v-for="item in items" :key="item.main_title" lg="6" sm="12" md="6">
         <b-card class="border-light">
           <b-col lg="12">
@@ -25,8 +24,7 @@
           </b-row>
         </b-card>
       </b-col>
-    </b-row><!--/.row-->
-  </div>
+  </b-row>
 </template>
 
 <script>

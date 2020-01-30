@@ -18,16 +18,14 @@
 <script>
   export default {
     name: 'Policies',
-    async asyncData ({ $axios, app }) {
-      try {
-        const data = await $axios.$get('/am/main/v2/data/55/8')
-        return {policies: data[0]._data}
-      } catch (e) {
-        const code = parseInt(e.response && e.response.status);
-        if ([401, 403].includes(code)) {
-          app.$auth.logout();
-        }
+    data() {
+      return {
+        policies: []
       }
+    },
+    async mounted() { // only client side hook no need to check
+      const { data } = await this.$axios.get('/am/main/v2/data/55/8'); // await is not mandatory
+      this.policies = data[0]._data
     }
   }
 </script>

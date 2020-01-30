@@ -2,18 +2,18 @@
   <div class="wrapper">
     <div class="animated fadeIn">
       <div class="container">
-        <div class="row justify-content-lg-center">
+        <div class="justify-content-lg-center">
           <products
-            :items="products"
+          :items="page.products"
           />
           <about
-            :data="about"
+          :data="page.about"
           />
           <offers
-            :items="offers"
+          :items="page.offers"
           />
           <banners
-            :items="banners"
+          :items="page.banners"
           />
         </div>
       </div>
@@ -22,34 +22,31 @@
 </template>
 
 <script>
-  import { mapGetters, mapState } from 'vuex';
-  import Products from '../LandingPage/Products'
-  import About from '../LandingPage/About'
-  import Offers from '../LandingPage/Offers'
-  import Banners from '../LandingPage/Banners'
+  import Products from '../LandingPage/LandingPageProducts'
+  import About from '../LandingPage/LandingPageAbout'
+  import Offers from '../LandingPage/LandingPageOffers'
+  import Banners from '../LandingPage/LandingPageBanners'
+
+  const pageId = 177
   export default {
     components: {Banners, Offers, About, Products},
-    async fetch({store}) {
-      await store.dispatch("pages/get", "177")
+    async asyncData ({store}) {
+      await store.dispatch('pages/get', pageId)
     },
     head () {
       return {
         title: this.title,
         meta: [
           // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-          { hid: 'description', name: 'description', content: 'My custom description' }
+          {hid: 'description', name: 'description', content: 'My custom description'}
         ]
       }
     },
     computed: {
-      ...mapGetters(['isAuthenticated']),
-      ...mapState({
-        products: state => state.pages.page.products,
-        about: state => state.pages.page.about,
-        offers: state => state.pages.page.offers,
-        banners: state => state.pages.page.banners
-      })
-    },
+      page () {
+        return this.$store.getters['pages/getPageById'](pageId).data.acf
+      }
+    }
   }
 </script>
 

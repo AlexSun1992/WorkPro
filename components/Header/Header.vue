@@ -5,16 +5,16 @@
     </button>
     <b-link class="navbar-brand" to="/"></b-link>
     <b-navbar-nav class="d-md-down-none">
-      <NLink class="px-3" to="/">
+      <NLink class="px-3" to="/about">
         Купить полис
       </NLink>
-      <NLink class="px-3" to="/">
+      <NLink class="px-3" to="/about">
         Ближайший офис
       </NLink>
-      <NLink class="px-3" to="/">
+      <NLink class="px-3" to="/about">
         Справочный офис
       </NLink>
-      <NLink class="px-3" to="/feedback">
+      <NLink class="px-3" to="/about">
        РЕСО для бизнеса
       </NLink>
     </b-navbar-nav>

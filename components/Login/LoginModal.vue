@@ -32,7 +32,7 @@
         try {
           e.preventDefault();
           this.errorMessage = null;
-          let password = this.user.login + ':' + `{mode:2, pass: "${this.user.password}"}`
+          let password = encodeURI(this.user.login) + ':' + `{mode:2, pass: "${encodeURI(this.user.password)}"}`
           var basicAuth = 'Basic ' + btoa(password)
           await this.$auth.loginWith('local', {
             headers: { 'Authorization': basicAuth }

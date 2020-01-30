@@ -94,7 +94,7 @@ module.exports = {
         user: '',
         endpoints: {
           login: { url: '/am/auth/v2/authorize', method: 'get' },
-          refresh: { url: '/am/auth/v2/token_update', method: 'post' },
+          refresh: { url: '/am/auth/v2/token_refresh', method: 'post' },
           user: { url: '/am/main/v2/userinfo', method: 'get' },
           logout: false
         }
