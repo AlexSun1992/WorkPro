@@ -24,7 +24,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
   export default class AboutComponent extends Vue {
 
     async fetch({store}: any) {
-      debugger
       await store.dispatch("pages/get", pageId)
     }
 
