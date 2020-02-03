@@ -15,12 +15,19 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+
+import { Vue, Component, Prop } from 'vue-property-decorator'
   const pageId = 190
-  export default {
-    async fetch({store}) {
+
+  @Component
+  export default class AboutComponent extends Vue {
+
+    async fetch({store}: any) {
+      debugger
       await store.dispatch("pages/get", pageId)
-    },
+    }
+
     head () {
       return {
         title: this.page.title,
@@ -29,11 +36,10 @@
           { hid: 'description', name: 'description', content: 'My custom description' }
         ]
       }
-    },
-    computed: {
-      page () {
-        return this.$store.getters['pages/getPageById'](pageId).data.acf
-      }
-    },
+    }
+
+    get page () {
+      return this.$store.getters['pages/getPageById'](pageId).data.acf
+    }
   }
 </script>

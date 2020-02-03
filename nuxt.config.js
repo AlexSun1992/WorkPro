@@ -42,7 +42,8 @@ module.exports = {
   */
   buildModules: [
     '@nuxtjs/router',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    '@nuxt/typescript-build'
   ],
   /*
   ** Nuxt.js modules
