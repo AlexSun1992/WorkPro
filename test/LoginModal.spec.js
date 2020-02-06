@@ -33,14 +33,12 @@ describe('LoginModal', () => {
     wrapper.vm.$refs['auth-modal'].show = jest.fn();
 
     it('showLoginModal', () => {
-        debugger
         expect(wrapper.find({ref: 'auth-modal'}).exists()).toBe(true);
         wrapper.vm.showLoginModal();
         expect(wrapper.vm.$refs['auth-modal'].show).toHaveBeenCalled();
     })
 
     it('login', async () => {
-        debugger
         await wrapper.vm.login(event);
         expect(wrapper.vm.errorMessage).toBeNull()
         expect(event.preventDefault).toHaveBeenCalled();
