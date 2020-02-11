@@ -18,6 +18,8 @@
 <script lang="ts">
 
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import axios from 'axios'
+
   const pageId = 190
 
   @Component({
@@ -26,7 +28,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
     }
   })
   export default class AboutComponent extends Vue {
-
     head () {
       return {
         title: this.page.title,
@@ -40,5 +41,16 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
     get page () {
       return this.$store.getters['pages/getPageById'](pageId).data.acf
     }
+
+    // Пример получения данных своего api
+
+    // async getdata() {
+    //   try {
+    //     let response = await axios.get('/api/getdata');
+    //     console.log(response)
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
   }
 </script>

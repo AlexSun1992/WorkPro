@@ -73,6 +73,11 @@ module.exports = {
     '/am': 'http://172.17.0.33:8080',
 
   },
+
+  serverMiddleware: [
+    '~/api/index.js',
+  ],
+  
   auth: {
     strategies: {
       local: {
