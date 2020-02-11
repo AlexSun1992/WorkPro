@@ -20,12 +20,12 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
   const pageId = 190
 
-  @Component
-  export default class AboutComponent extends Vue {
-
+  @Component({
     async fetch({store}: any) {
       await store.dispatch("pages/get", pageId)
     }
+  })
+  export default class AboutComponent extends Vue {
 
     head () {
       return {
