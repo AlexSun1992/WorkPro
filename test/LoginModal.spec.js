@@ -44,6 +44,5 @@ describe('LoginModal', () => {
         expect(event.preventDefault).toHaveBeenCalled();
         expect(wrapper.vm.$auth.loginWith).toHaveBeenCalled();
         expect(wrapper.vm.$refs['auth-modal'].hide).toHaveBeenCalled();
-        expect(wrapper.vm.onAuth).toHaveBeenCalled();
     })
 })

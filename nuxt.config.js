@@ -70,8 +70,8 @@ module.exports = {
     // Simple proxy
     '/wp-json': 'http://192.168.200.89:8080',
     '/free': 'http://172.17.0.33:8080',
-    '/am': 'http://172.17.0.33:8080',
-
+    // '/am': 'http://172.17.0.33:8080',
+    '/am': 'https://mobile2.reso.ru'
   },
 
   serverMiddleware: [
@@ -85,23 +85,25 @@ module.exports = {
         autoRefresh: {
           enable: true
         },
-        dataRefreshToken: 'REFRESH_TOKEN',
+        dataRefreshToken: 'refreshToken',
         clientId: false,
         dataClientId: false,
         grantType: false,
         dataGrantType: false,
         token: {
-          property: 'ACCESS_TOKEN',
+          property: 'token',
           maxAge: 1800
         },
         refreshToken: {
-          property: 'REFRESH_TOKEN'
+          property: 'refreshToken'
         },
         user: '',
         endpoints: {
-          login: { url: '/am/auth/v2/authorize', method: 'get' },
+          login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
+          // login: { url: '/am/auth/v2/authorize', method: 'get' },
           refresh: { url: '/am/auth/v2/token_refresh', method: 'post' },
-          user: { url: '/am/main/v2/userinfo', method: 'get' },
+          user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
+          // user: { url: '/am/main/v2/userinfo', method: 'get' },
           logout: false
         }
       }
