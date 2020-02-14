@@ -9,6 +9,7 @@
       <label>Пароль</label>
       <input v-model="user.password" type="password" class="form-control"  placeholder="Пароль">
     </div>
+    <b-button variant="link">Зарегистрироваться</b-button>
   </b-modal>
 </template>
 
