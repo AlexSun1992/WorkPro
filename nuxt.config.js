@@ -85,25 +85,25 @@ module.exports = {
         autoRefresh: {
           enable: true
         },
-        dataRefreshToken: 'refreshToken',
+        dataRefreshToken: 'REFRESH_TOKEN',
         clientId: false,
         dataClientId: false,
         grantType: false,
         dataGrantType: false,
         token: {
-          property: 'token',
+          property: 'ACCESS_TOKEN',
           maxAge: 1800
         },
         refreshToken: {
-          property: 'refreshToken'
+          property: 'REFRESH_TOKEN'
         },
         user: '',
         endpoints: {
-          login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
-          // login: { url: '/am/auth/v2/authorize', method: 'get' },
+          // login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
+          login: { url: '/am/auth/v2/authorize', method: 'post' },
           refresh: { url: '/am/auth/v2/token_refresh', method: 'post' },
-          user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
-          // user: { url: '/am/main/v2/userinfo', method: 'get' },
+          // user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
+          user: { url: '/am/main/v2/userinfo', method: 'get' },
           logout: false
         }
       }

@@ -1,6 +1,5 @@
 export interface IUser {
-    login: string | number;
-    user_type: string;
+    username: string | number;
     password: string | number;
-    recaptcha_token: string;
+    mode: number;
 }
