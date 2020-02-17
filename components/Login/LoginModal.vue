@@ -27,17 +27,23 @@ import { IUser } from './login.types';
 
     user = <IUser>{};
     errorMessage = null;
+    captcha = null;
 
     async login(e) {
       try {
         e.preventDefault();
         if (!this.validation) return;
+        // await this.getCaptcha();
+        debugger
+        this.captcha = await (this as any).$getCaptcha();
+        console.log(this.captcha)
         await ((this as any).$auth as any).loginWith('local', {
           headers: {},
           data: <IUser> {
             username: this.user.username,
             password: this.user.password,
-            mode: 2
+            mode: 2,
+            captcha: this.captcha
           }
         });
         (this.$refs['auth-modal'] as any).hide();
@@ -51,6 +57,10 @@ import { IUser } from './login.types';
     showLoginModal () {
       (this.$refs['auth-modal'] as any).show()
     }
+    // async getCaptcha () {
+    //     const siteKey = '6LeO2dgUAAAAAOCANdOMWTfUW0eLjluo7UKC366h';
+    //     this.captcha = await window['grecaptcha'].execute(`${siteKey}`)
+    // }
     get validation() {
       if (this.user['username']) {
         const emailPattern = /^\w{2,}@\w{2,}\.\w{2,4}$/; 

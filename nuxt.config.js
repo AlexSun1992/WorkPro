@@ -13,6 +13,9 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      { src: 'https://www.google.com/recaptcha/api.js?render=6LeO2dgUAAAAAOCANdOMWTfUW0eLjluo7UKC366h' }
     ]
   },
   /*
@@ -35,7 +38,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~plugins/devextreme'
+    // '~plugins/devextreme',
+    '~/plugins/captcha.js'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -99,11 +103,11 @@ module.exports = {
         },
         user: '',
         endpoints: {
-          // login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
-          login: { url: '/am/auth/v2/authorize', method: 'post' },
+          login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
+          // login: { url: '/am/auth/v2/authorize', method: 'post' },
           refresh: { url: '/am/auth/v2/token_refresh', method: 'post' },
-          // user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
-          user: { url: '/am/main/v2/userinfo', method: 'get' },
+          user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
+          // user: { url: '/am/main/v2/userinfo', method: 'get' },
           logout: false
         }
       }
