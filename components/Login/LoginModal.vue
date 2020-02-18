@@ -33,10 +33,7 @@ import { IUser } from './login.types';
       try {
         e.preventDefault();
         if (!this.validation) return;
-        // await this.getCaptcha();
-        debugger
         this.captcha = await (this as any).$getCaptcha();
-        console.log(this.captcha)
         await ((this as any).$auth as any).loginWith('local', {
           headers: {},
           data: <IUser> {
@@ -57,10 +54,6 @@ import { IUser } from './login.types';
     showLoginModal () {
       (this.$refs['auth-modal'] as any).show()
     }
-    // async getCaptcha () {
-    //     const siteKey = '6LeO2dgUAAAAAOCANdOMWTfUW0eLjluo7UKC366h';
-    //     this.captcha = await window['grecaptcha'].execute(`${siteKey}`)
-    // }
     get validation() {
       if (this.user['username']) {
         const emailPattern = /^\w{2,}@\w{2,}\.\w{2,4}$/; 
