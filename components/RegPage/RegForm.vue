@@ -2,7 +2,7 @@
   <div class="flex-row align-items-center">
     <div class="container">
       <b-row class="justify-content-center">
-        <b-col md="8">
+        <b-col md="6" lg="4">
           <b-form @submit="onSubmit" v-if="show">
             <b-form-group>
               <b-form-input
@@ -14,7 +14,7 @@
               >
               </b-form-input>
               <div v-show="isPhoneCodeInputConfirm">
-                <b-button  v-on:click="changePhone" variant="link">Изменить номер</b-button>
+                <b-button v-on:click="changePhone" variant="link">Изменить номер</b-button>
                 <div>Код подверждения отправлен на указанный номер</div>
               </div>
             </b-form-group>
@@ -59,13 +59,7 @@
               ></b-form-input>
             </b-form-group>
             <b-form-group>
-              <b-form-input
-                placeholder="Дата рождения"
-                type="text"
-                onfocus="(this.type='date')"
-                v-model="form.birthday"
-                required
-              ></b-form-input>
+              <birthday-picker/>
             </b-form-group>
             <b-form-group>
               <b-form-input
@@ -107,6 +101,8 @@
 
 <script>
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+  import birthdayPicker from '../Libs/birthdayPicker'
+
   export default {
     data () {
       return {
@@ -124,6 +120,7 @@
         isPhoneCodeInputConfirm: false
       }
     },
+    components: {birthdayPicker},
     methods: {
       onSubmit (evt) {
         evt.preventDefault()
@@ -133,7 +130,7 @@
         this.isPhoneCodeInputConfirm = true
       },
       changePhone () {
-        this.isPhoneCodeInputConfirm = false;
+        this.isPhoneCodeInputConfirm = false
         this.form.phone = ''
         this.form.code = ''
       }
