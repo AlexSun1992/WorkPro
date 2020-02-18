@@ -4,78 +4,100 @@
       <b-row class="justify-content-center">
         <b-col md="8">
           <b-form @submit="onSubmit" v-if="show">
-            <b-form-group label="Номер телефона *"  description="Пример номера: +7 XXX XXX XX XX">
+            <b-form-group>
               <b-form-input
                 v-model="form.phone"
                 :disabled="isDisabledPhone"
                 type="tel"
                 required
-                placeholder="Введите номер телефона"
-              ></b-form-input>
+                placeholder="Телефон"
+              >
+              </b-form-input>
+              <div v-show="isPhoneCodeInputConfirm">
+                <b-button  v-on:click="changePhone" variant="link">Изменить номер</b-button>
+                <div>Код подверждения отправлен на указанный номер</div>
+              </div>
             </b-form-group>
-            <b-form-group v-show="isPhoneButtonConfirm">
-              <b-button v-on:click="phoneConfirm" block type="submit" variant="primary">Подтвердить номер</b-button>
-            </b-form-group>
-            <b-form-group v-show="isPhoneCodeInputConfirm" label="Код подверждения*">
+            <b-form-group v-show="isPhoneCodeInputConfirm">
               <b-form-input
+                type="number"
                 v-model="form.code"
                 required
-                placeholder="Введите код подверждения"
+                placeholder="Код подверждения"
               ></b-form-input>
             </b-form-group>
-            <b-form-group
-              label="Фамилия*"
-            >
+            <b-form-group>
+              <b-form-group v-show="isPhoneButtonConfirm">
+                <b-button v-on:click="phoneConfirm" block type="submit" variant="primary">Подтвердить номер</b-button>
+              </b-form-group>
+              <b-form-group>
+                <b-form-input
+                  v-model="form.email"
+                  type="email"
+                  required
+                  placeholder="E-mail"
+                ></b-form-input>
+              </b-form-group>
               <b-form-input
                 v-model="form.family"
                 required
-                placeholder="Введите фамилию"
+                placeholder="Фамилия"
               ></b-form-input>
             </b-form-group>
-            <b-form-group label="Имя*">
+            <b-form-group>
               <b-form-input
                 v-model="form.name"
                 required
-                placeholder="Введите имя"
+                placeholder="Имя"
               ></b-form-input>
             </b-form-group>
-            <b-form-group label="Отчество*">
+            <b-form-group>
               <b-form-input
                 v-model="form.patronymic"
                 required
-                placeholder="Введите отчество"
+                placeholder="Отчество"
               ></b-form-input>
             </b-form-group>
-            <b-form-group label="Дата рождения*">
+            <b-form-group>
               <b-form-input
-                type="date"
+                placeholder="Дата рождения"
+                type="text"
+                onfocus="(this.type='date')"
                 v-model="form.birthday"
                 required
-                placeholder="Введите дату рождения"
               ></b-form-input>
             </b-form-group>
-            <b-form-group label="Номер полиса">
+            <b-form-group>
               <b-form-input
                 id="input-3"
                 v-model="form.policy"
-                required
-                placeholder="Введите номер полиса"
+                placeholder="Номер полиса"
               ></b-form-input>
             </b-form-group>
-            <b-form-group label="E-mail*">
+            <b-form-group>
               <b-form-input
-                v-model="form.email"
-                type="email"
+                type="password"
+                v-model="form.password"
+                placeholder="Пароль"
                 required
-                placeholder="Введите Ваш электронный почтовый ящик"
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group>
+              <b-form-input
+                type="password"
+                v-model="form.repassword"
+                placeholder="Повторите пароль"
+                required
               ></b-form-input>
             </b-form-group>
             <b-form-group id="input-group-4">
               <b-form-checkbox-group v-model="form.checked" id="checkboxes-4">
-                <b-form-checkbox value="me">Я согласен на обработку персональных данных</b-form-checkbox>
+                <b-form-checkbox required value="true" unchecked-value="false">Я согласен на обработку персональных
+                  данных
+                </b-form-checkbox>
               </b-form-checkbox-group>
             </b-form-group>
-            <b-button type="submit" variant="primary">Зарегистрироваться</b-button>
+            <b-button :disabled="form.checked === 'true'" type="submit" variant="primary">Зарегистрироваться</b-button>
           </b-form>
         </b-col>
       </b-row>
@@ -84,6 +106,7 @@
 </template>
 
 <script>
+  const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
   export default {
     data () {
       return {
@@ -108,14 +131,19 @@
       },
       phoneConfirm () {
         this.isPhoneCodeInputConfirm = true
+      },
+      changePhone () {
+        this.isPhoneCodeInputConfirm = false;
+        this.form.phone = ''
+        this.form.code = ''
       }
     },
     computed: {
       isPhoneButtonConfirm: function () {
-        return this.form.phone && !this.isPhoneCodeInputConfirm;
+        return regex.test(this.form.phone) && !this.isPhoneCodeInputConfirm
       },
       isDisabledPhone: function () {
-        return this.isPhoneCodeInputConfirm;
+        return this.isPhoneCodeInputConfirm
       }
     }
   }
