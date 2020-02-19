@@ -69,7 +69,6 @@ export default class PasswordReset extends Vue {
 
   async getCode() {
     try {
-        debugger
       if (!this.code && this.phone) {
           this.isPhoneChanged = false;
           this.resendCount = this.initialCount;
