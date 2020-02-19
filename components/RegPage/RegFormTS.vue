@@ -101,7 +101,7 @@
 
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator'
-  import birthdayPickerComponent from '../Libs/birthdayPicker'
+  import birthdayPickerComponent from '../Libs/birthdayPicker.vue'
 
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
 
@@ -122,7 +122,7 @@
       birthday: string,
       policyNumber: string,
       code: string
-    }
+    } = {} as any
 
     show: boolean = true
 

@@ -12,9 +12,12 @@
   </b-row>
 </template>
 
-<script>
+<script lang="ts">
   import data from './data'
-  export default {
+  import { Vue, Component, Prop } from 'vue-property-decorator'
+
+  @Component({})
+  export default class birthdayPickerComponent extends Vue {
     data () {
       return {
         date : {day: null, month: null, year: null},

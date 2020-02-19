@@ -99,11 +99,11 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
 
-  import birthdayPicker from '../Libs/birthdayPicker'
+  import birthdayPicker from '../Libs/birthdayPicker.vue'
 
   export default {
     data () {
@@ -115,8 +115,7 @@
           name: '',
           patronymic: '',
           birthday: '',
-          policyNumber: '',
-          email: ''
+          policyNumber: ''
         },
         show: true,
         isPhoneCodeInputConfirm: false
@@ -126,23 +125,23 @@
     methods: {
       onSubmit (evt) {
         evt.preventDefault()
-        alert(JSON.stringify(this.form))
+        alert(JSON.stringify((this as any).form))
       },
       phoneConfirm () {
-        this.isPhoneCodeInputConfirm = true
+        (this as any).isPhoneCodeInputConfirm = true
       },
       changePhone () {
-        this.isPhoneCodeInputConfirm = false
-        this.form.phone = ''
-        this.form.code = ''
+        (this as any).isPhoneCodeInputConfirm = false;
+        (this as any).form.phone = '';
+        (this as any).form.code = '';
       }
     },
     computed: {
       isPhoneButtonConfirm: function () {
-        return regex.test(this.form.phone) && !this.isPhoneCodeInputConfirm
+        return regex.test((this as any).form.phone) && !(this as any).isPhoneCodeInputConfirm
       },
       isDisabledPhone: function () {
-        return this.isPhoneCodeInputConfirm
+        return (this as any).isPhoneCodeInputConfirm
       }
     }
   }
