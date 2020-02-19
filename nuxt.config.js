@@ -39,7 +39,8 @@ module.exports = {
   */
   plugins: [
     // '~plugins/devextreme',
-    '~/plugins/captcha.js'
+    '~/plugins/captcha.js',
+    '~/plugins/mask.js'
   ],
   /*
   ** Nuxt.js dev-modules

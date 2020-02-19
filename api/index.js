@@ -34,6 +34,18 @@ app.post('/authorize', (req, res) => {
         });
 })
 
+app.post('/password', (req, res) => {
+    try {
+        if (req.body.phone === '(916)-264-19-17' || req.body.phone === '(916)-264-19-16') {
+            res.send(JSON.stringify(data.code))
+        } else {
+            res.send(false)
+        }
+    } catch (e) {
+        console.log(e)
+    }
+})
+
 module.exports = {
    path: '/api',
    handler: app

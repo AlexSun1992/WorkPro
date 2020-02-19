@@ -23,7 +23,10 @@ const userinfo = [
     }
 ]
 
+const code = '555555';
+
 module.exports = {
     authData,
-    userinfo
+    userinfo,
+    code
 }
