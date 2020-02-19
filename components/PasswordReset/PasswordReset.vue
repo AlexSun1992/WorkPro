@@ -29,9 +29,7 @@ export default class PasswordReset extends Vue {
   repeatPassword: string = '';
 
   get isPasswordIdentical() {
-    if (this.newPassword.length == 0 || (this.newPassword != this.repeatPassword)) {
-      return true;
-    }
+    return this.newPassword.length == 0 || (this.newPassword != this.repeatPassword);
   }
 }
 </script>
