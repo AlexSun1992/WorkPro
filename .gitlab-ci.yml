@@ -5,7 +5,9 @@ stages:
 
 default:
   cache: &default_cache
-    key: ${CI_COMMIT_SHORT_SHA}
+    key:
+      files:
+        - package.json
     paths:
       - node_modules/
     policy: pull
