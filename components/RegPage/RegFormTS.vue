@@ -100,50 +100,58 @@
 </template>
 
 <script lang="ts">
+  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import birthdayPickerComponent from '../Libs/birthdayPicker'
 
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
 
-  import birthdayPicker from '../Libs/birthdayPicker'
-
-  export default {
-    data () {
-      return {
-        form: {
-          phone: '',
-          email: '',
-          family: '',
-          name: '',
-          patronymic: '',
-          birthday: '',
-          policyNumber: '',
-          email: ''
-        },
-        show: true,
-        isPhoneCodeInputConfirm: false
-      }
-    },
-    components: {birthdayPicker},
-    methods: {
-      onSubmit (evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
-      },
-      phoneConfirm () {
-        this.isPhoneCodeInputConfirm = true
-      },
-      changePhone () {
-        this.isPhoneCodeInputConfirm = false
-        this.form.phone = ''
-        this.form.code = ''
-      }
-    },
-    computed: {
-      isPhoneButtonConfirm: function () {
-        return regex.test(this.form.phone) && !this.isPhoneCodeInputConfirm
-      },
-      isDisabledPhone: function () {
-        return this.isPhoneCodeInputConfirm
-      }
+  @Component({
+    components: {
+      birthdayPicker: birthdayPickerComponent
     }
+  })
+
+  export default class YourComponent extends Vue {
+
+    form :  {
+      phone: string,
+      email: string,
+      family: string,
+      name: string,
+      patronymic: string,
+      birthday: string,
+      policyNumber: string,
+      code: string
+    }
+
+    show: boolean = true
+
+    isPhoneCodeInputConfirm: boolean = false
+
+    onSubmit (evt) {
+      evt.preventDefault()
+      alert(JSON.stringify(this.form))
+    }
+    phoneConfirm () {
+      this.isPhoneCodeInputConfirm = true
+    }
+    changePhone () {
+      this.isPhoneCodeInputConfirm = false
+      this.form.phone = ''
+      this.form.code = ''
+    }
+
+    get isPhoneButtonConfirm (): boolean {
+      return regex.test(this.form.phone) && !this.isPhoneCodeInputConfirm
+    }
+
+    get isDisabledPhone (): boolean {
+      return this.isPhoneCodeInputConfirm
+    }
+
   }
 </script>
+
+<style scoped>
+
+</style>
