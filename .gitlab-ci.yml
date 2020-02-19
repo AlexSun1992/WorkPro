@@ -1,0 +1,57 @@
+stages:
+  - install
+  - test
+  - deploy
+
+default:
+  cache: &default_cache
+    key: ${CI_COMMIT_SHORT_SHA}
+    paths:
+      - node_modules/
+    policy: pull
+
+install:
+  image: node:12
+  stage: install
+  cache:
+    <<: *default_cache
+    policy: pull-push
+  script:
+    - wget --directory-prefix=/root https://git.reso.ru/free/self-signed-sertificate/raw/master/reso.crt
+    - export NODE_EXTRA_CA_CERTS=/root/reso.crt
+    - npm install
+    - npm install --only=dev
+  tags:
+    - git-docker
+
+test:
+  image: node:12
+  stage: test
+  retry: 1
+  script:
+    # - npm test
+    - echo 'no test yet'
+  tags:
+    - git-docker
+
+deploy_staging:
+  image: debian
+  stage: deploy
+  cache: {}
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - 'which rsync || ( apt-get update -y && apt-get install rsync -y )'
+    - eval $(ssh-agent -s)
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - chmod 600 $PRIVATE_KEY
+    - ssh-add $PRIVATE_KEY
+    - ssh-keyscan -H -p $TEST_PORT $TEST_HOST >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - rsync --recursive --delete-after --rsh "ssh -p $TEST_PORT" . nodejs@$TEST_HOST:test
+    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- 'pm2 restart all'
+  environment:
+    name: test
+    url: http://nodejs.reso.ru/
+  tags:
+    - git-docker
