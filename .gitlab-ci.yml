@@ -36,8 +36,8 @@ deploy_staging:
     - ssh-keyscan -H -p $TEST_PORT $TEST_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - rsync --recursive --delete-after --rsh "ssh -p $TEST_PORT" . nodejs@$TEST_HOST:test
-    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- 'cd ~/test; ~/.nvm/versions/node/v12.14.0/bin/npm install'
-    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- 'cd ~/test; ~/.nvm/versions/node/v12.14.0/bin/npm run build'
+    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- 'cd ~/test; ~/.nvm/versions/node/v12.14.0/bin/node ~/.nvm/versions/node/v12.14.0/bin/npm install'
+    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- 'cd ~/test; ~/.nvm/versions/node/v12.14.0/bin/node ~/.nvm/versions/node/v12.14.0/bin/npm run build'
     - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '~/.nvm/versions/node/v12.14.0/bin/node ~/.nvm/versions/node/v12.14.0/bin/pm2 restart all'
   environment:
     name: test
