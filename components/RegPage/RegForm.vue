@@ -103,6 +103,14 @@
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
   import birthdayPicker from '../Libs/birthdayPicker'
 
+  import { Vue, Component, PropSync } from 'vue-property-decorator'
+
+  @Component({name: 'RegForm', comments: {birthdayPicker}})
+
+  export default class RegForm extends Vue {
+    message: string = 'This is a message'
+  }
+
   export default {
     data () {
       return {
