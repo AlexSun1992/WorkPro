@@ -39,7 +39,6 @@ test:
 deploy_staging:
   image: debian
   stage: deploy
-  cache: {}
   script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - 'which rsync || ( apt-get update -y && apt-get install rsync -y )'
