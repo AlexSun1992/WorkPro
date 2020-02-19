@@ -12,7 +12,7 @@ import RegPolicy from '~/components/Pages/Cabinet/RegPolicy'
 import Policies from '~/components/Pages/Cabinet/Policies'
 import Agents from '~/components/Pages/Cabinet/Agents'
 
-import Reg from '~/components/RegPage/RegFormTS'
+import Reg from '~/components/RegPage/RegForm'
 
 Vue.use(Router)
 
