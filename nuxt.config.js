@@ -72,7 +72,7 @@ module.exports = {
   },
   proxy: {
     // Simple proxy
-    '/wp-json': 'http://192.168.200.89:8080',
+    '/wp-json': 'http://172.17.0.123:8080',
     '/free': 'http://172.17.0.33:8080',
     // '/am': 'http://172.17.0.33:8080',
     '/am': 'https://mobile2.reso.ru'
@@ -81,7 +81,7 @@ module.exports = {
   serverMiddleware: [
     '~/api/index.js',
   ],
-  
+
   auth: {
     strategies: {
       local: {

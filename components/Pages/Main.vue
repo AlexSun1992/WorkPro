@@ -4,16 +4,20 @@
       <div class="container">
         <div class="justify-content-lg-center">
           <products
-          :items="page.products"
+            v-if="page.products"
+            :items="page.products"
           />
           <about
-          :data="page.about"
+            v-if="page.about"
+            :data="page.about"
           />
           <offers
-          :items="page.offers"
+            v-if="page.offers"
+            :items="page.offers"
           />
           <banners
-          :items="page.banners"
+            v-if="page.banners"
+            :items="page.banners"
           />
         </div>
       </div>
@@ -27,7 +31,7 @@
   import Offers from '../LandingPage/LandingPageOffers'
   import Banners from '../LandingPage/LandingPageBanners'
 
-  const pageId = 177
+  const pageId = 57
   export default {
     components: {Banners, Offers, About, Products},
     async asyncData ({store}) {
