@@ -92,7 +92,7 @@ export default class PasswordReset extends Vue {
     this.insertedCode = null;
     this.isPhoneDisabled = false;
     this.isPhoneChanged = true;
-    this.$emit('onCode', this.code, this.insertedCode);
+    this.$emit('onCode', this.code);
     this.countdown();
   }
 
