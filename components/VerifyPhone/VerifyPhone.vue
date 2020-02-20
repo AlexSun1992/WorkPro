@@ -45,9 +45,9 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import axios from "axios";
 
 @Component({
-  name: "LoginModal"
+  name: "VerifyPhone"
 })
-export default class PasswordReset extends Vue {
+export default class VerifyPhone extends Vue {
   @Prop({ default: 10 }) count;
 
   phone: string | null = null;
