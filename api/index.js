@@ -36,7 +36,7 @@ app.post('/authorize', (req, res) => {
 
 app.post('/password', (req, res) => {
     try {
-        if (req.body.phone === '(916)-264-19-17' || req.body.phone === '(916)-264-19-16') {
+        if (req.body.phone === '9162641917' || req.body.phone === '9162641916') {
             res.send(JSON.stringify(data.code))
         } else {
             res.send(false)

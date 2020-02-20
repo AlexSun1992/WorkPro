@@ -2,7 +2,7 @@
   <div>
     <div class="form-group">
       <label>Телефон / Email</label>
-      <input v-model="user.username"  type="tel" :state="validation" class="form-control" placeholder="Введите 10 цифр Вашего телефона или email">
+      <input v-model.lazy="user.username"  type="tel" :state="validation" class="form-control" placeholder="Введите 10 цифр Вашего телефона или email">
     </div>
     <b-form-invalid-feedback :state="validation">
         Пожалуйста, введите корректный номер телефона или email
@@ -11,32 +11,28 @@
       <label>Пароль</label>
       <input v-model="user.password" type="password" class="form-control"  placeholder="Пароль">
     </div>
-    <b-button variant="success" @click="login">Авторизоваться</b-button>
+    <b-button variant="success" @click.prevent="login">Авторизоваться</b-button>
   </div>
 </template>
 
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator';
-// import PasswordReset from '../PasswordReset/PasswordReset.vue';
 import { IUser } from '../login.types';
 
   @Component({
-    name: 'LoginModal',
-    // components: {PasswordReset}
+    name: 'LoginForm',
   })
-  export default class LoginModal extends Vue {
+  export default class LoginForm extends Vue {
 
     user = <IUser>{};
     errorMessage = null;
     captcha = null;
 
-    async login(e) {
+    async login() {
       try {
-        debugger
-        e.preventDefault();
         if (!this.validation) return;
-        this.captcha = await (this as any).$getCaptcha();
+        // this.captcha = await (this as any).$getCaptcha();
         await ((this as any).$auth as any).loginWith('local', {
           headers: {},
           data: <IUser> {
@@ -46,19 +42,13 @@ import { IUser } from '../login.types';
             captcha: this.captcha
           }
         });
-        // (this.$refs['auth-modal'] as any).hide();
         this.$router.push('/')
         this.errorMessage = null;
       } catch (e) {
-        // if ((this as any).$auth.error.response.status === 401){
-        //   this.errorMessage = (this as any).$auth.error.response.data.MESSAGE;
-        // }
         console.log(e)
       }
     }
-    showLoginModal () {
-      (this.$refs['auth-modal'] as any).show()
-    }
+
     get validation() {
       if (this.user['username']) {
         const emailPattern = /^\w{2,}@\w{2,}\.\w{2,4}$/; 

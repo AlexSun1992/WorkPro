@@ -40,8 +40,8 @@ module.exports = {
   plugins: [
     // '~plugins/devextreme',
     '~/plugins/captcha.js',
-    '~/plugins/mask.js',
-    '~/plugins/vee-validate'
+    // '~/plugins/mask.js',
+    // '~/plugins/vee-validate'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -105,11 +105,11 @@ module.exports = {
         },
         user: '',
         endpoints: {
-          login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
-          // login: { url: '/am/auth/v2/authorize', method: 'post' },
+          // login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
+          login: { url: '/am/auth/v2/authorize', method: 'post' },
           refresh: { url: '/am/auth/v2/token_refresh', method: 'post' },
-          user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
-          // user: { url: '/am/main/v2/userinfo', method: 'get' },
+          // user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
+          user: { url: '/am/main/v2/userinfo', method: 'get' },
           logout: false
         }
       }
