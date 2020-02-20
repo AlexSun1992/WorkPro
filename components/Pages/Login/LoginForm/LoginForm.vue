@@ -11,7 +11,7 @@
       <label>Пароль</label>
       <input v-model="user.password" type="password" class="form-control"  placeholder="Пароль">
     </div>
-    <b-button variant="link" @click="login">Зарегистрироваться</b-button>
+    <b-button variant="success" @click="login">Авторизоваться</b-button>
   </div>
 </template>
 
@@ -46,7 +46,8 @@ import { IUser } from '../login.types';
             captcha: this.captcha
           }
         });
-        (this.$refs['auth-modal'] as any).hide();
+        // (this.$refs['auth-modal'] as any).hide();
+        this.$router.push('/')
         this.errorMessage = null;
       } catch (e) {
         // if ((this as any).$auth.error.response.status === 401){
