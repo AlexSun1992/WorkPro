@@ -1,40 +1,29 @@
 <template>
   <div>
-    <b-form>
-      <b-form-group label="Телефон" label-for="input-1">
-        <b-form-input
-          id="input-1"
-          ref="phone"
-          v-mask="'(###)-###-##-##'"
-          v-model="phone"
-          placeholder="Введите номер телефона"
-          :disabled="isPhoneDisabled"
-        ></b-form-input>
-      </b-form-group>
-      <b-link v-if="isPhoneDisabled" @click="changeNumber">Изменить номер</b-link>
-      <div v-if="code && code.data">
-        <p>На указанный номер выслан код подтверждения</p>
-        <b-form>
-          <b-form-group>
-            <b-form-input
-              v-mask="'######'"
-              v-model="insertedCode"
-              placeholder="Код подтверждения"
-            ></b-form-input>
-          </b-form-group>
-          <b-button
-            type="submit"
-            v-if="!insertedCode"
-            :disabled="disabledResend"
-            @click.prevent="resendCode"
-            variant="success"
-          >
-            Отправить повторно
-            <span>{{ resendCount }}</span>
-          </b-button>
-        </b-form>
-      </div>
-    </b-form>
+    <b-form-input
+      class="mb-1"
+      ref="phone"
+      v-model="phone"
+      placeholder="Введите номер телефона"
+      :disabled="isPhoneDisabled"
+    ></b-form-input>
+
+    <b-link v-if="isPhoneDisabled" @click="changeNumber">Изменить номер</b-link>
+
+    <div v-if="code && code.data">
+      <p>На указанный номер выслан код подтверждения</p>
+      <b-form-input v-model="insertedCode" class="mb-1" placeholder="Код подтверждения"></b-form-input>
+      <b-button
+        type="submit"
+        v-if="!insertedCode"
+        :disabled="disabledResend"
+        @click.prevent="resendCode"
+        variant="success"
+      >
+        Отправить повторно
+        <span>{{ resendCount }}</span>
+      </b-button>
+    </div>
     <b-button type="submit" v-if="!code" @click.prevent="getCode" variant="success">Подтвердить</b-button>
     <!-- <b-button type="submit" v-if="insertedCode" variant="success">Продолжить</b-button> -->
   </div>
@@ -45,9 +34,9 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import axios from "axios";
 
 @Component({
-  name: "LoginModal"
+  name: "VerifyPhone"
 })
-export default class PasswordReset extends Vue {
+export default class VerifyPhone extends Vue {
   @Prop({ default: 10 }) count;
 
   phone: string | null = null;
@@ -70,12 +59,12 @@ export default class PasswordReset extends Vue {
   async getCode() {
     try {
       if (!this.code && this.phone) {
-          this.isPhoneChanged = false;
-          this.resendCount = this.initialCount;
-          this.disabledResend = true;
+        this.isPhoneChanged = false;
+        this.resendCount = this.initialCount;
+        this.disabledResend = true;
         // Будет изменено на action
         this.code = await axios.post("/api/password", { phone: this.phone });
-        this.$emit('onCode', this.code);
+        this.$emit("onCode", this.code);
         this.isPhoneDisabled = true;
         this.countdown();
       } else {
@@ -92,7 +81,7 @@ export default class PasswordReset extends Vue {
     this.insertedCode = null;
     this.isPhoneDisabled = false;
     this.isPhoneChanged = true;
-    this.$emit('onCode', this.code);
+    this.$emit("onCode", this.code);
     this.countdown();
   }
 
@@ -107,11 +96,11 @@ export default class PasswordReset extends Vue {
       clearTimeout(this.timer);
       this.resendCount = null;
     } else {
-        if(this.isPhoneChanged) {
-            this.resendCount = null;
-            this.disabledResend = false;
-            return;
-        };
+      if (this.isPhoneChanged) {
+        this.resendCount = null;
+        this.disabledResend = false;
+        return;
+      }
       this.timer = setTimeout(this.countdown, 1000);
       return this.resendCount;
     }
@@ -126,7 +115,7 @@ export default class PasswordReset extends Vue {
 </script>
 
 <style scoped>
-  .form-group {
-    margin-bottom: 4px;
-  }
+.form-group {
+  margin-bottom: 4px;
+}
 </style>
