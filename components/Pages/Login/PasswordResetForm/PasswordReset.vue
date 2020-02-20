@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import VerifyPhone from '../VerifyPhone/VerifyPhone.vue';
+import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone.vue';
 
 @Component({
   name: "PasswordReset",
