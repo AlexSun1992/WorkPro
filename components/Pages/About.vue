@@ -20,7 +20,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import axios from 'axios'
 
-  const pageId = 190
+  const pageId = 59
 
   @Component({
     async fetch({store}: any) {
