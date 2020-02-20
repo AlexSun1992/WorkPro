@@ -5,7 +5,6 @@
         <b-form-input
           id="input-1"
           ref="phone"
-          v-mask="'(###)-###-##-##'"
           v-model="phone"
           placeholder="Введите номер телефона"
           :disabled="isPhoneDisabled"
@@ -17,7 +16,6 @@
         <b-form>
           <b-form-group>
             <b-form-input
-              v-mask="'######'"
               v-model="insertedCode"
               placeholder="Код подтверждения"
             ></b-form-input>
