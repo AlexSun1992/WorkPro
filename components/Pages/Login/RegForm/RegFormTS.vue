@@ -54,50 +54,60 @@
   </b-form>
 </template>
 
-<script>
-  import birthdayPicker from '../../../Libs/BirthdayPicker/BirthdayPicker'
-  import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone'
+<script lang="ts">
+  import {Vue, Component, Prop} from 'vue-property-decorator'
+  import birthdayPickerComponent from '../../../Libs/BirthdayPicker/BirthdayPicker.vue'
+  import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone.vue'
 
-  export default {
-    name: 'RegForm',
-    data () {
-      return {
-        form: {
-          phone: '',
-          email: '',
-          family: '',
-          name: '',
-          patronymic: '',
-          birthday: '',
-          policyNumber: '',
-          code: '',
-        },
-        show: true
-      }
-    },
-    components: {birthdayPicker},
-    methods: {
-      onSubmit (evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
-      },
-      phoneConfirm () {
-        this.isPhoneCodeInputConfirm = true
-      },
-      changePhone () {
-        this.isPhoneCodeInputConfirm = false
-        this.form.phone = ''
-        this.form.code = ''
-      }
-    },
-    computed: {
-      isPhoneButtonConfirm () {
-        return regex.test(this.form.phone) && !this.isPhoneCodeInputConfirm
-      },
-      isDisabledPhone () {
-        return this.isPhoneCodeInputConfirm
-      }
+  const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+
+  @Component({
+    components: {
+      birthdayPicker: birthdayPickerComponent,
+      VerifyPhone: VerifyPhone
     }
+  })
+
+  export default class YourComponent extends Vue {
+
+    form: {
+      phone: string,
+      email: string,
+      family: string,
+      name: string,
+      patronymic: string,
+      birthday: string,
+      policyNumber: string,
+      code: string
+    } = {} as any
+
+    show: boolean = true
+
+    isPhoneCodeInputConfirm: boolean = false
+
+    onSubmit(evt) {
+      evt.preventDefault()
+      alert(JSON.stringify(this.form))
+    }
+
+    phoneConfirm() {
+      this.isPhoneCodeInputConfirm = true
+    }
+
+    changePhone() {
+      this.isPhoneCodeInputConfirm = false
+      this.form.phone = ''
+      this.form.code = ''
+    }
+
+    get isPhoneButtonConfirm(): boolean {
+      return regex.test(this.form.phone) && !this.isPhoneCodeInputConfirm
+    }
+
+    get isDisabledPhone(): boolean {
+      return this.isPhoneCodeInputConfirm
+    }
+
   }
 </script>
 

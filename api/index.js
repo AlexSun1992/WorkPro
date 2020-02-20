@@ -20,7 +20,7 @@ app.post('/authorize', (req, res) => {
         .then(response => {
             if(!response.data.success || response.data.score < 0.4) {
                 return res.json({'msg': 'Robot', 'score': response.score})
-            } 
+            }
             if (req.body.username === '9162641917' && req.body.password === 'r12345') {
                 console.log(response.data.success);
                 console.log(response.data.score);

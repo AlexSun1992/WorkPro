@@ -22,7 +22,7 @@
 <script>
 
   import LoginForm from './LoginForm/LoginForm'
-  import RegForm from './RegForm/RegForm'
+  import RegForm from './RegForm/RegFormTS'
 
   export default {
     name: 'LoginPage',

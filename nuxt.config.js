@@ -40,7 +40,8 @@ module.exports = {
   plugins: [
     // '~plugins/devextreme',
     '~/plugins/captcha.js',
-    '~/plugins/mask.js'
+    '~/plugins/mask.js',
+    '~/plugins/vee-validate'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -82,7 +83,7 @@ module.exports = {
   serverMiddleware: [
     '~/api/index.js',
   ],
-  
+
   auth: {
     strategies: {
       local: {
