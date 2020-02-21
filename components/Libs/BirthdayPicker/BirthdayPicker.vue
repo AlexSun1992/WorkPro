@@ -1,5 +1,5 @@
 <template>
-  <b-row>
+  <b-row @input="updateInput">
     <b-col>
       <b-form-select v-model="date.day" :options="days"></b-form-select>
     </b-col>
@@ -12,18 +12,22 @@
   </b-row>
 </template>
 
-<script lang="ts">
+<script>
   import data from './data'
-  import { Vue, Component, Prop } from 'vue-property-decorator'
 
-  @Component({})
-  export default class birthdayPickerComponent extends Vue {
+  export default  {
     data () {
       return {
         date : {day: null, month: null, year: null},
         days: data.days(),
         months: data.month(),
         years: data.years()
+      }
+    },
+    prop: ['value'],
+    methods: {
+      updateInput () {
+        this.$emit('input', this.date)
       }
     }
   }

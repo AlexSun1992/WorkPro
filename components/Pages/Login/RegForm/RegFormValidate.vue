@@ -1,16 +1,61 @@
 <template>
   <div>
     <b-form @submit.stop.prevent="onSubmit">
-      <b-form-group  label="Name">
+      <b-form-group label="Телефон">
+        <verify-phone/>
+      </b-form-group>
+      <b-form-group  label="Имя">
         <b-form-input
           v-model="$v.form.name.$model"
           :state="validateState('name')"
         ></b-form-input>
-        <b-form-invalid-feedback
-        >This is a required field and must be at least 3 characters.</b-form-invalid-feedback>
+        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group  label="Фамилия">
+        <b-form-input
+          v-model="$v.form.family.$model"
+          :state="validateState('family')"
+        ></b-form-input>
+        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group  label="Отчество">
+        <b-form-input
+          v-model="$v.form.patronymic.$model"
+          :state="validateState('patronymic')"
+        ></b-form-input>
+        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group  label="Дата рождения">
+        <birthday-picker v-model="$v.form.birthday.$model"   :state="false" />
+        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group>
+        <b-form-input
+          id="input-3"
+          v-model="form.policyNumber"
+          placeholder="Номер полиса"
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group>
+        <b-form-input
+          type="password"
+          v-model="$v.form.password.$model"
+          :state="validateState('password')"
+          placeholder="Пароль"
+        ></b-form-input>
+        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group>
+        <b-form-input
+          type="password"
+          v-model="$v.form.password2.$model"
+          :state="validateState('password2')"
+          placeholder="Повторите пароль"
+        ></b-form-input>
+        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button type="submit" variant="primary">Создать аккаунт</b-button>
     </b-form>
   </div>
 </template>
@@ -19,29 +64,52 @@
   import { validationMixin } from "vuelidate";
   import { required, minLength } from "vuelidate/lib/validators";
 
+  import birthdayPicker from '../../../Libs/BirthdayPicker/BirthdayPicker'
+  import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone'
+
   export default {
+    components: {birthdayPicker, VerifyPhone},
     mixins: [validationMixin],
-    data() {
+    data () {
       return {
-        foods: [
-          { value: null, text: "Choose..." },
-          { value: "apple", text: "Apple" },
-          { value: "orange", text: "Orange" }
-        ],
         form: {
-          name: null,
-          food: null
-        }
-      };
+          phone: '',
+          email: '',
+          family: '',
+          name: '',
+          patronymic: '',
+          birthday: '',
+          policyNumber: '',
+          code: '',
+          password: '',
+          password2: ''
+        },
+        show: true,
+        password2: ''
+      }
     },
     validations: {
       form: {
-        food: {
+        name: {
           required
         },
-        name: {
-          required,
-          minLength: minLength(3)
+        family: {
+          required
+        },
+        patronymic: {
+          required
+        },
+        birthday: {
+          required
+        },
+        code: {
+          required
+        },
+        password: {
+          required
+        },
+        password2: {
+          required
         }
       }
     },
@@ -49,16 +117,6 @@
       validateState(name) {
         const { $dirty, $error } = this.$v.form[name];
         return $dirty ? !$error : null;
-      },
-      resetForm() {
-        this.form = {
-          name: null,
-          food: null
-        };
-
-        this.$nextTick(() => {
-          this.$v.$reset();
-        });
       },
       onSubmit() {
         this.$v.form.$touch();
