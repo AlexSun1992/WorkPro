@@ -5,6 +5,15 @@
     </b-form-group>
     <b-form-group>
       <b-form-input
+        v-model="form.email"
+        v-validate="'required|email'"
+        required
+        placeholder="E-mail"
+      ></b-form-input>
+      <span>{{ veeErrors.first('email') }}</span>
+    </b-form-group>
+    <b-form-group>
+      <b-form-input
         v-model="form.name"
         required
         placeholder="Имя"
@@ -58,6 +67,9 @@
   import {Vue, Component, Prop} from 'vue-property-decorator'
   import birthdayPickerComponent from '../../../Libs/BirthdayPicker/BirthdayPicker.vue'
   import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone.vue'
+
+  import { validationMixin } from "vuelidate";
+  import { required, minLength } from "vuelidate/lib/validators";
 
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
 
