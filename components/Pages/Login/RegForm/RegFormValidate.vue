@@ -4,39 +4,38 @@
       <b-form-group label="Телефон">
         <verify-phone/>
       </b-form-group>
-      <b-form-group  label="Имя">
+      <b-form-group label="Имя">
         <b-form-input
           v-model="$v.form.name.$model"
           :state="validateState('name')"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group  label="Фамилия">
+      <b-form-group label="Фамилия">
         <b-form-input
           v-model="$v.form.family.$model"
           :state="validateState('family')"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group  label="Отчество">
+      <b-form-group label="Отчество">
         <b-form-input
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group  label="Дата рождения">
-        <birthday-picker v-model="$v.form.birthday.$model"   :state="false" />
-        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+      <b-form-group label="Дата рождения">
+        <birthday-picker :data="$v.form" :state="validateState('birthday')"/>
       </b-form-group>
-      <b-form-group>
+      <b-form-group label="Номер полиса">
         <b-form-input
           id="input-3"
           v-model="form.policyNumber"
           placeholder="Номер полиса"
         ></b-form-input>
       </b-form-group>
-      <b-form-group>
+      <b-form-group label="Пароль">
         <b-form-input
           type="password"
           v-model="$v.form.password.$model"
@@ -45,7 +44,7 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group>
+      <b-form-group label="Повторите пароль">
         <b-form-input
           type="password"
           v-model="$v.form.password2.$model"
@@ -61,14 +60,15 @@
 </template>
 
 <script>
-  import { validationMixin } from "vuelidate";
-  import { required, minLength } from "vuelidate/lib/validators";
+  import { validationMixin } from 'vuelidate'
+  import { required, minLength } from 'vuelidate/lib/validators'
 
   import birthdayPicker from '../../../Libs/BirthdayPicker/BirthdayPicker'
   import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone'
+  import CustomComponent from '../../../Libs/CustomComponent'
 
   export default {
-    components: {birthdayPicker, VerifyPhone},
+    components: {CustomComponent, birthdayPicker, VerifyPhone},
     mixins: [validationMixin],
     data () {
       return {
@@ -85,7 +85,8 @@
           password2: ''
         },
         show: true,
-        password2: ''
+        password2: '',
+        name: ''
       }
     },
     validations: {
@@ -113,19 +114,23 @@
         }
       }
     },
+    computed: {
+      invalidFeedback () {
+        return 'Пожалуйста, заполните это поле'
+      }
+    },
     methods: {
-      validateState(name) {
-        const { $dirty, $error } = this.$v.form[name];
-        return $dirty ? !$error : null;
+      validateState (name) {
+        const {$dirty, $error} = this.$v.form[name]
+        return $dirty ? !$error : null
       },
-      onSubmit() {
-        this.$v.form.$touch();
+      onSubmit () {
+        this.$v.form.$touch()
         if (this.$v.form.$anyError) {
-          return;
+          return
         }
-
-        alert("Form submitted!");
+       console.log(this.form)
       }
     }
-  };
+  }
 </script>

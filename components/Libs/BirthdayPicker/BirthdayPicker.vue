@@ -1,34 +1,21 @@
 <template>
-  <b-row @input="updateInput">
-    <b-col>
-      <b-form-select v-model="date.day" :options="days"></b-form-select>
-    </b-col>
-    <div class="col">
-      <b-form-select v-model="date.month" :options="months"></b-form-select>
-    </div>
-    <div class="col">
-      <b-form-select v-model="date.year" :options="years"></b-form-select>
-    </div>
-  </b-row>
+  <div>
+      <birthday-form  v-model="data.birthday.$model"/>
+      <small v-show="state === false && data.$touch" class="text-danger">
+        Пожалуйста, заполните это поле
+      </small>
+  </div>
+
 </template>
 
 <script>
-  import data from './data'
-
-  export default  {
-    data () {
-      return {
-        date : {day: null, month: null, year: null},
-        days: data.days(),
-        months: data.month(),
-        years: data.years()
-      }
-    },
-    prop: ['value'],
-    methods: {
-      updateInput () {
-        this.$emit('input', this.date)
-      }
+  import BirthdayForm from './BirthdayForm'
+  export default {
+    name: 'BirthdayWrapper',
+    components: {BirthdayForm},
+    props: {
+      data: Object,
+      state: Boolean
     }
   }
 </script>

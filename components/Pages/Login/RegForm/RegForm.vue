@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import birthdayPicker from '../../../Libs/BirthdayPicker/BirthdayPicker'
+  import birthdayPicker from '../../../Libs/BirthdayPicker/BirthdayForm'
   import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone'
 
   export default {

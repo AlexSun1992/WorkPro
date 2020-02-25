@@ -10,6 +10,7 @@
               </b-tab>
               <b-tab title="Регистрация">
                 <!--<reg-form/>-->
+                <!--<test-form/>-->
                <reg-form-validate/>
               </b-tab>
             </b-tabs>
@@ -25,10 +26,11 @@
   import LoginForm from './LoginForm/LoginForm'
   import RegForm from './RegForm/RegFormTS'
   import RegFormValidate from './RegForm/RegFormValidate'
+  import TestForm from './RegForm/TestForm'
 
   export default {
     name: 'LoginPage',
-    components: {RegForm, LoginForm, RegFormValidate}
+    components: {RegForm, LoginForm, RegFormValidate, TestForm}
   }
 </script>
 
