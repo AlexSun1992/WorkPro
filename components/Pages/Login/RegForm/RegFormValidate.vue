@@ -92,7 +92,8 @@
           required
         },
         code: {
-          required
+          required,
+          mustBeVerified
         },
         password: {
           required
