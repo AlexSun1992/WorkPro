@@ -6,6 +6,7 @@
         v-model="v.password.$model"
         :state="validateState('password')"
         placeholder="Пароль"
+        @blur="v.password.$touch()"
       ></b-form-input>
       <b-form-invalid-feedback>Введите пароль</b-form-invalid-feedback>
     </b-form-group>
@@ -15,6 +16,7 @@
         v-model="v.password2.$model"
         :state="validateState('password2')"
         placeholder="Повторите пароль"
+        @blur="v.password2.$touch()"
       ></b-form-input>
       <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
     </b-form-group>
