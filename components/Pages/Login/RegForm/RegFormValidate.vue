@@ -99,7 +99,11 @@
         },
         password2: {
           required
-        }
+        },
+        phone: {
+          required,
+          minLength: minLength(17)
+        },
       }
     },
     methods: {
