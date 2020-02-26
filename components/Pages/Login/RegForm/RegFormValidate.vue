@@ -99,7 +99,8 @@
           required
         },
         password2: {
-          required
+          required,
+          sameAsPassword: sameAs('password')
         },
         phone: {
           required,
