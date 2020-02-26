@@ -1,64 +1,95 @@
 <template>
-  <div>
-    <div class="form-group">
-      <label>Телефон / Email</label>
-      <input v-model.lazy="user.username"  type="tel" :state="validation" class="form-control" placeholder="Введите 10 цифр Вашего телефона или email">
-    </div>
-    <b-form-invalid-feedback :state="validation">
-        Пожалуйста, введите корректный номер телефона или email
-    </b-form-invalid-feedback>
-    <div class="form-group">
-      <label>Пароль</label>
-      <input v-model="user.password" type="password" class="form-control"  placeholder="Пароль">
-    </div>
-    <b-button variant="success" @click.prevent="login">Авторизоваться</b-button>
-  </div>
+  <b-form @submit.prevent="onSubmit">
+    <b-form-group label="Телефон">
+      <b-form-input
+        v-model="$v.user.username.$model"
+        v-mask="usernameMask"
+        :placeholder="placeholder"
+        type="tel"
+        :state="validateState('username')"
+        class="form-control">
+      </b-form-input>
+      <b-form-invalid-feedback>Пожалуйста, введите корректный номер телефона</b-form-invalid-feedback>
+    </b-form-group>
+    <b-form-group label="Пароль">
+      <b-form-input
+        v-model="$v.user.password.$model"
+        placeholder="Пароль"
+        v-mask="passwordMask"
+        type="password"
+        :state="validateState('password')"
+        class="form-control">
+      </b-form-input>
+      <b-form-invalid-feedback>Пожалуйста, введите пароль</b-form-invalid-feedback>
+    </b-form-group>
+    <b-button variant="success" type="submit">Авторизоваться</b-button>
+  </b-form>
 </template>
 
-<script lang="ts">
+<script>
+import { required, minLength, sameAs } from "vuelidate/lib/validators";
 
-import { Vue, Component } from 'vue-property-decorator';
-import { IUser } from '../login.types';
+export default {
+  data() {
+    return {
+      user: {
+        username: '',
+        password: ''
+      },
+      captcha: null,
+      usernameMask: '+7(###)-###-##-##',
+      passwordMask: 'NNNNNN',
+      placeholder: '+7(___)-___-__-__'
+    }
+  },
 
-  @Component({
-    name: 'LoginForm',
-  })
-  export default class LoginForm extends Vue {
-
-    user = <IUser>{};
-    errorMessage = null;
-    captcha = null;
-
+  methods: {
     async login() {
       try {
-        if (!this.validation) return;
         // this.captcha = await (this as any).$getCaptcha();
-        await ((this as any).$auth as any).loginWith('local', {
+        await this.$auth.loginWith('local', {
           headers: {},
-          data: <IUser> {
-            username: this.user.username,
-            password: this.user.password,
+          data: {
+            username: this.$v.user.username.$model,
+            password: this.$v.user.password.$model,
             mode: 2,
             captcha: this.captcha
           }
         });
         this.$router.push('/')
-        this.errorMessage = null;
       } catch (e) {
         console.log(e)
       }
-    }
+    },
 
-    get validation() {
-      if (this.user['username']) {
-        const emailPattern = /^\w{2,}@\w{2,}\.\w{2,4}$/; 
-        const mobilePattern = /^[0-9]{10}$/; 
-        return (this.user.username as string).match(emailPattern) || (this.user.username as string).match(mobilePattern) ? true : false;
+    validateState(name) {
+      const { $dirty, $error } = this.$v.user[name];
+      return $dirty ? !$error : null;
+    },
+
+    onSubmit() {
+      this.$v.user.$touch();
+      if (this.$v.user.$anyError) {
+        return;
+      }
+      this.login();
+    }
+  },
+
+  validations: {
+    user: {
+      username: {
+        required,
+        minLength: minLength(17)
+      },
+      password: {
+        required,
+        minLength: minLength(6)
       }
     }
   }
+}
 </script>
 
 <style scoped>
-
 </style>
