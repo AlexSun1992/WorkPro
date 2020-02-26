@@ -31,7 +31,7 @@
       <b-form-group label="Дата рождения">
         <birthday-picker :data="$v.form" :state="validateState('birthday')"/>
       </b-form-group>
-      <b-form-group>
+      <b-form-group label="Номер полиса">
         <b-form-input
           id="input-3"
           v-model="form.policyNumber"
