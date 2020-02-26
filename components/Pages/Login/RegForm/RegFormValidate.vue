@@ -4,11 +4,21 @@
       <b-form-group label="Телефон">
         <verify-phone :v="$v.form" :count="20" :validateState="validateState"/>
       </b-form-group>
+      <b-form-group  label="E-mail">
+        <b-form-input
+          v-model="$v.form.email.$model"
+          :state="validateState('email')"
+          @blur="$v.form.email.$touch()"
+          placeholder="E-mail"
+        ></b-form-input>
+        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+      </b-form-group>
       <b-form-group  label="Имя">
         <b-form-input
           v-model="$v.form.name.$model"
           :state="validateState('name')"
           @blur="$v.form.name.$touch()"
+          placeholder="Имя"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
@@ -17,6 +27,7 @@
           v-model="$v.form.family.$model"
           :state="validateState('family')"
           @blur="$v.form.family.$touch()"
+          placeholder="Фамилия"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
@@ -25,13 +36,14 @@
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
           @blur="$v.form.patronymic.$touch()"
+          placeholder="Отчество"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
       <b-form-group label="Дата рождения">
         <birthday-picker :data="$v.form" :state="validateState('birthday')"/>
       </b-form-group>
-      <b-form-group>
+      <b-form-group label="Номер полиса">
         <b-form-input
           id="input-3"
           v-model="form.policyNumber"
@@ -105,6 +117,9 @@
         phone: {
           required,
           minLength: minLength(17)
+        },
+        email: {
+          required
         },
       }
     },
