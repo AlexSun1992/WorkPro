@@ -1,13 +1,13 @@
 <template>
   <b-row>
     <b-col>
-      <b-form-select v-model="date.day" :options="days" @change="updateInput()"></b-form-select>
+      <b-form-select v-model="date.day" :options="days" @change="updateInput()" :state="state"></b-form-select>
     </b-col>
     <div class="col">
-      <b-form-select v-model="date.month" :options="months" @change="updateInput()"></b-form-select>
+      <b-form-select v-model="date.month" :options="months" @change="updateInput()" :state="state"></b-form-select>
     </div>
     <div class="col">
-      <b-form-select v-model="date.year" :options="years" @change="updateInput()"></b-form-select>
+      <b-form-select v-model="date.year" :options="years" @change="updateInput()" :state="state"></b-form-select>
     </div>
   </b-row>
 </template>
@@ -28,7 +28,8 @@
         date : {day: null, month: null, year: null},
         days: data.days(),
         months: data.month(),
-        years: data.years()
+        years: data.years(),
+        focus: false
       }
     },
     props: ['value', 'state'],

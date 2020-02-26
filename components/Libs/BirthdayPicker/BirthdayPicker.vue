@@ -1,7 +1,7 @@
 <template>
   <div>
-      <birthday-form  v-model="data.birthday.$model"/>
-      <small v-show="state === false && data.$touch" class="text-danger">
+      <birthday-form  v-model="data.birthday.$model" :state="state"/>
+      <small v-show="state === false" class="text-danger">
         Пожалуйста, заполните это поле
       </small>
   </div>

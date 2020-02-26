@@ -8,6 +8,7 @@
         <b-form-input
           v-model="$v.form.name.$model"
           :state="validateState('name')"
+          @blur="$v.form.name.$touch()"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
@@ -15,6 +16,7 @@
         <b-form-input
           v-model="$v.form.family.$model"
           :state="validateState('family')"
+          @blur="$v.form.family.$touch()"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
@@ -22,6 +24,7 @@
         <b-form-input
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
+          @blur="$v.form.patronymic.$touch()"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
@@ -32,7 +35,6 @@
         <b-form-input
           id="input-3"
           v-model="form.policyNumber"
-          placeholder="Номер полиса"
         ></b-form-input>
       </b-form-group>
       <b-form-group label="Пароль">
@@ -53,7 +55,6 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
-
       <b-button type="submit" variant="primary">Создать аккаунт</b-button>
     </b-form>
   </div>
