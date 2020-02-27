@@ -7,7 +7,6 @@
         class="mb-1"
         v-model="v.phone.$model"
         v-mask="mask"
-        autofocus
         :placeholder="placeholder"
         :disabled="isPhoneDisabled"
         @blur="phoneFieldValidate"
@@ -17,7 +16,6 @@
         ref="phoneInput"
         v-if="phoneBlured"
         class="mb-1"
-        autofocus
         v-model="v.phone.$model"
         v-mask="mask"
         :placeholder="placeholder"
