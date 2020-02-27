@@ -2,7 +2,7 @@
   <div>
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-group label="Телефон">
-        <verify-phone :v="$v.form" :count="20" :validateState="validateState"/>
+        <verify-phone ref="verifyPhone" :v="$v.form" :count="20" :validateState="validateState"/>
       </b-form-group>
       <b-form-group  label="E-mail">
         <b-form-input
@@ -130,6 +130,10 @@
       },
 
       onSubmit() {
+        debugger
+        if (this.$v.form.phone.$model) {
+          this.$refs['verifyPhone'].getCode();
+        }
         this.$v.form.$touch();
         if (this.$v.form.$anyError) {
           return;

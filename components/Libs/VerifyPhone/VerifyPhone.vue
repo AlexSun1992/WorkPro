@@ -27,7 +27,7 @@
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
     <b-link v-if="isPhoneDisabled" @click="changeNumber">Изменить номер</b-link>
-    <div v-if="code && code.data">
+    <div v-if="showCodeField">
       <p>На указанный номер выслан код подтверждения</p>
       <b-form-input v-if="!codeBlured" v-model="v.code.$model" class="mb-1" v-mask="codeMask" @blur="codeFieldValidate" @input="checkCodeInput(v.code.$model)" placeholder="Код подтверждения"></b-form-input>
       <b-form-input v-if="codeBlured" v-model="v.code.$model" class="mb-1" v-mask="codeMask" @input="checkCodeInput(v.code.$model)" @blur="codeFieldValidate" :state="validateState('code')" placeholder="Код подтверждения"></b-form-input>
@@ -79,6 +79,7 @@ export default {
 
   methods: {
      getCode() {
+       debugger
       try {
         if (!this.code && this.v.phone.$model) {
           this.isPhoneChanged = false;
@@ -161,6 +162,13 @@ export default {
       } else {
         this.codeBlured = false;
       }
+    }
+  },
+
+  computed: {
+    showCodeField() {
+      debugger
+      return this.code && this.code.data;
     }
   }
 };
