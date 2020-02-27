@@ -8,7 +8,6 @@
         v-model="v.phone.$model"
         v-mask="mask"
         :placeholder="placeholder"
-        :disabled="isPhoneDisabled"
         @blur="phoneFieldValidate"
         @input="checkPhoneInput(v.phone.$model)"
       ></b-form-input>
@@ -20,7 +19,6 @@
         v-mask="mask"
         :placeholder="placeholder"
         :state="validateState('phone')"
-        :disabled="isPhoneDisabled"
         @blur="phoneFieldValidate"
         @input="checkPhoneInput(v.phone.$model)"
       ></b-form-input>
@@ -71,6 +69,7 @@ export default {
   },
 
   created() {
+    debugger
     this.phoneBlured = true;
     this.codeBlured = true;
     this.initialCount = this.count;
@@ -90,6 +89,7 @@ export default {
             data: '55555'
           }
           this.$emit("onCode", this.code);
+          this.$refs['phoneInput'].$el.disabled = true;
           this.isPhoneDisabled = true;
           this.countdown();
         } else {
@@ -102,10 +102,12 @@ export default {
     },
 
     changeNumber() {
+      console.log(this.$refs)
       this.phoneBlured = false;
       this.codeBlured = false;
       this.v.phone.$model = '';
-      this.$refs['phoneInput'].focus();
+      this.$refs['phoneInput'].$el.disabled = false;
+      this.$refs['phoneInput'].$el.focus();
       this.code = null;
       this.v.code.$model = null;
       this.isPhoneDisabled = false;
