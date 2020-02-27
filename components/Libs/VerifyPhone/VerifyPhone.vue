@@ -79,7 +79,6 @@ export default {
 
   methods: {
      getCode() {
-       debugger
       try {
         if (!this.code && this.v.phone.$model) {
           this.isPhoneChanged = false;
@@ -133,6 +132,7 @@ export default {
     },
 
     resendCode() {
+      this.v.code.$model = '';
       this.resendCount = this.initialCount;
       this.disabledResend = true;
       this.countdown();
@@ -167,7 +167,6 @@ export default {
 
   computed: {
     showCodeField() {
-      debugger
       return this.code && this.code.data;
     }
   }
