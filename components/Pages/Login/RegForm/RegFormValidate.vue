@@ -6,7 +6,7 @@
       </b-form-group>
       <b-form-group  label="E-mail">
         <b-form-input
-          v-model="$v.form.email.$model"
+          v-model.lazy="$v.form.email.$model"
           :state="validateState('email')"
           @blur="$v.form.email.$touch()"
           placeholder="E-mail"
@@ -51,16 +51,16 @@
         ></b-form-input>
       </b-form-group>
       <verify-password :v="$v.form" :validateState="validateState"/>
-      <b-button type="submit" variant="primary">Создать аккаунт</b-button>
+      <b-button type="submit"  variant="success">Зарегистрироваться</b-button>
     </b-form>
   </div>
 </template>
 
 <script>
   import { validationMixin } from "vuelidate";
-  import { required, minLength, sameAs } from "vuelidate/lib/validators";
+  import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 
-  import birthdayPicker from '../../../Libs/BirthdayPicker/BirthdayPicker'
+  import birthdayPicker from '../../../Libs/BirthdatePicker/BirthdatePicker'
   import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone'
   import VerifyPassword from '../../../Libs/VerifyPassword/VerifyPassword'
 
@@ -119,7 +119,7 @@
           minLength: minLength(17)
         },
         email: {
-          required
+          required, email
         },
       }
     },
