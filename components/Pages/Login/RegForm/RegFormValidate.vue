@@ -136,12 +136,6 @@
         }
         alert("Form submitted!");
       }
-    },
-
-    // validations() {
-    //   return {
-    //     code: { required, mustBeVerified }
-    //   };
-    // }
+    }
   };
 </script>
