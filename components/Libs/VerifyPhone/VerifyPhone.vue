@@ -69,7 +69,6 @@ export default {
   },
 
   created() {
-    debugger
     this.phoneBlured = true;
     this.codeBlured = true;
     this.initialCount = this.count;
