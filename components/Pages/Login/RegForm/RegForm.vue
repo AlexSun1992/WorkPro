@@ -8,6 +8,7 @@
         v-model="form.name"
         required
         placeholder="Имя"
+        autofocus
       ></b-form-input>
     </b-form-group>
     <b-form-group>
@@ -50,12 +51,12 @@
         </b-form-checkbox>
       </b-form-checkbox-group>
     </b-form-group>
-    <b-button :disabled="form.checked === 'true'" type="submit" variant="primary">Зарегистрироваться</b-button>
+    <b-button :disabled="form.checked === 'true'" type="submit"  variant="success">Зарегистрироваться</b-button>
   </b-form>
 </template>
 
 <script>
-  import birthdayPicker from '../../../Libs/BirthdayPicker/BirthdayForm'
+  import birthdayPicker from '../../../Libs/BirthdatePicker/BirthdateForm'
   import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone'
 
   export default {

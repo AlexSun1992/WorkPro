@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import BirthdayForm from './BirthdayForm'
+  import BirthdayForm from './BirthdateForm'
   export default {
     name: 'BirthdayWrapper',
     components: {BirthdayForm},

@@ -65,7 +65,7 @@
 
 <script lang="ts">
   import {Vue, Component, Prop} from 'vue-property-decorator'
-  import birthdayPickerComponent from '../../../Libs/BirthdayPicker/BirthdayForm.vue'
+  import birthdayPickerComponent from '../../../Libs/BirthdatePicker/BirthdateForm.vue'
   import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone.vue'
 
   import { validationMixin } from "vuelidate";

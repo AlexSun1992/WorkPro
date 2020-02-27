@@ -9,6 +9,7 @@
         type="tel"
         @blur="phoneFieldValidate"
         @input="checkPhoneInput($v.user.username.$model)"
+        autofocus
         class="form-control">
       </b-form-input>
       <b-form-input
@@ -75,7 +76,6 @@ export default {
     this.phoneBlured = true;
     this.passwordBlured = true;
   },
-
   methods: {
     async login() {
       try {
