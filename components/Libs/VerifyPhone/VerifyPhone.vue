@@ -7,6 +7,7 @@
         class="mb-1"
         v-model="v.phone.$model"
         v-mask="mask"
+        autofocus
         :placeholder="placeholder"
         :disabled="isPhoneDisabled"
         @blur="phoneFieldValidate"
@@ -16,6 +17,7 @@
         ref="phoneInput"
         v-if="phoneBlured"
         class="mb-1"
+        autofocus
         v-model="v.phone.$model"
         v-mask="mask"
         :placeholder="placeholder"
@@ -29,8 +31,8 @@
     <b-link v-if="isPhoneDisabled" @click="changeNumber">Изменить номер</b-link>
     <div v-if="showCodeField">
       <p>На указанный номер выслан код подтверждения</p>
-      <b-form-input v-if="!codeBlured" v-model="v.code.$model" class="mb-1" v-mask="codeMask" @blur="codeFieldValidate" @input="checkCodeInput(v.code.$model)" placeholder="Код подтверждения"></b-form-input>
-      <b-form-input v-if="codeBlured" v-model="v.code.$model" class="mb-1" v-mask="codeMask" @input="checkCodeInput(v.code.$model)" @blur="codeFieldValidate" :state="validateState('code')" placeholder="Код подтверждения"></b-form-input>
+      <b-form-input v-if="!codeBlured" autofocus v-model="v.code.$model" class="mb-1" v-mask="codeMask" @blur="codeFieldValidate" @input="checkCodeInput(v.code.$model)" placeholder="Код подтверждения"></b-form-input>
+      <b-form-input v-if="codeBlured" autofocus v-model="v.code.$model" class="mb-1" v-mask="codeMask" @input="checkCodeInput(v.code.$model)" @blur="codeFieldValidate" :state="validateState('code')" placeholder="Код подтверждения"></b-form-input>
       <b-form-invalid-feedback v-if="!v.code.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
       <b-form-invalid-feedback v-else>Неверный код подтверждения</b-form-invalid-feedback>
       <b-button
