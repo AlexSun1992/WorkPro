@@ -9,6 +9,7 @@
         </b-toast>
       </div>
       <div v-html="content"></div>
+      <b-form-input autofocus></b-form-input>
       <v-runtime-template :template="content"></v-runtime-template>
       {{car}}
       <ul>

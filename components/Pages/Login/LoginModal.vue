@@ -1,5 +1,6 @@
 <template>
   <b-modal ref="auth-modal"  title="Авторизация" cancel-title="Отмена" @ok="login" no-fade>
+    <!-- <PasswordReset/> -->
     <b-alert :show="errorMessage" variant="danger">{{errorMessage}}</b-alert>
     <div class="form-group">
       <label>Телефон / Email</label>
@@ -12,16 +13,19 @@
       <label>Пароль</label>
       <input v-model="user.password" type="password" class="form-control"  placeholder="Пароль">
     </div>
+    <b-button variant="link">Зарегистрироваться</b-button>
   </b-modal>
 </template>
 
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator';
+// import PasswordReset from '../PasswordReset/PasswordReset.vue';
 import { IUser } from './login.types';
 
   @Component({
-    name: 'LoginModal'
+    name: 'LoginModal',
+    // components: {PasswordReset}
   })
   export default class LoginModal extends Vue {
 

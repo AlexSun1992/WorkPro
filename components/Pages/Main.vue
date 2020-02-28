@@ -26,10 +26,10 @@
 </template>
 
 <script>
-  import Products from '../LandingPage/LandingPageProducts'
-  import About from '../LandingPage/LandingPageAbout'
-  import Offers from '../LandingPage/LandingPageOffers'
-  import Banners from '../LandingPage/LandingPageBanners'
+  import Products from './LandingPage/LandingPageProducts'
+  import About from './LandingPage/LandingPageAbout'
+  import Offers from './LandingPage/LandingPageOffers'
+  import Banners from './LandingPage/LandingPageBanners'
 
   const pageId = 57
   export default {

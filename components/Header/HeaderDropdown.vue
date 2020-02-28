@@ -15,13 +15,13 @@
 <script>
   import { mapGetters } from 'vuex';
   import HeaderUserName from './HeaderUserName'
-  import LoginModal from '../Login/LoginModal'
+  import LoginModal from '../Pages/Login/LoginModal'
   export default {
     name: 'header-dropdown',
     components: {HeaderUserName, LoginModal},
     methods: {
       login () {
-        this.$refs['refLogin'].showLoginModal()
+        this.$router.push('/login')
       },
       logout() {
         try {

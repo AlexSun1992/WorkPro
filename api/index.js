@@ -20,8 +20,8 @@ app.post('/authorize', (req, res) => {
         .then(response => {
             if(!response.data.success || response.data.score < 0.4) {
                 return res.json({'msg': 'Robot', 'score': response.score})
-            } 
-            if (req.body.username === '9162641917' && req.body.password === 'r12345') {
+            }
+            if (req.body.phone === '+7(916)-264-19-17' && req.body.password === 'r12345') {
                 console.log(response.data.success);
                 console.log(response.data.score);
                 res.send(JSON.stringify(data.authData))
@@ -32,6 +32,19 @@ app.post('/authorize', (req, res) => {
         .catch(error => {
             console.log(error);
         });
+})
+
+app.post('/password', (req, res) => {
+    // try {
+    //     if (req.body.phone === '+7(916)-264-19-17' || req.body.phone === '+7(916)-264-19-16') {
+    //         res.send(JSON.stringify(data.code))
+    //     } else {
+    //         res.send(false)
+    //     }
+    // } catch (e) {
+    //     console.log(e)
+    // }
+    res.send(JSON.stringify(data.code))
 })
 
 module.exports = {

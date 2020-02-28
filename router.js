@@ -12,6 +12,8 @@ import RegPolicy from '~/components/Pages/Cabinet/RegPolicy'
 import Policies from '~/components/Pages/Cabinet/Policies'
 import Agents from '~/components/Pages/Cabinet/Agents'
 
+import Login from '~/components/Pages/Login/LoginPage'
+
 Vue.use(Router)
 
 export function createRouter() {
@@ -22,6 +24,11 @@ export function createRouter() {
         meta: 'Главная',
         path: '/',
         component: Main,
+      },
+      {
+        meta: 'Регистрация',
+        path: '/login',
+        component: Login,
       },
       {
         meta: 'О компании',

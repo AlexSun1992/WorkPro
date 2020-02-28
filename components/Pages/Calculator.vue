@@ -38,7 +38,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import LoginModal from '../Login/LoginModal'
+  import LoginModal from './Login/LoginModal'
   export default {
     name: 'Calculator',
     components: {LoginModal},
