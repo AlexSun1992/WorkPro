@@ -1,6 +1,6 @@
 <template>
   <div>
-      <birthday-form  v-model="data.birthday.$model" :state="state"/>
+      <birthday-form  v-model="data.birthdate.$model" :state="state"/>
       <small v-show="state === false" class="text-danger">
         Пожалуйста, заполните это поле
       </small>
