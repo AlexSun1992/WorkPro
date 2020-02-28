@@ -30,19 +30,15 @@
         v-if="!passwordBlured"
         v-model="$v.user.password.$model"
         placeholder="Пароль"
-        v-mask="passwordMask"
         type="password"
         @blur="passwordFieldValidate"
-        @input="checkPasswordInput($v.user.password.$model)"
         class="form-control">
       </b-form-input>
       <b-form-input
         v-if="passwordBlured"
         v-model="$v.user.password.$model"
         placeholder="Пароль"
-        v-mask="passwordMask"
         type="password"
-        @input="checkPasswordInput($v.user.password.$model)"
         @blur="passwordFieldValidate"
         :state="validateState('password')"
         class="form-control">
@@ -65,7 +61,7 @@ export default {
       },
       captcha: null,
       usernameMask: '+7(###)-###-##-##',
-      passwordMask: 'NNNNNN',
+      // passwordMask: 'NNNNNN',
       placeholder: '+7(___)-___-__-__',
       phoneBlured: false,
       passwordBlured: false
@@ -86,11 +82,12 @@ export default {
             username: this.$v.user.username.$model,
             password: this.$v.user.password.$model,
             mode: 2,
-            captcha: this.captcha
+            // captcha: this.captcha
           }
         });
         this.$router.push('/')
       } catch (e) {
+        debugger
         console.log(e)
       }
     },
@@ -126,13 +123,13 @@ export default {
       this.$v.user.password.$touch();
     },
 
-    checkPasswordInput(value) {
-      if (value.length > 5) {
-        this.passwordBlured = true;
-      } else {
-        this.passwordBlured = false;
-      }
-    },
+    // checkPasswordInput(value) {
+    //   if (value.length > 5) {
+    //     this.passwordBlured = true;
+    //   } else {
+    //     this.passwordBlured = false;
+    //   }
+    // },
   },
 
   validations: {
@@ -142,8 +139,7 @@ export default {
         minLength: minLength(17)
       },
       password: {
-        required,
-        minLength: minLength(6)
+        required
       }
     }
   }

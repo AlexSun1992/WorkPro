@@ -130,7 +130,6 @@
       },
 
       onSubmit() {
-        debugger
         if (this.$v.form.phone.$model) {
           this.$refs['verifyPhone'].getCode();
         }
