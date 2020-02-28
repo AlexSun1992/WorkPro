@@ -1,52 +1,55 @@
 <template>
-  <b-form @submit.prevent="onSubmit">
-    <b-form-group label="Телефон">
-      <b-form-input
-        v-if="!phoneBlured"
-        v-model="$v.user.username.$model"
-        v-mask="usernameMask"
-        :placeholder="placeholder"
-        type="tel"
-        @blur="phoneFieldValidate"
-        @input="checkPhoneInput($v.user.username.$model)"
-        autofocus
-        class="form-control">
-      </b-form-input>
-      <b-form-input
-        v-if="phoneBlured"
-        v-model="$v.user.username.$model"
-        v-mask="usernameMask"
-        :placeholder="placeholder"
-        type="tel"
-        :state="validateState('username')"
-        @input="checkPhoneInput($v.user.username.$model)"
-        @blur="phoneFieldValidate"
-        class="form-control">
-      </b-form-input>
-      <b-form-invalid-feedback>Пожалуйста, введите корректный номер телефона</b-form-invalid-feedback>
-    </b-form-group>
-    <b-form-group label="Пароль">
-      <b-form-input
-        v-if="!passwordBlured"
-        v-model="$v.user.password.$model"
-        placeholder="Пароль"
-        type="password"
-        @blur="passwordFieldValidate"
-        class="form-control">
-      </b-form-input>
-      <b-form-input
-        v-if="passwordBlured"
-        v-model="$v.user.password.$model"
-        placeholder="Пароль"
-        type="password"
-        @blur="passwordFieldValidate"
-        :state="validateState('password')"
-        class="form-control">
-      </b-form-input>
-      <b-form-invalid-feedback>Пожалуйста, введите пароль</b-form-invalid-feedback>
-    </b-form-group>
-    <b-button variant="success" type="submit">Авторизоваться</b-button>
-  </b-form>
+  <div>
+    <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
+    <b-form @submit.prevent="onSubmit">
+      <b-form-group label="Телефон">
+        <b-form-input
+          v-if="!phoneBlured"
+          v-model="$v.user.username.$model"
+          v-mask="usernameMask"
+          :placeholder="placeholder"
+          type="tel"
+          @blur="phoneFieldValidate"
+          @input="checkPhoneInput($v.user.username.$model)"
+          autofocus
+          class="form-control"
+        ></b-form-input>
+        <b-form-input
+          v-if="phoneBlured"
+          v-model="$v.user.username.$model"
+          v-mask="usernameMask"
+          :placeholder="placeholder"
+          type="tel"
+          :state="validateState('username')"
+          @input="checkPhoneInput($v.user.username.$model)"
+          @blur="phoneFieldValidate"
+          class="form-control"
+        ></b-form-input>
+        <b-form-invalid-feedback>Пожалуйста, введите корректный номер телефона</b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group label="Пароль">
+        <b-form-input
+          v-if="!passwordBlured"
+          v-model="$v.user.password.$model"
+          placeholder="Пароль"
+          type="password"
+          @blur="passwordFieldValidate"
+          class="form-control"
+        ></b-form-input>
+        <b-form-input
+          v-if="passwordBlured"
+          v-model="$v.user.password.$model"
+          placeholder="Пароль"
+          type="password"
+          @blur="passwordFieldValidate"
+          :state="validateState('password')"
+          class="form-control"
+        ></b-form-input>
+        <b-form-invalid-feedback>Пожалуйста, введите пароль</b-form-invalid-feedback>
+      </b-form-group>
+      <b-button variant="success" type="submit">Авторизоваться</b-button>
+    </b-form>
+  </div>
 </template>
 
 <script>
@@ -56,19 +59,20 @@ export default {
   data() {
     return {
       user: {
-        username: '',
-        password: ''
+        username: "",
+        password: ""
       },
       captcha: null,
-      usernameMask: '+7(###)-###-##-##',
+      usernameMask: "+7(###)-###-##-##",
       // passwordMask: 'NNNNNN',
-      placeholder: '+7(___)-___-__-__',
+      placeholder: "+7(___)-___-__-__",
       phoneBlured: false,
-      passwordBlured: false
-    }
+      passwordBlured: false,
+      errorMessage: null
+    };
   },
 
-  created(){
+  created() {
     this.phoneBlured = true;
     this.passwordBlured = true;
   },
@@ -76,19 +80,20 @@ export default {
     async login() {
       try {
         // this.captcha = await (this as any).$getCaptcha();
-        await this.$auth.loginWith('local', {
+        await this.$auth.loginWith("local", {
           headers: {},
           data: {
             username: this.$v.user.username.$model,
             password: this.$v.user.password.$model,
-            mode: 2,
+            mode: 2
             // captcha: this.captcha
           }
         });
-        this.$router.push('/')
+        this.$router.push("/");
       } catch (e) {
-        
-        console.log(e)
+        if (this.$auth.error.response.status === 401) {
+          this.errorMessage = this.$auth.error.response.data.MESSAGE;
+        }
       }
     },
 
@@ -121,7 +126,7 @@ export default {
     passwordFieldValidate() {
       this.passwordBlured = true;
       this.$v.user.password.$touch();
-    },
+    }
 
     // checkPasswordInput(value) {
     //   if (value.length > 5) {
@@ -143,7 +148,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
