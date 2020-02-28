@@ -1,5 +1,7 @@
 <template>
-  <b-form @submit.prevent="onSubmit">
+  <div>
+    <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
+    <b-form @submit.prevent="onSubmit">
     <b-form-group label="Телефон">
       <b-form-input
         v-if="!phoneBlured"
@@ -47,6 +49,7 @@
     </b-form-group>
     <b-button variant="success" type="submit">Авторизоваться</b-button>
   </b-form>
+  </div>
 </template>
 
 <script>
@@ -64,7 +67,8 @@ export default {
       // passwordMask: 'NNNNNN',
       placeholder: '+7(___)-___-__-__',
       phoneBlured: false,
-      passwordBlured: false
+      passwordBlured: false,
+      errorMessage: null
     }
   },
 
@@ -87,8 +91,9 @@ export default {
         });
         this.$router.push('/')
       } catch (e) {
-        
-        console.log(e)
+        if (this.$auth.error.response.status === 401){
+          this.errorMessage = this.$auth.error.response.data.MESSAGE;
+        }
       }
     },
 
