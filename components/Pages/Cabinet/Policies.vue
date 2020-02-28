@@ -24,8 +24,7 @@
       }
     },
     async mounted() { // only client side hook no need to check
-      const { data } = await this.$axios.get('/am/main/v2/data/55/8'); // await is not mandatory
-      this.policies = data[0]._data
+      this.policies = []
     }
   }
 </script>
