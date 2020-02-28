@@ -87,7 +87,7 @@ export default {
         });
         this.$router.push('/')
       } catch (e) {
-        debugger
+        
         console.log(e)
       }
     },
