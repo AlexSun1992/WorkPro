@@ -6,6 +6,7 @@
         class="mb-1"
         v-model="v.phone.$model"
         v-mask="mask"
+        autofocus
         :placeholder="placeholder"
         :state="validateInput('phone', isPhoneBlured)"
         :disabled="isPhoneDisabled"

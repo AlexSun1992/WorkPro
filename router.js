@@ -29,6 +29,7 @@ export function createRouter() {
         meta: 'Регистрация',
         path: '/login',
         component: Login,
+        alias: '/register'
       },
       {
         meta: 'О компании',

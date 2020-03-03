@@ -8,6 +8,7 @@
           v-model="$v.user.username.$model"
           v-mask="usernameMask"
           :placeholder="placeholder"
+          autofocus
           type="tel"
           :state="validateInput('username', isUsernameBlured)"
           @blur="blurField('username', isUsernameBlured)"
