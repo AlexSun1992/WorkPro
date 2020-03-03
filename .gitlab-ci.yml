@@ -33,5 +33,7 @@ deploy_staging:
   environment:
     name: test
     url: http://nodejs.reso.ru/
+  only:
+    - master
   tags:
     - git-docker

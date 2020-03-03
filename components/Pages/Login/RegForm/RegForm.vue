@@ -64,10 +64,6 @@
   import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone'
   import VerifyPassword from '../../../Libs/VerifyPassword/VerifyPassword'
 
-  function mustBeVerified (value) {
-    return value === '55555';
-  }
-
   export default {
     components: {birthdayPicker, VerifyPhone, VerifyPassword},
     mixins: [validationMixin],
@@ -105,7 +101,7 @@
         },
         code: {
           required,
-          mustBeVerified
+          minLength: minLength(5)
         },
         password: {
           required
