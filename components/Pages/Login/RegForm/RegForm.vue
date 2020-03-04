@@ -86,7 +86,7 @@
           password2: ''
         },
         show: true,
-        password2: ''
+        password2: '',
       }
     },
     validations: {

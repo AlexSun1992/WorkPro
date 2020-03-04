@@ -41,7 +41,8 @@ module.exports = {
     // '~plugins/devextreme',
     '~/plugins/captcha.js',
     '~/plugins/mask.js',
-    '~/plugins/validate'
+    '~/plugins/validate',
+    { src: '~plugins/vcalendar.js', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
