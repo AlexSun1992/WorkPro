@@ -10,7 +10,7 @@
         :placeholder="placeholder"
         :state="validateInput('phone', isPhoneBlured)"
         :disabled="isPhoneDisabled"
-        @blur="blurField('phone', isPhoneBlured)"
+        @blur="debouncedUpdate('phone', isPhoneBlured)"
         @input="isPhoneBlured = false"
       ></b-form-input>
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
@@ -18,13 +18,13 @@
     <b-link v-if="isPhoneDisabled" @click="changeNumber">Изменить номер</b-link>
     <div v-if="code">
       <p>На указанный номер выслан код подтверждения</p>
-      <b-form-input
+      <!-- <b-form-input
         autofocus
         v-model="v.code.$model"
         class="mb-1"
         v-mask="codeMask"
         :state="validateInput('code', isCodeBlured)"
-        @blur="blurField('code', isCodeBlured)"
+        @blur="debouncedUpdate()"
         @input="isCodeBlured = false"
         placeholder="Код подтверждения"
       ></b-form-input>
@@ -38,7 +38,7 @@
       >
         Отправить повторно
         <span>{{ resendCount }}</span>
-      </b-button>
+      </b-button> -->
     </div>
     <b-button
       type="submit"
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+
+import _ from 'lodash'
 
 export default {
   props: ["count", "v", "validateState"],
@@ -72,6 +74,7 @@ export default {
   },
 
   created() {
+    this.debouncedUpdate = _.debounce(this.blurField, 100)
     this.initialCount = this.count;
     this.resendCount = this.count;
   },

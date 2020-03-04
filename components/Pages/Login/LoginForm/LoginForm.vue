@@ -11,7 +11,7 @@
           autofocus
           type="tel"
           :state="validateInput('username', isUsernameBlured)"
-          @blur="blurField('username', isUsernameBlured)"
+          @blur="debouncedUpdate('username', isUsernameBlured)"
           @input="isUsernameBlured = false"
           class="form-control"
         ></b-form-input>
@@ -36,6 +36,7 @@
 
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
+import _ from 'lodash'
 
 export default {
   data() {
@@ -50,6 +51,12 @@ export default {
       placeholder: "+7(___)-___-__-__",
       errorMessage: null
     };
+  },
+
+  created() {
+    this.debouncedUpdate = _.debounce(this.blurField, 100)
+    this.initialCount = this.count;
+    this.resendCount = this.count;
   },
 
   methods: {
