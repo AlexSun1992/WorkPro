@@ -6,10 +6,11 @@
         class="mb-1"
         v-model="v.phone.$model"
         v-mask="mask"
+        autofocus
         :placeholder="placeholder"
         :state="validateInput('phone', isPhoneBlured)"
         :disabled="isPhoneDisabled"
-        @blur="blurField('phone', isPhoneBlured)"
+        @blur="debouncedUpdate('phone', isPhoneBlured)"
         @input="isPhoneBlured = false"
       ></b-form-input>
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
@@ -51,6 +52,8 @@
 
 <script>
 
+import _ from 'lodash'
+
 export default {
   props: ["count", "v", "validateState"],
   data() {
@@ -71,6 +74,7 @@ export default {
   },
 
   created() {
+    this.debouncedUpdate = _.debounce(this.blurField, 100)
     this.initialCount = this.count;
     this.resendCount = this.count;
   },

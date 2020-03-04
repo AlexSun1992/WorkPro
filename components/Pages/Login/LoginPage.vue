@@ -4,11 +4,11 @@
       <div class="container">
         <b-row class="justify-content-center">
           <b-col md="6" lg="6">
-            <b-tabs content-class="mt-3">
-              <b-tab title="Вход" active>
+            <b-tabs ref="tabs" content-class="mt-3">
+              <b-tab title="Вход" @click="changeUrl" :active="$route.path === '/login'">
                 <login-form/>
               </b-tab>
-              <b-tab title="Регистрация">
+              <b-tab @click="changeUrl" title="Регистрация" :active="$route.path === '/register'">
                <reg-form/>
               </b-tab>
             </b-tabs>
@@ -26,7 +26,17 @@
 
   export default {
     name: 'LoginPage',
-    components: {RegForm, LoginForm}
+    components: {RegForm, LoginForm},
+    methods: {
+      changeUrl() {
+        if (this.$refs['tabs'].currentTab == 0) {
+          this.$router.push('/login')
+        }
+        if (this.$refs['tabs'].currentTab == 1) {
+          this.$router.push('/register')
+        }
+      }
+    }
   }
 </script>
 
