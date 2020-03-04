@@ -4,45 +4,26 @@
     <b-form @submit.prevent="onSubmit">
       <b-form-group label="Телефон">
         <b-form-input
-          v-if="!phoneBlured"
+          ref="phoneInput"
           v-model="$v.user.username.$model"
           v-mask="usernameMask"
           :placeholder="placeholder"
           type="tel"
-          @blur="phoneFieldValidate"
-          @input="checkPhoneInput($v.user.username.$model)"
-          autofocus
-          class="form-control"
-        ></b-form-input>
-        <b-form-input
-          v-if="phoneBlured"
-          v-model="$v.user.username.$model"
-          v-mask="usernameMask"
-          :placeholder="placeholder"
-          type="tel"
-          :state="validateState('username')"
-          @input="checkPhoneInput($v.user.username.$model)"
-          @blur="phoneFieldValidate"
+          :state="validateInput('username', isUsernameBlured)"
+          @blur="blurField('username', isUsernameBlured)"
+          @input="isUsernameBlured = false"
           class="form-control"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, введите корректный номер телефона</b-form-invalid-feedback>
       </b-form-group>
       <b-form-group label="Пароль">
         <b-form-input
-          v-if="!passwordBlured"
           v-model="$v.user.password.$model"
           placeholder="Пароль"
           type="password"
-          @blur="passwordFieldValidate"
-          class="form-control"
-        ></b-form-input>
-        <b-form-input
-          v-if="passwordBlured"
-          v-model="$v.user.password.$model"
-          placeholder="Пароль"
-          type="password"
-          @blur="passwordFieldValidate"
-          :state="validateState('password')"
+          :state="validateInput('password', isPasswordBlured)"
+          @blur="blurField('password', isPasswordBlured)"
+          @input="isPasswordBlured = false"
           class="form-control"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, введите пароль</b-form-invalid-feedback>
@@ -53,7 +34,7 @@
 </template>
 
 <script>
-import { required, minLength, sameAs } from "vuelidate/lib/validators";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   data() {
@@ -62,31 +43,23 @@ export default {
         username: "",
         password: ""
       },
-      captcha: null,
+      isUsernameBlured: true,
+      isPasswordBlured: true,
       usernameMask: "+7(###)-###-##-##",
-      // passwordMask: 'NNNNNN',
       placeholder: "+7(___)-___-__-__",
-      phoneBlured: false,
-      passwordBlured: false,
       errorMessage: null
     };
   },
 
-  created() {
-    this.phoneBlured = true;
-    this.passwordBlured = true;
-  },
   methods: {
     async login() {
       try {
-        // this.captcha = await (this as any).$getCaptcha();
         await this.$auth.loginWith("local", {
           headers: {},
           data: {
             username: this.$v.user.username.$model,
             password: this.$v.user.password.$model,
             mode: 2
-            // captcha: this.captcha
           }
         });
         this.$router.push("/");
@@ -95,6 +68,23 @@ export default {
           this.errorMessage = this.$auth.error.response.data.MESSAGE;
         }
       }
+    },
+
+    validateInput(field, bluredField) {
+      if (this.$v.user[field].$model && 
+          this.$v.user[field].$params.minLength && 
+          (this.$v.user[field].$model.length === this.$v.user[field].$params.minLength.min) || bluredField) {
+        return this.validateState(field);
+      }
+    },
+
+    blurField(field, bluredField) {
+      if (field === 'username') {
+        this.isUsernameBlured = true;
+      } else if (field === 'password') {
+        this.isPasswordBlured = true;
+      }
+      this.$v.user[field].$touch();  
     },
 
     validateState(name) {
@@ -108,35 +98,9 @@ export default {
         return;
       }
       this.login();
-    },
-
-    phoneFieldValidate() {
-      this.phoneBlured = true;
-      this.$v.user.username.$touch();
-    },
-
-    checkPhoneInput(value) {
-      if (value.length > 16) {
-        this.phoneBlured = true;
-      } else {
-        this.phoneBlured = false;
-      }
-    },
-
-    passwordFieldValidate() {
-      this.passwordBlured = true;
-      this.$v.user.password.$touch();
     }
-
-    // checkPasswordInput(value) {
-    //   if (value.length > 5) {
-    //     this.passwordBlured = true;
-    //   } else {
-    //     this.passwordBlured = false;
-    //   }
-    // },
   },
-
+  
   validations: {
     user: {
       username: {

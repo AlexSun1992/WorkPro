@@ -3,32 +3,30 @@
     <b-form-group>
       <b-form-input
         ref="phoneInput"
-        v-if="!phoneBlured"
         class="mb-1"
         v-model="v.phone.$model"
         v-mask="mask"
         :placeholder="placeholder"
-        @blur="phoneFieldValidate"
-        @input="checkPhoneInput(v.phone.$model)"
-      ></b-form-input>
-      <b-form-input
-        ref="phoneInput"
-        v-if="phoneBlured"
-        class="mb-1"
-        v-model="v.phone.$model"
-        v-mask="mask"
-        :placeholder="placeholder"
-        :state="validateState('phone')"
-        @blur="phoneFieldValidate"
-        @input="checkPhoneInput(v.phone.$model)"
+        :state="validateInput('phone', isPhoneBlured)"
+        :disabled="isPhoneDisabled"
+        @blur="blurField('phone', isPhoneBlured)"
+        @input="isPhoneBlured = false"
       ></b-form-input>
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
     <b-link v-if="isPhoneDisabled" @click="changeNumber">Изменить номер</b-link>
-    <div v-if="showCodeField">
+    <div v-if="code">
       <p>На указанный номер выслан код подтверждения</p>
-      <b-form-input v-if="!codeBlured" autofocus v-model="v.code.$model" class="mb-1" v-mask="codeMask" @blur="codeFieldValidate" @input="checkCodeInput(v.code.$model)" placeholder="Код подтверждения"></b-form-input>
-      <b-form-input v-if="codeBlured" autofocus v-model="v.code.$model" class="mb-1" v-mask="codeMask" @input="checkCodeInput(v.code.$model)" @blur="codeFieldValidate" :state="validateState('code')" placeholder="Код подтверждения"></b-form-input>
+      <b-form-input
+        autofocus
+        v-model="v.code.$model"
+        class="mb-1"
+        v-mask="codeMask"
+        :state="validateInput('code', isCodeBlured)"
+        @blur="blurField('code', isCodeBlured)"
+        @input="isCodeBlured = false"
+        placeholder="Код подтверждения"
+      ></b-form-input>
       <b-form-invalid-feedback v-if="!v.code.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
       <b-form-invalid-feedback v-else>Неверный код подтверждения</b-form-invalid-feedback>
       <b-button
@@ -41,18 +39,24 @@
         <span>{{ resendCount }}</span>
       </b-button>
     </div>
-    <b-button type="submit" v-if="!code" :disabled="v.phone.$invalid" @click.prevent="getCode" variant="success">Подтвердить</b-button>
+    <b-button
+      type="submit"
+      v-if="!code"
+      :disabled="v.phone.$invalid"
+      @click.prevent="getCode"
+      variant="success"
+    >Подтвердить</b-button>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
-  props: ['count', 'v', 'validateState'],
+  props: ["count", "v", "validateState"],
   data() {
     return {
-      phone: null,
+      isPhoneBlured: true,
+      isCodeBlured: true,
       code: null,
       isPhoneDisabled: false,
       disabledResend: true,
@@ -60,40 +64,29 @@ export default {
       initialCount: null,
       resendCount: null,
       isPhoneChanged: false,
-      mask: '+7(###)-###-##-##',
-      codeMask: '#####',
-      placeholder: '+7(___)-___-__-__',
-      phoneBlured: false,
-      codeBlured: false
+      mask: "+7(###)-###-##-##",
+      codeMask: "#####",
+      placeholder: "+7(___)-___-__-__"
     };
   },
 
   created() {
-    this.phoneBlured = true;
-    this.codeBlured = true;
     this.initialCount = this.count;
     this.resendCount = this.count;
   },
 
   methods: {
-     getCode() {
+    getCode() {
       try {
         if (!this.code && this.v.phone.$model) {
-          this.isPhoneChanged = false;
           this.resendCount = this.initialCount;
           this.disabledResend = true;
-          // Будет изменено на action
-          // this.code = await axios.post("/api/password", { phone: this.v.phone.$model });
-          this.code = {
-            data: '55555'
-          }
+          this.code = "55555"
           this.$emit("onCode", this.code);
-          this.$refs['phoneInput'].$el.disabled = true;
           this.isPhoneDisabled = true;
           this.countdown();
         } else {
           this.isPhoneDisabled = false;
-          this.code = null;
         }
       } catch (e) {
         console.log(e);
@@ -101,18 +94,31 @@ export default {
     },
 
     changeNumber() {
-      console.log(this.$refs)
-      this.phoneBlured = false;
-      this.codeBlured = false;
-      this.v.phone.$model = '';
-      this.$refs['phoneInput'].$el.disabled = false;
-      this.$refs['phoneInput'].$el.focus();
+      this.isPhoneBlured = false;
+      this.v.phone.$model = "";
+      this.$refs["phoneInput"].$el.disabled = false;
+      this.$refs["phoneInput"].$el.focus();
       this.code = null;
       this.v.code.$model = null;
       this.isPhoneDisabled = false;
       this.isPhoneChanged = true;
       this.$emit("onCode", this.code);
       this.countdown();
+    },
+
+    validateInput(field, bluredField) {
+      if (this.v[field].$model && (this.v[field].$model.length === this.v[field].$params.minLength.min) || bluredField) {
+        return this.validateState(field);
+      }
+    },
+
+    blurField(field, bluredField) {
+      if (field === 'phone') {
+        this.isPhoneBlured = true;
+      } else if (field === 'code') {
+        this.isCodeBlured = true;
+      }
+      this.v[field].$touch();  
     },
 
     countdown() {
@@ -133,42 +139,10 @@ export default {
     },
 
     resendCode() {
-      this.v.code.$model = '';
+      this.v.code.$model = "";
       this.resendCount = this.initialCount;
       this.disabledResend = true;
       this.countdown();
-    },
-
-    phoneFieldValidate() {
-      this.phoneBlured = true;
-      this.v.phone.$touch();
-    },
-
-    codeFieldValidate() {
-      this.codeBlured = true;
-      this.v.code.$touch();
-    },
-
-    checkPhoneInput(value) {
-      if (value.length > 16) {
-        this.phoneBlured = true;
-      } else {
-        this.phoneBlured = false;
-      }
-    },
-
-    checkCodeInput(value) {
-      if (value === '55555') {
-        this.codeBlured = true;
-      } else {
-        this.codeBlured = false;
-      }
-    }
-  },
-
-  computed: {
-    showCodeField() {
-      return this.code && this.code.data;
     }
   }
 };
