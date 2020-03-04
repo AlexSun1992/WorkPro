@@ -18,13 +18,13 @@
     <b-link v-if="isPhoneDisabled" @click="changeNumber">Изменить номер</b-link>
     <div v-if="code">
       <p>На указанный номер выслан код подтверждения</p>
-      <!-- <b-form-input
+      <b-form-input
         autofocus
         v-model="v.code.$model"
         class="mb-1"
         v-mask="codeMask"
         :state="validateInput('code', isCodeBlured)"
-        @blur="debouncedUpdate()"
+        @blur="blurField('code', isCodeBlured)"
         @input="isCodeBlured = false"
         placeholder="Код подтверждения"
       ></b-form-input>
@@ -38,7 +38,7 @@
       >
         Отправить повторно
         <span>{{ resendCount }}</span>
-      </b-button> -->
+      </b-button>
     </div>
     <b-button
       type="submit"
