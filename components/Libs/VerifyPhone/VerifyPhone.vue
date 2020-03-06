@@ -88,6 +88,7 @@ export default {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
           // this.code = "55555"
+          // Перенести в actions
           this.code = await axios.post("/api/password", { phone: this.v.phone.$model });
           this.$emit("onCode", this.code);
           this.isPhoneDisabled = true;

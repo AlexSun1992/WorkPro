@@ -49,7 +49,6 @@ app.post('/password', (req, res) => {
 
 app.post('/register', (req, res) => {
     try {
-        console.log(req.body.form)
         axios.post('https://mobiletest.reso.ru/free/v2/register', req.body.form)
             .then(response => {
                 res.send(response.data)
