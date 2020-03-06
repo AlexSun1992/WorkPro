@@ -141,7 +141,7 @@
       async setToken() {
         this.registrationInProcess = true;
         // Вынести в actions
-        const response = await axios.post("/api/register", {form: this.form});
+        const response = await axios.post("/api/registration", {form: this.form});
         if (response && response.status === 200) {
           const token = response.data[0].TOKEN;
           this.registrationInProcess = false;

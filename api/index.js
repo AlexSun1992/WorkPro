@@ -47,9 +47,9 @@ app.post('/password', (req, res) => {
     res.send(JSON.stringify(data.code))
 })
 
-app.post('/register', (req, res) => {
+app.post('/registration', (req, res) => {
     try {
-        axios.post('https://mobiletest.reso.ru/free/v2/register', req.body.form)
+        axios.post('https://mobiletest.reso.ru/free/v2/registration', req.body.form)
             .then(response => {
                 res.send(response.data)
             })
