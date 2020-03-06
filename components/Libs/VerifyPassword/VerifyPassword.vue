@@ -9,6 +9,7 @@
             :state="validateState('password')"
             placeholder="Пароль"
             @blur="v.password.$touch()"
+            :disabled="disabled"
           ></b-form-input>
           <b-form-invalid-feedback>Введите пароль</b-form-invalid-feedback>
         </b-form-group>
@@ -21,6 +22,7 @@
             :state="validateState('password2')"
             placeholder="Повторите пароль"
             @blur="v.password2.$touch()"
+            :disabled="disabled"
           ></b-form-input>
           <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
         </b-form-group>
@@ -31,7 +33,7 @@
 
 <script>
 export default {
-  props: ["v", "validateState"],
+  props: ["v", "validateState", "disabled"],
   data() {
     return {
       password: "",

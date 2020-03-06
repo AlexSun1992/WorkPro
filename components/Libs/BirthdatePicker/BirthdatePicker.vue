@@ -13,6 +13,7 @@
       :lang="lang"
       :disabled-date="notBeforeDate"
       :default-value="defaultDate"
+      :disabled="disabled"
       :input-class="state === false ? `timestamp form-control is-invalid` : `timestamp form-control`">
     </date-picker>
       <small v-show="state === false" class="date-error text-danger">
@@ -40,7 +41,8 @@
     components: {BirthdayForm, DatePicker},
     props: {
       data: Object,
-      state: Boolean
+      state: Boolean,
+      disabled: Boolean
     },
     data () {
       return {

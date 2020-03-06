@@ -13,6 +13,7 @@
           :state="validateInput('username', isUsernameBlured)"
           @blur="debouncedUpdate('username', isUsernameBlured)"
           @input="isUsernameBlured = false"
+          :disabled="authInProcess"
           class="form-control"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, введите корректный номер телефона</b-form-invalid-feedback>
@@ -26,10 +27,14 @@
           @blur="blurField('password', isPasswordBlured)"
           @input="isPasswordBlured = false"
           class="form-control"
+          :disabled="authInProcess"
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, введите пароль</b-form-invalid-feedback>
       </b-form-group>
-      <b-button variant="success" type="submit">Авторизоваться</b-button>
+      <b-button variant="success" type="submit" :disabled="authInProcess">
+        Авторизоваться
+        <b-spinner v-if="authInProcess" style="width: 1.2rem; height: 1.2rem;" variant="light"></b-spinner>
+      </b-button>
     </b-form>
   </div>
 </template>
@@ -49,7 +54,8 @@ export default {
       isPasswordBlured: true,
       usernameMask: "+7(###)-###-##-##",
       placeholder: "+7(___)-___-__-__",
-      errorMessage: null
+      errorMessage: null,
+      authInProcess: false
     };
   },
 
@@ -62,6 +68,7 @@ export default {
   methods: {
     async login() {
       try {
+        this.authInProcess = true;
         await this.$auth.loginWith("local", {
           headers: {},
           data: {
@@ -70,10 +77,12 @@ export default {
             mode: 2
           }
         });
+        this.authInProcess = false;
         this.$router.push("/");
       } catch (e) {
         if (this.$auth.error.response.status === 401) {
           this.errorMessage = this.$auth.error.response.data.MESSAGE;
+          this.authInProcess = false;
         }
       }
     },
