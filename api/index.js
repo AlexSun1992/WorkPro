@@ -47,6 +47,17 @@ app.post('/password', (req, res) => {
     res.send(JSON.stringify(data.code))
 })
 
+app.post('/registration', (req, res) => {
+    try {
+        axios.post('https://mobiletest.reso.ru/free/v2/registration', req.body.form)
+            .then(response => {
+                res.send(response.data)
+            })
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 module.exports = {
    path: '/api',
    handler: app

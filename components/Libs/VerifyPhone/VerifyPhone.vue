@@ -9,7 +9,7 @@
         autofocus
         :placeholder="placeholder"
         :state="validateInput('phone', isPhoneBlured)"
-        :disabled="isPhoneDisabled"
+        :disabled="isPhoneDisabled || disabled"
         @blur="debouncedUpdate('phone', isPhoneBlured)"
         @input="isPhoneBlured = false"
       ></b-form-input>
@@ -26,6 +26,7 @@
         :state="validateInput('code', isCodeBlured)"
         @blur="blurField('code', isCodeBlured)"
         @input="isCodeBlured = false"
+        :disabled="disabled"
         placeholder="Код подтверждения"
       ></b-form-input>
       <b-form-invalid-feedback v-if="!v.code.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
@@ -53,9 +54,10 @@
 <script>
 
 import _ from 'lodash'
+import axios from 'axios'
 
 export default {
-  props: ["count", "v", "validateState"],
+  props: ["count", "v", "validateState", "disabled"],
   data() {
     return {
       isPhoneBlured: true,
@@ -80,12 +82,14 @@ export default {
   },
 
   methods: {
-    getCode() {
+    async getCode() {
       try {
         if (!this.code && this.v.phone.$model) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
-          this.code = "55555"
+          // this.code = "55555"
+          // Перенести в actions
+          this.code = await axios.post("/api/password", { phone: this.v.phone.$model });
           this.$emit("onCode", this.code);
           this.isPhoneDisabled = true;
           this.countdown();
@@ -151,9 +155,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.form-group {
-  margin-bottom: 4px;
-}
-</style>

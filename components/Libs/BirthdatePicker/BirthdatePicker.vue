@@ -102,8 +102,7 @@
 </script>
 
 <style scoped>
-  .mx-datepicker {
-    width: 100%
-  }
-
+.mx-datepicker {
+  width: 100%
+}
 </style>

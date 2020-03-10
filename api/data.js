@@ -6,16 +6,18 @@ const authData = {
 const userinfo = [
     {
         "_data": [
-            {
-                "STHIRDNAME": "Валентиновна",
-                "DBIRTHDATE": "1981-01-30 00:00:00.0",
-                "SPHONE": "9162641917",
-                "SUSERNAME": "9162641917",
-                "SFIRSTNAME": "Наталия",
-                "ID": 2003,
-                "SSECONDNAME": "Жарова",
-                "IDAUTHTYPE": 2
-            }
+            // {
+            //     "STHIRDNAME": "Валентиновна",
+            //     "DBIRTHDATE": "1981-01-30 00:00:00.0",
+            //     "SPHONE": "9162641917",
+            //     "SUSERNAME": "9162641917",
+            //     "SFIRSTNAME": "Наталия",
+            //     "ID": 2003,
+            //     "SSECONDNAME": "Жарова",
+            //     "IDAUTHTYPE": 2
+            // }
+
+            {"SSECONDNAME":"Матвеев","SFIRSTNAME":"Кирилл","STHIRDNAME":"Владимирович","DBIRTHDATE":"1972-12-08","SPHONE":"9","SEMAIL":"9"}
         ],
         "_struct": [],
         "_info": {},
