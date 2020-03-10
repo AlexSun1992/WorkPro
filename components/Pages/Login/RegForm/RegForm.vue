@@ -143,7 +143,7 @@
         // Вынести в actions
         const response = await axios.post("/api/registration", {form: this.form});
         if (response && response.status === 200) {
-          const token = response.data[0].TOKEN;
+          const token = response.data[0].ACCESS_TOKEN;
           this.registrationInProcess = false;
           this.$auth.setUserToken(token).then(this.$router.push("/"));
         } else {
