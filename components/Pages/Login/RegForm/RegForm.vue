@@ -94,8 +94,7 @@
         },
         show: true,
         password2: '',
-        registrationInProcess: false,
-        errorMessage: null
+        registrationInProcess: false
       }
     },
     validations: {
@@ -140,16 +139,11 @@
 
       async setToken() {
         this.registrationInProcess = true;
-        // Вынести в actions
-        const response = await axios.post("/api/registration", {form: this.form});
+        const response = await this.$store.dispatch("registerUser", this.form)
         if (response && response.status === 200) {
-          const token = response.data[0].ACCESS_TOKEN;
-          this.registrationInProcess = false;
-          this.$auth.setUserToken(token).then(this.$router.push("/"));
-        } else {
-          this.registrationInProcess = false;
-          this.errorMessage = 'При регистрации пользователя произошла ошибка'
+          this.$auth.setUserToken(response.data[0].ACCESS_TOKEN);
         }
+        this.registrationInProcess = false;
       },
 
       onSubmit() {
@@ -164,6 +158,20 @@
           this.setToken();
         } catch (e) {
           console.log(e);
+        }
+      }
+    },
+
+    computed: {
+      errorMessage() {
+        debugger
+        if (this.$store.getters.getRegistrationError) {
+          return 'При регистрации пользователя произошла ошибка'
+          // return this.$store.getters.getRegistrationError.toString();
+        }
+
+        if (!this.$store.getters.getRegistrationError && this.$store.getters.isAuthenticated) {
+          this.$router.push("/")
         }
       }
     }

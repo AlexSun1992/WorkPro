@@ -6,7 +6,8 @@ const axios = require('axios');
 app.use(express.json())
 
 app.get('/userinfo', (req, res) => {
-    res.send(data.userinfo)
+    // res.send(data.userinfo)
+    throw new Error('Ошибка')
 })
 
 app.post('/authorize', (req, res) => {

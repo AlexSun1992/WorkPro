@@ -42,6 +42,7 @@ module.exports = {
     '~/plugins/captcha.js',
     '~/plugins/mask.js',
     '~/plugins/validate',
+    '~/plugins/axios',
     { src: '~plugins/vcalendar.js', ssr: false }
   ],
   /*
