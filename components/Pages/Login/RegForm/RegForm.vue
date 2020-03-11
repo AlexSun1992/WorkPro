@@ -164,7 +164,6 @@
 
     computed: {
       errorMessage() {
-        debugger
         if (this.$store.getters.getRegistrationError) {
           return 'При регистрации пользователя произошла ошибка'
           // return this.$store.getters.getRegistrationError.toString();
