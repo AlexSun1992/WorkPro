@@ -94,7 +94,8 @@
         },
         show: true,
         password2: '',
-        registrationInProcess: false
+        registrationInProcess: false,
+        captchaToken: null
       }
     },
     validations: {
@@ -139,14 +140,22 @@
 
       async setToken() {
         this.registrationInProcess = true;
-        const response = await this.$store.dispatch("registerUser", this.form)
-        if (response && response.status === 200) {
-          this.$auth.setUserToken(response.data[0].ACCESS_TOKEN);
+        this.captchaToken = this.$getCaptcha();
+
+        if (this.captchaToken) {
+          const params = {
+            form: this.form,
+            RECAPTCHA: this.captchaToken
+          }
+          const response = await this.$store.dispatch("registerUser", params)
+          if (response && response.status === 200) {
+            this.$auth.setUserToken(response.data[0].ACCESS_TOKEN);
+          }
+            this.registrationInProcess = false;
         }
-        this.registrationInProcess = false;
       },
 
-      onSubmit() {
+      async onSubmit() {
         try {
           if (this.$v.form.phone.$model) {
             this.$refs['verifyPhone'].getCode();

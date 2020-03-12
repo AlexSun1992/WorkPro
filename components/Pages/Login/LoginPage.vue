@@ -33,6 +33,7 @@
           this.$router.push('/login')
         }
         if (this.$refs['tabs'].currentTab == 1) {
+          this.$store.dispatch('clearAxiosError')
           this.$router.push('/register')
         }
       }

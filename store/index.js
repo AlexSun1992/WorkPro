@@ -3,18 +3,32 @@ export const state = () => ({
 })
 
 export const actions = {
-  async registerUser(params) {
+  async registerUser({commit}, params) {
     try {
-      return await this.$axios.post("/free/v2/registration", params);
+      const RECAPTCHA = params.RECAPTCHA;
+      delete params.RECAPTCHA;
+      return await this.$axios.post("/free/v2/registration", params, {
+        headers: {
+          RECAPTCHA
+        }
+      });
     } catch(e) {
       console.log(e);
     }
+  },
+
+  clearAxiosError({commit}) {
+    commit('clearAxiosError')
   }
 }
 
 export const mutations = {
   setAxiosError(state, error) {
     state.registrationError = error;
+  },
+
+  clearAxiosError(state) {
+    state.registrationError = null;
   }
 }
 

@@ -15,7 +15,7 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
-      { src: 'https://www.google.com/recaptcha/api.js?render=6LeO2dgUAAAAAOCANdOMWTfUW0eLjluo7UKC366h' }
+      { src: 'https://www.google.com/recaptcha/api.js?render=6Le_5tkUAAAAAI4paHCeddGpgcZCJZ2aAHfZaCme' }
     ]
   },
   /*
@@ -79,7 +79,7 @@ module.exports = {
     '/wp-json': 'http://wpress.reso.ru/',
     '/free': 'http://172.17.0.33:8080',
     '/am': 'http://172.17.0.33:8080',
-    //'/am': 'https://mobile2.reso.ru'
+    // '/am': 'https://mobile2.reso.ru'
   },
 
   serverMiddleware: [

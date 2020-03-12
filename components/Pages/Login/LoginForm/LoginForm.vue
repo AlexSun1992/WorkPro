@@ -55,7 +55,8 @@ export default {
       usernameMask: "+7(###)-###-##-##",
       placeholder: "+7(___)-___-__-__",
       errorMessage: null,
-      authInProcess: false
+      authInProcess: false,
+      captchaToken: null
     };
   },
 
@@ -69,8 +70,11 @@ export default {
     async login() {
       try {
         this.authInProcess = true;
+        this.captchaToken = await this.$getCaptcha();
         await this.$auth.loginWith("local", {
-          headers: {},
+          headers: {
+            RECAPTCHA: this.captchaToken
+          },
           data: {
             username: this.$v.user.username.$model,
             password: this.$v.user.password.$model,
@@ -78,7 +82,6 @@ export default {
           }
         });
         this.authInProcess = false;
-        this.$router.push("/");
       } catch (e) {
         if (this.$auth.error.response.status === 401) {
           this.errorMessage = this.$auth.error.response.data.MESSAGE;
