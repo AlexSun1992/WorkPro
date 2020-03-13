@@ -1,5 +1,5 @@
 export const state = () => ({
-  pages: []
+  pages: {}
 })
 
 export const getters = {
