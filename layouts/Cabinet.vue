@@ -32,8 +32,12 @@
     },
     data () {
       return {
-        nav: nav.items
+        nav: []
       }
+    },
+    async mounted() {
+      const { data } = await this.$axios.get('/api/module');
+      this.nav = data
     },
     computed: {
       name () {
