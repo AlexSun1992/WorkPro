@@ -73,7 +73,6 @@ export default {
   methods: {
     async login() {
       try {
-        debugger
         this.authInProcess = true;
         this.captchaToken = await this.$getCaptcha();
         await this.$auth.loginWith("local", {
