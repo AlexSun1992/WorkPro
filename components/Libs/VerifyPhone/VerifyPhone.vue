@@ -84,6 +84,7 @@ export default {
   methods: {
     async getCode() {
       try {
+        debugger
         if (!this.code && this.v.phone.$model) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
