@@ -36,6 +36,10 @@
         <b-spinner v-if="authInProcess" style="width: 1.2rem; height: 1.2rem;" variant="light"></b-spinner>
       </b-button>
     </b-form>
+    <div class="mt-2">
+      <span class="forgot-password">Забыли пароль?</span>
+      <nuxt-link to="/recovery">Восстановить</nuxt-link>
+    </div>
   </div>
 </template>
 
@@ -55,7 +59,8 @@ export default {
       usernameMask: "+7(###)-###-##-##",
       placeholder: "+7(___)-___-__-__",
       errorMessage: null,
-      authInProcess: false
+      authInProcess: false,
+      captchaToken: null
     };
   },
 
@@ -69,8 +74,11 @@ export default {
     async login() {
       try {
         this.authInProcess = true;
+        this.captchaToken = await this.$getCaptcha();
         await this.$auth.loginWith("local", {
-          headers: {},
+          headers: {
+            RECAPTCHA: this.captchaToken
+          },
           data: {
             username: this.$v.user.username.$model,
             password: this.$v.user.password.$model,
@@ -78,7 +86,6 @@ export default {
           }
         });
         this.authInProcess = false;
-        this.$router.push("/");
       } catch (e) {
         if (this.$auth.error.response.status === 401) {
           this.errorMessage = this.$auth.error.response.data.MESSAGE;
@@ -133,4 +140,7 @@ export default {
 </script>
 
 <style scoped>
+  .forgot-password {
+    color: #536c79;
+  }
 </style>

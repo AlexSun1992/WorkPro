@@ -15,7 +15,7 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
-      { src: 'https://www.google.com/recaptcha/api.js?render=6LeO2dgUAAAAAOCANdOMWTfUW0eLjluo7UKC366h' }
+      { src: 'https://www.google.com/recaptcha/api.js?render=6Le_5tkUAAAAAI4paHCeddGpgcZCJZ2aAHfZaCme' }
     ]
   },
   /*
@@ -41,7 +41,9 @@ module.exports = {
     // '~plugins/devextreme',
     '~/plugins/captcha.js',
     '~/plugins/mask.js',
-    '~/plugins/validate'
+    '~/plugins/validate',
+    '~/plugins/axios',
+    { src: '~plugins/vcalendar.js', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules

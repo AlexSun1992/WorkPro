@@ -1,21 +1,17 @@
 <template>
-  <div>
-    <div class="flex-row align-items-center">
-      <div class="container">
-        <b-row class="justify-content-center">
-          <b-col md="6" lg="6">
-            <b-tabs ref="tabs" content-class="mt-3">
-              <b-tab title="Вход" @click="changeUrl" :active="$route.path === '/login'">
-                <login-form/>
-              </b-tab>
-              <b-tab @click="changeUrl" title="Регистрация" :active="$route.path === '/register'">
-               <reg-form/>
-              </b-tab>
-            </b-tabs>
-          </b-col>
-        </b-row>
-      </div>
-    </div>
+  <div class="container">
+    <b-row class="justify-content-center">
+      <b-col md="6" lg="6">
+        <b-tabs ref="tabs" content-class="mt-3">
+          <b-tab title="Вход" @click="changeUrl" :active="$route.path === '/login'">
+            <login-form/>
+          </b-tab>
+          <b-tab @click="changeUrl" title="Регистрация" :active="$route.path === '/register'">
+            <reg-form/>
+          </b-tab>
+        </b-tabs>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -26,13 +22,17 @@
 
   export default {
     name: 'LoginPage',
-    components: {RegForm, LoginForm},
+    components: {
+      RegForm, 
+      LoginForm
+      },
     methods: {
       changeUrl() {
         if (this.$refs['tabs'].currentTab == 0) {
           this.$router.push('/login')
         }
         if (this.$refs['tabs'].currentTab == 1) {
+          this.$store.dispatch('clearAxiosError')
           this.$router.push('/register')
         }
       }

@@ -14,7 +14,7 @@
   "dependencies": {
     "@nuxt/typescript-runtime": "latest",
     "@nuxtjs/auth": "git+https://github.com/nuxt-community/auth-module.git#78e1090",
-    "@nuxtjs/axios": "^5.9.3",
+    "@nuxtjs/axios": "^5.9.5",
     "@nuxtjs/style-resources": "^1.0.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",

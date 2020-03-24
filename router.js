@@ -13,6 +13,7 @@ import Policies from '~/components/Pages/Cabinet/Policies'
 import Agents from '~/components/Pages/Cabinet/Agents'
 
 import Login from '~/components/Pages/Login/LoginPage'
+import PasswordRecovery from '~/components/Pages/Login/PasswordRecoveryForm/PasswordRecoveryForm'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export function createRouter() {
         path: '/login',
         component: Login,
         alias: '/register'
+      },
+      {
+        meta: 'Восстановление',
+        path: '/recovery',
+        component: PasswordRecovery
       },
       {
         meta: 'О компании',

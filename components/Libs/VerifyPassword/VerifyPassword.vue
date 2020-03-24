@@ -2,7 +2,7 @@
   <div>
     <b-row>
       <b-col sm="6">
-        <b-form-group label="Пароль">
+        <b-form-group :label="showLabel">
           <b-form-input
             type="password"
             v-model="v.password.$model"
@@ -14,7 +14,8 @@
           <b-form-invalid-feedback>Введите пароль</b-form-invalid-feedback>
         </b-form-group>
       </b-col>
-      <b-col class="password-repeat" sm="6">
+      <b-col sm="6" v-if="recovery"></b-col>
+      <b-col class="password-repeat" :class="{'mt-0': recovery}" sm="6">
         <b-form-group>
           <b-form-input
             type="password"
@@ -27,18 +28,24 @@
           <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
         </b-form-group>
       </b-col>
+      <b-col sm="6" v-if="recovery"></b-col>
     </b-row>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["v", "validateState", "disabled"],
+  props: ["v", "validateState", "disabled", "recovery"],
   data() {
     return {
       password: "",
       password2: ""
     };
+  },
+  computed: {
+    showLabel() {
+      return this.recovery ? 'Придумайте новый пароль' : 'Пароль'
+    }
   }
 };
 </script>
