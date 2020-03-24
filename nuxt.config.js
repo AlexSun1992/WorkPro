@@ -84,7 +84,8 @@ module.exports = {
 
   serverMiddleware: [
     '~/api/index.js',
-    '~/api/configurator.js'
+    '~/api/configurator.js',
+    '~/api/list.js'
   ],
 
   auth: {

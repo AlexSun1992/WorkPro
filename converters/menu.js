@@ -60,7 +60,7 @@ converter.menuObject = (data) => {
   if (data.IDITEM === -1) {
     obj.url = `/${data.idModule}/${data.ID}`
   } else {
-    obj.url = data.IDITEM ? `/${data.idModule}/${data.IDPARENT}/${data.IDITEM}` : `/${data.ID}`
+    obj.url = data.IDITEM ? `/cabinet/${data.idModule}/${data.IDPARENT}/${data.IDITEM}` : `/${data.ID}`
   }
   obj.id = data.ID
   obj.icon = iconConverter.icon(data.SLOGO)
