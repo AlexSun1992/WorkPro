@@ -20,15 +20,15 @@ app.get('/module', (req, res) => {
     }
     modules.getItems = () => {
       return new Promise((resolve, reject) => {
-        res.send(data.userinfo)
-        // axios({url: `${consts.MODULE}`, method: 'GET'})
-        //   .then(resp => {
-        //     let modules = converter.modules(resp.data)
-        //     resolve(modules)
-        //   })
-        //   .catch(err => {
-        //     res.send(err.response.data)
-        //   })
+        axios({url: `${consts.MODULE}`, method: 'GET'})
+          .then(resp => {
+            // let modules = converter.modules(resp.data)
+            // resolve(modules)
+            resolve(resp.data)
+          })
+          .catch(err => {
+            res.send(err)
+          })
       })
     }
     menu.getItems = (modules) => {
