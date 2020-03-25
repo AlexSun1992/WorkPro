@@ -1,22 +1,23 @@
 <template>
   <div>
+    <p>{{label}}</p>
     <b-form-group>
       <b-form-input
-        ref="phoneInput"
+        ref="userInput"
         class="mb-1"
-        v-model="v.phone.$model"
-        v-mask="mask"
+        v-model="v[loginType].$model"
+        v-mask="changeMask"
         autofocus
         :placeholder="placeholder"
-        :state="validateInput('phone', isPhoneBlured)"
-        :disabled="isPhoneDisabled || disabled"
-        @blur="debouncedUpdate('phone', isPhoneBlured)"
-        @input="isPhoneBlured = false"
+        :state="validateInput(loginType, isUserBlured)"
+        :disabled="isUserDisabled || disabled"
+        @blur="debouncedUpdate(loginType, isUserBlured)"
+        @input="isUserBlured = false"
       ></b-form-input>
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
-    <b-link v-if="isPhoneDisabled" @click="changeNumber">Изменить номер</b-link>
-    <div v-if="code">
+    <b-link v-if="isUserDisabled" @click="changeNumber">Изменить номер</b-link>
+    <div v-if="code && loginType === 'phone'">
       <p>На указанный номер выслан код подтверждения</p>
       <b-form-input
         autofocus
@@ -43,7 +44,7 @@
     </div>
     <b-button
       type="submit"
-      v-if="!code"
+      v-if="!code && loginType === 'phone'"
       :disabled="v.phone.$invalid"
       @click.prevent="getCode"
       variant="success"
@@ -57,19 +58,19 @@ import _ from 'lodash'
 import axios from 'axios'
 
 export default {
-  props: ["count", "v", "validateState", "disabled"],
+  props: ["count", "v", "validateState", "disabled", "loginType", "label"],
   data() {
     return {
-      isPhoneBlured: true,
+      isUserBlured: true,
       isCodeBlured: true,
       code: null,
-      isPhoneDisabled: false,
+      isUserDisabled: false,
       disabledResend: true,
       timer: null,
       initialCount: null,
       resendCount: null,
       isPhoneChanged: false,
-      mask: "+7(###)-###-##-##",
+      mask: "",
       codeMask: "#####",
       placeholder: "+7(___)-___-__-__"
     };
@@ -84,7 +85,6 @@ export default {
   methods: {
     async getCode() {
       try { 
-        
         if (!this.code && this.v.phone.$model) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
@@ -92,10 +92,10 @@ export default {
           // Перенести в actions
           this.code = await axios.post("/api/password", { phone: this.v.phone.$model });
           this.$emit("onCode", this.code);
-          this.isPhoneDisabled = true;
+          this.isUserDisabled = true;
           this.countdown();
         } else {
-          this.isPhoneDisabled = false;
+          this.isUserDisabled = false;
         }
       } catch (e) {
         console.log(e);
@@ -103,27 +103,29 @@ export default {
     },
 
     changeNumber() {
-      this.isPhoneBlured = false;
+      this.isUserBlured = false;
       this.v.phone.$model = "";
-      this.$refs["phoneInput"].$el.disabled = false;
-      this.$refs["phoneInput"].$el.focus();
+      this.$refs["userInput"].$el.disabled = false;
+      this.$refs["userInput"].$el.focus();
       this.code = null;
       this.v.code.$model = null;
-      this.isPhoneDisabled = false;
+      this.isUserDisabled = false;
       this.isPhoneChanged = true;
       this.$emit("onCode", this.code);
       this.countdown();
     },
 
     validateInput(field, bluredField) {
-      if (this.v[field].$model && (this.v[field].$model.length === this.v[field].$params.minLength.min) || bluredField) {
-        return this.validateState(field);
+      if( this.v[field].$params.minLength) {
+        if (this.v[field].$model && (this.v[field].$model.length === this.v[field].$params.minLength.min) || bluredField) {
+          return this.validateState(field);
+        }
       }
     },
 
     blurField(field, bluredField) {
       if (field === 'phone') {
-        this.isPhoneBlured = true;
+        this.isUserBlured = true;
       } else if (field === 'code') {
         this.isCodeBlured = true;
       }
@@ -152,6 +154,18 @@ export default {
       this.resendCount = this.initialCount;
       this.disabledResend = true;
       this.countdown();
+    }
+  },
+
+  computed: {
+    changeMask() {
+      if (this.loginType === 'phone') {
+        this.placeholder = "+7(___)-___-__-__"
+        return this.mask = "+7(###)-###-##-##"
+      } else {
+        this.placeholder = "";
+        return this.mask = "X".repeat(50);
+      }
     }
   }
 };

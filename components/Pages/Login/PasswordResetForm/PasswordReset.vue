@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VerifyPhone :count="20" @onCode="code = $event"/>
+    <VerifyUser :count="20" @onCode="code = $event"/>
     <div v-if="code">
        <b-form-input
           class="mb-2 mt-4"
@@ -15,12 +15,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone.vue';
+import VerifyUser from '../../../Libs/VerifyUser/VerifyUser.vue';
 
 @Component({
   name: "PasswordReset",
   components: {
-      VerifyPhone
+      VerifyUser
   }
 })
 export default class PasswordReset extends Vue {

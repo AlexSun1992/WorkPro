@@ -3,7 +3,7 @@
     <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-group label="Телефон">
-        <verify-phone ref="verifyPhone" :v="$v.form" :count="20" :validateState="validateState" :disabled="registrationInProcess"/>
+        <verify-user ref="verifyUser" :v="$v.form" :count="20" :loginType="'phone'" :validateState="validateState" :disabled="registrationInProcess"/>
       </b-form-group>
       <b-form-group  label="E-mail">
         <b-form-input
@@ -71,11 +71,11 @@
   import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 
   import birthdayPicker from '../../../Libs/BirthdatePicker/BirthdatePicker'
-  import VerifyPhone from '../../../Libs/VerifyPhone/VerifyPhone'
+  import VerifyUser from '../../../Libs/VerifyUser/VerifyUser'
   import VerifyPassword from '../../../Libs/VerifyPassword/VerifyPassword'
 
   export default {
-    components: {birthdayPicker, VerifyPhone, VerifyPassword},
+    components: {birthdayPicker, VerifyUser, VerifyPassword},
     mixins: [validationMixin],
 
     data () {
@@ -158,7 +158,7 @@
       async onSubmit() {
         try {
           if (this.$v.form.phone.$model) {
-            this.$refs['verifyPhone'].getCode();
+            this.$refs['verifyUser'].getCode();
           }
           this.$v.form.$touch();
           if (this.$v.form.$anyError) {

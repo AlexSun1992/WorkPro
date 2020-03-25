@@ -86,6 +86,7 @@ export default {
           }
         });
         this.authInProcess = false;
+        this.$router.push('/');
       } catch (e) {
         if (this.$auth.error.response.status === 401) {
           this.errorMessage = this.$auth.error.response.data.MESSAGE;
@@ -141,6 +142,6 @@ export default {
 
 <style scoped>
   .forgot-password {
-    color: #536c79;
+    color: #536c79; /**Заменить на глобальные цвета */
   }
 </style>

@@ -2,27 +2,33 @@
   <div class="container">
     <!-- <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert> -->
     <h5 class="mb-3">{{ !isCodeValid ? "Восстановление доступа" : "Изменение пароля" }}</h5>
-    <verify-phone v-if="!isCodeValid" :v="$v.form" :count="20" :validateState="validateState"/>
-    <verify-password :recovery="true" v-else :v="$v.form" :validateState="validateState"/>
+    <b-tabs v-if="!changePasswordActive" ref="tabs" content-class="mt-2">
+      <b-tab title="Телефон" active>
+        <verify-user v-if="!isCodeValid" :label="phoneLabel" :loginType="'phone'" :v="$v.form" :count="20" :validateState="validateState"/>
+      </b-tab>
+      <b-tab title="Email">
+        <verify-user v-if="!isCodeValid" :label="emailLabel" :loginType="'email'" :v="$v.form" :count="20" :validateState="validateState"/>
+      </b-tab>
+    </b-tabs>
+    <verify-password :recovery="true" v-if="isCodeValid || isEmailValid" :v="$v.form" :validateState="validateState"/>
     <div class="mt-2 d-flex justify-content-between">
       <router-link to="/login">
         <b-button variant="outline-secondary">Отмена</b-button>
       </router-link>
-      <b-button variant="success" v-if="!changePasswordActive" @click="validateCode" :disabled="$v.form.code.$invalid">Далее</b-button>
+      <b-button variant="success" v-if="!changePasswordActive" @click="validateCode" :disabled="$v.form.email.$invalid && $v.form.code.$invalid">Далее</b-button>
       <b-button variant="success" v-if="changePasswordActive" @click="savePassword" :disabled="$v.form.password2.$invalid">Сохранить</b-button>
     </div>
   </div>
 </template>
 
 <script>
-import VerifyPhone from '~/components/Libs/VerifyPhone/VerifyPhone'
+import VerifyUser from '~/components/Libs/VerifyUser/VerifyUser'
 import VerifyPassword from '~/components/Libs/VerifyPassword/VerifyPassword'
 import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 
-
 export default {
   components: {
-    VerifyPhone,
+    VerifyUser,
     VerifyPassword
   },
   data() {
@@ -33,10 +39,14 @@ export default {
       form: {
         phone: '',
         code: '',
+        email: '',
         password: '',
         password2: ''
       },
-      changePasswordActive: false
+      changePasswordActive: false,
+      phoneLabel: 'Введите номер телефона указанный при регистрации',
+      emailLabel: 'Введите email указанный при регистрации',
+      isEmailValid: false
     }
   },
 
@@ -56,6 +66,7 @@ export default {
       // const response = this.$store.dispatch('validateCode', params)
       // this.errorMessage = 'Неправильный код, попробуйте ещё раз'
       this.isCodeValid = true; // Удалить с появлением метода validateCode
+      this.isEmailValid = true;
       this.changePasswordActive = true;
     },
 
@@ -81,6 +92,11 @@ export default {
         required,
         minLength: minLength(17)
       },
+      email: {
+        required,
+        email
+        // minLength: minLength(6)
+      },
       code: {
         required,
         minLength: minLength(5)
@@ -103,5 +119,27 @@ export default {
     max-width: 540px;
     padding: 1rem;
     border: 1px solid #a4b7c1;
+  }
+
+  .tabs >>> .tab-content {
+    border: none;
+  }
+
+  .tabs >>> .nav-tabs {
+    display: flex;
+    justify-content: center;
+    border-bottom: none;
+  }
+
+  .tabs >>> .nav-tabs .nav-link {
+    border: none;
+  }
+
+  .tabs >>> .nav-tabs .nav-link.active {
+    border-bottom: 2px solid green; /**Заменить на глобальные цвета */
+  }
+
+  .tabs >>> .nav-tabs .nav-link.active:focus {
+    border-bottom: 2px solid green; /**Заменить на глобальные цвета */
   }
 </style>
