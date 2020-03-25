@@ -74,7 +74,7 @@ export default {
     async login() {
       try {
         this.authInProcess = true;
-        this.captchaToken = await this.$getCaptcha();
+        // this.captchaToken = await this.$getCaptcha();
         await this.$auth.loginWith("local", {
           headers: {
             RECAPTCHA: this.captchaToken
@@ -95,8 +95,8 @@ export default {
     },
 
     validateInput(field, bluredField) {
-      if (this.$v.user[field].$model && 
-          this.$v.user[field].$params.minLength && 
+      if (this.$v.user[field].$model &&
+          this.$v.user[field].$params.minLength &&
           (this.$v.user[field].$model.length === this.$v.user[field].$params.minLength.min) || bluredField) {
         return this.validateState(field);
       }
@@ -108,7 +108,7 @@ export default {
       } else if (field === 'password') {
         this.isPasswordBlured = true;
       }
-      this.$v.user[field].$touch();  
+      this.$v.user[field].$touch();
     },
 
     validateState(name) {
@@ -124,7 +124,7 @@ export default {
       this.login();
     }
   },
-  
+
   validations: {
     user: {
       username: {
