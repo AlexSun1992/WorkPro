@@ -17,6 +17,7 @@ app.get('/module', (req, res) => {
   try {
     if(req.cookies){
       axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
+      axios.defaults.baseURL = 'https://mobile2.reso.ru';
     }
     modules.getItems = () => {
       return new Promise((resolve, reject) => {
