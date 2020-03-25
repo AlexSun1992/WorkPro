@@ -14,11 +14,10 @@ const menu = {}
 
 app.get('/list/:idModule/:idItem', (req, res) => {
   try {
-    axios.defaults.headers.common['Authorization'] = req.headers.authorization
     if(req.cookies){
-      //axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
+      axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
     }
-    axios({url: `${consts.DATA}/${req.params.idModule}/${req.params.idItem}`, method: 'GET'})
+    axios({url: `https://mobile2.reso.ru${consts.DATA}/${req.params.idModule}/${req.params.idItem}`, method: 'GET'})
       .then(resp => {
         res.send(listConverter.list(resp.data))
       })
@@ -26,7 +25,7 @@ app.get('/list/:idModule/:idItem', (req, res) => {
         res.send(err.response.data)
       })
   } catch (e) {
-    console.log(e)
+    res.send(e)
   }
 })
 

@@ -14,13 +14,12 @@ const menu = {}
 
 app.get('/module', (req, res) => {
   try {
-    axios.defaults.headers.common['Authorization'] = req.headers.authorization
     if(req.cookies){
-      //axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
+      axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
     }
     modules.getItems = () => {
       return new Promise((resolve, reject) => {
-        axios({url: consts.MODULE, method: 'GET'})
+        axios({url: `https://mobile2.reso.ru${consts.MODULE}`, method: 'GET'})
           .then(resp => {
             let modules = converter.modules(resp.data)
             resolve(modules)
@@ -49,7 +48,7 @@ app.get('/module', (req, res) => {
       })
     })
   } catch (e) {
-    console.log(e)
+    res.send(e)
   }
 })
 

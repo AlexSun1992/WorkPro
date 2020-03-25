@@ -74,7 +74,7 @@ export default {
     async login() {
       try {
         this.authInProcess = true;
-        // this.captchaToken = await this.$getCaptcha();
+        this.captchaToken = await this.$getCaptcha();
         await this.$auth.loginWith("local", {
           headers: {
             RECAPTCHA: this.captchaToken

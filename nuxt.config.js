@@ -15,7 +15,7 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
-      // { src: 'https://www.google.com/recaptcha/api.js?render=6Le_5tkUAAAAAI4paHCeddGpgcZCJZ2aAHfZaCme' }
+      { src: 'https://www.google.com/recaptcha/api.js?render=6Le_5tkUAAAAAI4paHCeddGpgcZCJZ2aAHfZaCme' }
     ]
   },
   /*
@@ -39,7 +39,7 @@ module.exports = {
   */
   plugins: [
     // '~plugins/devextreme',
-    // '~/plugins/captcha.js',
+    '~/plugins/captcha.js',
     '~/plugins/mask.js',
     '~/plugins/validate',
     '~/plugins/axios',
