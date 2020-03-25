@@ -20,14 +20,13 @@ app.get('/module', (req, res) => {
     }
     modules.getItems = () => {
       return new Promise((resolve, reject) => {
-        axios({url: `https://mobile2.reso.ru/am/main/v2/module`, method: 'GET'})
+        axios({url: `${consts.MODULE}`, method: 'GET'})
           .then(resp => {
-            //let modules = converter.modules(resp.data)
-            //resolve(modules)
-            resolve(resp.data)
+            let modules = converter.modules(resp.data)
+            resolve(modules)
           })
           .catch(err => {
-            res.send(err)
+            res.send(err.response.data)
           })
       })
     }
