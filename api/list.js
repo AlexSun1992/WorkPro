@@ -17,7 +17,7 @@ app.get('/list/:idModule/:idItem', (req, res) => {
     if(req.cookies){
       axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
     }
-    axios({url: `https://mobile2.reso.ru${consts.DATA}/${req.params.idModule}/${req.params.idItem}`, method: 'GET'})
+    axios({url: `${consts.DATA}/${req.params.idModule}/${req.params.idItem}`, method: 'GET'})
       .then(resp => {
         res.send(listConverter.list(resp.data))
       })
