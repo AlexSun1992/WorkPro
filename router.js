@@ -5,6 +5,7 @@ import Main from '~/components/Pages/Main'
 import About from '~/components/Pages/About'
 import Feedback from '~/components/Pages/Feedback'
 import Calculator from '~/components/Pages/Calculator'
+import DemoPage from '~/components/Pages/DemoPage'
 
 import Cabinet from '~/components/Pages/Cabinet/Full'
 import Dashboard from '~/components/Pages/Cabinet/Dashboard'
@@ -49,6 +50,11 @@ export function createRouter() {
         meta: 'Калькулятор',
         path: '/calculator',
         component: Calculator
+      },
+      {
+        meta: 'Демонстрационная страница',
+        path: '/demo-page',
+        component: DemoPage
       },
       {
         meta: 'Кабинет',
