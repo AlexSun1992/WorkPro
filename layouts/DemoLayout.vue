@@ -254,34 +254,6 @@
   nav {
     display: block;
   }
-  .breadcrumb > li + li:before {
-    color: #cccccc;
-    content: "â†’";
-    padding: 0 5px;
-  }
-  .breadcrumb li.active {
-    color: #a3a3a3;
-  }
-  .breadcrumb li a{
-    color: #a3a3a3;
-    border-bottom: 1px solid rgba(163,163,163,0.33);
-  }
-  .breadcrumb li a:hover {
-    border-bottom: 1px solid rgba(17,86,37,0.33) !important;
-    color: #115625 !important;
-  }
-  .breadcrumb {
-    font-size: 0.8em;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    padding-bottom: 2em;
-    list-style: none;
-  }
-  ol.breadcrumb {
-    margin-top: 0;
-  }
 
 
   @media (min-width: 992px) {
