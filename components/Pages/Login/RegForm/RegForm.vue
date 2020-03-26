@@ -3,7 +3,7 @@
     <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-group label="Телефон">
-        <verify-user ref="verifyUser" :v="$v.form" :count="20" :loginType="'phone'" :validateState="validateState" :disabled="registrationInProcess"/>
+        <verify-user ref="verifyUser" :v="$v.form" :count="20" :context="'registration'" :loginType="'phone'" :validateState="validateState" :disabled="registrationInProcess"/>
       </b-form-group>
       <b-form-group  label="E-mail">
         <b-form-input

@@ -16,37 +16,40 @@
       ></b-form-input>
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
-    <b-link v-if="isUserDisabled" @click="changeNumber">Изменить номер</b-link>
-    <div v-if="code && loginType === 'phone'">
-      <p>На указанный номер выслан код подтверждения</p>
-      <b-form-input
-        autofocus
-        v-model="v.code.$model"
-        class="mb-1"
-        v-mask="codeMask"
-        :state="validateInput('code', isCodeBlured)"
-        @blur="blurField('code', isCodeBlured)"
-        @input="isCodeBlured = false"
-        :disabled="disabled"
-        placeholder="Код подтверждения"
-      ></b-form-input>
-      <b-form-invalid-feedback v-if="!v.code.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-      <b-form-invalid-feedback v-else>Неверный код подтверждения</b-form-invalid-feedback>
-      <b-button
-        type="submit"
-        :disabled="disabledResend"
-        @click.prevent="resendCode"
-        variant="success"
-      >
-        Отправить повторно
-        <span>{{ resendCount }}</span>
-      </b-button>
+    <div>
+      <b-link v-if="isUserDisabled" @click="changeNumber">Изменить номер</b-link>
+      <div v-if="(code || userFormValid) && loginType === 'phone'">
+        <p>На указанный номер выслан код подтверждения</p>
+        <b-form-input
+          autofocus
+          v-model="v.code.$model"
+          class="mb-1"
+          v-mask="codeMask"
+          :state="validateInput('code', isCodeBlured)"
+          @blur="blurField('code', isCodeBlured)"
+          @input="isCodeBlured = false"
+          :disabled="disabled"
+          placeholder="Код подтверждения"
+        ></b-form-input>
+        <b-form-invalid-feedback v-if="!v.code.$model">Пожалуйста, заполните это поле</b-form-invalid-feedback>
+        <b-form-invalid-feedback v-else>Неверный код подтверждения</b-form-invalid-feedback>
+        <b-button
+          type="submit"
+          :disabled="disabledResend"
+          @click.prevent="resendCode"
+          variant="success"
+        >
+          Отправить повторно
+          <span>{{ resendCount }}</span>
+        </b-button>
+      </div>
     </div>
+    <UserRecoveryForm v-if="greater180 && context !== 'registration' && !userFormValid && !isPhoneChanged" :v="$v.user" :validateState="validateState" />
     <b-button
       type="submit"
-      v-if="!code && loginType === 'phone'"
+      v-if="!code && loginType === 'phone' && !userFormValid"
       :disabled="v.phone.$invalid"
-      @click.prevent="getCode"
+      @click.prevent="verifyUser"
       variant="success"
     >Подтвердить</b-button>
   </div>
@@ -56,9 +59,14 @@
 
 import _ from 'lodash'
 import axios from 'axios'
+import UserRecoveryForm from '~/components/Pages/Login/PasswordRecovery/UserRecoveryForm'
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
-  props: ["count", "v", "validateState", "disabled", "loginType", "label"],
+  props: ["count", "v", "validateState", "disabled", "loginType", "label", "context"],
+  components: {
+    UserRecoveryForm
+  },
   data() {
     return {
       isUserBlured: true,
@@ -72,7 +80,15 @@ export default {
       isPhoneChanged: false,
       mask: "",
       codeMask: "#####",
-      placeholder: "+7(___)-___-__-__"
+      placeholder: "+7(___)-___-__-__",
+      greater180: false, // Заменить на реальные данные
+      user: {
+        surname: "",
+        name: "",
+        patronymic: "",
+        birthdate: "",
+      },
+      userFormValid: false
     };
   },
 
@@ -84,11 +100,10 @@ export default {
 
   methods: {
     async getCode() {
-      try { 
+      try {
         if (!this.code && this.v.phone.$model) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
-          // this.code = "55555"
           // Перенести в actions
           this.code = await axios.post("/api/password", { phone: this.v.phone.$model });
           this.$emit("onCode", this.code);
@@ -102,7 +117,25 @@ export default {
       }
     },
 
+    async showForm() {
+      if (!this.$v.user.$invalid) {
+        this.userFormValid = true;
+        this.isUserDisabled = true;
+        this.countdown();
+      }
+    },
+
+    verifyUser(){
+      this.greater180 = true; // Заменить на реальные данные
+      if(this.greater180 && this.context !== 'registration') {
+        this.showForm();
+      } else {
+        this.getCode();
+      }
+    },
+
     changeNumber() {
+      this.userFormValid = false;
       this.isUserBlured = false;
       this.v.phone.$model = "";
       this.$refs["userInput"].$el.disabled = false;
@@ -165,6 +198,23 @@ export default {
       } else {
         this.placeholder = "";
         return this.mask = "X".repeat(50);
+      }
+    }
+  },
+
+  validations: {
+    user: {
+      surname: {
+        required
+      },
+      name: {
+        required
+      },
+      patronymic: {
+        required
+      },
+      birthdate: {
+        required
       }
     }
   }

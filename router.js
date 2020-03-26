@@ -13,7 +13,7 @@ import Policies from '~/components/Pages/Cabinet/Policies'
 import Agents from '~/components/Pages/Cabinet/Agents'
 
 import Login from '~/components/Pages/Login/LoginPage'
-import PasswordRecovery from '~/components/Pages/Login/PasswordRecoveryForm/PasswordRecoveryForm'
+import PasswordRecovery from '~/components/Pages/Login/PasswordRecovery/PasswordRecoveryForm'
 
 Vue.use(Router)
 

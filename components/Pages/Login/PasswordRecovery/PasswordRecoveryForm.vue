@@ -142,4 +142,8 @@ export default {
   .tabs >>> .nav-tabs .nav-link.active:focus {
     border-bottom: 2px solid green; /**Заменить на глобальные цвета */
   }
+
+  .tabs >>> .tab-pane {
+    padding-left: 0;
+  }
 </style>
