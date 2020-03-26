@@ -108,6 +108,9 @@ export default {
         required,
         sameAsPassword: sameAs('password')
       },
+      birthdate: {
+        required
+      }
     }
   }
   

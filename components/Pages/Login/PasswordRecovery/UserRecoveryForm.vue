@@ -26,7 +26,7 @@
         <b-form-invalid-feedback>Пожалуйста, введите отчество</b-form-invalid-feedback>
       </b-form-group>
       <b-form-group label="Дата рождения">
-        <birthday-picker :data="v" :state="{}"/>
+        <birthday-picker :data="v" :state="validateState('birthdate')"/>
       </b-form-group>
     </b-form>
   </div>
@@ -37,7 +37,7 @@ import { required, minLength } from "vuelidate/lib/validators";
 import birthdayPicker from '../../../Libs/BirthdatePicker/BirthdatePicker'
 
 export default {
-  props: ["v"],
+  props: ["v", "validateState"],
   components: {
     birthdayPicker
   }
