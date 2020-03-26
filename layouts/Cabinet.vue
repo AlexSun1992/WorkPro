@@ -4,9 +4,9 @@
     <div class="app-body">
       <Sidebar :navItems="nav"/>
       <main class="main">
-        <breadcrumb :list="list"/>
+        <b-breadcrumb :items="items"/>
         <div class="container-fluid">
-          <nuxt />
+          <nuxt/>
         </div>
       </main>
     </div>
@@ -14,11 +14,11 @@
   </div>
 </template>
 <script>
-  import nav from './cabinet-menu'
-  import Header from '~/components/Header/Header';
-  import Footer from '~/components/Footer';
-  import Sidebar from '~/components/Sidebar/Sidebar';
-  import Breadcrumb from '~/components/Breadcrumb';
+  import Header from '~/components/Header/Header'
+  import Footer from '~/components/Footer'
+  import Sidebar from '~/components/Sidebar/Sidebar'
+  import breadcrumbs from '~/converters/breadcrumbs'
+
   export default {
     name: 'full',
     head: {
@@ -27,20 +27,33 @@
     components: {
       Header,
       Sidebar,
-      Footer,
-      Breadcrumb
+      Footer
     },
     data () {
       return {
-        nav: nav.items
+        nav: [],
+        data: null
+      }
+    },
+    async mounted () {
+      const {data} = await this.$axios.get('/api/module')
+      this.nav = data
+      this.setParams()
+    },
+    watch: {
+      '$route': 'setParams'
+    },
+    methods: {
+       setParams  () {
+        this.$store.commit('menu/setBreadcrumbs', breadcrumbs.getData(this.nav, this.$route.params))
       }
     },
     computed: {
       name () {
         return this.$route.name
       },
-      list () {
-        return this.$route.matched
+      items () {
+        return this.$store.getters['menu/breadcrumbs']
       }
     }
   }

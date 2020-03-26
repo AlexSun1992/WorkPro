@@ -5,12 +5,12 @@ import Main from '~/components/Pages/Main'
 import About from '~/components/Pages/About'
 import Feedback from '~/components/Pages/Feedback'
 import Calculator from '~/components/Pages/Calculator'
+import DemoPage from '~/components/Pages/DemoPage'
+import DemoCarousel from '~/components/Pages/DemoCarousel'
 
 import Cabinet from '~/components/Pages/Cabinet/Full'
-import Profile from '~/components/Pages/Cabinet/Profile'
-import RegPolicy from '~/components/Pages/Cabinet/RegPolicy'
-import Policies from '~/components/Pages/Cabinet/Policies'
-import Agents from '~/components/Pages/Cabinet/Agents'
+import Dashboard from '~/components/Pages/Cabinet/Dashboard'
+import Fluid from '~/components/Pages/Cabinet/Fluid'
 
 import Login from '~/components/Pages/Login/LoginPage'
 import PasswordRecovery from '~/components/Pages/Login/PasswordRecovery/PasswordRecoveryForm'
@@ -53,30 +53,28 @@ export function createRouter() {
         component: Calculator
       },
       {
+        meta: 'Демонстрационная страница',
+        path: '/demo-page',
+        component: DemoPage
+      },
+      {
+        meta: 'Карусель',
+        path: '/demo-carousel',
+        component: DemoCarousel
+      },
+      {
         meta: 'Кабинет',
         path: '/cabinet',
         component: Cabinet,
-        redirect: '/cabinet/policies',
+        redirect: '/cabinet/dashboard',
         children: [
           {
-            meta: 'Профиль',
-            path: 'profile',
-            component: Profile
+            path: 'dashboard',
+            component: Dashboard
           },
           {
-            meta: 'Полисы',
-            path: 'policies',
-            component: Policies
-          },
-          {
-            meta: 'Агенты',
-            path: 'agents',
-            component: Agents
-          },
-          {
-            meta: 'Оформление полиса',
-            path: 'reg-policy/:calcId',
-            component: RegPolicy
+            path: ':idModule/:idParent/:idItem',
+            component: Fluid
           }
         ]
       }
