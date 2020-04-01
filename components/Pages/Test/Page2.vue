@@ -13,9 +13,7 @@
     data () {
       return {
         pageTitle: null,
-        link: null,
-        structure: null,
-        pageId: null
+        link: null
       }
     },
 
