@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <nuxt-link to="/page1">Страница 1</nuxt-link>
     <div class="animated fadeIn">
       <div class="container">
         <div class="justify-content-lg-center">
