@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Main from '~/components/Pages/Main'
-import About from '~/components/Pages/About'
+import DemoAbout from '~/components/Pages/DemoAbout'
 import Feedback from '~/components/Pages/Feedback'
 import Calculator from '~/components/Pages/Calculator'
 import DemoPage from '~/components/Pages/DemoPage'
@@ -42,7 +42,7 @@ export function createRouter() {
       {
         meta: 'О компании',
         path: '/about',
-        component: About
+        component: DemoAbout
       },
       {
         meta: 'Обратная связь',
@@ -56,7 +56,7 @@ export function createRouter() {
       },
       {
         meta: 'Демонстрационная страница',
-        path: '/demo-page',
+        path: '/coronavirus',
         component: DemoPage
       },
       {

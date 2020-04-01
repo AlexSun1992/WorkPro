@@ -18,12 +18,12 @@
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     layout: 'DemoLayout',
-    name: 'DemoPage',
+    name: 'DemoAbout',
     head: {
       title: 'Демонстрационная страница'
     },
     async asyncData ({ $axios }) {
-      let dataPage = await $axios.get('/wp-json/wp/v2/pages/160')
+      let dataPage = await $axios.get('/wp-json/wp/v2/pages/391')
       let dataMenu = await $axios.get(`/wp-json/acf/v3/main/${dataPage.data.acf.main_menu.component_id}`)
       return {
         content: dataPage.data.content.rendered,
