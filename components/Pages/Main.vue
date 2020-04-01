@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper">
-    <!-- <div v-html="link"></div> -->
-    <a :href="link">Первая страница</a>
+    <a :href="link">{{ pageTitle }}</a>
     <div class="animated fadeIn">
       <div class="container">
         <div class="justify-content-lg-center">
