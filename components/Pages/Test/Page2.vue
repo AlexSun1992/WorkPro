@@ -2,7 +2,7 @@
   <div style="text-align: center;">
     <span style="font-size: xx-large;">{{ pageTitle }}</span>
     <br>
-    <nuxt-link to="/page1">Переход на 1 страницу</nuxt-link>
+    <a :href="link" v-if="link">{{ decodeURIComponent(link) }}</a>
   </div>
 </template>
 
@@ -17,15 +17,15 @@
       }
     },
 
-    async beforeRouteEnter(to, from, next) {
+    async created() {
       const structure = await axios.get("http://wpress.reso.ru/wp-json/wp/v2/url?slug=calculators");
       const pageId = structure.data[0].id;
-      axios.get(`http://wpress.reso.ru/wp-json/wp/v2/main?url=${pageId}`).then(response => {
-        next(vm => {
-          vm.pageTitle = response.data[0].title.rendered;
-          vm.link = response.data[0].acf.next;
-        });
-      }) 
+
+      let responseTitle = await axios.get(`http://wpress.reso.ru/wp-json/wp/v2/main?url=${pageId}`);
+      this.pageTitle = responseTitle.data[0].title.rendered;
+
+      let responseLink = await axios.get("http://wpress.reso.ru/wp-json/wp/v2/main/343");
+      this.link = responseLink.data.slug;
     }
   }
 </script>

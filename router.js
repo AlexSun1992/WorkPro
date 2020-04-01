@@ -82,7 +82,7 @@ export function createRouter() {
       },
       {
         meta: 'Первая тестовая страница',
-        path: '/page1',
+        path: '/первая-страница',
         component: Page1
       },
       {

@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
-    <nuxt-link to="/page1">Страница 1</nuxt-link>
+    <!-- <div v-html="link"></div> -->
+    <a :href="link">Первая страница</a>
     <div class="animated fadeIn">
       <div class="container">
         <div class="justify-content-lg-center">
@@ -35,9 +36,27 @@
   const pageId = 57
   export default {
     components: {Banners, Offers, About, Products},
+
+    data () {
+      return {
+        pageTitle: null,
+        link: null,
+        pageId: null
+      }
+    },
+
     async asyncData ({store}) {
       await store.dispatch('pages/get', pageId)
     },
+
+    async created() {
+      debugger
+      const response = await this.$axios.get("http://wpress.reso.ru/wp-json/wp/v2/main/343");
+      this.pageTitle = response.data.title.rendered;
+      debugger
+      this.link = response.data.slug;
+    },
+
     head () {
       return {
         title: this.title,
