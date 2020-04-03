@@ -13,8 +13,6 @@ import Dashboard from '~/components/Pages/Cabinet/Dashboard'
 import Fluid from '~/components/Pages/Cabinet/Fluid'
 
 import Login from '~/components/Pages/Login/LoginPage'
-import Page1 from '~/components/Pages/Test/Page1'
-import Page2 from '~/components/Pages/Test/Page2'
 import PasswordRecovery from '~/components/Pages/Login/PasswordRecovery/PasswordRecoveryForm'
 
 Vue.use(Router)
@@ -79,16 +77,6 @@ export function createRouter() {
             component: Fluid
           }
         ]
-      },
-      {
-        meta: 'Первая тестовая страница',
-        path: '/первая-страница',
-        component: Page1
-      },
-      {
-        meta: 'Вторая страница',
-        path: '/calculators',
-        component: Page2
       }
     ]
   })

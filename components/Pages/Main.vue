@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper">
-    <a :href="link">{{ pageTitle }}</a>
     <div class="animated fadeIn">
       <div class="container">
         <div class="justify-content-lg-center">
@@ -38,22 +37,14 @@
 
     data () {
       return {
-        pageTitle: null,
-        link: null,
         pageId: null
       }
     },
 
     async asyncData ({store}) {
+      debugger
+      console.log('!!!!')
       await store.dispatch('pages/get', pageId)
-    },
-
-    async created() {
-      debugger
-      const response = await this.$axios.get("http://wpress.reso.ru/wp-json/wp/v2/main/343");
-      this.pageTitle = response.data.title.rendered;
-      debugger
-      this.link = response.data.slug;
     },
 
     head () {
@@ -67,6 +58,7 @@
     },
     computed: {
       page () {
+        debugger
         return this.$store.getters['pages/getPageById'](pageId).data.acf
       }
     }
