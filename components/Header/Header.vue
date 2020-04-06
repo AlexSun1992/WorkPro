@@ -5,18 +5,22 @@
     </button>
     <b-link class="navbar-brand" to="/"></b-link>
     <b-navbar-nav class="d-md-down-none">
-      <NLink class="px-3" to="/about">
-        Купить полис
-      </NLink>
-      <NLink class="px-3" to="/about">
-        Ближайший офис
-      </NLink>
-      <NLink class="px-3" to="/about">
-        Справочный офис
-      </NLink>
-      <NLink class="px-3" to="/about">
-       РЕСО для бизнеса
-      </NLink>
+    <MainMenu :pageId="pageId"/>
+    <!-- <NLink class="px-3" :to="item.link.url" @click.native="setUrl(item.link.url)" v-for="item in menu">
+      {{ item.link.title }}
+    </NLink> -->
+    <!-- <NLink class="px-3" to="/about">
+      Купить полис
+    </NLink>
+    <NLink class="px-3" to="/about">
+      Ближайший офис
+    </NLink>
+    <NLink class="px-3" to="/about">
+      Справочный офис
+    </NLink>
+    <NLink class="px-3" to="/about">
+      РЕСО для бизнеса
+    </NLink> -->
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto header-dropdown-button">
       <HeaderDropdown/>
@@ -26,12 +30,21 @@
 
 <script>
   import HeaderDropdown from './HeaderDropdown.vue'
+  import MainMenu from './MainMenu/MainMenu'
 
   export default {
     name: 'c-header',
     components: {
-      HeaderDropdown
+      HeaderDropdown,
+      MainMenu
     },
+
+    data() {
+      return {
+        pageId: 415
+      }
+    },
+
     methods: {
       sidebarToggle (e) {
         e.preventDefault()

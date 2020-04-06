@@ -3,7 +3,8 @@
     <div class="animated fadeIn">
       <div class="container">
         <div class="justify-content-lg-center">
-          <products
+          <DynamicRoutesRenderer/>
+          <!-- <products
             v-if="page.products"
             :items="page.products"
           />
@@ -18,7 +19,7 @@
           <banners
             v-if="page.banners"
             :items="page.banners"
-          />
+          /> -->
         </div>
       </div>
     </div>
@@ -30,10 +31,11 @@
   import About from './LandingPage/LandingPageAbout'
   import Offers from './LandingPage/LandingPageOffers'
   import Banners from './LandingPage/LandingPageBanners'
+  import DynamicRoutesRenderer from '~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer'
 
-  const pageId = 57
+  const pageId = 415;
   export default {
-    components: {Banners, Offers, About, Products},
+    components: {Banners, Offers, About, Products, DynamicRoutesRenderer},
 
     data () {
       return {
@@ -42,8 +44,6 @@
     },
 
     async asyncData ({store}) {
-      debugger
-      console.log('!!!!')
       await store.dispatch('pages/get', pageId)
     },
 
@@ -56,9 +56,9 @@
         ]
       }
     },
+    
     computed: {
       page () {
-        debugger
         return this.$store.getters['pages/getPageById'](pageId).data.acf
       }
     }
