@@ -14,7 +14,12 @@
   export default {
     computed: {
       setUrl() {
-        const url = this.$store.getters['pages/url'];
+        const url = this.$route.path;
+        // const url = this.$store.getters['pages/url'];
+        if (this.$route.path === '/') {
+          this.$store.dispatch('pages/fetchPageByUrl', '/index');
+          return;
+        }
         this.$store.dispatch('pages/fetchPageByUrl', url);
       },
       getPage() {
