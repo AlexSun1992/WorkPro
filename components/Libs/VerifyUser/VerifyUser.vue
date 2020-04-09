@@ -17,8 +17,9 @@
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
     <div>
-      <b-link v-if="isUserDisabled" @click="changeNumber">Изменить номер</b-link>
+      <!-- <b-link v-if="isUserDisabled" @click="changeNumber">Изменить номер</b-link> -->
       <div v-if="(code || userFormValid) && loginType === 'phone'">
+        <b-link @click="changeNumber">Изменить номер</b-link>
         <p>На указанный номер выслан код подтверждения</p>
         <b-form-input
           autofocus
@@ -36,7 +37,7 @@
         <b-button
           type="submit"
           :disabled="disabledResend"
-          @click.prevent="resendCode"
+          @click="resendCode"
           variant="success"
         >
           Отправить повторно
@@ -100,12 +101,20 @@ export default {
 
   methods: {
     async getCode() {
+      this.isPhoneChanged = false;
       try {
         if (!this.code && this.v.phone.$model) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
           // Перенести в actions
-          this.code = await axios.post("/api/password", { phone: this.v.phone.$model });
+          // this.code = await axios.post("/api/password", { phone: this.v.phone.$model });
+          const params = {
+            'PHONE': this.v.phone.$model
+          };
+          const response = await this.$store.dispatch('getCode', params);
+          this.code = response.data[0].TEMPPASS;
+          // Для показа
+          this.v.code.$model = this.code;
           this.$emit("onCode", this.code);
           this.isUserDisabled = true;
           this.countdown();
@@ -145,7 +154,8 @@ export default {
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
       this.$emit("onCode", this.code);
-      this.countdown();
+      
+      // this.countdown();
     },
 
     validateInput(field, bluredField) {
@@ -166,6 +176,10 @@ export default {
     },
 
     countdown() {
+      if (this.isPhoneChanged){
+        this.timer = null;
+        return;
+      }
       this.resendCount--;
       if (this.resendCount == 0) {
         this.disabledResend = false;
@@ -173,19 +187,26 @@ export default {
         this.resendCount = null;
       } else {
         if (this.isPhoneChanged) {
-          this.resendCount = null;
-          this.disabledResend = false;
-          return;
+          // this.resendCount = this.initialCount;
+          // this.disabledResend = false;
+          this.timer = setTimeout(this.countdown, 1000);
+          return this.resendCount;
+          // return;
         }
         this.timer = setTimeout(this.countdown, 1000);
         return this.resendCount;
       }
     },
 
-    resendCode() {
+    async resendCode() {
       this.v.code.$model = "";
       this.resendCount = this.initialCount;
       this.disabledResend = true;
+      const params = {
+            'PHONE': this.v.phone.$model
+          };
+      const response = await this.$store.dispatch('getCode', params);
+          this.v.code.$model = response.data[0].TEMPPASS;
       this.countdown();
     }
   },

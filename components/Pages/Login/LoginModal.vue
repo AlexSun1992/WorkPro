@@ -37,7 +37,7 @@ import { IUser } from './login.types';
       try {
         e.preventDefault();
         if (!this.validation) return;
-        this.captcha = await (this as any).$getCaptcha();
+        // this.captcha = await (this as any).$getCaptcha();
         await ((this as any).$auth as any).loginWith('local', {
           headers: {},
           data: <IUser> {
