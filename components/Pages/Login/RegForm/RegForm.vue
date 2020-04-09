@@ -171,6 +171,7 @@
         try {
           if (this.$v.form.phone.$model) {
             this.$refs['verifyUser'].getCode();
+            this.$refs['verifyUser'].isPhoneChanged = true;
           }
           this.$v.form.$touch();
           if (this.$v.form.$anyError) {

@@ -187,11 +187,8 @@ export default {
         this.resendCount = null;
       } else {
         if (this.isPhoneChanged) {
-          // this.resendCount = this.initialCount;
-          // this.disabledResend = false;
           this.timer = setTimeout(this.countdown, 1000);
           return this.resendCount;
-          // return;
         }
         this.timer = setTimeout(this.countdown, 1000);
         return this.resendCount;
