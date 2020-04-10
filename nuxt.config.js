@@ -14,9 +14,9 @@ module.exports = {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
-    script: [
-      { src: 'https://www.google.com/recaptcha/api.js?render=6Le_5tkUAAAAAI4paHCeddGpgcZCJZ2aAHfZaCme' }
-    ]
+    // script: [
+    //   { src: 'https://www.google.com/recaptcha/api.js?render=6Le_5tkUAAAAAI4paHCeddGpgcZCJZ2aAHfZaCme' }
+    // ]
   },
   /*
   ** Customize the progress-bar color
@@ -77,12 +77,9 @@ module.exports = {
   proxy: {
     // Simple proxy
     '/wp-json': 'http://wpress.reso.ru/',
-    //'/free': 'http://172.17.0.105:8080',
-    //'/am': 'http://172.17.0.105:8080',
-    //'/free': 'http://172.17.0.33:8080',
-    //'/am': 'http://172.17.0.33:8080',
-    '/free': 'https://mobile2.reso.ru',
-    '/am': 'https://mobile2.reso.ru'
+    // '/free': 'https://mobile2.reso.ru',
+    '/free': 'https://mobiletest.reso.ru',
+    '/am': 'https://mobiletest.reso.ru'
   },
 
   serverMiddleware: [

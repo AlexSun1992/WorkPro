@@ -3,7 +3,7 @@
     <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-group label="Телефон">
-        <verify-user ref="verifyUser" :v="$v.form" :count="20" :context="'registration'" :loginType="'phone'" :validateState="validateState" :disabled="registrationInProcess"/>
+        <verify-user ref="verifyUser" :v="$v.form" :count="60" :context="'registration'" :loginType="'phone'" :validateState="validateState" :disabled="registrationInProcess"/>
       </b-form-group>
       <b-form-group  label="E-mail">
         <b-form-input
@@ -140,25 +140,38 @@
 
       async setToken() {
         this.registrationInProcess = true;
-        this.captchaToken = this.$getCaptcha();
-
-        if (this.captchaToken) {
-          const params = {
-            form: this.form,
-            RECAPTCHA: this.captchaToken
-          }
-          const response = await this.$store.dispatch("registerUser", params)
-          if (response && response.status === 200) {
-            this.$auth.setUserToken(response.data[0].ACCESS_TOKEN);
-          }
-            this.registrationInProcess = false;
+        // this.captchaToken = this.$getCaptcha();
+        const params = {
+          SECONDNAME: this.$v.form.family.$model,
+          FIRSTNAME: this.$v.form.name.$model,
+          THIRDNAME: this.$v.form.patronymic.$model,
+          BIRTHDATE: this.$v.form.birthdate.$model.toISOString().split('T')[0],
+          PHONE: this.$v.form.phone.$model,
+          EMAIL: this.$v.form.email.$model,
+          CODE: this.$v.form.code.$model,
+          POLICY_NUMBER: "",
+          PASSWORD: this.$v.form.password.$model,
+          PASSWORD_CONFIRM: this.$v.form.password2.$model
         }
+          const response = await this.$store.dispatch("registerUser", params)
+
+
+          if (response) {
+            this.$auth.setUserToken(response.ACCESS_TOKEN);
+            if (this.$store.getters.getRegistrationError) {
+              this.$router.push('/');
+            }
+          } else {
+            this.$refs['verifyUser'].code = null;
+          }
+          this.registrationInProcess = false;
       },
 
       async onSubmit() {
         try {
           if (this.$v.form.phone.$model) {
             this.$refs['verifyUser'].getCode();
+            this.$refs['verifyUser'].isPhoneChanged = true;
           }
           this.$v.form.$touch();
           if (this.$v.form.$anyError) {
@@ -174,7 +187,8 @@
     computed: {
       errorMessage() {
         if (this.$store.getters.getRegistrationError) {
-          return 'При регистрации пользователя произошла ошибка'
+          // Обработать статусы ответа от nuxt-server
+          return 'Ошибка при регистрации. Учётная запись уже существует'
           // return this.$store.getters.getRegistrationError.toString();
         }
 

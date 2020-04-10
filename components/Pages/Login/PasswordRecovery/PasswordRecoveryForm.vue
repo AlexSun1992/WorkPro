@@ -4,10 +4,10 @@
     <h5 class="mb-3">{{ !isCodeValid ? "Восстановление доступа" : "Изменение пароля" }}</h5>
     <b-tabs v-if="!changePasswordActive" ref="tabs" content-class="mt-2">
       <b-tab title="Телефон" active>
-        <verify-user v-if="!isCodeValid" :label="phoneLabel" :loginType="'phone'" :v="$v.form" :count="20" :validateState="validateState"/>
+        <verify-user v-if="!isCodeValid" :label="phoneLabel" :loginType="'phone'" :v="$v.form" :count="60" :validateState="validateState"/>
       </b-tab>
       <b-tab title="Email">
-        <verify-user v-if="!isCodeValid" :label="emailLabel" :loginType="'email'" :v="$v.form" :count="20" :validateState="validateState"/>
+        <verify-user v-if="!isCodeValid" :label="emailLabel" :loginType="'email'" :v="$v.form" :count="60" :validateState="validateState"/>
       </b-tab>
     </b-tabs>
     <verify-password :recovery="true" v-if="isCodeValid || isEmailValid" :v="$v.form" :validateState="validateState"/>
@@ -58,7 +58,7 @@ export default {
     },
 
     async validateCode() {
-      this.captchaToken = await this.$getCaptcha();
+      // this.captchaToken = await this.$getCaptcha();
       const params = {
         code: this.$v.form.code.$model,
         RECAPTCHA: this.captchaToken
@@ -71,7 +71,7 @@ export default {
     },
 
     async savePassword() {
-      this.captchaToken = await this.$getCaptcha();
+      // this.captchaToken = await this.$getCaptcha();
       const params = {
         password: this.$v.form.password.$model,
         RECAPTCHA: this.captchaToken
