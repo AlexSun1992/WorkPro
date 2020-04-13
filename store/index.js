@@ -5,13 +5,6 @@ export const state = () => ({
 export const actions = {
   async registerUser({commit}, params) {
     try {
-      // const RECAPTCHA = params.RECAPTCHA;
-      // delete params.RECAPTCHA;
-      // return await this.$axios.post("/free/v2/registration", params, {
-      //   headers: {
-      //     RECAPTCHA
-      //   }
-      // });
       const regResponse = await this.$axios.post("/free/v2/registration", params);
       if (regResponse.data[0].MESSAGE_CODE == 200) {
         const authParams = {
@@ -29,7 +22,21 @@ export const actions = {
 
   async getCode({commit}, params) {
     try {
-      return await this.$axios.post("/free/v2/sendsmscode", params);
+      if (params.loginType === 'phone') {
+        delete params.loginType;
+        return await this.$axios.post("/free/v2/sendsmscode", params);
+      } else {
+        delete params.loginType;
+        return await this.$axios.post("/free/v2/sendemailcode", params);
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  },
+
+  async resetPassword({commit}, params) {
+    try {
+      return await this.$axios.post("/free/v2/restorepassword", params);
     } catch(e) {
       console.log(e);
     }
@@ -42,7 +49,9 @@ export const actions = {
 
 export const mutations = {
   setAxiosError(state, error) {
-    state.registrationError = error;
+    if (error) {
+      state.registrationError = error.response.data.INFO;
+    }
   },
 
   clearAxiosError(state) {

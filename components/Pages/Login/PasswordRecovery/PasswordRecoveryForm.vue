@@ -1,52 +1,69 @@
 <template>
   <div class="container">
-    <!-- <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert> -->
-    <h5 class="mb-3">{{ !isCodeValid ? "Восстановление доступа" : "Изменение пароля" }}</h5>
-    <b-tabs v-if="!changePasswordActive" ref="tabs" content-class="mt-2">
+    <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
+    <h5 class="mb-3">Восстановление доступа</h5>
+    <b-tabs ref="tabs" content-class="mt-2">
       <b-tab title="Телефон" active>
-        <verify-user v-if="!isCodeValid" :label="phoneLabel" :loginType="'phone'" :v="$v.form" :count="60" :validateState="validateState"/>
+        <verify-user :label="phoneLabel" :loginType="'phone'" :v="$v.form" :count="60" :validateState="validateState"/>
       </b-tab>
       <b-tab title="Email">
-        <verify-user v-if="!isCodeValid" :label="emailLabel" :loginType="'email'" :v="$v.form" :count="60" :validateState="validateState"/>
+        <verify-user :label="emailLabel" :loginType="'email'" :v="$v.form" :count="60" :validateState="validateState"/>
       </b-tab>
     </b-tabs>
-    <verify-password :recovery="true" v-if="isCodeValid || isEmailValid" :v="$v.form" :validateState="validateState"/>
+    <UserRecoveryForm v-if="greater180" :v="$v.form" :validateState="validateState"/>
+    <b-form-group>
+      <b-form-input
+        type="password"
+        v-model="$v.form.password.$model"
+        placeholder="Пароль"
+      ></b-form-input>
+      <b-form-invalid-feedback>Введите пароль</b-form-invalid-feedback>
+    </b-form-group>
+    <b-form-group>
+      <b-form-input
+        type="password"
+        v-model="$v.form.password2.$model"
+        placeholder="Повторите пароль"
+      ></b-form-input>
+      <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
+    </b-form-group>
     <div class="mt-2 d-flex justify-content-between">
       <router-link to="/login">
         <b-button variant="outline-secondary">Отмена</b-button>
       </router-link>
-      <b-button variant="success" v-if="!changePasswordActive" @click="validateCode" :disabled="$v.form.email.$invalid && $v.form.code.$invalid">Далее</b-button>
-      <b-button variant="success" v-if="changePasswordActive" @click="savePassword" :disabled="$v.form.password2.$invalid">Сохранить</b-button>
+      <b-button variant="success" @click="resetPassword" :disabled="disabledReset">Сбросить пароль</b-button>
     </div>
   </div>
 </template>
 
 <script>
 import VerifyUser from '~/components/Libs/VerifyUser/VerifyUser'
-import VerifyPassword from '~/components/Libs/VerifyPassword/VerifyPassword'
+import UserRecoveryForm from '~/components/Pages/Login/PasswordRecovery/UserRecoveryForm'
 import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 
 export default {
   components: {
     VerifyUser,
-    VerifyPassword
+    UserRecoveryForm
   },
   data() {
     return {
-      isCodeValid: false,
-      captchaToken: '',
-      errorMessage: null,
       form: {
         phone: '',
         code: '',
         email: '',
+        surname: '',
+        name: '',
+        patronymic: '',
+        birthdate: '',
         password: '',
         password2: ''
       },
-      changePasswordActive: false,
       phoneLabel: 'Введите номер телефона указанный при регистрации',
       emailLabel: 'Введите email указанный при регистрации',
-      isEmailValid: false
+      isEmailValid: false,
+      errorMessage: null,
+      greater180: null
     }
   },
 
@@ -57,33 +74,65 @@ export default {
       return $dirty ? !$error : null;
     },
 
-    async validateCode() {
-      // this.captchaToken = await this.$getCaptcha();
-      const params = {
-        code: this.$v.form.code.$model,
-        RECAPTCHA: this.captchaToken
+    async resetPassword() {
+      let params;
+      if (this.$refs['tabs'].currentTab == 0) {
+        params = {
+          "PHONE": this.$v.form.phone.$model,
+          "SMSCODE": this.$v.form.code.$model,
+          "PASSWORD": this.$v.form.password.$model,
+          "PASSWORD_CONFIRM": this.$v.form.password2.$model
+        };
+        console.log(params)
       }
-      // const response = this.$store.dispatch('validateCode', params)
-      // this.errorMessage = 'Неправильный код, попробуйте ещё раз'
-      this.isCodeValid = true; // Удалить с появлением метода validateCode
-      this.isEmailValid = true;
-      this.changePasswordActive = true;
-    },
-
-    async savePassword() {
-      // this.captchaToken = await this.$getCaptcha();
-      const params = {
-        password: this.$v.form.password.$model,
-        RECAPTCHA: this.captchaToken
+      if (this.$refs['tabs'].currentTab == 1) {
+        params = {
+          "EMAIL": this.$v.form.email.$model,
+          "EMAILCODE": this.$v.form.code.$model,
+          "PASSWORD": this.$v.form.password.$model,
+          "PASSWORD_CONFIRM": this.$v.form.password2.$model
+        };
+        console.log(params)
       }
-      // const response = this.$store.dispach('resetPassword', params)
-      const response = true; // Удалить с появлением метода resetPassword
-      if (response) {
-        this.$router.push('/login')
+      // Исправить с появлением метода (> 180)
+      let response;
+      if (!this.greater180) {
+        let response = await this.$store.dispatch('resetPassword', params);
+        if (!response) 
+        this.greater180 = true;
+        return;
       } else {
-        this.errorMessage = "При изменении пароля произошла ошибка, попробуйте ещё раз";
+        const additionalParams = {
+          "SURNAME" : this.$v.form.surname.$model,
+          "FIRSTNAME" : this.$v.form.name.$model,
+          "PATRONYMIC" : this.$v.form.patronymic.$model,
+          "BIRTHDATE" : this.$v.form.birthdate.$model ? this.$v.form.birthdate.$model.toISOString().split('T')[0] : null
+        }
+        params = {
+          ...params,
+          ...additionalParams
+        }
+        console.log(params);
+        response = await this.$store.dispatch('resetPassword', params);
       }
-    },
+
+      // if (response) {
+      //   this.$router.push('/login')
+      // } else {
+      //   this.errorMessage = "При изменении пароля произошла ошибка, попробуйте ещё раз";
+      // }
+    }
+  },
+
+  computed: {
+    disabledReset() {
+      if (!this.greater180) {
+        return this.$v.form.password2.$invalid;
+      } else {
+        return this.$v.form.name.$invalid || 
+        this.$v.form.surname.$invalid || this.$v.form.patronymic.$invalid || this.$v.form.birthdate.$invalid;
+      }
+    }
   },
 
   validations: {
@@ -95,7 +144,15 @@ export default {
       email: {
         required,
         email
-        // minLength: minLength(6)
+      },
+      name: {
+        required
+      },
+      surname: {
+        required
+      },
+      patronymic: {
+        required
       },
       code: {
         required,

@@ -187,9 +187,7 @@
     computed: {
       errorMessage() {
         if (this.$store.getters.getRegistrationError) {
-          // Обработать статусы ответа от nuxt-server
-          return 'Ошибка при регистрации. Учётная запись уже существует'
-          // return this.$store.getters.getRegistrationError.toString();
+          return this.$store.getters.getRegistrationError.toString();
         }
 
         if (!this.$store.getters.getRegistrationError && this.$store.getters.isAuthenticated) {

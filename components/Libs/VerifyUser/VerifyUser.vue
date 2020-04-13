@@ -17,10 +17,9 @@
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
     <div>
-      <!-- <b-link v-if="isUserDisabled" @click="changeNumber">Изменить номер</b-link> -->
-      <div v-if="(code || userFormValid) && loginType === 'phone'">
-        <b-link @click="changeNumber">Изменить номер</b-link>
-        <p>На указанный номер выслан код подтверждения</p>
+      <div v-if="code">
+        <b-link @click="changeNumber">{{ loginType === 'phone' ? 'Изменить номер' : 'Изменить email' }}</b-link>
+        <p>На указанный {{ loginType === 'phone' ? 'номер' : 'email' }} выслан код подтверждения</p>
         <b-form-input
           autofocus
           v-model="v.code.$model"
@@ -45,11 +44,11 @@
         </b-button>
       </div>
     </div>
-    <UserRecoveryForm v-if="greater180 && context !== 'registration' && !userFormValid && !isPhoneChanged" :v="$v.user" :validateState="validateState" />
+    <!-- <UserRecoveryForm v-if="greater180 && context !== 'registration' && !userFormValid && !isPhoneChanged" :v="$v.user" :validateState="validateState" /> -->
     <b-button
       type="submit"
-      v-if="!code && loginType === 'phone' && !userFormValid"
-      :disabled="v.phone.$invalid"
+      v-if="!code"
+      :disabled="v.phone.$invalid && v.email.$invalid"
       @click.prevent="verifyUser"
       variant="success"
     >Подтвердить</b-button>
@@ -60,13 +59,13 @@
 
 import _ from 'lodash'
 import axios from 'axios'
-import UserRecoveryForm from '~/components/Pages/Login/PasswordRecovery/UserRecoveryForm'
-import { required, minLength } from "vuelidate/lib/validators";
+// import UserRecoveryForm from '~/components/Pages/Login/PasswordRecovery/UserRecoveryForm'
+// import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   props: ["count", "v", "validateState", "disabled", "loginType", "label", "context"],
   components: {
-    UserRecoveryForm
+    // UserRecoveryForm
   },
   data() {
     return {
@@ -82,14 +81,12 @@ export default {
       mask: "",
       codeMask: "#####",
       placeholder: "+7(___)-___-__-__",
-      greater180: false, // Заменить на реальные данные
-      user: {
-        surname: "",
-        name: "",
-        patronymic: "",
-        birthdate: "",
-      },
-      userFormValid: false
+      // user: {
+      //   surname: "",
+      //   name: "",
+      //   patronymic: "",
+      //   birthdate: "",
+      // },
     };
   },
 
@@ -103,16 +100,18 @@ export default {
     async getCode() {
       this.isPhoneChanged = false;
       try {
-        if (!this.code && this.v.phone.$model) {
+        if (!this.code && (this.v.phone.$model || this.v.email.$model)) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
-          // Перенести в actions
-          // this.code = await axios.post("/api/password", { phone: this.v.phone.$model });
-          const params = {
-            'PHONE': this.v.phone.$model
-          };
+
+          let params = this.getCodeParams(this.loginType);
           const response = await this.$store.dispatch('getCode', params);
-          this.code = response.data[0].TEMPPASS;
+          if (this.loginType === 'phone') {
+            this.code = response.data[0].TEMPPASS;
+          } else {
+            // Для показа (заменить на код email)
+            this.code = '*';
+          }
           // Для показа
           this.v.code.$model = this.code;
           this.$emit("onCode", this.code);
@@ -126,25 +125,39 @@ export default {
       }
     },
 
+    getCodeParams(loginType) {
+      let params;
+      if (this.loginType === 'phone') {
+        params = {
+          'PHONE': this.v.phone.$model,
+          'loginType': 'phone'
+        };
+      } else {
+        params = {
+          'EMAIL': this.v.email.$model,
+          'loginType': 'email'
+        };
+      }
+      return params;
+    },
+
     async showForm() {
       if (!this.$v.user.$invalid) {
-        this.userFormValid = true;
         this.isUserDisabled = true;
         this.countdown();
       }
     },
 
     verifyUser(){
-      this.greater180 = true; // Заменить на реальные данные
-      if(this.greater180 && this.context !== 'registration') {
-        this.showForm();
-      } else {
+      // this.greater180 = false;
+      // if(this.greater180 && this.context !== 'registration') {
+      //   this.showForm();
+      // } else {
         this.getCode();
-      }
+      // }
     },
 
     changeNumber() {
-      this.userFormValid = false;
       this.isUserBlured = false;
       this.v.phone.$model = "";
       this.$refs["userInput"].$el.disabled = false;
@@ -154,8 +167,6 @@ export default {
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
       this.$emit("onCode", this.code);
-      
-      // this.countdown();
     },
 
     validateInput(field, bluredField) {
@@ -199,11 +210,15 @@ export default {
       this.v.code.$model = "";
       this.resendCount = this.initialCount;
       this.disabledResend = true;
-      const params = {
-            'PHONE': this.v.phone.$model
-          };
+      let params = this.getCodeParams(this.loginType);
       const response = await this.$store.dispatch('getCode', params);
-          this.v.code.$model = response.data[0].TEMPPASS;
+      if (this.loginType === 'phone') {
+        this.code = response.data[0].TEMPPASS;
+        this.v.code.$model = this.code;
+      } else {
+        // Для показа (заменить на код email)
+        this.code = '*';
+      }
       this.countdown();
     }
   },
@@ -216,23 +231,6 @@ export default {
       } else {
         this.placeholder = "";
         return this.mask = "X".repeat(50);
-      }
-    }
-  },
-
-  validations: {
-    user: {
-      surname: {
-        required
-      },
-      name: {
-        required
-      },
-      patronymic: {
-        required
-      },
-      birthdate: {
-        required
       }
     }
   }
