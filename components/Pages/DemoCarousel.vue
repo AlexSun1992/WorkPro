@@ -14,8 +14,8 @@
       title: 'Карусель'
     },
     async asyncData ({ $axios }) {
-      const {data} = await $axios.get('/wp-json/acf/v3/main/239')
-      return {content: data.acf.carousel}
+      const {data} = await $axios.get('/wp-json/wp/v2/pages?slug=index')
+      return {content: data[0].content.rendered}
     },
     components: {VRuntimeTemplate}
   }
