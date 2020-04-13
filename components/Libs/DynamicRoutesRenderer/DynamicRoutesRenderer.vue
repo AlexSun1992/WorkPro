@@ -16,8 +16,9 @@
 
 <script>
   import VRuntimeTemplate from "v-runtime-template";
+  import Calculator from "../../Pages/Calculator";
   export default {
-    components: {VRuntimeTemplate},
+    components: {VRuntimeTemplate,Calculator},
     computed: {
       setUrl() {
         const url = this.$route.path;

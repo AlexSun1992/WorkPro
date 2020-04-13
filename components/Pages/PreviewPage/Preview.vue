@@ -6,9 +6,10 @@
 
 <script>
   import VRuntimeTemplate from "v-runtime-template";
+  import Calculator from "../../Pages/Calculator";
   export default {
     name: 'Preview',
-    components: {VRuntimeTemplate},
+    components: {VRuntimeTemplate, Calculator},
     head: {
       title: 'Карусель'
     },
