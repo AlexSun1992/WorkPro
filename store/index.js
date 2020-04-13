@@ -49,7 +49,7 @@ export const actions = {
 
 export const mutations = {
   setAxiosError(state, error) {
-    if (error) {
+    if (error && error.response) {
       state.registrationError = error.response.data.INFO;
     }
   },
