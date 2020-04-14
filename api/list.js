@@ -16,7 +16,7 @@ app.get('/list/:idModule/:idItem', (req, res) => {
   try {
     if(req.cookies){
       axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
-      axios.defaults.baseURL = 'https://mobile2.reso.ru';
+      axios.defaults.baseURL = 'https://mobiletest.reso.ru';
     }
     axios({url: `${consts.DATA}/${req.params.idModule}/${req.params.idItem}`, method: 'GET'})
       .then(resp => {
