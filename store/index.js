@@ -36,7 +36,10 @@ export const actions = {
 
   async resetPassword({commit}, params) {
     try {
-      return await this.$axios.post("/free/v2/restorepassword", params);
+      debugger
+      let response = await this.$axios.post("/free/v2/restorepassword", params);
+      console.log(response)
+      return response;
     } catch(e) {
       console.log(e);
     }

@@ -78,29 +78,31 @@ export default {
       let params;
       if (this.$refs['tabs'].currentTab == 0) {
         params = {
+          "TYPE": 1,
           "PHONE": this.$v.form.phone.$model,
           "SMSCODE": this.$v.form.code.$model,
           "PASSWORD": this.$v.form.password.$model,
           "PASSWORD_CONFIRM": this.$v.form.password2.$model
         };
-        console.log(params)
       }
       if (this.$refs['tabs'].currentTab == 1) {
         params = {
+          "TYPE": 2,
           "EMAIL": this.$v.form.email.$model,
           "EMAILCODE": this.$v.form.code.$model,
           "PASSWORD": this.$v.form.password.$model,
           "PASSWORD_CONFIRM": this.$v.form.password2.$model
         };
-        console.log(params)
       }
       // Исправить с появлением метода (> 180)
       let response;
       if (!this.greater180) {
         let response = await this.$store.dispatch('resetPassword', params);
-        if (!response) 
-        this.greater180 = true;
-        return;
+        if (response.data[0].MESSAGE_CODE === '200') {
+          this.$router.push('/login');
+        } else {
+          this.greater180 = true;
+        }
       } else {
         const additionalParams = {
           "SURNAME" : this.$v.form.surname.$model,
@@ -112,15 +114,11 @@ export default {
           ...params,
           ...additionalParams
         }
-        console.log(params);
         response = await this.$store.dispatch('resetPassword', params);
+        if (response.data[0].MESSAGE_CODE === '200') {
+          this.$router.push('/login');
+        }
       }
-
-      // if (response) {
-      //   this.$router.push('/login')
-      // } else {
-      //   this.errorMessage = "При изменении пароля произошла ошибка, попробуйте ещё раз";
-      // }
     }
   },
 
