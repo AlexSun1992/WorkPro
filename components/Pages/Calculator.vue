@@ -71,7 +71,7 @@
       },
       regPolicy() {
         if(!this.isAuthenticated){
-          this.$refs['refLogin'].showLoginModal()
+          this.$router.push(`/login`)
         }
         else{
           this.$router.push(`/cabinet/reg-policy/${this.calcId}`)

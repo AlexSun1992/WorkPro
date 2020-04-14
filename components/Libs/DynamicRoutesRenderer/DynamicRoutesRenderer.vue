@@ -6,12 +6,19 @@
         {{ getPage.title.rendered }}
       </h1>
     </div>
-    <div v-if="getPage" v-html="getPage.content.rendered"></div>
+
+    <!--<div v-if="getPage" v-html="getPage.content.rendered"></div>-->
+    <div v-if="getPage">
+      <v-runtime-template :template="getPage.content.rendered"></v-runtime-template>
+    </div>
   </div>
 </template>
 
 <script>
+  import VRuntimeTemplate from "v-runtime-template";
+  import Calculator from "../../Pages/Calculator";
   export default {
+    components: {VRuntimeTemplate,Calculator},
     computed: {
       setUrl() {
         const url = this.$route.path;

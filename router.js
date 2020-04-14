@@ -16,6 +16,8 @@ import Login from '~/components/Pages/Login/LoginPage'
 import PasswordRecovery from '~/components/Pages/Login/PasswordRecovery/PasswordRecoveryForm'
 import DynamicRoutesRenderer from '~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer'
 
+import Preview from '~/components/Pages/PreviewPage/Preview'
+
 Vue.use(Router)
 
 export function createRouter() {
@@ -80,9 +82,13 @@ export function createRouter() {
         ]
       },
       {
+        path: '/preview/:pageId',
+        component: Preview
+      },
+      {
         path: '/*',
         component: DynamicRoutesRenderer
-      },
+      }
     ]
   })
 }
