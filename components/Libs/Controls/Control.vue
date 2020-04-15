@@ -1,0 +1,67 @@
+<template>
+  <b-col :xl="col" lg="6" md="6" sm="12">
+    <component  v-bind:is="comp"  v-bind:data="data" v-bind:edit="edit"></component>
+  </b-col>
+</template>
+<script>
+import ControlString from '~/components/Libs/Controls/ControlString'
+import ControlText from '~/components/Libs/Controls/ControlText'
+import ControlBoolean from '~/components/Libs/Controls/ControlBoolean'
+import ControlDouble from '~/components/Libs/Controls/ControlDouble'
+import ControlLong from '~/components/Libs/Controls/ControlLong'
+import ControlTimestamp from '~/components/Libs/Controls/ControlTimestamp'
+import ControlPeriod from '~/components/Libs/Controls/ControlPeriod'
+import ControlClob from '~/components/Libs/Controls/ControlString'
+import ControlEnum from '~/components/Libs/Controls/ControlString'
+export default {
+  name: 'Control',
+  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, ControlTimestamp, ControlPeriod, ControlClob, ControlEnum},
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {}
+    },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false
+    },
+    cols: {
+      type: Number,
+      required: true,
+      default: () => 1
+    }
+  },
+  computed: {
+    comp: function () {
+      return 'Control' + this.data.type.charAt(0).toUpperCase() + this.data.type.slice(1)
+    },
+    col: function () {
+      return 12 / this.cols * this.data.col
+    }
+  },
+  watch: {
+    'data.value': 'eventValidate'
+  },
+  methods: {
+    eventValidate () {
+      if (this.data.required) {
+        if (this.data.value != null && this.data.value !== '') {
+          this.data.state = null
+          this.data.checked = true
+        }
+        if (this.data.checked) {
+          if (this.data.value == null || this.data.value === '') {
+            this.data.state = false
+          }
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

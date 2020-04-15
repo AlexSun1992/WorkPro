@@ -9,7 +9,8 @@
             <div slot="header">
               <i class="fa fa-align-justify"></i> {{head}}
             </div>
-            <grid  :load="load" :total="count" :fields="data.fields" :items="data.items"></grid>
+            <Form  v-if="showForm" :data="formData" :edit="formEdit" :cols="formCols" @action-clicked="showList"></Form>
+            <grid  v-if="showGrid" :load="load" :total="count" :fields="data.fields" :items="data.items" @action-clicked="showItem"></grid>
           </b-card>
         </b-col>
       </b-row>
@@ -20,14 +21,20 @@
 <script>
 
   import Grid from '~/components/Libs/Table/Grid'
+  import Form from '~/components/Libs/Form/Form'
 
   export default {
     name: 'Card',
-    components: {Grid},
+    components: {Grid, Form},
     data () {
       return {
         data: {},
         count: null,
+        showForm: false,
+        showGrid: true,
+        formData: null,
+        formEdit: true,
+        formCols: 12,
         load: false
       }
     },
@@ -46,6 +53,8 @@
     },
     methods: {
       loadData () {
+        this.showGrid = true
+        this.showForm = false
         this.load = true
         this.$axios({url: `/api/list/${this.params.page.idModule}/${this.params.page.idItem}`, method: 'GET'})
           .then(resp => {
@@ -56,6 +65,25 @@
           .catch(err => {
             console.log(err)
           })
+      },
+      showItem (record) {
+        if(!record.item.ID){
+          alert('У записи отсутствует ID')
+          return
+        }
+        this.$axios({url: `/api/card/${this.params.page.idModule}/${this.params.page.idItem}/${record.item.ID}`, method: 'GET'})
+          .then(resp => {
+            this.formData = resp.data
+            this.showGrid = false
+            this.showForm = true
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      showList () {
+        this.showGrid = true
+        this.showForm = false
       }
     },
     computed: {

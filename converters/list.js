@@ -25,6 +25,7 @@ converter.list = (data) => {
     }
   }
   obj.fields = arr
+  obj.fields.unshift({ key: 'index', label: 'Действия' })
   obj.items = data[0]._data
   obj.total = obj.items.length
   return obj

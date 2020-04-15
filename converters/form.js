@@ -1,5 +1,5 @@
 import moment from 'moment/moment'
-import controlConverter from '@/utils/converters/control'
+import controlConverter from '../converters/control'
 
 const converter = {}
 
@@ -15,42 +15,23 @@ converter.subcompare = (a, b) => {
   return 0
 }
 
-converter.form = (data, struct) => {
+converter.form = (data) => {
   let arr = []
   let item = data[0]._data.length ? data[0]._data[0] : {}
-  if (!struct) {
-    let fields = struct
-    fields.sort(converter.subcompare)
-    for (let i = 0; i < fields.length; i++) {
-      let obj = {}
-      obj.label = fields[i].SCAPTION
-      obj.value = item[fields[i].SNAME]
-      obj.type = fields[i].SDATATYPE
-      obj.control = fields[i].IDADMWEBCONTROL
-      obj.name = fields[i].SNAME
-      obj.visible = fields[i].LVISIBLE
-      obj.required = fields[i].LREQUIRED
-      obj.readonly = fields[i].LREADONLY
-      obj.col = fields[i].NCOLSPAN
-      obj.state = null
-      arr.push(obj)
-    }
-  } else {
-    let fields = data[0]._struct
-    fields.sort(converter.compare)
-    for (let i = 0; i < fields.length; i++) {
-      let obj = {}
-      obj.label = fields[i].CAPTION ? fields[i].CAPTION : fields[i].FIELD
-      obj.value = item[fields[i].FIELD]
-      obj.type = fields[i].TYPE
-      obj.maxlength = fields[i].PRECISION
-      obj.name = fields[i].FIELD
-      obj.visible = fields[i].VISIBLE
-      obj.required = fields[i].REQUIRED
-      obj.control = null
-      obj.state = null
-      arr.push(obj)
-    }
+  let fields = data[0]._struct
+  fields.sort(converter.compare)
+  for (let i = 0; i < fields.length; i++) {
+    let obj = {}
+    obj.label = fields[i].CAPTION ? fields[i].CAPTION : fields[i].FIELD
+    obj.value = item[fields[i].FIELD]
+    obj.type = fields[i].TYPE
+    obj.maxlength = fields[i].PRECISION
+    obj.name = fields[i].FIELD
+    obj.visible = fields[i].VISIBLE
+    obj.required = fields[i].REQUIRED
+    obj.control = null
+    obj.state = null
+    arr.push(obj)
   }
   return converter.type(arr)
 }

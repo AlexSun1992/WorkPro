@@ -8,6 +8,9 @@
           Нет данных
         </div>
       </template>
+      <template v-slot:cell(index)="data">
+        <button v-on:click="showItem(data)" class="btn btn-success">Открыть</button>
+      </template>
     </b-table>
     <b-form v-show="paging" inline>
       <b-form-select class="mb-2 mt-1 mr-sm-2 mb-sm-0" :width="'auto'" :plain="true" v-model="page" :options="options" />
@@ -76,7 +79,7 @@ export default {
       this.$emit('selected', record, index)
     },
     showItem (record, index) {
-      this.$emit('dbl-clicked', record, index)
+      this.$emit('action-clicked', record, index)
     },
     onFiltered (filteredItems) {
       this.count = filteredItems.length
