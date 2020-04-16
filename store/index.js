@@ -34,9 +34,18 @@ export const actions = {
     }
   },
 
+  async nuxtServerInit({ dispatch }, context) {
+    let params;
+    if (!context.params.pathMatch) {
+      params = '/index'
+    } else {
+      params = `/${context.params.pathMatch}`
+    }
+    await dispatch('pages/fetchPageByUrl', params)
+  },
+
   async resetPassword({commit}, params) {
     try {
-      debugger
       let response = await this.$axios.post("/free/v2/restorepassword", params);
       console.log(response)
       return response;
