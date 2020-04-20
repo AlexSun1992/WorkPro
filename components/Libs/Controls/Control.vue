@@ -1,5 +1,5 @@
 <template>
-  <b-col :xl="col" lg="6" md="6" sm="12">
+  <b-col :xl="col" lg="12" md="12" sm="12">
     <component  v-bind:is="comp"  v-bind:data="data" v-bind:edit="edit"></component>
   </b-col>
 </template>
@@ -12,7 +12,7 @@ import ControlLong from '~/components/Libs/Controls/ControlLong'
 import ControlTimestamp from '~/components/Libs/Controls/ControlTimestamp'
 import ControlPeriod from '~/components/Libs/Controls/ControlPeriod'
 import ControlClob from '~/components/Libs/Controls/ControlString'
-import ControlEnum from '~/components/Libs/Controls/ControlString'
+import ControlEnum from '~/components/Libs/Controls/ControlEnum'
 export default {
   name: 'Control',
   components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, ControlTimestamp, ControlPeriod, ControlClob, ControlEnum},

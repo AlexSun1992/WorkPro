@@ -9,7 +9,7 @@
             <div slot="header">
               <i class="fa fa-align-justify"></i> {{head}}
             </div>
-            <Form  v-if="showForm" :data="formData" :edit="formEdit" :cols="formCols" @action-clicked="showList"></Form>
+            <Form  v-if="showForm && formData" :data="formData" :edit="formEdit" :cols="formCols" @action-clicked="showList"></Form>
             <grid  v-if="showGrid" :load="load" :total="count" :fields="data.fields" :items="data.items" @action-clicked="showItem"></grid>
           </b-card>
         </b-col>
@@ -30,6 +30,7 @@
       return {
         data: {},
         count: null,
+        id: null,
         showForm: false,
         showGrid: true,
         formData: null,
@@ -46,16 +47,32 @@
       }
     },
     created () {
-      this.loadData()
+      this.initData()
     },
     watch: {
-      'params': 'loadData'
+      'params': 'initData'
     },
     methods: {
-      loadData () {
-        this.showGrid = true
-        this.showForm = false
-        this.load = true
+      initData () {
+        if(this.params.settings){
+          this.showGrid = this.params.settings.recordLoad && !this.params.settings.newRecord
+          if(!this.showGrid){
+            if(this.isFilter){
+              this.formData = JSON.parse(JSON.stringify(this.params.settings.filters))
+            }
+            if(this.params.settings.newRecord){
+              this.showItem(0)
+            }
+            this.showForm = true
+          }
+          if(this.showGrid){
+            this.showForm = false
+            this.load = true
+            this.loadGrid()
+          }
+        }
+      },
+      loadGrid () {
         this.$axios({url: `/api/list/${this.params.page.idModule}/${this.params.page.idItem}`, method: 'GET'})
           .then(resp => {
             this.count = resp.data.length
@@ -67,11 +84,13 @@
           })
       },
       showItem (record) {
-        if(!record.item.ID){
-          alert('У записи отсутствует ID')
-          return
+        if(record === 0){
+         this.id = 0
         }
-        this.$axios({url: `/api/card/${this.params.page.idModule}/${this.params.page.idItem}/${record.item.ID}`, method: 'GET'})
+        else{
+          this.id = record.item.ID
+        }
+        this.$axios({url: `/api/card/${this.params.page.idModule}/${this.params.page.idItem}/${this.id}`, method: 'GET'})
           .then(resp => {
             this.formData = resp.data
             this.showGrid = false
@@ -89,6 +108,9 @@
     computed: {
       head () {
         return this.params.settings ? `${this.params.settings.text}` : ``
+      },
+      isFilter () {
+        return this.params.settings ? this.params.settings.filters.length : false
       }
     }
   }

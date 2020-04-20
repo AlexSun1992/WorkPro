@@ -37,6 +37,7 @@ bcItem.getData = (data) => {
   obj.active = true
   obj.compType = data.compType
   obj.recordLoad = data.recordLoad
+  obj.newRecord = data.newRecord
   obj.filters = data.filters
   obj.actions = data.actions
   obj.tabs = data.tabs

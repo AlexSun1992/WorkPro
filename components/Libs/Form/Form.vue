@@ -1,6 +1,5 @@
 <template>
   <div>
-    <b-button v-on:click="showList" type="submit" variant="primary" v-b-popover.hover.top="'Перейти к списку'"><i  class="fa fa-chevron-left"></i></b-button>
     <b-form-row>
       <Control  v-for='(item, index) in items' :key='index' v-bind:data="item" v-bind:edit="edit" :cols="cols"></Control>
     </b-form-row>

@@ -15,12 +15,16 @@ converter.select = (data) => {
     let obj = {}
     for (let j = 0; j < fields.length; j++) {
       if (fields[j].VISIBLE) {
-        if (fields[j].FIELD !== 'ID' && fields[j].TYPE === 'string') {
-          obj.text = items[i][fields[j].FIELD]
+        if(!data[0]._meta){
+          if (fields[j].FIELD !== 'ID' && fields[j].TYPE === 'string') {
+            obj.text = items[i][fields[j].FIELD]
+          }
+          if (fields[j].FIELD === 'ID') {
+            obj.value = items[i][fields[j].FIELD]
+          }
         }
-        if (fields[j].FIELD === 'ID') {
-          obj.value = items[i][fields[j].FIELD]
-        }
+        obj.text = items[i][data[0]._meta.SNAMEFIELD.toUpperCase()]
+        obj.value = items[i][data[0]._meta.SKEYFIELD.toUpperCase()]
       }
     }
     arr.push(obj)

@@ -18,8 +18,8 @@
 </template>
 
 <script>
+import 'vue-search-select/dist/VueSearchSelect.css'
 import {ModelListSelect} from 'vue-search-select'
-import select from '@/services/select'
 
 export default {
   name: 'ControlEnum',
@@ -40,9 +40,13 @@ export default {
   },
   methods: {
     initData (param) {
-      select.getData(this.data.dic, param).then((data) => {
-        this.options = data
-      })
+      this.$axios({url: `/api/dic/${this.data.dic}`, method: 'GET'})
+        .then(resp => {
+          this.options = resp.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     optionDisplayText (option) {
       return option.text

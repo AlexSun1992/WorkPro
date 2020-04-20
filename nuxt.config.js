@@ -86,7 +86,8 @@ module.exports = {
     '~/api/index.js',
     '~/api/configurator.js',
     '~/api/list.js',
-    '~/api/card.js'
+    '~/api/card.js',
+    '~/api/dic.js'
   ],
 
   auth: {
