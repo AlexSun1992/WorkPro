@@ -19,11 +19,12 @@ converter.form = (data) => {
   let arr = []
   let item = data[0]._data.length ? data[0]._data[0] : {}
   let fields = data[0]._struct
+  let meta = converter.meta(data[0]._meta)
   fields.sort(converter.compare)
   for (let i = 0; i < fields.length; i++) {
     let obj = {}
     obj.label = fields[i].CAPTION ? fields[i].CAPTION : fields[i].FIELD
-    obj.value = item[fields[i].FIELD]
+    obj.value = item[fields[i].FIELD] || meta[fields[i].FIELD]
     obj.type = fields[i].TYPE
     obj.maxlength = fields[i].PRECISION
     obj.name = fields[i].FIELD
@@ -72,6 +73,18 @@ converter.remove = (arr, toRemove) => {
     }
   }
   return arr
+}
+
+converter.meta = (meta) => {
+  if(meta.SNEWRECORD){
+    let convert_meta = {}
+    let arr_split = meta.SNEWRECORD.split(`\r`)
+    for(let i = 0; i < arr_split.length; i++ ){
+      let field_meta = arr_split[i].split(`=`)
+      convert_meta[field_meta[0].toUpperCase()] = field_meta[1]
+    }
+    return convert_meta
+  }
 }
 
 converter.save = (data) => {
