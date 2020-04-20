@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ConfirmModal :conformation="conformation" @agree="isRegConfirmed=$event"/>
     <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-group label="Телефон">
@@ -57,7 +58,7 @@
         ></b-form-input>
       </b-form-group>
       <verify-password :v="$v.form" :validateState="validateState" :disabled="registrationInProcess"/>
-      <b-button type="submit" variant="success" :disabled="registrationInProcess">
+      <b-button type="submit" variant="success" :disabled="registrationInProcess || !!this.$store.getters.getRegistrationError">
         Зарегистрироваться
         <b-spinner v-if="registrationInProcess" style="width: 1.2rem; height: 1.2rem;" variant="light"></b-spinner>
       </b-button>
@@ -73,9 +74,10 @@
   import birthdayPicker from '../../../Libs/BirthdatePicker/BirthdatePicker'
   import VerifyUser from '../../../Libs/VerifyUser/VerifyUser'
   import VerifyPassword from '../../../Libs/VerifyPassword/VerifyPassword'
+  import ConfirmModal from './ConfirmModal'
 
   export default {
-    components: {birthdayPicker, VerifyUser, VerifyPassword},
+    components: {birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal},
     mixins: [validationMixin],
 
     data () {
@@ -92,10 +94,12 @@
           password: '',
           password2: ''
         },
+        conformation: false,
         show: true,
         password2: '',
         registrationInProcess: false,
-        captchaToken: null
+        captchaToken: null,
+        isRegConfirmed: null
       }
     },
     validations: {
@@ -151,20 +155,30 @@
           CODE: this.$v.form.code.$model,
           POLICY_NUMBER: "",
           PASSWORD: this.$v.form.password.$model,
-          PASSWORD_CONFIRM: this.$v.form.password2.$model
+          PASSWORD_CONFIRM: this.$v.form.password2.$model,
+          USER_CONFIRM: this.isRegConfirmed ? "Y" : "N"
         }
-          const response = await this.$store.dispatch("registerUser", params)
 
+        const response = await this.$store.dispatch("registerUser", params);
 
-          if (response) {
-            this.$auth.setUserToken(response.ACCESS_TOKEN);
-            if (this.$store.getters.getRegistrationError) {
-              this.$router.push('/');
-            }
-          } else {
-            this.$refs['verifyUser'].code = null;
-          }
+        // Удалить с появлением обработки ошибки
+        if (!response) {
           this.registrationInProcess = false;
+        }
+
+        if (response && response.MESSAGE_CODE === '510') {
+          this.conformation = true;
+          return;
+        }
+
+        if (response) {
+          this.$auth.setUserToken(response.ACCESS_TOKEN);
+          if (this.$store.getters.getRegistrationError) {
+            this.$router.push('/');
+          }
+        } else {
+          this.$refs['verifyUser'].code = null;
+        }
       },
 
       async onSubmit() {
@@ -187,11 +201,27 @@
     computed: {
       errorMessage() {
         if (this.$store.getters.getRegistrationError) {
+          this.registrationInProcess = false;
+          if (this.$refs['verifyUser']) {
+            this.$refs['verifyUser'].$refs["userInput"].$el.focus();
+            // this.$refs['verifyUser'].v.phone.$model = null;
+            this.$refs['verifyUser'].resendCount = null;
+          }
           return this.$store.getters.getRegistrationError.toString();
         }
 
         if (!this.$store.getters.getRegistrationError && this.$store.getters.isAuthenticated) {
           this.$router.push("/")
+        }
+      }
+    },
+
+    watch: {
+      isRegConfirmed: function(val) {
+        if (val) {
+          this.setToken();
+        } else {
+          this.$router.push('/login');
         }
       }
     }

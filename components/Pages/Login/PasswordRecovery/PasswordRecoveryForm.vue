@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <h5 class="mb-3">Восстановление доступа</h5>
+    <b-alert :show="errorMessage  || !!$store.getters.getRegistrationError" variant="danger">{{ errorMessage ? errorMessage : $store.getters.getRegistrationError }}</b-alert>
     <b-tabs ref="tabs" content-class="mt-2">
       <b-tab title="Телефон" active>
         <verify-user :label="phoneLabel" :loginType="'phone'" :v="$v.form" :count="60" :validateState="validateState"/>
@@ -94,21 +94,29 @@ export default {
           "PASSWORD_CONFIRM": this.$v.form.password2.$model
         };
       }
-      // Исправить с появлением метода (> 180)
       let response;
       if (!this.greater180) {
         let response = await this.$store.dispatch('resetPassword', params);
         if (response.data[0].MESSAGE_CODE === '200') {
           this.$router.push('/login');
-        } else {
+        } else if (response.data[0].MESSAGE_CODE === '501') {
+          this.errorMessage = 'Необходимо ввести дополнительные данные'
           this.greater180 = true;
         }
       } else {
+        let birthdate = this.$v.form.birthdate.$model;
+        let year = birthdate.getFullYear();
+        let date = birthdate.getDate();
+        let month = birthdate.getMonth() + 1;
+        date = String(date).length === 1 ? `0${date}` : date;
+        month = String(month).length === 1 ? `0${month}` : month;
+        this.$v.form.birthdate.$model = `${year}-${month}-${date}`       
+
         const additionalParams = {
-          "SURNAME" : this.$v.form.surname.$model,
+          "SECONDNAME" : this.$v.form.surname.$model,
           "FIRSTNAME" : this.$v.form.name.$model,
-          "PATRONYMIC" : this.$v.form.patronymic.$model,
-          "BIRTHDATE" : this.$v.form.birthdate.$model ? this.$v.form.birthdate.$model.toISOString().split('T')[0] : null
+          "THIRDNAME" : this.$v.form.patronymic.$model,
+          "BIRTHDATE" : this.$v.form.birthdate.$model
         }
         params = {
           ...params,
@@ -117,6 +125,8 @@ export default {
         response = await this.$store.dispatch('resetPassword', params);
         if (response.data[0].MESSAGE_CODE === '200') {
           this.$router.push('/login');
+        } else if(response.data[0].MESSAGE_CODE === '502') {
+          this.errorMessage = 'Введённые дополнительные данные некорректны. Повторите попытку'
         }
       }
     }
