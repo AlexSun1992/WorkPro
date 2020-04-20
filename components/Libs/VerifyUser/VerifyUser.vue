@@ -149,6 +149,7 @@ export default {
     },
 
     verifyUser(){
+      this.$store.commit('clearAxiosError');
       // this.greater180 = false;
       // if(this.greater180 && this.context !== 'registration') {
       //   this.showForm();
@@ -171,6 +172,9 @@ export default {
 
     validateInput(field, bluredField) {
       if( this.v[field].$params.minLength) {
+        if (this.$store.getters.getRegistrationError) {
+          return false;
+        }
         if (this.v[field].$model && (this.v[field].$model.length === this.v[field].$params.minLength.min) || bluredField) {
           return this.validateState(field);
         }

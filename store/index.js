@@ -14,6 +14,8 @@ export const actions = {
         }
         const authResponse = await this.$axios.post("am/auth/v2/authorize", JSON.stringify(authParams));
         return {'ACCESS_TOKEN': authResponse.data.ACCESS_TOKEN}
+      } else {
+        return regResponse.data[0];
       }
     } catch(e) {
       console.log(e);
