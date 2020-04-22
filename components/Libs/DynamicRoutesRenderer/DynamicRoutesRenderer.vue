@@ -1,16 +1,17 @@
 <template>
   <div>
     {{ setUrl }}
+    {{ getMenu }}
     <div v-if="getPage" class="container">
       <h1>
         {{ getPage.title.rendered }}
       </h1>
     </div>
 
-    <!--<div v-if="getPage" v-html="getPage.content.rendered"></div>-->
-    <div v-if="getPage">
+    <div v-if="getPage" v-html="getPage.content.rendered"></div>
+    <!-- <div v-if="getPage">
       <v-runtime-template :template="getPage.content.rendered"></v-runtime-template>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -22,15 +23,17 @@
     computed: {
       setUrl() {
         const url = this.$route.path;
-        // const url = this.$store.getters['pages/url'];
         if (this.$route.path === '/') {
-          this.$store.dispatch('pages/fetchPageByUrl', '/index');
           return;
         }
         this.$store.dispatch('pages/fetchPageByUrl', url);
       },
       getPage() {
         return this.$store.getters['pages/getPageByUrl'];
+      },
+      getMenu() {
+        this.$store.dispatch('pages/setMenuId');
+        this.$store.dispatch('pages/getComponent', this.$store.getters['pages/getMenuId']);
       }
     }
   }

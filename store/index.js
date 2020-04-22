@@ -36,14 +36,16 @@ export const actions = {
     }
   },
 
-  async nuxtServerInit({ dispatch }, context) {
+  async nuxtServerInit({ dispatch, store }, context) {
     let params;
     if (!context.params.pathMatch) {
       params = '/index'
     } else {
       params = `/${context.params.pathMatch}`
     }
-    await dispatch('pages/fetchPageByUrl', params)
+    await dispatch('pages/fetchPageByUrl', params);
+    await dispatch('pages/setMenuId');
+    await dispatch('pages/getComponent', context.store.getters['pages/getMenuId']);
   },
 
   async resetPassword({commit}, params) {
