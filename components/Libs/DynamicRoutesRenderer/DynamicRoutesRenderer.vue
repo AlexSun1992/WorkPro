@@ -8,10 +8,11 @@
       </h1>
     </div>
 
-    <div v-if="getPage" v-html="getPage.content.rendered"></div>
-    <!-- <div v-if="getPage">
+    <!-- <div v-if="getPage" v-html="getPage.content.rendered"></div> -->
+
+    <div v-if="getPage">
       <v-runtime-template :template="getPage.content.rendered"></v-runtime-template>
-    </div> -->
+    </div>
   </div>
 </template>
 
