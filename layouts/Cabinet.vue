@@ -1,17 +1,17 @@
 <template>
-  <div class="app">
-    <Header/>
-    <div class="app-body">
-      <Sidebar :navItems="nav"/>
-      <main class="main">
-        <b-breadcrumb :items="items"/>
-        <div class="container-fluid">
-          <nuxt/>
-        </div>
-      </main>
+    <div class="app">
+      <Header/>
+      <div class="app-body">
+        <Sidebar  :navItems="nav"/>
+        <main class="main">
+          <b-breadcrumb :items="items"/>
+          <div class="container-fluid">
+            <nuxt/>
+          </div>
+        </main>
+      </div>
+      <Footer/>
     </div>
-    <Footer/>
-  </div>
 </template>
 <script>
   import Header from '~/components/Header/Header'
@@ -29,26 +29,23 @@
       Sidebar,
       Footer
     },
-    data () {
-      return {
-        nav: [],
-        data: null
-      }
-    },
-    async mounted () {
-      const {data} = await this.$axios.get('/api/module')
-      this.nav = data
-      this.setParams()
+    mounted () {
+      this.$store.dispatch('menu/fetchMenu', this.$route.params)
     },
     watch: {
       '$route': 'setParams'
     },
     methods: {
        setParams  () {
-        this.$store.commit('menu/setBreadcrumbs', breadcrumbs.getData(this.nav, this.$route.params))
+        const bc = breadcrumbs.getData(this.nav, this.$route.params)
+        this.$store.commit('menu/setBreadcrumbs', bc)
+        this.$store.dispatch('card/setCard', {page: this.$route.params, settings: bc.slice(-1).pop()});
       }
     },
     computed: {
+      nav () {
+        return this.$store.getters['menu/menu']
+      },
       name () {
         return this.$route.name
       },

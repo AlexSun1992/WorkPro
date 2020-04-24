@@ -1,5 +1,7 @@
 <template>
-  <card :params="params"></card>
+  <div>
+  <card   :params="params"></card>
+  </div>
 </template>
 
 <script>

@@ -58,7 +58,7 @@ converter.menuObject = (data) => {
   let obj = {}
   obj.name = data.SNAME
   if (data.IDITEM === -1) {
-    obj.url = `/${data.idModule}/${data.ID}`
+    obj.url = `/cabinet/${data.idModule}/${data.ID}`
   } else {
     obj.url = data.IDITEM ? `/cabinet/${data.idModule}/${data.IDPARENT}/${data.IDITEM}` : `/${data.ID}`
   }

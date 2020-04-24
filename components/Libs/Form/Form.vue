@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-form-row>
+      {{editDataForm}}
       <Control  v-for='(item, index) in items' :key='index' v-bind:data="item" v-bind:edit="edit" :cols="cols"></Control>
     </b-form-row>
   </div>
@@ -27,14 +28,25 @@ export default {
       default: () => 1
     }
   },
+  data () {
+    return {
+      editDataForm: this.data
+    }
+  },
+  watch: {
+    'data': 'setData'
+  },
   methods: {
+    setData () {
+      this.editDataForm = this.data
+    },
     showList () {
       this.$emit('action-clicked', null)
     }
   },
   computed: {
     items: function () {
-      return this.data.filter(function (item) {
+      return this.editDataForm.filter(function (item) {
         return item.visible
       })
     }
