@@ -35,7 +35,7 @@ export default {
   },
   watch: {
     data: function (val) {
-      this.options = []
+      // this.options = []
     }
   },
   methods: {

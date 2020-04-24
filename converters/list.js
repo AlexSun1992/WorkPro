@@ -51,4 +51,14 @@ converter.formatByType = (type, value) => {
   }
 }
 
+converter.getFilterParams = (filters) => {
+  let obj = {}
+  for (var prop in filters) {
+    if (filters[prop] !== 'NULL') {
+      obj[prop] = filters[prop]
+    }
+  }
+  return JSON.stringify(obj)
+}
+
 export default converter

@@ -7,18 +7,20 @@ app.use(express.json())
 app.use(cookieParser())
 
 import listConverter from '../converters/list'
+import formConverter from '../converters/form'
 import consts from '../api/urls'
 
 const modules = {}
 const menu = {}
 
-app.get('/list/:idModule/:idItem', (req, res) => {
+app.get('/list/:idModule/:idItem/:filters', (req, res) => {
   try {
     if(req.cookies){
       axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
       axios.defaults.baseURL = 'https://mobiletest.reso.ru';
     }
-    axios({url: `${consts.DATA}/${req.params.idModule}/${req.params.idItem}`, method: 'GET'})
+    const filters = listConverter.getFilterParams(formConverter.save(JSON.parse(req.params.filters)))
+    axios({url: `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${filters}`, method: 'GET'})
       .then(resp => {
         res.send(listConverter.list(resp.data))
       })

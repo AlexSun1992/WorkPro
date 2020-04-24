@@ -9,8 +9,9 @@
               <div slot="header">
                 <i class="fa fa-align-justify"></i> {{head}}
               </div>
-              <Form  v-if="isForm || isFilter" :data="formData" :edit="editForm"></Form>
-              <!--<grid  v-if="showGrid" :load="load" :total="count" :fields="data.fields" :items="data.items" @action-clicked="showItem"></grid>-->
+              <card-form  v-if="isForm" :data="formData" @action-clicked="saveForm"/>
+              <card-filter  v-if="isFilter" :data="formData" @action-clicked="applyFilter"/>
+              <card-list v-if="isList" :data="listData"/>
             </b-card>
           </b-col>
         </b-row>
@@ -20,23 +21,26 @@
 
 <script>
 
-  import Grid from '~/components/Libs/Table/Grid'
-  import Form from '~/components/Libs/Form/Form'
-  import Vue from 'vue'
+  import CardList from './CardList'
+  import CardForm from './CardForm'
+  import CardFilter from './CardFilter'
 
   export default {
     name: 'Card',
-    components: {Grid, Form},
-    data () {
-      return {
-        editForm: true
-      }
-    },
+    components: {CardList, CardForm, CardFilter},
     props: {
       params: {
         type: Object,
         required: true,
         default: () => {}
+      }
+    },
+    methods: {
+      applyFilter (data) {
+        this.$store.dispatch('card/applyFilter', data);
+      },
+      saveForm (data) {
+        this.$store.dispatch('card/saveForm', data);
       }
     },
     computed: {
@@ -53,6 +57,11 @@
           }
         }
       },
+      listData: {
+        get: function () {
+          return this.$store.getters['card/list'];
+        }
+      },
       isForm: {
         get: function () {
           return this.$store.getters['card/isForm'];
@@ -61,6 +70,11 @@
       isFilter: {
         get: function () {
           return this.$store.getters['card/isFilter'];
+        }
+      },
+      isList: {
+        get: function () {
+          return this.$store.getters['card/isList'];
         }
       }
     }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-table   bordered empty-text="Нет данных" empty-filtered-text="Нет данных" show-empty :filter="filter" @filtered="onFiltered" :perPage="page" :current-page="currentPage"  :busy.sync="load"  @row-clicked="selectItem"  @row-dblclicked="showItem"   responsive striped hover :items="items" :fields="fields" small>
+    <b-table sticky-header="400px"  bordered empty-text="Нет данных" empty-filtered-text="Нет данных" show-empty :filter="filter" @filtered="onFiltered"  :current-page="currentPage"  :busy.sync="load"  @row-clicked="selectItem"  @row-dblclicked="showItem"   responsive striped hover :items="items" :fields="fields" small>
       <template
         slot="empty">
         <pulse-loader class="text-center"  :loading="load" :margin="'10px'" :color="'#678898'" :size="'25px'"></pulse-loader>
@@ -9,7 +9,7 @@
         </div>
       </template>
       <template v-slot:cell(index)="data">
-        <button v-on:click="showItem(data)" class="btn btn-success">Открыть</button>
+        <b-button :disabled="!action" v-on:click="showItem(data)"  class="btn btn-success">Открыть</b-button>
       </template>
     </b-table>
     <b-form v-show="paging" inline>
@@ -38,6 +38,11 @@ export default {
     PulseLoader
   },
   props: {
+    action: {
+      type: Boolean,
+      required: false,
+      default: () => false
+    },
     load: {
       type: Boolean,
       required: false,
@@ -95,4 +100,7 @@ export default {
 </script>
 
 <style>
+  .text-col {
+    white-space: nowrap;
+  }
 </style>

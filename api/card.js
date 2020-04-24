@@ -30,6 +30,22 @@ app.get('/card/:idModule/:idItem/:id', (req, res) => {
     res.send(e)
   }
 })
+app.post('/card/:idModule/:idItem/:id', (req, res) => {
+  try {
+    if(req.cookies){
+      axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
+      axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+    }
+    axios.post(`${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.id}`, formConverter.save(req.body))
+      .then(resp => {
+        console.log(resp)
+        res.send(resp.data[0])
+      })
+      .catch(err =>  res.send(err.response.data))
+} catch (e) {
+  res.send(e)
+}
+})
 
 module.exports = {
   path: '/api',
