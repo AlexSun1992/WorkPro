@@ -10,7 +10,9 @@ export const getters = {
   getPageById: state => id => {
     return state.pages.find(page => page.id === id);
   },
-  getPageByUrl: state => state.currentPage,
+  getPageByUrl: state => {
+    return state.currentPage
+  },
   getMenu: state => state.menu,
   getMenuId: state => state.menuId
 }
@@ -29,14 +31,8 @@ export const actions = {
     let menuId;
     let response;
     if (state.currentPage.acf.main_menu.custom) {
-      menuId = state.currentPage.acf.main_menu.component_id
-    } 
-    // else if(!state.currentPage.acf.main_menu.custom && state.currentPage.parent != 0) {
-    //   response = dispatch('get', res.data[0].parent)
-    //   if (response.data[0].acf.main_menu.custom) {
-    //     menuId = res.data[0].acf.main_menu.component_id
-    //   }
-    if (state.currentPage.parent === 0){
+      menuId = state.currentPage.acf.main_menu.component_id;
+    } else {
       response = await this.$axios.get(`/wp-json/wp/v2/pages?slug=index`)
       menuId = state.currentPage.acf.main_menu.component_id
     }

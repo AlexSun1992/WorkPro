@@ -1,15 +1,6 @@
 <template>
   <div>
     {{ setUrl }}
-    {{ getMenu }}
-    <div v-if="getPage" class="container">
-      <h1>
-        {{ getPage.title.rendered }}
-      </h1>
-    </div>
-
-    <!-- <div v-if="getPage" v-html="getPage.content.rendered"></div> -->
-
     <div v-if="getPage">
       <v-runtime-template :template="getPage.content.rendered"></v-runtime-template>
     </div>
@@ -21,6 +12,11 @@
   import Calculator from "../../Pages/Calculator";
   export default {
     components: {VRuntimeTemplate,Calculator},
+    data(){
+      return {
+        counter: 0
+      }
+    },
     computed: {
       setUrl() {
         const url = this.$route.path;
@@ -30,8 +26,14 @@
         this.$store.dispatch('pages/fetchPageByUrl', url);
       },
       getPage() {
+        if (this.counter == 1) {
+          this.getMenu();
+        }
+        this.counter++;
         return this.$store.getters['pages/getPageByUrl'];
-      },
+      }
+    },
+    methods: {
       getMenu() {
         this.$store.dispatch('pages/setMenuId');
         this.$store.dispatch('pages/getComponent', this.$store.getters['pages/getMenuId']);
