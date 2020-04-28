@@ -3,7 +3,8 @@ export const state = () => ({
   pages: [],
   currentPage: null,
   menu: null,
-  menuId: null
+  menuId: null,
+  config: null
 })
 
 export const getters = {
@@ -14,7 +15,8 @@ export const getters = {
     return state.currentPage
   },
   getMenu: state => state.menu,
-  getMenuId: state => state.menuId
+  getMenuId: state => state.menuId,
+  getConfig: state => state.config
 }
 
 export const actions = {
@@ -30,10 +32,12 @@ export const actions = {
   async setMenuId({commit, state}) {
     let menuId;
     let response;
+    let mainPage;
     if (state.currentPage.acf.main_menu.custom) {
       menuId = state.currentPage.acf.main_menu.component_id;
     } else {
-      response = await this.$axios.get(`/wp-json/wp/v2/pages?slug=index`)
+      mainPage = state.config.wpreso_settings_index_page.value;
+      response = await this.$axios.get(`/wp-json/wp/v2/pages?slug=${mainPage}`)
       menuId = state.currentPage.acf.main_menu.component_id
     }
     commit('setMenuId', menuId);
@@ -59,7 +63,12 @@ export const actions = {
     } catch(e) {
       console.log(e);
     }
-  }
+  },
+
+  async setConfig({commit}) {
+    let { data } = await this.$axios.get(`/wp-json/wpreso/v1/options`);
+    commit('setConfig', data);
+  },
 }
 
 export const mutations = {
@@ -74,5 +83,8 @@ export const mutations = {
   },
   setMenuId(state, params) {
     state.menuId = params;
+  },
+  setConfig(state, params) {
+    state.config = params;
   }
 }

@@ -36,10 +36,12 @@ export const actions = {
     }
   },
 
-  async nuxtServerInit({ dispatch, store }, context) {
+  async nuxtServerInit({ dispatch }, context) {
     let params;
+    await dispatch('pages/setConfig', params);
     if (!context.params.pathMatch) {
-      params = '/index'
+      const mainPage = context.store.state.pages.config.wpreso_settings_index_page.value;
+      params = `/${mainPage}`;
     } else {
       params = `/${context.params.pathMatch}`
     }
@@ -51,7 +53,6 @@ export const actions = {
   async resetPassword({commit}, params) {
     try {
       let response = await this.$axios.post("/free/v2/restorepassword", params);
-      console.log(response)
       return response;
     } catch(e) {
       console.log(e);
