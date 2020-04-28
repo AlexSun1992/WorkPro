@@ -2,17 +2,21 @@
 export const state = () => ({
   pages: [],
   currentPage: null,
-  url: '',
-  menu: null
+  menu: null,
+  menuId: null,
+  config: null
 })
 
 export const getters = {
   getPageById: state => id => {
     return state.pages.find(page => page.id === id);
   },
-  getPageByUrl: state => state.currentPage,
+  getPageByUrl: state => {
+    return state.currentPage
+  },
   getMenu: state => state.menu,
-  url: state => state.url
+  getMenuId: state => state.menuId,
+  getConfig: state => state.config
 }
 
 export const actions = {
@@ -25,46 +29,46 @@ export const actions = {
     })
   },
 
-  setUrl({commit}, params) {
-    commit('setUrl', params)
+  async setMenuId({commit, state}) {
+    let menuId;
+    let response;
+    let mainPage;
+    if (state.currentPage.acf.main_menu.custom) {
+      menuId = state.currentPage.acf.main_menu.component_id;
+    } else {
+      mainPage = state.config.wpreso_settings_index_page.value;
+      response = await this.$axios.get(`/wp-json/wp/v2/pages?slug=${mainPage}`)
+      menuId = state.currentPage.acf.main_menu.component_id
+    }
+    commit('setMenuId', menuId);
   },
 
-  async fetchPageByUrl({commit, dispatch}, params) {
+  async getComponent({commit}, params) {
+    let component = await this.$axios.get(`/wp-json/wp/v2/component/${params}`);
+    commit('setMenu', component.data.acf.list);
+  },
+
+  async fetchPageByUrl({commit}, params) {
     try {
       if (params.slice(params.length-1) === '/') {
         params = params.substring(0, params.length-1);
       } 
       params = params.split('/').pop();
-      // Вынести в отдельный action
       await this.$axios.get(`/wp-json/wp/v2/pages?slug=${params}`)
       .then(async (res) => {
         if (res.status === 200) {
           commit('setPage', res.data[0]);
-          let menuId;
-          let response;
-          if (res.data[0].acf.main_menu.custom) {
-            menuId = res.data[0].acf.main_menu.component_id
-          } else if(!res.data[0].acf.main_menu.custom && res.data[0].parent != 0) {
-            //Для показа! (переделать на рекурсию)
-            response = dispatch('get', res.data[0].parent)
-            // response = await this.$axios.get(`/wp-json/wp/v2/pages/${res.data[0].parent}`);
-            if (response.data[0].acf.main_menu.custom) {
-              menuId = res.data[0].acf.main_menu.component_id
-            }
-          } else if (res.data[0].parent === 0){
-            // Вынести в отдельный action
-            response = await this.$axios.get(`/wp-json/wp/v2/pages?slug=index`)
-            menuId = response.data[0].acf.main_menu.component_id
-          }
-          // Вынести в отдельный action
-          let component = await this.$axios.get(`/wp-json/wp/v2/component/${menuId}`);
-          commit('setMenu', component.data.acf.list);
         }
       })
     } catch(e) {
       console.log(e);
     }
-  }
+  },
+
+  async setConfig({commit}) {
+    let { data } = await this.$axios.get(`/wp-json/wpreso/v1/options`);
+    commit('setConfig', data);
+  },
 }
 
 export const mutations = {
@@ -77,7 +81,10 @@ export const mutations = {
   setMenu(state, params) {
     state.menu = params;
   },
-  setUrl(state, params) {
-    state.url = params;
+  setMenuId(state, params) {
+    state.menuId = params;
   },
+  setConfig(state, params) {
+    state.config = params;
+  }
 }
