@@ -2,9 +2,12 @@
   <div>
     <Form   :data="editDataForm" :edit="editForm"></Form>
     <p class="mb-10 mt-3"></p>
-    <div class="form-group">
-      <button v-on:click="saveForm" type="button" class="btn btn-primary">Отправить</button>
-    </div>
+    <b-button-group  class="mr-1">
+      <button v-if="!isActions" v-on:click="saveForm" type="button" class="btn btn-primary">Сохранить</button>
+      <b-dropdown v-if="isActions" id="ddown-left" variant="primary" text="Действия" class="mr-1">
+        <b-dropdown-item-button v-for='(item, index) in actions' :key='index'  v-on:click="applyAction(item)">{{item.label}}</b-dropdown-item-button>
+      </b-dropdown>
+    </b-button-group>
   </div>
 </template>
 
@@ -39,7 +42,12 @@
       },
       saveForm () {
         if(validateData(this.editDataForm)){
-          this.$emit('action-clicked',this.editDataForm)
+          this.$emit('save-form',this.editDataForm)
+        }
+      },
+      applyAction (data) {
+        if(validateData(this.editDataForm)){
+          this.$emit('apply-action',this.editDataForm, data.id)
         }
       }
     },
@@ -49,8 +57,18 @@
         type: Array,
         required: true,
         default: () => []
+      },
+      actions: {
+        type: Array,
+        required: true,
+        default: () => []
       }
     },
+    computed: {
+      isActions () {
+        return this.actions.length
+      },
+    }
   }
 </script>
 

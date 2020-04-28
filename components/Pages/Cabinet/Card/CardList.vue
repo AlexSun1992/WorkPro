@@ -1,6 +1,10 @@
 <template>
   <div>
-    <grid  :load="load" :total="count" :fields="data.fields" :items="data.items"/>
+    <grid  :load="load" :action="isAction" :total="count" :fields="data.fields" :items="data.items">
+      <template  v-slot:actions="slotProps">
+        <b-button :disabled="!isAction" v-on:click="showItem(slotProps)"  class="btn btn-success">Открыть</b-button>
+      </template>
+    </grid>
   </div>
 </template>
 
@@ -11,15 +15,29 @@
     components: {Grid},
     data () {
       return {
-        load: false,
         count: 10
       }
     },
     props: {
+      load: {
+        type: Boolean,
+        required: false,
+        default: () => false
+      },
       data: {
         type: Object,
         required: true,
         default: () => {}
+      },
+      isAction: {
+        type: Boolean,
+        required: false,
+        default: () => false
+      }
+    },
+    methods: {
+      showItem (record) {
+        this.$emit('action-clicked', record)
       }
     },
   }

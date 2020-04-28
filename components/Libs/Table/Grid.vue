@@ -1,15 +1,20 @@
 <template>
   <div>
-    <b-table sticky-header="400px"  bordered empty-text="Нет данных" empty-filtered-text="Нет данных" show-empty :filter="filter" @filtered="onFiltered"  :current-page="currentPage"  :busy.sync="load"  @row-clicked="selectItem"  @row-dblclicked="showItem"   responsive striped hover :items="items" :fields="fields" small>
+    <b-table sticky-header="400px"  bordered empty-text="Нет данных" empty-filtered-text="Нет данных" show-empty :filter="filter" @filtered="onFiltered"  :current-page="currentPage"  :busy="isBusy"  @row-clicked="selectItem"  @row-dblclicked="showItem"   responsive striped hover :items="items" :fields="fields" small>
       <template
         slot="empty">
-        <pulse-loader class="text-center"  :loading="load" :margin="'10px'" :color="'#678898'" :size="'25px'"></pulse-loader>
         <div v-if="!load" class="text-center">
           Нет данных
         </div>
       </template>
+      <template v-slot:table-busy>
+        <div class="text-center text-danger my-2">
+          <b-spinner class="align-middle"></b-spinner>
+          <strong>Загрузка...</strong>
+        </div>
+      </template>
       <template v-slot:cell(index)="data">
-        <b-button :disabled="!action" v-on:click="showItem(data)"  class="btn btn-success">Открыть</b-button>
+        <slot name="actions"  v-bind:data="data"></slot>
       </template>
     </b-table>
     <b-form v-show="paging" inline>
@@ -92,6 +97,9 @@ export default {
     }
   },
   computed: {
+    isBusy () {
+      return this.load
+    },
     paging () {
       return this.count > this.page
     }

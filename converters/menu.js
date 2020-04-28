@@ -66,7 +66,7 @@ converter.menuObject = (data) => {
   obj.icon = iconConverter.icon(data.SLOGO)
   obj.idItem = data.IDITEM
   obj.idParent = data.IDPARENT
-  obj.compType = data.IDADMMENUTYPE === 3 ? `Card` : `Card`
+  obj.compType = data.IDADMMENUTYPE
   obj.recordLoad = data.LFIRSTLOADRECORD
   obj.newRecord = data.LNEWRECORDMETHOD
   obj.filters = data.FILTERCUR ? filterConverter.filter(data.FILTERCUR) : []
