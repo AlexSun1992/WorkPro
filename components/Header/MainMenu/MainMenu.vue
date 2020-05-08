@@ -7,6 +7,7 @@
             <b-button class="mr-4" :href="link.link.url">{{link.link.title}}</b-button>
           </span>
         </div>
+      <b-button v-if="products.link" variant="link" :href="products.link.url">{{products.link.title}}</b-button>
     </b-modal>
     <span class="px-3"  v-for="(item, index) in menu" :key="index">
       <span v-if="!item.sections"><a :href="item.link.url">{{ item.title }}</a></span>
