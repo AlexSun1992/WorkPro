@@ -33,26 +33,22 @@ export const actions = {
     let menuId;
     let response;
     let mainPage;
-    if (state.currentPage.acf.main_menu.custom) {
-      menuId = state.currentPage.acf.main_menu.component_id;
-    } else {
-      mainPage = state.config.wpreso_settings_index_page.value;
-      response = await this.$axios.get(`/wp-json/wp/v2/pages?slug=${mainPage}`)
-      menuId = state.currentPage.acf.main_menu.component_id
-    }
+    mainPage = state.config.wpreso_settings_index_page.value;
+    response = await this.$axios.get(`/wp-json/wp/v2/pages?slug=${mainPage}`)
+    menuId = state.currentPage.wpreso.inherited.main_menu_id;
     commit('setMenuId', menuId);
   },
 
   async getComponent({commit}, params) {
-    let component = await this.$axios.get(`/wp-json/wp/v2/component/${params}`);
-    commit('setMenu', component.data.acf.list);
+    let component = await this.$axios.get(`/wp-json/wp/v2/wpreso_template_elem/${params}`);
+    commit('setMenu', component.data.acf.wp_reso_main_menu_items);
   },
 
   async fetchPageByUrl({commit}, params) {
     try {
       if (params.slice(params.length-1) === '/') {
         params = params.substring(0, params.length-1);
-      } 
+      }
       params = params.split('/').pop();
       await this.$axios.get(`/wp-json/wp/v2/pages?slug=${params}`)
       .then(async (res) => {

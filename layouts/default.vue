@@ -35,6 +35,15 @@
         nav: nav.items
       }
     },
+    watch: {
+      $route(to, from) {
+        let url = to.path
+        if (to.path === '/') {
+          url = 'index'
+        }
+        this.$store.dispatch('pages/fetchPageByUrl', url);
+      }
+    },
     computed: {
       name () {
         return this.$route.name

@@ -4,22 +4,6 @@
       <div class="container">
         <div class="justify-content-lg-center">
           <DynamicRoutesRenderer/>
-          <!-- <products
-            v-if="page.products"
-            :items="page.products"
-          />
-          <about
-            v-if="page.about"
-            :data="page.about"
-          />
-          <offers
-            v-if="page.offers"
-            :items="page.offers"
-          />
-          <banners
-            v-if="page.banners"
-            :items="page.banners"
-          /> -->
         </div>
       </div>
     </div>
@@ -56,7 +40,7 @@
         ]
       }
     },
-    
+
     computed: {
       page () {
         return this.$store.getters['pages/getPageById'](pageId).data.acf
