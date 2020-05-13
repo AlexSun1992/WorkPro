@@ -5,6 +5,7 @@ export const state = () => ({
 export const actions = {
     async getCity({ commit }, params) {
         try {
+            debugger
             let { data: { ip } } = await this.$axios.get('https://api.ipify.org/?format=json');
             let { data: { location: { value } } } = await this.$axios.get(`https://dadata.reso.ru/suggestions/api/4_1/rs/iplocate/address?ip=${ip}`);
             commit('setCity', value)
