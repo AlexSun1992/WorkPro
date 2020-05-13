@@ -14,25 +14,25 @@
       >{{products.link.title}}</b-button>
     </b-modal>
     <CitySearch />
-    <div>
-      <span class="px-3" v-for="(item, index) in menu" :key="index">
-        <span v-if="!item.sections">
-          <a :href="item.link.url">{{ item.title }}</a>
-        </span>
-        <b-button variant="link" v-if="item.sections" @click="showProducts(item)" v-b-modal.modal-1>
-          {{ item.title }}
-          <i class="fa fa-chevron-down" aria-hidden="true"></i>
-        </b-button>
+    <span class="px-3" v-for="(item, index) in menu" :key="index">
+      <span v-if="!item.sections">
+        <a :href="item.link.url">{{ item.title }}</a>
       </span>
-    </div>
+      <b-button variant="link" v-if="item.sections" @click="showProducts(item)" v-b-modal.modal-1>
+        {{ item.title }}
+        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+      </b-button>
+    </span>
+    <GlobalSearch />
   </div>
 </template>
 
 <script>
 import CitySearch from "./CitySearch";
+import GlobalSearch from "./GlobalSearch";
 
 export default {
-  components: { CitySearch },
+  components: { CitySearch, GlobalSearch },
   data() {
     return {
       products: {}

@@ -22,6 +22,15 @@ export const actions = {
     }
   },
 
+  async search({commit}, params) {
+    try {
+      const { data } = await this.$axios.get(`/wp-json/wp/v2/pages?search=${params}`);
+      return data;
+    } catch(e) {
+      console.log(e);
+    }
+  },
+
   async getCode({commit}, params) {
     try {
       if (params.loginType === 'phone') {
