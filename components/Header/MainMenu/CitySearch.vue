@@ -45,7 +45,9 @@ export default {
     };
   },
   async created() {
-    this.city = this.$store.state.cities.city;
+    //Нужно передавать ip клиента через nginx бэку
+    // this.city = this.$store.state.cities.city;
+    this.city = 'Москва';
   },
   methods: {
     async loadCities() {
