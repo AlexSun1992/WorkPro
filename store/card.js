@@ -54,6 +54,8 @@ export const actions = {
         await dispatch('fetchForm', 0);
         commit('setShowForm', true);
         commit('setShowFilter', false);
+      }else{
+        await dispatch('fetchList');
       }
     }
   },

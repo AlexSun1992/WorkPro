@@ -41,7 +41,7 @@ export const actions = {
 
   async getComponent({commit}, params) {
     let component = await this.$axios.get(`/wp-json/wp/v2/wpreso_template_elem/${params}`);
-    commit('setMenu', component.data.acf.wp_reso_main_menu_items);
+    commit('setMenu', component.data.acf.wpreso_main_menu_items);
   },
 
   async fetchPageByUrl({commit}, params) {
