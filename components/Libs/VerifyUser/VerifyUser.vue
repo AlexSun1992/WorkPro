@@ -13,6 +13,7 @@
         :disabled="isUserDisabled || disabled"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
+        @click="loginTouchesCount = 2"
       ></b-form-input>
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
@@ -44,7 +45,6 @@
         </b-button>
       </div>
     </div>
-    <!-- <UserRecoveryForm v-if="greater180 && context !== 'registration' && !userFormValid && !isPhoneChanged" :v="$v.user" :validateState="validateState" /> -->
     <b-button
       type="submit"
       v-if="!code"
@@ -59,14 +59,9 @@
 
 import _ from 'lodash'
 import axios from 'axios'
-// import UserRecoveryForm from '~/components/Pages/Login/PasswordRecovery/UserRecoveryForm'
-// import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   props: ["count", "v", "validateState", "disabled", "loginType", "label", "context"],
-  components: {
-    // UserRecoveryForm
-  },
   data() {
     return {
       isUserBlured: true,
@@ -81,12 +76,7 @@ export default {
       mask: "",
       codeMask: "#####",
       placeholder: "+7(___)-___-__-__",
-      // user: {
-      //   surname: "",
-      //   name: "",
-      //   patronymic: "",
-      //   birthdate: "",
-      // },
+      loginTouchesCount: 0
     };
   },
 
@@ -150,12 +140,7 @@ export default {
 
     verifyUser(){
       this.$store.commit('clearAxiosError');
-      // this.greater180 = false;
-      // if(this.greater180 && this.context !== 'registration') {
-      //   this.showForm();
-      // } else {
-        this.getCode();
-      // }
+      this.getCode();
     },
 
     changeNumber() {
@@ -171,6 +156,7 @@ export default {
     },
 
     validateInput(field, bluredField) {
+      if (field === 'phone' && this.loginTouchesCount <= 2 && bluredField && !this.v[field].$model) return;
       if( this.v[field].$params.minLength) {
         if (this.$store.getters.getRegistrationError) {
           return false;
@@ -183,6 +169,7 @@ export default {
 
     blurField(field, bluredField) {
       if (field === 'phone') {
+        this.loginTouchesCount++;
         this.isUserBlured = true;
       } else if (field === 'code') {
         this.isCodeBlured = true;

@@ -13,6 +13,7 @@
           :state="validateInput('username', isUsernameBlured)"
           @blur="debouncedUpdate('username', isUsernameBlured)"
           @input="isUsernameBlured = false"
+          @click="loginTouchesCount = 2"
           :disabled="authInProcess"
           class="form-control"
         ></b-form-input>
@@ -60,7 +61,8 @@ export default {
       placeholder: "+7(___)-___-__-__",
       errorMessage: null,
       authInProcess: false,
-      captchaToken: null
+      captchaToken: null,
+      loginTouchesCount: 0
     };
   },
 
@@ -96,6 +98,7 @@ export default {
     },
 
     validateInput(field, bluredField) {
+      if (field === 'username' && this.loginTouchesCount <= 2 && this.isUsernameBlured && !this.$v.user[field].$model) return;
       if (this.$v.user[field].$model &&
           this.$v.user[field].$params.minLength &&
           (this.$v.user[field].$model.length === this.$v.user[field].$params.minLength.min) || bluredField) {
@@ -105,6 +108,7 @@ export default {
 
     blurField(field, bluredField) {
       if (field === 'username') {
+        this.loginTouchesCount++;
         this.isUsernameBlured = true;
       } else if (field === 'password') {
         this.isPasswordBlured = true;
@@ -118,6 +122,7 @@ export default {
     },
 
     onSubmit() {
+      this.loginTouchesCount = 3;
       this.$v.user.$touch();
       if (this.$v.user.$anyError) {
         return;

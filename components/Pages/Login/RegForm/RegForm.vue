@@ -183,6 +183,7 @@
 
       async onSubmit() {
         try {
+          this.$refs['verifyUser'].loginTouchesCount = 3;
           if (this.$v.form.phone.$model) {
             this.$refs['verifyUser'].getCode();
             this.$refs['verifyUser'].isPhoneChanged = true;
@@ -204,7 +205,6 @@
           this.registrationInProcess = false;
           if (this.$refs['verifyUser']) {
             this.$refs['verifyUser'].$refs["userInput"].$el.focus();
-            // this.$refs['verifyUser'].v.phone.$model = null;
             this.$refs['verifyUser'].resendCount = null;
           }
           return this.$store.getters.getRegistrationError.toString();
