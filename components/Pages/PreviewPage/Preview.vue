@@ -11,12 +11,10 @@
     name: 'Preview',
     components: {VRuntimeTemplate, Calculator},
     head: {
-      title: 'Карусель'
+      title: 'Предпросмотр страницы'
     },
     async asyncData ({ $axios, store, route }) {
       let dataPage = await $axios.get(`/wp-json/wpreso/v1/previews/${route.params.pageId}`)
-      let dataMenu = await $axios.get(`/wp-json/wp/v2/component/354`)
-      store.commit('pages/setMenu', dataMenu.data.acf.list);
       return {
         content: dataPage.data.content.rendered,
       }
