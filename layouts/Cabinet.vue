@@ -33,7 +33,17 @@
       this.$store.dispatch('menu/fetchMenu', this.$route.params)
     },
     watch: {
-      '$route': 'setParams'
+      $route(to, from) {
+        if(to.meta === 'Cabinet'){
+          this.setParams();
+        }else{
+          let url;
+          if (to.path === '/') {
+            url = 'index'
+          }
+          this.$store.dispatch('pages/fetchPageByUrl', url);
+        }
+      }
     },
     methods: {
        setParams  () {

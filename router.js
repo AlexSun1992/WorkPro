@@ -66,16 +66,18 @@ export function createRouter() {
         component: DemoCarousel
       },
       {
-        meta: 'Кабинет',
+        meta: 'Cabinet',
         path: '/cabinet',
         component: Cabinet,
         redirect: '/cabinet/dashboard',
         children: [
           {
+            meta: 'Cabinet',
             path: 'dashboard',
             component: Dashboard
           },
           {
+            meta: 'Cabinet',
             path: ':idModule/:idParent/:idItem',
             component: Fluid
           }

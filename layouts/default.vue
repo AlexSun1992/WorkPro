@@ -41,6 +41,7 @@
         if (to.path === '/') {
           url = 'index'
         }
+        console.log(url)
         this.$store.dispatch('pages/fetchPageByUrl', url);
       }
     },
