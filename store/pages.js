@@ -2,8 +2,10 @@
 export const state = () => ({
   pages: [],
   currentPage: null,
-  menu: null,
-  menuId: null,
+  mainMenu: null,
+  mainMenuId: null,
+  footerMenu: null,
+  footerMenuId: null,
   config: null
 })
 
@@ -14,8 +16,10 @@ export const getters = {
   getPageByUrl: state => {
     return state.currentPage
   },
-  getMenu: state => state.menu,
-  getMenuId: state => state.menuId,
+  getMenu: state => state.mainMenu,
+  getFooterMenu: state => state.footerMenu,
+  getMainMenuId: state => state.mainMenuId,
+  getFooterMenuId: state => state.footerMenuId,
   getConfig: state => state.config
 }
 
@@ -29,21 +33,31 @@ export const actions = {
     })
   },
 
-  async setMenuId({commit, state}) {
-    let menuId;
-    let response;
-    let mainPage;
-    mainPage = state.config.wpreso_settings_index_page.value;
-    response = await this.$axios.get(`/wp-json/wp/v2/pages?slug=${mainPage}`)
-    menuId = state.currentPage.wpreso.inherited.main_menu_id;
-    commit('setMenuId', menuId);
+  async setMenuIDs({commit, state}) {
+    let mainMenuId = state.currentPage.wpreso.inherited.main_menu_id;
+    let footerMenuId = state.currentPage.wpreso.inherited.footer_menu_id;
+    commit('setMenuIDs', {mainMenuId, footerMenuId});
   },
 
-  async getComponent({commit}, params) {
-    let component = await this.$axios.get(`/wp-json/wp/v2/wpreso_template_elem/${params}`);
-    commit('setMenu', component.data.acf.wpreso_main_menu_items);
+  // Объединить в один запрос после добавления в одну страницу WP (Алексей)
+  async getMainMenu({commit}, params) {
+    try {
+      let component = await this.$axios.get(`/wp-json/wp/v2/wpreso_template_elem/${params}`);
+      commit('setMainMenu', component.data.acf.wpreso_main_menu_items);
+    } catch(e) {
+      console.log(e);
+    }
   },
-
+  // Объединить в один запрос после добавления в одну страницу WP (Алексей)
+  async getFooterMenu({commit}, params) {
+    try {
+      let component = await this.$axios.get(`/wp-json/wp/v2/wpreso_template_elem/${params}`);
+      commit('setFooterMenu', component.data.acf.wpreso_footer_menu_items);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  //
   async fetchPageByUrl({commit}, params) {
     try {
       if (params.slice(params.length-1) === '/') {
@@ -74,11 +88,18 @@ export const mutations = {
   setPage(state, params) {
     state.currentPage = params;
   },
-  setMenu(state, params) {
-    state.menu = params;
+  // Объединить в одну мутацию после добавления в одну страницу WP (Алексей)
+  setMainMenu(state, params) {
+    state.mainMenu = params;
   },
-  setMenuId(state, params) {
-    state.menuId = params;
+  // Объединить в одну мутацию после добавления в одну страницу WP (Алексей)
+  setFooterMenu(state, params) {
+    state.footerMenu = params;
+  },
+  //
+  setMenuIDs(state, params) {
+    state.mainMenuId = params.mainMenuId;
+    state.footerMenuId = params.footerMenuId;
   },
   setConfig(state, params) {
     state.config = params;
