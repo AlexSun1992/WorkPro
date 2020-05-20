@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="animated fadeIn">
-      <div class="container">
+      <div>
         <div class="justify-content-lg-center">
           <DynamicRoutesRenderer/>
         </div>

@@ -1,6 +1,6 @@
 <template>
   <b-form-group  :label="label">
-    <date-picker v-model="data.value"  :disabled="!edit" type="datetime" format="DD.MM.YYYY HH:mm:ss" :first-day-of-week="1" :lang="lang" :input-class="data.state === false ? `${state} is-invalid` : state" ></date-picker>
+    <date-picker v-model="data.value"  :disabled="!edit" type="date" valueType="DD.MM.YYYY" format="DD.MM.YYYY" :first-day-of-week="1" :lang="lang" :input-class="data.state === false ? `${state} is-invalid` : state" ></date-picker>
     <div class="timestamp error" v-if="data.state === false">
       Обязательно для заполнения
     </div>
@@ -9,6 +9,7 @@
 
 <script>
 import DatePicker from 'vue2-datepicker'
+import moment from 'moment/moment'
 export default {
   name: 'ControlTimestamp',
   components: {DatePicker},

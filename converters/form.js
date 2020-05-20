@@ -48,6 +48,11 @@ converter.type = (data) => {
         copy[i].type = `text`
       }
     }
+    if(data[i].type === `timestamp`){
+      if(data[i].value){
+        data[i].value = moment(data[i].value, ['DD.MM.YYYY', 'YYYY-MM-DD']).format('DD.MM.YYYY')
+      }
+    }
     if (data[i].name.substring(0, 2) === `FK`) {
       for (let j = 0; j < data.length; j++) {
         if (data[i].name.substring(2) === data[j].name) {
