@@ -63,11 +63,10 @@ export const actions = {
       if (params.slice(params.length-1) === '/') {
         params = params.substring(0, params.length-1);
       }
-      params = params.split('/').pop();
-      await this.$axios.get(`/wp-json/wp/v2/pages?slug=${params}`)
+      await this.$axios.get(`/wp-json/wpreso/v1/pages-by-url?url=${params}`)
       .then(async (res) => {
         if (res.status === 200) {
-          commit('setPage', res.data[0]);
+          commit('setPage', res.data);
         }
       })
     } catch(e) {

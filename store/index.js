@@ -54,13 +54,11 @@ export const actions = {
     } else {
       params = `/${context.params.pathMatch}`
     }
-    //Нужно передавать ip клиента через nginx бэку
-    // await dispatch('cities/getCity');
     await dispatch('pages/fetchPageByUrl', params);
     await dispatch('pages/setMenuIDs');
     await dispatch('pages/getMainMenu', context.store.getters['pages/getMainMenuId']);
     await dispatch('pages/getFooterMenu', context.store.getters['pages/getFooterMenuId']);
-    
+
   },
 
   async resetPassword({commit}, params) {

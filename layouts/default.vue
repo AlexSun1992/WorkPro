@@ -38,10 +38,12 @@
     watch: {
       $route(to, from) {
         let url = to.path
+        if(url === '/login'){
+          return
+        }
         if (to.path === '/') {
           url = 'index'
         }
-        console.log(url)
         this.$store.dispatch('pages/fetchPageByUrl', url);
       }
     },
