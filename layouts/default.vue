@@ -37,6 +37,9 @@
     },
     watch: {
       $route(to, from) {
+        if(to.meta === 'Cabinet'){
+         return
+        }
         let url = to.path
         if(url === '/login'){
           return

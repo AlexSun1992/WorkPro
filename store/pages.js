@@ -71,6 +71,7 @@ export const actions = {
       })
     } catch(e) {
       console.log(e);
+      this.$nuxt.$router.replace({ path: '/login'})
     }
   },
 

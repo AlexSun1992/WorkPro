@@ -30,7 +30,7 @@
       Footer
     },
     mounted () {
-      this.$store.dispatch('menu/fetchMenu', this.$route.params)
+      // this.$store.dispatch('menu/fetchMenu', this.$route.params)
     },
     watch: {
       $route(to, from) {
