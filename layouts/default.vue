@@ -5,7 +5,7 @@
       <main class="main">
         <!--<breadcrumb :list="list"/>-->
         <p class="mb-10 mt-3"></p>
-        <div class="container-fluid">
+        <div>
           <nuxt />
         </div>
       </main>

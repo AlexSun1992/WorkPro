@@ -77,6 +77,7 @@ module.exports = {
   proxy: {
     // Simple proxy
     '/wp-json': 'http://wpress.reso.ru/',
+    '/wp-content': 'http://wpress.reso.ru/',
     // '/free': 'https://mobile2.reso.ru',
     '/free': 'https://mobiletest.reso.ru',
     '/am': 'https://mobiletest.reso.ru',
