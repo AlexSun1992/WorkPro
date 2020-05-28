@@ -54,11 +54,15 @@ export const actions = {
     } else {
       params = `/${context.params.pathMatch}`
     }
-    await dispatch('pages/fetchPageByUrl', params);
-    await dispatch('pages/setMenuIDs');
-    await dispatch('pages/getMainMenu', context.store.getters['pages/getMainMenuId']);
-    await dispatch('pages/getFooterMenu', context.store.getters['pages/getFooterMenuId']);
-
+    await dispatch('pages/fetchPageByUrl', params, context);
+    if(context.store.state.pages.currentPage.code !== "rest_post_invalid"){
+      await dispatch('pages/setMenuIDs');
+      await dispatch('pages/getMainMenu', context.store.getters['pages/getMainMenuId']);
+      await dispatch('pages/getFooterMenu', context.store.getters['pages/getFooterMenuId']);
+    }
+    else{
+      context.error({ statusCode: 404, message: 'Post not found' })
+    }
   },
 
   async resetPassword({commit}, params) {

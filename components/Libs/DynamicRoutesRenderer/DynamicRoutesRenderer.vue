@@ -10,6 +10,11 @@
   import VRuntimeTemplate from "v-runtime-template";
   import Calculator from "../../Pages/Calculator";
   export default {
+    head () {
+      return {
+        title: this.getPage.title.rendered
+      }
+    },
     components: {VRuntimeTemplate,Calculator},
     data(){
       return {

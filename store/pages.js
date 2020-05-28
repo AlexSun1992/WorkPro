@@ -70,8 +70,7 @@ export const actions = {
         }
       })
     } catch(e) {
-      console.log(e);
-      this.$nuxt.$router.replace({ path: '/login'})
+      commit('setPage', e.response.data);
     }
   },
 

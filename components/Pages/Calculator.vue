@@ -42,9 +42,6 @@
   export default {
     name: 'Calculator',
     components: {LoginModal},
-    head: {
-      title: 'Калькулятор'
-    },
     data () {
       return {
         user: {},
