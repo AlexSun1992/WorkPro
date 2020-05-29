@@ -14,6 +14,9 @@
       >{{products.link.title}}</b-button>
     </b-modal>
     <CitySearch />
+    <div class="px-3 ">
+      <span>{{ phoneNumber }}</span>
+    </div>
     <span class="px-3" v-for="(item, index) in menu" :key="index">
       <span v-if="!item.sections">
         <a :href="item.link.url">{{ item.title }}</a>
@@ -47,6 +50,9 @@ export default {
   computed: {
     menu() {
       return this.$store.getters["pages/getMenu"];
+    },
+    phoneNumber() {
+      return this.$store.state.pages.config.wpreso_settings_federal_number.default;
     }
   }
 };
