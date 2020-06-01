@@ -24,15 +24,6 @@ export const getters = {
 }
 
 export const actions = {
-  async get({commit}, params) {
-    await this.$axios.get(`/wp-json/acf/v3/pages/${params}`)
-    .then((res) => {
-      if (res.status === 200) {
-        commit('addPage', {id: params, data: res.data})
-      }
-    })
-  },
-
   async setMenuIDs({commit, state}) {
     let mainMenuId = state.currentPage.wpreso.inherited.main_menu_id;
     let footerMenuId = state.currentPage.wpreso.inherited.footer_menu_id;
