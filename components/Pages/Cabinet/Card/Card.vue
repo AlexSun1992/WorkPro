@@ -9,6 +9,7 @@
               <div slot="header">
                {{head}}
               </div>
+              <b-button class="mb-2" v-if="isList" v-on:click="refreshCardList" type="submit" variant="primary" v-b-popover.hover.top="'Обновить список'"><i  class="fa fa-refresh"></i></b-button>
               <b-button v-if="isForm && !isAddCardForEdit" v-on:click="openCardList" type="submit" variant="primary" v-b-popover.hover.top="'Перейти к списку'"><i  class="fa fa-chevron-left"></i></b-button>
               <card-form  v-if="isForm"  :data="formData" :actions="actionsData" @save-form="saveCardForm" @apply-action="applyCardActionForm"/>
               <card-filter  v-if="isFilter" :data="formData" @action-clicked="applyCardFilter"/>
@@ -57,12 +58,22 @@
         });
       },
       async saveCardForm (data) {
-        await this.$store.dispatch('card/saveForm', data);
-        this.$bvToast.toast('Успешно сохранено', {
-          title: ``,
-          variant: 'success',
-          solid: true
-        })
+        try {
+          await this.$store.dispatch('card/saveForm', data);
+          this.$bvToast.toast('Успешно сохранено', {
+            title: ``,
+            variant: 'success',
+            solid: true
+          })
+        } catch(err) {
+          this.$bvToast.toast(err.response.data.MESSAGE, {
+            title: `Ошибка`,
+            variant: 'danger',
+            noAutoHide: true,
+            solid: true
+          })
+        }
+
       },
       openCardForm (data) {
         this.$store.dispatch('card/fetchForm', data.data.item.ID)
@@ -70,6 +81,23 @@
       openCardList () {
         this.$store.commit('card/setShowForm', false)
         this.$store.commit('card/setShowList', true)
+      },
+      async refreshCardList () {
+        try {
+          await this.$store.dispatch('card/fetchList');
+          this.$bvToast.toast('Успешно  обновлено', {
+            title: ``,
+            variant: 'success',
+            solid: true
+          })
+        } catch(err) {
+          this.$bvToast.toast(err.response.data.MESSAGE, {
+            title: `Ошибка`,
+            variant: 'danger',
+            noAutoHide: true,
+            solid: true
+          })
+        }
       }
     },
     computed: {

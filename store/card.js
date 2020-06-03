@@ -62,6 +62,7 @@ export const actions = {
   async fetchForm ({commit, getters}, id) {
     await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${id}`)
       .then((res) => {
+        commit('setCardId', id)
         commit('setShowForm', true);
         commit('setShowFilter', false);
         commit('setShowList', false);

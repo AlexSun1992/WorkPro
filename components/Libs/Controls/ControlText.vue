@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     label () {
-      return `${this.data.label}${this.data.required ? '<span style="color:red">*</span>' : ''}`
+      return this.data.label
     }
   }
 }

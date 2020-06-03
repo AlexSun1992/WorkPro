@@ -23,8 +23,7 @@ app.get('/card/:idModule/:idItem/:id', (req, res) => {
         res.send(formConverter.form(resp.data))
       })
       .catch(err => {
-        console.log(err)
-        res.send(err)
+        res.status(err.response.data.STATUS).send(err.response.data)
       })
   } catch (e) {
     res.send(e)
@@ -41,7 +40,9 @@ app.post('/card/:idModule/:idItem/:id', (req, res) => {
       .then(resp => {
         res.send(resp.data[0])
       })
-      .catch(err =>  res.send(err.response.data))
+      .catch(err => {
+        res.status(err.response.data.STATUS).send(err.response.data)
+      }  )
 } catch (e) {
   res.send(e)
 }

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <LoginModal  ref="refLogin"/>
       <b-button v-if="!isAuthenticated" v-on:click="login" size="bg" class="my-2 my-sm-0" type="submit"  variant="success">Ваш кабинет</b-button>
       <b-nav-item-dropdown v-else right no-caret variant="primary">
         <template slot="button-content">
