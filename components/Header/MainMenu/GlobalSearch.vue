@@ -1,6 +1,6 @@
 <template>
   <div>
-    <i v-b-toggle.collapse-1 class="fa fa-search fa-lg" aria-hidden="true" @click="clearSearch()"></i>
+    <i v-b-toggle.collapse-1 id="toggleButton" class="fa fa-search fa-lg" aria-hidden="true" @click="clearSearch()"></i>
     <b-collapse ref="collapse" id="collapse-1" class="mt-3">
       <b-card>
         <b-input-group class="search">
@@ -46,6 +46,7 @@ export default {
   },
   mounted() {
     this.$refs["collapse"].$el.style.position = "absolute";
+    window.document.addEventListener('click', this.closeSearch);
   },
   methods: {
     async search() {
@@ -78,6 +79,11 @@ export default {
     clearSearch() {
       this.searchResult = null;
       this.queryStr = null;
+    },
+    closeSearch(e) {
+      if (e.target.id !== 'toggleButton') {
+        this.$refs['collapse'].show = false;
+      }
     }
   }
 };
