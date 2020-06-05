@@ -4,9 +4,9 @@
     <b-collapse ref="collapse" id="collapse-1" class="mt-3">
       <b-card>
         <b-input-group class="search">
-          <b-form-input v-model="queryStr" @keydown.enter="search()" placeholder="Поиск по сайту"></b-form-input>
+          <b-form-input v-model="queryStr" id="searchInput" @keydown.enter="search()" placeholder="Поиск по сайту"></b-form-input>
           <b-input-group-append class="ml-3">
-            <b-button @click="search()" variant="success">Найти</b-button>
+            <b-button id="searchButton" @click="search()" variant="success">Найти</b-button>
           </b-input-group-append>
         </b-input-group>
         <div v-if="searchResult">
@@ -21,11 +21,11 @@
           <h6 class="mr-1">{{ i + 1 }}.</h6>
           <div v-html="highlight(item.excerpt.rendered)"></div>
         </div>
-        <div>
+        <!-- <div>
           <div class="overflow-auto mt-2" v-if="searchResult">
             <b-pagination v-model="currentPage" size="sm" align="center"></b-pagination>
           </div>
-        </div>
+        </div> -->
       </b-card>
     </b-collapse>
   </div>
@@ -81,8 +81,10 @@ export default {
       this.queryStr = null;
     },
     closeSearch(e) {
-      if (e.target.id !== 'toggleButton') {
-        this.$refs['collapse'].show = false;
+      if (e.target.id !== 'toggleButton' && e.target.id !== 'searchInput' && e.target.id !== 'searchButton') {
+        if (this.$refs['collapse']) {
+          this.$refs['collapse'].show = false;
+        }
       }
     }
   }
