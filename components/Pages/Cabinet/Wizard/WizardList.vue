@@ -38,8 +38,7 @@
       this.wizardId = this.wizardData.idItem
       this.list = await this.$axios.$get(`/api/list/${this.moduleId}/${this.wizardId}/{}`)
       this.load = false
-    },
-    fetchOnServer: false
+    }
   }
 </script>
 

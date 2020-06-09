@@ -3,7 +3,9 @@
     <b-col v-for="wizard in wizardData" :key="wizard.id" cols="12">
       <b-card :header="wizard.name" >
         <b-card-text>
-          <wizard-list :module-id="moduleId" :wizard-data="wizard"/>
+          <client-only>
+            <wizard-list :module-id="moduleId" :wizard-data="wizard"/>
+          </client-only>
         </b-card-text>
       </b-card>
     </b-col>
