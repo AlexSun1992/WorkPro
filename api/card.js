@@ -16,13 +16,15 @@ app.get('/card/:idModule/:idItem/:id', (req, res) => {
   try {
     if(req.cookies){
       axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
-      axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      axios.defaults.baseURL = 'https://mobile2.reso.ru';
     }
     axios({url: `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.id}`, method: 'GET'})
       .then(resp => {
         res.send(formConverter.form(resp.data))
       })
       .catch(err => {
+        console.log(err.response.data)
         res.status(err.response.data.STATUS).send(err.response.data)
       })
   } catch (e) {
@@ -33,7 +35,8 @@ app.post('/card/:idModule/:idItem/:id', (req, res) => {
   try {
     if(req.cookies){
       axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
-      axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      axios.defaults.baseURL = 'https://mobile2.reso.ru';
     }
     const typeReq = req.params.id === 0 ? 'post' : 'put'
     axios[typeReq](`${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.id}`, formConverter.save(req.body))

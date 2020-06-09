@@ -79,12 +79,12 @@ module.exports = {
     '/wp-json': 'http://wpress.reso.ru/',
     '/wp-content': 'http://wpress.reso.ru/',
     '/free': 'https://mobile2.reso.ru',
-    '/free': 'https://mobiletest.reso.ru',
-    '/am': 'https://mobiletest.reso.ru',
-    '/main': 'https://mobiletest.reso.ru',
-    // '/free': 'https://mobile2.reso.ru',
-    // '/am': 'https://mobile2.reso.ru',
-    // '/main': 'https://mobile2.reso.ru'
+    // '/free': 'https://mobiletest.reso.ru',
+    // '/am': 'https://mobiletest.reso.ru',
+    // '/main': 'https://mobiletest.reso.ru',
+    '/free': 'https://mobile2.reso.ru',
+    '/am': 'https://mobile2.reso.ru',
+    '/main': 'https://mobile.reso.ru'
   },
 
   serverMiddleware: [

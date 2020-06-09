@@ -24,7 +24,8 @@ converter.form = (data) => {
   for (let i = 0; i < fields.length; i++) {
     let obj = {}
     obj.label = fields[i].CAPTION ? fields[i].CAPTION : fields[i].FIELD
-    obj.value = item[fields[i].FIELD] || meta[fields[i].FIELD]
+    obj.value = item[fields[i].FIELD]
+    //obj.value = item[fields[i].FIELD] || meta[fields[i].FIELD]
     obj.type = fields[i].TYPE
     obj.maxlength = fields[i].PRECISION
     obj.name = fields[i].FIELD
@@ -35,6 +36,7 @@ converter.form = (data) => {
     arr.push(obj)
   }
   return converter.type(arr)
+  //return arr
 }
 
 converter.type = (data) => {

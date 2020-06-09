@@ -1,6 +1,5 @@
 <template>
   <b-form-group  :label="label">
-    {{data}}ddd
     <b-form-input v-model="data.value" :disabled="!edit" :type="'number'" :state="data.state"></b-form-input>
     <b-form-invalid-feedback>
       Обязательно для заполнения

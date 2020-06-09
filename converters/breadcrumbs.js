@@ -13,13 +13,15 @@ breadcrumbs.getData = (data, params) => {
             arr.push(bcItem.getData(item[j]))
           }
         } else {
-          if (item[j].children.length) {
-            let folder = item[j].children
-            for (let i = 0; i < folder.length; i++) {
-              if (folder[i].idParent === parseInt(params.idParent)) {
-                if (folder[i].idItem === parseInt(params.idItem)) {
-                  arr.push(bcItem.getData(item[j]))
-                  arr.push(bcItem.getData(folder[i]))
+          if(item[j].children){
+            if (item[j].children.length) {
+              let folder = item[j].children
+              for (let i = 0; i < folder.length; i++) {
+                if (folder[i].idParent === parseInt(params.idParent)) {
+                  if (folder[i].idItem === parseInt(params.idItem)) {
+                    arr.push(bcItem.getData(item[j]))
+                    arr.push(bcItem.getData(folder[i]))
+                  }
                 }
               }
             }
@@ -45,6 +47,8 @@ bcItem.getData = (data) => {
   obj.edit = data.edit
   obj.delete = data.delete
   obj.cols = data.cols
+  obj.wizard = data.wizard
+  obj.isCard = data.isCard
   return obj
 }
 

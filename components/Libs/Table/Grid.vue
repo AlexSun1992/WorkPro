@@ -13,7 +13,7 @@
 
         </div>
       </template>
-      <template v-slot:cell(index)="data">
+      <template  v-slot:cell(index)="data">
         <slot name="actions"  v-bind:data="data"></slot>
       </template>
     </b-table>

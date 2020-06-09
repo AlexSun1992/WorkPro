@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser')
 import converter from '../converters/menu'
 import consts from '../api/urls'
 
-import data from './data.js'
 app.use(express.json())
 app.use(cookieParser())
 
@@ -17,7 +16,8 @@ app.get('/module', (req, res) => {
   try {
     if(req.cookies){
       axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
-      axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      axios.defaults.baseURL = 'https://mobile2.reso.ru';
     }
     modules.getItems = () => {
       return new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@ app.get('/module', (req, res) => {
             resolve(modules)
           })
           .catch(err => {
-            res.send(err.response.data)
+            res.status(err.response.data.STATUS).send(err.response.data)
           })
       })
     }
@@ -37,7 +37,7 @@ app.get('/module', (req, res) => {
           .then(axios.spread(function (...res) {
             resolve(res)
           })).catch(err => {
-          res.send(err.response.data)
+          res.status(err.response.data.STATUS).send(err.response.data)
         })
       })
     }
@@ -46,7 +46,7 @@ app.get('/module', (req, res) => {
         converter.sidebar(modules, menu)
         res.send(modules)
       }).catch(err => {
-        res.send(err.response.data)
+        res.status(err.response.data.STATUS).send(err.response.data)
       })
     })
   } catch (e) {

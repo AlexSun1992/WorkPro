@@ -2,6 +2,7 @@ import filterConverter from '../converters/filter'
 import actionConverter from '../converters/action'
 import tabConverter from '../converters/tab'
 import iconConverter from '../converters/icon'
+import wizardConverter from '../converters/wizard'
 const converter = {}
 
 converter.modules = (data, id) => {
@@ -76,6 +77,9 @@ converter.menuObject = (data) => {
   obj.edit = data.LEDIT
   obj.delete = data.LDELETE
   obj.cols = data.NCOLCOUNT
+  obj.isCard = !data.LNOTCARD
+  obj.wizard =  wizardConverter.wizard(data.WIZARDCUR)
+
   return obj
 }
 

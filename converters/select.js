@@ -23,8 +23,10 @@ converter.select = (data) => {
             obj.value = items[i][fields[j].FIELD]
           }
         }
-        obj.text = items[i][data[0]._meta.SNAMEFIELD.toUpperCase()]
-        obj.value = items[i][data[0]._meta.SKEYFIELD.toUpperCase()]
+        else{
+          obj.text = items[i][data[0]._meta.SNAMEFIELD.toUpperCase()]
+          obj.value = items[i][data[0]._meta.SKEYFIELD.toUpperCase()]
+        }
       }
     }
     arr.push(obj)

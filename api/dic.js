@@ -16,14 +16,15 @@ app.get('/dic/:name', (req, res) => {
   try {
     if(req.cookies){
       axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
-      axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      axios.defaults.baseURL = 'https://mobile2.reso.ru';
     }
     axios({url: `${consts.DIC}/${req.params.name}`, method: 'GET'})
       .then(resp => {
         res.send(selectConverter.select(resp.data))
       })
       .catch(err => {
-        res.send(err.response.data)
+        res.status(err.response.data.STATUS).send(err.response.data)
       })
   } catch (e) {
     res.send(e)

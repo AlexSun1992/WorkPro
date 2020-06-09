@@ -13,7 +13,6 @@ export const actions = {
   async fetchMenu ({commit, dispatch}, params) {
     await this.$axios.get(`/api/module`)
       .then((res) => {
-        console.log('setmenu');
         commit('setMenu', res.data);
         commit('setBreadcrumbs', breadcrumbs.getData(res.data, params))
       })

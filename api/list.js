@@ -17,7 +17,8 @@ app.get('/list/:idModule/:idItem/:filters', (req, res) => {
   try {
     if(req.cookies){
       axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
-      axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      axios.defaults.baseURL = 'https://mobile2.reso.ru';
     }
     const filters = listConverter.getFilterParams(formConverter.save(JSON.parse(req.params.filters)))
     axios({url: `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${filters}`, method: 'GET'})
