@@ -6,6 +6,7 @@ const MODULE = `/am/main/${VER}/module`
 const MENU = `/am/main/${VER}/menu`
 const DATACARD = `/am/main/${VER}/datacard`
 const DATA = `/am/main/${VER}/data`
+const DATALIST = `/am/main/${VER}/datalist`
 const FILTER = `/am/main/${VER}/filter`
 const ACTIONPARAM = `/am/main/${VER}/actionparam`
 const ACTIONEXEC = `/am/main/${VER}/actionexec`
@@ -26,6 +27,7 @@ export default {
   MENU: MENU,
   DATACARD: DATACARD,
   DATA: DATA,
+  DATALIST: DATALIST,
   FILTER: FILTER,
   ACTIONPARAM: ACTIONPARAM,
   ACTIONEXEC: ACTIONEXEC,

@@ -10,7 +10,8 @@
                {{head}}
               </div>
               <b-button class="mb-2" v-if="isList" v-on:click="refreshCardList" type="submit" variant="primary" v-b-popover.hover.top="'Обновить список'"><i  class="fa fa-refresh"></i></b-button>
-              <b-button v-if="isForm && !isAddCardForEdit" v-on:click="openCardList" type="submit" variant="primary" v-b-popover.hover.top="'Перейти к списку'"><i  class="fa fa-chevron-left"></i></b-button>
+              <b-button v-if="isForm && !isAddCardForEdit || isWizard" v-on:click="openCardList" type="submit" variant="primary" v-b-popover.hover.top="'Перейти к списку'"><i  class="fa fa-chevron-left"></i></b-button>
+              <card-wizard v-if="isWizard"/>
               <card-form  v-if="isForm"  :data="formData" :actions="actionsData" @save-form="saveCardForm" @apply-action="applyCardActionForm"/>
               <card-filter  v-if="isFilter" :data="formData" @action-clicked="applyCardFilter"/>
               <card-list v-if="isList" :is-action="isEdit" :load="isListLoading" :data="listData"  @action-clicked="openCardForm"/>
@@ -25,11 +26,12 @@
 
   import CardList from './CardList'
   import CardForm from './CardForm'
+  import CardWizard from './CardWizard'
   import CardFilter from './CardFilter'
 
   export default {
     name: 'Card',
-    components: {CardList, CardForm, CardFilter},
+    components: {CardList, CardForm, CardFilter, CardWizard},
     props: {
       params: {
         type: Object,
@@ -76,10 +78,16 @@
 
       },
       openCardForm (data) {
-        this.$store.dispatch('card/fetchForm', data.data.item.ID)
+        if(this.params.settings.wizard.length){
+          this.$store.dispatch('card/fetchWizard', data.data.item.ID, this.params.settings.wizard)
+        }
+        else{
+          this.$store.dispatch('card/fetchForm', data.data.item.ID)
+        }
       },
       openCardList () {
         this.$store.commit('card/setShowForm', false)
+        this.$store.commit('card/setShowWizard', false)
         this.$store.commit('card/setShowList', true)
       },
       async refreshCardList () {
@@ -127,6 +135,11 @@
       isForm: {
         get: function () {
           return this.$store.getters['card/isForm'];
+        }
+      },
+      isWizard: {
+        get: function () {
+          return this.$store.getters['card/isWizard'];
         }
       },
       isFilter: {

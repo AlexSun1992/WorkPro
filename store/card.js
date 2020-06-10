@@ -8,6 +8,7 @@ export const state = () => ({
   showForm: false,
   showFilter: false,
   showAction: false,
+  showWizard: false,
   isAdd: false,
   isEdit: false,
   isDelete: false,
@@ -25,6 +26,7 @@ export const getters = {
   actions: state => state.actions,
   isForm: state => state.showForm,
   isList: state => state.showList,
+  isWizard: state => state.showWizard,
   isFilter: state => state.showFilter,
   isActions: state => state.showActions,
   isEdit: state => state.isEdit,
@@ -49,6 +51,7 @@ export const actions = {
       commit('setDelete', params.settings.delete);
       commit('setComponentType', params.settings.compType);
       commit('setShowForm', false);
+      commit('setShowWizard', false);
       commit('setList',{});
       if(params.settings.newRecord){
         await dispatch('fetchForm', 0);
@@ -68,6 +71,11 @@ export const actions = {
         commit('setShowList', false);
         commit('setForm', res.data);
       })
+  },
+  async fetchWizard ({commit, getters}, id, wizard) {
+    commit('setShowWizard', true);
+    commit('setShowFilter', false);
+    commit('setShowList', false);
   },
   async applyFilter ({commit, dispatch, getters}, filters) {
     commit('setFilters', filters);
@@ -126,6 +134,9 @@ export const mutations = {
   },
   setShowForm(state, data) {
     state.showForm = data
+  },
+  setShowWizard(state, data) {
+    state.showWizard = data
   },
   setShowFilter(state, data) {
     state.showFilter = data
