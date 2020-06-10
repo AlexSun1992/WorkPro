@@ -20,7 +20,7 @@ converter.list = (data) => {
       obj.type = fields[i].TYPE
       obj.tdClass = 'text-col'
       obj.sortable = true
-      obj.formatter = (value) => { return converter.formatter(obj.type, value) }
+      obj.formatter = "formatData"
       arr.push(obj)
     }
   }
@@ -39,9 +39,7 @@ converter.formatter = (type, value) => {
 converter.formatByType = (type, value) => {
   switch (type) {
     case 'timestamp':
-      return value ? moment(value).format('DD.MM.YYYY HH:mm:ss') : ''
-    case 'boolean':
-      return `<input onclick="return false"  type="checkbox" ${value ? 'checked' : ''}>`
+      return value ? moment(value).format('DD.MM.YYYY') : ''
     case 'double':
       return value ? value.toLocaleString('ru') : ''
     case 'long':
