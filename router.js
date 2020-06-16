@@ -8,6 +8,8 @@ import Calculator from '~/components/Pages/Calculator'
 // import DemoPage from '~/components/Pages/DemoPage'
 import DemoCarousel from '~/components/Pages/DemoCarousel'
 
+import DemoPortlet from '~/components/Pages/DemoPortlet'
+
 import Cabinet from '~/components/Pages/Cabinet/Full'
 import Dashboard from '~/components/Pages/Cabinet/Dashboard'
 import Fluid from '~/components/Pages/Cabinet/Fluid'
@@ -64,6 +66,11 @@ export function createRouter() {
         meta: 'Карусель',
         path: '/demo-carousel',
         component: DemoCarousel
+      },
+      {
+        meta: 'Демо контент',
+        path: '/demo-portlet',
+        component: DemoPortlet
       },
       {
         meta: 'Cabinet',

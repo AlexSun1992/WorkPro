@@ -11,7 +11,7 @@ import ControlDouble from '~/components/Libs/Controls/ControlDouble'
 import ControlLong from '~/components/Libs/Controls/ControlLong'
 import ControlTimestamp from '~/components/Libs/Controls/ControlTimestamp'
 import ControlPeriod from '~/components/Libs/Controls/ControlPeriod'
-import ControlClob from '~/components/Libs/Controls/ControlClob'
+import ControlClob from '~/components/Libs/Controls/ControlText'
 import ControlEnum from '~/components/Libs/Controls/ControlEnum'
 export default {
   name: 'Control',
