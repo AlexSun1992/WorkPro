@@ -1,6 +1,5 @@
 <template>
-  <!-- <b-form-group  :label="label"> -->
-  <b-form-group  :label="data.label" :class="{required: data.required}">
+  <b-form-group  :label="label">
     <date-picker v-model="data.value"  :disabled="!edit" type="date" valueType="DD.MM.YYYY" format="DD.MM.YYYY" :first-day-of-week="1" :lang="lang" :input-class="data.state === false ? `${state} is-invalid` : state" ></date-picker>
     <div class="timestamp error" v-if="data.state === false">
       Обязательно для заполнения
@@ -32,11 +31,11 @@ export default {
       default: () => false
     }
   },
-  // computed: {
-  //   label () {
-  //     return `${this.data.label}${this.data.required ? '<span style="color:red">*</span>' : ''}`
-  //   }
-  // }
+  computed: {
+    label () {
+      return `${this.data.label}${this.data.required ? '<span style="color:red">*</span>' : ''}`
+    }
+  }
 }
 </script>
 
@@ -51,10 +50,5 @@ export default {
     margin-top: 0.25rem;
     font-size: 80%;
     color: #f86c6b;
-  }
-
-  .required > legend:after {
-    content: '*';
-    color: red;
   }
 </style>

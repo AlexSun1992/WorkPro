@@ -15,7 +15,6 @@ converter.wizard = (data) => {
       obj.name = data[i].SNAME
       obj.idItem = data[i].NITEM
       obj.id = data[i].ID
-      obj.list = data[i].LOPENLIST
       arr.push(obj)
     }
   }
