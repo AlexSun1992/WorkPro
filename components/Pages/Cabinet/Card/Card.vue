@@ -11,7 +11,7 @@
               </div>
               <b-button class="mb-2" v-if="isList" v-on:click="refreshCardList" type="submit" variant="primary" v-b-popover.hover.top="'Обновить список'"><i  class="fa fa-refresh"></i></b-button>
               <b-button v-if="isForm && !isAddCardForEdit || isWizard" v-on:click="openCardList" type="submit" variant="primary" v-b-popover.hover.top="'Перейти к списку'"><i  class="fa fa-chevron-left"></i></b-button>
-              <card-wizard v-if="isWizard"/>
+              <card-wizard :id="recordId" :wizard="params.settings.wizard" v-if="isWizard"/>
               <card-form  v-if="isForm"  :data="formData" :actions="actionsData" @save-form="saveCardForm" @apply-action="applyCardActionForm"/>
               <card-filter  v-if="isFilter" :data="formData" @action-clicked="applyCardFilter"/>
               <card-list v-if="isList" :is-action="isEdit" :load="isListLoading" :data="listData"  @action-clicked="openCardForm"/>
@@ -37,6 +37,11 @@
         type: Object,
         required: true,
         default: () => {}
+      }
+    },
+    data() {
+      return {
+        recordId: null
       }
     },
     methods: {
@@ -79,7 +84,12 @@
       },
       openCardForm (data) {
         if(this.params.settings.wizard.length){
-          this.$store.dispatch('card/fetchWizard', data.data.item.ID, this.params.settings.wizard)
+          this.recordId = data.data.item.ID;
+          const params = {
+            id: data.data.item.ID,
+            wizard: this.params.settings.wizard
+          }
+          this.$store.dispatch('card/fetchWizard', params)
         }
         else{
           this.$store.dispatch('card/fetchForm', data.data.item.ID)

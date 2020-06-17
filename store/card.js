@@ -15,7 +15,8 @@ export const state = () => ({
   isFormLoading: false,
   isListLoading: false,
   componentType: null,
-  cardId: 0
+  cardId: 0,
+  wizardData: null
 })
 
 export const getters = {
@@ -35,7 +36,8 @@ export const getters = {
   isFormLoading: state => state.isFormLoading,
   isListLoading: state => state.isListLoading,
   componentType: state => state.componentType,
-  cardId: state => state.cardId
+  cardId: state => state.cardId,
+  wizardData: state => state.wizardData
 }
 
 export const actions = {
@@ -72,11 +74,28 @@ export const actions = {
         commit('setForm', res.data);
       })
   },
-  async fetchWizard ({commit, getters}, id, wizard) {
+  async fetchWizard ({commit, getters}, params) {
+    let promise;
+    let promises = [];
+    params.wizard.forEach(item => {
+      let entity = item.list ? 'wizardlist' : 'card';
+      promise = this.$axios.get(`/api/${entity}/55/${item.idItem}/${params.id}`);
+      promises.push(promise);
+    });
+    Promise.all(promises).then(results => {
+      let wizardData = params.wizard;
+      wizardData.forEach((item, i) => {
+        item['data'] = results[i].data;
+      });
+      commit('setWizardData', wizardData);
+    }).catch((error) => {
+      console.log(error);
+    });
     commit('setShowWizard', true);
     commit('setShowFilter', false);
     commit('setShowList', false);
   },
+  
   async applyFilter ({commit, dispatch, getters}, filters) {
     commit('setFilters', filters);
     await dispatch('fetchList');
@@ -164,5 +183,8 @@ export const mutations = {
   },
   setCardId(state, data) {
     state.cardId = data
+  },
+  setWizardData(state, data) {
+    state.wizardData = data
   }
 }
