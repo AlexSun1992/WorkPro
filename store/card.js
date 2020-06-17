@@ -79,7 +79,7 @@ export const actions = {
     let promises = [];
     params.wizard.forEach(item => {
       let entity = item.list ? 'wizardlist' : 'card';
-      promise = this.$axios.get(`/api/${entity}/55/${item.idItem}/${params.id}`);
+      promise = this.$axios.get(`/api/${entity}/${getters['page'].idModule}/${item.idItem}/${params.id}`);
       promises.push(promise);
     });
     Promise.all(promises).then(results => {
