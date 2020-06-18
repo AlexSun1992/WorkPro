@@ -1,8 +1,6 @@
 <template>
   <div>
-    <client-only>
       <v-runtime-template :template="templateData"></v-runtime-template>
-    </client-only>
   </div>
 </template>
 
