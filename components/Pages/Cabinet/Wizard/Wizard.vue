@@ -1,35 +1,18 @@
 <template>
-  <b-row>
-    <b-col v-for="wizard in wizardData" :key="wizard.id" cols="12">
-      <b-card :header="wizard.name" v-if="wizard.name !== 'Полисы'" >
-        <b-card-text>
-            <wizard-list :module-id="moduleId" :wizard-data="wizard"/>
-        </b-card-text>
-      </b-card>
-      <div v-else>
-        <v-runtime-template :template="content"></v-runtime-template>
-      </div>
-    </b-col>
-  </b-row>
+  <div>
+      <v-runtime-template :template="templateData"></v-runtime-template>
+  </div>
 </template>
 
 <script>
   import WizardList from './WizardList'
-  import WizardSlot from './WizardSlot'
+  import NotifyBlock from '../Block/NotifyBlock'
+  import OfferBlock from '../Block/OfferBlock'
+  import PolicyBlock from '../Block/PolicyBlock'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'Wizard',
-    components: {WizardList,WizardSlot, VRuntimeTemplate},
-    data(){
-      return {
-        content: '<demo-content>\n' +
-        '  <template v-slot:data="{ content }">\n' +
-        '    <b>{{ content.name }}</b>\n' +
-        '    <i>{{ content.id }}</i>\n' +
-        '  </template>\n' +
-        '</demo-content>'
-      }
-    },
+    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate},
     props: {
       params: {
         type: Object,
@@ -43,6 +26,9 @@
       },
       moduleId () {
         return this.params.page.idModule
+      },
+      templateData () {
+        return this.params.settings.portalgrid
       }
     }
   }

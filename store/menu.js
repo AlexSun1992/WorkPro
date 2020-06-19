@@ -1,12 +1,16 @@
 import breadcrumbs from '~/converters/breadcrumbs'
 export const state = () => ({
   menu: [],
+  flatmenu: [],
   breadcrumbs: []
 })
 
 export const getters = {
   breadcrumbs: state => state.breadcrumbs,
-  menu: state => state.menu
+  menu: state => state.menu,
+  getMenuById: state => id => {
+    return state.flatmenu.find(m => m.IDITEM === parseInt(id));
+  },
 }
 
 export const actions = {
@@ -16,12 +20,19 @@ export const actions = {
         commit('setMenu', res.data);
         commit('setBreadcrumbs', breadcrumbs.getData(res.data, params))
       })
+    await this.$axios.get(`am/main/v2/menu/55`)
+      .then((res) => {
+        commit('setFlatMenu', res.data[0]._data);
+      })
   },
 }
 
 export const mutations = {
   setMenu(state, data) {
     state.menu = data
+  },
+  setFlatMenu(state, data) {
+    state.flatmenu = data
   },
   setBreadcrumbs(state, data) {
     state.breadcrumbs = data

@@ -8,7 +8,7 @@
       Указываем слот для каждой задачи, передавая
       объект `todo` в качестве входного параметра.
       -->
-      <slot name="data" v-bind:content="todo">
+      <slot name="data" v-bind:content="{todo,filteredTodos}">
         <!-- Содержимое по умолчанию -->
         {{ todo.name }}
       </slot>
