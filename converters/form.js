@@ -16,7 +16,7 @@ converter.subcompare = (a, b) => {
 }
 
 converter.form = (data) => {
-  let arr = []
+  let arr = [];
   let item = data[0]._data.length ? data[0]._data[0] : {}
   let fields = data[0]._struct
   let meta = converter.meta(data[0]._meta)
@@ -35,8 +35,34 @@ converter.form = (data) => {
     obj.state = null
     arr.push(obj)
   }
-  return converter.type(arr)
-  //return arr
+
+  // Собираем объект для JSONWEBFIELDS (сделать единую обработку)
+  let webFieldsArr = [];
+  let webFields = data[0]._meta['JSONWEBFIELDS']
+  webFields = webFields.sort((a, b) => a['NORDER'] - b['NORDER']);
+  for (let i = 0; i < webFields.length; i++) {
+    let obj = {}
+    obj.label = webFields[i].SCAPTION;
+    obj.value = item[webFields[i].SNAME]
+    obj.type = webFields[i].STYPE
+    obj.name = webFields[i].SNAME
+    obj.visible = webFields[i].LVISIBLE
+    obj.required = webFields[i].LREQUIRED
+    obj.page = webFields[i].NPAGE
+    obj.control = null
+    obj.state = null
+    webFieldsArr.push(obj)
+  }
+  // ********
+
+  return {
+    data: converter.type(arr),
+    // Метаданные для отображения JSONWEBFIELDS
+    metaData: {
+      data: converter.type(webFieldsArr),
+      captions: data[0]._meta['SPAGECAPTION']
+    }
+  }
 }
 
 converter.type = (data) => {
@@ -50,7 +76,7 @@ converter.type = (data) => {
         copy[i].type = `text`
       }
     }
-    if(data[i].type === `timestamp`){
+    if(data[i].type === `timestamp` || data[i].type === `DateTime`){
       if(data[i].value){
         data[i].value = moment(data[i].value, ['DD.MM.YYYY', 'YYYY-MM-DD']).format('DD.MM.YYYY')
       }

@@ -1,9 +1,15 @@
 <template>
   <b-tabs v-if="wizardData" content-class="mt-3">
-    <div v-for="(tab, i) in wizardData" :key="i">
-      <b-tab :title="tab.name">
-        <grid v-if="tab.list" :fields="tab.data.fields" :items="tab.data.items" :total="tab.data.count"></grid>
-        <Form v-else :data="tab.data" :edit="editForm"></Form>
+    <div v-for="(item, i) in wizardData" :key="i">
+      <b-tab :title="item.name">
+        <grid v-if="item.list" :fields="item.data.fields" :items="item.data.items" :total="item.data.count"></grid>
+        <b-tabs v-if="!item.list" content-class="mt-3">
+          <div v-for="(item, i) in item.data" :key="i">
+            <b-tab :title="item.title">
+              <Form :data="item.data" :edit="editForm"></Form>
+            </b-tab>
+          </div>
+        </b-tabs>
       </b-tab>
     </div>
   </b-tabs>
@@ -29,7 +35,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

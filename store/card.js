@@ -65,13 +65,14 @@ export const actions = {
     }
   },
   async fetchForm ({commit, getters}, id) {
+    debugger
     await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${id}`)
       .then((res) => {
         commit('setCardId', id)
         commit('setShowForm', true);
         commit('setShowFilter', false);
         commit('setShowList', false);
-        commit('setForm', res.data);
+        commit('setForm', res.data.data);
       })
   },
   async fetchWizard ({commit, getters}, params) {
@@ -85,7 +86,24 @@ export const actions = {
     Promise.all(promises).then(results => {
       let wizardData = params.wizard;
       wizardData.forEach((item, i) => {
-        item['data'] = results[i].data;
+        if(results[i].data.metaData) {
+          let tabs = results[i].data.metaData.captions.split(';');
+          tabs.pop();
+          let items = results[i].data.metaData.data;
+          tabs = tabs.map(tab => {
+            return {
+              'title': tab,
+              'data': []
+            };
+          });
+          items.forEach(item => {
+            tabs[item.page]['data'].push(item);
+            
+          });
+          item['data'] = tabs;
+        } else {
+          item['data'] = results[i].data;
+        }
       });
       commit('setWizardData', wizardData);
     }).catch((error) => {
