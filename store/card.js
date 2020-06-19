@@ -65,7 +65,6 @@ export const actions = {
     }
   },
   async fetchForm ({commit, getters}, id) {
-    debugger
     await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${id}`)
       .then((res) => {
         commit('setCardId', id)
