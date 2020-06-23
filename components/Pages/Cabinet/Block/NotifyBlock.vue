@@ -29,7 +29,7 @@
           return this.$store.getters['menu/getMenuById'](this.itemId).SVJCARDGRID
         }
       },
-      actionData: {
+      actions: {
         get: function () {
           return this.$store.getters['menu/getMenuById'](this.itemId).ACTIONSCUR
         }

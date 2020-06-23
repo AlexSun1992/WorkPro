@@ -8,13 +8,18 @@
   export default {
     name: 'ActionButton',
     props: {
-      actionId: {
-        type: Number,
+      actions: {
+        type: Array,
+        required: true,
+        default: () => []
+      },
+      itemId: {
+        type: String,
         required: true,
         default: () => null
       },
-      itemId: {
-        type: Number,
+      actionId: {
+        type: String,
         required: true,
         default: () => null
       },
@@ -26,25 +31,17 @@
     },
     methods: {
       async startAction () {
-        console.log(this.actionData)
-        // try {
-        //   await this.$store.dispatch('blocks/executeAction', {actionId:this.actionId, rowId:this.rowId});
-        // } catch(err) {
-        //   this.$bvToast.toast(err.response.data.MESSAGE, {
-        //     title: `Ошибка`,
-        //     variant: 'danger',
-        //     noAutoHide: true,
-        //     solid: true
-        //   })
-        // }
-      },
-    },
-    computed: {
-      actionData: {
-        get: function () {
-          return this.$store.getters['menu/getMenuById'](this.itemId).ACTIONSCUR
+        try {
+          await this.$store.dispatch('blocks/executeAction', {actionId:this.actionId, rowId:this.rowId, itemId:this.itemId});
+        } catch(err) {
+          this.$bvToast.toast(err.response.data.MESSAGE, {
+            title: `Ошибка`,
+            variant: 'danger',
+            noAutoHide: true,
+            solid: true
+          })
         }
-      }
+      },
     }
   }
 </script>

@@ -21,10 +21,10 @@ export const actions = {
         commit('updateBlock', {blockId : parseInt(id), data : res.data });
       })
   },
-  async executeAction ({commit, dispatch, getters}, {rowId, actionId}) {
+  async executeAction ({commit, dispatch, getters}, {rowId, itemId, actionId}) {
     await this.$axios.post(`/am/main/v2/actionexec/${rowId}/${actionId}`, {})
       .then(async resp => {
-        dispatch('updateBlock', rowId)
+        dispatch('updateBlock', itemId)
       })
   },
 }
