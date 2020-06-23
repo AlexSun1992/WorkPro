@@ -7,13 +7,8 @@
 <script>
   import Grid from '~/components/Libs/Table/Grid'
   export default {
-    name: 'WizardList',
+    name: 'ContentBlock',
     components: {Grid},
-    data () {
-      return {
-        dataContent: {},
-      }
-    },
     props: {
       itemId: {
         type: String,
@@ -22,7 +17,29 @@
       }
     },
     async  fetch () {
-      this.dataContent = await this.$axios.$get(`/api/list/55/${this.itemId}/{}`)
+      try {
+        await this.$store.dispatch('blocks/fetchBlock', this.itemId);
+      } catch(err) {
+        this.$bvToast.toast(err.response.data.MESSAGE, {
+          title: `Ошибка`,
+          variant: 'danger',
+          noAutoHide: true,
+          solid: true
+        })
+      }
+    },
+    computed: {
+      dataContent: {
+        get: function () {
+          let block =  this.$store.getters['blocks/getBlockById'](this.itemId)
+          if(block){
+            return block.data
+          }
+          else{
+            return {}
+          }
+        }
+      }
     }
   }
 </script>
