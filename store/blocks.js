@@ -21,6 +21,9 @@ export const actions = {
         commit('updateBlock', {blockId : parseInt(id), data : res.data });
       })
   },
+  async clearBlock ({commit}) {
+    commit('clearBlock');
+  },
   async executeAction ({commit, dispatch, getters}, {rowId, itemId, actionId}) {
     await this.$axios.post(`/am/main/v2/actionexec/${rowId}/${actionId}`, {})
       .then(async resp => {
@@ -36,6 +39,9 @@ export const mutations = {
   updateBlock(state, block) {
     const bs = state.blocks.find(b => b.blockId === block.blockId);
     bs.data = block.data
+  },
+  clearBlock(state) {
+    state.blocks = []
   }
 }
 

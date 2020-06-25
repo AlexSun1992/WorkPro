@@ -8,4 +8,5 @@ export default function ({
     app.$cookiz.set('url', route.path);
     return redirect('/login');
   }
+  store.dispatch('blocks/clearBlock');
 }

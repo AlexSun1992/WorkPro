@@ -1,6 +1,6 @@
 <template>
-    <b-button v-on:click="startAction()">
-      <slot></slot>
+    <b-button v-if="action" v-on:click="startAction()">
+      <slot><div v-text="action.SNAME"></div></slot>
     </b-button>
 </template>
 
@@ -12,11 +12,6 @@
         type: Array,
         required: true,
         default: () => []
-      },
-      itemId: {
-        type: String,
-        required: true,
-        default: () => null
       },
       actionId: {
         type: String,
@@ -32,7 +27,14 @@
     methods: {
       async startAction () {
         try {
-          await this.$store.dispatch('blocks/executeAction', {actionId:this.actionId, rowId:this.rowId, itemId:this.itemId});
+          if(this.action.NTYPE === 2){
+            if(this.action.SCONST){
+              this.$router.push(`/cabinet/55/1/${this.action.SCONST}`)
+            }
+          }
+          else{
+            await this.$store.dispatch('blocks/executeAction', {actionId:this.actionId, rowId:this.rowId, itemId:this.action.NITEM});
+          }
         } catch(err) {
           this.$bvToast.toast(err.response.data.MESSAGE, {
             title: `Ошибка`,
@@ -42,6 +44,14 @@
           })
         }
       },
+    },
+    computed: {
+      action: {
+        get: function () {
+          const action = this.actions.find(a => a.ID === parseInt(this.actionId));
+          return action ? action : null
+        }
+      }
     }
   }
 </script>
