@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.4.8",
-    "@nuxtjs/auth-next": "^5.0.0-1591630887.eba51b3",
+    "@nuxtjs/auth-next": "git+https://github.com/nuxt-community/auth-module.git#78e1090",
     "@nuxtjs/axios": "^5.10.3",
     "@nuxtjs/style-resources": "^1.0.0",
     "axios": "^0.19.2",
