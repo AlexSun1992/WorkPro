@@ -40,14 +40,31 @@ converter.form = (data) => {
   let webFieldsArr = [];
   let webFields = data[0]._meta['JSONWEBFIELDS']
   webFields = webFields.sort((a, b) => a['NORDER'] - b['NORDER']);
+  
   for (let i = 0; i < webFields.length; i++) {
     let obj = {}
     obj.label = webFields[i].SCAPTION;
-    obj.value = item[webFields[i].SNAME]
-    obj.type = webFields[i].STYPE
+    obj.value = item[webFields[i].SNAME];
+    obj.type = webFields[i].STYPE;
+
+    if (obj.type === 'DateTime') {
+      obj.type = 'timestamp';
+    } else if (obj.type === 'Int64' && webFields[i].IDCONTROL == 15) {
+      obj.type = 'enum';
+    } else if (obj.type === 'Int64') {
+      obj.type = 'long';
+    } else if (obj.type === 'String' && webFields[i].IDCONTROL == 16) {
+      obj.type = 'boolean';
+    } else if (obj.type === 'String' && webFields[i].IDCONTROL == 15) {
+      obj.type = 'enum';
+    } else if (obj.type === 'Decimal' && webFields[i].LDIC == 'Y') {
+      obj.type = 'enum';
+    } else if (obj.type === 'Decimal' && webFields[i].LDIC == 'N') {
+      obj.type = 'string';
+    } 
     obj.name = webFields[i].SNAME
-    obj.visible = webFields[i].LVISIBLE
-    obj.required = webFields[i].LREQUIRED
+    obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
+    obj.required = webFields[i].REQUIRED === 'N' ? false : true;
     obj.page = webFields[i].NPAGE
     obj.control = null
     obj.state = null
@@ -76,7 +93,7 @@ converter.type = (data) => {
         copy[i].type = `text`
       }
     }
-    if(data[i].type === `timestamp` || data[i].type === `DateTime`){
+    if(data[i].type === `timestamp`){
       if(data[i].value){
         data[i].value = moment(data[i].value, ['DD.MM.YYYY', 'YYYY-MM-DD']).format('DD.MM.YYYY')
       }

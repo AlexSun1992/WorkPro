@@ -25,7 +25,8 @@ converter.select = (data) => {
         }
         else{
           obj.text = items[i][data[0]._meta.SNAMEFIELD.toUpperCase()]
-          obj.value = items[i][data[0]._meta.SKEYFIELD.toUpperCase()]
+          obj.value = items[i][data[0]._meta.SKEYFIELD] ? items[i][data[0]._meta.SKEYFIELD].toUpperCase() : items[i].ID
+
         }
       }
     }

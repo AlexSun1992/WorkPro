@@ -13,6 +13,7 @@ import ControlTimestamp from '~/components/Libs/Controls/ControlTimestamp'
 import ControlPeriod from '~/components/Libs/Controls/ControlPeriod'
 import ControlClob from '~/components/Libs/Controls/ControlText'
 import ControlEnum from '~/components/Libs/Controls/ControlEnum'
+
 export default {
   name: 'Control',
   components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, ControlTimestamp, ControlPeriod, ControlClob, ControlEnum},
