@@ -77,7 +77,7 @@ converter.menuObject = (data) => {
   obj.edit = data.LEDIT
   obj.delete = data.LDELETE
   obj.cols = data.NCOLCOUNT
-  obj.isCard = !data.LNOTCARD
+  obj.isCard = !data.LNOTCARD && !data.SVJCARDGRID
   obj.wizard =  wizardConverter.wizard(data.WIZARDCUR)
   obj.portalgrid = data.SVJPORTALGRID || null
   obj.cardgrid = data.SVJCARDGRID || null
