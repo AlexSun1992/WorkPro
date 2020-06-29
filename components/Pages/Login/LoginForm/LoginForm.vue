@@ -75,6 +75,7 @@ export default {
   methods: {
     async login() {
       try {
+   
         this.authInProcess = true;
         // this.captchaToken = await this.$getCaptcha();
         await this.$auth.loginWith("local", {
@@ -88,13 +89,25 @@ export default {
           }
         });
         this.authInProcess = false;
-        this.$router.push('/');
+        let cookie = this.getCookie('url');
+        let lastURL;
+        if (cookie) {
+          lastURL = cookie.split('=')[1];
+        }
+        let url = lastURL ? lastURL : '/';
+        this.$router.push(url);
+
       } catch (e) {
-        if (this.$auth.error.response.status === 401) {
+        if (this.$auth.error?.response.status === 401) {
           this.errorMessage = this.$auth.error.response.data.MESSAGE;
           this.authInProcess = false;
         }
       }
+    },
+
+    getCookie(name) {
+      let cookies = document.cookie.split('; ');
+      return decodeURIComponent(cookies.find(item => item.includes(name)));
     },
 
     validateInput(field, bluredField) {

@@ -6,10 +6,11 @@
 
 <script>
   import ContentBlock from './ContentBlock'
+  import ActionButton from './ActionButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'NotifyBlock',
-    components: {ContentBlock, VRuntimeTemplate},
+    components: {ContentBlock, VRuntimeTemplate, ActionButton},
     props: {
       itemId: {
         type: String,
@@ -26,6 +27,11 @@
       templateData: {
         get: function () {
           return this.$store.getters['menu/getMenuById'](this.itemId).SVJCARDGRID
+        }
+      },
+      actions: {
+        get: function () {
+          return this.$store.getters['menu/getMenuById'](this.itemId).ACTIONSCUR
         }
       }
     }

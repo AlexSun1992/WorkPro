@@ -27,7 +27,8 @@
       },
       logout() {
         try {
-          this.$auth.logout()
+          this.$auth.logout();
+          window.$nuxt.$cookiz.remove('url');
           this.$router.push('/')
         } catch (e) {
           console.log(e)
