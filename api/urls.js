@@ -4,6 +4,7 @@ const REFRESH_TOKEN = `/am/auth/${VER}/token_refresh`
 const SOCKET = `wss://mobile2.reso.ru/chat`
 const MODULE = `/am/main/${VER}/module`
 const MENU = `/am/main/${VER}/menu`
+const CLIENTMENU = `/am/main/${VER}/clientmenu`
 const DATACARD = `/am/main/${VER}/datacard`
 const DATA = `/am/main/${VER}/data`
 const DATALIST = `/am/main/${VER}/datalist`
@@ -25,6 +26,7 @@ export default {
   SOCKET: SOCKET,
   MODULE: MODULE,
   MENU: MENU,
+  CLIENTMENU:  CLIENTMENU,
   DATACARD: DATACARD,
   DATA: DATA,
   DATALIST: DATALIST,

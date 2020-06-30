@@ -33,7 +33,7 @@ app.get('/module', (req, res) => {
     }
     menu.getItems = (modules) => {
       return new Promise((resolve, reject) => {
-        axios.all(modules.map(l => axios.get(`${consts.MENU}/${l.id}`)))
+        axios.all(modules.map(l => axios.get(`${consts.CLIENTMENU}/${l.id}`)))
           .then(axios.spread(function (...res) {
             resolve(res)
           })).catch(err => {
