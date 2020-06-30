@@ -5,7 +5,7 @@ import Main from '~/components/Pages/Main'
 import DemoAbout from '~/components/Pages/DemoAbout'
 import Feedback from '~/components/Pages/Feedback'
 import Calculator from '~/components/Pages/Calculator'
-// import DemoPage from '~/components/Pages/DemoPage'
+import DemoPage from '~/components/Pages/DemoPage'
 import DemoCarousel from '~/components/Pages/DemoCarousel'
 
 import DemoPortlet from '~/components/Pages/DemoPortlet'
@@ -57,11 +57,11 @@ export function createRouter() {
         path: '/calculator',
         component: Calculator
       },
-      // {
-      //   meta: 'Демонстрационная страница',
-      //   path: '/coronavirus',
-      //   component: DemoPage
-      // },
+      {
+        meta: 'Демонстрационная страница',
+        path: '/demo-page',
+        component: DemoPage
+      },
       {
         meta: 'Карусель',
         path: '/demo-carousel',

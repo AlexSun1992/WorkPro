@@ -1,6 +1,8 @@
 <template>
   <div class="app">
+    Здесь будет будет HEADER и SIDEBAR
     <nuxt/>
+    Здесь будет FOOTER
   </div>
 </template>
 
