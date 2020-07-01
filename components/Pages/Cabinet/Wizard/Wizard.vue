@@ -13,12 +13,17 @@
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'Wizard',
-    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock},
+    components: {WizardList, NotifyBlock, OfferBlock, PolicyBlock, VRuntimeTemplate, ContentBlock},
     props: {
       params: {
         type: Object,
         required: true,
         default: () => {}
+      }
+    },
+    data() {
+      return {
+        fieldsArr: []
       }
     },
     computed: {
@@ -35,6 +40,19 @@
         return this.params.page.idItem
       },
       templateData () {
+        // Удалить. Временно создал для теста табов
+        let data = this.$store.getters['card/list'];
+        if (data.fields && data.fields.length) {
+          data.fields.forEach(field => {
+            if (data.items[0][field['key']]) {
+              let obj = {};
+              obj.key = field.label;
+              obj.value = data.items[0][field['key']];
+              this.fieldsArr.push(obj)
+            }
+          });
+        }
+        // --------------------------------------------
         return this.params.settings.portalgrid || this.params.settings.cardgrid
       }
     }
