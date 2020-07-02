@@ -7,11 +7,17 @@
 <script>
   import ContentBlock from './ContentBlock'
   import ActionButton from './ActionButton'
+  import OpenCardButton from '../Block/OpenCardButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'NotifyBlock',
-    components: {ContentBlock, VRuntimeTemplate, ActionButton},
+    components: {ContentBlock, VRuntimeTemplate, ActionButton, OpenCardButton},
     props: {
+      moduleId: {
+        type: String,
+        required: false,
+        default: () => ''
+      },
       itemId: {
         type: String,
         required: true,

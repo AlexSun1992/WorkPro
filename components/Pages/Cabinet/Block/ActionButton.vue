@@ -29,7 +29,7 @@
         try {
           if(this.action.NTYPE === 2){
             if(this.action.SCONST){
-              this.$router.push(`/cabinet/55/1/${this.action.SCONST}`)
+              this.$router.push(`/cabinet/55/0/${this.action.SCONST}`)
             }
           }
           else{
