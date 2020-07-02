@@ -40,8 +40,16 @@
         return this.params.page.idItem
       },
       templateData () {
-        // Удалить. Временно создал для теста табов
+        this.testTabs();
+        return this.params.settings.portalgrid || this.params.settings.cardgrid
+      }
+    },
+    methods: {
+      // Удалить. Временно создал для теста табов
+      testTabs() {
+        debugger
         let data = this.$store.getters['card/list'];
+        this.fieldsArr = [];
         if (data.fields && data.fields.length) {
           data.fields.forEach(field => {
             if (data.items[0][field['key']]) {
@@ -52,8 +60,6 @@
             }
           });
         }
-        // --------------------------------------------
-        return this.params.settings.portalgrid || this.params.settings.cardgrid
       }
     }
   }
