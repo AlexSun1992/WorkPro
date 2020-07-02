@@ -54,11 +54,13 @@
         this.fieldsArr = [];
         if (data.fields && data.fields.length) {
           data.fields.forEach(field => {
+            let obj = {};
             if (data.items[0][field['key']]) {
-              let obj = {};
               obj.key = field.label;
               obj.value = data.items[0][field['key']];
               this.fieldsArr.push(obj)
+            } else {
+              obj.key = field.label;
             }
           });
         }
