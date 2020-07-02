@@ -21,6 +21,9 @@
         default: () => {}
       }
     },
+    created() {
+      this.$store.dispatch('card/setCard', this.params);
+    },
     data() {
       return {
         fieldsArr: []
