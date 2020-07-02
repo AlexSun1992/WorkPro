@@ -47,7 +47,6 @@
     methods: {
       // Удалить. Временно создал для теста табов
       testTabs() {
-        debugger
         let data = this.$store.getters['card/list'];
         this.fieldsArr = [];
         if (data.fields && data.fields.length) {
