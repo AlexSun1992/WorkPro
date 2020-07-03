@@ -5,7 +5,7 @@ export default function ({
   route
 }) {
   if (!store.state.auth.loggedIn) {
-    app.$cookiz.set('url', route.path);
+    app.$cookiz?.set('url', route.path);
     return redirect('/login');
   }
   store.dispatch('blocks/clearBlock');
