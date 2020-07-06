@@ -38,7 +38,6 @@ export default {
     return {
       queryStr: null,
       searchResult: null,
-      test: null,
       searchInput: null,
       resultQty: null,
       currentPage: 1

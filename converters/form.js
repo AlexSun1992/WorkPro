@@ -50,7 +50,7 @@ converter.form = (data) => {
     if (obj.type === 'DateTime') {
       obj.type = 'timestamp';
     } else if (obj.type === 'Int64' && webFields[i].IDCONTROL == 15) {
-      obj.type = 'enum';
+      obj.type = 'string';
     } else if (obj.type === 'Int64') {
       obj.type = 'long';
     } else if (obj.type === 'String' && webFields[i].IDCONTROL == 16) {
@@ -62,6 +62,7 @@ converter.form = (data) => {
     } else if (obj.type === 'Decimal' && webFields[i].LDIC == 'N') {
       obj.type = 'string';
     } 
+    
     obj.name = webFields[i].SNAME
     obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
     obj.required = webFields[i].REQUIRED === 'N' ? false : true;
