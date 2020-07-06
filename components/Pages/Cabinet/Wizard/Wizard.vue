@@ -13,11 +13,13 @@
   import PolicyBlock from '../Block/PolicyBlock'
   import ContentBlock from '../Block/ContentBlock'
   import ActionButton from '../Block/ActionButton'
+  import Profile from '../Profile'
+  import Form from '~/components/Libs/Form/Form'
   import OpenCardButton from '../Block/OpenCardButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'Wizard',
-    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard},
+    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, Profile, Form},
     props: {
       params: {
         type: Object,
@@ -25,12 +27,9 @@
         default: () => {}
       }
     },
-    created() {
-      this.$store.dispatch('card/setCard', this.params);
-    },
     data() {
       return {
-        fieldsArr: []
+        editForm: true
       }
     },
     computed: {
@@ -47,31 +46,11 @@
         return this.params.page.idItem
       },
       templateData () {
-        this.testTabs();
         return this.params.settings.portalgrid || this.params.settings.cardgrid
       },
       isForm: {
         get: function () {
           return this.$store.getters['blocks/getForm'].length
-        }
-      }
-    },
-    methods: {
-      // Удалить. Временно создал для теста табов
-      testTabs() {
-        let data = this.$store.getters['card/list'];
-        this.fieldsArr = [];
-        if (data.fields && data.fields.length) {
-          data.fields.forEach(field => {
-            let obj = {};
-            if (data.items[0][field['key']]) {
-              obj.key = field.label;
-              obj.value = data.items[0][field['key']];
-              this.fieldsArr.push(obj)
-            } else {
-              obj.key = field.label;
-            }
-          });
         }
       }
     }

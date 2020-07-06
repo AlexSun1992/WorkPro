@@ -75,39 +75,20 @@ export const actions = {
       })
   },
   async fetchWizard ({commit, getters}, params) {
-    let promise;
-    let promises = [];
-    params.wizard.forEach(item => {
-      let entity = item.list ? 'wizardlist' : 'card';
-      promise = this.$axios.get(`/api/${entity}/${getters['page'].idModule}/${item.idItem}/${params.id}`);
-      promises.push(promise);
+    let card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${params.id}`);
+    let captions = card.data.metaData.captions.split(';');
+    captions.pop();
+    let fields = card.data.metaData.data;
+    let tabs = captions.map(caption => {
+      return {
+        'title': caption,
+        'data': []
+      };
     });
-    Promise.all(promises).then(results => {
-      let wizardData = params.wizard;
-      wizardData.forEach((item, i) => {
-        if(results[i].data.metaData) {
-          let tabs = results[i].data.metaData.captions.split(';');
-          tabs.pop();
-          let items = results[i].data.metaData.data;
-          tabs = tabs.map(tab => {
-            return {
-              'title': tab,
-              'data': []
-            };
-          });
-          items.forEach(item => {
-            tabs[item.page]['data'].push(item);
-            
-          });
-          item['data'] = tabs;
-        } else {
-          item['data'] = results[i].data;
-        }
-      });
-      commit('setWizardData', wizardData);
-    }).catch((error) => {
-      console.log(error);
+    fields.forEach(item => {
+      tabs[item.page]['data'].push(item);
     });
+    commit('setWizardData', tabs);
     commit('setShowWizard', true);
     commit('setShowFilter', false);
     commit('setShowList', false);
