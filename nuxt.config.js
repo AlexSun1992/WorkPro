@@ -32,7 +32,8 @@ module.exports = {
     '~/node_modules/font-awesome/css/font-awesome.min.css',
     /* Import Simple Line Icons Set */
     '~/node_modules/simple-line-icons/css/simple-line-icons.css',
-    { src: '~/assets/scss/style.scss', lang: 'scss' }
+    /*{ src: '~/assets/scss/style.scss', lang: 'scss' }*/
+    { src: '~/assets/scss/style_new.scss', lang: 'scss' }
   ],
   /*
   ** Plugins to load before mounting the App
