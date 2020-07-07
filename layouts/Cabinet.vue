@@ -47,14 +47,14 @@
     },
     methods: {
        setParams  () {
-        const bc = breadcrumbs.getData(this.nav, this.$route.params)
+        const bc = breadcrumbs.getData(this.$store.getters['menu/menu'], this.$route.params)
         this.$store.commit('menu/setBreadcrumbs', bc)
         this.$store.dispatch('card/setCard', {page: this.$route.params, settings: bc.slice(-1).pop()});
       }
     },
     computed: {
       nav () {
-        return this.$store.getters['menu/menu']
+        return this.$store.getters['menu/menu'][0].children
       },
       name () {
         return this.$route.name

@@ -6,11 +6,17 @@
 
 <script>
   import ContentBlock from './ContentBlock'
+  import OpenCardButton from '../Block/OpenCardButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'PolicyBlock',
-    components: {ContentBlock, VRuntimeTemplate},
+    components: {ContentBlock, VRuntimeTemplate, OpenCardButton},
     props: {
+      moduleId: {
+        type: String,
+        required: false,
+        default: () => ''
+      },
       itemId: {
         type: String,
         required: true,

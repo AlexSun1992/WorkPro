@@ -1,8 +1,6 @@
 <template>
   <div>
     <b-form-row>
-      <!-- {{items}} -->
-      <!-- {{items}} -->
       <Control  v-for='(item, index) in items' :key='index' v-bind:data="item" v-bind:edit="edit" :cols="cols"></Control>
     </b-form-row>
   </div>
@@ -32,13 +30,8 @@ export default {
   computed: {
     items: function () {
       return this.data.filter(function (item) {
-        return item.visible
+        return item.visible && item.type != 'Button';
       })
-      // Оставил для теста 
-      // (Необходимые поля для отображения JSONWEBFIELDS удаляются в form.js стр. 104 
-      // if (data[i].name.substring(0, 2) === `FK`) {...})
-
-      // return this.data;
     }
   }
 }

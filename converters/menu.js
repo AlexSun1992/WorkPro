@@ -7,7 +7,17 @@ const converter = {}
 
 converter.modules = (data, id) => {
   let arr = []
-  let _data = data[0]._data
+  let _data = []
+  if(data){
+    if(data.length){
+      if(data[0]._data){
+        _data = data[0]._data
+      }
+      else {
+        _data = data
+      }
+    }
+  }
   for (let i = 0; i < _data.length; i++) {
     if (_data[i][`SNAME`]) {
       if (id) {
@@ -48,11 +58,16 @@ converter.toTree = (data) => {
 }
 
 converter.sidebar = (modules, menu) => {
-  for (let i = 0; i < modules.length; i++) {
-    let children = converter.toTree(converter.modules(menu[i].data, modules[i].id))
-    modules[i].children = children
+  try {
+    for (let i = 0; i < modules.length; i++) {
+      let children = converter.toTree(converter.modules(menu[i].data, modules[i].id))
+      modules[i].children = children
+    }
+    return modules
   }
-  return modules
+  catch (e) {
+   console.log(e)
+  }
 }
 
 converter.menuObject = (data) => {
