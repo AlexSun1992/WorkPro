@@ -29,7 +29,11 @@
         border-radius: 0px 60px 60px 0px;
         transition: box-shadow .3s .15s, margin-left .3s, margin-right .3s, width .3s, z-index 0s ease .3s, -webkit-transform .3s;
         transition: box-shadow .3s .15s, transform .3s, margin-left .3s, margin-right .3s, width .3s, z-index 0s ease .3s;
-        transition: box-shadow .3s .15s, transform .3s, margin-left .3s, margin-right .3s, width .3s, z-index 0s ease .3s, -webkit-transform .3s
+        transition: box-shadow .3s .15s, transform .3s, margin-left .3s, margin-right .3s, width .3s, z-index 0s ease .3s, -webkit-transform .3s;
+        position: fixed;
+        top: 119px;
+        bottom: 0;
+        z-index: 1030;
     }
     
     body {
@@ -268,13 +272,4 @@
         padding-right: 39px;
         background: #fff;
         padding-top: 25px;
-    }
-    
-    @media (min-width: 992px) {
-        .sidebar {
-            position: fixed;
-            top: 119px;
-            bottom: 0;
-            z-index: 1030;
-        }
     }
