@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <div class="sidebar">
+    <div class="sidebar_client">
       <div class="ppl-info 50percents ppl-male">
         <img src="">
         <span clas="ppl-name">Настя Семенова</span>
@@ -162,3 +162,6 @@
     </div>
   </div>
 </template>
+<style lang="scss" scoped>
+  @import '~/assets/scss/style_new.scss'
+</style>
