@@ -66,22 +66,22 @@
     
     .sidebar-nav-item {
         display: flex;
-        flex: 0 0 35%;
+        flex: 0 0 116px;
         background: #fff;
         border-radius: 18px;
         transition: 0.3s;
         position: relative;
-        margin: 20px 0;
+        margin: 18px 0;
     }
     
     .sidebar-nav-item:nth-child(even) {
-        margin-right: 10%;
-        margin-left: 5%;
+        margin-right: 37px;
+        margin-left: 18px;
     }
     
     .sidebar-nav-item:nth-child(odd) {
-        margin-right: 5%;
-        margin-left: 10%;
+        margin-right: 19px;
+        margin-left: 37px;
     }
     
     .sidebar-nav-item:hover {
@@ -90,7 +90,7 @@
     }
     
     .sidebar-nav-item a {
-        min-height: 115px;
+        min-height: 116px;
         width: 100%;
         padding: 10px 10px;
         display: flex;
