@@ -103,6 +103,7 @@
         width: auto;
         margin: 0 auto;
         fill: #008B4E;
+        stroke: #008B4E;
         transition: 0.3s;
         padding: 10px;
         box-sizing: content-box;
@@ -110,6 +111,7 @@
     
     .sidebar-nav-item:hover a svg {
         fill: #fff;
+        stroke: #fff;
         transition: 0.3s;
     }
     
@@ -119,7 +121,7 @@
         font-family: Roboto;
         font-style: normal;
         font-weight: 500;
-        font-size: 15px;
+        font-size: 14px;
         line-height: 16px;
         text-align: center;
         letter-spacing: 0.02em;
