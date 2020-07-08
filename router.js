@@ -58,11 +58,6 @@ export function createRouter() {
         component: Calculator
       },
       {
-        meta: 'Демонстрационная страница',
-        path: '/demo-page',
-        component: DemoPage
-      },
-      {
         meta: 'Карусель',
         path: '/demo-carousel',
         component: DemoCarousel
@@ -87,7 +82,12 @@ export function createRouter() {
             meta: 'Cabinet',
             path: ':idModule/:idParent/:idItem',
             component: Fluid
-          }
+          },
+          {
+            meta: 'Демонстрационная страница',
+            path: 'demo-page',
+            component: DemoPage
+          },
         ]
       },
       {

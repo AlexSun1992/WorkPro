@@ -12,7 +12,7 @@
     @import "~bootstrap/scss/bootstrap";
     // Custom styles
     @import "custom";
-    .sidebar_client {
+    /deep/ .sidebar_client {
         display: -ms-flexbox;
         display: flex;
         -ms-flex: 0 0 348px;
@@ -36,11 +36,7 @@
         z-index: 1030;
     }
 
-    body {
-        background: linear-gradient(128.22deg, rgba(244, 250, 248, 0.66) 1.33%, rgba(234, 243, 238, 0.73) 101.82%);
-    }
-
-    header>div {
+    /deep/ header>div {
         position: relative;
         display: -ms-flexbox;
         display: flex;
@@ -53,14 +49,14 @@
         height: 119px;
     }
 
-    header {
+    /deep/ header {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
     }
 
-    .sidebar-nav {
+    /deep/ .sidebar-nav {
         list-style: none;
         display: flex;
         flex-wrap: wrap;
@@ -68,7 +64,7 @@
         margin: 0;
     }
 
-    .sidebar-nav-item {
+    /deep/ .sidebar-nav-item {
         display: flex;
         flex: 0 0 116px;
         background: #fff;
@@ -78,22 +74,22 @@
         margin: 18px 0;
     }
 
-    .sidebar-nav-item:nth-child(even) {
+    /deep/ .sidebar-nav-item:nth-child(even) {
         margin-right: 37px;
         margin-left: 18px;
     }
 
-    .sidebar-nav-item:nth-child(odd) {
+    /deep/ .sidebar-nav-item:nth-child(odd) {
         margin-right: 19px;
         margin-left: 37px;
     }
 
-    .sidebar-nav-item:hover {
+    /deep/ .sidebar-nav-item:hover {
         background: #008b4e;
         transition: 0.3s;
     }
 
-    .sidebar-nav-item a {
+    /deep/ .sidebar-nav-item a {
         min-height: 116px;
         width: 100%;
         padding: 10px 10px;
@@ -101,7 +97,7 @@
         flex-wrap: wrap;
     }
 
-    .sidebar-nav-item a svg {
+    /deep/ .sidebar-nav-item a svg {
         display: block;
         height: 40px;
         width: auto;
@@ -113,13 +109,13 @@
         box-sizing: content-box;
     }
 
-    .sidebar-nav-item:hover a svg {
+    /deep/ .sidebar-nav-item:hover a svg {
         fill: #fff;
         stroke: #fff;
         transition: 0.3s;
     }
 
-    .sidebar-nav-item a span {
+    /deep/ .sidebar-nav-item a span {
         display: block;
         width: 100%;
         font-family: Roboto;
@@ -133,13 +129,13 @@
         text-decoration: none;
     }
 
-    .sidebar-nav-item a:hover,
-    .sidebar-nav-item a:hover span {
+    /deep/ .sidebar-nav-item a:hover,
+    /deep/ .sidebar-nav-item a:hover span {
         text-decoration: none;
         color: #fff;
     }
 
-    .sidebar-nav-item-number {
+    /deep/ .sidebar-nav-item-number {
         position: absolute;
         top: -6px;
         right: -9px;
@@ -156,7 +152,7 @@
         font-size: 16px;
     }
 
-    .sidebar-minimizer {
+    /deep/ .sidebar-minimizer {
         width: 52px;
         height: 59px;
         position: absolute;
@@ -168,8 +164,8 @@
         margin-left: -25px;
     }
 
-    .sidebar-minimizer:after,
-    .sidebar-minimizer:before {
+    /deep/ .sidebar-minimizer:after,
+    /deep/ .sidebar-minimizer:before {
         content: "";
         position: absolute;
         width: 3px;
@@ -180,13 +176,13 @@
         transform: rotate(30deg);
     }
 
-    .sidebar-minimizer:after {
+    /deep/ .sidebar-minimizer:after {
         transform: rotate(-30deg);
         top: 26px;
     }
 
-    .header-nav,
-    .header-text {
+    /deep/ .header-nav,
+    /deep/ .header-text {
         display: -ms-flexbox;
         display: flex;
         -ms-flex-direction: row;
@@ -200,24 +196,24 @@
         list-style: none;
     }
 
-    .header-nav {
+    /deep/ .header-nav {
         margin-left: 0;
         margin-right: 39px;
     }
 
-    .header-nav-item {
+    /deep/ .header-nav-item {
         margin: 0 20px;
     }
 
-    .header-nav-item:first-of-type {
+    /deep/ .header-nav-item:first-of-type {
         margin-left: 0;
     }
 
-    .header-nav-item:last-of-type {
+    /deep/ .header-nav-item:last-of-type {
         margin-right: 0;
     }
 
-    .header-logo {
+    /deep/ .header-logo {
         background: url(/img/reso.svg) 0 0 no-repeat;
         display: table;
         width: 150px;
@@ -256,7 +252,7 @@
         flex-grow: 1;
     }
 
-    footer {
+    /deep/ footer {
         display: -ms-flexbox;
         display: flex;
         -ms-flex-wrap: wrap;

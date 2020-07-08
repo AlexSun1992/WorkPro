@@ -16,7 +16,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import HeaderUserName from './HeaderUserName'
+  import HeaderUserName from '../Pages/Cabinet/Header/HeaderUserName'
   import LoginModal from '../Pages/Login/LoginModal'
   export default {
     name: 'header-dropdown',

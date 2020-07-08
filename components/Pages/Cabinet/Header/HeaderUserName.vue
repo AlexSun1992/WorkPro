@@ -1,5 +1,5 @@
 <template>
-    <div>{{user}} <i class="fa fa-chevron-down" aria-hidden="true"></i></div>
+    <div>{{user}}</div>
 </template>
 
 <script>

@@ -6,9 +6,6 @@
             <b-card
               header-tag="header"
               footer-tag="footer">
-              <div slot="header">
-               {{head}}
-              </div>
               <b-button class="mb-2" v-if="isList" v-on:click="refreshCardList" type="submit" variant="primary" v-b-popover.hover.top="'Обновить список'"><i  class="fa fa-refresh"></i></b-button>
               <b-button v-if="isForm && !isAddCardForEdit || isWizard" v-on:click="openCardList" type="submit" variant="primary" v-b-popover.hover.top="'Перейти к списку'"><i  class="fa fa-chevron-left"></i></b-button>
               <card-form  v-if="isForm"  :data="formData" :actions="actionsData" @save-form="saveCardForm" @apply-action="applyCardActionForm"/>
