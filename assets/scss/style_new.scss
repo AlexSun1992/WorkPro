@@ -269,3 +269,55 @@
         background: #fff;
         padding-top: 25px;
     }
+    /deep/ .ppl-info {
+      margin: 44px auto 20px;
+      text-align: center;
+    }
+
+    /deep/ .ppl-info.ppl-female .ppl-avatar {
+      background: url(/img/female.svg) 50% 50% no-repeat;
+    }
+
+    /deep/ .ppl-info.percent70 .ppl-avatar:after {
+      background: url(/img/70percent.svg) 50% 50% no-repeat;
+      background-size: contain;
+      position: absolute;
+      width: 112px;
+      height: 112px;
+      top: 0;
+      left: 0;
+      content: "";
+    }
+
+    /deep/ .ppl-info.percent70 .ppl-avatar:before {
+      content: "70%";
+      position: absolute;
+      right: -29px;
+      top: 1px;
+      height: 24px;
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 20px;
+      line-height: 24px;
+      color: #008B4E;
+    }
+
+    /deep/ .ppl-avatar {
+      width: 112px;
+      height: 112px;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 107px;
+    }
+
+    /deep/ .ppl-name {
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      color: #008B4E;
+      margin-top: 13px;
+      display: block;
+    }

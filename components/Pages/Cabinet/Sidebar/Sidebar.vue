@@ -1,8 +1,10 @@
 <template>
   <div class="sidebar_client">
-    <div class="ppl-info 50percents ppl-male">
-      <img src="">
-      <span clas="ppl-name"><header-user-name :user-data="loggedInUser"></header-user-name></span>
+    <div class="ppl-info percent70 ppl-female">
+      <div class="ppl-avatar">
+        <img src="">
+      </div>
+      <span class="ppl-name"><header-user-name :user-data="loggedInUser"></header-user-name></span>
     </div>
     <ul class="sidebar-nav">
       <li v-for="item in navItems" :key="item.id" class="sidebar-nav-item ">
