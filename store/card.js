@@ -128,6 +128,23 @@ export const actions = {
         commit('setList', res.data);
       })
   },
+  async fetchSuggestions({commit, getters}, params) {
+    let type = params.suggestionType;
+    let key = params.key;
+    delete params.suggestionType;
+    delete params.key;
+    let response = await fetch(`https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Token ${key}`
+        },
+        body: JSON.stringify(params)
+      }); 
+    let result = await response.json();
+    return result.suggestions.map(item => item.value);
+  }
 }
 
 export const mutations = {

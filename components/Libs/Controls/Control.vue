@@ -4,7 +4,7 @@
   </b-col>
 </template>
 <script>
-import ControlString from '~/components/Libs/Controls/ControlString'
+import ControlString from '~/components/Libs/Controls/ControlString/ControlString'
 import ControlText from '~/components/Libs/Controls/ControlText'
 import ControlBoolean from '~/components/Libs/Controls/ControlBoolean'
 import ControlDouble from '~/components/Libs/Controls/ControlDouble'
