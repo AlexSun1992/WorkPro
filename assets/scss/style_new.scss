@@ -136,15 +136,15 @@
     }
     
     /deep/ .sidebar-minimizer {
-        width: 52px;
-        height: 59px;
-        position: absolute;
-        left: 100%;
+        width: 42px;
+        height: 46px;
+        position: fixed;
+        left: 263px;
         top: 70%;
         background: #82B896;
         border-radius: 12px;
         border: 0;
-        margin-left: -30px;
+        margin-left: -15px;
     }
     
     /deep/ .sidebar-minimizer:after,
@@ -154,14 +154,14 @@
         width: 3px;
         height: 16px;
         background-color: #E0F1F0;
-        top: 13px;
-        left: 47%;
+        top: 9px;
+        left: 45%;
         transform: rotate(30deg);
     }
     
     /deep/ .sidebar-minimizer:after {
         transform: rotate(-30deg);
-        top: 26px;
+        top: 22px;
     }
     
     /deep/ .header-nav,
