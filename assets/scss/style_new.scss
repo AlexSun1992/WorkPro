@@ -252,8 +252,11 @@
         background: url(/img/female.svg) 50% 50% no-repeat;
     }
     
-    /deep/ .ppl-info.percent70 .ppl-avatar:after {
-        background: url(/img/70percent.svg) 50% 50% no-repeat;
+    /deep/ .ppl-info.ppl-male .ppl-avatar {
+        background: url(/img/male.svg) 50% 50% no-repeat;
+    }
+    
+    /deep/ .ppl-info .ppl-avatar:after {
         background-size: contain;
         position: absolute;
         width: 112px;
@@ -263,8 +266,63 @@
         content: "";
     }
     
+    /deep/ .ppl-info.percent30 .ppl-avatar:after {
+        background: url(/img/30percent.svg) 50% 50% no-repeat;
+    }
+    
+    /deep/ .ppl-info.percent40 .ppl-avatar:after {
+        background: url(/img/40percent.svg) 50% 50% no-repeat;
+    }
+    
+    /deep/ .ppl-info.percent50 .ppl-avatar:after {
+        background: url(/img/50percent.svg) 50% 50% no-repeat;
+    }
+    
+    /deep/ .ppl-info.percent60 .ppl-avatar:after {
+        background: url(/img/60percent.svg) 50% 50% no-repeat;
+    }
+    
+    /deep/ .ppl-info.percent70 .ppl-avatar:after {
+        background: url(/img/70percent.svg) 50% 50% no-repeat;
+    }
+    
+    /deep/ .ppl-info.percent80 .ppl-avatar:after {
+        background: url(/img/80percent.svg) 50% 50% no-repeat;
+    }
+    
+    /deep/ .ppl-info.percent90 .ppl-avatar:after {
+        background: url(/img/90percent.svg) 50% 50% no-repeat;
+    }
+    
+    /deep/ .ppl-info.percent30 .ppl-avatar:before {
+        content: "30%";
+    }
+    
+    /deep/ .ppl-info.percent40 .ppl-avatar:before {
+        content: "40%";
+    }
+    
+    /deep/ .ppl-info.percent50 .ppl-avatar:before {
+        content: "50%";
+    }
+    
+    /deep/ .ppl-info.percent60 .ppl-avatar:before {
+        content: "60%";
+    }
+    
     /deep/ .ppl-info.percent70 .ppl-avatar:before {
         content: "70%";
+    }
+    
+    /deep/ .ppl-info.percent80 .ppl-avatar:before {
+        content: "80%";
+    }
+    
+    /deep/ .ppl-info.percent90 .ppl-avatar:before {
+        content: "90%";
+    }
+    
+    /deep/ .ppl-info .ppl-avatar:before {
         position: absolute;
         right: -29px;
         top: 1px;
