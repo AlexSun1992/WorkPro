@@ -6,9 +6,8 @@
         Страхование на все случаи жизни
       </div>
       <ul class="header-nav col-auto">
-        <li class="header-nav-item"><a href="">Уведомления</a></li>
-        <li class="header-nav-item"><a href="">Настройки</a></li>
-        <li class="header-nav-item"><a href="">Выход</a></li>
+        <li class="header-nav-item"><button type="button" class="header-nav-notifications" /></li>
+        <li class="header-nav-item"><button type="button" class="header-nav-exit" /></li>
       </ul>
     </div>
   </header>

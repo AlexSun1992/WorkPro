@@ -295,3 +295,27 @@
         margin-top: 13px;
         display: block;
     }
+    
+    /deep/ .header-text {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 30px;
+        line-height: 18px;
+        letter-spacing: 0.02em;
+        color: #008B4E;
+    }
+    
+    /deep/ .header-nav-notifications {
+        width: 30px;
+        height: 30px;
+        border: 0;
+        background: url(/img/notifications.svg) 0 0 no-repeat;
+    }
+    
+    /deep/ .header-nav-exit {
+        width: 30px;
+        height: 30px;
+        border: 0;
+        background: url(/img/exit.svg) 0 0 no-repeat;
+    }
