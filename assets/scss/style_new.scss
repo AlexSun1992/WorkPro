@@ -222,16 +222,11 @@
     }
     
     .body {
-        flex-grow: 1;
+        display: grid;
     }
     
     /deep/ footer {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-        -ms-flex-align: center;
-        align-items: center;
+        display: grid;
         color: #4f5d73;
         border-top: 1px solid #d8dbe0;
         box-sizing: border-box;
@@ -241,6 +236,7 @@
         background: #fff;
         padding-top: 25px;
         padding-bottom: 25px;
+        align-self: end;
     }
     
     /deep/ .ppl-info {
