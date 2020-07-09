@@ -20,6 +20,7 @@
         border-radius: 0px 60px 60px 0px;
         z-index: 1;
         position: relative;
+        min-height: calc(100vh - 80px);
     }
     
     /deep/ header>div {
