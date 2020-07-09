@@ -49,7 +49,9 @@ converter.toTree = (data) => {
       if(!list[map[node.idParent]].children){
         list[map[node.idParent]].children = []
       }
-      list[map[node.idParent]].children.push(node)
+      if(list[map[node.idParent]].children){
+        list[map[node.idParent]].children.push(node)
+      }
     } else {
       roots.push(node)
     }
@@ -92,7 +94,7 @@ converter.menuObject = (data) => {
   obj.edit = data.LEDIT
   obj.delete = data.LDELETE
   obj.cols = data.NCOLCOUNT
-  obj.isCard = !data.LNOTCARD && !data.SVJCARDGRID
+  obj.isCard = data.IDADMMENUTYPE === 3
   obj.wizard =  wizardConverter.wizard(data.WIZARDCUR)
   obj.portalgrid = data.SVJPORTALGRID || null
   obj.cardgrid = data.SVJCARDGRID || null
