@@ -5,7 +5,7 @@
  * Copyright (c) 2018 creativeLabs Łukasz Holeczek
  * @license MIT
  */
-
+    
     // Override Boostrap variables
     @import "bootstrap-variables";
     // Import Bootstrap source files
@@ -13,29 +13,15 @@
     // Custom styles
     @import "custom";
     /deep/ .sidebar_client {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex: 0 0 348px;
-        flex: 0 0 348px;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        -ms-flex-order: -1;
-        order: -1;
-        width: 348px;
         padding: 0;
         box-shadow: none;
         color: #fff;
         background: #CBE0D7;
         border-radius: 0px 60px 60px 0px;
-        transition: box-shadow .3s .15s, margin-left .3s, margin-right .3s, width .3s, z-index 0s ease .3s, -webkit-transform .3s;
-        transition: box-shadow .3s .15s, transform .3s, margin-left .3s, margin-right .3s, width .3s, z-index 0s ease .3s;
-        transition: box-shadow .3s .15s, transform .3s, margin-left .3s, margin-right .3s, width .3s, z-index 0s ease .3s, -webkit-transform .3s;
-        position: fixed;
-        top: 119px;
-        bottom: 0;
-        z-index: 1030;
+        z-index: 1;
+        position: relative;
     }
-
+    
     /deep/ header>div {
         position: relative;
         display: -ms-flexbox;
@@ -46,16 +32,13 @@
         flex-wrap: wrap;
         -ms-flex-negative: 0;
         flex-shrink: 0;
-        height: 119px;
+        height: 80px;
     }
-
+    
     /deep/ header {
-        position: fixed;
-        top: 0;
-        left: 0;
         width: 100%;
     }
-
+    
     /deep/ .sidebar-nav {
         list-style: none;
         display: flex;
@@ -63,78 +46,77 @@
         padding: 0;
         margin: 0;
     }
-
+    
     /deep/ .sidebar-nav-item {
         display: flex;
-        flex: 0 0 116px;
+        flex: 0 0 92px;
         background: #fff;
         border-radius: 18px;
         transition: 0.3s;
         position: relative;
-        margin: 18px 0;
+        margin: 13px 0;
     }
-
+    
     /deep/ .sidebar-nav-item:nth-child(even) {
-        margin-right: 37px;
-        margin-left: 18px;
+        margin-right: 26px;
+        margin-left: 13px;
     }
-
+    
     /deep/ .sidebar-nav-item:nth-child(odd) {
-        margin-right: 19px;
-        margin-left: 37px;
+        margin-right: 13px;
+        margin-left: 26px;
     }
-
+    
     /deep/ .sidebar-nav-item:hover {
         background: #008b4e;
         transition: 0.3s;
     }
-
+    
     /deep/ .sidebar-nav-item a {
-        min-height: 116px;
+        min-height: 92px;
         width: 100%;
         padding: 10px 10px;
         display: flex;
         flex-wrap: wrap;
     }
-
+    
     /deep/ .sidebar-nav-item a svg {
         display: block;
-        height: 40px;
+        height: 32px;
         width: auto;
         margin: 0 auto;
         fill: #008B4E;
         stroke: #008B4E;
         transition: 0.3s;
-        padding: 10px;
+        padding: 0 0 10px;
         box-sizing: content-box;
     }
-
+    
     /deep/ .sidebar-nav-item:hover a svg {
         fill: #fff;
         stroke: #fff;
         transition: 0.3s;
     }
-
+    
     /deep/ .sidebar-nav-item a span {
         display: block;
         width: 100%;
         font-family: Roboto;
         font-style: normal;
-        font-weight: 500;
+        font-weight: normal;
         font-size: 14px;
-        line-height: 16px;
+        line-height: 15px;
         text-align: center;
-        letter-spacing: 0.02em;
-        color: #5A6168;
+        color: #000000;
         text-decoration: none;
     }
-
+    
     /deep/ .sidebar-nav-item a:hover,
     /deep/ .sidebar-nav-item a:hover span {
         text-decoration: none;
         color: #fff;
     }
-
+    
     /deep/ .sidebar-nav-item-number {
         position: absolute;
         top: -6px;
@@ -151,7 +133,7 @@
         font-weight: 500;
         font-size: 16px;
     }
-
+    
     /deep/ .sidebar-minimizer {
         width: 52px;
         height: 59px;
@@ -161,9 +143,9 @@
         background: #82B896;
         border-radius: 12px;
         border: 0;
-        margin-left: -25px;
+        margin-left: -30px;
     }
-
+    
     /deep/ .sidebar-minimizer:after,
     /deep/ .sidebar-minimizer:before {
         content: "";
@@ -175,12 +157,12 @@
         left: 47%;
         transform: rotate(30deg);
     }
-
+    
     /deep/ .sidebar-minimizer:after {
         transform: rotate(-30deg);
         top: 26px;
     }
-
+    
     /deep/ .header-nav,
     /deep/ .header-text {
         display: -ms-flexbox;
@@ -189,55 +171,46 @@
         flex-direction: row;
         -ms-flex-align: center;
         align-items: center;
-        min-height: 119px;
+        min-height: 80px;
         padding: 0;
         margin-bottom: 0;
-        margin-left: 387px;
+        margin-left: 299px;
         list-style: none;
     }
-
+    
     /deep/ .header-nav {
         margin-left: 0;
         margin-right: 39px;
     }
-
+    
     /deep/ .header-nav-item {
         margin: 0 20px;
     }
-
+    
     /deep/ .header-nav-item:first-of-type {
         margin-left: 0;
     }
-
+    
     /deep/ .header-nav-item:last-of-type {
         margin-right: 0;
     }
-
+    
     /deep/ .header-logo {
         background: url(/img/reso.svg) 0 0 no-repeat;
         display: table;
-        width: 150px;
-        height: 43px;
+        width: 139px;
+        height: 40px;
         position: absolute;
-        top: 39px;
+        top: 20px;
         left: 39px;
+        background-size: contain;
     }
-
+    
     .wrapper {
-        transition: margin .3s;
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex: 1;
-        flex: 1;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        min-width: 0;
-        min-height: calc(100vh - 119px);
-        margin-left: 387px;
-        margin-top: 119px;
-        margin-right: 39px;
+        display: grid;
+        grid-template-columns: 263px 1fr;
     }
-
+    
     .main {
         -ms-flex-preferred-size: auto;
         flex-basis: auto;
@@ -247,11 +220,11 @@
         flex-grow: 1;
         min-width: 0;
     }
-
+    
     .body {
         flex-grow: 1;
     }
-
+    
     /deep/ footer {
         display: -ms-flexbox;
         display: flex;
@@ -262,62 +235,63 @@
         color: #4f5d73;
         border-top: 1px solid #d8dbe0;
         box-sizing: border-box;
-        margin-left: -387px;
-        padding-left: 387px;
-        margin-right: -39px;
+        margin-left: -263px;
+        padding-left: 303px;
         padding-right: 39px;
         background: #fff;
         padding-top: 25px;
+        padding-bottom: 25px;
     }
+    
     /deep/ .ppl-info {
-      margin: 44px auto 20px;
-      text-align: center;
+        margin: 44px auto 20px;
+        text-align: center;
     }
-
+    
     /deep/ .ppl-info.ppl-female .ppl-avatar {
-      background: url(/img/female.svg) 50% 50% no-repeat;
+        background: url(/img/female.svg) 50% 50% no-repeat;
     }
-
+    
     /deep/ .ppl-info.percent70 .ppl-avatar:after {
-      background: url(/img/70percent.svg) 50% 50% no-repeat;
-      background-size: contain;
-      position: absolute;
-      width: 112px;
-      height: 112px;
-      top: 0;
-      left: 0;
-      content: "";
+        background: url(/img/70percent.svg) 50% 50% no-repeat;
+        background-size: contain;
+        position: absolute;
+        width: 112px;
+        height: 112px;
+        top: 0;
+        left: 0;
+        content: "";
     }
-
+    
     /deep/ .ppl-info.percent70 .ppl-avatar:before {
-      content: "70%";
-      position: absolute;
-      right: -29px;
-      top: 1px;
-      height: 24px;
-      font-family: Roboto;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 20px;
-      line-height: 24px;
-      color: #008B4E;
+        content: "70%";
+        position: absolute;
+        right: -29px;
+        top: 1px;
+        height: 24px;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 20px;
+        line-height: 24px;
+        color: #008B4E;
     }
-
+    
     /deep/ .ppl-avatar {
-      width: 112px;
-      height: 112px;
-      margin: 0 auto;
-      position: relative;
-      border-radius: 107px;
+        width: 112px;
+        height: 112px;
+        margin: 0 auto;
+        position: relative;
+        border-radius: 107px;
     }
-
+    
     /deep/ .ppl-name {
-      font-family: Roboto;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 24px;
-      color: #008B4E;
-      margin-top: 13px;
-      display: block;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        color: #008B4E;
+        margin-top: 13px;
+        display: block;
     }
