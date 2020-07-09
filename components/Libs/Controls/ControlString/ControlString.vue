@@ -1,15 +1,18 @@
 <template>
     <b-form-group   class="mb-0"  :label="label">
-      <b-form-input v-model="data.value" :disabled="!edit" :required="data.required" :state="data.state"></b-form-input>
-      <b-form-invalid-feedback>
-        Обязательно для заполнения
-      </b-form-invalid-feedback>
+      <string-autocomplete
+        :data="data"
+        :edit="edit"
+        @update="data.value=$event"
+      ></string-autocomplete>
     </b-form-group>
 </template>
 
 <script>
+import StringAutocomplete from './StringAutocomplete'
 export default {
   name: 'ControlString',
+  components: { StringAutocomplete },
   props: {
     data: {
       type: Object,

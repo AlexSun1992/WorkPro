@@ -27,9 +27,12 @@ export default {
       default: () => 1
     }
   },
+  created() {
+    this.fields = this.data;
+  },
   computed: {
     items: function () {
-      return this.data.filter(function (item) {
+      return this.fields.filter(function (item) {
         return item.visible && item.type != 'Button';
       })
     }
