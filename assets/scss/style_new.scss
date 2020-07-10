@@ -76,20 +76,20 @@
     /deep/ .sidebar-nav-item a {
         min-height: 92px;
         width: 100%;
-        padding: 10px 10px;
+        padding: 10px 3px;
         display: flex;
         flex-wrap: wrap;
     }
     
     /deep/ .sidebar-nav-item a svg {
         display: block;
-        height: 32px;
+        height: 35px;
         width: auto;
         margin: 0 auto;
         fill: #008B4E;
         stroke: #008B4E;
         transition: 0.3s;
-        padding: 0 0 10px;
+        padding: 0 0 5px;
         box-sizing: content-box;
     }
     
@@ -105,8 +105,9 @@
         font-family: Roboto;
         font-style: normal;
         font-weight: normal;
-        font-size: 14px;
+        font-size: 13px;
         line-height: 15px;
+        font-weight: 500;
         text-align: center;
         color: #000000;
         text-decoration: none;
@@ -136,15 +137,15 @@
     }
     
     /deep/ .sidebar-minimizer {
-        width: 42px;
-        height: 46px;
+        width: 38px;
+        height: 42px;
         position: fixed;
         left: 263px;
-        top: 70%;
+        top: 92%;
         background: #82B896;
         border-radius: 12px;
         border: 0;
-        margin-left: -15px;
+        margin-left: -17px;
     }
     
     /deep/ .sidebar-minimizer:after,
@@ -152,16 +153,16 @@
         content: "";
         position: absolute;
         width: 3px;
-        height: 16px;
+        height: 14px;
         background-color: #E0F1F0;
-        top: 9px;
+        top: 8px;
         left: 45%;
         transform: rotate(30deg);
     }
     
     /deep/ .sidebar-minimizer:after {
         transform: rotate(-30deg);
-        top: 22px;
+        top: 20px;
     }
     
     /deep/ .header-nav,
@@ -247,17 +248,19 @@
     
     /deep/ .ppl-info.ppl-female .ppl-avatar {
         background: url(/img/female.svg) 50% 50% no-repeat;
+        background-size: 50%;
     }
     
     /deep/ .ppl-info.ppl-male .ppl-avatar {
         background: url(/img/male.svg) 50% 50% no-repeat;
+        background-size: 50%;
     }
     
     /deep/ .ppl-info .ppl-avatar:after {
         background-size: contain;
         position: absolute;
-        width: 112px;
-        height: 112px;
+        width: 84px;
+        height: 84px;
         top: 0;
         left: 0;
         content: "";
@@ -265,30 +268,37 @@
     
     /deep/ .ppl-info.percent30 .ppl-avatar:after {
         background: url(/img/30percent.svg) 50% 50% no-repeat;
+        background-size: contain;
     }
     
     /deep/ .ppl-info.percent40 .ppl-avatar:after {
         background: url(/img/40percent.svg) 50% 50% no-repeat;
+        background-size: contain;
     }
     
     /deep/ .ppl-info.percent50 .ppl-avatar:after {
         background: url(/img/50percent.svg) 50% 50% no-repeat;
+        background-size: contain;
     }
     
     /deep/ .ppl-info.percent60 .ppl-avatar:after {
         background: url(/img/60percent.svg) 50% 50% no-repeat;
+        background-size: contain;
     }
     
     /deep/ .ppl-info.percent70 .ppl-avatar:after {
         background: url(/img/70percent.svg) 50% 50% no-repeat;
+        background-size: contain;
     }
     
     /deep/ .ppl-info.percent80 .ppl-avatar:after {
         background: url(/img/80percent.svg) 50% 50% no-repeat;
+        background-size: contain;
     }
     
     /deep/ .ppl-info.percent90 .ppl-avatar:after {
         background: url(/img/90percent.svg) 50% 50% no-repeat;
+        background-size: contain;
     }
     
     /deep/ .ppl-info.percent30 .ppl-avatar:before {
@@ -321,7 +331,7 @@
     
     /deep/ .ppl-info .ppl-avatar:before {
         position: absolute;
-        right: -29px;
+        right: -37px;
         top: 1px;
         height: 24px;
         font-family: Roboto;
@@ -333,8 +343,8 @@
     }
     
     /deep/ .ppl-avatar {
-        width: 112px;
-        height: 112px;
+        width: 84px;
+        height: 84px;
         margin: 0 auto;
         position: relative;
         border-radius: 107px;
@@ -373,4 +383,176 @@
         height: 30px;
         border: 0;
         background: url(/img/exit.svg) 0 0 no-repeat;
+    }
+    
+    /deep/ .block-notification {
+        background: #FFFFFF;
+        border: 1px solid #EAF1F7;
+        box-sizing: border-box;
+        border-radius: 24px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    /deep/ .block-notification-item:hover {
+        background: #F3F8FB;
+    }
+    
+    /deep/ .block-notification-item:hover:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 32px;
+        width: calc(100% - 79px);
+        height: 1px;
+        border: 0.6px dashed rgba(0, 0, 0, 0.16);
+    }
+    
+    /deep/ .block-notification-item:hover:before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 32px;
+        width: calc(100% - 79px);
+        border-top: 0.6px dashed rgba(0, 0, 0, 0.16);
+    }
+    
+    /deep/ .block-notification-item {
+        cursor: pointer;
+        min-height: 57px;
+        padding-left: 32px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        display: grid;
+        grid-template-columns: 23px auto auto;
+        grid-gap: 21px;
+        position: relative;
+    }
+    
+    /deep/ .block-notification-btn {
+        padding-right: 27px;
+        text-align: right;
+        align-self: center;
+        line-height: 0;
+        display: table;
+    }
+    
+    /deep/ .block-notification-item svg {
+        fill: #20A668;
+        align-self: center;
+    }
+    
+    /deep/ .block-notification-item:hover svg {
+        fill: #878B8F;
+    }
+    
+    /deep/ .block-notification-item-text {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        color: #20A668;
+        align-self: center;
+    }
+    
+    /deep/ .block-notification-item:hover .block-notification-item-text {
+        color: #363D44;
+    }
+    
+    /deep/ .block-title {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 22px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        color: #363D44;
+        padding-left: 32px;
+        padding-top: 24px;
+        margin-bottom: 16px;
+    }
+    
+    /deep/ .block-notification-btn button {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    
+    /deep/ .block-notification-btn button:not(.notification-close) {
+        background: #22A66A;
+        box-shadow: 2px 8px 32px rgba(91, 206, 150, 0.35);
+        border-radius: 50px;
+        font-family: Open Sans, sans-serif;
+        font-weight: bold;
+        font-size: 10px;
+        line-height: 40px;
+        text-align: center;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        padding: 0 20px;
+        border: 0;
+    }
+    
+    /deep/ .block-notification-btn button.notification-close {
+        background: transparent;
+        width: 20px;
+        height: 20px;
+        position: relative;
+        line-height: 40px;
+        border: 0;
+        border-radius: 20px;
+        padding: 0;
+    }
+    
+    /deep/ .block-notification-btn button.notification-close div {
+        display: none;
+    }
+    
+    /deep/ .block-notification-btn button+button.notification-close {
+        margin-left: 40px;
+    }
+    
+    /deep/ .block-notification-btn button.notification-close:after,
+    /deep/ .block-notification-btn button.notification-close:before {
+        content: "";
+        width: 20px;
+        height: 1.7px;
+        background-color: rgba(122, 122, 122, 0.6);
+        position: absolute;
+        top: 8px;
+        transform: rotate(45deg);
+        left: -1px;
+    }
+    
+    /deep/ .block-notification-btn button.notification-close:after {
+        transform: rotate(-45deg);
+    }
+    
+    /deep/ .block-notification-footer {
+        min-height: 57px;
+        padding: 0 27px 0 32px;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    
+    /deep/ .block-notification-footer a {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        letter-spacing: 0.02em;
+        color: rgba(54, 61, 68, 0.6);
+        text-decoration: none;
+    }
+    
+    /deep/ .block-notification-footer a:hover {
+        text-decoration: underline;
+    }
+    
+    /deep/ .link-arrow-right i {
+        width: 12px;
+        background: url(/img/arrow-right.svg)50% 50% no-repeat;
+        padding-left: 40px;
     }
