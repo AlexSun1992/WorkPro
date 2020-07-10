@@ -71,7 +71,7 @@ export function createRouter() {
         meta: 'Cabinet',
         path: '/cabinet',
         component: Cabinet,
-        redirect: '/cabinet/dashboard',
+        redirect: '/cabinet/55/0/701',
         children: [
           {
             meta: 'Cabinet',
