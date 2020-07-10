@@ -5,7 +5,7 @@
  * Copyright (c) 2018 creativeLabs Łukasz Holeczek
  * @license MIT
  */
-    
+
     // Override Boostrap variables
     @import "bootstrap-variables";
     // Import Bootstrap source files
@@ -22,7 +22,7 @@
         position: relative;
         min-height: calc(100vh - 80px);
     }
-    
+
     /deep/ header>div {
         position: relative;
         display: -ms-flexbox;
@@ -35,11 +35,11 @@
         flex-shrink: 0;
         height: 80px;
     }
-    
+
     /deep/ header {
         width: 100%;
     }
-    
+
     /deep/ .sidebar-nav {
         list-style: none;
         display: flex;
@@ -47,7 +47,7 @@
         padding: 0;
         margin: 0;
     }
-    
+
     /deep/ .sidebar-nav-item {
         display: flex;
         flex: 0 0 92px;
@@ -57,22 +57,26 @@
         position: relative;
         margin: 13px 0;
     }
-    
+
     /deep/ .sidebar-nav-item:nth-child(even) {
         margin-right: 26px;
         margin-left: 13px;
     }
-    
+
     /deep/ .sidebar-nav-item:nth-child(odd) {
         margin-right: 13px;
         margin-left: 26px;
     }
-    
+
     /deep/ .sidebar-nav-item:hover {
         background: #008b4e;
         transition: 0.3s;
     }
-    
+
+    /deep/ .sidebar-nav-item.active {
+      background: #008b4e;
+    }
+
     /deep/ .sidebar-nav-item a {
         min-height: 92px;
         width: 100%;
@@ -80,7 +84,7 @@
         display: flex;
         flex-wrap: wrap;
     }
-    
+
     /deep/ .sidebar-nav-item a svg {
         display: block;
         height: 35px;
@@ -92,13 +96,19 @@
         padding: 0 0 5px;
         box-sizing: content-box;
     }
-    
+
     /deep/ .sidebar-nav-item:hover a svg {
         fill: #fff;
         stroke: #fff;
         transition: 0.3s;
     }
-    
+
+    /deep/ .sidebar-nav-item.active a svg {
+      fill: #fff;
+      stroke: #fff;
+      transition: 0.3s;
+    }
+
     /deep/ .sidebar-nav-item a span {
         display: block;
         width: 100%;
@@ -112,13 +122,17 @@
         color: #000000;
         text-decoration: none;
     }
-    
+
     /deep/ .sidebar-nav-item a:hover,
     /deep/ .sidebar-nav-item a:hover span {
         text-decoration: none;
         color: #fff;
     }
-    
+    /deep/ .sidebar-nav-item.active a span {
+      text-decoration: none;
+      color: #fff;
+    }
+
     /deep/ .sidebar-nav-item-number {
         position: absolute;
         top: -6px;
@@ -135,7 +149,7 @@
         font-weight: 500;
         font-size: 16px;
     }
-    
+
     /deep/ .sidebar-minimizer {
         width: 38px;
         height: 42px;
@@ -147,7 +161,7 @@
         border: 0;
         margin-left: -17px;
     }
-    
+
     /deep/ .sidebar-minimizer:after,
     /deep/ .sidebar-minimizer:before {
         content: "";
@@ -159,12 +173,12 @@
         left: 45%;
         transform: rotate(30deg);
     }
-    
+
     /deep/ .sidebar-minimizer:after {
         transform: rotate(-30deg);
         top: 20px;
     }
-    
+
     /deep/ .header-nav,
     /deep/ .header-text {
         display: -ms-flexbox;
@@ -179,24 +193,24 @@
         margin-left: 299px;
         list-style: none;
     }
-    
+
     /deep/ .header-nav {
         margin-left: 0;
         margin-right: 39px;
     }
-    
+
     /deep/ .header-nav-item {
         margin: 0 20px;
     }
-    
+
     /deep/ .header-nav-item:first-of-type {
         margin-left: 0;
     }
-    
+
     /deep/ .header-nav-item:last-of-type {
         margin-right: 0;
     }
-    
+
     /deep/ .header-logo {
         background: url(/img/reso.svg) 0 0 no-repeat;
         display: table;
@@ -207,12 +221,12 @@
         left: 39px;
         background-size: contain;
     }
-    
+
     .wrapper {
         display: grid;
         grid-template-columns: 263px 1fr;
     }
-    
+
     .main {
         -ms-flex-preferred-size: auto;
         flex-basis: auto;
@@ -222,11 +236,11 @@
         flex-grow: 1;
         min-width: 0;
     }
-    
+
     .body {
         display: grid;
     }
-    
+
     /deep/ footer {
         display: grid;
         color: #4f5d73;
@@ -240,22 +254,22 @@
         padding-bottom: 25px;
         align-self: end;
     }
-    
+
     /deep/ .ppl-info {
         margin: 44px auto 20px;
         text-align: center;
     }
-    
+
     /deep/ .ppl-info.ppl-female .ppl-avatar {
         background: url(/img/female.svg) 50% 50% no-repeat;
         background-size: 50%;
     }
-    
+
     /deep/ .ppl-info.ppl-male .ppl-avatar {
         background: url(/img/male.svg) 50% 50% no-repeat;
         background-size: 50%;
     }
-    
+
     /deep/ .ppl-info .ppl-avatar:after {
         background-size: contain;
         position: absolute;
@@ -265,70 +279,70 @@
         left: 0;
         content: "";
     }
-    
+
     /deep/ .ppl-info.percent30 .ppl-avatar:after {
         background: url(/img/30percent.svg) 50% 50% no-repeat;
         background-size: contain;
     }
-    
+
     /deep/ .ppl-info.percent40 .ppl-avatar:after {
         background: url(/img/40percent.svg) 50% 50% no-repeat;
         background-size: contain;
     }
-    
+
     /deep/ .ppl-info.percent50 .ppl-avatar:after {
         background: url(/img/50percent.svg) 50% 50% no-repeat;
         background-size: contain;
     }
-    
+
     /deep/ .ppl-info.percent60 .ppl-avatar:after {
         background: url(/img/60percent.svg) 50% 50% no-repeat;
         background-size: contain;
     }
-    
+
     /deep/ .ppl-info.percent70 .ppl-avatar:after {
         background: url(/img/70percent.svg) 50% 50% no-repeat;
         background-size: contain;
     }
-    
+
     /deep/ .ppl-info.percent80 .ppl-avatar:after {
         background: url(/img/80percent.svg) 50% 50% no-repeat;
         background-size: contain;
     }
-    
+
     /deep/ .ppl-info.percent90 .ppl-avatar:after {
         background: url(/img/90percent.svg) 50% 50% no-repeat;
         background-size: contain;
     }
-    
+
     /deep/ .ppl-info.percent30 .ppl-avatar:before {
         content: "30%";
     }
-    
+
     /deep/ .ppl-info.percent40 .ppl-avatar:before {
         content: "40%";
     }
-    
+
     /deep/ .ppl-info.percent50 .ppl-avatar:before {
         content: "50%";
     }
-    
+
     /deep/ .ppl-info.percent60 .ppl-avatar:before {
         content: "60%";
     }
-    
+
     /deep/ .ppl-info.percent70 .ppl-avatar:before {
         content: "70%";
     }
-    
+
     /deep/ .ppl-info.percent80 .ppl-avatar:before {
         content: "80%";
     }
-    
+
     /deep/ .ppl-info.percent90 .ppl-avatar:before {
         content: "90%";
     }
-    
+
     /deep/ .ppl-info .ppl-avatar:before {
         position: absolute;
         right: -37px;
@@ -341,7 +355,7 @@
         line-height: 24px;
         color: #008B4E;
     }
-    
+
     /deep/ .ppl-avatar {
         width: 84px;
         height: 84px;
@@ -349,7 +363,7 @@
         position: relative;
         border-radius: 107px;
     }
-    
+
     /deep/ .ppl-name {
         font-family: Roboto;
         font-style: normal;
@@ -360,7 +374,7 @@
         margin-top: 13px;
         display: block;
     }
-    
+
     /deep/ .header-text {
         font-family: Roboto;
         font-style: normal;
@@ -370,14 +384,14 @@
         letter-spacing: 0.02em;
         color: #008B4E;
     }
-    
+
     /deep/ .header-nav-notifications {
         width: 30px;
         height: 30px;
         border: 0;
         background: url(/img/notifications.svg) 0 0 no-repeat;
     }
-    
+
     /deep/ .header-nav-exit {
         width: 30px;
         height: 30px;
