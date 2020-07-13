@@ -1,5 +1,5 @@
 <template>
-  <b-col :xl="col" lg="12" md="12" sm="12">
+  <b-col :xl="col" :lg="data.cols" md="12" sm="12">
     <component  v-bind:is="comp"  v-bind:data="data" v-bind:edit="edit"></component>
   </b-col>
 </template>

@@ -42,30 +42,24 @@ converter.form = (data) => {
   webFields = webFields.sort((a, b) => a['NORDER'] - b['NORDER']);
   
   for (let i = 0; i < webFields.length; i++) {
-    let obj = {}
+    let obj = {};
     obj.label = webFields[i].SCAPTION;
     obj.value = item[webFields[i].SNAME];
     obj.type = webFields[i].STYPE;
 
     if (obj.type === 'DateTime') {
       obj.type = 'timestamp';
-    } else if (obj.type === 'Int64' && webFields[i].IDCONTROL == 15) {
-      obj.type = 'string';
-    } else if (obj.type === 'Int64') {
-      obj.type = 'long';
-    } else if (obj.type === 'String' && webFields[i].IDCONTROL == 16) {
+    } else if (webFields[i].IDCONTROL == 16) {
       obj.type = 'boolean';
-    } else if (obj.type === 'String' && webFields[i].IDCONTROL == 15) {
-      obj.type = 'enum';
-    } else if (obj.type === 'Decimal' && webFields[i].LDIC == 'Y') {
-      obj.type = 'enum';
-    } else if (obj.type === 'Decimal' && webFields[i].LDIC == 'N') {
+    } else if (obj.type === 'Decimal') {
       obj.type = 'string';
     } 
     
-    obj.name = webFields[i].SNAME
+    obj.cols = webFields[i].NCOLSPAN;
+    obj.width = webFields[i].NWIDTH;
+    obj.name = webFields[i].SNAME;
     obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
-    obj.required = webFields[i].REQUIRED === 'N' ? false : true;
+    obj.required = webFields[i].LREQUIRED === 'N' ? false : true;
     obj.page = webFields[i].NPAGE
     obj.control = null
     obj.state = null
