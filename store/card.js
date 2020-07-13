@@ -85,13 +85,33 @@ export const actions = {
         'data': []
       };
     });
+
     fields.forEach(item => {
       tabs[item.page]['data'].push(item);
+    });
+    tabs.forEach(tab => {
+      let obj = {};
+      let cols = [];
+      obj.title = tab.title;
+      tab.data.forEach(field => {
+        cols.push(field.cols);
+      });
+      obj.maxCol = Math.max(...cols);
+      tab.data.forEach(field => {
+        // field.cols = field.cols*12/obj.maxCol;
+        if (field.width == 0) {
+          field.width = 100;
+        }
+        field.cols = Math.ceil((field.cols/obj.maxCol) * (field.width/100) * 12);
+      });
     });
     commit('setWizardData', tabs);
     commit('setShowWizard', true);
     commit('setShowFilter', false);
     commit('setShowList', false);
+  },
+  updateWizard({commit, getters}, params) {
+    commit('setWizardData', params);
   },
   
   async applyFilter ({commit, dispatch, getters}, filters) {
