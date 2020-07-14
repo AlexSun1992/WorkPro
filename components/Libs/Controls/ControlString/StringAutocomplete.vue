@@ -55,7 +55,6 @@ export default {
       return index === this.current;
     },
     suggestionClick(index) {
-      debugger
       this.open = false;
       if (!index) return;
       this.$emit("update", this.suggestions[index]);
@@ -91,7 +90,6 @@ export default {
 <style scoped>
 .autocomplete {
   position: relative;
-  width: 70%;
 }
 .dropdown-menu {
   display: block;
