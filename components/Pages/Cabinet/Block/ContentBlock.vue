@@ -1,7 +1,7 @@
 <template>
-  <b-row>
+  <div>
       <slot v-for="item in dataContent.items"  name="data" v-bind:content="item"></slot>
-  </b-row>
+  </div>
 </template>
 
 <script>

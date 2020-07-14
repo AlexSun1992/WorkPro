@@ -1,3 +1,4 @@
+
 <template>
   <div class="app">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,6 +18,7 @@
 </template>
 <script>
     import Header from '~/components/Pages/Cabinet/Header/Header'
+    import Notification from '~/components/Pages/Cabinet/Notification/Notification'
     import Footer from '~/components/Pages/Cabinet/Footer/Footer'
     import Sidebar from '~/components/Pages/Cabinet/Sidebar/Sidebar'
     import breadcrumbs from '~/converters/breadcrumbs'
@@ -29,7 +31,8 @@
         components: {
             Header,
             Sidebar,
-            Footer
+            Footer,
+            Notification
         },
         mounted() {
             // this.$store.dispatch('menu/fetchMenu', this.$route.params)
