@@ -1,5 +1,5 @@
 <template>
-  <div class="block-notification">
+  <div class="block  bg-white block-border-one">
     <div class="block-title">
       Eведомления
     </div>
@@ -39,7 +39,7 @@
         <button type="button" class="notification-close"><div>Отметить как прочтенное</div></button>
       </div>
     </div>
-    <div class="block-notification-footer row justify-content-between align-items-center">
+    <div class="block-footer bg-white row justify-content-between align-items-center">
       <a href="/" class="col-auto link-arrow-right">Отметить как прочитанное<i></i></a>
       <a href="/" class="col-auto link-arrow-right">Посмотреть все уведомления<i></i></a>
     </div>
