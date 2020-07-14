@@ -1,3 +1,4 @@
+
 <template>
   <div class="app">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -7,7 +8,6 @@
       <div class="body">
         <main class="main">
           <div class="container-fluid">
-            <Notification/>
             <nuxt/>
           </div>
         </main>
