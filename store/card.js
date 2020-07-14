@@ -137,6 +137,12 @@ export const actions = {
         commit('setCardId', resp.data.ID)
       })
   },
+  async saveProfile ({commit, dispatch, getters}, form) {
+    await this.$axios.post(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/125`, form)
+      .then(async resp => {
+        commit('setCardId', resp.data.ID)
+      })
+  },
   async fetchList ({commit, getters}) {
     const page = getters['page'];
     const jsonFilters = JSON.stringify(getters['filters']);

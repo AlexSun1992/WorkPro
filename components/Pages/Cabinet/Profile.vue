@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <slot :content="wizardData" :actions="actions"></slot>
+  <div v-if="show">
+    <slot :content="wizardData" :saveProfile="saveProfile" :cancel="cancel" :actions="actions"></slot>
   </div>
 </template>
 
@@ -14,7 +14,13 @@ export default {
       default: () => {}
     }
   },
+  data() {
+    return {
+      show: true
+    }
+  },
   created() {
+    console.log('reloaded')
     this.$store.dispatch('card/setCard', this.params);
     this.fetchWizard();
   },
@@ -36,11 +42,46 @@ export default {
       };
       this.$store.dispatch("card/fetchWizard", params);
     },
-    saveForm() {
-
+    validateData(data) {
+      let valid = true
+      for (let i = 0; i < data.length; i++) {
+        let value = data[i].type === 'enum' ? data[i].value.value : data[i].value
+        data[i].checked = true
+        if (data[i].required && !value && data[i].type !== 'boolean') {
+          data[i].state = false
+          valid = false
+        }
+      }
+      return valid
+    },
+    saveProfile() {
+      let fields = [];
+      for (let i = 0; i < this.wizardData.length; i++) {
+        fields.push(...this.$children[0].$children[i].$children[0].items);
+      }
+      if(this.validateData(fields)){
+        try {
+          this.$store.dispatch('card/saveProfile', fields);
+          this.$bvToast.toast('Успешно сохранено', {
+            title: ``,
+            variant: 'success',
+            solid: true
+          })
+        } catch(err) {
+          this.$bvToast.toast(err.response.data.MESSAGE, {
+            title: `Ошибка`,
+            variant: 'danger',
+            noAutoHide: true,
+            solid: true
+          })
+        }
+      }
     },
     cancel() {
-      
+      this.show = false;
+      this.$nextTick(() => {
+        this.show = true;
+      })
     }
   }
 };
