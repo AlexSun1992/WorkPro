@@ -559,7 +559,7 @@
         position: relative;
     }
     
-    /deep/ .block-footer a {
+    /deep/ .block-footer button {
         font-family: Roboto;
         font-style: normal;
         font-weight: normal;
@@ -569,14 +569,24 @@
         letter-spacing: 0.02em;
         color: rgba(54, 61, 68, 0.6);
         text-decoration: none;
+        background: transparent;
+        border: 0;
+        padding-left: 0;
+        padding-right: 20px;
+        position: relative;
     }
     
-    /deep/ .block-footer a:hover {
+    /deep/ .block-footer button:hover {
         text-decoration: underline;
     }
     
-    /deep/ .link-arrow-right i {
+    /deep/ .block-footer button:after {
+        content: "";
         width: 12px;
+        height: 12px;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
         background: url(/img/arrow-right.svg)50% 50% no-repeat;
-        padding-left: 40px;
+        position: absolute;
     }
