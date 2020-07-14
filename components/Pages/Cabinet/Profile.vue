@@ -35,6 +35,12 @@ export default {
         wizard: null
       };
       this.$store.dispatch("card/fetchWizard", params);
+    },
+    saveForm() {
+
+    },
+    cancel() {
+      
     }
   }
 };

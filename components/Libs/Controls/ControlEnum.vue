@@ -1,6 +1,6 @@
 <template>
   <span  @click="onfocus">
-    <b-form-group   :label="data.label">
+    <b-form-group :label="data.label" :class="{required: data.required}">
       <model-list-select  :list="options"
                          option-value="value"
                          option-text="text"
@@ -85,6 +85,11 @@ export default {
     margin-top: 0.25rem;
     font-size: 80%;
     color: #f86c6b;
+  }
+
+  .required > legend:after {
+    content: '*';
+    color: red;
   }
 
 </style>
