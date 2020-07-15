@@ -13,23 +13,17 @@
   import PolicyBlock from '../Block/PolicyBlock'
   import ContentBlock from '../Block/ContentBlock'
   import ActionButton from '../Block/ActionButton'
-  import Profile from '../Profile'
-  import Form from '~/components/Libs/Form/Form'
+  import Profile from '../Profile/Profile'
   import OpenCardButton from '../Block/OpenCardButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'Wizard',
-    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, Profile, Form},
+    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, Profile},
     props: {
       params: {
         type: Object,
         required: true,
         default: () => {}
-      }
-    },
-    data() {
-      return {
-        editForm: true
       }
     },
     computed: {
