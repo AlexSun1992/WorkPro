@@ -36,13 +36,10 @@ export default {
       fields: null
     }
   },
-  created() {
-    this.fields = this.data;
-  },
   computed: {
     items: function () {
-      return this.fields.filter(function (item) {
-        return item.visible && item.type != 'Button';
+      return this.data.filter(function (item) {
+        return item.visible;
       })
     }
   }
