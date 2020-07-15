@@ -25,6 +25,15 @@ export default {
       type: Number,
       required: false,
       default: () => 1
+    },
+    show: {
+      type: Boolean,
+      required: false
+    },
+  },
+  data() {
+    return {
+      fields: null
     }
   },
   created() {
