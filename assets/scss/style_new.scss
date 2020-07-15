@@ -411,12 +411,36 @@
         border: 1px solid #EAF1F7;
     }
     
+    /deep/ .block-border-two {
+        border: 1px solid #EAF1F7;
+    }
+    
     /deep/ .bg-white {
         background: #FFFFFF;
     }
     
+    /deep/ .bg-one {
+        background: #EEF4F5;
+    }
+    
+    /deep/ .bg-two {
+        background: #F3D9D3;
+    }
+    
+    /deep/ .bg-tree {
+        background: #D8E5EF;
+    }
+    
+    /deep/ .bg-for {
+        background: #DBEFE6;
+    }
+    
     /deep/ .block-notification-item:hover {
         background: #F3F8FB;
+    }
+    
+    /deep/ .block-mypolicies-item:hover {
+        background: #fff;
     }
     /* /deep/ .block-notification-item:hover:after {
         content: "";
@@ -429,6 +453,7 @@
     }
     */
     
+    /deep/ .block-mypolicies-item:before,
     /deep/ .block-notification-item:before {
         content: "";
         position: absolute;
@@ -438,20 +463,32 @@
         border-top: 0.6px dashed rgba(0, 0, 0, 0.16);
     }
     
+    /deep/ .block-mypolicies-item {
+        cursor: pointer;
+        min-height: 57px;
+        padding: 10px 30px;
+        display: grid;
+        grid-template-columns: 23px 50px auto auto 98px 23px;
+        grid-gap: 15px;
+        position: relative;
+    }
+    
+    /deep/ .block-mypolicies-item>div {
+        align-self: center;
+    }
+    
     /deep/ .block-notification-item {
         cursor: pointer;
         min-height: 57px;
-        padding-left: 32px;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding: 10px 30px;
         display: grid;
         grid-template-columns: 23px auto auto;
         grid-gap: 21px;
         position: relative;
     }
     
+    /deep/ .block-btn,
     /deep/ .block-notification-btn {
-        padding-right: 27px;
         text-align: right;
         align-self: center;
         line-height: 0;
@@ -464,6 +501,38 @@
     }
     
     /deep/ .block-notification-item:hover svg {
+        fill: #878B8F;
+    }
+    
+    /deep/ .block-notification-item-text {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        color: #20A668;
+        align-self: center;
+    }
+    
+    /deep/ .block-notification-item:hover .block-notification-item-text {
+        color: #363D44;
+    }
+    
+    /deep/ .block-title {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 22px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        color: #363D44;
+        padding-left: 32px;
+        padding-top: 24px;
+        margin-bottom: 16px;
+    }
+    
+    /deep/ .block-notificationotification-item:hover svg {
         fill: #878B8F;
     }
     
@@ -589,4 +658,58 @@
         transform: translateY(-50%);
         background: url(/img/arrow-right.svg)50% 50% no-repeat;
         position: absolute;
+    }
+    
+    /deep/ .block-mypolicies-item-object {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: #008B4E;
+    }
+    
+    /deep/ .block-mypolicies-item-number {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: #008B4E;
+    }
+    
+    /deep/ .block-mypolicies-item-name {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: #363D44;
+    }
+    
+    /deep/ .block-mypolicies-date {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        color: #000000;
+    }
+    
+    /deep/ .arrow-right-bold {
+        width: 13px;
+        height: 12px;
+        border: 0;
+        background: url(/img/arrow-right-bold.svg) 50% 50% no-repeat;
+    }
+    
+    /deep/ .arrow-right-bold>div {
+        display: none;
     }
