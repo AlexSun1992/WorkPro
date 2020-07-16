@@ -16,13 +16,15 @@ export const state = () => ({
   isListLoading: false,
   componentType: null,
   cardId: 0,
-  wizardData: null
+  wizardData: null,
+  modalForm: null
 })
 
 export const getters = {
   page: state => state.page,
   list: state => state.list,
   form: state => state.form,
+  modalForm: state => state.modalForm,
   filters: state => state.filters,
   actions: state => state.actions,
   isForm: state => state.showForm,
@@ -74,6 +76,28 @@ export const actions = {
         commit('setForm', res.data.data);
       })
   },
+  async fetchModalForm ({commit, getters}, id) {
+    await this.$axios.get(`/api/card/${getters['page'].idModule}/${id}/0`)
+      .then((res) => {
+        // Вынести в общую функцию
+        let cols = [];
+        res.data.metaData.data.forEach(field => {
+          cols.push(field.cols);
+        });
+        let maxCol = Math.max(...cols);
+        res.data.metaData.data.forEach(field => {
+          // field.cols = field.cols*12/obj.maxCol;
+          if (field.width == 0) {
+            field.width = 100;
+          }
+          field.cols = Math.ceil((field.cols/maxCol) * (field.width/100) * 12);
+        });
+        commit('setModalForm', res.data.metaData.data);
+      })
+  },
+  clearModalForm({commit, getters}) {
+    commit('clearModalForm');
+  },
   async fetchWizard ({commit, getters}, params) {
     let card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${params.id}`);
     let captions = card.data.metaData.captions.split(';');
@@ -85,7 +109,7 @@ export const actions = {
         'data': []
       };
     });
-
+    // Вынести в общую функцию (см. выше)
     fields.forEach(item => {
       tabs[item.page]['data'].push(item);
     });
@@ -227,5 +251,11 @@ export const mutations = {
   },
   setWizardData(state, data) {
     state.wizardData = data
+  },
+  setModalForm(state, data) {
+    state.modalForm = data
+  },
+  clearModalForm(state, data) {
+    state.modalForm = null;
   }
 }

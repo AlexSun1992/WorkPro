@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form-row>
-      <Control  v-for='(item, index) in items' :key='index' v-bind:data="item" v-bind:edit="edit" :cols="cols"></Control>
+      <Control  v-for='(item, index) in items' @modal="$emit('modal', $event)" :key='index' v-bind:data="item" v-bind:edit="edit" :cols="cols"></Control>
     </b-form-row>
   </div>
 </template>
@@ -25,22 +25,15 @@ export default {
       type: Number,
       required: false,
       default: () => 1
-    },
-    show: {
-      type: Boolean,
-      required: false
-    },
-  },
-  data() {
-    return {
-      fields: null
     }
   },
   computed: {
     items: function () {
-      return this.data.filter(function (item) {
-        return item.visible;
-      })
+      if (this.data) {
+        return this.data.filter(function (item) {
+          return item.visible;
+        })
+      }
     }
   }
 }
