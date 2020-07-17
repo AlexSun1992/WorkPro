@@ -1,12 +1,29 @@
 <template>
-  <div v-if="show">
-    <slot :content="wizardData" :saveProfile="saveProfile" :cancel="cancel" :actions="actions"></slot>
+  <div>
+    <b-tabs v-if="wizardData" content-class="mt-3">
+      <div v-for="(item, i) in wizardData" :key="i">
+        <b-tab :title="item.title">
+          <profile-form ref="profile-form" :data="item.data" :edit="editForm"></profile-form>
+        </b-tab>
+      </div>
+    </b-tabs>
+    <div class="my-3 d-flex d-flex justify-content-between">
+      <div>
+        <b-button pill v-on:click="saveProfile(this)" type="button" variant="success">Сохранить изменения</b-button>
+        <b-button pill v-on:click="cancel" type="button" variant="outline-success">Отменить</b-button>
+      </div>
+      <!-- <action-button :actions="actions" :rowId="125" item-id="params.page.itemId" action-id="32904"/> -->
+    </div>
   </div>
 </template>
 
 <script>
+
+import ProfileForm from '~/components/Pages/Cabinet/Profile/ProfileForm'
+import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
 export default {
   name: "Profile",
+  components: { ActionButton, ProfileForm },
   props: {
     params: {
       type: Object,
@@ -16,17 +33,17 @@ export default {
   },
   data() {
     return {
-      show: true
+      editForm: true
     }
   },
   created() {
-    console.log('reloaded')
     this.$store.dispatch('card/setCard', this.params);
     this.fetchWizard();
+    this.initialWizardData = this.$store.getters['card/wizardData'];
   },
   computed: {
     wizardData() {
-      return this.$store.getters["card/wizardData"];
+      return JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']));
     },
     actions: {
       get: function () {
@@ -52,16 +69,17 @@ export default {
           valid = false
         }
       }
-      return valid
+      return valid;
     },
-    saveProfile() {
+    async saveProfile() {
       let fields = [];
-      for (let i = 0; i < this.wizardData.length; i++) {
-        fields.push(...this.$children[0].$children[i].$children[0].items);
-      }
+      let profileForm = this.$refs['profile-form'];
+      profileForm.forEach(item => {
+        fields.push(...item.$refs.form.items)
+      });
       if(this.validateData(fields)){
         try {
-          this.$store.dispatch('card/saveProfile', fields);
+          await this.$store.dispatch('card/saveProfile', fields);
           this.$bvToast.toast('Успешно сохранено', {
             title: ``,
             variant: 'success',

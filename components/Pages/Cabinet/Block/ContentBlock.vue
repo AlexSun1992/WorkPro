@@ -1,6 +1,8 @@
 <template>
   <div>
-      <slot v-for="item in dataContent.items"  name="data" v-bind:content="item"></slot>
+    <div v-for="item in dataContent.items" v-on:click="openCard(item)">
+      <slot name="data" v-bind:content="item"></slot>
+    </div>
   </div>
 </template>
 
@@ -14,6 +16,11 @@
         type: String,
         required: true,
         default: () => null
+      },
+      isOpenCard: {
+        type: Boolean,
+        required: false,
+        default: () => false
       }
     },
     async  fetch () {
@@ -40,7 +47,24 @@
           }
         }
       }
-    }
+    },
+    methods: {
+      async openCard (item) {
+        try {
+          if(this.isOpenCard){
+            await this.$store.dispatch('blocks/fetchForm', {moduleId:55, menuId:this.itemId, itemId:item.ID});
+          }
+
+        } catch(err) {
+          this.$bvToast.toast(err.response.data.MESSAGE, {
+            title: `Ошибка`,
+            variant: 'danger',
+            noAutoHide: true,
+            solid: true
+          })
+        }
+      },
+    },
   }
 </script>
 

@@ -1,0 +1,24 @@
+<template>
+  <div>
+    <b-card>
+      <p>
+        Пожалуйста, убедитесь в том, что вся информация заполнена и актуальна в настоящий момент.
+      </p>
+    </b-card>
+  </div>
+</template>
+
+<script>
+import Form from '~/components/Libs/Form/Form'
+import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
+export default {
+  name: "ProfileSideBlock"
+};
+</script>
+
+<style scoped>
+  .card {
+    min-width: 250px;
+    max-width: 250px;
+  }
+</style>
