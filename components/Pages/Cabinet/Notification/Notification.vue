@@ -35,7 +35,7 @@
   
   <div class="row">
         <div class="col-lg-4">
-          <div class="block bg-two h100 d-grid">
+          <div class="block bg-two h-100 d-grid">
             <div class="block-title">
               ДМС для москвичей
             </div>
@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="col-lg-4">
-          <div class="block bg-tree h100 d-grid">
+          <div class="block bg-tree h-100 d-grid">
             <div class="block-title">
               Туризм
             </div>
@@ -61,7 +61,7 @@
           </div>
         </div>
         <div class="col-lg-4">
-          <div class="block bg-for h100  d-grid">
+          <div class="block bg-for h-100 d-grid">
             <div class="block-title">
               Несчастный случай
             </div>
