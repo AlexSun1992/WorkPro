@@ -439,8 +439,9 @@
         background: #F3F8FB;
     }
     
+    /deep/ .block-insurancecase-item:hover,
     /deep/ .block-mypolicies-item:hover {
-        background: #fff;
+        background: rgba(255, 255, 255, 0.7);
     }
     /* /deep/ .block-notification-item:hover:after {
         content: "";
@@ -453,6 +454,7 @@
     }
     */
     
+    /deep/ .block-insurancecase-item:before,
     /deep/ .block-mypolicies-item:before,
     /deep/ .block-notification-item:before {
         content: "";
@@ -473,8 +475,19 @@
         position: relative;
     }
     
-    /deep/ .block-mypolicies-item>div {
+    /deep/ .block-mypolicies-item>div,
+    /deep/ .block-insurancecase-item>div {
         align-self: center;
+    }
+    
+    /deep/ .block-insurancecase-item {
+        cursor: pointer;
+        min-height: 57px;
+        padding: 10px 30px;
+        display: grid;
+        grid-template-columns: 35px auto 23px;
+        grid-gap: 15px;
+        position: relative;
     }
     
     /deep/ .block-notification-item {
@@ -712,4 +725,72 @@
     
     /deep/ .arrow-right-bold>div {
         display: none;
+    }
+    
+    /deep/ .block-insurancecase-text {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        color: #363D44;
+    }
+    
+    /deep/ .block-insurancecase-text span {
+        display: block;
+        font-weight: 300;
+        margin-top: 10px;
+    }
+    
+    /deep/ .img-insurancecase-kasko {
+        width: 33px;
+        height: 19px;
+        background: url(/img/insurancecase.svg) 0 0 no-repeat;
+    }
+    
+    /deep/ .block-offer {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 18px;
+        color: #000000;
+        padding: 0 32px 10px;
+        align-self: center;
+    }
+    
+    /deep/ .block-offer-button {
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 0.02em;
+        color: #2C537A;
+        position: relative;
+        border-radius: 12px;
+        background-color: rgba(255, 255, 255, 0.5);
+        padding: 13px 50px 13px 32px;
+        align-self: end;
+        cursor: pointer;
+    }
+    
+    /deep/ .block-offer-button b {
+        font-weight: 700;
+    }
+    
+    /deep/ .block-offer-button:after {
+        position: absolute;
+        top: 50%;
+        right: 24px;
+        transform: translate(-50%, -50%);
+        width: 16px;
+        height: 13px;
+        background: url(/img/arrow-right-bold.svg) 0 0 no-repeat;
+        content: "";
+    }
+    
+    /deep/ .d-grid {
+        display: grid;
     }
