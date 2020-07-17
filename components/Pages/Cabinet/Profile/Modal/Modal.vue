@@ -1,17 +1,17 @@
 <template>
   <div>
     <b-card v-if="getFormData">
-      <Form :data="getFormData" @modal="openModal($event)" :edit="editForm"></Form>
+      <modal-form :data="getFormData" :edit="editForm"></modal-form>
     </b-card>
   </div>
 </template>
 
 <script>
-  import Form from '~/components/Libs/Form/Form'
+  import ModalForm from '~/components/Pages/Cabinet/Profile/Modal/ModalForm'
 
   export default {
-    name: 'ModalForm',
-    components: {Form},
+    name: 'Modal',
+    components: {ModalForm},
     props: ['data'],
     data () {
       return {
@@ -25,7 +25,7 @@
     },
     computed: {
       getFormData() {
-        return this.$store.getters['card/modalForm'];
+        return JSON.parse(JSON.stringify(this.$store.getters['card/modalForm']));
       }
     }
   }

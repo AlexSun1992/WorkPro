@@ -1,19 +1,19 @@
 <template>
   <div>
     <b-modal v-if="modalData" :title="modalData.data.label" cancel-title="Отмена" centered @cancel="cancelCard" @ok="saveCard" v-model="modalData.show">
-      <modal-form :data="modalData.data"></modal-form>
+      <modal :data="modalData.data"></modal>
     </b-modal>
-    <Form :data="editDataForm" @modal="openModal($event)" :edit="editForm"></Form>
+    <Form ref="form" :data="editDataForm" @modal="openModal($event)" :edit="editForm"></Form>
   </div>
 </template>
 
 <script>
   import Form from '~/components/Libs/Form/Form'
-  import ModalForm from '~/components/Pages/Cabinet/Profile/ModalForm'
+  import Modal from '~/components/Pages/Cabinet/Profile/Modal/Modal'
   
   export default {
     name: 'ProfileForm',
-    components: {Form, ModalForm},
+    components: {Form, Modal},
     props: {
       data: {
         type: Array,
