@@ -1,3 +1,20 @@
+<div class="mt-4">
+  <content-block :item-id="itemId">
+    <template v-slot:data="data">
+      <div class="col-lg-4">
+        <div class="block bg-tree h-100 d-grid">
+          <div class="block-title">
+            Туризм
+          </div>
+          <div class="block-offer">
+            <img src="/img/card2.svg">
+          </div>
+          <a v-text="data.content.SNAME" href="" class="block-offer-button"/>
+        </div>
+      </div>
+    </template>
+  </content-block>
+</div>
 <template>
 <div>
  <div class="block  bg-one block-border-two">
@@ -7,7 +24,7 @@
     <div class="block-insurancecase-item">
       <div class="img-insurancecase-kasko"></div>
       <div class="block-insurancecase-text">
-        УЩЕРБ от 
+        УЩЕРБ от
       <span class="block-insurancecase-item-number">
         EE1011000091
       </span>
@@ -19,7 +36,7 @@
     <div class="block-insurancecase-item">
       <div class="img-insurancecase-kasko"></div>
       <div class="block-insurancecase-text">
-        УЩЕРБ от 
+        УЩЕРБ от
       <span class="block-insurancecase-item-number">
         EE1011000091
       </span>
@@ -32,7 +49,7 @@
       <button type="button" class="col-auto link-arrow-right">Архив страховых случаев</button>
     </div>
   </div>
-  
+
   <div class="row">
         <div class="col-lg-4">
           <div class="block bg-two h-100 d-grid">

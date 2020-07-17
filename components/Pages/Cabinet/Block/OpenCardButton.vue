@@ -10,7 +10,7 @@
     props: {
       itemId: {
         type: Number,
-        required: true,
+        required: false,
         default: () => null
       },
       menuId: {

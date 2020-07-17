@@ -1,9 +1,12 @@
 <template>
-  <div>
+  <div v-if="isOpenCard">
     <div v-for="item in dataContent.items" v-on:click="openCard(item)">
       <slot name="data" v-bind:content="item"></slot>
     </div>
   </div>
+    <div v-else>
+      <slot v-for="item in dataContent.items"  name="data" v-bind:content="item"></slot>
+    </div>
 </template>
 
 <script>
