@@ -1,6 +1,6 @@
 <template>
   <b-col :xl="col" :lg="data.cols" md="12" sm="12">
-    <component  v-bind:is="comp"  v-bind:data="data" v-bind:edit="edit"></component>
+    <component  v-bind:is="comp" @modal="$emit('modal', $event)" v-bind:data="data" v-bind:edit="edit"></component>
   </b-col>
 </template>
 <script>
@@ -13,10 +13,12 @@ import ControlTimestamp from '~/components/Libs/Controls/ControlTimestamp'
 import ControlPeriod from '~/components/Libs/Controls/ControlPeriod'
 import ControlClob from '~/components/Libs/Controls/ControlText'
 import ControlEnum from '~/components/Libs/Controls/ControlEnum'
+import ControlButton from '~/components/Libs/Controls/ControlButton'
+import ControlEmpty from '~/components/Libs/Controls/ControlEmpty'
 
 export default {
   name: 'Control',
-  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, ControlTimestamp, ControlPeriod, ControlClob, ControlEnum},
+  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, ControlTimestamp, ControlPeriod, ControlClob, ControlEnum, ControlButton, ControlEmpty},
   props: {
     data: {
       type: Object,

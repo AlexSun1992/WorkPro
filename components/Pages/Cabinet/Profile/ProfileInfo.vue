@@ -7,9 +7,9 @@
         </b-tab>
       </div>
     </b-tabs>
-    <div class="my-3 d-flex d-flex justify-content-between">
+    <div class="my-3 d-flex d-flex justify-content-between" v-if="this.$store.getters['card/wizardData']">
       <div>
-        <b-button pill v-on:click="saveProfile(this)" type="button" variant="success">Сохранить изменения</b-button>
+        <b-button pill v-on:click="saveProfile" type="button" variant="success">Сохранить изменения</b-button>
         <b-button pill v-on:click="cancel" type="button" variant="outline-success">Отменить</b-button>
       </div>
       <!-- <action-button :actions="actions" :rowId="125" item-id="params.page.itemId" action-id="32904"/> -->
@@ -33,13 +33,13 @@ export default {
   },
   data() {
     return {
-      editForm: true
+      editForm: true,
+      initialWizardData: null
     }
   },
   created() {
     this.$store.dispatch('card/setCard', this.params);
     this.fetchWizard();
-    this.initialWizardData = this.$store.getters['card/wizardData'];
   },
   computed: {
     wizardData() {
@@ -57,7 +57,8 @@ export default {
         id: this.$store.state.auth.user[0]._data[0].ID,
         wizard: null
       };
-      this.$store.dispatch("card/fetchWizard", params);
+      await this.$store.dispatch("card/fetchWizard", params);
+      this.$emit('load');
     },
     validateData(data) {
       let valid = true
@@ -75,7 +76,8 @@ export default {
       let fields = [];
       let profileForm = this.$refs['profile-form'];
       profileForm.forEach(item => {
-        fields.push(...item.$refs.form.items)
+        fields.push(...item.$refs.form.items);
+        fields = fields.filter(item => item.name !== 'SEMPTY');
       });
       if(this.validateData(fields)){
         try {
@@ -95,11 +97,8 @@ export default {
         }
       }
     },
-    cancel() {
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      })
+    cancel(e) {
+      this.$emit('cancel');
     }
   }
 };
