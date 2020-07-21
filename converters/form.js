@@ -31,6 +31,7 @@ converter.form = (data) => {
     obj.name = fields[i].FIELD
     obj.visible = fields[i].VISIBLE
     obj.required = fields[i].REQUIRED
+    obj.readonly = fields[i].READONLY
     obj.control = null
     obj.state = null
     arr.push(obj)
@@ -60,9 +61,10 @@ converter.form = (data) => {
     obj.name = webFields[i].SNAME;
     obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
     obj.required = webFields[i].LREQUIRED === 'N' ? false : true;
-    obj.page = webFields[i].NPAGE
-    obj.control = null
-    obj.state = null
+    obj.page = webFields[i].NPAGE;
+    obj.readonly = webFields[i].LREADONLY === 'N' ? false : true;;
+    obj.control = null;
+    obj.state = null;
     webFieldsArr.push(obj)
   }
   // ********

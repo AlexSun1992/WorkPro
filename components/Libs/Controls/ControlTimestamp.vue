@@ -1,7 +1,7 @@
 <template>
   <!-- <b-form-group  :label="label"> -->
   <b-form-group  :label="data.label" :class="{required: data.required}">
-    <date-picker v-model="data.value"  :disabled="!edit" type="date" valueType="DD.MM.YYYY" format="DD.MM.YYYY" :first-day-of-week="1" :lang="lang" :input-class="data.state === false ? `${state} is-invalid` : state" ></date-picker>
+    <date-picker v-model="data.value" :disabled="!edit ? !edit : data.readonly" type="date" valueType="DD.MM.YYYY" format="DD.MM.YYYY" :first-day-of-week="1" :lang="lang" :input-class="data.state === false ? `${state} is-invalid` : state" ></date-picker>
     <div class="timestamp error" v-if="data.state === false">
       Обязательно для заполнения
     </div>

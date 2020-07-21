@@ -2,7 +2,7 @@
   <b-form-group  :label="label">
     <b-form-textarea id="textarea1"
                      v-model="data.value"
-                     :disabled="!edit"
+                     :disabled="!edit ? !edit : data.readonly"
                      :state="data.state"
                      placeholder="Введите текст"
                      :rows="3"

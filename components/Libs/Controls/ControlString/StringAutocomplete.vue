@@ -4,7 +4,7 @@
       class="form-control"
       type="text"
       v-model="data.value"
-      :disabled="!edit"
+      :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
       @keydown.enter="enter"

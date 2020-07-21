@@ -2,7 +2,7 @@
   <div>
     <b-form-group  :label="data.label">
       <multi-select :options="options"
-                    :isDisabled="!edit"
+                    :isDisabled="!edit ? !edit : data.readonly"
                     :isError="data.state === false"
                     :selected-options="data.value"
                     @select="onSelect"

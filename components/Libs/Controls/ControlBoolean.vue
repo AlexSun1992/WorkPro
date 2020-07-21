@@ -1,5 +1,5 @@
 <template>
-  <b-form-checkbox class="my-3" v-model="data.value" :disabled="!edit">{{data.label}}</b-form-checkbox>
+  <b-form-checkbox class="my-3" v-model="data.value" :disabled="!edit ? !edit : data.readonly">{{data.label}}</b-form-checkbox>
 </template>
 
 <script>

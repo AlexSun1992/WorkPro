@@ -4,7 +4,7 @@
       <model-list-select  :list="options"
                          option-value="value"
                          option-text="text"
-                         :isDisabled="!edit"
+                         :isDisabled="!edit ? !edit : data.readonly"
                          :isError="data.state === false"
                          v-model="data.value"
                          placeholder="Выберите из списка"
