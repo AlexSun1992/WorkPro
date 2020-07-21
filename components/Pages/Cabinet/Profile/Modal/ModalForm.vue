@@ -26,6 +26,9 @@
     methods: {
       setData () {
         this.editDataForm = this.data;
+      },
+      openModal() {
+       
       }
     },
     watch: {

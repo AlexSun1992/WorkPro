@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'ControlBoolean',
+  name: 'ControlButton',
   data() {
     return {
       modalShow: false
@@ -17,11 +17,6 @@ export default {
       type: Object,
       required: true,
       default: () => {}
-    },
-    edit: {
-      type: Boolean,
-      required: true,
-      default: () => false
     }
   },
   methods: {
@@ -37,10 +32,7 @@ export default {
 </script>
 
 <style scoped>
-  .modal-body {
-    min-height: 500px;
-  }
   .button {
-    margin-left: 100px;
+    margin-top: 28px;
   }
 </style>

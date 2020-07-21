@@ -3,7 +3,9 @@
     <b-card title="Мой профиль">
       <div class="profile">
         <profile-info v-if="show" @load="dataLoaded=true" @cancel="cancel" :params="params"></profile-info>
-        <profile-side-block v-if="dataLoaded" class="ml-4"></profile-side-block>
+        <profile-side-block v-if="dataLoaded" class="ml-4">
+          <slot></slot>
+        </profile-side-block>
       </div>
     </b-card>
   </div>
@@ -21,19 +23,20 @@ export default {
       show: true
     }
   },
-  props: {
-    params: {
-      type: Object,
-      required: true,
-      default: () => {}
-    }
-  },
+  props: ['params'],
   methods: {
     cancel() {
       this.show = false;
       this.$nextTick(() => {
         this.show = true;
       })
+    }
+  },
+  computed: {
+    templateData: {
+      get: function () {
+        return this.params.settings.cardgrid;
+      }
     }
   }
 };

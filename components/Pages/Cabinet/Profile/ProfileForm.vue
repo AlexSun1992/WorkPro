@@ -1,7 +1,15 @@
 <template>
   <div>
-    <b-modal v-if="modalData" :title="modalData.data.label" cancel-title="Отмена" centered @cancel="cancelCard" @ok="saveCard" v-model="modalData.show">
+    <b-modal v-if="modalData" :title="modalData.data.label" @cancel="cancelCard" @ok="saveCard" centered v-model="modalData.show">
       <modal :data="modalData.data"></modal>
+      <template v-slot:modal-footer="{ ok, cancel }">
+        <b-button pill type="button" variant="success" @click="ok()">
+          Сохранить
+        </b-button>
+        <b-button pill type="button" variant="outline-success" @click="cancel()">
+          Отменить
+        </b-button>
+      </template>
     </b-modal>
     <Form ref="form" :data="editDataForm" @modal="openModal($event)" :edit="editForm"></Form>
   </div>
@@ -14,13 +22,7 @@
   export default {
     name: 'ProfileForm',
     components: {Form, Modal},
-    props: {
-      data: {
-        type: Array,
-        required: true,
-        default: () => []
-      }
-    },
+    props: ['data'],
     data () {
       return {
         editForm: true,
@@ -35,8 +37,15 @@
       openModal(e) {
         this.modalData = e;
       },
-      saveCard() {},
-      cancelCard() {}
+      saveCard() {
+
+      },
+      cancelCard() {
+
+      },
+      getCode() {
+
+      }
     },
     watch: {
       'data': 'setData'

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <b-tabs v-if="wizardData" content-class="mt-3">
       <div v-for="(item, i) in wizardData" :key="i">
         <b-tab :title="item.title">
@@ -7,7 +7,7 @@
         </b-tab>
       </div>
     </b-tabs>
-    <div class="my-3 d-flex d-flex justify-content-between" v-if="this.$store.getters['card/wizardData']">
+    <div class="my-3 d-flex d-flex justify-content-between" v-if="$store.getters['card/wizardData']">
       <div>
         <b-button pill v-on:click="saveProfile" type="button" variant="success">Сохранить изменения</b-button>
         <b-button pill v-on:click="cancel" type="button" variant="outline-success">Отменить</b-button>
@@ -22,15 +22,9 @@
 import ProfileForm from '~/components/Pages/Cabinet/Profile/ProfileForm'
 import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
 export default {
-  name: "Profile",
+  name: "ProfileInfo",
   components: { ActionButton, ProfileForm },
-  props: {
-    params: {
-      type: Object,
-      required: true,
-      default: () => {}
-    }
-  },
+  props: ['params'],
   data() {
     return {
       editForm: true,
@@ -103,3 +97,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .wrapper {
+    width: 100%;
+  }
+</style>

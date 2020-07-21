@@ -11,6 +11,7 @@
       @keydown.down="down"
       @keydown.up="up"
       @input="getSuggestions(data.name)"
+      @blur="debouncedClose()"
     ></b-form-input>
     <b-form-invalid-feedback>Обязательно для заполнения</b-form-invalid-feedback>
     <ul v-if="open && suggestions && suggestions.length" :class="{'dropdown-menu': open}">
@@ -27,16 +28,24 @@
 </template>
 
 <script>
+import _ from 'lodash'
 export default {
   data() {
     return {
       open: false,
       current: 0,
-      suggestions: null
+      suggestions: null,
+      debouncedClose: null
     };
   },
   props: ['data', 'edit'],
+  created() {
+    this.debouncedClose = _.debounce(this.closeList, 300)
+  },
   methods: {
+    closeList() {
+      this.open = false;
+    },
     enter() {
       this.open = false;
       this.$emit("update", this.suggestions[this.current]);
@@ -56,8 +65,8 @@ export default {
     },
     suggestionClick(index) {
       this.open = false;
-      if (!index) return;
       this.$emit("update", this.suggestions[index]);
+      this.open = false;
     },
     async getSuggestions(name) {
       let API_KEY = '7a6080c3383b4dc69e786e1cd5c88366ab58a14c';
