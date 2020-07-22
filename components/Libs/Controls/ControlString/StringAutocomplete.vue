@@ -84,12 +84,16 @@ export default {
           params.parts = ["NAME"];
         } else if (name === 'SSECONDNAME') {
           params.parts = ["SURNAME"];
-        } else {
+        } else if (name === 'PATRONYMIC') {
           params.parts = ["PATRONYMIC"];
         }
       } else if (name.includes('ADDRESS')) {
         params.suggestionType = 'address';
-      } else return;
+      } else if (name === 'SISSUED_WHERE') {
+        params.suggestionType = 'fms_unit';
+      } else {
+        return;
+      }
       this.suggestions = await this.$store.dispatch('card/fetchSuggestions', params)
     }
   }

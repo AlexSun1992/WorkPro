@@ -99,6 +99,7 @@ converter.menuObject = (data) => {
   obj.portalgrid = data.SVJPORTALGRID || null
   obj.cardgrid = data.SVJCARDGRID || null
   obj.cardtemplate = data.SVJCARDTEMPLATE || null
+  obj.isModal = data.LMODALFORMSTYLE
   return obj
 }
 

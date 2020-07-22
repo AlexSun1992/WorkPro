@@ -52,6 +52,7 @@ bcItem.getData = (data) => {
   obj.portalgrid = data.portalgrid
   obj.cardgrid = data.cardgrid
   obj.cardtemplate = data.cardtemplate
+  obj.isModal = data.isModal
   return obj
 }
 
