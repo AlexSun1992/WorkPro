@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     initData (param) {
-      this.$axios({url: `/api/dic/${this.data.dic}`, method: 'GET'})
+      this.$axios({url: `/api/dic/${this.$route.params.idModule}/${this.$route.params.idItem}/${this.data.dic}`, method: 'GET'})
         .then(resp => {
           this.options = resp.data
         })
