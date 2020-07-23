@@ -101,7 +101,7 @@
         }
         
         /deep/ .sidebar-nav-item:hover .menu-icon-profile,
-        .sidebar-nav-item.active .menu-icon-profile {
+        /deep/ .sidebar-nav-item.active .menu-icon-profile {
             background: url(/img/menu-icon-profile_white.svg) 50% 50% no-repeat;
         }
         
@@ -110,7 +110,7 @@
         }
         
         /deep/ .sidebar-nav-item:hover .menu-icon-customization,
-        .sidebar-nav-item.active .menu-icon-customization {
+        /deep/ .sidebar-nav-item.active .menu-icon-customization {
             background: url(/img/menu-icon-customization_white.svg) 50% 50% no-repeat;
         }
         
@@ -119,7 +119,7 @@
         }
         
         /deep/ .sidebar-nav-item:hover .menu-icon-buy,
-        .sidebar-nav-item.active .menu-icon-buy {
+        /deep/ .sidebar-nav-item.active .menu-icon-buy {
             background: url(/img/menu-icon-buy_white.svg) 50% 50% no-repeat;
         }
         
@@ -128,7 +128,7 @@
         }
         
         /deep/ .sidebar-nav-item:hover .menu-icon-promotions,
-        .sidebar-nav-item.active .menu-icon-promotions {
+        /deep/ .sidebar-nav-item.active .menu-icon-promotions {
             background: url(/img/menu-icon-promotions_white.svg) 50% 50% no-repeat;
         }
         
@@ -137,7 +137,7 @@
         }
         
         /deep/ .sidebar-nav-item:hover .menu-icon-notifications,
-        .sidebar-nav-item.active .menu-icon-notifications {
+        /deep/ .sidebar-nav-item.active .menu-icon-notifications {
             background: url(/img/menu-icon-notifications_white.svg) 50% 50% no-repeat;
         }
         
@@ -146,7 +146,7 @@
         }
         
         /deep/ .sidebar-nav-item:hover .menu-icon-insuredevents,
-        .sidebar-nav-item.active .menu-icon-insuredevents {
+        /deep/ .sidebar-nav-item.active .menu-icon-insuredevents {
             background: url(/img/menu-icon-insuredevents_white.svg) 50% 50% no-repeat;
         }
         
@@ -155,7 +155,7 @@
         }
         
         /deep/ .sidebar-nav-item:hover .menu-icon-myobjects,
-        .sidebar-nav-item.active .menu-icon-myobjects {
+        /deep/ .sidebar-nav-item.active .menu-icon-myobjects {
             background: url(/img/menu-icon-myobjects_white.svg) 50% 50% no-repeat;
         }
         
@@ -164,7 +164,7 @@
         }
         
         /deep/ .sidebar-nav-item:hover .menu-icon-calculation,
-        .sidebar-nav-item.active .menu-icon-calculation {
+        /deep/ .sidebar-nav-item.active .menu-icon-calculation {
             background: url(/img/menu-icon-calculation_white.svg) 50% 50% no-repeat;
         }
         
@@ -173,7 +173,7 @@
         }
         
         /deep/ .sidebar-nav-item:hover .menu-icon-policies,
-        .sidebar-nav-item.active .menu-icon-policies {
+        /deep/ .sidebar-nav-item.active .menu-icon-policies {
             background: url(/img/menu-icon-policies_white.svg) 50% 50% no-repeat;
         }
         
@@ -864,5 +864,3 @@
         /deep/ .d-grid {
             display: grid;
         }
-        
-        block-notification-icon
