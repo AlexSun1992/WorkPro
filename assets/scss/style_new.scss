@@ -5,7 +5,7 @@
  * Copyright (c) 2018 creativeLabs Łukasz Holeczek
  * @license MIT
  */
-        
+
         // Override Boostrap variables
         @import "bootstrap-variables";
         // Import Bootstrap source files
@@ -22,7 +22,7 @@
             position: relative;
             min-height: calc(100vh - 80px);
         }
-        
+
         /deep/ header>div {
             position: relative;
             display: -ms-flexbox;
@@ -35,11 +35,11 @@
             flex-shrink: 0;
             height: 80px;
         }
-        
+
         /deep/ header {
             width: 100%;
         }
-        
+
         /deep/ .sidebar-nav {
             list-style: none;
             display: flex;
@@ -47,7 +47,7 @@
             padding: 0;
             margin: 0;
         }
-        
+
         /deep/ .sidebar-nav-item {
             display: flex;
             flex: 0 0 92px;
@@ -57,26 +57,26 @@
             position: relative;
             margin: 13px 0;
         }
-        
+
         /deep/ .sidebar-nav-item:nth-child(even) {
             margin-right: 26px;
             margin-left: 13px;
         }
-        
+
         /deep/ .sidebar-nav-item:nth-child(odd) {
             margin-right: 13px;
             margin-left: 26px;
         }
-        
+
         /deep/ .sidebar-nav-item:hover {
             background: #008b4e;
             transition: 0.3s;
         }
-        
+
         /deep/ .sidebar-nav-item.active {
             background: #008b4e;
         }
-        
+
         /deep/ .sidebar-nav-item a {
             min-height: 92px;
             width: 100%;
@@ -84,7 +84,7 @@
             display: flex;
             flex-wrap: wrap;
         }
-        
+
         /deep/ .sidebar-nav-item a div[class^="menu-icon"] {
             display: block;
             height: 36px;
@@ -95,88 +95,88 @@
             transition: 0.3s;
             padding: 0 0 5px;
         }
-        
+
         /deep/ .sidebar-nav-item .menu-icon-profile {
             background: url(/img/menu-icon-profile.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item:hover .menu-icon-profile,
         .sidebar-nav-item.active .menu-icon-profile {
             background: url(/img/menu-icon-profile_white.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item .menu-icon-customization {
             background: url(/img/menu-icon-customization.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item:hover .menu-icon-customization,
         .sidebar-nav-item.active .menu-icon-customization {
             background: url(/img/menu-icon-customization_white.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item .menu-icon-buy {
             background: url(/img/menu-icon-buy.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item:hover .menu-icon-buy,
         .sidebar-nav-item.active .menu-icon-buy {
             background: url(/img/menu-icon-buy_white.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item .menu-icon-promotions {
             background: url(/img/menu-icon-promotions.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item:hover .menu-icon-promotions,
         .sidebar-nav-item.active .menu-icon-promotions {
             background: url(/img/menu-icon-promotions_white.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item .menu-icon-notifications {
             background: url(/img/menu-icon-notifications.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item:hover .menu-icon-notifications,
         .sidebar-nav-item.active .menu-icon-notifications {
             background: url(/img/menu-icon-notifications_white.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item .menu-icon-insuredevents {
             background: url(/img/menu-icon-insuredevents.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item:hover .menu-icon-insuredevents,
         .sidebar-nav-item.active .menu-icon-insuredevents {
             background: url(/img/menu-icon-insuredevents_white.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item .menu-icon-myobjects {
             background: url(/img/menu-icon-myobjects.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item:hover .menu-icon-myobjects,
         .sidebar-nav-item.active .menu-icon-myobjects {
             background: url(/img/menu-icon-myobjects_white.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item .menu-icon-calculation {
             background: url(/img/menu-icon-calculation.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item:hover .menu-icon-calculation,
         .sidebar-nav-item.active .menu-icon-calculation {
             background: url(/img/menu-icon-calculation_white.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item .menu-icon-policies {
             background: url(/img/menu-icon-policies.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item:hover .menu-icon-policies,
         .sidebar-nav-item.active .menu-icon-policies {
             background: url(/img/menu-icon-policies_white.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .sidebar-nav-item a span {
             display: block;
             width: 100%;
@@ -190,18 +190,18 @@
             color: #000000;
             text-decoration: none;
         }
-        
+
         /deep/ .sidebar-nav-item a:hover,
         /deep/ .sidebar-nav-item a:hover span {
             text-decoration: none;
             color: #fff;
         }
-        
+
         /deep/ .sidebar-nav-item.active a span {
             text-decoration: none;
             color: #fff;
         }
-        
+
         /deep/ .sidebar-nav-item-number {
             position: absolute;
             top: -6px;
@@ -218,7 +218,7 @@
             font-weight: 500;
             font-size: 16px;
         }
-        
+
         /deep/ .sidebar-minimizer {
             width: 38px;
             height: 42px;
@@ -230,7 +230,7 @@
             border: 0;
             margin-left: -17px;
         }
-        
+
         /deep/ .sidebar-minimizer:after,
         /deep/ .sidebar-minimizer:before {
             content: "";
@@ -242,12 +242,12 @@
             left: 45%;
             transform: rotate(30deg);
         }
-        
+
         /deep/ .sidebar-minimizer:after {
             transform: rotate(-30deg);
             top: 20px;
         }
-        
+
         /deep/ .header-nav,
         /deep/ .header-text {
             display: -ms-flexbox;
@@ -262,24 +262,24 @@
             margin-left: 299px;
             list-style: none;
         }
-        
+
         /deep/ .header-nav {
             margin-left: 0;
             margin-right: 39px;
         }
-        
+
         /deep/ .header-nav-item {
             margin: 0 20px;
         }
-        
+
         /deep/ .header-nav-item:first-of-type {
             margin-left: 0;
         }
-        
+
         /deep/ .header-nav-item:last-of-type {
             margin-right: 0;
         }
-        
+
         /deep/ .header-logo {
             background: url(/img/reso.svg) 0 0 no-repeat;
             display: table;
@@ -290,12 +290,12 @@
             left: 39px;
             background-size: contain;
         }
-        
+
         .wrapper {
             display: grid;
             grid-template-columns: 263px 1fr;
         }
-        
+
         .main {
             -ms-flex-preferred-size: auto;
             flex-basis: auto;
@@ -305,11 +305,11 @@
             flex-grow: 1;
             min-width: 0;
         }
-        
+
         .body {
             display: grid;
         }
-        
+
         /deep/ footer {
             display: grid;
             color: #4f5d73;
@@ -323,22 +323,22 @@
             padding-bottom: 25px;
             align-self: end;
         }
-        
+
         /deep/ .ppl-info {
             margin: 44px auto 20px;
             text-align: center;
         }
-        
+
         /deep/ .ppl-info.ppl-female .ppl-avatar {
             background: url(/img/female.svg) 50% 50% no-repeat;
             background-size: 50%;
         }
-        
+
         /deep/ .ppl-info.ppl-male .ppl-avatar {
             background: url(/img/male.svg) 50% 50% no-repeat;
             background-size: 50%;
         }
-        
+
         /deep/ .ppl-info .ppl-avatar:after {
             background-size: contain;
             position: absolute;
@@ -348,70 +348,70 @@
             left: 0;
             content: "";
         }
-        
+
         /deep/ .ppl-info.percent30 .ppl-avatar:after {
             background: url(/img/30percent.svg) 50% 50% no-repeat;
             background-size: contain;
         }
-        
+
         /deep/ .ppl-info.percent40 .ppl-avatar:after {
             background: url(/img/40percent.svg) 50% 50% no-repeat;
             background-size: contain;
         }
-        
+
         /deep/ .ppl-info.percent50 .ppl-avatar:after {
             background: url(/img/50percent.svg) 50% 50% no-repeat;
             background-size: contain;
         }
-        
+
         /deep/ .ppl-info.percent60 .ppl-avatar:after {
             background: url(/img/60percent.svg) 50% 50% no-repeat;
             background-size: contain;
         }
-        
+
         /deep/ .ppl-info.percent70 .ppl-avatar:after {
             background: url(/img/70percent.svg) 50% 50% no-repeat;
             background-size: contain;
         }
-        
+
         /deep/ .ppl-info.percent80 .ppl-avatar:after {
             background: url(/img/80percent.svg) 50% 50% no-repeat;
             background-size: contain;
         }
-        
+
         /deep/ .ppl-info.percent90 .ppl-avatar:after {
             background: url(/img/90percent.svg) 50% 50% no-repeat;
             background-size: contain;
         }
-        
+
         /deep/ .ppl-info.percent30 .ppl-avatar:before {
             content: "30%";
         }
-        
+
         /deep/ .ppl-info.percent40 .ppl-avatar:before {
             content: "40%";
         }
-        
+
         /deep/ .ppl-info.percent50 .ppl-avatar:before {
             content: "50%";
         }
-        
+
         /deep/ .ppl-info.percent60 .ppl-avatar:before {
             content: "60%";
         }
-        
+
         /deep/ .ppl-info.percent70 .ppl-avatar:before {
             content: "70%";
         }
-        
+
         /deep/ .ppl-info.percent80 .ppl-avatar:before {
             content: "80%";
         }
-        
+
         /deep/ .ppl-info.percent90 .ppl-avatar:before {
             content: "90%";
         }
-        
+
         /deep/ .ppl-info .ppl-avatar:before {
             position: absolute;
             right: -37px;
@@ -424,7 +424,7 @@
             line-height: 24px;
             color: #008B4E;
         }
-        
+
         /deep/ .ppl-avatar {
             width: 84px;
             height: 84px;
@@ -432,7 +432,7 @@
             position: relative;
             border-radius: 107px;
         }
-        
+
         /deep/ .ppl-name {
             font-family: Roboto;
             font-style: normal;
@@ -443,7 +443,7 @@
             margin-top: 13px;
             display: block;
         }
-        
+
         /deep/ .header-text {
             font-family: Roboto;
             font-style: normal;
@@ -453,60 +453,60 @@
             letter-spacing: 0.02em;
             color: #008B4E;
         }
-        
+
         /deep/ .header-nav-notifications {
             width: 30px;
             height: 30px;
             border: 0;
             background: url(/img/notifications.svg) 0 0 no-repeat;
         }
-        
+
         /deep/ .header-nav-exit {
             width: 30px;
             height: 30px;
             border: 0;
             background: url(/img/exit.svg) 0 0 no-repeat;
         }
-        
+
         /deep/ .block {
             box-sizing: border-box;
             border-radius: 24px;
             overflow: hidden;
             position: relative;
         }
-        
+
         /deep/ .block-border-one {
             border: 1px solid #EAF1F7;
         }
-        
+
         /deep/ .block-border-two {
             border: 1px solid #EAF1F7;
         }
-        
+
         /deep/ .bg-white {
             background: #FFFFFF;
         }
-        
+
         /deep/ .bg-one {
             background: #EEF4F5;
         }
-        
+
         /deep/ .bg-two {
             background: #F3D9D3;
         }
-        
+
         /deep/ .bg-tree {
             background: #D8E5EF;
         }
-        
+
         /deep/ .bg-for {
             background: #DBEFE6;
         }
-        
+
         /deep/ .block-notification-item:hover {
             background: #F3F8FB;
         }
-        
+
         /deep/ .block-insurancecase-item:hover,
         /deep/ .block-mypolicies-item:hover {
             background: rgba(255, 255, 255, 0.7);
@@ -521,7 +521,7 @@
         border: 0.6px dashed rgba(0, 0, 0, 0.16);
     }
     */
-        
+
         /deep/ .block-insurancecase-item:before,
         /deep/ .block-mypolicies-item:before,
         /deep/ .block-notification-item:before {
@@ -532,7 +532,7 @@
             width: calc(100% - 64px);
             border-top: 0.6px dashed rgba(0, 0, 0, 0.16);
         }
-        
+
         /deep/ .block-mypolicies-item {
             cursor: pointer;
             min-height: 57px;
@@ -542,12 +542,12 @@
             grid-gap: 15px;
             position: relative;
         }
-        
+
         /deep/ .block-mypolicies-item>div,
         /deep/ .block-insurancecase-item>div {
             align-self: center;
         }
-        
+
         /deep/ .block-insurancecase-item {
             cursor: pointer;
             min-height: 57px;
@@ -557,7 +557,7 @@
             grid-gap: 15px;
             position: relative;
         }
-        
+
         /deep/ .block-notification-item {
             cursor: pointer;
             min-height: 57px;
@@ -567,7 +567,7 @@
             grid-gap: 21px;
             position: relative;
         }
-        
+
         /deep/ .block-btn,
         /deep/ .block-notification-btn {
             text-align: right;
@@ -575,18 +575,18 @@
             line-height: 0;
             display: table;
         }
-        
+
         /deep/ .block-notification-item .block-notification-icon {
             align-self: center;
             width: 23px;
             height: 20px;
             background: url(/img/block-notification-icon.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .block-notification-item:hover .block-notification-icon {
             background: url(/img/block-notification-icon_hover.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .block-notification-item-text {
             font-family: Roboto;
             font-style: normal;
@@ -597,11 +597,11 @@
             color: #20A668;
             align-self: center;
         }
-        
+
         /deep/ .block-notification-item:hover .block-notification-item-text {
             color: #363D44;
         }
-        
+
         /deep/ .block-title {
             font-family: Roboto;
             font-style: normal;
@@ -614,11 +614,11 @@
             padding-top: 24px;
             margin-bottom: 16px;
         }
-        
+
         /deep/ .block-notificationotification-item:hover svg {
             fill: #878B8F;
         }
-        
+
         /deep/ .block-notification-item-text {
             font-family: Roboto;
             font-style: normal;
@@ -629,11 +629,11 @@
             color: #20A668;
             align-self: center;
         }
-        
+
         /deep/ .block-notification-item:hover .block-notification-item-text {
             color: #363D44;
         }
-        
+
         /deep/ .block-title {
             font-family: Roboto;
             font-style: normal;
@@ -646,12 +646,12 @@
             padding-top: 24px;
             margin-bottom: 16px;
         }
-        
+
         /deep/ .block-notification-btn button {
             display: table-cell;
             vertical-align: middle;
         }
-        
+
         /deep/ .block-notification-btn button:not(.notification-close) {
             background: #22A66A;
             box-shadow: 2px 8px 32px rgba(91, 206, 150, 0.35);
@@ -666,7 +666,7 @@
             padding: 0 20px;
             border: 0;
         }
-        
+
         /deep/ .block-notification-btn button.notification-close {
             background: transparent;
             width: 20px;
@@ -677,15 +677,15 @@
             border-radius: 20px;
             padding: 0;
         }
-        
+
         /deep/ .block-notification-btn button.notification-close div {
             display: none;
         }
-        
+
         /deep/ .block-notification-btn button+button.notification-close {
             margin-left: 40px;
         }
-        
+
         /deep/ .block-notification-btn button.notification-close:after,
         /deep/ .block-notification-btn button.notification-close:before {
             content: "";
@@ -697,11 +697,11 @@
             transform: rotate(45deg);
             left: -1px;
         }
-        
+
         /deep/ .block-notification-btn button.notification-close:after {
             transform: rotate(-45deg);
         }
-        
+
         /deep/ .block-footer {
             min-height: 57px;
             padding: 0 27px 0 32px;
@@ -710,7 +710,7 @@
             z-index: 1;
             position: relative;
         }
-        
+
         /deep/ .block-footer button {
             font-family: Roboto;
             font-style: normal;
@@ -727,11 +727,11 @@
             padding-right: 20px;
             position: relative;
         }
-        
+
         /deep/ .block-footer button:hover {
             text-decoration: underline;
         }
-        
+
         /deep/ .block-footer button:after {
             content: "";
             width: 12px;
@@ -742,7 +742,7 @@
             background: url(/img/arrow-right.svg)50% 50% no-repeat;
             position: absolute;
         }
-        
+
         /deep/ .block-mypolicies-item-object {
             font-family: Roboto;
             font-style: normal;
@@ -753,7 +753,7 @@
             text-transform: uppercase;
             color: #008B4E;
         }
-        
+
         /deep/ .block-mypolicies-item-number {
             font-family: Roboto;
             font-style: normal;
@@ -764,7 +764,7 @@
             text-transform: uppercase;
             color: #008B4E;
         }
-        
+
         /deep/ .block-mypolicies-item-name {
             font-family: Roboto;
             font-style: normal;
@@ -775,7 +775,7 @@
             text-transform: uppercase;
             color: #363D44;
         }
-        
+
         /deep/ .block-mypolicies-date {
             font-family: Roboto;
             font-style: normal;
@@ -785,18 +785,18 @@
             letter-spacing: 0.02em;
             color: #000000;
         }
-        
+
         /deep/ .arrow-right-bold {
             width: 13px;
             height: 12px;
             border: 0;
             background: url(/img/arrow-right-bold.svg) 50% 50% no-repeat;
         }
-        
+
         /deep/ .arrow-right-bold>div {
             display: none;
         }
-        
+
         /deep/ .block-insurancecase-text {
             font-family: Roboto;
             font-style: normal;
@@ -806,19 +806,19 @@
             letter-spacing: 0.02em;
             color: #363D44;
         }
-        
+
         /deep/ .block-insurancecase-text span {
             display: block;
             font-weight: 300;
             margin-top: 10px;
         }
-        
+
         /deep/ .img-insurancecase-kasko {
             width: 33px;
             height: 19px;
             background: url(/img/insurancecase.svg) 0 0 no-repeat;
         }
-        
+
         /deep/ .block-offer {
             font-family: Roboto;
             font-style: normal;
@@ -829,7 +829,7 @@
             padding: 0 32px 10px;
             align-self: center;
         }
-        
+
         /deep/ .block-offer-button {
             font-family: Roboto;
             font-style: normal;
@@ -845,11 +845,11 @@
             align-self: end;
             cursor: pointer;
         }
-        
+
         /deep/ .block-offer-button b {
             font-weight: 700;
         }
-        
+
         /deep/ .block-offer-button:after {
             position: absolute;
             top: 50%;
@@ -860,9 +860,7 @@
             background: url(/img/arrow-right-bold.svg) 0 0 no-repeat;
             content: "";
         }
-        
+
         /deep/ .d-grid {
             display: grid;
         }
-        
-        block-notification-icon
