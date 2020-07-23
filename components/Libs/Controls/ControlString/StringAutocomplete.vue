@@ -116,6 +116,8 @@ export default {
         });
         if (docType.data.value.value == 35 || docType.data.value.value == 36 || docType.data.value.value == 21) {
           params.suggestionType = 'fms_unit';
+        } else {
+          return;
         }
         let suggestions = {};
         suggestions.data = await this.$store.dispatch('card/fetchSuggestions', params);
