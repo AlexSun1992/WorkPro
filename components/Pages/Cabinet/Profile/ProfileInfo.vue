@@ -2,8 +2,8 @@
   <div class="wrapper">
     <b-tabs v-if="wizardData" content-class="mt-3">
       <div v-for="(item, i) in wizardData" :key="i">
-        <b-tab :title="item.title">
-          <profile-form ref="profile-form" :data="item.data" :edit="editForm"></profile-form>
+        <b-tab v-if="item.data.length" :title="item.title">
+          <profile-form ref="profile-form" :data="item.data" :edit="editForm" :params="params" @update="updateForm($event)"></profile-form>
         </b-tab>
       </div>
     </b-tabs>
@@ -93,6 +93,9 @@ export default {
     },
     cancel(e) {
       this.$emit('cancel');
+    },
+    updateForm(e) {
+      this.$emit('update', e)
     }
   }
 };

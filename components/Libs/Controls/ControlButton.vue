@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button class="button" @click="openModal()" variant="secondary">{{ data.label }}</b-button>
+    <b-button class="button" @click="openEdit()" variant="secondary">{{ data.label }}</b-button>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   name: 'ControlButton',
   data() {
     return {
-      modalShow: false
+      editShow: false
     }
   },
   props: {
@@ -20,11 +20,11 @@ export default {
     }
   },
   methods: {
-    openModal() {
-      this.modalShow = true;
-      this.$emit('modal', {
+    openEdit() {
+      this.editShow = true;
+      this.$emit('edit', {
         data: this.data,
-        show: this.modalShow 
+        show: this.editShow 
       });
     }
   }
