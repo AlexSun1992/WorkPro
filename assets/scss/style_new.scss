@@ -576,13 +576,15 @@
             display: table;
         }
         
-        /deep/ .block-notification-item svg {
-            fill: #20A668;
+        /deep/ .block-notification-item .block-notification-icon {
             align-self: center;
+            width: 23px;
+            height: 20px;
+            background: url(/img/block-notification-icon.svg) 50% 50% no-repeat;
         }
         
-        /deep/ .block-notification-item:hover svg {
-            fill: #878B8F;
+        /deep/ .block-notification-item:hover .block-notification-icon {
+            background: url(/img/block-notification-icon_hover.svg) 50% 50% no-repeat;
         }
         
         /deep/ .block-notification-item-text {
@@ -862,3 +864,5 @@
         /deep/ .d-grid {
             display: grid;
         }
+        
+        block-notification-icon
