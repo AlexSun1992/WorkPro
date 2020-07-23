@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form :data="editDataForm" @modal="openModal($event)" :edit="editForm"></Form>
+    <Form :data="editDataForm" @edit="openEdit($event)" :edit="editForm"></Form>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
   import Form from '~/components/Libs/Form/Form'
   
   export default {
-    name: 'ModalForm',
+    name: 'CardForm',
     components: {Form},
     props: {
       data: {
@@ -27,7 +27,7 @@
       setData () {
         this.editDataForm = this.data;
       },
-      openModal() {
+      openEdit() {
        
       }
     },

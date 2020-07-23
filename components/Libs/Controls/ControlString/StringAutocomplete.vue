@@ -14,9 +14,9 @@
       @blur="debouncedClose()"
     ></b-form-input>
     <b-form-invalid-feedback>Обязательно для заполнения</b-form-invalid-feedback>
-    <ul v-if="open && suggestions && suggestions.length" :class="{'dropdown-menu': open}">
+    <ul v-if="open && suggestions && suggestions.data && suggestions.data.length" :class="{'dropdown-menu': open}">
       <li
-        v-for="(suggestion, i) in suggestions"
+        v-for="(suggestion, i) in suggestions.data"
         :key="i"
         :class="{'active': isActive(i)}"
         @click="suggestionClick(i)"
@@ -34,7 +34,7 @@ export default {
     return {
       open: false,
       current: 0,
-      suggestions: null,
+      suggestions: {},
       debouncedClose: null
     };
   },
@@ -48,7 +48,7 @@ export default {
     },
     enter() {
       this.open = false;
-      this.$emit("update", this.suggestions[this.current]);
+      this.$emit("update", this.suggestions.data[this.current]);
     },
     up() {
       if (this.current > 0) {
@@ -56,7 +56,7 @@ export default {
       }
     },
     down() {
-      if (this.current < this.suggestions.length - 1) {
+      if (this.current < this.suggestions.data.length - 1) {
         this.current++;
       }
     },
@@ -65,7 +65,24 @@ export default {
     },
     suggestionClick(index) {
       this.open = false;
-      this.$emit("update", this.suggestions[index]);
+      let issuedWhere = this.$parent.$parent.$parent.$parent.$children.find(item => {
+          return item.data.name === 'SISSUED_WHERE';
+        });
+      let docDep = this.$parent.$parent.$parent.$parent.$children.find(item => {
+        return item.data.name === 'SDOCDEP';
+      });
+      if (this.suggestions.type === 'SISSUED_WHERE') {
+        this.$set(issuedWhere.data, 'value', null);
+        this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[0]);
+        this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[1]);
+      }
+      else if (this.suggestions.type === 'SDOCDEP') {
+        this.$set(issuedWhere.data, 'value', null);
+        this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[1]);
+        this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[0]);
+      } else {
+        this.$emit("update", this.suggestions.data[index]);
+      }
       this.open = false;
     },
     async getSuggestions(name) {
@@ -87,14 +104,41 @@ export default {
         } else if (name === 'PATRONYMIC') {
           params.parts = ["PATRONYMIC"];
         }
+        let result = await this.$store.dispatch('card/fetchSuggestions', params);
+        result = result.map(item => item.value);
+        this.$set(this.suggestions, 'data', result);
+        return;
       } else if (name.includes('ADDRESS')) {
         params.suggestionType = 'address';
-      } else if (name === 'SISSUED_WHERE') {
-        params.suggestionType = 'fms_unit';
-      } else {
-        return;
-      }
-      this.suggestions = await this.$store.dispatch('card/fetchSuggestions', params)
+      } else if (name === 'SISSUED_WHERE' || name === 'SDOCDEP') {
+        const docType = this.$parent.$parent.$parent.$parent.$children.find(item => {
+          return item.data.name === 'FKIDDOCTYPE';
+        });
+        if (docType.data.value.value == 35 || docType.data.value.value == 36 || docType.data.value.value == 21) {
+          params.suggestionType = 'fms_unit';
+        } else {
+          return;
+        }
+        let suggestions = {};
+        suggestions.data = await this.$store.dispatch('card/fetchSuggestions', params);
+        let obj = {};
+        let values;
+        if (name === 'SISSUED_WHERE') {
+          values = suggestions.data.map(item => {
+            return `${item.data.name} - ${item.data.code}`
+          });
+          obj.type = 'SISSUED_WHERE';
+        }
+        if (name === 'SDOCDEP') {
+          values = suggestions.data.map(item => {
+            return `${item.data.code} - ${item.data.name}`
+          });
+          obj.type = 'SDOCDEP';
+        }
+        obj.values = values;
+        this.$set(this.suggestions, 'data', obj.values);
+        this.$set(this.suggestions, 'type', obj.type);
+      } 
     }
   }
 };

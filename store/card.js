@@ -17,14 +17,14 @@ export const state = () => ({
   componentType: null,
   cardId: 0,
   wizardData: null,
-  modalForm: null
+  cardForm: null
 })
 
 export const getters = {
   page: state => state.page,
   list: state => state.list,
   form: state => state.form,
-  modalForm: state => state.modalForm,
+  cardForm: state => state.cardForm,
   filters: state => state.filters,
   actions: state => state.actions,
   isForm: state => state.showForm,
@@ -76,7 +76,7 @@ export const actions = {
         commit('setForm', res.data.data);
       })
   },
-  async fetchModalForm ({commit, getters}, id) {
+  async fetchCardForm ({commit, getters}, id) {
     await this.$axios.get(`/api/card/${getters['page'].idModule}/${id}/0`)
       .then((res) => {
         // Вынести в общую функцию
@@ -92,11 +92,11 @@ export const actions = {
           }
           field.cols = Math.ceil((field.cols/maxCol) * (field.width/100) * 12);
         });
-        commit('setModalForm', res.data.metaData.data);
+        commit('setCardForm', res.data.metaData.data);
       })
   },
-  clearModalForm({commit, getters}) {
-    commit('clearModalForm');
+  clearCardForm({commit, getters}) {
+    commit('clearCardForm');
   },
   async fetchWizard ({commit, getters}, params) {
     let card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${params.id}`);
@@ -193,7 +193,8 @@ export const actions = {
         body: JSON.stringify(params)
       }); 
     let result = await response.json();
-    return result.suggestions.map(item => item.value);
+    return result.suggestions;
+    // return result.suggestions.map(item => item.value);
   }
 }
 
@@ -252,10 +253,10 @@ export const mutations = {
   setWizardData(state, data) {
     state.wizardData = data
   },
-  setModalForm(state, data) {
-    state.modalForm = data
+  setCardForm(state, data) {
+    state.cardForm = data
   },
-  clearModalForm(state, data) {
-    state.modalForm = null;
+  clearCardForm(state, data) {
+    state.cardForm = null;
   }
 }

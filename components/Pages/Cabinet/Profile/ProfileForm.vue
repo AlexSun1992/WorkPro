@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-modal v-if="modalData" :title="modalData.data.label" @cancel="cancelCard" @ok="saveCard" centered v-model="modalData.show">
-      <modal :data="modalData.data"></modal>
+    <b-modal v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" centered v-model="editData.show">
+      <card :data="editData.data"></card>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b-button pill type="button" variant="success" @click="ok()">
           Сохранить
@@ -11,31 +11,35 @@
         </b-button>
       </template>
     </b-modal>
-    <Form ref="form" :data="editDataForm" @modal="openModal($event)" :edit="editForm"></Form>
+    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" :edit="editForm"></Form>
   </div>
 </template>
 
 <script>
   import Form from '~/components/Libs/Form/Form'
-  import Modal from '~/components/Pages/Cabinet/Profile/Modal/Modal'
+  import Card from '~/components/Pages/Cabinet/Profile/Card/Card'
   
   export default {
     name: 'ProfileForm',
-    components: {Form, Modal},
-    props: ['data'],
+    components: {Form, Card},
+    props: ['data', 'params'],
     data () {
       return {
         editForm: true,
         editDataForm: this.data,
-        modalData: null
+        editData: null
       }
     },
     methods: {
       setData () {
         this.editDataForm = this.data;
       },
-      openModal(e) {
-        this.modalData = e;
+      openEdit(e) {
+        if (this.params.settings.isModal) {
+          this.editData = e;
+        } else {
+          this.$emit('update', e);
+        }
       },
       saveCard() {
 
