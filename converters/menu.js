@@ -82,6 +82,7 @@ converter.menuObject = (data) => {
   }
   obj.id = data.ID
   obj.icon = iconConverter.icon(data.SLOGO)
+  obj.iconFileName = data.SICONFILENAME
   obj.idItem = data.IDITEM
   obj.idParent = data.IDPARENT
   obj.compType = data.IDADMMENUTYPE
