@@ -313,15 +313,17 @@
         /deep/ footer {
             display: grid;
             color: #4f5d73;
-            border-top: 1px solid #d8dbe0;
+            /*border-top: 1px solid #d8dbe0;*/
             box-sizing: border-box;
-            margin-left: -263px;
+            /*   margin-left: -263px;*/
             padding-left: 303px;
             padding-right: 39px;
             background: #fff;
             padding-top: 25px;
             padding-bottom: 25px;
             align-self: end;
+            border-top-left-radius: 50px;
+            z-index: 1;
         }
         
         /deep/ .ppl-info {
@@ -865,11 +867,24 @@
             display: grid;
         }
         
+        /deep/ .mypolices-all-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 0 15px;
+            grid-column-gap: 30px;
+            grid-row-gap: 30px;
+        }
+        
         /deep/ .mypolices-block {
             padding: 20px 32px 0;
             font-family: Roboto, sans-serif;
             font-style: normal;
             font-weight: normal;
+            display: grid;
+        }
+        
+        /deep/ .mypolices-block>div {
+            align-self: end;
         }
         
         /deep/ .mypolices-block .block-footer {
@@ -881,6 +896,10 @@
             background: url(/img/arrow-right-bold.svg) 0 0 no-repeat;
             right: 32px;
             width: 16px;
+        }
+        
+        /deep/ .mypolices-block .block-footer button {
+            display: contents;
         }
         
         /deep/ .img-mypolices-img {
@@ -896,6 +915,7 @@
             line-height: 22px;
             color: #363D44;
             padding-left: 48px;
+            align-self: start;
         }
         
         /deep/ .mypolices-name {
@@ -932,4 +952,28 @@
         /deep/ .title-bottom-line {
             border-bottom: 1px solid #D8D8D8;
             padding-bottom: 15px !important;
+        }
+        
+        /deep/ .sidebar_client:before {
+            width: 151px;
+            height: 144px;
+            margin: 10px 0 20px 0;
+            border-radius: 50%;
+            box-shadow: inset -62px -1px 0 0 #CBE0D7;
+            position: absolute;
+            top: -132px;
+            left: -62px;
+            transform: rotate(157deg);
+            content: "";
+        }
+        
+        /deep/ .sidebar_client:after {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            bottom: -60px;
+            /* left: -71px; */
+            /* transform: rotate(-147deg); */
+            background: #CBE0D7;
+            content: "";
         }
