@@ -11,9 +11,9 @@
             <nuxt/>
           </div>
         </main>
-        <Footer/>
       </div>
     </div>
+    <Footer/>
   </div>
 </template>
 <script>
