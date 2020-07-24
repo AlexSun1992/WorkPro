@@ -93,7 +93,7 @@ export default {
         if (cookie) {
           lastURL = cookie.split('=')[1];
         }
-        let url = lastURL ? lastURL : '/';
+        let url = lastURL ? lastURL : '/cabinet/55/0/701';
         this.$router.push(url);
 
       } catch (e) {
