@@ -8,6 +8,7 @@
       <div class="body">
         <main class="main">
           <div class="container-fluid">
+<Notification/>
             <nuxt/>
           </div>
         </main>
