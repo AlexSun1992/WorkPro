@@ -44,6 +44,7 @@ module.exports = {
     '~/plugins/mask.js',
     '~/plugins/validate',
     '~/plugins/axios',
+    '~/plugins/moment',
     { src: '~plugins/vcalendar.js', ssr: false }
   ],
   /*

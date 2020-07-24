@@ -864,3 +864,72 @@
         /deep/ .d-grid {
             display: grid;
         }
+        
+        /deep/ .mypolices-block {
+            padding: 20px 32px 0;
+            font-family: Roboto, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+        }
+        
+        /deep/ .mypolices-block .block-footer {
+            padding: 0 32px;
+            margin: 0 -32px;
+        }
+        
+        /deep/ .mypolices-block .block-footer button:after {
+            background: url(/img/arrow-right-bold.svg) 0 0 no-repeat;
+            right: 32px;
+            width: 16px;
+        }
+        
+        /deep/ .img-mypolices-img {
+            width: 33px;
+            height: 22px;
+            position: absolute;
+            top: 20px;
+            left: 32px;
+        }
+        
+        /deep/ .mypolices-title {
+            font-size: 18px;
+            line-height: 22px;
+            color: #363D44;
+            padding-left: 48px;
+        }
+        
+        /deep/ .mypolices-name {
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 16px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: #363D44;
+            margin-top: 23px;
+        }
+        
+        /deep/ .mypolices-number {
+            font-size: 14px;
+            line-height: 16px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: #008B4E;
+            margin-top: 11px;
+        }
+        
+        /deep/ .mypolices-time {
+            font-size: 14px;
+            line-height: 17px;
+            color: #565656;
+            margin-top: 8px;
+            margin-bottom: 19px;
+        }
+        
+        /deep/ .mypolices-time b {
+            color: #000000;
+        }
+        
+        /deep/ .title-bottom-line {
+            border-bottom: 1px solid #D8D8D8;
+            padding-bottom: 15px !important;
+        }
