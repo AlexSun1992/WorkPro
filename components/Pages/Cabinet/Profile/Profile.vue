@@ -30,6 +30,7 @@ export default {
   props: ['params'],
   methods: {
     cancel() {
+      console.log('test');
       this.show = false;
       this.$nextTick(() => {
         this.show = true;
