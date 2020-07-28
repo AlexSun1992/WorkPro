@@ -14,7 +14,6 @@
         default: () => null
       },
       menuId: {
-        type: String,
         required: true,
         default: () => ''
       },

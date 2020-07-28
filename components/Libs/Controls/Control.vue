@@ -1,6 +1,6 @@
 <template>
   <b-col :xl="col" :lg="data.cols" md="12" sm="12">
-    <component  v-bind:is="comp" @edit="$emit('edit', $event)" v-bind:data="data" v-bind:edit="edit"></component>
+    <component  v-bind:is="comp" @edit="$emit('edit', $event)" @update="$emit('update', $event)" v-bind:data="data" v-bind:edit="edit"></component>
   </b-col>
 </template>
 <script>

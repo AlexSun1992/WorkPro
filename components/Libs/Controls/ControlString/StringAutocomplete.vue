@@ -86,6 +86,7 @@ export default {
       this.open = false;
     },
     async getSuggestions(name) {
+      this.$emit('code', this.data.value);
       let API_KEY = '7a6080c3383b4dc69e786e1cd5c88366ab58a14c';
       this.open = true;
       this.current = 0;
@@ -101,7 +102,7 @@ export default {
           params.parts = ["NAME"];
         } else if (name === 'SSECONDNAME') {
           params.parts = ["SURNAME"];
-        } else if (name === 'PATRONYMIC') {
+        } else if (name === 'STHIRDNAME') {
           params.parts = ["PATRONYMIC"];
         }
         let result = await this.$store.dispatch('card/fetchSuggestions', params);
@@ -111,14 +112,7 @@ export default {
       } else if (name.includes('ADDRESS')) {
         params.suggestionType = 'address';
       } else if (name === 'SISSUED_WHERE' || name === 'SDOCDEP') {
-        const docType = this.$parent.$parent.$parent.$parent.$children.find(item => {
-          return item.data.name === 'FKIDDOCTYPE';
-        });
-        if (docType.data.value.value == 35 || docType.data.value.value == 36 || docType.data.value.value == 21) {
-          params.suggestionType = 'fms_unit';
-        } else {
-          return;
-        }
+        params.suggestionType = 'fms_unit';
         let suggestions = {};
         suggestions.data = await this.$store.dispatch('card/fetchSuggestions', params);
         let obj = {};

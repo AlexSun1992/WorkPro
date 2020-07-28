@@ -1,44 +1,43 @@
 <template>
   <div>
-    <b-card title="Мой профиль">
-      <div class="profile">
-        <edit v-if="isEditForm" @editClose="isEditForm=false" :data="editCard"></edit>
-        <profile-info v-if="show" v-show="!isEditForm" @load="dataLoaded=true" @update="updateForm($event)" @cancel="cancel" :params="params"></profile-info>
-        <profile-side-block v-if="dataLoaded" class="ml-4">
-          <slot></slot>
-        </profile-side-block>
-      </div>
-    </b-card>
+    <component :is="params.settings.isModal ? 'b-modal' : 'div'" id="profile-modal" @close="closeModal" no-close-on-backdrop hide-footer>
+      <b-card title="Мой профиль">
+        <div class="profile">
+          <profile-info v-if="show" @load="dataLoaded=true" @cancel="cancel" :params="params"></profile-info>
+          <profile-side-block v-if="dataLoaded" class="ml-4">
+            <slot></slot>
+          </profile-side-block>
+        </div>
+      </b-card>
+    </component>
   </div>
 </template>
 
 <script>
 import ProfileInfo from '~/components/Pages/Cabinet/Profile/ProfileInfo'
-import Edit from '~/components/Pages/Cabinet/Profile/Card/Edit'
 import ProfileSideBlock from '~/components/Pages/Cabinet/Profile/ProfileSideBlock'
 export default {
   name: "Profile",
-  components: { ProfileInfo, ProfileSideBlock, Edit },
+  components: { ProfileInfo, ProfileSideBlock },
   data() {
     return {
       dataLoaded: false,
-      show: true,
-      isEditForm: false,
-      editCard: null
+      show: true
     }
   },
   props: ['params'],
+  mounted() {
+    this.$bvModal.show('profile-modal')
+  },
   methods: {
     cancel() {
-      console.log('test');
       this.show = false;
       this.$nextTick(() => {
         this.show = true;
       })
     },
-    updateForm(e) {
-      this.isEditForm=true;
-      this.editCard = e.data;
+    closeModal() {
+      this.$router.back();
     }
   },
   computed: {
@@ -55,5 +54,9 @@ export default {
   .profile {
     display: flex;
     justify-content: space-between;
+  }
+  /deep/ .modal-dialog {
+    width: 95vw;
+    max-width: 100%;
   }
 </style>

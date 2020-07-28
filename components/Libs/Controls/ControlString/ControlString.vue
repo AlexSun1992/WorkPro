@@ -4,6 +4,7 @@
         :data="data"
         :edit="edit"
         @update="data.value=$event"
+        @code="getCode($event)"
       ></string-autocomplete>
     </b-form-group>
 </template>
@@ -28,6 +29,12 @@ export default {
   computed: {
     label () {
       return `${this.data.label}`
+    }
+  },
+  methods: {
+    getCode(e) {
+      this.data.value=e;
+      this.$emit('update', e);
     }
   }
 }

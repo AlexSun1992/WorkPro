@@ -38,9 +38,10 @@ export const actions = {
     commit('setForm', []);
     commit('clearBlock');
   },
-  async executeAction ({commit, dispatch, getters}, {rowId, itemId, actionId}) {
-    await this.$axios.post(`/am/main/v2/actionexec/${rowId}/${actionId}`, {})
+  async executeAction ({commit, dispatch, getters}, {rowId, itemId, actionId, body}) {
+    await this.$axios.post(`/am/main/v2/actionexec/${rowId}/${actionId}`, body ? body : {})
       .then(async resp => {
+        if (body) return;
         dispatch('updateBlock', itemId)
       })
   },

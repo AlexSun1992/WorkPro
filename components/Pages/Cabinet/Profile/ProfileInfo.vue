@@ -3,7 +3,7 @@
     <b-tabs v-if="wizardData" content-class="mt-3">
       <div v-for="(item, i) in wizardData" :key="i">
         <b-tab v-if="item.data.length" :title="item.title">
-          <profile-form ref="profile-form" :data="item.data" :edit="editForm" :params="params" @update="updateForm($event)"></profile-form>
+          <profile-form ref="profile-form" :data="item.data" :edit="editForm" :params="params"></profile-form>
         </b-tab>
       </div>
     </b-tabs>
@@ -38,11 +38,6 @@ export default {
   computed: {
     wizardData() {
       return JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']));
-    },
-    actions: {
-      get: function () {
-        return this.$store.getters['menu/getMenuById'](this.params.page.idItem).ACTIONSCUR
-      }
     }
   },
   methods: {
@@ -93,9 +88,6 @@ export default {
     },
     cancel(e) {
       this.$emit('cancel');
-    },
-    updateForm(e) {
-      this.$emit('update', e)
     }
   }
 };
