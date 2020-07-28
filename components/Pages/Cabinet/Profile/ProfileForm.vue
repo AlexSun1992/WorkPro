@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" centered v-model="editData.show">
+    <b-modal v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" no-close-on-backdrop @close="cancelCard" centered v-model="editData.show">
       <card :data="editData.data" @actions="actions=$event" @update="updateNumber($event)"></card>
       <action-button class="action-button" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
       <template v-slot:modal-footer="{ ok, cancel }">
@@ -32,7 +32,9 @@
         editDataForm: this.data,
         editData: null,
         actions: null,
-        body: null
+        body: null,
+        number: null,
+        code: null
       }
     },
     methods: {
@@ -42,16 +44,45 @@
       openEdit(e) {
         this.editData = e;
       },
-      saveCard() {
+      async saveCard() {
+        // Перенести в actions
+        let params = {
+            "NUMBER": this.number,
+            "CODE": this.code
+        }
+        try {
+          // Заменить на idModule, idItem
+          await this.$axios.put(`/am/main/v2/datacard/55/719/0`, params)
+          .then(async resp => {
+            if (resp.status == 200) {
+              this.$bvToast.toast('Успешно сохранено', {
+                title: ``,
+                variant: 'success',
+                solid: true
+              })
+            }
+          })
+        } catch (e) {
+          this.$bvToast.toast('Error', {
+            title: `Ошибка`,
+            variant: 'danger',
+            noAutoHide: true,
+            solid: true
+          })
+        }
       },
       cancelCard() {
       },
       getCode() {
-
       },
       updateNumber(e) {
-        this.body = {
-          "sNumber": e
+        if (e.length > 5) {
+          this.number = e;
+          this.body = {
+            "sNumber": e
+          }
+        } else {
+          this.code = e;
         }
       }
     },
