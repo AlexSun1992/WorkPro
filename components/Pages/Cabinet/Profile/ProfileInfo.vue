@@ -3,7 +3,7 @@
     <b-tabs v-if="wizardData" content-class="mt-3">
       <div v-for="(item, i) in wizardData" :key="i">
         <b-tab v-if="item.data.length" :title="item.title">
-          <profile-form ref="profile-form" :data="item.data" :edit="editForm" :params="params"></profile-form>
+          <profile-form ref="profile-form" @phone-changed="$emit('phone-changed')" :data="item.data" :edit="editForm" :params="params"></profile-form>
         </b-tab>
       </div>
     </b-tabs>

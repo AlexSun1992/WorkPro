@@ -44,6 +44,9 @@
       openEdit(e) {
         this.editData = e;
       },
+      refreshForm() {
+        this.notChanged = true;
+      },
       async saveCard() {
         // Перенести в actions
         let params = {
@@ -55,6 +58,7 @@
           await this.$axios.put(`/am/main/v2/datacard/55/719/0`, params)
           .then(async resp => {
             if (resp.status == 200) {
+              this.$emit('phone-changed');
               this.$bvToast.toast('Успешно сохранено', {
                 title: ``,
                 variant: 'success',
@@ -72,8 +76,6 @@
         }
       },
       cancelCard() {
-      },
-      getCode() {
       },
       updateNumber(e) {
         if (e.length > 5) {
