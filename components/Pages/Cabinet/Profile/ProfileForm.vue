@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{number}}
     <b-modal v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" no-close-on-backdrop @close="cancelCard" centered v-model="editData.show">
       <card :data="editData.data" @actions="actions=$event" @update="updateNumber($event)"></card>
       <action-button :disabled="disabledCode" class="action-button" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
@@ -36,7 +35,6 @@
         body: null,
         number: null,
         code: null,
-        disabled: true,
         disabledCode: true,
         disabledSave: true
       }
@@ -52,31 +50,26 @@
         this.notChanged = true;
       },
       async saveCard() {
-        // Перенести в actions
         let params = {
             "NUMBER": this.number,
-            "CODE": this.code
+            "CODE": this.code,
+            "idItem": this.editData.data.name.split('Card')[1]
         }
-        try {
-          // Заменить на idModule, idItem
-          await this.$axios.put(`/am/main/v2/datacard/55/719/0`, params)
-          .then(async resp => {
-            if (resp.status == 200) {
-              this.$bvToast.toast('Успешно сохранено', {
-                title: ``,
-                variant: 'success',
-                solid: true
-              })
-              this.$emit('phone-changed');
-            }
-          })
-        } catch (e) {
+        let resp = await this.$store.dispatch('card/editCard', params);
+        if (resp.status == 200) {
+          this.$bvToast.toast('Успешно сохранено', {
+          title: ``,
+          variant: 'success',
+          solid: true
+        });
+        this.$emit('phone-changed');
+        } else {
           this.$bvToast.toast('Error', {
-            title: `Ошибка`,
-            variant: 'danger',
-            noAutoHide: true,
-            solid: true
-          })
+          title: `Ошибка`,
+          variant: 'danger',
+          noAutoHide: true,
+          solid: true
+        })
         }
       },
       cancelCard() {
