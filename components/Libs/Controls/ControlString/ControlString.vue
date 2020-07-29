@@ -4,7 +4,7 @@
         :data="data"
         :edit="edit"
         @update="data.value=$event"
-        @code="getCode($event)"
+        @changed-field="updateField($event)"
       ></string-autocomplete>
     </b-form-group>
 </template>
@@ -32,8 +32,8 @@ export default {
     }
   },
   methods: {
-    getCode(e) {
-      this.data.value=e;
+    updateField(e) {
+      this.data.value=e.value;
       this.$emit('update', e);
     }
   }

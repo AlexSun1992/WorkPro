@@ -1,10 +1,11 @@
 <template>
   <div>
+    {{number}}
     <b-modal v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" no-close-on-backdrop @close="cancelCard" centered v-model="editData.show">
       <card :data="editData.data" @actions="actions=$event" @update="updateNumber($event)"></card>
-      <action-button class="action-button" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
+      <action-button :disabled="disabledCode" class="action-button" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
       <template v-slot:modal-footer="{ ok, cancel }">
-        <b-button pill type="button" variant="success" @click="ok()">
+        <b-button :disabled="disabledSave" pill type="button" variant="success" @click="ok()">
           Сохранить
         </b-button>
         <b-button pill type="button" variant="outline-success" @click="cancel()">
@@ -34,7 +35,10 @@
         actions: null,
         body: null,
         number: null,
-        code: null
+        code: null,
+        disabled: true,
+        disabledCode: true,
+        disabledSave: true
       }
     },
     methods: {
@@ -58,12 +62,12 @@
           await this.$axios.put(`/am/main/v2/datacard/55/719/0`, params)
           .then(async resp => {
             if (resp.status == 200) {
-              this.$emit('phone-changed');
               this.$bvToast.toast('Успешно сохранено', {
                 title: ``,
                 variant: 'success',
                 solid: true
               })
+              this.$emit('phone-changed');
             }
           })
         } catch (e) {
@@ -78,18 +82,24 @@
       cancelCard() {
       },
       updateNumber(e) {
-        if (e.length > 5) {
-          this.number = e;
+        if (e.name === 'SNEWPHONE') {
+          this.number = e.value;
           this.body = {
-            "sNumber": e
+            "sNumber": e.value
           }
-        } else {
-          this.code = e;
+        } else if (e.name === 'SCODEFIELD') {
+          this.code = e.value;
         }
       }
     },
     watch: {
-      'data': 'setData'
+      'data': 'setData',
+      number(val) {
+        this.disabledCode = val.length == 10 ? false : true;
+      },
+      code(val) {
+        this.disabledSave = val.length == 4 ? false : true;
+      }
     }
   }
 </script>

@@ -86,7 +86,10 @@ export default {
       this.open = false;
     },
     async getSuggestions(name) {
-      this.$emit('code', this.data.value);
+      this.$emit('changed-field', {
+        name,
+        value: this.data.value
+      });
       let API_KEY = '7a6080c3383b4dc69e786e1cd5c88366ab58a14c';
       this.open = true;
       this.current = 0;
@@ -106,11 +109,12 @@ export default {
           params.parts = ["PATRONYMIC"];
         }
         let result = await this.$store.dispatch('card/fetchSuggestions', params);
-        result = result.map(item => item.value);
-        this.$set(this.suggestions, 'data', result);
+        this.$set(this.suggestions, 'data', result.map(item => item.value));
         return;
       } else if (name.includes('ADDRESS')) {
         params.suggestionType = 'address';
+        let result = await this.$store.dispatch('card/fetchSuggestions', params);
+        this.$set(this.suggestions, 'data', result.map(item => item.value));
       } else if (name === 'SISSUED_WHERE' || name === 'SDOCDEP') {
         params.suggestionType = 'fms_unit';
         let suggestions = {};
