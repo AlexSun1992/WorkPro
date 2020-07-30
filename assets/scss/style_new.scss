@@ -17,7 +17,7 @@
             box-shadow: none;
             color: #fff;
             background: #CBE0D7;
-            border-radius: 0px 60px 60px 0px;
+            border-radius: 0px 50px 50px 0px;
             z-index: 1;
             position: relative;
             min-height: calc(100vh - 80px);
@@ -955,15 +955,15 @@
         }
         
         /deep/ .sidebar_client:before {
-            width: 151px;
-            height: 144px;
+            width: 100px;
+            height: 100px;
             margin: 10px 0 20px 0;
             border-radius: 50%;
-            box-shadow: inset -62px -1px 0 0 #CBE0D7;
+            box-shadow: inset -60px -1px 0 0 #CBE0D7;
             position: absolute;
-            top: -132px;
-            left: -62px;
-            transform: rotate(157deg);
+            top: -80px;
+            left: -56px;
+            transform: rotate(149deg);
             content: "";
         }
         
