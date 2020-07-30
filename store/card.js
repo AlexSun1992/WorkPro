@@ -195,7 +195,17 @@ export const actions = {
     let result = await response.json();
     return result.suggestions;
     // return result.suggestions.map(item => item.value);
-  }
+  },
+  async editCard({commit, getters}, params) {
+    try {
+      let idItem = params.idItem;
+      delete params.idItem;
+      let response = await this.$axios.put(`/am/main/v2/datacard/${getters['page'].idModule}/${idItem}/0`, params);
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
 }
 
 export const mutations = {

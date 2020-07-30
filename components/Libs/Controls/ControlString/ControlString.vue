@@ -4,6 +4,7 @@
         :data="data"
         :edit="edit"
         @update="data.value=$event"
+        @changed-field="updateField($event)"
       ></string-autocomplete>
     </b-form-group>
 </template>
@@ -28,6 +29,12 @@ export default {
   computed: {
     label () {
       return `${this.data.label}`
+    }
+  },
+  methods: {
+    updateField(e) {
+      this.data.value=e.value;
+      this.$emit('update', e);
     }
   }
 }

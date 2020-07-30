@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form-row>
-      <Control  v-for='(item, index) in items' @edit="$emit('edit', $event)" :key='index' v-bind:data="item" v-bind:edit="edit" :cols="cols"></Control>
+      <Control  v-for='(item, index) in items' @edit="$emit('edit', $event)" @update="$emit('update', $event)" :key='index' v-bind:data="item" v-bind:edit="edit" :cols="cols"></Control>
     </b-form-row>
   </div>
 </template>

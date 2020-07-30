@@ -22,6 +22,10 @@
         type: Number,
         required: false,
         default: () => 0
+      },
+      body: {
+        type: Object,
+        required: false
       }
     },
     methods: {
@@ -33,7 +37,7 @@
             }
           }
           else{
-            await this.$store.dispatch('blocks/executeAction', {actionId:this.actionId, rowId:this.rowId, itemId:this.action.NITEM});
+            await this.$store.dispatch('blocks/executeAction', {actionId:this.actionId, rowId:this.rowId, itemId:this.action.NITEM, body:this.body});
           }
         } catch(err) {
           this.$bvToast.toast(err.response.data.MESSAGE, {

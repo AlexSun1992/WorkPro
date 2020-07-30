@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card v-if="getFormData">
-      <card-form :data="getFormData" :edit="editForm"></card-form>
+      <card-form :data="getFormData" :edit="editForm" @update="$emit('update', $event)"></card-form>
     </b-card>
   </div>
 </template>
@@ -22,6 +22,10 @@
       this.$store.dispatch('card/clearCardForm');
       let cardId = this.data.name.split('Card')[1];
       await this.$store.dispatch('card/fetchCardForm', cardId);
+      if (this.$store.getters['menu/flatmenu'].length) {
+        let menu = this.$store.getters['menu/flatmenu'].find(item => item.IDITEM == cardId);
+        this.$emit('actions', menu.ACTIONSCUR);
+      }
     },
     computed: {
       getFormData() {

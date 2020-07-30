@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form :data="editDataForm" @edit="openEdit($event)" :edit="editForm"></Form>
+    <Form :data="editDataForm" @edit="openEdit($event)" @update="$emit('update', $event)" :edit="editForm"></Form>
   </div>
 </template>
 
