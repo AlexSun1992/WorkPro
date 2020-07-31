@@ -2,7 +2,7 @@
   <div class="wrapper">
     <b-tabs v-if="wizardData" content-class="mt-3">
       <div v-for="(item, i) in wizardData" :key="i">
-        <b-tab v-if="item.data.length" :title="item.title">
+        <b-tab :title="item.title" :active="isActive(i)">
           <profile-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="editForm" :params="params"></profile-form>
         </b-tab>
       </div>
@@ -28,7 +28,8 @@ export default {
   data() {
     return {
       editForm: true,
-      initialWizardData: null
+      initialWizardData: null,
+      invalidFields: []
     }
   },
   created() {
@@ -50,13 +51,15 @@ export default {
       this.$emit('load');
     },
     validateData(data) {
+      this.invalidFields.length = 0;
       let valid = true
       for (let i = 0; i < data.length; i++) {
         let value = data[i].type === 'enum' ? data[i].value.value : data[i].value
         data[i].checked = true
         if (data[i].required && !value && data[i].type !== 'boolean') {
-          data[i].state = false
-          valid = false
+          data[i].state = false;
+          valid = false;
+          this.invalidFields.push(data[i]);
         }
       }
       return valid;
@@ -88,6 +91,11 @@ export default {
     },
     cancel(e) {
       this.$emit('cancel');
+    },
+    isActive(i) {
+      if(this.invalidFields.length) {
+        return this.invalidFields[0].page == i;
+      }
     }
   }
 };
