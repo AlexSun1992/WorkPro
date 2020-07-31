@@ -2,9 +2,9 @@
   <div>
     <b-modal v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" no-close-on-backdrop @close="cancelCard" centered v-model="editData.show">
       <card :data="editData.data" @actions="actions=$event" @update="updateNumber($event)"></card>
-      <action-button :disabled="disabledCode" class="action-button" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
+      <action-button :disabled="noPhone" class="action-button" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
       <template v-slot:modal-footer="{ ok, cancel }">
-        <b-button :disabled="disabledSave" pill type="button" variant="success" @click="ok()">
+        <b-button :disabled="(noCode || noPhone) && noEmail" pill type="button" variant="success" @click="ok()">
           Сохранить
         </b-button>
         <b-button pill type="button" variant="outline-success" @click="cancel()">
@@ -32,11 +32,14 @@
         editDataForm: this.data,
         editData: null,
         actions: null,
+        cardId: null,
         body: null,
         number: null,
         code: null,
-        disabledCode: true,
-        disabledSave: true
+        email: null,
+        noPhone: true,
+        noCode: true,
+        noEmail: true,
       }
     },
     methods: {
@@ -45,34 +48,35 @@
       },
       openEdit(e) {
         this.editData = e;
-      },
-      refreshForm() {
-        this.notChanged = true;
+        this.cardId = this.editData.data.name.split('Card')[1];
       },
       async saveCard() {
         let params = {
-            "NUMBER": this.number,
-            "CODE": this.code,
-            "idItem": this.editData.data.name.split('Card')[1]
+          "idItem": this.cardId
+        };
+        if (this.cardId == 719) {
+          params['NUMBER'] = this.number;
+          params['CODE'] = this.code
+        } 
+        else if (this.cardId == 718) {
+          params['NEWEMAIL'] = this.email;
         }
         let resp = await this.$store.dispatch('card/editCard', params);
         if (resp.status == 200) {
-          this.$bvToast.toast('Успешно сохранено', {
-          title: ``,
-          variant: 'success',
-          solid: true
-        });
-        this.$emit('phone-changed');
-        } else {
-          this.$bvToast.toast('Error', {
-          title: `Ошибка`,
-          variant: 'danger',
-          noAutoHide: true,
-          solid: true
-        })
+          this.$emit('saved');
+          this.$emit('field-changed');
+        } 
+        else {
+          this.$emit('error');
         }
       },
       cancelCard() {
+        this.noPhone = true;
+        this.noCode = true;
+        this.noEmail = true;
+        this.phone = null;
+        this.code = null;
+        this.email = null;
       },
       updateNumber(e) {
         if (e.name === 'SNEWPHONE') {
@@ -82,16 +86,24 @@
           }
         } else if (e.name === 'SCODEFIELD') {
           this.code = e.value;
+        } else if (e.name === 'SNEWEMAIL') {
+          this.email = e.value;
         }
       }
     },
     watch: {
       'data': 'setData',
       number(val) {
-        this.disabledCode = val.length == 10 ? false : true;
+        const reg = /^[0-9]{10}$/;
+        this.noPhone = !reg.test(val);
       },
       code(val) {
-        this.disabledSave = val.length == 4 ? false : true;
+        const reg = /^[0-9]{4}$/;
+        this.noCode = !reg.test(val);
+      },
+      email(val) {
+        const reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        this.noEmail = !reg.test(val);
       }
     }
   }

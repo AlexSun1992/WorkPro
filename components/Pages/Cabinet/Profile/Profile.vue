@@ -3,7 +3,7 @@
     <component :is="params.settings.isModal ? 'b-modal' : 'div'" id="profile-modal" @close="closeModal" no-close-on-backdrop hide-footer>
       <b-card title="Мой профиль">
         <div class="profile">
-          <profile-info @phone-changed="refresh()" v-if="show" @load="dataLoaded=true" @cancel="refresh()" :params="params"></profile-info>
+          <profile-info @field-changed="refresh()" @saved="showSaveToast()" @error="showErrorToast()" v-if="show" @load="dataLoaded=true" @cancel="refresh()" :params="params"></profile-info>
           <profile-side-block v-if="dataLoaded" class="ml-4">
             <slot></slot>
           </profile-side-block>
@@ -38,6 +38,21 @@ export default {
     },
     closeModal() {
       this.$router.back();
+    },
+    showSaveToast() {
+      this.$bvToast.toast('Успешно сохранено', {
+        title: ``,
+        variant: 'success',
+        solid: true
+      });
+    },
+    showErrorToast() {
+      this.$bvToast.toast('Error', {
+        title: `Ошибка`,
+        variant: 'danger',
+        noAutoHide: true,
+        solid: true
+      })
     }
   },
   computed: {

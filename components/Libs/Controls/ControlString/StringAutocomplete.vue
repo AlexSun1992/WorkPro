@@ -2,16 +2,18 @@
   <div class="autocomplete">
     <b-form-input
       class="form-control"
-      type="text"
+      :type="getType(data.name)"
       v-model="data.value"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
+      :placeholder="showPlaceholder(data.name)"
       @keydown.enter="enter"
       @keydown.down="down"
       @keydown.up="up"
       @input="getSuggestions(data.name)"
       @blur="debouncedClose()"
+      :id="data.name"
     ></b-form-input>
     <b-form-invalid-feedback>Обязательно для заполнения</b-form-invalid-feedback>
     <ul v-if="open && suggestions && suggestions.data && suggestions.data.length" :class="{'dropdown-menu': open}">
@@ -137,20 +139,42 @@ export default {
         this.$set(this.suggestions, 'data', obj.values);
         this.$set(this.suggestions, 'type', obj.type);
       } 
+    },
+    showPlaceholder(name) {
+      if (name === 'SNEWPHONE') {
+        return 'Введите 10 цифр Вашего телефона'
+      } else if (name === 'SCODEFIELD') {
+        return 'Введите код';
+      } else if (name === 'SNEWEMAIL') {
+        return 'Введите новый email';
+      }
+    },
+    getType(name) {
+      if (name === 'SNEWPHONE' || name === 'SCODEFIELD') {
+        return 'number';
+      } else {
+        return 'text';
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-.autocomplete {
-  position: relative;
-}
-.dropdown-menu {
-  display: block;
-  width: 100%;
-}
-.active {
-  background-color: lightgrey;
-}
+  .autocomplete {
+    position: relative;
+  }
+  .dropdown-menu {
+    display: block;
+    width: 100%;
+  }
+  .active {
+    background-color: lightgrey;
+  }
+
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
 </style>
