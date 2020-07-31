@@ -12,6 +12,10 @@
         @import "~bootstrap/scss/bootstrap";
         // Custom styles
         @import "custom";
+        body {
+            background: linear-gradient(132.21deg, #FFFFFF 1.33%, rgba(243, 247, 244, 0.97) 101.82%);
+        }
+        
         /deep/ .sidebar_client {
             padding: 0;
             box-shadow: none;
@@ -20,7 +24,7 @@
             border-radius: 0px 50px 50px 0px;
             z-index: 1;
             position: relative;
-            min-height: calc(100vh - 80px);
+            min-height: 100%;
         }
         
         /deep/ header>div {
@@ -457,32 +461,32 @@
         }
         
         /deep/ .header-nav-notifications {
-            width: 30px;
-            height: 30px;
+            width: 26px;
+            height: 26px;
             border: 0;
             background: url(/img/notifications.svg) 0 0 no-repeat;
         }
         
         /deep/ .header-nav-exit {
-            width: 30px;
-            height: 30px;
+            width: 22px;
+            height: 23px;
             border: 0;
             background: url(/img/exit.svg) 0 0 no-repeat;
         }
         
         /deep/ .block {
             box-sizing: border-box;
-            border-radius: 24px;
+            border-radius: 20px;
             overflow: hidden;
             position: relative;
         }
         
         /deep/ .block-border-one {
-            border: 1px solid #EAF1F7;
+            border: 1px solid #D9E1E8;
         }
         
         /deep/ .block-border-two {
-            border: 1px solid #EAF1F7;
+            border: 1px solid #D9E1E8;
         }
         
         /deep/ .bg-white {
@@ -490,7 +494,7 @@
         }
         
         /deep/ .bg-one {
-            background: #EEF4F5;
+            background: #F1F6F6;
         }
         
         /deep/ .bg-two {
@@ -527,12 +531,14 @@
         /deep/ .block-insurancecase-item:before,
         /deep/ .block-mypolicies-item:before,
         /deep/ .block-notification-item:before {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 32px;
             width: calc(100% - 64px);
-            border-top: 0.6px dashed rgba(0, 0, 0, 0.16);
+            position: absolute;
+            height: 1px;
+            background: url(/img/border1.svg) -6px 0 repeat-x;
+            content: "";
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
         }
         
         /deep/ .block-mypolicies-item {
@@ -708,9 +714,12 @@
             min-height: 57px;
             padding: 0 27px 0 32px;
             border-top: 1px solid rgba(0, 0, 0, 0.08);
-            margin-top: -1px;
             z-index: 1;
             position: relative;
+        }
+        
+        /deep/ .block-footer.row {
+            margin: 0;
         }
         
         /deep/ .block-footer button {
@@ -832,6 +841,10 @@
             align-self: center;
         }
         
+        /deep/ .block-offer img {
+            max-width: 100%;
+        }
+        
         /deep/ .block-offer-button {
             font-family: Roboto;
             font-style: normal;
@@ -846,6 +859,7 @@
             padding: 13px 50px 13px 32px;
             align-self: end;
             cursor: pointer;
+            min-height: 57px;
         }
         
         /deep/ .block-offer-button b {
@@ -976,4 +990,53 @@
             /* transform: rotate(-147deg); */
             background: #CBE0D7;
             content: "";
+        }
+        
+        /deep/ .block-hover:hover {
+            box-shadow: 12px 16px 16px rgba(221, 235, 226, 0.32);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        
+        /deep/ .block-hover:hover:after {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.03);
+            content: "";
+            transition: 0.3s;
+        }
+        
+        /deep/ .block-hover:hover .block-footer:after {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.05);
+            content: "";
+            transition: 0.3s;
+        }
+        
+        /deep/ .b-top:after {
+            width: calc(100% - 64px);
+            position: absolute;
+            height: 1px;
+            background: url(/img/border1.svg) -6px 0 repeat-x;
+            content: "";
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /deep/ .block .block-title+div>div:last-of-type div[class^="block-"]:before {
+            display: none;
+        }
+        
+        .app {
+            display: grid;
+            grid-template-rows: 80px auto min-content;
+            min-height: 100vh;
         }
