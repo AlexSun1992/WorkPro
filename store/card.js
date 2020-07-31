@@ -122,11 +122,11 @@ export const actions = {
       });
       obj.maxCol = Math.max(...cols);
       tab.data.forEach(field => {
-        // field.cols = field.cols*12/obj.maxCol;
-        if (field.width == 0) {
-          field.width = 100;
-        }
-        field.cols = Math.ceil((field.cols/obj.maxCol) * (field.width/100) * 12);
+        field.cols = field.cols*12/obj.maxCol;
+        // if (field.width == 0) {
+        //   field.width = 100;
+        // }
+        // field.cols = Math.ceil((field.cols/obj.maxCol) * (field.width/100) * 12);
       });
     });
     commit('setWizardData', tabs);

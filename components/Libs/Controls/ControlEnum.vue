@@ -1,6 +1,6 @@
 <template>
   <span  @click="onfocus">
-    <b-form-group :label="data.label" :class="{required: data.required}">
+    <b-form-group :label="data.label" :class="{required: data.required}" :label-cols="data.labelCols ? data.labelCols : 2">
       <model-list-select  :list="options"
                          option-value="value"
                          option-text="text"
