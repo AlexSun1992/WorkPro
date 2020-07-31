@@ -32,7 +32,5 @@ export default {
 </script>
 
 <style scoped>
-  .button {
-    margin-top: 28px;
-  }
+ 
 </style>

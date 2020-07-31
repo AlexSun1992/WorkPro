@@ -13,6 +13,7 @@
       @keydown.up="up"
       @input="getSuggestions(data.name)"
       @blur="debouncedClose()"
+      :id="data.name"
     ></b-form-input>
     <b-form-invalid-feedback>Обязательно для заполнения</b-form-invalid-feedback>
     <ul v-if="open && suggestions && suggestions.data && suggestions.data.length" :class="{'dropdown-menu': open}">
