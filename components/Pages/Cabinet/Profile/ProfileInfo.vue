@@ -35,7 +35,7 @@ export default {
   },
   async fetch () {
     await this.fetchWizard();
-    this.wizardData = this.$store.getters['card/wizardData'];
+    this.wizardData = JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']));
   },
   created() {
     this.$store.dispatch('card/setCard', this.params);
