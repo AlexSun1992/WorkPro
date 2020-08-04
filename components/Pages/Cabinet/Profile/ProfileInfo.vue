@@ -33,14 +33,12 @@ export default {
       wizardData: null
     }
   },
-  async created() {
-    this.$store.dispatch('card/setCard', this.params);
-    debugger
+  async fetch () {
     await this.fetchWizard();
-    debugger
     this.wizardData = this.$store.getters['card/wizardData'];
-    console.log(this.wizardData);
-    debugger
+  },
+  created() {
+    this.$store.dispatch('card/setCard', this.params);
   },
   methods: {
     async fetchWizard() {
