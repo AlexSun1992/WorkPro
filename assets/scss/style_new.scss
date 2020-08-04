@@ -24,7 +24,7 @@
             border-radius: 0px 50px 50px 0px;
             z-index: 1;
             position: relative;
-            min-height: 100%;
+            height: 100%;
         }
         
         /deep/ header>div {
@@ -507,6 +507,14 @@
         
         /deep/ .bg-for {
             background: #DBEFE6;
+        }
+        
+        /deep/ .bg-five {
+            background: linear-gradient(128.81deg, #FEFEFE 1.33%, #FCFDFD 50.2%, #FBFDFC 101.82%);
+        }
+        
+        /deep/ .bg-six {
+            background: #F3F7F8;
         }
         
         /deep/ .block-notification-item:hover {
@@ -1039,4 +1047,53 @@
             display: grid;
             grid-template-rows: 80px auto min-content;
             min-height: 100vh;
+        }
+        
+        /deep/ .profile .wrapper {
+            background: #F3F7F8;
+            border: 1px solid #D9E1E8;
+            padding: 24px 33px;
+        }
+        
+        /deep/ .profile .wrapper label {
+            font-family: Proxima Nova;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 17px;
+            color: #7D8B9C;
+        }
+        
+        /deep/ .profile .wrapper input {
+            background: #FFFFFF;
+            border-radius: 6px;
+        }
+        
+        /deep/ .profile .wrapper .tab-content .tab-pane {
+            padding: 0;
+        }
+        
+        /deep/ .profile .wrapper .tab-content {
+            background: transparent;
+            border: 0;
+        }
+        
+        /deep/ .profile .wrapper .nav-tabs .nav-link {
+            border: 0 !important;
+            background: transparent !important;
+            position: relative;
+        }
+        
+        /deep/ .profile .wrapper .nav-tabs .nav-link.active:after {
+            background: #008B4E;
+            width: 100%;
+            height: 1px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            content: "";
+        }
+        
+        /deep/ .profile .wrapper .nav-tabs {
+            border-bottom: 1px solid #E7EEF2;
         }
