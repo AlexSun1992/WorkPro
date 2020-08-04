@@ -115,7 +115,7 @@
   }
   .action-button {
     position: absolute;
-    right: 140px;
-    bottom: 61px;
+    right: 220px;
+    bottom: 65px;
   }
 </style>

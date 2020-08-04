@@ -1,6 +1,8 @@
 <template>
   <b-col :xl="col" :lg="data.cols" md="12" sm="12" class="mb-4">
-    <component  v-bind:is="comp" @edit="$emit('edit', $event)" @update="$emit('update', $event)" v-bind:data="data" v-bind:edit="edit"></component>
+    <div class="control" :style="{width: data.width ? data.width : '100%'}">
+      <component class="mt-2 mr-3" v-bind:is="comp" @edit="$emit('edit', $event)" @update="$emit('update', $event)" v-bind:data="data" v-bind:edit="edit"></component>
+    </div>
   </b-col>
 </template>
 <script>
@@ -66,5 +68,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .control > fieldset {
+    margin-bottom: 0;
+  }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <b-form-group  :label="label">
+  <b-form-group  :label="label" :label-cols="data.labelCols ? data.labelCols : 2">
     <b-form-textarea id="textarea1"
                      v-model="data.value"
                      :disabled="!edit ? !edit : data.readonly"

@@ -29,17 +29,16 @@ export default {
     return {
       editForm: true,
       initialWizardData: null,
-      invalidFields: []
+      invalidFields: [],
+      wizardData: null
     }
+  },
+  async fetch () {
+    await this.fetchWizard();
+    this.wizardData = this.$store.getters['card/wizardData'];
   },
   created() {
     this.$store.dispatch('card/setCard', this.params);
-    this.fetchWizard();
-  },
-  computed: {
-    wizardData() {
-      return JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']));
-    }
   },
   methods: {
     async fetchWizard() {

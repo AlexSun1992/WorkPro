@@ -2,7 +2,7 @@
 <div>
   <b-row>
     <b-col sm="6">
-      <b-form-group :label="data.label" >
+      <b-form-group :label="data.label" :label-cols="data.labelCols ? data.labelCols : 2">
         <b-form-select v-model="data.month" :options="months">
         </b-form-select>
       </b-form-group>
