@@ -1139,11 +1139,10 @@
             font-style: normal;
             font-weight: normal;
             font-size: 14px;
-            line-height: 16px;
+            line-height: 21px;
             text-decoration-line: underline;
             color: #008B4E;
             text-decoration: underline;
-            line-height: 33px;
         }
         
         /deep/ .link-button:hover,
@@ -1176,4 +1175,60 @@
             top: 50%;
             left: 0;
             transform: translateY(-50%);
+        }
+        
+        /deep/ .ui.selection.dropdown {
+            border-radius: 6px;
+        }
+        
+        /deep/ .control {
+            line-height: 0;
+        }
+        
+        /deep/ .form-group {
+            margin-bottom: 0;
+        }
+        
+        /deep/ .btn-success {
+            background: #22A66A;
+            box-shadow: 2px 8px 32px rgba(91, 206, 150, 0.35);
+            border-radius: 50px;
+            font-family: Roboto;
+            font-weight: bold;
+            font-size: 10px;
+            line-height: 23px;
+            text-align: center;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #FFFFFF;
+        }
+        
+        /deep/ .btn-outline-success {
+            border: 1px solid #008B4E;
+            border-radius: 50px;
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 10px;
+            line-height: 23px;
+            text-align: center;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #22A66A;
+        }
+        
+        /deep/ .btn-outline-success:hover {
+            color: #fff;
+        }
+        
+        /deep/ .modal-body input {
+            border: 1px solid red !important;
+        }
+        
+        /deep/ button+button {
+            margin-left: 20px;
+        }
+        
+        input {
+            border: 1px solid red;
         }

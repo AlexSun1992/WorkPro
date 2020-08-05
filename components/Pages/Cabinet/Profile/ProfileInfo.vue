@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <b-tabs v-if="wizardData" content-class="mt-3">
+    <b-tabs v-if="wizardData" content-class="mt-4">
       <div v-for="(item, i) in wizardData" :key="i">
         <b-tab :title="item.title" :active="isActive(i)">
           <profile-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="editForm" :params="params"></profile-form>

@@ -1,5 +1,5 @@
 <template>
-    <b-form-group class="mb-0" :label="label" :class="{required: data.required}" :label-for="data.name" label-cols="" :label-class="data.labelCols">
+    <b-form-group :label="label" :class="{required: data.required}" :label-for="data.name" label-cols="" :label-class="data.labelCols">
       <string-autocomplete
         :data="data"
         :edit="edit"
