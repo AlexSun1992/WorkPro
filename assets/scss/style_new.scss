@@ -1156,8 +1156,24 @@
             box-shadow: none;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
         }
-        /*first-label-item*/
         
-        /deep/ .f-l-i {
-            width: 140px;
+        @media (min-width: 962px) {
+            /deep/ .f-l-i {
+                flex: 0 0 140px;
+                max-width: 140px;
+            }
+        }
+        
+        /deep/ .mx-datepicker {
+            width: 120px;
+        }
+        
+        /deep/ .icon-my-profile {
+            position: absolute;
+            background: url(/img/icon-my-profile.svg) 50% 50% no-repeat;
+            width: 16px;
+            height: 21px;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
         }
