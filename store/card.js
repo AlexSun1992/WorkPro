@@ -122,7 +122,8 @@ export const actions = {
       });
       obj.maxCol = Math.max(...cols);
       tab.data.forEach(field => {
-        field.cols = field.cols*12/obj.maxCol;
+        // field.cols = field.cols*12/obj.maxCol;
+        field.cols = 12/field.cols;
         // if (field.width == 0) {
         //   field.width = 100;
         // }
