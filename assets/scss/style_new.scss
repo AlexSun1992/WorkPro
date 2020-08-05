@@ -1055,7 +1055,8 @@
             padding: 24px 33px;
         }
         
-        /deep/ .profile .wrapper label {
+        /deep/ .profile .wrapper label,
+        /deep/ .profile .wrapper legend {
             font-family: Proxima Nova;
             font-style: normal;
             font-weight: normal;
@@ -1096,4 +1097,16 @@
         
         /deep/ .profile .wrapper .nav-tabs {
             border-bottom: 1px solid #E7EEF2;
+        }
+        
+        /deep/ .required label {
+            position: relative;
+        }
+        
+        /deep/ .required label:after {
+            content: '*';
+            color: red;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
