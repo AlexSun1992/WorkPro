@@ -1055,8 +1055,14 @@
             padding: 24px 33px;
         }
         
-        /deep/ .profile .wrapper label,
-        /deep/ .profile .wrapper legend {
+        /deep/
+        /*.profile .wrapper*/
+        
+        label,
+        /deep/
+        /*.profile .wrapper*/
+        
+        legend {
             font-family: Proxima Nova;
             font-style: normal;
             font-weight: normal;
@@ -1065,27 +1071,42 @@
             color: #7D8B9C;
         }
         
-        /deep/ .profile .wrapper input {
+        /deep/
+        /*.profile .wrapper*/
+        
+        input {
             background: #FFFFFF;
             border-radius: 6px;
         }
         
-        /deep/ .profile .wrapper .tab-content .tab-pane {
+        /deep/
+        /*.profile .wrapper*/
+        
+        .tab-content .tab-pane {
             padding: 0;
         }
         
-        /deep/ .profile .wrapper .tab-content {
+        /deep/
+        /*.profile .wrapper*/
+        
+        .tab-content {
             background: transparent;
             border: 0;
         }
         
-        /deep/ .profile .wrapper .nav-tabs .nav-link {
+        /deep/
+        /*.profile .wrapper*/
+        
+        .nav-tabs .nav-link {
             border: 0 !important;
             background: transparent !important;
             position: relative;
         }
         
-        /deep/ .profile .wrapper .nav-tabs .nav-link.active:after {
+        /deep/
+        /*.profile .wrapper*/
+        
+        .nav-tabs .nav-link.active:after {
             background: #008B4E;
             width: 100%;
             height: 1px;
@@ -1095,7 +1116,10 @@
             content: "";
         }
         
-        /deep/ .profile .wrapper .nav-tabs {
+        /deep/
+        /*.profile .wrapper*/
+        
+        .nav-tabs {
             border-bottom: 1px solid #E7EEF2;
         }
         
@@ -1106,4 +1130,34 @@
         /deep/ .required label:after {
             content: '*';
             color: red;
+        }
+        
+        /deep/ .link-button {
+            border: 0;
+            background: transparent;
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 16px;
+            text-decoration-line: underline;
+            color: #008B4E;
+            text-decoration: underline;
+            line-height: 33px;
+        }
+        
+        /deep/ .link-button:hover,
+        /deep/ .link-button:active,
+        /deep/ .link-button:active:focus {
+            color: darkgreen;
+            background: transparent;
+            text-decoration: underline;
+            border: 0;
+            box-shadow: none;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        /*first-label-item*/
+        
+        /deep/ .f-l-i {
+            width: 140px;
         }
