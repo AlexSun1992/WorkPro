@@ -1,8 +1,60 @@
 // Here you can add other styles
 body {
-  background: linear-gradient(128.22deg, rgba(244, 250, 248, 0.66) 1.33%, rgba(234, 243, 238, 0.73) 101.82%);
+    background: linear-gradient(132.21deg, #FFFFFF 1.33%, rgba(243, 247, 244, 0.97) 101.82%);
 }
+
 .form-control:disabled {
     background-color: #e8f3f9;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+label,
+legend {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    color: #7D8B9C;
+}
+
+input {
+    background: #FDFDFD;
+    border-radius: 6px;
+    border: none !important;
+    font-family: Proxima Nova;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #202020;
+}
+
+.modal-content {
+    background: #FFFFFF;
+    box-shadow: 0px 13px 20px rgba(8, 68, 17, 0.0864019);
+    border-radius: 14px;
+    padding: 0 20px;
+}
+
+.modal-title {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    color: #363D44;
+}
+
+.modal-content input {
+    background: #F5F8F6;
+}
+
+.modal-header {
+    border-bottom: 1px solid #EFEFEF;
+}
+
+.modal-footer {
+    border: none;
+}

@@ -177,20 +177,4 @@ export default {
     -webkit-appearance: none; 
     margin: 0; 
   }
-       
-        label,
-        legend {
-            font-family: Proxima Nova;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 14px;
-            line-height: 17px;
-            color: #7D8B9C;
-        }
-        
-        input {
-            background: #FFFFFF;
-            border-radius: 6px;
-        }
-
 </style>

@@ -12,10 +12,6 @@
         @import "~bootstrap/scss/bootstrap";
         // Custom styles
         @import "custom";
-        body {
-            background: linear-gradient(132.21deg, #FFFFFF 1.33%, rgba(243, 247, 244, 0.97) 101.82%);
-        }
-        
         /deep/ .sidebar_client {
             padding: 0;
             box-shadow: none;
@@ -1058,30 +1054,6 @@
         /deep/
         /*.profile .wrapper*/
         
-        label,
-        /deep/
-        /*.profile .wrapper*/
-        
-        legend {
-            font-family: Proxima Nova;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 14px;
-            line-height: 17px;
-            color: #7D8B9C;
-        }
-        
-        /deep/
-        /*.profile .wrapper*/
-        
-        input {
-            background: #FFFFFF;
-            border-radius: 6px;
-        }
-        
-        /deep/
-        /*.profile .wrapper*/
-        
         .tab-content .tab-pane {
             padding: 0;
         }
@@ -1221,14 +1193,6 @@
             color: #fff;
         }
         
-        /deep/ .modal-body input {
-            border: 1px solid red !important;
-        }
-        
         /deep/ button+button {
             margin-left: 20px;
-        }
-        
-        input {
-            border: 1px solid red;
         }
