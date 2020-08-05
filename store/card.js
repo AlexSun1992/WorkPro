@@ -120,15 +120,15 @@ export const actions = {
       tab.data.forEach(field => {
         cols.push(field.cols);
       });
-      obj.maxCol = Math.max(...cols);
-      tab.data.forEach(field => {
+      // obj.maxCol = Math.max(...cols);
+      // tab.data.forEach(field => {
         // field.cols = field.cols*12/obj.maxCol;
-        field.cols = 12/field.cols;
+        // field.cols = field.cols;
         // if (field.width == 0) {
         //   field.width = 100;
         // }
         // field.cols = Math.ceil((field.cols/obj.maxCol) * (field.width/100) * 12);
-      });
+      // });
     });
     commit('setWizardData', tabs);
     commit('setShowWizard', true);
