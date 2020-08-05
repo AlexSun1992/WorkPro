@@ -59,9 +59,7 @@ converter.form = (data) => {
     obj.cols = webFields[i].NCOLSPAN;
     obj.width = webFields[i].NWIDTH + '%';
     obj.name = webFields[i].SNAME;
-    if (webFields[i].SCAPTIONPOSITION) {
-      obj.labelCols = webFields[i].SCAPTIONPOSITION.split('-')[1];
-    }
+    obj.labelCols = webFields[i].SCAPTIONPOSITION;
     obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
     obj.required = webFields[i].LREQUIRED === 'N' ? false : true;
     obj.page = webFields[i].NPAGE;
