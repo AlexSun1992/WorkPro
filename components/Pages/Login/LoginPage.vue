@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <b-row class="justify-content-center">
-      <b-col md="6" lg="6">
+      <b-col md="6" lg="6" class="block bg-six block-border-one mb-5">
         <b-tabs ref="tabs" content-class="mt-3">
           <b-tab title="Вход" @click="changeUrl" :active="$route.path === '/login'">
             <login-form/>
