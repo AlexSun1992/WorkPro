@@ -3,9 +3,9 @@
     <component :is="params.settings.isModal ? 'b-modal' : 'div'" id="profile-modal" @close="closeModal" no-close-on-backdrop hide-footer>
       <div>
       <div class="block-title pt-0 position-relative mt-2 mb-4"><i class="icon-my-profile"></i>Мой профиль</div>
-        <div class="profile"> 
-          <profile-info @field-changed="refresh()" @saved="showSaveToast()" @error="showErrorToast()" v-if="show" @load="dataLoaded=true" @cancel="refresh()" :params="params" class="bg-six block-border-one block"></profile-info>
-          <profile-side-block v-if="dataLoaded" class="ml-4 bg-six block-border-one block">
+        <div class="profile row"> 
+          <profile-info @field-changed="refresh()" @saved="showSaveToast()" @error="showErrorToast()" v-if="show" @load="dataLoaded=true" @cancel="refresh()" :params="params" class="bg-six block-border-one block col-lg-9 col-12"></profile-info>
+          <profile-side-block v-if="dataLoaded" class="col-lg-3 d-none d-lg-block">
             <slot></slot>
           </profile-side-block>
         </div>

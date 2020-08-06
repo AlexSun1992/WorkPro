@@ -58,3 +58,54 @@ input {
 .modal-footer {
     border: none;
 }
+
+.modal-body .card {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+.modal-body .card-body {
+    padding: 0;
+    margin-top: 1rem;
+}
+
+.btn-secondary:not(.link-button,
+.link-arrow-right,
+.arrow-right-bold,
+.notification-close),
+.btn-success {
+    background: #22A66A;
+    box-shadow: 2px 8px 32px rgba(91, 206, 150, 0.35);
+    border-radius: 50px;
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 23px;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+.btn-outline-success {
+    border: 1px solid #008B4E;
+    border-radius: 50px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 23px;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #22A66A;
+}
+
+.btn-outline-success:hover {
+    color: #fff;
+}
+
+button+button {
+    margin-left: 20px;
+}

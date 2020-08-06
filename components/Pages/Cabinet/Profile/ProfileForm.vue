@@ -2,7 +2,7 @@
   <div>
     <b-modal v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" no-close-on-backdrop @close="cancelCard" centered v-model="editData.show">
       <card :data="editData.data" @actions="actions=$event" @update="updateNumber($event)"></card>
-      <action-button :disabled="noPhone" class="action-button" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
+      <action-button :disabled="noPhone" class="w-100" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
       <template v-slot:modal-footer="{ ok, cancel }">
         <b-button :disabled="(noCode || noPhone) && noEmail" pill type="button" variant="success" @click="ok()">
           Сохранить

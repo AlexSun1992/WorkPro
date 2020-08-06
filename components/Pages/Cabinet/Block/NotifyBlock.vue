@@ -15,8 +15,8 @@
     </template>
   </content-block>
   <div class="block-footer row justify-content-between align-items-center">
-    <div  class="col-auto link-arrow-right"><action-button  :actions="actions" item-id="itemId" action-id="32722"/></div>
-    <div  class="col-auto link-arrow-right"><action-button  :actions="actions" item-id="itemId" action-id="32729"/></div>
+    <div  class="col-auto"><action-button  :actions="actions" item-id="itemId" action-id="32722" class="link-arrow-right"/></div>
+    <div  class="col-auto"><action-button  :actions="actions" item-id="itemId" action-id="32729" class="link-arrow-right"/></div>
   </div>
 </div>
 <template>

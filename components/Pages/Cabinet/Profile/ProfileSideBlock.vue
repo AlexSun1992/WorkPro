@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card>
+    <b-card class="bg-six block-border-one block">
       <slot></slot>
     </b-card>
   </div>
