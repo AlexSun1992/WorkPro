@@ -71,7 +71,8 @@ converter.form = (data) => {
   // ********
 
   return {
-    data: converter.type(arr),
+    // Переход на поля JSONWEBFIELDS
+    data:  webFields.length ? converter.type(webFieldsArr) : converter.type(arr),
     // Метаданные для отображения JSONWEBFIELDS
     metaData: {
       data: converter.type(webFieldsArr),
