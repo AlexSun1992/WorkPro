@@ -2,7 +2,7 @@
   <div>
     <p class="my-2">{{errorMessage}}</p>
     <b-form @submit.prevent="onSubmit">
-      <b-form-group label="Телефон">
+      <b-form-group label="Телефон" label-cols="3">
         <b-form-input
           ref="phoneInput"
           v-model="$v.user.username.$model"
@@ -19,7 +19,7 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, введите корректный номер телефона</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group label="Пароль">
+      <b-form-group label="Пароль" label-cols="3">
         <b-form-input
           v-model="$v.user.password.$model"
           placeholder="Пароль"
@@ -32,12 +32,12 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, введите пароль</b-form-invalid-feedback>
       </b-form-group>
-      <b-button variant="success" type="submit" :disabled="authInProcess">
+      <b-button variant="success" type="submit" :disabled="authInProcess" class="w-100">
         Авторизоваться
         <b-spinner v-if="authInProcess" style="width: 1.2rem; height: 1.2rem;" variant="light"></b-spinner>
       </b-button>
     </b-form>
-    <div class="mt-2">
+    <div class="mt-3 text-center">
       <span class="forgot-password">Забыли пароль?</span>
       <nuxt-link to="/recovery">Восстановить</nuxt-link>
     </div>

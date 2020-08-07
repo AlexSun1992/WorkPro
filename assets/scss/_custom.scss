@@ -185,3 +185,44 @@ button+button {
     background-color: transparent;
     border: 0;
 }
+
+.btn-outline-secondary {
+    background: transparent;
+    border-radius: 50px;
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 23px;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid #868E96;
+    box-sizing: border-box;
+    color: #868E96;
+}
+
+.mx-datepicker {
+    width: 120px;
+}
+
+.mx-datepicker+small {
+    display: block;
+    margin-top: 4px
+}
+
+.mx-datepicker .input-group-append {
+    display: none;
+}
+
+.mx-icon-calendar:after {
+    line-height: 23px;
+    font-size: 18px;
+    color: #C8C8C8;
+    content: "\f073";
+    font-family: FontAwesome;
+    width: 20px;
+    height: 20px;
+    z-index: 1;
+    background: #fff;
+    font-style: normal;
+}

@@ -18,7 +18,7 @@
         <b-input-group>
           <birth-date-input ref="birthDateInputInstance" v-model="data.birthdate.$model" :state="state" :blur="debouncedUpdate"/>
           <b-input-group-append>
-            <b-button v-on:click="showDataPicker" @focus="setButtonFocus" @blur="blurButtonFocus"><i class="fa fa-calendar"></i></b-button>
+            <b-button v-on:click="showDataPicker" @focus="setButtonFocus" @blur="blurButtonFocus" class="button-datapicker"><i class="fa fa-calendar"></i></b-button>
           </b-input-group-append>
         </b-input-group>
 
@@ -102,7 +102,5 @@
 </script>
 
 <style scoped>
-.mx-datepicker {
-  width: 100%
-}
+
 </style>
