@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-runtime-template :template="templateData"></v-runtime-template>
-    <b-card class="bg-six block border-block-one">
+    <v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>
+    <b-card v-else class="bg-six block border-block-one">
       <b-button v-on:click="destroyForm" type="submit" variant="primary" v-b-popover.hover.top="'Назад'"><i  class="fa fa-chevron-left"></i></b-button>
       <Form   :data="formData" :edit="editForm"></Form>
     </b-card>
