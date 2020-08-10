@@ -1,6 +1,6 @@
 <template>
   <div>
-      <wizard-card v-if="isForm"/>
+      <wizard-card :template-data="templateCardData" v-if="isForm"/>
       <v-runtime-template v-if="!isForm" :template="templateData"></v-runtime-template>
   </div>
 </template>
@@ -41,6 +41,9 @@
       },
       templateData () {
         return this.params.settings.portalgrid || this.params.settings.cardgrid
+      },
+      templateCardData () {
+        return this.params.settings.cardtemplate
       },
       isForm: {
         get: function () {
