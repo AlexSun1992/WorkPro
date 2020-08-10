@@ -41,6 +41,8 @@
   }
 </script>
 
-<style scoped>
-
+<style>
+  .form-row {
+    align-items: baseline;
+  }
 </style>
