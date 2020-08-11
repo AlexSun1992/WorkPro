@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style scoped>
-  .form-control:disabled, .form-control[readonly]{
+  /* .form-control:disabled, .form-control[readonly]{
     background-color: white;
-  }
+  } */
 </style>

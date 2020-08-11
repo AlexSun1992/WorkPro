@@ -4,7 +4,7 @@
       class="form-control"
       :type="getType(data.name)"
       v-model="data.value"
-      :disabled="data.readonly"
+      :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
       :placeholder="showPlaceholder(data.name)"

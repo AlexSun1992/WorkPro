@@ -1,6 +1,6 @@
 <template>
   <div>
-      <wizard-card :template-data="templateCardData" v-if="isForm"/>
+      <wizard-card :edit="params.settings.edit" :template-data="templateCardData" v-if="isForm"/>
       <v-runtime-template v-if="!isForm" :template="templateData"></v-runtime-template>
   </div>
 </template>
@@ -24,6 +24,11 @@
         type: Object,
         required: true,
         default: () => {}
+      }
+    },
+    data() {
+      return {
+        test: ''
       }
     },
     computed: {
