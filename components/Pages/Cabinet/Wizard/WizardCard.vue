@@ -73,7 +73,7 @@
             solid: true
           })
         }
-      },
+      }
     }
   }
 </script>
