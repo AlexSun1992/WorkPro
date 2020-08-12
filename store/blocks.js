@@ -3,7 +3,8 @@ export const state = () => ({
   form: [],
   isBlock: true,
   isForm: false,
-  cardId: 0
+  cardId: 0,
+  blockId: null
 })
 
 export const getters = {
@@ -14,20 +15,23 @@ export const getters = {
   cardId: state => state.cardId,
   moduleId: state => state.moduleId,
   menuId: state => state.menuId,
+  blockId: state => state.blockId,
 }
 
 export const actions = {
   async fetchForm ({commit, dispatch}, {moduleId, menuId, itemId}) {
     await this.$axios.get(`/api/card/${moduleId}/${menuId}/${itemId}`)
       .then((res) => {
-        commit('setCardId', itemId)
+        commit('setCardId', itemId);
+        commit('setBlockId', menuId);
         commit('setForm', res.data.data);
       })
   },
-  async saveForm ({commit, dispatch, state}, {moduleId, menuId, form}) {
-    await this.$axios.post(`/api/card/${moduleId}/${menuId}/${state.cardId}`, form)
-      .then(async resp => {
-        commit('setForm', res.data.data);
+  async saveForm ({commit, dispatch, state}, {moduleId,form}) {
+    await this.$axios.post(`/api/card/${moduleId}/${state.blockId}/${state.cardId}`, form)
+      .then(async res => {
+        commit('setCardId', res.data.ID);
+        dispatch('updateBlock', state.blockId)
       })
   },
   async fetchBlock ({commit, dispatch}, id) {
@@ -53,7 +57,7 @@ export const actions = {
     await this.$axios.post(`/am/main/v2/actionexec/${rowId}/${actionId}`, body ? body : {})
       .then(async resp => {
         if (body) return;
-        dispatch('updateBlock', itemId)
+        dispatch('updateBlock', itemId);
       })
   },
 }
@@ -74,6 +78,9 @@ export const mutations = {
   },
   setCardId(state, data) {
     state.cardId = data
+  },
+  setBlockId(state, data) {
+    state.blockId = data
   },
 }
 

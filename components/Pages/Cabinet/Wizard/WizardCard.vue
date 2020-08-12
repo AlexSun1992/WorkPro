@@ -59,7 +59,7 @@
       },
       async saveForm () {
         try {
-          await this.$store.dispatch('blocks/saveForm', {moduleId:this.moduleId, menuId:this.itemId, itemId:this.editDataForm.ID || 0, form: this.editDataForm});
+          await this.$store.dispatch('blocks/saveForm', {moduleId:this.moduleId, form: this.editDataForm});
           this.$bvToast.toast('Успешно сохранено', {
             title: ``,
             variant: 'success',
