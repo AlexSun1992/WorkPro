@@ -8,23 +8,28 @@ export const state = () => ({
   showForm: false,
   showFilter: false,
   showAction: false,
+  showWizard: false,
   isAdd: false,
   isEdit: false,
   isDelete: false,
   isFormLoading: false,
   isListLoading: false,
   componentType: null,
-  cardId: 0
+  cardId: 0,
+  wizardData: null,
+  cardForm: null
 })
 
 export const getters = {
   page: state => state.page,
   list: state => state.list,
   form: state => state.form,
+  cardForm: state => state.cardForm,
   filters: state => state.filters,
   actions: state => state.actions,
   isForm: state => state.showForm,
   isList: state => state.showList,
+  isWizard: state => state.showWizard,
   isFilter: state => state.showFilter,
   isActions: state => state.showActions,
   isEdit: state => state.isEdit,
@@ -33,7 +38,8 @@ export const getters = {
   isFormLoading: state => state.isFormLoading,
   isListLoading: state => state.isListLoading,
   componentType: state => state.componentType,
-  cardId: state => state.cardId
+  cardId: state => state.cardId,
+  wizardData: state => state.wizardData
 }
 
 export const actions = {
@@ -49,6 +55,7 @@ export const actions = {
       commit('setDelete', params.settings.delete);
       commit('setComponentType', params.settings.compType);
       commit('setShowForm', false);
+      commit('setShowWizard', false);
       commit('setList',{});
       if(params.settings.newRecord){
         await dispatch('fetchForm', 0);
@@ -66,9 +73,72 @@ export const actions = {
         commit('setShowForm', true);
         commit('setShowFilter', false);
         commit('setShowList', false);
-        commit('setForm', res.data);
+        commit('setForm', res.data.data);
       })
   },
+  async fetchCardForm ({commit, getters}, id) {
+    await this.$axios.get(`/api/card/${getters['page'].idModule}/${id}/0`)
+      .then((res) => {
+        // Вынести в общую функцию
+        let cols = [];
+        res.data.metaData.data.forEach(field => {
+          cols.push(field.cols);
+        });
+        let maxCol = Math.max(...cols);
+        res.data.metaData.data.forEach(field => {
+          // field.cols = field.cols*12/obj.maxCol;
+          if (field.width == 0) {
+            field.width = 100;
+          }
+          field.cols = Math.ceil((field.cols/maxCol) * (field.width/100) * 12);
+        });
+        commit('setCardForm', res.data.metaData.data);
+      })
+  },
+  clearCardForm({commit, getters}) {
+    commit('clearCardForm');
+  },
+  async fetchWizard ({commit, getters}, params) {
+    let card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${params.id}`);
+    let captions = card.data.metaData.captions.split(';');
+    captions.pop();
+    let fields = card.data.metaData.data;
+    let tabs = captions.map(caption => {
+      return {
+        'title': caption,
+        'data': []
+      };
+    });
+    // Вынести в общую функцию (см. выше)
+    fields.forEach(item => {
+      tabs[item.page]['data'].push(item);
+    });
+    tabs.forEach(tab => {
+      let obj = {};
+      let cols = [];
+      obj.title = tab.title;
+      tab.data.forEach(field => {
+        cols.push(field.cols);
+      });
+      // obj.maxCol = Math.max(...cols);
+      // tab.data.forEach(field => {
+        // field.cols = field.cols*12/obj.maxCol;
+        // field.cols = field.cols;
+        // if (field.width == 0) {
+        //   field.width = 100;
+        // }
+        // field.cols = Math.ceil((field.cols/obj.maxCol) * (field.width/100) * 12);
+      // });
+    });
+    commit('setWizardData', tabs);
+    commit('setShowWizard', true);
+    commit('setShowFilter', false);
+    commit('setShowList', false);
+  },
+  updateWizard({commit, getters}, params) {
+    commit('setWizardData', params);
+  },
+  
   async applyFilter ({commit, dispatch, getters}, filters) {
     commit('setFilters', filters);
     await dispatch('fetchList');
@@ -92,6 +162,12 @@ export const actions = {
         commit('setCardId', resp.data.ID)
       })
   },
+  async saveProfile ({commit, dispatch, getters}, form) {
+    await this.$axios.post(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/125`, form)
+      .then(async resp => {
+        commit('setCardId', resp.data.ID)
+      })
+  },
   async fetchList ({commit, getters}) {
     const page = getters['page'];
     const jsonFilters = JSON.stringify(getters['filters']);
@@ -102,6 +178,34 @@ export const actions = {
         commit('setListLoading', false);
         commit('setList', res.data);
       })
+  },
+  async fetchSuggestions({commit, getters}, params) {
+    let type = params.suggestionType;
+    let key = params.key;
+    delete params.suggestionType;
+    delete params.key;
+    let response = await fetch(`https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Token ${key}`
+        },
+        body: JSON.stringify(params)
+      }); 
+    let result = await response.json();
+    return result.suggestions;
+    // return result.suggestions.map(item => item.value);
+  },
+  async editCard({commit, getters}, params) {
+    try {
+      let idItem = params.idItem;
+      delete params.idItem;
+      let response = await this.$axios.put(`/am/main/v2/datacard/${getters['page'].idModule}/${idItem}/0`, params);
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
   },
 }
 
@@ -126,6 +230,9 @@ export const mutations = {
   },
   setShowForm(state, data) {
     state.showForm = data
+  },
+  setShowWizard(state, data) {
+    state.showWizard = data
   },
   setShowFilter(state, data) {
     state.showFilter = data
@@ -153,5 +260,14 @@ export const mutations = {
   },
   setCardId(state, data) {
     state.cardId = data
+  },
+  setWizardData(state, data) {
+    state.wizardData = data
+  },
+  setCardForm(state, data) {
+    state.cardForm = data
+  },
+  clearCardForm(state, data) {
+    state.cardForm = null;
   }
 }

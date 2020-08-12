@@ -1,8 +1,8 @@
 <template>
-  <b-form-group  :label="label">
+  <b-form-group  :label="label" :label-cols="data.labelCols ? '' : 2">
     <b-form-textarea id="textarea1"
                      v-model="data.value"
-                     :disabled="!edit"
+                     :disabled="!edit ? !edit : data.readonly"
                      :state="data.state"
                      placeholder="Введите текст"
                      :rows="3"
@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style scoped>
-  .form-control:disabled, .form-control[readonly]{
+  /* .form-control:disabled, .form-control[readonly]{
     background-color: white;
-  }
+  } */
 </style>

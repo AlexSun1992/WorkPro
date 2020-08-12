@@ -1,22 +1,24 @@
 <template>
-  <b-row>
-    <b-col v-for="wizard in wizardData" :key="wizard.id" cols="12">
-      <b-card :header="wizard.name" >
-        <b-card-text>
-          <client-only>
-            <wizard-list :module-id="moduleId" :wizard-data="wizard"/>
-          </client-only>
-        </b-card-text>
-      </b-card>
-    </b-col>
-  </b-row>
+  <div>
+      <wizard-card :edit="params.settings.edit" :template-data="templateCardData" v-if="isForm"/>
+      <v-runtime-template v-if="!isForm" :template="templateData"></v-runtime-template>
+  </div>
 </template>
 
 <script>
   import WizardList from './WizardList'
+  import WizardCard from './WizardCard'
+  import NotifyBlock from '../Block/NotifyBlock'
+  import OfferBlock from '../Block/OfferBlock'
+  import PolicyBlock from '../Block/PolicyBlock'
+  import ContentBlock from '../Block/ContentBlock'
+  import ActionButton from '../Block/ActionButton'
+  import Profile from '../Profile/Profile'
+  import OpenCardButton from '../Block/OpenCardButton'
+  import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'Wizard',
-    components: {WizardList},
+    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, Profile},
     props: {
       params: {
         type: Object,
@@ -24,12 +26,34 @@
         default: () => {}
       }
     },
+    data() {
+      return {
+        test: ''
+      }
+    },
     computed: {
+      name () {
+        return this.params.settings.text
+      },
       wizardData () {
         return this.params.settings.wizard
       },
       moduleId () {
         return this.params.page.idModule
+      },
+      itemId () {
+        return this.params.page.idItem
+      },
+      templateData () {
+        return this.params.settings.portalgrid || this.params.settings.cardgrid
+      },
+      templateCardData () {
+        return this.params.settings.cardtemplate
+      },
+      isForm: {
+        get: function () {
+          return this.$store.getters['blocks/getForm'].length
+        }
       }
     }
   }

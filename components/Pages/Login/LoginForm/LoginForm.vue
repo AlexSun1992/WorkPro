@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
+    <p class="my-2">{{errorMessage}}</p>
     <b-form @submit.prevent="onSubmit">
-      <b-form-group label="Телефон">
+      <b-form-group label="Телефон" label-cols="3">
         <b-form-input
           ref="phoneInput"
           v-model="$v.user.username.$model"
@@ -19,7 +19,7 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, введите корректный номер телефона</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group label="Пароль">
+      <b-form-group label="Пароль" label-cols="3">
         <b-form-input
           v-model="$v.user.password.$model"
           placeholder="Пароль"
@@ -32,12 +32,12 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, введите пароль</b-form-invalid-feedback>
       </b-form-group>
-      <b-button variant="success" type="submit" :disabled="authInProcess">
+      <b-button variant="success" type="submit" :disabled="authInProcess" class="w-100">
         Авторизоваться
         <b-spinner v-if="authInProcess" style="width: 1.2rem; height: 1.2rem;" variant="light"></b-spinner>
       </b-button>
     </b-form>
-    <div class="mt-2">
+    <div class="mt-3 text-center">
       <span class="forgot-password">Забыли пароль?</span>
       <nuxt-link to="/recovery">Восстановить</nuxt-link>
     </div>
@@ -73,31 +73,46 @@ export default {
   },
 
   methods: {
-    async login() {
+    async login(context) {
       try {
         this.authInProcess = true;
         // this.captchaToken = await this.$getCaptcha();
-        await this.$auth.loginWith("local", {
-          headers: {
-            RECAPTCHA: this.captchaToken
-          },
+        await context.$auth.loginWith("local", {
+          // headers: {
+          //   RECAPTCHA: context.captchaToken
+          // },
           data: {
-            username: this.$v.user.username.$model,
-            password: this.$v.user.password.$model,
+            username: context.$v.user.username.$model,
+            password: context.$v.user.password.$model,
             mode: 2
           }
         });
         this.authInProcess = false;
-        this.$router.push('/');
+        let cookie = this.getCookie('url');
+        let lastURL;
+        if (cookie) {
+          lastURL = cookie.split('=')[1];
+        }
+        let url = lastURL ? lastURL : '/cabinet/55/0/701';
+        this.$router.push(url);
+
       } catch (e) {
-        if (this.$auth.error.response.status === 401) {
-          this.errorMessage = this.$auth.error.response.data.MESSAGE;
-          this.authInProcess = false;
+        if (context.$auth.error?.response.status === 401) {
+          context.errorMessage = context.$auth.error.response.data.MESSAGE;
+          context.authInProcess = false;
         }
       }
     },
 
+    getCookie(name) {
+      let cookies = document.cookie.split('; ');
+      return decodeURIComponent(cookies.find(item => item.includes(name)));
+    },
+
     validateInput(field, bluredField) {
+      if (this.errorMessage) {
+        return false;
+      }
       if (field === 'username' && this.loginTouchesCount <= 2 && this.isUsernameBlured && !this.$v.user[field].$model) return;
       if (this.$v.user[field].$model &&
           this.$v.user[field].$params.minLength &&
@@ -122,12 +137,13 @@ export default {
     },
 
     onSubmit() {
+      this.errorMessage = null;
       this.loginTouchesCount = 3;
       this.$v.user.$touch();
       if (this.$v.user.$anyError) {
         return;
       }
-      this.login();
+      this.login(this);
     }
   },
 

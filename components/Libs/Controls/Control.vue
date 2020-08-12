@@ -1,21 +1,26 @@
 <template>
-  <b-col :xl="col" lg="12" md="12" sm="12">
-    <component  v-bind:is="comp"  v-bind:data="data" v-bind:edit="edit"></component>
+  <b-col :xl="col" :lg="data.cols" md="12" sm="12" class="mb-4">
+    <div class="control" :style="{width: data.width ? data.width : '100%'}">
+      <component v-bind:is="comp" @edit="$emit('edit', $event)" @update="$emit('update', $event)" v-bind:data="data" v-bind:edit="edit"></component>
+    </div>
   </b-col>
 </template>
 <script>
-import ControlString from '~/components/Libs/Controls/ControlString'
+import ControlString from '~/components/Libs/Controls/ControlString/ControlString'
 import ControlText from '~/components/Libs/Controls/ControlText'
 import ControlBoolean from '~/components/Libs/Controls/ControlBoolean'
 import ControlDouble from '~/components/Libs/Controls/ControlDouble'
 import ControlLong from '~/components/Libs/Controls/ControlLong'
 import ControlTimestamp from '~/components/Libs/Controls/ControlTimestamp'
 import ControlPeriod from '~/components/Libs/Controls/ControlPeriod'
-import ControlClob from '~/components/Libs/Controls/ControlClob'
+import ControlClob from '~/components/Libs/Controls/ControlText'
 import ControlEnum from '~/components/Libs/Controls/ControlEnum'
+import ControlButton from '~/components/Libs/Controls/ControlButton'
+import ControlLink from '~/components/Libs/Controls/ControlLink'
+
 export default {
   name: 'Control',
-  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, ControlTimestamp, ControlPeriod, ControlClob, ControlEnum},
+  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, ControlTimestamp, ControlPeriod, ControlClob, ControlEnum, ControlButton, ControlLink},
   props: {
     data: {
       type: Object,
@@ -63,5 +68,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .control > fieldset {
+    margin-bottom: 0;
+  }
 </style>

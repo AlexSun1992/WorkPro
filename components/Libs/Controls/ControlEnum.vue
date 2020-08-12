@@ -1,10 +1,10 @@
 <template>
   <span  @click="onfocus">
-    <b-form-group   :label="data.label">
+    <b-form-group :label="data.label" :class="{required: data.required}" :label-cols="data.labelCols ? '' : 2" :label-class="data.labelCols">
       <model-list-select  :list="options"
                          option-value="value"
                          option-text="text"
-                         :isDisabled="!edit"
+                         :isDisabled="!edit ? !edit : data.readonly"
                          :isError="data.state === false"
                          v-model="data.value"
                          placeholder="Выберите из списка"
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     initData (param) {
-      this.$axios({url: `/api/dic/${this.data.dic}`, method: 'GET'})
+      this.$axios({url: `/api/dic/${this.$route.params.idModule}/${this.$route.params.idItem}/${this.data.dic}`, method: 'GET'})
         .then(resp => {
           this.options = resp.data
         })
@@ -85,6 +85,11 @@ export default {
     margin-top: 0.25rem;
     font-size: 80%;
     color: #f86c6b;
+  }
+
+  .required > legend:after {
+    content: '*';
+    color: red;
   }
 
 </style>

@@ -33,6 +33,7 @@ module.exports = {
     /* Import Simple Line Icons Set */
     '~/node_modules/simple-line-icons/css/simple-line-icons.css',
     { src: '~/assets/scss/style.scss', lang: 'scss' }
+    // { src: '~/assets/scss/style_new.scss', lang: 'scss' }
   ],
   /*
   ** Plugins to load before mounting the App
@@ -43,6 +44,7 @@ module.exports = {
     '~/plugins/mask.js',
     '~/plugins/validate',
     '~/plugins/axios',
+    '~/plugins/moment',
     { src: '~plugins/vcalendar.js', ssr: false }
   ],
   /*

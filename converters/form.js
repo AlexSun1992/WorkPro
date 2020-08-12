@@ -16,7 +16,7 @@ converter.subcompare = (a, b) => {
 }
 
 converter.form = (data) => {
-  let arr = []
+  let arr = [];
   let item = data[0]._data.length ? data[0]._data[0] : {}
   let fields = data[0]._struct
   let meta = converter.meta(data[0]._meta)
@@ -31,12 +31,54 @@ converter.form = (data) => {
     obj.name = fields[i].FIELD
     obj.visible = fields[i].VISIBLE
     obj.required = fields[i].REQUIRED
+    obj.readonly = fields[i].READONLY
     obj.control = null
     obj.state = null
     arr.push(obj)
   }
-  return converter.type(arr)
-  //return arr
+
+  // Собираем объект для JSONWEBFIELDS (сделать единую обработку)
+  let webFieldsArr = [];
+  let webFields = data[0]._meta['JSONWEBFIELDS']
+  webFields = webFields.sort((a, b) => a['NORDER'] - b['NORDER']);
+  
+  for (let i = 0; i < webFields.length; i++) {
+    let obj = {};
+    obj.label = webFields[i].SCAPTION;
+    obj.value = item[webFields[i].SNAME];
+    obj.type = webFields[i].STYPE;
+
+    if (obj.type === 'DateTime') {
+      obj.type = 'timestamp';
+    } else if (webFields[i].IDCONTROL == 16) {
+      obj.type = 'boolean';
+    } else if (obj.type === 'Decimal') {
+      obj.type = 'string';
+    } 
+    
+    obj.cols = webFields[i].NCOLSPAN;
+    obj.width = webFields[i].NWIDTH + '%';
+    obj.name = webFields[i].SNAME;
+    obj.labelCols = webFields[i].SCAPTIONPOSITION;
+    obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
+    obj.required = webFields[i].LREQUIRED === 'N' ? false : true;
+    obj.page = webFields[i].NPAGE;
+    obj.readonly = webFields[i].LREADONLY === 'N' ? false : true;;
+    obj.control = null;
+    obj.state = null;
+    webFieldsArr.push(obj)
+  }
+  // ********
+
+  return {
+    // Переход на поля JSONWEBFIELDS
+    data:  webFields.length ? converter.type(webFieldsArr) : converter.type(arr),
+    // Метаданные для отображения JSONWEBFIELDS
+    metaData: {
+      data: converter.type(webFieldsArr),
+      captions: data[0]._meta['SPAGECAPTION']
+    }
+  }
 }
 
 converter.type = (data) => {

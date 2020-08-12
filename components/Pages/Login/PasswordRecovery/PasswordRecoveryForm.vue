@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <h5 class="mb-3">Восстановление доступа</h5>
+    <div class="row justify-content-center">
+      <div class="block bg-six block-border-one mb-5 col-md-10 col-lg-6">
+    <h4 class="mb-3 text-center mt-2">Восстановление доступа</h4>
     <b-alert :show="errorMessage  || !!$store.getters.getRegistrationError" variant="danger">{{ errorMessage ? errorMessage : $store.getters.getRegistrationError }}</b-alert>
     <b-tabs ref="tabs" content-class="mt-2">
       <b-tab title="Телефон" active>
@@ -11,7 +13,8 @@
       </b-tab>
     </b-tabs>
     <UserRecoveryForm v-if="greater180" :v="$v.form" :validateState="validateState"/>
-    <b-form-group>
+    <b-row>
+    <b-form-group class="col-md-6 col-12">
       <b-form-input
         type="password"
         v-model="$v.form.password.$model"
@@ -19,7 +22,7 @@
       ></b-form-input>
       <b-form-invalid-feedback>Введите пароль</b-form-invalid-feedback>
     </b-form-group>
-    <b-form-group>
+    <b-form-group  class="col-md-6 col-12">
       <b-form-input
         type="password"
         v-model="$v.form.password2.$model"
@@ -27,12 +30,15 @@
       ></b-form-input>
       <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
     </b-form-group>
-    <div class="mt-2 d-flex justify-content-between">
+    </b-row>
+    <div class="mt-2 mb-3 d-flex justify-content-between">
       <router-link to="/login">
         <b-button variant="outline-secondary">Отмена</b-button>
       </router-link>
       <b-button variant="success" @click="resetPassword" :disabled="disabledReset">Сбросить пароль</b-button>
     </div>
+  </div>
+  </div>
   </div>
 </template>
 
@@ -183,35 +189,5 @@ export default {
 </script>
 
 <style scoped>
-  .container {
-    max-width: 540px;
-    padding: 1rem;
-    border: 1px solid #a4b7c1;
-  }
-
-  .tabs >>> .tab-content {
-    border: none;
-  }
-
-  .tabs >>> .nav-tabs {
-    display: flex;
-    justify-content: center;
-    border-bottom: none;
-  }
-
-  .tabs >>> .nav-tabs .nav-link {
-    border: none;
-  }
-
-  .tabs >>> .nav-tabs .nav-link.active {
-    border-bottom: 2px solid green; /**Заменить на глобальные цвета */
-  }
-
-  .tabs >>> .nav-tabs .nav-link.active:focus {
-    border-bottom: 2px solid green; /**Заменить на глобальные цвета */
-  }
-
-  .tabs >>> .tab-pane {
-    padding-left: 0;
-  }
+.tab-content .tab-pane {padding:1rem 0 0 0;}
 </style>

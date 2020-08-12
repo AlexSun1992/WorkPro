@@ -3,10 +3,10 @@
     <ConfirmModal :conformation="conformation" @agree="isRegConfirmed=$event"/>
     <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <b-form @submit.stop.prevent="onSubmit">
-      <b-form-group label="Телефон">
+      <b-form-group label="Телефон" label-cols="3">
         <verify-user ref="verifyUser" :v="$v.form" :count="60" :context="'registration'" :loginType="'phone'" :validateState="validateState" :disabled="registrationInProcess"/>
       </b-form-group>
-      <b-form-group  label="E-mail">
+      <b-form-group  label="E-mail" label-cols="3">
         <b-form-input
           v-model.lazy="$v.form.email.$model"
           :state="validateState('email')"
@@ -16,7 +16,7 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group  label="Имя">
+      <b-form-group  label="Имя" label-cols="3">
         <b-form-input
           v-model="$v.form.name.$model"
           :state="validateState('name')"
@@ -26,7 +26,7 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group  label="Фамилия">
+      <b-form-group  label="Фамилия" label-cols="3">
         <b-form-input
           v-model="$v.form.family.$model"
           :state="validateState('family')"
@@ -36,7 +36,7 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group  label="Отчество">
+      <b-form-group  label="Отчество" label-cols="3">
         <b-form-input
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
@@ -46,10 +46,10 @@
         ></b-form-input>
         <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group label="Дата рождения">
+      <b-form-group label="Дата рождения" label-cols="3">
         <birthday-picker :data="$v.form" :state="validateState('birthdate')" :disabled="registrationInProcess"/>
       </b-form-group>
-      <b-form-group label="Номер полиса">
+      <b-form-group label="Номер полиса" label-cols="3">
         <b-form-input
           id="input-3"
           v-model="form.policyNumber"
@@ -57,7 +57,7 @@
           :disabled="registrationInProcess"
         ></b-form-input>
       </b-form-group>
-      <verify-password :v="$v.form" :validateState="validateState" :disabled="registrationInProcess"/>
+      <verify-password :v="$v.form" :validateState="validateState" :disabled="registrationInProcess" />
       <b-button type="submit" variant="success" :disabled="registrationInProcess || !!this.$store.getters.getRegistrationError">
         Зарегистрироваться
         <b-spinner v-if="registrationInProcess" style="width: 1.2rem; height: 1.2rem;" variant="light"></b-spinner>
@@ -211,7 +211,7 @@
         }
 
         if (!this.$store.getters.getRegistrationError && this.$store.getters.isAuthenticated) {
-          this.$router.push("/")
+          this.$router.push("/cabinet/55/0/701")
         }
       }
     },

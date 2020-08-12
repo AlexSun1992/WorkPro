@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="getPage">
+    <div v-if="getPage && getPage.content">
       <v-runtime-template :template="getPage.content.rendered"></v-runtime-template>
     </div>
   </div>

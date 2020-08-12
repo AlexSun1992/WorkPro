@@ -1,7 +1,5 @@
 <template>
-    <b-form-group   class="form-inline" label="">
-      <b-form-checkbox v-model="data.value" :disabled="!edit">{{data.label}}</b-form-checkbox>
-    </b-form-group>
+  <b-form-checkbox class="my-3" v-model="data.value" :disabled="!edit ? !edit : data.readonly">{{data.label}}</b-form-checkbox>
 </template>
 
 <script>
@@ -23,5 +21,5 @@ export default {
 </script>
 
 <style scoped>
-
+ 
 </style>

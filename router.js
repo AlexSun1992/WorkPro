@@ -5,8 +5,10 @@ import Main from '~/components/Pages/Main'
 import DemoAbout from '~/components/Pages/DemoAbout'
 import Feedback from '~/components/Pages/Feedback'
 import Calculator from '~/components/Pages/Calculator'
-// import DemoPage from '~/components/Pages/DemoPage'
+import DemoPage from '~/components/Pages/DemoPage'
 import DemoCarousel from '~/components/Pages/DemoCarousel'
+
+import DemoPortlet from '~/components/Pages/DemoPortlet'
 
 import Cabinet from '~/components/Pages/Cabinet/Full'
 import Dashboard from '~/components/Pages/Cabinet/Dashboard'
@@ -55,21 +57,21 @@ export function createRouter() {
         path: '/calculator',
         component: Calculator
       },
-      // {
-      //   meta: 'Демонстрационная страница',
-      //   path: '/coronavirus',
-      //   component: DemoPage
-      // },
       {
         meta: 'Карусель',
         path: '/demo-carousel',
         component: DemoCarousel
       },
       {
+        meta: 'Демо контент',
+        path: '/demo-portlet',
+        component: DemoPortlet
+      },
+      {
         meta: 'Cabinet',
         path: '/cabinet',
         component: Cabinet,
-        redirect: '/cabinet/dashboard',
+        redirect: '/cabinet/55/0/701',
         children: [
           {
             meta: 'Cabinet',
@@ -80,7 +82,12 @@ export function createRouter() {
             meta: 'Cabinet',
             path: ':idModule/:idParent/:idItem',
             component: Fluid
-          }
+          },
+          {
+            meta: 'Демонстрационная страница',
+            path: 'demo-page',
+            component: DemoPage
+          },
         ]
       },
       {

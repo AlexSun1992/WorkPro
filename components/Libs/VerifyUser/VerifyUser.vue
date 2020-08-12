@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <p>{{label}}</p>
-    <b-form-group>
-      <b-form-input
+  <div class="row">
+    <p class="col-12">{{label}}</p>
+    <b-form-group class="col-md-8 col-12">
+      <b-form-input 
         ref="userInput"
         class="mb-1"
         v-model="v[loginType].$model"
@@ -45,13 +45,15 @@
         </b-button>
       </div>
     </div>
-    <b-button
+    <div class="col-12 col-md-4 mb-3 mb-md-0">
+    <b-button class="w-100"
       type="submit"
       v-if="!code"
       :disabled="v.phone.$invalid && v.email.$invalid"
       @click.prevent="verifyUser"
       variant="success"
     >Подтвердить</b-button>
+    </div>
   </div>
 </template>
 

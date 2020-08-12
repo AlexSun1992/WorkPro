@@ -7,7 +7,17 @@ const converter = {}
 
 converter.modules = (data, id) => {
   let arr = []
-  let _data = data[0]._data
+  let _data = []
+  if(data){
+    if(data.length){
+      if(data[0]._data){
+        _data = data[0]._data
+      }
+      else {
+        _data = data
+      }
+    }
+  }
   for (let i = 0; i < _data.length; i++) {
     if (_data[i][`SNAME`]) {
       if (id) {
@@ -39,7 +49,9 @@ converter.toTree = (data) => {
       if(!list[map[node.idParent]].children){
         list[map[node.idParent]].children = []
       }
-      list[map[node.idParent]].children.push(node)
+      if(list[map[node.idParent]].children){
+        list[map[node.idParent]].children.push(node)
+      }
     } else {
       roots.push(node)
     }
@@ -48,11 +60,16 @@ converter.toTree = (data) => {
 }
 
 converter.sidebar = (modules, menu) => {
-  for (let i = 0; i < modules.length; i++) {
-    let children = converter.toTree(converter.modules(menu[i].data, modules[i].id))
-    modules[i].children = children
+  try {
+    for (let i = 0; i < modules.length; i++) {
+      let children = converter.toTree(converter.modules(menu[i].data, modules[i].id))
+      modules[i].children = children
+    }
+    return modules
   }
-  return modules
+  catch (e) {
+   console.log(e)
+  }
 }
 
 converter.menuObject = (data) => {
@@ -65,6 +82,7 @@ converter.menuObject = (data) => {
   }
   obj.id = data.ID
   obj.icon = iconConverter.icon(data.SLOGO)
+  obj.iconFileName = data.SICONFILENAME
   obj.idItem = data.IDITEM
   obj.idParent = data.IDPARENT
   obj.compType = data.IDADMMENUTYPE
@@ -77,9 +95,12 @@ converter.menuObject = (data) => {
   obj.edit = data.LEDIT
   obj.delete = data.LDELETE
   obj.cols = data.NCOLCOUNT
-  obj.isCard = !data.LNOTCARD
+  obj.isCard = data.IDADMMENUTYPE === 3
   obj.wizard =  wizardConverter.wizard(data.WIZARDCUR)
-
+  obj.portalgrid = data.SVJPORTALGRID || null
+  obj.cardgrid = data.SVJCARDGRID || null
+  obj.cardtemplate = data.SVJCARDTEMPLATE || null
+  obj.isModal = data.LMODALFORMSTYLE
   return obj
 }
 

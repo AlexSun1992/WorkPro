@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-row>
-      <b-col sm="6">
-        <b-form-group :label="showLabel">
+      <b-col sm="12">
+        <b-form-group :label="showLabel" label-cols="3">
           <b-form-input
             type="password"
             v-model="v.password.$model"
@@ -11,12 +11,12 @@
             @blur="v.password.$touch()"
             :disabled="disabled"
           ></b-form-input>
-          <b-form-invalid-feedback>Введите пароль</b-form-invalid-feedback>
+          <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
         </b-form-group>
       </b-col>
-      <b-col sm="6" v-if="recovery"></b-col>
-      <b-col class="password-repeat" :class="{'mt-0': recovery}" sm="6">
-        <b-form-group>
+      <b-col sm="12" v-if="recovery"></b-col>
+      <b-col class="password-repeat" :class="{'mt-0': recovery}" sm="12">
+        <b-form-group :label="'Повторите пароль'" label-cols="3">
           <b-form-input
             type="password"
             v-model="v.password2.$model"
@@ -28,7 +28,7 @@
           <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
         </b-form-group>
       </b-col>
-      <b-col sm="6" v-if="recovery"></b-col>
+      <b-col sm="12" v-if="recovery"></b-col>
     </b-row>
   </div>
 </template>
@@ -51,7 +51,5 @@ export default {
 </script>
 
 <style scoped>
-  .password-repeat {
-    margin-top: 28px;
-  }
+
 </style>

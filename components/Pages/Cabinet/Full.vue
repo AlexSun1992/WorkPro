@@ -5,7 +5,7 @@
 <script>
   export default {
     middleware: 'guest',
-    layout: 'Cabinet',
+    layout: 'DemoLayout',
     name: 'Full',
     async fetch ({ store, route }) {
       await store.dispatch('menu/fetchMenu', route.params)

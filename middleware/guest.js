@@ -1,8 +1,12 @@
 export default function ({
+  app,
   store,
-  redirect
+  redirect,
+  route
 }) {
   if (!store.state.auth.loggedIn) {
-    return redirect('/')
+    app.$cookiz?.set('url', route.path);
+    return redirect('/login');
   }
+  store.dispatch('blocks/clearBlock');
 }

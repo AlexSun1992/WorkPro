@@ -10,7 +10,6 @@
       <template v-slot:table-busy>
         <div class="text-center text-danger my-2">
           <b-spinner class="align-middle"></b-spinner>
-
         </div>
       </template>
       <template  v-slot:cell(index)="data">
@@ -26,6 +25,14 @@
 
 <script>
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import formatter from '~/converters/list'
+function getTypeByKey(fields,key){
+  for(let i = 0; i < fields.length; i++){
+    if(fields[i].key === key){
+      return fields[i].type
+    }
+  }
+}
 export default {
   name: 'Grid',
   data () {
@@ -94,6 +101,9 @@ export default {
     onFiltered (filteredItems) {
       this.count = filteredItems.length
       this.currentPage = 1
+    },
+    formatData (value, key) {
+      return  formatter.formatByType(getTypeByKey(this.fields,key),value)
     }
   },
   computed: {

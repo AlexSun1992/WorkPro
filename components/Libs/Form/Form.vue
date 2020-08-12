@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form-row>
-      <Control  v-for='(item, index) in items' :key='index' v-bind:data="item" v-bind:edit="edit" :cols="cols"></Control>
+      <Control  v-for='(item, index) in items' @edit="$emit('edit', $event)" @update="$emit('update', $event)" :key='index' v-bind:data="item" v-bind:edit="edit" :cols="cols"></Control>
     </b-form-row>
   </div>
 </template>
@@ -29,16 +29,18 @@ export default {
   },
   computed: {
     items: function () {
-      return this.data.filter(function (item) {
-        return item.visible
-      })
+      if (this.data) {
+        return this.data.filter(function (item) {
+          return item.visible;
+        })
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-  .form-control:disabled, .form-control[readonly]{
+  /* .form-control:disabled, .form-control[readonly]{
     background-color: white;
-  }
+  } */
 </style>
