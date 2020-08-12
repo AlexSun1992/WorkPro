@@ -1,6 +1,6 @@
 <template>
   <div>
-      <wizard-card :template-data="templateCardData" v-if="isForm"/>
+      <wizard-card :is-edit="isEdit" :module-id="moduleId" :item-id="itemId" :form-data="formCardData" :template-data="templateCardData" v-if="isForm"/>
       <v-runtime-template v-if="!isForm" :template="templateData"></v-runtime-template>
   </div>
 </template>
@@ -48,6 +48,16 @@
       isForm: {
         get: function () {
           return this.$store.getters['blocks/getForm'].length
+        }
+      },
+      formCardData: {
+        get: function () {
+          return JSON.parse(JSON.stringify(this.$store.getters['blocks/getForm']));
+        }
+      },
+      isEdit: {
+        get: function () {
+          return this.params.settings.edit
         }
       }
     }

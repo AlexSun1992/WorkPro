@@ -4,7 +4,7 @@
       class="form-control"
       :type="getType(data.name)"
       v-model="data.value"
-      :disabled="data.readonly"
+      :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
       :placeholder="showPlaceholder(data.name)"
@@ -138,7 +138,7 @@ export default {
         obj.values = values;
         this.$set(this.suggestions, 'data', obj.values);
         this.$set(this.suggestions, 'type', obj.type);
-      } 
+      }
     },
     showPlaceholder(name) {
       if (name === 'SNEWPHONE') {
@@ -172,9 +172,9 @@ export default {
     background-color: lightgrey;
   }
 
-  input[type=number]::-webkit-inner-spin-button, 
-  input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 </style>

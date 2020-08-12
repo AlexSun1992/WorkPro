@@ -3,7 +3,9 @@
     <v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>
     <b-card v-else class="bg-six block border-block-one">
       <b-button v-on:click="destroyForm" type="submit" variant="primary" v-b-popover.hover.top="'Назад'"><i  class="fa fa-chevron-left"></i></b-button>
-      <Form   :data="formData" :edit="editForm"></Form>
+      <Form   :data="editDataForm" :edit="isEdit"></Form>
+      <p class="mb-10 mt-3"></p>
+      <button v-if="isEdit"  v-on:click="saveForm" type="button" class="btn btn-primary">Сохранить</button>
     </b-card>
   </div>
 </template>
@@ -20,23 +22,58 @@
         required: false,
         default: () => null
       },
+      formData: {
+        type: Array,
+        required: true,
+        default: () => []
+      },
+      moduleId: {
+        type: String,
+        required: false,
+        default: () => null
+      },
+      itemId: {
+        type: String,
+        required: false,
+        default: () => null
+      },
+      isEdit: {
+        type: Boolean,
+        default: () => false
+      },
     },
     data () {
       return {
-        editForm: false
+        editDataForm: this.formData
       }
     },
+    watch: {
+      'formData': 'setData'
+    },
     methods: {
+      setData () {
+        this.editDataForm = this.formData;
+      },
       destroyForm () {
         this.$store.dispatch('blocks/destroyForm');
       },
-    },
-    computed: {
-      formData: {
-        get: function () {
-          return JSON.parse(JSON.stringify(this.$store.getters['blocks/getForm']));
+      async saveForm () {
+        try {
+          await this.$store.dispatch('blocks/saveForm', {moduleId:this.moduleId, menuId:this.itemId, itemId:this.editDataForm.ID || 0, form: this.editDataForm});
+          this.$bvToast.toast('Успешно сохранено', {
+            title: ``,
+            variant: 'success',
+            solid: true
+          })
+        } catch(err) {
+          this.$bvToast.toast(err.response.data.MESSAGE, {
+            title: `Ошибка`,
+            variant: 'danger',
+            noAutoHide: true,
+            solid: true
+          })
         }
-      }
+      },
     }
   }
 </script>

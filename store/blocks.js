@@ -2,20 +2,31 @@ export const state = () => ({
   blocks: [],
   form: [],
   isBlock: true,
-  isForm: false
+  isForm: false,
+  cardId: 0
 })
 
 export const getters = {
   getBlockById: state => id => {
     return state.blocks.find(b => b.blockId === parseInt(id));
   },
-  getForm: state => state.form
+  getForm: state => state.form,
+  cardId: state => state.cardId,
+  moduleId: state => state.moduleId,
+  menuId: state => state.menuId,
 }
 
 export const actions = {
   async fetchForm ({commit, dispatch}, {moduleId, menuId, itemId}) {
     await this.$axios.get(`/api/card/${moduleId}/${menuId}/${itemId}`)
       .then((res) => {
+        commit('setCardId', itemId)
+        commit('setForm', res.data.data);
+      })
+  },
+  async saveForm ({commit, dispatch, state}, {moduleId, menuId, form}) {
+    await this.$axios.post(`/api/card/${moduleId}/${menuId}/${state.cardId}`, form)
+      .then(async resp => {
         commit('setForm', res.data.data);
       })
   },
@@ -60,6 +71,9 @@ export const mutations = {
   },
   clearBlock(state) {
     state.blocks = []
-  }
+  },
+  setCardId(state, data) {
+    state.cardId = data
+  },
 }
 
