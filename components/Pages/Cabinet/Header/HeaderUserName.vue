@@ -10,24 +10,20 @@
 <script>
   export default {
     name: 'HeaderUserInfo',
-    props: {
-      userData: {
-        type: Array
-      }
-    },
+    props: ['userData'],
     computed: {
       user () {
-        if (this.userData[0]) {
+        if (this.userData && this.userData[0]) {
           return `${this.userData[0]._data[0]['SFIRSTNAME']} ${this.userData[0]._data[0]['SSECONDNAME']}`;
         }
       },
       percent () {
-        if (this.userData[0]) {
+        if (this.userData && this.userData[0]) {
           return this.userData[0]._data[0]['NPROFILEFULLNESS'];
         }
       },
       sex () {
-        if (this.userData[0]) {
+        if (this.userData && this.userData[0]) {
           return this.userData[0]._data[0]['BSEX'] === 0 ? 'male' : 'female';
         }
       }
