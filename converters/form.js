@@ -15,7 +15,7 @@ converter.subcompare = (a, b) => {
   return 0
 }
 
-converter.form = (data) => {
+converter.form = (data, itemId) => {
   let arr = [];
   let item = data[0]._data.length ? data[0]._data[0] : {}
   let fields = data[0]._struct
@@ -26,6 +26,7 @@ converter.form = (data) => {
     obj.label = fields[i].CAPTION ? fields[i].CAPTION : fields[i].FIELD
     obj.value = item[fields[i].FIELD]
     //obj.value = item[fields[i].FIELD] || meta[fields[i].FIELD]
+    obj.id = itemId
     obj.type = fields[i].TYPE
     obj.maxlength = fields[i].PRECISION
     obj.name = fields[i].FIELD
@@ -41,21 +42,20 @@ converter.form = (data) => {
   let webFieldsArr = [];
   let webFields = data[0]._meta['JSONWEBFIELDS']
   webFields = webFields.sort((a, b) => a['NORDER'] - b['NORDER']);
-  
+
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
     obj.label = webFields[i].SCAPTION;
     obj.value = item[webFields[i].SNAME];
     obj.type = webFields[i].STYPE;
-
     if (obj.type === 'DateTime') {
       obj.type = 'timestamp';
     } else if (webFields[i].IDCONTROL == 16) {
       obj.type = 'boolean';
     } else if (obj.type === 'Decimal') {
       obj.type = 'string';
-    } 
-    
+    }
+    obj.id = itemId
     obj.cols = webFields[i].NCOLSPAN;
     obj.width = webFields[i].NWIDTH + '%';
     obj.name = webFields[i].SNAME;
@@ -105,6 +105,7 @@ converter.type = (data) => {
           copy[i].required = copy[j].required
           copy[i].dic = data[j].name
           copy[i].value = {text: copy[i].value, value: copy[j].value}
+          copy[i].id = copy[j].id
           del.push(data[j])
         }
       }

@@ -13,6 +13,18 @@
 <script>
   import Form from '~/components/Libs/Form/Form'
   import VRuntimeTemplate from "v-runtime-template";
+  const validateData = (data) => {
+    let valid = true
+    for (let i = 0; i < data.length; i++) {
+      let value = data[i].type === 'enum' ? data[i].value.value : data[i].value
+      data[i].checked = true
+      if (data[i].required && !value && data[i].type !== 'boolean') {
+        data[i].state = false
+        valid = false
+      }
+    }
+    return valid
+  }
   export default {
     name: 'WizardList',
     components: {Form,VRuntimeTemplate},
@@ -59,12 +71,14 @@
       },
       async saveForm () {
         try {
-          await this.$store.dispatch('blocks/saveForm', {moduleId:this.moduleId, form: this.editDataForm});
-          this.$bvToast.toast('Успешно сохранено', {
-            title: ``,
-            variant: 'success',
-            solid: true
-          })
+          if(validateData(this.editDataForm)){
+            await this.$store.dispatch('blocks/saveForm', {moduleId:this.moduleId, form: this.editDataForm});
+            this.$bvToast.toast('Успешно сохранено', {
+              title: ``,
+              variant: 'success',
+              solid: true
+            })
+          }
         } catch(err) {
           this.$bvToast.toast(err.response.data.MESSAGE, {
             title: `Ошибка`,

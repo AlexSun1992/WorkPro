@@ -21,7 +21,7 @@ app.get('/card/:idModule/:idItem/:id', (req, res) => {
     }
     axios({url: `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.id}`, method: 'GET'})
       .then(resp => {
-        res.send(formConverter.form(resp.data))
+        res.send(formConverter.form(resp.data, req.params.idItem))
       })
       .catch(err => {
         console.log(err.response.data)

@@ -21,7 +21,7 @@
   import Form from '~/components/Libs/Form/Form'
   import Card from '~/components/Pages/Cabinet/Profile/Card/Card'
   import ActionButton from '../Block/ActionButton'
-  
+
   export default {
     name: 'ProfileForm',
     components: {Form, Card, ActionButton},
@@ -57,7 +57,7 @@
         if (this.cardId == 719) {
           params['NUMBER'] = this.number;
           params['CODE'] = this.code
-        } 
+        }
         else if (this.cardId == 718) {
           params['NEWEMAIL'] = this.email;
         }
@@ -65,7 +65,7 @@
         if (resp.status == 200) {
           this.$emit('saved');
           this.$emit('field-changed');
-        } 
+        }
         else {
           this.$emit('error');
         }
@@ -118,5 +118,5 @@
     right: 220px;
     bottom: 65px;
   }
-  
+
 </style>
