@@ -12,7 +12,7 @@
   export default {
     head () {
       return {
-        title: this.getPage.title.rendered
+        title: this.getPage?.title.rendered
       }
     },
     components: {VRuntimeTemplate,Calculator},
