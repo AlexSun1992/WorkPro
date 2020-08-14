@@ -8,7 +8,7 @@
       <b-button v-if="isEdit"  v-on:click="saveForm"  pill type="button" variant="success">
         Сохранить
       </b-button>
-      <b-button pill type="button" variant="outline-success" @click="cancelForm()">
+      <b-button  v-if="isEdit" pill type="button" variant="outline-success" @click="cancelForm()">
         Отменить
       </b-button>
     </b-card>
