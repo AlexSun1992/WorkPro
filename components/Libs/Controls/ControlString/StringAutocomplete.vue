@@ -50,7 +50,8 @@ export default {
     },
     enter() {
       this.open = false;
-      this.$emit("update", this.suggestions.data[this.current]);
+      this.suggestionClick(this.current);
+      // this.$emit("update", this.suggestions.data[this.current]);
     },
     up() {
       if (this.current > 0) {
@@ -66,6 +67,7 @@ export default {
       return index === this.current;
     },
     suggestionClick(index) {
+      debugger
       this.open = false;
       let issuedWhere = this.$parent.$parent.$parent.$parent.$children.find(item => {
           return item.data.name === 'SISSUED_WHERE';
