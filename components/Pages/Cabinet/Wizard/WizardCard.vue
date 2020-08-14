@@ -8,6 +8,9 @@
       <b-button v-if="isEdit"  v-on:click="saveForm"  pill type="button" variant="success">
         Сохранить
       </b-button>
+      <b-button pill type="button" variant="outline-success" @click="cancelForm()">
+        Отменить
+      </b-button>
     </b-card>
   </div>
 </template>
@@ -58,7 +61,8 @@
     },
     data () {
       return {
-        editDataForm: this.formData
+        editDataForm: this.formData,
+        copyDataForm: null
       }
     },
     watch: {
@@ -67,6 +71,7 @@
     methods: {
       setData () {
         this.editDataForm = this.formData;
+        this.copyDataForm = JSON.parse(JSON.stringify(this.formData));
       },
       destroyForm () {
         this.$store.dispatch('blocks/destroyForm');
@@ -89,6 +94,9 @@
             solid: true
           })
         }
+      },
+      cancelForm () {
+        this.editDataForm = JSON.parse(JSON.stringify(this.copyDataForm));
       }
     }
   }
