@@ -62,7 +62,7 @@
     data () {
       return {
         editDataForm: this.formData,
-        copyDataForm: null
+        copyDataForm: JSON.parse(JSON.stringify(this.formData))
       }
     },
     watch: {
