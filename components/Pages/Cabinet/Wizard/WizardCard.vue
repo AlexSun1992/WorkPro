@@ -2,10 +2,12 @@
   <div>
     <v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>
     <b-card v-else class="bg-six block border-block-one">
-      <b-button v-on:click="destroyForm" type="submit" variant="primary" v-b-popover.hover.top="'Назад'"><i  class="fa fa-chevron-left"></i></b-button>
+      <b-button v-on:click="destroyForm" type="submit" variant="success" pill v-b-popover.hover.top="'Назад'"><i  class="fa fa-chevron-left"></i></b-button>
       <Form   :data="editDataForm" :edit="isEdit"></Form>
       <p class="mb-10 mt-3"></p>
-      <button v-if="isEdit"  v-on:click="saveForm" type="button" class="btn btn-primary">Сохранить</button>
+      <b-button v-if="isEdit"  v-on:click="saveForm"  pill type="button" variant="success">
+        Сохранить
+      </b-button>
     </b-card>
   </div>
 </template>
