@@ -30,8 +30,9 @@ export default {
   computed: {
     items: function () {
       if (this.data) {
-        return this.data.filter(function (item) {
-          return item.visible;
+        return this.data.filter(item => {
+          if (!item.visible) return;
+          return this.edit || !this.edit && item.value;
         })
       }
     }

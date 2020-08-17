@@ -62,7 +62,8 @@ module.exports = {
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
     ['@nuxtjs/axios', { proxy: true }],
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    ['cookie-universal-nuxt', { alias: 'cookiz' }]
   ],
   /*
   ** Build configuration
