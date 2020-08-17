@@ -883,6 +883,7 @@
             height: 13px;
             background: url(/img/arrow-right-bold.svg) 0 0 no-repeat;
             content: "";
+            background-size: cover;
         }
         
         /deep/ .d-grid {
@@ -903,6 +904,7 @@
             font-style: normal;
             font-weight: normal;
             display: grid;
+            height: 100%;
         }
         
         /deep/ .mypolices-block>div {
@@ -1178,3 +1180,25 @@
         /deep/ .invalid-feedback {
             line-height: 1;
         }
+        /*
+        <div>
+  <div class="block-title title-bottom-line">{{name}}</div>
+  <content-block  class="row" :item-id="itemId">
+    <template v-slot:data="data">
+      <div class="col-12 col-md-6 col-lg-3 mb-4">
+        <div class="block bg-one block-border-two mypolices-block" :data-id="data.content.IDPRODUCT">
+          <div class="img-mypolices-img"></div>
+          <div class="mypolices-title">{{data.content.SPRODUCTNAME}}</div>
+          <div class="mypolices-name">{{data.content.SPOLOBJ}}</div>
+          <div class="mypolices-number">{{data.content.SPOLICY_NUMBER}}</div>
+          <div class="mypolices-time">Срок действия: <b>по {{data.content.DTODATE | moment("DD.MM.YYYY")}}</b></div>
+          <div class="block-footer bg-one row justify-content-start align-items-center"><open-card-button  :moduleId="moduleId" :menuId="712" :itemId="data.content.ID" ><div>Перейти к полису</div></open-card-button></div>
+        </div>
+      </div>
+    </template>
+  </content-block>
+</div>
+*/
+        /*
+<b-card class="block bg-one block-border-two mypolices-block" :title="data.content.FKIDBRAND + ' ' + data.content.SMODEL + (data.content.FKIDCOLOR ? ' (' + data.content.FKIDCOLOR + ')' : '')">
+*/

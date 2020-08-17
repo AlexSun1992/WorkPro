@@ -1,6 +1,7 @@
 // Here you can add other styles
 body {
     background: linear-gradient(132.21deg, #FFFFFF 1.33%, rgba(243, 247, 244, 0.97) 101.82%);
+    font-family: Roboto, sans-serif;
 }
 
 .form-control:disabled {
@@ -23,7 +24,6 @@ input {
     background: #FDFDFD;
     border-radius: 6px;
     border: none !important;
-    font-family: Proxima Nova;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
