@@ -751,6 +751,10 @@
             text-decoration: underline;
         }
         
+        /deep/ .mypolices-block .block-footer button:hover {
+            color: #22A66A !important;
+        }
+        
         /deep/ .block-footer button:after {
             content: "";
             width: 12px;
@@ -1005,9 +1009,9 @@
         /deep/ .block-hover:hover {
             box-shadow: 12px 16px 16px rgba(221, 235, 226, 0.32);
             transition: 0.3s;
-            cursor: pointer;
+            /*cursor: pointer;*/
         }
-        
+        /*        
         /deep/ .block-hover:hover:after {
             width: 100%;
             height: 100%;
@@ -1029,6 +1033,7 @@
             content: "";
             transition: 0.3s;
         }
+*/
         
         /deep/ .b-top:after {
             width: calc(100% - 64px);
@@ -1134,7 +1139,7 @@
             box-shadow: none !important;
         }
         
-        @media (min-width: 962px) {
+        @media (min-width: 992px) {
             /deep/ .f-l-i {
                 flex: 0 0 140px;
                 max-width: 140px;
@@ -1180,25 +1185,26 @@
         /deep/ .invalid-feedback {
             line-height: 1;
         }
-        /*
-        <div>
-  <div class="block-title title-bottom-line">{{name}}</div>
-  <content-block  class="row" :item-id="itemId">
-    <template v-slot:data="data">
-      <div class="col-12 col-md-6 col-lg-3 mb-4">
-        <div class="block bg-one block-border-two mypolices-block" :data-id="data.content.IDPRODUCT">
-          <div class="img-mypolices-img"></div>
-          <div class="mypolices-title">{{data.content.SPRODUCTNAME}}</div>
-          <div class="mypolices-name">{{data.content.SPOLOBJ}}</div>
-          <div class="mypolices-number">{{data.content.SPOLICY_NUMBER}}</div>
-          <div class="mypolices-time">Срок действия: <b>по {{data.content.DTODATE | moment("DD.MM.YYYY")}}</b></div>
-          <div class="block-footer bg-one row justify-content-start align-items-center"><open-card-button  :moduleId="moduleId" :menuId="712" :itemId="data.content.ID" ><div>Перейти к полису</div></open-card-button></div>
-        </div>
-      </div>
-    </template>
-  </content-block>
-</div>
-*/
-        /*
-<b-card class="block bg-one block-border-two mypolices-block" :title="data.content.FKIDBRAND + ' ' + data.content.SMODEL + (data.content.FKIDCOLOR ? ' (' + data.content.FKIDCOLOR + ')' : '')">
-*/
+        
+        /deep/ .mypolices-block[data-id="2"] .img-mypolices-img {
+            background: url(/img/mypolices-id2.svg) 50% 50% no-repeat;
+        }
+        
+        /deep/ .mypolices-block[data-id="3"] .img-mypolices-img {
+            background: url(/img/mypolices-id3.svg) 50% 50% no-repeat;
+        }
+        
+        /deep/ .mypolices-block[data-id="1"] .img-mypolices-img {
+            background: url(/img/mypolices-id1.svg) 50% 50% no-repeat;
+        }
+        
+        /deep/ .mypolices-block[data-id] .img-mypolices-img {
+            background-size: contain;
+        }
+        
+        /deep/ .mypolices-block[data-id="8"] .img-mypolices-img:after {
+            position: absolute;
+            content: "id8";
+            top: 0;
+            left: 0;
+        }
