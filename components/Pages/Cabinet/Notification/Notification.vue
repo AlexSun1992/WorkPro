@@ -1,3 +1,23 @@
+<div class="block  bg-one block-border-two mt-4">
+  <div v-text="name"  class="block-title"/>
+  <content-block :item-id="itemId">
+    <template v-slot:data="data">
+      <div class="block-insurancecase-item">
+        <div class="img-insurancecase-kasko"></div>
+        <div   class="block-insurancecase-text">
+          <b  v-text="data.content.SRISK + ' от ' + data.content.DCLAIM_DATE"/>
+          <span v-text="data.content.SPNUMBER" class="block-insurancecase-item-number"/>
+        </div>
+        <div class="block-btn">
+          <open-card-button class="arrow-right-bold"  :moduleId="moduleId" :menuId="itemId" :itemId="data.content.ID" ><div>Перейти</div></open-card-button>
+        </div>
+      </div>
+    </template>
+  </content-block>
+  <div class="block-footer bg-one row justify-content-center align-items-center">
+    <button type="button" class="col-auto link-arrow-right">Архив страховых случаев</button>
+  </div>
+</div>
 <template>
 <div>
 

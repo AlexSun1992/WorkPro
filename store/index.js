@@ -80,8 +80,12 @@ export const actions = {
 }
 
 export const mutations = {
-  setAxiosError(state, error) {
+  setAxiosError(state, error, ) {
     if (error && error.response) {
+      if (error.response.status == '401') {
+        state.auth.user = [];
+        this.$router.push('/login');
+      }
       state.registrationError = error.response.data.INFO;
     }
   },
@@ -93,7 +97,7 @@ export const mutations = {
 
 export const getters = {
   isAuthenticated(state) {
-    return state.auth.loggedIn;
+    return state.auth?.user?.length;
   },
 
   loggedInUser(state) {

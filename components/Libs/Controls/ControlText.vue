@@ -1,5 +1,5 @@
 <template>
-  <b-form-group  :label="label" :label-cols="data.labelCols ? data.labelCols : 2">
+  <b-form-group  :label="label" :label-for="data.name" :label-cols="data.labelCols ? '' : 2">
     <b-form-textarea id="textarea1"
                      v-model="data.value"
                      :disabled="!edit ? !edit : data.readonly"
@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style scoped>
-  .form-control:disabled, .form-control[readonly]{
+  /* .form-control:disabled, .form-control[readonly]{
     background-color: white;
-  }
+  } */
 </style>

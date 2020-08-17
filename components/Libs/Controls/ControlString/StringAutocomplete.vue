@@ -4,7 +4,7 @@
       class="form-control"
       :type="getType(data.name)"
       v-model="data.value"
-      :disabled="data.readonly"
+      :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
       :placeholder="showPlaceholder(data.name)"
@@ -50,7 +50,8 @@ export default {
     },
     enter() {
       this.open = false;
-      this.$emit("update", this.suggestions.data[this.current]);
+      this.suggestionClick(this.current);
+      // this.$emit("update", this.suggestions.data[this.current]);
     },
     up() {
       if (this.current > 0) {
@@ -66,6 +67,7 @@ export default {
       return index === this.current;
     },
     suggestionClick(index) {
+      debugger
       this.open = false;
       let issuedWhere = this.$parent.$parent.$parent.$parent.$children.find(item => {
           return item.data.name === 'SISSUED_WHERE';
@@ -138,7 +140,7 @@ export default {
         obj.values = values;
         this.$set(this.suggestions, 'data', obj.values);
         this.$set(this.suggestions, 'type', obj.type);
-      } 
+      }
     },
     showPlaceholder(name) {
       if (name === 'SNEWPHONE') {
@@ -172,9 +174,9 @@ export default {
     background-color: lightgrey;
   }
 
-  input[type=number]::-webkit-inner-spin-button, 
-  input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 </style>

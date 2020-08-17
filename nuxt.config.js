@@ -62,7 +62,7 @@ module.exports = {
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
     ['@nuxtjs/axios', { proxy: true }],
-    '@nuxtjs/auth'
+    '@nuxtjs/auth-next'
   ],
   /*
   ** Build configuration
@@ -96,27 +96,26 @@ module.exports = {
     '~/api/card.js',
     '~/api/dic.js'
   ],
-
   auth: {
     strategies: {
       local: {
-        _scheme: 'refresh',
+        scheme: 'refresh',
         autoRefresh: {
           enable: true
         },
-        dataRefreshToken: 'REFRESH_TOKEN',
         clientId: false,
-        dataClientId: false,
         grantType: false,
-        dataGrantType: false,
         token: {
           property: 'ACCESS_TOKEN',
-          maxAge: 1800
+          maxAge: 3600
         },
         refreshToken: {
-          property: 'REFRESH_TOKEN'
+          property: 'REFRESH_TOKEN',
+          data: 'REFRESH_TOKEN'
         },
-        user: '',
+        user: {
+          property: false
+        },
         endpoints: {
           // login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
           login: { url: '/am/auth/v2/authorize', method: 'post' },

@@ -1,5 +1,5 @@
 <template>
-    <b-form-group :label="label" :class="{required: data.required}" :label-for="data.name" label-cols="" :label-class="data.labelCols">
+    <b-form-group :label="label" :class="{required: data.required}" :label-for="data.name" :label-cols="data.labelCols ? '' : 2" :label-class="data.labelCols">
       <string-autocomplete
         :data="data"
         :edit="edit"
@@ -41,9 +41,9 @@ export default {
 </script>
 
 <style scoped>
-  .form-control:disabled, .form-control[readonly]{
+  /* .form-control:disabled, .form-control[readonly]{
     background-color: white;
-  }
+  } */
   .form-group {
     margin-bottom: 0!important;
   }

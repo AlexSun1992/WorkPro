@@ -26,7 +26,11 @@ app.get('/list/:idModule/:idItem/:filters', (req, res) => {
         res.send(listConverter.list(resp.data))
       })
       .catch(err => {
-        res.send(err.response.data)
+        if (err.response.data.STATUS == 401) {
+          res.sendStatus(err.response.data.STATUS);
+        } else {
+          res.send(err.response.data)
+        }
       })
   } catch (e) {
     res.send(e)

@@ -1,6 +1,6 @@
 <template>
   <span  @click="onfocus">
-    <b-form-group :label="data.label" :class="{required: data.required}" label-cols="" :label-class="data.labelCols">
+    <b-form-group :label="data.label" :class="{required: data.required}" :label-for="data.name" :label-cols="data.labelCols ? '' : 2" :label-class="data.labelCols">
       <model-list-select  :list="options"
                          option-value="value"
                          option-text="text"
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     initData (param) {
-      this.$axios({url: `/api/dic/${this.$route.params.idModule}/${this.$route.params.idItem}/${this.data.dic}`, method: 'GET'})
+      this.$axios({url: `/api/dic/${this.$route.params.idModule}/${this.data.id}/${this.data.dic}`, method: 'GET'})
         .then(resp => {
           this.options = resp.data
         })

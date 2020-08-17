@@ -61,7 +61,7 @@ export const actions = {
         }
       })
     } catch(e) {
-      commit('setPage', e.response.data);
+      commit('setPage', e?.response?.data);
     }
   },
 
