@@ -82,12 +82,12 @@ export const actions = {
 export const mutations = {
   setAxiosError(state, error, ) {
     if (error && error.response) {
-      if (error.response.status == '401') {
-        state.auth.user = [];
-        this.$router.push('/login');
-      }
       state.registrationError = error.response.data.INFO;
     }
+  },
+
+  resetUser(state) {
+    state.auth.user = [];
   },
 
   clearAxiosError(state) {
