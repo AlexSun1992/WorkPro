@@ -1,6 +1,6 @@
 <template>
   <div v-if="isOpenCard">
-    <div v-for="item in dataContent.items" v-on:click="openCard(item)">
+    <div v-for="item in dataContent.items" @click.prevent="openCard(item, $event)">
       <slot name="data" v-bind:content="item"></slot>
     </div>
   </div>
@@ -52,9 +52,13 @@
       }
     },
     methods: {
-      async openCard (item) {
+      async openCard (item, event) {
         try {
           if(this.isOpenCard){
+            console.log('open card')
+            if (event) {
+              event.preventDefault()
+            }
             await this.$store.dispatch('blocks/fetchForm', {moduleId:55, menuId:this.itemId, itemId:item.ID});
           }
 
