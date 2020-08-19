@@ -43,7 +43,7 @@
         return this.params.settings.portalgrid || this.params.settings.cardgrid
       },
       templateCardData () {
-        return this.params.settings.cardtemplate
+        return this.$store.getters['menu/getMenuById'](this.$store.getters['blocks/blockId']).SVJCARDTEMPLATE
       },
       isForm: {
         get: function () {
