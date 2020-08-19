@@ -17,10 +17,12 @@ import ControlClob from '~/components/Libs/Controls/ControlText'
 import ControlEnum from '~/components/Libs/Controls/ControlEnum'
 import ControlButton from '~/components/Libs/Controls/ControlButton'
 import ControlLink from '~/components/Libs/Controls/ControlLink'
+import ControlLabel from '~/components/Libs/Controls/ControlLabel'
 
 export default {
   name: 'Control',
-  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, ControlTimestamp, ControlPeriod, ControlClob, ControlEnum, ControlButton, ControlLink},
+  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, 
+  ControlTimestamp, ControlPeriod, ControlClob, ControlEnum, ControlButton, ControlLink, ControlLabel},
   props: {
     data: {
       type: Object,

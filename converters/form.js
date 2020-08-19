@@ -48,13 +48,25 @@ converter.form = (data, itemId) => {
     obj.label = webFields[i].SCAPTION;
     obj.value = item[webFields[i].SNAME];
     obj.type = webFields[i].STYPE;
-    if (obj.type === 'DateTime') {
+  
+    if (webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) {
+      obj.type = 'string';
+    } else if (webFields[i].IDCONTROL == 2) {
+      obj.type = 'text';
+    } else if (webFields[i].IDCONTROL == 7) {
+      obj.type = 'label';
+    } else if (webFields[i].IDCONTROL == 8) {
+      obj.type = 'link';
+    } else if (webFields[i].IDCONTROL == 14) {
       obj.type = 'timestamp';
     } else if (webFields[i].IDCONTROL == 16) {
       obj.type = 'boolean';
-    } else if (obj.type === 'Decimal') {
+    } else if (webFields[i].IDCONTROL == 21) {
+      obj.type = 'button';
+    } else {
       obj.type = 'string';
     }
+
     obj.id = itemId
     obj.cols = webFields[i].NCOLSPAN;
     obj.width = webFields[i].NWIDTH + '%';
