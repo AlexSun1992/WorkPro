@@ -1,7 +1,12 @@
 <template>
   <div>
     <ConfirmModal :conformation="conformation" @agree="isRegConfirmed=$event"/>
+    <!-- Алерт ошибки кода регистрации Андрея (на восстановлении у Жени) -->
     <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
+    <!--  -->
+    <!-- Алерт ошибки кода регистрации (удалить после восстановления) -->
+    <b-alert :show="!!errorMessage" variant="danger">{{ errorMessage }}</b-alert>
+    <!--  -->
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-group label="Телефон" label-cols="3">
         <verify-user ref="verifyUser" :v="$v.form" :count="60" :context="'registration'" :loginType="'phone'" :validateState="validateState" :disabled="registrationInProcess"/>
@@ -118,7 +123,7 @@
         },
         code: {
           required,
-          minLength: minLength(5)
+          minLength: minLength(4)
         },
         password: {
           required

@@ -33,12 +33,17 @@ export const actions = {
 
   async getCode({commit}, params) {
     try {
-      if (params.loginType === 'phone') {
-        delete params.loginType;
-        return await this.$axios.post("/free/v2/sendsmscode", params);
+      let recaptcha = params.token;
+      let loginType = params.loginType;
+      let headers = {
+        headers: {'recaptcha': recaptcha}
+      }
+      delete params.loginType;
+      delete params.token;
+      if (loginType === 'phone') {
+        return await this.$axios.post("/free/v2/sendsmscode", params, headers);
       } else {
-        delete params.loginType;
-        return await this.$axios.post("/free/v2/sendemailcode", params);
+        return await this.$axios.post("/free/v2/sendemailcode", params, headers);
       }
     } catch(e) {
       console.log(e);
@@ -82,7 +87,7 @@ export const actions = {
 export const mutations = {
   setAxiosError(state, error, ) {
     if (error && error.response) {
-      state.registrationError = error.response.data.INFO;
+      state.registrationError = error.response.data.INFO ? error.response.data.INFO : error.response.data.MESSAGE;
     }
   },
 
