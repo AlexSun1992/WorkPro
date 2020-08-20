@@ -18,7 +18,7 @@
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
     <div>
-      <div v-if="code">
+      <div v-if="code" class="code">
         <b-link @click="changeNumber">{{ loginType === 'phone' ? 'Изменить номер' : 'Изменить email' }}</b-link>
         <p>На указанный {{ loginType === 'phone' ? 'номер' : 'email' }} выслан код подтверждения</p>
         <b-form-input
@@ -54,6 +54,7 @@
       variant="success"
     >Подтвердить</b-button>
     </div>
+    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
   </div>
 </template>
 
@@ -78,7 +79,8 @@ export default {
       mask: "",
       codeMask: "#####",
       placeholder: "+7(___)-___-__-__",
-      loginTouchesCount: 0
+      loginTouchesCount: 0,
+      token: null
     };
   },
 
@@ -89,7 +91,28 @@ export default {
   },
 
   methods: {
+    onError(error) {
+      console.log('Error:', error)
+    },
+    onSuccess(token) {
+      this.token = token
+      console.log('Succeeded:', token)
+    },
+    onExpired() {
+      console.log('Expired')
+    },
+    async getCaptcha() {
+      try {
+        const token = await this.$recaptcha.getResponse()
+        console.log('ReCaptcha token:', token)
+        await this.$recaptcha.reset()
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('Login error:', error)
+      }
+    },
     async getCode() {
+      await this.getCaptcha();
       this.isPhoneChanged = false;
       try {
         if (!this.code && (this.v.phone.$model || this.v.email.$model)) {
@@ -97,9 +120,11 @@ export default {
           this.disabledResend = true;
 
           let params = this.getCodeParams(this.loginType);
+          if (!this.token) return;
+          params = {...params, token: this.token}
           const response = await this.$store.dispatch('getCode', params);
           if (this.loginType === 'phone') {
-            this.code = response.data[0].TEMPPASS;
+            this.code = response.status == 200;
           } else {
             // Для показа (заменить на код email)
             this.code = '*';
@@ -108,7 +133,7 @@ export default {
           this.v.code.$model = this.code;
           this.$emit("onCode", this.code);
           this.isUserDisabled = true;
-          this.countdown();
+          this.countdown(); 
         } else {
           this.isUserDisabled = false;
         }
@@ -229,3 +254,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .code {
+    margin-left: 20px;
+  }
+</style>
