@@ -1,5 +1,5 @@
 <template>
-  <b-form-group  :label="data.label" :class="{required: data.required}" :label-for="data.name" :label-cols="data.labelCols ? '' : 2">
+  <b-form-group  :label="data.label" :class="{required: data.required}" :label-for="data.name" :label-cols="data.labelCols ? '' : 2" :label-class="data.labelCols">
     <b-form-input v-model="data.value" :disabled="!edit ? !edit : data.readonly" :type="'number'" :state="data.state"></b-form-input>
     <b-form-invalid-feedback>
       Обязательно для заполнения

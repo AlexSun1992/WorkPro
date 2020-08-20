@@ -49,8 +49,9 @@ converter.form = (data, itemId) => {
     obj.value = item[webFields[i].SNAME];
     obj.type = webFields[i].STYPE;
   
-    if (webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) {
-      obj.type = 'string';
+    if ((webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) && 
+        (webFields[i].STYPE == 'Double' || webFields[i].STYPE == 'Int64' || webFields[i].STYPE == 'Int16')) {
+      obj.type = 'double';
     } else if (webFields[i].IDCONTROL == 2) {
       obj.type = 'text';
     } else if (webFields[i].IDCONTROL == 7) {
@@ -65,8 +66,8 @@ converter.form = (data, itemId) => {
       obj.type = 'button';
     } else {
       obj.type = 'string';
-    }
-
+    } 
+  
     obj.id = itemId
     obj.cols = webFields[i].NCOLSPAN;
     obj.width = webFields[i].NWIDTH + '%';
