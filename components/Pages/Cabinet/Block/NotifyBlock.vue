@@ -8,10 +8,11 @@
   import ContentBlock from './ContentBlock'
   import ActionButton from './ActionButton'
   import OpenCardButton from '../Block/OpenCardButton'
+  import DeleteCardButton from '../Block/DeleteCardButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'NotifyBlock',
-    components: {ContentBlock, VRuntimeTemplate, ActionButton, OpenCardButton},
+    components: {ContentBlock, VRuntimeTemplate, ActionButton, OpenCardButton, DeleteCardButton},
     props: {
       moduleId: {
         type: String,

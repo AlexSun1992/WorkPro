@@ -27,6 +27,12 @@ export const actions = {
         commit('setForm', res.data.data);
       })
   },
+  async deleteForm ({commit, dispatch}, {moduleId, menuId, itemId}) {
+    await this.$axios.delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}`)
+      .then((res) => {
+        dispatch('updateBlock', itemId);
+      })
+  },
   async saveForm ({commit, dispatch, state}, {moduleId,form}) {
     await this.$axios.post(`/api/card/${moduleId}/${state.blockId}/${state.cardId}`, form)
       .then(async res => {
