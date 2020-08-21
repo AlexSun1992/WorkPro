@@ -87,7 +87,7 @@ converter.menuObject = (data) => {
   obj.idParent = data.IDPARENT
   obj.compType = data.IDADMMENUTYPE
   obj.recordLoad = data.LFIRSTLOADRECORD
-  obj.newRecord = data.LNEWRECORDMETHOD
+  obj.newRecord = data.IDADMMENUTYPE === 10
   obj.filters = data.FILTERCUR ? filterConverter.filter(data.FILTERCUR) : []
   obj.actions = data.ACTIONSCUR ? actionConverter.action(data.ACTIONSCUR) : []
   obj.tabs = data.ONETOMANYCUR ? tabConverter.tab(data.ONETOMANYCUR) : []
