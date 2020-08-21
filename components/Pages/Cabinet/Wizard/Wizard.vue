@@ -43,7 +43,7 @@
         return this.params.settings.portalgrid || this.params.settings.cardgrid
       },
       templateCardData () {
-        return this.params.settings.cardtemplate
+        return this.$store.getters['menu/getMenuById'](this.$store.getters['blocks/blockId']).SVJCARDTEMPLATE
       },
       isForm: {
         get: function () {
@@ -58,6 +58,17 @@
       isEdit: {
         get: function () {
           return this.params.settings.edit
+        }
+      },
+      isEmptyContent: {
+        get: function () {
+          let block =  this.$store.getters['blocks/getBlockById'](this.itemId)
+          if(block){
+            return !block.data.items.length
+          }
+          else{
+            return false
+          }
         }
       }
     }

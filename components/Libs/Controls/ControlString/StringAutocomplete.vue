@@ -67,7 +67,6 @@ export default {
       return index === this.current;
     },
     suggestionClick(index) {
-      debugger
       this.open = false;
       let issuedWhere = this.$parent.$parent.$parent.$parent.$children.find(item => {
           return item.data.name === 'SISSUED_WHERE';

@@ -48,18 +48,41 @@ converter.form = (data, itemId) => {
     obj.label = webFields[i].SCAPTION;
     obj.value = item[webFields[i].SNAME];
     obj.type = webFields[i].STYPE;
-    if (obj.type === 'DateTime') {
+  
+    if ((webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) && 
+        (webFields[i].STYPE == 'Double' || webFields[i].STYPE == 'Int64' || webFields[i].STYPE == 'Int16')) {
+      obj.type = 'double';
+    } else if (webFields[i].IDCONTROL == 2) {
+      obj.type = 'text';
+    } else if (webFields[i].IDCONTROL == 7) {
+      obj.type = 'label';
+    } else if (webFields[i].IDCONTROL == 8) {
+      obj.type = 'link';
+    } else if (webFields[i].IDCONTROL == 14) {
       obj.type = 'timestamp';
     } else if (webFields[i].IDCONTROL == 16) {
       obj.type = 'boolean';
-    } else if (obj.type === 'Decimal') {
+    } else if (webFields[i].IDCONTROL == 21) {
+      obj.type = 'button';
+    } else {
       obj.type = 'string';
+    } 
+
+    function setDefaultValues(caption) {
+      if (caption) {
+        return caption;
+      } else {
+        obj.cols = 12;
+        obj.width = '100%';
+        return 'f-l-i col-md-3 col-12';
+      }
     }
+  
     obj.id = itemId
     obj.cols = webFields[i].NCOLSPAN;
     obj.width = webFields[i].NWIDTH + '%';
     obj.name = webFields[i].SNAME;
-    obj.labelCols = webFields[i].SCAPTIONPOSITION;
+    obj.labelCols = setDefaultValues(webFields[i].SCAPTIONPOSITION);
     obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
     obj.required = webFields[i].LREQUIRED === 'N' ? false : true;
     obj.page = webFields[i].NPAGE;

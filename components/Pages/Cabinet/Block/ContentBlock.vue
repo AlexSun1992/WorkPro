@@ -1,6 +1,6 @@
 <template>
   <div v-if="isOpenCard">
-    <div v-for="item in dataContent.items" v-on:click="openCard(item)">
+    <div v-for="item in dataContent.items" @click.prevent="openCard(item)">
       <slot name="data" v-bind:content="item"></slot>
     </div>
   </div>

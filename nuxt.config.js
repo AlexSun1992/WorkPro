@@ -62,8 +62,16 @@ module.exports = {
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
     ['@nuxtjs/axios', { proxy: true }],
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    ['cookie-universal-nuxt', { alias: 'cookiz' }],
+    '@nuxtjs/recaptcha'
   ],
+  recaptcha: {
+    hideBadge: false,
+    siteKey: '6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV',
+    version: 2, // Version
+    size: 'invisible'
+  },
   /*
   ** Build configuration
   */
@@ -84,7 +92,7 @@ module.exports = {
     // '/free': 'https://mobiletest.reso.ru',
     // '/am': 'https://mobiletest.reso.ru',
     // '/main': 'https://mobiletest.reso.ru',
-    '/free': 'https://mobile2.reso.ru',
+    '/free': 'https://mobile.reso.ru',
     '/am': 'https://mobile2.reso.ru',
     '/main': 'https://mobile.reso.ru'
   },
