@@ -67,12 +67,22 @@ converter.form = (data, itemId) => {
     } else {
       obj.type = 'string';
     } 
+
+    function setDefaultValues(caption) {
+      if (caption) {
+        return caption;
+      } else {
+        obj.cols = 12;
+        obj.width = '100%';
+        return 'f-l-i col-md-3 col-12';
+      }
+    }
   
     obj.id = itemId
     obj.cols = webFields[i].NCOLSPAN;
     obj.width = webFields[i].NWIDTH + '%';
     obj.name = webFields[i].SNAME;
-    obj.labelCols = webFields[i].SCAPTIONPOSITION;
+    obj.labelCols = setDefaultValues(webFields[i].SCAPTIONPOSITION);
     obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
     obj.required = webFields[i].LREQUIRED === 'N' ? false : true;
     obj.page = webFields[i].NPAGE;
