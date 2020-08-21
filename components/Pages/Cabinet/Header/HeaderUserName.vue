@@ -24,7 +24,7 @@
       },
       sex () {
         if (this.userData && this.userData[0]) {
-          return this.userData[0]._data[0]['BSEX'] === 0 ? 'male' : 'female';
+          return this.userData[0]._data[0]['BSEX'] === 1 ? 'male' : 'female';
         }
       }
     }
