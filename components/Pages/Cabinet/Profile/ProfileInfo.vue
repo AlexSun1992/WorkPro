@@ -73,6 +73,7 @@ export default {
       if(this.validateData(fields)){
         try {
           await this.$store.dispatch('card/saveProfile', fields);
+          await this.$store.dispatch('updateUser');
           this.$bvToast.toast('Успешно сохранено', {
             title: ``,
             variant: 'success',

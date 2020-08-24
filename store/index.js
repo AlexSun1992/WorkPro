@@ -79,6 +79,15 @@ export const actions = {
     }
   },
 
+  async updateUser({commit}) {
+    try {
+      const { data } = await this.$axios.get('/am/main/v2/userinfo');
+      commit('updateUser', data)
+    } catch(e) {
+      console.log(e);
+    }
+  },
+
   clearAxiosError({commit}) {
     commit('clearAxiosError')
   }
@@ -93,6 +102,10 @@ export const mutations = {
 
   resetUser(state) {
     state.auth.user = [];
+  },
+
+  updateUser(state, params) {
+    state.auth.user = params;
   },
 
   clearAxiosError(state) {
