@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button class="link-button" @click="openEdit()" variant="secondary">{{ data.label }}</b-button>
+    <b-button :class="data.labelCols + ' link-button'" @click="openEdit()" variant="secondary">{{ data.label }}</b-button>
   </div>
 </template>
 

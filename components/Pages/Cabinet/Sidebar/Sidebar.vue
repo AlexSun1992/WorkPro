@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar_client">
     <header-user-name :user-data="loggedInUser"></header-user-name>
-    <ul class="sidebar-nav">
+    <ul class="sidebar-nav justify-content-center">
       <n-link  v-for="item in navItems" :key="item.id" :to="item.url" v-slot="{ href, route, navigate, isActive, isExactActive }">
       <li :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'">
           <a :href="href" @click="navigate">

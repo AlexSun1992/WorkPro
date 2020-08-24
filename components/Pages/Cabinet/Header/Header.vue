@@ -12,6 +12,9 @@
         <li class="header-nav-item">
           <button v-on:click="logout()" type="button" class="header-nav-exit" />
         </li>
+        <li class="header-nav-item mobile-menu-btn">
+          <button v-on:click="mobileMenu()" type="button" class="header-nav-mobile" />
+        </li>
       </ul>
     </div>
   </header>
@@ -21,6 +24,9 @@
   export default {
     name: 'Header',
     methods: {
+      mobileMenu() {
+        
+      },
       logout() {
         try {
           this.$auth.logout();

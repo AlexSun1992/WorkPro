@@ -7,10 +7,10 @@
         </b-tab>
       </div>
     </b-tabs>
-    <div class="my-3 d-flex d-flex justify-content-between" v-if="$store.getters['card/wizardData']">
-      <div>
-        <b-button pill v-on:click="saveProfile" type="button" variant="success">Сохранить изменения</b-button>
-        <b-button pill v-on:click="cancel" type="button" variant="outline-success">Отменить</b-button>
+    <div class="mt-3 row" v-if="$store.getters['card/wizardData']">
+      <div class="col-12">
+        <b-button pill v-on:click="saveProfile" type="button" variant="success" class="col-12 col-md-auto">Сохранить изменения</b-button>
+        <b-button pill v-on:click="cancel" type="button" variant="outline-success" class="col-12 col-md-auto mt-2 mt-md-0 ml-md-3">Отменить</b-button>
       </div>
       <!-- <action-button :actions="actions" :rowId="125" item-id="params.page.itemId" action-id="32904"/> -->
     </div>
