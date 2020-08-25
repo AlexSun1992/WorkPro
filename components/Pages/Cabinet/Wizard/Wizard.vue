@@ -1,8 +1,10 @@
 <template>
-  <div>
+  <client-only>
+    <div>
       <wizard-card :is-edit="isEdit" :module-id="moduleId" :item-id="itemId" :form-data="formCardData" :template-data="templateCardData" v-if="isForm"/>
       <v-runtime-template v-if="!isForm" :template="templateData"></v-runtime-template>
-  </div>
+    </div>
+  </client-only>
 </template>
 
 <script>
@@ -67,7 +69,7 @@
             return !block.data.items.length
           }
           else{
-            return false
+            return true
           }
         }
       }
