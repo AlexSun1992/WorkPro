@@ -9,10 +9,10 @@
     >
       <div>
         <div class="block-title pt-0 position-relative mt-2 mb-4">
-          <i class="icon-my-profile"></i>Мой профиль
+          <i class="icon-my-profile"></i>{{ label }}
         </div>
         <div class="profile row" v-show="$store.getters['card/wizardData']">
-          <profile-info
+          <card-viewer-info
             @field-changed="refresh()"
             @saved="showSaveToast()"
             @error="showErrorToast()"
@@ -21,10 +21,10 @@
             @cancel="refresh()"
             :params="params"
             class="bg-six block-border-one block col"
-          ></profile-info>
-          <profile-side-block class="col-xl-3 d-none d-xl-block">
+          ></card-viewer-info>
+          <side-block class="col-xl-3 d-none d-xl-block">
             <slot></slot>
-          </profile-side-block>
+          </side-block>
         </div>
       </div>
     </component>
@@ -32,18 +32,18 @@
 </template>
 
 <script>
-import ProfileInfo from "~/components/Pages/Cabinet/Profile/ProfileInfo";
-import ProfileSideBlock from "~/components/Pages/Cabinet/Profile/ProfileSideBlock";
+import CardViewerInfo from "~/components/Pages/Cabinet/CardViewer/CardViewerInfo";
+import SideBlock from "~/components/Pages/Cabinet/CardViewer/SideBlock";
 export default {
-  name: "Profile",
-  components: { ProfileInfo, ProfileSideBlock },
+  name: "CardViewer",
+  components: { CardViewerInfo, SideBlock },
   data() {
     return {
       dataLoaded: false,
       show: true,
     };
   },
-  props: ["params"],
+  props: ["params", "label"],
   mounted() {
     this.$bvModal.show("profile-modal");
   },
@@ -87,6 +87,7 @@ export default {
 .profile {
   display: flex;
   justify-content: space-between;
+  min-height: 450px;
 }
 /deep/ .modal-dialog {
   width: 95vw;

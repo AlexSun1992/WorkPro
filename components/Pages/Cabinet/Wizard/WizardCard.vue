@@ -17,6 +17,7 @@
 
 <script>
   import Form from '~/components/Libs/Form/Form'
+  import CardViewer from '~/components/Pages/Cabinet/CardViewer/CardViewer'
   import VRuntimeTemplate from "v-runtime-template";
   const validateData = (data) => {
     let valid = true
@@ -32,8 +33,13 @@
   }
   export default {
     name: 'WizardList',
-    components: {Form,VRuntimeTemplate},
+    components: {Form,VRuntimeTemplate, CardViewer},
     props: {
+      params: {
+        type: Object,
+        required: true,
+        default: () => {}
+      },
       templateData: {
         type: String,
         required: false,

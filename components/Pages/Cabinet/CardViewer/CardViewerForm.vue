@@ -12,20 +12,20 @@
         </b-button>
       </template>
     </b-modal>
-    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" :edit="editForm"></Form>
+    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" :edit="edit"></Form>
     <!-- <nuxt-link to="/cabinet/55/0/719"><b-button  type="button">test</b-button></nuxt-link> -->
   </div>
 </template>
 
 <script>
   import Form from '~/components/Libs/Form/Form'
-  import Card from '~/components/Pages/Cabinet/Profile/Card/Card'
+  import Card from '~/components/Pages/Cabinet/CardViewer/Card/Card'
   import ActionButton from '../Block/ActionButton'
 
   export default {
-    name: 'ProfileForm',
+    name: 'CardViewerForm',
     components: {Form, Card, ActionButton},
-    props: ['data', 'params'],
+    props: ['data', 'params', 'edit'],
     data () {
       return {
         editForm: true,

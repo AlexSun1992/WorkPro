@@ -3,14 +3,14 @@
     <b-tabs v-if="wizardData" content-class="mt-4">
       <div v-for="(item, i) in wizardData" :key="i">
         <b-tab :title="item.title" :active="isActive(i)">
-          <profile-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="editForm" :params="params"></profile-form>
+          <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="params.settings.edit" :params="params"></card-viewer-form>
         </b-tab>
       </div>
     </b-tabs>
-    <div class="mt-3 row" v-if="$store.getters['card/wizardData']">
+    <div class="mt-3 row button-container" v-if="$store.getters['card/wizardData']">
       <div class="col-12">
-        <b-button pill v-on:click="saveProfile" type="button" variant="success" class="col-12 col-md-auto">Сохранить изменения</b-button>
-        <b-button pill v-on:click="cancel" type="button" variant="outline-success" class="col-12 col-md-auto mt-2 mt-md-0 ml-md-3">Отменить</b-button>
+        <b-button pill v-on:click="saveProfile" type="button" variant="success" class="col-12 col-md-auto">Сохранить</b-button>
+        <b-button pill v-on:click="cancel" type="button" variant="outline-success" class="col-12 col-md-auto mt-2 mt-md-0">Отменить</b-button>
       </div>
       <!-- <action-button :actions="actions" :rowId="125" item-id="params.page.itemId" action-id="32904"/> -->
     </div>
@@ -19,12 +19,12 @@
 
 <script>
 
-import ProfileForm from '~/components/Pages/Cabinet/Profile/ProfileForm'
+import CardViewerForm from '~/components/Pages/Cabinet/CardViewer/CardViewerForm'
 import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
 export default {
-  name: "ProfileInfo",
-  components: { ActionButton, ProfileForm },
-  props: ['params'],
+  name: "CardViewerInfo",
+  components: { ActionButton, CardViewerForm },
+  props: ['params', 'edit'],
   data() {
     return {
       editForm: true,
@@ -104,5 +104,9 @@ export default {
 <style scoped>
   .wrapper {
     width: 100%;
+  }
+  .button-container {
+    position: absolute;
+    bottom: 10px;
   }
 </style>

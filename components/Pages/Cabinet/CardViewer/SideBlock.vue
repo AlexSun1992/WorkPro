@@ -10,7 +10,7 @@
 import Form from '~/components/Libs/Form/Form'
 import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
 export default {
-  name: "ProfileSideBlock"
+  name: "SideBlock"
 };
 </script>
 
