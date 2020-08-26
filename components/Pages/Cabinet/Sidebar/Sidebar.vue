@@ -12,6 +12,7 @@
       </n-link>
     </ul>
     <button v-on:click="minimizeMenu"  class="sidebar-minimizer" v-bind:class="{'position-absolute': endScrollMenu }"></button>
+    <button class="sidebar-mobile_close"></button>
   </div>
 </template>
 
