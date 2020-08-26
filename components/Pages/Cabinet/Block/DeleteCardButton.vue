@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <b-modal :id="'confirmDelete' + menuId + itemId"  centered title="Удаление записи" ok-title="Удалить" cancel-title="Отмена"  no-close-on-backdrop  @ok="deleteCard">
-      Вы действительно хотите удалить эту запись?
-    </b-modal>
     <b-button @click="$bvModal.show('confirmDelete' + menuId + itemId)">
+      <b-modal :id="'confirmDelete' + menuId + itemId"  centered title="Удаление записи" ok-title="Удалить" cancel-title="Отмена"  no-close-on-backdrop  @ok="deleteCard">
+        Вы действительно хотите удалить эту запись?
+      </b-modal>
       <slot>Удалить</slot>
     </b-button>
-  </div>
 </template>
 
 <script>

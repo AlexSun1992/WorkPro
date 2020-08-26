@@ -1227,9 +1227,19 @@
                             
                             /deep/ .sidebar-min .sidebar_client {
                                 width: 0;
-                                overflow: hidden;
-                                height: 0;
                                 transition: width 0.3s;
+                            }
+                            
+                            /deep/ .sidebar-min .sidebar_client {
+                                width: 0;
+                                transition: width 0.3s;
+                            }
+                            
+                            /deep/ .sidebar-min .sidebar-nav,
+                            /deep/ .sidebar-min .ppl-info {
+                                width: 0;
+                                height: 0;
+                                overflow: hidden;
                             }
                             
                             /deep/ .sidebar-min .sidebar-minimizer {
@@ -1264,8 +1274,17 @@
                                 z-index: 2;
                             }
                             
+                            /deep/ .sidebar-min .sidebar_client:after,
+                            /deep/ .sidebar-min .sidebar_client:before {
+                                display: none;
+                            }
+                            
                             /deep/ .sidebar-min .sidebar-minimizer {
                                 width: 30px;
+                            }
+                            
+                            /deep/ .sidebar-minimizer.position-absolute {
+                                top: 94%;
                             }
                             
                             /deep/ {
@@ -1422,4 +1441,67 @@
                                 position: absolute;
                                 bottom: 20px;
                                 left: 148px;
+                            }
+                            
+                            /deep/ .btn_add_to {
+                                background: transparent !important;
+                                box-shadow: none !important;
+                                border: 1px solid #C4C4C4;
+                                width: 30px;
+                                height: 30px;
+                                position: absolute;
+                                top: 18px;
+                            }
+                            
+                            /deep/ .block-title.title-bottom-line span {
+                                padding-right: 10px;
+                            }
+                            
+                            /deep/ .btn_add_to:after,
+                            /deep/ .btn_add_to:before {
+                                content: "";
+                                width: 16px;
+                                height: 2px;
+                                position: absolute;
+                                left: 50%;
+                                top: 50%;
+                                margin-top: -1px;
+                                transform: translateX(-50%);
+                                background: #22A66A;
+                            }
+                            
+                            /deep/ .btn_add_to:before {
+                                transform: rotate(90deg);
+                                left: 6px;
+                            }
+                            
+                            /deep/ .btn_delete {
+                                background: transparent !important;
+                                box-shadow: none !important;
+                                border: 1px solid #C4C4C4;
+                                width: 30px;
+                                height: 30px;
+                                position: absolute;
+                                top: 5px;
+                                right: 5px;
+                                opacity: 0;
+                                transition: 0.3s;
+                            }
+                            
+                            /deep/ .btn_delete:after {
+                                content: "";
+                                width: 16px;
+                                height: 2px;
+                                position: absolute;
+                                left: 50%;
+                                top: 50%;
+                                margin-top: -1px;
+                                transform: translateX(-50%);
+                                background: red;
+                                position: absolute;
+                            }
+                            
+                            /deep/ .mypolices-block:hover .btn_delete {
+                                opacity: 1;
+                                transition: opacity 0.3s;
                             }
