@@ -1283,6 +1283,10 @@
                                 width: 30px;
                             }
                             
+                            /deep/ .sidebar-minimizer.position-absolute {
+                                top: 94%;
+                            }
+                            
                             /deep/ {
                                 @media (max-width: 992px) {
                                     header>div {
