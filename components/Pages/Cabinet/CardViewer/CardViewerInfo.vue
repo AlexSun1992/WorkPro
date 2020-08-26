@@ -61,6 +61,7 @@ export default {
         }; 
       }
       await this.$store.dispatch("card/fetchWizard", params);
+      // this.$store.commit('card/setCardId', cardId)
       this.$emit('load');
     },
     validateData(data) {
@@ -78,9 +79,11 @@ export default {
       return valid;
     },
     async saveProfile() {
+      let blockId = this.$store.getters['blocks/blockId'];
+      let cardId = this.$store.getters['blocks/cardId'];
       let fields = [];
       let profileForm = this.$refs['profile-form'];
-      if (this.context != 'profile') {
+      if (profileForm.$refs) {
         fields = profileForm.$refs.form.items;
       } else {
         profileForm.forEach(item => {
@@ -90,7 +93,7 @@ export default {
       }
       if(this.validateData(fields)){
         try {
-          await this.$store.dispatch('card/saveProfile', fields);
+          await this.$store.dispatch('card/saveProfile', {fields, context: this.context, blockId, cardId: this.$store.getters['blocks/cardId']});
           await this.$store.dispatch('updateUser');
           this.$bvToast.toast('Успешно сохранено', {
             title: ``,

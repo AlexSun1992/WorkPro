@@ -171,11 +171,20 @@ export const actions = {
         commit('setCardId', resp.data.ID)
       })
   },
-  async saveProfile ({commit, dispatch, getters}, form) {
-    await this.$axios.post(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/125`, form)
+  async saveProfile ({commit, dispatch, getters}, params) {
+    if (params.context == 'profile') {
+      // Объединить в один метод после открытия карточки на новой странице!
+      await this.$axios.post(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/125`, params.fields)
       .then(async resp => {
         commit('setCardId', resp.data.ID)
       })
+    } else {
+      // Объединить в один метод после открытия карточки на новой странице!
+      await this.$axios.post(`/api/card/${getters['page'].idModule}/${params.blockId}/${params.cardId}`, params.fields)
+      .then(async resp => {
+        commit('setCardId', resp.data.ID)
+      })
+    }
   },
   async fetchList ({commit, getters}) {
     const page = getters['page'];
