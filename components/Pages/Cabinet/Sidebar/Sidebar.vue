@@ -12,7 +12,7 @@
       </n-link>
     </ul>
     <button v-on:click="minimizeMenu"  class="sidebar-minimizer" v-bind:class="{'position-absolute': endScrollMenu }"></button>
-    <button class="sidebar-mobile_close"></button>
+    <button v-on:click="minimizeMobileMenu" class="sidebar-mobile_close"></button>
   </div>
 </template>
 
@@ -42,6 +42,9 @@
       minimizeMenu() {
         this.$emit('mini-sidebar');
         setTimeout(() => this.updateScroll(), 100);
+      },
+      minimizeMobileMenu() {
+        this.$emit('mini-mobile-sidebar');
       }
     },
     computed: {
