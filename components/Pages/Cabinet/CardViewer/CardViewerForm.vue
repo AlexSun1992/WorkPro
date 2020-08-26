@@ -25,7 +25,7 @@
   export default {
     name: 'CardViewerForm',
     components: {Form, Card, ActionButton},
-    props: ['data', 'params', 'edit'],
+    props: ['data', 'params', 'edit', 'context'],
     data () {
       return {
         editForm: true,

@@ -13,6 +13,7 @@
         </div>
         <div class="profile row" v-show="$store.getters['card/wizardData']">
           <card-viewer-info
+            :context="context"
             @field-changed="refresh()"
             @saved="showSaveToast()"
             @error="showErrorToast()"
@@ -43,7 +44,7 @@ export default {
       show: true,
     };
   },
-  props: ["params", "label"],
+  props: ["params", "label", "context"],
   mounted() {
     this.$bvModal.show("profile-modal");
   },

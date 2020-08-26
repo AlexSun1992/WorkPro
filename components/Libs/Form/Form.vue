@@ -2,7 +2,7 @@
   <div>
     <b-form-row>
       <div>
-        {{ defaultPlug }}
+        <!-- {{ defaultPlug }} -->
       </div>
       <Control  v-for='(item, index) in items' @edit="$emit('edit', $event)" @update="$emit('update', $event)" :key='index' v-bind:data="item" :edit="edit" :cols="cols"></Control>
     </b-form-row>
@@ -20,9 +20,8 @@ export default {
   },
   props: {
     data: {
-      type: Array,
-      required: true,
-      default: () => []
+      type: Array | null,
+      required: true
     },
     edit: {
       type: Boolean,

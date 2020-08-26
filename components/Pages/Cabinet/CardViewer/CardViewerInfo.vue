@@ -1,12 +1,15 @@
 <template>
   <div class="wrapper">
-    <b-tabs v-if="wizardData" content-class="mt-4">
+    <b-tabs v-if="wizardData && wizardData[0].title" content-class="mt-4">
       <div v-for="(item, i) in wizardData" :key="i">
-        <b-tab :title="item.title" :active="isActive(i)">
+        <b-tab v-if="item.title" :title="item.title" :active="isActive(i)">
           <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="params.settings.edit" :params="params"></card-viewer-form>
         </b-tab>
       </div>
     </b-tabs>
+    <div v-else>
+      <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params"></card-viewer-form>
+    </div>
     <div class="mt-3 row button-container" v-if="$store.getters['card/wizardData']">
       <div class="col-12">
         <b-button pill v-on:click="saveProfile" type="button" variant="success" class="col-12 col-md-auto">Сохранить</b-button>
@@ -24,7 +27,7 @@ import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
 export default {
   name: "CardViewerInfo",
   components: { ActionButton, CardViewerForm },
-  props: ['params', 'edit'],
+  props: ['params', 'edit', 'context'],
   data() {
     return {
       editForm: true,
@@ -42,10 +45,21 @@ export default {
   },
   methods: {
     async fetchWizard() {
-      const params = {
-        id: this.$store.state.auth.user[0]._data[0].ID,
-        wizard: null
-      };
+      let params;
+      let blockId = this.$store.getters['blocks/blockId'];
+      let cardId = this.$store.getters['blocks/cardId'];
+      if (this.context == 'profile') {
+        params = {
+          id: this.$store.state.auth.user[0]._data[0].ID,
+          wizard: null,
+          context: this.context
+        }; 
+      } else {
+        params = {
+          blockId,
+          cardId
+        }; 
+      }
       await this.$store.dispatch("card/fetchWizard", params);
       this.$emit('load');
     },
@@ -66,10 +80,14 @@ export default {
     async saveProfile() {
       let fields = [];
       let profileForm = this.$refs['profile-form'];
-      profileForm.forEach(item => {
-        fields.push(...item.$refs.form.items);
-        fields = fields.filter(item => item.name !== 'SEMPTY');
-      });
+      if (this.context != 'profile') {
+        fields = profileForm.$refs.form.items;
+      } else {
+        profileForm.forEach(item => {
+          fields.push(...item.$refs.form.items);
+          fields = fields.filter(item => item.name !== 'SEMPTY');
+        });
+      }
       if(this.validateData(fields)){
         try {
           await this.$store.dispatch('card/saveProfile', fields);

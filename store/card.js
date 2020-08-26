@@ -99,7 +99,16 @@ export const actions = {
     commit('clearCardForm');
   },
   async fetchWizard ({commit, getters}, params) {
-    let card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${params.id}`);
+    let card;
+    if (params.context == 'profile') {
+      card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${params.id}`);
+    } else {
+      card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${params.blockId}/${params.cardId}`);
+    }
+    if (!card.data.metaData.captions) {
+      commit('setWizardData', card.data.metaData.data);
+      return;
+    }
     let captions = card.data.metaData.captions.split(';');
     captions.pop();
     let fields = card.data.metaData.data;
