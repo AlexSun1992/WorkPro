@@ -1,7 +1,5 @@
 <template>
-  <div>
     <v-runtime-template :template="templateData"></v-runtime-template>
-  </div>
 </template>
 
 <script>

@@ -11,7 +11,7 @@
       </li>
       </n-link>
     </ul>
-    <button class="sidebar-minimizer"></button>
+    <button v-on:click="minimizeMenu"  class="sidebar-minimizer" v-bind:class="{'position-absolute': endScrollMenu }"></button>
   </div>
 </template>
 
@@ -28,9 +28,29 @@
         default: () => []
       }
     },
+    data () {
+      return {
+        endScrollMenu: false,
+        sideBarMini: false
+      }
+    },
+    methods: {
+      updateScroll() {
+        this.endScrollMenu = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 113
+      },
+      minimizeMenu() {
+        this.$emit('mini-sidebar',!this.sideBarMini)
+      }
+    },
     computed: {
       ...mapGetters(['isAuthenticated','loggedInUser']),
+    },
+    mounted() {
+      this.endScrollMenu  =  window.innerHeight === document.documentElement.offsetHeight
+      window.addEventListener('scroll', this.updateScroll);
+      window.addEventListener('resize', this.updateScroll);
     }
+
   }
 </script>
 

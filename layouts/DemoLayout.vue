@@ -3,8 +3,8 @@
   <div class="app">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <Header/>
-    <div class="wrapper">
-      <Sidebar :nav-items="nav"/>
+    <div class="wrapper" v-bind:class="{'sidebar-min': sideBarMini }">
+      <Sidebar @mini-sidebar="changeSidebar" :nav-items="nav"/>
       <div class="body">
         <main class="main">
           <div class="container-fluid">
@@ -34,9 +34,11 @@
             Footer,
             Notification
         },
-        mounted() {
-            // this.$store.dispatch('menu/fetchMenu', this.$route.params)
-        },
+      data () {
+        return {
+          sideBarMini: false
+        }
+      },
         watch: {
             $route(to, from) {
                 if (to.meta === 'Cabinet') {
@@ -58,7 +60,10 @@
                     page: this.$route.params,
                     settings: bc.slice(-1).pop()
                 });
-            }
+            },
+          changeSidebar(data) {
+            this.sideBarMini = data
+          },
         },
         computed: {
             nav() {
