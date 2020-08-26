@@ -25,7 +25,7 @@
     name: 'Header',
     methods: {
       mobileMenu() {
-        
+        this.$emit('mini-sidebar');
       },
       logout() {
         try {

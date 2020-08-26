@@ -37,10 +37,11 @@
     },
     methods: {
       updateScroll() {
-        this.endScrollMenu = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 113
+        this.endScrollMenu = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 120
       },
       minimizeMenu() {
-        this.$emit('mini-sidebar',!this.sideBarMini)
+        this.$emit('mini-sidebar');
+        setTimeout(() => this.updateScroll(), 100);
       }
     },
     computed: {
@@ -51,7 +52,6 @@
       window.addEventListener('scroll', this.updateScroll);
       window.addEventListener('resize', this.updateScroll);
     }
-
   }
 </script>
 

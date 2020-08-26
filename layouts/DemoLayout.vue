@@ -1,9 +1,8 @@
-
 <template>
   <div class="app">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <Header/>
-    <div class="wrapper" v-bind:class="{'sidebar-min': sideBarMini }">
+    <Header @mini-sidebar="changeMobileSidebar"/>
+    <div class="wrapper" v-bind:class="{'sidebar-min': sideBarMini, 'mobile_menu': sideBarMobileMini }">
       <Sidebar @mini-sidebar="changeSidebar" :nav-items="nav"/>
       <div class="body">
         <main class="main">
@@ -36,7 +35,8 @@
         },
       data () {
         return {
-          sideBarMini: false
+          sideBarMini: false,
+          sideBarMobileMini: false
         }
       },
         watch: {
@@ -61,8 +61,11 @@
                     settings: bc.slice(-1).pop()
                 });
             },
-          changeSidebar(data) {
-            this.sideBarMini = data
+          changeSidebar() {
+            this.sideBarMini = !this.sideBarMini
+          },
+          changeMobileSidebar() {
+            this.sideBarMobileMini = !this.sideBarMobileMini
           },
         },
         computed: {
