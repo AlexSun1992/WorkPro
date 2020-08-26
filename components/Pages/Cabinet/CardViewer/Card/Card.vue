@@ -1,17 +1,17 @@
 <template>
   <div>
     <b-card v-if="getFormData">
-      <card-viewer-form :data="getFormData" :edit="editForm" @update="$emit('update', $event)"></card-viewer-form>
+      <card-form :data="getFormData" :edit="editForm" @update="$emit('update', $event)"></card-form>
     </b-card>
   </div>
 </template>
 
 <script>
-  import CardViewerForm from '~/components/Pages/Cabinet/CardViewer/CardViewerForm'
+  import CardForm from '~/components/Pages/Cabinet/CardViewer/Card/CardForm'
 
   export default {
     name: 'Card',
-    components: {CardViewerForm},
+    components: {CardForm},
     props: ['data'],
     data () {
       return {
