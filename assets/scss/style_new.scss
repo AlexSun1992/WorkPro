@@ -1227,9 +1227,19 @@
                             
                             /deep/ .sidebar-min .sidebar_client {
                                 width: 0;
-                                overflow: hidden;
-                                height: 0;
                                 transition: width 0.3s;
+                            }
+                            
+                            /deep/ .sidebar-min .sidebar_client {
+                                width: 0;
+                                transition: width 0.3s;
+                            }
+                            
+                            /deep/ .sidebar-min .sidebar-nav,
+                            /deep/ .sidebar-min .ppl-info {
+                                width: 0;
+                                height: 0;
+                                overflow: hidden;
                             }
                             
                             /deep/ .sidebar-min .sidebar-minimizer {
@@ -1262,6 +1272,11 @@
                                 left: 0;
                                 background: #82B896;
                                 z-index: 2;
+                            }
+                            
+                            /deep/ .sidebar-min .sidebar_client:after,
+                            /deep/ .sidebar-min .sidebar_client:before {
+                                display: none;
                             }
                             
                             /deep/ .sidebar-min .sidebar-minimizer {
