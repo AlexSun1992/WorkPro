@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <b-button v-if="context != 'profile'"  v-on:click="destroyForm" type="submit" variant="success"><i  class="fa fa-chevron-left"></i> Назад</b-button>
     <b-tabs v-if="wizardData && wizardData[0].title" content-class="mt-4">
       <div v-for="(item, i) in wizardData" :key="i">
         <b-tab v-if="item.title" :title="item.title" :active="isActive(i)">
@@ -63,6 +64,9 @@ export default {
       await this.$store.dispatch("card/fetchWizard", params);
       // this.$store.commit('card/setCardId', cardId)
       this.$emit('load');
+    },
+    destroyForm () {
+      this.$store.dispatch('blocks/destroyForm');
     },
     validateData(data) {
       this.invalidFields.length = 0;
