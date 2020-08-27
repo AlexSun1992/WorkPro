@@ -12,7 +12,7 @@
       <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params" :context="context"></card-viewer-form>
     </div>
     <div class="mt-3 row button-container" v-if="$store.getters['card/wizardData']">
-      <div class="col-12">
+      <div v-if="params.settings.edit"  class="col-12">
         <b-button pill v-on:click="saveProfile" type="button" variant="success" class="col-12 col-md-auto">Сохранить</b-button>
         <b-button pill v-on:click="cancel" type="button" variant="outline-success" class="col-12 col-md-auto mt-2 mt-md-0">Отменить</b-button>
       </div>
