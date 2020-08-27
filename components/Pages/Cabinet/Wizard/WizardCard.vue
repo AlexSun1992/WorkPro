@@ -1,38 +1,35 @@
 <template>
   <div>
-    <!--<v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>-->
+    <v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>
+    <!--<div v-if="templateData">-->
+      <!--<card-viewer :params="params" label="Мой профиль" context="profile">-->
+        <!--<template v-slot="slotProps">-->
+          <!--<div class="sideblock">-->
+            <!--<div class="sideblock__text">-->
+              <!--<p>Пожалуйста, убедитесь в том, что вся информация заполнена и актуальна в настоящий момент.</p>-->
+              <!--<div class="sideblock__img">-->
+                <!--<img src="/img/notification-helper.svg">-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</template>-->
+      <!--</card-viewer>-->
+    <!--</div>-->
 
-    <!-- Чтобы работал профиль нужно заменить Vue js шаблон одной строки в конфигураторе на :
-
-    <div v-if="templateData">
-      <card-viewer :params="params" label="Мой профиль" context="profile">
-        <template v-slot="slotProps">
-          <div class="sideblock">
-            <div class="sideblock__text">
-              <p>Пожалуйста, убедитесь в том, что вся информация заполнена и актуальна в настоящий момент.</p>
-              <div class="sideblock__img">
-                <img src="/img/notification-helper.svg">
-              </div>
-            </div>
-          </div>
-        </template>
-      </card-viewer>
-    </div> -->
-
-     <div v-if="templateData">
-      <card-viewer :params="params" label="Карточка автомобиля" :edit="isEdit">
-        <template v-slot="slotProps">
-          <div class="sideblock">
-            <div class="sideblock__text">
-              <p>Пожалуйста, убедитесь в том, что вся информация заполнена и актуальна в настоящий момент.</p>
-            <div class="sideblock__img">
-              <img src="/img/notification-helper.svg">
-            </div>
-          </div>
-          </div>
-        </template>
-      </card-viewer>
-    </div>
+     <!--<div v-if="templateData">-->
+      <!--<card-viewer :params="params" label="Карточка автомобиля" :edit="isEdit">-->
+        <!--<template v-slot="slotProps">-->
+          <!--<div class="sideblock">-->
+            <!--<div class="sideblock__text">-->
+              <!--<p>Пожалуйста, убедитесь в том, что вся информация заполнена и актуальна в настоящий момент.</p>-->
+            <!--<div class="sideblock__img">-->
+              <!--<img src="/img/notification-helper.svg">-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+        <!--</template>-->
+      <!--</card-viewer>-->
+    <!--</div>-->
 
     <!-- <div v-if="templateData">
       <card-viewer :params="params" label="Полис ОСАГО" :edit="isEdit">

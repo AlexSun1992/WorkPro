@@ -3,12 +3,12 @@
     <b-tabs v-if="wizardData && wizardData[0].title" content-class="mt-4">
       <div v-for="(item, i) in wizardData" :key="i">
         <b-tab v-if="item.title" :title="item.title" :active="isActive(i)">
-          <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="params.settings.edit" :params="params"></card-viewer-form>
+          <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="params.settings.edit" :params="params" :context="context"></card-viewer-form>
         </b-tab>
       </div>
     </b-tabs>
     <div v-else>
-      <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params"></card-viewer-form>
+      <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params" :context="context"></card-viewer-form>
     </div>
     <div class="mt-3 row button-container" v-if="$store.getters['card/wizardData']">
       <div class="col-12">
@@ -53,12 +53,12 @@ export default {
           id: this.$store.state.auth.user[0]._data[0].ID,
           wizard: null,
           context: this.context
-        }; 
+        };
       } else {
         params = {
           blockId,
           cardId
-        }; 
+        };
       }
       await this.$store.dispatch("card/fetchWizard", params);
       // this.$store.commit('card/setCardId', cardId)
@@ -93,8 +93,13 @@ export default {
       }
       if(this.validateData(fields)){
         try {
-          await this.$store.dispatch('card/saveProfile', {fields, context: this.context, blockId, cardId: this.$store.getters['blocks/cardId']});
-          await this.$store.dispatch('updateUser');
+          if(this.context == 'profile'){
+            await this.$store.dispatch('card/saveProfile', {fields, context: this.context, blockId, cardId: this.$store.getters['blocks/cardId']});
+            await this.$store.dispatch('updateUser');
+          }
+          else{
+            await this.$store.dispatch('blocks/saveForm', {moduleId:55, form: fields});
+          }
           this.$bvToast.toast('Успешно сохранено', {
             title: ``,
             variant: 'success',
