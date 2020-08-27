@@ -1,6 +1,51 @@
 <template>
   <div>
     <v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>
+    <!--<div v-if="templateData">-->
+      <!--<card-viewer :params="params" label="Мой профиль" context="profile">-->
+        <!--<template v-slot="slotProps">-->
+          <!--<div class="sideblock">-->
+            <!--<div class="sideblock__text">-->
+              <!--<p>Пожалуйста, убедитесь в том, что вся информация заполнена и актуальна в настоящий момент.</p>-->
+              <!--<div class="sideblock__img">-->
+                <!--<img src="/img/notification-helper.svg">-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</template>-->
+      <!--</card-viewer>-->
+    <!--</div>-->
+
+     <!--<div v-if="templateData">-->
+      <!--<card-viewer :params="params" label="Карточка автомобиля" :edit="isEdit">-->
+        <!--<template v-slot="slotProps">-->
+          <!--<div class="sideblock">-->
+            <!--<div class="sideblock__text">-->
+              <!--<p>Пожалуйста, убедитесь в том, что вся информация заполнена и актуальна в настоящий момент.</p>-->
+            <!--<div class="sideblock__img">-->
+              <!--<img src="/img/notification-helper.svg">-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+        <!--</template>-->
+      <!--</card-viewer>-->
+    <!--</div>-->
+
+    <!--<div v-if="templateData">-->
+      <!--<card-viewer :params="params" label="Полис ОСАГО" :edit="isEdit">-->
+        <!--<template v-slot="slotProps">-->
+          <!--<div class="sideblock">-->
+            <!--<div class="sideblock__text">-->
+              <!--<p>Пожалуйста, убедитесь в том, что вся информация заполнена и актуальна в настоящий момент.</p>-->
+              <!--<div class="sideblock__img">-->
+                <!--<img src="/img/notification-helper.svg">-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</template>-->
+      <!--</card-viewer>-->
+    <!--</div>-->
+
     <b-card v-else class="bg-six block border-block-one">
       <b-button v-on:click="destroyForm" type="submit" variant="success" pill v-b-popover.hover.top="'Назад'"><i  class="fa fa-chevron-left"></i></b-button>
       <Form   :data="editDataForm" :edit="isEdit"></Form>
@@ -17,6 +62,7 @@
 
 <script>
   import Form from '~/components/Libs/Form/Form'
+  import CardViewer from '~/components/Pages/Cabinet/CardViewer/CardViewer'
   import VRuntimeTemplate from "v-runtime-template";
   const validateData = (data) => {
     let valid = true
@@ -32,8 +78,13 @@
   }
   export default {
     name: 'WizardList',
-    components: {Form,VRuntimeTemplate},
+    components: {Form,VRuntimeTemplate, CardViewer},
     props: {
+      params: {
+        type: Object,
+        required: true,
+        default: () => {}
+      },
       templateData: {
         type: String,
         required: false,

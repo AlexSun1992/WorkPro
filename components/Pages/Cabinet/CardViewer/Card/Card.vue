@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import CardForm from '~/components/Pages/Cabinet/Profile/Card/CardForm'
+  import CardForm from '~/components/Pages/Cabinet/CardViewer/Card/CardForm'
 
   export default {
     name: 'Card',
