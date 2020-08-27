@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>
+    <!--<v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>-->
 
     <!-- Чтобы работал профиль нужно заменить Vue js шаблон одной строки в конфигураторе на :
-    
+
     <div v-if="templateData">
       <card-viewer :params="params" label="Мой профиль" context="profile">
         <template v-slot="slotProps">
@@ -19,7 +19,7 @@
       </card-viewer>
     </div> -->
 
-    <!-- <div v-if="templateData">
+     <div v-if="templateData">
       <card-viewer :params="params" label="Карточка автомобиля" :edit="isEdit">
         <template v-slot="slotProps">
           <div class="sideblock">
@@ -32,7 +32,7 @@
           </div>
         </template>
       </card-viewer>
-    </div> -->
+    </div>
 
     <!-- <div v-if="templateData">
       <card-viewer :params="params" label="Полис ОСАГО" :edit="isEdit">
@@ -48,7 +48,7 @@
         </template>
       </card-viewer>
     </div> -->
-    
+
     <b-card v-else class="bg-six block border-block-one">
       <b-button v-on:click="destroyForm" type="submit" variant="success" pill v-b-popover.hover.top="'Назад'"><i  class="fa fa-chevron-left"></i></b-button>
       <Form   :data="editDataForm" :edit="isEdit"></Form>

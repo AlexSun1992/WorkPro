@@ -12,6 +12,7 @@
         </b-button>
       </template>
     </b-modal>
+    <b-button v-on:click="destroyForm" type="submit" variant="success"><i  class="fa fa-chevron-left"></i> Назад</b-button>
     <Form ref="form" :data="editDataForm" @edit="openEdit($event)" :edit="edit"></Form>
     <!-- <nuxt-link to="/cabinet/55/0/719"><b-button  type="button">test</b-button></nuxt-link> -->
   </div>
@@ -49,6 +50,9 @@
       openEdit(e) {
         this.editData = e;
         this.cardId = this.editData.data.name.split('Card')[1];
+      },
+      destroyForm () {
+        this.$store.dispatch('blocks/destroyForm');
       },
       async saveCard() {
         let params = {
