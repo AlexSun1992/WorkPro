@@ -122,7 +122,7 @@ export default {
           params = {...params, token: this.token}
           const response = await this.$store.dispatch('getCode', params);
           if (response) {
-            this.code = true
+            this.code = '*'
           }
           // Для показа
           this.v.code.$model = this.code;
@@ -196,7 +196,7 @@ export default {
       } else if (field === 'code') {
         this.isCodeBlured = true;
       }
-      this.v[field].$touch();  
+      this.v[field].$touch();
     },
 
     countdown() {
