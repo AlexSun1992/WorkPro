@@ -5,7 +5,7 @@
     <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <!--  -->
     <!-- Алерт ошибки кода регистрации (удалить после восстановления) -->
-    <b-alert :show="!!errorMessage" variant="danger">{{ errorMessage }}</b-alert>
+    <!-- <b-alert :show="!!errorMessage" variant="danger">{{ errorMessage }}</b-alert> -->
     <!--  -->
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-group label="Телефон" label-cols="3">
@@ -69,6 +69,7 @@
         <b-spinner v-if="registrationInProcess" style="width: 1.2rem; height: 1.2rem;" variant="light"></b-spinner>
       </b-button>
     </b-form>
+    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
   </div>
 </template>
 
@@ -105,7 +106,8 @@
         password2: '',
         registrationInProcess: false,
         captchaToken: null,
-        isRegConfirmed: null
+        isRegConfirmed: null,
+        token: null
       }
     },
     validations: {
@@ -143,40 +145,49 @@
       }
     },
     methods: {
+      onError(error) {
+        console.log('Error:', error)
+      },
+      onSuccess(token) {
+        this.token = token
+        console.log('Succeeded:', token)
+      },
+      onExpired() {
+        console.log('Expired')
+      },
+      async getCaptcha() {
+        try {
+          const token = await this.$recaptcha.getResponse()
+          await this.$recaptcha.reset()
+        } catch (error) {
+          console.log('Login error:', error)
+        }
+      },
       validateState(name) {
         const { $dirty, $error } = this.$v.form[name];
         return $dirty ? !$error : null;
       },
 
       async login(context) {
-      try {
-        debugger
-        // this.authInProcess = true;
-        // this.captchaToken = await this.$getCaptcha();
-        await context.$auth.loginWith("local", {
-          // headers: {
-          //   RECAPTCHA: context.captchaToken
-          // },
-          data: {
-            username: context.$v.form.phone.$model,
-            password: context.$v.form.password.$model,
-            mode: 2
+        try {
+          await context.$auth.loginWith("local", {
+            data: {
+              username: context.$v.form.phone.$model,
+              password: context.$v.form.password.$model,
+              mode: 2
+            }
+          });
+        } catch (e) {
+          if (context.$auth.error?.response.status === 401) {
+            context.errorMessage = context.$auth.error.response.data.MESSAGE;
+            context.authInProcess = false;
           }
-        });
-       
-
-      } catch (e) {
-        if (context.$auth.error?.response.status === 401) {
-          context.errorMessage = context.$auth.error.response.data.MESSAGE;
-          context.authInProcess = false;
         }
-      }
-    },
+      },
 
       async setToken(context) {
         this.registrationInProcess = true;
-        // this.captchaToken = this.$getCaptcha();
-        const params = {
+        let params = {
           SECONDNAME: this.$v.form.family.$model,
           FIRSTNAME: this.$v.form.name.$model,
           THIRDNAME: this.$v.form.patronymic.$model,
@@ -190,9 +201,12 @@
           USER_CONFIRM: this.isRegConfirmed ? "Y" : "N"
         }
 
-        const response = await this.$store.dispatch("registerUser", params);
-        debugger
+        await this.getCaptcha();
 
+        if (!this.token) return;
+          params = {...params, token: this.token}
+
+        const response = await this.$store.dispatch("registerUser", params);
         // Удалить с появлением обработки ошибки
         if (!response) {
           this.registrationInProcess = false;
@@ -204,13 +218,20 @@
         }
 
         if (response) {
-          debugger
-          // this.$auth.setUserToken(response.ACCESS_TOKEN);
-          // $nuxt.$auth.setUserToken(response.ACCESS_TOKEN);
-          // if (this.$store.getters.getRegistrationError) {
-          //   this.$router.push('/');
-          // }
-          this.login(this);
+          try {
+            await context.$auth.loginWith("local", {
+              data: {
+                username: context.$v.form.phone.$model,
+                password: context.$v.form.password.$model,
+                mode: 2
+              }
+            });
+          } catch (e) {
+            if (context.$auth.error?.response.status === 401) {
+              context.errorMessage = context.$auth.error.response.data.MESSAGE;
+              context.authInProcess = false;
+            }
+          }
         } else {
           this.$refs['verifyUser'].code = null;
         }

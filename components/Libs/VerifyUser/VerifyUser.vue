@@ -102,19 +102,17 @@ export default {
     async getCaptcha() {
       try {
         const token = await this.$recaptcha.getResponse()
-        console.log('ReCaptcha token:', token)
         await this.$recaptcha.reset()
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.log('Login error:', error)
       }
     },
 
     async getCode() {
+      if (this.code) return;
       await this.getCaptcha();
       this.isPhoneChanged = false;
       try {
-        debugger
         if (!this.code && (this.v.phone.$model || this.v.email.$model)) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
@@ -123,11 +121,8 @@ export default {
           if (!this.token) return;
           params = {...params, token: this.token}
           const response = await this.$store.dispatch('getCode', params);
-          if (this.loginType === 'phone') {
-            this.code = true;
-          } else {
-            // Для показа (заменить на код email)
-            this.code = '*';
+          if (response) {
+            this.code = true
           }
           // Для показа
           this.v.code.$model = this.code;
