@@ -192,7 +192,7 @@ export const actions = {
           'Authorization': `Token ${key}`
         },
         body: JSON.stringify(params)
-      }); 
+      });
     let result = await response.json();
     return result.suggestions;
     // return result.suggestions.map(item => item.value);
