@@ -5,7 +5,7 @@
     <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <!--  -->
     <!-- Алерт ошибки кода регистрации (удалить после восстановления) -->
-    <!-- <b-alert :show="!!errorMessage" variant="danger">{{ errorMessage }}</b-alert> -->
+    <b-alert :show="!!errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <!--  -->
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-group label="Телефон" label-cols="3">
@@ -166,23 +166,6 @@
       validateState(name) {
         const { $dirty, $error } = this.$v.form[name];
         return $dirty ? !$error : null;
-      },
-
-      async login(context) {
-        try {
-          await context.$auth.loginWith("local", {
-            data: {
-              username: context.$v.form.phone.$model,
-              password: context.$v.form.password.$model,
-              mode: 2
-            }
-          });
-        } catch (e) {
-          if (context.$auth.error?.response.status === 401) {
-            context.errorMessage = context.$auth.error.response.data.MESSAGE;
-            context.authInProcess = false;
-          }
-        }
       },
 
       async setToken(context) {
