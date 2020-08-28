@@ -4,7 +4,7 @@
       <card :data="editData.data" @actions="actions=$event" @update="updateNumber($event)"></card>
       <action-button :disabled="noPhone" class="w-100" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
       <template v-slot:modal-footer="{ ok, cancel }">
-        <b-button :disabled="(noCode || noPhone) && noEmail" pill type="button" variant="success" @click="ok()">
+        <b-button  :disabled="(noCode || noPhone) && noEmail" pill type="button" variant="success" @click="ok()">
           Сохранить
         </b-button>
         <b-button pill type="button" variant="outline-success" @click="cancel()">
@@ -12,20 +12,20 @@
         </b-button>
       </template>
     </b-modal>
-    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" :edit="editForm"></Form>
+    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" :edit="edit"></Form>
     <!-- <nuxt-link to="/cabinet/55/0/719"><b-button  type="button">test</b-button></nuxt-link> -->
   </div>
 </template>
 
 <script>
   import Form from '~/components/Libs/Form/Form'
-  import Card from '~/components/Pages/Cabinet/Profile/Card/Card'
+  import Card from '~/components/Pages/Cabinet/CardViewer/Card/Card'
   import ActionButton from '../Block/ActionButton'
 
   export default {
-    name: 'ProfileForm',
+    name: 'CardViewerForm',
     components: {Form, Card, ActionButton},
-    props: ['data', 'params'],
+    props: ['data', 'params', 'edit', 'context'],
     data () {
       return {
         editForm: true,
@@ -49,6 +49,9 @@
       openEdit(e) {
         this.editData = e;
         this.cardId = this.editData.data.name.split('Card')[1];
+      },
+      destroyForm () {
+        this.$store.dispatch('blocks/destroyForm');
       },
       async saveCard() {
         let params = {

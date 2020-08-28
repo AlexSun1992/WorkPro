@@ -3,7 +3,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <Header @mini-sidebar="changeMobileSidebar"/>
     <div class="wrapper" v-bind:class="{'sidebar-min': sideBarMini, 'mobile_menu': sideBarMobileMini }">
-      <Sidebar @mini-sidebar="changeSidebar" :nav-items="nav"/>
+      <Sidebar @mini-sidebar="changeSidebar" @mini-mobile-sidebar="changeMobileSidebar"  :nav-items="nav"/>
       <div class="body">
         <main class="main">
           <div class="container-fluid">
@@ -42,6 +42,7 @@
         watch: {
             $route(to, from) {
                 if (to.meta === 'Cabinet') {
+                  this.sideBarMobileMini = false;
                     this.setParams();
                 } else {
                     let url;
@@ -63,9 +64,11 @@
             },
           changeSidebar() {
             this.sideBarMini = !this.sideBarMini
+            this.sideBarMobileMini = false
           },
           changeMobileSidebar() {
             this.sideBarMobileMini = !this.sideBarMobileMini
+            this.sideBarMini = false;
           },
         },
         computed: {

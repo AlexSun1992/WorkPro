@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <div>
-      <wizard-card :is-edit="isEdit" :module-id="moduleId" :item-id="itemId" :form-data="formCardData" :template-data="templateCardData" v-if="isForm"/>
+      <wizard-card :params="params" :is-edit="isEdit" :module-id="moduleId" :item-id="itemId" :form-data="formCardData" :template-data="templateCardData" v-if="isForm"/>
       <v-runtime-template v-if="!isForm" :template="templateData"></v-runtime-template>
     </div>
   </client-only>
@@ -15,12 +15,12 @@
   import PolicyBlock from '../Block/PolicyBlock'
   import ContentBlock from '../Block/ContentBlock'
   import ActionButton from '../Block/ActionButton'
-  import Profile from '../Profile/Profile'
+  import CardViewer from '../CardViewer/CardViewer'
   import OpenCardButton from '../Block/OpenCardButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'Wizard',
-    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, Profile},
+    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, CardViewer},
     props: {
       params: {
         type: Object,
