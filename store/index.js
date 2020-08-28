@@ -5,7 +5,11 @@ export const state = () => ({
 export const actions = {
   async registerUser({commit}, params) {
     try {
-      const regResponse = await this.$axios.post("/free/v2/registration", params);
+      debugger
+      let headers = {
+        headers: {'recaptcha': '03AERD8Xq2P3I8lQIIsMsc-Ri851n1aQ6SuOt-qdBOgQcvdgOP6bMm_HzXuu7Cbf3ABQSZLLwOyZfEnVDb3dbOe3vFSOzXRP6ru9S8lSaXkw3ljoWYz1NloWlb82RzdoT38xiD0JyWE1JkoxMM0KBASjJOzOANyLaesprUmS0TALkgMBYYjrzZma9RUE12n3aYQAC0hyf5_-AyuHDNGh-NoyX3fkVRomyoWLN-sbvqbDSmFYUqM_DTrAS9Ki_gII688KxYAauHVXITkayinhDRmOROxBVqzFlSLNCw2a23MvkPCtt1uHyJ2wHstJKI2Q8Ca05w7Tr5GexJBhvDDVObSU-ra1jl_pKShvhsidFBhgVg5hJ1DK_67rc'}
+      }
+      const regResponse = await this.$axios.post("/free/v2/registration", params, headers);
       if (regResponse.data[0].MESSAGE_CODE == 200) {
         const authParams = {
           "username": params.PHONE,
@@ -31,12 +35,31 @@ export const actions = {
     }
   },
 
+  // async getCode({commit}, params) {
+  //   try {
+  //     let recaptcha = params.token;
+  //     let loginType = params.loginType;
+  //     let headers = {
+  //       headers: {'recaptcha': '03AERD8Xq2P3I8lQIIsMsc-Ri851n1aQ6SuOt-qdBOgQcvdgOP6bMm_HzXuu7Cbf3ABQSZLLwOyZfEnVDb3dbOe3vFSOzXRP6ru9S8lSaXkw3ljoWYz1NloWlb82RzdoT38xiD0JyWE1JkoxMM0KBASjJOzOANyLaesprUmS0TALkgMBYYjrzZma9RUE12n3aYQAC0hyf5_-AyuHDNGh-NoyX3fkVRomyoWLN-sbvqbDSmFYUqM_DTrAS9Ki_gII688KxYAauHVXITkayinhDRmOROxBVqzFlSLNCw2a23MvkPCtt1uHyJ2wHstJKI2Q8Ca05w7Tr5GexJBhvDDVObSU-ra1jl_pKShvhsidFBhgVg5hJ1DK_67rc'}
+  //     }
+  //     delete params.loginType;
+  //     delete params.token;
+  //     if (loginType === 'phone') {
+  //       return await this.$axios.post("/free/v2/sendsmscode", params, headers);
+  //     } else {
+  //       return await this.$axios.post("/free/v2/sendemailcode", params, headers);
+  //     }
+  //   } catch(e) {
+  //     console.log(e);
+  //   }
+  // },
+
   async getCode({commit}, params) {
     try {
       let recaptcha = params.token;
       let loginType = params.loginType;
       let headers = {
-        headers: {'recaptcha': recaptcha}
+        headers: {'recaptcha': '03AERD8Xq2P3I8lQIIsMsc-Ri851n1aQ6SuOt-qdBOgQcvdgOP6bMm_HzXuu7Cbf3ABQSZLLwOyZfEnVDb3dbOe3vFSOzXRP6ru9S8lSaXkw3ljoWYz1NloWlb82RzdoT38xiD0JyWE1JkoxMM0KBASjJOzOANyLaesprUmS0TALkgMBYYjrzZma9RUE12n3aYQAC0hyf5_-AyuHDNGh-NoyX3fkVRomyoWLN-sbvqbDSmFYUqM_DTrAS9Ki_gII688KxYAauHVXITkayinhDRmOROxBVqzFlSLNCw2a23MvkPCtt1uHyJ2wHstJKI2Q8Ca05w7Tr5GexJBhvDDVObSU-ra1jl_pKShvhsidFBhgVg5hJ1DK_67rc'}
       }
       delete params.loginType;
       delete params.token;

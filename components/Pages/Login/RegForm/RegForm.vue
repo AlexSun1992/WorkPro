@@ -15,6 +15,7 @@
         <b-form-input
           v-model.lazy="$v.form.email.$model"
           :state="validateState('email')"
+          autocomplete="off"
           @blur="$v.form.email.$touch()"
           placeholder="E-mail"
           :disabled="registrationInProcess"
@@ -147,7 +148,32 @@
         return $dirty ? !$error : null;
       },
 
-      async setToken() {
+      async login(context) {
+      try {
+        debugger
+        // this.authInProcess = true;
+        // this.captchaToken = await this.$getCaptcha();
+        await context.$auth.loginWith("local", {
+          // headers: {
+          //   RECAPTCHA: context.captchaToken
+          // },
+          data: {
+            username: context.$v.form.phone.$model,
+            password: context.$v.form.password.$model,
+            mode: 2
+          }
+        });
+       
+
+      } catch (e) {
+        if (context.$auth.error?.response.status === 401) {
+          context.errorMessage = context.$auth.error.response.data.MESSAGE;
+          context.authInProcess = false;
+        }
+      }
+    },
+
+      async setToken(context) {
         this.registrationInProcess = true;
         // this.captchaToken = this.$getCaptcha();
         const params = {
@@ -165,6 +191,7 @@
         }
 
         const response = await this.$store.dispatch("registerUser", params);
+        debugger
 
         // Удалить с появлением обработки ошибки
         if (!response) {
@@ -177,10 +204,13 @@
         }
 
         if (response) {
-          this.$auth.setUserToken(response.ACCESS_TOKEN);
-          if (this.$store.getters.getRegistrationError) {
-            this.$router.push('/');
-          }
+          debugger
+          // this.$auth.setUserToken(response.ACCESS_TOKEN);
+          // $nuxt.$auth.setUserToken(response.ACCESS_TOKEN);
+          // if (this.$store.getters.getRegistrationError) {
+          //   this.$router.push('/');
+          // }
+          this.login(this);
         } else {
           this.$refs['verifyUser'].code = null;
         }
@@ -197,7 +227,7 @@
           if (this.$v.form.$anyError) {
             return;
           }
-          this.setToken();
+          this.setToken(this);
         } catch (e) {
           console.log(e);
         }
@@ -216,7 +246,7 @@
         }
 
         if (!this.$store.getters.getRegistrationError && this.$store.getters.isAuthenticated) {
-          // this.$router.push("/cabinet/55/0/701")
+          this.$router.push("/cabinet/55/0/701")
         }
       }
     },
@@ -224,7 +254,7 @@
     watch: {
       isRegConfirmed: function(val) {
         if (val) {
-          this.setToken();
+          this.setToken(this);
         } else {
           this.$router.push('/login');
         }

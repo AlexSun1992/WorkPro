@@ -1,8 +1,8 @@
 <template>
-  <div class="row">
-    <p class="col-12">{{label}}</p>
-    <b-form-group class="col-md-8 col-12">
-      <b-form-input 
+  <div>
+    <p>{{label}}</p>
+    <b-form-group>
+      <b-form-input
         ref="userInput"
         class="mb-1"
         v-model="v[loginType].$model"
@@ -18,7 +18,7 @@
       <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
     </b-form-group>
     <div>
-      <div v-if="code" class="code">
+      <div v-if="code">
         <b-link @click="changeNumber">{{ loginType === 'phone' ? 'Изменить номер' : 'Изменить email' }}</b-link>
         <p>На указанный {{ loginType === 'phone' ? 'номер' : 'email' }} выслан код подтверждения</p>
         <b-form-input
@@ -45,16 +45,14 @@
         </b-button>
       </div>
     </div>
-    <div class="col-12 col-md-4 mb-3 mb-md-0">
-    <b-button class="w-100"
+    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
+    <b-button
       type="submit"
       v-if="!code"
       :disabled="v.phone.$invalid && v.email.$invalid"
       @click.prevent="verifyUser"
       variant="success"
     >Подтвердить</b-button>
-    </div>
-    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
   </div>
 </template>
 
@@ -111,10 +109,12 @@ export default {
         console.log('Login error:', error)
       }
     },
+
     async getCode() {
       await this.getCaptcha();
       this.isPhoneChanged = false;
       try {
+        debugger
         if (!this.code && (this.v.phone.$model || this.v.email.$model)) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
@@ -124,7 +124,7 @@ export default {
           params = {...params, token: this.token}
           const response = await this.$store.dispatch('getCode', params);
           if (this.loginType === 'phone') {
-            this.code = response.status == 200;
+            this.code = true;
           } else {
             // Для показа (заменить на код email)
             this.code = '*';
@@ -133,7 +133,7 @@ export default {
           this.v.code.$model = this.code;
           this.$emit("onCode", this.code);
           this.isUserDisabled = true;
-          this.countdown(); 
+          this.countdown();
         } else {
           this.isUserDisabled = false;
         }
@@ -254,9 +254,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-  .code {
-    margin-left: 20px;
-  }
-</style>
