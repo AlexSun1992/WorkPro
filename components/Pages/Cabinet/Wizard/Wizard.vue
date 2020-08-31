@@ -69,7 +69,7 @@
             return !block.data.items.length
           }
           else{
-            return true
+            return false
           }
         }
       }
