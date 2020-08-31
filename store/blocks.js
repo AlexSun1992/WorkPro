@@ -30,7 +30,7 @@ export const actions = {
   async deleteForm ({commit, dispatch}, {moduleId, menuId, itemId}) {
     await this.$axios.delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}`)
       .then((res) => {
-        dispatch('updateBlock', itemId);
+        dispatch('updateBlock', menuId);
       })
   },
   async saveForm ({commit, dispatch, state}, {moduleId,form}) {
