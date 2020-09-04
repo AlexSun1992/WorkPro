@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <b-button v-if="context != 'profile'"  v-on:click="destroyForm" type="submit" variant="success"><i  class="fa fa-chevron-left"></i> Назад</b-button>
-    <b-tabs v-if="wizardData && wizardData[0].title" content-class="mt-4">
+    <b-tabs v-if="isShowWizard" content-class="mt-4">
       <div v-for="(item, i) in wizardData" :key="i">
         <b-tab v-if="item.title" :title="item.title" :active="isActive(i)">
           <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="params.settings.edit" :params="params" :context="context"></card-viewer-form>
@@ -9,7 +9,7 @@
       </div>
     </b-tabs>
     <div v-else>
-      <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params" :context="context"></card-viewer-form>
+      <card-viewer-form  @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params" :context="context"></card-viewer-form>
     </div>
     <div class="mt-3 row button-container" v-if="$store.getters['card/wizardData']">
       <div v-if="params.settings.edit"  class="col-12">
@@ -34,12 +34,12 @@ export default {
       editForm: true,
       initialWizardData: null,
       invalidFields: [],
-      wizardData: null
+      //wizardData: null
     }
   },
   async fetch () {
     await this.fetchWizard();
-    this.wizardData = JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']));
+    //this.wizardData = JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']));
   },
   created() {
     this.$store.dispatch('card/setCard', this.params);
@@ -67,6 +67,8 @@ export default {
     },
     destroyForm () {
       this.$store.dispatch('blocks/destroyForm');
+      this.$store.dispatch('card/updateWizard', []);
+      this.$store.commit('card/setShowWizard', false);
     },
     validateData(data) {
       this.invalidFields.length = 0;
@@ -126,7 +128,19 @@ export default {
       if(this.invalidFields.length) {
         return this.invalidFields[0].page == i;
       }
-    }
+    },
+  },
+  computed: {
+    wizardData: {
+      get: function () {
+        return JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']))
+      }
+    },
+    isShowWizard: {
+      get: function () {
+        return this.$store.getters['card/isWizard']
+      }
+    },
   }
 };
 </script>

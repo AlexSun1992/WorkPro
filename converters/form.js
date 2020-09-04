@@ -48,8 +48,8 @@ converter.form = (data, itemId) => {
     obj.label = webFields[i].SCAPTION;
     obj.value = item[webFields[i].SNAME];
     obj.type = webFields[i].STYPE;
-  
-    if ((webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) && 
+
+    if ((webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) &&
         (webFields[i].STYPE == 'Double' || webFields[i].STYPE == 'Int64' || webFields[i].STYPE == 'Int16')) {
       obj.type = 'double';
     } else if (webFields[i].IDCONTROL == 2) {
@@ -66,7 +66,7 @@ converter.form = (data, itemId) => {
       obj.type = 'button';
     } else {
       obj.type = 'string';
-    } 
+    }
 
     function setDefaultValues(caption) {
       if (caption) {
@@ -77,8 +77,9 @@ converter.form = (data, itemId) => {
         return 'f-l-i col-md-3 col-12';
       }
     }
-  
+
     obj.id = itemId
+    obj.fieldId = webFields[i].ID;
     obj.cols = webFields[i].NCOLSPAN;
     obj.width = webFields[i].NWIDTH + '%';
     obj.name = webFields[i].SNAME;
@@ -86,9 +87,11 @@ converter.form = (data, itemId) => {
     obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
     obj.required = webFields[i].LREQUIRED === 'N' ? false : true;
     obj.page = webFields[i].NPAGE;
-    obj.readonly = webFields[i].LREADONLY === 'N' ? false : true;;
+    obj.readonly = webFields[i].LREADONLY === 'N' ? false : true;
     obj.control = null;
     obj.state = null;
+    obj.isRelation = webFields[i].LDIC === 'N' ? false : true;
+    obj.fieldRelation = webFields[i].SCONNECTFIELD ? 'FK' + webFields[i].SCONNECTFIELD : null
     webFieldsArr.push(obj)
   }
   // ********
@@ -129,6 +132,9 @@ converter.type = (data) => {
           copy[i].dic = data[j].name
           copy[i].value = {text: copy[i].value, value: copy[j].value}
           copy[i].id = copy[j].id
+          copy[i].isRelation = copy[j].isRelation
+          copy[i].fieldRelation = copy[j].fieldRelation
+          copy[i].fieldId = copy[j].fieldId
           del.push(data[j])
         }
       }

@@ -27,6 +27,8 @@
       async openCard () {
         try {
           await this.$store.dispatch('blocks/fetchForm', {moduleId:this.moduleId, menuId:this.menuId, itemId:this.itemId});
+          this.$store.commit('card/setShowWizard', false);
+          this.$store.dispatch('card/updateWizard', []);
         } catch(err) {
           this.$bvToast.toast(err.response.data.MESSAGE, {
             title: `Ошибка`,

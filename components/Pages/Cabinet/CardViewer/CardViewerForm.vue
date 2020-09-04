@@ -12,7 +12,7 @@
         </b-button>
       </template>
     </b-modal>
-    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" :edit="edit"></Form>
+    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" @update="updateForm($event)"  :edit="edit"></Form>
     <!-- <nuxt-link to="/cabinet/55/0/719"><b-button  type="button">test</b-button></nuxt-link> -->
   </div>
 </template>
@@ -52,6 +52,9 @@
       },
       destroyForm () {
         this.$store.dispatch('blocks/destroyForm');
+      },
+      updateForm (e) {
+        console.log(e)
       },
       async saveCard() {
         let params = {
@@ -96,6 +99,12 @@
     },
     watch: {
       'data': 'setData',
+      editDataForm: {
+        handler: function(newValue) {
+          //this.$store.commit('card/setWizardData', JSON.parse(JSON.stringify(newValue)));
+        },
+        deep: true
+      },
       number(val) {
         const reg = /^[0-9]{10}$/;
         this.noPhone = !reg.test(val);

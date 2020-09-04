@@ -18,6 +18,7 @@ const MESSAGECHAT = `/am/main/${VER}/chat/data/messagechat`
 const USERPROFILE = `/am/main/${VER}/userinfo`
 const WEBFIELD = `/am/main/${VER}/webfield`
 const DIC = `/am/main/${VER}/dic`
+const DICWF = `/am/main/${VER}/dicwf`
 
 export default {
   VER: VER,
@@ -39,5 +40,6 @@ export default {
   MESSAGECHAT: MESSAGECHAT,
   USERPROFILE: USERPROFILE,
   WEBFIELD: WEBFIELD,
-  DIC: DIC
+  DIC: DIC,
+  DICWF: DICWF,
 }

@@ -39,7 +39,10 @@ export const getters = {
   isListLoading: state => state.isListLoading,
   componentType: state => state.componentType,
   cardId: state => state.cardId,
-  wizardData: state => state.wizardData
+  wizardData: state => state.wizardData,
+  getWizardDataFieldByName: state => name => {
+    return state.wizardData.find(b => b.name === name);
+  },
 }
 
 export const actions = {
@@ -147,7 +150,21 @@ export const actions = {
   updateWizard({commit, getters}, params) {
     commit('setWizardData', params);
   },
-  
+
+  clearRelationFields({commit,state}, data) {
+   let items = JSON.parse(JSON.stringify(state.wizardData));
+    for (let i = 0; i < items.length; i++) {
+      if(items[i].fieldRealation === data){
+        items[i].value = null
+      }
+    }
+    commit('setWizardData', items);
+  },
+
+  updateWizardField({commit}, data) {
+    commit('setWizardField', data);
+  },
+
   async applyFilter ({commit, dispatch, getters}, filters) {
     commit('setFilters', filters);
     await dispatch('fetchList');
@@ -287,5 +304,9 @@ export const mutations = {
   },
   clearCardForm(state, data) {
     state.cardForm = null;
+  },
+  setWizardField(state, data) {
+    const item = state.wizardData.find(d => d.fieldId === data.fieldId)
+    item.value = data.value
   }
 }

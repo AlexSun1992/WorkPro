@@ -30,6 +30,24 @@ app.get('/dic/:moduleId/:itemId/:name', (req, res) => {
     res.send(e)
   }
 })
+app.get('/dicwf/:fieldId/:valueId', (req, res) => {
+  try {
+    if(req.cookies){
+      axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
+      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      axios.defaults.baseURL = 'https://mobile2.reso.ru';
+    }
+    axios({url: `${consts.DICWF}/${req.params.fieldId}/${req.params.valueId}`, method: 'GET'})
+      .then(resp => {
+        res.send(selectConverter.select(resp.data))
+      })
+      .catch(err => {
+        res.status(err.response.data.STATUS).send(err.response.data)
+      })
+  } catch (e) {
+    res.send(e)
+  }
+})
 
 module.exports = {
   path: '/api',

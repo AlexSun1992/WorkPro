@@ -6,8 +6,9 @@
                          option-text="text"
                          :isDisabled="!edit ? !edit : data.readonly"
                          :isError="data.state === false"
-                         v-model="data.value"
+                         v-model="fieldValue"
                          placeholder="Выберите из списка"
+                         @select="onSelect"
                          @searchchange="initData">
       </model-list-select>
       <span class="error" v-if="data.state === false">
@@ -33,14 +34,18 @@ export default {
   created () {
     if (this.data.value.value) this.options.push(this.data.value)
   },
-  watch: {
-    data: function (val) {
-      // this.options = []
-    }
-  },
   methods: {
     initData (param) {
-      this.$axios({url: `/api/dic/${this.$route.params.idModule}/${this.data.id}/${this.data.dic}`, method: 'GET'})
+      let url = '';
+      if(this.relationValue){
+        if(this.relationValue.value){
+          url = `/api/dicwf/${this.data.fieldId}/${this.relationValue.value.value}`
+        }
+      }
+      else{
+        url = `/api/dic/${this.$route.params.idModule}/${this.data.id}/${this.data.dic}`
+      }
+      this.$axios({url: url, method: 'GET'})
         .then(resp => {
           this.options = resp.data
         })
@@ -55,6 +60,9 @@ export default {
       if (this.edit) {
         this.initData()
       }
+    },
+    onSelect (items, lastSelectItem) {
+      console.log(lastSelectItem)
     }
   },
   props: {
@@ -68,6 +76,36 @@ export default {
       type: Boolean,
       required: true,
       default: () => false
+    }
+  },
+  watch: {
+    data: {
+      handler: function (newValue, oldValue) {
+        if(newValue.value.value !== oldValue.value.value){
+          this.$store.dispatch('card/updateWizardField', newValue);
+        }
+      },
+      deep: true
+    },
+  },
+  computed: {
+    relationValue: {
+      get: function () {
+        if(this.data.isRelation){
+          return this.$store.getters['card/getWizardDataFieldByName'](this.data.fieldRelation)
+        }
+        else{
+          return null
+        }
+      }
+    },
+    fieldValue: {
+      get: function () {
+        return this.data.value
+      },
+      set: function (value) {
+        this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, value:value});
+      }
     }
   }
 }

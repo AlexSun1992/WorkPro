@@ -21,7 +21,7 @@ import ControlLabel from '~/components/Libs/Controls/ControlLabel'
 
 export default {
   name: 'Control',
-  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong, 
+  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong,
   ControlTimestamp, ControlPeriod, ControlClob, ControlEnum, ControlButton, ControlLink, ControlLabel},
   props: {
     data: {
@@ -46,7 +46,7 @@ export default {
     },
     col: function () {
       return 12 / this.cols * this.data.col
-    }
+    },
   },
   watch: {
     'data.value': 'eventValidate'
