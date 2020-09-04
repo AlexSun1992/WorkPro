@@ -104,7 +104,8 @@ export default {
         return this.data.value
       },
       set: function (value) {
-        this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, value:value});
+        this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:value, page: this.data.page});
+        this.$store.commit('card/clearWizardRelationField', {fieldName:this.data.name});
       }
     }
   }

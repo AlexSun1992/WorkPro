@@ -40,7 +40,7 @@
         }
       },
         watch: {
-            $route(to, from) {
+            $route(to, from, next) {
                 if (to.meta === 'Cabinet') {
                   this.sideBarMobileMini = false;
                     this.setParams();

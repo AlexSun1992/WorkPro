@@ -33,7 +33,7 @@
       // this.$store.dispatch('menu/fetchMenu', this.$route.params)
     },
     watch: {
-      $route(to, from) {
+      $route(to, from, next) {
         if(to.meta === 'Cabinet'){
           this.setParams();
         }else{
@@ -43,6 +43,7 @@
           }
           this.$store.dispatch('pages/fetchPageByUrl', url);
         }
+        next(false)
       }
     },
     methods: {

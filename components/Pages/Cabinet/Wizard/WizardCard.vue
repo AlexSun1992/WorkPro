@@ -148,8 +148,8 @@
       },
       cancelForm () {
         this.editDataForm = JSON.parse(JSON.stringify(this.copyDataForm));
-      }
-    }
+      },
+    },
   }
 </script>
 

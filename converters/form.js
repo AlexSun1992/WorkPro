@@ -35,6 +35,7 @@ converter.form = (data, itemId) => {
     obj.readonly = fields[i].READONLY
     obj.control = null
     obj.state = null
+    obj.isTab = data[0]._meta['SPAGECAPTION'] ? true : false
     arr.push(obj)
   }
 
@@ -92,6 +93,7 @@ converter.form = (data, itemId) => {
     obj.state = null;
     obj.isRelation = webFields[i].LDIC === 'N' ? false : true;
     obj.fieldRelation = webFields[i].SCONNECTFIELD ? 'FK' + webFields[i].SCONNECTFIELD : null
+    obj.isTab = data[0]._meta['SPAGECAPTION'] ? true : false
     webFieldsArr.push(obj)
   }
   // ********
@@ -121,6 +123,9 @@ converter.type = (data) => {
     if(data[i].type === `timestamp`){
       if(data[i].value){
         data[i].value = moment(data[i].value, ['DD.MM.YYYY', 'YYYY-MM-DD']).format('DD.MM.YYYY')
+      }
+      else{
+        data[i].value = null
       }
     }
     if (data[i].name.substring(0, 2) === `FK`) {

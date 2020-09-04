@@ -46,7 +46,7 @@ export default {
     },
     col: function () {
       return 12 / this.cols * this.data.col
-    },
+    }
   },
   watch: {
     'data.value': 'eventValidate'

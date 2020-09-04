@@ -17,7 +17,8 @@ export const state = () => ({
   componentType: null,
   cardId: 0,
   wizardData: null,
-  cardForm: null
+  cardForm: null,
+  isTab: false
 })
 
 export const getters = {
@@ -40,8 +41,12 @@ export const getters = {
   componentType: state => state.componentType,
   cardId: state => state.cardId,
   wizardData: state => state.wizardData,
+  isTab: state => state.isTab,
   getWizardDataFieldByName: state => name => {
     return state.wizardData.find(b => b.name === name);
+  },
+  getWizardDataFieldByFieldId: state => id => {
+    return state.wizardData.find(b => b.fieldId === id);
   },
 }
 
@@ -132,33 +137,15 @@ export const actions = {
       tab.data.forEach(field => {
         cols.push(field.cols);
       });
-      // obj.maxCol = Math.max(...cols);
-      // tab.data.forEach(field => {
-        // field.cols = field.cols*12/obj.maxCol;
-        // field.cols = field.cols;
-        // if (field.width == 0) {
-        //   field.width = 100;
-        // }
-        // field.cols = Math.ceil((field.cols/obj.maxCol) * (field.width/100) * 12);
-      // });
     });
     commit('setWizardData', tabs);
     commit('setShowWizard', true);
     commit('setShowFilter', false);
     commit('setShowList', false);
+    commit('setIsTab', true);
   },
   updateWizard({commit, getters}, params) {
     commit('setWizardData', params);
-  },
-
-  clearRelationFields({commit,state}, data) {
-   let items = JSON.parse(JSON.stringify(state.wizardData));
-    for (let i = 0; i < items.length; i++) {
-      if(items[i].fieldRealation === data){
-        items[i].value = null
-      }
-    }
-    commit('setWizardData', items);
   },
 
   updateWizardField({commit}, data) {
@@ -302,11 +289,26 @@ export const mutations = {
   setCardForm(state, data) {
     state.cardForm = data
   },
+  setIsTab(state, data) {
+    state.isTab = data
+  },
   clearCardForm(state, data) {
     state.cardForm = null;
   },
   setWizardField(state, data) {
-    const item = state.wizardData.find(d => d.fieldId === data.fieldId)
-    item.value = data.value
+    if(data.isTab === false){
+      const item = state.wizardData.find(d => d.fieldId === data.fieldId)
+      item.value = data.value
+    }
+    else{
+      const item = state.wizardData[data.page]['data'].find(d => d.fieldId === data.fieldId)
+      item.value = data.value
+    }
+  },
+  clearWizardRelationField(state, data) {
+    const item = state.wizardData.find(d => d.fieldRelation === data.fieldName)
+    if(item){
+      item.value = {}
+    }
   }
 }
