@@ -65,7 +65,12 @@ export function createRouter() {
       {
         meta: 'Демо контент',
         path: '/demo-portlet',
-        component: DemoPortlet
+        component: DemoPage
+      },
+      {
+        meta: 'Демонстрационная страница',
+        path: '/demo-page',
+        component: DemoPage
       },
       {
         meta: 'Cabinet',
@@ -82,11 +87,6 @@ export function createRouter() {
             meta: 'Cabinet',
             path: ':idModule/:idParent/:idItem',
             component: Fluid
-          },
-          {
-            meta: 'Демонстрационная страница',
-            path: 'demo-page',
-            component: DemoPage
           },
         ]
       },
