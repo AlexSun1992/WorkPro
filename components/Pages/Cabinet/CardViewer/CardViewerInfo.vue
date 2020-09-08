@@ -105,6 +105,7 @@ export default {
           }
           else{
             await this.$store.dispatch('blocks/saveForm', {moduleId:55, form: fields});
+            this.$store.commit('card/setFormChanged', false)
           }
           this.$bvToast.toast('Успешно сохранено', {
             title: ``,

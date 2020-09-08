@@ -18,7 +18,8 @@ export const state = () => ({
   cardId: 0,
   wizardData: null,
   cardForm: null,
-  isTab: false
+  isTab: false,
+  isFormChanged: false
 })
 
 export const getters = {
@@ -42,6 +43,7 @@ export const getters = {
   cardId: state => state.cardId,
   wizardData: state => state.wizardData,
   isTab: state => state.isTab,
+  isFormChanged: state => state.isFormChanged,
   getWizardDataFieldByName: state => name => {
     return state.wizardData.find(b => b.name === name);
   },
@@ -64,6 +66,7 @@ export const actions = {
       commit('setComponentType', params.settings.compType);
       commit('setShowForm', false);
       commit('setShowWizard', false);
+      commit('setFormChanged', false)
       commit('setList',{});
       if(params.settings.newRecord){
         await dispatch('fetchForm', 0);
@@ -187,6 +190,7 @@ export const actions = {
       await this.$axios.post(`/api/card/${getters['page'].idModule}/${params.blockId}/${params.cardId}`, params.fields)
       .then(async resp => {
         commit('setCardId', resp.data.ID)
+        commit('setFormChanged', false)
       })
     }
   },
@@ -292,6 +296,9 @@ export const mutations = {
   setIsTab(state, data) {
     state.isTab = data
   },
+  setFormChanged(state, data) {
+    state.isFormChanged = data
+  },
   clearCardForm(state, data) {
     state.cardForm = null;
   },
@@ -304,6 +311,7 @@ export const mutations = {
       const item = state.wizardData[data.page]['data'].find(d => d.fieldId === data.fieldId)
       item.value = data.value
     }
+    state.isFormChanged = true
   },
   clearWizardRelationField(state, data) {
     const item = state.wizardData.find(d => d.fieldRelation === data.fieldName)

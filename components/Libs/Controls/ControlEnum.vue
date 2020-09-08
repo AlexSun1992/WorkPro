@@ -7,6 +7,7 @@
                          :isDisabled="!edit ? !edit : data.readonly"
                          :isError="data.state === false"
                          v-model="fieldValue"
+                         @input="updateMessage"
                          placeholder="Выберите из списка"
                          @select="onSelect"
                          @searchchange="initData">
@@ -35,6 +36,9 @@ export default {
     if (this.data.value.value) this.options.push(this.data.value)
   },
   methods: {
+    updateMessage(e){
+      console.log(e)
+    },
     initData (param) {
       let url = '';
       if(this.relationValue){
@@ -77,16 +81,6 @@ export default {
       required: true,
       default: () => false
     }
-  },
-  watch: {
-    data: {
-      handler: function (newValue, oldValue) {
-        if(newValue.value.value !== oldValue.value.value){
-          this.$store.dispatch('card/updateWizardField', newValue);
-        }
-      },
-      deep: true
-    },
   },
   computed: {
     relationValue: {

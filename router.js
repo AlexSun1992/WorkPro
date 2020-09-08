@@ -20,7 +20,9 @@ import DynamicRoutesRenderer from '~/components/Libs/DynamicRoutesRenderer/Dynam
 
 import Preview from '~/components/Pages/PreviewPage/Preview'
 
+
 Vue.use(Router)
+
 
 export function createRouter() {
   return new Router({

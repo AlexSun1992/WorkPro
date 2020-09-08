@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     updateField(e) {
-      this.data.value=e.value;
       this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:e.value, page: this.data.page});
       this.$emit('update', e);
     }

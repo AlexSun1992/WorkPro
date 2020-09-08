@@ -40,7 +40,7 @@
         }
       },
         watch: {
-            $route(to, from, next) {
+            $route(to, from) {
                 if (to.meta === 'Cabinet') {
                   this.sideBarMobileMini = false;
                     this.setParams();
@@ -81,7 +81,7 @@
             items() {
                 return this.$store.getters['menu/breadcrumbs']
             }
-        }
+        },
     }
 </script>
 <style lang="scss" scoped>

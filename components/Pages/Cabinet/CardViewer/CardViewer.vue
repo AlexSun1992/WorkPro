@@ -49,6 +49,11 @@ export default {
     this.$bvModal.show("profile-modal");
   },
   methods: {
+    beforeUnload(event) {
+      var confirmationMessage = "\o/";
+      event.returnValue = confirmationMessage;
+      return confirmationMessage;
+    },
     refresh() {
       this.show = false;
       this.$nextTick(() => {
@@ -81,6 +86,13 @@ export default {
       },
     },
   },
+  mounted() {
+    window.addEventListener('beforeunload',  event => {
+      if(this.$store.getters['card/isFormChanged']){
+        this.beforeUnload(event)
+      }
+    });
+  }
 };
 </script>
 
