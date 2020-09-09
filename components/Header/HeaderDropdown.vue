@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="d-inline-block">
     <LoginModal  ref="refLogin"/>
     <client-only>
-      <b-button v-if="!isAuthenticated" v-on:click="login" size="bg" class="my-2 my-sm-0" type="submit"  variant="success">Ваш кабинет</b-button>
+      <b-button v-if="!isAuthenticated" v-on:click="login" size="bg" class="gotolk btn_trn btn-p-sm btn-icon-left" type="submit"  variant="success">Личный кабинет</b-button>
       <b-nav-item-dropdown v-else right no-caret variant="primary">
         <template slot="button-content">
           <header-user-name :user-data="loggedInUser"></header-user-name>
