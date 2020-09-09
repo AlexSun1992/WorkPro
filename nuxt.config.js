@@ -25,16 +25,7 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [
-    /* Import Font Awesome Icons Set */
-    '~/node_modules/flag-icon-css/css/flag-icon.min.css',
-    /* Import Font Awesome Icons Set */
-    '~/node_modules/font-awesome/css/font-awesome.min.css',
-    /* Import Simple Line Icons Set */
-    '~/node_modules/simple-line-icons/css/simple-line-icons.css',
-    { src: '~/assets/scss/style.scss', lang: 'scss' }
-    // { src: '~/assets/scss/style_new.scss', lang: 'scss' }
-  ],
+  css: [],
   /*
   ** Plugins to load before mounting the App
   */
@@ -60,7 +51,7 @@ module.exports = {
   */
   modules: [
     // Doc: https://bootstrap-vue.js.org
-    'bootstrap-vue/nuxt',
+    ['bootstrap-vue/nuxt', { css: false }],
     ['@nuxtjs/axios', { proxy: true }],
     '@nuxtjs/auth-next',
     ['cookie-universal-nuxt', { alias: 'cookiz' }],
