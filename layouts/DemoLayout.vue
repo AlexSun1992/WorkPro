@@ -1,6 +1,6 @@
 <template>
+
   <div class="app">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <Header @mini-sidebar="changeMobileSidebar"/>
     <div class="wrapper" v-bind:class="{'sidebar-min': sideBarMini, 'mobile_menu': sideBarMobileMini }">
       <Sidebar @mini-sidebar="changeSidebar" @mini-mobile-sidebar="changeMobileSidebar"  :nav-items="nav"/>
@@ -21,7 +21,6 @@
     import Footer from '~/components/Pages/Cabinet/Footer/Footer'
     import Sidebar from '~/components/Pages/Cabinet/Sidebar/Sidebar'
     import breadcrumbs from '~/converters/breadcrumbs'
-
     export default {
         name: 'full',
         head: {
@@ -83,7 +82,11 @@
             }
         }
     }
+    
 </script>
 <style lang="scss" scoped>
     @import '~/assets/scss/style_new.scss'
 </style>
+
+
+

@@ -1,6 +1,5 @@
 <template>
-<div>
-
+<div class="main_page">
 <MainHeader/>
     <main>
         <div class="container">
@@ -190,6 +189,6 @@
 </script>
 
 <style lang="scss">
-    /*@import '~/assets/scss/main.scss'*/
+    .main_page { @import '~/assets/scss/main.scss'}
 </style>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper main_page">
     <div class="animated fadeIn">
       <div>
         <div class="justify-content-lg-center">
@@ -17,7 +17,6 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+    .main_page { @import '~/assets/scss/main.scss'}
 </style>
-
