@@ -100,10 +100,10 @@ converter.form = async(data, itemId) => {
 
     obj.id = itemId
     obj.fieldId = webFields[i].ID;
-    obj.cols = webFields[i].NCOLSPAN;
-    obj.width = webFields[i].NWIDTH + '%';
+    obj.cols = webFields[i].NCOLSPAN ? webFields[i].NCOLSPAN : 12;
+    obj.width = webFields[i].NWIDTH ? webFields[i].NWIDTH + '%' : '100%';
     obj.name = webFields[i].SNAME;
-    obj.labelCols = webFields[i].SCAPTIONPOSITION
+    obj.labelCols = webFields[i].SCAPTIONPOSITION ? webFields[i].SCAPTIONPOSITION : 'f-l-i col-md-3 col-12';
     obj.visible = webFields[i].LVISIBLE === 'N' ? false : true;
     obj.required = webFields[i].LREQUIRED === 'N' ? false : true;
     obj.page = webFields[i].NPAGE;
