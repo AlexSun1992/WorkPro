@@ -100,11 +100,12 @@ export default {
       if(this.validateData(fields)){
         try {
           if(this.context == 'profile'){
+
             await this.$store.dispatch('card/saveProfile', {fields, context: this.context, blockId, cardId: this.$store.getters['blocks/cardId']});
             await this.$store.dispatch('updateUser');
           }
           else{
-            await this.$store.dispatch('blocks/saveForm', {moduleId:55, form: fields});
+            await this.$store.dispatch('blocks/saveForm', {moduleId:55, form: this.$store.getters["card/wizardData"]});
           }
           this.$bvToast.toast('Успешно сохранено', {
             title: ``,

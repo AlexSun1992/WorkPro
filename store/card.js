@@ -296,12 +296,14 @@ export const mutations = {
     state.cardForm = null;
   },
   setWizardField(state, data) {
-    if(data.isTab === false){
-      const item = state.wizardData.find(d => d.fieldId === data.fieldId)
-      item.value = data.value
+    let item;
+    if(data.isTab){
+      item = state.wizardData[data.page]['data'].find(d => d.fieldId === data.fieldId)
     }
-    else{
-      const item = state.wizardData[data.page]['data'].find(d => d.fieldId === data.fieldId)
+    else {
+      item = state.wizardData.find(d => d.fieldId === data.fieldId)
+    }
+    if (item) {
       item.value = data.value
     }
   },

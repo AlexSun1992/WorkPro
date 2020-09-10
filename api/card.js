@@ -20,8 +20,9 @@ app.get('/card/:idModule/:idItem/:id', (req, res) => {
       axios.defaults.baseURL = 'https://mobile2.reso.ru';
     }
     axios({url: `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.id}`, method: 'GET'})
-      .then(resp => {
-        res.send(formConverter.form(resp.data, req.params.idItem))
+      .then(async resp => {
+        // res.send(formConverter.form(resp.data, req.params.idItem))
+        res.send(await formConverter.form(resp.data, req.params.idItem))
       })
       .catch(err => {
         console.log(err.response.data)
