@@ -3,6 +3,36 @@ import controlConverter from '../converters/control'
 
 const converter = {}
 
+converter.setArrayOfObjectFields = (itemId, items, fields) => {
+  let arr = [];
+  for(let i = 0; i < items.length; i++){
+    arr.push(converter.setFieldsParams(itemId, items[i], fields))
+  }
+  return arr
+}
+
+converter.setFieldsParams = (itemId, item, fields) => {
+  let arr = [];
+  fields.sort(converter.compare)
+  for (let i = 0; i < fields.length; i++) {
+    let obj = {}
+    obj.label = fields[i].CAPTION ? fields[i].CAPTION : fields[i].FIELD
+    obj.value = fields[i].TYPE != 'resultset' ? item[fields[i].FIELD] : converter.setArrayOfObjectFields(itemId,item[fields[i].FIELD], fields[i].FIELDS)
+    obj.id = itemId
+    obj.type = fields[i].TYPE
+    obj.maxlength = fields[i].PRECISION
+    obj.name = fields[i].FIELD
+    obj.visible = fields[i].VISIBLE
+    obj.required = fields[i].REQUIRED
+    obj.readonly = fields[i].READONLY
+    obj.control = null
+    obj.state = null
+    obj.isTab = false
+    arr.push(obj)
+  }
+  return arr
+}
+
 converter.compare = (a, b) => {
   if (a.ORDER < b.ORDER) { return -1 }
   if (a.ORDER > b.ORDER) { return 1 }
@@ -16,28 +46,10 @@ converter.subcompare = (a, b) => {
 }
 
 converter.form = (data, itemId) => {
-  let arr = [];
   let item = data[0]._data.length ? data[0]._data[0] : {}
   let fields = data[0]._struct
   let meta = converter.meta(data[0]._meta)
-  fields.sort(converter.compare)
-  for (let i = 0; i < fields.length; i++) {
-    let obj = {}
-    obj.label = fields[i].CAPTION ? fields[i].CAPTION : fields[i].FIELD
-    obj.value = item[fields[i].FIELD]
-    //obj.value = item[fields[i].FIELD] || meta[fields[i].FIELD]
-    obj.id = itemId
-    obj.type = fields[i].TYPE
-    obj.maxlength = fields[i].PRECISION
-    obj.name = fields[i].FIELD
-    obj.visible = fields[i].VISIBLE
-    obj.required = fields[i].REQUIRED
-    obj.readonly = fields[i].READONLY
-    obj.control = null
-    obj.state = null
-    obj.isTab = data[0]._meta['SPAGECAPTION'] ? true : false
-    arr.push(obj)
-  }
+  let arr = converter.setFieldsParams(itemId, item, fields)
 
   // Собираем объект для JSONWEBFIELDS (сделать единую обработку)
   let webFieldsArr = [];
@@ -100,7 +112,7 @@ converter.form = (data, itemId) => {
 
   return {
     // Переход на поля JSONWEBFIELDS
-    data:  webFields.length ? converter.type(webFieldsArr) : converter.type(arr),
+    data:  converter.type(arr),
     // Метаданные для отображения JSONWEBFIELDS
     metaData: {
       data: converter.type(webFieldsArr),
