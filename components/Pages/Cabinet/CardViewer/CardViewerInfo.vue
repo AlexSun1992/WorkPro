@@ -90,7 +90,7 @@ export default {
       let fields = [];
       let profileForm = this.$refs['profile-form'];
       if (profileForm.$refs) {
-        fields = profileForm.$refs.form.items;
+        fields = this.$store.getters["card/wizardData"].filter(item => !item.name.match(/^ID/));
       } else {
         profileForm.forEach(item => {
           fields.push(...item.$refs.form.items);
@@ -100,12 +100,11 @@ export default {
       if(this.validateData(fields)){
         try {
           if(this.context == 'profile'){
-
             await this.$store.dispatch('card/saveProfile', {fields, context: this.context, blockId, cardId: this.$store.getters['blocks/cardId']});
             await this.$store.dispatch('updateUser');
           }
           else{
-            await this.$store.dispatch('blocks/saveForm', {moduleId:55, form: this.$store.getters["card/wizardData"]});
+            await this.$store.dispatch('blocks/saveForm', {moduleId:55, form: fields});
           }
           this.$bvToast.toast('Успешно сохранено', {
             title: ``,
