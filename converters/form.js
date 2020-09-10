@@ -107,11 +107,11 @@ converter.form = async (data, itemId) => {
 
   await Promise.allSettled(promises).then(values => {
     values.forEach((item, i) => {
-      if (!item.value.data) {
-        webFieldsArr.push(item.value);
-      } else {
+      if (item.status == 'fulfilled' && item.value.data) {
         let options = selectConverter.select(item.value.data)
         values[i + 1].value.options = options;
+      } else if (item.status == 'fulfilled' && !item.value.data) {
+        webFieldsArr.push(item.value);
       }
     })
   })
