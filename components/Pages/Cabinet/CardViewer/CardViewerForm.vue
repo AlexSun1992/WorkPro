@@ -68,7 +68,7 @@
           params['NEWEMAIL'] = this.email;
         }
         let resp = await this.$store.dispatch('card/editCard', params);
-        if (resp.status == 200) {
+        if (resp?.status == 200) {
           this.$emit('saved');
           this.$emit('field-changed');
         }

@@ -1,5 +1,7 @@
 import moment from 'moment/moment'
 import controlConverter from '../converters/control'
+const axios = require('axios')
+import selectConverter from '../converters/select'
 
 const converter = {}
 
@@ -45,7 +47,7 @@ converter.subcompare = (a, b) => {
   return 0
 }
 
-converter.form = (data, itemId) => {
+converter.form = async(data, itemId) => {
   let item = data[0]._data.length ? data[0]._data[0] : {}
   let fields = data[0]._struct
   let meta = converter.meta(data[0]._meta)
@@ -55,6 +57,8 @@ converter.form = (data, itemId) => {
   let webFieldsArr = [];
   let webFields = data[0]._meta['JSONWEBFIELDS']
   webFields = webFields.sort((a, b) => a['NORDER'] - b['NORDER']);
+
+  let promises = [];
 
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
@@ -73,6 +77,9 @@ converter.form = (data, itemId) => {
       obj.type = 'link';
     } else if (webFields[i].IDCONTROL == 14) {
       obj.type = 'timestamp';
+    } else if (webFields[i].IDCONTROL == 15) {
+      obj.type = 'combobox';
+      promises.push(axios.get(`/am/main/v2/dicwf/${webFields[i].ID}`));
     } else if (webFields[i].IDCONTROL == 16) {
       obj.type = 'boolean';
     } else if (webFields[i].IDCONTROL == 21) {
@@ -106,8 +113,21 @@ converter.form = (data, itemId) => {
     obj.isRelation = webFields[i].LDIC === 'N' ? false : true;
     obj.fieldRelation = webFields[i].SCONNECTFIELD ? 'FK' + webFields[i].SCONNECTFIELD : null
     obj.isTab = data[0]._meta['SPAGECAPTION'] ? true : false
-    webFieldsArr.push(obj)
+    // webFieldsArr.push(obj)
+    promises.push(Promise.resolve(obj));
   }
+
+  await Promise.allSettled(promises).then(values => {
+    values.forEach((item, i) => {
+      if (!item.value.data) {
+        webFieldsArr.push(item.value);
+      } else {
+        let options = selectConverter.select(item.value.data)
+        values[i + 1].value.options = options;
+      }
+    })
+  })
+
   // ********
 
   return {

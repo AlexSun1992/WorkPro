@@ -25,10 +25,10 @@ export default {
   computed: {
     fieldValue: {
       get: function () {
-        return this.data.value
+        return Number(this.data.value)
       },
       set: function (value) {
-        this.$store.commit('card/setWizardField',{fieldId:this.data.fieldId, isTab:this.data.isTab, value:value, page: this.data.page});
+        this.$store.commit('card/setWizardField',{fieldId:this.data.fieldId, isTab:this.data.isTab, value: Number(value), page: this.data.page});
       }
     }
   }

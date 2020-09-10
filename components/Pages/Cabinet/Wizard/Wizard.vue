@@ -49,7 +49,7 @@
       },
       isForm: {
         get: function () {
-          return this.$store.getters['blocks/getForm'].length
+          return this.$store.getters['blocks/getForm']?.length
         }
       },
       formCardData: {

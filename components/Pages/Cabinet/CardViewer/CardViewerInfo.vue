@@ -90,7 +90,7 @@ export default {
       let fields = [];
       let profileForm = this.$refs['profile-form'];
       if (profileForm.$refs) {
-        fields = profileForm.$refs.form.items;
+        fields = this.$store.getters["card/wizardData"].filter(item => !item.name.match(/^ID/));
       } else {
         profileForm.forEach(item => {
           fields.push(...item.$refs.form.items);
