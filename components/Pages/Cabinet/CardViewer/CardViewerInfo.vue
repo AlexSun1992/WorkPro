@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div>
     <b-button v-if="context != 'profile'"  v-on:click="destroyForm" type="submit" variant="success"><i  class="fa fa-chevron-left"></i> Назад</b-button>
     <b-tabs v-if="wizardData && wizardData[0].title" content-class="mt-4">
       <div v-for="(item, i) in wizardData" :key="i">
@@ -13,7 +13,7 @@
     </div>
     <div class="mt-3 row button-container" v-if="$store.getters['card/wizardData']">
       <div v-if="params.settings.edit"  class="col-12">
-        <b-button pill v-on:click="saveProfile" type="button" variant="success" class="col-12 col-md-auto">Сохранить</b-button>
+        <b-button pill v-on:click="saveProfile" type="button" variant="success" class="col-12 col-md-auto mr-4">Сохранить</b-button>
         <b-button pill v-on:click="cancel" type="button" variant="outline-success" class="col-12 col-md-auto mt-2 mt-md-0">Отменить</b-button>
       </div>
       <!-- <action-button :actions="actions" :rowId="125" item-id="params.page.itemId" action-id="32904"/> -->
@@ -132,11 +132,5 @@ export default {
 </script>
 
 <style scoped>
-  .wrapper {
-    width: 100%;
-  }
-  .button-container {
-    position: absolute;
-    bottom: 10px;
-  }
+
 </style>

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="app">
+  <div class="app cabinet">
     <Header @mini-sidebar="changeMobileSidebar"/>
     <div class="wrapper" v-bind:class="{'sidebar-min': sideBarMini, 'mobile_menu': sideBarMobileMini }">
       <Sidebar @mini-sidebar="changeSidebar" @mini-mobile-sidebar="changeMobileSidebar"  :nav-items="nav"/>
@@ -84,8 +84,14 @@
     }
     
 </script>
-<style lang="scss" scoped>
-    @import '~/assets/scss/style_new.scss'
+<style lang="scss">
+.cabinet { @import '~/assets/scss/style_new.scss'}
+.cabinet {
+    display: grid;
+    grid-template-rows: 80px auto min-content;
+    min-height: 100vh;
+}
+
 </style>
 
 
