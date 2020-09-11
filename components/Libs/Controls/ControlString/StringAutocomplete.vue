@@ -86,6 +86,7 @@ export default {
       } else {
         this.$emit("update", this.suggestions.data[index]);
       }
+      this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:this.suggestions.data[index], page: this.data.page});
       this.open = false;
     },
     async getSuggestions(name) {
