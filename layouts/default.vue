@@ -1,6 +1,7 @@
 <template>
   <div class="app main_page">
     <Header/>
+    <b-breadcrumb prefetch :items="breadcrumbs"></b-breadcrumb>
     <div class="app-body">
       <main class="main">
         <!--<breadcrumb :list="list"/>-->
@@ -51,13 +52,17 @@
       }
     },
     computed: {
-      name () {
-        return this.$route.name
+      breadcrumbs() {
+        return this.$store.getters["pages/getBreadCrumbs"];
       },
-      list () {
-        return this.$route.matched
+      showBreadcrumbs() {
+        return this.$store.getters["pages/getShowBreadCrumbs"];
       }
     }
   }
 </script>
+<style lang="scss">
+  .main_page { @import '~/assets/scss/main.scss'}
+</style>
+
 
