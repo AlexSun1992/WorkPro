@@ -698,3 +698,40 @@ a.icon-arrow-right:after {
 .middle_menu .gotolk .ppl-avatar {
     display: none;
 }
+
+.breadcrumb {
+    padding: 1rem 0;
+}
+
+.breadcrumb a {
+    color: #36AB4D;
+}
+
+li.breadcrumb-item {
+    LIST-STYLE: NONE;
+    MARGIN-RIGHT: 20px;
+    display: inline-block;
+    position: relative;
+}
+
+li.breadcrumb-item:first-of-type {
+    margin-left: 20px;
+}
+
+li.breadcrumb-item:first-of-type:after {
+    background: url(/img/main/label_reso.svg) 0 0 no-repeat;
+    position: absolute;
+    top: 3px;
+    left: -20px;
+    width: 15px;
+    height: 15px;
+    content: "";
+    background-size: contain;
+}
+
+li.breadcrumb-item:not(:first-of-type):after {
+    content: "//";
+    position: absolute;
+    left: -15px;
+    width: 10px;
+}
