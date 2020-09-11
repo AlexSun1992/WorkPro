@@ -1,63 +1,95 @@
 <template>
-  <header class="app-header navbar">
-    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button" @click="mobileSidebarToggle">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <b-link class="navbar-brand" to="/"></b-link>
-    <b-navbar-nav class="d-md-down-none">
-    <MainMenu :pageId="pageId"/>
-    </b-navbar-nav>
-    <b-navbar-nav class="ml-auto header-dropdown-button">
-      <HeaderDropdown/>
-    </b-navbar-nav>
+  <header>
+    <div class="container">
+      <div class="top_menu">
+        <div class="float-left">
+                    <span class="icon-left icon-location"><span class="d-none d-lg-inline-block">Ваш
+                            город:</span></span>
+          <a href="" class="icon-right icon-arrow-small-down color-green pr-3">Москва</a>
+        </div>
+        <div class="float-left">
+          <div class="separator32"></div>
+        </div>
+        <div class="float-left">
+          <a href="" class="icon-left icon-search-office">Найти ближайший офис</a>
+        </div>
+        <div class="float-right">
+          <a href="" class="icon-left icon-eye">Версия для слабовидящих</a>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="middle_menu row align-items-center">
+        <div class="col-2">
+          <nuxt-link class="logo" to="/"></nuxt-link>
+        </div>
+        <div class="col-7">
+          <span v-for="(item, index) in menu" :key="index">
+            <a href="">{{item.title}}</a>
+          </span>
+        </div>
+        <div class="col-3 text-right">
+          <button class="search mr-4"></button>
+          <button  v-if="!isAuthenticated" v-on:click="login" class="gotolk btn_trn btn-p-sm btn-icon-left">Личный кабинет</button>
+          <b-nav-item-dropdown v-else   class="gotolk btn_trn btn-p-sm btn-icon-left" variant="primary">
+            <template slot="button-content">
+              <header-user-name :user-data="loggedInUser"></header-user-name>
+            </template>
+            <b-dropdown-item @click="goInCabinet"><i class="fa fa-home"></i> Личный кабинет</b-dropdown-item>
+            <b-dropdown-item @click="logout"><i class="fa fa-lock"></i> Выход</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </div>
+      </div>
+    </div>
   </header>
 </template>
 
 <script>
-  import HeaderDropdown from './HeaderDropdown.vue'
-  import MainMenu from './MainMenu/MainMenu'
-
+  import HeaderUserName from '../Pages/Cabinet/Header/HeaderUserName'
+  import { mapGetters } from 'vuex';
   export default {
     name: 'c-header',
     components: {
-      HeaderDropdown,
-      MainMenu
+      HeaderUserName
     },
-
-    data() {
-      return {
-        pageId: 415
-      }
-    },
-
     methods: {
-      sidebarToggle (e) {
-        e.preventDefault()
-        document.body.classList.toggle('sidebar-hidden')
+      login () {
+        this.$router.push('/login')
       },
-      sidebarMinimize (e) {
-        e.preventDefault()
-        document.body.classList.toggle('sidebar-minimized')
+      logout() {
+        try {
+          this.$auth.logout();
+          window.$nuxt.$cookiz?.remove('url');
+          this.$router.push('/')
+        } catch (e) {
+          console.log(e)
+        }
       },
-      mobileSidebarToggle (e) {
-        e.preventDefault()
-        document.body.classList.toggle('sidebar-mobile-show')
-      },
-      asideToggle (e) {
-        e.preventDefault()
-        document.body.classList.toggle('aside-menu-hidden')
+      goInCabinet() {
+        this.$router.push('/cabinet')
       }
+    },
+    computed: {
+      menu() {
+        return this.$store.getters["pages/getMenu"];
+      },
+      ...mapGetters(['isAuthenticated','loggedInUser']),
     }
   }
 </script>
 <style scoped>
-.header-dropdown-button {
-  padding-right: 40px;
-}
-.app-header.navbar {
-  border-bottom: 1px solid #f0f3f5;
-}
-.app-header.navbar .navbar-brand {
-  border-bottom: 1px solid #f0f3f5;
-}
+  .logo {
+    width: 120px;
+    height: 40px;
+
+    display: block;
+  }
+  .buy-block {
+    background: #36AB4D;
+    border-radius: 10px;
+    height: 80px;
+  }
+  .logo {background:url(/img/main/logo.svg) 0 0 no-repeat;}
+  .search{background:url(/img/main/search.svg) 0 0 no-repeat;height:16px; width:16px; border:0;}
 </style>
