@@ -6,6 +6,8 @@ export const state = () => ({
   mainMenuId: null,
   footerMenu: null,
   footerMenuId: null,
+  breadcrumbs: null,
+  isShowBreadcrumbs: false,
   config: null
 })
 
@@ -20,6 +22,8 @@ export const getters = {
   getFooterMenu: state => state.footerMenu,
   getMainMenuId: state => state.mainMenuId,
   getFooterMenuId: state => state.footerMenuId,
+  getBreadCrumbs: state => state.breadcrumbs,
+  getShowBreadCrumbs: state => state.isShowBreadcrumbs,
   getConfig: state => state.config
 }
 
@@ -58,6 +62,8 @@ export const actions = {
       .then(async (res) => {
         if (res.status === 200) {
           commit('setPage', res.data);
+          commit('setBreadCrumbs', res.data.wpreso.autobreadcrumbs);
+          commit('setShowBreadCrumbs', res.data.acf.skip_breadcrumbs);
         }
       })
     } catch(e) {
@@ -93,5 +99,11 @@ export const mutations = {
   },
   setConfig(state, params) {
     state.config = params;
+  },
+  setBreadCrumbs(state, params) {
+    state.breadcrumbs = params;
+  },
+  setShowBreadCrumbs(state, params) {
+    state.isShowBreadcrumbs = params;
   }
 }

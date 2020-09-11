@@ -71,6 +71,12 @@ input {
     margin-top: 1rem;
 }
 
+.btn {
+    height: 40px;
+    border: 0;
+    cursor: pointer;
+}
+
 .btn-secondary:not(.link-button,
 .link-arrow-right,
 .arrow-right-bold,
@@ -89,6 +95,11 @@ input {
     color: #FFFFFF;
 }
 
+.btn-success:hover {
+    background: #38C183;
+    box-shadow: 2px 8px 32px rgba(91, 206, 150, 0.35);
+}
+
 .btn-outline-success {
     border: 1px solid #008B4E;
     border-radius: 50px;
@@ -101,10 +112,14 @@ input {
     letter-spacing: 1px;
     text-transform: uppercase;
     color: #22A66A;
+    border: 1px solid #008B4E;
+    background-color: transparent;
 }
 
 .btn-outline-success:hover {
     color: #fff;
+    background: linear-gradient(0deg, #22A66A, #22A66A), linear-gradient(360deg, #F8FCF9 -10.05%, #FFFFFF 100%);
+    border: 1px solid #5FB456;
 }
 
 
