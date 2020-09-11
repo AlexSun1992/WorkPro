@@ -1707,6 +1707,7 @@ ul.dropdown-menu li:hover {
     height: 30px;
     position: absolute;
     top: 18px;
+    padding: 0;
 }
 
 .block-title.title-bottom-line span {
@@ -1742,6 +1743,7 @@ ul.dropdown-menu li:hover {
     right: 5px;
     opacity: 0;
     transition: 0.3s;
+    padding: 0;
 }
 
 .btn_delete:after {
