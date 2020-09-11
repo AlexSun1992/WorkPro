@@ -648,3 +648,53 @@ a.icon-arrow-right:after {
 .navbar-dark .navbar-text a:hover {
     color: #fff
 }
+
+.dropdown.gotolk {
+    font-size: 1rem;
+    display: inline-block;
+    list-style: none;
+    line-height: 0;
+    position: relative;
+}
+
+.dropdown.gotolk .dropdown-menu {
+    display: none;
+}
+
+.dropdown.gotolk:after {
+    width: 8px;
+    height: 8px;
+    border-left: 2px solid #36AB4D;
+    border-bottom: 2px solid #36AB4D;
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    transform: rotate(-135deg);
+    transition: 0.3s;
+}
+
+.dropdown.gotolk.show:after {
+    transform: rotate(-45deg);
+    top: 5px;
+    transition: 0.3s;
+}
+
+.nav-item.gotolk.show .dropdown-menu {
+    display: block;
+    list-style: none;
+    padding: 5px 0 0;
+    text-align: right;
+    line-height: 1.5rem;
+}
+
+.middle_menu .gotolk a {
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1rem;
+}
+
+.middle_menu .gotolk .ppl-avatar {
+    display: none;
+}
