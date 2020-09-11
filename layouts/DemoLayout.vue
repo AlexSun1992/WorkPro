@@ -1,5 +1,4 @@
 <template>
-
   <div class="app">
     <Header @mini-sidebar="changeMobileSidebar"/>
     <div class="wrapper" v-bind:class="{'sidebar-min': sideBarMini, 'mobile_menu': sideBarMobileMini }">
@@ -82,7 +81,7 @@
             }
         },
     }
-    
+
 </script>
 <style lang="scss" scoped>
     @import '~/assets/scss/style_new.scss'

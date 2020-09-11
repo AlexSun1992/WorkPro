@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="relative">
-      <a href="/" class="header-logo"></a>
+      <nuxt-link to="/" class="header-logo"></nuxt-link>
       <div class="header-text col-auto mr-auto">
         Страхование на все случаи жизни
       </div>
