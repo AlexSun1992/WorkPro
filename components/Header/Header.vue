@@ -26,7 +26,7 @@
         </div>
         <div class="col-7">
           <span v-for="(item, index) in menu" :key="index">
-            <a href="">{{item.title}}</a>
+             <nuxt-link  :to="item.link.url">{{item.title}}</nuxt-link>
           </span>
         </div>
         <div class="col-3 text-right">
