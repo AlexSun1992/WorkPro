@@ -127,6 +127,15 @@
       destroyForm () {
         this.$store.dispatch('blocks/destroyForm');
       },
+      isFieldExists(name) {
+        return Boolean(this.getField(name));
+      },
+      getField(name) {
+        return this.editDataForm.find(item => item.name === name);
+      },
+      getFieldValue(name) {
+        return this.getField(name).value;
+      },
       async saveForm () {
         try {
           if(validateData(this.editDataForm)){
