@@ -1,7 +1,9 @@
 <template>
   <div class="app main_page">
     <Header/>
-    <b-breadcrumb prefetch :items="breadcrumbs"></b-breadcrumb>
+    <div class="container">
+      <b-breadcrumb prefetch :items="breadcrumbs"></b-breadcrumb>
+    </div>
     <div class="app-body">
       <main class="main">
         <!--<breadcrumb :list="list"/>-->
