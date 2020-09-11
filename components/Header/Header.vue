@@ -24,17 +24,17 @@
         <div class="col-2">
           <nuxt-link class="logo" to="/"></nuxt-link>
         </div>
-        <div class="col-7">
+        <div class="col-6">
           <span v-for="(item, index) in menu" :key="index">
              <nuxt-link  :to="item.link.url">{{item.title}}</nuxt-link>
           </span>
         </div>
-        <div class="col-3 text-right">
+        <div class="col-4 text-right">
           <button class="search mr-4"></button>
           <button  v-if="!isAuthenticated" v-on:click="login" class="gotolk btn_trn btn-p-sm btn-icon-left">Личный кабинет</button>
-          <b-nav-item-dropdown v-else   class="gotolk btn_trn btn-p-sm btn-icon-left" variant="primary">
+          <b-nav-item-dropdown v-else   class="gotolk icon-right" variant="primary">
             <template slot="button-content">
-              <header-user-name :user-data="loggedInUser"></header-user-name>
+              <header-user-name :user-data="loggedInUser" class="color-green"></header-user-name>
             </template>
             <b-dropdown-item @click="goInCabinet"><i class="fa fa-home"></i> Личный кабинет</b-dropdown-item>
             <b-dropdown-item @click="logout"><i class="fa fa-lock"></i> Выход</b-dropdown-item>

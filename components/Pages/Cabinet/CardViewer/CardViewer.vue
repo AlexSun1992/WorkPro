@@ -21,7 +21,7 @@
             @load="dataLoaded=true"
             @cancel="refresh()"
             :params="params"
-            class="bg-six block-border-one block col"
+            class="bg-six block-border-one block col p-4"
           ></card-viewer-info>
           <side-block class="col-xl-3 d-none d-xl-block">
             <slot></slot>
@@ -100,10 +100,6 @@ export default {
 .profile {
   display: flex;
   justify-content: space-between;
-  min-height: 450px;
-}
-/deep/ .modal-dialog {
-  width: 95vw;
-  max-width: 100%;
+
 }
 </style>

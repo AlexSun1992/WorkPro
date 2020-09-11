@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" no-close-on-backdrop @close="cancelCard" centered v-model="editData.show">
+    <b-modal :modal-class="myclass" v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" no-close-on-backdrop @close="cancelCard" centered v-model="editData.show">
       <card :data="editData.data" @actions="actions=$event" @update="updateNumber($event)"></card>
       <action-button :disabled="noPhone" class="w-100" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
       <template v-slot:modal-footer="{ ok, cancel }">
@@ -28,6 +28,7 @@
     props: ['data', 'params', 'edit', 'context'],
     data () {
       return {
+        myclass: ['cabinet'],
         editForm: true,
         editDataForm: this.data,
         editData: null,
