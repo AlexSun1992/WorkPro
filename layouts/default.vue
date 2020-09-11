@@ -10,7 +10,7 @@
         </div>
       </main>
     </div>
-    <Footer/>
+    <!--<Footer/>-->
   </div>
 </template>
 <script>
