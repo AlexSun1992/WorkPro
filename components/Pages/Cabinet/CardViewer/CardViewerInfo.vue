@@ -96,6 +96,7 @@ export default {
           fields.push(...item.$refs.form.items);
           fields = fields.filter(item => item.name !== 'SEMPTY');
         });
+      }
       if(true){
         try {
           if(this.context == 'profile'){
