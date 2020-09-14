@@ -84,16 +84,12 @@ export default {
         this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[1]);
         this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[0]);
       } else {
-        this.$emit("update", this.suggestions.data[index]);
+        this.$emit("update", {fieldId:this.data.fieldId, isTab:this.data.isTab, value:this.suggestions.data[index], page: this.data.page});
       }
-      this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:this.suggestions.data[index], page: this.data.page});
       this.open = false;
     },
     async getSuggestions(name) {
-      this.$emit('changed-field', {
-        name,
-        value: this.data.value
-      });
+      this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:this.data.value, page: this.data.page});
       let API_KEY = '7a6080c3383b4dc69e786e1cd5c88366ab58a14c';
       this.open = true;
       this.current = 0;

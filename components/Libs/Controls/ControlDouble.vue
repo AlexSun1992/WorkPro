@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     updateField(e) {
-      debugger
       this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value: Number(e), page: this.data.page})
     }
   }

@@ -52,11 +52,9 @@ export default {
   },
   methods: {
     updateValue(e) {
-      debugger
       this.$store.commit('card/setWizardField', e);
     },
     clearRelation(e) {
-      debugger
       this.$store.commit('card/clearWizardRelationField', e);
     }
   }
