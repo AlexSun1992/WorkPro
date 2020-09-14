@@ -29,8 +29,8 @@ export const getters = {
 
 export const actions = {
   async setMenuIDs({commit, state}) {
-    let mainMenuId = state.currentPage.wpreso.inherited.main_menu_id;
-    let footerMenuId = state.currentPage.wpreso.inherited.footer_menu_id;
+    let mainMenuId = state.currentPage.wpreso.properties.main_menu_id;
+    let footerMenuId = state.currentPage.wpreso.properties.footer_menu_id;
     commit('setMenuIDs', {mainMenuId, footerMenuId});
   },
 
@@ -63,11 +63,12 @@ export const actions = {
         if (res.status === 200) {
           commit('setPage', res.data);
           commit('setBreadCrumbs', res.data.wpreso.autobreadcrumbs);
-          commit('setShowBreadCrumbs', res.data.acf.skip_breadcrumbs);
+          commit('setShowBreadCrumbs', res.data.wpreso.properties.skip_breadcrumbs ? false : true);
         }
       })
     } catch(e) {
-      commit('setPage', e?.response?.data);
+      console.log(e)
+      //commit('setPage', e.response.data);
     }
   },
 
