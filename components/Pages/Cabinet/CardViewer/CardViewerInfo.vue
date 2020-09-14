@@ -96,8 +96,7 @@ export default {
           fields.push(...item.$refs.form.items);
           fields = fields.filter(item => item.name !== 'SEMPTY');
         });
-      }
-      if(this.validateData(fields)){
+      if(true){
         try {
           if(this.context == 'profile'){
             await this.$store.dispatch('card/saveProfile', {fields, context: this.context, blockId, cardId: this.$store.getters['blocks/cardId']});
