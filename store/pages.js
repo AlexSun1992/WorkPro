@@ -63,7 +63,7 @@ export const actions = {
         if (res.status === 200) {
           commit('setPage', res.data);
           commit('setBreadCrumbs', res.data.wpreso.autobreadcrumbs);
-          commit('setShowBreadCrumbs', res.data.acf.skip_breadcrumbs);
+          commit('setShowBreadCrumbs', res.data.wpreso.properties.skip_breadcrumbs ? true : false);
         }
       })
     } catch(e) {

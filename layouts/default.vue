@@ -2,7 +2,7 @@
   <div class="app main_page">
     <Header/>
     <div class="container">
-      <b-breadcrumb prefetch :items="breadcrumbs"></b-breadcrumb>
+      <b-breadcrumb v-if="showBreadcrumbs" :prefetch="true" :items="breadcrumbs"></b-breadcrumb>
     </div>
     <div class="app-body">
       <main class="main">
