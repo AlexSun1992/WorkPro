@@ -63,11 +63,12 @@ export const actions = {
         if (res.status === 200) {
           commit('setPage', res.data);
           commit('setBreadCrumbs', res.data.wpreso.autobreadcrumbs);
-          commit('setShowBreadCrumbs', res.data.wpreso.properties.skip_breadcrumbs ? true : false);
+          commit('setShowBreadCrumbs', res.data.wpreso.properties.skip_breadcrumbs ? false : true);
         }
       })
     } catch(e) {
-      commit('setPage', e?.response?.data);
+      console.log(e)
+      //commit('setPage', e.response.data);
     }
   },
 
