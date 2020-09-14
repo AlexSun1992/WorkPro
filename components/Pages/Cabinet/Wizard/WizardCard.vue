@@ -127,14 +127,14 @@
       destroyForm () {
         this.$store.dispatch('blocks/destroyForm');
       },
-      isFieldExists(name) {
-        return Boolean(this.getField(name));
+      isFieldExists(name, data = undefined) {
+        return Boolean(this.getField(name, data));
       },
-      getField(name) {
-        return this.editDataForm.find(item => item.name === name);
+      getField(name, data = this.editDataForm) {
+        return data.find(item => item.name === name);
       },
-      getFieldValue(name) {
-        return this.getField(name).value;
+      getFieldValue(name, data = undefined) {
+        return this.getField(name, data).value;
       },
       async saveForm () {
         try {
