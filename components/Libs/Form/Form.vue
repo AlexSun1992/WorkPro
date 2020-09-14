@@ -4,7 +4,8 @@
       <div>
         <!-- {{ defaultPlug }} -->
       </div>
-      <Control  v-for='(item, index) in items' @edit="$emit('edit', $event)" @update="$emit('update', $event)" :key='index' v-bind:data="item" :edit="edit" :cols="cols"></Control>
+      <!-- <Control  v-for='(item, index) in items' @edit="$emit('edit', $event)" @update="$emit('update', $event)" :key='index' v-bind:data="item" :edit="edit" :cols="cols"></Control> -->
+      <Control  v-for='(item, index) in items' @update="updateValue($event)" @clear="clearRelation($event)" @edit="$emit('edit', $event)" :key='index' v-bind:data="item" :edit="edit" :cols="cols"></Control>
     </b-form-row>
   </div>
 </template>
@@ -47,6 +48,16 @@ export default {
       if (this.counter == this.data.length) {
           return 'Нет данных для отображения'
         }
+    }
+  },
+  methods: {
+    updateValue(e) {
+      debugger
+      this.$store.commit('card/setWizardField', e);
+    },
+    clearRelation(e) {
+      debugger
+      this.$store.commit('card/clearWizardRelationField', e);
     }
   }
 }

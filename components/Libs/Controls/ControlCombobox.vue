@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form-group :label="data.label" :class="{required: data.required}" :label-for="data.name" :label-cols="data.labelCols ? '' : 2" :label-class="data.labelCols">
-      <b-form-select v-model="fieldValue" :options="data.options" size="sm" class="mt-3"></b-form-select>
+      <b-form-select v-model="data.value" @input="updateField" :options="data.options" size="sm" class="mt-3"></b-form-select>
     </b-form-group>
   </div>
 </template>
@@ -23,14 +23,9 @@ export default {
       default: () => false
     }
   },
-  computed: {
-    fieldValue: {
-      get: function () {
-        return String(this.data.value)
-      },
-      set: function (value) {
-        this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, isTab:this.data.isTab, value: String(value), page: this.data.page});
-      }
+  methods: {
+    updateField(e){
+      this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value: String(e), page: this.data.page})
     }
   }
 }
