@@ -97,7 +97,8 @@ export default {
           fields = fields.filter(item => item.name !== 'SEMPTY');
         });
       }
-      if(true){
+      if(this.validateData(fields)){
+        // Убрать ошибку vuex this.validateData(fields)!
         try {
           if(this.context == 'profile'){
             await this.$store.dispatch('card/saveProfile', {fields, context: this.context, blockId, cardId: this.$store.getters['blocks/cardId']});
