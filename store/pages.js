@@ -29,8 +29,8 @@ export const getters = {
 
 export const actions = {
   async setMenuIDs({commit, state}) {
-    let mainMenuId = state.currentPage.wpreso.inherited.main_menu_id;
-    let footerMenuId = state.currentPage.wpreso.inherited.footer_menu_id;
+    let mainMenuId = state.currentPage.wpreso.properties.main_menu_id;
+    let footerMenuId = state.currentPage.wpreso.properties.footer_menu_id;
     commit('setMenuIDs', {mainMenuId, footerMenuId});
   },
 
