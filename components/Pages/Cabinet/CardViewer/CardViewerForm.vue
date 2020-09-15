@@ -22,7 +22,7 @@
   import ActionButton from '../Block/ActionButton'
 
   export default {
-    name: 'CardForm',
+    name: 'CardViewerForm',
     components: {Form, Card, ActionButton},
     props: ['data', 'params', 'edit', 'context'],
     data () {
