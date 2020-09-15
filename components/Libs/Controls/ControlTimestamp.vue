@@ -37,9 +37,13 @@ export default {
   methods: {
     updateField(e){
       this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value: this.data.value, page: this.data.page})
-    },
-    setInputClass() {
-      return data.state === false ? `${state} is-invalid` : state;
+    }
+  },
+  computed: {
+    setInputClass: {
+      get: function () {
+        return this.data.state === false ? `${this.state} is-invalid` : this.state;
+      }
     }
   }
 }
