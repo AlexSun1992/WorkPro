@@ -4,12 +4,12 @@
     <b-tabs v-if="isShowWizard" content-class="mt-4">
       <div v-for="(item, i) in wizardData" :key="i">
         <b-tab v-if="item.title" :title="item.title" :active="isActive(i)">
-          <card-viewer-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="params.settings.edit" :params="params" :context="context"></card-viewer-form>
+          <card-form @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="item.data" :edit="params.settings.edit" :params="params" :context="context"></card-form>
         </b-tab>
       </div>
     </b-tabs>
     <div v-else>
-      <card-viewer-form  @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params" :context="context"></card-viewer-form>
+      <card-form  @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params" :context="context"></card-form>
     </div>
     <div class="mt-3 row button-container" v-if="$store.getters['card/wizardData']">
       <div v-if="params.settings.edit"  class="col-12">
@@ -23,11 +23,11 @@
 
 <script>
 
-import CardViewerForm from '~/components/Pages/Cabinet/CardViewer/CardViewerForm'
+import CardForm from '~/components/Pages/Cabinet/CardViewer/CardForm'
 import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
 export default {
   name: "CardViewerInfo",
-  components: { ActionButton, CardViewerForm },
+  components: { ActionButton, CardForm },
   props: ['params', 'edit', 'context'],
   data() {
     return {

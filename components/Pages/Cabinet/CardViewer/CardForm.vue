@@ -12,8 +12,7 @@
         </b-button>
       </template>
     </b-modal>
-    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" @update="updateForm($event)"  :edit="edit"></Form>
-    <!-- <nuxt-link to="/cabinet/55/0/719"><b-button  type="button">test</b-button></nuxt-link> -->
+    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" @update="updateValue($event)" @clear="clearRelation($event)" :edit="edit"></Form>
   </div>
 </template>
 
@@ -23,7 +22,7 @@
   import ActionButton from '../Block/ActionButton'
 
   export default {
-    name: 'CardViewerForm',
+    name: 'CardForm',
     components: {Form, Card, ActionButton},
     props: ['data', 'params', 'edit', 'context'],
     data () {
@@ -44,6 +43,12 @@
       }
     },
     methods: {
+      updateValue(e) {
+        this.$store.commit('card/setWizardField', e);
+      },
+      clearRelation(e) {
+        this.$store.commit('card/clearWizardRelationField', e);
+      },
       setData () {
         this.editDataForm = this.data;
       },
