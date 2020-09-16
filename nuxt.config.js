@@ -42,6 +42,7 @@ module.exports = {
         '~/plugins/validate',
         '~/plugins/axios',
         '~/plugins/moment',
+        '~/plugins/agile',
         { src: '~plugins/vcalendar.js', ssr: false }
     ],
     /*
