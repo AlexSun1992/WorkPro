@@ -15,7 +15,10 @@
         <ul class="select-finish-items">
           <li v-for="answer in chosenAnswers" :key="answer.id">
             {{ answer.name }}
-            <button class="select-finish-items-del"></button>
+            <button
+              class="select-finish-items-del"
+              @click="deleteAnswer(answer)"
+            ></button>
           </li>
         </ul>
         <Question
@@ -44,7 +47,6 @@ export default {
       chosenAnswers: [],
       quizId: 1,
       firstQuestion: 2100,
-      currentQuestionId: null,
       partnerId: -1,
       pageId: 1
     };
@@ -52,14 +54,21 @@ export default {
   methods: {
     chooseAnswer: function(answer) {
       this.chosenAnswers.push(answer);
-      this.currentQuestionId = Number(answer.properties.nnext_issue);
+    },
+    deleteAnswer: function(answer) {
+      const answerId = this.chosenAnswers.indexOf(answer);
+      this.chosenAnswers.splice(answerId);
     }
   },
   computed: {
+    currentQuestionId() {
+      const lastAnswer = this.chosenAnswers.slice().pop();
+      return lastAnswer
+        ? Number(lastAnswer.properties.nnext_issue)
+        : this.firstQuestion;
+    },
     currentQuestion() {
-      return this.questions.find(
-        item => item.id === (this.currentQuestionId || this.firstQuestion)
-      );
+      return this.questions.find(item => item.id === this.currentQuestionId);
     },
     currentAnswers() {
       return this.answers.filter(item => {
