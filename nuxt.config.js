@@ -42,7 +42,7 @@ module.exports = {
         '~/plugins/validate',
         '~/plugins/axios',
         '~/plugins/moment',
-        '~/plugins/agile',
+        '~/plugins/vue-agile',
         { src: '~plugins/vcalendar.js', ssr: false }
     ],
     /*
@@ -79,7 +79,8 @@ module.exports = {
         vendor: ['axios'],
         extend(config, ctx) {
             config.resolve.alias["vue"] = "vue/dist/vue.common";
-        }
+        },
+        transpile: ['vue-agile']
     },
     proxy: {
         // Simple proxy
