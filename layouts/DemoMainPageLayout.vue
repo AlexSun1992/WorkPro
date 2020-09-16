@@ -23,11 +23,16 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-1_25">
-                <div class="col-12">
-                    <div class="buy-block">
-                        1
-                    </div>
+            <div class="buy-block row mt-1_25 justify-content-md-center align-items-center">
+                <div class="col-auto fsz24 color-white">Я хочу купить полис</div>
+                <div class="col-auto">
+                    <b-dropdown text="ОСАГО" class="m-md-2 dpd-link">
+                        <b-dropdown-item>КАСКО</b-dropdown-item>
+                        <b-dropdown-item>ВЗР</b-dropdown-item>
+                    </b-dropdown>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn">Расчитать</button>
                 </div>
             </div>
             <div class="row flex-wrap">
