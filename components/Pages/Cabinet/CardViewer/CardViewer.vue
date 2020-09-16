@@ -44,6 +44,10 @@ export default {
       show: true,
     };
   },
+  created() {
+    this.$store.dispatch('card/clearCaptions');
+    this.$store.dispatch('card/updateWizard', []);
+  },
   props: ["params", "label", "context"],
   mounted() {
     this.$bvModal.show("profile-modal");

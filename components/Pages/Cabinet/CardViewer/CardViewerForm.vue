@@ -12,7 +12,7 @@
         </b-button>
       </template>
     </b-modal>
-    <Form ref="form" :data="editDataForm" @edit="openEdit($event)" @update="updateValue($event)" @clear="clearRelation($event)" :edit="edit"></Form>
+    <Form :data="editDataForm" @update="updateValue($event)" @clear="clearRelation($event)" :edit="edit"></Form>
   </div>
 </template>
 
