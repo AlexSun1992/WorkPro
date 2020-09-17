@@ -2,7 +2,9 @@
   <div class="app main_page">
     <Header/>
     <div class="container">
-      <b-breadcrumb v-if="showBreadcrumbs" :prefetch="true" :items="breadcrumbs"></b-breadcrumb>
+      <b-breadcrumb v-if="showBreadcrumbs">
+        <b-breadcrumb-item  v-for='(item, index) in breadcrumbs' v-bind:key="item.text"  :to="item.href" :active="item.active" :text="item.text"/>
+      </b-breadcrumb>
     </div>
     <div class="app-body">
       <main class="main">
