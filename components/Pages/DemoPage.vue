@@ -1,21 +1,14 @@
 <template>
-<<<<<<< HEAD
   <div class="slider-bg pt-4 pb-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 block-title">Наши предложения</div>
-    </div>
-    <div class="row d-block">
-      <div class="col-12 p-0">
-    <agile :slidesToShow="4" :dots="false">
-      <div class="block-slider">
-        <div class="block-container block-container-slider">
-=======
-  <div>
-    <agile :slidesToShow="2" :infinite="false">
-      <div class="col-3 d-flex">
-        <div class="block-container mt-1_25">
->>>>>>> master
+    <div class="container">
+      <div class="row">
+        <div class="col-12 block-title">Наши предложения</div>
+      </div>
+      <div class="row d-block">
+        <div class="col-12 p-0">
+      <agile :slidesToShow="4" :dots="false">
+        <div class="block-slider">
+          <div class="block-container block-container-slider">
           <div class="block-title">
             Сезон Renault
           </div>
