@@ -1,6 +1,6 @@
 <template>
   <div>
-    <agile :slidesToShow="2">
+    <agile :slidesToShow="2" :infinite="false">
       <div class="col-3 d-flex">
         <div class="block-container mt-1_25">
           <div class="block-title">
