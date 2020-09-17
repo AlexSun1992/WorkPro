@@ -10,9 +10,14 @@
         <div class="calc-description ">
           {{ stitle_h2 }}
         </div>
-
-        <!-- {calcResult}-->
-        <ul class="select-finish-items">
+        <CalcResult
+          v-if="isCalcStage"
+          :questions="questions"
+          :answers="chosenAnswers"
+          :quizId="quizId"
+          @reset-quiz="resetQuiz"
+        />
+        <ul v-else class="select-finish-items">
           <li v-for="answer in chosenAnswers" :key="answer.id">
             {{ answer.name }}
             <button
@@ -35,9 +40,10 @@ import questions from "./fixtures/questions";
 import answers from "./fixtures/answers";
 
 import Question from "./Question";
+import CalcResult from "./CalcResult";
 
 export default {
-  components: { Question },
+  components: { Question, CalcResult },
   data() {
     return {
       stitle_h1: "Калькулятор ОСАГО",
@@ -58,6 +64,9 @@ export default {
     deleteAnswer: function(answer) {
       const answerId = this.chosenAnswers.indexOf(answer);
       this.chosenAnswers.splice(answerId);
+    },
+    resetQuiz: function() {
+      this.chosenAnswers = [];
     }
   },
   computed: {
@@ -78,6 +87,12 @@ export default {
           String(item.properties.lactive) === "1"
         );
       });
+    },
+    isCalcStage() {
+      return (
+        this.currentQuestion &&
+        this.currentQuestion.properties.sshow_type === "SYSTEM_END"
+      );
     }
   }
 };
