@@ -205,6 +205,8 @@ header {
     background: #36AB4D;
     border-radius: 10px;
     height: 80px;
+    position: relative;
+    z-index: 1;
 }
 
 .mt-1_25 {
@@ -219,7 +221,7 @@ header {
     height: 48px;
     font-weight: 700;
     font-size: 14px;
-    line-height: 16px;
+    line-height: 48px;
     text-transform: uppercase;
     color: #36AB4D;
     cursor: pointer;
@@ -231,14 +233,14 @@ header {
 }
 
 .btn-p-sm.btn-icon-left {
-    padding-left: 36px;
+    padding-left: 42px;
 }
 
 .btn-icon-right {
     padding-right: 36px;
 }
 
-.block-container .block-button a {
+.block-button a {
     font-weight: 500;
     font-size: 1.25rem;
     text-decoration: underline;
@@ -251,7 +253,7 @@ header {
     display: inline-block;
 }
 
-.block-container .block-button a:hover {
+.block-button a:hover {
     background: #36AB4D;
     box-shadow: 0px 16px 16px -8px rgba(0, 193, 19, 0.3);
     border-radius: 6px;
@@ -271,12 +273,12 @@ a.icon-arrow-right:after {
     border-bottom: 2px solid #36AB4D;
     content: "";
     position: absolute;
-    top: 23px;
+    top: 22px;
     right: 0;
     transform: rotate(-135deg);
 }
 
-.block-container .block-button a.icon-arrow-right:hover:after {
+.block-button a.icon-arrow-right:hover:after {
     right: 16px;
     border-left: 2px solid #fff;
     border-bottom: 2px solid #fff;
@@ -648,6 +650,20 @@ a.icon-arrow-right:after {
     color: #fff
 }
 
+.gotolk:not(.show) {
+    position: relative;
+}
+
+.gotolk:not(.show):before {
+    background: url(/img/icon-ppl.svg) 0 0 no-repeat;
+    position: absolute;
+    content: "";
+    top: 15px;
+    left: 16px;
+    width: 16px;
+    height: 16px;
+}
+
 .dropdown.gotolk {
     font-size: 1rem;
     display: inline-block;
@@ -666,7 +682,7 @@ a.icon-arrow-right:after {
     border-bottom: 2px solid #36AB4D;
     content: "";
     position: absolute;
-    top: 5px;
+    top: 9px;
     right: 15px;
     transform: rotate(-135deg);
     transition: 0.3s;
@@ -674,22 +690,36 @@ a.icon-arrow-right:after {
 
 .dropdown.gotolk.show:after {
     transform: rotate(-45deg);
-    top: 5px;
+    top: 7px;
     transition: 0.3s;
 }
 
 .dropdown.show .dropdown-menu {
     display: block;
     list-style: none;
-    text-align: right;
     line-height: 1.5rem;
-    padding: 16px 26px;
+    padding: 1rem 0;
     background: #FFFFFF;
     border: 1px solid #E3EAE5;
     box-sizing: border-box;
     box-shadow: 0px 13px 5px -9px rgba(144, 144, 144, 0.08);
     border-radius: 14px;
     margin-top: 11px;
+}
+
+.dropdown.show .dropdown-menu li a {
+    line-height: 2rem;
+    padding: 0 26px;
+    height: 2rem;
+    color: #000;
+    display: block;
+    font-size: 1rem;
+}
+
+.dropdown.show .dropdown-menu li a:hover {
+    color: #fff;
+    text-decoration: none;
+    background-color: #2B9CCA;
 }
 
 .dropdown.show.gotolk .dropdown-menu {
@@ -700,7 +730,6 @@ a.icon-arrow-right:after {
     padding: 0;
     margin: 0;
     font-size: 1rem;
-    line-height: 1rem;
 }
 
 .middle_menu .gotolk .ppl-avatar {
@@ -747,4 +776,119 @@ li.breadcrumb-item:not(:first-of-type):after {
 
 .fsz24 {
     font-size: 1.5rem;
+}
+
+.buy-block .dpd-link button {
+    font-size: 1.5rem;
+    color: #fff;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.buy-block .dpd-link button:after {
+    content: "";
+    border-bottom: 1px dashed #fff;
+    position: absolute;
+    top: 34px;
+    left: 0;
+    width: 100%;
+}
+
+.buy-block .dpd-link button:before {
+    width: 8px;
+    height: 8px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    content: "";
+    position: absolute;
+    top: 15px;
+    right: -15px;
+    transform: rotate(-45deg);
+    transition: 0.3s;
+}
+
+.btn-large {
+    background: linear-gradient(360deg, #F8FCF9 -10.05%, #FFFFFF 100%);
+    border: 1px solid #36AB4D;
+    box-sizing: border-box;
+    border-radius: 6px;
+    height: 48px;
+    margin: 0;
+    padding: 0 16px 0 16px;
+    color: #36AB4D;
+    text-decoration: none;
+    transition: background .3s;
+    font-weight: 700;
+    font-size: 0.85rem;
+    line-height: 3rem;
+    text-align: center;
+}
+
+.btn-large.btn-arrow-right {
+    padding: 0 36px 0 16px;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.btn-large.btn-arrow-right:after {
+    width: 8px;
+    height: 8px;
+    border-left: 2px solid #36AB4D;
+    border-bottom: 2px solid #36AB4D;
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    transform: rotate(-135deg);
+}
+
+button {
+    cursor: pointer;
+}
+
+.diagramm-img {
+    width: 176px;
+    height: 182px;
+    text-align: center;
+    line-height: 176px;
+    background: url(/img/main/diagramm-bg.svg);
+    font-weight: 200;
+    font-size: 1.6875rem;
+}
+
+.diagramm-img span {
+    color: #2B9CCA;
+    font-weight: 300;
+    font-size: 3.5625rem;
+    letter-spacing: -5px;
+}
+
+.diagramm-description {
+    font-weight: 300;
+    margin-top: 0.85rem;
+    font-size: 1rem;
+}
+
+.diagramm-block {
+    width: 176px;
+    margin: 0 auto;
+}
+
+.fsz40 {
+    font-size: 2.5rem;
+    line-height: 2.75rem;
+}
+
+.fw500 {
+    font-weight: 500;
+}
+
+.diagramm-line {
+    border-bottom: 1px solid #E3EAE5;
+    height: 1px;
 }
