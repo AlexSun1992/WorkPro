@@ -4,6 +4,10 @@ html {
     font-weight: 400;
 }
 
+body {
+    background-color: #fff;
+}
+
 .top_menu {
     border-bottom: 1px solid #ECECEC;
     padding: 4px 0;
@@ -123,7 +127,7 @@ header {
     color: #242424;
 }
 
-.block-container .block-title {
+.block-title {
     font-weight: 500;
     font-size: 2rem;
     line-height: 2.5rem;
@@ -165,10 +169,20 @@ header {
     grid-row-gap: 2rem;
 }
 
+.block-container-slider {
+    display: grid;
+    grid-template-columns: auto 60px;
+    grid-template-areas: "title img" "description description" "button button";
+    grid-template-rows: minmax(60px, max-content) auto 1rem;
+    grid-row-gap: 1rem;
+}
+
+.block-container-slider .block-title,
 .block-container-big .block-title {
     grid-area: title;
 }
 
+.block-container-slider .block-description,
 .block-container-big .block-description {
     grid-area: description;
 }
@@ -177,10 +191,12 @@ header {
     grid-area: description;
 }
 
+.block-container-slider .block-img,
 .block-container-big .block-img {
     grid-area: img;
 }
 
+.block-container-slider .block-button,
 .block-container-big .block-button {
     grid-area: button;
 }
@@ -189,11 +205,11 @@ header {
     text-align: center;
 }
 
-.block-container .block-button {
+.block-container:not(.block-container-slider) .block-button {
     text-align: center;
 }
 
-.block-container:not(.block-container-big) .block-button a:first-of-type {
+.block-container:not(.block-container-big):not(.block-container-slider) .block-button a:first-of-type {
     float: left;
 }
 
@@ -211,6 +227,47 @@ header {
 
 .mt-1_25 {
     margin-top: 1.25rem;
+}
+
+.block-container-slider .block-title {
+    padding-right: 20px;
+}
+
+.block-container-slider .block-img {
+    max-width: 60px;
+    max-height: 60px;
+    align-self: start;
+}
+
+.block-container.block-container-slider {
+    padding: 24px;
+}
+
+.block-container-slider .block-title {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.block-container-slider .block-description {
+    line-height: 1.25rem;
+}
+
+.block-container-slider .block-description span {
+    color: #2B9CCA;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    display: block;
+    font-weight: 400;
+}
+
+.block-container-slider .block-button a {
+    font-size: 1rem;
+    float: none !important;
+    margin: 0;
+    height: 1rem;
+    line-height: 1rem;
+    position: relative;
+    padding: 0;
 }
 
 .btn_trn {
@@ -891,4 +948,48 @@ button {
 .diagramm-line {
     border-bottom: 1px solid #E3EAE5;
     height: 1px;
+}
+
+.agile__actions {
+    display: block;
+    position: absolute;
+    top: -54px;
+    right: 15px;
+}
+
+.agile {
+    margin-top: 1.5rem;
+}
+
+.block-container-slider,
+.block-slider {
+    height: 100%;
+}
+
+.block-container-slider:hover {
+    box-shadow: 0px 13px 16px rgba(115, 157, 129, 0.28);
+}
+
+.block-container-slider .block-button a:hover {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    text-decoration: none;
+    color: #5FB456;
+    line-height: 1rem;
+    height: 1rem;
+}
+
+.block-container-slider .block-button a:after,
+.block-container-slider .block-button a:hover:after {
+    top: 5px;
+    right: -10px;
+}
+
+.block-container-slider a.icon-arrow-right:hover:after {
+    border-left: 2px solid #5FB456;
+    border-bottom: 2px solid #5FB456;
 }

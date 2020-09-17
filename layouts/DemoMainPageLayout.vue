@@ -153,7 +153,7 @@
                     
                 </div>
 
-                <div class="row">
+                <div class="row d-none">
                     <div class="col-3 d-flex">
                         <div class="block-container mt-1_25">
                             <div class="block-title">
