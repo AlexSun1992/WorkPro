@@ -4,10 +4,9 @@
       <img v-if="isLoading" src="./img/loader.gif" style="height: 24px;" />
       <!-- {this.state.isLoading ? preloader : fetchedResult} -->
       <div v-else>
-        <span class="h1">
-          {{ this.premiumRub }}
-        </span>
-        <span>.{{ this.premiumKop }} ₽</span>
+        <span class="h1">{{ this.premiumRub }}</span
+        ><!--
+        --><span>.{{ this.premiumKop }} ₽</span>
         <span class="finish-price-text">
           &nbsp;— предварительная стоимость полиса
         </span>
