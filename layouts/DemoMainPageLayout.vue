@@ -28,7 +28,10 @@
           <div class="buy-block d-flex mt-1_25 justify-content-md-center align-items-center">
             <div class="col-auto pr-0 fsz24 color-white">Я хочу купить полис</div>
             <div class="col-auto pl-0">
-              <b-dropdown :text="textSelected ? textSelected : 'ОСАГО'" class="m-md-2 dpd-link" right>
+              <b-dropdown  class="m-md-2 dpd-link" right>
+                <template v-slot:button-content>
+                  <span v-text="textSelected ? textSelected : 'ОСАГО'"></span>
+                </template>
                 <b-dropdown-item @click="textSelected = 'ОСАГО';valueSelected = 'osago'" value="osago">ОСАГО
                 </b-dropdown-item>
                 <b-dropdown-item @click="textSelected = 'КАСКО';valueSelected = 'casco'" value="casco">КАСКО
