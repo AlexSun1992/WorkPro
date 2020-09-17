@@ -16,6 +16,7 @@
           :value="item.id"
           :key="item.id"
           @click="$emit('choose-answer', item)"
+          :style="item.properties.sli_css_class"
         >
           {{ item.name }}
         </li>
