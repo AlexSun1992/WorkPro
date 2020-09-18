@@ -19,7 +19,8 @@ export const state = () => ({
   wizardData: null,
   cardForm: null,
   isTab: false,
-  isFormChanged: false
+  isFormChanged: false,
+  captions: null
 })
 
 export const getters = {
@@ -42,6 +43,7 @@ export const getters = {
   componentType: state => state.componentType,
   cardId: state => state.cardId,
   wizardData: state => state.wizardData,
+  wizardCaptions: state => state.captions,
   isTab: state => state.isTab,
   isFormChanged: state => state.isFormChanged,
   getWizardDataFieldByName: state => name => {
@@ -120,28 +122,11 @@ export const actions = {
       commit('setWizardData', card.data.metaData.data);
       return;
     }
-    let captions = card.data.metaData.captions.split(';');
+    let captions = card.data.metaData.captions.split(';')
     captions.pop();
-    let fields = card.data.metaData.data;
-    let tabs = captions.map(caption => {
-      return {
-        'title': caption,
-        'data': []
-      };
-    });
-    // Вынести в общую функцию (см. выше)
-    fields.forEach(item => {
-      tabs[item.page]['data'].push(item);
-    });
-    tabs.forEach(tab => {
-      let obj = {};
-      let cols = [];
-      obj.title = tab.title;
-      tab.data.forEach(field => {
-        cols.push(field.cols);
-      });
-    });
-    commit('setWizardData', tabs);
+
+    commit('setWizardCaptions', captions);
+    commit('setWizardData', card.data.metaData.data);
     commit('setShowWizard', true);
     commit('setShowFilter', false);
     commit('setShowList', false);
@@ -153,6 +138,10 @@ export const actions = {
 
   updateWizardField({commit}, data) {
     commit('setWizardField', data);
+  },
+
+  clearCaptions({commit}) {
+    commit('clearCaptions');
   },
 
   async applyFilter ({commit, dispatch, getters}, filters) {
@@ -290,6 +279,12 @@ export const mutations = {
   setWizardData(state, data) {
     state.wizardData = data
   },
+  setWizardCaptions(state, data) {
+    state.captions = data
+  },
+  clearCaptions(state) {
+    state.captions = null
+  },
   setCardForm(state, data) {
     state.cardForm = data
   },
@@ -303,13 +298,7 @@ export const mutations = {
     state.cardForm = null;
   },
   setWizardField(state, data) {
-    let item;
-    if(data.isTab){
-      item = state.wizardData[data.page]['data'].find(d => d.fieldId === data.fieldId)
-    }
-    else {
-      item = state.wizardData.find(d => d.fieldId === data.fieldId)
-    }
+    let item = state.wizardData.find(d => d.fieldId === data.fieldId)
     if (item) {
       item.value = data.value
     }

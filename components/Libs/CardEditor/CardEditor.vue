@@ -1,15 +1,125 @@
 <template>
-<div>
-  <Form  :data="formData"></Form>
-</div>
+  <div>
+    <Form :data="editDataForm" @update="updateValue($event)" @clear="clearRelation($event)" :edit="edit"></Form>
+  </div>
 </template>
 
 <script>
+  import Form from '~/components/Libs/Form/Form'
   export default {
-    name: 'CardEditor'
+    name: 'CardEditor',
+    components: {Form},
+    props: ['data', 'params', 'edit'],
+    data () {
+      return {
+        myclass: ['cabinet'],
+        editForm: true,
+        editDataForm: this.data,
+        editData: null,
+        actions: null,
+        cardId: null,
+        body: null,
+        number: null,
+        code: null,
+        email: null,
+        noPhone: true,
+        noCode: true,
+        noEmail: true,
+      }
+    },
+    methods: {
+      updateValue(e) {
+        this.$store.commit('card/setWizardField', e);
+      },
+      clearRelation(e) {
+        this.$store.commit('card/clearWizardRelationField', e);
+      },
+      setData () {
+        this.editDataForm = this.data;
+      },
+      openEdit(e) {
+        this.editData = e;
+        this.cardId = this.editData.data.name.split('Card')[1];
+      },
+      destroyForm () {
+        this.$store.dispatch('blocks/destroyForm');
+      },
+      updateForm (e) {
+        console.log(e)
+      },
+      async saveCard() {
+        let params = {
+          "idItem": this.cardId
+        };
+        if (this.cardId == 719) {
+          params['NUMBER'] = this.number;
+          params['CODE'] = this.code
+        }
+        else if (this.cardId == 718) {
+          params['NEWEMAIL'] = this.email;
+        }
+        let resp = await this.$store.dispatch('card/editCard', params);
+        if (resp?.status == 200) {
+          this.$emit('saved');
+          this.$emit('field-changed');
+        }
+        else {
+          this.$emit('error');
+        }
+      },
+      cancelCard() {
+        this.noPhone = true;
+        this.noCode = true;
+        this.noEmail = true;
+        this.phone = null;
+        this.code = null;
+        this.email = null;
+      },
+      updateNumber(e) {
+        if (e.name === 'SNEWPHONE') {
+          this.number = e.value;
+          this.body = {
+            "sNumber": e.value
+          }
+        } else if (e.name === 'SCODEFIELD') {
+          this.code = e.value;
+        } else if (e.name === 'SNEWEMAIL') {
+          this.email = e.value;
+        }
+      }
+    },
+    watch: {
+      'data': 'setData',
+      editDataForm: {
+        handler: function(newValue) {
+          //this.$store.commit('card/setWizardData', JSON.parse(JSON.stringify(newValue)));
+        },
+        deep: true
+      },
+      number(val) {
+        const reg = /^[0-9]{10}$/;
+        this.noPhone = !reg.test(val);
+      },
+      code(val) {
+        const reg = /^[0-9]{4}$/;
+        this.noCode = !reg.test(val);
+      },
+      email(val) {
+        const reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        this.noEmail = !reg.test(val);
+      }
+    }
   }
 </script>
 
 <style scoped>
+  .modal-content {
+    min-height: 500px;
+  }
+  .action-button {
+    position: absolute;
+    right: 220px;
+    bottom: 65px;
+  }
 
 </style>

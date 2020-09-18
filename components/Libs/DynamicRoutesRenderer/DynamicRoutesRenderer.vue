@@ -18,7 +18,9 @@
     components: {VRuntimeTemplate,Calculator},
     data(){
       return {
-        counter: 0
+        counter: 0,
+        textSelected:null,
+        valueSelected: null,
       }
     },
     computed: {

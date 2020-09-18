@@ -13,7 +13,6 @@
         </div>
         <div class="profile row" v-show="$store.getters['card/wizardData']">
           <card-viewer-info
-            :context="context"
             @field-changed="refresh()"
             @saved="showSaveToast()"
             @error="showErrorToast()"
@@ -43,6 +42,10 @@ export default {
       dataLoaded: false,
       show: true,
     };
+  },
+  created() {
+    this.$store.dispatch('card/clearCaptions');
+    this.$store.dispatch('card/updateWizard', []);
   },
   props: ["params", "label", "context"],
   mounted() {
