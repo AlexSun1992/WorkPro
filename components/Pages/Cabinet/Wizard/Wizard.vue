@@ -1,5 +1,5 @@
 <template>
-  <client-only>
+  <client-only placeholder="Загрузка...">
     <div>
       <wizard-card :params="params" :is-edit="isEdit" :module-id="moduleId" :item-id="itemId" :form-data="formCardData" :template-data="templateCardData" v-if="isForm"/>
       <v-runtime-template v-if="!isForm" :template="templateData"></v-runtime-template>

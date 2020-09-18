@@ -161,8 +161,6 @@
               <a href="" class="btn-icon-right icon-arrow-right">О компании</a>
             </div>
           </div>
-
-
         </div>
 
         <div class="row">
