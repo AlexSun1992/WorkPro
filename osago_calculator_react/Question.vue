@@ -27,6 +27,11 @@
           class="mt-3"
         ></b-form-select>
       </div>
+      <div v-else-if="question.SSHOW_TYPE === 'SYSTEM_END'" />
+      <div v-else>
+        Отображения вопроса SSHOW_TYPE = "{{ question.SSHOW_TYPE }}" не
+        реализовано
+      </div>
     </div>
   </div>
 </template>
