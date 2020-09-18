@@ -95,13 +95,15 @@ export default {
     }
   },
   created: async function() {
-    const params = new URLSearchParams(window.location.search);
-    const quizId = params.get("quizId");
-    if (quizId) {
-      this.quizId = quizId;
+    if (process.browser) {
+      const params = new URLSearchParams(window.location.search);
+      const quizId = params.get("quizId");
+      if (quizId) {
+        this.quizId = quizId;
+      }
     }
     const [[quizInfo], questions, answers] = await Promise.all([
-      this.$axios(`/free/v2/quiz/info?idQUIZ=${this.quizId}&ttt`).then(
+      this.$axios(`/free/v2/quiz/info?idQUIZ=${this.quizId}`).then(
         ({ data }) => data
       ),
       this.$axios(`/free/v2/quiz/question?idQUIZ=${this.quizId}`).then(
