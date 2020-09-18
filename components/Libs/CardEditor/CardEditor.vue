@@ -1,30 +1,15 @@
 <template>
   <div>
-    <b-modal :modal-class="myclass" v-if="editData" :title="editData.data.label" @cancel="cancelCard" @ok="saveCard" no-close-on-backdrop @close="cancelCard" centered v-model="editData.show">
-      <card :data="editData.data" @actions="actions=$event" @update="updateNumber($event)"></card>
-      <action-button :disabled="noPhone" class="w-100" v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
-      <template v-slot:modal-footer="{ ok, cancel }">
-        <b-button  :disabled="(noCode || noPhone) && noEmail" pill type="button" variant="success" @click="ok()">
-          Сохранить
-        </b-button>
-        <b-button pill type="button" variant="outline-success" @click="cancel()">
-          Отменить
-        </b-button>
-      </template>
-    </b-modal>
     <Form :data="editDataForm" @update="updateValue($event)" @clear="clearRelation($event)" :edit="edit"></Form>
   </div>
 </template>
 
 <script>
   import Form from '~/components/Libs/Form/Form'
-  import Card from '~/components/Pages/Cabinet/CardViewer/Card/Card'
-  import ActionButton from '../Block/ActionButton'
-
   export default {
-    name: 'CardViewerForm',
-    components: {Form, Card, ActionButton},
-    props: ['data', 'params', 'edit', 'context'],
+    name: 'CardEditor',
+    components: {Form},
+    props: ['data', 'params', 'edit'],
     data () {
       return {
         myclass: ['cabinet'],

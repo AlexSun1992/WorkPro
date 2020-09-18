@@ -89,7 +89,7 @@ export function createRouter() {
             meta: 'Cabinet',
             path: ':idModule/:idParent/:idItem',
             component: Fluid
-          },
+          }
         ]
       },
       {

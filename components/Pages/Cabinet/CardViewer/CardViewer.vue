@@ -13,7 +13,6 @@
         </div>
         <div class="profile row" v-show="$store.getters['card/wizardData']">
           <card-viewer-info
-            :context="context"
             @field-changed="refresh()"
             @saved="showSaveToast()"
             @error="showErrorToast()"

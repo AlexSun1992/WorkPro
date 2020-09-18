@@ -1,6 +1,6 @@
 <template>
   <div>
-    <card-viewer-form  @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params" :context="context"></card-viewer-form>
+    <card-editor  @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="wizardData" :edit="params.settings.edit" :params="params" :context="context"></card-editor>
     <div class="mt-3 row button-container" v-if="$store.getters['card/wizardData']">
       <div v-if="params.settings.edit"  class="col-12">
         <b-button pill v-on:click="saveProfile" type="button" variant="success" class="col-12 col-md-auto mr-4">Сохранить</b-button>
@@ -12,11 +12,11 @@
 
 <script>
 
-import CardViewerForm from '~/components/Pages/Cabinet/CardViewer/CardViewerForm'
+import CardEditor from '~/components/Libs/CardEditor/CardEditor'
 import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
 export default {
   name: "CardViewerInfo",
-  components: { ActionButton, CardViewerForm },
+  components: { ActionButton, CardEditor },
   props: ['params', 'edit', 'context'],
   data() {
     return {

@@ -16,11 +16,12 @@
   import ContentBlock from '../Block/ContentBlock'
   import ActionButton from '../Block/ActionButton'
   import CardViewer from '../CardViewer/CardViewer'
+  import FormPage from '~/components/Pages/FormPage'
   import OpenCardButton from '../Block/OpenCardButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'Wizard',
-    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, CardViewer},
+    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, CardViewer, FormPage},
     props: {
       params: {
         type: Object,

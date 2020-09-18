@@ -49,6 +49,7 @@ bcItem.getData = (data) => {
   obj.cols = data.cols
   obj.wizard = data.wizard
   obj.isCard = data.isCard
+  obj.isForm = data.isForm
   obj.portalgrid = data.portalgrid
   obj.cardgrid = data.cardgrid
   obj.cardtemplate = data.cardtemplate
