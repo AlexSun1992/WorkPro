@@ -13,6 +13,7 @@ import DemoPortlet from '~/components/Pages/DemoPortlet'
 import Cabinet from '~/components/Pages/Cabinet/Full'
 import Dashboard from '~/components/Pages/Cabinet/Dashboard'
 import Fluid from '~/components/Pages/Cabinet/Fluid'
+import CardPage from '~/components/Pages/Cabinet/CardPage'
 
 import Login from '~/components/Pages/Login/LoginPage'
 import PasswordRecovery from '~/components/Pages/Login/PasswordRecovery/PasswordRecoveryForm'
@@ -89,6 +90,11 @@ export function createRouter() {
             meta: 'Cabinet',
             path: ':idModule/:idParent/:idItem',
             component: Fluid
+          },
+          {
+            meta: 'Cabinet',
+            path: ':idModule/:idParent/:idItem/:idCard',
+            component: CardPage
           }
         ]
       },
