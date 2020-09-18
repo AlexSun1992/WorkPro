@@ -37,8 +37,8 @@
   </div>
 </template>
 <script>
-import Question from "./Question";
-import CalcResult from "./CalcResult";
+import Question from "./QuizQuestion";
+import CalcResult from "./QuizCalcResult";
 
 export default {
   components: { Question, CalcResult },
