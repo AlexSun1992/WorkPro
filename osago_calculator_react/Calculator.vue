@@ -46,11 +46,11 @@ export default {
     return {
       stitle_h1: "Калькулятор",
       stitle_h2: "",
+      startIssue: null,
       questions: [],
       answers: [],
       chosenAnswers: [],
       quizId: 1,
-      firstQuestion: null,
       partnerId: -1,
       pageId: 1
     };
@@ -68,6 +68,11 @@ export default {
     }
   },
   computed: {
+    firstQuestion() {
+      return this.questions.find(item => item.ID === this.startIssue)
+        ? this.startIssue
+        : this.questions[0] && this.questions[0].ID;
+    },
     currentQuestionId() {
       const lastAnswer = this.chosenAnswers.slice().pop();
       return lastAnswer ? Number(lastAnswer.NNEXT_ISSUE) : this.firstQuestion;
@@ -90,6 +95,11 @@ export default {
     }
   },
   created: async function() {
+    const params = new URLSearchParams(window.location.search);
+    const quizId = params.get("quizId");
+    if (quizId) {
+      this.quizId = quizId;
+    }
     const [[quizInfo], questions, answers] = await Promise.all([
       this.$axios(`/free/v2/quiz/info?idQUIZ=${this.quizId}&ttt`).then(
         ({ data }) => data
@@ -103,7 +113,7 @@ export default {
     ]);
     this.questions = questions;
     this.answers = answers;
-    this.firstQuestion = quizInfo.NSTART_ISSUE;
+    this.startIssue = quizInfo.NSTART_ISSUE;
     this.stitle_h1 = quizInfo.STITLE_H1;
     this.stitle_h2 = quizInfo.STITLE_H2;
   }
