@@ -18,8 +18,8 @@
           @reset-quiz="resetQuiz"
         />
         <ul v-else class="select-finish-items">
-          <li v-for="answer in chosenAnswers" :key="answer.id">
-            {{ answer.name }}
+          <li v-for="answer in chosenAnswers" :key="answer.ID">
+            {{ answer.STITLE }}
             <button
               class="select-finish-items-del"
               @click="deleteAnswer(answer)"
@@ -27,6 +27,7 @@
           </li>
         </ul>
         <Question
+          v-if="currentQuestion"
           :question="currentQuestion"
           :answers="currentAnswers"
           @choose-answer="chooseAnswer"
@@ -36,9 +37,6 @@
   </div>
 </template>
 <script>
-import questions from "./fixtures/questions";
-import answers from "./fixtures/answers";
-
 import Question from "./Question";
 import CalcResult from "./CalcResult";
 
@@ -46,13 +44,13 @@ export default {
   components: { Question, CalcResult },
   data() {
     return {
-      stitle_h1: "Калькулятор ОСАГО",
-      stitle_h2: "Узнайте стоимость полиса за пару минут",
-      questions,
-      answers,
+      stitle_h1: "Калькулятор",
+      stitle_h2: "",
+      questions: [],
+      answers: [],
       chosenAnswers: [],
       quizId: 1,
-      firstQuestion: 2100,
+      firstQuestion: null,
       partnerId: -1,
       pageId: 1
     };
@@ -72,28 +70,42 @@ export default {
   computed: {
     currentQuestionId() {
       const lastAnswer = this.chosenAnswers.slice().pop();
-      return lastAnswer
-        ? Number(lastAnswer.properties.nnext_issue)
-        : this.firstQuestion;
+      return lastAnswer ? Number(lastAnswer.NNEXT_ISSUE) : this.firstQuestion;
     },
     currentQuestion() {
-      return this.questions.find(item => item.id === this.currentQuestionId);
+      return this.questions.find(item => item.ID === this.currentQuestionId);
     },
     currentAnswers() {
       return this.answers.filter(item => {
         return (
-          String(item.properties.idclient_quiz_issue) ===
-            String(this.currentQuestion.id) &&
-          String(item.properties.lactive) === "1"
+          String(item.IDCLIENT_QIUZ_ISSUE) ===
+            String(this.currentQuestion.ID) && item.LACTIVE === 1
         );
       });
     },
     isCalcStage() {
       return (
-        this.currentQuestion &&
-        this.currentQuestion.properties.sshow_type === "SYSTEM_END"
+        this.currentQuestion && this.currentQuestion.SSHOW_TYPE === "SYSTEM_END"
       );
     }
+  },
+  created: async function() {
+    const [[quizInfo], questions, answers] = await Promise.all([
+      this.$axios(`/free/v2/quiz/info?idQUIZ=${this.quizId}&ttt`).then(
+        ({ data }) => data
+      ),
+      this.$axios(`/free/v2/quiz/question?idQUIZ=${this.quizId}`).then(
+        ({ data }) => data
+      ),
+      this.$axios(`/free/v2/quiz/answer?idQUIZ=${this.quizId}`).then(
+        ({ data }) => data
+      )
+    ]);
+    this.questions = questions;
+    this.answers = answers;
+    this.firstQuestion = quizInfo.NSTART_ISSUE;
+    this.stitle_h1 = quizInfo.STITLE_H1;
+    this.stitle_h2 = quizInfo.STITLE_H2;
   }
 };
 </script>

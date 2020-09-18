@@ -1,27 +1,24 @@
 <template>
   <div>
     <div class="calc-action-title">
-      {{ question.name }}
+      {{ question.SNAME_ISSUE }}
     </div>
     <div class="calc-action">
       <div class="calc-select-label">
-        {{ question.properties.sdop_info }}
+        {{ question.SDOP_INFO }}
       </div>
-      <ul
-        v-if="question.properties.sshow_type === 'choice'"
-        class="select-items"
-      >
+      <ul v-if="question.SSHOW_TYPE === 'choice'" class="select-items">
         <li
           v-for="item in answers"
-          :value="item.id"
-          :key="item.id"
+          :value="item.ID"
+          :key="item.ID"
           @click="$emit('choose-answer', item)"
-          :style="item.properties.sli_css_class"
+          :style="item.SLI_CSS_CLASS"
         >
-          {{ item.name }}
+          {{ item.STITLE }}
         </li>
       </ul>
-      <div v-else-if="question.properties.sshow_type === 'select'">
+      <div v-else-if="question.SSHOW_TYPE === 'select'">
         <b-form-select
           v-model="selected"
           :options="selectOptions"
@@ -38,12 +35,15 @@ export default {
   props: ["question", "answers"],
   computed: {
     selectOptions() {
-      return this.answers.map(({ id: value, name: text }) => ({ value, text }));
+      return this.answers.map(({ ID: value, STITLE: text }) => ({
+        value,
+        text
+      }));
     }
   },
   methods: {
     onSelectChange(id) {
-      const answer = this.answers.find(item => item.id === id);
+      const answer = this.answers.find(item => item.ID === id);
       this.$emit("choose-answer", answer);
     }
   },

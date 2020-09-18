@@ -41,12 +41,9 @@ function buildQuery(answers, questions, quizId) {
   url.searchParams.append("quizId", quizId);
   answers.forEach(answer => {
     const question = questions.find(
-      item => item.id === Number(answer.properties.idclient_quiz_issue)
+      item => item.ID === Number(answer.IDCLIENT_QIUZ_ISSUE)
     );
-    url.searchParams.append(
-      question.properties.svalue_name,
-      answer.properties.svalue_value
-    );
+    url.searchParams.append(question.SVALUE_NAME, answer.SVALUE_VALUE);
   });
   return url.toString();
 }
