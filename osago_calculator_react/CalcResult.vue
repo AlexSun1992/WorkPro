@@ -35,10 +35,8 @@
 </template>
 <script>
 function buildQuery(answers, questions, quizId) {
-  const url = new URL(
-    "https://testclient.reso.ru/WarAgentResoRu/newClientResoRu/calculators"
-  );
-  url.searchParams.append("quizId", quizId);
+  const url = new URL("/free/v2/quiz/result", window.location.href);
+  url.searchParams.append("idQUIZ", quizId);
   answers.forEach(answer => {
     const question = questions.find(
       item => item.ID === Number(answer.IDCLIENT_QIUZ_ISSUE)
@@ -59,14 +57,10 @@ export default {
   created: function() {
     this.isLoading = true;
     const url = buildQuery(this.answers, this.questions, this.quizId);
-    setTimeout(() => {
-      this.premium = Math.ceil(Math.random() * 500000) / 100;
+    this.$axios(url).then(({ data }) => {
+      this.premium = data[0].PREMIUM;
       this.isLoading = false;
-    }, Math.random() * 10000 + 1000);
-    // this.$axios(url).then(({ data }) => {
-    //   console.log(data);
-    // });
-    console.log({ url });
+    });
   },
   computed: {
     premiumRub() {
