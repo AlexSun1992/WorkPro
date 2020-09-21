@@ -14,7 +14,7 @@
           v-if="isCalcStage"
           :questions="questions"
           :answers="chosenAnswers"
-          :quizId="quizId"
+          :quizId="quizIdValue"
           @reset-quiz="resetQuiz"
         />
         <ul v-else class="select-finish-items">
@@ -42,6 +42,7 @@ import CalcResult from "./QuizCalcResult";
 
 export default {
   components: { Question, CalcResult },
+  props: ["quizId"],
   data() {
     return {
       stitle_h1: "Калькулятор",
@@ -50,7 +51,7 @@ export default {
       questions: [],
       answers: [],
       chosenAnswers: [],
-      quizId: 1,
+      quizIdValue: 1,
       partnerId: -1,
       pageId: 1
     };
@@ -95,21 +96,24 @@ export default {
     }
   },
   created: async function() {
+    if (this.quizId) {
+      this.quizIdValue = this.quizId;
+    }
     if (process.browser) {
       const params = new URLSearchParams(window.location.search);
-      const quizId = params.get("quizId");
-      if (quizId) {
-        this.quizId = quizId;
+      const quizIdValue = params.get("quizId");
+      if (quizIdValue) {
+        this.quizIdValue = quizIdValue;
       }
     }
     const [[quizInfo], questions, answers] = await Promise.all([
-      this.$axios(`/free/v2/quiz/info?idQUIZ=${this.quizId}`).then(
+      this.$axios(`/free/v2/quiz/info?idQUIZ=${this.quizIdValue}`).then(
         ({ data }) => data
       ),
-      this.$axios(`/free/v2/quiz/question?idQUIZ=${this.quizId}`).then(
+      this.$axios(`/free/v2/quiz/question?idQUIZ=${this.quizIdValue}`).then(
         ({ data }) => data
       ),
-      this.$axios(`/free/v2/quiz/answer?idQUIZ=${this.quizId}`).then(
+      this.$axios(`/free/v2/quiz/answer?idQUIZ=${this.quizIdValue}`).then(
         ({ data }) => data
       )
     ]);
