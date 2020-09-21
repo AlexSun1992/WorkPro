@@ -28,6 +28,7 @@
     },
     async  fetch () {
       try {
+  
         await this.$store.dispatch('blocks/fetchBlock', this.itemId);
       } catch(err) {
         this.$bvToast.toast(err.response.data.MESSAGE, {

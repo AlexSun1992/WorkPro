@@ -29,6 +29,12 @@
         default: () => {}
       }
     },
+    data() {
+      return {
+        card: null,
+        list: null
+      }
+    },
     computed: {
       name () {
         return this.params.settings.text
@@ -46,7 +52,7 @@
         return this.params.settings.portalgrid || this.params.settings.cardgrid
       },
       templateCardData () {
-        return this.$store.getters['menu/getMenuById'](this.$store.getters['blocks/blockId']).SVJCARDTEMPLATE
+        return this.$store.getters['menu/getMenuById'](this.$store.getters['blocks/blockId'])?.SVJCARDTEMPLATE
       },
       isForm: {
         get: function () {
@@ -55,7 +61,7 @@
       },
       formCardData: {
         get: function () {
-          return JSON.parse(JSON.stringify(this.$store.getters['blocks/getForm']));
+          return JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']));
         }
       },
       isEdit: {

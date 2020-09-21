@@ -20,10 +20,14 @@ export const state = () => ({
   cardForm: null,
   isTab: false,
   isFormChanged: false,
-  captions: null
+  captions: null,
+  menuId: null,
+  itemId: null
 })
 
 export const getters = {
+  itemId: state => state.itemId,
+  menuId: state => state.menuId,
   page: state => state.page,
   list: state => state.list,
   form: state => state.form,
@@ -298,6 +302,7 @@ export const mutations = {
     state.cardForm = null;
   },
   setWizardField(state, data) {
+
     let item = state.wizardData.find(d => d.fieldId === data.fieldId)
     if (item) {
       item.value = data.value
@@ -309,5 +314,11 @@ export const mutations = {
     if(item){
       item.value = {}
     }
+  },
+  setMenuId(state, data) {
+    state.menuId = data
+  },
+  setItemId(state, data) {
+    state.itemId = data
   }
 }

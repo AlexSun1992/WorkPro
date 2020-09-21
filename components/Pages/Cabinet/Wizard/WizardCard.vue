@@ -46,7 +46,7 @@
       <!--</card-viewer>-->
     <!--</div>-->
 
-    <b-card v-else class="bg-six block border-block-one">
+    <b-card v-else class="p-4 bg-six block border-block-one">
       <b-button v-on:click="destroyForm" type="submit" variant="success" pill v-b-popover.hover.top="'Назад'"><i  class="fa fa-chevron-left"></i></b-button>
       <Form   :data="editDataForm" :edit="isEdit"></Form>
       <p class="mb-10 mt-3"></p>
@@ -112,10 +112,13 @@
     },
     data () {
       return {
+        list: null,
+        card: null,
         editDataForm: this.formData,
         copyDataForm: JSON.parse(JSON.stringify(this.formData))
       }
     },
+
     watch: {
       'formData': 'setData'
     },
@@ -139,7 +142,7 @@
       async saveForm () {
         try {
           if(validateData(this.editDataForm)){
-            await this.$store.dispatch('blocks/saveForm', {moduleId:this.moduleId, form: this.editDataForm});
+            await this.$store.dispatch('card/saveProfile', {moduleId:this.moduleId, form: this.editDataForm});
             this.$bvToast.toast('Успешно сохранено', {
               title: ``,
               variant: 'success',
