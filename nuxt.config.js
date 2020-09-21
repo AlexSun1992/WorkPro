@@ -43,7 +43,8 @@ module.exports = {
         '~/plugins/axios',
         '~/plugins/moment',
         '~/plugins/vue-agile',
-        { src: '~plugins/vcalendar.js', ssr: false }
+        { src: '~plugins/vcalendar.js', ssr: false },
+        '~/plugins/quizCalculator.js'
     ],
     /*
      ** Nuxt.js dev-modules
