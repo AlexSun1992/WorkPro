@@ -177,25 +177,54 @@ header {
     grid-row-gap: 1rem;
 }
 
+.block-container-four {
+    display: grid;
+    grid-template-columns: auto 100px;
+    grid-template-areas: "title img" "description description" "button button";
+    grid-template-rows: minmax(60px, max-content) auto 40px;
+    grid-row-gap: 0.5rem;
+    padding: 28px 40px 40px
+}
+
+.block-container-four .block-title {
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+    font-weight: 400;
+    align-self: center;
+}
+
+.block-container-four .block-title,
 .block-container-slider .block-title,
 .block-container-big .block-title {
     grid-area: title;
 }
 
-.block-container-slider .block-description,
-.block-container-big .block-description {
-    grid-area: description;
+.block-container-four .block-description {
+    font-size: 1rem;
+    line-height: 1.5rem;
 }
 
+.block-container-four .block-description span {
+    color: #2B9CCA;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.block-container-four .block-description,
+.block-container-slider .block-description,
+.block-container-big .block-description,
 .block-container .block-description {
     grid-area: description;
 }
 
+.block-container-four .block-img,
 .block-container-slider .block-img,
 .block-container-big .block-img {
     grid-area: img;
 }
 
+.block-container-four .block-button,
 .block-container-slider .block-button,
 .block-container-big .block-button {
     grid-area: button;
