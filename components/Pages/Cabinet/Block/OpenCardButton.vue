@@ -24,19 +24,8 @@
       }
     },
     methods: {
-      async openCard () {
-        try {
-          await this.$store.dispatch('blocks/fetchForm', {moduleId:this.moduleId, menuId:this.menuId, itemId:this.itemId});
-          this.$store.commit('card/setShowWizard', false);
-          this.$store.dispatch('card/updateWizard', []);
-        } catch(err) {
-          this.$bvToast.toast(err.response.data.MESSAGE, {
-            title: `Ошибка`,
-            variant: 'danger',
-            noAutoHide: true,
-            solid: true
-          })
-        }
+       openCard () {
+         $nuxt._router.push(`/cabinet/${this.moduleId}/0/${this.menuId}/${this.itemId}`)
       },
     },
   }
