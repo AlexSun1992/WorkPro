@@ -1,8 +1,10 @@
 export const state = () => ({
-  form : []
+  form : [],
+  captions: null
 })
 export const getters = {
   getForm: state => state.form,
+  getCaptions: state => state.captions,
   getDataFieldByName: state => name => {
     return state.form.find(b => b.name === name);
   },
@@ -14,7 +16,10 @@ export const actions = {
   async fetchForm ({commit, getters}, params) {
     await  this.$axios.get(`/api/card/${params.idModule}/${params.idItem}/${params.idCard}`)
       .then((res) => {
-        commit('setForm', res.data.data);
+        commit('setForm', res.data.metaData.data);
+        if (res.data.metaData.captions) {
+          commit('setCaptions', res.data.metaData.captions);
+        }
       })
   }
 }
@@ -22,14 +27,23 @@ export const mutations = {
   setForm(state, data) {
     state.form = data
   },
+  setCaptions(state, data) {
+    let captions = data.split(';')
+    captions.pop();
+    state.captions = captions
+  },
   setFormField(state, data) {
     let item = state.wizardData.find(d => d.fieldId === data.fieldId)
     if (item) {
       item.value = data.value
     }
   },
+  clearFormData(state) {
+    state.captions = null
+    state.form = []
+  },
   clearFormRelationField(state, data) {
-    const item = state.wizardData.find(d => d.fieldRelation === data.fieldName)
+    const item = state.form.find(d => d.fieldRelation === data.fieldName)
     if(item){
       item.value = {}
     }

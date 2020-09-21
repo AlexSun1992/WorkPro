@@ -5,7 +5,7 @@
         <div class="row">
           <Control v-for='(item, i) in items(index)' :key="i"
             @update="$emit('update', $event)" 
-            @clear="clear('clear', $event)" 
+            @clear="$emit('clear', $event)" 
             :data="item" 
             :edit="edit" 
             :cols="cols">
@@ -16,7 +16,7 @@
     <div v-else class="row">
       <Control v-for='(item, i) in items()' :key="i"
         @update="$emit('update', $event)" 
-        @clear="clear('clear', $event)"
+        @clear="$emit('clear', $event)"
         :data="item" 
         :edit="edit" 
         :cols="cols">
@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     captions: function() {
-      return this.$store.getters['card/wizardCaptions'];
+      return this.$store.getters['data_card/getCaptions'];
     }
   }
 }

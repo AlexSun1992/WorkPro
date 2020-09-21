@@ -6,12 +6,12 @@
                          option-text="text"
                          :isDisabled="!edit ? !edit : data.readonly"
                          :isError="data.state === false"
-                         v-model="data.value"
-                         @input="updateField"
+                         v-model="fieldValue"
                          placeholder="Выберите из списка"
                          @select="onSelect"
                          @searchchange="initData">
       </model-list-select>
+
       <span class="error" v-if="data.state === false">
       Обязательно для заполнения
     </span>
@@ -84,10 +84,19 @@ export default {
     }
   },
   computed: {
+    fieldValue: {
+      get: function () {
+        return this.data.value
+      },
+      set: function (value) {
+        this.$store.commit('data_card/setFormField', {fieldId:this.data.fieldId, value:value});
+        this.$store.commit('card/clearFormRelationField', {fieldName:this.data.name});
+      }
+    },
     relationValue: {
       get: function () {
         if(this.data.isRelation){
-          return this.$store.getters['card/getWizardDataFieldByName'](this.data.fieldRelation)
+          return this.$store.commit('data_card/clearFormRelationField', this.data?.fieldRelation)
         }
         else{
           return null

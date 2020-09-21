@@ -3,8 +3,7 @@
     <div class="block-title pt-0 position-relative mt-2 mb-4">
       <i class="icon-my-profile"></i>{{ params.settings.text }}
     </div>
-    
-    <card-editor class="bg-six block-border-one block col p-4"  @saved="$emit('saved')" @error="$emit('error')" ref="profile-form" @field-changed="$emit('field-changed')" :data="dataForm" :edit="params.settings.edit" :params="params"></card-editor>
+    <card-editor class="bg-six block-border-one block col p-4" @error="$emit('error')" :data="dataForm" :edit="params.settings.edit" :params="params"></card-editor>
   </div>
 </template>
 
@@ -14,30 +13,23 @@
     name: 'FormPage',
     components: { CardEditor },
     props: ['params'],
-    data() {
-      return {
-        list: null,
-        card: null
-      }
-    },
+
     async created() {
-      this.$store.dispatch('card/clearCaptions');
-      this.$store.dispatch('card/updateWizard', []);
-      this.list = await this.$axios.get(`/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`);
-      this.card = await this.$axios.get(`/api/card/${this.params.page.idModule}/${this.params.page.idItem}/${this.list.data.items[0].ID}`);
-      let captions = this.card.data.metaData.captions.split(';')
-      captions.pop();
-      this.$store.commit('card/setWizardData', this.card.data.metaData.data);
-      this.$store.commit('card/setWizardCaptions', captions);
+      this.$store.commit('data_card/clearFormData')
+      // Будем ли держать в data_card?
+      let list = await this.$axios.get(`/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`);
+      let params = {
+        idModule: this.params.page.idModule,
+        idItem: this.params.page.idItem,
+        idCard: list.data.items[0].ID
+      };
+      await this.$store.dispatch('data_card/fetchForm', params)
     },
     computed: {
       dataForm() {
-        return JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']))
+        return JSON.parse(JSON.stringify(this.$store.getters['data_card/getForm']))
       }
     }
-
-    // commit('setWizardCaptions', captions);
-    // commit('setWizardData', card.data.metaData.data);
   }
 </script>
 

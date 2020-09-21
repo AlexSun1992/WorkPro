@@ -15,13 +15,12 @@
   import PolicyBlock from '../Block/PolicyBlock'
   import ContentBlock from '../Block/ContentBlock'
   import ActionButton from '../Block/ActionButton'
-  import CardViewer from '../CardViewer/CardViewer'
   import FormPage from '~/components/Pages/FormPage'
   import OpenCardButton from '../Block/OpenCardButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'Wizard',
-    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, CardViewer, FormPage},
+    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, FormPage},
     props: {
       params: {
         type: Object,
@@ -57,11 +56,6 @@
       isForm: {
         get: function () {
           return this.$store.getters['blocks/getForm']?.length
-        }
-      },
-      formCardData: {
-        get: function () {
-          return JSON.parse(JSON.stringify(this.$store.getters['card/wizardData']));
         }
       },
       isEdit: {

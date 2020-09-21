@@ -1,5 +1,5 @@
 <template>
-    <div><CardEditor :data="form" :params="settings" :edit="true"/></div>
+    <div><CardEditor class="bg-six block-border-one block col p-4" :data="form" :params="settings" :edit="true"/></div>
 </template>
 
 <script>
@@ -13,7 +13,7 @@
     computed: {
       form: {
         get: function () {
-          return this.$store.getters['data_card/getForm']
+          return JSON.parse(JSON.stringify(this.$store.getters['data_card/getForm']));
         }
       },
       settings: {

@@ -16,18 +16,11 @@ export const state = () => ({
   isListLoading: false,
   componentType: null,
   cardId: 0,
-  wizardData: null,
   cardForm: null,
-  isTab: false,
   isFormChanged: false,
-  captions: null,
-  menuId: null,
-  itemId: null
 })
 
 export const getters = {
-  itemId: state => state.itemId,
-  menuId: state => state.menuId,
   page: state => state.page,
   list: state => state.list,
   form: state => state.form,
@@ -46,9 +39,6 @@ export const getters = {
   isListLoading: state => state.isListLoading,
   componentType: state => state.componentType,
   cardId: state => state.cardId,
-  wizardData: state => state.wizardData,
-  wizardCaptions: state => state.captions,
-  isTab: state => state.isTab,
   isFormChanged: state => state.isFormChanged,
   getWizardDataFieldByName: state => name => {
     return state.wizardData.find(b => b.name === name);
@@ -116,25 +106,9 @@ export const actions = {
     commit('clearCardForm');
   },
   async fetchWizard ({commit, getters}, params) {
-    let card;
-    if (params.context == 'profile') {
-      card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${params.id}`);
-    } else {
-      card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${params.blockId}/${params.cardId}`);
-    }
-    if (!card.data.metaData.captions) {
-      commit('setWizardData', card.data.metaData.data);
-      return;
-    }
-    let captions = card.data.metaData.captions.split(';')
-    captions.pop();
-
-    commit('setWizardCaptions', captions);
-    commit('setWizardData', card.data.metaData.data);
     commit('setShowWizard', true);
     commit('setShowFilter', false);
     commit('setShowList', false);
-    commit('setIsTab', true);
   },
   updateWizard({commit, getters}, params) {
     commit('setWizardData', params);
