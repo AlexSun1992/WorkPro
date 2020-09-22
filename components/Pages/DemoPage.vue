@@ -9,15 +9,15 @@
                 <a href="">Смотреть все</a>
             </div>
             <div class="col-auto">
-              <div class="slider-arrow-prev"></div>
-              <div class="slider-arrow-next"></div>
+              <div  @click="$refs.carousel.goToPrev()"class="slider-arrow-prev"></div>
+              <div  @click="$refs.carousel.goToNext()" class="slider-arrow-next"></div>
           </div>
       </div>
 </div>
       </div>
       <div class="row d-block">
         <div class="col-12 p-0">
-      <agile :slidesToShow="4" :dots="false" :navButtons="false">
+      <agile ref="carousel" :slidesToShow="4" :dots="false" :navButtons="false">
         <div class="block-slider">
           <div class="block-container block-container-slider">
           <div class="block-title">
@@ -105,7 +105,7 @@
     .block-slider {
         padding: 0 15px 40px;
     }
-    
+
     .slider-bg {
         background-color: #F5F8F6;
     }
