@@ -114,9 +114,9 @@
         </div>
     </div>
 </div>
-<div class="row justify-content-center">
+<div class="row justify-content-center py-5">
     <div class="col-12">
-        <div class="fsz40 fw500 text-center mt-5 mb-4"><span class="color-green">Страхование</span><br>на все случаи жизни
+        <div class="fsz40 fw500 text-center mb-4"><span class="color-green">Страхование</span><br>на все случаи жизни
         </div>
     </div>
     <div class="col-3 text-center">
@@ -146,7 +146,7 @@
     <div class="col-12">
         <div class="diagramm-line pt-4 mb-2"></div>
     </div>
-    <div class="col-7 mt-2 mb-3 text-center">
+    <div class="col-7 mt-2 text-center">
         Мы обеспечиваем качество и скорость работы с нашими клиентами и тратим много усилий, чтобы каждый год улучшать этот показатель.
         <br><br>
         <div class="block-button">
@@ -154,118 +154,52 @@
         </div>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-3 d-flex">
-        <div class="block-container mt-1_25">
-            <div class="block-title">
-                ваплывждп ывжадлп
-            </div>
-            <div class="block-description">
-                dfklsad;lfk ;asdfk ;asdk f;askdf;askdf;lkas fkasdf;kas df;lk as;dfk ;askd f;ask df;kas f;k asf;k as;fkas ;dfkj as df;lk
-            </div>
-            <div class="block-img">
-                <img src="">
-            </div>
-            <div class="block-button">
-                <a href="" class="btn-icon-right icon-arrow-right">Каско</a>
-                <a href="" class="btn-icon-right icon-arrow-right">ОСАГО</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-3 d-flex">
-        <div class="block-container mt-1_25">
-            <div class="block-title">
-                ваплывждп ывжадлп
-            </div>
-            <div class="block-description">
-                dfklsad;lfk ;asdfk ;asdk f;askdf;askdf;lkas fkasdf;kas df;lk as;dfk ;askd f;ask df;kas f;k asf;k as;fkas ;dfkj as df;lk
-            </div>
-            <div class="block-img">
-                <img src="">
-            </div>
-            <div class="block-button">
-                <a href="">1</a>
-                <a href="">1</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-3 d-flex">
-        <div class="block-container mt-1_25">
-            <div class="block-title">
-                ваплывждп ывжадлп
-            </div>
-            <div class="block-description">
-                dfklsad;lfk ;asdfk ;asdk f;askdf;askdf;lkas fkasdf;kas df;lk as;dfk ;askd f;ask df;kas f;k asf;k as;fkas ;dfkj as df;lk
-            </div>
-            <div class="block-img">
-                <img src="">
-            </div>
-            <div class="block-button">
-                <a href="">1</a>
-                <a href="">1</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-3 d-flex">
-        <div class="block-container mt-1_25">
-            <div class="block-title">
-                ваплывждп ывжадлп
-            </div>
-            <div class="block-description">
-                dfklsad;lfk ;asdfk ;asdk f;askdf;askdf;lkas fkasdf;kas df;lk as;dfk ;askd f;ask df;kas f;k asf;k as;fkas ;dfkj as df;lk
-            </div>
-            <div class="block-img">
-                <img src="">
-            </div>
-            <div class="block-button">
-                <a href="">1</a>
-                <a href="">1</a>
-            </div>
-        </div>
-    </div>
 </div>
-<div class="row">
-    <div class="col-6 d-flex">
-        <div class="block-container block-container-four">
-            <div class="block-title">
-                ваплывждп ывжадлп
-            </div>
-            <div class="block-description">
-                dfklsad;lfk ;asdfk ;asdk f;askdf;askdf;lkas fkasdf;kas df;lk as;dfk ;askd f;ask df;kas f;k asf;k as;fkas ;dfkj as df;lk
-            </div>
-            <div class="block-img">
-                <img src="/img/main/znak.svg">
-            </div>
-            <div class="block-button">
-                <a href="" class="btn-icon-right icon-arrow-right">Записаться на обучение</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 d-flex">
-        <div class="block-container block-container-four">
-            <div class="block-title">
-                ваплывждп ывжадлп
-            </div>
-            <div class="block-description">
-                <span>У нас работают свыше 27 тысяч агентов и брокеров. </span> Вы можете проконсультироваться со страховым агентом, который находиться рядом с вами. Выбрать того, кто вам понятнее и ближе по духу.
-                <div class="bcf-h-line"></div>
-            </div>
-            <div class="block-img">
-                <img src="/img/main/portfel.svg">
-            </div>
-            <div class="block-button">
-                <a href="" class="btn-icon-right icon-arrow-right">узнать больше</a>
-
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
 </main>
 
-<nuxt/> Подвал сайта
+<nuxt/>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-6 d-flex">
+            <div class="block-container block-container-four">
+                <div class="block-title">
+                    Школа обучения страхованию
+                </div>
+                <div class="block-description">
+                    Лучшая школа страхования в Россииприглашает всех желающих стать профессионалом страхового бизнеса
+
+                    <div class="bcf-h-line"></div>
+
+                </div>
+
+                <div class="block-img">
+                    <img src="/img/main/znak.svg">
+                </div>
+                <div class="block-button">
+                    <a href="" class="btn-icon-right icon-arrow-right">Записаться на обучение</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 d-flex">
+            <div class="block-container block-container-four">
+                <div class="block-title">
+                    Найдите своего страхового агента
+                </div>
+                <div class="block-description">
+                    <span>У нас работают свыше 27 тысяч агентов и брокеров. </span> Вы можете проконсультироваться со страховым агентом, который находиться рядом с вами. Выбрать того, кто вам понятнее и ближе по духу.
+
+                </div>
+                <div class="block-img">
+                    <img src="/img/main/portfel.svg">
+                </div>
+                <div class="block-button">
+                    <a href="" class="btn-icon-right icon-arrow-right">узнать больше</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </template>
 
