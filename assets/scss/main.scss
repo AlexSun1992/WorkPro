@@ -789,7 +789,7 @@ a.icon-arrow-right:after {
     position: relative;
 }
 
-.gotolk:not(.show):before {
+.gotolk:not(.show):not(.dropdown):before {
     background: url(/img/icon-ppl.svg) 0 0 no-repeat;
     position: absolute;
     content: "";
@@ -818,15 +818,16 @@ a.icon-arrow-right:after {
     content: "";
     position: absolute;
     top: 9px;
-    right: 15px;
+    right: 3px;
     transform: rotate(-135deg);
-    transition: 0.3s;
+    transition: transform 0.3s, top 0.3s;
 }
 
 .dropdown.gotolk.show:after {
     transform: rotate(-45deg);
     top: 7px;
-    transition: 0.3s;
+    transition: transform 0.3s, top 0.3s;
+    right: 17px;
 }
 
 .dropdown.show .dropdown-menu {
