@@ -102,11 +102,4 @@
 </script>
 
 <style scoped>
-  .block-slider {
-    padding: 0 15px 40px;
-  }
-
-  .slider-bg {
-    background-color: #F5F8F6;
-  }
 </style>
