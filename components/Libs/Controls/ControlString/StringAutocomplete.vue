@@ -49,7 +49,20 @@ export default {
   },
   methods: {
     changeValue() {
-      this.$emit("update", {fieldId:this.data.fieldId, value:this.suggestions.data[this.index]});
+      let value;
+      let fields = this.$store.getters['data_card/getForm']
+      let relatedValue;
+      let type = this.suggestions.type;
+      if (this.suggestions.type === 'SISSUED_WHERE' || this.suggestions.type === 'SDOCDEP') {
+        let {fieldId} = this.$store.getters['data_card/getDataFieldByName'](type === 'SISSUED_WHERE' ? 'SDOCDEP' : 'SISSUED_WHERE')
+        value = this.suggestions.data[this.index].split(' - ')[0]
+        relatedValue = this.suggestions.data[this.index].split(' - ')[1]
+        this.$emit("update", {fieldId:this.data.fieldId, value});
+        this.$emit("update", {fieldId, value: relatedValue});
+      } else {
+        value = this.suggestions.data[this.index]
+        this.$emit("update", {fieldId:this.data.fieldId, value})
+      }
       this.$forceUpdate();
     },
     closeList() {
@@ -75,26 +88,9 @@ export default {
     suggestionClick(index) {
       this.index = index;
       this.open = false;
-      // let issuedWhere = this.$parent.$parent.$parent.$parent.$children.find(item => {
-      //     return item.data.name === 'SISSUED_WHERE';
-      //   });
-      // let docDep = this.$parent.$parent.$parent.$parent.$children.find(item => {
-      //   return item.data.name === 'SDOCDEP';
-      // });
-      // if (this.suggestions.type === 'SISSUED_WHERE') {
-      //   this.$set(issuedWhere.data, 'value', null);
-      //   this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[0]);
-      //   this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[1]);
-      // }
-      // else if (this.suggestions.type === 'SDOCDEP') {
-      //   this.$set(issuedWhere.data, 'value', null);
-      //   this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[1]);
-      //   this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[0]);
-      // }
-      // this.open = false;
     },
     async getSuggestions(name) {
-      this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:this.data.value, page: this.data.page});
+      this.$emit('update', {fieldId:this.data.fieldId, value:this.data.value});
       let API_KEY = '7a6080c3383b4dc69e786e1cd5c88366ab58a14c';
       this.open = true;
       this.current = 0;
@@ -134,8 +130,7 @@ export default {
         }
         if (name === 'SDOCDEP') {
           values = suggestions.data.map(item => {
-            // return `${item.data.code} - ${item.data.name}`
-            return `${item.data.code}`
+            return `${item.data.code} - ${item.data.name}`
           });
           obj.type = 'SDOCDEP';
         }

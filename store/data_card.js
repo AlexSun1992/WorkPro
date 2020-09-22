@@ -26,8 +26,8 @@ export const actions = {
         }
       })
   },
-  async saveDataCard ({commit, getters}, params) {
-      await this.$axios.post(`/api/card/${params.moduleId}/${params.itemId}/${getters.getCardId}`, params.form)
+  async saveDataCard ({commit}, params) {
+      await this.$axios.post(`/api/card/${params.moduleId}/${params.itemId}/${params.cardId}`, params.form)
       .then(async resp => {
         commit('setCardId', resp.data.ID)
       })

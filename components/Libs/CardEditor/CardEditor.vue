@@ -59,11 +59,23 @@
         return valid;
       },
       async saveDataCard() {
-        let data = JSON.parse(JSON.stringify(this.$store.getters['data_card/getForm']))
-        if(this.validateData(data)){
+        let fields = JSON.parse(JSON.stringify(this.$store.getters['data_card/getForm']))
+        fields = fields.filter(item => !item.name.match(/^ID/));
+        if(this.validateData(fields)){
           try {
-            let fields = this.$store.getters['data_card/getForm'];
-            await this.$store.dispatch('data_card/saveDataCard', {moduleId: this.params.page.idModule, itemId: this.params.page.idItem,  form: fields});
+            let itemId;
+            let moduleId;
+            let cardId;
+            if (!this.params.page) {
+              itemId = this.$route.params.idItem
+              moduleId = this.$route.params.idModule
+              cardId = this.$route.params.idCard
+            } else {
+              itemId = this.params.page.idItem
+              moduleId = this.params.page.idModule
+              cardId = this.$store.getters['data_card/getCardId']
+            }
+            await this.$store.dispatch('data_card/saveDataCard', {moduleId, itemId, cardId, form: fields});
             this.$bvToast.toast('Успешно сохранено', {
               title: ``,
               variant: 'success',
