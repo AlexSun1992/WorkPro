@@ -1,12 +1,23 @@
 <template>
   <div class="slider-bg pt-4 pb-5">
     <div class="container">
-      <div class="row">
-        <div class="col-12 block-title">Наши предложения</div>
+      <div class="row slider-list">
+        <div class="col-8 block-title">Наши предложения</div>
+        <div class="col-4">
+          <div class="row slider-list justify-content-end">
+            <div class="col-auto">
+                <a href="">Смотреть все</a>
+            </div>
+            <div class="col-auto">
+              <div class="slider-arrow-prev"></div>
+              <div class="slider-arrow-next"></div>
+          </div>
+      </div>
+</div>
       </div>
       <div class="row d-block">
         <div class="col-12 p-0">
-      <agile :slidesToShow="4" :dots="false">
+      <agile :slidesToShow="4" :dots="false" :navButtons="false">
         <div class="block-slider">
           <div class="block-container block-container-slider">
           <div class="block-title">
@@ -53,23 +64,6 @@
           </div>
           <div class="block-button">
             <a href="" class="btn-icon-right icon-arrow-right">Подробнее</a>
-          </div>
-        </div>
-      </div>
-      <div class="block-slider">
-        <div class="block-container block-container-slider">
-          <div class="block-title">
-            ваплывждп ывжадлп
-          </div>
-          <div class="block-description">
-            dfklsad;lfk ;asdfk ;asdk f;askdf;askdf;lkas fkasdf;kas df;lk as;dfk ;askd f;ask df;kas f;k asf;k as;fkas ;dfkj as df;lk
-          </div>
-          <div class="block-img">
-            <img src="">
-          </div>
-          <div class="block-button">
-            <a href="">1</a>
-            <a href="">1</a>
           </div>
         </div>
       </div>
