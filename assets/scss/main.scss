@@ -1,4 +1,4 @@
-html {
+colohtml {
     font-size: 16px;
     font-family: Roboto, sans-serif;
     font-weight: 400;
@@ -138,10 +138,11 @@ header {
     color: #474747;
     font-size: 1.25rem;
     line-height: 2.5re1.75rem;
+    font-weight: 300;
 }
 
 .block-container-big .block-description strong {
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .block-container .block-img,
@@ -158,6 +159,13 @@ header {
     display: grid;
     grid-template-rows: minmax(40px, max-content) auto auto 40px;
     grid-template-areas: "title" "img" "description" "button";
+    grid-row-gap: 1.25rem;
+}
+
+.block-container-center {
+    display: grid;
+    grid-template-areas: "title" "description" "img" "button";
+    grid-template-rows: minmax(40px, max-content) auto auto auto;
     grid-row-gap: 1.25rem;
 }
 
@@ -183,7 +191,21 @@ header {
     grid-template-areas: "title img" "description description" "button button";
     grid-template-rows: minmax(60px, max-content) auto 40px;
     grid-row-gap: 0.5rem;
-    padding: 28px 40px 40px
+    padding: 28px 40px 40px;
+}
+
+.block-container-help {
+    display: grid;
+    grid-template-columns: 60px auto;
+    grid-template-areas: "img title" "button button";
+    grid-template-rows: minmax(60px, max-content) 40px;
+    grid-column-gap: 1.1875rem;
+    grid-row-gap: 0.5rem;
+    padding: 40px 26px;
+}
+
+.block-container-help .block-button {
+    margin-left: calc(64px + 1rem);
 }
 
 .block-container-four .block-title {
@@ -199,10 +221,18 @@ header {
     grid-area: title;
 }
 
+.block-container-help .block-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    align-self: center;
+    line-height: 1.75rem;
+}
+
 .block-container-four .block-description {
     font-size: 1rem;
     line-height: 1.5rem;
     position: relative;
+    margin-bottom: 1rem;
 }
 
 .block-container-four .block-description:after {
@@ -229,10 +259,16 @@ header {
     grid-area: description;
 }
 
+.block-container .block-img,
 .block-container-four .block-img,
 .block-container-slider .block-img,
 .block-container-big .block-img {
     grid-area: img;
+    text-align: center;
+}
+
+.block-container .block-img img {
+    max-width: 100%;
 }
 
 .block-container-four .block-button,
@@ -300,6 +336,7 @@ header {
     font-weight: 400;
 }
 
+.block-container-help .block-button a,
 .block-container-slider .block-button a {
     font-size: 1rem;
     float: none !important;
@@ -348,6 +385,7 @@ header {
     line-height: 48px;
     align-self: center;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .block-button a:hover {
@@ -1010,6 +1048,7 @@ button {
     box-shadow: 0px 13px 16px rgba(115, 157, 129, 0.28);
 }
 
+.block-container-help .block-button a:hover,
 .block-container-slider .block-button a:hover {
     background: transparent;
     box-shadow: none;
@@ -1023,12 +1062,15 @@ button {
     height: 1rem;
 }
 
+.block-container-help .block-button a:after,
+.block-container-help .block-button a:hover:after,
 .block-container-slider .block-button a:after,
 .block-container-slider .block-button a:hover:after {
     top: 5px;
     right: -10px;
 }
 
+.block-container-help a.icon-arrow-right:hover:after,
 .block-container-slider a.icon-arrow-right:hover:after {
     border-left: 2px solid #5FB456;
     border-bottom: 2px solid #5FB456;
@@ -1086,4 +1128,14 @@ button {
     width: 100%;
     height: 1px;
     background-color: #DEE5E0;
+}
+
+.block-v-line:after {
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    background-color: #DEE5E0;
+    top: 0;
+    left: 100%;
+    content: "";
 }
