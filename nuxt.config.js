@@ -44,7 +44,8 @@ module.exports = {
         '~/plugins/moment',
         '~/plugins/vue-agile',
         { src: '~plugins/vcalendar.js', ssr: false },
-        '~/plugins/quizCalculator.js'
+        '~/plugins/quizCalculator.js',
+        '~/plugins/carousel.js'
     ],
     /*
      ** Nuxt.js dev-modules

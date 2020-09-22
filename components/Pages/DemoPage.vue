@@ -9,19 +9,19 @@
               <a href="">Смотреть все</a>
             </div>
             <div class="col-auto">
-              <div  @click="$refs.carousel.goToPrev()"class="slider-arrow-prev"></div>
-              <div  @click="$refs.carousel.goToNext()" class="slider-arrow-next"></div>
+              <div  @click="$refs.wrapper.goToPrev()"class="slider-arrow-prev"></div>
+              <div  @click="$refs.wrapper.goToNext()" class="slider-arrow-next"></div>
             </div>
           </div>
         </div>
       </div>
       <div class="row d-block">
         <div class="col-12 p-0">
-          <agile ref="carousel" :slidesToShow="4" :dots="false" :navButtons="false">
+          <carousel-wrapper ref="wrapper" :slides="4">
             <div class="block-slider">
               <div class="block-container block-container-slider">
                 <div class="block-title">
-                  Сезон Renault
+                  Сезон Renault123
                 </div>
                 <div class="block-description">
                   Скидки для новых автомобилей при покупке полиса в офисах компании
@@ -84,7 +84,7 @@
                 </div>
               </div>
             </div>
-          </agile>
+          </carousel-wrapper>
         </div>
       </div>
     </div>
