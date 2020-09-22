@@ -7,25 +7,27 @@
 </template>
 
 <script>
-  import VRuntimeTemplate from "v-runtime-template";
-  import Calculator from "../../Pages/Calculator";
+  import VRuntimeTemplate from 'v-runtime-template'
+  import Calculator from '../../Pages/Calculator'
+
   export default {
     head () {
       return {
         title: this.getPage?.title?.rendered
       }
     },
-    components: {VRuntimeTemplate,Calculator},
-    data(){
+    components: {VRuntimeTemplate, Calculator},
+    data () {
       return {
         counter: 0,
-        textSelected:null,
-        valueSelected: null,
+        dropDownValueSelected: {textSelected: null, valueSelected: null},
+        textSelected: null,
+        valueSelected: null
       }
     },
     computed: {
-      getPage() {
-        return this.$store.getters['pages/getPageByUrl'];
+      getPage () {
+        return this.$store.getters['pages/getPageByUrl']
       }
     }
   }
