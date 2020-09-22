@@ -1,5 +1,5 @@
 <template>
-  <b-form-checkbox class="my-3" @input="updateField" v-model="data.value" :disabled="!edit ? !edit : data.readonly">{{data.label}}</b-form-checkbox>
+  <b-form-checkbox class="my-3" v-model="fieldValue" :disabled="!edit ? !edit : data.readonly">{{data.label}}</b-form-checkbox>
 </template>
 
 <script>
@@ -17,9 +17,14 @@ export default {
       default: () => false
     }
   },
-  methods: {
-    updateField(e){
-      this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value: String(e), page: this.data.page})
+  computed: {
+    fieldValue: {
+      get: function () {
+        return this.data.value
+      },
+      set: function (value) {
+        this.$emit('update', {fieldId:this.data.fieldId, value:value})
+      }
     }
   }
 }

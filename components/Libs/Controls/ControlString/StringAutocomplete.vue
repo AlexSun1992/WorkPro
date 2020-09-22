@@ -14,6 +14,7 @@
       @input="getSuggestions(data.name)"
       @blur="debouncedClose()"
       :id="data.name"
+      @change="debouncedChange()"
     ></b-form-input>
     <b-form-invalid-feedback>Обязательно для заполнения</b-form-invalid-feedback>
     <ul v-if="open && suggestions && suggestions.data && suggestions.data.length" :class="{'dropdown-menu': open}">
@@ -37,21 +38,26 @@ export default {
       open: false,
       current: 0,
       suggestions: {},
-      debouncedClose: null
+      debouncedClose: null,
+      debouncedChange: null
     };
   },
   props: ['data', 'edit'],
   created() {
     this.debouncedClose = _.debounce(this.closeList, 300)
+    this.debouncedChange = _.debounce(this.changeValue, 300)
   },
   methods: {
+    changeValue() {
+      this.$emit("update", {fieldId:this.data.fieldId, value:this.suggestions.data[this.index]});
+      this.$forceUpdate();
+    },
     closeList() {
       this.open = false;
     },
     enter() {
       this.open = false;
       this.suggestionClick(this.current);
-      // this.$emit("update", this.suggestions.data[this.current]);
     },
     up() {
       if (this.current > 0) {
@@ -67,26 +73,25 @@ export default {
       return index === this.current;
     },
     suggestionClick(index) {
+      this.index = index;
       this.open = false;
-      let issuedWhere = this.$parent.$parent.$parent.$parent.$children.find(item => {
-          return item.data.name === 'SISSUED_WHERE';
-        });
-      let docDep = this.$parent.$parent.$parent.$parent.$children.find(item => {
-        return item.data.name === 'SDOCDEP';
-      });
-      if (this.suggestions.type === 'SISSUED_WHERE') {
-        this.$set(issuedWhere.data, 'value', null);
-        this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[0]);
-        this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[1]);
-      }
-      else if (this.suggestions.type === 'SDOCDEP') {
-        this.$set(issuedWhere.data, 'value', null);
-        this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[1]);
-        this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[0]);
-      } else {
-        this.$emit("update", {fieldId:this.data.fieldId, isTab:this.data.isTab, value:this.suggestions.data[index], page: this.data.page});
-      }
-      this.open = false;
+      // let issuedWhere = this.$parent.$parent.$parent.$parent.$children.find(item => {
+      //     return item.data.name === 'SISSUED_WHERE';
+      //   });
+      // let docDep = this.$parent.$parent.$parent.$parent.$children.find(item => {
+      //   return item.data.name === 'SDOCDEP';
+      // });
+      // if (this.suggestions.type === 'SISSUED_WHERE') {
+      //   this.$set(issuedWhere.data, 'value', null);
+      //   this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[0]);
+      //   this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[1]);
+      // }
+      // else if (this.suggestions.type === 'SDOCDEP') {
+      //   this.$set(issuedWhere.data, 'value', null);
+      //   this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[1]);
+      //   this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[0]);
+      // }
+      // this.open = false;
     },
     async getSuggestions(name) {
       this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:this.data.value, page: this.data.page});
@@ -129,7 +134,8 @@ export default {
         }
         if (name === 'SDOCDEP') {
           values = suggestions.data.map(item => {
-            return `${item.data.code} - ${item.data.name}`
+            // return `${item.data.code} - ${item.data.name}`
+            return `${item.data.code}`
           });
           obj.type = 'SDOCDEP';
         }

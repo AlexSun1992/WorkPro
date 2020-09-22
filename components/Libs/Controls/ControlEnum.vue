@@ -49,10 +49,10 @@ export default {
     if (this.data.value.value) this.options.push(this.data.value)
   },
   methods: {
-    updateField(e){
-      this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value: e, page: this.data.page})
-      this.$emit('clear', {fieldName:this.data.name})
-    },
+    // updateField(e){
+    //   this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value: e, page: this.data.page})
+    //   this.$emit('clear', {fieldName:this.data.name})
+    // },
     initData (param) {
       let url = '';
       if(this.relationValue){
@@ -90,13 +90,13 @@ export default {
       },
       set: function (value) {
         this.$store.commit('data_card/setFormField', {fieldId:this.data.fieldId, value:value});
-        this.$store.commit('card/clearFormRelationField', {fieldName:this.data.name});
+        this.$store.commit('data_card/clearFormRelationField', {fieldName:this.data.name});
       }
     },
     relationValue: {
       get: function () {
         if(this.data.isRelation){
-          return this.$store.commit('data_card/clearFormRelationField', this.data?.fieldRelation)
+          return this.$store.getters['data_card/getDataFieldByName'](this.data.fieldRelation)
         }
         else{
           return null
