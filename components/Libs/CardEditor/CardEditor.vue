@@ -91,8 +91,8 @@
           }
         }
       },
-      cancelDataCard(e) {
-        this.$emit('cancel');
+      cancelDataCard() {
+        this.$store.commit('data_card/setForm', JSON.parse(JSON.stringify(this.$store.getters['data_card/getCopyForm'])))
       }
     }
   }

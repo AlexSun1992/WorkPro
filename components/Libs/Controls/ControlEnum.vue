@@ -89,8 +89,7 @@ export default {
         return this.data.value
       },
       set: function (value) {
-        this.$store.commit('data_card/setFormField', {fieldId:this.data.fieldId, value:value});
-        this.$store.commit('data_card/clearFormRelationField', {fieldName:this.data.name});
+        this.$emit('update', {fieldId:this.data.fieldId, value})
       }
     },
     relationValue: {

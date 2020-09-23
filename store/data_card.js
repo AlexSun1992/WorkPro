@@ -1,10 +1,12 @@
 export const state = () => ({
   form : [],
+  copyForm: [],
   cardId: null,
   captions: null
 })
 export const getters = {
   getForm: state => state.form,
+  getCopyForm: state => state.copyForm,
   getCardId: state => state.cardId,
   getCaptions: state => state.captions,
   getDataFieldByName: state => name => {
@@ -21,6 +23,7 @@ export const actions = {
     await  this.$axios.get(`/api/card/${params.idModule}/${params.idItem}/${params.idCard}`)
       .then((res) => {
         commit('setForm', res.data.metaData.data);
+        commit('setCopyForm', JSON.parse(JSON.stringify(res.data.metaData.data)));
         if (res.data.metaData.captions) {
           commit('setCaptions', res.data.metaData.captions);
         }
@@ -37,6 +40,9 @@ export const actions = {
 export const mutations = {
   setForm(state, data) {
     state.form = data
+  },
+  setCopyForm(state, data) {
+    state.copyForm = data
   },
   setCaptions(state, data) {
     let captions = data.split(';')
