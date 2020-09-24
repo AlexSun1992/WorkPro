@@ -22,7 +22,7 @@ export const actions = {
     commit('clearFormData')
     await  this.$axios.get(`/api/card/${params.idModule}/${params.idItem}/${params.idCard}`)
       .then((res) => {
-        commit('setForm', res.data.metaData.data);
+        commit('setForm', res.data.metaData.data.length ? res.data.metaData.data : res.data);
         commit('setCopyForm', JSON.parse(JSON.stringify(res.data.metaData.data)));
         if (res.data.metaData.captions) {
           commit('setCaptions', res.data.metaData.captions);

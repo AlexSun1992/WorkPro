@@ -1,5 +1,6 @@
 <template>
   <div>
+    <b-button v-on:click="$router.go(-1)" type="submit" variant="success"><i class="fa fa-chevron-left"></i> Назад</b-button>
     <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" :edit="edit"></Form>
      <div class="mt-3 row button-container">
       <div class="col-12">
