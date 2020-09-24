@@ -3,6 +3,11 @@
     <div v-if="getPage && getPage.content">
       <v-runtime-template :template="getPage.content.rendered"></v-runtime-template>
     </div>
+    <div v-else="getPage.status == '404'">
+      <div class="container">
+        <h1>404 Страница не найдена</h1>
+      </div>
+    </div>
   </div>
 </template>
 

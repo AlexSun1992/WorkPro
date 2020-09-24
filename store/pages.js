@@ -67,8 +67,8 @@ export const actions = {
         }
       })
     } catch(e) {
-      console.log(e)
-      //commit('setPage', e.response.data);
+      commit('setPage', e.response.data);
+      commit('setBreadCrumbs', null);
     }
   },
 

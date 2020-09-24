@@ -63,14 +63,16 @@ export const actions = {
     } else {
       params = `/${context.params.pathMatch}`
     }
-    await dispatch('pages/fetchPageByUrl', params, context);
-    if(context.store.state.pages.currentPage.code !== "rest_post_invalid"){
-      await dispatch('pages/setMenuIDs');
-      await dispatch('pages/getMainMenu', context.store.getters['pages/getMainMenuId']);
-      await dispatch('pages/getFooterMenu', context.store.getters['pages/getFooterMenuId']);
-    }
-    else{
-      context.error({ statusCode: 404, message: 'Post not found' })
+    try {
+      Promise.allSettled([
+        await dispatch('pages/fetchPageByUrl', params, context),
+        await dispatch('pages/setMenuIDs'),
+        await dispatch('pages/getMainMenu', context.store.getters['pages/getMainMenuId']),
+        await dispatch('pages/getFooterMenu', context.store.getters['pages/getFooterMenuId'])
+      ])
+  }
+    catch (e) {
+      // context.error({ statusCode: 404, message: 'Post not found' })
     }
   },
 

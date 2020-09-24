@@ -2,7 +2,7 @@
   <div class="app main_page">
     <Header/>
     <div class="container">
-      <b-breadcrumb v-if="showBreadcrumbs">
+      <b-breadcrumb v-if="showBreadcrumbs && breadcrumbs">
         <b-breadcrumb-item  v-for='(item, index) in breadcrumbs' v-bind:key="item.text"  :to="item.href" :active="item.active" :text="item.text"/>
       </b-breadcrumb>
     </div>

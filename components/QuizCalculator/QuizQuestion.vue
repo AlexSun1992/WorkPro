@@ -91,3 +91,6 @@ export default {
   }
 };
 </script>
+<style scoped lang="scss">
+@import url("./calculator.css");
+</style>
