@@ -1,6 +1,6 @@
 <template>
   <b-form-group  :label="data.label" :class="{required: data.required}" :label-for="data.name" :label-cols="data.labelCols ? '' : 2">
-    <b-form-input v-model="data.value" :disabled="!edit ? !edit : data.readonly" :type="'number'" :state="data.state"></b-form-input>
+    <b-form-input v-model="fieldValue" :disabled="!edit ? !edit : data.readonly" :type="'number'" :state="data.state"></b-form-input>
     <b-form-invalid-feedback>
       Обязательно для заполнения
     </b-form-invalid-feedback>
@@ -22,19 +22,20 @@ export default {
       default: () => false
     }
   },
-  // computed: {
-  //   label () {
-  //     return `${this.data.label}${this.data.required ? '<span style="color:red">*</span>' : ''}`
-  //   }
-  // }
+  computed: {
+    fieldValue: {
+      get: function () {
+        return this.data.value
+      },
+      set: function (value) {
+        this.$emit('update', {fieldId:this.data.fieldId, value:value})
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
-  /* .form-control:disabled, .form-control[readonly]{
-    background-color: white;
-  } */
-
   .required > legend:after {
     content: '*';
     color: red;

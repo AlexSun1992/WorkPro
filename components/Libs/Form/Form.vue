@@ -1,23 +1,34 @@
 <template>
-  <div>
-    <b-form-row>
-      <div>
-        <!-- {{ defaultPlug }} -->
-      </div>
-      <Control  v-for='(item, index) in items' @edit="$emit('edit', $event)" @update="$emit('update', $event)" :key='index' v-bind:data="item" :edit="edit" :cols="cols"></Control>
-    </b-form-row>
-  </div>
+  <b-form-row>
+    <b-tabs v-if="captions" content-class="mt-4">
+      <b-tab :title="tab" v-for="(tab, index) in captions" :key="index">
+        <div class="row">
+          <Control v-for='(item, i) in items(index)' :key="i"
+            @update="$emit('update', $event)" 
+            @clear="$emit('clear', $event)" 
+            :data="item" 
+            :edit="edit" 
+            :cols="cols">
+          </Control>
+        </div>
+      </b-tab>
+    </b-tabs>
+    <div v-else class="row">
+      <Control v-for='(item, i) in items()' :key="i"
+        @update="$emit('update', $event)" 
+        @clear="$emit('clear', $event)"
+        :data="item" 
+        :edit="edit" 
+        :cols="cols">
+      </Control>
+    </div>
+  </b-form-row>
 </template>
 <script>
 import Control from '~/components/Libs/Controls/Control'
 export default {
   name: 'Form',
   components: {Control},
-  data() {
-    return {
-      counter: 0
-    }
-  },
   props: {
     data: {
       type: Array | null,
@@ -33,27 +44,23 @@ export default {
       default: () => 1
     }
   },
-  computed: {
-    items: function () {
+  methods: {
+    items(index) {
       if (this.data) {
         return this.data.filter(item => {
-          if ((!item.value || Object.keys(item.value).length == 0) && !this.edit) this.counter++;
+          if (this.captions) {
+            if (index != item.page) return;
+          }
           if (!item.visible) return; 
           return this.edit || !this.edit && item.value;
         })
       }
-    },
-    defaultPlug: function() {
-      if (this.counter == this.data.length) {
-          return 'Нет данных для отображения'
-        }
+    }
+  },
+  computed: {
+    captions: function() {
+      return this.$store.getters['data_card/getCaptions'];
     }
   }
 }
 </script>
-
-<style scoped>
-  /* .form-control:disabled, .form-control[readonly]{
-    background-color: white;
-  } */
-</style>

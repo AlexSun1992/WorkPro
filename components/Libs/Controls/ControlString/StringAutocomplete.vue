@@ -14,6 +14,7 @@
       @input="getSuggestions(data.name)"
       @blur="debouncedClose()"
       :id="data.name"
+      @change="debouncedChange()"
     ></b-form-input>
     <b-form-invalid-feedback>Обязательно для заполнения</b-form-invalid-feedback>
     <ul v-if="open && suggestions && suggestions.data && suggestions.data.length" :class="{'dropdown-menu': open}">
@@ -37,21 +38,39 @@ export default {
       open: false,
       current: 0,
       suggestions: {},
-      debouncedClose: null
+      debouncedClose: null,
+      debouncedChange: null
     };
   },
   props: ['data', 'edit'],
   created() {
     this.debouncedClose = _.debounce(this.closeList, 300)
+    this.debouncedChange = _.debounce(this.changeValue, 300)
   },
   methods: {
+    changeValue() {
+      let value;
+      let fields = this.$store.getters['data_card/getForm']
+      let relatedValue;
+      let type = this.suggestions.type;
+      if (this.suggestions.type === 'SISSUED_WHERE' || this.suggestions.type === 'SDOCDEP') {
+        let {fieldId} = this.$store.getters['data_card/getDataFieldByName'](type === 'SISSUED_WHERE' ? 'SDOCDEP' : 'SISSUED_WHERE')
+        value = this.suggestions.data[this.index].split(' - ')[0]
+        relatedValue = this.suggestions.data[this.index].split(' - ')[1]
+        this.$emit("update", {fieldId:this.data.fieldId, value});
+        this.$emit("update", {fieldId, value: relatedValue});
+      } else {
+        value = this.suggestions.data[this.index]
+        this.$emit("update", {fieldId:this.data.fieldId, value})
+      }
+      this.$forceUpdate();
+    },
     closeList() {
       this.open = false;
     },
     enter() {
       this.open = false;
       this.suggestionClick(this.current);
-      // this.$emit("update", this.suggestions.data[this.current]);
     },
     up() {
       if (this.current > 0) {
@@ -67,33 +86,11 @@ export default {
       return index === this.current;
     },
     suggestionClick(index) {
-      this.open = false;
-      let issuedWhere = this.$parent.$parent.$parent.$parent.$children.find(item => {
-          return item.data.name === 'SISSUED_WHERE';
-        });
-      let docDep = this.$parent.$parent.$parent.$parent.$children.find(item => {
-        return item.data.name === 'SDOCDEP';
-      });
-      if (this.suggestions.type === 'SISSUED_WHERE') {
-        this.$set(issuedWhere.data, 'value', null);
-        this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[0]);
-        this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[1]);
-      }
-      else if (this.suggestions.type === 'SDOCDEP') {
-        this.$set(issuedWhere.data, 'value', null);
-        this.$set(issuedWhere.data, 'value', this.suggestions.data[index].split(' - ')[1]);
-        this.$set(docDep.data, 'value', this.suggestions.data[index].split(' - ')[0]);
-      } else {
-        this.$emit("update", this.suggestions.data[index]);
-      }
-      this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:this.suggestions.data[index], page: this.data.page});
+      this.index = index;
       this.open = false;
     },
     async getSuggestions(name) {
-      this.$emit('changed-field', {
-        name,
-        value: this.data.value
-      });
+      this.$emit('update', {fieldId:this.data.fieldId, value:this.data.value});
       let API_KEY = '7a6080c3383b4dc69e786e1cd5c88366ab58a14c';
       this.open = true;
       this.current = 0;

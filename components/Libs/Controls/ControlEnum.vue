@@ -7,11 +7,11 @@
                          :isDisabled="!edit ? !edit : data.readonly"
                          :isError="data.state === false"
                          v-model="fieldValue"
-                         @input="updateMessage"
                          placeholder="Выберите из списка"
                          @select="onSelect"
                          @searchchange="initData">
       </model-list-select>
+
       <span class="error" v-if="data.state === false">
       Обязательно для заполнения
     </span>
@@ -26,6 +26,19 @@ import {ModelListSelect} from 'vue-search-select'
 export default {
   name: 'ControlEnum',
   components: {ModelListSelect},
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {
+      }
+    },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false
+    }
+  },
   data () {
     return {
       options: [],
@@ -36,9 +49,10 @@ export default {
     if (this.data.value.value) this.options.push(this.data.value)
   },
   methods: {
-    updateMessage(e){
-      console.log(e)
-    },
+    // updateField(e){
+    //   this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value: e, page: this.data.page})
+    //   this.$emit('clear', {fieldName:this.data.name})
+    // },
     initData (param) {
       let url = '';
       if(this.relationValue){
@@ -69,37 +83,23 @@ export default {
       console.log(lastSelectItem)
     }
   },
-  props: {
-    data: {
-      type: Object,
-      required: true,
-      default: () => {
-      }
-    },
-    edit: {
-      type: Boolean,
-      required: true,
-      default: () => false
-    }
-  },
   computed: {
-    relationValue: {
-      get: function () {
-        if(this.data.isRelation){
-          return this.$store.getters['card/getWizardDataFieldByName'](this.data.fieldRelation)
-        }
-        else{
-          return null
-        }
-      }
-    },
     fieldValue: {
       get: function () {
         return this.data.value
       },
       set: function (value) {
-        this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:value, page: this.data.page});
-        this.$store.commit('card/clearWizardRelationField', {fieldName:this.data.name});
+        this.$emit('update', {fieldId:this.data.fieldId, value})
+      }
+    },
+    relationValue: {
+      get: function () {
+        if(this.data.isRelation){
+          return this.$store.getters['data_card/getDataFieldByName'](this.data.fieldRelation)
+        }
+        else{
+          return null
+        }
       }
     }
   }

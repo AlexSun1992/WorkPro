@@ -16,10 +16,8 @@ export const state = () => ({
   isListLoading: false,
   componentType: null,
   cardId: 0,
-  wizardData: null,
   cardForm: null,
-  isTab: false,
-  isFormChanged: false
+  isFormChanged: false,
 })
 
 export const getters = {
@@ -41,8 +39,6 @@ export const getters = {
   isListLoading: state => state.isListLoading,
   componentType: state => state.componentType,
   cardId: state => state.cardId,
-  wizardData: state => state.wizardData,
-  isTab: state => state.isTab,
   isFormChanged: state => state.isFormChanged,
   getWizardDataFieldByName: state => name => {
     return state.wizardData.find(b => b.name === name);
@@ -110,42 +106,9 @@ export const actions = {
     commit('clearCardForm');
   },
   async fetchWizard ({commit, getters}, params) {
-    let card;
-    if (params.context == 'profile') {
-      card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${getters['page'].idItem}/${params.id}`);
-    } else {
-      card = await this.$axios.get(`/api/card/${getters['page'].idModule}/${params.blockId}/${params.cardId}`);
-    }
-    if (!card.data.metaData.captions) {
-      commit('setWizardData', card.data.metaData.data);
-      return;
-    }
-    let captions = card.data.metaData.captions.split(';');
-    captions.pop();
-    let fields = card.data.metaData.data;
-    let tabs = captions.map(caption => {
-      return {
-        'title': caption,
-        'data': []
-      };
-    });
-    // Вынести в общую функцию (см. выше)
-    fields.forEach(item => {
-      tabs[item.page]['data'].push(item);
-    });
-    tabs.forEach(tab => {
-      let obj = {};
-      let cols = [];
-      obj.title = tab.title;
-      tab.data.forEach(field => {
-        cols.push(field.cols);
-      });
-    });
-    commit('setWizardData', tabs);
     commit('setShowWizard', true);
     commit('setShowFilter', false);
     commit('setShowList', false);
-    commit('setIsTab', true);
   },
   updateWizard({commit, getters}, params) {
     commit('setWizardData', params);
@@ -153,6 +116,10 @@ export const actions = {
 
   updateWizardField({commit}, data) {
     commit('setWizardField', data);
+  },
+
+  clearCaptions({commit}) {
+    commit('clearCaptions');
   },
 
   async applyFilter ({commit, dispatch, getters}, filters) {
@@ -290,6 +257,12 @@ export const mutations = {
   setWizardData(state, data) {
     state.wizardData = data
   },
+  setWizardCaptions(state, data) {
+    state.captions = data
+  },
+  clearCaptions(state) {
+    state.captions = null
+  },
   setCardForm(state, data) {
     state.cardForm = data
   },
@@ -303,13 +276,8 @@ export const mutations = {
     state.cardForm = null;
   },
   setWizardField(state, data) {
-    let item;
-    if(data.isTab){
-      item = state.wizardData[data.page]['data'].find(d => d.fieldId === data.fieldId)
-    }
-    else {
-      item = state.wizardData.find(d => d.fieldId === data.fieldId)
-    }
+
+    let item = state.wizardData.find(d => d.fieldId === data.fieldId)
     if (item) {
       item.value = data.value
     }
@@ -320,5 +288,11 @@ export const mutations = {
     if(item){
       item.value = {}
     }
+  },
+  setMenuId(state, data) {
+    state.menuId = data
+  },
+  setItemId(state, data) {
+    state.itemId = data
   }
 }
