@@ -96,6 +96,7 @@ converter.menuObject = (data) => {
   obj.delete = data.LDELETE
   obj.cols = data.NCOLCOUNT
   obj.isCard = data.IDADMMENUTYPE === 3
+  obj.isForm = data.IDADMMENUTYPE === 9
   obj.wizard =  wizardConverter.wizard(data.WIZARDCUR)
   obj.portalgrid = data.SVJPORTALGRID || null
   obj.cardgrid = data.SVJCARDGRID || null

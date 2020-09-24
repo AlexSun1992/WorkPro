@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="getPage && getPage.content">
-      <v-runtime-template :template="getPage.content.rendered"></v-runtime-template>
+       <v-runtime-template :template="getPage.content.rendered"></v-runtime-template>
     </div>
     <div v-else="getPage.status == '404'">
       <div class="container">

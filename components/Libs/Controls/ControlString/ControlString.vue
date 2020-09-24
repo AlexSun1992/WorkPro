@@ -3,8 +3,7 @@
       <string-autocomplete
         :data="data"
         :edit="edit"
-        @update="data.value=$event"
-        @changed-field="updateField($event)"
+        @update="updateField($event)"
       ></string-autocomplete>
     </b-form-group>
 </template>
@@ -33,7 +32,7 @@ export default {
   },
   methods: {
     updateField(e) {
-      this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:e.value, page: this.data.page});
+      this.data.value=e.value
       this.$emit('update', e);
     }
   }
@@ -41,9 +40,6 @@ export default {
 </script>
 
 <style scoped>
-  /* .form-control:disabled, .form-control[readonly]{
-    background-color: white;
-  } */
   .form-group {
     margin-bottom: 0!important;
   }

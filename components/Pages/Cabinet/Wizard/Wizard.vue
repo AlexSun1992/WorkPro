@@ -15,17 +15,23 @@
   import PolicyBlock from '../Block/PolicyBlock'
   import ContentBlock from '../Block/ContentBlock'
   import ActionButton from '../Block/ActionButton'
-  import CardViewer from '../CardViewer/CardViewer'
+  import FormPage from '~/components/Pages/FormPage'
   import OpenCardButton from '../Block/OpenCardButton'
   import VRuntimeTemplate from "v-runtime-template";
   export default {
     name: 'Wizard',
-    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, CardViewer},
+    components: {WizardList,NotifyBlock,OfferBlock,PolicyBlock, VRuntimeTemplate, ContentBlock, ActionButton, OpenCardButton, WizardCard, FormPage},
     props: {
       params: {
         type: Object,
         required: true,
         default: () => {}
+      }
+    },
+    data() {
+      return {
+        card: null,
+        list: null
       }
     },
     computed: {
@@ -45,16 +51,11 @@
         return this.params.settings.portalgrid || this.params.settings.cardgrid
       },
       templateCardData () {
-        return this.$store.getters['menu/getMenuById'](this.$store.getters['blocks/blockId']).SVJCARDTEMPLATE
+        return this.$store.getters['menu/getMenuById'](this.$store.getters['blocks/blockId'])?.SVJCARDTEMPLATE
       },
       isForm: {
         get: function () {
           return this.$store.getters['blocks/getForm']?.length
-        }
-      },
-      formCardData: {
-        get: function () {
-          return JSON.parse(JSON.stringify(this.$store.getters['blocks/getForm']));
         }
       },
       isEdit: {

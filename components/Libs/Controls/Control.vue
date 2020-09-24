@@ -1,7 +1,8 @@
 <template>
   <b-col :xl="col" :lg="data.cols" md="12" sm="12" class="mb-4">
     <div class="control" :style="{width: data.width ? data.width : '100%'}">
-      <component v-bind:is="comp" @edit="$emit('edit', $event)" @update="$emit('update', $event)" v-bind:data="data" v-bind:edit="edit"></component>
+      <!-- <component v-bind:is="comp" @edit="$emit('edit', $event)" @update="$emit('update', $event)" v-bind:data="data" v-bind:edit="edit"></component> -->
+      <component @update="$emit('update', $event)" @clear="$emit('clear', $event)" v-bind:is="comp" @edit="$emit('edit', $event)" :data="data" :edit="edit"></component>
     </div>
   </b-col>
 </template>

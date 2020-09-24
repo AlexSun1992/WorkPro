@@ -1,7 +1,7 @@
 <template>
   <b-form-group  :label="label" :label-for="data.name" :label-cols="data.labelCols ? '' : 2" :label-class="data.labelCols">
     <b-form-textarea id="textarea1"
-                     v-model="data.value"
+                     v-model="fieldValue"
                      :disabled="!edit ? !edit : data.readonly"
                      :state="data.state"
                      placeholder="Введите текст"
@@ -32,6 +32,14 @@ export default {
   computed: {
     label () {
       return this.data.label
+    },
+    fieldValue: {
+      get: function () {
+        return this.data.value
+      },
+      set: function (value) {
+        this.$emit('update', {fieldId:this.data.fieldId, value:value})
+      }
     }
   }
 }

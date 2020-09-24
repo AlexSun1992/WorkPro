@@ -24,7 +24,7 @@ export const actions = {
       .then((res) => {
         commit('setCardId', itemId);
         commit('setBlockId', menuId);
-        commit('setForm', res.data.data);
+        commit('setForm', res.data.metaData.data);
       })
   },
   async deleteForm ({commit, dispatch}, {moduleId, menuId, itemId}) {

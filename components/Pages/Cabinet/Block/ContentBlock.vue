@@ -28,6 +28,7 @@
     },
     async  fetch () {
       try {
+  
         await this.$store.dispatch('blocks/fetchBlock', this.itemId);
       } catch(err) {
         this.$bvToast.toast(err.response.data.MESSAGE, {
@@ -55,7 +56,7 @@
       async openCard (item) {
         try {
           if(this.isOpenCard){
-            await this.$store.dispatch('blocks/fetchForm', {moduleId:55, menuId:this.itemId, itemId:item.ID});
+            $nuxt._router.push(`/cabinet/55/0/${this.itemId}/${item.ID}`)
           }
 
         } catch(err) {
