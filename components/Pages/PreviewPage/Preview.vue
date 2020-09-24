@@ -13,6 +13,12 @@
     head: {
       title: 'Предпросмотр страницы'
     },
+    data () {
+      return {
+        counter: 0,
+        dropDownValueSelected: {textSelected: null, valueSelected: null}
+      }
+    },
     async asyncData ({ $axios, store, route }) {
       let dataPage = await $axios.get(`/wp-json/wpreso/v1/previews/${route.params.pageId}`)
       return {
