@@ -49,10 +49,6 @@ export default {
     if (this.data.value.value) this.options.push(this.data.value)
   },
   methods: {
-    // updateField(e){
-    //   this.$emit('update', {fieldId:this.data.fieldId, isTab:this.data.isTab, value: e, page: this.data.page})
-    //   this.$emit('clear', {fieldName:this.data.name})
-    // },
     initData (param) {
       let url = '';
       if(this.relationValue){
@@ -90,6 +86,7 @@ export default {
       },
       set: function (value) {
         this.$emit('update', {fieldId:this.data.fieldId, value})
+        this.$emit('clear', {fieldName:this.data.name})
       }
     },
     relationValue: {

@@ -43,7 +43,7 @@
         this.$store.commit('data_card/setFormField', {fieldId: e.fieldId, value: e.value});
       },
       clearRelation(e) {
-        this.$store.commit('data_card/clearFormRelationField', {fieldName:this.data.name});
+        this.$store.commit('data_card/clearFormRelationField', {fieldName:e.fieldName});
       },
       validateData(data) {
         this.invalidFields.length = 0;
