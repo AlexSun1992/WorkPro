@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="profile row">
+    <CardEditor v-if="editable || (!settings.cardtemplate && !editable)" class="bg-six block-border-one block col p-4" :data="getFormData" :edit="editable" :params="settings"/>
     <v-runtime-template v-if="settings.cardtemplate" :template="settings.cardtemplate"></v-runtime-template>
-    <CardEditor v-else class="bg-six block-border-one block col p-4" :data="getFormData" :edit="editable" :params="settings"/>
   </div>
 </template>
 
