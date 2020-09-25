@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <component
+    :is="params.settings.isModal ? 'b-modal' : 'div'"
+    id="modal"
+    no-close-on-backdrop
+    hide-footer
+  >
     <div class="block-title pt-0 position-relative mt-2 mb-4">
       <i class="icon-my-profile"></i>{{ params.settings.text }}
     </div>
@@ -16,7 +21,7 @@
         :template="params.settings.cardtemplate"
       ></v-runtime-template>
     </div>
-  </div>
+  </component>
 </template>
 
 <script>
@@ -26,6 +31,10 @@ export default {
   name: "FormPage",
   components: { CardEditor, VRuntimeTemplate },
   props: ["params"],
+
+  mounted() {
+    this.$bvModal.show("modal");
+  },
 
   async created() {
     this.$store.commit("data_card/clearFormData");
@@ -50,5 +59,3 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
