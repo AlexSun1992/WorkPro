@@ -16,6 +16,7 @@
   import Calculator from '../../Pages/Calculator'
 
   export default {
+    layout: 'MainLayout',
     head () {
       return {
         title: this.getPage?.title?.rendered
