@@ -12,6 +12,9 @@ export const getters = {
   getMenuById: state => id => {
     return state.flatmenu.find(m => m.IDITEM === parseInt(id));
   },
+  getMenuWithOutIcon: state => {
+    return state.menu[0].children.filter(m => m.iconFileName !== undefined && m.iconFileName !== '');
+  },
 }
 
 export const actions = {
@@ -21,7 +24,7 @@ export const actions = {
         commit('setMenu', res.data);
         commit('setBreadcrumbs', breadcrumbs.getData(res.data, params))
       })
-    await this.$axios.get(`am/main/v2/menu/55`)
+    await this.$axios.get(`am/main/v2/clientmenu/55`)
       .then((res) => {
         commit('setFlatMenu', res.data[0]._data);
       })
