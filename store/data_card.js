@@ -2,10 +2,12 @@ export const state = () => ({
   form : [],
   copyForm: [],
   cardId: null,
-  captions: null
+  captions: null,
+  cardCaption: null
 })
 export const getters = {
   getForm: state => state.form,
+  cardCaption: state => state.cardCaption,
   getCopyForm: state => state.copyForm,
   getCardId: state => state.cardId,
   getCaptions: state => state.captions,
@@ -27,6 +29,7 @@ export const actions = {
         if (res.data.metaData.captions) {
           commit('setCaptions', res.data.metaData.captions);
         }
+        commit('setCardCaption', res.data.metaData.cardCaption);
       })
   },
   async saveDataCard ({commit}, params) {
@@ -57,6 +60,9 @@ export const mutations = {
   },
   setCardId(state, data) {
     state.cardId = data
+  },
+  setCardCaption(state, data) {
+    state.cardCaption = data
   },
   clearFormData(state) {
     state.captions = null

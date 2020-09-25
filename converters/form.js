@@ -136,7 +136,8 @@ converter.form = async(data, itemId) => {
     // Метаданные для отображения JSONWEBFIELDS
     metaData: {
       data: converter.type(webFieldsArr),
-      captions: data[0]._meta['SPAGECAPTION']
+      captions: data[0]._meta['SPAGECAPTION'],
+      cardCaption: data[0]._meta['SCARDCAPTION'],
     }
   }
 }
