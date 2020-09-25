@@ -1,8 +1,13 @@
 <template>
+<div>
+  <div v-if="cardCaption" class="block-title pt-0 position-relative mt-2 mb-4">
+    <i class="icon-my-profile"></i>{{ cardCaption }}
+  </div>
   <div class="profile row">
     <CardEditor v-if="editable || (!settings.cardtemplate && !editable)" class="bg-six block-border-one block col p-4" :data="getFormData" :edit="editable" :params="settings"/>
     <v-runtime-template v-if="settings.cardtemplate" :template="settings.cardtemplate"></v-runtime-template>
   </div>
+</div>
 </template>
 
 <script>
@@ -54,6 +59,9 @@ export default {
         return this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
       },
     },
+    cardCaption() {
+      return this.$store.getters['data_card/cardCaption']
+    }
   },
 };
 </script>
