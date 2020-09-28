@@ -8,6 +8,7 @@
   import VRuntimeTemplate from "v-runtime-template";
   import Calculator from "../../Pages/Calculator";
   export default {
+    layout: 'MainLayout',
     name: 'Preview',
     components: {VRuntimeTemplate, Calculator},
     head: {
