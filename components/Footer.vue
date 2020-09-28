@@ -64,31 +64,8 @@
 <script>
 export default {
   name: 'c-footer',
-  data() {
-    return {
-      cols: 2
-    }
-  },
-  methods: {
-    links(item) {
-      let columns = [];
-      let links = [];
-      item.sections.forEach(i => {
-        links.push(...i.links);
-      });
-      if(links.length > 5) {
-        let mid = Math.ceil(links.length / this.cols);
-        for (let col = 0; col < this.cols; col++) {
-          columns.push(links.slice(col * mid, col * mid + mid));
-        }
-        return columns;
-      } else {
-        return links;
-      }
-    }
-  },
   computed: {
-    menu() {
+    footer() {
       return this.$store.getters["pages/getFooterMenu"];
     }
   }

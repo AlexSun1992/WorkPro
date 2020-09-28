@@ -1,11 +1,13 @@
 <template>
- <nuxt-child />
+  <div>
+    <nuxt-child />
+  </div>
 </template>
 
 <script>
   export default {
     middleware: 'guest',
-    layout: 'DemoLayout',
+    layout: 'CabinetLayout',
     name: 'Full',
     async fetch ({ store, route }) {
       await store.dispatch('menu/fetchMenu', route.params)

@@ -1,5 +1,4 @@
 <template>
-  <!-- <b-form-group  :label="label"> -->
   <div>
     <b-form-group  :label="data.label" :class="{required: data.required}" :label-for="data.name" :label-cols="data.labelCols ? '' : 2" :label-class="data.labelCols">
       <date-picker v-model="fieldValue" :disabled="!edit ? !edit : data.readonly" type="date" valueType="DD.MM.YYYY" format="DD.MM.YYYY" :first-day-of-week="1" :lang="lang" :input-class="data.state === false ? `${state} is-invalid` : state" ></date-picker>
@@ -40,8 +39,7 @@ export default {
         return this.data.value
       },
       set: function (value) {
-        this.data.value = value;
-        this.$store.commit('card/setWizardField', {fieldId:this.data.fieldId, isTab:this.data.isTab, value:value, page: this.data.page});
+        this.$emit('update', {fieldId:this.data.fieldId, value:value})
       }
     }
   }

@@ -23,7 +23,7 @@
   export default {
     name: 'LoginPage',
     components: {
-      RegForm, 
+      RegForm,
       LoginForm
       },
     methods: {
