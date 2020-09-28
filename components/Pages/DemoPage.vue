@@ -9,8 +9,8 @@
               <a href="">Смотреть все</a>
             </div>
             <div class="col-auto">
-              <div  @click="$refs.wrapper.goToPrev()"class="slider-arrow-prev"></div>
-              <div  @click="$refs.wrapper.goToNext()" class="slider-arrow-next"></div>
+              <div  @click="$refs.wrapper.goToPrev()"class="slider-arrow-prev" v-bind:class="{ disabled: isButtonLeftDisabled }"></div>
+              <div  @click="$refs.wrapper.goToNext()" class="slider-arrow-next" v-bind:class="{ disabled: isButtonRightDisabled }"></div>
             </div>
           </div>
         </div>
@@ -92,11 +92,15 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   export default {
     layout: 'DemoMainPageLayout',
     name: 'DemoPage',
     head: {
       title: 'Демонстрационная страница'
+    },
+    computed: {
+      ...mapGetters("slider",['isButtonLeftDisabled','isButtonRightDisabled']),
     }
   }
 </script>
