@@ -5,7 +5,8 @@
         <div class="row">
           <Control v-for='(item, i) in items(index)' :key="i"
             @update="$emit('update', $event)" 
-            @clear="$emit('clear', $event)" 
+            @clear="$emit('clear', $event)"
+            @open-card="$emit('open-card', $event)" 
             :data="item" 
             :edit="edit" 
             :cols="cols">
@@ -17,6 +18,7 @@
       <Control v-for='(item, i) in items()' :key="i"
         @update="$emit('update', $event)" 
         @clear="$emit('clear', $event)"
+        @open-card="$emit('open-card', $event)"
         :data="item" 
         :edit="edit" 
         :cols="cols">

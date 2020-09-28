@@ -1,7 +1,12 @@
 <template>
   <div>
     <b-button v-on:click="$router.go(-1)" type="submit" variant="success"><i class="fa fa-chevron-left"></i> Назад</b-button>
-    <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" :edit="edit"></Form>
+    <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
+    <div v-for='(item, index) in params.actions' :key='index'  v-on:click="applyAction(item)">
+      <b-button>
+        {{item.label}}
+      </b-button>
+    </div>
      <div class="mt-3 row button-container">
       <div class="col-12">
         <b-button pill v-on:click="saveDataCard" type="button" variant="success" class="col-12 col-md-auto mr-4">Сохранить</b-button>
@@ -44,6 +49,13 @@
       },
       clearRelation(e) {
         this.$store.commit('data_card/clearFormRelationField', {fieldName:e.fieldName});
+      },
+      openCard(e) {
+        let flatmenu = this.$store.getters['menu/flatmenu']
+        let menuItem = flatmenu.find(item => {
+          return item.SNAME == e.label
+        })
+        $nuxt._router.push(`/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0`)
       },
       validateData(data) {
         this.invalidFields.length = 0;
@@ -91,6 +103,9 @@
             })
           }
         }
+      },
+      async applyAction(item) {
+        
       },
       cancelDataCard() {
         this.$store.commit('data_card/setForm', JSON.parse(JSON.stringify(this.$store.getters['data_card/getCopyForm'])))
