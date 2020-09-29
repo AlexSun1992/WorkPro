@@ -2,9 +2,7 @@
   <div>
     <b-button v-on:click="$router.go(-1)" type="submit" variant="success"><i class="fa fa-chevron-left"></i> Назад</b-button>
     <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
-    <div v-for='(item, index) in params.actions' :key='index'  v-on:click="applyAction(item)">
-      <action-button v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
-    </div>
+    <action-button v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
      <div class="mt-3 row button-container">
       <div class="col-12">
         <b-button pill v-on:click="saveDataCard" type="button" variant="success" class="col-12 col-md-auto mr-4">Сохранить</b-button>
@@ -74,7 +72,6 @@
         return valid;
       },
       async saveDataCard() {
-        debugger
         let fields = JSON.parse(JSON.stringify(this.$store.getters['data_card/getForm']))
         fields = fields.filter(item => !item.name.match(/^ID/));
         if(this.validateData(fields)){
@@ -114,11 +111,10 @@
     computed: {
       actions: {
         get: function () {
-          debugger
+          // Переделать кнопку!
           this.body = {
             "sNumber": this.currentField?.value
           }
-          debugger
           return this.$store.getters['menu/getMenuById'](this.$route.params.idItem).ACTIONSCUR
         }
       }

@@ -60,8 +60,10 @@ export default {
         this.$emit("update", {fieldId:this.data.fieldId, value});
         this.$emit("update", {fieldId, value: relatedValue});
       } else {
-        value = this.suggestions.data[this.index]
-        this.$emit("update", {fieldId:this.data.fieldId, value})
+        if (this.suggestions.data && this.suggestions.data.length) {
+          value = this.suggestions.data[this.index]
+          this.$emit("update", {fieldId:this.data.fieldId, value})
+        }
       }
       this.$forceUpdate();
     },
