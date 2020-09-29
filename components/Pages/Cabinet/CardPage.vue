@@ -14,6 +14,7 @@
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import VRuntimeTemplate from "v-runtime-template";
 import { isFieldExists, getField, getFieldValue } from "~/utils/utils.js";
+
 export default {
   name: "CardPage",
   components: { CardEditor, VRuntimeTemplate },
@@ -29,8 +30,8 @@ export default {
     this.edit();
   },
   methods: {
-    // isFieldExists, 
-    // getField, 
+    // isFieldExists,
+    // getField,
     // getFieldValue,
     isFieldExists(name, data = undefined) {
       return Boolean(this.getField(name, data));

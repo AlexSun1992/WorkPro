@@ -1,6 +1,7 @@
 <template>
   <header>
     <div class="container">
+      {{menu}}
       <div class="top_menu">
         <div class="float-left">
                     <span class="icon-left icon-location"><span class="d-none d-lg-inline-block">Ваш
