@@ -1,5 +1,6 @@
 <template>
   <footer>
+    {{footer}}
     <div class="container">
       <div class="row">
         <div class="col-5  menu-link">
