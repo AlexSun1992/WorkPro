@@ -1,17 +1,10 @@
 <template>
   <div>
-    <component
-      :is="params.settings.isModal ? 'b-modal' : 'div'"
-      :modal-class="myclass"
-      @close="closeModal"
-      id="modal"
-      no-close-on-backdrop
-      hide-footer
-    >
+    <component :is="params.settings.isModal ? 'b-modal' : 'div'" :modal-class="myclass" @close="closeModal" id="modal" no-close-on-backdrop hide-footer>
       <div class="block-title pt-0 position-relative mt-2 mb-4">
         <i class="icon-my-profile"></i>{{ params.settings.text }}
       </div>
-      <div class="profile row">
+      <div class="profile row col-12">
         <card-editor
           class="bg-six block-border-one block col p-4"
           @error="$emit('error')"

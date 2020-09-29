@@ -3,18 +3,14 @@
     <div v-if="cardCaption" class="block-title pt-0 position-relative mt-2 mb-4">
       <i class="icon-my-profile"></i>{{ cardCaption }}
     </div>
-    <b-modal v-if="settings.isModal" :modal-class="myclass"
-      @close="closeModal"
-      id="modal"
-      no-close-on-backdrop
-      hide-footer>
+    <b-modal v-if="settings.isModal" :modal-class="myclass" @close="closeModal" id="modal" no-close-on-backdrop hide-footer>
       <div class="block-title pt-0 position-relative mt-2 mb-4">
         <i class="icon-my-profile"></i>{{ settings.text }}
       </div>
       <CardEditor v-if="editable || (!settings.cardtemplate && !editable)" class="bg-six block-border-one block col p-4" :data="getFormData" :edit="editable" :params="settings"/>
       <v-runtime-template v-if="settings.cardtemplate" :template="settings.cardtemplate"></v-runtime-template>
     </b-modal>
-    <div v-else class="profile row">
+    <div v-else class="profile col-12 row">
       <CardEditor v-if="editable || (!settings.cardtemplate && !editable)" class="bg-six block-border-one block col p-4" :data="getFormData" :edit="editable" :params="settings"/>
       <v-runtime-template v-if="settings.cardtemplate" :template="settings.cardtemplate"></v-runtime-template>
     </div>

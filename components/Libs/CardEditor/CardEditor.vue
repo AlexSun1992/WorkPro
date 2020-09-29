@@ -3,9 +3,7 @@
     <b-button v-on:click="$router.go(-1)" type="submit" variant="success"><i class="fa fa-chevron-left"></i> Назад</b-button>
     <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
     <div v-for='(item, index) in params.actions' :key='index'  v-on:click="applyAction(item)">
-      <b-button>
-        {{item.label}}
-      </b-button>
+      <action-button v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
     </div>
      <div class="mt-3 row button-container">
       <div class="col-12">
@@ -18,12 +16,15 @@
 
 <script>
   import Form from '~/components/Libs/Form/Form'
+  import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
   export default {
     name: 'CardEditor',
-    components: {Form},
+    components: {Form, ActionButton},
     data() {
       return {
-        invalidFields: []
+        invalidFields: [],
+        body: null,
+        currentField: null
       }
     },
     props: {
@@ -45,6 +46,7 @@
     },
     methods: {
       updateValue(e) {
+        this.currentField = {fieldId: e.fieldId, value: e.value}
         this.$store.commit('data_card/setFormField', {fieldId: e.fieldId, value: e.value});
       },
       clearRelation(e) {
@@ -72,6 +74,7 @@
         return valid;
       },
       async saveDataCard() {
+        debugger
         let fields = JSON.parse(JSON.stringify(this.$store.getters['data_card/getForm']))
         fields = fields.filter(item => !item.name.match(/^ID/));
         if(this.validateData(fields)){
@@ -104,11 +107,20 @@
           }
         }
       },
-      async applyAction(item) {
-        
-      },
       cancelDataCard() {
         this.$store.commit('data_card/setForm', JSON.parse(JSON.stringify(this.$store.getters['data_card/getCopyForm'])))
+      }
+    },
+    computed: {
+      actions: {
+        get: function () {
+          debugger
+          this.body = {
+            "sNumber": this.currentField?.value
+          }
+          debugger
+          return this.$store.getters['menu/getMenuById'](this.$route.params.idItem).ACTIONSCUR
+        }
       }
     }
   }
