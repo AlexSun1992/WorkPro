@@ -1328,3 +1328,14 @@ h6 {
 .fw-light {
   font-weight: 300;
 }
+@media (max-width: 1200px) {
+  .middle_menu a {
+    font-size: 1.125rem;
+  }
+}
+@media (max-width: 1023px) {
+  .middle_menu a {
+    font-size: 1rem;
+    margin-right: 20px;
+  }
+}

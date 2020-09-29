@@ -53,9 +53,23 @@
           <div class="block-h-line my-4"></div>
         </div>
         <div class="col-12">
-          <div class="info mb-2">СПАО «РЕСО-Гарантия» раскрывает информацию на странице в сети Интернет информационного агентства, аккредитованного ЦБ РФ на раскрытие информации, по адресу: <a href="http://www.disclosure.ru/issuer/7710045520/">http://www.disclosure.ru/issuer/7710045520/</a></div>
-          <div class="info_ppl mb-2">Информация об акционерах и лицах, под контролем или значительным влиянием которых находится страховщик на 17.12.2018 год</div>
-          <div class="copyright">© 2020, «РЕСО-Гарантия»&nbsp;&nbsp;&nbsp;&nbsp;<a href="">Конфиденциальность</a></div>
+          <div class="info mb-2">
+            СПАО «РЕСО-Гарантия» раскрывает информацию на странице в сети
+            Интернет информационного агентства, аккредитованного ЦБ РФ на
+            раскрытие информации, по адресу:
+            <a href="http://www.disclosure.ru/issuer/7710045520/"
+              >http://www.disclosure.ru/issuer/7710045520/</a
+            >
+          </div>
+          <div class="info_ppl mb-2">
+            Информация об акционерах и лицах, под контролем или значительным
+            влиянием которых находится страховщик на 17.12.2018 год
+          </div>
+          <div class="copyright">
+            © 2020, «РЕСО-Гарантия»&nbsp;&nbsp;&nbsp;&nbsp;<a href=""
+              >Конфиденциальность</a
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -63,15 +77,13 @@
 </template>
 <script>
 export default {
-  name: 'c-footer',
+  name: "c-footer",
   computed: {
     footer() {
       return this.$store.getters["pages/getFooterMenu"];
     }
   }
-}
+};
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
