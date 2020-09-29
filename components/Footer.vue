@@ -1,9 +1,60 @@
 <template>
   <footer>
-    {{footer}}
+    {{ footer }}
     <div class="container">
       <div class="row">
-        <div class="col-5  menu-link">
+        <div class="col-8">
+          <div class="row">
+            <div class="products_all">
+              <a href="">Купить полис</a>
+              <div
+                class="product menu-auto menu_link_separator mb-4 pb-4 position-relative"
+              >
+                <a href="">Авто</a>
+                <div class="priduct_link">
+                  <a href="">Осаго</a>
+                  <a href="">КАСКО</a>
+                  <a href="">Зелень</a>
+                </div>
+              </div>
+              <div class="product  menu-im">
+                <a href="">Имущество</a>
+                <div class="priduct_link">
+                  <a href="">КВАРТИРА</a>
+                  <a href="">ДОМ</a>
+                  <a href="">ИПОТЕКА</a>
+                </div>
+              </div>
+              <div class="product  menu-med">
+                <a href="">Медицина</a>
+                <div class="priduct_link">
+                  <a href="">ДМС</a>
+                  <a href="">ОМС</a>
+                  <a href="">НЕСЧАСТНЫЙ СЛУЧАЙ</a>
+                  <a href="">ТУРИЗМ</a>
+                  <a href="">Накопительное инвестиционное страхование жизни</a>
+                </div>
+              </div>
+            </div>
+            <div class="info_all block-v-line">
+              <a href="">РЕсо Гарантия</a>
+              <div class="product">
+                <a href="">РЕсо Гарантия</a>
+                <div class="priduct_link">
+                  <a href="">О компании</a>
+                  <a href="">Новости</a>
+                  <a href="">Раскрытие сведений</a>
+                  <a href="">Карьера в РЕСО</a>
+                  <a href="">Закупки</a>
+                  <a href="">Правила и тарифы</a>
+                  <a href="">Информация для получателей страховых услуг</a>
+                  <a href="">Карта сайта</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-5  menu-link d-none">
           <div class="row">
             <div class="col-5">
               <div class="title">Авто</div>
@@ -26,7 +77,7 @@
             </div>
           </div>
         </div>
-        <div class="col-3 block-v-line menu-link">
+        <div class="col-3  d-none block-v-line menu-link">
           <div class="title">РЕСО-Гарантия</div>
           <a href="">О компании</a>
           <a href="">Новости</a>
@@ -87,4 +138,67 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.info_all > a,
+.products_all > a {
+  display: none;
+}
+.products_all > a {
+  grid-area: title;
+}
+.menu-med {
+  grid-area: med;
+}
+.menu-auto {
+  grid-area: auto;
+}
+.menu_link_separator:after {
+  height: 1px;
+  width: 20%;
+  background-color: #dee5e0;
+  content: "";
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+.menu-im {
+  grid-area: im;
+}
+.products_all {
+  columns: 2;
+  flex: 0 0 60%;
+  max-width: 60%;
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas: "auto med" "im med";
+}
+.info_all {
+  flex: 0 0 40%;
+  max-width: 40%;
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.product > a {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  color: #474747;
+  font-weight: 500;
+  padding-bottom: 0.5rem;
+}
+.priduct_link a {
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #474747;
+  padding: 6px 0;
+  display: table;
+}
+</style>
