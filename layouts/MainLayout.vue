@@ -23,7 +23,6 @@
   import Header from '~/components/Header/Header';
   import Footer from '~/components/Footer';
   import Sidebar from '~/components/Sidebar/Sidebar';
-  import Breadcrumb from '~/components/Breadcrumb';
   export default {
     name: 'full',
     head: {
@@ -33,7 +32,6 @@
       Header,
       Sidebar,
       Footer,
-      Breadcrumb
     },
     data () {
       return {
