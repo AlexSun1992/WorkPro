@@ -68,6 +68,9 @@ export default {
 </script>
 
 <style>
+  .modal-content {
+    top: 85px;
+  }
 /* #modal {
   display: flex !important;
   align-items: center;

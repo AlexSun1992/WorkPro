@@ -4,7 +4,7 @@
     <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
     <action-button v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
      <div class="mt-3 row button-container">
-      <div class="col-12">
+      <div class="col-12" v-if="edit">
         <b-button pill v-on:click="saveDataCard" type="button" variant="success" class="col-12 col-md-auto mr-4">Сохранить</b-button>
         <b-button pill v-on:click="cancelDataCard" type="button" variant="outline-success" class="col-12 col-md-auto mt-2 mt-md-0">Отменить</b-button>
       </div>
@@ -89,6 +89,9 @@
               cardId = this.$store.getters['data_card/getCardId']
             }
             await this.$store.dispatch('data_card/saveDataCard', {moduleId, itemId, cardId, form: fields});
+            if (this.$route.params.idItem == '710') {
+              await this.$store.dispatch('updateUser');
+            }
             this.$bvToast.toast('Успешно сохранено', {
               title: ``,
               variant: 'success',
