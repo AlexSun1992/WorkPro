@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-button v-on:click="$router.go(-1)" type="submit" variant="success"><i class="fa fa-chevron-left"></i> Назад</b-button>
-    <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
-    <action-button v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
+    <Form :currentField="currentField" :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
+    <!-- <action-button v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/> -->
      <div class="mt-3 row button-container">
       <div class="col-12" v-if="edit">
         <b-button pill v-on:click="saveDataCard" type="button" variant="success" class="col-12 col-md-auto mr-4">Сохранить</b-button>
@@ -112,15 +112,14 @@
       }
     },
     computed: {
-      actions: {
-        get: function () {
-          // Переделать кнопку!
-          this.body = {
-            "sNumber": this.currentField?.value
-          }
-          return this.$store.getters['menu/getMenuById'](this.$route.params.idItem).ACTIONSCUR
-        }
-      }
+      // actions: {
+      //   get: function () {
+      //     this.body = {
+      //       "sNumber": this.currentField?.value
+      //     }
+      //     return this.$store.getters['menu/getMenuById'](this.$route.params.idItem).ACTIONSCUR
+      //   }
+      // }
     }
   }
 </script>
