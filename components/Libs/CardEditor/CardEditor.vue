@@ -1,9 +1,10 @@
 <template>
   <div>
     <b-button v-on:click="$router.go(-1)" type="submit" variant="success"><i class="fa fa-chevron-left"></i> Назад</b-button>
-    <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" :edit="edit"></Form>
+    <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
+    <action-button v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/>
      <div class="mt-3 row button-container">
-      <div class="col-12">
+      <div class="col-12" v-if="edit">
         <b-button pill v-on:click="saveDataCard" type="button" variant="success" class="col-12 col-md-auto mr-4">Сохранить</b-button>
         <b-button pill v-on:click="cancelDataCard" type="button" variant="outline-success" class="col-12 col-md-auto mt-2 mt-md-0">Отменить</b-button>
       </div>
@@ -13,12 +14,15 @@
 
 <script>
   import Form from '~/components/Libs/Form/Form'
+  import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
   export default {
     name: 'CardEditor',
-    components: {Form},
+    components: {Form, ActionButton},
     data() {
       return {
-        invalidFields: []
+        invalidFields: [],
+        body: null,
+        currentField: null
       }
     },
     props: {
@@ -40,10 +44,18 @@
     },
     methods: {
       updateValue(e) {
+        this.currentField = {fieldId: e.fieldId, value: e.value}
         this.$store.commit('data_card/setFormField', {fieldId: e.fieldId, value: e.value});
       },
       clearRelation(e) {
         this.$store.commit('data_card/clearFormRelationField', {fieldName:e.fieldName});
+      },
+      openCard(e) {
+        let flatmenu = this.$store.getters['menu/flatmenu']
+        let menuItem = flatmenu.find(item => {
+          return item.SNAME == e.label
+        })
+        $nuxt._router.push(`/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0`)
       },
       validateData(data) {
         this.invalidFields.length = 0;
@@ -77,6 +89,9 @@
               cardId = this.$store.getters['data_card/getCardId']
             }
             await this.$store.dispatch('data_card/saveDataCard', {moduleId, itemId, cardId, form: fields});
+            if (this.$route.params.idItem == '710') {
+              await this.$store.dispatch('updateUser');
+            }
             this.$bvToast.toast('Успешно сохранено', {
               title: ``,
               variant: 'success',
@@ -94,6 +109,17 @@
       },
       cancelDataCard() {
         this.$store.commit('data_card/setForm', JSON.parse(JSON.stringify(this.$store.getters['data_card/getCopyForm'])))
+      }
+    },
+    computed: {
+      actions: {
+        get: function () {
+          // Переделать кнопку!
+          this.body = {
+            "sNumber": this.currentField?.value
+          }
+          return this.$store.getters['menu/getMenuById'](this.$route.params.idItem).ACTIONSCUR
+        }
       }
     }
   }

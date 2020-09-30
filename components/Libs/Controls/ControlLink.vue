@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button :class="data.labelCols + ' link-button'" @click="openEdit()" variant="secondary">{{ data.label }}</b-button>
+    <b-button :class="data.labelCols + ' link-button'" @click="$emit('open-card', data)" variant="secondary">{{ data.label }}</b-button>
   </div>
 </template>
 
@@ -17,15 +17,6 @@ export default {
       type: Object,
       required: true,
       default: () => {}
-    }
-  },
-  methods: {
-    openEdit() {
-      this.editShow = true;
-      this.$emit('edit', {
-        data: this.data,
-        show: this.editShow 
-      });
     }
   }
 }

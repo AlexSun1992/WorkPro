@@ -1,21 +1,23 @@
 <template>
   <div>
-    <div class="block-title pt-0 position-relative mt-2 mb-4">
-      <i class="icon-my-profile"></i>{{ params.settings.text }}
-    </div>
-    <div class="profile row">
-      <card-editor
-        class="bg-six block-border-one block col p-4"
-        @error="$emit('error')"
-        :data="dataForm"
-        :edit="params.settings.edit"
-        :params="params"
-      ></card-editor>
-      <v-runtime-template
-        v-if="params.settings.cardtemplate"
-        :template="params.settings.cardtemplate"
-      ></v-runtime-template>
-    </div>
+    <component :is="params.settings.isModal ? 'b-modal' : 'div'" :modal-class="myclass" @close="closeModal" id="modal" no-close-on-backdrop hide-footer>
+      <div class="block-title pt-0 position-relative mt-2 mb-4">
+        <i class="icon-my-profile"></i>{{ params.settings.text }}
+      </div>
+      <div class="profile row col-12">
+        <card-editor
+          class="bg-six block-border-one block col p-4"
+          @error="$emit('error')"
+          :data="dataForm"
+          :edit="params.settings.edit"
+          :params="params"
+        ></card-editor>
+        <v-runtime-template
+          v-if="params.settings.cardtemplate"
+          :template="params.settings.cardtemplate"
+        ></v-runtime-template>
+      </div>
+    </component>
   </div>
 </template>
 
@@ -26,6 +28,16 @@ export default {
   name: "FormPage",
   components: { CardEditor, VRuntimeTemplate },
   props: ["params"],
+
+  data() {
+    return {
+      myclass: ["cabinet"],
+    };
+  },
+
+  mounted() {
+    this.$bvModal.show("modal");
+  },
 
   async created() {
     this.$store.commit("data_card/clearFormData");
@@ -40,6 +52,11 @@ export default {
     };
     await this.$store.dispatch("data_card/fetchForm", params);
   },
+  methods: {
+    closeModal() {
+      this.$router.back();
+    },
+  },
   computed: {
     dataForm() {
       return JSON.parse(
@@ -50,5 +67,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+  .modal-content {
+    top: 85px;
+  }
+/* #modal {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+} */
+.modal-dialog {
+  min-width: 80vw;
+}
 </style>
