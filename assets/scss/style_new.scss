@@ -1827,16 +1827,30 @@ button:focus {
   position: absolute;
 }
 .card + .card {
-  margin-top: 20px;
+  margin-top: 15px;
+  overflow: visible;
 }
 .card + .card:before {
   position: absolute;
-  top: -20px;
+  top: -40px;
   background: url(/img/block-separator.svg) 50% 50% no-repeat;
   left: 50%;
   margin-left: -20px;
-  width: 40px;
-  height: 40px;
+  width: 63px;
+  height: 65px;
   content: "";
   z-index: 1;
+}
+.block.box-shadow {
+  box-shadow: 0px 4px 12px rgba(188, 188, 188, 0.25);
+}
+
+.color-green {
+  color: #008b4e;
+}
+.color-gray {
+  color: #7d8b9c;
+}
+.color-dark {
+  color: #4c545e;
 }
