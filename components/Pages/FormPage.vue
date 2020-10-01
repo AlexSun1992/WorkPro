@@ -1,17 +1,26 @@
 <template>
   <div>
-    <component :is="params.settings.isModal ? 'b-modal' : 'div'" :modal-class="myclass" @close="closeModal" id="modal" no-close-on-backdrop hide-footer>
+    <component
+      :is="params.settings.isModal ? 'b-modal' : 'div'"
+      :modal-class="myclass"
+      @close="closeModal"
+      id="modal"
+      no-close-on-backdrop
+      hide-footer
+    >
       <div class="block-title pt-0 position-relative mt-2 mb-4">
         <i class="icon-my-profile"></i>{{ params.settings.text }}
       </div>
-      <div class="profile row col-12">
-        <card-editor
-          class="bg-six block-border-one block col p-4"
-          @error="$emit('error')"
-          :data="dataForm"
-          :edit="params.settings.edit"
-          :params="params"
-        ></card-editor>
+      <div class="profile row">
+        <div class="col">
+          <card-editor
+            class="bg-six block-border-one block p-4"
+            @error="$emit('error')"
+            :data="dataForm"
+            :edit="params.settings.edit"
+            :params="params"
+          ></card-editor>
+        </div>
         <v-runtime-template
           v-if="params.settings.cardtemplate"
           :template="params.settings.cardtemplate"
@@ -31,7 +40,7 @@ export default {
 
   data() {
     return {
-      myclass: ["cabinet"],
+      myclass: ["cabinet"]
     };
   },
 
@@ -48,29 +57,29 @@ export default {
     let params = {
       idModule: this.params.page.idModule,
       idItem: this.params.page.idItem,
-      idCard: list.data.items[0].ID,
+      idCard: list.data.items[0].ID
     };
     await this.$store.dispatch("data_card/fetchForm", params);
   },
   methods: {
     closeModal() {
       this.$router.back();
-    },
+    }
   },
   computed: {
     dataForm() {
       return JSON.parse(
         JSON.stringify(this.$store.getters["data_card/getForm"])
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style>
-  .modal-content {
-    top: 85px;
-  }
+.modal-content {
+  top: 85px;
+}
 /* #modal {
   display: flex !important;
   align-items: center;
