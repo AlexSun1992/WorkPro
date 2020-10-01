@@ -10,10 +10,11 @@
       <CardEditor v-if="editable || (!settings.cardtemplate && !editable)" class="bg-six block-border-one block col p-4" :data="getFormData" :edit="editable" :params="settings"/>
       <v-runtime-template v-if="settings.cardtemplate" :template="settings.cardtemplate"></v-runtime-template>
     </b-modal>
-    <div v-else class="profile row"><div class="col">
-      <CardEditor v-if="editable || (!settings.cardtemplate && !editable)" class="bg-six block-border-one block p-4" :data="getFormData" :edit="editable" :params="settings"/>
-      <v-runtime-template v-if="settings.cardtemplate" :template="settings.cardtemplate"></v-runtime-template>
+    <div v-else class="profile row">
+      <div class="col" v-if="editable || (!settings.cardtemplate && !editable)">
+        <CardEditor class="bg-six block-border-one block p-4" :data="getFormData" :edit="editable" :params="settings"/>
       </div>
+      <v-runtime-template v-if="settings.cardtemplate" :template="settings.cardtemplate"></v-runtime-template>
     </div>
   </div>
 </template>
