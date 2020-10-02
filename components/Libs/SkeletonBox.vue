@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <div class="grid-item" v-for="(item, index) in 7" :key="index"></div>
+      <div class="grid-item" v-for="(item, index) in 8" :key="index"></div>
     </div>
   </div>
 </template>
