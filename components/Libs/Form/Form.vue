@@ -9,7 +9,6 @@
             @open-card="$emit('open-card', $event)" 
             :data="item" 
             :edit="edit"
-            :currentField="currentField" 
             :cols="cols">
           </Control>
         </div>
@@ -22,7 +21,6 @@
         @open-card="$emit('open-card', $event)"
         :data="item" 
         :edit="edit"
-        :currentField="currentField" 
         :cols="cols">
       </Control>
     </div>
@@ -46,9 +44,6 @@ export default {
       type: Number,
       required: false,
       default: () => 1
-    },
-    currentField: {
-      required: false
     }
   },
   methods: {
