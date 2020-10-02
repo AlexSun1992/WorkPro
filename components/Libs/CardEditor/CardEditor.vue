@@ -8,6 +8,7 @@
       >Назад</b-button
     >
     <Form
+      v-if="data.length"
       :currentField="currentField"
       :data="data"
       @update="updateValue($event)"
@@ -16,7 +17,7 @@
       :edit="edit"
       class="mt-4"
     ></Form>
-    <!-- <action-button v-if="actions" :body="body" :actions="actions" item-id="actions.NITEM" action-id="33223"/> -->
+    <SkeletonBox v-else class="mt-5"></SkeletonBox>
     <div class="mt-3 row button-container">
       <div class="col-12" v-if="edit">
         <b-button
@@ -43,9 +44,10 @@
 <script>
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
+import SkeletonBox from "~/components/Libs/SkeletonBox";
 export default {
   name: "CardEditor",
-  components: { Form, ActionButton },
+  components: { Form, ActionButton, SkeletonBox },
   data() {
     return {
       invalidFields: [],
@@ -156,16 +158,6 @@ export default {
         JSON.parse(JSON.stringify(this.$store.getters["data_card/getCopyForm"]))
       );
     }
-  },
-  computed: {
-    // actions: {
-    //   get: function () {
-    //     this.body = {
-    //       "sNumber": this.currentField?.value
-    //     }
-    //     return this.$store.getters['menu/getMenuById'](this.$route.params.idItem).ACTIONSCUR
-    //   }
-    // }
   }
 };
 </script>
