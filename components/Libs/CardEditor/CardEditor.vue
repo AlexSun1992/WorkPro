@@ -1,7 +1,8 @@
 <template>
   <div>
     <b-button v-on:click="$router.go(-1)" type="submit" variant="success"><i class="fa fa-chevron-left"></i> Назад</b-button>
-    <Form :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
+    <Form  v-if="data.length" :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
+    <SkeletonBox v-else class="mt-5"></SkeletonBox>
      <div class="mt-3 row button-container">
       <div class="col-12" v-if="edit">
         <b-button pill v-on:click="saveDataCard" type="button" variant="success" class="col-12 col-md-auto mr-4">Сохранить</b-button>
@@ -14,9 +15,10 @@
 <script>
   import Form from '~/components/Libs/Form/Form'
   import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
+  import SkeletonBox from "~/components/Libs/SkeletonBox";
   export default {
     name: 'CardEditor',
-    components: {Form, ActionButton},
+    components: {Form, ActionButton, SkeletonBox},
     data() {
       return {
         invalidFields: [],
