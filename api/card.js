@@ -32,6 +32,26 @@ app.get('/card/:idModule/:idItem/:id', (req, res) => {
     res.send(e)
   }
 })
+
+app.post('/card/actionexec/:rowId/:actionId', (req, res) => {
+  try {
+    if(req.cookies){
+      axios.defaults.headers.common['Authorization'] = req.cookies['auth._token.local']
+      axios.defaults.baseURL = 'https://mobile2.reso.ru';
+    }
+    let body = formConverter.save(req.body)
+    axios['post'](`${consts.ACTIONEXEC}/${req.params.rowId}/${req.params.actionId}`, body)
+      .then(resp => {
+        res.send(resp.data[0])
+      })
+      .catch(err => {
+        res.status(err.response.data.STATUS).send(err.response.data)
+      }  )
+  } catch (e) {
+    res.send(e)
+  }
+})
+
 app.post('/card/:idModule/:idItem/:id', (req, res) => {
   try {
     if(req.cookies){

@@ -38,7 +38,16 @@ export const actions = {
         commit('setCardId', resp.data.ID)
       })
   },
-
+  async executeAction ({dispatch}, {rowId, itemId, actionId, body}) {
+    try {
+      await this.$axios.post(`/api/card/actionexec/${rowId}/${actionId}`, body ? body : {})
+      .then(resp => {
+        return resp
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 export const mutations = {
   setForm(state, data) {

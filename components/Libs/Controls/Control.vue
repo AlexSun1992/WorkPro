@@ -1,7 +1,7 @@
 <template>
   <b-col :xl="col" :lg="data.cols" md="12" sm="12" class="mb-4">
     <div class="control" :style="{width: data.width ? data.width : '100%'}">
-      <component :currentField="currentField" @update="$emit('update', $event)" @clear="$emit('clear', $event)" v-bind:is="comp" @open-card="$emit('open-card', $event)" :data="data" :edit="edit"></component>
+      <component @update="$emit('update', $event)" @clear="$emit('clear', $event)" v-bind:is="comp" @open-card="$emit('open-card', $event)" :data="data" :edit="edit"></component>
     </div>
   </b-col>
 </template>
@@ -39,9 +39,6 @@ export default {
       type: Number,
       required: true,
       default: () => 1
-    },
-    currentField: {
-      required: false
     }
   },
   computed: {
