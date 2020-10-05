@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-button
+      v-if="!params.settings"
       v-on:click="$router.go(-1)"
       type="submit"
       variant="success"
