@@ -26,7 +26,13 @@
         }
         return {page, settings, component}
       }
-    }
+    },
+    beforeRouteLeave(to, from, next) {
+      if (!window.confirm("Это для профиля")) {
+        return;
+      }
+      next();
+    },
   }
 </script>
 

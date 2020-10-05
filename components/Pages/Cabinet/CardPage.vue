@@ -1,3 +1,21 @@
+
+<div class="col-xl-3 d-none d-xl-block">
+  <div class="card bg-six block-border-one block">
+    <div class="card-body">
+      <div class="sideblock p-4">
+        <div class="sideblock__text">
+          <p>
+            Пожалуйста, убедитесь в том, что вся информация заполнена и
+            актуальна в настоящий момент.
+          </p>
+          <div class="sideblock__img">
+            <img src="/img/notification-helper.svg" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <template>
   <div>
     <div v-if="cardCaption" class="block-title pt-0 position-relative mt-2 mb-4">
@@ -79,6 +97,12 @@ export default {
     cardCaption() {
       return this.$store.getters['data_card/cardCaption']
     }
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!window.confirm("Leave without saving?")) {
+      return;
+    }
+    next();
   },
 };
 </script>
