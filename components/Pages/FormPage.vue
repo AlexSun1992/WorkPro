@@ -59,7 +59,7 @@ export default {
       idItem: this.params.page.idItem,
       idCard: list.data.items[0].ID
     };
-    await this.$store.dispatch("data_card/fetchForm", params);
+    this.$router.push(`/cabinet/${params.idModule}/0/${params.idItem}/${params.idCard}`)
   },
   methods: {
     closeModal() {
