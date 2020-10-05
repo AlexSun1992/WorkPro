@@ -4,13 +4,13 @@ export const state = () => ({
   cardId: null,
   captions: null,
   cardCaption: null,
-  isCardChanged: false,
-  saveCardClicked: false
+  cardChanged: false,
+  saveButtonClicked: false
 })
 export const getters = {
   getForm: state => state.form,
-  isCardChanged: state => state.isCardChanged,
-  saveCardClicked: state => state.saveCardClicked,
+  cardChanged: state => state.cardChanged,
+  saveButtonClicked: state => state.saveButtonClicked,
   cardCaption: state => state.cardCaption,
   getCopyForm: state => state.copyForm,
   getCardId: state => state.cardId,
@@ -28,7 +28,6 @@ export const actions = {
     commit('clearFormData')
     await  this.$axios.get(`/api/card/${params.idModule}/${params.idItem}/${params.idCard}`)
       .then((res) => {
-        debugger
         commit('setForm', res.data.metaData.data.length ? res.data.metaData.data : res.data);
         commit('setCopyForm', JSON.parse(JSON.stringify(res.data.metaData.data)));
         if (res.data.metaData.captions) {
@@ -46,13 +45,11 @@ export const actions = {
 
 }
 export const mutations = {
-  setFormChanged(state, data) {
-    debugger
-    state.isCardChanged = data
+  cardChanged(state, data) {
+    state.cardChanged = data
   },
-  saveCardClicked(state, data) {
-    debugger
-    state.saveCardClicked = data
+  saveButtonClicked(state, data) {
+    state.saveButtonClicked = data
   },
   setForm(state, data) {
     state.form = data

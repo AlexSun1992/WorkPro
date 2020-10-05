@@ -81,39 +81,18 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    debugger
-    // let conformation = window.confirm("Leave without saving?")
-    debugger
-    let isCardChanged = this.$store.getters['data_card/isCardChanged']
-    let saveCardClicked = this.$store.getters['data_card/saveCardClicked']
+    let cardChanged = this.$store.getters['data_card/cardChanged']
+    let saveButtonClicked = this.$store.getters['data_card/saveButtonClicked']
 
-    if (!isCardChanged) {
-      next();
-    }
-
-    if (isCardChanged) {
-      let confirmed = window.confirm("Leave without saving?")
+    if (cardChanged) {
+      let confirmed = window.confirm("Закрыть без сохранения данных?")
       if (confirmed) {
-        // this.$store.commit('data_card/setFormChanged', false)
         next();
       }
+    } else {
+      next();
     }
-
-    // if (isCardChanged && !saveCardClicked) {
-    //   if (window.confirm("Leave without saving?")) {
-    //     next();
-    //   } else {
-    //     return
-    //   }
-    // } else if (!isCardChanged && saveCardClicked) {
-    //   next();
-    // }
-    
-    // if (!window.confirm("Leave without saving?")) {
-    //   return;
-    // }
-    // next();
-  },
+  }
 };
 </script>
 
