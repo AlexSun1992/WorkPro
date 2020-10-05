@@ -4,11 +4,13 @@ export const state = () => ({
   cardId: null,
   captions: null,
   cardCaption: null,
-  isChanged: false
+  isCardChanged: false,
+  saveCardClicked: false
 })
 export const getters = {
   getForm: state => state.form,
-  getIsChanged: state => state.isChanged,
+  isCardChanged: state => state.isCardChanged,
+  saveCardClicked: state => state.saveCardClicked,
   cardCaption: state => state.cardCaption,
   getCopyForm: state => state.copyForm,
   getCardId: state => state.cardId,
@@ -44,8 +46,13 @@ export const actions = {
 
 }
 export const mutations = {
-  setIsChanged() {
+  setFormChanged(state, data) {
     debugger
+    state.isCardChanged = data
+  },
+  saveCardClicked(state, data) {
+    debugger
+    state.saveCardClicked = data
   },
   setForm(state, data) {
     state.form = data

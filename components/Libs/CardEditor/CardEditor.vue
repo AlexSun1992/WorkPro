@@ -70,8 +70,15 @@ export default {
       default: () => true
     }
   },
+  created() {
+    debugger
+    this.$store.commit('data_card/saveCardClicked', false)
+    this.$store.commit('data_card/setFormChanged', false)
+  },
   methods: {
     updateValue(e) {
+      debugger
+      this.$store.commit('data_card/setFormChanged', true)
       this.currentField = { fieldId: e.fieldId, value: e.value };
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
@@ -108,6 +115,8 @@ export default {
       return valid;
     },
     async saveDataCard() {
+      this.$store.commit('data_card/setFormChanged', false)
+      this.$store.commit('data_card/saveCardClicked', true)
       let fields = JSON.parse(
         JSON.stringify(this.$store.getters["data_card/getForm"])
       );
@@ -151,6 +160,7 @@ export default {
       }
     },
     cancelDataCard() {
+      this.$store.commit('data_card/setFormChanged', false)
       this.$store.commit(
         "data_card/setForm",
         JSON.parse(JSON.stringify(this.$store.getters["data_card/getCopyForm"]))
