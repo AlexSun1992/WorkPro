@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container-skeleton">
       <div class="grid-item" v-for="(item, index) in 8" :key="index"></div>
     </div>
   </div>
@@ -13,7 +13,7 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
+.container-skeleton{
   display: grid;
   grid-gap: 25px;
   grid-template-columns: auto auto auto;
