@@ -97,7 +97,10 @@
     grid-template-rows: 80px auto min-content;
     min-height: 100vh;
   }
-
+@media (max-width: 992px) {
+.cabinet {
+    grid-template-rows: auto auto min-content;
+}}
 </style>
 
 
