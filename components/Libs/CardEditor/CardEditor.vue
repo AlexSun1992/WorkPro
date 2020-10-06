@@ -2,11 +2,11 @@
   <div>
     <b-button v-on:click="$router.go(-1)" type="submit" variant="success"><i class="fa fa-chevron-left"></i> Назад</b-button>
     <Form  v-if="data.length" :data="data" @update="updateValue($event)" @clear="clearRelation($event)" @open-card="openCard($event)" :edit="edit"></Form>
-    <SkeletonBox v-else class="mt-5"></SkeletonBox>
+    <SkeletonBox v-else class="mt-5" :items="8"></SkeletonBox>
      <div class="mt-3 row button-container">
       <div class="col-12" v-if="edit">
-        <b-button pill v-on:click="saveDataCard" type="button" variant="success" class="col-12 col-md-auto mr-4">Сохранить</b-button>
-        <b-button pill v-on:click="cancelDataCard" type="button" variant="outline-success" class="col-12 col-md-auto mt-2 mt-md-0">Отменить</b-button>
+        <b-button pill v-on:click="saveDataCard" type="button" variant="success" class="col-12 col-md-auto mr-4" :style="isButtonDisabled">Сохранить</b-button>
+        <b-button pill v-on:click="cancelDataCard" type="button" variant="outline-success" class="col-12 col-md-auto mt-2 mt-md-0" :style="isButtonDisabled">Отменить</b-button>
       </div>
     </div>
   </div>
@@ -21,7 +21,13 @@
     components: {Form, ActionButton, SkeletonBox},
     data() {
       return {
-        body: null
+        body: null,
+        disabledButtons: {
+          background: '#dddbdd',
+          boxShadow: 'none',
+          border: 'none',
+          color: '#ffffff'
+        }
       }
     },
     props: {
@@ -110,6 +116,13 @@
       cancelDataCard() {
         this.$store.commit('data_card/setForm', JSON.parse(JSON.stringify(this.$store.getters['data_card/getCopyForm'])))
       }
+    },
+    computed: {
+      isButtonDisabled() {
+        if (!this.data.length) {
+          return this.disabledButtons
+        }
+      }
     }
   }
 </script>
@@ -123,5 +136,4 @@
     right: 220px;
     bottom: 65px;
   }
-
 </style>
