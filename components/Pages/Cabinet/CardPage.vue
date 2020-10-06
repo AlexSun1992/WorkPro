@@ -77,9 +77,12 @@ export default {
       })
       this.editable = menuItem?.LEDIT;
     },
-    saveFile(fileName) {
+    saveFile(idReport, fileName, event) {
+      if (event) {
+        event.preventDefault()
+      }
       this.$axios({
-        url: `am/main/v2/report?idreport=13178&id=${this.$route.params.idCard}`,
+        url: `am/main/v2/report?idreport=${idreport}&id=${this.$route.params.idCard}`,
         method: 'GET',
         responseType: 'blob',
       }).then((response) => {

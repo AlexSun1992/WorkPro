@@ -19,6 +19,7 @@ const USERPROFILE = `/am/main/${VER}/userinfo`
 const WEBFIELD = `/am/main/${VER}/webfield`
 const DIC = `/am/main/${VER}/dic`
 const DICWF = `/am/main/${VER}/dicwf`
+const REPORT = `/am/main/${VER}/report`
 
 export default {
   VER: VER,
@@ -42,4 +43,5 @@ export default {
   WEBFIELD: WEBFIELD,
   DIC: DIC,
   DICWF: DICWF,
+  REPORT: REPORT,
 }
