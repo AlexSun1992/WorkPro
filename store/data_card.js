@@ -5,10 +5,15 @@ export const state = () => ({
   captions: null,
   cardCaption: null,
   isError: null,
-  errorMessage: null
+  errorMessage: null,
+  cardCaption: null,
+  cardChanged: false,
+  saveButtonClicked: false
 })
 export const getters = {
   getForm: state => state.form,
+  cardChanged: state => state.cardChanged,
+  saveButtonClicked: state => state.saveButtonClicked,
   getError: state => state.isError,
   getErrorMessage: state => state.errorMessage,
   cardCaption: state => state.cardCaption,
@@ -21,7 +26,6 @@ export const getters = {
   getDataFieldByFieldId: state => id => {
     return state.form.find(b => b.fieldId === id);
   },
-
 }
 export const actions = {
   async fetchForm ({commit, getters}, params) {
@@ -61,6 +65,12 @@ export const actions = {
   }
 }
 export const mutations = {
+  cardChanged(state, data) {
+    state.cardChanged = data
+  },
+  saveButtonClicked(state, data) {
+    state.saveButtonClicked = data
+  },
   setForm(state, data) {
     state.form = data
   },

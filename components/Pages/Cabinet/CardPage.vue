@@ -43,6 +43,9 @@ export default {
   mounted() {
     this.$bvModal.show("modal");
   },
+  destroyed() {
+    this.$store.commit('data_card/cardChanged', false)
+  },
   methods: {
     // isFieldExists,
     // getField,
@@ -87,6 +90,19 @@ export default {
       return this.$store.getters['data_card/getError']
     }
   },
+  beforeRouteLeave(to, from, next) {
+    let cardChanged = this.$store.getters['data_card/cardChanged']
+    let saveButtonClicked = this.$store.getters['data_card/saveButtonClicked']
+
+    if (cardChanged) {
+      let confirmed = window.confirm("Закрыть без сохранения данных?")
+      if (confirmed) {
+        next();
+      }
+    } else {
+      next();
+    }
+  }
 };
 </script>
 
