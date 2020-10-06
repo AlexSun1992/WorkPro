@@ -68,6 +68,7 @@ export const mutations = {
     let item = state.form.find(d => d.fieldId === data.fieldId)
     if (item) {
       item.value = data.value
+      if (item.required)
       item.state = item.value ? null : false
     }
   },
