@@ -25,7 +25,6 @@ app.get('/card/:idModule/:idItem/:id', (req, res) => {
         res.send(await formConverter.form(resp.data, req.params.idItem))
       })
       .catch(err => {
-        console.log(err.response.data)
         res.status(err.response.data.STATUS).send(err.response.data)
       })
   } catch (e) {

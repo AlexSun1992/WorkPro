@@ -162,7 +162,7 @@
 .sideblock__img img {
   margin: 0 auto;
   width: 100%;
-  max-width: 300px;
+  max-width: 250px;
 }
 
 .logo-footer {
@@ -810,7 +810,7 @@ footer:not(.modal-footer) {
   min-height: 57px;
   padding: 10px 30px;
   display: grid;
-  grid-template-columns: 23px 50px 127px auto 98px 23px;
+  grid-template-columns: 23px 90px 127px auto 98px 23px;
   grid-gap: 15px;
   position: relative;
 }
@@ -1693,6 +1693,12 @@ ul.dropdown-menu li:hover {
   .app {
     display: block;
   }
+  footer:not(.modal-footer) {
+    padding-left: 15px;
+  }
+  main {
+    margin-bottom: 0rem;
+  }
 }
 
 .block-insurancecase-item-empty {
@@ -1803,7 +1809,7 @@ button:focus {
 }
 
 .btn-back {
-  background: transparent;
+  /*background: transparent;
   box-shadow: none;
   color: #363d44;
   line-height: 9px;
@@ -1814,13 +1820,31 @@ button:focus {
   border-bottom: 1px dashed black;
   border-radius: 0;
   padding: 6px 0 6px 19px;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);*/
+  background: #e6eced;
+  box-shadow: none;
+  color: #363d44;
+  line-height: 28px;
+  height: 40px;
+  position: absolute;
+  top: 20px;
+  font-size: 0.725rem;
+  border-radius: 50px;
+  padding: 6px 16px 6px 36px;
+  color: #363d44;
+  transition: 0.3s;
+}
+.btn-back:hover {
+  background: #d6dcdd;
+  box-shadow: none;
+  color: #000;
+  transition: 0.3s;
 }
 .btn-back:before {
   content: "";
   width: 15px;
   height: 12px;
-  left: 0;
+  left: 16px;
   top: 50%;
   transform: translateY(-50%);
   background: url(/img/btn-back.svg) 50% 50% no-repeat;
@@ -1856,4 +1880,29 @@ button:focus {
 }
 .h-auto {
   height: auto;
+}
+
+.list-none {
+  list-style: none;
+}
+
+.card-h-line {
+  position: relative;
+}
+.card-h-line:after {
+  width: calc(100% - 32px);
+  position: absolute;
+  height: 1px;
+  background: url(/img/border1.svg) -6px 0 repeat-x;
+  content: "";
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.columns_lg_2 {
+  columns: 2;
+}
+.columns_lg_2 li {
+  display: inline-block;
 }
