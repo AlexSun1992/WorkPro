@@ -42,6 +42,9 @@ export default {
   mounted() {
     this.$bvModal.show("modal");
   },
+  destroyed() {
+    this.$store.commit('data_card/cardChanged', false)
+  },
   methods: {
     // isFieldExists,
     // getField,

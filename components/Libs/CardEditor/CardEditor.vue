@@ -73,8 +73,7 @@ export default {
       default: () => true
     }
   },
-  created() {
-    this.$store.commit('data_card/saveButtonClicked', false)
+  destroyed() {
     this.$store.commit('data_card/cardChanged', false)
   },
   methods: {

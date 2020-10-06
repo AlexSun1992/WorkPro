@@ -27,12 +27,31 @@
         return {page, settings, component}
       }
     },
-    // beforeRouteLeave(to, from, next) {
-    //   if (!window.confirm("Это для профиля")) {
-    //     return;
-    //   }
-    //   next();
-    // },
+    
+    beforeRouteUpdate(to, from, next) {
+      let cardChanged = this.$store.getters['data_card/cardChanged']
+      let saveButtonClicked = this.$store.getters['data_card/saveButtonClicked']
+      if (cardChanged) {
+        let confirmed = window.confirm("Закрыть без сохранения данных?")
+        if (confirmed) {
+          next();
+        }
+      } else {
+        next();
+      }
+    },
+    beforeRouteLeave(to, from, next) {
+      let cardChanged = this.$store.getters['data_card/cardChanged']
+      let saveButtonClicked = this.$store.getters['data_card/saveButtonClicked']
+      if (cardChanged) {
+        let confirmed = window.confirm("Закрыть без сохранения данных?")
+        if (confirmed) {
+          next();
+        }
+      } else {
+        next();
+      }
+    },
   }
 </script>
 
