@@ -1,5 +1,6 @@
 <template>
   <div>
+    <b-button @click="saveFile()">Тест</b-button>
     <v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>
     <b-card v-else class="p-4 bg-six block border-block-one">
       <b-button v-on:click="destroyForm" type="submit" variant="success" pill v-b-popover.hover.top="'Назад'"><i  class="fa fa-chevron-left"></i></b-button>
@@ -17,6 +18,7 @@
 <script>
   import Form from '~/components/Libs/Form/Form'
   import VRuntimeTemplate from "v-runtime-template";
+  import { saveAs } from 'file-saver';
   export default {
     name: 'WizardList',
     components: {Form,VRuntimeTemplate},
@@ -70,6 +72,9 @@
       },
       getFieldValue(name, data = undefined) {
         return this.getField(name, data).value;
+      },
+      saveFile() {
+        saveAs('https://httpbin.org/image', "image.jpg");
       },
     },
   }

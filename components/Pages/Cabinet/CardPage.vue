@@ -31,6 +31,7 @@
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import VRuntimeTemplate from "v-runtime-template";
 import { isFieldExists, getField, getFieldValue } from "~/utils/utils.js";
+import { saveAs } from 'file-saver';
 
 export default {
   name: "CardPage",
@@ -75,7 +76,16 @@ export default {
         return item.IDITEM == this.$route.params.idItem
       })
       this.editable = menuItem?.LEDIT;
-    }
+    },
+    saveFile(fileName) {
+      this.$axios({
+        url: `am/main/v2/report?idreport=13178&id=${this.$route.params.idCard}`,
+        method: 'GET',
+        responseType: 'blob',
+      }).then((response) => {
+        saveAs(response.data, fileName);
+      });
+    },
   },
   computed: {
     getFormData() {
