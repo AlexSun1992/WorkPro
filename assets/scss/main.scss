@@ -1332,6 +1332,12 @@ h6 {
   .middle_menu a {
     font-size: 1.125rem;
   }
+  .footer-apple + .footer-google {
+    margin-left: 0;
+  }
+  .social a + a {
+    margin-left: 0.5rem;
+  }
 }
 @media (max-width: 1023px) {
   .middle_menu a {
