@@ -69,7 +69,7 @@ export const actions = {
         commit('setShowForm', true);
         commit('setShowFilter', false);
       }else{
-        await dispatch('fetchList');
+        // await dispatch('fetchList');
       }
     }
   },
