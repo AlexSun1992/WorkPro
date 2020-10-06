@@ -1,6 +1,13 @@
 <template>
   <div>
-    <div v-if="isError">{{errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE}}</div>
+    <div v-if="isError">
+      <b-button
+        v-on:click="$router.go(-1)"
+        type="submit"
+        variant="success"
+      >Назад</b-button>
+      {{errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE}}
+    </div>
     <div v-if="cardCaption" class="block-title pt-0 position-relative mt-2 mb-4">
       <i class="icon-my-profile"></i>{{ cardCaption }}
     </div>
