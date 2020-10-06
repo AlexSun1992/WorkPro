@@ -21,7 +21,6 @@
     components: {Form, ActionButton, SkeletonBox},
     data() {
       return {
-        invalidFields: [],
         body: null
       }
     },
@@ -62,22 +61,19 @@
         $nuxt._router.push(`/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0`)
       },
       validateData(data) {
-        this.invalidFields.length = 0;
         let valid = true
         for (let i = 0; i < data.length; i++) {
           let value = data[i].type === 'enum' ? data[i].value.value : data[i].value
           data[i].checked = true
           if (data[i].required && !value && data[i].type !== 'boolean') {
-            data[i].state = false;
             valid = false;
-            this.invalidFields.push(data[i]);
           }
         }
         return valid;
       },
       async saveDataCard() {
-        let fields = JSON.parse(JSON.stringify(this.$store.getters['data_card/getForm']))
-        fields = fields.filter(item => !item.name.match(/^ID/));
+         this.$store.commit('data_card/filterFields')
+         let fields = this.$store.getters['data_card/getForm']
         if(this.validateData(fields)){
           try {
             let itemId;

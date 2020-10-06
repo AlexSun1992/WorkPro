@@ -50,6 +50,9 @@ export const actions = {
   }
 }
 export const mutations = {
+  filterFields(state, data) {
+    state.form = state.form.filter(item => !item.name.match(/^ID/));
+  },
   setForm(state, data) {
     state.form = data
   },
@@ -65,6 +68,7 @@ export const mutations = {
     let item = state.form.find(d => d.fieldId === data.fieldId)
     if (item) {
       item.value = data.value
+      item.state = item.value ? null : false
     }
   },
   setCardId(state, data) {
