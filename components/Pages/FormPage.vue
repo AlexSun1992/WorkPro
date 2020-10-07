@@ -54,6 +54,7 @@ export default {
     let list = await this.$axios.get(
       `/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`
     );
+    debugger
     let params = {
       idModule: this.params.page.idModule,
       idItem: this.params.page.idItem,
