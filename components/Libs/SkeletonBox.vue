@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container-skeleton">
-      <div class="grid-item" v-for="(item, index) in 8" :key="index"></div>
+      <div class="grid-item" v-for="(item, index) in items" :key="index"></div>
     </div>
   </div>
 </template>
@@ -9,6 +9,7 @@
 <script>
 export default {
   name: "SkeletonBox",
+  props: ['items']
 };
 </script>
 
@@ -21,7 +22,6 @@ export default {
 }
 
 .grid-item {
-  background-color: #dddbdd;
   height: 35px;
   display: inline-block;
   position: relative;
