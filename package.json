@@ -28,6 +28,7 @@
     "devextreme-vue": "19.2.3",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.16.4",
+    "file-saver": "^2.0.2",
     "flag-icon-css": "^3.4.6",
     "font-awesome": "^4.7.0",
     "install": "^0.13.0",
