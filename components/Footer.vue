@@ -12,13 +12,7 @@
               >
                 <a href="">{{ section.title }}</a>
                 <div class="priduct_link">
-                  <a
-                    v-for="link in section.links"
-                    :key="link.link.title"
-                    :href="link.link.url"
-                    :target="link.link.target"
-                    >{{ link.link.title }}</a
-                  >
+                  <nuxt-link v-for="link in section.links"  :key="link.link.title"  :to="link.link.url ? link.link.url : ''">{{ link.link.title }}</nuxt-link>
                 </div>
               </div>
             </div>
