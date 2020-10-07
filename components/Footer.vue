@@ -1,9 +1,9 @@
 <template>
   <footer>
     <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-12 order-1">
-          <div class="row">
+      <div class="row pt-lg-5 pt-md-3">
+        <div class="col-lg-8 col-12 order-1 pl-md-0">
+          <!--<div class="row">
             <div v-for="item in footer" :key="item.title" :class="item.class">
               <div
                 v-for="section in item.sections"
@@ -16,16 +16,65 @@
                 </div>
               </div>
             </div>
+          </div>-->
+          <div class="menu-link d-md-flex">
+            <div class="products_all">
+              <a href="">Купить полис</a>
+              <div
+                class="product menu-auto menu_link_separator mb-4 pb-4 position-relative"
+              >
+                <a href="">Авто</a>
+                <div class="priduct_link">
+                  <a href="">Осаго</a>
+                  <a href="">КАСКО</a>
+                  <a href="">Зелень</a>
+                </div>
+              </div>
+              <div class="product  menu-im">
+                <a href="">Имущество</a>
+                <div class="priduct_link">
+                  <a href="">КВАРТИРА</a>
+                  <a href="">ДОМ</a>
+                  <a href="">ИПОТЕКА</a>
+                </div>
+              </div>
+              <div class="product  menu-med">
+                <a href="">Медицина</a>
+                <div class="priduct_link">
+                  <a href="">ДМС</a>
+                  <a href="">ОМС</a>
+                  <a href="">НЕСЧАСТНЫЙ СЛУЧАЙ</a>
+                  <a href="">ТУРИЗМ</a>
+                  <a href="">Накопительное инвестиционное страхование жизни</a>
+                </div>
+              </div>
+            </div>
+            <div class="info_all block-v-line-lg active">
+              <a href="">РЕсо Гарантия</a>
+              <div class="product">
+                <a href="">РЕсо Гарантия</a>
+                <div class="priduct_link">
+                  <a href="">О компании</a>
+                  <a href="">Новости</a>
+                  <a href="">Раскрытие сведений</a>
+                  <a href="">Карьера в РЕСО</a>
+                  <a href="">Закупки</a>
+                  <a href="">Правила и тарифы</a>
+                  <a href="">Информация для получателей страховых услуг</a>
+                  <a href="">Карта сайта</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div
-          class="col-lg-4 pl-lg-4 col-md-6 col-12 order-2 order-md-3 order-lg-2  pt-4 pt-lg-0 pl-0 pl-md-3"
+          class="col-lg-4 pl-lg-4 col-md-6 col-12 order-2 order-md-3 order-lg-2  pt-4 pt-lg-0 pl-md-3"
         >
-          <div class="title d-none d-sm-block mt-0 mt-lg-5 mb-0 mb-lg-3 ">
+          <div class="title d-none d-sm-block mt-0 mb-0 mb-lg-3 ">
             Наши приложения
           </div>
           <a href="" class="footer-apple"></a>
-          <a href="" class="footer-google"></a>
+          <a href="" class="footer-google float-right"></a>
           <div class="title d-none d-sm-block mt-lg-5 mt-2 mb-lg-3 mb-1">
             Мы в социальных сетях
           </div>
@@ -38,10 +87,10 @@
           </div>
         </div>
         <div class="col-12  order-4 order-lg-3">
-          <div class="block-h-line my-4"></div>
+          <div class="block-h-line my-md-4 my-2"></div>
         </div>
         <div
-          class="col-lg-12 col-6 order-2 order-lg-3 pt-4 pt-lg-0 block-v-line-sm"
+          class="col-lg-12 col-md-6 col-12 order-2 order-lg-3 pt-4 pt-lg-0 block-v-line-sm"
         >
           <div class="info mb-2">
             СПАО «РЕСО-Гарантия» раскрывает информацию на странице в сети
@@ -56,7 +105,7 @@
             влиянием которых находится страховщик на 17.12.2018 год
           </div>
         </div>
-        <div class="col-12 order-5">
+        <div class="col-12 order-5 pb-2">
           <div class="copyright">
             © 2020, «РЕСО-Гарантия»&nbsp;&nbsp;&nbsp;&nbsp;<a href=""
               >Конфиденциальность</a
@@ -79,8 +128,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.info_all > a,
-.products_all > a {
+.menu-link .info_all > a,
+.menu-link .products_all > a {
   display: none;
 }
 
@@ -164,10 +213,16 @@ export default {
     position: relative;
     width: 100%;
   }
+  .menu-link .info_all > a,
+  .menu-link .products_all > a {
+    display: block;
+    position: relative;
+  }
   .info_all,
   .products_all {
     padding: 20px 0;
     border-bottom: 1px solid red;
+    display: block;
   }
   .menu_link_separator:after {
     display: none;
@@ -177,6 +232,46 @@ export default {
   }
   footer .title {
     font-size: 0.825rem;
+  }
+
+  .info_all > a,
+  .products_all > a {
+    display: block;
+    font-size: 16px;
+    line-height: 20px;
+    color: #242424;
+  }
+  .info_all > a:before,
+  .products_all > a:before,
+  .info_all > a:after,
+  .products_all > a:after {
+    content: "";
+    background-color: #36ab4d;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    height: 2px;
+    width: 10px;
+  }
+  .info_all > a:before,
+  .products_all > a:before {
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    height: 10px;
+    width: 2px;
+  }
+
+  .info_all:not(.active) .product,
+  .products_all:not(.active) .product {
+    display: none;
+  }
+  .priduct_link a {
+    display: inline-block;
+    margin-right: 9px;
   }
 }
 </style>
