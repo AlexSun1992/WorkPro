@@ -18,7 +18,7 @@
             </div>
           </div>-->
           <div class="menu-link d-md-flex">
-            <div class="products_all">
+            <div class="products_all active">
               <a href="">Купить полис</a>
               <div
                 class="product menu-auto menu_link_separator mb-4 pb-4 position-relative"
