@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     premiumRub() {
-      return Math.ceil(this.premium).toLocaleString();
+      return Math.floor(this.premium).toLocaleString();
     },
     premiumKop() {
       return String(this.premium * 100).slice(-2);
