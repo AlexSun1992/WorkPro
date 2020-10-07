@@ -1141,7 +1141,7 @@ button {
   background-color: #dee5e0;
 }
 
-.block-v-line:after {
+.block-v-line-lg:after {
   position: absolute;
   width: 1px;
   height: 100%;
@@ -1343,5 +1343,31 @@ h6 {
   .middle_menu a {
     font-size: 1rem;
     margin-right: 20px;
+  }
+}
+@media (max-width: 959px) {
+  .block-v-line-lg:after {
+    display: none;
+  }
+  .block-v-line-sm:after {
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    background-color: #dee5e0;
+    top: 0;
+    left: 100%;
+    content: "";
+  }
+}
+
+@media (min-width: 960px) {
+  .block-v-line-sm:after {
+    display: none;
+  }
+}
+@media (max-width: 767px) {
+  .products_all {
+    grid-template-columns: 100%;
+    grid-template-areas: "auto" "im" "med";
   }
 }
