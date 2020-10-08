@@ -3,15 +3,9 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-12 order-1 pl-md-0">
-          <div class="menu-link d-md-flex">
-            <div
-              v-for="item in footer"
-              :key="item.title"
-              v-bind:class="{ active: item.isActive }"
-            >
-              <a v-on:click="openSection(item.title, $event)" href="">{{
-                item.title
-              }}</a>
+         <div class="menu-link d-md-flex">
+            <div v-for="item in footer" :key="item.title"  :class="item.class + { active: item.isActive }">
+              <a v-on:click="openSection(item.title, $event)" href="">{{item.title}}</a>
               <div
                 v-for="section in item.sections"
                 :key="section.title"
