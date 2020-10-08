@@ -16,7 +16,6 @@
     components: {Grid},
     props: {
       itemId: {
-        type: String,
         required: true,
         default: () => null
       },

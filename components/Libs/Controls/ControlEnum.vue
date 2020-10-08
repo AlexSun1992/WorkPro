@@ -5,16 +5,17 @@
                          option-value="value"
                          option-text="text"
                          :isDisabled="!edit ? !edit : data.readonly"
-                         :isError="data.state === false"
+                         :isError="isValid == false"
                          v-model="fieldValue"
                          placeholder="Выберите из списка"
                          @select="onSelect"
                          @searchchange="initData">
       </model-list-select>
-
-      <span class="error" v-if="data.state === false">
-      Обязательно для заполнения
-    </span>
+      <div class="mt-2">
+        <span class="error" v-if="isValid == false">
+          Обязательно для заполнения
+        </span> 
+      </div>
     </b-form-group>
   </span>
 </template>
@@ -87,6 +88,7 @@ export default {
       set: function (value) {
         this.$emit('update', {fieldId:this.data.fieldId, value})
         this.$emit('clear', {fieldName:this.data.name})
+        // this.$store.commit('data_card/setFormField', this.data)
       }
     },
     relationValue: {
@@ -98,7 +100,10 @@ export default {
           return null
         }
       }
-    }
+    },
+    isValid() {
+      return this.$store.getters['data_card/getDataFieldByFieldId'](`${this.data.fieldId}`).state
+    },
   }
 }
 </script>
@@ -120,6 +125,11 @@ export default {
   .required > legend:after {
     content: '*';
     color: red;
+  }
+
+  .ui.selection.dropdown.error {
+    border-color:  #f86c6b;
+    background: none
   }
 
 </style>
