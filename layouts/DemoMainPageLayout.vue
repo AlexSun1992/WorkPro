@@ -455,7 +455,7 @@ export default {
 </script>
 
 <style lang="scss">
-.main_page {
+/* .main_page {
   @import "~/assets/scss/main.scss";
 }
 
@@ -602,4 +602,5 @@ export default {
     margin-right: 9px;
   }
 }
+*/
 </style>
