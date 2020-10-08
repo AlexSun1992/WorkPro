@@ -24,7 +24,7 @@ export const getters = {
     return state.form.find(b => b.name === name);
   },
   getDataFieldByFieldId: state => id => {
-    return state.form.find(b => b.fieldId === id);
+    return state.form.find(b => b.fieldId == id);
   },
 }
 export const actions = {
@@ -95,8 +95,18 @@ export const mutations = {
     let item = state.form.find(d => d.fieldId === data.fieldId)
     if (item) {
       item.value = data.value
-      if (item.required)
-      item.state = item.value ? null : false
+      if (item.required) {
+        if (item.value == null || item.value == '') {
+          item.state = false
+        }
+        if (item.value) {
+          item.state = null
+        }
+        if (item.value && item.value.__ob__) {
+          item.state = item.value.value ? null : false
+        }
+      }
+      
     }
   },
   setCardId(state, data) {
@@ -113,6 +123,7 @@ export const mutations = {
     const item = state.form.find(d => d.fieldRelation === data.fieldName)
     if(item){
       item.value = {}
+      item.state = false
     }
   }
 }
