@@ -22,6 +22,7 @@
 
   export default {
     name: 'LoginPage',
+    layout: 'MainLayout',
     components: {
       RegForm,
       LoginForm

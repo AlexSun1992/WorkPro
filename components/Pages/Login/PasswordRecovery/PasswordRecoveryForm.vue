@@ -48,6 +48,7 @@ import UserRecoveryForm from '~/components/Pages/Login/PasswordRecovery/UserReco
 import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 
 export default {
+  layout: 'MainLayout',
   components: {
     VerifyUser,
     UserRecoveryForm
@@ -116,7 +117,7 @@ export default {
         let month = birthdate.getMonth() + 1;
         date = String(date).length === 1 ? `0${date}` : date;
         month = String(month).length === 1 ? `0${month}` : month;
-        this.$v.form.birthdate.$model = `${year}-${month}-${date}`       
+        this.$v.form.birthdate.$model = `${year}-${month}-${date}`
 
         const additionalParams = {
           "SECONDNAME" : this.$v.form.surname.$model,
@@ -143,7 +144,7 @@ export default {
       if (!this.greater180) {
         return this.$v.form.password2.$invalid;
       } else {
-        return this.$v.form.name.$invalid || 
+        return this.$v.form.name.$invalid ||
         this.$v.form.surname.$invalid || this.$v.form.patronymic.$invalid || this.$v.form.birthdate.$invalid;
       }
     }
@@ -184,7 +185,7 @@ export default {
       }
     }
   }
-  
+
 };
 </script>
 
