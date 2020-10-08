@@ -3,9 +3,15 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-12 order-1 pl-md-0">
-         <div class="menu-link d-md-flex">
-            <div v-for="item in footer" :key="item.title"  class="products_all" v-bind:class="{ active: item.isActive }">
-              <a v-on:click="openSection(item.title, $event)" href="">{{item.title}}</a>
+          <div class="menu-link d-md-flex">
+            <div
+              v-for="item in footer"
+              :key="item.title"
+              v-bind:class="{ active: item.isActive }"
+            >
+              <a v-on:click="openSection(item.title, $event)" href="">{{
+                item.title
+              }}</a>
               <div
                 v-for="section in item.sections"
                 :key="section.title"
@@ -13,7 +19,12 @@
               >
                 <a href="">{{ section.title }}</a>
                 <div class="priduct_link">
-                  <nuxt-link v-for="link in section.links"  :key="link.link.title"  :to="link.link.url ? link.link.url : ''">{{ link.link.title }}</nuxt-link>
+                  <nuxt-link
+                    v-for="link in section.links"
+                    :key="link.link.title"
+                    :to="link.link.url ? link.link.url : ''"
+                    >{{ link.link.title }}</nuxt-link
+                  >
                 </div>
               </div>
             </div>
@@ -71,15 +82,15 @@
 <script>
 export default {
   name: "c-footer",
-  data () {
+  data() {
     return {
-     isActive: true
-    }
+      isActive: true
+    };
   },
   methods: {
-    openSection: function (title, e) {
-      e.preventDefault()
-      this.$store.commit("pages/changeFooterActiveSection", title)
+    openSection: function(title, e) {
+      e.preventDefault();
+      this.$store.commit("pages/changeFooterActiveSection", title);
     }
   },
   computed: {
@@ -91,6 +102,113 @@ export default {
 </script>
 
 <style scoped lang="scss">
+footer {
+  background: linear-gradient(180deg, #fcfcfc 0%, rgba(255, 255, 255, 0) 100%);
+  position: relative;
+  font-size: 0.75rem;
+  padding: 32px;
+}
+
+footer .title {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  color: #474747;
+  font-weight: 500;
+  padding-bottom: 0.5rem;
+}
+
+footer .menu-link a {
+  text-decoration: none;
+  color: #474747;
+  padding: 6px 0;
+  display: table;
+}
+
+footer .menu-link a:hover {
+  color: #5fb456;
+  text-decoration: underline;
+}
+
+footer:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  opacity: 0.8;
+  border: 1px solid #e3ebe6;
+  box-shadow: 0px -13px 20px rgba(144, 144, 144, 0.13);
+  top: 0;
+  left: 0;
+}
+
+.social {
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.social a {
+  width: 40px;
+  height: 40px;
+}
+
+.footer-fb {
+  background: url(/img/main/fb.svg) 0 0 no-repeat;
+}
+
+.footer-vk {
+  background: url(/img/main/vk.svg) 0 0 no-repeat;
+}
+
+.footer-ok {
+  background: url(/img/main/ok.svg) 0 0 no-repeat;
+}
+
+.footer-in {
+  background: url(/img/main/in.svg) 0 0 no-repeat;
+}
+
+.footer-tw {
+  background: url(/img/main/tw.svg) 0 0 no-repeat;
+}
+
+.footer-apple {
+  background: url(/img/main/ios.svg) 0 0 no-repeat;
+  width: 132px;
+  height: 44px;
+  display: inline-block;
+}
+
+.footer-google {
+  background: url(/img/main/google.svg) 0 0 no-repeat;
+  width: 144px;
+  height: 44px;
+  display: inline-block;
+}
+
+footer .info {
+  color: #6f6f6f;
+}
+
+footer .info a {
+  color: #aeaeae;
+  text-decoration: none;
+}
+
+footer .copy {
+  color: #aeaeae;
+}
+
+footer .copyright {
+  color: #6f6f6f;
+  font-size: 0.875rem;
+  font-weight: 300;
+}
+
+footer .copyright a {
+  color: #36ab4d;
+}
+
 .menu-link .info_all > a,
 .menu-link .products_all > a {
   display: none;
@@ -155,11 +273,11 @@ export default {
 }
 
 .priduct_link a {
-  text-transform: uppercase;
   text-decoration: none;
   color: #474747;
   padding: 6px 0;
   display: table;
+  text-transform: uppercase;
 }
 @media (max-width: 767px) {
   .products_all {
@@ -203,6 +321,7 @@ export default {
     font-size: 16px;
     line-height: 20px;
     color: #242424;
+    text-transform: uppercase;
   }
   .info_all > a:before,
   .products_all > a:before,
