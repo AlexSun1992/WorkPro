@@ -1,10 +1,11 @@
 <template>
   <footer>
     <div class="container">
-      <div class="row pt-lg-5 pt-md-3">
+      <div class="row">
         <div class="col-lg-8 col-12 order-1 pl-md-0">
-          <!--<div class="row">
-            <div v-for="item in footer" :key="item.title" :class="item.class">
+         <div class="menu-link d-md-flex">
+            <div v-for="item in footer" :key="item.title"  class="products_all" v-bind:class="{ active: item.isActive }">
+              <a v-on:click="openSection(item.title, $event)" href="#">{{item.title}}</a>
               <div
                 v-for="section in item.sections"
                 :key="section.title"
@@ -13,55 +14,6 @@
                 <a href="">{{ section.title }}</a>
                 <div class="priduct_link">
                   <nuxt-link v-for="link in section.links"  :key="link.link.title"  :to="link.link.url ? link.link.url : ''">{{ link.link.title }}</nuxt-link>
-                </div>
-              </div>
-            </div>
-          </div>-->
-          <div class="menu-link d-md-flex">
-            <div class="products_all active">
-              <a href="">Купить полис</a>
-              <div
-                class="product menu-auto menu_link_separator mb-4 pb-4 position-relative"
-              >
-                <a href="">Авто</a>
-                <div class="priduct_link">
-                  <a href="">Осаго</a>
-                  <a href="">КАСКО</a>
-                  <a href="">Зелень</a>
-                </div>
-              </div>
-              <div class="product  menu-im">
-                <a href="">Имущество</a>
-                <div class="priduct_link">
-                  <a href="">КВАРТИРА</a>
-                  <a href="">ДОМ</a>
-                  <a href="">ИПОТЕКА</a>
-                </div>
-              </div>
-              <div class="product  menu-med">
-                <a href="">Медицина</a>
-                <div class="priduct_link">
-                  <a href="">ДМС</a>
-                  <a href="">ОМС</a>
-                  <a href="">НЕСЧАСТНЫЙ СЛУЧАЙ</a>
-                  <a href="">ТУРИЗМ</a>
-                  <a href="">Накопительное инвестиционное страхование жизни</a>
-                </div>
-              </div>
-            </div>
-            <div class="info_all block-v-line-lg active">
-              <a href="">РЕсо Гарантия</a>
-              <div class="product">
-                <a href="">РЕсо Гарантия</a>
-                <div class="priduct_link">
-                  <a href="">О компании</a>
-                  <a href="">Новости</a>
-                  <a href="">Раскрытие сведений</a>
-                  <a href="">Карьера в РЕСО</a>
-                  <a href="">Закупки</a>
-                  <a href="">Правила и тарифы</a>
-                  <a href="">Информация для получателей страховых услуг</a>
-                  <a href="">Карта сайта</a>
                 </div>
               </div>
             </div>
@@ -119,6 +71,17 @@
 <script>
 export default {
   name: "c-footer",
+  data () {
+    return {
+     isActive: true
+    }
+  },
+  methods: {
+    openSection: function (title, e) {
+      e.preventDefault()
+      this.$store.commit("pages/changeFooterActiveSection", title)
+    }
+  },
   computed: {
     footer() {
       return this.$store.getters["pages/getFooterMenu"];

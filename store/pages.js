@@ -1,4 +1,4 @@
-
+import Vue from 'vue'
 export const state = () => ({
   pages: [],
   currentPage: null,
@@ -106,5 +106,9 @@ export const mutations = {
   },
   setShowBreadCrumbs(state, params) {
     state.isShowBreadcrumbs = params;
-  }
+  },
+  changeFooterActiveSection(state, title) {
+    const section = state.footerMenu.find(b => b.title === title);
+    Vue.set(section, 'isActive', section.isActive === undefined ? true : !section.isActive)
+  },
 }
