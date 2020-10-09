@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from "vue";
 export const state = () => ({
   pages: [],
@@ -117,6 +118,14 @@ export const mutations = {
   },
   changeFooterActiveSection(state, title) {
     const section = state.footerMenu.find((b) => b.title === title);
+    Vue.set(
+      section,
+      "isActive",
+      section.isActive === undefined ? true : !section.isActive
+    );
+  },
+  changeHeaderActiveSection(state, title) {
+    const section = state.mainMenu.find((b) => b.title === title);
     Vue.set(
       section,
       "isActive",

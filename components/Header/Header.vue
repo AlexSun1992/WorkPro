@@ -7,9 +7,33 @@
         <div
           class="middle_menu col-lg-6 col-md-7 pl-md-4 pr-md-0 offset-lg-2 offset-md-3"
         >
-          <span v-for="(item, index) in menu" :key="index">
-            <nuxt-link :to="item.link.url">{{ item.title }}</nuxt-link>
-          </span>
+          <div
+            v-for="item in footer"
+            :key="item.title"
+            :class="item.isActive ? item.class + ' active' : item.class"
+          >
+            <a v-on:click="openSection(item.title, $event)" href="">{{
+              item.title
+            }}</a>
+            <div
+              v-for="section in item.sections"
+              :key="section.title"
+              :class="section.class"
+            >
+              <a href="">{{ section.title }}</a>
+              <div class="priduct_link">
+                <nuxt-link
+                  v-for="link in section.links"
+                  :key="link.link.title"
+                  :to="link.link.url ? link.link.url : ''"
+                  >{{ link.link.title }}</nuxt-link
+                >
+              </div>
+            </div>
+          </div>
+          <!--          <span v-for="(item, index) in menu" :key="index">-->
+          <!--            <nuxt-link :to="item.link.url">{{ item.title }}</nuxt-link>-->
+          <!--          </span>-->
 
           <!--          <div class="menu-link d-md-flex">-->
           <!--            <div class="buy_all">-->
@@ -47,7 +71,7 @@
           <!--                </div>-->
           <!--              </div>-->
           <!--            </div>-->
-          <!--            <div class="insurance_case block-v-line-lg pn-sm-none">-->
+          <!--            <div class="insurance_case block-v-line-lg pn-sm-none active">-->
           <!--              <a href="">Страховой случай</a>-->
           <!--              <div class="product">-->
           <!--                <a href="">О компании</a>-->
@@ -124,11 +148,11 @@
             ></header-user-name>
           </template>
           <b-dropdown-item @click="goInCabinet"
-            ><i class="fa fa-home"></i> Личный кабинет</b-dropdown-item
-          >
+            ><i class="fa fa-home"></i> Личный кабинет
+          </b-dropdown-item>
           <b-dropdown-item @click="logout"
-            ><i class="fa fa-lock"></i> Выход</b-dropdown-item
-          >
+            ><i class="fa fa-lock"></i> Выход
+          </b-dropdown-item>
         </b-nav-item-dropdown>
       </div>
     </div>
@@ -138,6 +162,7 @@
 <script>
 import HeaderUserName from "../Pages/Cabinet/Header/HeaderUserName";
 import { mapGetters } from "vuex";
+
 export default {
   name: "c-header",
   components: {
@@ -159,10 +184,17 @@ export default {
     goInCabinet() {
       this.$router.push("/cabinet");
     },
+    openSection: function (title, e) {
+      e.preventDefault();
+      this.$store.commit("pages/changeFooterActiveSection", title);
+    },
   },
   computed: {
     menu() {
       return this.$store.getters["pages/getMenu"];
+    },
+    footer() {
+      return this.$store.getters["pages/getFooterMenu"];
     },
     ...mapGetters(["isAuthenticated", "loggedInUser"]),
   },
@@ -178,38 +210,46 @@ export default {
   left: 15px;
   transform: translateY(-50%);
 }
+
 .login-form {
   position: absolute;
   top: 50%;
   right: 15px;
   transform: translateY(-50%);
 }
+
 .buy-block {
   background: #36ab4d;
   border-radius: 10px;
   height: 80px;
 }
+
 .logo {
   background: url(/img/main/logo.svg) 0 0 no-repeat;
 }
+
 .search {
   background: url(/img/main/search.svg) 0 0 no-repeat;
   height: 16px;
   width: 16px;
   border: 0;
 }
+
 .gotolk > a {
   padding: 0;
 }
+
 .top_menu {
   position: absolute;
   top: -40px;
   width: calc(100% - 30px);
   left: 15px;
 }
+
 header {
   padding-top: 40px;
 }
+
 .header-height {
   min-height: 72px;
 }
@@ -224,23 +264,29 @@ header {
     line-height: 1.25rem;
     font-size: 1rem;
   }
+
   .middle_menu {
   }
+
   .header-height {
     position: absolute;
     left: -100%;
   }
+
   header {
     padding: 0;
     opacity: 1 !important;
   }
+
   header > .container {
     height: 72px;
   }
+
   .logo {
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
   .burger {
     width: 32px;
     height: 19px;
@@ -253,6 +299,7 @@ header {
     left: 15px;
     transform: translateY(-50%);
   }
+
   .burger:after {
     content: "";
     position: absolute;
@@ -263,6 +310,7 @@ header {
     left: 0;
     background-color: #242424;
   }
+
   .gotolk.btn_trn {
     border: 0 !important;
     width: 24px;
@@ -271,12 +319,15 @@ header {
     padding: 0 !important;
     margin: 0;
   }
+
   .gotolk:not(.show):not(.dropdown):before {
     display: none;
   }
+
   .gotolk span {
     display: none;
   }
+
   .header-height {
     background: #fff;
     height: calc(100vh - 72px);

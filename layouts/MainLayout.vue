@@ -1,5 +1,5 @@
 <template>
-  <div class="app main_page">
+  <div class="app main_page menu-open">
     <Header />
     <div class="container">
       <b-breadcrumb v-if="showBreadcrumbs && breadcrumbs">
