@@ -1389,6 +1389,11 @@ h6 {
     display: none;
   }
 }
+.middle_menu>div .product
+{
+  display: none;
+}
+
 @media (max-width: 767px) {
   .block-v-line-sm:after {
     display: none;
@@ -1482,10 +1487,9 @@ h6 {
   .pn-sm-none .product > a {
     display: none;
   }
+  .middle_menu> div >div.active .product
+{
+  display: block;
+}
 }
 
-.middle_menu>div .product,
-.middle_menu>div .product,
-.middle_menu>div .product {
-  display: none;
-}

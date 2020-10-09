@@ -72,7 +72,7 @@ export default {
 <style lang="scss">
 .main_page {
   @import "~/assets/scss/main.scss";
-}
+}@media (max-width: 767px) {
 .menu-open header:after {
   content: "";
   width: 100vw;
@@ -88,5 +88,6 @@ export default {
 }
 .menu-open .header-height {
   left: 15px;
+}
 }
 </style>
