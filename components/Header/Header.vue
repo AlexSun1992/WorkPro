@@ -202,12 +202,6 @@ header {
   .middle_menu {
   }
 
-  .header-height {
-    position: absolute;
-    left: -200%;
-    transition: 1s;
-  }
-
   header {
     padding: 0;
     opacity: 1 !important;
