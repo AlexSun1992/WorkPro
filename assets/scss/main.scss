@@ -1484,8 +1484,8 @@ h6 {
   }
 }
 
-.middle_menu .buy_all .product,
-.middle_menu .insurance_case .product,
-.middle_menu .business .product {
+.middle_menu>div .product,
+.middle_menu>div .product,
+.middle_menu>div .product {
   display: none;
 }
