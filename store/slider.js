@@ -5,14 +5,14 @@ export const state = () => ({
 
 export const getters = {
   isButtonLeftDisabled: state => state.isButtonLeftDisabled,
-  isButtonRightDisabled: state => state.isButtonRightDisabled,
+  isButtonRightDisabled: state => state.isButtonRightDisabled
 }
 
 export const mutations = {
-  setButtonLeftDisabled(state, value) {
+  setButtonLeftDisabled (state, value) {
     state.isButtonLeftDisabled = value
   },
-  setButtonRightDisabled(state, value) {
+  setButtonRightDisabled (state, value) {
     state.isButtonRightDisabled = value
   }
 }

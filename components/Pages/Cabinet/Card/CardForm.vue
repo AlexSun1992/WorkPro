@@ -12,64 +12,64 @@
 </template>
 
 <script>
-  import Form from '~/components/Libs/Form/Form'
-  const validateData = (data) => {
-    let valid = true
-    for (let i = 0; i < data.length; i++) {
-      let value = data[i].type === 'enum' ? data[i].value.value : data[i].value
-      data[i].checked = true
-      if (data[i].required && !value && data[i].type !== 'boolean') {
-        data[i].state = false
-        valid = false
-      }
-    }
-    return valid
-  }
-  export default {
-    name: 'CardForm',
-    data () {
-      return {
-        editForm: true,
-        editDataForm: this.data
-      }
-    },
-    watch: {
-      'data': 'setData'
-    },
-    methods: {
-      setData () {
-        this.editDataForm = this.data
-      },
-      saveForm () {
-        if(validateData(this.editDataForm)){
-          this.$emit('save-form',this.editDataForm)
-        }
-      },
-      applyAction (data) {
-        if(validateData(this.editDataForm)){
-          this.$emit('apply-action',this.editDataForm, data.id)
-        }
-      }
-    },
-    components: {Form},
-    props: {
-      data: {
-        type: Array,
-        required: true,
-        default: () => []
-      },
-      actions: {
-        type: Array,
-        required: true,
-        default: () => []
-      }
-    },
-    computed: {
-      isActions () {
-        return this.actions.length
-      },
+import Form from '~/components/Libs/Form/Form'
+const validateData = (data) => {
+  let valid = true
+  for (let i = 0; i < data.length; i++) {
+    const value = data[i].type === 'enum' ? data[i].value.value : data[i].value
+    data[i].checked = true
+    if (data[i].required && !value && data[i].type !== 'boolean') {
+      data[i].state = false
+      valid = false
     }
   }
+  return valid
+}
+export default {
+  name: 'CardForm',
+  data () {
+    return {
+      editForm: true,
+      editDataForm: this.data
+    }
+  },
+  watch: {
+    data: 'setData'
+  },
+  methods: {
+    setData () {
+      this.editDataForm = this.data
+    },
+    saveForm () {
+      if (validateData(this.editDataForm)) {
+        this.$emit('save-form', this.editDataForm)
+      }
+    },
+    applyAction (data) {
+      if (validateData(this.editDataForm)) {
+        this.$emit('apply-action', this.editDataForm, data.id)
+      }
+    }
+  },
+  components: { Form },
+  props: {
+    data: {
+      type: Array,
+      required: true,
+      default: () => []
+    },
+    actions: {
+      type: Array,
+      required: true,
+      default: () => []
+    }
+  },
+  computed: {
+    isActions () {
+      return this.actions.length
+    }
+  }
+}
 </script>
 
 <style scoped>

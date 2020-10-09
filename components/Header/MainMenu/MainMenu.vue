@@ -31,31 +31,31 @@
 </template>
 
 <script>
-import CitySearch from "./CitySearch";
-import GlobalSearch from "./GlobalSearch";
+import CitySearch from './CitySearch'
+import GlobalSearch from './GlobalSearch'
 
 export default {
   components: { CitySearch, GlobalSearch },
-  data() {
+  data () {
     return {
       products: {}
-    };
+    }
   },
   methods: {
-    showProducts(data) {
-      this.products = data;
-      this.$refs["products"].show();
+    showProducts (data) {
+      this.products = data
+      this.$refs.products.show()
     }
   },
   computed: {
-    menu() {
-      return this.$store.getters["pages/getMenu"];
+    menu () {
+      return this.$store.getters['pages/getMenu']
     },
-    phoneNumber() {
-      return this.$store.state.pages.config.wpreso_settings_federal_number.default;
+    phoneNumber () {
+      return this.$store.state.pages.config.wpreso_settings_federal_number.default
     }
   }
-};
+}
 </script>
 
 <style scoped>

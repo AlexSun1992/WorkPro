@@ -20,154 +20,152 @@
 
 <script>
 
-  import CardList from './CardList'
-  import CardForm from './CardForm'
-  import CardFilter from './CardFilter'
+import CardList from './CardList'
+import CardForm from './CardForm'
+import CardFilter from './CardFilter'
 
-  export default {
-    name: 'Card',
-    components: {CardList, CardForm, CardFilter},
-    props: {
-      params: {
-        type: Object,
-        required: true,
-        default: () => {}
+export default {
+  name: 'Card',
+  components: { CardList, CardForm, CardFilter },
+  props: {
+    params: {
+      type: Object,
+      required: true,
+      default: () => {}
+    }
+  },
+  methods: {
+    applyCardFilter (data) {
+      this.$store.dispatch('card/applyFilter', data)
+    },
+    applyCardActionForm (data, id) {
+      this.$store.dispatch('card/applyAction', { form: data, actionId: id }).then((data) => {
+        this.$bvToast.toast('Успешно выполнено', {
+          title: '',
+          variant: 'success',
+          solid: true
+        })
+      }, err => {
+        this.$bvToast.toast(err.MESSAGE, {
+          title: 'Ошибка',
+          variant: 'danger',
+          noAutoHide: true,
+          solid: true
+        })
+      })
+    },
+    async saveCardForm (data) {
+      try {
+        await this.$store.dispatch('card/saveForm', data)
+        this.$bvToast.toast('Успешно сохранено', {
+          title: '',
+          variant: 'success',
+          solid: true
+        })
+      } catch (err) {
+        this.$bvToast.toast(err.response.data.MESSAGE, {
+          title: 'Ошибка',
+          variant: 'danger',
+          noAutoHide: true,
+          solid: true
+        })
       }
     },
-    methods: {
-      applyCardFilter (data) {
-        this.$store.dispatch('card/applyFilter', data);
-      },
-      applyCardActionForm (data,id) {
-        this.$store.dispatch('card/applyAction', {form: data, actionId: id}).then((data) => {
-          this.$bvToast.toast('Успешно выполнено', {
-            title: ``,
-            variant: 'success',
-            solid: true
-          })
-        }, err => {
-          this.$bvToast.toast(err.MESSAGE, {
-            title: `Ошибка`,
-            variant: 'danger',
-            noAutoHide: true,
-            solid: true
-          })
-        });
-      },
-      async saveCardForm (data) {
-        try {
-          await this.$store.dispatch('card/saveForm', data);
-          this.$bvToast.toast('Успешно сохранено', {
-            title: ``,
-            variant: 'success',
-            solid: true
-          })
-        } catch(err) {
-          this.$bvToast.toast(err.response.data.MESSAGE, {
-            title: `Ошибка`,
-            variant: 'danger',
-            noAutoHide: true,
-            solid: true
-          })
+    openCardForm (data) {
+      this.$store.dispatch('card/fetchForm', data.data.item.ID)
+    },
+    openCardList () {
+      this.$store.commit('card/setShowForm', false)
+      this.$store.commit('card/setShowWizard', false)
+      this.$store.commit('card/setShowList', true)
+    },
+    async refreshCardList () {
+      try {
+        await this.$store.dispatch('card/fetchList')
+        this.$bvToast.toast('Успешно  обновлено', {
+          title: '',
+          variant: 'success',
+          solid: true
+        })
+      } catch (err) {
+        this.$bvToast.toast(err.response.data.MESSAGE, {
+          title: 'Ошибка',
+          variant: 'danger',
+          noAutoHide: true,
+          solid: true
+        })
+      }
+    }
+  },
+  computed: {
+    head () {
+      return this.params.settings ? `${this.params.settings.text}` : ''
+    },
+    formData: {
+      get: function () {
+        if (this.isForm) {
+          return JSON.parse(JSON.stringify(this.$store.getters['card/form']))
         }
-
-      },
-      openCardForm (data) {
-        this.$store.dispatch('card/fetchForm', data.data.item.ID)
-      },
-      openCardList () {
-        this.$store.commit('card/setShowForm', false)
-        this.$store.commit('card/setShowWizard', false)
-        this.$store.commit('card/setShowList', true)
-      },
-      async refreshCardList () {
-        try {
-          await this.$store.dispatch('card/fetchList');
-          this.$bvToast.toast('Успешно  обновлено', {
-            title: ``,
-            variant: 'success',
-            solid: true
-          })
-        } catch(err) {
-          this.$bvToast.toast(err.response.data.MESSAGE, {
-            title: `Ошибка`,
-            variant: 'danger',
-            noAutoHide: true,
-            solid: true
-          })
+        if (this.isFilter) {
+          return JSON.parse(JSON.stringify(this.$store.getters['card/filters']))
         }
       }
     },
-    computed: {
-      head () {
-        return this.params.settings ? `${this.params.settings.text}` : ``
-      },
-      formData: {
-        get: function () {
-          if(this.isForm){
-            return  JSON.parse(JSON.stringify(this.$store.getters['card/form']));
-          }
-          if(this.isFilter){
-            return  JSON.parse(JSON.stringify(this.$store.getters['card/filters']));
-          }
-        }
-      },
-      listData: {
-        get: function () {
-          return this.$store.getters['card/list'];
-        }
-      },
-      actionsData: {
-        get: function () {
-          return this.$store.getters['card/actions'];
-        }
-      },
-      isForm: {
-        get: function () {
-          return this.$store.getters['card/isForm'];
-        }
-      },
-      isWizard: {
-        get: function () {
-          return this.$store.getters['card/isWizard'];
-        }
-      },
-      isFilter: {
-        get: function () {
-          return this.$store.getters['card/isFilter'];
-        }
-      },
-      isList: {
-        get: function () {
-          return this.$store.getters['card/isList'];
-        }
-      },
-      isFormLoading: {
-        get: function () {
-          return this.$store.getters['card/isFormLoading'];
-        }
-      },
-      isListLoading: {
-        get: function () {
-          return this.$store.getters['card/isListLoading'];
-        }
-      },
-      isEdit: {
-        get: function () {
-          return this.$store.getters['card/isEdit'];
-        }
-      },
-      isAddCardForEdit: {
-        get: function () {
-          return this.$store.getters['card/componentType'] === 10;
-        }
-      },
-      isActions: {
-        get: function () {
-          return this.$store.getters['card/componentType'] === 10 && this.$store.getters['card/actions'];
-        }
+    listData: {
+      get: function () {
+        return this.$store.getters['card/list']
+      }
+    },
+    actionsData: {
+      get: function () {
+        return this.$store.getters['card/actions']
+      }
+    },
+    isForm: {
+      get: function () {
+        return this.$store.getters['card/isForm']
+      }
+    },
+    isWizard: {
+      get: function () {
+        return this.$store.getters['card/isWizard']
+      }
+    },
+    isFilter: {
+      get: function () {
+        return this.$store.getters['card/isFilter']
+      }
+    },
+    isList: {
+      get: function () {
+        return this.$store.getters['card/isList']
+      }
+    },
+    isFormLoading: {
+      get: function () {
+        return this.$store.getters['card/isFormLoading']
+      }
+    },
+    isListLoading: {
+      get: function () {
+        return this.$store.getters['card/isListLoading']
+      }
+    },
+    isEdit: {
+      get: function () {
+        return this.$store.getters['card/isEdit']
+      }
+    },
+    isAddCardForEdit: {
+      get: function () {
+        return this.$store.getters['card/componentType'] === 10
+      }
+    },
+    isActions: {
+      get: function () {
+        return this.$store.getters['card/componentType'] === 10 && this.$store.getters['card/actions']
       }
     }
   }
+}
 </script>
-

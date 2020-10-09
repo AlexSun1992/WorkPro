@@ -55,7 +55,7 @@ export default {
     }
   },
   watch: {
-    'value': function (val) {
+    value: function (val) {
       if (this.data.month && this.data.year) {
         this.data.value = val
       }

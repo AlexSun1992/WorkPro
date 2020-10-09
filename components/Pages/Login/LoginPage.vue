@@ -17,28 +17,28 @@
 
 <script>
 
-  import LoginForm from './LoginForm/LoginForm'
-  import RegForm from './RegForm/RegForm'
+import LoginForm from './LoginForm/LoginForm'
+import RegForm from './RegForm/RegForm'
 
-  export default {
-    name: 'LoginPage',
-    layout: 'MainLayout',
-    components: {
-      RegForm,
-      LoginForm
-      },
-    methods: {
-      changeUrl() {
-        if (this.$refs['tabs'].currentTab == 0) {
-          this.$router.push('/login')
-        }
-        if (this.$refs['tabs'].currentTab == 1) {
-          this.$store.dispatch('clearAxiosError')
-          this.$router.push('/register')
-        }
+export default {
+  name: 'LoginPage',
+  layout: 'MainLayout',
+  components: {
+    RegForm,
+    LoginForm
+  },
+  methods: {
+    changeUrl () {
+      if (this.$refs.tabs.currentTab == 0) {
+        this.$router.push('/login')
+      }
+      if (this.$refs.tabs.currentTab == 1) {
+        this.$store.dispatch('clearAxiosError')
+        this.$router.push('/register')
       }
     }
   }
+}
 </script>
 
 <style scoped>

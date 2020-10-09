@@ -22,8 +22,21 @@ import ControlCombobox from '~/components/Libs/Controls/ControlCombobox'
 
 export default {
   name: 'Control',
-  components: {ControlString, ControlText, ControlBoolean, ControlDouble, ControlLong,
-  ControlTimestamp, ControlPeriod, ControlClob, ControlEnum, ControlButton, ControlLink, ControlLabel, ControlCombobox},
+  components: {
+    ControlString,
+    ControlText,
+    ControlBoolean,
+    ControlDouble,
+    ControlLong,
+    ControlTimestamp,
+    ControlPeriod,
+    ControlClob,
+    ControlEnum,
+    ControlButton,
+    ControlLink,
+    ControlLabel,
+    ControlCombobox
+  },
   props: {
     data: {
       type: Object,

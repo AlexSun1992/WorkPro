@@ -34,7 +34,7 @@
 <script>
 
 export default {
-  data() {
+  data () {
     return {
       queryStr: null,
       searchResult: null,
@@ -43,51 +43,51 @@ export default {
       currentPage: 1
     }
   },
-  mounted() {
-    this.$refs["collapse"].$el.style.position = "absolute";
-    window.document.addEventListener('click', this.closeSearch);
+  mounted () {
+    this.$refs.collapse.$el.style.position = 'absolute'
+    window.document.addEventListener('click', this.closeSearch)
   },
   methods: {
-    async search() {
-      if (!this.queryStr) return;
-      this.searchResult = null;
-      this.searchInput = this.queryStr;
-      this.searchResult = await this.$store.dispatch("search", this.queryStr);
-      this.items = this.searchResult;
-      this.resultQty = this.enumerate(this.searchResult.length.toString());
+    async search () {
+      if (!this.queryStr) return
+      this.searchResult = null
+      this.searchInput = this.queryStr
+      this.searchResult = await this.$store.dispatch('search', this.queryStr)
+      this.items = this.searchResult
+      this.resultQty = this.enumerate(this.searchResult.length.toString())
     },
-    enumerate(num) {
-      let lastChar = num.charAt(num.length - 1);
-      let result = 'совпадени';
+    enumerate (num) {
+      const lastChar = num.charAt(num.length - 1)
+      const result = 'совпадени'
       if (num.length > 2) {
-        num = num.charAt(num.length - 2) + num.charAt(num.length - 1);
+        num = num.charAt(num.length - 2) + num.charAt(num.length - 1)
       }
       if (lastChar == 0 || lastChar >= 5 && lastChar <= 9 || num >= 10 && num <= 20) {
-        return result + 'й';
-      } else if (lastChar == 1 ) {
-        return result + 'е';
+        return result + 'й'
+      } else if (lastChar == 1) {
+        return result + 'е'
       } else if (lastChar >= 2 && lastChar <= 4) {
-        return result + 'я';
+        return result + 'я'
       }
     },
-    highlight(content) {
-      return content.replace(new RegExp(this.searchInput, "gi"), match => {
+    highlight (content) {
+      return content.replace(new RegExp(this.searchInput, 'gi'), match => {
         return '<strong>' + match + '</strong>'
       })
     },
-    clearSearch() {
-      this.searchResult = null;
-      this.queryStr = null;
+    clearSearch () {
+      this.searchResult = null
+      this.queryStr = null
     },
-    closeSearch(e) {
+    closeSearch (e) {
       if (e.target.id !== 'toggleButton' && e.target.id !== 'searchInput' && e.target.id !== 'searchButton') {
-        if (this.$refs['collapse']) {
-          this.$refs['collapse'].show = false;
+        if (this.$refs.collapse) {
+          this.$refs.collapse.show = false
         }
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -96,7 +96,7 @@ export default {
   max-width: 60vw;
 }
 .search {
-  display: flex; 
+  display: flex;
   justify-content: center;
 }
 .collapse {

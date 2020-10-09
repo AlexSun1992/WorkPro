@@ -14,7 +14,7 @@
       <div class="mt-2">
         <span class="error" v-if="isValid == false">
           Обязательно для заполнения
-        </span> 
+        </span>
       </div>
     </b-form-group>
   </span>
@@ -22,11 +22,11 @@
 
 <script>
 import 'vue-search-select/dist/VueSearchSelect.css'
-import {ModelListSelect} from 'vue-search-select'
+import { ModelListSelect } from 'vue-search-select'
 
 export default {
   name: 'ControlEnum',
-  components: {ModelListSelect},
+  components: { ModelListSelect },
   props: {
     data: {
       type: Object,
@@ -51,16 +51,15 @@ export default {
   },
   methods: {
     initData (param) {
-      let url = '';
-      if(this.relationValue){
-        if(this.relationValue.value){
+      let url = ''
+      if (this.relationValue) {
+        if (this.relationValue.value) {
           url = `/api/dicwf/${this.data.fieldId}/${this.relationValue.value.value}`
         }
-      }
-      else{
+      } else {
         url = `/api/dic/${this.$route.params.idModule}/${this.data.id}/${this.data.dic}`
       }
-      this.$axios({url: url, method: 'GET'})
+      this.$axios({ url: url, method: 'GET' })
         .then(resp => {
           this.options = resp.data
         })
@@ -86,24 +85,23 @@ export default {
         return this.data.value
       },
       set: function (value) {
-        this.$emit('update', {fieldId:this.data.fieldId, value})
-        this.$emit('clear', {fieldName:this.data.name})
+        this.$emit('update', { fieldId: this.data.fieldId, value })
+        this.$emit('clear', { fieldName: this.data.name })
         // this.$store.commit('data_card/setFormField', this.data)
       }
     },
     relationValue: {
       get: function () {
-        if(this.data.isRelation){
+        if (this.data.isRelation) {
           return this.$store.getters['data_card/getDataFieldByName'](this.data.fieldRelation)
-        }
-        else{
+        } else {
           return null
         }
       }
     },
-    isValid() {
+    isValid () {
       return this.$store.getters['data_card/getDataFieldByFieldId'](`${this.data.fieldId}`).state
-    },
+    }
   }
 }
 </script>

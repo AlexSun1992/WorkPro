@@ -35,70 +35,70 @@
 </template>
 
 <script>
-  import _ from 'lodash'
-  import DatePicker from 'vue2-datepicker'
-  import BirthDateInput from './BirthdateInput'
-  import ClickOutside from 'vue-click-outside'
-  import 'vue2-datepicker/index.css'
-  import 'vue2-datepicker/locale/ru'
+import _ from 'lodash'
+import DatePicker from 'vue2-datepicker'
+import BirthDateInput from './BirthdateInput'
+import ClickOutside from 'vue-click-outside'
+import 'vue2-datepicker/index.css'
+import 'vue2-datepicker/locale/ru'
 
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+const today = new Date()
+today.setHours(0, 0, 0, 0)
 
-  function getDate (value) {
-    const date = new Date
-    date.setFullYear(date.getFullYear() - value)
-    return date
-  }
+function getDate (value) {
+  const date = new Date()
+  date.setFullYear(date.getFullYear() - value)
+  return date
+}
 
-  export default {
-    name: 'BirthdayWrapper',
-    components: {DatePicker, BirthDateInput},
-    props: {
-      data: Object,
-      state: Boolean
-    },
-    data () {
-      return {
-        lang: {
-          formatLocale: {
-            firstDayOfWeek: 1,
-          },
-          monthBeforeYear: false,
+export default {
+  name: 'BirthdayWrapper',
+  components: { DatePicker, BirthDateInput },
+  props: {
+    data: Object,
+    state: Boolean
+  },
+  data () {
+    return {
+      lang: {
+        formatLocale: {
+          firstDayOfWeek: 1
         },
-        defaultDate: getDate(18),
-        isOpenPanel: undefined,
-        open: false,
-        buttonFocus: false
-      }
-    },
-    created: function () {
-      this.debouncedUpdate = _.debounce(this.hideDataPicker, 100)
-    },
-    methods: {
-      notBeforeDate (date) {
-        return date > getDate(18)
+        monthBeforeYear: false
       },
-      hideDataPicker () {
-        this.$refs.datepicker.closePopup;
-      },
-      showDataPicker() {
-        this.$refs.datepicker.showPopup;
-      },
-      setDateValue (date) {
-        this.$refs.birthDateInputInstance.setDate(date)
-      },
-      setButtonFocus (){
-        this.buttonFocus = true
-      },
-      blurButtonFocus (){
-        this.buttonFocus = false
-      }
-    },
-    directives: {
-      ClickOutside
+      defaultDate: getDate(18),
+      isOpenPanel: undefined,
+      open: false,
+      buttonFocus: false
     }
+  },
+  created: function () {
+    this.debouncedUpdate = _.debounce(this.hideDataPicker, 100)
+  },
+  methods: {
+    notBeforeDate (date) {
+      return date > getDate(18)
+    },
+    hideDataPicker () {
+      this.$refs.datepicker.closePopup
+    },
+    showDataPicker () {
+      this.$refs.datepicker.showPopup
+    },
+    setDateValue (date) {
+      this.$refs.birthDateInputInstance.setDate(date)
+    },
+    setButtonFocus () {
+      this.buttonFocus = true
+    },
+    blurButtonFocus () {
+      this.buttonFocus = false
+    }
+  },
+  directives: {
+    ClickOutside
   }
+}
 </script>
 
 <style scoped>

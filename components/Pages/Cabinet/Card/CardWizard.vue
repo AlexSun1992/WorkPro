@@ -16,22 +16,22 @@
 </template>
 
 <script>
-  import Grid from '~/components/Libs/Table/Grid'
-  import Form from '~/components/Libs/Form/Form'
-  export default {
-    name: 'CardWizard',
-    components: {Grid, Form},
-    props: ['id', 'wizard'],
-    data() {
-      return {
-        tabs: null,
-        editForm: true
-      }
-    },
-    computed: {
-      wizardData() {
-        return this.$store.getters['card/wizardData'];
-      }
+import Grid from '~/components/Libs/Table/Grid'
+import Form from '~/components/Libs/Form/Form'
+export default {
+  name: 'CardWizard',
+  components: { Grid, Form },
+  props: ['id', 'wizard'],
+  data () {
+    return {
+      tabs: null,
+      editForm: true
+    }
+  },
+  computed: {
+    wizardData () {
+      return this.$store.getters['card/wizardData']
     }
   }
+}
 </script>

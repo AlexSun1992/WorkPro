@@ -8,9 +8,9 @@
 
 <script>
 export default {
-  name: "SkeletonBox",
+  name: 'SkeletonBox',
   props: ['items']
-};
+}
 </script>
 
 <style lang="scss">

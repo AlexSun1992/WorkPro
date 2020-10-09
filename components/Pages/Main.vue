@@ -11,11 +11,11 @@
 </template>
 
 <script>
-  import DynamicRoutesRenderer from '~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer'
-  export default {
-    layout: 'MainLayout',
-    components: {DynamicRoutesRenderer}
-  }
+import DynamicRoutesRenderer from '~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer'
+export default {
+  layout: 'MainLayout',
+  components: { DynamicRoutesRenderer }
+}
 </script>
 
 <style lang="scss">

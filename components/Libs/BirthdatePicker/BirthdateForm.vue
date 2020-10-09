@@ -13,51 +13,50 @@
 </template>
 
 <script>
-  import data from './data'
-  import _ from 'lodash'
-  function getDataString(date){
-    if(date.day && date.month && date.year){
-      return `${date.day}.${date.month}.${date.year}`
-    }
-    else{
-      return null
-    }
+import data from './data'
+import _ from 'lodash'
+function getDataString (date) {
+  if (date.day && date.month && date.year) {
+    return `${date.day}.${date.month}.${date.year}`
+  } else {
+    return null
   }
-  export default  {
-    data () {
-      return {
-        date : {day: null, month: null, year: null},
-        days: data.days(),
-        months: data.month(),
-        years: data.years(),
-        focus: false
+}
+export default {
+  data () {
+    return {
+      date: { day: null, month: null, year: null },
+      days: data.days(),
+      months: data.month(),
+      years: data.years(),
+      focus: false
+    }
+  },
+  props: ['value', 'state'],
+  created: function () {
+    this.debouncedUpdate = _.debounce(this.updateInput, 10)
+  },
+  methods: {
+    updateInput () {
+      if (!this.focus || getDataString(this.date)) {
+        this.$emit('input', getDataString(this.date))
       }
     },
-    props: ['value', 'state'],
-    created: function () {
-      this.debouncedUpdate = _.debounce(this.updateInput, 10)
+    setFocus () {
+      this.focus = true
     },
-    methods: {
-      updateInput () {
-        if(!this.focus || getDataString(this.date)){
-          this.$emit('input', getDataString(this.date))
-        }
-      },
-      setFocus () {
-        this.focus = true
-      },
-      unsetFocus () {
-        this.focus = false
-      }
-    },
-    watch: {
-      focus: function (newQuestion) {
-        if(!newQuestion){
-          this.debouncedUpdate()
-        }
+    unsetFocus () {
+      this.focus = false
+    }
+  },
+  watch: {
+    focus: function (newQuestion) {
+      if (!newQuestion) {
+        this.debouncedUpdate()
       }
     }
   }
+}
 </script>
 
 <style scoped>

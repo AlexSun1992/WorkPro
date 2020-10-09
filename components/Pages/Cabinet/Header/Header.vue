@@ -21,26 +21,26 @@
 </template>
 
 <script>
-  export default {
-    name: 'Header',
-    methods: {
-      mobileMenu() {
-        this.$emit('mini-sidebar');
-      },
-      logout() {
-        try {
-          this.$auth.logout();
-          window.$nuxt.$cookiz?.remove('url');
+export default {
+  name: 'Header',
+  methods: {
+    mobileMenu () {
+      this.$emit('mini-sidebar')
+    },
+    logout () {
+      try {
+        this.$auth.logout()
+          window.$nuxt.$cookiz?.remove('url')
           this.$router.push('/')
-        } catch (e) {
-          console.log(e)
-        }
-      },
-      goToNotify() {
-        this.$router.push('/cabinet/55/0/705')
+      } catch (e) {
+        console.log(e)
       }
+    },
+    goToNotify () {
+      this.$router.push('/cabinet/55/0/705')
     }
   }
+}
 </script>
 
 <style scoped>

@@ -21,18 +21,16 @@ import DynamicRoutesRenderer from '~/components/Libs/DynamicRoutesRenderer/Dynam
 
 import Preview from '~/components/Pages/PreviewPage/Preview'
 
-
 Vue.use(Router)
 
-
-export function createRouter() {
+export function createRouter () {
   return new Router({
     mode: 'history',
     routes: [
       {
         meta: 'Главная',
         path: '/',
-        component: Main,
+        component: Main
       },
       {
         meta: 'Регистрация',

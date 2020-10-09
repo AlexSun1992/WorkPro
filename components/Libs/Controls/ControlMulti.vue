@@ -20,7 +20,7 @@ import { MultiSelect } from 'vue-search-select'
 import select from '@/services/select'
 export default {
   name: 'ControlEnum',
-  components: {MultiSelect},
+  components: { MultiSelect },
   data () {
     return {
       options: [],

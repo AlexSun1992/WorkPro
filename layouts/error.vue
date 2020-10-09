@@ -7,16 +7,16 @@
 </template>
 
 <script>
-  export default {
-    head: {
-      title: 'Страница не найдена'
-    },
-    props: ['error'],
-    layout: 'ErrorLayout',
-    computed: {
-      errorMessage () {
-        return this.error.message
-      },
+export default {
+  head: {
+    title: 'Страница не найдена'
+  },
+  props: ['error'],
+  layout: 'ErrorLayout',
+  computed: {
+    errorMessage () {
+      return this.error.message
     }
   }
+}
 </script>

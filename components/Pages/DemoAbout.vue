@@ -15,23 +15,23 @@
 </template>
 
 <script>
-  import VRuntimeTemplate from "v-runtime-template";
-  export default {
-    layout: 'DemoLayout',
-    name: 'DemoAbout',
-    head: {
-      title: 'Демонстрационная страница'
-    },
-    async asyncData ({ $axios }) {
-      let dataPage = await $axios.get('/wp-json/wp/v2/pages/391')
-      let dataMenu = await $axios.get(`/wp-json/acf/v3/main/${dataPage.data.acf.main_menu.component_id}`)
-      return {
-        content: dataPage.data.content.rendered,
-        menu: dataMenu.data.acf
-      }
-    },
-    components: {VRuntimeTemplate}
-  }
+import VRuntimeTemplate from 'v-runtime-template'
+export default {
+  layout: 'DemoLayout',
+  name: 'DemoAbout',
+  head: {
+    title: 'Демонстрационная страница'
+  },
+  async asyncData ({ $axios }) {
+    const dataPage = await $axios.get('/wp-json/wp/v2/pages/391')
+    const dataMenu = await $axios.get(`/wp-json/acf/v3/main/${dataPage.data.acf.main_menu.component_id}`)
+    return {
+      content: dataPage.data.content.rendered,
+      menu: dataMenu.data.acf
+    }
+  },
+  components: { VRuntimeTemplate }
+}
 </script>
 
 <style scoped>

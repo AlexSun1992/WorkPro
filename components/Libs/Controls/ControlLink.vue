@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'ControlLink',
-  data() {
+  data () {
     return {
       editShow: false
     }
@@ -23,5 +23,5 @@ export default {
 </script>
 
 <style scoped>
- 
+
 </style>

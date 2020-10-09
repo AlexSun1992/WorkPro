@@ -3,22 +3,22 @@ export default {
     {
       name: 'Главная',
       url: '/',
-      icon: 'icon-home',
+      icon: 'icon-home'
     },
     {
       name: 'О компании',
       url: '/about',
-      icon: 'icon-home',
+      icon: 'icon-home'
     },
     {
       name: 'Калькулятор',
       url: '/calculator',
-      icon: 'icon-home',
+      icon: 'icon-home'
     },
     {
       name: 'Обратная связь',
       url: '/feedback',
-      icon: 'icon-home',
+      icon: 'icon-home'
     }
   ]
 }

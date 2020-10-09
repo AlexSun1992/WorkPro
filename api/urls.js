@@ -1,7 +1,7 @@
 const VER = 'v2'
 const AUTH = `/am/auth/${VER}/authorize`
 const REFRESH_TOKEN = `/am/auth/${VER}/token_refresh`
-const SOCKET = `wss://mobile2.reso.ru/chat`
+const SOCKET = 'wss://mobile2.reso.ru/chat'
 const MODULE = `/am/main/${VER}/module`
 const MENU = `/am/main/${VER}/menu`
 const CLIENTMENU = `/am/main/${VER}/clientmenu`
@@ -28,7 +28,7 @@ export default {
   SOCKET: SOCKET,
   MODULE: MODULE,
   MENU: MENU,
-  CLIENTMENU:  CLIENTMENU,
+  CLIENTMENU: CLIENTMENU,
   DATACARD: DATACARD,
   DATA: DATA,
   DATALIST: DATALIST,
@@ -43,5 +43,5 @@ export default {
   WEBFIELD: WEBFIELD,
   DIC: DIC,
   DICWF: DICWF,
-  REPORT: REPORT,
+  REPORT: REPORT
 }

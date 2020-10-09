@@ -4,10 +4,10 @@
       <b-tab :title="tab" v-for="(tab, index) in captions" :key="index">
         <div class="row">
           <Control v-for='(item, i) in items(index)' :key="i"
-            @update="$emit('update', $event)" 
+            @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
-            @open-card="$emit('open-card', $event)" 
-            :data="item" 
+            @open-card="$emit('open-card', $event)"
+            :data="item"
             :edit="edit"
             :cols="cols">
           </Control>
@@ -16,10 +16,10 @@
     </b-tabs>
     <div v-else class="row">
       <Control v-for='(item, i) in items()' :key="i"
-        @update="$emit('update', $event)" 
+        @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
-        :data="item" 
+        :data="item"
         :edit="edit"
         :cols="cols">
       </Control>
@@ -30,7 +30,7 @@
 import Control from '~/components/Libs/Controls/Control'
 export default {
   name: 'Form',
-  components: {Control},
+  components: { Control },
   props: {
     data: {
       type: Array | null,
@@ -47,21 +47,21 @@ export default {
     }
   },
   methods: {
-    items(index) {
+    items (index) {
       if (this.data) {
         return this.data.filter(item => {
           if (this.captions) {
-            if (index != item.page) return;
+            if (index != item.page) return
           }
-          if (!item.visible) return; 
-          return this.edit || !this.edit && item.value;
+          if (!item.visible) return
+          return this.edit || !this.edit && item.value
         })
       }
     }
   },
   computed: {
-    captions: function() {
-      return this.$store.getters['data_card/getCaptions'];
+    captions: function () {
+      return this.$store.getters['data_card/getCaptions']
     }
   }
 }

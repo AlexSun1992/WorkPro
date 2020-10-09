@@ -3,9 +3,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'CardBlock'
-  }
+export default {
+  name: 'CardBlock'
+}
 </script>
 
 <style scoped>

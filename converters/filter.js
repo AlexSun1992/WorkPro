@@ -8,11 +8,11 @@ converter.compare = (a, b) => {
 }
 
 converter.filter = (data, id) => {
-  let arr = []
-  let items = data
+  const arr = []
+  const items = data
   items.sort(converter.compare)
   for (let i = 0; i < items.length; i++) {
-    let obj = {}
+    const obj = {}
     obj.label = items[i].SNAMERUS
     obj.value = items[i].SDEFAULT
     obj.name = items[i].SNAME
@@ -20,7 +20,7 @@ converter.filter = (data, id) => {
     obj.state = null
     obj.type = converter.type(items[i])
     if (obj.type === 'enum') {
-      obj.value = {text: null, value: null}
+      obj.value = { text: null, value: null }
       obj.dic = id ? `${items[i].STYPE},idrow=${id}` : items[i].STYPE
     }
     if (obj.type === 'multi') {
@@ -40,7 +40,7 @@ converter.filter = (data, id) => {
 }
 
 converter.type = (item) => {
-  let type = item.STYPE.toLowerCase()
+  const type = item.STYPE.toLowerCase()
   if (type.localeCompare('строка') === 0) {
     return 'string'
   }

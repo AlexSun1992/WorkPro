@@ -17,26 +17,26 @@
 </template>
 
 <script>
-  export default {
-    name: 'DemoContent',
-    data () {
-      return {
-        filteredTodos: [
-          {
-            "name": "Основные",
-            "idItem": 19,
-            "id": 1101,
-            "actions": []
-          },
-          {
-            "name": "Список водителей",
-            "idItem": 21,
-            "id": 1102
-          }
-        ]
-      }
-    },
+export default {
+  name: 'DemoContent',
+  data () {
+    return {
+      filteredTodos: [
+        {
+          name: 'Основные',
+          idItem: 19,
+          id: 1101,
+          actions: []
+        },
+        {
+          name: 'Список водителей',
+          idItem: 21,
+          id: 1102
+        }
+      ]
+    }
   }
+}
 </script>
 
 <style scoped>

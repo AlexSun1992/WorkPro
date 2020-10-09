@@ -92,17 +92,17 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
-  export default {
-    layout: 'DemoMainPageLayout',
-    name: 'DemoPage',
-    head: {
-      title: 'Демонстрационная страница'
-    },
-    computed: {
-      ...mapGetters("slider",['isButtonLeftDisabled','isButtonRightDisabled']),
-    }
+import { mapGetters } from 'vuex'
+export default {
+  layout: 'DemoMainPageLayout',
+  name: 'DemoPage',
+  head: {
+    title: 'Демонстрационная страница'
+  },
+  computed: {
+    ...mapGetters('slider', ['isButtonLeftDisabled', 'isButtonRightDisabled'])
   }
+}
 </script>
 
 <style scoped>

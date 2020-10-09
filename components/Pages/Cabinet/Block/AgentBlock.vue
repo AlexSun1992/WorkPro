@@ -3,9 +3,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'AgentBlock'
-  }
+export default {
+  name: 'AgentBlock'
+}
 </script>
 
 <style scoped>

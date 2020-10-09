@@ -13,16 +13,16 @@
 </template>
 
 <script>
-  export default {
-    name: 'About',
-    props: {
-      data: {
-        type: Object,
-        required: true,
-        default: () => {}
-      }
+export default {
+  name: 'About',
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {}
     }
   }
+}
 </script>
 
 <style scoped>

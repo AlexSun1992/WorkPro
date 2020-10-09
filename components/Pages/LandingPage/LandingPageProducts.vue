@@ -28,16 +28,16 @@
 </template>
 
 <script>
-  export default {
-    name: 'Products',
-    props: {
-      items: {
-        type: Array,
-        required: true,
-        default: () => []
-      }
+export default {
+  name: 'Products',
+  props: {
+    items: {
+      type: Array,
+      required: true,
+      default: () => []
     }
   }
+}
 </script>
 
 <style scoped>

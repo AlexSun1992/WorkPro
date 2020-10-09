@@ -37,45 +37,44 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
-  import LoginModal from './Login/LoginModal'
-  export default {
-    name: 'Calculator',
-    components: {LoginModal},
-    data () {
-      return {
-        user: {},
-        form : {},
-        calcId : null,
-        result: null
-      }
+import { mapGetters } from 'vuex'
+import LoginModal from './Login/LoginModal'
+export default {
+  name: 'Calculator',
+  components: { LoginModal },
+  data () {
+    return {
+      user: {},
+      form: {},
+      calcId: null,
+      result: null
+    }
+  },
+  computed: {
+    isDisabledCalculate () {
+      return !this.form.a || !this.form.b
     },
-    computed: {
-      isDisabledCalculate () {
-         return !this.form.a || !this.form.b
-      },
-      isDisabledApply () {
-         return !this.calcId
-      },
-      ...mapGetters(['isAuthenticated'])
+    isDisabledApply () {
+      return !this.calcId
     },
-    methods: {
-      calculate() {
-        let min = Math.ceil(5000);
-        let max = Math.floor(1000);
-        this.calcId =  Math.floor(Math.random() * (max - min)) + min
-        this.result =  Number(this.form.a) +  Number(this.form.b)
-      },
-      regPolicy() {
-        if(!this.isAuthenticated){
-          this.$router.push(`/login`)
-        }
-        else{
-          this.$router.push(`/cabinet/reg-policy/${this.calcId}`)
-        }
+    ...mapGetters(['isAuthenticated'])
+  },
+  methods: {
+    calculate () {
+      const min = Math.ceil(5000)
+      const max = Math.floor(1000)
+      this.calcId = Math.floor(Math.random() * (max - min)) + min
+      this.result = Number(this.form.a) + Number(this.form.b)
+    },
+    regPolicy () {
+      if (!this.isAuthenticated) {
+        this.$router.push('/login')
+      } else {
+        this.$router.push(`/cabinet/reg-policy/${this.calcId}`)
       }
     }
   }
+}
 </script>
 
 <style scoped>

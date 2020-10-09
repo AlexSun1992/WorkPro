@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, minLength } from 'vuelidate/lib/validators'
 import birthdayPicker from '../../../Libs/BirthdatePicker/BirthdatePicker'
 
 export default {
-  props: ["v", "validateState"],
+  props: ['v', 'validateState'],
   components: {
     birthdayPicker
   },

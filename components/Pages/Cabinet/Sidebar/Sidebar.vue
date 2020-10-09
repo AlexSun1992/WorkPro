@@ -17,45 +17,45 @@
 </template>
 
 <script>
-  import HeaderUserName from '../Header/HeaderUserName'
-  import { mapGetters } from 'vuex';
-  export default {
-    name: 'Sidebar',
-    components: {HeaderUserName},
-    props: {
-      navItems: {
-        type: Array,
-        required: true,
-        default: () => []
-      }
-    },
-    data () {
-      return {
-        endScrollMenu: false,
-        sideBarMini: false
-      }
-    },
-    methods: {
-      updateScroll() {
-        this.endScrollMenu = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 120
-      },
-      minimizeMenu() {
-        this.$emit('mini-sidebar');
-        setTimeout(() => this.updateScroll(), 100);
-      },
-      minimizeMobileMenu() {
-        this.$emit('mini-mobile-sidebar');
-      }
-    },
-    computed: {
-      ...mapGetters(['isAuthenticated','loggedInUser']),
-    },
-    mounted() {
-      this.endScrollMenu  =  window.innerHeight === document.documentElement.offsetHeight
-      window.addEventListener('scroll', this.updateScroll);
-      window.addEventListener('resize', this.updateScroll);
+import HeaderUserName from '../Header/HeaderUserName'
+import { mapGetters } from 'vuex'
+export default {
+  name: 'Sidebar',
+  components: { HeaderUserName },
+  props: {
+    navItems: {
+      type: Array,
+      required: true,
+      default: () => []
     }
+  },
+  data () {
+    return {
+      endScrollMenu: false,
+      sideBarMini: false
+    }
+  },
+  methods: {
+    updateScroll () {
+      this.endScrollMenu = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 120
+    },
+    minimizeMenu () {
+      this.$emit('mini-sidebar')
+      setTimeout(() => this.updateScroll(), 100)
+    },
+    minimizeMobileMenu () {
+      this.$emit('mini-mobile-sidebar')
+    }
+  },
+  computed: {
+    ...mapGetters(['isAuthenticated', 'loggedInUser'])
+  },
+  mounted () {
+    this.endScrollMenu = window.innerHeight === document.documentElement.offsetHeight
+    window.addEventListener('scroll', this.updateScroll)
+    window.addEventListener('resize', this.updateScroll)
   }
+}
 </script>
 
 <style scoped>

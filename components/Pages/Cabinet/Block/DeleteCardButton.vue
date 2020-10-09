@@ -8,44 +8,44 @@
 </template>
 
 <script>
-  export default {
-    name: 'OpenCardButton',
-    props: {
-      itemId: {
-        type: Number,
-        required: false,
-        default: () => null
-      },
-      menuId: {
-        required: true,
-        default: () => ''
-      },
-      moduleId: {
-        type: String,
-        required: true,
-        default: () => ''
+export default {
+  name: 'OpenCardButton',
+  props: {
+    itemId: {
+      type: Number,
+      required: false,
+      default: () => null
+    },
+    menuId: {
+      required: true,
+      default: () => ''
+    },
+    moduleId: {
+      type: String,
+      required: true,
+      default: () => ''
+    }
+  },
+  data () {
+    return {
+      myclass: ['cabinet']
+    }
+  },
+  methods: {
+    async deleteCard () {
+      try {
+        await this.$store.dispatch('blocks/deleteForm', { moduleId: this.moduleId, menuId: this.menuId, itemId: this.itemId })
+      } catch (err) {
+        this.$bvToast.toast(err.response.data.MESSAGE, {
+          title: 'Ошибка',
+          variant: 'danger',
+          noAutoHide: true,
+          solid: true
+        })
       }
-    },
-    data () {
-      return {
-          myclass: ['cabinet'],
-        }
-      },
-    methods: {
-      async deleteCard () {
-        try {
-          await this.$store.dispatch('blocks/deleteForm', {moduleId:this.moduleId, menuId:this.menuId, itemId:this.itemId});
-        } catch(err) {
-          this.$bvToast.toast(err.response.data.MESSAGE, {
-            title: `Ошибка`,
-            variant: 'danger',
-            noAutoHide: true,
-            solid: true
-          })
-        }
-      },
-    },
+    }
   }
+}
 </script>
 
 <style scoped>

@@ -8,35 +8,35 @@
 </template>
 
 <script>
-  import Form from '~/components/Libs/Form/Form'
-  export default {
-    name: 'CardFilter',
-    data () {
-      return {
-        editForm: true,
-        editDataForm: this.data
-      }
+import Form from '~/components/Libs/Form/Form'
+export default {
+  name: 'CardFilter',
+  data () {
+    return {
+      editForm: true,
+      editDataForm: this.data
+    }
+  },
+  watch: {
+    data: 'setData'
+  },
+  methods: {
+    setData () {
+      this.editDataForm = this.data
     },
-    watch: {
-      'data': 'setData'
-    },
-    methods: {
-      setData () {
-        this.editDataForm = this.data
-      },
-      applyFilter () {
-        this.$emit('action-clicked',this.editDataForm)
-      }
-    },
-    components: {Form},
-    props: {
-      data: {
-        type: Array,
-        required: true,
-        default: () => []
-      }
-    },
+    applyFilter () {
+      this.$emit('action-clicked', this.editDataForm)
+    }
+  },
+  components: { Form },
+  props: {
+    data: {
+      type: Array,
+      required: true,
+      default: () => []
+    }
   }
+}
 </script>
 
 <style scoped>

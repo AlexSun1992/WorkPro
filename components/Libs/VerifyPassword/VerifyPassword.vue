@@ -37,19 +37,19 @@
 
 <script>
 export default {
-  props: ["v", "validateState", "disabled", "recovery"],
-  data() {
+  props: ['v', 'validateState', 'disabled', 'recovery'],
+  data () {
     return {
-      password: "",
-      password2: ""
-    };
+      password: '',
+      password2: ''
+    }
   },
   computed: {
-    showLabel() {
+    showLabel () {
       return this.recovery ? 'Придумайте новый пароль' : 'Пароль'
     }
   }
-};
+}
 </script>
 
 <style scoped>

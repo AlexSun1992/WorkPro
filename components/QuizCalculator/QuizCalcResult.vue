@@ -34,43 +34,43 @@
   </div>
 </template>
 <script>
-function buildQuery(answers, questions, quizId) {
-  const url = new URL("/free/v2/quiz/result", window.location.href);
-  url.searchParams.append("idQUIZ", quizId);
+function buildQuery (answers, questions, quizId) {
+  const url = new URL('/free/v2/quiz/result', window.location.href)
+  url.searchParams.append('idQUIZ', quizId)
   answers.forEach(answer => {
     const question = questions.find(
       item => item.ID === Number(answer.IDCLIENT_QIUZ_ISSUE)
-    );
-    url.searchParams.append(question.SVALUE_NAME, answer.SVALUE_VALUE);
-  });
-  return url.toString();
+    )
+    url.searchParams.append(question.SVALUE_NAME, answer.SVALUE_VALUE)
+  })
+  return url.toString()
 }
 
 export default {
-  props: ["answers", "quizId", "questions"],
-  data() {
+  props: ['answers', 'quizId', 'questions'],
+  data () {
     return {
       isLoading: true,
       premium: 0
-    };
+    }
   },
-  created: function() {
-    this.isLoading = true;
-    const url = buildQuery(this.answers, this.questions, this.quizId);
+  created: function () {
+    this.isLoading = true
+    const url = buildQuery(this.answers, this.questions, this.quizId)
     this.$axios(url).then(({ data }) => {
-      this.premium = data[0].PREMIUM;
-      this.isLoading = false;
-    });
+      this.premium = data[0].PREMIUM
+      this.isLoading = false
+    })
   },
   computed: {
-    premiumRub() {
-      return Math.floor(this.premium).toLocaleString();
+    premiumRub () {
+      return Math.floor(this.premium).toLocaleString()
     },
-    premiumKop() {
-      return String(this.premium * 100).slice(-2);
+    premiumKop () {
+      return String(this.premium * 100).slice(-2)
     }
   }
-};
+}
 </script>
 <style scoped lang="scss">
 @import url("./calculator.css");

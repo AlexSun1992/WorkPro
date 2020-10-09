@@ -37,16 +37,16 @@
   </div>
 </template>
 <script>
-import Question from "./QuizQuestion";
-import CalcResult from "./QuizCalcResult";
+import Question from './QuizQuestion'
+import CalcResult from './QuizCalcResult'
 
 export default {
   components: { Question, CalcResult },
-  props: ["quizId"],
-  data() {
+  props: ['quizId'],
+  data () {
     return {
-      stitle_h1: "Калькулятор",
-      stitle_h2: "",
+      stitle_h1: 'Калькулятор',
+      stitle_h2: '',
       startIssue: null,
       questions: [],
       answers: [],
@@ -54,56 +54,56 @@ export default {
       quizIdValue: 1,
       partnerId: -1,
       pageId: 1
-    };
+    }
   },
   methods: {
-    chooseAnswer: function(answer) {
-      this.chosenAnswers.push(answer);
+    chooseAnswer: function (answer) {
+      this.chosenAnswers.push(answer)
     },
-    deleteAnswer: function(answer) {
-      const answerId = this.chosenAnswers.indexOf(answer);
-      this.chosenAnswers.splice(answerId);
+    deleteAnswer: function (answer) {
+      const answerId = this.chosenAnswers.indexOf(answer)
+      this.chosenAnswers.splice(answerId)
     },
-    resetQuiz: function() {
-      this.chosenAnswers = [];
+    resetQuiz: function () {
+      this.chosenAnswers = []
     }
   },
   computed: {
-    firstQuestion() {
+    firstQuestion () {
       return this.questions.find(item => item.ID === this.startIssue)
         ? this.startIssue
-        : this.questions[0] && this.questions[0].ID;
+        : this.questions[0] && this.questions[0].ID
     },
-    currentQuestionId() {
-      const lastAnswer = this.chosenAnswers.slice().pop();
-      return lastAnswer ? Number(lastAnswer.NNEXT_ISSUE) : this.firstQuestion;
+    currentQuestionId () {
+      const lastAnswer = this.chosenAnswers.slice().pop()
+      return lastAnswer ? Number(lastAnswer.NNEXT_ISSUE) : this.firstQuestion
     },
-    currentQuestion() {
-      return this.questions.find(item => item.ID === this.currentQuestionId);
+    currentQuestion () {
+      return this.questions.find(item => item.ID === this.currentQuestionId)
     },
-    currentAnswers() {
+    currentAnswers () {
       return this.answers.filter(item => {
         return (
           String(item.IDCLIENT_QIUZ_ISSUE) ===
             String(this.currentQuestion.ID) && item.LACTIVE === 1
-        );
-      });
+        )
+      })
     },
-    isCalcStage() {
+    isCalcStage () {
       return (
-        this.currentQuestion && this.currentQuestion.SSHOW_TYPE === "SYSTEM_END"
-      );
+        this.currentQuestion && this.currentQuestion.SSHOW_TYPE === 'SYSTEM_END'
+      )
     }
   },
-  created: async function() {
+  created: async function () {
     if (this.quizId) {
-      this.quizIdValue = this.quizId;
+      this.quizIdValue = this.quizId
     }
     if (process.browser) {
-      const params = new URLSearchParams(window.location.search);
-      const quizIdValue = params.get("quizId");
+      const params = new URLSearchParams(window.location.search)
+      const quizIdValue = params.get('quizId')
       if (quizIdValue) {
-        this.quizIdValue = quizIdValue;
+        this.quizIdValue = quizIdValue
       }
     }
     const [[quizInfo], questions, answers] = await Promise.all([
@@ -116,14 +116,14 @@ export default {
       this.$axios(`/free/v2/quiz/answer?idQUIZ=${this.quizIdValue}`).then(
         ({ data }) => data
       )
-    ]);
-    this.questions = questions;
-    this.answers = answers;
-    this.startIssue = quizInfo.NSTART_ISSUE;
-    this.stitle_h1 = quizInfo.STITLE_H1;
-    this.stitle_h2 = quizInfo.STITLE_H2;
+    ])
+    this.questions = questions
+    this.answers = answers
+    this.startIssue = quizInfo.NSTART_ISSUE
+    this.stitle_h1 = quizInfo.STITLE_H1
+    this.stitle_h2 = quizInfo.STITLE_H2
   }
-};
+}
 </script>
 <style scoped lang="scss">
 @import url("./calculator.css");

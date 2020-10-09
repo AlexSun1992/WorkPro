@@ -45,7 +45,7 @@
 <script>
 import VerifyUser from '~/components/Libs/VerifyUser/VerifyUser'
 import UserRecoveryForm from '~/components/Pages/Login/PasswordRecovery/UserRecoveryForm'
-import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
+import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 
 export default {
   layout: 'MainLayout',
@@ -53,7 +53,7 @@ export default {
     VerifyUser,
     UserRecoveryForm
   },
-  data() {
+  data () {
     return {
       form: {
         phone: '',
@@ -76,63 +76,63 @@ export default {
 
   methods: {
 
-    validateState(name) {
-      const { $dirty, $error } = this.$v.form[name];
-      return $dirty ? !$error : null;
+    validateState (name) {
+      const { $dirty, $error } = this.$v.form[name]
+      return $dirty ? !$error : null
     },
 
-    async resetPassword() {
-      let params;
-      if (this.$refs['tabs'].currentTab == 0) {
+    async resetPassword () {
+      let params
+      if (this.$refs.tabs.currentTab == 0) {
         params = {
-          "TYPE": 1,
-          "PHONE": this.$v.form.phone.$model,
-          "SMSCODE": this.$v.form.code.$model,
-          "PASSWORD": this.$v.form.password.$model,
-          "PASSWORD_CONFIRM": this.$v.form.password2.$model
-        };
+          TYPE: 1,
+          PHONE: this.$v.form.phone.$model,
+          SMSCODE: this.$v.form.code.$model,
+          PASSWORD: this.$v.form.password.$model,
+          PASSWORD_CONFIRM: this.$v.form.password2.$model
+        }
       }
-      if (this.$refs['tabs'].currentTab == 1) {
+      if (this.$refs.tabs.currentTab == 1) {
         params = {
-          "TYPE": 2,
-          "EMAIL": this.$v.form.email.$model,
-          "EMAILCODE": this.$v.form.code.$model,
-          "PASSWORD": this.$v.form.password.$model,
-          "PASSWORD_CONFIRM": this.$v.form.password2.$model
-        };
+          TYPE: 2,
+          EMAIL: this.$v.form.email.$model,
+          EMAILCODE: this.$v.form.code.$model,
+          PASSWORD: this.$v.form.password.$model,
+          PASSWORD_CONFIRM: this.$v.form.password2.$model
+        }
       }
-      let response;
+      let response
       if (!this.greater180) {
-        let response = await this.$store.dispatch('resetPassword', params);
+        const response = await this.$store.dispatch('resetPassword', params)
         if (response.data[0].MESSAGE_CODE === '200') {
-          this.$router.push('/login');
+          this.$router.push('/login')
         } else if (response.data[0].MESSAGE_CODE === '501') {
           this.errorMessage = 'Необходимо ввести дополнительные данные'
-          this.greater180 = true;
+          this.greater180 = true
         }
       } else {
-        let birthdate = this.$v.form.birthdate.$model;
-        let year = birthdate.getFullYear();
-        let date = birthdate.getDate();
-        let month = birthdate.getMonth() + 1;
-        date = String(date).length === 1 ? `0${date}` : date;
-        month = String(month).length === 1 ? `0${month}` : month;
+        const birthdate = this.$v.form.birthdate.$model
+        const year = birthdate.getFullYear()
+        let date = birthdate.getDate()
+        let month = birthdate.getMonth() + 1
+        date = String(date).length === 1 ? `0${date}` : date
+        month = String(month).length === 1 ? `0${month}` : month
         this.$v.form.birthdate.$model = `${year}-${month}-${date}`
 
         const additionalParams = {
-          "SECONDNAME" : this.$v.form.surname.$model,
-          "FIRSTNAME" : this.$v.form.name.$model,
-          "THIRDNAME" : this.$v.form.patronymic.$model,
-          "BIRTHDATE" : this.$v.form.birthdate.$model
+          SECONDNAME: this.$v.form.surname.$model,
+          FIRSTNAME: this.$v.form.name.$model,
+          THIRDNAME: this.$v.form.patronymic.$model,
+          BIRTHDATE: this.$v.form.birthdate.$model
         }
         params = {
           ...params,
           ...additionalParams
         }
-        response = await this.$store.dispatch('resetPassword', params);
+        response = await this.$store.dispatch('resetPassword', params)
         if (response.data[0].MESSAGE_CODE === '200') {
-          this.$router.push('/login');
-        } else if(response.data[0].MESSAGE_CODE === '502') {
+          this.$router.push('/login')
+        } else if (response.data[0].MESSAGE_CODE === '502') {
           this.errorMessage = 'Введённые дополнительные данные некорректны. Повторите попытку'
         }
       }
@@ -140,12 +140,12 @@ export default {
   },
 
   computed: {
-    disabledReset() {
+    disabledReset () {
       if (!this.greater180) {
-        return this.$v.form.password2.$invalid;
+        return this.$v.form.password2.$invalid
       } else {
         return this.$v.form.name.$invalid ||
-        this.$v.form.surname.$invalid || this.$v.form.patronymic.$invalid || this.$v.form.birthdate.$invalid;
+        this.$v.form.surname.$invalid || this.$v.form.patronymic.$invalid || this.$v.form.birthdate.$invalid
       }
     }
   },
@@ -186,7 +186,7 @@ export default {
     }
   }
 
-};
+}
 </script>
 
 <style scoped>

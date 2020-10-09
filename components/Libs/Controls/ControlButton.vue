@@ -15,8 +15,8 @@ export default {
   computed: {
     action: {
       get: function () {
-        let contractId = this.data.name.split("Item")[1]
-        let actions = this.$store.getters['menu/getMenuById'](this.$route.params.idItem).ACTIONSCUR
+        const contractId = this.data.name.split('Item')[1]
+        const actions = this.$store.getters['menu/getMenuById'](this.$route.params.idItem).ACTIONSCUR
         return actions.find(item => item.ID == contractId)
       }
     }

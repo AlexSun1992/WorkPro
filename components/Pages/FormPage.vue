@@ -31,50 +31,50 @@
 </template>
 
 <script>
-import CardEditor from "~/components/Libs/CardEditor/CardEditor";
-import VRuntimeTemplate from "v-runtime-template";
+import CardEditor from '~/components/Libs/CardEditor/CardEditor'
+import VRuntimeTemplate from 'v-runtime-template'
 export default {
-  name: "FormPage",
+  name: 'FormPage',
   components: { CardEditor, VRuntimeTemplate },
-  props: ["params"],
+  props: ['params'],
 
-  data() {
+  data () {
     return {
-      myclass: ["cabinet"]
-    };
+      myclass: ['cabinet']
+    }
   },
 
-  mounted() {
-    this.$bvModal.show("modal");
+  mounted () {
+    this.$bvModal.show('modal')
   },
 
-  async created() {
-    this.$store.commit("data_card/clearFormData");
+  async created () {
+    this.$store.commit('data_card/clearFormData')
     // Будем ли держать в data_card?
-    let list = await this.$axios.get(
+    const list = await this.$axios.get(
       `/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`
-    );
-    let params = {
+    )
+    const params = {
       idModule: this.params.page.idModule,
       idItem: this.params.page.idItem,
       idCard: list.data.items[0].ID
-    };
-    await this.$store.dispatch("data_card/fetchForm", params);
+    }
+    await this.$store.dispatch('data_card/fetchForm', params)
     // this.$router.push(`/cabinet/${params.idModule}/0/${params.idItem}/${params.idCard}`)
   },
   methods: {
-    closeModal() {
-      this.$router.back();
+    closeModal () {
+      this.$router.back()
     }
   },
   computed: {
-    dataForm() {
+    dataForm () {
       return JSON.parse(
-        JSON.stringify(this.$store.getters["data_card/getForm"])
-      );
+        JSON.stringify(this.$store.getters['data_card/getForm'])
+      )
     }
   }
-};
+}
 </script>
 
 <style>

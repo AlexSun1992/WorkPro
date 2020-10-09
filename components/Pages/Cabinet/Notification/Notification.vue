@@ -77,13 +77,11 @@
 </template>
 
 <script>
-  export default {
-    name: 'Notification'
-  }
+export default {
+  name: 'Notification'
+}
 </script>
 
 <style scoped>
 
 </style>
-
-

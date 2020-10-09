@@ -7,11 +7,11 @@ converter.compare = (a, b) => {
 }
 
 converter.wizard = (data) => {
-  let arr = []
-  if(data){
+  const arr = []
+  if (data) {
     data.sort(converter.compare)
     for (let i = 0; i < data.length; i++) {
-      let obj = {}
+      const obj = {}
       obj.name = data[i].SNAME
       obj.idItem = data[i].NITEM
       obj.id = data[i].ID

@@ -5,36 +5,36 @@
 </template>
 
 <script>
-  import Form from '~/components/Libs/Form/Form'
-  
-  export default {
-    name: 'CardForm',
-    components: {Form},
-    props: {
-      data: {
-        type: Array,
-        required: true,
-        default: () => []
-      }
-    },
-    data () {
-      return {
-        editForm: true,
-        editDataForm: this.data
-      }
-    },
-    methods: {
-      setData () {
-        this.editDataForm = this.data;
-      },
-      openEdit() {
-       
-      }
-    },
-    watch: {
-      'data': 'setData'
+import Form from '~/components/Libs/Form/Form'
+
+export default {
+  name: 'CardForm',
+  components: { Form },
+  props: {
+    data: {
+      type: Array,
+      required: true,
+      default: () => []
     }
+  },
+  data () {
+    return {
+      editForm: true,
+      editDataForm: this.data
+    }
+  },
+  methods: {
+    setData () {
+      this.editDataForm = this.data
+    },
+    openEdit () {
+
+    }
+  },
+  watch: {
+    data: 'setData'
   }
+}
 </script>
 
 <style scoped>

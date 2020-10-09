@@ -28,7 +28,7 @@ export default {
         return this.data.value
       },
       set: function (value) {
-        this.$emit('update', {fieldId:this.data.fieldId, value: Number(value)})
+        this.$emit('update', { fieldId: this.data.fieldId, value: Number(value) })
       }
     }
   }

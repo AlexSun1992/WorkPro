@@ -55,41 +55,41 @@
 </template>
 <script>
 export default {
-  props: ["question", "answers"],
-  data() {
+  props: ['question', 'answers'],
+  data () {
     return {
-      inputValue: ""
-    };
+      inputValue: ''
+    }
   },
   computed: {
-    selectOptions() {
+    selectOptions () {
       return this.answers.map(({ ID: value, STITLE: text }) => ({
         value,
         text
-      }));
+      }))
     }
   },
   methods: {
-    onSelectChange(id) {
-      const answer = this.answers.find(item => item.ID === id);
-      this.$emit("choose-answer", answer);
+    onSelectChange (id) {
+      const answer = this.answers.find(item => item.ID === id)
+      this.$emit('choose-answer', answer)
     },
-    onSubmitValue() {
-      const answer = this.answers[0];
-      answer.STITLE = this.inputValue;
-      answer.SVALUE_VALUE = this.inputValue;
-      this.$emit("choose-answer", answer);
+    onSubmitValue () {
+      const answer = this.answers[0]
+      answer.STITLE = this.inputValue
+      answer.SVALUE_VALUE = this.inputValue
+      this.$emit('choose-answer', answer)
     }
   },
-  data() {
+  data () {
     return {
       selected: null
-    };
+    }
   },
-  created: function() {
-    this.inputValue = "";
+  created: function () {
+    this.inputValue = ''
   }
-};
+}
 </script>
 <style scoped lang="scss">
 @import url("./calculator.css");

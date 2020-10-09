@@ -13,127 +13,127 @@
 </template>
 
 <script>
-  import Form from '~/components/Libs/Form/Form'
-  import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
-  import SkeletonBox from "~/components/Libs/SkeletonBox";
-  export default {
-    name: 'CardEditor',
-    components: {Form, ActionButton, SkeletonBox},
-    data() {
-      return {
-        invalidFields: [],
-        body: null,
-        disabledButtons: {
-          background: '#dddbdd',
-          boxShadow: 'none',
-          border: 'none',
-          color: '#dddbdd'
+import Form from '~/components/Libs/Form/Form'
+import ActionButton from '~/components/Pages/Cabinet/Block/ActionButton'
+import SkeletonBox from '~/components/Libs/SkeletonBox'
+export default {
+  name: 'CardEditor',
+  components: { Form, ActionButton, SkeletonBox },
+  data () {
+    return {
+      invalidFields: [],
+      body: null,
+      disabledButtons: {
+        background: '#dddbdd',
+        boxShadow: 'none',
+        border: 'none',
+        color: '#dddbdd'
+      }
+    }
+  },
+  props: {
+    params: {
+      type: Object,
+      required: true,
+      default: () => {}
+    },
+    data: {
+      type: Array,
+      required: true,
+      default: () => []
+    },
+    edit: {
+      type: Boolean,
+      required: false,
+      default: () => true
+    }
+  },
+  destroyed () {
+    this.$store.commit('data_card/cardChanged', false)
+    this.$store.commit('data_card/setError', false)
+  },
+  methods: {
+    async updateValue (e) {
+      this.$store.commit('data_card/cardChanged', true)
+      if (e.SCONST) {
+        const form = this.$store.getters['data_card/getForm']
+        await this.$store.dispatch('data_card/executeAction', { actionId: e.ID, rowId: 0, itemId: e.NITEM, body: form })
+        return
+      }
+      this.$store.commit('data_card/setFormField', { fieldId: e.fieldId, value: e.value })
+    },
+    clearRelation (e) {
+      this.$store.commit('data_card/clearFormRelationField', { fieldName: e.fieldName })
+    },
+    openCard (e) {
+      const flatmenu = this.$store.getters['menu/flatmenu']
+      const menuItem = flatmenu.find(item => {
+        return item.SNAME == e.label
+      })
+      $nuxt._router.push(`/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0`)
+    },
+    validateData (data) {
+      let valid = true
+      for (let i = 0; i < data.length; i++) {
+        const value = data[i].type === 'enum' ? data[i].value.value : data[i].value
+        data[i].checked = true
+        if (data[i].required && !value && data[i].type !== 'boolean') {
+          valid = false
         }
       }
+      return valid
     },
-    props: {
-      params: {
-        type: Object,
-        required: true,
-        default: () => {}
-      },
-      data: {
-        type: Array,
-        required: true,
-        default: () => []
-      },
-      edit: {
-        type: Boolean,
-        required: false,
-        default: () => true
-      }
-    },
-    destroyed() {
+    async saveDataCard () {
       this.$store.commit('data_card/cardChanged', false)
-      this.$store.commit('data_card/setError', false)
-    },
-    methods: {
-      async updateValue(e) {
-        this.$store.commit('data_card/cardChanged', true)
-        if (e.SCONST) {
-          let form = this.$store.getters['data_card/getForm'];
-          await this.$store.dispatch('data_card/executeAction', {actionId: e.ID, rowId: 0, itemId: e.NITEM, body: form});
-          return
-        }
-        this.$store.commit('data_card/setFormField', {fieldId: e.fieldId, value: e.value});
-      },
-      clearRelation(e) {
-        this.$store.commit('data_card/clearFormRelationField', {fieldName:e.fieldName});
-      },
-      openCard(e) {
-        let flatmenu = this.$store.getters['menu/flatmenu']
-        let menuItem = flatmenu.find(item => {
-          return item.SNAME == e.label
-        })
-        $nuxt._router.push(`/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0`)
-      },
-      validateData(data) {
-        let valid = true
-        for (let i = 0; i < data.length; i++) {
-          let value = data[i].type === 'enum' ? data[i].value.value : data[i].value
-          data[i].checked = true
-          if (data[i].required && !value && data[i].type !== 'boolean') {
-            valid = false;
+      this.$store.commit('data_card/saveButtonClicked', true)
+      this.$store.commit('data_card/filterFields')
+      const fields = this.$store.getters['data_card/getForm']
+      if (this.validateData(fields)) {
+        try {
+          let itemId
+          let moduleId
+          let cardId
+          if (!this.params.page) {
+            itemId = this.$route.params.idItem
+            moduleId = this.$route.params.idModule
+            cardId = this.$route.params.idCard
+          } else {
+            itemId = this.params.page.idItem
+            moduleId = this.params.page.idModule
+            cardId = this.$store.getters['data_card/getCardId']
           }
-        }
-        return valid;
-      },
-      async saveDataCard() {
-        this.$store.commit('data_card/cardChanged', false)
-        this.$store.commit('data_card/saveButtonClicked', true)
-         this.$store.commit('data_card/filterFields')
-         let fields = this.$store.getters['data_card/getForm']
-        if(this.validateData(fields)){
-          try {
-            let itemId;
-            let moduleId;
-            let cardId;
-            if (!this.params.page) {
-              itemId = this.$route.params.idItem
-              moduleId = this.$route.params.idModule
-              cardId = this.$route.params.idCard
-            } else {
-              itemId = this.params.page.idItem
-              moduleId = this.params.page.idModule
-              cardId = this.$store.getters['data_card/getCardId']
-            }
-            await this.$store.dispatch('data_card/saveDataCard', {moduleId, itemId, cardId, form: fields});
-            if (this.$route.params.idItem == '710') {
-              await this.$store.dispatch('updateUser');
-            }
-            this.$bvToast.toast('Успешно сохранено', {
-              title: ``,
-              variant: 'success',
-              solid: true
-            })
-          } catch(err) {
-            this.$bvToast.toast(err.response.data.MESSAGE, {
-              title: `Ошибка`,
-              variant: 'danger',
-              noAutoHide: true,
-              solid: true
-            })
+          await this.$store.dispatch('data_card/saveDataCard', { moduleId, itemId, cardId, form: fields })
+          if (this.$route.params.idItem == '710') {
+            await this.$store.dispatch('updateUser')
           }
+          this.$bvToast.toast('Успешно сохранено', {
+            title: '',
+            variant: 'success',
+            solid: true
+          })
+        } catch (err) {
+          this.$bvToast.toast(err.response.data.MESSAGE, {
+            title: 'Ошибка',
+            variant: 'danger',
+            noAutoHide: true,
+            solid: true
+          })
         }
-      },
-      cancelDataCard() {
-        this.$store.commit('data_card/cardChanged', false)
-        this.$store.commit('data_card/setForm', JSON.parse(JSON.stringify(this.$store.getters['data_card/getCopyForm'])))
       }
     },
-    computed: {
-      isButtonDisabled() {
-        if (!this.data.length) {
-          return this.disabledButtons
-        }
+    cancelDataCard () {
+      this.$store.commit('data_card/cardChanged', false)
+      this.$store.commit('data_card/setForm', JSON.parse(JSON.stringify(this.$store.getters['data_card/getCopyForm'])))
+    }
+  },
+  computed: {
+    isButtonDisabled () {
+      if (!this.data.length) {
+        return this.disabledButtons
       }
     }
   }
+}
 </script>
 
 <style scoped>

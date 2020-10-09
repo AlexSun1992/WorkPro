@@ -28,12 +28,12 @@ export default {
   computed: {
     label () {
       return `${this.data.label}`
-    },
+    }
   },
   methods: {
-    updateField(e) {
-      this.data.value=e.value
-      this.$emit('update', e);
+    updateField (e) {
+      this.data.value = e.value
+      this.$emit('update', e)
     }
   }
 }

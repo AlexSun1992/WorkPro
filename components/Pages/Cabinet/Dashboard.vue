@@ -18,17 +18,17 @@
 </template>
 
 <script>
-  export default {
-    name: 'Dashboard',
-    data () {
-      return {
-        policies: []
-      }
-    },
-    async  fetch () {
-      this.policies = await this.$axios.$get('/main/v2/policy')
+export default {
+  name: 'Dashboard',
+  data () {
+    return {
+      policies: []
     }
+  },
+  async  fetch () {
+    this.policies = await this.$axios.$get('/main/v2/policy')
   }
+}
 </script>
 
 <style scoped>

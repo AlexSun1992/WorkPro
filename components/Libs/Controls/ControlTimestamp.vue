@@ -14,7 +14,7 @@ import DatePicker from 'vue2-datepicker'
 import moment from 'moment/moment'
 export default {
   name: 'ControlTimestamp',
-  components: {DatePicker},
+  components: { DatePicker },
   data () {
     return {
       lang: 'ru',
@@ -39,7 +39,7 @@ export default {
         return this.data.value
       },
       set: function (value) {
-        this.$emit('update', {fieldId:this.data.fieldId, value:value})
+        this.$emit('update', { fieldId: this.data.fieldId, value: value })
       }
     }
   }
