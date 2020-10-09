@@ -1,27 +1,30 @@
 <template>
   <div>
-    <b-button :class="data.labelCols + ' link-button'" @click="$emit('open-card', data)" variant="secondary">{{ data.label }}</b-button>
+    <b-button
+      :class="data.labelCols + ' link-button'"
+      @click="$emit('open-card', data)"
+      variant="secondary"
+      >{{ data.label }}</b-button
+    >
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ControlLink',
-  data () {
+  name: "ControlLink",
+  data() {
     return {
-      editShow: false
-    }
+      editShow: false,
+    };
   },
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {}
-    }
-  }
-}
+      default: () => {},
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

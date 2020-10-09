@@ -1,16 +1,16 @@
-const converter = {}
+const converter = {};
 
 converter.icon = (data) => {
   switch (data) {
-    case 'AG':
-      return 'fa fa-user'
-    case 'ПЛЗ':
-      return 'fa fa-tasks'
-    case 'TM':
-      return 'fa fa-medkit'
+    case "AG":
+      return "fa fa-user";
+    case "ПЛЗ":
+      return "fa fa-tasks";
+    case "TM":
+      return "fa fa-medkit";
     default:
-      return ''
+      return "";
   }
-}
+};
 
-export default converter
+export default converter;

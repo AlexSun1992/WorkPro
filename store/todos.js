@@ -1,18 +1,18 @@
 export const state = () => ({
-  list: []
-})
+  list: [],
+});
 
 export const mutations = {
-  add (state, text) {
+  add(state, text) {
     state.list.push({
       text,
-      done: false
-    })
+      done: false,
+    });
   },
-  remove (state, { todo }) {
-    state.list.splice(state.list.indexOf(todo), 1)
+  remove(state, { todo }) {
+    state.list.splice(state.list.indexOf(todo), 1);
   },
-  toggle (state, todo) {
-    todo.done = !todo.done
-  }
-}
+  toggle(state, todo) {
+    todo.done = !todo.done;
+  },
+};

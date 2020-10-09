@@ -5,33 +5,31 @@
 </template>
 
 <script>
-import ContentBlock from './ContentBlock'
-import VRuntimeTemplate from 'v-runtime-template'
+import ContentBlock from "./ContentBlock";
+import VRuntimeTemplate from "v-runtime-template";
 export default {
-  name: 'OfferBlock',
+  name: "OfferBlock",
   components: { ContentBlock, VRuntimeTemplate },
   props: {
     itemId: {
       type: String,
       required: true,
-      default: () => null
+      default: () => null,
     },
     name: {
       type: String,
       required: true,
-      default: () => null
-    }
+      default: () => null,
+    },
   },
   computed: {
     templateData: {
       get: function () {
-        return this.$store.getters['menu/getMenuById'](this.itemId).SVJCARDGRID
-      }
-    }
-  }
-}
+        return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
+      },
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

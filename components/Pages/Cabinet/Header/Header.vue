@@ -7,13 +7,21 @@
       </div>
       <ul class="header-nav col-auto">
         <li class="header-nav-item">
-          <button v-on:click="goToNotify()"  type="button" class="header-nav-notifications" />
+          <button
+            v-on:click="goToNotify()"
+            type="button"
+            class="header-nav-notifications"
+          />
         </li>
         <li class="header-nav-item">
           <button v-on:click="logout()" type="button" class="header-nav-exit" />
         </li>
         <li class="header-nav-item mobile-menu-btn">
-          <button v-on:click="mobileMenu()" type="button" class="header-nav-mobile" />
+          <button
+            v-on:click="mobileMenu()"
+            type="button"
+            class="header-nav-mobile"
+          />
         </li>
       </ul>
     </div>
@@ -22,27 +30,25 @@
 
 <script>
 export default {
-  name: 'Header',
+  name: "Header",
   methods: {
-    mobileMenu () {
-      this.$emit('mini-sidebar')
+    mobileMenu() {
+      this.$emit("mini-sidebar");
     },
-    logout () {
+    logout() {
       try {
-        this.$auth.logout()
-          window.$nuxt.$cookiz?.remove('url')
-          this.$router.push('/')
+        this.$auth.logout();
+        window.$nuxt.$cookiz?.remove("url");
+        this.$router.push("/");
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     },
-    goToNotify () {
-      this.$router.push('/cabinet/55/0/705')
-    }
-  }
-}
+    goToNotify() {
+      this.$router.push("/cabinet/55/0/705");
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

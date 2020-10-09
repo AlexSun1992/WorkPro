@@ -9,7 +9,9 @@
           :state="validateState('surname')"
           @blur="v.surname.$touch()"
         ></b-form-input>
-        <b-form-invalid-feedback>Пожалуйста, введите фамилию</b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          >Пожалуйста, введите фамилию</b-form-invalid-feedback
+        >
       </b-form-group>
       <b-form-group label="Имя">
         <b-form-input
@@ -19,7 +21,9 @@
           :state="validateState('name')"
           @blur="v.name.$touch()"
         ></b-form-input>
-        <b-form-invalid-feedback>Пожалуйста, введите имя</b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          >Пожалуйста, введите имя</b-form-invalid-feedback
+        >
       </b-form-group>
       <b-form-group label="Отчество">
         <b-form-input
@@ -29,37 +33,39 @@
           :state="validateState('patronymic')"
           @blur="v.patronymic.$touch()"
         ></b-form-input>
-        <b-form-invalid-feedback>Пожалуйста, введите отчество</b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          >Пожалуйста, введите отчество</b-form-invalid-feedback
+        >
       </b-form-group>
       <b-form-group label="Дата рождения">
-        <birthday-picker :data="v" :state="validateState('birthdate')"/>
+        <birthday-picker :data="v" :state="validateState('birthdate')" />
       </b-form-group>
     </b-form>
   </div>
 </template>
 
 <script>
-import { required, minLength } from 'vuelidate/lib/validators'
-import birthdayPicker from '../../../Libs/BirthdatePicker/BirthdatePicker'
+import { required, minLength } from "vuelidate/lib/validators";
+import birthdayPicker from "../../../Libs/BirthdatePicker/BirthdatePicker";
 
 export default {
-  props: ['v', 'validateState'],
+  props: ["v", "validateState"],
   components: {
-    birthdayPicker
+    birthdayPicker,
   },
   validations: {
     name: {
-      required
+      required,
     },
     surname: {
-      required
+      required,
     },
     patronymic: {
-      required
+      required,
     },
     birthdate: {
-      required
-    }
-  }
-}
+      required,
+    },
+  },
+};
 </script>

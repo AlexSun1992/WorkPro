@@ -3,7 +3,7 @@
     <div class="animated fadeIn">
       <div>
         <div class="justify-content-lg-center">
-          <DynamicRoutesRenderer/>
+          <DynamicRoutesRenderer />
         </div>
       </div>
     </div>
@@ -11,13 +11,15 @@
 </template>
 
 <script>
-import DynamicRoutesRenderer from '~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer'
+import DynamicRoutesRenderer from "~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer";
 export default {
-  layout: 'MainLayout',
-  components: { DynamicRoutesRenderer }
-}
+  layout: "MainLayout",
+  components: { DynamicRoutesRenderer },
+};
 </script>
 
 <style lang="scss">
-    .main_page { @import '~/assets/scss/main.scss'}
+.main_page {
+  @import "~/assets/scss/main.scss";
+}
 </style>

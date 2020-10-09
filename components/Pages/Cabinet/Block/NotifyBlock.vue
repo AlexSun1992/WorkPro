@@ -1,58 +1,62 @@
 <template>
-    <v-runtime-template :template="templateData"></v-runtime-template>
+  <v-runtime-template :template="templateData"></v-runtime-template>
 </template>
 
 <script>
-import ContentBlock from './ContentBlock'
-import ActionButton from './ActionButton'
-import OpenCardButton from '../Block/OpenCardButton'
-import DeleteCardButton from '../Block/DeleteCardButton'
-import VRuntimeTemplate from 'v-runtime-template'
+import ContentBlock from "./ContentBlock";
+import ActionButton from "./ActionButton";
+import OpenCardButton from "../Block/OpenCardButton";
+import DeleteCardButton from "../Block/DeleteCardButton";
+import VRuntimeTemplate from "v-runtime-template";
 export default {
-  name: 'NotifyBlock',
-  components: { ContentBlock, VRuntimeTemplate, ActionButton, OpenCardButton, DeleteCardButton },
+  name: "NotifyBlock",
+  components: {
+    ContentBlock,
+    VRuntimeTemplate,
+    ActionButton,
+    OpenCardButton,
+    DeleteCardButton,
+  },
   props: {
     moduleId: {
       type: String,
       required: false,
-      default: () => ''
+      default: () => "",
     },
     itemId: {
       type: String,
       required: true,
-      default: () => null
+      default: () => null,
     },
     name: {
       type: String,
       required: true,
-      default: () => null
-    }
+      default: () => null,
+    },
   },
   computed: {
     templateData: {
       get: function () {
-        return this.$store.getters['menu/getMenuById'](this.itemId).SVJCARDGRID
-      }
+        return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
+      },
     },
     actions: {
       get: function () {
-        return this.$store.getters['menu/getMenuById'](this.itemId).ACTIONSCUR
-      }
+        return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
+      },
     },
     isEmptyContent: {
       get: function () {
-        const block = this.$store.getters['blocks/getBlockById'](this.itemId)
+        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
-          return !block.data.items.length
+          return !block.data.items.length;
         } else {
-          return false
+          return false;
         }
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

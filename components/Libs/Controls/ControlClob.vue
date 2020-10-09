@@ -4,17 +4,15 @@
 
 <script>
 export default {
-  name: 'ControlClob',
+  name: "ControlClob",
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {}
-    }
-  }
-}
+      default: () => {},
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

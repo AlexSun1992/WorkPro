@@ -9,8 +9,16 @@
               <a href="">Смотреть все</a>
             </div>
             <div class="col-auto">
-              <div  @click="$refs.wrapper.goToPrev()"class="slider-arrow-prev" v-bind:class="{ disabled: isButtonLeftDisabled }"></div>
-              <div  @click="$refs.wrapper.goToNext()" class="slider-arrow-next" v-bind:class="{ disabled: isButtonRightDisabled }"></div>
+              <div
+                @click="$refs.wrapper.goToPrev()"
+                class="slider-arrow-prev"
+                v-bind:class="{ disabled: isButtonLeftDisabled }"
+              ></div>
+              <div
+                @click="$refs.wrapper.goToNext()"
+                class="slider-arrow-next"
+                v-bind:class="{ disabled: isButtonRightDisabled }"
+              ></div>
             </div>
           </div>
         </div>
@@ -20,67 +28,69 @@
           <carousel-wrapper ref="wrapper" :slides="4">
             <div class="block-slider">
               <div class="block-container block-container-slider">
-                <div class="block-title">
-                  Сезон Renault123
-                </div>
+                <div class="block-title">Сезон Renault123</div>
                 <div class="block-description">
-                  Скидки для новых автомобилей при покупке полиса в офисах компании
+                  Скидки для новых автомобилей при покупке полиса в офисах
+                  компании
                 </div>
                 <div class="block-img">
-                  <img src="/img/main/car.svg">
+                  <img src="/img/main/car.svg" />
                 </div>
                 <div class="block-button">
-                  <a href="" class="btn-icon-right icon-arrow-right">Подробнее</a>
+                  <a href="" class="btn-icon-right icon-arrow-right"
+                    >Подробнее</a
+                  >
                 </div>
               </div>
             </div>
             <div class="block-slider">
               <div class="block-container block-container-slider">
-                <div class="block-title">
-                  Московский хит
-                </div>
+                <div class="block-title">Московский хит</div>
                 <div class="block-description">
-                  Сэкономьте 35% на страховании автомобилей BMW, AUDI, MERCEDES и другие
+                  Сэкономьте 35% на страховании автомобилей BMW, AUDI, MERCEDES
+                  и другие
                 </div>
                 <div class="block-img">
-                  <img src="/img/main/zont.svg">
+                  <img src="/img/main/zont.svg" />
                 </div>
                 <div class="block-button">
-                  <a href="" class="btn-icon-right icon-arrow-right">Подробнее</a>
+                  <a href="" class="btn-icon-right icon-arrow-right"
+                    >Подробнее</a
+                  >
                 </div>
               </div>
             </div>
             <div class="block-slider">
               <div class="block-container block-container-slider">
-                <div class="block-title">
-                  Домовой-Экспресс
-                </div>
+                <div class="block-title">Домовой-Экспресс</div>
                 <div class="block-description">
                   <span>9 800 ₽/год</span>
                   Страхование квартиры от всех рисков
                 </div>
                 <div class="block-img">
-                  <img src="/img/main/house.svg">
+                  <img src="/img/main/house.svg" />
                 </div>
                 <div class="block-button">
-                  <a href="" class="btn-icon-right icon-arrow-right">Подробнее</a>
+                  <a href="" class="btn-icon-right icon-arrow-right"
+                    >Подробнее</a
+                  >
                 </div>
               </div>
             </div>
             <div class="block-slider">
               <div class="block-container block-container-slider">
-                <div class="block-title">
-                  Доктор РЕСО
-                </div>
+                <div class="block-title">Доктор РЕСО</div>
                 <div class="block-description">
                   <span>от 11 700 ₽/год</span>
                   Лечение у лучших врачей сети MedSwiss
                 </div>
                 <div class="block-img">
-                  <img src="/img/main/heart.svg">
+                  <img src="/img/main/heart.svg" />
                 </div>
                 <div class="block-button">
-                  <a href="" class="btn-icon-right icon-arrow-right">Подробнее</a>
+                  <a href="" class="btn-icon-right icon-arrow-right"
+                    >Подробнее</a
+                  >
                 </div>
               </div>
             </div>
@@ -92,18 +102,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-  layout: 'DemoMainPageLayout',
-  name: 'DemoPage',
+  layout: "DemoMainPageLayout",
+  name: "DemoPage",
   head: {
-    title: 'Демонстрационная страница'
+    title: "Демонстрационная страница",
   },
   computed: {
-    ...mapGetters('slider', ['isButtonLeftDisabled', 'isButtonRightDisabled'])
-  }
-}
+    ...mapGetters("slider", ["isButtonLeftDisabled", "isButtonRightDisabled"]),
+  },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

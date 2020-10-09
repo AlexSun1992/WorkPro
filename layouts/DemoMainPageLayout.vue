@@ -6,9 +6,7 @@
         <div class="row">
           <div class="col-12">
             <div class="block-container block-container-big mt-1_25">
-              <div class="block-title">
-                Автострахование
-              </div>
+              <div class="block-title">Автострахование</div>
               <div class="block-description">
                 <strong>Полис — это уверенность и спокойствие.</strong>
                 Уверенность в том, что мы всегда отремонтируем ваш автомобиль
@@ -70,9 +68,7 @@
         <div class="row flex-wrap">
           <div class="col-6 d-flex">
             <div class="block-container mt-1_25">
-              <div class="block-title">
-                Страхование туристов
-              </div>
+              <div class="block-title">Страхование туристов</div>
               <div class="block-description">
                 Путешествуйте по России и за рубежом с надежной защитой своего
                 здоровья. Только до конца мая скидка 25% по промокоду CORONA
@@ -113,9 +109,7 @@
           </div>
           <div class="col-6 d-flex">
             <div class="block-container mt-1_25">
-              <div class="block-title">
-                Страхование дач
-              </div>
+              <div class="block-title">Страхование дач</div>
               <div class="block-description">
                 Все, что может сгореть; все, что могут украсть, испортить,
                 разрушить, залить водой, можно застраховать по полису
@@ -134,9 +128,7 @@
           </div>
           <div class="col-6 d-flex">
             <div class="block-container mt-1_25 block-container-center">
-              <div class="block-title">
-                Все страховые продукты
-              </div>
+              <div class="block-title">Все страховые продукты</div>
               <div class="block-description">
                 У нас широкая линейка продуктов, поэтому мы легко подберем для
                 вас оптимальную страховую программу. Узнайте что мы можем вам
@@ -206,9 +198,7 @@
       <div class="row">
         <div class="col-6 d-flex">
           <div class="block-container block-container-four">
-            <div class="block-title">
-              Школа обучения страхованию
-            </div>
+            <div class="block-title">Школа обучения страхованию</div>
             <div class="block-description">
               Лучшая школа страхования в Россииприглашает всех желающих стать
               профессионалом страхового бизнеса
@@ -234,9 +224,7 @@
         </div>
         <div class="col-6 d-flex">
           <div class="block-container block-container-four">
-            <div class="block-title">
-              Найдите своего страхового агента
-            </div>
+            <div class="block-title">Найдите своего страхового агента</div>
             <div class="block-description">
               <span>У нас работают свыше 27 тысяч агентов и брокеров. </span> Вы
               можете проконсультироваться со страховым агентом, который
@@ -260,9 +248,7 @@
       <div class="row">
         <div class="col-4 d-flex">
           <div class="block-container block-container-help">
-            <div class="block-title">
-              Полезные опции
-            </div>
+            <div class="block-title">Полезные опции</div>
             <div class="block-img">
               <img src="/img/main/lamp.svg" />
             </div>
@@ -273,9 +259,7 @@
         </div>
         <div class="col-4 d-flex">
           <div class="block-container block-container-help">
-            <div class="block-title">
-              Есть жалобы или предложения?
-            </div>
+            <div class="block-title">Есть жалобы или предложения?</div>
             <div class="block-img">
               <img src="/img/main/chat.svg" />
             </div>
@@ -288,9 +272,7 @@
         </div>
         <div class="col-4 d-flex">
           <div class="block-container block-container-help">
-            <div class="block-title">
-              +7(495) 730-30-00
-            </div>
+            <div class="block-title">+7(495) 730-30-00</div>
             <div class="block-img">
               <img src="/img/main/trubka.svg" />
             </div>
@@ -320,7 +302,7 @@
                     <a href="">Зелень</a>
                   </div>
                 </div>
-                <div class="product  menu-im">
+                <div class="product menu-im">
                   <a href="">Имущество</a>
                   <div class="priduct_link">
                     <a href="">КВАРТИРА</a>
@@ -328,7 +310,7 @@
                     <a href="">ИПОТЕКА</a>
                   </div>
                 </div>
-                <div class="product  menu-med">
+                <div class="product menu-med">
                   <a href="">Медицина</a>
                   <div class="priduct_link">
                     <a href="">ДМС</a>
@@ -359,7 +341,7 @@
               </div>
             </div>
           </div>
-          <div class="col-5  menu-link d-none">
+          <div class="col-5 menu-link d-none">
             <div class="row">
               <div class="col-5">
                 <div class="title">Авто</div>
@@ -382,7 +364,7 @@
               </div>
             </div>
           </div>
-          <div class="col-3  d-none block-v-line menu-link">
+          <div class="col-3 d-none block-v-line menu-link">
             <div class="title">РЕСО-Гарантия</div>
             <a href="">О компании</a>
             <a href="">Новости</a>
@@ -444,13 +426,13 @@ export default {
     return {
       counter: 0,
       textSelected: null,
-      valueSelected: null
+      valueSelected: null,
     };
   },
   components: {
     MainHeader,
-    Footer
-  }
+    Footer,
+  },
 };
 </script>
 

@@ -1,7 +1,9 @@
 <template>
   <div>
     <div v-if="getPage && getPage.content">
-       <v-runtime-template :template="getPage.content.rendered"></v-runtime-template>
+      <v-runtime-template
+        :template="getPage.content.rendered"
+      ></v-runtime-template>
     </div>
     <div v-else="getPage.status == '404'">
       <div class="container">
@@ -12,31 +14,31 @@
 </template>
 
 <script>
-import VRuntimeTemplate from 'v-runtime-template'
-import Calculator from '../../Pages/Calculator'
-import { mapGetters } from 'vuex'
+import VRuntimeTemplate from "v-runtime-template";
+import Calculator from "../../Pages/Calculator";
+import { mapGetters } from "vuex";
 
 export default {
-  layout: 'MainLayout',
-  head () {
+  layout: "MainLayout",
+  head() {
     return {
-      title: this.getPage?.title?.rendered
-    }
+      title: this.getPage?.title?.rendered,
+    };
   },
   components: { VRuntimeTemplate, Calculator },
-  data () {
+  data() {
     return {
       counter: 0,
       dropDownValueSelected: { textSelected: null, valueSelected: null },
       textSelected: null,
-      valueSelected: null
-    }
+      valueSelected: null,
+    };
   },
   computed: {
-    getPage () {
-      return this.$store.getters['pages/getPageByUrl']
+    getPage() {
+      return this.$store.getters["pages/getPageByUrl"];
     },
-    ...mapGetters('slider', ['isButtonLeftDisabled', 'isButtonRightDisabled'])
-  }
-}
+    ...mapGetters("slider", ["isButtonLeftDisabled", "isButtonRightDisabled"]),
+  },
+};
 </script>

@@ -1,36 +1,36 @@
 <template>
-  <b-button  v-on:click="openCard()">
+  <b-button v-on:click="openCard()">
     <slot>Открыть</slot>
   </b-button>
 </template>
 
 <script>
 export default {
-  name: 'OpenCardButton',
+  name: "OpenCardButton",
   props: {
     itemId: {
       type: Number,
       required: false,
-      default: () => null
+      default: () => null,
     },
     menuId: {
       required: true,
-      default: () => ''
+      default: () => "",
     },
     moduleId: {
       type: String,
       required: true,
-      default: () => ''
-    }
+      default: () => "",
+    },
   },
   methods: {
-    openCard () {
-      $nuxt._router.push(`/cabinet/${this.moduleId}/0/${this.menuId}/${this.itemId}`)
-    }
-  }
-}
+    openCard() {
+      $nuxt._router.push(
+        `/cabinet/${this.moduleId}/0/${this.menuId}/${this.itemId}`
+      );
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

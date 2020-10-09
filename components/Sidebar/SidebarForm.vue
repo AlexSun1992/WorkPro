@@ -4,8 +4,7 @@
   </div>
 </template>
 <script>
-
 export default {
-  name: 'sidebar-form'
-}
+  name: "sidebar-form",
+};
 </script>

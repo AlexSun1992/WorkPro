@@ -29,31 +29,31 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import HeaderUserName from '../Pages/Cabinet/Header/HeaderUserName'
-import LoginModal from '../Pages/Login/LoginModal'
+import { mapGetters } from "vuex";
+import HeaderUserName from "../Pages/Cabinet/Header/HeaderUserName";
+import LoginModal from "../Pages/Login/LoginModal";
 export default {
-  name: 'header-dropdown',
+  name: "header-dropdown",
   components: { HeaderUserName, LoginModal },
   methods: {
-    login () {
-      this.$router.push('/login')
+    login() {
+      this.$router.push("/login");
     },
-    logout () {
+    logout() {
       try {
-        this.$auth.logout()
-        window.$nuxt.$cookiz?.remove('url')
-        this.$router.push('/')
+        this.$auth.logout();
+        window.$nuxt.$cookiz?.remove("url");
+        this.$router.push("/");
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     },
-    goInCabinet () {
-      this.$router.push('/cabinet')
-    }
+    goInCabinet() {
+      this.$router.push("/cabinet");
+    },
   },
   computed: {
-    ...mapGetters(['isAuthenticated', 'loggedInUser'])
-  }
-}
+    ...mapGetters(["isAuthenticated", "loggedInUser"]),
+  },
+};
 </script>

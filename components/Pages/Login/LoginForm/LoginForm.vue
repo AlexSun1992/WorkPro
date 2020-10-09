@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="my-2">{{errorMessage}}</p>
+    <p class="my-2">{{ errorMessage }}</p>
     <b-form @submit.prevent="onSubmit">
       <b-form-group label="Телефон" label-cols="3">
         <b-form-input
@@ -17,7 +17,10 @@
           :disabled="authInProcess"
           class="form-control"
         ></b-form-input>
-        <b-form-invalid-feedback>Пожалуйста, введите корректный номер телефона</b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          >Пожалуйста, введите корректный номер
+          телефона</b-form-invalid-feedback
+        >
       </b-form-group>
       <b-form-group label="Пароль" label-cols="3">
         <b-form-input
@@ -30,11 +33,22 @@
           class="form-control"
           :disabled="authInProcess"
         ></b-form-input>
-        <b-form-invalid-feedback>Пожалуйста, введите пароль</b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          >Пожалуйста, введите пароль</b-form-invalid-feedback
+        >
       </b-form-group>
-      <b-button variant="success" type="submit" :disabled="authInProcess" class="w-100">
+      <b-button
+        variant="success"
+        type="submit"
+        :disabled="authInProcess"
+        class="w-100"
+      >
         Авторизоваться
-        <b-spinner v-if="authInProcess" style="width: 1.2rem; height: 1.2rem;" variant="light"></b-spinner>
+        <b-spinner
+          v-if="authInProcess"
+          style="width: 1.2rem; height: 1.2rem"
+          variant="light"
+        ></b-spinner>
       </b-button>
     </b-form>
     <div class="mt-3 text-center">
@@ -45,123 +59,133 @@
 </template>
 
 <script>
-import { required, minLength } from 'vuelidate/lib/validators'
-import _ from 'lodash'
+import { required, minLength } from "vuelidate/lib/validators";
+import _ from "lodash";
 
 export default {
-  data () {
+  data() {
     return {
       user: {
-        username: '',
-        password: ''
+        username: "",
+        password: "",
       },
       isUsernameBlured: true,
       isPasswordBlured: true,
-      usernameMask: '+7(###)-###-##-##',
-      placeholder: '+7(___)-___-__-__',
+      usernameMask: "+7(###)-###-##-##",
+      placeholder: "+7(___)-___-__-__",
       errorMessage: null,
       authInProcess: false,
       captchaToken: null,
-      loginTouchesCount: 0
-    }
+      loginTouchesCount: 0,
+    };
   },
 
-  created () {
-    this.debouncedUpdate = _.debounce(this.blurField, 100)
-    this.initialCount = this.count
-    this.resendCount = this.count
+  created() {
+    this.debouncedUpdate = _.debounce(this.blurField, 100);
+    this.initialCount = this.count;
+    this.resendCount = this.count;
   },
 
   methods: {
-    async login (context) {
+    async login(context) {
       try {
-        this.authInProcess = true
+        this.authInProcess = true;
         // this.captchaToken = await this.$getCaptcha();
-        await context.$auth.loginWith('local', {
+        await context.$auth.loginWith("local", {
           // headers: {
           //   RECAPTCHA: context.captchaToken
           // },
           data: {
             username: context.$v.user.username.$model,
             password: context.$v.user.password.$model,
-            mode: 2
-          }
-        })
-        this.authInProcess = false
-        const cookie = this.getCookie('url')
-        let lastURL
+            mode: 2,
+          },
+        });
+        this.authInProcess = false;
+        const cookie = this.getCookie("url");
+        let lastURL;
         if (cookie) {
-          lastURL = cookie.split('=')[1]
+          lastURL = cookie.split("=")[1];
         }
-        const url = lastURL || '/cabinet/55/0/701'
-        this.$router.push(url)
+        const url = lastURL || "/cabinet/55/0/701";
+        this.$router.push(url);
       } catch (e) {
         if (context.$auth.error?.response.status === 401) {
-          context.errorMessage = context.$auth.error.response.data.MESSAGE
-          context.authInProcess = false
+          context.errorMessage = context.$auth.error.response.data.MESSAGE;
+          context.authInProcess = false;
         }
       }
     },
 
-    getCookie (name) {
-      const cookies = document.cookie.split('; ')
-      return decodeURIComponent(cookies.find(item => item.includes(name)))
+    getCookie(name) {
+      const cookies = document.cookie.split("; ");
+      return decodeURIComponent(cookies.find((item) => item.includes(name)));
     },
 
-    validateInput (field, bluredField) {
+    validateInput(field, bluredField) {
       if (this.errorMessage) {
-        return false
+        return false;
       }
-      if (field === 'username' && this.loginTouchesCount <= 2 && this.isUsernameBlured && !this.$v.user[field].$model) return
-      if (this.$v.user[field].$model &&
+      if (
+        field === "username" &&
+        this.loginTouchesCount <= 2 &&
+        this.isUsernameBlured &&
+        !this.$v.user[field].$model
+      )
+        return;
+      if (
+        (this.$v.user[field].$model &&
           this.$v.user[field].$params.minLength &&
-          (this.$v.user[field].$model.length === this.$v.user[field].$params.minLength.min) || bluredField) {
-        return this.validateState(field)
+          this.$v.user[field].$model.length ===
+            this.$v.user[field].$params.minLength.min) ||
+        bluredField
+      ) {
+        return this.validateState(field);
       }
     },
 
-    blurField (field, bluredField) {
-      if (field === 'username') {
-        this.loginTouchesCount++
-        this.isUsernameBlured = true
-      } else if (field === 'password') {
-        this.isPasswordBlured = true
+    blurField(field, bluredField) {
+      if (field === "username") {
+        this.loginTouchesCount++;
+        this.isUsernameBlured = true;
+      } else if (field === "password") {
+        this.isPasswordBlured = true;
       }
-      this.$v.user[field].$touch()
+      this.$v.user[field].$touch();
     },
 
-    validateState (name) {
-      const { $dirty, $error } = this.$v.user[name]
-      return $dirty ? !$error : null
+    validateState(name) {
+      const { $dirty, $error } = this.$v.user[name];
+      return $dirty ? !$error : null;
     },
 
-    onSubmit () {
-      this.errorMessage = null
-      this.loginTouchesCount = 3
-      this.$v.user.$touch()
+    onSubmit() {
+      this.errorMessage = null;
+      this.loginTouchesCount = 3;
+      this.$v.user.$touch();
       if (this.$v.user.$anyError) {
-        return
+        return;
       }
-      this.login(this)
-    }
+      this.login(this);
+    },
   },
 
   validations: {
     user: {
       username: {
         required,
-        minLength: minLength(17)
+        minLength: minLength(17),
       },
       password: {
-        required
-      }
-    }
-  }
-}
+        required,
+      },
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .forgot-password {
-    color: #536c79; /**Заменить на глобальные цвета */
-  }
+.forgot-password {
+  color: #536c79; /**Заменить на глобальные цвета */
+}
 </style>

@@ -7,19 +7,20 @@
 </template>
 
 <script>
-import VRuntimeTemplate from 'v-runtime-template'
-import DemoContent from './DemoContent'
+import VRuntimeTemplate from "v-runtime-template";
+import DemoContent from "./DemoContent";
 export default {
   components: { VRuntimeTemplate, DemoContent },
-    data () {
+  data() {
     return {
-      content: '<demo-content>\n' +
+      content:
+        "<demo-content>\n" +
         '  <template v-slot:data="{ content }">\n' +
-        '    <b>{{ content.name }}</b>\n' +
-        '    <i>{{ content.id }}</i>\n' +
-        '  </template>\n' +
-        '</demo-content>'
-    }
-  }
-}
+        "    <b>{{ content.name }}</b>\n" +
+        "    <i>{{ content.id }}</i>\n" +
+        "  </template>\n" +
+        "</demo-content>",
+    };
+  },
+};
 </script>

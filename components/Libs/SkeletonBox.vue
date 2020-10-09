@@ -8,13 +8,13 @@
 
 <script>
 export default {
-  name: 'SkeletonBox',
-  props: ['items']
-}
+  name: "SkeletonBox",
+  props: ["items"],
+};
 </script>
 
 <style lang="scss">
-.container-skeleton{
+.container-skeleton {
   display: grid;
   grid-gap: 25px;
   grid-template-columns: auto auto auto;

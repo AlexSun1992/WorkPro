@@ -1,8 +1,8 @@
-import Vue from 'vue'
+import Vue from "vue";
 
 // import * as VeeValidate from 'vee-validate';
 //
 // Vue.use(VeeValidate)
 
-import Vuelidate from 'vuelidate'
-Vue.use(Vuelidate)
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);

@@ -30,18 +30,14 @@
         @submit.prevent="onSubmitValue"
       >
         <input autoFocus type="text" v-model="inputValue" />
-        <a class="next-button" @click="onSubmitValue">
-          Далее
-        </a>
+        <a class="next-button" @click="onSubmitValue"> Далее </a>
       </form>
       <form
         v-else-if="question.SSHOW_TYPE === 'NUMBER'"
         @submit.prevent="onSubmitValue"
       >
         <input autoFocus type="number" v-model="inputValue" />
-        <a class="next-button" @click="onSubmitValue">
-          Далее
-        </a>
+        <a class="next-button" @click="onSubmitValue"> Далее </a>
       </form>
       <div v-else-if="question.SSHOW_TYPE === 'SYSTEM_END'" />
       <div v-else>
@@ -59,17 +55,17 @@ export default {
   props: ["question", "answers"],
   data() {
     return {
-      inputValue: ""
+      inputValue: "",
     };
   },
   computed: {
     autocompleteOptions() {
       return this.answers.map(({ STITLE }) => STITLE);
-    }
+    },
   },
   methods: {
     onAutocompleteChange(text) {
-      const answer = this.answers.find(item => item.STITLE === text);
+      const answer = this.answers.find((item) => item.STITLE === text);
       this.$emit("choose-answer", answer);
     },
     onSubmitValue() {
@@ -77,16 +73,16 @@ export default {
       answer.STITLE = this.inputValue;
       answer.SVALUE_VALUE = this.inputValue;
       this.$emit("choose-answer", answer);
-    }
+    },
   },
   data() {
     return {
-      selected: null
+      selected: null,
     };
   },
-  created: function() {
+  created: function () {
     this.inputValue = "";
-  }
+  },
 };
 </script>
 <style scoped>

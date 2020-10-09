@@ -4,8 +4,7 @@
   </div>
 </template>
 <script>
-
 export default {
-  name: 'sidebar-header'
-}
+  name: "sidebar-header",
+};
 </script>

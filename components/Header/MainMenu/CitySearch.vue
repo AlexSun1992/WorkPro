@@ -1,6 +1,13 @@
 <template>
   <div class="wrapper">
-    <a style="text-decoration: none;" href="#" v-b-modal.modal-center class="city btn-link" @click="loadCities">{{ city }}</a>
+    <a
+      style="text-decoration: none"
+      href="#"
+      v-b-modal.modal-center
+      class="city btn-link"
+      @click="loadCities"
+      >{{ city }}</a
+    >
     <b-modal id="modal-center" size="xl" centered hide-footer hide-header>
       <h2>
         <strong>Выберите регион или город</strong>
@@ -16,11 +23,15 @@
         </b-input-group-append>
       </b-input-group>
       <ul class="popular-cities" v-if="top6cities">
-        <li v-for="(item, i) in top6cities" @click="setCity(item)" :key="i">{{ item }}</li>
+        <li v-for="(item, i) in top6cities" @click="setCity(item)" :key="i">
+          {{ item }}
+        </li>
       </ul>
       <div class="container" v-if="top30cities">
         <div class="col" v-for="(column, i) in columns" :key="i">
-          <div @click="setCity(item)" v-for="(item, i) in column" :key="i">{{ item }}</div>
+          <div @click="setCity(item)" v-for="(item, i) in column" :key="i">
+            {{ item }}
+          </div>
         </div>
       </div>
     </b-modal>
@@ -28,12 +39,12 @@
 </template>
 
 <script>
-import axios from 'axios'
-import Autocomplete from '~/components/Libs/Autocomplete/Autocomplete'
+import axios from "axios";
+import Autocomplete from "~/components/Libs/Autocomplete/Autocomplete";
 
 export default {
   components: { Autocomplete },
-  data () {
+  data() {
     return {
       city: null,
       top6cities: null,
@@ -41,54 +52,54 @@ export default {
       foundCity: null,
       cols: 4,
       allCities: null,
-      value: ''
-    }
+      value: "",
+    };
   },
-  async created () {
+  async created() {
     // Нужно передавать ip клиента через nginx бэку
     // this.city = this.$store.state.cities.city;
-    this.city = 'Москва'
+    this.city = "Москва";
   },
   methods: {
-    async loadCities () {
+    async loadCities() {
       // Изменить на метод получения популярных городов
       const {
-        data: { top6cities, top30cities }
-      } = await this.$axios.get('/api/cities')
-      this.top6cities = top6cities
-      this.top30cities = top30cities
-      this.getAllCities()
+        data: { top6cities, top30cities },
+      } = await this.$axios.get("/api/cities");
+      this.top6cities = top6cities;
+      this.top30cities = top30cities;
+      this.getAllCities();
     },
-    setCity (item) {
-      this.city = item
-      this.$bvModal.hide('modal-center')
+    setCity(item) {
+      this.city = item;
+      this.$bvModal.hide("modal-center");
     },
-    applyFoundCity () {
-      this.city = this.foundCity
-      this.$bvModal.hide('modal-center')
+    applyFoundCity() {
+      this.city = this.foundCity;
+      this.$bvModal.hide("modal-center");
     },
-    async getAllCities () {
+    async getAllCities() {
       // Изменить на метод получения всех городов в выпадающем списке
       const {
-        data: { top6cities, top30cities }
-      } = await this.$axios.get('/api/cities')
-      this.allCities = top30cities
-    }
+        data: { top6cities, top30cities },
+      } = await this.$axios.get("/api/cities");
+      this.allCities = top30cities;
+    },
   },
   computed: {
-    columns () {
-      const columns = []
-      const mid = Math.ceil(this.top30cities.length / this.cols)
+    columns() {
+      const columns = [];
+      const mid = Math.ceil(this.top30cities.length / this.cols);
       for (let col = 0; col < this.cols; col++) {
-        columns.push(this.top30cities.slice(col * mid, col * mid + mid))
+        columns.push(this.top30cities.slice(col * mid, col * mid + mid));
       }
-      return columns
+      return columns;
     },
-    menu () {
-      return this.$store.getters['pages/getMenu']
-    }
-  }
-}
+    menu() {
+      return this.$store.getters["pages/getMenu"];
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

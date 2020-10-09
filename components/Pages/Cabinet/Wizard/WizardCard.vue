@@ -1,87 +1,109 @@
 <template>
   <div>
     <b-button @click="saveFile()">Тест</b-button>
-    <v-runtime-template v-if="templateData" :template="templateData"></v-runtime-template>
+    <v-runtime-template
+      v-if="templateData"
+      :template="templateData"
+    ></v-runtime-template>
     <b-card v-else class="p-4 bg-six block border-block-one">
-      <b-button v-on:click="destroyForm" type="submit" variant="success" pill v-b-popover.hover.top="'Назад'"><i  class="fa fa-chevron-left"></i></b-button>
-      <Form   :data="editDataForm" :edit="isEdit"></Form>
+      <b-button
+        v-on:click="destroyForm"
+        type="submit"
+        variant="success"
+        pill
+        v-b-popover.hover.top="'Назад'"
+        ><i class="fa fa-chevron-left"></i
+      ></b-button>
+      <Form :data="editDataForm" :edit="isEdit"></Form>
       <p class="mb-10 mt-3"></p>
-      <b-button v-if="isEdit"  v-on:click="saveForm"  pill type="button" variant="success">
+      <b-button
+        v-if="isEdit"
+        v-on:click="saveForm"
+        pill
+        type="button"
+        variant="success"
+      >
         Сохранить
       </b-button>
-      <b-button  v-if="isEdit" pill type="button" variant="outline-success" @click="cancelForm()">
+      <b-button
+        v-if="isEdit"
+        pill
+        type="button"
+        variant="outline-success"
+        @click="cancelForm()"
+      >
         Отменить
       </b-button>
     </b-card>
   </div>
 </template>
 <script>
-import Form from '~/components/Libs/Form/Form'
-import VRuntimeTemplate from 'v-runtime-template'
-import { saveAs } from 'file-saver'
+import Form from "~/components/Libs/Form/Form";
+import VRuntimeTemplate from "v-runtime-template";
+import { saveAs } from "file-saver";
 export default {
-  name: 'WizardList',
+  name: "WizardList",
   components: { Form, VRuntimeTemplate },
   props: {
     params: {
       type: Object,
       required: true,
-      default: () => {}
+      default: () => {},
     },
     templateData: {
       type: String,
       required: false,
-      default: () => null
+      default: () => null,
     },
     formData: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
     moduleId: {
       type: String,
       required: false,
-      default: () => null
+      default: () => null,
     },
     itemId: {
       type: String,
       required: false,
-      default: () => null
+      default: () => null,
     },
     isEdit: {
       type: Boolean,
-      default: () => false
-    }
+      default: () => false,
+    },
   },
-  data () {
+  data() {
     return {
       list: null,
       card: null,
-      editDataForm: this.formData
-    }
+      editDataForm: this.formData,
+    };
   },
   methods: {
-    destroyForm () {
-      this.$store.dispatch('blocks/destroyForm')
+    destroyForm() {
+      this.$store.dispatch("blocks/destroyForm");
     },
-    isFieldExists (name, data = undefined) {
-      return Boolean(this.getField(name, data))
+    isFieldExists(name, data = undefined) {
+      return Boolean(this.getField(name, data));
     },
-    getField (name, data = this.editDataForm) {
-      return data.find(item => item.name === name)
+    getField(name, data = this.editDataForm) {
+      return data.find((item) => item.name === name);
     },
-    getFieldValue (name, data = undefined) {
-      return this.getField(name, data).value
+    getFieldValue(name, data = undefined) {
+      return this.getField(name, data).value;
     },
-    saveFile () {
-      saveAs('https://httpbin.org/image', 'image.jpg')
-    }
-  }
-}
+    saveFile() {
+      saveAs("https://httpbin.org/image", "image.jpg");
+    },
+  },
+};
 </script>
 
 <style>
-  .form-row {
-    align-items: baseline;
-  }
+.form-row {
+  align-items: baseline;
+}
 </style>

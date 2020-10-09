@@ -25,71 +25,71 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       open: false,
       current: 0,
-      selection: null
-    }
+      selection: null,
+    };
   },
 
   props: {
     suggestions: {
       type: Array,
-      required: true
+      required: true,
     },
     placeholder: {
-      type: String
-    }
+      type: String,
+    },
   },
   methods: {
-    enter () {
-      this.selection = this.matches[this.current]
-      this.open = false
-      this.$emit('update', this.selection)
+    enter() {
+      this.selection = this.matches[this.current];
+      this.open = false;
+      this.$emit("update", this.selection);
     },
-    up () {
+    up() {
       if (this.current > 0) {
-        this.current--
+        this.current--;
       }
     },
-    down () {
+    down() {
       if (this.current < this.suggestions.length - 1) {
-        this.current++
+        this.current++;
       }
     },
-    isActive (index) {
-      return index === this.current
+    isActive(index) {
+      return index === this.current;
     },
-    change () {
+    change() {
       if (this.open == false) {
-        this.open = true
-        this.current = 0
+        this.open = true;
+        this.current = 0;
       }
     },
-    suggestionClick (index) {
-      this.selection = this.matches[index]
-      this.open = false
-      this.$emit('update', this.selection)
-    }
+    suggestionClick(index) {
+      this.selection = this.matches[index];
+      this.open = false;
+      this.$emit("update", this.selection);
+    },
   },
   computed: {
-    matches () {
-      return this.suggestions.filter(str => {
-        str = str.toLowerCase()
-        this.selection = this.selection.toLowerCase()
-        return str.indexOf(this.selection) >= 0
-      })
-    }
+    matches() {
+      return this.suggestions.filter((str) => {
+        str = str.toLowerCase();
+        this.selection = this.selection.toLowerCase();
+        return str.indexOf(this.selection) >= 0;
+      });
+    },
   },
   watch: {
     selection: function (val) {
       if (!this.selection) {
-        this.open = false
+        this.open = false;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

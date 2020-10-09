@@ -1,25 +1,25 @@
-const VER = 'v2'
-const AUTH = `/am/auth/${VER}/authorize`
-const REFRESH_TOKEN = `/am/auth/${VER}/token_refresh`
-const SOCKET = 'wss://mobile2.reso.ru/chat'
-const MODULE = `/am/main/${VER}/module`
-const MENU = `/am/main/${VER}/menu`
-const CLIENTMENU = `/am/main/${VER}/clientmenu`
-const DATACARD = `/am/main/${VER}/datacard`
-const DATA = `/am/main/${VER}/data`
-const DATALIST = `/am/main/${VER}/datalist`
-const FILTER = `/am/main/${VER}/filter`
-const ACTIONPARAM = `/am/main/${VER}/actionparam`
-const ACTIONEXEC = `/am/main/${VER}/actionexec`
-const ONETOMANYDATA = `/am/main/${VER}/one2manydata`
-const CHATS = `/am/main/${VER}/chat/data/chats`
-const MESSAGESCHAT = `/am/main/${VER}/chat/data/messageschat`
-const MESSAGECHAT = `/am/main/${VER}/chat/data/messagechat`
-const USERPROFILE = `/am/main/${VER}/userinfo`
-const WEBFIELD = `/am/main/${VER}/webfield`
-const DIC = `/am/main/${VER}/dic`
-const DICWF = `/am/main/${VER}/dicwf`
-const REPORT = `/am/main/${VER}/report`
+const VER = "v2";
+const AUTH = `/am/auth/${VER}/authorize`;
+const REFRESH_TOKEN = `/am/auth/${VER}/token_refresh`;
+const SOCKET = "wss://mobile2.reso.ru/chat";
+const MODULE = `/am/main/${VER}/module`;
+const MENU = `/am/main/${VER}/menu`;
+const CLIENTMENU = `/am/main/${VER}/clientmenu`;
+const DATACARD = `/am/main/${VER}/datacard`;
+const DATA = `/am/main/${VER}/data`;
+const DATALIST = `/am/main/${VER}/datalist`;
+const FILTER = `/am/main/${VER}/filter`;
+const ACTIONPARAM = `/am/main/${VER}/actionparam`;
+const ACTIONEXEC = `/am/main/${VER}/actionexec`;
+const ONETOMANYDATA = `/am/main/${VER}/one2manydata`;
+const CHATS = `/am/main/${VER}/chat/data/chats`;
+const MESSAGESCHAT = `/am/main/${VER}/chat/data/messageschat`;
+const MESSAGECHAT = `/am/main/${VER}/chat/data/messagechat`;
+const USERPROFILE = `/am/main/${VER}/userinfo`;
+const WEBFIELD = `/am/main/${VER}/webfield`;
+const DIC = `/am/main/${VER}/dic`;
+const DICWF = `/am/main/${VER}/dicwf`;
+const REPORT = `/am/main/${VER}/report`;
 
 export default {
   VER: VER,
@@ -43,5 +43,5 @@ export default {
   WEBFIELD: WEBFIELD,
   DIC: DIC,
   DICWF: DICWF,
-  REPORT: REPORT
-}
+  REPORT: REPORT,
+};

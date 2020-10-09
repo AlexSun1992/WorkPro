@@ -1,14 +1,11 @@
 <template>
   <ul>
-    <li
-      v-for="todo in filteredTodos"
-      v-bind:key="todo.id"
-    >
+    <li v-for="todo in filteredTodos" v-bind:key="todo.id">
       <!--
       Указываем слот для каждой задачи, передавая
       объект `todo` в качестве входного параметра.
       -->
-      <slot name="data" v-bind:content="{todo,filteredTodos}">
+      <slot name="data" v-bind:content="{ todo, filteredTodos }">
         <!-- Содержимое по умолчанию -->
         {{ todo.name }}
       </slot>
@@ -18,27 +15,25 @@
 
 <script>
 export default {
-  name: 'DemoContent',
-  data () {
+  name: "DemoContent",
+  data() {
     return {
       filteredTodos: [
         {
-          name: 'Основные',
+          name: "Основные",
           idItem: 19,
           id: 1101,
-          actions: []
+          actions: [],
         },
         {
-          name: 'Список водителей',
+          name: "Список водителей",
           idItem: 21,
-          id: 1102
-        }
-      ]
-    }
-  }
-}
+          id: 1102,
+        },
+      ],
+    };
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

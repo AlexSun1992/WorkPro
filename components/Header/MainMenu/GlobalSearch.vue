@@ -1,12 +1,25 @@
 <template>
   <div>
-    <i v-b-toggle.collapse-1 id="toggleButton" class="fa fa-search fa-lg" aria-hidden="true" @click="clearSearch()"></i>
+    <i
+      v-b-toggle.collapse-1
+      id="toggleButton"
+      class="fa fa-search fa-lg"
+      aria-hidden="true"
+      @click="clearSearch()"
+    ></i>
     <b-collapse ref="collapse" id="collapse-1" class="mt-3">
       <b-card>
         <b-input-group class="search">
-          <b-form-input v-model="queryStr" id="searchInput" @keydown.enter="search()" placeholder="Поиск по сайту"></b-form-input>
+          <b-form-input
+            v-model="queryStr"
+            id="searchInput"
+            @keydown.enter="search()"
+            placeholder="Поиск по сайту"
+          ></b-form-input>
           <b-input-group-append class="ml-3">
-            <b-button id="searchButton" @click="search()" variant="success">Найти</b-button>
+            <b-button id="searchButton" @click="search()" variant="success"
+              >Найти</b-button
+            >
           </b-input-group-append>
         </b-input-group>
         <div v-if="searchResult">
@@ -14,7 +27,9 @@
             <h4>Результаты поиска:</h4>
           </div>
           <div class="my-2">
-            По запросу <strong>'{{ searchInput }}'</strong> найдено <span v-if="searchResult">{{ searchResult.length }}</span> {{resultQty}}.
+            По запросу <strong>'{{ searchInput }}'</strong> найдено
+            <span v-if="searchResult">{{ searchResult.length }}</span>
+            {{ resultQty }}.
           </div>
         </div>
         <div class="result" v-for="(item, i) in this.searchResult" :key="i">
@@ -32,62 +47,69 @@
 </template>
 
 <script>
-
 export default {
-  data () {
+  data() {
     return {
       queryStr: null,
       searchResult: null,
       searchInput: null,
       resultQty: null,
-      currentPage: 1
-    }
+      currentPage: 1,
+    };
   },
-  mounted () {
-    this.$refs.collapse.$el.style.position = 'absolute'
-    window.document.addEventListener('click', this.closeSearch)
+  mounted() {
+    this.$refs.collapse.$el.style.position = "absolute";
+    window.document.addEventListener("click", this.closeSearch);
   },
   methods: {
-    async search () {
-      if (!this.queryStr) return
-      this.searchResult = null
-      this.searchInput = this.queryStr
-      this.searchResult = await this.$store.dispatch('search', this.queryStr)
-      this.items = this.searchResult
-      this.resultQty = this.enumerate(this.searchResult.length.toString())
+    async search() {
+      if (!this.queryStr) return;
+      this.searchResult = null;
+      this.searchInput = this.queryStr;
+      this.searchResult = await this.$store.dispatch("search", this.queryStr);
+      this.items = this.searchResult;
+      this.resultQty = this.enumerate(this.searchResult.length.toString());
     },
-    enumerate (num) {
-      const lastChar = num.charAt(num.length - 1)
-      const result = 'совпадени'
+    enumerate(num) {
+      const lastChar = num.charAt(num.length - 1);
+      const result = "совпадени";
       if (num.length > 2) {
-        num = num.charAt(num.length - 2) + num.charAt(num.length - 1)
+        num = num.charAt(num.length - 2) + num.charAt(num.length - 1);
       }
-      if (lastChar == 0 || lastChar >= 5 && lastChar <= 9 || num >= 10 && num <= 20) {
-        return result + 'й'
+      if (
+        lastChar == 0 ||
+        (lastChar >= 5 && lastChar <= 9) ||
+        (num >= 10 && num <= 20)
+      ) {
+        return result + "й";
       } else if (lastChar == 1) {
-        return result + 'е'
+        return result + "е";
       } else if (lastChar >= 2 && lastChar <= 4) {
-        return result + 'я'
+        return result + "я";
       }
     },
-    highlight (content) {
-      return content.replace(new RegExp(this.searchInput, 'gi'), match => {
-        return '<strong>' + match + '</strong>'
-      })
+    highlight(content) {
+      return content.replace(new RegExp(this.searchInput, "gi"), (match) => {
+        return "<strong>" + match + "</strong>";
+      });
     },
-    clearSearch () {
-      this.searchResult = null
-      this.queryStr = null
+    clearSearch() {
+      this.searchResult = null;
+      this.queryStr = null;
     },
-    closeSearch (e) {
-      if (e.target.id !== 'toggleButton' && e.target.id !== 'searchInput' && e.target.id !== 'searchButton') {
+    closeSearch(e) {
+      if (
+        e.target.id !== "toggleButton" &&
+        e.target.id !== "searchInput" &&
+        e.target.id !== "searchButton"
+      ) {
         if (this.$refs.collapse) {
-          this.$refs.collapse.show = false
+          this.$refs.collapse.show = false;
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

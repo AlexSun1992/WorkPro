@@ -16,7 +16,7 @@
         </b-form-group>
       </b-col>
       <b-col sm="12" v-if="recovery"></b-col>
-      <b-col class="password-repeat" :class="{'mt-0': recovery}" sm="12">
+      <b-col class="password-repeat" :class="{ 'mt-0': recovery }" sm="12">
         <b-form-group :label="'Повторите пароль'" label-cols="3">
           <b-form-input
             type="password"
@@ -37,21 +37,19 @@
 
 <script>
 export default {
-  props: ['v', 'validateState', 'disabled', 'recovery'],
-  data () {
+  props: ["v", "validateState", "disabled", "recovery"],
+  data() {
     return {
-      password: '',
-      password2: ''
-    }
+      password: "",
+      password2: "",
+    };
   },
   computed: {
-    showLabel () {
-      return this.recovery ? 'Придумайте новый пароль' : 'Пароль'
-    }
-  }
-}
+    showLabel() {
+      return this.recovery ? "Придумайте новый пароль" : "Пароль";
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

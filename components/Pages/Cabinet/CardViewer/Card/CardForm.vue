@@ -1,44 +1,47 @@
 <template>
   <div>
-    <Form :data="editDataForm" @edit="openEdit($event)" @update="$emit('update', $event)" :edit="editForm"></Form>
+    <Form
+      :data="editDataForm"
+      @edit="openEdit($event)"
+      @update="$emit('update', $event)"
+      :edit="editForm"
+    ></Form>
   </div>
 </template>
 
 <script>
-import Form from '~/components/Libs/Form/Form'
+import Form from "~/components/Libs/Form/Form";
 
 export default {
-  name: 'CardForm',
+  name: "CardForm",
   components: { Form },
   props: {
     data: {
       type: Array,
       required: true,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
-  data () {
+  data() {
     return {
       editForm: true,
-      editDataForm: this.data
-    }
+      editDataForm: this.data,
+    };
   },
   methods: {
-    setData () {
-      this.editDataForm = this.data
+    setData() {
+      this.editDataForm = this.data;
     },
-    openEdit () {
-
-    }
+    openEdit() {},
   },
   watch: {
-    data: 'setData'
-  }
-}
+    data: "setData",
+  },
+};
 </script>
 
 <style scoped>
-  .modal-content {
-    min-height: 500px;
-  }
+.modal-content {
+  min-height: 500px;
+}
 </style>

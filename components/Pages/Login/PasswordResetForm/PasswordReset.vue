@@ -1,38 +1,49 @@
 <template>
   <div>
-    <VerifyUser :count="20" @onCode="code = $event"/>
+    <VerifyUser :count="20" @onCode="code = $event" />
     <div v-if="code">
-       <b-form-input
-          class="mb-2 mt-4"
-          v-model="newPassword"
-          placeholder="Новый пароль"
-        ></b-form-input>
-        <b-form-input id="input-1" v-model="repeatPassword" placeholder="Повторите пароль"></b-form-input>
-        <b-button class="mt-2" type="submit" :disabled="isPasswordIdentical" variant="success">Продолжить</b-button>
+      <b-form-input
+        class="mb-2 mt-4"
+        v-model="newPassword"
+        placeholder="Новый пароль"
+      ></b-form-input>
+      <b-form-input
+        id="input-1"
+        v-model="repeatPassword"
+        placeholder="Повторите пароль"
+      ></b-form-input>
+      <b-button
+        class="mt-2"
+        type="submit"
+        :disabled="isPasswordIdentical"
+        variant="success"
+        >Продолжить</b-button
+      >
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import VerifyUser from '../../../Libs/VerifyUser/VerifyUser.vue';
+import VerifyUser from "../../../Libs/VerifyUser/VerifyUser.vue";
 
 @Component({
   name: "PasswordReset",
   components: {
-      VerifyUser
-  }
+    VerifyUser,
+  },
 })
 export default class PasswordReset extends Vue {
-  code: string = '';
-  newPassword: string = '';
-  repeatPassword: string = '';
+  code: string = "";
+  newPassword: string = "";
+  repeatPassword: string = "";
 
   get isPasswordIdentical() {
-    return this.newPassword.length == 0 || (this.newPassword != this.repeatPassword);
+    return (
+      this.newPassword.length == 0 || this.newPassword != this.repeatPassword
+    );
   }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

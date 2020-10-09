@@ -1,124 +1,151 @@
 <template>
   <div>
-    <b-table sticky-header="400px"  bordered empty-text="Нет данных" empty-filtered-text="Нет данных" show-empty :filter="filter" @filtered="onFiltered"  :current-page="currentPage"  :busy="isBusy"  @row-clicked="selectItem"  @row-dblclicked="showItem"   responsive striped hover :items="items" :fields="fields" small>
-      <template
-        slot="empty">
-        <div v-if="!load" class="text-center">
-          Нет данных
-        </div>
+    <b-table
+      sticky-header="400px"
+      bordered
+      empty-text="Нет данных"
+      empty-filtered-text="Нет данных"
+      show-empty
+      :filter="filter"
+      @filtered="onFiltered"
+      :current-page="currentPage"
+      :busy="isBusy"
+      @row-clicked="selectItem"
+      @row-dblclicked="showItem"
+      responsive
+      striped
+      hover
+      :items="items"
+      :fields="fields"
+      small
+    >
+      <template slot="empty">
+        <div v-if="!load" class="text-center">Нет данных</div>
       </template>
       <template v-slot:table-busy>
         <div class="text-center text-danger my-2">
           <b-spinner class="align-middle"></b-spinner>
         </div>
       </template>
-      <template  v-slot:cell(index)="data">
-        <slot name="actions"  v-bind:data="data"></slot>
+      <template v-slot:cell(index)="data">
+        <slot name="actions" v-bind:data="data"></slot>
       </template>
     </b-table>
     <b-form v-show="paging" inline>
-      <b-form-select class="mb-2 mt-1 mr-sm-2 mb-sm-0" :width="'auto'" :plain="true" v-model="page" :options="options" />
-      <b-pagination class="mb-2 mt-1 mr-sm-2 mb-sm-0"  size="md" :total-rows="count" v-model="currentPage" :per-page="page"></b-pagination>
+      <b-form-select
+        class="mb-2 mt-1 mr-sm-2 mb-sm-0"
+        :width="'auto'"
+        :plain="true"
+        v-model="page"
+        :options="options"
+      />
+      <b-pagination
+        class="mb-2 mt-1 mr-sm-2 mb-sm-0"
+        size="md"
+        :total-rows="count"
+        v-model="currentPage"
+        :per-page="page"
+      ></b-pagination>
     </b-form>
   </div>
 </template>
 
 <script>
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
-import formatter from '~/converters/list'
-function getTypeByKey (fields, key) {
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+import formatter from "~/converters/list";
+function getTypeByKey(fields, key) {
   for (let i = 0; i < fields.length; i++) {
     if (fields[i].key === key) {
-      return fields[i].type
+      return fields[i].type;
     }
   }
 }
 export default {
-  name: 'Grid',
-  data () {
+  name: "Grid",
+  data() {
     return {
       currentPage: 1,
       page: 10,
       count: null,
       options: [
-        { value: 10, text: '10' },
-        { value: 20, text: '20' }
-      ]
-    }
+        { value: 10, text: "10" },
+        { value: 20, text: "20" },
+      ],
+    };
   },
   components: {
-    PulseLoader
+    PulseLoader,
   },
   props: {
     action: {
       type: Boolean,
       required: false,
-      default: () => false
+      default: () => false,
     },
     load: {
       type: Boolean,
       required: false,
-      default: () => false
+      default: () => false,
     },
     total: {
       type: Number,
       required: false,
-      default: () => null
+      default: () => null,
     },
     selected: {
       type: Function,
       required: false,
-      default: () => null
+      default: () => null,
     },
     dblClicked: {
       type: Function,
       required: false,
-      default: () => null
+      default: () => null,
     },
     fields: {
       type: Array,
       required: false,
-      default: () => []
+      default: () => [],
     },
     items: {
       type: Array,
       required: false,
-      default: () => []
+      default: () => [],
     },
     filter: {
       type: String,
       required: false,
-      default: () => null
-    }
+      default: () => null,
+    },
   },
   methods: {
-    selectItem (record, index) {
-      this.$emit('selected', record, index)
+    selectItem(record, index) {
+      this.$emit("selected", record, index);
     },
-    showItem (record, index) {
-      this.$emit('action-clicked', record, index)
+    showItem(record, index) {
+      this.$emit("action-clicked", record, index);
     },
-    onFiltered (filteredItems) {
-      this.count = filteredItems.length
-      this.currentPage = 1
+    onFiltered(filteredItems) {
+      this.count = filteredItems.length;
+      this.currentPage = 1;
     },
-    formatData (value, key) {
-      return formatter.formatByType(getTypeByKey(this.fields, key), value)
-    }
+    formatData(value, key) {
+      return formatter.formatByType(getTypeByKey(this.fields, key), value);
+    },
   },
   computed: {
-    isBusy () {
-      return this.load
+    isBusy() {
+      return this.load;
     },
-    paging () {
-      return this.count > this.page
-    }
-  }
-}
+    paging() {
+      return this.count > this.page;
+    },
+  },
+};
 </script>
 
 <style>
-  .text-col {
-    white-space: nowrap;
-  }
+.text-col {
+  white-space: nowrap;
+}
 </style>

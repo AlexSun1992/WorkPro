@@ -31,9 +31,9 @@
           </div>
         </div>
         <div
-          class="col-lg-4 pl-lg-4 col-md-6 col-12 order-2 order-md-3 order-lg-2  pt-4 pt-lg-0 pl-md-3"
+          class="col-lg-4 pl-lg-4 col-md-6 col-12 order-2 order-md-3 order-lg-2 pt-4 pt-lg-0 pl-md-3"
         >
-          <div class="title d-none d-sm-block mt-0 mb-0 mb-lg-3 ">
+          <div class="title d-none d-sm-block mt-0 mb-0 mb-lg-3">
             Наши приложения
           </div>
           <a href="" class="footer-apple"></a>
@@ -49,7 +49,7 @@
             <a href="" class="footer-tw"></a>
           </div>
         </div>
-        <div class="col-12  order-4 order-lg-3">
+        <div class="col-12 order-4 order-lg-3">
           <div class="block-h-line my-md-4 my-2"></div>
         </div>
         <div
@@ -84,20 +84,20 @@ export default {
   name: "c-footer",
   data() {
     return {
-      isActive: true
+      isActive: true,
     };
   },
   methods: {
-    openSection: function(title, e) {
+    openSection: function (title, e) {
       e.preventDefault();
       this.$store.commit("pages/changeFooterActiveSection", title);
-    }
+    },
   },
   computed: {
     footer() {
       return this.$store.getters["pages/getFooterMenu"];
-    }
-  }
+    },
+  },
 };
 </script>
 

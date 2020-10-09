@@ -16,12 +16,22 @@
     >
       <template v-slot:input>
         <b-input-group>
-          <birth-date-input ref="birthDateInputInstance" v-model="data.birthdate.$model" :state="state" :blur="debouncedUpdate"/>
+          <birth-date-input
+            ref="birthDateInputInstance"
+            v-model="data.birthdate.$model"
+            :state="state"
+            :blur="debouncedUpdate"
+          />
           <b-input-group-append>
-            <b-button v-on:click="showDataPicker" @focus="setButtonFocus" @blur="blurButtonFocus" class="button-datapicker"><i class="fa fa-calendar"></i></b-button>
+            <b-button
+              v-on:click="showDataPicker"
+              @focus="setButtonFocus"
+              @blur="blurButtonFocus"
+              class="button-datapicker"
+              ><i class="fa fa-calendar"></i
+            ></b-button>
           </b-input-group-append>
         </b-input-group>
-
       </template>
       <template v-slot:icon-calendar>
         <div></div>
@@ -31,76 +41,73 @@
       Пожалуйста, заполните это поле
     </small>
   </div>
-
 </template>
 
 <script>
-import _ from 'lodash'
-import DatePicker from 'vue2-datepicker'
-import BirthDateInput from './BirthdateInput'
-import ClickOutside from 'vue-click-outside'
-import 'vue2-datepicker/index.css'
-import 'vue2-datepicker/locale/ru'
+import _ from "lodash";
+import DatePicker from "vue2-datepicker";
+import BirthDateInput from "./BirthdateInput";
+import ClickOutside from "vue-click-outside";
+import "vue2-datepicker/index.css";
+import "vue2-datepicker/locale/ru";
 
-const today = new Date()
-today.setHours(0, 0, 0, 0)
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 
-function getDate (value) {
-  const date = new Date()
-  date.setFullYear(date.getFullYear() - value)
-  return date
+function getDate(value) {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - value);
+  return date;
 }
 
 export default {
-  name: 'BirthdayWrapper',
+  name: "BirthdayWrapper",
   components: { DatePicker, BirthDateInput },
   props: {
     data: Object,
-    state: Boolean
+    state: Boolean,
   },
-  data () {
+  data() {
     return {
       lang: {
         formatLocale: {
-          firstDayOfWeek: 1
+          firstDayOfWeek: 1,
         },
-        monthBeforeYear: false
+        monthBeforeYear: false,
       },
       defaultDate: getDate(18),
       isOpenPanel: undefined,
       open: false,
-      buttonFocus: false
-    }
+      buttonFocus: false,
+    };
   },
   created: function () {
-    this.debouncedUpdate = _.debounce(this.hideDataPicker, 100)
+    this.debouncedUpdate = _.debounce(this.hideDataPicker, 100);
   },
   methods: {
-    notBeforeDate (date) {
-      return date > getDate(18)
+    notBeforeDate(date) {
+      return date > getDate(18);
     },
-    hideDataPicker () {
-      this.$refs.datepicker.closePopup
+    hideDataPicker() {
+      this.$refs.datepicker.closePopup;
     },
-    showDataPicker () {
-      this.$refs.datepicker.showPopup
+    showDataPicker() {
+      this.$refs.datepicker.showPopup;
     },
-    setDateValue (date) {
-      this.$refs.birthDateInputInstance.setDate(date)
+    setDateValue(date) {
+      this.$refs.birthDateInputInstance.setDate(date);
     },
-    setButtonFocus () {
-      this.buttonFocus = true
+    setButtonFocus() {
+      this.buttonFocus = true;
     },
-    blurButtonFocus () {
-      this.buttonFocus = false
-    }
+    blurButtonFocus() {
+      this.buttonFocus = false;
+    },
   },
   directives: {
-    ClickOutside
-  }
-}
+    ClickOutside,
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

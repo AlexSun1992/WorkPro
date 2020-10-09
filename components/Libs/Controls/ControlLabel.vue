@@ -6,17 +6,15 @@
 
 <script>
 export default {
-  name: 'ControlLabel',
+  name: "ControlLabel",
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {}
-    }
-  }
-}
+      default: () => {},
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

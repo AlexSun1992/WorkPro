@@ -1,20 +1,20 @@
-const converter = {}
+const converter = {};
 
 converter.getType = (data) => {
   switch (data) {
     case 0:
-      return 'string'
+      return "string";
     case 1:
-      return 'string'
+      return "string";
     case 2:
-      return 'text'
+      return "text";
     case 14:
-      return 'timestamp'
+      return "timestamp";
     case 16:
-      return 'boolean'
+      return "boolean";
     default:
-      return 'string'
+      return "string";
   }
-}
+};
 
-export default converter
+export default converter;

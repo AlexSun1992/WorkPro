@@ -1,10 +1,10 @@
 export default function ({ $axios, redirect, store }) {
-  $axios.onError(error => {
+  $axios.onError((error) => {
     if (error?.response?.status == 401) {
-      store.commit('resetUser')
-      redirect('/login')
+      store.commit("resetUser");
+      redirect("/login");
     } else {
-      store.commit('setAxiosError', error)
+      store.commit("setAxiosError", error);
     }
-  })
+  });
 }

@@ -17,281 +17,310 @@ export const state = () => ({
   componentType: null,
   cardId: 0,
   cardForm: null,
-  isFormChanged: false
-})
+  isFormChanged: false,
+});
 
 export const getters = {
-  page: state => state.page,
-  list: state => state.list,
-  form: state => state.form,
-  cardForm: state => state.cardForm,
-  filters: state => state.filters,
-  actions: state => state.actions,
-  isForm: state => state.showForm,
-  isList: state => state.showList,
-  isWizard: state => state.showWizard,
-  isFilter: state => state.showFilter,
-  isActions: state => state.showActions,
-  isEdit: state => state.isEdit,
-  isAdd: state => state.isAdd,
-  isDelete: state => state.isDelete,
-  isFormLoading: state => state.isFormLoading,
-  isListLoading: state => state.isListLoading,
-  componentType: state => state.componentType,
-  cardId: state => state.cardId,
-  isFormChanged: state => state.isFormChanged,
-  getWizardDataFieldByName: state => name => {
-    return state.wizardData.find(b => b.name === name)
+  page: (state) => state.page,
+  list: (state) => state.list,
+  form: (state) => state.form,
+  cardForm: (state) => state.cardForm,
+  filters: (state) => state.filters,
+  actions: (state) => state.actions,
+  isForm: (state) => state.showForm,
+  isList: (state) => state.showList,
+  isWizard: (state) => state.showWizard,
+  isFilter: (state) => state.showFilter,
+  isActions: (state) => state.showActions,
+  isEdit: (state) => state.isEdit,
+  isAdd: (state) => state.isAdd,
+  isDelete: (state) => state.isDelete,
+  isFormLoading: (state) => state.isFormLoading,
+  isListLoading: (state) => state.isListLoading,
+  componentType: (state) => state.componentType,
+  cardId: (state) => state.cardId,
+  isFormChanged: (state) => state.isFormChanged,
+  getWizardDataFieldByName: (state) => (name) => {
+    return state.wizardData.find((b) => b.name === name);
   },
-  getWizardDataFieldByFieldId: state => id => {
-    return state.wizardData.find(b => b.fieldId === id)
-  }
-}
+  getWizardDataFieldByFieldId: (state) => (id) => {
+    return state.wizardData.find((b) => b.fieldId === id);
+  },
+};
 
 export const actions = {
-  async setCard ({ commit, dispatch, getters }, params) {
+  async setCard({ commit, dispatch, getters }, params) {
     if (params.page.idModule) {
-      commit('setPage', params.page)
-      commit('setShowList', params.settings.recordLoad && !params.settings.newRecord)
-      commit('setShowFilter', params.settings.filters.length > 0)
-      commit('setFilters', params.settings.filters)
-      commit('setActions', params.settings.actions)
-      commit('setEdit', params.settings.edit)
-      commit('setAdd', params.settings.add)
-      commit('setDelete', params.settings.delete)
-      commit('setComponentType', params.settings.compType)
-      commit('setShowForm', false)
-      commit('setShowWizard', false)
-      commit('setFormChanged', false)
-      commit('setList', {})
+      commit("setPage", params.page);
+      commit(
+        "setShowList",
+        params.settings.recordLoad && !params.settings.newRecord
+      );
+      commit("setShowFilter", params.settings.filters.length > 0);
+      commit("setFilters", params.settings.filters);
+      commit("setActions", params.settings.actions);
+      commit("setEdit", params.settings.edit);
+      commit("setAdd", params.settings.add);
+      commit("setDelete", params.settings.delete);
+      commit("setComponentType", params.settings.compType);
+      commit("setShowForm", false);
+      commit("setShowWizard", false);
+      commit("setFormChanged", false);
+      commit("setList", {});
       if (params.settings.newRecord) {
-        await dispatch('fetchForm', 0)
-        commit('setShowForm', true)
-        commit('setShowFilter', false)
+        await dispatch("fetchForm", 0);
+        commit("setShowForm", true);
+        commit("setShowFilter", false);
       } else {
         // await dispatch('fetchList');
       }
     }
   },
-  async fetchForm ({ commit, getters }, id) {
-    await this.$axios.get(`/api/card/${getters.page.idModule}/${getters.page.idItem}/${id}`)
+  async fetchForm({ commit, getters }, id) {
+    await this.$axios
+      .get(`/api/card/${getters.page.idModule}/${getters.page.idItem}/${id}`)
       .then((res) => {
-        commit('setCardId', id)
-        commit('setShowForm', true)
-        commit('setShowFilter', false)
-        commit('setShowList', false)
-        commit('setForm', res.data.data)
-      })
+        commit("setCardId", id);
+        commit("setShowForm", true);
+        commit("setShowFilter", false);
+        commit("setShowList", false);
+        commit("setForm", res.data.data);
+      });
   },
-  async fetchCardForm ({ commit, getters }, id) {
-    await this.$axios.get(`/api/card/${getters.page.idModule}/${id}/0`)
+  async fetchCardForm({ commit, getters }, id) {
+    await this.$axios
+      .get(`/api/card/${getters.page.idModule}/${id}/0`)
       .then((res) => {
         // Вынести в общую функцию
-        const cols = []
-        res.data.metaData.data.forEach(field => {
-          cols.push(field.cols)
-        })
-        const maxCol = Math.max(...cols)
-        res.data.metaData.data.forEach(field => {
+        const cols = [];
+        res.data.metaData.data.forEach((field) => {
+          cols.push(field.cols);
+        });
+        const maxCol = Math.max(...cols);
+        res.data.metaData.data.forEach((field) => {
           // field.cols = field.cols*12/obj.maxCol;
           if (field.width == 0) {
-            field.width = 100
+            field.width = 100;
           }
-          field.cols = Math.ceil((field.cols / maxCol) * (field.width / 100) * 12)
-        })
-        commit('setCardForm', res.data.metaData.data)
-      })
+          field.cols = Math.ceil(
+            (field.cols / maxCol) * (field.width / 100) * 12
+          );
+        });
+        commit("setCardForm", res.data.metaData.data);
+      });
   },
-  clearCardForm ({ commit, getters }) {
-    commit('clearCardForm')
+  clearCardForm({ commit, getters }) {
+    commit("clearCardForm");
   },
-  async fetchWizard ({ commit, getters }, params) {
-    commit('setShowWizard', true)
-    commit('setShowFilter', false)
-    commit('setShowList', false)
+  async fetchWizard({ commit, getters }, params) {
+    commit("setShowWizard", true);
+    commit("setShowFilter", false);
+    commit("setShowList", false);
   },
-  updateWizard ({ commit, getters }, params) {
-    commit('setWizardData', params)
-  },
-
-  updateWizardField ({ commit }, data) {
-    commit('setWizardField', data)
+  updateWizard({ commit, getters }, params) {
+    commit("setWizardData", params);
   },
 
-  clearCaptions ({ commit }) {
-    commit('clearCaptions')
+  updateWizardField({ commit }, data) {
+    commit("setWizardField", data);
   },
 
-  async applyFilter ({ commit, dispatch, getters }, filters) {
-    commit('setFilters', filters)
-    await dispatch('fetchList')
+  clearCaptions({ commit }) {
+    commit("clearCaptions");
   },
-  async applyAction ({ commit, dispatch, getters }, { form, actionId }) {
-    await dispatch('saveForm', form)
+
+  async applyFilter({ commit, dispatch, getters }, filters) {
+    commit("setFilters", filters);
+    await dispatch("fetchList");
+  },
+  async applyAction({ commit, dispatch, getters }, { form, actionId }) {
+    await dispatch("saveForm", form);
     return new Promise((resolve, reject) => {
-      this.$axios.post(`am/main/v2/actionexec/${getters.cardId}/${actionId}`, {})
-        .then(res => {
-          dispatch('fetchForm', getters.cardId)
-          resolve(res.data)
+      this.$axios
+        .post(`am/main/v2/actionexec/${getters.cardId}/${actionId}`, {})
+        .then((res) => {
+          dispatch("fetchForm", getters.cardId);
+          resolve(res.data);
         })
-        .catch(err => {
-          reject(err.response.data)
-        })
-    })
+        .catch((err) => {
+          reject(err.response.data);
+        });
+    });
   },
-  async saveForm ({ commit, dispatch, getters }, form) {
-    await this.$axios.post(`/api/card/${getters.page.idModule}/${getters.page.idItem}/${getters.cardId}`, form)
-      .then(async resp => {
-        commit('setCardId', resp.data.ID)
-      })
+  async saveForm({ commit, dispatch, getters }, form) {
+    await this.$axios
+      .post(
+        `/api/card/${getters.page.idModule}/${getters.page.idItem}/${getters.cardId}`,
+        form
+      )
+      .then(async (resp) => {
+        commit("setCardId", resp.data.ID);
+      });
   },
-  async saveProfile ({ commit, dispatch, getters }, params) {
-    if (params.context == 'profile') {
+  async saveProfile({ commit, dispatch, getters }, params) {
+    if (params.context == "profile") {
       // Объединить в один метод после открытия карточки на новой странице!
-      await this.$axios.post(`/api/card/${getters.page.idModule}/${getters.page.idItem}/125`, params.fields)
-        .then(async resp => {
-          commit('setCardId', resp.data.ID)
-        })
+      await this.$axios
+        .post(
+          `/api/card/${getters.page.idModule}/${getters.page.idItem}/125`,
+          params.fields
+        )
+        .then(async (resp) => {
+          commit("setCardId", resp.data.ID);
+        });
     } else {
       // Объединить в один метод после открытия карточки на новой странице!
-      await this.$axios.post(`/api/card/${getters.page.idModule}/${params.blockId}/${params.cardId}`, params.fields)
-        .then(async resp => {
-          commit('setCardId', resp.data.ID)
-          commit('setFormChanged', false)
-        })
+      await this.$axios
+        .post(
+          `/api/card/${getters.page.idModule}/${params.blockId}/${params.cardId}`,
+          params.fields
+        )
+        .then(async (resp) => {
+          commit("setCardId", resp.data.ID);
+          commit("setFormChanged", false);
+        });
     }
   },
-  async fetchList ({ commit, getters }) {
-    const page = getters.page
-    const jsonFilters = JSON.stringify(getters.filters)
-    commit('setShowList', true)
-    commit('setListLoading', true)
-    await this.$axios.get(`/api/list/${page.idModule}/${page.idItem}/${jsonFilters}`)
+  async fetchList({ commit, getters }) {
+    const page = getters.page;
+    const jsonFilters = JSON.stringify(getters.filters);
+    commit("setShowList", true);
+    commit("setListLoading", true);
+    await this.$axios
+      .get(`/api/list/${page.idModule}/${page.idItem}/${jsonFilters}`)
       .then((res) => {
-        commit('setListLoading', false)
-        commit('setList', res.data)
-      })
+        commit("setListLoading", false);
+        commit("setList", res.data);
+      });
   },
-  async fetchSuggestions ({ commit, getters }, params) {
-    const type = params.suggestionType
-    const key = params.key
-    delete params.suggestionType
-    delete params.key
-    const response = await fetch(`https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Token ${key}`
-      },
-      body: JSON.stringify(params)
-    })
-    const result = await response.json()
-    return result.suggestions
+  async fetchSuggestions({ commit, getters }, params) {
+    const type = params.suggestionType;
+    const key = params.key;
+    delete params.suggestionType;
+    delete params.key;
+    const response = await fetch(
+      `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Token ${key}`,
+        },
+        body: JSON.stringify(params),
+      }
+    );
+    const result = await response.json();
+    return result.suggestions;
     // return result.suggestions.map(item => item.value);
   },
-  async editCard ({ commit, getters }, params) {
+  async editCard({ commit, getters }, params) {
     try {
-      const idItem = params.idItem
-      delete params.idItem
-      const response = await this.$axios.put(`/am/main/v2/datacard/${getters.page.idModule}/${idItem}/0`, params)
-      return response
+      const idItem = params.idItem;
+      delete params.idItem;
+      const response = await this.$axios.put(
+        `/am/main/v2/datacard/${getters.page.idModule}/${idItem}/0`,
+        params
+      );
+      return response;
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
-}
+  },
+};
 
 export const mutations = {
-  setPage (state, data) {
-    state.page = data
+  setPage(state, data) {
+    state.page = data;
   },
-  setList (state, data) {
-    state.list = data
+  setList(state, data) {
+    state.list = data;
   },
-  setForm (state, data) {
-    state.form = data
+  setForm(state, data) {
+    state.form = data;
   },
-  setFilters (state, data) {
-    state.filters = data
+  setFilters(state, data) {
+    state.filters = data;
   },
-  setActions (state, data) {
-    state.actions = data
+  setActions(state, data) {
+    state.actions = data;
   },
-  setShowList (state, data) {
-    state.showList = data
+  setShowList(state, data) {
+    state.showList = data;
   },
-  setShowForm (state, data) {
-    state.showForm = data
+  setShowForm(state, data) {
+    state.showForm = data;
   },
-  setShowWizard (state, data) {
-    state.showWizard = data
+  setShowWizard(state, data) {
+    state.showWizard = data;
   },
-  setShowFilter (state, data) {
-    state.showFilter = data
+  setShowFilter(state, data) {
+    state.showFilter = data;
   },
-  setShowActions (state, data) {
-    state.showActions = data
+  setShowActions(state, data) {
+    state.showActions = data;
   },
-  setEdit (state, data) {
-    state.isEdit = data
+  setEdit(state, data) {
+    state.isEdit = data;
   },
-  setAdd (state, data) {
-    state.isAdd = data
+  setAdd(state, data) {
+    state.isAdd = data;
   },
-  setDelete (state, data) {
-    state.isDelete = data
+  setDelete(state, data) {
+    state.isDelete = data;
   },
-  setFormLoading (state, data) {
-    state.isFormLoading = data
+  setFormLoading(state, data) {
+    state.isFormLoading = data;
   },
-  setListLoading (state, data) {
-    state.isListLoading = data
+  setListLoading(state, data) {
+    state.isListLoading = data;
   },
-  setComponentType (state, data) {
-    state.componentType = data
+  setComponentType(state, data) {
+    state.componentType = data;
   },
-  setCardId (state, data) {
-    state.cardId = data
+  setCardId(state, data) {
+    state.cardId = data;
   },
-  setWizardData (state, data) {
-    state.wizardData = data
+  setWizardData(state, data) {
+    state.wizardData = data;
   },
-  setWizardCaptions (state, data) {
-    state.captions = data
+  setWizardCaptions(state, data) {
+    state.captions = data;
   },
-  clearCaptions (state) {
-    state.captions = null
+  clearCaptions(state) {
+    state.captions = null;
   },
-  setCardForm (state, data) {
-    state.cardForm = data
+  setCardForm(state, data) {
+    state.cardForm = data;
   },
-  setIsTab (state, data) {
-    state.isTab = data
+  setIsTab(state, data) {
+    state.isTab = data;
   },
-  setFormChanged (state, data) {
-    state.isFormChanged = data
+  setFormChanged(state, data) {
+    state.isFormChanged = data;
   },
-  clearCardForm (state, data) {
-    state.cardForm = null
+  clearCardForm(state, data) {
+    state.cardForm = null;
   },
-  setWizardField (state, data) {
-    const item = state.wizardData.find(d => d.fieldId === data.fieldId)
+  setWizardField(state, data) {
+    const item = state.wizardData.find((d) => d.fieldId === data.fieldId);
     if (item) {
-      item.value = data.value
+      item.value = data.value;
     }
-    state.isFormChanged = true
+    state.isFormChanged = true;
   },
-  clearWizardRelationField (state, data) {
-    const item = state.wizardData.find(d => d.fieldRelation === data.fieldName)
+  clearWizardRelationField(state, data) {
+    const item = state.wizardData.find(
+      (d) => d.fieldRelation === data.fieldName
+    );
     if (item) {
-      item.value = {}
+      item.value = {};
     }
   },
-  setMenuId (state, data) {
-    state.menuId = data
+  setMenuId(state, data) {
+    state.menuId = data;
   },
-  setItemId (state, data) {
-    state.itemId = data
-  }
-}
+  setItemId(state, data) {
+    state.itemId = data;
+  },
+};

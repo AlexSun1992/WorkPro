@@ -32,16 +32,16 @@ import Sidebar from "~/components/Sidebar/Sidebar";
 export default {
   name: "full",
   head: {
-    title: "РЕСО-Гарантия"
+    title: "РЕСО-Гарантия",
   },
   components: {
     Header,
     Sidebar,
-    Footer
+    Footer,
   },
   data() {
     return {
-      nav: nav.items
+      nav: nav.items,
     };
   },
   watch: {
@@ -57,7 +57,7 @@ export default {
         url = "index";
       }
       this.$store.dispatch("pages/fetchPageByUrl", url);
-    }
+    },
   },
   computed: {
     breadcrumbs() {
@@ -65,8 +65,8 @@ export default {
     },
     showBreadcrumbs() {
       return this.$store.getters["pages/getShowBreadCrumbs"];
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">

@@ -1,44 +1,44 @@
 <template>
   <div>
-    <Form   :data="editDataForm" :edit="editForm"></Form>
+    <Form :data="editDataForm" :edit="editForm"></Form>
     <div class="form-group">
-      <button v-on:click="applyFilter" type="button" class="btn btn-primary">Применить</button>
+      <button v-on:click="applyFilter" type="button" class="btn btn-primary">
+        Применить
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import Form from '~/components/Libs/Form/Form'
+import Form from "~/components/Libs/Form/Form";
 export default {
-  name: 'CardFilter',
-  data () {
+  name: "CardFilter",
+  data() {
     return {
       editForm: true,
-      editDataForm: this.data
-    }
+      editDataForm: this.data,
+    };
   },
   watch: {
-    data: 'setData'
+    data: "setData",
   },
   methods: {
-    setData () {
-      this.editDataForm = this.data
+    setData() {
+      this.editDataForm = this.data;
     },
-    applyFilter () {
-      this.$emit('action-clicked', this.editDataForm)
-    }
+    applyFilter() {
+      this.$emit("action-clicked", this.editDataForm);
+    },
   },
   components: { Form },
   props: {
     data: {
       type: Array,
       required: true,
-      default: () => []
-    }
-  }
-}
+      default: () => [],
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

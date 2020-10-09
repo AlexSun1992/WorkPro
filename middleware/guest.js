@@ -1,10 +1,6 @@
-export default function ({
-  app,
-  store,
-  route
-}) {
-  app.$cookiz?.set('url', route.path)
-  store.dispatch('blocks/clearBlock')
+export default function ({ app, store, route }) {
+  app.$cookiz?.set("url", route.path);
+  store.dispatch("blocks/clearBlock");
   // app.router.beforeEach((to, from, next) => {
   //   console.log(to)
   //   if(store.getters['card/isFormChanged']){

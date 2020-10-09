@@ -27,7 +27,7 @@
                   >
                 </div>
               </div>
-              <div class="product  menu-im">
+              <div class="product menu-im">
                 <a href="">Имущество</a>
                 <div class="priduct_link">
                   <a href="/individual/property/flat/" class="">Квартира</a
@@ -35,7 +35,7 @@
                   ><a href="/individual/property/ipoteka/" class="">Ипотека</a>
                 </div>
               </div>
-              <div class="product  menu-med">
+              <div class="product menu-med">
                 <a href="">Жизнь и здоровье</a>
                 <div class="priduct_link">
                   <a href="/individual/medicine/dms/" class="">ДМС</a
@@ -142,7 +142,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "c-header",
   components: {
-    HeaderUserName
+    HeaderUserName,
   },
   methods: {
     login() {
@@ -159,14 +159,14 @@ export default {
     },
     goInCabinet() {
       this.$router.push("/cabinet");
-    }
+    },
   },
   computed: {
     menu() {
       return this.$store.getters["pages/getMenu"];
     },
-    ...mapGetters(["isAuthenticated", "loggedInUser"])
-  }
+    ...mapGetters(["isAuthenticated", "loggedInUser"]),
+  },
 };
 </script>
 <style scoped>

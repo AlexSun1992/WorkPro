@@ -1,4 +1,4 @@
-import Vue from 'vue'
-import VueAgile from 'vue-agile'
+import Vue from "vue";
+import VueAgile from "vue-agile";
 
-Vue.use(VueAgile)
+Vue.use(VueAgile);

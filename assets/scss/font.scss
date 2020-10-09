@@ -1,27 +1,35 @@
 @font-face {
-    font-family: 'Roboto';
-    src: url('/fonts/Roboto.woff') format('woff'), url('/fonts/Roboto.ttf') format('truetype'), url('/fonts/Roboto.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "Roboto";
+  src: url("/fonts/Roboto.woff") format("woff"),
+    url("/fonts/Roboto.ttf") format("truetype"),
+    url("/fonts/Roboto.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'Roboto';
-    src: url('/fonts/Robotobold.woff') format('woff'), url('/fonts/Robotobold.ttf') format('truetype'), url('/fonts/Robotobold.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
+  font-family: "Roboto";
+  src: url("/fonts/Robotobold.woff") format("woff"),
+    url("/fonts/Robotobold.ttf") format("truetype"),
+    url("/fonts/Robotobold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'Roboto';
-    src: url('/fonts/Robotomedium.woff') format('woff'), url('/fonts/Robotomedium.ttf') format('truetype'), url('/fonts/Robotomedium.woff2') format('woff2');
-    font-weight: 500;
-    font-style: normal;
+  font-family: "Roboto";
+  src: url("/fonts/Robotomedium.woff") format("woff"),
+    url("/fonts/Robotomedium.ttf") format("truetype"),
+    url("/fonts/Robotomedium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'Roboto';
-    src: url('/fonts/Robotolight.woff') format('woff'), url('/fonts/Robotolight.ttf') format('truetype'), url('/fonts/Robotolight.woff2') format('woff2');
-    font-weight: 300;
-    font-style: normal;
+  font-family: "Roboto";
+  src: url("/fonts/Robotolight.woff") format("woff"),
+    url("/fonts/Robotolight.ttf") format("truetype"),
+    url("/fonts/Robotolight.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
 }

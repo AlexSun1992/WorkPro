@@ -1,53 +1,64 @@
 <template>
-    <b-button @click="$bvModal.show('confirmDelete' + menuId + itemId)">
-      <b-modal :modal-class="myclass" :id="'confirmDelete' + menuId + itemId"  centered title="Удаление записи" ok-title="Удалить" cancel-title="Отмена"  no-close-on-backdrop  @ok="deleteCard">
-        Вы действительно хотите удалить эту запись?
-      </b-modal>
-      <slot>Удалить</slot>
-    </b-button>
+  <b-button @click="$bvModal.show('confirmDelete' + menuId + itemId)">
+    <b-modal
+      :modal-class="myclass"
+      :id="'confirmDelete' + menuId + itemId"
+      centered
+      title="Удаление записи"
+      ok-title="Удалить"
+      cancel-title="Отмена"
+      no-close-on-backdrop
+      @ok="deleteCard"
+    >
+      Вы действительно хотите удалить эту запись?
+    </b-modal>
+    <slot>Удалить</slot>
+  </b-button>
 </template>
 
 <script>
 export default {
-  name: 'OpenCardButton',
+  name: "OpenCardButton",
   props: {
     itemId: {
       type: Number,
       required: false,
-      default: () => null
+      default: () => null,
     },
     menuId: {
       required: true,
-      default: () => ''
+      default: () => "",
     },
     moduleId: {
       type: String,
       required: true,
-      default: () => ''
-    }
+      default: () => "",
+    },
   },
-  data () {
+  data() {
     return {
-      myclass: ['cabinet']
-    }
+      myclass: ["cabinet"],
+    };
   },
   methods: {
-    async deleteCard () {
+    async deleteCard() {
       try {
-        await this.$store.dispatch('blocks/deleteForm', { moduleId: this.moduleId, menuId: this.menuId, itemId: this.itemId })
+        await this.$store.dispatch("blocks/deleteForm", {
+          moduleId: this.moduleId,
+          menuId: this.menuId,
+          itemId: this.itemId,
+        });
       } catch (err) {
         this.$bvToast.toast(err.response.data.MESSAGE, {
-          title: 'Ошибка',
-          variant: 'danger',
+          title: "Ошибка",
+          variant: "danger",
           noAutoHide: true,
-          solid: true
-        })
+          solid: true,
+        });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

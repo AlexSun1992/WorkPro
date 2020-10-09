@@ -4,23 +4,20 @@
 
 <script>
 export default {
-  name: 'sidebar-nav-divider',
+  name: "sidebar-nav-divider",
   props: {
     classes: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   computed: {
-    classList () {
-      return [
-        'divider',
-        ...this.itemClasses
-      ]
+    classList() {
+      return ["divider", ...this.itemClasses];
     },
-    itemClasses () {
-      return this.classes ? this.classes.split(' ') : ''
-    }
-  }
-}
+    itemClasses() {
+      return this.classes ? this.classes.split(" ") : "";
+    },
+  },
+};
 </script>

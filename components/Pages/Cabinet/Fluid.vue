@@ -5,56 +5,58 @@
 </template>
 
 <script>
-import Card from '~/components/Pages/Cabinet/Card/Card'
-import Wizard from '~/components/Pages/Cabinet/Wizard/Wizard'
-import FormPage from '~/components/Pages/FormPage'
+import Card from "~/components/Pages/Cabinet/Card/Card";
+import Wizard from "~/components/Pages/Cabinet/Wizard/Wizard";
+import FormPage from "~/components/Pages/FormPage";
 export default {
-  name: 'Fluid',
+  name: "Fluid",
   components: { Card, Wizard, FormPage },
   computed: {
-    params () {
-      const page = this.$route.params
-      const settings = this.$store.getters['menu/breadcrumbs'].slice(-1).pop()
-      let component
+    params() {
+      const page = this.$route.params;
+      const settings = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
+      let component;
 
       if (settings.isCard) {
-        component = 'Card'
+        component = "Card";
       } else if (settings.isForm) {
-        component = 'FormPage'
+        component = "FormPage";
       } else {
-        component = 'Wizard'
+        component = "Wizard";
       }
-      return { page, settings, component }
-    }
+      return { page, settings, component };
+    },
   },
 
-  beforeRouteUpdate (to, from, next) {
-    const cardChanged = this.$store.getters['data_card/cardChanged']
-    const saveButtonClicked = this.$store.getters['data_card/saveButtonClicked']
+  beforeRouteUpdate(to, from, next) {
+    const cardChanged = this.$store.getters["data_card/cardChanged"];
+    const saveButtonClicked = this.$store.getters[
+      "data_card/saveButtonClicked"
+    ];
     if (cardChanged) {
-      const confirmed = window.confirm('Закрыть без сохранения данных?')
+      const confirmed = window.confirm("Закрыть без сохранения данных?");
       if (confirmed) {
-        next()
+        next();
       }
     } else {
-      next()
+      next();
     }
   },
-  beforeRouteLeave (to, from, next) {
-    const cardChanged = this.$store.getters['data_card/cardChanged']
-    const saveButtonClicked = this.$store.getters['data_card/saveButtonClicked']
+  beforeRouteLeave(to, from, next) {
+    const cardChanged = this.$store.getters["data_card/cardChanged"];
+    const saveButtonClicked = this.$store.getters[
+      "data_card/saveButtonClicked"
+    ];
     if (cardChanged) {
-      const confirmed = window.confirm('Закрыть без сохранения данных?')
+      const confirmed = window.confirm("Закрыть без сохранения данных?");
       if (confirmed) {
-        next()
+        next();
       }
     } else {
-      next()
+      next();
     }
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
