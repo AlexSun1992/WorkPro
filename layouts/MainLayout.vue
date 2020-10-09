@@ -100,6 +100,7 @@ export default {
 }
 .menu-open .header-height {
   left: 15px;
+  transition: 0.5s;
 }
 }
 </style>

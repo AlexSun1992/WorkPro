@@ -187,6 +187,7 @@ header {
   min-height: 72px;
 }
 
+
 @media (max-width: 767px) {
   .header-height .top_menu {
     position: relative;
@@ -203,7 +204,8 @@ header {
 
   .header-height {
     position: absolute;
-    left: -100%;
+    left: -200%;
+    transition: 1s;
   }
 
   header {
@@ -231,9 +233,15 @@ header {
     top: 50%;
     left: 15px;
     transform: translateY(-50%);
+    transition: 1s;
+  }
+  .menu-open .burger {
+    border-color: transparent;
+    transition: 0.3s;
   }
 
-  .burger:after {
+  .burger:after,
+  .burger:before {
     content: "";
     position: absolute;
     top: 50%;
@@ -242,6 +250,17 @@ header {
     width: 100%;
     left: 0;
     background-color: #242424;
+    transition: 0.3s;
+  }
+  .menu-open .burger:after,
+  .menu-open .burger:before {
+  width:34px;
+  transform: rotate(45deg);
+  left:-2px;
+  transition: 0.3s;
+  }
+  .menu-open .burger:after {
+    transform: rotate(-45deg);
   }
 
   .gotolk.btn_trn {
@@ -270,4 +289,5 @@ header {
     z-index: 1;
   }
 }
+
 </style>
