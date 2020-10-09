@@ -7,30 +7,33 @@
         <div
           class="middle_menu col-lg-6 col-md-7 pl-md-4 pr-md-0 offset-lg-2 offset-md-3"
         >
-          <div
-            v-for="item in footer"
-            :key="item.title"
-            :class="item.isActive ? item.class + ' active' : item.class"
-          >
-            <a v-on:click="openSection(item.title, $event)" href="">{{
-              item.title
-            }}</a>
+          <div class="menu-link d-md-flex">
             <div
-              v-for="section in item.sections"
-              :key="section.title"
-              :class="section.class"
+              v-for="item in footer"
+              :key="item.title"
+              :class="item.isActive ? item.class + ' active' : item.class"
             >
-              <a href="">{{ section.title }}</a>
-              <div class="priduct_link">
-                <nuxt-link
-                  v-for="link in section.links"
-                  :key="link.link.title"
-                  :to="link.link.url ? link.link.url : ''"
-                  >{{ link.link.title }}</nuxt-link
-                >
+              <a v-on:click="openSection(item.title, $event)" href=""
+                >{{ item.title }}
+              </a>
+              <div
+                v-for="section in item.sections"
+                :key="section.title"
+                :class="section.class"
+              >
+                <a href="">{{ section.title }}</a>
+                <div class="priduct_link">
+                  <nuxt-link
+                    v-for="link in section.links"
+                    :key="link.link.title"
+                    :to="link.link.url ? link.link.url : ''"
+                    >{{ link.link.title }}</nuxt-link
+                  >
+                </div>
               </div>
             </div>
           </div>
+
           <!--          <span v-for="(item, index) in menu" :key="index">-->
           <!--            <nuxt-link :to="item.link.url">{{ item.title }}</nuxt-link>-->
           <!--          </span>-->
