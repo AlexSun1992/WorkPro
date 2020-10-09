@@ -19,13 +19,11 @@
         </li>
       </ul>
       <div v-else-if="question.SSHOW_TYPE === 'select'">
-        <b-form-select
-          v-model="selected"
-          :options="selectOptions"
-          @change="onSelectChange"
-          size="sm"
-          class="mt-3"
-        ></b-form-select>
+        <autocomplete
+          :suggestions="autocompleteOptions"
+          @update="onAutocompleteChange"
+          placeholder="Начните вводить регион"
+        ></autocomplete>
       </div>
       <form
         v-else-if="question.SSHOW_TYPE === 'STRING'"
@@ -54,7 +52,10 @@
   </div>
 </template>
 <script>
+import Autocomplete from "~/components/Libs/Autocomplete/Autocomplete";
+
 export default {
+  components: { Autocomplete },
   props: ["question", "answers"],
   data() {
     return {
@@ -62,16 +63,13 @@ export default {
     };
   },
   computed: {
-    selectOptions() {
-      return this.answers.map(({ ID: value, STITLE: text }) => ({
-        value,
-        text
-      }));
+    autocompleteOptions() {
+      return this.answers.map(({ STITLE }) => STITLE);
     }
   },
   methods: {
-    onSelectChange(id) {
-      const answer = this.answers.find(item => item.ID === id);
+    onAutocompleteChange(text) {
+      const answer = this.answers.find(item => item.STITLE === text);
       this.$emit("choose-answer", answer);
     },
     onSubmitValue() {
@@ -91,6 +89,6 @@ export default {
   }
 };
 </script>
-<style scoped lang="scss">
+<style scoped>
 @import url("./calculator.css");
 </style>
