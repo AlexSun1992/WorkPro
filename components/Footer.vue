@@ -3,9 +3,15 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-12 order-1 pl-md-0">
-         <div class="menu-link d-md-flex">
-            <div v-for="item in footer" :key="item.title"  :class="item.isActive ? item.class + ' active' : item.class">
-              <a v-on:click="openSection(item.title, $event)" href="">{{item.title}}</a>
+          <div class="menu-link d-md-flex">
+            <div
+              v-for="item in footer"
+              :key="item.title"
+              :class="item.isActive ? item.class + ' active' : item.class"
+            >
+              <a v-on:click="openSection(item.title, $event)" href="">{{
+                item.title
+              }}</a>
               <div
                 v-for="section in item.sections"
                 :key="section.title"
@@ -111,14 +117,14 @@ footer .title {
   padding-bottom: 0.5rem;
 }
 
-footer .menu-link a {
+.priduct_link a {
   text-decoration: none;
   color: #474747;
   padding: 6px 0;
   display: table;
 }
 
-footer .menu-link a:hover {
+.priduct_link a:hover {
   color: #5fb456;
   text-decoration: underline;
 }
@@ -292,11 +298,29 @@ footer .copyright a {
   .menu-link .products_all > a {
     display: block;
     position: relative;
+    font-size: 20px;
   }
+  .menu-link .info_all.active > a,
+  .menu-link .products_all.active > a {
+    font-weight: 500;
+    color: #5fb456;
+  }
+  .active .product {
+    margin-top: 1rem;
+  }
+  .active .product > a {
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .active .priduct_link > a {
+    display: inline-block;
+    font-weight: 300;
+  }
+
   .info_all,
   .products_all {
-    padding: 20px 0;
-    border-bottom: 1px solid red;
+    padding: 16px 0;
+    border-bottom: 1px solid #ececec;
     display: block;
   }
   .menu_link_separator:after {
@@ -315,8 +339,14 @@ footer .copyright a {
     font-size: 16px;
     line-height: 20px;
     color: #242424;
-    text-transform: uppercase;
   }
+
+  .info_all > a:hover,
+  .products_all > a:hover {
+    color: #242424;
+    text-decoration: none;
+  }
+
   .info_all > a:before,
   .products_all > a:before,
   .info_all > a:after,
@@ -341,13 +371,32 @@ footer .copyright a {
     width: 2px;
   }
 
+  .active.info_all > a:before,
+  .active.products_all > a:before,
+  .active.info_all > a:after,
+  .active.products_all > a:after {
+    content: "";
+    background-color: #36ab4d;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 2px;
+    width: 12px;
+  }
+
   .info_all:not(.active) .product,
   .products_all:not(.active) .product {
     display: none;
   }
-  .priduct_link a {
+  footer .priduct_link a {
     display: inline-block;
     margin-right: 9px;
+    padding: 0;
+    text-transform: none;
+  }
+  .pn-sm-none .product > a {
+    display: none;
   }
 }
 </style>
