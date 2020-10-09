@@ -88,7 +88,7 @@ export default {
         const form = this.$store.getters["data_card/getForm"];
         await this.$store.dispatch("data_card/executeAction", {
           actionId: e.ID,
-          rowId: 0,
+          rowId: this.$route.params.idCard,
           itemId: e.NITEM,
           body: form,
         });
