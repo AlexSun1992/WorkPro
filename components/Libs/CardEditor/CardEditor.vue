@@ -5,10 +5,12 @@
       v-on:click="$router.go(-1)"
       type="submit"
       variant="success"
-      ><i class="fa fa-chevron-left"></i> Назад</b-button
+      class="btn-back"
+      >Назад</b-button
     >
     <Form
       v-if="data.length"
+      class="mt-5"
       :data="data"
       @update="updateValue($event)"
       @clear="clearRelation($event)"
