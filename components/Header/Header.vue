@@ -7,82 +7,81 @@
         <div
           class="middle_menu col-lg-6 col-md-7 pl-md-4 pr-md-0 offset-lg-2 offset-md-3"
         >
-          <!--
           <span v-for="(item, index) in menu" :key="index">
             <nuxt-link :to="item.link.url">{{ item.title }}</nuxt-link>
           </span>
-        -->
-          <div class="menu-link d-md-flex">
-            <div class="buy_all">
-              <a href="">Купить полиc</a>
-              <div
-                class="product menu-auto menu_link_separator mb-md-4 pb-md-4 position-relative"
-              >
-                <a href="">Автострахование</a>
-                <div class="priduct_link">
-                  <a href="/individual/auto/osago/" class="">Осаго</a
-                  ><a href="/individual/auto/casco/" class="">Каско</a
-                  ><a href="/individual/auto/greencard/" class=""
-                    >Зеленая карта</a
-                  >
-                </div>
-              </div>
-              <div class="product menu-im">
-                <a href="">Имущество</a>
-                <div class="priduct_link">
-                  <a href="/individual/property/flat/" class="">Квартира</a
-                  ><a href="/individual/property/house/" class="">Дом</a
-                  ><a href="/individual/property/ipoteka/" class="">Ипотека</a>
-                </div>
-              </div>
-              <div class="product menu-med">
-                <a href="">Жизнь и здоровье</a>
-                <div class="priduct_link">
-                  <a href="/individual/medicine/dms/" class="">ДМС</a
-                  ><a href="/individual/medicine/oms/" class="">ОМС</a
-                  ><a href="/individual/travel/" class="">Туризм</a
-                  ><a href="/individual/accident/" class="">Несчастный случай</a
-                  ><a href="/individual/life/" class=""
-                    >Накопительное и инвестиционное страхование</a
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="insurance_case block-v-line-lg pn-sm-none">
-              <a href="">Страховой случай</a>
-              <div class="product">
-                <a href="">О компании</a>
-                <div class="priduct_link">
-                  <a href="/about/news/" class="">Новости</a
-                  ><a href="/career/" class="">Вакансии</a
-                  ><a href="/tender/" class="">Закупки</a
-                  ><a href="/about/disclosure/" class="">Раскрытие сведений</a
-                  ><a href="/about/info-for-clients/" class=""
-                    >Информация для потребителей</a
-                  ><a href="/about/tariffs-and-rules" class=""
-                    >Правила и тарифы</a
-                  ><a href="/sitemap/" class="">Карта сайта</a>
-                </div>
-              </div>
-            </div>
-            <div class="insurance_case block-v-line-lg pn-sm-none">
-              <a href="">Бизнесу</a>
-              <div class="product">
-                <a href="">О компании</a>
-                <div class="priduct_link">
-                  <a href="/about/news/" class="">Новости</a
-                  ><a href="/career/" class="">Вакансии</a
-                  ><a href="/tender/" class="">Закупки</a
-                  ><a href="/about/disclosure/" class="">Раскрытие сведений</a
-                  ><a href="/about/info-for-clients/" class=""
-                    >Информация для потребителей</a
-                  ><a href="/about/tariffs-and-rules" class=""
-                    >Правила и тарифы</a
-                  ><a href="/sitemap/" class="">Карта сайта</a>
-                </div>
-              </div>
-            </div>
-          </div>
+
+          <!--          <div class="menu-link d-md-flex">-->
+          <!--            <div class="buy_all">-->
+          <!--              <a href="">Купить полиc</a>-->
+          <!--              <div-->
+          <!--                class="product menu-auto menu_link_separator mb-md-4 pb-md-4 position-relative"-->
+          <!--              >-->
+          <!--                <a href="">Автострахование</a>-->
+          <!--                <div class="priduct_link">-->
+          <!--                  <a href="/individual/auto/osago/" class="">Осаго</a-->
+          <!--                  ><a href="/individual/auto/casco/" class="">Каско</a-->
+          <!--                  ><a href="/individual/auto/greencard/" class=""-->
+          <!--                    >Зеленая карта</a-->
+          <!--                  >-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <div class="product menu-im">-->
+          <!--                <a href="">Имущество</a>-->
+          <!--                <div class="priduct_link">-->
+          <!--                  <a href="/individual/property/flat/" class="">Квартира</a-->
+          <!--                  ><a href="/individual/property/house/" class="">Дом</a-->
+          <!--                  ><a href="/individual/property/ipoteka/" class="">Ипотека</a>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <div class="product menu-med">-->
+          <!--                <a href="">Жизнь и здоровье</a>-->
+          <!--                <div class="priduct_link">-->
+          <!--                  <a href="/individual/medicine/dms/" class="">ДМС</a-->
+          <!--                  ><a href="/individual/medicine/oms/" class="">ОМС</a-->
+          <!--                  ><a href="/individual/travel/" class="">Туризм</a-->
+          <!--                  ><a href="/individual/accident/" class="">Несчастный случай</a-->
+          <!--                  ><a href="/individual/life/" class=""-->
+          <!--                    >Накопительное и инвестиционное страхование</a-->
+          <!--                  >-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--            <div class="insurance_case block-v-line-lg pn-sm-none">-->
+          <!--              <a href="">Страховой случай</a>-->
+          <!--              <div class="product">-->
+          <!--                <a href="">О компании</a>-->
+          <!--                <div class="priduct_link">-->
+          <!--                  <a href="/about/news/" class="">Новости</a-->
+          <!--                  ><a href="/career/" class="">Вакансии</a-->
+          <!--                  ><a href="/tender/" class="">Закупки</a-->
+          <!--                  ><a href="/about/disclosure/" class="">Раскрытие сведений</a-->
+          <!--                  ><a href="/about/info-for-clients/" class=""-->
+          <!--                    >Информация для потребителей</a-->
+          <!--                  ><a href="/about/tariffs-and-rules" class=""-->
+          <!--                    >Правила и тарифы</a-->
+          <!--                  ><a href="/sitemap/" class="">Карта сайта</a>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--            <div class="insurance_case block-v-line-lg pn-sm-none">-->
+          <!--              <a href="">Бизнесу</a>-->
+          <!--              <div class="product">-->
+          <!--                <a href="">О компании</a>-->
+          <!--                <div class="priduct_link">-->
+          <!--                  <a href="/about/news/" class="">Новости</a-->
+          <!--                  ><a href="/career/" class="">Вакансии</a-->
+          <!--                  ><a href="/tender/" class="">Закупки</a-->
+          <!--                  ><a href="/about/disclosure/" class="">Раскрытие сведений</a-->
+          <!--                  ><a href="/about/info-for-clients/" class=""-->
+          <!--                    >Информация для потребителей</a-->
+          <!--                  ><a href="/about/tariffs-and-rules" class=""-->
+          <!--                    >Правила и тарифы</a-->
+          <!--                  ><a href="/sitemap/" class="">Карта сайта</a>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
         </div>
         <div class="top_menu">
           <div class="float-md-left">
