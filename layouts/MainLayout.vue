@@ -1,6 +1,11 @@
 <template>
-  <div class="app main_page menu-open">
-    <Header />
+  <div
+    class="app main_page"
+    v-bind:class="{
+      'menu-open': mobileMenu,
+    }"
+  >
+    <Header @mini-sidebar="changeMobileMenu" />
     <div class="container">
       <b-breadcrumb v-if="showBreadcrumbs && breadcrumbs">
         <b-breadcrumb-item
@@ -29,6 +34,7 @@ import nav from "./menu";
 import Header from "~/components/Header/Header";
 import Footer from "~/components/Footer";
 import Sidebar from "~/components/Sidebar/Sidebar";
+import breadcrumbs from "@/converters/breadcrumbs";
 export default {
   name: "full",
   head: {
@@ -42,7 +48,13 @@ export default {
   data() {
     return {
       nav: nav.items,
+      mobileMenu: false,
     };
+  },
+  methods: {
+    changeMobileMenu() {
+      this.mobileMenu = !this.mobileMenu;
+    },
   },
   watch: {
     $route(to, from) {
