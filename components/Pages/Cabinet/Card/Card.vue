@@ -56,7 +56,7 @@ export default {
   name: "Card",
   components: { CardList, CardForm, CardFilter },
   props: {
-    params: {
+          params: {
       type: Object,
       required: true,
       default: () => {},

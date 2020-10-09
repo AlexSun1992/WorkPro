@@ -2,6 +2,7 @@
   <div class="autocomplete">
     <b-form-input
       class="form-control"
+      autocomplete="off"
       :type="getType(data.name)"
       v-model="data.value"
       :disabled="!edit ? !edit : data.readonly"

@@ -8,6 +8,7 @@
   >
     <b-form-input
       v-model="fieldValue"
+      autocomplete="off"
       :disabled="!edit ? !edit : data.readonly"
       :type="'number'"
       :state="data.state"
