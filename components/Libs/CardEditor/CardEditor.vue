@@ -86,12 +86,21 @@ export default {
       this.$store.commit("data_card/cardChanged", true);
       if (e.SCONST) {
         const form = this.$store.getters["data_card/getForm"];
-        await this.$store.dispatch("data_card/executeAction", {
+        let response = await this.$store.dispatch("data_card/executeAction", {
           actionId: e.ID,
           rowId: this.$route.params.idCard,
           itemId: e.NITEM,
           body: form,
         });
+
+        if (response?.response) {
+          this.$bvToast.toast(response.response.data.MESSAGE, {
+            title: "Ошибка",
+            variant: "danger",
+            noAutoHide: true,
+            solid: true,
+          });
+        }
         return;
       }
       this.$store.commit("data_card/setFormField", {
