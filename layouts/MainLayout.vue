@@ -81,4 +81,12 @@ export default {
   position: absolute;
   z-index: 0;
 }
+.menu-open {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+.menu-open .header-height {
+  left: 15px;
+}
 </style>
