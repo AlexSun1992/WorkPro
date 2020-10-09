@@ -98,6 +98,11 @@ export default {
   width: 100vw;
   height: 100vh;
 }
+.header-height {
+  position: absolute;
+  left: -200%;
+  transition: 1s;
+}
 .menu-open .header-height {
   left: 15px;
   transition: 0.5s;
