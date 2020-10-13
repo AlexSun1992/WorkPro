@@ -52,7 +52,7 @@
           variant="success"
         >
           Отправить повторно
-          <span>{{ resendCount }}</span>
+          <!-- <span>{{ resendCount }}</span> -->
         </b-button>
       </div>
     </div>
@@ -197,6 +197,7 @@ export default {
     },
 
     validateInput(field, bluredField) {
+      if(this.$store.getters.getRegistrationError) return
       if (
         field === "phone" &&
         this.loginTouchesCount <= 2 &&
@@ -279,3 +280,19 @@ export default {
   },
 };
 </script>
+
+<style>
+.alert {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+</style>
