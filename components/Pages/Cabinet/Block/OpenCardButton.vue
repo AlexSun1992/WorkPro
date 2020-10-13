@@ -1,5 +1,5 @@
 <template>
-  <b-button v-on:click="openCard()">
+  <b-button @click.stop="openCard()">
     <slot>Открыть</slot>
   </b-button>
 </template>
