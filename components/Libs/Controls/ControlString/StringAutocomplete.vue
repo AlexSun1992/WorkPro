@@ -69,7 +69,7 @@ export default {
         value = this.suggestions.data[this.index].split(" - ")[0];
         relatedValue = this.suggestions.data[this.index].split(" - ")[1];
         this.$emit("update", { fieldId: this.data.fieldId, value });
-        this.$emit("update", { fieldId, value: relatedValue });
+        // this.$emit("update", { fieldId, value: relatedValue });
       } else {
         if (this.suggestions.data && this.suggestions.data.length) {
           value = this.suggestions.data[this.index];
