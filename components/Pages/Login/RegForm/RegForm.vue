@@ -37,24 +37,26 @@
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
       </b-form-group>
-      <b-form-group label="Имя" label-cols="3">
-        <b-form-input
-          v-model="$v.form.name.$model"
-          :state="validateState('name')"
-          @blur="$v.form.name.$touch()"
-          placeholder="Имя"
-          :disabled="registrationInProcess"
-        ></b-form-input>
-        <b-form-invalid-feedback
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
-      </b-form-group>
+
       <b-form-group label="Фамилия" label-cols="3">
         <b-form-input
           v-model="$v.form.family.$model"
           :state="validateState('family')"
           @blur="$v.form.family.$touch()"
           placeholder="Фамилия"
+          :disabled="registrationInProcess"
+        ></b-form-input>
+        <b-form-invalid-feedback
+          >Пожалуйста, заполните это поле</b-form-invalid-feedback
+        >
+      </b-form-group>
+
+      <b-form-group label="Имя" label-cols="3">
+        <b-form-input
+          v-model="$v.form.name.$model"
+          :state="validateState('name')"
+          @blur="$v.form.name.$touch()"
+          placeholder="Имя"
           :disabled="registrationInProcess"
         ></b-form-input>
         <b-form-invalid-feedback
