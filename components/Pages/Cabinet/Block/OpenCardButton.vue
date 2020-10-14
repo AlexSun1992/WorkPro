@@ -26,8 +26,17 @@ export default {
   methods: {
     openCard() {
       $nuxt._router.push(
-        `/cabinet/${this.moduleId}/0/${this.menuId}/${this.itemId}`
+        `/cabinet/${this.moduleId}/0/${
+          this.parentMenu ? this.parentMenu : this.menuId
+        }/${this.itemId}`
       );
+    },
+  },
+  computed: {
+    parentMenu: {
+      get: function () {
+        return this.$store.getters["menu/getMenuById"](this.menuId).NPARENTMENU;
+      },
     },
   },
 };

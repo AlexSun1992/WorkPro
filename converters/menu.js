@@ -86,6 +86,7 @@ converter.menuObject = (data) => {
   obj.iconFileName = data.SICONFILENAME;
   obj.idItem = data.IDITEM;
   obj.idParent = data.IDPARENT;
+  obj.parentMenu = data.NPARENTMENU || null;
   obj.compType = data.IDADMMENUTYPE;
   obj.recordLoad = data.LFIRSTLOADRECORD;
   obj.newRecord = data.IDADMMENUTYPE === 10;

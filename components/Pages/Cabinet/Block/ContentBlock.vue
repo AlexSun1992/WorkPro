@@ -57,13 +57,20 @@ export default {
         }
       },
     },
+    parentMenu: {
+      get: function () {
+        return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
+      },
+    },
   },
   methods: {
     async openCard(item) {
       try {
         if (this.isOpenCard) {
           $nuxt._router.push(
-            `/cabinet/55/0/${this.itemId}/${item.ID || item[this.propertyId]}`
+            `/cabinet/55/0/${this.parentMenu ? this.parentMenu : this.itemId}/${
+              item.ID || item[this.propertyId]
+            }`
           );
         }
       } catch (err) {

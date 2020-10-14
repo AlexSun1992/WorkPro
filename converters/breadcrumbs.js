@@ -52,6 +52,7 @@ bcItem.getData = (data) => {
   obj.cardgrid = data.cardgrid;
   obj.cardtemplate = data.cardtemplate;
   obj.isModal = data.isModal;
+  obj.parentMenu = data.parentMenu;
   return obj;
 };
 
