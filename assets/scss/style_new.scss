@@ -9,7 +9,7 @@
 .btn-success {
   background: #22a66a;
   box-shadow: 2px 8px 32px rgba(91, 206, 150, 0.35);
-  border-radius: 50px;
+  border-radius: 10px;
   font-family: Roboto;
   font-weight: bold;
   font-size: 10px;
@@ -27,7 +27,7 @@
 
 .btn-outline-success {
   border: 1px solid #008b4e;
-  border-radius: 50px;
+  border-radius: 10px;
   font-family: Roboto;
   font-style: normal;
   font-weight: bold;
@@ -129,7 +129,7 @@
 
 .btn-outline-secondary {
   background: transparent;
-  border-radius: 50px;
+  border-radius: 10px;
   font-family: Roboto;
   font-weight: bold;
   font-size: 10px;
@@ -915,7 +915,7 @@ footer:not(.modal-footer) {
 .block-notification-btn button:not(.notification-close) {
   background: #22a66a;
   box-shadow: 2px 8px 32px rgba(91, 206, 150, 0.35);
-  border-radius: 50px;
+  border-radius: 10px;
   font-family: Open Sans, sans-serif;
   font-weight: bold;
   font-size: 10px;
@@ -1829,7 +1829,7 @@ button:focus {
   position: absolute;
   top: 20px;
   font-size: 0.725rem;
-  border-radius: 50px;
+  border-radius: 10px;
   padding: 6px 16px 6px 36px;
   color: #363d44;
   transition: 0.3s;
@@ -1901,9 +1901,65 @@ button:focus {
 }
 
 .columns_lg_2 {
-  columns: 2;
+  display: grid;
+  grid-template-columns: 49% 49%;
+  column-gap: 2%;
+  row-gap: 10px;
 }
-
+.columns_lg_2 span.txt-small{display: block;font-size:90%;}
 .form-control:focus {
   box-shadow: none;
 }
+
+.autocomplete {
+  position: relative;
+  width: 70%;
+}
+.dropdown-menu {
+  display: block;
+  width: 100%;
+}
+.active {
+  background-color: lightgrey;
+}
+.autocomplete .dropdown-menu {
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+  padding: 1px;
+  list-style: none;
+  margin: 0;
+  border-radius: 0 0 6px 6px;
+  border-top: 0px;
+  /*border-color: #8ad4ee;*/
+  border: 1px solid #8ad4ee;
+  border-top: 0;
+  background-color: #fff;
+  margin-top: -5px;
+  padding-top: 5px;
+}
+.autocomplete .dropdown-menu li {
+  padding: 5px 10px;
+  border-bottom: 1px solid #fafafa;
+}
+.autocomplete .dropdown-menu li:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+.autocomplete .form-control {
+  box-shadow: none;
+}
+.autocomplete .dropdown-menu li.active {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+.form-control:focus {
+  box-shadow: none;
+}
+.icon-pdf {    padding-right: 30px;
+  position: relative;}
+  .icon-pdf:after {
+  content: "";
+    width: 20px;
+    height: 20px;
+    background: url(/img/icon-pdf.svg) 0 0 no-repeat;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);}

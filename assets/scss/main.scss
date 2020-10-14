@@ -867,13 +867,13 @@ a.icon-arrow-right:after {
   left: -15px !important;
 }
 
-.middle_menu .gotolk a {
+.gotolk a {
   padding: 0;
   margin: 0;
   font-size: 1rem;
 }
 
-.middle_menu .gotolk .ppl-avatar {
+.gotolk .ppl-avatar {
   display: none;
 }
 
@@ -1336,6 +1336,28 @@ h6 {
   }
 }
 @media (max-width: 991px) {
+  .block-container-big .block-title {
+    font-size: 1.625rem;
+  line-height: 2rem;
+  }
+
+.block-title {
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+  color: #242424;
+}
+.block-container-four .block-title {
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+}
+.block-container-help .block-title {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+}
+.block-container-slider .block-title {
+  font-size: 1rem;
+  line-height: 1.25rem;
+}
   .block-v-line-lg:after {
     display: none;
   }
@@ -1369,7 +1391,7 @@ h6 {
     width: 40px;
     height: 40px;
     border: 1px solid #8f8f8f;
-    transform: translateY(-17px);
+    transform: translateY(-24px);
     border-radius: 40px;
   }
   .dropdown.gotolk {
@@ -1491,5 +1513,20 @@ h6 {
 {
   display: block;
 }
+
+.block-container-four .block-title, .block-title,.block-container-big .block-title {
+font-size: 1.25rem;
+line-height: 1.75rem;
+}
+ 
+.block-container-help .block-title {
+font-size: 1.125rem;
+line-height: 1.5rem;
+}
+.block-container-slider .block-title {
+font-size: 1rem;
+line-height: 1.25rem;
+}
+
 }
 
