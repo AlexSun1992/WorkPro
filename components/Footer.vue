@@ -17,7 +17,9 @@
                 :key="section.title"
                 :class="section.class"
               >
-                <a href="">{{ section.title }}</a>
+                <nuxt-link :to="section.link ? section.link.url : ''">{{
+                  section.title
+                }}</nuxt-link>
                 <div class="priduct_link">
                   <nuxt-link
                     v-for="link in section.links"

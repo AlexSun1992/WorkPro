@@ -84,28 +84,29 @@ export default {
 <style lang="scss">
 .main_page {
   @import "~/assets/scss/main.scss";
-}@media (max-width: 767px) {
-.menu-open header:after {
-  content: "";
-  width: 100vw;
-  height: 100vh;
-  background: #fff;
-  position: absolute;
-  z-index: 0;
 }
-.menu-open {
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
-}
-.header-height {
-  position: absolute;
-  left: -200%;
-  transition: 1s;
-}
-.menu-open .header-height {
-  left: 15px;
-  transition: 0.5s;
-}
+@media (max-width: 767px) {
+  .menu-open header:after {
+    content: "";
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+    position: absolute;
+    z-index: 0;
+  }
+  .menu-open {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+  }
+  .header-height {
+    position: absolute;
+    left: -200%;
+    transition: 1s;
+  }
+  .menu-open .header-height {
+    left: 15px;
+    transition: 0.5s;
+  }
 }
 </style>
