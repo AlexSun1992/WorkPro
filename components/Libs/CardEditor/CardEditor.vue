@@ -5,10 +5,12 @@
       v-on:click="$router.go(-1)"
       type="submit"
       variant="success"
-      ><i class="fa fa-chevron-left"></i> Назад</b-button
+      class="btn-back"
+      >Назад</b-button
     >
     <Form
       v-if="data.length"
+      :class="{'mt-5': !params.settings}"
       :data="data"
       @update="updateValue($event)"
       @clear="clearRelation($event)"
@@ -86,12 +88,21 @@ export default {
       this.$store.commit("data_card/cardChanged", true);
       if (e.SCONST) {
         const form = this.$store.getters["data_card/getForm"];
-        await this.$store.dispatch("data_card/executeAction", {
+        let response = await this.$store.dispatch("data_card/executeAction", {
           actionId: e.ID,
-          rowId: 0,
+          rowId: this.$route.params.idCard,
           itemId: e.NITEM,
           body: form,
         });
+
+        if (response?.response) {
+          this.$bvToast.toast(response.response.data.MESSAGE, {
+            title: "Ошибка",
+            variant: "danger",
+            noAutoHide: true,
+            solid: true,
+          });
+        }
         return;
       }
       this.$store.commit("data_card/setFormField", {
@@ -116,11 +127,13 @@ export default {
     validateData(data) {
       let valid = true;
       for (let i = 0; i < data.length; i++) {
+        let test = data[i].label
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
         data[i].checked = true;
         if (data[i].required && !value && data[i].type !== "boolean") {
           valid = false;
+          this.$store.commit('data_card/setFormField', data[i])
         }
       }
       return valid;

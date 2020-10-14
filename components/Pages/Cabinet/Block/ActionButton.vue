@@ -1,5 +1,5 @@
 <template>
-  <b-button v-if="action" @click.stop="startAction()">
+  <b-button v-if="action" @click.prevent="startAction()">
     <slot><div v-text="action.SNAME"></div></slot>
   </b-button>
 </template>

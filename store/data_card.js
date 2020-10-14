@@ -71,7 +71,8 @@ export const actions = {
           return resp;
         });
     } catch (e) {
-      console.log(e);
+      console.log(e)
+      return e
     }
   },
 };

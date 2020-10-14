@@ -12,7 +12,7 @@
         >
           <div class="menu-link d-md-flex">
             <div
-              v-for="item in footer"
+              v-for="item in menu"
               :key="item.title"
               :class="item.isActive ? item.class + ' active' : item.class"
             >
@@ -116,7 +116,7 @@ export default {
     },
     openSection: function (title, e) {
       e.preventDefault();
-      this.$store.commit("pages/changeFooterActiveSection", title);
+      this.$store.commit("pages/changeHeaderActiveSection", title);
     },
     mobileMenu() {
       this.$emit("mini-sidebar");
@@ -187,7 +187,6 @@ header {
   min-height: 72px;
 }
 
-
 @media (max-width: 767px) {
   .header-height .top_menu {
     position: relative;
@@ -248,10 +247,10 @@ header {
   }
   .menu-open .burger:after,
   .menu-open .burger:before {
-  width:34px;
-  transform: rotate(45deg);
-  left:-2px;
-  transition: 0.3s;
+    width: 34px;
+    transform: rotate(45deg);
+    left: -2px;
+    transition: 0.3s;
   }
   .menu-open .burger:after {
     transform: rotate(-45deg);
@@ -283,5 +282,4 @@ header {
     z-index: 1;
   }
 }
-
 </style>

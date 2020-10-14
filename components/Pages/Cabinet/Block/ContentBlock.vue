@@ -1,6 +1,6 @@
 <template>
   <div v-if="isOpenCard">
-    <div v-for="item in dataContent.items" @click.prevent="openCard(item)">
+    <div v-for="item in dataContent.items" @click.stop="openCard(item)">
       <slot name="data" v-bind:content="item"></slot>
     </div>
   </div>
@@ -27,6 +27,11 @@ export default {
       type: Boolean,
       required: false,
       default: () => false,
+    },
+    propertyId: {
+      type: String,
+      required: false,
+      default: () => null,
     },
   },
   async fetch() {
@@ -57,7 +62,9 @@ export default {
     async openCard(item) {
       try {
         if (this.isOpenCard) {
-          $nuxt._router.push(`/cabinet/55/0/${this.itemId}/${item.ID}`);
+          $nuxt._router.push(
+            `/cabinet/55/0/${this.itemId}/${item.ID || item[this.propertyId]}`
+          );
         }
       } catch (err) {
         this.$bvToast.toast(err.response.data.MESSAGE, {
