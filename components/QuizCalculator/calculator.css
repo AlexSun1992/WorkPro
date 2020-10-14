@@ -325,7 +325,6 @@ h2 {
   width: 643px;
   height: 641px;
   z-index: 0;
-  background: url(img/bg-telo.gif) 0px 0px no-repeat;
 }
 
 .calculator-ppl-bg {
@@ -336,7 +335,6 @@ h2 {
   z-index: 2;
   width: 643px;
   height: 517px;
-  background: url(img/telo.png) 0px 0px no-repeat;
 }
 
 .block-calc {
