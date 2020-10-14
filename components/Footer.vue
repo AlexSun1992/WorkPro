@@ -36,17 +36,24 @@
           <div class="title d-none d-sm-block mt-0 mb-0 mb-lg-3">
             Наши приложения
           </div>
-          <a href="" class="footer-apple"></a>
-          <a href="" class="footer-google float-right"></a>
+          <a
+            href="https://apps.apple.com/us/app/resomobile/id1127266069"
+            class="footer-apple"
+          ></a>
+          <a
+            href="https://play.google.com/store/apps/details?id=ru.reso.app"
+            class="footer-google float-right"
+          ></a>
           <div class="title d-none d-sm-block mt-lg-5 mt-2 mb-lg-3 mb-1">
             Мы в социальных сетях
           </div>
           <div class="social mt-3 mt-sm-0">
-            <a href="" class="footer-fb"></a>
-            <a href="" class="footer-vk"></a>
-            <a href="" class="footer-ok"></a>
-            <a href="" class="footer-in"></a>
-            <a href="" class="footer-tw"></a>
+            <a href="https://ru-ru.facebook.com/reso.ru" class="footer-fb"></a>
+            <a href="http://vk.com/reso_garantia " class="footer-vk"></a>
+            <a
+              href="https://www.instagram.com/reso.ru_official/"
+              class="footer-in"
+            ></a>
           </div>
         </div>
         <div class="col-12 order-4 order-lg-3">
