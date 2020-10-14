@@ -1,8 +1,18 @@
 <template>
   <div class="container calculator" id="calculator">
     <div>
-      <div class="calculator-bg-bg"></div>
-      <div class="calculator-ppl-bg"></div>
+      <div
+        class="calculator-bg-bg"
+        :style="{
+          background: bgBeforeUrl,
+        }"
+      ></div>
+      <div
+        class="calculator-ppl-bg"
+        :style="{
+          background: bgAfterUrl,
+        }"
+      ></div>
       <div class="block-calc" id="calculator-item">
         <h2>
           {{ stitle_h1 }}
@@ -54,6 +64,8 @@ export default {
       quizIdValue: 1,
       partnerId: -1,
       pageId: 1,
+      bgAfterUrl: "",
+      bgBeforeUrl: "",
     };
   },
   methods: {
@@ -122,6 +134,12 @@ export default {
     this.startIssue = quizInfo.NSTART_ISSUE;
     this.stitle_h1 = quizInfo.STITLE_H1;
     this.stitle_h2 = quizInfo.STITLE_H2;
+    this.bgAfterUrl =
+      quizInfo.BG_AFTER_URL &&
+      quizInfo.BG_AFTER_URL.replace(/^[ ]+|[; ]+$/g, "");
+    this.bgBeforeUrl =
+      quizInfo.BG_BEFORE_URL &&
+      quizInfo.BG_BEFORE_URL.replace(/^[ ]+|[; ]+$/g, "");
   },
 };
 </script>
