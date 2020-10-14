@@ -10,7 +10,6 @@
         autofocus
         :placeholder="placeholder"
         :state="validateInput(loginType, isUserBlured)"
-        :disabled="isUserDisabled || disabled"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
