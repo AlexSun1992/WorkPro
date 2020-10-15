@@ -1404,9 +1404,12 @@ h6 {
   .dropdown.gotolk:after {
     display: none;
   }
+  .block-container .block-description {font-size:1rem;}
+  .block-container .block-description  h4 {font-size:1rem;}
+  .block-container .block-button a {font-size: 1rem;}
 }
 
-@media (min-width: 991px) {
+@media (min-width: 992px) {
   .block-v-line-sm:after {
     display: none;
   }
@@ -1527,6 +1530,81 @@ line-height: 1.5rem;
 font-size: 1rem;
 line-height: 1.25rem;
 }
+.block-container .block-title{font-size:1.25rem;text-align: center; padding: 0;}
+.block-container .block-description{text-align: center; padding: 0;margin-bottom:0;}
+.block-container {
+  grid-template-rows: auto;
+  grid-template-areas: "title" "description" "img" "button";
+  grid-row-gap: .5rem;
+  padding: 24px 16px 10px;
+}
+
+.block-container-center {
+  grid-template-areas: "title" "description" "img" "button";
+  grid-template-rows:auto;
+  grid-row-gap:.5rem;
+  padding: 24px 16px 10px;
+}
+
+.block-container-big {
+  display: grid;
+  grid-template-columns:100%;
+  grid-template-areas: "title" "description" "img" "button";
+  grid-template-rows: auto;
+  grid-row-gap: .5rem;
+  padding: 24px 16px 10px;
+}
+
+.block-container-slider {
+  display: grid;
+  grid-template-columns: auto 60px;
+  grid-template-areas: "title img" "description description" "button button";
+  grid-template-rows: minmax(60px, max-content) auto 1rem;
+  grid-row-gap: 1rem;
+  background-color: #fff;
+  padding: 24px 16px 10px;
+}
+
+.block-container-four {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas: "img" "title" "description" "button";
+  grid-template-rows:auto;
+  grid-row-gap: 0.5rem;
+  padding: 24px 16px 10px;
+}
+
+.block-container-help {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas: "img" "title" "button";
+  grid-template-rows: auto;
+  grid-column-gap:0;
+  grid-row-gap: 0.5rem;
+  padding: 24px 16px 10px;
+}
+.block-container-help .block-button {
+  margin-left: 0;
+}
+.main_page .buy-block {
+  display: grid !important;
+  grid-template-areas:
+      "title button"
+      "select button";
+  grid-template-columns: auto 124px;
+  grid-template-rows: 24px;
+  padding: 10px;
+  align-items: center;
+  height: auto;font-size:1rem;}
+.buy-block>div:nth-child(1){grid-area: title;font-size: 1rem;padding-left: 0 !important;}
+.buy-block>div:nth-child(2){grid-area: select;}
+.buy-block>div:nth-child(3){grid-area: button; padding:0 !important;}
+.buy-block>div:nth-child(3) a {font-size: 0.75rem;}
+.buy-block .dropdown button{    font-size: 1rem;font-weight: 500;
+  line-height: 1rem;}
+.buy-block .dpd-link button:before{top:2px;}
+.buy-block .dpd-link button:after{top:18px;}
+.buy-block .show.dpd-link button:before{top:6px;}
 
 }
 

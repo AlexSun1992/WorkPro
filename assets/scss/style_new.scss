@@ -1913,7 +1913,6 @@ button:focus {
 
 .autocomplete {
   position: relative;
-  width: 70%;
 }
 .dropdown-menu {
   display: block;
@@ -1963,3 +1962,9 @@ button:focus {
     right: 0;
     top: 50%;
     transform: translateY(-50%);}
+    .control .error {line-height: 1;}
+    .mx-datepicker .is-invalid + .mx-icon-calendar {display: none;}
+
+    .control .search.selection.dropdown .text.default {
+      white-space: nowrap;
+  }
