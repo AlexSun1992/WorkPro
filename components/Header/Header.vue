@@ -16,15 +16,17 @@
               :key="item.title"
               :class="item.isActive ? item.class + ' active' : item.class"
             >
-              <a v-on:click="openSection(item.title, $event)" href=""
-                >{{ item.title }}
-              </a>
+              <nuxt-link :to="item.link ? item.link.url : ''">{{
+                item.title
+              }}</nuxt-link>
               <div
                 v-for="section in item.sections"
                 :key="section.title"
                 :class="section.class"
               >
-                <a href="">{{ section.title }}</a>
+                <nuxt-link :to="section.link ? section.link.url : ''">{{
+                  section.title
+                }}</nuxt-link>
                 <div class="priduct_link">
                   <nuxt-link
                     v-for="link in section.links"
