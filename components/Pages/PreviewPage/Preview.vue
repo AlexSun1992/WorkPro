@@ -7,6 +7,7 @@
 <script>
 import VRuntimeTemplate from "v-runtime-template";
 import Calculator from "../../Pages/Calculator";
+import { mapGetters } from "vuex";
 export default {
   layout: "MainLayout",
   name: "Preview",
@@ -27,6 +28,12 @@ export default {
     return {
       content: dataPage.data.content.rendered,
     };
+  },
+  computed: {
+    getPage() {
+      return this.$store.getters["pages/getPageByUrl"];
+    },
+    ...mapGetters("slider", ["isButtonLeftDisabled", "isButtonRightDisabled"]),
   },
 };
 </script>
