@@ -95,7 +95,6 @@ export default {
 <style scoped>
 .autocomplete {
   position: relative;
-  width: 70%;
 }
 .dropdown-menu {
   display: block;
@@ -135,3 +134,5 @@ export default {
   box-shadow: none;
 }
 </style>
+
+
