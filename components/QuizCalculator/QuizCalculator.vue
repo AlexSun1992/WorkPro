@@ -1,5 +1,5 @@
 <template>
-  <div class="container calculator" id="calculator">
+  <div class="calculator" id="calculator">
     <div>
       <div
         class="calculator-bg-bg"
