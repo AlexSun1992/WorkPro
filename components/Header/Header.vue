@@ -19,6 +19,9 @@
               <nuxt-link :to="item.link ? item.link.url : ''">{{
                 item.title
               }}</nuxt-link>
+              <a v-on:click="openSection(item.title, $event)" href="">{{
+                item.title
+              }}</a>
               <div
                 v-for="section in item.sections"
                 :key="section.title"
