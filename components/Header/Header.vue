@@ -16,10 +16,10 @@
               :key="item.title"
               :class="item.isActive ? item.class + ' active' : item.class"
             >
-              <nuxt-link :to="item.link ? item.link.url : ''">{{
+              <nuxt-link :to="item.link ? item.link.url : ''" class="d-none d-md-block">{{
                 item.title
               }}</nuxt-link>
-              <a v-on:click="openSection(item.title, $event)" href="">{{
+              <a v-on:click="openSection(item.title, $event)" href="" class="d-md-none">{{
                 item.title
               }}</a>
               <div
