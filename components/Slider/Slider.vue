@@ -8,14 +8,6 @@
     >
       <slot></slot>
     </agile>
-    <agile
-      ref="carousel"
-      :slidesToShow="slides"
-      :navButtons="false"
-      :options="myOptions2"
-    >
-      <slot></slot>
-    </agile>
   </div>
 </template>
 
@@ -27,42 +19,36 @@ export default {
       counter: 0,
       myOptions: {
         navButtons: false,
+        dots: false,
         responsive: [
           {
-            breakpoint: 600,
+            breakpoint: 575,
             settings: {
-              dots: false,
+              slidesToShow: 2
             },
           },
           {
-            breakpoint: 900,
+            breakpoint: 0,
             settings: {
-              navButtons: true,
-              dots: true,
-              infinite: false,
+              slidesToShow: 1,
+              dots: true
+            },
+          },
+          {
+            breakpoint: 992,
+            settings: {
+
+              slidesToShow: 3,
+            },
+          },
+          {
+            breakpoint: 1200,
+            settings: {
+              slidesToShow: 4,
             },
           },
         ],
-      },
-      myOptions2: {
-        navButtons: false,
-        responsive: [
-          {
-            breakpoint: 600,
-            settings: {
-              dots: false,
-            },
-          },
-          {
-            breakpoint: 900,
-            settings: {
-              navButtons: true,
-              dots: true,
-              infinite: false,
-            },
-          },
-        ],
-      },
+      }
     };
   },
   props: {
@@ -99,4 +85,5 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
