@@ -1,12 +1,22 @@
 <template>
-  <agile
-    ref="carousel"
-    :slidesToShow="slides"
-    :navButtons="false"
-    :options="myOptions"
-  >
-    <slot></slot>
-  </agile>
+  <div>
+    <agile
+      ref="carousel"
+      :slidesToShow="slides"
+      :navButtons="false"
+      :options="myOptions"
+    >
+      <slot></slot>
+    </agile>
+    <agile
+      ref="carousel"
+      :slidesToShow="slides"
+      :navButtons="false"
+      :options="myOptions2"
+    >
+      <slot></slot>
+    </agile>
+  </div>
 </template>
 
 <script>
@@ -16,6 +26,25 @@ export default {
     return {
       counter: 0,
       myOptions: {
+        navButtons: false,
+        responsive: [
+          {
+            breakpoint: 600,
+            settings: {
+              dots: false,
+            },
+          },
+          {
+            breakpoint: 900,
+            settings: {
+              navButtons: true,
+              dots: true,
+              infinite: false,
+            },
+          },
+        ],
+      },
+      myOptions2: {
         navButtons: false,
         responsive: [
           {
