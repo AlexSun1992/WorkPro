@@ -2,8 +2,8 @@
   <agile
     ref="carousel"
     :slidesToShow="slides"
-    :dots="false"
     :navButtons="false"
+    :options="myOptions"
   >
     <slot></slot>
   </agile>
@@ -15,6 +15,25 @@ export default {
   data() {
     return {
       counter: 0,
+      myOptions: {
+        navButtons: false,
+        responsive: [
+          {
+            breakpoint: 600,
+            settings: {
+              dots: false,
+            },
+          },
+          {
+            breakpoint: 900,
+            settings: {
+              navButtons: true,
+              dots: true,
+              infinite: false,
+            },
+          },
+        ],
+      },
     };
   },
   props: {
