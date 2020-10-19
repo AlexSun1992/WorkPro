@@ -84,7 +84,10 @@ export const mutations = {
     state.saveButtonClicked = data;
   },
   filterFields(state, data) {
-    state.form = state.form.filter((item) => !item.name.match(/^ID/));
+    state.form = state.form.filter((item) => {
+      item.error = null
+      return !item.name.match(/^ID/)
+    });
   },
   setForm(state, data) {
     state.form = data;
@@ -136,5 +139,10 @@ export const mutations = {
       item.value = {};
       item.state = false;
     }
+  },
+  setFieldError(state, data) {
+    let [fieldName, fieldValue] = data.split('=')
+    let field = state.form.find(item => item.name === fieldName)
+    field.error = fieldValue
   },
 };
