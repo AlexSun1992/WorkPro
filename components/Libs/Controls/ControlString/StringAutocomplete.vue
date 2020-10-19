@@ -20,6 +20,7 @@
     <b-form-invalid-feedback
       >Обязательно для заполнения</b-form-invalid-feedback
     >
+    <p class="error">{{ data.error }}</p>
     <ul
       v-if="open && suggestions && suggestions.data && suggestions.data.length"
       :class="{ 'dropdown-menu': open }"
@@ -211,5 +212,10 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+.error {
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #f86c6b;
 }
 </style>
