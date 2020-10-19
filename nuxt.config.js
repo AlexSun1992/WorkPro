@@ -44,6 +44,7 @@ module.exports = {
     { src: "~plugins/vcalendar.js", ssr: false },
     "~/plugins/quizCalculator.js",
     "~/plugins/carousel.js",
+    "~/plugins/selectValue.js",
   ],
   /*
    ** Nuxt.js dev-modules

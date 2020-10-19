@@ -32,37 +32,17 @@
             <div class="col-auto pr-0 fsz24 color-white">
               Я хочу купить полис
             </div>
-            <div class="col-auto pl-0">
-              <b-dropdown class="m-md-2 dpd-link" right>
-                <template v-slot:button-content>
-                  <span v-text="textSelected ? textSelected : 'ОСАГО'"></span>
-                </template>
-                <b-dropdown-item
-                  @click="
-                    textSelected = 'ОСАГО';
-                    valueSelected = 'osago';
-                  "
-                  value="osago"
-                  >ОСАГО
-                </b-dropdown-item>
-                <b-dropdown-item
-                  @click="
-                    textSelected = 'КАСКО';
-                    valueSelected = 'casco';
-                  "
-                  value="casco"
-                  >КАСКО
-                </b-dropdown-item>
-              </b-dropdown>
-            </div>
-            <div class="col-auto">
-              <b-button
-                type="button"
-                :to="valueSelected ? valueSelected : 'OSAGO'"
-                class="btn-large btn-arrow-right position-relative uppercase d-block"
-                >Расчитать
-              </b-button>
-            </div>
+            <select-value
+              :options="{
+                buttonName: 'Рассчитать',
+                selected: { value: 'osago', text: 'ОСАГО' },
+                items: [
+                  { value: 'osago', text: 'ОСАГО' },
+                  { value: 'casco', text: 'КАСКО' },
+                ],
+              }"
+            >
+            </select-value>
           </div>
         </div>
         <div class="row flex-wrap">
