@@ -50,11 +50,7 @@ export default {
       current: 0,
       suggestions: {},
       debouncedClose: null,
-      debouncedChange: null,
-      maskTemplate: {
-        type: String,
-        default: ""
-      }
+      debouncedChange: null
     };
   },
   props: ["data", "edit"],
@@ -193,14 +189,7 @@ export default {
       } else if (name === "SNEWEMAIL") {
         return "Введите новый email";
       }
-    },
-    getType(name) {
-      if (name === "SNEWPHONE" || name === "SCODEFIELD") {
-        return "number";
-      } else {
-        return "text";
-      }
-    },
+    }
   }
 };
 </script>
