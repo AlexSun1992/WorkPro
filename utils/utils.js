@@ -1,11 +1,11 @@
-const isFieldExists = function isFieldExists(name, data = undefined) {
-  return Boolean(getField(name, data));
-};
-const getField = function getField(name, data) {
-  return data.find((item) => item.name === name);
-};
-const getFieldValue = function getFieldValue(name, data = undefined) {
-  return getField(name, data).value;
-};
 
-export { isFieldExists, getField, getFieldValue };
+import { mask } from "vue-the-mask";
+
+export const applyMask = {
+    bind(el, binding) {
+        if (binding.value && binding.value !== "") {
+            mask(el, binding)
+        }
+    },
+    unbind() {}
+}

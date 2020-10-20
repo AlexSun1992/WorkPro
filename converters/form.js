@@ -128,6 +128,7 @@ converter.form = async (data, itemId) => {
     obj.visible = webFields[i].LVISIBLE === "N" ? false : true;
     obj.required = webFields[i].LREQUIRED === "N" ? false : true;
     obj.page = webFields[i].NPAGE;
+    obj.mask = webFields[i].SMASK;
     obj.readonly = webFields[i].LREADONLY === "N" ? false : true;
     obj.control = null;
     obj.state = null;
