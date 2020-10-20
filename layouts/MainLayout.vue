@@ -63,6 +63,7 @@ export default {
       }
       let url = to.path;
       if (url === "/login") {
+        this.$store.commit("pages/setBreadCrumbs", null);
         return;
       }
       if (to.path === "/") {

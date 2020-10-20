@@ -43,8 +43,5 @@ export default {
     },
     ...mapGetters("slider", ["isButtonLeftDisabled", "isButtonRightDisabled"]),
   },
-  // beforeDestroy: function () {
-  //   this.$store.commit[("pages/setBreadCrumbs", null)];
-  // },
 };
 </script>
