@@ -7,7 +7,7 @@
   >
     <Header @mini-sidebar="changeMobileMenu" />
     <div class="container">
-      <b-breadcrumb v-if="showBreadcrumbs && breadcrumbs">
+      <b-breadcrumb v-if="showBreadcrumbs !== false && breadcrumbs">
         <b-breadcrumb-item
           v-for="(item, index) in breadcrumbs"
           v-bind:key="item.text"
@@ -68,7 +68,9 @@ export default {
       if (to.path === "/") {
         url = "index";
       }
-      this.$store.dispatch("pages/fetchPageByUrl", url);
+      if (from.meta === "Main") {
+        this.$store.dispatch("pages/fetchPageByUrl", url);
+      }
     },
   },
   computed: {
@@ -76,6 +78,8 @@ export default {
       return this.$store.getters["pages/getBreadCrumbs"];
     },
     showBreadcrumbs() {
+      console.log(this.$store.getters["pages/getShowBreadCrumbs"]);
+      console.log(this.$route.params.pathMatch);
       return (
         this.$store.getters["pages/getShowBreadCrumbs"] &&
         this.$route.params.pathMatch

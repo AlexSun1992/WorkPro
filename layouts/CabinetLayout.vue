@@ -51,12 +51,6 @@ export default {
       if (to.meta === "Cabinet") {
         this.sideBarMobileMini = false;
         this.setParams();
-      } else {
-        let url;
-        if (to.path === "/") {
-          url = "index";
-        }
-        this.$store.dispatch("pages/fetchPageByUrl", url);
       }
     },
   },

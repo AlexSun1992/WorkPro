@@ -42,11 +42,17 @@ export default {
       next();
     }
   },
-  beforeRouteLeave(to, from, next) {
+  async beforeRouteLeave(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
     const saveButtonClicked = this.$store.getters[
       "data_card/saveButtonClicked"
     ];
+    if (to.meta !== "Cabinet") {
+      await this.$store.dispatch(
+        "pages/fetchPageByUrl",
+        to.path === "/" ? "index" : to.path
+      );
+    }
     if (cardChanged) {
       const confirmed = window.confirm("Закрыть без сохранения данных?");
       if (confirmed) {

@@ -31,23 +31,23 @@ export function createRouter() {
     },
     routes: [
       {
-        meta: "Главная",
+        meta: "Main",
         path: "/",
         component: Main,
       },
       {
-        meta: "Регистрация",
+        meta: "Register",
         path: "/login",
         component: Login,
         alias: "/register",
       },
       {
-        meta: "Восстановление",
+        meta: "Recovery",
         path: "/recovery",
         component: PasswordRecovery,
       },
       {
-        meta: "О компании",
+        meta: "About",
         path: "/about",
         component: DemoAbout,
       },
@@ -104,6 +104,7 @@ export function createRouter() {
         component: Preview,
       },
       {
+        meta: "Main",
         path: "/*",
         component: DynamicRoutesRenderer,
       },

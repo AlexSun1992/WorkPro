@@ -10,6 +10,7 @@ export const state = () => ({
   breadcrumbs: null,
   isShowBreadcrumbs: false,
   config: null,
+  isLoading: false,
 });
 
 export const getters = {
@@ -26,6 +27,7 @@ export const getters = {
   getBreadCrumbs: (state) => state.breadcrumbs,
   getShowBreadCrumbs: (state) => state.isShowBreadcrumbs,
   getConfig: (state) => state.config,
+  getLoading: (state) => state.isLoading,
 };
 
 export const actions = {
@@ -63,10 +65,12 @@ export const actions = {
       if (params.slice(params.length - 1) === "/") {
         params = params.substring(0, params.length - 1);
       }
+      commit("setLoading", true);
       await this.$axios
         .get(`/wp-json/wpreso/v1/pages-by-url?url=${params}`)
         .then(async (res) => {
           if (res.status === 200) {
+            commit("setLoading", false);
             commit("setPage", res.data);
             commit("setBreadCrumbs", res.data.wpreso.autobreadcrumbs);
             commit(
@@ -115,6 +119,9 @@ export const mutations = {
   },
   setShowBreadCrumbs(state, params) {
     state.isShowBreadcrumbs = params;
+  },
+  setLoading(state, data) {
+    state.isLoading = data;
   },
   changeFooterActiveSection(state, title) {
     const section = state.footerMenu.find((b) => b.title === title);

@@ -45,6 +45,15 @@ export default {
       }
     },
   },
+  async beforeRouteLeave(to, from, next) {
+    if (to.meta !== "Cabinet") {
+      await this.$store.dispatch(
+        "pages/fetchPageByUrl",
+        to.path === "/" ? "index" : to.path
+      );
+    }
+    next();
+  },
 };
 </script>
 
