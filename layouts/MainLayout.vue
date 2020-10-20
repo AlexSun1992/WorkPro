@@ -76,7 +76,10 @@ export default {
       return this.$store.getters["pages/getBreadCrumbs"];
     },
     showBreadcrumbs() {
-      return this.$store.getters["pages/getShowBreadCrumbs"];
+      return (
+        this.$store.getters["pages/getShowBreadCrumbs"] &&
+        this.$route.params.pathMatch
+      );
     },
   },
 };
