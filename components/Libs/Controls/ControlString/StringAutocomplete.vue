@@ -3,8 +3,8 @@
     <b-form-input
       class="form-control"
       autocomplete="off"
-      :type="getType(data.name)"
       v-model="data.value"
+      v-mask="data.mask"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
@@ -39,7 +39,11 @@
 
 <script>
 import _ from "lodash";
+import { applyMask as _mask } from "~/utils/utils";
 export default {
+  directives: {
+    mask: _mask
+  },
   data() {
     return {
       open: false,
@@ -47,6 +51,10 @@ export default {
       suggestions: {},
       debouncedClose: null,
       debouncedChange: null,
+      maskTemplate: {
+        type: String,
+        default: ""
+      }
     };
   },
   props: ["data", "edit"],
@@ -193,7 +201,7 @@ export default {
         return "text";
       }
     },
-  },
+  }
 };
 </script>
 

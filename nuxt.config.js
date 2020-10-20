@@ -37,6 +37,7 @@ module.exports = {
     // '~plugins/devextreme',
     "~/plugins/captcha.js",
     "~/plugins/mask.js",
+    "~/plugins/vueTheMask.js",
     "~/plugins/validate",
     "~/plugins/axios",
     "~/plugins/moment",
