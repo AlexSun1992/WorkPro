@@ -75,7 +75,7 @@ export const actions = {
             commit("setBreadCrumbs", res.data.wpreso.autobreadcrumbs);
             commit(
               "setShowBreadCrumbs",
-              !res.data.wpreso.properties.skip_breadcrumbs
+              res.data.wpreso.properties.skip_breadcrumbs ? false : true
             );
           }
         });
