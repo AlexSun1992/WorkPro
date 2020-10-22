@@ -16,12 +16,17 @@
               :key="item.title"
               :class="item.isActive ? item.class + ' active' : item.class"
             >
-              <nuxt-link :to="item.link ? item.link.url : ''" class="d-none d-md-block">{{
-                item.title
-              }}</nuxt-link>
-              <a v-on:click="openSection(item.title, $event)" href="" class="d-md-none">{{
-                item.title
-              }}</a>
+              <nuxt-link
+                :to="item.link ? item.link.url : ''"
+                class="d-none d-md-block"
+                >{{ item.title }}</nuxt-link
+              >
+              <a
+                v-on:click="openSection(item.title, $event)"
+                href=""
+                class="d-md-none"
+                >{{ item.title }}</a
+              >
               <div
                 v-for="section in item.sections"
                 :key="section.title"
@@ -32,11 +37,16 @@
                 }}</nuxt-link>
                 <div class="priduct_link">
                   <nuxt-link
-                    v-for="link in section.links"
+                    v-for="link in absoluteUrl(section.links)"
                     :key="link.link.title"
                     :to="link.link.url ? link.link.url : ''"
                     >{{ link.link.title }}
                   </nuxt-link>
+                  <a
+                    v-for="link in relativeUrl(section.links)"
+                    :href="link.link.url"
+                    >{{ link.link.title }}</a
+                  >
                 </div>
               </div>
             </div>
@@ -125,6 +135,16 @@ export default {
     },
     mobileMenu() {
       this.$emit("mini-sidebar");
+    },
+    absoluteUrl(items) {
+      return items.filter(
+        (item) => new RegExp("^(?:[a-z]+:)?//", "i").test(item) === true
+      );
+    },
+    relativeUrl(items) {
+      return items.filter(
+        (item) => new RegExp("^(?:[a-z]+:)?//", "i").test(item) === false
+      );
     },
   },
   computed: {
