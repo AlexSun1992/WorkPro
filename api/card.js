@@ -22,9 +22,11 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       axios.defaults.baseURL = "https://mobile2.reso.ru";
     }
     axios({
-      url: `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${
-        req.params.id
-      }${req.params.idRel !== "undefined" ? `?rel=${req.params.idRel}` : ""}`,
+      url: encodeURI(
+        `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${
+          req.params.id
+        }${req.params.idRel !== "undefined" ? `?rel=${req.params.idRel}` : ""}`
+      ),
       method: "GET",
     })
       .then(async (resp) => {

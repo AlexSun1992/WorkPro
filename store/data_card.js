@@ -35,7 +35,9 @@ export const actions = {
     try {
       await this.$axios
         .get(
-          `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
+          encodeURI(
+            `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
+          )
         )
         .then((res) => {
           commit(
