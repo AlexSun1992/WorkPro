@@ -67,6 +67,7 @@ export default {
     async openCard(item) {
       try {
         if (this.isOpenCard) {
+          console.log(this.dataContent.REL);
           $nuxt._router.push(
             `/cabinet/55/0/${this.parentMenu ? this.parentMenu : this.itemId}/${
               item.ID || item[this.propertyId]

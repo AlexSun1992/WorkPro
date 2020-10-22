@@ -1,10 +1,11 @@
+/* eslint-disable */
+
 export const state = () => ({
   form: [],
   copyForm: [],
   cardId: null,
   captions: null,
-  cardCaption: null,
-  isError: null,
+  isError: false,
   errorMessage: null,
   cardCaption: null,
   cardChanged: false,
@@ -33,7 +34,9 @@ export const actions = {
     commit("clearFormData");
     try {
       await this.$axios
-        .get(`/api/card/${params.idModule}/${params.idItem}/${params.idCard}`)
+        .get(
+          `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
+        )
         .then((res) => {
           commit(
             "setForm",
@@ -85,8 +88,8 @@ export const mutations = {
   },
   filterFields(state, data) {
     state.form = state.form.filter((item) => {
-      item.error = null
-      return !item.name.match(/^ID/)
+      item.error = null;
+      return !item.name.match(/^ID/);
     });
   },
   setForm(state, data) {
@@ -141,8 +144,8 @@ export const mutations = {
     }
   },
   setFieldError(state, data) {
-    let [fieldName, fieldValue] = data.split('=')
-    let field = state.form.find(item => item.name === fieldName)
-    field.error = fieldValue
+    let [fieldName, fieldValue] = data.split("=");
+    let field = state.form.find((item) => item.name === fieldName);
+    field.error = fieldValue;
   },
 };

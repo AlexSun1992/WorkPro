@@ -22,13 +22,18 @@ export default {
       required: true,
       default: () => "",
     },
+    relId: {
+      type: String,
+      required: false,
+      default: () => null,
+    },
   },
   methods: {
     openCard() {
       $nuxt._router.push(
         `/cabinet/${this.moduleId}/0/${
           this.parentMenu ? this.parentMenu : this.menuId
-        }/${this.itemId}`
+        }/${this.itemId}${this.relId ? `/${this.relId}` : ""}`
       );
     },
   },
