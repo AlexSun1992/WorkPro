@@ -28,9 +28,13 @@ export const actions = {
         commit("setForm", res.data.metaData.data);
       });
   },
-  async deleteForm({ commit, dispatch }, { moduleId, menuId, itemId }) {
+  async deleteForm({ commit, dispatch }, { moduleId, menuId, itemId, relId }) {
     await this.$axios
-      .delete(`/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}`)
+      .delete(
+        `/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${
+          relId ? `?rel=${relId}` : ""
+        }`
+      )
       .then((res) => {
         dispatch("updateBlock", menuId);
       });

@@ -34,6 +34,11 @@ export default {
       required: true,
       default: () => "",
     },
+    relId: {
+      type: String,
+      required: false,
+      default: () => null,
+    },
   },
   data() {
     return {
@@ -47,6 +52,7 @@ export default {
           moduleId: this.moduleId,
           menuId: this.menuId,
           itemId: this.itemId,
+          relId: this.relId,
         });
       } catch (err) {
         this.$bvToast.toast(err.response.data.MESSAGE, {

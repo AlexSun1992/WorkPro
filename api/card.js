@@ -90,7 +90,7 @@ app.post("/card/actionexec/:rowId/:actionId", (req, res) => {
   }
 });
 
-app.post("/card/:idModule/:idItem/:id", (req, res) => {
+app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     if (req.cookies) {
       axios.defaults.headers.common.Authorization =
@@ -100,7 +100,9 @@ app.post("/card/:idModule/:idItem/:id", (req, res) => {
     }
     const typeReq = req.params.id === 0 ? "post" : "put";
     axios[typeReq](
-      `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.id}`,
+      `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${
+        req.params.id
+      }${req.params.idRel !== "undefined" ? `?rel=${req.params.idRel}` : ""}`,
       formConverter.save(req.body)
     )
       .then((resp) => {

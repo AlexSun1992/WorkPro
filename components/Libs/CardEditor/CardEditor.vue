@@ -10,15 +10,18 @@
     >
     <Form
       v-if="data.length"
-      :class="{'mt-5': !params.settings}"
+      :class="{ 'mt-5': !params.settings }"
       :data="data"
       @update="updateValue($event)"
       @clear="clearRelation($event)"
       @open-card="openCard($event)"
       :edit="edit"
     ></Form>
-    <SkeletonBox v-else class="mt-5" :items="8"></SkeletonBox>
-    <div class="mt-3 row button-container">
+    <SkeletonBox v-else-if="!isError" class="mt-5" :items="8"></SkeletonBox>
+    <div class="error-message" v-else-if="isError">
+      {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
+    </div>
+    <div v-if="!isError" class="mt-3 row button-container">
       <div class="col-12" v-if="edit">
         <b-button
           pill
@@ -127,13 +130,13 @@ export default {
     validateData(data) {
       let valid = true;
       for (let i = 0; i < data.length; i++) {
-        let test = data[i].label
+        let test = data[i].label;
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
         data[i].checked = true;
         if (data[i].required && !value && data[i].type !== "boolean") {
           valid = false;
-          this.$store.commit('data_card/setFormField', data[i])
+          this.$store.commit("data_card/setFormField", data[i]);
         }
       }
       return valid;
@@ -142,29 +145,43 @@ export default {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
       this.$store.commit("data_card/filterFields");
+      console.log(this.$store.getters["data_card/getForm"]);
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
         try {
           let itemId;
           let moduleId;
           let cardId;
+          let relId;
           if (!this.params.page) {
             itemId = this.$route.params.idItem;
             moduleId = this.$route.params.idModule;
             cardId = this.$route.params.idCard;
+            relId = this.$route.params.idReal;
           } else {
             itemId = this.params.page.idItem;
             moduleId = this.params.page.idModule;
             cardId = this.$store.getters["data_card/getCardId"];
+            relId = this.$store.getters["data_card/getCardRelId"];
           }
           await this.$store.dispatch("data_card/saveDataCard", {
             moduleId,
             itemId,
             cardId,
+            relId,
             form: fields,
           });
           if (this.$route.params.idItem == "710") {
             await this.$store.dispatch("updateUser");
+          }
+          if (this.$route.params.idCard === "0") {
+            cardId = this.$store.getters["data_card/getCardId"];
+            relId = this.$store.getters["data_card/getCardRelId"];
+            $nuxt._router.push(
+              `/cabinet/${moduleId}/0/${itemId}/${cardId}${
+                relId ? `/${relId}` : ""
+              }`
+            );
           }
           this.$bvToast.toast("Успешно сохранено", {
             title: "",
@@ -172,8 +189,8 @@ export default {
             solid: true,
           });
         } catch (err) {
-          let errorInfo = err.response.data.INFO
-          this.$store.commit('data_card/setFieldError', errorInfo)
+          let errorInfo = err.response.data.INFO;
+          this.$store.commit("data_card/setFieldError", errorInfo);
           this.$bvToast.toast(err.response.data.MESSAGE, {
             title: "Ошибка",
             variant: "danger",
@@ -197,6 +214,12 @@ export default {
         return this.disabledButtons;
       }
     },
+    errorMessage() {
+      return this.$store.getters["data_card/getErrorMessage"];
+    },
+    isError() {
+      return this.$store.getters["data_card/getError"];
+    },
   },
 };
 </script>
@@ -209,5 +232,8 @@ export default {
   position: absolute;
   right: 220px;
   bottom: 65px;
+}
+.error-message {
+  padding: 15px;
 }
 </style>

@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div v-if="isError">
-      {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
-    </div>
     <div
       v-if="cardCaption"
       class="block-title pt-0 position-relative mt-2 mb-4"
@@ -32,7 +29,7 @@
         :template="settings.cardtemplate"
       ></v-runtime-template>
     </b-modal>
-    <div v-else-if="!isError" class="profile row">
+    <div class="profile row">
       <div
         class="col"
         v-if="editable || (!settings.cardtemplate && !editable && !isError)"
