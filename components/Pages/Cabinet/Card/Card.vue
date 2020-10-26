@@ -1,48 +1,42 @@
 <template>
-  <div class="wrapper">
+  <div>
     <div class="animated fadeIn">
-      <b-row>
-        <b-col lg="12">
-          <b-card header-tag="header" footer-tag="footer">
-            <b-button
-              class="mb-2"
-              v-if="isList"
-              v-on:click="refreshCardList"
-              type="submit"
-              variant="primary"
-              v-b-popover.hover.top="'Обновить список'"
-              ><i class="fa fa-refresh"></i
-            ></b-button>
-            <b-button
-              v-if="(isForm && !isAddCardForEdit) || isWizard"
-              v-on:click="openCardList"
-              type="submit"
-              variant="primary"
-              v-b-popover.hover.top="'Перейти к списку'"
-              ><i class="fa fa-chevron-left"></i
-            ></b-button>
-            <card-form
-              v-if="isForm"
-              :data="formData"
-              :actions="actionsData"
-              @save-form="saveCardForm"
-              @apply-action="applyCardActionForm"
-            />
-            <card-filter
-              v-if="isFilter"
-              :data="formData"
-              @action-clicked="applyCardFilter"
-            />
-            <card-list
-              v-if="isList"
-              :is-action="isEdit"
-              :load="isListLoading"
-              :data="listData"
-              @action-clicked="openCardForm"
-            />
-          </b-card>
-        </b-col>
-      </b-row>
+      <b-button
+        class="mb-2"
+        v-if="isList"
+        v-on:click="refreshCardList"
+        type="submit"
+        variant="primary"
+        v-b-popover.hover.top="'Обновить список'"
+        >Обновить</b-button
+      >
+      <b-button
+        v-if="(isForm && !isAddCardForEdit) || isWizard"
+        v-on:click="openCardList"
+        type="submit"
+        variant="primary"
+        v-b-popover.hover.top="'Перейти к списку'"
+        ><i class="fa fa-chevron-left"></i
+      ></b-button>
+      <card-form
+        v-if="isForm"
+        :data="formData"
+        :actions="actionsData"
+        @save-form="saveCardForm"
+        @apply-action="applyCardActionForm"
+      />
+      <card-filter
+        v-if="isFilter"
+        :data="formData"
+        @action-clicked="applyCardFilter"
+      />
+      <card-list
+        v-if="isList"
+        :is-action="isEdit"
+        :load="isListLoading"
+        :data="listData"
+        @action-clicked="openCardForm"
+      />
     </div>
   </div>
 </template>
@@ -55,8 +49,17 @@ import CardFilter from "./CardFilter";
 export default {
   name: "Card",
   components: { CardList, CardForm, CardFilter },
+  head: {
+    link: [
+      {
+        rel: "stylesheet",
+        href:
+          "https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css",
+      },
+    ],
+  },
   props: {
-          params: {
+    params: {
       type: Object,
       required: true,
       default: () => {},
