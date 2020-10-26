@@ -172,8 +172,11 @@ export default {
             solid: true,
           });
         } catch (err) {
+          console.log(err.response)
           let errorInfo = err.response.data.INFO
-          this.$store.commit('data_card/setFieldError', errorInfo)
+          if (errorInfo) {
+            this.$store.commit('data_card/setFieldError', errorInfo)
+          }
           this.$bvToast.toast(err.response.data.MESSAGE, {
             title: "Ошибка",
             variant: "danger",
