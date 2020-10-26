@@ -50,6 +50,9 @@
 import Question from "./QuizQuestion";
 import CalcResult from "./QuizCalcResult";
 
+const IS_PRODUCTION = false;
+const DISABLE_CACHE = !IS_PRODUCTION;
+
 export default {
   components: { Question, CalcResult },
   props: ["quizId"],
@@ -118,16 +121,19 @@ export default {
         this.quizIdValue = quizIdValue;
       }
     }
+    const cacheDisabled = DISABLE_CACHE
+      ? `&disableCache=true${Math.random()}`
+      : "";
     const [[quizInfo], questions, answers] = await Promise.all([
-      this.$axios(`/free/v2/quiz/info?idQUIZ=${this.quizIdValue}`).then(
-        ({ data }) => data
-      ),
-      this.$axios(`/free/v2/quiz/question?idQUIZ=${this.quizIdValue}`).then(
-        ({ data }) => data
-      ),
-      this.$axios(`/free/v2/quiz/answer?idQUIZ=${this.quizIdValue}`).then(
-        ({ data }) => data
-      ),
+      this.$axios(
+        `/free/v2/quiz/info?idQUIZ=${this.quizIdValue}${cacheDisabled}`
+      ).then(({ data }) => data),
+      this.$axios(
+        `/free/v2/quiz/question?idQUIZ=${this.quizIdValue}${cacheDisabled}`
+      ).then(({ data }) => data),
+      this.$axios(
+        `/free/v2/quiz/answer?idQUIZ=${this.quizIdValue}${cacheDisabled}`
+      ).then(({ data }) => data),
     ]);
     this.questions = questions;
     this.answers = answers;

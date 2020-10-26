@@ -34,9 +34,17 @@
   </div>
 </template>
 <script>
+const IS_PRODUCTION = false;
+const DISABLE_CACHE = !IS_PRODUCTION;
+
 function buildQuery(answers, questions, quizId, zone = "/free/v2") {
+  const disableCache = DISABLE_CACHE ? `true${Math.random()}` : "";
+
   const url = new URL(`${zone}/quiz/result`, window.location.href);
   url.searchParams.append("idQUIZ", quizId);
+  if (disableCache) {
+    url.searchParams.append("disableCache", disableCache);
+  }
   answers.forEach((answer) => {
     const question = questions.find(
       (item) => item.ID === Number(answer.IDCLIENT_QIUZ_ISSUE)
