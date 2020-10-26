@@ -3,7 +3,13 @@ export default function ({ $axios, redirect, store, $router }) {
     if (error?.response?.status == 401) {
       store.commit("resetUser");
       let path = store.$router.currentRoute.path
-      path.includes('cabinet') ? redirect("/login") : redirect("/")
+      if (path.includes('cabinet')) {
+        redirect("/login")
+      } else if (path.includes('login')) {
+        return
+      } else {
+        redirect("/")
+      }
     } else {
       store.commit("setAxiosError", error);
     }
