@@ -45,6 +45,9 @@
         v-if="!isError && settings.cardtemplate"
         :template="settings.cardtemplate"
       ></v-runtime-template>
+      <div v-else>
+        {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
+      </div>
     </div>
   </div>
 </template>
