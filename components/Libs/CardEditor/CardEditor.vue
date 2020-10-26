@@ -190,7 +190,6 @@ export default {
           });
         } catch (err) {
             let errorInfo = err.response.data.INFO
-            this.$store.commit('data_card/setFieldError', errorInfo)
             if (errorInfo) {
               this.$store.commit('data_card/setFieldError', errorInfo)
             }
