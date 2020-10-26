@@ -90,7 +90,7 @@ module.exports = {
     // '/main': 'https://mobiletest.reso.ru',
     "/free": "https://mobile.reso.ru",
     "/am": "https://mobile2.reso.ru",
-    "/main": "https://mobile2.reso.ru",
+    "/main": "https://mobile.reso.ru",
   },
 
   serverMiddleware: [
