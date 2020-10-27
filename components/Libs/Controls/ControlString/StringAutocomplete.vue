@@ -10,6 +10,7 @@
       :state="data.state"
       :placeholder="showPlaceholder(data.name)"
       @keydown.enter="enter"
+      @keydown.tab="enter"
       @keydown.down="down"
       @keydown.up="up"
       @input="getSuggestions(data.name)"
