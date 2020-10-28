@@ -3,6 +3,7 @@
     <b-form-input
       class="form-control"
       autocomplete="off"
+      type="search"
       v-model="data.value"
       v-mask="data.mask"
       :disabled="!edit ? !edit : data.readonly"
