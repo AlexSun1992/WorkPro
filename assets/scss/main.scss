@@ -209,6 +209,9 @@ header {
 .block-container-help .block-button {
   margin-left: calc(64px + 1rem);
 }
+.block-container-help .block-description {
+  display: none;
+}
 
 .block-container-four .block-title {
   font-size: 1.75rem;
@@ -273,6 +276,8 @@ header {
   max-width: 100%;
 }
 
+.block-container-five .block-button,
+.block-container-six .block-button,
 .block-container-four .block-button,
 .block-container-slider .block-button,
 .block-container-big .block-button {
@@ -410,7 +415,7 @@ a.icon-arrow-right:after {
   border-bottom: 2px solid #36ab4d;
   content: "";
   position: absolute;
-  top: 22px;
+  top: 21px;
   right: 0;
   transform: rotate(-135deg);
 }
@@ -879,6 +884,9 @@ a.icon-arrow-right:after {
 
 .breadcrumb {
   padding: 1rem 0;
+  color: #a6a6a6;
+  font-size: 0.875rem;
+  font-weight: 300;
 }
 
 .breadcrumb a {
@@ -892,11 +900,16 @@ li.breadcrumb-item {
   position: relative;
 }
 
-li.breadcrumb-item:not(:first-of-type):after {
-  content: "/";
+li.breadcrumb-item:not(:first-of-type):before {
+  content: "";
   position: absolute;
-  left: -10px;
-  width: 10px;
+  left: -13px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid #a6a6a6;
+  border-right: 1px solid #a6a6a6;
+  transform: rotate(45deg);
+  top: 7px;
 }
 
 .block-container.block-container-center .block-title {
@@ -1674,4 +1687,46 @@ h2,
 h3,
 h4 {
   font-weight: 500;
+}
+
+.block-container-five {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "title img" "description description" "button button";
+  grid-template-rows: minmax(60px, max-content) auto 40px;
+  grid-row-gap: 0.5rem;
+  padding: 28px 40px 40px;
+}
+.block-container-five .block-img {
+  text-align: right;
+}
+.block-container-six {
+  display: grid;
+  grid-template-areas: "title" "description" "button";
+  grid-template-rows: auto auto 40px;
+  grid-row-gap: 0.5rem;
+  padding: 30px 24px;
+}
+.block-container-six .block-title {
+  font-size: 1.5rem;
+  color: #2b9cca;
+  font-weight: 400;
+}
+.block-container-six .block-description {
+  font-size: 0.875rem;
+}
+.block-container-six .block-button a {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+ul.p-0.mx-0 li {
+  margin-left: 17px;
+}
+
+.bg-help-block {
+  background-color: #f5f8f6;
+}
+.bg-help-block .block-container {
+  border-color: transparent;
 }

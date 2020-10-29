@@ -1302,23 +1302,14 @@ footer:not(.modal-footer) {
   padding: 24px 33px;
 }
 
-/deep/
-/*.profile .wrapper*/
-
 .tab-content .tab-pane {
   padding: 0;
 }
-
-/deep/
-/*.profile .wrapper*/
 
 .tab-content {
   background: transparent;
   border: 0;
 }
-
-/deep/
-/*.profile .wrapper*/
 
 .nav-tabs .nav-link {
   border: 0 !important;
@@ -1326,8 +1317,7 @@ footer:not(.modal-footer) {
   position: relative;
 }
 
-/deep/
-/*.profile .wrapper*/
+
 
 .nav-tabs .nav-link.active:after {
   background: #008b4e;
@@ -1338,9 +1328,6 @@ footer:not(.modal-footer) {
   left: 0;
   content: "";
 }
-
-/deep/
-/*.profile .wrapper*/
 
 .nav-tabs {
   border-bottom: 1px solid #e7eef2;
