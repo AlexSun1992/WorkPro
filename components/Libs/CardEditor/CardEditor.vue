@@ -93,6 +93,7 @@ export default {
         const form = this.$store.getters["data_card/getForm"];
         let response = await this.$store.dispatch("data_card/executeAction", {
           actionId: e.ID,
+          relId: this.$route.params.idRel,
           rowId: this.$route.params.idCard,
           itemId: e.NITEM,
           body: form,
@@ -145,7 +146,6 @@ export default {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
       this.$store.commit("data_card/filterFields");
-      console.log(this.$store.getters["data_card/getForm"]);
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
         try {

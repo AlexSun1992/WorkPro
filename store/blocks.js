@@ -66,10 +66,13 @@ export const actions = {
   },
   async executeAction(
     { commit, dispatch, getters },
-    { rowId, itemId, actionId, body }
+    { relId, rowId, itemId, actionId, body }
   ) {
     await this.$axios
-      .post(`/am/main/v2/actionexec/${rowId}/${actionId}`, body || {})
+      .post(
+        `/am/main/v2/actionexec/${rowId}/${actionId}?REL=${relId}`,
+        body || {}
+      )
       .then(async (resp) => {
         if (body) return;
         dispatch("updateBlock", itemId);

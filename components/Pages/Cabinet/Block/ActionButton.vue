@@ -1,5 +1,5 @@
 <template>
-  <b-button v-if="action" @click.prevent="startAction()">
+  <b-button v-if="action" @click.stop="startAction()">
     <slot><div v-text="action.SNAME"></div></slot>
   </b-button>
 </template>
@@ -27,6 +27,11 @@ export default {
       type: Object,
       required: false,
     },
+    relId: {
+      type: String,
+      required: false,
+      default: () => null,
+    },
   },
   methods: {
     async startAction() {
@@ -37,6 +42,7 @@ export default {
           }
         } else {
           await this.$store.dispatch("blocks/executeAction", {
+            relId: this.relId,
             actionId: this.actionId,
             rowId: this.rowId,
             itemId: this.action.NITEM,
