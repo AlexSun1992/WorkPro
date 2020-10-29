@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     openCard() {
+      this.$store.commit("data_card/saveButtonClicked", false);
       $nuxt._router.push(
         `/cabinet/${this.moduleId}/0/${
           this.parentMenu ? this.parentMenu : this.menuId
