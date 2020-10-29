@@ -64,6 +64,9 @@ export const actions = {
     }
   },
   async saveDataCard({ commit }, params) {
+    console.log(
+      `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`
+    );
     await this.$axios
       .post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`,

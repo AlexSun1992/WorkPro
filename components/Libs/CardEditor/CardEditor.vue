@@ -157,7 +157,7 @@ export default {
             itemId = this.$route.params.idItem;
             moduleId = this.$route.params.idModule;
             cardId = this.$route.params.idCard;
-            relId = this.$route.params.idReal;
+            relId = this.$route.params.idRel;
           } else {
             itemId = this.params.page.idItem;
             moduleId = this.params.page.idModule;
@@ -189,16 +189,16 @@ export default {
             solid: true,
           });
         } catch (err) {
-            let errorInfo = err.response.data.INFO
-            if (errorInfo) {
-              this.$store.commit('data_card/setFieldError', errorInfo)
-            }
-            this.$bvToast.toast(err.response.data.MESSAGE, {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
-            });
+          let errorInfo = err.response.data.INFO;
+          if (errorInfo) {
+            this.$store.commit("data_card/setFieldError", errorInfo);
+          }
+          this.$bvToast.toast(err.response.data.MESSAGE, {
+            title: "Ошибка",
+            variant: "danger",
+            noAutoHide: true,
+            solid: true,
+          });
         }
       }
     },
