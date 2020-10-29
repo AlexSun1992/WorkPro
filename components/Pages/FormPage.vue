@@ -49,18 +49,23 @@ export default {
   },
 
   async created() {
-    this.$store.commit("data_card/clearFormData");
-    // Будем ли держать в data_card?
-    const list = await this.$axios.get(
-      `/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`
-    );
-    const params = {
-      idModule: this.params.page.idModule,
-      idItem: this.params.page.idItem,
-      idCard: list.data.items[0].ID,
-    };
-    await this.$store.dispatch("data_card/fetchForm", params);
-    // this.$router.push(`/cabinet/${params.idModule}/0/${params.idItem}/${params.idCard}`)
+    try {
+      this.$store.commit("data_card/clearFormData");
+      // Будем ли держать в data_card?
+      const list = await this.$axios.get(
+        `/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`
+      );
+      const params = {
+        idModule: this.params.page.idModule,
+        idItem: this.params.page.idItem,
+        idCard: list.data.items[0].ID,
+        idRel: list.data.items[0].REL,
+      };
+      await this.$store.dispatch("data_card/fetchForm", params);
+      // this.$router.push(`/cabinet/${params.idModule}/0/${params.idItem}/${params.idCard}`)
+    } catch (e) {
+      console.log(e);
+    }
   },
   methods: {
     closeModal() {
@@ -72,6 +77,12 @@ export default {
       return JSON.parse(
         JSON.stringify(this.$store.getters["data_card/getForm"])
       );
+    },
+    errorMessage() {
+      return this.$store.getters["data_card/getErrorMessage"];
+    },
+    isError() {
+      return this.$store.getters["data_card/getError"];
     },
   },
 };

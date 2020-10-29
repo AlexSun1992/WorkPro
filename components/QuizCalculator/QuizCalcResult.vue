@@ -34,9 +34,17 @@
   </div>
 </template>
 <script>
-function buildQuery(answers, questions, quizId) {
-  const url = new URL("/free/v2/quiz/result", window.location.href);
+const IS_PRODUCTION = false;
+const DISABLE_CACHE = !IS_PRODUCTION;
+
+function buildQuery(answers, questions, quizId, zone = "/free/v2") {
+  const disableCache = DISABLE_CACHE ? `true${Math.random()}` : "";
+
+  const url = new URL(`${zone}/quiz/result`, window.location.href);
   url.searchParams.append("idQUIZ", quizId);
+  if (disableCache) {
+    url.searchParams.append("disableCache", disableCache);
+  }
   answers.forEach((answer) => {
     const question = questions.find(
       (item) => item.ID === Number(answer.IDCLIENT_QIUZ_ISSUE)
@@ -56,11 +64,34 @@ export default {
   },
   created: function () {
     this.isLoading = true;
-    const url = buildQuery(this.answers, this.questions, this.quizId);
-    this.$axios(url).then(({ data }) => {
-      this.premium = data[0].PREMIUM;
-      this.isLoading = false;
-    });
+    const authUrl = buildQuery(
+      this.answers,
+      this.questions,
+      this.quizId,
+      "/main/v2"
+    );
+    this.$axios({
+      url: authUrl,
+      validateStatus: (status) =>
+        (status >= 200 && status < 300) || status === 401,
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          throw new Error("401");
+        }
+        return res;
+      })
+      .catch((err) => {
+        if (/401/.test(err.message)) {
+          const url = buildQuery(this.answers, this.questions, this.quizId);
+          return this.$axios(url);
+        }
+        throw err;
+      })
+      .then(({ data }) => {
+        this.premium = data[0].PREMIUM;
+        this.isLoading = false;
+      });
   },
   computed: {
     premiumRub() {

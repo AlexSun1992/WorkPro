@@ -1,11 +1,5 @@
 <template>
   <div>
-    <div v-if="isError">
-      <b-button v-on:click="$router.go(-1)" type="submit" variant="success"
-        >Назад</b-button
-      >
-      {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
-    </div>
     <div
       v-if="cardCaption"
       class="block-title pt-0 position-relative mt-2 mb-4"
@@ -35,7 +29,7 @@
         :template="settings.cardtemplate"
       ></v-runtime-template>
     </b-modal>
-    <div v-else class="profile row">
+    <div class="profile row">
       <div
         class="col"
         v-if="editable || (!settings.cardtemplate && !editable && !isError)"
@@ -51,6 +45,9 @@
         v-if="!isError && settings.cardtemplate"
         :template="settings.cardtemplate"
       ></v-runtime-template>
+      <div v-else-if="isError">
+        {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
+      </div>
     </div>
   </div>
 </template>
@@ -81,6 +78,7 @@ export default {
   },
   destroyed() {
     this.$store.commit("data_card/cardChanged", false);
+    this.$store.commit("data_card/setError", false);
   },
   methods: {
     // isFieldExists,

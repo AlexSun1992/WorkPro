@@ -1,7 +1,12 @@
 <template>
   <b-form-row>
     <b-tabs v-if="captions" content-class="mt-4">
-      <b-tab :title="tab" v-for="(tab, index) in captions" :key="index">
+      <b-tab
+        :title="tab"
+        v-for="(tab, index) in captions"
+        :key="index"
+        :title-link-class="{'error': highlightTab(index)}"
+      >
         <div class="row">
           <Control
             v-for="(item, i) in items(index)"
@@ -51,6 +56,10 @@ export default {
       required: false,
       default: () => 1,
     },
+    invalidFields: {
+      type: Array | null,
+      required: false
+    }
   },
   methods: {
     items(index) {
@@ -64,6 +73,11 @@ export default {
         });
       }
     },
+    highlightTab(i) {
+      let invalidFields = this.$store.getters['data_card/getForm'].filter(item => item.state == false )
+      let invalidField = invalidFields.find(item => item.page == i)
+      if (invalidField) return true
+    }
   },
   computed: {
     captions: function () {
@@ -72,3 +86,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.error {
+  color: red !important;
+}
+</style>

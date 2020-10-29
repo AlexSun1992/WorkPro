@@ -12,7 +12,6 @@
       :busy="isBusy"
       @row-clicked="selectItem"
       @row-dblclicked="showItem"
-      responsive
       striped
       hover
       :items="items"

@@ -3,6 +3,7 @@
     <b-form-input
       class="form-control"
       autocomplete="off"
+      type="search"
       v-model="data.value"
       v-mask="data.mask"
       :disabled="!edit ? !edit : data.readonly"
@@ -10,6 +11,7 @@
       :state="data.state"
       :placeholder="showPlaceholder(data.name)"
       @keydown.enter="enter"
+      @keydown.tab="enter"
       @keydown.down="down"
       @keydown.up="up"
       @input="getSuggestions(data.name)"

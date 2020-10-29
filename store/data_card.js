@@ -1,10 +1,12 @@
+/* eslint-disable */
+
 export const state = () => ({
   form: [],
   copyForm: [],
   cardId: null,
+  cardRelId: null,
   captions: null,
-  cardCaption: null,
-  isError: null,
+  isError: false,
   errorMessage: null,
   cardCaption: null,
   cardChanged: false,
@@ -19,6 +21,7 @@ export const getters = {
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
   getCardId: (state) => state.cardId,
+  getCardRelId: (state) => state.cardRelId,
   getCaptions: (state) => state.captions,
   getDataFieldByName: (state) => (name) => {
     return state.form.find((b) => b.name === name);
@@ -30,10 +33,15 @@ export const getters = {
 export const actions = {
   async fetchForm({ commit, getters }, params) {
     commit("setCardId", params.idCard);
+    commit("setCardRelId", params.idRel);
     commit("clearFormData");
     try {
       await this.$axios
-        .get(`/api/card/${params.idModule}/${params.idItem}/${params.idCard}`)
+        .get(
+          encodeURI(
+            `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
+          )
+        )
         .then((res) => {
           commit(
             "setForm",
@@ -49,24 +57,33 @@ export const actions = {
           commit("setCardCaption", res.data.metaData.cardCaption);
         });
     } catch (error) {
-      commit("setError", true);
-      commit("setErrorMessage", error.response.data);
+      if (error.response) {
+        commit("setError", true);
+        commit("setErrorMessage", error.response.data);
+      }
     }
   },
   async saveDataCard({ commit }, params) {
+    console.log(
+      `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`
+    );
     await this.$axios
       .post(
-        `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}`,
+        `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`,
         params.form
       )
       .then(async (resp) => {
         commit("setCardId", resp.data.ID);
+        commit("setCardRelId", resp.data.REL);
       });
   },
-  async executeAction({ dispatch }, { rowId, itemId, actionId, body }) {
+  async executeAction({ dispatch }, { relId, rowId, itemId, actionId, body }) {
     try {
       await this.$axios
-        .post(`/api/card/actionexec/${rowId}/${actionId}`, body || {})
+        .post(
+          `/api/card/actionexec/${rowId}/${actionId}?REL=${relId}`,
+          body || {}
+        )
         .then((resp) => {
           return resp;
         });
@@ -85,8 +102,8 @@ export const mutations = {
   },
   filterFields(state, data) {
     state.form = state.form.filter((item) => {
-      item.error = null
-      return !item.name.match(/^ID/)
+      item.error = null;
+      return !item.name.match(/^ID/);
     });
   },
   setForm(state, data) {
@@ -126,6 +143,9 @@ export const mutations = {
   setCardId(state, data) {
     state.cardId = data;
   },
+  setCardRelId(state, data) {
+    state.cardRelId = data;
+  },
   setCardCaption(state, data) {
     state.cardCaption = data;
   },
@@ -141,8 +161,12 @@ export const mutations = {
     }
   },
   setFieldError(state, data) {
-    let [fieldName, fieldValue] = data.split('=')
-    let field = state.form.find(item => item.name === fieldName)
-    field.error = fieldValue
+    try {
+      let [fieldName, fieldValue] = data.split("=");
+      let field = state.form.find((item) => item.name === fieldName);
+      field.error = fieldValue;
+    } catch (error) {
+      console.log(error);
+    }
   },
 };

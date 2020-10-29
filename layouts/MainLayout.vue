@@ -70,6 +70,7 @@ export default {
         url = "index";
       }
       if (from.meta === "Main") {
+        this.mobileMenu = false;
         this.$store.dispatch("pages/fetchPageByUrl", url);
       }
     },
