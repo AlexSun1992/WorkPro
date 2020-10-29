@@ -17,6 +17,8 @@ import ActionButton from "../Block/ActionButton";
 import FormPage from "~/components/Pages/FormPage";
 import OpenCardButton from "../Block/OpenCardButton";
 import VRuntimeTemplate from "v-runtime-template";
+import DeleteCardButton from "../Block/DeleteCardButton"
+
 export default {
   name: "Wizard",
   components: {
@@ -30,6 +32,7 @@ export default {
     OpenCardButton,
     WizardCard,
     FormPage,
+    DeleteCardButton
   },
   props: {
     params: {
