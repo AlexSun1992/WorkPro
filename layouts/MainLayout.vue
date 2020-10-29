@@ -89,6 +89,9 @@ export default {
 .main_page {
   @import "~/assets/scss/main.scss";
 }
+.main_page {
+  background: #fff;
+}
 @media (max-width: 767px) {
   .menu-open header:after {
     content: "";
