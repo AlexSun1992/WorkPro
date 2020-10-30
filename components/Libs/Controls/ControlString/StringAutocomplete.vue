@@ -80,7 +80,11 @@ export default {
         this.$store.commit("data_card/filterFields");
       } else {
         if (this.suggestions.data && this.suggestions.data.length) {
-          value = this.suggestions.data[this.index];
+          if (this.index >= 0) {
+            value = this.suggestions.data[this.index];
+          } else {
+            value = this.data.value
+          }
           this.$emit("update", { fieldId: this.data.fieldId, value });
         }
       }
@@ -117,7 +121,7 @@ export default {
       });
       const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
       this.open = true;
-      this.current = 0;
+      this.current = -1;
       let suggestionType;
       const params = {
         query: this.data.value,
