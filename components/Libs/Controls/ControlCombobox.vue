@@ -76,10 +76,10 @@ export default {
 
 .required > legend:after {
   content: "*";
-  color: red;
+  color: #f86c6b;
 }
 
 .error-outline {
-  border: 1px solid red;
+  border: 1px solid #f86c6b;
 }
 </style>
