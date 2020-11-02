@@ -475,12 +475,15 @@ header {
   width: 38px;
   height: 42px;
   position: fixed;
-  left: 263px;
+  left: calc(100% - (100% - 246px));
   top: 92%;
   background: #82b896;
   border-radius: 12px;
   border: 0;
-  margin-left: -17px;
+}
+.sidebar-minimizer.position-absolute {
+  left: 246px;
+  transform: translateX(0);
 }
 
 .sidebar-minimizer:after,
@@ -1369,6 +1372,12 @@ footer:not(.modal-footer) {
   .f-l-i {
     flex: 0 0 140px;
     max-width: 140px;
+  }
+}
+@media (min-width: 1440px) {
+  .sidebar-minimizer {
+    transform: translateX(-474px);
+    left: 50%;
   }
 }
 
