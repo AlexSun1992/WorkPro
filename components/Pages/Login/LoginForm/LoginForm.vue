@@ -90,13 +90,11 @@ export default {
     async login(context) {
       try {
         this.authInProcess = true;
-        let cookies;
-        if (document) {
-          cookies = document.cookie.split("; ")
-        }
-        let cookie = decodeURIComponent(cookies.find((item) => item.includes('url')))
-        let lastUrl = cookie.split("=")[1]
+        // this.captchaToken = await this.$getCaptcha();
         await context.$auth.loginWith("local", {
+          // headers: {
+          //   RECAPTCHA: context.captchaToken
+          // },
           data: {
             username: context.$v.user.username.$model,
             password: context.$v.user.password.$model,
@@ -104,7 +102,13 @@ export default {
           },
         });
         this.authInProcess = false;
-        this.$router.push(lastUrl);
+        const cookie = this.getCookie("url");
+        let lastURL;
+        if (cookie) {
+          lastURL = cookie.split("=")[1];
+        }
+        const url = lastURL || "/cabinet/55/0/701";
+        this.$router.push(url);
       } catch (e) {
         if (context.$auth.error?.response.status === 401) {
           context.errorMessage = context.$auth.error.response.data.MESSAGE;
