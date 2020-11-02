@@ -25,6 +25,7 @@
           :questions="questions"
           :answers="chosenAnswers"
           :quizId="quizIdValue"
+          :issueLink="issueLink"
           @reset-quiz="resetQuiz"
         />
         <ul v-else class="select-finish-items">
@@ -69,6 +70,7 @@ export default {
       pageId: 1,
       bgAfterUrl: "",
       bgBeforeUrl: "",
+      issueLink: "",
     };
   },
   methods: {
@@ -146,6 +148,7 @@ export default {
     this.bgBeforeUrl =
       quizInfo.BG_BEFORE_URL &&
       quizInfo.BG_BEFORE_URL.replace(/^[ ]+|[; ]+$/g, "");
+    this.issueLink = quizInfo.SONL_ORDER_2 || "";
   },
 };
 </script>

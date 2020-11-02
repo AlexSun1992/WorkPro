@@ -15,12 +15,10 @@
     <p class="fsz-18 mt-3"></p>
     <div class="finish-price-action conteiner-fluid">
       <ul class="row">
-        <li class="col-4">
-          <a
-            href="https://testclient.reso.ru/WarAgentResoRu/newClientResoRu/auth/login.xhtml?welcome_id=wlc1799"
-          >
+        <li class="col-4" v-if="issueLink">
+          <a :href="issueLink">
             <img src="./img/price-action1.svg" />
-            Оформить ОСАГО
+            Оформить полис
           </a>
         </li>
         <li class="col-4">
@@ -55,7 +53,7 @@ function buildQuery(answers, questions, quizId, zone = "/free/v2") {
 }
 
 export default {
-  props: ["answers", "quizId", "questions"],
+  props: ["answers", "quizId", "questions", "issueLink"],
   data() {
     return {
       isLoading: true,

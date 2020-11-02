@@ -12,7 +12,13 @@
         :options="data.options"
         size="sm"
         class="mt-3"
+        :class="{'error-outline': isValid == false}"
       ></b-form-select>
+      <div class="mt-2">
+        <span class="error" v-if="isValid == false">
+          Обязательно для заполнения
+        </span>
+      </div>
     </b-form-group>
   </div>
 </template>
@@ -44,6 +50,11 @@ export default {
         });
       },
     },
+    isValid() {
+      return this.$store.getters["data_card/getDataFieldByFieldId"](
+        `${this.data.fieldId}`
+      ).state;
+    }
   },
 };
 </script>
@@ -65,6 +76,10 @@ export default {
 
 .required > legend:after {
   content: "*";
-  color: red;
+  color: #f86c6b;
+}
+
+.error-outline {
+  border: 1px solid #f86c6b;
 }
 </style>
