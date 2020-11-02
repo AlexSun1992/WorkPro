@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-group :label="data.label" :label-cols="data.labelCols ? '' : 2">
+    <b-form-group :label="data.label">
       <multi-select
         :options="options"
         :isDisabled="!edit ? !edit : data.readonly"
