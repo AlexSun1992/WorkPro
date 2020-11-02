@@ -158,6 +158,6 @@ export default {
 
 <style>
 .modal-dialog {
-  min-width: 80vw;
+  min-width: 80%;
 }
 </style>
