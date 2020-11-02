@@ -100,6 +100,9 @@ export default {
   display: grid;
   grid-template-rows: 80px auto min-content;
   min-height: 100vh;
+  max-width: 1920px;
+  overflow-x: hidden;
+  margin: 0 auto;
 }
 @media (max-width: 992px) {
   .cabinet {
