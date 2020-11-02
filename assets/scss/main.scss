@@ -75,7 +75,7 @@ footer {
 
 a.color-green,
 .color-green {
-  color: #36ab4d;
+  color: #009639;
 }
 
 header {
@@ -303,7 +303,7 @@ header {
 }
 
 .buy-block {
-  background: #36ab4d;
+  background: #009639;
   border-radius: 10px;
   height: 80px;
   position: relative;
@@ -358,7 +358,7 @@ header {
 
 .btn_trn {
   background: linear-gradient(360deg, #f8fcf9 -10.05%, #ffffff 100%);
-  border: 1px solid #36ab4d;
+  border: 1px solid #009639;
   box-sizing: border-box;
   border-radius: 6px;
   height: 48px;
@@ -366,7 +366,7 @@ header {
   font-size: 14px;
   line-height: 48px;
   text-transform: uppercase;
-  color: #36ab4d;
+  color: #009639;
   cursor: pointer;
   padding: 0 30px;
 }
@@ -387,7 +387,7 @@ header {
   font-weight: 500;
   font-size: 1.25rem;
   text-decoration: underline;
-  color: #36ab4d;
+  color: #009639;
   position: relative;
   padding-right: 16px;
   line-height: 48px;
@@ -397,7 +397,7 @@ header {
 }
 
 .block-container:hover a.pseudo-btn {
-  background: #36ab4d;
+  background: #009639;
   box-shadow: 0px 16px 16px -8px rgba(0, 193, 19, 0.3);
   border-radius: 6px;
   height: 48px;
@@ -411,8 +411,8 @@ header {
 a.icon-arrow-right:after {
   width: 8px;
   height: 8px;
-  border-left: 2px solid #36ab4d;
-  border-bottom: 2px solid #36ab4d;
+  border-left: 2px solid #009639;
+  border-bottom: 2px solid #009639;
   content: "";
   position: absolute;
   top: 21px;
@@ -480,6 +480,21 @@ a.icon-arrow-right:after {
   background: no-repeat 50%;
   background-size: 100% 100%;
 }
+h1 {
+  font-size: 1.375rem;
+}
+h2 {
+  font-size: 1.25rem;
+}
+h3 {
+  font-size: 1.25rem;
+}
+h4 {
+  font-size: 1.125rem;
+}
+h5 {
+  font-size: 1rem;
+}
 
 @media (max-width: 575.98px) {
   .navbar-expand-sm > .container,
@@ -538,6 +553,21 @@ a.icon-arrow-right:after {
 }
 
 @media (min-width: 768px) {
+  h1 {
+    font-size: 1.625rem;
+  }
+  h2 {
+    font-size: 1.375rem;
+  }
+  h3 {
+    font-size: 1.375rem;
+  }
+  h4 {
+    font-size: 1.125rem;
+  }
+  h5 {
+    font-size: 1rem;
+  }
   .navbar-expand-md {
     flex-flow: row nowrap;
     justify-content: flex-start;
@@ -626,6 +656,24 @@ a.icon-arrow-right:after {
 }
 
 @media (min-width: 1200px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    font-size: 1.75rem;
+  }
+  h4 {
+    font-size: 1.5rem;
+  }
+  h5 {
+    font-size: 1.25rem;
+  }
+  h6 {
+    font-size: 1rem;
+  }
   .navbar-expand-xl {
     flex-flow: row nowrap;
     justify-content: flex-start;
@@ -820,8 +868,8 @@ a.icon-arrow-right:after {
 .dropdown.gotolk:after {
   width: 8px;
   height: 8px;
-  border-left: 2px solid #36ab4d;
-  border-bottom: 2px solid #36ab4d;
+  border-left: 2px solid #009639;
+  border-bottom: 2px solid #009639;
   content: "";
   position: absolute;
   top: 7px;
@@ -890,7 +938,7 @@ a.icon-arrow-right:after {
 }
 
 .breadcrumb a {
-  color: #36ab4d;
+  color: #009639;
 }
 
 li.breadcrumb-item {
@@ -970,13 +1018,13 @@ li.breadcrumb-item:not(:first-of-type):before {
 }
 .btn-large {
   background: linear-gradient(360deg, #f8fcf9 -10.05%, #ffffff 100%);
-  border: 1px solid #36ab4d;
+  border: 1px solid #009639;
   box-sizing: border-box;
   border-radius: 6px;
   height: 48px;
   margin: 0;
   padding: 0 16px 0 16px;
-  color: #36ab4d;
+  color: #009639;
   text-decoration: none;
   transition: background 0.3s;
   font-weight: 700;
@@ -996,8 +1044,8 @@ li.breadcrumb-item:not(:first-of-type):before {
 .btn-large.btn-arrow-right:after {
   width: 8px;
   height: 8px;
-  border-left: 2px solid #36ab4d;
-  border-bottom: 2px solid #36ab4d;
+  border-left: 2px solid #009639;
+  border-bottom: 2px solid #009639;
   content: "";
   position: absolute;
   top: 20px;
@@ -1139,7 +1187,7 @@ button {
   font-size: 16px;
   line-height: 20px;
   text-decoration-line: underline;
-  color: #36ab4d;
+  color: #009639;
   transition: 0.3s;
 }
 .slider-list a:hover {
@@ -1269,7 +1317,7 @@ footer .copyright {
 }
 
 footer .copyright a {
-  color: #36ab4d;
+  color: #009639;
 }
 */
 .block-slider {
@@ -1285,27 +1333,8 @@ button,
   outline-color: transparent;
 }
 
-h1 {
-  font-size: 2.5rem;
-}
-h2 {
-  font-size: 2rem;
-}
-h3 {
-  font-size: 1.75rem;
-}
-h4 {
-  font-size: 1.5rem;
-}
-h5 {
-  font-size: 1.25rem;
-}
-h6 {
-  font-size: 1rem;
-}
-
 .block-button .link-btn {
-  background: #36ab4d;
+  background: #009639;
   box-shadow: 0px 16px 16px -8px rgba(0, 193, 19, 0.3);
   border-radius: 6px;
   height: 48px;
@@ -1489,7 +1518,7 @@ h6 {
   .menu-link > div > a:after,
   .menu-link > div > a:before {
     content: "";
-    background-color: #36ab4d;
+    background-color: #009639;
     position: absolute;
     right: 0;
     top: 50%;
@@ -1509,7 +1538,7 @@ h6 {
 
   .menu-link > div.active > a:before {
     content: "";
-    background-color: #36ab4d;
+    background-color: #009639;
     position: absolute;
     right: 0;
     top: 50%;
@@ -1679,14 +1708,16 @@ h6 {
   padding: 0;
 }
 .agile__dot.agile__dot--current button {
-  background: #36ab4d;
+  background: #009639;
 }
 
 h1,
-h2,
+h2 {
+  font-weight: 500;
+}
 h3,
 h4 {
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .block-container-five {

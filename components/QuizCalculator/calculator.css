@@ -294,19 +294,13 @@ a:hover {
 }
 
 h1 {
-  font-weight: bold;
-  font-size: 43px;
   line-height: 60px;
   letter-spacing: -1px;
-  color: #009448;
 }
 
 h2 {
-  font-weight: bold;
-  font-size: 36px;
   line-height: 52px;
   letter-spacing: -1px;
-  color: #009448;
 }
 
 .mt-50 {

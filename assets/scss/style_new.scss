@@ -550,7 +550,7 @@ header {
 }
 
 .wrapper.sidebar-min {
-  grid-template-columns: 2px 1fr;
+  grid-template-columns: 16px 1fr;
 }
 
 .main {
@@ -1317,8 +1317,6 @@ footer:not(.modal-footer) {
   position: relative;
 }
 
-
-
 .nav-tabs .nav-link.active:after {
   background: #008b4e;
   width: 100%;
@@ -1456,12 +1454,7 @@ ul.dropdown-menu li:hover {
 }
 
 .sidebar-min .sidebar_client {
-  width: 0;
-  transition: width 0.3s;
-}
-
-.sidebar-min .sidebar_client {
-  width: 0;
+  width: 16px;
   transition: width 0.3s;
 }
 
@@ -1473,7 +1466,7 @@ ul.dropdown-menu li:hover {
 }
 
 .sidebar-min .sidebar-minimizer {
-  left: 10px;
+  left: 27px;
 }
 
 .sidebar-min .sidebar-minimizer:after,
@@ -1510,7 +1503,13 @@ ul.dropdown-menu li:hover {
 }
 
 .sidebar-min .sidebar-minimizer {
-  width: 30px;
+  width: 18px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.sidebar-min .sidebar_client {
+  background-color: #82b896;
+  border-radius: 0;
 }
 
 .sidebar-minimizer.position-absolute {
@@ -1893,7 +1892,10 @@ button:focus {
   column-gap: 2%;
   row-gap: 10px;
 }
-.columns_lg_2 span.txt-small{display: block;font-size:90%;}
+.columns_lg_2 span.txt-small {
+  display: block;
+  font-size: 90%;
+}
 .form-control:focus {
   box-shadow: none;
 }
@@ -1938,20 +1940,27 @@ button:focus {
 .form-control:focus {
   box-shadow: none;
 }
-.icon-pdf {    padding-right: 30px;
-  position: relative;}
-  .icon-pdf:after {
+.icon-pdf {
+  padding-right: 30px;
+  position: relative;
+}
+.icon-pdf:after {
   content: "";
-    width: 20px;
-    height: 20px;
-    background: url(/img/icon-pdf.svg) 0 0 no-repeat;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);}
-    .control .error {line-height: 1;}
-    .mx-datepicker .is-invalid + .mx-icon-calendar {display: none;}
+  width: 20px;
+  height: 20px;
+  background: url(/img/icon-pdf.svg) 0 0 no-repeat;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.control .error {
+  line-height: 1;
+}
+.mx-datepicker .is-invalid + .mx-icon-calendar {
+  display: none;
+}
 
-    .control .search.selection.dropdown .text.default {
-      white-space: nowrap;
-  }
+.control .search.selection.dropdown .text.default {
+  white-space: nowrap;
+}

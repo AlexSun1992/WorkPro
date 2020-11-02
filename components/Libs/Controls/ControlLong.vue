@@ -3,7 +3,7 @@
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
-    :label-cols="data.labelCols ? '' : 2"
+
   >
     <b-form-input
       v-model="fieldValue"
