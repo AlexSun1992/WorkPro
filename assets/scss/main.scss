@@ -1761,3 +1761,31 @@ ul.p-0.mx-0 li {
 .bg-help-block .block-container {
   border-color: transparent;
 }
+
+.btn-secondary {
+  border: 1px solid #009639;
+  line-height: 48px;
+  border-radius: 6px;
+  display: table;
+  color: #009639;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+.btn-secondary.arrow-right {
+  padding-right: 16px;
+}
+
+.btn-secondary.arrow-right i {
+  position: absolute;
+}
+.btn-secondary.arrow-right i:after {
+  width: 8px;
+  height: 8px;
+  border-left: 2px solid #009639;
+  border-bottom: 2px solid #009639;
+  content: "";
+  position: absolute;
+  top: 19px;
+  right: -13px;
+  transform: rotate(-135deg);
+}
