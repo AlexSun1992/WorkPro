@@ -135,7 +135,7 @@ export const mutations = {
           item.state = null;
         }
         if (item.value && item.value.__ob__) {
-          item.state = item.value.value ? null : false;
+          item.state = item.value.value || item.value.value == 0 ? null : false;
         }
       }
     }
