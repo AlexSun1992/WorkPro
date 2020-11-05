@@ -25,6 +25,7 @@ import ControlEnum from "~/components/Libs/Controls/ControlEnum";
 import ControlButton from "~/components/Libs/Controls/ControlButton";
 import ControlLink from "~/components/Libs/Controls/ControlLink";
 import ControlLabel from "~/components/Libs/Controls/ControlLabel";
+import ControlSplitter from "~/components/Libs/Controls/ControlSplitter";
 import ControlCombobox from "~/components/Libs/Controls/ControlCombobox";
 
 export default {
@@ -43,6 +44,7 @@ export default {
     ControlLink,
     ControlLabel,
     ControlCombobox,
+    ControlSplitter
   },
   props: {
     data: {
