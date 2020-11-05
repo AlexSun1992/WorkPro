@@ -52,7 +52,8 @@ export default {
     };
   },
   created() {
-    if (this.data.value.value) this.options.push(this.data.value);
+    debugger
+    if (this.data.value.value || this.data.value.value == 0) this.options.push(this.data.value);
   },
   methods: {
     initData(param) {
