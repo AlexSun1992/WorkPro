@@ -103,6 +103,8 @@ converter.form = async (data, itemId) => {
       obj.type = "boolean";
     } else if (webFields[i].IDCONTROL == 21) {
       obj.type = "button";
+    } else if (webFields[i].IDCONTROL == 22) {
+      obj.type = "splitter";
     } else {
       obj.type = "string";
     }
