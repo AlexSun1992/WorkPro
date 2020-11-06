@@ -34,7 +34,7 @@ export const actions = {
   async fetchForm({ commit, getters, state }, params) {
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
-    if (state.cardId !== params.idCard) {
+    if (state.cardId !== params.idCard || !params.idRel) {
       commit("clearFormData");
     }
     try {

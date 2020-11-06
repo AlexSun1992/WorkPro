@@ -65,10 +65,8 @@ converter.subcompare = (a, b) => {
 converter.form = async (data, itemId) => {
   let item = data[0]._data.length ? data[0]._data[0] : {};
   let fields = data[0]._struct;
-  let meta = converter.meta(data[0]._meta);
+  let meta = converter.meta(data[0]._meta) || {};
   let arr = converter.setFieldsParams(itemId, item, fields);
-
-  // Собираем объект для JSONWEBFIELDS (сделать единую обработку)
   let webFieldsArr = [];
   let webFields = data[0]._meta["JSONWEBFIELDS"];
   webFields = webFields.sort((a, b) => a["NORDER"] - b["NORDER"]);
@@ -78,7 +76,9 @@ converter.form = async (data, itemId) => {
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
     obj.label = webFields[i].SCAPTION;
-    obj.value = item[webFields[i].SNAME];
+    obj.value = item[webFields[i].SNAME]
+      ? item[webFields[i].SNAME]
+      : meta[webFields[i].SNAME];
     obj.type = webFields[i].STYPE;
 
     if (
