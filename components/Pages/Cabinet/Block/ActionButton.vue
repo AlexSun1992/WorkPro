@@ -43,6 +43,7 @@ export default {
         } else {
           await this.$store.dispatch("blocks/executeAction", {
             relId: this.relId,
+            relActionId: this.action.REL,
             actionId: this.actionId,
             rowId: this.rowId,
             itemId: this.action.NITEM,

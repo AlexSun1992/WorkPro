@@ -66,11 +66,11 @@ export const actions = {
   },
   async executeAction(
     { commit, dispatch, getters },
-    { relId, rowId, itemId, actionId, body }
+    { relId, relActionId, rowId, itemId, actionId, body }
   ) {
     await this.$axios
       .post(
-        `/am/main/v2/actionexec/${rowId}/${actionId}?REL=${relId}`,
+        `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
         body || {}
       )
       .then(async (resp) => {

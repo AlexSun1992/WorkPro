@@ -93,6 +93,7 @@ export default {
         const form = this.$store.getters["data_card/getForm"];
         let response = await this.$store.dispatch("data_card/executeAction", {
           actionId: e.ID,
+          relActionId: e.REL,
           relId: this.$route.params.idRel,
           rowId: this.$route.params.idCard,
           itemId: e.NITEM,
@@ -211,11 +212,11 @@ export default {
     },
     goBack() {
       if (this.$store.state.data_card.saveButtonClicked) {
-        this.$router.go(-2)
+        this.$router.go(-2);
       } else {
-        this.$router.go(-1)
+        this.$router.go(-1);
       }
-    }
+    },
   },
   computed: {
     isButtonDisabled() {

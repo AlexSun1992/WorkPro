@@ -77,11 +77,14 @@ export const actions = {
         commit("setCardRelId", resp.data.REL);
       });
   },
-  async executeAction({ dispatch }, { relId, rowId, itemId, actionId, body }) {
+  async executeAction(
+    { dispatch },
+    { relId, relActionId, rowId, itemId, actionId, body }
+  ) {
     try {
       await this.$axios
         .post(
-          `/api/card/actionexec/${rowId}/${actionId}?REL=${relId}`,
+          `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
           body || {}
         )
         .then((resp) => {

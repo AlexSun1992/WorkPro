@@ -66,29 +66,36 @@ app.get("/file/:idReport/:idCard", (req, res) => {
     res.send(e);
   }
 });
-app.post("/card/actionexec/:rowId/:actionId", (req, res) => {
-  try {
-    if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
+app.post(
+  "/card/actionexec/:rowId/:actionId/:relId?/:relActionId",
+  (req, res) => {
+    try {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+        axios.defaults.baseURL = "https://mobile2.reso.ru";
+      }
+      const body = formConverter.save(req.body);
+      const url = `${consts.ACTIONEXEC}/${req.params.rowId}/${
+        req.params.actionId
+      }${req.params.relId !== "undefined" ? `?rel=${req.params.relId}&` : "?"}${
+        req.params.relActionId !== "undefined"
+          ? `relaction=${req.params.relActionId}`
+          : ""
+      }`;
+      axios
+        .post(url, body)
+        .then((resp) => {
+          res.send(resp.data[0]);
+        })
+        .catch((err) => {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        });
+    } catch (e) {
+      res.send(e);
     }
-    const body = formConverter.save(req.body);
-    axios
-      .post(
-        `${consts.ACTIONEXEC}/${req.params.rowId}/${req.params.actionId}`,
-        body
-      )
-      .then((resp) => {
-        res.send(resp.data[0]);
-      })
-      .catch((err) => {
-        res.status(err.response.data.STATUS).send(err.response.data);
-      });
-  } catch (e) {
-    res.send(e);
   }
-});
+);
 
 app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
