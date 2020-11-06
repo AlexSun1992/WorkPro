@@ -107,6 +107,8 @@ export default {
             noAutoHide: true,
             solid: true,
           });
+        } else {
+          await this.$store.dispatch("data_card/fetchForm", this.$route.params);
         }
         return;
       }

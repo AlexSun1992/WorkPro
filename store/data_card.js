@@ -31,10 +31,12 @@ export const getters = {
   },
 };
 export const actions = {
-  async fetchForm({ commit, getters }, params) {
+  async fetchForm({ commit, getters, state }, params) {
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
-    commit("clearFormData");
+    if (state.cardId !== params.idCard) {
+      commit("clearFormData");
+    }
     try {
       await this.$axios
         .get(
