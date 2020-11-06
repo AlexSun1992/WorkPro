@@ -124,6 +124,7 @@ export const mutations = {
     state.captions = captions;
   },
   setFormField(state, data) {
+    debugger
     const item = state.form.find((d) => d.fieldId === data.fieldId);
     if (item) {
       item.value = data.value;
@@ -157,7 +158,6 @@ export const mutations = {
     const item = state.form.find((d) => d.fieldRelation === data.fieldName);
     if (item) {
       item.value = {};
-      item.state = false;
     }
   },
   setFieldError(state, data) {
