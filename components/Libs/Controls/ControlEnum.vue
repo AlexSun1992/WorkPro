@@ -52,7 +52,7 @@ export default {
     };
   },
   created() {
-    if (this.data.value.value) this.options.push(this.data.value);
+    if (this.data.value.value || this.data.value.value == 0) this.options.push(this.data.value);
   },
   methods: {
     initData(param) {

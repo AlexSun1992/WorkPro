@@ -138,7 +138,7 @@ export const mutations = {
           item.state = null;
         }
         if (item.value && item.value.__ob__) {
-          item.state = item.value.value ? null : false;
+          item.state = item.value.value || item.value.value == 0 ? null : false;
         }
       }
     }
@@ -160,7 +160,6 @@ export const mutations = {
     const item = state.form.find((d) => d.fieldRelation === data.fieldName);
     if (item) {
       item.value = {};
-      item.state = false;
     }
   },
   setFieldError(state, data) {
