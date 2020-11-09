@@ -1,3 +1,4 @@
+/* eslint-disable */
 import formConverter from "../converters/form";
 import consts from "./urls";
 
@@ -32,6 +33,33 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       .then(async (resp) => {
         // res.send(formConverter.form(resp.data, req.params.idItem))
         res.send(await formConverter.form(resp.data, req.params.idItem));
+      })
+      .catch((err) => {
+        res.status(err.response.data.STATUS).send(err.response.data);
+      });
+  } catch (e) {
+    res.send(e);
+  }
+});
+
+app.get("/card/js/:idModule/:idItem", (req, res) => {
+  try {
+    if (req.cookies) {
+      axios.defaults.headers.common.Authorization =
+        req.cookies["auth._token.local"];
+      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    }
+    axios({
+      url: encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`),
+      method: "GET",
+    })
+      .then(async (resp) => {
+        res.set("Content-Type", "text/javascript");
+        res.send(
+          resp.data[0]._data.find(
+            (item) => item.IDITEM === parseInt(req.params.idItem)
+          )?.SONSELECTCALLBACKCOMPLETE || "// empty javascript"
+        );
       })
       .catch((err) => {
         res.status(err.response.data.STATUS).send(err.response.data);

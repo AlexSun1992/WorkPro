@@ -52,6 +52,15 @@ import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 export default {
   name: "CardEditor",
+  head() {
+    return {
+      script: [
+        {
+          src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
+        },
+      ],
+    };
+  },
   components: { Form, ActionButton, SkeletonBox },
   data() {
     return {
@@ -89,6 +98,9 @@ export default {
   methods: {
     async updateValue(e) {
       this.$store.commit("data_card/cardChanged", true);
+      if (typeof showMessage === "function") {
+        showMessage(this.data, e);
+      }
       if (e.SCONST) {
         const form = this.$store.getters["data_card/getForm"];
         let response = await this.$store.dispatch("data_card/executeAction", {
