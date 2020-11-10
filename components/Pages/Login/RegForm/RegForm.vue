@@ -295,7 +295,7 @@ export default {
         !this.$store.getters.getRegistrationError &&
         this.$store.getters.isAuthenticated
       ) {
-        this.$router.push("/cabinet/55/0/701");
+        //this.$router.push("/cabinet/55/0/701");
       }
     },
   },
