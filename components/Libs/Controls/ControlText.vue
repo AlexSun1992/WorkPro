@@ -1,9 +1,5 @@
 <template>
-  <b-form-group
-    :label="label"
-    :label-for="data.name"
-    
-  >
+  <b-form-group :label="label" :label-for="data.name">
     <b-form-textarea
       id="textarea1"
       v-model="fieldValue"
@@ -14,6 +10,7 @@
       :max-rows="6"
     >
     </b-form-textarea>
+    <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <b-form-invalid-feedback>
       Обязательно для заполнения
     </b-form-invalid-feedback>
@@ -52,6 +49,10 @@ export default {
 </script>
 
 <style scoped>
+.help-text {
+  font-size: 12px;
+  margin-top: 10px;
+}
 /* .form-control:disabled, .form-control[readonly]{
     background-color: white;
   } */
