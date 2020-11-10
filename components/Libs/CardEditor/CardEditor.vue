@@ -2,6 +2,7 @@
   <div>
     <b-button
       v-if="!params.settings"
+      v-show="$store.state.data_card.listPath"
       v-on:click="goBack()"
       type="submit"
       variant="success"
@@ -213,11 +214,7 @@ export default {
       );
     },
     goBack() {
-      if (this.$store.state.data_card.saveButtonClicked) {
-        this.$router.go(-2);
-      } else {
-        this.$router.go(-1);
-      }
+      this.$router.push(this.$store.state.data_card.listPath);
     },
   },
   computed: {

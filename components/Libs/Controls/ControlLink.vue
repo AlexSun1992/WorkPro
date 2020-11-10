@@ -2,7 +2,7 @@
   <div>
     <b-button
       :class="data.labelCols + ' link-button'"
-      @click="$emit('open-card', data)"
+      @click="clickLink"
       variant="secondary"
       >{{ data.label }}</b-button
     >
@@ -22,6 +22,12 @@ export default {
       type: Object,
       required: true,
       default: () => {},
+    },
+  },
+  methods: {
+    clickLink() {
+      this.$store.commit("data_card/setListPath", this.$route.fullPath);
+      this.$emit("open-card", this.data);
     },
   },
 };
