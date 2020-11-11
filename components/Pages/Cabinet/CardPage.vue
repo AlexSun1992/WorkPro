@@ -162,7 +162,4 @@ export default {
 .modal-dialog {
   min-width: 80%;
 }
-.heading {
-  padding-left: 0;
-}
 </style>
