@@ -2,8 +2,8 @@
   <div>
     <b-button
       v-if="!params.settings"
-      v-show="$store.state.data_card.listPath"
-      v-on:click="goBack()"
+      v-show="showBtnBack"
+      v-on:click="goBack"
       type="submit"
       variant="success"
       class="btn-back"
@@ -228,6 +228,11 @@ export default {
     },
     isError() {
       return this.$store.getters["data_card/getError"];
+    },
+    showBtnBack() {
+      let path = this.$store.state.data_card.listPath;
+      // Жестко убрали кнопку с полиса осаго (Игорь)
+      return path && !path.includes("/55/0/19");
     },
   },
 };
