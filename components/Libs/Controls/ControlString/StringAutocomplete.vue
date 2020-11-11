@@ -22,7 +22,9 @@
     <b-form-invalid-feedback
       >Обязательно для заполнения</b-form-invalid-feedback
     >
+    <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p class="error">{{ data.error }}</p>
+
     <ul
       v-if="open && suggestions && suggestions.data && suggestions.data.length"
       :class="{ 'dropdown-menu': open }"
@@ -44,7 +46,7 @@ import _ from "lodash";
 import { applyMask as _mask } from "~/utils/utils";
 export default {
   directives: {
-    mask: _mask
+    mask: _mask,
   },
   data() {
     return {
@@ -52,7 +54,7 @@ export default {
       current: 0,
       suggestions: {},
       debouncedClose: null,
-      debouncedChange: null
+      debouncedChange: null,
     };
   },
   props: ["data", "edit"],
@@ -83,7 +85,7 @@ export default {
           if (this.index >= 0) {
             value = this.suggestions.data[this.index];
           } else {
-            value = this.data.value
+            value = this.data.value;
           }
           this.$emit("update", { fieldId: this.data.fieldId, value });
         }
@@ -195,8 +197,8 @@ export default {
       } else if (name === "SNEWEMAIL") {
         return "Введите новый email";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -221,5 +223,9 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-top: 0.25rem;
   font-size: 80%;
   color: #f86c6b;
+}
+.help-text {
+  font-size: 12px;
+  margin-top: 10px;
 }
 </style>

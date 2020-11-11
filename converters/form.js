@@ -135,6 +135,7 @@ converter.form = async (data, itemId) => {
     obj.control = null;
     obj.state = null;
     obj.error = null;
+    obj.helpText = webFields[i].SHELPTEXT;
     obj.isRelation = webFields[i].LDIC === "N" ? false : true;
     obj.fieldRelation = webFields[i].SCONNECTFIELD
       ? "FK" + webFields[i].SCONNECTFIELD

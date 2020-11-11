@@ -17,6 +17,7 @@
         @searchchange="initData"
       >
       </model-list-select>
+      <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
       <div class="mt-2">
         <span class="error" v-if="isValid == false">
           Обязательно для заполнения
@@ -52,7 +53,8 @@ export default {
     };
   },
   created() {
-    if (this.data.value.value || this.data.value.value == 0) this.options.push(this.data.value);
+    if (this.data.value.value || this.data.value.value == 0)
+      this.options.push(this.data.value);
   },
   methods: {
     initData(param) {
@@ -138,5 +140,10 @@ export default {
 .ui.selection.dropdown.error {
   border-color: #f86c6b;
   background: none;
+}
+
+.help-text {
+  font-size: 12px;
+  margin-top: 10px;
 }
 </style>
