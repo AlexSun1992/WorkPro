@@ -16,10 +16,14 @@
     <div class="finish-price-action conteiner-fluid">
       <ul class="row">
         <li class="col-4" v-if="issueLink">
-          <a :href="issueLink">
+          <nuxt-link :to="issueLink">
             <img src="./img/price-action1.svg" />
             Оформить полис
-          </a>
+          </nuxt-link>
+          <!--          <a :href="issueLink">-->
+          <!--            <img src="./img/price-action1.svg" />-->
+          <!--            Оформить полис-->
+          <!--          </a>-->
         </li>
         <li class="col-4">
           <a href="#" @click.prevent="$emit('reset-quiz')">
