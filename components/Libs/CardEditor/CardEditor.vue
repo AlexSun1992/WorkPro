@@ -2,7 +2,8 @@
   <div>
     <b-button
       v-if="!params.settings"
-      v-on:click="goBack()"
+      v-show="showBtnBack"
+      v-on:click="goBack"
       type="submit"
       variant="success"
       class="btn-back"
@@ -213,11 +214,7 @@ export default {
       );
     },
     goBack() {
-      if (this.$store.state.data_card.saveButtonClicked) {
-        this.$router.go(-2);
-      } else {
-        this.$router.go(-1);
-      }
+      this.$router.push(this.$store.state.data_card.listPath);
     },
   },
   computed: {
@@ -231,6 +228,11 @@ export default {
     },
     isError() {
       return this.$store.getters["data_card/getError"];
+    },
+    showBtnBack() {
+      let path = this.$store.state.data_card.listPath;
+      // Жестко убрали кнопку с полиса осаго (Игорь)
+      return path && !path.includes("/55/0/19");
     },
   },
 };
