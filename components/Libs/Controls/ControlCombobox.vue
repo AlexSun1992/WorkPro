@@ -10,8 +10,9 @@
         :options="data.options"
         size="sm"
         class="mt-3"
-        :class="{'error-outline': isValid == false}"
+        :class="{ 'error-outline': isValid == false }"
       ></b-form-select>
+      <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
       <div class="mt-2">
         <span class="error" v-if="isValid == false">
           Обязательно для заполнения
@@ -52,7 +53,7 @@ export default {
       return this.$store.getters["data_card/getDataFieldByFieldId"](
         `${this.data.fieldId}`
       ).state;
-    }
+    },
   },
 };
 </script>

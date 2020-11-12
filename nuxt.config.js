@@ -39,7 +39,7 @@ module.exports = {
     "~/plugins/mask.js",
     "~/plugins/vueTheMask.js",
     "~/plugins/validate",
-    "~/plugins/axios",
+    // "~/plugins/axios",
     "~/plugins/moment",
     "~/plugins/vue-agile",
     { src: "~plugins/vcalendar.js", ssr: false },
@@ -138,6 +138,7 @@ module.exports = {
       home: false,
       user: false,
     },
+    plugins: ["~/plugins/auth.js"]
   },
   server: {
     port: 8000, // default: 3000

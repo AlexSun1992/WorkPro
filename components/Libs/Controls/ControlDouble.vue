@@ -11,6 +11,7 @@
       :type="'number'"
       :state="data.state"
     ></b-form-input>
+    <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <b-form-invalid-feedback>
       Обязательно для заполнения
     </b-form-invalid-feedback>
@@ -49,6 +50,10 @@ export default {
 </script>
 
 <style scoped>
+.help-text {
+  font-size: 12px;
+  margin-top: 10px;
+}
 .required > legend:after {
   content: "*";
   color: red;

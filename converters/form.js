@@ -79,6 +79,23 @@ converter.form = async (data, itemId) => {
     obj.value = item[webFields[i].SNAME]
       ? item[webFields[i].SNAME]
       : meta[webFields[i].SNAME];
+    if (
+      obj.value === "Д" ||
+      obj.value === "д" ||
+      obj.value === "Y" ||
+      obj.value === "y" ||
+      obj.value === "1"
+    ) {
+      obj.value = true;
+    } else if (
+      obj.value === "Н" ||
+      obj.value === "н" ||
+      obj.value === "N" ||
+      obj.value === "n" ||
+      obj.value === "0"
+    ) {
+      obj.value = false;
+    }
     obj.type = webFields[i].STYPE;
 
     if (
@@ -135,6 +152,7 @@ converter.form = async (data, itemId) => {
     obj.control = null;
     obj.state = null;
     obj.error = null;
+    obj.helpText = webFields[i].SHELPTEXT;
     obj.isRelation = webFields[i].LDIC === "N" ? false : true;
     obj.fieldRelation = webFields[i].SCONNECTFIELD
       ? "FK" + webFields[i].SCONNECTFIELD

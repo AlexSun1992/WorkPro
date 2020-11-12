@@ -3,8 +3,10 @@
     <div
       v-if="cardCaption"
       class="block-title pt-0 position-relative mt-2 mb-4"
+      :class="{ 'pl-0': $route.path.includes('/55/0/19') }"
     >
-      <i class="icon-my-profile"></i>{{ cardCaption }}
+      <i class="icon-my-profile" v-if="!$route.path.includes('/55/0/19')"></i
+      >{{ cardCaption }}
     </div>
     <b-modal
       v-if="!isError && settings.isModal"

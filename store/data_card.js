@@ -11,6 +11,7 @@ export const state = () => ({
   cardCaption: null,
   cardChanged: false,
   saveButtonClicked: false,
+  listPath: "",
 });
 export const getters = {
   getForm: (state) => state.form,
@@ -172,5 +173,8 @@ export const mutations = {
     } catch (error) {
       console.log(error);
     }
+  },
+  setListPath(state, data) {
+    state.listPath = data;
   },
 };

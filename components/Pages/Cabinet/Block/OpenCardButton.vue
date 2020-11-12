@@ -31,6 +31,7 @@ export default {
   methods: {
     openCard() {
       this.$store.commit("data_card/saveButtonClicked", false);
+      this.$store.commit("data_card/setListPath", this.$route.fullPath);
       $nuxt._router.push(
         `/cabinet/${this.moduleId}/0/${
           this.parentMenu ? this.parentMenu : this.menuId
