@@ -79,6 +79,11 @@ converter.form = async (data, itemId) => {
     obj.value = item[webFields[i].SNAME]
       ? item[webFields[i].SNAME]
       : meta[webFields[i].SNAME];
+    if (obj.value == "Д") {
+      obj.value = true;
+    } else if (obj.value == "Н") {
+      obj.value = false;
+    }
     obj.type = webFields[i].STYPE;
 
     if (
