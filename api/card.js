@@ -58,7 +58,8 @@ app.get("/card/js/:idModule/:idItem", (req, res) => {
         res.send(
           resp.data[0]._data.find(
             (item) => item.IDITEM === parseInt(req.params.idItem)
-          )?.SONSELECTCALLBACKCOMPLETE || "// empty javascript"
+          )?.SONSELECTCALLBACKCOMPLETE ||
+            "function eventHandler(data, item) {\n" + "  return null\n" + "}"
         );
       })
       .catch((err) => {

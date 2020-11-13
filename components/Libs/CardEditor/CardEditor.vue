@@ -57,6 +57,7 @@ export default {
     return {
       script: [
         {
+          // type: "module",
           src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
         },
       ],
@@ -99,8 +100,14 @@ export default {
   methods: {
     async updateValue(e) {
       this.$store.commit("data_card/cardChanged", true);
-      if (typeof showMessage === "function") {
-        showMessage(this.data, e);
+      if (typeof eventHandler === "function") {
+        this.$store.commit(
+          "data_card/setForm",
+          eventHandler(
+            this.data.map((a) => Object.assign({}, a)),
+            e
+          ) || this.data
+        );
       }
       if (e.SCONST) {
         const form = this.$store.getters["data_card/getForm"];

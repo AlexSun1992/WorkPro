@@ -92,11 +92,11 @@ export default {
     isFieldExists(name, data = undefined) {
       return Boolean(this.getField(name, data));
     },
-    getField(name, data = this.$store.getters["data_card/getForm"].data) {
+    getField(name, data = this.$store.getters["data_card/getForm"].data || []) {
       return data.find((item) => item.name === name);
     },
     getFieldValue(name, data = undefined) {
-      return this.getField(name, data).value;
+      return this.getField(name, data) ? this.getField(name, data).value : "";
     },
     edit() {
       const flatmenu = this.$store.getters["menu/flatmenu"];
