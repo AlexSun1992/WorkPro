@@ -44,7 +44,7 @@
           ></a>
           <a
             href="https://play.google.com/store/apps/details?id=ru.reso.app"
-            class="footer-google float-right"
+            class="footer-google float-md-right"
           ></a>
           <div class="title d-none d-sm-block mt-lg-5 mt-2 mb-lg-3 mb-1">
             Мы в социальных сетях
@@ -369,7 +369,6 @@ footer .copyright a {
   }
   footer .priduct_link a {
     display: inline-block;
-    margin-right: 9px;
     padding: 0;
     text-transform: none;
   }

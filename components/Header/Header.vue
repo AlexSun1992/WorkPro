@@ -8,9 +8,9 @@
       ></button>
       <div class="row header-height align-items-start align-items-md-center">
         <div
-          class="middle_menu col-lg-6 col-md-7 pl-md-4 pr-md-0 offset-lg-2 offset-md-3"
+          class="middle_menu col-lg-6 col-md-7 pl-md-4 pr-md-0 offset-lg-2 offset-md-2"
         >
-          <div class="menu-link d-md-flex">
+          <div class="menu-link d-md-flex ml-md-3 ml-lg-0">
             <div
               v-for="item in menu"
               :key="item.title"
