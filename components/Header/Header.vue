@@ -52,7 +52,7 @@
             </div>
           </div>
         </div>
-        <div class="top_menu">
+        <div class="top_menu mt-4 mt-md-0">
           <div class="float-md-left">
             <span class="icon-left icon-location"
               ><span class="d-md-none d-lg-inline-block">Ваш город:</span></span
@@ -73,6 +73,20 @@
             <a href="" class="icon-left icon-eye">Версия для слабовидящих</a>
           </div>
           <div class="clearfix"></div>
+          <div class="d-md-none top_menu_social">
+            Мы всегда на связи
+            <div class="social">
+              <a
+                href="https://ru-ru.facebook.com/reso.ru"
+                class="footer-fb"
+              ></a>
+              <a href="http://vk.com/reso_garantia " class="footer-vk"></a>
+              <a
+                href="https://www.instagram.com/reso.ru_official/"
+                class="footer-in"
+              ></a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="login-form">
@@ -159,6 +173,24 @@ export default {
 };
 </script>
 <style scoped>
+.top_menu {
+  border-bottom: 1px solid #ececec;
+  padding: 4px 0;
+}
+
+.top_menu > div {
+  line-height: 32px;
+}
+.top_menu {
+  font-weight: 300;
+  line-height: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.top_menu a {
+  color: #6f6f6f;
+}
+
 .logo {
   width: 120px;
   height: 40px;
@@ -301,10 +333,32 @@ header {
   .header-height {
     background: #fff;
     height: calc(100vh - 72px);
-    top: 72px;
+    top: 77px;
     display: block;
     width: 100%;
     z-index: 1;
+  }
+  .top_menu a {
+    color: #242424;
+  }
+  .top_menu > div {
+    line-height: 40px;
+  }
+  .top_menu {
+    border-bottom: 0;
+  }
+
+  .top_menu_social {
+    border-top: 1px solid #ececec;
+    color: #6f6f6f;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+  .menu-link > div:last-child {
+    margin: 0 -16px;
+    padding: 16px 16px;
   }
 }
 </style>

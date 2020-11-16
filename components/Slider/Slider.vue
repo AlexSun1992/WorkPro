@@ -24,20 +24,20 @@ export default {
           {
             breakpoint: 575,
             settings: {
-              slidesToShow: 2
+              slidesToShow: 2,
             },
           },
           {
             breakpoint: 0,
             settings: {
               slidesToShow: 1,
-              dots: true
+              dots: true,
             },
           },
           {
             breakpoint: 992,
             settings: {
-
+              dots: false,
               slidesToShow: 3,
             },
           },
@@ -48,7 +48,7 @@ export default {
             },
           },
         ],
-      }
+      },
     };
   },
   props: {
@@ -85,5 +85,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

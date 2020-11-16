@@ -20,7 +20,6 @@
     <div class="app-body">
       <main class="main">
         <!--<breadcrumb :list="list"/>-->
-        <p class="mb-10 mt-3"></p>
         <div>
           <nuxt />
         </div>
@@ -100,6 +99,8 @@ export default {
     background: #fff;
     position: absolute;
     z-index: 0;
+    top: 77px;
+    background: #f5f8f6;
   }
   .menu-open {
     overflow: hidden;
@@ -114,6 +115,7 @@ export default {
   .menu-open .header-height {
     left: 15px;
     transition: 0.5s;
+    background: #f5f8f6;
   }
 }
 </style>

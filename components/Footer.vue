@@ -149,43 +149,12 @@ footer:before {
   left: 0;
 }
 
-.social {
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.social a {
-  width: 40px;
-  height: 40px;
-}
-
-.footer-fb {
-  background: url(/img/main/fb.svg) 0 0 no-repeat;
-}
-
-.footer-vk {
-  background: url(/img/main/vk.svg) 0 0 no-repeat;
-}
-
-.footer-ok {
-  background: url(/img/main/ok.svg) 0 0 no-repeat;
-}
-
-.footer-in {
-  background: url(/img/main/in.svg) 0 0 no-repeat;
-}
-
-.footer-tw {
-  background: url(/img/main/tw.svg) 0 0 no-repeat;
-}
-
 .footer-apple {
   background: url(/img/main/ios.svg) 0 0 no-repeat;
   width: 132px;
   height: 44px;
   display: inline-block;
+  margin-right: 20px;
 }
 
 .footer-google {
@@ -406,6 +375,21 @@ footer .copyright a {
   }
   .pn-sm-none .product > a {
     display: none;
+  }
+  font-size: 1rem;
+  margin-right: 20px;
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .footer-google,
+  .footer-apple {
+    height: 40px;
+    background-size: contain;
+  }
+  .footer-apple {
+    width: 120px;
+  }
+  .footer-google {
+    width: 134px;
   }
 }
 </style>
