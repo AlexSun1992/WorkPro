@@ -937,10 +937,10 @@ li.breadcrumb-item {
   position: relative;
 }
 
-li.breadcrumb-item:not(:first-of-type):before {
+li.breadcrumb-item:not(:last-of-type):before {
   content: "";
   position: absolute;
-  left: -13px;
+  right: -10px;
   width: 7px;
   height: 7px;
   border-top: 1px solid #a6a6a6;
