@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <b-alert class="m-2" show
+    <b-alert v-if="showMessage" class="m-2 text-center" show
       >Для того, чтобы продолжить, необходимо войти или
       зарегистрироваться.</b-alert
     >
@@ -56,6 +56,11 @@ export default {
         this.$store.dispatch("clearAxiosError");
         this.$router.push("/register");
       }
+    },
+  },
+  computed: {
+    showMessage() {
+      return !!this.$cookiz.get("url");
     },
   },
   async beforeRouteLeave(to, from, next) {
