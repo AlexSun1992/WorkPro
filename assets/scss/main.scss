@@ -1396,6 +1396,9 @@ button,
   }
 }
 @media (max-width: 991px) {
+  .priduct_link a {
+    margin-right: 20px;
+  }
   .dropdown.show.gotolk .dropdown-menu {
     transform: translate3d(-50%, 24px, 0px) !important;
   }
@@ -1598,7 +1601,6 @@ button,
   }
   .priduct_link a {
     display: inline-block;
-    margin-right: 9px;
     padding: 0;
     text-transform: none;
   }
