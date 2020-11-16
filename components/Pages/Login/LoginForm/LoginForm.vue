@@ -101,17 +101,6 @@ export default {
             mode: 2,
           },
         });
-        console.log(this.$cookiz.get("url"));
-        // this.authInProcess = false;
-        // const cookie = this.getCookie("url");
-        // let lastURL;
-        // if (cookie) {
-        //   lastURL = cookie.split("=")[1];
-        // }
-        // lastURL = lastURL || this.$cookiz.get("url");
-        // console.log(this.$cookiz.get("url"));
-        // const url = lastURL || "/cabinet/55/0/701";
-        // this.$router.push(url);
         const url = this.$cookiz.get("url") || "/cabinet/55/0/701";
         this.$router.push(url);
       } catch (e) {
