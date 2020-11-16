@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <b-alert class="m-2" show
+      >Для того, чтобы продолжить, необходимо войти или
+      зарегистрироваться.</b-alert
+    >
     <b-row class="justify-content-center">
       <b-col md="10" lg="6" class="block bg-six block-border-one mb-5">
         <b-tabs ref="tabs" content-class="mt-3">
@@ -30,6 +34,15 @@ import RegForm from "./RegForm/RegForm";
 export default {
   name: "LoginPage",
   layout: "MainLayout",
+  head: {
+    link: [
+      {
+        rel: "stylesheet",
+        href:
+          "https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css",
+      },
+    ],
+  },
   components: {
     RegForm,
     LoginForm,
