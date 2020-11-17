@@ -7,6 +7,7 @@
           v-text="file.SFILENAME"
           @click.prevent="downloadItem(file)"
         />
+        | <span class="size">{{ fileSize(file) }}</span>
       </div>
     </div>
     <div>
@@ -115,6 +116,9 @@ export default {
         this.percentsVisible = false;
       }, 1000);
     },
+    fileSize(file) {
+      return (file.NSIZE / 1024000).toFixed(1) + "мб";
+    },
   },
 };
 </script>
@@ -133,5 +137,10 @@ export default {
 }
 .file {
   max-width: 500px;
+}
+.size {
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
 }
 </style>
