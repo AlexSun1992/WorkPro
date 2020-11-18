@@ -10,6 +10,7 @@ import Login from "~/components/Pages/Login/LoginPage";
 import PasswordRecovery from "~/components/Pages/Login/PasswordRecovery/PasswordRecoveryForm";
 import DynamicRoutesRenderer from "~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer";
 import Preview from "~/components/Pages/PreviewPage/Preview";
+import Table from "~/components/Pages/Table/Table";
 
 Vue.use(Router);
 
@@ -40,6 +41,11 @@ export function createRouter() {
         meta: "Демонстрационная страница",
         path: "/demo-page",
         component: DemoPage,
+      },
+      {
+        meta: "Загрузка файлов",
+        path: "/download",
+        component: Table,
       },
       {
         meta: "Cabinet",
