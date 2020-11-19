@@ -93,6 +93,14 @@ export default {
       default: () => true,
     },
   },
+  created() {
+    if (typeof eventHandler === "function") {
+      this.$store.commit(
+        "data_card/setForm",
+        initHandler(this.data.map((a) => Object.assign({}, a))) || this.data
+      );
+    }
+  },
   destroyed() {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
