@@ -9,6 +9,9 @@
       @keydown.down="down"
       @keydown.up="up"
       @input="change"
+      @mousedown="open = true"
+      autocomplete="off"
+      @blur="debouncedClose()"
     ></b-form-input>
     <ul v-if="open" :class="{ 'dropdown-menu': open }">
       <li
@@ -24,12 +27,14 @@
 </template>
 
 <script>
+import _ from "lodash";
 export default {
   data() {
     return {
       open: false,
       current: 0,
       selection: null,
+      debouncedClose: null,
     };
   },
 
@@ -42,7 +47,13 @@ export default {
       type: String,
     },
   },
+  created() {
+    this.debouncedClose = _.debounce(this.closeList, 300);
+  },
   methods: {
+    closeList() {
+      this.open = false;
+    },
     enter() {
       this.selection = this.matches[this.current];
       this.open = false;
@@ -75,17 +86,14 @@ export default {
   },
   computed: {
     matches() {
-      return this.suggestions.filter((str) => {
-        str = str.toLowerCase();
-        this.selection = this.selection.toLowerCase();
-        return str.indexOf(this.selection) >= 0;
-      });
-    },
-  },
-  watch: {
-    selection: function (val) {
-      if (!this.selection) {
-        this.open = false;
+      if (this.selection) {
+        return this.suggestions.filter((str) => {
+          str = str.toLowerCase();
+          this.selection = this.selection.toLowerCase();
+          return str.indexOf(this.selection) >= 0;
+        });
+      } else {
+        return this.suggestions;
       }
     },
   },
@@ -134,5 +142,3 @@ export default {
   box-shadow: none;
 }
 </style>
-
-
