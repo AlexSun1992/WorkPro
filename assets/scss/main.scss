@@ -7,9 +7,7 @@ html {
 .light-blue {
   color: #2b9cca;
 }
-a.pseudo-btn {
-  font-size: 0.875rem !important;
-}
+
 main,
 header,
 footer {
@@ -1328,7 +1326,7 @@ footer .copyright a {
   transition: background 0.3s, box-shadow 0.3s, color 0.3s, padding 0.3s,
     font-size 0.3s;
   text-transform: uppercase;
-  font-size: 0.875rem;
+  font-size: 0.875rem !important;
   font-weight: 700;
   line-height: 50px;
 }
