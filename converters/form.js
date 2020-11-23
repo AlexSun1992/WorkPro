@@ -83,16 +83,14 @@ converter.form = async (data, itemId) => {
       obj.value === "Д" ||
       obj.value === "д" ||
       obj.value === "Y" ||
-      obj.value === "y" ||
-      obj.value === "1"
+      obj.value === "y" 
     ) {
       obj.value = true;
     } else if (
       obj.value === "Н" ||
       obj.value === "н" ||
       obj.value === "N" ||
-      obj.value === "n" ||
-      obj.value === "0"
+      obj.value === "n"
     ) {
       obj.value = false;
     }

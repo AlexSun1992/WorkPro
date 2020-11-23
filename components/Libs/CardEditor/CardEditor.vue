@@ -11,7 +11,7 @@
     >
     <Form
       v-if="data.length"
-      :class="{ 'mt-5': !params.settings }"
+      :class="{ 'mt-5': !params.settings && showBtnBack }"
       :data="data"
       @update="updateValue($event)"
       @clear="clearRelation($event)"
