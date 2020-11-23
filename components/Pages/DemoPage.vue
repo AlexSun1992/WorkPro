@@ -25,6 +25,16 @@
       </div>
       <div class="row d-block">
         <div class="col-12 p-0">
+          <VueSlickCarousel :arrows="true" :dots="true">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+          </VueSlickCarousel>
+        </div>
+      </div>
+      <div class="row d-block">
+        <div class="col-12 p-0">
           <carousel-wrapper ref="wrapper" :slides="4">
             <div class="block-slider">
               <div class="block-container block-container-slider">
@@ -111,6 +121,19 @@ export default {
   },
   computed: {
     ...mapGetters("slider", ["isButtonLeftDisabled", "isButtonRightDisabled"]),
+  },
+  data() {
+    return {
+      settings: {
+        dots: true,
+        dotsClass: "slick-dots custom-dot-class",
+        edgeFriction: 0.35,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    };
   },
 };
 </script>
