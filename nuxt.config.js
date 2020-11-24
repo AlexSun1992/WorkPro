@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = {
   mode: "universal",
   /*
@@ -46,6 +47,7 @@ module.exports = {
     "~/plugins/quizCalculator.js",
     "~/plugins/carousel.js",
     "~/plugins/selectValue.js",
+    "~/plugins/slick-carousel.js",
   ],
   /*
    ** Nuxt.js dev-modules
@@ -138,7 +140,7 @@ module.exports = {
       home: false,
       user: false,
     },
-    plugins: ["~/plugins/auth.js"]
+    plugins: ["~/plugins/auth.js"],
   },
   server: {
     port: 8000, // default: 3000

@@ -11,7 +11,7 @@
     >
     <Form
       v-if="data.length"
-      :class="{ 'mt-5': !params.settings }"
+      :class="{ 'mt-5': !params.settings && showBtnBack }"
       :data="data"
       @update="updateValue($event)"
       @clear="clearRelation($event)"
@@ -92,6 +92,14 @@ export default {
       required: false,
       default: () => true,
     },
+  },
+  created() {
+    if (typeof initHandler === "function") {
+      this.$store.commit(
+        "data_card/setForm",
+        initHandler(this.data.map((a) => Object.assign({}, a))) || this.data
+      );
+    }
   },
   destroyed() {
     this.$store.commit("data_card/cardChanged", false);
