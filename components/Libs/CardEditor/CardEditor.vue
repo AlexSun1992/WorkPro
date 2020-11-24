@@ -162,11 +162,14 @@ export default {
     validateData(data) {
       let valid = true;
       for (let i = 0; i < data.length; i++) {
-        let test = data[i].label;
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
         data[i].checked = true;
-        if (data[i].required && !value && data[i].type !== "boolean") {
+        if (
+          data[i].required &&
+          (value == null || value == undefined) &&
+          data[i].type !== "boolean"
+        ) {
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
         }
