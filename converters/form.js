@@ -84,7 +84,7 @@ converter.form = async (data, itemId) => {
       obj.value === "д" ||
       obj.value === "Y" ||
       obj.value === "y" ||
-      obj.value === "1"
+      ((obj.type == 'enum' || obj.type == 'boolean') && obj.value === "1")
     ) {
       obj.value = true;
     } else if (
@@ -92,7 +92,7 @@ converter.form = async (data, itemId) => {
       obj.value === "н" ||
       obj.value === "N" ||
       obj.value === "n" ||
-      obj.value === "0"
+      ((obj.type == 'enum' || obj.type == 'boolean') && obj.value === "0")
     ) {
       obj.value = false;
     }

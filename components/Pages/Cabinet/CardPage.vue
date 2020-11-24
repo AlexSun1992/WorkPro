@@ -37,7 +37,8 @@
         v-if="editable || (!settings.cardtemplate && !editable && !isError)"
       >
         <CardEditor
-          class="bg-six block-border-one block p-4 pt-5"
+          class="bg-six block-border-one block p-4"
+          :class="{ 'pt-5': showBtnBack() }"
           :data="getFormData"
           :edit="editable"
           :params="settings"
@@ -116,6 +117,10 @@ export default {
       }).then((response) => {
         saveAs(response.data, fileName);
       });
+    },
+    showBtnBack() {
+      let path = this.$store.state.data_card.listPath;
+      return path && !path.includes("/55/0/19");
     },
   },
   computed: {
