@@ -152,26 +152,14 @@ export default {
         arrows: false,
         responsive: [
           {
-            breakpoint: 992,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 1,
-              infinite: false,
-              dots: true,
-              centerMode: true,
-              centerPadding: "60px",
-              infinite: true,
-            },
-          },
-          {
             breakpoint: 768,
             settings: {
               slidesToShow: 2,
-              slidesToScroll: 1,
               dots: true,
               centerMode: true,
-              centerPadding: "60px",
+              centerPadding: "20px",
               infinite: true,
+              variableWidth: true,
             },
           },
           {
@@ -181,8 +169,9 @@ export default {
               slidesToScroll: 1,
               dots: true,
               centerMode: true,
-              centerPadding: "80px",
+              centerPadding: "20px",
               infinite: true,
+              variableWidth: true,
             },
           },
           {
@@ -192,8 +181,9 @@ export default {
               slidesToScroll: 1,
               dots: true,
               centerMode: true,
-              centerPadding: "60px",
+              centerPadding: "20px",
               infinite: true,
+              variableWidth: true,
             },
           },
         ],
