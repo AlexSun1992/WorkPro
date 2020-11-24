@@ -1,5 +1,33 @@
 <template>
   <div class="slider-bg pt-4 pb-5">
+    <div class="container-lg">
+      <VueSlickCarousel v-bind="settings_one">
+        <div class="text-center">
+          <div class="diagramm-block">
+            <div class="diagramm-img"><span>11</span>млн.</div>
+            <div class="diagramm-discription">Клиентов во всем мире</div>
+          </div>
+        </div>
+        <div class="text-center">
+          <div class="diagramm-block">
+            <div class="diagramm-img"><span>1200</span></div>
+            <div class="diagramm-discription">Офисов в России</div>
+          </div>
+        </div>
+        <div class="text-center">
+          <div class="diagramm-block">
+            <div class="diagramm-img"><span>3</span></div>
+            <div class="diagramm-discription">Место на рынке</div>
+          </div>
+        </div>
+        <div class="text-center">
+          <div class="diagramm-block">
+            <div class="diagramm-img">№<span>1</span></div>
+            <div class="diagramm-discription">Народная марка в России</div>
+          </div>
+        </div>
+      </VueSlickCarousel>
+    </div>
     <div class="container">
       <div class="row slider-list">
         <div class="col-8 block-title">Наши предложения</div>
@@ -21,16 +49,6 @@
               ></div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row d-block">
-        <div class="col-12 p-0">
-          <VueSlickCarousel :arrows="true" :dots="true">
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-          </VueSlickCarousel>
         </div>
       </div>
       <div class="row d-block">
@@ -124,14 +142,61 @@ export default {
   },
   data() {
     return {
-      settings: {
-        dots: true,
-        dotsClass: "slick-dots custom-dot-class",
-        edgeFriction: 0.35,
+      settings_one: {
+        dots: false,
         infinite: false,
         speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        initialSlide: 0,
+        arrows: false,
+        responsive: [
+          {
+            breakpoint: 992,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 1,
+              infinite: false,
+              dots: true,
+              centerMode: true,
+              centerPadding: "60px",
+              infinite: true,
+            },
+          },
+          {
+            breakpoint: 768,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 1,
+              dots: true,
+              centerMode: true,
+              centerPadding: "60px",
+              infinite: true,
+            },
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              dots: true,
+              centerMode: true,
+              centerPadding: "80px",
+              infinite: true,
+            },
+          },
+          {
+            breakpoint: 370,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              dots: true,
+              centerMode: true,
+              centerPadding: "60px",
+              infinite: true,
+            },
+          },
+        ],
       },
     };
   },
