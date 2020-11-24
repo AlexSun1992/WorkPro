@@ -16,6 +16,10 @@ html {
 ::before {
   box-sizing: inherit;
 }
+.container-sm,
+.container-lg,
+.container-md,
+.container-xl,
 .container {
   width: 100%;
   padding-right: 15px;
@@ -23,22 +27,33 @@ html {
   margin-right: auto;
   margin-left: auto;
 }
+
 @media (min-width: 576px) {
+  .container-sm,
   .container {
     max-width: 540px;
   }
 }
 @media (min-width: 768px) {
+  .container-sm,
+  .container-md,
   .container {
     max-width: 720px;
   }
 }
 @media (min-width: 992px) {
+  .container-sm,
+  .container-md,
+  .container-lg,
   .container {
     max-width: 960px;
   }
 }
 @media (min-width: 1200px) {
+  .container-sm,
+  .container-lg,
+  .container-md,
+  .container-xl,
   .container {
     max-width: 1140px;
   }
