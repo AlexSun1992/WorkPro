@@ -1976,4 +1976,8 @@ button:focus {
 
 .custom-checkbox {
   display: flex;
+  margin-top: 2rem;
+}
+.custom-checkbox input {
+  margin-right: 10px;
 }
