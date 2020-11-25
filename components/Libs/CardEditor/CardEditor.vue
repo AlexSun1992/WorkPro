@@ -22,7 +22,7 @@
     <div class="error-message" v-else-if="isError">
       {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
     </div>
-    <div v-if="!isError" class="mt-3 row button-container">
+    <!-- <div v-if="!isError" class="mt-3 row button-container">
       <div class="col-12" v-if="edit">
         <b-button
           pill
@@ -43,7 +43,7 @@
           >Отменить</b-button
         >
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -222,17 +222,23 @@ export default {
             variant: "success",
             solid: true,
           });
+          this.$emit("error", null);
         } catch (err) {
+          if (this.$route.path.includes("55/0/19")) {
+            this.$emit("error", err.response.data.INFO);
+          }
           let errorInfo = err.response.data.INFO;
           if (errorInfo) {
             this.$store.commit("data_card/setFieldError", errorInfo);
           }
-          this.$bvToast.toast(err.response.data.MESSAGE, {
-            title: "Ошибка",
-            variant: "danger",
-            noAutoHide: true,
-            solid: true,
-          });
+          if (!this.$route.path.includes("55/0/19")) {
+            this.$bvToast.toast(err.response.data.MESSAGE, {
+              title: "Ошибка",
+              variant: "danger",
+              noAutoHide: true,
+              solid: true,
+            });
+          }
         }
       }
     },

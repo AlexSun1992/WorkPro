@@ -171,7 +171,7 @@ export const mutations = {
       let field = state.form.find((item) => item.name === fieldName);
       field.error = fieldValue;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },
   setListPath(state, data) {
