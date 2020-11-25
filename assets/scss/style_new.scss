@@ -1932,6 +1932,8 @@ button:focus {
   background-color: #fff;
   margin-top: -20px;
   padding-top: 5px;
+  position: absolute;
+  z-index: 1;
 }
 .autocomplete .dropdown-menu li {
   padding: 5px 10px;
