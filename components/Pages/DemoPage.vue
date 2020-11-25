@@ -1,7 +1,54 @@
 <template>
   <div class="slider-bg pt-4 pb-5">
     <div class="container-lg">
-      <VueSlickCarousel v-bind="settings_one">
+      <VueSlickCarousel
+        v-bind="{
+          dots: false,
+          infinite: false,
+          speed: 500,
+          slidesToShow: 4,
+          slidesToScroll: 4,
+          initialSlide: 0,
+          arrows: false,
+          responsive: [
+            {
+              breakpoint: 768,
+              settings: {
+                slidesToShow: 2,
+                dots: true,
+                centerMode: true,
+                centerPadding: '20px',
+                infinite: true,
+                variableWidth: true,
+              },
+            },
+            {
+              breakpoint: 480,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                dots: true,
+                centerMode: true,
+                centerPadding: '20px',
+                infinite: true,
+                variableWidth: true,
+              },
+            },
+            {
+              breakpoint: 370,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                dots: true,
+                centerMode: true,
+                centerPadding: '20px',
+                infinite: true,
+                variableWidth: true,
+              },
+            },
+          ],
+        }"
+      >
         <div class="text-center">
           <div class="diagramm-block">
             <div class="diagramm-img"><span>11</span>млн.</div>
