@@ -164,7 +164,7 @@ header {
   display: grid;
   grid-template-columns: auto 60px;
   grid-template-areas: "title img" "description description" "button button";
-  grid-template-rows: minmax(60px, max-content) auto 1rem;
+  grid-template-rows: minmax(60px, max-content) minmax(60px, max-content) 1rem;
   grid-row-gap: 1rem;
   background-color: #fff;
 }
@@ -1534,6 +1534,17 @@ ul.p-0.mx-0 li {
 }
 
 @media (max-width: 1200px) {
+  .diagramm-img {
+    width: 133px;
+    height: 138px;
+    background-size: cover;
+    line-height: 138px;
+    font-size: 1.2875rem;
+    margin: 0 auto;
+  }
+  .diagramm-img span {
+    font-size: 2.5rem;
+  }
   .middle_menu a {
     font-size: 1.125rem;
   }
@@ -1548,6 +1559,9 @@ ul.p-0.mx-0 li {
   }
 }
 @media (max-width: 991px) {
+  .block-container-slider {
+    grid-template-rows: minmax(60px, max-content) minmax(120px, max-content) 1rem;
+  }
   .priduct_link a {
     margin-right: 20px;
   }
@@ -1773,6 +1787,16 @@ ul.p-0.mx-0 li {
     display: block;
   }
 
+  .block-container .block-title {
+    font-size: 1.25rem;
+    text-align: center;
+    padding: 0;
+  }
+  .block-container .block-description {
+    text-align: center;
+    padding: 0;
+    margin-bottom: 0;
+  }
   .block-container-four .block-title,
   .block-title,
   .block-container-big .block-title {
@@ -1787,17 +1811,12 @@ ul.p-0.mx-0 li {
   .block-container-slider .block-title {
     font-size: 1rem;
     line-height: 1.25rem;
+    text-align: left;
   }
-  .block-container .block-title {
-    font-size: 1.25rem;
-    text-align: center;
-    padding: 0;
+  .block-container-slider .block-description {
+    text-align: left;
   }
-  .block-container .block-description {
-    text-align: center;
-    padding: 0;
-    margin-bottom: 0;
-  }
+
   .block-container {
     grid-template-rows: auto;
     grid-template-areas: "title" "description" "img" "button";
@@ -1825,7 +1844,7 @@ ul.p-0.mx-0 li {
     display: grid;
     grid-template-columns: auto 60px;
     grid-template-areas: "title img" "description description" "button button";
-    grid-template-rows: minmax(60px, max-content) auto 1rem;
+    grid-template-rows: minmax(60px, max-content) minmax(100px, max-content) 1rem;
     grid-row-gap: 1rem;
     background-color: #fff;
     padding: 24px 16px 10px;
@@ -1961,6 +1980,11 @@ ul.p-0.mx-0 li {
   .btn-center a {
     float: none !important;
   }
+  .slick-slide:not(.slick-active) .diagramm-img,
+  .slick-slide:not(.slick-active) .diagramm-img span,
+  .slick-slide:not(.slick-active) .diagramm-discription {
+    color: transparent !important;
+  }
 }
 @media (max-width: 540px) {
   .main_page .buy-block .dropdown-menu.show {
@@ -1974,4 +1998,21 @@ ul.p-0.mx-0 li {
 .btn-w100 a.icon-arrow-right:after {
   right: auto !important;
   margin-left: 6px;
+}
+.slick-dots li button:before {
+  display: none;
+}
+.slick-dots li button {
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+  background: #dee5e0;
+  box-sizing: border-box;
+  padding: 0;
+}
+.slick-dots li.slick-active button {
+  background: #36ab4d;
+}
+.slick-dots {
+  margin-top: 5px;
 }

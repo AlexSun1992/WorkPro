@@ -53,7 +53,7 @@
 .block {
   box-sizing: border-box;
   border-radius: 20px;
-  overflow: hidden;
+
   position: relative;
 }
 
@@ -732,7 +732,6 @@ footer:not(.modal-footer) {
 .block {
   box-sizing: border-box;
   border-radius: 20px;
-  overflow: hidden;
   position: relative;
 }
 
@@ -971,6 +970,7 @@ footer:not(.modal-footer) {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
   z-index: 1;
   position: relative;
+  border-radius: 0 0 20px 20px;
 }
 
 .block-footer.row {
