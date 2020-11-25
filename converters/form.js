@@ -76,9 +76,12 @@ converter.form = async (data, itemId) => {
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
     obj.label = webFields[i].SCAPTION;
-    obj.value = item[webFields[i].SNAME]
-      ? item[webFields[i].SNAME]
-      : meta[webFields[i].SNAME];
+    if (item[webFields[i].SNAME] || item[webFields[i].SNAME] == 0) {
+        obj.value = item[webFields[i].SNAME]
+    }
+    if (meta[webFields[i].SNAME] || meta[webFields[i].SNAME] == 0) {
+      obj.value = meta[webFields[i].SNAME]
+  }
     if (
       obj.value === "Д" ||
       obj.value === "д" ||
@@ -166,10 +169,11 @@ converter.form = async (data, itemId) => {
     values.forEach((item, i) => {
       if (item.status == "fulfilled" && item.value.data) {
         let options = selectConverter.select(item.value.data);
-        values[i + 1].value.options = options;
+        // values[i + 1].value.options = options;
       } else if (item.status == "fulfilled" && !item.value.data) {
         webFieldsArr.push(item.value);
       }
+      
     });
   });
 
@@ -276,7 +280,14 @@ converter.save = (data) => {
         name = data[i].name;
       }
       if (data[i].type !== "multi") {
-        res[name] = data[i].value.value ? data[i].value.value : "NULL";
+        if (data[i].value.value) {
+          res[name] = data[i].value.value
+        } else if (data[i].value.value == 0) {
+            res[name] = 0
+        } else {
+            res[name] = "NULL";
+        }
+        // res[name] = data[i].value.value ? data[i].value.value : "NULL";
       } else {
         res[name] = "NULL";
         let arr = [];
