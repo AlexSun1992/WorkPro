@@ -1,6 +1,5 @@
 <template>
   <b-form-checkbox
-    class="my-3"
     v-model="fieldValue"
     :disabled="!edit ? !edit : data.readonly"
     >{{ data.label }}</b-form-checkbox
