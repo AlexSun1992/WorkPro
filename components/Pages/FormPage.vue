@@ -14,6 +14,7 @@
       <div class="profile row">
         <div class="col">
           <card-editor
+            ref="cardEditor"
             class="bg-six block-border-one block p-4"
             @error="$emit('error')"
             :data="dataForm"
@@ -27,6 +28,28 @@
         ></v-runtime-template>
       </div>
     </component>
+    <div v-if="!isError" class="mt-3 row button-container">
+      <div class="col-12" v-if="params.settings.edit">
+        <b-button
+          pill
+          v-on:click="saveDataCard"
+          type="button"
+          variant="success"
+          class="col-12 col-md-auto mr-4"
+          :style="isButtonDisabled"
+          >Сохранить</b-button
+        >
+        <b-button
+          pill
+          v-on:click="cancelDataCard"
+          type="button"
+          variant="outline-success"
+          class="col-12 col-md-auto mt-2 mt-md-0"
+          :style="isButtonDisabled"
+          >Отменить</b-button
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -71,8 +94,23 @@ export default {
     closeModal() {
       this.$router.back();
     },
+    saveDataCard() {
+      if (this.$refs.cardEditor) {
+        this.$refs.cardEditor.saveDataCard();
+      }
+    },
+    cancelDataCard() {
+      if (this.$refs.cardEditor) {
+        this.$refs.cardEditor.cancelDataCard();
+      }
+    },
   },
   computed: {
+    isButtonDisabled() {
+      if (this.$refs.CardEditor) {
+        return this.$refs.cardEditor.isButtonDisabled;
+      }
+    },
     dataForm() {
       return JSON.parse(
         JSON.stringify(this.$store.getters["data_card/getForm"])

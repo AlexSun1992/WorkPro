@@ -20,6 +20,8 @@
         <i class="icon-my-profile"></i>{{ settings.text }}
       </div>
       <CardEditor
+        @error="error = $event"
+        ref="cardEditor"
         v-if="editable || (!settings.cardtemplate && !editable)"
         class="bg-six block-border-one block col p-4"
         :data="getFormData"
@@ -37,6 +39,8 @@
         v-if="editable || (!settings.cardtemplate && !editable && !isError)"
       >
         <CardEditor
+          @error="error = $event"
+          ref="cardEditor"
           class="bg-six block-border-one block p-4"
           :class="{ 'pt-5': showBtnBack() }"
           :data="getFormData"
@@ -51,6 +55,32 @@
       <div v-else-if="isError">
         {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
       </div>
+    </div>
+    <div v-if="!isError" class="mt-3 row button-container">
+      <div class="col-12" v-if="edit">
+        <b-button
+          pill
+          v-on:click="saveDataCard"
+          type="button"
+          variant="success"
+          class="col-12 col-md-auto mr-4"
+          :style="isButtonDisabled"
+          >Сохранить</b-button
+        >
+        <b-button
+          pill
+          v-on:click="cancelDataCard"
+          type="button"
+          variant="outline-success"
+          class="col-12 col-md-auto mt-2 mt-md-0"
+          :style="isButtonDisabled"
+          >Отменить</b-button
+        >
+      </div>
+    </div>
+    <div v-if="error" class="mt-3">
+      <p><strong>Сообщения при оформлении полиса:</strong></p>
+      <b-form-textarea v-model="error"> </b-form-textarea>
     </div>
   </div>
 </template>
@@ -71,6 +101,7 @@ export default {
     return {
       editable: false,
       myclass: ["cabinet"],
+      error: null,
     };
   },
   created() {
@@ -122,8 +153,23 @@ export default {
       let path = this.$store.state.data_card.listPath;
       return path && !path.includes("/55/0/19");
     },
+    saveDataCard() {
+      if (this.$refs.cardEditor) {
+        this.$refs.cardEditor.saveDataCard();
+      }
+    },
+    cancelDataCard() {
+      if (this.$refs.cardEditor) {
+        this.$refs.cardEditor.cancelDataCard();
+      }
+    },
   },
   computed: {
+    isButtonDisabled() {
+      if (this.$refs.CardEditor) {
+        return this.$refs.cardEditor.isButtonDisabled;
+      }
+    },
     getFormData() {
       const formData = JSON.parse(
         JSON.stringify(this.$store.getters["data_card/getForm"])
