@@ -129,12 +129,16 @@ export default {
         });
 
         if (response?.response) {
-          this.$bvToast.toast(response.response.data.MESSAGE, {
-            title: "Ошибка",
-            variant: "danger",
-            noAutoHide: true,
-            solid: true,
-          });
+          if (this.$route.path.includes("55/0/19")) {
+            this.$emit("error", response.response.data.MESSAGE);
+          } else {
+            this.$bvToast.toast(response.response.data.MESSAGE, {
+              title: "Ошибка",
+              variant: "danger",
+              noAutoHide: true,
+              solid: true,
+            });
+          }
         } else {
           await this.$store.dispatch("data_card/fetchForm", this.$route.params);
         }

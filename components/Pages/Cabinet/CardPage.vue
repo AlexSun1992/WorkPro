@@ -80,7 +80,7 @@
     </div>
     <div v-if="error" class="mt-3">
       <p><strong>Сообщения при оформлении полиса:</strong></p>
-      <b-form-textarea v-model="error"> </b-form-textarea>
+      <b-form-textarea rows="8" v-model="error"> </b-form-textarea>
     </div>
   </div>
 </template>
