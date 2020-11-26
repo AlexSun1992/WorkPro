@@ -1,6 +1,10 @@
 <template>
   <b-col :xl="col" :lg="data.cols" md="12" sm="12">
-    <div class="control" :style="{ width: data.width ? data.width : '100%' }">
+    <div
+      class="control"
+      :field-id="data.fieldId"
+      :style="{ width: data.width ? data.width : '100%' }"
+    >
       <component
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"

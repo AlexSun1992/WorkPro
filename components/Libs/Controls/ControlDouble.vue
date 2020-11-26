@@ -12,6 +12,7 @@
       :state="data.state"
     ></b-form-input>
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
+    <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
     <b-form-invalid-feedback>
       Обязательно для заполнения
     </b-form-invalid-feedback>
@@ -51,6 +52,11 @@ export default {
 
 <style scoped>
 .help-text {
+  font-size: 12px;
+  margin-top: 10px;
+}
+.danger-text {
+  color: red;
   font-size: 12px;
   margin-top: 10px;
 }
