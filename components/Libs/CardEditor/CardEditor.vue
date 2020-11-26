@@ -167,7 +167,7 @@ export default {
         data[i].checked = true;
         if (
           data[i].required &&
-          (value == null || value == undefined) &&
+          (value == null || value == undefined || value == "") &&
           data[i].type !== "boolean"
         ) {
           valid = false;
