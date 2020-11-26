@@ -1,11 +1,13 @@
 <template>
-  <span @click="onfocus">
+  <span>
     <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
       :label-for="data.name"
     >
       <model-list-select
+        :ref="selectId"
+        :id="selectId"
         :list="options"
         option-value="value"
         option-text="text"
@@ -48,6 +50,7 @@ export default {
   },
   data() {
     return {
+      selectId: `id${this.data.fieldId}`,
       options: [],
       param: "",
     };
@@ -56,8 +59,13 @@ export default {
     if (this.data.value.value || this.data.value.value == 0)
       this.options.push(this.data.value);
   },
+  mounted() {
+    this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
+      this.initData();
+    };
+  },
   methods: {
-    initData(param) {
+    initData() {
       let url = "";
       if (this.relationValue) {
         if (this.relationValue.value) {
