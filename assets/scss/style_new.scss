@@ -1983,3 +1983,9 @@ button:focus {
 .custom-checkbox input {
   margin-right: 10px;
 }
+
+button:disabled,
+.disabled {
+  background: #868e96;
+  pointer-events: none;
+}
