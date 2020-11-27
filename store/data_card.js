@@ -169,7 +169,7 @@ export const mutations = {
     try {
       let [fieldName, fieldValue] = data.split("=");
       let field = state.form.find((item) => item.name === fieldName);
-      field.error = fieldValue;
+      field.error = fieldValue || data;
     } catch (error) {
       // console.log(error);
     }

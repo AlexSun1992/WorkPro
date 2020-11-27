@@ -22,28 +22,6 @@
     <div class="error-message" v-else-if="isError">
       {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
     </div>
-    <!-- <div v-if="!isError" class="mt-3 row button-container">
-      <div class="col-12" v-if="edit">
-        <b-button
-          pill
-          v-on:click="saveDataCard"
-          type="button"
-          variant="success"
-          class="col-12 col-md-auto mr-4"
-          :style="isButtonDisabled"
-          >Сохранить</b-button
-        >
-        <b-button
-          pill
-          v-on:click="cancelDataCard"
-          type="button"
-          variant="outline-success"
-          class="col-12 col-md-auto mt-2 mt-md-0"
-          :style="isButtonDisabled"
-          >Отменить</b-button
-        >
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -172,8 +150,10 @@ export default {
         if (
           data[i].required &&
           (value == null || value == undefined || value == "") &&
-          data[i].type !== "boolean"
+          data[i].type !== "boolean" &&
+          value !== 0
         ) {
+          console.log(data[i]);
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
         }
@@ -229,9 +209,14 @@ export default {
           this.$emit("error", null);
         } catch (err) {
           if (this.$route.path.includes("55/0/19")) {
-            this.$emit("error", err.response.data.INFO);
+            this.$emit(
+              "error",
+              err.response.data.INFO || err.response.data.MESSAGE
+            );
           }
-          let errorInfo = err.response.data.INFO;
+          let errorInfo = err.response.data.INFO
+            ? err.response.data.INFO
+            : err.response.data.MESSAGE;
           if (errorInfo) {
             this.$store.commit("data_card/setFieldError", errorInfo);
           }
