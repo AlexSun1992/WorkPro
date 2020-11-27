@@ -57,9 +57,19 @@
       </div>
     </div>
     <div v-if="!isError" class="mt-3 row button-container">
-      <div class="col-12" v-if="settings.edit">
+      <div class="col-12" v-if="edit">
+        <div class="inbuttons" v-for="(item, i) in action" :key="i">
+          <b-button
+            v-if="item.LINBUTTONS"
+            @click="execAction(item)"
+            class="button mr-4"
+            variant="outline-success"
+            >{{ item.SNAME }}
+          </b-button>
+        </div>
         <b-button
           pill
+          :disabled="!$store.getters['data_card/cardChanged']"
           v-on:click="saveDataCard"
           type="button"
           variant="success"
@@ -90,10 +100,11 @@ import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import VRuntimeTemplate from "v-runtime-template";
 import { isFieldExists, getField, getFieldValue } from "~/utils/utils.js";
 import { saveAs } from "file-saver";
+import ControlButton from "~/components/Libs/Controls/ControlButton";
 
 export default {
   name: "CardPage",
-  components: { CardEditor, VRuntimeTemplate },
+  components: { CardEditor, VRuntimeTemplate, ControlButton },
   async fetch({ store, route }) {
     await store.dispatch("data_card/fetchForm", route.params);
   },
@@ -163,6 +174,28 @@ export default {
         this.$refs.cardEditor.cancelDataCard();
       }
     },
+    async execAction(action) {
+      this.error = null;
+      let response = await this.$store.dispatch("data_card/executeAction", {
+        actionId: action.ID,
+        relActionId: action.REL,
+        relId: this.$route.params.idRel,
+        rowId: this.$route.params.idCard,
+        itemId: action.NITEM,
+      });
+      if (response?.response) {
+        if (this.$route.path.includes("55/0/19")) {
+          this.error = response.response.data.MESSAGE;
+        } else {
+          this.$bvToast.toast(response.response.data.MESSAGE, {
+            title: "Ошибка",
+            variant: "danger",
+            noAutoHide: true,
+            solid: true,
+          });
+        }
+      }
+    },
   },
   computed: {
     isButtonDisabled() {
@@ -190,6 +223,13 @@ export default {
     isError() {
       return this.$store.getters["data_card/getError"];
     },
+    action: {
+      get: function () {
+        return this.$store.getters["menu/getMenuById"](
+          this.$route.params.idItem
+        ).ACTIONSCUR;
+      },
+    },
   },
   beforeRouteLeave(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
@@ -212,5 +252,8 @@ export default {
 <style>
 .modal-dialog {
   min-width: 80%;
+}
+.inbuttons {
+  display: inline-block;
 }
 </style>
