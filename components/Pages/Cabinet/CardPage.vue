@@ -33,6 +33,41 @@
         :template="settings.cardtemplate"
       ></v-runtime-template>
     </b-modal>
+    <div v-if="!isError" class="mt-3 mb-3 row button-container">
+      <div class="col-12" v-if="settings.edit">
+        <div class="inbuttons" v-for="(item, i) in action" :key="i">
+          <b-button
+            v-if="item.LINBUTTONS"
+            @click="execAction(item)"
+            class="button mr-4"
+            variant="outline-success"
+            >{{ item.SNAME }}
+          </b-button>
+        </div>
+        <b-button
+          pill
+          v-on:click="saveDataCard"
+          type="button"
+          variant="success"
+          class="col-12 col-md-auto mr-4"
+          :style="isButtonDisabled"
+          >Сохранить</b-button
+        >
+        <b-button
+          pill
+          v-on:click="cancelDataCard"
+          type="button"
+          variant="outline-success"
+          class="col-12 col-md-auto mt-2 mt-md-0"
+          :style="isButtonDisabled"
+          >Отменить</b-button
+        >
+      </div>
+    </div>
+    <div v-if="error" class="mt-3 mb-3">
+      <p><strong>Сообщения при оформлении полиса:</strong></p>
+      <b-form-textarea rows="8" v-model="error"> </b-form-textarea>
+    </div>
     <div class="profile row">
       <div
         class="col"
@@ -55,42 +90,6 @@
       <div v-else-if="isError">
         {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
       </div>
-    </div>
-    <div v-if="!isError" class="mt-3 row button-container">
-      <div class="col-12" v-if="edit">
-        <div class="inbuttons" v-for="(item, i) in action" :key="i">
-          <b-button
-            v-if="item.LINBUTTONS"
-            @click="execAction(item)"
-            class="button mr-4"
-            variant="outline-success"
-            >{{ item.SNAME }}
-          </b-button>
-        </div>
-        <b-button
-          pill
-          :disabled="!$store.getters['data_card/cardChanged']"
-          v-on:click="saveDataCard"
-          type="button"
-          variant="success"
-          class="col-12 col-md-auto mr-4"
-          :style="isButtonDisabled"
-          >Сохранить</b-button
-        >
-        <b-button
-          pill
-          v-on:click="cancelDataCard"
-          type="button"
-          variant="outline-success"
-          class="col-12 col-md-auto mt-2 mt-md-0"
-          :style="isButtonDisabled"
-          >Отменить</b-button
-        >
-      </div>
-    </div>
-    <div v-if="error" class="mt-3">
-      <p><strong>Сообщения при оформлении полиса:</strong></p>
-      <b-form-textarea rows="8" v-model="error"> </b-form-textarea>
     </div>
   </div>
 </template>
