@@ -112,7 +112,6 @@ export default {
       editable: false,
       myclass: ["cabinet"],
       error: null,
-      actions: null,
     };
   },
   created() {
@@ -195,7 +194,6 @@ export default {
           });
         }
       }
-      debugger;
     },
   },
   computed: {
@@ -226,10 +224,9 @@ export default {
     },
     action: {
       get: function () {
-        this.actions = this.$store.getters["menu/getMenuById"](
+        return this.$store.getters["menu/getMenuById"](
           this.$route.params.idItem
         ).ACTIONSCUR;
-        return this.actions;
       },
     },
   },
