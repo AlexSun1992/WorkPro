@@ -69,6 +69,7 @@
         </div>
         <b-button
           pill
+          :disabled="!$store.getters['data_card/cardChanged']"
           v-on:click="saveDataCard"
           type="button"
           variant="success"
