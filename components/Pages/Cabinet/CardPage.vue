@@ -57,7 +57,7 @@
       </div>
     </div>
     <div v-if="!isError" class="mt-3 row button-container">
-      <div class="col-12" v-if="edit">
+      <div class="col-12" v-if="settings.edit">
         <b-button
           pill
           v-on:click="saveDataCard"
