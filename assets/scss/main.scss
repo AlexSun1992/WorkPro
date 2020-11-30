@@ -2013,6 +2013,12 @@ ul.p-0.mx-0 li {
 .slick-dots li.slick-active button {
   background: #36ab4d;
 }
+.slick-dots li {
+  width: 5px;
+  height: 5px;
+  margin: 0 4px;
+}
+
 .slick-dots {
-  margin-top: 5px;
+  bottom: -35px;
 }
