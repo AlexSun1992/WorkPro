@@ -77,17 +77,17 @@ converter.form = async (data, itemId) => {
     let obj = {};
     obj.label = webFields[i].SCAPTION;
     if (item[webFields[i].SNAME] || item[webFields[i].SNAME] == 0) {
-        obj.value = item[webFields[i].SNAME]
+      obj.value = item[webFields[i].SNAME];
     }
     if (meta[webFields[i].SNAME] || meta[webFields[i].SNAME] == 0) {
-      obj.value = meta[webFields[i].SNAME]
-  }
+      obj.value = meta[webFields[i].SNAME];
+    }
     if (
       obj.value === "Д" ||
       obj.value === "д" ||
       obj.value === "Y" ||
       obj.value === "y" ||
-      ((obj.type == 'enum' || obj.type == 'boolean') && obj.value === "1")
+      ((obj.type == "enum" || obj.type == "boolean") && obj.value === "1")
     ) {
       obj.value = true;
     } else if (
@@ -95,7 +95,7 @@ converter.form = async (data, itemId) => {
       obj.value === "н" ||
       obj.value === "N" ||
       obj.value === "n" ||
-      ((obj.type == 'enum' || obj.type == 'boolean') && obj.value === "0")
+      ((obj.type == "enum" || obj.type == "boolean") && obj.value === "0")
     ) {
       obj.value = false;
     }
@@ -173,7 +173,6 @@ converter.form = async (data, itemId) => {
       } else if (item.status == "fulfilled" && !item.value.data) {
         webFieldsArr.push(item.value);
       }
-      
     });
   });
 
@@ -262,7 +261,7 @@ converter.save = (data) => {
     if (data[i].type !== "enum" && data[i].type !== "multi") {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
-          res[data[i].name] = data[i].value ? data[i].value : "NULL";
+          res[data[i].name] = data[i].value !== null ? data[i].value : "NULL";
         } else {
           res[data[i].name] = data[i].value
             ? moment(data[i].value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
@@ -281,11 +280,11 @@ converter.save = (data) => {
       }
       if (data[i].type !== "multi") {
         if (data[i].value.value) {
-          res[name] = data[i].value.value
+          res[name] = data[i].value.value;
         } else if (data[i].value.value == 0) {
-            res[name] = 0
+          res[name] = 0;
         } else {
-            res[name] = "NULL";
+          res[name] = "NULL";
         }
         // res[name] = data[i].value.value ? data[i].value.value : "NULL";
       } else {
