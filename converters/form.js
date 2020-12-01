@@ -87,6 +87,7 @@ converter.form = async (data, itemId) => {
       obj.value === "д" ||
       obj.value === "Y" ||
       obj.value === "y" ||
+      obj.value === true ||
       ((obj.type == "enum" || obj.type == "boolean") && obj.value === "1")
     ) {
       obj.value = true;
@@ -95,6 +96,7 @@ converter.form = async (data, itemId) => {
       obj.value === "н" ||
       obj.value === "N" ||
       obj.value === "n" ||
+      obj.value === false ||
       ((obj.type == "enum" || obj.type == "boolean") && obj.value === "0")
     ) {
       obj.value = false;
@@ -147,16 +149,26 @@ converter.form = async (data, itemId) => {
     obj.labelCols = webFields[i].SCAPTIONPOSITION
       ? webFields[i].SCAPTIONPOSITION
       : "f-l-i col-md-3 col-12";
-    obj.visible = webFields[i].LVISIBLE === "N" ? false : true;
-    obj.required = webFields[i].LREQUIRED === "N" ? false : true;
+    obj.visible =
+      webFields[i].LVISIBLE === "N" || webFields[i].LVISIBLE === false
+        ? false
+        : true;
+    obj.required =
+      webFields[i].LREQUIRED === "N" || webFields[i].LREQUIRED === false
+        ? false
+        : true;
     obj.page = webFields[i].NPAGE;
     obj.mask = webFields[i].SMASK;
-    obj.readonly = webFields[i].LREADONLY === "N" ? false : true;
+    obj.readonly =
+      webFields[i].LREADONLY === "N" || webFields[i].LREADONLY === false
+        ? false
+        : true;
     obj.control = null;
     obj.state = null;
     obj.error = null;
     obj.helpText = webFields[i].SHELPTEXT;
-    obj.isRelation = webFields[i].LDIC === "N" ? false : true;
+    obj.isRelation =
+      webFields[i].LDIC === "N" || webFields[i].LDIC === false ? false : true;
     obj.fieldRelation = webFields[i].SCONNECTFIELD
       ? "FK" + webFields[i].SCONNECTFIELD
       : null;
