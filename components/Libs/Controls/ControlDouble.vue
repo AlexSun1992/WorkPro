@@ -6,6 +6,7 @@
   >
     <b-form-input
       v-model="fieldValue"
+      v-mask="data.mask"
       autocomplete="off"
       :disabled="!edit ? !edit : data.readonly"
       :type="'number'"
@@ -20,8 +21,12 @@
 </template>
 
 <script>
+import { applyMask as _mask } from "~/utils/utils";
 export default {
   name: "ControlDouble",
+  directives: {
+    mask: _mask,
+  },
   props: {
     data: {
       type: Object,

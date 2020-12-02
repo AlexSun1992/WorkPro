@@ -7,6 +7,7 @@
     >
       <date-picker
         v-model="fieldValue"
+        v-mask="data.mask"
         :disabled="!edit ? !edit : data.readonly"
         type="date"
         valueType="DD.MM.YYYY"
@@ -24,10 +25,13 @@
 
 <script>
 import DatePicker from "vue2-datepicker";
-import moment from "moment/moment";
+import { applyMask as _mask } from "~/utils/utils";
 export default {
   name: "ControlTimestamp",
   components: { DatePicker },
+  directives: {
+    mask: _mask,
+  },
   data() {
     return {
       lang: "ru",
