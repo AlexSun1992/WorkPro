@@ -5,7 +5,7 @@
         :title="tab"
         v-for="(tab, index) in captions"
         :key="index"
-        :title-link-class="{'error': highlightTab(index)}"
+        :title-link-class="{ error: highlightTab(index) }"
       >
         <div class="row">
           <Control
@@ -21,11 +21,14 @@
           </Control>
         </div>
       </b-tab>
+      <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
+        <ArrayEditor :id="tab.id" />
+      </b-tab>
     </b-tabs>
     <div v-else class="row">
       <Control
         v-for="(item, i) in items()"
-        :key="i"
+        :key="item.id"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
@@ -39,13 +42,18 @@
 </template>
 <script>
 import Control from "~/components/Libs/Controls/Control";
+import ArrayEditor from "@/components/Libs/ArrayEditor/ArrayEditor";
 export default {
   name: "Form",
-  components: { Control },
+  components: { ArrayEditor, Control },
   props: {
     data: {
       type: Array | null,
       required: true,
+    },
+    tabs: {
+      type: Array,
+      required: false,
     },
     edit: {
       type: Boolean,
@@ -58,8 +66,8 @@ export default {
     },
     invalidFields: {
       type: Array | null,
-      required: false
-    }
+      required: false,
+    },
   },
   methods: {
     items(index) {
@@ -74,10 +82,12 @@ export default {
       }
     },
     highlightTab(i) {
-      let invalidFields = this.$store.getters['data_card/getForm'].filter(item => item.state == false )
-      let invalidField = invalidFields.find(item => item.page == i)
-      if (invalidField) return true
-    }
+      let invalidFields = this.$store.getters["data_card/getForm"].filter(
+        (item) => item.state == false
+      );
+      let invalidField = invalidFields.find((item) => item.page == i);
+      if (invalidField) return true;
+    },
   },
   computed: {
     captions: function () {

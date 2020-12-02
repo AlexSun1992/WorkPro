@@ -43,6 +43,33 @@ app.get("/list/:idModule/:idItem/:filters", (req, res) => {
   }
 });
 
+app.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
+  try {
+    if (req.cookies) {
+      axios.defaults.headers.common.Authorization =
+        req.cookies["auth._token.local"];
+      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    }
+    axios({
+      url: `${consts.ONETOMANYDATA}/${req.params.idItem}/${req.params.id}?rel=${req.params.rel}`,
+      method: "GET",
+    })
+      .then((resp) => {
+        res.send(listConverter.list(resp.data));
+      })
+      .catch((err) => {
+        if (err.response.data.STATUS === 401) {
+          res.sendStatus(err.response.data.STATUS).send(err.response.data);
+        } else {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        }
+      });
+  } catch (e) {
+    res.send(e);
+  }
+});
+
 app.get("/wizardlist/:idModule/:idWizard/:idItem", (req, res) => {
   try {
     if (req.cookies) {
