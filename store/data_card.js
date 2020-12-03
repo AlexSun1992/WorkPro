@@ -3,6 +3,7 @@
 export const state = () => ({
   form: [],
   copyForm: [],
+  oneToManyData: {},
   cardId: null,
   cardRelId: null,
   captions: null,
@@ -24,6 +25,7 @@ export const getters = {
   getCardId: (state) => state.cardId,
   getCardRelId: (state) => state.cardRelId,
   getCaptions: (state) => state.captions,
+  getOneToManyData: (state) => state.oneToManyData,
   getDataFieldByName: (state) => (name) => {
     return state.form.find((b) => b.name === name);
   },
@@ -58,6 +60,24 @@ export const actions = {
             commit("setCaptions", res.data.metaData.captions);
           }
           commit("setCardCaption", res.data.metaData.cardCaption);
+        });
+    } catch (error) {
+      if (error.response) {
+        commit("setError", true);
+        commit("setErrorMessage", error.response.data);
+      }
+    }
+  },
+  async fetchOneToManyData({ commit, getters, state }, params) {
+    try {
+      await this.$axios
+        .get(
+          encodeURI(
+            `/api/onetomanylist/${params.routeParams.idCard}/${params.id}/${params.routeParams.idRel}`
+          )
+        )
+        .then((res) => {
+          commit("setOneToManyData", res.data);
         });
     } catch (error) {
       if (error.response) {
@@ -111,6 +131,9 @@ export const mutations = {
   },
   setForm(state, data) {
     state.form = data;
+  },
+  setOneToManyData(state, data) {
+    state.oneToManyData = data;
   },
   setError(state, data) {
     state.isError = data;

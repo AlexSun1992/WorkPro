@@ -13,6 +13,7 @@
       v-if="data.length"
       :class="{ 'mt-5': !params.settings && showBtnBack }"
       :data="data"
+      :tabs="tabs"
       @update="updateValue($event)"
       @clear="clearRelation($event)"
       @open-card="openCard($event)"
@@ -257,6 +258,9 @@ export default {
       let path = this.$store.state.data_card.listPath;
       // Жестко убрали кнопку с полиса осаго (Игорь)
       return path && !path.includes("/55/0/19");
+    },
+    tabs() {
+      return this.params.tabs;
     },
   },
 };
