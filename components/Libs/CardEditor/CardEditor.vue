@@ -153,7 +153,6 @@ export default {
           data[i].type !== "boolean" &&
           value !== 0
         ) {
-          console.log(data[i]);
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
         }
