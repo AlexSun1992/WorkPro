@@ -33,6 +33,29 @@
         :template="settings.cardtemplate"
       ></v-runtime-template>
     </b-modal>
+    <div class="profile row">
+      <div
+        class="col"
+        v-if="editable || (!settings.cardtemplate && !editable && !isError)"
+      >
+        <CardEditor
+          @error="error = $event"
+          ref="cardEditor"
+          class="bg-six block-border-one block p-4"
+          :class="{ 'pt-5': showBtnBack() }"
+          :data="getFormData"
+          :edit="editable"
+          :params="settings"
+        />
+      </div>
+      <v-runtime-template
+        v-if="!isError && settings.cardtemplate"
+        :template="settings.cardtemplate"
+      ></v-runtime-template>
+      <div v-else-if="isError">
+        {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
+      </div>
+    </div>
     <div v-if="!isError" class="mt-3 mb-3 row button-container">
       <div class="col-12" v-if="settings.edit">
         <div class="inbuttons" v-for="(item, i) in action" :key="i">
@@ -67,29 +90,6 @@
     <div v-if="error" class="mt-3 mb-3">
       <p><strong>Сообщения при оформлении полиса:</strong></p>
       <b-form-textarea rows="8" v-model="error"> </b-form-textarea>
-    </div>
-    <div class="profile row">
-      <div
-        class="col"
-        v-if="editable || (!settings.cardtemplate && !editable && !isError)"
-      >
-        <CardEditor
-          @error="error = $event"
-          ref="cardEditor"
-          class="bg-six block-border-one block p-4"
-          :class="{ 'pt-5': showBtnBack() }"
-          :data="getFormData"
-          :edit="editable"
-          :params="settings"
-        />
-      </div>
-      <v-runtime-template
-        v-if="!isError && settings.cardtemplate"
-        :template="settings.cardtemplate"
-      ></v-runtime-template>
-      <div v-else-if="isError">
-        {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
-      </div>
     </div>
   </div>
 </template>
