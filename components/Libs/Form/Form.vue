@@ -22,7 +22,7 @@
         </div>
       </b-tab>
       <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
-        <ArrayEditor :id="tab.id" />
+        <ArrayEditor v-if="cardId != 0" :id="tab.id" />
       </b-tab>
     </b-tabs>
     <div v-else class="row">
@@ -92,6 +92,9 @@ export default {
   computed: {
     captions: function () {
       return this.$store.getters["data_card/getCaptions"];
+    },
+    cardId: function () {
+      return this.$store.getters["data_card/getCardId"];
     },
   },
 };
