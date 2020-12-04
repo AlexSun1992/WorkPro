@@ -12,6 +12,9 @@ export const getters = {
   getMenuById: (state) => (id) => {
     return state.flatmenu.find((m) => m.IDITEM === parseInt(id));
   },
+  getMenuByName: (state) => (name) => {
+    return state.flatmenu.find((m) => m.SNAME === name);
+  },
   getMenuWithOutIcon: (state) => {
     return state.menu[0].children.filter(
       (m) => m.iconFileName !== undefined && m.iconFileName !== ""

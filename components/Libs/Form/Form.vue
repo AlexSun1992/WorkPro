@@ -22,7 +22,7 @@
         </div>
       </b-tab>
       <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
-        <ArrayEditor v-if="cardId != 0" :id="tab.id" />
+        <TableEditor v-if="cardId != 0" :id="tab.id" />
       </b-tab>
     </b-tabs>
     <div v-else class="row">
@@ -42,10 +42,10 @@
 </template>
 <script>
 import Control from "~/components/Libs/Controls/Control";
-import ArrayEditor from "@/components/Libs/ArrayEditor/ArrayEditor";
+import TableEditor from "@/components/Libs/ArrayEditor/TebleEditor";
 export default {
   name: "Form",
-  components: { ArrayEditor, Control },
+  components: { TableEditor, Control },
   props: {
     data: {
       type: Array | null,
