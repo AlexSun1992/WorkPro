@@ -1,6 +1,7 @@
 export default function ({ app, store, redirect, auth }) {
   app.$axios.onError((error) => {
     if (error.response.status === 401) {
+      app.$cookiz.set("url", app.router.history.pending.fullPath);
       app.$auth.logout();
       return redirect("/login");
     }
