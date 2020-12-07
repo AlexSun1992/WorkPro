@@ -1,7 +1,7 @@
 <template>
   <div>
-    <TableEditorForm :data="oneToManyDataForm" />
     <grid
+      v-if="!isFormEdit"
       :total="oneToManyDataTable.total"
       :fields="oneToManyDataTable.fields"
       :items="oneToManyDataTable.items"
@@ -12,6 +12,10 @@
         >
       </template>
     </grid>
+    <div v-else-if="oneToManyDataForm">
+      <TableEditorForm :data="oneToManyDataForm" />
+      <b-button v-on:click="applyForm()">Применить</b-button>
+    </div>
   </div>
 </template>
 
@@ -20,16 +24,12 @@ import Grid from "~/components/Libs/Table/Grid";
 import TableEditorForm from "@/components/Libs/TableEditor/TableEditorForm";
 export default {
   name: "ArrayEditor",
-  head: {
-    link: [
-      {
-        rel: "stylesheet",
-        href:
-          "https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css",
-      },
-    ],
-  },
   components: { TableEditorForm, Grid },
+  data() {
+    return {
+      isFormEdit: false,
+    };
+  },
   props: {
     id: {
       type: Number,
@@ -65,6 +65,10 @@ export default {
         idCard: record.data.item.ID,
         idRel: record.data.item.REL,
       });
+      this.isFormEdit = true;
+    },
+    applyForm() {
+      this.isFormEdit = false;
     },
   },
 };
