@@ -1,3 +1,4 @@
+/* eslint-disable */
 import breadcrumbs from "~/converters/breadcrumbs";
 export const state = () => ({
   menu: [],
@@ -13,7 +14,7 @@ export const getters = {
     return state.flatmenu.find((m) => m.IDITEM === parseInt(id));
   },
   getMenuByName: (state) => (name) => {
-    return state.flatmenu.find((m) => m.SNAME === name);
+    return state.flatmenu.find((m) => m.SCARDCAPTION === name);
   },
   getMenuWithOutIcon: (state) => {
     return state.menu[0].children.filter(

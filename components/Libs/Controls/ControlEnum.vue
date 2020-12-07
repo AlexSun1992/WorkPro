@@ -60,9 +60,11 @@ export default {
       this.options.push(this.data.value);
   },
   mounted() {
-    this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
-      this.initData();
-    };
+    if (this.$refs[this.selectId]) {
+      this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
+        this.initData();
+      };
+    }
   },
   methods: {
     initData() {
@@ -119,7 +121,7 @@ export default {
     isValid() {
       return this.$store.getters["data_card/getDataFieldByFieldId"](
         `${this.data.fieldId}`
-      ).state;
+      )?.state;
     },
   },
 };

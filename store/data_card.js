@@ -3,7 +3,7 @@
 export const state = () => ({
   form: [],
   copyForm: [],
-  oneToManyData: {},
+  oneToManyData: { table: {}, form: null },
   cardId: null,
   cardRelId: null,
   captions: null,
@@ -25,7 +25,8 @@ export const getters = {
   getCardId: (state) => state.cardId,
   getCardRelId: (state) => state.cardRelId,
   getCaptions: (state) => state.captions,
-  getOneToManyData: (state) => state.oneToManyData,
+  getOneToManyDataTable: (state) => state.oneToManyData.table,
+  getOneToManyDataForm: (state) => state.oneToManyData.form,
   getDataFieldByName: (state) => (name) => {
     return state.form.find((b) => b.name === name);
   },
@@ -68,7 +69,7 @@ export const actions = {
       }
     }
   },
-  async fetchOneToManyData({ commit, getters, state }, params) {
+  async fetchOneToManyDataTable({ commit, getters, state }, params) {
     try {
       await this.$axios
         .get(
@@ -77,7 +78,25 @@ export const actions = {
           )
         )
         .then((res) => {
-          commit("setOneToManyData", res.data);
+          commit("setOneToManyDataTable", res.data);
+        });
+    } catch (error) {
+      if (error.response) {
+        commit("setError", true);
+        commit("setErrorMessage", error.response.data);
+      }
+    }
+  },
+  async fetchOneToManyDataForm({ commit, getters, state }, params) {
+    try {
+      await this.$axios
+        .get(
+          encodeURI(
+            `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
+          )
+        )
+        .then((res) => {
+          commit("setOneToManyDataForm", res.data);
         });
     } catch (error) {
       if (error.response) {
@@ -132,8 +151,11 @@ export const mutations = {
   setForm(state, data) {
     state.form = data;
   },
-  setOneToManyData(state, data) {
-    state.oneToManyData = data;
+  setOneToManyDataTable(state, data) {
+    state.oneToManyData.table = data;
+  },
+  setOneToManyDataForm(state, data) {
+    state.oneToManyData.form = data;
   },
   setError(state, data) {
     state.isError = data;
