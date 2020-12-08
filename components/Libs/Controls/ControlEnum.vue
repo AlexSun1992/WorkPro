@@ -11,7 +11,7 @@
         :list="options"
         option-value="value"
         option-text="text"
-        :isDisabled="!edit ? !edit : data.readonly"
+        :isDisabled="!edit ? !edit : data.readonly || isDisabled"
         :isError="isValid == false"
         v-model="fieldValue"
         placeholder="Выберите из списка"
@@ -67,6 +67,10 @@ export default {
   methods: {
     initData() {
       let url = "";
+      this.options = [];
+      if (this.isDisabled) {
+        return;
+      }
       if (this.relationValue) {
         if (this.relationValue.value) {
           url = `/api/dicwf/${this.data.fieldId}/${this.relationValue.value.value}`;
@@ -77,6 +81,11 @@ export default {
       this.$axios({ url: url, method: "GET" })
         .then((resp) => {
           this.options = resp.data;
+          if (this.options.length === 1) {
+            let value = this.options[0];
+            this.$emit("update", { fieldId: this.data.fieldId, value });
+            this.$emit("clear", { fieldName: this.data.name });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -97,12 +106,18 @@ export default {
   computed: {
     fieldValue: {
       get: function () {
-        return this.data.value;
+        if (this.isDisabled) {
+          return "";
+        }
+        if (this.options.length === 1) {
+          return this.options[0];
+        } else {
+          return this.data.value;
+        }
       },
       set: function (value) {
         this.$emit("update", { fieldId: this.data.fieldId, value });
         this.$emit("clear", { fieldName: this.data.name });
-        // this.$store.commit('data_card/setFormField', this.data)
       },
     },
     relationValue: {
@@ -120,6 +135,26 @@ export default {
       return this.$store.getters["data_card/getDataFieldByFieldId"](
         `${this.data.fieldId}`
       ).state;
+    },
+    isDisabled() {
+      if (this.relationValue) {
+        if (this.relationValue.value) {
+          if (!this.relationValue.value.value) {
+            return true;
+          }
+        }
+      } else {
+        return false;
+      }
+    },
+  },
+  watch: {
+    relationValue: function (val, old) {
+      if (val.value.value) {
+        if (val.value.value !== old.value.value) {
+          this.initData();
+        }
+      }
     },
   },
 };
