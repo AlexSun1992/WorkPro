@@ -76,15 +76,6 @@
           :style="isButtonDisabled"
           >Сохранить</b-button
         >
-        <b-button
-          pill
-          v-on:click="cancelDataCard"
-          type="button"
-          variant="outline-success"
-          class="col-12 col-md-auto mt-2 mt-md-0"
-          :style="isButtonDisabled"
-          >Отменить</b-button
-        >
       </div>
     </div>
     <div v-if="error" class="mt-3 mb-3">
