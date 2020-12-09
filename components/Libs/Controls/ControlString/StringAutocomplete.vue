@@ -5,7 +5,7 @@
       autocomplete="off"
       type="search"
       v-model="data.value"
-      v-mask="data.mask"
+      v-mask="mask"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
@@ -197,6 +197,21 @@ export default {
       } else if (name === "SNEWEMAIL") {
         return "Введите новый email";
       }
+    },
+  },
+  computed: {
+    mask: function () {
+      if (this.data.mask) {
+        if (
+          this.data.mask.charAt(0) === "[" &&
+          this.data.mask.charAt(this.data.mask.length - 1) === "]"
+        ) {
+          return JSON.parse(this.data.mask);
+        } else {
+          return this.data.mask;
+        }
+      }
+      return this.data.mask;
     },
   },
 };
