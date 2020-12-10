@@ -23,7 +23,6 @@
         @error="error = $event"
         ref="cardEditor"
         v-if="editable || (!settings.cardtemplate && !editable)"
-        class="bg-six block-border-one block col p-4"
         :data="getFormData"
         :edit="editable"
         :params="settings"
@@ -41,12 +40,12 @@
         <CardEditor
           @error="error = $event"
           ref="cardEditor"
-          class="bg-six block-border-one block p-4"
           :class="{ 'pt-5': showBtnBack() }"
           :data="getFormData"
           :edit="editable"
           :params="settings"
         />
+        <!--        <CardAccordion />-->
       </div>
       <v-runtime-template
         v-if="!isError && settings.cardtemplate"
@@ -88,13 +87,13 @@
 <script>
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import VRuntimeTemplate from "v-runtime-template";
-import { isFieldExists, getField, getFieldValue } from "~/utils/utils.js";
 import { saveAs } from "file-saver";
 import ControlButton from "~/components/Libs/Controls/ControlButton";
+import CardAccordion from "@/components/Libs/CardAccordion/CardAccordion";
 
 export default {
   name: "CardPage",
-  components: { CardEditor, VRuntimeTemplate, ControlButton },
+  components: { CardAccordion, CardEditor, VRuntimeTemplate, ControlButton },
   async fetch({ store, route }) {
     await store.dispatch("data_card/fetchForm", route.params);
   },

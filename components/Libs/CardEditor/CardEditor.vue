@@ -9,7 +9,17 @@
       class="btn-back"
       >Назад</b-button
     >
-    <Form
+    <!--    <Form-->
+    <!--      v-if="data.length"-->
+    <!--      :class="{ 'mt-5': !params.settings && showBtnBack }"-->
+    <!--      :data="data"-->
+    <!--      :tabs="tabs"-->
+    <!--      @update="updateValue($event)"-->
+    <!--      @clear="clearRelation($event)"-->
+    <!--      @open-card="openCard($event)"-->
+    <!--      :edit="edit"-->
+    <!--    ></Form>-->
+    <FormAccordion
       v-if="data.length"
       :class="{ 'mt-5': !params.settings && showBtnBack }"
       :data="data"
@@ -18,7 +28,7 @@
       @clear="clearRelation($event)"
       @open-card="openCard($event)"
       :edit="edit"
-    ></Form>
+    />
     <SkeletonBox v-else-if="!isError" class="mt-5" :items="8"></SkeletonBox>
     <div class="error-message" v-else-if="isError">
       {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
@@ -30,6 +40,7 @@
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
+import FormAccordion from "@/components/Libs/Form/FormAccordion";
 export default {
   name: "CardEditor",
   head() {
@@ -42,7 +53,7 @@ export default {
       ],
     };
   },
-  components: { Form, ActionButton, SkeletonBox },
+  components: { FormAccordion, Form, ActionButton, SkeletonBox },
   data() {
     return {
       invalidFields: [],
