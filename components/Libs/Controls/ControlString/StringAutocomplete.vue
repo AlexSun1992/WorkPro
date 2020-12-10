@@ -201,17 +201,37 @@ export default {
   },
   computed: {
     mask: function () {
+      let mask = null;
       if (this.data.mask) {
         if (
           this.data.mask.charAt(0) === "[" &&
           this.data.mask.charAt(this.data.mask.length - 1) === "]"
         ) {
-          return JSON.parse(this.data.mask);
+          try {
+            mask = JSON.parse(this.data.mask);
+          } catch (e) {
+            mask = null;
+          }
         } else {
-          return this.data.mask;
+          mask = this.data.mask;
         }
       }
-      return this.data.mask;
+      return mask
+        ? {
+            mask: mask,
+            tokens: {
+              X: { pattern: /[0-9a-zA-Z]/ },
+              F: {
+                pattern: /(?!8)\d/,
+              },
+              S: {
+                pattern: /[abekmhopctyxABEKMHOPCTYX]/,
+                transform: (v) => v.toLocaleUpperCase(),
+              },
+              "#": { pattern: /\d/ },
+            },
+          }
+        : mask;
     },
   },
 };
