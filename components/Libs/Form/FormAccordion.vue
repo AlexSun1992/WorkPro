@@ -5,14 +5,19 @@
         style="border-color: #1eb869"
         class="block-border-one block p-1 mb-1 header"
       >
-        <b-button class="btn" v-b-toggle="'acc_' + index" variant="primary">{{
-          tab
-        }}</b-button>
+        <b-button
+          class="btn"
+          v-bind:class="{ error: highlightTab(index) }"
+          v-b-toggle="'acc_' + index"
+          variant="primary"
+          >{{ tab }}</b-button
+        >
       </div>
       <b-collapse
+        :visible="index == 0"
         accordion="my-accordion"
         :id="'acc_' + index"
-        class="bg-six block-border-one block p-5"
+        class="bg-six block-border-one block p-3"
         role="tabpanel"
       >
         <div class="row">
@@ -95,6 +100,11 @@ export default {
 <style scoped>
 .header {
   background-color: #cbe0d7;
+  cursor: pointer;
+  text-align: center;
+}
+.error {
+  background-color: #f5c6cb;
   cursor: pointer;
   text-align: center;
 }

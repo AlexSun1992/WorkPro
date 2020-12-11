@@ -203,17 +203,17 @@ export default {
     mask: function () {
       let mask = null;
       if (this.data.mask) {
-        if (
-          this.data.mask.charAt(0) === "[" &&
-          this.data.mask.charAt(this.data.mask.length - 1) === "]"
-        ) {
-          try {
+        try {
+          if (
+            this.data.mask.charAt(0) === "[" &&
+            this.data.mask.charAt(this.data.mask.length - 1) === "]"
+          ) {
             mask = JSON.parse(this.data.mask);
-          } catch (e) {
-            mask = null;
+          } else {
+            mask = this.data.mask;
           }
-        } else {
-          mask = this.data.mask;
+        } catch (e) {
+          mask = null;
         }
       }
       return mask

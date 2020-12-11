@@ -9,18 +9,18 @@
       class="btn-back"
       >Назад</b-button
     >
-    <!--    <Form-->
-    <!--      v-if="data.length"-->
-    <!--      :class="{ 'mt-5': !params.settings && showBtnBack }"-->
-    <!--      :data="data"-->
-    <!--      :tabs="tabs"-->
-    <!--      @update="updateValue($event)"-->
-    <!--      @clear="clearRelation($event)"-->
-    <!--      @open-card="openCard($event)"-->
-    <!--      :edit="edit"-->
-    <!--    ></Form>-->
+    <Form
+      v-if="data.length && !this.captions"
+      :class="{ 'mt-5': !params.settings && showBtnBack }"
+      :data="data"
+      :tabs="tabs"
+      @update="updateValue($event)"
+      @clear="clearRelation($event)"
+      @open-card="openCard($event)"
+      :edit="edit"
+    ></Form>
     <FormAccordion
-      v-if="data.length"
+      v-else-if="data.length"
       :class="{ 'mt-5': !params.settings && showBtnBack }"
       :data="data"
       :tabs="tabs"
@@ -83,7 +83,7 @@ export default {
       default: () => true,
     },
   },
-  created() {
+  mounted() {
     if (typeof initHandler === "function") {
       this.$store.commit(
         "data_card/setForm",
@@ -272,6 +272,9 @@ export default {
     },
     tabs() {
       return this.params.tabs;
+    },
+    captions: function () {
+      return this.$store.getters["data_card/getCaptions"];
     },
   },
 };

@@ -40,12 +40,14 @@
         <CardEditor
           @error="error = $event"
           ref="cardEditor"
-          :class="{ 'pt-5': showBtnBack() }"
+          :class="{
+            'pt-5': showBtnBack(),
+            'bg-six block-border-one block p-4': !captions,
+          }"
           :data="getFormData"
           :edit="editable"
           :params="settings"
         />
-        <!--        <CardAccordion />-->
       </div>
       <v-runtime-template
         v-if="!isError && settings.cardtemplate"
@@ -218,6 +220,9 @@ export default {
           this.$route.params.idItem
         ).ACTIONSCUR;
       },
+    },
+    captions: function () {
+      return this.$store.getters["data_card/getCaptions"];
     },
   },
   beforeRouteLeave(to, from, next) {

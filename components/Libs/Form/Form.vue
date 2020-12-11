@@ -10,7 +10,7 @@
         <div class="row">
           <Control
             v-for="(item, i) in items(index)"
-            :key="i"
+            :key="'form_tab' + i"
             @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
             @open-card="$emit('open-card', $event)"
@@ -21,14 +21,11 @@
           </Control>
         </div>
       </b-tab>
-      <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
-<!--        <ArrayEditor v-if="cardId != 0" :id="tab.id" />-->
-      </b-tab>
     </b-tabs>
     <div v-else class="row">
       <Control
         v-for="(item, i) in items()"
-        :key="item.id"
+        :key="'form' + i"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
