@@ -34,7 +34,14 @@
             >
             </Control>
           </template>
-          <div v-else>123</div>
+          <div v-else>
+            <TableEditor
+              class="m-4"
+              v-if="cardId != 0"
+              :id="driverTab.id"
+              :name="driverTab.label"
+            />
+          </div>
         </div>
       </b-collapse>
     </div>
@@ -42,10 +49,10 @@
 </template>
 <script>
 import Control from "~/components/Libs/Controls/Control";
-import ArrayEditor from "@/components/Libs/ArrayEditor/ArrayEditor";
+import TableEditor from "@/components/Libs/TableEditor/TableEditor";
 export default {
   name: "FormAccordion",
-  components: { ArrayEditor, Control },
+  components: { Control, TableEditor },
   props: {
     data: {
       type: Array | null,
@@ -95,6 +102,9 @@ export default {
     },
     cardId: function () {
       return this.$store.getters["data_card/getCardId"];
+    },
+    driverTab: function () {
+      return this.tabs[0];
     },
   },
 };

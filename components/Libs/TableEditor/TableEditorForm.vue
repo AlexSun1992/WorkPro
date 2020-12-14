@@ -46,7 +46,8 @@ export default {
   methods: {
     items(index) {
       if (this.data) {
-        return this.data.metaData.data.filter((item) => {
+        let data = this.data.metaData.data.map((a) => Object.assign({}, a));
+        return data.filter((item) => {
           if (this.captions) {
             if (index != item.page) return;
           }
