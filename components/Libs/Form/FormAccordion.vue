@@ -21,17 +21,20 @@
         role="tabpanel"
       >
         <div class="row">
-          <Control
-            v-for="(item, i) in items(index)"
-            :key="i"
-            @update="$emit('update', $event)"
-            @clear="$emit('clear', $event)"
-            @open-card="$emit('open-card', $event)"
-            :data="item"
-            :edit="edit"
-            :cols="cols"
-          >
-          </Control>
+          <template v-if="items(index).length">
+            <Control
+              v-for="(item, i) in items(index)"
+              :key="i"
+              @update="$emit('update', $event)"
+              @clear="$emit('clear', $event)"
+              @open-card="$emit('open-card', $event)"
+              :data="item"
+              :edit="edit"
+              :cols="cols"
+            >
+            </Control>
+          </template>
+          <div v-else>123</div>
         </div>
       </b-collapse>
     </div>
@@ -71,9 +74,9 @@ export default {
       if (this.data) {
         return this.data.filter((item) => {
           if (this.captions) {
-            if (index != item.page) return;
+            if (index != item.page) return null;
           }
-          if (!item.visible) return;
+          if (!item.visible) return null;
           return this.edit || (!this.edit && item.value);
         });
       }
