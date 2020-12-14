@@ -10,7 +10,7 @@
       >Назад</b-button
     >
     <Form
-      v-if="data.length"
+      v-if="data.length && !this.captions"
       :class="{ 'mt-5': !params.settings && showBtnBack }"
       :data="data"
       :tabs="tabs"
@@ -19,6 +19,16 @@
       @open-card="openCard($event)"
       :edit="edit"
     ></Form>
+    <FormAccordion
+      v-else-if="data.length"
+      :class="{ 'mt-5': !params.settings && showBtnBack }"
+      :data="data"
+      :tabs="tabs"
+      @update="updateValue($event)"
+      @clear="clearRelation($event)"
+      @open-card="openCard($event)"
+      :edit="edit"
+    />
     <SkeletonBox v-else-if="!isError" class="mt-5" :items="8"></SkeletonBox>
     <div class="error-message" v-else-if="isError">
       {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
@@ -30,6 +40,7 @@
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
+import FormAccordion from "@/components/Libs/Form/FormAccordion";
 export default {
   name: "CardEditor",
   head() {
@@ -42,7 +53,7 @@ export default {
       ],
     };
   },
-  components: { Form, ActionButton, SkeletonBox },
+  components: { FormAccordion, Form, ActionButton, SkeletonBox },
   data() {
     return {
       invalidFields: [],
@@ -72,7 +83,7 @@ export default {
       default: () => true,
     },
   },
-  created() {
+  mounted() {
     if (typeof initHandler === "function") {
       this.$store.commit(
         "data_card/setForm",
@@ -261,6 +272,9 @@ export default {
     },
     tabs() {
       return this.params.tabs;
+    },
+    captions: function () {
+      return this.$store.getters["data_card/getCaptions"];
     },
   },
 };

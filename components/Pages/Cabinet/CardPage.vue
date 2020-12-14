@@ -23,7 +23,6 @@
         @error="error = $event"
         ref="cardEditor"
         v-if="editable || (!settings.cardtemplate && !editable)"
-        class="bg-six block-border-one block col p-4"
         :data="getFormData"
         :edit="editable"
         :params="settings"
@@ -41,8 +40,10 @@
         <CardEditor
           @error="error = $event"
           ref="cardEditor"
-          class="bg-six block-border-one block p-4"
-          :class="{ 'pt-5': showBtnBack() }"
+          :class="{
+            'pt-5': showBtnBack(),
+            'bg-six block-border-one block p-4': !captions,
+          }"
           :data="getFormData"
           :edit="editable"
           :params="settings"
@@ -76,15 +77,6 @@
           :style="isButtonDisabled"
           >Сохранить</b-button
         >
-        <b-button
-          pill
-          v-on:click="cancelDataCard"
-          type="button"
-          variant="outline-success"
-          class="col-12 col-md-auto mt-2 mt-md-0"
-          :style="isButtonDisabled"
-          >Отменить</b-button
-        >
       </div>
     </div>
     <div v-if="error" class="mt-3 mb-3">
@@ -97,13 +89,13 @@
 <script>
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import VRuntimeTemplate from "v-runtime-template";
-import { isFieldExists, getField, getFieldValue } from "~/utils/utils.js";
 import { saveAs } from "file-saver";
 import ControlButton from "~/components/Libs/Controls/ControlButton";
+import CardAccordion from "@/components/Libs/CardAccordion/CardAccordion";
 
 export default {
   name: "CardPage",
-  components: { CardEditor, VRuntimeTemplate, ControlButton },
+  components: { CardAccordion, CardEditor, VRuntimeTemplate, ControlButton },
   async fetch({ store, route }) {
     await store.dispatch("data_card/fetchForm", route.params);
   },
@@ -228,6 +220,9 @@ export default {
           this.$route.params.idItem
         ).ACTIONSCUR;
       },
+    },
+    captions: function () {
+      return this.$store.getters["data_card/getCaptions"];
     },
   },
   beforeRouteLeave(to, from, next) {

@@ -5,7 +5,7 @@
       autocomplete="off"
       type="search"
       v-model="data.value"
-      v-mask="data.mask"
+      v-mask="mask"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
@@ -197,6 +197,41 @@ export default {
       } else if (name === "SNEWEMAIL") {
         return "Введите новый email";
       }
+    },
+  },
+  computed: {
+    mask: function () {
+      let mask = null;
+      if (this.data.mask) {
+        try {
+          if (
+            this.data.mask.charAt(0) === "[" &&
+            this.data.mask.charAt(this.data.mask.length - 1) === "]"
+          ) {
+            mask = JSON.parse(this.data.mask);
+          } else {
+            mask = this.data.mask;
+          }
+        } catch (e) {
+          mask = null;
+        }
+      }
+      return mask
+        ? {
+            mask: mask,
+            tokens: {
+              X: { pattern: /[0-9a-zA-Z]/ },
+              F: {
+                pattern: /(?!8)\d/,
+              },
+              S: {
+                pattern: /[abekmhopctyxABEKMHOPCTYX]/,
+                transform: (v) => v.toLocaleUpperCase(),
+              },
+              "#": { pattern: /\d/ },
+            },
+          }
+        : mask;
     },
   },
 };

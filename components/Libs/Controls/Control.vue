@@ -2,6 +2,7 @@
   <b-col :xl="col" :lg="data.cols" md="12" sm="12">
     <div
       class="control"
+      v-bind:class="{ visibility_hidden: data.hidden }"
       :field-id="data.fieldId"
       :style="{ width: data.width ? data.width : '100%' }"
     >
@@ -103,5 +104,8 @@ export default {
 <style scoped>
 .control > fieldset {
   margin-bottom: 0;
+}
+.visibility_hidden {
+  visibility: hidden;
 }
 </style>
