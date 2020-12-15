@@ -112,6 +112,8 @@ converter.form = async (data, itemId) => {
       obj.type = "double";
     } else if (webFields[i].IDCONTROL == 2) {
       obj.type = "text";
+    } else if (webFields[i].IDCONTROL == 6) {
+      obj.type = "uploader";
     } else if (webFields[i].IDCONTROL == 7) {
       obj.type = "label";
     } else if (webFields[i].IDCONTROL == 8) {
