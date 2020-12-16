@@ -32,6 +32,7 @@ import ControlLink from "~/components/Libs/Controls/ControlLink";
 import ControlLabel from "~/components/Libs/Controls/ControlLabel";
 import ControlSplitter from "~/components/Libs/Controls/ControlSplitter";
 import ControlCombobox from "~/components/Libs/Controls/ControlCombobox";
+import ControlUploader from "~/components/Libs/Controls/ControlUploader";
 
 export default {
   name: "Control",
@@ -50,6 +51,7 @@ export default {
     ControlLabel,
     ControlCombobox,
     ControlSplitter,
+    ControlUploader,
   },
   props: {
     data: {
