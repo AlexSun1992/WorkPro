@@ -91,11 +91,10 @@ import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import VRuntimeTemplate from "v-runtime-template";
 import { saveAs } from "file-saver";
 import ControlButton from "~/components/Libs/Controls/ControlButton";
-import CardAccordion from "@/components/Libs/CardAccordion/CardAccordion";
 
 export default {
   name: "CardPage",
-  components: { CardAccordion, CardEditor, VRuntimeTemplate, ControlButton },
+  components: { CardEditor, VRuntimeTemplate, ControlButton },
   async fetch({ store, route }) {
     await store.dispatch("data_card/fetchForm", route.params);
   },

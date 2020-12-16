@@ -85,10 +85,12 @@ export default {
   },
   mounted() {
     if (typeof initHandler === "function") {
-      this.$store.commit(
-        "data_card/setForm",
-        initHandler(this.data.map((a) => Object.assign({}, a))) || this.data
-      );
+      try {
+        this.$store.commit(
+          "data_card/setForm",
+          initHandler(this.data.map((a) => Object.assign({}, a))) || this.data
+        );
+      } catch {}
     }
   },
   destroyed() {
