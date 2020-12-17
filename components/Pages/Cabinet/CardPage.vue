@@ -41,7 +41,6 @@
           @error="error = $event"
           ref="cardEditor"
           :class="{
-            'pt-5': showBtnBack(),
             'bg-six block-border-one block p-4': !captions,
           }"
           :data="getFormData"
@@ -152,7 +151,7 @@ export default {
     },
     showBtnBack() {
       let path = this.$store.state.data_card.listPath;
-      return path && !path.includes("/55/0/19");
+      return path && !path.includes("/55/0/19") && !path.includes("/55/0/738");
     },
     saveDataCard() {
       if (this.$refs.cardEditor) {

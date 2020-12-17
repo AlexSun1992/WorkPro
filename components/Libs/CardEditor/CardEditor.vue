@@ -1,17 +1,7 @@
 <template>
   <div>
-    <b-button
-      v-if="!params.settings"
-      v-show="showBtnBack"
-      v-on:click="goBack"
-      type="submit"
-      variant="success"
-      class="btn-back"
-      >Назад</b-button
-    >
     <Form
       v-if="data.length && !this.captions"
-      :class="{ 'mt-5': !params.settings && showBtnBack }"
       :data="data"
       :tabs="tabs"
       @update="updateValue($event)"
@@ -270,7 +260,7 @@ export default {
     showBtnBack() {
       let path = this.$store.state.data_card.listPath;
       // Жестко убрали кнопку с полиса осаго (Игорь)
-      return path && !path.includes("/55/0/19");
+      return path && !path.includes("/55/0/19") && !path.includes("/55/0/738");
     },
     tabs() {
       return this.params.tabs;
