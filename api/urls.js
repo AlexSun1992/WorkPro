@@ -20,6 +20,7 @@ const WEBFIELD = `/am/main/${VER}/webfield`;
 const DIC = `/am/main/${VER}/dic`;
 const DICWF = `/am/main/${VER}/dicwf`;
 const REPORT = `/am/main/${VER}/report`;
+const FREEDATACARD = `/am/free/${VER}/data`;
 
 export default {
   VER: VER,
@@ -30,6 +31,7 @@ export default {
   MENU: MENU,
   CLIENTMENU: CLIENTMENU,
   DATACARD: DATACARD,
+  FREEDATACARD: FREEDATACARD,
   DATA: DATA,
   DATALIST: DATALIST,
   FILTER: FILTER,

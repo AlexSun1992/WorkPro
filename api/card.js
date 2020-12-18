@@ -41,6 +41,23 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
     res.send(e);
   }
 });
+app.get("/osago", (req, res) => {
+  try {
+    axios({
+      url: encodeURI(`${consts.FREEDATACARD}/55/738/0/0`),
+      method: "GET",
+    })
+      .then(async (resp) => {
+        // res.send(formConverter.form(resp.data, req.params.idItem))
+        res.send(await formConverter.form(resp.data, req.params.idItem));
+      })
+      .catch((err) => {
+        res.status(err.response.data.STATUS).send(err.response.data);
+      });
+  } catch (e) {
+    res.send(e);
+  }
+});
 
 app.get("/card/js/:idModule/:idItem", (req, res) => {
   try {
