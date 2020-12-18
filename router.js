@@ -11,6 +11,7 @@ import PasswordRecovery from "~/components/Pages/Login/PasswordRecovery/Password
 import DynamicRoutesRenderer from "~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer";
 import Preview from "~/components/Pages/PreviewPage/Preview";
 import Table from "~/components/Pages/Table/Table";
+import DemoOsago from "@/components/Pages/DemoOsago";
 
 Vue.use(Router);
 
@@ -41,6 +42,11 @@ export function createRouter() {
         meta: "Демонстрационная страница",
         path: "/demo-page",
         component: DemoPage,
+      },
+      {
+        meta: "Оформление ОСАГО",
+        path: "/demo-osago",
+        component: DemoOsago,
       },
       {
         meta: "Загрузка файлов",
