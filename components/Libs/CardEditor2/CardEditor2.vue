@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FormAccordion :data="data" :edit="false" :store="store" />
+    <FormAccordion :data="data" :edit="true" :store="store" />
   </div>
 </template>
 

@@ -5,15 +5,17 @@
         style="border-color: #1eb869"
         class="block-border-one block p-1 mb-1 header"
       >
+        <!-- {{ tab }} -->
         <b-button
-          class="btn"
-          v-bind:class="{ error: highlightTab(index) }"
+          class="toggle-button"
           v-b-toggle="'acc_' + index"
-          variant="primary"
-          >{{ tab }}</b-button
+          @click="toggleButton(index)"
         >
+          {{ buttonTitle }}
+        </b-button>
       </div>
       <b-collapse
+        ref="collapse"
         :visible="index == 0"
         accordion="my-accordion"
         :id="'acc_' + index"
@@ -53,6 +55,9 @@ import TableEditor from "@/components/Libs/TableEditor/TableEditor";
 export default {
   name: "FormAccordion",
   components: { Control, TableEditor },
+  data() {
+    return {};
+  },
   props: {
     data: {
       type: Array | null,
@@ -100,8 +105,16 @@ export default {
       let invalidField = invalidFields.find((item) => item.page == i);
       if (invalidField) return true;
     },
+    toggleButton(index) {
+      // записать в store
+      // this.$store.dispatch(`${this.store}/...`);
+    },
   },
   computed: {
+    buttonTitle: function () {
+      // брать из store
+      // this.$store.getters[`${this.store}/...`]
+    },
     captions: function () {
       return this.$store.getters[`${this.store}/getCaptions`];
     },
@@ -118,19 +131,22 @@ export default {
 <style scoped>
 .header {
   background-color: #cbe0d7;
-  cursor: pointer;
-  text-align: center;
+  /* cursor: pointer; */
+  text-align: right;
 }
 .error {
   background-color: #f5c6cb;
   cursor: pointer;
   text-align: center;
 }
-.btn {
+.toggle-button {
+  cursor: pointer;
+}
+/* .btn {
   border: 0;
   cursor: pointer;
   padding: 0;
   width: 99%;
   background-color: #cbe0d7;
-}
+} */
 </style>
