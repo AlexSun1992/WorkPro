@@ -75,6 +75,11 @@ export default {
       type: Array | null,
       required: false,
     },
+    store: {
+      type: String,
+      required: false,
+      default: "data_card",
+    },
   },
   methods: {
     items(index) {
@@ -89,7 +94,7 @@ export default {
       }
     },
     highlightTab(i) {
-      let invalidFields = this.$store.getters["data_card/getForm"].filter(
+      let invalidFields = this.$store.getters[`${this.store}/getForm`].filter(
         (item) => item.state == false
       );
       let invalidField = invalidFields.find((item) => item.page == i);
@@ -98,10 +103,10 @@ export default {
   },
   computed: {
     captions: function () {
-      return this.$store.getters["data_card/getCaptions"];
+      return this.$store.getters[`${this.store}/getCaptions`];
     },
     cardId: function () {
-      return this.$store.getters["data_card/getCardId"];
+      return this.$store.getters[`${this.store}getCardId`];
     },
     driverTab: function () {
       return this.tabs[0];

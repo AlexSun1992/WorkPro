@@ -1,11 +1,17 @@
 <template>
-  <div>{{ data }}</div>
+  <div>
+    <CardEditor2 v-if="getFormData" :store="store" :data="getFormData" />
+  </div>
 </template>
 
 <script>
 import STORES from "@/store/stores.json";
+import CardEditor2 from "~/components/Libs/CardEditor2/CardEditor2";
 export default {
   name: "CardWidget",
+  components: {
+    CardEditor2,
+  },
   props: {
     widgetId: {
       type: Number,
@@ -20,8 +26,8 @@ export default {
     store() {
       return STORES[this.widgetId];
     },
-    data: function () {
-      return this.$store.getters[`${this.store}/getData`];
+    getFormData: function () {
+      return this.$store.getters[`${this.store}/getForm`];
     },
   },
 };

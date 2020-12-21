@@ -24,7 +24,8 @@ export default {
         const contractId = this.data.name.split("Item")[1];
         const actions = this.$store.getters["menu/getMenuById"](
           this.$route.params.idItem
-        ).ACTIONSCUR;
+        )?.ACTIONSCUR;
+        if (!actions) return;
         return actions.find((item) => item.ID == contractId);
       },
     },
