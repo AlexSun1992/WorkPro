@@ -1,6 +1,7 @@
 <template>
   <div>
-    <CardEditor2 v-if="getFormData" :store="store" :data="getFormData" />
+    <!--    <CardEditor2 v-if="getFormData" :store="store" :data="getFormData" />-->
+    {{ dataForm }}
   </div>
 </template>
 
@@ -26,7 +27,7 @@ export default {
     store() {
       return STORES[this.widgetId];
     },
-    getFormData: function () {
+    dataForm: function () {
       return this.$store.getters[`${this.store}/getForm`];
     },
   },
