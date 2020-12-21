@@ -78,8 +78,10 @@ module.exports = {
      ** You can extend webpack config here
      */
     vendor: ["axios"],
-    extend(config, ctx) {
+    extend(config, { isDev, isClient }) {
       config.resolve.alias.vue = "vue/dist/vue.common";
+      if (isClient) config.devtool = "eval-source-map";
+      else config.devtool = "inline-source-map";
     },
     transpile: ["vue-agile"],
   },

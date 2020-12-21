@@ -1,5 +1,7 @@
 /* eslint-disable */
 import formConverter from "../converters/form";
+import menuConverter from "../converters/menu";
+import freeMethodsConverter from "../converters/forfreemethods";
 import consts from "./urls";
 
 const express = require("express");
@@ -48,8 +50,12 @@ app.get("/osago", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
-        // res.send(formConverter.form(resp.data, req.params.idItem))
-        res.send(await formConverter.form(resp.data, req.params.idItem));
+        let data = freeMethodsConverter.osago(
+          await formConverter.form(resp.data, req.params.idItem)
+        );
+        const menu = await axios.get(`${consts.FREEMENU}/55/738`);
+        data.settings = menuConverter.menuObject(menu.data[0]._data[0]);
+        res.send(data);
       })
       .catch((err) => {
         res.status(err.response.data.STATUS).send(err.response.data);

@@ -21,6 +21,7 @@ const DIC = `/am/main/${VER}/dic`;
 const DICWF = `/am/main/${VER}/dicwf`;
 const REPORT = `/am/main/${VER}/report`;
 const FREEDATACARD = `/am/free/${VER}/data`;
+const FREEMENU = `/am/free/${VER}/menu`;
 
 export default {
   VER: VER,
@@ -32,6 +33,7 @@ export default {
   CLIENTMENU: CLIENTMENU,
   DATACARD: DATACARD,
   FREEDATACARD: FREEDATACARD,
+  FREEMENU: FREEMENU,
   DATA: DATA,
   DATALIST: DATALIST,
   FILTER: FILTER,

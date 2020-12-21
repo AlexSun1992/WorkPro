@@ -1,6 +1,7 @@
 <template>
   <div>
-    <CardEditor2 v-if="getFormData" :store="store" :data="getFormData" />
+    <!--    <CardEditor2 v-if="getFormData" :store="store" :data="getFormData" />-->
+    {{ getFormData }}
   </div>
 </template>
 
