@@ -2,7 +2,7 @@
 
 export const state = () => ({
   id: 738,
-  form: [],
+  form: null,
   captions: null,
   cardCaption: null,
 });
@@ -14,15 +14,9 @@ export const actions = {
   async fetchData({ commit, getters, state }) {
     try {
       await this.$axios.get(encodeURI(`/api/osago`)).then((res) => {
-        commit(
-          "setForm",
-          res.data.metaData.data.length ? res.data.metaData.data : res.data
-        );
-
-        if (res.data.metaData.captions) {
-          commit("setCaptions", res.data.metaData.captions);
-        }
-        commit("setCardCaption", res.data.metaData.cardCaption);
+        commit("setForm", res.data.data);
+        commit("setCaptions", res.data.captions);
+        commit("setCardCaption", res.data.cardCaption);
       });
     } catch (e) {
       console.log(e);
@@ -30,15 +24,13 @@ export const actions = {
   },
 };
 export const mutations = {
+  setForm(state, data) {
+    state.form = data;
+  },
   setCaptions(state, data) {
-    const captions = data.split(";");
-    captions.pop();
-    state.captions = captions;
+    state.captions = data;
   },
   setCardCaption(state, data) {
     state.cardCaption = data;
-  },
-  setForm(state, data) {
-    state.form = data;
   },
 };
