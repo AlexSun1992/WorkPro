@@ -13,6 +13,7 @@
         @open-card="$emit('open-card', $event)"
         :data="data"
         :edit="edit"
+        :store="store"
       ></component>
     </div>
   </b-col>
@@ -68,6 +69,11 @@ export default {
       type: Number,
       required: true,
       default: () => 1,
+    },
+    store: {
+      type: String,
+      required: false,
+      default: () => {},
     },
   },
   computed: {

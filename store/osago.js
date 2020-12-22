@@ -6,6 +6,7 @@ export const state = () => ({
   form: null,
   captions: null,
   cardCaption: null,
+  settings: null,
 });
 export const getters = {
   getData: (state) => state.data,
@@ -23,6 +24,9 @@ export const actions = {
       console.log(e);
     }
   },
+  updateCaptions({ commit, getters, state }, index) {
+    commit("updateCaptions", index);
+  },
 };
 export const mutations = {
   setData(state, data) {
@@ -34,7 +38,14 @@ export const mutations = {
   setCaptions(state, data) {
     state.data.captions = data;
   },
+  updateCaptions(state, data) {
+    state.captions = [...state.captions];
+    state.captions[data].visible = !state.captions[data].visible;
+  },
   setCardCaption(state, data) {
     state.data.cardCaption = data;
+  },
+  setSettings(state, data) {
+    state.settings = data;
   },
 };
