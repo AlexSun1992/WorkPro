@@ -7,6 +7,7 @@ converter.osago = (data) => {
     const obj = {};
     obj.label = captions[i];
     obj.page = i;
+    obj.toggle = false;
     arr.push(obj);
   }
   arr.pop();
