@@ -1,11 +1,11 @@
 <template>
   <div>
-    <FormAccordion :data="data" :edit="true" :store="store" />
+    <FormAccordion :data="form" :captions="captions" />
   </div>
 </template>
 
 <script>
-import FormAccordion from "@/components/Libs/Form/FormAccordion";
+import FormAccordion from "@/components/Libs/Form/FormAccordion2";
 export default {
   name: "CardEditor2",
   components: { FormAccordion },

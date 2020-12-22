@@ -3,7 +3,6 @@
     :label="label"
     :class="{ required: data.required }"
     :label-for="data.name"
-
   >
     <string-autocomplete
       :data="data"

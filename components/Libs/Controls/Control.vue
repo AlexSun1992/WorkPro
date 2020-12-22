@@ -62,12 +62,12 @@ export default {
     },
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      required: false,
+      default: () => true,
     },
     cols: {
       type: Number,
-      required: true,
+      required: false,
       default: () => 1,
     },
     store: {

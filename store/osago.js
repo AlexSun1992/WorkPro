@@ -2,7 +2,7 @@
 
 export const state = () => ({
   id: 738,
-  data: null,
+  data: {},
   form: null,
   captions: null,
   cardCaption: null,
@@ -39,8 +39,8 @@ export const mutations = {
     state.data.captions = data;
   },
   updateCaptions(state, data) {
-    state.captions = [...state.captions];
-    state.captions[data].visible = !state.captions[data].visible;
+    state.data.captions = [...state.data.captions];
+    state.data.captions[data].visible = !state.data.captions[data].visible;
   },
   setCardCaption(state, data) {
     state.data.cardCaption = data;

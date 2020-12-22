@@ -1,7 +1,7 @@
 <template>
   <div>
-    <CardEditor2 v-if="dataForm" :store="store" :data="dataForm" />
-    <!-- {{ dataForm }} -->
+    <CardEditor2 :store="store" :data="dataForm" />
+    <!--    {{ dataForm }}-->
   </div>
 </template>
 
