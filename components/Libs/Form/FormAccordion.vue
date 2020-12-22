@@ -1,51 +1,42 @@
 <template>
   <div>
     <div v-for="(tab, index) in captions" :key="index" class="mb-1">
-      <div
-        style="border-color: #1eb869"
-        class="block-border-one block p-1 mb-1 header"
-      >
-        <!-- {{ tab }} -->
-        <b-button
-          class="toggle-button"
-          v-b-toggle="'acc_' + index"
-          @click="toggleButton(index)"
-        >
-          {{ buttonTitle }}
-        </b-button>
-      </div>
-      <b-collapse
-        ref="collapse"
-        :visible="index == 0"
-        accordion="my-accordion"
-        :id="'acc_' + index"
-        class="bg-six block-border-one block p-3"
-        role="tabpanel"
-      >
-        <div class="row">
-          <template v-if="items(index).length">
-            <Control
-              v-for="(item, i) in items(index)"
-              :key="i"
-              @update="$emit('update', $event)"
-              @clear="$emit('clear', $event)"
-              @open-card="$emit('open-card', $event)"
-              :data="item"
-              :edit="edit"
-              :cols="cols"
-            >
-            </Control>
-          </template>
-          <div v-else>
-            <TableEditor
-              class="m-4"
-              v-if="cardId != 0"
-              :id="driverTab.id"
-              :name="driverTab.label"
-            />
+      <div v-if="tab.displayed">
+        <div class="block-border-one block p-1 mb-1 header">
+          <div class="label">
+            <strong>{{ tab.label }}</strong>
+          </div>
+          <div type="button" class="toggle-button" @click="toggleButton(index)">
+            {{ buttonTitle(tab) }}
           </div>
         </div>
-      </b-collapse>
+        <div v-show="tab.visible" class="bg-six block-border-one block p-3">
+          <div class="row">
+            <template v-if="items(index).length">
+              <Control
+                v-for="(item, i) in items(index)"
+                :key="i"
+                @update="$emit('update', $event)"
+                @clear="$emit('clear', $event)"
+                @open-card="$emit('open-card', $event)"
+                :data="item"
+                :edit="edit"
+                :cols="cols"
+                :store="store"
+              >
+              </Control>
+            </template>
+            <div v-else>
+              <TableEditor
+                class="m-4"
+                v-if="cardId != 0"
+                :id="driverTab.id"
+                :name="driverTab.label"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -86,6 +77,9 @@ export default {
       default: "data_card",
     },
   },
+  mounted() {
+    this.$store.dispatch(`${this.store}/updateCaptions`, 0);
+  },
   methods: {
     items(index) {
       if (this.data) {
@@ -106,15 +100,13 @@ export default {
       if (invalidField) return true;
     },
     toggleButton(index) {
-      // записать в store
-      // this.$store.dispatch(`${this.store}/...`);
+      this.$store.dispatch(`${this.store}/updateCaptions`, index);
+    },
+    buttonTitle(tab) {
+      return tab.visible ? "cвернуть" : "развернуть";
     },
   },
   computed: {
-    buttonTitle: function () {
-      // брать из store
-      // this.$store.getters[`${this.store}/...`]
-    },
     captions: function () {
       return this.$store.getters[`${this.store}/getCaptions`];
     },
@@ -130,9 +122,12 @@ export default {
 
 <style scoped>
 .header {
-  background-color: #cbe0d7;
+  /* background-color: #cbe0d7; */
   /* cursor: pointer; */
-  text-align: right;
+  /* text-align: right; */
+  border-bottom: 1px solid rgb(30, 184, 105);
+  display: flex;
+  justify-content: space-between;
 }
 .error {
   background-color: #f5c6cb;
@@ -141,6 +136,11 @@ export default {
 }
 .toggle-button {
   cursor: pointer;
+  text-decoration: underline;
+  color: rgb(30, 184, 105);
+}
+.label {
+  text-align: left;
 }
 /* .btn {
   border: 0;

@@ -5,10 +5,12 @@ export const state = () => ({
   form: null,
   captions: null,
   cardCaption: null,
+  settings: null,
 });
 export const getters = {
   getForm: (state) => state.form,
   getCaptions: (state) => state.captions,
+  getSettings: (state) => state.settings,
 };
 export const actions = {
   async fetchData({ commit, getters, state }) {
@@ -17,10 +19,14 @@ export const actions = {
         commit("setForm", res.data.data);
         commit("setCaptions", res.data.captions);
         commit("setCardCaption", res.data.cardCaption);
+        commit("setSettings", res.data.settings);
       });
     } catch (e) {
       console.log(e);
     }
+  },
+  updateCaptions({ commit, getters, state }, index) {
+    commit("updateCaptions", index);
   },
 };
 export const mutations = {
@@ -30,7 +36,14 @@ export const mutations = {
   setCaptions(state, data) {
     state.captions = data;
   },
+  updateCaptions(state, data) {
+    state.captions = [...state.captions];
+    state.captions[data].visible = !state.captions[data].visible;
+  },
   setCardCaption(state, data) {
     state.cardCaption = data;
+  },
+  setSettings(state, data) {
+    state.settings = data;
   },
 };
