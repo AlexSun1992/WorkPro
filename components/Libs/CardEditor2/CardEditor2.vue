@@ -1,6 +1,10 @@
 <template>
   <div>
-    <FormAccordion :data="form" :captions="captions" />
+    <FormAccordion
+      :data="form"
+      :captions="captions"
+      @update="updateValue($event)"
+    />
   </div>
 </template>
 
@@ -23,7 +27,11 @@ export default {
   },
   mounted() {},
   destroyed() {},
-  methods: {},
+  methods: {
+    async updateValue(e) {
+      this.$store.dispatch(`${this.store}/executeAction`, e);
+    },
+  },
   computed: {
     form: function () {
       return this.$store.getters[`${this.store}/getForm`];
