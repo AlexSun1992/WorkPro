@@ -20,7 +20,7 @@ export default {
       default: () => {},
     },
     data: {
-      type: Array | null,
+      type: Array,
       required: true,
       default: () => [],
     },
@@ -29,7 +29,7 @@ export default {
   destroyed() {},
   methods: {
     async updateValue(e) {
-      console.log(e);
+      this.$store.dispatch(`${this.store}/executeAction`, e);
     },
   },
   computed: {

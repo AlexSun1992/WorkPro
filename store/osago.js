@@ -6,7 +6,6 @@ export const state = () => ({
   form: null,
   captions: null,
   cardCaption: null,
-  settings: null,
 });
 export const getters = {
   getData: (state) => state.data,
@@ -27,6 +26,22 @@ export const actions = {
   },
   updateCaptions({ commit, getters, state }, index) {
     commit("updateCaptions", index);
+  },
+  async executeAction({ commit, getters, state }, params) {
+    // Присвоить значения
+    let rowId, actionId, relId, relActionId, body;
+    try {
+      await this.$axios
+        .post(
+          `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
+          body || {}
+        )
+        .then((resp) => {
+          return resp;
+        });
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
 export const mutations = {
