@@ -10,7 +10,8 @@ export const state = () => ({
 });
 export const getters = {
   getData: (state) => state.data,
-  getForm: (state) => state.data.data,
+  getForm: (state) =>
+    state.data.data ? state.data.data.map((a) => Object.assign({}, a)) : [],
   getCaptions: (state) => state.data.captions,
   getCardCaption: (state) => state.data.cardCaption,
 };
