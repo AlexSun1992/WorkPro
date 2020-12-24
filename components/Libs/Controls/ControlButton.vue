@@ -1,6 +1,6 @@
 <template>
   <b-button
-    @click="$emit('update', data.name)"
+    @click="$emit('update', { fieldId: data.fieldId, value: data.name })"
     class="button"
     variant="secondary"
     >{{ data.label }}</b-button

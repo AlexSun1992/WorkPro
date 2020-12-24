@@ -13,6 +13,9 @@ export const getters = {
     state.data.data ? state.data.data.map((a) => Object.assign({}, a)) : [],
   getCaptions: (state) => state.data.captions,
   getCardCaption: (state) => state.data.cardCaption,
+  getDataFieldByFieldId: (state) => (id) => {
+    return state.data.data.find((item) => item.fieldId == id);
+  },
 };
 export const actions = {
   async fetchData({ commit, getters, state }) {
@@ -28,19 +31,20 @@ export const actions = {
     commit("updateCaptions", index);
   },
   async executeAction({ commit, getters, state }, params) {
-    // Присвоить значения
-    let rowId, actionId, relId, relActionId, body;
-    try {
-      await this.$axios
-        .post(
-          `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
-          body || {}
-        )
-        .then((resp) => {
-          return resp;
-        });
-    } catch (e) {
-      console.log(e);
+    commit("setValueByFieldId", params);
+    if (params.fieldId === 29914) {
+      console.log(getters.getDataFieldByFieldId(29912).value);
+      try {
+        const REG_NUMBER = getters.getDataFieldByFieldId(29912).value;
+        await this.$axios
+          .get(encodeURI(`/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}`))
+          .then((res) => {
+            console.log(res.data);
+            commit("setValueByFieldId", { fieldId: 29973, value: res.data });
+          });
+      } catch (e) {
+        console.log(e);
+      }
     }
   },
 };
@@ -63,5 +67,9 @@ export const mutations = {
   },
   setSettings(state, data) {
     state.settings = data;
+  },
+  setValueByFieldId(state, data) {
+    let field = state.data.data.find((item) => item.fieldId == data.fieldId);
+    field.value = data.value;
   },
 };
