@@ -21,6 +21,9 @@ export const actions = {
   async fetchData({ commit, getters, state }) {
     try {
       await this.$axios.get(encodeURI(`/api/osago`)).then((res) => {
+        res.data.captions[0].visible = true;
+        res.data.captions[1].displayed = false;
+        res.data.captions[1].visible = false;
         commit("setData", res.data);
       });
     } catch (e) {
@@ -31,6 +34,10 @@ export const actions = {
     commit("updateCaptions", index);
   },
   async executeAction({ commit, getters, state }, params) {
+    let renderOptions = [
+      { visible: false, displayed: true },
+      { visible: true, displayed: true },
+    ];
     commit("setValueByFieldId", params);
     if (params.fieldId === 29914) {
       console.log(getters.getDataFieldByFieldId(29912).value);
@@ -39,9 +46,9 @@ export const actions = {
         await this.$axios
           .get(encodeURI(`/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}`))
           .then((res) => {
-            console.log(res.data);
             commit("setValueByFieldId", { fieldId: 29973, value: res.data });
           });
+        commit("toggleVisibility", renderOptions);
       } catch (e) {
         console.log(e);
       }
@@ -71,5 +78,12 @@ export const mutations = {
   setValueByFieldId(state, data) {
     let field = state.data.data.find((item) => item.fieldId == data.fieldId);
     field.value = data.value;
+  },
+  toggleVisibility(state, data) {
+    state.data.captions = state.data.captions.map((item, i) => {
+      item.visible = data[i].visible;
+      item.displayed = data[i].displayed;
+      return item;
+    });
   },
 };
