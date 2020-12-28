@@ -14,7 +14,7 @@ export const getters = {
   getCaptions: (state) => state.data.captions,
   getCardCaption: (state) => state.data.cardCaption,
   getDataFieldByFieldId: (state) => (id) => {
-    return state.data.data.find((item) => item.fieldId == id);
+    return state.data.data.find((item) => item.fieldId === parseInt(id));
   },
 };
 export const actions = {
@@ -35,18 +35,39 @@ export const actions = {
   },
   async executeAction({ commit, getters, state }, params) {
     let renderOptions = [
-      { visible: false, displayed: true },
-      { visible: true, displayed: true },
+      {
+        visible: false,
+        displayed: true,
+      },
+      {
+        visible: true,
+        displayed: true,
+      },
     ];
     commit("setValueByFieldId", params);
     if (params.fieldId === 29914) {
       console.log(getters.getDataFieldByFieldId(29912).value);
       try {
         const REG_NUMBER = getters.getDataFieldByFieldId(29912).value;
+        if (!getters.getDataFieldByFieldId(29912).value) {
+          return;
+        }
         await this.$axios
           .get(encodeURI(`/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}`))
           .then((res) => {
-            commit("setValueByFieldId", { fieldId: 29973, value: res.data });
+            commit("setValueByFieldId", {
+              fieldId: 29973,
+              value: res.data.length
+                ? `<ul>
+                      <li>Марка-модель: <b>${res.data[0].SMODEL}</b></li>
+                      <li>Тип ТС: <b>${res.data[0].IDCAR_BODY_TYPE}</b></li>
+                      <li>Год выпуска: <b>${res.data[0].NBUILD_YEAR}</b></li>
+                      <li>Мощность: <b>${res.data[0].NOUTPUT} л.с.</b></li>
+                      <li>VIN: <b>${res.data[0].SVIN}</b></li>
+                      <li>СТС: <b>${res.data[0].SSTS_NUMBER} от ${res.data[0].DTEH_OSMOTR_DATE}</b></li>
+                      </ul>`
+                : "<p>данные не обнаружены, ничего страшного, просим продолжить оформление</p>",
+            });
           });
         commit("toggleVisibility", renderOptions);
       } catch (e) {
