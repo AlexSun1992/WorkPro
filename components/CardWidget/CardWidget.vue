@@ -33,5 +33,8 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
+<style lang="scss" scoped>
+::v-deep {
+  @import "bootstrap/scss/bootstrap.scss";
+}
+</style>
