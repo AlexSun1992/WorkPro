@@ -58,9 +58,10 @@ app.get("/osago", (req, res) => {
         res.send(data);
       })
       .catch((err) => {
-        res
-          .status(err.response.data ? err.response.data.STATUS : 500)
-          .send(err.response.data);
+        // res
+        //   .status(err.response.data ? err.response.data.STATUS : 500)
+        //   .send(err.response.data); res.send(e);
+        res.send(err);
       });
   } catch (e) {
     res.send(e);
