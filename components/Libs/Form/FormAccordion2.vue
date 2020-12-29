@@ -5,6 +5,9 @@
         <div class="block-border-one block p-1 mb-1 header">
           <div class="label">
             <strong>{{ tab.label }}</strong>
+            <div>
+              <i>{{ tab.previewText }}</i>
+            </div>
           </div>
           <div type="button" class="toggle-button" @click="toggleButton(index)">
             {{ tab.visible ? "cвернуть" : "развернуть" }}

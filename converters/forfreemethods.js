@@ -9,6 +9,7 @@ converter.osago = (data) => {
     obj.page = i;
     obj.displayed = true;
     obj.visible = false;
+    obj.previewText = "";
     arr.push(obj);
   }
   arr.pop();

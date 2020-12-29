@@ -34,16 +34,6 @@ export const actions = {
     commit("updateCaptions", index);
   },
   async executeAction({ commit, getters, state }, params) {
-    let renderOptions = [
-      {
-        visible: false,
-        displayed: true,
-      },
-      {
-        visible: true,
-        displayed: true,
-      },
-    ];
     commit("setValueByFieldId", params);
     if (params.fieldId === 29914) {
       console.log(getters.getDataFieldByFieldId(29912).value);
@@ -52,6 +42,18 @@ export const actions = {
         if (!getters.getDataFieldByFieldId(29912).value) {
           return;
         }
+        let renderOptions = [
+          {
+            visible: false,
+            displayed: true,
+            previewText: REG_NUMBER,
+          },
+          {
+            visible: true,
+            displayed: true,
+            previewText: "",
+          },
+        ];
         await this.$axios
           .get(encodeURI(`/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}`))
           .then((res) => {
@@ -69,7 +71,7 @@ export const actions = {
                 : "<p>данные не обнаружены, ничего страшного, просим продолжить оформление</p>",
             });
           });
-        commit("toggleVisibility", renderOptions);
+        commit("togglePanel", renderOptions);
       } catch (e) {
         console.log(e);
       }
@@ -100,10 +102,11 @@ export const mutations = {
     let field = state.data.data.find((item) => item.fieldId == data.fieldId);
     field.value = data.value;
   },
-  toggleVisibility(state, data) {
+  togglePanel(state, data) {
     state.data.captions = state.data.captions.map((item, i) => {
       item.visible = data[i].visible;
       item.displayed = data[i].displayed;
+      item.previewText = data[i].previewText;
       return item;
     });
   },
