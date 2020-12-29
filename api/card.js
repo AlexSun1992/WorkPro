@@ -45,6 +45,7 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
 });
 app.get("/osago", (req, res) => {
   try {
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
     axios({
       url: encodeURI(`${consts.FREEDATACARD}/55/738/0/0`),
       method: "GET",
