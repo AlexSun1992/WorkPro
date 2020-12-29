@@ -45,6 +45,7 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
 });
 app.get("/osago", (req, res) => {
   try {
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
     axios({
       url: encodeURI(`${consts.FREEDATACARD}/55/738/0/0`),
       method: "GET",
@@ -58,10 +59,9 @@ app.get("/osago", (req, res) => {
         res.send(data);
       })
       .catch((err) => {
-        // res
-        //   .status(err.response.data ? err.response.data.STATUS : 500)
-        //   .send(err.response.data); res.send(e);
-        res.send(err);
+        res
+          .status(err.response.data ? err.response.data.STATUS : 500)
+          .send(err.response.data);
       });
   } catch (e) {
     res.send(e);
