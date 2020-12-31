@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="(tab, index) in captions" :key="index" class="mb-1">
-      <div v-if="tab.displayed">
+      <div v-if="tab && tab.displayed">
         <div class="block-border-one block p-1 mb-1 header">
           <div class="label">
             <strong>{{ tab.label }}</strong>
@@ -24,6 +24,7 @@
                 @open-card="$emit('open-card', $event)"
                 :data="item"
                 :store="store"
+                :loading="tab.loading"
               >
               </Control>
             </template>

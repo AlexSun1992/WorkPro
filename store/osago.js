@@ -47,16 +47,21 @@ export const actions = {
             visible: false,
             displayed: true,
             previewText: REG_NUMBER,
+            loading: true,
           },
           {
             visible: true,
             displayed: true,
             previewText: "",
+            loading: false,
           },
         ];
+        commit("setLoading", renderOptions);
         await this.$axios
           .get(encodeURI(`/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}`))
           .then((res) => {
+            renderOptions[0].loading = false;
+            commit("setLoading", renderOptions);
             commit("setValueByFieldId", {
               fieldId: 29973,
               value: res.data.length
@@ -107,6 +112,12 @@ export const mutations = {
       item.visible = data[i].visible;
       item.displayed = data[i].displayed;
       item.previewText = data[i].previewText;
+      return item;
+    });
+  },
+  setLoading(state, data) {
+    state.data.captions = state.data.captions.map((item, i) => {
+      item.loading = data[i].loading ? data[i].loading : !!data[i].loading;
       return item;
     });
   },

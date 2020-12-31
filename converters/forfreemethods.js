@@ -10,6 +10,7 @@ converter.osago = (data) => {
     obj.displayed = true;
     obj.visible = false;
     obj.previewText = "";
+    obj.loading = false;
     arr.push(obj);
   }
   arr.pop();

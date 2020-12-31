@@ -1,10 +1,18 @@
 <template>
   <b-button
     @click="$emit('update', { fieldId: data.fieldId, value: data.name })"
-    class="button"
     variant="secondary"
-    >{{ data.label }}</b-button
   >
+    <div class="button">
+      {{ data.label }}
+      <b-spinner
+        v-if="loading"
+        class="ml-2"
+        variant="success"
+        label="Spinning"
+      ></b-spinner>
+    </div>
+  </b-button>
 </template>
 
 <script>
@@ -21,6 +29,17 @@ export default {
       required: false,
       default: () => {},
     },
+    loading: {
+      type: Boolean,
+      required: false,
+    },
   },
 };
 </script>
+
+<style>
+.button {
+  display: flex;
+  align-items: center;
+}
+</style>

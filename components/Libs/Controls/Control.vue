@@ -14,6 +14,7 @@
         :data="data"
         :edit="edit"
         :store="store"
+        :loading="loading"
       ></component>
     </div>
   </b-col>
@@ -74,6 +75,10 @@ export default {
       type: String,
       required: false,
       default: () => {},
+    },
+    loading: {
+      type: Boolean,
+      required: false,
     },
   },
   computed: {
