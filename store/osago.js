@@ -35,6 +35,17 @@ export const actions = {
   },
   async executeAction({ commit, getters, state }, params) {
     commit("setValueByFieldId", params);
+    let renderOptions = Array.from(
+      { length: state.data.captions.length },
+      () => {
+        let obj = new Object();
+        obj.visible = false;
+        obj.displayed = true;
+        obj.previewText = "";
+        obj.loading = false;
+        return obj;
+      }
+    );
     if (params.fieldId === 29914) {
       console.log(getters.getDataFieldByFieldId(29912).value);
       try {
@@ -42,20 +53,9 @@ export const actions = {
         if (!getters.getDataFieldByFieldId(29912).value) {
           return;
         }
-        let renderOptions = [
-          {
-            visible: false,
-            displayed: true,
-            previewText: REG_NUMBER,
-            loading: true,
-          },
-          {
-            visible: true,
-            displayed: true,
-            previewText: "",
-            loading: false,
-          },
-        ];
+        renderOptions[0].previewText = REG_NUMBER;
+        renderOptions[0].loading = true;
+        renderOptions[1].visible = true;
         commit("setLoading", renderOptions);
         await this.$axios
           .get(encodeURI(`/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}`))
@@ -80,6 +80,9 @@ export const actions = {
       } catch (e) {
         console.log(e);
       }
+    } else if (params.fieldId === 29974) {
+      renderOptions[2].visible = true;
+      commit("togglePanel", renderOptions);
     }
   },
 };
