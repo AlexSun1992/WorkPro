@@ -1,6 +1,7 @@
 <template>
   <b-button
     @click="$emit('update', { fieldId: data.fieldId, value: data.name })"
+    :disabled="disabled"
     variant="secondary"
   >
     <div class="button">
@@ -28,6 +29,10 @@ export default {
       type: String,
       required: false,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
     },
     loading: {
       type: Boolean,

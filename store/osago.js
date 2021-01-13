@@ -22,7 +22,7 @@ export const actions = {
     try {
       await this.$axios.get(encodeURI(`/api/osago`)).then((res) => {
         res.data.captions[0].visible = true;
-        res.data.captions[1].displayed = false;
+        res.data.captions[0].displayed = true;
         res.data.captions[1].visible = false;
         commit("setData", res.data);
       });
@@ -40,13 +40,29 @@ export const actions = {
       () => {
         let obj = new Object();
         obj.visible = false;
-        obj.displayed = true;
+        obj.displayed = false;
         obj.previewText = "";
         obj.loading = false;
         return obj;
       }
     );
+    let page;
+    let toggleDisplay = (page) => {
+      renderOptions = renderOptions.map((item, index) => {
+        if (index <= page) {
+          item.displayed = true;
+          return item;
+        }
+      });
+    };
+    let getPage = (id) => {
+      let item = state.data.data.find((item) => {
+        return item.fieldId === id;
+      });
+      return item.page + 1;
+    };
     if (params.fieldId === 29914) {
+      page = 1;
       console.log(getters.getDataFieldByFieldId(29912).value);
       try {
         const REG_NUMBER = getters.getDataFieldByFieldId(29912).value;
@@ -76,14 +92,25 @@ export const actions = {
                 : "<p>данные не обнаружены, ничего страшного, просим продолжить оформление</p>",
             });
           });
-        commit("togglePanel", renderOptions);
       } catch (e) {
         console.log(e);
       }
     } else if (params.fieldId === 29974) {
-      renderOptions[2].visible = true;
-      commit("togglePanel", renderOptions);
+      page = getPage(29974);
+    } else if (params.fieldId === 29975) {
+      alert("Не реализовано");
+    } else if (params.fieldId === 31112) {
+      page = getPage(31112);
+    } else if (params.fieldId === 31113) {
+      page = getPage(31113);
+    } else if (params.fieldId === 31114) {
+      page = getPage(31114);
+    } else if (params.fieldId === 31115) {
+      page = getPage(31115);
     }
+    renderOptions[page].visible = true;
+    toggleDisplay(page);
+    commit("togglePanel", renderOptions);
   },
 };
 export const mutations = {

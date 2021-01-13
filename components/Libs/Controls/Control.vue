@@ -14,6 +14,7 @@
         :data="data"
         :edit="edit"
         :store="store"
+        :disabled="disabled"
         :loading="loading"
       ></component>
     </div>
@@ -75,6 +76,10 @@ export default {
       type: String,
       required: false,
       default: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
     },
     loading: {
       type: Boolean,
