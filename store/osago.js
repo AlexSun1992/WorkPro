@@ -62,7 +62,7 @@ export const actions = {
       return item.page + 1;
     };
     if (params.fieldId === 29914) {
-      page = 1;
+      page = getPage(29914);
       console.log(getters.getDataFieldByFieldId(29912).value);
       try {
         const REG_NUMBER = getters.getDataFieldByFieldId(29912).value;
