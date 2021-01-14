@@ -1,5 +1,13 @@
 /* eslint-disable */
 
+import {
+  toggleDisplay,
+  getPage,
+  getOptions,
+  carTemplate,
+  getTemplate,
+} from "../utils/osago";
+
 export const state = () => ({
   id: 738,
   data: {},
@@ -23,7 +31,7 @@ export const actions = {
       await this.$axios.get(encodeURI(`/api/osago`)).then((res) => {
         res.data.captions[0].visible = true;
         res.data.captions[0].displayed = true;
-        res.data.captions[1].visible = false;
+        // res.data.captions[1].visible = false;
         commit("setData", res.data);
       });
     } catch (e) {
@@ -35,35 +43,10 @@ export const actions = {
   },
   async executeAction({ commit, getters, state }, params) {
     commit("setValueByFieldId", params);
-    let renderOptions = Array.from(
-      { length: state.data.captions.length },
-      () => {
-        let obj = new Object();
-        obj.visible = false;
-        obj.displayed = false;
-        obj.previewText = "";
-        obj.loading = false;
-        return obj;
-      }
-    );
     let page;
-    let toggleDisplay = (page) => {
-      renderOptions = renderOptions.map((item, index) => {
-        if (index <= page) {
-          item.displayed = true;
-          return item;
-        }
-      });
-    };
-    let getPage = (id) => {
-      let item = state.data.data.find((item) => {
-        return item.fieldId === id;
-      });
-      return item.page + 1;
-    };
+    let renderOptions = getOptions(state);
     if (params.fieldId === 29914) {
-      page = getPage(29914);
-      console.log(getters.getDataFieldByFieldId(29912).value);
+      page = getPage(29914, state);
       try {
         const REG_NUMBER = getters.getDataFieldByFieldId(29912).value;
         if (!getters.getDataFieldByFieldId(29912).value) {
@@ -71,7 +54,6 @@ export const actions = {
         }
         renderOptions[0].previewText = REG_NUMBER;
         renderOptions[0].loading = true;
-        renderOptions[1].visible = true;
         commit("setLoading", renderOptions);
         await this.$axios
           .get(encodeURI(`/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}`))
@@ -81,14 +63,7 @@ export const actions = {
             commit("setValueByFieldId", {
               fieldId: 29973,
               value: res.data.length
-                ? `<ul>
-                      <li>Марка-модель: <b>${res.data[0].SMODEL}</b></li>
-                      <li>Тип ТС: <b>${res.data[0].IDCAR_BODY_TYPE}</b></li>
-                      <li>Год выпуска: <b>${res.data[0].NBUILD_YEAR}</b></li>
-                      <li>Мощность: <b>${res.data[0].NOUTPUT} л.с.</b></li>
-                      <li>VIN: <b>${res.data[0].SVIN}</b></li>
-                      <li>СТС: <b>${res.data[0].SSTS_NUMBER} от ${res.data[0].DTEH_OSMOTR_DATE}</b></li>
-                      </ul>`
+                ? getTemplate(res)
                 : "<p>данные не обнаружены, ничего страшного, просим продолжить оформление</p>",
             });
           });
@@ -96,23 +71,22 @@ export const actions = {
         console.log(e);
       }
     } else if (params.fieldId === 29974) {
-      page = getPage(29974);
+      page = getPage(29974, state);
     } else if (params.fieldId === 29975) {
       alert("Не реализовано");
     } else if (params.fieldId === 31112) {
-      page = getPage(31112);
+      page = getPage(31112, state);
     } else if (params.fieldId === 31113) {
-      page = getPage(31113);
+      page = getPage(31113, state);
     } else if (params.fieldId === 31114) {
-      page = getPage(31114);
+      page = getPage(31114, state);
     } else if (params.fieldId === 31115) {
-      page = getPage(31115);
-    }
-
+      page = getPage(31115, state);
+    } else return;
     if (renderOptions[page]) {
       renderOptions[page].visible = true;
     }
-    toggleDisplay(page);
+    toggleDisplay(page, renderOptions);
     commit("togglePanel", renderOptions);
   },
 };
