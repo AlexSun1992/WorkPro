@@ -108,7 +108,10 @@ export const actions = {
     } else if (params.fieldId === 31115) {
       page = getPage(31115);
     }
-    renderOptions[page].visible = true;
+
+    if (renderOptions[page]) {
+      renderOptions[page].visible = true;
+    }
     toggleDisplay(page);
     commit("togglePanel", renderOptions);
   },
@@ -139,9 +142,11 @@ export const mutations = {
   },
   togglePanel(state, data) {
     state.data.captions = state.data.captions.map((item, i) => {
-      item.visible = data[i].visible;
-      item.displayed = data[i].displayed;
-      item.previewText = data[i].previewText;
+      if (data[i]) {
+        item.visible = data[i].visible;
+        item.displayed = data[i].displayed;
+        item.previewText = data[i].previewText;
+      }
       return item;
     });
   },
