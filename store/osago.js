@@ -14,6 +14,7 @@ export const state = () => ({
   form: null,
   captions: null,
   cardCaption: null,
+  carInfo: null,
 });
 export const getters = {
   getData: (state) => state.data,
@@ -56,8 +57,13 @@ export const actions = {
         renderOptions[0].loading = true;
         commit("setLoading", renderOptions);
         await this.$axios
-          .get(encodeURI(`/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}`))
+          .get(
+            encodeURI(
+              `/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}&${Math.random()}`
+            )
+          )
           .then((res) => {
+            commit("setCarInfo", res.data[0]);
             renderOptions[0].loading = false;
             commit("setLoading", renderOptions);
             commit("setValueByFieldId", {
@@ -72,6 +78,22 @@ export const actions = {
       }
     } else if (params.fieldId === 29974) {
       page = getPage(29974, state);
+      state.data.data.forEach((item) => {
+        if (state.carInfo[item.name]) {
+          if (item.name === "OUTPUT") {
+            commit("setValueByFieldId", {
+              fieldId: 31045,
+              value:
+                Math.round((Number(state.carInfo[item.name]) * 100) / 1.3596) /
+                100,
+            });
+          }
+          commit("setValueByFieldId", {
+            fieldId: item.fieldId,
+            value: state.carInfo[item.name],
+          });
+        }
+      });
     } else if (params.fieldId === 29975) {
       alert("Не реализовано");
     } else if (params.fieldId === 31112) {
@@ -111,6 +133,7 @@ export const mutations = {
     state.settings = data;
   },
   setValueByFieldId(state, data) {
+    if (!data.fieldId) return;
     let field = state.data.data.find((item) => item.fieldId == data.fieldId);
     field.value = data.value;
   },
@@ -129,5 +152,8 @@ export const mutations = {
       item.loading = data[i].loading ? data[i].loading : !!data[i].loading;
       return item;
     });
+  },
+  setCarInfo(state, data) {
+    state.carInfo = data;
   },
 };

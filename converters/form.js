@@ -65,7 +65,9 @@ converter.subcompare = (a, b) => {
 converter.form = async (data, itemId) => {
   let item = data[0]._data.length ? data[0]._data[0] : {};
   let fields = data[0]._struct;
+  console.log(item);
   let meta = converter.meta(data[0]._meta) || {};
+  console.log(meta);
   let arr = converter.setFieldsParams(itemId, item, fields);
   let webFieldsArr = [];
   let webFields = data[0]._meta["JSONWEBFIELDS"];

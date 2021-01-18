@@ -51,6 +51,7 @@ app.get("/osago", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
+        console.log(resp);
         let data = freeMethodsConverter.osago(
           await formConverter.form(resp.data, req.params.idItem)
         );
