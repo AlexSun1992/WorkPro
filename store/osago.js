@@ -117,7 +117,7 @@ export const actions = {
         }
       });
     } else if (params.fieldId === 29975) {
-      alert("Не реализовано");
+      page = getPage(29974, state);
     } else if (params.fieldId === 31112) {
       page = getPage(31112, state);
     } else if (params.fieldId === 31113) {
