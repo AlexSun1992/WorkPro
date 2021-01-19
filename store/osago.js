@@ -93,6 +93,28 @@ export const actions = {
             value: state.carInfo[item.name],
           });
         }
+        if (item.fieldId == 31069) {
+          // Вынести и отрефакторить
+          commit("setValueByFieldId", {
+            fieldId: item.fieldId,
+            text: state.carInfo[item.name],
+            value: {
+              text: state.carInfo[item.name],
+              value: item.fieldId,
+            },
+          });
+        }
+        if (item.fieldId == 31094) {
+          // Вынести и отрефакторить
+          commit("setValueByFieldId", {
+            fieldId: item.fieldId,
+            text: state.carInfo[item.name],
+            value: {
+              text: state.carInfo[item.name],
+              value: item.fieldId,
+            },
+          });
+        }
       });
     } else if (params.fieldId === 29975) {
       alert("Не реализовано");
