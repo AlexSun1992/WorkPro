@@ -28,7 +28,7 @@
     <div v-else class="row">
       <Control
         v-for="(item, i) in items()"
-        :key="item.id"
+        :key="i"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
