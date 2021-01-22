@@ -97,7 +97,7 @@ converter.menuObject = (data) => {
   obj.edit = data.LEDIT;
   obj.delete = data.LDELETE;
   obj.cols = data.NCOLCOUNT;
-  obj.isCard = data.IDADMMENUTYPE === 3;
+  obj.isCard = data.IDADMMENUTYPE === 3 || data.IDADMMENUTYPE === 14;
   obj.isForm = data.IDADMMENUTYPE === 9;
   obj.wizard = wizardConverter.wizard(data.WIZARDCUR);
   obj.portalgrid = data.SVJPORTALGRID || null;
