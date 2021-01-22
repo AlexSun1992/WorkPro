@@ -1,26 +1,28 @@
 <template>
   <div>
-    <Form
-      v-if="data.length && !this.captions"
-      :data="data"
-      :tabs="tabs"
-      @update="updateValue($event)"
-      @clear="clearRelation($event)"
-      @open-card="openCard($event)"
-      :edit="edit"
-    ></Form>
-    <FormAccordion
-      v-else-if="data.length"
-      :class="{ 'mt-5': !params.settings && showBtnBack }"
-      :data="data"
-      :tabs="tabs"
-      @update="updateValue($event)"
-      @clear="clearRelation($event)"
-      @open-card="openCard($event)"
-      :edit="edit"
-    />
-    <SkeletonBox v-else-if="!isError" class="mt-5" :items="8"></SkeletonBox>
-    <div class="error-message" v-else-if="isError">
+    <div v-if="data.length">
+      <Form
+        v-if="!isAccordion"
+        :data="data"
+        :tabs="tabs"
+        @update="updateValue($event)"
+        @clear="clearRelation($event)"
+        @open-card="openCard($event)"
+        :edit="edit"
+      ></Form>
+      <FormAccordion
+        v-else-if="isAccordion"
+        :class="{ 'mt-5': !params.settings && showBtnBack }"
+        :data="data"
+        :tabs="tabs"
+        @update="updateValue($event)"
+        @clear="clearRelation($event)"
+        @open-card="openCard($event)"
+        :edit="edit"
+      />
+    </div>
+    <SkeletonBox v-if="!data.length" class="mt-5" :items="8"></SkeletonBox>
+    <div class="error-message" v-if="isError">
       {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
     </div>
   </div>
@@ -267,6 +269,10 @@ export default {
     },
     captions: function () {
       return this.$store.getters["data_card/getCaptions"];
+    },
+    isAccordion: function () {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        .LACCORDION;
     },
   },
 };
