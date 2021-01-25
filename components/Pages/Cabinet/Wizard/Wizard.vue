@@ -17,7 +17,7 @@ import ActionButton from "../Block/ActionButton";
 import FormPage from "~/components/Pages/FormPage";
 import OpenCardButton from "../Block/OpenCardButton";
 import VRuntimeTemplate from "v-runtime-template";
-import DeleteCardButton from "../Block/DeleteCardButton"
+import DeleteCardButton from "../Block/DeleteCardButton";
 
 export default {
   name: "Wizard",
@@ -32,7 +32,7 @@ export default {
     OpenCardButton,
     WizardCard,
     FormPage,
-    DeleteCardButton
+    DeleteCardButton,
   },
   props: {
     params: {
@@ -92,4 +92,20 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.dropdown > ul {
+  min-width: fit-content;
+}
+.dropdown-item:hover {
+  background-color: #ccc !important;
+}
+.dropdown-item:hover > button {
+  background-color: #ccc !important;
+}
+
+.dropdown-item > button {
+  background-color: white !important;
+  color: black !important;
+  box-shadow: none !important;
+}
+</style>
