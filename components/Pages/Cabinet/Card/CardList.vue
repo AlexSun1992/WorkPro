@@ -48,6 +48,7 @@ export default {
   },
   methods: {
     showItem(record) {
+      console.log(record);
       this.$emit("action-clicked", record);
     },
   },
