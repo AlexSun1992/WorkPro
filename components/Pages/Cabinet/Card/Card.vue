@@ -7,7 +7,6 @@
         v-on:click="refreshCardList"
         type="submit"
         variant="primary"
-        v-b-popover.hover.top="'Обновить список'"
         >Обновить</b-button
       >
       <card-list
@@ -22,12 +21,10 @@
 
 <script>
 import CardList from "./CardList";
-import CardForm from "./CardForm";
-import CardFilter from "./CardFilter";
 
 export default {
   name: "Card",
-  components: { CardList, CardForm, CardFilter },
+  components: { CardList },
   props: {
     params: {
       type: Object,
@@ -37,9 +34,12 @@ export default {
   },
   methods: {
     openCardForm(data) {
-      console.log(data);
       $nuxt._router.push(
-        `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${data.data.item.ID}/${data.data.item.REL}`
+        `/cabinet/wizard/${this.params.page.idItem}/${
+          this.params.page.idModule
+        }/0/${this.params.settings.wizard[0].idItem}/${data.data.item.ID}/${
+          data.data.item.REL.split("|")[0]
+        }`
       );
     },
     async refreshCardList() {
