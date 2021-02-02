@@ -160,7 +160,7 @@ export default {
         data[i].checked = true;
         if (
           data[i].required &&
-          (value == null || value == undefined || value == "") &&
+          (value === null || value === undefined || value === "") &&
           data[i].type !== "boolean" &&
           value !== 0
         ) {
