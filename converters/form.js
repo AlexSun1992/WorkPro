@@ -207,7 +207,7 @@ converter.form = async (data, itemId) => {
             }
           } else {
             fieldName = item.value.config.url.replace(
-              "/am/main/v2/dic/55/742/",
+              `/am/main/v2/dic/55/${itemId}/`,
               ""
             );
             if (fieldName) {
@@ -262,7 +262,10 @@ converter.type = (data) => {
     }
     if (data[i].name.substring(0, 2) === `FK`) {
       for (let j = 0; j < data.length; j++) {
-        if (data[i].name.substring(2) === data[j].name) {
+        if (
+          data[i].name.substring(2) === data[j].name &&
+          data[j].type !== "combobox"
+        ) {
           copy[i].type = `enum`;
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
