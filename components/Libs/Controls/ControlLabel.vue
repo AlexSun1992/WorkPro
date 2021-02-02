@@ -1,5 +1,9 @@
 <template>
-  <v-runtime-template :template="data.value"></v-runtime-template>
+  <div>
+    <v-runtime-template
+      :template="'<div>' + data.value + '</div>'"
+    ></v-runtime-template>
+  </div>
 </template>
 
 <script>

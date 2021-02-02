@@ -5,25 +5,7 @@
         <b-nav-item
           v-for="(item, index) in settings.wizard"
           :key="item.id"
-          :to="
-            item.list
-              ? '/cabinet/wizard/' +
-                $route.params.idWizard +
-                '/list/55/0/' +
-                item.idItem +
-                '/' +
-                $route.params.idCard +
-                '/' +
-                rels.split('|')[index]
-              : '/cabinet/wizard/' +
-                $route.params.idWizard +
-                '/55/0/' +
-                item.idItem +
-                '/' +
-                $route.params.idCard +
-                '/' +
-                rels.split('|')[index]
-          "
+          :to="getURL(item, index)"
           exact
           exact-active-class="active"
           >{{ item.name }}</b-nav-item
@@ -41,6 +23,21 @@ export default {
   async fetch({ store, route }) {
     await store.dispatch("wizard/fetchList", route.params);
   },
+  methods: {
+    getURL(item, index) {
+      if (this.$route.params.idCard === "0") {
+        return `/cabinet/wizard/${this.$route.params.idWizard}${
+          item.list ? `/list/55/0/` : `/55/0/`
+        }${item.idItem}/0/0`;
+      } else {
+        return `/cabinet/wizard/${this.$route.params.idWizard}${
+          item.list ? `/list/55/0/` : `/55/0/`
+        }${item.idItem}/${this.$route.params.idCard}/${
+          this.rels.split("|")[index]
+        }`;
+      }
+    },
+  },
   computed: {
     settings: {
       get: function () {
@@ -55,12 +52,12 @@ export default {
       },
     },
     rels() {
-      if (this.$route.params.idCard) {
+      if (this.$route.params.idCard !== "0") {
         return this.$store.getters["wizard/getItemOfListById"](
           `${this.$route.params.idCard}`
         ).REL;
       } else {
-        return null;
+        return "|";
       }
     },
   },

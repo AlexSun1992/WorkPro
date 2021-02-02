@@ -3,6 +3,14 @@
     <div class="animated fadeIn">
       <b-button
         class="mb-2"
+        v-if="isAddNewRecord"
+        v-on:click="addNewRecord"
+        type="submit"
+        variant="primary"
+        >Добавить новую запись</b-button
+      >
+      <b-button
+        class="mb-2"
         v-if="isList"
         v-on:click="refreshCardList"
         type="submit"
@@ -42,6 +50,11 @@ export default {
         }`
       );
     },
+    addNewRecord() {
+      $nuxt._router.push(
+        `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/0/0`
+      );
+    },
     async refreshCardList() {
       try {
         await this.$store.dispatch("card/fetchList");
@@ -74,6 +87,11 @@ export default {
     isListLoading: {
       get: function () {
         return this.$store.getters["card/isListLoading"];
+      },
+    },
+    isAddNewRecord: {
+      get: function () {
+        return this.params.settings.add;
       },
     },
   },

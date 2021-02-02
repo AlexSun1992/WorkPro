@@ -122,7 +122,16 @@ converter.form = async (data, itemId) => {
       obj.type = "timestamp";
     } else if (webFields[i].IDCONTROL == 15) {
       obj.type = "combobox";
-      promises.push(axios.get(`/am/main/v2/dicwf/${webFields[i].ID}`));
+      if (webFields[i].LVISIBLE && webFields[i].LDIC === true) {
+        promises.push(axios.get(`/am/main/v2/dicwf/${webFields[i].ID}`));
+      }
+      if (webFields[i].LVISIBLE && webFields[i].LDIC === false) {
+        promises.push(
+          axios.get(
+            `/am/main/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${webFields[i].SNAME}`
+          )
+        );
+      }
     } else if (webFields[i].IDCONTROL == 16) {
       obj.type = "boolean";
     } else if (webFields[i].IDCONTROL == 21) {
@@ -175,23 +184,49 @@ converter.form = async (data, itemId) => {
       ? "FK" + webFields[i].SCONNECTFIELD
       : null;
     obj.isTab = data[0]._meta["SPAGECAPTION"] ? true : false;
-    // webFieldsArr.push(obj)
     promises.push(Promise.resolve(obj));
   }
-
-  await Promise.allSettled(promises).then((values) => {
-    values.forEach((item, i) => {
-      if (item.status == "fulfilled" && item.value.data) {
-        let options = selectConverter.select(item.value.data);
-        // values[i + 1].value.options = options;
-      } else if (item.status == "fulfilled" && !item.value.data) {
-        webFieldsArr.push(item.value);
-      }
+  try {
+    await Promise.allSettled(promises).then((values) => {
+      values.forEach((item, i) => {
+        if (item.status == "fulfilled" && item.value.data) {
+          let options = selectConverter.select(item.value.data);
+          const url = item.value.config.url;
+          const isDicwf = url.includes("dicwf");
+          const fieldId = null;
+          let fieldName = null;
+          let field1 = null;
+          if (isDicwf) {
+            const fieldId = parseInt(
+              item.value.config.url.replace("/am/main/v2/dicwf/", "")
+            );
+            if (fieldId) {
+              field1 = values.find((b) =>
+                b.value ? b.value.fieldId === fieldId : null
+              );
+            }
+          } else {
+            fieldName = item.value.config.url.replace(
+              "/am/main/v2/dic/55/742/",
+              ""
+            );
+            if (fieldName) {
+              field1 = values.find((b) =>
+                b.value ? b.value.name === fieldName : null
+              );
+            }
+          }
+          if (field1) {
+            field1.value.options = options;
+          }
+        } else if (item.status == "fulfilled" && !item.value.data) {
+          webFieldsArr.push(item.value);
+        }
+      });
     });
-  });
+  } catch (e) {}
 
   // ********
-
   return {
     // Переход на поля JSONWEBFIELDS
     data: converter.type(arr),

@@ -22,7 +22,6 @@ export const actions = {
 
 export const mutations = {
   setList(state, data) {
-    console.log(data);
     state.list = data;
   },
 };
