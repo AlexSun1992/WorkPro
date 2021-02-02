@@ -173,7 +173,7 @@ export default {
     async saveDataCard() {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
-      this.$store.commit("data_card/filterFields");
+      // this.$store.commit("data_card/filterFields");
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
         try {
