@@ -91,20 +91,13 @@ export default {
     async updateValue(e) {
       this.$store.commit("data_card/cardChanged", true);
       if (typeof eventHandler === "function") {
-        if (
+        this.$store.commit(
+          "data_card/setForm",
           eventHandler(
             this.data.map((a) => Object.assign({}, a)),
             e
-          )
-        ) {
-          this.$store.commit(
-            "data_card/setForm",
-            eventHandler(
-              this.data.map((a) => Object.assign({}, a)),
-              e
-            ) || this.data
-          );
-        }
+          ) || this.data
+        );
       }
       if (e.SCONST) {
         const form = this.$store.getters["data_card/getForm"];
