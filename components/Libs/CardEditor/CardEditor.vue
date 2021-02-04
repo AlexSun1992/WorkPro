@@ -97,7 +97,7 @@ export default {
           this.fetchCard
         );
         if (data) {
-          this.$store.commit("data_card/setForm", data || this.data);
+          this.$store.commit("data_card/setForm", data);
         }
       }
       if (e.SCONST) {
