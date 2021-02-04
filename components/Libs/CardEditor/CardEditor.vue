@@ -91,13 +91,14 @@ export default {
     async updateValue(e) {
       this.$store.commit("data_card/cardChanged", true);
       if (typeof eventHandler === "function") {
-        this.$store.commit(
-          "data_card/setForm",
-          eventHandler(
-            this.data.map((a) => Object.assign({}, a)),
-            e
-          ) || this.data
+        let data = await eventHandler(
+          this.data.map((a) => Object.assign({}, a)),
+          e,
+          this.fetchCard
         );
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.data);
+        }
       }
       if (e.SCONST) {
         const form = this.$store.getters["data_card/getForm"];
@@ -130,6 +131,13 @@ export default {
         fieldId: e.fieldId,
         value: e.value,
       });
+    },
+    async fetchCard(item) {
+      let [, idModule, idItem, idCard, rel] = item.value.value.split("/");
+      let test = await this.$axios.get(
+        `/am/main/v2/datacard/${idModule}/${idItem}/${idCard}?REL=${rel}`
+      );
+      return test.data[0]._data[0];
     },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {

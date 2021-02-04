@@ -85,7 +85,11 @@ export default {
           this.options = resp.data;
           if (this.options.length === 1) {
             let value = this.options[0];
-            this.$emit("update", { fieldId: this.data.fieldId, value });
+            this.$emit("update", {
+              fieldId: this.data.fieldId,
+              name: this.data.name,
+              value,
+            });
             this.$emit("clear", { fieldName: this.data.name });
           }
         })
@@ -118,7 +122,11 @@ export default {
         }
       },
       set: function (value) {
-        this.$emit("update", { fieldId: this.data.fieldId, value });
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value,
+        });
         this.$emit("clear", { fieldName: this.data.name });
       },
     },
