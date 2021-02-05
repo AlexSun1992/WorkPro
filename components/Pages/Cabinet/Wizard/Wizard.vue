@@ -55,7 +55,7 @@ export default {
       if (this.$route.params.idCard !== "0") {
         return this.$store.getters["wizard/getItemOfListById"](
           `${this.$route.params.idCard}`
-        ).REL;
+        )?.REL;
       } else {
         return "|";
       }
