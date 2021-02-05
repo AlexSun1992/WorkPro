@@ -56,7 +56,7 @@ export default {
     };
   },
   created() {
-    if (this.data.value.value || this.data.value.value == 0)
+    if (this.data.value?.value || this.data.value?.value == 0)
       this.options.push(this.data.value);
   },
   mounted() {
@@ -161,7 +161,7 @@ export default {
   watch: {
     relationValue: function (val, old) {
       if (val.value.value) {
-        if (val.value.value !== old.value.value) {
+        if (val.value.value !== old?.value.value) {
           this.initData();
         }
       }
