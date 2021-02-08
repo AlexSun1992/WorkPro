@@ -133,9 +133,15 @@ export default {
     relationValue: {
       get: function () {
         if (this.data.isRelation) {
-          return this.$store.getters["data_card/getDataFieldByName"](
-            this.data.fieldRelation
-          );
+          if (this.data.fieldRelation !== null) {
+            return this.$store.getters["data_card/getDataFieldByName"](
+              this.data.fieldRelation
+            );
+          } else {
+            return this.$store.getters["data_card/getDataFieldByName"](
+              this.data.name
+            );
+          }
         } else {
           return null;
         }
