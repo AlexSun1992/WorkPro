@@ -153,7 +153,7 @@ export default {
       )?.state;
     },
     isDisabled() {
-      if (this.relationValue) {
+      if (this.relationValue && this.data.fieldRelation) {
         if (this.relationValue.value) {
           if (!this.relationValue.value.value) {
             return true;
