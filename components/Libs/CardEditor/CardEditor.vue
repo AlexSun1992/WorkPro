@@ -207,11 +207,21 @@ export default {
           if (this.$route.params.idCard === "0") {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
-            $nuxt._router.push(
-              `/cabinet/${moduleId}/0/${itemId}/${cardId}${
-                relId ? `/${relId}` : ""
-              }`
-            );
+            if (this.$route.params.idWizard) {
+              await this.$store.dispatch(
+                "wizard/fetchList",
+                this.$route.params
+              );
+              $nuxt._router.push(
+                `/cabinet/wizard/${this.$route.params.idWizard}/${moduleId}/0/${itemId}/${cardId}/${relId}`
+              );
+            } else {
+              $nuxt._router.push(
+                `/cabinet/${moduleId}/0/${itemId}/${cardId}${
+                  relId ? `/${relId}` : ""
+                }`
+              );
+            }
           }
           this.$bvToast.toast("Успешно сохранено", {
             title: "",
@@ -220,6 +230,7 @@ export default {
           });
           this.$emit("error", null);
         } catch (err) {
+          console.log(err.response);
           if (this.$route.path.includes("55/0/19")) {
             this.$emit(
               "error",

@@ -102,7 +102,10 @@ converter.form = async (data, itemId) => {
       obj.value = false;
     }
     obj.type = webFields[i].STYPE;
-
+    const fieldOfStruct = fields.find((f) => f.FIELD === webFields[i].SNAME);
+    if (fieldOfStruct) {
+      obj.structType = fieldOfStruct.TYPE;
+    }
     if (
       (webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) &&
       (webFields[i].STYPE == "Double" ||
@@ -314,6 +317,16 @@ converter.save = (data) => {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
           res[data[i].name] = data[i].value !== null ? data[i].value : "NULL";
+          if (data[i].structType === "boolrus") {
+            res[data[i].name] = data[i].value === "true" ? "Д" : "Н";
+          }
+          if (
+            data[i].structType === "long" ||
+            data[i].structType === "double"
+          ) {
+            res[data[i].name] =
+              data[i].value !== null ? parseInt(data[i].value) : "NULL";
+          }
         } else {
           res[data[i].name] = data[i].value
             ? moment(data[i].value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
@@ -322,7 +335,11 @@ converter.save = (data) => {
             : "NULL";
         }
       } else {
-        res[data[i].name] = data[i].value ? "Y" : "N";
+        if (data[i].name.substring(0, 1) === "B") {
+          res[data[i].name] = data[i].value ? "Д" : "Н";
+        } else {
+          res[data[i].name] = data[i].value ? "Y" : "N";
+        }
       }
     } else {
       if (data[i].name.substring(0, 2) === `FK`) {
