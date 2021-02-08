@@ -31,6 +31,7 @@ import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
+import consts from "~/api/urls";
 export default {
   name: "CardEditor",
   head() {
@@ -97,7 +98,7 @@ export default {
           this.fetchCard
         );
         if (data) {
-          this.$store.commit("data_card/setForm", data);
+          this.$store.commit("data_card/setForm", data || this.data);
         }
       }
       if (e.SCONST) {
@@ -134,10 +135,10 @@ export default {
     },
     async fetchCard(item) {
       let [, idModule, idItem, idCard, rel] = item.value.value.split("/");
-      let test = await this.$axios.get(
-        `/am/main/v2/datacard/${idModule}/${idItem}/${idCard}?REL=${rel}`
+      let result = await this.$axios.get(
+        `${consts.DATACARD}/${idModule}/${idItem}/${idCard}?REL=${rel}`
       );
-      return test.data[0]._data[0];
+      return result.data[0]._data[0];
     },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {
