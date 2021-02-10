@@ -41,13 +41,14 @@ export default {
     },
   },
   methods: {
-    openCardForm(data) {
+    async openCardForm(data) {
+      await this.$store.dispatch("wizard/fetchWizard", {
+        idModule: this.params.page.idModule,
+        idWizard: this.params.page.idItem,
+        idCard: data.data.item.ID,
+      });
       $nuxt._router.push(
-        `/cabinet/wizard/${this.params.page.idItem}/${
-          this.params.page.idModule
-        }/0/${this.params.settings.wizard[0].idItem}/${data.data.item.ID}/${
-          data.data.item.REL.split("|")[0]
-        }`
+        `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/${data.data.item.ID}/${this.wizardRel}`
       );
     },
     addNewRecord() {
@@ -93,6 +94,9 @@ export default {
       get: function () {
         return this.params.settings.add;
       },
+    },
+    wizardRel() {
+      return this.$store.getters["wizard/getWizard"]?.REL.split("|")[0];
     },
   },
 };

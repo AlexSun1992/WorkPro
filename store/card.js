@@ -1,3 +1,4 @@
+/* eslint-disable */
 export const state = () => ({
   page: {},
   form: [],
@@ -187,7 +188,7 @@ export const actions = {
     commit("setShowList", true);
     commit("setListLoading", true);
     await this.$axios
-      .get(`/api/list/${page.idModule}/${page.idItem}/${jsonFilters}`)
+      .get(`/api/list/${page.idModule}/${page.idItem}/[]`)
       .then((res) => {
         commit("setListLoading", false);
         commit("setList", res.data);

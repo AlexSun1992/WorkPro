@@ -1,27 +1,24 @@
 /* eslint-disable */
 export const state = () => ({
-  list: [],
+  data: {},
 });
 
 export const getters = {
-  getList: (state) => state.list,
-  getItemOfListById: (state) => (id) => {
-    return state.list.items.find((b) => b.ID === parseInt(id));
-  },
+  getWizard: (state) => state.data,
 };
 
 export const actions = {
-  async fetchList({ commit, getters }, params) {
+  async fetchWizard({ commit, getters }, params) {
     await this.$axios
-      .get(`/api/list/${params.idModule}/${params.idWizard}/[]`)
+      .get(`/api/wizard/${params.idModule}/${params.idWizard}/${params.idCard}`)
       .then((res) => {
-        commit("setList", res.data);
+        commit("setWizard", res.data.data);
       });
   },
 };
 
 export const mutations = {
-  setList(state, data) {
-    state.list = data;
+  setWizard(state, data) {
+    state.data = data;
   },
 };

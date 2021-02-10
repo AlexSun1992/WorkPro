@@ -21,7 +21,7 @@ import breadcrumbs from "~/converters/breadcrumbs";
 export default {
   name: "Wizard",
   async fetch({ store, route }) {
-    await store.dispatch("wizard/fetchList", route.params);
+    await store.dispatch("wizard/fetchWizard", route.params);
   },
   methods: {
     getURL(item, index) {
@@ -53,9 +53,7 @@ export default {
     },
     rels() {
       if (this.$route.params.idCard !== "0") {
-        return this.$store.getters["wizard/getItemOfListById"](
-          `${this.$route.params.idCard}`
-        )?.REL;
+        return this.$store.getters["wizard/getWizard"]?.REL;
       } else {
         return "|";
       }

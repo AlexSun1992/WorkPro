@@ -76,10 +76,10 @@ converter.form = async (data, itemId) => {
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
     obj.label = webFields[i].SCAPTION;
-    if (item[webFields[i].SNAME] || item[webFields[i].SNAME] == 0) {
+    if (item[webFields[i].SNAME] || item[webFields[i].SNAME] === 0) {
       obj.value = item[webFields[i].SNAME];
     }
-    if (meta[webFields[i].SNAME] || meta[webFields[i].SNAME] == 0) {
+    if (meta[webFields[i].SNAME] || meta[webFields[i].SNAME] === 0) {
       obj.value = meta[webFields[i].SNAME];
     }
     if (

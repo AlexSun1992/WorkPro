@@ -1,3 +1,4 @@
+/* eslint-disable */
 import listConverter from "../converters/list";
 import formConverter from "../converters/form";
 import consts from "../api/urls";

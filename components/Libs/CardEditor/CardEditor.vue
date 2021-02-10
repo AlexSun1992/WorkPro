@@ -99,7 +99,9 @@ export default {
           ) || this.data
         );
       }
-      if (e.SCONST) {
+      let field = this.data.find((f) => f.fieldId === e.fieldId);
+      console.log(field);
+      if (field.type === "button") {
         const form = this.$store.getters["data_card/getForm"];
         let response = await this.$store.dispatch("data_card/executeAction", {
           actionId: e.ID,
@@ -109,7 +111,6 @@ export default {
           itemId: e.NITEM,
           body: form,
         });
-
         if (response?.response) {
           if (this.$route.path.includes("55/0/19")) {
             this.$emit("error", response.response.data.MESSAGE);
@@ -199,10 +200,11 @@ export default {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
             if (this.$route.params.idWizard) {
-              await this.$store.dispatch(
-                "wizard/fetchList",
-                this.$route.params
-              );
+              await this.$store.dispatch("wizard/fetchWizard", {
+                idModule: this.$route.params.idModule,
+                idWizard: this.$route.params.idWizard,
+                idCard: cardId,
+              });
               $nuxt._router.push(
                 `/cabinet/wizard/${this.$route.params.idWizard}/${moduleId}/0/${itemId}/${cardId}/${relId}`
               );
@@ -221,7 +223,6 @@ export default {
           });
           this.$emit("error", null);
         } catch (err) {
-          console.log(err.response);
           if (this.$route.path.includes("55/0/19")) {
             this.$emit(
               "error",
