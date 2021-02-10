@@ -25,8 +25,8 @@ app.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     );
     const list_data = listConverter.list(list.data);
     let card = null;
-    let result = null;
-    if (list_data.items.length) {
+    let result = { data: null, meta: null };
+    if (list_data.items.length !== 0) {
       const REL = list_data.items[0].REL;
       card = await axios.get(
         `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${ID}?REL=${REL}`

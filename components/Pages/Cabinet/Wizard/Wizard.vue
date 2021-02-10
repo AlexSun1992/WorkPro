@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="mb-4">
-      <b-nav tabs justified>
+      <b-nav v-if="pages" tabs justified>
         <b-nav-item
-          v-for="(item, index) in settings.wizard"
+          v-for="(item, index) in tabs"
           :key="item.id"
           :to="getURL(item, index)"
           exact
@@ -52,11 +52,29 @@ export default {
       },
     },
     rels() {
-      if (this.$route.params.idCard !== "0") {
-        return this.$store.getters["wizard/getWizard"]?.REL;
+      const rel = this.$store.getters["wizard/getWizard"]?.REL;
+      if (this.$route.params.idCard !== "0" && rel) {
+        return rel;
       } else {
         return "|";
       }
+    },
+    pages() {
+      return this.$store.getters["wizard/getWizardPages"];
+    },
+    tabs() {
+      let t = this.settings.wizard;
+      let arr = [];
+      if (this.pages) {
+        const p_arr = this.pages.split(";");
+        for (let i = 0; i < t.length; i++) {
+          const p_item = p_arr.find((v) => parseInt(v) === t[i].idItem);
+          if (p_item) {
+            arr.push(t[i]);
+          }
+        }
+      }
+      return arr;
     },
   },
 };
