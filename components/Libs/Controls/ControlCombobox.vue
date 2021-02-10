@@ -43,6 +43,7 @@ export default {
       set: function (value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
+          name: this.data.name,
           value: String(value),
         });
       },

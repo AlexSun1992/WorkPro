@@ -31,6 +31,7 @@ import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
+import consts from "~/api/urls";
 export default {
   name: "CardEditor",
   head() {
@@ -91,13 +92,14 @@ export default {
     async updateValue(e) {
       this.$store.commit("data_card/cardChanged", true);
       if (typeof eventHandler === "function") {
-        this.$store.commit(
-          "data_card/setForm",
-          eventHandler(
-            this.data.map((a) => Object.assign({}, a)),
-            e
-          ) || this.data
+        let data = await eventHandler(
+          this.data.map((a) => Object.assign({}, a)),
+          e,
+          this.fetchCard
         );
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.data);
+        }
       }
       let field = this.data.find((f) => f.fieldId === e.fieldId);
       console.log(field);
@@ -131,6 +133,13 @@ export default {
         fieldId: e.fieldId,
         value: e.value,
       });
+    },
+    async fetchCard(item) {
+      let [, idModule, idItem, idCard, rel] = item.value.value.split("/");
+      let result = await this.$axios.get(
+        `${consts.DATACARD}/${idModule}/${idItem}/${idCard}?REL=${rel}`
+      );
+      return result.data[0]._data[0];
     },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {
