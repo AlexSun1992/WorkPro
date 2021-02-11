@@ -304,11 +304,9 @@ export default {
         });
       }
       if (response.status === 200) {
-        this.$bvToast.toast("Успешно выполнено!", {
-          title: "",
-          variant: "success",
-          solid: true,
-        });
+        if (response.data.POUTVALUE) {
+          window.open(response.data.POUTVALUE);
+        }
       }
     },
   },

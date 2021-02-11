@@ -124,7 +124,7 @@ export const actions = {
     { relId, relActionId, rowId, actionId, body }
   ) {
     try {
-      await this.$axios
+      return await this.$axios
         .post(
           `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
           body || {}
