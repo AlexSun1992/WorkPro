@@ -1,5 +1,26 @@
 <template>
   <div>
+    <b-modal
+      modal-class="cabinet"
+      :id="'confirmAction'"
+      centered
+      :title="actionParamsTitle"
+      ok-title="Выполнить"
+      cancel-title="Отмена"
+      no-close-on-backdrop
+      @ok="applyAction"
+      no-fade
+    >
+      <b-alert :show="isActionApplyError" variant="danger">{{
+        actionApplyErrorMessage
+      }}</b-alert>
+      <Form
+        v-if="actionParams.length"
+        :data="actionParams"
+        :edit="true"
+        @update="updateActionParams($event)"
+      ></Form>
+    </b-modal>
     <Form
       v-if="data.length && !this.captions"
       :data="data"
@@ -31,6 +52,7 @@ import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
+import formConverter from "@/converters/form";
 import consts from "~/api/urls";
 export default {
   name: "CardEditor",
@@ -49,6 +71,10 @@ export default {
     return {
       invalidFields: [],
       body: null,
+      actionParamsTitle: null,
+      actionParamsId: null,
+      isActionApplyError: false,
+      actionApplyErrorMessage: null,
       disabledButtons: {
         background: "#dddbdd",
         boxShadow: "none",
@@ -102,32 +128,18 @@ export default {
         }
       }
       let field = this.data.find((f) => f.fieldId === e.fieldId);
-      console.log(field);
       if (field.type === "button") {
-        const form = this.$store.getters["data_card/getForm"];
-        let response = await this.$store.dispatch("data_card/executeAction", {
-          actionId: e.ID,
-          relActionId: e.REL,
-          relId: this.$route.params.idRel,
-          rowId: this.$route.params.idCard,
-          itemId: e.NITEM,
-          body: form,
-        });
-        if (response?.response) {
-          if (this.$route.path.includes("55/0/19")) {
-            this.$emit("error", response.response.data.MESSAGE);
-          } else {
-            this.$bvToast.toast(response.response.data.MESSAGE, {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
-            });
+        this.isActionApplyError = false;
+        const actionId = e.value.replace("Item", "");
+        let actionParams = await this.$store.dispatch(
+          "data_card/fetchActionParams",
+          {
+            actionId,
           }
-        } else {
-          await this.$store.dispatch("data_card/fetchForm", this.$route.params);
-        }
-        return;
+        );
+        this.actionParamsTitle = field.label;
+        this.actionParamsId = parseInt(actionId);
+        this.$bvModal.show("confirmAction");
       }
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
@@ -265,6 +277,40 @@ export default {
     goBack() {
       this.$router.push(this.$store.state.data_card.listPath);
     },
+    updateActionParams(e) {
+      this.$store.commit("data_card/setActionParamsField", e);
+    },
+    async applyAction(evt) {
+      if (evt) evt.preventDefault();
+      this.isActionApplyError = false;
+      const action = this.params.actions.find(
+        (f) => f.id === this.actionParamsId
+      );
+      let response = await this.$store.dispatch("data_card/executeAction", {
+        actionId: this.actionParamsId,
+        relActionId: action.relaction,
+        relId: this.$route.params.idRel,
+        rowId: this.$route.params.idCard,
+        body: this.actionParams,
+      });
+      if (response.status === 500) {
+        this.isActionApplyError = true;
+        this.actionApplyErrorMessage = response.data.INFO;
+        this.$bvToast.toast(response.data.MESSAGE, {
+          title: "Ошибка",
+          variant: "danger",
+          noAutoHide: true,
+          solid: true,
+        });
+      }
+      if (response.status === 200) {
+        this.$bvToast.toast("Успешно выполнено!", {
+          title: "",
+          variant: "success",
+          solid: true,
+        });
+      }
+    },
   },
   computed: {
     isButtonDisabled() {
@@ -288,6 +334,9 @@ export default {
     },
     captions: function () {
       return this.$store.getters["data_card/getCaptions"];
+    },
+    actionParams: function () {
+      return this.$store.getters["data_card/getActionParams"];
     },
   },
 };

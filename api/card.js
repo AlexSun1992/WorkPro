@@ -1,6 +1,7 @@
 /* eslint-disable */
 import formConverter from "../converters/form";
 import menuConverter from "../converters/menu";
+import filterConverter from "../converters/filter";
 import freeMethodsConverter from "../converters/forfreemethods";
 import consts from "./urls";
 
@@ -176,6 +177,21 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       });
   } catch (e) {
     res.send(e);
+  }
+});
+
+app.get("/action/:id", async (req, res) => {
+  try {
+    if (req.cookies) {
+      axios.defaults.headers.common.Authorization =
+        req.cookies["auth._token.local"];
+      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
+      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    }
+    const params = await axios.get(`${consts.ACTIONPARAM}/${req.params.id}`);
+    res.send(filterConverter.filter(params.data[0]._data));
+  } catch (err) {
+    res.send(err.response.data);
   }
 });
 

@@ -13,6 +13,7 @@ export const state = () => ({
   cardChanged: false,
   saveButtonClicked: false,
   listPath: "",
+  actionParams: [],
 });
 export const getters = {
   getForm: (state) => state.form,
@@ -25,6 +26,8 @@ export const getters = {
   getCardId: (state) => state.cardId,
   getCardRelId: (state) => state.cardRelId,
   getCaptions: (state) => state.captions,
+  getActionParams: (state) =>
+    state.actionParams.map((a) => Object.assign({}, a)),
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
   getDataFieldByName: (state) => (name) => {
@@ -118,7 +121,7 @@ export const actions = {
   },
   async executeAction(
     { dispatch },
-    { relId, relActionId, rowId, itemId, actionId, body }
+    { relId, relActionId, rowId, actionId, body }
   ) {
     try {
       await this.$axios
@@ -130,7 +133,16 @@ export const actions = {
           return resp;
         });
     } catch (e) {
-      console.log(e);
+      return e.response;
+    }
+  },
+  async fetchActionParams({ dispatch, commit }, { actionId }) {
+    try {
+      return await this.$axios.get(`/api/action/${actionId}`).then((resp) => {
+        commit("setActionParams", resp.data);
+        return resp.data;
+      });
+    } catch (e) {
       return e;
     }
   },
@@ -188,6 +200,10 @@ export const mutations = {
       }
     }
   },
+  setActionParamsField(state, data) {
+    const item = state.actionParams.find((d) => d.name === data.name);
+    item.value = data.value;
+  },
   setCardId(state, data) {
     state.cardId = data;
   },
@@ -218,5 +234,8 @@ export const mutations = {
   },
   setListPath(state, data) {
     state.listPath = data;
+  },
+  setActionParams(state, data) {
+    state.actionParams = data;
   },
 };
