@@ -3,35 +3,22 @@
     <div class="animated fadeIn">
       <b-button
         class="mb-2"
+        v-if="isAddNewRecord"
+        v-on:click="addNewRecord"
+        type="submit"
+        variant="primary"
+        >Добавить новую запись</b-button
+      >
+      <b-button
+        class="mb-2"
         v-if="isList"
         v-on:click="refreshCardList"
         type="submit"
         variant="primary"
         >Обновить</b-button
       >
-      <b-button
-        v-if="(isForm && !isAddCardForEdit) || isWizard"
-        v-on:click="openCardList"
-        type="submit"
-        variant="primary"
-        v-b-popover.hover.top="'Перейти к списку'"
-        ><i class="fa fa-chevron-left"></i
-      ></b-button>
-      <card-form
-        v-if="isForm"
-        :data="formData"
-        :actions="actionsData"
-        @save-form="saveCardForm"
-        @apply-action="applyCardActionForm"
-      />
-      <card-filter
-        v-if="isFilter"
-        :data="formData"
-        @action-clicked="applyCardFilter"
-      />
       <card-list
         v-if="isList"
-        :is-action="isEdit"
         :load="isListLoading"
         :data="listData"
         @action-clicked="openCardForm"
@@ -42,12 +29,10 @@
 
 <script>
 import CardList from "./CardList";
-import CardForm from "./CardForm";
-import CardFilter from "./CardFilter";
 
 export default {
   name: "Card",
-  components: { CardList, CardForm, CardFilter },
+  components: { CardList },
   props: {
     params: {
       type: Object,
@@ -56,56 +41,20 @@ export default {
     },
   },
   methods: {
-    applyCardFilter(data) {
-      this.$store.dispatch("card/applyFilter", data);
-    },
-    applyCardActionForm(data, id) {
-      this.$store
-        .dispatch("card/applyAction", { form: data, actionId: id })
-        .then(
-          (data) => {
-            this.$bvToast.toast("Успешно выполнено", {
-              title: "",
-              variant: "success",
-              solid: true,
-            });
-          },
-          (err) => {
-            this.$bvToast.toast(err.MESSAGE, {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
-            });
-          }
-        );
-    },
-    async saveCardForm(data) {
-      try {
-        await this.$store.dispatch("card/saveForm", data);
-        this.$bvToast.toast("Успешно сохранено", {
-          title: "",
-          variant: "success",
-          solid: true,
-        });
-      } catch (err) {
-        this.$bvToast.toast(err.response.data.MESSAGE, {
-          title: "Ошибка",
-          variant: "danger",
-          noAutoHide: true,
-          solid: true,
-        });
-      }
-    },
-    openCardForm(data) {
+    async openCardForm(data) {
+      await this.$store.dispatch("wizard/fetchWizard", {
+        idModule: this.params.page.idModule,
+        idWizard: this.params.page.idItem,
+        idCard: data.data.item.ID,
+      });
       $nuxt._router.push(
-        `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${data.data.item.ID}/${data.data.item.REL}`
+        `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/${data.data.item.ID}/${this.wizardRel}`
       );
     },
-    openCardList() {
-      this.$store.commit("card/setShowForm", false);
-      this.$store.commit("card/setShowWizard", false);
-      this.$store.commit("card/setShowList", true);
+    addNewRecord() {
+      $nuxt._router.push(
+        `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/0/0`
+      );
     },
     async refreshCardList() {
       try {
@@ -126,44 +75,9 @@ export default {
     },
   },
   computed: {
-    head() {
-      return this.params.settings ? `${this.params.settings.text}` : "";
-    },
-    formData: {
-      get: function () {
-        if (this.isForm) {
-          return JSON.parse(JSON.stringify(this.$store.getters["card/form"]));
-        }
-        if (this.isFilter) {
-          return JSON.parse(
-            JSON.stringify(this.$store.getters["card/filters"])
-          );
-        }
-      },
-    },
     listData: {
       get: function () {
         return this.$store.getters["card/list"];
-      },
-    },
-    actionsData: {
-      get: function () {
-        return this.$store.getters["card/actions"];
-      },
-    },
-    isForm: {
-      get: function () {
-        return this.$store.getters["card/isForm"];
-      },
-    },
-    isWizard: {
-      get: function () {
-        return this.$store.getters["card/isWizard"];
-      },
-    },
-    isFilter: {
-      get: function () {
-        return this.$store.getters["card/isFilter"];
       },
     },
     isList: {
@@ -171,33 +85,18 @@ export default {
         return this.$store.getters["card/isList"];
       },
     },
-    isFormLoading: {
-      get: function () {
-        return this.$store.getters["card/isFormLoading"];
-      },
-    },
     isListLoading: {
       get: function () {
         return this.$store.getters["card/isListLoading"];
       },
     },
-    isEdit: {
+    isAddNewRecord: {
       get: function () {
-        return this.$store.getters["card/isEdit"];
+        return this.params.settings.add;
       },
     },
-    isAddCardForEdit: {
-      get: function () {
-        return this.$store.getters["card/componentType"] === 10;
-      },
-    },
-    isActions: {
-      get: function () {
-        return (
-          this.$store.getters["card/componentType"] === 10 &&
-          this.$store.getters["card/actions"]
-        );
-      },
+    wizardRel() {
+      return this.$store.getters["wizard/getWizard"]?.REL.split("|")[0];
     },
   },
 };

@@ -33,6 +33,7 @@ import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
+import consts from "~/api/urls";
 export default {
   name: "CardEditor",
   head() {
@@ -93,15 +94,18 @@ export default {
     async updateValue(e) {
       this.$store.commit("data_card/cardChanged", true);
       if (typeof eventHandler === "function") {
-        this.$store.commit(
-          "data_card/setForm",
-          eventHandler(
-            this.data.map((a) => Object.assign({}, a)),
-            e
-          ) || this.data
+        let data = await eventHandler(
+          this.data.map((a) => Object.assign({}, a)),
+          e,
+          this.fetchCard
         );
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.data);
+        }
       }
-      if (e.SCONST) {
+      let field = this.data.find((f) => f.fieldId === e.fieldId);
+      console.log(field);
+      if (field.type === "button") {
         const form = this.$store.getters["data_card/getForm"];
         let response = await this.$store.dispatch("data_card/executeAction", {
           actionId: e.ID,
@@ -111,7 +115,6 @@ export default {
           itemId: e.NITEM,
           body: form,
         });
-
         if (response?.response) {
           if (this.$route.path.includes("55/0/19")) {
             this.$emit("error", response.response.data.MESSAGE);
@@ -132,6 +135,13 @@ export default {
         fieldId: e.fieldId,
         value: e.value,
       });
+    },
+    async fetchCard(item) {
+      let [, idModule, idItem, idCard, rel] = item.value.value.split("/");
+      let result = await this.$axios.get(
+        `${consts.DATACARD}/${idModule}/${idItem}/${idCard}?REL=${rel}`
+      );
+      return result.data[0]._data[0];
     },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {
@@ -155,7 +165,7 @@ export default {
         data[i].checked = true;
         if (
           data[i].required &&
-          (value == null || value == undefined || value == "") &&
+          (value === null || value === undefined || value === "") &&
           data[i].type !== "boolean" &&
           value !== 0
         ) {
@@ -168,7 +178,7 @@ export default {
     async saveDataCard() {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
-      this.$store.commit("data_card/filterFields");
+      // this.$store.commit("data_card/filterFields");
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
         try {
@@ -200,11 +210,22 @@ export default {
           if (this.$route.params.idCard === "0") {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
-            $nuxt._router.push(
-              `/cabinet/${moduleId}/0/${itemId}/${cardId}${
-                relId ? `/${relId}` : ""
-              }`
-            );
+            if (this.$route.params.idWizard) {
+              await this.$store.dispatch("wizard/fetchWizard", {
+                idModule: this.$route.params.idModule,
+                idWizard: this.$route.params.idWizard,
+                idCard: cardId,
+              });
+              $nuxt._router.push(
+                `/cabinet/wizard/${this.$route.params.idWizard}/${moduleId}/0/${itemId}/${cardId}/${relId}`
+              );
+            } else {
+              $nuxt._router.push(
+                `/cabinet/${moduleId}/0/${itemId}/${cardId}${
+                  relId ? `/${relId}` : ""
+                }`
+              );
+            }
           }
           this.$bvToast.toast("Успешно сохранено", {
             title: "",

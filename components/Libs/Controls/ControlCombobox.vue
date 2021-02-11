@@ -8,8 +8,6 @@
       <b-form-select
         v-model="fieldValue"
         :options="data.options"
-        size="sm"
-        class="mt-3"
         :class="{ 'error-outline': isValid == false }"
       ></b-form-select>
       <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
@@ -45,6 +43,7 @@ export default {
       set: function (value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
+          name: this.data.name,
           value: String(value),
         });
       },

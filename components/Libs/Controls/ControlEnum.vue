@@ -56,7 +56,7 @@ export default {
     };
   },
   created() {
-    if (this.data.value.value || this.data.value.value == 0)
+    if (this.data.value?.value || this.data.value?.value == 0)
       this.options.push(this.data.value);
   },
   mounted() {
@@ -85,7 +85,11 @@ export default {
           this.options = resp.data;
           if (this.options.length === 1) {
             let value = this.options[0];
-            this.$emit("update", { fieldId: this.data.fieldId, value });
+            this.$emit("update", {
+              fieldId: this.data.fieldId,
+              name: this.data.name,
+              value,
+            });
             this.$emit("clear", { fieldName: this.data.name });
           }
         })
@@ -118,16 +122,26 @@ export default {
         }
       },
       set: function (value) {
-        this.$emit("update", { fieldId: this.data.fieldId, value });
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value,
+        });
         this.$emit("clear", { fieldName: this.data.name });
       },
     },
     relationValue: {
       get: function () {
         if (this.data.isRelation) {
-          return this.$store.getters["data_card/getDataFieldByName"](
-            this.data.fieldRelation
-          );
+          if (this.data.fieldRelation !== null) {
+            return this.$store.getters["data_card/getDataFieldByName"](
+              this.data.fieldRelation
+            );
+          } else {
+            return this.$store.getters["data_card/getDataFieldByName"](
+              this.data.name
+            );
+          }
         } else {
           return null;
         }
@@ -139,7 +153,7 @@ export default {
       )?.state;
     },
     isDisabled() {
-      if (this.relationValue) {
+      if (this.relationValue && this.data.fieldRelation) {
         if (this.relationValue.value) {
           if (!this.relationValue.value.value) {
             return true;
@@ -153,7 +167,7 @@ export default {
   watch: {
     relationValue: function (val, old) {
       if (val.value.value) {
-        if (val.value.value !== old.value.value) {
+        if (val.value.value !== old?.value.value) {
           this.initData();
         }
       }

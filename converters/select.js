@@ -28,9 +28,22 @@ converter.select = (data) => {
           }
         } else {
           obj.text = items[i][data[0]._meta.SNAMEFIELD.toUpperCase()];
-          obj.value = items[i][data[0]._meta.SKEYFIELD]
+          let value = items[i][data[0]._meta.SKEYFIELD]
             ? items[i][data[0]._meta.SKEYFIELD.toUpperCase()]
             : items[i].ID;
+          if (
+            value === "N" ||
+            value === false ||
+            value === "Н" ||
+            value === true ||
+            value === "Y" ||
+            value === "Д"
+          ) {
+            obj.value =
+              value === "N" || value === false || value === "Н" ? false : true;
+          } else {
+            obj.value = value;
+          }
         }
       }
     }

@@ -99,7 +99,7 @@ export default {
   },
   data() {
     return {
-      editable: false,
+      editable: true,
       myclass: ["cabinet"],
       error: null,
     };

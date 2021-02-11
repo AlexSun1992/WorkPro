@@ -103,6 +103,7 @@ module.exports = {
     "~/api/list.js",
     "~/api/card.js",
     "~/api/dic.js",
+    "~/api/wizard.js",
   ],
   auth: {
     strategies: {

@@ -161,6 +161,7 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       axios.defaults.baseURL = "https://mobile2.reso.ru";
     }
     const typeReq = req.params.id === 0 ? "post" : "put";
+    console.log(JSON.stringify(formConverter.save(req.body)));
     axios[typeReq](
       `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${
         req.params.id

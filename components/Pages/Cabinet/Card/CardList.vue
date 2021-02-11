@@ -8,10 +8,7 @@
       :items="data.items"
     >
       <template v-slot:actions="slotProps">
-        <b-button
-          :disabled="!isAction"
-          v-on:click="showItem(slotProps)"
-          class="btn btn-success"
+        <b-button v-on:click="showItem(slotProps)" class="btn btn-success"
           >Открыть</b-button
         >
       </template>
