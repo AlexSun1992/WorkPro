@@ -139,7 +139,11 @@ export default {
         );
         this.actionParamsTitle = field.label;
         this.actionParamsId = parseInt(actionId);
-        this.$bvModal.show("confirmAction");
+        if (actionParams.length) {
+          this.$bvModal.show("confirmAction");
+        } else {
+          this.applyAction();
+        }
       }
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
@@ -305,6 +309,7 @@ export default {
       }
       if (response.status === 200) {
         if (response.data.POUTVALUE) {
+          this.$bvModal.hide("confirmAction");
           window.open(response.data.POUTVALUE);
         }
       }
