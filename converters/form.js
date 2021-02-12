@@ -323,7 +323,8 @@ converter.save = (data) => {
         if (data[i].type !== "timestamp") {
           res[data[i].name] = data[i].value !== null ? data[i].value : "NULL";
           if (data[i].structType === "boolrus") {
-            res[data[i].name] = data[i].value === "true" ? "Д" : "Н";
+            res[data[i].name] =
+              data[i].value === "true" || data[i].value === true ? "Д" : "Н";
           }
           if (
             data[i].structType === "long" ||
