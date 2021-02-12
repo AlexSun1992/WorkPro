@@ -100,7 +100,7 @@ export default {
       default: () => true,
     },
   },
-  mounted() {
+  created() {
     if (typeof initHandler === "function") {
       try {
         this.$store.commit(
