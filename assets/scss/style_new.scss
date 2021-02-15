@@ -1809,8 +1809,17 @@ ul.dropdown-menu li:hover {
   font-weight: 600;
 }
 
+.modal-footer,
+.modal-body {
+  padding: 1rem 0;
+}
+.modal-body .form-row {
+  display: block;
+  width: 100%;
+  margin: 0;
+}
 .modal-dialog header {
-  padding: 0 1rem 1rem;
+  padding: 0 0 1rem;
 }
 
 button:focus {
