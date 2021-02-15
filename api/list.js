@@ -25,9 +25,6 @@ app.get("/list/:idModule/:idItem/:filters", (req, res) => {
     const filters = listConverter.getFilterParams(
       formConverter.save(JSON.parse(req.params.filters))
     );
-    console.log(
-      `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${filters}`
-    );
     axios({
       url: `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${filters}`,
       method: "GET",

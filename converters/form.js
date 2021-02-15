@@ -272,7 +272,8 @@ converter.type = (data) => {
       for (let j = 0; j < data.length; j++) {
         if (
           data[i].name.substring(2) === data[j].name &&
-          data[j].type !== "combobox"
+          data[j].type !== "combobox" &&
+          data[i].type !== "label"
         ) {
           copy[i].type = `enum`;
           copy[i].label = copy[j].label;

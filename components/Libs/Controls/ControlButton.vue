@@ -1,9 +1,9 @@
 <template>
   <b-button
-    class="mb-2 mt-2"
+    class="mt-2"
     @click="$emit('update', { fieldId: data.fieldId, value: data.name })"
     :disabled="disabled"
-    variant="secondary"
+    variant="primary"
   >
     <div class="button">
       {{ data.label }}
