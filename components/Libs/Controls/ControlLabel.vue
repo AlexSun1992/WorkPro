@@ -1,10 +1,7 @@
 <template>
-  <div class="row">
-    <div class="col-3 py-2">{{ data.label }}:</div>
-    <div class="col-9 py-2">
-      <b>{{ data.value }}</b>
-    </div>
-  </div>
+  <b-form-group :label="data.label" :label-for="data.name" class="mb-3">
+    <div>{{ data.value }}</div>
+  </b-form-group>
 </template>
 
 <script>

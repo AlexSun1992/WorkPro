@@ -25,7 +25,7 @@
         <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />
       </b-tab>
     </b-tabs>
-    <div v-else class="row form_width">
+    <div v-else class="row">
       <Control
         v-for="(item, i) in items()"
         :key="i"
@@ -103,8 +103,5 @@ export default {
 <style>
 .error {
   color: red !important;
-}
-.form_width {
-  width: 100%;
 }
 </style>
