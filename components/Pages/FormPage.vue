@@ -135,7 +135,4 @@ export default {
   align-items: center;
   justify-content: center;
 } */
-.modal-dialog {
-  min-width: 80vw;
-}
 </style>
