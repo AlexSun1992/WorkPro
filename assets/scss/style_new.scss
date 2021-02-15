@@ -20,7 +20,7 @@
   color: #ffffff;
 }
 
-.btn-secondary {
+.btn-secondary:not(.link-button, .link-arrow-right, .arrow-right-bold, .notification-close) {
   background: #ffffff;
   border: 1px solid #d0d0d0;
   box-shadow: 0px 4px 17px rgba(0, 0, 0, 0.15);
