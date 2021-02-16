@@ -112,7 +112,7 @@ export default {
 
 <style scoped>
 .header {
-  background-color: #cbe0d7;
+  background-color: #18a25b;
   cursor: pointer;
   text-align: center;
 }
