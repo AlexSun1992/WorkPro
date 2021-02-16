@@ -242,9 +242,6 @@ export default {
 </script>
 
 <style>
-.modal-dialog {
-  min-width: 80%;
-}
 .inbuttons {
   display: inline-block;
 }

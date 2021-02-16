@@ -79,9 +79,8 @@ app.get("/wizardlist/:idModule/:idWizard/:idItem", (req, res) => {
       // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
       axios.defaults.baseURL = "https://mobile2.reso.ru";
     }
-    // const filters = listConverter.getFilterParams(formConverter.save(JSON.parse(req.params.filters)))
     axios({
-      url: `${consts.DATALIST}/${req.params.idModule}/${req.params.idWizard}/${req.params.idItem}?json={}`,
+      url: `${consts.DATA}/${req.params.idModule}/${req.params.idWizard}/0/${req.params.idItem}?json={}`,
       method: "GET",
     })
       .then((resp) => {

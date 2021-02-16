@@ -32,6 +32,9 @@ import CardList from "./CardList";
 
 export default {
   name: "Card",
+  async created() {
+    await this.$store.dispatch("card/fetchList", this.$route.params);
+  },
   components: { CardList },
   props: {
     params: {
@@ -42,6 +45,14 @@ export default {
   },
   methods: {
     async openCardForm(data) {
+      if (!this.params.settings.isWizard) {
+        if (data.data.item.REL) {
+          $nuxt._router.push(
+            `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${data.data.item.ID}/${data.data.item.REL}`
+          );
+        }
+        return;
+      }
       await this.$store.dispatch("wizard/fetchWizard", {
         idModule: this.params.page.idModule,
         idWizard: this.params.page.idItem,
@@ -58,7 +69,7 @@ export default {
     },
     async refreshCardList() {
       try {
-        await this.$store.dispatch("card/fetchList");
+        await this.$store.dispatch("card/fetchList", this.$route.params);
         this.$bvToast.toast("Успешно  обновлено", {
           title: "",
           variant: "success",

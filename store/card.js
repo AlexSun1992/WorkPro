@@ -73,7 +73,7 @@ export const actions = {
         commit("setShowForm", true);
         commit("setShowFilter", false);
       } else {
-        await dispatch("fetchList");
+        //await dispatch("fetchList");
       }
     }
   },
@@ -182,17 +182,26 @@ export const actions = {
         });
     }
   },
-  async fetchList({ commit, getters }) {
+  async fetchList({ commit, getters }, params) {
     const page = getters.page;
     const jsonFilters = JSON.stringify(getters.filters);
     commit("setShowList", true);
     commit("setListLoading", true);
-    await this.$axios
-      .get(`/api/list/${page.idModule}/${page.idItem}/[]`)
-      .then((res) => {
-        commit("setListLoading", false);
-        commit("setList", res.data);
-      });
+    if (params.idWizard) {
+      await this.$axios
+        .get(`/api/wizardlist/${page.idModule}/${page.idItem}/${page.idCard}`)
+        .then((res) => {
+          commit("setListLoading", false);
+          commit("setList", res.data);
+        });
+    } else {
+      await this.$axios
+        .get(`/api/list/${page.idModule}/${page.idItem}/{}`)
+        .then((res) => {
+          commit("setListLoading", false);
+          commit("setList", res.data);
+        });
+    }
   },
   async fetchSuggestions({ commit, getters }, params) {
     const type = params.suggestionType;

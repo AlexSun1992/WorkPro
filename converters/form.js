@@ -76,11 +76,16 @@ converter.form = async (data, itemId) => {
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
     obj.label = webFields[i].SCAPTION;
-    if (item[webFields[i].SNAME] || item[webFields[i].SNAME] === 0) {
+    if (
+      item[webFields[i].SNAME] ||
+      item[webFields[i].SNAME] === 0 ||
+      item[webFields[i].SNAME] === false
+    ) {
       obj.value = item[webFields[i].SNAME];
-    }
-    if (meta[webFields[i].SNAME] || meta[webFields[i].SNAME] === 0) {
-      obj.value = meta[webFields[i].SNAME];
+    } else {
+      if (meta[webFields[i].SNAME] || meta[webFields[i].SNAME] === 0) {
+        obj.value = meta[webFields[i].SNAME];
+      }
     }
     if (
       obj.value === "Д" ||
@@ -267,7 +272,8 @@ converter.type = (data) => {
       for (let j = 0; j < data.length; j++) {
         if (
           data[i].name.substring(2) === data[j].name &&
-          data[j].type !== "combobox"
+          data[j].type !== "combobox" &&
+          data[i].type !== "label"
         ) {
           copy[i].type = `enum`;
           copy[i].label = copy[j].label;
@@ -318,7 +324,8 @@ converter.save = (data) => {
         if (data[i].type !== "timestamp") {
           res[data[i].name] = data[i].value !== null ? data[i].value : "NULL";
           if (data[i].structType === "boolrus") {
-            res[data[i].name] = data[i].value === "true" ? "Д" : "Н";
+            res[data[i].name] =
+              data[i].value === "true" || data[i].value === true ? "Д" : "Н";
           }
           if (
             data[i].structType === "long" ||
