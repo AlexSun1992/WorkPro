@@ -153,7 +153,7 @@ export default {
       )?.state;
     },
     isDisabled() {
-      if (this.relationValue && this.data.fieldRelation) {
+      if (this.relationValue) {
         if (this.relationValue.value) {
           if (!this.relationValue.value.value) {
             return true;
@@ -166,7 +166,7 @@ export default {
   },
   watch: {
     relationValue: function (val, old) {
-      if (val.value.value) {
+      if (val.value?.value) {
         if (val.value.value !== old?.value.value) {
           this.initData();
         }
