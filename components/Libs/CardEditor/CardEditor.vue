@@ -301,19 +301,24 @@ export default {
       });
       if (response.status === 500) {
         this.isActionApplyError = true;
-        this.actionApplyErrorMessage = response.data.INFO;
-        this.$bvToast.toast(response.data.MESSAGE, {
-          title: "Ошибка",
-          variant: "danger",
-          noAutoHide: true,
-          solid: true,
-        });
+        this.actionApplyErrorMessage = response.data.INFO
+          ? response.data.INFO
+          : response.data.MESSAGE;
       }
       if (response.status === 200) {
         if (response.data.POUTVALUE) {
-          this.$bvModal.hide("confirmAction");
-          window.open(response.data.POUTVALUE);
+          if (response.data.POUTVALUE.includes("/")) {
+            window.open(response.data.POUTVALUE);
+          }
+        } else {
+          await this.$store.dispatch("data_card/fetchForm", this.$route.params);
         }
+        this.$bvModal.hide("confirmAction");
+        this.$bvToast.toast("Успешно выполнено", {
+          title: "",
+          variant: "success",
+          solid: true,
+        });
       }
     },
   },
