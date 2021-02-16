@@ -76,11 +76,16 @@ converter.form = async (data, itemId) => {
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
     obj.label = webFields[i].SCAPTION;
-    if (item[webFields[i].SNAME] || item[webFields[i].SNAME] == 0) {
+    if (
+      item[webFields[i].SNAME] ||
+      item[webFields[i].SNAME] === 0 ||
+      item[webFields[i].SNAME] === false
+    ) {
       obj.value = item[webFields[i].SNAME];
-    }
-    if (meta[webFields[i].SNAME] || meta[webFields[i].SNAME] == 0) {
-      obj.value = meta[webFields[i].SNAME];
+    } else {
+      if (meta[webFields[i].SNAME] || meta[webFields[i].SNAME] === 0) {
+        obj.value = meta[webFields[i].SNAME];
+      }
     }
     if (
       obj.value === "Д" ||
@@ -102,7 +107,10 @@ converter.form = async (data, itemId) => {
       obj.value = false;
     }
     obj.type = webFields[i].STYPE;
-
+    const fieldOfStruct = fields.find((f) => f.FIELD === webFields[i].SNAME);
+    if (fieldOfStruct) {
+      obj.structType = fieldOfStruct.TYPE;
+    }
     if (
       (webFields[i].IDCONTROL == 0 || webFields[i].IDCONTROL == 1) &&
       (webFields[i].STYPE == "Double" ||
@@ -122,7 +130,16 @@ converter.form = async (data, itemId) => {
       obj.type = "timestamp";
     } else if (webFields[i].IDCONTROL == 15) {
       obj.type = "combobox";
-      promises.push(axios.get(`/am/main/v2/dicwf/${webFields[i].ID}`));
+      if (webFields[i].LVISIBLE && webFields[i].LDIC === true) {
+        promises.push(axios.get(`/am/main/v2/dicwf/${webFields[i].ID}`));
+      }
+      if (webFields[i].LVISIBLE && webFields[i].LDIC === false) {
+        promises.push(
+          axios.get(
+            `/am/main/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${webFields[i].SNAME}`
+          )
+        );
+      }
     } else if (webFields[i].IDCONTROL == 16) {
       obj.type = "boolean";
     } else if (webFields[i].IDCONTROL == 21) {
@@ -175,23 +192,49 @@ converter.form = async (data, itemId) => {
       ? "FK" + webFields[i].SCONNECTFIELD
       : null;
     obj.isTab = data[0]._meta["SPAGECAPTION"] ? true : false;
-    // webFieldsArr.push(obj)
     promises.push(Promise.resolve(obj));
   }
-
-  await Promise.allSettled(promises).then((values) => {
-    values.forEach((item, i) => {
-      if (item.status == "fulfilled" && item.value.data) {
-        let options = selectConverter.select(item.value.data);
-        // values[i + 1].value.options = options;
-      } else if (item.status == "fulfilled" && !item.value.data) {
-        webFieldsArr.push(item.value);
-      }
+  try {
+    await Promise.allSettled(promises).then((values) => {
+      values.forEach((item, i) => {
+        if (item.status == "fulfilled" && item.value.data) {
+          let options = selectConverter.select(item.value.data);
+          const url = item.value.config.url;
+          const isDicwf = url.includes("dicwf");
+          const fieldId = null;
+          let fieldName = null;
+          let field1 = null;
+          if (isDicwf) {
+            const fieldId = parseInt(
+              item.value.config.url.replace("/am/main/v2/dicwf/", "")
+            );
+            if (fieldId) {
+              field1 = values.find((b) =>
+                b.value ? b.value.fieldId === fieldId : null
+              );
+            }
+          } else {
+            fieldName = item.value.config.url.replace(
+              `/am/main/v2/dic/55/${itemId}/`,
+              ""
+            );
+            if (fieldName) {
+              field1 = values.find((b) =>
+                b.value ? b.value.name === fieldName : null
+              );
+            }
+          }
+          if (field1) {
+            field1.value.options = options;
+          }
+        } else if (item.status == "fulfilled" && !item.value.data) {
+          webFieldsArr.push(item.value);
+        }
+      });
     });
-  });
+  } catch (e) {}
 
   // ********
-
   return {
     // Переход на поля JSONWEBFIELDS
     data: converter.type(arr),
@@ -227,7 +270,11 @@ converter.type = (data) => {
     }
     if (data[i].name.substring(0, 2) === `FK`) {
       for (let j = 0; j < data.length; j++) {
-        if (data[i].name.substring(2) === data[j].name) {
+        if (
+          data[i].name.substring(2) === data[j].name &&
+          data[j].type !== "combobox" &&
+          data[i].type !== "label"
+        ) {
           copy[i].type = `enum`;
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
@@ -276,6 +323,17 @@ converter.save = (data) => {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
           res[data[i].name] = data[i].value !== null ? data[i].value : "NULL";
+          if (data[i].structType === "boolrus") {
+            res[data[i].name] =
+              data[i].value === "true" || data[i].value === true ? "Д" : "Н";
+          }
+          if (
+            data[i].structType === "long" ||
+            data[i].structType === "double"
+          ) {
+            res[data[i].name] =
+              data[i].value !== null ? parseInt(data[i].value) : "NULL";
+          }
         } else {
           res[data[i].name] = data[i].value
             ? moment(data[i].value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
@@ -284,7 +342,11 @@ converter.save = (data) => {
             : "NULL";
         }
       } else {
-        res[data[i].name] = data[i].value ? "Y" : "N";
+        if (data[i].name.substring(0, 1) === "B") {
+          res[data[i].name] = data[i].value ? "Д" : "Н";
+        } else {
+          res[data[i].name] = data[i].value ? "Y" : "N";
+        }
       }
     } else {
       if (data[i].name.substring(0, 2) === `FK`) {

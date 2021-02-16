@@ -40,9 +40,7 @@
         <CardEditor
           @error="error = $event"
           ref="cardEditor"
-          :class="{
-            'bg-six block-border-one block p-4': !captions,
-          }"
+          class="bg-six block-border-one block p-4"
           :data="getFormData"
           :edit="editable"
           :params="settings"
@@ -99,7 +97,7 @@ export default {
   },
   data() {
     return {
-      editable: false,
+      editable: true,
       myclass: ["cabinet"],
       error: null,
     };
@@ -242,9 +240,6 @@ export default {
 </script>
 
 <style>
-.modal-dialog {
-  min-width: 80%;
-}
 .inbuttons {
   display: inline-block;
 }

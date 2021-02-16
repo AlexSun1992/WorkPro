@@ -41,7 +41,11 @@ export default {
         return this.data.value;
       },
       set: function (value) {
-        this.$emit("update", { fieldId: this.data.fieldId, value: value });
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: value,
+        });
       },
     },
   },

@@ -77,8 +77,16 @@ export default {
         );
         value = this.suggestions.data[this.index].split(" - ")[0];
         relatedValue = this.suggestions.data[this.index].split(" - ")[1];
-        this.$emit("update", { fieldId: this.data.fieldId, value });
-        this.$emit("update", { fieldId, value: relatedValue });
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value,
+        });
+        this.$emit("update", {
+          fieldId,
+          name: this.data.name,
+          value: relatedValue,
+        });
         this.$store.commit("data_card/filterFields");
       } else {
         if (this.suggestions.data && this.suggestions.data.length) {
@@ -87,7 +95,11 @@ export default {
           } else {
             value = this.data.value;
           }
-          this.$emit("update", { fieldId: this.data.fieldId, value });
+          this.$emit("update", {
+            fieldId: this.data.fieldId,
+            name: this.data.name,
+            value,
+          });
         }
       }
       this.$forceUpdate();
@@ -119,6 +131,7 @@ export default {
     async getSuggestions(name) {
       this.$emit("update", {
         fieldId: this.data.fieldId,
+        name: this.data.name,
         value: this.data.value,
       });
       const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";

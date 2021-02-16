@@ -1,26 +1,49 @@
 <template>
   <div>
-    <Form
-      v-if="data.length && !this.captions"
-      :data="data"
-      :tabs="tabs"
-      @update="updateValue($event)"
-      @clear="clearRelation($event)"
-      @open-card="openCard($event)"
-      :edit="edit"
-    ></Form>
-    <FormAccordion
-      v-else-if="data.length"
-      :class="{ 'mt-5': !params.settings && showBtnBack }"
-      :data="data"
-      :tabs="tabs"
-      @update="updateValue($event)"
-      @clear="clearRelation($event)"
-      @open-card="openCard($event)"
-      :edit="edit"
-    />
-    <SkeletonBox v-else-if="!isError" class="mt-5" :items="8"></SkeletonBox>
-    <div class="error-message" v-else-if="isError">
+    <b-modal
+      modal-class="cabinet"
+      :id="'confirmAction'"
+      centered
+      :title="actionParamsTitle"
+      ok-title="Выполнить"
+      cancel-title="Отмена"
+      no-close-on-backdrop
+      @ok="applyAction"
+      no-fade
+    >
+      <b-alert :show="isActionApplyError" variant="danger">{{
+        actionApplyErrorMessage
+      }}</b-alert>
+      <Form
+        v-if="actionParams.length"
+        :data="actionParams"
+        :edit="true"
+        @update="updateActionParams($event)"
+      ></Form>
+    </b-modal>
+    <div v-if="data.length">
+      <Form
+        v-if="!isAccordion"
+        :data="data"
+        :tabs="tabs"
+        @update="updateValue($event)"
+        @clear="clearRelation($event)"
+        @open-card="openCard($event)"
+        :edit="edit"
+      ></Form>
+      <FormAccordion
+        v-else-if="isAccordion"
+        :class="{ 'mt-5': !params.settings && showBtnBack }"
+        :data="data"
+        :tabs="tabs"
+        @update="updateValue($event)"
+        @clear="clearRelation($event)"
+        @open-card="openCard($event)"
+        :edit="edit"
+      />
+    </div>
+    <SkeletonBox v-if="!data.length" class="mt-5" :items="8"></SkeletonBox>
+    <div class="error-message" v-if="isError">
       {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
     </div>
   </div>
@@ -31,6 +54,8 @@ import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
+import formConverter from "@/converters/form";
+import consts from "~/api/urls";
 export default {
   name: "CardEditor",
   head() {
@@ -48,6 +73,10 @@ export default {
     return {
       invalidFields: [],
       body: null,
+      actionParamsTitle: null,
+      actionParamsId: null,
+      isActionApplyError: false,
+      actionApplyErrorMessage: null,
       disabledButtons: {
         background: "#dddbdd",
         boxShadow: "none",
@@ -73,7 +102,7 @@ export default {
       default: () => true,
     },
   },
-  mounted() {
+  created() {
     if (typeof initHandler === "function") {
       try {
         this.$store.commit(
@@ -91,45 +120,44 @@ export default {
     async updateValue(e) {
       this.$store.commit("data_card/cardChanged", true);
       if (typeof eventHandler === "function") {
-        this.$store.commit(
-          "data_card/setForm",
-          eventHandler(
-            this.data.map((a) => Object.assign({}, a)),
-            e
-          ) || this.data
+        let data = await eventHandler(
+          this.data.map((a) => Object.assign({}, a)),
+          e,
+          this.fetchCard
         );
-      }
-      if (e.SCONST) {
-        const form = this.$store.getters["data_card/getForm"];
-        let response = await this.$store.dispatch("data_card/executeAction", {
-          actionId: e.ID,
-          relActionId: e.REL,
-          relId: this.$route.params.idRel,
-          rowId: this.$route.params.idCard,
-          itemId: e.NITEM,
-          body: form,
-        });
-
-        if (response?.response) {
-          if (this.$route.path.includes("55/0/19")) {
-            this.$emit("error", response.response.data.MESSAGE);
-          } else {
-            this.$bvToast.toast(response.response.data.MESSAGE, {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
-            });
-          }
-        } else {
-          await this.$store.dispatch("data_card/fetchForm", this.$route.params);
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.data);
         }
-        return;
+      }
+      let field = this.data.find((f) => f.fieldId === e.fieldId);
+      if (field.type === "button") {
+        this.isActionApplyError = false;
+        const actionId = e.value.replace("Item", "");
+        let actionParams = await this.$store.dispatch(
+          "data_card/fetchActionParams",
+          {
+            actionId,
+          }
+        );
+        this.actionParamsTitle = field.label;
+        this.actionParamsId = parseInt(actionId);
+        if (actionParams.length) {
+          this.$bvModal.show("confirmAction");
+        } else {
+          this.applyAction();
+        }
       }
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
         value: e.value,
       });
+    },
+    async fetchCard(item) {
+      let [, idModule, idItem, idCard, rel] = item.value.value.split("/");
+      let result = await this.$axios.get(
+        `${consts.DATACARD}/${idModule}/${idItem}/${idCard}?REL=${rel}`
+      );
+      return result.data[0]._data[0];
     },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {
@@ -153,7 +181,7 @@ export default {
         data[i].checked = true;
         if (
           data[i].required &&
-          (value == null || value == undefined || value == "") &&
+          (value === null || value === undefined || value === "") &&
           data[i].type !== "boolean" &&
           value !== 0
         ) {
@@ -166,7 +194,7 @@ export default {
     async saveDataCard() {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
-      this.$store.commit("data_card/filterFields");
+      // this.$store.commit("data_card/filterFields");
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
         try {
@@ -198,11 +226,22 @@ export default {
           if (this.$route.params.idCard === "0") {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
-            $nuxt._router.push(
-              `/cabinet/${moduleId}/0/${itemId}/${cardId}${
-                relId ? `/${relId}` : ""
-              }`
-            );
+            if (this.$route.params.idWizard) {
+              await this.$store.dispatch("wizard/fetchWizard", {
+                idModule: this.$route.params.idModule,
+                idWizard: this.$route.params.idWizard,
+                idCard: cardId,
+              });
+              $nuxt._router.push(
+                `/cabinet/wizard/${this.$route.params.idWizard}/${moduleId}/0/${itemId}/${cardId}/${relId}`
+              );
+            } else {
+              $nuxt._router.push(
+                `/cabinet/${moduleId}/0/${itemId}/${cardId}${
+                  relId ? `/${relId}` : ""
+                }`
+              );
+            }
           }
           this.$bvToast.toast("Успешно сохранено", {
             title: "",
@@ -244,6 +283,44 @@ export default {
     goBack() {
       this.$router.push(this.$store.state.data_card.listPath);
     },
+    updateActionParams(e) {
+      this.$store.commit("data_card/setActionParamsField", e);
+    },
+    async applyAction(evt) {
+      if (evt) evt.preventDefault();
+      this.isActionApplyError = false;
+      const action = this.params.actions.find(
+        (f) => f.id === this.actionParamsId
+      );
+      let response = await this.$store.dispatch("data_card/executeAction", {
+        actionId: this.actionParamsId,
+        relActionId: action.relaction,
+        relId: this.$route.params.idRel,
+        rowId: this.$route.params.idCard,
+        body: this.actionParams,
+      });
+      if (response.status === 500) {
+        this.isActionApplyError = true;
+        this.actionApplyErrorMessage = response.data.INFO
+          ? response.data.INFO
+          : response.data.MESSAGE;
+      }
+      if (response.status === 200) {
+        if (response.data.POUTVALUE) {
+          if (response.data.POUTVALUE.includes("/")) {
+            window.open(response.data.POUTVALUE);
+          }
+        } else {
+          await this.$store.dispatch("data_card/fetchForm", this.$route.params);
+        }
+        this.$bvModal.hide("confirmAction");
+        this.$bvToast.toast("Успешно выполнено", {
+          title: "",
+          variant: "success",
+          solid: true,
+        });
+      }
+    },
   },
   computed: {
     isButtonDisabled() {
@@ -267,6 +344,13 @@ export default {
     },
     captions: function () {
       return this.$store.getters["data_card/getCaptions"];
+    },
+    isAccordion: function () {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        .LACCORDION;
+    },
+    actionParams: function () {
+      return this.$store.getters["data_card/getActionParams"];
     },
   },
 };

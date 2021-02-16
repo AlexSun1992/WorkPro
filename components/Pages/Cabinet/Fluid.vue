@@ -5,12 +5,13 @@
 </template>
 
 <script>
-import Card from "~/components/Pages/Cabinet/Card/Card";
-import Wizard from "~/components/Pages/Cabinet/Wizard/Wizard";
+import CardPage from "~/components/Pages/Cabinet/Card/Card";
+import PortalPage from "@/components/Pages/Cabinet/Portal/Portal";
+import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
 import FormPage from "~/components/Pages/FormPage";
 export default {
   name: "Fluid",
-  components: { Card, Wizard, FormPage },
+  components: { CardPage, PortalPage, WizardPage, FormPage },
   computed: {
     params() {
       const page = this.$route.params;
@@ -18,12 +19,18 @@ export default {
       let component;
 
       if (settings.isCard) {
-        component = "Card";
-      } else if (settings.isForm) {
-        component = "FormPage";
-      } else {
-        component = "Wizard";
+        component = "CardPage";
       }
+      if (settings.isForm) {
+        component = "FormPage";
+      }
+      if (settings.isPortal) {
+        component = "PortalPage";
+      }
+      if (settings.isWizard) {
+        component = "CardPage";
+      }
+
       return { page, settings, component };
     },
   },

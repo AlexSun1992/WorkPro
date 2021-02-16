@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nuxt-child />
+    <nuxt-child :key="$route.fullPath" />
   </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
     try {
       await store.dispatch("menu/fetchMenu", route.params);
       const setting = store.getters["menu/breadcrumbs"].slice(-1).pop();
-      if (setting.isCard) {
+      if (setting.isCard || setting.isWizard) {
         await store.dispatch("card/setCard", {
           page: route.params,
           settings: setting,

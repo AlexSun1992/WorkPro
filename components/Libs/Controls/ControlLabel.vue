@@ -1,5 +1,7 @@
 <template>
-  <v-runtime-template :template="data.value"></v-runtime-template>
+  <b-form-group :label="data.label" :label-for="data.name" class="mb-3">
+    <div>{{ data.value }}</div>
+  </b-form-group>
 </template>
 
 <script>

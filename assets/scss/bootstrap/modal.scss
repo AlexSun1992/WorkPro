@@ -169,12 +169,16 @@
   text-shadow: 0 0 0 #3e515b;
 }
 
+select:focus,
 .form-control:focus {
   color: #3e515b;
   background-color: #fff;
   border-color: #8ad4ee;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(32, 168, 216, 0.25);
+}
+select:focus {
+  box-shadow: none;
 }
 
 .form-control::-moz-placeholder {

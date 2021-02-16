@@ -48,6 +48,8 @@ bcItem.getData = (data) => {
   obj.wizard = data.wizard;
   obj.isCard = data.isCard;
   obj.isForm = data.isForm;
+  obj.isWizard = data.isWizard;
+  obj.isPortal = data.isPortal;
   obj.portalgrid = data.portalgrid;
   obj.cardgrid = data.cardgrid;
   obj.cardtemplate = data.cardtemplate;

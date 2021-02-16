@@ -1,92 +1,80 @@
 <template>
-  <client-only placeholder="Загрузка...">
-    <div>
-      <v-runtime-template :template="templateData"></v-runtime-template>
+  <div>
+    <div class="mb-4">
+      <b-nav v-if="pages" tabs justified>
+        <b-nav-item
+          v-for="(item, index) in tabs"
+          :key="item.id"
+          :to="getURL(item, index)"
+          exact
+          exact-active-class="active"
+          >{{ item.name }}</b-nav-item
+        >
+      </b-nav>
     </div>
-  </client-only>
+    <nuxt-child :key="$route.fullPath" />
+  </div>
 </template>
 
 <script>
-import WizardList from "./WizardList";
-import WizardCard from "./WizardCard";
-import NotifyBlock from "../Block/NotifyBlock";
-import OfferBlock from "../Block/OfferBlock";
-import PolicyBlock from "../Block/PolicyBlock";
-import ContentBlock from "../Block/ContentBlock";
-import ActionButton from "../Block/ActionButton";
-import FormPage from "~/components/Pages/FormPage";
-import OpenCardButton from "../Block/OpenCardButton";
-import VRuntimeTemplate from "v-runtime-template";
-import DeleteCardButton from "../Block/DeleteCardButton";
-
+import breadcrumbs from "~/converters/breadcrumbs";
 export default {
   name: "Wizard",
-  components: {
-    WizardList,
-    NotifyBlock,
-    OfferBlock,
-    PolicyBlock,
-    VRuntimeTemplate,
-    ContentBlock,
-    ActionButton,
-    OpenCardButton,
-    WizardCard,
-    FormPage,
-    DeleteCardButton,
+  async fetch({ store, route }) {
+    await store.dispatch("wizard/fetchWizard", route.params);
   },
-  props: {
-    params: {
-      type: Object,
-      required: true,
-      default: () => {},
+  methods: {
+    getURL(item, index) {
+      if (this.$route.params.idCard === "0") {
+        return `/cabinet/wizard/${this.$route.params.idWizard}${
+          item.list ? `/list/55/0/` : `/55/0/`
+        }${item.idItem}/0/0`;
+      } else {
+        return `/cabinet/wizard/${this.$route.params.idWizard}${
+          item.list ? `/list/55/0/` : `/55/0/`
+        }${item.idItem}/${this.$route.params.idCard}/${
+          this.rels.split("|")[index]
+        }`;
+      }
     },
-  },
-  data() {
-    return {
-      card: null,
-      list: null,
-    };
   },
   computed: {
-    name() {
-      return this.params.settings.text;
-    },
-    wizardData() {
-      return this.params.settings.wizard;
-    },
-    moduleId() {
-      return this.params.page.idModule;
-    },
-    itemId() {
-      return this.params.page.idItem;
-    },
-    templateData() {
-      return this.params.settings.portalgrid || this.params.settings.cardgrid;
-    },
-    templateCardData() {
-      return this.$store.getters["menu/getMenuById"](
-        this.$store.getters["blocks/blockId"]
-      )?.SVJCARDTEMPLATE;
-    },
-    isForm: {
+    settings: {
       get: function () {
-        return this.$store.getters["blocks/getForm"]?.length;
+        return breadcrumbs
+          .getData(this.$store.getters["menu/menu"], {
+            idModule: 55,
+            idParent: 0,
+            idItem: this.$route.params.idWizard,
+          })
+          .slice(-1)
+          .pop();
       },
     },
-    isEdit: {
-      get: function () {
-        return this.params.settings.edit;
-      },
+    rels() {
+      const rel = this.$store.getters["wizard/getWizard"]?.REL;
+      if (this.$route.params.idCard !== "0" && rel) {
+        return rel;
+      } else {
+        return "|";
+      }
     },
-    isEmptyContent: {
-      get: function () {
-        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
-        if (block) {
-          return !block.data.items.length;
-        } else {
-          return false;
+    pages() {
+      return this.$store.getters["wizard/getWizardPages"];
+    },
+    tabs() {
+      let t = this.settings.wizard;
+      let arr = [];
+      if (this.pages) {
+        const p_arr = this.pages.split(";");
+        for (let i = 0; i < t.length; i++) {
+          const p_item = p_arr.find((v) => parseInt(v) === t[i].idItem);
+          if (p_item) {
+            arr.push(t[i]);
+          }
         }
-      },
+      }
+      return arr;
     },
   },
 };

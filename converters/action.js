@@ -9,6 +9,7 @@ converter.action = (data) => {
     obj.id = items[i].ID;
     obj.type = items[i].NTYPE;
     obj.command = items[i].SCONST;
+    obj.relaction = items[i].REL;
     arr.push(obj);
   }
   return arr;
