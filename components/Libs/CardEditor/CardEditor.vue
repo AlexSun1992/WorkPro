@@ -64,6 +64,9 @@ export default {
         {
           // type: "module",
           src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
+          callback: () => {
+            this.stripeLoaded();
+          },
         },
       ],
     };
@@ -102,21 +105,24 @@ export default {
       default: () => true,
     },
   },
-  created() {
-    if (typeof initHandler === "function") {
-      try {
-        this.$store.commit(
-          "data_card/setForm",
-          initHandler(this.data.map((a) => Object.assign({}, a))) || this.data
-        );
-      } catch {}
-    }
+  mounted() {
+    this.stripeLoaded();
   },
   destroyed() {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
   },
   methods: {
+    stripeLoaded() {
+      try {
+        if (typeof initHandler === "function") {
+          this.$store.commit(
+            "data_card/setForm",
+            initHandler(this.data.map((a) => Object.assign({}, a))) || this.data
+          );
+        }
+      } catch {}
+    },
     async updateValue(e) {
       this.$store.commit("data_card/cardChanged", true);
       if (typeof eventHandler === "function") {
