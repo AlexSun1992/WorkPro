@@ -65,7 +65,8 @@ converter.subcompare = (a, b) => {
 converter.form = async (data, itemId) => {
   let item = data[0]._data.length ? data[0]._data[0] : {};
   let fields = data[0]._struct;
-  let meta = converter.meta(data[0]._meta) || {};
+  let meta_value = converter.meta(data[0]?._meta.SNEWRECORD) || {};
+  let meta_visible = converter.meta(data[0]?._meta.SVISIBLE) || {};
   let arr = converter.setFieldsParams(itemId, item, fields);
   let webFieldsArr = [];
   let webFields = data[0]._meta["JSONWEBFIELDS"];
@@ -83,8 +84,11 @@ converter.form = async (data, itemId) => {
     ) {
       obj.value = item[webFields[i].SNAME];
     } else {
-      if (meta[webFields[i].SNAME] || meta[webFields[i].SNAME] === 0) {
-        obj.value = meta[webFields[i].SNAME];
+      if (
+        meta_value[webFields[i].SNAME] ||
+        meta_value[webFields[i].SNAME] === 0
+      ) {
+        obj.value = meta_value[webFields[i].SNAME];
       }
     }
     if (
@@ -168,10 +172,18 @@ converter.form = async (data, itemId) => {
     obj.labelCols = webFields[i].SCAPTIONPOSITION
       ? webFields[i].SCAPTIONPOSITION
       : "f-l-i col-md-3 col-12";
-    obj.visible =
-      webFields[i].LVISIBLE === "N" || webFields[i].LVISIBLE === false
-        ? false
-        : true;
+    if (
+      meta_visible[webFields[i].SNAME.toUpperCase()] === "Y" ||
+      meta_visible[webFields[i].SNAME.toUpperCase()] === "N"
+    ) {
+      obj.visible =
+        meta_visible[webFields[i].SNAME.toUpperCase()] === "N" ? false : true;
+    } else {
+      obj.visible =
+        webFields[i].LVISIBLE === "N" || webFields[i].LVISIBLE === false
+          ? false
+          : true;
+    }
     obj.required =
       webFields[i].LREQUIRED === "N" || webFields[i].LREQUIRED === false
         ? false
@@ -243,6 +255,7 @@ converter.form = async (data, itemId) => {
       data: converter.type(webFieldsArr),
       captions: data[0]._meta["SPAGECAPTION"],
       cardCaption: data[0]._meta["SCARDCAPTION"],
+      btnSave: meta_visible?.BTNSAVE === "N" ? false : true,
     },
   };
 };
@@ -304,9 +317,9 @@ converter.remove = (arr, toRemove) => {
 };
 
 converter.meta = (meta) => {
-  if (meta.SNEWRECORD) {
+  if (meta) {
     let convert_meta = {};
-    let arr_split = meta.SNEWRECORD.split(`\r`);
+    let arr_split = meta.split(`\r`);
     for (let i = 0; i < arr_split.length; i++) {
       let field_meta = arr_split[i].split(`=`);
       convert_meta[field_meta[0].toUpperCase()] = field_meta[1];

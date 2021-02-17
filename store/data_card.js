@@ -14,6 +14,7 @@ export const state = () => ({
   saveButtonClicked: false,
   listPath: "",
   actionParams: [],
+  isSave: true,
 });
 export const getters = {
   getForm: (state) => state.form,
@@ -26,6 +27,7 @@ export const getters = {
   getCardId: (state) => state.cardId,
   getCardRelId: (state) => state.cardRelId,
   getCaptions: (state) => state.captions,
+  getBtnSave: (state) => state.isSave,
   getActionParams: (state) =>
     state.actionParams.map((a) => Object.assign({}, a)),
   getOneToManyDataTable: (state) => state.oneToManyData.table,
@@ -62,6 +64,12 @@ export const actions = {
           );
           if (res.data.metaData.captions) {
             commit("setCaptions", res.data.metaData.captions);
+          }
+          if (
+            res.data.metaData.btnSave === true ||
+            res.data.metaData.btnSave === false
+          ) {
+            commit("setBtnSave", res.data.metaData.btnSave);
           }
           commit("setCardCaption", res.data.metaData.cardCaption);
         });
@@ -237,5 +245,8 @@ export const mutations = {
   },
   setActionParams(state, data) {
     state.actionParams = data;
+  },
+  setBtnSave(state, data) {
+    state.isSave = data;
   },
 };

@@ -66,6 +66,7 @@
           </b-button>
         </div>
         <b-button
+          v-if="isButtonSave"
           pill
           v-on:click="saveDataCard"
           type="button"
@@ -219,6 +220,9 @@ export default {
     },
     captions: function () {
       return this.$store.getters["data_card/getCaptions"];
+    },
+    isButtonSave: function () {
+      return this.$store.getters["data_card/getBtnSave"];
     },
   },
   beforeRouteLeave(to, from, next) {
