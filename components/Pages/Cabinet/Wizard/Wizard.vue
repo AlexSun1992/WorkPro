@@ -1,6 +1,12 @@
 <template>
   <div>
     <div class="mb-4">
+      <div
+        v-if="cardCaption"
+        class="block-title pt-0 position-relative mt-2 mb-4"
+      >
+        <i class="icon-my-profile"></i>{{ cardCaption }}
+      </div>
       <b-nav v-if="pages" tabs justified>
         <b-nav-item
           v-for="(item, index) in tabs"
@@ -75,6 +81,9 @@ export default {
         }
       }
       return arr;
+    },
+    cardCaption() {
+      return this.$store.getters["data_card/cardCaption"];
     },
   },
 };
