@@ -144,12 +144,17 @@ export const actions = {
       return e.response;
     }
   },
-  async fetchActionParams({ dispatch, commit }, { actionId }) {
+  async fetchActionParams(
+    { dispatch, commit },
+    { moduleId, actionId, cardId }
+  ) {
     try {
-      return await this.$axios.get(`/api/action/${actionId}`).then((resp) => {
-        commit("setActionParams", resp.data);
-        return resp.data;
-      });
+      return await this.$axios
+        .get(`/api/action/${moduleId}/${actionId}/${cardId}`)
+        .then((resp) => {
+          commit("setActionParams", resp.data);
+          return resp.data;
+        });
     } catch (e) {
       return e;
     }

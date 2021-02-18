@@ -180,7 +180,7 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   }
 });
 
-app.get("/action/:id", async (req, res) => {
+app.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
   try {
     if (req.cookies) {
       axios.defaults.headers.common.Authorization =
@@ -188,7 +188,9 @@ app.get("/action/:id", async (req, res) => {
       // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
       axios.defaults.baseURL = "https://mobile2.reso.ru";
     }
-    const params = await axios.get(`${consts.ACTIONPARAM}/${req.params.id}`);
+    const params = await axios.get(
+      `${consts.ACTIONPARAM}/${req.params.moduleId}/${req.params.actionId}/${req.params.cardId}`
+    );
     res.send(filterConverter.filter(params.data[0]._data));
   } catch (err) {
     res.send(err.response.data);

@@ -1,5 +1,5 @@
 <template>
-  <b-button @click.stop="openCard()">
+  <b-button variant="info" @click.stop="openCard()">
     <slot>Открыть</slot>
   </b-button>
 </template>

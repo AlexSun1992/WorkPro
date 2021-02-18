@@ -139,10 +139,21 @@ export default {
       if (field.type === "button") {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");
+        let moduleId;
+        let cardId;
+        if (!this.params.page) {
+          moduleId = this.$route.params.idModule;
+          cardId = this.$route.params.idCard;
+        } else {
+          moduleId = this.params.page.idModule;
+          cardId = this.$store.getters["data_card/getCardId"];
+        }
         let actionParams = await this.$store.dispatch(
           "data_card/fetchActionParams",
           {
+            moduleId,
             actionId,
+            cardId,
           }
         );
         this.actionParamsTitle = field.label;
