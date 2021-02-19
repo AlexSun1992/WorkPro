@@ -104,6 +104,8 @@ module.exports = {
     "~/api/card.js",
     "~/api/dic.js",
     "~/api/wizard.js",
+    "~/api/user.js",
+    "~/api/refresh.js",
   ],
   auth: {
     strategies: {
@@ -116,7 +118,7 @@ module.exports = {
         grantType: false,
         token: {
           property: "ACCESS_TOKEN",
-          maxAge: 3600,
+          maxAge: 360000,
         },
         refreshToken: {
           property: "REFRESH_TOKEN",
@@ -128,18 +130,18 @@ module.exports = {
         endpoints: {
           // login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
           login: { url: "/am/auth/v2/authorize", method: "post" },
-          refresh: { url: "/am/auth/v2/token_refresh", method: "post" },
+          refresh: { url: "/api/token_refresh", method: "post" },
           // user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
-          user: { url: "/am/main/v2/userinfo", method: "get" },
+          user: { url: "/api/userinfo", method: "get" },
           logout: false,
         },
       },
     },
-    resetOnError: true,
+    resetOnError: false,
     fullPathRedirect: true,
     redirect: {
       login: false,
-      logout: "/",
+      logout: "/login",
       home: false,
       user: false,
     },

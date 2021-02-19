@@ -14,11 +14,14 @@ const menu = {};
 
 app.get("/dic/:moduleId/:itemId/:name", (req, res) => {
   try {
-    if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
-      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.authorization) {
+      axios.defaults.headers.common.Authorization = req.headers.authorization;
+    } else {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+      }
     }
     axios({
       url: `${consts.DIC}/${req.params.moduleId}/${req.params.itemId}/${req.params.name}`,
@@ -36,11 +39,14 @@ app.get("/dic/:moduleId/:itemId/:name", (req, res) => {
 });
 app.get("/dicwf/:fieldId/:valueId", (req, res) => {
   try {
-    if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
-      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.authorization) {
+      axios.defaults.headers.common.Authorization = req.headers.authorization;
+    } else {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+      }
     }
     axios({
       url: `${consts.DICWF}/${req.params.fieldId}/${req.params.valueId}`,

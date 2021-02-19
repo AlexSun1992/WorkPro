@@ -13,11 +13,14 @@ app.use(cookieParser());
 
 app.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
   try {
-    if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
-      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.authorization) {
+      axios.defaults.headers.common.Authorization = req.headers.authorization;
+    } else {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+      }
     }
     const ID = parseInt(req.params.idCard);
     const list = await axios.get(

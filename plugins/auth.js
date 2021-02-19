@@ -1,14 +1,48 @@
-export default function ({ app, store, redirect, auth }) {
-  app.$axios.onError((error) => {
-    if (error.response.status === 401) {
+/* eslint-disable */
+import converter from "@/converters/menu";
+
+export default function ({ app, store, redirect, $auth }) {
+  app.$axios.onResponseError((error) => {
+    if (!error?.response?.config) {
+      return;
+    }
+    if (error.response?.config?.url.includes("/am/auth/v2/token_refresh")) {
+      return;
+    }
+    if (!error?.response) {
+      return app.router.push("/login");
+    }
+    const {
+      config,
+      response: { status },
+    } = error;
+    const originalRequest = config;
+    if (error.response.status === 401 && !originalRequest.__isRetryRequest) {
+      originalRequest.__isRetryRequest = true;
       if (app.router.history.pending) {
         app.$cookiz.set("url", app.router.history.pending.fullPath);
       }
-      app.$auth.logout();
-      return redirect("/login");
+      //
+      return app.$auth
+        .refreshTokens()
+        .then((data) => {
+          if (data?.data) {
+            if (data?.data?.STATUS === 401) {
+              $auth.logout();
+              redirect("/login");
+            }
+          }
+          return app.$axios(originalRequest);
+        })
+        .catch((err) => {
+          $auth.logout();
+        });
     }
   });
   app.$axios.onRequest((config) => {
-    // console.log(`Making request to ${config.url}`);
+    console.log(`Making request to ${config.url}`);
+  });
+  $auth.onError((error, name, endpoint) => {
+    //console.log(name, error);
   });
 }

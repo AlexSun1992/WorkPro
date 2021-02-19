@@ -19,11 +19,14 @@ const menu = {};
 
 app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
-    if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
-      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.authorization) {
+      axios.defaults.headers.common.Authorization = req.headers.authorization;
+    } else {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+      }
     }
     axios({
       url: encodeURI(
@@ -71,10 +74,14 @@ app.get("/osago", (req, res) => {
 
 app.get("/card/js/:idModule/:idItem", (req, res) => {
   try {
-    if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.authorization) {
+      axios.defaults.headers.common.Authorization = req.headers.authorization;
+    } else {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+      }
     }
     axios({
       url: encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`),
@@ -99,11 +106,14 @@ app.get("/card/js/:idModule/:idItem", (req, res) => {
 
 app.get("/file/:idReport/:idCard", (req, res) => {
   try {
-    if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
-      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.authorization) {
+      axios.defaults.headers.common.Authorization = req.headers.authorization;
+    } else {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+      }
     }
     axios({
       url: `${consts.REPORT}?idreport=${req.params.idReport}&id=${req.params.idCard}`,
@@ -126,10 +136,14 @@ app.post(
   "/card/actionexec/:rowId/:actionId/:relId?/:relActionId",
   (req, res) => {
     try {
-      if (req.cookies) {
-        axios.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
-        axios.defaults.baseURL = "https://mobile2.reso.ru";
+      axios.defaults.baseURL = "https://mobile2.reso.ru";
+      if (req.headers.authorization) {
+        axios.defaults.headers.common.Authorization = req.headers.authorization;
+      } else {
+        if (req.cookies) {
+          axios.defaults.headers.common.Authorization =
+            req.cookies["auth._token.local"];
+        }
       }
       const body = formConverter.save(req.body);
       const url = `${consts.ACTIONEXEC}/${req.params.rowId}/${
@@ -155,11 +169,14 @@ app.post(
 
 app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
-    if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
-      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.authorization) {
+      axios.defaults.headers.common.Authorization = req.headers.authorization;
+    } else {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+      }
     }
     const typeReq = req.params.id === 0 ? "post" : "put";
     console.log(JSON.stringify(formConverter.save(req.body)));
@@ -182,11 +199,14 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
 
 app.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
   try {
-    if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
-      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.authorization) {
+      axios.defaults.headers.common.Authorization = req.headers.authorization;
+    } else {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+      }
     }
     const params = await axios.get(
       `${consts.ACTIONPARAM}/${req.params.moduleId}/${req.params.actionId}/${req.params.cardId}`

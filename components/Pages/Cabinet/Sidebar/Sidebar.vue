@@ -47,6 +47,9 @@ export default {
       sideBarMini: false,
     };
   },
+  created() {
+    this.$auth.fetchUser();
+  },
   methods: {
     updateScroll() {
       this.endScrollMenu =
