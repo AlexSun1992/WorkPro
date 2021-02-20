@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="cardCaption && isWizard"
+      v-if="cardCaption && !isWizard"
       class="block-title pt-0 position-relative mt-2 mb-4"
     >
       <i class="icon-my-profile"></i>{{ cardCaption }}
@@ -223,7 +223,7 @@ export default {
       return this.$store.getters["data_card/getBtnSave"];
     },
     isWizard() {
-      return !this.$route.path.includes("wizard");
+      return this.$route.path.includes("wizard");
     },
   },
   beforeRouteLeave(to, from, next) {
