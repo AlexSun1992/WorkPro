@@ -132,7 +132,7 @@ export default {
       const menuItem = flatmenu.find((item) => {
         return item.IDITEM == this.$route.params.idItem;
       });
-      this.editable = menuItem?.LEDIT;
+      this.editable = menuItem?.LEDIT && !this.isReadOnly;
     },
     saveFile(idReport, fileName, event) {
       if (event) {
@@ -221,6 +221,9 @@ export default {
     },
     isButtonSave: function () {
       return this.$store.getters["data_card/getBtnSave"];
+    },
+    isReadOnly: function () {
+      return this.$store.getters["data_card/getReadOnly"];
     },
     isWizard() {
       return this.$route.path.includes("wizard");

@@ -67,6 +67,7 @@ converter.form = async (data, itemId) => {
   let fields = data[0]._struct;
   let meta_value = converter.meta(data[0]?._meta.SNEWRECORD) || {};
   let meta_visible = converter.meta(data[0]?._meta.SVISIBLE) || {};
+  let meta_readonly = converter.meta(data[0]?._meta.SREADONLY) || {};
   let arr = converter.setFieldsParams(itemId, item, fields);
   let webFieldsArr = [];
   let webFields = data[0]._meta["JSONWEBFIELDS"];
@@ -256,6 +257,7 @@ converter.form = async (data, itemId) => {
       captions: data[0]._meta["SPAGECAPTION"],
       cardCaption: data[0]._meta["SCARDCAPTION"],
       btnSave: meta_visible?.BTNSAVE === "N" ? false : true,
+      readonly: meta_readonly?.ALL_FIELDS === "Y" ? true : false,
     },
   };
 };

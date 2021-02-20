@@ -327,9 +327,8 @@ export default {
           if (response.data.POUTVALUE.includes("/")) {
             window.open(response.data.POUTVALUE);
           }
-        } else {
-          await this.$store.dispatch("data_card/fetchForm", this.$route.params);
         }
+        await this.$store.dispatch("data_card/fetchForm", this.$route.params);
         this.$bvModal.hide("confirmAction");
         this.$bvToast.toast("Успешно выполнено", {
           title: "",

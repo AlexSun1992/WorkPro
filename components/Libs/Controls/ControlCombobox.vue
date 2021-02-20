@@ -8,6 +8,7 @@
       <b-form-select
         v-model="fieldValue"
         :options="data.options"
+        :disabled="!edit ? !edit : data.readonly"
         :class="{ 'error-outline': isValid == false }"
       ></b-form-select>
       <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>

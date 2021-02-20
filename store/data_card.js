@@ -15,6 +15,7 @@ export const state = () => ({
   listPath: "",
   actionParams: [],
   isSave: true,
+  isReadOnly: false,
 });
 export const getters = {
   getForm: (state) => state.form,
@@ -28,6 +29,7 @@ export const getters = {
   getCardRelId: (state) => state.cardRelId,
   getCaptions: (state) => state.captions,
   getBtnSave: (state) => state.isSave,
+  getReadOnly: (state) => state.isReadOnly,
   getActionParams: (state) =>
     state.actionParams.map((a) => Object.assign({}, a)),
   getOneToManyDataTable: (state) => state.oneToManyData.table,
@@ -70,6 +72,12 @@ export const actions = {
             res.data.metaData.btnSave === false
           ) {
             commit("setBtnSave", res.data.metaData.btnSave);
+          }
+          if (
+            res.data.metaData.readonly === true ||
+            res.data.metaData.readonly === false
+          ) {
+            commit("setReadOnly", res.data.metaData.readonly);
           }
           commit("setCardCaption", res.data.metaData.cardCaption);
         });
@@ -253,5 +261,8 @@ export const mutations = {
   },
   setBtnSave(state, data) {
     state.isSave = data;
+  },
+  setReadOnly(state, data) {
+    state.isReadOnly = data;
   },
 };
