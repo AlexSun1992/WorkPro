@@ -12,10 +12,21 @@
 
 <script>
 import DynamicRoutesRenderer from "~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer";
+import consts from "@/api/urls";
 export default {
   scrollToTop: true,
   layout: "MainLayout",
   components: { DynamicRoutesRenderer },
+  async fetch({ $axios, $auth }) {
+    try {
+      const { data } = await $axios.get(`${consts.USERPROFILE}`);
+      if (data) {
+        $auth.setUser(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 </script>
 

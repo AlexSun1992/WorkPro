@@ -22,7 +22,6 @@ app.get("/userinfo", async (req, res) => {
     const { data } = await axios.get(`${consts.USERPROFILE}`);
     res.send(data);
   } catch (err) {
-    console.log(err);
     if (err?.response.status === 401) {
       res.status(200).send(err.response.data);
     } else {
