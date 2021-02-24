@@ -193,7 +193,7 @@ export default {
   },
   computed: {
     buttonTitle() {
-      if (this.isWizard && this.$store.getters["data_card/getCardId"] === "0") {
+      if (this.isWizard && this.$route.params.idCard === "0") {
         return "Продолжить";
       } else {
         return "Сохранить";
