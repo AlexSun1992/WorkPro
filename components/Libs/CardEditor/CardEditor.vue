@@ -104,6 +104,10 @@ export default {
       required: false,
       default: () => true,
     },
+    wizardTabs: {
+      type: Array,
+      required: false,
+    },
   },
   mounted() {
     this.stripeLoaded();

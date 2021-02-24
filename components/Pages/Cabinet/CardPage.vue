@@ -21,6 +21,7 @@
         @error="error = $event"
         ref="cardEditor"
         v-if="editable || (!settings.cardtemplate && !editable)"
+        :wizard-tabs="wizardTabs"
         :data="getFormData"
         :edit="editable"
         :params="settings"
@@ -93,6 +94,12 @@ export default {
   components: { CardEditor, VRuntimeTemplate, ControlButton },
   async fetch({ store, route }) {
     await store.dispatch("data_card/fetchForm", route.params);
+  },
+  props: {
+    wizardTabs: {
+      type: Array,
+      required: false,
+    },
   },
   data() {
     return {

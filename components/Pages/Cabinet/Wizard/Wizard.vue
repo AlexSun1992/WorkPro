@@ -18,7 +18,7 @@
         >
       </b-nav>
     </div>
-    <nuxt-child :key="$route.fullPath" />
+    <nuxt-child :key="$route.fullPath" :wizard-tabs="tabs" />
   </div>
 </template>
 
