@@ -39,6 +39,7 @@
         <CardEditor
           @error="error = $event"
           ref="cardEditor"
+          :wizard-tabs="wizardTabs"
           class="bg-six block-border-one block p-4"
           :data="getFormData"
           :edit="editable"
@@ -72,7 +73,7 @@
           variant="success"
           class="col-12 col-md-auto mr-4"
           :style="isButtonDisabled"
-          >Сохранить</b-button
+          >{{ buttonTitle }}</b-button
         >
       </div>
     </div>
@@ -191,6 +192,13 @@ export default {
     },
   },
   computed: {
+    buttonTitle() {
+      if (this.isWizard && this.$store.getters["data_card/getCardId"] === "0") {
+        return "Продолжить";
+      } else {
+        return "Сохранить";
+      }
+    },
     isButtonDisabled() {
       if (this.$refs.CardEditor) {
         return this.$refs.cardEditor.isButtonDisabled;

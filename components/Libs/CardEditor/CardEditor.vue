@@ -246,15 +246,21 @@ export default {
           }
           if (this.$route.params.idCard === "0") {
             cardId = this.$store.getters["data_card/getCardId"];
-            relId = this.$store.getters["data_card/getCardRelId"];
             if (this.$route.params.idWizard) {
               await this.$store.dispatch("wizard/fetchWizard", {
                 idModule: this.$route.params.idModule,
                 idWizard: this.$route.params.idWizard,
                 idCard: cardId,
               });
+              let index = this.wizardTabs.findIndex(
+                (item) => item.idItem == this.$route.params.idItem
+              );
+              let tab = this.wizardTabs[++index];
+              const rel = this.$store.getters["wizard/getWizard"]?.REL;
               $nuxt._router.push(
-                `/cabinet/wizard/${this.$route.params.idWizard}/${moduleId}/0/${itemId}/${cardId}/${relId}`
+                `/cabinet/wizard/${this.$route.params.idWizard}/${moduleId}/0/${
+                  tab.idItem
+                }/${cardId}/${rel.split("|")[index]}`
               );
             } else {
               $nuxt._router.push(
