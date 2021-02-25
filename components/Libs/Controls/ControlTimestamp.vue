@@ -17,7 +17,7 @@
         :input-class="data.state === false ? `${state} is-invalid` : state"
       ></date-picker>
       <div class="timestamp error" v-if="data.state === false">
-        Обязательно для заполнения
+        {{ data.error ? data.error : "Обязательно для заполнения" }}
       </div>
     </b-form-group>
   </div>
