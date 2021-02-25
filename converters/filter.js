@@ -22,6 +22,7 @@ converter.filter = (data, id) => {
     obj.name = items[i].SNAME;
     obj.required = items[i].LREQUIRED;
     obj.state = null;
+    obj.mask = items[i].SMASK;
     obj.type = converter.type(items[i]);
     if (obj.type === "enum") {
       obj.value = { text: null, value: null };
