@@ -29,14 +29,19 @@ app.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     const list_data = listConverter.list(list.data);
     let card = null;
     let result = { data: null, meta: null };
+    let rel;
     if (list_data.items.length !== 0) {
-      const REL = list_data.items[0].REL;
-      card = await axios.get(
-        `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${ID}?REL=${REL}`
-      );
+      rel = list_data.items[0].REL;
     }
+    card = await axios.get(
+      `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${ID}` +
+        (rel ? `?REL=${rel}` : "")
+    );
     if (card) {
-      result = { data: card.data[0]._data[0], meta: card.data[0]._meta };
+      result = {
+        data: card.data[0]._data[0],
+        meta: card.data[0]._meta,
+      };
     }
     res.send(result);
   } catch (err) {
