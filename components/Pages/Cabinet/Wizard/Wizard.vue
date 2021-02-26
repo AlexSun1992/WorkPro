@@ -83,7 +83,7 @@ export default {
       return arr;
     },
     cardCaption() {
-      return this.$store.getters["data_card/cardCaption"];
+      return this.$store.getters["wizard/getWizardCaption"];
     },
   },
 };
