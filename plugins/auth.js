@@ -38,6 +38,13 @@ export default function ({ app, store, redirect, $auth }) {
           $auth.logout();
         });
     }
+    if (error.response.status !== 401) {
+      $nuxt.$bvToast.toast(error.response.data.MESSAGE, {
+        title: "Ошибка",
+        variant: "danger",
+        autoHideDelay: 5000,
+      });
+    }
   });
   app.$axios.onRequest((config) => {
     console.log(`Making request to ${config.url}`);
