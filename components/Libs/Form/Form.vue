@@ -77,7 +77,7 @@ export default {
             if (index != item.page) return;
           }
           if (!item.visible) return;
-          return this.edit || (!this.edit && item.value);
+          return this.edit || !this.edit;
         });
       }
     },
