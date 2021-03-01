@@ -73,8 +73,15 @@
           variant="success"
           class="col-12 col-md-auto mr-4"
           :style="isButtonDisabled"
-          >{{ buttonTitle }}</b-button
         >
+          <b-spinner
+            v-if="$store.getters['data_card/getLoading']"
+            class="ml-2"
+            variant="danger"
+            label="Spinning"
+          ></b-spinner>
+          {{ buttonTitle }}
+        </b-button>
       </div>
     </div>
     <div v-if="error" class="mt-3 mb-3">

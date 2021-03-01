@@ -16,6 +16,7 @@ export const state = () => ({
   actionParams: [],
   isSave: true,
   isReadOnly: false,
+  loading: false,
 });
 export const getters = {
   getForm: (state) => state.form,
@@ -40,9 +41,10 @@ export const getters = {
   getDataFieldByFieldId: (state) => (id) => {
     return state.form.find((b) => b.fieldId == id);
   },
+  getLoading: (state) => state.loading,
 };
 export const actions = {
-  async fetchForm({ commit, getters, state }, params) {
+  async fetchForm({ dispatch, commit, getters, state }, params) {
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
     if (state.cardId !== params.idCard || !params.idRel) {
@@ -125,14 +127,20 @@ export const actions = {
     }
   },
   async saveDataCard({ commit }, params) {
+    commit("setLoading", true);
     await this.$axios
       .post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`,
         params.form
       )
       .then(async (resp) => {
+        commit("setLoading", false);
         commit("setCardId", resp.data.ID);
         commit("setCardRelId", resp.data.REL);
+      })
+      .catch((err) => {
+        commit("setLoading", false);
+        console.log(err);
       });
   },
   async executeAction(
@@ -166,6 +174,9 @@ export const actions = {
     } catch (e) {
       return e;
     }
+  },
+  setLoading({ commit }, params) {
+    commit("setLoading", params);
   },
 };
 export const mutations = {
@@ -264,5 +275,8 @@ export const mutations = {
   },
   setReadOnly(state, data) {
     state.isReadOnly = data;
+  },
+  setLoading(state, params) {
+    state.loading = params;
   },
 };
