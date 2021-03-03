@@ -247,11 +247,13 @@ export default {
           if (this.$route.params.idCard === "0") {
             cardId = this.$store.getters["data_card/getCardId"];
             if (this.$route.params.idWizard) {
+              this.$store.commit("data_card/setLoading", true);
               await this.$store.dispatch("wizard/fetchWizard", {
                 idModule: this.$route.params.idModule,
                 idWizard: this.$route.params.idWizard,
                 idCard: cardId,
               });
+              this.$store.commit("data_card/setLoading", false);
               let index = this.wizardTabs.findIndex(
                 (item) => item.idItem == this.$route.params.idItem
               );

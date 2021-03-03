@@ -165,13 +165,16 @@ export const actions = {
     { moduleId, actionId, cardId }
   ) {
     try {
+      commit("setLoading", true);
       return await this.$axios
         .get(`/api/action/${moduleId}/${actionId}/${cardId}`)
         .then((resp) => {
+          commit("setLoading", false);
           commit("setActionParams", resp.data);
           return resp.data;
         });
     } catch (e) {
+      commit("setLoading", false);
       return e;
     }
   },
