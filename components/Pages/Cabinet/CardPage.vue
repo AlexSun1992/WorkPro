@@ -68,13 +68,22 @@
         <b-button
           v-if="isButtonSave"
           pill
+          :disabled="loading"
           v-on:click="saveDataCard"
           type="button"
           variant="success"
           class="col-12 col-md-auto mr-4"
           :style="isButtonDisabled"
-          >{{ buttonTitle }}</b-button
         >
+          {{ buttonTitle }}
+          <b-spinner
+            v-if="loading"
+            style="width: 1rem; height: 1rem"
+            class="ml-2"
+            variant="danger"
+            label="Spinning"
+          ></b-spinner>
+        </b-button>
       </div>
     </div>
     <div v-if="error" class="mt-3 mb-3">
@@ -242,6 +251,9 @@ export default {
     },
     isWizard() {
       return this.$route.path.includes("wizard");
+    },
+    loading() {
+      return this.$store.getters["data_card/getLoading"];
     },
   },
   beforeRouteLeave(to, from, next) {

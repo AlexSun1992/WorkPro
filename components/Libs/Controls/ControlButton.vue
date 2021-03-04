@@ -1,15 +1,16 @@
 <template>
   <b-button
     class="mt-2"
-    @click="$emit('update', { fieldId: data.fieldId, value: data.name })"
-    :disabled="disabled"
+    @click="updateValue()"
+    :disabled="loading && clicked"
     variant="primary"
   >
     <div class="button">
       {{ data.label }}
       <b-spinner
-        v-if="loading"
+        v-if="loading && clicked"
         class="ml-2"
+        style="width: 1.2rem; height: 1.2rem"
         variant="success"
         label="Spinning"
       ></b-spinner>
@@ -31,13 +32,31 @@ export default {
       required: false,
       default: () => {},
     },
-    disabled: {
-      type: Boolean,
-      required: false,
+  },
+  data() {
+    return {
+      clicked: false,
+    };
+  },
+  methods: {
+    updateValue() {
+      this.clicked = true;
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        value: this.data.name,
+      });
     },
-    loading: {
-      type: Boolean,
-      required: false,
+  },
+  computed: {
+    loading() {
+      return this.$store.getters["data_card/getLoading"];
+    },
+  },
+  watch: {
+    loading() {
+      if (!this.loading) {
+        this.clicked = false;
+      }
     },
   },
 };

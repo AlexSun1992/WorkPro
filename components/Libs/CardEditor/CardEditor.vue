@@ -234,7 +234,7 @@ export default {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
           }
-          await this.$store.dispatch("data_card/saveDataCard", {
+          let resp = await this.$store.dispatch("data_card/saveDataCard", {
             moduleId,
             itemId,
             cardId,
@@ -247,11 +247,13 @@ export default {
           if (this.$route.params.idCard === "0") {
             cardId = this.$store.getters["data_card/getCardId"];
             if (this.$route.params.idWizard) {
+              this.$store.commit("data_card/setLoading", true);
               await this.$store.dispatch("wizard/fetchWizard", {
                 idModule: this.$route.params.idModule,
                 idWizard: this.$route.params.idWizard,
                 idCard: cardId,
               });
+              this.$store.commit("data_card/setLoading", false);
               let index = this.wizardTabs.findIndex(
                 (item) => item.idItem == this.$route.params.idItem
               );
@@ -270,11 +272,13 @@ export default {
               );
             }
           }
-          this.$bvToast.toast("Успешно сохранено", {
-            title: "",
-            variant: "success",
-            solid: true,
-          });
+          if (resp) {
+            this.$bvToast.toast("Успешно сохранено", {
+              title: "",
+              variant: "success",
+              solid: true,
+            });
+          }
           this.$emit("error", null);
         } catch (err) {
           if (this.$route.path.includes("55/0/19")) {
