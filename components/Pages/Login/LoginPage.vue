@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     showMessage() {
-      return !!this.$cookiz.get("url");
+      return this.$cookiz.get("url") && this.$cookiz.get("url") !== "/";
     },
   },
   async beforeRouteLeave(to, from, next) {

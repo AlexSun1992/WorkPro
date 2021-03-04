@@ -101,7 +101,10 @@ export default {
             mode: 2,
           },
         });
-        const url = this.$cookiz.get("url") || "/cabinet/55/0/701";
+        let url = "/cabinet/55/0/701";
+        if (this.$cookiz.get("url") !== "/") {
+          url = this.$cookiz.get("url");
+        }
         this.$cookiz.remove("url");
         this.$router.push(url);
       } catch (e) {
