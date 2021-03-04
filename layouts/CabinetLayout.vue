@@ -100,7 +100,6 @@ export default {
   display: grid;
   grid-template-rows: 80px auto min-content;
   min-height: 100vh;
-  max-width: 1440px;
   overflow-x: hidden;
   margin: 0 auto;
 }
