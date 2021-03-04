@@ -289,14 +289,6 @@ export default {
           if (errorInfo) {
             this.$store.commit("data_card/setFieldError", errorInfo);
           }
-          if (!this.$route.path.includes("55/0/19")) {
-            this.$bvToast.toast(err.response.data.MESSAGE, {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
-            });
-          }
         }
       }
     },
