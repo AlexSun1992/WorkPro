@@ -101,9 +101,16 @@ export default {
             mode: 2,
           },
         });
-        const url = this.$cookiz.get("url") || "/cabinet/55/0/701";
-        this.$cookiz.remove("url");
-        this.$router.push(url);
+        let url = "/cabinet/55/0/701";
+        if (this.$cookiz.get("url") && this.$cookiz.get("url") !== "/") {
+          url = this.$cookiz.get("url");
+        }
+        if (url) {
+          this.$cookiz.remove("url");
+          this.$router.push(url);
+        } else {
+          context.authInProcess = false;
+        }
       } catch (e) {
         context.errorMessage = "Неверный телефон или пароль";
         context.authInProcess = false;

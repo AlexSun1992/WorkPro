@@ -141,8 +141,8 @@ module.exports = {
     fullPathRedirect: true,
     redirect: {
       login: false,
-      logout: "/login",
-      home: false,
+      logout: "/",
+      home: "/",
       user: false,
     },
     plugins: ["~/plugins/auth.js"],

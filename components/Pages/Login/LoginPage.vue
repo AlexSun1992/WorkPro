@@ -33,6 +33,7 @@ import RegForm from "./RegForm/RegForm";
 
 export default {
   name: "LoginPage",
+  middleware: "login",
   layout: "MainLayout",
   head: {
     link: [
@@ -60,7 +61,7 @@ export default {
   },
   computed: {
     showMessage() {
-      return !!this.$cookiz.get("url");
+      return this.$cookiz.get("url") && this.$cookiz.get("url") !== "/";
     },
   },
   async beforeRouteLeave(to, from, next) {

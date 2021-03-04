@@ -19,9 +19,9 @@ export default {
   components: { DynamicRoutesRenderer },
   async fetch({ $axios, $auth }) {
     try {
-      const { data } = await $axios.get(`${consts.USERPROFILE}`);
-      if (data) {
-        $auth.setUser(data);
+      const data = await $axios.get(`${consts.USERPROFILE}`);
+      if (data?.data) {
+        $auth.setUser(data.data);
       }
     } catch (error) {
       console.log(error);
