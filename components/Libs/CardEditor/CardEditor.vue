@@ -234,7 +234,7 @@ export default {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
           }
-          await this.$store.dispatch("data_card/saveDataCard", {
+          let resp = await this.$store.dispatch("data_card/saveDataCard", {
             moduleId,
             itemId,
             cardId,
@@ -272,11 +272,13 @@ export default {
               );
             }
           }
-          this.$bvToast.toast("Успешно сохранено", {
-            title: "",
-            variant: "success",
-            solid: true,
-          });
+          if (resp) {
+            this.$bvToast.toast("Успешно сохранено", {
+              title: "",
+              variant: "success",
+              solid: true,
+            });
+          }
           this.$emit("error", null);
         } catch (err) {
           if (this.$route.path.includes("55/0/19")) {

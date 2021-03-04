@@ -128,20 +128,19 @@ export const actions = {
   },
   async saveDataCard({ commit }, params) {
     commit("setLoading", true);
-    await this.$axios
-      .post(
+    try {
+      let resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`,
         params.form
-      )
-      .then(async (resp) => {
-        commit("setLoading", false);
-        commit("setCardId", resp.data.ID);
-        commit("setCardRelId", resp.data.REL);
-      })
-      .catch((err) => {
-        commit("setLoading", false);
-        console.log(err);
-      });
+      );
+      commit("setLoading", false);
+      commit("setCardId", resp.data.ID);
+      commit("setCardRelId", resp.data.REL);
+      return resp;
+    } catch (e) {
+      commit("setLoading", false);
+      console.log(err);
+    }
   },
   async executeAction(
     { dispatch },
