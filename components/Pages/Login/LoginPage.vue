@@ -33,6 +33,7 @@ import RegForm from "./RegForm/RegForm";
 
 export default {
   name: "LoginPage",
+  middleware: "login",
   layout: "MainLayout",
   head: {
     link: [

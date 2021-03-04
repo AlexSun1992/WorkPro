@@ -102,11 +102,15 @@ export default {
           },
         });
         let url = "/cabinet/55/0/701";
-        if (this.$cookiz.get("url") !== "/") {
+        if (this.$cookiz.get("url") && this.$cookiz.get("url") !== "/") {
           url = this.$cookiz.get("url");
         }
-        this.$cookiz.remove("url");
-        this.$router.push(url);
+        if (url) {
+          this.$cookiz.remove("url");
+          this.$router.push(url);
+        } else {
+          context.authInProcess = false;
+        }
       } catch (e) {
         context.errorMessage = "Неверный телефон или пароль";
         context.authInProcess = false;

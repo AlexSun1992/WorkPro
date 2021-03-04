@@ -16,7 +16,6 @@ export const actions = {
     await this.$axios
       .get(`/api/wizard/${params.idModule}/${params.idWizard}/${params.idCard}`)
       .then((res) => {
-        console.log(res);
         commit("setWizard", res.data.data);
         commit("setWizardPages", res.data.meta?.SPAGES);
         commit("setWizardCaption", res.data.meta?.SCARDCAPTION);
