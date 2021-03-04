@@ -282,21 +282,21 @@ export default {
 
   computed: {
     errorMessage() {
-      if (this.$store.getters.getRegistrationError) {
-        this.registrationInProcess = false;
-        if (this.$refs.verifyUser) {
-          this.$refs.verifyUser.$refs.userInput.$el.focus();
-          this.$refs.verifyUser.resendCount = null;
-        }
-        return this.$store.getters.getRegistrationError.toString();
-      }
-
-      if (
-        !this.$store.getters.getRegistrationError &&
-        this.$store.getters.isAuthenticated
-      ) {
-        //this.$router.push("/cabinet/55/0/701");
-      }
+      // if (this.$store.getters.getRegistrationError) {
+      //   this.registrationInProcess = false;
+      //   if (this.$refs.verifyUser) {
+      //     this.$refs.verifyUser.$refs.userInput.$el.focus();
+      //     this.$refs.verifyUser.resendCount = null;
+      //   }
+      //   return this.$store.getters.getRegistrationError.toString();
+      // }
+      //
+      // if (
+      //   !this.$store.getters.getRegistrationError &&
+      //   this.$store.getters.isAuthenticated
+      // ) {
+      //   //this.$router.push("/cabinet/55/0/701");
+      // }
     },
   },
 

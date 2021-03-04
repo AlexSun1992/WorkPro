@@ -105,10 +105,8 @@ export default {
         this.$cookiz.remove("url");
         this.$router.push(url);
       } catch (e) {
-        if (context.$auth.error?.response.status === 401) {
-          context.errorMessage = context.$auth.error.response.data.MESSAGE;
-          context.authInProcess = false;
-        }
+        context.errorMessage = "Неверный телефон или пароль";
+        context.authInProcess = false;
       }
     },
 
