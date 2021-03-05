@@ -7,7 +7,7 @@
     >
       <date-picker
         v-model="fieldValue"
-        v-mask="data.mask"
+        v-mask="maskTemplate"
         :disabled="!edit ? !edit : data.readonly"
         type="date"
         valueType="DD.MM.YYYY"
@@ -36,6 +36,7 @@ export default {
     return {
       lang: "ru",
       state: "timestamp form-control",
+      maskTemplate: "##.##.####",
     };
   },
   props: {
