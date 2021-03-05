@@ -2022,3 +2022,13 @@ ul.p-0.mx-0 li {
 .slick-dots {
   bottom: -35px;
 }
+
+.buy-block .dropdown-toggle::after {
+  border-top: 0;
+  border-right: 0;
+  margin-left: -3px;
+}
+
+.gotolk .dropdown-toggle::after {
+  display: none;
+}
