@@ -260,9 +260,9 @@ export default {
               let tab = this.wizardTabs[++index];
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
               $nuxt._router.push(
-                `/cabinet/wizard/${this.$route.params.idWizard}/${moduleId}/0/${
-                  tab.idItem
-                }/${cardId}/${rel.split("|")[index]}`
+                `/cabinet/wizard/${this.$route.params.idWizard}${
+                  tab.list ? `/list/` : `/`
+                }${moduleId}/0/${tab.idItem}/${cardId}/${rel.split("|")[index]}`
               );
             } else {
               $nuxt._router.push(
