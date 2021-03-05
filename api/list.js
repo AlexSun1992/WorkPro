@@ -37,7 +37,7 @@ app.get("/list/:idModule/:idItem/:filters", (req, res) => {
       })
       .catch((err) => {
         if (err.response.data.STATUS == 401) {
-          res.sendStatus(err.response.data.STATUS).send(err.response.data);
+          res.status(err.response.data.STATUS).send(err.response.data);
         } else {
           res.status(err.response.data.STATUS).send(err.response.data);
         }
@@ -67,7 +67,7 @@ app.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
       })
       .catch((err) => {
         if (err.response.data.STATUS === 401) {
-          res.sendStatus(err.response.data.STATUS).send(err.response.data);
+          res.status(err.response.data.STATUS).send(err.response.data);
         } else {
           res.status(err.response.data.STATUS).send(err.response.data);
         }

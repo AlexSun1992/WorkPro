@@ -46,7 +46,7 @@ app.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     res.send(result);
   } catch (err) {
     if (err.response.data.STATUS == 401) {
-      res.sendStatus(err.response.data.STATUS).send(err.response.data);
+      res.status(err.response.data.STATUS).send(err.response.data);
     } else {
       res.status(err.response.data.STATUS).send(err.response.data);
     }
