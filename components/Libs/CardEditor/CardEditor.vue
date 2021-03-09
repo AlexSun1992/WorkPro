@@ -173,12 +173,15 @@ export default {
         value: e.value,
       });
     },
-    async fetchCard(item) {
-      let [, idModule, idItem, idCard, rel] = item.value.value.split("/");
-      let result = await this.$axios.get(
-        `${consts.DATACARD}/${idModule}/${idItem}/${idCard}?REL=${rel}`
-      );
-      return result.data[0]._data[0];
+    async fetchCard(method, url) {
+      try {
+        let result = await this.$axios[method](url);
+        if (result) {
+          return result.data[0];
+        }
+      } catch (e) {
+        console.log(e);
+      }
     },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {
