@@ -189,7 +189,9 @@ export const actions = {
     commit("setListLoading", true);
     if (params.idWizard) {
       await this.$axios
-        .get(`/api/wizardlist/${page.idModule}/${page.idItem}/${page.idCard}`)
+        .get(
+          `/api/wizardlist/${params.idModule}/${params.idItem}/${params.idCard}`
+        )
         .then((res) => {
           commit("setListLoading", false);
           commit("setList", res.data);

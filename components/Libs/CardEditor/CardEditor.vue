@@ -173,12 +173,15 @@ export default {
         value: e.value,
       });
     },
-    async fetchCard(item) {
-      let [, idModule, idItem, idCard, rel] = item.value.value.split("/");
-      let result = await this.$axios.get(
-        `${consts.DATACARD}/${idModule}/${idItem}/${idCard}?REL=${rel}`
-      );
-      return result.data[0]._data[0];
+    async fetchCard(method, url) {
+      try {
+        let result = await this.$axios[method](url);
+        if (result) {
+          return result.data[0];
+        }
+      } catch (e) {
+        console.log(e);
+      }
     },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {
@@ -260,9 +263,9 @@ export default {
               let tab = this.wizardTabs[++index];
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
               $nuxt._router.push(
-                `/cabinet/wizard/${this.$route.params.idWizard}/${moduleId}/0/${
-                  tab.idItem
-                }/${cardId}/${rel.split("|")[index]}`
+                `/cabinet/wizard/${this.$route.params.idWizard}${
+                  tab.list ? `/list/` : `/`
+                }${moduleId}/0/${tab.idItem}/${cardId}/${rel.split("|")[index]}`
               );
             } else {
               $nuxt._router.push(

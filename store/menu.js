@@ -10,6 +10,9 @@ export const getters = {
   breadcrumbs: (state) => state.breadcrumbs,
   menu: (state) => state.menu,
   flatmenu: (state) => state.flatmenu,
+  getSettingsByIdItem: (state) => (id) => {
+    return state.menu[0].children.find((m) => console.log(m.idItem));
+  },
   getMenuById: (state) => (id) => {
     return state.flatmenu.find((m) => m.IDITEM === parseInt(id));
   },

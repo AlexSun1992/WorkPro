@@ -142,7 +142,7 @@ module.exports = {
     redirect: {
       login: false,
       logout: "/",
-      home: "/",
+      home: false,
       user: false,
     },
     plugins: ["~/plugins/auth.js"],
