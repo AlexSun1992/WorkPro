@@ -108,4 +108,28 @@ export default {
     grid-template-rows: auto auto min-content;
   }
 }
+
+.toast {
+  padding: 20px !important;
+}
+
+.toast .toast-header {
+  background-color: transparent !important;
+}
+.toast .close {
+  float: right;
+  border-radius: 20px;
+  border: 0;
+  background: transparent;
+  font-size: 26px;
+  font-weight: 700;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  cursor: pointer;
+}
+.toast button:focus {
+  outline: 0px;
+  outline: 0px auto transparent;
+}
 </style>
