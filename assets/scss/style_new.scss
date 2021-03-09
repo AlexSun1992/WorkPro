@@ -301,7 +301,7 @@ header > div {
 header {
   width: 100%;
 }
-header:after {
+header:not(.modal-header):after {
   content: "";
   width: 100%;
   position: absolute;
