@@ -47,7 +47,7 @@
         />
       </div>
       <v-runtime-template
-        v-if="!isError && settings.cardtemplate"
+        v-if="!isError && settings.cardtemplate && getFormData"
         :template="settings.cardtemplate"
       ></v-runtime-template>
       <div v-else-if="isError">
