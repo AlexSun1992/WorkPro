@@ -63,9 +63,15 @@ export default {
       );
     },
     addNewRecord() {
-      $nuxt._router.push(
-        `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/0/0`
-      );
+      if (this.params.settings.wizard.length) {
+        $nuxt._router.push(
+          `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/0/0`
+        );
+      } else {
+        $nuxt._router.push(
+          `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/0`
+        );
+      }
     },
     async refreshCardList() {
       try {
