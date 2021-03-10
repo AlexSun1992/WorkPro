@@ -1,4 +1,4 @@
-.btn {
+f.img-mypolices-img.btn {
   height: 40px;
   border: 0;
   cursor: pointer;
@@ -1197,7 +1197,6 @@ footer:not(.modal-footer) {
 }
 
 .mypolices-block > div.mypolices-title {
-  align-self: start;
   position: relative;
 }
 
@@ -1216,7 +1215,14 @@ footer:not(.modal-footer) {
   display: contents;
 }
 
-.img-mypolices-img {
+.mypolices-block:not(.block-title) .img-mypolices-img {
+  width: 33px;
+  height: 22px;
+}
+.block-title.mypolices-block {
+  display: block;
+}
+.block-title.mypolices-block .img-mypolices-img {
   width: 33px;
   height: 22px;
   position: absolute;
@@ -3060,12 +3066,23 @@ button.btn:disabled {
   position: relative;
 }
 
+.block-insured-events,
 .block-list-of-policies {
   border: 1px solid #d9e1e8;
   box-sizing: border-box;
   border-radius: 14px;
   position: relative;
   background: #f1f6f6;
+  display: grid;
+  grid-template-rows: minmax(40px, max-content) auto 57px;
+}
+.block-insured-events > div,
+.block-list-of-policies > div {
+  align-self: start;
+}
+.block-insured-events .block-footer,
+.block-list-of-policies .block-footer {
+  align-self: end;
 }
 
 .block-notifications .left-link:after,
@@ -3081,4 +3098,56 @@ button.btn:disabled {
 }
 .block-notification-btn .notification-close {
   box-shadow: none;
+}
+
+.mypolices-block:not(.block-title) {
+  padding: 10px 30px 0 30px;
+  font-family: Roboto, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  display: grid;
+  height: 100%;
+  background: #f1f6f6;
+  border: 1px solid #d9e1e8;
+  box-sizing: border-box;
+  border-radius: 10px;
+  position: relative;
+  grid-template-areas:
+    "img title"
+    "name name"
+    "info info"
+    "footer footer";
+  grid-template-columns: 40px auto;
+  grid-template-rows:
+    minmax(40px, max-content) minmax(40px, max-content)
+    auto minmax(57px, max-content);
+  grid-row-gap: 1px;
+  grid-column-gap: 5px;
+}
+
+.mypolices-block .mypolices-title {
+  grid-area: title;
+  align-self: center;
+  padding-left: 10px;
+}
+.mypolices-block .img-mypolices-img {
+  grid-area: img;
+  align-self: center;
+}
+.mypolices-block .mypolices-name {
+  grid-area: name;
+  align-self: start;
+}
+.mypolices-block .mypolices-info {
+  grid-area: info;
+  align-self: start;
+}
+.mypolices-block .block-footer {
+  grid-area: footer;
+  align-self: end;
+  padding-left: 32px !important;
+}
+
+.mypolices-block .mypolices-name {
+  margin-top: 5px;
 }

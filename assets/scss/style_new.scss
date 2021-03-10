@@ -757,6 +757,7 @@ footer:not(.modal-footer):after {
   height: 23px;
   border: 0;
   background: url(/img/exit.svg) 0 0 no-repeat;
+  cursor: pointer;
 }
 
 .block-r_min {
@@ -1010,9 +1011,9 @@ footer:not(.modal-footer):after {
   text-transform: none;
 }
 
-.block-footer button:hover {
+/*.block-footer button:hover {
   text-decoration: underline;
-}
+}*/
 
 .mypolices-all-block .mypolices-block:hover {
   box-shadow: 12px 16px 16px rgba(221, 235, 226, 0.32);
@@ -1330,17 +1331,17 @@ ul.dropdown-menu li:hover {
 
 .mypolices-block[data-id="2"] .img-mypolices-img,
 .block-mypolicies-item[data-id="2"] .img-mypolices-img {
-  background: url(/img/mypolices-id2.svg) 50% 50% no-repeat;
+  background: url(/img/mypolices-id2_new.svg) 50% 50% no-repeat;
 }
 
 .mypolices-block[data-id="3"] .img-mypolices-img,
 .block-mypolicies-item[data-id="3"] .img-mypolices-img {
-  background: url(/img/mypolices-id3.svg) 50% 50% no-repeat;
+  background: url(/img/mypolices-id3_new.svg) 50% 50% no-repeat;
 }
 
 .mypolices-block[data-id="1"] .img-mypolices-img,
 .block-mypolicies-item[data-id="1"] .img-mypolices-img {
-  background: url(/img/mypolices-id1.svg) 50% 50% no-repeat;
+  background: url(/img/mypolices-id1_new.svg) 50% 50% no-repeat;
 }
 
 .mypolices-block[data-id] .img-mypolices-img,
@@ -3017,7 +3018,7 @@ footer > div {
   transition: 0.3s;
 }
 
-.btn.btn-secondary:not(.left-link):not(.right-link):not(.link-button) {
+.btn.btn-secondary:not(.left-link):not(.right-link):not(.link-button):not(.notification-close) {
   background: #fff;
   border: 1px solid #868e96;
   border-radius: 4px;
@@ -3254,7 +3255,7 @@ footer > div {
   transform: translateY(-50%);
 }
 
-.mypolices-block {
+.mypolices-block:not(.block-title) {
   padding: 20px 30px 0 30px;
   font-family: Roboto, sans-serif;
   font-style: normal;
@@ -3271,11 +3272,12 @@ footer > div {
     "name  img"
     "info info"
     "footer footer";
-  grid-template-columns: auto 90px;
+  grid-template-columns: auto 80px;
   grid-template-rows:
     minmax(40px, max-content) minmax(40px, max-content)
     auto minmax(57px, max-content);
   grid-row-gap: 1px;
+  grid-column-gap: 5px;
 }
 
 .mypolices-block .mypolices-title {
@@ -3285,11 +3287,18 @@ footer > div {
   color: #242424;
   align-self: start;
 }
-.mypolices-block .img-mypolices-img {
+.mypolices-block.block-title .img-mypolices-img {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.mypolices-block:not(.block-title) .img-mypolices-img {
   grid-area: img;
   align-self: start;
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
 }
 .mypolices-block .mypolices-name {
   grid-area: name;
