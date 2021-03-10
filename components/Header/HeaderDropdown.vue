@@ -1,6 +1,5 @@
 <template>
   <div class="d-inline-block">
-    <LoginModal ref="refLogin" />
     <client-only>
       <b-button
         v-if="!isAuthenticated"
@@ -31,10 +30,9 @@
 <script>
 import { mapGetters } from "vuex";
 import HeaderUserName from "../Pages/Cabinet/Header/HeaderUserName";
-import LoginModal from "../Pages/Login/LoginModal";
 export default {
   name: "header-dropdown",
-  components: { HeaderUserName, LoginModal },
+  components: { HeaderUserName },
   methods: {
     login() {
       this.$router.push("/login");

@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper">
     <div class="animated fadeIn">
-      <LoginModal :on-auth="regPolicy" ref="refLogin" />
       <b-row>
         <b-col lg="12">
           <b-card>
@@ -56,10 +55,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import LoginModal from "./Login/LoginModal";
 export default {
   name: "Calculator",
-  components: { LoginModal },
   data() {
     return {
       user: {},

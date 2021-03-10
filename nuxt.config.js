@@ -1,6 +1,7 @@
 /* eslint-disable */
 module.exports = {
-  mode: "universal",
+  target: "static",
+  telemetry: false,
   /*
    ** Headers of the page
    */
@@ -52,7 +53,7 @@ module.exports = {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: ["@nuxtjs/router", "@nuxtjs/proxy", "@nuxt/typescript-build"],
+  buildModules: ["@nuxtjs/router", "@nuxtjs/proxy"],
   /*
    ** Nuxt.js modules
    */
