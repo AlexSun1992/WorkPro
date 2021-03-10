@@ -17,7 +17,8 @@
           <header-user-name :user-data="loggedInUser"></header-user-name>
         </template>
         <b-dropdown-item @click="goInCabinet"
-          ><i class="fa fa-home"></i> Личный кабинет</b-dropdown-item
+          ><i class="fa fa-home"></i> Личный кабинет
+          </b-dropdown-item
         >
         <b-dropdown-item @click="logout"
           ><i class="fa fa-lock"></i> Выход</b-dropdown-item

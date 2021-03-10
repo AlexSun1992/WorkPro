@@ -2,6 +2,11 @@
 module.exports = {
   target: "static",
   telemetry: false,
+  generate: {
+    minify: {
+      collapseWhitespace: false,
+    },
+  },
   /*
    ** Headers of the page
    */

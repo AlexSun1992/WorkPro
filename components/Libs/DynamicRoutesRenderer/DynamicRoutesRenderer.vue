@@ -5,7 +5,7 @@
         :template="getPage.content.rendered"
       ></v-runtime-template>
     </div>
-    <div v-else-if="getPage.status == '404'">
+    <div v-else-if="getStatus === '404'">
       <div class="container">
         <h1>404 Страница не найдена</h1>
       </div>
@@ -37,6 +37,9 @@ export default {
   computed: {
     getPage() {
       return this.$store.getters["pages/getPageByUrl"];
+    },
+    getStatus() {
+      return this.getPage?.status;
     },
     isLoading() {
       return this.$store.getters["pages/getLoading"];
