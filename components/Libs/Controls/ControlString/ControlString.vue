@@ -42,9 +42,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.form-group {
-  margin-bottom: 0 !important;
-}
-</style>

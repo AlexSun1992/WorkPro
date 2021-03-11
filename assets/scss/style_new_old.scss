@@ -1733,13 +1733,12 @@ ul.dropdown-menu li:hover {
 .btn_add_to {
   background: transparent !important;
   box-shadow: none !important;
-  border: 1px solid #299732;
+  border: 1px solid #c4c4c4;
   width: 30px;
   height: 30px;
   position: absolute;
   top: 18px;
   padding: 0;
-  border-radius: 30px;
 }
 
 .block-title.title-bottom-line span {
@@ -3164,6 +3163,7 @@ button.btn:disabled {
   z-index: 1;
   background: transparent !important;
 }
+.btn_add_to:hover,
 .dropdown_plus .btn:hover {
   box-shadow: 1px 2px 5px #29973230;
 }
