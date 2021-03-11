@@ -128,17 +128,20 @@ export const actions = {
   },
   async saveDataCard({ commit }, params) {
     commit("setLoading", true);
+    commit("setDisabled", true);
     try {
       let resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`,
         params.form
       );
       commit("setLoading", false);
+      commit("setDisabled", false);
       commit("setCardId", resp.data.ID);
       commit("setCardRelId", resp.data.REL);
       return resp;
     } catch (e) {
       commit("setLoading", false);
+      commit("setDisabled", false);
       console.log(err);
     }
   },
@@ -165,15 +168,18 @@ export const actions = {
   ) {
     try {
       commit("setLoading", true);
+      commit("setDisabled", true);
       return await this.$axios
         .get(`/api/action/${moduleId}/${actionId}/${cardId}`)
         .then((resp) => {
           commit("setLoading", false);
+          commit("setDisabled", false);
           commit("setActionParams", resp.data);
           return resp.data;
         });
     } catch (e) {
       commit("setLoading", false);
+      commit("setDisabled", false);
       return e;
     }
   },
@@ -280,5 +286,11 @@ export const mutations = {
   },
   setLoading(state, params) {
     state.loading = params;
+  },
+  setDisabled(state, params) {
+    state.form = state.form.map((item) => {
+      item.readonly = params;
+      return item;
+    });
   },
 };
