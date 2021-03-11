@@ -276,4 +276,8 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 12px;
   margin-top: 10px;
 }
+.autocomplete ul.dropdown-menu {
+  display: block;
+  margin-top: -5px;
+}
 </style>
