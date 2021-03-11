@@ -1,6 +1,6 @@
 /* eslint-disable */
 module.exports = {
-  target: "static",
+  target: "universal",
   telemetry: false,
   generate: {
     minify: {
