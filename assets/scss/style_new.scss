@@ -1,3 +1,6 @@
+*:focus {
+  outline-color: transparent;
+}
 .btn {
   height: 40px;
   border: 0;
@@ -151,7 +154,7 @@
 }
 
 .mx-datepicker {
-  width: 120px;
+  width: 130px;
 }
 
 .mx-datepicker + small {
@@ -1283,10 +1286,6 @@ footer:not(.modal-footer):after {
   }
 }
 
-.mx-datepicker {
-  width: 120px;
-}
-
 .icon-my-profile {
   position: absolute;
   background: url(/img/icon-my-profile.svg) 50% 50% no-repeat;
@@ -1299,14 +1298,6 @@ footer:not(.modal-footer):after {
 
 .ui.selection.dropdown {
   border-radius: 6px;
-}
-
-.control {
-  // line-height: 0;
-}
-
-.form-group {
-  margin-bottom: 0;
 }
 
 ul.dropdown-menu li {
@@ -1613,13 +1604,14 @@ ul.dropdown-menu li:hover {
 
 .btn_add_to {
   background: transparent !important;
-  box-shadow: none !important;
-  border: 1px solid #c4c4c4;
+  box-shadow: none;
+  border: 1px solid #299732;
   width: 30px;
   height: 30px;
   position: absolute;
   top: 18px;
   padding: 0;
+  border-radius: 30px;
 }
 
 .block-title.title-bottom-line span {
@@ -3388,4 +3380,81 @@ footer > div {
 
 a.btn:hover {
   text-decoration: none;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  background: #f4f7f5;
+  border: 1px solid #dfdfe2;
+}
+
+.block-profile {
+  padding: 10px 30px;
+  background: #ffffff;
+  border: 1px solid #d9e1e8;
+  box-sizing: border-box;
+  border-radius: 14px;
+  position: relative;
+}
+
+label,
+legend {
+  color: #6b7077;
+  margin-bottom: 3px;
+}
+
+select,
+.form-control,
+input {
+  padding: 13px;
+  font-size: 16px;
+}
+select,
+input {
+  margin-bottom: 2px;
+}
+
+.form-control {
+  height: auto;
+}
+p.error {
+  margin: 0;
+  padding: 0;
+}
+
+select,
+.form-control,
+input {
+  border: 1px solid #a8a8a8;
+  transition: 0.3s;
+}
+
+select:active,
+select:focus,
+.form-control:active,
+.form-control:focus,
+input:active,
+input:focus {
+  border: 1px solid #4a984d;
+  transition: 0.3s;
+}
+
+.ui.selection.dropdown {
+  padding: 14px;
+  border: 1px solid #a8a8a8;
+}
+
+.ui.selection.dropdown > .delete.icon,
+.ui.selection.dropdown > .dropdown.icon,
+.ui.selection.dropdown > .search.icon {
+  top: 13px;
+}
+.ui.search.selection.dropdown > input.search,
+.ui.search.selection.dropdown > span.sizer {
+  padding: 13px;
+}
+
+.btn_add_to:hover,
+.dropdown_plus .btn:hover {
+  box-shadow: 1px 2px 5px #29973230;
 }

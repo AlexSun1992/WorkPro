@@ -15,7 +15,7 @@
         <div class="col">
           <card-editor
             ref="cardEditor"
-            class="bg-six block-border-one block p-4"
+            class="block-profile"
             @error="$emit('error')"
             :data="dataForm"
             :edit="params.settings.edit"

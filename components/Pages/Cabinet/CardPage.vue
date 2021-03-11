@@ -40,7 +40,7 @@
           @error="error = $event"
           ref="cardEditor"
           :wizard-tabs="wizardTabs"
-          class="bg-six block-border-one block p-4"
+          class="block-profile"
           :data="getFormData"
           :edit="editable"
           :params="settings"
