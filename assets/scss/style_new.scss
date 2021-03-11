@@ -102,8 +102,11 @@
   );
 }
 
-.bg-six {
+/*.bg-six {
   background: #f3f7f8;
+}*/
+.bg-six {
+  background: #ffffff;
 }
 
 .block-insurancecase-item:hover,
@@ -804,10 +807,6 @@ footer:not(.modal-footer):after {
     #fcfdfd 50.2%,
     #fbfdfc 101.82%
   );
-}
-
-.bg-six {
-  background: #f3f7f8;
 }
 
 .block-notification-item.mail-empty:hover {
