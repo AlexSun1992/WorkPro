@@ -86,6 +86,7 @@ export default {
         border: "none",
         color: "#dddbdd",
       },
+      source: ''
     };
   },
   props: {
@@ -175,12 +176,25 @@ export default {
     },
     async fetchCard(method, url) {
       try {
-        let result = await this.$axios[method](url);
+        this.cancelRequest();
+        this.source = this.$axios.CancelToken.source();
+
+        let result = await this.$axios[method](url, {
+          cancelToken: this.source.token,
+        });
+
         if (result) {
+          this.source = "";
           return result.data[0];
         }
       } catch (e) {
         console.log(e);
+      }
+    },
+    cancelRequest() {
+      if (this.source) {
+        this.source.cancel("Cancelled");
+        console.log("cancel request done");
       }
     },
     clearRelation(e) {
