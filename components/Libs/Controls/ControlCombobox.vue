@@ -6,7 +6,8 @@
       :label-for="data.name"
     >
       <b-form-select
-        v-model="fieldValue"
+        v-model="data.value"
+        @change="update"
         :options="data.options"
         :disabled="!edit ? !edit : data.readonly"
         :class="{ 'error-outline': isValid == false }"
@@ -36,19 +37,16 @@ export default {
       default: () => false,
     },
   },
-  computed: {
-    fieldValue: {
-      get: function () {
-        return this.data.value;
-      },
-      set: function (value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: String(value),
-        });
-      },
+  methods: {
+    update() {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: String(this.data.value),
+      });
     },
+  },
+  computed: {
     isValid() {
       return this.$store.getters["data_card/getDataFieldByFieldId"](
         `${this.data.fieldId}`
