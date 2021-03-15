@@ -47,6 +47,35 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
     res.send(e);
   }
 });
+app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
+  try {
+    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.authorization) {
+      axios.defaults.headers.common.Authorization = req.headers.authorization;
+    } else {
+      if (req.cookies) {
+        axios.defaults.headers.common.Authorization =
+          req.cookies["auth._token.local"];
+      }
+    }
+    const url = encodeURI(
+      `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.idCard}/${req.params.idWizard}`
+    );
+    axios({
+      url: url,
+      method: "GET",
+    })
+      .then(async (resp) => {
+        // res.send(formConverter.form(resp.data, req.params.idItem))
+        res.send(await formConverter.form(resp.data, req.params.idItem));
+      })
+      .catch((err) => {
+        res.status(err.response.data.STATUS).send(err.response.data);
+      });
+  } catch (e) {
+    res.send(e);
+  }
+});
 app.get("/osago", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";

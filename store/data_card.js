@@ -51,12 +51,18 @@ export const actions = {
       commit("clearFormData");
     }
     try {
+      let url;
+      if (params.idWizard && params.idCard === "0") {
+        url = encodeURI(
+          `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${params.idCard}/0`
+        );
+      } else {
+        url = encodeURI(
+          `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
+        );
+      }
       await this.$axios
-        .get(
-          encodeURI(
-            `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
-          )
-        )
+        .get(url)
         .then((res) => {
           commit(
             "setForm",
@@ -82,6 +88,10 @@ export const actions = {
             commit("setReadOnly", res.data.metaData.readonly);
           }
           commit("setCardCaption", res.data.metaData.cardCaption);
+        })
+        .catch((err) => {
+          console.log(err);
+          throw error;
         });
     } catch (error) {
       if (error.response) {
@@ -140,9 +150,7 @@ export const actions = {
       commit("setCardRelId", resp.data.REL);
       return resp;
     } catch (e) {
-      commit("setLoading", false);
-      commit("setDisabled", false);
-      console.log(err);
+      console.log(e);
     }
   },
   async executeAction(

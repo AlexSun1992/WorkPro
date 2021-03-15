@@ -45,32 +45,48 @@ export default {
   },
   methods: {
     async openCardForm(data) {
-      if (!this.params.settings.isWizard) {
-        if (data.data.item.REL) {
-          $nuxt._router.push(
-            `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${data.data.item.ID}/${data.data.item.REL}`
-          );
+      if (!this.params.settings.wizard.length) {
+        if (data.data.item.REL && this.params.page.idWizard) {
+          this.$router.push({
+            path: `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${data.data.item.ID}/${data.data.item.REL}`,
+            query: { ref: this.$route.path },
+          });
+        } else {
+          if (data.data.item.REL) {
+            this.$router.push(
+              `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${data.data.item.ID}/${data.data.item.REL}`
+            );
+          }
         }
         return;
       }
-      await this.$store.dispatch("wizard/fetchWizard", {
-        idModule: this.params.page.idModule,
-        idWizard: this.params.page.idItem,
-        idCard: data.data.item.ID,
-      });
-      $nuxt._router.push(
-        `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/${data.data.item.ID}/${this.wizardRel}`
-      );
+      if (this.params.settings.wizard.length) {
+        await this.$store.dispatch("wizard/fetchWizard", {
+          idModule: this.params.page.idModule,
+          idWizard: this.params.page.idItem,
+          idCard: data.data.item.ID,
+        });
+        this.$router.push(
+          `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/${data.data.item.ID}/${this.wizardRel}`
+        );
+      }
     },
     addNewRecord() {
       if (this.params.settings.wizard.length) {
-        $nuxt._router.push(
+        this.router.push(
           `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/0/0`
         );
       } else {
-        $nuxt._router.push(
-          `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/0`
-        );
+        if (this.params.page.idWizard) {
+          this.$router.push({
+            path: `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${this.params.page.idCard}/0/0`,
+            query: { ref: this.$route.path },
+          });
+        } else {
+          this.router.push(
+            `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/0`
+          );
+        }
       }
     },
     async refreshCardList() {

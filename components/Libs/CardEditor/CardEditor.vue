@@ -218,7 +218,6 @@ export default {
     async saveDataCard() {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
-      // this.$store.commit("data_card/filterFields");
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
         try {
@@ -244,10 +243,10 @@ export default {
             relId,
             form: fields,
           });
-          if (this.$route.params.idItem == "710") {
+          if (this.$route.params.idItem === "710") {
             await this.$store.dispatch("updateUser");
           }
-          if (this.$route.params.idCard === "0") {
+          if (this.$route.params.idCard === "0" && !this.$route.query?.ref) {
             cardId = this.$store.getters["data_card/getCardId"];
             if (this.$route.params.idWizard) {
               this.$store.commit("data_card/setLoading", true);
@@ -257,22 +256,23 @@ export default {
                 idCard: cardId,
               });
               this.$store.commit("data_card/setLoading", false);
-              let index = this.wizardTabs.findIndex(
-                (item) => item.idItem == this.$route.params.idItem
-              );
-              let tab = this.wizardTabs[++index];
+              let tab = this.wizardTabs[1];
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
-              $nuxt._router.push(
+              this.$router.push(
                 `/cabinet/wizard/${this.$route.params.idWizard}${
                   tab.list ? `/list/` : `/`
-                }${moduleId}/0/${tab.idItem}/${cardId}/${rel.split("|")[index]}`
+                }${moduleId}/0/${tab.idItem}/${cardId}/${rel.split("|")[1]}`
               );
             } else {
-              $nuxt._router.push(
+              this.$router.push(
                 `/cabinet/${moduleId}/0/${itemId}/${cardId}${
                   relId ? `/${relId}` : ""
                 }`
               );
+            }
+          } else {
+            if (this.$route.query?.ref && resp) {
+              this.$router.push(this.$route.query?.ref);
             }
           }
           if (resp) {
@@ -287,12 +287,12 @@ export default {
           if (this.$route.path.includes("55/0/19")) {
             this.$emit(
               "error",
-              err.response.data.INFO || err.response.data.MESSAGE
+              err?.response?.data?.INFO || err?.response?.data?.MESSAGE
             );
           }
-          let errorInfo = err.response.data.INFO
-            ? err.response.data.INFO
-            : err.response.data.MESSAGE;
+          let errorInfo = err?.response?.data?.INFO
+            ? err?.response?.data?.INFO
+            : err?.response?.data?.MESSAGE;
           if (errorInfo) {
             this.$store.commit("data_card/setFieldError", errorInfo);
           }

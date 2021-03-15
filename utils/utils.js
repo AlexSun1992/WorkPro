@@ -1,7 +1,7 @@
 import { mask } from "vue-the-mask";
 
 export const applyMask = {
-  update(el, binding) {
+  bind(el, binding) {
     if (binding.value && binding.value !== "") {
       mask(el, binding);
     }

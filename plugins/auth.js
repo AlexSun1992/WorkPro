@@ -39,11 +39,19 @@ export default function ({ app, store, redirect, $auth }) {
         });
     }
     if (error.response.status !== 401) {
-      $nuxt.$bvToast.toast(error.response.data.MESSAGE, {
-        title: "Ошибка",
-        variant: "danger",
-        autoHideDelay: 5000,
-      });
+      try {
+        store.commit("data_card/setLoading", false);
+        store.commit("data_card/setDisabled", false);
+        store.commit("data_card/setError", true);
+        store.commit("data_card/setErrorMessage", error.response.data);
+        if ($nuxt) {
+          $nuxt.$bvToast.toast(error.response.data.MESSAGE, {
+            title: "Ошибка",
+            variant: "danger",
+            autoHideDelay: 5000,
+          });
+        }
+      } catch (e) {}
     }
   });
   app.$axios.onRequest((config) => {

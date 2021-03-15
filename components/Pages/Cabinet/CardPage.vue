@@ -34,7 +34,10 @@
     <div class="profile row">
       <div
         class="col"
-        v-if="editable || (!settings.cardtemplate && !editable && !isError)"
+        v-if="
+          (editable && !isError) ||
+          (!settings.cardtemplate && !editable && !isError)
+        "
       >
         <CardEditor
           @error="error = $event"
@@ -84,6 +87,16 @@
             label="Spinning"
           ></b-spinner>
         </b-button>
+        <b-button
+          v-if="ref"
+          pill
+          v-on:click="$router.push(ref)"
+          type="button"
+          variant="outline-success"
+          class="col-12 col-md-auto mt-2 mt-md-0"
+          :style="isButtonDisabled"
+          >Отменить</b-button
+        >
       </div>
     </div>
     <div v-if="error" class="mt-3 mb-3">
@@ -254,6 +267,9 @@ export default {
     },
     loading() {
       return this.$store.getters["data_card/getLoading"];
+    },
+    ref() {
+      return this.$route.query?.ref;
     },
   },
   beforeRouteLeave(to, from, next) {

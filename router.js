@@ -85,6 +85,11 @@ export function createRouter() {
           },
           {
             meta: "Cabinet",
+            path: ":idModule/:idParent/:idItem/:idWizard/:idCard/:idRel",
+            component: CardPage,
+          },
+          {
+            meta: "Cabinet",
             path: "wizard/:idWizard",
             component: WizardPage,
             children: [
