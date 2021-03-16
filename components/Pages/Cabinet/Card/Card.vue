@@ -73,7 +73,7 @@ export default {
     },
     addNewRecord() {
       if (this.params.settings.wizard.length) {
-        this.router.push(
+        this.$router.push(
           `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/0/0`
         );
       } else {
@@ -83,7 +83,7 @@ export default {
             query: { ref: this.$route.path },
           });
         } else {
-          this.router.push(
+          this.$router.push(
             `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/0`
           );
         }
