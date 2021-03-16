@@ -1,5 +1,8 @@
 <template>
-  <div :class="'ppl-info percent' + percent + ' ppl-' + sex">
+  <div
+    style="cursor: pointer"
+    :class="'ppl-info percent' + percent + ' ppl-' + sex"
+  >
     <div class="ppl-avatar" @click="goToProfile">
       <img src="" />
     </div>
@@ -36,4 +39,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.cursor {
+  cursor: pointer;
+}
+</style>
