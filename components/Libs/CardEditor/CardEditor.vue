@@ -43,9 +43,9 @@
       />
     </div>
     <SkeletonBox v-if="!data.length" class="mt-5" :items="8"></SkeletonBox>
-    <div class="error-message" v-if="isError">
-      {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
-    </div>
+    <!--    <div class="error-message" v-if="isError">-->
+    <!--      {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}-->
+    <!--    </div>-->
   </div>
 </template>
 

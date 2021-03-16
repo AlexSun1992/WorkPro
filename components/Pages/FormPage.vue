@@ -28,7 +28,7 @@
         ></v-runtime-template>
       </div>
     </component>
-    <div v-if="!isError" class="mt-3 row button-container">
+    <div class="mt-3 row button-container">
       <div class="col-12" v-if="params.settings.edit">
         <b-button
           pill
