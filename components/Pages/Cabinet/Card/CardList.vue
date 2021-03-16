@@ -8,8 +8,9 @@
       :items="data.items"
     >
       <template v-slot:actions="slotProps">
-        <b-button v-on:click="showItem(slotProps)" class="btn btn-success"
-          >Открыть</b-button
+        <b-button v-on:click="showItem(slotProps)">Открыть</b-button>
+        <b-button v-on:click="deleteItem(slotProps)" class="mt-2"
+          >Удалить</b-button
         >
       </template>
     </grid>
@@ -46,6 +47,9 @@ export default {
   methods: {
     showItem(record) {
       this.$emit("action-clicked", record);
+    },
+    deleteItem(record) {
+      this.$emit("delete-item", record);
     },
   },
 };

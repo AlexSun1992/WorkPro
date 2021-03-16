@@ -22,6 +22,7 @@
         :load="isListLoading"
         :data="listData"
         @action-clicked="openCardForm"
+        @delete-item="deleteRecord"
       />
     </div>
   </div>
@@ -42,6 +43,11 @@ export default {
       required: true,
       default: () => {},
     },
+  },
+  data() {
+    return {
+      myclass: ["cabinet"],
+    };
   },
   methods: {
     async openCardForm(data) {
@@ -88,6 +94,41 @@ export default {
           );
         }
       }
+    },
+    async deleteRecord(data) {
+      const params = {
+        moduleId: this.$route.params.idModule,
+        menuId: this.$route.params.idItem,
+        itemId: data.data.item.ID,
+        relId: data.data.item.REL,
+      };
+      try {
+        this.$bvModal
+          .msgBoxConfirm("Вы действительно хотите удалить запись?", {
+            title: "Удаление записи",
+            size: "sm",
+            buttonSize: "sm",
+            okVariant: "primary",
+            okTitle: "Удалить",
+            cancelTitle: "Отмена",
+            footerClass: "p-2",
+            modalClass: this.myclass,
+            hideHeaderClose: false,
+            centered: true,
+          })
+          .then(async (value) => {
+            if (value) {
+              await this.$store.dispatch("card/deleteRecord", params);
+              await this.$store.dispatch("card/fetchList", this.$route.params);
+              this.$bvToast.toast("Успешно  удалено", {
+                title: "",
+                variant: "success",
+                solid: true,
+              });
+            }
+          })
+          .catch((err) => {});
+      } catch (err) {}
     },
     async refreshCardList() {
       try {

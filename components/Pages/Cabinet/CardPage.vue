@@ -277,7 +277,8 @@ export default {
     const saveButtonClicked = this.$store.getters[
       "data_card/saveButtonClicked"
     ];
-
+    next();
+    /*
     if (cardChanged) {
       const confirmed = window.confirm("Закрыть без сохранения данных?");
       if (confirmed) {
@@ -286,6 +287,7 @@ export default {
     } else {
       next();
     }
+    */
   },
 };
 </script>

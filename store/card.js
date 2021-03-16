@@ -205,6 +205,20 @@ export const actions = {
         });
     }
   },
+  async deleteRecord(
+    { commit, dispatch },
+    { moduleId, menuId, itemId, relId }
+  ) {
+    return await this.$axios
+      .delete(
+        `/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${
+          relId ? `?rel=${relId}` : ""
+        }`
+      )
+      .then((res) => {
+        return res.data;
+      });
+  },
   async fetchSuggestions({ commit, getters }, params) {
     const type = params.suggestionType;
     const key = params.key;

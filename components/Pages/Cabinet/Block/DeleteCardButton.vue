@@ -54,14 +54,7 @@ export default {
           itemId: this.itemId,
           relId: this.relId,
         });
-      } catch (err) {
-        this.$bvToast.toast(err.response.data.MESSAGE, {
-          title: "Ошибка",
-          variant: "danger",
-          noAutoHide: true,
-          solid: true,
-        });
-      }
+      } catch (err) {}
     },
   },
 };
