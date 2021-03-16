@@ -1,6 +1,6 @@
 <template>
   <div :class="'ppl-info percent' + percent + ' ppl-' + sex">
-    <div class="ppl-avatar">
+    <div class="ppl-avatar" @click="goToProfile">
       <img src="" />
     </div>
     <span class="ppl-name">{{ user }}</span>
@@ -11,6 +11,11 @@
 export default {
   name: "HeaderUserInfo",
   props: ["userData"],
+  methods: {
+    goToProfile() {
+      $nuxt._router.push(`/cabinet/${this.$route.params.idModule}/0/710`);
+    },
+  },
   computed: {
     user() {
       if (this.userData && this.userData[0]) {
