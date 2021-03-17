@@ -86,7 +86,7 @@ export default {
         border: "none",
         color: "#dddbdd",
       },
-      source: ''
+      source: "",
     };
   },
   props: {
@@ -262,6 +262,7 @@ export default {
           }
           if (this.$route.params.idCard === "0" && !this.$route.query?.ref) {
             cardId = this.$store.getters["data_card/getCardId"];
+            relId = this.$store.getters["data_card/getCardRelId"];
             if (this.$route.params.idWizard) {
               this.$store.commit("data_card/setLoading", true);
               await this.$store.dispatch("wizard/fetchWizard", {
