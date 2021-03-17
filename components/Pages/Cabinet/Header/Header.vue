@@ -39,7 +39,6 @@ export default {
       try {
         this.$auth.logout();
         window.$nuxt.$cookiz?.remove("url");
-        this.$router.push("/");
       } catch (e) {
         console.log(e);
       }
