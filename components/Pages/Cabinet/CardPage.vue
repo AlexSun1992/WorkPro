@@ -51,7 +51,7 @@
         {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
       </div>
     </div>
-    <div v-if="!isError" class="mt-3 mb-3 row button-container">
+    <div v-if="isShowCardEditor" class="mt-3 mb-3 row button-container">
       <div class="col-12" v-if="settings.edit">
         <div class="inbuttons" v-for="(item, i) in action" :key="i">
           <b-button
