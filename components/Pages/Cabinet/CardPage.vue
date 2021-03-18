@@ -32,13 +32,7 @@
       ></v-runtime-template>
     </b-modal>
     <div class="profile row">
-      <div
-        class="col"
-        v-if="
-          (editable && !isError) ||
-          (!settings.cardtemplate && !editable && !isError)
-        "
-      >
+      <div class="col" v-if="isShowCardEditor">
         <CardEditor
           @error="error = $event"
           ref="cardEditor"
@@ -50,10 +44,10 @@
         />
       </div>
       <v-runtime-template
-        v-if="!isError && settings.cardtemplate && getFormData"
+        v-if="isShowTemplate"
         :template="settings.cardtemplate"
       ></v-runtime-template>
-      <div v-else-if="isError">
+      <div v-else-if="isShowErrorMessage">
         {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
       </div>
     </div>
@@ -270,6 +264,18 @@ export default {
     },
     ref() {
       return this.$route.query?.ref;
+    },
+    isShowCardEditor() {
+      return (
+        (!this.settings.cardtemplate && !!this.getFormData) ||
+        (this.editable && !this.isError)
+      );
+    },
+    isShowErrorMessage() {
+      return this.isError && !this.getFormData;
+    },
+    isShowTemplate() {
+      return !this.isError && this.settings.cardtemplate && !!this.getFormData;
     },
   },
   beforeRouteLeave(to, from, next) {
