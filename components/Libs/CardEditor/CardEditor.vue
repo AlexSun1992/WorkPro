@@ -129,7 +129,10 @@ export default {
       } catch {}
     },
     async updateValue(e) {
-      this.$store.commit("data_card/cardChanged", true);
+      let field = this.data.find((f) => f.fieldId === e.fieldId);
+      if (field.type !== "button") {
+        this.$store.commit("data_card/cardChanged", true);
+      }
       if (typeof eventHandler === "function") {
         let data = await eventHandler(
           this.data.map((a) => Object.assign({}, a)),
@@ -140,7 +143,6 @@ export default {
           this.$store.commit("data_card/setForm", data || this.data);
         }
       }
-      let field = this.data.find((f) => f.fieldId === e.fieldId);
       if (field.type === "button") {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");
