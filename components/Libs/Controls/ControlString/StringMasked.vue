@@ -21,11 +21,13 @@ export default {
   },
   methods: {
     updateValue(val) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: val,
-      });
+      if (this.data.value !== val) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: val,
+        });
+      }
     },
   },
 };

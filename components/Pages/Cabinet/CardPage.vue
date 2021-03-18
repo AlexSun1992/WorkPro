@@ -283,17 +283,29 @@ export default {
     const saveButtonClicked = this.$store.getters[
       "data_card/saveButtonClicked"
     ];
-    next();
-    /*
     if (cardChanged) {
-      const confirmed = window.confirm("Закрыть без сохранения данных?");
-      if (confirmed) {
-        next();
-      }
+      this.$bvModal
+        .msgBoxConfirm("Закрыть страницу без сохранения данных?", {
+          title: "Удаление записи",
+          size: "sm",
+          buttonSize: "sm",
+          okVariant: "primary",
+          okTitle: "Перейти",
+          cancelTitle: "Отмена",
+          footerClass: "p-2",
+          modalClass: this.myclass,
+          hideHeaderClose: false,
+          centered: true,
+        })
+        .then(async (value) => {
+          if (value) {
+            next();
+          }
+        })
+        .catch((err) => {});
     } else {
       next();
     }
-    */
   },
 };
 </script>
