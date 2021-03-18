@@ -5,7 +5,6 @@
       autocomplete="off"
       type="search"
       v-model="data.value"
-      v-mask="mask"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
@@ -43,11 +42,7 @@
 
 <script>
 import _ from "lodash";
-import { applyMask as _mask } from "~/utils/utils";
 export default {
-  directives: {
-    mask: _mask,
-  },
   data() {
     return {
       open: false,
@@ -129,6 +124,7 @@ export default {
       this.open = false;
     },
     async getSuggestions(name) {
+      console.log(this.data.value);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -210,41 +206,6 @@ export default {
       } else if (name === "SNEWEMAIL") {
         return "Введите новый email";
       }
-    },
-  },
-  computed: {
-    mask: function () {
-      let mask = null;
-      if (this.data.mask) {
-        try {
-          if (
-            this.data.mask.charAt(0) === "[" &&
-            this.data.mask.charAt(this.data.mask.length - 1) === "]"
-          ) {
-            mask = JSON.parse(this.data.mask);
-          } else {
-            mask = this.data.mask;
-          }
-        } catch (e) {
-          mask = null;
-        }
-      }
-      return mask
-        ? {
-            mask: mask,
-            tokens: {
-              X: { pattern: /[0-9a-zA-Z]/ },
-              F: {
-                pattern: /(?!8)\d/,
-              },
-              S: {
-                pattern: /[abekmhopctyxABEKMHOPCTYX]/,
-                transform: (v) => v.toLocaleUpperCase(),
-              },
-              "#": { pattern: /\d/ },
-            },
-          }
-        : mask;
     },
   },
 };

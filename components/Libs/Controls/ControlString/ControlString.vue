@@ -4,7 +4,13 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
+    <string-masked
+      v-if="data.mask"
+      :data="data"
+      @update="updateField($event)"
+    ></string-masked>
     <string-autocomplete
+      v-else
       :data="data"
       :edit="edit"
       @update="updateField($event)"
@@ -14,9 +20,10 @@
 
 <script>
 import StringAutocomplete from "./StringAutocomplete";
+import StringMasked from "./StringMasked";
 export default {
   name: "ControlString",
-  components: { StringAutocomplete },
+  components: { StringAutocomplete, StringMasked },
   props: {
     data: {
       type: Object,
