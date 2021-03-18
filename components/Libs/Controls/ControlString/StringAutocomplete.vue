@@ -124,7 +124,6 @@ export default {
       this.open = false;
     },
     async getSuggestions(name) {
-      console.log(this.data.value);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
