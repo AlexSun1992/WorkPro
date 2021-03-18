@@ -286,11 +286,11 @@ export default {
     if (cardChanged) {
       this.$bvModal
         .msgBoxConfirm("Закрыть страницу без сохранения данных?", {
-          title: "Удаление записи",
+          title: "Переход на другую страницу",
           size: "sm",
           buttonSize: "sm",
           okVariant: "primary",
-          okTitle: "Перейти",
+          okTitle: "Закрыть",
           cancelTitle: "Отмена",
           footerClass: "p-2",
           modalClass: this.myclass,
