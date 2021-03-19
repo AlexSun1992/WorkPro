@@ -2,6 +2,7 @@
   <the-mask
     v-if="data.mask"
     :mask="data.mask"
+    class="form-control"
     v-bind:value="data.value"
     v-on:input="updateValue($event)"
     type="text"
