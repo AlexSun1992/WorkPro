@@ -302,7 +302,9 @@ export default {
             next();
           }
         })
-        .catch((err) => {});
+        .catch((err) => {
+          next(err);
+        });
     } else {
       next();
     }
