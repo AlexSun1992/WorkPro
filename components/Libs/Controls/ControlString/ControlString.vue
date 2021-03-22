@@ -7,6 +7,7 @@
     <string-masked
       v-if="data.mask"
       :data="data"
+      :edit="edit"
       @update="updateField($event)"
     ></string-masked>
     <string-autocomplete
