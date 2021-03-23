@@ -237,6 +237,7 @@ export default {
     async saveDataCard() {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
+      this.$store.commit("data_card/setError", false);
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
         try {
@@ -317,6 +318,11 @@ export default {
             this.$store.commit("data_card/setFieldError", errorInfo);
           }
         }
+      } else {
+        this.$store.commit("data_card/setError", true);
+        this.$store.commit("data_card/setErrorMessage", {
+          MESSAGE: "Проверьте правильность заполнения формы!",
+        });
       }
     },
     cancelDataCard() {

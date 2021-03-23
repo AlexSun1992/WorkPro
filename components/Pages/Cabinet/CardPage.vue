@@ -51,6 +51,9 @@
         {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
       </div>
     </div>
+    <b-alert :show="isError && !!getFormData" variant="danger" class="mt-4">{{
+      errorText
+    }}</b-alert>
     <div v-if="isShowCardEditor" class="mt-3 mb-3 row button-container">
       <div class="col-12" v-if="settings.edit">
         <div class="inbuttons" v-for="(item, i) in action" :key="i">
@@ -92,10 +95,6 @@
           >Отменить</b-button
         >
       </div>
-    </div>
-    <div v-if="error" class="mt-3 mb-3">
-      <p><strong>Сообщения при оформлении полиса:</strong></p>
-      <b-form-textarea rows="8" v-model="error"> </b-form-textarea>
     </div>
   </div>
 </template>
@@ -236,6 +235,9 @@ export default {
     },
     errorMessage() {
       return this.$store.getters["data_card/getErrorMessage"];
+    },
+    errorText() {
+      return this.$store.getters["data_card/getErrorMessage"]?.MESSAGE;
     },
     isError() {
       return this.$store.getters["data_card/getError"];
