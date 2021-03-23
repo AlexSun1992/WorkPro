@@ -221,6 +221,8 @@ export default {
         data[i].checked = true;
         if (
           data[i].required &&
+          !data[i].hidden &&
+          data[i].visible &&
           (value === null || value === undefined || value === "") &&
           data[i].type !== "boolean" &&
           value !== 0
