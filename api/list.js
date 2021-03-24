@@ -96,7 +96,7 @@ app.get("/wizardlist/:idModule/:idWizard/:idItem", (req, res) => {
         res.send(listConverter.list(resp.data));
       })
       .catch((err) => {
-        res.send(err.response.data);
+        res.status(err.response.data.STATUS).send(err.response.data);
       });
   } catch (e) {
     res.send(e);
