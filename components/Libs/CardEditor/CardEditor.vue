@@ -297,6 +297,16 @@ export default {
             }
           }
           if (resp) {
+            await this.$store.dispatch(
+              "data_card/fetchForm",
+              this.$route.params
+            );
+            if (this.$route.params.idWizard) {
+              await this.$store.dispatch(
+                "wizard/fetchWizard",
+                this.$route.params
+              );
+            }
             this.$bvToast.toast("Успешно сохранено", {
               title: "",
               variant: "success",
@@ -344,6 +354,7 @@ export default {
       const action = this.params.actions.find(
         (f) => f.id === this.actionParamsId
       );
+      this.$store.commit("data_card/setError", false);
       let response = await this.$store.dispatch("data_card/executeAction", {
         actionId: this.actionParamsId,
         relActionId: action.relaction,
@@ -356,6 +367,7 @@ export default {
         this.actionApplyErrorMessage = response.data.INFO
           ? response.data.INFO
           : response.data.MESSAGE;
+        this.$store.commit("data_card/setErrorMessage", response.data);
       }
       if (response.status === 200) {
         if (response.data.POUTVALUE) {
@@ -364,6 +376,9 @@ export default {
           }
         }
         await this.$store.dispatch("data_card/fetchForm", this.$route.params);
+        if (this.$route.params.idWizard) {
+          await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
+        }
         this.$bvModal.hide("confirmAction");
         this.$bvToast.toast("Успешно выполнено", {
           title: "",
