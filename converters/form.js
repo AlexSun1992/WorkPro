@@ -85,7 +85,7 @@ converter.form = async (data, itemId) => {
     ) {
       obj.value = item[webFields[i].SNAME];
     } else {
-      if (item.length === 0) {
+      if (Object.keys(item).length === 0) {
         obj.value = meta_value[webFields[i].SNAME];
       }
     }

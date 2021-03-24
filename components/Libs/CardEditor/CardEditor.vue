@@ -301,7 +301,7 @@ export default {
               "data_card/fetchForm",
               this.$route.params
             );
-            if (this.$route.params.idWizard) {
+            if (this.wizardTabs) {
               await this.$store.dispatch(
                 "wizard/fetchWizard",
                 this.$route.params
@@ -376,7 +376,7 @@ export default {
           }
         }
         await this.$store.dispatch("data_card/fetchForm", this.$route.params);
-        if (this.$route.params.idWizard) {
+        if (this.wizardTabs) {
           await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
         }
         this.$bvModal.hide("confirmAction");
