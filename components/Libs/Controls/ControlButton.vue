@@ -1,6 +1,6 @@
 <template>
   <b-button
-    class="mt-2"
+    class="mt-4"
     @click="updateValue()"
     :disabled="loading && clicked"
     variant="primary"
