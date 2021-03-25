@@ -374,6 +374,7 @@ export default {
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
             window.open(response.data.POUTVALUE);
+            return;
           }
         }
         await this.$store.dispatch("data_card/fetchForm", this.$route.params);
