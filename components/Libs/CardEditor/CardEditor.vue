@@ -284,12 +284,14 @@ export default {
                   tab.list ? `/list/` : `/`
                 }${moduleId}/0/${tab.idItem}/${cardId}/${rel.split("|")[1]}`
               );
+              return;
             } else {
               this.$router.push(
                 `/cabinet/${moduleId}/0/${itemId}/${cardId}${
                   relId ? `/${relId}` : ""
                 }`
               );
+              return;
             }
           } else {
             if (this.$route.query?.ref && resp) {
