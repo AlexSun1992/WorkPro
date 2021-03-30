@@ -41,7 +41,7 @@
         variant="success"
         type="submit"
         :disabled="authInProcess"
-        class="w-100"
+        class="w-100 mt-3"
       >
         Авторизоваться
         <b-spinner
@@ -179,8 +179,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .forgot-password {
   color: #536c79; /**Заменить на глобальные цвета */
 }
+@import "~/assets/scss/reg.scss";
 </style>

@@ -1,10 +1,9 @@
 <template>
   <div class="row">
     <p>{{ label }}</p>
-    <b-form-group class="col-6">
+    <b-form-group class="col-12 col-md-6">
       <b-form-input
         ref="userInput"
-        class="mb-1"
         v-model="v[loginType].$model"
         v-mask="changeMask"
         autofocus
@@ -56,7 +55,7 @@
       </div>
     </div>
     <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
-    <div class="col-6">
+    <div class="col-12 col-md-6 mt-2 mt-md-0">
       <b-button
         type="submit"
         v-if="!code"
@@ -318,4 +317,10 @@ export default {
 .mx-datepicker .form-control.is-valid {
   background: #fff;
 }
+.form-group {
+  margin: 0 !important;
+}
+</style>
+<style scoped lang="scss">
+@import "~/assets/scss/reg.scss";
 </style>
