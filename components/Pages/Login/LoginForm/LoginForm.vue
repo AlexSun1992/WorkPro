@@ -2,7 +2,7 @@
   <div>
     <p class="my-2">{{ errorMessage }}</p>
     <b-form @submit.prevent="onSubmit">
-      <b-form-group label="Телефон" label-cols="3">
+      <b-form-group label="Телефон" label-cols="12">
         <b-form-input
           ref="phoneInput"
           v-model="$v.user.username.$model"
@@ -22,7 +22,7 @@
           телефона</b-form-invalid-feedback
         >
       </b-form-group>
-      <b-form-group label="Пароль" label-cols="3">
+      <b-form-group label="Пароль" label-cols="12">
         <b-form-input
           v-model="$v.user.password.$model"
           placeholder="Пароль"

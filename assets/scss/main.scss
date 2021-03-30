@@ -2032,3 +2032,74 @@ ul.p-0.mx-0 li {
 .gotolk .dropdown-toggle::after {
   display: none;
 }
+
+.block-registration {
+  background: #ffffff;
+  border: 1px solid #787878;
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+.block-registration input {
+  height: 42px;
+  box-sizing: border-box;
+}
+.block-registration legend {
+  font-size: 1rem;
+}
+.block-registration input,
+.block-registration legend {
+  color: #000000;
+}
+.block-registration .form-control:-internal-autofill-selected,
+.block-registration input:-internal-autofill-selected,
+.block-registration .form-control:valid,
+.block-registration input:valid {
+  background-color: #fff !important;
+}
+.block-registration .form-control:focus,
+.block-registration input:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #000;
+  transition: 0.3s;
+}
+.login-form .nav.nav-tabs {
+  border: 0;
+}
+.login-form .nav.nav-tabs a {
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: "Roboto";
+}
+.login-form .nav-tabs .nav-link {
+  color: #000;
+}
+
+.login-form .nav-tabs .nav-link.active:after,
+.login-form .nav-tabs .navbar .active.dropdown-toggle:after,
+.login-form .navbar .nav-tabs .active.dropdown-toggle:after {
+  height: 3px;
+  background: rgb(0, 140, 60);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 140, 60, 0) 0%,
+    rgba(0, 140, 60, 1) 50%,
+    rgba(0, 140, 60, 0) 100%
+  );
+}
+
+.login-form .btn-sms {
+  border: 0;
+  padding: 1px 10px;
+}
+.login-form .form-group > div {
+  width: 100%;
+  display: block;
+}
+
+.login-form .form-inline .form-control,
+.login-form .form-row {
+  width: 100% !important;
+  margin: 0 !important;
+  display: block !important;
+}

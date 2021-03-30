@@ -1,29 +1,31 @@
 <template>
-  <div class="container">
-    <b-alert v-if="showMessage" class="m-2 text-center" show
-      >Для того, чтобы продолжить, необходимо войти или
-      зарегистрироваться.</b-alert
-    >
-    <b-row class="justify-content-center">
-      <b-col md="10" lg="6" class="block bg-six block-border-one mb-5">
-        <b-tabs ref="tabs" content-class="mt-3">
-          <b-tab
-            title="Вход"
-            @click="changeUrl"
-            :active="$route.path === '/login'"
-          >
-            <login-form />
-          </b-tab>
-          <b-tab
-            @click="changeUrl"
-            title="Регистрация"
-            :active="$route.path === '/register'"
-          >
-            <reg-form />
-          </b-tab>
-        </b-tabs>
-      </b-col>
-    </b-row>
+  <div class="login-form">
+    <div class="container mt-5">
+      <b-alert v-if="showMessage" class="m-2 text-center" show
+        >Для того, чтобы продолжить, необходимо войти или
+        зарегистрироваться.</b-alert
+      >
+      <b-row class="justify-content-center">
+        <b-col md="10" lg="6" class="block bg-six block-border-one mb-5">
+          <b-tabs ref="tabs" content-class="mt-4 block-registration">
+            <b-tab
+              title="Вход"
+              @click="changeUrl"
+              :active="$route.path === '/login'"
+            >
+              <login-form />
+            </b-tab>
+            <b-tab
+              @click="changeUrl"
+              title="Регистрация"
+              :active="$route.path === '/register'"
+            >
+              <reg-form />
+            </b-tab>
+          </b-tabs>
+        </b-col>
+      </b-row>
+    </div>
   </div>
 </template>
 
@@ -76,4 +78,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.login-form {
+  background: url(/img/registration.svg) 50% top no-repeat;
+  height: 100%;
+  background-size: contain;
+}
+</style>

@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <b-row>
-      <b-col sm="12">
-        <b-form-group :label="showLabel" label-cols="3">
+      <b-col sm="12" md="6">
+        <b-form-group :label="showLabel" label-cols="12">
           <b-form-input
             type="password"
             v-model="v.password.$model"
@@ -15,9 +15,14 @@
           <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
         </b-form-group>
       </b-col>
-      <b-col sm="12" v-if="recovery"></b-col>
-      <b-col class="password-repeat" :class="{ 'mt-0': recovery }" sm="12">
-        <b-form-group :label="'Повторите пароль'" label-cols="3">
+      <b-col sm="12" md="6" v-if="recovery"></b-col>
+      <b-col
+        class="password-repeat"
+        :class="{ 'mt-0': recovery }"
+        sm="12"
+        md="6"
+      >
+        <b-form-group :label="'Повторите пароль'" label-cols="12">
           <b-form-input
             type="password"
             autocomplete="new-password"
