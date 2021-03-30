@@ -37,15 +37,6 @@ export default {
   name: "LoginPage",
   middleware: "login",
   layout: "MainLayout",
-  head: {
-    link: [
-      {
-        rel: "stylesheet",
-        href:
-          "https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css",
-      },
-    ],
-  },
   components: {
     RegForm,
     LoginForm,

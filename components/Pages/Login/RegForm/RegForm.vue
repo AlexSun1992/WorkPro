@@ -49,12 +49,8 @@
           :disabled="registrationInProcess"
         />
       </b-form-group>
-      <div class="col-12">
-        <b-form-group
-          label="Фамилия"
-          label-cols="6"
-          class="col-12 col-md-6 pl-0"
-        >
+      <div class="d-flex w-100">
+        <b-form-group label="Фамилия" label-cols="12" class="col-12 col-md-6">
           <b-form-input
             v-model="$v.form.family.$model"
             :state="validateState('family')"
@@ -106,9 +102,9 @@
         :validateState="validateState"
         :disabled="registrationInProcess"
       />
-      <div class="col-8 m-auto pt-3">
+      <div class="col-12 m-auto pt-3">
         <b-button
-          class="d-block m-auto"
+          class="w-100"
           type="submit"
           variant="success"
           :disabled="
@@ -325,3 +321,7 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+@import "~/assets/scss/reg.scss";
+</style>
