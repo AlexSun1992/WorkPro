@@ -85,12 +85,29 @@ export default {
 };
 </script>
 <style lang="scss">
+html,
+body,
+#__nuxt,
+#__layout,
+main,
+main > div {
+  height: 100%;
+}
+.app.main_page {
+  display: grid;
+  grid-template-rows: minmax(114px, max-content) 0px auto minmax(
+      114px,
+      max-content
+    );
+  height: 100%;
+}
 .main_page {
   @import "~/assets/scss/main.scss";
 }
 .main_page {
   background: #fff;
 }
+
 @media (max-width: 767px) {
   .menu-open header:after {
     content: "";
