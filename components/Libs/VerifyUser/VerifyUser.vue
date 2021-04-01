@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div class="row">
     <p>{{ label }}</p>
-    <b-form-group>
+    <b-form-group class="col-12 col-md-6">
       <b-form-input
         ref="userInput"
-        class="mb-1"
         v-model="v[loginType].$model"
         v-mask="changeMask"
         autofocus
@@ -56,14 +55,17 @@
       </div>
     </div>
     <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
-    <b-button
-      type="submit"
-      v-if="!code"
-      :disabled="v.phone.$invalid && v.email.$invalid"
-      @click.prevent="verifyUser"
-      variant="success"
-      >Подтвердить</b-button
-    >
+    <div class="col-12 col-md-6 mt-2 mt-md-0">
+      <b-button
+        type="submit"
+        v-if="!code"
+        :disabled="v.phone.$invalid && v.email.$invalid"
+        @click.prevent="verifyUser"
+        variant="success"
+        class="btn-sms"
+        >Подтвердить</b-button
+      >
+    </div>
   </div>
 </template>
 
@@ -196,7 +198,7 @@ export default {
     },
 
     validateInput(field, bluredField) {
-      if(this.$store.getters.getRegistrationError) return
+      if (this.$store.getters.getRegistrationError) return;
       if (
         field === "phone" &&
         this.loginTouchesCount <= 2 &&
@@ -294,4 +296,31 @@ export default {
   background-color: #f8d7da;
   border-color: #f5c6cb;
 }
+
+.mx-datepicker {
+  width: 100%;
+}
+.mx-datepicker .button-datapicker {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  background: url(/img/button-datapicker.svg) 50% 50% no-repeat;
+  background-size: 16px;
+  border: 0 !important;
+  width: 28px;
+}
+.mx-datepicker .input-group > div {
+  width: 100%;
+}
+.mx-datepicker .form-control.is-invalid,
+.mx-datepicker .form-control.is-valid {
+  background: #fff;
+}
+.form-group {
+  margin: 0 !important;
+}
+</style>
+<style scoped lang="scss">
+@import "~/assets/scss/reg.scss";
 </style>

@@ -1,68 +1,120 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="block bg-six block-border-one mb-5 col-md-10 col-lg-6">
-        <h4 class="mb-3 text-center mt-2">Восстановление доступа</h4>
-        <b-alert
-          :show="errorMessage || !!$store.getters.getRegistrationError"
-          variant="danger"
-          >{{
-            errorMessage ? errorMessage : $store.getters.getRegistrationError
-          }}</b-alert
-        >
-        <b-tabs ref="tabs" content-class="mt-2">
-          <b-tab title="Телефон" active>
-            <verify-user
-              :label="phoneLabel"
-              :loginType="'phone'"
-              :v="$v.form"
-              :count="60"
-              :validateState="validateState"
-            />
-          </b-tab>
-          <b-tab title="Email">
-            <verify-user
-              :label="emailLabel"
-              :loginType="'email'"
-              :v="$v.form"
-              :count="60"
-              :validateState="validateState"
-            />
-          </b-tab>
-        </b-tabs>
-        <UserRecoveryForm
-          v-if="greater180"
-          :v="$v.form"
-          :validateState="validateState"
-        />
-        <b-row>
-          <b-form-group class="col-md-6 col-12">
-            <b-form-input
-              type="password"
-              v-model="$v.form.password.$model"
-              placeholder="Пароль"
-            ></b-form-input>
-            <b-form-invalid-feedback>Введите пароль</b-form-invalid-feedback>
-          </b-form-group>
-          <b-form-group class="col-md-6 col-12">
-            <b-form-input
-              type="password"
-              v-model="$v.form.password2.$model"
-              placeholder="Повторите пароль"
-            ></b-form-input>
-            <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
-          </b-form-group>
-        </b-row>
-        <div class="mt-2 mb-3 d-flex justify-content-between">
-          <router-link to="/login">
-            <b-button variant="outline-secondary">Отмена</b-button>
-          </router-link>
-          <b-button
-            variant="success"
-            @click="resetPassword"
-            :disabled="disabledReset"
-            >Сбросить пароль</b-button
+  <div class="login-form">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="block bg-six block-border-one mb-5 col-md-10 col-lg-6">
+          <h2 class="mb-3 text-center mt-5">Восстановление доступа</h2>
+          <b-alert
+            :show="errorMessage || !!$store.getters.getRegistrationError"
+            variant="danger"
+            >{{
+              errorMessage ? errorMessage : $store.getters.getRegistrationError
+            }}</b-alert
           >
+          <b-tabs ref="tabs" content-class="mt-4 block-registration">
+            <b-tab title="Телефон" active>
+              <div class="mb-3">
+                Введите номер телефона указанный при регистрации
+              </div>
+              <verify-user
+                :loginType="'phone'"
+                :v="$v.form"
+                :count="60"
+                :validateState="validateState"
+              />
+              <b-row class="mt-3">
+                <b-form-group class="col-md-6 col-12">
+                  <b-form-input
+                    type="password"
+                    v-model="$v.form.password.$model"
+                    placeholder="Пароль"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    >Введите пароль</b-form-invalid-feedback
+                  >
+                </b-form-group>
+                <b-form-group class="col-md-6 col-12 mt-3 mt-md-0">
+                  <b-form-input
+                    type="password"
+                    v-model="$v.form.password2.$model"
+                    placeholder="Повторите пароль"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    >Повторите пароль</b-form-invalid-feedback
+                  >
+                </b-form-group>
+              </b-row>
+              <div class="mt-3 row justify-content-between">
+                <router-link to="/login" class="col-6">
+                  <b-button variant="outline-secondary" class="w-100"
+                    >Отмена</b-button
+                  >
+                </router-link>
+                <div class="col-6">
+                  <b-button
+                    variant="success"
+                    @click="resetPassword"
+                    :disabled="disabledReset"
+                    class="w-100"
+                    >Сбросить пароль</b-button
+                  >
+                </div>
+              </div>
+            </b-tab>
+            <b-tab title="Email">
+              <div class="mb-3">Введите email указанный при регистрации</div>
+              <verify-user
+                :loginType="'email'"
+                :v="$v.form"
+                :count="60"
+                :validateState="validateState"
+              />
+              <b-row class="mt-3">
+                <b-form-group class="col-md-6 col-12">
+                  <b-form-input
+                    type="password"
+                    v-model="$v.form.password.$model"
+                    placeholder="Пароль"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    >Введите пароль</b-form-invalid-feedback
+                  >
+                </b-form-group>
+                <b-form-group class="col-md-6 col-12 mt-3 mt-md-0">
+                  <b-form-input
+                    type="password"
+                    v-model="$v.form.password2.$model"
+                    placeholder="Повторите пароль"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    >Повторите пароль</b-form-invalid-feedback
+                  >
+                </b-form-group>
+              </b-row>
+              <div class="mt-3 row justify-content-between">
+                <router-link to="/login" class="col-6">
+                  <b-button variant="outline-secondary" class="w-100"
+                    >Отмена</b-button
+                  >
+                </router-link>
+                <div class="col-6">
+                  <b-button
+                    variant="success"
+                    @click="resetPassword"
+                    :disabled="disabledReset"
+                    class="w-100"
+                    >Сбросить пароль</b-button
+                  >
+                </div>
+              </div>
+            </b-tab>
+          </b-tabs>
+
+          <UserRecoveryForm
+            v-if="greater180"
+            :v="$v.form"
+            :validateState="validateState"
+          />
         </div>
       </div>
     </div>
@@ -220,7 +272,16 @@ export default {
 </script>
 
 <style scoped>
-.tab-content .tab-pane {
-  padding: 1rem 0 0 0;
+.login-form {
+  background: url(/img/registration.svg) 50% top no-repeat;
+  height: 100%;
+  background-size: contain;
 }
+.block-registration p {
+  padding: 0 15px;
+}
+</style>
+
+<style scoped lang="scss">
+@import "~/assets/scss/reg.scss";
 </style>

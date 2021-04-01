@@ -12,8 +12,8 @@
       errorMessage
     }}</b-alert>
     <!--  -->
-    <b-form @submit.stop.prevent="onSubmit">
-      <b-form-group label="Телефон" label-cols="3">
+    <b-form @submit.stop.prevent="onSubmit" inline class="align-items-start">
+      <b-form-group label="Телефон" label-cols="12" class="col-12">
         <verify-user
           ref="verifyUser"
           :v="$v.form"
@@ -24,7 +24,7 @@
           :disabled="registrationInProcess"
         />
       </b-form-group>
-      <b-form-group label="E-mail" label-cols="3">
+      <b-form-group label="E-mail" label-cols="12" class="col-12 col-md-6">
         <b-form-input
           v-model.lazy="$v.form.email.$model"
           :state="validateState('email')"
@@ -38,20 +38,32 @@
         >
       </b-form-group>
 
-      <b-form-group label="Фамилия" label-cols="3">
-        <b-form-input
-          v-model="$v.form.family.$model"
-          :state="validateState('family')"
-          @blur="$v.form.family.$touch()"
-          placeholder="Фамилия"
+      <b-form-group
+        label="Дата рождения"
+        label-cols="12"
+        class="col-12 col-md-6"
+      >
+        <birthday-picker
+          :data="$v.form"
+          :state="validateState('birthdate')"
           :disabled="registrationInProcess"
-        ></b-form-input>
-        <b-form-invalid-feedback
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
+        />
       </b-form-group>
-
-      <b-form-group label="Имя" label-cols="3">
+      <div class="d-flex w-100">
+        <b-form-group label="Фамилия" label-cols="12" class="col-12 col-md-6">
+          <b-form-input
+            v-model="$v.form.family.$model"
+            :state="validateState('family')"
+            @blur="$v.form.family.$touch()"
+            placeholder="Фамилия"
+            :disabled="registrationInProcess"
+          ></b-form-input>
+          <b-form-invalid-feedback
+            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          >
+        </b-form-group>
+      </div>
+      <b-form-group label="Имя" label-cols="12" class="col-12 col-md-6">
         <b-form-input
           v-model="$v.form.name.$model"
           :state="validateState('name')"
@@ -63,7 +75,7 @@
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
       </b-form-group>
-      <b-form-group label="Отчество" label-cols="3">
+      <b-form-group label="Отчество" label-cols="12" class="col-12 col-md-6">
         <b-form-input
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
@@ -75,14 +87,8 @@
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
       </b-form-group>
-      <b-form-group label="Дата рождения" label-cols="3">
-        <birthday-picker
-          :data="$v.form"
-          :state="validateState('birthdate')"
-          :disabled="registrationInProcess"
-        />
-      </b-form-group>
-      <b-form-group label="Номер полиса" label-cols="3">
+
+      <b-form-group label="Номер полиса" label-cols="12" class="col-12">
         <b-form-input
           id="input-3"
           v-model="form.policyNumber"
@@ -90,25 +96,29 @@
           :disabled="registrationInProcess"
         ></b-form-input>
       </b-form-group>
+
       <verify-password
         :v="$v.form"
         :validateState="validateState"
         :disabled="registrationInProcess"
       />
-      <b-button
-        type="submit"
-        variant="success"
-        :disabled="
-          registrationInProcess || !!this.$store.getters.getRegistrationError
-        "
-      >
-        Зарегистрироваться
-        <b-spinner
-          v-if="registrationInProcess"
-          style="width: 1.2rem; height: 1.2rem"
-          variant="light"
-        ></b-spinner>
-      </b-button>
+      <div class="col-12 m-auto pt-3">
+        <b-button
+          class="w-100"
+          type="submit"
+          variant="success"
+          :disabled="
+            registrationInProcess || !!this.$store.getters.getRegistrationError
+          "
+        >
+          Зарегистрироваться
+          <b-spinner
+            v-if="registrationInProcess"
+            style="width: 1.2rem; height: 1.2rem"
+            variant="light"
+          ></b-spinner>
+        </b-button>
+      </div>
     </b-form>
     <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
   </div>
@@ -311,3 +321,7 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+@import "~/assets/scss/reg.scss";
+</style>
