@@ -20,6 +20,7 @@ converter.wizard = (data) => {
       obj.idItem = data[i].NITEM;
       obj.id = data[i].ID;
       obj.list = data[i].LOPENLIST;
+      obj.order = data[i].NORDER;
       arr.push(obj);
     }
   }

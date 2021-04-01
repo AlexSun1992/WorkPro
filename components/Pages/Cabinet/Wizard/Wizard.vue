@@ -39,7 +39,7 @@ export default {
         return `/cabinet/wizard/${this.$route.params.idWizard}${
           item.list ? `/list/55/0/` : `/55/0/`
         }${item.idItem}/${this.$route.params.idCard}/${
-          this.rels.split("|")[index]
+          this.rels.split("|")[item.order - 1]
         }`;
       }
     },
