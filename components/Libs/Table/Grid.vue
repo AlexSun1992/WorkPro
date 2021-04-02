@@ -17,6 +17,7 @@
       :items="items"
       :fields="fields"
       small
+      data-mobile-responsive="true"
     >
       <template slot="empty">
         <div v-if="!load" class="text-center">Нет данных</div>
@@ -145,6 +146,6 @@ export default {
 
 <style>
 .text-col {
-  white-space: nowrap;
+  white-space: wrap;
 }
 </style>
