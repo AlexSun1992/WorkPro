@@ -275,7 +275,8 @@ export default {
 .login-form {
   background: url(/img/registration.svg) 50% top no-repeat;
   height: 100%;
-  background-size: contain;
+  min-height: 900px;
+  display: grid;
 }
 .block-registration p {
   padding: 0 15px;

@@ -73,6 +73,7 @@ export default {
 .login-form {
   background: url(/img/registration.svg) 50% top no-repeat;
   height: 100%;
-  background-size: contain;
+  min-height: 900px;
+  display: grid;
 }
 </style>
