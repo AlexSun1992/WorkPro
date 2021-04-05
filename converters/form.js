@@ -148,6 +148,8 @@ converter.form = async (data, itemId) => {
       obj.type = "button";
     } else if (webFields[i].IDCONTROL == 22) {
       obj.type = "splitter";
+    } else if (webFields[i].IDCONTROL == 29) {
+      obj.type = "captcha";
     } else {
       obj.type = "string";
     }

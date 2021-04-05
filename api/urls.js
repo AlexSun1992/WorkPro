@@ -22,6 +22,7 @@ const DICWF = `/am/main/${VER}/dicwf`;
 const REPORT = `/am/main/${VER}/report`;
 const FREEDATACARD = `/am/free/${VER}/data`;
 const FREEMENU = `/am/free/${VER}/menu`;
+const CAPTCHA = `/am/authw/${VER}/captcha`;
 
 export default {
   VER: VER,
@@ -48,4 +49,5 @@ export default {
   DIC: DIC,
   DICWF: DICWF,
   REPORT: REPORT,
+  CAPTCHA: CAPTCHA,
 };

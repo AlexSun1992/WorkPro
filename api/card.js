@@ -242,7 +242,8 @@ app.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
     );
     res.send(filterConverter.filter(params.data[0]._data));
   } catch (err) {
-    res.send(err.response.data);
+    console.log(err);
+    res.send(err.response?.data);
   }
 });
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import moment from "moment/moment";
 const converter = {};
 
@@ -24,6 +25,9 @@ converter.filter = (data, id) => {
     obj.state = null;
     obj.mask = items[i].SMASK;
     obj.type = converter.type(items[i]);
+    if (obj.type === "error") {
+      obj.value = "Unknown type " + items[i].STYPE;
+    }
     if (obj.type === "enum") {
       obj.value = { text: null, value: null };
       obj.dic = id ? `${items[i].STYPE},idrow=${id}` : items[i].STYPE;
@@ -67,9 +71,8 @@ converter.type = (item) => {
   }
   if (item.LMANYVALUES) {
     return "multi";
-  } else {
-    return "enum";
   }
+  return "error";
 };
 
 export default converter;
