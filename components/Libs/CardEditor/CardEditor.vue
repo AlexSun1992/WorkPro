@@ -299,7 +299,7 @@ export default {
               return;
             }
           }
-          if (resp) {
+          if (resp?.status === 200) {
             await this.$store.dispatch(
               "data_card/fetchForm",
               this.$route.params
@@ -315,6 +315,13 @@ export default {
               variant: "success",
               solid: true,
             });
+          } else {
+            if (resp?.status === 500) {
+              this.$store.commit("data_card/setLoading", false);
+              this.$store.commit("data_card/setDisabled", false);
+              this.$store.commit("data_card/setError", true);
+              this.$store.commit("data_card/setErrorMessage", resp.data);
+            }
           }
           this.$emit("error", null);
         } catch (err) {

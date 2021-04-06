@@ -1,5 +1,5 @@
 /* eslint-disable */
-
+import api from "@/api/urls";
 export const state = () => ({
   form: [],
   copyForm: [],
@@ -136,7 +136,7 @@ export const actions = {
       }
     }
   },
-  async saveDataCard({ commit }, params) {
+  async saveDataCard({ commit, state, dispath }, params) {
     commit("setLoading", true);
     commit("setDisabled", true);
     try {
@@ -150,7 +150,7 @@ export const actions = {
       commit("setCardRelId", resp.data.REL);
       return resp;
     } catch (e) {
-      console.log(e);
+      return e.response;
     }
   },
   async executeAction(
@@ -193,6 +193,24 @@ export const actions = {
   },
   setLoading({ commit }, params) {
     commit("setLoading", params);
+  },
+  async fetchCaptcha({ commit, getters, state }, { params, data }) {
+    try {
+      await this.$axios
+        .get(
+          encodeURI(
+            `${api?.CAPTCHA}?project=${params.idModule}/${params.idItem}&id=${params.idCard}`
+          )
+        )
+        .then((res) => {
+          commit("setCaptcha", { captcha: res.data, data: data });
+        });
+    } catch (error) {
+      if (error.response) {
+        commit("setError", true);
+        commit("setErrorMessage", error.response.data);
+      }
+    }
   },
 };
 export const mutations = {
@@ -300,5 +318,9 @@ export const mutations = {
       item.readonly = params;
       return item;
     });
+  },
+  setCaptcha(state, data) {
+    const item = state.form.find((d) => d.fieldId === data.data.fieldId);
+    item.captcha = data.captcha;
   },
 };

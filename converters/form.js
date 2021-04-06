@@ -150,6 +150,7 @@ converter.form = async (data, itemId) => {
       obj.type = "splitter";
     } else if (webFields[i].IDCONTROL == 29) {
       obj.type = "captcha";
+      obj.captcha = null;
     } else {
       obj.type = "string";
     }

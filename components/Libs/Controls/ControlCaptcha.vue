@@ -9,6 +9,7 @@
         >
           <b-form-input
             v-model="captchaValue"
+            :disabled="!edit ? !edit : data.readonly"
             @update="setValue"
             :state="data.state"
             autocomplete="off"
@@ -19,14 +20,19 @@
         </b-form-group>
       </div>
       <div class="col-lg-3">
-        <img class="mt-2" @click="showCaptcha" alt="Капча" :src="captcha" />
+        <img
+          class="captcha mt-2"
+          @click="showCaptcha"
+          alt="Капча"
+          :src="captcha.CAPTCHA"
+          title="Обновить"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import api from "@/api/urls";
 export default {
   name: "ControlCaptcha",
   props: {
@@ -43,8 +49,6 @@ export default {
   },
   data() {
     return {
-      captcha: null,
-      captchaId: null,
       captchaValue: null,
     };
   },
@@ -52,24 +56,31 @@ export default {
     this.showCaptcha();
   },
   methods: {
-    showCaptcha() {
-      this.$axios({
-        url: `${api?.CAPTCHA}?project=${this.$route.params.idModule}/${this.$route.params.idItem}&id=${this.$route.params.idCard}`,
-        method: "GET",
-      })
-        .then((resp) => {
-          this.captcha = resp.data?.CAPTCHA;
-          this.captchaId = resp.data?.ID;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    async showCaptcha() {
+      await this.$store.dispatch("data_card/fetchCaptcha", {
+        params: this.$route.params,
+        data: this.data,
+      });
     },
     setValue(value) {
       this.$emit("update", {
         fieldId: this.data.fieldId,
-        value: value ? this.captchaId + "|" + value : null,
+        value: value ? this.captcha.ID + "|" + value : null,
       });
+    },
+  },
+  computed: {
+    captcha() {
+      return this.data.captcha;
+    },
+  },
+  watch: {
+    data(newVal, oldVal) {
+      if (newVal.readonly === false && oldVal.readonly === true) {
+        this.captchaValue = null;
+        this.setValue(null);
+        this.showCaptcha();
+      }
     },
   },
 };
@@ -78,6 +89,5 @@ export default {
 <style scoped>
 .captcha {
   cursor: pointer;
-  margin-top: 25px;
 }
 </style>

@@ -35,15 +35,14 @@ export default function ({ app, store, redirect, $auth }) {
           return app.$axios(originalRequest);
         })
         .catch((err) => {
-          $auth.logout();
+          console.log(err.response);
+          if (err?.response?.status === 401) {
+            $auth.logout();
+          }
         });
     }
     if (error.response.status !== 401) {
       try {
-        store.commit("data_card/setLoading", false);
-        store.commit("data_card/setDisabled", false);
-        store.commit("data_card/setError", true);
-        store.commit("data_card/setErrorMessage", error.response.data);
         if ($nuxt) {
           $nuxt.$bvToast.toast(error.response.data.MESSAGE, {
             title: "Ошибка",
