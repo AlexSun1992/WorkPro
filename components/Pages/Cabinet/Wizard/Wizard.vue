@@ -18,16 +18,30 @@
         >
       </b-nav>
     </div>
-    <nuxt-child :key="$route.fullPath" :wizard-tabs="settings.wizard" />
+    <nuxt-child
+      ref="child"
+      :key="$route.fullPath"
+      :wizard-tabs="settings.wizard"
+    />
+    <wizard-buttons
+      :currentTab="currentTab"
+      :tabs="tabs"
+      @goNext="goNext($event)"
+      @goBack="goBack($event)"
+    ></wizard-buttons>
   </div>
 </template>
 
 <script>
 import breadcrumbs from "~/converters/breadcrumbs";
+import wizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
 export default {
   name: "Wizard",
   async fetch({ store, route }) {
     await store.dispatch("wizard/fetchWizard", route.params);
+  },
+  components: {
+    wizardButtons,
   },
   methods: {
     getURL(item, index) {
@@ -42,6 +56,32 @@ export default {
           this.rels.split("|")[item.order - 1]
         }`;
       }
+    },
+    async goNext(e) {
+      if (!this.currentTab.list) {
+        await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+        this.$router.push(this.getURL(e));
+      } else {
+        const menu = this.$store.getters["menu/flatmenu"].find(
+          (item) => item.IDITEM == this.currentTab.idItem
+        );
+        let action = menu.ACTIONSCUR[0];
+        if (action) {
+          let response = await this.$store.dispatch("data_card/executeAction", {
+            actionId: action.ID,
+            relActionId: action.REL,
+            relId: this.$route.params.idRel,
+            rowId: this.$route.params.idCard,
+          });
+          if (response.status != 200) {
+            return;
+          }
+        }
+        this.$router.push(this.getURL(e));
+      }
+    },
+    async goBack(e) {
+      this.$router.push(this.getURL(e));
     },
   },
   computed: {
@@ -82,6 +122,9 @@ export default {
       }
       return arr;
     },
+    currentTab() {
+      return this.tabs.find((item) => item.idItem == this.$route.params.idItem);
+    },
     cardCaption() {
       return this.$store.getters["wizard/getWizardCaption"];
     },
@@ -104,5 +147,10 @@ export default {
   background-color: white !important;
   color: black !important;
   box-shadow: none !important;
+}
+
+.wizard-buttons {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
