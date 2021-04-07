@@ -162,8 +162,7 @@ export const actions = {
     try {
       return await this.$axios
         .post(
-          // `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
-          `/am/main/v2/actionexec/${rowId}/${actionId}?relaction=${relActionId}&rel=${relId}`,
+          `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
           body || {}
         )
         .then((resp) => {
