@@ -49,6 +49,7 @@ export default {
   },
   data() {
     return {
+      captcha: null,
       captchaValue: null,
     };
   },
@@ -57,7 +58,7 @@ export default {
   },
   methods: {
     async showCaptcha() {
-      await this.$store.dispatch("data_card/fetchCaptcha", {
+      this.captcha = await this.$store.dispatch("data_card/fetchCaptcha", {
         params: this.$route.params,
         data: this.data,
       });
@@ -69,14 +70,13 @@ export default {
       });
     },
   },
-  computed: {
-    captcha() {
-      return this.data.captcha;
-    },
-  },
   watch: {
     data(newVal, oldVal) {
-      if (newVal.readonly === false && oldVal.readonly === true) {
+      if (
+        newVal.readonly === false &&
+        oldVal.readonly === true &&
+        this.$store.getters["data_card/getError"]
+      ) {
         this.captchaValue = null;
         this.setValue(null);
         this.showCaptcha();

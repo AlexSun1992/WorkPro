@@ -360,6 +360,7 @@ export default {
     },
     async applyAction(evt) {
       if (evt) evt.preventDefault();
+      this.$store.commit("data_card/setError", false);
       this.isActionApplyError = false;
       const action = this.params.actions.find(
         (f) => f.id === this.actionParamsId
@@ -372,14 +373,15 @@ export default {
         rowId: this.$route.params.idCard,
         body: this.actionParams,
       });
-      if (response.status === 500) {
+      if (response?.status === 500) {
         this.isActionApplyError = true;
         this.actionApplyErrorMessage = response.data.INFO
           ? response.data.INFO
           : response.data.MESSAGE;
+        this.$store.commit("data_card/setError", true);
         this.$store.commit("data_card/setErrorMessage", response.data);
       }
-      if (response.status === 200) {
+      if (response?.status === 200) {
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
             window.open(response.data.POUTVALUE);

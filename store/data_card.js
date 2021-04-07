@@ -32,7 +32,9 @@ export const getters = {
   getBtnSave: (state) => state.isSave,
   getReadOnly: (state) => state.isReadOnly,
   getActionParams: (state) =>
-    state.actionParams.map((a) => Object.assign({}, a)),
+    typeof state.actionParams.map === "function"
+      ? state.actionParams.map((a) => Object.assign({}, a))
+      : [],
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
   getDataFieldByName: (state) => (name) => {
@@ -196,7 +198,7 @@ export const actions = {
   },
   async fetchCaptcha({ commit, getters, state }, { params, data }) {
     try {
-      await this.$axios
+      return await this.$axios
         .get(
           encodeURI(
             `${api?.CAPTCHA}?project=${params.idModule}/${params.idItem}&id=${params.idCard}`
@@ -204,11 +206,13 @@ export const actions = {
         )
         .then((res) => {
           commit("setCaptcha", { captcha: res.data, data: data });
+          return res.data;
         });
     } catch (error) {
       if (error.response) {
         commit("setError", true);
         commit("setErrorMessage", error.response.data);
+        return error.response;
       }
     }
   },

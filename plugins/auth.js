@@ -35,8 +35,8 @@ export default function ({ app, store, redirect, $auth }) {
           return app.$axios(originalRequest);
         })
         .catch((err) => {
-          console.log(err.response);
-          if (err?.response?.status === 401) {
+          console.log(err?.response);
+          if (err?.response?.data?.STATUS === 401) {
             $auth.logout();
           }
         });
