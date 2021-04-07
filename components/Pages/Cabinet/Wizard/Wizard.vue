@@ -60,6 +60,7 @@ export default {
     async goNext(e) {
       if (!this.currentTab.list) {
         await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+        if (this.isError()) return;
         this.$router.push(this.getURL(e));
       } else {
         const menu = this.$store.getters["menu/flatmenu"].find(
@@ -82,6 +83,9 @@ export default {
     },
     async goBack(e) {
       this.$router.push(this.getURL(e));
+    },
+    isError() {
+      return this.$store.getters["data_card/getError"];
     },
   },
   computed: {
