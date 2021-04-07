@@ -26,6 +26,7 @@
     <wizard-buttons
       :currentTab="currentTab"
       :tabs="tabs"
+      :qty="settings.wizard.length"
       @goNext="goNext($event)"
       @goBack="goBack($event)"
     ></wizard-buttons>
@@ -80,7 +81,10 @@ export default {
             return;
           }
         }
-        this.$router.push(this.getURL(e));
+        await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
+        if (e) {
+          this.$router.push(this.getURL(e));
+        }
       }
     },
     async goBack(e) {
