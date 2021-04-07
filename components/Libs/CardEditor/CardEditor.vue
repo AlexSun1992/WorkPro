@@ -293,13 +293,12 @@ export default {
               );
               return;
             }
-          } else {
+          }
+          if (resp?.status === 200) {
             if (this.$route.query?.ref && resp) {
               this.$router.push(this.$route.query?.ref);
               return;
             }
-          }
-          if (resp?.status === 200) {
             await this.$store.dispatch(
               "data_card/fetchForm",
               this.$route.params
