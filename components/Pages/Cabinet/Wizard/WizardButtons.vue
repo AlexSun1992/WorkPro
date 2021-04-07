@@ -2,11 +2,7 @@
   <div class="buttons">
     <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
     <div></div>
-    <b-button
-      variant="success"
-      v-if="currentTab.order != tabs.length"
-      @click="goNext"
-    >
+    <b-button variant="success" v-if="currentTab.order != qty" @click="goNext">
       {{ showBtnName }}
       <b-spinner
         v-if="false"
@@ -22,16 +18,19 @@
 <script>
 export default {
   name: "WizardButtons",
-  props: ["currentTab", "tabs"],
+  props: ["currentTab", "tabs", "qty"],
   methods: {
+    getCurrentIndex() {
+      return this.tabs.findIndex(
+        (item) => item.idItem == this.currentTab.idItem
+      );
+    },
     goNext() {
-      let index = this.currentTab.order;
-      let tab = this.tabs[index];
+      let tab = this.tabs[this.getCurrentIndex() + 1];
       this.$emit("goNext", tab);
     },
     goBack() {
-      let index = this.currentTab.order - 2;
-      let tab = this.tabs[index];
+      let tab = this.tabs[this.getCurrentIndex() - 1];
       this.$emit("goBack", tab);
     },
   },
