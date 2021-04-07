@@ -65,35 +65,40 @@
             >{{ item.SNAME }}
           </b-button>
         </div>
-        <b-button
-          v-if="isButtonSave"
-          pill
-          :disabled="loading"
-          v-on:click="saveDataCard"
-          type="button"
-          variant="success"
-          class="col-12 col-md-auto mr-4"
-          :style="isButtonDisabled"
+        <div
+          v-if="!isWizard || (isWizard && $route.params.idCard == 0)"
+          :class="{ 'btn-right': isWizard && $route.params.idCard == 0 }"
         >
-          {{ buttonTitle }}
-          <b-spinner
-            v-if="loading"
-            style="width: 1rem; height: 1rem"
-            class="ml-2"
-            variant="danger"
-            label="Spinning"
-          ></b-spinner>
-        </b-button>
-        <b-button
-          v-if="ref"
-          pill
-          v-on:click="$router.push(ref)"
-          type="button"
-          variant="outline-success"
-          class="col-12 col-md-auto mt-2 mt-md-0"
-          :style="isButtonDisabled"
-          >Отменить</b-button
-        >
+          <b-button
+            v-if="isButtonSave"
+            pill
+            :disabled="loading"
+            v-on:click="saveDataCard"
+            type="button"
+            variant="success"
+            class="col-12 col-md-auto mr-4"
+            :style="isButtonDisabled"
+          >
+            {{ buttonTitle }}
+            <b-spinner
+              v-if="loading"
+              style="width: 1rem; height: 1rem"
+              class="ml-2"
+              variant="danger"
+              label="Spinning"
+            ></b-spinner>
+          </b-button>
+          <b-button
+            v-if="ref"
+            pill
+            v-on:click="$router.push(ref)"
+            type="button"
+            variant="outline-success"
+            class="col-12 col-md-auto mt-2 mt-md-0"
+            :style="isButtonDisabled"
+            >Отменить</b-button
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -317,5 +322,10 @@ export default {
 <style>
 .inbuttons {
   display: inline-block;
+}
+
+.btn-right {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
