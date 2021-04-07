@@ -59,7 +59,9 @@ export default {
     },
     async goNext(e) {
       if (!this.currentTab.list) {
-        await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+        if (this.$store.getters["data_card/getBtnSave"]) {
+          await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+        }
         if (this.isError()) return;
         this.$router.push(this.getURL(e));
       } else {
