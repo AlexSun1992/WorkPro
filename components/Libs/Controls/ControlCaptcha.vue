@@ -62,6 +62,7 @@ export default {
   methods: {
     async showCaptcha() {
       this.isLoading = true;
+      this.captchaValue = null;
       this.captcha = await this.$store.dispatch("data_card/fetchCaptcha", {
         params: this.$route.params,
         data: this.data,
