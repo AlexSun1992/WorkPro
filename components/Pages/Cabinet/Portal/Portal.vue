@@ -60,6 +60,9 @@ export default {
     itemId() {
       return this.params.page.idItem;
     },
+    cardId() {
+      return this.$route.params.idCard;
+    },
     templateData() {
       return this.params.settings.portalgrid || this.params.settings.cardgrid;
     },

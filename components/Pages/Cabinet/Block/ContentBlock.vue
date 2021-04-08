@@ -23,6 +23,10 @@ export default {
       required: true,
       default: () => null,
     },
+    cardId: {
+      required: false,
+      default: () => null,
+    },
     isOpenCard: {
       type: Boolean,
       required: false,
@@ -36,7 +40,12 @@ export default {
   },
   async fetch() {
     try {
-      await this.$store.dispatch("blocks/fetchBlock", this.itemId);
+      (await this.cardId)
+        ? this.$store.dispatch("blocks/fetchWizardBlock", {
+            itemId: this.itemId,
+            cardId: this.cardId,
+          })
+        : this.$store.dispatch("blocks/fetchBlock", this.itemId);
     } catch (err) {
       this.$bvToast.toast(err.response.data.MESSAGE, {
         title: "Ошибка",
