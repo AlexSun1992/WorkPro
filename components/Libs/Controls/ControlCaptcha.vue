@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="captcha" class="row">
+    <div class="row">
       <div class="col-lg-6">
         <b-form-group
           :label="data.label"
@@ -20,7 +20,9 @@
         </b-form-group>
       </div>
       <div class="col-lg-3">
+        <b-spinner v-if="isLoading" class="mt-4 ml-4"></b-spinner>
         <img
+          v-else
           class="captcha mt-2"
           @click="showCaptcha"
           alt="Капча"
@@ -51,6 +53,7 @@ export default {
     return {
       captcha: null,
       captchaValue: null,
+      isLoading: false,
     };
   },
   created() {
@@ -58,10 +61,12 @@ export default {
   },
   methods: {
     async showCaptcha() {
+      this.isLoading = true;
       this.captcha = await this.$store.dispatch("data_card/fetchCaptcha", {
         params: this.$route.params,
         data: this.data,
       });
+      this.isLoading = false;
     },
     setValue(value) {
       this.$emit("update", {
