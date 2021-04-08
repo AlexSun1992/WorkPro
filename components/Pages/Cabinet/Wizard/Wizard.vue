@@ -1,23 +1,21 @@
 <template>
   <div>
-    <div class="mb-4">
-      <div
-        v-if="cardCaption"
-        class="block-title pt-0 position-relative mt-2 mb-4"
-      >
-        <i class="icon-my-profile"></i>{{ cardCaption }}
-      </div>
-      <b-nav v-if="pages" tabs justified>
-        <b-nav-item
-          v-for="(item, index) in tabs"
-          :key="item.id"
-          :to="getURL(item, index)"
-          exact
-          exact-active-class="active"
-          >{{ item.name }}</b-nav-item
-        >
-      </b-nav>
+    <div
+      v-if="cardCaption"
+      class="block-title pt-0 position-relative mt-2 mb-4"
+    >
+      <i class="icon-my-profile"></i>{{ cardCaption }}
     </div>
+    <b-nav v-if="pages" tabs justified class="sticky-top">
+      <b-nav-item
+        v-for="(item, index) in tabs"
+        :key="item.id"
+        :to="getURL(item, index)"
+        exact
+        exact-active-class="active"
+        >{{ item.name }}</b-nav-item
+      >
+    </b-nav>
     <nuxt-child
       ref="child"
       :key="$route.fullPath"
@@ -26,7 +24,6 @@
     <wizard-buttons
       :currentTab="currentTab"
       :tabs="tabs"
-      :qty="settings.wizard.length"
       @goNext="goNext($event)"
       @goBack="goBack($event)"
     ></wizard-buttons>
@@ -60,9 +57,7 @@ export default {
     },
     async goNext(e) {
       if (!this.currentTab.list) {
-        if (this.$store.getters["data_card/getBtnSave"]) {
-          await this.$refs["child"].$refs["cardEditor"].saveDataCard();
-        }
+        await this.$refs["child"].$refs["cardEditor"].saveDataCard();
         if (this.isError()) return;
         this.$router.push(this.getURL(e));
       } else {
@@ -81,10 +76,7 @@ export default {
             return;
           }
         }
-        await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
-        if (e) {
-          this.$router.push(this.getURL(e));
-        }
+        this.$router.push(this.getURL(e));
       }
     },
     async goBack(e) {

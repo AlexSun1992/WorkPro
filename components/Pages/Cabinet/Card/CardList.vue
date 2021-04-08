@@ -8,8 +8,12 @@
       :items="data.items"
     >
       <template v-slot:actions="slotProps">
-        <b-button v-on:click="showItem(slotProps)">Открыть</b-button>
-        <b-button v-on:click="deleteItem(slotProps)" class="mt-2"
+        <b-button v-on:click="showItem(slotProps)" class="btn-table-open"
+          >Открыть</b-button
+        >
+        <b-button
+          v-on:click="deleteItem(slotProps)"
+          class="mt-2 btn-table-delete"
           >Удалить</b-button
         >
       </template>

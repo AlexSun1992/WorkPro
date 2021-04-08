@@ -1,5 +1,5 @@
 <template>
-  <div class="buttons">
+  <div class="buttons sticky-bottom">
     <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
     <div></div>
     <b-button variant="success" v-if="currentTab.order != qty" @click="goNext">
