@@ -1,8 +1,12 @@
 <template>
-  <div class="buttons sticky-bottom">
+  <div class="buttons">
     <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
     <div></div>
-    <b-button variant="success" v-if="currentTab.order != qty" @click="goNext">
+    <b-button
+      variant="success"
+      v-if="currentTab.order != qty && $route.params.idCard != 0"
+      @click="goNext"
+    >
       {{ showBtnName }}
       <b-spinner
         v-if="false"
@@ -25,7 +29,23 @@ export default {
         (item) => item.idItem == this.currentTab.idItem
       );
     },
-    goNext() {
+    async goNext() {
+      const menu = this.$store.getters["menu/flatmenu"].find(
+        (item) => item.IDITEM == this.currentTab.idItem
+      );
+      let action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
+      if (action) {
+        let response = await this.$store.dispatch("data_card/executeAction", {
+          actionId: action.ID,
+          relActionId: action.REL,
+          relId: this.$route.params.idRel,
+          rowId: this.$route.params.idCard,
+        });
+        if (response.status != 200) {
+          return;
+        }
+      }
+      await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
       let tab = this.tabs[this.getCurrentIndex() + 1];
       this.$emit("goNext", tab);
     },

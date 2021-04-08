@@ -1,21 +1,23 @@
 <template>
   <div>
-    <div
-      v-if="cardCaption"
-      class="block-title pt-0 position-relative mt-2 mb-4"
-    >
-      <i class="icon-my-profile"></i>{{ cardCaption }}
-    </div>
-    <b-nav v-if="pages" tabs justified class="sticky-top">
-      <b-nav-item
-        v-for="(item, index) in tabs"
-        :key="item.id"
-        :to="getURL(item, index)"
-        exact
-        exact-active-class="active"
-        >{{ item.name }}</b-nav-item
+    <div class="mb-4">
+      <div
+        v-if="cardCaption"
+        class="block-title pt-0 position-relative mt-2 mb-4"
       >
-    </b-nav>
+        <i class="icon-my-profile"></i>{{ cardCaption }}
+      </div>
+      <b-nav v-if="pages" tabs justified>
+        <b-nav-item
+          v-for="(item, index) in tabs"
+          :key="item.id"
+          :to="getURL(item, index)"
+          exact
+          exact-active-class="active"
+          >{{ item.name }}</b-nav-item
+        >
+      </b-nav>
+    </div>
     <nuxt-child
       ref="child"
       :key="$route.fullPath"
@@ -24,6 +26,7 @@
     <wizard-buttons
       :currentTab="currentTab"
       :tabs="tabs"
+      :qty="settings.wizard.length"
       @goNext="goNext($event)"
       @goBack="goBack($event)"
     ></wizard-buttons>
@@ -57,27 +60,12 @@ export default {
     },
     async goNext(e) {
       if (!this.currentTab.list) {
-        await this.$refs["child"].$refs["cardEditor"].saveDataCard();
-        if (this.isError()) return;
-        this.$router.push(this.getURL(e));
-      } else {
-        const menu = this.$store.getters["menu/flatmenu"].find(
-          (item) => item.IDITEM == this.currentTab.idItem
-        );
-        let action = menu.ACTIONSCUR[0];
-        if (action) {
-          let response = await this.$store.dispatch("data_card/executeAction", {
-            actionId: action.ID,
-            relActionId: action.REL,
-            relId: this.$route.params.idRel,
-            rowId: this.$route.params.idCard,
-          });
-          if (response.status != 200) {
-            return;
-          }
+        if (this.$store.getters["data_card/getBtnSave"]) {
+          await this.$refs["child"].$refs["cardEditor"].saveDataCard();
         }
-        this.$router.push(this.getURL(e));
+        if (this.isError()) return;
       }
+      this.$router.push(this.getURL(e));
     },
     async goBack(e) {
       this.$router.push(this.getURL(e));
