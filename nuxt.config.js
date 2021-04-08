@@ -51,6 +51,8 @@ module.exports = {
     "~/plugins/vue-agile",
     { src: "~plugins/vcalendar.js", ssr: false },
     "~/plugins/quizCalculator.js",
+    "~/plugins/fileUploader.js",
+    "~/plugins/fileDownload.js",
     "~/plugins/carousel.js",
     "~/plugins/selectValue.js",
     "~/plugins/slick-carousel.js",
