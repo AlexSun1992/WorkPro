@@ -32,6 +32,7 @@ export default {
     },
     async goNext() {
       this.$store.commit("data_card/setLoading", true);
+      // this.$store.commit("data_card/setLoading", false);
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM == this.currentTab.idItem
       );
@@ -51,7 +52,6 @@ export default {
       await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
       let tab = this.tabs[this.getCurrentIndex() + 1];
       this.$emit("goNext", tab);
-      this.$store.commit("data_card/setLoading", false);
     },
     goBack() {
       let tab = this.tabs[this.getCurrentIndex() - 1];
@@ -71,6 +71,9 @@ export default {
     },
     loading() {
       return this.$store.getters["data_card/getLoading"];
+    },
+    isError() {
+      return this.$store.getters["data_card/getError"];
     },
   },
 };

@@ -60,6 +60,9 @@ export default {
       if (!this.currentTab.list) {
         if (this.$store.getters["data_card/getBtnSave"]) {
           await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+          if (this.isError()) {
+            this.$store.commit("data_card/setLoading", false);
+          }
         }
         if (this.isError()) return;
       }
