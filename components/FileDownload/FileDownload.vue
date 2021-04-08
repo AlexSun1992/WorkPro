@@ -1,6 +1,7 @@
 <template>
   <a href="" @click.prevent="downloadItem(id, rel, fileName)">
-    {{ fileName }}<span class="size">{{ fileSize(size) }}</span>
+    {{ fileName }} (<span class="size">{{ fileSizeMb(fileSize) }}</span
+    >)
   </a>
 </template>
 
@@ -36,7 +37,7 @@ export default {
         link.click();
       });
     },
-    fileSize(size) {
+    fileSizeMb(size) {
       return (size / 1024000).toFixed(1) + "мб";
     },
   },
