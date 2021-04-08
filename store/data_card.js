@@ -152,6 +152,7 @@ export const actions = {
       commit("setCardRelId", resp.data.REL);
       return resp;
     } catch (e) {
+      commit("setDisabled", false);
       return e.response;
     }
   },
