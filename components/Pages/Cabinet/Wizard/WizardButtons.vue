@@ -3,13 +3,14 @@
     <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
     <div></div>
     <b-button
+      :disabled="loading"
       variant="success"
       v-if="currentTab.order != qty && $route.params.idCard != 0"
       @click="goNext"
     >
       {{ showBtnName }}
       <b-spinner
-        v-if="false"
+        v-if="loading"
         style="width: 1rem; height: 1rem"
         class="ml-2"
         variant="danger"
@@ -30,6 +31,7 @@ export default {
       );
     },
     async goNext() {
+      this.$store.commit("data_card/setLoading", true);
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM == this.currentTab.idItem
       );
@@ -42,12 +44,14 @@ export default {
           rowId: this.$route.params.idCard,
         });
         if (response.status != 200) {
+          this.$store.commit("data_card/setLoading", false);
           return;
         }
       }
       await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
       let tab = this.tabs[this.getCurrentIndex() + 1];
       this.$emit("goNext", tab);
+      this.$store.commit("data_card/setLoading", false);
     },
     goBack() {
       let tab = this.tabs[this.getCurrentIndex() - 1];
@@ -64,6 +68,9 @@ export default {
       } else {
         return "Продолжить";
       }
+    },
+    loading() {
+      return this.$store.getters["data_card/getLoading"];
     },
   },
 };
