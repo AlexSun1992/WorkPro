@@ -11,7 +11,7 @@ export const getters = {
   menu: (state) => state.menu,
   flatmenu: (state) => state.flatmenu,
   getSettingsByIdItem: (state) => (id) => {
-    return state.menu[0].children.find((m) => console.log(m.idItem));
+    return state.menu[0].children.find((m) => console.log(m));
   },
   getMenuById: (state) => (id) => {
     return state.flatmenu.find((m) => m.IDITEM === parseInt(id));

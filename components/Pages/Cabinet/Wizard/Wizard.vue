@@ -6,7 +6,7 @@
     >
       <i class="icon-my-profile"></i>{{ cardCaption }}
     </div>
-    <b-nav v-if="pages" tabs justified class="sticky-top">
+    <b-nav v-if="pages" tabs justified class="mb-2 sticky-top">
       <b-nav-item
         v-for="(item, index) in tabs"
         :key="item.id"
