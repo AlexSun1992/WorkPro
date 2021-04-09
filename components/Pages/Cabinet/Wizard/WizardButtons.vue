@@ -23,7 +23,7 @@
 <script>
 export default {
   name: "WizardButtons",
-  props: ["currentTab", "tabs", "qty"],
+  props: ["currentTab", "tabs", "qty", "loading"],
   methods: {
     getCurrentIndex() {
       return this.tabs.findIndex(
@@ -31,8 +31,6 @@ export default {
       );
     },
     async goNext() {
-      this.$store.commit("data_card/setLoading", true);
-      // this.$store.commit("data_card/setLoading", false);
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM == this.currentTab.idItem
       );
@@ -69,9 +67,9 @@ export default {
         return "Продолжить";
       }
     },
-    loading() {
-      return this.$store.getters["data_card/getLoading"];
-    },
+    // loading() {
+    //   return this.$store.getters["data_card/getLoading"];
+    // },
     isError() {
       return this.$store.getters["data_card/getError"];
     },
