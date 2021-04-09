@@ -59,6 +59,13 @@ export const actions = {
         commit("addBlock", { blockId: parseInt(itemId), data: res.data });
       });
   },
+  async updateWizardBlock({ commit, dispatch }, { itemId, cardId }) {
+    await this.$axios
+      .get(`/api/wizardlist/55/${itemId}/${cardId}`)
+      .then((res) => {
+        commit("updateBlock", { blockId: parseInt(itemId), data: res.data });
+      });
+  },
   async updateBlock({ commit, dispatch }, id) {
     await this.$axios.get(`/api/list/55/${id}/{}`).then((res) => {
       commit("updateBlock", { blockId: parseInt(id), data: res.data });

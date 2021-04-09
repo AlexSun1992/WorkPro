@@ -1,7 +1,7 @@
 <template>
   <div v-if="isOpenCard">
     <div v-for="item in dataContent.items" @click.stop="openCard(item)">
-      <slot name="data" v-bind:content="item"></slot>
+      <slot name="data" v-bind:content="item" :event="event"></slot>
     </div>
   </div>
   <div v-else>

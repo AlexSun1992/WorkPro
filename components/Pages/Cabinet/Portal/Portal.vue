@@ -92,6 +92,14 @@ export default {
       },
     },
   },
+  methods: {
+    refreshWizardList() {
+      this.$store.dispatch("blocks/updateWizardBlock", {
+        itemId: this.itemId,
+        cardId: this.cardId,
+      });
+    },
+  },
 };
 </script>
 

@@ -17,15 +17,6 @@ export default {
   data() {
     return {};
   },
-  head: {
-    link: [
-      {
-        rel: "stylesheet",
-        href:
-          "https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css",
-      },
-    ],
-  },
   methods: {
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
@@ -36,8 +27,7 @@ export default {
       formData.append("file", this.file, this.file.name);
       this.$axios
         .$post(
-          `/am/main/v2/file/${this.id}
-?rel=${this.rel}`,
+          `/am/main/v2/file/${this.id}?rel=${this.rel}`,
           formData
           // {
           //   headers: {
@@ -46,6 +36,10 @@ export default {
           //   },
           // }
         )
+        .then(async (result) => {
+          this.$refs.file.value = "";
+          this.$emit("uploaded", result);
+        })
         .catch(function (e) {
           console.log(e);
         });
