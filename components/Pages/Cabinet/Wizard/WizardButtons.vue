@@ -3,13 +3,14 @@
     <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
     <div></div>
     <b-button
+      :disabled="loading"
       variant="success"
       v-if="currentTab.order != qty && $route.params.idCard != 0"
       @click="goNext"
     >
       {{ showBtnName }}
       <b-spinner
-        v-if="false"
+        v-if="loading"
         style="width: 1rem; height: 1rem"
         class="ml-2"
         variant="danger"
@@ -22,7 +23,7 @@
 <script>
 export default {
   name: "WizardButtons",
-  props: ["currentTab", "tabs", "qty"],
+  props: ["currentTab", "tabs", "qty", "loading"],
   methods: {
     getCurrentIndex() {
       return this.tabs.findIndex(
@@ -42,6 +43,7 @@ export default {
           rowId: this.$route.params.idCard,
         });
         if (response.status != 200) {
+          this.$store.commit("data_card/setLoading", false);
           return;
         }
       }
@@ -64,6 +66,12 @@ export default {
       } else {
         return "Продолжить";
       }
+    },
+    // loading() {
+    //   return this.$store.getters["data_card/getLoading"];
+    // },
+    isError() {
+      return this.$store.getters["data_card/getError"];
     },
   },
 };

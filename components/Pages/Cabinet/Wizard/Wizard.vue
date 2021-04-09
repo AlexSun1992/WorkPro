@@ -25,6 +25,7 @@
       :currentTab="currentTab"
       :tabs="tabs"
       :qty="settings.wizard.length"
+      :loading="loading"
       @goNext="goNext($event)"
       @goBack="goBack($event)"
     ></wizard-buttons>
@@ -38,6 +39,11 @@ export default {
   name: "Wizard",
   async fetch({ store, route }) {
     await store.dispatch("wizard/fetchWizard", route.params);
+  },
+  data() {
+    return {
+      loading: false,
+    };
   },
   components: {
     wizardButtons,
@@ -57,11 +63,15 @@ export default {
       }
     },
     async goNext(e) {
+      this.loading = true;
       if (!this.currentTab.list) {
         if (this.$store.getters["data_card/getBtnSave"]) {
           await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+          if (this.isError()) {
+            this.loading = false;
+            return;
+          }
         }
-        if (this.isError()) return;
       }
       this.$router.push(this.getURL(e));
     },

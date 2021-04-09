@@ -130,6 +130,7 @@ export default {
     };
   },
   created() {
+    this.$store.commit("data_card/setLoading", false);
     this.edit();
   },
   mounted() {
