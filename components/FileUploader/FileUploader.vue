@@ -1,12 +1,24 @@
 <template>
   <div>
-    <button @click="$refs.file.click()">Добавить файл</button>
+    <button v-if="!percentsVisible" @click="$refs.file.click()">
+      Добавить файл
+    </button>
     <input
       ref="file"
       type="file"
       style="display: none"
       v-on:change="handleFileUpload()"
     />
+    <div style="max-width: 200px; margin-top: 5px">
+      <b-progress
+        v-if="percentsVisible"
+        class="mb-2"
+        variant="success"
+        :value="uploadPercentage"
+        show-progress
+        animated
+      ></b-progress>
+    </div>
   </div>
 </template>
 
@@ -15,7 +27,10 @@ export default {
   name: "FileUploader",
   props: ["id", "rel"],
   data() {
-    return {};
+    return {
+      uploadPercentage: 0,
+      percentsVisible: false,
+    };
   },
   methods: {
     handleFileUpload() {
@@ -23,26 +38,40 @@ export default {
       this.submitFile();
     },
     submitFile() {
-      let formData = new FormData();
-      formData.append("file", this.file, this.file.name);
+      // Костыль
+      let fileName = this.id + "." + this.file.name?.split(".")[1];
       this.$axios
         .$post(
-          `/am/main/v2/file/${this.id}?rel=${this.rel}`,
-          formData
-          // {
-          //   headers: {
-          //     "Content-Type": "multipart/form-data",
-          //     "Content-Disposition": `attachment; filename=${this.file.name}`,
-          //   },
-          // }
+          `/am/main/v2/file/${this.id}
+?rel=${this.rel}`,
+          this.file,
+          {
+            headers: {
+              "Content-Type": "application/pdf",
+              "Content-Disposition": `attachment; filename=${fileName}`,
+            },
+            onUploadProgress: (progressEvent) => {
+              this.percentsVisible = true;
+              this.uploadPercentage = parseInt(
+                Math.round((progressEvent.loaded / progressEvent.total) * 100)
+              );
+              console.log(this.uploadPercentage);
+            },
+          }
         )
-        .then(async (result) => {
+        .then((result) => {
           this.$refs.file.value = "";
           this.$emit("uploaded", result);
+          this.hidePercents();
         })
         .catch(function (e) {
           console.log(e);
         });
+    },
+    hidePercents() {
+      setTimeout(() => {
+        this.percentsVisible = false;
+      }, 1000);
     },
   },
 };
