@@ -1,8 +1,12 @@
 <template>
   <div>
-    <button v-if="!percentsVisible" @click="$refs.file.click()">
-      Добавить файл
-    </button>
+    <b-button
+      v-if="!percentsVisible"
+      @click="$refs.file.click()"
+      variant="success"
+    >
+      Прикрепить файл
+    </b-button>
     <input
       ref="file"
       type="file"
