@@ -34,6 +34,7 @@
     <div class="profile row">
       <div class="col" v-if="isShowCardEditor">
         <CardEditor
+          v-if="getFormData"
           @error="error = $event"
           ref="cardEditor"
           :wizard-tabs="wizardTabs"
@@ -69,35 +70,37 @@
           v-if="!isWizard || (isWizard && $route.params.idCard == 0)"
           :class="{ 'btn-right': isWizard && $route.params.idCard == 0 }"
         >
-          <b-button
-            v-if="isButtonSave"
-            pill
-            :disabled="loading"
-            v-on:click="saveDataCard"
-            type="button"
-            variant="success"
-            class="col-12 col-md-auto mr-4"
-            :style="isButtonDisabled"
-          >
-            {{ buttonTitle }}
-            <b-spinner
-              v-if="loading"
-              style="width: 1rem; height: 1rem"
-              class="ml-2"
-              variant="danger"
-              label="Spinning"
-            ></b-spinner>
-          </b-button>
-          <b-button
-            v-if="ref"
-            pill
-            v-on:click="$router.push(ref)"
-            type="button"
-            variant="outline-success"
-            class="col-12 col-md-auto mt-2 mt-md-0"
-            :style="isButtonDisabled"
-            >Отменить</b-button
-          >
+          <div v-if="getFormData">
+            <b-button
+              v-if="isButtonSave"
+              pill
+              :disabled="loading"
+              v-on:click="saveDataCard"
+              type="button"
+              variant="success"
+              class="col-12 col-md-auto mr-4"
+              :style="isButtonDisabled"
+            >
+              {{ buttonTitle }}
+              <b-spinner
+                v-if="loading"
+                style="width: 1rem; height: 1rem"
+                class="ml-2"
+                variant="danger"
+                label="Spinning"
+              ></b-spinner>
+            </b-button>
+            <b-button
+              v-if="ref"
+              pill
+              v-on:click="$router.push(ref)"
+              type="button"
+              variant="outline-success"
+              class="col-12 col-md-auto mt-2 mt-md-0"
+              :style="isButtonDisabled"
+              >Отменить</b-button
+            >
+          </div>
         </div>
       </div>
     </div>
