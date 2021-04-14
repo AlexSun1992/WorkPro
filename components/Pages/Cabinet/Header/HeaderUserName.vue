@@ -3,10 +3,12 @@
     style="cursor: pointer"
     :class="'ppl-info percent' + percent + ' ppl-' + sex"
   >
-    <div class="ppl-avatar" @click="goToProfile">
-      <img src="" />
+    <div @click="goToProfile">
+      <div class="ppl-avatar">
+        <img src="" />
+      </div>
+      <span class="ppl-name">{{ user }}</span>
     </div>
-    <span class="ppl-name">{{ user }}</span>
   </div>
 </template>
 
