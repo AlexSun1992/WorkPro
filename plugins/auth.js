@@ -1,6 +1,6 @@
 /* eslint-disable */
 import converter from "@/converters/menu";
-
+import { getErrorMessage } from "../utils/transform";
 export default function ({ app, store, redirect, $auth }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response?.config) {
@@ -44,7 +44,8 @@ export default function ({ app, store, redirect, $auth }) {
     if (error.response.status !== 401) {
       try {
         if ($nuxt) {
-          $nuxt.$bvToast.toast(error.response.data.MESSAGE, {
+          console.log(error.response.data);
+          $nuxt.$bvToast.toast(getErrorMessage(error.response.data), {
             title: "Ошибка",
             variant: "danger",
             autoHideDelay: 5000,

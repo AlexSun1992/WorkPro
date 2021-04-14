@@ -1,5 +1,7 @@
 /* eslint-disable */
 import api from "@/api/urls";
+import { getErrorMessage } from "../utils/transform";
+
 export const state = () => ({
   form: [],
   copyForm: [],
@@ -23,7 +25,7 @@ export const getters = {
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
   getError: (state) => state.isError,
-  getErrorMessage: (state) => state.errorMessage,
+  getErrorMessage: (state) => getErrorMessage(state.errorMessage),
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
   getCardId: (state) => state.cardId,
@@ -91,9 +93,9 @@ export const actions = {
           }
           commit("setCardCaption", res.data.metaData.cardCaption);
         })
-        .catch((err) => {
-          console.log(err);
-          throw error;
+        .catch((error) => {
+          commit("setError", true);
+          commit("setErrorMessage", error.response.data);
         });
     } catch (error) {
       if (error.response) {
@@ -319,10 +321,12 @@ export const mutations = {
     state.loading = params;
   },
   setDisabled(state, params) {
-    state.form = state.form.map((item) => {
-      item.readonly = params;
-      return item;
-    });
+    if (Array.isArray(state.form)) {
+      state.form = state.form.map((item) => {
+        item.readonly = params;
+        return item;
+      });
+    }
   },
   setCaptcha(state, data) {
     const item = state.form.find((d) => d.fieldId === data.data.fieldId);

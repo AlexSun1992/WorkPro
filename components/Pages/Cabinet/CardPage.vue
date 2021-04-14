@@ -48,11 +48,11 @@
         :template="settings.cardtemplate"
       ></v-runtime-template>
       <div v-else-if="isShowErrorMessage">
-        {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}
+        {{ errorMessage }}
       </div>
     </div>
     <b-alert :show="isError && !!getFormData" variant="danger" class="mt-4">{{
-      errorText
+      errorMessage
     }}</b-alert>
     <div v-if="isShowCardEditor" class="mt-3 mb-3 row button-container">
       <div class="col-12" v-if="settings.edit">
@@ -241,9 +241,6 @@ export default {
     },
     errorMessage() {
       return this.$store.getters["data_card/getErrorMessage"];
-    },
-    errorText() {
-      return this.$store.getters["data_card/getErrorMessage"]?.MESSAGE;
     },
     isError() {
       return this.$store.getters["data_card/getError"];

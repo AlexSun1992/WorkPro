@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="wizardIsError === false">
     <div
       v-if="cardCaption"
       class="block-title pt-0 position-relative mt-2 mb-4"
@@ -30,6 +30,7 @@
       @goBack="goBack($event)"
     ></wizard-buttons>
   </div>
+  <div v-else>{{ wizardErrorMessage }}</div>
 </template>
 
 <script>
@@ -66,10 +67,28 @@ export default {
       this.loading = true;
       if (!this.currentTab.list) {
         if (this.$store.getters["data_card/getBtnSave"]) {
-          await this.$refs["child"].$refs["cardEditor"].saveDataCard();
-          if (this.isError()) {
-            this.loading = false;
-            return;
+          if (this.$refs["child"].$refs["cardEditor"] !== undefined) {
+            await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+            if (this.isError()) {
+              this.loading = false;
+              return;
+            }
+          } else {
+            let itemId = this.$route.params.idItem;
+            let moduleId = this.$route.params.idModule;
+            let cardId = this.$route.params.idCard;
+            let relId = this.$route.params.idRel;
+            let resp = await this.$store.dispatch("data_card/saveDataCard", {
+              moduleId,
+              itemId,
+              cardId,
+              relId,
+              form: this.$store.getters["data_card/getForm"]?.data,
+            });
+            if (this.isError()) {
+              this.loading = false;
+              return;
+            }
           }
         }
       }
@@ -125,6 +144,18 @@ export default {
     },
     cardCaption() {
       return this.$store.getters["wizard/getWizardCaption"];
+    },
+    wizardIsError() {
+      return this.$store.getters["wizard/getWizardIsError"];
+    },
+    isCardError() {
+      return this.$store.getters["data_card/getError"];
+    },
+    wizardErrorMessage() {
+      return (
+        this.$store.getters["wizard/getWizardErrorMessage"] ||
+        this.$store.getters["data_card/getErrorMessage"]
+      );
     },
   },
 };
