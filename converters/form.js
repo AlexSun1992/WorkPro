@@ -168,6 +168,9 @@ converter.form = async (data, itemId) => {
     obj.id = itemId;
     obj.fieldId = webFields[i].ID;
     obj.cols = webFields[i].NCOLSPAN ? webFields[i].NCOLSPAN : 12;
+    obj.colSm = webFields[i].NCOLSM ? webFields[i].NCOLSM : 12;
+    obj.colMd = webFields[i].NCOLMD ? webFields[i].NCOLMD : 12;
+    obj.colLg = webFields[i].NCOLLG ? webFields[i].NCOLLG : 12;
     obj.width = webFields[i].NWIDTH ? webFields[i].NWIDTH + "%" : "100%";
     obj.name = webFields[i].SNAME;
     obj.labelCols = webFields[i].SCAPTIONPOSITION
