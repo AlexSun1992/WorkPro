@@ -1799,6 +1799,9 @@ button:focus {
   left: 50%;
   transform: translateX(-50%);
 }
+div > .card-h-line:last-child:after {
+  display: none;
+}
 
 .columns_lg_2 {
   display: grid;
