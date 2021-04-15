@@ -6,6 +6,6 @@ const getErrorMessage = (data) => {
   if (data?.MESSAGE) {
     return data?.MESSAGE;
   }
-  return data;
+  return null;
 };
 export { getErrorMessage };

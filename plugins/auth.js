@@ -45,11 +45,13 @@ export default function ({ app, store, redirect, $auth }) {
       try {
         if ($nuxt) {
           console.log(error.response.data);
-          $nuxt.$bvToast.toast(getErrorMessage(error.response.data), {
-            title: "Ошибка",
-            variant: "danger",
-            autoHideDelay: 5000,
-          });
+          if (getErrorMessage(error.response.data)) {
+            $nuxt.$bvToast.toast(getErrorMessage(error.response.data), {
+              title: "Ошибка",
+              variant: "danger",
+              autoHideDelay: 5000,
+            });
+          }
         }
       } catch (e) {}
     }
