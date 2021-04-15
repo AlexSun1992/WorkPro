@@ -378,6 +378,7 @@ export default {
       if (response?.status === 200) {
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
+            this.$bvModal.hide("confirmAction");
             window.open(response.data.POUTVALUE);
             return;
           }
