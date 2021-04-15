@@ -7,6 +7,7 @@
       :title="actionParamsTitle"
       ok-title="Выполнить"
       cancel-title="Отмена"
+      auto-focus-button="ok"
       no-close-on-backdrop
       @ok="applyAction"
       no-fade
@@ -43,9 +44,6 @@
       />
     </div>
     <SkeletonBox v-if="!data.length" class="mt-5" :items="8"></SkeletonBox>
-    <!--    <div class="error-message" v-if="isError">-->
-    <!--      {{ errorMessage.INFO ? errorMessage.INFO : errorMessage.MESSAGE }}-->
-    <!--    </div>-->
   </div>
 </template>
 
@@ -54,8 +52,7 @@ import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
-import formConverter from "@/converters/form";
-import consts from "~/api/urls";
+import { getErrorMessage } from "@/utils/transform";
 export default {
   name: "CardEditor",
   head() {
@@ -374,9 +371,7 @@ export default {
       });
       if (response?.status === 500) {
         this.isActionApplyError = true;
-        this.actionApplyErrorMessage = response.data.INFO
-          ? response.data.INFO
-          : response.data.MESSAGE;
+        this.actionApplyErrorMessage = getErrorMessage(response.data);
         this.$store.commit("data_card/setError", true);
         this.$store.commit("data_card/setErrorMessage", response.data);
       }

@@ -1,5 +1,5 @@
 <template>
-  <b-col :xl="col" :lg="data.cols" :md="data.colMd" :sm="data.colSm">
+  <b-col :xl="colXl" :lg="data.cols" :md="colMd" :sm="colSm">
     <div
       class="control"
       v-bind:class="{ visibility_hidden: data.hidden }"
@@ -98,8 +98,14 @@ export default {
         this.data.type.slice(1)
       );
     },
-    col: function () {
+    colXl: function () {
       return (12 / this.cols) * this.data.col;
+    },
+    colMd: function () {
+      return this.data.colMd ? this.data.colMd : 12;
+    },
+    colSm: function () {
+      return this.data.colSm ? this.data.colSm : 12;
     },
   },
   watch: {
