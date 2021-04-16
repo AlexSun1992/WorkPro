@@ -162,7 +162,7 @@ export default {
         );
         this.actionParamsTitle = field.label;
         this.actionParamsId = parseInt(actionId);
-        if (actionParams.length) {
+        if (this.actionSettings.isDialog) {
           this.$bvModal.show("confirmAction");
         } else {
           this.applyAction();
@@ -358,13 +358,10 @@ export default {
       if (evt) evt.preventDefault();
       this.$store.commit("data_card/setError", false);
       this.isActionApplyError = false;
-      const action = this.params.actions.find(
-        (f) => f.id === this.actionParamsId
-      );
       this.$store.commit("data_card/setError", false);
       let response = await this.$store.dispatch("data_card/executeAction", {
         actionId: this.actionParamsId,
-        relActionId: action.relaction,
+        relActionId: this.actionSettings.relaction,
         relId: this.$route.params.idRel,
         rowId: this.$route.params.idCard,
         body: this.actionParams,
@@ -425,6 +422,9 @@ export default {
     },
     actionParams: function () {
       return this.$store.getters["data_card/getActionParams"];
+    },
+    actionSettings: function () {
+      return this.params.actions.find((a) => a.id === this.actionParamsId);
     },
   },
 };
