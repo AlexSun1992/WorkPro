@@ -10,6 +10,7 @@ converter.action = (data) => {
     obj.type = items[i].NTYPE;
     obj.command = items[i].SCONST;
     obj.relaction = items[i].REL;
+    obj.isDialog = items[i].LHIDEDLG;
     arr.push(obj);
   }
   return arr;

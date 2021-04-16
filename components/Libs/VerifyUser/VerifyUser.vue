@@ -317,9 +317,9 @@ export default {
 .mx-datepicker .form-control.is-valid {
   background: #fff;
 }
-.form-group {
-  margin: 0 !important;
-}
+/*.form-group {*/
+/*  margin: 0 !important;*/
+/*}*/
 </style>
 <style scoped lang="scss">
 @import "~/assets/scss/reg.scss";
