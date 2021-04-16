@@ -5,6 +5,7 @@
       :id="'confirmAction'"
       centered
       :title="actionParamsTitle"
+      :ok-disabled="actionFormDisabled"
       ok-title="Выполнить"
       cancel-title="Отмена"
       auto-focus-button="ok"
@@ -15,12 +16,14 @@
       <b-alert :show="isActionApplyError" variant="danger">{{
         actionApplyErrorMessage
       }}</b-alert>
-      <Form
-        v-if="actionParams.length"
-        :data="actionParams"
-        :edit="true"
-        @update="updateActionParams($event)"
-      ></Form>
+      <b-form @submit="applyAction">
+        <Form
+          v-if="actionParams.length"
+          :data="actionParams"
+          :edit="!actionFormDisabled"
+          @update="updateActionParams($event)"
+        ></Form>
+      </b-form>
     </b-modal>
     <div v-if="data.length">
       <Form
@@ -75,6 +78,7 @@ export default {
       body: null,
       actionParamsTitle: null,
       actionParamsId: null,
+      actionFormDisabled: false,
       isActionApplyError: false,
       actionApplyErrorMessage: null,
       disabledButtons: {
@@ -358,6 +362,7 @@ export default {
       if (evt) evt.preventDefault();
       this.$store.commit("data_card/setError", false);
       this.isActionApplyError = false;
+      this.actionFormDisabled = true;
       this.$store.commit("data_card/setError", false);
       let response = await this.$store.dispatch("data_card/executeAction", {
         actionId: this.actionParamsId,
@@ -366,6 +371,7 @@ export default {
         rowId: this.$route.params.idCard,
         body: this.actionParams,
       });
+      this.actionFormDisabled = false;
       if (response?.status === 500) {
         this.isActionApplyError = true;
         this.actionApplyErrorMessage = getErrorMessage(response.data);
