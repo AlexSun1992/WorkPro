@@ -45,7 +45,7 @@
         />
       </div>
       <v-runtime-template
-        v-if="isShowTemplate"
+        v-else-if="isShowTemplate"
         :template="settings.cardtemplate"
       ></v-runtime-template>
       <div v-else-if="isShowErrorMessage">
@@ -275,15 +275,20 @@ export default {
     },
     isShowCardEditor() {
       return (
-        (!this.settings.cardtemplate && !!this.getFormData) ||
-        (this.editable && !this.isError)
+        ((!this.settings.cardtemplate && !!this.getFormData) ||
+          (this.editable && !this.isError)) &&
+        this.$store.getters[`data_card/getForm`].length
       );
     },
     isShowErrorMessage() {
       return this.isError && !this.getFormData;
     },
     isShowTemplate() {
-      return !this.isError && this.settings.cardtemplate && !!this.getFormData;
+      return (
+        !this.isError &&
+        this.settings.cardtemplate &&
+        this.$store.getters[`data_card/getForm`].data
+      );
     },
   },
   beforeRouteLeave(to, from, next) {

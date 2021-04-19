@@ -62,7 +62,6 @@ export default {
   methods: {
     async showCaptcha() {
       this.isLoading = true;
-      this.captchaValue = null;
       this.captcha = await this.$store.dispatch("data_card/fetchCaptcha", {
         params: this.$route.params,
         data: this.data,
@@ -78,13 +77,7 @@ export default {
   },
   watch: {
     data(newVal, oldVal) {
-      if (
-        newVal.readonly === false &&
-        oldVal.readonly === true &&
-        this.$store.getters["data_card/getError"]
-      ) {
-        this.captchaValue = null;
-        this.setValue(null);
+      if (newVal.readonly === false && oldVal.readonly === true) {
         this.showCaptcha();
       }
     },

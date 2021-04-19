@@ -49,6 +49,7 @@ export const getters = {
 };
 export const actions = {
   async fetchForm({ dispatch, commit, getters, state }, params) {
+    commit("setLoading", true);
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
     if (state.cardId !== params.idCard || !params.idRel) {
@@ -68,6 +69,7 @@ export const actions = {
       await this.$axios
         .get(url)
         .then((res) => {
+          commit("setLoading", false);
           commit(
             "setForm",
             res.data.metaData.data.length ? res.data.metaData.data : res.data
@@ -99,6 +101,7 @@ export const actions = {
         });
     } catch (error) {
       if (error.response) {
+        commit("setLoading", false);
         commit("setError", true);
         commit("setErrorMessage", error.response.data);
       }
