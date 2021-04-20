@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import HeaderUserName from "../Pages/Cabinet/Header/HeaderUserName";
+import HeaderUserName from "../Header/HeaderUserName";
 import { mapGetters } from "vuex";
 
 export default {
@@ -141,6 +141,7 @@ export default {
       }
     },
     goInCabinet() {
+      console.log("here");
       this.$router.push("/cabinet");
     },
     openSection: function (title, e) {

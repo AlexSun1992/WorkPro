@@ -2,7 +2,7 @@
   <b-button
     class="mt-4"
     @click="updateValue()"
-    :disabled="loading && clicked"
+    :disabled="loading"
     variant="primary"
   >
     <div class="button">

@@ -156,6 +156,7 @@ export default {
           moduleId = this.params.page.idModule;
           cardId = this.$store.getters["data_card/getCardId"];
         }
+        this.$store.commit("data_card/setLoading", true);
         let actionParams = await this.$store.dispatch(
           "data_card/fetchActionParams",
           {
@@ -167,6 +168,7 @@ export default {
         this.actionParamsTitle = field.label;
         this.actionParamsId = parseInt(actionId);
         if (this.actionSettings.isDialog) {
+          this.$store.commit("data_card/setLoading", false);
           this.$bvModal.show("confirmAction");
         } else {
           this.applyAction();
@@ -373,6 +375,7 @@ export default {
       });
       this.actionFormDisabled = false;
       if (response?.status === 500) {
+        this.$store.commit("data_card/setLoading", false);
         this.isActionApplyError = true;
         this.actionApplyErrorMessage = getErrorMessage(response.data);
         this.$store.commit("data_card/setError", true);
@@ -383,13 +386,13 @@ export default {
           if (response.data.POUTVALUE.includes("/")) {
             this.$bvModal.hide("confirmAction");
             window.open(response.data.POUTVALUE);
-            return;
           }
         }
         await this.$store.dispatch("data_card/fetchForm", this.$route.params);
         if (this.wizardTabs) {
           await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
         }
+        this.$store.commit("data_card/setLoading", false);
         this.$bvModal.hide("confirmAction");
         this.$bvToast.toast("Успешно выполнено", {
           title: "",

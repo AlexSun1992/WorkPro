@@ -66,6 +66,10 @@ export default {
         params: this.$route.params,
         data: this.data,
       });
+      if (this.captchaValue !== null) {
+        this.captchaValue = null;
+        this.setValue();
+      }
       this.isLoading = false;
     },
     setValue(value) {
