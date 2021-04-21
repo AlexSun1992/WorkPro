@@ -12,15 +12,6 @@ export default {
   data() {
     return {};
   },
-  head: {
-    link: [
-      {
-        rel: "stylesheet",
-        href:
-          "https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css",
-      },
-    ],
-  },
   methods: {
     async downloadItem(id, rel, fileName) {
       this.$axios({
