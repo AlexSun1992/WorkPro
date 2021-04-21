@@ -1,5 +1,14 @@
 <template>
-  <v-runtime-template :template="templateData"></v-runtime-template>
+  <div>
+    <div v-show="isShowBlock">
+      <v-runtime-template :template="templateData"></v-runtime-template>
+    </div>
+    <div v-if="!isShowBlock">
+      <div class="card bg-six block-border-one block p-4">
+        <SkeletonBox class="mt-5" :items="8"></SkeletonBox>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -8,6 +17,7 @@ import ActionButton from "./ActionButton";
 import OpenCardButton from "../Block/OpenCardButton";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import VRuntimeTemplate from "v-runtime-template";
+import SkeletonBox from "~/components/Libs/SkeletonBox";
 export default {
   name: "NotifyBlock",
   components: {
@@ -16,6 +26,7 @@ export default {
     ActionButton,
     OpenCardButton,
     DeleteCardButton,
+    SkeletonBox,
   },
   props: {
     moduleId: {
@@ -53,6 +64,11 @@ export default {
         } else {
           return false;
         }
+      },
+    },
+    isShowBlock: {
+      get: function () {
+        return Boolean(this.$store.getters["blocks/getBlockById"](this.itemId));
       },
     },
   },
