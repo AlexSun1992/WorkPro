@@ -1,7 +1,7 @@
 <template>
   <div v-if="isOpenCard">
     <div v-for="item in dataContent.items" @click.stop="openCard(item)">
-      <slot name="data" v-bind:content="item" :event="event"></slot>
+      <slot name="data" v-bind:content="item"></slot>
     </div>
   </div>
   <div v-else>
@@ -73,11 +73,10 @@ export default {
     },
   },
   methods: {
-    async openCard(item) {
+    openCard(item) {
       try {
         if (this.isOpenCard) {
-          this.$store.commit("data_card/setListPath", this.$route.fullPath);
-          $nuxt._router.push(
+          this.$router.push(
             `/cabinet/55/0/${this.parentMenu ? this.parentMenu : this.itemId}/${
               item.ID || item[this.propertyId]
             }${item.RELCARD ? `/${item.RELCARD}` : `/${item.REL}`}`

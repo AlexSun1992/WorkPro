@@ -1,7 +1,14 @@
 <template>
   <client-only placeholder="Загрузка...">
     <div>
-      <v-runtime-template :template="templateData"></v-runtime-template>
+      <div v-show="isShowBlock">
+        <v-runtime-template :template="templateData"></v-runtime-template>
+      </div>
+      <div v-if="!isShowBlock">
+        <div style="text-align: center">
+          <b-spinner class="m-5"></b-spinner>
+        </div>
+      </div>
     </div>
   </client-only>
 </template>
@@ -18,6 +25,7 @@ import FormPage from "~/components/Pages/FormPage";
 import OpenCardButton from "../Block/OpenCardButton";
 import VRuntimeTemplate from "v-runtime-template";
 import DeleteCardButton from "../Block/DeleteCardButton";
+import SkeletonBox from "~/components/Libs/SkeletonBox";
 
 export default {
   name: "Wizard",
@@ -33,6 +41,7 @@ export default {
     PortalCard,
     FormPage,
     DeleteCardButton,
+    SkeletonBox,
   },
   props: {
     params: {
@@ -91,6 +100,14 @@ export default {
         }
       },
     },
+    isShowBlock: {
+      get: function () {
+        return (
+          Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) ||
+          this.params.settings.compType === 16
+        );
+      },
+    },
   },
   methods: {
     refreshWizardList() {
@@ -99,6 +116,9 @@ export default {
         cardId: this.cardId,
       });
     },
+  },
+  destroyed() {
+    this.$store.dispatch("blocks/clearBlock");
   },
 };
 </script>

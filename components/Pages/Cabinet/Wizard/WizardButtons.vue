@@ -31,6 +31,7 @@ export default {
       );
     },
     async goNext() {
+      this.$parent.loading = true;
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM == this.currentTab.idItem
       );

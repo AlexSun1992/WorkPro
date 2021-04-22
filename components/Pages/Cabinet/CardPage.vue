@@ -31,6 +31,11 @@
         :template="settings.cardtemplate"
       ></v-runtime-template>
     </b-modal>
+    <div v-if="!isShowCardEditor && !isShowTemplate">
+      <div style="text-align: center">
+        <b-spinner class="m-5"></b-spinner>
+      </div>
+    </div>
     <div class="profile row">
       <div class="col" v-if="isShowCardEditor">
         <CardEditor

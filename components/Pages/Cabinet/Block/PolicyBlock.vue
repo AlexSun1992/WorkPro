@@ -1,6 +1,13 @@
 <template>
   <div>
-    <v-runtime-template :template="templateData"></v-runtime-template>
+    <div v-show="isShowBlock">
+      <v-runtime-template :template="templateData"></v-runtime-template>
+    </div>
+    <div v-if="!isShowBlock">
+      <div class="card bg-six block-border-one block p-4">
+        <SkeletonBox class="mt-5" :items="4"></SkeletonBox>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -8,9 +15,10 @@
 import ContentBlock from "./ContentBlock";
 import OpenCardButton from "../Block/OpenCardButton";
 import VRuntimeTemplate from "v-runtime-template";
+import SkeletonBox from "~/components/Libs/SkeletonBox";
 export default {
   name: "PolicyBlock",
-  components: { ContentBlock, VRuntimeTemplate, OpenCardButton },
+  components: { ContentBlock, VRuntimeTemplate, OpenCardButton, SkeletonBox },
   props: {
     moduleId: {
       type: String,
@@ -42,6 +50,11 @@ export default {
         } else {
           return false;
         }
+      },
+    },
+    isShowBlock: {
+      get: function () {
+        return Boolean(this.$store.getters["blocks/getBlockById"](this.itemId));
       },
     },
   },
