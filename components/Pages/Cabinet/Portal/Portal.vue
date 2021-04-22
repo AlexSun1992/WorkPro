@@ -117,6 +117,9 @@ export default {
       });
     },
   },
+  destroyed() {
+    this.$store.dispatch("blocks/clearBlock");
+  },
 };
 </script>
 
