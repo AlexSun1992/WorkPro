@@ -44,7 +44,7 @@ export default {
           rowId: this.$route.params.idCard,
         });
         if (response.status != 200) {
-          this.$store.commit("data_card/setLoading", false);
+          this.$parent.loading = false;
           return;
         }
       }
