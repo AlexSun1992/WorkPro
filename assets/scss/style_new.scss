@@ -1003,7 +1003,7 @@ footer:not(.modal-footer):after {
   text-align: center;
   letter-spacing: 0.02em;
   color: #474747;
-  text-decoration: none;
+  text-decoration: underline;
   background: transparent;
   border: 0;
   padding-left: 0;
@@ -3097,8 +3097,9 @@ footer > div {
   position: relative;
   padding-right: 15px;
   color: #009639;
+  text-decoration: underline;
 }
-/*
+
 .block-advertising .right-link:before,
 .block-insured-events .right-link:before,
 .block-list-of-policies .right-link:before,
@@ -3113,7 +3114,7 @@ footer > div {
   right: 2px;
   transform: rotate(-135deg);
 }
-*/
+
 .block-notifications .block-footer {
   padding: 0 19px 0 16px;
 }
@@ -3141,6 +3142,7 @@ footer > div {
   position: relative;
   overflow: hidden;
 }
+/*
 .block-advertising .right-link:after,
 .block-insured-events .right-link:after,
 .block-list-of-policies .right-link:after,
@@ -3156,7 +3158,7 @@ footer > div {
   top: 30px;
   background-color: #009639;
   transition: 0.3s;
-}
+}*/
 .block-advertising .right-link:after,
 .block-insured-events .right-link:after,
 .block-list-of-policies .right-link:after,
