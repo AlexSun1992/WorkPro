@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="text-right">
     <b-button
       v-if="!percentsVisible"
       @click="$refs.file.click()"
-      variant="success"
+      class="btn-doc-add"
     >
       Прикрепить файл
     </b-button>
@@ -13,7 +13,7 @@
       style="display: none"
       v-on:change="handleFileUpload()"
     />
-    <div style="max-width: 200px; margin-top: 5px">
+    <div class="progress">
       <b-progress
         v-if="percentsVisible"
         class="mb-2"

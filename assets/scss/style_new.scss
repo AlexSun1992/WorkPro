@@ -3466,6 +3466,7 @@ input:focus {
   box-shadow: 1px 2px 5px #29973230;
 }
 
+.docs-card,
 .driver-card {
   background: #ffffff;
   border: 1px solid #d9e1e8;
@@ -3480,9 +3481,11 @@ input:focus {
   transition: 0.3s;
   position: relative;
 }
+div > .docs-card,
 div > .driver-card:last-child {
   margin-bottom: 20px;
 }
+.docs-card:hover,
 .driver-card:hover {
   background: #f4f7f5;
   transition: 0.3s;
@@ -3591,4 +3594,45 @@ div > .driver-card:last-child {
     position: absolute;
     background-color: #d9e1e8;
   }
+}
+
+.docs-card {
+  grid-template-columns: auto 230px 170px 210px;
+}
+.btn-doc-add {
+  border: none !important;
+  align-items: center;
+  padding: 0 !important;
+  color: #6b7077 !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+  line-height: 1;
+  white-space: nowrap;
+  background: transparent !important;
+  height: 1rem !important;
+  position: relative;
+  margin-left: 60px;
+}
+.btn-doc-add:hover {
+  text-decoration: underline;
+}
+
+.btn-doc-add:after {
+  width: 47px;
+  height: 47px;
+  position: absolute;
+  top: -15px;
+  left: -60px;
+  content: "";
+  background: transparent url(/img/btn-doc-add.svg) left center no-repeat !important;
+}
+.doc-ready {
+  background: #fcf0f1;
+  display: table;
+  border-radius: 4px;
+  padding: 10px 20px 10px 36px;
+  color: #c9471a;
+  white-space: nowrap;
 }
