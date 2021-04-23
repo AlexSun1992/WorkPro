@@ -31,7 +31,7 @@ export const actions = {
         });
     } catch (e) {
       commit("setWizardIsError", true);
-      commit("setWizardErrorMessage", e.response.data);
+      commit("setWizardErrorMessage", e.response?.data);
       return e.response;
     }
   },
