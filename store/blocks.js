@@ -40,6 +40,20 @@ export const actions = {
         dispatch("updateBlock", menuId);
       });
   },
+  async deleteWizardForm(
+    { commit, dispatch },
+    { moduleId, menuId, itemId, cardId, relId }
+  ) {
+    await this.$axios
+      .delete(
+        `/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${
+          relId ? `?rel=${relId}` : ""
+        }`
+      )
+      .then((res) => {
+        dispatch("updateWizardBlock", { menuId, cardId });
+      });
+  },
   async saveForm({ commit, dispatch, state }, { moduleId, form }) {
     await this.$axios
       .post(`/api/card/${moduleId}/${state.blockId}/${state.cardId}`, form)
@@ -60,11 +74,11 @@ export const actions = {
         commit("addBlock", { blockId: parseInt(itemId), data: res.data });
       });
   },
-  async updateWizardBlock({ commit, dispatch }, { itemId, cardId }) {
+  async updateWizardBlock({ commit, dispatch }, { menuId, cardId }) {
     await this.$axios
-      .get(`/api/wizardlist/55/${itemId}/${cardId}`)
+      .get(`/api/wizardlist/55/${menuId}/${cardId}`)
       .then((res) => {
-        commit("updateBlock", { blockId: parseInt(itemId), data: res.data });
+        commit("updateBlock", { blockId: parseInt(menuId), data: res.data });
       });
   },
   async updateBlock({ commit, dispatch }, id) {

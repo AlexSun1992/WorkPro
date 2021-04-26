@@ -112,7 +112,7 @@ export default {
   methods: {
     refreshWizardList() {
       this.$store.dispatch("blocks/updateWizardBlock", {
-        itemId: this.itemId,
+        menuId: this.itemId,
         cardId: this.cardId,
       });
     },
