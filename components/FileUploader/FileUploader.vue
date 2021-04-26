@@ -47,7 +47,7 @@ export default {
       this.$axios
         .$post(
           `/am/main/v2/file/${this.id}
-?rel=${this.rel}`,
+?rel=${this.rel}&product=osago`,
           this.file,
           {
             headers: {
