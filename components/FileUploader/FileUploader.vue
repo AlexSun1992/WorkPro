@@ -64,13 +64,15 @@ export default {
           }
         )
         .then((result) => {
-          this.$refs.file.value = "";
           this.$emit("uploaded", result);
         })
         .catch(function (e) {
           console.log(e);
         })
-        .finally(() => this.hidePercents());
+        .finally(() => {
+          this.$refs.file.value = "";
+          this.hidePercents();
+        });
     },
     hidePercents() {
       setTimeout(() => {
