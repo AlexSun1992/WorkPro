@@ -66,11 +66,11 @@ export default {
         .then((result) => {
           this.$refs.file.value = "";
           this.$emit("uploaded", result);
-          this.hidePercents();
         })
         .catch(function (e) {
           console.log(e);
-        });
+        })
+        .finally(() => this.hidePercents());
     },
     hidePercents() {
       setTimeout(() => {
