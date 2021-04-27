@@ -269,7 +269,11 @@ export default {
           if (this.$route.params.idItem === "710") {
             await this.$store.dispatch("updateUser");
           }
-          if (this.$route.params.idCard === "0" && !this.$route.query?.ref) {
+          if (
+            this.$route.params.idCard === "0" &&
+            !this.$route.query?.ref &&
+            resp?.status !== 500
+          ) {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
             if (this.$route.params.idWizard) {
