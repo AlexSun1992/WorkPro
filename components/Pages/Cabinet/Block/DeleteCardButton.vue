@@ -39,6 +39,10 @@ export default {
       required: false,
       default: () => null,
     },
+    cardId: {
+      required: false,
+      default: () => null,
+    },
   },
   data() {
     return {
@@ -48,13 +52,19 @@ export default {
   methods: {
     async deleteCard() {
       try {
-        await this.$store.dispatch("blocks/deleteForm", {
+        const body = {
           moduleId: this.moduleId,
           menuId: this.menuId,
           itemId: this.itemId,
+          cardId: this.cardId,
           relId: this.relId,
-        });
-      } catch (err) {}
+        };
+        this.cardId
+          ? this.$store.dispatch("blocks/deleteWizardForm", body)
+          : this.$store.dispatch("blocks/deleteForm", body);
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };

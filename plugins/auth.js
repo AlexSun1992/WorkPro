@@ -45,6 +45,17 @@ export default function ({ app, store, redirect, $auth }) {
       try {
         if ($nuxt) {
           console.log(error.response.data);
+          if (
+            !originalRequest.__isRetryRequest &&
+            error.response.data?.MESSAGE
+          ) {
+            if (
+              error.response.data?.MESSAGE.includes("ограничение уникальности")
+            ) {
+              originalRequest.__isRetryRequest = true;
+              return app.$axios(originalRequest);
+            }
+          }
           if (getErrorMessage(error.response.data)) {
             $nuxt.$bvToast.toast(getErrorMessage(error.response.data), {
               title: "Ошибка",

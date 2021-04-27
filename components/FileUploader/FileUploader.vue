@@ -47,7 +47,7 @@ export default {
       this.$axios
         .$post(
           `/am/main/v2/file/${this.id}
-?rel=${this.rel}`,
+?rel=${this.rel}&product=osago`,
           this.file,
           {
             headers: {
@@ -64,12 +64,14 @@ export default {
           }
         )
         .then((result) => {
-          this.$refs.file.value = "";
           this.$emit("uploaded", result);
-          this.hidePercents();
         })
         .catch(function (e) {
           console.log(e);
+        })
+        .finally(() => {
+          this.$refs.file.value = "";
+          this.hidePercents();
         });
     },
     hidePercents() {

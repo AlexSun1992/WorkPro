@@ -6,7 +6,12 @@
     >
       <i class="icon-my-profile"></i>{{ cardCaption }}
     </div>
-    <b-nav v-if="pages" tabs justified class="mb-2 sticky-top">
+    <template v-if="isShowCardTemplate">
+      <v-runtime-template
+        :template="settings.cardtemplate"
+      ></v-runtime-template>
+    </template>
+    <b-nav v-else-if="pages" tabs justified class="mb-2 sticky-top">
       <b-nav-item
         v-for="(item, index) in tabs"
         :key="item.id"
@@ -36,6 +41,7 @@
 <script>
 import breadcrumbs from "~/converters/breadcrumbs";
 import wizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
+import VRuntimeTemplate from "v-runtime-template";
 export default {
   name: "Wizard",
   async fetch({ store, route }) {
@@ -48,6 +54,7 @@ export default {
   },
   components: {
     wizardButtons,
+    VRuntimeTemplate,
   },
   methods: {
     getURL(item, index) {
@@ -156,6 +163,9 @@ export default {
         this.$store.getters["wizard/getWizardErrorMessage"] ||
         this.$store.getters["data_card/getErrorMessage"]
       );
+    },
+    isShowCardTemplate() {
+      return Boolean(this.settings?.cardtemplate);
     },
   },
 };

@@ -3664,7 +3664,6 @@ div > .driver-card:last-child {
   color: #c9471a;
   white-space: nowrap;
 }
-
 .docs-error {
   color: #da100b;
   margin-top: 10px;
@@ -3830,4 +3829,46 @@ div > .driver-card:last-child {
     content: "";
     position: absolute;
   }
+}
+.dotted {
+  background: url(/img/telemed-gray-list.svg) 50% 50% no-repeat;
+  width: 70px;
+  height: 10px;
+  margin-top: 11px;
+}
+
+.active .dotted {
+  background: url(/img/telemed-green-list.svg) 50% 50% no-repeat;
+}
+.step {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  background: #dadada;
+  border: 2px solid #dadada;
+  text-align: center;
+  line-height: 26px;
+  margin: 0 auto 20px;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-weight: 700;
+  color: #fff;
+}
+
+.active .step {
+  cursor: pointer;
+  display: block;
+  background: #ffffff;
+  border: 2px solid #00984a;
+  color: #00984a;
+}
+
+.stap-block {
+  font-weight: 700;
+  color: #bbbbbb;
+}
+
+.stap-block .active {
+  color: #00984a;
 }
