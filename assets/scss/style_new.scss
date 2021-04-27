@@ -3466,7 +3466,6 @@ input:focus {
   box-shadow: 1px 2px 5px #29973230;
 }
 
-.docs-card,
 .driver-card {
   background: #ffffff;
   border: 1px solid #d9e1e8;
@@ -3481,7 +3480,6 @@ input:focus {
   transition: 0.3s;
   position: relative;
 }
-div > .docs-card,
 div > .driver-card:last-child {
   margin-bottom: 20px;
 }
@@ -3595,10 +3593,41 @@ div > .driver-card:last-child {
     background-color: #d9e1e8;
   }
 }
-
 .docs-card {
-  grid-template-columns: auto 230px 170px 210px;
+  background: #ffffff;
+  border: 1px solid #d9e1e8;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding: 27px 34px;
+  margin-bottom: 12px;
+  transition: 0.3s;
+  position: relative;
 }
+
+.docs-card-error {
+  border: 1px solid #da100b;
+}
+
+.docs-date {
+  grid-template-columns: auto 240px 190px 210px;
+  align-self: center;
+  align-items: center;
+  display: grid;
+  grid-template-areas: "doc-name doc-file doc-state doc-upload";
+}
+.docs-date > div:nth-child(1) {
+  grid-area: doc-name;
+}
+.docs-date > div:nth-child(2) {
+  grid-area: doc-file;
+}
+.docs-date > div:nth-child(3) {
+  grid-area: doc-state;
+}
+.docs-date > div:nth-child(4) {
+  grid-area: doc-upload;
+}
+
 .btn-doc-add {
   border: none !important;
   align-items: center;
@@ -3630,9 +3659,175 @@ div > .driver-card:last-child {
 }
 .doc-ready {
   background: #fcf0f1;
-  display: table;
   border-radius: 4px;
   padding: 10px 20px 10px 36px;
   color: #c9471a;
   white-space: nowrap;
+}
+
+.docs-error {
+  color: #da100b;
+  margin-top: 10px;
+}
+.doc-ready,
+.doc-error,
+.doc-unload,
+.doc-load {
+  position: relative;
+  background: #fdd9d9;
+  padding: 7px 12px 7px 24px;
+  border-radius: 4px;
+  color: #de2925;
+  font-size: 14px;
+}
+
+.doc-ready {
+  background: #e9f9ee;
+  color: #1c8430;
+}
+.doc-unload {
+  background: #c5dcfa;
+  color: #004fbc;
+}
+.doc-load {
+  background: #fbe5c9;
+  color: #ce6300;
+}
+
+.doc-ready:after,
+.doc-error:after,
+.doc-unload:after,
+.doc-load:after {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: #de2925;
+  border-radius: 5px;
+  top: 50%;
+  margin-top: -2px;
+  left: 12px;
+  content: "";
+}
+.doc-ready:after {
+  background: #36ab4d;
+}
+.doc-unload:after {
+  background: #0067f5;
+}
+.doc-load:after {
+  background: #c63400;
+}
+.img-doc-ready,
+.img-doc-error,
+.img-doc-unload,
+.img-doc-load {
+  padding-left: 60px;
+  position: relative;
+}
+.img-doc-ready a,
+.img-doc-ready {
+  color: #008b4e;
+}
+.img-doc-error a,
+.img-doc-error {
+  color: #ababab;
+}
+.img-doc-unload a,
+.img-doc-unload {
+  color: #285d9b;
+}
+.img-doc-load a,
+.img-doc-load {
+  color: #ce6300;
+}
+.img-doc-ready:after,
+.img-doc-error:after,
+.img-doc-unload:after,
+.img-doc-load:after {
+  position: absolute;
+  width: 47px;
+  height: 47px;
+  top: 50%;
+  margin-top: -23px;
+  left: 5px;
+  content: "";
+  background-size: contain !important;
+}
+
+.img-doc-ready:after {
+  background: url(/img/btn-doc-ready.svg) 0 0 no-repeat;
+}
+.img-doc-error:after {
+  background: url(/img/btn-doc-error.svg) 0 0 no-repeat;
+}
+.img-doc-unload:after {
+  background: url(/img/btn-doc-unload.svg) 0 0 no-repeat;
+}
+.img-doc-load:after {
+  background: url(/img/btn-doc-load.svg) 0 0 no-repeat;
+}
+
+@media (max-width: 1199px) {
+  .docs-date {
+    grid-template-columns: auto 190px 210px;
+    align-self: center;
+    align-items: center;
+    display: grid;
+    grid-template-areas:
+      "doc-name doc-name doc-name"
+      "doc-file doc-state doc-upload";
+  }
+  .docs-date > div:nth-child(1) {
+    padding-bottom: 20px;
+  }
+  .img-doc-ready:after,
+  .img-doc-error:after,
+  .img-doc-unload:after,
+  .img-doc-load:after {
+    left: 0;
+  }
+  .docs-error {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .docs-date {
+    grid-template-areas:
+      "doc-state"
+      "doc-name"
+      "doc-file"
+      "doc-upload";
+    grid-template-columns: 100%;
+    grid-row-gap: 1rem;
+  }
+
+  .docs-date > div:nth-child(3) {
+    text-align: right;
+  }
+  .docs-date > div:nth-child(2) {
+    margin-bottom: 8px;
+    position: relative;
+    margin-top: 15px;
+  }
+
+  .docs-date > div:nth-child(4) {
+    margin: 25px 0 10px 0;
+    text-align: left !important;
+    position: relative;
+  }
+
+  .docs-card {
+    padding: 12px 16px;
+  }
+  .docs-date > div:nth-child(4):before,
+  .docs-date > div:nth-child(2):before {
+    width: calc(100% + 32px);
+    height: 2px;
+    background: url(/img/border1.svg) 0 0;
+    left: -16px;
+    top: -25px;
+    content: "";
+    position: absolute;
+  }
 }
