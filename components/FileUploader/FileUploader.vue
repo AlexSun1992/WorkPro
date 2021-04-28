@@ -67,12 +67,14 @@ export default {
           this.$emit("uploaded", result);
         })
         .catch((e) => {
-          this.$bvToast.toast("Не удалось загрузить файл", {
-            title: "Ошибка",
-            variant: "danger",
-            noAutoHide: true,
-            solid: true,
-          });
+          if (!e.response) {
+            this.$bvToast.toast("Не удалось загрузить файл", {
+              title: "Ошибка",
+              variant: "danger",
+              noAutoHide: true,
+              solid: true,
+            });
+          }
         })
         .finally(() => {
           this.$refs.file.value = "";
