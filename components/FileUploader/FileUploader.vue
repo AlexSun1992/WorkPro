@@ -66,8 +66,13 @@ export default {
         .then((result) => {
           this.$emit("uploaded", result);
         })
-        .catch(function (e) {
-          console.log(e);
+        .catch((e) => {
+          this.$bvToast.toast("Не удалось загрузить файл", {
+            title: "Ошибка",
+            variant: "danger",
+            noAutoHide: true,
+            solid: true,
+          });
         })
         .finally(() => {
           this.$refs.file.value = "";
