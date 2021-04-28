@@ -31,7 +31,7 @@
         :template="settings.cardtemplate"
       ></v-runtime-template>
     </b-modal>
-    <div v-if="!isShowCardEditor && !isShowTemplate">
+    <div v-if="!isShowCardEditor && !isShowTemplate && !isShowErrorMessage">
       <div style="text-align: center">
         <b-spinner class="m-5"></b-spinner>
       </div>
