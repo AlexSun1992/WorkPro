@@ -212,8 +212,8 @@ export default {
       const menuItem = flatmenu.find((item) => {
         return item.SNAME == e.label;
       });
-      $nuxt._router.push(
-        `/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0`
+      this.$router.push(
+        `/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0?ref=${this.$route.fullPath}`
       );
     },
     validateData(data) {
