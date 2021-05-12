@@ -3,11 +3,22 @@
     <p>{{ label }}</p>
     <b-form-group class="col-12 col-md-6">
       <b-form-input
+        v-if="loginType === 'phone'"
         ref="userInput"
         v-model="v[loginType].$model"
         v-mask="changeMask"
         autofocus
         :placeholder="placeholder"
+        :state="validateInput(loginType, isUserBlured)"
+        @blur="debouncedUpdate(loginType, isUserBlured)"
+        @input="isUserBlured = false"
+        @click="loginTouchesCount = 2"
+      ></b-form-input>
+      <b-form-input
+        v-else-if="loginType === 'email'"
+        ref="userInput"
+        v-model="v[loginType].$model"
+        autofocus
         :state="validateInput(loginType, isUserBlured)"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
@@ -59,7 +70,7 @@
       <b-button
         type="submit"
         v-if="!code"
-        :disabled="v.phone.$invalid && v.email.$invalid"
+        :disabled="loginType === 'phone' ? v.phone.$invalid : v.email.$invalid"
         @click.prevent="verifyUser"
         variant="success"
         class="btn-sms"

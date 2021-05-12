@@ -1,5 +1,5 @@
 <template>
-  <b-col :xl="colXl" :lg="data.cols" :md="colMd" :sm="colSm">
+  <b-col :xl="colXl" :lg="data.cols" :md="colMd" :sm="colSm" :cols="colSm">
     <div
       class="control"
       v-bind:class="{ visibility_hidden: data.hidden }"
