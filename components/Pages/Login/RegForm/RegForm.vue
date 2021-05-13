@@ -28,7 +28,7 @@
         <b-form-input
           v-model.lazy="$v.form.email.$model"
           :state="validateState('email')"
-          autocomplete="off"
+          autocomplete="new-password"
           @blur="$v.form.email.$touch()"
           placeholder="E-mail"
           :disabled="registrationInProcess"
@@ -177,7 +177,7 @@ export default {
       },
       code: {
         required,
-        minLength: minLength(4),
+        minLength: minLength(6),
       },
       password: {
         required,

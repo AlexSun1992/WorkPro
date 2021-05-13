@@ -75,6 +75,7 @@
                     type="password"
                     v-model="$v.form.password.$model"
                     placeholder="Пароль"
+                    autocomplete="new-password"
                   ></b-form-input>
                   <b-form-invalid-feedback
                     >Введите пароль</b-form-invalid-feedback
@@ -85,6 +86,7 @@
                     type="password"
                     v-model="$v.form.password2.$model"
                     placeholder="Повторите пароль"
+                    autocomplete="new-password"
                   ></b-form-input>
                   <b-form-invalid-feedback
                     >Повторите пароль</b-form-invalid-feedback
@@ -254,7 +256,7 @@ export default {
       },
       code: {
         required,
-        minLength: minLength(5),
+        minLength: minLength(6),
       },
       password: {
         required,
