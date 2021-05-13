@@ -13,7 +13,7 @@
     }}</b-alert>
     <!--  -->
     <b-form @submit.stop.prevent="onSubmit" inline class="align-items-start">
-      <b-form-group label="Телефон" label-cols="12" class="col-12">
+      <b-form-group label-cols="12" class="col-12">
         <verify-user
           ref="verifyUser"
           :v="$v.form"

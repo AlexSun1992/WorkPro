@@ -23,7 +23,7 @@
                 :validateState="validateState"
               />
               <b-row class="mt-3">
-                <b-form-group class="col-md-6 col-12">
+                <b-form-group label="Дата рождения" class="col-md-6 col-12">
                   <birthday-picker
                     :data="$v.form"
                     :state="validateState('birthdate')"
@@ -31,7 +31,7 @@
                 </b-form-group>
               </b-row>
               <b-row class="mt-3">
-                <b-form-group class="col-md-6 col-12">
+                <b-form-group label="Пароль" class="col-md-6 col-12">
                   <b-form-input
                     type="password"
                     v-model="$v.form.password.$model"
@@ -42,7 +42,10 @@
                     >Введите пароль</b-form-invalid-feedback
                   >
                 </b-form-group>
-                <b-form-group class="col-md-6 col-12 mt-3 mt-md-0">
+                <b-form-group
+                  label="Повторите пароль"
+                  class="col-md-6 col-12 mt-3 mt-md-0"
+                >
                   <b-form-input
                     type="password"
                     v-model="$v.form.password2.$model"
@@ -80,7 +83,7 @@
                 :validateState="validateState"
               />
               <b-row class="mt-3">
-                <b-form-group class="col-md-6 col-12">
+                <b-form-group label="Пароль" class="col-md-6 col-12">
                   <b-form-input
                     type="password"
                     v-model="$v.form.password.$model"
@@ -90,7 +93,10 @@
                     >Введите пароль</b-form-invalid-feedback
                   >
                 </b-form-group>
-                <b-form-group class="col-md-6 col-12 mt-3 mt-md-0">
+                <b-form-group
+                  label="Повторите пароль"
+                  class="col-md-6 col-12 mt-3 mt-md-0"
+                >
                   <b-form-input
                     type="password"
                     v-model="$v.form.password2.$model"
