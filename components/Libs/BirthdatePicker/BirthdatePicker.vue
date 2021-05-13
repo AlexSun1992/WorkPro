@@ -37,9 +37,9 @@
         <div></div>
       </template>
     </date-picker>
-    <small v-show="state === false" class="date-error text-danger">
-      Пожалуйста, заполните это поле
-    </small>
+    <b-form-invalid-feedback :state="state"
+      >Пожалуйста, заполните это поле</b-form-invalid-feedback
+    >
   </div>
 </template>
 

@@ -12,7 +12,12 @@
       errorMessage
     }}</b-alert>
     <!--  -->
-    <b-form @submit.stop.prevent="onSubmit" inline class="align-items-start">
+    <b-form
+      @submit.stop.prevent="onSubmit"
+      inline
+      class="align-items-start"
+      autocomplete="off"
+    >
       <b-form-group label="Телефон" label-cols="12" class="col-12">
         <verify-user
           ref="verifyUser"
@@ -26,12 +31,13 @@
       </b-form-group>
       <b-form-group label="E-mail" label-cols="12" class="col-12 col-md-6">
         <b-form-input
+          :id="Math.random().toString()"
           v-model.lazy="$v.form.email.$model"
           :state="validateState('email')"
-          autocomplete="new-password"
           @blur="$v.form.email.$touch()"
           placeholder="E-mail"
           :disabled="registrationInProcess"
+          autocomplete="new-password"
         ></b-form-input>
         <b-form-invalid-feedback
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
@@ -52,6 +58,7 @@
       <div class="d-flex w-100">
         <b-form-group label="Фамилия" label-cols="12" class="col-12 col-md-6">
           <b-form-input
+            :id="Math.random().toString()"
             v-model="$v.form.family.$model"
             :state="validateState('family')"
             @blur="$v.form.family.$touch()"
@@ -66,6 +73,7 @@
       </div>
       <b-form-group label="Имя" label-cols="12" class="col-12 col-md-6">
         <b-form-input
+          :id="Math.random().toString()"
           v-model="$v.form.name.$model"
           :state="validateState('name')"
           @blur="$v.form.name.$touch()"
@@ -79,6 +87,7 @@
       </b-form-group>
       <b-form-group label="Отчество" label-cols="12" class="col-12 col-md-6">
         <b-form-input
+          :id="Math.random().toString()"
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
           @blur="$v.form.patronymic.$touch()"
@@ -93,7 +102,7 @@
 
       <b-form-group label="Номер полиса" label-cols="12" class="col-12">
         <b-form-input
-          id="input-3"
+          :id="Math.random().toString()"
           v-model="form.policyNumber"
           placeholder="Номер полиса"
           :disabled="registrationInProcess"

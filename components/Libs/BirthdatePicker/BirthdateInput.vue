@@ -1,12 +1,12 @@
 <template>
   <div>
     <b-input
+      id="date"
       v-mask="dateMask"
       @blur="debouncedUpdate()"
       :placeholder="placeholder"
       v-model="date"
       :state="state"
-      autocomplete="new-password"
     ></b-input>
   </div>
 </template>

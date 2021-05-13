@@ -10,6 +10,7 @@
         autofocus
         :placeholder="placeholder"
         :state="validateInput(loginType, isUserBlured)"
+        :disabled="code"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
@@ -28,41 +29,44 @@
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
     </b-form-group>
-    <div>
-      <div v-if="code">
-        <b-link @click="changeNumber">{{
+    <div v-if="code" class="col-12 col-md-12">
+      <div class="row">
+        <b-link @click="changeNumber" class="col-12 col-md-12">{{
           loginType === "phone" ? "Изменить номер" : "Изменить email"
         }}</b-link>
-        <p>
+        <p class="col-12 col-md-12">
           На указанный {{ loginType === "phone" ? "номер" : "email" }} выслан
           код подтверждения
         </p>
-        <b-form-input
-          autofocus
-          v-model="v.code.$model"
-          class="mb-1"
-          v-mask="codeMask"
-          :state="validateInput('code', isCodeBlured)"
-          @blur="blurField('code', isCodeBlured)"
-          @input="isCodeBlured = false"
-          :disabled="disabled"
-          placeholder="Код подтверждения"
-        ></b-form-input>
-        <b-form-invalid-feedback v-if="!v.code.$model"
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
-        <b-form-invalid-feedback v-else
-          >Неверный код подтверждения</b-form-invalid-feedback
-        >
-        <b-button
-          type="submit"
-          :disabled="disabledResend"
-          @click="resendCode"
-          variant="success"
-        >
-          Отправить повторно
-          <!-- <span>{{ resendCount }}</span> -->
-        </b-button>
+        <b-form-group class="col-12 col-md-6">
+          <b-form-input
+            autofocus
+            v-model="v.code.$model"
+            class="mb-2"
+            v-mask="codeMask"
+            :state="validateInput('code', isCodeBlured)"
+            @blur="blurField('code', isCodeBlured)"
+            @input="isCodeBlured = false"
+            :disabled="disabled"
+            placeholder="Код подтверждения"
+          ></b-form-input>
+          <b-form-invalid-feedback v-if="!v.code.$model"
+            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          >
+          <b-form-invalid-feedback v-else
+            >Неверный код подтверждения</b-form-invalid-feedback
+          >
+        </b-form-group>
+        <div class="col-12 col-md-6 mt-2 mt-md-0">
+          <b-button
+            type="submit"
+            :disabled="disabledResend"
+            @click="resendCode"
+            variant="success"
+          >
+            Отправить повторно
+          </b-button>
+        </div>
       </div>
     </div>
     <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
