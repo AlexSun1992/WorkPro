@@ -6,7 +6,7 @@
       :placeholder="placeholder"
       v-model="date"
       :state="state"
-      autocomplete="off"
+      autocomplete="new-password"
     ></b-input>
   </div>
 </template>

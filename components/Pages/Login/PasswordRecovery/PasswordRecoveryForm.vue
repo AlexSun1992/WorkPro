@@ -24,10 +24,19 @@
               />
               <b-row class="mt-3">
                 <b-form-group class="col-md-6 col-12">
+                  <birthday-picker
+                    :data="$v.form"
+                    :state="validateState('birthdate')"
+                  />
+                </b-form-group>
+              </b-row>
+              <b-row class="mt-3">
+                <b-form-group class="col-md-6 col-12">
                   <b-form-input
                     type="password"
                     v-model="$v.form.password.$model"
                     placeholder="Пароль"
+                    autocomplete="new-password"
                   ></b-form-input>
                   <b-form-invalid-feedback
                     >Введите пароль</b-form-invalid-feedback
@@ -38,6 +47,7 @@
                     type="password"
                     v-model="$v.form.password2.$model"
                     placeholder="Повторите пароль"
+                    autocomplete="new-password"
                   ></b-form-input>
                   <b-form-invalid-feedback
                     >Повторите пароль</b-form-invalid-feedback
@@ -127,12 +137,14 @@
 import VerifyUser from "~/components/Libs/VerifyUser/VerifyUser";
 import UserRecoveryForm from "~/components/Pages/Login/PasswordRecovery/UserRecoveryForm";
 import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
+import birthdayPicker from "~/components/Libs/BirthdatePicker/BirthdatePicker";
 
 export default {
   layout: "MainLayout",
   components: {
     VerifyUser,
     UserRecoveryForm,
+    birthdayPicker,
   },
   data() {
     return {
