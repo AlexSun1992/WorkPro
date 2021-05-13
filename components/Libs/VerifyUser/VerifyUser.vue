@@ -1,7 +1,10 @@
 <template>
   <div class="row">
     <p>{{ label }}</p>
-    <b-form-group class="col-12 col-md-6">
+    <b-form-group
+      class="col-12 col-md-6"
+      :label="loginType === 'phone' ? 'Телефон' : 'Email'"
+    >
       <b-form-input
         v-if="loginType === 'phone'"
         ref="userInput"
