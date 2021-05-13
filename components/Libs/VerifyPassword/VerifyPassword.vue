@@ -4,6 +4,7 @@
       <b-col sm="12" md="6">
         <b-form-group :label="showLabel" label-cols="12">
           <b-form-input
+            :id="Math.random().toString()"
             type="password"
             v-model="v.password.$model"
             :state="validateState('password')"
@@ -24,6 +25,7 @@
       >
         <b-form-group :label="'Повторите пароль'" label-cols="12">
           <b-form-input
+            :id="Math.random().toString()"
             type="password"
             autocomplete="new-password"
             v-model="v.password2.$model"
