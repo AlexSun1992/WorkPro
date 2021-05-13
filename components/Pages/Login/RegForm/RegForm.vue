@@ -57,6 +57,7 @@
             @blur="$v.form.family.$touch()"
             placeholder="Фамилия"
             :disabled="registrationInProcess"
+            autocomplete="new-password"
           ></b-form-input>
           <b-form-invalid-feedback
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
@@ -70,6 +71,7 @@
           @blur="$v.form.name.$touch()"
           placeholder="Имя"
           :disabled="registrationInProcess"
+          autocomplete="new-password"
         ></b-form-input>
         <b-form-invalid-feedback
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
@@ -82,6 +84,7 @@
           @blur="$v.form.patronymic.$touch()"
           placeholder="Отчество"
           :disabled="registrationInProcess"
+          autocomplete="new-password"
         ></b-form-input>
         <b-form-invalid-feedback
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
@@ -94,6 +97,7 @@
           v-model="form.policyNumber"
           placeholder="Номер полиса"
           :disabled="registrationInProcess"
+          autocomplete="new-password"
         ></b-form-input>
       </b-form-group>
 
