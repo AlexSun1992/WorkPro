@@ -186,6 +186,7 @@ export default {
           TYPE: 1,
           PHONE: this.$v.form.phone.$model,
           SMSCODE: this.$v.form.code.$model,
+          BIRTHDATE: this.$v.form.birthdate.$model,
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };
