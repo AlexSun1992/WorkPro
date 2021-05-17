@@ -7,6 +7,7 @@
       :placeholder="placeholder"
       v-model="date"
       :state="state"
+      :disabled="isDisabled"
     ></b-input>
   </div>
 </template>
@@ -30,6 +31,7 @@ export default {
   props: {
     state: Boolean,
     blur: Function,
+    disabled: Boolean,
   },
   methods: {
     updateInput() {
@@ -45,6 +47,11 @@ export default {
       if (moment(val, "DD.MM.YYYY", true).isValid()) {
         this.updateInput();
       }
+    },
+  },
+  computed: {
+    isDisabled() {
+      return this.disabled;
     },
   },
 };

@@ -12,6 +12,7 @@
       :disabled-date="notBeforeDate"
       :default-value="defaultDate"
       :clearable="false"
+      :disabled="isDisabled"
       ref="datepicker"
     >
       <template v-slot:input>
@@ -21,6 +22,7 @@
             v-model="data.birthdate.$model"
             :state="state"
             :blur="debouncedUpdate"
+            :disabled="isDisabled"
           />
           <b-input-group-append>
             <b-button
@@ -66,6 +68,7 @@ export default {
   props: {
     data: Object,
     state: Boolean,
+    disabled: Boolean,
   },
   data() {
     return {
@@ -102,6 +105,11 @@ export default {
     },
     blurButtonFocus() {
       this.buttonFocus = false;
+    },
+  },
+  computed: {
+    isDisabled() {
+      return this.disabled;
     },
   },
   directives: {

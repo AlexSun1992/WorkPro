@@ -110,7 +110,7 @@ export default {
       resendCount: null,
       isPhoneChanged: false,
       mask: "",
-      codeMask: "######",
+      codeMask: "#####",
       placeholder: "+7(___)-___-__-__",
       loginTouchesCount: 0,
       token: null,

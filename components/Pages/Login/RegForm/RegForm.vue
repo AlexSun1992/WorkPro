@@ -190,7 +190,7 @@ export default {
       },
       code: {
         required,
-        minLength: minLength(6),
+        minLength: minLength(5),
       },
       password: {
         required,
@@ -281,7 +281,7 @@ export default {
           }
         }
       } else {
-        this.$refs.verifyUser.code = null;
+        //this.$refs.verifyUser.code = null;
       }
     },
 
