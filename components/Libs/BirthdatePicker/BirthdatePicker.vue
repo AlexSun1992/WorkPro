@@ -1,7 +1,7 @@
 <template>
   <div>
     <date-picker
-      v-model="data.birthdate.$model"
+      v-model="data"
       placeholder="Дата рождения"
       @change="hideDataPicker"
       @input="setDateValue"
@@ -19,7 +19,7 @@
         <b-input-group>
           <birth-date-input
             ref="birthDateInputInstance"
-            v-model="data.birthdate.$model"
+            v-model="data"
             :state="state"
             :blur="debouncedUpdate"
             :disabled="isDisabled"
@@ -52,6 +52,7 @@ import BirthDateInput from "./BirthdateInput";
 import ClickOutside from "vue-click-outside";
 import "vue2-datepicker/index.css";
 import "vue2-datepicker/locale/ru";
+import moment from "moment/moment";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -66,12 +67,12 @@ export default {
   name: "BirthdayWrapper",
   components: { DatePicker, BirthDateInput },
   props: {
-    data: Object,
     state: Boolean,
     disabled: Boolean,
   },
   data() {
     return {
+      data: null,
       lang: {
         formatLocale: {
           firstDayOfWeek: 1,
@@ -92,12 +93,18 @@ export default {
       return date > getDate(18);
     },
     hideDataPicker() {
+      if (this.data) {
+        this.$emit("input", moment(this.data).format("YYYY-MM-DD"));
+      } else {
+        this.$emit("input", null);
+      }
       this.$refs.datepicker.closePopup;
     },
     showDataPicker() {
       this.$refs.datepicker.showPopup;
     },
     setDateValue(date) {
+      this.$emit("input", moment(date).format("DD.MM.YYYY"));
       this.$refs.birthDateInputInstance.setDate(date);
     },
     setButtonFocus() {

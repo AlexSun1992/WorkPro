@@ -4,15 +4,11 @@
       <div class="row justify-content-center">
         <div class="block bg-six block-border-one mb-5 col-md-10 col-lg-6">
           <h2 class="mb-3 text-center mt-5">Восстановление доступа</h2>
-          <b-alert
-            :show="errorMessage || !!$store.getters.getRegistrationError"
-            variant="danger"
-            >{{
-              errorMessage ? errorMessage : $store.getters.getRegistrationError
-            }}</b-alert
-          >
           <b-tabs ref="tabs" content-class="mt-4 block-registration">
             <b-tab title="Телефон" active>
+              <b-alert :show="isErrorMessage" variant="danger">{{
+                errorMessage
+              }}</b-alert>
               <div class="mb-3">
                 Введите номер телефона указанный при регистрации
               </div>
@@ -25,37 +21,13 @@
               <b-row class="mt-3">
                 <b-form-group label="Дата рождения" class="col-md-6 col-12">
                   <birthday-picker
-                    :data="$v.form"
+                    v-model="$v.form.birthdate.$model"
                     :state="validateState('birthdate')"
                   />
                 </b-form-group>
               </b-row>
-              <b-row class="mt-3">
-                <b-form-group label="Пароль" class="col-md-6 col-12">
-                  <b-form-input
-                    type="password"
-                    v-model="$v.form.password.$model"
-                    placeholder="Пароль"
-                    autocomplete="new-password"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    >Введите пароль</b-form-invalid-feedback
-                  >
-                </b-form-group>
-                <b-form-group
-                  label="Повторите пароль"
-                  class="col-md-6 col-12 mt-3 mt-md-0"
-                >
-                  <b-form-input
-                    type="password"
-                    v-model="$v.form.password2.$model"
-                    placeholder="Повторите пароль"
-                    autocomplete="new-password"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    >Повторите пароль</b-form-invalid-feedback
-                  >
-                </b-form-group>
+              <b-row>
+                <verify-password :v="$v.form" :validateState="validateState" />
               </b-row>
               <div class="mt-3 row justify-content-between">
                 <router-link to="/login" class="col-6">
@@ -127,12 +99,6 @@
               </div>
             </b-tab>
           </b-tabs>
-
-          <UserRecoveryForm
-            v-if="greater180"
-            :v="$v.form"
-            :validateState="validateState"
-          />
         </div>
       </div>
     </div>
@@ -144,6 +110,7 @@ import VerifyUser from "~/components/Libs/VerifyUser/VerifyUser";
 import UserRecoveryForm from "~/components/Pages/Login/PasswordRecovery/UserRecoveryForm";
 import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 import birthdayPicker from "~/components/Libs/BirthdatePicker/BirthdatePicker";
+import VerifyPassword from "../../../Libs/VerifyPassword/VerifyPassword";
 
 export default {
   layout: "MainLayout",
@@ -151,6 +118,7 @@ export default {
     VerifyUser,
     UserRecoveryForm,
     birthdayPicker,
+    VerifyPassword,
   },
   data() {
     return {
@@ -168,8 +136,10 @@ export default {
       phoneLabel: "Введите номер телефона указанный при регистрации",
       emailLabel: "Введите email указанный при регистрации",
       isEmailValid: false,
+      isBirthdateValid: false,
       errorMessage: null,
-      greater180: null,
+      isErrorMessage: false,
+      isGreater180: false,
     };
   },
 
@@ -200,57 +170,42 @@ export default {
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };
       }
-      let response;
-      if (!this.greater180) {
-        const response = await this.$store.dispatch("resetPassword", params);
-        if (response.data[0].MESSAGE_CODE === "200") {
-          this.$router.push("/login");
-        } else if (response.data[0].MESSAGE_CODE === "501") {
-          this.errorMessage = "Необходимо ввести дополнительные данные";
-          this.greater180 = true;
+      try {
+        let response;
+        if (!this.greater180) {
+          this.isErrorMessage = false;
+          this.errorMessage = null;
+          const response = await this.$store.dispatch("resetPassword", params);
+          if (response?.data?.STATUS === 500) {
+            this.isErrorMessage = true;
+            this.errorMessage = response?.data?.INFO;
+            return;
+          }
+          if (response.data[0]?.MESSAGE_CODE === "200") {
+            this.$router.push("/login");
+          } else if (response.data[0]?.MESSAGE_CODE === "502") {
+            this.isErrorMessage = true;
+            this.errorMessage = "Данные неверные";
+          } else if (response.data[0]?.MESSAGE_CODE === "501") {
+            this.isErrorMessage = true;
+            this.errorMessage = "Необходимо ввести дополнительные данные";
+          }
         }
-      } else {
-        const birthdate = this.$v.form.birthdate.$model;
-        const year = birthdate.getFullYear();
-        let date = birthdate.getDate();
-        let month = birthdate.getMonth() + 1;
-        date = String(date).length === 1 ? `0${date}` : date;
-        month = String(month).length === 1 ? `0${month}` : month;
-        this.$v.form.birthdate.$model = `${year}-${month}-${date}`;
-
-        const additionalParams = {
-          SECONDNAME: this.$v.form.surname.$model,
-          FIRSTNAME: this.$v.form.name.$model,
-          THIRDNAME: this.$v.form.patronymic.$model,
-          BIRTHDATE: this.$v.form.birthdate.$model,
-        };
-        params = {
-          ...params,
-          ...additionalParams,
-        };
-        response = await this.$store.dispatch("resetPassword", params);
-        if (response.data[0].MESSAGE_CODE === "200") {
-          this.$router.push("/login");
-        } else if (response.data[0].MESSAGE_CODE === "502") {
-          this.errorMessage =
-            "Введённые дополнительные данные некорректны. Повторите попытку";
-        }
+      } catch (e) {
+        console.log(e);
       }
     },
   },
 
   computed: {
     disabledReset() {
-      if (!this.greater180) {
-        return this.$v.form.password2.$invalid;
-      } else {
-        return (
-          this.$v.form.name.$invalid ||
-          this.$v.form.surname.$invalid ||
-          this.$v.form.patronymic.$invalid ||
-          this.$v.form.birthdate.$invalid
-        );
-      }
+      return (
+        this.$v.form.phone.$invalid ||
+        this.$v.form.code.$invalid ||
+        this.$v.form.birthdate.$invalid ||
+        this.$v.form.password.$invalid ||
+        this.$v.form.password2.$invalid
+      );
     },
   },
 
@@ -275,7 +230,7 @@ export default {
       },
       code: {
         required,
-        minLength: minLength(6),
+        minLength: minLength(5),
       },
       password: {
         required,

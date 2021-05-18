@@ -14,6 +14,7 @@
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
+        autocomplete="off"
       ></b-form-input>
       <b-form-input
         v-else-if="loginType === 'email'"
@@ -24,6 +25,7 @@
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
+        autocomplete="off"
       ></b-form-input>
       <b-form-invalid-feedback
         >Пожалуйста, заполните это поле</b-form-invalid-feedback

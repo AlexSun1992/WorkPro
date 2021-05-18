@@ -4,10 +4,12 @@
       id="date"
       v-mask="dateMask"
       @blur="debouncedUpdate()"
+      @update="debouncedUpdate()"
       :placeholder="placeholder"
       v-model="date"
       :state="state"
       :disabled="isDisabled"
+      autocomplete="off"
     ></b-input>
   </div>
 </template>
@@ -35,8 +37,13 @@ export default {
   },
   methods: {
     updateInput() {
-      this.$emit("input", moment(this.date, "DD.MM.YYYY").toDate());
-      this.blur();
+      if (moment(this.date, "DD.MM.YYYY", true).isValid()) {
+        this.$emit("input", moment(this.date, "DD.MM.YYYY").toDate());
+        this.blur();
+      } else {
+        this.$emit("input", null);
+        this.blur();
+      }
     },
     setDate(date) {
       this.date = moment(date).format("DD.MM.YYYY");
@@ -44,7 +51,8 @@ export default {
   },
   watch: {
     date: function (val) {
-      if (moment(val, "DD.MM.YYYY", true).isValid()) {
+      console.log(val);
+      if (val) {
         this.updateInput();
       }
     },
