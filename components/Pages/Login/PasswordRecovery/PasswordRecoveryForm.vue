@@ -55,31 +55,7 @@
                 :validateState="validateState"
               />
               <b-row class="mt-3">
-                <b-form-group label="Пароль" class="col-md-6 col-12">
-                  <b-form-input
-                    type="password"
-                    v-model="$v.form.password.$model"
-                    placeholder="Пароль"
-                    autocomplete="new-password"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    >Введите пароль</b-form-invalid-feedback
-                  >
-                </b-form-group>
-                <b-form-group
-                  label="Повторите пароль"
-                  class="col-md-6 col-12 mt-3 mt-md-0"
-                >
-                  <b-form-input
-                    type="password"
-                    v-model="$v.form.password2.$model"
-                    placeholder="Повторите пароль"
-                    autocomplete="new-password"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    >Повторите пароль</b-form-invalid-feedback
-                  >
-                </b-form-group>
+                <verify-password :v="$v.form" :validateState="validateState" />
               </b-row>
               <div class="mt-3 row justify-content-between">
                 <router-link to="/login" class="col-6">
@@ -91,7 +67,7 @@
                   <b-button
                     variant="success"
                     @click="resetPassword"
-                    :disabled="disabledReset"
+                    :disabled="disabledEmailReset"
                     class="w-100"
                     >Сбросить пароль</b-button
                   >
@@ -171,25 +147,22 @@ export default {
         };
       }
       try {
-        let response;
-        if (!this.greater180) {
-          this.isErrorMessage = false;
-          this.errorMessage = null;
-          const response = await this.$store.dispatch("resetPassword", params);
-          if (response?.data?.STATUS === 500) {
-            this.isErrorMessage = true;
-            this.errorMessage = response?.data?.INFO;
-            return;
-          }
-          if (response.data[0]?.MESSAGE_CODE === "200") {
-            this.$router.push("/login");
-          } else if (response.data[0]?.MESSAGE_CODE === "502") {
-            this.isErrorMessage = true;
-            this.errorMessage = "Данные неверные";
-          } else if (response.data[0]?.MESSAGE_CODE === "501") {
-            this.isErrorMessage = true;
-            this.errorMessage = "Необходимо ввести дополнительные данные";
-          }
+        this.isErrorMessage = false;
+        this.errorMessage = null;
+        const response = await this.$store.dispatch("resetPassword", params);
+        if (response?.data?.STATUS === 500) {
+          this.isErrorMessage = true;
+          this.errorMessage = response?.data?.INFO;
+          return;
+        }
+        if (response.data[0]?.MESSAGE_CODE === "200") {
+          this.$router.push("/login");
+        } else if (response.data[0]?.MESSAGE_CODE === "502") {
+          this.isErrorMessage = true;
+          this.errorMessage = "Данные неверные";
+        } else if (response.data[0]?.MESSAGE_CODE === "501") {
+          this.isErrorMessage = true;
+          this.errorMessage = "Необходимо ввести дополнительные данные";
         }
       } catch (e) {
         console.log(e);
@@ -203,6 +176,14 @@ export default {
         this.$v.form.phone.$invalid ||
         this.$v.form.code.$invalid ||
         this.$v.form.birthdate.$invalid ||
+        this.$v.form.password.$invalid ||
+        this.$v.form.password2.$invalid
+      );
+    },
+    disabledEmailReset() {
+      return (
+        this.$v.form.email.$invalid ||
+        this.$v.form.code.$invalid ||
         this.$v.form.password.$invalid ||
         this.$v.form.password2.$invalid
       );

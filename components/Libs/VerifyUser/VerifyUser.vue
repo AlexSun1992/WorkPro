@@ -22,6 +22,7 @@
         v-model="v[loginType].$model"
         autofocus
         :state="validateInput(loginType, isUserBlured)"
+        :disabled="code"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
@@ -37,8 +38,11 @@
           loginType === "phone" ? "Изменить номер" : "Изменить email"
         }}</b-link>
         <p class="col-12 col-md-12">
-          На указанный {{ loginType === "phone" ? "номер" : "email" }} выслан
-          код подтверждения
+          Если ваш
+          {{
+            loginType === "phone" ? "номер телефона" : "адрес электронной почты"
+          }}
+          существует в нашей базе, то вы получите код, который нужно ввести
         </p>
         <b-form-group class="col-12 col-md-6">
           <b-form-input
@@ -50,6 +54,7 @@
             @blur="blurField('code', isCodeBlured)"
             @input="isCodeBlured = false"
             :disabled="disabled"
+            autocomplete="off"
             placeholder="Код подтверждения"
           ></b-form-input>
           <b-form-invalid-feedback v-if="!v.code.$model"
