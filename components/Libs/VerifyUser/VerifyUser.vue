@@ -10,10 +10,11 @@
         autofocus
         :placeholder="placeholder"
         :state="validateInput(loginType, isUserBlured)"
-        :disabled="code"
+        :disabled="isSendCode"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
+        @keyup.enter="verifyUser"
         autocomplete="off"
       ></b-form-input>
       <b-form-input
@@ -22,17 +23,18 @@
         v-model="v[loginType].$model"
         autofocus
         :state="validateInput(loginType, isUserBlured)"
-        :disabled="code"
+        :disabled="isSendCode"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
+        @keyup.enter="verifyUser"
         autocomplete="off"
       ></b-form-input>
       <b-form-invalid-feedback
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
     </b-form-group>
-    <div v-if="code" class="col-12 col-md-12">
+    <div v-if="isSendCode" class="col-12 col-md-12">
       <div class="row">
         <b-link @click="changeNumber" class="col-12 col-md-12">{{
           loginType === "phone" ? "Изменить номер" : "Изменить email"
@@ -80,7 +82,7 @@
     <div class="col-12 col-md-6 mt-2 mt-md-0">
       <b-button
         type="submit"
-        v-if="!code"
+        v-if="!isSendCode"
         :disabled="loginType === 'phone' ? v.phone.$invalid : v.email.$invalid"
         @click.prevent="verifyUser"
         variant="success"
@@ -107,6 +109,7 @@ export default {
   ],
   data() {
     return {
+      isSendCode: false,
       isUserBlured: true,
       isCodeBlured: true,
       code: null,
@@ -129,7 +132,6 @@ export default {
     this.initialCount = this.count;
     this.resendCount = this.count;
   },
-
   methods: {
     onError(error) {
       console.log("Error:", error);
@@ -155,7 +157,12 @@ export default {
       await this.getCaptcha();
       this.isPhoneChanged = false;
       try {
-        if (!this.code && (this.v.phone.$model || this.v.email.$model)) {
+        if (
+          !this.code &&
+          (this.loginType === "phone"
+            ? !this.v.phone.$invalid
+            : !this.v.email.$invalid)
+        ) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
 
