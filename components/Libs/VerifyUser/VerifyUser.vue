@@ -10,7 +10,7 @@
         autofocus
         :placeholder="placeholder"
         :state="validateInput(loginType, isUserBlured)"
-        :disabled="isSendCode"
+        :disabled="isShowCodeEnter"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
@@ -23,7 +23,7 @@
         v-model="v[loginType].$model"
         autofocus
         :state="validateInput(loginType, isUserBlured)"
-        :disabled="isSendCode"
+        :disabled="isShowCodeEnter"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
@@ -34,7 +34,7 @@
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
     </b-form-group>
-    <div v-if="isSendCode" class="col-12 col-md-12">
+    <div v-if="isShowCodeEnter" class="col-12 col-md-12">
       <div class="row">
         <b-link @click="changeNumber" class="col-12 col-md-12">{{
           loginType === "phone" ? "Изменить номер" : "Изменить email"
@@ -82,7 +82,7 @@
     <div class="col-12 col-md-6 mt-2 mt-md-0">
       <b-button
         type="submit"
-        v-if="!isSendCode"
+        v-if="!isShowCodeEnter"
         :disabled="loginType === 'phone' ? v.phone.$invalid : v.email.$invalid"
         @click.prevent="verifyUser"
         variant="success"
@@ -171,12 +171,8 @@ export default {
           params = { ...params, token: this.token };
           const response = await this.$store.dispatch("getCode", params);
           if (response) {
-            this.code = "*";
+            this.isSendCode = true;
           }
-          // Для показа
-          this.v.code.$model = this.code;
-          this.$emit("onCode", this.code);
-          this.isUserDisabled = true;
           this.countdown();
         } else {
           this.isUserDisabled = false;
@@ -286,13 +282,6 @@ export default {
       this.disabledResend = true;
       const params = this.getCodeParams(this.loginType);
       const response = await this.$store.dispatch("getCode", params);
-      if (this.loginType === "phone") {
-        this.code = response.data[0].TEMPPASS;
-        this.v.code.$model = this.code;
-      } else {
-        // Для показа (заменить на код email)
-        this.code = "*";
-      }
       this.countdown();
     },
   },
@@ -305,6 +294,13 @@ export default {
       } else {
         this.placeholder = "";
         return (this.mask = "X".repeat(50));
+      }
+    },
+    isShowCodeEnter() {
+      if (this.loginType === "phone") {
+        return !this.v.phone.$invalid && this.isSendCode;
+      } else {
+        return !this.v.email.$invalid && this.isSendCode;
       }
     },
   },

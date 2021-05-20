@@ -51,7 +51,6 @@ export default {
   },
   watch: {
     date: function (val) {
-      console.log(val);
       if (val) {
         this.updateInput();
       }

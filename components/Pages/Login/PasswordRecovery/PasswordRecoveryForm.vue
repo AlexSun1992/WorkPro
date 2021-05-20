@@ -176,6 +176,7 @@ export default {
         password: "",
         password2: "",
       };
+      this.isErrorMessage = false;
       this.$v.form.$reset();
     },
   },
