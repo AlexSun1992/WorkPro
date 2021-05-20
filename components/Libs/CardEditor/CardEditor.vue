@@ -306,10 +306,12 @@ export default {
               this.$router.push(this.$route.query?.ref);
               return;
             }
-            await this.$store.dispatch(
-              "data_card/fetchForm",
-              this.$route.params
-            );
+            if (this.$route.params.idCard) {
+              await this.$store.dispatch(
+                "data_card/fetchForm",
+                this.$route.params
+              );
+            }
             if (this.wizardTabs) {
               await this.$store.dispatch(
                 "wizard/fetchWizard",
