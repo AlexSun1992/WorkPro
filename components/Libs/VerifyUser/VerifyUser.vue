@@ -10,10 +10,11 @@
         autofocus
         :placeholder="placeholder"
         :state="validateInput(loginType, isUserBlured)"
-        :disabled="code"
+        :disabled="isShowCodeEnter"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
+        @keyup.enter="verifyUser"
         autocomplete="off"
       ></b-form-input>
       <b-form-input
@@ -22,17 +23,18 @@
         v-model="v[loginType].$model"
         autofocus
         :state="validateInput(loginType, isUserBlured)"
-        :disabled="code"
+        :disabled="isShowCodeEnter"
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
+        @keyup.enter="verifyUser"
         autocomplete="off"
       ></b-form-input>
       <b-form-invalid-feedback
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
     </b-form-group>
-    <div v-if="code" class="col-12 col-md-12">
+    <div v-if="isShowCodeEnter" class="col-12 col-md-12">
       <div class="row">
         <b-link @click="changeNumber" class="col-12 col-md-12">{{
           loginType === "phone" ? "Изменить номер" : "Изменить email"
@@ -80,7 +82,7 @@
     <div class="col-12 col-md-6 mt-2 mt-md-0">
       <b-button
         type="submit"
-        v-if="!code"
+        v-if="!isShowCodeEnter"
         :disabled="loginType === 'phone' ? v.phone.$invalid : v.email.$invalid"
         @click.prevent="verifyUser"
         variant="success"
@@ -107,6 +109,7 @@ export default {
   ],
   data() {
     return {
+      isSendCode: false,
       isUserBlured: true,
       isCodeBlured: true,
       code: null,
@@ -129,7 +132,6 @@ export default {
     this.initialCount = this.count;
     this.resendCount = this.count;
   },
-
   methods: {
     onError(error) {
       console.log("Error:", error);
@@ -155,7 +157,12 @@ export default {
       await this.getCaptcha();
       this.isPhoneChanged = false;
       try {
-        if (!this.code && (this.v.phone.$model || this.v.email.$model)) {
+        if (
+          !this.code &&
+          (this.loginType === "phone"
+            ? !this.v.phone.$invalid
+            : !this.v.email.$invalid)
+        ) {
           this.resendCount = this.initialCount;
           this.disabledResend = true;
 
@@ -164,12 +171,8 @@ export default {
           params = { ...params, token: this.token };
           const response = await this.$store.dispatch("getCode", params);
           if (response) {
-            this.code = "*";
+            this.isSendCode = true;
           }
-          // Для показа
-          this.v.code.$model = this.code;
-          this.$emit("onCode", this.code);
-          this.isUserDisabled = true;
           this.countdown();
         } else {
           this.isUserDisabled = false;
@@ -279,13 +282,6 @@ export default {
       this.disabledResend = true;
       const params = this.getCodeParams(this.loginType);
       const response = await this.$store.dispatch("getCode", params);
-      if (this.loginType === "phone") {
-        this.code = response.data[0].TEMPPASS;
-        this.v.code.$model = this.code;
-      } else {
-        // Для показа (заменить на код email)
-        this.code = "*";
-      }
       this.countdown();
     },
   },
@@ -298,6 +294,13 @@ export default {
       } else {
         this.placeholder = "";
         return (this.mask = "X".repeat(50));
+      }
+    },
+    isShowCodeEnter() {
+      if (this.loginType === "phone") {
+        return !this.v.phone.$invalid && this.isSendCode;
+      } else {
+        return !this.v.email.$invalid && this.isSendCode;
       }
     },
   },

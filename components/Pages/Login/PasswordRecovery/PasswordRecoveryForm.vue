@@ -4,7 +4,11 @@
       <div class="row justify-content-center">
         <div class="block bg-six block-border-one mb-5 col-md-10 col-lg-6">
           <h2 class="mb-3 text-center mt-5">Восстановление доступа</h2>
-          <b-tabs ref="tabs" content-class="mt-4 block-registration">
+          <b-tabs
+            @activate-tab="initData"
+            ref="tabs"
+            content-class="mt-4 block-registration"
+          >
             <b-tab title="Телефон" active>
               <b-alert :show="isErrorMessage" variant="danger">{{
                 errorMessage
@@ -54,7 +58,7 @@
                 :count="60"
                 :validateState="validateState"
               />
-              <b-row class="mt-3">
+              <b-row class="mt-0">
                 <verify-password :v="$v.form" :validateState="validateState" />
               </b-row>
               <div class="mt-3 row justify-content-between">
@@ -98,17 +102,7 @@ export default {
   },
   data() {
     return {
-      form: {
-        phone: "",
-        code: "",
-        email: "",
-        surname: "",
-        name: "",
-        patronymic: "",
-        birthdate: "",
-        password: "",
-        password2: "",
-      },
+      form: {},
       phoneLabel: "Введите номер телефона указанный при регистрации",
       emailLabel: "Введите email указанный при регистрации",
       isEmailValid: false,
@@ -118,7 +112,9 @@ export default {
       isGreater180: false,
     };
   },
-
+  created() {
+    this.initData();
+  },
   methods: {
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
@@ -167,6 +163,21 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    initData() {
+      this.form = {
+        phone: "",
+        code: "",
+        email: "",
+        surname: "",
+        name: "",
+        patronymic: "",
+        birthdate: "",
+        password: "",
+        password2: "",
+      };
+      this.isErrorMessage = false;
+      this.$v.form.$reset();
     },
   },
 

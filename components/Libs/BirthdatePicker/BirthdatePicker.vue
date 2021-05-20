@@ -2,6 +2,7 @@
   <div>
     <date-picker
       v-model="data"
+      :open="open"
       placeholder="Дата рождения"
       @change="hideDataPicker"
       @input="setDateValue"
@@ -92,16 +93,18 @@ export default {
     notBeforeDate(date) {
       return date > getDate(18);
     },
-    hideDataPicker() {
+    hideDataPicker(value) {
+      if (value) {
+        this.open = false;
+      }
       if (this.data) {
         this.$emit("input", moment(this.data).format("YYYY-MM-DD"));
       } else {
         this.$emit("input", null);
       }
-      this.$refs.datepicker.closePopup;
     },
     showDataPicker() {
-      this.$refs.datepicker.showPopup;
+      this.open = true;
     },
     setDateValue(date) {
       this.$emit("input", moment(date).format("DD.MM.YYYY"));
