@@ -41,9 +41,9 @@
         }}</b-link>
         <p class="col-12 col-md-12">
           {{ textMessage }}
-<!--          <template v-if="resendCount"-->
-<!--            >Отправить повторно можно через {{ resendCount }} секунд.</template-->
-<!--          >-->
+          <!--          <template v-if="resendCount"-->
+          <!--            >Отправить повторно можно через {{ resendCount }} секунд.</template-->
+          <!--          >-->
         </p>
         <b-form-group class="col-12 col-md-6">
           <b-form-input
@@ -185,8 +185,8 @@ export default {
           this.$emit("error", null);
           let isError = Boolean(response?.data[0]?.ERRORCODE);
           let isErrorList = Boolean(response?.data[0]?.ERRORLIST);
-          let isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 202;
-          let isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 201;
+          let isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
+          let isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           if (isError === false) {
             if (
               this.modeType === "REG" &&
