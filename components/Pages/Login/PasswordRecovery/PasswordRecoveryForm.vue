@@ -17,7 +17,9 @@
                 Введите номер телефона указанный при регистрации
               </div>
               <verify-user
+                @error="showError"
                 :loginType="'phone'"
+                :mode-type="'RECOVERY'"
                 :v="$v.form"
                 :count="60"
                 :validateState="validateState"
@@ -184,8 +186,16 @@ export default {
       this.isErrorMessage = false;
       this.$v.form.$reset();
     },
+    showError(msg) {
+      if (msg) {
+        this.isErrorMessage = true;
+        this.errorMessage = msg;
+      } else {
+        this.isErrorMessage = false;
+        this.errorMessage = null;
+      }
+    },
   },
-
   computed: {
     disabledReset() {
       return (
@@ -206,10 +216,10 @@ export default {
     },
     textMessage() {
       if (this.currentTab == 0) {
-        return "Если Ваш номер телефона существует в нашей базе, то вы получите код, который нужно ввести";
+        return "Если Ваш номер телефона существует в нашей базе, то вы получите код, который нужно ввести.";
       }
       if (this.currentTab == 1) {
-        return "Если ваш адрес электронной почты существует в нашей базе, то вы получите код, который нужно ввести";
+        return "Если ваш адрес электронной почты существует в нашей базе, то вы получите код, который нужно ввести.";
       }
     },
   },

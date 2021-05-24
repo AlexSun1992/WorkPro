@@ -21,10 +21,12 @@
       <b-form-group label="Телефон" label-cols="12" class="col-12">
         <verify-user
           ref="verifyUser"
+          @error="showError"
           :v="$v.form"
           :count="60"
           :context="'registration'"
           :loginType="'phone'"
+          :mode-type="'REG'"
           :validateState="validateState"
           :disabled="registrationInProcess"
           :text-message="textMessage"
@@ -51,7 +53,7 @@
         class="col-12 col-md-6"
       >
         <birthday-picker
-          :data="$v.form"
+          v-model="$v.form.birthdate.$model"
           :state="validateState('birthdate')"
           :disabled="registrationInProcess"
         />
@@ -174,7 +176,9 @@ export default {
       isRegConfirmed: null,
       token: null,
       textMessage:
-        "На Ваш номер телефона был отправлен код, который необходимо ввести",
+        "На Ваш номер телефона был отправлен код, который необходимо ввести.",
+      errorMessage: null,
+      isErrorMessage: false,
     };
   },
   validations: {
@@ -237,60 +241,42 @@ export default {
     },
 
     async setToken(context) {
-      this.registrationInProcess = true;
-      let params = {
-        SECONDNAME: this.$v.form.family.$model,
-        FIRSTNAME: this.$v.form.name.$model,
-        THIRDNAME: this.$v.form.patronymic.$model,
-        BIRTHDATE: this.$v.form.birthdate.$model.toISOString().split("T")[0],
-        PHONE: this.$v.form.phone.$model,
-        EMAIL: this.$v.form.email.$model,
-        CODE: this.$v.form.code.$model,
-        POLICY_NUMBER: "",
-        PASSWORD: this.$v.form.password.$model,
-        PASSWORD_CONFIRM: this.$v.form.password2.$model,
-        USER_CONFIRM: this.isRegConfirmed ? "Y" : "N",
-      };
-
-      await this.getCaptcha();
-
-      if (!this.token) return;
-      params = { ...params, token: this.token };
-
-      const response = await this.$store.dispatch("registerUser", params);
-      // Удалить с появлением обработки ошибки
-      if (!response) {
+      try {
+        this.registrationInProcess = true;
+        let params = {
+          SECONDNAME: this.$v.form.family.$model,
+          FIRSTNAME: this.$v.form.name.$model,
+          THIRDNAME: this.$v.form.patronymic.$model,
+          BIRTHDATE: this.$v.form.birthdate.$model,
+          PHONE: this.$v.form.phone.$model,
+          EMAIL: this.$v.form.email.$model,
+          CODE: this.$v.form.code.$model,
+          POLICY_NUMBER: "",
+          PASSWORD: this.$v.form.password.$model,
+          PASSWORD_CONFIRM: this.$v.form.password2.$model,
+          USER_CONFIRM: this.isRegConfirmed ? "Y" : "N",
+        };
+        await this.getCaptcha();
+        if (!this.token) return;
+        params = { ...params, token: this.token };
+        const response = await this.$store.dispatch("registerUser", params);
+        console.log(response);
         this.registrationInProcess = false;
-      }
-
-      if (response && response.MESSAGE_CODE === "510") {
-        this.conformation = true;
-        return;
-      }
-
-      if (response) {
-        try {
-          await context.$auth.loginWith("local", {
-            data: {
-              username: context.$v.form.phone.$model,
-              password: context.$v.form.password.$model,
-              mode: 2,
-            },
-          });
-        } catch (e) {
-          if (context.$auth.error?.response.status === 401) {
-            context.errorMessage = context.$auth.error.response.data.MESSAGE;
-            context.authInProcess = false;
-          }
+        if (response?.code === 200) {
+          this.$router.push("/login");
+        } else if (response?.code !== 200) {
+          this.isErrorMessage = true;
+          this.errorMessage = response.data.INFO;
         }
-      } else {
-        //this.$refs.verifyUser.code = null;
+      } catch (e) {
+        console.log(e);
       }
     },
 
     async onSubmit() {
       try {
         this.$refs.verifyUser.loginTouchesCount = 3;
+        this.isErrorMessage = false;
         if (this.$v.form.phone.$model) {
           this.$refs.verifyUser.getCode();
           this.$refs.verifyUser.isPhoneChanged = true;
@@ -304,34 +290,13 @@ export default {
         console.log(e);
       }
     },
-  },
-
-  computed: {
-    errorMessage() {
-      // if (this.$store.getters.getRegistrationError) {
-      //   this.registrationInProcess = false;
-      //   if (this.$refs.verifyUser) {
-      //     this.$refs.verifyUser.$refs.userInput.$el.focus();
-      //     this.$refs.verifyUser.resendCount = null;
-      //   }
-      //   return this.$store.getters.getRegistrationError.toString();
-      // }
-      //
-      // if (
-      //   !this.$store.getters.getRegistrationError &&
-      //   this.$store.getters.isAuthenticated
-      // ) {
-      //   //this.$router.push("/cabinet/55/0/701");
-      // }
-    },
-  },
-
-  watch: {
-    isRegConfirmed: function (val) {
-      if (val) {
-        this.setToken(this);
+    showError(msg) {
+      if (msg) {
+        this.isErrorMessage = true;
+        this.errorMessage = msg;
       } else {
-        this.$router.push("/login");
+        this.isErrorMessage = false;
+        this.errorMessage = null;
       }
     },
   },

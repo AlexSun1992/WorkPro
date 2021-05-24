@@ -15,22 +15,9 @@ export const actions = {
         params,
         headers
       );
-      if (regResponse.data[0].MESSAGE_CODE == 200) {
-        const authParams = {
-          username: params.PHONE,
-          password: params.PASSWORD,
-          mode: 2,
-        };
-        const authResponse = await this.$axios.post(
-          "am/auth/v2/authorize",
-          JSON.stringify(authParams)
-        );
-        return { ACCESS_TOKEN: authResponse.data.ACCESS_TOKEN };
-      } else {
-        return regResponse.data[0];
-      }
+      return regResponse;
     } catch (e) {
-      console.log(e);
+      return e?.response;
     }
   },
 

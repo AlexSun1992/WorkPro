@@ -41,6 +41,9 @@
         }}</b-link>
         <p class="col-12 col-md-12">
           {{ textMessage }}
+<!--          <template v-if="resendCount"-->
+<!--            >Отправить повторно можно через {{ resendCount }} секунд.</template-->
+<!--          >-->
         </p>
         <b-form-group class="col-12 col-md-6">
           <b-form-input
@@ -100,6 +103,7 @@ export default {
     "validateState",
     "disabled",
     "loginType",
+    "modeType",
     "label",
     "context",
     "textMessage",
@@ -121,9 +125,20 @@ export default {
       placeholder: "+7(___)-___-__-__",
       loginTouchesCount: 0,
       token: null,
+      myclass: ["cabinet"],
     };
   },
-
+  watch: {
+    textMessage: {
+      immediate: true,
+      handler(val, oldVal) {
+        if (this.timer !== null) {
+          this.countdown();
+          this.isSendCode = false;
+        }
+      },
+    },
+  },
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.initialCount = this.count;
@@ -167,8 +182,54 @@ export default {
           if (!this.token) return;
           params = { ...params, token: this.token };
           const response = await this.$store.dispatch("getCode", params);
-          if (response) {
-            this.isSendCode = true;
+          this.$emit("error", null);
+          let isError = Boolean(response?.data[0]?.ERRORCODE);
+          let isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+          let isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 202;
+          let isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 201;
+          if (isError === false) {
+            if (
+              this.modeType === "REG" &&
+              this.loginType === "phone" &&
+              (isInSystemLogin || isExpiredLogin)
+            ) {
+              this.$bvModal[isInSystemLogin ? "msgBoxOk" : "msgBoxConfirm"](
+                "Введенный Вами мобильный телефон уже есть в системе!",
+                {
+                  title: "Подтверждение",
+                  size: "md",
+                  buttonSize: "md",
+                  okVariant: "success",
+                  okTitle: isInSystemLogin
+                    ? "Войти в систему"
+                    : "Продолжить регистрацию",
+                  cancelTitle: "Войти",
+                  footerClass: "p-2",
+                  hideHeaderClose: false,
+                  centered: true,
+                  modalClass: this.myclass,
+                }
+              )
+                .then((value) => {
+                  let confirm = value && isInSystemLogin === false;
+                  if (confirm === true) {
+                    this.isSendCode = true;
+                  }
+                  if (confirm === false) {
+                    this.$router.push("/login");
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            } else {
+              this.isSendCode = true;
+            }
+          } else if (isErrorList === true) {
+            this.$emit(
+              "error",
+              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "")
+            );
           }
           this.countdown();
         } else {
@@ -216,6 +277,8 @@ export default {
       this.v.code.$model = null;
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
+      this.isSendCode = false;
+      this.countdown();
       this.$emit("onCode", this.code);
     },
 
@@ -300,6 +363,10 @@ export default {
         return !this.v.email.$invalid && this.isSendCode;
       }
     },
+  },
+  destroyed() {
+    this.countdown();
+    this.isSendCode = false;
   },
 };
 </script>
