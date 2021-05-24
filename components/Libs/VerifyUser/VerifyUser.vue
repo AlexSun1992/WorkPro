@@ -40,11 +40,7 @@
           loginType === "phone" ? "Изменить номер" : "Изменить email"
         }}</b-link>
         <p class="col-12 col-md-12">
-          Если ваш
-          {{
-            loginType === "phone" ? "номер телефона" : "адрес электронной почты"
-          }}
-          существует в нашей базе, то вы получите код, который нужно ввести
+          {{ textMessage }}
         </p>
         <b-form-group class="col-12 col-md-6">
           <b-form-input
@@ -106,6 +102,7 @@ export default {
     "loginType",
     "label",
     "context",
+    "textMessage",
   ],
   data() {
     return {

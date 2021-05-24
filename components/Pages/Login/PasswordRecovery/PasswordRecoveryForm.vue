@@ -21,6 +21,7 @@
                 :v="$v.form"
                 :count="60"
                 :validateState="validateState"
+                :text-message="textMessage"
               />
               <b-row class="mt-3">
                 <b-form-group label="Дата рождения" class="col-md-6 col-12">
@@ -110,6 +111,7 @@ export default {
       errorMessage: null,
       isErrorMessage: false,
       isGreater180: false,
+      currentTab: 0,
     };
   },
   created() {
@@ -164,7 +166,10 @@ export default {
         console.log(e);
       }
     },
-    initData() {
+    initData(value) {
+      if (value === 0 || value === 1) {
+        this.currentTab = value;
+      }
       this.form = {
         phone: "",
         code: "",
@@ -198,6 +203,14 @@ export default {
         this.$v.form.password.$invalid ||
         this.$v.form.password2.$invalid
       );
+    },
+    textMessage() {
+      if (this.currentTab == 0) {
+        return "Если Ваш номер телефона существует в нашей базе, то вы получите код, который нужно ввести";
+      }
+      if (this.currentTab == 1) {
+        return "Если ваш адрес электронной почты существует в нашей базе, то вы получите код, который нужно ввести";
+      }
     },
   },
 

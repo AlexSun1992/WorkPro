@@ -27,6 +27,7 @@
           :loginType="'phone'"
           :validateState="validateState"
           :disabled="registrationInProcess"
+          :text-message="textMessage"
         />
       </b-form-group>
       <b-form-group label="E-mail" label-cols="12" class="col-12 col-md-6">
@@ -172,6 +173,8 @@ export default {
       captchaToken: null,
       isRegConfirmed: null,
       token: null,
+      textMessage:
+        "На Ваш номер телефона был отправлен код, который необходимо ввести",
     };
   },
   validations: {
