@@ -254,7 +254,7 @@ export default {
           POLICY_NUMBER: "",
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
-          USER_CONFIRM: this.isRegConfirmed ? "Y" : "N",
+          USER_CONFIRM: "Y",
         };
         await this.getCaptcha();
         if (!this.token) return;
