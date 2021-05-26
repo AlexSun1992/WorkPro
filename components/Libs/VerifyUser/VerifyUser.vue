@@ -14,7 +14,7 @@
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
-        @keyup.enter="verifyUser"
+        tabindex="10"
         autocomplete="off"
       ></b-form-input>
       <b-form-input
@@ -28,6 +28,7 @@
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
         @keyup.enter="verifyUser"
+        :tabindex="tabIndex[0]"
         autocomplete="off"
       ></b-form-input>
       <b-form-invalid-feedback
@@ -41,9 +42,11 @@
         }}</b-link>
         <p class="col-12 col-md-12">
           {{ textMessage }}
-          <!--          <template v-if="resendCount"-->
-          <!--            >Отправить повторно можно через {{ resendCount }} секунд.</template-->
-          <!--          >-->
+          <template v-if="disabledResend"
+            >Отправить повторно можно через
+            <verify-timer @onFinish="stopTimer" :duration="duration" />
+            секунд.</template
+          >
         </p>
         <b-form-group class="col-12 col-md-6">
           <b-form-input
@@ -56,6 +59,7 @@
             @input="isCodeBlured = false"
             :disabled="disabled"
             autocomplete="off"
+            :tabindex="tabIndex[1]"
             placeholder="Код подтверждения"
           ></b-form-input>
           <b-form-invalid-feedback v-if="!v.code.$model"
@@ -94,9 +98,10 @@
 
 <script>
 import _ from "lodash";
-import axios from "axios";
+import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
 export default {
+  components: { VerifyTimer },
   props: [
     "count",
     "v",
@@ -107,6 +112,7 @@ export default {
     "label",
     "context",
     "textMessage",
+    "tabIndex",
   ],
   data() {
     return {
@@ -117,8 +123,6 @@ export default {
       isUserDisabled: false,
       disabledResend: true,
       timer: null,
-      initialCount: null,
-      resendCount: null,
       isPhoneChanged: false,
       mask: "",
       codeMask: "#####",
@@ -126,23 +130,11 @@ export default {
       loginTouchesCount: 0,
       token: null,
       myclass: ["cabinet"],
+      duration: 60,
     };
-  },
-  watch: {
-    textMessage: {
-      immediate: true,
-      handler(val, oldVal) {
-        if (this.timer !== null) {
-          this.countdown();
-          this.isSendCode = false;
-        }
-      },
-    },
   },
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
-    this.initialCount = this.count;
-    this.resendCount = this.count;
   },
   methods: {
     onError(error) {
@@ -175,7 +167,6 @@ export default {
             ? !this.v.phone.$invalid
             : !this.v.email.$invalid)
         ) {
-          this.resendCount = this.initialCount;
           this.disabledResend = true;
 
           let params = this.getCodeParams(this.loginType);
@@ -193,29 +184,35 @@ export default {
               this.loginType === "phone" &&
               (isInSystemLogin || isExpiredLogin)
             ) {
-              this.$bvModal[isInSystemLogin ? "msgBoxOk" : "msgBoxConfirm"](
-                "Введенный Вами мобильный телефон уже есть в системе!",
-                {
-                  title: "Подтверждение",
-                  size: "md",
-                  buttonSize: "md",
-                  okVariant: "success",
-                  okTitle: isInSystemLogin
-                    ? "Войти в систему"
-                    : "Продолжить регистрацию",
-                  cancelTitle: "Войти",
-                  footerClass: "p-2",
-                  hideHeaderClose: false,
-                  centered: true,
-                  modalClass: this.myclass,
-                }
-              )
-                .then((value) => {
-                  let confirm = value && isInSystemLogin === false;
-                  if (confirm === true) {
-                    this.isSendCode = true;
+              this.$bvModal
+                .msgBoxConfirm(
+                  "Введенный Вами мобильный телефон уже есть в системе!",
+                  {
+                    title: "Подтверждение",
+                    size: "md",
+                    buttonSize: "md",
+                    okVariant: "success",
+                    okTitle: isInSystemLogin
+                      ? "Изменить номер телефона"
+                      : "Продолжить регистрацию",
+                    cancelTitle: "Войти в систему",
+                    footerClass: "p-2",
+                    hideHeaderClose: false,
+                    centered: true,
+                    modalClass: this.myclass,
+                    autoFocusButton: "ok",
                   }
-                  if (confirm === false) {
+                )
+                .then((value) => {
+                  if (value === true) {
+                    if (isInSystemLogin) {
+                      this.changeNumber();
+                    }
+                    if (isExpiredLogin) {
+                      this.isSendCode = true;
+                    }
+                  }
+                  if (value === false) {
                     this.$router.push("/login");
                   }
                 })
@@ -231,7 +228,6 @@ export default {
               response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "")
             );
           }
-          this.countdown();
         } else {
           this.isUserDisabled = false;
         }
@@ -259,7 +255,6 @@ export default {
     async showForm() {
       if (!this.$v.user.$invalid) {
         this.isUserDisabled = true;
-        this.countdown();
       }
     },
 
@@ -278,7 +273,6 @@ export default {
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
       this.isSendCode = false;
-      this.countdown();
       this.$emit("onCode", this.code);
     },
 
@@ -316,33 +310,14 @@ export default {
       this.v[field].$touch();
     },
 
-    countdown() {
-      if (this.isPhoneChanged) {
-        this.timer = null;
-        return;
-      }
-      this.resendCount--;
-      if (this.resendCount == 0) {
-        this.disabledResend = false;
-        clearTimeout(this.timer);
-        this.resendCount = null;
-      } else {
-        if (this.isPhoneChanged) {
-          this.timer = setTimeout(this.countdown, 1000);
-          return this.resendCount;
-        }
-        this.timer = setTimeout(this.countdown, 1000);
-        return this.resendCount;
-      }
-    },
-
     async resendCode() {
       this.v.code.$model = "";
-      this.resendCount = this.initialCount;
       this.disabledResend = true;
       const params = this.getCodeParams(this.loginType);
       const response = await this.$store.dispatch("getCode", params);
-      this.countdown();
+    },
+    stopTimer() {
+      this.disabledResend = false;
     },
   },
 
@@ -365,7 +340,6 @@ export default {
     },
   },
   destroyed() {
-    this.countdown();
     this.isSendCode = false;
   },
 };

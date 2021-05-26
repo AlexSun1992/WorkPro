@@ -23,6 +23,7 @@
             v-model="data"
             :state="state"
             :blur="debouncedUpdate"
+            :tabindex="tabindex"
             :disabled="isDisabled"
           />
           <b-input-group-append>
@@ -70,6 +71,7 @@ export default {
   props: {
     state: Boolean,
     disabled: Boolean,
+    tabindex: Number,
   },
   data() {
     return {

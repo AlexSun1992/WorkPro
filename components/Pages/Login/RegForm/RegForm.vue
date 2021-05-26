@@ -14,6 +14,7 @@
     <!--  -->
     <b-form
       @submit.stop.prevent="onSubmit"
+      @keydown.enter="onSubmit"
       inline
       class="align-items-start"
       autocomplete="off"
@@ -30,6 +31,7 @@
           :validateState="validateState"
           :disabled="registrationInProcess"
           :text-message="textMessage"
+          :tab-index="[10, 15]"
         />
       </b-form-group>
       <b-form-group label="E-mail" label-cols="12" class="col-12 col-md-6">
@@ -40,6 +42,7 @@
           @blur="$v.form.email.$touch()"
           placeholder="E-mail"
           :disabled="registrationInProcess"
+          tabindex="20"
           autocomplete="new-password"
         ></b-form-input>
         <b-form-invalid-feedback
@@ -55,6 +58,7 @@
         <birthday-picker
           v-model="$v.form.birthdate.$model"
           :state="validateState('birthdate')"
+          :tabindex="30"
           :disabled="registrationInProcess"
         />
       </b-form-group>
@@ -67,6 +71,7 @@
             @blur="$v.form.family.$touch()"
             placeholder="Фамилия"
             :disabled="registrationInProcess"
+            tabindex="40"
             autocomplete="new-password"
           ></b-form-input>
           <b-form-invalid-feedback
@@ -82,6 +87,7 @@
           @blur="$v.form.name.$touch()"
           placeholder="Имя"
           :disabled="registrationInProcess"
+          tabindex="50"
           autocomplete="new-password"
         ></b-form-input>
         <b-form-invalid-feedback
@@ -96,6 +102,7 @@
           @blur="$v.form.patronymic.$touch()"
           placeholder="Отчество"
           :disabled="registrationInProcess"
+          tabindex="60"
           autocomplete="new-password"
         ></b-form-input>
         <b-form-invalid-feedback
@@ -109,6 +116,7 @@
           v-model="form.policyNumber"
           placeholder="Номер полиса"
           :disabled="registrationInProcess"
+          tabindex="70"
           autocomplete="new-password"
         ></b-form-input>
       </b-form-group>
@@ -117,6 +125,7 @@
         :v="$v.form"
         :validateState="validateState"
         :disabled="registrationInProcess"
+        :tab-index="[80, 90]"
       />
       <div class="col-12 m-auto pt-3">
         <b-button
@@ -179,6 +188,7 @@ export default {
         "На Ваш номер телефона был отправлен код, который необходимо ввести.",
       errorMessage: null,
       isErrorMessage: false,
+      myclass: ["cabinet"],
     };
   },
   validations: {
@@ -260,11 +270,27 @@ export default {
         if (!this.token) return;
         params = { ...params, token: this.token };
         const response = await this.$store.dispatch("registerUser", params);
-        console.log(response);
         this.registrationInProcess = false;
-        if (response?.code === 200) {
-          this.$router.push("/login");
-        } else if (response?.code !== 200) {
+        if (response?.status === 200) {
+          this.$bvModal
+            .msgBoxOk("Вы успешно зарегистрированы в системе!", {
+              title: "Подтверждение",
+              size: "md",
+              buttonSize: "md",
+              okVariant: "success",
+              okTitle: "Войти в систему",
+              footerClass: "p-2",
+              hideHeaderClose: false,
+              centered: true,
+              modalClass: this.myclass,
+            })
+            .then((value) => {
+              this.$router.push("/login");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else if (response?.status !== 200) {
           this.isErrorMessage = true;
           this.errorMessage = response.data.INFO;
         }
@@ -276,13 +302,13 @@ export default {
     async onSubmit() {
       try {
         this.$refs.verifyUser.loginTouchesCount = 3;
-        this.isErrorMessage = false;
-        if (this.$v.form.phone.$model) {
-          this.$refs.verifyUser.getCode();
-          this.$refs.verifyUser.isPhoneChanged = true;
-        }
         this.$v.form.$touch();
+        this.isErrorMessage = false;
         if (this.$v.form.$anyError) {
+          if (this.$refs.verifyUser.isSendCode === false) {
+            this.$refs.verifyUser.getCode();
+            this.$refs.verifyUser.isPhoneChanged = true;
+          }
           return;
         }
         this.setToken(this);

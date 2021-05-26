@@ -9,6 +9,7 @@
       v-model="date"
       :state="state"
       :disabled="isDisabled"
+      :tabindex="tabindex"
       autocomplete="off"
     ></b-input>
   </div>
@@ -34,6 +35,7 @@ export default {
     state: Boolean,
     blur: Function,
     disabled: Boolean,
+    tabindex: Number,
   },
   methods: {
     updateInput() {

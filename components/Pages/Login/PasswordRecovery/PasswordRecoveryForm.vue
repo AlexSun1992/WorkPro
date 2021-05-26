@@ -24,17 +24,23 @@
                 :count="60"
                 :validateState="validateState"
                 :text-message="textMessage"
+                :tab-index="[10, 15]"
               />
               <b-row class="mt-3">
                 <b-form-group label="Дата рождения" class="col-md-6 col-12">
                   <birthday-picker
                     v-model="$v.form.birthdate.$model"
                     :state="validateState('birthdate')"
+                    :tabindex="20"
                   />
                 </b-form-group>
               </b-row>
               <b-row>
-                <verify-password :v="$v.form" :validateState="validateState" />
+                <verify-password
+                  :tab-index="[30, 40]"
+                  :v="$v.form"
+                  :validateState="validateState"
+                />
               </b-row>
               <div class="mt-3 row justify-content-between">
                 <router-link to="/login" class="col-6">
@@ -60,9 +66,14 @@
                 :v="$v.form"
                 :count="60"
                 :validateState="validateState"
+                :tab-index="[10, 15]"
               />
               <b-row class="mt-0">
-                <verify-password :v="$v.form" :validateState="validateState" />
+                <verify-password
+                  :tab-index="[20, 30]"
+                  :v="$v.form"
+                  :validateState="validateState"
+                />
               </b-row>
               <div class="mt-3 row justify-content-between">
                 <router-link to="/login" class="col-6">
