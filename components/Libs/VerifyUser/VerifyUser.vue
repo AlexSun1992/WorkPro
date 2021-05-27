@@ -87,6 +87,7 @@
         type="submit"
         v-if="!isShowCodeEnter"
         :disabled="loginType === 'phone' ? v.phone.$invalid : v.email.$invalid"
+        @click.prevent="verifyUser"
         variant="success"
         class="btn-sms"
         >Подтвердить</b-button
