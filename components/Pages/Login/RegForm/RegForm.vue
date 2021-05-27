@@ -13,8 +13,8 @@
     }}</b-alert>
     <!--  -->
     <b-form
-      @submit.stop.prevent="onSubmit"
-      @keydown.enter="onSubmit"
+      @submit.stop.prevent
+      @keyup.enter="onSubmit"
       inline
       class="align-items-start"
       autocomplete="off"
@@ -129,12 +129,11 @@
       />
       <div class="col-12 m-auto pt-3">
         <b-button
+          @click.stop.prevent="onSubmit"
           class="w-100"
           type="submit"
           variant="success"
-          :disabled="
-            registrationInProcess || !!this.$store.getters.getRegistrationError
-          "
+          :disabled="registrationInProcess"
         >
           Зарегистрироваться
           <b-spinner
@@ -145,7 +144,7 @@
         </b-button>
       </div>
     </b-form>
-    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
+    <!--    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />-->
   </div>
 </template>
 
@@ -183,7 +182,7 @@ export default {
       registrationInProcess: false,
       captchaToken: null,
       isRegConfirmed: null,
-      token: null,
+      token: 1,
       textMessage:
         "На Ваш номер телефона был отправлен код, который необходимо ввести.",
       errorMessage: null,
@@ -261,13 +260,13 @@ export default {
           PHONE: this.$v.form.phone.$model,
           EMAIL: this.$v.form.email.$model,
           CODE: this.$v.form.code.$model,
-          POLICY_NUMBER: "",
+          POLICY_NUMBER: this.form.policyNumber,
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
         };
-        await this.getCaptcha();
-        if (!this.token) return;
+        // await this.getCaptcha();
+        // if (!this.token) return;
         params = { ...params, token: this.token };
         const response = await this.$store.dispatch("registerUser", params);
         this.registrationInProcess = false;
@@ -283,6 +282,7 @@ export default {
               hideHeaderClose: false,
               centered: true,
               modalClass: this.myclass,
+              autoFocusButton: "ok",
             })
             .then((value) => {
               this.$router.push("/login");
@@ -299,8 +299,9 @@ export default {
       }
     },
 
-    async onSubmit() {
+    async onSubmit(event) {
       try {
+        console.log(event);
         this.$refs.verifyUser.loginTouchesCount = 3;
         this.$v.form.$touch();
         this.isErrorMessage = false;

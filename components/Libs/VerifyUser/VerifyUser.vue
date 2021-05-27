@@ -81,13 +81,12 @@
         </div>
       </div>
     </div>
-    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
+    <!--    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />-->
     <div class="col-12 col-md-6 mt-2 mt-md-0">
       <b-button
         type="submit"
         v-if="!isShowCodeEnter"
         :disabled="loginType === 'phone' ? v.phone.$invalid : v.email.$invalid"
-        @click.prevent="verifyUser"
         variant="success"
         class="btn-sms"
         >Подтвердить</b-button
@@ -119,7 +118,7 @@ export default {
       isSendCode: false,
       isUserBlured: true,
       isCodeBlured: true,
-      code: null,
+      code: 1,
       isUserDisabled: false,
       disabledResend: true,
       timer: null,
@@ -128,7 +127,7 @@ export default {
       codeMask: "#####",
       placeholder: "+7(___)-___-__-__",
       loginTouchesCount: 0,
-      token: null,
+      token: 1,
       myclass: ["cabinet"],
       duration: 60,
     };
@@ -157,20 +156,19 @@ export default {
     },
 
     async getCode() {
-      if (this.code) return;
-      await this.getCaptcha();
+      //if (this.code) return;
+      //await this.getCaptcha();
       this.isPhoneChanged = false;
       try {
         if (
-          !this.code &&
-          (this.loginType === "phone"
+          this.loginType === "phone"
             ? !this.v.phone.$invalid
-            : !this.v.email.$invalid)
+            : !this.v.email.$invalid
         ) {
           this.disabledResend = true;
 
           let params = this.getCodeParams(this.loginType);
-          if (!this.token) return;
+          //if (!this.token) return;
           params = { ...params, token: this.token };
           const response = await this.$store.dispatch("getCode", params);
           this.$emit("error", null);
