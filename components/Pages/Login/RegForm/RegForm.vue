@@ -14,7 +14,7 @@
     <!--  -->
     <b-form
       @submit.stop.prevent
-      @keyup.enter="onSubmit"
+      @keydown.enter.prevent="onSubmit"
       inline
       class="align-items-start"
       autocomplete="off"

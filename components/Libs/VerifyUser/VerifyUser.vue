@@ -87,7 +87,7 @@
         type="submit"
         v-if="!isShowCodeEnter"
         :disabled="loginType === 'phone' ? v.phone.$invalid : v.email.$invalid"
-        @click.prevent="verifyUser"
+        @click="verifyUser"
         variant="success"
         class="btn-sms"
         >Подтвердить</b-button
@@ -160,6 +160,7 @@ export default {
       //if (this.code) return;
       //await this.getCaptcha();
       this.isPhoneChanged = false;
+      this.$emit("error", null);
       try {
         if (
           this.loginType === "phone"
@@ -172,7 +173,6 @@ export default {
           //if (!this.token) return;
           params = { ...params, token: this.token };
           const response = await this.$store.dispatch("getCode", params);
-          this.$emit("error", null);
           let isError = Boolean(response?.data[0]?.ERRORCODE);
           let isErrorList = Boolean(response?.data[0]?.ERRORLIST);
           let isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
@@ -257,7 +257,8 @@ export default {
       }
     },
 
-    verifyUser() {
+    verifyUser(e) {
+      console.log(e);
       this.$store.commit("clearAxiosError");
       this.getCode();
     },
