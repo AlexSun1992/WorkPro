@@ -36,13 +36,21 @@ export const actions = {
     try {
       const recaptcha = params.token;
       const loginType = params.loginType;
+      const modeType = params.modeType;
       const headers = {
         headers: { recaptcha: recaptcha },
       };
       delete params.loginType;
       delete params.token;
+      delete params.modeType;
       if (loginType === "phone") {
-        return await this.$axios.post("/free/v2/sendsmscode", params, headers);
+        return await this.$axios.post(
+          `/free/v2/sendsmscode${
+            modeType === "RECOVERY" ? `?smstype=recovery` : ``
+          }`,
+          params,
+          headers
+        );
       } else {
         return await this.$axios.post(
           "/free/v2/sendemailcode",

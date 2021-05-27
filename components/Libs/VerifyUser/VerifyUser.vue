@@ -171,7 +171,7 @@ export default {
 
           let params = this.getCodeParams(this.loginType);
           //if (!this.token) return;
-          params = { ...params, token: this.token };
+          params = { ...params, token: this.token, modeType: this.modeType };
           const response = await this.$store.dispatch("getCode", params);
           let isError = Boolean(response?.data[0]?.ERRORCODE);
           let isErrorList = Boolean(response?.data[0]?.ERRORLIST);
