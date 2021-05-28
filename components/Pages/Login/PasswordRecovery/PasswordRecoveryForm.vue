@@ -9,7 +9,7 @@
             ref="tabs"
             content-class="mt-4 block-registration"
           >
-            <b-tab title="Телефон" active>
+            <b-tab title="Телефон" active lazy>
               <b-alert :show="isErrorMessage" variant="danger">{{
                 errorMessage
               }}</b-alert>
@@ -17,6 +17,7 @@
                 Введите номер телефона указанный при регистрации
               </div>
               <verify-user
+                ref="verifyUser"
                 @error="showError"
                 :loginType="'phone'"
                 :mode-type="'RECOVERY'"
@@ -59,8 +60,8 @@
                 </div>
               </div>
             </b-tab>
-            <b-tab title="Email">
-              <div class="mb-3">Введите email указанный при регистрации</div>
+            <b-tab title="Email" lazy>
+              <div class="mb-3">Введите e-mail указанный при регистрации</div>
               <verify-user
                 :loginType="'email'"
                 :v="$v.form"
@@ -127,7 +128,7 @@ export default {
       currentTab: 0,
     };
   },
-  created() {
+  mounted() {
     this.initData();
   },
   methods: {

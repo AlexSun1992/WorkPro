@@ -59,7 +59,7 @@ export const actions = {
         );
       }
     } catch (e) {
-      console.log(e);
+      return e?.response;
     }
   },
 

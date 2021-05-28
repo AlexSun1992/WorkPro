@@ -14,6 +14,7 @@
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
+        @keydown.tab.prevent="tabPhoneEvent"
         tabindex="10"
         autocomplete="off"
       ></b-form-input>
@@ -29,6 +30,7 @@
         @click="loginTouchesCount = 2"
         @keyup.enter="verifyUser"
         :tabindex="tabIndex[0]"
+        placeholder="E-mail"
         autocomplete="off"
       ></b-form-input>
       <b-form-invalid-feedback
@@ -173,6 +175,9 @@ export default {
           //if (!this.token) return;
           params = { ...params, token: this.token, modeType: this.modeType };
           const response = await this.$store.dispatch("getCode", params);
+          if (response?.status === 500) {
+            return;
+          }
           let isError = Boolean(response?.data[0]?.ERRORCODE);
           let isErrorList = Boolean(response?.data[0]?.ERRORLIST);
           let isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
@@ -258,7 +263,6 @@ export default {
     },
 
     verifyUser(e) {
-      console.log(e);
       this.$store.commit("clearAxiosError");
       this.getCode();
     },
@@ -318,6 +322,10 @@ export default {
     },
     stopTimer() {
       this.disabledResend = false;
+    },
+    tabPhoneEvent(event) {
+      console.log(event);
+      //event.preventDefault();
     },
   },
 
