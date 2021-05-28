@@ -14,15 +14,12 @@ export default {
   },
   methods: {
     async downloadItem(id, rel, fileName) {
-      debugger;
       this.$axios({
         url: `/am/main/v2/file/${id}?rel=${rel}`,
         method: "GET",
         responseType: "blob",
       })
         .then((response) => {
-          debugger;
-          console.log(response.data);
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement("a");
           link.href = url;
