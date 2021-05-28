@@ -1,6 +1,6 @@
 <template>
   <a href="" @click.prevent="downloadItem(id, rel, fileName)">
-    {{ fileName }} (<span class="size">{{ fileSizeMb(fileSize) }}</span
+    {{ fileName }} (<span class="size">{{ conv_size(fileSize) }}</span
     >)
   </a>
 </template>
@@ -28,8 +28,16 @@ export default {
         link.click();
       });
     },
-    fileSizeMb(size) {
-      return (size / 1024000).toFixed(1) + "мб";
+    conv_size(b) {
+      let fsize;
+      let fsizekb = b / 1024;
+      let fsizemb = fsizekb / 1024;
+      if (fsizekb <= 1024) {
+        fsize = fsizekb.toFixed(1) + " кб";
+      } else if (fsizekb >= 1024 && fsizemb <= 1024) {
+        fsize = fsizemb.toFixed(1) + " мб";
+      }
+      return fsize;
     },
   },
 };
