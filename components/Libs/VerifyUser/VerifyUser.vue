@@ -47,7 +47,7 @@
           <template v-if="disabledResend"
             >Отправить повторно можно через
             <verify-timer @onFinish="stopTimer" :duration="duration" />
-            секунд.</template
+            сек.</template
           >
         </p>
         <b-form-group class="col-12 col-md-6">
@@ -137,6 +137,7 @@ export default {
   },
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
+    this.debouncedGetCode = _.debounce(this.getCode, 500);
   },
   methods: {
     onError(error) {
@@ -344,6 +345,18 @@ export default {
         return !this.v.phone.$invalid && this.isSendCode;
       } else {
         return !this.v.email.$invalid && this.isSendCode;
+      }
+    },
+  },
+  watch: {
+    "v.phone.$model": function () {
+      if (this.v.phone.$invalid === false) {
+        this.debouncedGetCode();
+      }
+    },
+    "v.email.$model": function () {
+      if (this.v.email.$invalid === false) {
+        this.debouncedGetCode();
       }
     },
   },
