@@ -14,7 +14,6 @@
         @blur="debouncedUpdate(loginType, isUserBlured)"
         @input="isUserBlured = false"
         @click="loginTouchesCount = 2"
-        @keydown.tab.prevent="tabPhoneEvent"
         tabindex="10"
         autocomplete="off"
       ></b-form-input>
@@ -323,10 +322,6 @@ export default {
     },
     stopTimer() {
       this.disabledResend = false;
-    },
-    tabPhoneEvent(event) {
-      console.log(event);
-      //event.preventDefault();
     },
   },
 
