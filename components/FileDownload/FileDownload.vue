@@ -18,15 +18,23 @@ export default {
         url: `/am/main/v2/file/${id}?rel=${rel}`,
         method: "GET",
         responseType: "blob",
-      }).then((response) => {
-        console.log(response.data);
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", fileName);
-        document.body.appendChild(link);
-        link.click();
-      });
+      })
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+        })
+        .catch((e) => {
+          this.$bvToast.toast("Не удалось скачать файл", {
+            title: "Ошибка",
+            variant: "danger",
+            noAutoHide: true,
+            solid: true,
+          });
+        });
     },
     conv_size(b) {
       let fsize;
