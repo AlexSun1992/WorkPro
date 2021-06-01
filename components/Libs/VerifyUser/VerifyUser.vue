@@ -52,6 +52,7 @@
         <b-form-group class="col-12 col-md-6">
           <b-form-input
             autofocus
+            ref="codeInput"
             v-model="v.code.$model"
             class="mb-2"
             v-mask="codeMask"
@@ -136,7 +137,7 @@ export default {
   },
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
-    this.debouncedGetCode = _.debounce(this.getCode, 500);
+    this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
   methods: {
     onError(error) {
@@ -315,10 +316,17 @@ export default {
     },
 
     async resendCode() {
-      this.v.code.$model = "";
-      this.disabledResend = true;
       const params = this.getCodeParams(this.loginType);
       const response = await this.$store.dispatch("getCode", params);
+      if (
+        response?.status === 500 ||
+        Boolean(response?.data[0]?.ERRORCODE) === true
+      ) {
+        return;
+      }
+      this.v.code.$model = "";
+      this.disabledResend = true;
+      this.$refs.codeInput.focus();
     },
     stopTimer() {
       this.disabledResend = false;
