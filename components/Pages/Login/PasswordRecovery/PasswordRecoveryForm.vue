@@ -45,12 +45,16 @@
               </b-row>
               <div class="mt-3 row justify-content-between">
                 <router-link to="/login" class="col-6">
-                  <b-button variant="outline-secondary" class="w-100"
+                  <b-button
+                    tabindex="50"
+                    variant="outline-secondary"
+                    class="w-100"
                     >Отмена</b-button
                   >
                 </router-link>
                 <div class="col-6">
                   <b-button
+                    tabindex="60"
                     variant="success"
                     @click="resetPassword"
                     :disabled="disabledReset"

@@ -134,6 +134,7 @@
           type="submit"
           variant="success"
           :disabled="registrationInProcess"
+          tabindex="100"
         >
           Зарегистрироваться
           <b-spinner
@@ -301,7 +302,6 @@ export default {
 
     async onSubmit(event) {
       try {
-        console.log(event);
         this.$refs.verifyUser.loginTouchesCount = 3;
         this.$v.form.$touch();
         this.isErrorMessage = false;

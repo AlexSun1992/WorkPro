@@ -353,12 +353,12 @@ export default {
   },
   watch: {
     "v.phone.$model": function () {
-      if (this.v.phone.$invalid === false) {
+      if (this.v.phone.$invalid === false && this.loginType === "phone") {
         this.debouncedGetCode();
       }
     },
     "v.email.$model": function () {
-      if (this.v.email.$invalid === false) {
+      if (this.v.email.$invalid === false && this.loginType === "email") {
         this.debouncedGetCode();
       }
     },
