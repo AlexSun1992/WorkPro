@@ -48,6 +48,7 @@ export const getters = {
   getLoading: (state) => state.loading,
 };
 export const actions = {
+
   async fetchForm({ dispatch, commit, getters, state }, params) {
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
@@ -68,6 +69,9 @@ export const actions = {
       await this.$axios
         .get(url)
         .then((res) => {
+         console.log(url)
+         console.log(res.data.metaData)
+         console.log(res.data)
           commit(
             "setForm",
             res.data.metaData.data.length ? res.data.metaData.data : res.data
@@ -77,6 +81,7 @@ export const actions = {
             JSON.parse(JSON.stringify(res.data.metaData.data))
           );
           if (res.data.metaData.captions) {
+            console.log(res.data.metaData.captions)
             commit("setCaptions", res.data.metaData.captions);
           }
           if (
@@ -105,6 +110,10 @@ export const actions = {
       }
     }
   },
+
+
+
+
   async fetchOneToManyDataTable({ commit, getters, state }, params) {
     try {
       await this.$axios
@@ -274,6 +283,7 @@ export const mutations = {
       }
     }
   },
+
   setActionParamsField(state, data) {
     const item = state.actionParams.find((d) => d.name === data.name);
     item.value = data.value;

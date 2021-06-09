@@ -1,4 +1,5 @@
 <template>
+<div>
   <div
     style="cursor: pointer"
     :class="'ppl-info percent' + percent + ' ppl-' + sex"
@@ -10,14 +11,33 @@
       <span class="ppl-name">{{ user }}</span>
     </div>
   </div>
+
+<!-- <div>
+   <span class="ppl-name">{{ user }}</span>
+   <p>заполните профиль</p>
+    <ControlProgressbar 
+    :profileFullness="loggedInUser">
+    </ControlProgressbar>
+</div> -->
+
+
+</div>
 </template>
 
 <script>
+
+import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar"
+import { mapGetters } from 'vuex';
+
 export default {
+  components: { ControlProgressbar },
   name: "HeaderUserInfo",
   props: ["userData"],
+   
+
   methods: {
     goToProfile() {
+      console.log(this.userData)
       $nuxt._router.push(`/cabinet/${this.$route.params.idModule}/0/710`);
     },
   },
@@ -37,6 +57,9 @@ export default {
         return this.userData[0]._data[0].BSEX === 1 ? "male" : "female";
       }
     },
+
+    ...mapGetters(['loggedInUser'])
+
   },
 };
 </script>
