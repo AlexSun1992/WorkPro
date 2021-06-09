@@ -59,7 +59,7 @@
                     @click="resetPassword"
                     :disabled="disabledReset"
                     class="w-100"
-                    >Сбросить пароль</b-button
+                    >Изменить пароль</b-button
                   >
                 </div>
               </div>
