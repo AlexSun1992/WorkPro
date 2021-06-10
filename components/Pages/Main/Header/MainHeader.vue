@@ -14,7 +14,7 @@
           <div class="separator32"></div>
         </div>
         <div class="float-left">
-          <a href="" class="icon-left icon-search-office"
+          <a href="/contacts" class="icon-left icon-search-office"
             >Найти ближайший офис</a
           >
         </div>
