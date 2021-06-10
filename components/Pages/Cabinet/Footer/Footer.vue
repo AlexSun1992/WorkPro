@@ -7,7 +7,7 @@
             <a href="">Политика обработки персональных данных</a>
           </div>
           <div class="col-md-4 col-12 mt-3 mt-md-0">
-            <a href="" class="position-relative footer-office-link"
+            <a href="/contacts" class="position-relative footer-office-link"
               >Найти офисы</a
             >
           </div>

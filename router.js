@@ -14,8 +14,7 @@ import DynamicRoutesRenderer from "~/components/Libs/DynamicRoutesRenderer/Dynam
 import Preview from "~/components/Pages/PreviewPage/Preview";
 import Table from "~/components/Pages/Table/Table";
 import DemoOsago from "@/components/Pages/DemoOsago";
-
-import List from "~/components/Pages/Cabinet/List/List";
+import MapViewer from "@/components/MapViewer/MapViewer";
 
 Vue.use(Router);
 
@@ -56,6 +55,11 @@ export function createRouter() {
         meta: "Загрузка файлов",
         path: "/download",
         component: Table,
+      },
+      {
+        meta: "Карта офисов",
+        path: "/contacts",
+        component: MapViewer,
       },
       {
         meta: "Cabinet",

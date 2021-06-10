@@ -1,6 +1,7 @@
 /* eslint-disable */
 export const state = () => ({
   registrationError: null,
+  agencies: null,
 });
 
 export const actions = {
@@ -60,6 +61,15 @@ export const actions = {
       }
     } catch (e) {
       return e?.response;
+    }
+  },
+
+  async fetchAgencies({ commit }) {
+    try {
+      const { data } = await this.$axios.get(`/free/v2/agencies`);
+      commit("setAgencies", data);
+    } catch (e) {
+      console.log(e);
     }
   },
 
@@ -135,6 +145,10 @@ export const mutations = {
     state.auth.user = params;
   },
 
+  setAgencies(state, params) {
+    state.agencies = params;
+  },
+
   clearAxiosError(state) {
     state.registrationError = null;
   },
@@ -151,5 +165,9 @@ export const getters = {
 
   getRegistrationError(state) {
     return state.registrationError;
+  },
+
+  getAgencies(state) {
+    return state.agencies;
   },
 };
