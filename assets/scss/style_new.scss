@@ -157,7 +157,7 @@
 }
 
 .mx-datepicker {
-  width: 130px;
+  width: 100%;
 }
 
 .mx-datepicker + small {
@@ -3871,4 +3871,11 @@ div > .driver-card:last-child {
 
 .stap-block .active {
   color: #00984a;
+}
+p {
+  margin: 0;
+  line-height: 1.2;
+}
+hr {
+  margin: 0.25rem;
 }
