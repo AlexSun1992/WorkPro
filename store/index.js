@@ -44,11 +44,15 @@ export const actions = {
       delete params.loginType;
       delete params.token;
       delete params.modeType;
-      if (loginType === "phone") {
+      if (
+        loginType === "phone" ||
+        modeType === "REG" ||
+        modeType === "RECOVERY"
+      ) {
+        let method = params.error ? "sendsmscode2" : "sendsmscode";
         return await this.$axios.post(
-          `/free/v2/sendsmscode${
-            modeType === "RECOVERY" ? `?smstype=recovery` : ``
-          }`,
+          `/free/v2/${method}` +
+            `${modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,
           params,
           headers
         );

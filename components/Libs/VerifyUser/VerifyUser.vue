@@ -83,7 +83,7 @@
         </div>
       </div>
     </div>
-    <!--    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />-->
+    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
     <div class="col-12 col-md-6 mt-2 mt-md-0">
       <b-button
         type="submit"
@@ -179,6 +179,24 @@ export default {
           if (response?.status === 500) {
             return;
           }
+
+          if (response?.data[0]?.ERRORCODE === 106) {
+            await this.$recaptcha.reset();
+            const token = await this.$recaptcha.getResponse();
+            params = {
+              ...params,
+              token: this.token,
+              modeType: this.modeType,
+              error: true,
+            };
+            const response = await this.$store.dispatch("getCode", params);
+
+            if (response?.data[0]?.ERRORLIST) {
+              this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT);
+            } else {
+              this.isSendCode = true;
+            }
+          }
           let isError = Boolean(response?.data[0]?.ERRORCODE);
           let isErrorList = Boolean(response?.data[0]?.ERRORLIST);
           let isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
@@ -228,6 +246,7 @@ export default {
               this.isSendCode = true;
             }
           } else if (isErrorList === true) {
+            if (response?.data[0]?.ERRORCODE === 106) return;
             this.$emit(
               "error",
               response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "")
