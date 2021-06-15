@@ -181,7 +181,6 @@ export default {
           }
 
           if (response?.data[0]?.ERRORCODE === 106) {
-            await this.$recaptcha.reset();
             const token = await this.$recaptcha.getResponse();
             params = {
               ...params,
