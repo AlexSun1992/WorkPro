@@ -332,8 +332,26 @@ export default {
     },
 
     async resendCode() {
-      const params = this.getCodeParams(this.loginType);
+      let params = this.getCodeParams(this.loginType);
+      params = { ...params, token: this.token, modeType: this.modeType };
       const response = await this.$store.dispatch("getCode", params);
+      if (response?.data[0]?.ERRORCODE === 106) {
+        const token = await this.$recaptcha.getResponse();
+        await this.$recaptcha.reset();
+        params = {
+          ...params,
+          token: this.token,
+          modeType: this.modeType,
+          error: true,
+        };
+        const response = await this.$store.dispatch("getCode", params);
+        if (response?.data[0]?.ERRORLIST) {
+          this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT);
+        } else {
+          this.isSendCode = true;
+        }
+      }
+
       if (
         response?.status === 500 ||
         Boolean(response?.data[0]?.ERRORCODE) === true
