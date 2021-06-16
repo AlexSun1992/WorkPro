@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { getErrorMessage } from "@/utils/transform";
 export default {
   name: "WizardButtons",
   props: ["currentTab", "tabs", "qty", "loading"],
@@ -32,6 +33,7 @@ export default {
     },
     async goNext() {
       this.$parent.loading = true;
+      this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM == this.currentTab.idItem
       );
@@ -44,6 +46,11 @@ export default {
           rowId: this.$route.params.idCard,
         });
         if (response.status != 200) {
+          this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
+          this.$store.commit(
+            "wizard/setWizardErrorActionExecuteMessage",
+            response.data
+          );
           this.$parent.loading = false;
           return;
         }
@@ -53,6 +60,7 @@ export default {
       this.$emit("goNext", tab);
     },
     goBack() {
+      this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
       let tab = this.tabs[this.getCurrentIndex() - 1];
       this.$emit("goBack", tab);
     },

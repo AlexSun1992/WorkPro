@@ -5,6 +5,8 @@ export const state = () => ({
   pages: null,
   caption: null,
   error: null,
+  isErrorActionExecute: false,
+  errorActionExecuteMessage: null,
   isError: false,
 });
 
@@ -13,6 +15,9 @@ export const getters = {
   getWizardPages: (state) => state.pages,
   getWizardCaption: (state) => state.caption,
   getWizardErrorMessage: (state) => getErrorMessage(state.error),
+  getWizardErrorActionExecuteMessage: (state) =>
+    getErrorMessage(state.errorActionExecuteMessage),
+  getWizardIsErrorActionExecute: (state) => state.isErrorActionExecute,
   getWizardIsError: (state) => state.isError,
 };
 
@@ -50,7 +55,13 @@ export const mutations = {
   setWizardIsError(state, data) {
     state.isError = data;
   },
+  setWizardIsErrorActionExecute(state, data) {
+    state.isErrorActionExecute = data;
+  },
   setWizardErrorMessage(state, data) {
     state.error = data;
+  },
+  setWizardErrorActionExecuteMessage(state, data) {
+    state.errorActionExecuteMessage = data;
   },
 };

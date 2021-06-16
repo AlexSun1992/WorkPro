@@ -56,8 +56,8 @@ export default function ({ app, store, redirect, $auth }) {
               return app.$axios(originalRequest);
             }
           }
-          if (getErrorMessage(error.response.data)) {
-            $nuxt.$bvToast.toast(getErrorMessage(error.response.data), {
+          if (Boolean(error.response.data?.INFO) === false) {
+            $nuxt.$bvToast.toast("Неизвестная ошибка", {
               title: "Ошибка",
               variant: "danger",
               autoHideDelay: 5000,

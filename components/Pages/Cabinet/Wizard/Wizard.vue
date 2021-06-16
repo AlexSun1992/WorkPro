@@ -26,6 +26,14 @@
       :key="$route.fullPath"
       :wizard-tabs="settings.wizard"
     />
+    <div>
+      <b-alert
+        :show="isErrorActionExecuteMessage"
+        variant="danger"
+        class="mt-4"
+        >{{ errorActionExecuteMessage }}</b-alert
+      >
+    </div>
     <wizard-buttons
       :currentTab="currentTab"
       :tabs="tabs"
@@ -108,6 +116,9 @@ export default {
       return this.$store.getters["data_card/getError"];
     },
   },
+  destroyed() {
+    this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
+  },
   computed: {
     settings: {
       get: function () {
@@ -166,6 +177,12 @@ export default {
     },
     isShowCardTemplate() {
       return Boolean(this.settings?.cardtemplate);
+    },
+    isErrorActionExecuteMessage() {
+      return this.$store.getters["wizard/getWizardIsErrorActionExecute"];
+    },
+    errorActionExecuteMessage() {
+      return this.$store.getters["wizard/getWizardErrorActionExecuteMessage"];
     },
   },
 };
