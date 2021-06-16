@@ -6,11 +6,13 @@
     >
       <i class="icon-my-profile"></i>{{ cardCaption }}
     </div>
+
     <template v-if="isShowCardTemplate">
       <v-runtime-template
         :template="settings.cardtemplate"
       ></v-runtime-template>
     </template>
+    
     <b-nav v-else-if="pages" tabs justified class="mb-2 sticky-top">
       <b-nav-item
         v-for="(item, index) in tabs"
@@ -26,6 +28,7 @@
       :key="$route.fullPath"
       :wizard-tabs="settings.wizard"
     />
+
     <wizard-buttons
       :currentTab="currentTab"
       :tabs="tabs"
@@ -34,6 +37,7 @@
       @goNext="goNext($event)"
       @goBack="goBack($event)"
     ></wizard-buttons>
+
   </div>
   <div v-else>{{ wizardErrorMessage }}</div>
 </template>

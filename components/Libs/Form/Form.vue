@@ -6,7 +6,6 @@
         v-for="(tab, index) in captions"
         :key="index"
         :title-link-class="{ error: highlightTab(index) }"
-        @click = RevealId(index,tab)
       >
         <div class="row">
           <Control
@@ -22,12 +21,10 @@
         </div>
         
       </b-tab>
-      
-      <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
+            <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
         <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />
       </b-tab>
-
-    </b-tabs>
+</b-tabs>
 
     <div  class="row">
       <Control
@@ -40,8 +37,8 @@
         :edit="edit"
         :cols="cols"
       ></Control>
-
     </div>
+
   </b-form-row>
 </template>
 <script>
@@ -74,26 +71,7 @@ export default {
     },
   },
   
-
  methods: {
-   
-    // Выявление полей индекса, и заголовка
-    RevealId(id,tab){
-
-      console.log(id)
-
-      console.log(tab)
-     
-      for(let i = 0; i < this.data.length; i++){
-
-        console.log(this.data[i])
-        
-      }
-
-      console.log(this.captions)
-    },
-
-  
     items(index) {
       if (this.data) {
         return this.data.filter((item) => {
@@ -105,6 +83,7 @@ export default {
         });
       }
     },
+
 
     highlightTab(i) {
       let invalidFields = this.$store.getters["data_card/getForm"].filter(
@@ -122,6 +101,7 @@ export default {
       return this.$store.getters["data_card/getCardId"];
     },
   },
+
 }
 </script>
 

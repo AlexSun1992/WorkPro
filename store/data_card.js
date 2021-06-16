@@ -20,6 +20,7 @@ export const state = () => ({
   isReadOnly: false,
   loading: false,
 });
+
 export const getters = {
   getForm: (state) => state.form,
   cardChanged: (state) => state.cardChanged,
@@ -69,9 +70,6 @@ export const actions = {
       await this.$axios
         .get(url)
         .then((res) => {
-         console.log(url)
-         console.log(res.data.metaData)
-         console.log(res.data)
           commit(
             "setForm",
             res.data.metaData.data.length ? res.data.metaData.data : res.data
@@ -81,7 +79,7 @@ export const actions = {
             JSON.parse(JSON.stringify(res.data.metaData.data))
           );
           if (res.data.metaData.captions) {
-            console.log(res.data.metaData.captions)
+            
             commit("setCaptions", res.data.metaData.captions);
           }
           if (

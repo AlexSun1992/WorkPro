@@ -81,6 +81,7 @@ export default {
       actionFormDisabled: false,
       isActionApplyError: false,
       actionApplyErrorMessage: null,
+      updateValueCounter:0,
       disabledButtons: {
         background: "#dddbdd",
         boxShadow: "none",
@@ -129,6 +130,8 @@ export default {
         }
       } catch {}
     },
+
+
     async updateValue(e) {
       let field = this.data.find((f) => f.fieldId === e.fieldId);
       if (field.type !== "button") {
@@ -149,6 +152,7 @@ export default {
         const actionId = e.value.replace("Item", "");
         let moduleId;
         let cardId;
+
         if (!this.params.page) {
           moduleId = this.$route.params.idModule;
           cardId = this.$route.params.idCard;
@@ -178,7 +182,11 @@ export default {
         fieldId: e.fieldId,
         value: e.value,
       });
+        
     },
+
+
+
     async fetchCard(method, url) {
       try {
         this.cancelRequest();
@@ -207,6 +215,7 @@ export default {
         fieldName: e.fieldName,
       });
     },
+    
     openCard(e) {
       const flatmenu = this.$store.getters["menu/flatmenu"];
       const menuItem = flatmenu.find((item) => {

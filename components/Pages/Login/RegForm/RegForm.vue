@@ -34,7 +34,9 @@
           :tab-index="[10, 15]"
         />
       </b-form-group>
+
       <b-form-group label="E-mail" label-cols="12" class="col-12 col-md-6">
+
         <b-form-input
           :id="Math.random().toString()"
           v-model.lazy="$v.form.email.$model"
@@ -45,9 +47,8 @@
           tabindex="20"
           autocomplete="new-password"
         ></b-form-input>
-        <b-form-invalid-feedback
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
+        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+
       </b-form-group>
 
       <b-form-group
@@ -74,11 +75,11 @@
             tabindex="40"
             autocomplete="new-password"
           ></b-form-input>
-          <b-form-invalid-feedback
-            >Пожалуйста, заполните это поле</b-form-invalid-feedback
-          >
+          <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
+          <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
         </b-form-group>
       </div>
+
       <b-form-group label="Имя" label-cols="12" class="col-12 col-md-6">
         <b-form-input
           :id="Math.random().toString()"
@@ -89,10 +90,13 @@
           :disabled="registrationInProcess"
           tabindex="50"
           autocomplete="new-password"
+          :class="$v.form.name.$model.length > 5 ? 'ok' : null "
         ></b-form-input>
-        <b-form-invalid-feedback
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
+        
+        <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> 
+
+
       </b-form-group>
       <b-form-group label="Отчество" label-cols="12" class="col-12 col-md-6">
         <b-form-input
@@ -105,9 +109,8 @@
           tabindex="60"
           autocomplete="new-password"
         ></b-form-input>
-        <b-form-invalid-feedback
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
+        <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> 
       </b-form-group>
 
       <b-form-group label="Номер полиса" label-cols="12" class="col-12">
@@ -152,15 +155,19 @@
 <script>
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
+import { required, email, minLength, sameAs, helpers } from "vuelidate/lib/validators";
 
 import birthdayPicker from "../../../Libs/BirthdatePicker/BirthdatePicker";
 import VerifyUser from "../../../Libs/VerifyUser/VerifyUser";
 import VerifyPassword from "../../../Libs/VerifyPassword/VerifyPassword";
 import ConfirmModal from "./ConfirmModal";
 
+
+const alpha = helpers.regex('alpha', /^[а-яА-Я]/)
+
 export default {
   components: { birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal },
+
   mixins: [validationMixin],
 
   data() {
@@ -177,6 +184,7 @@ export default {
         password: "",
         password2: "",
       },
+
       conformation: false,
       show: true,
       password2: "",
@@ -191,16 +199,20 @@ export default {
       myclass: ["cabinet"],
     };
   },
+
   validations: {
     form: {
       name: {
         required,
+        alpha
       },
       family: {
         required,
+        alpha
       },
       patronymic: {
         required,
+        alpha
       },
       birthdate: {
         required,
@@ -226,6 +238,7 @@ export default {
       },
     },
   },
+
   methods: {
     onError(error) {
       console.log("Error:", error);
@@ -246,8 +259,11 @@ export default {
       }
     },
     validateState(name) {
+      
       const { $dirty, $error } = this.$v.form[name];
-      return $dirty ? !$error : null;
+  
+      return $dirty ? !$error : null
+
     },
 
     async setToken(context) {
@@ -266,6 +282,7 @@ export default {
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
         };
+        console.log(params)
         // await this.getCaptcha();
         // if (!this.token) return;
         params = { ...params, token: this.token };
@@ -327,9 +344,35 @@ export default {
       }
     },
   },
+
+
+// watch:{
+
+// 'form.name':function(value){
+ 
+//   if(value){
+
+//    this.$v.form.name.$model = this.$v.form.name.$model.replace(/[a-z]/gi,'')
+  
+//   }
+
+//  }
+
+// }
+
+
 };
 </script>
 
 <style scoped lang="scss">
 @import "~/assets/scss/reg.scss";
+
+.alert{
+  border:1px solid orange;
+}
+
+.ok{
+  border:1px solid red;
+}
+
 </style>

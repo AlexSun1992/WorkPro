@@ -138,6 +138,7 @@ export default {
         suggestionType,
         key: API_KEY,
       };
+
       if (
         name === "SFIRSTNAME" ||
         name === "SSECONDNAME" ||

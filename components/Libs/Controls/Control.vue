@@ -102,7 +102,6 @@ export default {
   },
   computed: {
     comp: function () {
-      // console.log(this.data)
       return (
         "Control" +
         this.data.type.charAt(0).toUpperCase() +

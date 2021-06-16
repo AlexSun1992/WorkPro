@@ -88,6 +88,7 @@ export default {
 
   methods: {
     async login(context) {
+  
       try {
         this.authInProcess = true;
         // this.captchaToken = await this.$getCaptcha();
@@ -140,6 +141,7 @@ export default {
     },
 
     blurField(field, bluredField) {
+      
       if (field === "username") {
         this.loginTouchesCount++;
         this.isUsernameBlured = true;
@@ -159,6 +161,7 @@ export default {
       this.loginTouchesCount = 3;
       this.$v.user.$touch();
       if (this.$v.user.$anyError) {
+        console.log(this.$v.user)
         return;
       }
       this.login(this);
