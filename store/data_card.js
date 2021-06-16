@@ -109,9 +109,6 @@ export const actions = {
     }
   },
 
-
-
-
   async fetchOneToManyDataTable({ commit, getters, state }, params) {
     try {
       await this.$axios

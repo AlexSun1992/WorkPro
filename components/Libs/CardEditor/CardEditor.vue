@@ -131,7 +131,6 @@ export default {
       } catch {}
     },
 
-
     async updateValue(e) {
       let field = this.data.find((f) => f.fieldId === e.fieldId);
       if (field.type !== "button") {
@@ -184,8 +183,6 @@ export default {
       });
         
     },
-
-
 
     async fetchCard(method, url) {
       try {
