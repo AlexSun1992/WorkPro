@@ -241,6 +241,7 @@ export default {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
       this.$store.commit("data_card/setError", false);
+      this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
         try {

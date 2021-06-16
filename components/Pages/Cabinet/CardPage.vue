@@ -57,7 +57,7 @@
         {{ errorMessage }}
       </div>
     </div>
-    <b-alert :show="isError && !!getFormData" variant="danger" class="mt-4">{{
+    <b-alert :show="Boolean(errorMessage)" variant="danger" class="mt-4">{{
       errorMessage
     }}</b-alert>
     <div v-if="isShowCardEditor" class="mt-3 mb-3 row button-container">
@@ -147,6 +147,7 @@ export default {
   destroyed() {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
+    this.$store.commit("data_card/setErrorMessage", null);
   },
   methods: {
     // isFieldExists,
