@@ -2,14 +2,17 @@
   <div class="login-form">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="block bg-six block-border-one mb-5 col-md-10 col-lg-6">
+        <div
+          v-if="formLoaded"
+          class="block bg-six block-border-one mb-5 col-md-10 col-lg-6"
+        >
           <h2 class="mb-3 text-center mt-5">Восстановление доступа</h2>
           <b-tabs
             @activate-tab="initData"
             ref="tabs"
             content-class="mt-4 block-registration"
           >
-            <b-tab title="Телефон" active lazy>
+            <b-tab title="Телефон">
               <b-alert :show="isErrorMessage" variant="danger">{{
                 errorMessage
               }}</b-alert>
@@ -64,7 +67,7 @@
                 </div>
               </div>
             </b-tab>
-            <b-tab title="Email" lazy>
+            <b-tab title="Email">
               <div class="mb-3">Введите e-mail указанный при регистрации</div>
               <verify-user
                 :loginType="'email'"
@@ -130,10 +133,12 @@ export default {
       isErrorMessage: false,
       isGreater180: false,
       currentTab: 0,
+      formLoaded: false,
     };
   },
   mounted() {
     this.initData();
+    this.formLoaded = true;
   },
   methods: {
     validateState(name) {

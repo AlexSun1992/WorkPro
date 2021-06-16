@@ -136,6 +136,7 @@ export default {
     };
   },
   created() {
+    console.log("Создан");
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
@@ -153,15 +154,12 @@ export default {
     async getCaptcha() {
       try {
         const token = await this.$recaptcha.getResponse();
-        await this.$recaptcha.reset();
       } catch (error) {
         console.log("Login error:", error);
       }
     },
 
     async getCode() {
-      //if (this.code) return;
-      //await this.getCaptcha();
       this.isPhoneChanged = false;
       this.$emit("error", null);
       try {
@@ -173,7 +171,6 @@ export default {
           this.disabledResend = true;
 
           let params = this.getCodeParams(this.loginType);
-          //if (!this.token) return;
           params = { ...params, token: this.token, modeType: this.modeType };
           const response = await this.$store.dispatch("getCode", params);
           if (response?.status === 500) {
