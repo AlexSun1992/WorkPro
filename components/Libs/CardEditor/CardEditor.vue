@@ -117,6 +117,7 @@ export default {
   destroyed() {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
+    this.$store.commit("data_card/setSavedError", false);
   },
   methods: {
     stripeLoaded() {
@@ -240,7 +241,7 @@ export default {
     async saveDataCard() {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
-      this.$store.commit("data_card/setError", false);
+      this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
@@ -328,7 +329,7 @@ export default {
             if (resp?.status === 500) {
               this.$store.commit("data_card/setLoading", false);
               this.$store.commit("data_card/setDisabled", false);
-              this.$store.commit("data_card/setError", true);
+              this.$store.commit("data_card/setSavedError", true);
               this.$store.commit("data_card/setErrorMessage", resp.data);
             }
           }

@@ -61,7 +61,7 @@
         {{ errorMessage }}
       </div>
     </div>
-    <b-alert :show="Boolean(errorMessage)" variant="danger" class="mt-4">{{
+    <b-alert :show="isShowSavedError" variant="danger" class="mt-4">{{
       errorMessage
     }}</b-alert>
     <div v-if="isShowCardEditor" class="mt-3 mb-3 row button-container">
@@ -292,6 +292,9 @@ export default {
     },
     isShowErrorMessage() {
       return this.isError && !this.getFormData;
+    },
+    isShowSavedError() {
+      return this.$store.getters[`data_card/getSavedError`];
     },
     isShowTemplate() {
       return (

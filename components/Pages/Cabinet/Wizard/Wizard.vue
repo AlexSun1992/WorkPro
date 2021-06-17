@@ -84,7 +84,7 @@ export default {
         if (this.$store.getters["data_card/getBtnSave"]) {
           if (this.$refs["child"].$refs["cardEditor"] !== undefined) {
             await this.$refs["child"].$refs["cardEditor"].saveDataCard();
-            if (this.isError()) {
+            if (this.isSavedError === true) {
               this.loading = false;
               return;
             }
@@ -111,9 +111,6 @@ export default {
     },
     async goBack(e) {
       this.$router.push(this.getURL(e));
-    },
-    isError() {
-      return this.$store.getters["data_card/getError"];
     },
   },
   destroyed() {
@@ -183,6 +180,9 @@ export default {
     },
     errorActionExecuteMessage() {
       return this.$store.getters["wizard/getWizardErrorActionExecuteMessage"];
+    },
+    isSavedError() {
+      return this.$store.getters["data_card/getSavedError"];
     },
   },
 };

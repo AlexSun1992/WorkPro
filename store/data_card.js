@@ -10,6 +10,7 @@ export const state = () => ({
   cardRelId: null,
   captions: null,
   isError: false,
+  isSavedError: false,
   errorMessage: null,
   cardCaption: null,
   cardChanged: false,
@@ -25,6 +26,7 @@ export const getters = {
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
   getError: (state) => state.isError,
+  getSavedError: (state) => state.isSavedError,
   getErrorMessage: (state) => getErrorMessage(state.errorMessage),
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
@@ -245,6 +247,9 @@ export const mutations = {
   },
   setError(state, data) {
     state.isError = data;
+  },
+  setSavedError(state, data) {
+    state.isSavedError = data;
   },
   setErrorMessage(state, data) {
     state.errorMessage = data;
