@@ -4,7 +4,7 @@
       <v-runtime-template :template="templateData"></v-runtime-template>
     </div>
     <div v-if="!isShowBlock">
-      <div class="card bg-six block-border-one block p-4">
+      <div class="card bg-six block-border-one block">
         <SkeletonBox class="mt-5" :items="8"></SkeletonBox>
       </div>
     </div>

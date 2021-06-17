@@ -3409,8 +3409,9 @@ legend {
 select,
 .form-control,
 input {
-  padding: 13px;
+  padding: 9px;
   font-size: 16px;
+  font-weight: 500;
 }
 select {
   height: auto;
@@ -3447,8 +3448,9 @@ input:focus {
 }
 
 .ui.selection.dropdown {
-  padding: 14px;
+  padding: 9px;
   border: 1px solid #a8a8a8;
+  font-weight: 500;
 }
 
 .ui.selection.dropdown > .delete.icon,
