@@ -10,8 +10,6 @@ converter.setArrayOfObjectFields = (itemId, items, fields) => {
   for (let i = 0; i < items.length; i++) {
     arr.push(converter.setFieldsParams(itemId, items[i], fields));
   }
-
-  console.log(arr)
   return arr;
   };
 
@@ -79,8 +77,7 @@ converter.form = async (data, itemId) => {
 
   let promises = [];
 
-  console.log(webFields)
-
+  
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
     obj.label = webFields[i].SCAPTION;
@@ -163,7 +160,7 @@ converter.form = async (data, itemId) => {
       obj.type = "string";
     }
 
-    console.log(obj)
+    
 
     function setDefaultValues(caption) {
       if (caption) {

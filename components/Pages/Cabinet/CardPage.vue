@@ -190,7 +190,7 @@ export default {
     },
     saveDataCard() {
       if (this.$refs.cardEditor) {
-        console.log(this.$refs.cardEditor)
+    
         this.$refs.cardEditor.saveDataCard();
       }
     },

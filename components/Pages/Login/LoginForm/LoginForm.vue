@@ -161,7 +161,7 @@ export default {
       this.loginTouchesCount = 3;
       this.$v.user.$touch();
       if (this.$v.user.$anyError) {
-        console.log(this.$v.user)
+        
         return;
       }
       this.login(this);

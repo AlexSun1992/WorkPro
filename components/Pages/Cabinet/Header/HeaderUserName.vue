@@ -37,7 +37,6 @@ export default {
 
   methods: {
     goToProfile() {
-      console.log(this.userData)
       $nuxt._router.push(`/cabinet/${this.$route.params.idModule}/0/710`);
     },
   },

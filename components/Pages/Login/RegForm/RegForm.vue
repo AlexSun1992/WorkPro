@@ -282,7 +282,7 @@ export default {
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
         };
-        console.log(params)
+        
         // await this.getCaptcha();
         // if (!this.token) return;
         params = { ...params, token: this.token };

@@ -57,9 +57,6 @@ export default {
     };
   },
   created() {
-    
-    // console.log(this.data);
-
     if (this.data.value?.value || this.data.value?.value == 0)
       this.options.push(this.data.value);
   },
@@ -88,11 +85,9 @@ export default {
       this.$axios({ url: url, method: "GET" })
         .then((resp) => {
           this.options = resp.data;
-          console.log(resp)
+        
           if (this.options.length === 1) {
             let value = this.options[0];
-
-            console.log(value)
             this.$emit("update", {
               fieldId: this.data.fieldId,
               name: this.data.name,
