@@ -92,9 +92,9 @@
           autocomplete="new-password"
           :class="$v.form.name.$model.length > 5 ? 'ok' : null "
         ></b-form-input>
-        
+
         <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> 
+        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
 
 
       </b-form-group>
@@ -110,7 +110,7 @@
           autocomplete="new-password"
         ></b-form-input>
         <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> 
+        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group label="Номер полиса" label-cols="12" class="col-12">
@@ -259,9 +259,9 @@ export default {
       }
     },
     validateState(name) {
-      
+
       const { $dirty, $error } = this.$v.form[name];
-  
+
       return $dirty ? !$error : null
 
     },
@@ -282,7 +282,7 @@ export default {
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
         };
-        
+
         // await this.getCaptcha();
         // if (!this.token) return;
         params = { ...params, token: this.token };
@@ -344,23 +344,6 @@ export default {
       }
     },
   },
-
-
-// watch:{
-
-// 'form.name':function(value){
- 
-//   if(value){
-
-//    this.$v.form.name.$model = this.$v.form.name.$model.replace(/[a-z]/gi,'')
-  
-//   }
-
-//  }
-
-// }
-
-
 };
 </script>
 
