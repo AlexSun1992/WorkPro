@@ -163,7 +163,7 @@ import VerifyPassword from "../../../Libs/VerifyPassword/VerifyPassword";
 import ConfirmModal from "./ConfirmModal";
 
 
-const alpha = helpers.regex('alpha', /^[а-яА-Я]/)
+const alpha = helpers.regex('alpha', /^[а-яА-Я]*$/)
 
 export default {
   components: { birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal },
@@ -259,11 +259,8 @@ export default {
       }
     },
     validateState(name) {
-
       const { $dirty, $error } = this.$v.form[name];
-
       return $dirty ? !$error : null
-
     },
 
     async setToken(context) {

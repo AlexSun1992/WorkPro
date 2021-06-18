@@ -19,8 +19,7 @@
       @change="debouncedChange()"
     ></b-form-input>
     <b-form-invalid-feedback
-      >Обязательно для заполнения</b-form-invalid-feedback
-    >
+      >Обязательно для заполнения</b-form-invalid-feedback>
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p class="error">{{ data.error }}</p>
 
@@ -36,7 +35,9 @@
       >
         <span>{{ suggestion }}</span>
       </li>
+      
     </ul>
+    
   </div>
 </template>
 
@@ -70,6 +71,7 @@ export default {
         const { fieldId } = this.$store.getters["data_card/getDataFieldByName"](
           type === "SISSUED_WHERE" ? "SDOCDEP" : "SISSUED_WHERE"
         );
+
         value = this.suggestions.data[this.index].split(" - ")[0];
         relatedValue = this.suggestions.data[this.index].split(" - ")[1];
         this.$emit("update", {
@@ -77,12 +79,15 @@ export default {
           name: this.data.name,
           value,
         });
+
         this.$emit("update", {
           fieldId,
           name: this.data.name,
           value: relatedValue,
         });
+
         this.$store.commit("data_card/filterFields");
+
       } else {
         if (this.suggestions.data && this.suggestions.data.length) {
           if (this.index >= 0) {
@@ -129,6 +134,7 @@ export default {
         name: this.data.name,
         value: this.data.value,
       });
+
       const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
       this.open = true;
       this.current = -1;
