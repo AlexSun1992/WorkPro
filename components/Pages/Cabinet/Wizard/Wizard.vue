@@ -100,7 +100,7 @@ export default {
               relId,
               form: this.$store.getters["data_card/getForm"]?.data,
             });
-            if (this.isError()) {
+            if (this.isSavedError === true) {
               this.loading = false;
               return;
             }
