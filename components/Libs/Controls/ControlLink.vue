@@ -4,7 +4,8 @@
       :class="data.labelCols + ' link-button'"
       @click="clickLink"
       variant="secondary"
-      >{{ data.label }}</b-button>
+      >{{ data.label }}</b-button
+    >
   </div>
 </template>
 
@@ -28,7 +29,7 @@ export default {
       this.$store.commit("data_card/setListPath", this.$route.fullPath);
       this.$emit("open-card", this.data);
     },
-},
+  },
 };
 </script>
 
