@@ -16,7 +16,9 @@
         :store="store"
         :disabled="disabled"
         :loading="loading"
+        :profileFullness="loggedInUser"
       ></component>
+      
     </div>
   </b-col>
 </template>
@@ -38,10 +40,14 @@ import ControlCombobox from "~/components/Libs/Controls/ControlCombobox";
 import ControlUploader from "~/components/Libs/Controls/ControlUploader";
 import ControlCaptcha from "~/components/Libs/Controls/ControlCaptcha";
 import ControlError from "~/components/Libs/Controls/ControlError";
+import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar"
+import { mapGetters } from "vuex";
+
 
 export default {
   name: "Control",
   components: {
+    ControlProgressbar,
     ControlString,
     ControlText,
     ControlBoolean,
@@ -89,6 +95,10 @@ export default {
       type: Boolean,
       required: false,
     },
+    profileFullness:{
+      type:Array,
+      required:false
+    }
   },
   computed: {
     comp: function () {
@@ -107,6 +117,9 @@ export default {
     colSm: function () {
       return this.data.colSm ? this.data.colSm : 12;
     },
+
+    ...mapGetters(['loggedInUser'])
+
   },
   watch: {
     "data.value": "eventValidate",

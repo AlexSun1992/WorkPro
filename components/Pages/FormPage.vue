@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <component
       :is="params.settings.isModal ? 'b-modal' : 'div'"
       :modal-class="myclass"
@@ -28,6 +29,7 @@
         ></v-runtime-template>
       </div>
     </component>
+
     <div class="mt-3 row button-container">
       <div class="col-12" v-if="params.settings.edit">
         <b-button
@@ -90,6 +92,9 @@ export default {
       console.log(e);
     }
   },
+
+
+
   methods: {
     closeModal() {
       this.$router.back();
@@ -111,11 +116,15 @@ export default {
         return this.$refs.cardEditor.isButtonDisabled;
       }
     },
+
+// Получение массива с полями
     dataForm() {
       return JSON.parse(
         JSON.stringify(this.$store.getters["data_card/getForm"])
       );
     },
+//
+
     errorMessage() {
       return this.$store.getters["data_card/getErrorMessage"];
     },

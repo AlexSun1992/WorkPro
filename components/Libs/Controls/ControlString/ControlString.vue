@@ -10,6 +10,7 @@
       :edit="edit"
       @update="updateField($event)"
     ></string-masked>
+    
     <string-autocomplete
       v-else
       :data="data"
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+
 import StringAutocomplete from "./StringAutocomplete";
 import StringMasked from "./StringMasked";
 export default {

@@ -17,15 +17,16 @@
             :data="item"
             :edit="edit"
             :cols="cols"
-          >
-          </Control>
+          ></Control>
         </div>
+        
       </b-tab>
-      <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
+            <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
         <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />
       </b-tab>
-    </b-tabs>
-    <div v-else class="row">
+</b-tabs>
+
+    <div  class="row">
       <Control
         v-for="(item, i) in items()"
         :key="i"
@@ -35,9 +36,9 @@
         :data="item"
         :edit="edit"
         :cols="cols"
-      >
-      </Control>
+      ></Control>
     </div>
+
   </b-form-row>
 </template>
 <script>
@@ -69,7 +70,8 @@ export default {
       required: false,
     },
   },
-  methods: {
+  
+ methods: {
     items(index) {
       if (this.data) {
         return this.data.filter((item) => {
@@ -81,6 +83,8 @@ export default {
         });
       }
     },
+
+
     highlightTab(i) {
       let invalidFields = this.$store.getters["data_card/getForm"].filter(
         (item) => item.state == false
@@ -97,7 +101,8 @@ export default {
       return this.$store.getters["data_card/getCardId"];
     },
   },
-};
+
+}
 </script>
 
 <style>

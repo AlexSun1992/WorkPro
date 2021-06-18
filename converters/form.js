@@ -11,7 +11,9 @@ converter.setArrayOfObjectFields = (itemId, items, fields) => {
     arr.push(converter.setFieldsParams(itemId, items[i], fields));
   }
   return arr;
-};
+  };
+
+
 
 converter.setFieldsParams = (itemId, item, fields) => {
   let arr = [];
@@ -75,6 +77,7 @@ converter.form = async (data, itemId) => {
 
   let promises = [];
 
+  
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
     obj.label = webFields[i].SCAPTION;
@@ -130,6 +133,8 @@ converter.form = async (data, itemId) => {
       obj.type = "link";
     } else if (webFields[i].IDCONTROL == 14) {
       obj.type = "timestamp";
+    } else if (webFields[i].IDCONTROL == 5) {
+      obj.type = 'progressbar'  
     } else if (webFields[i].IDCONTROL == 15) {
       obj.type = "combobox";
       if (webFields[i].LVISIBLE && webFields[i].LDIC === true) {
@@ -154,6 +159,8 @@ converter.form = async (data, itemId) => {
     } else {
       obj.type = "string";
     }
+
+    
 
     function setDefaultValues(caption) {
       if (caption) {
