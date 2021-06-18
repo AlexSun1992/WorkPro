@@ -3415,7 +3415,7 @@ input {
 }
 select {
   height: auto;
-  padding: 7px 0px 7px 9px;
+  padding: 7px 0px 7px 5px;
 }
 select,
 input {
@@ -3448,7 +3448,7 @@ input:focus {
 }
 
 .ui.selection.dropdown {
-  padding: 11px 9px 10px 9px;
+  padding: 11px 9px 10px 8px;
   border: 1px solid #a8a8a8;
   font-weight: 500;
 }
@@ -3891,14 +3891,16 @@ input[type="checkbox"] {
 }
 input[type="checkbox"] + label {
   position: relative;
-  padding-left: 25px;
+  padding-left: 30px;
+  margin: 1rem 0;
+  font-size: 1rem;
 }
 input[type="checkbox"]:checked + label:before {
   position: absolute;
-  width: 8px;
-  height: 5px;
-  top: 2px;
-  left: 4px;
+  width: 11px;
+  height: 7px;
+  top: 0px;
+  left: 5px;
   border-left: 2px solid #00984a;
   border-bottom: 2px solid #00984a;
   content: "";
@@ -3906,12 +3908,15 @@ input[type="checkbox"]:checked + label:before {
 }
 input[type="checkbox"] + label:after {
   position: absolute;
-  width: 16px;
-  height: 15px;
-  top: -2px;
+  width: 20px;
+  height: 20px;
+  top: -5px;
   left: 0;
   border: 2px solid #00984a;
   box-sizing: border-box;
   border-radius: 4px;
   content: "";
+}
+input.form-control.is-invalid {
+  border: 1px solid red;
 }
