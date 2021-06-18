@@ -17,6 +17,7 @@
       :edit="edit"
       @update="updateField($event)"
     ></string-autocomplete>
+    
   </b-form-group>
 </template>
 

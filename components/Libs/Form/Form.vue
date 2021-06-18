@@ -74,6 +74,7 @@ export default {
  methods: {
     items(index) {
       if (this.data) {
+        console.log(this.data)
         return this.data.filter((item) => {
           if (this.captions) {
             if (index != item.page) return;
@@ -83,8 +84,6 @@ export default {
         });
       }
     },
-
-
     highlightTab(i) {
       let invalidFields = this.$store.getters["data_card/getForm"].filter(
         (item) => item.state == false
