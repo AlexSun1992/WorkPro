@@ -4,7 +4,7 @@
           :placeholder="placeholder"
           :type="type"
           class="form-control"
-          :autofocus="autofocus"
+          
           >
           </b-form-input>
           <b-form-invalid-feedback>

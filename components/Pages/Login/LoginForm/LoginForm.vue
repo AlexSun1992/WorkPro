@@ -22,6 +22,14 @@
         <b-form-invalid-feedback
           >Пожалуйста, введите корректный номер
           телефона</b-form-invalid-feedback>
+
+      <!-- <login-autocomplete
+      :placeholder="placeholder"
+      v-mask="usernameMask"
+      :autofocus="true"
+      :type="tel"
+      ></login-autocomplete> -->
+
             </b-form-group>
 
       <b-form-group label="Пароль" label-cols="12"> 
@@ -40,7 +48,10 @@
           >Пожалуйста, введите пароль
           </b-form-invalid-feedback>  -->
 
-          <login-autocomplete></login-autocomplete>
+          <login-autocomplete
+          placeholder="Пароль"
+          type="password"
+          ></login-autocomplete>
 
           </b-form-group>
 

@@ -37,7 +37,7 @@
 
       <b-form-group label="E-mail" label-cols="12" class="col-12 col-md-6">
 
-        <b-form-input
+        <!-- <b-form-input
           :id="Math.random().toString()"
           v-model.lazy="$v.form.email.$model"
           :state="validateState('email')"
@@ -47,7 +47,15 @@
           tabindex="20"
           autocomplete="new-password"
         ></b-form-input>
-        <b-form-invalid-feedback>Пожалуйста, заполните это поле</b-form-invalid-feedback>
+        <b-form-invalid-feedback>
+          Пожалуйста, заполните это поле
+          </b-form-invalid-feedback> -->
+
+      <login-autocomplete
+      placeholder="E-mail"
+      >
+      </login-autocomplete>
+
 
       </b-form-group>
 
@@ -63,9 +71,11 @@
           :disabled="registrationInProcess"
         />
       </b-form-group>
+
       <div class="d-flex w-100">
         <b-form-group label="Фамилия" label-cols="12" class="col-12 col-md-6">
-          <b-form-input
+
+          <!-- <b-form-input
             :id="Math.random().toString()"
             v-model="$v.form.family.$model"
             :state="validateState('family')"
@@ -74,14 +84,21 @@
             :disabled="registrationInProcess"
             tabindex="40"
             autocomplete="new-password"
-          ></b-form-input>
-          <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-          <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
+          ></b-form-input> -->
+
+          <!-- <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
+          <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> -->
+
+              <login-autocomplete
+              placeholder="Фамилия"
+            >
+            </login-autocomplete>
+
         </b-form-group>
       </div>
 
       <b-form-group label="Имя" label-cols="12" class="col-12 col-md-6">
-        <b-form-input
+        <!-- <b-form-input
           :id="Math.random().toString()"
           v-model="$v.form.name.$model"
           :state="validateState('name')"
@@ -94,12 +111,18 @@
         ></b-form-input>
 
         <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> -->
 
+        <login-autocomplete
+        placeholder="Имя"
+        >
+        </login-autocomplete>
 
       </b-form-group>
+
       <b-form-group label="Отчество" label-cols="12" class="col-12 col-md-6">
-        <b-form-input
+
+        <!-- <b-form-input
           :id="Math.random().toString()"
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
@@ -110,7 +133,13 @@
           autocomplete="new-password"
         ></b-form-input>
         <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> -->
+
+        <login-autocomplete
+        placeholder="Отчество"
+        >
+        </login-autocomplete>
+
       </b-form-group>
 
       <b-form-group label="Номер полиса" label-cols="12" class="col-12">
@@ -160,13 +189,14 @@ import { required, email, minLength, sameAs, helpers } from "vuelidate/lib/valid
 import birthdayPicker from "../../../Libs/BirthdatePicker/BirthdatePicker";
 import VerifyUser from "../../../Libs/VerifyUser/VerifyUser";
 import VerifyPassword from "../../../Libs/VerifyPassword/VerifyPassword";
-import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "./ConfirmModal"; 
+import LoginAutocomplete from '../LoginAutocomplete/LoginAutocomplete.vue';
 
 
 const alpha = helpers.regex('alpha', /^[а-яА-Я]*$/)
 
 export default {
-  components: { birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal },
+  components: { birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal,LoginAutocomplete },
 
   mixins: [validationMixin],
 
