@@ -26,7 +26,7 @@
 
       <b-form-group label="Пароль" label-cols="12"> 
 
-        <b-form-input
+        <!-- <b-form-input
           v-model="$v.user.password.$model"
           placeholder="Пароль"
           type="password"
@@ -38,7 +38,9 @@
         ></b-form-input>
         <b-form-invalid-feedback
           >Пожалуйста, введите пароль
-          </b-form-invalid-feedback> 
+          </b-form-invalid-feedback>  -->
+
+          <login-autocomplete></login-autocomplete>
 
           </b-form-group>
 
@@ -70,6 +72,7 @@
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
+import LoginAutocomplete from '../LoginAutocomplete/LoginAutocomplete.vue';
 
 
 
@@ -77,10 +80,12 @@ import _ from "lodash";
 
 export default {
  
+components:{LoginAutocomplete},
+
   data() {
     return {
       user: {
-        username: "",
+      username: "",
         password: ""
       },
       isUsernameBlured: true,
