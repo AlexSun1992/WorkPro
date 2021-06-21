@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <component
       :is="params.settings.isModal ? 'b-modal' : 'div'"
       :modal-class="myclass"
@@ -19,7 +18,7 @@
             class="block-profile"
             @error="$emit('error')"
             :data="dataForm"
-            :edit="params.settings.edit"
+            :edit="isReadOnly === false"
             :params="params"
           ></card-editor>
         </div>
@@ -30,7 +29,7 @@
       </div>
     </component>
 
-    <div class="mt-3 row button-container">
+    <div v-if="isButtonSave" class="mt-3 row button-container">
       <div class="col-12" v-if="params.settings.edit">
         <b-button
           pill
@@ -93,8 +92,6 @@ export default {
     }
   },
 
-
-
   methods: {
     closeModal() {
       this.$router.back();
@@ -117,19 +114,28 @@ export default {
       }
     },
 
-// Получение массива с полями
+    // Получение массива с полями
     dataForm() {
       return JSON.parse(
         JSON.stringify(this.$store.getters["data_card/getForm"])
       );
     },
-//
+    //
 
     errorMessage() {
       return this.$store.getters["data_card/getErrorMessage"];
     },
     isError() {
       return this.$store.getters["data_card/getError"];
+    },
+    isButtonSave: function () {
+      return this.$store.getters["data_card/getBtnSave"];
+    },
+    isReadOnly: function () {
+      return (
+        this.$store.getters["data_card/getReadOnly"] ||
+        this.params?.settings.edit === false
+      );
     },
   },
 };

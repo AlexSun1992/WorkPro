@@ -153,6 +153,8 @@ converter.form = async (data, itemId) => {
     } else if (webFields[i].IDCONTROL == 29) {
       obj.type = "captcha";
       obj.captcha = null;
+    } else if (webFields[i].IDCONTROL == 30) {
+      obj.type = "empty";
     } else {
       obj.type = "string";
     }
