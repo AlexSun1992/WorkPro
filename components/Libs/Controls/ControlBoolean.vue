@@ -2,8 +2,9 @@
   <b-form-checkbox
     v-model="fieldValue"
     :disabled="!edit ? !edit : data.readonly"
-    >{{ data.label }}</b-form-checkbox
   >
+    <span v-html="data.label"></span>
+  </b-form-checkbox>
 </template>
 
 <script>
@@ -21,7 +22,7 @@ export default {
       default: () => false,
     },
   },
-  
+
   computed: {
     fieldValue: {
       get: function () {
