@@ -80,7 +80,6 @@
           :class="{ 'btn-right': isWizard && $route.params.idCard == 0 }"
         >
           <div v-if="getFormData">
-
             <b-button
               v-if="isButtonSave"
               pill
@@ -195,7 +194,6 @@ export default {
     },
     saveDataCard() {
       if (this.$refs.cardEditor) {
-    
         this.$refs.cardEditor.saveDataCard();
       }
     },
@@ -287,8 +285,7 @@ export default {
     },
     isShowCardEditor() {
       return (
-        ((!this.settings.cardtemplate && !!this.getFormData) ||
-          (this.editable && !this.isError)) &&
+        (!!this.getFormData || (this.editable && !this.isError)) &&
         this.$store.getters[`data_card/getForm`].length
       );
     },
