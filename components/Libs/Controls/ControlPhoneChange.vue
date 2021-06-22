@@ -81,7 +81,6 @@ export default {
   data() {
     return {
       isSendCode: false,
-      newPhone: "",
       disabledResend: true,
       duration: 20,
       mask: "",
@@ -196,6 +195,8 @@ export default {
           this.$store.commit("data_card/setErrorMessage", response.data);
         }
         if (response?.status === 200) {
+          this.$store.commit("data_card/setError", false);
+          this.$store.commit("data_card/setErrorMessage", null);
           this.isSendCode = true;
           this.$bvToast.toast("Успешно выполнено", {
             title: "",
@@ -271,6 +272,18 @@ export default {
     },
     isShowCodeEnter() {
       return !this.$v.newPhone.$invalid && this.isSendCode;
+    },
+    newPhone: {
+      get: function () {
+        return this.data.value;
+      },
+      set: function (value) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: value,
+        });
+      },
     },
   },
   destroyed() {
