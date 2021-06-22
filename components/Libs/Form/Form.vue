@@ -11,6 +11,7 @@
           <Control
             v-for="(item, i) in items(index)"
             :key="i"
+            :params="params"
             @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
             @open-card="$emit('open-card', $event)"
@@ -29,6 +30,7 @@
       <Control
         v-for="(item, i) in items()"
         :key="i"
+        :params="params"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
@@ -53,6 +55,10 @@ export default {
     },
     tabs: {
       type: Array,
+      required: false,
+    },
+    params: {
+      type: Object,
       required: false,
     },
     edit: {

@@ -151,18 +151,10 @@ converter.form = async (data, itemId) => {
     } else if (webFields[i].IDCONTROL == 29) {
       obj.type = "captcha";
       obj.captcha = null;
+    } else if (webFields[i].IDCONTROL == 31) {
+      obj.type = "phoneChange";
     } else {
       obj.type = "string";
-    }
-
-    function setDefaultValues(caption) {
-      if (caption) {
-        return caption;
-      } else {
-        obj.cols = 12;
-        obj.width = "100%";
-        return "f-l-i col-md-3 col-12";
-      }
     }
 
     obj.id = itemId;
