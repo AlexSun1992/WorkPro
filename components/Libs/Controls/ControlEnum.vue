@@ -5,6 +5,7 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
+      <template v-slot:label><span v-html="data.label"></span></template>
       <model-list-select
         :ref="selectId"
         :id="selectId"
@@ -85,7 +86,7 @@ export default {
       this.$axios({ url: url, method: "GET" })
         .then((resp) => {
           this.options = resp.data;
-        
+
           if (this.options.length === 1) {
             let value = this.options[0];
             this.$emit("update", {

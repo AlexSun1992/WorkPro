@@ -5,6 +5,7 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
+      <template v-slot:label><span v-html="data.label"></span></template>
       <b-form-select
         v-model="data.value"
         @change="update"

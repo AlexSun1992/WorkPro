@@ -3,8 +3,8 @@
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
-
   >
+    <template v-slot:label><span v-html="data.label"></span></template>
     <b-form-input
       v-model="fieldValue"
       :disabled="!edit ? !edit : data.readonly"
