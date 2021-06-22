@@ -19,9 +19,11 @@
           :disabled="authInProcess"
           class="form-control">
         </b-form-input>
+
         <b-form-invalid-feedback
           >Пожалуйста, введите корректный номер
           телефона</b-form-invalid-feedback>
+
             </b-form-group>
 
       <b-form-group label="Пароль" label-cols="12"> 
