@@ -202,6 +202,10 @@ export default {
         if (response?.status === 500) {
           this.$store.commit("data_card/setError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
+          this.$store.commit("data_card/setFormField", {
+            fieldId: 26713,
+            value: "",
+          });
         }
         if (response?.status === 200) {
           this.$store.commit("data_card/setError", false);
