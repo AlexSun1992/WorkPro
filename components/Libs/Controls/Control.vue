@@ -40,6 +40,7 @@ import ControlUploader from "~/components/Libs/Controls/ControlUploader";
 import ControlCaptcha from "~/components/Libs/Controls/ControlCaptcha";
 import ControlError from "~/components/Libs/Controls/ControlError";
 import ControlPhoneChange from "~/components/Libs/Controls/ControlPhoneChange";
+import ControlEmailChange from "~/components/Libs/Controls/ControlEmailChange";
 
 export default {
   name: "Control",
@@ -62,6 +63,7 @@ export default {
     ControlCaptcha,
     ControlError,
     ControlPhoneChange,
+    ControlEmailChange,
   },
   props: {
     data: {

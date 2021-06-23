@@ -1,14 +1,13 @@
 <template>
   <div>
-    <div class="change-number">
+    <div class="change-email">
       <div class="row">
         <b-form-group :label="data.label" :class="{ required: data.required }">
           <b-form-input
             ref="userInput"
-            v-model="newPhone"
+            v-model="newEmail"
             :placeholder="placeholder"
-            v-mask="changeMask"
-            :state="validateState('newPhone')"
+            :state="validateState('newEmail')"
             @blur="update"
             autocomplete="off"
             autofocus
@@ -18,31 +17,19 @@
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
           >
         </b-form-group>
-
-        <div class="col-12 col-md-6 mt-2 mt-md-0">
-          <!-- <b-button
-            type="submit"
-            v-if="!isShowCodeEnter"
-            @click="verifyUser"
-            variant="success"
-            class="btn-sms"
-            :disabled="$v.newPhone.$invalid"
-            >Подтвердить</b-button
-          > -->
-        </div>
       </div>
       <b-button
         type="submit"
         v-if="!isShowCodeEnter || !disabledResend"
         @click="verifyUser"
         variant="success"
-        class="btn-sms mt-3"
-        :disabled="$v.newPhone.$invalid"
-        >Получить sms-код</b-button
+        class="btn-sms mt-3 ml-4"
+        :disabled="$v.newEmail.$invalid"
+        >Получить код</b-button
       >
       <div v-if="isShowCodeEnter" class="resend">
-        <b-link @click="changeNumber" class="col-12 col-md-12">
-          Изменить номер
+        <b-link @click="changeEmail" class="col-12 col-md-12">
+          Изменить email
         </b-link>
       </div>
       <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
@@ -57,14 +44,6 @@
           сек.</template
         >
       </p>
-      <!-- <b-button
-        type="submit"
-        :disabled="disabledResend"
-        @click="resendCode"
-        variant="success"
-      >
-        Отправить повторно
-      </b-button> -->
     </div>
   </div>
 </template>
@@ -72,21 +51,20 @@
 <script>
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, email } from "vuelidate/lib/validators";
 import _ from "lodash";
 export default {
   components: { VerifyTimer },
   mixins: [validationMixin],
-  name: "ControlPhoneChange",
+  name: "ControlEmailChange",
   data() {
     return {
       isSendCode: false,
       disabledResend: true,
       duration: 20,
-      newPhone: "",
-      mask: "",
-      placeholder: "+7(___)-___-__-__",
-      isPhoneChanged: false,
+      newEmail: "",
+      placeholder: "Email",
+      isEmailChanged: false,
       token: 1,
       isUserBlured: true,
       isUserDisabled: false,
@@ -104,9 +82,9 @@ export default {
     },
   },
   validations: {
-    newPhone: {
+    newEmail: {
       required,
-      minLength: minLength(17),
+      email,
     },
   },
   created() {
@@ -115,11 +93,11 @@ export default {
   },
   methods: {
     update() {
-      this.$v.newPhone.$touch();
+      this.$v.newEmail.$touch();
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.newPhone,
+        value: this.newEmail,
       });
     },
     validateState(name) {
@@ -144,55 +122,16 @@ export default {
       }
     },
 
-    // async getCode() {
-    //   if (!this.newPhone) return;
-    //   this.isPhoneChanged = false;
-    //   try {
-    //     this.disabledResend = true;
-    //     let params = {
-    //       PHONE: this.newPhone,
-    //       loginType: "phone",
-    //       modeType: "RECOVERY",
-    //     };
-    //     const response = await this.$store.dispatch("getCode", params);
-    //     if (response?.status === 500) {
-    //       return;
-    //     }
-
-    //     if (response?.data[0]?.ERRORCODE === 106) {
-    //       await this.$recaptcha.getResponse();
-    //       await this.$recaptcha.reset();
-    //       params = {
-    //         ...params,
-    //         token: this.token,
-    //         modeType: "RECOVERY",
-    //         error: true,
-    //       };
-    //       const response = await this.$store.dispatch("getCode", params);
-
-    //       if (response?.data[0]?.ERRORLIST) {
-    //         this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT);
-    //       } else {
-    //         this.isSendCode = true;
-    //       }
-    //     } else {
-    //       this.isSendCode = true;
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // },
-
     async getCode() {
       this.$store.commit("data_card/setFormField", {
-        fieldId: 26713,
+        fieldId: 35622,
         value: null,
       });
-      if (!this.newPhone) return;
-      this.isPhoneChanged = false;
+      if (!this.newEmail) return;
+      this.isEmailChanged = false;
       let actionParams = {
-        name: "SNEWPHONE",
-        value: this.newPhone,
+        name: "SNEWEMAIL",
+        value: this.newEmail,
       };
       try {
         this.disabledResend = true;
@@ -207,8 +146,8 @@ export default {
           this.$store.commit("data_card/setError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
           this.$store.commit("data_card/setFormField", {
-            fieldId: 26713,
-            value: "",
+            fieldId: 35622,
+            value: null,
           });
         }
         if (response?.status === 200) {
@@ -231,13 +170,13 @@ export default {
       this.getCode();
     },
 
-    changeNumber() {
+    changeEmail() {
       this.isUserBlured = false;
-      this.$v.newPhone.$model = "";
+      this.$v.newEmail.$model = "";
       this.$refs.userInput.$el.disabled = false;
       this.$refs.userInput.$el.focus();
       this.isUserDisabled = false;
-      this.isPhoneChanged = true;
+      this.isEmailChanged = true;
       this.isSendCode = false;
     },
 
@@ -246,37 +185,6 @@ export default {
       this.v[field].$touch();
     },
 
-    // async resendCode() {
-    //   let params = {
-    //     PHONE: this.newPhone,
-    //     loginType: "phone",
-    //   };
-    //   params = { ...params, token: this.token, modeType: "RECOVERY" };
-    //   const response = await this.$store.dispatch("getCode", params);
-    //   if (response?.data[0]?.ERRORCODE === 106) {
-    //     const token = await this.$recaptcha.getResponse();
-    //     await this.$recaptcha.reset();
-    //     params = {
-    //       ...params,
-    //       token: this.token,
-    //       error: true,
-    //     };
-    //     const response = await this.$store.dispatch("getCode", params);
-    //     if (response?.data[0]?.ERRORLIST) {
-    //       this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT);
-    //     } else {
-    //       this.isSendCode = true;
-    //     }
-    //   }
-
-    //   if (
-    //     response?.status === 500 ||
-    //     Boolean(response?.data[0]?.ERRORCODE) === true
-    //   ) {
-    //     return;
-    //   }
-    //   this.disabledResend = true;
-    // },
     stopTimer() {
       this.isSendCode = false;
       this.disabledResend = false;
@@ -284,40 +192,18 @@ export default {
   },
 
   computed: {
-    changeMask() {
-      return (this.mask = "+7(###)-###-##-##");
-    },
     isShowCodeEnter() {
-      return !this.$v.newPhone.$invalid && this.isSendCode;
+      return !this.$v.newEmail.$invalid && this.isSendCode;
     },
-    // newPhone: {
-    //   get: function () {
-    //     return this.data.value;
-    //   },
-    //   set: function (value) {
-    //     this.$emit("update", {
-    //       fieldId: this.data.fieldId,
-    //       name: this.data.name,
-    //       value: value,
-    //     });
-    //   },
-    // },
   },
   destroyed() {
     this.isSendCode = false;
-  },
-  watch: {
-    // "$v.newPhone.$model": function () {
-    //   if (this.$v.newPhone.$invalid === false) {
-    //     this.debouncedGetCode();
-    //   }
-    // },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.change-number {
+.change-email {
   display: flex;
   align-items: center;
   & .row {
