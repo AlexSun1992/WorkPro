@@ -94,7 +94,6 @@ export default {
   },
 
 
-
   methods: {
     closeModal() {
       this.$router.back();

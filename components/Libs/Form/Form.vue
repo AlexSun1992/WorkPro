@@ -74,7 +74,6 @@ export default {
  methods: {
     items(index) {
       if (this.data) {
-        console.log(this.data)
         return this.data.filter((item) => {
           if (this.captions) {
             if (index != item.page) return;

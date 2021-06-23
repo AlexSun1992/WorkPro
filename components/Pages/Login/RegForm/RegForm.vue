@@ -11,7 +11,7 @@
     <b-alert :show="!!errorMessage" variant="danger">{{
       errorMessage
     }}</b-alert>
-    <!--  -->
+   
     <b-form
       @submit.stop.prevent
       @keydown.enter.prevent="onSubmit"
@@ -36,8 +36,7 @@
       </b-form-group>
 
       <b-form-group label="E-mail" label-cols="12" class="col-12 col-md-6">
-
-        <!-- <b-form-input
+        <b-form-input
           :id="Math.random().toString()"
           v-model.lazy="$v.form.email.$model"
           :state="validateState('email')"
@@ -49,14 +48,9 @@
         ></b-form-input>
         <b-form-invalid-feedback>
           Пожалуйста, заполните это поле
-          </b-form-invalid-feedback> -->
-
-      <login-autocomplete
-      placeholder="E-mail"
-      >
-      </login-autocomplete>
-
-
+          </b-form-invalid-feedback>
+        
+    
       </b-form-group>
 
       <b-form-group
@@ -74,8 +68,7 @@
 
       <div class="d-flex w-100">
         <b-form-group label="Фамилия" label-cols="12" class="col-12 col-md-6">
-
-          <!-- <b-form-input
+          <b-form-input
             :id="Math.random().toString()"
             v-model="$v.form.family.$model"
             :state="validateState('family')"
@@ -84,21 +77,25 @@
             :disabled="registrationInProcess"
             tabindex="40"
             autocomplete="new-password"
-          ></b-form-input> -->
+          ></b-form-input> 
 
-          <!-- <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-          <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> -->
+          <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
+          <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
 
-              <login-autocomplete
-              placeholder="Фамилия"
-            >
-            </login-autocomplete>
+           <input-autocomplete 
+           ref="family"
+          v-if="this.$v.form.family.$model !== '' &&  this.$v.form.family.alpha !== false"
+          :items="persons" 
+          filterby="surname" 
+          :stringValue="this.$v.form.family.$model"
+          @setSurname="setSurname"
+       /> 
 
         </b-form-group>
       </div>
 
       <b-form-group label="Имя" label-cols="12" class="col-12 col-md-6">
-        <!-- <b-form-input
+        <b-form-input
           :id="Math.random().toString()"
           v-model="$v.form.name.$model"
           :state="validateState('name')"
@@ -107,22 +104,25 @@
           :disabled="registrationInProcess"
           tabindex="50"
           autocomplete="new-password"
-          :class="$v.form.name.$model.length > 5 ? 'ok' : null "
         ></b-form-input>
 
         <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> -->
+        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
+      
+       <input-autocomplete 
+       v-if="this.$v.form.name.$model !== '' &&  this.$v.form.name.alpha !== false"
+       :items="persons" 
+       filterby="name" 
+       :stringValue="this.$v.form.name.$model"
+       ref="name"
+       @setName="setName"
+       /> 
 
-        <login-autocomplete
-        placeholder="Имя"
-        >
-        </login-autocomplete>
 
       </b-form-group>
 
       <b-form-group label="Отчество" label-cols="12" class="col-12 col-md-6">
-
-        <!-- <b-form-input
+        <b-form-input
           :id="Math.random().toString()"
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
@@ -133,13 +133,17 @@
           autocomplete="new-password"
         ></b-form-input>
         <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> -->
+        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
 
-        <login-autocomplete
-        placeholder="Отчество"
-        >
-        </login-autocomplete>
-
+       <input-autocomplete 
+       ref="patronymic"
+       v-if="this.$v.form.patronymic.$model !== '' &&  this.$v.form.patronymic.alpha !== false"
+       :items="persons" 
+       filterby="patronymic" 
+       :stringValue="this.$v.form.patronymic.$model"
+       @setValue="setValue"
+      />
+      
       </b-form-group>
 
       <b-form-group label="Номер полиса" label-cols="12" class="col-12">
@@ -190,13 +194,13 @@ import birthdayPicker from "../../../Libs/BirthdatePicker/BirthdatePicker";
 import VerifyUser from "../../../Libs/VerifyUser/VerifyUser";
 import VerifyPassword from "../../../Libs/VerifyPassword/VerifyPassword";
 import ConfirmModal from "./ConfirmModal"; 
-import LoginAutocomplete from '../LoginAutocomplete/LoginAutocomplete.vue';
-
+import InputAutocomplete from '../InputAutocomplete.vue';
 
 const alpha = helpers.regex('alpha', /^[а-яА-Я]*$/)
 
 export default {
-  components: { birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal,LoginAutocomplete },
+  components: { birthdayPicker, VerifyUser, VerifyPassword, 
+  ConfirmModal, InputAutocomplete },
 
   mixins: [validationMixin],
 
@@ -215,6 +219,19 @@ export default {
         password2: "",
       },
 
+      persons:[
+
+    {id:1, name:'Степан', surname:'Петров', patronymic:'Владимирович', email:'korston@mail.ru'},
+
+    {id:1, name:'Дмитрий', surname:'Васин', patronymic:'Васильевич', email:'aurora@mail.ru'},
+
+    {id:1, name:'Василий', surname:'Гаврилов', patronymic:'Всеолодович', email:'automobile@mail.ru'},
+
+    {id:1, name:'Александр', surname:'Бочаров', patronymic:'Владиленович', email:'petya@mail.ru'}
+
+      ],
+
+    
       conformation: false,
       show: true,
       password2: "",
@@ -270,6 +287,21 @@ export default {
   },
 
   methods: {
+
+    setValue(index){
+     this.$v.form.patronymic.$model=this.persons[index][this.$refs.patronymic.filterby]
+    },
+
+    setName(index){
+      this.$v.form.name.$model=this.persons[index][this.$refs.name.filterby]
+    },
+
+    setSurname(index){
+      
+      this.$v.form.family.$model=this.persons[index][this.$refs.family.filterby]
+    },
+
+
     onError(error) {
       console.log("Error:", error);
     },
@@ -309,6 +341,8 @@ export default {
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
         };
+
+      
 
         // await this.getCaptcha();
         // if (!this.token) return;
@@ -371,6 +405,10 @@ export default {
       }
     },
   },
+
+  
+
+
 };
 </script>
 
@@ -384,5 +422,36 @@ export default {
 .ok{
   border:1px solid red;
 }
+
+.autocomplete {
+  position: relative;
+}
+.dropdown-menu {
+  display: block;
+  width: 100%;
+}
+.active {
+  background-color: lightgrey;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.error {
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #f86c6b;
+}
+.help-text {
+  font-size: 12px;
+  margin-top: 10px;
+}
+.autocomplete ul.dropdown-menu {
+  display: block;
+  margin-top: -5px;
+}
+
 
 </style>

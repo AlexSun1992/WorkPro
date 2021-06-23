@@ -18,23 +18,17 @@
           @click="loginTouchesCount = 2"
           :disabled="authInProcess"
           class="form-control">
+          
         </b-form-input>
         <b-form-invalid-feedback
           >Пожалуйста, введите корректный номер
           телефона</b-form-invalid-feedback>
 
-      <!-- <login-autocomplete
-      :placeholder="placeholder"
-      v-mask="usernameMask"
-      :autofocus="true"
-      :type="tel"
-      ></login-autocomplete> -->
 
             </b-form-group>
 
       <b-form-group label="Пароль" label-cols="12"> 
-
-        <!-- <b-form-input
+        <b-form-input
           v-model="$v.user.password.$model"
           placeholder="Пароль"
           type="password"
@@ -46,12 +40,7 @@
         ></b-form-input>
         <b-form-invalid-feedback
           >Пожалуйста, введите пароль
-          </b-form-invalid-feedback>  -->
-
-          <login-autocomplete
-          placeholder="Пароль"
-          type="password"
-          ></login-autocomplete>
+          </b-form-invalid-feedback> 
 
           </b-form-group>
 
@@ -83,15 +72,12 @@
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
-import LoginAutocomplete from '../LoginAutocomplete/LoginAutocomplete.vue';
-
-
 
 
 
 export default {
  
-components:{LoginAutocomplete},
+components:{},
 
   data() {
     return {
