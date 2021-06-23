@@ -9,7 +9,7 @@
             :placeholder="placeholder"
             v-mask="changeMask"
             :state="validateState('newPhone')"
-            @blur="$v.newPhone.$touch()"
+            @blur="update"
             autocomplete="off"
             autofocus
             :disabled="isShowCodeEnter"
@@ -83,6 +83,7 @@ export default {
       isSendCode: false,
       disabledResend: true,
       duration: 20,
+      newPhone: "",
       mask: "",
       placeholder: "+7(___)-___-__-__",
       isPhoneChanged: false,
@@ -113,6 +114,14 @@ export default {
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
   methods: {
+    update() {
+      this.$v.newPhone.$touch();
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.newPhone,
+      });
+    },
     validateState(name) {
       const { $dirty, $error } = this.$v[name];
       return $dirty ? !$error : null;
@@ -273,18 +282,18 @@ export default {
     isShowCodeEnter() {
       return !this.$v.newPhone.$invalid && this.isSendCode;
     },
-    newPhone: {
-      get: function () {
-        return this.data.value;
-      },
-      set: function (value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: value,
-        });
-      },
-    },
+    // newPhone: {
+    //   get: function () {
+    //     return this.data.value;
+    //   },
+    //   set: function (value) {
+    //     this.$emit("update", {
+    //       fieldId: this.data.fieldId,
+    //       name: this.data.name,
+    //       value: value,
+    //     });
+    //   },
+    // },
   },
   destroyed() {
     this.isSendCode = false;
