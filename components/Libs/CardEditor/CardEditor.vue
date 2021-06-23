@@ -47,6 +47,15 @@
         @open-card="openCard($event)"
         :edit="edit"
       />
+      <FormBlock
+        v-if="isBlock"
+        :data="data"
+        :tabs="tabs"
+        @update="updateValue($event)"
+        @clear="clearRelation($event)"
+        @open-card="openCard($event)"
+        :edit="edit"
+      />
     </div>
     <SkeletonBox v-if="!data.length" class="mt-5" :items="8"></SkeletonBox>
   </div>
@@ -58,6 +67,7 @@ import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import { getErrorMessage } from "@/utils/transform";
+import FormBlock from "@/components/Libs/Form/FormBlock";
 export default {
   name: "CardEditor",
   head() {
@@ -73,7 +83,7 @@ export default {
       ],
     };
   },
-  components: { FormAccordion, Form, ActionButton, SkeletonBox },
+  components: { FormBlock, FormAccordion, Form, ActionButton, SkeletonBox },
   data() {
     return {
       invalidFields: [],
@@ -441,13 +451,16 @@ export default {
       return this.$store.getters["data_card/getCaptions"];
     },
     isAccordion: function () {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LACCORDION;
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LACCORDION;
     },
     isBlock: function () {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LUSEBLOCK;
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LUSEBLOCK;
     },
     isTabs: function () {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LTABBED;
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LTABBED;
     },
     actionParams: function () {
       return this.$store.getters["data_card/getActionParams"];

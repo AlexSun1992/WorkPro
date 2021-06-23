@@ -51,7 +51,7 @@ export default {
     isValid() {
       return this.$store.getters["data_card/getDataFieldByFieldId"](
         `${this.data.fieldId}`
-      ).state;
+      )?.state;
     },
   },
 };
