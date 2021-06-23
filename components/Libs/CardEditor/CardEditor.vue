@@ -27,16 +27,18 @@
     </b-modal>
     <div v-if="data.length">
       <Form
-        v-if="!isAccordion"
+        v-if="!isAccordion && !isBlock"
+        class="block-profile"
         :data="data"
         :tabs="tabs"
+        :is-tabs="isTabs"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
         :edit="edit"
       ></Form>
       <FormAccordion
-        v-else-if="isAccordion"
+        v-if="isAccordion"
         :class="{ 'mt-5': !params.settings && showBtnBack }"
         :data="data"
         :tabs="tabs"
@@ -81,7 +83,7 @@ export default {
       actionFormDisabled: false,
       isActionApplyError: false,
       actionApplyErrorMessage: null,
-      updateValueCounter:0,
+      updateValueCounter: 0,
       disabledButtons: {
         background: "#dddbdd",
         boxShadow: "none",
@@ -182,7 +184,6 @@ export default {
         fieldId: e.fieldId,
         value: e.value,
       });
-        
     },
 
     async fetchCard(method, url) {
@@ -213,7 +214,7 @@ export default {
         fieldName: e.fieldName,
       });
     },
-    
+
     openCard(e) {
       const flatmenu = this.$store.getters["menu/flatmenu"];
       const menuItem = flatmenu.find((item) => {
@@ -440,8 +441,13 @@ export default {
       return this.$store.getters["data_card/getCaptions"];
     },
     isAccordion: function () {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        .LACCORDION;
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LACCORDION;
+    },
+    isBlock: function () {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LUSEBLOCK;
+    },
+    isTabs: function () {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)?.LTABBED;
     },
     actionParams: function () {
       return this.$store.getters["data_card/getActionParams"];
