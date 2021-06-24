@@ -38,7 +38,7 @@
         :edit="edit"
       ></Form>
       <FormAccordion
-        v-if="isAccordion"
+        v-if="isAccordion && !isTabs && !isBlock"
         :class="{ 'mt-5': !params.settings && showBtnBack }"
         :data="data"
         :tabs="tabs"
@@ -48,7 +48,7 @@
         :edit="edit"
       />
       <FormBlock
-        v-if="isBlock"
+        v-if="isBlock && !isTabs && !isAccordion"
         :data="data"
         :tabs="tabs"
         @update="updateValue($event)"
