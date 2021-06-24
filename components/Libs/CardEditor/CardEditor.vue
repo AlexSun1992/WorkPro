@@ -303,12 +303,19 @@ export default {
                 idCard: cardId,
               });
               this.$store.commit("data_card/setLoading", false);
-              let tab = this.wizardTabs[1];
+              const nextIdItem = this.$store.getters[
+                "wizard/getWizardPages"
+              ].split(";")[1];
+              let tab = this.wizardTabs.find(
+                (w) => w.idItem === parseInt(nextIdItem)
+              );
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
               this.$router.push(
                 `/cabinet/wizard/${this.$route.params.idWizard}${
                   tab.list ? `/list/` : `/`
-                }${moduleId}/0/${tab.idItem}/${cardId}/${rel.split("|")[1]}`
+                }${moduleId}/0/${tab.idItem}/${cardId}/${
+                  rel.split("|")[tab.order - 1]
+                }`
               );
               return;
             } else {
