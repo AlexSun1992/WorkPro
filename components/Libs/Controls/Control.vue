@@ -41,7 +41,7 @@ import ControlCaptcha from "~/components/Libs/Controls/ControlCaptcha";
 import ControlError from "~/components/Libs/Controls/ControlError";
 import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar";
 import { mapGetters } from "vuex";
-
+import ControlEmpty from "/components/Libs/Controls/ControlEmpty";
 export default {
   name: "Control",
   components: {
@@ -63,6 +63,7 @@ export default {
     ControlUploader,
     ControlCaptcha,
     ControlError,
+    ControlEmpty,
   },
   props: {
     data: {
