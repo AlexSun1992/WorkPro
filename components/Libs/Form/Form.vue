@@ -1,6 +1,6 @@
 <template>
   <b-form-row>
-    <b-tabs v-if="captions" content-class="mt-4">
+    <b-tabs v-if="isTabs" content-class="mt-4">
       <b-tab
         :title="tab"
         v-for="(tab, index) in captions"
@@ -19,14 +19,12 @@
             :cols="cols"
           ></Control>
         </div>
-        
       </b-tab>
-            <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
+      <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
         <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />
       </b-tab>
-</b-tabs>
-
-    <div  class="row">
+    </b-tabs>
+    <div v-else class="row">
       <Control
         v-for="(item, i) in items()"
         :key="i"
@@ -38,7 +36,6 @@
         :cols="cols"
       ></Control>
     </div>
-
   </b-form-row>
 </template>
 <script>
@@ -56,6 +53,11 @@ export default {
       type: Array,
       required: false,
     },
+    isTabs: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
     edit: {
       type: Boolean,
       required: true,
@@ -70,13 +72,12 @@ export default {
       required: false,
     },
   },
-  
- methods: {
+
+  methods: {
     items(index) {
       if (this.data) {
-        console.log(this.data)
         return this.data.filter((item) => {
-          if (this.captions) {
+          if (this.isTabs && this.captions) {
             if (index != item.page) return;
           }
           if (!item.visible) return;
@@ -100,8 +101,7 @@ export default {
       return this.$store.getters["data_card/getCardId"];
     },
   },
-
-}
+};
 </script>
 
 <style>

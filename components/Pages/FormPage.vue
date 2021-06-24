@@ -15,7 +15,6 @@
         <div class="col">
           <card-editor
             ref="cardEditor"
-            class="block-profile"
             @error="$emit('error')"
             :data="dataForm"
             :edit="isReadOnly === false"

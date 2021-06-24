@@ -43,7 +43,6 @@
           @error="error = $event"
           ref="cardEditor"
           :wizard-tabs="wizardTabs"
-          class="block-profile"
           :data="getFormData"
           :edit="editable"
           :params="settings"
