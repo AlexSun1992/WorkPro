@@ -26,11 +26,11 @@
       :key="$route.fullPath"
       :wizard-tabs="settings.wizard"
     />
-    <div>
+    <div class="row">
       <b-alert
         :show="isErrorActionExecuteMessage"
         variant="danger"
-        class="mt-4"
+        class="mt-4 col-lg-9"
         >{{ errorActionExecuteMessage }}</b-alert
       >
     </div>

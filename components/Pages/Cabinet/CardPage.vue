@@ -60,11 +60,15 @@
         {{ errorMessage }}
       </div>
     </div>
-    <b-alert :show="isShowSavedError" variant="danger" class="mt-4">{{
-      errorMessage
-    }}</b-alert>
+    <b-alert
+      :show="isShowSavedError"
+      variant="danger"
+      class="mt-4"
+      :class="isShowCardTemplate"
+      >{{ errorMessage }}</b-alert
+    >
     <div v-if="isShowCardEditor" class="mt-3 mb-3 row button-container">
-      <div class="col-12" v-if="settings.edit">
+      <div :class="isShowCardTemplate" v-if="settings.edit">
         <div class="inbuttons" v-for="(item, i) in action" :key="i">
           <b-button
             v-if="item.LINBUTTONS"
@@ -86,7 +90,7 @@
               v-on:click="saveDataCard"
               type="button"
               variant="success"
-              class="col-12 col-md-auto mr-4"
+              class="col-12 col-md-auto"
               :style="isButtonDisabled"
             >
               {{ buttonTitle }}
@@ -301,12 +305,14 @@ export default {
         this.$store.getters[`data_card/getForm`].data
       );
     },
+    isShowCardTemplate() {
+      return this.settings.cardtemplate ? "col-9" : "col-12";
+    },
   },
   beforeRouteLeave(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
-    const saveButtonClicked = this.$store.getters[
-      "data_card/saveButtonClicked"
-    ];
+    const saveButtonClicked =
+      this.$store.getters["data_card/saveButtonClicked"];
     if (cardChanged) {
       this.$bvModal
         .msgBoxConfirm("Закрыть страницу без сохранения данных?", {

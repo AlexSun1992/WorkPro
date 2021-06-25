@@ -1,22 +1,24 @@
 <template>
-  <div class="buttons">
-    <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
-    <div></div>
-    <b-button
-      :disabled="loading"
-      variant="success"
-      v-if="currentTab.order != qty && $route.params.idCard != 0"
-      @click="goNext"
-    >
-      {{ showBtnName }}
-      <b-spinner
-        v-if="loading"
-        style="width: 1rem; height: 1rem"
-        class="ml-2"
-        variant="danger"
-        label="Spinning"
-      ></b-spinner>
-    </b-button>
+  <div class="row">
+    <div class="buttons" :class="isUseCardTemplate ? 'col-9' : 'col-12'">
+      <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
+      <div></div>
+      <b-button
+        :disabled="loading"
+        variant="success"
+        v-if="currentTab.order != qty && $route.params.idCard != 0"
+        @click="goNext"
+      >
+        {{ showBtnName }}
+        <b-spinner
+          v-if="loading"
+          style="width: 1rem; height: 1rem"
+          class="ml-2"
+          variant="danger"
+          label="Spinning"
+        ></b-spinner>
+      </b-button>
+    </div>
   </div>
 </template>
 
@@ -81,6 +83,12 @@ export default {
     // },
     isError() {
       return this.$store.getters["data_card/getError"];
+    },
+    isUseCardTemplate() {
+      return Boolean(
+        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+          ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
+      );
     },
   },
 };
