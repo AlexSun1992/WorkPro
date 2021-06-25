@@ -1,6 +1,13 @@
 <template>
   <div class="row">
-    <div class="buttons" :class="isUseCardTemplate ? 'col-9' : 'col-12'">
+    <div
+      class="buttons"
+      :class="
+        isUseCardTemplate
+          ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
+          : 'col-12'
+      "
+    >
       <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
       <div></div>
       <b-button

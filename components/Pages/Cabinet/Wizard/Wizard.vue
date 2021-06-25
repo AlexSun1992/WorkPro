@@ -27,12 +27,17 @@
       :wizard-tabs="settings.wizard"
     />
     <div class="row">
-      <b-alert
-        :show="isErrorActionExecuteMessage"
-        variant="danger"
-        class="mt-4 col-lg-9"
-        >{{ errorActionExecuteMessage }}</b-alert
+      <div
+        :class="
+          isUseCardTemplate
+            ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
+            : 'col-12'
+        "
       >
+        <b-alert :show="isErrorActionExecuteMessage" variant="danger">{{
+          errorActionExecuteMessage
+        }}</b-alert>
+      </div>
     </div>
     <wizard-buttons
       :currentTab="currentTab"
@@ -183,6 +188,12 @@ export default {
     },
     isSavedError() {
       return this.$store.getters["data_card/getSavedError"];
+    },
+    isUseCardTemplate() {
+      return Boolean(
+        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+          ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
+      );
     },
   },
 };
