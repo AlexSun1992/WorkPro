@@ -109,6 +109,7 @@
           </datalist>
         </b-form-group>
       </div>
+      <!-- ///// -->
 
       <!-- Имя -->
       <b-form-group label="Имя" label-cols="12" class="col-12 col-md-6">
@@ -140,6 +141,8 @@
           </option>
         </datalist>
       </b-form-group>
+      <!-- /////// -->
+
       <!-- Отчество -->
       <b-form-group label="Отчество" label-cols="12" class="col-12 col-md-6">
         <b-form-input
@@ -169,6 +172,7 @@
           </option>
         </datalist>
       </b-form-group>
+      <!-- ////// -->
 
       <b-form-group label="Номер полиса" label-cols="12" class="col-12">
         <b-form-input
