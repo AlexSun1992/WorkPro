@@ -28,6 +28,8 @@
     />
     <div class="row">
       <div
+        v-if="isErrorActionExecuteMessage"
+        class="mt-3 mb-0"
         :class="
           isUseCardTemplate
             ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'

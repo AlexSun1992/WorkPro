@@ -62,12 +62,18 @@
     </div>
     <div class="row">
       <div :class="isShowCardTemplate">
-        <b-alert :show="isShowSavedError" variant="danger" class="mt-4">{{
+        <b-alert :show="isShowSavedError" variant="danger" class="mt-3 mb-0">{{
           errorMessage
         }}</b-alert>
       </div>
     </div>
-    <div v-if="isShowCardEditor" class="mt-3 mb-3 row button-container">
+    <div
+      v-if="
+        (isShowCardEditor && !isWizard) ||
+        (isWizard && $route.params.idCard == 0)
+      "
+      class="mt-3 row button-container"
+    >
       <div :class="isShowCardTemplate" v-if="settings.edit">
         <div class="inbuttons" v-for="(item, i) in action" :key="i">
           <b-button

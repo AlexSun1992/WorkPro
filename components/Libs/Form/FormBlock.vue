@@ -3,7 +3,8 @@
     <div
       v-for="(tab, index) in captions"
       :key="index"
-      class="mb-4 bg-six block-border-one block p-3"
+      class="bg-six block-border-one block p-3"
+      :class="{ 'mb-4': index < captions.length - 1 }"
     >
       <div class="row">
         <!--        {{ items(index) }}-->

@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div
-      class="buttons"
+      class="mt-3 buttons"
       :class="
         isUseCardTemplate
           ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
