@@ -11,7 +11,7 @@
     <b-alert :show="!!errorMessage" variant="danger">{{
       errorMessage
     }}</b-alert>
-   
+
     <b-form
       @submit.stop.prevent
       @keydown.enter.prevent="onSubmit"
@@ -38,7 +38,7 @@
       <b-form-group label="E-mail" label-cols="12" class="col-12 col-md-6">
         <b-form-input
           :id="Math.random().toString()"
-          v-model.lazy="$v.form.email.$model"
+          v-model="$v.form.email.$model"
           :state="validateState('email')"
           @blur="$v.form.email.$touch()"
           placeholder="E-mail"
@@ -48,9 +48,19 @@
         ></b-form-input>
         <b-form-invalid-feedback>
           Пожалуйста, заполните это поле
-          </b-form-invalid-feedback>
-        
-    
+        </b-form-invalid-feedback>
+
+        <input-autocomplete
+          ref="email"
+          v-if="
+            this.$v.form.email.$model !== '' &&
+            this.$v.form.email.alpha !== false
+          "
+          :items="persons"
+          filterby="email"
+          :stringValue="this.$v.form.email.$model"
+          @setEmail="setEmail"
+        />
       </b-form-group>
 
       <b-form-group
@@ -66,84 +76,98 @@
         />
       </b-form-group>
 
+      <!-- Фамилия -->
       <div class="d-flex w-100">
         <b-form-group label="Фамилия" label-cols="12" class="col-12 col-md-6">
           <b-form-input
+            list="my-list-id"
             :id="Math.random().toString()"
             v-model="$v.form.family.$model"
             :state="validateState('family')"
-            @blur="$v.form.family.$touch()"
+            @blur="
+              $v.form.family.$touch();
+              clearArray();
+            "
             placeholder="Фамилия"
             :disabled="registrationInProcess"
             tabindex="40"
             autocomplete="new-password"
-          ></b-form-input> 
+            @input="addSurname"
+          ></b-form-input>
 
-          <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-          <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
+          <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''"
+            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          >
+          <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false"
+            >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+          >
 
-           <input-autocomplete 
-           ref="family"
-          v-if="this.$v.form.family.$model !== '' &&  this.$v.form.family.alpha !== false"
-          :items="persons" 
-          filterby="surname" 
-          :stringValue="this.$v.form.family.$model"
-          @setSurname="setSurname"
-       /> 
-
+          <datalist id="my-list-id">
+            <option v-for="(item, index) in array" :key="index">
+              {{ item }}
+            </option>
+          </datalist>
         </b-form-group>
       </div>
 
+      <!-- Имя -->
       <b-form-group label="Имя" label-cols="12" class="col-12 col-md-6">
         <b-form-input
+          list="my-list-id"
           :id="Math.random().toString()"
           v-model="$v.form.name.$model"
           :state="validateState('name')"
-          @blur="$v.form.name.$touch()"
+          @blur="
+            $v.form.name.$touch();
+            clearArray();
+          "
           placeholder="Имя"
           :disabled="registrationInProcess"
           tabindex="50"
           autocomplete="new-password"
+          @input="addName"
         ></b-form-input>
 
-        <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
-      
-       <input-autocomplete 
-       v-if="this.$v.form.name.$model !== '' &&  this.$v.form.name.alpha !== false"
-       :items="persons" 
-       filterby="name" 
-       :stringValue="this.$v.form.name.$model"
-       ref="name"
-       @setName="setName"
-       /> 
-
-
+        <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''"
+          >Пожалуйста, заполните это поле</b-form-invalid-feedback
+        >
+        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false"
+          >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+        >
+        <datalist id="my-list-id">
+          <option v-for="(item, index) in array" :key="index">
+            {{ item }}
+          </option>
+        </datalist>
       </b-form-group>
-
+      <!-- Отчество -->
       <b-form-group label="Отчество" label-cols="12" class="col-12 col-md-6">
         <b-form-input
+          list="my-list-id"
           :id="Math.random().toString()"
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
-          @blur="$v.form.patronymic.$touch()"
+          @blur="
+            $v.form.patronymic.$touch();
+            clearArray();
+          "
           placeholder="Отчество"
           :disabled="registrationInProcess"
           tabindex="60"
           autocomplete="new-password"
+          @input="addPatronymic"
         ></b-form-input>
-        <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
-
-       <input-autocomplete 
-       ref="patronymic"
-       v-if="this.$v.form.patronymic.$model !== '' &&  this.$v.form.patronymic.alpha !== false"
-       :items="persons" 
-       filterby="patronymic" 
-       :stringValue="this.$v.form.patronymic.$model"
-       @setValue="setValue"
-      />
-      
+        <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''"
+          >Пожалуйста, заполните это поле</b-form-invalid-feedback
+        >
+        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false"
+          >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+        >
+        <datalist id="my-list-id">
+          <option v-for="(item, index) in array" :key="index">
+            {{ item }}
+          </option>
+        </datalist>
       </b-form-group>
 
       <b-form-group label="Номер полиса" label-cols="12" class="col-12">
@@ -188,24 +212,33 @@
 <script>
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import { required, email, minLength, sameAs, helpers } from "vuelidate/lib/validators";
-
+import {
+  required,
+  email,
+  minLength,
+  sameAs,
+  helpers,
+} from "vuelidate/lib/validators";
 import birthdayPicker from "../../../Libs/BirthdatePicker/BirthdatePicker";
 import VerifyUser from "../../../Libs/VerifyUser/VerifyUser";
 import VerifyPassword from "../../../Libs/VerifyPassword/VerifyPassword";
-import ConfirmModal from "./ConfirmModal"; 
-import InputAutocomplete from '../InputAutocomplete.vue';
+import ConfirmModal from "./ConfirmModal";
 
-const alpha = helpers.regex('alpha', /^[а-яА-Я]*$/)
+const alpha = helpers.regex("alpha", /^[а-яА-Я]*$/);
 
 export default {
-  components: { birthdayPicker, VerifyUser, VerifyPassword, 
-  ConfirmModal, InputAutocomplete },
+  components: {
+    birthdayPicker,
+    VerifyUser,
+    VerifyPassword,
+    ConfirmModal,
+  },
 
   mixins: [validationMixin],
 
   data() {
     return {
+      array: [],
       form: {
         phone: "",
         email: "",
@@ -219,19 +252,6 @@ export default {
         password2: "",
       },
 
-      persons:[
-
-    {id:1, name:'Степан', surname:'Петров', patronymic:'Владимирович', email:'korston@mail.ru'},
-
-    {id:1, name:'Дмитрий', surname:'Васин', patronymic:'Васильевич', email:'aurora@mail.ru'},
-
-    {id:1, name:'Василий', surname:'Гаврилов', patronymic:'Всеолодович', email:'automobile@mail.ru'},
-
-    {id:1, name:'Александр', surname:'Бочаров', patronymic:'Владиленович', email:'petya@mail.ru'}
-
-      ],
-
-    
       conformation: false,
       show: true,
       password2: "",
@@ -251,15 +271,15 @@ export default {
     form: {
       name: {
         required,
-        alpha
+        alpha,
       },
       family: {
         required,
-        alpha
+        alpha,
       },
       patronymic: {
         required,
-        alpha
+        alpha,
       },
       birthdate: {
         required,
@@ -287,20 +307,108 @@ export default {
   },
 
   methods: {
-
-    setValue(index){
-     this.$v.form.patronymic.$model=this.persons[index][this.$refs.patronymic.filterby]
+    clearArray() {
+      this.array = [];
     },
 
-    setName(index){
-      this.$v.form.name.$model=this.persons[index][this.$refs.name.filterby]
+    addName() {
+      this.array = [];
+      var url = "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/fio";
+      var token = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+      var query = this.$v.form.name.$model;
+      var options = {
+        method: "POST",
+        mode: "cors",
+
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Token " + token,
+        },
+        body: JSON.stringify({ query: query }),
+      };
+
+      fetch(url, options)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          data.suggestions.forEach((item) => {
+            if (item.data.name !== null && this.$v.form.name.alpha !== false) {
+              this.array.push(item.data.name);
+            }
+          });
+        });
     },
 
-    setSurname(index){
-      
-      this.$v.form.family.$model=this.persons[index][this.$refs.family.filterby]
+    addSurname() {
+      this.array = [];
+      var url = "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/fio";
+      var token = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+      var query = this.$v.form.family.$model;
+      var options = {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Token " + token,
+        },
+        body: JSON.stringify({ query: query }),
+      };
+      fetch(url, options)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          data.suggestions.forEach((item) => {
+            if (
+              item.data.surname !== null &&
+              this.$v.form.family.alpha !== false
+            ) {
+              this.array.push(item.data.surname);
+            }
+          });
+        });
     },
 
+    addPatronymic() {
+      this.array = [];
+      var url = "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/fio";
+      var token = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+      var query = this.$v.form.patronymic.$model;
+
+      var options = {
+        method: "POST",
+        mode: "cors",
+
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Token " + token,
+        },
+
+        body: JSON.stringify({
+          query: query,
+          parts: ["PATRONYMIC"],
+        }),
+      };
+
+      fetch(url, options)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          data.suggestions.forEach((item) => {
+            if (
+              item.data.patronymic !== null &&
+              this.$v.form.patronymic.alpha !== false
+            ) {
+              this.array.push(item.data.patronymic);
+            }
+          });
+        });
+    },
 
     onError(error) {
       console.log("Error:", error);
@@ -322,7 +430,7 @@ export default {
     },
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
-      return $dirty ? !$error : null
+      return $dirty ? !$error : null;
     },
 
     async setToken(context) {
@@ -341,8 +449,6 @@ export default {
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
         };
-
-      
 
         // await this.getCaptcha();
         // if (!this.token) return;
@@ -405,22 +511,18 @@ export default {
       }
     },
   },
-
-  
-
-
 };
 </script>
 
 <style scoped lang="scss">
 @import "~/assets/scss/reg.scss";
 
-.alert{
-  border:1px solid orange;
+.alert {
+  border: 1px solid orange;
 }
 
-.ok{
-  border:1px solid red;
+.ok {
+  border: 1px solid red;
 }
 
 .autocomplete {
@@ -452,6 +554,4 @@ input[type="number"]::-webkit-outer-spin-button {
   display: block;
   margin-top: -5px;
 }
-
-
 </style>
