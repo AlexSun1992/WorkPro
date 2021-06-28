@@ -18,26 +18,13 @@
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
           >
         </b-form-group>
-
-        <div class="col-12 col-md-6 mt-2 mt-md-0">
-          <!-- <b-button
-            type="submit"
-            v-if="!isShowCodeEnter"
-            @click="verifyUser"
-            variant="success"
-            class="btn-sms"
-            :disabled="$v.newPhone.$invalid"
-            >Подтвердить</b-button
-          > -->
-        </div>
       </div>
       <b-button
         type="submit"
-        v-if="!isShowCodeEnter || !disabledResend"
         @click="verifyUser"
         variant="success"
-        class="btn-sms mt-3"
-        :disabled="$v.newPhone.$invalid"
+        class="btn-sms mt-3 ml-4"
+        :disabled="$v.newPhone.$invalid || isShowCodeEnter"
         >Получить sms-код</b-button
       >
       <div v-if="isShowCodeEnter" class="resend">
@@ -57,14 +44,6 @@
           сек.</template
         >
       </p>
-      <!-- <b-button
-        type="submit"
-        :disabled="disabledResend"
-        @click="resendCode"
-        variant="success"
-      >
-        Отправить повторно
-      </b-button> -->
     </div>
   </div>
 </template>
@@ -110,6 +89,13 @@ export default {
     },
   },
   created() {
+    if (process.client) {
+      if (
+        this.$store.getters["data_card/getErrorMessage"] &&
+        localStorage.newPhone
+      )
+        this.newPhone = localStorage.newPhone;
+    }
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
@@ -144,50 +130,13 @@ export default {
       }
     },
 
-    // async getCode() {
-    //   if (!this.newPhone) return;
-    //   this.isPhoneChanged = false;
-    //   try {
-    //     this.disabledResend = true;
-    //     let params = {
-    //       PHONE: this.newPhone,
-    //       loginType: "phone",
-    //       modeType: "RECOVERY",
-    //     };
-    //     const response = await this.$store.dispatch("getCode", params);
-    //     if (response?.status === 500) {
-    //       return;
-    //     }
-
-    //     if (response?.data[0]?.ERRORCODE === 106) {
-    //       await this.$recaptcha.getResponse();
-    //       await this.$recaptcha.reset();
-    //       params = {
-    //         ...params,
-    //         token: this.token,
-    //         modeType: "RECOVERY",
-    //         error: true,
-    //       };
-    //       const response = await this.$store.dispatch("getCode", params);
-
-    //       if (response?.data[0]?.ERRORLIST) {
-    //         this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT);
-    //       } else {
-    //         this.isSendCode = true;
-    //       }
-    //     } else {
-    //       this.isSendCode = true;
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // },
-
     async getCode() {
+      // Очищаем поле с кодом СМС
       this.$store.commit("data_card/setFormField", {
         fieldId: 26713,
         value: null,
       });
+
       if (!this.newPhone) return;
       this.isPhoneChanged = false;
       let actionParams = {
@@ -246,37 +195,6 @@ export default {
       this.v[field].$touch();
     },
 
-    // async resendCode() {
-    //   let params = {
-    //     PHONE: this.newPhone,
-    //     loginType: "phone",
-    //   };
-    //   params = { ...params, token: this.token, modeType: "RECOVERY" };
-    //   const response = await this.$store.dispatch("getCode", params);
-    //   if (response?.data[0]?.ERRORCODE === 106) {
-    //     const token = await this.$recaptcha.getResponse();
-    //     await this.$recaptcha.reset();
-    //     params = {
-    //       ...params,
-    //       token: this.token,
-    //       error: true,
-    //     };
-    //     const response = await this.$store.dispatch("getCode", params);
-    //     if (response?.data[0]?.ERRORLIST) {
-    //       this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT);
-    //     } else {
-    //       this.isSendCode = true;
-    //     }
-    //   }
-
-    //   if (
-    //     response?.status === 500 ||
-    //     Boolean(response?.data[0]?.ERRORCODE) === true
-    //   ) {
-    //     return;
-    //   }
-    //   this.disabledResend = true;
-    // },
     stopTimer() {
       this.isSendCode = false;
       this.disabledResend = false;
@@ -290,28 +208,10 @@ export default {
     isShowCodeEnter() {
       return !this.$v.newPhone.$invalid && this.isSendCode;
     },
-    // newPhone: {
-    //   get: function () {
-    //     return this.data.value;
-    //   },
-    //   set: function (value) {
-    //     this.$emit("update", {
-    //       fieldId: this.data.fieldId,
-    //       name: this.data.name,
-    //       value: value,
-    //     });
-    //   },
-    // },
   },
   destroyed() {
     this.isSendCode = false;
-  },
-  watch: {
-    // "$v.newPhone.$model": function () {
-    //   if (this.$v.newPhone.$invalid === false) {
-    //     this.debouncedGetCode();
-    //   }
-    // },
+    localStorage.setItem("newPhone", this.newPhone);
   },
 };
 </script>

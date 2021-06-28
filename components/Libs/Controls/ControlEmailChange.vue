@@ -20,11 +20,10 @@
       </div>
       <b-button
         type="submit"
-        v-if="!isShowCodeEnter || !disabledResend"
         @click="verifyUser"
         variant="success"
         class="btn-sms mt-3 ml-4"
-        :disabled="$v.newEmail.$invalid"
+        :disabled="$v.newEmail.$invalid || isShowCodeEnter"
         >Получить код</b-button
       >
       <div v-if="isShowCodeEnter" class="resend">
@@ -88,6 +87,13 @@ export default {
     },
   },
   created() {
+    if (process.client) {
+      if (
+        this.$store.getters["data_card/getErrorMessage"] &&
+        localStorage.newEmail
+      )
+        this.newEmail = localStorage.newEmail;
+    }
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
@@ -198,6 +204,7 @@ export default {
   },
   destroyed() {
     this.isSendCode = false;
+    localStorage.setItem("newEmail", this.newEmail);
   },
 };
 </script>
