@@ -9,22 +9,38 @@
       "
     >
       <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
-      <div></div>
-      <b-button
-        :disabled="loading"
-        variant="success"
-        v-if="currentTab.order != qty && $route.params.idCard != 0"
-        @click="goNext"
-      >
-        {{ showBtnName }}
-        <b-spinner
-          v-if="loading"
-          style="width: 1rem; height: 1rem"
-          class="ml-2"
-          variant="danger"
-          label="Spinning"
-        ></b-spinner>
-      </b-button>
+      <div>
+        <b-button
+          :disabled="loading"
+          variant="success"
+          v-if="currentTab.order != qty && $route.params.idCard != 0"
+          @click="saveCard"
+        >
+          Сохранить
+          <b-spinner
+            v-if="loading"
+            style="width: 1rem; height: 1rem"
+            class="ml-2"
+            variant="danger"
+            label="Spinning"
+          ></b-spinner>
+        </b-button>
+        <b-button
+          :disabled="loading"
+          variant="success"
+          v-if="currentTab.order != qty && $route.params.idCard != 0"
+          @click="goNext"
+        >
+          {{ showBtnName }}
+          <b-spinner
+            v-if="loading"
+            style="width: 1rem; height: 1rem"
+            class="ml-2"
+            variant="danger"
+            label="Spinning"
+          ></b-spinner>
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -72,6 +88,10 @@ export default {
       this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
       let tab = this.tabs[this.getCurrentIndex() - 1];
       this.$emit("goBack", tab);
+    },
+    saveCard() {
+      this.$parent.loading = true;
+      this.$emit("saveCard");
     },
   },
   computed: {

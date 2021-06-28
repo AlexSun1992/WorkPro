@@ -48,6 +48,7 @@
       :loading="loading"
       @goNext="goNext($event)"
       @goBack="goBack($event)"
+      @saveCard="saveCard($event)"
     ></wizard-buttons>
   </div>
   <div v-else>{{ wizardErrorMessage }}</div>
@@ -118,6 +119,17 @@ export default {
     },
     async goBack(e) {
       this.$router.push(this.getURL(e));
+    },
+    async saveCard(e) {
+      this.loading = true;
+      if (this.$refs["child"].$refs["cardEditor"] !== undefined) {
+        await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+        if (this.isSavedError === true) {
+          this.loading = false;
+          return;
+        }
+      }
+      this.loading = false;
     },
   },
   destroyed() {

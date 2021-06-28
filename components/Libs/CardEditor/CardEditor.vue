@@ -245,7 +245,6 @@ export default {
           !data[i].hidden &&
           data[i].visible &&
           (value === null || value === undefined || value === "") &&
-          data[i].type !== "boolean" &&
           value !== 0
         ) {
           console.log("error", data[i]);
@@ -373,7 +372,7 @@ export default {
           }
         }
       } else {
-        this.$store.commit("data_card/setError", true);
+        this.$store.commit("data_card/setSavedError", true);
         this.$store.commit("data_card/setErrorMessage", {
           MESSAGE: "Проверьте правильность заполнения формы!",
         });
