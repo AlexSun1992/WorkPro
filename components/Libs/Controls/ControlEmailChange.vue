@@ -2,7 +2,10 @@
   <div>
     <div class="change-email">
       <div class="row">
-        <b-form-group :label="data.label" :class="{ required: data.required }">
+        <b-form-group
+          :label="data.label"
+          :class="[{ required: data.required }, data.labelCols]"
+        >
           <b-form-input
             ref="userInput"
             v-model="newEmail"
