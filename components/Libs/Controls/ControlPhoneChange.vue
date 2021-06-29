@@ -28,9 +28,16 @@
             @click="verifyUser"
             variant="success"
             class="btn-sms"
-            :disabled="$v.newPhone.$invalid || isShowCodeEnter"
-            >Получить sms-код</b-button
-          >
+            :disabled="$v.newPhone.$invalid || loading || isSendCode"
+            >Получить sms-код
+            <b-spinner
+              v-if="loading"
+              style="width: 1rem; height: 1rem"
+              class="ml-2"
+              variant="danger"
+              label="Spinning"
+            ></b-spinner>
+          </b-button>
         </div>
       </div>
 
@@ -68,7 +75,7 @@ export default {
     return {
       isSendCode: false,
       disabledResend: true,
-      duration: 20,
+      duration: 60,
       newPhone: "",
       mask: "",
       placeholder: "+7(___)-___-__-__",
@@ -76,6 +83,7 @@ export default {
       token: 1,
       isUserBlured: true,
       isUserDisabled: false,
+      loading: false,
     };
   },
   props: {
@@ -151,6 +159,7 @@ export default {
         value: this.newPhone,
       };
       try {
+        this.loading = true;
         this.disabledResend = true;
         let response = await this.$store.dispatch("data_card/executeAction", {
           actionId: this.params.actions[0].id,
@@ -160,6 +169,7 @@ export default {
           body: [actionParams],
         });
         if (response?.status === 500) {
+          this.loading = false;
           this.$store.commit("data_card/setError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
           this.$store.commit("data_card/setFormField", {
@@ -168,6 +178,7 @@ export default {
           });
         }
         if (response?.status === 200) {
+          this.loading = false;
           this.$store.commit("data_card/setError", false);
           this.$store.commit("data_card/setErrorMessage", null);
           this.isSendCode = true;
