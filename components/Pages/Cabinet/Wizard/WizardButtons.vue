@@ -6,7 +6,6 @@
         isUseCardTemplate
           ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
           : 'col-12',
-        { 'btn-right': currentTab.order === 1 },
       ]"
     >
       <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
