@@ -11,7 +11,7 @@
     <b-alert :show="!!errorMessage" variant="danger">{{
       errorMessage
     }}</b-alert>
-    <!--  -->
+
     <b-form
       @submit.stop.prevent
       @keydown.enter.prevent="onSubmit"
@@ -36,9 +36,9 @@
       </b-form-group>
 
       <b-form-group label="E-mail" label-cols="12" class="col-12 col-md-6">
-         <b-form-input
+        <b-form-input
           :id="Math.random().toString()"
-          v-model.lazy="$v.form.email.$model"
+          v-model="$v.form.email.$model"
           :state="validateState('email')"
           @blur="$v.form.email.$touch()"
           placeholder="E-mail"
@@ -48,7 +48,7 @@
         ></b-form-input>
         <b-form-invalid-feedback>
           Пожалуйста, заполните это поле
-          </b-form-invalid-feedback> 
+        </b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group
@@ -64,57 +64,95 @@
         />
       </b-form-group>
 
+      <!-- Фамилия -->
       <div class="d-flex w-100">
         <b-form-group label="Фамилия" label-cols="12" class="col-12 col-md-6">
           <b-form-input
+            list="my-list-id"
             :id="Math.random().toString()"
             v-model="$v.form.family.$model"
             :state="validateState('family')"
-            @blur="$v.form.family.$touch()"
+            @blur="$v.form.family.$touch(), clearArray()"
             placeholder="Фамилия"
             :disabled="registrationInProcess"
             tabindex="40"
             autocomplete="new-password"
+            @input="askSuggestions('surname')"
           ></b-form-input>
-          <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-          <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback>
+
+          <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''"
+            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          >
+          <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false"
+            >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+          >
+
+          <datalist id="my-list-id">
+            <option v-for="(item, index) in array" :key="index">
+              {{ item }}
+            </option>
+          </datalist>
         </b-form-group>
-
       </div>
+      <!-- ///// -->
 
+      <!-- Имя -->
       <b-form-group label="Имя" label-cols="12" class="col-12 col-md-6">
         <b-form-input
+          list="my-list-id"
           :id="Math.random().toString()"
           v-model="$v.form.name.$model"
           :state="validateState('name')"
-          @blur="$v.form.name.$touch()"
+          @blur="$v.form.name.$touch(), clearArray()"
           placeholder="Имя"
           :disabled="registrationInProcess"
           tabindex="50"
           autocomplete="new-password"
-        
+          @input="askSuggestions('name')"
         ></b-form-input>
-        <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> 
 
+        <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''"
+          >Пожалуйста, заполните это поле</b-form-invalid-feedback
+        >
+        <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false"
+          >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+        >
+        <datalist id="my-list-id">
+          <option v-for="(item, index) in array" :key="index">
+            {{ item }}
+          </option>
+        </datalist>
       </b-form-group>
+      <!-- /////// -->
 
-
+      <!-- Отчество -->
       <b-form-group label="Отчество" label-cols="12" class="col-12 col-md-6">
-
         <b-form-input
+          list="my-list-id"
           :id="Math.random().toString()"
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
-          @blur="$v.form.patronymic.$touch()"
+          @blur="$v.form.patronymic.$touch(), clearArray()"
           placeholder="Отчество"
           :disabled="registrationInProcess"
           tabindex="60"
           autocomplete="new-password"
+          @input="askSuggestions('patronymic')"
         ></b-form-input>
-        <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''">Пожалуйста, заполните это поле</b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false">Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback> 
+
+        <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''"
+          >Пожалуйста, заполните это поле</b-form-invalid-feedback
+        >
+        <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false"
+          >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+        >
+        <datalist id="my-list-id">
+          <option v-for="(item, index) in array" :key="index">
+            {{ item }}
+          </option>
+        </datalist>
       </b-form-group>
+      <!-- ////// -->
 
       <b-form-group label="Номер полиса" label-cols="12" class="col-12">
         <b-form-input
@@ -150,7 +188,6 @@
           ></b-spinner>
         </b-button>
       </div>
-    
     </b-form>
     <!--    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />-->
   </div>
@@ -159,22 +196,28 @@
 <script>
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import { required, email, minLength, sameAs, helpers } from "vuelidate/lib/validators";
-
+import {
+  required,
+  email,
+  minLength,
+  sameAs,
+  helpers,
+} from "vuelidate/lib/validators";
 import birthdayPicker from "../../../Libs/BirthdatePicker/BirthdatePicker";
 import VerifyUser from "../../../Libs/VerifyUser/VerifyUser";
 import VerifyPassword from "../../../Libs/VerifyPassword/VerifyPassword";
 import ConfirmModal from "./ConfirmModal";
 
-const alpha = helpers.regex('alpha', /^[а-яА-Я- ]*$/)
+const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
 export default {
-  components: { birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal},
+  components: { birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal },
 
   mixins: [validationMixin],
 
   data() {
     return {
+      array: [],
       form: {
         phone: "",
         email: "",
@@ -187,7 +230,7 @@ export default {
         password: "",
         password2: "",
       },
-        
+
       conformation: false,
       show: true,
       password2: "",
@@ -207,16 +250,16 @@ export default {
     form: {
       name: {
         required,
-        alpha
+        alpha,
       },
 
       family: {
         required,
-        alpha
+        alpha,
       },
       patronymic: {
         required,
-        alpha
+        alpha,
       },
       birthdate: {
         required,
@@ -243,15 +286,67 @@ export default {
     },
   },
 
-computed:{
-errorReset(){
-  if(!this.$v.form.name.$model){
-    console.log(this.$v.form.name.$model)
-  }
-}
-},
+  computed: {
+    errorReset() {
+      if (!this.$v.form.name.$model) {
+        console.log(this.$v.form.name.$model);
+      }
+    },
+  },
 
   methods: {
+    clearArray() {
+      this.array = [];
+    },
+
+    async askSuggestions(target) {
+      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+      let suggestionType = "fio";
+      let query;
+
+      const params = {
+        query: query,
+        suggestionType,
+        key: API_KEY,
+      };
+
+      if (target === "patronymic") {
+        params.query = this.$v.form.patronymic.$model;
+        params.parts = ["PATRONYMIC"];
+      } else if (target === "surname") {
+        params.query = this.$v.form.family.$model;
+        params.parts = ["SURNAME"];
+      } else if (target === "name") {
+        params.query = this.$v.form.name.$model;
+        params.parts = ["NAME"];
+      }
+
+      const result = await this.$store.dispatch(
+        "card/fetchSuggestions",
+        params
+      );
+
+      if (target === "surname" && this.$v.form.family.alpha !== false) {
+        this.array.length = 0;
+        await result.forEach((item) => {
+          this.array.push(item.data.surname);
+        });
+      } else if (target === "name" && this.$v.form.name.alpha !== false) {
+        this.array.length = 0;
+        await result.forEach((item) => {
+          this.array.push(item.data.name);
+        });
+      } else if (
+        target === "patronymic" &&
+        this.$v.form.patronymic.alpha !== false
+      ) {
+        this.array.length = 0;
+        await result.forEach((item) => {
+          this.array.push(item.data.patronymic);
+        });
+      }
+    },
+
     onError(error) {
       console.log("Error:", error);
     },
@@ -272,7 +367,7 @@ errorReset(){
     },
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
-      return $dirty ? !$error : null
+      return $dirty ? !$error : null;
     },
 
     async setToken(context) {
@@ -291,13 +386,13 @@ errorReset(){
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
         };
-        
+
         // await this.getCaptcha();
         // if (!this.token) return;
 
         params = { ...params, token: this.token };
         const response = await this.$store.dispatch("registerUser", params);
-        
+
         this.registrationInProcess = false;
         if (response?.status === 200) {
           this.$bvModal
@@ -356,18 +451,46 @@ errorReset(){
     },
   },
 };
-
 </script>
 
 <style scoped lang="scss">
 @import "~/assets/scss/reg.scss";
 
-.alert{
-  border:1px solid orange;
+.alert {
+  border: 1px solid orange;
 }
 
-.ok{
-  border:1px solid red;
+.ok {
+  border: 1px solid red;
 }
 
+.autocomplete {
+  position: relative;
+}
+.dropdown-menu {
+  display: block;
+  width: 100%;
+}
+.active {
+  background-color: lightgrey;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.error {
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #f86c6b;
+}
+.help-text {
+  font-size: 12px;
+  margin-top: 10px;
+}
+.autocomplete ul.dropdown-menu {
+  display: block;
+  margin-top: -5px;
+}
 </style>

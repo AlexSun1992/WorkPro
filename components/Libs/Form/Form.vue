@@ -21,7 +21,7 @@
           ></Control>
         </div>
       </b-tab>
-      <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
+      <b-tab :title="tab.label" v-for="tab in tabs" :key="tab.id">
         <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />
       </b-tab>
     </b-tabs>
