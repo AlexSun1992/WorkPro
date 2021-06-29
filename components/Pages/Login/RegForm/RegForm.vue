@@ -84,7 +84,7 @@
             :id="Math.random().toString()"
             v-model="$v.form.family.$model"
             :state="validateState('family')"
-            @blur="$v.form.family.$touch()"
+            @blur="$v.form.family.$touch(), clearArray()"
             placeholder="Фамилия"
             :disabled="registrationInProcess"
             tabindex="40"
@@ -115,7 +115,7 @@
           :id="Math.random().toString()"
           v-model="$v.form.name.$model"
           :state="validateState('name')"
-          @blur="$v.form.name.$touch()"
+          @blur="$v.form.name.$touch(), clearArray()"
           placeholder="Имя"
           :disabled="registrationInProcess"
           tabindex="50"
@@ -144,7 +144,7 @@
           :id="Math.random().toString()"
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
-          @blur="$v.form.patronymic.$touch()"
+          @blur="$v.form.patronymic.$touch(), clearArray()"
           placeholder="Отчество"
           :disabled="registrationInProcess"
           tabindex="60"
@@ -220,7 +220,7 @@ import VerifyUser from "../../../Libs/VerifyUser/VerifyUser";
 import VerifyPassword from "../../../Libs/VerifyPassword/VerifyPassword";
 import ConfirmModal from "./ConfirmModal";
 
-const alpha = helpers.regex("alpha", /^[а-яА-Я]*$/);
+const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
 export default {
   components: {
@@ -303,9 +303,9 @@ export default {
   },
 
   methods: {
-    // clearArray() {
-    //   this.array = [];
-    // },
+    clearArray() {
+      this.array = [];
+    },
 
     async askSuggestions(target) {
       const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
