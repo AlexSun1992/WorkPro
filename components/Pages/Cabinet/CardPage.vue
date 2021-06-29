@@ -84,10 +84,7 @@
             >{{ item.SNAME }}
           </b-button>
         </div>
-        <div
-          v-if="!isWizard || (isWizard && $route.params.idCard == 0)"
-          :class="{ 'btn-right': isWizard && $route.params.idCard == 0 }"
-        >
+        <div v-if="!isWizard || (isWizard && $route.params.idCard == 0)">
           <div v-if="getFormData">
             <b-button
               v-if="
