@@ -130,6 +130,8 @@ converter.form = async (data, itemId) => {
       obj.type = "link";
     } else if (webFields[i].IDCONTROL == 14) {
       obj.type = "timestamp";
+    } else if (webFields[i].IDCONTROL == 5) {
+      obj.type = "progressbar";
     } else if (webFields[i].IDCONTROL == 15) {
       obj.type = "combobox";
       if (webFields[i].LVISIBLE && webFields[i].LDIC === true) {
@@ -151,10 +153,15 @@ converter.form = async (data, itemId) => {
     } else if (webFields[i].IDCONTROL == 29) {
       obj.type = "captcha";
       obj.captcha = null;
+<<<<<<< HEAD
     } else if (webFields[i].IDCONTROL == 31) {
       obj.type = "phoneChange";
     } else if (webFields[i].IDCONTROL == 32) {
       obj.type = "emailChange";
+=======
+    } else if (webFields[i].IDCONTROL == 30) {
+      obj.type = "empty";
+>>>>>>> master
     } else {
       obj.type = "string";
     }
@@ -167,9 +174,7 @@ converter.form = async (data, itemId) => {
     obj.colLg = webFields[i].NCOLLG ? webFields[i].NCOLLG : 12;
     obj.width = webFields[i].NWIDTH ? webFields[i].NWIDTH + "%" : "100%";
     obj.name = webFields[i].SNAME;
-    obj.labelCols = webFields[i].SCAPTIONPOSITION
-      ? webFields[i].SCAPTIONPOSITION
-      : "f-l-i col-md-3 col-12";
+    obj.labelCols = webFields[i].SCAPTPOS ? webFields[i].SCAPTPOS : "";
     if (
       meta_visible[webFields[i].SNAME.toUpperCase()] === "Y" ||
       meta_visible[webFields[i].SNAME.toUpperCase()] === "N"

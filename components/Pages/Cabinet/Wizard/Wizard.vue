@@ -2,7 +2,7 @@
   <div v-if="wizardIsError === false">
     <div
       v-if="cardCaption"
-      class="block-title pt-0 position-relative mt-2 mb-4"
+      class="block-title title-page position-relative mb-4"
     >
       <i class="icon-my-profile"></i>{{ cardCaption }}
     </div>
@@ -26,13 +26,20 @@
       :key="$route.fullPath"
       :wizard-tabs="settings.wizard"
     />
-    <div>
-      <b-alert
-        :show="isErrorActionExecuteMessage"
-        variant="danger"
-        class="mt-4"
-        >{{ errorActionExecuteMessage }}</b-alert
+    <div class="row">
+      <div
+        v-if="isErrorActionExecuteMessage"
+        class="mt-3 mb-0"
+        :class="
+          isUseCardTemplate
+            ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
+            : 'col-12'
+        "
       >
+        <b-alert :show="isErrorActionExecuteMessage" variant="danger">{{
+          errorActionExecuteMessage
+        }}</b-alert>
+      </div>
     </div>
     <wizard-buttons
       :currentTab="currentTab"
@@ -41,6 +48,7 @@
       :loading="loading"
       @goNext="goNext($event)"
       @goBack="goBack($event)"
+      @saveCard="saveCard($event)"
     ></wizard-buttons>
   </div>
   <div v-else>{{ wizardErrorMessage }}</div>
@@ -84,7 +92,7 @@ export default {
         if (this.$store.getters["data_card/getBtnSave"]) {
           if (this.$refs["child"].$refs["cardEditor"] !== undefined) {
             await this.$refs["child"].$refs["cardEditor"].saveDataCard();
-            if (this.isError()) {
+            if (this.isSavedError === true) {
               this.loading = false;
               return;
             }
@@ -100,7 +108,7 @@ export default {
               relId,
               form: this.$store.getters["data_card/getForm"]?.data,
             });
-            if (this.isError()) {
+            if (this.isSavedError === true) {
               this.loading = false;
               return;
             }
@@ -112,8 +120,16 @@ export default {
     async goBack(e) {
       this.$router.push(this.getURL(e));
     },
-    isError() {
-      return this.$store.getters["data_card/getError"];
+    async saveCard(e) {
+      this.loading = true;
+      if (this.$refs["child"].$refs["cardEditor"] !== undefined) {
+        await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+        if (this.isSavedError === true) {
+          this.loading = false;
+          return;
+        }
+      }
+      this.loading = false;
     },
   },
   destroyed() {
@@ -183,6 +199,15 @@ export default {
     },
     errorActionExecuteMessage() {
       return this.$store.getters["wizard/getWizardErrorActionExecuteMessage"];
+    },
+    isSavedError() {
+      return this.$store.getters["data_card/getSavedError"];
+    },
+    isUseCardTemplate() {
+      return Boolean(
+        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+          ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
+      );
     },
   },
 };

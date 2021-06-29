@@ -2,7 +2,9 @@
   <div>
     <p class="my-2">{{ errorMessage }}</p>
     <b-form @submit.prevent="onSubmit">
+
       <b-form-group label="Телефон" label-cols="12">
+        
         <b-form-input
           ref="phoneInput"
           v-model="$v.user.username.$model"
@@ -15,14 +17,17 @@
           @input="isUsernameBlured = false"
           @click="loginTouchesCount = 2"
           :disabled="authInProcess"
-          class="form-control"
-        ></b-form-input>
+          class="form-control">
+        </b-form-input>
+
         <b-form-invalid-feedback
           >Пожалуйста, введите корректный номер
-          телефона</b-form-invalid-feedback
-        >
-      </b-form-group>
-      <b-form-group label="Пароль" label-cols="12">
+          телефона</b-form-invalid-feedback>
+
+            </b-form-group>
+
+      <b-form-group label="Пароль" label-cols="12"> 
+
         <b-form-input
           v-model="$v.user.password.$model"
           placeholder="Пароль"
@@ -34,9 +39,13 @@
           :disabled="authInProcess"
         ></b-form-input>
         <b-form-invalid-feedback
-          >Пожалуйста, введите пароль</b-form-invalid-feedback
-        >
-      </b-form-group>
+          >Пожалуйста, введите пароль
+          </b-form-invalid-feedback> 
+
+          </b-form-group>
+
+
+
       <b-button
         variant="success"
         type="submit"
@@ -58,19 +67,27 @@
   </div>
 </template>
 
+
+
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
 
+
+
+
+
 export default {
+ 
   data() {
     return {
       user: {
         username: "",
-        password: "",
+        password: ""
       },
       isUsernameBlured: true,
       isPasswordBlured: true,
+      autofocus:true,
       usernameMask: "+7(###)-###-##-##",
       placeholder: "+7(___)-___-__-__",
       errorMessage: null,
@@ -88,6 +105,7 @@ export default {
 
   methods: {
     async login(context) {
+  
       try {
         this.authInProcess = true;
         // this.captchaToken = await this.$getCaptcha();
@@ -140,6 +158,7 @@ export default {
     },
 
     blurField(field, bluredField) {
+      
       if (field === "username") {
         this.loginTouchesCount++;
         this.isUsernameBlured = true;
@@ -159,6 +178,7 @@ export default {
       this.loginTouchesCount = 3;
       this.$v.user.$touch();
       if (this.$v.user.$anyError) {
+        
         return;
       }
       this.login(this);

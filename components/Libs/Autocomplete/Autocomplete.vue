@@ -21,6 +21,7 @@
         @click="suggestionClick(i)"
       >
         <span>{{ suggestion }}</span>
+        
       </li>
     </ul>
   </div>

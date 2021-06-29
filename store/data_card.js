@@ -10,6 +10,7 @@ export const state = () => ({
   cardRelId: null,
   captions: null,
   isError: false,
+  isSavedError: false,
   errorMessage: null,
   cardCaption: null,
   cardChanged: false,
@@ -20,11 +21,13 @@ export const state = () => ({
   isReadOnly: false,
   loading: false,
 });
+
 export const getters = {
   getForm: (state) => state.form,
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
   getError: (state) => state.isError,
+  getSavedError: (state) => state.isSavedError,
   getErrorMessage: (state) => getErrorMessage(state.errorMessage),
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
@@ -105,6 +108,7 @@ export const actions = {
       }
     }
   },
+
   async fetchOneToManyDataTable({ commit, getters, state }, params) {
     try {
       await this.$axios
@@ -246,6 +250,9 @@ export const mutations = {
   setError(state, data) {
     state.isError = data;
   },
+  setSavedError(state, data) {
+    state.isSavedError = data;
+  },
   setErrorMessage(state, data) {
     state.errorMessage = data;
   },
@@ -267,6 +274,8 @@ export const mutations = {
         }
         if (item.value) {
           item.state = null;
+        } else {
+          item.state = false;
         }
         if (item.value && item.value.__ob__) {
           item.state = item.value.value || item.value.value == 0 ? null : false;
@@ -274,6 +283,7 @@ export const mutations = {
       }
     }
   },
+
   setActionParamsField(state, data) {
     const item = state.actionParams.find((d) => d.name === data.name);
     item.value = data.value;
@@ -324,7 +334,14 @@ export const mutations = {
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {
       state.form = state.form.map((item) => {
-        item.readonly = params;
+        let copyField = state.copyForm.find(
+          (field) => field.fieldId === item.fieldId
+        );
+        if (copyField.readonly) {
+          item.readonly = true;
+        } else {
+          item.readonly = params;
+        }
         return item;
       });
     }

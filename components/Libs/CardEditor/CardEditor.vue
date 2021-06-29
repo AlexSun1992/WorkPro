@@ -27,18 +27,29 @@
     </b-modal>
     <div v-if="data.length">
       <Form
-        v-if="!isAccordion"
+        v-if="!isAccordion && !isBlock"
+        class="block-profile"
         :data="data"
         :tabs="tabs"
         :params="params"
+        :is-tabs="isTabs"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
         :edit="edit"
       ></Form>
       <FormAccordion
-        v-else-if="isAccordion"
+        v-if="isAccordion && !isTabs && !isBlock"
         :class="{ 'mt-5': !params.settings && showBtnBack }"
+        :data="data"
+        :tabs="tabs"
+        @update="updateValue($event)"
+        @clear="clearRelation($event)"
+        @open-card="openCard($event)"
+        :edit="edit"
+      />
+      <FormBlock
+        v-if="isBlock && !isTabs && !isAccordion"
         :data="data"
         :tabs="tabs"
         @update="updateValue($event)"
@@ -57,6 +68,7 @@ import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import { getErrorMessage } from "@/utils/transform";
+import FormBlock from "@/components/Libs/Form/FormBlock";
 export default {
   name: "CardEditor",
   head() {
@@ -72,7 +84,7 @@ export default {
       ],
     };
   },
-  components: { FormAccordion, Form, ActionButton, SkeletonBox },
+  components: { FormBlock, FormAccordion, Form, ActionButton, SkeletonBox },
   data() {
     return {
       invalidFields: [],
@@ -82,6 +94,7 @@ export default {
       actionFormDisabled: false,
       isActionApplyError: false,
       actionApplyErrorMessage: null,
+      updateValueCounter: 0,
       disabledButtons: {
         background: "#dddbdd",
         boxShadow: "none",
@@ -118,6 +131,7 @@ export default {
   destroyed() {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
+    this.$store.commit("data_card/setSavedError", false);
   },
   methods: {
     stripeLoaded() {
@@ -130,6 +144,7 @@ export default {
         }
       } catch {}
     },
+
     async updateValue(e) {
       let field = this.data.find((f) => f.fieldId === e.fieldId);
       if (field.type !== "button") {
@@ -150,6 +165,7 @@ export default {
         const actionId = e.value.replace("Item", "");
         let moduleId;
         let cardId;
+
         if (!this.params.page) {
           moduleId = this.$route.params.idModule;
           cardId = this.$route.params.idCard;
@@ -180,6 +196,7 @@ export default {
         value: e.value,
       });
     },
+
     async fetchCard(method, url) {
       try {
         this.cancelRequest();
@@ -208,6 +225,7 @@ export default {
         fieldName: e.fieldName,
       });
     },
+
     openCard(e) {
       const flatmenu = this.$store.getters["menu/flatmenu"];
       const menuItem = flatmenu.find((item) => {
@@ -228,7 +246,6 @@ export default {
           !data[i].hidden &&
           data[i].visible &&
           (value === null || value === undefined || value === "") &&
-          data[i].type !== "boolean" &&
           value !== 0
         ) {
           console.log("error", data[i]);
@@ -241,7 +258,7 @@ export default {
     async saveDataCard() {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
-      this.$store.commit("data_card/setError", false);
+      this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
       if (this.validateData(fields)) {
@@ -286,12 +303,19 @@ export default {
                 idCard: cardId,
               });
               this.$store.commit("data_card/setLoading", false);
-              let tab = this.wizardTabs[1];
+              const nextIdItem = this.$store.getters[
+                "wizard/getWizardPages"
+              ].split(";")[1];
+              let tab = this.wizardTabs.find(
+                (w) => w.idItem === parseInt(nextIdItem)
+              );
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
               this.$router.push(
                 `/cabinet/wizard/${this.$route.params.idWizard}${
                   tab.list ? `/list/` : `/`
-                }${moduleId}/0/${tab.idItem}/${cardId}/${rel.split("|")[1]}`
+                }${moduleId}/0/${tab.idItem}/${cardId}/${
+                  rel.split("|")[tab.order - 1]
+                }`
               );
               return;
             } else {
@@ -329,7 +353,7 @@ export default {
             if (resp?.status === 500) {
               this.$store.commit("data_card/setLoading", false);
               this.$store.commit("data_card/setDisabled", false);
-              this.$store.commit("data_card/setError", true);
+              this.$store.commit("data_card/setSavedError", true);
               this.$store.commit("data_card/setErrorMessage", resp.data);
             }
           }
@@ -349,7 +373,7 @@ export default {
           }
         }
       } else {
-        this.$store.commit("data_card/setError", true);
+        this.$store.commit("data_card/setSavedError", true);
         this.$store.commit("data_card/setErrorMessage", {
           MESSAGE: "Проверьте правильность заполнения формы!",
         });
@@ -435,7 +459,15 @@ export default {
     },
     isAccordion: function () {
       return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        .LACCORDION;
+        ?.LACCORDION;
+    },
+    isBlock: function () {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LUSEBLOCK;
+    },
+    isTabs: function () {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LTABBED;
     },
     actionParams: function () {
       return this.$store.getters["data_card/getActionParams"];

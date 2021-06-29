@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-3 mb-1">
+  <div class="mt-1 mb-2">
     <p>
       <strong>
         {{ data.label }}

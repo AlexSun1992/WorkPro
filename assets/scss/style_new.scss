@@ -329,6 +329,9 @@ header:not(.modal-header):after {
   flex-wrap: wrap;
   padding: 0;
   margin: 0 0 30px 0;
+  background: #e7fae9;
+  border-radius: 14px;
+  padding: 16px;
 }
 
 .sidebar-nav-item {
@@ -340,12 +343,14 @@ header:not(.modal-header):after {
 }
 
 .sidebar-nav-item:hover {
-  background: #36ab4d;
+  background: #008b4e;
   transition: 0.3s;
+  border-radius: 14px;
 }
 
 .sidebar-nav-item.active {
-  background: #36ab4d;
+  background: #008b4e;
+  border-radius: 14px;
 }
 
 .sidebar-nav-item a {
@@ -557,11 +562,11 @@ header:not(.modal-header):after {
 .header-logo {
   background: url(/img/reso.svg) 0 0 no-repeat;
   display: table;
-  width: 139px;
-  height: 40px;
+  width: 150px;
+  height: 43px;
   position: absolute;
   top: 20px;
-  left: 39px;
+  left: 56px;
   background-size: contain;
 }
 
@@ -624,6 +629,9 @@ footer:not(.modal-footer):after {
 .ppl-info {
   margin: 0 auto 20px;
   text-align: center;
+  background: #e7fae9;
+  padding: 16px;
+  border-radius: 14px;
 }
 
 .ppl-info.ppl-female .ppl-avatar {
@@ -719,7 +727,7 @@ footer:not(.modal-footer):after {
   font-weight: normal;
   font-size: 20px;
   line-height: 24px;
-  color: #36ab4d;
+  color: #008b4e;
 }
 
 .ppl-avatar {
@@ -736,7 +744,7 @@ footer:not(.modal-footer):after {
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
-  color: #36ab4d;
+  color: #008b4e;
   margin-top: 13px;
   display: block;
 }
@@ -1084,6 +1092,7 @@ footer:not(.modal-footer):after {
   height: 12px;
   border: 0;
   background: url(/img/arrow-right-bold.svg) 50% 50% no-repeat;
+  background-size: contain;
 }
 
 .arrow-right-bold > div {
@@ -1225,7 +1234,7 @@ footer:not(.modal-footer):after {
 }
 
 .nav-tabs .nav-link.active:after {
-  background: #36ab4d;
+  background: #008b4e;
   width: 100%;
   height: 1px;
   position: absolute;
@@ -1885,7 +1894,6 @@ div > .card-h-line:last-child:after {
 
 .custom-checkbox {
   display: flex;
-  margin-top: 2rem;
 }
 .custom-checkbox input {
   margin-right: 10px;
@@ -3392,12 +3400,13 @@ a.btn:hover {
 }
 
 .block-profile {
-  padding: 10px 30px;
-  background: #ffffff;
-  border: 1px solid #d9e1e8;
+  padding: 15px 30px;
+  background: #fff;
+  border: 1px solid #008b4e;
   box-sizing: border-box;
   border-radius: 14px;
   position: relative;
+  box-shadow: 0 0 5px #008b4e40;
 }
 
 label,
@@ -3415,7 +3424,7 @@ input {
 }
 select {
   height: auto;
-  padding: 11px 13px;
+  padding: 7px 0px 7px 5px;
 }
 select,
 input {
@@ -3448,7 +3457,7 @@ input:focus {
 }
 
 .ui.selection.dropdown {
-  padding: 9px;
+  padding: 11px 9px 10px 8px;
   border: 1px solid #a8a8a8;
   font-weight: 500;
 }
@@ -3456,11 +3465,11 @@ input:focus {
 .ui.selection.dropdown > .delete.icon,
 .ui.selection.dropdown > .dropdown.icon,
 .ui.selection.dropdown > .search.icon {
-  top: 13px;
+  top: 9px;
 }
 .ui.search.selection.dropdown > input.search,
 .ui.search.selection.dropdown > span.sizer {
-  padding: 13px;
+  padding: 9px;
 }
 
 .btn_add_to:hover,
@@ -3869,6 +3878,7 @@ div > .driver-card:last-child {
 .stap-block {
   font-weight: 700;
   color: #bbbbbb;
+  margin-bottom: 13px;
 }
 
 .stap-block .active {
@@ -3880,4 +3890,53 @@ p {
 }
 hr {
   margin: 0.25rem 0;
+}
+.ui.selection.dropdown > .delete.icon,
+.ui.selection.dropdown > .dropdown.icon,
+.ui.selection.dropdown > .search.icon {
+  right: 5px;
+}
+input[type="checkbox"] {
+  display: none;
+}
+input[type="checkbox"] + label {
+  position: relative;
+  padding-left: 30px;
+  margin: 1rem 0;
+  font-size: 1rem;
+}
+input[type="checkbox"]:checked + label:before {
+  position: absolute;
+  width: 11px;
+  height: 7px;
+  top: 0px;
+  left: 5px;
+  border-left: 2px solid #00984a;
+  border-bottom: 2px solid #00984a;
+  content: "";
+  transform: rotate(-45deg);
+}
+input[type="checkbox"] + label:after {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: -5px;
+  left: 0;
+  border: 2px solid #00984a;
+  box-sizing: border-box;
+  border-radius: 4px;
+  content: "";
+}
+input.form-control.is-invalid {
+  border: 1px solid red;
+}
+
+.title-page {
+  border: 1px solid gray;
+  padding-top: 17px;
+  padding-bottom: 17px;
+  border-radius: 14px;
+}
+.border-green {
+  border: 1px solid #008b4e;
 }

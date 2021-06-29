@@ -5,6 +5,7 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
+      <template v-slot:label><span v-html="data.label"></span></template>
       <model-list-select
         :ref="selectId"
         :id="selectId"
@@ -19,6 +20,7 @@
         @searchchange="initData"
       >
       </model-list-select>
+
       <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
       <div class="mt-2">
         <span class="error" v-if="isValid == false">
@@ -59,6 +61,7 @@ export default {
     if (this.data.value?.value || this.data.value?.value == 0)
       this.options.push(this.data.value);
   },
+
   mounted() {
     if (this.$refs[this.selectId]) {
       this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
@@ -83,6 +86,7 @@ export default {
       this.$axios({ url: url, method: "GET" })
         .then((resp) => {
           this.options = resp.data;
+
           if (this.options.length === 1) {
             let value = this.options[0];
             this.$emit("update", {
@@ -130,6 +134,7 @@ export default {
         this.$emit("clear", { fieldName: this.data.name });
       },
     },
+
     relationValue: {
       get: function () {
         if (this.data.isRelation) {

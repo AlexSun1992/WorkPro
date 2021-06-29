@@ -1,6 +1,7 @@
 <template>
   <div class="sidebar_client">
     <header-user-name :user-data="loggedInUser"></header-user-name>
+
     <ul class="sidebar-nav justify-content-center">
       <n-link
         v-for="item in navItems"
@@ -16,15 +17,18 @@
         </li>
       </n-link>
     </ul>
+
     <button
       v-on:click="minimizeMenu"
       class="sidebar-minimizer"
       v-bind:class="{ 'position-absolute': endScrollMenu }"
     ></button>
+
     <button
       v-on:click="minimizeMobileMenu"
       class="sidebar-mobile_close"
     ></button>
+    
   </div>
 </template>
 
@@ -69,9 +73,11 @@ export default {
       this.$emit("mini-mobile-sidebar");
     },
   },
+
   computed: {
     ...mapGetters(["isAuthenticated", "loggedInUser"]),
   },
+
   mounted() {
     this.endScrollMenu =
       window.innerHeight === document.documentElement.offsetHeight;

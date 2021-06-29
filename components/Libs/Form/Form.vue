@@ -1,6 +1,6 @@
 <template>
   <b-form-row>
-    <b-tabs v-if="captions" content-class="mt-4">
+    <b-tabs v-if="isTabs" content-class="mt-4">
       <b-tab
         :title="tab"
         v-for="(tab, index) in captions"
@@ -18,8 +18,7 @@
             :data="item"
             :edit="edit"
             :cols="cols"
-          >
-          </Control>
+          ></Control>
         </div>
       </b-tab>
       <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
@@ -37,8 +36,7 @@
         :data="item"
         :edit="edit"
         :cols="cols"
-      >
-      </Control>
+      ></Control>
     </div>
   </b-form-row>
 </template>
@@ -57,9 +55,16 @@ export default {
       type: Array,
       required: false,
     },
+<<<<<<< HEAD
     params: {
       type: Object,
       required: false,
+=======
+    isTabs: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+>>>>>>> master
     },
     edit: {
       type: Boolean,
@@ -75,11 +80,12 @@ export default {
       required: false,
     },
   },
+
   methods: {
     items(index) {
       if (this.data) {
         return this.data.filter((item) => {
-          if (this.captions) {
+          if (this.isTabs && this.captions) {
             if (index != item.page) return;
           }
           if (!item.visible) return;
