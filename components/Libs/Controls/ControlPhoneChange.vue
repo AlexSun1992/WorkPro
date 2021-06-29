@@ -22,7 +22,7 @@
           >
         </b-form-group>
         <div class="col-auto">
-          <label class="d-block">&nbsp;</label>
+          <label class="d-none d-md-block">&nbsp;</label>
           <b-button
             type="submit"
             @click="verifyUser"
@@ -39,12 +39,12 @@
             ></b-spinner>
           </b-button>
         </div>
-      </div>
-
-      <div v-if="isShowCodeEnter" class="resend">
-        <b-link @click="changeNumber" class="col-12 col-md-12">
-          Изменить номер
-        </b-link>
+        <div v-if="isShowCodeEnter" class="col-auto">
+          <label class="d-none d-md-block">&nbsp;</label>
+          <b-link @click="changeNumber" class="link-button mt-1">
+            Изменить номер
+          </b-link>
+        </div>
       </div>
       <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
     </div>
@@ -254,5 +254,9 @@ export default {
 .required > legend:after {
   content: "*";
   color: red;
+}
+.btn-sms {
+  height: 37px !important;
+  line-height: 37px;
 }
 </style>
