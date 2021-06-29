@@ -1,10 +1,7 @@
 <template>
   <div v-if="wizardIsError === false">
-    <div
-      v-if="cardCaption"
-      class="block-title pt-0 position-relative mt-2 mb-4"
-    >
-      <i class="icon-my-profile"></i>{{ cardCaption }}
+    <div v-if="cardCaption" class="title-page position-relative ml-0">
+      {{ cardCaption }}
     </div>
     <template v-if="isShowCardTemplate">
       <v-runtime-template
@@ -26,13 +23,20 @@
       :key="$route.fullPath"
       :wizard-tabs="settings.wizard"
     />
-    <div>
-      <b-alert
-        :show="isErrorActionExecuteMessage"
-        variant="danger"
-        class="mt-4"
-        >{{ errorActionExecuteMessage }}</b-alert
+    <div class="row">
+      <div
+        v-if="isErrorActionExecuteMessage"
+        class="mt-3 mb-0"
+        :class="
+          isUseCardTemplate
+            ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
+            : 'col-12'
+        "
       >
+        <b-alert :show="isErrorActionExecuteMessage" variant="danger">{{
+          errorActionExecuteMessage
+        }}</b-alert>
+      </div>
     </div>
     <wizard-buttons
       :currentTab="currentTab"
@@ -41,6 +45,7 @@
       :loading="loading"
       @goNext="goNext($event)"
       @goBack="goBack($event)"
+      @saveCard="saveCard($event)"
     ></wizard-buttons>
   </div>
   <div v-else>{{ wizardErrorMessage }}</div>
@@ -111,6 +116,17 @@ export default {
     },
     async goBack(e) {
       this.$router.push(this.getURL(e));
+    },
+    async saveCard(e) {
+      this.loading = true;
+      if (this.$refs["child"].$refs["cardEditor"] !== undefined) {
+        await this.$refs["child"].$refs["cardEditor"].saveDataCard();
+        if (this.isSavedError === true) {
+          this.loading = false;
+          return;
+        }
+      }
+      this.loading = false;
     },
   },
   destroyed() {
@@ -183,6 +199,12 @@ export default {
     },
     isSavedError() {
       return this.$store.getters["data_card/getSavedError"];
+    },
+    isUseCardTemplate() {
+      return Boolean(
+        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+          ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
+      );
     },
   },
 };

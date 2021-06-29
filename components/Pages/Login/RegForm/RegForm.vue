@@ -49,18 +49,6 @@
         <b-form-invalid-feedback>
           Пожалуйста, заполните это поле
         </b-form-invalid-feedback>
-
-        <input-autocomplete
-          ref="email"
-          v-if="
-            this.$v.form.email.$model !== '' &&
-            this.$v.form.email.alpha !== false
-          "
-          :items="persons"
-          filterby="email"
-          :stringValue="this.$v.form.email.$model"
-          @setEmail="setEmail"
-        />
       </b-form-group>
 
       <b-form-group
@@ -223,12 +211,7 @@ import ConfirmModal from "./ConfirmModal";
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
 export default {
-  components: {
-    birthdayPicker,
-    VerifyUser,
-    VerifyPassword,
-    ConfirmModal,
-  },
+  components: { birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal },
 
   mixins: [validationMixin],
 
@@ -269,6 +252,7 @@ export default {
         required,
         alpha,
       },
+
       family: {
         required,
         alpha,
@@ -299,6 +283,14 @@ export default {
         required,
         email,
       },
+    },
+  },
+
+  computed: {
+    errorReset() {
+      if (!this.$v.form.name.$model) {
+        console.log(this.$v.form.name.$model);
+      }
     },
   },
 
@@ -397,8 +389,10 @@ export default {
 
         // await this.getCaptcha();
         // if (!this.token) return;
+
         params = { ...params, token: this.token };
         const response = await this.$store.dispatch("registerUser", params);
+
         this.registrationInProcess = false;
         if (response?.status === 200) {
           this.$bvModal

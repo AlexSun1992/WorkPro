@@ -4,25 +4,24 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
+    <template v-slot:label><span v-html="label"></span></template>
     <string-masked
       v-if="data.mask"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
     ></string-masked>
-    
+
     <string-autocomplete
       v-else
       :data="data"
       :edit="edit"
       @update="updateField($event)"
     ></string-autocomplete>
-    
   </b-form-group>
 </template>
 
 <script>
-
 import StringAutocomplete from "./StringAutocomplete";
 import StringMasked from "./StringMasked";
 export default {

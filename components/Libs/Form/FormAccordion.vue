@@ -17,7 +17,7 @@
         :visible="index == 0"
         accordion="my-accordion"
         :id="'acc_' + index"
-        class="bg-six block-border-one block p-3"
+        class="bg-six1 block-border-one block p-3"
         role="tabpanel"
       >
         <div class="row">
@@ -80,11 +80,9 @@ export default {
     items(index) {
       if (this.data) {
         return this.data.filter((item) => {
-          if (this.captions) {
-            if (index != item.page) return null;
+          if (index === item.page && item.visible === true) {
+            return true;
           }
-          if (!item.visible) return null;
-          return this.edit || (!this.edit && item.value);
         });
       }
     },

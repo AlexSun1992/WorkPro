@@ -51,7 +51,6 @@ export const getters = {
   getLoading: (state) => state.loading,
 };
 export const actions = {
-
   async fetchForm({ dispatch, commit, getters, state }, params) {
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
@@ -81,7 +80,6 @@ export const actions = {
             JSON.parse(JSON.stringify(res.data.metaData.data))
           );
           if (res.data.metaData.captions) {
-            
             commit("setCaptions", res.data.metaData.captions);
           }
           if (
@@ -276,6 +274,8 @@ export const mutations = {
         }
         if (item.value) {
           item.state = null;
+        } else {
+          item.state = false;
         }
         if (item.value && item.value.__ob__) {
           item.state = item.value.value || item.value.value == 0 ? null : false;
@@ -334,7 +334,14 @@ export const mutations = {
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {
       state.form = state.form.map((item) => {
-        item.readonly = params;
+        let copyField = state.copyForm.find(
+          (field) => field.fieldId === item.fieldId
+        );
+        if (copyField.readonly) {
+          item.readonly = true;
+        } else {
+          item.readonly = params;
+        }
         return item;
       });
     }

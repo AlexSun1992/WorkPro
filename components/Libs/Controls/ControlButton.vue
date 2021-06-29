@@ -1,5 +1,5 @@
 <template>
-  <b-button @click="updateValue()" :disabled="loading" variant="primary">
+  <b-button @click="updateValue()" :class="data.labelCols" :disabled="loading" variant="primary">
     <div class="button">
       {{ data.label }}
       <b-spinner

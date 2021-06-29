@@ -1,9 +1,16 @@
 <template>
-  <b-form-checkbox
-    v-model="fieldValue"
-    :disabled="!edit ? !edit : data.readonly"
-    >{{ data.label }}</b-form-checkbox
-  >
+  <div>
+    <b-form-checkbox
+      v-model="fieldValue"
+      :state="data.state"
+      :disabled="!edit ? !edit : data.readonly"
+    >
+      <span v-html="data.label"></span>
+      <b-form-invalid-feedback :state="data.state"
+        >Необходимо указать этот параметр</b-form-invalid-feedback
+      >
+    </b-form-checkbox>
+  </div>
 </template>
 
 <script>
@@ -21,7 +28,7 @@ export default {
       default: () => false,
     },
   },
-  
+
   computed: {
     fieldValue: {
       get: function () {

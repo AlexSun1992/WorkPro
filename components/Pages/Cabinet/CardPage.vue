@@ -43,7 +43,6 @@
           @error="error = $event"
           ref="cardEditor"
           :wizard-tabs="wizardTabs"
-          class="block-profile"
           :data="getFormData"
           :edit="editable"
           :params="settings"
@@ -61,11 +60,21 @@
         {{ errorMessage }}
       </div>
     </div>
-    <b-alert :show="isShowSavedError" variant="danger" class="mt-4">{{
-      errorMessage
-    }}</b-alert>
-    <div v-if="isShowCardEditor" class="mt-3 mb-3 row button-container">
-      <div class="col-12" v-if="settings.edit">
+    <div class="row">
+      <div :class="isShowCardTemplate">
+        <b-alert :show="isShowSavedError" variant="danger" class="mt-3 mb-0">{{
+          errorMessage
+        }}</b-alert>
+      </div>
+    </div>
+    <div
+      v-if="
+        (isShowCardEditor && !isWizard) ||
+        (isWizard && $route.params.idCard == 0)
+      "
+      class="mt-3 row button-container"
+    >
+      <div :class="isShowCardTemplate" v-if="settings.edit">
         <div class="inbuttons" v-for="(item, i) in action" :key="i">
           <b-button
             v-if="item.LINBUTTONS"
@@ -80,7 +89,6 @@
           :class="{ 'btn-right': isWizard && $route.params.idCard == 0 }"
         >
           <div v-if="getFormData">
-
             <b-button
               v-if="isButtonSave"
               pill
@@ -88,7 +96,7 @@
               v-on:click="saveDataCard"
               type="button"
               variant="success"
-              class="col-12 col-md-auto mr-4"
+              class="col-12 col-md-auto"
               :style="isButtonDisabled"
             >
               {{ buttonTitle }}
@@ -195,7 +203,6 @@ export default {
     },
     saveDataCard() {
       if (this.$refs.cardEditor) {
-    
         this.$refs.cardEditor.saveDataCard();
       }
     },
@@ -287,8 +294,7 @@ export default {
     },
     isShowCardEditor() {
       return (
-        ((!this.settings.cardtemplate && !!this.getFormData) ||
-          (this.editable && !this.isError)) &&
+        (!!this.getFormData || (this.editable && !this.isError)) &&
         this.$store.getters[`data_card/getForm`].length
       );
     },
@@ -304,6 +310,11 @@ export default {
         this.settings.cardtemplate &&
         this.$store.getters[`data_card/getForm`].data
       );
+    },
+    isShowCardTemplate() {
+      return this.settings.cardtemplate
+        ? "col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12"
+        : "col-12";
     },
   },
   beforeRouteLeave(to, from, next) {

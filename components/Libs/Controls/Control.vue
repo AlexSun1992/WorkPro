@@ -12,13 +12,13 @@
         v-bind:is="comp"
         @open-card="$emit('open-card', $event)"
         :data="data"
+        :params="params"
         :edit="edit"
         :store="store"
         :disabled="disabled"
         :loading="loading"
         :profileFullness="loggedInUser"
       ></component>
-      
     </div>
   </b-col>
 </template>
@@ -40,10 +40,12 @@ import ControlCombobox from "~/components/Libs/Controls/ControlCombobox";
 import ControlUploader from "~/components/Libs/Controls/ControlUploader";
 import ControlCaptcha from "~/components/Libs/Controls/ControlCaptcha";
 import ControlError from "~/components/Libs/Controls/ControlError";
-import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar"
+import ControlPhoneChange from "~/components/Libs/Controls/ControlPhoneChange";
+import ControlEmailChange from "~/components/Libs/Controls/ControlEmailChange";
+
+import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar";
 import { mapGetters } from "vuex";
-
-
+import ControlEmpty from "/components/Libs/Controls/ControlEmpty";
 export default {
   name: "Control",
   components: {
@@ -65,6 +67,9 @@ export default {
     ControlUploader,
     ControlCaptcha,
     ControlError,
+    ControlPhoneChange,
+    ControlEmailChange,
+    ControlEmpty,
   },
   props: {
     data: {
@@ -76,6 +81,10 @@ export default {
       type: Boolean,
       required: false,
       default: () => true,
+    },
+    params: {
+      type: Object,
+      required: false,
     },
     cols: {
       type: Number,
@@ -95,10 +104,10 @@ export default {
       type: Boolean,
       required: false,
     },
-    profileFullness:{
-      type:Array,
-      required:false
-    }
+    profileFullness: {
+      type: Array,
+      required: false,
+    },
   },
   computed: {
     comp: function () {
@@ -118,8 +127,7 @@ export default {
       return this.data.colSm ? this.data.colSm : 12;
     },
 
-    ...mapGetters(['loggedInUser'])
-
+    ...mapGetters(["loggedInUser"]),
   },
   watch: {
     "data.value": "eventValidate",
