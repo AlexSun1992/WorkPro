@@ -84,15 +84,12 @@
             :id="Math.random().toString()"
             v-model="$v.form.family.$model"
             :state="validateState('family')"
-            @blur="
-              $v.form.family.$touch();
-              clearArray();
-            "
+            @blur="$v.form.family.$touch()"
             placeholder="Фамилия"
             :disabled="registrationInProcess"
             tabindex="40"
             autocomplete="new-password"
-            @input="addSurname"
+            @input="askSuggestions('surname')"
           ></b-form-input>
 
           <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''"
@@ -118,15 +115,12 @@
           :id="Math.random().toString()"
           v-model="$v.form.name.$model"
           :state="validateState('name')"
-          @blur="
-            $v.form.name.$touch();
-            clearArray();
-          "
+          @blur="$v.form.name.$touch()"
           placeholder="Имя"
           :disabled="registrationInProcess"
           tabindex="50"
           autocomplete="new-password"
-          @input="addName"
+          @input="askSuggestions('name')"
         ></b-form-input>
 
         <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''"
@@ -150,16 +144,14 @@
           :id="Math.random().toString()"
           v-model="$v.form.patronymic.$model"
           :state="validateState('patronymic')"
-          @blur="
-            $v.form.patronymic.$touch();
-            clearArray();
-          "
+          @blur="$v.form.patronymic.$touch()"
           placeholder="Отчество"
           :disabled="registrationInProcess"
           tabindex="60"
           autocomplete="new-password"
-          @input="addPatronymic"
+          @input="askSuggestions('patronymic')"
         ></b-form-input>
+
         <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''"
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
@@ -311,107 +303,56 @@ export default {
   },
 
   methods: {
-    clearArray() {
-      this.array = [];
-    },
+    // clearArray() {
+    //   this.array = [];
+    // },
 
-    addName() {
-      this.array = [];
-      var url = "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/fio";
-      var token = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-      var query = this.$v.form.name.$model;
-      var options = {
-        method: "POST",
-        mode: "cors",
+    async askSuggestions(target) {
+      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+      let suggestionType = "fio";
+      let query;
 
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Token " + token,
-        },
-        body: JSON.stringify({ query: query }),
+      const params = {
+        query: query,
+        suggestionType,
+        key: API_KEY,
       };
 
-      fetch(url, options)
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          data.suggestions.forEach((item) => {
-            if (item.data.name !== null && this.$v.form.name.alpha !== false) {
-              this.array.push(item.data.name);
-            }
-          });
+      if (target === "patronymic") {
+        params.query = this.$v.form.patronymic.$model;
+        params.parts = ["PATRONYMIC"];
+      } else if (target === "surname") {
+        params.query = this.$v.form.family.$model;
+        params.parts = ["SURNAME"];
+      } else if (target === "name") {
+        params.query = this.$v.form.name.$model;
+        params.parts = ["NAME"];
+      }
+
+      const result = await this.$store.dispatch(
+        "card/fetchSuggestions",
+        params
+      );
+
+      if (target === "surname" && this.$v.form.family.alpha !== false) {
+        this.array.length = 0;
+        await result.forEach((item) => {
+          this.array.push(item.data.surname);
         });
-    },
-
-    addSurname() {
-      this.array = [];
-      var url = "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/fio";
-      var token = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-      var query = this.$v.form.family.$model;
-      var options = {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Token " + token,
-        },
-        body: JSON.stringify({ query: query }),
-      };
-      fetch(url, options)
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          data.suggestions.forEach((item) => {
-            if (
-              item.data.surname !== null &&
-              this.$v.form.family.alpha !== false
-            ) {
-              this.array.push(item.data.surname);
-            }
-          });
+      } else if (target === "name" && this.$v.form.name.alpha !== false) {
+        this.array.length = 0;
+        await result.forEach((item) => {
+          this.array.push(item.data.name);
         });
-    },
-
-    addPatronymic() {
-      this.array = [];
-      var url = "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/fio";
-      var token = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-      var query = this.$v.form.patronymic.$model;
-
-      var options = {
-        method: "POST",
-        mode: "cors",
-
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Token " + token,
-        },
-
-        body: JSON.stringify({
-          query: query,
-          parts: ["PATRONYMIC"],
-        }),
-      };
-
-      fetch(url, options)
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          data.suggestions.forEach((item) => {
-            if (
-              item.data.patronymic !== null &&
-              this.$v.form.patronymic.alpha !== false
-            ) {
-              this.array.push(item.data.patronymic);
-            }
-          });
+      } else if (
+        target === "patronymic" &&
+        this.$v.form.patronymic.alpha !== false
+      ) {
+        this.array.length = 0;
+        await result.forEach((item) => {
+          this.array.push(item.data.patronymic);
         });
+      }
     },
 
     onError(error) {
