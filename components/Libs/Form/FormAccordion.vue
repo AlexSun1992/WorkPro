@@ -17,7 +17,7 @@
         :visible="index == 0"
         accordion="my-accordion"
         :id="'acc_' + index"
-        class="bg-six block-border-one block p-3"
+        class="bg-six1 block-border-one block p-3"
         role="tabpanel"
       >
         <div class="row">
