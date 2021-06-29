@@ -331,7 +331,7 @@ header:not(.modal-header):after {
   margin: 0 0 30px 0;
   background: #e7fae9;
   border-radius: 14px;
-  padding: 16px;
+  padding: 16px 0;
 }
 
 .sidebar-nav-item {
@@ -345,12 +345,10 @@ header:not(.modal-header):after {
 .sidebar-nav-item:hover {
   background: #008b4e;
   transition: 0.3s;
-  border-radius: 14px;
 }
 
 .sidebar-nav-item.active {
   background: #008b4e;
-  border-radius: 14px;
 }
 
 .sidebar-nav-item a {
@@ -3938,5 +3936,10 @@ input.form-control.is-invalid {
   border-radius: 14px;
 }
 .border-green {
-  border: 1px solid #008b4e;
+  box-shadow: 2px 8px 8px rgb(45 80 37 / 46%);
+  border: 1px solid #65716c87;
+}
+
+input[type="checkbox"].is-invalid {
+  color: #6b7077;
 }
