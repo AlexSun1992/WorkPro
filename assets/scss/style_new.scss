@@ -3878,6 +3878,7 @@ div > .driver-card:last-child {
 .stap-block {
   font-weight: 700;
   color: #bbbbbb;
+  margin-bottom: 13px;
 }
 
 .stap-block .active {
@@ -3935,4 +3936,7 @@ input.form-control.is-invalid {
   padding-top: 17px;
   padding-bottom: 17px;
   border-radius: 14px;
+}
+.border-green {
+  border: 1px solid #008b4e;
 }

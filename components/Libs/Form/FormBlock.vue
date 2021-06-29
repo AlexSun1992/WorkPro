@@ -3,7 +3,7 @@
     <div
       v-for="(tab, index) in captions"
       :key="index"
-      class="bg-six block-border-one block p-3"
+      class="bg-six border-green block p-3"
       :class="{ 'mb-4': index < captions.length - 1 }"
     >
       <div class="row">
