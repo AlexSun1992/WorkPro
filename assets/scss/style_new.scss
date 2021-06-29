@@ -329,6 +329,9 @@ header:not(.modal-header):after {
   flex-wrap: wrap;
   padding: 0;
   margin: 0 0 30px 0;
+  background: #e7fae9;
+  border-radius: 14px;
+  padding: 16px;
 }
 
 .sidebar-nav-item {
@@ -340,12 +343,14 @@ header:not(.modal-header):after {
 }
 
 .sidebar-nav-item:hover {
-  background: #36ab4d;
+  background: #008b4e;
   transition: 0.3s;
+  border-radius: 14px;
 }
 
 .sidebar-nav-item.active {
-  background: #36ab4d;
+  background: #008b4e;
+  border-radius: 14px;
 }
 
 .sidebar-nav-item a {
@@ -557,11 +562,11 @@ header:not(.modal-header):after {
 .header-logo {
   background: url(/img/reso.svg) 0 0 no-repeat;
   display: table;
-  width: 139px;
-  height: 40px;
+  width: 150px;
+  height: 43px;
   position: absolute;
   top: 20px;
-  left: 39px;
+  left: 56px;
   background-size: contain;
 }
 
@@ -624,6 +629,9 @@ footer:not(.modal-footer):after {
 .ppl-info {
   margin: 0 auto 20px;
   text-align: center;
+  background: #e7fae9;
+  padding: 16px;
+  border-radius: 14px;
 }
 
 .ppl-info.ppl-female .ppl-avatar {
@@ -719,7 +727,7 @@ footer:not(.modal-footer):after {
   font-weight: normal;
   font-size: 20px;
   line-height: 24px;
-  color: #36ab4d;
+  color: #008b4e;
 }
 
 .ppl-avatar {
@@ -736,7 +744,7 @@ footer:not(.modal-footer):after {
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
-  color: #36ab4d;
+  color: #008b4e;
   margin-top: 13px;
   display: block;
 }
@@ -1084,6 +1092,7 @@ footer:not(.modal-footer):after {
   height: 12px;
   border: 0;
   background: url(/img/arrow-right-bold.svg) 50% 50% no-repeat;
+  background-size: contain;
 }
 
 .arrow-right-bold > div {
@@ -1225,7 +1234,7 @@ footer:not(.modal-footer):after {
 }
 
 .nav-tabs .nav-link.active:after {
-  background: #36ab4d;
+  background: #008b4e;
   width: 100%;
   height: 1px;
   position: absolute;
@@ -3919,4 +3928,11 @@ input[type="checkbox"] + label:after {
 }
 input.form-control.is-invalid {
   border: 1px solid red;
+}
+
+.title-page {
+  border: 1px solid gray;
+  padding-top: 17px;
+  padding-bottom: 17px;
+  border-radius: 14px;
 }
