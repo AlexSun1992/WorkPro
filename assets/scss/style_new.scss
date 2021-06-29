@@ -3939,3 +3939,7 @@ input.form-control.is-invalid {
   box-shadow: 2px 8px 8px rgb(45 80 37 / 46%);
   border: 1px solid #65716c87;
 }
+
+input[type="checkbox"].is-invalid {
+  color: #6b7077;
+}
