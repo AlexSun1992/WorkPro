@@ -21,15 +21,19 @@
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
           >
         </b-form-group>
+        <div class="col-auto">
+          <label class="d-block">&nbsp;</label>
+          <b-button
+            type="submit"
+            @click="verifyUser"
+            variant="success"
+            class="btn-sms"
+            :disabled="$v.newPhone.$invalid || isShowCodeEnter"
+            >Получить sms-код</b-button
+          >
+        </div>
       </div>
-      <b-button
-        type="submit"
-        @click="verifyUser"
-        variant="success"
-        class="btn-sms mt-3 ml-4"
-        :disabled="$v.newPhone.$invalid || isShowCodeEnter"
-        >Получить sms-код</b-button
-      >
+
       <div v-if="isShowCodeEnter" class="resend">
         <b-link @click="changeNumber" class="col-12 col-md-12">
           Изменить номер
@@ -220,18 +224,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.change-number {
-  display: flex;
-  align-items: center;
-  & .row {
-    margin-left: 0px;
-  }
-}
 .resend {
   margin-top: 20px;
 }
 .resend-block {
-  //   margin-left: -15px;
   margin-bottom: 15px;
 }
 
