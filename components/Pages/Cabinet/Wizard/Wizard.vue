@@ -2,7 +2,7 @@
   <div v-if="wizardIsError === false">
     <div
       v-if="cardCaption"
-      class="block-title pt-0 position-relative mt-2 mb-4"
+      class="block-title title-page position-relative mb-4"
     >
       <i class="icon-my-profile"></i>{{ cardCaption }}
     </div>
