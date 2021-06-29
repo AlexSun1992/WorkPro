@@ -55,16 +55,14 @@ export default {
       type: Array,
       required: false,
     },
-<<<<<<< HEAD
     params: {
       type: Object,
       required: false,
-=======
+    },
     isTabs: {
       type: Boolean,
       required: false,
       default: () => false,
->>>>>>> master
     },
     edit: {
       type: Boolean,
