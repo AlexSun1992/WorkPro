@@ -153,15 +153,12 @@ converter.form = async (data, itemId) => {
     } else if (webFields[i].IDCONTROL == 29) {
       obj.type = "captcha";
       obj.captcha = null;
-<<<<<<< HEAD
     } else if (webFields[i].IDCONTROL == 31) {
       obj.type = "phoneChange";
     } else if (webFields[i].IDCONTROL == 32) {
       obj.type = "emailChange";
-=======
     } else if (webFields[i].IDCONTROL == 30) {
       obj.type = "empty";
->>>>>>> master
     } else {
       obj.type = "string";
     }
