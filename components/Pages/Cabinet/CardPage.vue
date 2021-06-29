@@ -90,10 +90,33 @@
         >
           <div v-if="getFormData">
             <b-button
+              v-if="
+                isButtonSave &&
+                this.isWizard &&
+                this.$route.params.idCard === '0'
+              "
+              pill
+              :disabled="loading"
+              v-on:click="saveDataCard(0)"
+              type="button"
+              variant="success"
+              class="col-12 col-md-auto"
+              :style="isButtonDisabled"
+            >
+              Сохранить
+              <b-spinner
+                v-if="loading"
+                style="width: 1rem; height: 1rem"
+                class="ml-2"
+                variant="danger"
+                label="Spinning"
+              ></b-spinner>
+            </b-button>
+            <b-button
               v-if="isButtonSave"
               pill
               :disabled="loading"
-              v-on:click="saveDataCard"
+              v-on:click="saveDataCard(1)"
               type="button"
               variant="success"
               class="col-12 col-md-auto"
@@ -201,9 +224,9 @@ export default {
       let path = this.$store.state.data_card.listPath;
       return path && !path.includes("/55/0/19") && !path.includes("/55/0/738");
     },
-    saveDataCard() {
+    saveDataCard(step) {
       if (this.$refs.cardEditor) {
-        this.$refs.cardEditor.saveDataCard();
+        this.$refs.cardEditor.saveDataCard(step);
       }
     },
     cancelDataCard() {
