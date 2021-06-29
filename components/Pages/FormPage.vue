@@ -8,8 +8,8 @@
       no-close-on-backdrop
       hide-footer
     >
-      <div class="block-title title-page position-relative mb-4">
-        <i class="icon-my-profile"></i>{{ params.settings.text }}
+      <div class="title-page position-relative">
+        {{ params.settings.text }}
       </div>
       <div class="profile row">
         <div class="col">

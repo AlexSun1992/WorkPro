@@ -1,10 +1,7 @@
 <template>
   <div v-if="wizardIsError === false">
-    <div
-      v-if="cardCaption"
-      class="block-title title-page position-relative mb-4"
-    >
-      <i class="icon-my-profile"></i>{{ cardCaption }}
+    <div v-if="cardCaption" class="title-page position-relative ml-0">
+      {{ cardCaption }}
     </div>
     <template v-if="isShowCardTemplate">
       <v-runtime-template
