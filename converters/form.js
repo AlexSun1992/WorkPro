@@ -159,6 +159,8 @@ converter.form = async (data, itemId) => {
       obj.type = "emailChange";
     } else if (webFields[i].IDCONTROL == 30) {
       obj.type = "empty";
+    } else if (webFields[i].IDCONTROL == 33) {
+      obj.type = "LabelMoney";
     } else {
       obj.type = "string";
     }

@@ -46,6 +46,7 @@ import ControlEmailChange from "~/components/Libs/Controls/ControlEmailChange";
 import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar";
 import { mapGetters } from "vuex";
 import ControlEmpty from "/components/Libs/Controls/ControlEmpty";
+import ControlLabelMoney from "/components/Libs/Controls/ControlLabelMoney";
 export default {
   name: "Control",
   components: {
@@ -70,6 +71,7 @@ export default {
     ControlPhoneChange,
     ControlEmailChange,
     ControlEmpty,
+    ControlLabelMoney,
   },
   props: {
     data: {
