@@ -19,20 +19,7 @@ export default {
     data: {
       type: Object,
       required: true,
-      value: String,
       default: () => {},
-    },
-  },
-  /*   created: {
-    validDataMoney()
-  }, */
-  methods: {
-    validDataMoney() {
-      let isValid = true;
-      if (this.data.value.length === 0) {
-        isValid = false;
-      }
-      return this.data.value.replace(/(\d+)\.(\d+)/, "$1,$2");
     },
   },
   computed: {
