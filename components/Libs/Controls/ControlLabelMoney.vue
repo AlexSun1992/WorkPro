@@ -3,8 +3,8 @@
     <template v-slot:label><span v-html="data.label"></span></template>
     <div class="money-label-comp">
       <span style="font-size: 24px"
-        ><b>{{ countMoneyOne }},</b></span
-      ><span style="font-size: 16px; color: black">{{ countMoneyTwo }}</span>
+        ><b>{{ countMoneyOne }}</b></span
+      ><span style="font-size: 16px; color: black">,{{ countMoneyTwo }}</span>
     </div>
   </b-form-group>
 </template>
