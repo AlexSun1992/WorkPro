@@ -155,6 +155,8 @@ converter.form = async (data, itemId) => {
       obj.captcha = null;
     } else if (webFields[i].IDCONTROL == 30) {
       obj.type = "empty";
+    } else if (webFields[i].IDCONTROL == 33) {
+      obj.type = "LabelMoney";
     } else {
       obj.type = "string";
     }
