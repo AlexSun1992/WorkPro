@@ -31,6 +31,7 @@
         class="block-profile"
         :data="data"
         :tabs="tabs"
+        :params="params"
         :is-tabs="isTabs"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
@@ -254,7 +255,7 @@ export default {
       }
       return valid;
     },
-    async saveDataCard() {
+    async saveDataCard(step = 1) {
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
       this.$store.commit("data_card/setSavedError", false);
@@ -304,7 +305,7 @@ export default {
               this.$store.commit("data_card/setLoading", false);
               const nextIdItem = this.$store.getters[
                 "wizard/getWizardPages"
-              ].split(";")[1];
+              ].split(";")[step];
               let tab = this.wizardTabs.find(
                 (w) => w.idItem === parseInt(nextIdItem)
               );

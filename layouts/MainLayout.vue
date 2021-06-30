@@ -85,13 +85,15 @@ export default {
 };
 </script>
 <style lang="scss">
-html,
-body,
 #__nuxt,
 #__layout,
 main,
 main > div {
   height: 100%;
+}
+html,
+body {
+  min-height: 100%;
 }
 .app.main_page {
   display: grid;

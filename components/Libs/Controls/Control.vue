@@ -12,6 +12,7 @@
         v-bind:is="comp"
         @open-card="$emit('open-card', $event)"
         :data="data"
+        :params="params"
         :edit="edit"
         :store="store"
         :disabled="disabled"
@@ -39,6 +40,9 @@ import ControlCombobox from "~/components/Libs/Controls/ControlCombobox";
 import ControlUploader from "~/components/Libs/Controls/ControlUploader";
 import ControlCaptcha from "~/components/Libs/Controls/ControlCaptcha";
 import ControlError from "~/components/Libs/Controls/ControlError";
+import ControlPhoneChange from "~/components/Libs/Controls/ControlPhoneChange";
+import ControlEmailChange from "~/components/Libs/Controls/ControlEmailChange";
+
 import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar";
 import { mapGetters } from "vuex";
 import ControlEmpty from "/components/Libs/Controls/ControlEmpty";
@@ -64,6 +68,8 @@ export default {
     ControlUploader,
     ControlCaptcha,
     ControlError,
+    ControlPhoneChange,
+    ControlEmailChange,
     ControlEmpty,
     ControlLabelMoney,
   },
@@ -77,6 +83,10 @@ export default {
       type: Boolean,
       required: false,
       default: () => true,
+    },
+    params: {
+      type: Object,
+      required: false,
     },
     cols: {
       type: Number,

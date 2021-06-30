@@ -19,7 +19,8 @@
       @change="debouncedChange()"
     ></b-form-input>
     <b-form-invalid-feedback
-      >Обязательно для заполнения</b-form-invalid-feedback>
+      >Обязательно для заполнения</b-form-invalid-feedback
+    >
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p class="error">{{ data.error }}</p>
 
@@ -35,9 +36,7 @@
       >
         <span>{{ suggestion }}</span>
       </li>
-      
     </ul>
-    
   </div>
 </template>
 
@@ -74,6 +73,7 @@ export default {
 
         value = this.suggestions.data[this.index].split(" - ")[0];
         relatedValue = this.suggestions.data[this.index].split(" - ")[1];
+
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -87,7 +87,6 @@ export default {
         });
 
         this.$store.commit("data_card/filterFields");
-
       } else {
         if (this.suggestions.data && this.suggestions.data.length) {
           if (this.index >= 0) {
@@ -128,6 +127,7 @@ export default {
       this.index = index;
       this.open = false;
     },
+
     async getSuggestions(name) {
       this.$emit("update", {
         fieldId: this.data.fieldId,
@@ -139,6 +139,7 @@ export default {
       this.open = true;
       this.current = -1;
       let suggestionType;
+
       const params = {
         query: this.data.value,
         suggestionType,
@@ -204,6 +205,7 @@ export default {
         this.$set(this.suggestions, "type", obj.type);
       }
     },
+
     showPlaceholder(name) {
       if (name === "SNEWPHONE") {
         return "Введите 10 цифр Вашего телефона";

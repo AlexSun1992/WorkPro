@@ -11,6 +11,7 @@
           <Control
             v-for="(item, i) in items(index)"
             :key="i"
+            :params="params"
             @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
             @open-card="$emit('open-card', $event)"
@@ -20,7 +21,7 @@
           ></Control>
         </div>
       </b-tab>
-      <b-tab :title="tab.label" v-for="(tab, index) in tabs" :key="tab.id">
+      <b-tab :title="tab.label" v-for="tab in tabs" :key="tab.id">
         <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />
       </b-tab>
     </b-tabs>
@@ -28,6 +29,7 @@
       <Control
         v-for="(item, i) in items()"
         :key="i"
+        :params="params"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
@@ -51,6 +53,10 @@ export default {
     },
     tabs: {
       type: Array,
+      required: false,
+    },
+    params: {
+      type: Object,
       required: false,
     },
     isTabs: {
