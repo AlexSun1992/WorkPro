@@ -1,7 +1,7 @@
 <template>
   <b-form-group :label="data.label" :label-for="data.name" class="mb-3">
     <template v-slot:label><span v-html="data.label"></span></template>
-    <div>{{ data.value }}</div>
+    <div v-html="data.value" />
   </b-form-group>
 </template>
 
