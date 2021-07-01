@@ -102,6 +102,7 @@ export default {
     },
   },
   created() {
+    this.$store.commit("data_card/saveButtonClicked", false);
     if (process.client) {
       if (
         this.$store.getters["data_card/getErrorMessage"] &&
@@ -114,7 +115,7 @@ export default {
   },
   methods: {
     update() {
-      this.$v.newEmail.$touch();
+      // this.$v.newEmail.$touch();
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -166,7 +167,7 @@ export default {
         });
         if (response?.status === 500) {
           this.loading = false;
-          this.$store.commit("data_card/setError", true);
+          this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
           this.$store.commit("data_card/setFormField", {
             fieldId: 35622,
@@ -175,7 +176,7 @@ export default {
         }
         if (response?.status === 200) {
           this.loading = false;
-          this.$store.commit("data_card/setError", false);
+          this.$store.commit("data_card/setSavedError", false);
           this.$store.commit("data_card/setErrorMessage", null);
           this.isSendCode = true;
           this.$bvToast.toast("Успешно выполнено", {
@@ -218,6 +219,16 @@ export default {
   computed: {
     isShowCodeEnter() {
       return !this.$v.newEmail.$invalid && this.isSendCode;
+    },
+    saveButtonClicked() {
+      if (this.$store.getters["data_card/saveButtonClicked"]) {
+        this.$v.newEmail.$touch();
+      }
+    },
+  },
+  watch: {
+    saveButtonClicked() {
+      console.log("clicked");
     },
   },
   destroyed() {

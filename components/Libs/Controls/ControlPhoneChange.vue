@@ -104,6 +104,7 @@ export default {
     },
   },
   created() {
+    this.$store.commit("data_card/saveButtonClicked", false);
     if (process.client) {
       if (
         this.$store.getters["data_card/getErrorMessage"] &&
@@ -116,7 +117,7 @@ export default {
   },
   methods: {
     update() {
-      this.$v.newPhone.$touch();
+      // this.$v.newPhone.$touch();
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -226,7 +227,18 @@ export default {
     isShowCodeEnter() {
       return !this.$v.newPhone.$invalid && this.isSendCode;
     },
+    saveButtonClicked() {
+      if (this.$store.getters["data_card/saveButtonClicked"]) {
+        this.$v.newPhone.$touch();
+      }
+    },
   },
+  watch: {
+    saveButtonClicked() {
+      console.log("clicked");
+    },
+  },
+
   destroyed() {
     this.isSendCode = false;
     localStorage.setItem("newPhone", this.newPhone);
