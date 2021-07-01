@@ -116,11 +116,13 @@ export default {
   methods: {
     update() {
       // this.$v.newEmail.$touch();
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.newEmail,
-      });
+      if (this.newEmail != "") {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.newEmail,
+        });
+      }
     },
     validateState(name) {
       const { $dirty, $error } = this.$v[name];

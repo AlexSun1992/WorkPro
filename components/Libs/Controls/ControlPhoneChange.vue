@@ -118,11 +118,13 @@ export default {
   methods: {
     update() {
       // this.$v.newPhone.$touch();
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.newPhone,
-      });
+      if (this.newPhone != "") {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.newPhone,
+        });
+      }
     },
     validateState(name) {
       const { $dirty, $error } = this.$v[name];
