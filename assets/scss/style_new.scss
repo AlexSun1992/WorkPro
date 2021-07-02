@@ -1617,9 +1617,10 @@ ul.dropdown-menu li:hover {
   width: 30px;
   height: 30px;
   position: absolute;
-  top: 18px;
+  top: 10px;
   padding: 0;
   border-radius: 30px;
+  margin-left: 10px;
 }
 
 .block-title.title-bottom-line span {
@@ -3806,8 +3807,14 @@ div > .driver-card:last-child {
     margin-top: 20px;
   }
 }
-
+.p-block {
+  padding: 15px 30px;
+}
 @media (max-width: 768px) {
+  .p-block,
+  .block-profile {
+    padding: 15px;
+  }
   .docs-date {
     grid-template-areas:
       "doc-state"
@@ -3966,4 +3973,20 @@ input.form-control.is-invalid {
 
 input[type="checkbox"].is-invalid + label.custom-control-label {
   color: #6b7077;
+}
+.block-title i {
+  display: none;
+}
+.block-title {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 27px;
+  line-height: 1.2;
+  color: #242424;
+  letter-spacing: 0.02em;
+  padding-top: 13px;
+  padding-bottom: 4px;
+  margin-bottom: 33px;
+  margin-left: -5px;
 }
