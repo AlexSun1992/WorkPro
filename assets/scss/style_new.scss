@@ -191,10 +191,6 @@
   top: 50%;
 }
 
-.footer-link {
-  margin-top: -77px;
-}
-
 .footer-link a {
   color: #868686;
   font-size: 14px;
@@ -249,18 +245,6 @@ footer .share-link:first-of-type {
 
 footer a {
   color: #797979;
-}
-
-@media (min-width: 1280px) {
-  .footer-link {
-    margin-top: -60px;
-  }
-}
-
-@media (max-width: 768px) {
-  .footer-link {
-    margin-top: 0;
-  }
 }
 
 /**************************/
@@ -3990,4 +3974,13 @@ input[type="checkbox"].is-invalid + label.custom-control-label {
   padding-bottom: 4px;
   margin-bottom: 33px;
   margin-left: -5px;
+}
+
+.footer-link {
+  margin-bottom: 2rem;
+}
+@media (max-width: 768px) {
+  .footer-link {
+    margin-bottom: 1rem;
+  }
 }
