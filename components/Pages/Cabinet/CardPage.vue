@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="cardCaption && !isWizard"
-      class="block-title pt-0 position-relative mt-2 mb-4"
+      class="title-page position-relative ml-0"
     >
       <i class="icon-my-profile"></i>{{ cardCaption }}
     </div>
@@ -14,7 +14,7 @@
       no-close-on-backdrop
       hide-footer
     >
-      <div class="block-title pt-0 position-relative mt-2 mb-4">
+      <div class="title-page position-relative ml-0">
         <i class="icon-my-profile"></i>{{ settings.text }}
       </div>
       <CardEditor

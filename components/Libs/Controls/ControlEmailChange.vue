@@ -26,7 +26,7 @@
             type="submit"
             @click="verifyUser"
             variant="success"
-            class="btn-sms"
+            class="btn-sms mb-3"
             :disabled="$v.newEmail.$invalid || loading || isSendCode"
             >Получить код
             <b-spinner
@@ -40,7 +40,7 @@
         </div>
         <div v-if="isShowCodeEnter" class="col-auto">
           <label class="d-none d-md-block">&nbsp;</label>
-          <b-link @click="changeEmail" class="link-button mt-1">
+          <b-link @click="changeEmail" class="link-button d-block l-b-m-t">
             Изменить email
           </b-link>
         </div>
@@ -116,11 +116,13 @@ export default {
   methods: {
     update() {
       // this.$v.newEmail.$touch();
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.newEmail,
-      });
+      if (this.newEmail != "") {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.newEmail,
+        });
+      }
     },
     validateState(name) {
       const { $dirty, $error } = this.$v[name];
@@ -263,5 +265,8 @@ export default {
 .btn-sms {
   height: 37px !important;
   line-height: 37px;
+}
+.l-b-m-t {
+  margin-top: 10px;
 }
 </style>

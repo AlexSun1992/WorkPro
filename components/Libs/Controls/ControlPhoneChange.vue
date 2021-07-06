@@ -27,7 +27,7 @@
             type="submit"
             @click="verifyUser"
             variant="success"
-            class="btn-sms"
+            class="btn-sms mb-3"
             :disabled="$v.newPhone.$invalid || loading || isSendCode"
             >Получить sms-код
             <b-spinner
@@ -41,7 +41,7 @@
         </div>
         <div v-if="isShowCodeEnter" class="col-auto">
           <label class="d-none d-md-block">&nbsp;</label>
-          <b-link @click="changeNumber" class="link-button mt-1">
+          <b-link @click="changeNumber" class="link-button l-b-m-t d-block">
             Изменить номер
           </b-link>
         </div>
@@ -118,11 +118,13 @@ export default {
   methods: {
     update() {
       // this.$v.newPhone.$touch();
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.newPhone,
-      });
+      if (this.newPhone != "") {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.newPhone,
+        });
+      }
     },
     validateState(name) {
       const { $dirty, $error } = this.$v[name];
@@ -270,5 +272,8 @@ export default {
 .btn-sms {
   height: 37px !important;
   line-height: 37px;
+}
+.l-b-m-t {
+  margin-top: 10px;
 }
 </style>
