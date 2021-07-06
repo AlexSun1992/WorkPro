@@ -3377,13 +3377,23 @@ footer > div {
 a.btn:hover {
   text-decoration: none;
 }
-
+select:disabled,
+.ui.selection.dropdown.disabled,
 .form-control:disabled,
 .form-control[readonly] {
   background: #f4f7f5;
   border: 1px solid #dfdfe2;
 }
-
+select:disabled,
+.ui.selection.dropdown.disabled .text {
+  color: #202020;
+}
+select:disabled {
+  opacity: 1;
+}
+.ui.disabled.dropdown {
+  opacity: 1;
+}
 .block-profile {
   padding: 15px 30px;
   background: #fff;
