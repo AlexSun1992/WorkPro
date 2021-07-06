@@ -116,7 +116,7 @@
               v-on:click="saveDataCard(1)"
               type="button"
               variant="success"
-              class="col-12 col-md-auto"
+              class="col-12 col-md-auto mt-3 mt-md-0"
               :style="isButtonDisabled"
             >
               {{ buttonTitle }}
