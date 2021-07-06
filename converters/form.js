@@ -325,7 +325,8 @@ converter.meta = (meta) => {
     let arr_split = meta.split(`\r`);
     for (let i = 0; i < arr_split.length; i++) {
       let field_meta = arr_split[i].split(`=`);
-      convert_meta[field_meta[0].toUpperCase()] = field_meta[1];
+      let value_meta = arr_split[i].replace(field_meta[0] + "=", "");
+      convert_meta[field_meta[0].toUpperCase()] = value_meta;
     }
     return convert_meta;
   }
