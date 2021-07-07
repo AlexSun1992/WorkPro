@@ -1350,7 +1350,7 @@ ul.dropdown-menu li:hover {
 
 @media (max-width: 992px) {
   .mt-md-minus {
-    margin-top: -1rem;
+    margin-top: -1rem !important;
   }
   footer:not(.modal-footer) > div {
     padding-left: 0;
