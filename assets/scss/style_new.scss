@@ -3424,7 +3424,7 @@ select:disabled {
 label,
 legend {
   color: #6b7077;
-  margin-bottom: 3px;
+  margin-bottom: 0;
 }
 
 select,
@@ -4010,4 +4010,7 @@ input[type="checkbox"].is-invalid + label.custom-control-label {
   background: #87cefa38;
   padding: 3px 10px;
   border-radius: 5px;
+}
+.form-group {
+  margin-bottom: 0.725rem;
 }
