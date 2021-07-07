@@ -1349,6 +1349,9 @@ ul.dropdown-menu li:hover {
 }
 
 @media (max-width: 992px) {
+  .mt-md-minus {
+    margin-top: -1rem;
+  }
   footer:not(.modal-footer) > div {
     padding-left: 0;
   }
@@ -4001,4 +4004,10 @@ input[type="checkbox"].is-invalid + label.custom-control-label {
   .footer-link {
     margin-bottom: 1rem;
   }
+}
+
+.blue-block {
+  background: #87cefa38;
+  padding: 3px 10px;
+  border-radius: 5px;
 }
