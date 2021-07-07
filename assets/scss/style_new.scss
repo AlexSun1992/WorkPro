@@ -1249,20 +1249,22 @@ footer:not(.modal-footer):after {
   font-size: 14px;
   line-height: 21px;
   text-decoration-line: underline;
-  color: #36ab4d;
+  color: #009639;
   text-decoration: underline;
   box-shadow: none !important;
   text-transform: none;
+  transition: 0.3s;
 }
 
 .link-button:hover,
 .link-button:active,
 .link-button:active:focus {
-  color: darkgreen;
+  color: #43b02a;
   background: transparent;
-  text-decoration: underline;
+  text-decoration: none;
   border: 0;
   box-shadow: none !important;
+  transition: 0.3s;
 }
 
 @media (min-width: 992px) {
