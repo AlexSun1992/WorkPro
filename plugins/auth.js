@@ -3,6 +3,12 @@ import converter from "@/converters/menu";
 import { getErrorMessage } from "../utils/transform";
 export default function ({ app, store, redirect, $auth }) {
   app.$axios.onResponseError((error) => {
+    if (localStorage.ACCESS_TOKEN && localStorage.REFRESH_TOKEN) {
+      app.$auth.setUserToken(
+        localStorage.ACCESS_TOKEN,
+        localStorage.REFRESH_TOKEN
+      );
+    }
     if (!error?.response?.config) {
       return;
     }
