@@ -29,6 +29,7 @@ export function createRouter() {
         meta: "Main",
         path: "/",
         component: Main,
+        redirect: "/cabinet/55/0/701",
       },
       {
         meta: "Register",
@@ -110,15 +111,6 @@ export function createRouter() {
             ],
           },
         ],
-      },
-      {
-        path: "/preview/:pageId",
-        component: Preview,
-      },
-      {
-        meta: "Main",
-        path: "/*",
-        component: DynamicRoutesRenderer,
       },
     ],
   });
