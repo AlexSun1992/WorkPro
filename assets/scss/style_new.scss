@@ -1249,20 +1249,22 @@ footer:not(.modal-footer):after {
   font-size: 14px;
   line-height: 21px;
   text-decoration-line: underline;
-  color: #36ab4d;
+  color: #009639;
   text-decoration: underline;
   box-shadow: none !important;
   text-transform: none;
+  transition: 0.3s;
 }
 
 .link-button:hover,
 .link-button:active,
 .link-button:active:focus {
-  color: darkgreen;
+  color: #43b02a;
   background: transparent;
-  text-decoration: underline;
+  text-decoration: none;
   border: 0;
   box-shadow: none !important;
+  transition: 0.3s;
 }
 
 @media (min-width: 992px) {
@@ -1349,6 +1351,9 @@ ul.dropdown-menu li:hover {
 }
 
 @media (max-width: 992px) {
+  .mt-md-minus {
+    margin-top: -1rem !important;
+  }
   footer:not(.modal-footer) > div {
     padding-left: 0;
   }
@@ -1437,7 +1442,7 @@ ul.dropdown-menu li:hover {
     z-index: 2;
     transition: left 0.3s;
     background: #fff;
-    padding-top: 40px;
+    padding: 40px 10px 0;
     transition: left 0.3s;
     top: 0;
   }
@@ -3421,7 +3426,7 @@ select:disabled {
 label,
 legend {
   color: #6b7077;
-  margin-bottom: 3px;
+  margin-bottom: 0;
 }
 
 select,
@@ -4001,4 +4006,13 @@ input[type="checkbox"].is-invalid + label.custom-control-label {
   .footer-link {
     margin-bottom: 1rem;
   }
+}
+
+.blue-block {
+  background: #87cefa38;
+  padding: 3px 10px;
+  border-radius: 5px;
+}
+.form-group {
+  margin-bottom: 0.725rem;
 }
