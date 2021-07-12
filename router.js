@@ -29,7 +29,6 @@ export function createRouter() {
         meta: "Main",
         path: "/",
         component: Main,
-        redirect: "/cabinet/55/0/701",
       },
       {
         meta: "Register",
