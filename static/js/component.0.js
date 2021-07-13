@@ -276,233 +276,22 @@ module.exports = function spread(callback) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ BButton; });
-
-// UNUSED EXPORTS: props
-
-// EXTERNAL MODULE: external "Vue"
-var external_Vue_ = __webpack_require__("8bbf");
-var external_Vue_default = /*#__PURE__*/__webpack_require__.n(external_Vue_);
-
-// EXTERNAL MODULE: ./node_modules/vue-functional-data-merge/dist/lib.esm.js
-var lib_esm = __webpack_require__("b42e");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/constants/components.js
-var components = __webpack_require__("c637");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/constants/key-codes.js
-var key_codes = __webpack_require__("9bfa");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/constants/props.js
-var constants_props = __webpack_require__("a723");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/utils/array.js
-var array = __webpack_require__("2326");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/utils/dom.js
-var dom = __webpack_require__("906c");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/utils/events.js
-var events = __webpack_require__("6b77");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/utils/inspect.js
-var inspect = __webpack_require__("7b1e");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/utils/object.js
-var object = __webpack_require__("d82f");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/utils/props.js
-var utils_props = __webpack_require__("cf75");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/constants/regex.js
-var regex = __webpack_require__("992e");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/utils/string.js
-var string = __webpack_require__("fa73");
-
-// CONCATENATED MODULE: ./node_modules/bootstrap-vue/esm/utils/router.js
-
-
-
-
-
-var ANCHOR_TAG = 'a'; // Method to replace reserved chars
-
-var encodeReserveReplacer = function encodeReserveReplacer(c) {
-  return '%' + c.charCodeAt(0).toString(16);
-}; // Fixed encodeURIComponent which is more conformant to RFC3986:
-// - escapes [!'()*]
-// - preserve commas
-
-
-var router_encode = function encode(str) {
-  return encodeURIComponent(Object(string["d" /* toString */])(str)).replace(regex["d" /* RX_ENCODE_REVERSE */], encodeReserveReplacer).replace(regex["c" /* RX_ENCODED_COMMA */], ',');
-};
-
-var decode = decodeURIComponent; // Stringifies an object of query parameters
-// See: https://github.com/vuejs/vue-router/blob/dev/src/util/query.js
-
-var router_stringifyQueryObj = function stringifyQueryObj(obj) {
-  if (!Object(inspect["h" /* isPlainObject */])(obj)) {
-    return '';
-  }
-
-  var query = Object(object["g" /* keys */])(obj).map(function (key) {
-    var value = obj[key];
-
-    if (Object(inspect["j" /* isUndefined */])(value)) {
-      return '';
-    } else if (Object(inspect["f" /* isNull */])(value)) {
-      return router_encode(key);
-    } else if (Object(inspect["a" /* isArray */])(value)) {
-      return value.reduce(function (results, value2) {
-        if (Object(inspect["f" /* isNull */])(value2)) {
-          results.push(router_encode(key));
-        } else if (!Object(inspect["j" /* isUndefined */])(value2)) {
-          // Faster than string interpolation
-          results.push(router_encode(key) + '=' + router_encode(value2));
-        }
-
-        return results;
-      }, []).join('&');
-    } // Faster than string interpolation
-
-
-    return router_encode(key) + '=' + router_encode(value);
-  })
-  /* must check for length, as we only want to filter empty strings, not things that look falsey! */
-  .filter(function (x) {
-    return x.length > 0;
-  }).join('&');
-  return query ? "?".concat(query) : '';
-};
-var router_parseQuery = function parseQuery(query) {
-  var parsed = {};
-  query = Object(string["d" /* toString */])(query).trim().replace(regex["j" /* RX_QUERY_START */], '');
-
-  if (!query) {
-    return parsed;
-  }
-
-  query.split('&').forEach(function (param) {
-    var parts = param.replace(regex["i" /* RX_PLUS */], ' ').split('=');
-    var key = decode(parts.shift());
-    var value = parts.length > 0 ? decode(parts.join('=')) : null;
-
-    if (Object(inspect["j" /* isUndefined */])(parsed[key])) {
-      parsed[key] = value;
-    } else if (Object(inspect["a" /* isArray */])(parsed[key])) {
-      parsed[key].push(value);
-    } else {
-      parsed[key] = [parsed[key], value];
-    }
-  });
-  return parsed;
-};
-var router_isLink = function isLink(props) {
-  return !!(props.href || props.to);
-};
-var router_isRouterLink = function isRouterLink(tag) {
-  return !!(tag && !Object(dom["g" /* isTag */])(tag, 'a'));
-};
-var computeTag = function computeTag(_ref, thisOrParent) {
-  var to = _ref.to,
-      disabled = _ref.disabled,
-      routerComponentName = _ref.routerComponentName;
-  var hasRouter = !!thisOrParent.$router;
-
-  if (!hasRouter || hasRouter && (disabled || !to)) {
-    return ANCHOR_TAG;
-  } // TODO:
-  //   Check registered components for existence of user supplied router link component name
-  //   We would need to check PascalCase, kebab-case, and camelCase versions of name:
-  //   const name = routerComponentName
-  //   const names = [name, PascalCase(name), KebabCase(name), CamelCase(name)]
-  //   exists = names.some(name => !!thisOrParent.$options.components[name])
-  //   And may want to cache the result for performance or we just let the render fail
-  //   if the component is not registered
-
-
-  return routerComponentName || (thisOrParent.$nuxt ? 'nuxt-link' : 'router-link');
-};
-var router_computeRel = function computeRel() {
-  var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      target = _ref2.target,
-      rel = _ref2.rel;
-
-  return target === '_blank' && Object(inspect["f" /* isNull */])(rel) ? 'noopener' : rel || null;
-};
-var router_computeHref = function computeHref() {
-  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      href = _ref3.href,
-      to = _ref3.to;
-
-  var tag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ANCHOR_TAG;
-  var fallback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '#';
-  var toFallback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '/';
-
-  // Return `href` when explicitly provided
-  if (href) {
-    return href;
-  } // We've checked for `$router` in `computeTag()`, so `isRouterLink()` indicates a live router
-  // When deferring to Vue Router's `<router-link>`, don't use the `href` attribute at all
-  // We return `null`, and then remove `href` from the attributes passed to `<router-link>`
-
-
-  if (router_isRouterLink(tag)) {
-    return null;
-  } // Fallback to `to` prop (if `to` is a string)
-
-
-  if (Object(inspect["i" /* isString */])(to)) {
-    return to || toFallback;
-  } // Fallback to `to.path' + `to.query` + `to.hash` prop (if `to` is an object)
-
-
-  if (Object(inspect["h" /* isPlainObject */])(to) && (to.path || to.query || to.hash)) {
-    var path = Object(string["d" /* toString */])(to.path);
-    var query = router_stringifyQueryObj(to.query);
-    var hash = Object(string["d" /* toString */])(to.hash);
-    hash = !hash || hash.charAt(0) === '#' ? hash : "#".concat(hash);
-    return "".concat(path).concat(query).concat(hash) || toFallback;
-  } // If nothing is provided return the fallback
-
-
-  return fallback;
-};
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/constants/events.js
-var constants_events = __webpack_require__("0056");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/utils/cache.js + 1 modules
-var cache = __webpack_require__("8c4e");
-
-// CONCATENATED MODULE: ./node_modules/bootstrap-vue/esm/mixins/attrs.js
-
-var attrsMixin = Object(cache["a" /* makePropCacheMixin */])('$attrs', 'bvAttrs');
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/mixins/listen-on-root.js
-var listen_on_root = __webpack_require__("602d");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/mixins/listeners.js
-var mixins_listeners = __webpack_require__("bc9a");
-
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/mixins/normalize-slot.js
-var normalize_slot = __webpack_require__("8c18");
-
-// CONCATENATED MODULE: ./node_modules/bootstrap-vue/esm/components/link/link.js
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
+/* unused harmony export props */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BButton; });
+/* harmony import */ var _vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("8bbf");
+/* harmony import */ var _vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("b42e");
+/* harmony import */ var _constants_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("c637");
+/* harmony import */ var _constants_key_codes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("9bfa");
+/* harmony import */ var _constants_props__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("a723");
+/* harmony import */ var _utils_array__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("2326");
+/* harmony import */ var _utils_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("906c");
+/* harmony import */ var _utils_events__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("6b77");
+/* harmony import */ var _utils_inspect__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("7b1e");
+/* harmony import */ var _utils_object__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("d82f");
+/* harmony import */ var _utils_props__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("cf75");
+/* harmony import */ var _utils_router__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("4a38");
+/* harmony import */ var _link_link__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("aa59");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -520,272 +309,73 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
-
-
- // --- Constants ---
-
-var ROOT_EVENT_NAME_CLICKED = Object(events["d" /* getRootEventName */])(components["k" /* NAME_LINK */], 'clicked'); // --- Props ---
-// `<router-link>` specific props
-
-var routerLinkProps = {
-  activeClass: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */]),
-  append: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
-  event: Object(utils_props["b" /* makeProp */])(constants_props["c" /* PROP_TYPE_ARRAY_STRING */], constants_events["c" /* EVENT_NAME_CLICK */]),
-  exact: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
-  exactActiveClass: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */]),
-  replace: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
-  routerTag: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], 'a'),
-  to: Object(utils_props["b" /* makeProp */])(constants_props["j" /* PROP_TYPE_OBJECT_STRING */])
-}; // `<nuxt-link>` specific props
-
-var nuxtLinkProps = {
-  noPrefetch: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
-  // Must be `null` to fall back to the value defined in the
-  // `nuxt.config.js` configuration file for `router.prefetchLinks`
-  // We convert `null` to `undefined`, so that Nuxt.js will use the
-  // compiled default
-  // Vue treats `undefined` as default of `false` for Boolean props,
-  // so we must set it as `null` here to be a true tri-state prop
-  prefetch: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], null)
-}; // All `<b-link>` props
-
-var link_props = Object(utils_props["c" /* makePropsConfigurable */])(Object(object["k" /* sortKeys */])(_objectSpread(_objectSpread(_objectSpread({}, nuxtLinkProps), routerLinkProps), {}, {
-  active: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
-  disabled: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
-  href: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */]),
-  // Must be `null` if no value provided
-  rel: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], null),
-  // To support 3rd party router links based on `<router-link>` (i.e. `g-link` for Gridsome)
-  // Default is to auto choose between `<router-link>` and `<nuxt-link>`
-  // Gridsome doesn't provide a mechanism to auto detect and has caveats
-  // such as not supporting FQDN URLs or hash only URLs
-  routerComponentName: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */]),
-  target: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], '_self')
-})), components["k" /* NAME_LINK */]); // --- Main component ---
-// @vue/component
-
-var BLink = /*#__PURE__*/external_Vue_default.a.extend({
-  name: components["k" /* NAME_LINK */],
-  // Mixin order is important!
-  mixins: [attrsMixin, mixins_listeners["a" /* listenersMixin */], listen_on_root["a" /* listenOnRootMixin */], normalize_slot["a" /* normalizeSlotMixin */]],
-  inheritAttrs: false,
-  props: link_props,
-  computed: {
-    computedTag: function computedTag() {
-      // We don't pass `this` as the first arg as we need reactivity of the props
-      var to = this.to,
-          disabled = this.disabled,
-          routerComponentName = this.routerComponentName;
-      return computeTag({
-        to: to,
-        disabled: disabled,
-        routerComponentName: routerComponentName
-      }, this);
-    },
-    isRouterLink: function isRouterLink() {
-      return router_isRouterLink(this.computedTag);
-    },
-    computedRel: function computedRel() {
-      // We don't pass `this` as the first arg as we need reactivity of the props
-      var target = this.target,
-          rel = this.rel;
-      return router_computeRel({
-        target: target,
-        rel: rel
-      });
-    },
-    computedHref: function computedHref() {
-      // We don't pass `this` as the first arg as we need reactivity of the props
-      var to = this.to,
-          href = this.href;
-      return router_computeHref({
-        to: to,
-        href: href
-      }, this.computedTag);
-    },
-    computedProps: function computedProps() {
-      var prefetch = this.prefetch;
-      return this.isRouterLink ? _objectSpread(_objectSpread({}, Object(utils_props["d" /* pluckProps */])(_objectSpread(_objectSpread({}, routerLinkProps), nuxtLinkProps), this)), {}, {
-        // Coerce `prefetch` value `null` to be `undefined`
-        prefetch: Object(inspect["b" /* isBoolean */])(prefetch) ? prefetch : undefined,
-        // Pass `router-tag` as `tag` prop
-        tag: this.routerTag
-      }) : {};
-    },
-    computedAttrs: function computedAttrs() {
-      var bvAttrs = this.bvAttrs,
-          href = this.computedHref,
-          rel = this.computedRel,
-          disabled = this.disabled,
-          target = this.target,
-          routerTag = this.routerTag,
-          isRouterLink = this.isRouterLink;
-      return _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, bvAttrs), href ? {
-        href: href
-      } : {}), isRouterLink && !Object(dom["g" /* isTag */])(routerTag, 'a') ? {} : {
-        rel: rel,
-        target: target
-      }), {}, {
-        tabindex: disabled ? '-1' : Object(inspect["j" /* isUndefined */])(bvAttrs.tabindex) ? null : bvAttrs.tabindex,
-        'aria-disabled': disabled ? 'true' : null
-      });
-    },
-    computedListeners: function computedListeners() {
-      return _objectSpread(_objectSpread({}, this.bvListeners), {}, {
-        // We want to overwrite any click handler since our callback
-        // will invoke the user supplied handler(s) if `!this.disabled`
-        click: this.onClick
-      });
-    }
-  },
-  methods: {
-    onClick: function onClick(event) {
-      var _arguments = arguments;
-      var eventIsEvent = Object(inspect["d" /* isEvent */])(event);
-      var isRouterLink = this.isRouterLink;
-      var suppliedHandler = this.bvListeners.click;
-
-      if (eventIsEvent && this.disabled) {
-        // Stop event from bubbling up
-        // Kill the event loop attached to this specific `EventTarget`
-        // Needed to prevent `vue-router` for doing its thing
-        Object(events["e" /* stopEvent */])(event, {
-          immediatePropagation: true
-        });
-      } else {
-        /* istanbul ignore next: difficult to test, but we know it works */
-        if (isRouterLink && event.currentTarget.__vue__) {
-          // Router links do not emit instance `click` events, so we
-          // add in an `$emit('click', event)` on its Vue instance
-          event.currentTarget.__vue__.$emit(constants_events["c" /* EVENT_NAME_CLICK */], event);
-        } // Call the suppliedHandler(s), if any provided
-
-
-        Object(array["b" /* concat */])(suppliedHandler).filter(function (h) {
-          return Object(inspect["e" /* isFunction */])(h);
-        }).forEach(function (handler) {
-          handler.apply(void 0, _toConsumableArray(_arguments));
-        }); // Emit the global `$root` click event
-
-        this.emitOnRoot(ROOT_EVENT_NAME_CLICKED, event); // TODO: Remove deprecated 'clicked::link' event with next major release
-
-        this.emitOnRoot('clicked::link', event);
-      } // Stop scroll-to-top behavior or navigation on
-      // regular links when href is just '#'
-
-
-      if (eventIsEvent && !isRouterLink && this.computedHref === '#') {
-        Object(events["e" /* stopEvent */])(event, {
-          propagation: false
-        });
-      }
-    },
-    focus: function focus() {
-      Object(dom["c" /* attemptFocus */])(this.$el);
-    },
-    blur: function blur() {
-      Object(dom["b" /* attemptBlur */])(this.$el);
-    }
-  },
-  render: function render(h) {
-    var active = this.active,
-        disabled = this.disabled;
-    return h(this.computedTag, _defineProperty({
-      class: {
-        active: active,
-        disabled: disabled
-      },
-      attrs: this.computedAttrs,
-      props: this.computedProps
-    }, this.isRouterLink ? 'nativeOn' : 'on', this.computedListeners), this.normalizeSlot());
-  }
-});
-// CONCATENATED MODULE: ./node_modules/bootstrap-vue/esm/components/button/button.js
-function button_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function button_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { button_ownKeys(Object(source), true).forEach(function (key) { button_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { button_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function button_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-
-
-
-
-
-
-
-
-
-
  // --- Props ---
 
-var linkProps = Object(object["i" /* omit */])(link_props, ['event', 'routerTag']);
+var linkProps = Object(_utils_object__WEBPACK_IMPORTED_MODULE_9__[/* omit */ "i"])(_link_link__WEBPACK_IMPORTED_MODULE_12__[/* props */ "b"], ['event', 'routerTag']);
 delete linkProps.href.default;
 delete linkProps.to.default;
-var button_props = Object(utils_props["c" /* makePropsConfigurable */])(Object(object["k" /* sortKeys */])(button_objectSpread(button_objectSpread({}, linkProps), {}, {
-  block: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
-  disabled: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
-  pill: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
+var props = Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makePropsConfigurable */ "c"])(Object(_utils_object__WEBPACK_IMPORTED_MODULE_9__[/* sortKeys */ "k"])(_objectSpread(_objectSpread({}, linkProps), {}, {
+  block: Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_4__[/* PROP_TYPE_BOOLEAN */ "d"], false),
+  disabled: Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_4__[/* PROP_TYPE_BOOLEAN */ "d"], false),
+  pill: Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_4__[/* PROP_TYPE_BOOLEAN */ "d"], false),
   // Tri-state: `true`, `false` or `null`
   // => On, off, not a toggle
-  pressed: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], null),
-  size: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */]),
-  squared: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
-  tag: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], 'button'),
-  type: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], 'button'),
-  variant: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], 'secondary')
-})), components["a" /* NAME_BUTTON */]); // --- Helper methods ---
+  pressed: Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_4__[/* PROP_TYPE_BOOLEAN */ "d"], null),
+  size: Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_4__[/* PROP_TYPE_STRING */ "k"]),
+  squared: Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_4__[/* PROP_TYPE_BOOLEAN */ "d"], false),
+  tag: Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_4__[/* PROP_TYPE_STRING */ "k"], 'button'),
+  type: Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_4__[/* PROP_TYPE_STRING */ "k"], 'button'),
+  variant: Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_4__[/* PROP_TYPE_STRING */ "k"], 'secondary')
+})), _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_BUTTON */ "a"]); // --- Helper methods ---
 // Focus handler for toggle buttons
 // Needs class of 'focus' when focused
 
-var button_handleFocus = function handleFocus(event) {
+var handleFocus = function handleFocus(event) {
   if (event.type === 'focusin') {
-    Object(dom["a" /* addClass */])(event.target, 'focus');
+    Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__[/* addClass */ "a"])(event.target, 'focus');
   } else if (event.type === 'focusout') {
-    Object(dom["k" /* removeClass */])(event.target, 'focus');
+    Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__[/* removeClass */ "k"])(event.target, 'focus');
   }
 }; // Is the requested button a link?
 // If tag prop is set to `a`, we use a <b-link> to get proper disabled handling
 
 
-var button_isLink = function isLink(props) {
-  return router_isLink(props) || Object(dom["g" /* isTag */])(props.tag, 'a');
+var isLink = function isLink(props) {
+  return Object(_utils_router__WEBPACK_IMPORTED_MODULE_11__[/* isLink */ "d"])(props) || Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__[/* isTag */ "g"])(props.tag, 'a');
 }; // Is the button to be a toggle button?
 
 
-var button_isToggle = function isToggle(props) {
-  return Object(inspect["b" /* isBoolean */])(props.pressed);
+var isToggle = function isToggle(props) {
+  return Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_8__[/* isBoolean */ "b"])(props.pressed);
 }; // Is the button "really" a button?
 
 
-var button_isButton = function isButton(props) {
-  return !(button_isLink(props) || props.tag && !Object(dom["g" /* isTag */])(props.tag, 'button'));
+var isButton = function isButton(props) {
+  return !(isLink(props) || props.tag && !Object(_utils_dom__WEBPACK_IMPORTED_MODULE_6__[/* isTag */ "g"])(props.tag, 'button'));
 }; // Is the requested tag not a button or link?
 
 
 var isNonStandardTag = function isNonStandardTag(props) {
-  return !button_isLink(props) && !button_isButton(props);
+  return !isLink(props) && !isButton(props);
 }; // Compute required classes (non static classes)
 
 
 var computeClass = function computeClass(props) {
   var _ref;
 
-  return ["btn-".concat(props.variant || 'secondary'), (_ref = {}, button_defineProperty(_ref, "btn-".concat(props.size), props.size), button_defineProperty(_ref, 'btn-block', props.block), button_defineProperty(_ref, 'rounded-pill', props.pill), button_defineProperty(_ref, 'rounded-0', props.squared && !props.pill), button_defineProperty(_ref, "disabled", props.disabled), button_defineProperty(_ref, "active", props.pressed), _ref)];
+  return ["btn-".concat(props.variant || 'secondary'), (_ref = {}, _defineProperty(_ref, "btn-".concat(props.size), props.size), _defineProperty(_ref, 'btn-block', props.block), _defineProperty(_ref, 'rounded-pill', props.pill), _defineProperty(_ref, 'rounded-0', props.squared && !props.pill), _defineProperty(_ref, "disabled", props.disabled), _defineProperty(_ref, "active", props.pressed), _ref)];
 }; // Compute the link props to pass to b-link (if required)
 
 
-var button_computeLinkProps = function computeLinkProps(props) {
-  return button_isLink(props) ? Object(utils_props["d" /* pluckProps */])(linkProps, props) : {};
+var computeLinkProps = function computeLinkProps(props) {
+  return isLink(props) ? Object(_utils_props__WEBPACK_IMPORTED_MODULE_10__[/* pluckProps */ "d"])(linkProps, props) : {};
 }; // Compute the attributes for a button
 
 
 var computeAttrs = function computeAttrs(props, data) {
-  var button = button_isButton(props);
-  var link = button_isLink(props);
-  var toggle = button_isToggle(props);
+  var button = isButton(props);
+  var link = isLink(props);
+  var toggle = isToggle(props);
   var nonStandardTag = isNonStandardTag(props);
   var hashLink = link && props.href === '#';
   var role = data.attrs && data.attrs.role ? data.attrs.role : null;
@@ -821,17 +411,17 @@ var computeAttrs = function computeAttrs(props, data) {
 // @vue/component
 
 
-var BButton = /*#__PURE__*/external_Vue_default.a.extend({
-  name: components["a" /* NAME_BUTTON */],
+var BButton = /*#__PURE__*/_vue__WEBPACK_IMPORTED_MODULE_0___default.a.extend({
+  name: _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_BUTTON */ "a"],
   functional: true,
-  props: button_props,
+  props: props,
   render: function render(h, _ref2) {
     var props = _ref2.props,
         data = _ref2.data,
         listeners = _ref2.listeners,
         children = _ref2.children;
-    var toggle = button_isToggle(props);
-    var link = button_isLink(props);
+    var toggle = isToggle(props);
+    var link = isLink(props);
     var nonStandardTag = isNonStandardTag(props);
     var hashLink = link && props.href === '#';
     var on = {
@@ -846,9 +436,9 @@ var BButton = /*#__PURE__*/external_Vue_default.a.extend({
 
         var keyCode = event.keyCode; // Add CODE_SPACE handler for `href="#"` and CODE_ENTER handler for non-standard tags
 
-        if (keyCode === key_codes["d" /* CODE_SPACE */] || keyCode === key_codes["b" /* CODE_ENTER */] && nonStandardTag) {
+        if (keyCode === _constants_key_codes__WEBPACK_IMPORTED_MODULE_3__[/* CODE_SPACE */ "d"] || keyCode === _constants_key_codes__WEBPACK_IMPORTED_MODULE_3__[/* CODE_ENTER */ "b"] && nonStandardTag) {
           var target = event.currentTarget || event.target;
-          Object(events["e" /* stopEvent */])(event, {
+          Object(_utils_events__WEBPACK_IMPORTED_MODULE_7__[/* stopEvent */ "e"])(event, {
             propagation: false
           });
           target.click();
@@ -856,14 +446,14 @@ var BButton = /*#__PURE__*/external_Vue_default.a.extend({
       },
       click: function click(event) {
         /* istanbul ignore if: blink/button disabled should handle this */
-        if (props.disabled && Object(inspect["d" /* isEvent */])(event)) {
-          Object(events["e" /* stopEvent */])(event);
+        if (props.disabled && Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_8__[/* isEvent */ "d"])(event)) {
+          Object(_utils_events__WEBPACK_IMPORTED_MODULE_7__[/* stopEvent */ "e"])(event);
         } else if (toggle && listeners && listeners['update:pressed']) {
           // Send `.sync` updates to any "pressed" prop (if `.sync` listeners)
           // `concat()` will normalize the value to an array without
           // double wrapping an array value in an array
-          Object(array["b" /* concat */])(listeners['update:pressed']).forEach(function (fn) {
-            if (Object(inspect["e" /* isFunction */])(fn)) {
+          Object(_utils_array__WEBPACK_IMPORTED_MODULE_5__[/* concat */ "b"])(listeners['update:pressed']).forEach(function (fn) {
+            if (Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_8__[/* isFunction */ "e"])(fn)) {
               fn(!props.pressed);
             }
           });
@@ -872,18 +462,18 @@ var BButton = /*#__PURE__*/external_Vue_default.a.extend({
     };
 
     if (toggle) {
-      on.focusin = button_handleFocus;
-      on.focusout = button_handleFocus;
+      on.focusin = handleFocus;
+      on.focusout = handleFocus;
     }
 
     var componentData = {
       staticClass: 'btn',
       class: computeClass(props),
-      props: button_computeLinkProps(props),
+      props: computeLinkProps(props),
       attrs: computeAttrs(props, data),
       on: on
     };
-    return h(link ? BLink : props.tag, Object(lib_esm["a" /* mergeData */])(data, componentData), children);
+    return h(link ? _link_link__WEBPACK_IMPORTED_MODULE_12__[/* BLink */ "a"] : props.tag, Object(_vue__WEBPACK_IMPORTED_MODULE_1__[/* mergeData */ "a"])(data, componentData), children);
   }
 });
 
@@ -1601,6 +1191,185 @@ module.exports = function settle(resolve, reject, response) {
   }
 };
 
+
+/***/ }),
+
+/***/ "493b":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return attrsMixin; });
+/* harmony import */ var _utils_cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("8c4e");
+
+var attrsMixin = Object(_utils_cache__WEBPACK_IMPORTED_MODULE_0__[/* makePropCacheMixin */ "a"])('$attrs', 'bvAttrs');
+
+/***/ }),
+
+/***/ "4a38":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export stringifyQueryObj */
+/* unused harmony export parseQuery */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return isLink; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return isRouterLink; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return computeTag; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return computeRel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return computeHref; });
+/* harmony import */ var _constants_regex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("992e");
+/* harmony import */ var _dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("906c");
+/* harmony import */ var _inspect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("7b1e");
+/* harmony import */ var _object__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("d82f");
+/* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("fa73");
+
+
+
+
+
+var ANCHOR_TAG = 'a'; // Method to replace reserved chars
+
+var encodeReserveReplacer = function encodeReserveReplacer(c) {
+  return '%' + c.charCodeAt(0).toString(16);
+}; // Fixed encodeURIComponent which is more conformant to RFC3986:
+// - escapes [!'()*]
+// - preserve commas
+
+
+var encode = function encode(str) {
+  return encodeURIComponent(Object(_string__WEBPACK_IMPORTED_MODULE_4__[/* toString */ "d"])(str)).replace(_constants_regex__WEBPACK_IMPORTED_MODULE_0__[/* RX_ENCODE_REVERSE */ "d"], encodeReserveReplacer).replace(_constants_regex__WEBPACK_IMPORTED_MODULE_0__[/* RX_ENCODED_COMMA */ "c"], ',');
+};
+
+var decode = decodeURIComponent; // Stringifies an object of query parameters
+// See: https://github.com/vuejs/vue-router/blob/dev/src/util/query.js
+
+var stringifyQueryObj = function stringifyQueryObj(obj) {
+  if (!Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isPlainObject */ "h"])(obj)) {
+    return '';
+  }
+
+  var query = Object(_object__WEBPACK_IMPORTED_MODULE_3__[/* keys */ "g"])(obj).map(function (key) {
+    var value = obj[key];
+
+    if (Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isUndefined */ "j"])(value)) {
+      return '';
+    } else if (Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isNull */ "f"])(value)) {
+      return encode(key);
+    } else if (Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isArray */ "a"])(value)) {
+      return value.reduce(function (results, value2) {
+        if (Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isNull */ "f"])(value2)) {
+          results.push(encode(key));
+        } else if (!Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isUndefined */ "j"])(value2)) {
+          // Faster than string interpolation
+          results.push(encode(key) + '=' + encode(value2));
+        }
+
+        return results;
+      }, []).join('&');
+    } // Faster than string interpolation
+
+
+    return encode(key) + '=' + encode(value);
+  })
+  /* must check for length, as we only want to filter empty strings, not things that look falsey! */
+  .filter(function (x) {
+    return x.length > 0;
+  }).join('&');
+  return query ? "?".concat(query) : '';
+};
+var parseQuery = function parseQuery(query) {
+  var parsed = {};
+  query = Object(_string__WEBPACK_IMPORTED_MODULE_4__[/* toString */ "d"])(query).trim().replace(_constants_regex__WEBPACK_IMPORTED_MODULE_0__[/* RX_QUERY_START */ "j"], '');
+
+  if (!query) {
+    return parsed;
+  }
+
+  query.split('&').forEach(function (param) {
+    var parts = param.replace(_constants_regex__WEBPACK_IMPORTED_MODULE_0__[/* RX_PLUS */ "i"], ' ').split('=');
+    var key = decode(parts.shift());
+    var value = parts.length > 0 ? decode(parts.join('=')) : null;
+
+    if (Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isUndefined */ "j"])(parsed[key])) {
+      parsed[key] = value;
+    } else if (Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isArray */ "a"])(parsed[key])) {
+      parsed[key].push(value);
+    } else {
+      parsed[key] = [parsed[key], value];
+    }
+  });
+  return parsed;
+};
+var isLink = function isLink(props) {
+  return !!(props.href || props.to);
+};
+var isRouterLink = function isRouterLink(tag) {
+  return !!(tag && !Object(_dom__WEBPACK_IMPORTED_MODULE_1__[/* isTag */ "g"])(tag, 'a'));
+};
+var computeTag = function computeTag(_ref, thisOrParent) {
+  var to = _ref.to,
+      disabled = _ref.disabled,
+      routerComponentName = _ref.routerComponentName;
+  var hasRouter = !!thisOrParent.$router;
+
+  if (!hasRouter || hasRouter && (disabled || !to)) {
+    return ANCHOR_TAG;
+  } // TODO:
+  //   Check registered components for existence of user supplied router link component name
+  //   We would need to check PascalCase, kebab-case, and camelCase versions of name:
+  //   const name = routerComponentName
+  //   const names = [name, PascalCase(name), KebabCase(name), CamelCase(name)]
+  //   exists = names.some(name => !!thisOrParent.$options.components[name])
+  //   And may want to cache the result for performance or we just let the render fail
+  //   if the component is not registered
+
+
+  return routerComponentName || (thisOrParent.$nuxt ? 'nuxt-link' : 'router-link');
+};
+var computeRel = function computeRel() {
+  var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      target = _ref2.target,
+      rel = _ref2.rel;
+
+  return target === '_blank' && Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isNull */ "f"])(rel) ? 'noopener' : rel || null;
+};
+var computeHref = function computeHref() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      href = _ref3.href,
+      to = _ref3.to;
+
+  var tag = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ANCHOR_TAG;
+  var fallback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '#';
+  var toFallback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '/';
+
+  // Return `href` when explicitly provided
+  if (href) {
+    return href;
+  } // We've checked for `$router` in `computeTag()`, so `isRouterLink()` indicates a live router
+  // When deferring to Vue Router's `<router-link>`, don't use the `href` attribute at all
+  // We return `null`, and then remove `href` from the attributes passed to `<router-link>`
+
+
+  if (isRouterLink(tag)) {
+    return null;
+  } // Fallback to `to` prop (if `to` is a string)
+
+
+  if (Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isString */ "i"])(to)) {
+    return to || toFallback;
+  } // Fallback to `to.path' + `to.query` + `to.hash` prop (if `to` is an object)
+
+
+  if (Object(_inspect__WEBPACK_IMPORTED_MODULE_2__[/* isPlainObject */ "h"])(to) && (to.path || to.query || to.hash)) {
+    var path = Object(_string__WEBPACK_IMPORTED_MODULE_4__[/* toString */ "d"])(to.path);
+    var query = stringifyQueryObj(to.query);
+    var hash = Object(_string__WEBPACK_IMPORTED_MODULE_4__[/* toString */ "d"])(to.hash);
+    hash = !hash || hash.charAt(0) === '#' ? hash : "#".concat(hash);
+    return "".concat(path).concat(query).concat(hash) || toFallback;
+  } // If nothing is provided return the fallback
+
+
+  return fallback;
+};
 
 /***/ }),
 
@@ -3220,6 +2989,243 @@ var PROP_TYPE_OBJECT_STRING = [PROP_TYPE_OBJECT, PROP_TYPE_STRING];
 
 /***/ }),
 
+/***/ "aa59":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export routerLinkProps */
+/* unused harmony export nuxtLinkProps */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return props; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BLink; });
+/* harmony import */ var _vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("8bbf");
+/* harmony import */ var _vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("c637");
+/* harmony import */ var _constants_events__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("0056");
+/* harmony import */ var _constants_props__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("a723");
+/* harmony import */ var _utils_array__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("2326");
+/* harmony import */ var _utils_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("906c");
+/* harmony import */ var _utils_events__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("6b77");
+/* harmony import */ var _utils_inspect__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("7b1e");
+/* harmony import */ var _utils_object__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("d82f");
+/* harmony import */ var _utils_props__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("cf75");
+/* harmony import */ var _utils_router__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("4a38");
+/* harmony import */ var _mixins_attrs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("493b");
+/* harmony import */ var _mixins_listen_on_root__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("602d");
+/* harmony import */ var _mixins_listeners__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__("bc9a");
+/* harmony import */ var _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__("8c18");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // --- Constants ---
+
+var ROOT_EVENT_NAME_CLICKED = Object(_utils_events__WEBPACK_IMPORTED_MODULE_6__[/* getRootEventName */ "d"])(_constants_components__WEBPACK_IMPORTED_MODULE_1__[/* NAME_LINK */ "l"], 'clicked'); // --- Props ---
+// `<router-link>` specific props
+
+var routerLinkProps = {
+  activeClass: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"]),
+  append: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false),
+  event: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_ARRAY_STRING */ "c"], _constants_events__WEBPACK_IMPORTED_MODULE_2__[/* EVENT_NAME_CLICK */ "c"]),
+  exact: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false),
+  exactActiveClass: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"]),
+  replace: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false),
+  routerTag: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"], 'a'),
+  to: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_OBJECT_STRING */ "j"])
+}; // `<nuxt-link>` specific props
+
+var nuxtLinkProps = {
+  noPrefetch: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false),
+  // Must be `null` to fall back to the value defined in the
+  // `nuxt.config.js` configuration file for `router.prefetchLinks`
+  // We convert `null` to `undefined`, so that Nuxt.js will use the
+  // compiled default
+  // Vue treats `undefined` as default of `false` for Boolean props,
+  // so we must set it as `null` here to be a true tri-state prop
+  prefetch: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], null)
+}; // All `<b-link>` props
+
+var props = Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makePropsConfigurable */ "c"])(Object(_utils_object__WEBPACK_IMPORTED_MODULE_8__[/* sortKeys */ "k"])(_objectSpread(_objectSpread(_objectSpread({}, nuxtLinkProps), routerLinkProps), {}, {
+  active: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false),
+  disabled: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false),
+  href: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"]),
+  // Must be `null` if no value provided
+  rel: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"], null),
+  // To support 3rd party router links based on `<router-link>` (i.e. `g-link` for Gridsome)
+  // Default is to auto choose between `<router-link>` and `<nuxt-link>`
+  // Gridsome doesn't provide a mechanism to auto detect and has caveats
+  // such as not supporting FQDN URLs or hash only URLs
+  routerComponentName: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"]),
+  target: Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"], '_self')
+})), _constants_components__WEBPACK_IMPORTED_MODULE_1__[/* NAME_LINK */ "l"]); // --- Main component ---
+// @vue/component
+
+var BLink = /*#__PURE__*/_vue__WEBPACK_IMPORTED_MODULE_0___default.a.extend({
+  name: _constants_components__WEBPACK_IMPORTED_MODULE_1__[/* NAME_LINK */ "l"],
+  // Mixin order is important!
+  mixins: [_mixins_attrs__WEBPACK_IMPORTED_MODULE_11__[/* attrsMixin */ "a"], _mixins_listeners__WEBPACK_IMPORTED_MODULE_13__[/* listenersMixin */ "a"], _mixins_listen_on_root__WEBPACK_IMPORTED_MODULE_12__[/* listenOnRootMixin */ "a"], _mixins_normalize_slot__WEBPACK_IMPORTED_MODULE_14__[/* normalizeSlotMixin */ "a"]],
+  inheritAttrs: false,
+  props: props,
+  computed: {
+    computedTag: function computedTag() {
+      // We don't pass `this` as the first arg as we need reactivity of the props
+      var to = this.to,
+          disabled = this.disabled,
+          routerComponentName = this.routerComponentName;
+      return Object(_utils_router__WEBPACK_IMPORTED_MODULE_10__[/* computeTag */ "c"])({
+        to: to,
+        disabled: disabled,
+        routerComponentName: routerComponentName
+      }, this);
+    },
+    isRouterLink: function isRouterLink() {
+      return Object(_utils_router__WEBPACK_IMPORTED_MODULE_10__[/* isRouterLink */ "e"])(this.computedTag);
+    },
+    computedRel: function computedRel() {
+      // We don't pass `this` as the first arg as we need reactivity of the props
+      var target = this.target,
+          rel = this.rel;
+      return Object(_utils_router__WEBPACK_IMPORTED_MODULE_10__[/* computeRel */ "b"])({
+        target: target,
+        rel: rel
+      });
+    },
+    computedHref: function computedHref() {
+      // We don't pass `this` as the first arg as we need reactivity of the props
+      var to = this.to,
+          href = this.href;
+      return Object(_utils_router__WEBPACK_IMPORTED_MODULE_10__[/* computeHref */ "a"])({
+        to: to,
+        href: href
+      }, this.computedTag);
+    },
+    computedProps: function computedProps() {
+      var prefetch = this.prefetch;
+      return this.isRouterLink ? _objectSpread(_objectSpread({}, Object(_utils_props__WEBPACK_IMPORTED_MODULE_9__[/* pluckProps */ "d"])(_objectSpread(_objectSpread({}, routerLinkProps), nuxtLinkProps), this)), {}, {
+        // Coerce `prefetch` value `null` to be `undefined`
+        prefetch: Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_7__[/* isBoolean */ "b"])(prefetch) ? prefetch : undefined,
+        // Pass `router-tag` as `tag` prop
+        tag: this.routerTag
+      }) : {};
+    },
+    computedAttrs: function computedAttrs() {
+      var bvAttrs = this.bvAttrs,
+          href = this.computedHref,
+          rel = this.computedRel,
+          disabled = this.disabled,
+          target = this.target,
+          routerTag = this.routerTag,
+          isRouterLink = this.isRouterLink;
+      return _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, bvAttrs), href ? {
+        href: href
+      } : {}), isRouterLink && !Object(_utils_dom__WEBPACK_IMPORTED_MODULE_5__[/* isTag */ "g"])(routerTag, 'a') ? {} : {
+        rel: rel,
+        target: target
+      }), {}, {
+        tabindex: disabled ? '-1' : Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_7__[/* isUndefined */ "j"])(bvAttrs.tabindex) ? null : bvAttrs.tabindex,
+        'aria-disabled': disabled ? 'true' : null
+      });
+    },
+    computedListeners: function computedListeners() {
+      return _objectSpread(_objectSpread({}, this.bvListeners), {}, {
+        // We want to overwrite any click handler since our callback
+        // will invoke the user supplied handler(s) if `!this.disabled`
+        click: this.onClick
+      });
+    }
+  },
+  methods: {
+    onClick: function onClick(event) {
+      var _arguments = arguments;
+      var eventIsEvent = Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_7__[/* isEvent */ "d"])(event);
+      var isRouterLink = this.isRouterLink;
+      var suppliedHandler = this.bvListeners.click;
+
+      if (eventIsEvent && this.disabled) {
+        // Stop event from bubbling up
+        // Kill the event loop attached to this specific `EventTarget`
+        // Needed to prevent `vue-router` for doing its thing
+        Object(_utils_events__WEBPACK_IMPORTED_MODULE_6__[/* stopEvent */ "e"])(event, {
+          immediatePropagation: true
+        });
+      } else {
+        /* istanbul ignore next: difficult to test, but we know it works */
+        if (isRouterLink && event.currentTarget.__vue__) {
+          // Router links do not emit instance `click` events, so we
+          // add in an `$emit('click', event)` on its Vue instance
+          event.currentTarget.__vue__.$emit(_constants_events__WEBPACK_IMPORTED_MODULE_2__[/* EVENT_NAME_CLICK */ "c"], event);
+        } // Call the suppliedHandler(s), if any provided
+
+
+        Object(_utils_array__WEBPACK_IMPORTED_MODULE_4__[/* concat */ "b"])(suppliedHandler).filter(function (h) {
+          return Object(_utils_inspect__WEBPACK_IMPORTED_MODULE_7__[/* isFunction */ "e"])(h);
+        }).forEach(function (handler) {
+          handler.apply(void 0, _toConsumableArray(_arguments));
+        }); // Emit the global `$root` click event
+
+        this.emitOnRoot(ROOT_EVENT_NAME_CLICKED, event); // TODO: Remove deprecated 'clicked::link' event with next major release
+
+        this.emitOnRoot('clicked::link', event);
+      } // Stop scroll-to-top behavior or navigation on
+      // regular links when href is just '#'
+
+
+      if (eventIsEvent && !isRouterLink && this.computedHref === '#') {
+        Object(_utils_events__WEBPACK_IMPORTED_MODULE_6__[/* stopEvent */ "e"])(event, {
+          propagation: false
+        });
+      }
+    },
+    focus: function focus() {
+      Object(_utils_dom__WEBPACK_IMPORTED_MODULE_5__[/* attemptFocus */ "c"])(this.$el);
+    },
+    blur: function blur() {
+      Object(_utils_dom__WEBPACK_IMPORTED_MODULE_5__[/* attemptBlur */ "b"])(this.$el);
+    }
+  },
+  render: function render(h) {
+    var active = this.active,
+        disabled = this.disabled;
+    return h(this.computedTag, _defineProperty({
+      class: {
+        active: active,
+        disabled: disabled
+      },
+      attrs: this.computedAttrs,
+      props: this.computedProps
+    }, this.isRouterLink ? 'nativeOn' : 'on', this.computedListeners), this.normalizeSlot());
+  }
+});
+
+/***/ }),
+
 /***/ "b42e":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3942,33 +3948,33 @@ module.exports = {
 /* unused harmony export NAME_DROPDOWN_FORM */
 /* unused harmony export NAME_DROPDOWN_GROUP */
 /* unused harmony export NAME_DROPDOWN_HEADER */
-/* unused harmony export NAME_DROPDOWN_ITEM */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return NAME_DROPDOWN_ITEM; });
 /* unused harmony export NAME_DROPDOWN_ITEM_BUTTON */
 /* unused harmony export NAME_DROPDOWN_TEXT */
 /* unused harmony export NAME_EMBED */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return NAME_FORM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return NAME_FORM; });
 /* unused harmony export NAME_FORM_CHECKBOX */
 /* unused harmony export NAME_FORM_CHECKBOX_GROUP */
 /* unused harmony export NAME_FORM_DATALIST */
 /* unused harmony export NAME_FORM_DATEPICKER */
 /* unused harmony export NAME_FORM_FILE */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return NAME_FORM_GROUP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return NAME_FORM_INPUT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return NAME_FORM_INVALID_FEEDBACK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return NAME_FORM_GROUP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return NAME_FORM_INPUT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return NAME_FORM_INVALID_FEEDBACK; });
 /* unused harmony export NAME_FORM_RADIO */
 /* unused harmony export NAME_FORM_RADIO_GROUP */
 /* unused harmony export NAME_FORM_RATING */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return NAME_FORM_ROW; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return NAME_FORM_ROW; });
 /* unused harmony export NAME_FORM_SELECT */
 /* unused harmony export NAME_FORM_SELECT_OPTION */
 /* unused harmony export NAME_FORM_SELECT_OPTION_GROUP */
 /* unused harmony export NAME_FORM_SPINBUTTON */
 /* unused harmony export NAME_FORM_TAG */
 /* unused harmony export NAME_FORM_TAGS */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return NAME_FORM_TEXT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return NAME_FORM_TEXT; });
 /* unused harmony export NAME_FORM_TEXTAREA */
 /* unused harmony export NAME_FORM_TIMEPICKER */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return NAME_FORM_VALID_FEEDBACK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return NAME_FORM_VALID_FEEDBACK; });
 /* unused harmony export NAME_ICON */
 /* unused harmony export NAME_ICONSTACK */
 /* unused harmony export NAME_ICON_BASE */
@@ -3980,7 +3986,7 @@ module.exports = {
 /* unused harmony export NAME_INPUT_GROUP_PREPEND */
 /* unused harmony export NAME_INPUT_GROUP_TEXT */
 /* unused harmony export NAME_JUMBOTRON */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return NAME_LINK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return NAME_LINK; });
 /* unused harmony export NAME_LIST_GROUP */
 /* unused harmony export NAME_LIST_GROUP_ITEM */
 /* unused harmony export NAME_MEDIA */
@@ -4010,7 +4016,7 @@ module.exports = {
 /* unused harmony export NAME_SKELETON_IMG */
 /* unused harmony export NAME_SKELETON_TABLE */
 /* unused harmony export NAME_SKELETON_WRAPPER */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return NAME_SPINNER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return NAME_SPINNER; });
 /* unused harmony export NAME_TAB */
 /* unused harmony export NAME_TABLE */
 /* unused harmony export NAME_TABLE_CELL */

@@ -30,11 +30,11 @@ var props = Object(_utils_props__WEBPACK_IMPORTED_MODULE_6__[/* makePropsConfigu
   tag: Object(_utils_props__WEBPACK_IMPORTED_MODULE_6__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"], 'span'),
   type: Object(_utils_props__WEBPACK_IMPORTED_MODULE_6__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"], 'border'),
   variant: Object(_utils_props__WEBPACK_IMPORTED_MODULE_6__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"])
-}, _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_SPINNER */ "l"]); // --- Main component ---
+}, _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_SPINNER */ "m"]); // --- Main component ---
 // @vue/component
 
 var BSpinner = /*#__PURE__*/_vue__WEBPACK_IMPORTED_MODULE_0___default.a.extend({
-  name: _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_SPINNER */ "l"],
+  name: _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_SPINNER */ "m"],
   functional: true,
   props: props,
   render: function render(h, _ref) {
@@ -190,11 +190,11 @@ var props = Object(_utils_props__WEBPACK_IMPORTED_MODULE_4__[/* makePropsConfigu
   inline: Object(_utils_props__WEBPACK_IMPORTED_MODULE_4__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false),
   novalidate: Object(_utils_props__WEBPACK_IMPORTED_MODULE_4__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false),
   validated: Object(_utils_props__WEBPACK_IMPORTED_MODULE_4__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false)
-}, _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_FORM */ "d"]); // --- Main component ---
+}, _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_FORM */ "e"]); // --- Main component ---
 // @vue/component
 
 var BForm = /*#__PURE__*/_vue__WEBPACK_IMPORTED_MODULE_0___default.a.extend({
-  name: _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_FORM */ "d"],
+  name: _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_FORM */ "e"],
   functional: true,
   props: props,
   render: function render(h, _ref) {
@@ -18183,11 +18183,11 @@ var props = Object(_utils_props__WEBPACK_IMPORTED_MODULE_4__[/* makePropsConfigu
   state: Object(_utils_props__WEBPACK_IMPORTED_MODULE_4__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], null),
   tag: Object(_utils_props__WEBPACK_IMPORTED_MODULE_4__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_STRING */ "k"], 'div'),
   tooltip: Object(_utils_props__WEBPACK_IMPORTED_MODULE_4__[/* makeProp */ "b"])(_constants_props__WEBPACK_IMPORTED_MODULE_3__[/* PROP_TYPE_BOOLEAN */ "d"], false)
-}, _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_FORM_INVALID_FEEDBACK */ "g"]); // --- Main component ---
+}, _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_FORM_INVALID_FEEDBACK */ "h"]); // --- Main component ---
 // @vue/component
 
 var BFormInvalidFeedback = /*#__PURE__*/_vue__WEBPACK_IMPORTED_MODULE_0___default.a.extend({
-  name: _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_FORM_INVALID_FEEDBACK */ "g"],
+  name: _constants_components__WEBPACK_IMPORTED_MODULE_2__[/* NAME_FORM_INVALID_FEEDBACK */ "h"],
   functional: true,
   props: props,
   render: function render(h, _ref) {
@@ -18918,11 +18918,11 @@ var form_input_props = Object(utils_props["c" /* makePropsConfigurable */])(Obje
   type: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], 'text', function (type) {
     return Object(array["a" /* arrayIncludes */])(TYPES, type);
   })
-})), components["f" /* NAME_FORM_INPUT */]); // --- Main component ---
+})), components["g" /* NAME_FORM_INPUT */]); // --- Main component ---
 // @vue/component
 
 var BFormInput = /*#__PURE__*/external_Vue_default.a.extend({
-  name: components["f" /* NAME_FORM_INPUT */],
+  name: components["g" /* NAME_FORM_INPUT */],
   // Mixin order is important!
   mixins: [listeners["a" /* listenersMixin */], id["a" /* idMixin */], formControlMixin, formSizeMixin, form_state["a" /* formStateMixin */], formTextMixin, formSelectionMixin, formValidityMixin],
   props: form_input_props,
@@ -19541,11 +19541,11 @@ var external_Vue_default = /*#__PURE__*/__webpack_require__.n(external_Vue_);
 
 var form_row_props = Object(utils_props["c" /* makePropsConfigurable */])({
   tag: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], 'div')
-}, components["h" /* NAME_FORM_ROW */]); // --- Main component ---
+}, components["i" /* NAME_FORM_ROW */]); // --- Main component ---
 // @vue/component
 
 var BFormRow = /*#__PURE__*/external_Vue_default.a.extend({
-  name: components["h" /* NAME_FORM_ROW */],
+  name: components["i" /* NAME_FORM_ROW */],
   functional: true,
   props: form_row_props,
   render: function render(h, _ref) {
@@ -19570,11 +19570,11 @@ var form_text_props = Object(utils_props["c" /* makePropsConfigurable */])({
   inline: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
   tag: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], 'small'),
   textVariant: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], 'muted')
-}, components["i" /* NAME_FORM_TEXT */]); // --- Main component ---
+}, components["j" /* NAME_FORM_TEXT */]); // --- Main component ---
 // @vue/component
 
 var BFormText = /*#__PURE__*/external_Vue_default.a.extend({
-  name: components["i" /* NAME_FORM_TEXT */],
+  name: components["j" /* NAME_FORM_TEXT */],
   functional: true,
   props: form_text_props,
   render: function render(h, _ref) {
@@ -19609,11 +19609,11 @@ var form_valid_feedback_props = Object(utils_props["c" /* makePropsConfigurable 
   state: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], null),
   tag: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */], 'div'),
   tooltip: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false)
-}, components["j" /* NAME_FORM_VALID_FEEDBACK */]); // --- Main component ---
+}, components["k" /* NAME_FORM_VALID_FEEDBACK */]); // --- Main component ---
 // @vue/component
 
 var BFormValidFeedback = /*#__PURE__*/external_Vue_default.a.extend({
-  name: components["j" /* NAME_FORM_VALID_FEEDBACK */],
+  name: components["k" /* NAME_FORM_VALID_FEEDBACK */],
   functional: true,
   props: form_valid_feedback_props,
   render: function render(h, _ref) {
@@ -19699,14 +19699,14 @@ var form_group_generateProps = function generateProps() {
     tooltip: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false),
     validFeedback: Object(utils_props["b" /* makeProp */])(constants_props["k" /* PROP_TYPE_STRING */]),
     validated: Object(utils_props["b" /* makeProp */])(constants_props["d" /* PROP_TYPE_BOOLEAN */], false)
-  })), components["e" /* NAME_FORM_GROUP */]);
+  })), components["f" /* NAME_FORM_GROUP */]);
 }; // --- Main component ---
 // We do not use `Vue.extend()` here as that would evaluate the props
 // immediately, which we do not want to happen
 // @vue/component
 
 var BFormGroup = {
-  name: components["e" /* NAME_FORM_GROUP */],
+  name: components["f" /* NAME_FORM_GROUP */],
   mixins: [mixins_id["a" /* idMixin */], form_state["a" /* formStateMixin */], normalize_slot["a" /* normalizeSlotMixin */]],
 
   get props() {

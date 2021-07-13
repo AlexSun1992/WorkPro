@@ -72,7 +72,7 @@ var form_invalid_feedback = __webpack_require__("3010");
 // EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/components/spinner/spinner.js
 var spinner = __webpack_require__("01e3");
 
-// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/components/button/button.js + 3 modules
+// EXTERNAL MODULE: ./node_modules/bootstrap-vue/esm/components/button/button.js
 var button_button = __webpack_require__("1947");
 
 // EXTERNAL MODULE: ./node_modules/vuelidate/lib/index.js
