@@ -8,8 +8,14 @@ export default function ({ app, store, redirect, route }) {
       app.$cookiz.get("auth._refresh_token.local")
     );
   }
-  if (!store.state.auth.loggedIn) {
+  if (!app.$cookiz.get("auth._token.local")) {
     app.$cookiz.set("url", route.path);
-    return redirect("/login");
+    if (process.client) {
+      if (window !== undefined) {
+        window.location.href = "/login";
+      }
+    } else {
+      return redirect("/login");
+    }
   }
 }

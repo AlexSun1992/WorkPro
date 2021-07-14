@@ -35,9 +35,9 @@ export default {
     mobileMenu() {
       this.$emit("mini-sidebar");
     },
-    logout() {
+    async logout() {
       try {
-        this.$auth.logout();
+        await this.$auth.logout();
         window.$nuxt.$cookiz?.remove("url");
         window.location.href = "/";
       } catch (e) {

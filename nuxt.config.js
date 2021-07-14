@@ -141,7 +141,7 @@ module.exports = {
           refresh: { url: "/api/token_refresh", method: "post" },
           // user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
           user: { url: "/api/userinfo", method: "get" },
-          logout: "/",
+          logout: false,
         },
       },
     },
