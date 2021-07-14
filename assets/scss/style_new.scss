@@ -4016,3 +4016,16 @@ input[type="checkbox"].is-invalid + label.custom-control-label {
 .form-group {
   margin-bottom: 0.725rem;
 }
+.alert {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}

@@ -395,9 +395,9 @@ export default {
     async applyAction(evt) {
       if (evt) evt.preventDefault();
       this.$store.commit("data_card/setError", false);
+      this.$store.commit("data_card/setSavedError", false);
       this.isActionApplyError = false;
       this.actionFormDisabled = true;
-      this.$store.commit("data_card/setError", false);
       let response = await this.$store.dispatch("data_card/executeAction", {
         actionId: this.actionParamsId,
         relActionId: this.actionSettings.relaction,
@@ -408,10 +408,13 @@ export default {
       this.actionFormDisabled = false;
       if (response?.status === 500) {
         this.$store.commit("data_card/setLoading", false);
-        this.isActionApplyError = true;
-        this.actionApplyErrorMessage = getErrorMessage(response.data);
-        this.$store.commit("data_card/setError", true);
-        this.$store.commit("data_card/setErrorMessage", response.data);
+        if (this.actionSettings.isDialog) {
+          this.isActionApplyError = true;
+          this.actionApplyErrorMessage = getErrorMessage(response.data);
+        } else {
+          this.$store.commit("data_card/setSavedError", true);
+          this.$store.commit("data_card/setErrorMessage", response.data);
+        }
       }
       if (response?.status === 200) {
         if (response.data.POUTVALUE) {
