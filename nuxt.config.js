@@ -104,7 +104,6 @@ module.exports = {
     "/free": "https://mobile.reso.ru",
     "/am": "https://mobile2.reso.ru",
     "/main": "https://mobile.reso.ru",
-    "/main": "https://mobile.reso.ru",
   },
   serverMiddleware: [
     "~/api/index.js",
