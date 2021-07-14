@@ -104,6 +104,7 @@ module.exports = {
     "/free": "https://mobile.reso.ru",
     "/am": "https://mobile2.reso.ru",
     "/main": "https://mobile.reso.ru",
+    "/main": "https://mobile.reso.ru",
   },
   serverMiddleware: [
     "~/api/index.js",
@@ -141,7 +142,7 @@ module.exports = {
           refresh: { url: "/api/token_refresh", method: "post" },
           // user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
           user: { url: "/api/userinfo", method: "get" },
-          logout: false,
+          logout: "/",
         },
       },
     },
@@ -149,7 +150,7 @@ module.exports = {
     fullPathRedirect: true,
     redirect: {
       login: false,
-      logout: "/",
+      logout: false,
       home: false,
       user: false,
     },

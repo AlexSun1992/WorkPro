@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="relative">
-      <nuxt-link to="/" class="header-logo"></nuxt-link>
+      <a href="/" class="header-logo"></a>
       <div class="header-text col-auto mr-auto">
         Страхование на все случаи жизни
       </div>
@@ -39,6 +39,7 @@ export default {
       try {
         this.$auth.logout();
         window.$nuxt.$cookiz?.remove("url");
+        window.location.href = "/";
       } catch (e) {
         console.log(e);
       }

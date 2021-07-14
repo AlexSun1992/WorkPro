@@ -1,7 +1,7 @@
 /* eslint-disable */
 import converter from "@/converters/menu";
 import { getErrorMessage } from "../utils/transform";
-export default function ({ app, store, redirect, $auth }) {
+export default function ({ app, store, redirect, $auth, $window }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response?.config) {
       return;
@@ -29,13 +29,18 @@ export default function ({ app, store, redirect, $auth }) {
           if (data?.data) {
             if (data?.data?.STATUS === 401) {
               $auth.logout();
-              redirect("/login");
+              if (process.client) {
+                if (window !== undefined) {
+                  window.location.href = "/login";
+                }
+              } else {
+                redirect("/login");
+              }
             }
           }
           return app.$axios(originalRequest);
         })
         .catch((err) => {
-          console.log(err?.response);
           if (err?.response?.data?.STATUS === 401) {
             $auth.logout();
           }

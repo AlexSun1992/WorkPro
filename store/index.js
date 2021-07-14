@@ -79,33 +79,7 @@ export const actions = {
     }
   },
 
-  async nuxtServerInit({ dispatch }, context) {
-    let params;
-    await dispatch("pages/setConfig", params);
-    if (!context.params.pathMatch) {
-      const mainPage =
-        context.store.state.pages.config.wpreso_settings_index_page.value;
-      params = `/${mainPage}`;
-    } else {
-      params = `/${context.params.pathMatch}`;
-    }
-    try {
-      Promise.allSettled([
-        await dispatch("pages/fetchPageByUrl", params, context),
-        await dispatch("pages/setMenuIDs"),
-        await dispatch(
-          "pages/getMainMenu",
-          context.store.getters["pages/getMainMenuId"]
-        ),
-        await dispatch(
-          "pages/getFooterMenu",
-          context.store.getters["pages/getFooterMenuId"]
-        ),
-      ]);
-    } catch (e) {
-      // context.error({ statusCode: 404, message: 'Post not found' })
-    }
-  },
+  async nuxtServerInit({ dispatch }, context) {},
 
   async resetPassword({ commit }, params) {
     try {
