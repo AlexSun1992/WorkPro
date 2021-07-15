@@ -7,7 +7,7 @@
         <h2>
           {{ stitle_h1 }}
         </h2>
-        <div class="calc-description ">
+        <div class="calc-description">
           {{ stitle_h2 }}
         </div>
         <CalcResult
@@ -57,14 +57,14 @@ export default {
     };
   },
   methods: {
-    chooseAnswer: function(answer) {
+    chooseAnswer(answer) {
       this.chosenAnswers.push(answer);
     },
-    deleteAnswer: function(answer) {
+    deleteAnswer(answer) {
       const answerId = this.chosenAnswers.indexOf(answer);
       this.chosenAnswers.splice(answerId);
     },
-    resetQuiz: function() {
+    resetQuiz() {
       this.chosenAnswers = [];
     },
   },
@@ -95,7 +95,7 @@ export default {
       );
     },
   },
-  created: async function() {
+  async created() {
     if (this.quizId) {
       this.quizIdValue = this.quizId;
     }

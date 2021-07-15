@@ -32,18 +32,14 @@
         @submit.prevent="onSubmitValue"
       >
         <input autoFocus type="text" v-model="inputValue" />
-        <a class="next-button" @click="onSubmitValue">
-          Далее
-        </a>
+        <a class="next-button" @click="onSubmitValue"> Далее </a>
       </form>
       <form
         v-else-if="question.SSHOW_TYPE === 'NUMBER'"
         @submit.prevent="onSubmitValue"
       >
         <input autoFocus type="number" v-model="inputValue" />
-        <a class="next-button" @click="onSubmitValue">
-          Далее
-        </a>
+        <a class="next-button" @click="onSubmitValue"> Далее </a>
       </form>
       <div v-else-if="question.SSHOW_TYPE === 'SYSTEM_END'" />
       <div v-else>
@@ -82,7 +78,7 @@ export default {
       this.$emit("choose-answer", answer);
     },
   },
-  created: function() {
+  created() {
     this.inputValue = "";
   },
 };

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="finish-price mt-2">
-      <img v-if="isLoading" src="./img/loader.gif" style="height: 24px;" />
+      <img v-if="isLoading" src="./img/loader.gif" style="height: 24px" />
       <!-- {this.state.isLoading ? preloader : fetchedResult} -->
       <div v-else>
         <span class="h1">{{ this.premiumRub }}</span
@@ -54,7 +54,7 @@ export default {
       premium: 0,
     };
   },
-  created: function() {
+  created() {
     this.isLoading = true;
     const url = buildQuery(this.answers, this.questions, this.quizId);
     fetch(url)
