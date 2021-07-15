@@ -1,16 +1,22 @@
 stages:
-  - test
+  - pre_deploy
   - deploy
 
-test:
+build_compoments:
   image: node:12
-  stage: test
-  retry: 1
+  stage: pre_deploy
   script:
-    # - npm test
-    - echo 'no test yet'
-  tags:
-    - git-docker
+    - wget --directory-prefix=/root https://git.reso.ru/free/self-signed-sertificate/raw/master/reso.crt
+    - export NODE_EXTRA_CA_CERTS=/root/reso.crt
+    - npm install
+    - cd components-vue2
+    - npm install
+    - npm run component
+  artifacts:
+    paths:
+      - "/static/js"
+    untracked: false
+    expire_in: 1 days
 
 deploy_staging:
   image: debian
@@ -35,6 +41,7 @@ deploy_staging:
   environment:
     name: test
     url: http://nodejs.reso.ru/
+  when: manual
   only:
     - master
   tags:
