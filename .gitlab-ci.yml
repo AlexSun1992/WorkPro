@@ -1,5 +1,19 @@
 stages:
+  - pre_deploy
   - deploy
+
+build_compoments:
+  image: node:12
+  stage: pre_deploy
+  script:
+    - cd components-vue2
+    - npm install
+    - npm run component
+  artifacts:
+    paths:
+      - "/static/js"
+    untracked: false
+    expire_in: 1 days
 
 deploy_staging:
   image: debian
@@ -24,6 +38,7 @@ deploy_staging:
   environment:
     name: test
     url: http://nodejs.reso.ru/
+  when: manual
   only:
     - master
   tags:
