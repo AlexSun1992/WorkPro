@@ -1,16 +1,5 @@
 stages:
-  - test
   - deploy
-
-test:
-  image: node:12
-  stage: test
-  retry: 1
-  script:
-    # - npm test
-    - echo 'no test yet'
-  tags:
-    - git-docker
 
 deploy_staging:
   image: debian
@@ -27,9 +16,9 @@ deploy_staging:
     - ssh-keyscan -H -p $TEST_PORT $TEST_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - rsync --recursive --delete-after --rsh "ssh -p $TEST_PORT" . nodejs@$TEST_HOST:nuxt-vue
+    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '\. ~/.nvm/nvm.sh; cd ~/nuxt-vue; npm install'
     - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '\. ~/.nvm/nvm.sh; cd ~/nuxt-vue/components-vue2; npm install'
     - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '\. ~/.nvm/nvm.sh; cd ~/nuxt-vue/components-vue2; npm run component'
-    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '\. ~/.nvm/nvm.sh; cd ~/nuxt-vue; npm install'
     - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '\. ~/.nvm/nvm.sh; cd ~/nuxt-vue; npm run build'
     - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '\. ~/.nvm/nvm.sh; pm2 restart all'
   environment:
