@@ -6,6 +6,7 @@ build_compoments:
   image: node:12
   stage: pre_deploy
   cache:
+    key: ${CI_COMMIT_REF_SLUG}
     paths:
       - node_modules/
   script:
