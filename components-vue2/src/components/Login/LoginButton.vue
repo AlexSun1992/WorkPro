@@ -27,6 +27,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { BDropdown, BButton, BDropdownItem } from "bootstrap-vue";
+
 const TOKEN_NAME = "auth._token.local";
 const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
 const URL_GET_USER_NAME = "/am/main/v2/userinfo";
@@ -59,7 +60,7 @@ axios.interceptors.response.use(undefined, function (err) {
         failedQueue.push({ resolve, reject });
       })
         .then((token) => {
-          originalRequest.headers["Authorization"] = "Bearer " + token;
+          originalRequest.headers.Authorization = `Bearer ${token}`;
           return axios(originalRequest);
         })
         .catch((err) => {
@@ -72,19 +73,17 @@ axios.interceptors.response.use(undefined, function (err) {
     return axios({
       url: URL_REFRESH_TOKEN,
       headers: {
-        Authorization: "Bearer " + Cookies.get(REFRESH_TOKEN_NAME),
+        Authorization: `Bearer ${Cookies.get(REFRESH_TOKEN_NAME)}`,
       },
       method: "GET",
     })
       .then(
         (resp) => {
-          Cookies.set(TOKEN_NAME, "Bearer " + resp.data.ACCESS_TOKEN);
+          Cookies.set(TOKEN_NAME, `Bearer ${resp.data.ACCESS_TOKEN}`);
           Cookies.set(REFRESH_TOKEN_NAME, resp.data.REFRESH_TOKEN);
-          axios.defaults.headers.common["Authorization"] =
-            "Bearer " + resp.data.ACCESS_TOKEN;
+          axios.defaults.headers.common.Authorization = `Bearer ${resp.data.ACCESS_TOKEN}`;
           isRefreshing = false;
-          originalRequest.headers["Authorization"] =
-            "Bearer " + resp.data.ACCESS_TOKEN;
+          originalRequest.headers.Authorization = `Bearer ${resp.data.ACCESS_TOKEN}`;
           processQueue(null, resp.data.ACCESS_TOKEN);
           return axios(originalRequest);
         },
@@ -119,8 +118,8 @@ export default {
         window.location.href = "/cabinet/55/0/701";
       } else {
         this.personsData = null;
-        Cookies.set(TOKEN_NAME, Cookies.get(TOKEN_NAME) + "0");
-        Cookies.set(REFRESH_TOKEN_NAME, Cookies.get(REFRESH_TOKEN_NAME) + "0");
+        Cookies.set(TOKEN_NAME, `${Cookies.get(TOKEN_NAME)}0`);
+        Cookies.set(REFRESH_TOKEN_NAME, `${Cookies.get(REFRESH_TOKEN_NAME)}0`);
       }
     },
     redirectToLoginPage() {
@@ -129,7 +128,7 @@ export default {
     getPersonsData() {
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
-        axios.defaults.headers.common["Authorization"] = token;
+        axios.defaults.headers.common.Authorization = token;
       }
       axios({ url: URL_GET_USER_NAME, method: "GET" })
         .then((resp) => {
@@ -147,9 +146,7 @@ export default {
       return Boolean(this.personsData);
     },
     userName() {
-      return (
-        this.personsData["SFIRSTNAME"] + " " + this.personsData["SSECONDNAME"]
-      );
+      return `${this.personsData.SFIRSTNAME} ${this.personsData.SSECONDNAME}`;
     },
   },
   created() {
