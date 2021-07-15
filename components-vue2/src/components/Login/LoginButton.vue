@@ -32,6 +32,7 @@ const TOKEN_NAME = "auth._token.local";
 const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
 const URL_GET_USER_NAME = "/am/main/v2/userinfo";
 const URL_REFRESH_TOKEN = "/am/auth/v2/token_refresh";
+const URL_AUTHORIZE = "/am/auth/v2/authorize";
 let failedQueue = [];
 const processQueue = (error, token = null) => {
   failedQueue.forEach((prom) => {
@@ -53,7 +54,8 @@ axios.interceptors.response.use(undefined, function (err) {
   if (
     status === 401 &&
     !originalRequest._retry &&
-    originalRequest.url !== URL_REFRESH_TOKEN
+    originalRequest.url !== URL_REFRESH_TOKEN &&
+    originalRequest.url !== URL_AUTHORIZE
   ) {
     if (isRefreshing) {
       return new Promise(function (resolve, reject) {
