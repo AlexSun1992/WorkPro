@@ -14,6 +14,8 @@ build_compoments:
     - npm install
     - cd components-vue2
     - npm install
+    - npm run component || true
+    - npm install
     - npm run component
   artifacts:
     paths:
