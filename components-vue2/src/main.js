@@ -3,6 +3,7 @@ import vueCustomElement from "vue-custom-element";
 import ComponentLoginButton from "./components/Login/LoginButton.vue";
 import ComponentLoginForm from "./components/Login/LoginForm.vue";
 import ComponentQuizCalculator from "./components/QuizCalculator/QuizCalculator.vue";
+import ComponentPasswordRecoveryForm from "./components/Login/RecoveryForm/PasswordRecoveryForm.vue";
 Vue.use(vueCustomElement);
 Vue.config.productionTip = false;
 new Vue({
@@ -11,3 +12,7 @@ new Vue({
 Vue.customElement("component-login-button", ComponentLoginButton);
 Vue.customElement("component-login-form", ComponentLoginForm);
 Vue.customElement("component-quiz-calculator", ComponentQuizCalculator);
+Vue.customElement(
+  "component-password-recovery-form",
+  ComponentPasswordRecoveryForm
+);
