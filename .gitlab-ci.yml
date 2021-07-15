@@ -1,14 +1,25 @@
 stages:
-  - test
+  - pre_deploy
   - deploy
 
-test:
+build_compoments:
   image: node:12
-  stage: test
-  retry: 1
+  stage: pre_deploy
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
   script:
-    # - npm test
-    - echo 'no test yet'
+    - npm install
+    - cd components-vue2
+    - npm install
+    - npm run component || true
+    - npm run component
+  artifacts:
+    paths:
+      - static/js
+    untracked: false
+    expire_in: 1 days
   tags:
     - git-docker
 
@@ -33,6 +44,8 @@ deploy_staging:
   environment:
     name: test
     url: http://nodejs.reso.ru/
+  dependencies:
+    - build_compoments
   only:
     - master
   tags:
