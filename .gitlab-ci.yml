@@ -5,6 +5,9 @@ stages:
 build_compoments:
   image: node:12
   stage: pre_deploy
+  cache:
+    paths:
+      - node_modules/
   script:
     - wget --directory-prefix=/root https://git.reso.ru/free/self-signed-sertificate/raw/master/reso.crt
     - export NODE_EXTRA_CA_CERTS=/root/reso.crt
@@ -17,6 +20,8 @@ build_compoments:
       - "/static/js"
     untracked: false
     expire_in: 1 days
+  tags:
+    - git-docker
 
 deploy_staging:
   image: debian
@@ -41,6 +46,8 @@ deploy_staging:
   environment:
     name: test
     url: http://nodejs.reso.ru/
+  dependencies:
+    - build_compoments
   when: manual
   only:
     - master
