@@ -6,6 +6,8 @@ build_compoments:
   image: node:12
   stage: pre_deploy
   script:
+    - wget --directory-prefix=/root https://git.reso.ru/free/self-signed-sertificate/raw/master/reso.crt
+    - export NODE_EXTRA_CA_CERTS=/root/reso.crt
     - cd components-vue2
     - npm install
     - npm run component
