@@ -1,5 +1,16 @@
 stages:
+  - test
   - deploy
+
+test:
+  image: node:12
+  stage: test
+  retry: 1
+  script:
+    # - npm test
+    - echo 'no test yet'
+  tags:
+    - git-docker
 
 deploy_staging:
   image: debian
