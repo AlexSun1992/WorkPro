@@ -8,6 +8,9 @@
     "lint": "vue-cli-service lint",
     "component": "vue-cli-service build --target lib --name components src/main.js"
   },
+  "rules": {
+    "no-unused-vars": "off"
+  },
   "dependencies": {
     "axios": "^0.21.1",
     "bootstrap": "^4.5.0",
