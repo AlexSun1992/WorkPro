@@ -6,7 +6,7 @@
         v-if="isAuthentificated"
         id="dropdown-1"
         :text="userName"
-        class="m-md-2"
+        class="gotolk icon-right"
       >
         <b-dropdown-item
           v-for="(item, index) in navigationList"
@@ -16,7 +16,7 @@
           {{ item }}
         </b-dropdown-item>
       </b-dropdown>
-      <b-button variant="success" v-else @click="redirectToLoginPage"
+      <b-button class="gotolk btn_trn btn-p-sm btn-icon-left" v-else @click="redirectToLoginPage"
         >ЛИЧНЫЙ КАБИНЕТ</b-button
       >
     </div>
