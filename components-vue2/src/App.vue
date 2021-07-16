@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
-    <LoginButton />
-  </div>
+  <div></div>
 </template>
 
 <script>
