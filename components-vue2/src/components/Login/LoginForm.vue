@@ -58,7 +58,7 @@
     </b-form>
     <div class="mt-3 text-center">
       <span class="forgot-password">Забыли пароль?</span>
-      <!-- <router-link to="/recovery">Восстановить</router-link> -->
+      <a href="/password-recovery-form">Восстановить</a>
     </div>
   </div>
 </template>

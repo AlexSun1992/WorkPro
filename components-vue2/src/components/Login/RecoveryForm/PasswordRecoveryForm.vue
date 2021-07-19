@@ -94,7 +94,6 @@
                   >Отмена</b-button
                 >
                 <b-button
-                  href="/login"
                   variant="success"
                   @click="resetPassword"
                   :disabled="disabledEmailReset"
