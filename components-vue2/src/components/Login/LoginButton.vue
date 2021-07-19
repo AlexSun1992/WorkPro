@@ -16,9 +16,17 @@
           {{ item }}
         </b-dropdown-item>
       </b-dropdown>
-      <b-button class="gotolk btn_trn btn-p-sm btn-icon-left" v-else @click="redirectToLoginPage"
+      <b-button
+        class="gotolk btn_trn btn-p-sm btn-icon-left"
+        v-else
+        @click="redirectToLoginPage"
         >ЛИЧНЫЙ КАБИНЕТ</b-button
       >
+    </div>
+    <div v-else>
+      <div>
+        <b-spinner variant="success" label="Loading..."></b-spinner>
+      </div>
     </div>
   </div>
 </template>
@@ -26,7 +34,7 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BDropdown, BButton, BDropdownItem } from "bootstrap-vue";
+import { BDropdown, BButton, BDropdownItem, BSpinner } from "bootstrap-vue";
 
 const TOKEN_NAME = "auth._token.local";
 const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
@@ -106,6 +114,7 @@ export default {
     BDropdown,
     BButton,
     BDropdownItem,
+    BSpinner,
   },
   data() {
     return {
@@ -114,6 +123,7 @@ export default {
       isLoadedUserInfo: false,
     };
   },
+
   methods: {
     applyAction(index) {
       if (index === 0) {
@@ -143,6 +153,7 @@ export default {
         });
     },
   },
+
   computed: {
     isAuthentificated() {
       return Boolean(this.personsData);
