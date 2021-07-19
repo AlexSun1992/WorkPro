@@ -341,19 +341,19 @@ export default {
       const result = await response.json();
       return result.suggestions;
     },
-    async editCard({ commit, getters }, params) {
-      try {
-        const idItem = params.idItem;
-        delete params.idItem;
-        const response = await this.$axios.put(
-          `/am/main/v2/datacard/${getters.page.idModule}/${idItem}/0`,
-          params
-        );
-        return response;
-      } catch (e) {
-        console.log(e);
-      }
-    },
+    // async editCard({ commit, getters }, params) {
+    //   try {
+    //     const idItem = params.idItem;
+    //     delete params.idItem;
+    //     const response = await this.$axios.put(
+    //       `/am/main/v2/datacard/${getters.page.idModule}/${idItem}/0`,
+    //       params
+    //     );
+    //     return response;
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // },
 
     async askSuggestions(target) {
       const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
@@ -400,46 +400,12 @@ export default {
       }
     },
 
-    onError(error) {
-      console.log("Error:", error);
-    },
-    onSuccess(token) {
-      this.token = token;
-      console.log("Succeeded:", token);
-    },
-    onExpired() {
-      console.log("Expired");
-    },
-    async getCaptcha() {
-      try {
-        const token = await this.$recaptcha.getResponse();
-        await this.$recaptcha.reset();
-      } catch (error) {
-        console.log("Login error:", error);
-      }
-    },
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;
     },
-    async registerUser(params) {
-      try {
-        const headers = {
-          headers: { recaptcha: params.token },
-        };
-        delete params.token;
-        const regResponse = await this.$axios.post(
-          "/free/v2/registration",
-          params,
-          headers
-        );
-        return regResponse;
-      } catch (e) {
-        return e?.response;
-      }
-    },
 
-    async setToken(context) {
+    async register(context) {
       try {
         this.registrationInProcess = true;
         let params = {
@@ -456,11 +422,14 @@ export default {
           USER_CONFIRM: "Y",
         };
 
-        // await this.getCaptcha();
-        // if (!this.token) return;
-
-        params = { ...params, token: this.token };
-        const response = await this.registerUser(params);
+        const headers = {
+          headers: { recaptcha: params.token },
+        };
+        const response = await axios.post(
+          "/free/v2/registration",
+          params,
+          headers
+        );
 
         this.registrationInProcess = false;
         if (response?.status === 200) {
@@ -478,7 +447,7 @@ export default {
               autoFocusButton: "ok",
             })
             .then((value) => {
-              this.$router.push("/login");
+              window.location.href = "/login";
             })
             .catch((err) => {
               console.log(err);
@@ -504,7 +473,7 @@ export default {
           }
           return;
         }
-        this.setToken(this);
+        this.register(this);
       } catch (e) {
         console.log(e);
       }

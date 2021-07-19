@@ -139,6 +139,7 @@ export default {
     "context",
     "textMessage",
     "tabIndex",
+    "error",
   ],
 
   data() {
@@ -207,6 +208,7 @@ export default {
           return await axios.post("/free/v2/sendemailcode", params, headers);
         }
       } catch (e) {
+        debugger;
         this.loading = false;
         this.$emit("error", e.response.data.INFO);
       }
@@ -291,8 +293,9 @@ export default {
                     }
                   }
                   if (value === false) {
-                    this.$router.push("/login");
+                    window.location.href = "/login";
                   }
+                  this.loading = false;
                 })
                 .catch((err) => {
                   console.log(err);
@@ -411,6 +414,9 @@ export default {
       if (this.token) {
         this.getCode();
       }
+    },
+    error: function () {
+      debugger;
     },
   },
   destroyed() {

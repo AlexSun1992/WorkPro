@@ -191,7 +191,15 @@ export default {
           return;
         }
         if (response.data[0]?.MESSAGE_CODE === "200") {
-          this.$router.push("/login");
+          // this.$bvModal
+          //   .msgBoxOk("Пароль успшено изменён")
+          //   .then((value) => {
+          //     window.location.href = "/login";
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //   });
+          window.location.href = "/login";
         } else if (response.data[0]?.MESSAGE_CODE === "502") {
           this.isErrorMessage = true;
           this.errorMessage = "Данные неверные";
