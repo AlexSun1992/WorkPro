@@ -55,7 +55,6 @@
                   >Отмена</b-button
                 >
                 <b-button
-                  href="/login"
                   tabindex="60"
                   variant="success"
                   @click="resetPassword"
@@ -183,22 +182,20 @@ export default {
         this.isErrorMessage = false;
         this.errorMessage = null;
         const response = await axios.post("/free/v2/restorepassword", params);
-
-        if (response?.data?.STATUS === 500) {
-          this.isErrorMessage = true;
-          this.errorMessage = response?.data?.INFO;
-          return;
-        }
-        if (response.data[0]?.MESSAGE_CODE === "200") {
-          this.$router.push("/login");
-        } else if (response.data[0]?.MESSAGE_CODE === "502") {
+        if (response.data[0].MESSAGE_CODE === "200") {
+          window.location.href = "/login";
+        } else if (response.data[0].MESSAGE_CODE === "502") {
           this.isErrorMessage = true;
           this.errorMessage = "Данные неверные";
-        } else if (response.data[0]?.MESSAGE_CODE === "501") {
+        } else if (response.data[0].MESSAGE_CODE === "501") {
           this.isErrorMessage = true;
           this.errorMessage = "Необходимо ввести дополнительные данные";
         }
       } catch (e) {
+        if (e.response.data.STATUS === 500) {
+          this.isErrorMessage = true;
+          this.errorMessage = e.response.data.INFO;
+        }
         console.log(e);
       }
     },
