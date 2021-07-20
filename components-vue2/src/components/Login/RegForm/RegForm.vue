@@ -190,7 +190,6 @@
         </b-button>
       </div>
     </b-form>
-    <!--    <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />-->
   </div>
 </template>
 
@@ -341,19 +340,6 @@ export default {
       const result = await response.json();
       return result.suggestions;
     },
-    // async editCard({ commit, getters }, params) {
-    //   try {
-    //     const idItem = params.idItem;
-    //     delete params.idItem;
-    //     const response = await this.$axios.put(
-    //       `/am/main/v2/datacard/${getters.page.idModule}/${idItem}/0`,
-    //       params
-    //     );
-    //     return response;
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // },
 
     async askSuggestions(target) {
       const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
@@ -407,6 +393,8 @@ export default {
 
     async register(context) {
       try {
+        this.isErrorMessage = false;
+        this.errorMessage = null;
         this.registrationInProcess = true;
         let params = {
           SECONDNAME: this.$v.form.family.$model,
@@ -457,6 +445,9 @@ export default {
           this.errorMessage = response.data.INFO;
         }
       } catch (e) {
+        this.isErrorMessage = true;
+        this.errorMessage = e.response.data.INFO;
+        this.registrationInProcess = false;
         console.log(e);
       }
     },
