@@ -75,7 +75,5 @@ export default {
 };
 </script>
 <style scoped>
-#calculator{
-@import "./calculator.css";
-}
+@import url("./calculator.css");
 </style>
