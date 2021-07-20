@@ -77,7 +77,7 @@ converter.form = async (data, itemId) => {
 
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
-    obj.label = webFields[i].SCAPTION;
+    obj.label = webFields[i].SCAPTION || webFields[i].SCAPTIONLONG;
     if (
       item[webFields[i].SNAME] ||
       item[webFields[i].SNAME] === 0 ||
