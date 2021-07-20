@@ -25,7 +25,7 @@
     </div>
     <div v-else>
       <div>
-        <b-spinner variant="success" label="Loading..."></b-spinner>
+        <SkeletonBox :items="1"></SkeletonBox>
       </div>
     </div>
   </div>
@@ -34,7 +34,8 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BDropdown, BButton, BDropdownItem, BSpinner } from "bootstrap-vue";
+import { BDropdown, BButton, BDropdownItem } from "bootstrap-vue";
+import SkeletonBox from "./Libs/SkeletonBox";
 
 const TOKEN_NAME = "auth._token.local";
 const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
@@ -114,7 +115,7 @@ export default {
     BDropdown,
     BButton,
     BDropdownItem,
-    BSpinner,
+    SkeletonBox,
   },
   data() {
     return {
