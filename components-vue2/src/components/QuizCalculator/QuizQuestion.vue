@@ -85,6 +85,6 @@ export default {
 </script>
 <style scoped>
 #calculator{
-@import url("./calculator.css");
+@import "./calculator.css";
 }
 </style>
