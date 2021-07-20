@@ -49,6 +49,11 @@
         variant="success"
         class="btn-sms"
         >Получить код
+        <b-spinner
+          v-if="loading"
+          style="width: 1.2rem; height: 1.2rem"
+          variant="light"
+        ></b-spinner>
       </b-button>
       <b-link v-if="isSendCode" @click="changeNumber">{{
         loginType === "phone" ? "Изменить номер" : "Изменить email"
@@ -80,6 +85,7 @@
             :tabindex="tabIndex[1]"
             placeholder="Код подтверждения"
           ></b-form-input>
+
           <b-form-invalid-feedback v-if="!v.code.$model"
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
           >
@@ -89,6 +95,14 @@
         </b-form-group>
       </div>
     </div>
+    <!-- <b-button
+      type="submit"
+      v-if="isSendCode"
+      @click="executeRecaptcha"
+      variant="success"
+    >
+      Отправить повторно
+    </b-button> -->
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
@@ -208,7 +222,6 @@ export default {
           return await axios.post("/free/v2/sendemailcode", params, headers);
         }
       } catch (e) {
-        debugger;
         this.loading = false;
         this.$emit("error", e.response.data.INFO);
       }
@@ -414,9 +427,6 @@ export default {
       if (this.token) {
         this.getCode();
       }
-    },
-    error: function () {
-      debugger;
     },
   },
   destroyed() {
