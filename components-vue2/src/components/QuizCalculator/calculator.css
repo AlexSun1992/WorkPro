@@ -225,7 +225,7 @@ menu {
   right: -184px;
   height: 641px;
   z-index: 0;
-  background: url(../img/bg-telo.gif) 0 0 no-repeat;
+  background: url(./img/bg-telo.gif) 0 0 no-repeat;
 }
 .calculator .calculator-bg-bg,
 .calculator .calculator-ppl-bg {
@@ -238,7 +238,7 @@ menu {
   right: -273px;
   z-index: 2;
   height: 517px;
-  background: url(../img/telo.png) 0 0 no-repeat;
+  background: url(./img/telo.png) 0 0 no-repeat;
 }
 .calculator .block-calc {
   margin-top: 30px;
