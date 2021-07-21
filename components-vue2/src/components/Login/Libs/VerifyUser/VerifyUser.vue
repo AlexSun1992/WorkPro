@@ -1,5 +1,6 @@
 <template>
   <div class="row">
+  <div class="col-12 col-md-6">
     <p>{{ label }}</p>
     <b-form-group>
       <b-form-input
@@ -37,7 +38,8 @@
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
     </b-form-group>
-    <div>
+    </div>
+    <div class="col-12 col-md-6 mt-2 mt-md-0">
       <b-button
         type="submit"
         :disabled="
@@ -49,11 +51,6 @@
         variant="success"
         class="btn-sms"
         >Получить код
-        <b-spinner
-          v-if="loading"
-          style="width: 1.2rem; height: 1.2rem"
-          variant="light"
-        ></b-spinner>
       </b-button>
       <b-link v-if="isSendCode" @click="changeNumber">{{
         loginType === "phone" ? "Изменить номер" : "Изменить email"
@@ -85,7 +82,6 @@
             :tabindex="tabIndex[1]"
             placeholder="Код подтверждения"
           ></b-form-input>
-
           <b-form-invalid-feedback v-if="!v.code.$model"
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
           >
@@ -95,14 +91,6 @@
         </b-form-group>
       </div>
     </div>
-    <!-- <b-button
-      type="submit"
-      v-if="isSendCode"
-      @click="executeRecaptcha"
-      variant="success"
-    >
-      Отправить повторно
-    </b-button> -->
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
@@ -222,6 +210,7 @@ export default {
           return await axios.post("/free/v2/sendemailcode", params, headers);
         }
       } catch (e) {
+        debugger;
         this.loading = false;
         this.$emit("error", e.response.data.INFO);
       }
@@ -428,6 +417,9 @@ export default {
         this.getCode();
       }
     },
+    error: function () {
+      debugger;
+    },
   },
   destroyed() {
     this.isSendCode = false;
@@ -451,7 +443,7 @@ export default {
 }
 
 .mx-datepicker {
-  width: 100%;
+  width: 100% !important;
 }
 .mx-datepicker .button-datapicker {
   position: absolute;
