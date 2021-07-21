@@ -1,7 +1,6 @@
 <template>
   <div class="row">
   <div class="col-12 col-md-6">
-    <p>{{ label }}</p>
     <b-form-group>
       <b-form-input
         v-if="loginType === 'phone'"
@@ -465,6 +464,33 @@ export default {
 /*.form-group {*/
 /*  margin: 0 !important;*/
 /*}*/
+.btn-success {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #28a745;
+  border-radius: 0.25rem;
+  color: #fff;
+  background-color: #28a745;
+  padding: 0 15px;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.btn-success:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.btn-sms {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
 </style>
 <style scoped lang="scss">
 // @import "~/assets/scss/reg.scss";
