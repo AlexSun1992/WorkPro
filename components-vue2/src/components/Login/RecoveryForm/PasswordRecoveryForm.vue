@@ -20,7 +20,6 @@
                 Введите номер телефона указанный при регистрации
               </div>
               <verify-user
-                class="col-12"
                 ref="verifyUser"
                 @error="showError"
                 :loginType="'phone'"
@@ -85,20 +84,24 @@
                   :validateState="validateState"
                 />
               </b-row>
-              <div class="buttons">
-                <b-button
-                  href="/login"
-                  variant="outline-secondary"
-                  class="w-100"
-                  >Отмена</b-button
-                >
-                <b-button
-                  variant="success"
-                  @click="resetPassword"
-                  :disabled="disabledEmailReset"
-                  class="w-100"
-                  >Изменить пароль</b-button
-                >
+              <div class="row buttons">
+                <div class="col-12 col-md-6">
+                  <b-button
+                    href="/login"
+                    variant="outline-secondary"
+                    class="w-100"
+                    >Отмена</b-button
+                  >
+                </div>
+                <div class="col-12 col-md-6">
+                  <b-button
+                    variant="success"
+                    @click="resetPassword"
+                    :disabled="disabledEmailReset"
+                    class="w-100"
+                    >Изменить пароль</b-button
+                  >
+                </dv>
               </div>
             </b-tab>
           </b-tabs>
