@@ -103,7 +103,7 @@
                     class="w-100"
                     >Изменить пароль</b-button
                   >
-                </dv>
+                </div>
               </div>
             </b-tab>
           </b-tabs>
