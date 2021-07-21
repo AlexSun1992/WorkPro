@@ -4,75 +4,76 @@
       <div class="row justify-content-center">
         <div v-if="formLoaded" class="mb-5 col-md-10 col-lg-6">
           <h2 class="mb-3 text-center mt-5">Восстановление доступа</h2>
-          <b-tabs
-            @activate-tab="initData"
-            ref="tabs"
-            content-class="mt-4 block-registration"
-          >
-            <b-tab title="Телефон">
-              <b-alert :show="isErrorMessage" variant="danger">{{
-                errorMessage
-              }}</b-alert>
-              <div class="mb-3">
-                Введите номер телефона указанный при регистрации
-              </div>
-              <verify-user
-                ref="verifyUser"
-                @error="showError"
-                :loginType="'phone'"
-                :mode-type="'RECOVERY'"
-                :v="$v.form"
-                :count="60"
-                :validateState="validateState"
-                :text-message="textMessage"
-                :tab-index="[10, 15]"
-              />
-              <b-row class="mt-3">
-                <b-form-group label="Дата рождения" class="col-md-6 col-12">
-                  <birthday-picker
-                    v-model="$v.form.birthdate.$model"
-                    :state="validateState('birthdate')"
-                    :tabindex="20"
+            <div class="mt-4 block-registration p-4">
+              <b-tabs
+                @activate-tab="initData"
+                ref="tabs"
+              >
+                <b-tab title="Телефон">
+                  <b-alert :show="isErrorMessage" variant="danger">{{
+                    errorMessage
+                  }}</b-alert>
+                  <div class="mb-3">
+                    Введите номер телефона указанный при регистрации
+                  </div>
+                  <verify-user
+                    ref="verifyUser"
+                    @error="showError"
+                    :loginType="'phone'"
+                    :mode-type="'RECOVERY'"
+                    :v="$v.form"
+                    :count="60"
+                    :validateState="validateState"
+                    :text-message="textMessage"
+                    :tab-index="[10, 15]"
                   />
-                </b-form-group>
-              </b-row>
-            </b-tab>
-            <b-tab title="Email">
-              <b-alert :show="isErrorMessage" variant="danger">{{
-                errorMessage
-              }}</b-alert>
-              <div class="mb-3">Введите e-mail указанный при регистрации</div>
-              <verify-user
-                @error="showError"
-                :loginType="'email'"
+                  <b-row class="mt-3">
+                    <b-form-group label="Дата рождения" class="col-md-6 col-12">
+                      <birthday-picker
+                        v-model="$v.form.birthdate.$model"
+                        :state="validateState('birthdate')"
+                        :tabindex="20"
+                      />
+                    </b-form-group>
+                  </b-row>
+                </b-tab>
+                <b-tab title="Email">
+                  <b-alert :show="isErrorMessage" variant="danger">{{
+                    errorMessage
+                  }}</b-alert>
+                  <div class="mb-3">Введите e-mail указанный при регистрации</div>
+                  <verify-user
+                    @error="showError"
+                    :loginType="'email'"
+                    :v="$v.form"
+                    :count="60"
+                    :validateState="validateState"
+                    :tab-index="[10, 15]"
+                  />
+                </b-tab>
+              </b-tabs>
+              <verify-password
+                :tab-index="[20, 30]"
                 :v="$v.form"
-                :count="60"
                 :validateState="validateState"
-                :tab-index="[10, 15]"
               />
-            </b-tab>
-          </b-tabs>
-          <verify-password
-            :tab-index="[20, 30]"
-            :v="$v.form"
-            :validateState="validateState"
-          />
-          <div class="row buttons">
-            <div class="col-12 col-md-6">
-              <b-button href="/login" variant="outline-secondary" class="w-100"
-                >Отмена</b-button
-              >
+              <div class="row buttons">
+                <div class="col-12 col-md-6">
+                  <b-button href="/login" variant="outline-secondary" class="w-100"
+                    >Отмена</b-button
+                  >
+                </div>
+                <div class="col-12 col-md-6">
+                  <b-button
+                    variant="success"
+                    @click="resetPassword"
+                    :disabled="disabled"
+                    class="w-100"
+                    >Изменить пароль</b-button
+                  >
+                </div>
+              </div>
             </div>
-            <div class="col-12 col-md-6">
-              <b-button
-                variant="success"
-                @click="resetPassword"
-                :disabled="disabled"
-                class="w-100"
-                >Изменить пароль</b-button
-              >
-            </div>
-          </div>
         </div>
       </div>
     </div>
