@@ -4,8 +4,8 @@
     <div class="row justify-content-center">
       <div class="mb-5 col-md-10 col-lg-6">
         <h2 class="mb-3 text-center mt-5">Вход</h2>
-        <div class="mt-4 block-registration">
-          <p class="my-2">{{ errorMessage }}</p>
+        <div class="mt-4 block-registration p-4">
+          <div>{{ errorMessage }}</div>
           <b-form @submit.prevent="onSubmit">
             <b-form-group label="Телефон" label-cols="12">
               <b-form-input
