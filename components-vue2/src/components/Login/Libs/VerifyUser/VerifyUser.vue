@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <p>{{ label }}</p>
+  <div class="col-12 col-md-6">
     <b-form-group>
       <b-form-input
         v-if="loginType === 'phone'"
@@ -37,7 +37,8 @@
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
     </b-form-group>
-    <div>
+    </div>
+    <div class="col-12 col-md-6 mt-2 mt-md-0">
       <b-button
         type="submit"
         :disabled="
@@ -49,11 +50,6 @@
         variant="success"
         class="btn-sms"
         >Получить код
-        <b-spinner
-          v-if="loading"
-          style="width: 1.2rem; height: 1.2rem"
-          variant="light"
-        ></b-spinner>
       </b-button>
       <b-link v-if="isSendCode" @click="changeNumber">{{
         loginType === "phone" ? "Изменить номер" : "Изменить email"
@@ -85,7 +81,6 @@
             :tabindex="tabIndex[1]"
             placeholder="Код подтверждения"
           ></b-form-input>
-
           <b-form-invalid-feedback v-if="!v.code.$model"
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
           >
@@ -95,14 +90,6 @@
         </b-form-group>
       </div>
     </div>
-    <!-- <b-button
-      type="submit"
-      v-if="isSendCode"
-      @click="executeRecaptcha"
-      variant="success"
-    >
-      Отправить повторно
-    </b-button> -->
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
@@ -222,6 +209,7 @@ export default {
           return await axios.post("/free/v2/sendemailcode", params, headers);
         }
       } catch (e) {
+        debugger;
         this.loading = false;
         this.$emit("error", e.response.data.INFO);
       }
@@ -428,6 +416,9 @@ export default {
         this.getCode();
       }
     },
+    error: function () {
+      debugger;
+    },
   },
   destroyed() {
     this.isSendCode = false;
@@ -451,7 +442,7 @@ export default {
 }
 
 .mx-datepicker {
-  width: 100%;
+  width: 100% !important;
 }
 .mx-datepicker .button-datapicker {
   position: absolute;
@@ -473,6 +464,33 @@ export default {
 /*.form-group {*/
 /*  margin: 0 !important;*/
 /*}*/
+.btn-success {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #28a745;
+  border-radius: 0.25rem;
+  color: #fff;
+  background-color: #28a745;
+  padding: 0 15px;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.btn-success:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.btn-sms {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
 </style>
 <style scoped lang="scss">
 // @import "~/assets/scss/reg.scss";

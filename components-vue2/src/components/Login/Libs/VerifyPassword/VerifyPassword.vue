@@ -1,6 +1,5 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
+    <div class="row">
       <b-col sm="12" md="6">
         <b-form-group :label="showLabel" label-cols="12">
           <b-form-input
@@ -40,8 +39,7 @@
         </b-form-group>
       </b-col>
       <b-col sm="12" v-if="recovery"></b-col>
-    </b-row>
-  </div>
+    </div>
 </template>
 
 <script>

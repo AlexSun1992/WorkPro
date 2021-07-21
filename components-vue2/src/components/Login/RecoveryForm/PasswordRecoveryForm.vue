@@ -4,7 +4,7 @@
       <div class="row justify-content-center">
         <div
           v-if="formLoaded"
-          class="block bg-six block-border-one mb-5 col-md-10 col-lg-6"
+          class="mb-5 col-md-10 col-lg-6"
         >
           <h2 class="mb-3 text-center mt-5">Восстановление доступа</h2>
           <b-tabs
@@ -20,7 +20,6 @@
                 Введите номер телефона указанный при регистрации
               </div>
               <verify-user
-                class="col-12"
                 ref="verifyUser"
                 @error="showError"
                 :loginType="'phone'"
@@ -40,28 +39,32 @@
                   />
                 </b-form-group>
               </b-row>
-              <b-row>
+              
                 <verify-password
                   :tab-index="[30, 40]"
                   :v="$v.form"
                   :validateState="validateState"
                 />
-              </b-row>
-              <div class="buttons">
-                <b-button
-                  href="/login"
-                  variant="outline-secondary"
-                  class="w-100"
-                  >Отмена</b-button
-                >
-                <b-button
-                  tabindex="60"
-                  variant="success"
-                  @click="resetPassword"
-                  :disabled="disabledReset"
-                  class="w-100"
-                  >Изменить пароль</b-button
-                >
+              
+              <div class="buttons row">
+                <div class="col-12 col-md-6">
+                  <b-button
+                    href="/login"
+                    variant="outline-secondary"
+                    class="w-100"
+                    >Отмена</b-button
+                  >
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <b-button
+                      tabindex="60"
+                      variant="success"
+                      @click="resetPassword"
+                      :disabled="disabledReset"
+                      class="w-100"
+                      >Изменить пароль</b-button
+                    >
+                  </div>
               </div>
             </b-tab>
             <b-tab title="Email">
@@ -70,7 +73,6 @@
               }}</b-alert>
               <div class="mb-3">Введите e-mail указанный при регистрации</div>
               <verify-user
-                class="col-12"
                 @error="showError"
                 :loginType="'email'"
                 :v="$v.form"
@@ -78,27 +80,30 @@
                 :validateState="validateState"
                 :tab-index="[10, 15]"
               />
-              <b-row class="mt-0">
                 <verify-password
                   :tab-index="[20, 30]"
                   :v="$v.form"
                   :validateState="validateState"
                 />
-              </b-row>
-              <div class="buttons">
-                <b-button
-                  href="/login"
-                  variant="outline-secondary"
-                  class="w-100"
-                  >Отмена</b-button
-                >
-                <b-button
-                  variant="success"
-                  @click="resetPassword"
-                  :disabled="disabledEmailReset"
-                  class="w-100"
-                  >Изменить пароль</b-button
-                >
+
+              <div class="row buttons">
+                <div class="col-12 col-md-6">
+                  <b-button
+                    href="/login"
+                    variant="outline-secondary"
+                    class="w-100"
+                    >Отмена</b-button
+                  >
+                </div>
+                <div class="col-12 col-md-6">
+                  <b-button
+                    variant="success"
+                    @click="resetPassword"
+                    :disabled="disabledEmailReset"
+                    class="w-100"
+                    >Изменить пароль</b-button
+                  >
+                </div>
               </div>
             </b-tab>
           </b-tabs>
@@ -183,7 +188,22 @@ export default {
         this.errorMessage = null;
         const response = await axios.post("/free/v2/restorepassword", params);
         if (response.data[0].MESSAGE_CODE === "200") {
-          window.location.href = "/login";
+          this.$bvModal
+            .msgBoxOk("Пароль успешно изменён", {
+              title: "Уведомление",
+              size: "sm",
+              buttonSize: "sm",
+              okVariant: "success",
+              headerClass: "p-2 border-bottom-0",
+              footerClass: "p-2 border-top-0",
+              centered: true,
+            })
+            .then((value) => {
+              window.location.href = "/login";
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } else if (response.data[0].MESSAGE_CODE === "502") {
           this.isErrorMessage = true;
           this.errorMessage = "Данные неверные";
@@ -306,6 +326,51 @@ export default {
 .buttons {
   display: flex;
 }
+.btn-success {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #28a745;
+  border-radius: 0.25rem;
+  color: #fff;
+  background-color: #28a745;
+  padding: 0 15px;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.btn-success:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.btn-sms {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.btn-outline-secondary {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #28a745;
+  border-radius: 0.25rem;
+  color: #28a745;
+  background-color: #fff;
+  padding: 0 15px;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
 </style>
 
 <style scoped lang="scss"></style>
