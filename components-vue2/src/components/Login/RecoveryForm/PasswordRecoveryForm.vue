@@ -46,21 +46,25 @@
                   :validateState="validateState"
                 />
               
-              <div class="buttons">
-                <b-button
-                  href="/login"
-                  variant="outline-secondary"
-                  class="w-100"
-                  >Отмена</b-button
-                >
-                <b-button
-                  tabindex="60"
-                  variant="success"
-                  @click="resetPassword"
-                  :disabled="disabledReset"
-                  class="w-100"
-                  >Изменить пароль</b-button
-                >
+              <div class="buttons row">
+                <div class="col-12 col-md-6">
+                  <b-button
+                    href="/login"
+                    variant="outline-secondary"
+                    class="w-100"
+                    >Отмена</b-button
+                  >
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <b-button
+                      tabindex="60"
+                      variant="success"
+                      @click="resetPassword"
+                      :disabled="disabledReset"
+                      class="w-100"
+                      >Изменить пароль</b-button
+                    >
+                  </div>
               </div>
             </b-tab>
             <b-tab title="Email">
@@ -69,7 +73,6 @@
               }}</b-alert>
               <div class="mb-3">Введите e-mail указанный при регистрации</div>
               <verify-user
-                class="col-12"
                 @error="showError"
                 :loginType="'email'"
                 :v="$v.form"
@@ -77,13 +80,12 @@
                 :validateState="validateState"
                 :tab-index="[10, 15]"
               />
-              <b-row class="mt-0">
                 <verify-password
                   :tab-index="[20, 30]"
                   :v="$v.form"
                   :validateState="validateState"
                 />
-              </b-row>
+
               <div class="row buttons">
                 <div class="col-12 col-md-6">
                   <b-button
