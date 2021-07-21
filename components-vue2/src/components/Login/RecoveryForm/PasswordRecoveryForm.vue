@@ -2,10 +2,7 @@
   <div class="login-form">
     <div class="container">
       <div class="row justify-content-center">
-        <div
-          v-if="formLoaded"
-          class="mb-5 col-md-10 col-lg-6"
-        >
+        <div v-if="formLoaded" class="mb-5 col-md-10 col-lg-6">
           <h2 class="mb-3 text-center mt-5">Восстановление доступа</h2>
           <b-tabs
             @activate-tab="initData"
@@ -39,33 +36,6 @@
                   />
                 </b-form-group>
               </b-row>
-              
-                <verify-password
-                  :tab-index="[30, 40]"
-                  :v="$v.form"
-                  :validateState="validateState"
-                />
-              
-              <div class="buttons row">
-                <div class="col-12 col-md-6">
-                  <b-button
-                    href="/login"
-                    variant="outline-secondary"
-                    class="w-100"
-                    >Отмена</b-button
-                  >
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <b-button
-                      tabindex="60"
-                      variant="success"
-                      @click="resetPassword"
-                      :disabled="disabledReset"
-                      class="w-100"
-                      >Изменить пароль</b-button
-                    >
-                  </div>
-              </div>
             </b-tab>
             <b-tab title="Email">
               <b-alert :show="isErrorMessage" variant="danger">{{
@@ -80,33 +50,29 @@
                 :validateState="validateState"
                 :tab-index="[10, 15]"
               />
-                <verify-password
-                  :tab-index="[20, 30]"
-                  :v="$v.form"
-                  :validateState="validateState"
-                />
-
-              <div class="row buttons">
-                <div class="col-12 col-md-6">
-                  <b-button
-                    href="/login"
-                    variant="outline-secondary"
-                    class="w-100"
-                    >Отмена</b-button
-                  >
-                </div>
-                <div class="col-12 col-md-6">
-                  <b-button
-                    variant="success"
-                    @click="resetPassword"
-                    :disabled="disabledEmailReset"
-                    class="w-100"
-                    >Изменить пароль</b-button
-                  >
-                </div>
-              </div>
             </b-tab>
           </b-tabs>
+          <verify-password
+            :tab-index="[20, 30]"
+            :v="$v.form"
+            :validateState="validateState"
+          />
+          <div class="row buttons">
+            <div class="col-12 col-md-6">
+              <b-button href="/login" variant="outline-secondary" class="w-100"
+                >Отмена</b-button
+              >
+            </div>
+            <div class="col-12 col-md-6">
+              <b-button
+                variant="success"
+                @click="resetPassword"
+                :disabled="disabled"
+                class="w-100"
+                >Изменить пароль</b-button
+              >
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -248,18 +214,16 @@ export default {
     },
   },
   computed: {
-    disabledReset() {
-      return (
-        this.$v.form.phone.$invalid ||
-        this.$v.form.code.$invalid ||
-        // this.$v.form.birthdate.$invalid ||
-        this.$v.form.password.$invalid ||
-        this.$v.form.password2.$invalid
-      );
+    tabIndex() {
+      return this.currentTab == 0 ? [30, 40] : [20, 30];
     },
-    disabledEmailReset() {
+    disabled() {
+      let loginFieldInvalid =
+        this.currentTab == 0
+          ? this.$v.form.phone.$invalid
+          : this.$v.form.email.$invalid;
       return (
-        this.$v.form.email.$invalid ||
+        loginFieldInvalid ||
         this.$v.form.code.$invalid ||
         this.$v.form.password.$invalid ||
         this.$v.form.password2.$invalid
@@ -370,7 +334,6 @@ export default {
   font-size: 1.125rem;
   font-weight: 500;
 }
-
 </style>
 
 <style scoped lang="scss"></style>

@@ -1,42 +1,42 @@
 <template>
   <div class="row">
-  <div class="col-12 col-md-6">
-    <b-form-group>
-      <b-form-input
-        v-if="loginType === 'phone'"
-        ref="userInput"
-        v-model="v[loginType].$model"
-        v-mask="changeMask"
-        autofocus
-        :placeholder="placeholder"
-        :state="validateInput(loginType, isUserBlured)"
-        :disabled="isSendCode || loading"
-        @blur="debouncedUpdate(loginType, isUserBlured)"
-        @input="isUserBlured = false"
-        @click="loginTouchesCount = 2"
-        tabindex="10"
-        autocomplete="off"
-      ></b-form-input>
+    <div class="col-12 col-md-6">
+      <b-form-group>
+        <b-form-input
+          v-if="loginType === 'phone'"
+          ref="userInput"
+          v-model="v[loginType].$model"
+          v-mask="changeMask"
+          autofocus
+          :placeholder="placeholder"
+          :state="validateInput(loginType, isUserBlured)"
+          :disabled="isSendCode || loading"
+          @blur="debouncedUpdate(loginType, isUserBlured)"
+          @input="isUserBlured = false"
+          @click="loginTouchesCount = 2"
+          tabindex="10"
+          autocomplete="off"
+        ></b-form-input>
 
-      <b-form-input
-        v-else-if="loginType === 'email'"
-        ref="userInput"
-        v-model="v[loginType].$model"
-        autofocus
-        :state="validateInput(loginType, isUserBlured)"
-        :disabled="isSendCode || loading"
-        @blur="debouncedUpdate(loginType, isUserBlured)"
-        @input="isUserBlured = false"
-        @click="loginTouchesCount = 2"
-        @keyup.enter="verifyUser"
-        :tabindex="tabIndex[0]"
-        placeholder="E-mail"
-        autocomplete="off"
-      ></b-form-input>
-      <b-form-invalid-feedback
-        >Пожалуйста, заполните это поле</b-form-invalid-feedback
-      >
-    </b-form-group>
+        <b-form-input
+          v-else-if="loginType === 'email'"
+          ref="userInput"
+          v-model="v[loginType].$model"
+          autofocus
+          :state="validateInput(loginType, isUserBlured)"
+          :disabled="isSendCode || loading"
+          @blur="debouncedUpdate(loginType, isUserBlured)"
+          @input="isUserBlured = false"
+          @click="loginTouchesCount = 2"
+          @keyup.enter="verifyUser"
+          :tabindex="tabIndex[0]"
+          placeholder="E-mail"
+          autocomplete="off"
+        ></b-form-input>
+        <b-form-invalid-feedback
+          >Пожалуйста, заполните это поле</b-form-invalid-feedback
+        >
+      </b-form-group>
     </div>
     <div class="col-12 col-md-6 mt-2 mt-md-0">
       <b-button
@@ -209,7 +209,6 @@ export default {
           return await axios.post("/free/v2/sendemailcode", params, headers);
         }
       } catch (e) {
-        debugger;
         this.loading = false;
         this.$emit("error", e.response.data.INFO);
       }
@@ -416,9 +415,6 @@ export default {
         this.getCode();
       }
     },
-    error: function () {
-      debugger;
-    },
   },
   destroyed() {
     this.isSendCode = false;
@@ -490,7 +486,6 @@ export default {
   font-size: 1rem;
   font-weight: 400;
 }
-
 </style>
 <style scoped lang="scss">
 // @import "~/assets/scss/reg.scss";
