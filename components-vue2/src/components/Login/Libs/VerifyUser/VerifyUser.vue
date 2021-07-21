@@ -66,30 +66,30 @@
             сек.</template
           >
         </p>
-        <b-form-group>
-          <b-form-input
-            autofocus
-            ref="codeInput"
-            v-model="v.code.$model"
-            class="mb-2"
-            v-mask="codeMask"
-            :state="validateInput('code', isCodeBlured)"
-            @blur="blurField('code', isCodeBlured)"
-            @input="isCodeBlured = false"
-            :disabled="disabled"
-            autocomplete="off"
-            :tabindex="tabIndex[1]"
-            placeholder="Код подтверждения"
-          ></b-form-input>
-          <b-form-invalid-feedback v-if="!v.code.$model"
-            >Пожалуйста, заполните это поле</b-form-invalid-feedback
-          >
-          <b-form-invalid-feedback v-else
-            >Неверный код подтверждения</b-form-invalid-feedback
-          >
-        </b-form-group>
       </div>
     </div>
+    <b-form-group v-if="codeFieldShown" label="Код подтверждения">
+      <b-form-input
+        autofocus
+        ref="codeInput"
+        v-model="v.code.$model"
+        class="mb-2"
+        v-mask="codeMask"
+        :state="validateInput('code', isCodeBlured)"
+        @blur="blurField('code', isCodeBlured)"
+        @input="isCodeBlured = false"
+        :disabled="disabled"
+        autocomplete="off"
+        :tabindex="tabIndex[1]"
+        placeholder="Код подтверждения"
+      ></b-form-input>
+      <b-form-invalid-feedback v-if="!v.code.$model"
+        >Пожалуйста, заполните это поле</b-form-invalid-feedback
+      >
+      <b-form-invalid-feedback v-else
+        >Неверный код подтверждения</b-form-invalid-feedback
+      >
+    </b-form-group>
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
@@ -158,10 +158,11 @@ export default {
       loginTouchesCount: 0,
       token: 1,
       myclass: ["cabinet"],
-      duration: 60,
+      duration: 10,
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
       token: "",
       loading: false,
+      codeFieldShown: false,
     };
   },
   created() {
@@ -215,6 +216,8 @@ export default {
     },
 
     async getCode() {
+      this.v.code.$model = null;
+      this.codeFieldShown = false;
       this.isPhoneChanged = false;
       this.$emit("error", null);
       try {
@@ -227,6 +230,7 @@ export default {
           params = { ...params, token: 1, modeType: this.modeType };
           const response = await this.getCodeHelper(params);
           if (response.data[0].MESSAGE_CODE === 200) {
+            this.codeFieldShown = true;
             this.loading = false;
             this.isSendCode = true;
           }
@@ -250,6 +254,7 @@ export default {
               this.isSendCode = false;
               this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT);
             } else {
+              this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
             }
@@ -301,6 +306,7 @@ export default {
                   console.log(err);
                 });
             } else {
+              this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
             }
@@ -343,17 +349,16 @@ export default {
     },
 
     changeNumber() {
+      this.codeFieldShown = false;
       this.$emit("error", null);
       this.isUserBlured = false;
       this.v.phone.$model = "";
       this.$refs.userInput.$el.disabled = false;
       this.$refs.userInput.$el.focus();
-      this.code = null;
       this.v.code.$model = null;
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
       this.isSendCode = false;
-      this.$emit("onCode", this.code);
     },
 
     validateInput(field, bluredField) {
@@ -414,6 +419,9 @@ export default {
       if (this.token) {
         this.getCode();
       }
+    },
+    error: function () {
+      this.loading = false;
     },
   },
   destroyed() {

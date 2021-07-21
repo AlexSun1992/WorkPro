@@ -5,7 +5,7 @@
       @agree="isRegConfirmed = $event"
     />
     <!-- Алерт ошибки кода регистрации Андрея (на восстановлении у Жени) -->
-    <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
+    <!-- <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert> -->
     <!--  -->
     <!-- Алерт ошибки кода регистрации (удалить после восстановления) -->
     <b-alert :show="!!errorMessage" variant="danger">{{
@@ -33,6 +33,7 @@
           :disabled="registrationInProcess"
           :text-message="textMessage"
           :tab-index="[10, 15]"
+          :error="errorMessage"
         />
       </b-form-group>
 
