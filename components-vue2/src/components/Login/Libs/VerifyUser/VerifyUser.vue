@@ -158,7 +158,7 @@ export default {
       loginTouchesCount: 0,
       token: 1,
       myclass: ["cabinet"],
-      duration: 10,
+      duration: 60,
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
       token: "",
       loading: false,
