@@ -183,7 +183,22 @@ export default {
         this.errorMessage = null;
         const response = await axios.post("/free/v2/restorepassword", params);
         if (response.data[0].MESSAGE_CODE === "200") {
-          window.location.href = "/login";
+          this.$bvModal
+            .msgBoxOk("Пароль успешно изменён", {
+              title: "Уведомление",
+              size: "sm",
+              buttonSize: "sm",
+              okVariant: "success",
+              headerClass: "p-2 border-bottom-0",
+              footerClass: "p-2 border-top-0",
+              centered: true,
+            })
+            .then((value) => {
+              window.location.href = "/login";
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } else if (response.data[0].MESSAGE_CODE === "502") {
           this.isErrorMessage = true;
           this.errorMessage = "Данные неверные";
