@@ -63,7 +63,7 @@
             </b-form>
             <div class="mt-3 text-center">
               <span class="forgot-password">Забыли пароль?</span>
-              <a href="/login/password-recovery-form">Восстановить</a>
+              <a href="/login/password-recovery">Восстановить</a>
             </div>
           </div>
         </div>
