@@ -7,7 +7,7 @@
             <b-nav-item active>Вход</b-nav-item>
             <b-nav-item href="/login/registration">Регистрация</b-nav-item>
           </b-nav>
-          <h2 class="mb-3 text-center mt-5">Вход</h2>
+          <!-- <h2 class="mb-3 text-center mt-5">Вход</h2> -->
           <div class="mt-4 block-registration">
             <div>{{ errorMessage }}</div>
             <b-form @submit.prevent="onSubmit">
