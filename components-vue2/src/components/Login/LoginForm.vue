@@ -3,8 +3,12 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="mb-5 col-md-10 col-lg-6">
-          <h2 class="mb-3 text-center mt-5">Вход</h2>
-          <div class="mt-4 block-registration p-4">
+          <b-nav card-header tabs class="pt-4 pl-2">
+            <b-nav-item active>Вход</b-nav-item>
+            <b-nav-item href="/login/registration">Регистрация</b-nav-item>
+          </b-nav>
+          <!-- <h2 class="mb-3 text-center mt-5">Вход</h2> -->
+          <div class="mt-4 block-registration">
             <div>{{ errorMessage }}</div>
             <b-form @submit.prevent="onSubmit">
               <b-form-group label="Телефон" label-cols="12">
@@ -82,6 +86,8 @@ import {
   BFormInvalidFeedback,
   BSpinner,
   BButton,
+  BNav,
+  BNavItem,
 } from "bootstrap-vue";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
@@ -95,6 +101,8 @@ export default {
     BFormInvalidFeedback,
     BSpinner,
     BButton,
+    BNav,
+    BNavItem,
   },
   mixins: [validationMixin],
   directives: { mask },
