@@ -5,12 +5,17 @@
       @agree="isRegConfirmed = $event"
     />
     <!-- Алерт ошибки кода регистрации Андрея (на восстановлении у Жени) -->
-    <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
+    <!-- <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert> -->
     <!--  -->
     <!-- Алерт ошибки кода регистрации (удалить после восстановления) -->
     <b-alert :show="!!errorMessage" variant="danger">{{
       errorMessage
     }}</b-alert>
+
+    <b-nav card-header tabs class="pt-4 pl-2">
+      <b-nav-item href="/login">Вход</b-nav-item>
+      <b-nav-item active>Регистрация</b-nav-item>
+    </b-nav>
 
     <b-form
       @submit.stop.prevent
@@ -33,6 +38,7 @@
           :disabled="registrationInProcess"
           :text-message="textMessage"
           :tab-index="[10, 15]"
+          :error="errorMessage"
         />
       </b-form-group>
 
@@ -215,6 +221,8 @@ import {
   BAlert,
   BButton,
   BSpinner,
+  BNav,
+  BNavItem,
 } from "bootstrap-vue";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
@@ -232,6 +240,8 @@ export default {
     BAlert,
     BButton,
     BSpinner,
+    BNav,
+    BNavItem,
   },
 
   mixins: [validationMixin],
