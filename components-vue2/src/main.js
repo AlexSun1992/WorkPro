@@ -49,3 +49,12 @@ Vue.customElement(
         resolve(lazyComponent.default));
     })
 );
+/* Для теста */
+Vue.customElement(
+  "component-driver-list",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/FormCalculator/DriverList.vue"], (lazyComponent) =>
+        resolve(lazyComponent.default));
+    })
+);
