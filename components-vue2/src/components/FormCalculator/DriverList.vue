@@ -13,26 +13,27 @@
 
       <div class="item select">
         <label for="">КБМ, сколько лет без аварий?</label>
-
-        <b-form-input list="my-list-id"></b-form-input>
-
-        <datalist id="my-list-id">
-          <option>Страхуюсь впервые</option>
-          <option>1 год</option>
-          <option>2 года</option>
-          <option>3 года</option>
-          <option>4 года</option>
-          <option>5 лет</option>
-          <option>6 лет</option>
-          <option>7 лет</option>
-          <option>8 лет</option>
-          <option>9 лет</option>
-          <option>10 лет и более</option>
-          <option>Был в ДТП менее года назад</option>
-        </datalist>
+        <b-form-select v-model="selected" class="mb-3">
+          <b-form-select-option value="a"
+            >Страхуюсь впервые</b-form-select-option
+          >
+          <b-form-select-option value="a">1 год</b-form-select-option>
+          <b-form-select-option value="a">2 года</b-form-select-option>
+          <b-form-select-option value="a">3 года</b-form-select-option>
+          <b-form-select-option value="a">4 года</b-form-select-option>
+          <b-form-select-option value="a">5 лет</b-form-select-option>
+          <b-form-select-option value="a">6 лет</b-form-select-option>
+          <b-form-select-option value="a">7 лет</b-form-select-option>
+          <b-form-select-option value="a">8 лет</b-form-select-option>
+          <b-form-select-option value="a">9 лет</b-form-select-option>
+          <b-form-select-option value="a">10 лет и более</b-form-select-option>
+          <b-form-select-option value="a"
+            >Был в ДТП менее года назад</b-form-select-option
+          >
+        </b-form-select>
       </div>
     </div>
-    <b-button variant="light">+ добавить еще одного водителя</b-button>
+    <a href="#"><span>+ Добавить еще одного водителя</span></a>
   </div>
 </template>
 
@@ -41,16 +42,27 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-input {
+input,
+select {
   border: none;
+}
+label {
+  margin: 10px;
+}
+span {
+  color: #0f4d21;
+  border-bottom: 1px solid #0f4d21;
+}
+a {
+  text-decoration: none;
 }
 .wrapper {
   display: flex;
   justify-content: space-around;
 }
 .item {
-  border: 1px solid black;
-  border-radius: 5px;
+  border: 1px solid #858585;
+  border-radius: 10px;
 }
 .select {
   display: flex;
