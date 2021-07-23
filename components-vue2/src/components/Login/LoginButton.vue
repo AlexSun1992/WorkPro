@@ -119,9 +119,9 @@ export default {
   },
   data() {
     return {
-      personsData: null,
+      personsData: localStorage.getItem("USER_INFO") || null,
       navigationList: ["Личный кабинет", "Выход"],
-      isLoadedUserInfo: false,
+      isLoadedUserInfo: Boolean(localStorage.getItem("USER_INFO")) || false,
     };
   },
 
