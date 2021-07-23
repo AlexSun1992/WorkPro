@@ -1,19 +1,16 @@
 <template>
   <div>
-    <div class="wrapper">
-      <div class="item">
-        <label for="">Возраст</label>
-        <b-form-input v-model="number"></b-form-input>
-      </div>
+    <b-form-row>
+      <b-form-group class="col-md-3" label="Возраст">
+        <b-form-input type="number"></b-form-input>
+      </b-form-group>
 
-      <div class="item">
-        <label for="">Стаж</label>
-        <b-form-input v-model="number"></b-form-input>
-      </div>
+      <b-form-group class="col-md-3" label="Стаж">
+        <b-form-input type="number"></b-form-input>
+      </b-form-group>
 
-      <div class="item select">
-        <label for="">КБМ, сколько лет без аварий?</label>
-        <b-form-select v-model="selected" class="mb-3">
+      <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
+        <b-form-select class="mb-3">
           <b-form-select-option value="a"
             >Страхуюсь впервые</b-form-select-option
           >
@@ -31,41 +28,39 @@
             >Был в ДТП менее года назад</b-form-select-option
           >
         </b-form-select>
-      </div>
-    </div>
+      </b-form-group>
+    </b-form-row>
     <a href="#"><span>+ Добавить еще одного водителя</span></a>
   </div>
 </template>
 
 <script>
-export default {};
+import {
+  BFormInput,
+  BFormSelect,
+  BFormSelectOption,
+  BFormRow,
+  BFormGroup,
+} from "bootstrap-vue";
+
+export default {
+  name: "LoginButton",
+  components: {
+    BFormInput,
+    BFormSelect,
+    BFormSelectOption,
+    BFormRow,
+    BFormGroup,
+  },
+  data() {
+    return {};
+  },
+
+  methods: {},
+
+  computed: {},
+  created() {},
+};
 </script>
 
-<style lang="scss" scoped>
-input,
-select {
-  border: none;
-}
-label {
-  margin: 10px;
-}
-span {
-  color: #0f4d21;
-  border-bottom: 1px solid #0f4d21;
-}
-a {
-  text-decoration: none;
-}
-.wrapper {
-  display: flex;
-  justify-content: space-around;
-}
-.item {
-  border: 1px solid #858585;
-  border-radius: 10px;
-}
-.select {
-  display: flex;
-  flex-direction: column;
-}
-</style>
+<style lang="scss" scoped></style>
