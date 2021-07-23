@@ -119,7 +119,7 @@ export default {
   },
   data() {
     return {
-      personsData: localStorage.getItem("USER_INFO") || null,
+      personsData: JSON.parse(localStorage.getItem("USER_INFO")) || null,
       navigationList: ["Личный кабинет", "Выход"],
       isLoadedUserInfo: Boolean(localStorage.getItem("USER_INFO")) || false,
     };
