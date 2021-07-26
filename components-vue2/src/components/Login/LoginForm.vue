@@ -53,7 +53,7 @@
               variant="success"
               type="submit"
               :disabled="authInProcess"
-              class="w-100 mt-3"
+              class="w-100"
             >
               Авторизоваться
               <b-spinner

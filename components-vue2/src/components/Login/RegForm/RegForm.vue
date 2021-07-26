@@ -105,7 +105,7 @@
                   </b-form-group>
                   <!-- /////// -->
                 </div>
-                <div class="col-12 col-md-6 mt-2 mt-md-3">
+                <div class="col-12 col-md-6 mt-2">
                   <!-- Отчество -->
                   <b-form-group label="Отчество" label-cols="12">
                     <b-form-input
@@ -135,7 +135,7 @@
                   </b-form-group>
                   <!-- ////// -->
                 </div>
-                <div class="col-12 col-md-6 mt-2 mt-md-3">
+                <div class="col-12 col-md-6 mt-2">
                   <b-form-group
                       label="Дата рождения"
                       label-cols="12"
@@ -209,6 +209,7 @@
           </div>
         </div>
     </div>
+  </div>
 </template>
 
 <script>
