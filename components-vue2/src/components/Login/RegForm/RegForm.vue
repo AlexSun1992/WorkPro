@@ -28,9 +28,8 @@
               class="align-items-start"
               autocomplete="off"
             >
-              <b-form-group label="Телефон" label-cols="12" class="col-12 mt-3">
+              <b-form-group label="Телефон" class="mt-3">
                 <verify-user
-                  class="col-12"
                   ref="verifyUser"
                   @error="showError"
                   :v="$v.form"
@@ -46,128 +45,129 @@
                 />
               </b-form-group>
               <!-- Фамилия -->
-              
-              <div class="col-12 col-md-6">
-                <b-form-group label="Фамилия" label-cols="12" class="col-12">
-                  <b-form-input
-                    list="my-list-id"
-                    :id="Math.random().toString()"
-                    v-model="$v.form.family.$model"
-                    :state="validateState('family')"
-                    @blur="$v.form.family.$touch(), clearArray()"
-                    placeholder="Фамилия"
-                    :disabled="registrationInProcess"
-                    tabindex="40"
-                    autocomplete="new-password"
-                    @input="askSuggestions('surname')"
-                  ></b-form-input>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <b-form-group label="Фамилия" label-cols="12">
+                    <b-form-input
+                      list="my-list-id"
+                      :id="Math.random().toString()"
+                      v-model="$v.form.family.$model"
+                      :state="validateState('family')"
+                      @blur="$v.form.family.$touch(), clearArray()"
+                      placeholder="Фамилия"
+                      :disabled="registrationInProcess"
+                      tabindex="40"
+                      autocomplete="new-password"
+                      @input="askSuggestions('surname')"
+                    ></b-form-input>
 
-                  <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''"
-                    >Пожалуйста, заполните это поле</b-form-invalid-feedback
-                  >
-                  <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false"
-                    >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
-                  >
+                    <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''"
+                      >Пожалуйста, заполните это поле</b-form-invalid-feedback
+                    >
+                    <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false"
+                      >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+                    >
 
-                  <datalist id="my-list-id">
-                    <option v-for="(item, index) in array" :key="index">
-                      {{ item }}
-                    </option>
-                  </datalist>
-                </b-form-group>
-              </div>
-              <!-- ///// -->
-              <div class="col-12 col-md-6">
-                <!-- Имя -->
-                <b-form-group label="Имя" label-cols="12" class="col-12">
-                  <b-form-input
-                    list="my-list-id"
-                    :id="Math.random().toString()"
-                    v-model="$v.form.name.$model"
-                    :state="validateState('name')"
-                    @blur="$v.form.name.$touch(), clearArray()"
-                    placeholder="Имя"
-                    :disabled="registrationInProcess"
-                    tabindex="50"
-                    autocomplete="new-password"
-                    @input="askSuggestions('name')"
-                  ></b-form-input>
-
-                  <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''"
-                    >Пожалуйста, заполните это поле</b-form-invalid-feedback
-                  >
-                  <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false"
-                    >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
-                  >
-                  <datalist id="my-list-id">
-                    <option v-for="(item, index) in array" :key="index">
-                      {{ item }}
-                    </option>
-                  </datalist>
-                </b-form-group>
-                <!-- /////// -->
-              </div>
-              <div class="col-12 col-md-6">
-                <!-- Отчество -->
-                <b-form-group label="Отчество" label-cols="12" class="col-12">
-                  <b-form-input
-                    list="my-list-id"
-                    :id="Math.random().toString()"
-                    v-model="$v.form.patronymic.$model"
-                    :state="validateState('patronymic')"
-                    @blur="$v.form.patronymic.$touch(), clearArray()"
-                    placeholder="Отчество"
-                    :disabled="registrationInProcess"
-                    tabindex="60"
-                    autocomplete="new-password"
-                    @input="askSuggestions('patronymic')"
-                  ></b-form-input>
-
-                  <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''"
-                    >Пожалуйста, заполните это поле</b-form-invalid-feedback
-                  >
-                  <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false"
-                    >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
-                  >
-                  <datalist id="my-list-id">
-                    <option v-for="(item, index) in array" :key="index">
-                      {{ item }}
-                    </option>
-                  </datalist>
-                </b-form-group>
-                <!-- ////// -->
-              </div>
-              <div class="col-12 col-md-6">
-                <b-form-group label="E-mail" label-cols="12" class="col-12">
-                  <b-form-input
-                    :id="Math.random().toString()"
-                    v-model="$v.form.email.$model"
-                    :state="validateState('email')"
-                    @blur="$v.form.email.$touch()"
-                    placeholder="E-mail"
-                    :disabled="registrationInProcess"
-                    tabindex="20"
-                    autocomplete="new-password"
-                  ></b-form-input>
-                  <b-form-invalid-feedback>
-                    Пожалуйста, заполните это поле
-                  </b-form-invalid-feedback>
+                    <datalist id="my-list-id">
+                      <option v-for="(item, index) in array" :key="index">
+                        {{ item }}
+                      </option>
+                    </datalist>
                   </b-form-group>
+                </div>
+                <!-- ///// -->
+                <div class="col-12 col-md-6">
+                  <!-- Имя -->
+                  <b-form-group label="Имя" label-cols="12" class="col-12">
+                    <b-form-input
+                      list="my-list-id"
+                      :id="Math.random().toString()"
+                      v-model="$v.form.name.$model"
+                      :state="validateState('name')"
+                      @blur="$v.form.name.$touch(), clearArray()"
+                      placeholder="Имя"
+                      :disabled="registrationInProcess"
+                      tabindex="50"
+                      autocomplete="new-password"
+                      @input="askSuggestions('name')"
+                    ></b-form-input>
 
-                <b-form-group
-                  label="Дата рождения"
-                  label-cols="12"
-                >
-                  <birthday-picker
-                    v-model="$v.form.birthdate.$model"
-                    :state="validateState('birthdate')"
-                    :tabindex="30"
-                    :disabled="registrationInProcess"
-                  />
-                </b-form-group>
+                    <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''"
+                      >Пожалуйста, заполните это поле</b-form-invalid-feedback
+                    >
+                    <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false"
+                      >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+                    >
+                    <datalist id="my-list-id">
+                      <option v-for="(item, index) in array" :key="index">
+                        {{ item }}
+                      </option>
+                    </datalist>
+                  </b-form-group>
+                  <!-- /////// -->
+                </div>
+                <div class="col-12 col-md-6">
+                  <!-- Отчество -->
+                  <b-form-group label="Отчество" label-cols="12" class="col-12">
+                    <b-form-input
+                      list="my-list-id"
+                      :id="Math.random().toString()"
+                      v-model="$v.form.patronymic.$model"
+                      :state="validateState('patronymic')"
+                      @blur="$v.form.patronymic.$touch(), clearArray()"
+                      placeholder="Отчество"
+                      :disabled="registrationInProcess"
+                      tabindex="60"
+                      autocomplete="new-password"
+                      @input="askSuggestions('patronymic')"
+                    ></b-form-input>
+
+                    <b-form-invalid-feedback v-if="this.$v.form.patronymic.$model === ''"
+                      >Пожалуйста, заполните это поле</b-form-invalid-feedback
+                    >
+                    <b-form-invalid-feedback v-if="this.$v.form.patronymic.alpha === false"
+                      >Просьба указать ФИО в русской транскрипции</b-form-invalid-feedback
+                    >
+                    <datalist id="my-list-id">
+                      <option v-for="(item, index) in array" :key="index">
+                        {{ item }}
+                      </option>
+                    </datalist>
+                  </b-form-group>
+                  <!-- ////// -->
+                </div>
+                <div class="col-12 col-md-6">
+                  <b-form-group label="E-mail" label-cols="12" class="col-12">
+                    <b-form-input
+                      :id="Math.random().toString()"
+                      v-model="$v.form.email.$model"
+                      :state="validateState('email')"
+                      @blur="$v.form.email.$touch()"
+                      placeholder="E-mail"
+                      :disabled="registrationInProcess"
+                      tabindex="20"
+                      autocomplete="new-password"
+                    ></b-form-input>
+                    <b-form-invalid-feedback>
+                      Пожалуйста, заполните это поле
+                    </b-form-invalid-feedback>
+                    </b-form-group>
+
+                  <b-form-group
+                    label="Дата рождения"
+                    label-cols="12"
+                  >
+                    <birthday-picker
+                      v-model="$v.form.birthdate.$model"
+                      :state="validateState('birthdate')"
+                      :tabindex="30"
+                      :disabled="registrationInProcess"
+                    />
+                  </b-form-group>
+                </div>
+                <div class="col-6"></div>
+                <div class="col-12 col-md-6">
               </div>
-              <div class="col-6"></div>
-              <div class="col-12 col-md-6">
 
               <b-form-group label="Номер полиса" label-cols="12" class="col-12">
                 <b-form-input
