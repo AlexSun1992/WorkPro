@@ -153,19 +153,19 @@
                     </b-form-invalid-feedback>
                   </b-form-group>
                 </div>
-                                  <b-form-group
-                    label="Дата рождения"
-                    label-cols="12"
-                  >
-                  <div class="col-12 col-md-6">
-                    <birthday-picker
-                        v-model="$v.form.birthdate.$model"
-                        :state="validateState('birthdate')"
-                        :tabindex="30"
-                        :disabled="registrationInProcess"
-                      />
-                    </b-form-group>
-                  </div>
+                <div class="col-12 col-md-6 pl-0">
+                  <b-form-group
+                      label="Дата рождения"
+                      label-cols="12"
+                    >
+                      <birthday-picker
+                          v-model="$v.form.birthdate.$model"
+                          :state="validateState('birthdate')"
+                          :tabindex="30"
+                          :disabled="registrationInProcess"
+                        />
+                      </b-form-group>
+                </div>
               <div class="col-12 col-md-6"></div>
               <div class="col-12 col-md-6">
                 <b-form-group label="Номер полиса" label-cols="12">
