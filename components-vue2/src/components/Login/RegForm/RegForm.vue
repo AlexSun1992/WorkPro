@@ -1,9 +1,8 @@
 <template>
   <div class="login-form">
-    <div class="container">
       <div class="row justify-content-center">
         <div class="mb-5 col-md-10 col-lg-6">
-          <div class="block-registration px-4 pb-3 mt-3">
+          <div class="block-registration px-2 px-md-4 pb-3 mt-3">
             <ConfirmModal
               :conformation="conformation"
               @agree="isRegConfirmed = $event"
@@ -46,7 +45,7 @@
               </b-form-group>
               <!-- Фамилия -->
               <div class="row">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-6 mt-3">
                   <b-form-group label="Фамилия" label-cols="12">
                     <b-form-input
                       list="my-list-id"
@@ -76,7 +75,7 @@
                   </b-form-group>
                 </div>
                 <!-- ///// -->
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-6 mt-2 mt-md-3">
                   <!-- Имя -->
                   <b-form-group label="Имя" label-cols="12">
                     <b-form-input
@@ -106,7 +105,7 @@
                   </b-form-group>
                   <!-- /////// -->
                 </div>
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-6 mt-2 mt-md-3">
                   <!-- Отчество -->
                   <b-form-group label="Отчество" label-cols="12">
                     <b-form-input
@@ -136,7 +135,20 @@
                   </b-form-group>
                   <!-- ////// -->
                 </div>
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-6 mt-2 mt-md-3">
+                  <b-form-group
+                      label="Дата рождения"
+                      label-cols="12"
+                    >
+                      <birthday-picker
+                          v-model="$v.form.birthdate.$model"
+                          :state="validateState('birthdate')"
+                          :tabindex="30"
+                          :disabled="registrationInProcess"
+                        />
+                      </b-form-group>
+                </div>
+                <div class="col-12 col-md-6 mt-3">
                   <b-form-group label="E-mail" label-cols="12">
                     <b-form-input
                       :id="Math.random().toString()"
@@ -153,21 +165,9 @@
                     </b-form-invalid-feedback>
                   </b-form-group>
                 </div>
-                <div class="col-12 col-md-6">
-                  <b-form-group
-                      label="Дата рождения"
-                      label-cols="12"
-                    >
-                      <birthday-picker
-                          v-model="$v.form.birthdate.$model"
-                          :state="validateState('birthdate')"
-                          :tabindex="30"
-                          :disabled="registrationInProcess"
-                        />
-                      </b-form-group>
-                </div>
+                
               <div class="col-12 col-md-6"></div>
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-md-6 mt-3">
                 <b-form-group label="Номер полиса" label-cols="12">
                   <b-form-input
                     :id="Math.random().toString()"
@@ -180,7 +180,7 @@
                 </b-form-group>
               </div>
               <div class="col-12 col-md-6"></div>
-              <div class="col-12">
+              <div class="col-12 mt-3">
                 <verify-password
                   :v="$v.form"
                   :validateState="validateState"
@@ -208,7 +208,6 @@
             </b-form>
           </div>
         </div>
-      </div>
     </div>
 </template>
 
