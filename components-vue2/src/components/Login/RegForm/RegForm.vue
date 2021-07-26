@@ -186,7 +186,7 @@
                 :disabled="registrationInProcess"
                 :tab-index="[80, 90]"
               />
-              <div class="col-12 m-auto pt-3">
+              <div class="m-auto pt-3 d-block w-100">
                 <b-button
                   @click.stop.prevent="onSubmit"
                   class="w-100"
