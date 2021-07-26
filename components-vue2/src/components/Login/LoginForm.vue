@@ -1,74 +1,71 @@
 <template>
   <div class="login-form">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="mb-5 col-md-10 col-lg-6">
-          <b-nav card-header tabs class="pt-4 pl-2">
+    <div class="row justify-content-center">
+      <div class="mb-5 col-md-10 col-lg-6">
+        <div class="block-registration px-2 px-md-4 pb-3 mt-3">
+          <b-nav card-header tabs>
             <b-nav-item active>Вход</b-nav-item>
             <b-nav-item href="/login/registration">Регистрация</b-nav-item>
           </b-nav>
-          <!-- <h2 class="mb-3 text-center mt-5">Вход</h2> -->
-          <div class="mt-4 block-registration">
-            <div>{{ errorMessage }}</div>
-            <b-form @submit.prevent="onSubmit">
-              <b-form-group label="Телефон" label-cols="12">
-                <b-form-input
-                  ref="phoneInput"
-                  v-model="$v.user.username.$model"
-                  v-mask="usernameMask"
-                  :placeholder="placeholder"
-                  autofocus
-                  type="tel"
-                  :state="validateInput('username', isUsernameBlured)"
-                  @blur="debouncedUpdate('username', isUsernameBlured)"
-                  @input="isUsernameBlured = false"
-                  @click="loginTouchesCount = 2"
-                  :disabled="authInProcess"
-                  class="form-control"
-                >
-                </b-form-input>
-
-                <b-form-invalid-feedback
-                  >Пожалуйста, введите корректный номер
-                  телефона</b-form-invalid-feedback
-                >
-              </b-form-group>
-
-              <b-form-group label="Пароль" label-cols="12">
-                <b-form-input
-                  v-model="$v.user.password.$model"
-                  placeholder="Пароль"
-                  type="password"
-                  :state="validateInput('password', isPasswordBlured)"
-                  @blur="blurField('password', isPasswordBlured)"
-                  @input="isPasswordBlured = false"
-                  class="form-control"
-                  :disabled="authInProcess"
-                ></b-form-input>
-                <b-form-invalid-feedback
-                  >Пожалуйста, введите пароль
-                </b-form-invalid-feedback>
-              </b-form-group>
-
-              <b-button
-                v-on:enter="fetchToken()"
-                variant="success"
-                type="submit"
+          <div>{{ errorMessage }}</div>
+          <b-form @submit.prevent="onSubmit">
+            <b-form-group label="Телефон" label-cols="12" class="mt-3">
+              <b-form-input
+                ref="phoneInput"
+                v-model="$v.user.username.$model"
+                v-mask="usernameMask"
+                :placeholder="placeholder"
+                autofocus
+                type="tel"
+                :state="validateInput('username', isUsernameBlured)"
+                @blur="debouncedUpdate('username', isUsernameBlured)"
+                @input="isUsernameBlured = false"
+                @click="loginTouchesCount = 2"
                 :disabled="authInProcess"
-                class="w-100 mt-3"
+                class="form-control"
               >
-                Авторизоваться
-                <b-spinner
-                  v-if="authInProcess"
-                  style="width: 1.2rem; height: 1.2rem"
-                  variant="light"
-                ></b-spinner>
-              </b-button>
-            </b-form>
-            <div class="mt-3 text-center">
-              <span class="forgot-password">Забыли пароль?</span>
-              <a href="/login/password-recovery">Восстановить</a>
-            </div>
+              </b-form-input>
+
+              <b-form-invalid-feedback
+                >Пожалуйста, введите корректный номер
+                телефона</b-form-invalid-feedback
+              >
+            </b-form-group>
+
+            <b-form-group label="Пароль" label-cols="12">
+              <b-form-input
+                v-model="$v.user.password.$model"
+                placeholder="Пароль"
+                type="password"
+                :state="validateInput('password', isPasswordBlured)"
+                @blur="blurField('password', isPasswordBlured)"
+                @input="isPasswordBlured = false"
+                class="form-control"
+                :disabled="authInProcess"
+              ></b-form-input>
+              <b-form-invalid-feedback
+                >Пожалуйста, введите пароль
+              </b-form-invalid-feedback>
+            </b-form-group>
+
+            <b-button
+              v-on:enter="fetchToken()"
+              variant="success"
+              type="submit"
+              :disabled="authInProcess"
+              class="w-100 mt-3"
+            >
+              Авторизоваться
+              <b-spinner
+                v-if="authInProcess"
+                style="width: 1.2rem; height: 1.2rem"
+                variant="light"
+              ></b-spinner>
+            </b-button>
+          </b-form>
+          <div class="mt-3 text-center">
+            <span class="forgot-password">Забыли пароль?&nbsp;&nbsp;</span>
+            <a href="/login/password-recovery">Восстановить</a>
           </div>
         </div>
       </div>
@@ -214,4 +211,9 @@ export default {
   color: #536c79; /**Заменить на глобальные цвета */
 }
 @import "src/assets/scss/reg";
+legend {
+  margin: 0;
+  padding: 0;
+  font-size: 0.875rem;
+}
 </style>

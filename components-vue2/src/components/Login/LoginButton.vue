@@ -119,7 +119,10 @@ export default {
   },
   data() {
     return {
-      personsData: JSON.parse(localStorage.getItem("USER_INFO")) || null,
+      personsData:
+        localStorage.getItem("auth._token.local") !== "false"
+          ? JSON.parse(localStorage.getItem("USER_INFO"))
+          : null,
       navigationList: ["Личный кабинет", "Выход"],
       isLoadedUserInfo: Boolean(localStorage.getItem("USER_INFO")) || false,
     };
@@ -133,6 +136,7 @@ export default {
         this.personsData = null;
         Cookies.set(TOKEN_NAME, `${Cookies.get(TOKEN_NAME)}0`);
         Cookies.set(REFRESH_TOKEN_NAME, `${Cookies.get(REFRESH_TOKEN_NAME)}0`);
+        localStorage.setItem("auth._token.local", "false");
       }
     },
     redirectToLoginPage() {
