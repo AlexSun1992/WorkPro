@@ -28,7 +28,7 @@
               class="align-items-start"
               autocomplete="off"
             >
-              <b-form-group label="Телефон" class="mt-3">
+              <b-form-group label="Телефон" class="mt-3 w-100">
                 <verify-user
                   ref="verifyUser"
                   @error="showError"
@@ -78,7 +78,7 @@
                 <!-- ///// -->
                 <div class="col-12 col-md-6">
                   <!-- Имя -->
-                  <b-form-group label="Имя" label-cols="12" class="col-12">
+                  <b-form-group label="Имя" label-cols="12">
                     <b-form-input
                       list="my-list-id"
                       :id="Math.random().toString()"
@@ -108,7 +108,7 @@
                 </div>
                 <div class="col-12 col-md-6">
                   <!-- Отчество -->
-                  <b-form-group label="Отчество" label-cols="12" class="col-12">
+                  <b-form-group label="Отчество" label-cols="12">
                     <b-form-input
                       list="my-list-id"
                       :id="Math.random().toString()"
@@ -137,7 +137,7 @@
                   <!-- ////// -->
                 </div>
                 <div class="col-12 col-md-6">
-                  <b-form-group label="E-mail" label-cols="12" class="col-12">
+                  <b-form-group label="E-mail" label-cols="12">
                     <b-form-input
                       :id="Math.random().toString()"
                       v-model="$v.form.email.$model"
@@ -151,35 +151,35 @@
                     <b-form-invalid-feedback>
                       Пожалуйста, заполните это поле
                     </b-form-invalid-feedback>
-                    </b-form-group>
-
-                  <b-form-group
+                  </b-form-group>
+                </div>
+                                  <b-form-group
                     label="Дата рождения"
                     label-cols="12"
                   >
+                  <div class="col-12 col-md-6">
                     <birthday-picker
-                      v-model="$v.form.birthdate.$model"
-                      :state="validateState('birthdate')"
-                      :tabindex="30"
-                      :disabled="registrationInProcess"
-                    />
-                  </b-form-group>
-                </div>
-                <div class="col-6"></div>
-                <div class="col-12 col-md-6">
+                        v-model="$v.form.birthdate.$model"
+                        :state="validateState('birthdate')"
+                        :tabindex="30"
+                        :disabled="registrationInProcess"
+                      />
+                    </b-form-group>
+                  </div>
+              <div class="col-12 col-md-6"></div>
+              <div class="col-12 col-md-6">
+                <b-form-group label="Номер полиса" label-cols="12">
+                  <b-form-input
+                    :id="Math.random().toString()"
+                    v-model="form.policyNumber"
+                    placeholder="Номер полиса"
+                    :disabled="registrationInProcess"
+                    tabindex="70"
+                    autocomplete="new-password"
+                  ></b-form-input>
+                </b-form-group>
               </div>
-
-              <b-form-group label="Номер полиса" label-cols="12" class="col-12">
-                <b-form-input
-                  :id="Math.random().toString()"
-                  v-model="form.policyNumber"
-                  placeholder="Номер полиса"
-                  :disabled="registrationInProcess"
-                  tabindex="70"
-                  autocomplete="new-password"
-                ></b-form-input>
-              </b-form-group>
-              </div>
+              <div class="col-12 col-md-6"></div>
               <verify-password
                 :v="$v.form"
                 :validateState="validateState"
