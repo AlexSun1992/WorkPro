@@ -153,7 +153,7 @@
                     </b-form-invalid-feedback>
                   </b-form-group>
                 </div>
-                <div class="col-12 col-md-6 pl-0">
+                <div class="col-12 col-md-6">
                   <b-form-group
                       label="Дата рождения"
                       label-cols="12"
@@ -180,13 +180,15 @@
                 </b-form-group>
               </div>
               <div class="col-12 col-md-6"></div>
-              <verify-password
-                :v="$v.form"
-                :validateState="validateState"
-                :disabled="registrationInProcess"
-                :tab-index="[80, 90]"
-              />
-              <div class="m-auto pt-3 d-block w-100">
+              <div class="col-12">
+                <verify-password
+                  :v="$v.form"
+                  :validateState="validateState"
+                  :disabled="registrationInProcess"
+                  :tab-index="[80, 90]"
+                />
+                </div>
+              <div class="col-12 pt-3">
                 <b-button
                   @click.stop.prevent="onSubmit"
                   class="w-100"
