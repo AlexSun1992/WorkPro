@@ -1,42 +1,16 @@
 <template>
   <div>
     <b-form-row>
-      <b-form-group class="col-md-3" label="Возраст: ">
-        <span>{{ driver.age }}</span>
-      </b-form-group>
-
-      <b-form-group class="col-md-3" label="Стаж: ">
-        <span>{{ driver.standing }}</span>
-      </b-form-group>
-
-      <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
-        <span>{{ driver.experiences }}</span>
-      </b-form-group>
-    </b-form-row>
-
-    <b-form-row @submit.prevent>
       <b-form-group class="col-md-3" label="Возраст">
-        <b-form-input
-          v-model="driver.age"
-          @input="$emit('update', driver.age)"
-          type="number"
-        ></b-form-input>
+        <b-form-input type="number"></b-form-input>
       </b-form-group>
 
       <b-form-group class="col-md-3" label="Стаж">
-        <b-form-input
-          v-model="driver.standing"
-          @input="$emit('update', driver.standing)"
-          type="number"
-        ></b-form-input>
+        <b-form-input type="number"></b-form-input>
       </b-form-group>
 
       <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
-        <b-form-select
-          v-model="driver.experience"
-          @input="$emit('update', driver.experience)"
-          class="mb-3"
-        >
+        <b-form-select class="mb-3">
           <b-form-select-option
             v-for="item in driver.experiences"
             :key="item.id"
@@ -45,9 +19,7 @@
         </b-form-select>
       </b-form-group>
     </b-form-row>
-    <a href="#"
-      ><span @click="addDriver">+ Добавить еще одного водителя</span></a
-    >
+    <a href="#"><span>+ Добавить еще одного водителя</span></a>
   </div>
 </template>
 
@@ -94,22 +66,10 @@ export default {
     };
   },
 
-  methods: {
-    addDriver() {
-      // const newDriver = {
-      //   age: this.age,
-      //   standing: this.standing,
-      //   experience: this.driver.experiences.text,
-      // };
-      // console.log(newDriver);
-      // this.drivers.push(newDriver);
-    },
-  },
+  methods: {},
 
   computed: {},
-  created() {
-    console.log(this.driver.experiences);
-  },
+  created() {},
 };
 </script>
 
