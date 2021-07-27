@@ -5,6 +5,7 @@ module.exports = {
     "no-debugger": "off",
   },
   parserOptions: {
+    sourceType: "module",
     ecmaVersion: 2020,
   },
   env: {
