@@ -2,14 +2,14 @@ import Vue from "vue";
 // import Vuex from "vuex";
 import vueCustomElement from "vue-custom-element";
 import { ModalPlugin } from "bootstrap-vue";
-// import { store } from "./store/index";
+import { store } from "./store/index";
 
 Vue.use(ModalPlugin);
 Vue.use(vueCustomElement);
 
 Vue.config.productionTip = false;
 new Vue({
-  // store,
+  store,
   render: (h) => h(App),
 });
 

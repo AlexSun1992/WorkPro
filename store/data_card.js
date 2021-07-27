@@ -1,4 +1,3 @@
-/* eslint-disable */
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 
