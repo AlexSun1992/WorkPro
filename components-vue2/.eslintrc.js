@@ -4,12 +4,10 @@ module.exports = {
     "no-console": "off",
     "no-debugger": "off",
   },
-  // parser: "babel-eslint",
   parserOptions: {
     ecmaVersion: 2020,
   },
-  ecmaFeatures: {
-    jsx: true,
-    modules: true,
-  },
+  env: {
+    es6: true
+  }
 };
