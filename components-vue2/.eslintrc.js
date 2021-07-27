@@ -4,12 +4,12 @@ module.exports = {
     "no-console": "off",
     "no-debugger": "off",
   },
-  parser: "babel-eslint",
+  // parser: "babel-eslint",
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: "module",
   },
-  ecmaFeatures: {
-    modules: true,
-  },
+  // ecmaFeatures: {
+  //   modules: true,
+  // },
 };
