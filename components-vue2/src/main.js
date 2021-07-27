@@ -1,6 +1,4 @@
-/* eslint-disable */
 import Vue from "vue";
-import Vuex from "vuex";
 import vueCustomElement from "vue-custom-element";
 import { ModalPlugin } from "bootstrap-vue";
 import { store } from "./store/index";
