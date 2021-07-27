@@ -69,7 +69,8 @@
     "vue-spinner": "^1.0.3",
     "vue-the-mask": "^0.11.1",
     "vue2-datepicker": "^3.5.0",
-    "vuelidate": "^0.7.5"
+    "vuelidate": "^0.7.5",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^1.0.1",

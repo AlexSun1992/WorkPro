@@ -1,5 +1,5 @@
 /* eslint-disable */
-import api from "@/api/urls";
+import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 
 export const state = () => ({
