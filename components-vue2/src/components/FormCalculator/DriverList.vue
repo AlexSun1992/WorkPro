@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-row v-if="drivers.length !== 0">
+    <b-form-row>
       <b-form-group class="col-md-3" label="Возраст: ">
         <span>{{ driver.age }}</span>
       </b-form-group>
@@ -10,7 +10,7 @@
       </b-form-group>
 
       <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
-        <span>{{ driver.experience.text }}</span>
+        <span>{{ driver.experiences }}</span>
       </b-form-group>
     </b-form-row>
 
@@ -18,7 +18,7 @@
       <b-form-group class="col-md-3" label="Возраст">
         <b-form-input
           v-model="driver.age"
-          @input="$emit($event.target.value)"
+          @input="$emit('update', driver.age)"
           type="number"
         ></b-form-input>
       </b-form-group>
@@ -26,7 +26,7 @@
       <b-form-group class="col-md-3" label="Стаж">
         <b-form-input
           v-model="driver.standing"
-          @input="$emit($event.target.value)"
+          @input="$emit('update', driver.standing)"
           type="number"
         ></b-form-input>
       </b-form-group>
@@ -34,11 +34,11 @@
       <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
         <b-form-select
           v-model="driver.experience"
-          @input="$emit($event.target.value)"
+          @input="$emit('update', driver.experience)"
           class="mb-3"
         >
           <b-form-select-option
-            v-for="item in driver.experience"
+            v-for="item in driver.experiences"
             :key="item.id"
             >{{ item.text }}</b-form-select-option
           >
@@ -74,7 +74,7 @@ export default {
       driver: {
         age: "",
         standing: "",
-        experience: [
+        experiences: [
           { id: 1, text: "" },
           { id: 2, text: "Страхуюсь впервые" },
           { id: 3, text: "1 год" },
@@ -96,18 +96,20 @@ export default {
 
   methods: {
     addDriver() {
-      const newDriver = {
-        age: this.age,
-        standing: this.standing,
-        experience: this.driver.experience.text,
-      };
-      console.log(newDriver);
-      this.drivers.push(newDriver);
+      // const newDriver = {
+      //   age: this.age,
+      //   standing: this.standing,
+      //   experience: this.driver.experiences.text,
+      // };
+      // console.log(newDriver);
+      // this.drivers.push(newDriver);
     },
   },
 
   computed: {},
-  created() {},
+  created() {
+    console.log(this.driver.experiences);
+  },
 };
 </script>
 
