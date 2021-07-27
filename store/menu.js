@@ -1,5 +1,5 @@
 /* eslint-disable */
-import breadcrumbs from "~/converters/breadcrumbs";
+import breadcrumbs from "../converters/breadcrumbs";
 export const state = () => ({
   menu: [],
   flatmenu: [],

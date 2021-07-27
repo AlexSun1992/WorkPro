@@ -1,3 +1,4 @@
+/* eslint-disable */
 const VER = "v2";
 const AUTH = `/am/auth/${VER}/authorize`;
 const REFRESH_TOKEN = `/am/auth/${VER}/token_refresh`;
