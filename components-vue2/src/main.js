@@ -2,6 +2,7 @@ import Vue from "vue";
 import vueCustomElement from "vue-custom-element";
 import { ModalPlugin } from "bootstrap-vue";
 import { store } from "./store/index";
+import Axios from "axios";
 
 Vue.use(ModalPlugin);
 Vue.use(vueCustomElement);
@@ -12,7 +13,6 @@ new Vue({
   render: (h) => h(App),
 });
 
-import Axios from "axios";
 Vue.prototype.$axios = Axios;
 
 Vue.customElement(
@@ -62,18 +62,6 @@ Vue.customElement(
   () =>
     new Promise((resolve) => {
       require(["./components/EditorWrapper.vue"], (lazyComponent) => {
-        lazyComponent.default.store = store;
-        resolve(lazyComponent.default);
-      });
-    })
-);
-Vue.customElement(
-  "card-component-editor",
-  () =>
-    new Promise((resolve) => {
-      require(["./components/Card/CardComponentEditor.vue"], (
-        lazyComponent
-      ) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
