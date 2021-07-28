@@ -2,6 +2,7 @@ import Vue from "vue";
 import vueCustomElement from "vue-custom-element";
 import { ModalPlugin } from "bootstrap-vue";
 import { store } from "./store/index";
+import Axios from "axios";
 
 Vue.use(ModalPlugin);
 Vue.use(vueCustomElement);
@@ -11,6 +12,8 @@ new Vue({
   store,
   render: (h) => h(App),
 });
+
+Vue.prototype.$axios = Axios;
 
 Vue.customElement(
   "component-login-button",
