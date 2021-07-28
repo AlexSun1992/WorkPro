@@ -12,6 +12,9 @@ new Vue({
   render: (h) => h(App),
 });
 
+import Axios from "axios";
+Vue.prototype.$axios = Axios;
+
 Vue.customElement(
   "component-login-button",
   () =>
@@ -59,6 +62,18 @@ Vue.customElement(
   () =>
     new Promise((resolve) => {
       require(["./components/EditorWrapper.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+Vue.customElement(
+  "card-component-editor",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/Card/CardComponentEditor.vue"], (
+        lazyComponent
+      ) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

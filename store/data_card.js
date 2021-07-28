@@ -68,8 +68,8 @@ export const actions = {
           `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
         );
       }
-      let axiosBible = this.$axios ? this.$axios : axios;
-      await axiosBible
+      //let axiosBible = this.$axios ? this.$axios : axios;
+      await this.$axios
         .get(url)
         .then((res) => {
           commit(
