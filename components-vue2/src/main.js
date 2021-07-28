@@ -58,7 +58,9 @@ Vue.customElement(
   "component-editor-wrapper",
   () =>
     new Promise((resolve) => {
-      require(["./components/EditorWrapper.vue"], (lazyComponent) =>
-        resolve(lazyComponent.default));
+      require(["./components/EditorWrapper.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
     })
 );

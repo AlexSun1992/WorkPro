@@ -1,5 +1,6 @@
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
+import axios from "axios";
 
 export const state = () => ({
   form: [],
@@ -67,7 +68,8 @@ export const actions = {
           `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
         );
       }
-      await this.$axios
+      let axiosBible = this.$axios ? this.$axios : axios;
+      await axiosBible
         .get(url)
         .then((res) => {
           commit(
@@ -148,7 +150,7 @@ export const actions = {
     commit("setLoading", true);
     commit("setDisabled", true);
     try {
-      let resp = await this.$axios.post(
+      let resp = await axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`,
         params.form
       );
