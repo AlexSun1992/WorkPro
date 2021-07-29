@@ -20,7 +20,7 @@ export default {
       idCard: "0",
     };
     await this.$store.dispatch("fetchForm", this.params);
-    await this.$store.dispatch("fetchMenu", this.params);
+    //await this.$store.dispatch("fetchMenu", this.params);
     this.setting = this.$store.getters["breadcrumbs"].slice(-1).pop();
   },
 

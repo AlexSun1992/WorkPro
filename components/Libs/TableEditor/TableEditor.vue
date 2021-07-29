@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import Grid from "~/components/Libs/Table/Grid";
-import TableEditorForm from "@/components/Libs/TableEditor/TableEditorForm";
+import Grid from "../../Libs/Table/Grid";
+import TableEditorForm from "../../Libs/TableEditor/TableEditorForm";
 export default {
   name: "ArrayEditor",
   components: { TableEditorForm, Grid },

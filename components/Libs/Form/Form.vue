@@ -21,9 +21,9 @@
           ></Control>
         </div>
       </b-tab>
-      <b-tab :title="tab.label" v-for="tab in tabs" :key="tab.id">
-        <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />
-      </b-tab>
+      <!--      <b-tab :title="tab.label" v-for="tab in tabs" :key="tab.id">-->
+      <!--        <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />-->
+      <!--      </b-tab>-->
     </b-tabs>
     <div v-else class="row">
       <Control
@@ -41,11 +41,11 @@
   </b-form-row>
 </template>
 <script>
-import Control from "~/components/Libs/Controls/Control";
-import TableEditor from "@/components/Libs/TableEditor/TableEditor";
+import Control from "../Controls/Control";
+// import TableEditor from "../TableEditor/TableEditor";
 export default {
   name: "Form",
-  components: { TableEditor, Control },
+  components: { Control },
   props: {
     data: {
       type: Array | null,

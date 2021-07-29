@@ -1,5 +1,5 @@
 <template>
-  <div>123</div>
+  <div>{{ getForm }}</div>
 </template>
 
 <script>
@@ -28,13 +28,13 @@ export default {
       idParent: "0",
       idCard: "0",
     };
+    await this.$store.dispatch("fetchMenu", params);
     await this.$store.dispatch("fetchForm", params);
-    // await this.$store.dispatch("fetchMenu", params);
-    // this.setting = this.$store.getters["breadcrumbs"].slice(-1).pop();
+    this.setting = this.$store.getters["breadcrumbs"].slice(-1).pop();
   },
-  // computed: {
-  //   ...mapGetters(["getForm", "getMenu"]),
-  // },
+  computed: {
+    ...mapGetters(["getForm", "getMenu"]),
+  },
 };
 </script>
 

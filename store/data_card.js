@@ -1,6 +1,5 @@
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
-import axios from "axios";
 
 export const state = () => ({
   form: [],
@@ -68,7 +67,6 @@ export const actions = {
           `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
         );
       }
-      //let axiosBible = this.$axios ? this.$axios : axios;
       await this.$axios
         .get(url)
         .then((res) => {

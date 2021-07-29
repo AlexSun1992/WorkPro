@@ -1,19 +1,12 @@
 import Vue from "vue";
 import vueCustomElement from "vue-custom-element";
 import { ModalPlugin } from "bootstrap-vue";
+import axios from "axios";
 import { store } from "./store/index";
-import Axios from "axios";
-
+store.$axios = axios;
 Vue.use(ModalPlugin);
 Vue.use(vueCustomElement);
-
 Vue.config.productionTip = false;
-new Vue({
-  store,
-  render: (h) => h(App),
-});
-
-Vue.prototype.$axios = Axios;
 
 Vue.customElement(
   "component-login-button",
@@ -58,10 +51,12 @@ Vue.customElement(
     })
 );
 Vue.customElement(
-  "component-editor-wrapper",
+  "component-card-editor",
   () =>
     new Promise((resolve) => {
-      require(["./components/EditorWrapper.vue"], (lazyComponent) => {
+      require(["./components/Card/CardEditor.vue", "./store/index"], (
+        lazyComponent
+      ) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

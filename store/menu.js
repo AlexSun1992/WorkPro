@@ -1,6 +1,5 @@
 /* eslint-disable */
 import breadcrumbs from "../converters/breadcrumbs";
-import axios from "axios";
 export const state = () => ({
   menu: [],
   flatmenu: [],
@@ -29,12 +28,11 @@ export const getters = {
 
 export const actions = {
   async fetchMenu({ commit, dispatch }, params) {
-    let axiosBible = this.$axios ? this.$axios : axios;
-    await axiosBible.get("/api/module").then((res) => {
+    await this.$axios.get("/api/module").then((res) => {
       commit("setMenu", res.data);
       commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
     });
-    await axiosBible.get("am/main/v2/clientmenu/55").then((res) => {
+    await this.$axios.get("am/main/v2/clientmenu/55").then((res) => {
       commit("setFlatMenu", res.data[0]._data);
     });
   },
