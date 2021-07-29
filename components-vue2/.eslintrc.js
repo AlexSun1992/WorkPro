@@ -4,12 +4,11 @@ module.exports = {
     "no-console": "off",
     "no-debugger": "off",
   },
-
   parserOptions: {
-    ecmaVersion: 2017,
+    sourceType: "module",
+    ecmaVersion: 2020,
   },
-
   env: {
-    es6: true,
-  },
+    es6: true
+  }
 };
