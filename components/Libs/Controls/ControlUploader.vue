@@ -1,11 +1,13 @@
 <template>
   <div>
-    <div v-if="items"><FileLoader :item="items[0]" tableId="9662" /></div>
+    <div v-if="items">
+      <FileLoader :item="items[0]" table-id="9662" />
+    </div>
   </div>
 </template>
 
 <script>
-import FileLoader from "~/components/Pages/Table/FileLoader";
+import FileLoader from "../../../components/Pages/Table/FileLoader";
 
 export default {
   name: "ControlUploader",

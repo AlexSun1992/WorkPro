@@ -1,48 +1,21 @@
 <template>
-  <b-form-row>
-    <b-tabs v-if="isTabs" content-class="mt-4">
-      <b-tab
-        v-for="(tab, index) in captions"
-        :key="index"
-        :title="tab"
-        :title-link-class="{ error: highlightTab(index) }"
-      >
-        <div class="row">
-          <Control
-            v-for="(item, i) in items(index)"
-            :key="i"
-            :params="params"
-            :data="item"
-            :edit="edit"
-            :cols="cols"
-            @update="$emit('update', $event)"
-            @clear="$emit('clear', $event)"
-            @open-card="$emit('open-card', $event)"
-          />
-        </div>
-      </b-tab>
-      <!--      <b-tab :title="tab.label" v-for="tab in tabs" :key="tab.id">-->
-      <!--        <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />-->
-      <!--      </b-tab>-->
-    </b-tabs>
-    <div v-else class="row">
-      <Control
-        v-for="(item, i) in items()"
-        :key="i"
-        :params="params"
-        :data="item"
-        :edit="edit"
-        :cols="cols"
-        @update="$emit('update', $event)"
-        @clear="$emit('clear', $event)"
-        @open-card="$emit('open-card', $event)"
-      />
-    </div>
-  </b-form-row>
+  <div>
+    <Control
+      v-for="(item, i) in items()"
+      :key="i"
+      :params="params"
+      :data="item"
+      :edit="edit"
+      :cols="cols"
+      @update="$emit('update', $event)"
+      @clear="$emit('clear', $event)"
+      @open-card="$emit('open-card', $event)"
+    />
+  </div>
 </template>
+
 <script>
 import Control from "../Controls/Control";
-// import TableEditor from "../TableEditor/TableEditor";
 export default {
   name: "Form",
   components: { Control },
@@ -66,7 +39,8 @@ export default {
     },
     edit: {
       type: Boolean,
-      required: true,
+      required: false,
+      default: () => true,
     },
     cols: {
       type: Number,
@@ -86,7 +60,6 @@ export default {
       return this.$store.getters["data_card/getCardId"];
     },
   },
-
   methods: {
     items(index) {
       if (this.data) {
@@ -110,8 +83,4 @@ export default {
 };
 </script>
 
-<style>
-.error {
-  color: red !important;
-}
-</style>
+<style scoped></style>

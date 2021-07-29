@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
+import VerifyTimer from "../VerifyUser/VerifyTimer";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 import _ from "lodash";

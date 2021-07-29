@@ -2,23 +2,22 @@
   <b-col :xl="colXl" :lg="data.cols" :md="colMd" :sm="colSm" :cols="colSm">
     <div
       class="control"
-      v-bind:class="{ visibility_hidden: data.hidden }"
+      :class="{ visibility_hidden: data.hidden }"
       :field-id="data.fieldId"
       :style="{ width: data.width ? data.width : '100%' }"
     >
       <component
-        @update="$emit('update', $event)"
-        @clear="$emit('clear', $event)"
-        v-bind:is="comp"
-        @open-card="$emit('open-card', $event)"
+        :is="comp"
         :data="data"
         :params="params"
         :edit="edit"
         :store="store"
         :disabled="disabled"
         :loading="loading"
-        :profileFullness="loggedInUser"
-      ></component>
+        @update="$emit('update', $event)"
+        @clear="$emit('clear', $event)"
+        @open-card="$emit('open-card', $event)"
+      />
     </div>
   </b-col>
 </template>
@@ -128,25 +127,23 @@ export default {
     colSm: function () {
       return this.data.colSm ? this.data.colSm : 12;
     },
-
-    ...mapGetters(["loggedInUser"]),
   },
   watch: {
     "data.value": "eventValidate",
   },
   methods: {
     eventValidate() {
-      if (this.data.required) {
-        if (this.data.value != null && this.data.value !== "") {
-          this.data.state = null;
-          this.data.checked = true;
-        }
-        if (this.data.checked) {
-          if (this.data.value == null || this.data.value === "") {
-            this.data.state = false;
-          }
-        }
-      }
+      // if (this.data.required) {
+      //   if (this.data.value != null && this.data.value !== "") {
+      //     this.data.state = null;
+      //     this.data.checked = true;
+      //   }
+      //   if (this.data.checked) {
+      //     if (this.data.value == null || this.data.value === "") {
+      //       this.data.state = false;
+      //     }
+      //   }
+      // }
     },
   },
 };

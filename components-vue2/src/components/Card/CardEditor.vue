@@ -1,12 +1,16 @@
 <template>
-  <div>{{ getForm }}</div>
+  <div><Form :data="getForm" /></div>
 </template>
-
 <script>
 import { mapGetters } from "vuex";
+import Form from "/../components/Libs/Form/Form2.vue";
+import Vue from "vue";
+import { BootstrapVue } from "bootstrap-vue";
+Vue.use(BootstrapVue);
 
 export default {
   name: "CardEditor",
+  components: { Form },
   props: {
     moduleId: {
       type: Number,
