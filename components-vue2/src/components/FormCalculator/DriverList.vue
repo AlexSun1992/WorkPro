@@ -1,7 +1,8 @@
 <template>
   <div>
+    <!-- отрисовка списка водителей-->
     <div v-for="driver in driverList" :key="driver.id">
-      <b-form-row @submit.prevent>
+      <b-form-row>
         <b-form-group class="col-md-3" label="Возраст">
           <b-form-input type="number" :value="driver.age"></b-form-input>
         </b-form-group>
@@ -11,24 +12,21 @@
         </b-form-group>
 
         <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
-          <b-form-input :value="driver.kbm"></b-form-input>
+          <b-form-select v-model="driver.selectKbm.selected">
+            <b-form-select-option
+              v-for="item in driver.selectKbm.optionsKbm"
+              :key="item.id"
+              :value="item.text"
+              >{{ item.text }}</b-form-select-option
+            >
+          </b-form-select>
         </b-form-group>
-
-        <b-form-select v-model="selectKbm.selected">
-          <b-form-select-option
-            v-for="item in selectKbm.optionsKbm"
-            :key="item.id"
-            :value="item.text"
-            >{{ item.text }}</b-form-select-option
-          >
-        </b-form-select>
       </b-form-row>
-      <a href="#"><span @click="removeDriver">+ удалить водителя</span></a>
-      <hr />
+      <a href="#"><span @click="removeDriver">Удалить водителя</span></a>
     </div>
     <hr />
-
     <div>
+      <!-- форма списка водителей -->
       <b-form-row>
         <b-form-group class="col-md-3" label="Возраст">
           <b-form-input v-model="driver.age" type="number"></b-form-input>
@@ -42,9 +40,9 @@
         </b-form-group>
 
         <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
-          <b-form-select v-model="selectKbm.selected">
+          <b-form-select v-model="driver.selectKbm.selected">
             <b-form-select-option
-              v-for="item in selectKbm.optionsKbm"
+              v-for="item in driver.selectKbm.optionsKbm"
               :key="item.id"
               :value="item.text"
               >{{ item.text }}</b-form-select-option
@@ -54,10 +52,10 @@
       </b-form-row>
 
       <a href="#"
-        ><span @click="addDriver">+ Добавить еще одного водителя</span></a
+        ><span @click="addAge">+ Добавить еще одного водителя</span></a
       >
     </div>
-    <hr color="black" />
+    <hr />
     <div>
       {{ driverList }}
     </div>
@@ -83,48 +81,63 @@ export default {
     BFormGroup,
   },
   data() {
+    // моделька водителя
     return {
       driver: {
         id: "",
         age: "",
         experience: "",
-        kbm: null,
+        selectKbm: {
+          selected: null,
+          optionsKbm: [
+            { id: 1, text: "Страхуюсь впервые" },
+            { id: 2, text: "1 год" },
+            { id: 3, text: "2 года" },
+            { id: 4, text: "3 года" },
+            { id: 5, text: "4 года" },
+            { id: 6, text: "5 лет" },
+            { id: 7, text: "6 лет" },
+            { id: 8, text: "7 лет" },
+            { id: 9, text: "8 лет" },
+            { id: 10, text: "9 лет" },
+            { id: 11, text: "10 лет и более" },
+            { id: 12, text: "был в ДТП менее года назад" },
+          ],
+        },
       },
       driverList: [],
-      selectKbm: {
-        selected: null,
-        optionsKbm: [
-          { id: 1, text: "Страхуюсь впервые" },
-          { id: 2, text: "1 год" },
-          { id: 3, text: "2 года" },
-          { id: 4, text: "3 года" },
-          { id: 5, text: "4 года" },
-          { id: 6, text: "5 лет" },
-          { id: 7, text: "6 лет" },
-          { id: 8, text: "7 лет" },
-          { id: 9, text: "8 лет" },
-          { id: 10, text: "9 лет" },
-          { id: 11, text: "10 лет и более" },
-          { id: 12, text: "был в ДТП менее года назад" },
-        ],
-      },
     };
   },
   methods: {
-    addDriver() {
+    // добавление водителя в список
+    addAge() {
       const newDriver = {
         id: Date.now(),
         age: this.driver.age,
         experience: this.driver.experience,
-        kbm: this.selectKbm.selected,
+        selectKbm: { ...this.driver.selectKbm },
       };
-      this.driverList.push(newDriver);
-      this.driver.age = "";
-      this.driver.experience = "";
-      this.selectKbm.selected = null;
+      if (
+        newDriver.id !== "" &&
+        newDriver.age !== "" &&
+        newDriver.experience !== "" &&
+        newDriver.selectKbm.selected !== null
+      ) {
+        this.driverList.push(newDriver);
+        this.driver.age = "";
+        this.driver.experience = "";
+        this.driver.selectKbm.selected = null;
+      } else {
+        console.log("ошибка: добавленны пустые значения!");
+      }
     },
+    // уделение водителя из списка
     removeDriver() {
-      // this.driverList.find((e) => e.driver.id);
+      this.driverList.find((e) => {
+        if (e.id === this.driver.id) {
+          console.log(e);
+        }
+      });
     },
   },
   // computed: {},
