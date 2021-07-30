@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- отрисовка списка водителей-->
-    <div v-for="driver in driverList" :key="driver.id">
+    <div v-for="(driver, index) in driverList" :key="driver.id">
       <b-form-row>
         <b-form-group class="col-md-3" label="Возраст">
           <b-form-input type="number" :value="driver.age"></b-form-input>
@@ -22,9 +22,8 @@
           </b-form-select>
         </b-form-group>
       </b-form-row>
-      <a href="#"><span @click="removeDriver">Удалить водителя</span></a>
+      <a href="#"><span @click="removeDriver(index)">Удалить водителя</span></a>
     </div>
-    <hr />
     <div>
       <!-- форма списка водителей -->
       <b-form-row>
@@ -55,7 +54,6 @@
         ><span @click="addAge">+ Добавить еще одного водителя</span></a
       >
     </div>
-    <hr />
     <div>
       {{ driverList }}
     </div>
@@ -132,12 +130,8 @@ export default {
       }
     },
     // уделение водителя из списка
-    removeDriver() {
-      this.driverList.find((e) => {
-        if (e.id === this.driver.id) {
-          console.log(e);
-        }
-      });
+    removeDriver(index) {
+      this.driverList.splice(index, 1);
     },
   },
   // computed: {},
@@ -146,3 +140,4 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
+this.driverList.splice(index, 1);
