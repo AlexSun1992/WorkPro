@@ -1,6 +1,5 @@
 module.exports = {
   extends: ["plugin:vue/base"],
-  plugins: ["import", "vue"],
   rules: {
     "no-console": "off",
     "no-debugger": "off",
