@@ -69,12 +69,8 @@ export default {
   methods: {
     async showCaptcha() {
       this.isLoading = true;
-      this.captcha = await this.$store.dispatch("fetchCaptcha", {
-        params: {
-          idModule: "55",
-          idItem: "765",
-          idCard: "0",
-        },
+      this.captcha = await this.$store.dispatch("data_card/fetchCaptcha", {
+        params: this.$store.getters["data_card/getFormParams"],
         data: this.data,
       });
       if (this.captchaValue !== null) {
