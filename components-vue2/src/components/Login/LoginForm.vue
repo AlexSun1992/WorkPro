@@ -89,6 +89,9 @@ import {
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
+import Cookies from "js-cookie";
+
+const COOKIE_NAME = "url";
 
 export default {
   components: {
@@ -142,13 +145,12 @@ export default {
         document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN};`;
         document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
         window.location.href = "/cabinet/55/0/701";
-        document.cookie = `currentLocation=/cabinet/55/0/707`;
-        let cookieCollection = document.cookie.split(";");
-        cookieCollection.forEach((item) => {
-          if (item.match(/currentLocation/)) {
-            window.location.href = item.split("=")[1];
-          }
-        });
+        // document.cookie = `url=/cabinet/55/0/710`;
+
+        if (Cookies.get(COOKIE_NAME)) {
+          window.location.href = `${Cookies.get(COOKIE_NAME)}`;
+        } else window.location.href = "/cabinet/55/0/701";
+        Cookies.set(COOKIE_NAME, null);
       } catch (e) {
         this.errorMessage = "Неверный телефон или пароль";
         this.authInProcess = false;
