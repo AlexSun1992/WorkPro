@@ -102,6 +102,7 @@ export default {
         color: "#dddbdd",
       },
       source: "",
+      saveSuccess: false
     };
   },
   props: {
@@ -150,7 +151,7 @@ export default {
       if (field.type !== "button") {
         this.$store.commit("data_card/cardChanged", true);
       }
-      if (typeof eventHandler === "function") {
+      if (typeof eventHandler === "function" && field.type != "button") {
         let data = await eventHandler(
           this.data.map((a) => Object.assign({}, a)),
           e,
@@ -174,6 +175,49 @@ export default {
           cardId = this.$store.getters["data_card/getCardId"];
         }
         this.$store.commit("data_card/setLoading", true);
+        const flatmenu = this.$store.getters["menu/flatmenu"];
+        const menuItem = flatmenu.find((item) => {
+          return item.IDITEM == this.$route.params.idItem;
+        });
+        let CUR = menuItem.ACTIONSCUR.find((item) => {
+          return item.ID == actionId;
+        });
+        if (CUR.NTYPE == 38) {
+          this.saveSuccess = false
+          await this.saveDataCard();
+          let params = {
+                    idCard: this.$store.getters["data_card/getCardId"],
+                    idItem: this.$route.params.idItem,
+                    idModule: this.$route.params.idModule,
+                    idRel: this.$store.getters["data_card/getCardRelId"]
+                    }
+          if (this.saveSuccess) {
+            await this.$store.dispatch("data_card/fetchForm", params);
+            this.$store.commit("data_card/setDisabled", false);
+            let data = eventHandler(
+            this.data.map((a) => Object.assign({}, a)),
+            e,
+            'save'
+          );
+          if (data) {
+            this.$store.commit("data_card/setForm", data || this.data);
+          }
+          }
+          this.$store.commit("data_card/setLoading", false);
+          return;
+        } else if (CUR.NTYPE == 33) {
+          this.$store.commit("data_card/setLoading", false);
+          this.$store.commit("data_card/setReadOnly", false)
+          let data = eventHandler(
+            this.data.map((a) => Object.assign({}, a)),
+            e,
+          );
+          if (data) {
+            this.$store.commit("data_card/setForm", data || this.data);
+          }
+          return;
+        }
+
         let actionParams = await this.$store.dispatch(
           "data_card/fetchActionParams",
           {
@@ -303,9 +347,8 @@ export default {
                 idCard: cardId,
               });
               this.$store.commit("data_card/setLoading", false);
-              const nextIdItem = this.$store.getters[
-                "wizard/getWizardPages"
-              ].split(";")[step];
+              const nextIdItem =
+                this.$store.getters["wizard/getWizardPages"].split(";")[step];
               let tab = this.wizardTabs.find(
                 (w) => w.idItem === parseInt(nextIdItem)
               );
@@ -328,6 +371,7 @@ export default {
             }
           }
           if (resp?.status === 200) {
+            this.saveSuccess = true
             if (this.$route.query?.ref && resp) {
               this.$router.push(this.$route.query?.ref);
               return;
