@@ -138,11 +138,17 @@ export default {
           password: this.$v.user.password.$model,
           username: this.$v.user.username.$model,
         });
-
         document.cookie = `auth.strategy=local;`;
         document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN};`;
         document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
         window.location.href = "/cabinet/55/0/701";
+        document.cookie = `currentLocation=/cabinet/55/0/707`;
+        let cookieCollection = document.cookie.split(";");
+        cookieCollection.forEach((item) => {
+          if (item.match(/currentLocation/)) {
+            window.location.href = item.split("=")[1];
+          }
+        });
       } catch (e) {
         this.errorMessage = "Неверный телефон или пароль";
         this.authInProcess = false;
