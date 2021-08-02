@@ -1,19 +1,19 @@
 <template>
-<div>
- <b-button @click="updateValue()" :class="data.labelCols" :disabled="loading" variant="primary">
-    <div class="button">
-      {{ data.label }}
-      <b-spinner
-        v-if="loading && clicked"
-        class="ml-2"
-        style="width: 1.2rem; height: 1.2rem"
-        variant="success"
-        label="Spinning"
-      ></b-spinner>
-    </div>
+  <b-button
+    @click="updateValue()"
+    :class="data.labelCols"
+    :disabled="loading || disabled"
+    variant="primary"
+  >
+    {{ data.label }}
+    <b-spinner
+      v-if="loading && clicked"
+      class="ml-2"
+      style="width: 1.2rem; height: 1.2rem"
+      variant="success"
+      label="Spinning"
+    ></b-spinner>
   </b-button>
-</div>
- 
 </template>
 
 <script>
@@ -24,7 +24,7 @@ export default {
       type: Object,
       required: true,
       default: () => {},
-    }
+    },
   },
   data() {
     return {
@@ -44,9 +44,9 @@ export default {
     loading() {
       return this.$store.getters["data_card/getLoading"];
     },
-    // disabled() {
-    //   return this.$store.getters["data_card/getReadOnly"] || this.data.readonly
-    // }
+    disabled() {
+      return this.data.readonly;
+    },
   },
   watch: {
     loading() {
