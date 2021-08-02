@@ -32,7 +32,7 @@ export const actions = {
       commit("setMenu", res.data);
       commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
     });
-    await this.$axios.get("am/main/v2/clientmenu/55").then((res) => {
+    await this.$axios.get("/am/main/v2/clientmenu/55").then((res) => {
       commit("setFlatMenu", res.data[0]._data);
     });
   },
