@@ -36,7 +36,7 @@ export default {
 
   beforeRouteUpdate(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
-    const saveButtonClicked
+    const saveButtonClicked =
       this.$store.getters["data_card/saveButtonClicked"];
     if (cardChanged) {
       const confirmed = window.confirm("Закрыть без сохранения данных?");

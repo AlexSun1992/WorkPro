@@ -145,12 +145,14 @@ export default {
         document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN};`;
         document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
         window.location.href = "/cabinet/55/0/701";
-        // document.cookie = `url=/cabinet/55/0/710`;
+        document.cookie = `url=/cabinet/55/0/710`;
 
         if (Cookies.get(COOKIE_NAME)) {
           window.location.href = `${Cookies.get(COOKIE_NAME)}`;
-        } else window.location.href = "/cabinet/55/0/701";
-        Cookies.set(COOKIE_NAME, null);
+        } else {
+          window.location.href = "/cabinet/55/0/701";
+          Cookies.set(COOKIE_NAME, null);
+        }
       } catch (e) {
         this.errorMessage = "Неверный телефон или пароль";
         this.authInProcess = false;
