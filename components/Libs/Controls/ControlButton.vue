@@ -1,5 +1,6 @@
 <template>
-  <b-button @click="updateValue()" :class="data.labelCols" :disabled="loading" variant="primary">
+<div>
+ <b-button @click="updateValue()" :class="data.labelCols" :disabled="loading" variant="primary">
     <div class="button">
       {{ data.label }}
       <b-spinner
@@ -11,6 +12,8 @@
       ></b-spinner>
     </div>
   </b-button>
+</div>
+ 
 </template>
 
 <script>
@@ -21,12 +24,7 @@ export default {
       type: Object,
       required: true,
       default: () => {},
-    },
-    store: {
-      type: String,
-      required: false,
-      default: () => {},
-    },
+    }
   },
   data() {
     return {
@@ -46,6 +44,9 @@ export default {
     loading() {
       return this.$store.getters["data_card/getLoading"];
     },
+    // disabled() {
+    //   return this.$store.getters["data_card/getReadOnly"] || this.data.readonly
+    // }
   },
   watch: {
     loading() {

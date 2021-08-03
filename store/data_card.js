@@ -19,10 +19,20 @@ export const state = () => ({
   isSave: true,
   isReadOnly: false,
   loading: false,
+  moduleId: false,
+  menuId: false,
 });
 
 export const getters = {
   getForm: (state) => state.form,
+  getFormParams: (state) => {
+    return {
+      idModule: state.moduleId,
+      idItem: state.menuId,
+      idCard: state.cardId,
+      idRel: state.cardRelId,
+    };
+  },
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
   getError: (state) => state.isError,
@@ -53,6 +63,8 @@ export const actions = {
   async fetchForm({ dispatch, commit, getters, state }, params) {
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
+    commit("setModuleId", params.idModule);
+    commit("setMenuId", params.idItem);
     if (state.cardId !== params.idCard || !params.idRel) {
       commit("clearFormData");
     }
@@ -154,11 +166,15 @@ export const actions = {
       );
       commit("setLoading", false);
       commit("setDisabled", false);
+      commit("setSavedError", false);
       commit("setCardId", resp.data.ID);
       commit("setCardRelId", resp.data.REL);
       return resp;
     } catch (e) {
+      commit("setLoading", false);
       commit("setDisabled", false);
+      commit("setSavedError", true);
+      commit("setErrorMessage", e.response.data);
       return e.response;
     }
   },
@@ -213,6 +229,25 @@ export const actions = {
         )
         .then((res) => {
           commit("setCaptcha", { captcha: res.data, data: data });
+          return res.data;
+        });
+    } catch (error) {
+      if (error.response) {
+        commit("setError", true);
+        commit("setErrorMessage", error.response.data);
+        return error.response;
+      }
+    }
+  },
+  async fetchList({ commit, getters, state }, params) {
+    try {
+      return await this.$axios
+        .get(encodeURI(`/api/list/${params.idModule}/${params.idItem}/[]`))
+        .then((res) => {
+          commit("setCardId", res.data.items[0].ID);
+          commit("setCardRelId", res.data.items[0].REL);
+          commit("setModuleId", params.idModule);
+          commit("setMenuId", params.idItem);
           return res.data;
         });
     } catch (error) {
@@ -292,6 +327,12 @@ export const mutations = {
   },
   setCardRelId(state, data) {
     state.cardRelId = data;
+  },
+  setModuleId(state, data) {
+    state.moduleId = data;
+  },
+  setMenuId(state, data) {
+    state.menuId = data;
   },
   setCardCaption(state, data) {
     state.cardCaption = data;

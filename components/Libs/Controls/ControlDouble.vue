@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { applyMask as _mask } from "~/utils/utils";
+import { applyMask as _mask } from "../../../utils/utils";
 export default {
   name: "ControlDouble",
   directives: {

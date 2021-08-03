@@ -10,9 +10,9 @@
           <b-form-input
             v-model="captchaValue"
             :disabled="!edit ? !edit : data.readonly"
-            @update="setValue"
             :state="data.state"
             autocomplete="off"
+            @update="setValue"
           />
           <b-form-invalid-feedback>
             Обязательно для заполнения
@@ -20,14 +20,14 @@
         </b-form-group>
       </div>
       <div class="col-lg-3">
-        <b-spinner v-if="isLoading" class="mt-4 ml-4"></b-spinner>
+        <b-spinner v-if="isLoading" class="mt-4 ml-4" />
         <img
           v-else
           class="captcha mt-2"
-          @click="showCaptcha"
           alt="Капча"
           :src="captcha.CAPTCHA"
           title="Обновить"
+          @click="showCaptcha"
         />
       </div>
     </div>
@@ -56,6 +56,13 @@ export default {
       isLoading: false,
     };
   },
+  watch: {
+    data(newVal, oldVal) {
+      if (newVal.readonly === false && oldVal.readonly === true) {
+        this.showCaptcha();
+      }
+    },
+  },
   created() {
     this.showCaptcha();
   },
@@ -63,7 +70,7 @@ export default {
     async showCaptcha() {
       this.isLoading = true;
       this.captcha = await this.$store.dispatch("data_card/fetchCaptcha", {
-        params: this.$route.params,
+        params: this.$store.getters["data_card/getFormParams"],
         data: this.data,
       });
       if (this.captchaValue !== null) {
@@ -77,13 +84,6 @@ export default {
         fieldId: this.data.fieldId,
         value: value ? this.captcha.ID + "|" + value : null,
       });
-    },
-  },
-  watch: {
-    data(newVal, oldVal) {
-      if (newVal.readonly === false && oldVal.readonly === true) {
-        this.showCaptcha();
-      }
     },
   },
 };
