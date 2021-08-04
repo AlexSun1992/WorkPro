@@ -20,20 +20,25 @@ const menu = {};
 app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
-    if (req.headers.authorization) {
-      axios.defaults.headers.common.Authorization = req.headers.authorization;
-    } else {
-      if (req.cookies) {
-        axios.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+    if (req.query.zone !== "free") {
+      if (req.headers?.authorization) {
+        axios.defaults.headers.common.Authorization = req.headers.authorization;
+      } else {
+        if (req.cookies) {
+          axios.defaults.headers.common.Authorization =
+            req.cookies["auth._token.local"];
+        }
       }
     }
+    const URL_ADDRESSS = encodeURI(
+      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
+        req.params.idModule
+      }/${req.params.idItem}/${req.params.id}${
+        req.params.idRel !== "undefined" ? `?rel=${req.params.idRel}` : ""
+      }`
+    );
     axios({
-      url: encodeURI(
-        `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${
-          req.params.id
-        }${req.params.idRel !== "undefined" ? `?rel=${req.params.idRel}` : ""}`
-      ),
+      url: URL_ADDRESSS,
       method: "GET",
     })
       .then(async (resp) => {
@@ -104,16 +109,24 @@ app.get("/osago", (req, res) => {
 app.get("/card/js/:idModule/:idItem", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
-    if (req.headers.authorization) {
-      axios.defaults.headers.common.Authorization = req.headers.authorization;
-    } else {
-      if (req.cookies) {
-        axios.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+    let URL_ADDRESS;
+    if (req.query.zone !== "free") {
+      if (req.headers?.authorization) {
+        axios.defaults.headers.common.Authorization = req.headers.authorization;
+      } else {
+        if (req.cookies) {
+          axios.defaults.headers.common.Authorization =
+            req.cookies["auth._token.local"];
+        }
       }
+      URL_ADDRESS = encodeURI(
+        `${consts.CLIENTFREEMENU}/${req.params.idModule}/${req.params.idItem}`
+      );
+    } else {
+      URL_ADDRESS = encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`);
     }
     axios({
-      url: encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`),
+      url: URL_ADDRESS,
       method: "GET",
     })
       .then(async (resp) => {
@@ -210,9 +223,11 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
     const typeReq = req.params.id === 0 ? "post" : "put";
     console.log(JSON.stringify(formConverter.save(req.body)));
     axios[typeReq](
-      `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${
-        req.params.id
-      }${req.params.idRel !== "undefined" ? `?rel=${req.params.idRel}` : ""}`,
+      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
+        req.params.idModule
+      }/${req.params.idItem}/${req.params.id}${
+        req.params.idRel !== "undefined" ? `?rel=${req.params.idRel}` : ""
+      }`,
       formConverter.save(req.body)
     )
       .then((resp) => {

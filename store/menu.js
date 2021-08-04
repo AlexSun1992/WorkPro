@@ -1,5 +1,8 @@
 /* eslint-disable */
 import breadcrumbs from "../converters/breadcrumbs";
+const BFF_URL_GET_MENU = "/api/module";
+const BFF_URL_GET_FREE_MENU = "/api/module?zone=free";
+const URL_GET_FREE_MENU = "/api/module?zone=free";
 export const state = () => ({
   menu: [],
   flatmenu: [],
@@ -28,11 +31,17 @@ export const getters = {
 
 export const actions = {
   async fetchMenu({ commit, dispatch }, params) {
-    await this.$axios.get("/api/module").then((res) => {
-      commit("setMenu", res.data);
-      commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
-    });
-    await this.$axios.get("/am/main/v2/clientmenu/55").then((res) => {
+    const URL =
+      params.zone === "free"
+        ? `/am/free/v2/menu/55/${params.idItem}`
+        : "/am/main/v2/clientmenu/55";
+    if (params.zone !== "free") {
+      await this.$axios.get("/api/module").then((res) => {
+        commit("setMenu", res.data);
+        commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
+      });
+    }
+    await this.$axios.get(URL).then((res) => {
       commit("setFlatMenu", res.data[0]._data);
     });
   },

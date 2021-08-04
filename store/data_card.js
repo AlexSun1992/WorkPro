@@ -65,6 +65,8 @@ export const actions = {
     commit("setCardRelId", params.idRel);
     commit("setModuleId", params.idModule);
     commit("setMenuId", params.idItem);
+    commit("setLoading", true);
+    commit("setDisabled", true);
     if (state.cardId !== params.idCard || !params.idRel) {
       commit("clearFormData");
     }
@@ -76,12 +78,17 @@ export const actions = {
         );
       } else {
         url = encodeURI(
-          `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
+          `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${
+            params.idRel
+          }${params.zone === "free" ? "?zone=free" : ""}`
         );
       }
       await this.$axios
         .get(url)
         .then((res) => {
+          commit("setLoading", false);
+          commit("setDisabled", false);
+          commit("setSavedError", false);
           commit(
             "setForm",
             res.data.metaData.data.length ? res.data.metaData.data : res.data
@@ -161,7 +168,9 @@ export const actions = {
     commit("setDisabled", true);
     try {
       let resp = await this.$axios.post(
-        `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`,
+        `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
+          params.relId
+        }${params.zone === "free" ? "?zone=free" : ""}`,
         params.form
       );
       commit("setLoading", false);
@@ -242,7 +251,13 @@ export const actions = {
   async fetchList({ commit, getters, state }, params) {
     try {
       return await this.$axios
-        .get(encodeURI(`/api/list/${params.idModule}/${params.idItem}/[]`))
+        .get(
+          encodeURI(
+            `/api/list/${params.idModule}/${params.idItem}/[]${
+              params.zone === "free" ? "?zone=free" : ""
+            }`
+          )
+        )
         .then((res) => {
           commit("setCardId", res.data.items[0].ID);
           commit("setCardRelId", res.data.items[0].REL);
