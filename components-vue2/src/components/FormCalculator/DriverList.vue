@@ -4,11 +4,11 @@
     <div v-for="(driver, index) in driverList" :key="driver.id">
       <b-form-row>
         <b-form-group class="col-md-3" label="Возраст">
-          <b-form-input type="number" :value="driver.age"></b-form-input>
+          <b-form-input type="number" :value="driver.age" />
         </b-form-group>
 
         <b-form-group class="col-md-3" label="Стаж">
-          <b-form-input type="number" :value="driver.experience"></b-form-input>
+          <b-form-input type="number" :value="driver.experience" />
         </b-form-group>
 
         <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
@@ -28,14 +28,11 @@
       <!-- форма списка водителей -->
       <b-form-row>
         <b-form-group class="col-md-3" label="Возраст">
-          <b-form-input v-model="driver.age" type="number"></b-form-input>
+          <b-form-input v-model="driver.age" type="number" />
         </b-form-group>
 
         <b-form-group class="col-md-3" label="Стаж">
-          <b-form-input
-            v-model="driver.experience"
-            type="number"
-          ></b-form-input>
+          <b-form-input v-model="driver.experience" type="number" />
         </b-form-group>
 
         <b-form-group class="col-md-3" label="КБМ, сколько лет без аварий?">
@@ -134,7 +131,7 @@ export default {
       this.driverList.splice(index, 1);
     },
   },
-  // computed: {},
+  // computed: {},components-vue2/src/components/FormCalculator/DriverList.vue
   // created() {},
 };
 </script>
