@@ -222,8 +222,6 @@ export default {
             idModule: this.$route.params.idModule,
             idRel: this.$store.getters["data_card/getCardRelId"],
           };
-          params.idCard = this.$store.getters["data_card/getCardId"];
-          params.idItem = this.$route.params.idItem;
           await this.$store.dispatch("data_card/fetchForm", params);
           return;
         }
