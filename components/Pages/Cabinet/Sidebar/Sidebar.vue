@@ -16,9 +16,10 @@
           </a>
         </li>
       </n-link>
-      <li :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'">
+      <li class="sidebar-nav-item">
         <a href="#" @click="logout()">
-          <button type="button" class="header-nav-exit">Выйти</button>
+          <div :class="'menu-icon-exit'"></div>
+          <span>Выйти</span>
         </a>
       </li>
     </ul>
@@ -100,4 +101,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.menu-icon-exit {
+  background: url(/img/exit.svg) 50% 50% no-repeat;
+}
+</style>
