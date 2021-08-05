@@ -119,11 +119,11 @@ app.get("/card/js/:idModule/:idItem", (req, res) => {
             req.cookies["auth._token.local"];
         }
       }
+      URL_ADDRESS = encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`);
+    } else {
       URL_ADDRESS = encodeURI(
         `${consts.CLIENTFREEMENU}/${req.params.idModule}/${req.params.idItem}`
       );
-    } else {
-      URL_ADDRESS = encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`);
     }
     axios({
       url: URL_ADDRESS,

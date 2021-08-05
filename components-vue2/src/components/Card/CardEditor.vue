@@ -51,7 +51,9 @@ export default {
     };
   },
   async created() {
-    await this.$loadScript(`/api/card/js/${this.moduleId}/${this.menuId}`);
+    await this.$loadScript(
+      `/api/card/js/${this.moduleId}/${this.menuId}?zone=free`
+    );
     await this.$store.dispatch("menu/fetchMenu", this.params);
     this.eventHandler =
       typeof eventHandler === "function" ? eventHandler : null;
