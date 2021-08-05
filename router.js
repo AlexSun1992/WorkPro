@@ -65,11 +65,6 @@ export function createRouter() {
               },
             ],
           },
-          {
-            meta: "Contacts",
-            path: "contacts",
-            component: MapViewer,
-          },
         ],
       },
       {
