@@ -34,10 +34,12 @@ export default {
   methods: {
     updateValue() {
       this.clicked = true;
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        value: this.data.name,
-      });
+      if (!this.loading && !this.disabled) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          value: this.data.name,
+        });
+      }
     },
   },
   computed: {
