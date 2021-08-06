@@ -6,8 +6,10 @@ const SOCKET = "wss://mobile2.reso.ru/chat";
 const MODULE = `/am/main/${VER}/module`;
 const MENU = `/am/main/${VER}/menu`;
 const CLIENTMENU = `/am/main/${VER}/clientmenu`;
+const CLIENTFREEMENU = `/am/free/${VER}/menu`;
 const DATACARD = `/am/main/${VER}/datacard`;
 const DATA = `/am/main/${VER}/data`;
+const FREEDATA = `/am/free/${VER}/data`;
 const DATALIST = `/am/main/${VER}/datalist`;
 const FILTER = `/am/main/${VER}/filter`;
 const ACTIONPARAM = `/am/main/${VER}/actionparam`;
@@ -21,7 +23,7 @@ const WEBFIELD = `/am/main/${VER}/webfield`;
 const DIC = `/am/main/${VER}/dic`;
 const DICWF = `/am/main/${VER}/dicwf`;
 const REPORT = `/am/main/${VER}/report`;
-const FREEDATACARD = `/am/free/${VER}/data`;
+const FREEDATACARD = `/am/free/${VER}/datacard`;
 const FREEMENU = `/am/free/${VER}/menu`;
 const CAPTCHA = `/am/authw/${VER}/captcha`;
 
@@ -33,10 +35,12 @@ export default {
   MODULE: MODULE,
   MENU: MENU,
   CLIENTMENU: CLIENTMENU,
+  CLIENTFREEMENU: CLIENTFREEMENU,
   DATACARD: DATACARD,
   FREEDATACARD: FREEDATACARD,
   FREEMENU: FREEMENU,
   DATA: DATA,
+  FREEDATA: FREEDATA,
   DATALIST: DATALIST,
   FILTER: FILTER,
   ACTIONPARAM: ACTIONPARAM,

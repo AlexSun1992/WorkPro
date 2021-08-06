@@ -15,6 +15,8 @@ import { mapGetters } from "vuex";
 import Form from "/../components/Libs/Form/Form.vue";
 import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
+import LoadScript from "vue-plugin-load-script";
+Vue.use(LoadScript);
 Vue.use(BootstrapVue);
 
 export default {
@@ -36,21 +38,26 @@ export default {
   },
   data() {
     return {
+      params: {
+        idItem: this.menuId,
+        idModule: this.moduleId,
+        idParent: "0",
+        idCard: "0",
+        idRel: "0",
+        zone: "free",
+      },
       isShowSavedError: false,
+      eventHandler: null,
     };
   },
   async created() {
-    let params = {
-      idItem: this.menuId,
-      idModule: this.moduleId,
-      idParent: "0",
-      idCard: "0",
-    };
-    await this.$store.dispatch("menu/fetchMenu", params);
-    let { items } = await this.$store.dispatch("data_card/fetchList", params);
-    params.idCard = items[0].ID;
-    params.idRel = items[0].REL;
-    await this.$store.dispatch("data_card/fetchForm", params);
+    await this.$loadScript(
+      `/api/card/js/${this.moduleId}/${this.menuId}?zone=free`
+    );
+    await this.$store.dispatch("menu/fetchMenu", this.params);
+    this.eventHandler =
+      typeof eventHandler === "function" ? eventHandler : null;
+    await this.fetchCard();
     this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
   },
   computed: {
@@ -82,32 +89,56 @@ export default {
       }
       return valid;
     },
+    async fetchCard() {
+      let { items } = await this.$store.dispatch(
+        "data_card/fetchList",
+        this.params
+      );
+      this.params.idCard = items[0].ID;
+      this.params.idRel = items[0].REL;
+      await this.$store.dispatch("data_card/fetchForm", this.params);
+    },
     async updateValue(e) {
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM === this.menuId
       );
-      let action = menu.ACTIONSCUR.find((item) => item.NTYPE === 38);
+      const actionRefreshCard = menu.ACTIONSCUR.find(
+        (item) => item.NTYPE === 33
+      );
+      const actionSaveCard = menu.ACTIONSCUR.find((item) => item.NTYPE === 38);
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
         value: e.value,
       });
       const actionId = parseInt(e.value.replace("Item", ""));
-      if (action.ID === actionId && this.validateData(this.getForm)) {
+      if (actionSaveCard.ID === actionId && this.validateData(this.getForm)) {
         this.isShowSavedError = false;
         let moduleId = this.moduleId,
           itemId = this.menuId,
           cardId = this.getFormParams.idCard,
-          relId = this.getFormParams.idRel;
+          relId = this.getFormParams.idRel,
+          zone = "free";
         let resp = await this.$store.dispatch("data_card/saveDataCard", {
           moduleId,
           itemId,
           cardId,
           relId,
+          zone,
           form: this.getForm,
         });
+        let data = await this.eventHandler(
+          this.getForm.map((a) => Object.assign({}, a)),
+          e
+        );
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.getForm);
+        }
         if (resp.status === 200) {
           await this.$store.dispatch("data_card/fetchForm", this.getFormParams);
         }
+      }
+      if (actionRefreshCard.ID === actionId) {
+        await this.fetchCard();
       }
     },
   },

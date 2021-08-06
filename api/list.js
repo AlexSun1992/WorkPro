@@ -17,19 +17,25 @@ const menu = {};
 app.get("/list/:idModule/:idItem/:filters", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
-    if (req.headers.authorization) {
-      axios.defaults.headers.common.Authorization = req.headers.authorization;
-    } else {
-      if (req.cookies) {
-        axios.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
-      }
-    }
+    let URL_ADDRESS;
     const filters = listConverter.getFilterParams(
       formConverter.save(JSON.parse(req.params.filters))
     );
+    if (req.query.zone !== "free") {
+      if (req.headers?.authorization) {
+        axios.defaults.headers.common.Authorization = req.headers.authorization;
+      } else {
+        if (req.cookies) {
+          axios.defaults.headers.common.Authorization =
+            req.cookies["auth._token.local"];
+        }
+      }
+      URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${filters}`;
+    } else {
+      URL_ADDRESS = `${consts.FREEDATA}/${req.params.idModule}/${req.params.idItem}/0/0`;
+    }
     axios({
-      url: `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${filters}`,
+      url: URL_ADDRESS,
       method: "GET",
     })
       .then((resp) => {
