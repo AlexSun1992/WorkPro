@@ -4,7 +4,6 @@
       :search="search"
       aria-label="Search for a country"
       :placeholder="placeholderString"
-      @click="handleSubmit"
     ></autocomplete>
   </div>
 </template>
@@ -24,11 +23,11 @@ export default {
     },
     link: {
       type: String,
-      required: true,
+      // required: true,
     },
     placeholder: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   data() {
@@ -47,17 +46,14 @@ export default {
 
       this.group = [];
 
-      const response = await fetch(
-        `/suggestions/api/4_1/rs/suggest/${this.suggestionType}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ query: input }),
-        }
-      );
+      const response = await fetch(`/suggestions/api/4_1/rs/suggest/address`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ query: input }),
+      });
 
       const result = await response.json();
 

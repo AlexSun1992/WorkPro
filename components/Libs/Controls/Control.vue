@@ -45,7 +45,7 @@ import ControlProgressbar from "./ControlProgressbar";
 import { mapGetters } from "vuex";
 import ControlEmpty from "./ControlEmpty";
 import ControlLabelMoney from "./ControlLabelMoney";
-import ControlDadataSelect from "./ControlDadataSelect";
+import ControlDadataSelect from "./ControlDadataSelect.vue";
 export default {
   name: "Control",
   components: {
