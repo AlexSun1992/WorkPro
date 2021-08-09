@@ -45,11 +45,11 @@ import ControlProgressbar from "./ControlProgressbar";
 import { mapGetters } from "vuex";
 import ControlEmpty from "./ControlEmpty";
 import ControlLabelMoney from "./ControlLabelMoney";
-import ControlDadata from "./ControlDadata";
+import ControlDadataSelect from "./ControlDadataSelect";
 export default {
   name: "Control",
   components: {
-    ControlDadata,
+    ControlDadataSelect,
     ControlProgressbar,
     ControlString,
     ControlText,
