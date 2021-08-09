@@ -62,3 +62,15 @@ Vue.customElement(
       });
     })
 );
+Vue.customElement(
+  "component-office-map",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/OfficeMap.vue", "./store/index"], (
+        lazyComponent
+      ) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
