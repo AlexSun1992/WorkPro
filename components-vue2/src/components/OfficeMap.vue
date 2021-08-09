@@ -95,7 +95,7 @@ export default {
         mapContainer.clientHeight,
       ]);
       // Сохраняем полный адрес для сообщения под картой.
-      let address = [obj.getCountry(), obj.getAddressLine()].join(", ");
+      // let address = [obj.getCountry(), obj.getAddressLine()].join(", ");
       // Сохраняем укороченный адрес для подписи метки.
       let shortAddress = [
         obj.getThoroughfare(),
