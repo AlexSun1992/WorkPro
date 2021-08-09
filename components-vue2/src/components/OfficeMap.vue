@@ -11,6 +11,9 @@
 </template>
 
 <script>
+import Vue from "vue";
+import LoadScript from "vue-plugin-load-script";
+Vue.use(LoadScript);
 export default {
   name: "OfficeMap",
   data() {
@@ -22,11 +25,15 @@ export default {
   async created() {
     try {
       await this.$store.dispatch("general/fetchAgencies");
+      await this.$loadScript(
+        `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
+      ).then(() => {
+        if (this.$store.getters["general/getAgencies"]) {
+          ymaps.ready(this.init);
+        }
+      });
     } catch (error) {
       console.log(error);
-    }
-    if (this.$store.getters["general/getAgencies"]) {
-      ymaps.ready(this.init);
     }
   },
   methods: {
