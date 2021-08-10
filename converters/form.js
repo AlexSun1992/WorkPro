@@ -200,6 +200,7 @@ converter.form = async (data, itemId) => {
     obj.state = null;
     obj.error = null;
     obj.helpText = webFields[i].SHELPTEXT;
+    obj.placeholder = webFields[i].SNULLTEXT;
     obj.isRelation =
       webFields[i].LDIC === "N" || webFields[i].LDIC === false ? false : true;
     obj.fieldRelation = webFields[i].SCONNECTFIELD
