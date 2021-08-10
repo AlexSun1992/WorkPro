@@ -1,10 +1,6 @@
 <template>
   <div>
-    <autocomplete
-      :search="search"
-      aria-label="Search for a country"
-      :placeholder="placeholderString"
-    ></autocomplete>
+    <autocomplete :search="search"></autocomplete>
   </div>
 </template>
 
@@ -21,20 +17,11 @@ export default {
       required: true,
       default: () => {},
     },
-    link: {
-      type: String,
-      // required: true,
-    },
-    placeholder: {
-      type: String,
-      // required: true,
-    },
   },
   data() {
     return {
       group: [],
-      suggestionType: "",
-      placeholderString: "",
+      requestAddress: null,
     };
   },
 
@@ -43,18 +30,26 @@ export default {
       if (input.length < 1) {
         return [];
       }
-
       this.group = [];
+      this.requestAddress = null;
 
-      const response = await fetch(`/suggestions/api/4_1/rs/suggest/address`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ query: input }),
-      });
+      if (this.data.name === "ADDRESS_REG") {
+        this.requestAddress = "address";
+      } else if (this.data.name === "VEHICLE_MODEL") {
+        this.requestAddress = "brandmodel";
+      }
 
+      const response = await fetch(
+        `/suggestions/api/4_1/rs/suggest/${this.requestAddress}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ query: input }),
+        }
+      );
       const result = await response.json();
 
       result.suggestions.forEach((item) => {
@@ -77,10 +72,6 @@ export default {
         });
       },
     },
-  },
-  created() {
-    this.suggestionType = this.link;
-    this.placeholderString = this.placeholder;
   },
 };
 </script>
