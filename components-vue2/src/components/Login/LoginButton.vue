@@ -95,6 +95,9 @@ axios.interceptors.response.use(undefined, function (err) {
         },
         (err) => {
           processQueue(err, null);
+          Cookies.set(TOKEN_NAME, "false");
+          Cookies.set(REFRESH_TOKEN_NAME, "false");
+          localStorage.setItem("auth._token.local", "false");
           console.log(err);
         }
       )
@@ -129,8 +132,8 @@ export default {
         window.location.href = "/cabinet/55/0/701";
       } else {
         this.personsData = null;
-        Cookies.set(TOKEN_NAME, `${Cookies.get(TOKEN_NAME)}0`);
-        Cookies.set(REFRESH_TOKEN_NAME, `${Cookies.get(REFRESH_TOKEN_NAME)}0`);
+        Cookies.set(TOKEN_NAME, "false");
+        Cookies.set(REFRESH_TOKEN_NAME, "false");
         localStorage.setItem("auth._token.local", "false");
       }
     },
