@@ -103,7 +103,7 @@ export default {
         (item) => item.IDITEM === this.menuId
       );
       const actionRefreshCard = menu.ACTIONSCUR.find(
-        (item) => item.NTYPE === 33
+        (item) => item.NTYPE === 39
       );
       const actionSaveCard = menu.ACTIONSCUR.find((item) => item.NTYPE === 38);
       this.$store.commit("data_card/setFormField", {
