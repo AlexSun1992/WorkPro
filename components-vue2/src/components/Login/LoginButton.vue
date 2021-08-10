@@ -1,33 +1,26 @@
 <template>
   <div class="LoginButton">
-    <div v-if="isLoadedUserInfo">
-      <b-dropdown
-        variant="success"
-        v-if="isAuthentificated"
-        id="dropdown-1"
-        :text="userName"
-        class="gotolk icon-right"
+    <b-dropdown
+      variant="success"
+      v-if="isAuthentificated"
+      id="dropdown-1"
+      :text="userName"
+      class="gotolk icon-right"
+    >
+      <b-dropdown-item
+        v-for="(item, index) in navigationList"
+        :key="index"
+        @click="applyAction(index)"
       >
-        <b-dropdown-item
-          v-for="(item, index) in navigationList"
-          :key="index"
-          @click="applyAction(index)"
-        >
-          {{ item }}
-        </b-dropdown-item>
-      </b-dropdown>
-      <b-button
-        class="gotolk btn_trn btn-p-sm btn-icon-left"
-        v-else
-        @click="redirectToLoginPage"
-        >ЛИЧНЫЙ КАБИНЕТ</b-button
-      >
-    </div>
-    <div v-else>
-      <div>
-        <SkeletonBox :items="1"></SkeletonBox>
-      </div>
-    </div>
+        {{ item }}
+      </b-dropdown-item>
+    </b-dropdown>
+    <b-button
+      class="gotolk btn_trn btn-p-sm btn-icon-left"
+      v-else
+      @click="redirectToLoginPage"
+      >ЛИЧНЫЙ КАБИНЕТ</b-button
+    >
   </div>
 </template>
 
@@ -38,10 +31,12 @@ import { BDropdown, BButton, BDropdownItem } from "bootstrap-vue";
 import SkeletonBox from "./Libs/SkeletonBox";
 
 const TOKEN_NAME = "auth._token.local";
+const EXPIRATION_TOKEN = "auth._token_expiration.local";
 const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
 const URL_GET_USER_NAME = "/am/main/v2/userinfo";
 const URL_REFRESH_TOKEN = "/am/auth/v2/token_refresh";
 const URL_AUTHORIZE = "/am/auth/v2/authorize";
+const DURATION = "100000";
 let failedQueue = [];
 const processQueue = (error, token = null) => {
   failedQueue.forEach((prom) => {
@@ -120,7 +115,7 @@ export default {
   data() {
     return {
       personsData:
-        localStorage.getItem("auth._token.local") !== "false"
+        Cookies.get(TOKEN_NAME) !== "false"
           ? JSON.parse(localStorage.getItem("USER_INFO"))
           : null,
       navigationList: ["Личный кабинет", "Выход"],
@@ -151,6 +146,7 @@ export default {
         .then((resp) => {
           this.personsData = resp.data[0]._data[0];
           this.isLoadedUserInfo = true;
+          localStorage.setItem(EXPIRATION_TOKEN, Date.now() + DURATION);
         })
         .catch((err) => {
           this.isLoadedUserInfo = true;
@@ -168,7 +164,13 @@ export default {
     },
   },
   created() {
-    this.getPersonsData();
+    if (Cookies.get(TOKEN_NAME)) {
+      if (localStorage.getItem(EXPIRATION_TOKEN) - Date.now() < DURATION) {
+        this.getPersonsData(Cookies.get(TOKEN_NAME));
+      }
+    } else {
+      this.personsData = null;
+    }
   },
 };
 </script>
