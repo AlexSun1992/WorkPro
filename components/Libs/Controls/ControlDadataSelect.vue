@@ -2,7 +2,11 @@
   <div>
     <b-form-group>
       <template v-slot:label><span v-html="data.label"></span></template>
-      <autocomplete :data="data" :search="search"></autocomplete>
+      <autocomplete
+        :data="data"
+        :search="search"
+        @submit="handleSubmit"
+      ></autocomplete>
     </b-form-group>
   </div>
 </template>
@@ -58,23 +62,15 @@ export default {
       result.suggestions.forEach((item) => {
         this.group.push(item.value);
       });
-      console.log(this.data);
-      console.log(this.data.label);
+
       return this.group;
     },
-  },
-  computed: {
-    fieldValue: {
-      get: function () {
-        return this.data.value;
-      },
-      set: function (value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: value,
-        });
-      },
+    handleSubmit(result) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: result,
+      });
     },
   },
 };
