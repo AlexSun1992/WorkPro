@@ -1,6 +1,9 @@
 <template>
   <div>
-    <autocomplete :search="search"></autocomplete>
+    <b-form-group>
+      <template v-slot:label><span v-html="data.label"></span></template>
+      <autocomplete :data="data" :search="search"></autocomplete>
+    </b-form-group>
   </div>
 </template>
 
@@ -55,7 +58,8 @@ export default {
       result.suggestions.forEach((item) => {
         this.group.push(item.value);
       });
-
+      console.log(this.data);
+      console.log(this.data.label);
       return this.group;
     },
   },
