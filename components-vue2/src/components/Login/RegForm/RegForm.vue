@@ -111,7 +111,8 @@
                 </b-form-group>
                 <!-- /////// -->
               </div>
-              <div class="col-12 col-md-6 mt-2">
+
+              <div class="col-12 col-md-6 mt-2 mt-md-3">
                 <!-- Отчество -->
                 <b-form-group label="Отчество" label-cols="12">
                   <b-form-input
@@ -144,7 +145,7 @@
                 </b-form-group>
                 <!-- ////// -->
               </div>
-              <div class="col-12 col-md-6 mt-2">
+              <div class="col-12 col-md-6 mt-2 mt-md-3">
                 <b-form-group label="Дата рождения" label-cols="12">
                   <birthday-picker
                     v-model="$v.form.birthdate.$model"
