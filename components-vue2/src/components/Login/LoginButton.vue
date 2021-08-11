@@ -149,7 +149,7 @@ export default {
         .then((resp) => {
           this.personsData = resp.data[0]._data[0];
           this.isLoadedUserInfo = true;
-          localStorage.setItem(EXPIRATION_TOKEN, Date.now() + DURATION);
+          Cookies.set(EXPIRATION_TOKEN, Date.now() + DURATION);
         })
         .catch((err) => {
           this.isLoadedUserInfo = true;
@@ -167,8 +167,11 @@ export default {
     },
   },
   created() {
-    if (Cookies.get(TOKEN_NAME)) {
-      if (localStorage.getItem(EXPIRATION_TOKEN) - Date.now() < DURATION) {
+    if (
+      Cookies.get(TOKEN_NAME) !== "false" &&
+      Cookies.get(TOKEN_NAME) !== undefined
+    ) {
+      if (Cookies.get(EXPIRATION_TOKEN) - Date.now() < DURATION) {
         this.getPersonsData(Cookies.get(TOKEN_NAME));
       }
     } else {
