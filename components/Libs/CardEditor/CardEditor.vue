@@ -52,6 +52,7 @@
         v-if="isBlock && !isTabs && !isAccordion"
         :data="data"
         :tabs="tabs"
+        :params="params"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
