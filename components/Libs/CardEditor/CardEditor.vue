@@ -191,6 +191,14 @@ export default {
         });
         if (CUR.NTYPE == 38) {
           this.saveSuccess = false;
+          let data = eventHandler(
+            this.data.map((a) => Object.assign({}, a)),
+            e,
+            "beforeSave"
+          );
+          if (data) {
+            this.$store.commit("data_card/setForm", data || this.data);
+          }
           await this.saveDataCard();
           if (this.saveSuccess) {
             await this.$store.dispatch("data_card/fetchForm", params);
@@ -198,7 +206,7 @@ export default {
             let data = eventHandler(
               this.data.map((a) => Object.assign({}, a)),
               e,
-              "save"
+              "afterSave"
             );
             if (data) {
               this.$store.commit("data_card/setForm", data || this.data);

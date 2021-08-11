@@ -11,6 +11,36 @@
   </div>
 </template>
 <script>
+function eventHandler(data, item, action) {
+  const field = data.find((f) => f.fieldId === item.fieldId);
+  if (field.name === "SPOLICYNUMBER") {
+    if (field?.value?.length === 13 && field.error) {
+      field.error = null;
+    }
+  }
+  if (field.name === "Item36465") {
+    const FIELD_BUTTON_CHANGE = data.find((f) => f.fieldId === 36233);
+    const FIELD_POLICYNUMBER = data.find((f) => f.fieldId === 36230);
+    const FIELD_CAPTCHA = data.find((f) => f.fieldId === 36231);
+
+    if (action === "beforeSave") {
+      if (FIELD_POLICYNUMBER?.value?.length < 13) {
+        FIELD_POLICYNUMBER.error =
+          "Длина серии и номера полиса должна быть 13 символов";
+      } else {
+        FIELD_POLICYNUMBER.error = null;
+      }
+    }
+    if (action === "afterSave") {
+      field.readonly = true;
+      FIELD_BUTTON_CHANGE.visible = true;
+      FIELD_CAPTCHA.visible = false;
+      FIELD_POLICYNUMBER.readonly = true;
+    }
+  }
+
+  return data;
+}
 import { mapGetters } from "vuex";
 import Form from "/../components/Libs/Form/Form.vue";
 import Vue from "vue";
@@ -52,7 +82,9 @@ export default {
   },
   async created() {
     await this.$loadScript(
-      `/api/card/js/${this.moduleId}/${this.menuId}?zone=free`
+      `/api/card/js/${this.moduleId}/${
+        this.menuId
+      }?zone=free&time=${Date.now()}`
     );
     await this.$store.dispatch("menu/fetchMenu", this.params);
     this.eventHandler =
@@ -75,12 +107,14 @@ export default {
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
         data[i].checked = true;
+        const error = data[i].error;
         if (
-          data[i].required &&
-          !data[i].hidden &&
-          data[i].visible &&
-          (value === null || value === undefined || value === "") &&
-          value !== 0
+          (data[i].required &&
+            !data[i].hidden &&
+            data[i].visible &&
+            (value === null || value === undefined || value === "") &&
+            value !== 0) ||
+          error
         ) {
           console.log("error", data[i]);
           valid = false;
@@ -88,6 +122,16 @@ export default {
         }
       }
       return valid;
+    },
+    async callScript(e, action = null) {
+      let data = await this.eventHandler(
+        this.getForm.map((a) => Object.assign({}, a)),
+        e,
+        action
+      );
+      if (data) {
+        this.$store.commit("data_card/setForm", data || this.getForm);
+      }
     },
     async fetchCard() {
       let { items } = await this.$store.dispatch(
@@ -111,6 +155,7 @@ export default {
         value: e.value,
       });
       const actionId = parseInt(e.value.replace("Item", ""));
+      await this.callScript(e, "beforeSave");
       if (actionSaveCard.ID === actionId && this.validateData(this.getForm)) {
         this.isShowSavedError = false;
         let moduleId = this.moduleId,
@@ -131,13 +176,7 @@ export default {
             ...this.getFormParams,
             zone: "free",
           });
-          let data = await this.eventHandler(
-            this.getForm.map((a) => Object.assign({}, a)),
-            e
-          );
-          if (data) {
-            this.$store.commit("data_card/setForm", data || this.getForm);
-          }
+          await this.callScript(e, "afterSave");
         }
       }
       if (actionRefreshCard.ID === actionId) {
