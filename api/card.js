@@ -21,10 +21,16 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.query.zone !== "free") {
-      if (req.headers?.authorization) {
-        axios.defaults.headers.common.Authorization = req.headers.authorization;
+      if (Boolean(req?.headers?.authorization)) {
+        if (Boolean(axios?.defaults?.headers?.common?.Authorization)) {
+          axios.defaults.headers.common.Authorization =
+            req.headers.authorization;
+        }
       } else {
-        if (req.cookies) {
+        if (
+          req.cookies &&
+          Boolean(axios?.defaults?.headers?.common?.Authorization)
+        ) {
           axios.defaults.headers.common.Authorization =
             req.cookies["auth._token.local"];
         }
@@ -46,7 +52,11 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
         res.send(await formConverter.form(resp.data, req.params.idItem));
       })
       .catch((err) => {
-        res.status(err.response.data.STATUS).send(err.response.data);
+        if (err?.response?.data) {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        } else {
+          res.status(500).send(err);
+        }
       });
   } catch (e) {
     res.send(e);
@@ -114,7 +124,10 @@ app.get("/card/js/:idModule/:idItem", (req, res) => {
       if (req.headers?.authorization) {
         axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
-        if (req.cookies) {
+        if (
+          req.cookies &&
+          Boolean(axios?.defaults?.headers?.common?.Authorization)
+        ) {
           axios.defaults.headers.common.Authorization =
             req.cookies["auth._token.local"];
         }
@@ -220,7 +233,10 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       if (req.headers?.authorization) {
         axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
-        if (req.cookies) {
+        if (
+          req.cookies &&
+          Boolean(axios?.defaults?.headers?.common?.Authorization)
+        ) {
           axios.defaults.headers.common.Authorization =
             req.cookies["auth._token.local"];
         }

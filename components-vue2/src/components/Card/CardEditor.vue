@@ -103,7 +103,7 @@ export default {
         (item) => item.IDITEM === this.menuId
       );
       const actionRefreshCard = menu.ACTIONSCUR.find(
-        (item) => item.NTYPE === 33
+        (item) => item.NTYPE === 39
       );
       const actionSaveCard = menu.ACTIONSCUR.find((item) => item.NTYPE === 38);
       this.$store.commit("data_card/setFormField", {
@@ -126,15 +126,18 @@ export default {
           zone,
           form: this.getForm,
         });
-        let data = await this.eventHandler(
-          this.getForm.map((a) => Object.assign({}, a)),
-          e
-        );
-        if (data) {
-          this.$store.commit("data_card/setForm", data || this.getForm);
-        }
         if (resp.status === 200) {
-          await this.$store.dispatch("data_card/fetchForm", this.getFormParams);
+          await this.$store.dispatch("data_card/fetchForm", {
+            ...this.getFormParams,
+            zone: "free",
+          });
+          let data = await this.eventHandler(
+            this.getForm.map((a) => Object.assign({}, a)),
+            e
+          );
+          if (data) {
+            this.$store.commit("data_card/setForm", data || this.getForm);
+          }
         }
       }
       if (actionRefreshCard.ID === actionId) {

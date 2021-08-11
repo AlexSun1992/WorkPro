@@ -4,6 +4,7 @@
       v-if="data.mask"
       :mask="data.mask"
       class="form-control"
+      :placeholder="data.placeholder"
       :disabled="!edit ? !edit : data.readonly"
       v-bind:value="data.value"
       v-on:input="updateValue($event)"
