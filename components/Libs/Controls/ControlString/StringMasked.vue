@@ -20,8 +20,10 @@
 </template>
 
 <script>
+import { TheMask } from "vue-the-mask";
 export default {
   name: "StringMasked",
+  components: { TheMask },
   props: {
     data: {
       type: Object,
