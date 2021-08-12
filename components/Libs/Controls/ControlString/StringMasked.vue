@@ -13,11 +13,11 @@
       :masked="false"
       :tokens="customTokens"
     ></the-mask>
-    <b-form-invalid-feedback :state="data.state"
-      >Обязательно для заполнения</b-form-invalid-feedback
-    >
+    <b-form-invalid-feedback :state="isState">{{
+      data.error ? data.error : "Обязательно для заполнения"
+    }}</b-form-invalid-feedback>
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
-    <p class="error">{{ data.error }}</p>
+    <!--    <p class="error">{{ data.error }}</p>-->
   </div>
 </template>
 
@@ -70,6 +70,18 @@ export default {
           realValue: val.data,
         });
       }
+    },
+  },
+  computed: {
+    isState() {
+      let state = true;
+      if (this.data.state === false) {
+        state = false;
+      }
+      if (Boolean(this.data.error)) {
+        state = false;
+      }
+      return state;
     },
   },
 };
