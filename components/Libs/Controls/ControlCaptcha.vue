@@ -27,8 +27,8 @@
           alt="Капча"
           :src="captcha.CAPTCHA"
           title="Обновить"
-          @click="showCaptcha"
         />
+        <b-button @click="showCaptcha">Обновить</b-button>
       </div>
     </div>
   </div>
