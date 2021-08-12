@@ -11,36 +11,6 @@
   </div>
 </template>
 <script>
-function eventHandler(data, item, action) {
-  const field = data.find((f) => f.fieldId === item.fieldId);
-  if (field.name === "SPOLICYNUMBER") {
-    if (field?.value?.length === 13 && field.error) {
-      field.error = null;
-    }
-  }
-  if (field.name === "Item36465") {
-    const FIELD_BUTTON_CHANGE = data.find((f) => f.fieldId === 36233);
-    const FIELD_POLICYNUMBER = data.find((f) => f.fieldId === 36230);
-    const FIELD_CAPTCHA = data.find((f) => f.fieldId === 36231);
-
-    if (action === "beforeSave") {
-      if (FIELD_POLICYNUMBER?.value?.length < 13) {
-        FIELD_POLICYNUMBER.error =
-          "Длина серии и номера полиса должна быть 13 символов";
-      } else {
-        FIELD_POLICYNUMBER.error = null;
-      }
-    }
-    if (action === "afterSave") {
-      field.readonly = true;
-      FIELD_BUTTON_CHANGE.visible = true;
-      FIELD_CAPTCHA.visible = false;
-      FIELD_POLICYNUMBER.readonly = true;
-    }
-  }
-
-  return data;
-}
 import { mapGetters } from "vuex";
 import Form from "/../components/Libs/Form/Form.vue";
 import Vue from "vue";
