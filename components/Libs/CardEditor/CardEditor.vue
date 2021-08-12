@@ -222,7 +222,7 @@ export default {
             idModule: this.$route.params.idModule,
             idRel: this.$store.getters["data_card/getCardRelId"],
           };
-          await this.$store.dispatch("data_card/fetchForm", params);
+          // await this.$store.dispatch("data_card/fetchForm", params);
           return;
         }
         // throw new Error(`Неизвестный CUR.NTYPE=${CUR.NTYPE}`)
