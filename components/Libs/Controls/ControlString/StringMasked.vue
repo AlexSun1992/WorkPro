@@ -8,8 +8,10 @@
       :disabled="!edit ? !edit : data.readonly"
       v-bind:value="data.value"
       v-on:input="updateValue($event)"
+      @input.native="handler($event)"
       type="text"
       :masked="false"
+      :tokens="customTokens"
     ></the-mask>
     <b-form-invalid-feedback :state="data.state"
       >Обязательно для заполнения</b-form-invalid-feedback
@@ -24,6 +26,19 @@ import { TheMask } from "vue-the-mask";
 export default {
   name: "StringMasked",
   components: { TheMask },
+  data() {
+    return {
+      customTokens: {
+        "#": { pattern: /\d/ },
+        X: { pattern: /[0-9a-zA-Z]/ },
+        S: { pattern: /[a-zA-Z]/ },
+        A: { pattern: /[a-zA-Z]/, transform: (v) => v.toLocaleUpperCase() },
+        R: { pattern: /[а-яА-я]/, transform: (v) => v.toLocaleUpperCase() },
+        a: { pattern: /[a-zA-Z]/, transform: (v) => v.toLocaleLowerCase() },
+        "!": { escape: true },
+      },
+    };
+  },
   props: {
     data: {
       type: Object,
@@ -43,6 +58,16 @@ export default {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: val,
+        });
+      }
+    },
+    handler(val) {
+      if (val.data) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.data.value,
+          realValue: val.data,
         });
       }
     },
