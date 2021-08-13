@@ -94,15 +94,9 @@ module.exports = {
     transpile: ["vue-agile"],
   },
   proxy: {
-    // Simple proxy
-    "/wp-json": "http://wpress.reso.ru/",
-    "/wp-content": "http://wpress.reso.ru/",
-    // '/free': 'https://mobiletest.reso.ru',
-    // '/am': 'https://mobiletest.reso.ru',
-    // '/main': 'https://mobiletest.reso.ru',
-    "/free": "https://mobile.reso.ru",
+    "/free": "https://mobile2.reso.ru",
     "/am": "https://mobile2.reso.ru",
-    "/main": "https://mobile.reso.ru",
+    "/main": "https://mobile2.reso.ru",
   },
   serverMiddleware: [
     "~/api/index.js",
