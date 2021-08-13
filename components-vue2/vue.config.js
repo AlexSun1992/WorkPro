@@ -3,14 +3,17 @@ module.exports = {
   css: { extract: false },
   devServer: {
     proxy: {
-      "/free/": {
+      "^/free": {
+        target: "https://mobile.reso.ru",
+      },
+      "^/am": {
         target: "https://mobile2.reso.ru",
       },
-      "/am/": {
-        target: "https://mobile2.reso.ru",
-      },
-      "/cabinet|img|fonts|js|_nuxt|api/": {
+      "^/cabinet|^/img|^/fonts|^/js|^/_nuxt|^/api": {
         target: "http://localhost:8000",
+      },
+      "^/suggestions": {
+        target: "https://dadata.reso.ru",
       },
     },
   },
