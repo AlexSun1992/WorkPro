@@ -46,7 +46,7 @@ export default {
         this.requestAddress = "brandmodel";
       }
 
-      const response = await fetch(`api/suggestions/${this.requestAddress}`, {
+      const response = await fetch(`/api/suggestions/${this.requestAddress}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
