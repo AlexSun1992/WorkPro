@@ -97,6 +97,7 @@ module.exports = {
     "/free": "https://mobile2.reso.ru",
     "/am": "https://mobile2.reso.ru",
     "/main": "https://mobile2.reso.ru",
+    "/suggestions": "https://dadata.reso.ru",
   },
   serverMiddleware: [
     "~/api/index.js",
@@ -107,6 +108,7 @@ module.exports = {
     "~/api/wizard.js",
     "~/api/user.js",
     "~/api/refresh.js",
+    "~/api/dadata.js",
   ],
   auth: {
     strategies: {

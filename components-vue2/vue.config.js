@@ -13,7 +13,7 @@ module.exports = {
         target: "http://localhost:8000",
       },
       "^/suggestions": {
-        target: "https://dadata.reso.ru",
+        target: "http://localhost:8000",
       },
     },
   },
