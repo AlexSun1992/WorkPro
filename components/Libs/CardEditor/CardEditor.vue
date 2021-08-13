@@ -409,6 +409,13 @@ export default {
         });
       }
     },
+    cancelDataCard() {
+      this.$store.commit("data_card/cardChanged", false);
+      this.$store.commit(
+        "data_card/setForm",
+        JSON.parse(JSON.stringify(this.$store.getters["data_card/getCopyForm"]))
+      );
+    },
     updateActionParams(e) {
       this.$store.commit("data_card/setActionParamsField", e);
     },
