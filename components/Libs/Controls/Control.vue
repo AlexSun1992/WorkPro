@@ -41,14 +41,15 @@ import ControlCaptcha from "./ControlCaptcha";
 import ControlError from "./ControlError";
 import ControlPhoneChange from "./ControlPhoneChange";
 import ControlEmailChange from "./ControlEmailChange";
-
 import ControlProgressbar from "./ControlProgressbar";
 import { mapGetters } from "vuex";
 import ControlEmpty from "./ControlEmpty";
 import ControlLabelMoney from "./ControlLabelMoney";
+import ControlDadataSelect from "./ControlDadataSelect.vue";
 export default {
   name: "Control",
   components: {
+    ControlDadataSelect,
     ControlProgressbar,
     ControlString,
     ControlText,

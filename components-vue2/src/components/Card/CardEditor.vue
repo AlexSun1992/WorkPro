@@ -113,44 +113,50 @@ export default {
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
     async updateValue(e) {
+      let field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM === this.menuId
       );
-      const actionRefreshCard = menu.ACTIONSCUR.find(
-        (item) => item.NTYPE === 39
-      );
-      const actionSaveCard = menu.ACTIONSCUR.find((item) => item.NTYPE === 38);
+      await this.callScript(e);
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
         value: e.value,
       });
-      const actionId = parseInt(e.value.replace("Item", ""));
-      await this.callScript(e, "beforeSave");
-      if (actionSaveCard.ID === actionId && this.validateData(this.getForm)) {
-        this.isShowSavedError = false;
-        let moduleId = this.moduleId,
-          itemId = this.menuId,
-          cardId = this.getFormParams.idCard,
-          relId = this.getFormParams.idRel,
-          zone = "free";
-        let resp = await this.$store.dispatch("data_card/saveDataCard", {
-          moduleId,
-          itemId,
-          cardId,
-          relId,
-          zone,
-          form: this.getForm,
-        });
-        if (resp.status === 200) {
-          await this.$store.dispatch("data_card/fetchForm", {
-            ...this.getFormParams,
-            zone: "free",
+      if (field.type === "button") {
+        const actionId = parseInt(e.value.replace("Item", ""));
+        const actionRefreshCard = menu.ACTIONSCUR.find(
+          (item) => item.NTYPE === 39
+        );
+        const actionSaveCard = menu.ACTIONSCUR.find(
+          (item) => item.NTYPE === 38
+        );
+        await this.callScript(e, "beforeSave");
+        if (actionSaveCard.ID === actionId && this.validateData(this.getForm)) {
+          this.isShowSavedError = false;
+          let moduleId = this.moduleId,
+            itemId = this.menuId,
+            cardId = this.getFormParams.idCard,
+            relId = this.getFormParams.idRel,
+            zone = "free";
+          let resp = await this.$store.dispatch("data_card/saveDataCard", {
+            moduleId,
+            itemId,
+            cardId,
+            relId,
+            zone,
+            form: this.getForm,
           });
-          await this.callScript(e, "afterSave");
+          if (resp.status === 200) {
+            await this.$store.dispatch("data_card/fetchForm", {
+              ...this.getFormParams,
+              zone: "free",
+            });
+            await this.callScript(e, "afterSave");
+          }
         }
-      }
-      if (actionRefreshCard.ID === actionId) {
-        await this.fetchCard();
+        if (actionRefreshCard.ID === actionId) {
+          await this.fetchCard();
+        }
       }
     },
   },
