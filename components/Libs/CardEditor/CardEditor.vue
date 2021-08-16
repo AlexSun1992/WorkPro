@@ -88,21 +88,17 @@ export default {
   components: { FormBlock, FormAccordion, Form, ActionButton, SkeletonBox },
   data() {
     return {
-      invalidFields: [],
-      body: null,
       actionParamsTitle: null,
       actionParamsId: null,
       actionFormDisabled: false,
       isActionApplyError: false,
       actionApplyErrorMessage: null,
-      updateValueCounter: 0,
       disabledButtons: {
         background: "#dddbdd",
         boxShadow: "none",
         border: "none",
         color: "#dddbdd",
       },
-      source: "",
       saveSuccess: false,
     };
   },
@@ -156,7 +152,7 @@ export default {
         let data = await eventHandler(
           this.data.map((a) => Object.assign({}, a)),
           e,
-          this.fetchCard
+          this.$store._actions["data_card/fetchCard"][0]
         );
         if (data) {
           this.$store.commit("data_card/setForm", data || this.data);
@@ -234,15 +230,11 @@ export default {
           // await this.$store.dispatch("data_card/fetchForm", params);
           return;
         }
-        // throw new Error(`Неизвестный CUR.NTYPE=${CUR.NTYPE}`)
-        let actionParams = await this.$store.dispatch(
-          "data_card/fetchActionParams",
-          {
-            moduleId,
-            actionId,
-            cardId,
-          }
-        );
+        await this.$store.dispatch("data_card/fetchActionParams", {
+          moduleId,
+          actionId,
+          cardId,
+        });
         this.actionParamsTitle = field.label;
         this.actionParamsId = parseInt(actionId);
         if (this.actionSettings.isDialog) {
@@ -258,29 +250,6 @@ export default {
       });
     },
 
-    async fetchCard(method, url) {
-      try {
-        this.cancelRequest();
-        this.source = this.$axios.CancelToken.source();
-
-        let result = await this.$axios[method](url, {
-          cancelToken: this.source.token,
-        });
-
-        if (result) {
-          this.source = "";
-          return result.data[0];
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    cancelRequest() {
-      if (this.source) {
-        this.source.cancel("Cancelled");
-        console.log("cancel request done");
-      }
-    },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {
         fieldName: e.fieldName,
@@ -447,9 +416,6 @@ export default {
         JSON.parse(JSON.stringify(this.$store.getters["data_card/getCopyForm"]))
       );
     },
-    goBack() {
-      this.$router.push(this.$store.state.data_card.listPath);
-    },
     updateActionParams(e) {
       this.$store.commit("data_card/setActionParamsField", e);
     },
@@ -499,17 +465,6 @@ export default {
     },
   },
   computed: {
-    isButtonDisabled() {
-      if (!this.data.length) {
-        return this.disabledButtons;
-      }
-    },
-    errorMessage() {
-      return this.$store.getters["data_card/getErrorMessage"];
-    },
-    isError() {
-      return this.$store.getters["data_card/getError"];
-    },
     showBtnBack() {
       let path = this.$store.state.data_card.listPath;
       // Жестко убрали кнопку с полиса осаго (Игорь)

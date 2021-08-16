@@ -21,6 +21,7 @@ export const state = () => ({
   loading: false,
   moduleId: false,
   menuId: false,
+  source: "",
 });
 
 export const getters = {
@@ -41,6 +42,7 @@ export const getters = {
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
   getCardId: (state) => state.cardId,
+  getSource: (state) => state.source,
   getCardRelId: (state) => state.cardRelId,
   getCaptions: (state) => state.captions,
   getBtnSave: (state) => state.isSave,
@@ -273,6 +275,28 @@ export const actions = {
       }
     }
   },
+  async fetchCard({ commit, dispatch, getters, state }, params) {
+    try {
+      dispatch("cancelRequest");
+      commit("setSource", this.$axios.CancelToken.source());
+      let result = await this.$axios[params.method](params.url, {
+        cancelToken: getters.getSource.token,
+      });
+
+      if (result) {
+        commit("setSource", "");
+        return result.data[0];
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  cancelRequest({ commit, getters, state }) {
+    if (getters.getSource) {
+      getters.getSource.cancel("Cancelled");
+      console.log("cancel request done");
+    }
+  },
 };
 export const mutations = {
   cardChanged(state, data) {
@@ -404,5 +428,8 @@ export const mutations = {
   setCaptcha(state, data) {
     const item = state.form.find((d) => d.fieldId === data.data.fieldId);
     item.captcha = data.captcha;
+  },
+  setSource(state, params) {
+    state.source = params;
   },
 };
