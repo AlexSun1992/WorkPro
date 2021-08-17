@@ -158,7 +158,7 @@ export default {
           this.$store.commit("data_card/setForm", data || this.data);
         }
       }
-      if (field.type === "button") {
+      if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");
         let moduleId;
@@ -243,6 +243,8 @@ export default {
         } else {
           this.applyAction();
         }
+      } else {
+        // Кнопке не назначено действие
       }
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
