@@ -244,7 +244,13 @@ export default {
           this.applyAction();
         }
       } else {
-        // Кнопке не назначено действие
+        let data = eventHandler(
+          this.data.map((a) => Object.assign({}, a)),
+          e
+        );
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.data);
+        }
       }
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
