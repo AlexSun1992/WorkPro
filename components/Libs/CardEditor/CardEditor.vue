@@ -210,7 +210,7 @@ export default {
           }
           this.$store.commit("data_card/setLoading", false);
           return;
-        } else if (CUR.NTYPE == 33) {
+        } else if (CUR.NTYPE == 39) {
           this.$store.commit("data_card/setLoading", false);
           this.$store.commit("data_card/setReadOnly", false);
           let data = eventHandler(
@@ -227,8 +227,10 @@ export default {
             idModule: this.$route.params.idModule,
             idRel: this.$store.getters["data_card/getCardRelId"],
           };
-          // await this.$store.dispatch("data_card/fetchForm", params);
+          await this.$store.dispatch("data_card/fetchForm", params);
           return;
+        } else {
+          throw new Error("Ошибка: Тип действия не задан");
         }
         await this.$store.dispatch("data_card/fetchActionParams", {
           moduleId,
