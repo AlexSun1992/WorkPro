@@ -43,5 +43,7 @@ deploy_staging:
     url: http://new.reso.ru/
   dependencies:
     - build_compoments
+  only:
+    - master
   tags:
     - git-docker
