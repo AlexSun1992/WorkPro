@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-md-6">
         <b-form-group
           :label="data.label"
           :class="{ required: data.required }"
@@ -19,16 +19,21 @@
           </b-form-invalid-feedback>
         </b-form-group>
       </div>
-      <div class="col-lg-3">
-        <b-spinner v-if="isLoading" class="mt-4 ml-4" />
+      <div class="col-md-6 pt-3">
+        <b-spinner v-if="isLoading" class="ml-4" />
         <img
           v-else
-          class="captcha mt-2"
+          class="captcha"
           alt="Капча"
           :src="captcha.CAPTCHA"
           title="Обновить"
         />
-        <b-button @click="showCaptcha">Обновить</b-button>
+        <b-button
+          @click="showCaptcha"
+          class="reload-captcha"
+          variant="outline-success"
+          >Обновить</b-button
+        >
       </div>
     </div>
   </div>
@@ -92,5 +97,13 @@ export default {
 <style scoped>
 .captcha {
   cursor: pointer;
+  height: 37px;
+}
+.btn-outline-success.reload-captcha {
+  padding-left: 32px;
+  background: url(/img/reload-captcha.svg) 8px 50% no-repeat;
+  height: 37px;
+  background-size: 20px;
+  margin-left: 15px;
 }
 </style>
