@@ -246,7 +246,7 @@ export default {
         } else {
           this.applyAction();
         }
-      } else {
+      } else if (field.type === "button") {
         let data = eventHandler(
           this.data.map((a) => Object.assign({}, a)),
           e
