@@ -229,9 +229,10 @@ export default {
           };
           await this.$store.dispatch("data_card/fetchForm", params);
           return;
-        } else {
-          throw new Error("Ошибка: Тип действия не задан");
         }
+        // else {
+        //   throw new Error("Ошибка: Тип действия не задан");
+        // }
         await this.$store.dispatch("data_card/fetchActionParams", {
           moduleId,
           actionId,
