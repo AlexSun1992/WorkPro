@@ -134,10 +134,10 @@ converter.form = async (data, itemId) => {
       obj.type = "progressbar";
     } else if (webFields[i].IDCONTROL == 15) {
       obj.type = "combobox";
-      if (webFields[i].LVISIBLE && webFields[i].LDIC === true) {
+      if (webFields[i].LDIC === true) {
         promises.push(axios.get(`/am/main/v2/dicwf/${webFields[i].ID}`));
       }
-      if (webFields[i].LVISIBLE && webFields[i].LDIC === false) {
+      if (webFields[i].LDIC === false) {
         promises.push(
           axios.get(
             `/am/main/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${webFields[i].SNAME}`
@@ -163,8 +163,7 @@ converter.form = async (data, itemId) => {
       obj.type = "LabelMoney";
     } else if (webFields[i].IDCONTROL == 35) {
       obj.type = "DadataSelect";
-    }
-    else {
+    } else {
       obj.type = "string";
     }
 
