@@ -163,8 +163,7 @@ converter.form = async (data, itemId) => {
       obj.type = "LabelMoney";
     } else if (webFields[i].IDCONTROL == 35) {
       obj.type = "DadataSelect";
-    }
-    else {
+    } else {
       obj.type = "string";
     }
 
