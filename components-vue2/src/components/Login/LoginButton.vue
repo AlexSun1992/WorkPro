@@ -1,29 +1,35 @@
 <template>
   <div class="LoginButton">
-    <b-dropdown
-      variant="success"
-      v-if="isAuthentificated"
-      id="dropdown-1"
-      :text="userName"
-      class="gotolk icon-right"
-    >
-      <b-dropdown-item
-        v-for="(item, index) in navigationList"
-        :key="index"
-        @click="applyAction(index)"
+    <div v-if="isLoadedUserInfo">
+      <b-dropdown
+        variant="success"
+        v-if="isAuthentificated"
+        id="dropdown-1"
+        :text="userName"
+        class="gotolk icon-right"
       >
-        {{ item }}
-      </b-dropdown-item>
-    </b-dropdown>
-    <b-button
-      class="gotolk btn_trn btn-p-sm btn-icon-left"
-      v-else
-      @click="redirectToLoginPage"
-      >ЛИЧНЫЙ КАБИНЕТ</b-button
-    >
+        <b-dropdown-item
+          v-for="(item, index) in navigationList"
+          :key="index"
+          @click="applyAction(index)"
+        >
+          {{ item }}
+        </b-dropdown-item>
+      </b-dropdown>
+      <b-button
+        class="gotolk btn_trn btn-p-sm btn-icon-left"
+        v-else-if="!isAuthentificated"
+        @click="redirectToLoginPage"
+        >ЛИЧНЫЙ КАБИНЕТ</b-button
+      >
+    </div>
+    <div v-else>
+      <div>
+        <SkeletonBox :items="1"></SkeletonBox>
+      </div>
+    </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -31,82 +37,60 @@ import { BDropdown, BButton, BDropdownItem } from "bootstrap-vue";
 import SkeletonBox from "./Libs/SkeletonBox";
 
 const TOKEN_NAME = "auth._token.local";
-const EXPIRATION_TOKEN = "auth._token_expiration.local";
 const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
 const URL_GET_USER_NAME = "/am/main/v2/userinfo";
 const URL_REFRESH_TOKEN = "/am/auth/v2/token_refresh";
 const URL_AUTHORIZE = "/am/auth/v2/authorize";
-const DURATION = "100000";
-let failedQueue = [];
-const processQueue = (error, token = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
+const TOKEN_EXPIRATION = "auth._token_expiration.local";
+
+let autoRefreshTimeout;
+
+function startAutoRefresh() {
+  const tokenUpdate = Number(Cookies.get(TOKEN_EXPIRATION)) - 7200000;
+  clearTimeout(autoRefreshTimeout);
+  autoRefreshTimeout = setTimeout(() => refreshAccessToken(), tokenUpdate);
+  return axios({ url: URL_GET_USER_NAME, method: "GET" });
+}
+
+startAutoRefresh();
+
+async function refreshAccessToken() {
+  const request = await axios({
+    url: URL_REFRESH_TOKEN,
+    headers: {
+      Authorization: `Bearer ${Cookies.get(REFRESH_TOKEN_NAME)}`,
+    },
+    method: "GET",
   });
-  failedQueue = [];
-};
-let isRefreshing = false;
-axios.interceptors.response.use(undefined, function (err) {
+
+  Cookies.set(TOKEN_NAME, `Bearer ${request.data.ACCESS_TOKEN}`);
+  Cookies.set(REFRESH_TOKEN_NAME, request.data.REFRESH_TOKEN);
+  axios.defaults.headers.common.Authorization = `Bearer ${request.data.ACCESS_TOKEN}`;
+  startAutoRefresh();
+}
+
+axios.interceptors.response.use(undefined, async function (err) {
   const {
     config,
     response: { status },
   } = err;
-  const originalRequest = config;
+
   if (
     status === 401 &&
-    !originalRequest._retry &&
-    originalRequest.url !== URL_REFRESH_TOKEN &&
-    originalRequest.url !== URL_AUTHORIZE
+    !config._retry &&
+    config.url !== URL_REFRESH_TOKEN &&
+    config.url !== URL_AUTHORIZE
   ) {
-    if (isRefreshing) {
-      return new Promise(function (resolve, reject) {
-        failedQueue.push({ resolve, reject });
-      })
-        .then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return axios(originalRequest);
-        })
-        .catch((err) => {
-          console.log("error");
-          return err;
-        });
+    try {
+      await refreshAccessToken();
+      return axios(config);
+    } catch (err) {
+      console.log(err);
     }
-    isRefreshing = true;
-    originalRequest._retry = true;
-    return axios({
-      url: URL_REFRESH_TOKEN,
-      headers: {
-        Authorization: `Bearer ${Cookies.get(REFRESH_TOKEN_NAME)}`,
-      },
-      method: "GET",
-    })
-      .then(
-        (resp) => {
-          Cookies.set(TOKEN_NAME, `Bearer ${resp.data.ACCESS_TOKEN}`);
-          Cookies.set(REFRESH_TOKEN_NAME, resp.data.REFRESH_TOKEN);
-          axios.defaults.headers.common.Authorization = `Bearer ${resp.data.ACCESS_TOKEN}`;
-          isRefreshing = false;
-          originalRequest.headers.Authorization = `Bearer ${resp.data.ACCESS_TOKEN}`;
-          processQueue(null, resp.data.ACCESS_TOKEN);
-          return axios(originalRequest);
-        },
-        (err) => {
-          processQueue(err, null);
-          Cookies.set(TOKEN_NAME, "false");
-          Cookies.set(REFRESH_TOKEN_NAME, "false");
-          localStorage.setItem("auth._token.local", "false");
-          console.log(err);
-        }
-      )
-      .catch((err) => {
-        processQueue(err, null);
-      });
   }
   throw err;
 });
+
 export default {
   name: "LoginButton",
   components: {
@@ -118,7 +102,7 @@ export default {
   data() {
     return {
       personsData:
-        Cookies.get(TOKEN_NAME) !== "false"
+        localStorage.getItem("auth._token.local") !== "false"
           ? JSON.parse(localStorage.getItem("USER_INFO"))
           : null,
       navigationList: ["Личный кабинет", "Выход"],
@@ -132,29 +116,27 @@ export default {
         window.location.href = "/cabinet/55/0/701";
       } else {
         this.personsData = null;
-        Cookies.set(TOKEN_NAME, "false");
-        Cookies.set(REFRESH_TOKEN_NAME, "false");
+        Cookies.set(TOKEN_NAME, `${Cookies.get(TOKEN_NAME)}0`);
+        Cookies.set(REFRESH_TOKEN_NAME, `${Cookies.get(REFRESH_TOKEN_NAME)}0`);
         localStorage.setItem("auth._token.local", "false");
       }
     },
     redirectToLoginPage() {
       window.location.href = "/login";
     },
-    getPersonsData() {
+    async getPersonsData() {
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
         axios.defaults.headers.common.Authorization = token;
       }
-      axios({ url: URL_GET_USER_NAME, method: "GET" })
-        .then((resp) => {
-          this.personsData = resp.data[0]._data[0];
-          this.isLoadedUserInfo = true;
-          Cookies.set(EXPIRATION_TOKEN, Date.now() + DURATION);
-        })
-        .catch((err) => {
-          this.isLoadedUserInfo = true;
-          this.personsData = null;
-        });
+      try {
+        const res = await axios({ url: URL_GET_USER_NAME, method: "GET" });
+        this.personsData = await res.data[0]._data[0];
+        this.isLoadedUserInfo = true;
+      } catch (err) {
+        this.isLoadedUserInfo = true;
+        this.personsData = null;
+      }
     },
   },
 
@@ -167,16 +149,7 @@ export default {
     },
   },
   created() {
-    if (
-      Cookies.get(TOKEN_NAME) !== "false" &&
-      Cookies.get(TOKEN_NAME) !== undefined
-    ) {
-      if (Cookies.get(EXPIRATION_TOKEN) - Date.now() < DURATION) {
-        this.getPersonsData(Cookies.get(TOKEN_NAME));
-      }
-    } else {
-      this.personsData = null;
-    }
+    this.getPersonsData();
   },
 };
 </script>
