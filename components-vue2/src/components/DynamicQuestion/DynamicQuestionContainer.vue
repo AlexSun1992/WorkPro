@@ -59,6 +59,7 @@ export default {
       active: "KASKO",
     };
   },
+  methods: {},
 };
 </script>
 
