@@ -8,7 +8,6 @@
       :disabled="!edit ? !edit : data.readonly"
       v-bind:value="data.value"
       v-on:input="updateValue($event)"
-      @input.native="handler($event)"
       type="text"
       :masked="false"
       :tokens="customTokens"
@@ -61,16 +60,16 @@ export default {
         });
       }
     },
-    handler(val) {
-      if (val.data) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.data.value,
-          realValue: val.data,
-        });
-      }
-    },
+    // handler(val) {
+    //   if (val.data) {
+    //     this.$emit("update", {
+    //       fieldId: this.data.fieldId,
+    //       name: this.data.name,
+    //       value: this.data.value,
+    //       realValue: val.data,
+    //     });
+    //   }
+    // },
   },
   computed: {
     isState() {
