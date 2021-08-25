@@ -51,6 +51,15 @@ Vue.customElement(
     })
 );
 Vue.customElement(
+  "component-dynamic-question-container",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/DynamicQuestion/DynamicQuestionContainer.vue"], (
+        lazyComponent
+      ) => resolve(lazyComponent.default));
+    })
+);
+Vue.customElement(
   "component-card-editor",
   () =>
     new Promise((resolve) => {
