@@ -1,6 +1,6 @@
 <template>
   <div class="DynamicComponent">
-    <p>OSAGO</p>
+    <p>Здесь будет контент про ОСАГО</p>
   </div>
 </template>
 
