@@ -122,7 +122,7 @@ export default {
         fieldId: e.fieldId,
         value: e.value,
       });
-      if (field.type === "button") {
+      if (field.type === "button" && e.action) {
         const actionId = parseInt(e.value.replace("Item", ""));
         const actionRefreshCard = menu.ACTIONSCUR.find(
           (item) => item.NTYPE === 39
