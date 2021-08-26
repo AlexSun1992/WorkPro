@@ -1,40 +1,28 @@
 <template>
-  <div class="DynamicComponent">
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima repellat
-      doloremque quo voluptate harum, tempora accusamus delectus laudantium iure
-      doloribus veritatis debitis ullam, perferendis modi placeat itaque labore
-      earum ipsum?
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima repellat
-      doloremque quo voluptate harum, tempora accusamus delectus laudantium iure
-      doloribus veritatis debitis ullam, perferendis modi placeat itaque labore
-      earum ipsum?
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima repellat
-      doloremque quo voluptate harum, tempora accusamus delectus laudantium iure
-      doloribus veritatis debitis ullam, perferendis modi placeat itaque labore
-      earum ipsum?
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima repellat
-      doloremque quo voluptate harum, tempora accusamus delectus laudantium iure
-      doloribus veritatis debitis ullam, perferendis modi placeat itaque labore
-      earum ipsum?
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima repellat
-      doloremque quo voluptate harum, tempora accusamus delectus laudantium iure
-      doloribus veritatis debitis ullam, perferendis modi placeat itaque labore
-      earum ipsum?
-    </p>
+  <div class="DynamicComponent" v-if="questions !== null">
+    <div v-for="(question, id) in questions" :key="id">
+      <h4>{{ question.SQUESTION }}</h4>
+      <p>{{ question.SANSWER }}</p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "DynamicKASKO",
+  data() {
+    return {
+      questions: null,
+    };
+  },
+  async created() {
+    const url = "/free/v2/question";
+    let response = await fetch(url);
+    let data = await response.json();
+    let kasko = data.filter(function (item) {
+      return item.FKIDRMPRODUCT === "КАСКО";
+    });
+    this.questions = kasko;
+  },
 };
 </script>
