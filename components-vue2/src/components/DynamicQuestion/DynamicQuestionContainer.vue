@@ -19,7 +19,6 @@
       <dynamic-card componentName="DynamicDMS" param="60" v-b-toggle:60
         >ДМС</dynamic-card
       >
-
       <dynamic-card componentName="DynamicAnother" param="70" v-b-toggle:70
         >ДРУГОЕ</dynamic-card
       >
@@ -60,6 +59,15 @@ export default {
     };
   },
   methods: {},
+  mounted() {
+    // fetch("/free/v2/question")
+    //   .then(function (response) {
+    //     return response.json();
+    //   })
+    //   .then(function (data) {
+    //     console.log(data);
+    //   });
+  },
 };
 </script>
 

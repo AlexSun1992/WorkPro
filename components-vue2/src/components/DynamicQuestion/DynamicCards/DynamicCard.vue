@@ -1,7 +1,7 @@
 <template>
   <b-card no-body class="mb-1">
     <b-card-header header-tag="header" class="p-1" role="tab">
-      <b-button block :variant="text">
+      <b-button  block :variant="text">
         <slot />
       </b-button>
     </b-card-header>
