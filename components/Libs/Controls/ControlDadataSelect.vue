@@ -6,6 +6,7 @@
         :data="data"
         :search="search"
         @submit="handleSubmit"
+        :disabled="disabled"
       ></autocomplete>
     </b-form-group>
   </div>
@@ -37,6 +38,7 @@ export default {
       if (input.length < 1) {
         return [];
       }
+
       this.group = [];
       this.requestAddress = null;
 
@@ -68,6 +70,11 @@ export default {
         name: this.data.name,
         value: result,
       });
+    },
+  },
+  computed: {
+    disabled() {
+      return this.$store.getters["data_card/getReadOnly"];
     },
   },
 };
