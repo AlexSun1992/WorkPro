@@ -25,7 +25,10 @@ app.get("/list/:idModule/:idItem/:filters", (req, res) => {
       if (req.headers?.authorization) {
         axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
-        if (req.cookies) {
+        if (
+          req.cookies &&
+          Boolean(axios?.defaults?.headers?.common?.Authorization)
+        ) {
           axios.defaults.headers.common.Authorization =
             req.cookies["auth._token.local"];
         }

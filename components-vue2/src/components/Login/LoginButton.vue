@@ -18,7 +18,7 @@
       </b-dropdown>
       <b-button
         class="gotolk btn_trn btn-p-sm btn-icon-left"
-        v-else
+        v-else-if="!isAuthentificated"
         @click="redirectToLoginPage"
         >ЛИЧНЫЙ КАБИНЕТ</b-button
       >
@@ -30,7 +30,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -42,73 +41,56 @@ const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
 const URL_GET_USER_NAME = "/am/main/v2/userinfo";
 const URL_REFRESH_TOKEN = "/am/auth/v2/token_refresh";
 const URL_AUTHORIZE = "/am/auth/v2/authorize";
-let failedQueue = [];
-const processQueue = (error, token = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
+const TOKEN_EXPIRATION = "auth._token_expiration.local";
+
+let autoRefreshTimeout;
+
+function startAutoRefresh() {
+  const tokenUpdate = Number(Cookies.get(TOKEN_EXPIRATION)) - 7200000;
+  clearTimeout(autoRefreshTimeout);
+  autoRefreshTimeout = setTimeout(() => refreshAccessToken(), tokenUpdate);
+  return axios({ url: URL_GET_USER_NAME, method: "GET" });
+}
+
+startAutoRefresh();
+
+async function refreshAccessToken() {
+  const request = await axios({
+    url: URL_REFRESH_TOKEN,
+    headers: {
+      Authorization: `Bearer ${Cookies.get(REFRESH_TOKEN_NAME)}`,
+    },
+    method: "GET",
   });
-  failedQueue = [];
-};
-let isRefreshing = false;
-axios.interceptors.response.use(undefined, function (err) {
+
+  Cookies.set(TOKEN_NAME, `Bearer ${request.data.ACCESS_TOKEN}`);
+  Cookies.set(REFRESH_TOKEN_NAME, request.data.REFRESH_TOKEN);
+  axios.defaults.headers.common.Authorization = `Bearer ${request.data.ACCESS_TOKEN}`;
+  startAutoRefresh();
+}
+
+axios.interceptors.response.use(undefined, async function (err) {
   const {
     config,
     response: { status },
   } = err;
-  const originalRequest = config;
+
   if (
     status === 401 &&
-    !originalRequest._retry &&
-    originalRequest.url !== URL_REFRESH_TOKEN &&
-    originalRequest.url !== URL_AUTHORIZE
+    !config._retry &&
+    config.url !== URL_REFRESH_TOKEN &&
+    config.url !== URL_AUTHORIZE
   ) {
-    if (isRefreshing) {
-      return new Promise(function (resolve, reject) {
-        failedQueue.push({ resolve, reject });
-      })
-        .then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return axios(originalRequest);
-        })
-        .catch((err) => {
-          console.log("error");
-          return err;
-        });
+    try {
+      await refreshAccessToken();
+      return axios(config);
+    } catch (err) {
+      console.log(err);
     }
-    isRefreshing = true;
-    originalRequest._retry = true;
-    return axios({
-      url: URL_REFRESH_TOKEN,
-      headers: {
-        Authorization: `Bearer ${Cookies.get(REFRESH_TOKEN_NAME)}`,
-      },
-      method: "GET",
-    })
-      .then(
-        (resp) => {
-          Cookies.set(TOKEN_NAME, `Bearer ${resp.data.ACCESS_TOKEN}`);
-          Cookies.set(REFRESH_TOKEN_NAME, resp.data.REFRESH_TOKEN);
-          axios.defaults.headers.common.Authorization = `Bearer ${resp.data.ACCESS_TOKEN}`;
-          isRefreshing = false;
-          originalRequest.headers.Authorization = `Bearer ${resp.data.ACCESS_TOKEN}`;
-          processQueue(null, resp.data.ACCESS_TOKEN);
-          return axios(originalRequest);
-        },
-        (err) => {
-          processQueue(err, null);
-          console.log(err);
-        }
-      )
-      .catch((err) => {
-        processQueue(err, null);
-      });
   }
   throw err;
 });
+
 export default {
   name: "LoginButton",
   components: {
@@ -142,20 +124,19 @@ export default {
     redirectToLoginPage() {
       window.location.href = "/login";
     },
-    getPersonsData() {
+    async getPersonsData() {
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
         axios.defaults.headers.common.Authorization = token;
       }
-      axios({ url: URL_GET_USER_NAME, method: "GET" })
-        .then((resp) => {
-          this.personsData = resp.data[0]._data[0];
-          this.isLoadedUserInfo = true;
-        })
-        .catch((err) => {
-          this.isLoadedUserInfo = true;
-          this.personsData = null;
-        });
+      try {
+        const res = await axios({ url: URL_GET_USER_NAME, method: "GET" });
+        this.personsData = await res.data[0]._data[0];
+        this.isLoadedUserInfo = true;
+      } catch (err) {
+        this.isLoadedUserInfo = true;
+        this.personsData = null;
+      }
     },
   },
 

@@ -15,6 +15,7 @@
             @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
             @open-card="$emit('open-card', $event)"
+            :params="params"
             :data="item"
             :edit="edit"
             :cols="cols"
@@ -52,6 +53,10 @@ export default {
     },
     invalidFields: {
       type: Array | null,
+      required: false,
+    },
+    params: {
+      type: Object,
       required: false,
     },
   },

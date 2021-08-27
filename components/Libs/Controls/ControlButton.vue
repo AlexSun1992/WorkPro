@@ -38,6 +38,7 @@ export default {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           value: this.data.name,
+          action: this.data.name.includes("Item"),
         });
       }
     },

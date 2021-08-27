@@ -46,17 +46,14 @@ export default {
         this.requestAddress = "brandmodel";
       }
 
-      const response = await fetch(
-        `/suggestions/api/4_1/rs/suggest/${this.requestAddress}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ query: input }),
-        }
-      );
+      const response = await fetch(`/api/suggestions/${this.requestAddress}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ query: input }),
+      });
       const result = await response.json();
 
       result.suggestions.forEach((item) => {

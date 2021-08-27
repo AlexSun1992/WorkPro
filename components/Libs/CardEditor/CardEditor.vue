@@ -52,6 +52,7 @@
         v-if="isBlock && !isTabs && !isAccordion"
         :data="data"
         :tabs="tabs"
+        :params="params"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
@@ -87,21 +88,17 @@ export default {
   components: { FormBlock, FormAccordion, Form, ActionButton, SkeletonBox },
   data() {
     return {
-      invalidFields: [],
-      body: null,
       actionParamsTitle: null,
       actionParamsId: null,
       actionFormDisabled: false,
       isActionApplyError: false,
       actionApplyErrorMessage: null,
-      updateValueCounter: 0,
       disabledButtons: {
         background: "#dddbdd",
         boxShadow: "none",
         border: "none",
         color: "#dddbdd",
       },
-      source: "",
       saveSuccess: false,
     };
   },
@@ -155,13 +152,13 @@ export default {
         let data = await eventHandler(
           this.data.map((a) => Object.assign({}, a)),
           e,
-          this.fetchCard
+          this.$store._actions["data_card/fetchCard"][0]
         );
         if (data) {
           this.$store.commit("data_card/setForm", data || this.data);
         }
       }
-      if (field.type === "button") {
+      if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");
         let moduleId;
@@ -190,6 +187,14 @@ export default {
         });
         if (CUR.NTYPE == 38) {
           this.saveSuccess = false;
+          let data = eventHandler(
+            this.data.map((a) => Object.assign({}, a)),
+            e,
+            "beforeSave"
+          );
+          if (data) {
+            this.$store.commit("data_card/setForm", data || this.data);
+          }
           await this.saveDataCard();
           if (this.saveSuccess) {
             await this.$store.dispatch("data_card/fetchForm", params);
@@ -197,7 +202,7 @@ export default {
             let data = eventHandler(
               this.data.map((a) => Object.assign({}, a)),
               e,
-              "save"
+              "afterSave"
             );
             if (data) {
               this.$store.commit("data_card/setForm", data || this.data);
@@ -205,7 +210,7 @@ export default {
           }
           this.$store.commit("data_card/setLoading", false);
           return;
-        } else if (CUR.NTYPE == 33) {
+        } else if (CUR.NTYPE == 39) {
           this.$store.commit("data_card/setLoading", false);
           this.$store.commit("data_card/setReadOnly", false);
           let data = eventHandler(
@@ -225,15 +230,14 @@ export default {
           await this.$store.dispatch("data_card/fetchForm", params);
           return;
         }
-        // throw new Error(`Неизвестный CUR.NTYPE=${CUR.NTYPE}`)
-        let actionParams = await this.$store.dispatch(
-          "data_card/fetchActionParams",
-          {
-            moduleId,
-            actionId,
-            cardId,
-          }
-        );
+        // else {
+        //   throw new Error("Ошибка: Тип действия не задан");
+        // }
+        await this.$store.dispatch("data_card/fetchActionParams", {
+          moduleId,
+          actionId,
+          cardId,
+        });
         this.actionParamsTitle = field.label;
         this.actionParamsId = parseInt(actionId);
         if (this.actionSettings.isDialog) {
@@ -242,6 +246,14 @@ export default {
         } else {
           this.applyAction();
         }
+      } else if (field.type === "button") {
+        let data = eventHandler(
+          this.data.map((a) => Object.assign({}, a)),
+          e
+        );
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.data);
+        }
       }
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
@@ -249,29 +261,6 @@ export default {
       });
     },
 
-    async fetchCard(method, url) {
-      try {
-        this.cancelRequest();
-        this.source = this.$axios.CancelToken.source();
-
-        let result = await this.$axios[method](url, {
-          cancelToken: this.source.token,
-        });
-
-        if (result) {
-          this.source = "";
-          return result.data[0];
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    cancelRequest() {
-      if (this.source) {
-        this.source.cancel("Cancelled");
-        console.log("cancel request done");
-      }
-    },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {
         fieldName: e.fieldName,
@@ -438,9 +427,6 @@ export default {
         JSON.parse(JSON.stringify(this.$store.getters["data_card/getCopyForm"]))
       );
     },
-    goBack() {
-      this.$router.push(this.$store.state.data_card.listPath);
-    },
     updateActionParams(e) {
       this.$store.commit("data_card/setActionParamsField", e);
     },
@@ -490,17 +476,6 @@ export default {
     },
   },
   computed: {
-    isButtonDisabled() {
-      if (!this.data.length) {
-        return this.disabledButtons;
-      }
-    },
-    errorMessage() {
-      return this.$store.getters["data_card/getErrorMessage"];
-    },
-    isError() {
-      return this.$store.getters["data_card/getError"];
-    },
     showBtnBack() {
       let path = this.$store.state.data_card.listPath;
       // Жестко убрали кнопку с полиса осаго (Игорь)

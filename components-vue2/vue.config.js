@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     proxy: {
       "^/free": {
-        target: "https://mobile.reso.ru",
+        target: "https://mobile2.reso.ru",
       },
       "^/am": {
         target: "https://mobile2.reso.ru",
@@ -13,7 +13,7 @@ module.exports = {
         target: "http://localhost:8000",
       },
       "^/suggestions": {
-        target: "https://dadata.reso.ru",
+        target: "http://localhost:8000",
       },
     },
   },
