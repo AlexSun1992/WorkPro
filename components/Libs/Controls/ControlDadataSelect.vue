@@ -42,7 +42,7 @@ export default {
 
       if (this.data.name === "ADDRESS_REG") {
         this.requestAddress = "address";
-      } else if (this.data.name === "VEHICLE_MODEL") {
+      } else if (this.data.name === "SVEHICLE_MODEL") {
         this.requestAddress = "brandmodel";
       }
 
