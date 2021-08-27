@@ -40,7 +40,7 @@ export default {
       this.group = [];
       this.requestAddress = null;
 
-      if (this.data.name === "ADDRESS_REG") {
+      if (this.data.name === "SADDRESS_REG") {
         this.requestAddress = "address";
       } else if (this.data.name === "SVEHICLE_MODEL") {
         this.requestAddress = "brandmodel";
