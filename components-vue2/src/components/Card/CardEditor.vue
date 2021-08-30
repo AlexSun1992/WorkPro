@@ -1,6 +1,6 @@
 <template>
   <div class="col-lg-12">
-    <Form :data="getForm" :edit="true" @update="updateValue($event)" />
+    <Form :data="getForm" :edit="!isReadOnly" @update="updateValue($event)" />
     <div class="row">
       <div>
         <b-alert :show="getSavedError" variant="danger" class="mt-3 mb-0">
@@ -69,6 +69,9 @@ export default {
       "getErrorMessage",
       "getSavedError",
     ]),
+    isReadOnly: function () {
+      return this.$store.getters["data_card/getReadOnly"];
+    },
   },
   methods: {
     validateData(data) {
