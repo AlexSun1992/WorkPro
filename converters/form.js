@@ -63,7 +63,7 @@ converter.subcompare = (a, b) => {
 };
 
 converter.form = async (data, params) => {
-  let itemId = params.itemId;
+  let itemId = params.idItem;
   let zone = params?.zone;
   let item = data[0]._data.length ? data[0]._data[0] : {};
   let fields = data[0]._struct;

@@ -48,7 +48,6 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
-        // res.send(formConverter.form(resp.data, req.params.idItem))
         res.send(
           await formConverter.form(resp.data, { ...req.query, ...req.params })
         );
