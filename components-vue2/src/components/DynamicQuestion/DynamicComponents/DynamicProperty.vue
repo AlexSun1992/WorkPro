@@ -19,6 +19,7 @@ export default {
     const url = "/free/v2/question";
     let response = await fetch(url);
     let data = await response.json();
+    console.log(data);
     let property = data.filter(function (item) {
       return item.FKIDRMPRODUCT === "Имущество";
     });
