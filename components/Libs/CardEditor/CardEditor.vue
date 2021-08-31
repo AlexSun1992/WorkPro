@@ -60,6 +60,9 @@
       />
     </div>
     <SkeletonBox v-if="!data.length" class="mt-5" :items="8"></SkeletonBox>
+    <b-alert :show="isActionApplyError" variant="danger">{{
+      actionApplyErrorMessage
+    }}</b-alert>
   </div>
 </template>
 
@@ -392,6 +395,8 @@ export default {
             });
           } else {
             if (resp?.status === 500) {
+              this.isActionApplyError = true;
+              this.actionApplyErrorMessage = resp.data.INFO;
               this.$store.commit("data_card/setLoading", false);
               this.$store.commit("data_card/setDisabled", false);
               this.$store.commit("data_card/setSavedError", true);
