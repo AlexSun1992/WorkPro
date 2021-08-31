@@ -149,6 +149,10 @@ export default {
         .then((resp) => {
           this.personsData = resp.data[0]._data[0];
           this.isLoadedUserInfo = true;
+          localStorage.setItem(
+            "USER_INFO",
+            JSON.stringify(resp.data[0]._data[0])
+          );
           Cookies.set(EXPIRATION_TOKEN, Date.now() + DURATION);
         })
         .catch((err) => {
@@ -171,6 +175,9 @@ export default {
       Cookies.get(TOKEN_NAME) !== "false" &&
       Cookies.get(TOKEN_NAME) !== undefined
     ) {
+      if (!localStorage.getItem("USER_INFO")) {
+        this.getPersonsData(Cookies.get(TOKEN_NAME));
+      }
       if (Cookies.get(EXPIRATION_TOKEN) - Date.now() < DURATION) {
         this.getPersonsData(Cookies.get(TOKEN_NAME));
       }
