@@ -60,10 +60,9 @@
       />
     </div>
     <SkeletonBox v-if="!data.length" class="mt-5" :items="8"></SkeletonBox>
-    <!-- <b-alert :show="isActionApplyError" variant="danger">{{
-        actionApplyErrorMessage
-      }}</b-alert> -->
-    {{ actionApplyErrorMessage }}
+    <b-alert :show="isActionApplyError" variant="danger">{{
+      actionApplyErrorMessage
+    }}</b-alert>
   </div>
 </template>
 
