@@ -62,7 +62,9 @@ converter.subcompare = (a, b) => {
   return 0;
 };
 
-converter.form = async (data, itemId) => {
+converter.form = async (data, params) => {
+  let itemId = params.itemId;
+  let zone = params?.zone;
   let item = data[0]._data.length ? data[0]._data[0] : {};
   let fields = data[0]._struct;
   let meta_value = converter.meta(data[0]?._meta.SNEWRECORD) || {};
@@ -135,12 +137,20 @@ converter.form = async (data, itemId) => {
     } else if (webFields[i].IDCONTROL == 15) {
       obj.type = "combobox";
       if (webFields[i].LDIC === true) {
-        promises.push(axios.get(`/am/main/v2/dicwf/${webFields[i].ID}`));
+        promises.push(
+          axios.get(
+            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
+              webFields[i].ID
+            }`
+          )
+        );
       }
       if (webFields[i].LDIC === false) {
         promises.push(
           axios.get(
-            `/am/main/v2/dic/${webFields[i].IDADMMODULE}/${itemId}/${webFields[i].SNAME}`
+            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
+              webFields[i].IDADMMODULE
+            }/${itemId}/${webFields[i].SNAME}`
           )
         );
       }
@@ -223,7 +233,10 @@ converter.form = async (data, itemId) => {
           let field1 = null;
           if (isDicwf) {
             const fieldId = parseInt(
-              item.value.config.url.replace("/am/main/v2/dicwf/", "")
+              item.value.config.url.replace(
+                `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/`,
+                ""
+              )
             );
             if (fieldId) {
               field1 = values.find((b) =>
@@ -232,7 +245,7 @@ converter.form = async (data, itemId) => {
             }
           } else {
             fieldName = item.value.config.url.replace(
-              `/am/main/v2/dic/55/${itemId}/`,
+              `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${itemId}/`,
               ""
             );
             if (fieldName) {

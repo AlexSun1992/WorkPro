@@ -49,7 +49,9 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
     })
       .then(async (resp) => {
         // res.send(formConverter.form(resp.data, req.params.idItem))
-        res.send(await formConverter.form(resp.data, req.params.idItem));
+        res.send(
+          await formConverter.form(resp.data, { ...req.query, ...req.params })
+        );
       })
       .catch((err) => {
         if (err?.response?.data) {
@@ -82,7 +84,9 @@ app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
     })
       .then(async (resp) => {
         // res.send(formConverter.form(resp.data, req.params.idItem))
-        res.send(await formConverter.form(resp.data, req.params.idItem));
+        res.send(
+          await formConverter.form(resp.data, { ...req.query, ...req.params })
+        );
       })
       .catch((err) => {
         res.status(err.response.data.STATUS).send(err.response.data);
@@ -100,7 +104,7 @@ app.get("/osago", (req, res) => {
     })
       .then(async (resp) => {
         let data = freeMethodsConverter.osago(
-          await formConverter.form(resp.data, req.params.idItem)
+          await formConverter.form(resp.data, { ...req.query, ...req.params })
         );
         const menu = await axios.get(`${consts.FREEMENU}/55/738`);
         data.settings = menuConverter.menuObject(menu.data[0]._data[0]);
