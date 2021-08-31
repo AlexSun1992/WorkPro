@@ -59,15 +59,6 @@ export default {
     };
   },
   methods: {},
-  mounted() {
-    // fetch("/free/v2/question")
-    //   .then(function (response) {
-    //     return response.json();
-    //   })
-    //   .then(function (data) {
-    //     console.log(data);
-    //   });
-  },
 };
 </script>
 
