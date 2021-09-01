@@ -2,14 +2,14 @@
   <div class="DynamicQuestionContainer">
     <div class="accordion" role="tablist">
       <dynamic-card
-        v-for="(item, idx) in targetData"
+        v-for="(item, idx) in distinctTitlesData"
         :key="idx"
         :param="`${idx}`"
         v-b-toggle="`${idx}`"
         :title="item"
         @action="hello(idx)"
       >
-        <div v-for="(item, id) in linkData" :key="id">
+        <div v-for="(item, id) in selectData" :key="id">
           <h4>{{ item.SQUESTION }}</h4>
           <p>{{ item.SANSWER }}</p>
         </div>
@@ -48,27 +48,17 @@ export default {
 
   data() {
     return {
-      targetReferences: [],
-      dataHub: [],
-      targetData: [],
-      linkData: null,
+      fullTitlesData: [],
+      distinctTitlesData: [],
+      fullData: [],
+      selectData: [],
     };
   },
   methods: {
-    async hello(idx) {
-      const url = "/free/v2/question";
-      let response = await fetch(url);
-      let data = await response.json();
-      this.targetReferences.unshift(this.targetData[idx]);
-
-      if (this.targetData[idx] !== this.targetReferences[0]) {
-        this.linkData = null;
-      }
-
-      let hub = data.filter((item) => {
-        return item.FKIDRMPRODUCT === this.targetData[idx];
+    hello(idx) {
+      this.selectData = this.fullData.filter((item) => {
+        return item.FKIDRMPRODUCT === this.distinctTitlesData[idx];
       });
-      this.linkData = hub;
     },
   },
 
@@ -76,12 +66,14 @@ export default {
     const url = "/free/v2/question";
     let response = await fetch(url);
     let data = await response.json();
+    this.fullData = data;
     data.forEach((item) => {
-      this.dataHub.push(item.FKIDRMPRODUCT);
+      this.fullTitlesData.push(item.FKIDRMPRODUCT);
     });
-    for (let str of this.dataHub) {
-      if (!this.targetData.includes(str)) {
-        this.targetData.push(str);
+
+    for (let str of this.fullTitlesData) {
+      if (!this.distinctTitlesData.includes(str)) {
+        this.distinctTitlesData.push(str);
       }
     }
   },
