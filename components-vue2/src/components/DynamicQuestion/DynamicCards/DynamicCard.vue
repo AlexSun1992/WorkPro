@@ -7,9 +7,6 @@
     </b-card-header>
     <b-collapse :id="param" accordion="my-accordion" role="tabpanel">
       <div>
-        <!-- <b-card-body>
-          <div>{{ message }}</div>
-        </b-card-body> -->
         <slot></slot>
       </div>
     </b-collapse>

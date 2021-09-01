@@ -9,13 +9,6 @@
         :title="item"
         @action="hello(idx)"
       >
-        <!-- <dynamic-question-body
-          :content="linkData"
-          v-for="(item, id) in linkData"
-          :key="id"
-        >
-          <h2>{{ item }}</h2>
-        </dynamic-question-body> -->
         <div v-for="(item, id) in linkData" :key="id">
           <h4>{{ item.SQUESTION }}</h4>
           <p>{{ item.SANSWER }}</p>
@@ -27,7 +20,6 @@
 
 <script>
 import DynamicCard from "./DynamicCards/DynamicCard";
-// import DynamicQuestionBody from "./DynamicQuestionBody/DynamicQuestionBody";
 
 import {
   BCollapse,
@@ -49,7 +41,6 @@ export default {
     BCardBody,
     BCardHeader,
     DynamicCard,
-    // DynamicQuestionBody,
   },
   directives: {
     "b-toggle": VBToggle,
@@ -57,6 +48,7 @@ export default {
 
   data() {
     return {
+      targetReferences: [],
       dataHub: [],
       targetData: [],
       linkData: null,
@@ -67,12 +59,16 @@ export default {
       const url = "/free/v2/question";
       let response = await fetch(url);
       let data = await response.json();
-      console.log(this.targetData[idx]);
+      this.targetReferences.unshift(this.targetData[idx]);
+
+      if (this.targetData[idx] !== this.targetReferences[0]) {
+        this.linkData = null;
+      }
+
       let hub = data.filter((item) => {
         return item.FKIDRMPRODUCT === this.targetData[idx];
       });
       this.linkData = hub;
-      console.log(this.linkData);
     },
   },
 
