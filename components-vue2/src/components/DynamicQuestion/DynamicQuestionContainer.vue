@@ -7,7 +7,7 @@
         :param="`${idx}`"
         v-b-toggle="`${idx}`"
         :title="item"
-        @action="hello(idx)"
+        @action="ChooseItem(idx)"
       >
         <div v-for="(item, id) in selectData" :key="id">
           <h4>{{ item.SQUESTION }}</h4>
@@ -55,7 +55,7 @@ export default {
     };
   },
   methods: {
-    hello(idx) {
+    ChooseItem(idx) {
       this.selectData = this.fullData.filter((item) => {
         return item.FKIDRMPRODUCT === this.distinctTitlesData[idx];
       });

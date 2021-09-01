@@ -48,10 +48,8 @@ export default {
 
   methods: {
     action() {
-      // console.log(this.title);
       this.$emit("action");
     },
   },
-  async created() {},
 };
 </script>
