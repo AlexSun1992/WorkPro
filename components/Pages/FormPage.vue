@@ -50,6 +50,11 @@
         >
       </div>
     </div>
+    <div class="row">
+      <b-alert class="mt-3" show v-if="errorMessage" variant="danger">{{
+        errorMessage
+      }}</b-alert>
+    </div>
   </div>
 </template>
 
