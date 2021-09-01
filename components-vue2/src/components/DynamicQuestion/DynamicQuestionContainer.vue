@@ -1,33 +1,30 @@
 <template>
   <div class="DynamicQuestionContainer">
     <div class="accordion" role="tablist">
-      <dynamic-card componentName="DynamicOSAGO" param="10" v-b-toggle:10
-        >ОСАГО</dynamic-card
+      <dynamic-card
+        v-for="(item, idx) in targetData"
+        :key="idx"
+        :param="`${idx}`"
+        v-b-toggle="`${idx}`"
+        :title="item"
+        @action="hello(idx)"
       >
-      <dynamic-card componentName="DynamicKASKO" param="20" v-b-toggle:20
-        >КАСКО</dynamic-card
-      >
-      <dynamic-card componentName="DynamicGreenCard" param="30" v-b-toggle:30
-        >Зеленая карта</dynamic-card
-      >
-      <dynamic-card componentName="DynamicProperty" param="40" v-b-toggle:40
-        >Имущество</dynamic-card
-      >
-      <dynamic-card componentName="DynamicTourists" param="50" v-b-toggle:50
-        >Туризм</dynamic-card
-      >
-      <dynamic-card componentName="DynamicDMS" param="60" v-b-toggle:60
-        >ДМС</dynamic-card
-      >
-      <dynamic-card componentName="DynamicAnother" param="70" v-b-toggle:70
-        >ДРУГОЕ</dynamic-card
-      >
+        <dynamic-question-body
+          :content="linkData"
+          v-for="(item, id) in linkData"
+          :key="id"
+        >
+          <h2>{{ item.SANSWER }}</h2>
+        </dynamic-question-body>
+      </dynamic-card>
     </div>
   </div>
 </template>
 
 <script>
 import DynamicCard from "./DynamicCards/DynamicCard";
+import DynamicQuestionBody from "./DynamicQuestionBody/DynamicQuestionBody";
+
 import {
   BCollapse,
   BButton,
@@ -48,15 +45,46 @@ export default {
     BCardBody,
     BCardHeader,
     DynamicCard,
+    DynamicQuestionBody,
   },
   directives: {
     "b-toggle": VBToggle,
   },
 
   data() {
-    return {};
+    return {
+      dataHub: [],
+      targetData: [],
+      linkData: null,
+    };
   },
-  methods: {},
+  methods: {
+    async hello(idx) {
+      const url = "/free/v2/question";
+      let response = await fetch(url);
+      let data = await response.json();
+      console.log(this.targetData[idx]);
+      let hub = data.filter((item) => {
+        return item.FKIDRMPRODUCT === this.targetData[idx];
+      });
+      this.linkData = hub;
+      console.log(this.linkData);
+    },
+  },
+
+  async created() {
+    const url = "/free/v2/question";
+    let response = await fetch(url);
+    let data = await response.json();
+    data.forEach((item) => {
+      this.dataHub.push(item.FKIDRMPRODUCT);
+    });
+    for (let str of this.dataHub) {
+      if (!this.targetData.includes(str)) {
+        this.targetData.push(str);
+      }
+    }
+  },
 };
 </script>
 

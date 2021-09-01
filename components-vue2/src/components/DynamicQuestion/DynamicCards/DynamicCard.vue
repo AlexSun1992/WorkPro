@@ -1,27 +1,22 @@
 <template>
   <b-card no-body class="mb-1">
     <b-card-header header-tag="header" class="p-1" role="tab">
-      <b-button block :variant="text">
-        <slot />
+      <b-button @click="action" block :variant="text">
+        {{ title }}
       </b-button>
     </b-card-header>
     <b-collapse :id="param" accordion="my-accordion" role="tabpanel">
-      <b-card-body>
-        <component :is="componentName"></component>
-      </b-card-body>
+      <div>
+        <!-- <b-card-body>
+          <div>{{ message }}</div>
+        </b-card-body> -->
+        <slot></slot>
+      </div>
     </b-collapse>
   </b-card>
 </template>
 
 <script>
-import DynamicOSAGO from "../DynamicComponents/DynamicOSAGO";
-import DynamicKASKO from "../DynamicComponents/DynamicKASKO";
-import DynamicGreenCard from "../DynamicComponents/DynamicGreenCard.vue";
-import DynamicProperty from "../DynamicComponents/DynamicProperty.vue";
-import DynamicTourists from "../DynamicComponents/DynamicTourists.vue";
-import DynamicDMS from "../DynamicComponents/DynamicDMS.vue";
-import DynamicAnother from "../DynamicComponents/DynamicAnother.vue";
-
 import {
   BCollapse,
   BButton,
@@ -33,16 +28,9 @@ import {
 } from "bootstrap-vue";
 
 export default {
-  props: ["param", "componentName"],
+  props: ["param", "title", "message"],
   name: "DynamicCard",
   components: {
-    DynamicOSAGO,
-    DynamicKASKO,
-    DynamicGreenCard,
-    DynamicProperty,
-    DynamicTourists,
-    DynamicDMS,
-    DynamicAnother,
     BCollapse,
     BButton,
     BCard,
@@ -53,13 +41,20 @@ export default {
   directives: {
     "b-toggle": VBToggle,
   },
+
   data() {
     return {
       text: "info",
+      dataHub: [],
     };
   },
-  created() {
-    console.log(this.componentName);
+
+  methods: {
+    action() {
+      // console.log(this.title);
+      this.$emit("action");
+    },
   },
+  async created() {},
 };
 </script>
