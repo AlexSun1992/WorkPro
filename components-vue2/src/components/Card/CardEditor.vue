@@ -69,6 +69,7 @@ export default {
       "getErrorMessage",
       "getSavedError",
     ]),
+    ...mapGetters("auth", ["getLogged", "getUser"]),
     isReadOnly: function () {
       return this.$store.getters["data_card/getReadOnly"];
     },
@@ -157,7 +158,7 @@ export default {
             await this.callScript(e, "afterSave");
           }
         }
-        if (actionRefreshCard.ID === actionId) {
+        if (actionRefreshCard?.ID === actionId) {
           await this.fetchCard();
         }
       }
