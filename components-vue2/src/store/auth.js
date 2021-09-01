@@ -11,7 +11,6 @@ export const mutations = {
     state.isLogged = data;
   },
   setUser(state, data) {
-    console.log(data);
     state.user = data;
   },
 };
