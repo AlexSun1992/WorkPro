@@ -9,13 +9,17 @@
         :title="item"
         @action="hello(idx)"
       >
-        <dynamic-question-body
+        <!-- <dynamic-question-body
           :content="linkData"
           v-for="(item, id) in linkData"
           :key="id"
         >
-          <h2>{{ item.SANSWER }}</h2>
-        </dynamic-question-body>
+          <h2>{{ item }}</h2>
+        </dynamic-question-body> -->
+        <div v-for="(item, id) in linkData" :key="id">
+          <h4>{{ item.SQUESTION }}</h4>
+          <p>{{ item.SANSWER }}</p>
+        </div>
       </dynamic-card>
     </div>
   </div>
@@ -23,7 +27,7 @@
 
 <script>
 import DynamicCard from "./DynamicCards/DynamicCard";
-import DynamicQuestionBody from "./DynamicQuestionBody/DynamicQuestionBody";
+// import DynamicQuestionBody from "./DynamicQuestionBody/DynamicQuestionBody";
 
 import {
   BCollapse,
@@ -45,7 +49,7 @@ export default {
     BCardBody,
     BCardHeader,
     DynamicCard,
-    DynamicQuestionBody,
+    // DynamicQuestionBody,
   },
   directives: {
     "b-toggle": VBToggle,
