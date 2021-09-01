@@ -42,7 +42,6 @@ export default {
   data() {
     return {
       text: "info",
-      dataHub: [],
     };
   },
 

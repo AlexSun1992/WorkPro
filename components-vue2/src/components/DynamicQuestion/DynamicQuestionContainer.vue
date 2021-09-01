@@ -24,7 +24,6 @@ import DynamicCard from "./DynamicCards/DynamicCard";
 import {
   BCollapse,
   BButton,
-  BCard,
   BCardText,
   BCardBody,
   BCardHeader,
@@ -36,7 +35,6 @@ export default {
   components: {
     BCollapse,
     BButton,
-    BCard,
     BCardText,
     BCardBody,
     BCardHeader,
@@ -70,7 +68,6 @@ export default {
     data.forEach((item) => {
       this.fullTitlesData.push(item.FKIDRMPRODUCT);
     });
-
     for (let str of this.fullTitlesData) {
       if (!this.distinctTitlesData.includes(str)) {
         this.distinctTitlesData.push(str);
