@@ -14,31 +14,17 @@
 </template>
 
 <script>
-import {
-  BCollapse,
-  BButton,
-  BCard,
-  BCardText,
-  BCardBody,
-  BCardHeader,
-  VBToggle,
-} from "bootstrap-vue";
+import { BCollapse, BButton, BCard, BCardHeader } from "bootstrap-vue";
 
 export default {
-  props: ["param", "title", "message"],
+  props: ["param", "title"],
   name: "DynamicCard",
   components: {
     BCollapse,
     BButton,
     BCard,
-    BCardText,
-    BCardBody,
     BCardHeader,
   },
-  directives: {
-    "b-toggle": VBToggle,
-  },
-
   data() {
     return {
       text: "info",

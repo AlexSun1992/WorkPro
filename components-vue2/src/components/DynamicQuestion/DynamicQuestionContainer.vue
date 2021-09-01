@@ -21,23 +21,11 @@
 <script>
 import DynamicCard from "./DynamicCards/DynamicCard";
 
-import {
-  BCollapse,
-  BButton,
-  BCardText,
-  BCardBody,
-  BCardHeader,
-  VBToggle,
-} from "bootstrap-vue";
+import { VBToggle } from "bootstrap-vue";
 
 export default {
   name: "DynamicQuestionContainer",
   components: {
-    BCollapse,
-    BButton,
-    BCardText,
-    BCardBody,
-    BCardHeader,
     DynamicCard,
   },
   directives: {
