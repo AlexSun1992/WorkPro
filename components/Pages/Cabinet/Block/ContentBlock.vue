@@ -45,7 +45,7 @@ export default {
             itemId: this.itemId,
             cardId: this.cardId,
           })
-        : this.$store.dispatch("blocks/fetchBlock", this.itemId);
+        : this.$store.dispatch("blocks/fetchBlock", { id: this.itemId });
     } catch (err) {
       this.$bvToast.toast(err.response.data.MESSAGE, {
         title: "Ошибка",
