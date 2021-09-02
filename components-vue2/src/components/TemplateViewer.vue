@@ -5,10 +5,8 @@
 </template>
 
 <script>
-const ACCESS_TOKEN = "auth._token.local";
 import ContentBlock from "./ContentBlock.vue";
 import VRuntimeTemplate from "v-runtime-template";
-import Cookies from "js-cookie";
 export default {
   name: "TemplateViewer",
   components: { ContentBlock, VRuntimeTemplate },
@@ -29,44 +27,40 @@ export default {
         idModule: this.moduleId,
         idParent: "0",
         idCard: "0",
-        idRel: "0",
-        zone: Cookies.get(ACCESS_TOKEN) != "false" ? "" : "free",
+        zone: this.$store.getters["auth/getLogged"] ? "" : "free",
       },
       template: "",
     };
   },
+
   created() {
     this.fetchTemplate();
   },
+
   methods: {
     async fetchTemplate() {
       await this.$store.dispatch("menu/fetchMenu", this.params);
-      let settings = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
-      if (Cookies.get(ACCESS_TOKEN) != "false") {
-        this.template = settings.cardgrid;
+      if (this.$store.getters["auth/getLogged"]) {
+        if (this.$store.getters["menu/breadcrumbs"]) {
+          this.template = this.$store.getters["menu/breadcrumbs"]
+            .slice(-1)
+            .pop().cardgrid;
+        }
+      } else {
+        this.template = this.getMenuItem().SVJCARDGRID;
       }
-      if (!settings) {
-        const flatmenu = this.$store.getters["menu/flatmenu"];
-        const menuItem = flatmenu.find((item) => {
-          return item.IDITEM == this.itemId;
-        });
-        this.template = menuItem.SVJCARDGRID;
-      }
+    },
+    getMenuItem() {
+      const flatmenu = this.$store.getters["menu/flatmenu"];
+      const menuItem = flatmenu.find((item) => {
+        return item.IDITEM == this.itemId;
+      });
+      return menuItem;
     },
   },
   computed: {
     templateData() {
       return this.template;
-    },
-    userInfo() {
-      if (this.$store.getters["data_card/userInfo"]) {
-        this.fetchTemplate();
-      }
-    },
-  },
-  watch: {
-    userInfo() {
-      console.log("userInfo");
     },
   },
 };

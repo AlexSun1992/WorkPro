@@ -9,8 +9,6 @@
 </template>
 
 <script>
-const ACCESS_TOKEN = "auth._token.local";
-import Cookies from "js-cookie";
 export default {
   name: "ContentBlock",
   props: {
@@ -18,25 +16,42 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      params: {
+        id: this.itemId,
+        zone: this.zone,
+      },
+    };
+  },
   async created() {
     try {
-      let params = {
-        id: this.itemId,
-        zone: Cookies.get(ACCESS_TOKEN) != "false" ? "" : "free",
-      };
-      await this.$store.dispatch("blocks/fetchBlock", params);
+      await this.$store.dispatch("blocks/fetchBlock", this.params);
     } catch (err) {
       console.log(err);
     }
   },
   computed: {
     dataContent() {
-      if (this.$store.getters["blocks/getBlockById"](this.itemId)) {
-        let block = this.$store.getters["blocks/getBlockById"](this.itemId);
-        if (block) {
-          return block.data;
-        }
+      if (this.block) {
+        return this.block.data;
       }
+    },
+    async logged() {
+      this.params.zone = this.zone;
+      this.$store.dispatch("blocks/clearBlock");
+      this.$store.getters["auth/getLogged"];
+    },
+    block() {
+      return this.$store.getters["blocks/getBlockById"](this.itemId);
+    },
+    zone() {
+      return this.$store.getters["auth/getLogged"] ? "" : "free";
+    },
+  },
+  watch: {
+    async logged() {
+      await this.$store.dispatch("blocks/fetchBlock", this.params);
     },
   },
 };
