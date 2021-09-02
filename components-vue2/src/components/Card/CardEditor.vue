@@ -1,6 +1,6 @@
 <template>
   <div class="col-lg-12">
-    <Form :data="getForm" :edit="true" @update="updateValue($event)" />
+    <Form :data="getForm" :edit="!isReadOnly" @update="updateValue($event)" />
     <div class="row">
       <div>
         <b-alert :show="getSavedError" variant="danger" class="mt-3 mb-0">
@@ -69,6 +69,10 @@ export default {
       "getErrorMessage",
       "getSavedError",
     ]),
+    ...mapGetters("auth", ["getLogged", "getUser"]),
+    isReadOnly: function () {
+      return this.$store.getters["data_card/getReadOnly"];
+    },
   },
   methods: {
     validateData(data) {
@@ -122,7 +126,7 @@ export default {
         fieldId: e.fieldId,
         value: e.value,
       });
-      if (field.type === "button") {
+      if (field.type === "button" && e.action) {
         const actionId = parseInt(e.value.replace("Item", ""));
         const actionRefreshCard = menu.ACTIONSCUR.find(
           (item) => item.NTYPE === 39
@@ -154,7 +158,7 @@ export default {
             await this.callScript(e, "afterSave");
           }
         }
-        if (actionRefreshCard.ID === actionId) {
+        if (actionRefreshCard?.ID === actionId) {
           await this.fetchCard();
         }
       }

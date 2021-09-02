@@ -6,6 +6,7 @@
         :data="data"
         :search="search"
         @submit="handleSubmit"
+        :disabled="disabled"
       ></autocomplete>
     </b-form-group>
   </div>
@@ -37,12 +38,13 @@ export default {
       if (input.length < 1) {
         return [];
       }
+
       this.group = [];
       this.requestAddress = null;
 
       if (this.data.name === "SADDRESS_REG") {
         this.requestAddress = "address";
-      } else if (this.data.name === "NVEHICLE_MODEL") {
+      } else if (this.data.name === "SVEHICLE_MODEL") {
         this.requestAddress = "brandmodel";
       }
 
@@ -68,6 +70,11 @@ export default {
         name: this.data.name,
         value: result,
       });
+    },
+  },
+  computed: {
+    disabled() {
+      return this.$store.getters["data_card/getReadOnly"];
     },
   },
 };

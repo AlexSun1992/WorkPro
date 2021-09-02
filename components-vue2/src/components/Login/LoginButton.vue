@@ -135,6 +135,8 @@ export default {
         Cookies.set(TOKEN_NAME, "false");
         Cookies.set(REFRESH_TOKEN_NAME, "false");
         localStorage.setItem("auth._token.local", "false");
+        this.$store.commit("auth/setLogged", false);
+        this.$store.commit("auth/setUser", null);
       }
     },
     redirectToLoginPage() {
@@ -149,6 +151,12 @@ export default {
         .then((resp) => {
           this.personsData = resp.data[0]._data[0];
           this.isLoadedUserInfo = true;
+          localStorage.setItem(
+            "USER_INFO",
+            JSON.stringify(resp.data[0]._data[0])
+          );
+          this.$store.commit("auth/setLogged", true);
+          this.$store.commit("auth/setUser", resp.data[0]._data[0]);
           Cookies.set(EXPIRATION_TOKEN, Date.now() + DURATION);
         })
         .catch((err) => {
@@ -171,6 +179,12 @@ export default {
       Cookies.get(TOKEN_NAME) !== "false" &&
       Cookies.get(TOKEN_NAME) !== undefined
     ) {
+      if (!localStorage.getItem("USER_INFO")) {
+        this.getPersonsData(Cookies.get(TOKEN_NAME));
+      } else {
+        this.$store.commit("auth/setLogged", true);
+        this.$store.commit("auth/setUser", localStorage.getItem("USER_INFO"));
+      }
       if (Cookies.get(EXPIRATION_TOKEN) - Date.now() < DURATION) {
         this.getPersonsData(Cookies.get(TOKEN_NAME));
       }
