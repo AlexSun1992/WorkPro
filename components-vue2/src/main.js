@@ -85,3 +85,17 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-template-viewer",
+  () =>
+    new Promise((resolve) => {
+      require([
+        "./components/TemplateViewer/TemplateViewer.vue",
+        "./store/index",
+      ], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
