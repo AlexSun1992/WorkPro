@@ -17,7 +17,24 @@
 <script>
 import { BCollapse, BButton, BCard, BCardHeader } from "bootstrap-vue";
 export default {
-  props: ["param", "title", "headTitle", "answer"],
+  props: {
+    answer: {
+      type: String,
+      required: true,
+      default: () => {},
+    },
+    param: {
+      type: String,
+      reqiured: true,
+      default: () => {},
+    },
+    title: {
+      type: String,
+      required: true,
+      default: () => {},
+    },
+  },
+
   name: "DynamicCard",
   components: {
     BCollapse,
@@ -28,7 +45,6 @@ export default {
   data() {
     return {
       text: "info",
-      dataHub: [],
     };
   },
 };

@@ -1,13 +1,16 @@
 <template>
   <div class="DynamicQuestionContainer">
-    <DynamicQuestion :product-id="target"></DynamicQuestion>
+    <DynamicQuestion
+      :choosenData="distinctData"
+      :product-id="target"
+    ></DynamicQuestion>
   </div>
 </template>
 
 <script>
 import DynamicQuestion from "./DynamicQuestion.vue";
 export default {
-  props: ["productId"],
+  props: ["productId", "choosenData"],
   props: {
     productId: {
       type: Number,
@@ -22,11 +25,18 @@ export default {
   data() {
     return {
       target: "",
+      distinctData: [],
     };
   },
 
-  created() {
-    this.target = this.productId;
+  async created() {
+    const url = "/free/v2/question";
+    let response = await fetch(url);
+    let data = await response.json();
+
+    this.distinctData = data.filter((item) => {
+      return item.IDRMPRODUCT === this.productId;
+    });
   },
 };
 </script>

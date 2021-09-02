@@ -2,7 +2,7 @@
   <div class="DynamicQuestion">
     <div class="accordion" role="tablist">
       <dynamic-card
-        v-for="(item, idx) in testData"
+        v-for="(item, idx) in choosenData"
         :key="idx"
         :param="`${idx}`"
         v-b-toggle="`${idx}`"
@@ -24,6 +24,11 @@ export default {
       required: true,
       default: () => {},
     },
+    choosenData: {
+      type: Array,
+      required: true,
+      default: () => {},
+    },
   },
 
   name: "DynamicQuestion",
@@ -32,25 +37,6 @@ export default {
   },
   directives: {
     "b-toggle": VBToggle,
-  },
-
-  data() {
-    return {
-      testData: [],
-    };
-  },
-
-  async created() {
-    const url = "/free/v2/question";
-    let response = await fetch(url);
-    let data = await response.json();
-    const target = this.productId;
-
-    data.forEach((item) => {
-      if (item.IDRMPRODUCT === target) {
-        this.testData.push(item);
-      }
-    });
   },
 };
 </script>
