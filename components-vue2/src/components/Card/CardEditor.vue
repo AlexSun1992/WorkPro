@@ -69,6 +69,7 @@ export default {
       "getErrorMessage",
       "getSavedError",
     ]),
+    ...mapGetters("auth", ["getLogged", "getUser"]),
     isReadOnly: function () {
       return this.$store.getters["data_card/getReadOnly"];
     },
