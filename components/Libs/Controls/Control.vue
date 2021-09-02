@@ -7,6 +7,7 @@
       :style="{ width: data.width ? data.width : '100%' }"
     >
       <component
+        :class="data.labelCols"
         :is="comp"
         :data="data"
         :params="params"
