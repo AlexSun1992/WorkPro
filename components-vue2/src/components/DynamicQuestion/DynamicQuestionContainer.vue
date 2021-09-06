@@ -34,8 +34,9 @@ export default {
     let response = await fetch(url);
     let data = await response.json();
     const urlAddress = /\bhttps?:\/\/\S+/g;
-    const email = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-    const phone = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
+    const phone =
+      /(\+7|8)[- _]*\(?[- _]*(\d{3}[- _]*\)?([- _]*\d){7}|\d\d[- _]*\d\d[- _]*\)?([- _]*\d){6})/g;
+    const email = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/g;
 
     this.distinctData = data.filter((item) => {
       return item.IDRMPRODUCT === this.productId;
@@ -54,22 +55,25 @@ export default {
           }
         }
       }
-      if (item.SANSWER.match(email)) {
-        console.log(item.SANSWER);
-        // if (item.SANSWER.match(email).length > 0) {
-        //   for (let i = 0; i < item.SANSWER.match(email).length; i++) {
-        //     item.SANSWER = item.SANSWER.replace(
-        //       item.SANSWER.match(email)[i],
-        //       `<a href="${item.SANSWER.match(email)[i]}">${
-        //         item.SANSWER.match(email)[i]
-        //       }</a>`
-        //     );
-        //   }
-        // }
-      }
+
       if (item.SANSWER.match(phone)) {
-        console.log(item.SANSWER);
+        item.SANSWER = item.SANSWER.replace(
+          item.SANSWER.match(phone),
+          `<a href="tel:${item.SANSWER.match(phone)}">${item.SANSWER.match(
+            phone
+          )}</a>`
+        );
       }
+
+      if (item.SANSWER.match(email)) {
+        item.SANSWER = item.SANSWER.replace(
+          item.SANSWER.match(email),
+          `<a href="mailto:${item.SANSWER.match(email)}">${item.SANSWER.match(
+            email
+          )}</a>`
+        );
+      }
+
       if (item.SANSWER.includes("\n")) {
         item.SANSWER = item.SANSWER.replace(/\n/g, "<br />");
       }
