@@ -35,7 +35,7 @@ export default {
     let data = await response.json();
     const urlAddress = /\bhttps?:\/\/\S+/g;
     const phone =
-      /(\+7|8)[- _]*\(?[- _]*(\d{3}[- _]*\)?([- _]*\d){7}|\d\d[- _]*\d\d[- _]*\)?([- _]*\d){6})/g;
+      /\s(\+7|8)[-]*\(?[-]*(\d{3}[-]*\)?([-]*\d){7}|\d\d[-]*\d\d[-]*\)?([-]*\d){6})/g;
     const email = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/g;
 
     this.distinctData = data.filter((item) => {
@@ -53,25 +53,51 @@ export default {
               }</a>`
             );
           }
-        }
+        } else
+          item.SANSWER = item.SANSWER.replace(
+            item.SANSWER.match(urlAddress),
+            `<a href="${item.SANSWER.match(urlAddress)}">${item.SANSWER.match(
+              urlAddress
+            )}</a>`
+          );
       }
 
       if (item.SANSWER.match(phone)) {
-        item.SANSWER = item.SANSWER.replace(
-          item.SANSWER.match(phone),
-          `<a href="tel:${item.SANSWER.match(phone)}">${item.SANSWER.match(
-            phone
-          )}</a>`
-        );
+        if (item.SANSWER.match(phone).length > 1) {
+          for (let i = 0; i < item.SANSWER.match(phone).length; i++) {
+            item.SANSWER = item.SANSWER.replace(
+              item.SANSWER.match(phone)[i],
+              `<a href=tel:"${item.SANSWER.match(phone)[i]}">${
+                item.SANSWER.match(phone)[i]
+              }</a>`
+            );
+          }
+        } else
+          item.SANSWER = item.SANSWER.replace(
+            item.SANSWER.match(phone),
+            `<a href="tel:${item.SANSWER.match(phone)}">${item.SANSWER.match(
+              phone
+            )}</a>`
+          );
       }
 
       if (item.SANSWER.match(email)) {
-        item.SANSWER = item.SANSWER.replace(
-          item.SANSWER.match(email),
-          `<a href="mailto:${item.SANSWER.match(email)}">${item.SANSWER.match(
-            email
-          )}</a>`
-        );
+        if (item.SANSWER.match(email).length > 1) {
+          for (let i = 0; i < item.SANSWER.match(email).length; i++) {
+            item.SANSWER = item.SANSWER.replace(
+              item.SANSWER.match(email)[i],
+              `<a href=tel:"${item.SANSWER.match(email)[i]}">${
+                item.SANSWER.match(phone)[i]
+              }</a>`
+            );
+          }
+        } else
+          item.SANSWER = item.SANSWER.replace(
+            item.SANSWER.match(email),
+            `<a href="mailto:${item.SANSWER.match(email)}">${item.SANSWER.match(
+              email
+            )}</a>`
+          );
       }
 
       if (item.SANSWER.includes("\n")) {
