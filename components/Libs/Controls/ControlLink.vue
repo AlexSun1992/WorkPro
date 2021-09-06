@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button
-      :class="data.labelCols + ' link-button'"
+      :class="'link-button'"
       @click="clickLink"
       variant="secondary"
       >{{ data.label }}</b-button
