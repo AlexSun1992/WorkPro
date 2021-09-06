@@ -4,7 +4,7 @@
       <div class="row">
         <b-form-group
           :label="data.label"
-          :class="[{ required: data.required }, data.labelCols]"
+          :class="[{ required: data.required }]"
         >
           <b-form-input
             ref="userInput"
