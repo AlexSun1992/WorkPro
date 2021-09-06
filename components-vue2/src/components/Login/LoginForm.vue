@@ -151,7 +151,7 @@ export default {
           window.location.href = `${Cookies.get(COOKIE_NAME)}`;
         } else {
           window.location.href = "/cabinet/55/0/701";
-          Cookies.set(COOKIE_NAME, null);
+          Cookies.remove(COOKIE_NAME);
         }
       } catch (e) {
         this.errorMessage = "Неверный телефон или пароль";
