@@ -165,14 +165,13 @@ export default {
   },
   data() {
     return {
-      editable: true,
       myclass: ["cabinet"],
       error: null,
     };
   },
   created() {
     this.$store.commit("data_card/setLoading", false);
-    this.edit();
+    this.editable;
   },
   mounted() {
     this.$bvModal.show("modal");
@@ -197,13 +196,6 @@ export default {
     },
     getFieldValue(name, data = undefined) {
       return this.getField(name, data) ? this.getField(name, data).value : "";
-    },
-    edit() {
-      const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find((item) => {
-        return item.IDITEM == this.$route.params.idItem;
-      });
-      this.editable = menuItem?.LEDIT && !this.isReadOnly;
     },
     saveFile(idReport, fileName, event) {
       if (event) {
@@ -255,6 +247,13 @@ export default {
     },
   },
   computed: {
+    editable() {
+      const flatmenu = this.$store.getters["menu/flatmenu"];
+      const menuItem = flatmenu.find((item) => {
+        return item.IDITEM == this.$route.params.idItem;
+      });
+      return menuItem?.LEDIT && !this.isReadOnly;
+    },
     buttonTitle() {
       if (this.isWizard && this.$route.params.idCard === "0") {
         return "Продолжить";

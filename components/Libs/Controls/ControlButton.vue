@@ -1,15 +1,18 @@
 <template>
-  <b-button @click="updateValue()" :class="data.labelCols" :disabled="loading" variant="primary">
-    <div class="button">
-      {{ data.label }}
-      <b-spinner
-        v-if="loading && clicked"
-        class="ml-2"
-        style="width: 1.2rem; height: 1.2rem"
-        variant="success"
-        label="Spinning"
-      ></b-spinner>
-    </div>
+  <b-button
+    @click="updateValue()"
+    :class="data.labelCols"
+    :disabled="loading || disabled"
+    variant="primary"
+  >
+    {{ data.label }}
+    <b-spinner
+      v-if="loading && clicked"
+      class="ml-2"
+      style="width: 1.2rem; height: 1.2rem"
+      variant="success"
+      label="Spinning"
+    ></b-spinner>
   </b-button>
 </template>
 
@@ -22,11 +25,6 @@ export default {
       required: true,
       default: () => {},
     },
-    store: {
-      type: String,
-      required: false,
-      default: () => {},
-    },
   },
   data() {
     return {
@@ -36,15 +34,21 @@ export default {
   methods: {
     updateValue() {
       this.clicked = true;
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        value: this.data.name,
-      });
+      if (!this.loading && !this.disabled) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          value: this.data.name,
+          action: this.data.name.includes("Item"),
+        });
+      }
     },
   },
   computed: {
     loading() {
       return this.$store.getters["data_card/getLoading"];
+    },
+    disabled() {
+      return this.data.readonly;
     },
   },
   watch: {

@@ -19,10 +19,21 @@ export const state = () => ({
   isSave: true,
   isReadOnly: false,
   loading: false,
+  moduleId: false,
+  menuId: false,
+  source: "",
 });
 
 export const getters = {
   getForm: (state) => state.form,
+  getFormParams: (state) => {
+    return {
+      idModule: state.moduleId,
+      idItem: state.menuId,
+      idCard: state.cardId,
+      idRel: state.cardRelId,
+    };
+  },
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
   getError: (state) => state.isError,
@@ -31,6 +42,7 @@ export const getters = {
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
   getCardId: (state) => state.cardId,
+  getSource: (state) => state.source,
   getCardRelId: (state) => state.cardRelId,
   getCaptions: (state) => state.captions,
   getBtnSave: (state) => state.isSave,
@@ -53,6 +65,10 @@ export const actions = {
   async fetchForm({ dispatch, commit, getters, state }, params) {
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
+    commit("setModuleId", params.idModule);
+    commit("setMenuId", params.idItem);
+    commit("setLoading", true);
+    commit("setDisabled", true);
     if (state.cardId !== params.idCard || !params.idRel) {
       commit("clearFormData");
     }
@@ -64,12 +80,17 @@ export const actions = {
         );
       } else {
         url = encodeURI(
-          `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
+          `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${
+            params.idRel
+          }${params.zone === "free" ? "?zone=free" : ""}`
         );
       }
       await this.$axios
         .get(url)
         .then((res) => {
+          commit("setLoading", false);
+          commit("setDisabled", false);
+          commit("setSavedError", false);
           commit(
             "setForm",
             res.data.metaData.data.length ? res.data.metaData.data : res.data
@@ -149,16 +170,22 @@ export const actions = {
     commit("setDisabled", true);
     try {
       let resp = await this.$axios.post(
-        `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${params.relId}`,
+        `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
+          params.relId
+        }${params.zone === "free" ? "?zone=free" : ""}`,
         params.form
       );
       commit("setLoading", false);
       commit("setDisabled", false);
+      commit("setSavedError", false);
       commit("setCardId", resp.data.ID);
       commit("setCardRelId", resp.data.REL);
       return resp;
     } catch (e) {
+      commit("setLoading", false);
       commit("setDisabled", false);
+      commit("setSavedError", true);
+      commit("setErrorMessage", e.response.data);
       return e.response;
     }
   },
@@ -221,6 +248,53 @@ export const actions = {
         commit("setErrorMessage", error.response.data);
         return error.response;
       }
+    }
+  },
+  async fetchList({ commit, getters, state }, params) {
+    try {
+      return await this.$axios
+        .get(
+          encodeURI(
+            `/api/list/${params.idModule}/${params.idItem}/[]${
+              params.zone === "free" ? "?zone=free" : ""
+            }`
+          )
+        )
+        .then((res) => {
+          commit("setCardId", res.data.items[0].ID);
+          commit("setCardRelId", res.data.items[0].REL);
+          commit("setModuleId", params.idModule);
+          commit("setMenuId", params.idItem);
+          return res.data;
+        });
+    } catch (error) {
+      if (error.response) {
+        commit("setError", true);
+        commit("setErrorMessage", error.response.data);
+        return error.response;
+      }
+    }
+  },
+  async fetchCard({ commit, dispatch, getters, state }, params) {
+    try {
+      dispatch("cancelRequest");
+      commit("setSource", this.$axios.CancelToken.source());
+      let result = await this.$axios[params.method](params.url, {
+        cancelToken: getters.getSource.token,
+      });
+
+      if (result) {
+        commit("setSource", "");
+        return result.data[0];
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  cancelRequest({ commit, getters, state }) {
+    if (getters.getSource) {
+      getters.getSource.cancel("Cancelled");
+      console.log("cancel request done");
     }
   },
 };
@@ -293,6 +367,12 @@ export const mutations = {
   setCardRelId(state, data) {
     state.cardRelId = data;
   },
+  setModuleId(state, data) {
+    state.moduleId = data;
+  },
+  setMenuId(state, data) {
+    state.menuId = data;
+  },
   setCardCaption(state, data) {
     state.cardCaption = data;
   },
@@ -348,5 +428,8 @@ export const mutations = {
   setCaptcha(state, data) {
     const item = state.form.find((d) => d.fieldId === data.data.fieldId);
     item.captcha = data.captcha;
+  },
+  setSource(state, params) {
+    state.source = params;
   },
 };

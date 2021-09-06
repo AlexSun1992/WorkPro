@@ -1,49 +1,39 @@
 <template>
   <div class="map-container mt-3">
-    <div>
-      <input type="text" id="suggest" />
-      <div class="mt-2 mb-2">
-        <a href="https://reso.ru/About/Contacts/OfficesList"
-          >Список офисов продаж и центров выплат</a
-        >
-      </div>
+    <input type="text" id="suggest" />
+    <div class="mt-2 mb-2">
+      <a href="https://reso.ru/About/Contacts/OfficesList"
+        >Список офисов продаж и центров выплат</a
+      >
     </div>
-    <div>
-      <div ref="map" id="map" class="map"></div>
-    </div>
+    <div ref="map" id="map" class="map"></div>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
+import LoadScript from "vue-plugin-load-script";
+Vue.use(LoadScript);
 export default {
-  name: "MapViewer",
+  name: "OfficeMap",
   data() {
     return {
       myMap: null,
-      suggestion: "",
-      site: "",
       myClusterer: null,
     };
   },
-  async fetch() {
+  async created() {
     try {
-      await this.$store.dispatch("fetchAgencies");
+      await this.$store.dispatch("general/fetchAgencies");
+      await this.$loadScript(
+        `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
+      ).then(() => {
+        if (this.$store.getters["general/getAgencies"]) {
+          ymaps.ready(this.init);
+        }
+      });
     } catch (error) {
       console.log(error);
-    }
-  },
-  head() {
-    return {
-      script: [
-        {
-          src: `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`,
-        },
-      ],
-    };
-  },
-  created() {
-    if (process.client) {
-      ymaps.ready(this.init);
     }
   },
   methods: {
@@ -59,7 +49,7 @@ export default {
         zoom: 6,
       });
 
-      let agencies = this.$store.getters["getAgencies"];
+      let agencies = this.$store.getters["general/getAgencies"];
       let myGeoObjects = [];
       for (let i = 0; i < agencies.length; i++) {
         myGeoObjects[i] = new ymaps.GeoObject({
@@ -112,7 +102,7 @@ export default {
         mapContainer.clientHeight,
       ]);
       // Сохраняем полный адрес для сообщения под картой.
-      let address = [obj.getCountry(), obj.getAddressLine()].join(", ");
+      // let address = [obj.getCountry(), obj.getAddressLine()].join(", ");
       // Сохраняем укороченный адрес для подписи метки.
       let shortAddress = [
         obj.getThoroughfare(),

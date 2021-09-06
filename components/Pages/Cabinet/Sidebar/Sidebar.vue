@@ -16,6 +16,12 @@
           </a>
         </li>
       </n-link>
+      <li class="sidebar-nav-item">
+        <a href="#" @click="logout()">
+          <div :class="'menu-icon-exit'"></div>
+          <span>Выйти</span>
+        </a>
+      </li>
     </ul>
 
     <button
@@ -28,7 +34,6 @@
       v-on:click="minimizeMobileMenu"
       class="sidebar-mobile_close"
     ></button>
-    
   </div>
 </template>
 
@@ -72,6 +77,15 @@ export default {
     minimizeMobileMenu() {
       this.$emit("mini-mobile-sidebar");
     },
+    async logout() {
+      try {
+        await this.$auth.logout();
+        window.$nuxt.$cookiz?.remove("url");
+        window.location.href = "/";
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 
   computed: {
@@ -87,4 +101,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.menu-icon-exit {
+  background: url(/img/exit.svg) 50% 50% no-repeat;
+}
+</style>

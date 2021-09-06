@@ -44,7 +44,6 @@ module.exports = {
     // '~plugins/devextreme',
     "~/plugins/captcha.js",
     "~/plugins/mask.js",
-    "~/plugins/vueTheMask.js",
     "~/plugins/validate",
     // "~/plugins/axios",
     "~/plugins/moment",
@@ -95,15 +94,10 @@ module.exports = {
     transpile: ["vue-agile"],
   },
   proxy: {
-    // Simple proxy
-    "/wp-json": "http://wpress.reso.ru/",
-    "/wp-content": "http://wpress.reso.ru/",
-    // '/free': 'https://mobiletest.reso.ru',
-    // '/am': 'https://mobiletest.reso.ru',
-    // '/main': 'https://mobiletest.reso.ru',
     "/free": "https://mobile.reso.ru",
     "/am": "https://mobile2.reso.ru",
-    "/main": "https://mobile.reso.ru",
+    "/main": "https://mobile2.reso.ru",
+    "/suggestions": "https://dadata.reso.ru",
   },
   serverMiddleware: [
     "~/api/index.js",
@@ -114,6 +108,7 @@ module.exports = {
     "~/api/wizard.js",
     "~/api/user.js",
     "~/api/refresh.js",
+    "~/api/dadata.js",
   ],
   auth: {
     strategies: {
@@ -126,7 +121,7 @@ module.exports = {
         grantType: false,
         token: {
           property: "ACCESS_TOKEN",
-          maxAge: 360000,
+          maxAge: 3700,
         },
         refreshToken: {
           property: "REFRESH_TOKEN",

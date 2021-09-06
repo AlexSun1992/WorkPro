@@ -4,73 +4,85 @@
       <div class="row">
         <b-form-group
           :label="data.label"
-          :class="[{ required: data.required }, data.labelCols]"
+          :class="[{ required: data.required }]"
         >
           <b-form-input
             ref="userInput"
             v-model="newPhone"
-            :placeholder="placeholder"
             v-mask="changeMask"
+            :placeholder="placeholder"
             :state="validateState('newPhone')"
-            @blur="update"
             autocomplete="off"
             autofocus
             :disabled="isShowCodeEnter"
-          ></b-form-input>
-          <b-form-invalid-feedback
-            >Пожалуйста, заполните это поле</b-form-invalid-feedback
-          >
+            @blur="update"
+          />
+          <b-form-invalid-feedback>
+            Пожалуйста, заполните это поле
+          </b-form-invalid-feedback>
         </b-form-group>
         <div class="col-auto">
           <label class="d-none d-md-block">&nbsp;</label>
           <b-button
             type="submit"
-            @click="verifyUser"
             variant="success"
             class="btn-sms mb-3"
             :disabled="$v.newPhone.$invalid || loading || isSendCode"
-            >Получить sms-код
+            @click="verifyUser"
+          >
+            Получить sms-код
             <b-spinner
               v-if="loading"
               style="width: 1rem; height: 1rem"
               class="ml-2"
               variant="danger"
               label="Spinning"
-            ></b-spinner>
+            />
           </b-button>
         </div>
         <div v-if="isShowCodeEnter" class="col-auto">
           <label class="d-none d-md-block">&nbsp;</label>
-          <b-link @click="changeNumber" class="link-button l-b-m-t d-block">
+          <b-link class="link-button l-b-m-t d-block" @click="changeNumber">
             Изменить номер
           </b-link>
         </div>
       </div>
       <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
     </div>
-    <div class="resend-block" v-if="isShowCodeEnter">
+    <div v-if="isShowCodeEnter" class="resend-block">
       <p>
-        <template v-if="disabledResend"
-          >На указанный номер мы направили sms-код, просим ввести его в поле
+        <template v-if="disabledResend">
+          На указанный номер мы направили sms-код, просим ввести его в поле
           ниже.<br />
           Повторный код можно запросить через
-          <verify-timer @onFinish="stopTimer" :duration="duration" />
-          сек.</template
-        >
+          <verify-timer :duration="duration" @onFinish="stopTimer" />
+          сек.
+        </template>
       </p>
     </div>
   </div>
 </template>
 
 <script>
-import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
+import VerifyTimer from "../VerifyUser/VerifyTimer";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
 export default {
+  name: "ControlPhoneChange",
   components: { VerifyTimer },
   mixins: [validationMixin],
-  name: "ControlPhoneChange",
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+    params: {
+      type: Object,
+      required: false,
+    },
+  },
   data() {
     return {
       isSendCode: false,
@@ -86,21 +98,29 @@ export default {
       loading: false,
     };
   },
-  props: {
-    data: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
-    params: {
-      type: Object,
-      required: false,
-    },
-  },
   validations: {
     newPhone: {
       required,
       minLength: minLength(17),
+    },
+  },
+
+  computed: {
+    changeMask() {
+      return (this.mask = "+7(###)-###-##-##");
+    },
+    isShowCodeEnter() {
+      return !this.$v.newPhone.$invalid && this.isSendCode;
+    },
+    saveButtonClicked() {
+      if (this.$store.getters["data_card/saveButtonClicked"]) {
+        this.$v.newPhone.$touch();
+      }
+    },
+  },
+  watch: {
+    saveButtonClicked() {
+      console.log("clicked");
     },
   },
   created() {
@@ -114,6 +134,11 @@ export default {
     }
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
+  },
+
+  unmounted() {
+    this.isSendCode = false;
+    localStorage.setItem("newPhone", this.newPhone);
   },
   methods: {
     update() {
@@ -220,30 +245,6 @@ export default {
       this.isSendCode = false;
       this.disabledResend = false;
     },
-  },
-
-  computed: {
-    changeMask() {
-      return (this.mask = "+7(###)-###-##-##");
-    },
-    isShowCodeEnter() {
-      return !this.$v.newPhone.$invalid && this.isSendCode;
-    },
-    saveButtonClicked() {
-      if (this.$store.getters["data_card/saveButtonClicked"]) {
-        this.$v.newPhone.$touch();
-      }
-    },
-  },
-  watch: {
-    saveButtonClicked() {
-      console.log("clicked");
-    },
-  },
-
-  destroyed() {
-    this.isSendCode = false;
-    localStorage.setItem("newPhone", this.newPhone);
   },
 };
 </script>

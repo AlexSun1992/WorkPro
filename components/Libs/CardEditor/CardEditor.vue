@@ -52,6 +52,7 @@
         v-if="isBlock && !isTabs && !isAccordion"
         :data="data"
         :tabs="tabs"
+        :params="params"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
@@ -87,21 +88,18 @@ export default {
   components: { FormBlock, FormAccordion, Form, ActionButton, SkeletonBox },
   data() {
     return {
-      invalidFields: [],
-      body: null,
       actionParamsTitle: null,
       actionParamsId: null,
       actionFormDisabled: false,
       isActionApplyError: false,
       actionApplyErrorMessage: null,
-      updateValueCounter: 0,
       disabledButtons: {
         background: "#dddbdd",
         boxShadow: "none",
         border: "none",
         color: "#dddbdd",
       },
-      source: "",
+      saveSuccess: false,
     };
   },
   props: {
@@ -150,17 +148,17 @@ export default {
       if (field.type !== "button") {
         this.$store.commit("data_card/cardChanged", true);
       }
-      if (typeof eventHandler === "function") {
+      if (typeof eventHandler === "function" && field.type != "button") {
         let data = await eventHandler(
           this.data.map((a) => Object.assign({}, a)),
           e,
-          this.fetchCard
+          this.$store._actions["data_card/fetchCard"][0]
         );
         if (data) {
           this.$store.commit("data_card/setForm", data || this.data);
         }
       }
-      if (field.type === "button") {
+      if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");
         let moduleId;
@@ -173,15 +171,73 @@ export default {
           moduleId = this.params.page.idModule;
           cardId = this.$store.getters["data_card/getCardId"];
         }
+        let params = {
+          idCard: this.$store.getters["data_card/getCardId"],
+          idItem: this.$route.params.idItem,
+          idModule: this.$route.params.idModule,
+          idRel: this.$store.getters["data_card/getCardRelId"],
+        };
         this.$store.commit("data_card/setLoading", true);
-        let actionParams = await this.$store.dispatch(
-          "data_card/fetchActionParams",
-          {
-            moduleId,
-            actionId,
-            cardId,
+        const flatmenu = this.$store.getters["menu/flatmenu"];
+        const menuItem = flatmenu.find((item) => {
+          return item.IDITEM == this.$route.params.idItem;
+        });
+        let CUR = menuItem.ACTIONSCUR.find((item) => {
+          return item.ID == actionId;
+        });
+        if (CUR.NTYPE == 38) {
+          this.saveSuccess = false;
+          let data = eventHandler(
+            this.data.map((a) => Object.assign({}, a)),
+            e,
+            "beforeSave"
+          );
+          if (data) {
+            this.$store.commit("data_card/setForm", data || this.data);
           }
-        );
+          await this.saveDataCard();
+          if (this.saveSuccess) {
+            await this.$store.dispatch("data_card/fetchForm", params);
+            this.$store.commit("data_card/setDisabled", false);
+            let data = eventHandler(
+              this.data.map((a) => Object.assign({}, a)),
+              e,
+              "afterSave"
+            );
+            if (data) {
+              this.$store.commit("data_card/setForm", data || this.data);
+            }
+          }
+          this.$store.commit("data_card/setLoading", false);
+          return;
+        } else if (CUR.NTYPE == 39) {
+          this.$store.commit("data_card/setLoading", false);
+          this.$store.commit("data_card/setReadOnly", false);
+          let data = eventHandler(
+            this.data.map((a) => Object.assign({}, a)),
+            e
+          );
+          if (data) {
+            this.$store.commit("data_card/setForm", data || this.data);
+          }
+          await this.$store.dispatch("data_card/fetchList", params);
+          params = {
+            idCard: this.$store.getters["data_card/getCardId"],
+            idItem: this.$route.params.idItem,
+            idModule: this.$route.params.idModule,
+            idRel: this.$store.getters["data_card/getCardRelId"],
+          };
+          await this.$store.dispatch("data_card/fetchForm", params);
+          return;
+        }
+        // else {
+        //   throw new Error("Ошибка: Тип действия не задан");
+        // }
+        await this.$store.dispatch("data_card/fetchActionParams", {
+          moduleId,
+          actionId,
+          cardId,
+        });
         this.actionParamsTitle = field.label;
         this.actionParamsId = parseInt(actionId);
         if (this.actionSettings.isDialog) {
@@ -190,6 +246,14 @@ export default {
         } else {
           this.applyAction();
         }
+      } else if (field.type === "button") {
+        let data = eventHandler(
+          this.data.map((a) => Object.assign({}, a)),
+          e
+        );
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.data);
+        }
       }
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
@@ -197,29 +261,6 @@ export default {
       });
     },
 
-    async fetchCard(method, url) {
-      try {
-        this.cancelRequest();
-        this.source = this.$axios.CancelToken.source();
-
-        let result = await this.$axios[method](url, {
-          cancelToken: this.source.token,
-        });
-
-        if (result) {
-          this.source = "";
-          return result.data[0];
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    cancelRequest() {
-      if (this.source) {
-        this.source.cancel("Cancelled");
-        console.log("cancel request done");
-      }
-    },
     clearRelation(e) {
       this.$store.commit("data_card/clearFormRelationField", {
         fieldName: e.fieldName,
@@ -303,9 +344,8 @@ export default {
                 idCard: cardId,
               });
               this.$store.commit("data_card/setLoading", false);
-              const nextIdItem = this.$store.getters[
-                "wizard/getWizardPages"
-              ].split(";")[step];
+              const nextIdItem =
+                this.$store.getters["wizard/getWizardPages"].split(";")[step];
               let tab = this.wizardTabs.find(
                 (w) => w.idItem === parseInt(nextIdItem)
               );
@@ -328,6 +368,7 @@ export default {
             }
           }
           if (resp?.status === 200) {
+            this.saveSuccess = true;
             if (this.$route.query?.ref && resp) {
               this.$router.push(this.$route.query?.ref);
               return;
@@ -386,9 +427,6 @@ export default {
         JSON.parse(JSON.stringify(this.$store.getters["data_card/getCopyForm"]))
       );
     },
-    goBack() {
-      this.$router.push(this.$store.state.data_card.listPath);
-    },
     updateActionParams(e) {
       this.$store.commit("data_card/setActionParamsField", e);
     },
@@ -438,17 +476,6 @@ export default {
     },
   },
   computed: {
-    isButtonDisabled() {
-      if (!this.data.length) {
-        return this.disabledButtons;
-      }
-    },
-    errorMessage() {
-      return this.$store.getters["data_card/getErrorMessage"];
-    },
-    isError() {
-      return this.$store.getters["data_card/getError"];
-    },
     showBtnBack() {
       let path = this.$store.state.data_card.listPath;
       // Жестко убрали кнопку с полиса осаго (Игорь)

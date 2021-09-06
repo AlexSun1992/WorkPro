@@ -62,9 +62,15 @@ export const actions = {
         dispatch("updateBlock", state.blockId);
       });
   },
-  async fetchBlock({ commit, dispatch }, id) {
-    await this.$axios.get(`/api/list/55/${id}/{}`).then((res) => {
-      commit("addBlock", { blockId: parseInt(id), data: res.data });
+  async fetchBlock({ commit, dispatch }, params) {
+    let url;
+    if (!params.zone) {
+      url = `/api/list/55/${params.id}/{}`;
+    } else {
+      url = `/api/list/55/${params.id}/{}?zone=free`;
+    }
+    await this.$axios.get(url).then((res) => {
+      commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });
   },
   async fetchWizardBlock({ commit, dispatch }, { itemId, cardId }) {
