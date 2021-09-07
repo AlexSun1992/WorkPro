@@ -20,7 +20,7 @@ import { VBToggle } from "bootstrap-vue";
 export default {
   props: {
     productId: {
-      type: Number,
+      type: String,
       required: true,
       default: () => {},
     },

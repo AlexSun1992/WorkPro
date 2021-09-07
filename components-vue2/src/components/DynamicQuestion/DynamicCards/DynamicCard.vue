@@ -8,7 +8,7 @@
       </b-card-header>
       <b-collapse :id="param" accordion="my-accordion" role="tabpanel">
         <div>
-          <p>{{ answer }}</p>
+          <p v-html="answer"></p>
         </div>
       </b-collapse>
     </b-card>
