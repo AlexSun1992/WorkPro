@@ -1,10 +1,8 @@
 <template>
-  <div class="DynamicQuestionContainer">
-    <DynamicQuestion
-      :choosenData="distinctData"
-      :product-id="target"
-    ></DynamicQuestion>
-  </div>
+  <DynamicQuestion
+    :choosenData="distinctData"
+    :product-id="target"
+  ></DynamicQuestion>
 </template>
 
 <script>
