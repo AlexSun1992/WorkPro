@@ -31,6 +31,7 @@ export default {
     const url = "/free/v2/question";
     let response = await fetch(url);
     let data = await response.json();
+
     const urlAddress = /\bhttps?:\/\/\S+/g;
     const phone =
       /\s(\+7|8)[-]*\(?[-]*(\d{3}[-]*\)?([-]*\d){7}|\d\d[-]*\d\d[-]*\)?([-]*\d){6})/g;

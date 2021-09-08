@@ -1,7 +1,12 @@
 <template>
   <b-card no-body class="mb-1">
-    <b-card-header header-tag="header" class="p-1" role="tab">
-      <b-button block :variant="text" v-b-toggle="parameter">
+    <b-card-header
+      header-tag="header"
+      class="p-1"
+      role="tab"
+      v-b-toggle="parameter"
+    >
+      <b-button block :variant="text">
         {{ title }}
       </b-button>
     </b-card-header>
@@ -66,9 +71,5 @@ export default {
   },
 
   methods: {},
-
-  created() {
-    console.log(typeof this.parameter);
-  },
 };
 </script>
