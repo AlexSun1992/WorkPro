@@ -16,6 +16,7 @@
             autocomplete="off"
             autofocus
             :disabled="isShowCodeEnter"
+            type="email"
           ></b-form-input>
           <b-form-invalid-feedback
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
