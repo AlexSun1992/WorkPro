@@ -17,6 +17,7 @@
             autofocus
             :disabled="isShowCodeEnter"
             @blur="update"
+            type="tel"
           />
           <b-form-invalid-feedback>
             Пожалуйста, заполните это поле
