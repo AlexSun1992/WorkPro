@@ -2,6 +2,7 @@
   <DynamicQuestion
     :choosenData="distinctData"
     :product-id="target"
+    :varLength="distinctSGROUPNAME"
   ></DynamicQuestion>
 </template>
 
@@ -24,6 +25,8 @@ export default {
     return {
       target: "",
       distinctData: [],
+      distinctSGROUPNAME: [],
+      isTop: false,
     };
   },
 
@@ -40,6 +43,43 @@ export default {
     this.distinctData = data.filter((item) => {
       return item.IDRMPRODUCT === this.productId;
     });
+
+    // this.distinctData.forEach((item) => {
+    //   if ("LTOP" in item) {
+    //     this.isTop = true;
+    //   }
+    // });
+
+    // if (this.isTop) {
+    //   this.distinctData = data.filter((item) => {
+    //     return item.IDRMPRODUCT === this.productId && item.LTOP === true;
+    //   });
+    //   console.log(this.distinctData);
+    // }
+
+    if (!this.isTop) {
+      // this.distinctData = data.filter((item) => {
+      //   return item.IDRMPRODUCT === this.productId;
+      // });
+      // this.distinctData.forEach((item) => {
+      //   if (item.SGROUPNAME !== undefined && item.NGROUPSORT !== undefined) {
+      //     console.log(item);
+      //   }
+      // });
+      this.distinctData = data.filter((item) => {
+        if (item.SGROUPNAME !== undefined && item.NGROUPSORT !== undefined) {
+          return item.IDRMPRODUCT === this.productId;
+        }
+      });
+
+      for (let i = 0; i < this.distinctData.length; i++) {
+        if (
+          !this.distinctSGROUPNAME.includes(this.distinctData[i].SGROUPNAME)
+        ) {
+          this.distinctSGROUPNAME.push(this.distinctData[i].SGROUPNAME);
+        }
+      }
+    }
 
     this.distinctData.forEach((item) => {
       if (item.SANSWER.match(urlAddress)) {

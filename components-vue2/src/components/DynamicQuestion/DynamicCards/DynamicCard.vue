@@ -6,7 +6,7 @@
       role="tab"
       v-b-toggle="parameter"
     >
-      <b-button block :variant="text">
+      <b-button :variant="text">
         {{ title }}
       </b-button>
     </b-card-header>
