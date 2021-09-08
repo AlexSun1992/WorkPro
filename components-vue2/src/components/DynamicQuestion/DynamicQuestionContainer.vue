@@ -1,10 +1,8 @@
 <template>
-  <div class="DynamicQuestionContainer">
-    <DynamicQuestion
-      :choosenData="distinctData"
-      :product-id="target"
-    ></DynamicQuestion>
-  </div>
+  <DynamicQuestion
+    :choosenData="distinctData"
+    :product-id="target"
+  ></DynamicQuestion>
 </template>
 
 <script>
@@ -48,7 +46,7 @@ export default {
           for (let i = 0; i < item.SANSWER.match(urlAddress).length; i++) {
             item.SANSWER = item.SANSWER.replace(
               item.SANSWER.match(urlAddress)[i],
-              `<a href="${item.SANSWER.match(urlAddress)[i]}">${
+              `<a target="_blank" href="${item.SANSWER.match(urlAddress)[i]}">${
                 item.SANSWER.match(urlAddress)[i]
               }</a>`
             );
@@ -56,9 +54,9 @@ export default {
         } else
           item.SANSWER = item.SANSWER.replace(
             item.SANSWER.match(urlAddress),
-            `<a href="${item.SANSWER.match(urlAddress)}">${item.SANSWER.match(
+            `<a target="_blank" href="${item.SANSWER.match(
               urlAddress
-            )}</a>`
+            )}">${item.SANSWER.match(urlAddress)}</a>`
           );
       }
 
@@ -67,7 +65,7 @@ export default {
           for (let i = 0; i < item.SANSWER.match(phone).length; i++) {
             item.SANSWER = item.SANSWER.replace(
               item.SANSWER.match(phone)[i],
-              `<a href=tel:"${item.SANSWER.match(phone)[i]}">${
+              `<a target="_blank" href=tel:"${item.SANSWER.match(phone)[i]}">${
                 item.SANSWER.match(phone)[i]
               }</a>`
             );
@@ -75,9 +73,9 @@ export default {
         } else
           item.SANSWER = item.SANSWER.replace(
             item.SANSWER.match(phone),
-            `<a href="tel:${item.SANSWER.match(phone)}">${item.SANSWER.match(
+            `<a target="_blank" href="tel:${item.SANSWER.match(
               phone
-            )}</a>`
+            )}">${item.SANSWER.match(phone)}</a>`
           );
       }
 
@@ -86,7 +84,7 @@ export default {
           for (let i = 0; i < item.SANSWER.match(email).length; i++) {
             item.SANSWER = item.SANSWER.replace(
               item.SANSWER.match(email)[i],
-              `<a href=tel:"${item.SANSWER.match(email)[i]}">${
+              `<a target="_blank" href=tel:"${item.SANSWER.match(email)[i]}">${
                 item.SANSWER.match(phone)[i]
               }</a>`
             );
@@ -94,9 +92,9 @@ export default {
         } else
           item.SANSWER = item.SANSWER.replace(
             item.SANSWER.match(email),
-            `<a href="mailto:${item.SANSWER.match(email)}">${item.SANSWER.match(
+            `<a target="_blank" href="mailto:${item.SANSWER.match(
               email
-            )}</a>`
+            )}">${item.SANSWER.match(email)}</a>`
           );
       }
 

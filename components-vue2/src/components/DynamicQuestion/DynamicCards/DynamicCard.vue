@@ -1,21 +1,27 @@
 <template>
-  <div>
-    <b-card no-body class="mb-1">
-      <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-button block :variant="text">
-          {{ title }}
-        </b-button>
-      </b-card-header>
-      <b-collapse :id="param" accordion="my-accordion" role="tabpanel">
-        <div>
-          <p v-html="answer"></p>
-        </div>
-      </b-collapse>
-    </b-card>
-  </div>
+  <b-card no-body class="mb-1">
+    <b-card-header header-tag="header" class="p-1" role="tab">
+      <b-button block :variant="text" v-b-toggle="parameter">
+        {{ title }}
+      </b-button>
+    </b-card-header>
+    <b-collapse :id="param" accordion="my-accordion" role="tabpanel">
+      <b-card-body>
+        <b-card-text v-html="answer"></b-card-text>
+      </b-card-body>
+    </b-collapse>
+  </b-card>
 </template>
 <script>
-import { BCollapse, BButton, BCard, BCardHeader } from "bootstrap-vue";
+import {
+  BCollapse,
+  BButton,
+  BCard,
+  BCardHeader,
+  BCardBody,
+  BCardText,
+} from "bootstrap-vue";
+import { VBToggle } from "bootstrap-vue";
 export default {
   props: {
     answer: {
@@ -33,6 +39,11 @@ export default {
       required: true,
       default: () => {},
     },
+    parameter: {
+      type: String,
+      required: true,
+      default: () => {},
+    },
   },
 
   name: "DynamicCard",
@@ -41,11 +52,23 @@ export default {
     BButton,
     BCard,
     BCardHeader,
+    BCardBody,
+    BCardText,
+  },
+  directives: {
+    "b-toggle": VBToggle,
   },
   data() {
     return {
       text: "info",
+      active: false,
     };
+  },
+
+  methods: {},
+
+  created() {
+    console.log(typeof this.parameter);
   },
 };
 </script>

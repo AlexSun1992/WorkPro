@@ -5,9 +5,9 @@
         v-for="(item, idx) in choosenData"
         :key="idx"
         :param="`${idx}`"
-        v-b-toggle="`${idx}`"
         :title="item.SQUESTION"
         :answer="item.SANSWER"
+        :parameter="`${idx}`"
       >
       </dynamic-card>
     </div>
@@ -37,6 +37,11 @@ export default {
   },
   directives: {
     "b-toggle": VBToggle,
+  },
+  methods: {
+    action() {
+      console.log("!!!!");
+    },
   },
 };
 </script>
