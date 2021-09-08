@@ -40,7 +40,6 @@ export default {
     this.distinctData = data.filter((item) => {
       return item.IDRMPRODUCT === this.productId;
     });
-    console.log(this.distinctData);
 
     this.distinctData.forEach((item) => {
       if (item.SANSWER.match(urlAddress)) {
