@@ -1,18 +1,29 @@
 <template>
   <DynamicQuestion
     :choosenData="distinctData"
-    :product-id="target"
     :varLength="distinctSGROUPNAME"
+    :isGroup="isGroup"
+    product-id
+    isTop
   ></DynamicQuestion>
 </template>
 
 <script>
 import DynamicQuestion from "./DynamicQuestion.vue";
 export default {
-  props: ["productId", "choosenData"],
   props: {
     productId: {
       type: Number,
+      required: true,
+      default: () => {},
+    },
+    isTop: {
+      type: Boolean,
+      required: true,
+      default: () => {},
+    },
+    isGroup: {
+      type: Boolean,
       required: true,
       default: () => {},
     },
@@ -23,53 +34,57 @@ export default {
 
   data() {
     return {
-      target: "",
       distinctData: [],
       distinctSGROUPNAME: [],
-      isTop: false,
+      mainData: [],
+      objectHub: [],
     };
   },
+
+  // computed: {
+  //   revealChosenData: function () {
+  //     if (this.isTop === true) {
+  //       this.distinctData = this.mainData.filter((item) => {
+  //         return item.IDRMPRODUCT === this.productId && item.LTOP === true;
+  //       });
+  //
+  //     }
+  //     if (this.isTop === false) {
+  //       this.distinctData = this.mainData.filter((item) => {
+  //         return item.IDRMPRODUCT === this.productId;
+  //       });
+  //
+  //     }
+  //   },
+  // },
 
   async created() {
     const url = "/free/v2/question";
     let response = await fetch(url);
     let data = await response.json();
-
+    this.mainData = data;
     const urlAddress = /\bhttps?:\/\/\S+/g;
     const phone =
       /\s(\+7|8)[-]*\(?[-]*(\d{3}[-]*\)?([-]*\d){7}|\d\d[-]*\d\d[-]*\)?([-]*\d){6})/g;
     const email = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/g;
 
-    this.distinctData = data.filter((item) => {
-      return item.IDRMPRODUCT === this.productId;
-    });
+    // <------- сортировка по LTOP
+    if (this.isTop === true && this.isGroup === false) {
+      this.distinctData = this.mainData.filter((item) => {
+        return item.IDRMPRODUCT === this.productId && item.LTOP === true;
+      });
+    }
+    if (this.isTop === false) {
+      this.distinctData = this.mainData.filter((item) => {
+        return item.IDRMPRODUCT === this.productId;
+      });
+    }
+    //<-------сортировка по LTOP
 
-    // this.distinctData.forEach((item) => {
-    //   if ("LTOP" in item) {
-    //     this.isTop = true;
-    //   }
-    // });
-
-    // if (this.isTop) {
-    //   this.distinctData = data.filter((item) => {
-    //     return item.IDRMPRODUCT === this.productId && item.LTOP === true;
-    //   });
-    //   console.log(this.distinctData);
-    // }
-
-    if (!this.isTop) {
-      // this.distinctData = data.filter((item) => {
-      //   return item.IDRMPRODUCT === this.productId;
-      // });
-      // this.distinctData.forEach((item) => {
-      //   if (item.SGROUPNAME !== undefined && item.NGROUPSORT !== undefined) {
-      //     console.log(item);
-      //   }
-      // });
-      this.distinctData = data.filter((item) => {
-        if (item.SGROUPNAME !== undefined && item.NGROUPSORT !== undefined) {
-          return item.IDRMPRODUCT === this.productId;
-        }
+    //<--------сортировка по группам
+    if (this.isGroup === true && this.isTop === false) {
+      this.distinctData = this.mainData.filter((item) => {
+        return item.SGROUPNAME !== undefined;
       });
 
       for (let i = 0; i < this.distinctData.length; i++) {
@@ -79,8 +94,36 @@ export default {
           this.distinctSGROUPNAME.push(this.distinctData[i].SGROUPNAME);
         }
       }
+
+      this.distinctSGROUPNAME.forEach((item) => {
+        const obj = {};
+        obj.name = item;
+        obj.data = this.distinctData.filter((elem) => {
+          return elem.SGROUPNAME === obj.name;
+        });
+        this.objectHub.push(obj);
+      });
+
+      // this.objectHub.forEach((item) => {
+      //   item.data.unshift(item.name);
+      //   delete item.name;
+      // });
+
+      console.log(this.objectHub);
+
+      this.distinctData = this.objectHub;
+      // console.log(this.distinctData);
+      // console.log(this.distinctData);
     }
 
+    if (this.isGroup === false && this.isTop === false) {
+      this.distinctData = this.mainData.filter((item) => {
+        return item.IDRMPRODUCT === this.productId;
+      });
+    }
+    //<--------сортировка по группам
+
+    //<---- внесение html интерпретации
     this.distinctData.forEach((item) => {
       if (item.SANSWER.match(urlAddress)) {
         if (item.SANSWER.match(urlAddress).length > 0) {
@@ -144,6 +187,7 @@ export default {
       }
     });
   },
+  //<---- внесение html интепретации
 };
 </script>
 
