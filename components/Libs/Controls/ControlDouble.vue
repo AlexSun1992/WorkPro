@@ -12,6 +12,8 @@
       :disabled="!edit ? !edit : data.readonly"
       :type="'number'"
       :state="data.state"
+      :min="0"
+      oninput="validity.valid||(value='')"
     ></b-form-input>
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
@@ -40,6 +42,17 @@ export default {
       default: () => false,
     },
   },
+
+  // methods: {
+  //   formatter(value) {
+  //     if (value < 0) {
+  //       return "";
+  //     } else {
+  //       return this.fieldValue;
+  //     }
+  //   },
+  // },
+
   computed: {
     fieldValue: {
       get: function () {
