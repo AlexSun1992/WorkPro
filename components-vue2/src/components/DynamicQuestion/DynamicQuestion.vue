@@ -18,12 +18,12 @@
       :key="idx"
     >
       {{ item.name }}
-      <div v-for="(elem, id) in item.data" :key="id">
+      <div v-for="(elem, idx) in item.data" :key="idx">
         <dynamic-card
-          :param="`${id}`"
+          :param="`${idx}`"
           :title="elem.SQUESTION"
           :answer="elem.SANSWER"
-          :parameter="`${id}`"
+          :parameter="`${idx}`"
         >
         </dynamic-card>
       </div>
@@ -55,7 +55,6 @@ export default {
   directives: {
     "b-toggle": VBToggle,
   },
-  methods: {},
 };
 </script>
 
