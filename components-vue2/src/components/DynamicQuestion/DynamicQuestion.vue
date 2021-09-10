@@ -20,7 +20,7 @@
       {{ item.name }}
       <div v-for="(elem, idx) in item.data" :key="idx">
         <dynamic-card
-          :param="`${idx}`"
+          :param="`${(idx = Math.random())}`"
           :title="elem.SQUESTION"
           :answer="elem.SANSWER"
           :parameter="`${idx}`"

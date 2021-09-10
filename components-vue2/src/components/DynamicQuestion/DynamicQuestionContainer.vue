@@ -109,7 +109,7 @@ export default {
       //   delete item.name;
       // });
 
-      console.log(this.objectHub);
+      // console.log(this.objectHub);
 
       this.distinctData = this.objectHub;
       // console.log(this.distinctData);

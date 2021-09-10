@@ -71,5 +71,13 @@ export default {
   },
 
   methods: {},
+  mounted() {
+    // console.log(typeof Number(this.parameter));
+    // console.log(typeof String(this.parameter));
+    if (this.parameter === this.param) {
+      // this.parameter = this.param = Math.random().toFixed(2);
+      console.log(Math.random().toFixed(2));
+    }
+  },
 };
 </script>
