@@ -34,6 +34,7 @@ export default {
 
   data() {
     return {
+      testData: [],
       distinctData: [],
       distinctSGROUPNAME: [],
       mainData: [],
@@ -73,11 +74,13 @@ export default {
       this.distinctData = this.mainData.filter((item) => {
         return item.IDRMPRODUCT === this.productId && item.LTOP === true;
       });
+      // console.log(this.distinctData);
     }
     if (this.isTop === false) {
       this.distinctData = this.mainData.filter((item) => {
         return item.IDRMPRODUCT === this.productId;
       });
+      // console.log(this.distinctData);
     }
     //<-------сортировка по LTOP
 
@@ -103,17 +106,82 @@ export default {
         });
         this.objectHub.push(obj);
       });
-
-      // this.objectHub.forEach((item) => {
-      //   item.data.unshift(item.name);
-      //   delete item.name;
-      // });
-
-      // console.log(this.objectHub);
-
       this.distinctData = this.objectHub;
-      // console.log(this.distinctData);
-      // console.log(this.distinctData);
+
+      this.distinctData.forEach((item) => {
+        item.data.forEach((elem) => {
+          this.testData.push(elem);
+        });
+      });
+
+      // console.log(this.testData);
+
+      //<---сортировка по группам
+
+      this.testData.forEach((item) => {
+        if (item.SANSWER.match(urlAddress)) {
+          if (item.SANSWER.match(urlAddress).length > 0) {
+            for (let i = 0; i < item.SANSWER.match(urlAddress).length; i++) {
+              item.SANSWER = item.SANSWER.replace(
+                item.SANSWER.match(urlAddress)[i],
+                `<a target="_blank" href="${
+                  item.SANSWER.match(urlAddress)[i]
+                }">${item.SANSWER.match(urlAddress)[i]}</a>`
+              );
+            }
+          } else
+            item.SANSWER = item.SANSWER.replace(
+              item.SANSWER.match(urlAddress),
+              `<a target="_blank" href="${item.SANSWER.match(
+                urlAddress
+              )}">${item.SANSWER.match(urlAddress)}</a>`
+            );
+        }
+
+        if (item.SANSWER.match(phone)) {
+          if (item.SANSWER.match(phone).length > 1) {
+            for (let i = 0; i < item.SANSWER.match(phone).length; i++) {
+              item.SANSWER = item.SANSWER.replace(
+                item.SANSWER.match(phone)[i],
+                `<a target="_blank" href=tel:"${
+                  item.SANSWER.match(phone)[i]
+                }">${item.SANSWER.match(phone)[i]}</a>`
+              );
+            }
+          } else
+            item.SANSWER = item.SANSWER.replace(
+              item.SANSWER.match(phone),
+              `<a target="_blank" href="tel:${item.SANSWER.match(
+                phone
+              )}">${item.SANSWER.match(phone)}</a>`
+            );
+        }
+
+        if (item.SANSWER.match(email)) {
+          if (item.SANSWER.match(email).length > 1) {
+            for (let i = 0; i < item.SANSWER.match(email).length; i++) {
+              item.SANSWER = item.SANSWER.replace(
+                item.SANSWER.match(email)[i],
+                `<a target="_blank" href=tel:"${
+                  item.SANSWER.match(email)[i]
+                }">${item.SANSWER.match(phone)[i]}</a>`
+              );
+            }
+          } else
+            item.SANSWER = item.SANSWER.replace(
+              item.SANSWER.match(email),
+              `<a target="_blank" href="mailto:${item.SANSWER.match(
+                email
+              )}">${item.SANSWER.match(email)}</a>`
+            );
+        }
+
+        if (item.SANSWER.includes("\n")) {
+          item.SANSWER = item.SANSWER.replace(/\n/g, "<br />");
+        }
+      });
+
+      //<---сортировка по группам
     }
 
     if (this.isGroup === false && this.isTop === false) {
@@ -121,71 +189,70 @@ export default {
         return item.IDRMPRODUCT === this.productId;
       });
     }
-    //<--------сортировка по группам
 
-    //<---- внесение html интерпретации
-    this.distinctData.forEach((item) => {
-      if (item.SANSWER.match(urlAddress)) {
-        if (item.SANSWER.match(urlAddress).length > 0) {
-          for (let i = 0; i < item.SANSWER.match(urlAddress).length; i++) {
-            item.SANSWER = item.SANSWER.replace(
-              item.SANSWER.match(urlAddress)[i],
-              `<a target="_blank" href="${item.SANSWER.match(urlAddress)[i]}">${
-                item.SANSWER.match(urlAddress)[i]
-              }</a>`
-            );
-          }
-        } else
-          item.SANSWER = item.SANSWER.replace(
-            item.SANSWER.match(urlAddress),
-            `<a target="_blank" href="${item.SANSWER.match(
-              urlAddress
-            )}">${item.SANSWER.match(urlAddress)}</a>`
-          );
-      }
+    //<---- внесение html интерпретации при сортировке по Top
+    // this.distinctData.forEach((item) => {
+    //   if (item.SANSWER.match(urlAddress)) {
+    //     if (item.SANSWER.match(urlAddress).length > 0) {
+    //       for (let i = 0; i < item.SANSWER.match(urlAddress).length; i++) {
+    //         item.SANSWER = item.SANSWER.replace(
+    //           item.SANSWER.match(urlAddress)[i],
+    //           `<a target="_blank" href="${item.SANSWER.match(urlAddress)[i]}">${
+    //             item.SANSWER.match(urlAddress)[i]
+    //           }</a>`
+    //         );
+    //       }
+    //     } else
+    //       item.SANSWER = item.SANSWER.replace(
+    //         item.SANSWER.match(urlAddress),
+    //         `<a target="_blank" href="${item.SANSWER.match(
+    //           urlAddress
+    //         )}">${item.SANSWER.match(urlAddress)}</a>`
+    //       );
+    //   }
 
-      if (item.SANSWER.match(phone)) {
-        if (item.SANSWER.match(phone).length > 1) {
-          for (let i = 0; i < item.SANSWER.match(phone).length; i++) {
-            item.SANSWER = item.SANSWER.replace(
-              item.SANSWER.match(phone)[i],
-              `<a target="_blank" href=tel:"${item.SANSWER.match(phone)[i]}">${
-                item.SANSWER.match(phone)[i]
-              }</a>`
-            );
-          }
-        } else
-          item.SANSWER = item.SANSWER.replace(
-            item.SANSWER.match(phone),
-            `<a target="_blank" href="tel:${item.SANSWER.match(
-              phone
-            )}">${item.SANSWER.match(phone)}</a>`
-          );
-      }
+    //   if (item.SANSWER.match(phone)) {
+    //     if (item.SANSWER.match(phone).length > 1) {
+    //       for (let i = 0; i < item.SANSWER.match(phone).length; i++) {
+    //         item.SANSWER = item.SANSWER.replace(
+    //           item.SANSWER.match(phone)[i],
+    //           `<a target="_blank" href=tel:"${item.SANSWER.match(phone)[i]}">${
+    //             item.SANSWER.match(phone)[i]
+    //           }</a>`
+    //         );
+    //       }
+    //     } else
+    //       item.SANSWER = item.SANSWER.replace(
+    //         item.SANSWER.match(phone),
+    //         `<a target="_blank" href="tel:${item.SANSWER.match(
+    //           phone
+    //         )}">${item.SANSWER.match(phone)}</a>`
+    //       );
+    //   }
 
-      if (item.SANSWER.match(email)) {
-        if (item.SANSWER.match(email).length > 1) {
-          for (let i = 0; i < item.SANSWER.match(email).length; i++) {
-            item.SANSWER = item.SANSWER.replace(
-              item.SANSWER.match(email)[i],
-              `<a target="_blank" href=tel:"${item.SANSWER.match(email)[i]}">${
-                item.SANSWER.match(phone)[i]
-              }</a>`
-            );
-          }
-        } else
-          item.SANSWER = item.SANSWER.replace(
-            item.SANSWER.match(email),
-            `<a target="_blank" href="mailto:${item.SANSWER.match(
-              email
-            )}">${item.SANSWER.match(email)}</a>`
-          );
-      }
+    //   if (item.SANSWER.match(email)) {
+    //     if (item.SANSWER.match(email).length > 1) {
+    //       for (let i = 0; i < item.SANSWER.match(email).length; i++) {
+    //         item.SANSWER = item.SANSWER.replace(
+    //           item.SANSWER.match(email)[i],
+    //           `<a target="_blank" href=tel:"${item.SANSWER.match(email)[i]}">${
+    //             item.SANSWER.match(phone)[i]
+    //           }</a>`
+    //         );
+    //       }
+    //     } else
+    //       item.SANSWER = item.SANSWER.replace(
+    //         item.SANSWER.match(email),
+    //         `<a target="_blank" href="mailto:${item.SANSWER.match(
+    //           email
+    //         )}">${item.SANSWER.match(email)}</a>`
+    //       );
+    //   }
 
-      if (item.SANSWER.includes("\n")) {
-        item.SANSWER = item.SANSWER.replace(/\n/g, "<br />");
-      }
-    });
+    //   if (item.SANSWER.includes("\n")) {
+    //     item.SANSWER = item.SANSWER.replace(/\n/g, "<br />");
+    //   }
+    // });
   },
   //<---- внесение html интепретации
 };
