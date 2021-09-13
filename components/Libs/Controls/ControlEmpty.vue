@@ -1,5 +1,5 @@
 <template>
-  <div :class="data.labelCols">
+  <div>
 
   </div>
 </template>

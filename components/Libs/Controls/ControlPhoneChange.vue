@@ -4,7 +4,8 @@
       <div class="row">
         <b-form-group
           :label="data.label"
-          :class="[{ required: data.required }, data.labelCols]"
+          :class="[{ required: data.required }]"
+          class="col-12 col-md-6 col-lg-4"
         >
           <b-form-input
             ref="userInput"
@@ -16,6 +17,7 @@
             autofocus
             :disabled="isShowCodeEnter"
             @blur="update"
+            type="tel"
           />
           <b-form-invalid-feedback>
             Пожалуйста, заполните это поле

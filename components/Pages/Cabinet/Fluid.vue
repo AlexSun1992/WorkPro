@@ -36,9 +36,8 @@ export default {
 
   beforeRouteUpdate(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
-    const saveButtonClicked = this.$store.getters[
-      "data_card/saveButtonClicked"
-    ];
+    const saveButtonClicked =
+      this.$store.getters["data_card/saveButtonClicked"];
     if (cardChanged) {
       const confirmed = window.confirm("Закрыть без сохранения данных?");
       if (confirmed) {
@@ -48,11 +47,11 @@ export default {
       next();
     }
   },
+
   async beforeRouteLeave(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
-    const saveButtonClicked = this.$store.getters[
-      "data_card/saveButtonClicked"
-    ];
+    const saveButtonClicked =
+      this.$store.getters["data_card/saveButtonClicked"];
     if (to.meta !== "Cabinet") {
       await this.$store.dispatch(
         "pages/fetchPageByUrl",

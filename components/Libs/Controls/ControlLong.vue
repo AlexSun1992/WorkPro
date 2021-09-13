@@ -10,6 +10,8 @@
       :disabled="!edit ? !edit : data.readonly"
       :type="'number'"
       :state="data.state"
+      :min="0"
+      oninput="validity.valid||(value='')"
     ></b-form-input>
     <b-form-invalid-feedback>
       Обязательно для заполнения

@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
 
-  <body>
+<body>
     <noscript>
       <strong
         >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
@@ -16,6 +19,7 @@
         continue.</strong
       >
     </noscript>
+
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -34,7 +38,8 @@
     <!-- <component-card-editor module-id="55" menu-id="777" /> -->
     <!--    <component-card-editor module-id="55" menu-id="777" />-->
     <!-- <component-office-map /> -->
-    <component-dynamic-question-container product-Id="2" is-Top="false" is-Group="false"/>
+    <component-dynamic-question-container product-Id="2" is-Top="true" is-Group="true"/>
     <!-- <component-template-viewer module-id="55" item-id="702" /> -->
   </body>
 </html>
+
