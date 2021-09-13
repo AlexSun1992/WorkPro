@@ -1,11 +1,14 @@
 <template>
-  <DynamicQuestion
-    :choosenData="distinctData"
-    :varLength="distinctSGROUPNAME"
-    :isGroup="isGroup"
-    product-id
-    isTop
-  ></DynamicQuestion>
+  <div>
+    <!-- <h2>{{ testFunc }}</h2> -->
+    <DynamicQuestion
+      :choosenData="distinctData"
+      :varLength="distinctSGROUPNAME"
+      :isGroup="isGroup"
+      product-id
+      isTop
+    ></DynamicQuestion>
+  </div>
 </template>
 
 <script>
@@ -61,6 +64,12 @@ export default {
   //     }
   //   },
   // },
+
+  computed: {
+    testFunc: function () {
+      return this.isGroup;
+    },
+  },
 
   async created() {
     const url = "/free/v2/question";
