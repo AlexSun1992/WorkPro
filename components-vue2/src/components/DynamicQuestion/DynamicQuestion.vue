@@ -58,9 +58,6 @@ export default {
   directives: {
     "b-toggle": VBToggle,
   },
-  created() {
-    // console.log(this.choosenData);
-  },
 };
 </script>
 

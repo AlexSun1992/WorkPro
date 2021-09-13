@@ -70,9 +70,5 @@ export default {
     };
   },
   methods: {},
-  mounted() {
-    // console.log(this.parameter);
-    // console.log(this.param);
-  },
 };
 </script>
