@@ -100,7 +100,7 @@
               class="col-12 col-md-auto"
               :style="isButtonDisabled"
             >
-              Сохранить
+              {{ wizardButtonTitleSave }}
               <b-spinner
                 v-if="loading"
                 style="width: 1rem; height: 1rem"
@@ -256,10 +256,29 @@ export default {
     },
     buttonTitle() {
       if (this.isWizard && this.$route.params.idCard === "0") {
-        return "Продолжить";
+        const wizardButtonContinue = this.$store.getters[
+          "data_card/getForm"
+        ].find((item) => {
+          if (item.type === "WizardButton" && item.name === "Continue") {
+            return true;
+          }
+        });
+        return wizardButtonContinue?.label
+          ? wizardButtonContinue.label
+          : "Продолжить";
       } else {
         return "Сохранить";
       }
+    },
+    wizardButtonTitleSave() {
+      const wizardButtonSave = this.$store.getters["data_card/getForm"].find(
+        (item) => {
+          if (item.type === "WizardButton" && item.name === "Save") {
+            return true;
+          }
+        }
+      );
+      return wizardButtonSave?.label ? wizardButtonSave.label : "Сохранить";
     },
     isButtonDisabled() {
       if (this.$refs.CardEditor) {
@@ -338,9 +357,8 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
-    const saveButtonClicked = this.$store.getters[
-      "data_card/saveButtonClicked"
-    ];
+    const saveButtonClicked =
+      this.$store.getters["data_card/saveButtonClicked"];
     if (cardChanged) {
       this.$bvModal
         .msgBoxConfirm("Закрыть страницу без сохранения данных?", {

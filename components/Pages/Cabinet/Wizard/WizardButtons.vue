@@ -16,7 +16,7 @@
           v-if="currentTab.order != qty && $route.params.idCard != 0"
           @click="saveCard"
         >
-          Сохранить
+          {{ showBtnNameSave }}
           <b-spinner
             v-if="loading"
             style="width: 1rem; height: 1rem"
@@ -31,7 +31,7 @@
           v-if="currentTab.order != qty && $route.params.idCard != 0"
           @click="goNext"
         >
-          {{ showBtnName }}
+          {{ showBtnNameContinue }}
           <b-spinner
             v-if="loading"
             style="width: 1rem; height: 1rem"
@@ -95,15 +95,34 @@ export default {
     },
   },
   computed: {
-    showBtnName() {
+    showBtnNameContinue() {
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM == this.currentTab.idItem
       );
+      const wizardButtonContinue = this.$store.getters[
+        "data_card/getForm"
+      ].find((item) => {
+        if (item.type === "WizardButton" && item.name === "Continue") {
+          return true;
+        }
+      });
       if (menu.ACTIONSCUR[0]?.NTYPE == 35) {
         return menu.ACTIONSCUR[0].SNAME;
       } else {
-        return "Продолжить";
+        return wizardButtonContinue?.label
+          ? wizardButtonContinue.label
+          : "Продолжить";
       }
+    },
+    showBtnNameSave() {
+      const wizardButtonSave = this.$store.getters["data_card/getForm"].find(
+        (item) => {
+          if (item.type === "WizardButton" && item.name === "Save") {
+            return true;
+          }
+        }
+      );
+      return wizardButtonSave?.label ? wizardButtonSave.label : "Сохранить";
     },
     // loading() {
     //   return this.$store.getters["data_card/getLoading"];
