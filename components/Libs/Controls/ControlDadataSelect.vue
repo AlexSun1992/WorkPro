@@ -42,8 +42,21 @@ export default {
       this.group = [];
       this.requestAddress = null;
 
+      let queryInput = { query: input };
+      const cityAndSettlement = {
+        from_bound: {
+          value: "city",
+        },
+        to_bound: {
+          value: "settlement",
+        },
+      };
+
       if (this.data.name === "SADDRESS_REG") {
         this.requestAddress = "address";
+      } else if (this.data.name === "SCITY_SETTLEMENT") {
+        this.requestAddress = "address";
+        queryInput = { ...queryInput, ...cityAndSettlement };
       } else if (this.data.name === "SVEHICLE_MODEL") {
         this.requestAddress = "brandmodel";
       }
@@ -54,7 +67,7 @@ export default {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({ query: input }),
+        body: JSON.stringify(queryInput),
       });
       const result = await response.json();
 
