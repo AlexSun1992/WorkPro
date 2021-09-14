@@ -4,6 +4,7 @@ import { ModalPlugin } from "bootstrap-vue";
 import axios from "axios";
 import { store } from "./store/index";
 store.$axios = axios;
+Vue.prototype.$axios = axios;
 Vue.use(ModalPlugin);
 Vue.use(vueCustomElement);
 Vue.config.productionTip = false;

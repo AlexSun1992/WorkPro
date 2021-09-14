@@ -29,6 +29,7 @@ export default {
     return {
       customTokens: {
         "#": { pattern: /\d/ },
+        N: { pattern: /[0-9]/ },
         X: { pattern: /[0-9a-zA-Z]/ },
         S: { pattern: /[a-zA-Z]/ },
         A: { pattern: /[a-zA-Z]/, transform: (v) => v.toLocaleUpperCase() },
