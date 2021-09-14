@@ -23,13 +23,13 @@ export default {
     },
     isTop: {
       type: Boolean,
-      required: true,
-      default: () => {},
+      required: false,
+      default: () => false,
     },
     isGroup: {
       type: Boolean,
-      required: true,
-      default: () => {},
+      required: false,
+      default: () => false,
     },
   },
   components: {
