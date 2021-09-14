@@ -1,6 +1,6 @@
 <template>
   <div class="DynamicQuestion">
-    <div class="accordion" role="tablist">
+    <div class="accordion" role="tablist" v-if="isGroup === false">
       <dynamic-card
         v-for="(item, idx) in choosenData"
         :key="idx"
@@ -11,6 +11,26 @@
       >
       </dynamic-card>
     </div>
+
+    <div v-if="isGroup === true">
+      <div
+        class="accordion"
+        role="tablist"
+        v-for="(item, idx) in choosenData"
+        :key="idx"
+      >
+        {{ item.name }}
+        <div v-for="(elem, idx) in item.data" :key="idx">
+          <dynamic-card
+            :param="`${(idx = Math.random())}`"
+            :title="elem.SQUESTION"
+            :answer="elem.SANSWER"
+            :parameter="`${idx}`"
+          >
+          </dynamic-card>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -19,13 +39,13 @@ import { VBToggle } from "bootstrap-vue";
 
 export default {
   props: {
-    productId: {
-      type: String,
+    choosenData: {
+      type: Array,
       required: true,
       default: () => {},
     },
-    choosenData: {
-      type: Array,
+    isGroup: {
+      type: Boolean,
       required: true,
       default: () => {},
     },
@@ -37,11 +57,6 @@ export default {
   },
   directives: {
     "b-toggle": VBToggle,
-  },
-  methods: {
-    action() {
-      console.log("!!!!");
-    },
   },
 };
 </script>
