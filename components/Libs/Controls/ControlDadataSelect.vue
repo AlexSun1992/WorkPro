@@ -5,6 +5,7 @@
       <autocomplete
         :data="data"
         :search="search"
+        :getResultValue="getResultValue"
         @submit="handleSubmit"
         :disabled="disabled"
       ></autocomplete>
@@ -15,6 +16,43 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+
+function getQueryParams(queryType, input) {
+  if (queryType === "SADDRESS_REG") {
+    return {
+      query: "address",
+      body: {
+        query: input,
+      },
+    };
+  }
+  if (queryType === "SCITY_SETTLEMENT") {
+    return {
+      query: "address",
+      body: {
+        query: input,
+        from_bound: {
+          value: "city",
+        },
+        to_bound: {
+          value: "settlement",
+        },
+      },
+    };
+  }
+  if (queryType === "SVEHICLE_MODEL") {
+    return {
+      query: "brandmodel",
+      body: {
+        query: input,
+      },
+      id: "id",
+    };
+  }
+  throw new Error(
+    `Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`
+  );
+}
 
 export default {
   name: "AutoComplete",
@@ -30,6 +68,7 @@ export default {
     return {
       group: [],
       requestAddress: null,
+      id: "",
     };
   },
 
@@ -40,48 +79,37 @@ export default {
       }
 
       this.group = [];
-      this.requestAddress = null;
-
-      let queryInput = { query: input };
-      const cityAndSettlement = {
-        from_bound: {
-          value: "city",
-        },
-        to_bound: {
-          value: "settlement",
-        },
-      };
-
-      if (this.data.name === "SADDRESS_REG") {
-        this.requestAddress = "address";
-      } else if (this.data.name === "SCITY_SETTLEMENT") {
-        this.requestAddress = "address";
-        queryInput = { ...queryInput, ...cityAndSettlement };
-      } else if (this.data.name === "SVEHICLE_MODEL") {
-        this.requestAddress = "brandmodel";
+      const { query, body, id } = getQueryParams(this.data.name, input);
+      if (id) {
+        this.id = id;
       }
 
-      const response = await fetch(`/api/suggestions/${this.requestAddress}`, {
+      const response = await fetch(`/api/suggestions/${query}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify(queryInput),
+        body: JSON.stringify(body),
       });
       const result = await response.json();
 
       result.suggestions.forEach((item) => {
-        this.group.push(item.value);
+        this.group.push(item);
       });
 
       return this.group;
+    },
+    getResultValue(item) {
+      return item.value;
     },
     handleSubmit(result) {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: result,
+        value: this.id
+          ? `${result.data[this.id]}|${result.value}`
+          : result.value,
       });
     },
   },
