@@ -69,7 +69,11 @@ export default {
     },
   },
   created() {
-    this.showCaptcha();
+    if (this.data.captcha === null) {
+      this.showCaptcha();
+    } else {
+      this.captcha = this.data.captcha;
+    }
   },
   methods: {
     async showCaptcha() {
