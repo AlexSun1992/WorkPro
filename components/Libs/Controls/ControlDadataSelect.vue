@@ -122,7 +122,7 @@ export default {
     },
     handleBlur() {
       const find = this.group.find((i) => this.input.includes(i.value));
-      if (find === undefined) {
+      if (find === undefined || this.$refs.autocomplete.value === "") {
         this.$refs.autocomplete.value = "";
         this.$emit("update", {
           fieldId: this.data.fieldId,
