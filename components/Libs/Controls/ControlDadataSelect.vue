@@ -4,11 +4,13 @@
       <template v-slot:label><span v-html="data.label"></span></template>
       <autocomplete
         :data="data"
+        :autoSelect="true"
         :search="search"
         :getResultValue="getResultValue"
         @submit="handleSubmit"
         :disabled="disabled"
-      ></autocomplete>
+      >
+      </autocomplete>
     </b-form-group>
   </div>
 </template>
@@ -104,6 +106,7 @@ export default {
       return item.value;
     },
     handleSubmit(result) {
+      console.log(result);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
