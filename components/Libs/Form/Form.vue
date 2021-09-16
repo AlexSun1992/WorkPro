@@ -10,7 +10,7 @@
         <div class="row">
           <Control
             v-for="(item, i) in items(index)"
-            :key="i"
+            :key="item.fieldId"
             :params="params"
             :data="item"
             :edit="edit"
@@ -28,7 +28,7 @@
     <div v-else class="row">
       <Control
         v-for="(item, i) in items()"
-        :key="i"
+        :key="item.fieldId"
         :params="params"
         :data="item"
         :edit="edit"
