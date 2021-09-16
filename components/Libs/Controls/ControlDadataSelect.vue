@@ -3,6 +3,7 @@
     <b-form-group>
       <template v-slot:label><span v-html="data.label"></span></template>
       <autocomplete
+        :placeholder="data.placeholder"
         :data="data"
         :autoSelect="true"
         :search="search"
