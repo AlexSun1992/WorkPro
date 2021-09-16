@@ -1,16 +1,20 @@
 <template>
   <div>
-    <b-form-group>
+    <b-form-group :class="{ required: data.required }">
       <template v-slot:label><span v-html="data.label"></span></template>
       <autocomplete
-        :data="data"
-        :autoSelect="true"
+        ref="autocomplete"
+        :debounce-time="300"
         :search="search"
-        :getResultValue="getResultValue"
+        :get-result-value="getResultValue"
         @submit="handleSubmit"
+        @blur="handleBlur"
         :disabled="disabled"
       >
       </autocomplete>
+      <b-form-invalid-feedback :state="data.state">
+        Обязательно для заполнения
+      </b-form-invalid-feedback>
     </b-form-group>
   </div>
 </template>
@@ -71,6 +75,7 @@ export default {
       group: [],
       requestAddress: null,
       id: "",
+      input: null,
     };
   },
 
@@ -79,7 +84,7 @@ export default {
       if (input.length < 1) {
         return [];
       }
-
+      this.input = input;
       this.group = [];
       const { query, body, id } = getQueryParams(this.data.name, input);
       if (id) {
@@ -106,7 +111,7 @@ export default {
       return item.value;
     },
     handleSubmit(result) {
-      console.log(result);
+      this.input = result.value;
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -114,6 +119,19 @@ export default {
           ? `${result.data[this.id]}|${result.value}`
           : result.value,
       });
+    },
+    handleBlur() {
+      const find = this.group.find((i) => this.input.includes(i.value));
+      if (find === undefined) {
+        this.$refs.autocomplete.value = "";
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: null,
+        });
+      } else {
+        this.$refs.autocomplete.value = find.value;
+      }
     },
   },
   computed: {
