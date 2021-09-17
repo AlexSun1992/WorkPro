@@ -3,6 +3,7 @@
     <b-form-group :class="{ required: data.required }">
       <template v-slot:label><span v-html="data.label"></span></template>
       <autocomplete
+        :placeholder="data.placeholder"
         ref="autocomplete"
         :class="{ 'is-invalid': data.state === false }"
         :debounce-time="300"
@@ -113,6 +114,7 @@ export default {
     },
     handleSubmit(result) {
       this.input = result.value;
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,

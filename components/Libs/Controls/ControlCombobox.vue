@@ -12,13 +12,13 @@
         :options="data.options"
         :disabled="!edit ? !edit : data.readonly"
         :class="{ 'error-outline': isValid == false }"
+        :state="data.state"
       ></b-form-select>
       <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
-      <div class="mt-2">
-        <span class="error" v-if="isValid == false">
-          Обязательно для заполнения
-        </span>
-      </div>
+      <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
+      <b-form-invalid-feedback>
+        Обязательно для заполнения
+      </b-form-invalid-feedback>
     </b-form-group>
   </div>
 </template>
@@ -53,6 +53,19 @@ export default {
         `${this.data.fieldId}`
       )?.state;
     },
+  },
+
+  created() {
+    // this.data.value = null;
+    this.value = this.data.placeholder;
+    if (this.data.placeholder !== undefined) {
+      const item = {
+        value: null,
+        text: this.data.placeholder,
+        disabled: true,
+      };
+      this.data.options.unshift(item);
+    }
   },
 };
 </script>

@@ -6,6 +6,7 @@
   >
     <template v-slot:label><span v-html="data.label"></span></template>
     <b-form-input
+      :placeholder="data.placeholder"
       v-model="fieldValue"
       v-mask="data.mask"
       autocomplete="off"
