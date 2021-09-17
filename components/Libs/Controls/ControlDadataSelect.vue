@@ -1,17 +1,27 @@
 <template>
   <div>
-    <b-form-group>
+    <b-form-group :class="{ required: data.required }">
       <template v-slot:label><span v-html="data.label"></span></template>
       <autocomplete
+<<<<<<< HEAD
         :placeholder="data.placeholder"
         :data="data"
         :autoSelect="true"
+=======
+        ref="autocomplete"
+        :class="{ 'is-invalid': data.state === false }"
+        :debounce-time="300"
+>>>>>>> master
         :search="search"
-        :getResultValue="getResultValue"
+        :get-result-value="getResultValue"
         @submit="handleSubmit"
+        @blur="handleBlur"
         :disabled="disabled"
       >
       </autocomplete>
+      <b-form-invalid-feedback :state="data.state">
+        {{ errorText }}
+      </b-form-invalid-feedback>
     </b-form-group>
   </div>
 </template>
@@ -19,7 +29,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-
+const errorText = "Обязательно для заполнения";
 function getQueryParams(queryType, input) {
   if (queryType === "SADDRESS_REG") {
     return {
@@ -72,6 +82,7 @@ export default {
       group: [],
       requestAddress: null,
       id: "",
+      input: null,
     };
   },
 
@@ -80,7 +91,7 @@ export default {
       if (input.length < 1) {
         return [];
       }
-
+      this.input = input;
       this.group = [];
       const { query, body, id } = getQueryParams(this.data.name, input);
       if (id) {
@@ -107,6 +118,10 @@ export default {
       return item.value;
     },
     handleSubmit(result) {
+<<<<<<< HEAD
+=======
+      this.input = result.value;
+>>>>>>> master
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -115,10 +130,30 @@ export default {
           : result.value,
       });
     },
+    handleBlur() {
+      const find = this.group.find((i) => this.input.includes(i.value));
+      if (find === undefined || this.$refs.autocomplete.value === "") {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: null,
+        });
+      } else {
+        this.$refs.autocomplete.value = find.value;
+      }
+    },
   },
   computed: {
     disabled() {
       return this.$store.getters["data_card/getReadOnly"];
+    },
+    errorText() {
+      if (this.data.state === false) {
+        if (this.$refs.autocomplete.value !== "") {
+          return this.data?.helpText ? this.data.helpText : errorText;
+        }
+        return errorText;
+      }
     },
   },
 };
