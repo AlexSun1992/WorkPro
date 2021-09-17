@@ -56,7 +56,7 @@ export default {
   },
 
   created() {
-    // this.data.value = null;
+    this.data.value = null;
     this.value = this.data.placeholder;
     if (this.data.placeholder !== undefined) {
       const item = {
