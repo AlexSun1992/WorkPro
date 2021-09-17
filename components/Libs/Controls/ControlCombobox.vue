@@ -54,6 +54,19 @@ export default {
       )?.state;
     },
   },
+
+  created() {
+    this.data.value = null;
+    this.value = this.data.placeholder;
+    if (this.data.placeholder !== undefined) {
+      const item = {
+        value: null,
+        text: this.data.placeholder,
+        disabled: true,
+      };
+      this.data.options.unshift(item);
+    }
+  },
 };
 </script>
 

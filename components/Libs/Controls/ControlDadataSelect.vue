@@ -3,6 +3,7 @@
     <b-form-group>
       <template v-slot:label><span v-html="data.label"></span></template>
       <autocomplete
+        :placeholder="data.placeholder"
         :data="data"
         :autoSelect="true"
         :search="search"
@@ -106,7 +107,6 @@ export default {
       return item.value;
     },
     handleSubmit(result) {
-      console.log(result);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
