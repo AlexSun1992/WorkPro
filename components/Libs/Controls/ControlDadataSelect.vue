@@ -4,6 +4,7 @@
       <template v-slot:label><span v-html="data.label"></span></template>
       <autocomplete
         ref="autocomplete"
+        :class="{ 'is-invalid': data.state === false }"
         :debounce-time="300"
         :search="search"
         :get-result-value="getResultValue"
@@ -13,7 +14,7 @@
       >
       </autocomplete>
       <b-form-invalid-feedback :state="data.state">
-        Обязательно для заполнения
+        {{ errorText }}
       </b-form-invalid-feedback>
     </b-form-group>
   </div>
@@ -22,7 +23,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-
+const errorText = "Обязательно для заполнения";
 function getQueryParams(queryType, input) {
   if (queryType === "SADDRESS_REG") {
     return {
@@ -123,7 +124,6 @@ export default {
     handleBlur() {
       const find = this.group.find((i) => this.input.includes(i.value));
       if (find === undefined || this.$refs.autocomplete.value === "") {
-        this.$refs.autocomplete.value = "";
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -137,6 +137,14 @@ export default {
   computed: {
     disabled() {
       return this.$store.getters["data_card/getReadOnly"];
+    },
+    errorText() {
+      if (this.data.state === false) {
+        if (this.$refs.autocomplete.value !== "") {
+          return this.data?.helpText ? this.data.helpText : errorText;
+        }
+        return errorText;
+      }
     },
   },
 };
