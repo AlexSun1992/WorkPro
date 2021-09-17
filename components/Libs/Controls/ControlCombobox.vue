@@ -16,14 +16,9 @@
       ></b-form-select>
       <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
       <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
-      <div class="mt-2">
-        <!-- <span class="error" v-if="isValid == false">
-          Обязательно для заполнения
-        </span> -->
-        <b-form-invalid-feedback>
-          Обязательно для заполнения
-        </b-form-invalid-feedback>
-      </div>
+      <b-form-invalid-feedback>
+        Обязательно для заполнения
+      </b-form-invalid-feedback>
     </b-form-group>
   </div>
 </template>
