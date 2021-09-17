@@ -4,6 +4,7 @@
       <template v-slot:label><span v-html="data.label"></span></template>
       <autocomplete
         ref="autocomplete"
+        :placeholder="data.placeholder"
         :class="{ 'is-invalid': data.state === false }"
         :debounce-time="300"
         :search="search"
