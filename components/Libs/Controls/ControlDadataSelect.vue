@@ -3,15 +3,9 @@
     <b-form-group :class="{ required: data.required }">
       <template v-slot:label><span v-html="data.label"></span></template>
       <autocomplete
-<<<<<<< HEAD
-        :placeholder="data.placeholder"
-        :data="data"
-        :autoSelect="true"
-=======
         ref="autocomplete"
         :class="{ 'is-invalid': data.state === false }"
         :debounce-time="300"
->>>>>>> master
         :search="search"
         :get-result-value="getResultValue"
         @submit="handleSubmit"
@@ -118,10 +112,8 @@ export default {
       return item.value;
     },
     handleSubmit(result) {
-<<<<<<< HEAD
-=======
       this.input = result.value;
->>>>>>> master
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
