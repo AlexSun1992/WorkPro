@@ -56,15 +56,15 @@ export default {
   },
 
   created() {
-    const item = {
-      value: null,
-      text: this.data.placeholder
-        ? this.data.placeholder
-        : "Выберите из списка",
-      disabled: true,
-    };
-    // this.data.value = item;
-    this.data.options.unshift(item);
+    this.data.value = this.data.value ? this.data.value : null;
+    if (this.data.placeholder !== undefined && this.data.value === null) {
+      const item = {
+        value: null,
+        text: this.data.placeholder,
+        disabled: true,
+      };
+      this.data.options.unshift(item);
+    }
   },
 };
 </script>
