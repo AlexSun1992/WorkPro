@@ -5,7 +5,6 @@
       <autocomplete
         :placeholder="data.placeholder"
         ref="autocomplete"
-        :placeholder="data.placeholder"
         :class="{ 'is-invalid': data.state === false }"
         :debounce-time="300"
         :search="search"
