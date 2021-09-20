@@ -1,6 +1,11 @@
 <template>
   <div class="col-lg-12">
-    <Form :data="getForm" :edit="!isReadOnly" @update="updateValue($event)" />
+    <Form
+      :data="getForm"
+      :edit="!isReadOnly"
+      @update="updateValue($event)"
+      @blur="updateBlurValue($event)"
+    />
     <div class="row">
       <div>
         <b-alert :show="getSavedError" variant="danger" class="mt-3 mb-0">
@@ -162,6 +167,9 @@ export default {
           await this.fetchCard();
         }
       }
+    },
+    updateBlurValue($event) {
+      this.callScript($event, $event);
     },
   },
 };
