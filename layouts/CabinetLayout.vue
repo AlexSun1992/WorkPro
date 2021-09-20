@@ -32,8 +32,10 @@ import breadcrumbs from "~/converters/breadcrumbs";
 
 export default {
   name: "full",
-  head: {
-    title: "РЕСО-Гарантия",
+  head() {
+    return {
+      title: this.$store.getters["menu/breadcrumbs"][2].text,
+    };
   },
   components: {
     Header,
@@ -42,6 +44,7 @@ export default {
   },
   data() {
     return {
+      target: "!!",
       sideBarMini: false,
       sideBarMobileMini: false,
     };
@@ -51,6 +54,7 @@ export default {
       if (to.meta === "Cabinet") {
         this.sideBarMobileMini = false;
         this.setParams();
+        this.target = this.$store.getters["menu/breadcrumbs"][2].text;
       }
     },
   },
@@ -76,6 +80,9 @@ export default {
     },
   },
   computed: {
+    titleCaption() {
+      return this.$store.getters["menu/menu"];
+    },
     menuWithOutIcon() {
       return this.$store.getters["menu/getMenuWithOutIcon"];
     },
@@ -88,6 +95,9 @@ export default {
     items() {
       return this.$store.getters["menu/breadcrumbs"];
     },
+  },
+  created() {
+    this.target = this.$store.getters["menu/breadcrumbs"];
   },
 };
 </script>

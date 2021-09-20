@@ -207,6 +207,9 @@ export default {
       );
     },
   },
+  created() {
+    console.log(this.cardCaption);
+  },
 };
 </script>
 
