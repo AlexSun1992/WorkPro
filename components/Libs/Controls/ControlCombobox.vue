@@ -63,7 +63,10 @@ export default {
         text: this.data.placeholder,
         disabled: true,
       };
-      this.data.options.unshift(item);
+
+      if (this.data.options[0].text !== this.data.placeholder) {
+        this.data.options.unshift(item);
+      }
     }
   },
 };
