@@ -32,8 +32,12 @@ import breadcrumbs from "~/converters/breadcrumbs";
 
 export default {
   name: "full",
-  head: {
-    title: "РЕСО-Гарантия",
+  head() {
+    return {
+      title: this.$store.getters["menu/breadcrumbs"][2].text
+        ? this.$store.getters["menu/breadcrumbs"][2].text
+        : "РЕСО-Гарантия",
+    };
   },
   components: {
     Header,

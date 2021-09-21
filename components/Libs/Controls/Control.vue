@@ -15,6 +15,7 @@
         :store="store"
         :disabled="disabled"
         :loading="loading"
+        @blur="$emit('blur', $event)"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
