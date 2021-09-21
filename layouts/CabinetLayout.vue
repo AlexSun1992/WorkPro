@@ -44,7 +44,6 @@ export default {
   },
   data() {
     return {
-      target: "!!",
       sideBarMini: false,
       sideBarMobileMini: false,
     };
@@ -54,7 +53,6 @@ export default {
       if (to.meta === "Cabinet") {
         this.sideBarMobileMini = false;
         this.setParams();
-        this.target = this.$store.getters["menu/breadcrumbs"][2].text;
       }
     },
   },
@@ -80,9 +78,6 @@ export default {
     },
   },
   computed: {
-    titleCaption() {
-      return this.$store.getters["menu/menu"];
-    },
     menuWithOutIcon() {
       return this.$store.getters["menu/getMenuWithOutIcon"];
     },
@@ -95,9 +90,6 @@ export default {
     items() {
       return this.$store.getters["menu/breadcrumbs"];
     },
-  },
-  created() {
-    this.target = this.$store.getters["menu/breadcrumbs"];
   },
 };
 </script>
