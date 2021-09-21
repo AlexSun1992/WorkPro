@@ -54,7 +54,7 @@ function getQueryParams(queryType, input) {
       body: {
         query: input,
       },
-      id: "id",
+      id: "model_id",
     };
   }
   throw new Error(
