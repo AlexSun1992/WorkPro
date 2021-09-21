@@ -34,7 +34,9 @@ export default {
   name: "full",
   head() {
     return {
-      title: this.$store.getters["menu/breadcrumbs"][2].text,
+      title: this.$store.getters["menu/breadcrumbs"][2].text
+        ? this.$store.getters["menu/breadcrumbs"][2].text
+        : "РЕСО-Гарантия",
     };
   },
   components: {
