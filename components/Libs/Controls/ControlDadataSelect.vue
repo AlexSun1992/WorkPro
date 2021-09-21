@@ -119,7 +119,7 @@ export default {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.id
-          ? `${result.data[this.id]}|${result.value}`
+          ? `${result.data[this.id] || ""}|${result.value}`
           : result.value,
       });
     },
