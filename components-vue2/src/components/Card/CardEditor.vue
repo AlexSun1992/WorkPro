@@ -39,6 +39,17 @@ export default {
     cardId: {
       type: Number,
       required: false,
+      default: null,
+    },
+    rel: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    zone: {
+      type: String,
+      required: false,
+      default: "free",
     },
   },
   data() {
@@ -49,17 +60,21 @@ export default {
         idParent: "0",
         idCard: "0",
         idRel: "0",
-        zone: "free",
+        zone: this.zone,
       },
       isShowSavedError: false,
       eventHandler: null,
     };
   },
   async created() {
+    const token = localStorage.getItem("auth._token.local");
+    if (token) {
+      this.$axios.defaults.headers.common["Authorization"] = token;
+    }
     await this.$loadScript(
-      `/api/card/js/${this.moduleId}/${
-        this.menuId
-      }?zone=free&time=${Date.now()}`
+      `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
+        this.zone
+      }&time=${Date.now()}`
     );
     await this.$store.dispatch("menu/fetchMenu", this.params);
     this.eventHandler =
@@ -117,8 +132,8 @@ export default {
         "data_card/fetchList",
         this.params
       );
-      this.params.idCard = items[0].ID;
-      this.params.idRel = items[0].REL;
+      this.params.idCard = this.cardId || items[0].ID;
+      this.params.idRel = this.rel || items[0].REL;
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
     async updateValue(e) {
@@ -146,7 +161,7 @@ export default {
             itemId = this.menuId,
             cardId = this.getFormParams.idCard,
             relId = this.getFormParams.idRel,
-            zone = "free";
+            zone = this.zone;
           let resp = await this.$store.dispatch("data_card/saveDataCard", {
             moduleId,
             itemId,
@@ -158,7 +173,7 @@ export default {
           if (resp.status === 200) {
             await this.$store.dispatch("data_card/fetchForm", {
               ...this.getFormParams,
-              zone: "free",
+              zone: this.zone,
             });
             await this.callScript(e, "afterSave");
           }
