@@ -53,10 +53,12 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
         );
       })
       .catch((err) => {
-        if (err?.response?.data) {
+        if (err?.response?.data.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
-          res.status(500).send(err);
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
         }
       });
   } catch (e) {
@@ -88,7 +90,13 @@ app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
         );
       })
       .catch((err) => {
-        res.status(err.response.data.STATUS).send(err.response.data);
+        if (err?.response?.data.STATUS == 401) {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        } else {
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
+        }
       });
   } catch (e) {
     res.send(e);
@@ -155,10 +163,12 @@ app.get("/card/js/:idModule/:idItem", (req, res) => {
         );
       })
       .catch((err) => {
-        if (err?.response?.data) {
+        if (err?.response?.data.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
-          res.status(500).send(err);
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
         }
       });
   } catch (e) {

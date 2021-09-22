@@ -45,10 +45,12 @@ app.get("/list/:idModule/:idItem/:filters", (req, res) => {
         res.send(listConverter.list(resp.data));
       })
       .catch((err) => {
-        if (err.response.data.STATUS == 401) {
+        if (err?.response?.data.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
-          res.status(err.response.data.STATUS).send(err.response.data);
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
         }
       });
   } catch (e) {
