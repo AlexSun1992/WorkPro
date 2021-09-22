@@ -21,16 +21,16 @@ app.get("/list/:idModule/:idItem/:filters", (req, res) => {
     const filters = listConverter.getFilterParams(
       formConverter.save(JSON.parse(req.params.filters))
     );
-    if (req.query.zone !== "free") {
-      if (req.headers?.authorization) {
+    if (req?.query.zone !== "free") {
+      if (req?.headers?.authorization) {
         axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
         if (
-          req.cookies &&
+          req?.cookies &&
           Boolean(axios?.defaults?.headers?.common?.Authorization)
         ) {
           axios.defaults.headers.common.Authorization =
-            req.cookies["auth._token.local"];
+            req?.cookies["auth._token.local"];
         }
       }
       URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${filters}`;
