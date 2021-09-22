@@ -20,19 +20,14 @@ const menu = {};
 app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.headers.common.Authorization = null;
     if (req.query.zone !== "free") {
-      if (Boolean(req?.headers?.authorization)) {
-        if (Boolean(axios?.defaults?.headers?.common?.Authorization)) {
-          axios.defaults.headers.common.Authorization =
-            req.headers.authorization;
-        }
+      if (req?.headers?.authorization) {
+        axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
-        if (
-          req.cookies &&
-          Boolean(axios?.defaults?.headers?.common?.Authorization)
-        ) {
+        if (req?.cookies["auth._token.local"]) {
           axios.defaults.headers.common.Authorization =
-            req.cookies["auth._token.local"];
+            req?.cookies["auth._token.local"];
         }
       }
     }
@@ -68,12 +63,13 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
 app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
-    if (req.headers.authorization) {
+    axios.defaults.headers.common.Authorization = null;
+    if (req?.headers?.authorization) {
       axios.defaults.headers.common.Authorization = req.headers.authorization;
     } else {
-      if (req.cookies) {
+      if (req?.cookies["auth._token.local"]) {
         axios.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+          req?.cookies["auth._token.local"];
       }
     }
     const url = encodeURI(
@@ -130,17 +126,15 @@ app.get("/osago", (req, res) => {
 app.get("/card/js/:idModule/:idItem", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.headers.common.Authorization = null;
     let URL_ADDRESS;
     if (req.query.zone !== "free") {
-      if (req.headers?.authorization) {
+      if (req?.headers?.authorization) {
         axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
-        if (
-          req.cookies &&
-          Boolean(axios?.defaults?.headers?.common?.Authorization)
-        ) {
+        if (req?.cookies["auth._token.local"]) {
           axios.defaults.headers.common.Authorization =
-            req.cookies["auth._token.local"];
+            req?.cookies["auth._token.local"];
         }
       }
       URL_ADDRESS = encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`);
