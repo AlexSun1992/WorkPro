@@ -5,17 +5,14 @@
     :label-for="data.name"
   >
     <template v-slot:label><span v-html="data.label"></span></template>
-    <b-form-input
+    <currency-input
+      class="form-control"
       :placeholder="data.placeholder"
       v-model="fieldValue"
-      v-mask="data.mask"
-      autocomplete="off"
-      :disabled="!edit ? !edit : data.readonly"
-      :type="'number'"
-      :state="data.state"
-      :min="0"
-      oninput="validity.valid||(value='')"
-    ></b-form-input>
+      :allowNegative="false"
+      :currency="{ suffix: ` ${data.placeholder}` }"
+    />
+
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
     <b-form-invalid-feedback>
@@ -25,12 +22,11 @@
 </template>
 
 <script>
-import { applyMask as _mask } from "../../../utils/utils";
+import { CurrencyInput } from "vue-currency-input";
+
 export default {
-  name: "ControlDouble",
-  directives: {
-    mask: _mask,
-  },
+  name: "ControlCustomDouble",
+  components: { CurrencyInput },
   props: {
     data: {
       type: Object,
@@ -47,7 +43,9 @@ export default {
   computed: {
     fieldValue: {
       get: function () {
-        return this.data.value;
+        if (this.data.value !== 0) {
+          return this.data.value;
+        }
       },
       set: function (value) {
         this.$emit("update", {
@@ -62,17 +60,17 @@ export default {
 </script>
 
 <style scoped>
-.help-text {
-  font-size: 12px;
-  margin-top: 10px;
-}
-.danger-text {
-  color: red;
-  font-size: 12px;
-  margin-top: 10px;
-}
-.required > legend:after {
-  content: "*";
-  color: red;
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 </style>
