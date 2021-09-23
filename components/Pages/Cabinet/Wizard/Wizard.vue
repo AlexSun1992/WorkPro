@@ -1,54 +1,57 @@
 <template>
-  <div v-if="wizardIsError === false">
-    <div v-if="cardCaption" class="title-page position-relative ml-0">
-      {{ cardCaption }}
-    </div>
-    <template v-if="isShowCardTemplate">
-      <v-runtime-template
-        :template="settings.cardtemplate"
-      ></v-runtime-template>
-    </template>
-    <b-nav v-else-if="pages" tabs justified class="mb-2 sticky-top">
-      <b-nav-item
-        v-for="(item, index) in tabs"
-        :key="item.id"
-        :to="getURL(item, index)"
-        exact
-        exact-active-class="active"
-        >{{ item.name }}</b-nav-item
-      >
-    </b-nav>
-    <nuxt-child
-      ref="child"
-      :key="$route.fullPath"
-      :wizard-tabs="settings.wizard"
-    />
-    <div class="row">
-      <div
-        v-if="isErrorActionExecuteMessage"
-        class="mt-3 mb-0"
-        :class="
-          isUseCardTemplate
-            ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
-            : 'col-12'
-        "
-      >
-        <b-alert :show="isErrorActionExecuteMessage" variant="danger">{{
-          errorActionExecuteMessage
-        }}</b-alert>
+  <div>
+    <div v-if="wizardIsError === false">
+      <div v-if="cardCaption" class="title-page position-relative ml-0">
+        {{ cardCaption }}
       </div>
+      <template v-if="isShowCardTemplate">
+        <v-runtime-template
+          :template="settings.cardtemplate"
+        ></v-runtime-template>
+      </template>
+      <b-nav v-else-if="pages" tabs justified class="mb-2 sticky-top">
+        <b-nav-item
+          v-for="(item, index) in tabs"
+          :key="item.id"
+          :to="getURL(item, index)"
+          exact
+          exact-active-class="active"
+          >{{ item.name }}</b-nav-item
+        >
+      </b-nav>
+      <nuxt-child
+        ref="child"
+        :key="$route.fullPath"
+        :wizard-tabs="settings.wizard"
+      />
+      <div class="row">
+        <div
+          v-if="isErrorActionExecuteMessage"
+          class="mt-3 mb-0"
+          :class="
+            isUseCardTemplate
+              ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
+              : 'col-12'
+          "
+        >
+          <b-alert :show="isErrorActionExecuteMessage" variant="danger">{{
+            errorActionExecuteMessage
+          }}</b-alert>
+        </div>
+      </div>
+
+      <wizard-buttons
+        :currentTab="currentTab"
+        :tabs="tabs"
+        :qty="settings.wizard.length"
+        :loading="loading"
+        @goNext="goNext($event)"
+        @goBack="goBack($event)"
+        @saveCard="saveCard($event)"
+      ></wizard-buttons>
     </div>
-    <wizard-buttons
-      :currentTab="currentTab"
-      :tabs="tabs"
-      :qty="settings.wizard.length"
-      :loading="loading"
-      @goNext="goNext($event)"
-      @goBack="goBack($event)"
-      @saveCard="saveCard($event)"
-    ></wizard-buttons>
+    <div v-else>{{ wizardErrorMessage }}</div>
   </div>
-  <div v-else>{{ wizardErrorMessage }}</div>
 </template>
 
 <script>
