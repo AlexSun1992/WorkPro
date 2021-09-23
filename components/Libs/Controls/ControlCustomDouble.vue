@@ -42,7 +42,9 @@ export default {
   computed: {
     fieldValue: {
       get: function () {
-        return this.data.value;
+        if (this.data.value !== 0) {
+          return this.data.value;
+        }
       },
       set: function (value) {
         this.$emit("update", {
