@@ -6,12 +6,35 @@ export const state = () => ({
   isForm: false,
   cardId: 0,
   blockId: null,
+  filters: [],
 });
 
 export const getters = {
+  // getBlockById: (state) => (id) => {
+  //   console.log(state.filters);
+  //   return state.blocks.find((b) => b.blockId === parseInt(id));
+  // },
+
   getBlockById: (state) => (id) => {
-    return state.blocks.find((b) => b.blockId === parseInt(id));
+    if (state.filters.length !== 0) {
+      // return state.blocks
+      //   .find((b) => b.blockId === parseInt(id))
+      //   .data.items.filter((item) => {
+      //     return item.SPRODUCTNAME === state.filters[0];
+      //   });
+      console.log(state.blocks);
+      return state.blocks.find((b) => b.blockId === parseInt(id));
+    } else {
+      return state.blocks.find((b) => b.blockId === parseInt(id));
+    }
   },
+
+  getAttempt: (state) => (item) => {
+    return state.blocks[0].data.items.filter(
+      (elem) => elem.SPRODUCTNAME === item
+    );
+  },
+  getFilter: (state) => state.filters,
   getForm: (state) => state.form,
   cardId: (state) => state.cardId,
   moduleId: (state) => state.moduleId,
@@ -134,5 +157,8 @@ export const mutations = {
   },
   setBlockId(state, data) {
     state.blockId = data;
+  },
+  setFilters(state, parametr) {
+    state.filters.unshift(parametr);
   },
 };

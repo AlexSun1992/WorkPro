@@ -1,27 +1,17 @@
 <template>
-  <div>
-    <div v-if="isOpenCard">
-      <div
-        v-for="(item, idx) in dataContent.items"
-        :key="idx"
-        @click.stop="openCard(item)"
-      >
-        <slot name="data" v-bind:content="item"></slot>
-      </div>
+  <div v-if="isOpenCard">
+    <div
+      v-for="(item, idx) in dataContent.items"
+      :key="idx"
+      @click.stop="openCard(item)"
+    >
+      <slot name="data" v-bind:content="item"></slot>
     </div>
+  </div>
 
-    <div v-else>
-      <filter-block
-        v-on:revealItem="revealElement"
-        :group="this.dataName"
-      ></filter-block>
-
-      <slot
-        v-for="item in this.dataHub"
-        name="data"
-        v-bind:content="item"
-      ></slot>
-    </div>
+  <div v-else>
+    <filter-block></filter-block>
+    <slot v-for="item in dataContent" name="data" v-bind:content="item"></slot>
   </div>
 </template>
 
@@ -55,57 +45,48 @@ export default {
 
   data() {
     return {
-      dataName: [],
-      dataHub: [],
+      attempt: true,
+      pressAmount: 0,
+      target: "",
     };
   },
 
-  // async fetch() {
-  //   try {
-  //     (await this.cardId)
-  //       ? this.$store.dispatch("blocks/fetchWizardBlock", {
-  //           itemId: this.itemId,
-  //           cardId: this.cardId,
-  //         })
-  //       : this.$store.dispatch("blocks/fetchBlock", { id: this.itemId });
-  //   } catch (err) {
-  //     this.$bvToast.toast(err.response.data.MESSAGE, {
-  //       title: "Ошибка",
-  //       variant: "danger",
-  //       noAutoHide: true,
-  //       solid: true,
-  //     });
-  //   }
-  // },
+  async fetch() {
+    try {
+      (await this.cardId)
+        ? this.$store.dispatch("blocks/fetchWizardBlock", {
+            itemId: this.itemId,
+            cardId: this.cardId,
+          })
+        : this.$store.dispatch("blocks/fetchBlock", { id: this.itemId });
+    } catch (err) {
+      this.$bvToast.toast(err.response.data.MESSAGE, {
+        title: "Ошибка",
+        variant: "danger",
+        noAutoHide: true,
+        solid: true,
+      });
+    }
+  },
 
   computed: {
-    // dataContent: {
-    //   get: function () {
-    //     const block = this.$store.getters["blocks/getBlockById"](this.itemId);
-    //     if (block) {
-    //       return block.data;
-    //     } else {
-    //       return {};
-    //     }
-    //   },
-    // },
-    // parentMenu: {
-    //   get: function () {
-    //     return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
-    //   },
-    // },
-  },
-  methods: {
-    revealElement(item) {
-      console.log(item);
-      this.dataHub.forEach((elem) => {
-        if (elem.SPRODUCTNAME !== item) {
-          // this.dataHub.filter((target))
-          this.dataHub.splice(0, 1);
+    dataContent: {
+      get: function () {
+        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+        if (block) {
+          console.log(block.data.items);
+          return block.data.items;
         }
-      });
+      },
     },
+    parentMenu: {
+      get: function () {
+        return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
+      },
+    },
+  },
 
+  methods: {
     openCard(item) {
       try {
         if (this.isOpenCard) {
@@ -124,23 +105,6 @@ export default {
         });
       }
     },
-  },
-
-  mounted() {
-    this.$store.dispatch("blocks/fetchBlock", { id: this.itemId });
-    setTimeout(() => {
-      const result = this.$store.getters["blocks/getBlockById"](this.itemId);
-
-      for (let i = 0; i < result.data.items.length; i++) {
-        this.dataHub.push(result.data.items[i]);
-      }
-
-      this.dataHub.forEach((item) => {
-        if (!this.dataName.includes(item.SPRODUCTNAME)) {
-          this.dataName.unshift(item.SPRODUCTNAME);
-        }
-      });
-    }, 700);
   },
 };
 </script>
