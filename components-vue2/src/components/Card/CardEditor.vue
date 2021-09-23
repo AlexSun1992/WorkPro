@@ -21,8 +21,11 @@ import Form from "/../components/Libs/Form/Form.vue";
 import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
+import Cookies from "js-cookie";
 Vue.use(LoadScript);
 Vue.use(BootstrapVue);
+
+const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "CardEditor",
@@ -67,7 +70,7 @@ export default {
     };
   },
   async created() {
-    const token = localStorage.getItem("auth._token.local");
+    const token = Cookies.get(TOKEN_NAME);
     if (token) {
       this.$axios.defaults.headers.common["Authorization"] = token;
     }
