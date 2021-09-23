@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-12">
+  <div>
     <Form
       :data="getForm"
       :edit="!isReadOnly"
