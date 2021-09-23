@@ -7,6 +7,7 @@
     <template v-slot:label><span v-html="data.label"></span></template>
     <currency-input
       class="form-control"
+      :class="{ 'is-invalid': data.state === false }"
       :placeholder="data.placeholder"
       v-model="fieldValue"
       :allowNegative="false"
@@ -15,7 +16,7 @@
 
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
-    <b-form-invalid-feedback>
+    <b-form-invalid-feedback :state="data.state">
       Обязательно для заполнения
     </b-form-invalid-feedback>
   </b-form-group>
@@ -51,7 +52,7 @@ export default {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: Number(value),
+          value: value !== null ? Number(value) : null,
         });
       },
     },
@@ -59,18 +60,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.form-control {
-  display: block;
-  width: 100%;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-</style>
+<style scoped></style>
