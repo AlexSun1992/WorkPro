@@ -10,31 +10,25 @@ export const state = () => ({
 });
 
 export const getters = {
-  // getBlockById: (state) => (id) => {
-  //   console.log(state.filters);
-  //   return state.blocks.find((b) => b.blockId === parseInt(id));
-  // },
-
   getBlockById: (state) => (id) => {
     if (state.filters.length !== 0) {
-      // return state.blocks
+      // state.blocks
       //   .find((b) => b.blockId === parseInt(id))
-      //   .data.items.filter((item) => {
-      //     return item.SPRODUCTNAME === state.filters[0];
+      //   .data.items.forEach((item, idx) => {
+      //     if (item.SPRODUCTNAME !== state.filters[0]) {
+      //       state.blocks
+      //         .find((b) => b.blockId === parseInt(id))
+      //         .data.items.splice(idx, 1);
+      //     }
       //   });
-      console.log(state.blocks);
+
       return state.blocks.find((b) => b.blockId === parseInt(id));
     } else {
+      console.log(state.blocks.find((b) => b.blockId === parseInt(id)));
       return state.blocks.find((b) => b.blockId === parseInt(id));
     }
   },
 
-  getAttempt: (state) => (item) => {
-    return state.blocks[0].data.items.filter(
-      (elem) => elem.SPRODUCTNAME === item
-    );
-  },
-  getFilter: (state) => state.filters,
   getForm: (state) => state.form,
   cardId: (state) => state.cardId,
   moduleId: (state) => state.moduleId,
@@ -160,5 +154,13 @@ export const mutations = {
   },
   setFilters(state, parametr) {
     state.filters.unshift(parametr);
+    console.log(state.filters[0]);
+    if (state.filters.length !== 0) {
+      console.log(state.blocks[0].data.items);
+      state.blocks[0].data.items = state.blocks[0].data.items.filter((item) => {
+        return item.SPRODUCTNAME === state.filters[0];
+      });
+      console.log(state.blocks[0].data.items);
+    }
   },
 };

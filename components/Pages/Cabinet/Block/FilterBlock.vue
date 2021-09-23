@@ -35,12 +35,6 @@ export default {
   methods: {
     revealItem(item) {
       this.$store.commit("blocks/setFilters", item);
-
-      // const result = this.$store.getters["blocks/getFilter"];
-      // console.log(result);
-
-      const block = this.$store.getters["blocks/getBlockById"](712);
-      console.log(block);
     },
   },
 };

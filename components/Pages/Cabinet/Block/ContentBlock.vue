@@ -1,17 +1,16 @@
 <template>
   <div v-if="isOpenCard">
-    <div
-      v-for="(item, idx) in dataContent.items"
-      :key="idx"
-      @click.stop="openCard(item)"
-    >
+    <div v-for="item in dataContent.items" @click.stop="openCard(item)">
       <slot name="data" v-bind:content="item"></slot>
     </div>
   </div>
-
   <div v-else>
     <filter-block></filter-block>
-    <slot v-for="item in dataContent" name="data" v-bind:content="item"></slot>
+    <slot
+      v-for="item in dataContent.items"
+      name="data"
+      v-bind:content="item"
+    ></slot>
   </div>
 </template>
 
@@ -42,15 +41,6 @@ export default {
       default: () => null,
     },
   },
-
-  data() {
-    return {
-      attempt: true,
-      pressAmount: 0,
-      target: "",
-    };
-  },
-
   async fetch() {
     try {
       (await this.cardId)
@@ -68,14 +58,15 @@ export default {
       });
     }
   },
-
   computed: {
     dataContent: {
       get: function () {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
-          console.log(block.data.items);
-          return block.data.items;
+          console.log(block);
+          return block.data;
+        } else {
+          return {};
         }
       },
     },
@@ -85,7 +76,6 @@ export default {
       },
     },
   },
-
   methods: {
     openCard(item) {
       try {
