@@ -1,7 +1,11 @@
 <template>
   <div>
     <div v-if="isOpenCard">
-      <div v-for="item in dataContent.items" @click.stop="openCard(item)">
+      <div
+        v-for="(item, id) in dataContent.items"
+        :key="id"
+        @click.stop="openCard(item)"
+      >
         <slot name="data" v-bind:content="item"></slot>
       </div>
     </div>
