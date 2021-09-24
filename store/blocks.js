@@ -7,26 +7,16 @@ export const state = () => ({
   cardId: 0,
   blockId: null,
   filters: [],
+  choosenData: [],
 });
 
 export const getters = {
   getBlockById: (state) => (id) => {
-    if (state.filters.length !== 0) {
-      // state.blocks
-      //   .find((b) => b.blockId === parseInt(id))
-      //   .data.items.forEach((item, idx) => {
-      //     if (item.SPRODUCTNAME !== state.filters[0]) {
-      //       state.blocks
-      //         .find((b) => b.blockId === parseInt(id))
-      //         .data.items.splice(idx, 1);
-      //     }
-      //   });
+    return state.blocks.find((b) => b.blockId === parseInt(id));
+  },
 
-      return state.blocks.find((b) => b.blockId === parseInt(id));
-    } else {
-      console.log(state.blocks.find((b) => b.blockId === parseInt(id)));
-      return state.blocks.find((b) => b.blockId === parseInt(id));
-    }
+  getChoosenData: (state) => {
+    return state.choosenData;
   },
 
   getForm: (state) => state.form,
@@ -152,15 +142,16 @@ export const mutations = {
   setBlockId(state, data) {
     state.blockId = data;
   },
+
   setFilters(state, parametr) {
     state.filters.unshift(parametr);
-    console.log(state.filters[0]);
-    if (state.filters.length !== 0) {
-      console.log(state.blocks[0].data.items);
-      state.blocks[0].data.items = state.blocks[0].data.items.filter((item) => {
-        return item.SPRODUCTNAME === state.filters[0];
-      });
-      console.log(state.blocks[0].data.items);
-    }
+
+    state.choosenData.splice(0, state.choosenData.length);
+
+    state.blocks[0].data.items.forEach((elem) => {
+      if (elem.SPRODUCTNAME === parametr) {
+        state.choosenData.push(elem);
+      }
+    });
   },
 };

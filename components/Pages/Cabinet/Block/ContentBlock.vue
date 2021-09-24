@@ -1,16 +1,33 @@
 <template>
-  <div v-if="isOpenCard">
-    <div v-for="item in dataContent.items" @click.stop="openCard(item)">
-      <slot name="data" v-bind:content="item"></slot>
+  <div>
+    <div v-if="isOpenCard">
+      <div v-for="item in dataContent.items" @click.stop="openCard(item)">
+        <slot name="data" v-bind:content="item"></slot>
+      </div>
     </div>
-  </div>
-  <div v-else>
-    <filter-block></filter-block>
-    <slot
-      v-for="item in dataContent.items"
-      name="data"
-      v-bind:content="item"
-    ></slot>
+    <div v-else-if="indicator === null">
+      <filter-block
+        @addCount="addSome"
+        :group="dataDistinctName"
+      ></filter-block>
+      <slot
+        v-for="item in dataContent.items"
+        name="data"
+        v-bind:content="item"
+      ></slot>
+    </div>
+    <div v-if="indicator === '!!!'">
+      <filter-block
+        @addCount="addSome"
+        :group="dataDistinctName"
+      ></filter-block>
+      <slot
+        v-for="item in choosenData"
+        name="data"
+        v-bind:content="item"
+      ></slot>
+      <!-- <h2>{{ choosenData }}</h2> -->
+    </div>
   </div>
 </template>
 
@@ -41,6 +58,12 @@ export default {
       default: () => null,
     },
   },
+  data() {
+    return {
+      dataDistinctName: [],
+      indicator: null,
+    };
+  },
   async fetch() {
     try {
       (await this.cardId)
@@ -63,13 +86,29 @@ export default {
       get: function () {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
-          console.log(block);
+          block.data.items.forEach((item) => {
+            if (!this.dataDistinctName.includes(item.SPRODUCTNAME)) {
+              this.dataDistinctName.unshift(item.SPRODUCTNAME);
+            }
+          });
           return block.data;
         } else {
           return {};
         }
       },
     },
+
+    choosenData: {
+      get: function () {
+        const data = this.$store.getters["blocks/getChoosenData"];
+        if (data) {
+          return data;
+        } else {
+          return {};
+        }
+      },
+    },
+
     parentMenu: {
       get: function () {
         return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
@@ -77,6 +116,10 @@ export default {
     },
   },
   methods: {
+    addSome() {
+      this.indicator = "!!!";
+    },
+
     openCard(item) {
       try {
         if (this.isOpenCard) {

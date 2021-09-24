@@ -1,7 +1,7 @@
 <template>
   <div class="filterBlock">
     <ul>
-      <li v-for="(item, idx) in dataDistinctName" :key="idx">
+      <li v-for="(item, idx) in group" :key="idx">
         <button v-on:click="revealItem(item)">{{ item }}</button>
       </li>
     </ul>
@@ -13,28 +13,10 @@ export default {
   name: "FilterBlock",
   props: ["group"],
 
-  computed: {
-    dataDistinctName: {
-      get: function () {
-        const result = this.$store.getters["blocks/getBlockById"](712);
-        if (result) {
-          const dataDistinctNames = [];
-          result.data.items.forEach((item) => {
-            if (!dataDistinctNames.includes(item.SPRODUCTNAME)) {
-              dataDistinctNames.unshift(item.SPRODUCTNAME);
-            }
-          });
-          return dataDistinctNames;
-        } else {
-          return {};
-        }
-      },
-    },
-  },
-
   methods: {
-    revealItem(item) {
+    revealItem(item, idx) {
       this.$store.commit("blocks/setFilters", item);
+      this.$emit("addCount");
     },
   },
 };
