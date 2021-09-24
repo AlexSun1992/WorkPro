@@ -145,9 +145,7 @@ export const mutations = {
 
   setFilters(state, parametr) {
     state.filters.unshift(parametr);
-
     state.choosenData.splice(0, state.choosenData.length);
-
     state.blocks[0].data.items.forEach((elem) => {
       if (elem.SPRODUCTNAME === parametr) {
         state.choosenData.push(elem);

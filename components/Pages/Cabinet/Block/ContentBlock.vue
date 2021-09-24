@@ -26,7 +26,6 @@
         name="data"
         v-bind:content="item"
       ></slot>
-      <!-- <h2>{{ choosenData }}</h2> -->
     </div>
   </div>
 </template>

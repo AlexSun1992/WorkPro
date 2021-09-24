@@ -14,7 +14,7 @@ export default {
   props: ["group"],
 
   methods: {
-    revealItem(item, idx) {
+    revealItem(item) {
       this.$store.commit("blocks/setFilters", item);
       this.$emit("addCount");
     },
