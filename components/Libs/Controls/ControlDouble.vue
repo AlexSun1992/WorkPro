@@ -15,6 +15,7 @@
       :state="data.state"
       :min="0"
       oninput="validity.valid||(value='')"
+      v-on:blur="eventHandlerBlur"
     ></b-form-input>
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
@@ -56,6 +57,15 @@ export default {
           value: Number(value),
         });
       },
+    },
+  },
+  methods: {
+    eventHandlerBlur() {
+      this.$emit("blur", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.value,
+      });
     },
   },
 };
