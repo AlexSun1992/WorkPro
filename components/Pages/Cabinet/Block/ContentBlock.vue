@@ -15,6 +15,7 @@
         :group="dataDistinctName"
         propertyName="SPRODUCTNAME"
         @changeData="changeData"
+        :distinctItems="dataDistinctItems"
       ></filter-block>
       <slot
         v-for="item in dataContent.items"
@@ -26,6 +27,7 @@
       <filter-block
         @addCount="addSome"
         :group="dataDistinctName"
+        :distinctItems="dataDistinctItems"
         propertyName="SPRODUCTNAME"
         @changeData="changeData"
       ></filter-block>
@@ -67,6 +69,7 @@ export default {
   },
   data() {
     return {
+      dataDistinctItems: [],
       dataDistinctName: [],
       indicator: null,
     };
@@ -96,6 +99,7 @@ export default {
           block.data.items.forEach((item) => {
             if (!this.dataDistinctName.includes(item.SPRODUCTNAME)) {
               this.dataDistinctName.unshift(item.SPRODUCTNAME);
+              this.dataDistinctItems.unshift(item);
             }
           });
           return block.data;
@@ -149,6 +153,9 @@ export default {
         });
       }
     },
+  },
+  created() {
+    console.log(this.dataContent);
   },
 };
 </script>

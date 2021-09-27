@@ -1,10 +1,24 @@
 <template>
   <div class="filterBlock">
     <ul>
-      <li propertyName v-for="(item, idx) in group" :key="idx">
-        <button v-on:click="revealItem(item)">{{ item }}</button>
+      <li
+        distinctItems
+        propertyName
+        v-for="(item, idx) in distinctItems"
+        :key="idx"
+      >
+        <button v-on:click="revealItem(item[propertyName])">
+          {{ item[propertyName] }}
+        </button>
+
+        <!-- <input :id="idx" type="checkbox" />
+        <label :for="idx">{{ item }}</label> -->
       </li>
-      <div><button v-on:click="showAll">Все</button></div>
+      <div>
+        <button v-on:click="showAll">Все</button>
+        <!-- <input type="text">
+      <label for=""></label> -->
+      </div>
     </ul>
   </div>
 </template>
@@ -12,17 +26,11 @@
 <script>
 export default {
   name: "FilterBlock",
-  props: ["group", "propertyName"],
-
-  data() {
-    return {
-      item: "",
-    };
-  },
+  props: ["propertyName", "distinctItems"],
 
   methods: {
     revealItem(item) {
-      this.$store.commit("blocks/setFilters", item, this.propertyName);
+      this.$store.commit("blocks/setFilters", item);
       this.$emit("addCount");
     },
     showAll() {
