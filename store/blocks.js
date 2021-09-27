@@ -6,8 +6,8 @@ export const state = () => ({
   isForm: false,
   cardId: 0,
   blockId: null,
-  filters: [],
   choosenData: [],
+  propertyNameHub: [],
 });
 
 export const getters = {
@@ -144,12 +144,19 @@ export const mutations = {
   },
 
   setFilters(state, parametr) {
-    state.filters.unshift(parametr);
+    const property = state.propertyNameHub[0];
     state.choosenData.splice(0, state.choosenData.length);
-    state.blocks[0].data.items.forEach((elem) => {
-      if (elem.SPRODUCTNAME === parametr) {
-        state.choosenData.push(elem);
-      }
+    state.blocks[0].data.items.forEach((item) => {
+      Object.keys(item).forEach((unit) => {
+        if (unit === property && item[property] === parametr) {
+          state.choosenData.push(item);
+        }
+      });
     });
+  },
+
+  setPropertyName(state, param) {
+    state.propertyNameHub.splice(0, state.propertyNameHub.length);
+    state.propertyNameHub.unshift(param);
   },
 };

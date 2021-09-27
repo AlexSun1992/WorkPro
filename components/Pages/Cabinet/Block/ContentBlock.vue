@@ -13,6 +13,8 @@
       <filter-block
         @addCount="addSome"
         :group="dataDistinctName"
+        propertyName="SPRODUCTNAME"
+        @changeData="changeData"
       ></filter-block>
       <slot
         v-for="item in dataContent.items"
@@ -24,6 +26,8 @@
       <filter-block
         @addCount="addSome"
         :group="dataDistinctName"
+        propertyName="SPRODUCTNAME"
+        @changeData="changeData"
       ></filter-block>
       <slot
         v-for="item in choosenData"
@@ -121,6 +125,10 @@ export default {
   methods: {
     addSome() {
       this.indicator = "!!!";
+    },
+
+    changeData() {
+      this.indicator = null;
     },
 
     openCard(item) {
