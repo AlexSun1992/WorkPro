@@ -190,7 +190,7 @@ export const actions = {
     }
   },
   async executeAction(
-    { dispatch },
+    { dispatch, commit },
     { relId, relActionId, rowId, actionId, body }
   ) {
     try {
@@ -203,6 +203,10 @@ export const actions = {
           return resp;
         });
     } catch (e) {
+      commit("setLoading", false);
+      commit("setDisabled", false);
+      commit("setSavedError", true);
+      commit("setErrorMessage", e.response.data);
       return e.response;
     }
   },
