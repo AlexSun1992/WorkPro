@@ -13,6 +13,27 @@
         </b-alert>
       </div>
     </div>
+    <div class="row">
+      <b-button
+        v-if="getBtnSave && isShowButtonSave"
+        pill
+        :disabled="isSaving"
+        v-on:click="saveDataCard()"
+        type="button"
+        variant="success"
+        class="col-12 col-md-auto mt-3 mt-md-0"
+        :style="isButtonDisabled"
+      >
+        Сохранить
+        <b-spinner
+          v-if="isSaving"
+          style="width: 1rem; height: 1rem"
+          class="ml-2"
+          variant="danger"
+          label="Spinning"
+        ></b-spinner>
+      </b-button>
+    </div>
   </div>
 </template>
 <script>
@@ -67,23 +88,34 @@ export default {
       },
       isShowSavedError: false,
       eventHandler: null,
+      isButtonDisabled: false,
+      isSaving: false,
+      isShowButtonSave: false,
     };
   },
   async created() {
-    const token = Cookies.get(TOKEN_NAME);
-    if (token) {
-      this.$axios.defaults.headers.common["Authorization"] = token;
+    try {
+      const token = Cookies.get(TOKEN_NAME);
+      if (token) {
+        this.$axios.defaults.headers.common["Authorization"] = token;
+      }
+      await this.$loadScript(
+        `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
+          this.zone
+        }&time=${Date.now()}`
+      );
+      await this.$store.dispatch("menu/fetchMenu", this.params);
+      this.eventHandler =
+        typeof eventHandler === "function" ? eventHandler : null;
+      await this.fetchCard();
+      this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
+      this.isShowButtonSave = true;
+    } catch (e) {
+      this.$store.commit("data_card/setLoading", false);
+      this.$store.commit("data_card/setDisabled", false);
+      this.$store.commit("data_card/setSavedError", true);
+      this.$store.commit("data_card/setErrorMessage", e?.response?.data);
     }
-    await this.$loadScript(
-      `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
-        this.zone
-      }&time=${Date.now()}`
-    );
-    await this.$store.dispatch("menu/fetchMenu", this.params);
-    this.eventHandler =
-      typeof eventHandler === "function" ? eventHandler : null;
-    await this.fetchCard();
-    this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
   },
   computed: {
     ...mapGetters("data_card", [
@@ -91,6 +123,7 @@ export default {
       "getFormParams",
       "getErrorMessage",
       "getSavedError",
+      "getBtnSave",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
     isReadOnly: function () {
@@ -119,6 +152,32 @@ export default {
         }
       }
       return valid;
+    },
+    async saveDataCard(e = {}) {
+      if (this.validateData(this.getForm)) {
+        await this.callScript(e, "beforeSave");
+        this.isShowSavedError = false;
+        let moduleId = this.moduleId,
+          itemId = this.menuId,
+          cardId = this.getFormParams.idCard,
+          relId = this.getFormParams.idRel,
+          zone = this.zone;
+        let resp = await this.$store.dispatch("data_card/saveDataCard", {
+          moduleId,
+          itemId,
+          cardId,
+          relId,
+          zone,
+          form: this.getForm,
+        });
+        if (resp.status === 200) {
+          await this.$store.dispatch("data_card/fetchForm", {
+            ...this.getFormParams,
+            zone: this.zone,
+          });
+          await this.callScript(e, "afterSave");
+        }
+      }
     },
     async callScript(e, action = null) {
       let data = await this.eventHandler(
@@ -157,32 +216,25 @@ export default {
         const actionSaveCard = menu.ACTIONSCUR.find(
           (item) => item.NTYPE === 38
         );
-        await this.callScript(e, "beforeSave");
-        if (actionSaveCard.ID === actionId && this.validateData(this.getForm)) {
-          this.isShowSavedError = false;
-          let moduleId = this.moduleId,
-            itemId = this.menuId,
-            cardId = this.getFormParams.idCard,
-            relId = this.getFormParams.idRel,
-            zone = this.zone;
-          let resp = await this.$store.dispatch("data_card/saveDataCard", {
-            moduleId,
-            itemId,
-            cardId,
-            relId,
-            zone,
-            form: this.getForm,
-          });
-          if (resp.status === 200) {
-            await this.$store.dispatch("data_card/fetchForm", {
-              ...this.getFormParams,
-              zone: this.zone,
-            });
-            await this.callScript(e, "afterSave");
-          }
+        const actionExecute = menu.ACTIONSCUR.find((item) => item.NTYPE === 4);
+        if (actionSaveCard?.ID === actionId) {
+          await this.saveDataCard(e);
         }
         if (actionRefreshCard?.ID === actionId) {
           await this.fetchCard();
+        }
+        if (actionExecute?.ID === actionId) {
+          const response = await this.$store.dispatch(
+            "data_card/executeAction",
+            {
+              actionId: actionExecute?.ID,
+              relActionId: actionExecute?.REL,
+              relId: this.rel,
+              rowId: this.cardId,
+              body: this.$store.getters["data_card/getActionParams"],
+            }
+          );
+          console.log(response);
         }
       }
     },
