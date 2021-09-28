@@ -200,6 +200,7 @@ export const actions = {
           body || {}
         )
         .then((resp) => {
+          commit("setSavedError", false);
           return resp;
         });
     } catch (e) {

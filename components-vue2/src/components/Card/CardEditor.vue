@@ -17,7 +17,7 @@
         </b-alert>
       </div>
     </div>
-    <div class="row mt-4">
+    <div class="row mt-4 ml-2">
       <b-button
         v-if="getBtnSave && isShowButtonSave && !getError"
         pill
