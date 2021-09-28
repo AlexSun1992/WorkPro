@@ -1,23 +1,31 @@
 <template>
-  <div class="filterBlock">
-    <ul>
+  <div>
+    <ul v-if="this.dataItems.length !== 0">
       <li
         distinctItems
         propertyName
-        v-for="(item, idx) in distinctItems"
+        v-for="(item, idx) in dataItems"
+        :key="idx"
+      >
+        <button v-on:click="revealItem(item)">
+          {{ item }}
+        </button>
+      </li>
+    </ul>
+
+    <ul v-else>
+      <li
+        distinctItems
+        propertyName
+        v-for="(item, idx) in dataContent"
         :key="idx"
       >
         <button v-on:click="revealItem(item[propertyName])">
           {{ item[propertyName] }}
         </button>
-
-        <!-- <input :id="idx" type="checkbox" />
-        <label :for="idx">{{ item }}</label> -->
       </li>
       <div>
-        <button v-on:click="showAll">Все</button>
-        <!-- <input type="text">
-      <label for=""></label> -->
+        <button>Все</button>
       </div>
     </ul>
   </div>
@@ -28,20 +36,45 @@ export default {
   name: "FilterBlock",
   props: ["propertyName", "distinctItems"],
 
+  data() {
+    return {
+      dataItems: [],
+    };
+  },
+
   methods: {
     revealItem(item) {
+      if (this.propertyName !== undefined) {
+        this.$store.commit("blocks/setPropertyName", this.propertyName);
+      }
       this.$store.commit("blocks/setFilters", item);
-      this.$emit("addCount");
-    },
-    showAll() {
-      this.$emit("changeData");
     },
   },
 
-  created() {
-    if (this.propertyName !== undefined) {
-      this.$store.commit("blocks/setPropertyName", this.propertyName);
-    }
+  computed: {
+    dataContent: {
+      get: function () {
+        const block = this.$store.getters["blocks/getBlockById"](712);
+        if (block) {
+          const group = [];
+          block.data.items.forEach((item) => {
+            if (!group.includes(item[this.propertyName])) {
+              group.unshift(item[this.propertyName]);
+              console.log(group);
+            }
+
+            if (!this.dataItems.includes(item[this.propertyName])) {
+              this.dataItems.unshift(item[this.propertyName]);
+              console.log(this.dataItems);
+            }
+          });
+
+          return group;
+        } else {
+          return {};
+        }
+      },
+    },
   },
 };
 </script>

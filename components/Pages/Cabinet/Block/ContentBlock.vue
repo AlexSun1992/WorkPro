@@ -9,30 +9,10 @@
         <slot name="data" v-bind:content="item"></slot>
       </div>
     </div>
-    <div v-else-if="indicator === null">
-      <filter-block
-        @addCount="addSome"
-        :group="dataDistinctName"
-        propertyName="SPRODUCTNAME"
-        @changeData="changeData"
-        :distinctItems="dataDistinctItems"
-      ></filter-block>
+    <div>
+      <filter-block propertyName="SPRODUCTNAME"></filter-block>
       <slot
         v-for="item in dataContent.items"
-        name="data"
-        v-bind:content="item"
-      ></slot>
-    </div>
-    <div v-if="indicator === '!!!'">
-      <filter-block
-        @addCount="addSome"
-        :group="dataDistinctName"
-        :distinctItems="dataDistinctItems"
-        propertyName="SPRODUCTNAME"
-        @changeData="changeData"
-      ></filter-block>
-      <slot
-        v-for="item in choosenData"
         name="data"
         v-bind:content="item"
       ></slot>
@@ -69,8 +49,6 @@ export default {
   },
   data() {
     return {
-      dataDistinctItems: [],
-      dataDistinctName: [],
       indicator: null,
     };
   },
@@ -96,24 +74,7 @@ export default {
       get: function () {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
-          block.data.items.forEach((item) => {
-            if (!this.dataDistinctName.includes(item.SPRODUCTNAME)) {
-              this.dataDistinctName.unshift(item.SPRODUCTNAME);
-              this.dataDistinctItems.unshift(item);
-            }
-          });
           return block.data;
-        } else {
-          return {};
-        }
-      },
-    },
-
-    choosenData: {
-      get: function () {
-        const data = this.$store.getters["blocks/getChoosenData"];
-        if (data) {
-          return data;
         } else {
           return {};
         }
@@ -127,14 +88,6 @@ export default {
     },
   },
   methods: {
-    addSome() {
-      this.indicator = "!!!";
-    },
-
-    changeData() {
-      this.indicator = null;
-    },
-
     openCard(item) {
       try {
         if (this.isOpenCard) {
@@ -153,9 +106,6 @@ export default {
         });
       }
     },
-  },
-  created() {
-    console.log(this.dataContent);
   },
 };
 </script>

@@ -6,17 +6,13 @@ export const state = () => ({
   isForm: false,
   cardId: 0,
   blockId: null,
-  choosenData: [],
   propertyNameHub: [],
+  data: [],
 });
 
 export const getters = {
   getBlockById: (state) => (id) => {
     return state.blocks.find((b) => b.blockId === parseInt(id));
-  },
-
-  getChoosenData: (state) => {
-    return state.choosenData;
   },
 
   getForm: (state) => state.form,
@@ -143,20 +139,22 @@ export const mutations = {
     state.blockId = data;
   },
 
-  setFilters(state, parametr) {
-    const property = state.propertyNameHub[0];
-    state.choosenData.splice(0, state.choosenData.length);
-    state.blocks[0].data.items.forEach((item) => {
-      Object.keys(item).forEach((unit) => {
-        if (unit === property && item[property] === parametr) {
-          state.choosenData.push(item);
-        }
-      });
-    });
-  },
-
   setPropertyName(state, param) {
     state.propertyNameHub.splice(0, state.propertyNameHub.length);
     state.propertyNameHub.unshift(param);
+  },
+
+  setFilters(state, parametr) {
+    const property = state.propertyNameHub[0];
+
+    state.blocks[0].data.items.forEach((item) => {
+      if (state.data.length < state.blocks[0].data.items.length) {
+        state.data.push(item);
+      }
+    });
+
+    state.blocks[0].data.items = state.data.filter((item) => {
+      return item[property] === parametr;
+    });
   },
 };
