@@ -8,14 +8,18 @@
     />
     <div class="row">
       <div>
-        <b-alert :show="getSavedError" variant="danger" class="mt-3 mb-0">
+        <b-alert
+          :show="getSavedError || getError"
+          variant="danger"
+          class="mt-3 mb-0"
+        >
           {{ getErrorMessage }}
         </b-alert>
       </div>
     </div>
-    <div class="row">
+    <div class="row mt-4">
       <b-button
-        v-if="getBtnSave && isShowButtonSave"
+        v-if="getBtnSave && isShowButtonSave && !getError"
         pill
         :disabled="isSaving"
         v-on:click="saveDataCard()"
@@ -114,7 +118,10 @@ export default {
       this.$store.commit("data_card/setLoading", false);
       this.$store.commit("data_card/setDisabled", false);
       this.$store.commit("data_card/setSavedError", true);
-      this.$store.commit("data_card/setErrorMessage", e?.response?.data);
+      this.$store.commit(
+        "data_card/setErrorMessage",
+        e?.response?.data || { MESSAGE: "Ошибка отображения компонента" }
+      );
     }
   },
   computed: {
@@ -123,6 +130,7 @@ export default {
       "getFormParams",
       "getErrorMessage",
       "getSavedError",
+      "getError",
       "getBtnSave",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
