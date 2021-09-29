@@ -60,12 +60,10 @@ export default {
           block.data.items.forEach((item) => {
             if (!group.includes(item[this.propertyName])) {
               group.unshift(item[this.propertyName]);
-              console.log(group);
             }
 
             if (!this.dataItems.includes(item[this.propertyName])) {
               this.dataItems.unshift(item[this.propertyName]);
-              console.log(this.dataItems);
             }
           });
 

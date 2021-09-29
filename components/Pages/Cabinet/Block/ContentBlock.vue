@@ -10,7 +10,7 @@
       </div>
     </div>
     <div>
-      <filter-block propertyName="SPRODUCTNAME"></filter-block>
+      <filter-block propertyName="REL"></filter-block>
       <slot
         v-for="item in dataContent.items"
         name="data"

@@ -148,6 +148,7 @@ export const mutations = {
     const property = state.propertyNameHub[0];
 
     state.blocks[0].data.items.forEach((item) => {
+      console.log(item);
       if (state.data.length < state.blocks[0].data.items.length) {
         state.data.push(item);
       }
