@@ -51,10 +51,11 @@ export default {
         return this.data.value;
       },
       set: function (value) {
+        console.log(value);
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: Number(value),
+          value: Number(value) || null,
         });
       },
     },
