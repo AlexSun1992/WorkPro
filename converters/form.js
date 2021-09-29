@@ -194,7 +194,8 @@ converter.form = async (data, params) => {
         ? false
         : true;
     obj.control = null;
-    obj.state = null;
+    obj.state = obj.value && obj.required ? true : null;
+    obj.checked = obj.value && obj.required ? true : null;
     obj.error = null;
     obj.helpText = webFields[i].SHELPTEXT;
     obj.placeholder = webFields[i].SNULLTEXT;
