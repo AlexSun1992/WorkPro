@@ -146,7 +146,11 @@ export default {
   methods: {
     eventValidate() {
       if (this.data.required) {
-        if (this.data.value != null && this.data.value !== "") {
+        if (
+          this.data.value != null &&
+          this.data.value !== "" &&
+          !this.data.checked
+        ) {
           this.data.state = null;
           this.data.checked = true;
         }

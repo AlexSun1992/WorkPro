@@ -31,19 +31,7 @@ converter.select = (data) => {
           let value = items[i][data[0]._meta.SKEYFIELD]
             ? items[i][data[0]._meta.SKEYFIELD.toUpperCase()]
             : items[i].ID;
-          if (
-            value === "N" ||
-            value === false ||
-            value === "Н" ||
-            value === true ||
-            value === "Y" ||
-            value === "Д"
-          ) {
-            obj.value =
-              value === "N" || value === false || value === "Н" ? false : true;
-          } else {
-            obj.value = value;
-          }
+          obj.value = value;
         }
       }
     }

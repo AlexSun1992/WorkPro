@@ -351,12 +351,13 @@ export const mutations = {
           item.state = false;
         }
         if (item.value) {
-          item.state = null;
+          item.state = true;
+          item.checked = true;
         } else {
           item.state = false;
         }
         if (item.value && item.value.__ob__) {
-          item.state = item.value.value || item.value.value == 0 ? null : false;
+          item.state = item.value.value || item.value.value == 0 ? true : false;
         }
       }
     }

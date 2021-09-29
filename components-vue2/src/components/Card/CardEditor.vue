@@ -22,6 +22,7 @@
         v-if="getBtnSave && isShowButtonSave && !getError"
         pill
         :disabled="isSaving"
+        :class="'btn-lg'"
         v-on:click="saveDataCard()"
         type="button"
         variant="success"
@@ -132,6 +133,7 @@ export default {
       "getSavedError",
       "getError",
       "getBtnSave",
+      "getDataFieldByFieldId",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
     isReadOnly: function () {
@@ -207,15 +209,15 @@ export default {
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
     async updateValue(e) {
+      this.$store.commit("data_card/setFormField", {
+        fieldId: e.fieldId,
+        value: e.value,
+      });
       let field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM === this.menuId
       );
       await this.callScript(e);
-      this.$store.commit("data_card/setFormField", {
-        fieldId: e.fieldId,
-        value: e.value,
-      });
       if (field.type === "button" && e.action) {
         const actionId = parseInt(e.value.replace("Item", ""));
         const actionRefreshCard = menu.ACTIONSCUR.find(

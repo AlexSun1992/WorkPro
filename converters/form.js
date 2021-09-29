@@ -91,25 +91,6 @@ converter.form = async (data, params) => {
         obj.value = meta_value[webFields[i].SNAME];
       }
     }
-    if (
-      obj.value === "Д" ||
-      obj.value === "д" ||
-      obj.value === "Y" ||
-      obj.value === "y" ||
-      obj.value === true ||
-      ((obj.type == "enum" || obj.type == "boolean") && obj.value === "1")
-    ) {
-      obj.value = true;
-    } else if (
-      obj.value === "Н" ||
-      obj.value === "н" ||
-      obj.value === "N" ||
-      obj.value === "n" ||
-      obj.value === false ||
-      ((obj.type == "enum" || obj.type == "boolean") && obj.value === "0")
-    ) {
-      obj.value = false;
-    }
     obj.type = webFields[i].STYPE;
     const fieldOfStruct = fields.find((f) => f.FIELD === webFields[i].SNAME);
     if (fieldOfStruct) {
