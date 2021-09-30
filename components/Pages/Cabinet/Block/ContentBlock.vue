@@ -9,8 +9,8 @@
         <slot name="data" v-bind:content="item"></slot>
       </div>
     </div>
-    <div>
-      <filter-block propertyName="REL"></filter-block>
+    <div v-else>
+      <filter-block propertyName="ID"></filter-block>
       <slot
         v-for="item in dataContent.items"
         name="data"

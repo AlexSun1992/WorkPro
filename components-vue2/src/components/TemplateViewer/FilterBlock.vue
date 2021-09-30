@@ -1,18 +1,32 @@
 <template>
-  <div class="test">
+  <div>
     <ul v-if="this.dataItems.length !== 0">
-      <li propertyName v-for="(item, idx) in dataItems" :key="idx">
+      <li
+        distinctItems
+        propertyName
+        v-for="(item, idx) in dataItems"
+        :key="idx"
+      >
         <button v-on:click="revealItem(item)">
           {{ item }}
         </button>
       </li>
     </ul>
+
     <ul v-else>
-      <li propertyName v-for="(item, idx) in dataContent" :key="idx">
+      <li
+        distinctItems
+        propertyName
+        v-for="(item, idx) in dataContent"
+        :key="idx"
+      >
         <button v-on:click="revealItem(item[propertyName])">
           {{ item[propertyName] }}
         </button>
       </li>
+      <div>
+        <button>Все</button>
+      </div>
     </ul>
   </div>
 </template>
@@ -25,7 +39,6 @@ export default {
   data() {
     return {
       dataItems: [],
-      allElements: "Все",
     };
   },
 
@@ -34,7 +47,7 @@ export default {
       if (this.propertyName !== undefined) {
         this.$store.commit("blocks/setPropertyName", this.propertyName);
       }
-      this.$store.commit("blocks/setFilters", item, this.pressAmount);
+      this.$store.commit("blocks/setFilters", item);
     },
   },
 
@@ -51,12 +64,10 @@ export default {
 
             if (!this.dataItems.includes(item[this.propertyName])) {
               this.dataItems.unshift(item[this.propertyName]);
-
-              if (!this.dataItems.includes(this.allElements)) {
-                this.dataItems.push(this.allElements);
-              }
             }
           });
+
+          return group;
         } else {
           return {};
         }
@@ -67,10 +78,6 @@ export default {
 </script>
 
 <style scoped>
-.red {
-  background-color: red;
-}
-
 li {
   list-style: none;
   cursor: pointer;

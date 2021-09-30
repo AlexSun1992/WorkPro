@@ -9,8 +9,11 @@
 </template>
 
 <script>
+import FilterBlock from "./FilterBlock";
+
 export default {
   name: "ContentBlock",
+  components: { FilterBlock },
   props: {
     itemId: {
       required: true,

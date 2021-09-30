@@ -7,14 +7,18 @@ export const state = () => ({
   cardId: 0,
   blockId: null,
   propertyNameHub: [],
-  data: [],
+  allData: [],
+  choosenData: [],
+  Parametrs: [],
+  distinctParametrs: [],
+  count: 0,
 });
 
 export const getters = {
   getBlockById: (state) => (id) => {
     return state.blocks.find((b) => b.blockId === parseInt(id));
   },
-
+  getAllBlocks: (state) => state.allData,
   getForm: (state) => state.form,
   cardId: (state) => state.cardId,
   moduleId: (state) => state.moduleId,
@@ -148,14 +152,37 @@ export const mutations = {
     const property = state.propertyNameHub[0];
 
     state.blocks[0].data.items.forEach((item) => {
-      console.log(item);
-      if (state.data.length < state.blocks[0].data.items.length) {
-        state.data.push(item);
+      if (state.allData.length < state.blocks[0].data.items.length) {
+        state.allData.unshift(item);
       }
     });
 
-    state.blocks[0].data.items = state.data.filter((item) => {
+    state.blocks[0].data.items = state.allData.filter((item) => {
       return item[property] === parametr;
     });
+
+    state.blocks[0].data.items.forEach((item) => {
+      if (!state.choosenData.includes(item)) {
+        state.choosenData.unshift(item);
+      }
+    });
+
+    state.blocks[0].data.items = state.choosenData;
+
+    state.Parametrs.unshift(parametr);
+
+    const target = state.Parametrs[0];
+
+    for (let i = 1; i < state.Parametrs.length; i++) {
+      if (state.Parametrs[i] === target) {
+        console.log(state.Parametrs[i]);
+
+        state.blocks[0].data.items.forEach((elem) => {
+          if (elem[property] === target) {
+            console.log(state.blocks[0].data.items);
+          }
+        });
+      }
+    }
   },
 };
