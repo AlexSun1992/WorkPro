@@ -25,16 +25,21 @@ export default {
   data() {
     return {
       dataItems: [],
-      allElements: "Все",
+      items: [],
+      obj: {},
+      checked: false,
     };
   },
 
   methods: {
     revealItem(item) {
+      this.items.push(item);
+      console.log(this.items);
+
       if (this.propertyName !== undefined) {
         this.$store.commit("blocks/setPropertyName", this.propertyName);
       }
-      this.$store.commit("blocks/setFilters", item, this.pressAmount);
+      this.$store.commit("blocks/setFilters", item);
     },
   },
 
@@ -52,9 +57,9 @@ export default {
             if (!this.dataItems.includes(item[this.propertyName])) {
               this.dataItems.unshift(item[this.propertyName]);
 
-              if (!this.dataItems.includes(this.allElements)) {
-                this.dataItems.push(this.allElements);
-              }
+              // if (!this.dataItems.includes(this.allElements)) {
+              //   this.dataItems.push(this.allElements);
+              // }
             }
           });
         } else {
@@ -63,6 +68,9 @@ export default {
       },
     },
   },
+  // created() {
+  //   this.$store.commit("blocks/clearBlock");
+  //   },
 };
 </script>
 
