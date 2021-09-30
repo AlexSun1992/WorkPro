@@ -1,54 +1,55 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
 
-  <body>
-    <noscript>
-      <strong
-        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
         properly without JavaScript enabled. Please enable it to
-        continue.</strong
-      >
-    </noscript>
+        continue.</strong>
+  </noscript>
 
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
 
-    <!--    <component-login-button></component-login-button>-->
-    <!--    <component-login-form></component-login-form>-->
-    <!--    <component-quiz-calculator quiz-id="3" />-->
-    <!--    <component-password-recovery-form></component-password-recovery-form>-->
-    <!--    <component-reg-form></component-reg-form>-->
-    <!--    <component-editor-wrapper module-id="55" menu-id="765" ></component-editor-wrapper>-->
-    <!--    <component-card-editor module-id="55" menu-id="777" />-->
-    <!--    <component-card-editor module-id="55" menu-id="777" />-->
+  <!--    <component-login-button></component-login-button>-->
+  <!--    <component-login-form></component-login-form>-->
+  <!--    <component-quiz-calculator quiz-id="3" />-->
+  <!--    <component-password-recovery-form></component-password-recovery-form>-->
+  <!--    <component-reg-form></component-reg-form>-->
+  <!--    <component-editor-wrapper module-id="55" menu-id="765" ></component-editor-wrapper>-->
+  <!--    <component-card-editor module-id="55" menu-id="777" />-->
+  <!--    <component-card-editor module-id="55" menu-id="777" />-->
 
-    <!--       <component-dynamic-question-container-->
-    <!--         product-id="2"-->
-    <!--         is-top="false"-->
-    <!--         is-group="false"-->
-    <!--       />-->
-    <component-login-button></component-login-button>
-    <component-login-form></component-login-form>
-    <div class="col-lg-12">
-      <!--      <component-card-editor-->
-      <!--        zone="token"-->
-      <!--        module-id="55"-->
-      <!--        menu-id="780"-->
-      <!--        card-id="1990364742"-->
-      <!--        rel="C5EC4891B5E830BD85B0CCDA16746600"-->
-      <!--      />-->
-      <component-card-editor module-id="55" menu-id="777" />
-    </div>
-  </body>
+  <!--       <component-dynamic-question-container-->
+  <!--         product-id="2"-->
+  <!--         is-top="false"-->
+  <!--         is-group="false"-->
+  <!--       />-->
+  <component-login-button></component-login-button>
+  <component-login-form></component-login-form>
+  <div class="col-lg-12">
+    <!--      <component-card-editor-->
+    <!--        zone="token"-->
+    <!--        module-id="55"-->
+    <!--        menu-id="780"-->
+    <!--        card-id="1990364742"-->
+    <!--        rel="C5EC4891B5E830BD85B0CCDA16746600"-->
+    <!--      />-->
+    <!-- <component-card-editor module-id="55" menu-id="777" /> -->
+    <component-offices-map></component-offices-map>
+    <component-regions-list></component-regions-list>
+    <component-offices-list></component-offices-list>
+  </div>
+</body>
+
 </html>
