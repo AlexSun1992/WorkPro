@@ -200,6 +200,7 @@ export const actions = {
           body || {}
         )
         .then((resp) => {
+          commit("setSavedError", false);
           return resp;
         });
     } catch (e) {
@@ -343,20 +344,22 @@ export const mutations = {
   },
   setFormField(state, data) {
     const item = state.form.find((d) => d.fieldId === data.fieldId);
-    if (item) {
+    if (item !== undefined) {
       item.value = data.value;
       if (item.required) {
-        if (item.value == null || item.value == "") {
-          item.state = false;
-        }
-        if (item.value) {
-          item.state = null;
-        } else {
-          item.state = false;
+        item.state = false;
+        if (
+          item.value !== null &&
+          item.value !== "" &&
+          item.value !== undefined
+        ) {
+          item.state = true;
+          item.checked = true;
         }
         if (item.value && item.value.__ob__) {
-          item.state = item.value.value || item.value.value == 0 ? null : false;
+          item.state = item.value.value || item.value.value == 0 ? true : false;
         }
+
       }
     }
   },

@@ -17,9 +17,11 @@
         :lang="lang"
         :input-class="data.state === false ? `${state} is-invalid` : state"
       ></date-picker>
-      <div class="timestamp error" v-if="data.state === false">
-        {{ data.error ? data.error : "Обязательно для заполнения" }}
-      </div>
+      <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
+      <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
+      <b-form-invalid-feedback :state="data.state">
+        Обязательно для заполнения
+      </b-form-invalid-feedback>
     </b-form-group>
   </div>
 </template>

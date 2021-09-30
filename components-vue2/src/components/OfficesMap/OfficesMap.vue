@@ -1,11 +1,6 @@
 <template>
   <div class="map-container mt-3">
     <input type="text" id="suggest" />
-    <div class="mt-2 mb-2">
-      <a href="https://reso.ru/About/Contacts/OfficesList"
-        >Список офисов продаж и центров выплат</a
-      >
-    </div>
     <div ref="map" id="map" class="map"></div>
   </div>
 </template>
@@ -15,7 +10,7 @@ import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 Vue.use(LoadScript);
 export default {
-  name: "OfficeMap",
+  name: "OfficesMap",
   data() {
     return {
       myMap: null,
@@ -24,11 +19,11 @@ export default {
   },
   async created() {
     try {
-      await this.$store.dispatch("general/fetchAgencies");
+      await this.$store.dispatch("map/fetchAgencies");
       await this.$loadScript(
         `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
       ).then(() => {
-        if (this.$store.getters["general/getAgencies"]) {
+        if (this.$store.getters["map/getAgencies"]) {
           ymaps.ready(this.init);
         }
       });
@@ -49,7 +44,7 @@ export default {
         zoom: 6,
       });
 
-      let agencies = this.$store.getters["general/getAgencies"];
+      let agencies = this.$store.getters["map/getAgencies"];
       let myGeoObjects = [];
       for (let i = 0; i < agencies.length; i++) {
         myGeoObjects[i] = new ymaps.GeoObject({

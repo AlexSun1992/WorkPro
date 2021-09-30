@@ -8,17 +8,22 @@
     />
     <div class="row">
       <div>
-        <b-alert :show="getSavedError" variant="danger" class="mt-3 mb-0">
+        <b-alert
+          :show="getSavedError || getError"
+          variant="danger"
+          class="mt-3 mb-0"
+        >
           {{ getErrorMessage }}
         </b-alert>
       </div>
     </div>
-    <div class="row">
+    <div class="row mt-4 ml-2">
       <b-button
-        v-if="getBtnSave && isShowButtonSave"
+        v-if="getBtnSave && isShowButtonSave && !getError"
         pill
         :disabled="isSaving"
-        v-on:click="saveDataCard()"
+        :class="'btn-lg'"
+        v-on:click="saveCard()"
         type="button"
         variant="success"
         class="col-12 col-md-auto mt-3 mt-md-0"
@@ -40,11 +45,12 @@
 import { mapGetters } from "vuex";
 import Form from "/../components/Libs/Form/Form.vue";
 import Vue from "vue";
-import { BootstrapVue } from "bootstrap-vue";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 Vue.use(LoadScript);
 Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
 
 const TOKEN_NAME = "auth._token.local";
 
@@ -114,7 +120,10 @@ export default {
       this.$store.commit("data_card/setLoading", false);
       this.$store.commit("data_card/setDisabled", false);
       this.$store.commit("data_card/setSavedError", true);
-      this.$store.commit("data_card/setErrorMessage", e?.response?.data);
+      this.$store.commit(
+        "data_card/setErrorMessage",
+        e?.response?.data || { MESSAGE: "Ошибка отображения компонента" }
+      );
     }
   },
   computed: {
@@ -123,7 +132,9 @@ export default {
       "getFormParams",
       "getErrorMessage",
       "getSavedError",
+      "getError",
       "getBtnSave",
+      "getDataFieldByFieldId",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
     isReadOnly: function () {
@@ -153,7 +164,7 @@ export default {
       }
       return valid;
     },
-    async saveDataCard(e = {}) {
+    async saveCard(e = {}) {
       if (this.validateData(this.getForm)) {
         await this.callScript(e, "beforeSave");
         this.isShowSavedError = false;
@@ -199,26 +210,28 @@ export default {
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
     async updateValue(e) {
+      this.$store.commit("data_card/setFormField", {
+        fieldId: e.fieldId,
+        value: e.value,
+      });
       let field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM === this.menuId
       );
       await this.callScript(e);
-      this.$store.commit("data_card/setFormField", {
-        fieldId: e.fieldId,
-        value: e.value,
-      });
       if (field.type === "button" && e.action) {
         const actionId = parseInt(e.value.replace("Item", ""));
-        const actionRefreshCard = menu.ACTIONSCUR.find(
-          (item) => item.NTYPE === 39
-        );
-        const actionSaveCard = menu.ACTIONSCUR.find(
-          (item) => item.NTYPE === 38
-        );
-        const actionExecute = menu.ACTIONSCUR.find((item) => item.NTYPE === 4);
+        const actionRefreshCard = menu.ACTIONSCUR.find((item) => {
+          return item.NTYPE === 39 && item.ID === actionId;
+        });
+        const actionSaveCard = menu.ACTIONSCUR.find((item) => {
+          return item.NTYPE === 38 && item.ID === actionId;
+        });
+        const actionExecute = menu.ACTIONSCUR.find((item) => {
+          return item.NTYPE === 4 && item.ID === actionId;
+        });
         if (actionSaveCard?.ID === actionId) {
-          await this.saveDataCard(e);
+          await this.saveCard(e);
         }
         if (actionRefreshCard?.ID === actionId) {
           await this.fetchCard();
@@ -234,7 +247,13 @@ export default {
               body: this.$store.getters["data_card/getActionParams"],
             }
           );
-          console.log(response);
+          if (response?.data) {
+            if (response.data.POUTVALUE) {
+              if (response.data.POUTVALUE.includes("/")) {
+                window.open(response.data.POUTVALUE);
+              }
+            }
+          }
         }
       }
     },
