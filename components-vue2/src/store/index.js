@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import * as data_card from "../../../store/data_card";
+import * as card from "../../../store/card";
 import * as menu from "../../../store/menu";
 import * as blocks from "../../../store/blocks";
 import * as general from "../../../store/index";
@@ -14,6 +15,10 @@ export const store = new Vuex.Store({
     data_card: {
       namespaced: true,
       ...data_card,
+    },
+    card: {
+      namespaced: true,
+      ...card,
     },
     menu: {
       namespaced: true,

@@ -5,7 +5,7 @@
       <autocomplete
         :placeholder="data.placeholder"
         ref="autocomplete"
-        :class="{ 'is-invalid': data.state === false }"
+        :class="validClass"
         :debounce-time="300"
         :search="search"
         :get-result-value="getResultValue"
@@ -146,6 +146,13 @@ export default {
           return this.data?.helpText ? this.data.helpText : errorText;
         }
         return errorText;
+      }
+    },
+    validClass() {
+      if (this.data.state !== null && this.data.state !== undefined) {
+        return this.data.state === true ? "is-valid" : "is-invalid";
+      } else {
+        return "";
       }
     },
   },

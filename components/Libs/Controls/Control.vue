@@ -144,19 +144,7 @@ export default {
     "data.value": "eventValidate",
   },
   methods: {
-    eventValidate() {
-      if (this.data.required) {
-        if (this.data.value != null && this.data.value !== "") {
-          this.data.state = null;
-          this.data.checked = true;
-        }
-        if (this.data.checked) {
-          if (this.data.value == null || this.data.value === "") {
-            this.data.state = false;
-          }
-        }
-      }
-    },
+    eventValidate() {},
   },
 };
 </script>

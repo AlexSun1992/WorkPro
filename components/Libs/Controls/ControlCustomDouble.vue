@@ -7,7 +7,7 @@
     <template v-slot:label><span v-html="data.label"></span></template>
     <currency-input
       class="form-control"
-      :class="{ 'is-invalid': data.state === false }"
+      :class="validClass"
       :placeholder="data.placeholder"
       v-model="fieldValue"
       :allowNegative="false"
@@ -55,6 +55,13 @@ export default {
           value: value !== null ? Number(value) : null,
         });
       },
+    },
+    validClass() {
+      if (this.data.state !== null && this.data.state !== undefined) {
+        return this.data.state === true ? "is-valid" : "is-invalid";
+      } else {
+        return "";
+      }
     },
   },
 };
