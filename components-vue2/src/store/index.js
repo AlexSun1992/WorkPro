@@ -5,6 +5,7 @@ import * as card from "../../../store/card";
 import * as menu from "../../../store/menu";
 import * as blocks from "../../../store/blocks";
 import * as general from "../../../store/index";
+import * as map from "../../../store/map";
 import * as auth from "./auth";
 
 Vue.use(Vuex);
@@ -34,6 +35,10 @@ export const store = new Vuex.Store({
     auth: {
       namespaced: true,
       ...auth,
+    },
+    map: {
+      namespaced: true,
+      ...map,
     },
   },
 });

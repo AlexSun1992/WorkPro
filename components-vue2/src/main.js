@@ -75,10 +75,36 @@ Vue.customElement(
     })
 );
 Vue.customElement(
-  "component-office-map",
+  "component-offices-map",
   () =>
     new Promise((resolve) => {
-      require(["./components/OfficeMap.vue", "./store/index"], (
+      require(["./components/OfficesMap/OfficesMap.vue", "./store/index"], (
+        lazyComponent
+      ) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
+  "component-regions-list",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/OfficesMap/RegionsList.vue", "./store/index"], (
+        lazyComponent
+      ) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
+  "component-offices-list",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/OfficesMap/OfficesList.vue", "./store/index"], (
         lazyComponent
       ) => {
         lazyComponent.default.store = store;
