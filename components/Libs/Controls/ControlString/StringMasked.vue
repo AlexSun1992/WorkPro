@@ -4,10 +4,12 @@
       v-if="data.mask"
       :mask="data.mask"
       class="form-control"
+      :class="validClass"
       :placeholder="data.placeholder"
       :disabled="!edit ? !edit : data.readonly"
       v-bind:value="data.value"
       v-on:input="updateValue($event)"
+      @blur.native="eventHandlerBlur($event)"
       type="text"
       :masked="false"
       :tokens="customTokens"
@@ -16,7 +18,6 @@
       data.error ? data.error : "Обязательно для заполнения"
     }}</b-form-invalid-feedback>
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
-    <!--    <p class="error">{{ data.error }}</p>-->
   </div>
 </template>
 
@@ -54,34 +55,45 @@ export default {
   methods: {
     updateValue(val) {
       if (this.data.value !== val) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: val,
-        });
+        if (val !== null && val !== undefined) {
+          this.$emit("update", {
+            fieldId: this.data.fieldId,
+            name: this.data.name,
+            value: val,
+          });
+        }
       }
     },
-    // handler(val) {
-    //   if (val.data) {
-    //     this.$emit("update", {
-    //       fieldId: this.data.fieldId,
-    //       name: this.data.name,
-    //       value: this.data.value,
-    //       realValue: val.data,
-    //     });
-    //   }
-    // },
+    eventHandlerBlur(e) {
+      this.$emit("blur", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.value,
+      });
+    },
   },
   computed: {
     isState() {
-      let state = true;
+      let state = null;
       if (this.data.state === false) {
         state = false;
       }
       if (Boolean(this.data.error)) {
-        state = false;
+        if (this.data.error !== null) {
+          state = false;
+        }
+      }
+      if (this.data.state) {
+        state = !Boolean(this.data.error);
       }
       return state;
+    },
+    validClass() {
+      if (this.isState !== null) {
+        return this.isState === true ? "is-valid" : "is-invalid";
+      } else {
+        return "";
+      }
     },
   },
 };

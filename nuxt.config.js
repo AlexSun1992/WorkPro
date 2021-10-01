@@ -109,6 +109,7 @@ module.exports = {
     "~/api/user.js",
     "~/api/refresh.js",
     "~/api/dadata.js",
+    "~/api/menu.js",
   ],
   auth: {
     strategies: {
