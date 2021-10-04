@@ -2,6 +2,7 @@
   <client-only placeholder="Загрузка...">
     <div>
       <div v-show="isShowBlock">
+        <filter-block propertyName="SPRODUCTNAME"></filter-block>
         <v-runtime-template :template="templateData"></v-runtime-template>
       </div>
       <div v-if="!isShowBlock">

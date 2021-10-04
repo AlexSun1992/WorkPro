@@ -10,7 +10,7 @@
       </div>
     </div>
     <div v-else>
-      <filter-block propertyName="SPRODUCTNAME"></filter-block>
+      <!-- <filter-block propertyName="SPRODUCTNAME"></filter-block> -->
       <slot
         v-for="item in dataContent.items"
         name="data"
@@ -22,11 +22,11 @@
 
 <script>
 import Grid from "~/components/Libs/Table/Grid";
-import FilterBlock from "./FilterBlock.vue";
+// import FilterBlock from "./FilterBlock.vue";
 
 export default {
   name: "ContentBlock",
-  components: { Grid, FilterBlock },
+  components: { Grid },
   props: {
     itemId: {
       required: true,
