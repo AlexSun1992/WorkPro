@@ -1,72 +1,70 @@
 <template>
   <div>
-    <div v-if="data">
-      <div v-if="pageCount > 1" class="pagination my-4">
-        <button class="back mr-2" :disabled="disabledBack" @click="prevPage">
-          &laquo;
-        </button>
-        <div
-          @click="changePageNumber(index)"
-          class="number"
-          :class="{ active: pageNumber == index }"
-          v-for="(n, index) in pageCount"
-          :key="index"
-        >
-          {{ n }}
-        </div>
-        <button class="next ml-2" :disabled="disabledNext" @click="nextPage">
-          &raquo;
-        </button>
+    <!-- <div v-if="data"> -->
+    <div v-if="totalCount > 1" class="pagination my-4">
+      <button class="back mr-2" :disabled="disabledBack" @click="prevPage">
+        &laquo;
+      </button>
+      <div
+        @click="changePageNumber(index)"
+        class="number"
+        :class="{ active: number == index }"
+        v-for="(n, index) in totalCount"
+        :key="index"
+      >
+        {{ n }}
       </div>
+      <button class="next ml-2" :disabled="disabledNext" @click="nextPage">
+        &raquo;
+      </button>
     </div>
+    <!-- </div> -->
   </div>
 </template>
 
 <script>
 export default {
   name: "Paginator",
-  props: ["data", "size"],
+  props: {
+    itemsCount: {
+      type: Number,
+    },
+    pagesCount: {
+      type: Number,
+    },
+  },
   data() {
     return {
-      pageNumber: 0,
+      number: 0,
     };
   },
   methods: {
     nextPage() {
-      this.pageNumber++;
-      this.paginateData();
+      this.number++;
+      this.update();
     },
     prevPage() {
-      this.pageNumber--;
-      this.paginateData();
+      this.number--;
+      this.update();
     },
     changePageNumber(index) {
-      this.pageNumber = index;
-      this.paginateData();
+      this.number = index;
+      this.update();
     },
-    paginateData() {
-      let data = [...this.data];
-      let start = this.pageNumber * this.size;
-      let end = start + this.size;
-      let slicedData = data.slice(start, end);
-      this.$emit("update", slicedData);
+    update() {
+      this.$emit("update", this.number);
     },
   },
   computed: {
-    pageCount() {
-      this.paginateData();
-      return Math.ceil(this.data.length / this.size);
+    totalCount() {
+      this.number = 0;
+      return Math.ceil(this.itemsCount / this.pagesCount);
     },
     disabledBack() {
-      return this.pageNumber == 0;
+      return this.number == 0;
     },
     disabledNext() {
-      return this.pageNumber >= this.pageCount - 1;
-    },
-  },
-  watch: {
-    data: function (newVal) {
-      this.pageNumber = 0;
+      return this.number >= this.totalCount - 1;
     },
   },
 };
