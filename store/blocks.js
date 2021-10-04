@@ -8,9 +8,9 @@ export const state = () => ({
   isForm: false,
   cardId: 0,
   blockId: null,
-  propertyNameHub: [],
-  allData: [],
-  choosenData: [],
+  // propertyNameHub: [],
+  // allData: [],
+  // choosenData: [],
 });
 
 export const getters = {
@@ -142,43 +142,43 @@ export const mutations = {
     state.blockId = data;
   },
 
-  setPropertyName(state, param) {
-    state.propertyNameHub.splice(0, state.propertyNameHub.length);
-    state.propertyNameHub.unshift(param);
-  },
+  // setPropertyName(state, param) {
+  //   state.propertyNameHub.splice(0, state.propertyNameHub.length);
+  //   state.propertyNameHub.unshift(param);
+  // },
 
-  setFilters(state, parametr) {
-    const property = state.propertyNameHub[0];
+  // setFilters(state, parametr) {
+  //   const property = state.propertyNameHub[0];
 
-    state.blocks[0].data.items.forEach((item) => {
-      if (state.allData.length < state.blocks[0].data.items.length) {
-        state.allData.unshift(item);
-      }
-    });
+  //   state.blocks[0].data.items.forEach((item) => {
+  //     if (state.allData.length < state.blocks[0].data.items.length) {
+  //       state.allData.unshift(item);
+  //     }
+  //   });
 
-    state.blocks[0].data.items = state.allData.filter((item) => {
-      return item[property] === parametr.element;
-    });
+  //   state.blocks[0].data.items = state.allData.filter((item) => {
+  //     return item[property] === parametr.element;
+  //   });
 
-    state.blocks[0].data.items.forEach((item) => {
-      if (state.choosenData.includes(item)) {
-        state.choosenData.forEach((item) => {
-          console.log(item[property]);
-          console.log(parametr.element);
-          if ((item[property] = parametr.element)) {
-            item[property] = "Удалено!!!";
-          }
-        });
-        state.choosenData = state.choosenData.filter((unit) => {
-          return unit[property] !== parametr.element;
-        });
-      }
-      if (!state.choosenData.includes(item)) {
-        state.choosenData.unshift(item);
-      }
-    });
+  // state.blocks[0].data.items.forEach((item) => {
+  //   if (state.choosenData.includes(item)) {
+  //     state.choosenData.forEach((item) => {
+  //       console.log(item[property]);
+  //       console.log(parametr.element);
+  //       if ((item[property] = parametr.element)) {
+  //         item[property] = "Удалено!!!";
+  //       }
+  //     });
+  //     state.choosenData = state.choosenData.filter((unit) => {
+  //       return unit[property] !== parametr.element;
+  //     });
+  //   }
+  //   if (!state.choosenData.includes(item)) {
+  //     state.choosenData.unshift(item);
+  //   }
+  // });
 
-    state.blocks[0].data.items = state.choosenData;
-    console.log(state.blocks[0].data.items);
-  },
+  // state.blocks[0].data.items = state.choosenData;
+  // console.log(state.blocks[0].data.items);
+  // },
 };

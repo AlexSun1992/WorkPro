@@ -1,22 +1,19 @@
 <template>
-  <div>
-    <div v-if="isOpenCard">
-      <div
-        v-for="(item, id) in dataContent.items"
-        :key="id"
-        @click.stop="openCard(item)"
-      >
-        <slot name="data" v-bind:content="item"></slot>
-      </div>
+  <div v-if="isOpenCard">
+    <div
+      v-for="(item, id) in dataContent.items"
+      :key="id"
+      @click.stop="openCard(item)"
+    >
+      <slot name="data" v-bind:content="item"></slot>
     </div>
-    <div v-else>
-      <!-- <filter-block propertyName="SPRODUCTNAME"></filter-block> -->
-      <slot
-        v-for="item in dataContent.items"
-        name="data"
-        v-bind:content="item"
-      ></slot>
-    </div>
+  </div>
+  <div v-else>
+    <slot
+      v-for="item in dataContent.items"
+      name="data"
+      v-bind:content="item"
+    ></slot>
   </div>
 </template>
 

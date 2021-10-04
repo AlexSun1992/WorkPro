@@ -1,13 +1,13 @@
 <template>
   <div class="test">
-    <ul v-if="this.dataItems.length !== 0">
+    <ul v-if="this.dataItems.length !== 0" class="menu">
       <li propertyName v-for="(item, idx) in dataItems" :key="idx">
         <b-button v-on:click="revealItem(item, idx)">
           {{ item }}
         </b-button>
       </li>
     </ul>
-    <ul v-else>
+    <ul v-else class="menu">
       <li propertyName v-for="(item, idx) in dataContent" :key="idx">
         <b-button v-on:click="revealItem(item[propertyName], idx)">
           {{ item[propertyName] }}
@@ -77,6 +77,10 @@ export default {
 </script>
 
 <style scoped>
+.menu {
+  display: flex;
+}
+
 .red {
   background-color: red;
 }
