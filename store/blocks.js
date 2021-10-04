@@ -11,6 +11,9 @@ export const state = () => ({
   // propertyNameHub: [],
   // allData: [],
   // choosenData: [],
+  data: [],
+  filters: [],
+  elements: [],
 });
 
 export const getters = {
@@ -143,10 +146,37 @@ export const mutations = {
   },
 
   setFilters(state, data) {
-    console.log(state);
+    // console.log(data);
 
-    data.type = !data.type;
-    console.log(data);
+    // data.checked = !data.checked;
+
+    if (state.elements.includes(data.elementName)) {
+      state.elements = state.elements.filter((item) => {
+        return item != data.elementName;
+      });
+    }
+
+    console.log(data.checked);
+
+    if (!state.elements.includes(data.elementName)) {
+      state.elements.unshift(data.elementName);
+    }
+
+    console.log(state.elements);
+
+    // if (data.checked === false && state.elements.includes(data.elementName)) {
+    //   const idx = state.elements.indexOf(data.elementName);
+    //   console.log(idx);
+    //   state.elements.splice(idx, 1);
+    // }
+
+    // console.log(state.elements);
+
+    state.blocks[0].data.items.forEach((item) => {
+      if (state.data.length < state.blocks[0].data.items.length) {
+        state.data.unshift(item);
+      }
+    });
   },
 
   // setPropertyName(state, param) {

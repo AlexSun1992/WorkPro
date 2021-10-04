@@ -20,7 +20,7 @@
 <script>
 export default {
   name: "FilterBlock",
-  // props: ["propertyName"],
+
   props: {
     propertyName: {
       type: String,
@@ -38,20 +38,18 @@ export default {
   data() {
     return {
       dataItems: [],
+      // checked: false,
       // items: [],
       // obj: {},
-      // checked: false,
     };
   },
 
   methods: {
     revealItem(item, idx) {
-      // console.log(item, idx);
-
       this.$store.commit("blocks/setFilters", {
         elementName: item,
         elementOrder: idx,
-        type: this.checked,
+        checked: this.checked,
       });
 
       // this.items.push(item);
@@ -86,9 +84,9 @@ export default {
       },
     },
   },
-  // created() {
-  //   this.$store.commit("blocks/clearBlock");
-  //   },
+  created() {
+    console.log(this.checked);
+  },
 };
 </script>
 
