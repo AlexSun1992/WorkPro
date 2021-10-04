@@ -2,16 +2,16 @@
   <div class="test">
     <ul v-if="this.dataItems.length !== 0">
       <li propertyName v-for="(item, idx) in dataItems" :key="idx">
-        <button v-on:click="revealItem(item)">
+        <b-button v-on:click="revealItem(item, idx)">
           {{ item }}
-        </button>
+        </b-button>
       </li>
     </ul>
     <ul v-else>
       <li propertyName v-for="(item, idx) in dataContent" :key="idx">
-        <button v-on:click="revealItem(item[propertyName])">
+        <b-button v-on:click="revealItem(item[propertyName], idx)">
           {{ item[propertyName] }}
-        </button>
+        </b-button>
       </li>
     </ul>
   </div>
@@ -32,14 +32,16 @@ export default {
   },
 
   methods: {
-    revealItem(item) {
+    revealItem(item, idx) {
       this.items.push(item);
-      console.log(this.items);
 
       if (this.propertyName !== undefined) {
         this.$store.commit("blocks/setPropertyName", this.propertyName);
       }
-      this.$store.commit("blocks/setFilters", item);
+      this.$store.commit("blocks/setFilters", {
+        element: item,
+        id: idx,
+      });
     },
   },
 

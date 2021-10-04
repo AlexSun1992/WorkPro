@@ -11,9 +11,6 @@ export const state = () => ({
   propertyNameHub: [],
   allData: [],
   choosenData: [],
-  Parametrs: [],
-  distinctParametrs: [],
-  count: 0,
 });
 
 export const getters = {
@@ -153,8 +150,6 @@ export const mutations = {
   setFilters(state, parametr) {
     const property = state.propertyNameHub[0];
 
-    console.log(parametr);
-
     state.blocks[0].data.items.forEach((item) => {
       if (state.allData.length < state.blocks[0].data.items.length) {
         state.allData.unshift(item);
@@ -162,36 +157,28 @@ export const mutations = {
     });
 
     state.blocks[0].data.items = state.allData.filter((item) => {
-      return item[property] === parametr;
+      return item[property] === parametr.element;
     });
 
     state.blocks[0].data.items.forEach((item) => {
+      if (state.choosenData.includes(item)) {
+        state.choosenData.forEach((item) => {
+          console.log(item[property]);
+          console.log(parametr.element);
+          if ((item[property] = parametr.element)) {
+            item[property] = "Удалено!!!";
+          }
+        });
+        state.choosenData = state.choosenData.filter((unit) => {
+          return unit[property] !== parametr.element;
+        });
+      }
       if (!state.choosenData.includes(item)) {
         state.choosenData.unshift(item);
       }
     });
 
     state.blocks[0].data.items = state.choosenData;
-
-    // state.Parametrs.unshift(parametr);
-    // const target = state.Parametrs[0];
-    // for (let i = 1; i < state.Parametrs.length; i++) {
-    //   if (state.Parametrs[i] === target) {
-    //     state.blocks[0].data.items.forEach((elem) => {
-    //       if (elem[property] === target) {
-    //         state.blocks[0].data.items = state.blocks[0].data.items.filter(
-    //           (unit) => {
-    //             return unit[property] !== parametr;
-    //           }
-    //         );
-    //         console.log(state.blocks[0].data.items);
-    //       }
-    //     });
-    //   }
-    // }
-  },
-
-  setSomeThing(state) {
-    console.log(state);
+    console.log(state.blocks[0].data.items);
   },
 };

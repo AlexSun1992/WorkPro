@@ -10,7 +10,7 @@
       </div>
     </div>
     <div v-else>
-      <filter-block propertyName="ID"></filter-block>
+      <filter-block propertyName="SPRODUCTNAME"></filter-block>
       <slot
         v-for="item in dataContent.items"
         name="data"
