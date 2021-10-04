@@ -20,7 +20,20 @@
 <script>
 export default {
   name: "FilterBlock",
-  props: ["propertyName", "distinctItems"],
+  // props: ["propertyName"],
+  props: {
+    propertyName: {
+      type: String,
+      required: true,
+      default: () => {},
+    },
+
+    checked: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
 
   data() {
     return {
@@ -38,6 +51,7 @@ export default {
       this.$store.commit("blocks/setFilters", {
         elementName: item,
         elementOrder: idx,
+        type: this.checked,
       });
 
       // this.items.push(item);

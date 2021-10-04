@@ -143,9 +143,10 @@ export const mutations = {
   },
 
   setFilters(state, data) {
-    // console.log(state);
-    // console.log(data);
-    data.checked = false;
+    console.log(state);
+
+    data.type = !data.type;
+    console.log(data);
   },
 
   // setPropertyName(state, param) {
