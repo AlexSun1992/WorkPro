@@ -165,8 +165,8 @@ export default {
       return valid;
     },
     async saveCard(e = {}) {
+      await this.callScript(e, "beforeSave");
       if (this.validateData(this.getForm)) {
-        await this.callScript(e, "beforeSave");
         this.isShowSavedError = false;
         let moduleId = this.moduleId,
           itemId = this.menuId,
