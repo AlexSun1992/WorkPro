@@ -142,6 +142,12 @@ export const mutations = {
     state.blockId = data;
   },
 
+  setFilters(state, data) {
+    // console.log(state);
+    // console.log(data);
+    data.checked = false;
+  },
+
   // setPropertyName(state, param) {
   //   state.propertyNameHub.splice(0, state.propertyNameHub.length);
   //   state.propertyNameHub.unshift(param);

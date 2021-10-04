@@ -25,23 +25,29 @@ export default {
   data() {
     return {
       dataItems: [],
-      items: [],
-      obj: {},
-      checked: false,
+      // items: [],
+      // obj: {},
+      // checked: false,
     };
   },
 
   methods: {
     revealItem(item, idx) {
-      this.items.push(item);
+      // console.log(item, idx);
 
-      if (this.propertyName !== undefined) {
-        this.$store.commit("blocks/setPropertyName", this.propertyName);
-      }
       this.$store.commit("blocks/setFilters", {
-        element: item,
-        id: idx,
+        elementName: item,
+        elementOrder: idx,
       });
+
+      // this.items.push(item);
+      // if (this.propertyName !== undefined) {
+      //   this.$store.commit("blocks/setPropertyName", this.propertyName);
+      // }
+      // this.$store.commit("blocks/setFilters", {
+      //   element: item,
+      //   id: idx,
+      // });
     },
   },
 
@@ -58,10 +64,6 @@ export default {
 
             if (!this.dataItems.includes(item[this.propertyName])) {
               this.dataItems.unshift(item[this.propertyName]);
-
-              // if (!this.dataItems.includes(this.allElements)) {
-              //   this.dataItems.push(this.allElements);
-              // }
             }
           });
         } else {
