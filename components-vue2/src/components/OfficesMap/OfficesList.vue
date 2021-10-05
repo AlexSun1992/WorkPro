@@ -2,10 +2,13 @@
   <div v-if="offices">
     <div class="container">
       <FilterComponent class="my-4" :filters="filters" @update="setFilter" />
-      <div v-if="offices" class="offices">
+      <div v-if="offices.length" class="offices">
         <div v-for="(office, index) in offices" :key="index">
           <OfficeCard :office="office" />
         </div>
+      </div>
+      <div class="empty" v-else>
+        <p><strong>По данному фильтру офисы не найдены</strong></p>
       </div>
       <Paginator
         @update="page = $event"
@@ -39,10 +42,12 @@ export default {
       filter: null,
       page: 0,
       filters,
+      filteredData: null,
     };
   },
   methods: {
     setFilter(event) {
+      this.page = 0;
       this.filter = event;
     },
   },
@@ -50,16 +55,28 @@ export default {
     offices() {
       if (this.$store?.getters["map/getRegionOffices"]) {
         let data = [...this.$store.getters["map/getRegionOffices"]];
+        if (this.filter) {
+          data = data.filter((field) => {
+            return field[this.filter.name] == this.filter.value;
+          });
+          this.filteredData = data;
+        }
         let start = this.page * this.pagesCount;
         let end = start + this.pagesCount;
         return data.slice(start, end);
       }
     },
     region() {
-      return this.$store?.getters["map/getSelectedRegion"];
+      return this.$store.getters["map/getSelectedRegion"];
     },
     officesLength() {
-      return this.$store?.getters["map/getRegionOffices"]?.length;
+      if (!this.filter) {
+        this.filteredData = null;
+      }
+      if (this.filteredData) {
+        return this.filteredData.length;
+      }
+      return this.$store.getters["map/getRegionOffices"]?.length;
     },
   },
   watch: {
@@ -75,5 +92,9 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 2vw;
+}
+.empty {
+  display: flex;
+  justify-content: center;
 }
 </style>
