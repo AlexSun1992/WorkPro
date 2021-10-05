@@ -65,14 +65,8 @@ export default {
     },
     isChecked() {
       const filters = this.$store.getters["blocks/getFilters"];
-      const currentFilters = [];
-      filters.forEach((item) => {
-        currentFilters.push(item.filterItem);
-      });
 
-      console.log(currentFilters[0]);
-
-      return false;
+      return true;
     },
   },
 };
