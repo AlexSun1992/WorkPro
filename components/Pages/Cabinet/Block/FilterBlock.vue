@@ -3,7 +3,7 @@
     <ul v-if="this.dataItems.length !== 0" class="menu">
       <li propertyName v-for="(item, idx) in dataItems" :key="idx">
         <b-button v-on:click="toggleFilter(propertyName, item)">
-          {{ item }}
+          {{ item }} {{ isChecked }}
         </b-button>
       </li>
     </ul>
@@ -40,11 +40,6 @@ export default {
         propertyName: propertyName,
         filterItem: item,
       });
-
-      const data = this.$store.getters["blocks/getFilters"];
-      if (data) {
-        console.log(data);
-      }
     },
   },
 
@@ -68,19 +63,17 @@ export default {
         }
       },
     },
-    // isChecked() {
-    //   const filters = this.$store.getters["blocks/getFilters"];
-    //   const block = this.$store.getters["blocks/getBlockById"](712);
-    //   if (filters.length !== 0 && block) {
-    //     block.data.items.forEach((item) => {
-    //       if (item[this.propertyName] === filters[0].filterItem) {
-    //         return true;
-    //       } else {
-    //         return false;
-    //       }
-    //     });
-    //   }
-    // },
+    isChecked() {
+      const filters = this.$store.getters["blocks/getFilters"];
+      const currentFilters = [];
+      filters.forEach((item) => {
+        currentFilters.push(item.filterItem);
+      });
+
+      console.log(currentFilters[0]);
+
+      return false;
+    },
   },
 };
 </script>
