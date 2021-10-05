@@ -2,14 +2,14 @@
   <div class="test">
     <ul v-if="this.dataItems.length !== 0" class="menu">
       <li propertyName v-for="(item, idx) in dataItems" :key="idx">
-        <b-button v-on:click="toggleFilter(propertyName, dataItems)">
+        <b-button v-on:click="toggleFilter(propertyName, item)">
           {{ item }}
         </b-button>
       </li>
     </ul>
     <ul v-else class="menu">
       <li propertyName v-for="(item, idx) in dataContent" :key="idx">
-        <b-button v-on:click="toggleFilter(propertyName, dataContent)">
+        <b-button v-on:click="toggleFilter(propertyName, item)">
           {{ item[propertyName] }}
         </b-button>
       </li>
@@ -36,10 +36,10 @@ export default {
   },
 
   methods: {
-    toggleFilter(propertyName, dataContent) {
+    toggleFilter(propertyName, item) {
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
-        filterItems: dataContent,
+        filterItem: item,
       });
     },
   },
