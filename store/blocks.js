@@ -8,18 +8,14 @@ export const state = () => ({
   isForm: false,
   cardId: 0,
   blockId: null,
-  // propertyNameHub: [],
-  // allData: [],
-  // choosenData: [],
-  // data: [],
   filters: [],
-  // elements: [],
 });
 
 export const getters = {
   getBlockById: (state) => (id) => {
     return state.blocks.find((b) => b.blockId === parseInt(id));
   },
+  getFilters: (state) => state.filters,
   getAllBlocks: (state) => state.allData,
   getForm: (state) => state.form,
   cardId: (state) => state.cardId,

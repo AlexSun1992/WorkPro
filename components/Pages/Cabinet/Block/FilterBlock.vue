@@ -1,5 +1,6 @@
 <template>
   <div class="test">
+    {{ isChecked }}
     <ul v-if="this.dataItems.length !== 0" class="menu">
       <li propertyName v-for="(item, idx) in dataItems" :key="idx">
         <b-button v-on:click="toggleFilter(propertyName, item)">
@@ -8,6 +9,9 @@
       </li>
     </ul>
     <ul v-else class="menu">
+      {{
+        isChecked
+      }}
       <li propertyName v-for="(item, idx) in dataContent" :key="idx">
         <b-button v-on:click="toggleFilter(propertyName, item)">
           {{ item[propertyName] }}
@@ -16,7 +20,6 @@
     </ul>
   </div>
 </template>
-
 <script>
 export default {
   name: "FilterBlock",
@@ -63,6 +66,17 @@ export default {
           return {};
         }
       },
+    },
+    isChecked() {
+      const filters = this.$store.getters["blocks/getFilters"];
+      const block = this.$store.getters["blocks/getBlockById"](712);
+
+      if (block) {
+        console.log(block.data.items);
+        console.log(filters);
+      }
+
+      return filters;
     },
   },
 };
