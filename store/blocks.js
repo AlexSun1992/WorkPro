@@ -11,9 +11,9 @@ export const state = () => ({
   // propertyNameHub: [],
   // allData: [],
   // choosenData: [],
-  data: [],
+  // data: [],
   filters: [],
-  elements: [],
+  // elements: [],
 });
 
 export const getters = {
@@ -145,39 +145,42 @@ export const mutations = {
     state.blockId = data;
   },
 
-  setFilters(state, data) {
-    // console.log(data);
+  toggleFilter: (state, data) => {
+    const { propertyName, filterItems } = data;
 
-    // data.checked = !data.checked;
-
-    if (state.elements.includes(data.elementName)) {
-      state.elements = state.elements.filter((item) => {
-        return item != data.elementName;
+    if (!state.filters.find((filter) => filter.propertyName === propertyName)) {
+      state.filters.push({
+        propertyName,
+        filterItems,
       });
     }
-
-    console.log(data.checked);
-
-    if (!state.elements.includes(data.elementName)) {
-      state.elements.unshift(data.elementName);
-    }
-
-    console.log(state.elements);
-
-    // if (data.checked === false && state.elements.includes(data.elementName)) {
-    //   const idx = state.elements.indexOf(data.elementName);
-    //   console.log(idx);
-    //   state.elements.splice(idx, 1);
-    // }
-
-    // console.log(state.elements);
-
-    state.blocks[0].data.items.forEach((item) => {
-      if (state.data.length < state.blocks[0].data.items.length) {
-        state.data.unshift(item);
-      }
-    });
+    console.log(state.filters);
   },
+
+  // setFilters(state, data) {
+  //   if (state.elements.includes(data.elementName)) {
+  //     state.elements = state.elements.filter((item) => {
+  //       return item != data.elementName;
+  //     });
+  //   }
+
+  //   if (!state.elements.includes(data.elementName)) {
+  //     state.elements.unshift(data.elementName);
+  //   }
+
+  //   if (data.checked === false && state.elements.includes(data.elementName)) {
+  //     const idx = state.elements.indexOf(data.elementName);
+  //     console.log(idx);
+  //     state.elements.splice(idx, 1);
+  //   }
+  //   console.log(state.elements);
+
+  //   state.blocks[0].data.items.forEach((item) => {
+  //     if (state.data.length < state.blocks[0].data.items.length) {
+  //       state.data.unshift(item);
+  //     }
+  //   });
+  // },
 
   // setPropertyName(state, param) {
   //   state.propertyNameHub.splice(0, state.propertyNameHub.length);

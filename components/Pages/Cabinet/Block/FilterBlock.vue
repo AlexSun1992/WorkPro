@@ -2,14 +2,14 @@
   <div class="test">
     <ul v-if="this.dataItems.length !== 0" class="menu">
       <li propertyName v-for="(item, idx) in dataItems" :key="idx">
-        <b-button v-on:click="revealItem(item, idx)">
+        <b-button v-on:click="toggleFilter(propertyName, dataItems)">
           {{ item }}
         </b-button>
       </li>
     </ul>
     <ul v-else class="menu">
       <li propertyName v-for="(item, idx) in dataContent" :key="idx">
-        <b-button v-on:click="revealItem(item[propertyName], idx)">
+        <b-button v-on:click="toggleFilter(propertyName, dataContent)">
           {{ item[propertyName] }}
         </b-button>
       </li>
@@ -27,39 +27,20 @@ export default {
       required: true,
       default: () => {},
     },
-
-    checked: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
   },
 
   data() {
     return {
       dataItems: [],
-      // checked: false,
-      // items: [],
-      // obj: {},
     };
   },
 
   methods: {
-    revealItem(item, idx) {
-      this.$store.commit("blocks/setFilters", {
-        elementName: item,
-        elementOrder: idx,
-        checked: this.checked,
+    toggleFilter(propertyName, dataContent) {
+      this.$store.commit("blocks/toggleFilter", {
+        propertyName: propertyName,
+        filterItems: dataContent,
       });
-
-      // this.items.push(item);
-      // if (this.propertyName !== undefined) {
-      //   this.$store.commit("blocks/setPropertyName", this.propertyName);
-      // }
-      // this.$store.commit("blocks/setFilters", {
-      //   element: item,
-      //   id: idx,
-      // });
     },
   },
 
@@ -73,19 +54,16 @@ export default {
             if (!group.includes(item[this.propertyName])) {
               group.unshift(item[this.propertyName]);
             }
-
             if (!this.dataItems.includes(item[this.propertyName])) {
               this.dataItems.unshift(item[this.propertyName]);
             }
+            return group;
           });
         } else {
           return {};
         }
       },
     },
-  },
-  created() {
-    console.log(this.checked);
   },
 };
 </script>
