@@ -150,7 +150,7 @@ export const mutations = {
           filter.filterItem === filterItem
       )
     ) {
-      state.filters.push({
+      state.filters.unshift({
         propertyName,
         filterItem,
       });
