@@ -143,17 +143,22 @@ export const mutations = {
 
   toggleFilter: (state, data) => {
     const { propertyName, filterItem } = data;
-    if (
-      !state.filters.find(
-        (filter) =>
-          filter.propertyName === propertyName &&
-          filter.filterItem === filterItem
-      )
-    ) {
-      state.filters.unshift({
+
+    if (!state.filters.find((filter) => filter.propertyName === propertyName)) {
+      state.filters.push({
         propertyName,
-        filterItem,
+        filter: [],
       });
+    }
+    const currentFilter = state.filters.find(
+      (filter) => filter.propertyName === propertyName
+    );
+    if (currentFilter.filter.includes(filterItem)) {
+      currentFilter.filter = currentFilter.filter.filter(
+        (item) => item !== filterItem
+      );
+    } else {
+      currentFilter.filter.push(filterItem);
     }
   },
 };

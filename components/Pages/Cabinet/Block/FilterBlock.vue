@@ -65,8 +65,6 @@ export default {
     },
     isChecked() {
       const filters = this.$store.getters["blocks/getFilters"];
-
-      return true;
     },
   },
 };
