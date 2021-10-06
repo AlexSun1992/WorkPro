@@ -21,7 +21,6 @@
       </div>
       <a href="#">Схема проезда</a>
     </b-card-text>
-    <b-button href="#" variant="primary">Найти агента рядом</b-button>
   </b-card>
 </template>
 
