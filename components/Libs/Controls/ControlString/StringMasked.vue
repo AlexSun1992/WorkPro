@@ -53,9 +53,6 @@ export default {
       default: () => false,
     },
   },
-  created() {
-    console.log("created");
-  },
   methods: {
     updateValue(val) {
       if (this.data.value !== val) {
