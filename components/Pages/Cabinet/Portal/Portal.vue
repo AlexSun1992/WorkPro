@@ -3,6 +3,7 @@
     <div>
       <div v-show="isShowBlock">
         <filter-block propertyName="SPRODUCTNAME"></filter-block>
+        <filter-block propertyName="ID" filterType="radiobutton"></filter-block>
         <v-runtime-template :template="templateData"></v-runtime-template>
       </div>
       <div v-if="!isShowBlock">

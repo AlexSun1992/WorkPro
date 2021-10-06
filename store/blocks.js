@@ -12,11 +12,35 @@ export const state = () => ({
 });
 
 export const getters = {
-  getBlockById: (state) => (id) => {
+  getUnfilteredBlockById: (state) => (id) => {
     return state.blocks.find((b) => b.blockId === parseInt(id));
   },
+  getBlockById: (state) => (id) => {
+    const currentBlock = state.blocks.find((b) => b.blockId === parseInt(id));
+    if (currentBlock) {
+      return {
+        ...currentBlock,
+        data: {
+          ...currentBlock.data,
+          items: currentBlock.data.items.filter((item) => {
+            let isItemShow = true;
+            state.filters.forEach((filter) => {
+              if (!isItemShow) {
+                return;
+              }
+              const value = item[filter.propertyName];
+              if (filter.filter.length === 0) {
+                return;
+              }
+              isItemShow = filter.filter.includes(value);
+            });
+            return isItemShow;
+          }),
+        },
+      };
+    }
+  },
   getFilters: (state) => state.filters,
-  getAllBlocks: (state) => state.allData,
   getForm: (state) => state.form,
   cardId: (state) => state.cardId,
   moduleId: (state) => state.moduleId,
@@ -141,8 +165,18 @@ export const mutations = {
     state.blockId = data;
   },
 
+  clearFilter: (state, data) => {
+    const { propertyName } = data;
+    const currentFilter = state.filters.find(
+      (filter) => filter.propertyName === propertyName
+    );
+    if (currentFilter) {
+      currentFilter.filter = [];
+    }
+  },
+
   toggleFilter: (state, data) => {
-    const { propertyName, filterItem } = data;
+    const { propertyName, filterItem, filterType } = data;
 
     if (!state.filters.find((filter) => filter.propertyName === propertyName)) {
       state.filters.push({
@@ -153,6 +187,10 @@ export const mutations = {
     const currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
+    if (filterType === "radiobutton") {
+      currentFilter.filter = [filterItem];
+      return;
+    }
     if (currentFilter.filter.includes(filterItem)) {
       currentFilter.filter = currentFilter.filter.filter(
         (item) => item !== filterItem

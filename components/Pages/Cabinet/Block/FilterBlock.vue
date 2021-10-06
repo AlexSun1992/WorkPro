@@ -1,17 +1,13 @@
 <template>
   <div class="test">
-    <ul v-if="this.dataItems.length !== 0" class="menu">
-      <li propertyName v-for="(item, idx) in dataItems" :key="idx">
-        <b-button v-on:click="toggleFilter(propertyName, item)">
-          {{ item }} {{ isChecked }}
+    <ul class="menu">
+      <li propertyName v-for="item in filterItems" :key="item.name">
+        <b-button v-on:click="toggleFilter(propertyName, item.name)">
+          {{ item.name }} {{ item.isChecked }}
         </b-button>
       </li>
-    </ul>
-    <ul v-else class="menu">
-      <li propertyName v-for="(item, idx) in dataContent" :key="idx">
-        <b-button v-on:click="toggleFilter(propertyName, item)">
-          {{ item[propertyName] }}
-        </b-button>
+      <li>
+        <b-button v-on:click="clearFilter(propertyName)"> ALL </b-button>
       </li>
     </ul>
   </div>
@@ -26,45 +22,48 @@ export default {
       required: true,
       default: () => {},
     },
+    filterType: {
+      type: String,
+      default: () => "checkbox",
+    },
   },
 
   data() {
-    return {
-      dataItems: [],
-    };
+    return {};
   },
 
   methods: {
     toggleFilter(propertyName, item) {
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
+        filterType: this.filterType,
         filterItem: item,
+      });
+    },
+    clearFilter(propertyName, item) {
+      this.$store.commit("blocks/clearFilter", {
+        propertyName: propertyName,
       });
     },
   },
 
   computed: {
-    dataContent: {
-      get: function () {
-        const block = this.$store.getters["blocks/getBlockById"](712);
-        if (block) {
-          const group = [];
-          block.data.items.forEach((item) => {
-            if (!group.includes(item[this.propertyName])) {
-              group.unshift(item[this.propertyName]);
-            }
-            if (!this.dataItems.includes(item[this.propertyName])) {
-              this.dataItems.unshift(item[this.propertyName]);
-            }
-            return group;
-          });
-        } else {
-          return {};
-        }
-      },
-    },
-    isChecked() {
-      const filters = this.$store.getters["blocks/getFilters"];
+    filterItems() {
+      const block = this.$store.getters["blocks/getUnfilteredBlockById"](712);
+      if (block) {
+        const items = block.data.items.map((item) => item[this.propertyName]);
+        const uniqueItems = Array.from(new Set(items));
+        const filter =
+          this.$store.getters["blocks/getFilters"].find(
+            (item) => item.propertyName === this.propertyName
+          )?.filter || [];
+
+        return uniqueItems.map((name) => ({
+          name,
+          isChecked: filter.includes(name),
+        }));
+      }
+      return [];
     },
   },
 };
