@@ -7,8 +7,9 @@
       :class="validClass"
       :placeholder="data.placeholder"
       :disabled="!edit ? !edit : data.readonly"
-      v-bind:value="data.value"
-      v-on:input="updateValue($event)"
+      v-bind:value="dataValue"
+      @input="updateValue($event)"
+      @input.native="eventHandlerInputNative($event.target.value)"
       @blur.native="eventHandlerBlur($event)"
       type="text"
       :masked="false"
@@ -52,6 +53,9 @@ export default {
       default: () => false,
     },
   },
+  created() {
+    console.log("created");
+  },
   methods: {
     updateValue(val) {
       if (this.data.value !== val) {
@@ -70,6 +74,15 @@ export default {
         name: this.data.name,
         value: this.data.value,
       });
+    },
+    eventHandlerInputNative(val) {
+      if (this.dataValue === undefined || this.dataValue === null) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: val,
+        });
+      }
     },
   },
   computed: {
@@ -94,6 +107,9 @@ export default {
       } else {
         return "";
       }
+    },
+    dataValue() {
+      return this.data.value;
     },
   },
 };
