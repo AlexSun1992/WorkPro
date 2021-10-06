@@ -359,7 +359,6 @@ export const mutations = {
         if (item.value && item.value.__ob__) {
           item.state = item.value.value || item.value.value == 0 ? true : false;
         }
-
       }
     }
   },
