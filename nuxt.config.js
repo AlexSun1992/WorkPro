@@ -109,6 +109,7 @@ module.exports = {
     "~/api/user.js",
     "~/api/refresh.js",
     "~/api/dadata.js",
+    "~/api/menu.js",
   ],
   auth: {
     strategies: {
@@ -121,7 +122,7 @@ module.exports = {
         grantType: false,
         token: {
           property: "ACCESS_TOKEN",
-          maxAge: 3700,
+          maxAge: 360000,
         },
         refreshToken: {
           property: "REFRESH_TOKEN",

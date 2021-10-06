@@ -20,19 +20,14 @@ const menu = {};
 app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.headers.common.Authorization = null;
     if (req.query.zone !== "free") {
-      if (Boolean(req?.headers?.authorization)) {
-        if (Boolean(axios?.defaults?.headers?.common?.Authorization)) {
-          axios.defaults.headers.common.Authorization =
-            req.headers.authorization;
-        }
+      if (req?.headers?.authorization) {
+        axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
-        if (
-          req.cookies &&
-          Boolean(axios?.defaults?.headers?.common?.Authorization)
-        ) {
+        if (req?.cookies["auth._token.local"]) {
           axios.defaults.headers.common.Authorization =
-            req.cookies["auth._token.local"];
+            req?.cookies["auth._token.local"];
         }
       }
     }
@@ -53,10 +48,12 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
         );
       })
       .catch((err) => {
-        if (err?.response?.data) {
+        if (err?.response?.data.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
-          res.status(500).send(err);
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
         }
       });
   } catch (e) {
@@ -66,12 +63,13 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
 app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
-    if (req.headers.authorization) {
+    axios.defaults.headers.common.Authorization = null;
+    if (req?.headers?.authorization) {
       axios.defaults.headers.common.Authorization = req.headers.authorization;
     } else {
-      if (req.cookies) {
+      if (req?.cookies["auth._token.local"]) {
         axios.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+          req?.cookies["auth._token.local"];
       }
     }
     const url = encodeURI(
@@ -88,7 +86,13 @@ app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
         );
       })
       .catch((err) => {
-        res.status(err.response.data.STATUS).send(err.response.data);
+        if (err?.response?.data.STATUS == 401) {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        } else {
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
+        }
       });
   } catch (e) {
     res.send(e);
@@ -122,17 +126,15 @@ app.get("/osago", (req, res) => {
 app.get("/card/js/:idModule/:idItem", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    axios.defaults.headers.common.Authorization = null;
     let URL_ADDRESS;
     if (req.query.zone !== "free") {
-      if (req.headers?.authorization) {
+      if (req?.headers?.authorization) {
         axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
-        if (
-          req.cookies &&
-          Boolean(axios?.defaults?.headers?.common?.Authorization)
-        ) {
+        if (req?.cookies["auth._token.local"]) {
           axios.defaults.headers.common.Authorization =
-            req.cookies["auth._token.local"];
+            req?.cookies["auth._token.local"];
         }
       }
       URL_ADDRESS = encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`);
@@ -155,10 +157,12 @@ app.get("/card/js/:idModule/:idItem", (req, res) => {
         );
       })
       .catch((err) => {
-        if (err?.response?.data) {
+        if (err?.response?.data.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
-          res.status(500).send(err);
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
         }
       });
   } catch (e) {
@@ -169,12 +173,15 @@ app.get("/card/js/:idModule/:idItem", (req, res) => {
 app.get("/file/:idReport/:idCard", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
-    if (req.headers.authorization) {
-      axios.defaults.headers.common.Authorization = req.headers.authorization;
-    } else {
-      if (req.cookies) {
-        axios.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+    axios.defaults.headers.common.Authorization = null;
+    if (req.query.zone !== "free") {
+      if (req?.headers?.authorization) {
+        axios.defaults.headers.common.Authorization = req.headers.authorization;
+      } else {
+        if (req?.cookies["auth._token.local"]) {
+          axios.defaults.headers.common.Authorization =
+            req?.cookies["auth._token.local"];
+        }
       }
     }
     axios({
@@ -188,7 +195,13 @@ app.get("/file/:idReport/:idCard", (req, res) => {
       })
       .catch((err) => {
         res.contentType("application/json");
-        res.status(500).send(err.response.data);
+        if (err?.response?.data.STATUS == 401) {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        } else {
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
+        }
       });
   } catch (e) {
     res.send(e);

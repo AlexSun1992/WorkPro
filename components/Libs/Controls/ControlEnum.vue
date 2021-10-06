@@ -81,7 +81,7 @@ export default {
           url = `/api/dicwf/${this.data.fieldId}/${this.relationValue.value.value}`;
         }
       } else {
-        url = `/api/dic/${this.$route.params.idModule}/${this.data.id}/${this.data.dic}`;
+        url = `/api/dic/55/${this.data.id}/${this.data.dic}`;
       }
       this.$axios({ url: url, method: "GET" })
         .then((resp) => {

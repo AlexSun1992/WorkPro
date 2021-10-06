@@ -48,6 +48,11 @@ import { mapGetters } from "vuex";
 import ControlEmpty from "./ControlEmpty";
 import ControlLabelMoney from "./ControlLabelMoney";
 import ControlDadataSelect from "./ControlDadataSelect.vue";
+
+import ControlCustomCombobox from "./ControlCustomCombobox.vue";
+// импорт компонентa коныctujертера мощностей
+import ControlCustomDouble from "./ControlCustomDouble.vue";
+
 export default {
   name: "Control",
   components: {
@@ -74,6 +79,10 @@ export default {
     ControlEmailChange,
     ControlEmpty,
     ControlLabelMoney,
+
+    ControlCustomCombobox,
+    // регистрация компонентa конвертера мощностей
+    ControlCustomDouble,
   },
   props: {
     data: {
@@ -135,19 +144,7 @@ export default {
     "data.value": "eventValidate",
   },
   methods: {
-    eventValidate() {
-      if (this.data.required) {
-        if (this.data.value != null && this.data.value !== "") {
-          this.data.state = null;
-          this.data.checked = true;
-        }
-        if (this.data.checked) {
-          if (this.data.value == null || this.data.value === "") {
-            this.data.state = false;
-          }
-        }
-      }
-    },
+    eventValidate() {},
   },
 };
 </script>

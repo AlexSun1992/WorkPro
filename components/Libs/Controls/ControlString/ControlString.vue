@@ -10,6 +10,7 @@
       :data="data"
       :edit="edit"
       @update="updateField($event)"
+      @blur="$emit('blur', $event)"
     ></string-masked>
 
     <string-autocomplete

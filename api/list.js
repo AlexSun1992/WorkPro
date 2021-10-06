@@ -14,23 +14,21 @@ app.use(cookieParser());
 const modules = {};
 const menu = {};
 
-app.get("/list/:idModule/:idItem/:filters", (req, res) => {
+app.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     let URL_ADDRESS;
     const filters = listConverter.getFilterParams(
       formConverter.save(JSON.parse(req.params.filters))
     );
-    if (req.query.zone !== "free") {
-      if (req.headers?.authorization) {
+    axios.defaults.headers.common.Authorization = null;
+    if (req?.query.zone !== "free") {
+      if (req?.headers?.authorization) {
         axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
-        if (
-          req.cookies &&
-          Boolean(axios?.defaults?.headers?.common?.Authorization)
-        ) {
+        if (req?.cookies["auth._token.local"]) {
           axios.defaults.headers.common.Authorization =
-            req.cookies["auth._token.local"];
+            req?.cookies["auth._token.local"];
         }
       }
       URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${filters}`;
@@ -45,10 +43,12 @@ app.get("/list/:idModule/:idItem/:filters", (req, res) => {
         res.send(listConverter.list(resp.data));
       })
       .catch((err) => {
-        if (err.response.data.STATUS == 401) {
+        if (err?.response?.data.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
-          res.status(err.response.data.STATUS).send(err.response.data);
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
         }
       });
   } catch (e) {

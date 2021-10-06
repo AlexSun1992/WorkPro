@@ -15,12 +15,13 @@ const menu = {};
 app.get("/module", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
-    if (req.headers.authorization) {
+    axios.defaults.headers.common.Authorization = null;
+    if (req?.headers?.authorization) {
       axios.defaults.headers.common.Authorization = req.headers.authorization;
     } else {
-      if (req.cookies) {
+      if (req?.cookies["auth._token.local"]) {
         axios.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+          req?.cookies["auth._token.local"];
       }
     }
     modules.getItems = () => {

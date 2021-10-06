@@ -2,6 +2,9 @@
 export const state = () => ({
   registrationError: null,
   agencies: null,
+  regionsList: null,
+  regionOffices: null,
+  selectedRegion: null,
 });
 
 export const actions = {
@@ -70,17 +73,6 @@ export const actions = {
     }
   },
 
-  async fetchAgencies({ commit }) {
-    try {
-      const { data } = await this.$axios.get(`/free/v2/agencies`);
-      commit("setAgencies", data);
-    } catch (e) {
-      console.log(e);
-    }
-  },
-
-  async nuxtServerInit({ dispatch }, context) {},
-
   async resetPassword({ commit }, params) {
     try {
       const response = await this.$axios.post(
@@ -125,10 +117,6 @@ export const mutations = {
     state.auth.user = params;
   },
 
-  setAgencies(state, params) {
-    state.agencies = params;
-  },
-
   clearAxiosError(state) {
     state.registrationError = null;
   },
@@ -145,9 +133,5 @@ export const getters = {
 
   getRegistrationError(state) {
     return state.registrationError;
-  },
-
-  getAgencies(state) {
-    return state.agencies;
   },
 };
