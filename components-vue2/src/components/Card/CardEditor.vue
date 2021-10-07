@@ -6,15 +6,15 @@
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
     />
-      <div>
-        <b-alert
-          :show="getSavedError || getError"
-          variant="danger"
-          class="mt-3 mb-0"
-        >
-          {{ getErrorMessage }}
-        </b-alert>
-      </div>
+    <div>
+      <b-alert
+        :show="getSavedError || getError"
+        variant="danger"
+        class="mt-3 mb-0"
+      >
+        {{ getErrorMessage }}
+      </b-alert>
+    </div>
     <div
       v-if="getBtnSave && isShowButtonSave && !getError"
       class="row mt-4 ml-2"
@@ -147,7 +147,6 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
-        data[i].checked = true;
         const error = data[i].error;
         if (
           (data[i].required &&
