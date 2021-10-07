@@ -16,9 +16,9 @@
 
     <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
-    <b-form-invalid-feedback :state="data.state">
-      Обязательно для заполнения
-    </b-form-invalid-feedback>
+    <b-form-invalid-feedback :state="data.state">{{
+        data.error ? data.error : "Обязательно для заполнения"
+      }}</b-form-invalid-feedback>
   </b-form-group>
 </template>
 
