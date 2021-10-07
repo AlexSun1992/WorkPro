@@ -64,10 +64,6 @@ export default {
     };
   },
 
-  created() {
-    console.log(this.itemId);
-  },
-
   computed: {
     name() {
       return this.params.settings.text;
