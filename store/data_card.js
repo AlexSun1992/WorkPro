@@ -351,7 +351,8 @@ export const mutations = {
         if (
           item.value !== null &&
           item.value !== "" &&
-          item.value !== undefined
+          item.value !== undefined &&
+          (item.error === null || item.error === undefined)
         ) {
           item.state = true;
           item.checked = true;
