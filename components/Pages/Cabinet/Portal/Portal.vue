@@ -6,6 +6,11 @@
           :itemId="itemId"
           propertyName="SPRODUCTNAME"
         ></filter-block>
+        <filter-block
+          :itemId="itemId"
+          propertyName="SSTATUS"
+          filterType="radiobutton"
+        ></filter-block>
         <!-- <filter-block propertyName="ID" filterType="radiobutton"></filter-block> -->
         <v-runtime-template :template="templateData"></v-runtime-template>
       </div>

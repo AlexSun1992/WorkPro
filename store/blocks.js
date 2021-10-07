@@ -177,7 +177,6 @@ export const mutations = {
 
   toggleFilter: (state, data) => {
     const { propertyName, filterItem, filterType } = data;
-
     if (!state.filters.find((filter) => filter.propertyName === propertyName)) {
       state.filters.push({
         propertyName,

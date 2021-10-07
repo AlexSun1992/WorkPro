@@ -351,7 +351,8 @@ export const mutations = {
         if (
           item.value !== null &&
           item.value !== "" &&
-          item.value !== undefined
+          item.value !== undefined &&
+          (item.error === null || item.error === undefined)
         ) {
           item.state = true;
           item.checked = true;
@@ -359,7 +360,6 @@ export const mutations = {
         if (item.value && item.value.__ob__) {
           item.state = item.value.value || item.value.value == 0 ? true : false;
         }
-
       }
     }
   },

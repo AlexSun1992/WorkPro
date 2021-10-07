@@ -281,7 +281,7 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
-        data[i].checked = true;
+        //data[i].checked = true;
         if (
           data[i].required &&
           !data[i].hidden &&
@@ -458,7 +458,10 @@ export default {
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
             this.$bvModal.hide("confirmAction");
-            window.open(response.data.POUTVALUE);
+            window.open(
+              response.data.POUTVALUE,
+              this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
+            );
           }
         }
         await this.$store.dispatch("data_card/fetchForm", this.$route.params);
