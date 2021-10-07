@@ -2,6 +2,16 @@
   <client-only placeholder="Загрузка...">
     <div>
       <div v-show="isShowBlock">
+        <filter-block
+          :itemId="itemId"
+          propertyName="SPRODUCTNAME"
+        ></filter-block>
+        <filter-block
+          :itemId="itemId"
+          propertyName="SSTATUS"
+          filterType="radiobutton"
+        ></filter-block>
+        <!-- <filter-block propertyName="ID" filterType="radiobutton"></filter-block> -->
         <v-runtime-template :template="templateData"></v-runtime-template>
       </div>
       <div v-if="!isShowBlock">
@@ -26,6 +36,7 @@ import OpenCardButton from "../Block/OpenCardButton";
 import VRuntimeTemplate from "v-runtime-template";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
+import FilterBlock from "../Block/FilterBlock.vue";
 
 export default {
   name: "Wizard",
@@ -36,6 +47,7 @@ export default {
     PolicyBlock,
     VRuntimeTemplate,
     ContentBlock,
+    FilterBlock,
     ActionButton,
     OpenCardButton,
     PortalCard,
@@ -56,6 +68,7 @@ export default {
       list: null,
     };
   },
+
   computed: {
     name() {
       return this.params.settings.text;

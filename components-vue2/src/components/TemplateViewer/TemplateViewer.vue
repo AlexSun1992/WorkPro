@@ -6,10 +6,11 @@
 
 <script>
 import ContentBlock from "./ContentBlock.vue";
+import FilterBlock from "./FilterBlock.vue";
 import VRuntimeTemplate from "v-runtime-template";
 export default {
   name: "TemplateViewer",
-  components: { ContentBlock, VRuntimeTemplate },
+  components: { ContentBlock, FilterBlock, VRuntimeTemplate },
   props: {
     moduleId: {
       type: Number,

@@ -1,3 +1,5 @@
+import { indexOf } from "lodash";
+
 /* eslint-disable */
 export const state = () => ({
   blocks: [],
@@ -6,12 +8,39 @@ export const state = () => ({
   isForm: false,
   cardId: 0,
   blockId: null,
+  filters: [],
 });
 
 export const getters = {
-  getBlockById: (state) => (id) => {
+  getUnfilteredBlockById: (state) => (id) => {
     return state.blocks.find((b) => b.blockId === parseInt(id));
   },
+  getBlockById: (state) => (id) => {
+    const currentBlock = state.blocks.find((b) => b.blockId === parseInt(id));
+    if (currentBlock) {
+      return {
+        ...currentBlock,
+        data: {
+          ...currentBlock.data,
+          items: currentBlock.data.items.filter((item) => {
+            let isItemShow = true;
+            state.filters.forEach((filter) => {
+              if (!isItemShow) {
+                return;
+              }
+              const value = item[filter.propertyName];
+              if (filter.filter.length === 0) {
+                return;
+              }
+              isItemShow = filter.filter.includes(value);
+            });
+            return isItemShow;
+          }),
+        },
+      };
+    }
+  },
+  getFilters: (state) => state.filters,
   getForm: (state) => state.form,
   cardId: (state) => state.cardId,
   moduleId: (state) => state.moduleId,
@@ -134,5 +163,39 @@ export const mutations = {
   },
   setBlockId(state, data) {
     state.blockId = data;
+  },
+
+  clearFilter: (state, data) => {
+    const { propertyName } = data;
+    const currentFilter = state.filters.find(
+      (filter) => filter.propertyName === propertyName
+    );
+    if (currentFilter) {
+      currentFilter.filter = [];
+    }
+  },
+
+  toggleFilter: (state, data) => {
+    const { propertyName, filterItem, filterType } = data;
+    if (!state.filters.find((filter) => filter.propertyName === propertyName)) {
+      state.filters.push({
+        propertyName,
+        filter: [],
+      });
+    }
+    const currentFilter = state.filters.find(
+      (filter) => filter.propertyName === propertyName
+    );
+    if (filterType === "radiobutton") {
+      currentFilter.filter = [filterItem];
+      return;
+    }
+    if (currentFilter.filter.includes(filterItem)) {
+      currentFilter.filter = currentFilter.filter.filter(
+        (item) => item !== filterItem
+      );
+    } else {
+      currentFilter.filter.push(filterItem);
+    }
   },
 };

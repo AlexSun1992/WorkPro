@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <filter-block></filter-block> -->
     <component v-bind:is="params.component" :params="params"></component>
   </div>
 </template>
@@ -9,9 +10,16 @@ import CardPage from "~/components/Pages/Cabinet/Card/Card";
 import PortalPage from "@/components/Pages/Cabinet/Portal/Portal";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
 import FormPage from "~/components/Pages/FormPage";
+import FilterBlock from "./Block/FilterBlock.vue";
 export default {
   name: "Fluid",
-  components: { CardPage, PortalPage, WizardPage, FormPage },
+  components: {
+    CardPage,
+    PortalPage,
+    WizardPage,
+    FormPage,
+    FilterBlock,
+  },
   computed: {
     params() {
       const page = this.$route.params;
