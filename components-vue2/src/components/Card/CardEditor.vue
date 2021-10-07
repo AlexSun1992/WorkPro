@@ -6,7 +6,6 @@
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
     />
-    <div class="row">
       <div>
         <b-alert
           :show="getSavedError || getError"
@@ -16,7 +15,6 @@
           {{ getErrorMessage }}
         </b-alert>
       </div>
-    </div>
     <div
       v-if="getBtnSave && isShowButtonSave && !getError"
       class="row mt-4 ml-2"
