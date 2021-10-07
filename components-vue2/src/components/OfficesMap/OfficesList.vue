@@ -55,11 +55,8 @@ export default {
     offices() {
       if (this.$store?.getters["map/getRegionOffices"]) {
         let data = [...this.$store.getters["map/getRegionOffices"]];
-        if (this.filter) {
-          data = data.filter((field) => {
-            return field[this.filter.name] == this.filter.value;
-          });
-          this.filteredData = data;
+        if (this.filteredData) {
+          data = this.filteredData;
         }
         let start = this.page * this.pagesCount;
         let end = start + this.pagesCount;
@@ -70,18 +67,28 @@ export default {
       return this.$store.getters["map/getSelectedRegion"];
     },
     officesLength() {
-      if (!this.filter) {
-        this.filteredData = null;
-      }
       if (this.filteredData) {
         return this.filteredData.length;
+      } else {
+        return this.$store.getters["map/getRegionOffices"]?.length;
       }
-      return this.$store.getters["map/getRegionOffices"]?.length;
     },
   },
   watch: {
-    region: function (newVal) {
-      this.page = "";
+    region: function (val) {
+      this.filteredData = null;
+      this.page = 0;
+    },
+    filter: function (val) {
+      if (this.filter) {
+        this.filteredData = [
+          ...this.$store.getters["map/getRegionOffices"],
+        ].filter((field) => {
+          return field[this.filter.name] == this.filter.value;
+        });
+      } else {
+        this.filteredData = null;
+      }
     },
   },
 };
