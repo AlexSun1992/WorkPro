@@ -1,11 +1,18 @@
 <template>
   <div class="container">
     <div v-for="(filter, index) in filters" :key="index">
-      <button class="mr-2" @click="$emit('update', filter)">
+      <b-button
+        class="mr-2"
+        variant="success"
+        :class="{ active: selectedIndex === index }"
+        @click="update(filter, index)"
+      >
         {{ filter.text }}
-      </button>
+      </b-button>
     </div>
-    <button class="ml-3" @click="$emit('update', '')">Сбросить фильтры</button>
+    <button :disabled="disabled" class="ml-3" @click="update('')">
+      Сбросить фильтры
+    </button>
   </div>
 </template>
 
@@ -13,13 +20,40 @@
 import { BButton } from "bootstrap-vue";
 export default {
   name: "FilterComponent",
+  components: {
+    BButton,
+  },
+  data() {
+    return {
+      activeFilter: null,
+      selectedIndex: null,
+    };
+  },
   props: {
     filters: {
       type: Array,
     },
   },
-  components: {
-    BButton,
+  methods: {
+    update(filter, index) {
+      this.selectedIndex = index;
+      this.activeFilter = filter;
+      this.$emit("update", filter);
+    },
+  },
+  computed: {
+    disabled() {
+      return !this.activeFilter;
+    },
+    region() {
+      return this.$store.getters["map/getSelectedRegion"];
+    },
+  },
+  watch: {
+    region: function (val) {
+      this.activeFilter = null;
+      this.selectedIndex = null;
+    },
   },
 };
 </script>
@@ -30,14 +64,10 @@ export default {
 }
 
 button {
-  border: 1px solid #ccc;
   padding: 10px 30px;
-  border-radius: 3px;
   cursor: pointer;
 }
-
-button:focus {
-  background: #a7a0a0;
-  outline: none;
+.active {
+  background-color: #3d5443 !important;
 }
 </style>
