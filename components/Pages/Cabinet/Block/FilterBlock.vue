@@ -2,8 +2,11 @@
   <div class="test">
     <ul class="menu">
       <li propertyName v-for="item in filterItems" :key="item.name">
-        <b-button v-on:click="toggleFilter(propertyName, item.name)">
-          {{ item.name }} {{ item.isChecked }}
+        <b-button
+          :class="{ 'filter-checked': item.isChecked }"
+          v-on:click="toggleFilter(propertyName, item.name)"
+        >
+          {{ item.name }}
         </b-button>
       </li>
       <li>
@@ -15,6 +18,10 @@
 <script>
 export default {
   name: "FilterBlock",
+  data: {
+    activeColor: "red",
+    fontSize: 30,
+  },
 
   props: {
     propertyName: {
@@ -84,5 +91,11 @@ export default {
 li {
   list-style: none;
   cursor: pointer;
+}
+</style>
+<style>
+.cabinet .btn.btn-secondary .btn-filter-checked {
+  background-color: #008b4e;
+  color: white;
 }
 </style>
