@@ -26,10 +26,11 @@ export default {
       type: String,
       default: () => "checkbox",
     },
-  },
 
-  data() {
-    return {};
+    itemId: {
+      required: true,
+      default: () => null,
+    },
   },
 
   methods: {
@@ -40,7 +41,7 @@ export default {
         filterItem: item,
       });
     },
-    clearFilter(propertyName, item) {
+    clearFilter(propertyName) {
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
       });
@@ -49,7 +50,9 @@ export default {
 
   computed: {
     filterItems() {
-      const block = this.$store.getters["blocks/getUnfilteredBlockById"](712);
+      const block = this.$store.getters["blocks/getUnfilteredBlockById"](
+        this.itemId
+      );
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
         const uniqueItems = Array.from(new Set(items));
@@ -57,7 +60,6 @@ export default {
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
-
         return uniqueItems.map((name) => ({
           name,
           isChecked: filter.includes(name),

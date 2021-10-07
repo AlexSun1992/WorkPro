@@ -66,6 +66,9 @@ export default {
       });
     }
   },
+  created() {
+    console.log(this.itemId);
+  },
   computed: {
     dataContent: {
       get: function () {
