@@ -4059,7 +4059,7 @@ input[type="checkbox"].is-invalid+label.custom-control-label {
 
 button.btn.btn-secondary.filter-checked {
     background: #36ab4d !important;
-    box-shadow: 0 16px 15px -8px rgb(39 193 0 / 30%) !important;
+    box-shadow: 0px 16px 15px -8px rgba(39, 193, 0, 0.3);
     border-radius: 4px !important;
     color: #fff !important;
 }
