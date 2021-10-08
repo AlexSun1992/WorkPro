@@ -40,7 +40,6 @@ export default {
       activeColor: "red",
       fontSize: 30,
       isAllChecked: true,
-      isCurrentChecked: false,
       addClassToAll: 0,
     };
   },
