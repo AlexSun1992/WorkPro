@@ -4058,7 +4058,9 @@ input[type="checkbox"].is-invalid+label.custom-control-label {
 }
 
 button.btn.btn-secondary.filter-checked {
-    background: green !important;
+    background: #36ab4d !important;
+    box-shadow: 0 16px 15px -8px rgb(39 193 0 / 30%) !important;
+    border-radius: 4px !important;
     color: #fff !important;
 }
 
