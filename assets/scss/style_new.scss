@@ -4056,3 +4056,17 @@ input[type="checkbox"].is-invalid+label.custom-control-label {
     background-color: #f8d7da;
     border-color: #f5c6cb;
 }
+
+button.btn.btn-secondary.filter-checked {
+    background: green !important;
+    color: #fff !important;
+}
+
+ul.menu {
+    margin: 1rem 0;
+    padding: 0;
+}
+
+ul.menu li {
+    margin-right: 1rem;
+}
