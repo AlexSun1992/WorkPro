@@ -17,15 +17,7 @@
         </b-button>
       </li>
       <li>
-        <b-button
-          :class="{
-            'filter-checked':
-              (isAllChecked && this.defaultValue === undefined) ||
-              (this.defaultValue !== undefined && this.addClassToAll > 0),
-          }"
-          v-on:click="clearFilter(propertyName)"
-          >ALL</b-button
-        >
+        <b-button v-on:click="clearFilter(propertyName)">ALL</b-button>
       </li>
     </ul>
   </div>
@@ -39,7 +31,6 @@ export default {
       activeColor: "red",
       fontSize: 30,
       isAllChecked: true,
-      addClassToAll: 0,
     };
   },
 
@@ -78,12 +69,8 @@ export default {
 
   methods: {
     toggleFilter(propertyName, item) {
-      if (this.isAllChecked === true) {
-        this.isAllChecked = false;
-      }
-      if (this.defaultValue !== undefined) {
-        this.addClassToAll = 0;
-      }
+      this.isAllChecked = !this.isAllChecked;
+      console.log(this.isAllChecked);
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
@@ -91,10 +78,6 @@ export default {
       });
     },
     clearFilter(propertyName) {
-      if (this.defaultValue !== undefined) {
-        this.addClassToAll += 1;
-      }
-      this.isAllChecked = !this.isAllChecked;
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
       });

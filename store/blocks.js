@@ -186,8 +186,10 @@ export const mutations = {
     const currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
+
     if (filterType === "radiobutton") {
       currentFilter.filter = [filterItem];
+
       return;
     }
     if (currentFilter.filter.includes(filterItem)) {
