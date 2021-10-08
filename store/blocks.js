@@ -190,7 +190,6 @@ export const mutations = {
 
     if (filterType === "radiobutton") {
       currentFilter.filter = [filterItem];
-      console.log(currentFilter);
       return;
     }
     if (currentFilter.filter.includes(filterItem)) {
