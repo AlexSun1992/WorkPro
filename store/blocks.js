@@ -1,4 +1,5 @@
 import { indexOf } from "lodash";
+import Vue from "vue";
 
 /* eslint-disable */
 export const state = () => ({
@@ -189,7 +190,7 @@ export const mutations = {
 
     if (filterType === "radiobutton") {
       currentFilter.filter = [filterItem];
-
+      console.log(currentFilter);
       return;
     }
     if (currentFilter.filter.includes(filterItem)) {

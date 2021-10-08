@@ -69,7 +69,6 @@ export default {
 
   methods: {
     toggleFilter(propertyName, item) {
-      this.isAllChecked = !this.isAllChecked;
       console.log(this.isAllChecked);
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
