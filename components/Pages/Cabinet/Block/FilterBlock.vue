@@ -10,7 +10,7 @@
         </b-button>
       </li>
       <li>
-        <b-button v-on:click="clearFilter(propertyName)"> ALL </b-button>
+        <b-button v-on:click="clearFilter(propertyName)">ALL</b-button>
       </li>
     </ul>
   </div>
@@ -18,9 +18,12 @@
 <script>
 export default {
   name: "FilterBlock",
-  data: {
-    activeColor: "red",
-    fontSize: 30,
+
+  data() {
+    return {
+      activeColor: "red",
+      fontSize: 30,
+    };
   },
 
   props: {
@@ -36,6 +39,7 @@ export default {
     },
     filterType: {
       type: String,
+      required: false,
       default: () => "checkbox",
     },
 
@@ -59,7 +63,7 @@ export default {
     toggleFilter(propertyName, item) {
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
-        filterType: this.filterType,
+        filterType: this.data.filterType,
         filterItem: item,
       });
     },
