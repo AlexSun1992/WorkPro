@@ -10,7 +10,11 @@
         </b-button>
       </li>
       <li>
-        <b-button v-on:click="clearFilter(propertyName)"> ALL </b-button>
+        <b-button
+          :class="{ 'filter-checked': isAllChecked }"
+          v-on:click="clearFilter(propertyName)"
+          >ALL</b-button
+        >
       </li>
     </ul>
   </div>
@@ -18,12 +22,21 @@
 <script>
 export default {
   name: "FilterBlock",
-  data: {
-    activeColor: "red",
-    fontSize: 30,
+
+  data() {
+    return {
+      activeColor: "red",
+      fontSize: 30,
+      isAllChecked: true,
+    };
   },
 
   props: {
+    defaultValue: {
+      type: String,
+      required: false,
+      default: () => {},
+    },
     propertyName: {
       type: String,
       required: true,
@@ -31,6 +44,7 @@ export default {
     },
     filterType: {
       type: String,
+      required: false,
       default: () => "checkbox",
     },
 
@@ -38,6 +52,16 @@ export default {
       required: true,
       default: () => null,
     },
+  },
+
+  created() {
+    if (this.defaultValue !== undefined) {
+      this.$store.commit("blocks/toggleFilter", {
+        propertyName: this.propertyName,
+        filterType: this.filterType,
+        filterItem: this.defaultValue,
+      });
+    }
   },
 
   methods: {
@@ -49,6 +73,8 @@ export default {
       });
     },
     clearFilter(propertyName) {
+      this.isAllChecked = !this.isAllChecked;
+
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
       });
