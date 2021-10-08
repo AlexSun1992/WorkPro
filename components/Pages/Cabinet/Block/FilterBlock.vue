@@ -1,7 +1,12 @@
 <template>
   <div class="test">
     <ul class="menu">
-      <li propertyName v-for="item in filterItems" :key="item.name">
+      <li
+        propertyName
+        defaultValue
+        v-for="item in filterItems"
+        :key="item.name"
+      >
         <b-button v-on:click="toggleFilter(propertyName, item.name)">
           {{ item.name }} {{ item.isChecked }}
         </b-button>
@@ -17,6 +22,11 @@ export default {
   name: "FilterBlock",
 
   props: {
+    defaultValue: {
+      type: String,
+      required: false,
+      default: () => {},
+    },
     propertyName: {
       type: String,
       required: true,
@@ -31,6 +41,16 @@ export default {
       required: true,
       default: () => null,
     },
+  },
+
+  created() {
+    if (this.defaultValue !== undefined) {
+      this.$store.commit("blocks/toggleFilter", {
+        propertyName: this.propertyName,
+        filterType: this.filterType,
+        filterItem: this.defaultValue,
+      });
+    }
   },
 
   methods: {
