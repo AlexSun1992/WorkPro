@@ -18,6 +18,7 @@
       </li>
       <li>
         <b-button
+          v-if="this.filterType === 'radiobutton'"
           :class="{
             'filter-checked':
               (isAllChecked && this.defaultValue === undefined) ||
@@ -88,6 +89,7 @@ export default {
           this.addClassToAll = 0;
         }
       }
+
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
