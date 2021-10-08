@@ -1,4 +1,5 @@
 import { indexOf } from "lodash";
+import Vue from "vue";
 
 /* eslint-disable */
 export const state = () => ({
@@ -181,11 +182,13 @@ export const mutations = {
       state.filters.push({
         propertyName,
         filter: [],
+        className: "filter-checked",
       });
     }
     const currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
+
     if (filterType === "radiobutton") {
       currentFilter.filter = [filterItem];
       return;
