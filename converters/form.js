@@ -346,12 +346,13 @@ converter.save = (data) => {
             res[data[i].name] =
               data[i].value === "true" || data[i].value === true ? "Д" : "Н";
           }
-          if (
-            data[i].structType === "long" ||
-            data[i].structType === "double"
-          ) {
+          if (data[i].structType === "long") {
             res[data[i].name] =
               data[i].value !== null ? parseInt(data[i].value) : "NULL";
+          }
+          if (data[i].structType === "double") {
+            res[data[i].name] =
+              data[i].value !== null ? parseFloat(data[i].value) : "NULL";
           }
         } else {
           res[data[i].name] = data[i].value
