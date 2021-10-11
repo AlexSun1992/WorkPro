@@ -1,6 +1,10 @@
 <template>
   <div v-if="isOpenCard">
-    <div v-for="item in dataContent.items" @click.stop="openCard(item)">
+    <div
+      v-for="(item, id) in dataContent.items"
+      :key="id"
+      @click.stop="openCard(item)"
+    >
       <slot name="data" v-bind:content="item"></slot>
     </div>
   </div>
@@ -15,6 +19,8 @@
 
 <script>
 import Grid from "~/components/Libs/Table/Grid";
+// import FilterBlock from "./FilterBlock.vue";
+
 export default {
   name: "ContentBlock",
   components: { Grid },
@@ -38,6 +44,11 @@ export default {
       default: () => null,
     },
   },
+  data() {
+    return {
+      indicator: null,
+    };
+  },
   async fetch() {
     try {
       (await this.cardId)
@@ -55,6 +66,7 @@ export default {
       });
     }
   },
+
   computed: {
     dataContent: {
       get: function () {
@@ -66,6 +78,7 @@ export default {
         }
       },
     },
+
     parentMenu: {
       get: function () {
         return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;

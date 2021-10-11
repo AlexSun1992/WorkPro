@@ -26,6 +26,7 @@ import OpenCardButton from "../Block/OpenCardButton";
 import VRuntimeTemplate from "v-runtime-template";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
+import FilterBlock from "../Block/FilterBlock.vue";
 
 export default {
   name: "Wizard",
@@ -36,6 +37,7 @@ export default {
     PolicyBlock,
     VRuntimeTemplate,
     ContentBlock,
+    FilterBlock,
     ActionButton,
     OpenCardButton,
     PortalCard,
@@ -56,6 +58,7 @@ export default {
       list: null,
     };
   },
+
   computed: {
     name() {
       return this.params.settings.text;
