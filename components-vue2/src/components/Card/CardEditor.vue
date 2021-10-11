@@ -154,7 +154,7 @@ export default {
             data[i].visible &&
             (value === null || value === undefined || value === "") &&
             value !== 0) ||
-          error
+          (error && data[i].visible)
         ) {
           console.log("error", data[i]);
           valid = false;
