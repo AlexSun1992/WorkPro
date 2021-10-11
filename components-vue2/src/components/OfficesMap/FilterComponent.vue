@@ -1,16 +1,16 @@
 <template>
-  <div class="container">
-    <div v-for="(filter, index) in filters" :key="index">
+  <div>
+    <div v-for="(f, i) in filters" :key="i">
       <b-button
         class="mr-2"
         variant="success"
-        :class="{ active: selectedIndex === index }"
-        @click="update(filter, index)"
+        @click="update(f, i)"
+        :class="{ active: selectedIndex === i }"
       >
-        {{ filter.text }}
+        {{ f.text }}
       </b-button>
     </div>
-    <button :disabled="disabled" class="ml-3" @click="update('')">
+    <button :disabled="disabled" @click="update" class="ml-3">
       Сбросить фильтры
     </button>
   </div>
@@ -35,10 +35,15 @@ export default {
     },
   },
   methods: {
-    update(filter, index) {
-      this.selectedIndex = index;
-      this.activeFilter = filter;
-      this.$emit("update", filter);
+    update(f, i) {
+      if (!f.name) {
+        this.activeFilter = null;
+        this.selectedIndex = null;
+      } else {
+        this.activeFilter = f;
+        this.selectedIndex = i;
+      }
+      this.$emit("update", f);
     },
   },
   computed: {
