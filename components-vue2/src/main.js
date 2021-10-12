@@ -126,3 +126,16 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-notification",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/OfficesMap/Notification.vue", "./store/index"], (
+        lazyComponent
+      ) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);

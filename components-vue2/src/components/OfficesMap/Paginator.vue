@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <div v-if="data"> -->
     <div v-if="totalCount > 1" class="pagination my-4">
       <button class="back mr-2" :disabled="disabledBack" @click="prevPage">
         &laquo;
@@ -18,7 +17,6 @@
         &raquo;
       </button>
     </div>
-    <!-- </div> -->
   </div>
 </template>
 
