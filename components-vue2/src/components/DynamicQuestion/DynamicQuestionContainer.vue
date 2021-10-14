@@ -36,6 +36,13 @@ export default {
     DynamicQuestion,
   },
 
+  created() {
+    console.log(this.productId);
+    console.log(this.isTop);
+    console.log(this.isGroup);
+    // console.log();
+  },
+
   data() {
     return {
       testData: [],

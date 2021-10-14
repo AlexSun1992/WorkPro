@@ -58,6 +58,15 @@ export default {
   directives: {
     "b-toggle": VBToggle,
   },
+  /* created() {
+    console.log(this.choosenData);
+    console.log(this.isGroup);
+  }, */
+  /*   methods: {
+    sortTopProductQuestions() {
+
+    }
+  }, */
 };
 </script>
 
