@@ -123,19 +123,23 @@ export default {
           : result.value,
       });
     },
-    handleBlur() {
+    handleBlur(value) {
       const find = this.group.find((i) =>
         this.$refs.autocomplete?.value.includes(i.value)
       );
-      if (find === undefined) {
+      if (find !== undefined) {
+        this.handleSubmit(find);
+        return;
+      }
+      if (this.group.length === 0) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: null,
         });
       } else {
-        this.$refs.autocomplete.value = find.value;
-        this.handleSubmit(find);
+        this.$refs.autocomplete.value = this.group[0].value;
+        this.handleSubmit(this.group[0]);
       }
     },
   },
