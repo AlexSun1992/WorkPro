@@ -1,16 +1,12 @@
 <template>
-  <div>
-    <div v-for="(f, i) in filters" :key="i">
-      <b-button
-        class="mr-2"
-        variant="success"
-        @click="update(f, i)"
-        :class="{ active: selectedIndex === i }"
-      >
-        {{ f.text }}
-      </b-button>
+  <div class="filters-container">
+    <div class="filters">
+      <div v-for="(f, i) in filters" :key="i">
+        <input type="checkbox" :value="f" v-model="checkedFilters" />
+        <label>{{ f.text }}</label>
+      </div>
     </div>
-    <button :disabled="disabled" @click="update" class="ml-3">
+    <button :disabled="disabled" @click="clearFilters" class="ml-3">
       Сбросить фильтры
     </button>
   </div>
@@ -18,6 +14,7 @@
 
 <script>
 import { BButton } from "bootstrap-vue";
+import { getFilters } from "../../../../utils/map/filters";
 export default {
   name: "FilterComponent",
   components: {
@@ -25,8 +22,7 @@ export default {
   },
   data() {
     return {
-      activeFilter: null,
-      selectedIndex: null,
+      checkedFilters: [],
     };
   },
   props: {
@@ -35,44 +31,30 @@ export default {
     },
   },
   methods: {
-    update(f, i) {
-      if (!f.name) {
-        this.activeFilter = null;
-        this.selectedIndex = null;
-      } else {
-        this.activeFilter = f;
-        this.selectedIndex = i;
-      }
-      this.$emit("update", f);
+    clearFilters() {
+      this.checkedFilters = [];
     },
   },
   computed: {
     disabled() {
-      return !this.activeFilter;
-    },
-    region() {
-      return this.$store.getters["map/getSelectedRegion"];
+      return this.checkedFilters.length == 0;
     },
   },
   watch: {
-    region: function (val) {
-      this.activeFilter = null;
-      this.selectedIndex = null;
+    checkedFilters: function (filters) {
+      this.$emit("update", getFilters(filters));
     },
   },
 };
 </script>
 
 <style scoped>
-.container {
+.filters-container {
   display: flex;
 }
-
-button {
-  padding: 10px 30px;
-  cursor: pointer;
-}
-.active {
-  background-color: #3d5443 !important;
+.filters {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  grid-column-gap: 20px;
 }
 </style>

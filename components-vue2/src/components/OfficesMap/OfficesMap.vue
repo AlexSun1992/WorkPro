@@ -2,11 +2,7 @@
   <div class="map-container mt-3">
     <h5>Найдите офис рядом с вами</h5>
     <input type="text" id="suggest" />
-    <FilterComponent
-      :filters="filters"
-      @update="filterOffices"
-      class="my-3 filters"
-    />
+    <FilterComponent :filters="filters" @update="filterOffices" class="my-3" />
     <slot />
     <b-tabs ref="tabs" content-class="mt-3">
       <b-tab title="На карте" active
@@ -25,9 +21,8 @@
 import FilterComponent from "./FilterComponent.vue";
 import RegionsList from "./RegionsList.vue";
 import OfficesList from "./OfficesList.vue";
-import { filters } from "../../../../utils/filters";
+import { filters, filterData } from "../../../../utils/map/filters";
 import { BTabs, BTab } from "bootstrap-vue";
-
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 Vue.use(LoadScript);
@@ -64,25 +59,23 @@ export default {
     }
   },
   methods: {
-    init(_, f) {
+    init(_, filters) {
+      let suggestView = new ymaps.SuggestView("suggest");
       if (this.myMap) {
         this.myMap.destroy();
+        suggestView.destroy();
       }
-      let suggestView = new ymaps.SuggestView("suggest");
       let showOnMap = this.showOnMap.bind(this);
       suggestView.events.add("select", function (e) {
         showOnMap(e.get("item").value);
       });
-
       this.myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 6,
       });
       let agencies = this.$store.getters["map/getAgencies"];
-      if (f) {
-        agencies = agencies.filter((field) => {
-          return field[f.name] == f.value;
-        });
+      if (filters) {
+        agencies = filterData(agencies, filters);
       }
       let myGeoObjects = [];
       for (let i = 0; i < agencies.length; i++) {
@@ -154,19 +147,23 @@ export default {
         }
       });
     },
-    filterOffices(f) {
+    filterOffices(filters) {
       if (this.$refs.tabs.currentTab == 0) {
-        this.init(_, f);
+        // Карта офисов
+        this.init(_, filters);
       }
       if (this.$refs.tabs.currentTab == 1) {
+        // Карта метро
       }
       if (this.$refs.tabs.currentTab == 2) {
+        // Список офисов
         this.page = 0;
-        this.filteredOffices = this.$store.getters[
-          "map/getRegionOffices"
-        ]?.filter((field) => {
-          return field[f.name] == f.value;
-        });
+        if (filters) {
+          this.filteredOffices = filterData(
+            this.$store.getters["map/getRegionOffices"],
+            filters
+          );
+        }
       }
     },
   },
