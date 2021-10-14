@@ -124,6 +124,13 @@ export default {
       });
     },
     handleBlur(value) {
+      const find = this.group.find((i) =>
+        this.$refs.autocomplete?.value.includes(i.value)
+      );
+      if (find !== undefined) {
+        this.handleSubmit(find);
+        return;
+      }
       if (this.group.length === 0) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
