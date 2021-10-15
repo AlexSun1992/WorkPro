@@ -36,6 +36,13 @@ export default {
     DynamicQuestion,
   },
 
+  created() {
+    console.log(this.productId);
+    console.log(this.isTop);
+    console.log(this.isGroup);
+    // console.log();
+  },
+
   data() {
     return {
       testData: [],
@@ -54,13 +61,15 @@ export default {
           return item.IDRMPRODUCT === this.productId;
         });
         dataManager(this.distinctData);
+
         return this.distinctData;
       }
       if (this.isTop === true && this.isGroup === false) {
         this.distinctData = this.mainData.filter((item) => {
           return item.IDRMPRODUCT === this.productId && item.LTOP === true;
         });
-        dataManager(this.distinctData);
+        // dataManager(this.distinctData);
+
         return this.distinctData;
       }
       if (
@@ -70,7 +79,6 @@ export default {
         this.distinctData = this.mainData.filter((item) => {
           return item.SGROUPNAME !== undefined;
         });
-
         for (let i = 0; i < this.distinctData.length; i++) {
           if (
             !this.distinctSGROUPNAME.includes(this.distinctData[i].SGROUPNAME)
