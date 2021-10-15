@@ -98,6 +98,13 @@ export const actions = {
             "setForm",
             res.data.metaData.data.length ? res.data.metaData.data : res.data
           );
+          if (params.idCard === "0") {
+            getters["getForm"].forEach((item) => {
+              if (params.query[item.name]) {
+                item.value = params.query[item.name];
+              }
+            });
+          }
           if (getters["getDataFieldByType"]("captcha")) {
             dispatch("fetchCaptcha", {
               params: getters["getFormParams"],
