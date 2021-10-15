@@ -444,6 +444,7 @@ export const mutations = {
   setCaptcha(state, data) {
     const item = state.form.find((d) => d.fieldId === data.data.fieldId);
     item.captcha = data.captcha;
+    item.state = null;
     item.value = null;
   },
   setSource(state, params) {
