@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-lg-6">
         <b-form-group
           :label="data.label"
           :class="{ required: data.required }"
@@ -19,7 +19,7 @@
           </b-form-invalid-feedback>
         </b-form-group>
       </div>
-      <div class="col-md-6 pt-3">
+      <div class="col-lg-6 pt-lg-3 text-nowrap">
         <b-spinner v-if="isLoading" class="ml-4" />
         <img
           v-else
