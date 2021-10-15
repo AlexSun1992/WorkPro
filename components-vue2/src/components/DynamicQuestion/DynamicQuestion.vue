@@ -3,6 +3,7 @@
     <div class="accordion" role="tablist" v-if="isGroup === false">
       <dynamic-card
         v-for="(item, idx) in choosenData"
+        v-show="item.LTOP === true"
         :key="idx"
         :param="`${idx}`"
         :title="item.SQUESTION"
