@@ -56,6 +56,9 @@ export const getters = {
   getDataFieldByName: (state) => (name) => {
     return state.form.find((b) => b.name === name);
   },
+  getDataFieldByType: (state) => (name) => {
+    return state.form.find((b) => b.type === name);
+  },
   getDataFieldByFieldId: (state) => (id) => {
     return state.form.find((b) => b.fieldId == id);
   },
@@ -95,6 +98,12 @@ export const actions = {
             "setForm",
             res.data.metaData.data.length ? res.data.metaData.data : res.data
           );
+          if (getters["getDataFieldByType"]("captcha")) {
+            dispatch("fetchCaptcha", {
+              params: getters["getFormParams"],
+              data: getters["getDataFieldByType"]("captcha"),
+            });
+          }
           commit(
             "setCopyForm",
             JSON.parse(JSON.stringify(res.data.metaData.data))
@@ -435,6 +444,7 @@ export const mutations = {
   setCaptcha(state, data) {
     const item = state.form.find((d) => d.fieldId === data.data.fieldId);
     item.captcha = data.captcha;
+    item.value = null;
   },
   setSource(state, params) {
     state.source = params;
