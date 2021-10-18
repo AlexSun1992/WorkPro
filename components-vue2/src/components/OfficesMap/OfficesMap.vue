@@ -1,20 +1,47 @@
 <template>
   <div class="map-container mt-3">
+    <h5>Найдите офис рядом с вами</h5>
     <input type="text" id="suggest" />
-    <div ref="map" id="map" class="map"></div>
+    <FilterComponent :filters="filters" @update="filterOffices" class="my-3" />
+    <slot />
+    <b-tabs ref="tabs" content-class="mt-3">
+      <b-tab title="На карте" active
+        ><div ref="map" id="map" class="map"></div
+      ></b-tab>
+      <b-tab title="На схеме метро"><p>Схема метро</p></b-tab>
+      <b-tab title="В списке">
+        <RegionsList />
+        <OfficesList :data="getOffices" @update="page = $event" />
+      </b-tab>
+    </b-tabs>
   </div>
 </template>
 
 <script>
+import FilterComponent from "./FilterComponent.vue";
+import RegionsList from "./RegionsList.vue";
+import OfficesList from "./OfficesList.vue";
+import { filters, filterData } from "../../../../utils/map/filters";
+import { BTabs, BTab } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
+  components: {
+    RegionsList,
+    OfficesList,
+    FilterComponent,
+    BTabs,
+    BTab,
+  },
   data() {
     return {
       myMap: null,
       myClusterer: null,
+      filters,
+      filteredOffices: null,
+      page: 0,
     };
   },
   async created() {
@@ -32,19 +59,24 @@ export default {
     }
   },
   methods: {
-    init() {
+    init(_, filters) {
       let suggestView = new ymaps.SuggestView("suggest");
+      if (this.myMap) {
+        this.myMap.destroy();
+        suggestView.destroy();
+      }
       let showOnMap = this.showOnMap.bind(this);
       suggestView.events.add("select", function (e) {
         showOnMap(e.get("item").value);
       });
-
       this.myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 6,
       });
-
       let agencies = this.$store.getters["map/getAgencies"];
+      if (filters) {
+        agencies = filterData(agencies, filters);
+      }
       let myGeoObjects = [];
       for (let i = 0; i < agencies.length; i++) {
         myGeoObjects[i] = new ymaps.GeoObject({
@@ -115,6 +147,44 @@ export default {
         }
       });
     },
+    filterOffices(filters) {
+      if (this.$refs.tabs.currentTab == 0) {
+        // Карта офисов
+        this.init(_, filters);
+      }
+      if (this.$refs.tabs.currentTab == 1) {
+        // Карта метро
+      }
+      if (this.$refs.tabs.currentTab == 2) {
+        // Список офисов
+        this.page = 0;
+        if (filters) {
+          this.filteredOffices = filterData(
+            this.$store.getters["map/getRegionOffices"],
+            filters
+          );
+        }
+      }
+    },
+  },
+  computed: {
+    getOffices() {
+      let data;
+      if (this.filteredOffices) {
+        data = this.filteredOffices;
+      } else {
+        data = this.$store.getters["map/getRegionOffices"];
+      }
+      return data;
+    },
+    region() {
+      return this.$store.getters["map/getSelectedRegion"];
+    },
+  },
+  watch: {
+    region: function (val) {
+      this.filteredOffices = null;
+    },
   },
 };
 </script>
@@ -129,13 +199,7 @@ select,
 input {
   min-width: 500px !important;
 }
-/* .map-container {
+.filters {
   display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  position: absolute;
-  height: 100%;
-} */
+}
 </style>

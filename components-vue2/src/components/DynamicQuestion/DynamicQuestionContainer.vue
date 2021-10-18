@@ -1,30 +1,29 @@
 <template>
   <div>
-    <DynamicQuestion
-      :choosenData="neededData"
-      :varLength="distinctSGROUPNAME"
-      :isGroup="isGroup"
-      product-id
-      isTop
-    ></DynamicQuestion>
+    <DynamicCard v-if="isGroup === false" :questions="questions"></DynamicCard>
+    <template v-else-if="isGroup === true">
+      <div v-for="item in questions">
+        <h2>{{ item.groupName }}</h2>
+        <DynamicCard :questions="item.questions"></DynamicCard>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
-import DynamicQuestion from "./DynamicQuestion.vue";
-import { dataManager } from "./data-manager.links-wrapper";
+import DynamicCard from "./DynamicCards/DynamicCard.vue";
 
 export default {
   props: {
     productId: {
       type: Number,
-      required: true,
-      default: () => {},
+      required: false,
+      default: () => null,
     },
     isTop: {
       type: Boolean,
       required: false,
-      default: () => false,
+      default: () => null,
     },
     isGroup: {
       type: Boolean,
@@ -33,95 +32,65 @@ export default {
     },
   },
   components: {
-    DynamicQuestion,
+    DynamicCard,
   },
-
   data() {
     return {
-      testData: [],
-      distinctData: [],
-      distinctNGROUPSORT: [],
-      distinctSGROUPNAME: [],
-      mainData: [],
-      objectHub: [],
+      data: [],
     };
   },
-
-  computed: {
-    neededData: function () {
-      if (this.isGroup === false && this.isTop === false) {
-        this.distinctData = this.mainData.filter((item) => {
-          return item.IDRMPRODUCT === this.productId;
-        });
-        dataManager(this.distinctData);
-        return this.distinctData;
-      }
-      if (this.isTop === true && this.isGroup === false) {
-        this.distinctData = this.mainData.filter((item) => {
-          return item.IDRMPRODUCT === this.productId && item.LTOP === true;
-        });
-        dataManager(this.distinctData);
-        return this.distinctData;
-      }
-      if (
-        (this.isGroup === true && this.isTop === false) ||
-        (this.isGroup === true && this.isTop === true)
-      ) {
-        this.distinctData = this.mainData.filter((item) => {
-          return item.SGROUPNAME !== undefined;
-        });
-
-        for (let i = 0; i < this.distinctData.length; i++) {
-          if (
-            !this.distinctSGROUPNAME.includes(this.distinctData[i].SGROUPNAME)
-          ) {
-            this.distinctSGROUPNAME.push(this.distinctData[i].SGROUPNAME);
-          }
-          if (this.distinctData[i].NGROUPSORT === undefined) {
-            continue;
-          }
-          if (
-            !this.distinctNGROUPSORT.includes(this.distinctData[i].NGROUPSORT)
-          ) {
-            this.distinctNGROUPSORT.push(this.distinctData[i].NGROUPSORT);
-          }
-        }
-
-        this.distinctSGROUPNAME.forEach((item) => {
-          const obj = {};
-          obj.name = item;
-          obj.data = this.distinctData.filter((elem) => {
-            return elem.SGROUPNAME === obj.name;
-          });
-          this.objectHub.push(obj);
-        });
-        for (let i = 0; i < this.distinctNGROUPSORT.length; i++) {
-          this.objectHub[i].position = this.distinctNGROUPSORT[i];
-        }
-        this.distinctData = this.objectHub;
-
-        this.distinctData.sort((a, b) => {
-          return a.position - b.position;
-        });
-
-        this.distinctData.forEach((item) => {
-          item.data.forEach((elem) => {
-            this.testData.push(elem);
-          });
-        });
-
-        dataManager(this.testData);
-
-        return this.distinctData;
-      }
-    },
-  },
-
   async created() {
     const url = "/free/v2/question";
     let response = await fetch(url);
     let data = await response.json();
-    this.mainData = data;
+    this.data = data;
+  },
+  computed: {
+    questions: function () {
+      return this.data
+        .filter(
+          (item) => item.IDRMPRODUCT === (this.productId || item.IDRMPRODUCT)
+        )
+        .filter((item) => {
+          if (this.isTop === true) {
+            return item.LTOP === true;
+          } else {
+            return item;
+          }
+        })
+        .sort((a, b) => {
+          if (a.LTOP === true && b.LTOP === true) {
+            if (a.NTOPSORT > b.NTOPSORT) {
+              return 1;
+            }
+            if (a.NTOPSORT < b.NTOPSORT) {
+              return -1;
+            }
+            return a.NTOPSORT - b.NTOPSORT;
+          } else {
+            return 0;
+          }
+        })
+        .reduce((acc, value) => {
+          if (this.isGroup === false) {
+            acc.push(value);
+          }
+          if (this.isGroup === true && value.SGROUPNAME) {
+            let objectGroup;
+            objectGroup = acc.find(
+              (item) => item.groupName === value.SGROUPNAME
+            );
+            if (objectGroup === undefined) {
+              objectGroup = { groupName: value.SGROUPNAME, questions: [] };
+              objectGroup.questions.push(value);
+              acc.push(objectGroup);
+            } else {
+              objectGroup.questions.push(value);
+            }
+          }
+          return acc;
+        }, []);
+    },
   },
 };
 </script>

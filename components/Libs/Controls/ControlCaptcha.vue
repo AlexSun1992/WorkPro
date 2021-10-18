@@ -1,35 +1,34 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-lg-6">
         <b-form-group
           :label="data.label"
           :class="{ required: data.required }"
           :label-for="data.name"
         >
           <b-form-input
-            v-model="captchaValue"
-            :disabled="!edit ? !edit : data.readonly"
+            v-model="captchaDisplayValue"
+            :disabled="!edit || data.readonly"
             :state="data.state"
             autocomplete="off"
-            @update="setValue"
           />
           <b-form-invalid-feedback>
             Обязательно для заполнения
           </b-form-invalid-feedback>
         </b-form-group>
       </div>
-      <div class="col-md-6 pt-3">
+      <div class="col-lg-6 pt-lg-3 text-nowrap">
         <b-spinner v-if="isLoading" class="ml-4" />
         <img
           v-else
           class="captcha"
           alt="Капча"
-          :src="captcha.CAPTCHA"
+          :src="captchaData.CAPTCHA"
           title="Обновить"
         />
         <b-button
-          @click="showCaptcha"
+          @click="refreshDisplayCaptcha"
           class="reload-captcha"
           variant="outline-success"
           >Обновить</b-button
@@ -56,43 +55,33 @@ export default {
   },
   data() {
     return {
-      captcha: null,
-      captchaValue: null,
       isLoading: false,
     };
   },
-  watch: {
-    data(newVal, oldVal) {
-      if (newVal.readonly === false && oldVal.readonly === true) {
-        this.showCaptcha();
-      }
-    },
-  },
-  created() {
-    if (this.data.captcha === null) {
-      this.showCaptcha();
-    } else {
-      this.captcha = this.data.captcha;
-    }
-  },
   methods: {
-    async showCaptcha() {
+    async refreshDisplayCaptcha() {
       this.isLoading = true;
-      this.captcha = await this.$store.dispatch("data_card/fetchCaptcha", {
+      await this.$store.dispatch("data_card/fetchCaptcha", {
         params: this.$store.getters["data_card/getFormParams"],
         data: this.data,
       });
-      if (this.captchaValue !== null) {
-        this.captchaValue = null;
-        this.setValue();
-      }
       this.isLoading = false;
     },
-    setValue(value) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        value: value ? this.captcha.ID + "|" + value : null,
-      });
+  },
+  computed: {
+    captchaData() {
+      return this.data?.captcha || {};
+    },
+    captchaDisplayValue: {
+      get: function () {
+        return this.data.value ? this.data.value.split("|")[1] : null;
+      },
+      set: function (value) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          value: value ? this.captchaData.ID + "|" + value : null,
+        });
+      },
     },
   },
 };

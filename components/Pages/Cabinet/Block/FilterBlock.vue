@@ -1,12 +1,7 @@
 <template>
   <div class="test">
     <ul class="menu">
-      <li
-        defaultValue
-        propertyName
-        v-for="item in filterItems"
-        :key="item.name"
-      >
+      <li v-for="item in filterItems" :key="item.name">
         <b-button
           :class="{
             'filter-checked': item.isChecked,
@@ -23,7 +18,7 @@
             'filter-checked': isFilters.length === 0,
           }"
           v-on:click="clearFilter(propertyName)"
-          >ALL</b-button
+          >Все</b-button
         >
       </li>
     </ul>
@@ -42,6 +37,11 @@ export default {
   },
 
   props: {
+    uniqueItems: {
+      type: Array,
+      required: false,
+      default: () => null,
+    },
     defaultValue: {
       type: String,
       required: false,
@@ -103,12 +103,12 @@ export default {
       );
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
-        const uniqueItems = Array.from(new Set(items));
+        const uniqueItems = this.uniqueItems || Array.from(new Set(items));
         const filter =
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
-
+        console.log(uniqueItems);
         return uniqueItems.map((name) => ({
           name,
           isChecked: filter.includes(name),

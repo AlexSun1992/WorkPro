@@ -1,94 +1,61 @@
 <template>
-  <div v-if="offices">
-    <div class="container">
-      <FilterComponent class="my-4" :filters="filters" @update="setFilter" />
-      <div v-if="offices.length" class="offices">
-        <div v-for="(office, index) in offices" :key="index">
-          <OfficeCard :office="office" />
-        </div>
+  <div class="container">
+    <div v-if="offices && offices.length" class="offices">
+      <div v-for="(office, index) in offices" :key="index">
+        <OfficeCard :office="office" />
       </div>
-      <div class="empty" v-else>
-        <p><strong>По данному фильтру офисы не найдены</strong></p>
-      </div>
-      <Paginator
-        @update="page = $event"
-        :items-count="officesLength"
-        :pages-count="pagesCount"
-      />
     </div>
+    <Paginator
+      v-if="data"
+      @update="page = $event"
+      :items-count="officesLength"
+      :pages-count="pagesCount"
+    />
   </div>
 </template>
 
 <script>
 import Paginator from "./Paginator.vue";
 import OfficeCard from "./OfficeCard.vue";
-import FilterComponent from "./FilterComponent.vue";
-import { filters } from "../../../../utils/filters";
 export default {
   name: "OfficesList",
   props: {
+    data: {
+      type: Array,
+    },
     pagesCount: {
       type: Number,
       default: 15,
     },
+    filterApplied: {
+      type: Object,
+    },
   },
   components: {
-    Paginator,
     OfficeCard,
-    FilterComponent,
+    Paginator,
   },
   data() {
     return {
-      filter: null,
       page: 0,
-      filters,
-      filteredData: null,
     };
   },
-  methods: {
-    setFilter(event) {
-      this.page = 0;
-      this.filter = event;
-    },
-  },
   computed: {
+    officesLength() {
+      return this.data?.length;
+    },
     offices() {
-      if (this.$store?.getters["map/getRegionOffices"]) {
-        let data = [...this.$store.getters["map/getRegionOffices"]];
-        if (this.filteredData) {
-          data = this.filteredData;
-        }
+      if (this.data) {
         let start = this.page * this.pagesCount;
         let end = start + this.pagesCount;
-        return data.slice(start, end);
-      }
-    },
-    region() {
-      return this.$store.getters["map/getSelectedRegion"];
-    },
-    officesLength() {
-      if (this.filteredData) {
-        return this.filteredData.length;
-      } else {
-        return this.$store.getters["map/getRegionOffices"]?.length;
+        this.page = null;
+        return this.data.slice(start, end);
       }
     },
   },
   watch: {
-    region: function (val) {
-      this.filteredData = null;
-      this.page = 0;
-    },
-    filter: function (val) {
-      if (this.filter) {
-        this.filteredData = [
-          ...this.$store.getters["map/getRegionOffices"],
-        ].filter((field) => {
-          return field[this.filter.name] == this.filter.value;
-        });
-      } else {
-        this.filteredData = null;
-      }
+    page: function (val) {
+      this.$emit("update", val);
     },
   },
 };

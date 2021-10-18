@@ -6,6 +6,7 @@
         :placeholder="data.placeholder"
         ref="autocomplete"
         :class="validClass"
+        :auto-select="true"
         :debounce-time="300"
         :search="search"
         :get-result-value="getResultValue"
@@ -114,7 +115,6 @@ export default {
     },
     handleSubmit(result) {
       this.input = result.value;
-
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -123,16 +123,23 @@ export default {
           : result.value,
       });
     },
-    handleBlur() {
-      const find = this.group.find((i) => this.input.includes(i.value));
-      if (find === undefined || this.$refs.autocomplete.value === "") {
+    handleBlur(value) {
+      const find = this.group.find((i) =>
+        this.$refs.autocomplete?.value.includes(i.value)
+      );
+      if (find !== undefined) {
+        this.handleSubmit(find);
+        return;
+      }
+      if (this.group.length === 0) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: null,
         });
       } else {
-        this.$refs.autocomplete.value = find.value;
+        this.$refs.autocomplete.value = this.group[0].value;
+        this.handleSubmit(this.group[0]);
       }
     },
   },

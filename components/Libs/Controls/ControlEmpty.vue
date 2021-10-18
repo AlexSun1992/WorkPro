@@ -1,11 +1,9 @@
 <template>
-  <div>
-
-  </div>
+  <div v-html="data.value"></div>
 </template>
 
 <script>
-  export default {
+export default {
   name: "ControlEmpty",
   props: {
     data: {
@@ -17,6 +15,4 @@
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
