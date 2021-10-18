@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div>
-      ваш город: Москва
-      {{ data }}
-    </div>
+    <div>ваш город: {{ data }}</div>
   </div>
 </template>
 
@@ -15,12 +12,13 @@ export default {
       data: [],
     };
   },
+
   async created() {
-    const url = "https://new.reso.ru/am/free/v2/data/55/800/0/0";
+    const url = "/am/free/v2/data/55/800/0/0";
     let response = await fetch(url);
-    this.data = await response.json();
-    // let data = await response.json();
-    // this.data = data;
+    let data = await response.json();
+    let currentCity = data[0]._data[0].TOWN;
+    this.data = currentCity;
   },
 };
 </script>
