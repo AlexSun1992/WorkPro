@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>ваш город: {{ data }}</div>
+    <div>{{ data }}</div>
   </div>
 </template>
 
