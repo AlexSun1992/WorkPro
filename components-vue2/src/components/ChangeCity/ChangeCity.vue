@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div>{{ data }}</div>
-  </div>
+  <span>
+    {{ data }}
+  </span>
 </template>
 
 <script>
