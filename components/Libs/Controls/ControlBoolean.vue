@@ -32,7 +32,11 @@ export default {
   computed: {
     fieldValue: {
       get: function () {
-        return this.data.value;
+        if (this.data.structType === "boolrus") {
+          return this.data.value === "Д" || this.data.value === true;
+        } else {
+          return this.data.value === "Y" || this.data.value === true;
+        }
       },
       set: function (value) {
         this.$emit("update", {
