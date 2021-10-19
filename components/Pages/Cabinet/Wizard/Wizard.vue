@@ -132,6 +132,7 @@ export default {
       this.loading = false;
     },
   },
+
   destroyed() {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
   },

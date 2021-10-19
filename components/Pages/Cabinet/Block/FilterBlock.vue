@@ -18,7 +18,7 @@
             'filter-checked': isFilters.length === 0,
           }"
           v-on:click="clearFilter(propertyName)"
-          >Все</b-button
+          >{{ AllUnits }}</b-button
         >
       </li>
     </ul>
@@ -33,6 +33,7 @@ export default {
       activeColor: "red",
       fontSize: 30,
       isFilters: [],
+      AllUnits: "Все",
     };
   },
 
@@ -66,6 +67,15 @@ export default {
 
   created() {
     if (this.defaultValue !== undefined) {
+      // if (this.defaultValue !== this.$route.query.query) {
+      //   this.$router.push({
+      //     query: {
+      //       query: this.defaultValue,
+      //       propertyName: this.propertyName,
+      //     },
+      //   });
+      // }
+
       this.$store.commit("blocks/toggleFilter", {
         propertyName: this.propertyName,
         filterType: this.filterType,
@@ -80,6 +90,31 @@ export default {
 
   methods: {
     toggleFilter(propertyName, item) {
+      // this.$router.replace(
+      //   {
+      //     query: {
+      //       query: item,
+      //       propertyName: propertyName,
+      //     },
+      //   },
+      //   {
+      //     query: {
+      //       query: item,
+      //       propertyName: propertyName,
+      //     },
+      //   }
+      // );
+      // this.$router.push({
+      //   query: {
+      //     query: this.defaultValue,
+      //     propertyName: this.propertyName,
+      //   },
+      // });
+
+      history.pushState(propertyName, "", item);
+
+      console.log(history);
+
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
@@ -93,6 +128,7 @@ export default {
     },
 
     clearFilter(propertyName) {
+      console.log(propertyName);
       this.isFilters.length = 0;
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
