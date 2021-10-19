@@ -155,7 +155,10 @@ export default {
   name: "CardPage",
   components: { CardEditor, VRuntimeTemplate, ControlButton },
   async fetch({ store, route }) {
-    await store.dispatch("data_card/fetchForm", route.params);
+    await store.dispatch("data_card/fetchForm", {
+      ...route.params,
+      query: { ...route.query },
+    });
   },
   props: {
     wizardTabs: {

@@ -9,7 +9,7 @@ export default function ({ app, store, redirect, route }) {
     );
   }
   if (!app.$cookiz.get("auth._token.local")) {
-    app.$cookiz.set("url", route.path);
+    app.$cookiz.set("url", route.fullPath);
     if (process.client) {
       if (window !== undefined) {
         window.location.href = "/login";

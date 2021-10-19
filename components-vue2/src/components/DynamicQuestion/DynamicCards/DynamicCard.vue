@@ -1,21 +1,30 @@
 <template>
-  <b-card no-body class="mb-1">
-    <b-card-header
-      header-tag="header"
-      class="p-1"
-      role="tab"
-      v-b-toggle="parameter"
+  <div class="accordion">
+    <b-card
+      v-for="question in questions"
+      :key="question.ID"
+      no-body
+      class="mb-1"
     >
-      <b-button :variant="text">
-        {{ title }}
-      </b-button>
-    </b-card-header>
-    <b-collapse :id="param" accordion="my-accordion" role="tabpanel">
-      <b-card-body>
-        <b-card-text v-html="answer"></b-card-text>
-      </b-card-body>
-    </b-collapse>
-  </b-card>
+      <b-card-header
+        header-tag="header"
+        class="p-1"
+        role="tab"
+        v-b-toggle="question.ID.toString()"
+      >
+        {{ question.SQUESTION }}
+      </b-card-header>
+      <b-collapse
+        :id="question.ID.toString()"
+        accordion="my-accordion"
+        role="tabpanel"
+      >
+        <b-card-body>
+          <b-card-text v-html="textToMarkdown(question.SANSWER)" />
+        </b-card-body>
+      </b-collapse>
+    </b-card>
+  </div>
 </template>
 <script>
 import {
@@ -27,27 +36,13 @@ import {
   BCardText,
 } from "bootstrap-vue";
 import { VBToggle } from "bootstrap-vue";
+import marked from "marked";
 export default {
   props: {
-    answer: {
-      type: String,
+    questions: {
+      type: Array,
       required: true,
-      default: () => {},
-    },
-    param: {
-      type: String,
-      reqiured: true,
-      default: () => {},
-    },
-    title: {
-      type: String,
-      required: true,
-      default: () => {},
-    },
-    parameter: {
-      type: String,
-      required: true,
-      default: () => {},
+      default: () => [],
     },
   },
 
@@ -69,6 +64,10 @@ export default {
       active: false,
     };
   },
-  methods: {},
+  methods: {
+    textToMarkdown(text) {
+      return marked(text);
+    },
+  },
 };
 </script>
