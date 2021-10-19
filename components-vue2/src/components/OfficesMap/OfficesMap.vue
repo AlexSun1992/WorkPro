@@ -3,7 +3,7 @@
     <h5>Найдите офис рядом с вами</h5>
     <input type="text" id="suggest" />
     <FilterComponent :filters="filters" @update="filterOffices" class="my-3" />
-    <slot />
+    <Notification :notification="notification" />
     <b-tabs ref="tabs" content-class="mt-3">
       <b-tab title="На карте" active
         ><div ref="map" id="map" class="map"></div
@@ -18,6 +18,7 @@
 
 <script>
 import FilterComponent from "./FilterComponent.vue";
+import Notification from "./Notification.vue";
 import OfficesList from "./OfficesList.vue";
 import { filters, filterData } from "../../../../utils/map/filters";
 import { BTabs, BTab } from "bootstrap-vue";
@@ -29,9 +30,11 @@ export default {
   components: {
     OfficesList,
     FilterComponent,
+    Notification,
     BTabs,
     BTab,
   },
+  props: ["notification"],
   data() {
     return {
       myMap: null,
@@ -149,7 +152,7 @@ export default {
         iconCaption: caption,
         balloonContent: caption,
       });
-      this.myMap.setCenter(state.center, state.zoom);
+      this.myMap.setCenter(state.center, state.zoom ? state.zoom : 12);
     },
     showResult(obj) {
       let mapContainer = document.getElementById("map");
@@ -169,7 +172,18 @@ export default {
       ].join(" ");
       this.updateMap(this.mapState, shortAddress);
     },
-    showOnMap(suggest) {
+    async showOnMap(suggest) {
+      let address = await this.$axios.post("/api/suggestions/address", {
+        query: suggest,
+        count: 1,
+      });
+      if (address.data) {
+        this.regionId = address.data.suggestions[0].data.city_kladr_id.substr(
+          0,
+          2
+        );
+      }
+      await this.$store.dispatch("map/fetchRegion", this.regionId);
       let showResult = this.showResult.bind(this);
       ymaps.geocode(suggest).then(function (res, context) {
         let obj = res.geoObjects.get(0);
