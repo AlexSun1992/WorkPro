@@ -2,7 +2,6 @@
 export const state = () => ({
   regionsList: null,
   regionOffices: null,
-  selectedRegion: null,
 });
 
 export const actions = {
@@ -14,27 +13,9 @@ export const actions = {
       console.log(e);
     }
   },
-  async fetchRegionsList({ commit }) {
+  async fetchRegion({ commit }, id) {
     try {
-      const { data } = await this.$axios.get(`/free/v2/subject`);
-      data.sort((a, b) => a.NORDER - b.NORDER);
-      let result = data.reduce((acc, current) => {
-        let firstLetter = current.SNAME[0].toLocaleUpperCase();
-        if (!acc[firstLetter]) {
-          acc[firstLetter] = { title: firstLetter, data: [current] };
-        } else {
-          acc[firstLetter].data.push(current);
-        }
-        return acc;
-      }, {});
-      commit("setRegionsList", result);
-    } catch (e) {
-      console.log(e);
-    }
-  },
-  async fetchRegion({ commit }, params) {
-    try {
-      const { data } = await this.$axios.get(`/free/v2/agencies/${params.ID}`);
+      const { data } = await this.$axios.get(`/free/v2/agencies/${id}`);
       commit("setRegionOffices", data);
     } catch (e) {
       console.log(e);
@@ -52,9 +33,6 @@ export const mutations = {
   setRegionOffices(state, params) {
     state.regionOffices = params;
   },
-  setSelectedRegion(state, params) {
-    state.selectedRegion = params;
-  },
 };
 
 export const getters = {
@@ -66,8 +44,5 @@ export const getters = {
   },
   getRegionOffices(state) {
     return state.regionOffices;
-  },
-  getSelectedRegion(state) {
-    return state.selectedRegion;
   },
 };

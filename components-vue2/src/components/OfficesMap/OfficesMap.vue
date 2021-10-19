@@ -10,7 +10,6 @@
       ></b-tab>
       <b-tab title="На схеме метро"><p>Схема метро</p></b-tab>
       <b-tab title="В списке">
-        <RegionsList />
         <OfficesList :data="getOffices" @update="page = $event" />
       </b-tab>
     </b-tabs>
@@ -19,7 +18,6 @@
 
 <script>
 import FilterComponent from "./FilterComponent.vue";
-import RegionsList from "./RegionsList.vue";
 import OfficesList from "./OfficesList.vue";
 import { filters, filterData } from "../../../../utils/map/filters";
 import { BTabs, BTab } from "bootstrap-vue";
@@ -29,7 +27,6 @@ Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
   components: {
-    RegionsList,
     OfficesList,
     FilterComponent,
     BTabs,
@@ -42,6 +39,9 @@ export default {
       filters,
       filteredOffices: null,
       page: 0,
+      mapState: null,
+      regionId: null,
+      centerCoords: null,
     };
   },
   async created() {
@@ -59,24 +59,31 @@ export default {
     }
   },
   methods: {
-    init(_, filters) {
-      let suggestView = new ymaps.SuggestView("suggest");
-      if (this.myMap) {
-        this.myMap.destroy();
-        suggestView.destroy();
-      }
-      let showOnMap = this.showOnMap.bind(this);
-      suggestView.events.add("select", function (e) {
-        showOnMap(e.get("item").value);
-      });
-      this.myMap = new ymaps.Map("map", {
-        center: [55.76, 37.64],
-        zoom: 6,
-      });
+    async init(_, filters) {
+      this.initSuggestView();
       let agencies = this.$store.getters["map/getAgencies"];
       if (filters) {
         agencies = filterData(agencies, filters);
       }
+      await this.setPositionAttributes();
+      await this.$store.dispatch("map/fetchRegion", this.regionId);
+
+      this.myClusterer = new ymaps.Clusterer();
+      this.myClusterer.add(this.getGeoObjects(agencies));
+
+      this.myMap = new ymaps.Map(
+        "map",
+        this.mapState
+          ? this.mapState
+          : {
+              center: this.centerCoords ? this.centerCoords : [55.76, 37.64],
+              zoom: 12,
+            }
+      );
+
+      this.myMap.geoObjects.add(this.myClusterer);
+    },
+    getGeoObjects(agencies) {
       let myGeoObjects = [];
       for (let i = 0; i < agencies.length; i++) {
         myGeoObjects[i] = new ymaps.GeoObject({
@@ -96,9 +103,33 @@ export default {
           },
         });
       }
-      this.myClusterer = new ymaps.Clusterer();
-      this.myClusterer.add(myGeoObjects);
-      this.myMap.geoObjects.add(this.myClusterer);
+      return myGeoObjects;
+    },
+    initSuggestView() {
+      let suggestView = new ymaps.SuggestView("suggest");
+      if (this.myMap) {
+        this.myMap.destroy();
+        suggestView.destroy();
+      }
+      let showOnMap = this.showOnMap.bind(this);
+
+      suggestView.events.add("select", function (e) {
+        showOnMap(e.get("item").value);
+      });
+    },
+    async setPositionAttributes() {
+      let geolocation = await ymaps.geolocation.get();
+      if (geolocation) {
+        this.centerCoords = geolocation.geoObjects.position;
+        let address = await this.$axios.post("/api/suggestions/address", {
+          query: geolocation.geoObjects.get(0).properties.get("text"),
+          count: 1,
+        });
+        if (address.data) {
+          this.regionId =
+            address.data.suggestions[0].data.city_kladr_id.split("0")[0];
+        }
+      }
     },
     updateMap(state, caption) {
       let placemark = new ymaps.Placemark(
@@ -124,7 +155,7 @@ export default {
       let mapContainer = document.getElementById("map");
       let bounds = obj.properties.get("boundedBy");
       // Рассчитываем видимую область для текущего положения пользователя.
-      let mapState = ymaps.util.bounds.getCenterAndZoom(bounds, [
+      this.mapState = ymaps.util.bounds.getCenterAndZoom(bounds, [
         mapContainer.clientWidth,
         mapContainer.clientHeight,
       ]);
@@ -136,7 +167,7 @@ export default {
         obj.getPremiseNumber(),
         obj.getPremise(),
       ].join(" ");
-      this.updateMap(mapState, shortAddress);
+      this.updateMap(this.mapState, shortAddress);
     },
     showOnMap(suggest) {
       let showResult = this.showResult.bind(this);
@@ -176,14 +207,6 @@ export default {
         data = this.$store.getters["map/getRegionOffices"];
       }
       return data;
-    },
-    region() {
-      return this.$store.getters["map/getSelectedRegion"];
-    },
-  },
-  watch: {
-    region: function (val) {
-      this.filteredOffices = null;
     },
   },
 };

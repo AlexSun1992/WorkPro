@@ -88,19 +88,6 @@ Vue.customElement(
 );
 
 Vue.customElement(
-  "component-regions-list",
-  () =>
-    new Promise((resolve) => {
-      require(["./components/OfficesMap/RegionsList.vue", "./store/index"], (
-        lazyComponent
-      ) => {
-        lazyComponent.default.store = store;
-        resolve(lazyComponent.default);
-      });
-    })
-);
-
-Vue.customElement(
   "component-offices-list",
   () =>
     new Promise((resolve) => {
