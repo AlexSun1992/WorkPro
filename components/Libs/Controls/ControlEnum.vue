@@ -85,10 +85,19 @@ export default {
       }
       this.$axios({ url: url, method: "GET" })
         .then((resp) => {
+          this.options = [];
           this.options = resp.data;
-
           if (this.options.length === 1) {
             let value = this.options[0];
+            this.$emit("update", {
+              fieldId: this.data.fieldId,
+              name: this.data.name,
+              value,
+            });
+            this.$emit("clear", { fieldName: this.data.name });
+          }
+          if (this.options.length === 2) {
+            let value = this.options[1];
             this.$emit("update", {
               fieldId: this.data.fieldId,
               name: this.data.name,
@@ -121,6 +130,9 @@ export default {
         }
         if (this.options.length === 1) {
           return this.options[0];
+        }
+        if (this.options.length === 2) {
+          return this.options[1];
         } else {
           return this.data.value;
         }
