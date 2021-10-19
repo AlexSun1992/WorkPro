@@ -74,6 +74,10 @@ export default {
     }
   },
 
+  destroyed() {
+    this.clearFilter(this.propertyName);
+  },
+
   methods: {
     toggleFilter(propertyName, item) {
       this.$store.commit("blocks/toggleFilter", {
