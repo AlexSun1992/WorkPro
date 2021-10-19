@@ -108,7 +108,6 @@ export default {
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
-
         return uniqueItems.map((name) => ({
           name,
           isChecked: filter.includes(name),

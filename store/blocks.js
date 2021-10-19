@@ -185,6 +185,7 @@ export const mutations = {
         className: "filter-checked",
       });
     }
+
     const currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
