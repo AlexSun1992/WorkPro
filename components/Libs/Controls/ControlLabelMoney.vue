@@ -11,7 +11,6 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
-import { log } from "util";
 export default {
   name: "ControlLabel",
   components: { VRuntimeTemplate },

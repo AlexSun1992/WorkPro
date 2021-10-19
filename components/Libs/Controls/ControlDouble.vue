@@ -4,7 +4,9 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
-    <template v-slot:label><span v-html="data.label"></span></template>
+    <template v-slot:label
+      ><span v-b-tooltip.hover.top="data.helpText" v-html="data.label"></span
+    ></template>
     <b-form-input
       :placeholder="data.placeholder"
       v-model="fieldValue"
@@ -17,10 +19,9 @@
       oninput="validity.valid||(value='')"
       v-on:blur="eventHandlerBlur"
     ></b-form-input>
-    <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <b-form-invalid-feedback :state="data.state">{{
-        data.error ? data.error : "Обязательно для заполнения"
-      }}</b-form-invalid-feedback>
+      data.error ? data.error : "Обязательно для заполнения"
+    }}</b-form-invalid-feedback>
   </b-form-group>
 </template>
 
