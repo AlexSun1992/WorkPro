@@ -13,11 +13,9 @@
       </li>
       <li>
         <b-button
-          v-if="this.filterType === 'radiobutton'"
+          v-if="this.filterType !== 'radiobutton'"
           :class="{
-            'filter-checked':
-              (isAllChecked && this.defaultValue === undefined) ||
-              (this.defaultValue !== undefined && this.addClassToAll > 0),
+            'filter-checked': isFilters.length === 0,
           }"
           v-on:click="clearFilter(propertyName)"
           >Все</b-button
@@ -34,8 +32,7 @@ export default {
     return {
       activeColor: "red",
       fontSize: 30,
-      isAllChecked: true,
-      addClassToAll: 0,
+      isFilters: [],
     };
   },
 
@@ -77,31 +74,26 @@ export default {
     }
   },
 
+  destroyed() {
+    this.clearFilter(this.propertyName);
+  },
+
   methods: {
     toggleFilter(propertyName, item) {
-      if (this.filterType === "radiobutton") {
-        if (this.isAllChecked === true) {
-          this.isAllChecked = false;
-        }
-        if (this.defaultValue !== undefined) {
-          this.isCurrentChecked = !this.isCurrentChecked;
-          this.addClassToAll = 0;
-        }
-      }
-
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
         filterItem: item,
       });
-    },
-    clearFilter(propertyName) {
-      if (this.filterType === "radiobutton") {
-        if (this.defaultValue !== undefined) {
-          this.addClassToAll = 1;
-        }
-        this.isAllChecked = !this.isAllChecked;
+
+      if (this.filterType === "checkbox") {
+        const status = this.$store.getters["blocks/getFilters"];
+        this.isFilters = status[1].filter;
       }
+    },
+
+    clearFilter(propertyName) {
+      this.isFilters.length = 0;
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
       });
@@ -120,7 +112,7 @@ export default {
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
-        console.log(uniqueItems);
+
         return uniqueItems.map((name) => ({
           name,
           isChecked: filter.includes(name),
