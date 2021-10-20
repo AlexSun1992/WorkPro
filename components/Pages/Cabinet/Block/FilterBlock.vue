@@ -34,8 +34,6 @@ export default {
       fontSize: 30,
       isFilters: [],
       AllUnits: "Все",
-      urlGroup: [],
-      test: "",
     };
   },
 
@@ -68,17 +66,24 @@ export default {
   },
 
   created() {
-    if (this.defaultValue !== undefined) {
+    if (this.defaultValue && window.history.state.query === undefined) {
       if (this.$route["query"].SSTATUS !== this.defaultValue) {
         const query = {};
         query[this.propertyName] = this.defaultValue;
-        this.$router.push({ query });
       }
 
       this.$store.commit("blocks/toggleFilter", {
         propertyName: this.propertyName,
         filterType: this.filterType,
         filterItem: this.defaultValue,
+      });
+    }
+    if (window.history.state.query !== undefined) {
+      console.log(window.history.state.query);
+      this.$store.commit("blocks/toggleFilter", {
+        propertyName: "SSTATUS",
+        filterType: "radiobutton",
+        filterItem: window.history.state.query["SSTATUS"],
       });
     }
   },
@@ -89,28 +94,14 @@ export default {
 
   methods: {
     toggleFilter(propertyName, item) {
-      // this.$router.replace(
-      //   {
-      //     query: {
-      //       query: item,
-      //       propertyName: propertyName,
-      //     },
-      //   },
-      //   {
-      //     query: {
-      //       query: item,
-      //       propertyName: propertyName,
-      //     },
-      //   }
-      // );
-      // this.$router.push({
-      //   query: {
-      //     query: this.defaultValue,
-      //     propertyName: this.propertyName,
-      //   },
-      // });
+      const currentQuery = {};
+      currentQuery[propertyName] = item;
 
-      console.log(this.$route);
+      history.replaceState(
+        { query: currentQuery },
+        "",
+        `?${propertyName}=${item}`
+      );
 
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
@@ -121,8 +112,6 @@ export default {
       if (this.filterType === "checkbox") {
         const status = this.$store.getters["blocks/getFilters"];
         this.isFilters = status[1].filter;
-
-        // history.pushState(propertyName, "", "");
       }
     },
 
@@ -146,10 +135,6 @@ export default {
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
-
-        this.urlGroup = filter;
-
-        // history.pushState("", "", [filter]);
 
         return uniqueItems.map((name) => ({
           name,
