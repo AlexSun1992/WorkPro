@@ -35,6 +35,7 @@ export default {
       isFilters: [],
       AllUnits: "Все",
       urlGroup: [],
+      test: "",
     };
   },
 
@@ -68,16 +69,11 @@ export default {
 
   created() {
     if (this.defaultValue !== undefined) {
-      if (this.defaultValue !== this.$route.query.query) {
-        this.$router.push({
-          query: {
-            this.defaultValue,
-           this.propertyName,
-          },
-        });
+      if (this.$route["query"].SSTATUS !== this.defaultValue) {
+        const query = {};
+        query[this.propertyName] = this.defaultValue;
+        this.$router.push({ query });
       }
-
-      // history.pushState(this.propertyName, "", this.defaultValue);
 
       this.$store.commit("blocks/toggleFilter", {
         propertyName: this.propertyName,
@@ -114,6 +110,8 @@ export default {
       //   },
       // });
 
+      console.log(this.$route);
+
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
@@ -123,6 +121,7 @@ export default {
       if (this.filterType === "checkbox") {
         const status = this.$store.getters["blocks/getFilters"];
         this.isFilters = status[1].filter;
+
         // history.pushState(propertyName, "", "");
       }
     },
