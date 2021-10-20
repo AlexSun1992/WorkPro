@@ -4,6 +4,9 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
+    <template v-slot:label
+      ><span v-b-tooltip.hover.top="data.helpText" v-html="data.label"></span
+    ></template>
     <model-select
       v-model="fieldValue"
       :is-disabled="!edit || data.readonly"
