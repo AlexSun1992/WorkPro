@@ -1,7 +1,9 @@
 <template>
   <div>
     <b-form-group :class="{ required: data.required }">
-      <template v-slot:label><span v-html="data.label"></span></template>
+      <template v-slot:label
+        ><span v-b-tooltip.hover.top="data.helpText" v-html="data.label"></span
+      ></template>
       <autocomplete
         :placeholder="data.placeholder"
         ref="autocomplete"

@@ -21,7 +21,6 @@
     <b-form-invalid-feedback
       >Обязательно для заполнения</b-form-invalid-feedback
     >
-    <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p class="error">{{ data.error }}</p>
 
     <ul

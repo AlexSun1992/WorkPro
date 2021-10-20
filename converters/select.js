@@ -21,13 +21,14 @@ converter.select = (data) => {
       if (fields[j].VISIBLE) {
         if (!data[0]._meta) {
           if (fields[j].FIELD !== "ID" && fields[j].TYPE === "string") {
-            obj.text = items[i][fields[j].FIELD];
+            obj.text = items[i][fields[j].FIELD].toString();
           }
           if (fields[j].FIELD === "ID") {
             obj.value = items[i][fields[j].FIELD];
           }
         } else {
-          obj.text = items[i][data[0]._meta.SNAMEFIELD.toUpperCase()];
+          obj.text =
+            items[i][data[0]._meta.SNAMEFIELD.toUpperCase()].toString();
           let value = items[i][data[0]._meta.SKEYFIELD]
             ? items[i][data[0]._meta.SKEYFIELD.toUpperCase()]
             : items[i].ID;

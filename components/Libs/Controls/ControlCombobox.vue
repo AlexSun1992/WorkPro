@@ -5,7 +5,9 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
-      <template v-slot:label><span v-html="data.label"></span></template>
+      <template v-slot:label
+        ><span v-b-tooltip.hover.top="data.helpText" v-html="data.label"></span
+      ></template>
       <b-form-select
         v-model="data.value"
         @change="update"
@@ -14,7 +16,6 @@
         :class="{ 'error-outline': isValid == false }"
         :state="data.state"
       ></b-form-select>
-      <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
       <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
       <b-form-invalid-feedback>
         Обязательно для заполнения

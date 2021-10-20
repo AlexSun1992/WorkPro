@@ -7,6 +7,8 @@ store.$axios = axios;
 Vue.prototype.$axios = axios;
 Vue.use(ModalPlugin);
 Vue.use(vueCustomElement);
+import VTooltip from "v-tooltip";
+Vue.use(VTooltip);
 Vue.config.productionTip = false;
 
 Vue.customElement(
@@ -88,19 +90,6 @@ Vue.customElement(
 );
 
 Vue.customElement(
-  "component-regions-list",
-  () =>
-    new Promise((resolve) => {
-      require(["./components/OfficesMap/RegionsList.vue", "./store/index"], (
-        lazyComponent
-      ) => {
-        lazyComponent.default.store = store;
-        resolve(lazyComponent.default);
-      });
-    })
-);
-
-Vue.customElement(
   "component-offices-list",
   () =>
     new Promise((resolve) => {
@@ -134,6 +123,17 @@ Vue.customElement(
       require(["./components/OfficesMap/Notification.vue", "./store/index"], (
         lazyComponent
       ) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
+  "component-show-city",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/ShowCity/ShowCity.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

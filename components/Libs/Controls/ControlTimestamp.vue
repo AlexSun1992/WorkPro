@@ -5,7 +5,9 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
-      <template v-slot:label><span v-html="data.label"></span></template>
+      <template v-slot:label
+        ><span v-b-tooltip.hover.top="data.helpText" v-html="data.label"></span
+      ></template>
       <date-picker
         v-model="fieldValue"
         v-mask="maskTemplate"
@@ -17,7 +19,6 @@
         :lang="lang"
         :input-class="data.state === false ? `${state} is-invalid` : state"
       ></date-picker>
-      <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
       <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
       <b-form-invalid-feedback :state="data.state">
         Обязательно для заполнения
