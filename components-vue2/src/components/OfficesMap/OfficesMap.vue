@@ -69,7 +69,10 @@ export default {
         agencies = filterData(agencies, filters);
       }
       await this.setPositionAttributes();
-      await this.$store.dispatch("map/fetchRegion", this.regionId);
+      await this.$store.dispatch("map/fetchRegion", {
+        id: this.regionId,
+        coords: this.centerCoords,
+      });
 
       this.myClusterer = new ymaps.Clusterer();
       this.myClusterer.add(this.getGeoObjects(agencies));
@@ -183,7 +186,10 @@ export default {
           2
         );
       }
-      await this.$store.dispatch("map/fetchRegion", this.regionId);
+      await this.$store.dispatch("map/fetchRegion", {
+        id: this.regionId,
+        coords: this.centerCoords,
+      });
       let showResult = this.showResult.bind(this);
       ymaps.geocode(suggest).then(function (res, context) {
         let obj = res.geoObjects.get(0);
