@@ -44,13 +44,10 @@ import ControlError from "./ControlError";
 import ControlPhoneChange from "./ControlPhoneChange";
 import ControlEmailChange from "./ControlEmailChange";
 import ControlProgressbar from "./ControlProgressbar";
-import { mapGetters } from "vuex";
 import ControlEmpty from "./ControlEmpty";
 import ControlLabelMoney from "./ControlLabelMoney";
 import ControlDadataSelect from "./ControlDadataSelect.vue";
-
 import ControlCustomCombobox from "./ControlCustomCombobox.vue";
-// импорт компонентa коныctujертера мощностей
 import ControlCustomDouble from "./ControlCustomDouble.vue";
 
 export default {
@@ -79,9 +76,7 @@ export default {
     ControlEmailChange,
     ControlEmpty,
     ControlLabelMoney,
-
     ControlCustomCombobox,
-    // регистрация компонентa конвертера мощностей
     ControlCustomDouble,
   },
   props: {
@@ -139,12 +134,6 @@ export default {
     colSm: function () {
       return this.data.colSm ? this.data.colSm : 12;
     },
-  },
-  watch: {
-    "data.value": "eventValidate",
-  },
-  methods: {
-    eventValidate() {},
   },
 };
 </script>
