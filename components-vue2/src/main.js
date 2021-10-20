@@ -128,10 +128,10 @@ Vue.customElement(
 );
 
 Vue.customElement(
-  "component-change-city",
+  "component-show-city",
   () =>
     new Promise((resolve) => {
-      require(["./components/ChangeCity/ChangeCity.vue"], (lazyComponent) => {
+      require(["./components/ShowCity/ShowCity.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
