@@ -5,7 +5,9 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
-      <template v-slot:label><span v-html="data.label"></span></template>
+      <template v-slot:label
+        ><span v-b-tooltip.hover.top="data.helpText" v-html="data.label"></span
+      ></template>
       <model-list-select
         :ref="selectId"
         :id="selectId"
@@ -21,7 +23,6 @@
       >
       </model-list-select>
 
-      <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
       <div class="mt-2">
         <span class="error" v-if="isValid == false">
           Обязательно для заполнения

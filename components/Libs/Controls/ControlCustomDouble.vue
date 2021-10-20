@@ -4,7 +4,9 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
-    <template v-slot:label><span v-html="data.label"></span></template>
+    <template v-slot:label
+      ><span v-b-tooltip.hover.top="data.helpText" v-html="data.label"></span
+    ></template>
     <currency-input
       class="form-control"
       :class="validClass"
@@ -14,11 +16,10 @@
       :currency="{ suffix: ` ${data.placeholder}` }"
     />
 
-    <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
     <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
     <b-form-invalid-feedback :state="data.state">{{
-        data.error ? data.error : "Обязательно для заполнения"
-      }}</b-form-invalid-feedback>
+      data.error ? data.error : "Обязательно для заполнения"
+    }}</b-form-invalid-feedback>
   </b-form-group>
 </template>
 

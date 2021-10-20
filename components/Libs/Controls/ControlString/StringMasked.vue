@@ -1,6 +1,7 @@
 <template>
   <div>
     <the-mask
+      v-b-tooltip.hover.top="data.helpText"
       v-if="data.mask"
       :mask="data.mask"
       class="form-control"
@@ -18,7 +19,6 @@
     <b-form-invalid-feedback :state="isState">{{
       data.error ? data.error : "Обязательно для заполнения"
     }}</b-form-invalid-feedback>
-    <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
   </div>
 </template>
 

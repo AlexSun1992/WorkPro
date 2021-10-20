@@ -4,7 +4,9 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
-    <template v-slot:label><span v-html="label"></span></template>
+    <template v-slot:label
+      ><span v-b-tooltip.hover="data.helpText" v-html="label"></span
+    ></template>
     <string-masked
       v-if="data.mask"
       :data="data"

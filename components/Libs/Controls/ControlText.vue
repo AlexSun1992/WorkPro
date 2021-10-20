@@ -10,8 +10,9 @@
       :max-rows="6"
     >
     </b-form-textarea>
-    <template v-slot:label><span v-html="label"></span></template>
-    <p v-if="data.helpText" class="help-text">{{ data.helpText }}</p>
+    <template v-slot:label
+      ><span v-b-tooltip.hover.top="data.helpText" v-html="label"></span
+    ></template>
     <b-form-invalid-feedback>
       Обязательно для заполнения
     </b-form-invalid-feedback>
