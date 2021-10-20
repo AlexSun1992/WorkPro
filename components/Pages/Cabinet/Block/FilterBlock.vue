@@ -34,6 +34,7 @@ export default {
       fontSize: 30,
       isFilters: [],
       AllUnits: "Все",
+      urlGroup: [],
     };
   },
 
@@ -67,14 +68,16 @@ export default {
 
   created() {
     if (this.defaultValue !== undefined) {
-      // if (this.defaultValue !== this.$route.query.query) {
-      //   this.$router.push({
-      //     query: {
-      //       query: this.defaultValue,
-      //       propertyName: this.propertyName,
-      //     },
-      //   });
-      // }
+      if (this.defaultValue !== this.$route.query.query) {
+        this.$router.push({
+          query: {
+            this.defaultValue,
+           this.propertyName,
+          },
+        });
+      }
+
+      // history.pushState(this.propertyName, "", this.defaultValue);
 
       this.$store.commit("blocks/toggleFilter", {
         propertyName: this.propertyName,
@@ -111,10 +114,6 @@ export default {
       //   },
       // });
 
-      history.pushState(propertyName, "", item);
-
-      console.log(history);
-
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
@@ -124,11 +123,11 @@ export default {
       if (this.filterType === "checkbox") {
         const status = this.$store.getters["blocks/getFilters"];
         this.isFilters = status[1].filter;
+        // history.pushState(propertyName, "", "");
       }
     },
 
     clearFilter(propertyName) {
-      console.log(propertyName);
       this.isFilters.length = 0;
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
@@ -148,6 +147,11 @@ export default {
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
+
+        this.urlGroup = filter;
+
+        // history.pushState("", "", [filter]);
+
         return uniqueItems.map((name) => ({
           name,
           isChecked: filter.includes(name),
