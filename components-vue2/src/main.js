@@ -126,3 +126,14 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-change-city",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/ChangeCity/ChangeCity.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
