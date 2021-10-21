@@ -7,8 +7,8 @@ store.$axios = axios;
 Vue.prototype.$axios = axios;
 Vue.use(ModalPlugin);
 Vue.use(vueCustomElement);
-import VTooltip from "v-tooltip";
-Vue.use(VTooltip);
+import VueEasyTooltip from "vue-easy-tooltip";
+Vue.use(VueEasyTooltip);
 Vue.config.productionTip = false;
 
 Vue.customElement(
