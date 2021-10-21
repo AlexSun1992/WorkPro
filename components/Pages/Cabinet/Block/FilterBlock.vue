@@ -66,7 +66,9 @@ export default {
   },
 
   created() {
-    if (this.defaultValue && window.history.state.query === undefined) {
+    if (this.defaultValue && window.location.search === "") {
+      const status = this.$store.getters["blocks/getFilters"];
+
       if (this.$route["query"].SSTATUS !== this.defaultValue) {
         const query = {};
         query[this.propertyName] = this.defaultValue;
@@ -77,13 +79,8 @@ export default {
         filterItem: this.defaultValue,
       });
     }
-    if (this.defaultValue && window.history.state.query !== undefined) {
-      const propertyKey = Object.keys(window.history.state.query)[0];
-      this.$store.commit("blocks/toggleFilter", {
-        propertyName: propertyKey,
-        filterType: this.filterType,
-        filterItem: window.history.state.query[propertyKey],
-      });
+    if (this.defaultValue && window.location.search !== "") {
+      console.log("Нужно генерить строку!!!!");
     }
   },
 
@@ -99,27 +96,29 @@ export default {
         filterItem: item,
       });
       if (this.filterType === "radiobutton") {
+        const status = this.$store.getters["blocks/getFilters"];
+
         const currentQuery = {};
         currentQuery[propertyName] = item;
-        // const url = new URL();
-        // URLSearchParams.
         history.replaceState(
           { query: currentQuery },
           "",
           `?${propertyName}=${item}`
         );
-        console.log(history);
+        console.log(status);
+        console.log(this.isFilters);
       }
 
       if (this.filterType === "checkbox") {
         const status = this.$store.getters["blocks/getFilters"];
+
         this.isFilters = status[1].filter;
+
         history.replaceState(
           { query: [this.isFilters] },
           "",
           `?${propertyName}=${this.isFilters}`
         );
-        console.log(history);
       }
     },
 
