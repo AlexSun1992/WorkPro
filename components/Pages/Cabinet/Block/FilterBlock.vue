@@ -71,19 +71,18 @@ export default {
         const query = {};
         query[this.propertyName] = this.defaultValue;
       }
-
       this.$store.commit("blocks/toggleFilter", {
         propertyName: this.propertyName,
         filterType: this.filterType,
         filterItem: this.defaultValue,
       });
     }
-    if (window.history.state.query !== undefined) {
-      console.log(window.history.state.query);
+    if (this.defaultValue && window.history.state.query !== undefined) {
+      const propertyKey = Object.keys(window.history.state.query)[0];
       this.$store.commit("blocks/toggleFilter", {
-        propertyName: "SSTATUS",
-        filterType: "radiobutton",
-        filterItem: window.history.state.query["SSTATUS"],
+        propertyName: propertyKey,
+        filterType: this.filterType,
+        filterItem: window.history.state.query[propertyKey],
       });
     }
   },
@@ -94,24 +93,33 @@ export default {
 
   methods: {
     toggleFilter(propertyName, item) {
-      const currentQuery = {};
-      currentQuery[propertyName] = item;
-
-      history.replaceState(
-        { query: currentQuery },
-        "",
-        `?${propertyName}=${item}`
-      );
-
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
         filterItem: item,
       });
+      if (this.filterType === "radiobutton") {
+        const currentQuery = {};
+        currentQuery[propertyName] = item;
+        // const url = new URL();
+        // URLSearchParams.
+        history.replaceState(
+          { query: currentQuery },
+          "",
+          `?${propertyName}=${item}`
+        );
+        console.log(history);
+      }
 
       if (this.filterType === "checkbox") {
         const status = this.$store.getters["blocks/getFilters"];
         this.isFilters = status[1].filter;
+        history.replaceState(
+          { query: [this.isFilters] },
+          "",
+          `?${propertyName}=${this.isFilters}`
+        );
+        console.log(history);
       }
     },
 
