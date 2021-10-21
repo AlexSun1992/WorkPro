@@ -17,15 +17,6 @@
       <div class="title-page position-relative ml-0">
         <i class="icon-my-profile"></i>{{ settings.text }}
       </div>
-      <CardEditor
-        @error="error = $event"
-        ref="cardEditor"
-        v-if="editable || (!settings.cardtemplate && !editable)"
-        :wizard-tabs="wizardTabs"
-        :data="getFormData"
-        :edit="editable"
-        :params="settings"
-      />
       <v-runtime-template
         v-if="settings.cardtemplate"
         :template="settings.cardtemplate"

@@ -105,11 +105,13 @@ export const actions = {
               }
             });
           }
-          if (getters["getDataFieldByType"]("captcha")) {
-            dispatch("fetchCaptcha", {
-              params: getters["getFormParams"],
-              data: getters["getDataFieldByType"]("captcha"),
-            });
+          if (res.data.metaData.data.length) {
+            if (getters["getDataFieldByType"]("captcha")) {
+              dispatch("fetchCaptcha", {
+                params: getters["getFormParams"],
+                data: getters["getDataFieldByType"]("captcha"),
+              });
+            }
           }
           commit(
             "setCopyForm",
