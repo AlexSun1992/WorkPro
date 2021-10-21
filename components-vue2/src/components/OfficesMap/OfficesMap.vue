@@ -8,7 +8,7 @@
       <b-tab title="На карте" active
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
-      <b-tab title="На схеме метро"><p>Схема метро</p></b-tab>
+      <b-tab title="На схеме метро" v-if="tabVisible"><p>Схема метро</p></b-tab>
       <b-tab title="В списке">
         <OfficesList :data="getOffices" @update="page = $event" />
       </b-tab>
@@ -69,7 +69,10 @@ export default {
         agencies = filterData(agencies, filters);
       }
       await this.setPositionAttributes();
-      await this.$store.dispatch("map/fetchRegion", this.regionId);
+      await this.$store.dispatch("map/fetchRegion", {
+        id: this.regionId,
+        coords: this.centerCoords,
+      });
 
       this.myClusterer = new ymaps.Clusterer();
       this.myClusterer.add(this.getGeoObjects(agencies));
@@ -183,7 +186,10 @@ export default {
           2
         );
       }
-      await this.$store.dispatch("map/fetchRegion", this.regionId);
+      await this.$store.dispatch("map/fetchRegion", {
+        id: this.regionId,
+        coords: this.centerCoords,
+      });
       let showResult = this.showResult.bind(this);
       ymaps.geocode(suggest).then(function (res, context) {
         let obj = res.geoObjects.get(0);
@@ -221,6 +227,9 @@ export default {
         data = this.$store.getters["map/getRegionOffices"];
       }
       return data;
+    },
+    tabVisible() {
+      return this.regionId == 77 || this.regionId == 78;
     },
   },
 };

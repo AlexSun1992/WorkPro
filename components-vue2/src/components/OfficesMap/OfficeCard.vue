@@ -1,6 +1,9 @@
 <template>
   <b-card :title="office.SSHORTNAME" class="mb-2">
     <b-card-text>
+      <div class="distance" v-if="office.NDISTANSE">
+        <h4>{{ office.NDISTANSE.toFixed(1) + " км" }}</h4>
+      </div>
       <div v-if="office.SADDRESS">
         <strong>Адрес: </strong>{{ office.SADDRESS }}
       </div>
@@ -37,4 +40,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.distance {
+  display: flex;
+  justify-content: end;
+}
+</style>

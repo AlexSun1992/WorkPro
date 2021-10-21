@@ -115,8 +115,8 @@ converter.form = async (data, params) => {
       obj.type = "timestamp";
     } else if (webFields[i].IDCONTROL == 5) {
       obj.type = "progressbar";
-    } else if (webFields[i].IDCONTROL == 15) {
-      obj.type = "combobox";
+    } else if (webFields[i].IDCONTROL == 15 || webFields[i].IDCONTROL == 37) {
+      obj.type = webFields[i].IDCONTROL == 15 ? "combobox" : "customCombobox";
       if (webFields[i].LDIC === true) {
         promises.push(
           axios.get(

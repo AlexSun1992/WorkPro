@@ -7,6 +7,8 @@ store.$axios = axios;
 Vue.prototype.$axios = axios;
 Vue.use(ModalPlugin);
 Vue.use(vueCustomElement);
+import VTooltip from "v-tooltip";
+Vue.use(VTooltip);
 Vue.config.productionTip = false;
 
 Vue.customElement(
@@ -128,10 +130,10 @@ Vue.customElement(
 );
 
 Vue.customElement(
-  "component-change-city",
+  "component-show-city",
   () =>
     new Promise((resolve) => {
-      require(["./components/ChangeCity/ChangeCity.vue"], (lazyComponent) => {
+      require(["./components/ShowCity/ShowCity.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
