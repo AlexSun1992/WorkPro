@@ -67,19 +67,21 @@ export default {
 
   created() {
     if (this.defaultValue && window.location.search === "") {
-      // const status = this.$store.getters["blocks/getFilters"];
-
-      // if (this.$route["query"].SSTATUS !== this.defaultValue) {
-      //   const query = {};
-      //   query[this.propertyName] = this.defaultValue;
-      // }
-
-      this.$store.commit("blocks/toggleFilter", {
+      this.$store.commit("blocks/setFilter", {
         propertyName: this.propertyName,
-        filterType: this.filterType,
-        filterItem: this.defaultValue,
+        filter: this.defaultValue,
+        className: "filter-checked",
       });
-      return;
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      const value = params.get(this.propertyName);
+      if (value) {
+        this.$store.commit("blocks/setFilter", {
+          propertyName: this.propertyName,
+          filter: value.split(","),
+          className: "filter-checked",
+        });
+      }
     }
   },
 
@@ -99,11 +101,6 @@ export default {
 
         const currentQuery = {};
         currentQuery[propertyName] = item;
-        // history.replaceState(
-        //   { query: currentQuery },
-        //   "",
-        //   `?${propertyName}=${item}`
-        // );
       }
 
       if (this.filterType === "checkbox") {

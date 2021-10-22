@@ -1,35 +1,16 @@
 import { indexOf } from "lodash";
 import Vue from "vue";
 
-function getFilter() {
-  const paramsString = window.location.search;
-  const searchParams = new URLSearchParams(paramsString);
-  searchParams.forEach((propertyValue, propertyName) => {
-    console.log({ propertyName, propertyValue });
-    propertyValue.split(",").forEach((filterItem) => {
-      this.$store.commit("blocks/toggleFilter", {
-        propertyName,
-        filterType: this.filterType,
-        filterItem,
-      });
-    });
-  });
-  return [];
-}
-
 /* eslint-disable */
-export const state = (t) => {
-  console.log({ t }, window);
-  return {
-    blocks: [],
-    form: [],
-    isBlock: true,
-    isForm: false,
-    cardId: 0,
-    blockId: null,
-    filters: getFilter(),
-  };
-};
+export const state = () => ({
+  blocks: [],
+  form: [],
+  isBlock: true,
+  isForm: false,
+  cardId: 0,
+  blockId: null,
+  filters: [],
+});
 
 export const getters = {
   getUnfilteredBlockById: (state) => (id) => {
@@ -171,7 +152,6 @@ function setQuery(state) {
       query.append(filter.propertyName, filter.filter.join(","));
     }
   });
-
   window.history.replaceState(null, "", `?${query.toString()}`);
 }
 
@@ -204,6 +184,10 @@ export const mutations = {
     if (currentFilter) {
       currentFilter.filter = [];
     }
+  },
+
+  setFilter: (state, data) => {
+    state.filter.push(data);
   },
 
   toggleFilter: (state, data) => {
