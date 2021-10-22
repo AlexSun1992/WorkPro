@@ -30,10 +30,9 @@
 <script>
 import StringAutocomplete from "./StringAutocomplete";
 import StringMasked from "./StringMasked";
-import VueEasyTooltip from "vue-easy-tooltip";
 export default {
   name: "ControlString",
-  components: { StringAutocomplete, StringMasked, VueEasyTooltip },
+  components: { StringAutocomplete, StringMasked },
   props: {
     data: {
       type: Object,

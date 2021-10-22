@@ -184,6 +184,9 @@ export const actions = {
   async fetchList({ commit, getters }, params) {
     const page = getters.page;
     const jsonFilters = JSON.stringify(getters.filters);
+    console.log(params);
+    const urlJsonFilters = JSON.stringify(params.query);
+    console.log(urlJsonFilters);
     commit("setShowList", true);
     commit("setListLoading", true);
     if (params.idWizard) {
@@ -197,7 +200,7 @@ export const actions = {
         });
     } else {
       await this.$axios
-        .get(`/api/list/${page.idModule}/${page.idItem}/{}`)
+        .get(`/api/list/${page.idModule}/${page.idItem}/${urlJsonFilters}`)
         .then((res) => {
           commit("setListLoading", false);
           commit("setList", res.data);
