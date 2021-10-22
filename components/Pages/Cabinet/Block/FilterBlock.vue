@@ -18,7 +18,7 @@
             'filter-checked': isFilters.length === 0,
           }"
           v-on:click="clearFilter(propertyName)"
-          >Все</b-button
+          >{{ AllUnits }}</b-button
         >
       </li>
     </ul>
@@ -33,6 +33,7 @@ export default {
       activeColor: "red",
       fontSize: 30,
       isFilters: [],
+      AllUnits: "Все",
     };
   },
 
@@ -65,12 +66,23 @@ export default {
   },
 
   created() {
-    if (this.defaultValue !== undefined) {
-      this.$store.commit("blocks/toggleFilter", {
+    if (this.defaultValue && window.location.search === "") {
+      this.$store.commit("blocks/setFilter", {
         propertyName: this.propertyName,
-        filterType: this.filterType,
-        filterItem: this.defaultValue,
+        filter: this.defaultValue,
+        className: "filter-checked",
       });
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      const value = params.get(this.propertyName);
+      if (value) {
+        this.isFilters.push(value);
+        this.$store.commit("blocks/setFilter", {
+          propertyName: this.propertyName,
+          filter: value.split(","),
+          className: "filter-checked",
+        });
+      }
     }
   },
 
@@ -85,10 +97,21 @@ export default {
         filterType: this.filterType,
         filterItem: item,
       });
+      if (this.filterType === "radiobutton") {
+        const status = this.$store.getters["blocks/getFilters"];
+
+        const currentQuery = {};
+        currentQuery[propertyName] = item;
+      }
 
       if (this.filterType === "checkbox") {
         const status = this.$store.getters["blocks/getFilters"];
-        this.isFilters = status[1].filter;
+
+        status.forEach((item) => {
+          if (propertyName === item.propertyName) {
+            this.isFilters = item.filter;
+          }
+        });
       }
     },
 
@@ -108,6 +131,7 @@ export default {
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
+
         const filter =
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
