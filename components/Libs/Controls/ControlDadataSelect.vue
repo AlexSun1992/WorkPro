@@ -2,7 +2,10 @@
   <div>
     <b-form-group :class="{ required: data.required }">
       <template v-slot:label
-        ><span v-b-tooltip.hover.top="data.helpText" v-html="data.label"></span
+        ><span v-html="data.label"></span
+        ><span v-if="data.helpText">
+          (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
+            <span v-html="data.helpText"></span></vue-easy-tooltip></span
       ></template>
       <autocomplete
         :placeholder="data.placeholder"
@@ -26,6 +29,7 @@
 
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
+import VueEasyTooltip from "vue-easy-tooltip";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 const errorText = "Обязательно для заполнения";
 function getQueryParams(queryType, input) {
@@ -67,7 +71,7 @@ function getQueryParams(queryType, input) {
 
 export default {
   name: "AutoComplete",
-  components: { Autocomplete },
+  components: { Autocomplete, VueEasyTooltip },
   props: {
     data: {
       type: Object,
