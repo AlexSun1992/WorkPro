@@ -6,7 +6,7 @@
   >
     <template v-slot:label
       ><span v-html="label"></span
-      ><span>
+      ><span v-if="data.helpText">
         (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
           <span v-html="data.helpText"></span></vue-easy-tooltip></span
     ></template>
@@ -30,10 +30,9 @@
 <script>
 import StringAutocomplete from "./StringAutocomplete";
 import StringMasked from "./StringMasked";
-import VueEasyTooltip from "vue-easy-tooltip";
 export default {
   name: "ControlString",
-  components: { StringAutocomplete, StringMasked, VueEasyTooltip },
+  components: { StringAutocomplete, StringMasked },
   props: {
     data: {
       type: Object,
