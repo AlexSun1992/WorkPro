@@ -76,6 +76,7 @@ export default {
       const params = new URLSearchParams(window.location.search);
       const value = params.get(this.propertyName);
       if (value) {
+        this.isFilters.push(value);
         this.$store.commit("blocks/setFilter", {
           propertyName: this.propertyName,
           filter: value.split(","),

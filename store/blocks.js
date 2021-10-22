@@ -187,7 +187,7 @@ export const mutations = {
   },
 
   setFilter: (state, data) => {
-    state.filter.push(data);
+    state.filters.push(data);
   },
 
   toggleFilter: (state, data) => {
