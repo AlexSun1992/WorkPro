@@ -29,7 +29,6 @@
 
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
-import VueEasyTooltip from "vue-easy-tooltip";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 const errorText = "Обязательно для заполнения";
 function getQueryParams(queryType, input) {
@@ -71,7 +70,7 @@ function getQueryParams(queryType, input) {
 
 export default {
   name: "AutoComplete",
-  components: { Autocomplete, VueEasyTooltip },
+  components: { Autocomplete },
   props: {
     data: {
       type: Object,

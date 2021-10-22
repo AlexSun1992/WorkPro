@@ -32,13 +32,12 @@
 
 <script>
 import DatePicker from "vue2-datepicker";
-import VueEasyTooltip from "vue-easy-tooltip";
 import "vue2-datepicker/index.css";
 import "vue2-datepicker/locale/ru";
 import { applyMask as _mask } from "../../../utils/utils";
 export default {
   name: "ControlTimestamp",
-  components: { DatePicker, VueEasyTooltip },
+  components: { DatePicker },
   directives: {
     mask: _mask,
   },

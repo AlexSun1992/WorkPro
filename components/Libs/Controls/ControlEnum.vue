@@ -38,10 +38,9 @@
 <script>
 import "vue-search-select/dist/VueSearchSelect.css";
 import { ModelListSelect } from "vue-search-select";
-import VueEasyTooltip from "vue-easy-tooltip";
 export default {
   name: "ControlEnum",
-  components: { ModelListSelect, VueEasyTooltip },
+  components: { ModelListSelect },
   props: {
     data: {
       type: Object,

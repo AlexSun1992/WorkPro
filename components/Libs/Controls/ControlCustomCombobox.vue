@@ -26,12 +26,10 @@
 
 <script>
 import { ModelSelect } from "vue-search-select";
-import VueEasyTooltip from "vue-easy-tooltip";
 export default {
   name: "ControlCustomCombobox",
   components: {
     ModelSelect,
-    VueEasyTooltip,
   },
   props: {
     data: {

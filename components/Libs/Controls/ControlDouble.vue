@@ -30,12 +30,8 @@
 
 <script>
 import { applyMask as _mask } from "../../../utils/utils";
-import VueEasyTooltip from "vue-easy-tooltip";
 export default {
   name: "ControlDouble",
-  components: {
-    VueEasyTooltip,
-  },
   directives: {
     mask: _mask,
   },

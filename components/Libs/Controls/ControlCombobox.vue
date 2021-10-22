@@ -28,12 +28,8 @@
 </template>
 
 <script>
-import VueEasyTooltip from "vue-easy-tooltip";
 export default {
   name: "ControlCombobox",
-  components: {
-    VueEasyTooltip,
-  },
   props: {
     data: {
       type: Object,

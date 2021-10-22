@@ -28,10 +28,9 @@
 
 <script>
 import { CurrencyInput } from "vue-currency-input";
-import VueEasyTooltip from "vue-easy-tooltip";
 export default {
   name: "ControlCustomDouble",
-  components: { CurrencyInput, VueEasyTooltip },
+  components: { CurrencyInput },
   props: {
     data: {
       type: Object,

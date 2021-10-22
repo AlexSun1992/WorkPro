@@ -23,12 +23,8 @@
 </template>
 
 <script>
-import VueEasyTooltip from "vue-easy-tooltip";
 export default {
   name: "ControlText",
-  components: {
-    VueEasyTooltip,
-  },
   props: {
     data: {
       type: Object,
