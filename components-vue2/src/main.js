@@ -148,3 +148,14 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-modal",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/Modal/Modal.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
