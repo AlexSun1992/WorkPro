@@ -80,7 +80,7 @@ export default {
       });
     }
     if (this.defaultValue && window.location.search !== "") {
-      console.log("Нужно генерить строку!!!!");
+      console.log("!!!!");
     }
   },
 
@@ -105,14 +105,16 @@ export default {
           "",
           `?${propertyName}=${item}`
         );
-        console.log(status);
-        console.log(this.isFilters);
       }
 
       if (this.filterType === "checkbox") {
         const status = this.$store.getters["blocks/getFilters"];
 
-        this.isFilters = status[1].filter;
+        status.forEach((item) => {
+          if (propertyName === item.propertyName) {
+            this.isFilters = item.filter;
+          }
+        });
 
         history.replaceState(
           { query: [this.isFilters] },
@@ -138,6 +140,7 @@ export default {
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
+
         const filter =
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
