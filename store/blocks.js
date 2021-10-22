@@ -149,7 +149,9 @@ function setQuery(state) {
   const query = new URLSearchParams();
   state.filters.forEach((filter) => {
     if (filter.filter.length > 0) {
-      query.append(filter.propertyName, filter.filter.join(","));
+      if (Array.isArray(filter.filter)) {
+        query.append(filter.propertyName, filter.filter.join(","));
+      }
     }
   });
   window.history.replaceState(null, "", `?${query.toString()}`);
