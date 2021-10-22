@@ -139,3 +139,14 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-show-city",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/ShowCity/ShowCity.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
