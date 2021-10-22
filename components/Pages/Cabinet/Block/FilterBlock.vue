@@ -67,20 +67,19 @@ export default {
 
   created() {
     if (this.defaultValue && window.location.search === "") {
-      const status = this.$store.getters["blocks/getFilters"];
+      // const status = this.$store.getters["blocks/getFilters"];
 
-      if (this.$route["query"].SSTATUS !== this.defaultValue) {
-        const query = {};
-        query[this.propertyName] = this.defaultValue;
-      }
+      // if (this.$route["query"].SSTATUS !== this.defaultValue) {
+      //   const query = {};
+      //   query[this.propertyName] = this.defaultValue;
+      // }
+
       this.$store.commit("blocks/toggleFilter", {
         propertyName: this.propertyName,
         filterType: this.filterType,
         filterItem: this.defaultValue,
       });
-    }
-    if (this.defaultValue && window.location.search !== "") {
-      console.log("!!!!");
+      return;
     }
   },
 
@@ -100,11 +99,11 @@ export default {
 
         const currentQuery = {};
         currentQuery[propertyName] = item;
-        history.replaceState(
-          { query: currentQuery },
-          "",
-          `?${propertyName}=${item}`
-        );
+        // history.replaceState(
+        //   { query: currentQuery },
+        //   "",
+        //   `?${propertyName}=${item}`
+        // );
       }
 
       if (this.filterType === "checkbox") {
@@ -115,12 +114,6 @@ export default {
             this.isFilters = item.filter;
           }
         });
-
-        history.replaceState(
-          { query: [this.isFilters] },
-          "",
-          `?${propertyName}=${this.isFilters}`
-        );
       }
     },
 
