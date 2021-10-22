@@ -145,16 +145,6 @@ export const actions = {
   },
 };
 
-function setQuery(state) {
-  const query = new URLSearchParams();
-  state.filters.forEach((filter) => {
-    if (filter.filter.length > 0) {
-      query.append(filter.propertyName, filter.filter.join(","));
-    }
-  });
-  window.history.replaceState(null, "", `?${query.toString()}`);
-}
-
 export const mutations = {
   setForm(state, data) {
     state.form = data;
@@ -186,10 +176,6 @@ export const mutations = {
     }
   },
 
-  setFilter: (state, data) => {
-    state.filters.push(data);
-  },
-
   toggleFilter: (state, data) => {
     const { propertyName, filterItem, filterType } = data;
     if (!state.filters.find((filter) => filter.propertyName === propertyName)) {
@@ -199,14 +185,12 @@ export const mutations = {
         className: "filter-checked",
       });
     }
-
     const currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
 
     if (filterType === "radiobutton") {
       currentFilter.filter = [filterItem];
-      setQuery(state);
       return;
     }
     if (currentFilter.filter.includes(filterItem)) {
@@ -216,6 +200,5 @@ export const mutations = {
     } else {
       currentFilter.filter.push(filterItem);
     }
-    setQuery(state);
   },
 };
