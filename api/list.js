@@ -31,7 +31,9 @@ app.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
             req?.cookies["auth._token.local"];
         }
       }
-      URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json=${req.params.filters}`;
+      URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${
+        req.params.idItem
+      }?json=${encodeURIComponent(req.params.filters)}`;
     } else {
       URL_ADDRESS = `${consts.FREEDATA}/${req.params.idModule}/${req.params.idItem}/0/0`;
     }
