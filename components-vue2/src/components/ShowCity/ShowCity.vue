@@ -13,10 +13,15 @@
           <template>
             <span> </span>
           </template>
-          <autocomplete> </autocomplete>
-          <b-form-invalid-feedback>
+          <autocomplete
+            placeholder="Поиск региона"
+            ref="autocomplete"
+            :search="search"
+          >
+          </autocomplete>
+          <!-- <b-form-invalid-feedback>
             {{ errorText }}
-          </b-form-invalid-feedback>
+          </b-form-invalid-feedback> -->
         </b-form-group>
         <span>
           <strong> Ваш регион: {{ data }} </strong>
@@ -32,11 +37,27 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+
+/* function getQueryParams(input) {
+  return {
+    query: "address",
+    body: {
+      query: input,
+    },
+  };
+} */
 export default {
   name: "ChangeCity",
   components: {
     Autocomplete,
   },
+  /* props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+  }, */
   data() {
     return {
       data: [],
@@ -50,6 +71,8 @@ export default {
         "Москва",
         "Саратов",
       ],
+      input: null,
+      group: [],
     };
   },
   async created() {
@@ -59,6 +82,45 @@ export default {
     let currentCity = data[0]._data[0].TOWN;
     this.data = currentCity;
     return this.data;
+  },
+  methods: {
+    async search(input) {
+      console.log(input);
+      if (input.length < 1) {
+        return [];
+      }
+
+      const url = "/api/4_1/rs/suggest/address";
+      const query = "москва хабар";
+
+      const options = {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ query: query }),
+      };
+
+      await fetch(url, options)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+
+      /* const query = getQueryParams(input);
+      const response = await fetch(`/api/suggestions/${query}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(this.input),
+      });
+      console.log(response);
+      const result = await response.json();
+      console.log(result); */
+    },
   },
   /* methods: {
     async changedCity() {
