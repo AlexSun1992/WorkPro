@@ -73,8 +73,7 @@ export default {
         className: "filter-checked",
       });
     } else {
-      const params = new URLSearchParams(window.location.search);
-      const value = params.get(this.propertyName);
+      let value = this.$router.history.current.query[`${this.propertyName}`];
       if (value) {
         this.isFilters.push(value);
         this.$store.commit("blocks/setFilter", {
@@ -92,6 +91,8 @@ export default {
 
   methods: {
     toggleFilter(propertyName, item) {
+      const r = new URLSearchParams();
+
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
@@ -99,14 +100,12 @@ export default {
       });
       if (this.filterType === "radiobutton") {
         const status = this.$store.getters["blocks/getFilters"];
-
         const currentQuery = {};
         currentQuery[propertyName] = item;
       }
 
       if (this.filterType === "checkbox") {
         const status = this.$store.getters["blocks/getFilters"];
-
         status.forEach((item) => {
           if (propertyName === item.propertyName) {
             this.isFilters = item.filter;

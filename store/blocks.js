@@ -1,6 +1,3 @@
-import { indexOf } from "lodash";
-import Vue from "vue";
-
 /* eslint-disable */
 export const state = () => ({
   blocks: [],
@@ -145,18 +142,6 @@ export const actions = {
   },
 };
 
-function setQuery(state) {
-  const query = new URLSearchParams();
-  state.filters.forEach((filter) => {
-    if (filter.filter.length > 0) {
-      if (Array.isArray(filter.filter)) {
-        query.append(filter.propertyName, filter.filter.join(","));
-      }
-    }
-  });
-  window.history.replaceState(null, "", `?${query.toString()}`);
-}
-
 export const mutations = {
   setForm(state, data) {
     state.form = data;
@@ -183,9 +168,14 @@ export const mutations = {
     const currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
+    const query = new URLSearchParams(window.location.search);
+    query.delete(propertyName);
+    window.history.replaceState(null, "", `?${query.toString()}`);
+
     if (currentFilter) {
       currentFilter.filter = [];
     }
+    return;
   },
 
   setFilter: (state, data) => {
@@ -208,7 +198,16 @@ export const mutations = {
 
     if (filterType === "radiobutton") {
       currentFilter.filter = [filterItem];
-      setQuery(state);
+
+      const query = new URLSearchParams();
+      state.filters.forEach((filter) => {
+        if (filter.filter.length > 0) {
+          if (Array.isArray(filter.filter)) {
+            query.append(filter.propertyName, filter.filter.join(","));
+          }
+        }
+      });
+      window.history.replaceState(null, "", `?${query.toString()}`);
       return;
     }
     if (currentFilter.filter.includes(filterItem)) {
@@ -218,6 +217,16 @@ export const mutations = {
     } else {
       currentFilter.filter.push(filterItem);
     }
-    setQuery(state);
+
+    const query = new URLSearchParams();
+
+    state.filters.forEach((filter) => {
+      if (filter.filter.length > 0) {
+        if (Array.isArray(filter.filter)) {
+          query.append(filter.propertyName, filter.filter.join(","));
+        }
+      }
+    });
+    window.history.replaceState(null, "", `?${query.toString()}`);
   },
 };
