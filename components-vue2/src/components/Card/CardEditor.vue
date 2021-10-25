@@ -215,7 +215,6 @@ export default {
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
         value: e.value,
-        ready: e.ready,
       });
       let field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(
