@@ -48,9 +48,11 @@ import Vue from "vue";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
+import VueEasyTooltip from "vue-easy-tooltip";
 Vue.use(LoadScript);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+Vue.component("vue-easy-tooltip", VueEasyTooltip);
 
 const TOKEN_NAME = "auth._token.local";
 

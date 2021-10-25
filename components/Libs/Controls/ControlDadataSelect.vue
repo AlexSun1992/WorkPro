@@ -2,7 +2,10 @@
   <div>
     <b-form-group :class="{ required: data.required }">
       <template v-slot:label
-        ><span v-b-tooltip.hover.top="data.helpText" v-html="data.label"></span
+        ><span v-html="data.label"></span
+        ><span v-if="data.helpText">
+          (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
+            <span v-html="data.helpText"></span></vue-easy-tooltip></span
       ></template>
       <autocomplete
         :placeholder="data.placeholder"

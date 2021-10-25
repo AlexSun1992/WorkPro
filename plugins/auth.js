@@ -1,7 +1,7 @@
 /* eslint-disable */
 import converter from "@/converters/menu";
 import { getErrorMessage } from "../utils/transform";
-export default function ({ app, store, redirect, $auth, $window }) {
+export default function ({ app, store, redirect, $auth }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response?.config) {
       return;

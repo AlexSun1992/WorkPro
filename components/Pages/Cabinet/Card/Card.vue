@@ -34,7 +34,10 @@ import CardList from "./CardList";
 export default {
   name: "Card",
   async created() {
-    await this.$store.dispatch("card/fetchList", this.$route.params);
+    await this.$store.dispatch("card/fetchList", {
+      ...this.$route.params,
+      query: { ...this.$route.query },
+    });
   },
   components: { CardList },
   props: {
@@ -132,7 +135,10 @@ export default {
     },
     async refreshCardList() {
       try {
-        await this.$store.dispatch("card/fetchList", this.$route.params);
+        await this.$store.dispatch("card/fetchList", {
+          ...this.$route.params,
+          query: { ...this.$route.query },
+        });
         this.$bvToast.toast("Успешно  обновлено", {
           title: "",
           variant: "success",

@@ -107,15 +107,25 @@ export const actions = {
           if (params.idCard === "0") {
             getters["getForm"].forEach((item) => {
               if (params.query[item.name]) {
-                item.value = params.query[item.name];
+                if (item.name.substring(0, 2) === `FK`) {
+                  const text = params.query[item.name];
+                  const s_value = params.query[item.name.substring(2)];
+                  const value =
+                    isNaN(s_value) === false ? parseInt(s_value) : s_value;
+                  item.value = { text, value };
+                } else {
+                  item.value = params.query[item.name];
+                }
               }
             });
           }
-          if (getters["getDataFieldByType"]("captcha")) {
-            dispatch("fetchCaptcha", {
-              params: getters["getFormParams"],
-              data: getters["getDataFieldByType"]("captcha"),
-            });
+          if (res.data.metaData.data.length) {
+            if (getters["getDataFieldByType"]("captcha")) {
+              dispatch("fetchCaptcha", {
+                params: getters["getFormParams"],
+                data: getters["getDataFieldByType"]("captcha"),
+              });
+            }
           }
           commit(
             "setCopyForm",

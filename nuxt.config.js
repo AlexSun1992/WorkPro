@@ -55,6 +55,7 @@ module.exports = {
     "~/plugins/carousel.js",
     "~/plugins/selectValue.js",
     "~/plugins/slick-carousel.js",
+    "~/plugins/tooltip.js",
   ],
   /*
    ** Nuxt.js dev-modules
