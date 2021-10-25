@@ -103,7 +103,9 @@ export const actions = {
               if (params.query[item.name]) {
                 if (item.name.substring(0, 2) === `FK`) {
                   const text = params.query[item.name];
-                  const value = parseInt(params.query[item.name.substring(2)]);
+                  const s_value = params.query[item.name.substring(2)];
+                  const value =
+                    isNaN(s_value) === false ? parseInt(s_value) : s_value;
                   item.value = { text, value };
                 } else {
                   item.value = params.query[item.name];
