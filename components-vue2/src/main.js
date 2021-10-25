@@ -137,25 +137,3 @@ Vue.customElement(
       });
     })
 );
-
-Vue.customElement(
-  "component-show-city",
-  () =>
-    new Promise((resolve) => {
-      require(["./components/ShowCity/ShowCity.vue"], (lazyComponent) => {
-        lazyComponent.default.store = store;
-        resolve(lazyComponent.default);
-      });
-    })
-);
-
-Vue.customElement(
-  "component-modal",
-  () =>
-    new Promise((resolve) => {
-      require(["./components/Modal/Modal.vue"], (lazyComponent) => {
-        lazyComponent.default.store = store;
-        resolve(lazyComponent.default);
-      });
-    })
-);
