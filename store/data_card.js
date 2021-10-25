@@ -22,9 +22,15 @@ export const state = () => ({
   moduleId: false,
   menuId: false,
   source: "",
+  recaptchaToken: null,
+  updateValueFunction: null,
+  updateEvent: null,
 });
 
 export const getters = {
+  getUpdateEvent: (state) => state.updateEvent,
+  getUpdateValueFunction: (state) => state.updateValueFunction,
+  getRecaptchaToken: (state) => state.recaptchaToken,
   getForm: (state) => state.form,
   getFormParams: (state) => {
     return {
@@ -362,6 +368,7 @@ export const mutations = {
     const item = state.form.find((d) => d.fieldId === data.fieldId);
     if (item !== undefined) {
       item.value = data.value;
+      item.ready = data.ready;
       if (item.required) {
         item.state = false;
         if (
@@ -456,5 +463,14 @@ export const mutations = {
   },
   setSource(state, params) {
     state.source = params;
+  },
+  setRecaptchaToken(state, params) {
+    state.recaptchaToken = params;
+  },
+  setUpdateValueFunction(state, params) {
+    state.updateValueFunction = params;
+  },
+  setUpdateEvent(state, params) {
+    state.updateEvent = params;
   },
 };
