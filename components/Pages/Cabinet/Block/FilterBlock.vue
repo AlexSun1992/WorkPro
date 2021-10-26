@@ -17,7 +17,7 @@
           :class="{
             'filter-checked': isFilters.length === 0,
           }"
-          v-on:click="clearFilter(propertyName)"
+          v-on:click="clearFilter(propertyName, filterType)"
           >{{ AllUnits }}</b-button
         >
       </li>
@@ -66,7 +66,10 @@ export default {
   },
 
   created() {
-    if (this.defaultValue && window.location.search === "") {
+    const params = new URLSearchParams(window.location.search);
+    const value = params.get(this.propertyName);
+
+    if (this.defaultValue && value === null) {
       this.$store.commit("blocks/setFilter", {
         propertyName: this.propertyName,
         filter: this.defaultValue,
@@ -75,6 +78,7 @@ export default {
     } else {
       let value = this.$router.history.current.query[`${this.propertyName}`];
       if (value) {
+        console.log(value);
         this.isFilters.push(value);
         this.$store.commit("blocks/setFilter", {
           propertyName: this.propertyName,
@@ -86,7 +90,7 @@ export default {
   },
 
   destroyed() {
-    this.clearFilter(this.propertyName);
+    this.clearFilter(this.propertyName, this.filterType);
   },
 
   methods: {
@@ -114,10 +118,11 @@ export default {
       }
     },
 
-    clearFilter(propertyName) {
+    clearFilter(propertyName, filterType) {
       this.isFilters.length = 0;
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
+        filterType: filterType,
       });
     },
   },
