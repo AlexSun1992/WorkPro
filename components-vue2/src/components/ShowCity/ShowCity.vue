@@ -19,6 +19,7 @@ export default {
     let data = await response.json();
     let currentCity = data[0]._data[0].TOWN;
     this.data = currentCity;
+    localStorage.setItem("current_location_user", this.data);
   },
 };
 </script>

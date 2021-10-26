@@ -40,12 +40,15 @@ app.get("/dic/:moduleId/:itemId/:name", (req, res) => {
 app.get("/dicwf/:fieldId/:valueId", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
-    if (req.headers.authorization) {
-      axios.defaults.headers.common.Authorization = req.headers.authorization;
-    } else {
-      if (req.cookies) {
-        axios.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+    axios.defaults.headers.common.Authorization = null;
+    if (req.query.zone !== "free") {
+      if (req?.headers?.authorization) {
+        axios.defaults.headers.common.Authorization = req.headers.authorization;
+      } else {
+        if (req?.cookies["auth._token.local"]) {
+          axios.defaults.headers.common.Authorization =
+            req?.cookies["auth._token.local"];
+        }
       }
     }
     axios({
@@ -56,7 +59,13 @@ app.get("/dicwf/:fieldId/:valueId", (req, res) => {
         res.send(selectConverter.select(resp.data));
       })
       .catch((err) => {
-        res.status(err.response.data.STATUS).send(err.response.data);
+        if (err?.response?.data.STATUS == 401) {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        } else {
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
+        }
       });
   } catch (e) {
     res.send(e);
