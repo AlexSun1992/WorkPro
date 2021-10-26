@@ -13,21 +13,14 @@
           <template>
             <span> </span>
           </template>
-          <autocomplete
-            placeholder="Поиск региона"
-            ref="autocomplete"
-            :search="search"
-          >
+          <autocomplete placeholder="Поиск региона" :search="search">
           </autocomplete>
-          <!-- <b-form-invalid-feedback>
-            {{ errorText }}
-          </b-form-invalid-feedback> -->
         </b-form-group>
         <span>
           <strong> Ваш регион: {{ data }} </strong>
         </span>
-        <div v-for="item in popularCityes" key="item">
-          <span>{{ item }}</span>
+        <div v-for="item in popularCityes" :key="item.id">
+          <span @click="changeCity(item)">{{ item.text }}</span>
         </div>
       </div>
     </b-modal>
@@ -38,41 +31,48 @@
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 
-/* function getQueryParams(input) {
-  return {
-    query: "address",
-    body: {
-      query: input,
-    },
-  };
-} */
 export default {
   name: "ChangeCity",
   components: {
     Autocomplete,
   },
-  /* props: {
-    data: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
-  }, */
   data() {
     return {
       data: [],
       popularCityes: [
-        "Ростов-на-Дону",
-        "Волгогад",
-        "Краснодар",
-        "Воронеж",
-        "Белгород",
-        "Санкт-Петербург",
-        "Москва",
-        "Саратов",
+        {
+          id: 1,
+          text: "Ростов-на-Дону",
+        },
+        {
+          id: 2,
+          text: "Волгогад",
+        },
+        {
+          id: 3,
+          text: "Краснодар",
+        },
+        {
+          id: 4,
+          text: "Воронеж",
+        },
+        {
+          id: 5,
+          text: "Белгород",
+        },
+        {
+          id: 6,
+          text: "Санкт-Петербург",
+        },
+        {
+          id: 7,
+          text: "Москва",
+        },
+        {
+          id: 8,
+          text: "Саратов",
+        },
       ],
-      input: null,
-      group: [],
     };
   },
   async created() {
@@ -84,56 +84,11 @@ export default {
     return this.data;
   },
   methods: {
-    async search(input) {
-      console.log(input);
-      if (input.length < 1) {
-        return [];
-      }
-
-      const url = "/api/4_1/rs/suggest/address";
-      const query = "москва хабар";
-
-      const options = {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ query: query }),
-      };
-
-      await fetch(url, options)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
-
-      /* const query = getQueryParams(input);
-      const response = await fetch(`/api/suggestions/${query}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(this.input),
-      });
-      console.log(response);
-      const result = await response.json();
-      console.log(result); */
+    changeCity(input) {
+      this.data = input.text;
     },
+    async search() {},
   },
-  /* methods: {
-    async changedCity() {
-      const url = "/am/free/v2/data/55/800/0/0";
-      let response = await fetch(url);
-      let data = await response.json();
-      let currentCity = data[0]._data[0].TOWN;
-      this.data = currentCity;
-      console.log(this.data);
-      return this.data;
-    },
-    async cityesList() {},
-  }, */
 };
 </script>
 
