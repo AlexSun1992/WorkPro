@@ -163,17 +163,10 @@ export const mutations = {
     state.blockId = data;
   },
 
-  clearFilter: (state, data) => {
-    const { propertyName } = data;
-
-    const query = new URLSearchParams(window.location.search);
-    query.delete(propertyName);
-    window.history.replaceState(null, "", `?${query.toString()}`);
-
+  clearFilter: (state, { propertyName }) => {
     state.filters = state.filters.filter(
       (item) => item.propertyName !== propertyName
     );
-
     return;
   },
 
@@ -181,32 +174,19 @@ export const mutations = {
     state.filters.push(data);
   },
 
-  toggleFilter: (state, data) => {
-    const { propertyName, filterItem, filterType } = data;
-    if (!state.filters.find((filter) => filter.propertyName === propertyName)) {
-      state.filters.push({
-        propertyName,
-        filter: [],
-        className: "filter-checked",
-      });
-    }
-
-    const currentFilter = state.filters.find(
+  toggleFilter: (state, { propertyName, filterItem, filterType }) => {
+    let currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
-
+    if (currentFilter === undefined) {
+      currentFilter = {
+        propertyName,
+        filter: [],
+      };
+      state.filters.push(currentFilter);
+    }
     if (filterType === "radiobutton") {
       currentFilter.filter = [filterItem];
-
-      const query = new URLSearchParams();
-      state.filters.forEach((filter) => {
-        if (filter.filter.length > 0) {
-          if (Array.isArray(filter.filter)) {
-            query.append(filter.propertyName, filter.filter.join(","));
-          }
-        }
-      });
-      window.history.replaceState(null, "", `?${query.toString()}`);
       return;
     }
     if (currentFilter.filter.includes(filterItem)) {
@@ -216,16 +196,5 @@ export const mutations = {
     } else {
       currentFilter.filter.push(filterItem);
     }
-
-    const query = new URLSearchParams();
-
-    state.filters.forEach((filter) => {
-      if (filter.filter.length > 0) {
-        if (Array.isArray(filter.filter)) {
-          query.append(filter.propertyName, filter.filter.join(","));
-        }
-      }
-    });
-    window.history.replaceState(null, "", `?${query.toString()}`);
   },
 };

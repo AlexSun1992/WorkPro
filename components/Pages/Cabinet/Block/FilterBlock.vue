@@ -15,9 +15,9 @@
         <b-button
           v-if="this.filterType !== 'radiobutton'"
           :class="{
-            'filter-checked': isFilters.length === 0,
+            'filter-checked': isAllFilters,
           }"
-          v-on:click="clearFilter(propertyName, filterType)"
+          v-on:click="clearFilter(propertyName)"
           >{{ AllUnits }}</b-button
         >
       </li>
@@ -30,10 +30,8 @@ export default {
 
   data() {
     return {
-      activeColor: "red",
-      fontSize: 30,
-      isFilters: [],
       AllUnits: "Все",
+      isAllFilters: true,
     };
   },
 
@@ -46,12 +44,12 @@ export default {
     defaultValue: {
       type: String,
       required: false,
-      default: () => {},
+      default: () => null,
     },
     propertyName: {
       type: String,
       required: true,
-      default: () => {},
+      default: () => null,
     },
     filterType: {
       type: String,
@@ -66,26 +64,11 @@ export default {
   },
 
   created() {
-    const params = new URLSearchParams(window.location.search);
-    const value = params.get(this.propertyName);
-
-    if (this.defaultValue && value === null) {
+    if (this.defaultValue) {
       this.$store.commit("blocks/setFilter", {
         propertyName: this.propertyName,
         filter: this.defaultValue,
-        className: "filter-checked",
       });
-    } else {
-      let value = this.$router.history.current.query[`${this.propertyName}`];
-      if (value) {
-        console.log(value);
-        this.isFilters.push(value);
-        this.$store.commit("blocks/setFilter", {
-          propertyName: this.propertyName,
-          filter: value.split(","),
-          className: "filter-checked",
-        });
-      }
     }
   },
 
@@ -95,32 +78,19 @@ export default {
 
   methods: {
     toggleFilter(propertyName, item) {
+      this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
         filterItem: item,
       });
-      if (this.filterType === "radiobutton") {
-        const status = this.$store.getters["blocks/getFilters"];
-        const currentQuery = {};
-        currentQuery[propertyName] = item;
-      }
-
-      if (this.filterType === "checkbox") {
-        const status = this.$store.getters["blocks/getFilters"];
-        status.forEach((item) => {
-          if (propertyName === item.propertyName) {
-            this.isFilters = item.filter;
-          }
-        });
-      }
     },
 
-    clearFilter(propertyName, filterType) {
-      this.isFilters.length = 0;
+    clearFilter: function (propertyName) {
+      this.isAllFilters = true;
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
-        filterType: filterType,
+        filterType: this.filterType,
       });
     },
   },
