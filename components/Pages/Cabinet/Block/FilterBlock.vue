@@ -90,13 +90,11 @@ export default {
   },
 
   destroyed() {
-    this.clearFilter(this.propertyName, this.filterType);
+    this.clearFilter(this.propertyName);
   },
 
   methods: {
     toggleFilter(propertyName, item) {
-      const r = new URLSearchParams();
-
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,

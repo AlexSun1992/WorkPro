@@ -165,21 +165,15 @@ export const mutations = {
 
   clearFilter: (state, data) => {
     const { propertyName } = data;
-    const { filterType } = data;
-
-    const currentFilter = state.filters.find(
-      (filter) => filter.propertyName === propertyName
-    );
 
     const query = new URLSearchParams(window.location.search);
     query.delete(propertyName);
     window.history.replaceState(null, "", `?${query.toString()}`);
 
-    state.filters = [];
+    state.filters = state.filters.filter(
+      (item) => item.propertyName !== propertyName
+    );
 
-    if (currentFilter) {
-      currentFilter.filter = [];
-    }
     return;
   },
 
