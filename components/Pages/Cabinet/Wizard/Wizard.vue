@@ -72,6 +72,16 @@ export default {
     wizardButtons,
     VRuntimeTemplate,
   },
+  created() {
+    if (process.client) {
+      if (window.opener) {
+        if (window.location.href === window.opener.location.href) {
+          window.opener.location.reload();
+          window.close();
+        }
+      }
+    }
+  },
   methods: {
     getURL(item, index) {
       if (this.$route.params.idCard === "0") {
@@ -132,7 +142,6 @@ export default {
       this.loading = false;
     },
   },
-
   destroyed() {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
   },

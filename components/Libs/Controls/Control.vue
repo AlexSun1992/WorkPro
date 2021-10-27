@@ -49,6 +49,7 @@ import ControlLabelMoney from "./ControlLabelMoney";
 import ControlDadataSelect from "./ControlDadataSelect.vue";
 import ControlCustomCombobox from "./ControlCustomCombobox.vue";
 import ControlCustomDouble from "./ControlCustomDouble.vue";
+import ControlGoogleCaptcha from "./ControlGoogleCaptcha.vue";
 
 export default {
   name: "Control",
@@ -78,6 +79,7 @@ export default {
     ControlLabelMoney,
     ControlCustomCombobox,
     ControlCustomDouble,
+    ControlGoogleCaptcha,
   },
   props: {
     data: {

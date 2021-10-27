@@ -161,6 +161,7 @@ export default {
           console.log("error", data[i]);
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
+          this.$store.commit("data_card/saveButtonClicked", false);
         }
       }
       return valid;
@@ -232,7 +233,19 @@ export default {
           return item.NTYPE === 4 && item.ID === actionId;
         });
         if (actionSaveCard?.ID === actionId) {
+          let node = document.querySelector('[title="reCAPTCHA"]');
+          if (node && !this.$store.getters["data_card/getRecaptchaToken"]) {
+            this.$store.commit("data_card/saveButtonClicked", true);
+            this.$store.commit("data_card/setUpdateEvent", e);
+            this.$store.commit(
+              "data_card/setUpdateValueFunction",
+              this.updateValue
+            );
+            return;
+          }
           await this.saveCard(e);
+          this.$store.commit("data_card/setRecaptchaToken", null);
+          this.$store.commit("data_card/saveButtonClicked", false);
         }
         if (actionRefreshCard?.ID === actionId) {
           await this.fetchCard();
