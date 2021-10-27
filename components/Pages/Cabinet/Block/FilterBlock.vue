@@ -65,10 +65,14 @@ export default {
 
   created() {
     if (this.$route.query.filters) {
-      this.$store.commit(
-        "blocks/setFilter",
-        JSON.parse(this.$route.query.filters)
-      );
+      const filters = JSON.parse(this.$route.query.filters.toString());
+      if (
+        this.filterType === "checkbox" &&
+        filters.find((filter) => filter.propertyName === this.propertyName)
+      ) {
+        this.isAllFilters = false;
+      }
+      this.$store.commit("blocks/setFilter", filters);
     } else {
       if (this.defaultValue) {
         this.$store.commit("blocks/setFilter", {
@@ -80,7 +84,7 @@ export default {
   },
 
   destroyed() {
-    this.clearFilter(this.propertyName);
+    this.$store.commit("blocks/setFilter", []);
   },
 
   methods: {
@@ -107,6 +111,17 @@ export default {
         null,
         `?filters=${JSON.stringify(this.$store.getters["blocks/getFilters"])}`
       );
+      const { url } = {
+        url:
+          this.$route.path +
+          `?filters=${JSON.stringify(
+            this.$store.getters["blocks/getFilters"]
+          )}`,
+      };
+      this.$store.commit("menu/setQueriesUrlByIdMenu", {
+        ...this.$route.params,
+        url,
+      });
     },
   },
 
