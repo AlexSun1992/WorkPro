@@ -64,11 +64,18 @@ export default {
   },
 
   created() {
-    if (this.defaultValue) {
-      this.$store.commit("blocks/setFilter", {
-        propertyName: this.propertyName,
-        filter: this.defaultValue,
-      });
+    if (this.$route.query.filters) {
+      this.$store.commit(
+        "blocks/setFilter",
+        JSON.parse(this.$route.query.filters)
+      );
+    } else {
+      if (this.defaultValue) {
+        this.$store.commit("blocks/setFilter", {
+          propertyName: this.propertyName,
+          filter: this.defaultValue,
+        });
+      }
     }
   },
 
@@ -84,14 +91,22 @@ export default {
         filterType: this.filterType,
         filterItem: item,
       });
+      this.setQueryURL();
     },
-
     clearFilter: function (propertyName) {
       this.isAllFilters = true;
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
       });
+      this.setQueryURL();
+    },
+    setQueryURL: function () {
+      window.history.replaceState(
+        null,
+        null,
+        `?filters=${JSON.stringify(this.$store.getters["blocks/getFilters"])}`
+      );
     },
   },
 

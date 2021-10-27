@@ -171,7 +171,11 @@ export const mutations = {
   },
 
   setFilter: (state, data) => {
-    state.filters.push(data);
+    if (Array.isArray(data) === false) {
+      state.filters.push(data);
+    } else {
+      state.filters = data;
+    }
   },
 
   toggleFilter: (state, { propertyName, filterItem, filterType }) => {
