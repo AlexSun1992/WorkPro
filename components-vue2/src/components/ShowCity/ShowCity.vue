@@ -1,38 +1,26 @@
 <template>
   <div>
-    <span id="show-btn" @click="$bvModal.show('bv-modal-example')">
-      {{ data }}
+    <span id="show-btn" @click="$bvModal.show('select-city')">
+      {{ city }}
     </span>
-    <b-modal id="bv-modal-example" hide-footer>
+    <b-modal id="select-city" hide-footer>
       <template #modal-title> Выберите ваш город</template>
       <div class="d-block text-center">
-        <p class="my-4">
-          Воспользуйтесь поиском если не нашли ваш регион в списке:
-        </p>
-        <b-form-group>
-          <template>
-            <span> </span>
-          </template>
-          <autocomplete
-            placeholder="Поиск региона"
-            ref="autocomplete"
-            :search="search"
-            :get-result-value="getResultValue"
-          >
-          </autocomplete>
-        </b-form-group>
-        <div>
-          <span
-            ><strong @click="automaticLocation()"
-              >Определить автоматически</strong
-            ></span
-          >
-        </div>
+        <autocomplete
+          placeholder="Выберите город"
+          :debounce-time="300"
+          :search="search"
+          :get-result-value="getResultValue"
+          @submit="setSearchedCity"
+        >
+        </autocomplete>
         <span>
-          <strong> Ваш регион: {{ data }} </strong>
+          <strong> Ваш регион: {{ city }} </strong>
         </span>
-        <div v-for="item in popularCityes" :key="item.id">
-          <span @click="changeCity(item)">{{ item.text }}</span>
+        <div v-for="item in popularCities" :key="item.id">
+          <span @click="setPopularCity(item)" style="cursor: pointer">{{
+            item.text
+          }}</span>
         </div>
       </div>
     </b-modal>
@@ -42,11 +30,18 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+import { cities } from "./cities.js";
 function getParams(input) {
   return {
     query: "address",
     body: {
       query: input,
+      from_bound: {
+        value: "city",
+      },
+      to_bound: {
+        value: "settlement",
+      },
     },
   };
 }
@@ -57,92 +52,38 @@ export default {
   },
   data() {
     return {
-      data: [],
-      searchCityes: [],
-      input: null,
-      popularCityes: [
-        {
-          id: 1,
-          text: "Ростов-на-Дону",
-        },
-        {
-          id: 2,
-          text: "Волгоград",
-        },
-        {
-          id: 3,
-          text: "Краснодар",
-        },
-        {
-          id: 4,
-          text: "Воронеж",
-        },
-        {
-          id: 5,
-          text: "Белгород",
-        },
-        {
-          id: 6,
-          text: "Санкт-Петербург",
-        },
-        {
-          id: 7,
-          text: "Москва",
-        },
-        {
-          id: 8,
-          text: "Саратов",
-        },
-      ],
+      city: null,
+      popularCities: cities,
     };
   },
   async created() {
-    const url = "/am/free/v2/data/55/800/0/0";
-    let response = await fetch(url);
-    let data = await response.json();
-    let currentCity = data[0]._data[0].TOWN;
-    this.data = currentCity;
-    localStorage.setItem("location_dadata", this.data);
-    return this.data;
+    await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
+      this.city = res.data[0]._data[0].TOWN || "г. Москва";
+      localStorage.setItem("location_user", this.city);
+    });
   },
   methods: {
-    changeCity(input) {
-      this.data = input.text;
-      localStorage.setItem("location_user", this.data);
+    setSearchedCity(result) {
+      this.city = result.data["city_with_type"];
+      localStorage.setItem("location_user", this.city);
     },
-
-    async automaticLocation() {
-      const url = "/am/free/v2/data/55/800/0/0";
-      let response = await fetch(url);
-      let data = await response.json();
-      let currentCity = data[0]._data[0].TOWN;
-      this.data = currentCity;
-      return this.data;
+    setPopularCity(result) {
+      this.city = `г. ${result.text}`;
+      localStorage.setItem("location_user", this.city);
     },
     async search(input) {
       if (input.length < 1) {
         return [];
       }
-      this.input = input;
-      this.searchCityes = [];
       const { query, body } = getParams(input);
-      const response = await fetch(`/api/suggestions/${query}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-      const result = await response.json();
-      result.suggestions.forEach((item) => {
-        this.searchCityes.push(item);
-      });
-
-      return this.searchCityes;
+      return await this.$axios
+        .post(`/api/suggestions/${query}`, body)
+        .then((resp) => {
+          return resp.data.suggestions;
+        });
     },
-    getResultValue(input) {
-      return input.value;
+    getResultValue(item) {
+      return item.value;
     },
   },
 };
