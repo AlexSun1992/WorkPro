@@ -13,9 +13,21 @@
           <template>
             <span> </span>
           </template>
-          <autocomplete placeholder="Поиск региона" :search="search">
+          <autocomplete
+            placeholder="Поиск региона"
+            ref="autocomplete"
+            :search="search"
+            :get-result-value="getResultValue"
+          >
           </autocomplete>
         </b-form-group>
+        <div>
+          <span
+            ><strong @click="automaticLocation()"
+              >Определить автоматически</strong
+            ></span
+          >
+        </div>
         <span>
           <strong> Ваш регион: {{ data }} </strong>
         </span>
@@ -30,8 +42,14 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-import { mapGetters } from "vuex";
-
+function getParams(input) {
+  return {
+    query: "address",
+    body: {
+      query: input,
+    },
+  };
+}
 export default {
   name: "ChangeCity",
   components: {
@@ -40,6 +58,8 @@ export default {
   data() {
     return {
       data: [],
+      searchCityes: [],
+      input: null,
       popularCityes: [
         {
           id: 1,
@@ -83,13 +103,47 @@ export default {
     let currentCity = data[0]._data[0].TOWN;
     this.data = currentCity;
     localStorage.setItem("location_dadata", this.data);
+    return this.data;
   },
   methods: {
     changeCity(input) {
       this.data = input.text;
       localStorage.setItem("location_user", this.data);
     },
-    async search() {},
+
+    async automaticLocation() {
+      const url = "/am/free/v2/data/55/800/0/0";
+      let response = await fetch(url);
+      let data = await response.json();
+      let currentCity = data[0]._data[0].TOWN;
+      this.data = currentCity;
+      return this.data;
+    },
+    async search(input) {
+      if (input.length < 1) {
+        return [];
+      }
+      this.input = input;
+      this.searchCityes = [];
+      const { query, body } = getParams(input);
+      const response = await fetch(`/api/suggestions/${query}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      const result = await response.json();
+      result.suggestions.forEach((item) => {
+        this.searchCityes.push(item);
+      });
+
+      return this.searchCityes;
+    },
+    getResultValue(input) {
+      return input.value;
+    },
   },
 };
 </script>
