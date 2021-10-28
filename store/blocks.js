@@ -1,6 +1,3 @@
-import { indexOf } from "lodash";
-import Vue from "vue";
-
 /* eslint-disable */
 export const state = () => ({
   blocks: [],
@@ -166,29 +163,32 @@ export const mutations = {
     state.blockId = data;
   },
 
-  clearFilter: (state, data) => {
-    const { propertyName } = data;
-    const currentFilter = state.filters.find(
-      (filter) => filter.propertyName === propertyName
+  clearFilter: (state, { propertyName }) => {
+    state.filters = state.filters.filter(
+      (item) => item.propertyName !== propertyName
     );
-    if (currentFilter) {
-      currentFilter.filter = [];
+    return;
+  },
+
+  setFilter: (state, data) => {
+    if (Array.isArray(data) === false) {
+      state.filters.push(data);
+    } else {
+      state.filters = data;
     }
   },
 
-  toggleFilter: (state, data) => {
-    const { propertyName, filterItem, filterType } = data;
-    if (!state.filters.find((filter) => filter.propertyName === propertyName)) {
-      state.filters.push({
-        propertyName,
-        filter: [],
-        className: "filter-checked",
-      });
-    }
-    const currentFilter = state.filters.find(
+  toggleFilter: (state, { propertyName, filterItem, filterType }) => {
+    let currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
-
+    if (currentFilter === undefined) {
+      currentFilter = {
+        propertyName,
+        filter: [],
+      };
+      state.filters.push(currentFilter);
+    }
     if (filterType === "radiobutton") {
       currentFilter.filter = [filterItem];
       return;

@@ -51,6 +51,15 @@ export const mutations = {
   setMenu(state, data) {
     state.menu = data;
   },
+  setQueriesUrlByIdMenu(state, { idItem, url }) {
+    const itemsMenu = state.menu[0]?.children;
+    if (Array.isArray(itemsMenu)) {
+      const menu = itemsMenu.find((i) => i.idItem === parseInt(idItem));
+      if (menu) {
+        menu.url = url;
+      }
+    }
+  },
   setFlatMenu(state, data) {
     state.flatmenu = data;
   },
