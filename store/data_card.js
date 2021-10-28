@@ -22,9 +22,15 @@ export const state = () => ({
   moduleId: false,
   menuId: false,
   source: "",
+  recaptchaToken: null,
+  updateValueFunction: null,
+  updateEvent: null,
 });
 
 export const getters = {
+  getUpdateEvent: (state) => state.updateEvent,
+  getUpdateValueFunction: (state) => state.updateValueFunction,
+  getRecaptchaToken: (state) => state.recaptchaToken,
   getForm: (state) => state.form,
   getFormParams: (state) => {
     return {
@@ -101,7 +107,15 @@ export const actions = {
           if (params.idCard === "0") {
             getters["getForm"].forEach((item) => {
               if (params.query[item.name]) {
-                item.value = params.query[item.name];
+                if (item.name.substring(0, 2) === `FK`) {
+                  const text = params.query[item.name];
+                  const s_value = params.query[item.name.substring(2)];
+                  const value =
+                    isNaN(s_value) === false ? parseInt(s_value) : s_value;
+                  item.value = { text, value };
+                } else {
+                  item.value = params.query[item.name];
+                }
               }
             });
           }
@@ -458,5 +472,14 @@ export const mutations = {
   },
   setSource(state, params) {
     state.source = params;
+  },
+  setRecaptchaToken(state, params) {
+    state.recaptchaToken = params;
+  },
+  setUpdateValueFunction(state, params) {
+    state.updateValueFunction = params;
+  },
+  setUpdateEvent(state, params) {
+    state.updateEvent = params;
   },
 };
