@@ -39,8 +39,8 @@ export default {
   },
   data() {
     return {
-      data: [],
-      popularCityes: [
+      city: null,
+      popularCities: [
         {
           id: 1,
           text: "Ростов-на-Дону",
