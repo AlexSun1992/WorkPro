@@ -46,7 +46,7 @@ export default {
         },
         {
           id: 2,
-          text: "Волгоград",
+          text: "Волгогад",
         },
         {
           id: 3,
@@ -81,13 +81,11 @@ export default {
     let data = await response.json();
     let currentCity = data[0]._data[0].TOWN;
     this.data = currentCity;
-    localStorage.setItem("location_dadata", this.data);
     return this.data;
   },
   methods: {
     changeCity(input) {
       this.data = input.text;
-      localStorage.setItem("location_user", this.data);
     },
     async search() {},
   },
