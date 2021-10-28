@@ -30,6 +30,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ChangeCity",
@@ -82,7 +83,6 @@ export default {
     let currentCity = data[0]._data[0].TOWN;
     this.data = currentCity;
     localStorage.setItem("location_dadata", this.data);
-    return this.data;
   },
   methods: {
     changeCity(input) {
