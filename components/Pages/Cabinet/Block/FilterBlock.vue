@@ -15,10 +15,10 @@
         <b-button
           v-if="this.filterType !== 'radiobutton'"
           :class="{
-            'filter-checked': isFilters.length === 0,
+            'filter-checked': isAllFilters,
           }"
           v-on:click="clearFilter(propertyName)"
-          >Все</b-button
+          >{{ AllUnits }}</b-button
         >
       </li>
     </ul>
@@ -30,9 +30,8 @@ export default {
 
   data() {
     return {
-      activeColor: "red",
-      fontSize: 30,
-      isFilters: [],
+      AllUnits: "Все",
+      isAllFilters: true,
     };
   },
 
@@ -45,12 +44,12 @@ export default {
     defaultValue: {
       type: String,
       required: false,
-      default: () => {},
+      default: () => null,
     },
     propertyName: {
       type: String,
       required: true,
-      default: () => {},
+      default: () => null,
     },
     filterType: {
       type: String,
@@ -65,37 +64,63 @@ export default {
   },
 
   created() {
-    if (this.defaultValue !== undefined) {
-      this.$store.commit("blocks/toggleFilter", {
-        propertyName: this.propertyName,
-        filterType: this.filterType,
-        filterItem: this.defaultValue,
-      });
+    if (this.$route.query.filters) {
+      const filters = JSON.parse(this.$route.query.filters.toString());
+      if (
+        this.filterType === "checkbox" &&
+        filters.find((filter) => filter.propertyName === this.propertyName)
+      ) {
+        this.isAllFilters = false;
+      }
+      this.$store.commit("blocks/setFilter", filters);
+    } else {
+      if (this.defaultValue) {
+        this.$store.commit("blocks/setFilter", {
+          propertyName: this.propertyName,
+          filter: this.defaultValue,
+        });
+      }
     }
   },
 
   destroyed() {
-    this.clearFilter(this.propertyName);
+    this.$store.commit("blocks/setFilter", []);
   },
 
   methods: {
     toggleFilter(propertyName, item) {
+      this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
         filterItem: item,
       });
-
-      if (this.filterType === "checkbox") {
-        const status = this.$store.getters["blocks/getFilters"];
-        this.isFilters = status[1].filter;
-      }
+      this.setQueryURL();
     },
-
-    clearFilter(propertyName) {
-      this.isFilters.length = 0;
+    clearFilter: function (propertyName) {
+      this.isAllFilters = true;
       this.$store.commit("blocks/clearFilter", {
         propertyName: propertyName,
+        filterType: this.filterType,
+      });
+      this.setQueryURL();
+    },
+    setQueryURL: function () {
+      window.history.replaceState(
+        null,
+        null,
+        `?filters=${JSON.stringify(this.$store.getters["blocks/getFilters"])}`
+      );
+      const { url } = {
+        url:
+          this.$route.path +
+          `?filters=${JSON.stringify(
+            this.$store.getters["blocks/getFilters"]
+          )}`,
+      };
+      this.$store.commit("menu/setQueriesUrlByIdMenu", {
+        ...this.$route.params,
+        url,
       });
     },
   },
@@ -108,6 +133,7 @@ export default {
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
+
         const filter =
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
