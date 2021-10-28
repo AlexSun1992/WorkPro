@@ -8,7 +8,8 @@
       <b-tab title="На карте" active
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
-      <b-tab title="На схеме метро" v-if="tabVisible"><p>Схема метро</p></b-tab>
+      <!-- <b-tab title="На схеме метро" v-if="tabVisible"><p>Схема метро</p></b-tab> -->
+      <b-tab title="На схеме метро" v-show="false"><p>Схема метро</p></b-tab>
       <b-tab title="В списке">
         <OfficesList :data="getOffices" @update="page = $event" />
       </b-tab>
@@ -45,6 +46,9 @@ export default {
       mapState: null,
       regionId: null,
       centerCoords: null,
+      currentFilters: null,
+      address: null,
+      suggest: null,
     };
   },
   async created() {
@@ -69,24 +73,29 @@ export default {
         agencies = filterData(agencies, filters);
       }
       await this.setPositionAttributes();
-      await this.$store.dispatch("map/fetchRegion", {
-        id: this.regionId,
-        coords: this.centerCoords,
-      });
+      if (!this.currentFilters) {
+        await this.$store.dispatch("map/fetchRegion", {
+          id: this.regionId,
+          coords: this.centerCoords,
+        });
+      }
 
       this.myClusterer = new ymaps.Clusterer();
       this.myClusterer.add(this.getGeoObjects(agencies));
 
-      this.myMap = new ymaps.Map(
-        "map",
-        this.mapState
-          ? this.mapState
-          : {
-              center: this.centerCoords ? this.centerCoords : [55.76, 37.64],
-              zoom: 12,
-            }
-      );
+      let mapState;
 
+      if (this.mapState) {
+        mapState = this.mapState;
+        this.mapState.zoom = 12;
+      } else {
+        mapState = {
+          center: this.centerCoords ? this.centerCoords : [55.76, 37.64],
+          zoom: 12,
+        };
+      }
+
+      this.myMap = new ymaps.Map("map", mapState);
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getGeoObjects(agencies) {
@@ -123,17 +132,27 @@ export default {
         showOnMap(e.get("item").value);
       });
     },
+
     async setPositionAttributes() {
       let geolocation = await ymaps.geolocation.get();
       if (geolocation) {
+        let query = this.suggest
+          ? this.suggest
+          : geolocation.geoObjects.get(0).properties.get("text");
         this.centerCoords = geolocation.geoObjects.position;
-        let address = await this.$axios.post("/api/suggestions/address", {
-          query: geolocation.geoObjects.get(0).properties.get("text"),
-          count: 1,
-        });
-        if (address.data) {
-          this.regionId =
-            address.data.suggestions[0].data.city_kladr_id.split("0")[0];
+        try {
+          this.address = await this.$axios.post("/api/suggestions/address", {
+            query,
+            count: 1,
+          });
+          if (this.address.data.suggestions.length) {
+            this.regionId =
+              this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
+          } else {
+            this.regionId = "77";
+          }
+        } catch (e) {
+          console.log(e);
         }
       }
     },
@@ -149,13 +168,12 @@ export default {
         }
       );
       this.myMap.geoObjects.add(placemark);
-      this.myMap.setCenter(state.center, state.zoom);
+      this.myMap.setCenter(state.center, 12);
       placemark.geometry.setCoordinates(state.center);
       placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
       });
-      this.myMap.setCenter(state.center, state.zoom ? state.zoom : 12);
     },
     showResult(obj) {
       let mapContainer = document.getElementById("map");
@@ -176,20 +194,32 @@ export default {
       this.updateMap(this.mapState, shortAddress);
     },
     async showOnMap(suggest) {
-      let address = await this.$axios.post("/api/suggestions/address", {
-        query: suggest,
-        count: 1,
-      });
-      if (address.data) {
-        this.regionId = address.data.suggestions[0].data.city_kladr_id.substr(
-          0,
-          2
-        );
+      this.suggest = suggest;
+      try {
+        this.address = await this.$axios.post("/api/suggestions/address", {
+          query: suggest,
+          count: 1,
+        });
+        if (this.address.data.suggestions.length) {
+          this.regionId =
+            this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
+        }
+      } catch (e) {
+        console.log(e);
       }
+
       await this.$store.dispatch("map/fetchRegion", {
         id: this.regionId,
         coords: this.centerCoords,
       });
+
+      if (this.currentFilters) {
+        this.filteredOffices = filterData(
+          this.$store.getters["map/getRegionOffices"],
+          this.currentFilters
+        );
+      }
+
       let showResult = this.showResult.bind(this);
       ymaps.geocode(suggest).then(function (res, context) {
         let obj = res.geoObjects.get(0);
@@ -198,10 +228,20 @@ export default {
         }
       });
     },
-    filterOffices(filters) {
+    async filterOffices(filters) {
+      await this.$store.dispatch("map/fetchRegion", {
+        id: this.regionId,
+        coords: this.centerCoords,
+      });
+      this.currentFilters = filters;
+      this.filteredOffices = filterData(
+        this.$store.getters["map/getRegionOffices"],
+        this.currentFilters
+      );
+      let _;
+      this.init(_, filters);
       if (this.$refs.tabs.currentTab == 0) {
         // Карта офисов
-        this.init(_, filters);
       }
       if (this.$refs.tabs.currentTab == 1) {
         // Карта метро
@@ -209,12 +249,6 @@ export default {
       if (this.$refs.tabs.currentTab == 2) {
         // Список офисов
         this.page = 0;
-        if (filters) {
-          this.filteredOffices = filterData(
-            this.$store.getters["map/getRegionOffices"],
-            filters
-          );
-        }
       }
     },
   },
@@ -229,7 +263,7 @@ export default {
       return data;
     },
     tabVisible() {
-      return this.regionId == 77 || this.regionId == 78;
+      // return this.regionId == 77 || this.regionId == 78;
     },
   },
 };
