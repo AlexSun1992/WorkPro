@@ -3,11 +3,12 @@
     <span id="show-btn" @click="$bvModal.show('select-city')">
       {{ city }}
     </span>
-    <b-modal id="select-city" hide-footer>
+    <b-modal id="select-city" size="lg" hide-footer>
       <template #modal-title> Выберите ваш город</template>
-      <div class="d-block text-center">
+      <div>
+        Воспользуйтесь поиском если не нашли ваш регион в списке:
         <autocomplete
-          placeholder="Выберите город"
+          placeholder="Поиск региона"
           :debounce-time="300"
           :search="search"
           :get-result-value="getResultValue"
@@ -17,10 +18,16 @@
         <span>
           <strong> Ваш регион: {{ city }} </strong>
         </span>
-        <div v-for="item in popularCities" :key="item.id">
-          <span @click="setPopularCity(item)" style="cursor: pointer">{{
-            item.text
-          }}</span>
+        <div class="col-lg-12>">
+          <div class="row">
+            <div :class="`col-lg-${12 / cols}`" v-for="column in columns">
+              <div v-for="item in column" :key="item.id">
+                <span @click="setPopularCity(item)" style="cursor: pointer">{{
+                  item.text
+                }}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </b-modal>
@@ -54,21 +61,23 @@ export default {
     return {
       city: null,
       popularCities: cities,
+      cols: 3,
     };
   },
   async created() {
-    await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
-      this.city = res.data[0]._data[0].TOWN || "г. Москва";
-      localStorage.setItem("location_user", this.city);
-    });
+    this.city =
+      localStorage.getItem("location_user") ||
+      (await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
+        return res.data[0]._data[0].TOWN.replace(/г/gi, "") || "Москва";
+      }));
   },
   methods: {
     setSearchedCity(result) {
-      this.city = result.data["city_with_type"];
+      this.city = result.data["city"];
       localStorage.setItem("location_user", this.city);
     },
     setPopularCity(result) {
-      this.city = `г. ${result.text}`;
+      this.city = result.text;
       localStorage.setItem("location_user", this.city);
     },
     async search(input) {
@@ -84,6 +93,26 @@ export default {
     },
     getResultValue(item) {
       return item.value;
+    },
+  },
+  computed: {
+    sortedPopularCities: function () {
+      function compare(a, b) {
+        if (a.text < b.text) return -1;
+        if (a.text > b.text) return 1;
+        return 0;
+      }
+      return this.popularCities.sort(compare);
+    },
+    columns() {
+      const columns = [];
+      const mid = Math.ceil(this.sortedPopularCities.length / this.cols);
+      for (let col = 0; col < this.cols; col++) {
+        columns.push(
+          this.sortedPopularCities.slice(col * mid, col * mid + mid)
+        );
+      }
+      return columns;
     },
   },
 };
