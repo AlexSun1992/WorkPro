@@ -238,6 +238,7 @@ export default {
         this.$store.getters["map/getRegionOffices"],
         this.currentFilters
       );
+      let _;
       this.init(_, filters);
       if (this.$refs.tabs.currentTab == 0) {
         // Карта офисов
