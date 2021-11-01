@@ -2,6 +2,9 @@
   <div class="map-container mt-3">
     <h5>Найдите офис рядом с вами</h5>
     <input type="text" id="suggest" />
+    <div v-if="suggest && !getOffices">
+      По вашему запросу ничего не найдено. Попробуйте изменить критерии поиска
+    </div>
     <FilterComponent :filters="filters" @update="filterOffices" class="my-3" />
     <Notification :notification="notification" />
     <b-tabs ref="tabs" content-class="mt-3">
@@ -11,7 +14,15 @@
       <!-- <b-tab title="На схеме метро" v-if="tabVisible"><p>Схема метро</p></b-tab> -->
       <b-tab title="На схеме метро" v-show="false"><p>Схема метро</p></b-tab>
       <b-tab title="В списке">
-        <OfficesList :data="getOffices" @update="page = $event" />
+        <OfficesList
+          v-if="regionId"
+          :data="getOffices"
+          @update="page = $event"
+        />
+        <div v-else>
+          По вашему запросу ничего не найдено. Попробуйте изменить критерии
+          поиска
+        </div>
       </b-tab>
     </b-tabs>
   </div>
@@ -148,8 +159,6 @@ export default {
           if (this.address.data.suggestions.length) {
             this.regionId =
               this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
-          } else {
-            this.regionId = "77";
           }
         } catch (e) {
           console.log(e);
@@ -200,18 +209,21 @@ export default {
           query: suggest,
           count: 1,
         });
+
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
+
+          await this.$store.dispatch("map/fetchRegion", {
+            id: this.regionId,
+            coords: this.centerCoords,
+          });
+        } else {
+          this.regionId = null;
         }
       } catch (e) {
         console.log(e);
       }
-
-      await this.$store.dispatch("map/fetchRegion", {
-        id: this.regionId,
-        coords: this.centerCoords,
-      });
 
       if (this.currentFilters) {
         this.filteredOffices = filterData(
@@ -260,6 +272,11 @@ export default {
       } else {
         data = this.$store.getters["map/getRegionOffices"];
       }
+
+      if (!this.regionId) {
+        data = null;
+      }
+
       return data;
     },
     tabVisible() {
