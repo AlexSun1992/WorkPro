@@ -58,7 +58,10 @@ export default {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value:
-            value === null || value === undefined || value === ""
+            value === null ||
+            value === undefined ||
+            value === "" ||
+            value.match(/^(0)\1/)
               ? null
               : Number(value),
         });
