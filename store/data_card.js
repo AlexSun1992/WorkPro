@@ -445,10 +445,17 @@ export const mutations = {
     state.captions = null;
     state.form = [];
   },
-  clearFormRelationField(state, data) {
-    const item = state.form.find((d) => d.fieldRelation === data.fieldName);
-    if (item) {
-      item.value = {};
+  clearFormRelationField(state, { name }) {
+    let currentFieldName = name;
+    while (true) {
+      let item = state.form.find((d) => d.fieldRelation === currentFieldName);
+      if (item) {
+        item.value = {};
+        item.options = [];
+        currentFieldName = item.name;
+      } else {
+        break;
+      }
     }
   },
   setFieldError(state, data) {
@@ -511,5 +518,11 @@ export const mutations = {
   setEnumOptions(state, params) {
     const item = state.form.find((d) => d.fieldId === params.fieldId);
     item.options = params.options;
+    if (item.options.length === 1) {
+      item.value = item.options[0];
+    }
+    if (item.options.length === 2) {
+      item.value = item.options[1];
+    }
   },
 };
