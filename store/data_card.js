@@ -1,7 +1,9 @@
+import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 
 export const state = () => ({
+  options: [],
   form: [],
   copyForm: [],
   oneToManyData: { table: {}, form: null },
@@ -28,6 +30,7 @@ export const state = () => ({
 });
 
 export const getters = {
+  getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
   getUpdateValueFunction: (state) => state.updateValueFunction,
   getRecaptchaToken: (state) => state.recaptchaToken,
@@ -70,7 +73,18 @@ export const getters = {
   },
   getLoading: (state) => state.loading,
 };
+
 export const actions = {
+  async askSuggestions({ dispatch, commit, getters, state }, payload) {
+    let url = "";
+    if (payload.data.fieldId !== undefined) {
+      url = `/api/dicwf/${payload.data.fieldId}/${payload.relationValue.value}`;
+    }
+
+    let response = await Axios({ url: url, method: "GET" });
+    commit("setData", response.data);
+  },
+
   async fetchForm({ dispatch, commit, getters, state }, params) {
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
@@ -336,6 +350,10 @@ export const actions = {
   },
 };
 export const mutations = {
+  setData(state, suggestions) {
+    state.options = suggestions;
+  },
+
   cardChanged(state, data) {
     state.cardChanged = data;
   },
@@ -424,6 +442,7 @@ export const mutations = {
     if (item) {
       item.value = {};
     }
+    console.log(item);
   },
   setFieldError(state, data) {
     try {

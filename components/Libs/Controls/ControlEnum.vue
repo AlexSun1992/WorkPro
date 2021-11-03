@@ -73,6 +73,14 @@ export default {
     }
   },
   methods: {
+    clearData() {
+      this.options = [];
+      if (this.isDisabled) {
+        return;
+      }
+      this.$emit("clear", { fieldName: this.data.name });
+    },
+
     initData() {
       let url = "";
       this.options = [];
@@ -92,15 +100,6 @@ export default {
           this.options = resp.data;
           if (this.options.length === 1) {
             let value = this.options[0];
-            this.$emit("update", {
-              fieldId: this.data.fieldId,
-              name: this.data.name,
-              value,
-            });
-            this.$emit("clear", { fieldName: this.data.name });
-          }
-          if (this.options.length === 2) {
-            let value = this.options[1];
             this.$emit("update", {
               fieldId: this.data.fieldId,
               name: this.data.name,
@@ -133,9 +132,6 @@ export default {
         }
         if (this.options.length === 1) {
           return this.options[0];
-        }
-        if (this.options.length === 2) {
-          return this.options[1];
         } else {
           return this.data.value;
         }
@@ -186,6 +182,10 @@ export default {
   },
   watch: {
     relationValue: function (val, old) {
+      if (this.data.value?.value && !val.value?.value) {
+        this.clearData();
+      }
+
       if (val.value?.value) {
         if (val.value.value !== old?.value.value) {
           this.initData();
