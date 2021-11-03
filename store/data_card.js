@@ -442,7 +442,6 @@ export const mutations = {
     if (item) {
       item.value = {};
     }
-    console.log(item);
   },
   setFieldError(state, data) {
     try {
