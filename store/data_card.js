@@ -62,6 +62,9 @@ export const getters = {
   getDataFieldByName: (state) => (name) => {
     return state.form.find((b) => b.name === name);
   },
+  getDataByFieldRelation: (state) => (name) => {
+    return state.form.find((b) => b.fieldRelation === name);
+  },
   getDataFieldByType: (state) => (name) => {
     return state.form.find((b) => b.type === name);
   },
@@ -312,6 +315,29 @@ export const actions = {
       }
     }
   },
+  async fetchDic(
+    { commit, getters, state },
+    { isRelation, fieldRelation, fieldId, id, dic }
+  ) {
+    try {
+      let relationValue;
+      let url;
+      if (isRelation && fieldRelation) {
+        relationValue = getters["getDataFieldByName"](fieldRelation);
+        url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
+      } else {
+        url = `/api/dic/55/${id}/${dic}`;
+      }
+      const data = await this.$axios.get(encodeURI(url));
+      commit("setEnumOptions", { options: data.data, fieldId: fieldId });
+    } catch (error) {
+      if (error.response) {
+        commit("setError", true);
+        commit("setErrorMessage", error.response.data);
+        return error.response;
+      }
+    }
+  },
   async fetchCard({ commit, dispatch, getters, state }, params) {
     try {
       dispatch("cancelRequest");
@@ -481,5 +507,9 @@ export const mutations = {
   },
   setUpdateEvent(state, params) {
     state.updateEvent = params;
+  },
+  setEnumOptions(state, params) {
+    const item = state.form.find((d) => d.fieldId === params.fieldId);
+    item.options = params.options;
   },
 };

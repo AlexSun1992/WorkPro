@@ -56,7 +56,6 @@ export default {
   data() {
     return {
       selectId: `id${this.data.fieldId}`,
-      options: [],
       param: "",
     };
   },
@@ -74,44 +73,45 @@ export default {
   },
   methods: {
     initData() {
-      let url = "";
-      this.options = [];
-      if (this.isDisabled) {
-        return;
-      }
-      if (this.relationValue) {
-        if (this.relationValue.value) {
-          url = `/api/dicwf/${this.data.fieldId}/${this.relationValue.value.value}`;
-        }
-      } else {
-        url = `/api/dic/55/${this.data.id}/${this.data.dic}`;
-      }
-      this.$axios({ url: url, method: "GET" })
-        .then((resp) => {
-          this.options = [];
-          this.options = resp.data;
-          if (this.options.length === 1) {
-            let value = this.options[0];
-            this.$emit("update", {
-              fieldId: this.data.fieldId,
-              name: this.data.name,
-              value,
-            });
-            this.$emit("clear", { fieldName: this.data.name });
-          }
-          if (this.options.length === 2) {
-            let value = this.options[1];
-            this.$emit("update", {
-              fieldId: this.data.fieldId,
-              name: this.data.name,
-              value,
-            });
-            this.$emit("clear", { fieldName: this.data.name });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$store.dispatch("data_card/fetchDic", this.data);
+      // let url = "";
+      // this.options = [];
+      // if (this.isDisabled) {
+      //   return;
+      // }
+      // if (this.relationValue) {
+      //   if (this.relationValue.value) {
+      //     url = `/api/dicwf/${this.data.fieldId}/${this.relationValue.value.value}`;
+      //   }
+      // } else {
+      //   url = `/api/dic/55/${this.data.id}/${this.data.dic}`;
+      // }
+      // this.$axios({ url: url, method: "GET" })
+      //   .then((resp) => {
+      //     this.options = [];
+      //     this.options = resp.data;
+      //     if (this.options.length === 1) {
+      //       let value = this.options[0];
+      //       this.$emit("update", {
+      //         fieldId: this.data.fieldId,
+      //         name: this.data.name,
+      //         value,
+      //       });
+      //       this.$emit("clear", { fieldName: this.data.name });
+      //     }
+      //     if (this.options.length === 2) {
+      //       let value = this.options[1];
+      //       this.$emit("update", {
+      //         fieldId: this.data.fieldId,
+      //         name: this.data.name,
+      //         value,
+      //       });
+      //       this.$emit("clear", { fieldName: this.data.name });
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
     optionDisplayText(option) {
       return option.text;
@@ -149,7 +149,6 @@ export default {
         this.$emit("clear", { fieldName: this.data.name });
       },
     },
-
     relationValue: {
       get: function () {
         if (this.data.isRelation) {
@@ -173,15 +172,26 @@ export default {
       )?.state;
     },
     isDisabled() {
-      if (this.relationValue && this.data.fieldRelation) {
-        if (this.relationValue.value) {
-          if (!this.relationValue.value.value) {
-            return true;
-          }
-        }
+      if (this.data.fieldRelation) {
+        return (
+          Boolean(
+            this.$store.getters["data_card/getDataFieldByName"](
+              this.data.fieldRelation
+            )?.value?.value
+          ) === false
+        );
       } else {
         return false;
       }
+    },
+    options: {
+      get: function () {
+        return (
+          this.$store.getters["data_card/getDataFieldByFieldId"](
+            this.data.fieldId
+          )?.options || []
+        );
+      },
     },
   },
   watch: {
