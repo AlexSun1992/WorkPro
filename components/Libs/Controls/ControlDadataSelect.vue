@@ -4,7 +4,7 @@
       <template v-slot:label
         ><span v-html="data.label"></span
         ><span v-if="data.helpText">
-          (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
+          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
             <span v-html="data.helpText"></span></vue-easy-tooltip></span
       ></template>
       <autocomplete

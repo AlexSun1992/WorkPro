@@ -1,7 +1,9 @@
+import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 
 export const state = () => ({
+  options: [],
   form: [],
   copyForm: [],
   oneToManyData: { table: {}, form: null },
@@ -28,6 +30,7 @@ export const state = () => ({
 });
 
 export const getters = {
+  getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
   getUpdateValueFunction: (state) => state.updateValueFunction,
   getRecaptchaToken: (state) => state.recaptchaToken,
@@ -62,6 +65,9 @@ export const getters = {
   getDataFieldByName: (state) => (name) => {
     return state.form.find((b) => b.name === name);
   },
+  getDataByFieldRelation: (state) => (name) => {
+    return state.form.find((b) => b.fieldRelation === name);
+  },
   getDataFieldByType: (state) => (name) => {
     return state.form.find((b) => b.type === name);
   },
@@ -70,7 +76,18 @@ export const getters = {
   },
   getLoading: (state) => state.loading,
 };
+
 export const actions = {
+  async askSuggestions({ dispatch, commit, getters, state }, payload) {
+    let url = "";
+    if (payload.data.fieldId !== undefined) {
+      url = `/api/dicwf/${payload.data.fieldId}/${payload.relationValue.value}`;
+    }
+
+    let response = await Axios({ url: url, method: "GET" });
+    commit("setData", response.data);
+  },
+
   async fetchForm({ dispatch, commit, getters, state }, params) {
     commit("setCardId", params.idCard);
     commit("setCardRelId", params.idRel);
@@ -312,6 +329,29 @@ export const actions = {
       }
     }
   },
+  async fetchDic(
+    { commit, getters, state },
+    { isRelation, fieldRelation, fieldId, id, dic }
+  ) {
+    try {
+      let relationValue;
+      let url;
+      if (isRelation && fieldRelation) {
+        relationValue = getters["getDataFieldByName"](fieldRelation);
+        url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
+      } else {
+        url = `/api/dic/55/${id}/${dic}`;
+      }
+      const data = await this.$axios.get(encodeURI(url));
+      commit("setEnumOptions", { options: data.data, fieldId: fieldId });
+    } catch (error) {
+      if (error.response) {
+        commit("setError", true);
+        commit("setErrorMessage", error.response.data);
+        return error.response;
+      }
+    }
+  },
   async fetchCard({ commit, dispatch, getters, state }, params) {
     try {
       dispatch("cancelRequest");
@@ -336,6 +376,10 @@ export const actions = {
   },
 };
 export const mutations = {
+  setData(state, suggestions) {
+    state.options = suggestions;
+  },
+
   cardChanged(state, data) {
     state.cardChanged = data;
   },
@@ -419,10 +463,17 @@ export const mutations = {
     state.captions = null;
     state.form = [];
   },
-  clearFormRelationField(state, data) {
-    const item = state.form.find((d) => d.fieldRelation === data.fieldName);
-    if (item) {
-      item.value = {};
+  clearFormRelationField(state, { name }) {
+    let currentFieldName = name;
+    while (true) {
+      let item = state.form.find((d) => d.fieldRelation === currentFieldName);
+      if (item) {
+        item.value = {};
+        item.options = [];
+        currentFieldName = item.name;
+      } else {
+        break;
+      }
     }
   },
   setFieldError(state, data) {
@@ -481,5 +532,15 @@ export const mutations = {
   },
   setUpdateEvent(state, params) {
     state.updateEvent = params;
+  },
+  setEnumOptions(state, params) {
+    const item = state.form.find((d) => d.fieldId === params.fieldId);
+    item.options = params.options;
+    if (item.options.length === 1) {
+      item.value = item.options[0];
+    }
+    if (item.options.length === 2) {
+      item.value = item.options[1];
+    }
   },
 };

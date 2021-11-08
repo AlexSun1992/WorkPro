@@ -304,6 +304,7 @@ converter.type = (data) => {
           copy[i].isRelation = copy[j].isRelation;
           copy[i].fieldRelation = copy[j].fieldRelation;
           copy[i].fieldId = copy[j].fieldId;
+          copy[i].options = null;
           del.push(data[j]);
         }
       }
