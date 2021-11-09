@@ -153,6 +153,7 @@ export default {
 <style scoped>
 .menu {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .red {
@@ -162,6 +163,8 @@ export default {
 li {
   list-style: none;
   cursor: pointer;
+  white-space: nowrap;
+  margin-bottom: 5px;
 }
 </style>
 <style>
