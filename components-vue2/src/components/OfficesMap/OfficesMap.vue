@@ -11,8 +11,15 @@
       <b-tab title="На карте" active
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
-      <!-- <b-tab title="На схеме метро" v-if="tabVisible"><p>Схема метро</p></b-tab> -->
-      <b-tab title="На схеме метро" v-show="false"><p>Схема метро</p></b-tab>
+      <b-tab ref="metro" title="На схеме метро">
+        <Mosmetro @click="chooseStation" />
+        <div v-show="cardVisible" ref="card" class="card">
+          <metro-office-card
+            @close="circleClicked = false"
+            :offices="stationOffices"
+          />
+        </div>
+      </b-tab>
       <b-tab title="В списке">
         <OfficesList
           v-if="regionId"
@@ -29,9 +36,11 @@
 </template>
 
 <script>
+import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
 import Notification from "./Notification.vue";
 import OfficesList from "./OfficesList.vue";
+import MetroOfficeCard from "./MetroOfficeCard.vue";
 import { filters, filterData } from "../../../../utils/map/filters";
 import { BTabs, BTab } from "bootstrap-vue";
 import Vue from "vue";
@@ -45,6 +54,8 @@ export default {
     Notification,
     BTabs,
     BTab,
+    Mosmetro,
+    MetroOfficeCard,
   },
   props: ["notification"],
   data() {
@@ -60,6 +71,9 @@ export default {
       currentFilters: null,
       address: null,
       suggest: null,
+      circleColor: null,
+      stationOffices: [],
+      circleClicked: false,
     };
   },
   async created() {
@@ -77,6 +91,33 @@ export default {
     }
   },
   methods: {
+    chooseStation(e) {
+      if (this.circle) {
+        this.circle.attributes.fill.value = "#fff";
+      }
+      if (e.target.tagName == "circle") {
+        this.stationOffices = [];
+        this.circleClicked = true;
+        let stationName = e.target.nextSibling.innerHTML;
+        let offices = this.$store.getters["map/getRegionOffices"];
+        offices.forEach((office) => {
+          let candidate = office.IDUNDERGROUND.find((item) => {
+            if (item.SNAME.includes(", ")) {
+              return item.SNAME.split(", ").includes(stationName);
+            } else {
+              return item.SNAME === stationName;
+            }
+          });
+          if (candidate) {
+            this.stationOffices.push(office);
+          }
+        });
+        this.circle = e.target;
+        this.circle.attributes.fill.value = "gold";
+        this.$refs["card"].style.top = e.offsetY + "px";
+        this.$refs["card"].style.left = e.offsetX + "px";
+      }
+    },
     async init(_, filters) {
       this.initSuggestView();
       let agencies = this.$store.getters["map/getAgencies"];
@@ -265,6 +306,9 @@ export default {
     },
   },
   computed: {
+    cardVisible() {
+      return this.circleClicked && this.stationOffices.length;
+    },
     getOffices() {
       let data;
       if (this.filteredOffices) {
@@ -286,7 +330,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+body {
+  margin: 0;
+  padding: 0;
+}
 .map {
   width: 800px;
   height: 600px;
@@ -298,5 +346,25 @@ input {
 }
 .filters {
   display: flex;
+}
+.tab-pane {
+  position: relative;
+}
+.card {
+  position: absolute;
+  min-width: 400px;
+  min-width: min-content;
+  padding: 15px;
+  & > div {
+    display: flex;
+  }
+}
+
+circle:hover {
+  cursor: pointer;
+  r: 15;
+}
+path:hover {
+  stroke-width: 12;
 }
 </style>
