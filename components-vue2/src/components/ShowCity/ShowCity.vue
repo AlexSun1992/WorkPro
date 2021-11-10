@@ -18,7 +18,7 @@
         </span>
         <span
           class="btn gotolk btn_trn btn-p-sm btn-icon-left btn-secondary"
-          @click="$bvModal.show('select-city')"
+          @click="showModalSelectCity"
         >
           Нет, другой
         </span>
@@ -114,6 +114,9 @@ export default {
     },
     setAutoCity(result) {
       localStorage.setItem("location_user", result);
+    },
+    showModalSelectCity() {
+      this.$bvModal.show("select-city");
     },
     async search(input) {
       if (input.length < 1) {
