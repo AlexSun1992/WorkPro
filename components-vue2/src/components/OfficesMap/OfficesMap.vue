@@ -307,7 +307,6 @@ export default {
   },
   computed: {
     cardVisible() {
-      debugger;
       return this.circleClicked && this.stationOffices.length;
     },
     getOffices() {
