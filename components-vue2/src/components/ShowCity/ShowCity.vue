@@ -18,7 +18,7 @@
         </span>
         <span
           class="btn gotolk btn_trn btn-p-sm btn-icon-left btn-secondary"
-          @click="showModalSelectCity"
+          @click="showModalSelectCity()"
         >
           Нет, другой
         </span>
