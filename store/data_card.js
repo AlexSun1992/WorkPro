@@ -433,8 +433,17 @@ export const mutations = {
           item.state = true;
           item.checked = true;
         }
-        if (item.value && item.value.__ob__) {
-          item.state = item.value.value || item.value.value == 0 ? true : false;
+        if (item.value && item.type === "enum") {
+          if (item.value.value === undefined && item.options) {
+            item.state = null;
+            item.checked = false;
+            if (item.options.length === 1) {
+              item.value = item.options[0];
+            }
+          } else {
+            item.state =
+              item.value.value || item.value.value == 0 ? true : false;
+          }
         }
       }
     }

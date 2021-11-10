@@ -149,18 +149,6 @@ export default {
       if (field.type !== "button") {
         this.$store.commit("data_card/cardChanged", true);
       }
-      if (typeof eventHandler === "function" && field.type != "button") {
-        let data = await eventHandler(
-          this.$store.getters["data_card/getForm"].map((a) =>
-            Object.assign({}, a)
-          ),
-          e,
-          this.$store._actions["data_card/fetchCard"][0]
-        );
-        if (data) {
-          this.$store.commit("data_card/setForm", data);
-        }
-      }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");
@@ -262,6 +250,18 @@ export default {
         fieldId: e.fieldId,
         value: e.value,
       });
+      if (typeof eventHandler === "function" && field.type != "button") {
+        let data = await eventHandler(
+          this.$store.getters["data_card/getForm"].map((a) =>
+            Object.assign({}, a)
+          ),
+          e,
+          this.$store._actions["data_card/fetchCard"][0]
+        );
+        if (data) {
+          this.$store.commit("data_card/setForm", data);
+        }
+      }
     },
 
     clearRelation(e) {

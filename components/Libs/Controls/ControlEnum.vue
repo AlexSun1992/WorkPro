@@ -66,13 +66,22 @@ export default {
   mounted() {
     if (this.$refs[this.selectId]) {
       this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
-        this.initData();
+        if (!this.data.fieldRelation) {
+          this.initData();
+        }
       };
     }
   },
   methods: {
-    initData() {
-      this.$store.dispatch("data_card/fetchDic", this.data);
+    async initData() {
+      await this.$store.dispatch("data_card/fetchDic", this.data);
+      if (this.data.fieldRelation) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: {},
+        });
+      }
     },
   },
   computed: {
@@ -83,7 +92,9 @@ export default {
         )?.value;
       },
       set: function (value) {
-        this.$store.commit("data_card/clearFormRelationField", this.data);
+        if (value?.value !== this.fieldValue?.value) {
+          this.$store.commit("data_card/clearFormRelationField", this.data);
+        }
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
