@@ -21,7 +21,6 @@
         :isError="isValid == false"
         v-model="fieldValue"
         placeholder="Выберите из списка"
-        @select="onSelect"
         @searchchange="initData"
       >
       </model-list-select>
@@ -56,7 +55,6 @@ export default {
   data() {
     return {
       selectId: `id${this.data.fieldId}`,
-      options: [],
       param: "",
     };
   },
@@ -74,97 +72,30 @@ export default {
   },
   methods: {
     initData() {
-      let url = "";
-      this.options = [];
-      if (this.isDisabled) {
-        return;
-      }
-      if (this.relationValue) {
-        if (this.relationValue.value) {
-          url = `/api/dicwf/${this.data.fieldId}/${this.relationValue.value.value}`;
-        }
-      } else {
-        url = `/api/dic/55/${this.data.id}/${this.data.dic}`;
-      }
-      this.$axios({ url: url, method: "GET" })
-        .then((resp) => {
-          this.options = [];
-          this.options = resp.data;
-          if (this.options.length === 1) {
-            let value = this.options[0];
-            this.$emit("update", {
-              fieldId: this.data.fieldId,
-              name: this.data.name,
-              value,
-            });
-            this.$emit("clear", { fieldName: this.data.name });
-          }
-          if (this.options.length === 2) {
-            let value = this.options[1];
-            this.$emit("update", {
-              fieldId: this.data.fieldId,
-              name: this.data.name,
-              value,
-            });
-            this.$emit("clear", { fieldName: this.data.name });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    optionDisplayText(option) {
-      return option.text;
-    },
-    onfocus() {
-      if (this.edit) {
-        this.initData();
-      }
-    },
-    onSelect(items, lastSelectItem) {
-      console.log(lastSelectItem);
+      this.$store.dispatch("data_card/fetchDic", this.data);
     },
   },
   computed: {
     fieldValue: {
       get: function () {
-        if (this.isDisabled) {
-          return "";
-        }
-        if (this.options.length === 1) {
-          return this.options[0];
-        }
-        if (this.options.length === 2) {
-          return this.options[1];
-        } else {
-          return this.data.value;
-        }
+        return this.$store.getters["data_card/getDataFieldByName"](
+          this.data.name
+        )?.value;
       },
       set: function (value) {
+        this.$store.commit("data_card/clearFormRelationField", this.data);
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value,
         });
-        this.$emit("clear", { fieldName: this.data.name });
       },
     },
-
     relationValue: {
       get: function () {
-        if (this.data.isRelation) {
-          if (this.data.fieldRelation !== null) {
-            return this.$store.getters["data_card/getDataFieldByName"](
-              this.data.fieldRelation
-            );
-          } else {
-            return this.$store.getters["data_card/getDataFieldByName"](
-              this.data.name
-            );
-          }
-        } else {
-          return null;
-        }
+        return this.$store.getters["data_card/getDataFieldByName"](
+          this.data.fieldRelation
+        )?.value;
       },
     },
     isValid() {
@@ -173,21 +104,40 @@ export default {
       )?.state;
     },
     isDisabled() {
-      if (this.relationValue && this.data.fieldRelation) {
-        if (this.relationValue.value) {
-          if (!this.relationValue.value.value) {
-            return true;
-          }
-        }
+      if (this.data.fieldRelation) {
+        return (
+          Boolean(
+            this.$store.getters["data_card/getDataFieldByName"](
+              this.data.fieldRelation
+            )?.value?.value
+          ) === false
+        );
       } else {
         return false;
       }
     },
+    options: {
+      get: function () {
+        if (
+          this.$store.getters["data_card/getDataFieldByFieldId"](
+            this.data.fieldId
+          )?.options
+        ) {
+          return this.$store.getters["data_card/getDataFieldByFieldId"](
+            this.data.fieldId
+          )?.options;
+        }
+        if (this.data.value?.value) {
+          return [this.data.value];
+        }
+        return [];
+      },
+    },
   },
   watch: {
-    relationValue: function (val, old) {
-      if (val.value?.value) {
-        if (val.value.value !== old?.value.value) {
+    relationValue: function (newVal, oldVal) {
+      if (newVal?.value !== oldVal?.value) {
+        if (newVal?.value) {
           this.initData();
         }
       }

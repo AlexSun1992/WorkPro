@@ -145,17 +145,20 @@ export default {
 
     async updateValue(e) {
       let field = this.data.find((f) => f.fieldId === e.fieldId);
+
       if (field.type !== "button") {
         this.$store.commit("data_card/cardChanged", true);
       }
       if (typeof eventHandler === "function" && field.type != "button") {
         let data = await eventHandler(
-          this.data.map((a) => Object.assign({}, a)),
+          this.$store.getters["data_card/getForm"].map((a) =>
+            Object.assign({}, a)
+          ),
           e,
           this.$store._actions["data_card/fetchCard"][0]
         );
         if (data) {
-          this.$store.commit("data_card/setForm", data || this.data);
+          this.$store.commit("data_card/setForm", data);
         }
       }
       if (field.type === "button" && e.action) {
