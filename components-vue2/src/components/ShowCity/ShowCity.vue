@@ -1,5 +1,8 @@
 <template>
   <div>
+    <span id="show-btn" @click="$bvModal.show('select-city')">
+      {{ city }}
+    </span>
     <b-dropdown
       size="md"
       variant="link"
