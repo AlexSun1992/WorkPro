@@ -1,11 +1,12 @@
 import Vue from "vue";
 import vueCustomElement from "vue-custom-element";
-import { ModalPlugin } from "bootstrap-vue";
+import { ModalPlugin, DropdownPlugin } from "bootstrap-vue";
 import axios from "axios";
 import { store } from "./store/index";
 store.$axios = axios;
 Vue.prototype.$axios = axios;
 Vue.use(ModalPlugin);
+Vue.use(DropdownPlugin);
 Vue.use(vueCustomElement);
 Vue.config.productionTip = false;
 

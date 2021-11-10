@@ -1,23 +1,47 @@
 <template>
   <div>
-    <span id="show-btn" @click="$bvModal.show('select-city')">
-      {{ city }}
-    </span>
+    <b-dropdown
+      size="md"
+      variant="link"
+      toggle-class="text-decoration-none"
+      no-caret
+      :text="city"
+      ref="dropdown"
+    >
+      <b-dropdown-header>Ваш город {{ city }}?</b-dropdown-header>
+      <b-dropdown-item>
+        <span
+          @click="setAutoCity(city)"
+          class="gotolk btn_trn btn-p-sm btn-icon-left"
+        >
+          Да, верно
+        </span>
+        <span
+          class="btn gotolk btn_trn btn-p-sm btn-icon-left btn-secondary"
+          @click="$bvModal.show('select-city')"
+        >
+          Нет, другой
+        </span>
+      </b-dropdown-item>
+    </b-dropdown>
     <b-modal id="select-city" size="lg" hide-footer>
-      <template #modal-title> Выберите ваш город</template>
+      <template #modal-title> Выберите город</template>
       <div>
-        Воспользуйтесь поиском если не нашли ваш регион в списке:
+        <span>
+          <strong> Ваш город: {{ city }} </strong>
+        </span>
         <autocomplete
-          placeholder="Поиск региона"
+          placeholder="Поиск города"
+          ref="autocomplete"
           :debounce-time="300"
           :search="search"
           :get-result-value="getResultValue"
           @submit="setSearchedCity"
+          :defaultValue="city"
         >
         </autocomplete>
-        <span>
-          <strong> Ваш регион: {{ city }} </strong>
-        </span>
+        <hr />
+
         <div class="col-lg-12>">
           <div class="row">
             <div :class="`col-lg-${12 / cols}`" v-for="column in columns">
@@ -68,17 +92,28 @@ export default {
     this.city =
       localStorage.getItem("location_user") ||
       (await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
-        return res.data[0]._data[0].TOWN.replace(/г/gi, "") || "Москва";
+        this.$refs.dropdown.show(true);
+        if (res.data[0]._data[0].TOWN) {
+          return res.data[0]._data[0].TOWN.replace(/г/gi, "");
+        } else {
+          return "Москва";
+        }
       }));
   },
   methods: {
     setSearchedCity(result) {
-      this.city = result.data["city"];
+      if (result.data["city"]) {
+        this.city = result.data["city"];
+      }
       localStorage.setItem("location_user", this.city);
     },
     setPopularCity(result) {
+      this.$refs.autocomplete.value = result.text;
       this.city = result.text;
       localStorage.setItem("location_user", this.city);
+    },
+    setAutoCity(result) {
+      localStorage.setItem("location_user", result);
     },
     async search(input) {
       if (input.length < 1) {
@@ -102,7 +137,12 @@ export default {
         if (a.text > b.text) return 1;
         return 0;
       }
-      return this.popularCities.sort(compare);
+      this.popularCities.sort(compare);
+      this.popularCities.unshift({
+        id: 1,
+        text: "Москва",
+      });
+      return this.popularCities;
     },
     columns() {
       const columns = [];
