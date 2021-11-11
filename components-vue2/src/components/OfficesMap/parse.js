@@ -18,7 +18,7 @@ async function main() {
   );
   writeFileSync(filename, svg);
   await page.waitForTimeout(10000);
-  // await browser.close();
+  await browser.close();
 }
 
 main();
