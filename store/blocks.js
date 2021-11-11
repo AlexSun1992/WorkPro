@@ -91,10 +91,13 @@ export const actions = {
   },
   async fetchBlock({ commit, dispatch }, params) {
     let url;
+    const urlJsonFilters = JSON.stringify(params.query);
     if (!params.zone) {
-      url = `/api/list/55/${params.id}/{}`;
+      url = `/api/list/55/${params.id}/${encodeURIComponent(urlJsonFilters)}`;
     } else {
-      url = `/api/list/55/${params.id}/{}?zone=free`;
+      url = `/api/list/55/${params.id}/${encodeURIComponent(
+        urlJsonFilters
+      )}?zone=free`;
     }
     await this.$axios.get(url).then((res) => {
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
