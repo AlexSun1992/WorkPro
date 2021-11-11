@@ -111,6 +111,11 @@ export default {
         );
       },
     },
+    actions: {
+      get: function () {
+        return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
+      },
+    },
   },
   methods: {
     refreshWizardList() {
