@@ -1,9 +1,5 @@
 export const cities = [
   {
-    id: 1,
-    text: "Ростов-на-Дону",
-  },
-  {
     id: 2,
     text: "Волгоград",
   },
@@ -21,7 +17,7 @@ export const cities = [
   },
   {
     id: 7,
-    text: "Москва",
+    text: "Ростов-на-Дону",
   },
   {
     id: 9,
