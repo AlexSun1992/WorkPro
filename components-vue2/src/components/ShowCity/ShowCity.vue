@@ -1,9 +1,7 @@
 <template>
   <div>
-    <span id="show-btn" @click="$bvModal.show('select-city')">
-      {{ city }}
-    </span>
     <b-dropdown
+      lazy="true"
       size="md"
       variant="link"
       toggle-class="text-decoration-none"
