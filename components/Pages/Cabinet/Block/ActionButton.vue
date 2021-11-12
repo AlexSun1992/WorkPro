@@ -30,7 +30,7 @@ export default {
     relId: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
   },
   methods: {
