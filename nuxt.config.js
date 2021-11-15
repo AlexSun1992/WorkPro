@@ -49,6 +49,7 @@ module.exports = {
     "~/plugins/moment",
     "~/plugins/vue-agile",
     { src: "~plugins/vcalendar.js", ssr: false },
+    // { src: "~/plugins/load-script.js" },
     "~/plugins/quizCalculator.js",
     "~/plugins/fileUploader.js",
     "~/plugins/fileDownload.js",
@@ -87,6 +88,7 @@ module.exports = {
      ** You can extend webpack config here
      */
     vendor: ["axios"],
+
     extend(config, { isDev, isClient }) {
       config.resolve.alias.vue = "vue/dist/vue.common";
       if (isClient) config.devtool = "eval-source-map";
