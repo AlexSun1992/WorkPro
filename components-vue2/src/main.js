@@ -63,6 +63,17 @@ Vue.customElement(
       ) => resolve(lazyComponent.default));
     })
 );
+
+// Vue.customElement(
+//   "component-current-office-map",
+//   () =>
+//     new Promise((resolve) => {
+//       require(["./components/CurrentOfficeMap/CurrentOfficeMap.vue"], (
+//         lazyComponent
+//       ) => resolve(lazyComponent.default));
+//     })
+// );
+
 Vue.customElement(
   "component-card-editor",
   () =>

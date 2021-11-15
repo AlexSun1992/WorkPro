@@ -50,6 +50,7 @@ import ControlDadataSelect from "./ControlDadataSelect.vue";
 import ControlCustomCombobox from "./ControlCustomCombobox.vue";
 import ControlCustomDouble from "./ControlCustomDouble.vue";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha.vue";
+//import ControlCurrentOfficeMap from "./ControlCurrentOfficeMap.vue";
 
 export default {
   name: "Control",
