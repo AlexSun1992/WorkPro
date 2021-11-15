@@ -3,10 +3,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-import LoadScript from "vue-plugin-load-script";
-Vue.use(LoadScript);
-
 export default {
   name: "ControlMap",
   data() {
@@ -25,7 +21,7 @@ export default {
   },
 
   methods: {
-    async init() {
+    init() {
       this.myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 12,
