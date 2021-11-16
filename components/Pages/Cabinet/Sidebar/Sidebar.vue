@@ -17,6 +17,12 @@
         </li>
       </n-link>
       <li class="sidebar-nav-item">
+        <a href="#" @click="test()" target="blank">
+          <div :class="'menu-icon-polities'"></div>
+          <span>Телемедицина</span>
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
         <a href="#" @click="logout()">
           <div :class="'menu-icon-exit'"></div>
           <span>Выйти</span>
@@ -85,6 +91,14 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    test() {
+      const token = this.$auth.$storage._state["_token.local"].replace(
+        "Bearer ",
+        ""
+      );
+      const url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
+      window.location.href = url;
     },
   },
 
