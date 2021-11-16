@@ -50,6 +50,7 @@ import ControlDadataSelect from "./ControlDadataSelect.vue";
 import ControlCustomCombobox from "./ControlCustomCombobox.vue";
 import ControlCustomDouble from "./ControlCustomDouble.vue";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha.vue";
+import ControlMap from "./ControlMap.vue";
 
 export default {
   name: "Control",
@@ -80,6 +81,7 @@ export default {
     ControlCustomCombobox,
     ControlCustomDouble,
     ControlGoogleCaptcha,
+    ControlMap,
   },
   props: {
     data: {

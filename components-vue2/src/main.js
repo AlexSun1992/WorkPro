@@ -37,6 +37,7 @@ Vue.customElement(
       ) => resolve(lazyComponent.default));
     })
 );
+
 Vue.customElement(
   "component-password-recovery-form",
   () =>
@@ -63,6 +64,7 @@ Vue.customElement(
       ) => resolve(lazyComponent.default));
     })
 );
+
 Vue.customElement(
   "component-card-editor",
   () =>
