@@ -1,5 +1,5 @@
 <template>
-  <div id="map" class="test"></div>
+  <div id="map" class="max-size"></div>
 </template>
 
 <script>
@@ -13,6 +13,19 @@ export default {
     };
   },
 
+  props: {
+    Lattitude: {
+      type: Number,
+      required: false,
+      default: () => null,
+    },
+    Longetude: {
+      type: Number,
+      required: false,
+      default: () => null,
+    },
+  },
+
   async created() {
     if (process.client) {
       await this.$loadScript(
@@ -24,14 +37,15 @@ export default {
   methods: {
     init() {
       this.myMap = new ymaps.Map("map", {
-        center: [55.76, 37.64],
+        center: [this.Lattitude, this.Longetude],
         zoom: 12,
+        controls: [],
       });
 
       this.myPlacemark = new ymaps.GeoObject({
         geometry: {
           type: "Point", // тип геометрии - точка
-          coordinates: [55.76, 37.64], // координаты точки
+          coordinates: [this.Lattitude, this.Longetude], // координаты точки
         },
       });
 
@@ -42,9 +56,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.test {
-  width: 300px;
-  height: 300px;
+.max-size {
+  width: 100%;
+  height: 100px;
   box-shadow: 0 0 1px 1px black;
 }
 </style>
