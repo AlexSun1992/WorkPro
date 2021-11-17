@@ -14,6 +14,7 @@
       name="data"
       v-bind:content="item"
     ></slot>
+    <slot v-bind:content="dataContent.items"></slot>
   </div>
 </template>
 
