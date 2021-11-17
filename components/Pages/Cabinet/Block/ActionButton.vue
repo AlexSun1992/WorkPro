@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <b-button
-      v-if="action"
-      @click="$bvModal.show('confirmRefuse' + action.NITEM + actionId)"
-    >
-      <slot><div v-text="action.SNAME"></div></slot>
-    </b-button>
+  <b-button
+    v-if="action"
+    @click="$bvModal.show('confirmRefuse' + action.NITEM + actionId)"
+  >
+    <slot><div v-text="action.SNAME"></div></slot>
     <b-modal
+      modal-class="cabinet"
       v-if="action.LREQUESTCODE === true"
       :id="'confirmRefuse' + action.NITEM + actionId"
       @ok="startAction"
@@ -15,7 +14,7 @@
     >
       Вы действительно хотите отменить прием?
     </b-modal>
-  </div>
+  </b-button>
 </template>
 
 <script>
