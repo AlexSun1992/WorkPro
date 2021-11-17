@@ -72,6 +72,12 @@ export default {
   },
 
   computed: {
+    actions: {
+      get: function () {
+        return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
+      },
+    },
+
     dataContent: {
       get: function () {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);

@@ -160,6 +160,8 @@ converter.form = async (data, params) => {
       obj.type = "WizardButton";
     } else if (webFields[i].IDCONTROL == 41) {
       obj.type = "GoogleCaptcha";
+    } else if (webFields[i].IDCONTROL == 42) {
+      obj.type = "Map";
     } else {
       obj.type = "string";
     }

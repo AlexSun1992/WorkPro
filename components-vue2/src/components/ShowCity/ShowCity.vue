@@ -1,30 +1,22 @@
 <template>
   <div>
-    <b-dropdown
-      lazy="true"
-      size="md"
-      variant="link"
-      toggle-class="text-decoration-none"
-      no-caret
-      :text="city"
-      ref="dropdown"
-    >
-      <b-dropdown-header>Ваш город {{ city }}?</b-dropdown-header>
-      <b-dropdown-item>
-        <span
+    <b-button size="md" variant="link" @click="visible = !visible">
+      {{ city }}
+    </b-button>
+    <b-collapse v-model="visible" class="mt-2">
+      <b-card style="max-width: 18rem">
+        <b-button
+          variant="link"
           @click="setAutoCity(city)"
-          class="gotolk btn_trn btn-p-sm btn-icon-left"
+          class="btn-icon-left"
         >
           Да, верно
-        </span>
-        <span
-          class="btn gotolk btn_trn btn-p-sm btn-icon-left btn-secondary"
-          @click="showModalSelectCity()"
-        >
+        </b-button>
+        <b-button variant="success" @click="showModalSelectCity()">
           Нет, другой
-        </span>
-      </b-dropdown-item>
-    </b-dropdown>
+        </b-button>
+      </b-card>
+    </b-collapse>
     <b-modal id="select-city" size="lg" hide-footer>
       <template #modal-title> Выберите город</template>
       <div>
@@ -63,6 +55,7 @@
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { cities } from "./cities.js";
+import { BButton, BCollapse, BCard } from "bootstrap-vue";
 function getParams(input) {
   return {
     query: "address",
@@ -81,10 +74,14 @@ export default {
   name: "ChangeCity",
   components: {
     Autocomplete,
+    BButton,
+    BCollapse,
+    BCard,
   },
   data() {
     return {
       city: null,
+      visible: false,
       popularCities: cities,
       cols: 3,
     };
@@ -93,7 +90,7 @@ export default {
     this.city =
       localStorage.getItem("location_user") ||
       (await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
-        this.$refs.dropdown.show(true);
+        this.visible = true;
         if (res.data[0]._data[0].TOWN) {
           return res.data[0]._data[0].TOWN.replace(/г/gi, "");
         } else {
@@ -114,9 +111,11 @@ export default {
       localStorage.setItem("location_user", this.city);
     },
     setAutoCity(result) {
+      this.visible = false;
       localStorage.setItem("location_user", result);
     },
     showModalSelectCity() {
+      this.visible = false;
       this.$bvModal.show("select-city");
     },
     async search(input) {

@@ -49,6 +49,8 @@ module.exports = {
     "~/plugins/moment",
     "~/plugins/vue-agile",
     { src: "~plugins/vcalendar.js", ssr: false },
+    // { src: "~/plugins/load-script.js" },
+    "~/plugins/loadScript.js",
     "~/plugins/quizCalculator.js",
     "~/plugins/fileUploader.js",
     "~/plugins/fileDownload.js",
@@ -87,12 +89,13 @@ module.exports = {
      ** You can extend webpack config here
      */
     vendor: ["axios"],
+
     extend(config, { isDev, isClient }) {
       config.resolve.alias.vue = "vue/dist/vue.common";
       if (isClient) config.devtool = "eval-source-map";
       else config.devtool = "inline-source-map";
     },
-    transpile: ["vue-agile"],
+    transpile: ["vue-agile", "vue-plugin-load-script"],
   },
   proxy: {
     "/free": "https://mobile.reso.ru",
