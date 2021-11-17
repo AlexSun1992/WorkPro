@@ -1,7 +1,21 @@
 <template>
-  <b-button v-if="action" @click.stop="startAction()">
-    <slot><div v-text="action.SNAME"></div></slot>
-  </b-button>
+  <div>
+    <b-button
+      v-if="action"
+      @click="$bvModal.show('confirmRefuse' + action.NITEM + actionId)"
+    >
+      <slot><div v-text="action.SNAME"></div></slot>
+    </b-button>
+    <b-modal
+      v-if="action.LREQUESTCODE === true"
+      :id="'confirmRefuse' + action.NITEM + actionId"
+      @ok="startAction"
+      cancel-title="Нет"
+      ok-title="Да"
+    >
+      Вы действительно хотите отменить прием?
+    </b-modal>
+  </div>
 </template>
 
 <script>
@@ -33,6 +47,7 @@ export default {
       default: () => null,
     },
   },
+
   methods: {
     async startAction() {
       try {
