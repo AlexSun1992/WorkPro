@@ -17,7 +17,7 @@
         </li>
       </n-link>
       <li class="sidebar-nav-item">
-        <a href="#" @click="test()" target="blank">
+        <a :href="url" target="blank">
           <div :class="'menu-icon-polities'"></div>
           <span>Телемедицина</span>
         </a>
@@ -60,10 +60,16 @@ export default {
     return {
       endScrollMenu: false,
       sideBarMini: false,
+      url: null,
     };
   },
   created() {
     this.$auth.fetchUser();
+    const token = this.$auth.$storage._state["_token.local"].replace(
+      "Bearer ",
+      ""
+    );
+    this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
   },
   methods: {
     updateScroll() {
@@ -92,14 +98,14 @@ export default {
         console.log(e);
       }
     },
-    test() {
-      const token = this.$auth.$storage._state["_token.local"].replace(
+    /* test() {
+      const tokenKey = this.$auth.$storage._state["_token.local"].replace(
         "Bearer ",
         ""
       );
-      const url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
-      window.location.href = url;
-    },
+      // const url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
+      return tokenKey;
+    }, */
   },
 
   computed: {
