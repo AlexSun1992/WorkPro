@@ -1,18 +1,26 @@
 <template>
   <b-button
     v-if="action"
-    @click="$bvModal.show('confirmRefuse' + action.NITEM + actionId)"
+    @click="
+      action.LREQUESTCODE === true
+        ? $bvModal.show(String(rowId))
+        : startAction()
+    "
   >
     <slot><div v-text="action.SNAME"></div></slot>
     <b-modal
       modal-class="cabinet"
       v-if="action.LREQUESTCODE === true"
-      :id="'confirmRefuse' + action.NITEM + actionId"
+      :id="String(rowId)"
       @ok="startAction"
       cancel-title="Нет"
       ok-title="Да"
     >
-      Вы действительно хотите отменить прием?
+      {{
+        insideContent !== ""
+          ? insideContent
+          : `Вы действительно хотите выполнить действие "${action.SNAME}"?`
+      }}
     </b-modal>
   </b-button>
 </template>
@@ -44,6 +52,11 @@ export default {
       type: String,
       required: false,
       default: () => null,
+    },
+    insideContent: {
+      type: String,
+      required: false,
+      default: () => "",
     },
   },
 
