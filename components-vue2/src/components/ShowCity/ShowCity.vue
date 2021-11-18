@@ -6,23 +6,27 @@
     <b-collapse v-model="visible" class="sity-question">
       <b-card>
         <b-button
-          variant="link"
+          variant="primary"
           @click="setAutoCity(city)"
           class="btn-icon-left"
         >
           Да, верно
         </b-button>
-        <b-button variant="success" @click="showModalSelectCity()">
+        <b-button
+          variant="secondary"
+          class="ml-3"
+          @click="showModalSelectCity()"
+        >
           Нет, другой
         </b-button>
       </b-card>
     </b-collapse>
     <b-modal id="select-city" size="lg" hide-footer>
-      <template #modal-title> Выберите город</template>
+      <template #modal-title>Выберите город</template>
       <div>
-        <span>
+        <div class="mb-2">
           <strong> Ваш город: {{ city }} </strong>
-        </span>
+        </div>
         <autocomplete
           placeholder="Поиск города"
           ref="autocomplete"
@@ -33,9 +37,7 @@
           :defaultValue="city"
         >
         </autocomplete>
-        <hr />
-
-        <div class="col-lg-12>">
+        <div class="mt-2">
           <div class="row">
             <div :class="`col-lg-${12 / cols}`" v-for="column in columns">
               <div v-for="item in column" :key="item.id">
