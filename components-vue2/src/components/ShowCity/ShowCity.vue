@@ -1,10 +1,10 @@
 <template>
   <div>
-    <b-button size="md" variant="link" @click="visible = !visible">
+    <b-button class="select-sity" variant="link" @click="visible = !visible">
       {{ city }}
     </b-button>
-    <b-collapse v-model="visible" class="mt-2">
-      <b-card style="max-width: 18rem">
+    <b-collapse v-model="visible" class="sity-question">
+      <b-card>
         <b-button
           variant="link"
           @click="setAutoCity(city)"
