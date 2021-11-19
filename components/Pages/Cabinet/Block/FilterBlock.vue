@@ -56,7 +56,7 @@ export default {
       default: () => null,
     },
     propertyName: {
-      type: String,
+      type: String | Array[String],
       required: true,
       default: () => null,
     },
