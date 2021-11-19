@@ -1,6 +1,27 @@
 <template>
-  <b-button v-if="action" @click.stop="startAction()">
+  <b-button
+    v-if="action"
+    @click="
+      action.LREQUESTCODE === true
+        ? $bvModal.show(String(rowId))
+        : startAction()
+    "
+  >
     <slot><div v-text="action.SNAME"></div></slot>
+    <b-modal
+      modal-class="cabinet"
+      v-if="action.LREQUESTCODE === true"
+      :id="String(rowId)"
+      @ok="startAction"
+      cancel-title="Нет"
+      ok-title="Да"
+    >
+      {{
+        insideContent !== ""
+          ? insideContent
+          : `Вы действительно хотите выполнить действие "${action.SNAME}"?`
+      }}
+    </b-modal>
   </b-button>
 </template>
 
@@ -32,7 +53,13 @@ export default {
       required: false,
       default: () => null,
     },
+    insideContent: {
+      type: String,
+      required: false,
+      default: () => "",
+    },
   },
+
   methods: {
     async startAction() {
       try {

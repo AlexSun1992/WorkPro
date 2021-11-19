@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     init() {
-      if (this.myMap) return;
+      this.myMap?.destroy();
       this.myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 11,
@@ -78,7 +78,7 @@ export default {
     dataContent() {
       this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
       if (this.items) {
-        ymaps.ready(this.init);
+        ymaps.ready(this.init());
       }
     },
   },
