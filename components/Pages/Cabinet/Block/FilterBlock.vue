@@ -1,6 +1,6 @@
 <template>
-  <div class="test">
-    <ul class="menu">
+  <div>
+    <ul class="menu" v-if="filterType !== 'query'">
       <li v-for="item in filterItems" :key="item.name">
         <b-button
           :class="{
@@ -13,7 +13,7 @@
       </li>
       <li>
         <b-button
-          v-if="this.filterType !== 'radiobutton'"
+          v-if="filterType !== 'radiobutton'"
           :class="{
             'filter-checked': isAllFilters,
           }"
@@ -22,6 +22,14 @@
         >
       </li>
     </ul>
+
+    <div class="search" v-else>
+      <b-form-input
+        v-model="searchString"
+        placeholder="Введите поисковый запрос"
+      ></b-form-input>
+      <!-- <div class="mt-2">Value: {{ text }}</div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -32,6 +40,7 @@ export default {
     return {
       AllUnits: "Все",
       isAllFilters: true,
+      searchString: "",
     };
   },
 
@@ -147,6 +156,14 @@ export default {
       return [];
     },
   },
+  watch: {
+    searchString(val) {
+      this.$store.commit("blocks/setSearchParams", {
+        searchString: val,
+        searchProperty: this.propertyName,
+      });
+    },
+  },
 };
 </script>
 
@@ -171,5 +188,9 @@ li {
 .cabinet .btn.btn-secondary .btn-filter-checked {
   background-color: #008b4e;
   color: white;
+}
+
+.search {
+  width: 20vw;
 }
 </style>
