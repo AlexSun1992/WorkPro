@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <filter-block></filter-block> -->
     <component v-bind:is="params.component" :params="params"></component>
   </div>
 </template>
