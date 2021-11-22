@@ -91,7 +91,7 @@ import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
 
-const COOKIE_NAME = "url";
+//const COOKIE_NAME = "url";
 
 export default {
   components: {
@@ -125,7 +125,6 @@ export default {
   },
 
   created() {
-    //console.log(window.location.href);
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.initialCount = this.count;
     this.resendCount = this.count;
