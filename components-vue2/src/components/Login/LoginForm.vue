@@ -125,6 +125,7 @@ export default {
   },
 
   created() {
+    //console.log(window.location.href);
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.initialCount = this.count;
     this.resendCount = this.count;
@@ -146,11 +147,10 @@ export default {
         document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
         window.location.href = "/cabinet/55/0/701";
 
-        if (Cookies.get(COOKIE_NAME)) {
-          window.location.href = `${Cookies.get(COOKIE_NAME)}`;
-        } else {
-          Cookies.remove(COOKIE_NAME);
-          window.location.href = "/cabinet/55/0/701";
+        const attempt = new URL(window.location.href);
+
+        if (attempt.searchParams.has("ref")) {
+          window.location.href = `${attempt.searchParams.get("ref")}`;
         }
       } catch (e) {
         this.errorMessage = "Неверный телефон или пароль";
