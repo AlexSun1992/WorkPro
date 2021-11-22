@@ -50,6 +50,7 @@
         >
       </div>
     </div>
+
     <div class="row">
       <b-alert class="mt-3" show v-if="errorMessage" variant="danger">{{
         errorMessage
@@ -73,6 +74,8 @@ export default {
   },
 
   mounted() {
+    console.log(this.params);
+    console.log(this.isButtonSave);
     this.$bvModal.show("modal");
   },
 
