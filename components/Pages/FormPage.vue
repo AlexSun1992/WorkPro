@@ -74,8 +74,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.params);
-    console.log(this.isButtonSave);
     this.$bvModal.show("modal");
   },
 
