@@ -28,11 +28,11 @@
         v-model="searchString"
         placeholder="Введите поисковый запрос"
       ></b-form-input>
-      <!-- <div class="mt-2">Value: {{ text }}</div> -->
     </div>
   </div>
 </template>
 <script>
+import { changeKeyboardLayout } from "~/utils/utils";
 export default {
   name: "FilterBlock",
 
@@ -157,9 +157,9 @@ export default {
     },
   },
   watch: {
-    searchString(val) {
+    searchString(str) {
       this.$store.commit("blocks/setSearchParams", {
-        searchString: val,
+        searchString: changeKeyboardLayout(str),
         searchProperty: this.propertyName,
       });
     },
