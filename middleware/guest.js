@@ -9,14 +9,22 @@ export default function ({ app, store, redirect, route }) {
       app.$cookiz.get("auth._refresh_token.local")
     );
   }
+
   if (!app.$cookiz.get("auth._token.local")) {
-    app.$cookiz.set("url", route.fullPath);
+    const homePage = "http://localhost:8080";
+
+    const target = new URL("/login", homePage);
+
+    target.searchParams.set("ref", route.fullPath);
+
+    const redirectUrl = `${target.pathname}${target.search}`;
+
     if (process.client) {
       if (window !== undefined) {
-        window.location.href = "/login";
+        window.location.href = `${redirectUrl}`;
       }
     } else {
-      return redirect("/login");
+      return redirect(`${redirectUrl}`);
     }
   }
 }
