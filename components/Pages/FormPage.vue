@@ -27,7 +27,6 @@
         ></v-runtime-template>
       </div>
     </component>
-
     <div v-if="isButtonSave" class="mt-3 row button-container">
       <div class="col-12" v-if="params.settings.edit">
         <b-button
@@ -37,8 +36,8 @@
           variant="success"
           class="col-12 col-md-auto mr-4"
           :style="isButtonDisabled"
-          >Сохранить</b-button
-        >
+          >Сохранить
+        </b-button>
         <b-button
           pill
           v-on:click="cancelDataCard"
@@ -80,6 +79,7 @@ export default {
   async created() {
     try {
       this.$store.commit("data_card/clearFormData");
+      this.$store.commit("data_card/reverseBtnIsSave");
       // Будем ли держать в data_card?
       const list = await this.$axios.get(
         `/api/list/${this.params.page.idModule}/${this.params.page.idItem}/[]`
@@ -126,7 +126,6 @@ export default {
       );
     },
     //
-
     errorMessage() {
       return this.$store.getters["data_card/getErrorMessage"];
     },
