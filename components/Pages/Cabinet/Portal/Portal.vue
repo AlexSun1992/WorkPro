@@ -27,6 +27,8 @@ import VRuntimeTemplate from "v-runtime-template";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FilterBlock from "../Block/FilterBlock.vue";
+import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap";
+import ControlMap from "~/components/Libs/Controls/ControlMap";
 
 export default {
   name: "Wizard",
@@ -44,6 +46,8 @@ export default {
     FormPage,
     DeleteCardButton,
     SkeletonBox,
+    ObjectsOnMap,
+    ControlMap,
   },
   props: {
     params: {

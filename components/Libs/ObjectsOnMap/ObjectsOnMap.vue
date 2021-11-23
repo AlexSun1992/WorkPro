@@ -1,0 +1,88 @@
+<template>
+  <div id="map" style="width: 600px; height: 400px"></div>
+</template>
+
+<script>
+export default {
+  name: "ObjectsOnMap",
+  props: {
+    moduleId: {
+      type: Number,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      myMap: null,
+      items: null,
+    };
+  },
+  async created() {
+    try {
+      await this.$loadScript(
+        `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  computed: {
+    dataContent() {
+      return this.$store.getters["blocks/getBlockById"](this.moduleId);
+    },
+  },
+  methods: {
+    init() {
+      this.myMap?.destroy();
+      this.myMap = new ymaps.Map("map", {
+        center: [55.76, 37.64],
+        zoom: 11,
+      });
+      let clusterer = new ymaps.Clusterer();
+      clusterer.add(this.getGeoObjects(this.items.data.items));
+      this.myMap.geoObjects.add(clusterer);
+      let myPlacemark = new ymaps.Placemark(
+        [55.76, 37.64],
+        {
+          hintContent: "Я здесь",
+        },
+        {
+          preset: "islands#redDotIconWithCaption",
+        }
+      );
+      this.myMap.geoObjects.add(myPlacemark);
+    },
+    getGeoObjects(items) {
+      let myGeoObjects = [];
+      for (let i = 0; i < items.length; i++) {
+        myGeoObjects[i] = new ymaps.GeoObject({
+          geometry: {
+            type: "Point",
+            coordinates: [items[i].NLAT, items[i].NLON],
+          },
+          properties: {
+            balloonContentBody: `
+          <strong><span>${items[i].SLPU}</span></strong><br><br>
+          <strong>Адрес</strong><span>${items[i].SADDRESS}</span><br>
+          <strong>Тел.:</strong><span>${items[i].SPHONE}</span><br>
+          <strong>Режим работы:</strong><br><span>${items[i].STIME}</span>
+        `,
+            hintContent: `${items[i].SLPU}`,
+          },
+        });
+      }
+      return myGeoObjects;
+    },
+  },
+  watch: {
+    dataContent() {
+      this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
+      if (this.items) {
+        ymaps.ready(this.init());
+      }
+    },
+  },
+};
+</script>
+
+<style scoped></style>

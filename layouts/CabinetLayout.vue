@@ -65,10 +65,6 @@ export default {
         this.$route.params
       );
       this.$store.commit("menu/setBreadcrumbs", bc);
-      this.$store.dispatch("card/setCard", {
-        page: this.$route.params,
-        settings: bc.slice(-1).pop(),
-      });
     },
     changeSidebar() {
       this.sideBarMini = !this.sideBarMini;

@@ -1,6 +1,6 @@
 <template>
-  <div class="test">
-    <ul class="menu">
+  <div>
+    <ul class="menu" v-if="filterType !== 'query'">
       <li v-for="item in filterItems" :key="item.name">
         <b-button
           :class="{
@@ -13,7 +13,7 @@
       </li>
       <li>
         <b-button
-          v-if="this.filterType !== 'radiobutton'"
+          v-if="filterType !== 'radiobutton'"
           :class="{
             'filter-checked': isAllFilters,
           }"
@@ -22,9 +22,17 @@
         >
       </li>
     </ul>
+
+    <div class="search" v-else>
+      <b-form-input
+        v-model="searchString"
+        placeholder="Введите поисковый запрос"
+      ></b-form-input>
+    </div>
   </div>
 </template>
 <script>
+import { changeKeyboardLayout } from "~/utils/utils";
 export default {
   name: "FilterBlock",
 
@@ -32,6 +40,7 @@ export default {
     return {
       AllUnits: "Все",
       isAllFilters: true,
+      searchString: "",
     };
   },
 
@@ -47,7 +56,7 @@ export default {
       default: () => null,
     },
     propertyName: {
-      type: String,
+      type: String | Array[String],
       required: true,
       default: () => null,
     },
@@ -147,6 +156,14 @@ export default {
       return [];
     },
   },
+  watch: {
+    searchString(str) {
+      this.$store.commit("blocks/setSearchParams", {
+        searchString: changeKeyboardLayout(str),
+        searchProperty: this.propertyName,
+      });
+    },
+  },
 };
 </script>
 
@@ -171,5 +188,9 @@ li {
 .cabinet .btn.btn-secondary .btn-filter-checked {
   background-color: #008b4e;
   color: white;
+}
+
+.search {
+  width: 20vw;
 }
 </style>

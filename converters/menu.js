@@ -80,6 +80,9 @@ converter.menuObject = (data) => {
     obj.url = data.IDITEM
       ? `/cabinet/${data.idModule}/${data.IDPARENT}/${data.IDITEM}`
       : `/${data.ID}`;
+    if (data.IDADMMENUTYPE === 10) {
+      obj.url = `/cabinet/${data.idModule}/${data.IDPARENT}/${data.IDITEM}/0`;
+    }
   }
   obj.id = data.ID;
   obj.icon = iconConverter.icon(data.SLOGO);

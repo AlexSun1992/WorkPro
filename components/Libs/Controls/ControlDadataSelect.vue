@@ -60,7 +60,7 @@ function getQueryParams(queryType, input) {
       body: {
         query: input,
       },
-      id: "model_id",
+      id: "brand_model_code",
     };
   }
   throw new Error(

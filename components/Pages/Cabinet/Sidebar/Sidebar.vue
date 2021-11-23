@@ -17,6 +17,12 @@
         </li>
       </n-link>
       <li class="sidebar-nav-item">
+        <a :href="url" target="blank">
+          <div :class="'menu-icon-polities'"></div>
+          <span>Телемедицина</span>
+        </a>
+      </li>
+      <li class="sidebar-nav-item">
         <a href="#" @click="logout()">
           <div :class="'menu-icon-exit'"></div>
           <span>Выйти</span>
@@ -54,10 +60,16 @@ export default {
     return {
       endScrollMenu: false,
       sideBarMini: false,
+      url: null,
     };
   },
   created() {
     this.$auth.fetchUser();
+    const token = this.$auth.$storage._state["_token.local"].replace(
+      "Bearer ",
+      ""
+    );
+    this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
   },
   methods: {
     updateScroll() {
@@ -86,6 +98,14 @@ export default {
         console.log(e);
       }
     },
+    /* test() {
+      const tokenKey = this.$auth.$storage._state["_token.local"].replace(
+        "Bearer ",
+        ""
+      );
+      // const url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
+      return tokenKey;
+    }, */
   },
 
   computed: {

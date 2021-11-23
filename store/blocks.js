@@ -7,6 +7,7 @@ export const state = () => ({
   cardId: 0,
   blockId: null,
   filters: [],
+  searchParams: null,
 });
 
 export const getters = {
@@ -16,24 +17,37 @@ export const getters = {
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find((b) => b.blockId === parseInt(id));
     if (currentBlock) {
+      const currentBlock = state.blocks.find((b) => b.blockId === parseInt(id));
+      let items = currentBlock.data.items.filter((item) => {
+        let isItemShow = true;
+        state.filters.forEach((filter) => {
+          if (!isItemShow) {
+            return;
+          }
+          const value = item[filter.propertyName];
+          if (filter.filter.length === 0) {
+            return;
+          }
+          isItemShow = filter.filter.includes(value);
+        });
+        return isItemShow;
+      });
+
+      if (state.searchParams) {
+        items = items.filter((item) => {
+          return state.searchParams.searchProperty.some((param) => {
+            return String(item[param])
+              .toLowerCase()
+              .includes(state.searchParams.searchString.toLowerCase());
+          });
+        });
+      }
+
       return {
         ...currentBlock,
         data: {
           ...currentBlock.data,
-          items: currentBlock.data.items.filter((item) => {
-            let isItemShow = true;
-            state.filters.forEach((filter) => {
-              if (!isItemShow) {
-                return;
-              }
-              const value = item[filter.propertyName];
-              if (filter.filter.length === 0) {
-                return;
-              }
-              isItemShow = filter.filter.includes(value);
-            });
-            return isItemShow;
-          }),
+          items,
         },
       };
     }
@@ -91,10 +105,13 @@ export const actions = {
   },
   async fetchBlock({ commit, dispatch }, params) {
     let url;
+    const urlJsonFilters = JSON.stringify(params.query);
     if (!params.zone) {
-      url = `/api/list/55/${params.id}/{}`;
+      url = `/api/list/55/${params.id}/${encodeURIComponent(urlJsonFilters)}`;
     } else {
-      url = `/api/list/55/${params.id}/{}?zone=free`;
+      url = `/api/list/55/${params.id}/${encodeURIComponent(
+        urlJsonFilters
+      )}?zone=free`;
     }
     await this.$axios.get(url).then((res) => {
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
@@ -200,5 +217,8 @@ export const mutations = {
     } else {
       currentFilter.filter.push(filterItem);
     }
+  },
+  setSearchParams(state, data) {
+    state.searchParams = data;
   },
 };
