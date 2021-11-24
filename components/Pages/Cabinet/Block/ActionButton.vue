@@ -76,6 +76,7 @@ export default {
             itemId: this.action.NITEM,
             body: this.body,
           });
+          window.open(this.getUrlAddress, "_self");
         }
       } catch (err) {
         this.$bvToast.toast(err.response.data.MESSAGE, {
@@ -96,6 +97,11 @@ export default {
         );
         return action || null;
       },
+    },
+
+    getUrlAddress() {
+      const resultUrl = this.$store.getters["blocks/getUrl"];
+      return resultUrl;
     },
   },
 };

@@ -8,6 +8,7 @@ export const state = () => ({
   blockId: null,
   filters: [],
   searchParams: null,
+  PoutValue: "",
 });
 
 export const getters = {
@@ -58,6 +59,7 @@ export const getters = {
   moduleId: (state) => state.moduleId,
   menuId: (state) => state.menuId,
   blockId: (state) => state.blockId,
+  getUrl: (state) => state.PoutValue,
 };
 
 export const actions = {
@@ -153,6 +155,7 @@ export const actions = {
         body || {}
       )
       .then(async (resp) => {
+        commit("setPoutValue", resp.data.POUTVALUE);
         if (body) return;
         dispatch("updateBlock", itemId);
       });
@@ -160,6 +163,10 @@ export const actions = {
 };
 
 export const mutations = {
+  setPoutValue(state, address) {
+    state.PoutValue = address;
+  },
+
   setForm(state, data) {
     state.form = data;
   },

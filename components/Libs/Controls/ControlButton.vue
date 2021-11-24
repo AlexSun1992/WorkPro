@@ -31,6 +31,7 @@ export default {
       clicked: false,
     };
   },
+
   methods: {
     updateValue() {
       this.clicked = true;
