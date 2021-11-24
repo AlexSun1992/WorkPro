@@ -209,6 +209,9 @@ converter.form = async (data, params) => {
       ? "FK" + webFields[i].SCONNECTFIELD
       : null;
     obj.isTab = data[0]._meta["SPAGECAPTION"] ? true : false;
+    if (webFields[i].NITEMDIC) {
+      obj.menudic = webFields[i].NITEMDIC;
+    }
     promises.push(Promise.resolve(obj));
   }
   try {
@@ -298,6 +301,9 @@ converter.type = (data) => {
           data[i].type !== "label"
         ) {
           copy[i].type = `enum`;
+          if (data[i].menudic) {
+            copy[i].type = `listSelect`;
+          }
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
           copy[i].dic = data[j].name;
