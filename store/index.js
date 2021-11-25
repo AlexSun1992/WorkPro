@@ -1,10 +1,6 @@
 /* eslint-disable */
 export const state = () => ({
   registrationError: null,
-  agencies: null,
-  regionsList: null,
-  regionOffices: null,
-  selectedRegion: null,
 });
 
 export const actions = {

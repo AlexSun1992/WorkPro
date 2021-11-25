@@ -1,18 +1,11 @@
 /* eslint-disable */
 export const state = () => ({
-  regionsList: null,
   regionOffices: null,
+  defaultRegion: 77,
+  defaultCoords: [55, 37],
 });
 
 export const actions = {
-  async fetchAgencies({ commit }) {
-    try {
-      const { data } = await this.$axios.get(`/free/v2/agencies`);
-      commit("setAgencies", data);
-    } catch (e) {
-      console.log(e);
-    }
-  },
   async fetchRegion({ commit }, params) {
     try {
       const { data } = await this.$axios.get(
@@ -26,23 +19,17 @@ export const actions = {
 };
 
 export const mutations = {
-  setAgencies(state, params) {
-    state.agencies = params;
-  },
-  setRegionsList(state, params) {
-    state.regionsList = params;
-  },
   setRegionOffices(state, params) {
     state.regionOffices = params;
   },
 };
 
 export const getters = {
-  getAgencies(state) {
-    return state.agencies;
+  getDefaultRegion(state) {
+    return state.defaultRegion;
   },
-  getRegionsList(state) {
-    return state.regionsList;
+  getDefaultCoords(state) {
+    return state.defaultCoords;
   },
   getRegionOffices(state) {
     return state.regionOffices;
