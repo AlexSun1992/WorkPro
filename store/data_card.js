@@ -155,6 +155,7 @@ export const actions = {
             res.data.metaData.btnSave === true ||
             res.data.metaData.btnSave === false
           ) {
+            console.log(res.data.metaData.btnSave);
             commit("setBtnSave", res.data.metaData.btnSave);
           }
           if (
@@ -503,6 +504,11 @@ export const mutations = {
   setBtnSave(state, data) {
     state.isSave = data;
   },
+
+  reverseBtnIsSave(state) {
+    state.isSave = false;
+  },
+
   setReadOnly(state, data) {
     state.isReadOnly = data;
   },

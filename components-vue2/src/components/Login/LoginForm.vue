@@ -91,7 +91,7 @@ import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
 
-const COOKIE_NAME = "url";
+//const COOKIE_NAME = "url";
 
 export default {
   components: {
@@ -146,11 +146,10 @@ export default {
         document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
         window.location.href = "/cabinet/55/0/701";
 
-        if (Cookies.get(COOKIE_NAME)) {
-          window.location.href = `${Cookies.get(COOKIE_NAME)}`;
-        } else {
-          Cookies.remove(COOKIE_NAME);
-          window.location.href = "/cabinet/55/0/701";
+        const attempt = new URL(window.location.href);
+
+        if (attempt.searchParams.has("ref")) {
+          window.location.href = `${attempt.searchParams.get("ref")}`;
         }
       } catch (e) {
         this.errorMessage = "Неверный телефон или пароль";
