@@ -155,7 +155,6 @@ export const actions = {
             res.data.metaData.btnSave === true ||
             res.data.metaData.btnSave === false
           ) {
-            console.log(res.data.metaData.btnSave);
             commit("setBtnSave", res.data.metaData.btnSave);
           }
           if (
