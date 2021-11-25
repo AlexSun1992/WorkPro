@@ -164,7 +164,12 @@ export const mutations = {
     state.form = data;
   },
   addBlock(state, block) {
-    state.blocks.push(block);
+    const bs = state.blocks.find((b) => b.blockId === block.blockId);
+    if (bs) {
+      bs.data = block.data;
+    } else {
+      state.blocks.push(block);
+    }
   },
   updateBlock(state, block) {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);

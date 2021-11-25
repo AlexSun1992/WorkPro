@@ -27,6 +27,7 @@ export const state = () => ({
   recaptchaToken: null,
   updateValueFunction: null,
   updateEvent: null,
+  filters: {},
 });
 
 export const getters = {
@@ -75,6 +76,7 @@ export const getters = {
     return state.form.find((b) => b.fieldId == id);
   },
   getLoading: (state) => state.loading,
+  getFilters: (state) => state.filters,
 };
 
 export const actions = {
@@ -551,5 +553,8 @@ export const mutations = {
     if (item.options.length === 2) {
       item.value = item.options[1];
     }
+  },
+  setFilters(state, data) {
+    state.filters = { ...state.filters, ...data };
   },
 };
