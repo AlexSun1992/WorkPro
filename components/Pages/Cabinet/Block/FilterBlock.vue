@@ -13,7 +13,7 @@
       </li>
       <li>
         <b-button
-          v-if="filterType !== 'radiobutton'"
+          v-if="showButtonAll"
           :class="{
             'filter-checked': isAllFilters,
           }"
@@ -70,11 +70,35 @@ export default {
       required: true,
       default: () => null,
     },
+
+    showButtonAll: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
   },
 
   created() {
     if (this.$route.query.filters) {
       const filters = JSON.parse(this.$route.query.filters.toString());
+
+      if (this.filterType === "radiobutton" && this.defaultValue === null) {
+        this.isAllFilters = false;
+      }
+
+      if (this.filterType === "radiobutton" && this.defaultValue !== null) {
+        this.$store.commit("blocks/setFilter", {
+          propertyName: this.propertyName,
+          filter: this.defaultValue,
+        });
+      }
+
+      if (
+        this.filterType === "radiobutton" &&
+        filters.find((filter) => filter.propertyName === this.propertyName)
+      ) {
+        this.isAllFilters = false;
+      }
       if (
         this.filterType === "checkbox" &&
         filters.find((filter) => filter.propertyName === this.propertyName)
@@ -84,6 +108,7 @@ export default {
       this.$store.commit("blocks/setFilter", filters);
     } else {
       if (this.defaultValue) {
+        this.isAllFilters = false;
         this.$store.commit("blocks/setFilter", {
           propertyName: this.propertyName,
           filter: this.defaultValue,
@@ -105,6 +130,13 @@ export default {
         filterItem: item,
       });
       this.setQueryURL();
+      const target = this.$store.getters["blocks/getFilters"].find(
+        (elem) => elem.propertyName === propertyName
+      );
+
+      if (this.filterType === "checkbox" && target.filter.length === 0) {
+        this.isAllFilters = true;
+      }
     },
     clearFilter: function (propertyName) {
       this.isAllFilters = true;
