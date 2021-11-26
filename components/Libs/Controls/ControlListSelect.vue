@@ -1,35 +1,43 @@
 <template>
-  <div>
-    <b-button
-      class="mb-2"
-      :class="visible ? null : 'collapsed'"
-      :aria-expanded="visible ? 'true' : 'false'"
-      aria-controls="collapse-4"
-      @click="openList"
+  <div v-click-outside="outside">
+    <b-form-group
+      :label="data.label"
+      :class="{ required: data.required }"
+      :label-for="data.name"
     >
-      {{ data.value.text || data.label }}
-    </b-button>
-    <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-      <b-card>
-        <b-col style="width: 50rem">
-          <grid
-            :load="isLoad"
-            :action="true"
-            :total="dataContent.total"
-            :fields="dataContent.fields"
-            :items="dataContent.items"
-          >
-            <template v-slot:actions="slotProps">
-              <b-button
-                v-on:click="selectItem(slotProps)"
-                class="btn-table-open"
-                >Выбрать</b-button
-              >
-            </template>
-          </grid>
-        </b-col>
-      </b-card>
-    </b-collapse>
+      <b-input
+        v-model="data.value.text || 'Выберите из списка'"
+        :readonly="true"
+        class="mb-2"
+        :class="visible ? null : 'collapsed'"
+        :aria-expanded="visible ? 'true' : 'false'"
+        aria-controls="collapse-4"
+        @click="openList"
+      >
+        {{ data.value.text || "Выберите из списка" }}
+      </b-input>
+      <b-collapse id="collapse-4" v-model="visible" class="mt-2">
+        <b-card>
+          <b-col style="width: 60rem">
+            <grid
+              :load="isLoad"
+              :action="true"
+              :total="dataContent.total"
+              :fields="dataContent.fields"
+              :items="dataContent.items"
+            >
+              <template v-slot:actions="slotProps">
+                <b-button
+                  v-on:click="selectItem(slotProps)"
+                  class="btn-table-open"
+                  >Выбрать</b-button
+                >
+              </template>
+            </grid>
+          </b-col>
+        </b-card>
+      </b-collapse>
+    </b-form-group>
   </div>
 </template>
 
@@ -78,10 +86,17 @@ export default {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: {
-          value: value.data.item.ID,
-          text: value.data.item[this.data.name.substring(2)],
+          value: value.data.item,
+          text:
+            value.data.item[this.data.name.substring(2)] ||
+            value.data.item[this.dataContent.fields[1].label],
         },
       });
+    },
+    outside() {
+      if (this.visible) {
+        this.visible = false;
+      }
     },
     async openList() {
       this.visible = !this.visible;
@@ -94,14 +109,24 @@ export default {
           });
           this.isLoad = false;
         } catch (err) {
-          this.$bvToast.toast(err.response.data.MESSAGE, {
-            title: "Ошибка",
-            variant: "danger",
-            noAutoHide: true,
-            solid: true,
-          });
+          console.log(err);
         }
       }
+    },
+  },
+  directives: {
+    clickOutside: {
+      bind: function (el, binding, vnode) {
+        el.clickOutsideEvent = function (event) {
+          if (!(el == event.target || el.contains(event.target))) {
+            vnode.context[binding.expression](event);
+          }
+        };
+        document.body.addEventListener("click", el.clickOutsideEvent);
+      },
+      unbind: function (el) {
+        document.body.removeEventListener("click", el.clickOutsideEvent);
+      },
     },
   },
 };
