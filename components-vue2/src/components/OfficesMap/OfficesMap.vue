@@ -21,11 +21,7 @@
         </div>
       </b-tab>
       <b-tab title="В списке">
-        <OfficesList
-          v-if="regionId"
-          :data="getOffices"
-          @update="page = $event"
-        />
+        <OfficesList v-if="regionId" :data="getOffices" />
         <div v-else>
           По вашему запросу ничего не найдено. Попробуйте изменить критерии
           поиска
@@ -78,11 +74,14 @@ export default {
   },
   async created() {
     try {
-      await this.$store.dispatch("map/fetchAgencies");
+      await this.$store.dispatch("map/fetchRegion", {
+        id: this.$store.getters["map/getDefaultRegion"],
+        coords: this.$store.getters["map/getDefaultCoords"],
+      });
       await this.$loadScript(
         `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
       ).then(() => {
-        if (this.$store.getters["map/getAgencies"]) {
+        if (this.$store.getters["map/getRegionOffices"]) {
           ymaps.ready(this.init);
         }
       });
@@ -120,7 +119,7 @@ export default {
     },
     async init(_, filters) {
       this.initSuggestView();
-      let agencies = this.$store.getters["map/getAgencies"];
+      let agencies = this.$store.getters["map/getRegionOffices"];
       if (filters) {
         agencies = filterData(agencies, filters);
       }
@@ -142,7 +141,9 @@ export default {
         this.mapState.zoom = 12;
       } else {
         mapState = {
-          center: this.centerCoords ? this.centerCoords : [55.76, 37.64],
+          center: this.centerCoords
+            ? this.centerCoords
+            : this.$store.getters["map/getDefaultCoords"],
           zoom: 12,
         };
       }
@@ -228,14 +229,10 @@ export default {
     showResult(obj) {
       let mapContainer = document.getElementById("map");
       let bounds = obj.properties.get("boundedBy");
-      // Рассчитываем видимую область для текущего положения пользователя.
       this.mapState = ymaps.util.bounds.getCenterAndZoom(bounds, [
         mapContainer.clientWidth,
         mapContainer.clientHeight,
       ]);
-      // Сохраняем полный адрес для сообщения под картой.
-      // let address = [obj.getCountry(), obj.getAddressLine()].join(", ");
-      // Сохраняем укороченный адрес для подписи метки.
       let shortAddress = [
         obj.getThoroughfare(),
         obj.getPremiseNumber(),
@@ -254,7 +251,6 @@ export default {
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
-
           await this.$store.dispatch("map/fetchRegion", {
             id: this.regionId,
             coords: this.centerCoords,
@@ -262,6 +258,12 @@ export default {
         } else {
           this.regionId = null;
         }
+        this.myClusterer?.removeAll();
+
+        this.myClusterer.add(
+          this.getGeoObjects(this.$store.getters["map/getRegionOffices"])
+        );
+        this.myMap.geoObjects.add(this.myClusterer);
       } catch (e) {
         console.log(e);
       }
@@ -293,16 +295,6 @@ export default {
       );
       let _;
       this.init(_, filters);
-      if (this.$refs.tabs.currentTab == 0) {
-        // Карта офисов
-      }
-      if (this.$refs.tabs.currentTab == 1) {
-        // Карта метро
-      }
-      if (this.$refs.tabs.currentTab == 2) {
-        // Список офисов
-        this.page = 0;
-      }
     },
   },
   computed: {
