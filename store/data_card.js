@@ -505,6 +505,11 @@ export const mutations = {
   setBtnSave(state, data) {
     state.isSave = data;
   },
+
+  reverseBtnIsSave(state) {
+    state.isSave = false;
+  },
+
   setReadOnly(state, data) {
     state.isReadOnly = data;
   },

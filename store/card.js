@@ -229,7 +229,7 @@ export const actions = {
     delete params.suggestionType;
     delete params.key;
     const response = await fetch(
-      `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
+      `https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/${type}`,
       {
         method: "POST",
         headers: {
