@@ -76,7 +76,9 @@ export default {
             itemId: this.action.NITEM,
             body: this.body,
           });
-          window.open(this.getUrlAddress, "_self");
+          if (this.getUrlAddress) {
+            window.open(this.getUrlAddress, "_self");
+          }
         }
       } catch (err) {
         this.$bvToast.toast(err.response.data.MESSAGE, {
