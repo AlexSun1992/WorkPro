@@ -51,7 +51,7 @@ export default {
     relId: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
     insideContent: {
       type: String,
@@ -76,6 +76,9 @@ export default {
             itemId: this.action.NITEM,
             body: this.body,
           });
+          if (this.getUrlAddress) {
+            window.open(this.getUrlAddress, "_self");
+          }
         }
       } catch (err) {
         this.$bvToast.toast(err.response.data.MESSAGE, {
@@ -96,6 +99,11 @@ export default {
         );
         return action || null;
       },
+    },
+
+    getUrlAddress() {
+      const resultUrl = this.$store.getters["blocks/getUrl"];
+      return resultUrl;
     },
   },
 };
