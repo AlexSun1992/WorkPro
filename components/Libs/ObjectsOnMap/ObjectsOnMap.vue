@@ -10,6 +10,10 @@ export default {
       type: Number,
       required: true,
     },
+    template: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -52,6 +56,13 @@ export default {
       );
       this.myMap.geoObjects.add(myPlacemark);
     },
+    getTemplate(item) {
+      let str;
+      Object.keys(item).forEach((field) => {
+        str = (str ? str : this.template).replace(field, item[field]);
+      });
+      return str;
+    },
     getGeoObjects(items) {
       let myGeoObjects = [];
       for (let i = 0; i < items.length; i++) {
@@ -61,12 +72,7 @@ export default {
             coordinates: [items[i].NLAT, items[i].NLON],
           },
           properties: {
-            balloonContentBody: `
-          <strong><span>${items[i].SLPU}</span></strong><br><br>
-          <strong>Адрес</strong><span>${items[i].SADDRESS}</span><br>
-          <strong>Тел.:</strong><span>${items[i].SPHONE}</span><br>
-          <strong>Режим работы:</strong><br><span>${items[i].STIME}</span>
-        `,
+            balloonContentBody: this.getTemplate(items[i]),
             hintContent: `${items[i].SLPU}`,
           },
         });
