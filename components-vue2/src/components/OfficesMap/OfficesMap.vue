@@ -151,8 +151,32 @@ export default {
       this.myMap = new ymaps.Map("map", mapState);
       this.myMap.geoObjects.add(this.myClusterer);
     },
+    getTemplate(agency) {
+      return `
+          <strong><span>${agency.SSHORTNAME}</span></strong><br><br>
+          <span>${agency.SADDRESS}</span><br>
+          <strong>Тел.:</strong><span>${agency.SPHONE}</span><br>
+          <strong>Email.:</strong><span>${agency.SPHONE}</span><br>
+          <strong>Режим работы:</strong><br><span>${agency.SGRAF}</span>
+          <br>
+          <hr>
+        `;
+    },
+    combineAgencies(agencies, i, count) {
+      let arr = [];
+      agencies.slice(i, i + count).forEach((item) => {
+        arr.push(this.getTemplate(item));
+      });
+      return arr;
+    },
     getGeoObjects(agencies) {
       let myGeoObjects = [];
+
+      let uniqueItemsCount = agencies.reduce((acc, item) => {
+        acc[item["NLAT"]] = (acc[item["NLAT"]] || 0) + 1;
+        return acc;
+      }, {});
+
       for (let i = 0; i < agencies.length; i++) {
         myGeoObjects[i] = new ymaps.GeoObject({
           geometry: {
@@ -160,17 +184,16 @@ export default {
             coordinates: [agencies[i].NLAT, agencies[i].NLONG],
           },
           properties: {
-            balloonContentBody: `
-          <strong><span>${agencies[i].SSHORTNAME}</span></strong><br><br>
-          <span>${agencies[i].SADDRESS}</span><br>
-          <strong>Тел.:</strong><span>${agencies[i].SPHONE}</span><br>
-          <strong>Email.:</strong><span>${agencies[i].SPHONE}</span><br>
-          <strong>Режим работы:</strong><br><span>${agencies[i].SGRAF}</span>
-        `,
-            hintContent: `${agencies[i].SSHORTNAME}`,
+            balloonContentBody: this.combineAgencies(
+              agencies,
+              i,
+              uniqueItemsCount[agencies[i].NLAT]
+            ),
+            // hintContent: `${agencies[i].SSHORTNAME}`,
           },
         });
       }
+
       return myGeoObjects;
     },
     initSuggestView() {
