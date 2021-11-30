@@ -20,6 +20,11 @@ const menu = {};
 app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.referer) {
+      if (req.headers.referer.includes("testdms")) {
+        axios.defaults.baseURL = "https://mobiletest.reso.ru";
+      }
+    }
     axios.defaults.headers.common.Authorization = null;
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
