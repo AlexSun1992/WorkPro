@@ -172,7 +172,7 @@ export default {
     getGeoObjects(agencies) {
       let myGeoObjects = [];
 
-      let result = agencies.reduce((acc, item) => {
+      let uniqueItemsCount = agencies.reduce((acc, item) => {
         acc[item["NLAT"]] = (acc[item["NLAT"]] || 0) + 1;
         return acc;
       }, {});
@@ -187,7 +187,7 @@ export default {
             balloonContentBody: this.combineAgencies(
               agencies,
               i,
-              result[agencies[i].NLAT]
+              uniqueItemsCount[agencies[i].NLAT]
             ),
             // hintContent: `${agencies[i].SSHORTNAME}`,
           },
