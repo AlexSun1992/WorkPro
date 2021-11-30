@@ -15,6 +15,11 @@ const menu = {};
 app.get("/module", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.referer) {
+      if (req.headers.referer.includes("testdms")) {
+        axios.defaults.baseURL = "https://mobiletest.reso.ru";
+      }
+    }
     axios.defaults.headers.common.Authorization = null;
     if (req?.headers?.authorization) {
       axios.defaults.headers.common.Authorization = req.headers.authorization;
