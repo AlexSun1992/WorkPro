@@ -17,6 +17,11 @@ const menu = {};
 app.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.referer) {
+      if (req.headers.referer.includes("testdms")) {
+        axios.defaults.baseURL = "https://mobiletest.reso.ru";
+      }
+    }
     let URL_ADDRESS;
     const filters = listConverter.getFilterParams(
       formConverter.save(JSON.parse(req.params.filters))
