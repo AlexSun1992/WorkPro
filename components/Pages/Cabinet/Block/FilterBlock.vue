@@ -115,6 +115,7 @@ export default {
         });
       }
     }
+    this.$store.commit("blocks/setSearchParams", null);
   },
 
   destroyed() {
