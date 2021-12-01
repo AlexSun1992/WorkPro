@@ -20,6 +20,11 @@ const menu = {};
 app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.referer) {
+      if (req.headers.referer.includes("testdms")) {
+        axios.defaults.baseURL = "https://mobiletest.reso.ru";
+      }
+    }
     axios.defaults.headers.common.Authorization = null;
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
@@ -63,6 +68,11 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
 app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.referer) {
+      if (req.headers.referer.includes("testdms")) {
+        axios.defaults.baseURL = "https://mobiletest.reso.ru";
+      }
+    }
     axios.defaults.headers.common.Authorization = null;
     if (req?.headers?.authorization) {
       axios.defaults.headers.common.Authorization = req.headers.authorization;
@@ -126,6 +136,11 @@ app.get("/osago", (req, res) => {
 app.get("/card/js/:idModule/:idItem", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.referer) {
+      if (req.headers.referer.includes("testdms")) {
+        axios.defaults.baseURL = "https://mobiletest.reso.ru";
+      }
+    }
     axios.defaults.headers.common.Authorization = null;
     let URL_ADDRESS;
     if (req.query.zone !== "free") {
