@@ -43,7 +43,10 @@ export default {
         zoom: 11,
       });
       let clusterer = new ymaps.Clusterer();
-      clusterer.add(this.getGeoObjects(this.items.data.items));
+      let items = this.items.data.items.filter(
+        (item) => item.NLAT && item.NLON
+      );
+      clusterer.add(this.getGeoObjects(items));
       this.myMap.geoObjects.add(clusterer);
       let myPlacemark = new ymaps.Placemark(
         [55.76, 37.64],
@@ -83,8 +86,9 @@ export default {
   watch: {
     dataContent() {
       this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
+      debugger;
       if (ymaps && this.items) {
-        ymaps.ready(this.init());
+        ymaps.ready(this.init);
       }
     },
   },
