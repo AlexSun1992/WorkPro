@@ -86,7 +86,6 @@ export default {
   watch: {
     dataContent() {
       this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
-      debugger;
       if (ymaps && this.items) {
         ymaps.ready(this.init);
       }
