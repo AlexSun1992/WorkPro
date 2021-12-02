@@ -10,6 +10,10 @@ export default {
       type: Number,
       required: true,
     },
+    template: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -39,7 +43,10 @@ export default {
         zoom: 11,
       });
       let clusterer = new ymaps.Clusterer();
-      clusterer.add(this.getGeoObjects(this.items.data.items));
+      let items = this.items.data.items.filter(
+        (item) => item.NLAT && item.NLON
+      );
+      clusterer.add(this.getGeoObjects(items));
       this.myMap.geoObjects.add(clusterer);
       let myPlacemark = new ymaps.Placemark(
         [55.76, 37.64],
@@ -52,6 +59,13 @@ export default {
       );
       this.myMap.geoObjects.add(myPlacemark);
     },
+    getTemplate(item) {
+      let str;
+      Object.keys(item).forEach((field) => {
+        str = (str ? str : this.template).replace(field, item[field]);
+      });
+      return str;
+    },
     getGeoObjects(items) {
       let myGeoObjects = [];
       for (let i = 0; i < items.length; i++) {
@@ -61,12 +75,7 @@ export default {
             coordinates: [items[i].NLAT, items[i].NLON],
           },
           properties: {
-            balloonContentBody: `
-          <strong><span>${items[i].SLPU}</span></strong><br><br>
-          <strong>Адрес</strong><span>${items[i].SADDRESS}</span><br>
-          <strong>Тел.:</strong><span>${items[i].SPHONE}</span><br>
-          <strong>Режим работы:</strong><br><span>${items[i].STIME}</span>
-        `,
+            balloonContentBody: this.getTemplate(items[i]),
             hintContent: `${items[i].SLPU}`,
           },
         });
@@ -78,7 +87,7 @@ export default {
     dataContent() {
       this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
       if (ymaps && this.items) {
-        ymaps.ready(this.init());
+        ymaps.ready(this.init);
       }
     },
   },
