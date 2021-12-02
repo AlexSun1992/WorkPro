@@ -227,6 +227,11 @@ app.post(
   (req, res) => {
     try {
       axios.defaults.baseURL = "https://mobile2.reso.ru";
+      if (req.headers.referer) {
+        if (req.headers.referer.includes("testdms")) {
+          axios.defaults.baseURL = "https://mobiletest.reso.ru";
+        }
+      }
       if (req.headers.authorization) {
         axios.defaults.headers.common.Authorization = req.headers.authorization;
       } else {
@@ -260,6 +265,11 @@ app.post(
 app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
+    if (req.headers.referer) {
+      if (req.headers.referer.includes("testdms")) {
+        axios.defaults.baseURL = "https://mobiletest.reso.ru";
+      }
+    }
     if (req.query.zone !== "free") {
       if (req.headers?.authorization) {
         axios.defaults.headers.common.Authorization = req.headers.authorization;
