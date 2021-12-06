@@ -31,7 +31,7 @@ export default {
   props: {
     moduleId: {
       type: String,
-      required: false,
+      required: true,
       default: () => "",
     },
     itemId: {

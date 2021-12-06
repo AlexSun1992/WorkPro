@@ -1,5 +1,7 @@
 <template>
-  <div v-click-outside="outside">
+  <v-runtime-template :itemId="itemId" :template="getData"></v-runtime-template>
+
+  <!-- <div v-click-outside="outside">
     <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
@@ -38,14 +40,18 @@
         </b-card>
       </b-collapse>
     </b-form-group>
-  </div>
+  </div> -->
 </template>
 
 <script>
 import Grid from "../Table/Grid";
+import VRuntimeTemplate from "v-runtime-template";
+import ContentBlock from "../../Pages/Cabinet/Block/ContentBlock.vue";
+import FilterBlock from "../../Pages/Cabinet/Block/ContentBlock.vue";
+
 export default {
   name: "ControlListSelect",
-  components: { Grid },
+  components: { Grid, VRuntimeTemplate, ContentBlock, FilterBlock },
   data() {
     return {
       visible: false,
@@ -63,6 +69,11 @@ export default {
       required: true,
       default: () => false,
     },
+    itemId: {
+      type: String,
+      required: true,
+      default: () => 900,
+    },
   },
   computed: {
     dataContent: {
@@ -74,6 +85,16 @@ export default {
           return block.data;
         } else {
           return {};
+        }
+      },
+    },
+    getData: {
+      get: function () {
+        const data = this.$store.getters["menu/getMenuById"](
+          this.data.menudic
+        ).SVJCARDGRID;
+        if (data) {
+          return data;
         }
       },
     },
