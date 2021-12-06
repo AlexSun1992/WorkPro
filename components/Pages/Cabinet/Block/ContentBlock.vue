@@ -19,12 +19,9 @@
 </template>
 
 <script>
-import Grid from "~/components/Libs/Table/Grid";
-// import FilterBlock from "./FilterBlock.vue";
-
 export default {
   name: "ContentBlock",
-  components: { Grid },
+
   props: {
     itemId: {
       required: true,
@@ -95,6 +92,7 @@ export default {
       },
     },
   },
+
   methods: {
     openCard(item) {
       try {
