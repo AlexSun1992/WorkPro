@@ -15,6 +15,7 @@
         :debounce-time="300"
         :search="search"
         :get-result-value="getResultValue"
+        :default-value="data.value"
         @submit="handleSubmit"
         @blur="handleBlur"
         :disabled="disabled"
