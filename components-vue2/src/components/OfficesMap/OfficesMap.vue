@@ -11,7 +11,7 @@
       <b-tab title="На карте" active
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
-      <b-tab ref="metro" title="На схеме метро">
+      <b-tab ref="metro" v-if="tabVisible" title="На схеме метро">
         <Mosmetro @click="chooseStation" />
         <div v-show="cardVisible" ref="card" class="card">
           <metro-office-card
@@ -189,7 +189,7 @@ export default {
               i,
               uniqueItemsCount[agencies[i].NLAT]
             ),
-            // hintContent: `${agencies[i].SSHORTNAME}`,
+            hintContent: `${agencies[i].SSHORTNAME}`,
           },
         });
       }
@@ -339,7 +339,7 @@ export default {
       return data;
     },
     tabVisible() {
-      // return this.regionId == 77 || this.regionId == 78;
+      return this.regionId == 77 || this.regionId == 78;
     },
   },
 };
