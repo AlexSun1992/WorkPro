@@ -11,6 +11,7 @@ build_compoments:
       - node_modules/
   script:
     - npm install
+    - npm test
     - cd components-vue2
     - npm install
     - npm run component
