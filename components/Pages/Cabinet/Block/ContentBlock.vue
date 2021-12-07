@@ -19,15 +19,20 @@
 </template>
 
 <script>
-import Grid from "~/components/Libs/Table/Grid";
-// import FilterBlock from "./FilterBlock.vue";
+import FilterBlock from "./FilterBlock.vue";
+import ObjectsOnMap from "../../../Libs/ObjectsOnMap/ObjectsOnMap.vue";
 
 export default {
   name: "ContentBlock",
-  components: { Grid },
+
+  components: {
+    FilterBlock,
+    ObjectsOnMap,
+  },
+
   props: {
     itemId: {
-      required: true,
+      required: false,
       default: () => null,
     },
     cardId: {
@@ -94,7 +99,18 @@ export default {
         return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
       },
     },
+    isEmptyContent: {
+      get: function () {
+        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+        if (block) {
+          return !block?.data?.items.length;
+        } else {
+          return false;
+        }
+      },
+    },
   },
+
   methods: {
     openCard(item) {
       try {
