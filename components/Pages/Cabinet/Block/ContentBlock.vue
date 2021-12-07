@@ -20,7 +20,7 @@
 
 <script>
 import FilterBlock from "./FilterBlock.vue";
-import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap.vue";
+import ObjectsOnMap from "../../../Libs/ObjectsOnMap/ObjectsOnMap.vue";
 
 export default {
   name: "ContentBlock",
