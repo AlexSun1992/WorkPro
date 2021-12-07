@@ -15,6 +15,7 @@
         :debounce-time="300"
         :search="search"
         :get-result-value="getResultValue"
+        :default-value="data.value"
         @submit="handleSubmit"
         @blur="handleBlur"
         :disabled="disabled"
@@ -32,7 +33,7 @@ import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 const errorText = "Обязательно для заполнения";
 function getQueryParams(queryType, input) {
-  if (queryType === "SADDRESS_REG") {
+  if (queryType.includes("ADDRESS")) {
     return {
       query: "address",
       body: {

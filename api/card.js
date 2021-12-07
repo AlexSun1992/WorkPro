@@ -284,7 +284,6 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       }
     }
     const typeReq = req.params.id === 0 ? "post" : "put";
-    console.log(JSON.stringify(formConverter.save(req.body)));
     axios[typeReq](
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
         req.params.idModule
@@ -324,7 +323,6 @@ app.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
     );
     res.send(filterConverter.filter(params.data[0]._data));
   } catch (err) {
-    console.log(err);
     res.send(err.response?.data);
   }
 });
