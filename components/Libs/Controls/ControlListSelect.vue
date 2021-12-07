@@ -1,10 +1,9 @@
-<template :itemId="itemId">
-  <div v-click-outside="outside" :itemId="itemId">
+<template>
+  <div v-click-outside="outside">
     <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
       :label-for="data.name"
-      :itemId="itemId"
     >
       <b-input
         v-model="data.value.text || 'Выберите из списка'"
@@ -17,19 +16,16 @@
       >
         {{ data.value.text || "Выберите из списка" }}
       </b-input>
-      <b-collapse
-        id="collapse-4"
-        v-model="visible"
-        class="mt-2"
-        :itemId="itemId"
-      >
-        <content-block class="mypolices-all-block" :itemId="itemId">
+      <b-collapse id="collapse-4" v-model="visible" class="mt-2">
+        <content-block class="mypolices-all-block" :itemId="data.menudic">
           <v-runtime-template
-            :itemId="itemId"
+            :itemId="data.menudic"
+            v-if="getData"
             :template="getData"
-          ></v-runtime-template>
+          >
+          </v-runtime-template>
 
-          <!-- <b-card>
+          <b-card v-else>
             <b-col style="width: 60rem">
               <grid
                 :load="isLoad"
@@ -47,7 +43,7 @@
                 </template>
               </grid>
             </b-col>
-          </b-card> -->
+          </b-card>
         </content-block>
       </b-collapse>
     </b-form-group>
@@ -71,7 +67,6 @@ export default {
     return {
       visible: false,
       isLoad: false,
-      attempt: "Hello",
     };
   },
   props: {
@@ -85,16 +80,6 @@ export default {
       required: true,
       default: () => false,
     },
-    itemId: {
-      required: false,
-      default: () => 900,
-    },
-  },
-
-  mounted() {
-    console.log(this.data);
-    console.log(this.itemId);
-    console.log(this.data.menudic);
   },
 
   computed: {
@@ -122,9 +107,10 @@ export default {
     },
     isEmptyContent: {
       get: function () {
-        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+        const block = this.$store.getters["blocks/getBlockById"](
+          this.data.menudic
+        );
         if (block) {
-          console.log(block);
           return !block?.data?.items.length;
         } else {
           return false;
