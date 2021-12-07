@@ -19,12 +19,20 @@
 </template>
 
 <script>
+import FilterBlock from "./FilterBlock.vue";
+import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap.vue";
+
 export default {
   name: "ContentBlock",
 
+  components: {
+    FilterBlock,
+    ObjectsOnMap,
+  },
+
   props: {
     itemId: {
-      required: true,
+      required: false,
       default: () => null,
     },
     cardId: {
@@ -89,6 +97,16 @@ export default {
     parentMenu: {
       get: function () {
         return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
+      },
+    },
+    isEmptyContent: {
+      get: function () {
+        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+        if (block) {
+          return !block?.data?.items.length;
+        } else {
+          return false;
+        }
       },
     },
   },

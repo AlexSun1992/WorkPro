@@ -1,16 +1,4 @@
-<template>
-  <!-- <content-block :itemId="itemId">
-    <div :item="itemId">
-      <v-runtime-template
-        :itemId="itemId"
-        :template="getData"
-      ></v-runtime-template>
-    </div>
-  </content-block> -->
-  <!-- <div>
-    <template :itemId="itemId" v-html="getTemplate"></template>
-  </div> -->
-
+<template :itemId="itemId">
   <div v-click-outside="outside" :itemId="itemId">
     <b-form-group
       :label="data.label"
@@ -35,68 +23,31 @@
         class="mt-2"
         :itemId="itemId"
       >
-        <content-block
-          class="mypolices-all-block"
-          :item-id="itemId"
-          :itemId="itemId"
-        >
+        <content-block class="mypolices-all-block" :itemId="itemId">
           <v-runtime-template
             :itemId="itemId"
             :template="getData"
           ></v-runtime-template>
-          <!-- <template v-slot:data="data">
-            <div>
-              <div class="mypolices-block" :data-id="data.content.IDPRODUCT">
-                <div class="mypolices-title">
-                  {{ data.content.SSECONDNAME }} {{ data.content.SFIRSTNAME }}
-                  {{ data.content.STHIRDNAME }}
-                </div>
-                <div class="img-mypolices-img"></div>
-                <div class="mypolices-name">
-                  {{
-                    data.content.SPOLOBJ && data.content.SPOLOBJ.match(/г\/н/)
-                      ? data.content.SPOLOBJ.trim()
-                          .split(/; +г\/н: +/)
-                          .shift()
-                          .trim()
-                      : data.content.SPOLOBJ
-                  }}
-                </div>
 
-                <div class="mypolices-info">
-                  <div class="mypolices-number">
-                    {{ data.content.SPOLICY }}
-                  </div>
-                  <div class="mypolices-time">
-                    Срок действия:
-                    <b>
-                      {{
-                        $moment(data.content.TO_DATE).locale("ru").fromNow(true)
-                      }}</b
-                    >
-                    ({{ data.content.TO_DATE | moment("DD.MM.YYYY") }})
-                  </div>
-                </div>
-                <div
-                  class="
-                    block-footer
-                    row
-                    px-0
-                    justify-content-between
-                    align-items-center
-                  "
-                >
-                  <NLink
-                    :to="`/cabinet/55/0/901?SPOLICY=${data.content.SPOLICY}`"
-                    ><div>Перейти к полису</div></NLink
+          <!-- <b-card>
+            <b-col style="width: 60rem">
+              <grid
+                :load="isLoad"
+                :action="true"
+                :total="dataContent.total"
+                :fields="dataContent.fields"
+                :items="dataContent.items"
+              >
+                <template v-slot:actions="slotProps">
+                  <b-button
+                    v-on:click="selectItem(slotProps)"
+                    class="btn-table-open"
+                    >Выбрать</b-button
                   >
-                  <NLink to="/cabinet/55/0/905?SPOLICY=306526-13/21"
-                    ><div>Список ЛПУ</div></NLink
-                  >
-                </div>
-              </div>
-            </div>
-          </template> -->
+                </template>
+              </grid>
+            </b-col>
+          </b-card> -->
         </content-block>
       </b-collapse>
     </b-form-group>
@@ -107,15 +58,20 @@
 import Grid from "../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "../../Pages/Cabinet/Block/ContentBlock.vue";
-import FilterBlock from "../../Pages/Cabinet/Block/ContentBlock.vue";
 
 export default {
   name: "ControlListSelect",
-  components: { Grid, VRuntimeTemplate, ContentBlock, FilterBlock },
+  components: {
+    Grid,
+    VRuntimeTemplate,
+    ContentBlock,
+  },
+
   data() {
     return {
       visible: false,
       isLoad: false,
+      attempt: "Hello",
     };
   },
   props: {
@@ -130,11 +86,17 @@ export default {
       default: () => false,
     },
     itemId: {
-      type: String,
-      required: true,
+      required: false,
       default: () => 900,
     },
   },
+
+  mounted() {
+    console.log(this.data);
+    console.log(this.itemId);
+    console.log(this.data.menudic);
+  },
+
   computed: {
     dataContent: {
       get: function () {
@@ -155,6 +117,17 @@ export default {
         ).SVJCARDGRID;
         if (data) {
           return data;
+        }
+      },
+    },
+    isEmptyContent: {
+      get: function () {
+        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+        if (block) {
+          console.log(block);
+          return !block?.data?.items.length;
+        } else {
+          return false;
         }
       },
     },
