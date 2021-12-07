@@ -11,13 +11,24 @@
       <b-tab title="На карте" active
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
-      <b-tab ref="metro" v-if="tabVisible" title="На схеме метро">
-        <Mosmetro @click="chooseStation" />
-        <div v-show="cardVisible" ref="card" class="card">
-          <metro-office-card
-            @close="circleClicked = false"
-            :offices="stationOffices"
-          />
+      <b-tab v-if="tabVisible" title="На схеме метро">
+        <div class="metrowrapper">
+          <div>
+            <Mosmetro ref="metro" @click="chooseStation" />
+            <div v-show="cardVisible" ref="card" class="card">
+              <metro-office-card
+                @close="circleClicked = false"
+                :offices="stationOffices"
+              />
+            </div>
+          </div>
+          <div>
+            <b-button-group>
+              <b-button @click="zoom('+')" variant="success">+</b-button>
+              <b-button @click="zoom('0')" variant="primary">0</b-button>
+              <b-button @click="zoom('-')" variant="info">-</b-button>
+            </b-button-group>
+          </div>
         </div>
       </b-tab>
       <b-tab title="В списке">
@@ -38,7 +49,7 @@ import Notification from "./Notification.vue";
 import OfficesList from "./OfficesList.vue";
 import MetroOfficeCard from "./MetroOfficeCard.vue";
 import { filters, filterData } from "../../../../utils/map/filters";
-import { BTabs, BTab } from "bootstrap-vue";
+import { BTabs, BTab, BButtonGroup, BButton } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 Vue.use(LoadScript);
@@ -52,6 +63,8 @@ export default {
     BTab,
     Mosmetro,
     MetroOfficeCard,
+    BButtonGroup,
+    BButton,
   },
   props: ["notification"],
   data() {
@@ -90,6 +103,26 @@ export default {
     }
   },
   methods: {
+    zoom(param) {
+      let scale;
+      let transform = this.$refs.metro.getAttribute("transform");
+      if (param == "+") {
+        scale = "scale(2)";
+        if (transform) {
+          transform = transform.split("");
+          transform[6] = +transform[6] + 1;
+          scale = transform.join("");
+        }
+      } else if (param == "-") {
+        if (!transform || transform == "scale(1)") return;
+        transform = transform.split("");
+        transform[6] = +transform[6] - 1;
+        scale = transform.join("");
+      } else {
+        scale = "scale(1)";
+      }
+      this.$refs.metro.setAttribute("transform", scale);
+    },
     chooseStation(e) {
       if (this.circle) {
         this.circle.attributes.fill.value = "#fff";
@@ -381,5 +414,16 @@ circle:hover {
 }
 path:hover {
   stroke-width: 12;
+}
+
+.metrowrapper {
+  display: flex;
+  align-items: center;
+  & > div {
+    position: relative;
+    > svg {
+      position: absolute;
+    }
+  }
 }
 </style>
