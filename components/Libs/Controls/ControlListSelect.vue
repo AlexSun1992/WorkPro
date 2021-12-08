@@ -17,25 +17,34 @@
         {{ data.value.text || "Выберите из списка" }}
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <b-card>
-          <b-col style="width: 60rem">
-            <grid
-              :load="isLoad"
-              :action="true"
-              :total="dataContent.total"
-              :fields="dataContent.fields"
-              :items="dataContent.items"
-            >
-              <template v-slot:actions="slotProps">
-                <b-button
-                  v-on:click="selectItem(slotProps)"
-                  class="btn-table-open"
-                  >Выбрать</b-button
-                >
-              </template>
-            </grid>
-          </b-col>
-        </b-card>
+        <content-block class="mypolices-all-block" :itemId="data.menudic">
+          <v-runtime-template
+            :itemId="data.menudic"
+            v-if="getData"
+            :template="getData"
+          >
+          </v-runtime-template>
+
+          <b-card v-else>
+            <b-col style="width: 60rem">
+              <grid
+                :load="isLoad"
+                :action="true"
+                :total="dataContent.total"
+                :fields="dataContent.fields"
+                :items="dataContent.items"
+              >
+                <template v-slot:actions="slotProps">
+                  <b-button
+                    v-on:click="selectItem(slotProps)"
+                    class="btn-table-open"
+                    >Выбрать</b-button
+                  >
+                </template>
+              </grid>
+            </b-col>
+          </b-card>
+        </content-block>
       </b-collapse>
     </b-form-group>
   </div>
@@ -43,9 +52,17 @@
 
 <script>
 import Grid from "../Table/Grid";
+import VRuntimeTemplate from "v-runtime-template";
+import ContentBlock from "../../Pages/Cabinet/Block/ContentBlock.vue";
+
 export default {
   name: "ControlListSelect",
-  components: { Grid },
+  components: {
+    Grid,
+    VRuntimeTemplate,
+    ContentBlock,
+  },
+
   data() {
     return {
       visible: false,
@@ -64,6 +81,7 @@ export default {
       default: () => false,
     },
   },
+
   computed: {
     dataContent: {
       get: function () {
@@ -74,6 +92,28 @@ export default {
           return block.data;
         } else {
           return {};
+        }
+      },
+    },
+    getData: {
+      get: function () {
+        const data = this.$store.getters["menu/getMenuById"](
+          this.data.menudic
+        ).SVJCARDGRID;
+        if (data) {
+          return data;
+        }
+      },
+    },
+    isEmptyContent: {
+      get: function () {
+        const block = this.$store.getters["blocks/getBlockById"](
+          this.data.menudic
+        );
+        if (block) {
+          return !block?.data?.items.length;
+        } else {
+          return false;
         }
       },
     },
