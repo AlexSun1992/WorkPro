@@ -21,6 +21,7 @@
 <script>
 import FilterBlock from "./FilterBlock.vue";
 import ObjectsOnMap from "../../../Libs/ObjectsOnMap/ObjectsOnMap.vue";
+import ChooseButton from "./ChooseButton.vue";
 
 export default {
   name: "ContentBlock",
@@ -28,9 +29,15 @@ export default {
   components: {
     FilterBlock,
     ObjectsOnMap,
+    ChooseButton,
   },
 
   props: {
+    blocks: {
+      type: Object,
+      required: false,
+      default: () => null,
+    },
     itemId: {
       required: false,
       default: () => null,
@@ -55,6 +62,11 @@ export default {
       indicator: null,
     };
   },
+
+  // created() {
+  //   console.log(this.blocks);
+  // },
+
   async fetch() {
     try {
       (await this.cardId)
