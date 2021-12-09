@@ -32,9 +32,9 @@
   </div>
 </template>
 <script>
+//import { changeKeyboardLayout } from "~/utils/utils";
 export default {
   name: "FilterBlock",
-
   data() {
     return {
       AllUnits: "Все",

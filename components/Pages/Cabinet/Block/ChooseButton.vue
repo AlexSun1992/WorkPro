@@ -1,5 +1,5 @@
 <template>
-  <b-button @click="handOverData">{{ title }}</b-button>
+  <b-button @click="transferData">{{ title }}</b-button>
 </template>
 <script>
 export default {
@@ -14,9 +14,9 @@ export default {
       default: () => null,
     },
 
-    blocks: {
+    dictionaryList: {
       type: Object,
-      required: true,
+      required: false,
       default: () => {},
     },
 
@@ -31,7 +31,7 @@ export default {
     dataContent: {
       get: function () {
         const block = this.$store.getters["blocks/getUnfilteredBlockById"](
-          this.blocks.menudic
+          this.dictionaryList.menudic
         );
         if (block) {
           return block.data;
@@ -43,15 +43,15 @@ export default {
   },
 
   methods: {
-    handOverData() {
+    transferData() {
       this.$store.commit("data_card/setFilters", this.data);
       this.$emit("update", {
-        fieldId: this.blocks.fieldId,
-        name: this.blocks.name,
+        fieldId: this.dictionaryList.fieldId,
+        name: this.dictionaryList.name,
         value: {
           value: this.data,
           text:
-            this.data[this.blocks.name.substring(2)] ||
+            this.data[this.dictionaryList.name.substring(2)] ||
             this.data[this.dataContent.fields[1].label],
         },
       });

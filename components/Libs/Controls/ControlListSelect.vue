@@ -20,13 +20,13 @@
         <content-block
           class="mypolices-all-block"
           :itemId="data.menudic"
-          :blocks="data"
+          :dictionaryList="data"
         >
           <v-runtime-template
             :itemId="data.menudic"
             v-if="getData"
             :template="getData"
-            :blocks="data"
+            :dictionaryList="data"
           >
           </v-runtime-template>
 
@@ -74,6 +74,11 @@ export default {
     };
   },
   props: {
+    dictionaryList: {
+      type: Object,
+      required: false,
+      default: () => null,
+    },
     data: {
       type: Object,
       required: true,

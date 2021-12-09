@@ -33,7 +33,7 @@ export default {
   },
 
   props: {
-    blocks: {
+    dictionaryList: {
       type: Object,
       required: false,
       default: () => null,
@@ -62,10 +62,6 @@ export default {
       indicator: null,
     };
   },
-
-  // created() {
-  //   console.log(this.blocks);
-  // },
 
   async fetch() {
     try {
