@@ -281,6 +281,7 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       }
     }
     const typeReq = req.params.id === 0 ? "post" : "put";
+    console.log(JSON.stringify(formConverter.save(req.body), null, 2));
     axios[typeReq](
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
         req.params.idModule

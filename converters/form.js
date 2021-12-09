@@ -349,10 +349,17 @@ converter.save = (data) => {
   let res = {};
   let name = ``;
   for (let i = 0; i < data.length; i++) {
-    if (data[i].type !== "enum" && data[i].type !== "multi") {
+    if (
+      data[i].type !== "enum" &&
+      data[i].type !== "multi" &&
+      data[i].type !== "listSelect"
+    ) {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
-          res[data[i].name] = data[i].value !== null ? data[i].value : "NULL";
+          res[data[i].name] =
+            data[i].value !== null && data[i].value !== undefined
+              ? data[i].value
+              : "NULL";
           if (data[i].structType === "boolrus") {
             res[data[i].name] =
               data[i].value === "true" || data[i].value === true ? "Д" : "Н";
