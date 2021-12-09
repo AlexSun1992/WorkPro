@@ -9,7 +9,7 @@ export const applyMask = {
   unbind() {},
 };
 
-export const changeKeyboardLayout = (str) => {
+export function changeKeyboardLayout(str) {
   const replacer = {
     q: "й",
     w: "ц",
@@ -51,4 +51,4 @@ export const changeKeyboardLayout = (str) => {
       ? replacer[x]
       : replacer[x.toLowerCase()].toUpperCase();
   });
-};
+}
