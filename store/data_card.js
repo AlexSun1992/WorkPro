@@ -561,5 +561,6 @@ export const mutations = {
   },
   setFilters(state, data) {
     state.filters = { ...state.filters, ...data };
+    // console.log(state.filters);
   },
 };
