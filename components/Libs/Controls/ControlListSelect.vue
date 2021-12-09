@@ -122,14 +122,19 @@ export default {
     selectItem(value) {
       const value_prepare = { ...value.data.item };
       Object.keys(value_prepare).map(function (key, index) {
-        try {
-          JSON.parse(value_prepare[key]);
-          delete value_prepare[key];
-        } catch (e) {
+        if (Number.isInteger(value_prepare[key]) === false) {
+          try {
+            JSON.parse(value_prepare[key]);
+            delete value_prepare[key];
+          } catch (e) {
+            value_prepare[key] = value_prepare[key];
+          }
+        } else {
           value_prepare[key] = value_prepare[key];
         }
       });
       this.visible = false;
+      console.log(value_prepare);
       this.$store.commit("data_card/setFilters", value_prepare);
       this.$emit("update", {
         fieldId: this.data.fieldId,
