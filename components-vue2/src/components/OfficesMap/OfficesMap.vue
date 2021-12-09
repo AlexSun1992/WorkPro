@@ -1,5 +1,9 @@
 <template>
-  <div class="map-container mt-3">
+  <div
+    @mousedown="setMouseCoords"
+    @mouseup="removeListener"
+    class="map-container mt-3"
+  >
     <h5>Найдите офис рядом с вами</h5>
     <input type="text" id="suggest" />
     <div v-if="suggest && !getOffices">
@@ -22,13 +26,7 @@
               />
             </div>
           </div>
-          <div>
-            <b-button-group>
-              <b-button @click="zoom('+')" variant="success">+</b-button>
-              <b-button @click="zoom('0')" variant="primary">0</b-button>
-              <b-button @click="zoom('-')" variant="info">-</b-button>
-            </b-button-group>
-          </div>
+          <ZoomComponent @zoom="zoom" />
         </div>
       </b-tab>
       <b-tab title="В списке">
@@ -46,6 +44,7 @@
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
 import Notification from "./Notification.vue";
+import ZoomComponent from "./ZoomComponent.vue";
 import OfficesList from "./OfficesList.vue";
 import MetroOfficeCard from "./MetroOfficeCard.vue";
 import { filters, filterData } from "../../../../utils/map/filters";
@@ -65,6 +64,7 @@ export default {
     MetroOfficeCard,
     BButtonGroup,
     BButton,
+    ZoomComponent,
   },
   props: ["notification"],
   data() {
@@ -83,6 +83,10 @@ export default {
       circleColor: null,
       stationOffices: [],
       circleClicked: false,
+      oldPosX: null,
+      oldPosY: null,
+      curPosX: null,
+      curPosY: null,
     };
   },
   async created() {
@@ -103,6 +107,26 @@ export default {
     }
   },
   methods: {
+    setMouseCoords(e) {
+      e.preventDefault();
+      this.curPosX = e.clientX;
+      this.curPosY = e.clientY;
+      if (this.oldPosX) {
+        this.curPosX = e.clientX - parseInt(this.oldPosX);
+        this.curPosY = e.clientY - parseInt(this.oldPosY);
+      }
+      document.addEventListener("mousemove", this.onMouseMove);
+    },
+    removeListener(e) {
+      document.removeEventListener("mousemove", this.onMouseMove);
+    },
+    onMouseMove(e) {
+      let svg = document.querySelector("svg");
+      svg.style.left = e.clientX - this.curPosX + "px";
+      svg.style.top = e.clientY - this.curPosY + "px";
+      this.oldPosX = svg.style.left;
+      this.oldPosY = svg.style.top;
+    },
     zoom(param) {
       let scale;
       let transform = this.$refs.metro.getAttribute("transform");

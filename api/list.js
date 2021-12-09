@@ -8,11 +8,22 @@ const app = express();
 const axios = require("axios");
 const cookieParser = require("cookie-parser");
 
-app.use(express.json());
-app.use(cookieParser());
+const bodyParser = require("body-parser");
+app.use(
+  bodyParser.json({
+    limit: "50mb",
+  })
+);
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    parameterLimit: 100000,
+    extended: true,
+  })
+);
+app.use(express.json({ limit: "50mb" }));
 
-const modules = {};
-const menu = {};
+app.use(cookieParser());
 
 app.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
   try {
