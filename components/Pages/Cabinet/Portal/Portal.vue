@@ -27,6 +27,7 @@ import VRuntimeTemplate from "v-runtime-template";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FilterBlock from "../Block/FilterBlock.vue";
+import ChooseButton from "../Block/ChooseButton.vue";
 import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap";
 import ControlMap from "~/components/Libs/Controls/ControlMap";
 
@@ -40,6 +41,7 @@ export default {
     VRuntimeTemplate,
     ContentBlock,
     FilterBlock,
+    ChooseButton,
     ActionButton,
     OpenCardButton,
     PortalCard,
@@ -54,6 +56,11 @@ export default {
       type: Object,
       required: true,
       default: () => {},
+    },
+    dictionaryList: {
+      type: Object,
+      required: false,
+      default: () => null,
     },
   },
   data() {

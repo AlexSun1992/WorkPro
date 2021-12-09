@@ -17,11 +17,16 @@
         {{ data.value.text || "Выберите из списка" }}
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <content-block class="mypolices-all-block" :itemId="data.menudic">
+        <content-block
+          class="mypolices-all-block"
+          :itemId="data.menudic"
+          :dictionaryList="data"
+        >
           <v-runtime-template
             :itemId="data.menudic"
             v-if="getData"
             :template="getData"
+            :dictionaryList="data"
           >
           </v-runtime-template>
 
@@ -49,7 +54,6 @@
     </b-form-group>
   </div>
 </template>
-
 <script>
 import Grid from "../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
@@ -70,11 +74,17 @@ export default {
     };
   },
   props: {
+    dictionaryList: {
+      type: Object,
+      required: false,
+      default: () => null,
+    },
     data: {
       type: Object,
       required: true,
       default: () => {},
     },
+
     edit: {
       type: Boolean,
       required: true,
