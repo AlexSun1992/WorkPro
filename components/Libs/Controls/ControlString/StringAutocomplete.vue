@@ -165,7 +165,7 @@ export default {
         this.$set(
           this.suggestions,
           "data",
-          result.map((item) => item.value)
+          result?.map((item) => item.value)
         );
       } else if (name.includes("ADDRESS")) {
         params.suggestionType = "address";
@@ -176,7 +176,7 @@ export default {
         this.$set(
           this.suggestions,
           "data",
-          result.map((item) => item.value)
+          result?.map((item) => item.value)
         );
       } else if (name === "SISSUED_WHERE" || name === "SDOCDEP") {
         params.suggestionType = "fms_unit";
