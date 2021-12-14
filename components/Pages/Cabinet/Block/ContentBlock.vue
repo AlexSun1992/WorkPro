@@ -5,16 +5,16 @@
       :key="id"
       @click.stop="openCard(item)"
     >
-      <slot name="data" v-bind:content="item"></slot>
+      <slot name="data" :update="update" v-bind:content="item"></slot>
     </div>
   </div>
   <div v-else>
     <slot
-      v-for="item in dataContent.items"
       name="data"
+      v-for="item in dataContent.items"
       v-bind:content="item"
     ></slot>
-    <slot v-bind:content="dataContent.items"></slot>
+    <slot :update="update" v-bind:content="dataContent.items"></slot>
   </div>
 </template>
 
@@ -120,6 +120,9 @@ export default {
   },
 
   methods: {
+    update(event) {
+      this.$emit("update", event);
+    },
     openCard(item) {
       try {
         if (this.isOpenCard) {

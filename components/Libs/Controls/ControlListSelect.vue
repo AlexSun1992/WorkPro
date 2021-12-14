@@ -18,6 +18,7 @@
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
         <content-block
+          @update="update"
           class="mypolices-all-block"
           :itemId="data.menudic"
           :dictionaryList="data"
@@ -129,6 +130,16 @@ export default {
     },
   },
   methods: {
+    update(event) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: {
+          value: event,
+          text: event.SNAME,
+        },
+      });
+    },
     selectItem(value) {
       const value_prepare = { ...value.data.item };
       Object.keys(value_prepare).map(function (key, index) {

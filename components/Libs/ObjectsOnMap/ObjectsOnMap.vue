@@ -1,5 +1,9 @@
 <template>
-  <div id="map" style="width: 600px; height: 400px"></div>
+  <div
+    id="map"
+    @click="closeCurrentBalloon"
+    style="width: 600px; height: 400px"
+  ></div>
 </template>
 
 <script>
@@ -19,6 +23,7 @@ export default {
     return {
       myMap: null,
       items: null,
+      selectedItem: null,
     };
   },
   async created() {
@@ -36,11 +41,31 @@ export default {
     },
   },
   methods: {
+    closeCurrentBalloon() {
+      let close = document.querySelector(
+        'ymaps[class$="-balloon__close-button"]'
+      );
+      if (close != null) {
+        close.click();
+      }
+    },
+    setSelectedItem() {
+      let elem = document.getElementById("elem");
+      elem.addEventListener("click", this.update);
+      this.selectedItem = JSON.parse(elem.dataset.obj);
+    },
+    update() {
+      this.$emit("update", this.selectedItem);
+    },
     init() {
       this.myMap?.destroy();
       this.myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 11,
+      });
+      this.myMap.events.add("balloonopen", this.setSelectedItem);
+      this.myMap.events.add("click", (e) => {
+        e.get("target").balloon.close();
       });
       let clusterer = new ymaps.Clusterer();
       let items = this.items.data.items.filter(
@@ -64,7 +89,12 @@ export default {
       Object.keys(item).forEach((field) => {
         str = (str ? str : this.template).replace(field, item[field]);
       });
-      return str;
+      return (
+        str +
+        `<br><button data-obj='${JSON.stringify(
+          item
+        )}' id='elem'>Выбрать</button>`
+      );
     },
     getGeoObjects(items) {
       let myGeoObjects = [];
