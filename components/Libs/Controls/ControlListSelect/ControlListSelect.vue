@@ -17,55 +17,66 @@
         {{ data.value.text || "Выберите из списка" }}
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <content-block
+        <select-item-from-template class="mypolices-all-block">
+          <!-- {{ this.data }} -->
+          <!-- {{ this.dictionaryList }} -->
+          <!-- {{ this.edit }} -->
+          <!-- {{ this.dataContent }} -->
+          <!-- {{ this.getData }} -->
+          <!-- <v-runtime-template :template="getData"></v-runtime-template> -->
+        </select-item-from-template>
+
+        <!-- <content-block
           @update="update"
           class="mypolices-all-block"
           :itemId="data.menudic"
           :dictionaryList="data"
-        >
-          <v-runtime-template
+        > -->
+        <!-- <v-runtime-template
             :itemId="data.menudic"
             v-if="getData"
             :template="getData"
             :dictionaryList="data"
           >
-          </v-runtime-template>
+          </v-runtime-template> -->
 
-          <b-card v-else>
-            <b-col style="width: 60rem">
-              <grid
-                :load="isLoad"
-                :action="true"
-                :total="dataContent.total"
-                :fields="dataContent.fields"
-                :items="dataContent.items"
-              >
-                <template v-slot:actions="slotProps">
-                  <b-button
-                    v-on:click="selectItem(slotProps)"
-                    class="btn-table-open"
-                    >Выбрать</b-button
-                  >
-                </template>
-              </grid>
-            </b-col>
-          </b-card>
-        </content-block>
+        <!-- <b-card>
+          <b-col style="width: 60rem">
+            <grid
+              :load="isLoad"
+              :action="true"
+              :total="dataContent.total"
+              :fields="dataContent.fields"
+              :items="dataContent.items"
+            >
+              <template v-slot:actions="slotProps">
+                <b-button
+                  v-on:click="selectItem(slotProps)"
+                  class="btn-table-open"
+                  >Выбрать</b-button
+                >
+              </template>
+            </grid>
+          </b-col>
+        </b-card> -->
+        <!-- </content-block> -->
       </b-collapse>
     </b-form-group>
   </div>
 </template>
 <script>
-import Grid from "../Table/Grid";
+import Grid from "../../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
-import ContentBlock from "../../Pages/Cabinet/Block/ContentBlock.vue";
+// import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
+import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
 
 export default {
   name: "ControlListSelect",
   components: {
     Grid,
     VRuntimeTemplate,
-    ContentBlock,
+    // ContentBlock,
+    SelectItemFromTemplate,
   },
 
   data() {
