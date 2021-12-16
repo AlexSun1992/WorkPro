@@ -22,92 +22,7 @@
           class="mypolices-all-block"
           :itemId="data.menudic"
         >
-          <!-- Динамический шаблон -->
-          <!-- <v-runtime-template
-            :itemId="data.menudic"
-            v-if="getData"
-            :template="getData"
-          >
-          </v-runtime-template> -->
-
-          <!-- {{ this.data }}
-          {{ this.dataContent.items }} -->
-
-          <!-- Динамический шаблон -->
-
-          <!-- шаблон конфигуратора -->
-
-          <template v-slot:data="data">
-            <div>
-              <div
-                class="mypolices-block"
-                :data-id="data.content.IDPRODUCT"
-                :dictionaryList="dictionaryList"
-              >
-                <div class="mypolices-title">
-                  {{ data.content.SSECONDNAME }} {{ data.content.SFIRSTNAME }}
-                  {{ data.content.STHIRDNAME }}
-                </div>
-
-                <choose-button
-                  :data="data.content"
-                  :dictionaryList="dictionaryList"
-                  v-if="dictionaryList"
-                  title="Выбрать"
-                ></choose-button>
-
-                <div class="img-mypolices-img"></div>
-
-                <div class="mypolices-name">
-                  {{
-                    data.content.SPOLOBJ && data.content.SPOLOBJ.match(/г\/н/)
-                      ? data.content.SPOLOBJ.trim()
-                          .split(/; +г\/н: +/)
-                          .shift()
-                          .trim()
-                      : data.content.SPOLOBJ
-                  }}
-                </div>
-
-                <div class="mypolices-info">
-                  <div class="mypolices-number">
-                    {{ data.content.SPOLICY }}
-                  </div>
-                  <div class="mypolices-time">
-                    Срок действия:
-                    <b>
-                      {{
-                        $moment(data.content.TO_DATE).locale("ru").fromNow(true)
-                      }}</b
-                    >
-                    ({{ data.content.TO_DATE | moment("DD.MM.YYYY") }})
-                  </div>
-                </div>
-                <div
-                  v-if="!dictionaryList"
-                  class="
-                    block-footer
-                    row
-                    px-0
-                    justify-content-between
-                    align-items-center
-                  "
-                >
-                  <NLink
-                    :to="`/cabinet/55/0/901?SPOLICY=${data.content.SPOLICY}`"
-                    ><div>Перейти к полису</div></NLink
-                  >
-
-                  <NLink to="/cabinet/55/0/905?SPOLICY=306526-13/21"
-                    ><div>Список ЛПУ</div></NLink
-                  >
-                </div>
-              </div>
-            </div>
-          </template>
-          <!-- шаблон конфигуратора -->
-
-          <!-- <b-card v-else>
+          <b-card>
             <b-col style="width: 60rem">
               <grid
                 :load="isLoad"
@@ -125,7 +40,7 @@
                 </template>
               </grid>
             </b-col>
-          </b-card> -->
+          </b-card>
         </select-item-from-template>
       </b-collapse>
     </b-form-group>
