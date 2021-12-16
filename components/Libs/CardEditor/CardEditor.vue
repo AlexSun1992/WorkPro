@@ -64,6 +64,93 @@
 </template>
 
 <script>
+import moment from "moment";
+
+function eventHandler(data, item) {
+  console.log(item);
+  const policy = data.find((f) => f.name === "FKSPOLICY");
+  const contactPhoneLabel = data.find((f) => f.name === "SCONTACTPHONE");
+  const medPartner = data.find((f) => f.name === "IDMEDPARTNER");
+  const contactNameLabel = data.find((f) => f.name === "SCONTACTNAME");
+  const doctorLabel = data.find((f) => f.name === "SPERSON");
+  const doctor = data.find((f) => f.name === "FKSDOCTOR");
+  const specialistLabel = data.find((f) => f.name === "SSPECIALIST");
+  const specialist = data.find((f) => f.name === "FKIDSPECIALIST");
+  const lpuLabel = data.find((f) => f.name === "FKIDLPU");
+  const lpu = data.find((f) => f.name === "FKSLPU");
+  const datetimeLabel = data.find((f) => f.name === "DDATE_AND_TIME");
+  const scheduleButton = data.find((f) => f.name === "GET_TIMETABLE");
+  const schedule = data.find((f) => f.name === "FKSSCHEDULE");
+  const make_button = data.find((f) => f.name === "Item37178");
+  const back_button = data.find((f) => f.name === "BACK_BUTTON");
+
+  if (item.name === "FKSPOLICY") {
+    medPartner.value = item.value.value["IDMEDPARTNER"];
+    contactPhoneLabel.value = item.value.value["SPHONE"];
+    contactNameLabel.value = `${item.value.value["SFIRSTNAME"]} ${item.value.value["SSECONDNAME"]} ${item.value.value["STHIRDNAME"]}`;
+    specialist.visible = true;
+    if (specialist.value.value) {
+      lpu.visible = true;
+      doctor.visible = true;
+      scheduleButton.visible = true;
+    }
+  }
+  if (item.name === "FKIDSPECIALIST") {
+    if (policy.value.value) {
+      lpu.visible = true;
+      doctor.visible = true;
+      scheduleButton.visible = true;
+    }
+  }
+  if (item.value === "GET_TIMETABLE") {
+    schedule.visible = true;
+    back_button.visible = true;
+    scheduleButton.visible = false;
+
+    policy.visible = false;
+    specialist.visible = false;
+    lpu.visible = false;
+    doctor.visible = false;
+  }
+  if (item.value === "BACK_BUTTON") {
+    schedule.visible = false;
+    back_button.visible = false;
+    scheduleButton.visible = false;
+    policy.visible = true;
+    specialist.value = {};
+    lpu.value = {};
+    doctor.value = {};
+    specialist.visible = true;
+    contactNameLabel.visible = false;
+    contactPhoneLabel.visible = false;
+    doctorLabel.visible = false;
+    specialistLabel.visible = false;
+    lpuLabel.visible = false;
+    datetimeLabel.visible = false;
+    make_button.visible = false;
+  }
+  if (item.name === "FKSSCHEDULE") {
+    const idLPU = data.find((f) => f.name === "IDLPU");
+    idLPU.value = item.value.value["IDLPU"];
+
+    contactNameLabel.visible = true;
+    contactPhoneLabel.visible = true;
+    doctorLabel.visible = true;
+    specialistLabel.visible = true;
+    lpuLabel.visible = true;
+    datetimeLabel.visible = true;
+    make_button.visible = true;
+
+    lpuLabel.value = item.value.value["FKIDLPU"];
+    doctorLabel.value = item.value.value["SPERSON"];
+    specialistLabel.value = specialist.value.text;
+    datetimeLabel.value = `${moment(item.value.value["DDATE"]).format(
+      "DD.MM.YYYY"
+    )} ${item.value.value["DFROM"]} - ${item.value.value["DTO"]}`;
+  }
+
+  return data;
+}
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";

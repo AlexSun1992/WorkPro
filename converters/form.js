@@ -394,7 +394,15 @@ converter.save = (data) => {
       }
       if (data[i].type !== "multi") {
         if (data[i].value.value) {
-          res[name] = data[i].value.value;
+          if (
+            typeof data[i].value.value === "object" &&
+            !Array.isArray(data[i].value.value) &&
+            data[i].value.value !== null
+          ) {
+            res[name] = JSON.stringify(data[i].value.value);
+          } else {
+            res[name] = data[i].value.value;
+          }
         } else if (data[i].value.value == 0) {
           res[name] = 0;
         } else {
