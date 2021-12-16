@@ -10,8 +10,14 @@
 </template>
 
 <script>
+import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
+
 export default {
   name: "SelectItemFromTemplate",
+
+  components: {
+    ChooseButton,
+  },
 
   props: {
     dictionaryList: {
