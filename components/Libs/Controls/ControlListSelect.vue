@@ -17,40 +17,25 @@
         {{ data.value.text || "Выберите из списка" }}
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <content-block
-          @update="update"
-          class="mypolices-all-block"
-          :itemId="data.menudic"
-          :dictionaryList="data"
-        >
-          <v-runtime-template
-            :itemId="data.menudic"
-            v-if="getData"
-            :template="getData"
-            :dictionaryList="data"
-          >
-          </v-runtime-template>
-
-          <b-card v-else>
-            <b-col style="width: 60rem">
-              <grid
-                :load="isLoad"
-                :action="true"
-                :total="dataContent.total"
-                :fields="dataContent.fields"
-                :items="dataContent.items"
-              >
-                <template v-slot:actions="slotProps">
-                  <b-button
-                    v-on:click="selectItem(slotProps)"
-                    class="btn-table-open"
-                    >Выбрать</b-button
-                  >
-                </template>
-              </grid>
-            </b-col>
-          </b-card>
-        </content-block>
+        <b-card>
+          <b-col style="width: 60rem">
+            <grid
+              :load="isLoad"
+              :action="true"
+              :total="dataContent.total"
+              :fields="dataContent.fields"
+              :items="dataContent.items"
+            >
+              <template v-slot:actions="slotProps">
+                <b-button
+                  v-on:click="selectItem(slotProps)"
+                  class="btn-table-open"
+                  >Выбрать</b-button
+                >
+              </template>
+            </grid>
+          </b-col>
+        </b-card>
       </b-collapse>
     </b-form-group>
   </div>
