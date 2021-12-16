@@ -200,7 +200,7 @@
                   @click.stop.prevent="onSubmit"
                   class="w-100"
                   type="submit"
-                  variant="success"
+                  variant="primary"
                   :disabled="registrationInProcess"
                   tabindex="100"
                 >
@@ -513,49 +513,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-@import "../../../assets/scss/reg.scss";
-
-.alert {
-  border: 1px solid orange;
-}
-
-.ok {
-  border: 1px solid red;
-}
-
-.autocomplete {
-  position: relative;
-}
-.dropdown-menu {
-  display: block;
-  width: 100%;
-}
-.active {
-  background-color: lightgrey;
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.error {
-  margin-top: 0.25rem;
-  font-size: 80%;
-  color: #f86c6b;
-}
-.help-text {
-  font-size: 12px;
-  margin-top: 10px;
-}
-.autocomplete ul.dropdown-menu {
-  display: block;
-  margin-top: -5px;
-}
-legend {
-  margin: 0;
-  padding: 0;
-  font-size: 0.875rem;
-}
-</style>
+<style scoped lang="scss"></style>
