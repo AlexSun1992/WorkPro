@@ -30,6 +30,7 @@ import FilterBlock from "../Block/FilterBlock.vue";
 import ChooseButton from "../Block/ChooseButton.vue";
 import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap";
 import ControlMap from "~/components/Libs/Controls/ControlMap";
+import SelectItemFromTemplate from "../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
 
 export default {
   name: "Wizard",
@@ -50,6 +51,7 @@ export default {
     SkeletonBox,
     ObjectsOnMap,
     ControlMap,
+    SelectItemFromTemplate,
   },
   props: {
     params: {
