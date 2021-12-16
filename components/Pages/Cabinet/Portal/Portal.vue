@@ -59,11 +59,11 @@ export default {
       required: true,
       default: () => {},
     },
-    dictionaryList: {
-      type: Object,
-      required: false,
-      default: () => null,
-    },
+    // dictionaryList: {
+    //   type: Object,
+    //   required: false,
+    //   default: () => null,
+    // },
   },
   data() {
     return {

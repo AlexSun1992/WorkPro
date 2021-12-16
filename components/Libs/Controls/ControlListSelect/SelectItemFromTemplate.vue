@@ -11,43 +11,25 @@
 
 <script>
 import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
+import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
+import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
 
 export default {
   name: "SelectItemFromTemplate",
-
   components: {
     ChooseButton,
+    FilterBlock,
+    ObjectsOnMap,
   },
 
   props: {
-    dictionaryList: {
-      type: Object,
-      required: false,
-      default: () => null,
-    },
     itemId: {
-      required: false,
-      default: () => null,
-    },
-    cardId: {
-      required: false,
-      default: () => null,
-    },
-    isOpenCard: {
-      type: Boolean,
-      required: false,
-      default: () => false,
-    },
-    propertyId: {
-      type: String,
       required: false,
       default: () => null,
     },
   },
   data() {
-    return {
-      indicator: null,
-    };
+    return {};
   },
 
   async fetch() {
@@ -72,12 +54,6 @@ export default {
   },
 
   computed: {
-    actions: {
-      get: function () {
-        return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
-      },
-    },
-
     dataContent: {
       get: function () {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
@@ -88,16 +64,11 @@ export default {
         }
       },
     },
-
-    parentMenu: {
-      get: function () {
-        return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
-      },
-    },
     isEmptyContent: {
       get: function () {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
+          // console.log(block);
           return !block?.data?.items.length;
         } else {
           return false;
@@ -109,24 +80,6 @@ export default {
   methods: {
     update(event) {
       this.$emit("update", event);
-    },
-    openCard(item) {
-      try {
-        if (this.isOpenCard) {
-          this.$router.push(
-            `/cabinet/55/0/${this.parentMenu ? this.parentMenu : this.itemId}/${
-              item.ID || item[this.propertyId]
-            }${item.RELCARD ? `/${item.RELCARD}` : `/${item.REL}`}`
-          );
-        }
-      } catch (err) {
-        this.$bvToast.toast(err.response.data.MESSAGE, {
-          title: "Ошибка",
-          variant: "danger",
-          noAutoHide: true,
-          solid: true,
-        });
-      }
     },
   },
 };

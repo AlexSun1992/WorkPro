@@ -33,11 +33,11 @@ export default {
   },
 
   props: {
-    dictionaryList: {
-      type: Object,
-      required: false,
-      default: () => null,
-    },
+    // dictionaryList: {
+    //   type: Object,
+    //   required: false,
+    //   default: () => null,
+    // },
     itemId: {
       required: false,
       default: () => null,

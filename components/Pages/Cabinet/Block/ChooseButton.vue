@@ -14,12 +14,6 @@ export default {
       default: () => null,
     },
 
-    dictionaryList: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
-
     data: {
       type: Object,
       required: true,
@@ -31,7 +25,7 @@ export default {
     dataContent: {
       get: function () {
         const block = this.$store.getters["blocks/getUnfilteredBlockById"](
-          this.dictionaryList.menudic
+          this.data.menudic
         );
         if (block) {
           return block.data;

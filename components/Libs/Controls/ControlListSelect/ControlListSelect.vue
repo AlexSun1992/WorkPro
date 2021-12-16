@@ -21,7 +21,18 @@
           @update="update"
           class="mypolices-all-block"
           :itemId="data.menudic"
+          name="Vasya"
         >
+          <!-- Динамический шаблон -->
+          <v-runtime-template
+            :itemId="data.menudic"
+            v-if="getData"
+            :template="getData"
+          >
+          </v-runtime-template>
+
+          <!-- Динамический шаблон -->
+
           <b-card>
             <b-col style="width: 60rem">
               <grid
@@ -51,6 +62,7 @@ import Grid from "../../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
 import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
+import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
 
 export default {
   name: "ControlListSelect",
@@ -59,6 +71,7 @@ export default {
     VRuntimeTemplate,
     ContentBlock,
     SelectItemFromTemplate,
+    ChooseButton,
   },
 
   data() {
@@ -68,11 +81,6 @@ export default {
     };
   },
   props: {
-    dictionaryList: {
-      type: Object,
-      required: false,
-      default: () => null,
-    },
     data: {
       type: Object,
       required: true,
@@ -148,8 +156,9 @@ export default {
         }
       });
       this.visible = false;
-      console.log(value_prepare);
+      // console.log(value_prepare);
       this.$store.commit("data_card/setFilters", value_prepare);
+      console.log(value_prepare);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
