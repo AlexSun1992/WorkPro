@@ -9,7 +9,7 @@
           </b-nav>
           <div>{{ errorMessage }}</div>
           <b-form @submit.prevent="onSubmit">
-            <b-form-group label="Телефон" label-cols="12" class="mt-3">
+            <b-form-group label="Телефон" label-cols="12" class="mt-4">
               <b-form-input
                 ref="phoneInput"
                 v-model="$v.user.username.$model"
@@ -32,7 +32,7 @@
               >
             </b-form-group>
 
-            <b-form-group label="Пароль" label-cols="12">
+            <b-form-group label="Пароль" label-cols="12" class="mt-3">
               <b-form-input
                 v-model="$v.user.password.$model"
                 placeholder="Пароль"
@@ -50,17 +50,13 @@
 
             <b-button
               v-on:enter="fetchToken()"
-              variant="success"
+              variant="primary"
               type="submit"
               :disabled="authInProcess"
-              class="w-100"
+              class="w-100 mt-3"
             >
               Авторизоваться
-              <b-spinner
-                v-if="authInProcess"
-                style="width: 1.2rem; height: 1.2rem"
-                variant="light"
-              ></b-spinner>
+              <b-spinner v-if="authInProcess" variant="light"></b-spinner>
             </b-button>
           </b-form>
           <div class="mt-3 text-center">
@@ -214,14 +210,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.forgot-password {
-  color: #536c79; /**Заменить на глобальные цвета */
-}
-@import "src/assets/scss/reg";
-legend {
-  margin: 0;
-  padding: 0;
-  font-size: 0.875rem;
-}
-</style>
+<style></style>
