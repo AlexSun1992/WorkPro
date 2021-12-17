@@ -25,19 +25,19 @@ export default {
   },
 
   computed: {
-    // dataContent: {
-    //   get: function () {
-    //     const block = this.$store.getters["blocks/getUnfilteredBlockById"](
-    //       this.data.menudic
-    //     );
-    //     if (block) {
-    //       console.log(block.data);
-    //       return block.data;
-    //     } else {
-    //       return {};
-    //     }
-    //   },
-    // },
+    dataContent: {
+      get: function () {
+        const block = this.$store.getters["blocks/getUnfilteredBlockById"](
+          this.data.menudic
+        );
+        if (block) {
+          console.log(block.data);
+          return block.data;
+        } else {
+          return {};
+        }
+      },
+    },
   },
 
   methods: {

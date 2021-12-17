@@ -98,6 +98,7 @@ export default {
           this.data.menudic
         );
         if (block) {
+          console.log(this.data);
           return block.data;
         } else {
           return {};
