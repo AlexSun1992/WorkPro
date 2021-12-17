@@ -32,7 +32,7 @@
           </v-runtime-template>
           <!-- Динамический шаблон -->
 
-          <b-card v-if="!getData">
+          <b-card>
             <b-col style="width: 60rem">
               <grid
                 :load="isLoad"
@@ -98,7 +98,9 @@ export default {
           this.data.menudic
         );
         if (block) {
+          console.log(block);
           console.log(this.data);
+          console.log(this.edit);
           return block.data;
         } else {
           return {};

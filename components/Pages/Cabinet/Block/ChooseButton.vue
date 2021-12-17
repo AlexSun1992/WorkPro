@@ -22,6 +22,12 @@ export default {
       required: true,
       default: () => {},
     },
+
+    name: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
   },
 
   computed: {
