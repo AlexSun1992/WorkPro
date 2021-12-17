@@ -96,6 +96,8 @@ function eventHandler(data, item) {
   }
   if (item.name === "FKIDSPECIALIST") {
     if (policy.value.value) {
+      lpu.value = {};
+      doctor.value = {};
       lpu.visible = true;
       doctor.visible = true;
       scheduleButton.visible = true;

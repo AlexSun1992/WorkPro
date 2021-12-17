@@ -90,9 +90,6 @@ export default {
         if (value?.value !== this.fieldValue?.value) {
           this.$store.commit("data_card/clearFormRelationField", this.data);
         }
-        this.$store.commit("data_card/setFilters", {
-          [this.data.name.substring(2)]: value?.value,
-        });
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,

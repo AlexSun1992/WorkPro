@@ -77,6 +77,42 @@ export const getters = {
   },
   getLoading: (state) => state.loading,
   getFilters: (state) => state.filters,
+  getFiltersAllFields: (state) => {
+    return state.form.reduce((accumulator, currentValue) => {
+      if (
+        currentValue.type === "enum" &&
+        currentValue.name.substring(0, 2) === `FK`
+      ) {
+        return {
+          ...accumulator,
+          ...{
+            [currentValue.name.substring(2)]: currentValue.value?.value,
+          },
+        };
+      } else if (currentValue.type === "listSelect") {
+        return {
+          ...accumulator,
+          ...currentValue.value?.value,
+        };
+      } else if (currentValue.type === "timestamp") {
+        return {
+          ...accumulator,
+          ...{
+            [currentValue.name]: currentValue.value
+              ? $nuxt
+                  .$moment(currentValue.value, ["DD-MM-YYYY", "YYYY-MM-DD"])
+                  .format("YYYY-MM-DD HH:mm:ss")
+              : "",
+          },
+        };
+      } else {
+        return {
+          ...accumulator,
+          ...{ [currentValue.name]: currentValue.value },
+        };
+      }
+    }, {});
+  },
 };
 
 export const actions = {
@@ -561,6 +597,5 @@ export const mutations = {
   },
   setFilters(state, data) {
     state.filters = { ...state.filters, ...data };
-    // console.log(state.filters);
   },
 };
