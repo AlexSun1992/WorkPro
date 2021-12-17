@@ -138,6 +138,7 @@ export default {
         },
       });
     },
+
     selectItem(value) {
       const value_prepare = { ...value.data.item };
       console.log({ ...value.data.item });
