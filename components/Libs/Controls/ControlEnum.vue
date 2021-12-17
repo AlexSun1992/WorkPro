@@ -58,11 +58,6 @@ export default {
       param: "",
     };
   },
-  created() {
-    if (this.data.value?.value || this.data.value?.value == 0)
-      this.options.push(this.data.value);
-  },
-
   mounted() {
     if (this.$refs[this.selectId]) {
       this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {

@@ -31,7 +31,13 @@ app.get("/dic/:moduleId/:itemId/:name", (req, res) => {
         res.send(selectConverter.select(resp.data));
       })
       .catch((err) => {
-        res.status(err.response.data.STATUS).send(err.response.data);
+        if (err?.response?.data.STATUS == 401) {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        } else {
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
+        }
       });
   } catch (e) {
     res.send(e);
