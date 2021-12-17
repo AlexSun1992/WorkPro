@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <p>{{ dataContent }}</p> -->
     <b-button @click="transferData">{{ title }}</b-button>
   </div>
 </template>
@@ -27,6 +26,12 @@ export default {
       type: String,
       required: false,
       default: () => "",
+    },
+
+    isButtonRender: {
+      type: Object,
+      required: false,
+      default: () => {},
     },
   },
 

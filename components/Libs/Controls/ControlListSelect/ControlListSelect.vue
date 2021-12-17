@@ -18,40 +18,44 @@
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
         <select-item-from-template
-          @update="update"
           class="mypolices-all-block"
           :itemId="data.menudic"
-          name="Vasya"
+          :isButtonRender="data"
+          @update="update"
         >
           <!-- Динамический шаблон -->
           <v-runtime-template
             :itemId="data.menudic"
             v-if="getData"
             :template="getData"
+            :isButtonRender="data"
+            @update="update"
           >
           </v-runtime-template>
           <!-- Динамический шаблон -->
-
-          <b-card>
-            <b-col style="width: 60rem">
-              <grid
-                :load="isLoad"
-                :action="true"
-                :total="dataContent.total"
-                :fields="dataContent.fields"
-                :items="dataContent.items"
-              >
-                <template v-slot:actions="slotProps">
-                  <b-button
-                    v-on:click="selectItem(slotProps)"
-                    class="btn-table-open"
-                    >Выбрать</b-button
-                  >
-                </template>
-              </grid>
-            </b-col>
-          </b-card>
         </select-item-from-template>
+
+        <!-- Грид компонент -->
+        <b-card v-if="!getData">
+          <b-col style="width: 60rem">
+            <grid
+              :load="isLoad"
+              :action="true"
+              :total="dataContent.total"
+              :fields="dataContent.fields"
+              :items="dataContent.items"
+            >
+              <template v-slot:actions="slotProps">
+                <b-button
+                  v-on:click="selectItem(slotProps)"
+                  class="btn-table-open"
+                  >Выбрать</b-button
+                >
+              </template>
+            </grid>
+          </b-col>
+        </b-card>
+        <!-- Грид компонент -->
       </b-collapse>
     </b-form-group>
   </div>
@@ -59,7 +63,7 @@
 <script>
 import Grid from "../../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
-import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
+// import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
 import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
 
 export default {
@@ -67,7 +71,7 @@ export default {
   components: {
     Grid,
     VRuntimeTemplate,
-    ContentBlock,
+    // ContentBlock,
     SelectItemFromTemplate,
   },
 
@@ -89,6 +93,11 @@ export default {
       required: true,
       default: () => false,
     },
+    isButtonRender: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
   },
 
   computed: {
@@ -98,9 +107,6 @@ export default {
           this.data.menudic
         );
         if (block) {
-          console.log(block);
-          console.log(this.data);
-          console.log(this.edit);
           return block.data;
         } else {
           return {};

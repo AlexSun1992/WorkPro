@@ -59,11 +59,11 @@ export default {
       required: true,
       default: () => {},
     },
-    // dictionaryList: {
-    //   type: Object,
-    //   required: false,
-    //   default: () => null,
-    // },
+    isButtonRender: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
   },
   data() {
     return {

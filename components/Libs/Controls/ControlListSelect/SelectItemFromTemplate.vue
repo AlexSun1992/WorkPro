@@ -32,6 +32,11 @@ export default {
       required: false,
       default: () => "",
     },
+    isButtonRender: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
   },
   data() {
     return {};
@@ -69,16 +74,17 @@ export default {
         }
       },
     },
-    isEmptyContent: {
-      get: function () {
-        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
-        if (block) {
-          return !block?.data?.items.length;
-        } else {
-          return false;
-        }
-      },
-    },
+    // isEmptyContent: {
+    //   get: function () {
+    //     const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+    //     if (block) {
+    //       console.log(block);
+    //       return !block?.data?.items.length;
+    //     } else {
+    //       return false;
+    //     }
+    //   },
+    // },
   },
 
   methods: {

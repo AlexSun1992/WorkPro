@@ -53,10 +53,8 @@ export default {
       let elem = document.getElementById("elem");
       elem.addEventListener("click", this.update);
       this.selectedItem = JSON.parse(elem.dataset.obj);
-      console.log(this.selectedItem);
     },
     update() {
-      console.log(this.selectedItem);
       this.$emit("update", this.selectedItem);
     },
     init() {
