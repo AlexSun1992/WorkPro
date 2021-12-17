@@ -30,10 +30,9 @@
             :template="getData"
           >
           </v-runtime-template>
-
           <!-- Динамический шаблон -->
 
-          <b-card>
+          <b-card v-if="!getData">
             <b-col style="width: 60rem">
               <grid
                 :load="isLoad"
@@ -62,7 +61,6 @@ import Grid from "../../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
 import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
-import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
 
 export default {
   name: "ControlListSelect",
@@ -71,7 +69,6 @@ export default {
     VRuntimeTemplate,
     ContentBlock,
     SelectItemFromTemplate,
-    ChooseButton,
   },
 
   data() {
@@ -137,12 +134,13 @@ export default {
         name: this.data.name,
         value: {
           value: event,
-          text: event.SNAME,
+          text: event.SNAME || event.SFIRSTNAME + " " + event.SSECONDNAME,
         },
       });
     },
     selectItem(value) {
       const value_prepare = { ...value.data.item };
+      console.log({ ...value.data.item });
       Object.keys(value_prepare).map(function (key, index) {
         if (Number.isInteger(value_prepare[key]) === false) {
           try {
@@ -156,7 +154,7 @@ export default {
         }
       });
       this.visible = false;
-      // console.log(value_prepare);
+
       this.$store.commit("data_card/setFilters", value_prepare);
       console.log(value_prepare);
       this.$emit("update", {

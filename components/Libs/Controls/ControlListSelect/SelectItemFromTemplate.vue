@@ -68,7 +68,6 @@ export default {
       get: function () {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
-          // console.log(block);
           return !block?.data?.items.length;
         } else {
           return false;

@@ -38,20 +38,8 @@ export default {
 
   methods: {
     transferData() {
-      console.log(this.data);
-
+      this.$emit("update", this.data);
       this.$store.commit("data_card/setFilters", this.data);
-
-      // this.$emit("update", {
-      //   fieldId: this.dictionaryList.fieldId,
-      //   name: this.dictionaryList.name,
-      //   value: {
-      //     value: this.data,
-      //     text:
-      //       this.data[this.dictionaryList.name.substring(2)] ||
-      //       this.data[this.dataContent.fields[1].label],
-      //   },
-      // });
     },
   },
 };
