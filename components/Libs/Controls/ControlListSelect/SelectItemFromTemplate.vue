@@ -27,6 +27,11 @@ export default {
       required: false,
       default: () => null,
     },
+    name: {
+      type: String,
+      required: false,
+      default: () => "",
+    },
   },
   data() {
     return {};

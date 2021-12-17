@@ -24,9 +24,9 @@ export default {
     },
 
     name: {
-      type: Object,
+      type: String,
       required: false,
-      default: () => {},
+      default: () => "",
     },
   },
 
