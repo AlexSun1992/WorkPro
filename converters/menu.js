@@ -109,6 +109,7 @@ converter.menuObject = (data) => {
   obj.cardgrid = data.SVJCARDGRID || null;
   obj.cardtemplate = data.SVJCARDTEMPLATE || null;
   obj.isModal = data.LMODALFORMSTYLE;
+  obj.closeAfterSave = data.LCLOSEAFTERSAVE;
   return obj;
 };
 
