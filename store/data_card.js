@@ -84,19 +84,18 @@ export const getters = {
         currentValue.name.substring(0, 2) === `FK`
       ) {
         return {
-          ...accumulator,
           ...{
             [currentValue.name.substring(2)]: currentValue.value?.value,
           },
+          ...accumulator,
         };
       } else if (currentValue.type === "listSelect") {
         return {
-          ...accumulator,
           ...currentValue.value?.value,
+          ...accumulator,
         };
       } else if (currentValue.type === "timestamp") {
         return {
-          ...accumulator,
           ...{
             [currentValue.name]: currentValue.value
               ? $nuxt
@@ -104,11 +103,12 @@ export const getters = {
                   .format("YYYY-MM-DD HH:mm:ss")
               : "",
           },
+          ...accumulator,
         };
       } else {
         return {
-          ...accumulator,
           ...{ [currentValue.name]: currentValue.value },
+          ...accumulator,
         };
       }
     }, {});
