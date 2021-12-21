@@ -84,31 +84,28 @@ export const getters = {
         currentValue.name.substring(0, 2) === `FK`
       ) {
         return {
-          ...{
-            [currentValue.name.substring(2)]: currentValue.value?.value,
-          },
           ...accumulator,
+          [currentValue.name.substring(2)]: currentValue.value?.value,
         };
       } else if (currentValue.type === "listSelect") {
         return {
-          ...currentValue.value?.value,
           ...accumulator,
+          ...currentValue.value?.value,
         };
       } else if (currentValue.type === "timestamp") {
         return {
-          ...{
-            [currentValue.name]: currentValue.value
-              ? $nuxt
-                  .$moment(currentValue.value, ["DD-MM-YYYY", "YYYY-MM-DD"])
-                  .format("YYYY-MM-DD HH:mm:ss")
-              : "",
-          },
           ...accumulator,
+
+          [currentValue.name]: currentValue.value
+            ? $nuxt
+                .$moment(currentValue.value, ["DD-MM-YYYY", "YYYY-MM-DD"])
+                .format("YYYY-MM-DD HH:mm:ss")
+            : "",
         };
       } else {
         return {
-          ...{ [currentValue.name]: currentValue.value },
           ...accumulator,
+          [currentValue.name]: currentValue.value,
         };
       }
     }, {});
