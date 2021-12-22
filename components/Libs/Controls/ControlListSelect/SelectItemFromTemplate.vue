@@ -1,11 +1,11 @@
 <template>
-  <!-- <div>
+  <div>
     <slot name="data" v-for="item in dataContent.items" v-bind:content="item">
     </slot>
     <slot :update="update" v-bind:content="dataContent.items"> </slot>
-  </div> -->
+  </div>
 
-  <div>
+  <!-- <div>
     <b-form-group
       :label="isButtonRender.label"
       :class="{ required: isButtonRender.required }"
@@ -20,21 +20,21 @@
       >
         {{ "Выберите из списка" }}
       </b-input>
-      <!-- <b-collapse id="collapse-4" class="mt-2"> -->
-      <b-card>
-        <b-col style="width: 60rem">
-          <slot
-            name="data"
-            v-for="item in dataContent.items"
-            v-bind:content="item"
-          >
-          </slot>
-          <slot :update="update" v-bind:content="dataContent.items"> </slot>
-        </b-col>
-      </b-card>
-      <!-- </b-collapse> -->
+      <b-collapse id="collapse-4" v-model="visible" class="mt-2">
+        <b-card>
+          <b-col style="width: 60rem">
+            <slot
+              name="data"
+              v-for="item in dataContent.items"
+              v-bind:content="item"
+            >
+            </slot>
+            <slot :update="update" v-bind:content="dataContent.items"> </slot>
+          </b-col>
+        </b-card>
+      </b-collapse>
     </b-form-group>
-  </div>
+  </div> -->
 
   <!-- <div>
     <b-form-group
@@ -86,6 +86,7 @@ export default {
   data() {
     return {
       visible: false,
+      isLoad: false,
     };
   },
 
@@ -133,17 +134,15 @@ export default {
     }
   },
 
-  mounted() {
-    console.log(this.isButtonRender);
-  },
+  // mounted() {
+  //   console.log(this.isButtonRender);
+  // },
 
   computed: {
     dataContent: {
       get: function () {
-        console.log("начинаю делать запрос!!!");
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
-          console.log(block);
           return block.data;
         } else {
           return {};
@@ -165,8 +164,6 @@ export default {
 
   methods: {
     update(event) {
-      // console.log(event);
-      // console.log(this.itemId);
       this.$emit("update", event);
     },
     async openList() {
@@ -176,7 +173,7 @@ export default {
         try {
           this.isLoad = true;
           await this.$store.dispatch("blocks/fetchBlock", {
-            id: this.data.menudic,
+            id: this.isButtonRender.menudic,
             query: this.$store.getters["data_card/getFilters"],
           });
           this.isLoad = false;
@@ -184,6 +181,58 @@ export default {
           console.log(err);
         }
       }
+    },
+    selectItem(value) {
+      const value_prepare = { ...value.data.item };
+      console.log(value_prepare);
+      // console.log({ ...value.data.item });
+      // Object.keys(value_prepare).map(function (key, index) {
+      //   if (Number.isInteger(value_prepare[key]) === false) {
+      //     try {
+      //       JSON.parse(value_prepare[key]);
+      //       delete value_prepare[key];
+      //     } catch (e) {
+      //       value_prepare[key] = value_prepare[key];
+      //     }
+      //   } else {
+      //     value_prepare[key] = value_prepare[key];
+      //   }
+      // });
+      // this.visible = false;
+
+      // this.$store.commit("data_card/setFilters", value_prepare);
+      // console.log(value_prepare);
+      // this.$emit("update", {
+      //   fieldId: this.data.fieldId,
+      //   name: this.data.name,
+      //   value: {
+      //     value: value_prepare,
+      //     text:
+      //       value.data.item[this.data.name.substring(2)] ||
+      //       value.data.item[this.dataContent.fields[1].label],
+      //   },
+      // });
+    },
+    outside() {
+      if (this.visible) {
+        this.visible = false;
+      }
+    },
+  },
+
+  directives: {
+    clickOutside: {
+      bind: function (el, binding, vnode) {
+        el.clickOutsideEvent = function (event) {
+          if (!(el == event.target || el.contains(event.target))) {
+            vnode.context[binding.expression](event);
+          }
+        };
+        document.body.addEventListener("click", el.clickOutsideEvent);
+      },
+      unbind: function (el) {
+        document.body.removeEventListener("click", el.clickOutsideEvent);
+      },
     },
   },
 };

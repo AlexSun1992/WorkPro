@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-runtime-template v-if="getData" :template="getData" @update="update">
-    </v-runtime-template>
+    <!-- <v-runtime-template v-if="getData" :template="getData" @update="update">
+    </v-runtime-template> -->
 
-    <!-- <b-form-group
+    <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
       :label-for="data.name"
@@ -20,10 +20,10 @@
         {{ data.value.text || "Выберите из списка" }}
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <v-runtime-template v-if="getData" :template="getData" @update="update">
-        </v-runtime-template>
+        <!-- <v-runtime-template v-if="getData" :template="getData" @update="update">
+        </v-runtime-template> -->
 
-         <b-card>
+        <b-card>
           <b-col style="width: 60rem">
             <grid
               :load="isLoad"
@@ -41,9 +41,9 @@
               </template>
             </grid>
           </b-col>
-        </b-card> 
+        </b-card>
       </b-collapse>
-    </b-form-group> -->
+    </b-form-group>
   </div>
 </template>
 <script>
@@ -144,36 +144,36 @@ export default {
         },
       });
     },
-
     selectItem(value) {
+      console.log(value);
       const value_prepare = { ...value.data.item };
       console.log({ ...value.data.item });
-      Object.keys(value_prepare).map(function (key, index) {
-        if (Number.isInteger(value_prepare[key]) === false) {
-          try {
-            JSON.parse(value_prepare[key]);
-            delete value_prepare[key];
-          } catch (e) {
-            value_prepare[key] = value_prepare[key];
-          }
-        } else {
-          value_prepare[key] = value_prepare[key];
-        }
-      });
-      this.visible = false;
+      // Object.keys(value_prepare).map(function (key, index) {
+      //   if (Number.isInteger(value_prepare[key]) === false) {
+      //     try {
+      //       JSON.parse(value_prepare[key]);
+      //       delete value_prepare[key];
+      //     } catch (e) {
+      //       value_prepare[key] = value_prepare[key];
+      //     }
+      //   } else {
+      //     value_prepare[key] = value_prepare[key];
+      //   }
+      // });
+      // this.visible = false;
 
-      this.$store.commit("data_card/setFilters", value_prepare);
-      console.log(value_prepare);
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: {
-          value: value_prepare,
-          text:
-            value.data.item[this.data.name.substring(2)] ||
-            value.data.item[this.dataContent.fields[1].label],
-        },
-      });
+      // this.$store.commit("data_card/setFilters", value_prepare);
+      // console.log(value_prepare);
+      // this.$emit("update", {
+      //   fieldId: this.data.fieldId,
+      //   name: this.data.name,
+      //   value: {
+      //     value: value_prepare,
+      //     text:
+      //       value.data.item[this.data.name.substring(2)] ||
+      //       value.data.item[this.dataContent.fields[1].label],
+      //   },
+      // });
     },
     outside() {
       if (this.visible) {
@@ -196,21 +196,21 @@ export default {
       }
     },
   },
-  directives: {
-    clickOutside: {
-      bind: function (el, binding, vnode) {
-        el.clickOutsideEvent = function (event) {
-          if (!(el == event.target || el.contains(event.target))) {
-            vnode.context[binding.expression](event);
-          }
-        };
-        document.body.addEventListener("click", el.clickOutsideEvent);
-      },
-      unbind: function (el) {
-        document.body.removeEventListener("click", el.clickOutsideEvent);
-      },
-    },
-  },
+  // directives: {
+  //   clickOutside: {
+  //     bind: function (el, binding, vnode) {
+  //       el.clickOutsideEvent = function (event) {
+  //         if (!(el == event.target || el.contains(event.target))) {
+  //           vnode.context[binding.expression](event);
+  //         }
+  //       };
+  //       document.body.addEventListener("click", el.clickOutsideEvent);
+  //     },
+  //     unbind: function (el) {
+  //       document.body.removeEventListener("click", el.clickOutsideEvent);
+  //     },
+  //   },
+  // },
 };
 </script>
 
