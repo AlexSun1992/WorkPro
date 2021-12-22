@@ -42,7 +42,6 @@ export default {
           this.data.menudic
         );
         if (block) {
-          console.log(block.data);
           return block.data;
         } else {
           return {};

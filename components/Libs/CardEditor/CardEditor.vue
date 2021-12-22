@@ -70,8 +70,11 @@ import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
+import SelectItemFromTemplate from "../Controls/ControlListSelect/SelectItemFromTemplate.vue";
+
 export default {
   name: "CardEditor",
+  comments: { SelectItemFromTemplate },
   head() {
     return {
       script: [

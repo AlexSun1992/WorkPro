@@ -1,6 +1,9 @@
 <template>
-  <div v-click-outside="outside">
-    <b-form-group
+  <div>
+    <v-runtime-template v-if="getData" :template="getData" @update="update">
+    </v-runtime-template>
+
+    <!-- <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
       :label-for="data.name"
@@ -17,26 +20,10 @@
         {{ data.value.text || "Выберите из списка" }}
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <select-item-from-template
-          class="mypolices-all-block"
-          :itemId="data.menudic"
-          :isButtonRender="data"
-          @update="update"
-        >
-          <!-- Динамический шаблон -->
-          <v-runtime-template
-            :itemId="data.menudic"
-            v-if="getData"
-            :template="getData"
-            :isButtonRender="data"
-            @update="update"
-          >
-          </v-runtime-template>
-          <!-- Динамический шаблон -->
-        </select-item-from-template>
+        <v-runtime-template v-if="getData" :template="getData" @update="update">
+        </v-runtime-template>
 
-        <!-- Грид компонент -->
-        <b-card v-if="!getData">
+         <b-card>
           <b-col style="width: 60rem">
             <grid
               :load="isLoad"
@@ -54,10 +41,9 @@
               </template>
             </grid>
           </b-col>
-        </b-card>
-        <!-- Грид компонент -->
+        </b-card> 
       </b-collapse>
-    </b-form-group>
+    </b-form-group> -->
   </div>
 </template>
 <script>
@@ -65,6 +51,9 @@ import Grid from "../../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
 // import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
 import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
+import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
+import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
+import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
 
 export default {
   name: "ControlListSelect",
@@ -73,6 +62,9 @@ export default {
     VRuntimeTemplate,
     // ContentBlock,
     SelectItemFromTemplate,
+    ChooseButton,
+    FilterBlock,
+    ObjectsOnMap,
   },
 
   data() {
@@ -82,6 +74,10 @@ export default {
     };
   },
   props: {
+    itemId: {
+      required: false,
+      default: () => {},
+    },
     data: {
       type: Object,
       required: true,
@@ -136,6 +132,7 @@ export default {
       },
     },
   },
+
   methods: {
     update(event) {
       this.$emit("update", {

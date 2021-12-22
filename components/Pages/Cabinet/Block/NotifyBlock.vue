@@ -18,6 +18,7 @@ import OpenCardButton from "../Block/OpenCardButton";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import VRuntimeTemplate from "v-runtime-template";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
+// import SelectItemFromTemplate from "../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
 
 export default {
   name: "NotifyBlock",
@@ -28,6 +29,7 @@ export default {
     OpenCardButton,
     DeleteCardButton,
     SkeletonBox,
+    // SelectItemFromTemplate,
   },
   props: {
     moduleId: {
