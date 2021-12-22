@@ -23,6 +23,22 @@
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
         <b-card>
           <b-col style="width: 60rem">
+            <grid
+              :load="isLoad"
+              :action="true"
+              :total="dataContent.total"
+              :fields="dataContent.fields"
+              :items="dataContent.items"
+            >
+              <template v-slot:actions="slotProps">
+                <b-button
+                  v-on:click="selectItem(slotProps)"
+                  class="btn-table-open"
+                  >Выбрать</b-button
+                >
+              </template>
+            </grid>
+
             <slot
               name="data"
               v-for="item in dataContent.items"
@@ -74,6 +90,7 @@
 import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
 import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
 import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
+import Grid from "../../Table/Grid";
 
 export default {
   name: "SelectItemFromTemplate",
@@ -81,6 +98,7 @@ export default {
     ChooseButton,
     FilterBlock,
     ObjectsOnMap,
+    Grid,
   },
 
   data() {
@@ -134,10 +152,6 @@ export default {
     }
   },
 
-  // mounted() {
-  //   console.log(this.isButtonRender);
-  // },
-
   computed: {
     dataContent: {
       get: function () {
@@ -167,7 +181,6 @@ export default {
       this.$emit("update", event);
     },
     async openList() {
-      console.log("!!!");
       this.visible = !this.visible;
       if (this.visible) {
         try {
@@ -185,31 +198,33 @@ export default {
     selectItem(value) {
       const value_prepare = { ...value.data.item };
       console.log(value_prepare);
-      // console.log({ ...value.data.item });
-      // Object.keys(value_prepare).map(function (key, index) {
-      //   if (Number.isInteger(value_prepare[key]) === false) {
-      //     try {
-      //       JSON.parse(value_prepare[key]);
-      //       delete value_prepare[key];
-      //     } catch (e) {
-      //       value_prepare[key] = value_prepare[key];
-      //     }
-      //   } else {
-      //     value_prepare[key] = value_prepare[key];
-      //   }
-      // });
-      // this.visible = false;
 
-      // this.$store.commit("data_card/setFilters", value_prepare);
-      // console.log(value_prepare);
+      Object.keys(value_prepare).map(function (key, index) {
+        if (Number.isInteger(value_prepare[key]) === false) {
+          try {
+            JSON.parse(value_prepare[key]);
+            delete value_prepare[key];
+          } catch (e) {
+            value_prepare[key] = value_prepare[key];
+          }
+        } else {
+          value_prepare[key] = value_prepare[key];
+        }
+      });
+      this.visible = false;
+      this.$store.commit("data_card/setFilters", value_prepare);
+      console.log(value_prepare.SFIRSTNAME);
+      console.log(value_prepare.SSECONDNAME);
+      console.log(this.isButtonRender.fieldId);
+      console.log(this.isButtonRender.name);
       // this.$emit("update", {
-      //   fieldId: this.data.fieldId,
-      //   name: this.data.name,
+      //   fieldId: this.isButtonRender.fieldId,
+      //   name: this.isButtonRender.name,
       //   value: {
       //     value: value_prepare,
       //     text:
-      //       value.data.item[this.data.name.substring(2)] ||
-      //       value.data.item[this.dataContent.fields[1].label],
+      //       value_prepare.SNAME ||
+      //       value_prepare.SFIRSTNAME + " " + value_prepare.SSECONDNAME,
       //   },
       // });
     },
