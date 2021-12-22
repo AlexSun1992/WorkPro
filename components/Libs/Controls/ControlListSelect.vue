@@ -5,38 +5,15 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
-      <b-input
-        v-model="data.value.text || 'Выберите из списка'"
-        :readonly="true"
-        class="mb-2"
-        :class="visible ? null : 'collapsed'"
-        :aria-expanded="visible ? 'true' : 'false'"
-        aria-controls="collapse-4"
-        @click="openList"
-      >
-        {{ data.value.text || "Выберите из списка" }}
-      </b-input>
-      <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <b-card>
-          <b-col style="width: 60rem">
-            <grid
-              :load="isLoad"
-              :action="true"
-              :total="dataContent.total"
-              :fields="dataContent.fields"
-              :items="dataContent.items"
-            >
-              <template v-slot:actions="slotProps">
-                <b-button
-                  v-on:click="selectItem(slotProps)"
-                  class="btn-table-open"
-                  >Выбрать</b-button
-                >
-              </template>
-            </grid>
-          </b-col>
-        </b-card>
-      </b-collapse>
+      <control-wrapper-select
+        :options="options"
+        :select-id="selectId"
+        :item-value="itemValue"
+        :options-value="optionsValue"
+        :display-text="displayText"
+        @openList="openList"
+        @selectItem="selectItem"
+      />
     </b-form-group>
   </div>
 </template>
@@ -44,10 +21,12 @@
 import Grid from "../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "../../Pages/Cabinet/Block/ContentBlock.vue";
+import ControlWrapperSelect from "./ControlWrapperSelect";
 
 export default {
   name: "ControlListSelect",
   components: {
+    ControlWrapperSelect,
     Grid,
     VRuntimeTemplate,
     ContentBlock,
@@ -57,6 +36,8 @@ export default {
     return {
       visible: false,
       isLoad: false,
+      displayText: (item) =>
+        `${item.SSECONDNAME} ${item.SFIRSTNAME} ${item.STHIRDNAME}`,
     };
   },
   props: {
@@ -89,6 +70,26 @@ export default {
         } else {
           return {};
         }
+      },
+    },
+    options: {
+      get: function () {
+        return this.dataContent.items || [];
+      },
+    },
+    optionsValue: {
+      get: function () {
+        return this.data.name.substring(2) || this.dataContent.fields[1].label;
+      },
+    },
+    itemValue: {
+      get: function () {
+        return this.data?.value?.value || {};
+      },
+    },
+    selectId: {
+      get: function () {
+        return `id${this.data.fieldId}`;
       },
     },
     getData: {
@@ -126,8 +127,8 @@ export default {
       });
     },
     selectItem(value) {
-      const value_prepare = { ...value.data.item };
-      Object.keys(value_prepare).map(function (key, index) {
+      const value_prepare = { ...value };
+      Object.keys(value_prepare).map(function (key) {
         if (Number.isInteger(value_prepare[key]) === false) {
           try {
             JSON.parse(value_prepare[key]);
@@ -146,8 +147,8 @@ export default {
         value: {
           value: value_prepare,
           text:
-            value.data.item[this.data.name.substring(2)] ||
-            value.data.item[this.dataContent.fields[1].label],
+            value[this.data.name.substring(2)] ||
+            value[this.dataContent.fields[1].label],
         },
       });
     },

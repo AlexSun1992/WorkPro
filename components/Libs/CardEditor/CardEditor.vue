@@ -362,10 +362,7 @@ export default {
               return;
             } else {
               if (this.closeAfterSave) {
-                this.$router.push(
-                  `/cabinet/${moduleId}/0/${itemId}
-                `
-                );
+                this.$router.push(`/cabinet/${moduleId}/0/${itemId}`);
               } else {
                 this.$router.push(
                   `/cabinet/${moduleId}/0/${itemId}/${cardId}${
