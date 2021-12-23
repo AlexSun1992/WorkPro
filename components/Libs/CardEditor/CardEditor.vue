@@ -124,6 +124,10 @@ export default {
       required: false,
     },
   },
+  created() {
+    this.$root.eventHandler =
+      typeof eventHandler === "function" ? eventHandler : null;
+  },
   mounted() {
     this.stripeLoaded();
   },
