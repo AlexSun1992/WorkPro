@@ -47,7 +47,7 @@
           loading
         "
         @click="executeRecaptcha"
-        variant="success"
+        variant="primary"
         class="btn-sms"
         >Получить код
       </b-button>

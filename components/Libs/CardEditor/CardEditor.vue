@@ -62,7 +62,6 @@
     <SkeletonBox v-if="!data.length" class="mt-5" :items="8"></SkeletonBox>
   </div>
 </template>
-
 <script>
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
@@ -364,11 +363,18 @@ export default {
               );
               return;
             } else {
-              this.$router.push(
-                `/cabinet/${moduleId}/0/${itemId}/${cardId}${
-                  relId ? `/${relId}` : ""
-                }`
-              );
+              if (this.closeAfterSave) {
+                this.$router.push(
+                  `/cabinet/${moduleId}/0/${itemId}
+                `
+                );
+              } else {
+                this.$router.push(
+                  `/cabinet/${moduleId}/0/${itemId}/${cardId}${
+                    relId ? `/${relId}` : ""
+                  }`
+                );
+              }
               return;
             }
           }
@@ -512,6 +518,10 @@ export default {
     },
     actionSettings: function () {
       return this.params.actions.find((a) => a.id === this.actionParamsId);
+    },
+    closeAfterSave: function () {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LCLOSEAFTERSAVE;
     },
   },
 };

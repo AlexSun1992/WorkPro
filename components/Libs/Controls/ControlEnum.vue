@@ -58,11 +58,6 @@ export default {
       param: "",
     };
   },
-  created() {
-    if (this.data.value?.value || this.data.value?.value == 0)
-      this.options.push(this.data.value);
-  },
-
   mounted() {
     if (this.$refs[this.selectId]) {
       this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
@@ -95,9 +90,6 @@ export default {
         if (value?.value !== this.fieldValue?.value) {
           this.$store.commit("data_card/clearFormRelationField", this.data);
         }
-        this.$store.commit("data_card/setFilters", {
-          [this.data.name.substring(2)]: value?.value,
-        });
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,

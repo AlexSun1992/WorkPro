@@ -164,7 +164,9 @@ export default {
         }
       });
       this.visible = false;
+
       this.$store.commit("data_card/setFilters", value_prepare);
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -188,7 +190,7 @@ export default {
           this.isLoad = true;
           await this.$store.dispatch("blocks/fetchBlock", {
             id: this.data.menudic,
-            query: this.$store.getters["data_card/getFilters"],
+            query: this.$store.getters["data_card/getFiltersAllFields"],
           });
           this.isLoad = false;
         } catch (err) {
