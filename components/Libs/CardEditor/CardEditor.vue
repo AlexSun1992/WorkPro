@@ -78,6 +78,8 @@ export default {
           // type: "module",
           src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
           callback: () => {
+            this.$root.eventHandler =
+              typeof eventHandler === "function" ? eventHandler : null;
             this.stripeLoaded();
           },
         },
@@ -121,10 +123,6 @@ export default {
       type: Array,
       required: false,
     },
-  },
-  created() {
-    this.$root.eventHandler =
-      typeof eventHandler === "function" ? eventHandler : null;
   },
   mounted() {
     this.stripeLoaded();
