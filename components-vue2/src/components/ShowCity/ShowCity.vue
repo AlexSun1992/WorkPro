@@ -5,6 +5,10 @@
     </b-button>
     <b-collapse v-model="visible" class="sity-question">
       <b-card>
+        <div class="close-sity-block"></div>
+        <div class="sity-block-text">
+          Ваш город: <b>{{ city }}</b>
+        </div>
         <b-button
           variant="primary"
           @click="setAutoCity(city)"
