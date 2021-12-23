@@ -21,6 +21,7 @@
             :params="params"
           ></card-editor>
         </div>
+
         <v-runtime-template
           v-if="params.settings.cardtemplate"
           :template="params.settings.cardtemplate"

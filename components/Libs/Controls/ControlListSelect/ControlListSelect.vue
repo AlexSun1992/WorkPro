@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- <div>
-      <v-runtime-template v-if="getData" :template="getData" @update="update">
-      </v-runtime-template>
-    </div> -->
     <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
@@ -21,42 +17,15 @@
         {{ data.value.text || "Выберите из списка" }}
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <!-- <v-runtime-template v-if="getData" :template="getData" @update="update">
-        </v-runtime-template> -->
-        <!-- <select-item-from-template
+        <wrapper-item-from-template
           class="mypolices-all-block"
           :isButtonRender="data"
           @update="update"
           v-if="getData"
           :itemId="data.menudic"
-        >
-          <v-runtime-template
-            v-if="getData"
-            :template="getData"
-            :isButtonRender="data"
-            @update="update"
-          >
-          </v-runtime-template>
-        </select-item-from-template> -->
-        <b-card>
-          <b-col style="width: 60rem">
-            <grid
-              :load="isLoad"
-              :action="true"
-              :total="dataContent.total"
-              :fields="dataContent.fields"
-              :items="dataContent.items"
-            >
-              <template v-slot:actions="slotProps">
-                <b-button
-                  v-on:click="selectItem(slotProps)"
-                  class="btn-table-open"
-                  >Выбрать</b-button
-                >
-              </template>
-            </grid>
-          </b-col>
-        </b-card>
+          :isEmpty="isEmptyContent"
+          :template="getData"
+        ></wrapper-item-from-template>
       </b-collapse>
     </b-form-group>
   </div>
@@ -64,7 +33,6 @@
 <script>
 import Grid from "../../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
-// import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
 import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
 import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
 import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
@@ -76,7 +44,6 @@ export default {
   components: {
     Grid,
     VRuntimeTemplate,
-    // ContentBlock,
     SelectItemFromTemplate,
     WrapperItemFromTemplate,
     ChooseButton,
@@ -88,6 +55,7 @@ export default {
     return {
       visible: false,
       isLoad: false,
+      temp: "<h1>Евгений Канев!!! из селектЛиста</h1>",
     };
   },
   props: {
@@ -110,6 +78,11 @@ export default {
       type: Object,
       required: false,
       default: () => {},
+    },
+    isEmpty: {
+      type: Boolean,
+      required: false,
+      default: () => false,
     },
   },
 
@@ -152,7 +125,6 @@ export default {
 
   methods: {
     update(event) {
-      console.log("!!!");
       Object.keys(event).map(function (key, index) {
         if (Number.isInteger(event[key]) === false) {
           try {
@@ -177,10 +149,8 @@ export default {
       });
     },
     selectItem(value) {
-      console.log(this.data);
       const value_prepare = { ...value.data.item };
-      console.log(value_prepare);
-      console.log({ ...value.data.item });
+
       Object.keys(value_prepare).map(function (key, index) {
         if (Number.isInteger(value_prepare[key]) === false) {
           try {

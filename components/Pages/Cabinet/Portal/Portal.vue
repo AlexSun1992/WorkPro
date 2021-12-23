@@ -31,6 +31,7 @@ import ChooseButton from "../Block/ChooseButton.vue";
 import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap";
 import ControlMap from "~/components/Libs/Controls/ControlMap";
 import SelectItemFromTemplate from "../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
+import WrapperItemFromTemplate from "../../../Libs/Controls/ControlListSelect/WrapperItemFromTemplate.vue";
 
 export default {
   name: "Wizard",
@@ -52,6 +53,7 @@ export default {
     ObjectsOnMap,
     ControlMap,
     SelectItemFromTemplate,
+    WrapperItemFromTemplate,
   },
   props: {
     params: {
@@ -60,6 +62,11 @@ export default {
       default: () => {},
     },
     isButtonRender: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
+    data: {
       type: Object,
       required: false,
       default: () => {},

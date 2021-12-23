@@ -52,7 +52,6 @@ import ControlCustomDouble from "./ControlCustomDouble.vue";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha.vue";
 import ControlMap from "./ControlMap.vue";
 import ControlListSelect from "./ControlListSelect/ControlListSelect.vue";
-import SelectItemFromTemplate from "./ControlListSelect/SelectItemFromTemplate.vue";
 
 export default {
   name: "Control",
@@ -85,7 +84,6 @@ export default {
     ControlGoogleCaptcha,
     ControlMap,
     ControlListSelect,
-    SelectItemFromTemplate,
   },
   props: {
     data: {
