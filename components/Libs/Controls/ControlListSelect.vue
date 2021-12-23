@@ -36,8 +36,6 @@ export default {
     return {
       visible: false,
       isLoad: false,
-      displayText: (item) =>
-        `${item.SSECONDNAME} ${item.SFIRSTNAME} ${item.STHIRDNAME}`,
     };
   },
   props: {
@@ -58,7 +56,6 @@ export default {
       default: () => false,
     },
   },
-
   computed: {
     dataContent: {
       get: function () {
@@ -79,7 +76,9 @@ export default {
     },
     optionsValue: {
       get: function () {
-        return this.data.name.substring(2) || this.dataContent.fields[1].label;
+        if (this.dataContent?.fields?.length > 1) {
+          return this.dataContent?.fields[1].key || "ID";
+        }
       },
     },
     itemValue: {
@@ -125,6 +124,9 @@ export default {
           text: event.SNAME,
         },
       });
+    },
+    displayText: function (item) {
+      return this.$root.eventHandler(this.data, item, "displayText");
     },
     selectItem(value) {
       const value_prepare = { ...value };
