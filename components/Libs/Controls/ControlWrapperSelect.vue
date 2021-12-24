@@ -7,7 +7,7 @@
       v-model="selectValue"
       :option-value="optionsValue"
       :custom-text="displayText"
-      placeholder="Выберите из списка"
+      :placeholder="placeholder || 'Выберите из списка'"
     >
     </model-list-select>
   </div>
@@ -42,6 +42,10 @@ export default {
     displayText: {
       type: Function,
       required: true,
+    },
+    placeholder: {
+      type: String,
+      required: false,
     },
   },
   mounted() {
