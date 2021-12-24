@@ -1,9 +1,28 @@
 <template>
   <div>
+    <div v-click-outside="outside" v-if="!getData">
+      <b-form-group
+        :label="data.label"
+        :class="{ required: data.required }"
+        :label-for="data.name"
+      >
+        <control-wrapper-select
+          :options="options"
+          :select-id="selectId"
+          :item-value="itemValue"
+          :options-value="optionsValue"
+          :display-text="displayText"
+          @openList="openList"
+          @selectItem="selectItem"
+        />
+      </b-form-group>
+    </div>
+
     <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
       :label-for="data.name"
+      v-if="getData"
     >
       <b-input
         v-model="data.value.text || 'Выберите из списка'"
@@ -23,22 +42,10 @@
               class="mypolices-all-block"
               :isButtonRender="data"
               @update="update"
-              v-if="getData"
               :itemId="data.menudic"
               :isEmpty="isEmptyContent"
               :template="getData"
             ></wrapper-item-from-template>
-
-            <control-wrapper-select
-              v-if="!getData"
-              :options="options"
-              :select-id="selectId"
-              :item-value="itemValue"
-              :options-value="optionsValue"
-              :display-text="displayText"
-              @openList="openList"
-              @selectItem="selectItem"
-            />
           </b-col>
         </b-card>
       </b-collapse>
