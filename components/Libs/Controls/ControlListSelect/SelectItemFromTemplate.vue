@@ -29,7 +29,7 @@ export default {
   },
   props: {
     itemId: {
-      type: String,
+      type: Number,
       required: false,
       default: () => "",
     },

@@ -17,15 +17,30 @@
         {{ data.value.text || "Выберите из списка" }}
       </b-input>
       <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <wrapper-item-from-template
-          class="mypolices-all-block"
-          :isButtonRender="data"
-          @update="update"
-          v-if="getData"
-          :itemId="data.menudic"
-          :isEmpty="isEmptyContent"
-          :template="getData"
-        ></wrapper-item-from-template>
+        <b-card>
+          <b-col style="width: 60rem">
+            <wrapper-item-from-template
+              class="mypolices-all-block"
+              :isButtonRender="data"
+              @update="update"
+              v-if="getData"
+              :itemId="data.menudic"
+              :isEmpty="isEmptyContent"
+              :template="getData"
+            ></wrapper-item-from-template>
+
+            <control-wrapper-select
+              v-if="!getData"
+              :options="options"
+              :select-id="selectId"
+              :item-value="itemValue"
+              :options-value="optionsValue"
+              :display-text="displayText"
+              @openList="openList"
+              @selectItem="selectItem"
+            />
+          </b-col>
+        </b-card>
       </b-collapse>
     </b-form-group>
   </div>
@@ -38,10 +53,14 @@ import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
 import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
 import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
 import WrapperItemFromTemplate from "./WrapperItemFromTemplate.vue";
+import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
+import ControlWrapperSelect from "../ControlWrapperSelect";
 
 export default {
   name: "ControlListSelect",
   components: {
+    ContentBlock,
+    ControlWrapperSelect,
     Grid,
     VRuntimeTemplate,
     SelectItemFromTemplate,
@@ -84,7 +103,6 @@ export default {
       default: () => false,
     },
   },
-
   computed: {
     dataContent: {
       get: function () {
@@ -96,6 +114,28 @@ export default {
         } else {
           return {};
         }
+      },
+    },
+    options: {
+      get: function () {
+        return this.dataContent.items || [];
+      },
+    },
+    optionsValue: {
+      get: function () {
+        if (this.dataContent?.fields?.length > 1) {
+          return this.dataContent?.fields[1].key || "ID";
+        }
+      },
+    },
+    itemValue: {
+      get: function () {
+        return this.data?.value?.value || {};
+      },
+    },
+    selectId: {
+      get: function () {
+        return `id${this.data.fieldId}`;
       },
     },
     getData: {
@@ -147,10 +187,12 @@ export default {
         },
       });
     },
+    displayText: function (item) {
+      return this.$root.eventHandler(this.data, item, "displayText");
+    },
     selectItem(value) {
-      const value_prepare = { ...value.data.item };
-
-      Object.keys(value_prepare).map(function (key, index) {
+      const value_prepare = { ...value };
+      Object.keys(value_prepare).map(function (key) {
         if (Number.isInteger(value_prepare[key]) === false) {
           try {
             JSON.parse(value_prepare[key]);
@@ -172,8 +214,8 @@ export default {
         value: {
           value: value_prepare,
           text:
-            value.data.item[this.data.name.substring(2)] ||
-            value.data.item[this.dataContent.fields[1].label],
+            value[this.data.name.substring(2)] ||
+            value[this.dataContent.fields[1].label],
         },
       });
     },
