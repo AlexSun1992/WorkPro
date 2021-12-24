@@ -1,6 +1,41 @@
 <template>
   <div>
-    <div v-click-outside="outside" v-if="!getData">
+    <div v-if="getData">
+      <b-form-group
+        :label="data.label"
+        :class="{ required: data.required }"
+        :label-for="data.name"
+        v-if="getData"
+      >
+        <b-input
+          v-model="data.value.text || 'Выберите из списка'"
+          :readonly="true"
+          class="mb-2"
+          :class="visible ? null : 'collapsed'"
+          :aria-expanded="visible ? 'true' : 'false'"
+          aria-controls="collapse-4"
+          @click="openList"
+        >
+          {{ data.value.text || "Выберите из списка" }}
+        </b-input>
+        <b-collapse id="collapse-4" v-model="visible" class="mt-2">
+          <b-card>
+            <b-col style="width: 60rem">
+              <wrapper-item-from-template
+                class="mypolices-all-block"
+                :isButtonRender="data"
+                @update="update"
+                :itemId="data.menudic"
+                :isEmpty="isEmptyContent"
+                :template="getData"
+              ></wrapper-item-from-template>
+            </b-col>
+          </b-card>
+        </b-collapse>
+      </b-form-group>
+    </div>
+
+    <div v-click-outside="outside" v-else>
       <b-form-group
         :label="data.label"
         :class="{ required: data.required }"
@@ -17,43 +52,9 @@
         />
       </b-form-group>
     </div>
-
-    <b-form-group
-      :label="data.label"
-      :class="{ required: data.required }"
-      :label-for="data.name"
-      v-if="getData"
-    >
-      <b-input
-        v-model="data.value.text || 'Выберите из списка'"
-        :readonly="true"
-        class="mb-2"
-        :class="visible ? null : 'collapsed'"
-        :aria-expanded="visible ? 'true' : 'false'"
-        aria-controls="collapse-4"
-        @click="openList"
-      >
-        {{ data.value.text || "Выберите из списка" }}
-      </b-input>
-      <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <b-card>
-          <b-col style="width: 60rem">
-            <wrapper-item-from-template
-              class="mypolices-all-block"
-              :isButtonRender="data"
-              @update="update"
-              :itemId="data.menudic"
-              :isEmpty="isEmptyContent"
-              :template="getData"
-            ></wrapper-item-from-template>
-          </b-col>
-        </b-card>
-      </b-collapse>
-    </b-form-group>
   </div>
 </template>
 <script>
-import Grid from "../../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
 import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
 import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
@@ -68,7 +69,6 @@ export default {
   components: {
     ContentBlock,
     ControlWrapperSelect,
-    Grid,
     VRuntimeTemplate,
     SelectItemFromTemplate,
     WrapperItemFromTemplate,
