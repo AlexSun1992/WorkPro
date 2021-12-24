@@ -55,7 +55,6 @@ export default {
     return {
       visible: false,
       isLoad: false,
-      temp: "<h1>Евгений Канев!!! из селектЛиста</h1>",
     };
   },
   props: {

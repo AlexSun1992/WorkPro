@@ -36,6 +36,7 @@ export default {
     },
 
     itemId: {
+      type: String,
       required: false,
       default: () => "",
     },

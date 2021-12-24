@@ -29,6 +29,7 @@ export default {
   },
   props: {
     itemId: {
+      type: String,
       required: false,
       default: () => "",
     },
@@ -131,20 +132,6 @@ export default {
       });
       this.visible = false;
       this.$store.commit("data_card/setFilters", value_prepare);
-      // console.log(value_prepare.SFIRSTNAME);
-      // console.log(value_prepare.SSECONDNAME);
-      // console.log(this.isButtonRender.fieldId);
-      // console.log(this.isButtonRender.name);
-      // this.$emit("update", {
-      //   fieldId: this.isButtonRender.fieldId,
-      //   name: this.isButtonRender.name,
-      //   value: {
-      //     value: value_prepare,
-      //     text:
-      //       value_prepare.SNAME ||
-      //       value_prepare.SFIRSTNAME + " " + value_prepare.SSECONDNAME,
-      //   },
-      // });
     },
     outside() {
       if (this.visible) {
