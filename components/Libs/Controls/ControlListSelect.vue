@@ -1,53 +1,48 @@
 <template>
-  <div v-click-outside="outside">
-    <b-form-group
-      :label="data.label"
-      :class="{ required: data.required }"
-      :label-for="data.name"
-    >
-      <b-input
-        v-model="data.value.text || 'Выберите из списка'"
-        :readonly="true"
-        class="mb-2"
-        :class="visible ? null : 'collapsed'"
-        :aria-expanded="visible ? 'true' : 'false'"
-        aria-controls="collapse-4"
-        @click="openList"
+  <div class="row" v-click-outside="outside">
+    <div class="col-lg-10">
+      <b-form-group
+        :label="data.label"
+        :class="{ required: data.required }"
+        :label-for="data.name"
       >
-        {{ data.value.text || "Выберите из списка" }}
-      </b-input>
-      <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-        <b-card>
-          <b-col style="width: 60rem">
-            <grid
-              :load="isLoad"
-              :action="true"
-              :total="dataContent.total"
-              :fields="dataContent.fields"
-              :items="dataContent.items"
-            >
-              <template v-slot:actions="slotProps">
-                <b-button
-                  v-on:click="selectItem(slotProps)"
-                  class="btn-table-open"
-                  >Выбрать</b-button
-                >
-              </template>
-            </grid>
-          </b-col>
-        </b-card>
-      </b-collapse>
-    </b-form-group>
+        <control-wrapper-select
+          :options="options"
+          :select-id="selectId"
+          :item-value="itemValue"
+          :options-value="optionsValue"
+          :display-text="displayText"
+          :placeholder="data.placeholder"
+          @openList="openList"
+          @selectItem="selectItem"
+        />
+        <b-form-invalid-feedback>
+          Обязательно для заполнения
+        </b-form-invalid-feedback>
+      </b-form-group>
+    </div>
+    <div class="col-lg-2 pt-lg-2 text-nowrap">
+      <b-button
+        @click="clearItem"
+        v-if="!isLoad && itemValue[optionsValue]"
+        class="reload-captcha mt-1"
+        variant="outline-success"
+        >{{ data.placeholder || "Очистить" }}</b-button
+      >
+      <b-spinner v-if="isLoad" />
+    </div>
   </div>
 </template>
 <script>
 import Grid from "../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "../../Pages/Cabinet/Block/ContentBlock.vue";
+import ControlWrapperSelect from "./ControlWrapperSelect";
 
 export default {
   name: "ControlListSelect",
   components: {
+    ControlWrapperSelect,
     Grid,
     VRuntimeTemplate,
     ContentBlock,
@@ -77,7 +72,6 @@ export default {
       default: () => false,
     },
   },
-
   computed: {
     dataContent: {
       get: function () {
@@ -89,6 +83,28 @@ export default {
         } else {
           return {};
         }
+      },
+    },
+    options: {
+      get: function () {
+        return this.dataContent.items || [];
+      },
+    },
+    optionsValue: {
+      get: function () {
+        if (this.dataContent?.fields?.length > 1) {
+          return this.dataContent?.fields[1].key || "ID";
+        }
+      },
+    },
+    itemValue: {
+      get: function () {
+        return this.data?.value?.value || {};
+      },
+    },
+    selectId: {
+      get: function () {
+        return `id${this.data.fieldId}`;
       },
     },
     getData: {
@@ -125,9 +141,12 @@ export default {
         },
       });
     },
+    displayText: function (item) {
+      return this.$root.eventHandler(this.data, item, "displayText");
+    },
     selectItem(value) {
-      const value_prepare = { ...value.data.item };
-      Object.keys(value_prepare).map(function (key, index) {
+      const value_prepare = { ...value };
+      Object.keys(value_prepare).map(function (key) {
         if (Number.isInteger(value_prepare[key]) === false) {
           try {
             JSON.parse(value_prepare[key]);
@@ -146,9 +165,16 @@ export default {
         value: {
           value: value_prepare,
           text:
-            value.data.item[this.data.name.substring(2)] ||
-            value.data.item[this.dataContent.fields[1].label],
+            value[this.data.name.substring(2)] ||
+            value[this.dataContent.fields[1].label],
         },
+      });
+    },
+    clearItem() {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: {},
       });
     },
     outside() {
