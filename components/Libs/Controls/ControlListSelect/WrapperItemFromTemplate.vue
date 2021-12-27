@@ -8,14 +8,17 @@
 import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
 import VRuntimeTemplate from "v-runtime-template";
 import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
+import RefuseButton from "../../../Pages/Cabinet/Block/RefuseButton.vue";
 import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
 import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
+
 export default {
   name: "WrapperItemFromTemplate",
   components: {
     SelectItemFromTemplate,
     VRuntimeTemplate,
     ChooseButton,
+    RefuseButton,
     FilterBlock,
     ObjectsOnMap,
   },

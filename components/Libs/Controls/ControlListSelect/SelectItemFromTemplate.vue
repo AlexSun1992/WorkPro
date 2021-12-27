@@ -7,18 +7,14 @@
 </template>
 
 <script>
-import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
 import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
 import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
-import Grid from "../../Table/Grid";
 
 export default {
   name: "SelectItemFromTemplate",
   components: {
-    ChooseButton,
     FilterBlock,
     ObjectsOnMap,
-    Grid,
   },
 
   data() {
@@ -116,7 +112,6 @@ export default {
     },
     selectItem(value) {
       const value_prepare = { ...value.data.item };
-      console.log(value_prepare);
 
       Object.keys(value_prepare).map(function (key, index) {
         if (Number.isInteger(value_prepare[key]) === false) {
