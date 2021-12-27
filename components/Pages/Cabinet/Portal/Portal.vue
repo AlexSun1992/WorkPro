@@ -29,6 +29,7 @@ import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FilterBlock from "../Block/FilterBlock.vue";
 import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap";
 import ControlMap from "~/components/Libs/Controls/ControlMap";
+import ServerFilterBlock from "../Block/ServerFilterBlock.vue";
 
 export default {
   name: "Wizard",
@@ -48,6 +49,7 @@ export default {
     SkeletonBox,
     ObjectsOnMap,
     ControlMap,
+    ServerFilterBlock,
   },
   props: {
     params: {

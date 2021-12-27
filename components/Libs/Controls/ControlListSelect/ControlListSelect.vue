@@ -226,6 +226,13 @@ export default {
         },
       });
     },
+    clearItem() {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: {},
+      });
+    },
     outside() {
       if (this.visible) {
         this.visible = false;
