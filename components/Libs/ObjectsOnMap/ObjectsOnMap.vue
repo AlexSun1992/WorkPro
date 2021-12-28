@@ -26,6 +26,28 @@ export default {
       selectedItem: null,
     };
   },
+
+  // mounted() {
+  //   console.log(this.moduleId);
+  //   this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
+  //   console.log(this.items);
+  //   if (ymaps) {
+  //     console.log(ymaps);
+  //   }
+  // },
+
+  // beforeMount() {
+  //   if (ymaps) {
+  //     console.log(ymaps);
+  //   }
+  // },
+
+  // beforeCreate() {
+  //   if (ymaps) {
+  //     console.log(ymaps);
+  //   }
+  // },
+
   async created() {
     try {
       await this.$loadScript(
@@ -59,18 +81,22 @@ export default {
     },
     init() {
       this.myMap?.destroy();
+
       this.myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 11,
       });
+
       this.myMap.events.add("balloonopen", this.setSelectedItem);
       this.myMap.events.add("click", (e) => {
         e.get("target").balloon.close();
       });
+
       let clusterer = new ymaps.Clusterer();
       let items = this.items.data.items.filter(
         (item) => item.NLAT && item.NLON
       );
+
       clusterer.add(this.getGeoObjects(items));
       this.myMap.geoObjects.add(clusterer);
       let myPlacemark = new ymaps.Placemark(
@@ -82,6 +108,7 @@ export default {
           preset: "islands#redDotIconWithCaption",
         }
       );
+
       this.myMap.geoObjects.add(myPlacemark);
     },
     getTemplate(item) {
@@ -115,8 +142,11 @@ export default {
   },
   watch: {
     dataContent() {
+      // console.log(ymaps);
       this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
       if (ymaps && this.items) {
+        // console.log(ymaps);
+        // console.log(this.items);
         ymaps.ready(this.init);
       }
     },
