@@ -53,7 +53,6 @@ export default {
   methods: {
     transferData() {
       this.$emit("update", this.data);
-      this.$store.commit("data_card/setFilters", this.data);
     },
   },
 };

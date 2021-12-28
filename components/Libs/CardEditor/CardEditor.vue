@@ -151,11 +151,12 @@ export default {
     },
 
     async updateValue(e) {
+      console.log(e.value);
+      console.log(e.fieldId);
       let field = this.data.find((f) => f.fieldId === e.fieldId);
-
-      if (field.type !== "button") {
-        this.$store.commit("data_card/cardChanged", true);
-      }
+      // if (field.type !== "button") {
+      //   this.$store.commit("data_card/cardChanged", true);
+      // }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");

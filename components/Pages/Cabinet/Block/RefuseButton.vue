@@ -16,10 +16,15 @@ export default {
       required: true,
       default: () => null,
     },
+    rowData: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
   },
   methods: {
     refuseChoice() {
-      console.log("работает!");
+      this.$emit("update", this.rowData.content[0]);
     },
   },
 };

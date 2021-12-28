@@ -1,5 +1,6 @@
 <template>
   <div>
+    <slot name="rowData" v-bind:content="dataContent.items"></slot>
     <slot name="data" v-for="item in dataContent.items" v-bind:content="item">
     </slot>
     <slot :update="update" v-bind:content="dataContent.items"> </slot>
@@ -43,6 +44,11 @@ export default {
       type: Boolean,
       required: false,
       default: () => false,
+    },
+    data: {
+      type: Object,
+      required: false,
+      default: () => {},
     },
   },
 

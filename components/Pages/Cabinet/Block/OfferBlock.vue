@@ -7,7 +7,6 @@
 <script>
 import ContentBlock from "./ContentBlock";
 import VRuntimeTemplate from "v-runtime-template";
-// import SelectItemFromTemplate from "../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
 
 export default {
   name: "OfferBlock",

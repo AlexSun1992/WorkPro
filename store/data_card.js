@@ -454,7 +454,10 @@ export const mutations = {
     state.captions = captions;
   },
   setFormField(state, data) {
+    console.log(data);
+    console.log(state.form);
     const item = state.form.find((d) => d.fieldId === data.fieldId);
+    console.log(item);
     if (item !== undefined) {
       item.value = data.value;
       if (item.required) {

@@ -25,6 +25,7 @@
                 class="mypolices-all-block"
                 :isButtonRender="data"
                 @update="update"
+                @openList="openList"
                 :itemId="data.menudic"
                 :isEmpty="isEmptyContent"
                 :template="getData"
@@ -63,6 +64,7 @@ import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
 import WrapperItemFromTemplate from "./WrapperItemFromTemplate.vue";
 import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
 import ControlWrapperSelect from "../ControlWrapperSelect";
+import RefuseButton from "../../../Pages/Cabinet/Block/RefuseButton.vue";
 
 export default {
   name: "ControlListSelect",
@@ -75,6 +77,7 @@ export default {
     ChooseButton,
     FilterBlock,
     ObjectsOnMap,
+    RefuseButton,
   },
 
   data() {
@@ -117,6 +120,7 @@ export default {
           this.data.menudic
         );
         if (block) {
+          console.log(block);
           return block.data;
         } else {
           return {};
