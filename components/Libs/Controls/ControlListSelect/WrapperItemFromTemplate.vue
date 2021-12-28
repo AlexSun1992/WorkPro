@@ -75,14 +75,10 @@ export default {
 
   methods: {
     update(event) {
-      console.log("Отрабатывет метод update WrapperItemFromTemplate");
-      console.log(event);
-      console.log(this.isButtonRender);
       this.$emit("update", event);
     },
 
     clearItem(event) {
-      console.log("!!!");
       this.$emit("update", {
         fieldId: this.isButtonRender.fieldId,
         name: this.isButtonRender.name,

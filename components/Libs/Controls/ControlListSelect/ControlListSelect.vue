@@ -188,7 +188,6 @@ export default {
 
   methods: {
     update(event) {
-      console.log("Отрабатывает метод update в компоненте controlListSelect");
       Object.keys(event).map(function (key, index) {
         if (Number.isInteger(event[key]) === false) {
           try {
@@ -202,15 +201,28 @@ export default {
         }
       });
       this.visible = false;
+
       this.$store.commit("data_card/setFilters", event);
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: {
-          value: event,
-          text: event.SNAME || event.SFIRSTNAME + " " + event.SSECONDNAME,
-        },
-      });
+
+      if (event?.SNAME || event?.SFIRSTNAME || event?.SSECONDNAME) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: {
+            value: event,
+            text: event.SNAME || event.SFIRSTNAME + " " + event.SSECONDNAME,
+          },
+        });
+      } else {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: {
+            value: event,
+            text: "",
+          },
+        });
+      }
     },
     displayText: function (item) {
       return this.$root.eventHandler(this.data, item, "displayText");
@@ -245,9 +257,6 @@ export default {
       });
     },
     clearItem() {
-      console.log("!!!");
-      console.log(this.data.fieldId);
-      console.log(this.data.name);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,

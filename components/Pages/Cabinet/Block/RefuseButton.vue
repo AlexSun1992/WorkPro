@@ -24,9 +24,7 @@ export default {
   },
   methods: {
     refuseChoice() {
-      console.log("Начал отрабатывать метод refuseChoice");
       this.$emit("update", this.rowData.content[0]);
-      // console.log(this.rowData);
     },
   },
 };
