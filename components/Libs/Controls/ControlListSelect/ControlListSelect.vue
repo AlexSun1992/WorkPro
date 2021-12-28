@@ -51,7 +51,20 @@
           @openList="openList"
           @selectItem="selectItem"
         />
+        <b-form-invalid-feedback>
+          Обязательно для заполнения
+        </b-form-invalid-feedback>
       </b-form-group>
+      <div class="col-lg-2 pt-lg-2 text-nowrap">
+        <b-button
+          @click="clearItem"
+          v-if="!isLoad && itemValue[optionsValue]"
+          class="reload-captcha mt-1"
+          variant="outline-success"
+          >{{ data.placeholder || "Очистить" }}</b-button
+        >
+        <b-spinner v-if="isLoad" />
+      </div>
     </div>
   </div>
 </template>
@@ -175,6 +188,7 @@ export default {
 
   methods: {
     update(event) {
+      console.log("Отрабатывает метод update в компоненте controlListSelect");
       Object.keys(event).map(function (key, index) {
         if (Number.isInteger(event[key]) === false) {
           try {
@@ -231,6 +245,9 @@ export default {
       });
     },
     clearItem() {
+      console.log("!!!");
+      console.log(this.data.fieldId);
+      console.log(this.data.name);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,

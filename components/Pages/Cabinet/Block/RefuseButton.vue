@@ -25,6 +25,7 @@ export default {
   methods: {
     refuseChoice() {
       this.$emit("update", this.rowData.content[0]);
+      // console.log(this.rowData);
     },
   },
 };
