@@ -145,9 +145,7 @@ export default {
       // console.log(ymaps);
       this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
       if (ymaps && this.items) {
-        // console.log(ymaps);
-        // console.log(this.items);
-        ymaps.ready(this.init);
+        ymaps.ready(this.init());
       }
     },
   },
