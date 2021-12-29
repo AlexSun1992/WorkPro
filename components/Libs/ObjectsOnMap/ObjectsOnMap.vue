@@ -117,7 +117,7 @@ export default {
     dataContent() {
       this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
       if (ymaps && this.items) {
-        ymaps.ready(this.init);
+        ymaps.ready(this.init());
       }
     },
   },
