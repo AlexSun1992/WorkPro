@@ -4,14 +4,17 @@
       <template #label>
         <span v-html="data.label" />
       </template>
-      <b-input-group class="gos-number mb-2">
+      <b-input-group
+        class="gos-number mb-2"
+        :class="{ 'is-valid': isValid === false }"
+      >
         <b-form-input
           v-model="numberValue"
           @update="numberUpdateValue"
           :formatter="numberFormatter"
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
-          :state="isVisitedNumber === false ? null : stateNumber"
+          placeholder="А 000 АА"
           ref="number"
         />
         <b-form-input
@@ -19,11 +22,14 @@
           @update="codeUpdateValue"
           :formatter="codeFormatter"
           @blur="codeBlur"
-          :state="isVisitedCode === false ? null : stateCode"
+          placeholder="000"
           ref="code"
         />
       </b-input-group>
-      <b-form-invalid-feedback v-if="errorText !== null" :state="errorText">{{
+      <b-form-text v-if="isValid === null && data.state === null"
+        >Введите госномер, а мы заполним данные в калькуляторе</b-form-text
+      >
+      <b-form-invalid-feedback v-if="isValid !== null" :state="isValid">{{
         data.error ? data.error : "Пожалуйста, введите корректно госномер"
       }}</b-form-invalid-feedback>
       <b-form-invalid-feedback v-else :state="data.state">{{
@@ -85,24 +91,34 @@ export default {
   },
   methods: {
     numberUpdateValue(value) {
+      let setValue = null;
       if (isNumberValid(value.replace(/ /g, ""))) {
         this.$refs.code.$el.focus();
         if (this.stateNumber && this.stateCode) {
-          this.$emit("update", {
-            fieldId: this.data.fieldId,
-            value: this.numberAndCodeValue,
-          });
+          setValue = this.numberAndCodeValue;
+          this.isVisitedNumber = true;
         }
+      }
+      if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          value: setValue,
+        });
       }
     },
     codeUpdateValue(value) {
+      let setValue = null;
       if (isCodeValid(value)) {
         if (this.stateNumber && this.stateCode) {
-          this.$emit("update", {
-            fieldId: this.data.fieldId,
-            value: this.numberAndCodeValue,
-          });
+          setValue = this.numberAndCodeValue;
+          this.isVisitedCode = true;
         }
+      }
+      if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          value: setValue,
+        });
       }
     },
     numberFormatter(value) {
@@ -155,15 +171,9 @@ export default {
     numberAndCodeValue() {
       return this.numberValue.replace(/ /g, "") + this.codeValue;
     },
-    errorText() {
+    isValid() {
       if (this.isVisitedNumber === true && this.isVisitedCode === true) {
         return this.stateNumber && this.stateCode;
-      }
-      if (this.isVisitedNumber === true && this.isVisitedCode === false) {
-        return this.stateNumber;
-      }
-      if (this.isVisitedNumber === false && this.isVisitedCode === true) {
-        return this.stateCode;
       }
       return null;
     },
