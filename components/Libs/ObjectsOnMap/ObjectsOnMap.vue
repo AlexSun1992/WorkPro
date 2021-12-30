@@ -27,27 +27,6 @@ export default {
     };
   },
 
-  // mounted() {
-  //   console.log(this.moduleId);
-  //   this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
-  //   console.log(this.items);
-  //   if (ymaps) {
-  //     console.log(ymaps);
-  //   }
-  // },
-
-  // beforeMount() {
-  //   if (ymaps) {
-  //     console.log(ymaps);
-  //   }
-  // },
-
-  // beforeCreate() {
-  //   if (ymaps) {
-  //     console.log(ymaps);
-  //   }
-  // },
-
   async created() {
     try {
       await this.$loadScript(
@@ -142,7 +121,6 @@ export default {
   },
   watch: {
     dataContent() {
-      // console.log(ymaps);
       this.items = this.$store.getters["blocks/getBlockById"](this.moduleId);
       if (ymaps && this.items) {
         ymaps.ready(this.init());

@@ -190,6 +190,7 @@ export default {
   },
   watch: {
     searchString(str) {
+      console.log(this.propertyName);
       this.$store.commit("blocks/setSearchParams", {
         searchString: changeKeyboardLayout(str),
         searchProperty: this.propertyName,

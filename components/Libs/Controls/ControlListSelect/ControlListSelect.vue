@@ -270,6 +270,7 @@ export default {
     },
     async openList() {
       this.visible = !this.visible;
+      console.log(this.data.menudic);
       if (this.visible) {
         try {
           this.isLoad = true;
