@@ -6,7 +6,7 @@
       </template>
       <b-input-group
         class="gos-number mb-2"
-        :class="{ 'is-valid': isValid === false }"
+        :class="{ 'is-valid': isValid === true }"
       >
         <b-form-input
           v-model="numberValue"
