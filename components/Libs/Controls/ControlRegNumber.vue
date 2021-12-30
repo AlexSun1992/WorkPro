@@ -4,7 +4,7 @@
       <template #label>
         <span v-html="data.label" />
       </template>
-      <b-input-group class="mb-2">
+      <b-input-group class="gos-number mb-2">
         <b-form-input
           v-model="numberValue"
           @update="numberUpdateValue"
