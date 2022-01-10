@@ -80,7 +80,6 @@ export default {
 
   created() {
     const target = this.$store.getters["blocks/getFilters"];
-    console.log(target);
 
     if (this.$route.query.filters) {
       console.log(this.$route.query.filters);
@@ -122,8 +121,6 @@ export default {
           id: this.itemId,
         });
       }
-      const target = this.$store.getters["blocks/getFilters"];
-      console.log(target);
     }
     this.$store.commit("blocks/setSearchParams", null);
   },
