@@ -34,8 +34,6 @@ export const getters = {
         return isItemShow;
       });
       if (state.searchParams) {
-        console.log(id);
-        console.log(items);
         items = items.filter((item) => {
           return state.searchParams.searchProperty.some((param) => {
             return String(item[param])
@@ -43,9 +41,7 @@ export const getters = {
               .includes(state.searchParams.searchString.toLowerCase());
           });
         });
-        console.log(items);
       }
-
       return {
         ...currentBlock,
         data: {

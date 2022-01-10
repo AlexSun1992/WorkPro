@@ -88,7 +88,6 @@ export default {
       get: function () {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
-          console.log(block);
           return !block?.data?.items.length;
         } else {
           return false;
@@ -132,6 +131,7 @@ export default {
         }
       });
       this.visible = false;
+      console.log("selectItemFromTemplate");
       this.$store.commit("data_card/setFilters", value_prepare);
     },
     outside() {
