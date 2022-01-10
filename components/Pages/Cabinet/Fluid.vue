@@ -10,7 +10,6 @@ import PortalPage from "@/components/Pages/Cabinet/Portal/Portal";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
 import FormPage from "~/components/Pages/FormPage";
 import FilterBlock from "./Block/FilterBlock.vue";
-import ChooseButton from "./Block/ChooseButton.vue";
 
 export default {
   name: "Fluid",
@@ -20,7 +19,6 @@ export default {
     WizardPage,
     FormPage,
     FilterBlock,
-    ChooseButton,
   },
   computed: {
     params() {

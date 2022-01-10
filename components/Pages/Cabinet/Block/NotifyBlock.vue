@@ -18,6 +18,7 @@ import OpenCardButton from "../Block/OpenCardButton";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import VRuntimeTemplate from "v-runtime-template";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
+
 export default {
   name: "NotifyBlock",
   components: {
