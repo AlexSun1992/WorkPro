@@ -7,6 +7,7 @@
 <script>
 import ContentBlock from "./ContentBlock";
 import VRuntimeTemplate from "v-runtime-template";
+
 export default {
   name: "OfferBlock",
   components: { ContentBlock, VRuntimeTemplate },

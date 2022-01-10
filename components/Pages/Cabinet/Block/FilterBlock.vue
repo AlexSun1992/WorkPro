@@ -40,6 +40,7 @@ export default {
       AllUnits: "Все",
       isAllFilters: true,
       searchString: "",
+      id: null,
     };
   },
 
@@ -78,7 +79,10 @@ export default {
   },
 
   created() {
+    const target = this.$store.getters["blocks/getFilters"];
+
     if (this.$route.query.filters) {
+      console.log(this.$route.query.filters);
       const filters = JSON.parse(this.$route.query.filters.toString());
 
       if (this.filterType === "radiobutton" && this.defaultValue === null) {
@@ -89,6 +93,7 @@ export default {
         this.$store.commit("blocks/setFilter", {
           propertyName: this.propertyName,
           filter: this.defaultValue,
+          id: this.itemId,
         });
       }
 
@@ -105,12 +110,15 @@ export default {
         this.isAllFilters = false;
       }
       this.$store.commit("blocks/setFilter", filters);
+      const target = this.$store.getters["blocks/getFilters"];
+      console.log(target);
     } else {
       if (this.defaultValue) {
         this.isAllFilters = false;
         this.$store.commit("blocks/setFilter", {
           propertyName: this.propertyName,
           filter: this.defaultValue,
+          id: this.itemId,
         });
       }
     }
@@ -173,6 +181,7 @@ export default {
       );
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
+
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
 
         const filter =

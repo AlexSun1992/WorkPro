@@ -1,6 +1,42 @@
 <template>
-  <div class="row" v-click-outside="outside">
-    <div class="col-lg-10">
+  <div>
+    <div v-if="getData">
+      <b-form-group
+        :label="data.label"
+        :class="{ required: data.required }"
+        :label-for="data.name"
+        v-if="getData"
+      >
+        <b-input
+          v-model="data.value.text || 'Выберите из списка'"
+          :readonly="true"
+          class="mb-2"
+          :class="visible ? null : 'collapsed'"
+          :aria-expanded="visible ? 'true' : 'false'"
+          aria-controls="collapse-4"
+          @click="openList"
+        >
+          {{ data.value.text || "Выберите из списка" }}
+        </b-input>
+        <b-collapse id="collapse-4" v-model="visible" class="mt-2">
+          <b-card>
+            <b-col style="width: 60rem">
+              <wrapper-item-from-template
+                class="mypolices-all-block"
+                :isButtonRender="data"
+                @update="update"
+                @openList="openList"
+                :itemId="data.menudic"
+                :isEmpty="isEmptyContent"
+                :template="getData"
+              ></wrapper-item-from-template>
+            </b-col>
+          </b-card>
+        </b-collapse>
+      </b-form-group>
+    </div>
+
+    <div v-click-outside="outside" v-else>
       <b-form-group
         :label="data.label"
         :class="{ required: data.required }"
@@ -12,7 +48,6 @@
           :item-value="itemValue"
           :options-value="optionsValue"
           :display-text="displayText"
-          :placeholder="data.placeholder"
           @openList="openList"
           @selectItem="selectItem"
         />
@@ -20,32 +55,42 @@
           Обязательно для заполнения
         </b-form-invalid-feedback>
       </b-form-group>
-    </div>
-    <div class="col-lg-2 pt-lg-2 text-nowrap">
-      <b-button
-        @click="clearItem"
-        v-if="!isLoad && itemValue[optionsValue]"
-        class="reload-captcha mt-1"
-        variant="outline-success"
-        >{{ data.placeholder || "Очистить" }}</b-button
-      >
-      <b-spinner v-if="isLoad" />
+      <div class="col-lg-2 pt-lg-2 text-nowrap">
+        <b-button
+          @click="clearItem"
+          v-if="!isLoad && itemValue[optionsValue]"
+          class="reload-captcha mt-1"
+          variant="outline-success"
+          >{{ data.placeholder || "Очистить" }}</b-button
+        >
+        <b-spinner v-if="isLoad" />
+      </div>
     </div>
   </div>
 </template>
 <script>
-import Grid from "../Table/Grid";
 import VRuntimeTemplate from "v-runtime-template";
-import ContentBlock from "../../Pages/Cabinet/Block/ContentBlock.vue";
-import ControlWrapperSelect from "./ControlWrapperSelect";
+import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
+import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
+import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
+import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
+import WrapperItemFromTemplate from "./WrapperItemFromTemplate.vue";
+import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
+import ControlWrapperSelect from "../ControlWrapperSelect";
+import RefuseButton from "../../../Pages/Cabinet/Block/RefuseButton.vue";
 
 export default {
   name: "ControlListSelect",
   components: {
-    ControlWrapperSelect,
-    Grid,
-    VRuntimeTemplate,
     ContentBlock,
+    ControlWrapperSelect,
+    VRuntimeTemplate,
+    SelectItemFromTemplate,
+    WrapperItemFromTemplate,
+    ChooseButton,
+    FilterBlock,
+    ObjectsOnMap,
+    RefuseButton,
   },
 
   data() {
@@ -55,10 +100,9 @@ export default {
     };
   },
   props: {
-    dictionaryList: {
-      type: Object,
+    itemId: {
       required: false,
-      default: () => null,
+      default: () => {},
     },
     data: {
       type: Object,
@@ -71,6 +115,16 @@ export default {
       required: true,
       default: () => false,
     },
+    isButtonRender: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
+    isEmpty: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
   },
   computed: {
     dataContent: {
@@ -79,6 +133,7 @@ export default {
           this.data.menudic
         );
         if (block) {
+          console.log(block);
           return block.data;
         } else {
           return {};
@@ -130,16 +185,44 @@ export default {
       },
     },
   },
+
   methods: {
     update(event) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: {
-          value: event,
-          text: event.SNAME,
-        },
+      Object.keys(event).map(function (key, index) {
+        if (Number.isInteger(event[key]) === false) {
+          try {
+            JSON.parse(event[key]);
+            delete event[key];
+          } catch (e) {
+            event[key] = event[key];
+          }
+        } else {
+          event[key] = event[key];
+        }
       });
+      this.visible = false;
+
+      this.$store.commit("data_card/setFilters", event);
+
+      if (event?.SNAME || event?.SFIRSTNAME || event?.SSECONDNAME) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: {
+            value: event,
+            text: event.SNAME || event.SFIRSTNAME + " " + event.SSECONDNAME,
+          },
+        });
+      } else {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: {
+            value: event,
+            text: "",
+          },
+        });
+      }
     },
     displayText: function (item) {
       return this.$root.eventHandler(this.data, item, "displayText");
@@ -159,6 +242,9 @@ export default {
         }
       });
       this.visible = false;
+
+      this.$store.commit("data_card/setFilters", value_prepare);
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,

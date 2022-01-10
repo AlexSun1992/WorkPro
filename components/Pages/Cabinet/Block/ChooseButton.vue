@@ -1,5 +1,7 @@
 <template>
-  <b-button @click="transferData">{{ title }}</b-button>
+  <div>
+    <b-button @click="transferData">{{ title }}</b-button>
+  </div>
 </template>
 <script>
 export default {
@@ -14,15 +16,21 @@ export default {
       default: () => null,
     },
 
-    dictionaryList: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
-
     data: {
       type: Object,
       required: true,
+      default: () => {},
+    },
+
+    name: {
+      type: String,
+      required: false,
+      default: () => "",
+    },
+
+    isButtonRender: {
+      type: Object,
+      required: false,
       default: () => {},
     },
   },
@@ -31,7 +39,7 @@ export default {
     dataContent: {
       get: function () {
         const block = this.$store.getters["blocks/getUnfilteredBlockById"](
-          this.dictionaryList.menudic
+          this.data.menudic
         );
         if (block) {
           return block.data;
@@ -44,17 +52,7 @@ export default {
 
   methods: {
     transferData() {
-      this.$store.commit("data_card/setFilters", this.data);
-      this.$emit("update", {
-        fieldId: this.dictionaryList.fieldId,
-        name: this.dictionaryList.name,
-        value: {
-          value: this.data,
-          text:
-            this.data[this.dictionaryList.name.substring(2)] ||
-            this.data[this.dataContent.fields[1].label],
-        },
-      });
+      this.$emit("update", this.data);
     },
   },
 };

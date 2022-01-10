@@ -16,9 +16,15 @@ import ContentBlock from "./ContentBlock";
 import OpenCardButton from "../Block/OpenCardButton";
 import VRuntimeTemplate from "v-runtime-template";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
+
 export default {
   name: "PolicyBlock",
-  components: { ContentBlock, VRuntimeTemplate, OpenCardButton, SkeletonBox },
+  components: {
+    ContentBlock,
+    VRuntimeTemplate,
+    OpenCardButton,
+    SkeletonBox,
+  },
   props: {
     moduleId: {
       type: String,

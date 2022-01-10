@@ -212,6 +212,7 @@ export default {
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
     async updateValue(e) {
+      console.log(e);
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
         value: e.value,

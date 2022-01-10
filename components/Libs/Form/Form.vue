@@ -45,6 +45,8 @@
 <script>
 import Control from "../Controls/Control";
 // import TableEditor from "../TableEditor/TableEditor";
+// import SelectItemFromTemplate from "../Controls/ControlListSelect/SelectItemFromTemplate.vue";
+
 export default {
   name: "Form",
   components: { Control },

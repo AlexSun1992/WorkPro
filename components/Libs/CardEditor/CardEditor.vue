@@ -69,8 +69,10 @@ import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
+
 export default {
   name: "CardEditor",
+
   head() {
     return {
       script: [
@@ -150,10 +152,9 @@ export default {
 
     async updateValue(e) {
       let field = this.data.find((f) => f.fieldId === e.fieldId);
-
-      if (field.type !== "button") {
-        this.$store.commit("data_card/cardChanged", true);
-      }
+      // if (field.type !== "button") {
+      //   this.$store.commit("data_card/cardChanged", true);
+      // }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");

@@ -33,7 +33,6 @@ export const getters = {
         });
         return isItemShow;
       });
-
       if (state.searchParams) {
         items = items.filter((item) => {
           return state.searchParams.searchProperty.some((param) => {
@@ -43,7 +42,6 @@ export const getters = {
           });
         });
       }
-
       return {
         ...currentBlock,
         data: {

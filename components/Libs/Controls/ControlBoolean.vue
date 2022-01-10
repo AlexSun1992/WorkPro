@@ -2,6 +2,7 @@
   <div>
     <b-form-checkbox
       v-model="fieldValue"
+      class="checkbox-hide"
       :state="data.state"
       :disabled="!edit ? !edit : data.readonly"
     >
