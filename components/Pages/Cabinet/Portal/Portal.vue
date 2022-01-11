@@ -30,6 +30,7 @@ import FilterBlock from "../Block/FilterBlock.vue";
 import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap";
 import ControlMap from "~/components/Libs/Controls/ControlMap";
 import ServerFilterBlock from "../Block/ServerFilterBlock.vue";
+import Grid from "../../../Libs/Table/Grid.vue";
 
 export default {
   name: "Wizard",
@@ -50,6 +51,7 @@ export default {
     ObjectsOnMap,
     ControlMap,
     ServerFilterBlock,
+    Grid,
   },
   props: {
     params: {
