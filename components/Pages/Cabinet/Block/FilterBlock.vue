@@ -79,10 +79,8 @@ export default {
   },
 
   created() {
-    const target = this.$store.getters["blocks/getFilters"];
-
     if (this.$route.query.filters) {
-      console.log(this.$route.query.filters);
+      // console.log(this.$route.query.filters);
       const filters = JSON.parse(this.$route.query.filters.toString());
 
       if (this.filterType === "radiobutton" && this.defaultValue === null) {
@@ -109,9 +107,8 @@ export default {
       ) {
         this.isAllFilters = false;
       }
+      console.log(filters);
       this.$store.commit("blocks/setFilter", filters);
-      const target = this.$store.getters["blocks/getFilters"];
-      console.log(target);
     } else {
       if (this.defaultValue) {
         this.isAllFilters = false;
@@ -136,12 +133,13 @@ export default {
         propertyName: propertyName,
         filterType: this.filterType,
         filterItem: item,
+        id: this.itemId,
       });
       this.setQueryURL();
       const target = this.$store.getters["blocks/getFilters"].find(
         (elem) => elem.propertyName === propertyName
       );
-
+      console.log(target);
       if (this.filterType === "checkbox" && target.filter.length === 0) {
         this.isAllFilters = true;
       }
@@ -202,6 +200,7 @@ export default {
       this.$store.commit("blocks/setSearchParams", {
         searchString: changeKeyboardLayout(str),
         searchProperty: this.propertyName,
+        id: this.itemId,
       });
     },
   },

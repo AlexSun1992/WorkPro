@@ -33,7 +33,9 @@ export const getters = {
         });
         return isItemShow;
       });
+
       if (state.searchParams) {
+        console.log(state.searchParams);
         items = items.filter((item) => {
           return state.searchParams.searchProperty.some((param) => {
             return String(item[param])
@@ -198,6 +200,7 @@ export const mutations = {
   },
 
   setFilter: (state, data) => {
+    console.log();
     if (Array.isArray(data) === false) {
       state.filters.push(data);
     } else {
@@ -205,14 +208,16 @@ export const mutations = {
     }
   },
 
-  toggleFilter: (state, { propertyName, filterItem, filterType }) => {
+  toggleFilter: (state, { propertyName, filterItem, filterType, id }) => {
     let currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
+
     if (currentFilter === undefined) {
       currentFilter = {
         propertyName,
         filter: [],
+        id: id,
       };
       state.filters.push(currentFilter);
     }
@@ -229,6 +234,7 @@ export const mutations = {
     }
   },
   setSearchParams(state, data) {
+    console.log(data);
     state.searchParams = data;
   },
 };
