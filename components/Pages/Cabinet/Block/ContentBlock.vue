@@ -14,13 +14,18 @@
       v-for="item in dataContent.items"
       v-bind:content="item"
     ></slot>
-    <slot :update="update" v-bind:content="dataContent.items"></slot>
+    <slot
+      :update="update"
+      :list="list"
+      v-bind:content="dataContent.items"
+    ></slot>
   </div>
 </template>
 
 <script>
 import FilterBlock from "./FilterBlock.vue";
 import ObjectsOnMap from "../../../Libs/ObjectsOnMap/ObjectsOnMap.vue";
+import Grid from "../../../Libs/Table/Grid.vue";
 
 export default {
   name: "ContentBlock",
@@ -28,6 +33,7 @@ export default {
   components: {
     FilterBlock,
     ObjectsOnMap,
+    Grid,
   },
 
   props: {
@@ -93,6 +99,10 @@ export default {
           return {};
         }
       },
+    },
+
+    list() {
+      return this.dataContent;
     },
 
     parentMenu: {

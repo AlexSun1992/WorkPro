@@ -198,7 +198,6 @@ export const mutations = {
   },
 
   setFilter: (state, data) => {
-    debugger;
     if (Array.isArray(data) === false) {
       state.filters.push(data);
     } else {

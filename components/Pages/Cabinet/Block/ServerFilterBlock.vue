@@ -112,18 +112,15 @@ export default {
     getFilter() {
       let filter;
       if (this.$route.query.filters) {
-        debugger;
         filter = JSON.parse(this.$route.query.filters);
         let candidate = filter.find(
           (item) => item.propertyName === this.queryParamName
         );
-        debugger;
         if (!candidate) {
           filter?.push({
             propertyName: this.queryParamName,
             filter: this.queryParamValue,
           });
-          debugger;
         }
       } else {
         filter = {
@@ -133,34 +130,30 @@ export default {
       return filter;
     },
 
-    setFilter() {
-      let filterObj;
-      let isFilterSet = this.$store.getters["blocks/getFilters"].find(
-        (filter) => filter.propertyName === this.queryParamName
-      );
-      if (isFilterSet) return;
-      filterObj = this.getFilter();
-      debugger;
-      if (!Array.isArray(filterObj)) {
-        for (const [propertyName, filter] of Object.entries(filterObj)) {
-          filterObj = { propertyName, filter };
-        }
-      }
-      this.$store.commit("blocks/setFilter", filterObj);
-      this.setQueryURL();
-    },
+    // setFilter() {
+    //   let filterObj;
+    //   let isFilterSet = this.$store.getters["blocks/getFilters"].find(
+    //     (filter) => filter.propertyName === this.queryParamName
+    //   );
+    //   if (isFilterSet) return;
+    //   filterObj = this.getFilter();
+    //   if (!Array.isArray(filterObj)) {
+    //     for (const [propertyName, filter] of Object.entries(filterObj)) {
+    //       filterObj = { propertyName, filter };
+    //     }
+    //   }
+    //   this.$store.commit("blocks/setFilter", filterObj);
+    //   this.setQueryURL();
+    // },
 
     update(e) {
-      debugger;
       this.queryParamValue = this.queryParamValue
         ? this.queryParamValue
         : e.text;
-      debugger;
       let query = Array.isArray(this.getFilter())
         ? { filters: JSON.stringify(this.getFilter()) }
         : this.getFilter();
-      debugger;
-      this.setFilter();
+      // this.setFilter();
       this.$store.dispatch("blocks/fetchBlock", {
         id: this.$route.params.idItem,
         query,
