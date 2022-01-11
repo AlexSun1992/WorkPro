@@ -16,34 +16,38 @@ export const getters = {
     return state.blocks.find((b) => b.blockId === parseInt(id));
   },
   getBlockById: (state) => (id) => {
-    const currentBlock = state.blocks.find((b) => b.blockId === parseInt(id));
+    const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
     if (currentBlock) {
-      const currentBlock = state.blocks.find((b) => b.blockId === parseInt(id));
-      let items = currentBlock.data.items.filter((item) => {
-        let isItemShow = true;
-        state.filters.forEach((filter) => {
-          if (!isItemShow) {
-            return;
-          }
-          const value = item[filter.propertyName];
-          if (filter.filter.length === 0) {
-            return;
-          }
-          isItemShow = filter.filter.includes(value);
-        });
-        return isItemShow;
-      });
+      const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
 
-      if (state.searchParams) {
-        items = items.filter((item) => {
-          return state.searchParams.searchProperty.some((param) => {
-            return String(item[param])
-              .toLowerCase()
-              .includes(state.searchParams.searchString.toLowerCase());
+      let items = currentBlock.data.items
+        .filter((item) => {
+          let isItemShow = true;
+          state.filters.forEach((filter) => {
+            if (!isItemShow) {
+              return;
+            }
+            const value = item[filter.propertyName];
+
+            if (filter.filter.length === 0) {
+              return;
+            }
+            isItemShow = filter.filter.includes(value);
           });
+          return isItemShow;
+        })
+        .filter((item) => {
+          if (!state.searchParams) {
+            return true;
+          } else {
+            return state.searchParams.searchProperty.some((param) => {
+              return String(item[param])
+                .toLowerCase()
+                .includes(state.searchParams.searchString.toLowerCase());
+            });
+          }
         });
-        console.log(items);
-      }
+
       return {
         ...currentBlock,
         data: {
@@ -234,7 +238,6 @@ export const mutations = {
     }
   },
   setSearchParams(state, data) {
-    console.log(data);
     state.searchParams = data;
   },
 };
