@@ -37,15 +37,17 @@ export const getters = {
           return isItemShow;
         })
         .filter((item) => {
-          if (!state.searchParams) {
-            return true;
-          } else {
+          if (
+            state.searchParams &&
+            state.searchParams.id == currentBlock.blockId
+          ) {
             return state.searchParams.searchProperty.some((param) => {
               return String(item[param])
                 .toLowerCase()
                 .includes(state.searchParams.searchString.toLowerCase());
             });
           }
+          return true;
         });
 
       return {

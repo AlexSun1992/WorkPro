@@ -80,7 +80,6 @@ export default {
 
   created() {
     if (this.$route.query.filters) {
-      // console.log(this.$route.query.filters);
       const filters = JSON.parse(this.$route.query.filters.toString());
 
       if (this.filterType === "radiobutton" && this.defaultValue === null) {
@@ -107,7 +106,7 @@ export default {
       ) {
         this.isAllFilters = false;
       }
-      console.log(filters);
+
       this.$store.commit("blocks/setFilter", filters);
     } else {
       if (this.defaultValue) {
@@ -139,7 +138,6 @@ export default {
       const target = this.$store.getters["blocks/getFilters"].find(
         (elem) => elem.propertyName === propertyName
       );
-      console.log(target);
       if (this.filterType === "checkbox" && target.filter.length === 0) {
         this.isAllFilters = true;
       }
