@@ -59,6 +59,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.data);
     if (this.$refs[this.selectId]) {
       this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
         if (!this.data.fieldRelation) {
@@ -69,6 +70,7 @@ export default {
   },
   methods: {
     async initData() {
+      console.log(this.data);
       await this.$store.dispatch("data_card/fetchDic", this.data);
       if (this.data.fieldRelation) {
         this.$emit("update", {

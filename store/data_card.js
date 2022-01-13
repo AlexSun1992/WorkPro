@@ -366,18 +366,24 @@ export const actions = {
   },
   async fetchDic(
     { commit, getters, state },
-    { isRelation, fieldRelation, fieldId, id, dic }
+    { isRelation, fieldRelation, fieldId, id, dic, name }
   ) {
     try {
       let relationValue;
       let url;
       if (isRelation && fieldRelation) {
+        console.log("я в if!!!");
         relationValue = getters["getDataFieldByName"](fieldRelation);
         url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
       } else {
-        url = `/api/dic/55/${id}/${dic}`;
+        console.log("я в else!!!");
+        console.log(dic);
+        console.log(name);
+        url = `/api/dic/55/${id}/${name}`;
+        // url = `/api/dic/55/${id}/${dic}`;
       }
       const data = await this.$axios.get(encodeURI(url));
+      console.log(data);
       commit("setEnumOptions", { options: data.data, fieldId: fieldId });
     } catch (error) {
       if (error.response) {
