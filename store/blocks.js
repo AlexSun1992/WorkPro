@@ -7,11 +7,14 @@ export const state = () => ({
   cardId: 0,
   blockId: null,
   filters: [],
+  serverFilters: [],
   searchParams: null,
   PoutValue: "",
 });
 
 export const getters = {
+  getServerFilter: (state) => state.serverFilters,
+
   getUnfilteredBlockById: (state) => (id) => {
     return state.blocks.find((b) => b.blockId === parseInt(id));
   },
@@ -203,6 +206,17 @@ export const mutations = {
     } else {
       state.filters = data;
     }
+  },
+
+  setServerFilters: (state, data) => {
+    state.serverFilters.push(data);
+  },
+
+  updateServerFilter: (state, data) => {
+    let filter = state.serverFilters.find(
+      (item) => item.propertyName == data.propertyName
+    );
+    filter.filter = data.filter;
   },
 
   toggleFilter: (state, { propertyName, filterItem, filterType }) => {

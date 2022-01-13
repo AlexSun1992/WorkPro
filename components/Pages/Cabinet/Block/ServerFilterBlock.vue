@@ -64,7 +64,7 @@ export default {
         for (let item of this.dictionary) {
           this.list.push({
             text: item,
-            value: this.queryParamName,
+            value: item,
           });
         }
       } else {
@@ -76,84 +76,60 @@ export default {
 
         let str = this.fk;
 
-        for (let i = 0; i < fkFields.length; i++) {
-          if (items[0][fkFields[i]]) {
-            if (fkFields[i] === this.queryParamName)
-              this.queryParamValue = items[0][fkFields[i]];
-            str = str.replace(fkFields[i], items[0][fkFields[i]]);
+        for (let i = 0; i < items.length; i++) {
+          str = this.fk;
+          let value = null;
+          for (let j = 0; j < fkFields.length; j++) {
+            if (items[i][fkFields[j]]) {
+              if (fkFields[j] === this.idParamName) {
+                value = items[i][fkFields[j]];
+              }
+              str = str.replace(fkFields[j], items[i][fkFields[j]]);
+            }
           }
-        }
-        this.list.push({
-          text: str,
-          value: this.idParamName,
-        });
-      }
-    },
-
-    setQueryURL: function () {
-      window.history.replaceState(
-        null,
-        null,
-        `?filters=${JSON.stringify(this.$store.getters["blocks/getFilters"])}`
-      );
-      const { url } = {
-        url:
-          this.$route.path +
-          `?filters=${JSON.stringify(
-            this.$store.getters["blocks/getFilters"]
-          )}`,
-      };
-      this.$store.commit("menu/setQueriesUrlByIdMenu", {
-        ...this.$route.params,
-        url,
-      });
-    },
-
-    getFilter() {
-      let filter;
-      if (this.$route.query.filters) {
-        filter = JSON.parse(this.$route.query.filters);
-        let candidate = filter.find(
-          (item) => item.propertyName === this.queryParamName
-        );
-        if (!candidate) {
-          filter?.push({
-            propertyName: this.queryParamName,
-            filter: this.queryParamValue,
+          this.list.push({
+            value,
+            text: str,
           });
         }
-      } else {
-        filter = {
-          [this.queryParamName]: this.queryParamValue,
-        };
       }
-      return filter;
     },
 
-    // setFilter() {
-    //   let filterObj;
-    //   let isFilterSet = this.$store.getters["blocks/getFilters"].find(
-    //     (filter) => filter.propertyName === this.queryParamName
-    //   );
-    //   if (isFilterSet) return;
-    //   filterObj = this.getFilter();
-    //   if (!Array.isArray(filterObj)) {
-    //     for (const [propertyName, filter] of Object.entries(filterObj)) {
-    //       filterObj = { propertyName, filter };
-    //     }
-    //   }
-    //   this.$store.commit("blocks/setFilter", filterObj);
-    //   this.setQueryURL();
-    // },
+    setFilter() {
+      let filterObj;
+      for (const [propertyName, filter] of Object.entries({
+        [this.queryParamName]: this.queryParamValue,
+      })) {
+        filterObj = { propertyName, filter };
+      }
+      let foundedFilter = this.$store.getters["blocks/getServerFilter"].find(
+        (filter) => {
+          return filter.propertyName === this.queryParamName;
+        }
+      );
+      if (foundedFilter) {
+        this.$store.commit("blocks/updateServerFilter", {
+          propertyName: this.queryParamName,
+          filter: this.queryParamValue,
+        });
+      } else {
+        this.$store.commit("blocks/setServerFilters", filterObj);
+      }
+    },
 
     update(e) {
-      this.queryParamValue = this.queryParamValue
-        ? this.queryParamValue
-        : e.text;
-      let query = Array.isArray(this.getFilter())
-        ? { filters: JSON.stringify(this.getFilter()) }
-        : this.getFilter();
-      // this.setFilter();
+      this.queryParamValue = e.value;
+      this.setFilter();
+      let query = {
+        [this.queryParamName]: this.queryParamValue,
+      };
+      if (this.$store.getters["blocks/getServerFilter"].length > 1) {
+        query = {
+          filters: JSON.stringify(
+            this.$store.getters["blocks/getServerFilter"]
+          ),
+        };
+      }
       this.$store.dispatch("blocks/fetchBlock", {
         id: this.$route.params.idItem,
         query,
