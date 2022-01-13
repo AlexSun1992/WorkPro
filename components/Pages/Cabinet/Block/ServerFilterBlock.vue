@@ -102,13 +102,13 @@ export default {
       })) {
         filterObj = { propertyName, filter };
       }
-      let foundedFilter = this.$store.getters["blocks/getServerFilter"].find(
+      let foundedFilter = this.$store.getters["blocks/getServerFilters"].find(
         (filter) => {
           return filter.propertyName === this.queryParamName;
         }
       );
       if (foundedFilter) {
-        this.$store.commit("blocks/updateServerFilter", {
+        this.$store.commit("blocks/updateServerFilters", {
           propertyName: this.queryParamName,
           filter: this.queryParamValue,
         });
@@ -123,10 +123,10 @@ export default {
       let query = {
         [this.queryParamName]: this.queryParamValue,
       };
-      if (this.$store.getters["blocks/getServerFilter"].length > 1) {
+      if (this.$store.getters["blocks/getServerFilters"].length > 1) {
         query = {
           filters: JSON.stringify(
-            this.$store.getters["blocks/getServerFilter"]
+            this.$store.getters["blocks/getServerFilters"]
           ),
         };
       }

@@ -13,7 +13,7 @@ export const state = () => ({
 });
 
 export const getters = {
-  getServerFilter: (state) => state.serverFilters,
+  getServerFilters: (state) => state.serverFilters,
 
   getUnfilteredBlockById: (state) => (id) => {
     return state.blocks.find((b) => b.blockId === parseInt(id));
@@ -221,7 +221,7 @@ export const mutations = {
     state.serverFilters.push(data);
   },
 
-  updateServerFilter: (state, data) => {
+  updateServerFilters: (state, data) => {
     let filter = state.serverFilters.find(
       (item) => item.propertyName == data.propertyName
     );
