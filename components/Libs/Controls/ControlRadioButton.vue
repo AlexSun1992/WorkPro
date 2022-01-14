@@ -15,12 +15,6 @@
         }}</label>
       </li>
     </ul>
-    <div v-for="item in getData.options" :key="item.value">
-      <div
-        v-if="item.value === id"
-        :class="{ active: item.value === id }"
-      ></div>
-    </div>
   </div>
 </template>
 <script>
