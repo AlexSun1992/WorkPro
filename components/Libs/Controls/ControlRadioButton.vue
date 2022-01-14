@@ -5,20 +5,21 @@
         <input
           type="radio"
           :id="item.value"
-          :value="item.text"
-          name="contact"
-          v-model="driverType"
+          :value="item.value"
+          name="ControlRadioButton"
+          v-model="Id"
+          @change="update(Id)"
         />
-        <label :for="item.value">{{ item.text }}</label>
+        <label :for="item.value" :class="{ active: item.value === Id }">{{
+          item.text
+        }}</label>
       </li>
     </ul>
     <div v-for="item in getData.options" :key="item.value">
       <div
-        v-if="item.text === driverType"
-        :class="{ active: item.text === driverType }"
-      >
-        {{ item.text }}
-      </div>
+        v-if="item.value === Id"
+        :class="{ active: item.value === Id }"
+      ></div>
     </div>
   </div>
 </template>
@@ -26,8 +27,7 @@
 export default {
   data() {
     return {
-      parametr: true,
-      driverType: "",
+      Id: null,
     };
   },
   props: {
@@ -37,7 +37,15 @@ export default {
       default: () => {},
     },
   },
-  methods: {},
+  methods: {
+    update(value) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: String(value),
+      });
+    },
+  },
   computed: {
     getData() {
       return this.$store.getters["data_card/getDataFieldByFieldId"](
@@ -50,10 +58,5 @@ export default {
 
 <style lang="less" scoped>
 .active {
-  width: 300px;
-  height: 150px;
-  border: 1px solid black;
-  text-align: center;
-  line-height: 150px;
 }
 </style>
