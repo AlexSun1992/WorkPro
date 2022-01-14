@@ -53,6 +53,7 @@ import ControlGoogleCaptcha from "./ControlGoogleCaptcha.vue";
 import ControlMap from "./ControlMap.vue";
 import ControlListSelect from "./ControlListSelect/ControlListSelect.vue";
 import ControlRegNumber from "./ControlRegNumber.vue";
+import ControlRadioButton from "./ControlRadioButton.vue";
 
 export default {
   name: "Control",
@@ -86,6 +87,7 @@ export default {
     ControlMap,
     ControlListSelect,
     ControlRegNumber,
+    ControlRadioButton,
   },
   props: {
     data: {

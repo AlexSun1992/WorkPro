@@ -164,6 +164,13 @@ converter.form = async (data, params) => {
       obj.type = "Map";
     } else if (webFields[i].IDCONTROL == 43) {
       obj.type = "RegNumber";
+    } else if (webFields[i].IDCONTROL == 44) {
+      obj.type = "RadioButton";
+      promises.push(
+        axios.get(
+          `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`
+        )
+      );
     } else {
       obj.type = "string";
     }

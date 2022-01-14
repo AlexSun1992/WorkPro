@@ -55,7 +55,6 @@ export default {
   data() {
     return {
       selectId: `id${this.data.fieldId}`,
-      param: "",
     };
   },
   mounted() {
