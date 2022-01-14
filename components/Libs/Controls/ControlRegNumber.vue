@@ -40,22 +40,30 @@
 </template>
 <script>
 const isNumberValid = function (value) {
-  if (/^[АВЕКМНОРСТУХ]\d{3}(?<!000)[АВЕКМНОРСТУХ]{2}$/iu.test(value)) {
+  if (
+    /^[АВЕКМНОРСТУХABEKMNOPCTYX]\d{3}(?<!000)[АВЕКМНОРСТУХABEKMNOPCTYX]{2}$/iu.test(
+      value
+    )
+  ) {
     return true;
   }
-  if (/^[АВЕКМНОРСТУХ]{2}\d{3}(?<!000)$/iu.test(value)) {
+  if (/^[АВЕКМНОРСТУХABEKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
     return true;
   }
-  if (/^[АВЕКМНОРСТУХ]{2}\d{4}(?<!0000)$/iu.test(value)) {
+  if (/^[АВЕКМНОРСТУХABEKMNOPCTYX]{2}\d{4}(?<!0000)$/iu.test(value)) {
     return true;
   }
-  if (/^\d{4}(?<!0000)[АВЕКМНОРСТУХ]{2}$/iu.test(value)) {
+  if (/^\d{4}(?<!0000)[АВЕКМНОРСТУХABEKMNOPCTYX]{2}$/iu.test(value)) {
     return true;
   }
-  if (/^[АВЕКМНОРСТУХ]{2}\d{3}(?<!000)[АВЕКМНОРСТУХ]$/iu.test(value)) {
+  if (
+    /^[АВЕКМНОРСТУХABEKMNOPCTYX]{2}\d{3}(?<!000)[АВЕКМНОРСТУХABEKMNOPCTYX]$/iu.test(
+      value
+    )
+  ) {
     return true;
   }
-  if (/^Т[АВЕКМНОРСТУХ]{2}\d{3}(?<!000)$/iu.test(value)) {
+  if (/^Т[АВЕКМНОРСТУХABEKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
     return true;
   }
   return false;
@@ -125,7 +133,7 @@ export default {
       let formatValue = value.toUpperCase();
       if (isNumberValid(value)) {
         formatValue = formatValue.replace(
-          /[АВЕКМНОРСТУХ](?=\d)|\d(?=[АВЕКМНОРСТУХ])/gi,
+          /[АВЕКМНОРСТУХABEKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEKMNOPCTYX])/gi,
           "$& "
         );
       } else {
@@ -147,7 +155,11 @@ export default {
     },
     numberKeydown(e) {
       if (e.key !== "Backspace" && e.key !== "Delete") {
-        if (/^[0-9АаВвЕеКкМмНнОоРрСсТтУуХх]$/iu.test(e.key) === false) {
+        if (
+          /^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEKMNOPCTYXabekmnopctyx]$/iu.test(
+            e.key
+          ) === false
+        ) {
           e.preventDefault();
         }
       }
