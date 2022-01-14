@@ -7,18 +7,18 @@
           :id="item.value"
           :value="item.value"
           name="ControlRadioButton"
-          v-model="Id"
-          @change="update(Id)"
+          v-model="id"
+          @change="update(id)"
         />
-        <label :for="item.value" :class="{ active: item.value === Id }">{{
+        <label :for="item.value" :class="{ active: item.value === id }">{{
           item.text
         }}</label>
       </li>
     </ul>
     <div v-for="item in getData.options" :key="item.value">
       <div
-        v-if="item.value === Id"
-        :class="{ active: item.value === Id }"
+        v-if="item.value === id"
+        :class="{ active: item.value === id }"
       ></div>
     </div>
   </div>
@@ -27,7 +27,7 @@
 export default {
   data() {
     return {
-      Id: null,
+      id: null,
     };
   },
   props: {
@@ -56,7 +56,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.active {
-}
-</style>
+<style lang="less" scoped></style>
