@@ -228,7 +228,7 @@ export const mutations = {
     filter.filter = data.filter;
   },
 
-  toggleFilter: (state, { propertyName, filterItem, filterType }) => {
+  toggleFilter: (state, { propertyName, filterItem, filterType, id }) => {
     let currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
