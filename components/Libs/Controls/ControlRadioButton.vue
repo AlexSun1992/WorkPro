@@ -8,11 +8,18 @@
           :value="item.value"
           name="ControlRadioButton"
           v-model="id"
-          @change="update(id)"
+          @change="update(id, item.text)"
+          :checked="item.text == 'Без ограничения'"
         />
-        <label :for="item.value" :class="{ active: item.value === id }">{{
-          item.text
-        }}</label>
+        <label
+          :for="item.value"
+          :class="{
+            active:
+              item.value === id ||
+              (item.text === 'Без ограничения' && activeClass === true),
+          }"
+          >{{ item.text }}</label
+        >
       </li>
     </ul>
   </div>
@@ -22,7 +29,11 @@ export default {
   data() {
     return {
       id: null,
+      activeClass: true,
     };
+  },
+  mounted() {
+    this.activeClass = true;
   },
   props: {
     data: {
@@ -33,6 +44,7 @@ export default {
   },
   methods: {
     update(value) {
+      this.activeClass = false;
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
