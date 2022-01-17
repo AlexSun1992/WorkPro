@@ -15,7 +15,7 @@
       </b-dropdown-item>
     </b-dropdown>
     <b-button variant="login-btn" v-else @click="redirectToLoginPage"
-      >ЛИЧНЫЙ КАБИНЕТ</b-button
+      >Личный кабинет</b-button
     >
   </div>
 </template>
