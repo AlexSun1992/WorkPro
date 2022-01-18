@@ -9,7 +9,8 @@
         :class="isValid === true ? 'is-valid' : 'is-invalid'"
       >
         <b-form-input
-          v-model="fieldValue"
+          v-model="numberValue"
+          @update="numberUpdateValue"
           :formatter="numberFormatter"
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
@@ -82,6 +83,7 @@ export default {
       isVisitedNumber: false,
       isVisitedCode: false,
       state: null,
+      codeData: "",
     };
   },
   props: {
@@ -97,22 +99,40 @@ export default {
     },
   },
   methods: {
-    codeUpdateValue(value) {
-      let setValue = null;
-      console.log(value);
-      if (isCodeValid(value)) {
-        if (this.stateNumber && this.stateCode) {
-          setValue = this.numberAndCodeValue;
-          this.isVisitedCode = true;
-        }
-      }
-      if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          value: setValue,
-        });
-      }
-    },
+    // codeUpdateValue(value) {
+    //   let setValue = null;
+
+    //   if (isCodeValid(value)) {
+    //     this.codeData = value;
+    //     if (this.stateNumber && this.stateCode) {
+    //       setValue = this.numberValue + value;
+    //       this.isVisitedCode = true;
+    //     }
+    //   }
+    //   if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
+    //     this.$emit("update", {
+    //       fieldId: this.data.fieldId,
+    //       name: this.data.name,
+    //       value: setValue,
+    //     });
+    //   }
+    // },
+    // numberUpdateValue(value) {
+    //   let setValue = null;
+    //   if (isNumberValid(value.replace(/ /g, ""))) {
+    //     this.$refs.code.$el.focus();
+    //     if (this.stateNumber && this.stateCode) {
+    //       setValue = this.numberAndCodeValue;
+    //       this.isVisitedNumber = true;
+    //     }
+    //   }
+    //   if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
+    //     this.$emit("update", {
+    //       fieldId: this.data.fieldId,
+    //       value: setValue,
+    //     });
+    //   }
+    // },
     numberFormatter(value) {
       let formatValue = value.toUpperCase();
       if (isNumberValid(value)) {
@@ -185,21 +205,18 @@ export default {
 
           this.numberValue = value.replace(/ /g, "");
 
-          console.log(this.numberValue);
-
           this.$refs.code.$el.focus();
           if (
             isNumberValid(value.replace(/ /g, "")) === true &&
             this.stateCode
           ) {
-            // console.log("Я здесь!!");
-            // console.log(value.replace(/ /g, ""));
-            // setValue = this.numberAndCodeValue;
-            //  this.isVisitedNumber = true;
+            this.isVisitedNumber = true;
+            setValue = this.codeData + this.numberValue;
+
             this.$emit("update", {
               fieldId: this.data.fieldId,
               name: this.data.name,
-              value: value,
+              value: setValue,
             });
           }
         }
