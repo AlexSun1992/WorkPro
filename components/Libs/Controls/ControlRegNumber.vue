@@ -9,8 +9,7 @@
         :class="isValid === true ? 'is-valid' : 'is-invalid'"
       >
         <b-form-input
-          v-model="numberValue"
-          @update="numberUpdateValue"
+          v-model="fieldValue"
           :formatter="numberFormatter"
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
@@ -98,24 +97,9 @@ export default {
     },
   },
   methods: {
-    numberUpdateValue(value) {
-      let setValue = null;
-      if (isNumberValid(value.replace(/ /g, ""))) {
-        this.$refs.code.$el.focus();
-        if (this.stateNumber && this.stateCode) {
-          setValue = this.numberAndCodeValue;
-          this.isVisitedNumber = true;
-        }
-      }
-      if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          value: setValue,
-        });
-      }
-    },
     codeUpdateValue(value) {
       let setValue = null;
+      console.log(value);
       if (isCodeValid(value)) {
         if (this.stateNumber && this.stateCode) {
           setValue = this.numberAndCodeValue;
@@ -188,6 +172,38 @@ export default {
         return this.stateNumber && this.stateCode;
       }
       return null;
+    },
+    fieldValue: {
+      get: function () {
+        return this.data.value;
+      },
+      set: function (value) {
+        let setValue = null;
+
+        if (isNumberValid(value.replace(/ /g, ""))) {
+          this.isVisitedNumber = true;
+
+          this.numberValue = value.replace(/ /g, "");
+
+          console.log(this.numberValue);
+
+          this.$refs.code.$el.focus();
+          if (
+            isNumberValid(value.replace(/ /g, "")) === true &&
+            this.stateCode
+          ) {
+            // console.log("Я здесь!!");
+            // console.log(value.replace(/ /g, ""));
+            // setValue = this.numberAndCodeValue;
+            //  this.isVisitedNumber = true;
+            this.$emit("update", {
+              fieldId: this.data.fieldId,
+              name: this.data.name,
+              value: value,
+            });
+          }
+        }
+      },
     },
   },
 };
