@@ -63,6 +63,17 @@ export default {
   created() {
     this.setOptions();
   },
+  mounted() {
+    console.log("list:", this.list);
+    console.log("queryParamName:", this.queryParamName);
+    console.log("menudic:", this.menuDic);
+    console.log("name:", this.name);
+    console.log("idParamName:", this.idParamName);
+    console.log("id:", this.id);
+    console.log("fk:", this.fk);
+    console.log("required:", this.required);
+    console.log("dictionary:", this.dictionary);
+  },
 
   methods: {
     async setOptions() {
