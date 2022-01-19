@@ -49,10 +49,6 @@ export default {
       type: Array,
       required: false,
     },
-    partnerId: {
-      type: String,
-      required: false,
-    },
   },
 
   data() {
