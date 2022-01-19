@@ -1,6 +1,9 @@
 <template>
   <div>
-    <b-form-group :class="{ required: data.required }">
+    <b-form-group
+      :class="{ required: data.required }"
+      :disabled="!edit ? !edit : data.readonly"
+    >
       <template #label>
         <span v-html="data.label" />
       </template>
@@ -82,8 +85,6 @@ export default {
       codeValue: "",
       isVisitedNumber: false,
       isVisitedCode: false,
-      state: null,
-      codeData: "",
     };
   },
   props: {
@@ -92,6 +93,7 @@ export default {
       required: true,
       default: () => {},
     },
+
     edit: {
       type: Boolean,
       required: true,
@@ -99,40 +101,39 @@ export default {
     },
   },
   methods: {
-    // codeUpdateValue(value) {
-    //   let setValue = null;
-
-    //   if (isCodeValid(value)) {
-    //     this.codeData = value;
-    //     if (this.stateNumber && this.stateCode) {
-    //       setValue = this.numberValue + value;
-    //       this.isVisitedCode = true;
-    //     }
-    //   }
-    //   if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
-    //     this.$emit("update", {
-    //       fieldId: this.data.fieldId,
-    //       name: this.data.name,
-    //       value: setValue,
-    //     });
-    //   }
-    // },
-    // numberUpdateValue(value) {
-    //   let setValue = null;
-    //   if (isNumberValid(value.replace(/ /g, ""))) {
-    //     this.$refs.code.$el.focus();
-    //     if (this.stateNumber && this.stateCode) {
-    //       setValue = this.numberAndCodeValue;
-    //       this.isVisitedNumber = true;
-    //     }
-    //   }
-    //   if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
-    //     this.$emit("update", {
-    //       fieldId: this.data.fieldId,
-    //       value: setValue,
-    //     });
-    //   }
-    // },
+    numberUpdateValue() {
+      let setValue = null;
+      if (isNumberValid(this.numberValue.replace(/ /g, ""))) {
+        this.$refs.code.$el.focus();
+        if (this.stateNumber && this.stateCode) {
+          setValue = this.numberAndCodeValue;
+          this.isVisitedNumber = true;
+        }
+      }
+      if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: setValue,
+        });
+      }
+    },
+    codeUpdateValue(value) {
+      let setValue = null;
+      if (isCodeValid(value)) {
+        if (this.stateNumber && this.stateCode) {
+          setValue = this.numberAndCodeValue;
+          this.isVisitedCode = true;
+        }
+      }
+      if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: setValue,
+        });
+      }
+    },
     numberFormatter(value) {
       let formatValue = value.toUpperCase();
       if (isNumberValid(value)) {
@@ -193,34 +194,13 @@ export default {
       }
       return null;
     },
-    fieldValue: {
-      get: function () {
-        return this.data.value;
-      },
-      set: function (value) {
-        let setValue = null;
-
-        if (isNumberValid(value.replace(/ /g, ""))) {
-          this.isVisitedNumber = true;
-
-          this.numberValue = value.replace(/ /g, "");
-
-          this.$refs.code.$el.focus();
-          if (
-            isNumberValid(value.replace(/ /g, "")) === true &&
-            this.stateCode
-          ) {
-            this.isVisitedNumber = true;
-            setValue = this.codeData + this.numberValue;
-
-            this.$emit("update", {
-              fieldId: this.data.fieldId,
-              name: this.data.name,
-              value: setValue,
-            });
-          }
-        }
-      },
+  },
+  watch: {
+    data() {
+      if (this.data?.value === "") {
+        this.codeValue = "";
+        this.numberValue = "";
+      }
     },
   },
 };
