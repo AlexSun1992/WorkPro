@@ -85,6 +85,7 @@ export default {
       codeValue: "",
       isVisitedNumber: false,
       isVisitedCode: false,
+      state: null,
     };
   },
   props: {
