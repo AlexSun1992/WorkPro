@@ -209,7 +209,6 @@ export const mutations = {
   },
 
   setFilter: (state, data) => {
-    console.log();
     if (Array.isArray(data) === false) {
       state.filters.push(data);
     } else {
@@ -242,6 +241,10 @@ export const mutations = {
       state.filters.push(currentFilter);
     }
     if (filterType === "radiobutton") {
+      currentFilter.filter = [filterItem];
+      return;
+    }
+    if (filterType === "combobox") {
       currentFilter.filter = [filterItem];
       return;
     }
