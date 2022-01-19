@@ -33,6 +33,10 @@ export default {
       type: String,
       required: false,
     },
+    id: {
+      type: String,
+      required: false,
+    },
     fk: {
       type: String,
       required: false,
@@ -45,12 +49,18 @@ export default {
       type: Array,
       required: false,
     },
+    partnerId: {
+      type: String,
+      required: false,
+    },
   },
 
   data() {
     return {
       list: [],
       queryParamValue: null,
+      partnerObjFilter: null,
+      idParam: null,
     };
   },
 
@@ -90,17 +100,21 @@ export default {
           this.list.push({
             value,
             text: str,
+            data: items[i],
           });
         }
       }
     },
 
-    setFilter() {
+    setFilter(e) {
       let filterObj;
       for (const [propertyName, filter] of Object.entries({
         [this.queryParamName]: this.queryParamValue,
       })) {
-        filterObj = { propertyName, filter };
+        filterObj = {
+          propertyName,
+          filter,
+        };
       }
       let foundedFilter = this.$store.getters["blocks/getServerFilters"].find(
         (filter) => {
@@ -114,12 +128,17 @@ export default {
         });
       } else {
         this.$store.commit("blocks/setServerFilters", filterObj);
+        if (this.id && e.data[this.id])
+          this.$store.commit("blocks/setServerFilters", {
+            propertyName: this.id,
+            filter: e.data[this.id].toString(),
+          });
       }
     },
 
     update(e) {
       this.queryParamValue = e.value;
-      this.setFilter();
+      this.setFilter(e);
       let query = {
         [this.queryParamName]: this.queryParamValue,
       };

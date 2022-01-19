@@ -45,7 +45,7 @@ export default {
       default: () => 0,
     },
     body: {
-      type: Object,
+      type: Object | Array,
       required: false,
     },
     relId: {
@@ -57,6 +57,10 @@ export default {
       type: String,
       required: false,
       default: () => "",
+    },
+    contextChanged: {
+      type: Boolean,
+      required: false,
     },
   },
 
@@ -104,6 +108,11 @@ export default {
     getUrlAddress() {
       const resultUrl = this.$store.getters["blocks/getUrl"];
       return resultUrl;
+    },
+  },
+  watch: {
+    async contextChanged() {
+      this.startAction();
     },
   },
 };
