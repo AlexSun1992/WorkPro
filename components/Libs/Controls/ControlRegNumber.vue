@@ -1,4 +1,11 @@
 <template>
+  <!-- :class="{
+          'gos-number mb-2': true,
+          'is-invalid': isValid === false,
+        }" -->
+  <!-- :class="isValid === true ? 'is-valid' : 'is-invalid'" -->
+  <!-- class="gos-number mb-2"
+        :class="isValid === true  ? 'is-valid' : 'is-invalid'" -->
   <div>
     <b-form-group
       :class="{ required: data.required }"
@@ -8,8 +15,11 @@
         <span v-html="data.label" />
       </template>
       <b-input-group
-        class="gos-number mb-2"
-        :class="isValid === true ? 'is-valid' : 'is-invalid'"
+        :class="{
+          'gos-number mb-2': true,
+          'is-invalid': isValid === false && isDisabled === false,
+          'is-valid': isValid === true && isVisitedNumber === true,
+        }"
       >
         <b-form-input
           v-model="numberValue"
@@ -29,12 +39,17 @@
           ref="code"
         />
       </b-input-group>
-      <b-form-text v-if="isValid === null && data.state === null"
+      <b-form-text
+        v-if="isValid === null && data.state === null && isDisabled === false"
         >Введите госномер, а мы заполним данные в калькуляторе</b-form-text
       >
-      <b-form-invalid-feedback v-if="isValid !== null" :state="isValid">{{
-        data.error ? data.error : "Пожалуйста, введите корректно госномер"
-      }}</b-form-invalid-feedback>
+      <b-form-invalid-feedback
+        v-if="isValid !== null && isDisabled === false"
+        :state="isValid"
+        >{{
+          data.error ? data.error : "Пожалуйста, введите корректно госномер"
+        }}</b-form-invalid-feedback
+      >
       <b-form-invalid-feedback v-else :state="data.state">{{
         data.error ? data.error : "Обязательно для заполнения"
       }}</b-form-invalid-feedback>
@@ -86,7 +101,7 @@ export default {
       isVisitedNumber: false,
       isVisitedCode: false,
       state: null,
-      isRegNumberExist: true,
+      isDisabled: false,
     };
   },
   props: {
@@ -202,7 +217,7 @@ export default {
       if (this.data?.value === "") {
         this.codeValue = "";
         this.numberValue = "";
-        this.isRegNumberExist = false;
+        this.isDisabled = true;
       }
     },
   },
