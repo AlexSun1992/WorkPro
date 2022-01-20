@@ -28,7 +28,12 @@
         </div>
       </template>
       <template v-slot:cell(index)="data">
-        <slot name="actions" v-bind:data="data"></slot>
+        <slot
+          name="actions"
+          v-bind:data="data"
+          :index="data.index"
+          :contextChanged="compareIndexes(data.index)"
+        ></slot>
       </template>
     </b-table>
     <b-form v-show="paging" inline>
@@ -71,6 +76,7 @@ export default {
         { value: 10, text: "10" },
         { value: 20, text: "20" },
       ],
+      selectedIndex: null,
     };
   },
   components: {
@@ -120,6 +126,7 @@ export default {
   },
   methods: {
     selectItem(record, index) {
+      this.selectedIndex = index;
       this.$emit("selected", record, index);
     },
     showItem(record, index) {
@@ -131,6 +138,9 @@ export default {
     },
     formatData(value, key) {
       return formatter.formatByType(getTypeByKey(this.fields, key), value);
+    },
+    compareIndexes(index) {
+      return index == this.selectedIndex ? true : false;
     },
   },
   computed: {

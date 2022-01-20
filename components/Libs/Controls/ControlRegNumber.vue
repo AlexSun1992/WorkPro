@@ -1,6 +1,9 @@
 <template>
   <div>
-    <b-form-group :class="{ required: data.required }">
+    <b-form-group
+      :class="{ required: data.required }"
+      :disabled="!edit ? !edit : data.readonly"
+    >
       <template #label>
         <span v-html="data.label" />
       </template>
@@ -91,6 +94,7 @@ export default {
       required: true,
       default: () => {},
     },
+
     edit: {
       type: Boolean,
       required: true,
@@ -98,9 +102,9 @@ export default {
     },
   },
   methods: {
-    numberUpdateValue(value) {
+    numberUpdateValue() {
       let setValue = null;
-      if (isNumberValid(value.replace(/ /g, ""))) {
+      if (isNumberValid(this.numberValue.replace(/ /g, ""))) {
         this.$refs.code.$el.focus();
         if (this.stateNumber && this.stateCode) {
           setValue = this.numberAndCodeValue;
@@ -110,6 +114,7 @@ export default {
       if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
+          name: this.data.name,
           value: setValue,
         });
       }
@@ -125,6 +130,7 @@ export default {
       if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
+          name: this.data.name,
           value: setValue,
         });
       }
@@ -188,6 +194,14 @@ export default {
         return this.stateNumber && this.stateCode;
       }
       return null;
+    },
+  },
+  watch: {
+    data() {
+      if (this.data?.value === "") {
+        this.codeValue = "";
+        this.numberValue = "";
+      }
     },
   },
 };
