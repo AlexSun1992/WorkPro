@@ -86,6 +86,7 @@ export default {
       isVisitedNumber: false,
       isVisitedCode: false,
       state: null,
+      isRegNumberExist: true,
     };
   },
   props: {
@@ -201,6 +202,7 @@ export default {
       if (this.data?.value === "") {
         this.codeValue = "";
         this.numberValue = "";
+        this.isRegNumberExist = false;
       }
     },
   },
