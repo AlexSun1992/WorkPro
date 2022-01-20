@@ -30,10 +30,7 @@
           ref="code"
         />
       </b-input-group>
-      <b-form-text
-        v-if="isValid === null && data.state === null && isDisabled === false"
-        >Введите госномер, а мы заполним данные в калькуляторе</b-form-text
-      >
+
       <b-form-invalid-feedback
         v-if="isValid !== null && isDisabled === false"
         :state="isValid"
