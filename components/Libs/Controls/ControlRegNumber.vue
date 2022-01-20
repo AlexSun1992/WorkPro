@@ -5,8 +5,11 @@
       :disabled="!edit ? !edit : data.readonly"
     >
       <b-input-group
-        class="gos-number mb-2"
-        :class="isValid === true ? 'is-valid' : 'is-invalid'"
+        :class="{
+          'gos-number mb-2': true,
+          'is-invalid': isValid === false && isDisabled === false,
+          'is-valid': isValid === true && isVisitedNumber === true,
+        }"
       >
         <b-form-input
           v-model="numberValue"
@@ -35,13 +38,6 @@
         :state="isValid"
         >{{
           data.error ? data.error : "Пожалуйста, введите корректно госномер"
-        }}</b-form-invalid-feedback
-      >
-      <b-form-invalid-feedback
-        v-if="isValid !== null || (isValid === null && isDisabled === false)"
-        :state="data.state"
-        >{{
-          data.error ? data.error : "Обязательно для заполнения"
         }}</b-form-invalid-feedback
       >
     </b-form-group>
