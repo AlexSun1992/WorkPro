@@ -1,25 +1,12 @@
 <template>
-  <!-- :class="{
-          'gos-number mb-2': true,
-          'is-invalid': isValid === false,
-        }" -->
-  <!-- :class="isValid === true ? 'is-valid' : 'is-invalid'" -->
-  <!-- class="gos-number mb-2"
-        :class="isValid === true  ? 'is-valid' : 'is-invalid'" -->
   <div>
     <b-form-group
       :class="{ required: data.required }"
       :disabled="!edit ? !edit : data.readonly"
     >
-      <template #label>
-        <span v-html="data.label" />
-      </template>
       <b-input-group
-        :class="{
-          'gos-number mb-2': true,
-          'is-invalid': isValid === false && isDisabled === false,
-          'is-valid': isValid === true && isVisitedNumber === true,
-        }"
+        class="gos-number mb-2"
+        :class="isValid === true ? 'is-valid' : 'is-invalid'"
       >
         <b-form-input
           v-model="numberValue"
@@ -50,9 +37,13 @@
           data.error ? data.error : "Пожалуйста, введите корректно госномер"
         }}</b-form-invalid-feedback
       >
-      <b-form-invalid-feedback v-else :state="data.state">{{
-        data.error ? data.error : "Обязательно для заполнения"
-      }}</b-form-invalid-feedback>
+      <b-form-invalid-feedback
+        v-if="isValid !== null || (isValid === null && isDisabled === false)"
+        :state="data.state"
+        >{{
+          data.error ? data.error : "Обязательно для заполнения"
+        }}</b-form-invalid-feedback
+      >
     </b-form-group>
   </div>
 </template>
