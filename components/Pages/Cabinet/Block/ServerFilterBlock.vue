@@ -5,6 +5,7 @@
       :list="list"
       :placeholder="name"
       @update="update"
+      :autoValue="firstValue"
     />
   </div>
 </template>
@@ -55,12 +56,26 @@ export default {
     return {
       list: [],
       queryParamValue: null,
+      firstValue: null,
     };
   },
 
   created() {
     this.setOptions();
   },
+
+  // mounted() {
+  //   console.log("list:", this.list);
+  //   console.log("queryParamName:", this.queryParamName);
+  //   console.log("menudic:", this.menuDic);
+  //   console.log("name:", this.name);
+  //   console.log("idParamName:", this.idParamName);
+  //   console.log("id:", this.id);
+  //   console.log("fk:", this.fk);
+  //   console.log("required:", this.required);
+  //   console.log("dictionary:", this.dictionary);
+  //   console.log("Предполагаемая длина:", this.isAutoSelectSingleRow);
+  // },
 
   methods: {
     async setOptions() {
@@ -98,6 +113,9 @@ export default {
           });
         }
       }
+      if (this.list[0]?.hasOwnProperty("data") && this.list.length > 1) {
+        this.firstValue = this.list[0];
+      }
     },
 
     setFilter(e) {
@@ -115,6 +133,7 @@ export default {
           return filter.propertyName === this.queryParamName;
         }
       );
+
       if (foundedFilter) {
         this.$store.commit("blocks/updateServerFilters", {
           propertyName: this.queryParamName,

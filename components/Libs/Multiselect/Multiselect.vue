@@ -25,6 +25,10 @@ export default {
       type: String,
       required: false,
     },
+    autoValue: {
+      type: Object,
+      required: false,
+    },
   },
   data() {
     return {
@@ -34,9 +38,13 @@ export default {
       },
     };
   },
+
   watch: {
     selectedItem(val) {
       this.$emit("update", val);
+    },
+    autoValue(val) {
+      this.selectedItem = val;
     },
   },
 };
