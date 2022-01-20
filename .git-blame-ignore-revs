@@ -1,0 +1,4 @@
+## Хэши "мусорных" коммитов, которые игнорирует git blame
+## к примеру, prettier
+## git config blame.ignoreRevsFile .git-blame-ignore-revs
+9af4e47fe4c1e3e2b408a62024382c5bacd34785
