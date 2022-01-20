@@ -9,6 +9,7 @@
           'gos-number mb-2': true,
           'is-invalid': isValid === false && isDisabled === false,
           'is-valid': isValid === true && isVisitedNumber === true,
+          'is-disabled': isDisabled === true,
         }"
       >
         <b-form-input
