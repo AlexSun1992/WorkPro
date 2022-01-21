@@ -30,6 +30,7 @@ export default {
       required: false,
     },
   },
+
   data() {
     return {
       selectedItem: {

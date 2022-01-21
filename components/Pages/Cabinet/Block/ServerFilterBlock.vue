@@ -5,7 +5,7 @@
       :list="list"
       :placeholder="name"
       @update="update"
-      :autoValue="firstValue"
+      :autoValue="firstValueFromList"
     />
   </div>
 </template>
@@ -56,7 +56,7 @@ export default {
     return {
       list: [],
       queryParamValue: null,
-      firstValue: null,
+      firstValueFromList: null,
     };
   },
 
