@@ -56,6 +56,7 @@ export default {
     return {
       list: [],
       queryParamValue: null,
+
       partnerObjFilter: null,
       idParam: null,
       amountInsuredPersons: null,
