@@ -34,6 +34,7 @@ export default {
       },
     };
   },
+  methods: {},
   watch: {
     selectedItem(val) {
       this.$emit("update", val);
