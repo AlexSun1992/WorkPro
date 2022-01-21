@@ -47,8 +47,6 @@ export default {
     },
     isAutoopenForMultipleRow(val) {
       if (val.length > 1) {
-        console.log("я здесь!!", val);
-        // console.log(this.$refs["select"]._uid);
         this.$refs["select"].showMenu = true;
       }
     },
