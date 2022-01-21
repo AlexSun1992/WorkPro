@@ -100,7 +100,7 @@ export default {
           });
         }
       }
-      if (this.list[0]?.hasOwnProperty("data") && this.list.length > 1) {
+      if (this.list[0]?.hasOwnProperty("data") && this.list.length === 1) {
         this.firstValueFromList = this.list[0];
       }
     },
