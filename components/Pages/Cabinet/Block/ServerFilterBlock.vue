@@ -49,6 +49,10 @@ export default {
       type: Array,
       required: false,
     },
+    isAutoopenForMultipleRow: {
+      type: Array,
+      required: false,
+    },
   },
 
   data() {
