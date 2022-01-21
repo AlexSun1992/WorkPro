@@ -45,7 +45,6 @@ export default {
       this.$emit("update", val);
     },
     autoValue(val) {
-      console.log(val);
       this.selectedItem = val;
     },
   },
