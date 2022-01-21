@@ -46,7 +46,9 @@ export default {
       this.$emit("update", val);
     },
     isAutoopenForMultipleRow(val) {
-      if (this.$refs["select"]._uid === 39 && val.length > 1) {
+      if (val.length > 1) {
+        console.log("я здесь!!", val);
+        // console.log(this.$refs["select"]._uid);
         this.$refs["select"].showMenu = true;
       }
     },
