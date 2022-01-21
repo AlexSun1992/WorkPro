@@ -23,13 +23,26 @@
       </li>
     </ul>
 
-    <div class="select" v-else-if="filterType === 'combobox'">
+    <!-- <div class="search" v-else-if="filterType === 'combobox'">
       <b-form-select
         v-model="selected"
-        :options="filterItemsDate"
+        :options="filterItemsCombobox"
         value-field="item"
         text-field="name"
-        @change="filterCombobox(propertyName, filterItemsDate[selected].name)"
+        @change="toggleFilter(propertyName, filterItemsCombobox[selected].name)"
+      >
+      </b-form-select>
+    </div> -->
+
+    <div class="search" v-else-if="filterType === 'combobox'">
+      <b-form-select
+        v-model="selected"
+        :options="filterItemsCombobox"
+        value-field="item"
+        text-field="name"
+        @change="
+          toggleFilterCombobox(propertyName, filterItemsCombobox[selected].name)
+        "
       >
       </b-form-select>
     </div>
@@ -114,19 +127,10 @@ export default {
       }
       if (
         this.filterType === "checkbox" &&
-        // this.filterType === "combobox" &&
         filters.find((filter) => filter.propertyName === this.propertyName)
       ) {
         this.isAllFilters = false;
       }
-
-      /* if (
-        this.filterType === "checkbox" &&
-        filters.find((filter) => filter.propertyName === this.propertyName)
-      ) {
-        console.log("2", this.filterType);
-        this.isAllFilters = false;
-      } */
 
       this.$store.commit("blocks/setFilter", filters);
     } else {
@@ -155,7 +159,7 @@ export default {
         filterItem: item,
         id: this.itemId,
       });
-      this.setQueryURL();
+      // this.setQueryURL();
       const target = this.$store.getters["blocks/getFilters"].find(
         (elem) => elem.propertyName === propertyName
       );
@@ -169,42 +173,16 @@ export default {
         propertyName: propertyName,
         filterType: this.filterType,
       });
-      this.setQueryURL();
+      // this.setQueryURL();
     },
 
-    /* filterCombobox(propertyName, item) {
-      console.log("propertyName", propertyName);
-      console.log("item", item);
-      this.isAllFilters = false;
-      this.$store.commit("blocks/toggleFilter", {
+    toggleFilterCombobox(propertyName, item) {
+      this.$store.commit("blocks/replaceFilter", {
         propertyName: propertyName,
-        filterType: this.filterType,
-        filterItem: item,
+        filter: [item],
         id: this.itemId,
       });
-      this.setQueryURL();
-      const target = this.$store.getters["blocks/getFilters"].filter(
-        (elem) => elem.filter[0] === item
-      );
-      if (this.filterType === "combobox" && target.filter.length === 0) {
-        this.isAllFilters = true;
-      }
-    }, */
-
-    filterCombobox(propertyName, item) {
-      console.log("propertyName", propertyName);
-      console.log("item", item);
-      // this.isAllFilters = false;
-      this.$store.commit("blocks/toggleFilter", {
-        propertyName: propertyName,
-        filterType: this.filterType,
-        filterItem: item,
-        id: this.itemId,
-      });
-      this.setQueryURL();
-      return this.$store.getters["blocks/getFilters"].filter(
-        (elem) => elem.filter[0] === item
-      );
+      // this.setQueryURL();
     },
 
     setQueryURL: function () {
@@ -241,6 +219,7 @@ export default {
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
+
         return uniqueItems.map((name) => ({
           name,
           isChecked: filter.includes(name),
@@ -248,20 +227,9 @@ export default {
       }
       return [];
     },
-    // ----- фильрация по дате и времени
-    filterItemsDate() {
-      const block = this.$store.getters["blocks/getUnfilteredBlockById"](
-        this.itemId
-      );
-      if (block) {
-        const items = block.data.items.map((item) => item[this.propertyName]);
-        const uniqueItems = this.uniqueItems || Array.from(new Set(items));
-        const res = uniqueItems.map((name, item) => ({ item, name }));
-        console.log(res);
-        this.selected = res[0].item;
-        return res;
-      }
-      return [];
+
+    filterItemsCombobox() {
+      return this.filterItems.map(({ name }, idx) => ({ item: idx, name }));
     },
   },
   watch: {
@@ -300,10 +268,6 @@ li {
 }
 
 .search {
-  width: 20vw;
-}
-
-.select {
   width: 20vw;
 }
 </style>

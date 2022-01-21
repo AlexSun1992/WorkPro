@@ -1,4 +1,3 @@
-/* eslint-disable */
 export const state = () => ({
   blocks: [],
   form: [],
@@ -23,7 +22,7 @@ export const getters = {
     if (currentBlock) {
       const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
 
-      let items = currentBlock.data.items
+      const items = currentBlock.data.items
         .filter((item) => {
           let isItemShow = true;
           state.filters.forEach((filter) => {
@@ -209,10 +208,10 @@ export const mutations = {
   },
 
   setFilter: (state, data) => {
-    if (Array.isArray(data) === false) {
-      state.filters.push(data);
-    } else {
+    if (Array.isArray(data) === true) {
       state.filters = data;
+    } else {
+      state.filters.push(data);
     }
   },
 
@@ -227,11 +226,25 @@ export const mutations = {
     filter.filter = data.filter;
   },
 
-  toggleFilter: (state, { propertyName, filterItem, filterType, id }) => {
-    let currentFilter = state.filters.find(
-      (filter) => filter.propertyName === propertyName
-    );
+  replaceFilter: (state, { propertyName, filter, id }) => {
+    const currentFilter = state.filters.find((item) => {
+      return item.propertyName === propertyName && item.id === id;
+    });
+    if (currentFilter) {
+      currentFilter.filter = filter;
+    } else {
+      state.filters.push({
+        propertyName,
+        filter,
+        id,
+      });
+    }
+  },
 
+  toggleFilter: (state, { propertyName, filterItem, filterType, id }) => {
+    let currentFilter = state.filters.find((filter) => {
+      return filter.propertyName === propertyName;
+    });
     if (currentFilter === undefined) {
       currentFilter = {
         propertyName,
@@ -241,10 +254,6 @@ export const mutations = {
       state.filters.push(currentFilter);
     }
     if (filterType === "radiobutton") {
-      currentFilter.filter = [filterItem];
-      return;
-    }
-    if (filterType === "combobox") {
       currentFilter.filter = [filterItem];
       return;
     }
