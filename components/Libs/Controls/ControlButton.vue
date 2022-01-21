@@ -1,10 +1,5 @@
 <template>
-  <b-button
-    @click="updateValue()"
-    :class="data.labelCols"
-    :disabled="loading || disabled"
-    variant="primary"
-  >
+  <button type="button" @click="updateValue()" :disabled="loading || disabled">
     {{ data.label }}
     <b-spinner
       v-if="loading && clicked"
@@ -13,7 +8,7 @@
       variant="success"
       label="Spinning"
     ></b-spinner>
-  </b-button>
+  </button>
 </template>
 
 <script>
