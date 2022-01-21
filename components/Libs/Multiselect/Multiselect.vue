@@ -32,15 +32,6 @@ export default {
     },
   },
 
-  updated() {
-    if (
-      this.$refs["select"]._uid === 39 &&
-      this.isAutoopenForMultipleRow.length > 1
-    ) {
-      this.$refs["select"].showMenu = true;
-    }
-  },
-
   data() {
     return {
       selectedItem: {
@@ -53,6 +44,11 @@ export default {
   watch: {
     selectedItem(val) {
       this.$emit("update", val);
+    },
+    isAutoopenForMultipleRow(val) {
+      if (this.$refs["select"]._uid === 39 && val.length > 1) {
+        this.$refs["select"].showMenu = true;
+      }
     },
   },
 };
