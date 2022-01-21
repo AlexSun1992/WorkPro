@@ -26,10 +26,17 @@ export default {
       type: String,
       required: false,
     },
+    isAutoopenForMultipleRow: {
+      type: Array,
+      required: false,
+    },
   },
 
-  mounted() {
-    if (this.$refs["select"]._uid === 39) {
+  updated() {
+    if (
+      this.$refs["select"]._uid === 39 &&
+      this.isAutoopenForMultipleRow.length > 1
+    ) {
       this.$refs["select"].showMenu = true;
     }
   },
