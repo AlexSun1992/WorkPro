@@ -4,6 +4,7 @@
       :options="list"
       v-model="selectedItem"
       :placeholder="placeholder"
+      ref="select"
     >
     </model-select>
   </div>
@@ -26,6 +27,17 @@ export default {
       required: false,
     },
   },
+
+  //Обращение к списку List
+  //this.$refs["select"].$options.propsData.options.length
+
+  mounted() {
+    if (this.$refs["select"]._uid === 39) {
+      // this.$refs["select"].showMenu = true;
+      console.log(this.$refs["select"].$options);
+    }
+  },
+
   data() {
     return {
       selectedItem: {
