@@ -114,7 +114,8 @@ export default {
         }
       }
       if (this.list[0]?.hasOwnProperty("data") && this.list.length > 1) {
-        this.firstValue = this.list[0];
+        console.log("!!!");
+        this.firstValueFromList = this.list[0];
       }
     },
 
