@@ -5,7 +5,7 @@
       :list="list"
       :placeholder="name"
       @update="update"
-      :autoValue="firstValueFromList"
+      :isAutoopenForMultipleRow="firstValueFromList"
     />
   </div>
 </template>

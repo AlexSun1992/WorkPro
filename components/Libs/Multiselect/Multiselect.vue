@@ -25,7 +25,7 @@ export default {
       type: String,
       required: false,
     },
-    autoValue: {
+    isAutoopenForMultipleRow: {
       type: Object,
       required: false,
     },
@@ -44,7 +44,7 @@ export default {
     selectedItem(val) {
       this.$emit("update", val);
     },
-    autoValue(val) {
+    isAutoopenForMultipleRow(val) {
       this.selectedItem = val;
     },
   },
