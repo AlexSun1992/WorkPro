@@ -1,5 +1,5 @@
 <template>
-  <div v-html="data.value"></div>
+  <div v-html="data.value || data.label"></div>
 </template>
 
 <script>
