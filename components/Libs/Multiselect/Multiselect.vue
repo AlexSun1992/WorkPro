@@ -33,8 +33,8 @@ export default {
 
   mounted() {
     if (this.$refs["select"]._uid === 39) {
-      // this.$refs["select"].showMenu = true;
-      console.log(this.$refs["select"].$options);
+      this.$refs["select"].showMenu = true;
+      //console.log(this.$refs["select"].$options);
     }
   },
 
