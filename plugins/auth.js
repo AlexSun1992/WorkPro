@@ -49,6 +49,11 @@ export default function ({ app, store, redirect, $auth }) {
     if (error.response.status !== 401) {
       try {
         if ($nuxt) {
+          $nuxt.$bvToast.toast(error.response.data.MESSAGE, {
+            title: "Ошибка",
+            variant: "danger",
+            autoHideDelay: 5000,
+          });
           console.log(error.response.data);
           if (
             !originalRequest.__isRetryRequest &&

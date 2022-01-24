@@ -17,6 +17,7 @@
     <slot
       :update="update"
       :list="list"
+      :componentKey="componentKey"
       v-bind:content="dataContent.items"
     ></slot>
   </div>
@@ -59,6 +60,7 @@ export default {
   data() {
     return {
       indicator: null,
+      componentKey: 0,
     };
   },
 
@@ -124,6 +126,7 @@ export default {
 
   methods: {
     update(event) {
+      this.componentKey += 1;
       this.$emit("update", event);
     },
     openCard(item) {
