@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     setMouseCoords(e) {
-      e.preventDefault();
+      // e.preventDefault();
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
       if (this.oldPosX) {
