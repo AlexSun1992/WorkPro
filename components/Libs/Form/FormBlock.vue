@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import Control from "@/components/Libs/Controls/Control";
-
+//import Control from "@/components/Libs/Controls/Control";
+import Control from "../Controls/Control";
 export default {
   name: "FormBlock",
   components: { Control },
