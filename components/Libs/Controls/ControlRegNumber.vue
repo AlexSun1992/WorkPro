@@ -6,7 +6,7 @@
     >
       <b-input-group
         :class="{
-          'gos-number mb-2': true,
+          'gos-number': true,
           'is-invalid': isValid === false && isDisabled === false,
           'is-valid': isValid === true && isVisitedNumber === true,
           'is-disabled': isDisabled === true,

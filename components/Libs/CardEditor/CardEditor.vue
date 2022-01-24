@@ -204,6 +204,11 @@ export default {
             if (data) {
               this.$store.commit("data_card/setForm", data || this.data);
             }
+            this.$bvToast.toast("Успешно сохранено", {
+              title: "",
+              variant: "success",
+              solid: true,
+            });
           }
           this.$store.commit("data_card/setLoading", false);
           return;
@@ -343,6 +348,7 @@ export default {
             !this.$route.query?.ref &&
             resp?.status !== 500
           ) {
+            this.saveSuccess = true;
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
             if (this.$route.params.idWizard) {

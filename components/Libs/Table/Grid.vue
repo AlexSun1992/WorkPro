@@ -33,6 +33,7 @@
           v-bind:data="data"
           :index="data.index"
           :contextChanged="compareIndexes(data.index)"
+          :update="update"
         ></slot>
       </template>
     </b-table>
@@ -125,6 +126,9 @@ export default {
     },
   },
   methods: {
+    update() {
+      this.$emit("update");
+    },
     selectItem(record, index) {
       this.selectedIndex = index;
       this.$emit("selected", record, index);
