@@ -1,26 +1,25 @@
 <template>
-  <b-button
-    v-if="action"
-    @click="
-      action.LREQUESTCODE === true
-        ? $bvModal.show(String(rowId))
-        : startAction()
-    "
-  >
+  <b-button v-if="action">
     <slot><div v-text="action.SNAME"></div></slot>
     <b-modal
+      v-if="!action.LHIDEDLG"
+      @close="$emit('update')"
       modal-class="cabinet"
-      v-if="action.LREQUESTCODE === true"
       :id="String(rowId)"
-      @ok="startAction"
+      @ok="executeAction"
       cancel-title="Нет"
       ok-title="Да"
+      no-close-on-backdrop
+      ok-only
     >
       {{
         insideContent !== ""
           ? insideContent
           : `Вы действительно хотите выполнить действие "${action.SNAME}"?`
       }}
+      <b-button class="mt-3 cancel" block @click="$emit('update')"
+        >Нет</b-button
+      >
     </b-modal>
   </b-button>
 </template>
@@ -65,32 +64,48 @@ export default {
   },
 
   methods: {
-    async startAction() {
+    async executeAction() {
       try {
-        if (this.action.NTYPE === 2) {
-          if (this.action.SCONST) {
-            this.$router.push(`/cabinet/55/0/${this.action.SCONST}`);
-          }
-        } else {
-          await this.$store.dispatch("blocks/executeAction", {
-            relId: this.relId,
-            relActionId: this.action.REL,
-            actionId: this.actionId,
-            rowId: this.rowId,
-            itemId: this.action.NITEM,
-            body: this.body,
-          });
+        await this.$store.dispatch("blocks/executeAction", {
+          relId: this.relId,
+          relActionId: this.action.REL,
+          actionId: this.actionId,
+          rowId: this.rowId,
+          itemId: this.action.NITEM,
+          body: this.body,
+        });
+        await this.$store.dispatch("blocks/fetchBlock", {
+          id: this.$route.params.idItem,
+          query: {
+            filters: JSON.stringify(
+              this.$store.getters["blocks/getServerFilters"]
+            ),
+          },
+        });
+        this.$bvToast.toast("Успешно выполнено", {
+          title: "",
+          variant: "success",
+          solid: true,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      this.$emit("update");
+    },
+    async startAction() {
+      if (this.action.NTYPE === 2) {
+        if (this.action.SCONST) {
+          this.$router.push(`/cabinet/55/0/${this.action.SCONST}`);
+        }
+      } else {
+        if (this.action.LHIDEDLG) {
+          this.executeAction();
           if (this.getUrlAddress) {
             window.open(this.getUrlAddress, "_self");
           }
+        } else {
+          this.$bvModal.show(String(this.rowId));
         }
-      } catch (err) {
-        this.$bvToast.toast(err.response.data.MESSAGE, {
-          title: "Ошибка",
-          variant: "danger",
-          noAutoHide: true,
-          solid: true,
-        });
       }
     },
   },
@@ -111,11 +126,17 @@ export default {
     },
   },
   watch: {
-    async contextChanged() {
+    contextChanged() {
       this.startAction();
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.cancel {
+  position: absolute;
+  top: 56px;
+  right: 67px;
+}
+</style>
