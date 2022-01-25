@@ -1,5 +1,12 @@
 <template>
-  <b-button v-if="action">
+  <b-button
+    v-if="action"
+    @click="
+      action.LREQUESTCODE === true
+        ? $bvModal.show(String(rowId))
+        : startAction()
+    "
+  >
     <slot><div v-text="action.SNAME"></div></slot>
     <b-modal
       v-if="!action.LHIDEDLG"
