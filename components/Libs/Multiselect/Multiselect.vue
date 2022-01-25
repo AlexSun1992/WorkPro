@@ -26,6 +26,7 @@ export default {
       required: false,
     },
   },
+
   data() {
     return {
       selectedItem: {
@@ -36,6 +37,7 @@ export default {
   },
   watch: {
     selectedItem(val) {
+      console.log(val);
       this.$emit("update", val);
     },
   },
