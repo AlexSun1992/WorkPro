@@ -1,11 +1,21 @@
 <template>
   <div>
+    <FormBlock
+      :data="getForm"
+      :edit="!isReadOnly"
+      @update="updateValue($event)"
+      @blur="updateBlurValue($event)"
+      v-if="isBlock"
+    />
+
     <Form
       :data="getForm"
       :edit="!isReadOnly"
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
+      v-if="!isBlock"
     />
+
     <div>
       <b-alert
         :show="getSavedError || getError"
@@ -44,6 +54,7 @@
 <script>
 import { mapGetters } from "vuex";
 import Form from "/../components/Libs/Form/Form.vue";
+import FormBlock from "/../components/Libs/Form/FormBlock.vue";
 import Vue from "vue";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
@@ -58,7 +69,7 @@ const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "CardEditor",
-  components: { Form },
+  components: { FormBlock, Form },
   props: {
     moduleId: {
       type: Number,
@@ -141,6 +152,9 @@ export default {
     ...mapGetters("auth", ["getLogged", "getUser"]),
     isReadOnly: function () {
       return this.$store.getters["data_card/getReadOnly"];
+    },
+    isBlock: function () {
+      return this.$store.getters["menu/getMenuById"](this.menuId)?.LUSEBLOCK;
     },
   },
   methods: {
