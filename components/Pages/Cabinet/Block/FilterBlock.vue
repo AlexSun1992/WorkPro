@@ -23,17 +23,6 @@
       </li>
     </ul>
 
-    <!-- <div class="search" v-else-if="filterType === 'combobox'">
-      <b-form-select
-        v-model="selected"
-        :options="filterItemsCombobox"
-        value-field="item"
-        text-field="name"
-        @change="toggleFilter(propertyName, filterItemsCombobox[selected].name)"
-      >
-      </b-form-select>
-    </div> -->
-
     <div class="search" v-else-if="filterType === 'combobox'">
       <b-form-select
         v-model="selected"
@@ -177,6 +166,7 @@ export default {
     },
 
     toggleFilterCombobox(propertyName, item) {
+      console.log(propertyName, item);
       this.$store.commit("blocks/replaceFilter", {
         propertyName: propertyName,
         filter: [item],

@@ -22,6 +22,8 @@ export const getters = {
     if (currentBlock) {
       const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
 
+      console.log(currentBlock.data.items);
+
       const items = currentBlock.data.items
         .filter((item) => {
           let isItemShow = true;
@@ -245,12 +247,14 @@ export const mutations = {
     let currentFilter = state.filters.find((filter) => {
       return filter.propertyName === propertyName;
     });
+    console.log(currentFilter);
     if (currentFilter === undefined) {
       currentFilter = {
         propertyName,
         filter: [],
         id: id,
       };
+      console.log(currentFilter);
       state.filters.push(currentFilter);
     }
     if (filterType === "radiobutton") {
