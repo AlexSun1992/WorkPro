@@ -29,9 +29,7 @@
         :options="filterItemsCombobox"
         value-field="item"
         text-field="name"
-        @change="
-          toggleFilterCombobox(propertyName, filterItemsCombobox[selected].name)
-        "
+        @change="toggleFilter(propertyName, filterItemsCombobox[selected].name)"
       >
       </b-form-select>
     </div>
@@ -54,7 +52,7 @@ export default {
       isAllFilters: true,
       searchString: "",
       id: null,
-      selected: 0,
+      selected: null,
     };
   },
 
@@ -142,13 +140,14 @@ export default {
   methods: {
     toggleFilter(propertyName, item) {
       this.isAllFilters = false;
+
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
         filterItem: item,
         id: this.itemId,
       });
-      // this.setQueryURL();
+      this.setQueryURL();
       const target = this.$store.getters["blocks/getFilters"].find(
         (elem) => elem.propertyName === propertyName
       );
@@ -162,7 +161,7 @@ export default {
         propertyName: propertyName,
         filterType: this.filterType,
       });
-      // this.setQueryURL();
+      this.setQueryURL();
     },
 
     toggleFilterCombobox(propertyName, item) {
@@ -172,7 +171,7 @@ export default {
         filter: [item],
         id: this.itemId,
       });
-      // this.setQueryURL();
+      this.setQueryURL();
     },
 
     setQueryURL: function () {
