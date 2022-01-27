@@ -30,6 +30,7 @@
         value-field="item"
         text-field="name"
         @change="toggleFilter(propertyName, filterItemsCombobox[selected].name)"
+        placeholder="Выберите дату"
       >
       </b-form-select>
     </div>
