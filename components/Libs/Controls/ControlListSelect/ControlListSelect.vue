@@ -24,8 +24,8 @@
               <wrapper-item-from-template
                 class="mypolices-all-block"
                 :isButtonRender="data"
-                @update="update"
                 @openList="openList"
+                @update="update"
                 :itemId="data.menudic"
                 :isEmpty="isEmptyContent"
                 :template="getData"
@@ -126,6 +126,7 @@ export default {
       default: () => false,
     },
   },
+
   computed: {
     dataContent: {
       get: function () {
@@ -269,6 +270,7 @@ export default {
     },
     async openList() {
       this.visible = !this.visible;
+
       if (this.visible) {
         try {
           this.isLoad = true;

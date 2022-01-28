@@ -43,6 +43,7 @@ export default {
   methods: {},
   watch: {
     selectedItem(val) {
+      console.log(val);
       this.$emit("update", val);
     },
     isAutoopenForMultipleRow(val) {

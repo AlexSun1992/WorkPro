@@ -45,11 +45,11 @@ export default {
       required: false,
       default: () => false,
     },
-    data: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
+    // data: {
+    //   type: Object,
+    //   required: false,
+    //   default: () => {},
+    // },
   },
 
   async fetch() {
