@@ -45,7 +45,7 @@ module.exports = {
     "~/plugins/captcha.js",
     "~/plugins/mask.js",
     "~/plugins/validate",
-    // "~/plugins/axios",
+    "~/plugins/axios",
     "~/plugins/moment",
     "~/plugins/vue-agile",
     { src: "~plugins/vcalendar.js", ssr: false },
