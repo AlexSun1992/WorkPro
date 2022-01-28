@@ -119,17 +119,6 @@ export default {
     }
   },
 
-  // mounted() {
-  //   console.log("MenuDic:", this.menuDic);
-  //   console.log("id:", this.id);
-  //   console.log("queryParamName:", this.queryParamName);
-  //   console.log("name:", this.name);
-  //   console.log("idParamName:", this.idParamName);
-  //   console.log("dictionary:", this.dictionary);
-  //   console.log("fk", this.fk);
-  //   console.log(this.getData);
-  // },
-
   computed: {
     getData: {
       get: function () {
