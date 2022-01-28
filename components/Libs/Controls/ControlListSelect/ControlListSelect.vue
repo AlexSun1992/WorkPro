@@ -58,7 +58,7 @@
       <div class="col-lg-2 pt-lg-2 text-nowrap">
         <b-button
           @click="clearItem"
-          v-if="!isLoad && itemValue[optionsValue]"
+          v-if="!isLoad && itemValue[optionsValue] && getData"
           class="reload-captcha mt-1"
           variant="outline-success"
           >{{ data.placeholder || "Очистить" }}</b-button
