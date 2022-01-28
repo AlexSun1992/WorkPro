@@ -5,6 +5,7 @@
         <b-input
           aria-controls="collapse-4"
           @click="openList"
+          :placeholder="name"
           v-model="selectedItem"
         ></b-input>
         <b-collapse id="collapse-4" v-model="visible">
