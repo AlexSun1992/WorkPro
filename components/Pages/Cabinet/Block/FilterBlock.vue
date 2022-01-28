@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="menu" v-if="filterType !== 'query'">
+    <ul class="menu" v-if="filterType !== 'query' && filterType !== 'combobox'">
       <li v-for="item in filterItems" :key="item.name">
         <b-button
           :class="{
@@ -23,6 +23,18 @@
       </li>
     </ul>
 
+    <div class="search" v-else-if="filterType === 'combobox'">
+      <b-form-select
+        v-model="selected"
+        :options="filterItemsCombobox"
+        value-field="item"
+        text-field="name"
+        @change="toggleFilter(propertyName, filterItemsCombobox[selected].name)"
+        placeholder="Выберите дату"
+      >
+      </b-form-select>
+    </div>
+
     <div class="search" v-else>
       <b-form-input
         v-model="searchString"
@@ -41,6 +53,7 @@ export default {
       isAllFilters: true,
       searchString: "",
       id: null,
+      selected: null,
     };
   },
 
@@ -128,6 +141,7 @@ export default {
   methods: {
     toggleFilter(propertyName, item) {
       this.isAllFilters = false;
+
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
@@ -150,6 +164,17 @@ export default {
       });
       this.setQueryURL();
     },
+
+    toggleFilterCombobox(propertyName, item) {
+      console.log(propertyName, item);
+      this.$store.commit("blocks/replaceFilter", {
+        propertyName: propertyName,
+        filter: [item],
+        id: this.itemId,
+      });
+      this.setQueryURL();
+    },
+
     setQueryURL: function () {
       window.history.replaceState(
         null,
@@ -191,6 +216,10 @@ export default {
         }));
       }
       return [];
+    },
+
+    filterItemsCombobox() {
+      return this.filterItems.map(({ name }, idx) => ({ item: idx, name }));
     },
   },
   watch: {

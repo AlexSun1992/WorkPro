@@ -5,6 +5,7 @@
       :list="list"
       :placeholder="name"
       @update="update"
+      :isAutoopenForMultipleRow="amountInsuredPersons"
     />
   </div>
 </template>
@@ -55,6 +56,10 @@ export default {
     return {
       list: [],
       queryParamValue: null,
+
+      partnerObjFilter: null,
+      idParam: null,
+      amountInsuredPersons: null,
     };
   },
 
@@ -63,6 +68,13 @@ export default {
   },
 
   methods: {
+    async getParam() {
+      if (this.list[0]?.hasOwnProperty("data") && this.list.length > 1) {
+        console.log(this.list);
+        this.amountInsuredPersons = this.list;
+      }
+    },
+
     async setOptions() {
       if (this.dictionary?.length) {
         for (let item of this.dictionary) {
@@ -96,6 +108,9 @@ export default {
             text: str,
             data: items[i],
           });
+          if (this.list[0]?.hasOwnProperty("data") && this.list.length > 1) {
+            this.amountInsuredPersons = this.list;
+          }
         }
       }
     },
