@@ -118,7 +118,6 @@ export default {
     if (this.menuDic !== undefined) {
       this.itemId = this.menuDic;
     }
-    console.log(this.isAutoOpenForMultipleRow);
   },
 
   computed: {
