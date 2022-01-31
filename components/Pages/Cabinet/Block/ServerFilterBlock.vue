@@ -117,6 +117,8 @@ export default {
       list: [],
       queryParamValue: null,
       firstValueFromList: null,
+      selectedItem: "",
+      visible: false,
     };
   },
 
