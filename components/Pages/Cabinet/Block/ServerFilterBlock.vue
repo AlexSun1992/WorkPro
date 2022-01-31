@@ -117,8 +117,8 @@ export default {
       list: [],
       queryParamValue: null,
       firstValueFromList: null,
-      selectedItem: "",
       visible: false,
+      selectedItem: "",
     };
   },
 
@@ -196,7 +196,15 @@ export default {
         }
       }
 
-      if (this.list[0]?.hasOwnProperty("data") && this.list.length === 1) {
+      if (this.list?.length > 0 && this.getData) {
+        this.openList();
+      }
+
+      if (
+        this.list[0]?.hasOwnProperty("data") &&
+        this.list.length === 1 &&
+        !this.getData
+      ) {
         this.firstValueFromList = this.list[0];
       }
     },
