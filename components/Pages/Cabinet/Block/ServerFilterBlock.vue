@@ -186,6 +186,9 @@ export default {
             data: items[i],
           });
         }
+        if (this.list?.length > 1) {
+          this.openList();
+        }
       }
     },
 
