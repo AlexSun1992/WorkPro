@@ -87,7 +87,6 @@ export default {
       oldPosY: null,
       curPosX: null,
       curPosY: null,
-      stationOffices2: [],
     };
   },
   async created() {
