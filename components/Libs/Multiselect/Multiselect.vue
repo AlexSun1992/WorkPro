@@ -30,6 +30,11 @@ export default {
       type: Array,
       required: false,
     },
+
+    isAutoSelectSingleRow: {
+      type: Object,
+      required: false,
+    },
   },
 
   data() {
@@ -47,10 +52,12 @@ export default {
       this.$emit("update", val);
     },
     isAutoOpenForMultipleRow(val) {
-      this.selectedItem = val;
       if (val.length > 1) {
         this.$refs["select"].showMenu = true;
       }
+    },
+    isAutoSelectSingleRow(val) {
+      this.selectedItem = val;
     },
   },
 };
