@@ -30,7 +30,7 @@ export default {
 
   props: {
     isButtonRender: {
-      type: Object,
+      // type: Object,
       required: false,
       default: () => {},
     },

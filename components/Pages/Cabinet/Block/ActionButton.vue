@@ -1,7 +1,7 @@
 <template>
   <b-button
     v-if="action"
-    @click="
+    @click.stop="
       action.LREQUESTCODE === true
         ? $bvModal.show(String(rowId))
         : startAction()
