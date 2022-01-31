@@ -58,6 +58,7 @@ export default {
       itemId: null,
       visible: false,
       selectedItem: "",
+      firstValueFromList: null,
     };
   },
 
