@@ -33,7 +33,6 @@
         :isAutoopenForMultipleRow="firstValueFromList"
       />
     </div>
-    >>>>>>> master
   </div>
 </template>
 <script>

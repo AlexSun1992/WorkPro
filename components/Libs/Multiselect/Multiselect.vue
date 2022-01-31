@@ -47,6 +47,7 @@ export default {
       this.$emit("update", val);
     },
     isAutoopenForMultipleRow(val) {
+      console.log(val);
       this.selectedItem = val;
       if (val.length > 1) {
         this.$refs["select"].showMenu = true;
