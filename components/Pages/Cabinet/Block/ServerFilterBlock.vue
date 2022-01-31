@@ -30,6 +30,7 @@
         :list="list"
         :placeholder="name"
         @update="update"
+        :isAutoopenForMultipleRow="firstValueFromList"
       />
     </div>
   </div>
@@ -40,7 +41,6 @@ import VRuntimeTemplate from "v-runtime-template";
 import SelectItemFromTemplate from "../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
 import WrapperItemFromTemplate from "../../../Libs/Controls/ControlListSelect/WrapperItemFromTemplate.vue";
 import ChooseButton from "./ChooseButton.vue";
-
 export default {
   name: "ServerFilterBlock",
   components: {
@@ -67,7 +67,6 @@ export default {
       required: false,
       default: () => {},
     },
-
     queryParamName: {
       type: String,
       required: false,
@@ -113,6 +112,14 @@ export default {
     },
   },
 
+  data() {
+    return {
+      list: [],
+      queryParamValue: null,
+      firstValueFromList: null,
+    };
+  },
+
   created() {
     this.setOptions();
     if (this.menuDic !== undefined) {
@@ -151,7 +158,6 @@ export default {
     openList() {
       this.visible = !this.visible;
     },
-
     async setOptions() {
       if (this.dictionary?.length) {
         for (let item of this.dictionary) {
@@ -186,9 +192,10 @@ export default {
             data: items[i],
           });
         }
-        if (this.list?.length > 1) {
-          this.openList();
-        }
+      }
+
+      if (this.list[0]?.hasOwnProperty("data") && this.list.length === 1) {
+        this.firstValueFromList = this.list[0];
       }
     },
 
@@ -207,6 +214,7 @@ export default {
           return filter.propertyName === this.queryParamName;
         }
       );
+
       if (foundedFilter) {
         this.$store.commit("blocks/updateServerFilters", {
           propertyName: this.queryParamName,
