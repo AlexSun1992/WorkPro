@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <div v-if="getData">
+    <div v-if="getData">
       <b-form-group>
         <b-input
           aria-controls="collapse-4"
@@ -23,8 +23,8 @@
           </b-card>
         </b-collapse>
       </b-form-group>
-    </div> -->
-    <div>
+    </div>
+    <div v-if="getData">
       <Multiselect
         v-if="list"
         :list="list"
