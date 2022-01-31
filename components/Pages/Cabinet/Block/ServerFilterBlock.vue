@@ -24,13 +24,14 @@
         </b-collapse>
       </b-form-group>
     </div>
-    <div v-if="!getData">
+    <div v-else>
       <Multiselect
         v-if="list"
         :list="list"
         :placeholder="name"
         @update="update"
         :isAutoSelectSingleRow="firstValueFromList"
+        :isAutoOpenForMultipleRow="InsuredPersonsList"
       />
     </div>
   </div>
@@ -59,6 +60,7 @@ export default {
       visible: false,
       selectedItem: "",
       firstValueFromList: null,
+      InsuredPersonsList: null,
     };
   },
 
@@ -185,6 +187,11 @@ export default {
             data: items[i],
           });
         }
+      }
+
+      if (this.list?.length > 0) {
+        this.openList();
+        this.InsuredPersonsList = this.list;
       }
 
       if (this.list[0]?.hasOwnProperty("data") && this.list.length === 1) {
