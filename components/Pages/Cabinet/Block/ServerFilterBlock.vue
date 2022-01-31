@@ -1,23 +1,74 @@
 <template>
   <div>
-    <Multiselect
-      v-if="list"
-      :list="list"
-      :placeholder="name"
-      @update="update"
-      :isAutoopenForMultipleRow="firstValueFromList"
-    />
+    <div v-if="getData">
+      <b-form-group>
+        <b-input
+          aria-controls="collapse-4"
+          @click="openList"
+          :placeholder="name"
+          v-model="selectedItem"
+        ></b-input>
+        <b-collapse id="collapse-4" v-model="visible">
+          <b-card>
+            <b-col>
+              <wrapper-item-from-template
+                :itemId="Number(itemId)"
+                :template="getData"
+                :isEmpty="isEmptyContent"
+                :isButtonRender="getData"
+                @update="update"
+              >
+              </wrapper-item-from-template>
+            </b-col>
+          </b-card>
+        </b-collapse>
+      </b-form-group>
+    </div>
+    <div v-else>
+      <Multiselect
+        v-if="list"
+        :list="list"
+        :placeholder="name"
+        @update="update"
+        :isAutoopenForMultipleRow="firstValueFromList"
+      />
+    </div>
+    >>>>>>> master
   </div>
 </template>
 <script>
 import Multiselect from "../../../Libs/Multiselect/Multiselect.vue";
+import VRuntimeTemplate from "v-runtime-template";
+import SelectItemFromTemplate from "../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
+import WrapperItemFromTemplate from "../../../Libs/Controls/ControlListSelect/WrapperItemFromTemplate.vue";
+import ChooseButton from "./ChooseButton.vue";
 export default {
   name: "ServerFilterBlock",
   components: {
     Multiselect,
+    VRuntimeTemplate,
+    SelectItemFromTemplate,
+    WrapperItemFromTemplate,
+    ChooseButton,
+  },
+
+  data() {
+    return {
+      list: [],
+      queryParamValue: null,
+      itemId: null,
+      visible: false,
+      selectedItem: "",
+      firstValueFromList: null,
+    };
   },
 
   props: {
+    data: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
     queryParamName: {
       type: String,
       required: false,
@@ -50,21 +101,57 @@ export default {
       type: Array,
       required: false,
     },
-  },
+    template: {
+      type: String,
+      required: false,
+      default: () => "",
+    },
 
-  data() {
-    return {
-      list: [],
-      queryParamValue: null,
-      firstValueFromList: null,
-    };
+    isButtonRender: {
+      type: Boolean,
+      required: false,
+      default: () => true,
+    },
   },
 
   created() {
     this.setOptions();
+    if (this.menuDic !== undefined) {
+      this.itemId = this.menuDic;
+    }
+  },
+
+  computed: {
+    getData: {
+      get: function () {
+        if (this.itemId !== null) {
+          const data = this.$store.getters["menu/getMenuById"](
+            this.itemId
+          ).SVJCARDGRID;
+          if (data) {
+            return data;
+          }
+        }
+      },
+    },
+    isEmptyContent: {
+      get: function () {
+        if (this.itemId !== null) {
+          const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+          if (block) {
+            return !block?.data?.items.length;
+          } else {
+            return false;
+          }
+        }
+      },
+    },
   },
 
   methods: {
+    openList() {
+      this.visible = !this.visible;
+    },
     async setOptions() {
       if (this.dictionary?.length) {
         for (let item of this.dictionary) {
@@ -100,7 +187,16 @@ export default {
           });
         }
       }
-      if (this.list[0]?.hasOwnProperty("data") && this.list.length === 1) {
+
+      if (this.list?.length > 0 && this.getData) {
+        this.openList();
+      }
+
+      if (
+        this.list[0]?.hasOwnProperty("data") &&
+        this.list.length === 1 &&
+        !this.getData
+      ) {
         this.firstValueFromList = this.list[0];
       }
     },
@@ -137,7 +233,14 @@ export default {
     },
 
     update(e) {
+      this.selectedItem = e.SNAME;
+      if (this.getData) {
+        e = { data: e, text: e.SNAME, value: e.SPOLICY };
+      } else {
+        e = e;
+      }
       this.queryParamValue = e.value;
+      this.visible = false;
       this.setFilter(e);
       let query = {
         [this.queryParamName]: this.queryParamValue,
@@ -158,4 +261,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.hide {
+  display: none;
+}
+</style>

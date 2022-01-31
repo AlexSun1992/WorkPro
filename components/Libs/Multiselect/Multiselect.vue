@@ -4,6 +4,7 @@
       :options="list"
       v-model="selectedItem"
       :placeholder="placeholder"
+      ref="select"
     >
     </model-select>
   </div>
@@ -26,7 +27,7 @@ export default {
       required: false,
     },
     isAutoopenForMultipleRow: {
-      type: Object,
+      type: Array,
       required: false,
     },
   },
@@ -40,12 +41,16 @@ export default {
     };
   },
 
+  methods: {},
   watch: {
     selectedItem(val) {
       this.$emit("update", val);
     },
     isAutoopenForMultipleRow(val) {
       this.selectedItem = val;
+      if (val.length > 1) {
+        this.$refs["select"].showMenu = true;
+      }
     },
   },
 };
