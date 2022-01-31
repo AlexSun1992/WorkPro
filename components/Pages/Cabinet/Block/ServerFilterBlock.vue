@@ -30,7 +30,7 @@
         :list="list"
         :placeholder="name"
         @update="update"
-        :isAutoopenForMultipleRow="firstValueFromList"
+        :isAutoOpenForMultipleRow="firstValueFromList"
       />
     </div>
   </div>
@@ -118,6 +118,7 @@ export default {
     if (this.menuDic !== undefined) {
       this.itemId = this.menuDic;
     }
+    console.log(this.isAutoOpenForMultipleRow);
   },
 
   computed: {
