@@ -132,7 +132,7 @@ export default {
   computed: {
     getData: {
       get: function () {
-        if (this.itemId !== null) {
+        if (this.itemId !== null && this.itemId !== undefined) {
           const data = this.$store.getters["menu/getMenuById"](
             this.itemId
           ).SVJCARDGRID;
