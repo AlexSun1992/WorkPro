@@ -9,7 +9,7 @@
           'gos-number': true,
           'is-invalid': isValid === false && isDisabled === false,
           'is-valid': isValid === true && isVisitedNumber === true,
-          'is-disabled': isDisabled === true,
+          'is-disabled': data.readonly ? true : false,
         }"
       >
         <b-form-input
