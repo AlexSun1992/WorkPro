@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="getData">
+    <!-- <div v-if="getData">
       <b-form-group>
         <b-input
           aria-controls="collapse-4"
@@ -23,14 +23,14 @@
           </b-card>
         </b-collapse>
       </b-form-group>
-    </div>
-    <div v-else>
+    </div> -->
+    <div>
       <Multiselect
         v-if="list"
         :list="list"
         :placeholder="name"
         @update="update"
-        :isAutoopenForMultipleRow="firstValueFromList"
+        :isAutoOpenForMultipleRow="firstValueFromList"
       />
     </div>
   </div>
@@ -118,6 +118,7 @@ export default {
     if (this.menuDic !== undefined) {
       this.itemId = this.menuDic;
     }
+    console.log(this.isAutoOpenForMultipleRow);
   },
 
   computed: {

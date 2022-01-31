@@ -26,7 +26,7 @@ export default {
       type: String,
       required: false,
     },
-    isAutoopenForMultipleRow: {
+    isAutoOpenForMultipleRow: {
       type: Array,
       required: false,
     },
@@ -46,8 +46,7 @@ export default {
     selectedItem(val) {
       this.$emit("update", val);
     },
-    isAutoopenForMultipleRow(val) {
-      console.log(val);
+    isAutoOpenForMultipleRow(val) {
       this.selectedItem = val;
       if (val.length > 1) {
         this.$refs["select"].showMenu = true;
