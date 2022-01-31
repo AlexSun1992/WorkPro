@@ -112,16 +112,6 @@ export default {
     },
   },
 
-  data() {
-    return {
-      list: [],
-      queryParamValue: null,
-      firstValueFromList: null,
-      visible: false,
-      selectedItem: "",
-    };
-  },
-
   created() {
     this.setOptions();
     if (this.menuDic !== undefined) {
@@ -132,7 +122,7 @@ export default {
   computed: {
     getData: {
       get: function () {
-        if (this.itemId !== null && this.itemId !== undefined) {
+        if (this.itemId !== null) {
           const data = this.$store.getters["menu/getMenuById"](
             this.itemId
           ).SVJCARDGRID;
