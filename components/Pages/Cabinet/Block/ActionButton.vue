@@ -81,14 +81,16 @@ export default {
           itemId: this.action.NITEM,
           body: this.body,
         });
-        await this.$store.dispatch("blocks/fetchBlock", {
-          id: this.$route.params.idItem,
-          query: {
-            filters: JSON.stringify(
-              this.$store.getters["blocks/getServerFilters"]
-            ),
-          },
-        });
+        if (!this.getUrlAddress) {
+          await this.$store.dispatch("blocks/fetchBlock", {
+            id: this.$route.params.idItem,
+            query: {
+              filters: JSON.stringify(
+                this.$store.getters["blocks/getServerFilters"]
+              ),
+            },
+          });
+        }
         this.$bvToast.toast("Успешно выполнено", {
           title: "",
           variant: "success",
@@ -106,7 +108,7 @@ export default {
         }
       } else {
         if (this.action.LHIDEDLG) {
-          this.executeAction();
+          await this.executeAction();
           if (this.getUrlAddress) {
             window.open(this.getUrlAddress, "_self");
           }
