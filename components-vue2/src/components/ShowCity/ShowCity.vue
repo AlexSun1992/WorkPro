@@ -62,6 +62,8 @@ import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { cities } from "./cities.js";
 import { BButton, BCollapse, BCard } from "bootstrap-vue";
+import Cookies from "js-cookie";
+
 function getParams(input) {
   return {
     query: "address",
@@ -93,8 +95,11 @@ export default {
     };
   },
   async created() {
+    console.log(Cookies.get("location_user"));
     this.city =
-      localStorage.getItem("location_user") ||
+      // localStorage.getItem("location_user")
+
+      Cookies.get("location_user") ||
       (await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
         this.visible = true;
         if (res.data[0]._data[0].TOWN) {
@@ -109,16 +114,22 @@ export default {
       if (result.data["city"]) {
         this.city = result.data["city"];
       }
-      localStorage.setItem("location_user", this.city);
+      document.cookie = `location_user=${this.city}`;
+      // Cookies.set("location_user", this.city);
+      // localStorage.setItem("location_user", this.city);
     },
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
       this.city = result.text;
-      localStorage.setItem("location_user", this.city);
+      document.cookie = `location_user=${this.city}`;
+      // Cookies.set("location_user", this.city);
+      // localStorage.setItem("location_user", this.city);
     },
     setAutoCity(result) {
       this.visible = false;
-      localStorage.setItem("location_user", result);
+      document.cookie = `location_user=${result}`;
+      // Cookies.set("location_user", result);
+      // localStorage.setItem("location_user", result);
     },
     showModalSelectCity() {
       this.visible = false;
