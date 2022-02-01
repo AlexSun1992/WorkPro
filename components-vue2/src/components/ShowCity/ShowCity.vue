@@ -95,10 +95,7 @@ export default {
     };
   },
   async created() {
-    console.log(Cookies.get("location_user"));
     this.city =
-      // localStorage.getItem("location_user")
-
       Cookies.get("location_user") ||
       (await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
         this.visible = true;
@@ -115,21 +112,15 @@ export default {
         this.city = result.data["city"];
       }
       document.cookie = `location_user=${this.city}`;
-      // Cookies.set("location_user", this.city);
-      // localStorage.setItem("location_user", this.city);
     },
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
       this.city = result.text;
       document.cookie = `location_user=${this.city}`;
-      // Cookies.set("location_user", this.city);
-      // localStorage.setItem("location_user", this.city);
     },
     setAutoCity(result) {
       this.visible = false;
       document.cookie = `location_user=${result}`;
-      // Cookies.set("location_user", result);
-      // localStorage.setItem("location_user", result);
     },
     showModalSelectCity() {
       this.visible = false;
