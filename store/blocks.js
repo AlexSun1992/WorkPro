@@ -164,6 +164,7 @@ export const actions = {
       )
       .then(async (resp) => {
         commit("setPoutValue", resp.data.POUTVALUE);
+        if (resp.data.POUTVALUE) return;
         if (body) return;
         dispatch("updateBlock", itemId);
       });

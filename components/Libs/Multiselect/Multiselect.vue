@@ -26,8 +26,13 @@ export default {
       type: String,
       required: false,
     },
-    isAutoopenForMultipleRow: {
+    isAutoOpenForMultipleRow: {
       type: Array,
+      required: false,
+    },
+
+    isAutoSelectSingleRow: {
+      type: Object,
       required: false,
     },
   },
@@ -40,15 +45,20 @@ export default {
       },
     };
   },
+
   methods: {},
   watch: {
     selectedItem(val) {
       this.$emit("update", val);
     },
-    isAutoopenForMultipleRow(val) {
+    isAutoOpenForMultipleRow(val) {
+      console.log(val);
       if (val.length > 1) {
         this.$refs["select"].showMenu = true;
       }
+    },
+    isAutoSelectSingleRow(val) {
+      this.selectedItem = val;
     },
   },
 };
