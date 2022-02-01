@@ -117,6 +117,8 @@ export default {
       return this.group;
     },
     getResultValue(item) {
+      const hideBrandValue = `${item.data.brand_model_code} | ${item.data.brand_model_modification}`;
+      console.log(hideBrandValue);
       return item.value;
     },
     handleSubmit(result) {
