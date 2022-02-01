@@ -43,7 +43,11 @@
         </autocomplete>
         <div class="mt-2">
           <div class="row">
-            <div :class="`col-lg-${12 / cols}`" v-for="column in columns">
+            <div
+              :class="`col-lg-${12 / cols}`"
+              v-for="column in columns"
+              :key="column.id"
+            >
               <div v-for="item in column" :key="item.id">
                 <span @click="setPopularCity(item)" style="cursor: pointer">{{
                   item.text
@@ -93,30 +97,26 @@ export default {
       kladr: null,
       popularCities: cities,
       cols: 3,
+      request: null,
     };
   },
   async created() {
-    this.city =
-      Cookies.get("location_user") ||
-      (await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
-        this.visible = true;
-        if (res.data[0]._data[0].TOWN) {
-          return res.data[0]._data[0].TOWN.replace(/г/gi, "");
-        } else {
-          return "Москва";
-        }
-      }));
-
-    this.kladr =
-      Cookies.get("kladr_id") ||
-      (await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
-        this.visible = true;
-        if (res.data[0]._data[0].KLADR_ID) {
-          return res.data[0]._data[0].KLADR_ID;
-        } else {
-          return "7700000000000";
-        }
-      }));
+    if (Cookies.get("location_user") && Cookies.get("kladr_id")) {
+      this.kladr = Cookies.get("kladr_id");
+      this.city = Cookies.get("location_user");
+    } else {
+      this.request = await this.$axios
+        .get(`/am/free/v2/data/55/800/0/0`)
+        .then((res) => {
+          this.visible = true;
+          if (res.data[0]._data[0].TOWN) {
+            this.city = res.data[0]._data[0].TOWN.replace(/г/gi, "");
+          }
+          if (res.data[0]._data[0].KLADR_ID) {
+            this.kladr = res.data[0]._data[0].KLADR_ID;
+          }
+        });
+    }
   },
   methods: {
     setSearchedCity(result) {
@@ -124,21 +124,20 @@ export default {
         this.city = result.data["city"];
       }
       this.kladr = result.data.kladr_id;
-      document.cookie = `kladr_id=${this.kladr}`;
-      document.cookie = `location_user=${this.city}`;
+      Cookies.set("kladr_id", this.kladr);
+      Cookies.set("location_user", this.city);
     },
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
       this.city = result.text;
       this.kladr = result.kladr_id;
-      document.cookie = `kladr_id=${this.kladr}`;
-      document.cookie = `location_user=${this.city}`;
+      Cookies.set("kladr_id", this.kladr);
+      Cookies.set("location_user", this.city);
     },
     setAutoCity(result) {
       this.visible = false;
-      console.log(this.kladr);
-      document.cookie = `location_user=${result}`;
-      document.cookie = `kladr_id=${this.kladr}`;
+      Cookies.set("kladr_id", this.kladr);
+      Cookies.set("location_user", result);
     },
     showModalSelectCity() {
       this.visible = false;
