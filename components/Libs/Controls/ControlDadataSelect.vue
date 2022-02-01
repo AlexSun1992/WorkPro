@@ -118,7 +118,7 @@ export default {
     },
     getResultValue(item) {
       const hideBrandValue = `${item.data.brand_model_code} | ${item.data.brand_model_modification}`;
-      console.log(hideBrandValue);
+      // console.log(hideBrandValue);
       return item.value;
     },
     handleSubmit(result) {
@@ -130,6 +130,7 @@ export default {
           ? `${result.data[this.id] || ""}|${result.value}`
           : result.value,
       });
+      console.log(result);
     },
     handleBlur(value) {
       const find = this.group.find((i) =>
