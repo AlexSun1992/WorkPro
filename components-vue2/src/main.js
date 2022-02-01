@@ -140,3 +140,16 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-user-location",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/UserLocation/UserLocation.vue"], (
+        lazyComponent
+      ) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
