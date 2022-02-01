@@ -43,7 +43,11 @@
         </autocomplete>
         <div class="mt-2">
           <div class="row">
-            <div :class="`col-lg-${12 / cols}`" v-for="column in columns">
+            <div
+              :class="`col-lg-${12 / cols}`"
+              v-for="column in columns"
+              :key="column.id"
+            >
               <div v-for="item in column" :key="item.id">
                 <span @click="setPopularCity(item)" style="cursor: pointer">{{
                   item.text
@@ -62,6 +66,8 @@ import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { cities } from "./cities.js";
 import { BButton, BCollapse, BCard } from "bootstrap-vue";
+import Cookies from "js-cookie";
+
 function getParams(input) {
   return {
     query: "address",
@@ -88,37 +94,50 @@ export default {
     return {
       city: null,
       visible: false,
+      kladr: null,
       popularCities: cities,
       cols: 3,
+      request: null,
     };
   },
   async created() {
-    this.city =
-      localStorage.getItem("location_user") ||
-      (await this.$axios.get(`/am/free/v2/data/55/800/0/0`).then((res) => {
-        this.visible = true;
-        if (res.data[0]._data[0].TOWN) {
-          return res.data[0]._data[0].TOWN.replace(/г/gi, "");
-        } else {
-          return "Москва";
-        }
-      }));
+    if (Cookies.get("location_user") && Cookies.get("kladr_id")) {
+      this.kladr = Cookies.get("kladr_id");
+      this.city = Cookies.get("location_user");
+    } else {
+      this.request = await this.$axios
+        .get(`/am/free/v2/data/55/800/0/0`)
+        .then((res) => {
+          this.visible = true;
+          if (res.data[0]._data[0].TOWN) {
+            this.city = res.data[0]._data[0].TOWN.replace(/г/gi, "");
+          }
+          if (res.data[0]._data[0].KLADR_ID) {
+            this.kladr = res.data[0]._data[0].KLADR_ID;
+          }
+        });
+    }
   },
   methods: {
     setSearchedCity(result) {
       if (result.data["city"]) {
         this.city = result.data["city"];
       }
-      localStorage.setItem("location_user", this.city);
+      this.kladr = result.data.kladr_id;
+      Cookies.set("kladr_id", this.kladr);
+      Cookies.set("location_user", this.city);
     },
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
       this.city = result.text;
-      localStorage.setItem("location_user", this.city);
+      this.kladr = result.kladr_id;
+      Cookies.set("kladr_id", this.kladr);
+      Cookies.set("location_user", this.city);
     },
     setAutoCity(result) {
       this.visible = false;
-      localStorage.setItem("location_user", result);
+      Cookies.set("kladr_id", this.kladr);
+      Cookies.set("location_user", result);
     },
     showModalSelectCity() {
       this.visible = false;
@@ -149,6 +168,7 @@ export default {
       this.popularCities.sort(compare);
       this.popularCities.unshift({
         id: 1,
+        kladr_id: "7700000000000",
         text: "Москва",
       });
       return this.popularCities;
