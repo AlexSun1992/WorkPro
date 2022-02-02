@@ -15,7 +15,7 @@
         :debounce-time="300"
         :search="search"
         :get-result-value="getResultValue"
-        :default-value="data.value"
+        :default-value="getCurrentValue"
         @submit="handleSubmit"
         @blur="handleBlur"
         :disabled="disabled"
@@ -116,11 +116,11 @@ export default {
 
       return this.group;
     },
+
     getResultValue(item) {
-      // const hideBrandValue = `${item.data.brand_model_code} | ${item.data.brand_model_modification}`;
-      // console.log(hideBrandValue);
       return item.value;
     },
+
     handleSubmit(result) {
       this.input = result.value;
       this.$emit("update", {
@@ -131,16 +131,7 @@ export default {
           : result.value,
       });
     },
-    /* handleSubmit(result) {
-      this.input = result.value;
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.id
-          ? `${result.data[this.id] || ""}|${result.value}`
-          : result.value,
-      });
-    }, */
+
     handleBlur(value) {
       const find = this.group.find((i) =>
         this.$refs.autocomplete?.value.includes(i.value)
@@ -161,6 +152,7 @@ export default {
       }
     },
   },
+
   computed: {
     disabled() {
       return this.$store.getters["data_card/getReadOnly"];
@@ -179,6 +171,12 @@ export default {
       } else {
         return "";
       }
+    },
+    getCurrentValue() {
+      if (this.data.name === "SVEHICLE_MODEL") {
+        return this.data.value.split("|")[1];
+      }
+      return this.data.value;
     },
   },
 };
