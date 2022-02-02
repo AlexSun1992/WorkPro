@@ -249,8 +249,7 @@ export default {
         e = { data: e, text: e.SNAME, value: e.SPOLICY };
       }
 
-      this.selectedItem = e?.data.SNAME || e?.SNAME;
-
+      this.selectedItem = e.text;
       this.queryParamValue = e.value;
       this.visible = false;
       this.setFilter(e);
