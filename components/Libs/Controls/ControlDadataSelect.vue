@@ -173,7 +173,10 @@ export default {
       }
     },
     getCurrentValue() {
-      if (this.data.name === "SVEHICLE_MODEL") {
+      if (
+        this.data.value !== undefined &&
+        this.data.name === "SVEHICLE_MODEL"
+      ) {
         return this.data.value.split("|")[1];
       }
       return this.data.value;
