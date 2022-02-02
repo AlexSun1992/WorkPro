@@ -117,7 +117,7 @@ export default {
       return this.group;
     },
     getResultValue(item) {
-      const hideBrandValue = `${item.data.brand_model_code} | ${item.data.brand_model_modification}`;
+      // const hideBrandValue = `${item.data.brand_model_code} | ${item.data.brand_model_modification}`;
       // console.log(hideBrandValue);
       return item.value;
     },
@@ -130,8 +130,17 @@ export default {
           ? `${result.data[this.id] || ""}|${result.value}`
           : result.value,
       });
-      console.log(result);
     },
+    /* handleSubmit(result) {
+      this.input = result.value;
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.id
+          ? `${result.data[this.id] || ""}|${result.value}`
+          : result.value,
+      });
+    }, */
     handleBlur(value) {
       const find = this.group.find((i) =>
         this.$refs.autocomplete?.value.includes(i.value)
