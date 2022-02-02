@@ -27,7 +27,7 @@ export const cities = [
   {
     id: 7,
     kladr_id: "6600000100000",
-    text: "Екатеренбург",
+    text: "Екатеринбург",
   },
   {
     id: 8,
