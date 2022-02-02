@@ -125,14 +125,14 @@ export default {
   computed: {
     getData: {
       get: function () {
-        if (this.itemId !== null) {
-          const data = this.$store.getters["menu/getMenuById"](
-            this.itemId
-          ).SVJCARDGRID;
-          if (data) {
-            return data;
-          }
-        }
+        // if (this.itemId !== null) {
+        //   const data = this.$store.getters["menu/getMenuById"](
+        //     this.itemId
+        //   ).SVJCARDGRID;
+        //   if (data) {
+        //     return data;
+        //   }
+        // }
       },
     },
     isEmptyContent: {
@@ -189,42 +189,41 @@ export default {
         }
       }
 
-      if (
-        this.list?.length >  &&
-        this.getData !== undefined &&
-        this.getData !== null
-      ) {
-        this.openList();
-      }
-
-      if (
-        this.list?.length === 1 &&
-        this.getData !== undefined &&
-        this.getData !== null
-      ) {
-        if (this.list[0]?.data) {
-          this.update(this.list[0]);
-        }
-      }
-
       // if (
-      //   (this.list[0]?.hasOwnProperty("data") &&
-      //     this.list.length === 1 &&
-      //     this.getData === undefined) ||
-      //   this.getData === null
+      //   this.list.length > 1 &&
+      //   this.getData !== undefined &&
+      //   this.getData !== null
       // ) {
-      //   this.firstValueFromList = this.list[0];
-      //   console.log(this.firstValueFromList);
+      //   this.openList();
       // }
 
       // if (
-      //   (this.list[0]?.hasOwnProperty("data") &&
-      //     this.list.length > 2 &&
-      //     this.getData === undefined) ||
-      //    this.getData === null
+      //   this.list.length === 2 &&
+      //   this.getData !== undefined &&
+      //   this.getData !== null
       // ) {
-      //   this.InsuredPersonsList = this.list;
+      //   if (this.list[0]?.data) {
+      //     this.update(this.list[0]);
+      //   }
       // }
+
+      if (
+        (this.list[0]?.hasOwnProperty("data") &&
+          this.list.length === 1 &&
+          this.getData === undefined) ||
+        this.getData === null
+      ) {
+        this.firstValueFromList = this.list[0];
+        console.log(this.firstValueFromList);
+      }
+
+      if (
+        (this.list.length > 2 && this.getData === undefined) ||
+        this.getData === null
+      ) {
+        console.log("!!!");
+        this.InsuredPersonsList = this.list;
+      }
     },
 
     setFilter(e) {
@@ -259,15 +258,13 @@ export default {
     },
 
     update(e) {
-      console.log(e);
-
-      console.log(this.selectedItem);
+      this.selectedItem = e.SNAME;
       // if (this.getData !== null || this.getData !== undefined) {
       //   e = { data: e, text: e.SNAME, value: e.SPOLICY };
       // } else {
       //   e = e;
       // }
-      this.selectedItem = e.text;
+      // this.selectedItem = e.text;
       console.log(e);
       this.queryParamValue = e.value;
       this.visible = false;
