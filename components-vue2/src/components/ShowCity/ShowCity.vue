@@ -115,6 +115,12 @@ export default {
           if (res.data[0]._data[0].KLADR_ID) {
             this.kladr = res.data[0]._data[0].KLADR_ID;
           }
+          if (!res.data[0]._data[0].TOWN) {
+            this.city = "Москва";
+          }
+          if (!res.data[0]._data[0].KLADR_ID) {
+            this.kladr = "7700000000000";
+          }
         });
     }
   },
@@ -124,20 +130,20 @@ export default {
         this.city = result.data["city"];
       }
       this.kladr = result.data.kladr_id;
-      Cookies.set("kladr_id", this.kladr);
-      Cookies.set("location_user", this.city);
+      document.cookie = `kladr_id=${this.kladr}`;
+      document.cookie = `location_user=${this.city}`;
     },
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
       this.city = result.text;
       this.kladr = result.kladr_id;
-      Cookies.set("kladr_id", this.kladr);
-      Cookies.set("location_user", this.city);
+      document.cookie = `kladr_id=${this.kladr}`;
+      document.cookie = `location_user=${this.city}`;
     },
     setAutoCity(result) {
       this.visible = false;
-      Cookies.set("kladr_id", this.kladr);
-      Cookies.set("location_user", result);
+      document.cookie = `kladr_id=${this.kladr}`;
+      document.cookie = `location_user=${result}`;
     },
     showModalSelectCity() {
       this.visible = false;
