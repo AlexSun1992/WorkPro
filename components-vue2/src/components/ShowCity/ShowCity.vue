@@ -130,20 +130,20 @@ export default {
         this.city = result.data["city"];
       }
       this.kladr = result.data.kladr_id;
-      document.cookie = `kladr_id=${this.kladr}`;
-      document.cookie = `location_user=${this.city}`;
+      Cookies.set("kladr_id", this.kladr);
+      Cookies.set("location_user", this.city);
     },
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
       this.city = result.text;
       this.kladr = result.kladr_id;
-      document.cookie = `kladr_id=${this.kladr}`;
-      document.cookie = `location_user=${this.city}`;
+      Cookies.set("kladr_id", this.kladr);
+      Cookies.set("location_user", this.city);
     },
     setAutoCity(result) {
       this.visible = false;
-      document.cookie = `kladr_id=${this.kladr}`;
-      document.cookie = `location_user=${result}`;
+      Cookies.set("kladr_id", this.kladr);
+      Cookies.set("location_user", result);
     },
     showModalSelectCity() {
       this.visible = false;
