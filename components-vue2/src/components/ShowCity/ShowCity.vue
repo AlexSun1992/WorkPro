@@ -112,6 +112,9 @@ export default {
           if (res.data[0]._data[0].TOWN) {
             this.city = res.data[0]._data[0].TOWN.replace(/г/gi, "");
           }
+          if (res.data[0]._data[0].KLADR_ID) {
+            this.kladr = res.data[0]._data[0].KLADR_ID;
+          }
           if (!res.data[0]._data[0].TOWN) {
             this.city = "Москва";
           }
