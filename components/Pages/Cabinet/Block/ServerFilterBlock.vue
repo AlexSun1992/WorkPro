@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="getData">
+    <div v-if="isShowAsTemplate === true">
       <b-form-group>
         <b-input
           aria-controls="collapse-4"
@@ -24,7 +24,7 @@
         </b-collapse>
       </b-form-group>
     </div>
-    <div v-else>
+    <div v-if="isShowAsTemplate === false">
       <Multiselect
         v-if="list"
         :list="list"
@@ -69,6 +69,11 @@ export default {
       type: Object,
       required: false,
       default: () => {},
+    },
+    isShowAsTemplate: {
+      type: Boolean,
+      required: false,
+      default: () => false,
     },
     queryParamName: {
       type: String,
@@ -189,13 +194,22 @@ export default {
         }
       }
 
-      if (this.list?.length > 0) {
-        this.openList();
+      if (this.list.length === 1 && this.isShowAsTemplate === false) {
+        this.firstValueFromList = this.list[0];
+      }
+
+      if (this.list.length > 1 && this.isShowAsTemplate === false) {
         this.InsuredPersonsList = this.list;
       }
 
-      if (this.list[0]?.hasOwnProperty("data") && this.list.length === 1) {
-        this.firstValueFromList = this.list[0];
+      if (this.list.length > 1 && this.isShowAsTemplate === true) {
+        this.openList();
+      }
+
+      if (this.list.length === 1 && this.isShowAsTemplate === true) {
+        if (this.list[0]?.data) {
+          this.update(this.list[0]);
+        }
       }
     },
 
@@ -231,12 +245,12 @@ export default {
     },
 
     update(e) {
-      this.selectedItem = e.SNAME;
-      if (this.getData) {
+      if (!e?.text && !e?.value && this.isShowAsTemplate) {
         e = { data: e, text: e.SNAME, value: e.SPOLICY };
-      } else {
-        e = e;
       }
+
+      this.selectedItem = e?.data.SNAME || e?.SNAME;
+
       this.queryParamValue = e.value;
       this.visible = false;
       this.setFilter(e);
