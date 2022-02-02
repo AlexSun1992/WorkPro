@@ -24,7 +24,7 @@
         </b-collapse>
       </b-form-group>
     </div>
-    <div v-else>
+    <div v-if="!getData">
       <Multiselect
         v-if="list"
         :list="list"
@@ -189,14 +189,42 @@ export default {
         }
       }
 
-      if (this.list?.length > 0) {
+      if (
+        this.list?.length >  &&
+        this.getData !== undefined &&
+        this.getData !== null
+      ) {
         this.openList();
-        this.InsuredPersonsList = this.list;
       }
 
-      if (this.list[0]?.hasOwnProperty("data") && this.list.length === 1) {
-        this.firstValueFromList = this.list[0];
+      if (
+        this.list?.length === 1 &&
+        this.getData !== undefined &&
+        this.getData !== null
+      ) {
+        if (this.list[0]?.data) {
+          this.update(this.list[0]);
+        }
       }
+
+      // if (
+      //   (this.list[0]?.hasOwnProperty("data") &&
+      //     this.list.length === 1 &&
+      //     this.getData === undefined) ||
+      //   this.getData === null
+      // ) {
+      //   this.firstValueFromList = this.list[0];
+      //   console.log(this.firstValueFromList);
+      // }
+
+      // if (
+      //   (this.list[0]?.hasOwnProperty("data") &&
+      //     this.list.length > 2 &&
+      //     this.getData === undefined) ||
+      //    this.getData === null
+      // ) {
+      //   this.InsuredPersonsList = this.list;
+      // }
     },
 
     setFilter(e) {
@@ -231,12 +259,16 @@ export default {
     },
 
     update(e) {
-      this.selectedItem = e.SNAME;
-      if (this.getData) {
-        e = { data: e, text: e.SNAME, value: e.SPOLICY };
-      } else {
-        e = e;
-      }
+      console.log(e);
+
+      console.log(this.selectedItem);
+      // if (this.getData !== null || this.getData !== undefined) {
+      //   e = { data: e, text: e.SNAME, value: e.SPOLICY };
+      // } else {
+      //   e = e;
+      // }
+      this.selectedItem = e.text;
+      console.log(e);
       this.queryParamValue = e.value;
       this.visible = false;
       this.setFilter(e);
