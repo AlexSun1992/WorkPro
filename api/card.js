@@ -4,17 +4,17 @@ import menuConverter from "../converters/menu";
 import filterConverter from "../converters/filter";
 import freeMethodsConverter from "../converters/forfreemethods";
 import consts from "./urls";
+import { axios } from "./api";
 
-const express = require("express");
-
-const app = express();
-const axios = require("axios");
 const cookieParser = require("cookie-parser");
+const express = require("express");
+const app = express();
+const router = express.Router();
 
-app.use(express.json());
-app.use(cookieParser());
+router.use(express.json());
+router.use(cookieParser());
 
-app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
+router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.referer) {
@@ -62,7 +62,7 @@ app.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
     res.send(e);
   }
 });
-app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
+router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.referer) {
@@ -87,7 +87,6 @@ app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
-        // res.send(formConverter.form(resp.data, req.params.idItem))
         res.send(
           await formConverter.form(resp.data, { ...req.query, ...req.params })
         );
@@ -105,7 +104,7 @@ app.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
     res.send(e);
   }
 });
-app.get("/osago", (req, res) => {
+router.get("/osago", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     axios({
@@ -130,7 +129,7 @@ app.get("/osago", (req, res) => {
   }
 });
 
-app.get("/card/js/:idModule/:idItem", (req, res) => {
+router.get("/card/js/:idModule/:idItem", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.referer) {
@@ -182,7 +181,7 @@ app.get("/card/js/:idModule/:idItem", (req, res) => {
   }
 });
 
-app.get("/file/:idReport/:idCard", (req, res) => {
+router.get("/file/:idReport/:idCard", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     axios.defaults.headers.common.Authorization = null;
@@ -219,7 +218,7 @@ app.get("/file/:idReport/:idCard", (req, res) => {
     res.send(e);
   }
 });
-app.post(
+router.post(
   "/card/actionexec/:rowId/:actionId/:relId?/:relActionId",
   (req, res) => {
     try {
@@ -259,7 +258,7 @@ app.post(
   }
 );
 
-app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
+router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.referer) {
@@ -281,7 +280,6 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       }
     }
     const typeReq = req.params.id === 0 ? "post" : "put";
-    console.log(JSON.stringify(formConverter.save(req.body), null, 2));
     axios[typeReq](
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
         req.params.idModule
@@ -305,7 +303,7 @@ app.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   }
 });
 
-app.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
+router.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.authorization) {
@@ -326,6 +324,5 @@ app.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
 });
 
 module.exports = {
-  path: "/api",
-  handler: app,
+  routerCard: router,
 };

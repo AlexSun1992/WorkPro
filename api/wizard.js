@@ -1,17 +1,18 @@
 /* eslint-disable */
 import listConverter from "../converters/list";
-import formConverter from "../converters/form";
 import consts from "../api/urls";
 
+import { axios } from "./api";
+
+const cookieParser = require("cookie-parser");
 const express = require("express");
 const app = express();
-const axios = require("axios");
-const cookieParser = require("cookie-parser");
+const router = express.Router();
 
-app.use(express.json());
-app.use(cookieParser());
+router.use(express.json());
+router.use(cookieParser());
 
-app.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
+router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.authorization) {
@@ -54,6 +55,5 @@ app.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
 });
 
 module.exports = {
-  path: "/api",
-  handler: app,
+  routerWizard: router,
 };
