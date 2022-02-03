@@ -10,7 +10,7 @@
     <slot><div v-text="action.SNAME"></div></slot>
     <b-modal
       v-if="!action.LHIDEDLG"
-      @close="$emit('update')"
+      @close="$bvModal.hide(String(rowId))"
       modal-class="cabinet"
       :id="String(rowId)"
       @ok="executeAction"
@@ -24,7 +24,7 @@
           ? insideContent
           : `Вы действительно хотите выполнить действие "${action.SNAME}"?`
       }}
-      <b-button class="mt-3 cancel" block @click="$emit('update')"
+      <b-button class="mt-3 cancel" block @click="$bvModal.hide(String(rowId))"
         >Нет</b-button
       >
     </b-modal>
