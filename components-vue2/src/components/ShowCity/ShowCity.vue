@@ -111,15 +111,19 @@ export default {
           this.visible = true;
           if (res.data[0]._data[0].TOWN) {
             this.city = res.data[0]._data[0].TOWN.replace(/г/gi, "");
+            Cookies.set("location_user", this.city);
           }
           if (res.data[0]._data[0].KLADR_ID) {
             this.kladr = res.data[0]._data[0].KLADR_ID;
+            Cookies.set("kladr_id", this.kladr);
           }
           if (!res.data[0]._data[0].TOWN) {
             this.city = "Москва";
+            Cookies.set("location_user", this.city);
           }
           if (!res.data[0]._data[0].KLADR_ID) {
             this.kladr = "7700000000000";
+            Cookies.set("kladr_id", this.kladr);
           }
         });
     }
