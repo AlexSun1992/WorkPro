@@ -38,6 +38,7 @@ export default {
     async logout() {
       try {
         await this.$auth.logout();
+        localStorage.removeItem("USER_INFO");
         window.$nuxt.$cookiz?.remove("url");
         window.location.href = "/";
       } catch (e) {

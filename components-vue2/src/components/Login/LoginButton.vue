@@ -131,6 +131,7 @@ export default {
         Cookies.set(TOKEN_NAME, "false");
         Cookies.set(REFRESH_TOKEN_NAME, "false");
         localStorage.setItem("auth._token.local", "false");
+        localStorage.removeItem("USER_INFO");
         this.$store.commit("auth/setLogged", false);
         this.$store.commit("auth/setUser", null);
       }
