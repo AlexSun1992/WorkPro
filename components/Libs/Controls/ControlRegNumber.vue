@@ -102,6 +102,7 @@ export default {
       default: () => false,
     },
   },
+
   methods: {
     numberUpdateValue() {
       let setValue = null;
