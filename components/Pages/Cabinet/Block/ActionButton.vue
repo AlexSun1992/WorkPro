@@ -73,6 +73,13 @@ export default {
   methods: {
     async executeAction() {
       try {
+        console.log("Пытаюсь выполнить!");
+        console.log("relId:", this.relId);
+        console.log("relActionId:", this.relActionId);
+        console.log("actionId:", this.actionId);
+        console.log("rowId:", this.rowId);
+        console.log("itemId:", this.action.NITEM);
+        console.log("body:", this.body);
         await this.$store.dispatch("blocks/executeAction", {
           relId: this.relId,
           relActionId: this.action.REL,
@@ -81,7 +88,14 @@ export default {
           itemId: this.action.NITEM,
           body: this.body,
         });
+        console.log("сделал запрос");
         if (!this.getUrlAddress) {
+          console.log("Нет адреса");
+          console.log("id:", this.$route.params.idItem);
+          console.log(
+            "query:",
+            JSON.stringify(this.$store.getters["blocks/getServerFilters"])
+          );
           await this.$store.dispatch("blocks/fetchBlock", {
             id: this.$route.params.idItem,
             query: {
