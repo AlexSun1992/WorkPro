@@ -2,30 +2,31 @@
 import listConverter from "../converters/list";
 import formConverter from "../converters/form";
 import consts from "../api/urls";
+import { axios } from "./api";
 
 const express = require("express");
 const app = express();
-const axios = require("axios");
 const cookieParser = require("cookie-parser");
+const router = express.Router();
 
 const bodyParser = require("body-parser");
-app.use(
+router.use(
   bodyParser.json({
     limit: "50mb",
   })
 );
-app.use(
+router.use(
   bodyParser.urlencoded({
     limit: "50mb",
     parameterLimit: 100000,
     extended: true,
   })
 );
-app.use(express.json({ limit: "50mb" }));
+router.use(express.json({ limit: "50mb" }));
 
-app.use(cookieParser());
+router.use(cookieParser());
 
-app.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
+router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.referer) {
@@ -61,6 +62,7 @@ app.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
         res.send(listConverter.list(resp.data));
       })
       .catch((err) => {
+        console.log(err);
         if (err?.response?.data.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
@@ -70,11 +72,12 @@ app.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
         }
       });
   } catch (e) {
+    console.log(e);
     res.send(e);
   }
 });
 
-app.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
+router.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.authorization) {
@@ -104,7 +107,7 @@ app.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
   }
 });
 
-app.get("/wizardlist/:idModule/:idWizard/:idItem", (req, res) => {
+router.get("/wizardlist/:idModule/:idWizard/:idItem", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.authorization) {
@@ -131,6 +134,5 @@ app.get("/wizardlist/:idModule/:idWizard/:idItem", (req, res) => {
 });
 
 module.exports = {
-  path: "/api",
-  handler: app,
+  routerList: router,
 };

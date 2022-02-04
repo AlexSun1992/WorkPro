@@ -1,18 +1,20 @@
 import converter from "../converters/menu";
 import consts from "../api/urls";
 
+import { axios } from "./api";
+
+const cookieParser = require("cookie-parser");
 const express = require("express");
 const app = express();
-const axios = require("axios");
-const cookieParser = require("cookie-parser");
+const router = express.Router();
 
-app.use(express.json());
-app.use(cookieParser());
+router.use(express.json());
+router.use(cookieParser());
 
 const modules = {};
 const menu = {};
 
-app.get("/module", (req, res) => {
+router.get("/module", (req, res) => {
   try {
     axios.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.referer) {
@@ -72,6 +74,5 @@ app.get("/module", (req, res) => {
 });
 
 module.exports = {
-  path: "/api",
-  handler: app,
+  routerConfigurator: router,
 };
