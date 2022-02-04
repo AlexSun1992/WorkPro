@@ -81,6 +81,7 @@ export const actions = {
       });
   },
   async deleteForm({ commit, dispatch }, { moduleId, menuId, itemId, relId }) {
+    console.log("я здесь");
     await this.$axios
       .delete(
         `/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${
@@ -114,8 +115,10 @@ export const actions = {
       });
   },
   async fetchBlock({ commit, dispatch }, params) {
+    console.log("Вызов метода fethcBlock");
     let url;
     const urlJsonFilters = JSON.stringify(params.query);
+    console.log("rlJsonFilters:", urlJsonFilters);
     if (!params.zone) {
       url = `/api/list/55/${params.id}/${encodeURIComponent(urlJsonFilters)}`;
     } else {
@@ -124,6 +127,7 @@ export const actions = {
       )}?zone=free`;
     }
     await this.$axios.get(url).then((res) => {
+      console.log(res);
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });
   },
@@ -157,17 +161,34 @@ export const actions = {
     { commit, dispatch, getters },
     { relId, relActionId, rowId, itemId, actionId, body }
   ) {
+    console.log("executeAction:");
+    console.log("relId:", relId);
+    console.log("relActionId:", relActionId);
+    console.log("rowId:", rowId);
+    console.log("itemId:", itemId);
+    console.log("actionId", actionId);
+    console.log("body", body);
+    console.log("запрос начался axios");
     await this.$axios
       .post(
         `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
         body || {}
       )
       .then(async (resp) => {
+        console.log(resp);
         commit("setPoutValue", resp.data.POUTVALUE);
-        if (resp.data.POUTVALUE) return;
-        if (body) return;
+        if (resp.data.POUTVALUE) {
+          console.log(resp.data.POUTVALUE);
+          return;
+        }
+        if (body) {
+          console.log(body);
+          return;
+        }
+        console.log("вызываю метод updateBlock:", itemId);
         dispatch("updateBlock", itemId);
       });
+    console.log("запрос закончен axios");
   },
 };
 
