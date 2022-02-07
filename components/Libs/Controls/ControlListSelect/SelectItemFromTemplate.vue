@@ -77,14 +77,6 @@ export default {
     }
   },
 
-  created() {
-    console.log("itemId:", this.itemId);
-    console.log("name:", this.name);
-    console.log("isButtonRender:", this.isButtonRender);
-    console.log("isEmpty:", this.isEmpty);
-    console.log("data:", this.data);
-  },
-
   computed: {
     dataContent: {
       get: function () {
