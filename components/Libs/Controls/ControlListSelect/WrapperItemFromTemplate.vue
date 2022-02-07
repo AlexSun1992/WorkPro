@@ -63,15 +63,6 @@ export default {
     },
   },
 
-  created() {
-    console.log("itemId:", this.itemId);
-    console.log("name:", this.name);
-    console.log("isButtonRender:", this.isButtonRender);
-    console.log("isEmpty:", this.isEmpty);
-    console.log("data:", this.data);
-    console.log("template:", this.template);
-  },
-
   computed: {
     isEmptyContent: {
       get: function () {
