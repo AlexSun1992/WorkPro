@@ -3,25 +3,29 @@
     <slot name="rowData" v-bind:content="dataContent.items"></slot>
     <slot name="data" v-for="item in dataContent.items" v-bind:content="item">
     </slot>
-    <slot :update="update" v-bind:content="dataContent.items"> </slot>
+    <slot :update="update" v-bind:content="dataContent.items"></slot>
+    <b-spinner v-if="!dataContent.items"></b-spinner>
   </div>
 </template>
 
 <script>
 import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
 import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
+import Loader from "./Loader.vue";
 
 export default {
   name: "SelectItemFromTemplate",
   components: {
     FilterBlock,
     ObjectsOnMap,
+    Loader,
   },
 
   data() {
     return {
       visible: false,
       isLoad: false,
+      checkData: null,
     };
   },
   props: {
@@ -71,6 +75,14 @@ export default {
         solid: true,
       });
     }
+  },
+
+  created() {
+    console.log("itemId:", this.itemId);
+    console.log("name:", this.name);
+    console.log("isButtonRender:", this.isButtonRender);
+    console.log("isEmpty:", this.isEmpty);
+    console.log("data:", this.data);
   },
 
   computed: {
