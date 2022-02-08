@@ -1,7 +1,7 @@
 /* eslint-disable */
 import consts from "../api/urls";
 
-import { axios } from "./api";
+import { mobile2Service } from "./../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -13,13 +13,12 @@ router.use(cookieParser());
 
 router.get("/userinfo", async (req, res) => {
   try {
+    const mobile2ServiceInstance = mobile2Service();
     if (req.cookies) {
-      axios.defaults.headers.common.Authorization =
+      mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.cookies["auth._token.local"];
-      // axios.defaults.baseURL = 'https://mobiletest.reso.ru';
-      axios.defaults.baseURL = "https://mobile2.reso.ru";
     }
-    const { data } = await axios.get(`${consts.USERPROFILE}`);
+    const { data } = await mobile2ServiceInstance.get(`${consts.USERPROFILE}`);
     res.send(data);
   } catch (err) {
     if (err?.response.status === 401) {

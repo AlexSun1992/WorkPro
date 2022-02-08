@@ -1,7 +1,7 @@
 import converter from "../converters/menu";
 import consts from "../api/urls";
 
-import { axios } from "./api";
+import axios from "axios";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
