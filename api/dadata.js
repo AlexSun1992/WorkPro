@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { axios } from "./api";
+import { mobile2Service } from "./../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -12,7 +12,8 @@ router.use(cookieParser());
 
 router.post("/suggestions/:address", async (req, res) => {
   try {
-    const { data } = await axios.post(
+    const mobile2ServiceInstance = mobile2Service();
+    const { data } = await mobile2ServiceInstance.post(
       `https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/${req.params.address}`,
       req.body
     );
