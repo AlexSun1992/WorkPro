@@ -10,6 +10,7 @@
           v-model="id"
           @change="update(id, item.text)"
           :checked="item.text == 'Без ограничения'"
+          :disabled="data.readonly === true"
         />
         <label
           :for="item.value"

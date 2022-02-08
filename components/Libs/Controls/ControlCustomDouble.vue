@@ -14,6 +14,7 @@
       class="form-control"
       :class="validClass"
       :placeholder="data.placeholder"
+      :disabled="!edit ? !edit : data.readonly"
       v-model="fieldValue"
       :allowNegative="false"
       :currency="{ suffix: ` ${data.placeholder}` }"

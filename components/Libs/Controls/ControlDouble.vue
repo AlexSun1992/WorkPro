@@ -35,6 +35,7 @@ export default {
   directives: {
     mask: _mask,
   },
+
   props: {
     data: {
       type: Object,

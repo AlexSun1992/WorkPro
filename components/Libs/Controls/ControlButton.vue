@@ -14,6 +14,7 @@
 <script>
 export default {
   name: "ControlButton",
+
   props: {
     data: {
       type: Object,
