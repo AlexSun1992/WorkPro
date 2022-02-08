@@ -12,6 +12,7 @@
     ></template>
     <b-form-input
       :placeholder="data.placeholder"
+      :class="validClass"
       v-model="fieldValue"
       v-mask="data.mask"
       autocomplete="off"
@@ -66,6 +67,13 @@ export default {
               : Number(value),
         });
       },
+    },
+    validClass() {
+      if (this.data.state !== null && this.data.state !== undefined) {
+        return this.data.state === true ? "is-valid" : "is-invalid";
+      } else {
+        return "";
+      }
     },
   },
   methods: {
