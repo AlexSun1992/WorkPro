@@ -2,54 +2,39 @@
 <html lang="">
 
 <head>
-  <meta charset="utf-8" />
-  <meta
-    http-equiv="X-UA-Compatible"
-    content="IE=edge"
-  />
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1.0"
-  />
-  <link
-    rel="icon"
-    href="<%= BASE_URL %>favicon.ico"
-  />
-  <title>
-    <%=
-      htmlWebpackPlugin.options.title
-      %
-    >
-  </title>
-  <style>
-    .login-form {
-      width: 100%;
-    }
-  </style>
-</head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title>
+        <%= htmlWebpackPlugin.options.title % ></title>
+    <style>
+      .login-form {
+        width: 100%;
+      }
+    </style>
+  </head>
 
-<body class="container app_body">
-  <noscript>
-    <strong>We're sorry but <%=
-        htmlWebpackPlugin.options.title
-        %
-      > doesn't work
+  <body class="app_body">
+    <noscript>
+      <strong
+        >We're sorry but <%= htmlWebpackPlugin.options.title % > doesn't work
         properly without JavaScript enabled. Please enable it to
-        continue.</strong>
-  </noscript>
+        continue.</strong
+      >
+    </noscript>
 
-  <link
-    rel="stylesheet"
-    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-    crossorigin="anonymous"
-  />
-  <link
-    rel="stylesheet"
-    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
-  />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
+    />
 
-  
     <!-- <component-card-editor
       zone="token"
            module-id="55"
@@ -58,24 +43,23 @@
             rel="19B4DC3FA9416AFD5B2094CD7BF7DD26"
            />  -->
 
-         <!-- <component-card-editor module-id="55" menu-id="777" /> -->
-         
+    <!-- <component-card-editor module-id="55" menu-id="777" /> -->
+
     <component-login-button></component-login-button>
 
     <component-login-form></component-login-form>
 
-         <!-- <component-dynamic-question-container
+    <!-- <component-dynamic-question-container
          product-id="2"
             is-top="false"
             is-group="true"
           />  -->
 
-  <!-- <component-card-editor
+    <!-- <component-card-editor
       module-id="55"
       menu-id="666"
     /> -->
-  <!-- <component-show-city /> -->
-
-</body>
-
+    <!-- <component-show-city /> -->
+    <component-offices-map />
+  </body>
 </html>
