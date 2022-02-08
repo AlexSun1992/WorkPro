@@ -4,18 +4,20 @@
     @mouseup="removeListener"
     class="map-container mt-3"
   >
-    <h5>Найдите офис рядом с вами</h5>
-    <div class="office-block">
-      <div class="row align-items-center mh-1">
-        <div class="col-6">
-          <input type="text" id="suggest" />
-          <div v-if="suggest && !getOffices">
-            По вашему запросу ничего не найдено. Попробуйте изменить критерии
-            поиска
+    <div class="container">
+      <h5>Найдите офис рядом с вами</h5>
+      <div class="office-block">
+        <div class="row align-items-center mh-1">
+          <div class="col-6">
+            <input type="text" id="suggest" />
+            <div v-if="suggest && !getOffices">
+              По вашему запросу ничего не найдено. Попробуйте изменить критерии
+              поиска
+            </div>
           </div>
-        </div>
-        <div class="col-6">
-          <FilterComponent :filters="filters" @update="filterOffices" />
+          <div class="col-6">
+            <FilterComponent :filters="filters" @update="filterOffices" />
+          </div>
         </div>
       </div>
     </div>
