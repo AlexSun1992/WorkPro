@@ -90,6 +90,12 @@ export default {
     BCollapse,
     BCard,
   },
+  props: {
+    changeCity: {
+      type: Function,
+      required: false,
+    },
+  },
   data() {
     return {
       city: null,
@@ -125,6 +131,9 @@ export default {
             this.kladr = "7700000000000";
             Cookies.set("kladr_id", this.kladr);
           }
+          if (this.city && this.kladr) {
+            this.changeCity({ city: this.city, kladr: this.kladr });
+          }
         });
     }
   },
@@ -136,6 +145,7 @@ export default {
       this.kladr = result.data.kladr_id;
       Cookies.set("kladr_id", this.kladr);
       Cookies.set("location_user", this.city);
+      this.changeCity({ city: this.city, kladr: this.kladr });
     },
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
@@ -143,6 +153,7 @@ export default {
       this.kladr = result.kladr_id;
       Cookies.set("kladr_id", this.kladr);
       Cookies.set("location_user", this.city);
+      this.changeCity({ city: this.city, kladr: this.kladr });
     },
     setAutoCity(result) {
       this.visible = false;

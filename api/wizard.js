@@ -2,7 +2,7 @@
 import listConverter from "../converters/list";
 import consts from "../api/urls";
 
-import { axios } from "./api";
+import { mobile2Service } from "./../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -14,17 +14,18 @@ router.use(cookieParser());
 
 router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
   try {
-    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    const mobile2ServiceInstance = mobile2Service();
     if (req.headers.authorization) {
-      axios.defaults.headers.common.Authorization = req.headers.authorization;
+      mobile2ServiceInstance.defaults.headers.common.Authorization =
+        req.headers.authorization;
     } else {
       if (req.cookies) {
-        axios.defaults.headers.common.Authorization =
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
           req.cookies["auth._token.local"];
       }
     }
     const ID = parseInt(req.params.idCard);
-    const list = await axios.get(
+    const list = await mobile2ServiceInstance.get(
       `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json={"pID":${ID}}`
     );
     const list_data = listConverter.list(list.data);
@@ -34,7 +35,7 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     if (list_data.items.length !== 0) {
       rel = list_data.items[0].REL;
     }
-    card = await axios.get(
+    card = await mobile2ServiceInstance.get(
       `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${ID}` +
         (rel ? `?REL=${rel}` : "")
     );

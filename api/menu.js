@@ -1,6 +1,6 @@
 import consts from "../api/urls";
 
-import { axios } from "./api";
+import { mobile2Service } from "./../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -12,19 +12,20 @@ router.use(cookieParser());
 
 router.get("/menu/:idModule/?:idItem", (req, res) => {
   try {
-    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    const mobile2ServiceInstance = mobile2Service();
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
-        axios.defaults.baseURL = "https://mobiletest.reso.ru";
+        mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");
       }
     }
-    axios.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
-        axios.defaults.headers.common.Authorization = req.headers.authorization;
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
+          req.headers.authorization;
       } else {
         if (req?.cookies["auth._token.local"]) {
-          axios.defaults.headers.common.Authorization =
+          mobile2ServiceInstance.defaults.headers.common.Authorization =
             req?.cookies["auth._token.local"];
         }
       }
@@ -37,7 +38,7 @@ router.get("/menu/:idModule/?:idItem", (req, res) => {
     } else {
       URL_ADDRESSS = encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`);
     }
-    axios({
+    mobile2ServiceInstance({
       url: URL_ADDRESSS,
       method: "GET",
     })
