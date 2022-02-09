@@ -10,12 +10,12 @@
         <div class="card-office-opened">открыт до</div>
       </div>
       <div class="col-12">
-            <button type="button" class="show-maps-balloon">Показать на карте</a>
+            <button type="button" class="show-maps-balloon">Показать на карте</button>
       </div>
     </div>
     <div v-if="office.IDUNDERGROUND.length" class="card-office-undeground">
         <span class="undeground-color"></span><span v-for="(item, index) in office.IDUNDERGROUND" :key="index">
-          {{ item.SNAME }}
+          {{ item.SNAME }}</span>
         <span v-if="office.NDISTANSE" class="card-office-distance">
           {{ office.NDISTANSE.toFixed(1) + " км" }}
         </span>
