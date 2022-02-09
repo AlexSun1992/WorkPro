@@ -81,7 +81,7 @@ export default {
           itemId: this.action.NITEM,
           body: this.body,
         });
-        console.log("сделал запрос");
+
         if (!this.getUrlAddress) {
           await this.$store.dispatch("blocks/fetchBlock", {
             id: this.$route.params.idItem,
