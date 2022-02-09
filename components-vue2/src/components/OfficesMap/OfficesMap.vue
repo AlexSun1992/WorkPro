@@ -5,7 +5,6 @@
     class="map-container mt-3"
   >
     <div class="container">
-      <h5>Найдите офис рядом с вами</h5>
       <div class="office-block">
         <div class="row align-items-center mh-1">
           <div class="col-5">
