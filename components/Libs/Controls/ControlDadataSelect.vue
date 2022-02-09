@@ -18,7 +18,7 @@
         :default-value="getCurrentValue"
         @submit="handleSubmit"
         @blur="handleBlur"
-        :disabled="disabled"
+        :disabled="!edit ? !edit : data.readonly"
       >
       </autocomplete>
       <b-form-invalid-feedback :state="data.state">
@@ -77,6 +77,11 @@ export default {
       type: Object,
       required: true,
       default: () => {},
+    },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false,
     },
   },
   data() {
