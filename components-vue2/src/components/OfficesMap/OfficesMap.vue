@@ -298,7 +298,6 @@ export default {
     },
     getTemplate(agency) {
       return `
-      <div class="offices">
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
@@ -328,8 +327,6 @@ export default {
             </div>
           </div>
         </div>
-      </div>
-
         `;
     },
     combineAgencies(agencies, i, count) {
