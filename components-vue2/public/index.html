@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title><%= htmlWebpackPlugin.options.title % ></title>
+    <title>
+        <%= htmlWebpackPlugin.options.title % ></title>
     <style>
       .login-form {
         width: 100%;
@@ -24,14 +26,39 @@
 
     <link
       rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
+      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
     />
     <link
       rel="stylesheet"
+      type="text/css"
+      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
       href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_main.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_cards_pages.css"
+    />
+    <!--
     <div class="agent-block bg-slider-six">
       <div class="agent-block-dsp">
         Ваш город: <strong class="color-green-one">Владивосток</strong>
@@ -42,18 +69,14 @@
         <a class="btn-light" href="/about/contacts"> Найти на карте</a>
       </div>
     </div>
-
+   
     <component-login-button></component-login-button>
 
     <component-login-form></component-login-form>
 
     <component-show-city></component-show-city>
-
-    <component-card-editor
-    module-id="55"
-    menu-id="777"
-  />
-
+-->
+    <component-offices-map />
   </body>
   <script>
     (function () {
@@ -75,4 +98,3 @@
     })();
   </script>
 </html>
-
