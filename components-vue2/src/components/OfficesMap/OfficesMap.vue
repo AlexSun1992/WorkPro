@@ -297,36 +297,35 @@ export default {
     },
     getTemplate(agency) {
       return `
-<div class="card-body">
-  <h4 class="card-title">${agency.SSHORTNAME}</h4>
-  <div class="card-office-adress row">
-    <div class="col-4">
-      <img  src="">
-    </div>
-    <div class="col-8">
-      <div>${agency.SADDRESS}</div>
-      <div class="card-office-opened">Открыт до</div>
-    </div>
-  </div>
-  <div class="card-office-undeground">
-    <span  class="undeground-color"></span>
-    <span>Ленинский проспект</span>
-    <span class="card-office-distance"> 1.5 км </span>
-  </div>
-  <div class="card-office-time">
-    <button type="button">Режим работы:</button>
-    <div class="card-office-times">${agency.SGRAF}</div>
-  </div>
-  <div class="card-office-contacts">
-    <div class="card-office-phone">
-      <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
-    </div>
-    <div>
-      <a  href="mailto:${agency.SPHONE}" class="card-office-e-mail">${agency.SPHONE}</a>
-    </div>
-  </div>
-</div>
-
+        <div class="card-body">
+          <h4 class="card-title">${agency.SSHORTNAME}</h4>
+          <div class="card-office-adress row">
+            <div class="col-4">
+              <img  src="">
+            </div>
+            <div class="col-8">
+              <div>${agency.SADDRESS}</div>
+              <div class="card-office-opened">Открыт до</div>
+            </div>
+          </div>
+          <div class="card-office-undeground">
+            <span  class="undeground-color"></span>
+            <span>Ленинский проспект</span>
+            <span class="card-office-distance"> 1.5 км </span>
+          </div>
+          <div class="card-office-time">
+            <button type="button">Режим работы:</button>
+            <div class="card-office-times">${agency.SGRAF}</div>
+          </div>
+          <div class="card-office-contacts">
+            <div class="card-office-phone">
+              <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
+            </div>
+            <div>
+              <a  href="mailto:${agency.SPHONE}" class="card-office-e-mail">${agency.SPHONE}</a>
+            </div>
+          </div>
+        </div>
         `;
     },
     combineAgencies(agencies, i, count) {
