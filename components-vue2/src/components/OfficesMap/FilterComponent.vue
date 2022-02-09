@@ -1,6 +1,14 @@
 <template>
-  <div class="filters-container row align-items-center mh-1">
-    <div class="col-lg auto col-12">
+  <div
+    class="
+      filters-container
+      row
+      align-items-center
+      mh-1
+      justify-content-between
+    "
+  >
+    <div class="col-lg-auto col-12">
       <div class="filters row align-items-center mh-1">
         <div
           v-for="(f, i) in filters"
