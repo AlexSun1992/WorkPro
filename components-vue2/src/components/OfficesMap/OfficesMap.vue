@@ -512,35 +512,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-body {
-  margin: 0;
-  padding: 0;
-}
-/*.map {
-  width: 800px;
-  height: 600px;
-}
-select,
-.form-control,
-input {
-  min-width: 500px !important;
-}
-.filters {
-  display: flex;
-}*/
-.tab-pane {
-  position: relative;
-}
-.card {
-  position: absolute;
-  min-width: 400px;
-  min-width: min-content;
-  padding: 15px;
-  & > div {
-    display: flex;
-  }
-}
-
 circle:hover {
   cursor: pointer;
   r: 15;
