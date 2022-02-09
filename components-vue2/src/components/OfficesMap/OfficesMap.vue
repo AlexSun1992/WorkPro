@@ -22,11 +22,21 @@
       </div>
     </div>
     <Notification :notification="notification" />
-    <b-tabs ref="tabs" content-class="mt-3">
-      <b-tab title="На карте" active
+    <b-tabs
+      ref="tabs"
+      content-class="mt-3 office-tab-content"
+      nav-class="office-tabs text-center mt-3"
+      pills
+    >
+      <b-tab title="На карте" active title-item-class="office-on-map"
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
-      <b-tab v-if="tabVisible" @click="getOfficesCount" title="На схеме метро">
+      <b-tab
+        v-if="tabVisible"
+        @click="getOfficesCount"
+        title="На схеме метро"
+        title-item-class="office-on-undeground"
+      >
         <div class="metrowrapper">
           <div>
             <Mosmetro ref="metro" @click="chooseStation" />
@@ -40,7 +50,7 @@
           <ZoomComponent @zoom="zoom" />
         </div>
       </b-tab>
-      <b-tab title="В списке">
+      <b-tab title="В списке" title-item-class="office-on-lists">
         <OfficesList v-if="regionId" :data="getOffices" />
         <div v-else>
           По вашему запросу ничего не найдено. Попробуйте изменить критерии

@@ -1,28 +1,39 @@
 <template>
   <b-card :title="office.SSHORTNAME" class="mb-2">
     <b-card-text>
-      <div class="distance" v-if="office.NDISTANSE">
-        <h4>{{ office.NDISTANSE.toFixed(1) + " км" }}</h4>
+    <div class="card-office-adress row">
+      <div class="col-4">
+        <img src="">
       </div>
-      <div v-if="office.SADDRESS">
-        <strong>Адрес: </strong>{{ office.SADDRESS }}
+      <div class="col-8">
+        <div>{{ office.SADDRESS }}</div>
+        <div>открыт до</div>
       </div>
-      <div v-if="office.SPHONE">
-        <strong>Телефон:</strong> {{ office.SPHONE }}
+      <div class="col-12">
+            <a href="#">Показать на карте</a>
       </div>
-      <div v-if="office.SEMAIL">
-        <strong>Email:</strong> {{ office.SEMAIL }}
-      </div>
-      <div v-if="office.SGRAF">
-        <strong>Режим работы: </strong>{{ office.SGRAF }}
-      </div>
-      <div v-if="office.IDUNDERGROUND.length">
-        <span><strong>Ближайшее метро: </strong></span>
+    </div>
+    <div v-if="office.IDUNDERGROUND.length" class="card-office-undeground">
         <span v-for="(item, index) in office.IDUNDERGROUND" :key="index">
           {{ item.SNAME }}
         </span>
+        <span v-if="office.NDISTANSE" class="card-office-distance">
+          {{ office.NDISTANSE.toFixed(1) + " км" }}
+        </span>
       </div>
-      <a href="#">Схема проезда</a>
+    </div>
+    <div v-if="office.SGRAF" class="card-office-time">
+        <strong>Режим работы:</strong>
+        <div class="card-office-times">{{ office.SGRAF }}</div>
+    </div>
+    <div v-if="office.SGRAF" class="card-office-contacts">
+            <div v-if="office.SPHONE">
+        <strong>Телефон:</strong><a v-bind:href="'tel:'+office.SPHONE">{{ office.SPHONE }}</a>
+      </div>
+      <div v-if="office.SEMAIL">
+        <strong>Email:</strong> <a v-bind:href="'mailto:'+office.SEMAIL">{{ office.SEMAIL }}</a>
+      </div>
+    </div>
     </b-card-text>
   </b-card>
 </template>
@@ -41,8 +52,5 @@ export default {
 </script>
 
 <style scoped>
-.distance {
-  display: flex;
-  justify-content: end;
-}
+
 </style>
