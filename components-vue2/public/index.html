@@ -2,64 +2,78 @@
 <html lang="">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title>
-        <%= htmlWebpackPlugin.options.title % ></title>
-    <style>
-      .login-form {
-        width: 100%;
-      }
-    </style>
-  </head>
+  <meta charset="utf-8" />
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  />
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0"
+  />
+  <link
+    rel="icon"
+    href="<%= BASE_URL %>favicon.ico"
+  />
+  <title>
+    <%=
+      htmlWebpackPlugin.options.title
+      %
+    >
+  </title>
+  <style>
+    .login-form {
+      width: 100%;
+    }
+  </style>
+</head>
 
-  <body class="container app_body">
-    <noscript>
-      <strong
-        >We're sorry but <%= htmlWebpackPlugin.options.title % > doesn't work
+<body class="container app_body">
+  <noscript>
+    <strong>We're sorry but <%=
+        htmlWebpackPlugin.options.title
+        %
+      > doesn't work
         properly without JavaScript enabled. Please enable it to
-        continue.</strong
-      >
-    </noscript>
+        continue.</strong>
+  </noscript>
 
-    <link
-      rel="stylesheet"
-      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_main.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_cards_pages.css"
-    />
+  <link
+    rel="stylesheet"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_main.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_cards_pages.css"
+  />
 
-    <div class="agent-block bg-slider-six">
+  <!-- <div class="agent-block bg-slider-six">
       <div class="agent-block-dsp">
         Ваш город: <strong class="color-green-one">Владивосток</strong>
       </div>
@@ -72,11 +86,14 @@
 
     <component-login-button></component-login-button>
     <component-login-form></component-login-form>
-    <component-show-city></component-show-city>
-    <component-card-editor module-id="55" menu-id="777"></component-card-editor>
-    <component-offices-map></component-offices-map>
-  </body>
-  <script>
+    <component-show-city></component-show-city> -->
+  <component-card-editor
+    module-id="55"
+    menu-id="777"
+  ></component-card-editor>
+  <!-- <component-offices-map></component-offices-map> -->
+</body>
+<!-- <script>
     (function () {
       const fn = async (data) => {
         const region = data.kladr.substring(0, 2);
@@ -94,5 +111,6 @@
       };
       document.querySelector("component-show-city").changeCity = fn;
     })();
-  </script>
+  </script> -->
+
 </html>
