@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="office-pagination">
     <div v-if="totalCount > 1" class="pagination my-4">
       <button class="back mr-2" :disabled="disabledBack" @click="prevPage">
-        &laquo;
+        Назад
       </button>
       <div
         @click="changePageNumber(index)"
@@ -14,7 +14,7 @@
         {{ n }}
       </div>
       <button class="next ml-2" :disabled="disabledNext" @click="nextPage">
-        &raquo;
+        Вперед
       </button>
     </div>
   </div>
@@ -68,22 +68,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.active {
-  background-color: #4caf50;
-  color: white;
-}
-.pagination {
-  display: flex;
-  justify-content: center;
-}
-.number {
-  display: block;
-  padding: 8px 16px;
-  cursor: pointer;
-}
-.back,
-.next {
-  cursor: pointer;
-}
-</style>
+<style scoped></style>
