@@ -48,7 +48,7 @@ export default {
     rowId: {
       type: Number,
       required: false,
-      default: () => 0,
+      default: () => Math.random(),
     },
     body: {
       type: Object | Array,

@@ -62,11 +62,6 @@ export default {
 </script>
 
 <style scoped>
-.offices {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 2vw;
-}
 .empty {
   display: flex;
   justify-content: center;

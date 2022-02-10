@@ -1,18 +1,54 @@
 <template>
   <div>
     <div>
-      <div v-for="(office, index) in offices" :key="index">
-        <div>
-          <strong>{{ office.SSHORTNAME }}</strong>
+      <div
+        v-for="(office, index) in offices"
+        :key="index"
+        class="office-list-containers"
+      >
+        <div class="card-body">
+          <h4 class="card-title">{{ office.SSHORTNAME }}</h4>
+          <div class="card-text">
+            <div class="card-office-adress row">
+              <div class="col-4 px-0">
+                <img src="" />
+              </div>
+              <div class="col-8">
+                <div>{{ office.SADDRESS }}</div>
+                <div class="card-office-opened">открыт до</div>
+              </div>
+              <div class="col-12">
+                <button type="button" class="show-maps-balloon">
+                  Показать на карте
+                </button>
+              </div>
+            </div>
+            <div class="card-office-undeground">
+              <span class="undeground-color"></span>
+              <span> Данных нет (во вью пусто)</span>
+              <span class="card-office-distance"> 0.7 км </span>
+            </div>
+            <div class="card-office-time">
+              <button type="button">Режим работы:</button>
+              <div class="card-office-times">{{ office.SGRAF }}</div>
+            </div>
+            <div class="card-office-contacts">
+              <div class="card-office-phone">
+                <a :href="'tel:' + office.SPHONE">{{ office.SPHONE }}</a>
+              </div>
+              <div>
+                <a
+                  :href="'mailto:' + office.SEMAIL"
+                  class="card-office-e-mail"
+                  >{{ office.SEMAIL }}</a
+                >
+              </div>
+            </div>
+          </div>
         </div>
-        <div>{{ office.SADDRESS }}</div>
-        <div><strong>Тел.:</strong>{{ office.SPHONE }}</div>
-        <div><strong>Email:</strong>{{ office.SEMAIL }}</div>
-        <div><strong>Режим работы:</strong>{{ office.SGRAF }}</div>
-        <hr />
       </div>
     </div>
-    <div @click="$emit('close')" class="btn-close">X</div>
+    <div @click="$emit('close')" class="office-metro-btn-close"></div>
   </div>
 </template>
 
