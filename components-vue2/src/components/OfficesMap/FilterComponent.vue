@@ -8,6 +8,10 @@
       justify-content-between
     "
   >
+    <button class="popup-mobile-close" type="button"></button>
+    <div class="d-lg-none col-12">
+      <div class="popup-mobile-title">Фильтр поиска офисов</div>
+    </div>
     <div class="col-lg-auto col-12">
       <div class="filters row align-items-center mh-1">
         <div
