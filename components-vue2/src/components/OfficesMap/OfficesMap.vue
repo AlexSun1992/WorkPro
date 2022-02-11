@@ -6,15 +6,16 @@
   >
     <div class="container">
       <div class="office-block">
+        <button class="button office-filters">
         <div class="row align-items-center mh-1">
-          <div class="col-5">
+          <div class="col-12 col-lg-5">
             <input type="text" id="suggest" />
             <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
             </div>
           </div>
-          <div class="col-7">
+          <div class="col-12 col-lg-12">
             <FilterComponent :filters="filters" @update="filterOffices" />
           </div>
         </div>
