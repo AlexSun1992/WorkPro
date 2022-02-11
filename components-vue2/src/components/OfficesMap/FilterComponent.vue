@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-auto col-12">
+    <div class="col-lg-auto col-12 position-relative">
       <button
         :disabled="disabled"
         @click="clearFilters"
