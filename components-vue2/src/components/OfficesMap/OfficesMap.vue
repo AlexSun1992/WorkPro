@@ -6,7 +6,7 @@
   >
     <div class="container">
       <div class="office-block">
-        <button class="button office-filters">
+        <button type="button" class="office-filter"></button>
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
             <input type="text" id="suggest" />
@@ -15,7 +15,7 @@
               поиска
             </div>
           </div>
-          <div class="col-12 col-lg-12">
+          <div class="col-12 col-lg-7">
             <FilterComponent :filters="filters" @update="filterOffices" />
           </div>
         </div>
