@@ -5,12 +5,18 @@
 </template>
 
 <script>
+import consts from "@/api/urls";
+
 export default {
   middleware: "guest",
   layout: "CabinetLayout",
   name: "Full",
-  async fetch({ store, route }) {
+  async fetch({ store, route, app }) {
     try {
+      const data = await app.$axios.get(`${consts.USERPROFILE}`);
+      if (data?.data) {
+        app.$auth.setUser(data.data[0]._data[0]);
+      }
       await store.dispatch("menu/fetchMenu", route.params);
       const setting = store.getters["menu/breadcrumbs"].slice(-1).pop();
       if (setting.isCard || setting.isWizard) {
