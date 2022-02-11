@@ -1,7 +1,7 @@
 import selectConverter from "../converters/select";
 import consts from "../api/urls";
 
-import { axios } from "./api";
+import { mobile2Service } from "./../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -13,16 +13,17 @@ router.use(cookieParser());
 
 router.get("/dic/:moduleId/:itemId/:name", (req, res) => {
   try {
-    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    const mobile2ServiceInstance = mobile2Service();
     if (req.headers.authorization) {
-      axios.defaults.headers.common.Authorization = req.headers.authorization;
+      mobile2ServiceInstance.defaults.headers.common.Authorization =
+        req.headers.authorization;
     } else {
       if (req.cookies) {
-        axios.defaults.headers.common.Authorization =
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
           req.cookies["auth._token.local"];
       }
     }
-    axios({
+    mobile2ServiceInstance({
       url: `${consts.DIC}/${req.params.moduleId}/${req.params.itemId}/${req.params.name}`,
       method: "GET",
     })
@@ -44,19 +45,20 @@ router.get("/dic/:moduleId/:itemId/:name", (req, res) => {
 });
 router.get("/dicwf/:fieldId/:valueId", (req, res) => {
   try {
-    axios.defaults.baseURL = "https://mobile2.reso.ru";
-    axios.defaults.headers.common.Authorization = null;
+    const mobile2ServiceInstance = mobile2Service();
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
-        axios.defaults.headers.common.Authorization = req.headers.authorization;
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
+          req.headers.authorization;
       } else {
         if (req?.cookies["auth._token.local"]) {
-          axios.defaults.headers.common.Authorization =
+          mobile2ServiceInstance.defaults.headers.common.Authorization =
             req?.cookies["auth._token.local"];
         }
       }
     }
-    axios({
+    mobile2ServiceInstance({
       url: `${consts.DICWF}/${req.params.fieldId}/${req.params.valueId}`,
       method: "GET",
     })

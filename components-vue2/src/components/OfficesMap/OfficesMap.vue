@@ -5,28 +5,42 @@
     class="map-container mt-3"
   >
     <div class="container">
-      <h5>Найдите офис рядом с вами</h5>
       <div class="office-block">
+        <button type="button" class="office-filter"></button>
         <div class="row align-items-center mh-1">
-          <div class="col-6">
+          <div class="col-12 col-lg-5">
             <input type="text" id="suggest" />
             <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-12 col-lg-7">
             <FilterComponent :filters="filters" @update="filterOffices" />
           </div>
         </div>
       </div>
     </div>
     <Notification :notification="notification" />
-    <b-tabs ref="tabs" content-class="mt-3">
-      <b-tab title="На карте" active
+    <b-tabs
+      ref="tabs"
+      content-class="mt-3 office-tab-content"
+      nav-class="office-tabs text-center mt-3"
+      pills
+    >
+      <b-tab
+        title="На карте"
+        active
+        title-item-class="office-on-map"
+        content-class="maps-block"
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
-      <b-tab v-if="tabVisible" @click="getOfficesCount" title="На схеме метро">
+      <b-tab
+        v-if="tabVisible"
+        @click="getOfficesCount"
+        title="На схеме метро"
+        title-item-class="office-on-undeground"
+      >
         <div class="metrowrapper">
           <div>
             <Mosmetro ref="metro" @click="chooseStation" />
@@ -40,7 +54,7 @@
           <ZoomComponent @zoom="zoom" />
         </div>
       </b-tab>
-      <b-tab title="В списке">
+      <b-tab title="В списке" title-item-class="office-on-lists">
         <OfficesList v-if="regionId" :data="getOffices" />
         <div v-else>
           По вашему запросу ничего не найдено. Попробуйте изменить критерии
@@ -284,13 +298,35 @@ export default {
     },
     getTemplate(agency) {
       return `
-          <strong><span>${agency.SSHORTNAME}</span></strong><br><br>
-          <span>${agency.SADDRESS}</span><br>
-          <strong>Тел.:</strong><span>${agency.SPHONE}</span><br>
-          <strong>Email.:</strong><span>${agency.SPHONE}</span><br>
-          <strong>Режим работы:</strong><br><span>${agency.SGRAF}</span>
-          <br>
-          <hr>
+        <div class="card-body">
+          <h4 class="card-title">${agency.SSHORTNAME}</h4>
+          <div class="card-office-adress row">
+            <div class="col-4">
+              <img  src="">
+            </div>
+            <div class="col-8">
+              <div>${agency.SADDRESS}</div>
+              <div class="card-office-opened">Открыт до</div>
+            </div>
+          </div>
+          <div class="card-office-undeground">
+            <span  class="undeground-color"></span>
+            <span>Ленинский проспект</span>
+            <span class="card-office-distance"> 1.5 км </span>
+          </div>
+          <div class="card-office-time">
+            <button type="button">Режим работы:</button>
+            <div class="card-office-times">${agency.SGRAF}</div>
+          </div>
+          <div class="card-office-contacts">
+            <div class="card-office-phone">
+              <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
+            </div>
+            <div>
+              <a  href="mailto:${agency.SPHONE}" class="card-office-e-mail">${agency.SPHONE}</a>
+            </div>
+          </div>
+        </div>
         `;
     },
     combineAgencies(agencies, i, count) {
@@ -477,35 +513,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-body {
-  margin: 0;
-  padding: 0;
-}
-.map {
-  width: 800px;
-  height: 600px;
-}
-select,
-.form-control,
-input {
-  min-width: 500px !important;
-}
-.filters {
-  display: flex;
-}
-.tab-pane {
-  position: relative;
-}
-.card {
-  position: absolute;
-  min-width: 400px;
-  min-width: min-content;
-  padding: 15px;
-  & > div {
-    display: flex;
-  }
-}
-
 circle:hover {
   cursor: pointer;
   r: 15;

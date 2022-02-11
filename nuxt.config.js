@@ -103,7 +103,8 @@ module.exports = {
     "/main": "https://mobile2.reso.ru",
     "/suggestions": "https://dadata.reso.ru",
   },
-  serverMiddleware: ["~/api/api.js"],
+  // serverMiddleware: ["~/api/api.js"],
+  serverMiddleware: ["~/routes/routes.js"],
   auth: {
     strategies: {
       local: {
