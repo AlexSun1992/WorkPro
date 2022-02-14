@@ -3,7 +3,7 @@
     <b-card-text>
       <div class="card-office-adress row">
         <div class="col-4">
-          <img src="" />
+          <img :src="office.SPATH1" />
         </div>
         <div class="col-8">
           <div>{{ office.SADDRESS }}</div>
