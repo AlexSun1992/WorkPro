@@ -60,7 +60,6 @@ export default {
   methods: {
     getPhones(phones) {
       let phonesArr = phones.split(";");
-      phones.split(";");
       phonesArr.pop();
       return phonesArr;
     },
