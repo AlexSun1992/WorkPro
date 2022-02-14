@@ -6,15 +6,16 @@
   >
     <div class="container">
       <div class="office-block">
+        <button type="button" class="office-filter"></button>
         <div class="row align-items-center mh-1">
-          <div class="col-5">
+          <div class="col-12 col-lg-5">
             <input type="text" id="suggest" />
             <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
             </div>
           </div>
-          <div class="col-7">
+          <div class="col-12 col-lg-7">
             <FilterComponent :filters="filters" @update="filterOffices" />
           </div>
         </div>
@@ -297,36 +298,35 @@ export default {
     },
     getTemplate(agency) {
       return `
-<div class="card-body">
-  <h4 class="card-title">${agency.SSHORTNAME}</h4>
-  <div class="card-office-adress row">
-    <div class="col-4">
-      <img  src="">
-    </div>
-    <div class="col-8">
-      <div>${agency.SADDRESS}</div>
-      <div class="card-office-opened">Открыт до</div>
-    </div>
-  </div>
-  <div class="card-office-undeground">
-    <span  class="undeground-color"></span>
-    <span>Ленинский проспект</span>
-    <span class="card-office-distance"> 1.5 км </span>
-  </div>
-  <div class="card-office-time">
-    <button type="button">Режим работы:</button>
-    <div class="card-office-times">${agency.SGRAF}</div>
-  </div>
-  <div class="card-office-contacts">
-    <div class="card-office-phone">
-      <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
-    </div>
-    <div>
-      <a  href="mailto:${agency.SPHONE}" class="card-office-e-mail">${agency.SPHONE}</a>
-    </div>
-  </div>
-</div>
-
+        <div class="card-body">
+          <h4 class="card-title">${agency.SSHORTNAME}</h4>
+          <div class="card-office-adress row">
+            <div class="col-4">
+              <img  src="">
+            </div>
+            <div class="col-8">
+              <div>${agency.SADDRESS}</div>
+              <div class="card-office-opened">Открыт до</div>
+            </div>
+          </div>
+          <div class="card-office-undeground">
+            <span  class="undeground-color"></span>
+            <span>Ленинский проспект</span>
+            <span class="card-office-distance"> 1.5 км </span>
+          </div>
+          <div class="card-office-time">
+            <button type="button">Режим работы:</button>
+            <div class="card-office-times">${agency.SGRAF}</div>
+          </div>
+          <div class="card-office-contacts">
+            <div class="card-office-phone">
+              <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
+            </div>
+            <div>
+              <a  href="mailto:${agency.SPHONE}" class="card-office-e-mail">${agency.SPHONE}</a>
+            </div>
+          </div>
+        </div>
         `;
     },
     combineAgencies(agencies, i, count) {
@@ -513,35 +513,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-body {
-  margin: 0;
-  padding: 0;
-}
-/*.map {
-  width: 800px;
-  height: 600px;
-}
-select,
-.form-control,
-input {
-  min-width: 500px !important;
-}
-.filters {
-  display: flex;
-}*/
-.tab-pane {
-  position: relative;
-}
-.card {
-  position: absolute;
-  min-width: 400px;
-  min-width: min-content;
-  padding: 15px;
-  & > div {
-    display: flex;
-  }
-}
-
 circle:hover {
   cursor: pointer;
   r: 15;
