@@ -16,9 +16,9 @@ module.exports = {
       "^/suggestions": {
         target: "http://localhost:8000",
       },
-      "^/Branches": {
-        target: "https://www.reso.ru/export/sites_reso",
-      },
+      // "^/Branches": {
+      //   target: "https://www.reso.ru/export/sites_reso",
+      // },
     },
   },
   chainWebpack: (config) => {
