@@ -103,7 +103,6 @@ module.exports = {
     "/main": "https://mobile2.reso.ru",
     "/suggestions": "https://dadata.reso.ru",
   },
-  // serverMiddleware: ["~/api/api.js"],
   serverMiddleware: ["~/routes/routes.js"],
   auth: {
     strategies: {
@@ -134,7 +133,6 @@ module.exports = {
           user: false,
           logout: false,
         },
-        autoFetchUser: false,
       },
     },
     resetOnError: false,

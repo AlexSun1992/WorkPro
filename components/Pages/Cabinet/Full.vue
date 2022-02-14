@@ -14,7 +14,7 @@ export default {
   async fetch({ store, route, app }) {
     try {
       const data = await app.$axios.get(`${consts.USERPROFILE}`);
-      if (data?.data) {
+      if (data?.data && data?.data?.STATUS !== 401) {
         app.$auth.setUser(data.data[0]._data[0]);
       }
       await store.dispatch("menu/fetchMenu", route.params);
@@ -26,7 +26,7 @@ export default {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.log(error?.response);
     }
   },
 };
