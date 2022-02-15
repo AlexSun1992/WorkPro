@@ -28,8 +28,15 @@
       </div>
 
       <div v-if="office.SGRAF" class="card-office-time">
-        <button type="button">Режим работы:</button>
-        <div class="card-office-times">{{ office.SGRAF }}</div>
+        <button type="button" @click="isGrafShown = !isGrafShown">
+          Режим работы:
+        </button>
+
+        <div v-for="(graf, i) in getGrafs(office.SGRAF)" :key="i">
+          <div v-if="isGrafShown">
+            <div>{{ graf }}</div>
+          </div>
+        </div>
       </div>
       <div v-if="office.SGRAF" class="card-office-contacts">
         <div v-for="(phone, i) in getPhones(office.SPHONE)" :key="i">
@@ -59,11 +66,22 @@ export default {
     BCardText,
   },
   props: ["office"],
+  data() {
+    return {
+      isGrafShown: false,
+    };
+  },
   methods: {
     getPhones(phones) {
       let phonesArr = phones.split(";");
       phonesArr.pop();
       return phonesArr;
+    },
+    getGrafs(grafs) {
+      debugger;
+      let grafsArr = grafs.split("\n");
+      grafsArr.pop();
+      return grafsArr;
     },
   },
 };

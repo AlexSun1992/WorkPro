@@ -135,6 +135,11 @@ export default {
     this.getOfficesCount();
   },
   methods: {
+    getPhones(phones) {
+      let phonesArr = phones.split(";");
+      phonesArr.pop();
+      return phonesArr;
+    },
     getOfficesCount() {
       let g = document.getElementsByTagName("g");
       if (g && g[0]) {
@@ -297,7 +302,11 @@ export default {
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getTemplate(agency) {
-      return `
+      let phonesArr = agency.SPHONE.split(";");
+      let grafArr = agency.SGRAF.split("\n");
+      phonesArr.pop();
+      grafArr.pop();
+      let template = `
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
@@ -319,15 +328,33 @@ export default {
             <div class="card-office-times">${agency.SGRAF}</div>
           </div>
           <div class="card-office-contacts">
-            <div class="card-office-phone">
-              <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
-            </div>
+            <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
             <div>
-              <a  href="mailto:${agency.SPHONE}" class="card-office-e-mail">${agency.SPHONE}</a>
+              <a  href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
             </div>
           </div>
-        </div>
-        `;
+        </div>`;
+      template = template.replace(
+        /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
+        () => {
+          let temp = "";
+          grafArr.forEach((graf) => {
+            temp += `<div >${graf}</div>`;
+          });
+          return temp;
+        }
+      );
+      template = template.replace(
+        /<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g,
+        () => {
+          let temp = "";
+          phonesArr.forEach((phone) => {
+            temp += `<div class="card-office-phone"><a href="tel:${phone}">${phone}</a></div>`;
+          });
+          return temp;
+        }
+      );
+      return template;
     },
     combineAgencies(agencies, i, count) {
       let arr = [];
