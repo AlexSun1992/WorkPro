@@ -78,7 +78,6 @@ export default {
       return phonesArr;
     },
     getGrafs(grafs) {
-      debugger;
       let grafsArr = grafs.split("\n");
       grafsArr.pop();
       return grafsArr;
