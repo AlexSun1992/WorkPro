@@ -23,6 +23,7 @@
     </div>
     <!-- <Notification :notification="notification" /> -->
     <b-tabs
+      v-model="currentTab"
       ref="tabs"
       content-class="mt-3 office-tab-content"
       nav-class="office-tabs text-center mt-3"
@@ -30,7 +31,6 @@
     >
       <b-tab
         title="На карте"
-        active
         title-item-class="office-on-map"
         content-class="maps-block"
         ><div ref="map" id="map" class="map"></div
@@ -55,7 +55,7 @@
         </div>
       </b-tab>
       <b-tab title="В списке" title-item-class="office-on-lists">
-        <OfficesList v-if="regionId" :data="getOffices" />
+        <OfficesList v-if="regionId" :data="getOffices" @open="openOnMap" />
         <div v-else>
           По вашему запросу ничего не найдено. Попробуйте изменить критерии
           поиска
@@ -112,6 +112,7 @@ export default {
       oldPosY: null,
       curPosX: null,
       curPosY: null,
+      currentTab: 0,
     };
   },
   async created() {
@@ -135,6 +136,23 @@ export default {
     this.getOfficesCount();
   },
   methods: {
+    openOnMap(e) {
+      this.currentTab = 0;
+      this.updateMap(
+        {
+          center: [e.NLAT, e.NLONG],
+          zoom: 15,
+        },
+        e.SADDRESS,
+        20,
+        false
+      );
+    },
+    getPhones(phones) {
+      let phonesArr = phones.split(";");
+      phonesArr.pop();
+      return phonesArr;
+    },
     getOfficesCount() {
       let g = document.getElementsByTagName("g");
       if (g && g[0]) {
@@ -297,7 +315,11 @@ export default {
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getTemplate(agency) {
-      return `
+      let phonesArr = agency.SPHONE.split(";");
+      let grafArr = agency.SGRAF.split("\n");
+      phonesArr.pop();
+      grafArr.pop();
+      let template = `
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
@@ -319,15 +341,33 @@ export default {
             <div class="card-office-times">${agency.SGRAF}</div>
           </div>
           <div class="card-office-contacts">
-            <div class="card-office-phone">
-              <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
-            </div>
+            <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
             <div>
-              <a  href="mailto:${agency.SPHONE}" class="card-office-e-mail">${agency.SPHONE}</a>
+              <a  href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
             </div>
           </div>
-        </div>
-        `;
+        </div>`;
+      template = template.replace(
+        /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
+        () => {
+          let temp = "";
+          grafArr.forEach((graf) => {
+            temp += `<div >${graf}</div>`;
+          });
+          return temp;
+        }
+      );
+      template = template.replace(
+        /<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g,
+        () => {
+          let temp = "";
+          phonesArr.forEach((phone) => {
+            temp += `<div class="card-office-phone"><a href="tel:${phone}">${phone}</a></div>`;
+          });
+          return temp;
+        }
+      );
+      return template;
     },
     combineAgencies(agencies, i, count) {
       let arr = [];
@@ -397,7 +437,7 @@ export default {
         }
       }
     },
-    updateMap(state, caption) {
+    updateMap(state, caption, zoom = 12, visibility) {
       let placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
@@ -406,10 +446,11 @@ export default {
         },
         {
           preset: "islands#redDotIconWithCaption",
+          visible: visibility,
         }
       );
       this.myMap.geoObjects.add(placemark);
-      this.myMap.setCenter(state.center, 12);
+      this.myMap.setCenter(state.center, zoom);
       placemark.geometry.setCoordinates(state.center);
       placemark.properties.set({
         iconCaption: caption,
