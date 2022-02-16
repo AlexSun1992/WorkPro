@@ -15,24 +15,32 @@ export default {
     },
     title: {
       type: String,
-      required: false,
+      required: true,
       default: () => "",
     },
+    id: {
+      type: Number,
+      required: true,
+      default: () => null,
+    },
   },
+
   methods: {
     addDataToCalendar() {
       for (let i = 0; i < this.data.list.items.length; i++) {
-        this.$ics.addEvent(
-          "RUS",
-          `${this.data.list.items[i].ACTIVENAME}`,
-          `${this.data.list.items[i].SFULLNAME}`,
-          `${this.data.list.items[i].SLPU}`,
-          `${this.data.list.items[i].DDATE}`,
-          `${this.data.list.items[i].DDATE}`
-        );
+        if (this.data.list.items[i].ID === this.id) {
+          this.$ics.addEvent(
+            "RUS",
+            `${this.data.list.items[i].ACTIVENAME}`,
+            `${this.data.list.items[i].SFULLNAME}`,
+            `${this.data.list.items[i].SLPU}`,
+            `${this.data.list.items[i].DDATE}`,
+            `${this.data.list.items[i].DDATE}`
+          );
+          const currentCulendar = this.$ics.calendar();
+          this.$ics.download(currentCulendar);
+        }
       }
-      console.log(this.$ics.calendar());
-      this.$ics.removeAllEvents();
     },
   },
 };
