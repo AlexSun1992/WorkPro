@@ -21,25 +21,17 @@ export default {
   },
   methods: {
     addDataToCalendar() {
-      console.log(this.$ics);
+      for (let i = 0; i < this.data.list.items.length; i++) {
+        this.$ics.addEvent(
+          "RUS",
+          `${this.data.list.items[i].ACTIVENAME}`,
+          `${this.data.list.items[i].SFULLNAME}`,
+          `${this.data.list.items[i].SLPU}`,
+          `${this.data.list.items[i].DDATE}`,
+          `${this.data.list.items[i].DDATE}`
+        );
+      }
       console.log(this.$ics.calendar());
-      console.log(this.data);
-
-      this.$ics.addEvent(
-        "RUS",
-        `${this.data.list.items[0].ACTIVENAME}`,
-        `${this.data.list.items[0].SFULLNAME}`,
-        `${this.data.list.items[0].SLPU}`,
-        `${this.data.list.items[0].DDATE}`,
-        `${this.data.list.items[0].DDATE}`
-      );
-
-      console.log(this.$ics.calendar());
-
-      // for (let i = 0; i < this.data.list.items.length; i++) {
-      //   console.log(this.data.list.items[i]);
-      // }
-
       this.$ics.removeAllEvents();
     },
   },
