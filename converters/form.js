@@ -2,7 +2,7 @@ import moment from "moment/moment";
 import controlConverter from "../converters/control";
 const axios = require("axios");
 import selectConverter from "../converters/select";
-
+axios.defaults.baseURL = "https://mobile2.reso.ru";
 const converter = {};
 
 converter.setArrayOfObjectFields = (itemId, items, fields) => {
@@ -226,6 +226,9 @@ converter.form = async (data, params) => {
   try {
     await Promise.allSettled(promises).then((values) => {
       values.forEach((item, i) => {
+        if (item.status === "rejected") {
+          console.log(item.reason.response.data);
+        }
         if (item.status == "fulfilled" && item.value.data) {
           let options = selectConverter.select(item.value.data);
           const url = item.value.config.url;
@@ -264,7 +267,9 @@ converter.form = async (data, params) => {
         }
       });
     });
-  } catch (e) {}
+  } catch (e) {
+    console.error(e);
+  }
 
   // ********
   return {
