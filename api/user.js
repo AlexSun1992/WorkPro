@@ -21,7 +21,7 @@ router.get("/userinfo", async (req, res) => {
     const { data } = await mobile2ServiceInstance.get(`${consts.USERPROFILE}`);
     res.send(data);
   } catch (err) {
-    if (err?.response.status === 401) {
+    if (err?.response?.status === 401) {
       res.status(200).send(err.response.data);
     } else {
       res.status(500).send(err);

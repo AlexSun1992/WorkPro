@@ -3,15 +3,16 @@ import converter from "@/converters/menu";
 import { getErrorMessage } from "../utils/transform";
 export default function ({ app, store, redirect, $auth }) {
   app.$axios.onResponseError((error) => {
+    if (!error?.response) {
+      redirect(`/login?ref=${app.router.history.current.fullPath}`);
+    }
     if (!error?.response?.config) {
       return;
     }
     if (error.response?.config?.url.includes("/am/auth/v2/token_refresh")) {
       return;
     }
-    if (!error?.response) {
-      return app.router.push("/login");
-    }
+
     const {
       config,
       response: { status },
@@ -19,10 +20,6 @@ export default function ({ app, store, redirect, $auth }) {
     const originalRequest = config;
     if (error.response.status === 401 && !originalRequest.__isRetryRequest) {
       originalRequest.__isRetryRequest = true;
-      if (app.router.history.pending) {
-        app.$cookiz.set("url", app.router.history.pending.fullPath);
-      }
-      //
       return app.$auth
         .refreshTokens()
         .then((data) => {
@@ -34,9 +31,11 @@ export default function ({ app, store, redirect, $auth }) {
                   window.location.href = "/login";
                 }
               } else {
-                redirect("/login");
+                redirect(`/login?ref=${app.router.history.current.fullPath}`);
               }
             }
+          } else {
+            redirect(`/login?ref=${app.router.history.current.fullPath}`);
           }
           return app.$axios(originalRequest);
         })

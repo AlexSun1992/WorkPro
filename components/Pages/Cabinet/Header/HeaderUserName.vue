@@ -1,39 +1,35 @@
 <template>
-<div>
-  <div
-    style="cursor: pointer"
-    :class="'ppl-info percent' + percent + ' ppl-' + sex"
-  >
-    <div @click="goToProfile">
-      <div class="ppl-avatar">
-        <img src="" />
+  <div>
+    <div
+      style="cursor: pointer"
+      :class="'ppl-info percent' + percent + ' ppl-' + sex"
+    >
+      <div @click="goToProfile">
+        <div class="ppl-avatar">
+          <img src="" />
+        </div>
+        <span class="ppl-name">{{ user }}</span>
       </div>
-      <span class="ppl-name">{{ user }}</span>
     </div>
-  </div>
 
-<!-- <div>
+    <!-- <div>
    <span class="ppl-name">{{ user }}</span>
    <p>заполните профиль</p>
-    <ControlProgressbar 
+    <ControlProgressbar
     :profileFullness="loggedInUser">
     </ControlProgressbar>
 </div> -->
-
-
-</div>
+  </div>
 </template>
 
 <script>
-
-import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar"
-import { mapGetters } from 'vuex';
+import ControlProgressbar from "~/components/Libs/Controls/ControlProgressbar";
+import { mapGetters } from "vuex";
 
 export default {
   components: { ControlProgressbar },
   name: "HeaderUserInfo",
   props: ["userData"],
-   
 
   methods: {
     goToProfile() {
@@ -42,23 +38,22 @@ export default {
   },
   computed: {
     user() {
-      if (this.userData && this.userData[0]) {
-        return `${this.userData[0]._data[0].SFIRSTNAME} ${this.userData[0]._data[0].SSECONDNAME}`;
+      if (this.userData) {
+        return `${this.userData.SFIRSTNAME} ${this.userData.SSECONDNAME}`;
       }
     },
     percent() {
-      if (this.userData && this.userData[0]) {
-        return this.userData[0]._data[0].NPROFILEFULLNESS;
+      if (this.userData) {
+        return this.userData.NPROFILEFULLNESS;
       }
     },
     sex() {
-      if (this.userData && this.userData[0]) {
-        return this.userData[0]._data[0].BSEX === 1 ? "male" : "female";
+      if (this.userData) {
+        return this.userData.BSEX === 1 ? "male" : "female";
       }
     },
 
-    ...mapGetters(['loggedInUser'])
-
+    ...mapGetters(["loggedInUser"]),
   },
 };
 </script>

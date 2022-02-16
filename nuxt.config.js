@@ -103,7 +103,6 @@ module.exports = {
     "/main": "https://mobile2.reso.ru",
     "/suggestions": "https://dadata.reso.ru",
   },
-  // serverMiddleware: ["~/api/api.js"],
   serverMiddleware: ["~/routes/routes.js"],
   auth: {
     strategies: {
@@ -129,8 +128,9 @@ module.exports = {
           // login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
           login: { url: "/am/auth/v2/authorize", method: "post" },
           refresh: { url: "/api/token_refresh", method: "post" },
-          // user: { url: 'http://localhost:8000/api/userinfo', method: 'get' },
-          user: { url: "/api/userinfo", method: "get" },
+          //user: { url: "/api/userinfo", method: "get" },
+          //user: { url: "/am/main/v2/userinfo", method: "get" },
+          user: false,
           logout: false,
         },
       },

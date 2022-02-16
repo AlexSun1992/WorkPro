@@ -5,30 +5,34 @@
     class="map-container mt-3"
   >
     <div class="container">
-      <h5>Найдите офис рядом с вами</h5>
       <div class="office-block">
+        <button type="button" class="office-filter"></button>
         <div class="row align-items-center mh-1">
-          <div class="col-5">
+          <div class="col-12 col-lg-5">
             <input type="text" id="suggest" />
             <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
             </div>
           </div>
-          <div class="col-7">
+          <div class="col-12 col-lg-7">
             <FilterComponent :filters="filters" @update="filterOffices" />
           </div>
         </div>
       </div>
     </div>
-    <Notification :notification="notification" />
+    <!-- <Notification :notification="notification" /> -->
     <b-tabs
       ref="tabs"
       content-class="mt-3 office-tab-content"
       nav-class="office-tabs text-center mt-3"
       pills
     >
-      <b-tab title="На карте" active title-item-class="office-on-map"
+      <b-tab
+        title="На карте"
+        active
+        title-item-class="office-on-map"
+        content-class="maps-block"
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
       <b-tab
@@ -131,6 +135,11 @@ export default {
     this.getOfficesCount();
   },
   methods: {
+    getPhones(phones) {
+      let phonesArr = phones.split(";");
+      phonesArr.pop();
+      return phonesArr;
+    },
     getOfficesCount() {
       let g = document.getElementsByTagName("g");
       if (g && g[0]) {
@@ -293,15 +302,59 @@ export default {
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getTemplate(agency) {
-      return `
-          <strong><span>${agency.SSHORTNAME}</span></strong><br><br>
-          <span>${agency.SADDRESS}</span><br>
-          <strong>Тел.:</strong><span>${agency.SPHONE}</span><br>
-          <strong>Email.:</strong><span>${agency.SPHONE}</span><br>
-          <strong>Режим работы:</strong><br><span>${agency.SGRAF}</span>
-          <br>
-          <hr>
-        `;
+      let phonesArr = agency.SPHONE.split(";");
+      let grafArr = agency.SGRAF.split("\n");
+      phonesArr.pop();
+      grafArr.pop();
+      let template = `
+        <div class="card-body">
+          <h4 class="card-title">${agency.SSHORTNAME}</h4>
+          <div class="card-office-adress row">
+            <div class="col-4">
+              <img  src="">
+            </div>
+            <div class="col-8">
+              <div>${agency.SADDRESS}</div>
+              <div class="card-office-opened">Открыт до</div>
+            </div>
+          </div>
+          <div class="card-office-undeground">
+            <span  class="undeground-color"></span>
+            <span>Ленинский проспект</span>
+            <span class="card-office-distance"> 1.5 км </span>
+          </div>
+          <div class="card-office-time">
+            <button type="button">Режим работы:</button>
+            <div class="card-office-times">${agency.SGRAF}</div>
+          </div>
+          <div class="card-office-contacts">
+            <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
+            <div>
+              <a  href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
+            </div>
+          </div>
+        </div>`;
+      template = template.replace(
+        /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
+        () => {
+          let temp = "";
+          grafArr.forEach((graf) => {
+            temp += `<div >${graf}</div>`;
+          });
+          return temp;
+        }
+      );
+      template = template.replace(
+        /<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g,
+        () => {
+          let temp = "";
+          phonesArr.forEach((phone) => {
+            temp += `<div class="card-office-phone"><a href="tel:${phone}">${phone}</a></div>`;
+          });
+          return temp;
+        }
+      );
+      return template;
     },
     combineAgencies(agencies, i, count) {
       let arr = [];
@@ -487,35 +540,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-body {
-  margin: 0;
-  padding: 0;
-}
-/*.map {
-  width: 800px;
-  height: 600px;
-}
-select,
-.form-control,
-input {
-  min-width: 500px !important;
-}
-.filters {
-  display: flex;
-}*/
-.tab-pane {
-  position: relative;
-}
-.card {
-  position: absolute;
-  min-width: 400px;
-  min-width: min-content;
-  padding: 15px;
-  & > div {
-    display: flex;
-  }
-}
-
 circle:hover {
   cursor: pointer;
   r: 15;
