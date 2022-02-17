@@ -21,7 +21,7 @@ import OfferBlock from "../Block/OfferBlock";
 import PolicyBlock from "../Block/PolicyBlock";
 import ContentBlock from "../Block/ContentBlock";
 import ActionButton from "../Block/ActionButton";
-import AddToCalendarButton from "../Block/AddToCalendarButton.vue";
+import AddToCalendarButton from "../Block/AddToCalendarButton/AddToCalendarButton.vue";
 import FormPage from "~/components/Pages/FormPage";
 import OpenCardButton from "../Block/OpenCardButton";
 import VRuntimeTemplate from "v-runtime-template";
