@@ -2,7 +2,7 @@ import moment from "moment/moment";
 import controlConverter from "../converters/control";
 const axios = require("axios");
 import selectConverter from "../converters/select";
-
+axios.defaults.baseURL = "https://mobile2.reso.ru";
 const converter = {};
 
 converter.setArrayOfObjectFields = (itemId, items, fields) => {
@@ -63,6 +63,10 @@ converter.subcompare = (a, b) => {
 };
 
 converter.form = async (data, params) => {
+  const promises = [];
+  const webFieldsArr = [];
+  const errors = [];
+
   let itemId = params.idItem;
   let zone = params?.zone;
   let item = data[0]._data.length ? data[0]._data[0] : {};
@@ -71,11 +75,9 @@ converter.form = async (data, params) => {
   let meta_visible = converter.meta(data[0]?._meta.SVISIBLE) || {};
   let meta_readonly = converter.meta(data[0]?._meta.SREADONLY) || {};
   let arr = converter.setFieldsParams(itemId, item, fields);
-  let webFieldsArr = [];
+
   let webFields = data[0]._meta["JSONWEBFIELDS"];
   webFields = webFields.sort((a, b) => a["NORDER"] - b["NORDER"]);
-
-  let promises = [];
 
   for (let i = 0; i < webFields.length; i++) {
     let obj = {};
@@ -226,6 +228,9 @@ converter.form = async (data, params) => {
   try {
     await Promise.allSettled(promises).then((values) => {
       values.forEach((item, i) => {
+        if (item.status === "rejected") {
+          errors.push(item.reason.response.data);
+        }
         if (item.status == "fulfilled" && item.value.data) {
           let options = selectConverter.select(item.value.data);
           const url = item.value.config.url;
@@ -264,10 +269,16 @@ converter.form = async (data, params) => {
         }
       });
     });
-  } catch (e) {}
+  } catch (e) {
+    console.error(e);
+  }
 
   // ********
+  if (errors.length !== 0) {
+    throw { response: { data: errors } };
+  }
   return {
+    errors: errors,
     // Переход на поля JSONWEBFIELDS
     data: converter.type(arr),
     // Метаданные для отображения JSONWEBFIELDS
