@@ -19,6 +19,7 @@ const CHATS = `/am/main/${VER}/chat/data/chats`;
 const MESSAGESCHAT = `/am/main/${VER}/chat/data/messageschat`;
 const MESSAGECHAT = `/am/main/${VER}/chat/data/messagechat`;
 const USERPROFILE = `/am/main/${VER}/userinfo`;
+const USERBFFPROFILE = `/api/userinfo`;
 const WEBFIELD = `/am/main/${VER}/webfield`;
 const DIC = `/am/main/${VER}/dic`;
 const DICWF = `/am/main/${VER}/dicwf`;
@@ -55,4 +56,5 @@ export default {
   DICWF: DICWF,
   REPORT: REPORT,
   CAPTCHA: CAPTCHA,
+  USERBFFPROFILE: USERBFFPROFILE,
 };

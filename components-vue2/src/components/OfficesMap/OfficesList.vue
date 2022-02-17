@@ -2,7 +2,7 @@
   <div class="container">
     <div v-if="offices && offices.length" class="offices">
       <div v-for="(office, index) in offices" :key="index">
-        <OfficeCard :office="office" />
+        <OfficeCard @open="$emit('open', $event)" :office="office" />
       </div>
     </div>
     <Paginator
@@ -62,11 +62,6 @@ export default {
 </script>
 
 <style scoped>
-.offices {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 2vw;
-}
 .empty {
   display: flex;
   justify-content: center;

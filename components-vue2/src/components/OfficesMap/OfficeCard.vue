@@ -1,38 +1,63 @@
 <template>
   <b-card :title="office.SSHORTNAME" class="mb-2">
     <b-card-text>
-    <div class="card-office-adress row">
-      <div class="col-4">
-        <img src="">
+      <div class="card-office-adress row">
+        <div class="col-4">
+          <img
+            :src="'https://www.reso.ru/export/sites_reso/' + office.SPATH1"
+          />
+        </div>
+        <div class="col-8">
+          <div>{{ office.SADDRESS }}</div>
+          <div :class="[isOpened ? 'card-office-opened' : 'text-danger']">
+            {{ showWorkingHours(office) }}
+          </div>
+        </div>
+        <div class="col-12">
+          <button
+            @click="$emit('open', office)"
+            type="button"
+            class="show-maps-balloon"
+          >
+            Показать на карте
+          </button>
+        </div>
       </div>
-      <div class="col-8">
-        <div>{{ office.SADDRESS }}</div>
-        <div class="card-office-opened">открыт до</div>
-      </div>
-      <div class="col-12">
-            <button type="button" class="show-maps-balloon">Показать на карте</button>
-      </div>
-    </div>
-    <div v-if="office.IDUNDERGROUND.length" class="card-office-undeground">
-        <span class="undeground-color"></span><span v-for="(item, index) in office.IDUNDERGROUND" :key="index">
-          {{ item.SNAME }}</span>
+      <div v-if="office.IDUNDERGROUND.length" class="card-office-undeground">
+        <span class="undeground-color"></span
+        ><span v-for="(item, index) in office.IDUNDERGROUND" :key="index">
+          {{ item.SNAME }}</span
+        >
         <span v-if="office.NDISTANSE" class="card-office-distance">
           {{ office.NDISTANSE.toFixed(1) + " км" }}
         </span>
       </div>
-    </div>
-    <div v-if="office.SGRAF" class="card-office-time">
-        <button type="button">Режим работы:</button>
-        <div class="card-office-times">{{ office.SGRAF }}</div>
-    </div>
-    <div v-if="office.SGRAF" class="card-office-contacts">
-      <div v-if="office.SPHONE" class="card-office-phone">
-        <a v-bind:href="'tel:'+office.SPHONE">{{ office.SPHONE }}</a>
+
+      <div v-if="office.SGRAF" class="card-office-time">
+        <button type="button" @click="isGrafShown = !isGrafShown">
+          Режим работы:
+        </button>
+
+        <div v-for="(graf, i) in getGrafs(office.SGRAF)" :key="i">
+          <div v-if="isGrafShown">
+            <div>{{ graf }}</div>
+          </div>
+        </div>
       </div>
-      <div v-if="office.SEMAIL">
-      <a v-bind:href="'mailto:'+office.SEMAIL" class="card-office-e-mail">{{ office.SEMAIL }}</a>
+      <div v-if="office.SGRAF" class="card-office-contacts">
+        <div v-for="(phone, i) in getPhones(office.SPHONE)" :key="i">
+          <div v-if="office.SPHONE" class="card-office-phone">
+            <a v-bind:href="'tel:' + office.SPHONE">{{ phone }}</a>
+          </div>
+        </div>
+        <div v-if="office.SEMAIL">
+          <a
+            v-bind:href="'mailto:' + office.SEMAIL"
+            class="card-office-e-mail"
+            >{{ office.SEMAIL }}</a
+          >
+        </div>
       </div>
-    </div>
     </b-card-text>
   </b-card>
 </template>
@@ -47,9 +72,57 @@ export default {
     BCardText,
   },
   props: ["office"],
+  data() {
+    return {
+      isGrafShown: false,
+      isOpened: true,
+    };
+  },
+  methods: {
+    getPhones(phones) {
+      let phonesArr = phones.split(";");
+      phonesArr.pop();
+      return phonesArr;
+    },
+    getGrafs(grafs) {
+      let grafsArr = grafs.split("\n");
+      grafsArr.pop();
+      return grafsArr;
+    },
+    showWorkingHours(office) {
+      let dateNow = new Date();
+      let day = dateNow.getDay();
+      let dateEnd = new Date();
+      day = day == 0 ? 7 : day;
+      const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
+      dateEnd.setHours(endHour);
+      dateEnd.setMinutes(endMinute);
+      let str;
+      if (dateNow < dateEnd) {
+        str = `Открыт до ${dateEnd.getHours()}:${
+          dateEnd.getMinutes() == 0
+            ? dateEnd.getMinutes() + "0"
+            : dateEnd.getMinutes()
+        }`;
+      } else if (dateNow > dateEnd && office.GRAF[day]) {
+        str = `Откроется завтра в ${office.GRAF[day].SBEGIN}`;
+      } else if (dateNow > dateEnd && !office.GRAF[day]) {
+        this.isOpened = false;
+        dateNow.setDate(
+          dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+        );
+        str =
+          "Закрыт до " +
+          ("0" + dateNow.getDate()).slice(-2) +
+          "." +
+          ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+          "." +
+          dateNow.getFullYear();
+      }
+      return str;
+    },
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

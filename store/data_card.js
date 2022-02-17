@@ -201,6 +201,7 @@ export const actions = {
           commit("setCardCaption", res.data.metaData.cardCaption);
         })
         .catch((error) => {
+          console.log(error.response.data);
           commit("setError", true);
           commit("setErrorMessage", error.response.data);
         });
