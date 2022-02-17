@@ -2,7 +2,7 @@
   <div class="container">
     <div v-if="offices && offices.length" class="offices">
       <div v-for="(office, index) in offices" :key="index">
-        <OfficeCard :office="office" />
+        <OfficeCard @open="$emit('open', $event)" :office="office" />
       </div>
     </div>
     <Paginator

@@ -130,6 +130,7 @@ export default {
       this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
       this.isShowButtonSave = true;
     } catch (e) {
+      console.log(e);
       this.$store.commit("data_card/setLoading", false);
       this.$store.commit("data_card/setDisabled", false);
       this.$store.commit("data_card/setSavedError", true);

@@ -46,16 +46,18 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
-        res.send(
-          await formConverter.form(resp.data, { ...req.query, ...req.params })
-        );
+        const data = await formConverter.form(resp.data, {
+          ...req.query,
+          ...req.params,
+        });
+        res.send(data);
       })
       .catch((err) => {
-        if (err?.response?.data.STATUS == 401) {
+        if (err?.response?.data?.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
           res
-            .status(err?.response?.data.STATUS || 500)
+            .status(err?.response?.data?.STATUS || 500)
             .send(err?.response?.data || err);
         }
       });
@@ -89,9 +91,11 @@ router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
-        res.send(
-          await formConverter.form(resp.data, { ...req.query, ...req.params })
-        );
+        const data = await formConverter.form(resp.data, {
+          ...req.query,
+          ...req.params,
+        });
+        res.send(data);
       })
       .catch((err) => {
         if (err?.response?.data.STATUS == 401) {

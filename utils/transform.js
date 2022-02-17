@@ -6,6 +6,9 @@ const getErrorMessage = (data) => {
   if (data?.MESSAGE) {
     return data?.MESSAGE;
   }
+  if (Array.isArray(data)) {
+    return JSON.stringify(data);
+  }
   return null;
 };
 export { getErrorMessage };

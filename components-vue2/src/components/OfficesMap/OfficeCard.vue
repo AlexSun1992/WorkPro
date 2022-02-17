@@ -9,10 +9,16 @@
         </div>
         <div class="col-8">
           <div>{{ office.SADDRESS }}</div>
-          <div class="card-office-opened">открыт до</div>
+          <div :class="[isOpened ? 'card-office-opened' : 'text-danger']">
+            {{ showWorkingHours(office) }}
+          </div>
         </div>
         <div class="col-12">
-          <button type="button" class="show-maps-balloon">
+          <button
+            @click="$emit('open', office)"
+            type="button"
+            class="show-maps-balloon"
+          >
             Показать на карте
           </button>
         </div>
@@ -69,6 +75,7 @@ export default {
   data() {
     return {
       isGrafShown: false,
+      isOpened: true,
     };
   },
   methods: {
@@ -81,6 +88,38 @@ export default {
       let grafsArr = grafs.split("\n");
       grafsArr.pop();
       return grafsArr;
+    },
+    showWorkingHours(office) {
+      let dateNow = new Date();
+      let day = dateNow.getDay();
+      let dateEnd = new Date();
+      day = day == 0 ? 7 : day;
+      const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
+      dateEnd.setHours(endHour);
+      dateEnd.setMinutes(endMinute);
+      let str;
+      if (dateNow < dateEnd) {
+        str = `Открыт до ${dateEnd.getHours()}:${
+          dateEnd.getMinutes() == 0
+            ? dateEnd.getMinutes() + "0"
+            : dateEnd.getMinutes()
+        }`;
+      } else if (dateNow > dateEnd && office.GRAF[day]) {
+        str = `Откроется завтра в ${office.GRAF[day].SBEGIN}`;
+      } else if (dateNow > dateEnd && !office.GRAF[day]) {
+        this.isOpened = false;
+        dateNow.setDate(
+          dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+        );
+        str =
+          "Закрыт до " +
+          ("0" + dateNow.getDate()).slice(-2) +
+          "." +
+          ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+          "." +
+          dateNow.getFullYear();
+      }
+      return str;
     },
   },
 };
