@@ -40,32 +40,32 @@ export default {
     eventDescription: {
       type: String,
       required: false,
-      defulat: () => null,
+      default: () => null,
     },
     eventSpecialist: {
       type: String,
       required: false,
-      defulat: () => null,
+      default: () => null,
     },
     eventBeginDate: {
       type: String,
       required: true,
-      defulat: () => null,
+      default: () => null,
     },
     eventFinishDate: {
       type: String,
       required: false,
-      defulat: () => null,
+      default: () => null,
     },
     eventBeginTime: {
       type: String,
       required: false,
-      defulat: () => null,
+      default: () => null,
     },
     eventFinishTime: {
       type: String,
       required: false,
-      defulat: () => null,
+      default: () => null,
     },
     eventState: {
       type: String,
