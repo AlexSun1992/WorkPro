@@ -2,7 +2,7 @@
   <b-button @click="addDataToCalendar">{{ title }}</b-button>
 </template>
 <script>
-import { ics } from "./AddToCalendarButton";
+import { createEvent } from "ics";
 
 export default {
   name: "AddToCalendarButton",
@@ -30,53 +30,72 @@ export default {
     eventTitle: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
     eventLocation: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
     eventDescription: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
     eventSpecialist: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
     eventBeginDate: {
       type: String,
       required: true,
-      default: () => null,
+      default: () => "",
     },
     eventFinishDate: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
     eventBeginTime: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
     eventFinishTime: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
     eventState: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "",
     },
     eventDuration: {
       type: Object,
       required: false,
-      default: () => null,
+      default: () => "",
     },
+  },
+
+  created() {
+    if (
+      this.eventBeginTime !== "" &&
+      !/^\d\d:\d\d$/.test(this.eventBeginTime)
+    ) {
+      throw new Error(
+        `Неверный формат времени, необходимо использовать формат 00:00`
+      );
+    }
+    if (
+      this.eventBeginDate !== "" &&
+      !/^\d\d\d\d-\d\d-\d\d$/.test(this.eventBeginDate)
+    ) {
+      throw new Error(
+        `Неверный формат времени, необходимо использовать формат 2022-02-28`
+      );
+    }
   },
 
   methods: {
@@ -94,25 +113,39 @@ export default {
           },
         ],
       };
-      ics.createEvent(event, (error, value) => {
+      const icsObject = createEvent(event, (error, value) => {
         if (error) {
           console.log(error);
           return;
         }
-        console.log(value);
+        return value;
       });
+
+      const url = window.URL.createObjectURL(
+        new Blob([icsObject], {
+          type: "text/calendar;charset=utf-8",
+          filename: "test",
+        })
+      );
+
+      this.downLoadIcsCalendar(url);
+    },
+
+    downLoadIcsCalendar(urlAddress) {
+      const link = document.createElement("a");
+      link.href = urlAddress;
+      link.setAttribute("download", "schedule");
+      document.body.appendChild(link);
+      link.click();
     },
   },
   computed: {
     getEventStartData() {
-      let data = this.eventBeginDate.split("-").map((item) => Number(item));
-      this.eventBeginTime.split(":").forEach((item) => {
-        if (item !== "") {
-          item.trim();
-          data.push(parseInt(item, 10));
-        }
-      });
-      return data;
+      const dateTime = [
+        ...this.eventBeginDate.split("-").map((item) => Number(item)),
+        ...(this.eventBeginTime.split(":").map((item) => Number(item)) ?? []),
+      ];
+      return dateTime;
     },
   },
 };
