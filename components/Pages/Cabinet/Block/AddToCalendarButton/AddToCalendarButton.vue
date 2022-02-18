@@ -106,11 +106,10 @@ export default {
   computed: {
     getEventStartData() {
       let data = this.eventBeginDate.split("-").map((item) => Number(item));
-
-      this.eventBeginTime.split(".").forEach((item) => {
+      this.eventBeginTime.split(":").forEach((item) => {
         if (item !== "") {
           item.trim();
-          data.push(parseInt(item));
+          data.push(parseInt(item, 10));
         }
       });
       return data;
