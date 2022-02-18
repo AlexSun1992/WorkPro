@@ -124,7 +124,6 @@ export default {
       const url = window.URL.createObjectURL(
         new Blob([icsObject], {
           type: "text/calendar;charset=utf-8",
-          filename: "test",
         })
       );
 
@@ -134,7 +133,7 @@ export default {
     downLoadIcsCalendar(urlAddress) {
       const link = document.createElement("a");
       link.href = urlAddress;
-      link.setAttribute("download", "schedule");
+      link.setAttribute("download", "recieptData");
       document.body.appendChild(link);
       link.click();
     },
