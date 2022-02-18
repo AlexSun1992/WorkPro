@@ -45,23 +45,4 @@
 
     <component-card-editor module-id="55" menu-id="777"></component-card-editor>
   </body>
-  <script>
-    (function () {
-      const fn = async (data) => {
-        const region = data.kladr.substring(0, 2);
-        let response = await fetch(
-          `/free/v2/siteapi/RegionStat?idRegion=` + region
-        );
-        if (response.ok) {
-          let json = await response.json();
-          console.log("Город:", data.city);
-          console.log("Количество агентов:", json[0].AGENTCOUNT);
-          console.log("Количество офисов:", json[0].OFFICESCOUNT);
-        } else {
-          throw new Error(`Ошибка запроса`);
-        }
-      };
-      document.querySelector("component-show-city").changeCity = fn;
-    })();
-  </script>
 </html>
