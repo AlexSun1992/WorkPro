@@ -24,13 +24,15 @@
         </div>
       </div>
       <div v-if="office.IDUNDERGROUND.length" class="card-office-undeground">
-        <span class="undeground-color"></span
-        ><span v-for="(item, index) in office.IDUNDERGROUND" :key="index">
-          {{ item.SNAME }}</span
-        >
-        <span v-if="office.NDISTANSE" class="card-office-distance">
-          {{ office.NDISTANSE.toFixed(1) + " км" }}
-        </span>
+        <div v-for="(item, i) in office.IDUNDERGROUND" :key="i">
+          <span class="undeground-color"
+            ><strong>{{ item.IDUNDERLINE }} </strong>
+          </span>
+          <span>{{ item.SNAME }}</span>
+          <span v-if="office.NDISTANSE" class="card-office-distance">
+            {{ office.NDISTANSE.toFixed(1) + " км" }}
+          </span>
+        </div>
       </div>
 
       <div v-if="office.SGRAF" class="card-office-time">
