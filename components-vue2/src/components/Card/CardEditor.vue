@@ -64,9 +64,7 @@ Vue.use(LoadScript);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.component("vue-easy-tooltip", VueEasyTooltip);
-
 const TOKEN_NAME = "auth._token.local";
-
 export default {
   name: "CardEditor",
   components: { FormBlock, Form },
@@ -118,26 +116,32 @@ export default {
       if (token) {
         this.$axios.defaults.headers.common["Authorization"] = token;
       }
-      await this.$loadScript(
-        `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
-          this.zone
-        }&time=${Date.now()}`
-      );
+      if (process?.env?.NODE_ENV === "production") {
+        await this.$loadScript(
+          `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
+            this.zone
+          }&time=${Date.now()}`
+        );
+        this.eventHandler =
+          typeof eventHandler === "function" ? eventHandler : null;
+      }
+      if (process?.env?.NODE_ENV === "development") {
+        this.eventHandler = await this.loadScript();
+      }
       await this.$store.dispatch("menu/fetchMenu", this.params);
-      this.eventHandler =
-        typeof eventHandler === "function" ? eventHandler : null;
       await this.fetchCard();
       this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
       this.isShowButtonSave = true;
     } catch (e) {
-      console.log(e);
-      this.$store.commit("data_card/setLoading", false);
-      this.$store.commit("data_card/setDisabled", false);
+      console.error(e);
       this.$store.commit("data_card/setSavedError", true);
       this.$store.commit(
         "data_card/setErrorMessage",
         e?.response?.data || { MESSAGE: "Ошибка отображения компонента" }
       );
+    } finally {
+      this.$store.commit("data_card/setLoading", false);
+      this.$store.commit("data_card/setDisabled", false);
     }
   },
   computed: {
@@ -157,8 +161,17 @@ export default {
     isBlock: function () {
       return this.$store.getters["menu/getMenuById"](this.menuId)?.LUSEBLOCK;
     },
+    eventLocalHandler() {
+      return () =>
+        import(`/../components/EventHandler/${this.menuId}/eventHandler`);
+    },
   },
   methods: {
+    async loadScript() {
+      return this.eventLocalHandler().then((script) => {
+        return script.eventHandler;
+      });
+    },
     validateData(data) {
       let valid = true;
       for (let i = 0; i < data.length; i++) {
