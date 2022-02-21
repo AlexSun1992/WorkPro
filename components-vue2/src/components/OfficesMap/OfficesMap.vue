@@ -37,7 +37,6 @@
       ></b-tab>
       <b-tab
         v-if="tabVisible"
-        @click="getOfficesCount"
         title="На схеме метро"
         title-item-class="office-on-undeground"
       >
@@ -132,9 +131,6 @@ export default {
       console.log(error);
     }
   },
-  mounted() {
-    this.getOfficesCount();
-  },
   methods: {
     openOnMap(e) {
       this.currentTab = 0;
@@ -152,65 +148,6 @@ export default {
       let phonesArr = phones.split(";");
       phonesArr.pop();
       return phonesArr;
-    },
-    getOfficesCount() {
-      let g = document.getElementsByTagName("g");
-      if (g && g[0]) {
-        let str = g[0].innerHTML;
-        str = str.replace(
-          /(<circle[^>]*>(.*?)<\/circle[^>]*><text[^>]*>(.*?)<\/text[^>]*>)/g,
-          (match) => {
-            let officesByStation = [];
-            let originalString = match;
-            let textNode = match.match(/<text[^>]*>(.*?)<\/text[^>]*>/);
-            let stationName = match.match(/(?<=text[^>]*>)(.*?)(?=<\/text>)/g);
-            if (textNode) {
-              if (!textNode[0].includes('fill="#fff"')) {
-                textNode = textNode[0].replace(
-                  /(fill=['"])(.+?)['"]/g,
-                  "fill='black'"
-                );
-              }
-            }
-            match = match.replace(/<text[^>]*>(.*?)<\/text[^>]*>/, textNode);
-            let offices = this.$store.getters["map/getRegionOffices"];
-            offices.forEach((office) => {
-              let candidate = office.IDUNDERGROUND.find((item) => {
-                if (item.SNAME.includes(", ")) {
-                  return item.SNAME.split(", ").includes(stationName[0]);
-                } else {
-                  return item.SNAME === stationName[0];
-                }
-              });
-              if (candidate) {
-                officesByStation.push(office);
-              }
-            });
-            if (officesByStation.length) {
-              match = match.replace(
-                /(?<=text[^>]*>)(.*?)(?=<\/text>)/g,
-                `${officesByStation.length}`
-              );
-              let cx = match.match(/(cx=['"])(.+?)['"]/g);
-              let cy = match.match(/(cy=['"])(.+?)['"]/g);
-              let numberPattern = /-?\d+(\.\d+)?/g;
-              let cxValue = (cx[1] ? cx[1] : cx[0]).match(numberPattern);
-              let cyValue = (cy[1] ? cy[1] : cy[0]).match(numberPattern);
-              match = match.replace(
-                /((?<!c)x=['"])(.+?)['"]/g,
-                `x=${parseFloat(cxValue[0]) - 4}`
-              );
-              match = match.replace(
-                /((?<!c)y=['"])(.+?)['"]/g,
-                `y=${parseFloat(cyValue[0]) + 5}`
-              );
-              match = `${match.replace(/(r=['"])(.+?)['"]/g, 'r="15"')}`;
-            }
-            return originalString + match;
-          }
-        );
-        g[0].innerHTML = str;
-      }
     },
     setMouseCoords(e) {
       // e.preventDefault();
@@ -253,32 +190,31 @@ export default {
       this.$refs.metro.setAttribute("transform", scale);
     },
     chooseStation(e) {
-      let stationName;
-      this.stationOffices = [];
-      if (e.target.tagName == "circle") {
-        stationName = e.target.previousSibling.innerHTML;
-      } else if (e.target.tagName == "text") {
-        if (e.target.closest("text").innerHTML.length == 1) {
-          stationName =
-            e.target.closest("text").previousSibling.previousSibling.innerHTML;
-        }
+      if (this.circle) {
+        this.circle.attributes.fill.value = "#fff";
       }
-      this.circleClicked = true;
-      let offices = this.$store.getters["map/getRegionOffices"];
-      offices.forEach((office) => {
-        let candidate = office.IDUNDERGROUND.find((item) => {
-          if (item.SNAME.includes(", ")) {
-            return item.SNAME.split(", ").includes(stationName);
-          } else {
-            return item.SNAME === stationName;
+      if (e.target.tagName == "circle") {
+        this.stationOffices = [];
+        this.circleClicked = true;
+        let stationName = e.target.nextSibling.innerHTML;
+        let offices = this.$store.getters["map/getRegionOffices"];
+        offices.forEach((office) => {
+          let candidate = office.IDUNDERGROUND.find((item) => {
+            if (item.SNAME.includes(", ")) {
+              return item.SNAME.split(", ").includes(stationName);
+            } else {
+              return item.SNAME === stationName;
+            }
+          });
+          if (candidate) {
+            this.stationOffices.push(office);
           }
         });
-        if (candidate) {
-          this.stationOffices.push(office);
-        }
-      });
-      this.$refs["card"].style.top = e.offsetY + "px";
-      this.$refs["card"].style.left = e.offsetX + "px";
+        this.circle = e.target;
+        this.circle.attributes.fill.value = "gold";
+        this.$refs["card"].style.top = e.offsetY + "px";
+        this.$refs["card"].style.left = e.offsetX + "px";
+      }
     },
     async init(_, filters) {
       this.initSuggestView();
