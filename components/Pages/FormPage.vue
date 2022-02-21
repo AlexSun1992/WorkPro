@@ -52,7 +52,7 @@
     </div>
 
     <div class="row">
-      <b-alert class="mt-3" show v-if="errorMessage" variant="danger">{{
+      <b-alert class="mt-3" show v-if="isErrorExist" variant="danger">{{
         errorMessage
       }}</b-alert>
     </div>
@@ -70,32 +70,12 @@ export default {
   data() {
     return {
       myclass: ["cabinet"],
+      isErrorExist: false,
     };
   },
 
-  beforeMount() {
-    this.errorMessage = null;
-  },
-
-  beforeCreate() {
-    this.errorMessage = null;
-  },
-  mounted() {
-    this.errorMessage = null;
-    console.log(this.errorMessage);
-    this.$bvModal.show("modal");
-  },
-
-  updated() {
-    this.errorMessage = null;
-    console.log(this.errorMessage);
-  },
-
   async created() {
-    this.errorMessage = null;
-    console.log(this.errorMessage);
     try {
-      this.errorMessage = null;
       this.$store.commit("data_card/clearFormData");
       this.$store.commit("data_card/reverseBtnIsSave");
       // Будем ли держать в data_card?
@@ -130,6 +110,18 @@ export default {
       }
     },
   },
+
+  watch: {
+    errorMessage() {
+      if (this.errorMessage === null) {
+        this.isErrorExist = false;
+      }
+      if (this.errorMessage != null) {
+        this.isErrorExist = true;
+      }
+    },
+  },
+
   computed: {
     isButtonDisabled() {
       if (this.$refs.CardEditor) {
@@ -143,14 +135,9 @@ export default {
         JSON.stringify(this.$store.getters["data_card/getForm"])
       );
     },
-    //
-    errorMessage: {
-      get: function () {
-        return this.$store.getters["data_card/getErrorMessage"];
-      },
-      set: function () {
-        return null;
-      },
+
+    errorMessage() {
+      return this.$store.getters["data_card/getErrorMessage"];
     },
 
     isError() {
