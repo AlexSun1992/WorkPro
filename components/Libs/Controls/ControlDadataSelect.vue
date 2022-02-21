@@ -22,7 +22,7 @@
       >
       </autocomplete>
       <b-form-invalid-feedback :state="data.state">
-        {{ errorText }}
+        {{ data.error ? data.error : "Обязательно для заполнения" }}
       </b-form-invalid-feedback>
     </b-form-group>
   </div>
@@ -31,7 +31,6 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-const errorText = "Обязательно для заполнения";
 function getQueryParams(queryType, input) {
   if (queryType.includes("ADDRESS")) {
     return {

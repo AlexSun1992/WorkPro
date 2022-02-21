@@ -1,26 +1,84 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <style>
-      .login-form {
-        width: 100%;
-      }
-    </style>
-  </head>
 
-  <body class="container app_body">
-    <noscript>
-      <strong
-        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+<head>
+  <meta charset="utf-8" />
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  />
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0"
+  />
+  <link
+    rel="icon"
+    href="<%= BASE_URL %>favicon.ico"
+  />
+  <title>
+    <%=
+      htmlWebpackPlugin.options.title
+      %
+    >
+  </title>
+  <style>
+    .login-form {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body class="container app_body">
+  <!-- style="filter: invert(100%); background-color: black" -->
+  <noscript>
+    <strong>We're sorry but <%=
+        htmlWebpackPlugin.options.title
+        %
+      > doesn't work
         properly without JavaScript enabled. Please enable it to
-        continue.</strong
-      >
-    </noscript>
+        continue.</strong>
+  </noscript>
+
+  <link
+    rel="stylesheet"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_main.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_cards_pages.css"
+  />
+
+  <component-card-editor
+    module-id="55"
+    menu-id="777"
+  />
+
 
     <link
       rel="stylesheet"
@@ -46,3 +104,4 @@
     <component-card-editor module-id="55" menu-id="777"></component-card-editor>
   </body>
 </html>
+

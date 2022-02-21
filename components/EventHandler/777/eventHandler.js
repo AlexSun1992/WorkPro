@@ -1,5 +1,4 @@
 async function eventHandler(fields, action, func) {
-  console.log("local");
   /**
    * Поиск одного поля
    * @param { import("./configurator.service.55-777.types").FieldName } name
@@ -644,10 +643,21 @@ async function eventHandler(fields, action, func) {
   }
 
   if (action.value === "Item36585") {
-    findField("SVEHICLE_MODEL").error = "Марка авто не указана";
-    findField("NYEAR_VEHICLE").error = "Заполните год";
-    findField("NHORSE_VEHICLE_POWER").error = "Мощность не указана";
-    findField("NKH_VEHICLE_POWER").error = "Мощность не указана";
+    if (findField("SVEHICLE_MODEL").value === undefined) {
+      findField("SVEHICLE_MODEL").error = "Марка авто не указана";
+    }
+
+    if (findField("NYEAR_VEHICLE").value === undefined) {
+      findField("NYEAR_VEHICLE").error = "Заполните год";
+    }
+
+    if (findField("NHORSE_VEHICLE_POWER").value === undefined) {
+      findField("NHORSE_VEHICLE_POWER").error = "Мощность не указана";
+    }
+
+    if (findField("NKH_VEHICLE_POWER").value === undefined) {
+      findField("NKH_VEHICLE_POWER").error = "Мощность не указана";
+    }
   }
 
   return fields;
