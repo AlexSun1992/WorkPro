@@ -16,7 +16,7 @@ router.use(cookieParser());
 
 router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
-    const mobile2ServiceInstance = mobile2Service();
+    let mobile2ServiceInstance = mobile2Service();
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");
