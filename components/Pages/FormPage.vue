@@ -73,12 +73,29 @@ export default {
     };
   },
 
+  beforeMount() {
+    this.errorMessage = null;
+  },
+
+  beforeCreate() {
+    this.errorMessage = null;
+  },
   mounted() {
+    this.errorMessage = null;
+    console.log(this.errorMessage);
     this.$bvModal.show("modal");
   },
 
+  updated() {
+    this.errorMessage = null;
+    console.log(this.errorMessage);
+  },
+
   async created() {
+    this.errorMessage = null;
+    console.log(this.errorMessage);
     try {
+      this.errorMessage = null;
       this.$store.commit("data_card/clearFormData");
       this.$store.commit("data_card/reverseBtnIsSave");
       // Будем ли держать в data_card?
@@ -127,9 +144,15 @@ export default {
       );
     },
     //
-    errorMessage() {
-      return this.$store.getters["data_card/getErrorMessage"];
+    errorMessage: {
+      get: function () {
+        return this.$store.getters["data_card/getErrorMessage"];
+      },
+      set: function () {
+        return null;
+      },
     },
+
     isError() {
       return this.$store.getters["data_card/getError"];
     },
