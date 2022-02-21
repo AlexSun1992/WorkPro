@@ -112,14 +112,11 @@ export default {
   },
   async created() {
     try {
-      console.log(process.env.NODE_ENV);
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
         this.$axios.defaults.headers.common["Authorization"] = token;
       }
-      if (process?.env?.NODE_ENV === "development") {
-        this.eventHandler = await this.loadScript();
-      } else {
+      if (process?.env?.NODE_ENV === "production") {
         await this.$loadScript(
           `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
             this.zone
@@ -127,6 +124,9 @@ export default {
         );
         this.eventHandler =
           typeof eventHandler === "function" ? eventHandler : null;
+      }
+      if (process?.env?.NODE_ENV === "development") {
+        this.eventHandler = await this.loadScript();
       }
       await this.$store.dispatch("menu/fetchMenu", this.params);
       await this.fetchCard();
