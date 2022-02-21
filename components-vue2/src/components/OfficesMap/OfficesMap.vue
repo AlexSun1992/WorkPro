@@ -149,6 +149,7 @@ export default {
       phonesArr.pop();
       return phonesArr;
     },
+
     setMouseCoords(e) {
       // e.preventDefault();
       this.curPosX = e.clientX;
@@ -253,6 +254,7 @@ export default {
     getTemplate(agency) {
       let phonesArr = agency.SPHONE.split(";");
       let grafArr = agency.SGRAF.split("\n");
+      let email;
       phonesArr.pop();
       grafArr.pop();
       let template = `
@@ -279,7 +281,7 @@ export default {
           <div class="card-office-contacts">
             <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
             <div>
-              <a  href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
+              <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
             </div>
           </div>
         </div>`;
@@ -301,6 +303,14 @@ export default {
             temp += `<div class="card-office-phone"><a href="tel:${phone}">${phone}</a></div>`;
           });
           return temp;
+        }
+      );
+      template = template.replace(
+        /<a href="mailto:[^"].+? class="card-office-e-mail">(.*?)<\/a[^>]*?>/g,
+        () => {
+          return agency.SEMAIL
+            ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>`
+            : "";
         }
       );
       return template;
