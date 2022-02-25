@@ -252,10 +252,19 @@ export default {
             ? this.centerCoords
             : this.$store.getters["map/getDefaultCoords"],
           zoom: 12,
+          controls: [],
         };
       }
 
       this.myMap = new ymaps.Map("map", mapState);
+      this.myMap.controls.add("zoomControl", {
+        size: "small",
+        float: "none",
+        position: {
+          bottom: "50px",
+          right: "30px",
+        },
+      });
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getTemplate(agency) {
