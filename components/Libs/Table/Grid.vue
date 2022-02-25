@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isShowAsTemplate">
     <b-table
       sticky-header="400px"
       bordered

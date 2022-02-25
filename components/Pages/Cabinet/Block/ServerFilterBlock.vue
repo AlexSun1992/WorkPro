@@ -214,8 +214,6 @@ export default {
     },
 
     setFilter(e) {
-      console.log(e);
-      this.$emit("test");
       let filterObj;
       for (const [propertyName, filter] of Object.entries({
         [this.queryParamName]: this.queryParamValue,
