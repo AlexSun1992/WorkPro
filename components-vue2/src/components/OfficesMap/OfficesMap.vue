@@ -9,8 +9,13 @@
         <button type="button" class="office-filter"></button>
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
-            <input type="text" id="suggest" ref="search" />
-            <button @click="$refs.search.value = ''">x</button>
+            <div class="position-relative">
+              <input type="text" id="suggest" ref="search" />
+              <button
+                @click="$refs.search.value = ''"
+                class="suggest-clear"
+              ></button>
+            </div>
             <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
