@@ -256,7 +256,9 @@ export default {
         };
       }
 
-      this.myMap = new ymaps.Map("map", mapState);
+      this.myMap = new ymaps.Map("map", mapState, {
+        yandexMapDisablePoiInteractivity: true,
+      });
       this.myMap.controls.add("zoomControl", {
         size: "small",
         float: "none",
