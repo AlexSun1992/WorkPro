@@ -1,10 +1,4 @@
 async function eventHandler(fields, action, func) {
-  console.log("local");
-  /**
-   * Поиск одного поля
-   * @param { import("./configurator.service.55-777.types").FieldName } name
-   * @returns { import("./configurator.service.55-777.types").Field777 }
-   */
   function findField(name) {
     const field = fields.find((item) => item.name === name);
     if (field) {
@@ -14,19 +8,31 @@ async function eventHandler(fields, action, func) {
     throw new Error(`Поле ${name} не найдено в данных`);
   }
 
+  const changeElements = ([...params], property, value) => {
+    params.forEach((el) => {
+      el[property] = value;
+    });
+  };
+
+  const invertPropertyElements = ([...params], property) => {
+    params.forEach((el) => {
+      el[property] = !el[property];
+    });
+  };
+
   const citySettlement = findField("SCITY_SETTLEMENT");
   const ownerAge = findField("NOWNER_AGE");
-  const emptyOne = findField("Empty");
+  const empty = findField("Empty");
   const vehicleModel = findField("SVEHICLE_MODEL");
   const yearVehicle = findField("NYEAR_VEHICLE");
   const horseVehiclePower = findField("NHORSE_VEHICLE_POWER");
   const khVeiclePower = findField("NKH_VEHICLE_POWER");
-  const emptyTwo = findField("Empty");
   const driverType = findField("NDRIVER_TYPE");
   const emptyField1 = findField("EMPTY_FIELD_1");
   const empryThree = findField("empty");
   const emptyField3 = findField("EMPTY_FIELD_3");
   const fillInmanually = findField("SFILLINMANUALLY");
+  const checkNotRegNumber = findField("LCHECKREGNUMBER");
   const calculatePolis = findField("SCALCULATEPOLIS");
   const regNumber = findField("SREGNUMBER");
   const isCaptchaNeeded = findField("BISCAPTCHANEEDED");
@@ -34,71 +40,123 @@ async function eventHandler(fields, action, func) {
   const errRegNumNotFoundMob = findField("input_label_Nmber_err_N_F");
   const labelRegNumb = findField("input_label");
   const labelRegNumb_Number = findField("input_label_Nmber");
+  const crash_years = findField("NNO_CRASH_YEARS");
+  const calculate_btn = findField("Item36585");
+  const captcha = findField(`CAPTCHA`);
+  const reg_number_title = findField("z_one");
+  const owner_title = findField("z-two");
+  const car_title = findField("z-three");
+  const drivers_title = findField("z-four");
+  const add_driver = findField(`ADD_DRIVER`);
+
   let autoInfo = null;
 
   const url = new URL("/free/v2/osago/findAuto", window.location);
 
-  function showForm() {
-    citySettlement.visible = true;
-    ownerAge.visible = true;
-    emptyOne.visible = true;
-    vehicleModel.visible = true;
-    yearVehicle.visible = true;
-    horseVehiclePower.visible = true;
-    khVeiclePower.visible = true;
-    emptyTwo.visible = true;
-    driverType.visible = true;
+  let checkNotRegNumberForm = [
+    citySettlement,
+    ownerAge,
+    empty,
+    vehicleModel,
+    yearVehicle,
+    horseVehiclePower,
+    khVeiclePower,
+    empty,
+    driverType,
+    emptyField1,
+    empryThree,
+    emptyField3,
+    fillInmanually,
+    calculatePolis,
+    calculate_btn,
+    captcha,
+    reg_number_title,
+    owner_title,
+    car_title,
+    drivers_title,
+  ];
 
-    findField("NNO_CRASH_YEARS").visible = true;
-    emptyField1.visible = true;
-    empryThree.visible = true;
-    emptyField3.visible = true;
-    findField("z-two").visible = true;
-    findField("z-three").visible = true;
-    findField("z-four").visible = true;
-    fillInmanually.visible = false;
-    calculatePolis.visible = false;
-    findField(`Item36585`).visible = true;
-    if (isCaptchaNeeded.value === true) {
-      findField(`CAPTCHA`).visible = true;
-    }
+  let checkDriversForm = [crash_years, add_driver];
+
+  if (driverType.value == 1) {
+    checkNotRegNumberForm.push(crash_years);
+    checkDriversForm = checkDriversForm.concat(
+      showDrivers().length ? showDrivers() : findDriver(1)
+    );
   }
 
-  function hideForm() {
-    citySettlement.visible = false;
-    ownerAge.visible = false;
-    emptyOne.visible = false;
-    vehicleModel.visible = false;
-    yearVehicle.visible = false;
-    horseVehiclePower.visible = false;
-    khVeiclePower.visible = false;
-    emptyTwo.visible = false;
-    driverType.visible = false;
-
-    findField("NNO_CRASH_YEARS").visible = false;
-    emptyField1.visible = false;
-    empryThree.visible = false;
-    emptyField3.visible = false;
-
-    fillInmanually.visible = true;
-    calculatePolis.visible = true;
-    findField(`Item36585`).visible = false;
-    findField(`CAPTCHA`).visible = false;
-    findField("z-two").visible = false;
-    findField("z-three").visible = false;
-    findField("z-four").visible = false;
+  if (driverType.value == 2) {
+    checkNotRegNumberForm = checkNotRegNumberForm.concat(
+      findVisibleDrivers().length
+        ? findVisibleDrivers()
+        : showDrivers().length
+        ? showDrivers()
+        : findDriver(1)
+    );
+    checkNotRegNumberForm.push(add_driver);
+    checkDriversForm = checkDriversForm.concat(
+      showDrivers().length ? showDrivers() : findDriver(1)
+    );
   }
 
-  if (action.value === "SFILLINMANUALLY" || action.name === "LCHECKREGNUMBER") {
-    if (action.value === false) {
-      regNumber.readonly = false;
-      hideForm();
-    } else {
-      findField("LCHECKREGNUMBER").value = true;
-      regNumber.value = "";
-      regNumber.readonly = true;
-      showForm();
+  function findVisibleDrivers() {
+    const driverFieldNames = [
+      `DL_BUTTON_`,
+      `NDR_AGE_`,
+      `NDR_EXPERIENCE_`,
+      `NDR_NO_CRASH_`,
+    ];
+    return fields.filter((item) =>
+      driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.visible)
+    );
+  }
+  function showDrivers() {
+    const driverFieldNames = [
+      `DL_BUTTON_`,
+      `NDR_AGE_`,
+      `NDR_EXPERIENCE_`,
+      `NDR_NO_CRASH_`,
+    ];
+    let drivers = [];
+    fields
+      .filter((item) =>
+        driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.value)
+      )
+      .forEach((i) => {
+        drivers = [
+          ...new Set(
+            drivers.concat(
+              findDriver(
+                i.name.split(
+                  driverFieldNames.find((n) => i.name.indexOf(n) >= 0)
+                )[1]
+              )
+            )
+          ),
+        ];
+      });
+    return drivers;
+  }
+
+  if (action.name === "LCHECKREGNUMBER") {
+    if (!regNumber.value || !action.value) {
+      invertPropertyElements(checkNotRegNumberForm, "visible");
     }
+    regNumber.value = "";
+    invertPropertyElements([regNumber], "readonly");
+  }
+
+  if (action.value === "SFILLINMANUALLY") {
+    checkNotRegNumber.value = true;
+  }
+
+  if (action.name === "NDRIVER_TYPE" && action.value === "1") {
+    invertPropertyElements(checkDriversForm, "visible");
+    changeElements(findVisibleDrivers(), "visible", false);
+  }
+
+  if (action.name === "NDRIVER_TYPE" && action.value === "2") {
+    invertPropertyElements(checkDriversForm, "visible");
   }
 
   const showErrorFunc = (...params) => {
@@ -166,7 +224,7 @@ async function eventHandler(fields, action, func) {
       horseVehiclePower.value = null;
       khVeiclePower.value = null;
     }
-    showForm();
+    invertPropertyElements(checkNotRegNumberForm, "visible");
   }
 
   /**
@@ -353,24 +411,11 @@ async function eventHandler(fields, action, func) {
   function findDriver(driverId) {
     const driverFieldNames = [
       `DL_BUTTON_${driverId}`,
-      // `DR_TYPE_${driverId}`,
       `NDR_AGE_${driverId}`,
       `NDR_EXPERIENCE_${driverId}`,
       `NDR_NO_CRASH_${driverId}`,
     ];
     return fields.filter((item) => driverFieldNames.includes(item.name));
-  }
-
-  if (action.name === "NDRIVER_TYPE" && action.value === "1") {
-    const visibleDriversCount = getVisibleDriversCount();
-
-    findField("ADD_DRIVER").visible = false;
-    findField("NNO_CRASH_YEARS").visible = true;
-    findField("NDRIVER_TYPE").visible = true;
-
-    for (let i = 1; i <= visibleDriversCount; i++) {
-      deleteDriver(1);
-    }
   }
 
   if (
@@ -491,15 +536,6 @@ async function eventHandler(fields, action, func) {
         findField("NDR_NO_CRASH_1").checked = true;
       }
     }
-  }
-
-  if (action.name === "NDRIVER_TYPE" && action.value === "2") {
-    showDriver(1);
-    findField("DL_BUTTON_1").visible = false;
-    findField("DR_TYPE_1").visible = false;
-    findField("NNO_CRASH_YEARS").visible = false;
-    findField("ADD_DRIVER").visible = true;
-    findField("empty_DL_BUTTON_1").visible = true;
   }
 
   function deleteDriver(driverId) {
@@ -643,12 +679,12 @@ async function eventHandler(fields, action, func) {
     findField(`ISSUE_POLICY`).visible = false;
   }
 
-  if (action.value === "Item36585") {
-    findField("SVEHICLE_MODEL").error = "Марка авто не указана";
-    findField("NYEAR_VEHICLE").error = "Заполните год";
-    findField("NHORSE_VEHICLE_POWER").error = "Мощность не указана";
-    findField("NKH_VEHICLE_POWER").error = "Мощность не указана";
-  }
+  // if (action.value === "Item36585") {
+  //   findField("SVEHICLE_MODEL").error = "Марка авто не указана";
+  //   findField("NYEAR_VEHICLE").error = "Заполните год";
+  //   findField("NHORSE_VEHICLE_POWER").error = "Мощность не указана";
+  //   findField("NKH_VEHICLE_POWER").error = "Мощность не указана";
+  // }
 
   return fields;
 }
