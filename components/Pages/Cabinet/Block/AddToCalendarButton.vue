@@ -82,7 +82,8 @@ export default {
   created() {
     if (
       this.eventBeginTime !== "" &&
-      !/^\d\d:\d\d$/.test(this.eventBeginTime)
+      !/^\d\d:\d\d$/.test(this.eventBeginTime) &&
+      !/^\d:\d\d$/.test(this.eventBeginTime)
     ) {
       throw new Error(
         `Неверный формат времени, необходимо использовать формат 00:00`

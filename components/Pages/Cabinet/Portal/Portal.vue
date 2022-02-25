@@ -2,7 +2,10 @@
   <client-only placeholder="Загрузка...">
     <div>
       <div v-show="isShowBlock">
-        <v-runtime-template :template="templateData"></v-runtime-template>
+        <v-runtime-template
+          :template="templateData"
+          :params="params"
+        ></v-runtime-template>
       </div>
       <div v-if="!isShowBlock">
         <div style="text-align: center">

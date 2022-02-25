@@ -2,14 +2,16 @@
   <b-card :title="office.SSHORTNAME" class="mb-2">
     <b-card-text>
       <div class="card-office-adress row">
-        <div class="col-4">
+        <div v-if="office.SPATH1" class="col-4">
           <img
             :src="'https://www.reso.ru/export/sites_reso/' + office.SPATH1"
           />
         </div>
         <div class="col-8">
           <div>{{ office.SADDRESS }}</div>
-          <div :class="[isOpened ? 'card-office-opened' : 'text-danger']">
+          <div
+            :class="[isOpened ? 'card-office-opened' : 'card-office-closed']"
+          >
             {{ showWorkingHours(office) }}
           </div>
         </div>
@@ -25,9 +27,7 @@
       </div>
       <div v-if="office.IDUNDERGROUND.length" class="card-office-undeground">
         <div v-for="(item, i) in office.IDUNDERGROUND" :key="i">
-          <span class="undeground-color"
-            ><strong>{{ item.IDUNDERLINE }} </strong>
-          </span>
+          <span :class="'undeground-color_' + item.IDUNDERLINE"></span>
           <span>{{ item.SNAME }}</span>
           <span v-if="office.NDISTANSE" class="card-office-distance">
             {{ office.NDISTANSE.toFixed(1) + " км" }}

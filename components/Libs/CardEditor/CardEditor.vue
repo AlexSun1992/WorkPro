@@ -281,6 +281,16 @@ export default {
       const menuItem = flatmenu.find((item) => {
         return item.SNAME == e.label;
       });
+      if (menuItem === undefined) {
+        const menuItem = flatmenu.find((item) => {
+          return item.SNAME == "История профиля";
+        });
+
+        this.$router.push(
+          `/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}`
+        );
+        return;
+      }
       this.$router.push(
         `/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0?ref=${this.$route.fullPath}`
       );

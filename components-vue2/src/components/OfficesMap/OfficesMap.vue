@@ -9,7 +9,13 @@
         <button type="button" class="office-filter"></button>
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
-            <input type="text" id="suggest" />
+            <div class="position-relative">
+              <input type="text" id="suggest" ref="search" />
+              <button
+                @click="$refs.search.value = ''"
+                class="suggest-clear"
+              ></button>
+            </div>
             <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
@@ -112,6 +118,7 @@ export default {
       curPosX: null,
       curPosY: null,
       currentTab: 0,
+      suggestView: null,
     };
   },
   async created() {
@@ -245,10 +252,21 @@ export default {
             ? this.centerCoords
             : this.$store.getters["map/getDefaultCoords"],
           zoom: 12,
+          controls: [],
         };
       }
 
-      this.myMap = new ymaps.Map("map", mapState);
+      this.myMap = new ymaps.Map("map", mapState, {
+        yandexMapDisablePoiInteractivity: true,
+      });
+      this.myMap.controls.add("zoomControl", {
+        size: "small",
+        float: "none",
+        position: {
+          bottom: "50px",
+          right: "30px",
+        },
+      });
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getTemplate(agency) {
@@ -262,7 +280,7 @@ export default {
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
             <div class="col-4">
-              <img  src="">
+              <img src="" />
             </div>
             <div class="col-8">
               <div>${agency.SADDRESS}</div>
@@ -290,7 +308,7 @@ export default {
         () => {
           let temp = "";
           grafArr.forEach((graf) => {
-            temp += `<div >${graf}</div>`;
+            temp += `<div class="card-office-times">${graf}</div>`;
           });
           return temp;
         }
@@ -310,6 +328,16 @@ export default {
         () => {
           return agency.SEMAIL
             ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>`
+            : "";
+        }
+      );
+      template = template.replace(
+        /<div class="col-4">[\n\s]*?<img src="" \/>[\n\s]*?<\/div[^>]*>/g,
+        () => {
+          let url =
+            "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
+          return agency.SPATH1
+            ? `<div class="col-4"><img src=${url} /></div>`
             : "";
         }
       );
@@ -350,14 +378,14 @@ export default {
       return myGeoObjects;
     },
     initSuggestView() {
-      let suggestView = new ymaps.SuggestView("suggest");
+      this.suggestView = new ymaps.SuggestView("suggest");
       if (this.myMap) {
         this.myMap.destroy();
-        suggestView.destroy();
+        this.suggestView.destroy();
       }
       let showOnMap = this.showOnMap.bind(this);
 
-      suggestView.events.add("select", function (e) {
+      this.suggestView.events.add("select", function (e) {
         showOnMap(e.get("item").value);
       });
     },
