@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isShowAsTemplate">
     <b-table
       sticky-header="400px"
       bordered
@@ -85,6 +85,11 @@ export default {
   },
   props: {
     action: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
+    isShowAsTemplate: {
       type: Boolean,
       required: false,
       default: () => false,
