@@ -9,7 +9,8 @@
         <button type="button" class="office-filter"></button>
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
-            <input type="text" id="suggest" />
+            <input type="text" id="suggest" ref="search" />
+            <button @click="$refs.search.value = ''">x</button>
             <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
@@ -112,6 +113,7 @@ export default {
       curPosX: null,
       curPosY: null,
       currentTab: 0,
+      suggestView: null,
     };
   },
   async created() {
@@ -360,14 +362,14 @@ export default {
       return myGeoObjects;
     },
     initSuggestView() {
-      let suggestView = new ymaps.SuggestView("suggest");
+      this.suggestView = new ymaps.SuggestView("suggest");
       if (this.myMap) {
         this.myMap.destroy();
-        suggestView.destroy();
+        this.suggestView.destroy();
       }
       let showOnMap = this.showOnMap.bind(this);
 
-      suggestView.events.add("select", function (e) {
+      this.suggestView.events.add("select", function (e) {
         showOnMap(e.get("item").value);
       });
     },
