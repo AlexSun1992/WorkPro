@@ -1,11 +1,8 @@
 <template>
   <div>
-    <b-button
-      :class="'link-button'"
-      @click="clickLink"
-      variant="secondary"
-      >{{ data.label }}</b-button
-    >
+    <b-button :class="'link-button'" @click="clickLink" variant="secondary">{{
+      data.label
+    }}</b-button>
   </div>
 </template>
 

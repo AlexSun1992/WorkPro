@@ -290,7 +290,7 @@ export default {
         () => {
           let temp = "";
           grafArr.forEach((graf) => {
-            temp += `<div >${graf}</div>`;
+            temp += `<div class="card-office-times">${graf}</div>`;
           });
           return temp;
         }
