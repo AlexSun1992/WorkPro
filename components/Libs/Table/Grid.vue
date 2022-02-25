@@ -89,6 +89,11 @@ export default {
       required: false,
       default: () => false,
     },
+    isShowAsTemplate: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
     load: {
       type: Boolean,
       required: false,
