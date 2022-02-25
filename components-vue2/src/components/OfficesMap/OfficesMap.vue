@@ -9,7 +9,13 @@
         <button type="button" class="office-filter"></button>
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
-            <input type="text" id="suggest" />
+            <div class="position-relative">
+              <input type="text" id="suggest" ref="search" />
+              <button
+                @click="$refs.search.value = ''"
+                class="suggest-clear"
+              ></button>
+            </div>
             <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
@@ -112,6 +118,7 @@ export default {
       curPosX: null,
       curPosY: null,
       currentTab: 0,
+      suggestView: null,
     };
   },
   async created() {
@@ -245,10 +252,21 @@ export default {
             ? this.centerCoords
             : this.$store.getters["map/getDefaultCoords"],
           zoom: 12,
+          controls: [],
         };
       }
 
-      this.myMap = new ymaps.Map("map", mapState);
+      this.myMap = new ymaps.Map("map", mapState, {
+        yandexMapDisablePoiInteractivity: true,
+      });
+      this.myMap.controls.add("zoomControl", {
+        size: "small",
+        float: "none",
+        position: {
+          bottom: "50px",
+          right: "30px",
+        },
+      });
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getTemplate(agency) {
@@ -360,14 +378,14 @@ export default {
       return myGeoObjects;
     },
     initSuggestView() {
-      let suggestView = new ymaps.SuggestView("suggest");
+      this.suggestView = new ymaps.SuggestView("suggest");
       if (this.myMap) {
         this.myMap.destroy();
-        suggestView.destroy();
+        this.suggestView.destroy();
       }
       let showOnMap = this.showOnMap.bind(this);
 
-      suggestView.events.add("select", function (e) {
+      this.suggestView.events.add("select", function (e) {
         showOnMap(e.get("item").value);
       });
     },
