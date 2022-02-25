@@ -53,7 +53,8 @@ export default {
       isAllFilters: true,
       searchString: "",
       id: null,
-      selected: null,
+      selected: "placeholder",
+      placeHolder: { item: "placeholder", name: "Выберите время посещения" },
     };
   },
 
@@ -219,7 +220,14 @@ export default {
     },
 
     filterItemsCombobox() {
-      return this.filterItems.map(({ name }, idx) => ({ item: idx, name }));
+      let options = this.filterItems.map(({ name }, idx) => ({
+        item: idx,
+        name,
+      }));
+
+      options.push(this.placeHolder);
+
+      return options;
     },
   },
   watch: {
