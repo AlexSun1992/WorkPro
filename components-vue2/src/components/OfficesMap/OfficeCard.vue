@@ -2,7 +2,7 @@
   <b-card :title="office.SSHORTNAME" class="mb-2">
     <b-card-text>
       <div class="card-office-adress row">
-        <div class="col-4">
+        <div v-if="office.SPATH1" class="col-4">
           <img
             :src="'https://www.reso.ru/export/sites_reso/' + office.SPATH1"
           />

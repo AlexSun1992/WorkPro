@@ -262,7 +262,7 @@ export default {
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
             <div class="col-4">
-              <img  src="">
+              <img src="" />
             </div>
             <div class="col-8">
               <div>${agency.SADDRESS}</div>
@@ -310,6 +310,16 @@ export default {
         () => {
           return agency.SEMAIL
             ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>`
+            : "";
+        }
+      );
+      template = template.replace(
+        /<div class="col-4">[\n\s]*?<img src="" \/>[\n\s]*?<\/div[^>]*>/g,
+        () => {
+          let url =
+            "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
+          return agency.SPATH1
+            ? `<div class="col-4"><img src=${url} /></div>`
             : "";
         }
       );
