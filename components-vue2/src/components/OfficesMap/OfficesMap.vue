@@ -263,8 +263,8 @@ export default {
         size: "small",
         float: "none",
         position: {
-          bottom: "50px",
-          right: "30px",
+          bottom: "70px",
+          right: "100px",
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
