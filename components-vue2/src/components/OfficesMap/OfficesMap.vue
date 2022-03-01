@@ -279,8 +279,9 @@ export default {
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
-            <div class="col-4">
+            <div class="col-4 pe-0 position-relative">
               <img src="" />
+              <button class="office-image-zoom" type="button"></button>
             </div>
             <div class="col-8">
               <div>${agency.SADDRESS}</div>
