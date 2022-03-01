@@ -69,12 +69,15 @@ async function eventHandler(fields, action, func) {
     fillInmanually,
     calculatePolis,
     calculate_btn,
-    captcha,
     reg_number_title,
     owner_title,
     car_title,
     drivers_title,
   ];
+
+  if (isCaptchaNeeded.value === true) {
+    checkNotRegNumberForm.push(captcha);
+  }
 
   let checkDriversForm = [crash_years, add_driver];
 
@@ -208,23 +211,27 @@ async function eventHandler(fields, action, func) {
       const dataAuto = await response.json();
       return dataAuto;
     }
-    autoInfo = regNumber.value ? await getInfo(regNumber.value) : [];
-    if (!!autoInfo && autoInfo.length > 0) {
-      showLabelFunc(labelRegNumb, labelRegNumb_Number);
-      hideErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
-      vehicleModel.value = `${autoInfo[0].BRAND_MODEL_MODIFICATION}|${autoInfo[0].MAKE_MODEL}`;
-      yearVehicle.value = autoInfo[0].NBUILD_YEAR;
-      horseVehiclePower.value = autoInfo[0].OUTPUT;
-      khVeiclePower.value = autoInfo[0].POWER_KVT;
+    if (regNumber.value) {
+      autoInfo = regNumber.value ? await getInfo(regNumber.value) : [];
+      if (!!autoInfo && autoInfo.length > 0) {
+        showLabelFunc(labelRegNumb, labelRegNumb_Number);
+        hideErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
+        vehicleModel.value = `${autoInfo[0].BRAND_MODEL_MODIFICATION}|${autoInfo[0].MAKE_MODEL}`;
+        yearVehicle.value = autoInfo[0].NBUILD_YEAR;
+        horseVehiclePower.value = autoInfo[0].OUTPUT;
+        khVeiclePower.value = autoInfo[0].POWER_KVT;
+      } else {
+        showErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
+        hideLabelFunc(labelRegNumb, labelRegNumb_Number);
+        vehicleModel.value = "";
+        yearVehicle.value = null;
+        horseVehiclePower.value = null;
+        khVeiclePower.value = null;
+      }
+      invertPropertyElements(checkNotRegNumberForm, "visible");
     } else {
-      showErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
-      hideLabelFunc(labelRegNumb, labelRegNumb_Number);
-      vehicleModel.value = "";
-      yearVehicle.value = null;
-      horseVehiclePower.value = null;
-      khVeiclePower.value = null;
+      regNumber.state = false;
     }
-    invertPropertyElements(checkNotRegNumberForm, "visible");
   }
 
   /**
@@ -679,12 +686,23 @@ async function eventHandler(fields, action, func) {
     findField(`ISSUE_POLICY`).visible = false;
   }
 
-  // if (action.value === "Item36585") {
-  //   findField("SVEHICLE_MODEL").error = "Марка авто не указана";
-  //   findField("NYEAR_VEHICLE").error = "Заполните год";
-  //   findField("NHORSE_VEHICLE_POWER").error = "Мощность не указана";
-  //   findField("NKH_VEHICLE_POWER").error = "Мощность не указана";
-  // }
+  if (action.value === "Item36585") {
+    if (findField("SVEHICLE_MODEL").value === undefined) {
+      findField("SVEHICLE_MODEL").error = "Марка авто не указана";
+    }
+
+    if (findField("NYEAR_VEHICLE").value === undefined) {
+      findField("NYEAR_VEHICLE").error = "Заполните год";
+    }
+
+    if (findField("NHORSE_VEHICLE_POWER").value === undefined) {
+      findField("NHORSE_VEHICLE_POWER").error = "Мощность не указана";
+    }
+
+    if (findField("NKH_VEHICLE_POWER").value === undefined) {
+      findField("NKH_VEHICLE_POWER").error = "Мощность не указана";
+    }
+  }
 
   return fields;
 }
