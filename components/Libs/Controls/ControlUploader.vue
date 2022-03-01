@@ -29,14 +29,6 @@ export default {
       required: true,
       default: () => {},
     },
-    id: {
-      required: false,
-      default: () => null,
-    },
-    rel: {
-      required: false,
-      default: () => null,
-    },
   },
   data() {
     return {
@@ -47,11 +39,12 @@ export default {
   created() {},
   methods: {
     handleFileUpload() {
+      console.log("handleFileUpload");
       this.file = this.$refs.file.files[0];
+      this.submitFile();
     },
     submitFile() {
-      console.log(this.id);
-      console.log(this.rel);
+      console.log("submitFile");
     },
   },
 };
