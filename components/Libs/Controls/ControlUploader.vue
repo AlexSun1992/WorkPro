@@ -1,31 +1,65 @@
 <template>
   <div>
-    <div v-if="items">
-      <FileLoader :item="items[0]" table-id="9662" />
+    <b-button class="btn-doc-add">{{ data.label }}</b-button>
+    <input type="file" style="display: none" />
+    <div class="progress">
+      <b-progress
+        class="mb-2"
+        variant="success"
+        show-progress
+        animated
+      ></b-progress>
     </div>
   </div>
 </template>
 
 <script>
-import FileLoader from "../../../components/Pages/Table/FileLoader";
-
 export default {
   name: "ControlUploader",
-  components: {
-    FileLoader,
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+    id: {
+      required: false,
+      default: () => null,
+    },
+    rel: {
+      required: false,
+      default: () => null,
+    },
   },
   data() {
     return {
-      items: null,
+      uploadPercentage: 0,
+      percentsVisible: false,
     };
   },
-  async fetch() {
-    let data = await this.$axios.$get(
-      "/am/main/v2/data/27/983?json={pIdDocPhoto:1351480299}"
-    );
-    this.items = data[0]._data;
-  },
+  created() {},
+  methods: {},
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.files {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > div {
+    min-width: 135px;
+  }
+}
+.button {
+  height: fit-content;
+}
+.file {
+  max-width: 500px;
+}
+.size {
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+}
+</style>
