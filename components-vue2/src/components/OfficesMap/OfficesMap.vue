@@ -533,10 +533,6 @@ circle:hover {
   cursor: pointer;
   r: 15;
 }
-path:hover {
-  stroke-width: 12;
-}
-
 .metrowrapper {
   display: flex;
   align-items: center;
