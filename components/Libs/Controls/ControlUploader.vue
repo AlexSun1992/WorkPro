@@ -1,7 +1,12 @@
 <template>
   <div>
     <b-button class="btn-doc-add">{{ data.label }}</b-button>
-    <input type="file" style="display: none" />
+    <input
+      ref="file"
+      type="file"
+      style="display: none"
+      v-on:change="handleFileUpload()"
+    />
     <div class="progress">
       <b-progress
         class="mb-2"
@@ -38,7 +43,15 @@ export default {
     };
   },
   created() {},
-  methods: {},
+  methods: {
+    handleFileUpload() {
+      this.file = this.$refs.file.files[0];
+    },
+    submitFile() {
+      console.log(this.id);
+      console.log(this.rel);
+    },
+  },
 };
 </script>
 
