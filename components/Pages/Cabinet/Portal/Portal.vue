@@ -64,16 +64,6 @@ export default {
       required: true,
       default: () => {},
     },
-    isButtonRender: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
-    data: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
   },
   data() {
     return {

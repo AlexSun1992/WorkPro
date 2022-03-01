@@ -281,16 +281,13 @@ export default {
       const menuItem = flatmenu.find((item) => {
         return item.SNAME == e.label;
       });
-      if (menuItem === undefined) {
-        const menuItem = flatmenu.find((item) => {
-          return item.SNAME == "История профиля";
-        });
 
-        this.$router.push(
-          `/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}`
+      if (menuItem === undefined) {
+        throw new Error(
+          `В списке меню не найден пункт меню с названием SNAME === "${e.label}"`
         );
-        return;
       }
+
       this.$router.push(
         `/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0?ref=${this.$route.fullPath}`
       );

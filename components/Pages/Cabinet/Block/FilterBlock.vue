@@ -23,14 +23,13 @@
       </li>
     </ul>
 
-    <div class="search" v-else-if="filterType === 'combobox'">
+    <div class="search" v-if="filterType === 'combobox'">
       <b-form-select
         v-model="selected"
         :options="filterItemsCombobox"
         value-field="item"
         text-field="name"
         @change="toggleFilter(propertyName, filterItemsCombobox[selected].name)"
-        placeholder="Выберите дату"
       >
       </b-form-select>
     </div>

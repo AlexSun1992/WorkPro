@@ -135,6 +135,7 @@ export default {
       this.componentKey += 1;
       this.$emit("update", event);
     },
+
     openCard(item) {
       try {
         if (this.isOpenCard) {
