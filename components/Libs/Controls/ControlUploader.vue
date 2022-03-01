@@ -17,6 +17,7 @@
         animated
       ></b-progress>
     </div> -->
+    {{ fileCheck }}
   </div>
 </template>
 
@@ -34,17 +35,25 @@ export default {
     return {
       uploadPercentage: 0,
       percentsVisible: false,
+      file: null,
     };
   },
   created() {},
   methods: {
     handleFileUpload() {
-      console.log("handleFileUpload");
       this.file = this.$refs.file.files[0];
+      console.log(this.file);
       this.submitFile();
     },
     submitFile() {
       console.log("submitFile");
+    },
+  },
+  computed: {
+    fileCheck() {
+      if (this.file?.size) {
+        return (this.file.size / 1024000).toFixed(1) + "мб";
+      }
     },
   },
 };
