@@ -269,6 +269,7 @@ export default {
             ? this.centerCoords
             : this.$store.getters["map/getDefaultCoords"],
           zoom: 12,
+          controls: [],
         };
       }
 
