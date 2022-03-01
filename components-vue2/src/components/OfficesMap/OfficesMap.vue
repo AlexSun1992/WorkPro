@@ -10,16 +10,18 @@
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
             <div class="position-relative">
-              <input type="text" id="suggest" ref="search" />
-              <button
-                @click="$refs.search.value = ''"
-                class="suggest-clear"
-              ></button>
+              <input
+                type="text"
+                @input="clearStation"
+                id="suggest"
+                ref="search"
+              />
+              <button @click="clear" class="suggest-clear"></button>
             </div>
-            <div v-if="suggest && !getOffices">
+            <!-- <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
-            </div>
+            </div> -->
           </div>
           <div class="col-12 col-lg-7">
             <FilterComponent :filters="filters" @update="filterOffices" />
@@ -71,6 +73,7 @@
 </template>
 
 <script>
+import { BFormInput } from "bootstrap-vue";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
 import Notification from "./Notification.vue";
@@ -95,6 +98,7 @@ export default {
     BButtonGroup,
     BButton,
     ZoomComponent,
+    BFormInput,
   },
   props: ["notification"],
   data() {
@@ -119,6 +123,8 @@ export default {
       curPosY: null,
       currentTab: 0,
       suggestView: null,
+      currentStation: null,
+      useElement: null,
     };
   },
   async created() {
@@ -139,6 +145,17 @@ export default {
     }
   },
   methods: {
+    clearStation(e) {
+      if (e.target.value == "") {
+        this.useElement.setAttribute("x", -1000);
+        this.useElement.setAttribute("y", -1000);
+      }
+    },
+    clear() {
+      this.$refs.search.value = "";
+      this.useElement.setAttribute("x", -1000);
+      this.useElement.setAttribute("y", -1000);
+    },
     openOnMap(e) {
       this.currentTab = 0;
       this.updateMap(
@@ -252,21 +269,10 @@ export default {
             ? this.centerCoords
             : this.$store.getters["map/getDefaultCoords"],
           zoom: 12,
-          controls: [],
         };
       }
 
-      this.myMap = new ymaps.Map("map", mapState, {
-        yandexMapDisablePoiInteractivity: true,
-      });
-      this.myMap.controls.add("zoomControl", {
-        size: "small",
-        float: "none",
-        position: {
-          bottom: "50px",
-          right: "30px",
-        },
-      });
+      this.myMap = new ymaps.Map("map", mapState);
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getTemplate(agency) {
@@ -384,10 +390,27 @@ export default {
         this.suggestView.destroy();
       }
       let showOnMap = this.showOnMap.bind(this);
-
-      this.suggestView.events.add("select", function (e) {
+      let _this = this;
+      func._this = this;
+      function func(e) {
+        if (e.get("item").value.includes("метро")) {
+          _this.currentStation = e.get("item").value.split(" метро")[1].trim();
+          let maps = document.querySelectorAll(".maps");
+          for (let i = 0; i < maps[0].children.length; i++) {
+            if (maps[0].children[i].innerHTML == _this.currentStation) {
+              let currentCircle = maps[0].children[i - 1];
+              let x = currentCircle.getAttribute("cx");
+              let y = currentCircle.getAttribute("cy");
+              _this.useElement = maps[0].children[maps[0].children.length - 1];
+              _this.useElement.setAttribute("x", x);
+              _this.useElement.setAttribute("y", y);
+            }
+          }
+        }
+        if (_this.currentTab == 1) return;
         showOnMap(e.get("item").value);
-      });
+      }
+      this.suggestView.events.add("select", func);
     },
 
     async setPositionAttributes() {
