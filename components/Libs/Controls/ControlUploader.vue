@@ -1,20 +1,22 @@
 <template>
   <div>
-    <b-button class="btn-doc-add">{{ data.label }}</b-button>
+    <b-button @click="$refs.file.click()" class="btn-doc-add">{{
+      data.label
+    }}</b-button>
     <input
       ref="file"
       type="file"
       style="display: none"
       v-on:change="handleFileUpload()"
     />
-    <div class="progress">
+    <!-- <div class="progress">
       <b-progress
         class="mb-2"
         variant="success"
         show-progress
         animated
       ></b-progress>
-    </div>
+    </div> -->
   </div>
 </template>
 
