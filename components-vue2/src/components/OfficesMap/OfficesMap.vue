@@ -275,6 +275,8 @@ export default {
       this.myMap = new ymaps.Map("map", mapState, {
         yandexMapDisablePoiInteractivity: true,
       });
+
+      this.myMap.behaviors.enable(["dblClickZoom", "multiTouch"]);
       this.myMap.controls.add("zoomControl", {
         size: "small",
         float: "none",
