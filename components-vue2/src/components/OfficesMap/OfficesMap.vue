@@ -272,7 +272,17 @@ export default {
         };
       }
 
-      this.myMap = new ymaps.Map("map", mapState);
+      this.myMap = new ymaps.Map("map", mapState, {
+        yandexMapDisablePoiInteractivity: true,
+      });
+      this.myMap.controls.add("zoomControl", {
+        size: "small",
+        float: "none",
+        position: {
+          bottom: "70px",
+          right: "100px",
+        },
+      });
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getTemplate(agency) {
@@ -285,8 +295,9 @@ export default {
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
-            <div class="col-4">
+            <div class="col-4 pe-0 position-relative">
               <img src="" />
+              <button class="office-image-zoom" type="button"></button>
             </div>
             <div class="col-8">
               <div>${agency.SADDRESS}</div>
@@ -407,7 +418,6 @@ export default {
             }
           }
         }
-        if (_this.currentTab == 1) return;
         showOnMap(e.get("item").value);
       }
       this.suggestView.events.add("select", func);

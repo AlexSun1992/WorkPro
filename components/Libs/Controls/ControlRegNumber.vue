@@ -30,12 +30,18 @@
           ref="code"
         />
       </b-input-group>
-
       <b-form-invalid-feedback
         v-if="isValid !== null && isDisabled === false"
         :state="isValid"
         >{{
           data.error ? data.error : "Пожалуйста, введите корректно госномер"
+        }}</b-form-invalid-feedback
+      >
+      <b-form-invalid-feedback
+        v-else-if="!this.isVisitedNumber || !this.isVisitedCode"
+        :state="data.state"
+        >{{
+          data.error ? data.error : "Пожалуйста, заполните это поле"
         }}</b-form-invalid-feedback
       >
     </b-form-group>
@@ -196,15 +202,6 @@ export default {
         return this.stateNumber && this.stateCode;
       }
       return null;
-    },
-  },
-  watch: {
-    data() {
-      if (this.data?.value === "") {
-        this.codeValue = "";
-        this.numberValue = "";
-        this.isDisabled = true;
-      }
     },
   },
 };

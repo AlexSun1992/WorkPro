@@ -32,12 +32,13 @@
           <h4 class="card-title">{{ office.SSHORTNAME }}</h4>
           <div class="card-text">
             <div class="card-office-adress row">
-              <div v-if="office.SPATH1" class="col-4 px-0">
+              <div v-if="office.SPATH1" class="col-4 pe-0 position-relative">
                 <img
                   :src="
                     'https://www.reso.ru/export/sites_reso/' + office.SPATH1
                   "
                 />
+                <button class="office-image-zoom" type="button"></button>
               </div>
               <div class="col-8">
                 <div>{{ office.SADDRESS }}</div>
