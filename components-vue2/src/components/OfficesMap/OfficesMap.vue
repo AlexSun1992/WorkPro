@@ -269,6 +269,7 @@ export default {
             ? this.centerCoords
             : this.$store.getters["map/getDefaultCoords"],
           zoom: 12,
+          controls:[],
         };
       }
 
@@ -581,4 +582,4 @@ circle:hover {
 .test:after {
   content: "dsfdsf";
 }
-</style>
+</style
