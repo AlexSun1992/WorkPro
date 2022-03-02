@@ -9,7 +9,6 @@
       style="display: none"
       v-on:change="handleFileUpload()"
     />
-
     {{ fileSize }}
     {{ fileType }}
   </div>
