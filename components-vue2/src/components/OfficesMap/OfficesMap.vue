@@ -4,18 +4,50 @@
     @mouseup="removeListener"
     class="map-container mt-3"
   >
-    <h5>Найдите офис рядом с вами</h5>
-    <input type="text" id="suggest" />
-    <div v-if="suggest && !getOffices">
-      По вашему запросу ничего не найдено. Попробуйте изменить критерии поиска
+    <div class="container">
+      <div class="office-block">
+        <button type="button" class="office-filter"></button>
+        <div class="row align-items-center mh-1">
+          <div class="col-12 col-lg-5">
+            <div class="position-relative">
+              <input
+                type="text"
+                @input="clearStation"
+                id="suggest"
+                ref="search"
+              />
+              <button @click="clear" class="suggest-clear"></button>
+            </div>
+            <!-- <div v-if="suggest && !getOffices">
+              По вашему запросу ничего не найдено. Попробуйте изменить критерии
+              поиска
+            </div> -->
+          </div>
+          <div class="col-12 col-lg-7">
+            <FilterComponent :filters="filters" @update="filterOffices" />
+          </div>
+        </div>
+      </div>
     </div>
-    <FilterComponent :filters="filters" @update="filterOffices" class="my-3" />
-    <Notification :notification="notification" />
-    <b-tabs ref="tabs" content-class="mt-3">
-      <b-tab title="На карте" active
+    <!-- <Notification :notification="notification" /> -->
+    <b-tabs
+      v-model="currentTab"
+      ref="tabs"
+      content-class="mt-3 office-tab-content"
+      nav-class="office-tabs text-center mt-3"
+      pills
+    >
+      <b-tab
+        title="На карте"
+        title-item-class="office-on-map"
+        content-class="maps-block"
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
-      <b-tab v-if="tabVisible" @click="getOfficesCount" title="На схеме метро">
+      <b-tab
+        v-if="tabVisible"
+        title="На схеме метро"
+        title-item-class="office-on-undeground"
+      >
         <div class="metrowrapper">
           <div>
             <Mosmetro ref="metro" @click="chooseStation" />
@@ -29,8 +61,8 @@
           <ZoomComponent @zoom="zoom" />
         </div>
       </b-tab>
-      <b-tab title="В списке">
-        <OfficesList v-if="regionId" :data="getOffices" />
+      <b-tab title="В списке" title-item-class="office-on-lists">
+        <OfficesList v-if="regionId" :data="getOffices" @open="openOnMap" />
         <div v-else>
           По вашему запросу ничего не найдено. Попробуйте изменить критерии
           поиска
@@ -41,6 +73,7 @@
 </template>
 
 <script>
+import { BFormInput } from "bootstrap-vue";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
 import Notification from "./Notification.vue";
@@ -65,6 +98,7 @@ export default {
     BButtonGroup,
     BButton,
     ZoomComponent,
+    BFormInput,
   },
   props: ["notification"],
   data() {
@@ -87,6 +121,10 @@ export default {
       oldPosY: null,
       curPosX: null,
       curPosY: null,
+      currentTab: 0,
+      suggestView: null,
+      currentStation: null,
+      useElement: null,
     };
   },
   async created() {
@@ -106,69 +144,36 @@ export default {
       console.log(error);
     }
   },
-  mounted() {
-    this.getOfficesCount();
-  },
   methods: {
-    getOfficesCount() {
-      let g = document.getElementsByTagName("g");
-      if (g && g[0]) {
-        let str = g[0].innerHTML;
-        str = str.replace(
-          /(<circle[^>]*>(.*?)<\/circle[^>]*><text[^>]*>(.*?)<\/text[^>]*>)/g,
-          (match) => {
-            let officesByStation = [];
-            let originalString = match;
-            let textNode = match.match(/<text[^>]*>(.*?)<\/text[^>]*>/);
-            let stationName = match.match(/(?<=text[^>]*>)(.*?)(?=<\/text>)/g);
-            if (textNode) {
-              if (!textNode[0].includes('fill="#fff"')) {
-                textNode = textNode[0].replace(
-                  /(fill=['"])(.+?)['"]/g,
-                  "fill='black'"
-                );
-              }
-            }
-            match = match.replace(/<text[^>]*>(.*?)<\/text[^>]*>/, textNode);
-            let offices = this.$store.getters["map/getRegionOffices"];
-            offices.forEach((office) => {
-              let candidate = office.IDUNDERGROUND.find((item) => {
-                if (item.SNAME.includes(", ")) {
-                  return item.SNAME.split(", ").includes(stationName[0]);
-                } else {
-                  return item.SNAME === stationName[0];
-                }
-              });
-              if (candidate) {
-                officesByStation.push(office);
-              }
-            });
-            if (officesByStation.length) {
-              match = match.replace(
-                /(?<=text[^>]*>)(.*?)(?=<\/text>)/g,
-                `${officesByStation.length}`
-              );
-              let cx = match.match(/(cx=['"])(.+?)['"]/g);
-              let cy = match.match(/(cy=['"])(.+?)['"]/g);
-              let numberPattern = /-?\d+(\.\d+)?/g;
-              let cxValue = (cx[1] ? cx[1] : cx[0]).match(numberPattern);
-              let cyValue = (cy[1] ? cy[1] : cy[0]).match(numberPattern);
-              match = match.replace(
-                /((?<!c)x=['"])(.+?)['"]/g,
-                `x=${parseFloat(cxValue[0]) - 4}`
-              );
-              match = match.replace(
-                /((?<!c)y=['"])(.+?)['"]/g,
-                `y=${parseFloat(cyValue[0]) + 5}`
-              );
-              match = `${match.replace(/(r=['"])(.+?)['"]/g, 'r="15"')}`;
-            }
-            return originalString + match;
-          }
-        );
-        g[0].innerHTML = str;
+    clearStation(e) {
+      if (e.target.value == "") {
+        this.useElement.setAttribute("x", -1000);
+        this.useElement.setAttribute("y", -1000);
       }
     },
+    clear() {
+      this.$refs.search.value = "";
+      this.useElement.setAttribute("x", -1000);
+      this.useElement.setAttribute("y", -1000);
+    },
+    openOnMap(e) {
+      this.currentTab = 0;
+      this.updateMap(
+        {
+          center: [e.NLAT, e.NLONG],
+          zoom: 15,
+        },
+        e.SADDRESS,
+        20,
+        false
+      );
+    },
+    getPhones(phones) {
+      let phonesArr = phones.split(";");
+      phonesArr.pop();
+      return phonesArr;
+    },
+
     setMouseCoords(e) {
       // e.preventDefault();
       this.curPosX = e.clientX;
@@ -210,32 +215,31 @@ export default {
       this.$refs.metro.setAttribute("transform", scale);
     },
     chooseStation(e) {
-      let stationName;
-      this.stationOffices = [];
-      if (e.target.tagName == "circle") {
-        stationName = e.target.previousSibling.innerHTML;
-      } else if (e.target.tagName == "text") {
-        if (e.target.closest("text").innerHTML.length == 1) {
-          stationName =
-            e.target.closest("text").previousSibling.previousSibling.innerHTML;
-        }
+      if (this.circle) {
+        this.circle.attributes.fill.value = "#fff";
       }
-      this.circleClicked = true;
-      let offices = this.$store.getters["map/getRegionOffices"];
-      offices.forEach((office) => {
-        let candidate = office.IDUNDERGROUND.find((item) => {
-          if (item.SNAME.includes(", ")) {
-            return item.SNAME.split(", ").includes(stationName);
-          } else {
-            return item.SNAME === stationName;
+      if (e.target.tagName == "circle") {
+        this.stationOffices = [];
+        this.circleClicked = true;
+        let stationName = e.target.nextSibling.innerHTML;
+        let offices = this.$store.getters["map/getRegionOffices"];
+        offices.forEach((office) => {
+          let candidate = office.IDUNDERGROUND.find((item) => {
+            if (item.SNAME.includes(", ")) {
+              return item.SNAME.split(", ").includes(stationName);
+            } else {
+              return item.SNAME === stationName;
+            }
+          });
+          if (candidate) {
+            this.stationOffices.push(office);
           }
         });
-        if (candidate) {
-          this.stationOffices.push(office);
-        }
-      });
-      this.$refs["card"].style.top = e.offsetY + "px";
-      this.$refs["card"].style.left = e.offsetX + "px";
+        this.circle = e.target;
+        this.circle.attributes.fill.value = "gold";
+        this.$refs["card"].style.top = e.offsetY + "px";
+        this.$refs["card"].style.left = e.offsetX + "px";
+      }
     },
     async init(_, filters) {
       this.initSuggestView();
@@ -265,22 +269,99 @@ export default {
             ? this.centerCoords
             : this.$store.getters["map/getDefaultCoords"],
           zoom: 12,
+          controls: [],
         };
       }
 
-      this.myMap = new ymaps.Map("map", mapState);
+      this.myMap = new ymaps.Map("map", mapState, {
+        yandexMapDisablePoiInteractivity: true,
+      });
+      this.myMap.behaviors.disable("scrollZoom");
+      this.myMap.behaviors.enable(["dblClickZoom", "multiTouch"]);
+      this.myMap.controls.add("zoomControl", {
+        size: "small",
+        float: "none",
+        position: {
+          bottom: "70px",
+          right: "100px",
+        },
+      });
       this.myMap.geoObjects.add(this.myClusterer);
     },
     getTemplate(agency) {
-      return `
-          <strong><span>${agency.SSHORTNAME}</span></strong><br><br>
-          <span>${agency.SADDRESS}</span><br>
-          <strong>Тел.:</strong><span>${agency.SPHONE}</span><br>
-          <strong>Email.:</strong><span>${agency.SPHONE}</span><br>
-          <strong>Режим работы:</strong><br><span>${agency.SGRAF}</span>
-          <br>
-          <hr>
-        `;
+      let phonesArr = agency.SPHONE.split(";");
+      let grafArr = agency.SGRAF.split("\n");
+      let email;
+      phonesArr.pop();
+      grafArr.pop();
+      let template = `
+        <div class="card-body">
+          <h4 class="card-title">${agency.SSHORTNAME}</h4>
+          <div class="card-office-adress row">
+            <div class="col-4 pe-0 position-relative">
+              <img src="" />
+              <button class="office-image-zoom" type="button"></button>
+            </div>
+            <div class="col-8">
+              <div>${agency.SADDRESS}</div>
+              <div class="card-office-opened">Открыт до</div>
+            </div>
+          </div>
+          <div class="card-office-undeground">
+            <span  class="undeground-color"></span>
+            <span>Ленинский проспект</span>
+            <span class="card-office-distance"> 1.5 км </span>
+          </div>
+          <div class="card-office-time">
+            <button type="button">Режим работы:</button>
+            <div class="card-office-times">${agency.SGRAF}</div>
+          </div>
+          <div class="card-office-contacts">
+            <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
+            <div>
+              <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
+            </div>
+          </div>
+        </div>`;
+      template = template.replace(
+        /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
+        () => {
+          let temp = "";
+          grafArr.forEach((graf) => {
+            temp += `<div class="card-office-times">${graf}</div>`;
+          });
+          return temp;
+        }
+      );
+      template = template.replace(
+        /<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g,
+        () => {
+          let temp = "";
+          phonesArr.forEach((phone) => {
+            temp += `<div class="card-office-phone"><a href="tel:${phone}">${phone}</a></div>`;
+          });
+          return temp;
+        }
+      );
+      template = template.replace(
+        /<a href="mailto:[^"].+? class="card-office-e-mail">(.*?)<\/a[^>]*?>/g,
+        () => {
+          return agency.SEMAIL
+            ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>`
+            : "";
+        }
+      );
+      template = template.replace(
+        /<div class="col-4">[\n\s]*?<img src="" \/>[\n\s]*?<\/div[^>]*>/g,
+        () => {
+          let url =
+            "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
+          return agency.SPATH1
+            ? `<div class="col-4"><img src=${url} /></div>`
+            : "";
+        }
+      );
+      return template;
     },
     combineAgencies(agencies, i, count) {
       let arr = [];
@@ -317,16 +398,32 @@ export default {
       return myGeoObjects;
     },
     initSuggestView() {
-      let suggestView = new ymaps.SuggestView("suggest");
+      this.suggestView = new ymaps.SuggestView("suggest");
       if (this.myMap) {
         this.myMap.destroy();
-        suggestView.destroy();
+        this.suggestView.destroy();
       }
       let showOnMap = this.showOnMap.bind(this);
-
-      suggestView.events.add("select", function (e) {
+      let _this = this;
+      func._this = this;
+      function func(e) {
+        if (e.get("item").value.includes("метро")) {
+          _this.currentStation = e.get("item").value.split(" метро")[1].trim();
+          let maps = document.querySelectorAll(".maps");
+          for (let i = 0; i < maps[0].children.length; i++) {
+            if (maps[0].children[i].innerHTML == _this.currentStation) {
+              let currentCircle = maps[0].children[i - 1];
+              let x = currentCircle.getAttribute("cx");
+              let y = currentCircle.getAttribute("cy");
+              _this.useElement = maps[0].children[maps[0].children.length - 1];
+              _this.useElement.setAttribute("x", x);
+              _this.useElement.setAttribute("y", y);
+            }
+          }
+        }
         showOnMap(e.get("item").value);
-      });
+      }
+      this.suggestView.events.add("select", func);
     },
 
     async setPositionAttributes() {
@@ -350,7 +447,7 @@ export default {
         }
       }
     },
-    updateMap(state, caption) {
+    updateMap(state, caption, zoom = 12, visibility) {
       let placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
@@ -359,10 +456,11 @@ export default {
         },
         {
           preset: "islands#redDotIconWithCaption",
+          visible: visibility,
         }
       );
       this.myMap.geoObjects.add(placemark);
-      this.myMap.setCenter(state.center, 12);
+      this.myMap.setCenter(state.center, zoom);
       placemark.geometry.setCoordinates(state.center);
       placemark.properties.set({
         iconCaption: caption,
@@ -466,43 +564,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-body {
-  margin: 0;
-  padding: 0;
-}
-.map {
-  width: 800px;
-  height: 600px;
-}
-select,
-.form-control,
-input {
-  min-width: 500px !important;
-}
-.filters {
-  display: flex;
-}
-.tab-pane {
-  position: relative;
-}
-.card {
-  position: absolute;
-  min-width: 400px;
-  min-width: min-content;
-  padding: 15px;
-  & > div {
-    display: flex;
-  }
-}
-
 circle:hover {
   cursor: pointer;
   r: 15;
 }
-path:hover {
-  stroke-width: 12;
-}
-
 .metrowrapper {
   display: flex;
   align-items: center;

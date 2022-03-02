@@ -46,6 +46,11 @@ export default {
     placeholder: {
       type: String,
     },
+    data: {
+      type: Object,
+      required: false,
+      default: () => {},
+    },
   },
   created() {
     this.debouncedClose = _.debounce(this.closeList, 300);

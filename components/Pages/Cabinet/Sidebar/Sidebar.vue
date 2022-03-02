@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar_client">
-    <header-user-name :user-data="loggedInUser"></header-user-name>
+    <header-user-name :user-data="userInfo"></header-user-name>
 
     <ul class="sidebar-nav justify-content-center">
       <n-link
@@ -61,10 +61,11 @@ export default {
       endScrollMenu: false,
       sideBarMini: false,
       url: null,
+      userInfo: null,
     };
   },
   created() {
-    this.$auth.fetchUser();
+    this.userInfo = this.$auth.user;
     const token = this.$auth.$storage._state["_token.local"].replace(
       "Bearer ",
       ""
@@ -92,6 +93,7 @@ export default {
     async logout() {
       try {
         await this.$auth.logout();
+        localStorage.removeItem("USER_INFO");
         window.$nuxt.$cookiz?.remove("url");
         window.location.href = "/";
       } catch (e) {

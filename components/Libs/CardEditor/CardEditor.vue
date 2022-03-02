@@ -281,6 +281,13 @@ export default {
       const menuItem = flatmenu.find((item) => {
         return item.SNAME == e.label;
       });
+
+      if (menuItem === undefined) {
+        throw new Error(
+          `В списке меню не найден пункт меню с названием SNAME === "${e.label}"`
+        );
+      }
+
       this.$router.push(
         `/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0?ref=${this.$route.fullPath}`
       );

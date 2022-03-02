@@ -52,7 +52,7 @@
     </div>
 
     <div class="row">
-      <b-alert class="mt-3" show v-if="errorMessage" variant="danger">{{
+      <b-alert class="mt-3" show v-if="isErrorExist" variant="danger">{{
         errorMessage
       }}</b-alert>
     </div>
@@ -70,11 +70,8 @@ export default {
   data() {
     return {
       myclass: ["cabinet"],
+      isErrorExist: false,
     };
-  },
-
-  mounted() {
-    this.$bvModal.show("modal");
   },
 
   async created() {
@@ -113,6 +110,18 @@ export default {
       }
     },
   },
+
+  watch: {
+    errorMessage() {
+      if (this.errorMessage === null) {
+        this.isErrorExist = false;
+      }
+      if (this.errorMessage != null) {
+        this.isErrorExist = true;
+      }
+    },
+  },
+
   computed: {
     isButtonDisabled() {
       if (this.$refs.CardEditor) {
@@ -126,10 +135,11 @@ export default {
         JSON.stringify(this.$store.getters["data_card/getForm"])
       );
     },
-    //
+
     errorMessage() {
       return this.$store.getters["data_card/getErrorMessage"];
     },
+
     isError() {
       return this.$store.getters["data_card/getError"];
     },

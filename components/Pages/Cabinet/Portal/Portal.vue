@@ -2,7 +2,10 @@
   <client-only placeholder="Загрузка...">
     <div>
       <div v-show="isShowBlock">
-        <v-runtime-template :template="templateData"></v-runtime-template>
+        <v-runtime-template
+          :template="templateData"
+          :params="params"
+        ></v-runtime-template>
       </div>
       <div v-if="!isShowBlock">
         <div style="text-align: center">
@@ -21,6 +24,7 @@ import OfferBlock from "../Block/OfferBlock";
 import PolicyBlock from "../Block/PolicyBlock";
 import ContentBlock from "../Block/ContentBlock";
 import ActionButton from "../Block/ActionButton";
+import AddToCalendarButton from "../Block/AddToCalendarButton.vue";
 import FormPage from "~/components/Pages/FormPage";
 import OpenCardButton from "../Block/OpenCardButton";
 import VRuntimeTemplate from "v-runtime-template";
@@ -42,6 +46,7 @@ export default {
     VRuntimeTemplate,
     ContentBlock,
     FilterBlock,
+    AddToCalendarButton,
     ActionButton,
     OpenCardButton,
     PortalCard,
@@ -57,16 +62,6 @@ export default {
     params: {
       type: Object,
       required: true,
-      default: () => {},
-    },
-    isButtonRender: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
-    data: {
-      type: Object,
-      required: false,
       default: () => {},
     },
   },

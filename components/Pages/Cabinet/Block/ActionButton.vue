@@ -48,7 +48,7 @@ export default {
     rowId: {
       type: Number,
       required: false,
-      default: () => 0,
+      default: () => Math.random(),
     },
     body: {
       type: Object | Array,
@@ -89,11 +89,7 @@ export default {
           itemId: this.action.NITEM,
           body: this.body,
         });
-        console.log("экшн executeAction вызван");
-        if (this.getUrlAddress) {
-          console.log("getUrlAdress:наличие");
-          console.log(this.getUrlAddress);
-        }
+
         if (!this.getUrlAddress) {
           console.log("getUrlAdress:отсутствие");
           console.log("id:", this.$route.params.idItem);

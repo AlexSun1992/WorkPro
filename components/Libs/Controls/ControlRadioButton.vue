@@ -1,22 +1,21 @@
 <template>
   <div>
     <ul>
-      <li v-for="item in getData.options" :key="item.value">
+      <li v-for="item in options" :key="item.value">
         <input
           type="radio"
           :id="item.value"
           :value="item.value"
           name="ControlRadioButton"
           v-model="id"
-          @change="update(id, item.text)"
-          :checked="item.text == 'Без ограничения'"
+          @change="update(id)"
+          :checked="item.value === id"
+          :disabled="data.readonly === true"
         />
         <label
           :for="item.value"
           :class="{
-            active:
-              item.value === id ||
-              (item.text === 'Без ограничения' && activeClass === true),
+            active: item.value == id,
           }"
           >{{ item.text }}</label
         >
@@ -28,12 +27,8 @@
 export default {
   data() {
     return {
-      id: null,
-      activeClass: true,
+      id: this.data.value,
     };
-  },
-  mounted() {
-    this.activeClass = true;
   },
   props: {
     data: {
@@ -44,7 +39,6 @@ export default {
   },
   methods: {
     update(value) {
-      this.activeClass = false;
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -53,10 +47,8 @@ export default {
     },
   },
   computed: {
-    getData() {
-      return this.$store.getters["data_card/getDataFieldByFieldId"](
-        this.data.fieldId
-      );
+    options() {
+      return this.data.options;
     },
   },
 };

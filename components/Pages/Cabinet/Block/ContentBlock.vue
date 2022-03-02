@@ -56,6 +56,9 @@ export default {
       required: false,
       default: () => null,
     },
+    params: {
+      required: false,
+    },
   },
 
   data() {
@@ -67,6 +70,7 @@ export default {
 
   async fetch() {
     try {
+      // if (this.params.settings.recordLoad) {
       (await this.cardId)
         ? this.$store.dispatch("blocks/fetchWizardBlock", {
             itemId: this.itemId,
@@ -76,6 +80,7 @@ export default {
             id: this.itemId,
             query: { ...this.$route.query },
           });
+      // }
     } catch (err) {
       this.$bvToast.toast(err.response.data.MESSAGE, {
         title: "Ошибка",
@@ -130,6 +135,7 @@ export default {
       this.componentKey += 1;
       this.$emit("update", event);
     },
+
     openCard(item) {
       try {
         if (this.isOpenCard) {
