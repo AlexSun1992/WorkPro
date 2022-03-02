@@ -1,4 +1,5 @@
 import { mutations } from "./blocks";
+import { getters } from "./blocks";
 
 describe("модуль блоков", () => {
   it("должен добавлять фильтр в список", () => {
@@ -20,4 +21,23 @@ describe("модуль блоков", () => {
   });
 
   it("должен обновлять значение фильтра в списке", () => {});
+});
+
+describe("Неотфильтрованные блоки", () => {
+  it("должен возвращать все имеющиеся объекты(неотфильтрованные)", () => {
+    const state = { blocks: [] };
+
+    getters.getUnfilteredBlockById(state, { id: 712 });
+
+    expect(state.blocks).not.toBeNaN();
+    // expect(state.blocks).toHaveProperty("data");
+  });
+});
+
+describe("Значения по которым проводится фильтрация", () => {
+  it("Должен содержать строковые значения", () => {
+    const state = { filters: [] };
+    getters.getFilters(state);
+    expect(state.filters).not.toBeNaN();
+  });
 });

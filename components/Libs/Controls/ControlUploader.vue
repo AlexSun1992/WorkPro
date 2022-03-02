@@ -1,31 +1,79 @@
 <template>
   <div>
-    <div v-if="items">
-      <FileLoader :item="items[0]" table-id="9662" />
-    </div>
+    <b-button @click="$refs.file.click()" class="btn-doc-add">{{
+      data.label
+    }}</b-button>
+    <input
+      ref="file"
+      type="file"
+      style="display: none"
+      v-on:change="handleFileUpload()"
+    />
+    {{ fileSize }}
+    {{ fileType }}
   </div>
 </template>
 
 <script>
-import FileLoader from "../../../components/Pages/Table/FileLoader";
-
 export default {
   name: "ControlUploader",
-  components: {
-    FileLoader,
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
   },
   data() {
     return {
-      items: null,
+      uploadPercentage: 0,
+      percentsVisible: false,
+      file: null,
     };
   },
-  async fetch() {
-    let data = await this.$axios.$get(
-      "/am/main/v2/data/27/983?json={pIdDocPhoto:1351480299}"
-    );
-    this.items = data[0]._data;
+  created() {},
+  methods: {
+    handleFileUpload() {
+      this.file = this.$refs.file.files[0];
+      this.submitFile();
+    },
+    submitFile() {
+      return true;
+    },
+  },
+  computed: {
+    fileSize() {
+      if (this.file?.size) {
+        return (this.file.size / 1024000).toFixed(1) + "мб";
+      }
+    },
+    fileType() {
+      if (this.file?.type) {
+        return this.file.type;
+      }
+    },
   },
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.files {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > div {
+    min-width: 135px;
+  }
+}
+.button {
+  height: fit-content;
+}
+.file {
+  max-width: 500px;
+}
+.size {
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+}
+</style>

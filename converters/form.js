@@ -154,6 +154,8 @@ converter.form = async (data, params) => {
       obj.type = "empty";
     } else if (webFields[i].IDCONTROL == 33) {
       obj.type = "LabelMoney";
+    } else if (webFields[i].IDCONTROL == 34) {
+      obj.type = "Uploader";
     } else if (webFields[i].IDCONTROL == 35) {
       obj.type = "DadataSelect";
     } else if (webFields[i].IDCONTROL == 40) {

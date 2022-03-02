@@ -10,16 +10,22 @@
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
             <div class="position-relative">
-              <input type="text" id="suggest" ref="search" />
+              <input
+                type="text"
+                @input="clearStation"
+                id="suggest"
+                ref="search"
+              />
               <button
-                @click="$refs.search.value = ''"
+                v-show="!isInputEmpty"
+                @click="clear"
                 class="suggest-clear"
               ></button>
             </div>
-            <div v-if="suggest && !getOffices">
+            <!-- <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
               поиска
-            </div>
+            </div> -->
           </div>
           <div class="col-12 col-lg-7">
             <FilterComponent :filters="filters" @update="filterOffices" />
@@ -51,6 +57,7 @@
             <Mosmetro ref="metro" @click="chooseStation" />
             <div v-show="cardVisible" ref="card" class="card">
               <metro-office-card
+                @open="openOnMap"
                 @close="circleClicked = false"
                 :offices="stationOffices"
               />
@@ -71,6 +78,7 @@
 </template>
 
 <script>
+import { BFormInput } from "bootstrap-vue";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
 import Notification from "./Notification.vue";
@@ -95,6 +103,7 @@ export default {
     BButtonGroup,
     BButton,
     ZoomComponent,
+    BFormInput,
   },
   props: ["notification"],
   data() {
@@ -119,6 +128,9 @@ export default {
       curPosY: null,
       currentTab: 0,
       suggestView: null,
+      currentStation: null,
+      useElement: null,
+      isInputEmpty: true,
     };
   },
   async created() {
@@ -139,6 +151,21 @@ export default {
     }
   },
   methods: {
+    clearStation(e) {
+      if (e.target.value == "") {
+        this.isInputEmpty = true;
+        this.useElement.setAttribute("x", -1000);
+        this.useElement.setAttribute("y", -1000);
+      } else {
+        this.isInputEmpty = false;
+      }
+    },
+    clear() {
+      this.$refs.search.value = "";
+      this.isInputEmpty = true;
+      this.useElement.setAttribute("x", -1000);
+      this.useElement.setAttribute("y", -1000);
+    },
     openOnMap(e) {
       this.currentTab = 0;
       this.updateMap(
@@ -259,12 +286,14 @@ export default {
       this.myMap = new ymaps.Map("map", mapState, {
         yandexMapDisablePoiInteractivity: true,
       });
+      this.myMap.behaviors.disable("scrollZoom");
+      this.myMap.behaviors.enable(["dblClickZoom", "multiTouch"]);
       this.myMap.controls.add("zoomControl", {
         size: "small",
         float: "none",
         position: {
-          bottom: "50px",
-          right: "30px",
+          bottom: "70px",
+          right: "100px",
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
@@ -279,8 +308,9 @@ export default {
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
-            <div class="col-4">
+            <div class="col-4 pe-0 position-relative">
               <img src="" />
+              <button class="office-image-zoom" type="button"></button>
             </div>
             <div class="col-8">
               <div>${agency.SADDRESS}</div>
@@ -332,16 +362,59 @@ export default {
         }
       );
       template = template.replace(
-        /<div class="col-4">[\n\s]*?<img src="" \/>[\n\s]*?<\/div[^>]*>/g,
+        /<div class="col-4 pe-0 position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div[^>]*>/g,
         () => {
           let url =
             "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
           return agency.SPATH1
-            ? `<div class="col-4"><img src=${url} /></div>`
+            ? `<div class="col-4 pe-0 position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div>`
             : "";
         }
       );
+
+      template = template.replace(
+        /<div class="card-office-opened">Открыт до<\/div[^>]*>\n/g,
+        () => {
+          return `<div class="card-office-opened">${this.showWorkingHours(
+            agency
+          )}</div>`;
+        }
+      );
       return template;
+    },
+    showWorkingHours(agency) {
+      let dateNow = new Date();
+      let day = dateNow.getDay();
+      let dateEnd = new Date();
+      day = day == 0 ? 7 : day;
+
+      if (!agency.GRAF) return;
+      const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
+      dateEnd.setHours(endHour);
+      dateEnd.setMinutes(endMinute);
+      let str;
+      if (dateNow < dateEnd) {
+        str = `Открыт до ${dateEnd.getHours()}:${
+          dateEnd.getMinutes() == 0
+            ? dateEnd.getMinutes() + "0"
+            : dateEnd.getMinutes()
+        }`;
+      } else if (dateNow > dateEnd && agency.GRAF[day]) {
+        str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
+      } else if (dateNow > dateEnd && !agency.GRAF[day]) {
+        this.isOpened = false;
+        dateNow.setDate(
+          dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+        );
+        str =
+          "Закрыт до " +
+          ("0" + dateNow.getDate()).slice(-2) +
+          "." +
+          ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+          "." +
+          dateNow.getFullYear();
+      }
+      return str;
     },
     combineAgencies(agencies, i, count) {
       let arr = [];
@@ -384,10 +457,26 @@ export default {
         this.suggestView.destroy();
       }
       let showOnMap = this.showOnMap.bind(this);
-
-      this.suggestView.events.add("select", function (e) {
+      let _this = this;
+      func._this = this;
+      function func(e) {
+        if (e.get("item").value.includes("метро")) {
+          _this.currentStation = e.get("item").value.split(" метро")[1].trim();
+          let maps = document.querySelectorAll(".maps");
+          for (let i = 0; i < maps[0].children.length; i++) {
+            if (maps[0].children[i].innerHTML == _this.currentStation) {
+              let currentCircle = maps[0].children[i - 1];
+              let x = currentCircle.getAttribute("cx");
+              let y = currentCircle.getAttribute("cy");
+              _this.useElement = maps[0].children[maps[0].children.length - 1];
+              _this.useElement.setAttribute("x", x);
+              _this.useElement.setAttribute("y", y);
+            }
+          }
+        }
         showOnMap(e.get("item").value);
-      });
+      }
+      this.suggestView.events.add("select", func);
     },
 
     async setPositionAttributes() {
@@ -532,10 +621,6 @@ circle:hover {
   cursor: pointer;
   r: 15;
 }
-path:hover {
-  stroke-width: 12;
-}
-
 .metrowrapper {
   display: flex;
   align-items: center;
