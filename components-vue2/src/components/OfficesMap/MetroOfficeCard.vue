@@ -73,7 +73,11 @@
                 <div class="card-office-opened">открыт до</div>
               </div>
               <div class="col-12">
-                <button type="button" class="show-maps-balloon">
+                <button
+                  type="button"
+                  @click="$emit('open', office)"
+                  class="show-maps-balloon"
+                >
                   Показать на карте
                 </button>
               </div>

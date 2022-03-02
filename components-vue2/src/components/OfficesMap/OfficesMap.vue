@@ -53,6 +53,7 @@
             <Mosmetro ref="metro" @click="chooseStation" />
             <div v-show="cardVisible" ref="card" class="card">
               <metro-office-card
+                @open="openOnMap"
                 @close="circleClicked = false"
                 :offices="stationOffices"
               />
