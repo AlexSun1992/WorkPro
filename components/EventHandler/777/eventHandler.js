@@ -100,6 +100,20 @@ async function eventHandler(fields, action, func) {
     checkDriversForm = checkDriversForm.concat(
       showDrivers().length ? showDrivers() : findDriver(1)
     );
+    const delDriversFormButtonIndex = checkDriversForm.findIndex(
+      (item) => item.name === "DL_BUTTON_1"
+    );
+    const delRegNumberFormButtonIndex = checkNotRegNumberForm.findIndex(
+      (item) => item.name === "DL_BUTTON_1"
+    );
+    if (delDriversFormButtonIndex > 0 && delRegNumberFormButtonIndex > 0) {
+      if (checkDriversForm.length === 6) {
+        checkDriversForm.push(findField("empty_DL_BUTTON_1"));
+        checkNotRegNumberForm.push(findField("empty_DL_BUTTON_1"));
+        checkDriversForm.splice(delDriversFormButtonIndex, 1);
+        checkNotRegNumberForm.splice(delRegNumberFormButtonIndex, 1);
+      }
+    }
   }
 
   function findVisibleDrivers() {
@@ -111,6 +125,17 @@ async function eventHandler(fields, action, func) {
     ];
     return fields.filter((item) =>
       driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.visible)
+    );
+  }
+  function findDrivers() {
+    const driverFieldNames = [
+      `DL_BUTTON_`,
+      `NDR_AGE_`,
+      `NDR_EXPERIENCE_`,
+      `NDR_NO_CRASH_`,
+    ];
+    return fields.filter((item) =>
+      driverFieldNames.find((n) => item.name.indexOf(n) >= 0)
     );
   }
   function showDrivers() {
@@ -159,6 +184,7 @@ async function eventHandler(fields, action, func) {
   }
 
   if (action.name === "NDRIVER_TYPE" && action.value === "2") {
+    console.log("here");
     invertPropertyElements(checkDriversForm, "visible");
   }
 
