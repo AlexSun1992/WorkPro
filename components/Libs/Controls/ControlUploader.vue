@@ -10,7 +10,8 @@
       v-on:change="handleFileUpload()"
     />
 
-    {{ fileCheck }}
+    {{ fileSize }}
+    {{ fileType }}
   </div>
 </template>
 
@@ -42,9 +43,14 @@ export default {
     },
   },
   computed: {
-    fileCheck() {
+    fileSize() {
       if (this.file?.size) {
         return (this.file.size / 1024000).toFixed(1) + "мб";
+      }
+    },
+    fileType() {
+      if (this.file?.type) {
+        return this.file.type;
       }
     },
   },
