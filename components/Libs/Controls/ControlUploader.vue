@@ -9,14 +9,7 @@
       style="display: none"
       v-on:change="handleFileUpload()"
     />
-    <!-- <div class="progress">
-      <b-progress
-        class="mb-2"
-        variant="success"
-        show-progress
-        animated
-      ></b-progress>
-    </div> -->
+
     {{ fileCheck }}
   </div>
 </template>
@@ -45,7 +38,7 @@ export default {
       this.submitFile();
     },
     submitFile() {
-      console.log("submitFile");
+      return true;
     },
   },
   computed: {
