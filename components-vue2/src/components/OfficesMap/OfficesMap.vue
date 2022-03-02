@@ -16,7 +16,11 @@
                 id="suggest"
                 ref="search"
               />
-              <button @click="clear" class="suggest-clear"></button>
+              <button
+                v-show="!isInputEmpty"
+                @click="clear"
+                class="suggest-clear"
+              ></button>
             </div>
             <!-- <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
@@ -126,6 +130,7 @@ export default {
       suggestView: null,
       currentStation: null,
       useElement: null,
+      isInputEmpty: true,
     };
   },
   async created() {
@@ -148,12 +153,16 @@ export default {
   methods: {
     clearStation(e) {
       if (e.target.value == "") {
+        this.isInputEmpty = true;
         this.useElement.setAttribute("x", -1000);
         this.useElement.setAttribute("y", -1000);
+      } else {
+        this.isInputEmpty = false;
       }
     },
     clear() {
       this.$refs.search.value = "";
+      this.isInputEmpty = true;
       this.useElement.setAttribute("x", -1000);
       this.useElement.setAttribute("y", -1000);
     },
