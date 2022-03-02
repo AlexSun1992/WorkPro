@@ -201,6 +201,7 @@ export default {
         this.itemId
       );
       if (block) {
+        console.log(block);
         const items = block.data.items.map((item) => item[this.propertyName]);
 
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
@@ -209,6 +210,8 @@ export default {
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
+
+        console.log(filter);
 
         return uniqueItems.map((name) => ({
           name,
