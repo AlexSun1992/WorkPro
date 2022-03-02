@@ -362,16 +362,59 @@ export default {
         }
       );
       template = template.replace(
-        /<div class="col-4">[\n\s]*?<img src="" \/>[\n\s]*?<\/div[^>]*>/g,
+        /<div class="col-4 pe-0 position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div[^>]*>/g,
         () => {
           let url =
             "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
           return agency.SPATH1
-            ? `<div class="col-4"><img src=${url} /></div>`
+            ? `<div class="col-4 pe-0 position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div>`
             : "";
         }
       );
+
+      template = template.replace(
+        /<div class="card-office-opened">Открыт до<\/div[^>]*>\n/g,
+        () => {
+          return `<div class="card-office-opened">${this.showWorkingHours(
+            agency
+          )}</div>`;
+        }
+      );
       return template;
+    },
+    showWorkingHours(agency) {
+      let dateNow = new Date();
+      let day = dateNow.getDay();
+      let dateEnd = new Date();
+      day = day == 0 ? 7 : day;
+
+      if (!agency.GRAF) return;
+      const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
+      dateEnd.setHours(endHour);
+      dateEnd.setMinutes(endMinute);
+      let str;
+      if (dateNow < dateEnd) {
+        str = `Открыт до ${dateEnd.getHours()}:${
+          dateEnd.getMinutes() == 0
+            ? dateEnd.getMinutes() + "0"
+            : dateEnd.getMinutes()
+        }`;
+      } else if (dateNow > dateEnd && agency.GRAF[day]) {
+        str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
+      } else if (dateNow > dateEnd && !agency.GRAF[day]) {
+        this.isOpened = false;
+        dateNow.setDate(
+          dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+        );
+        str =
+          "Закрыт до " +
+          ("0" + dateNow.getDate()).slice(-2) +
+          "." +
+          ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+          "." +
+          dateNow.getFullYear();
+      }
+      return str;
     },
     combineAgencies(agencies, i, count) {
       let arr = [];
