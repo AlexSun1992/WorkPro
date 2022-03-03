@@ -1,8 +1,8 @@
 <template>
-  <div class="login-form">
+  <div class="">
     <div class="row justify-content-center">
       <div class="mb-5 col-md-10 col-lg-6">
-        <div class="block-registration px-2 px-md-4 pb-3 mt-3">
+        <div class="px-2 px-md-4 pb-3 mt-3">
           <b-tabs @activate-tab="initData" ref="tabs">
             <b-tab title="Телефон">
               <b-alert :show="isErrorMessage" variant="danger">{{
