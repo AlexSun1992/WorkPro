@@ -176,6 +176,7 @@ export default {
     },
 
     setQueryURL: function () {
+      console.log("setQueryURL");
       window.history.replaceState(
         null,
         null,
@@ -188,6 +189,9 @@ export default {
             this.$store.getters["blocks/getFilters"]
           )}`,
       };
+
+      console.log(url);
+
       this.$store.commit("menu/setQueriesUrlByIdMenu", {
         ...this.$route.params,
         url,

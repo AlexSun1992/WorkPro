@@ -18,9 +18,9 @@
       :placeholder="data.placeholder"
     >
     </model-select>
-    <b-form-invalid-feedback :state="data.state">{{
-      data.error ? data.error : "Обязательно для заполнения"
-    }}</b-form-invalid-feedback>
+    <b-form-invalid-feedback :state="data.state"
+      >{{ data.error ? data.error : "Обязательно для заполнения" }}
+    </b-form-invalid-feedback>
   </b-form-group>
 </template>
 

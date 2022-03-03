@@ -249,8 +249,6 @@ export default {
         this.circle.attributes.fill.value = "gold";
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + "px";
-        debugger;
-        console.log(e.target);
       }
     },
     async init(_, filters) {
@@ -371,19 +369,19 @@ export default {
           let url =
             "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
           return agency.SPATH1
-            ? `<div class="col-4 pe-0"><img src=${url} /><button class="office-image-zoom" type="button"></button></div>`
+            ? `<div class="col-4 pe-0"><div class="position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div></div>`
             : "";
         }
       );
 
-      template = template.replace(
-        /<div class="card-office-opened">Открыт до<\/div[^>]*>\n/g,
-        () => {
-          return `<div class="card-office-opened">${this.showWorkingHours(
-            agency
-          )}</div>`;
-        }
-      );
+      // template = template.replace(
+      //   /<div class="card-office-opened">Открыт до<\/div[^>]>/g,
+      //   () => {
+      //     return `<div class="card-office-opened">${this.showWorkingHours(
+      //       agency
+      //     )}</div>`;
+      //   }
+      // );
 
       template = template.replace(
         /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
@@ -403,7 +401,7 @@ export default {
       );
 
       template = template.replace(
-        /<div class="col-8">[\n\s]*?(.*?)[\n\s]*?<\/div[^>]*>\n/g,
+        /<div class="col-8">[\n\s]*?<div>[\n\s]*?(.*?)[\n\s]*?<\/div>[\n\s]*?<div class="card-office-opened">[\n\s]*?Открыт до[\n\s]*?<\/div>[\n\s]*?<\/div>/,
         () => {
           return agency.SPATH1
             ? `<div class="col-8">

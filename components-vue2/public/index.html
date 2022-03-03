@@ -9,11 +9,6 @@
   <title>
     <%= htmlWebpackPlugin.options.title %>
   </title>
-  <style>
-    .login-form {
-      width: 100%;
-    }
-  </style>
 </head>
 
 <body class="app_body">
@@ -23,9 +18,13 @@
         continue..123</strong>
   </noscript>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css" />
+  <link rel="stylesheet"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css" />
+  <link rel="stylesheet"
+    href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css" />
   <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css" />
+  <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_main.css" />
   <div class="agent-block bg-slider-six">
     <div class="agent-block-dsp">
       Ваш город: <strong class="color-green-one">Владивосток</strong>
@@ -37,8 +36,8 @@
     </div>
   </div>
 
-  <component-login-form></component-login-form>
-  <component-offices-map></component-offices-map>
+  <component-offices-map>
+    </component-office-map>
 </body>
 
 </html>
