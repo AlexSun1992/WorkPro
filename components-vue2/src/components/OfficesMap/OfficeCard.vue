@@ -10,7 +10,7 @@
             <button class="office-image-zoom" type="button"></button>
           </div>
         </div>
-        <div class="col-8">
+        <div :class="[office.SPATH1 ? 'col-8' : 'col-12']">
           <div>{{ office.SADDRESS }}</div>
           <div
             :class="[isOpened ? 'card-office-opened' : 'card-office-closed']"

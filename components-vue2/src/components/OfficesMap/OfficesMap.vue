@@ -322,7 +322,7 @@ export default {
             </div>
           </div>
           <div class="card-office-undeground">
-            <span  class="undeground-color"></span>
+            <span class="undeground-color"></span>
             <span>Ленинский проспект</span>
             <span class="card-office-distance"> 1.5 км </span>
           </div>
@@ -382,6 +382,42 @@ export default {
           return `<div class="card-office-opened">${this.showWorkingHours(
             agency
           )}</div>`;
+        }
+      );
+
+      template = template.replace(
+        /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
+        () => {
+          let temp = "";
+          agency.IDUNDERGROUND.forEach((item) => {
+            temp += `<div class="card-office-undeground">
+                    <span class=${
+                      "undeground-color_" + item.IDUNDERLINE
+                    }></span>
+                    <span>${item.SNAME}</span>
+                    <span class="card-office-distance"> 1.5 км </span>
+                  </div>`;
+          });
+          return temp;
+        }
+      );
+
+      template = template.replace(
+        /<div class="col-8">[\n\s]*?(.*?)[\n\s]*?<\/div[^>]*>\n/g,
+        () => {
+          return agency.SPATH1
+            ? `<div class="col-8">
+                  <div>${agency.SADDRESS}</div>
+                  <div class="card-office-opened">${this.showWorkingHours(
+                    agency
+                  )}</div>
+                </div>`
+            : `<div class="col-12">
+                <div>${agency.SADDRESS}</div>
+                <div class="card-office-opened">${this.showWorkingHours(
+                  agency
+                )}</div>
+            </div>`;
         }
       );
       return template;

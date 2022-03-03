@@ -70,9 +70,15 @@
                   <button class="office-image-zoom" type="button"></button>
                 </div>
               </div>
-              <div class="col-8">
+              <div :class="[office.SPATH1 ? 'col-8' : 'col-12']">
                 <div>{{ office.SADDRESS }}</div>
-                <div class="card-office-opened">открыт до</div>
+                <div
+                  :class="[
+                    isOpened ? 'card-office-opened' : 'card-office-closed',
+                  ]"
+                >
+                  {{ showWorkingHours(office) }}
+                </div>
               </div>
               <div class="col-12">
                 <button
@@ -84,22 +90,32 @@
                 </button>
               </div>
             </div>
-            <div class="card-office-undeground">
-              <span class="undeground-color"></span>
-              <span> Данных нет (во вью пусто)</span>
-              <span class="card-office-distance"> 0.7 км </span>
+            <div
+              v-if="office.IDUNDERGROUND.length"
+              class="card-office-undeground"
+            >
+              <div v-for="(item, i) in office.IDUNDERGROUND" :key="i">
+                <span :class="'undeground-color_' + item.IDUNDERLINE"></span>
+                <span>{{ item.SNAME }}</span>
+                <span v-if="office.NDISTANSE" class="card-office-distance">
+                  {{ office.NDISTANSE.toFixed(1) + " км" }}
+                </span>
+              </div>
             </div>
+
             <div class="card-office-time">
               <button type="button">Режим работы:</button>
               <div class="card-office-times">{{ office.SGRAF }}</div>
             </div>
-            <div class="card-office-contacts">
-              <div class="card-office-phone">
-                <a :href="'tel:' + office.SPHONE">{{ office.SPHONE }}</a>
+            <div v-if="office.SGRAF" class="card-office-contacts">
+              <div v-for="(phone, i) in getPhones(office.SPHONE)" :key="i">
+                <div v-if="office.SPHONE" class="card-office-phone">
+                  <a v-bind:href="'tel:' + office.SPHONE">{{ phone }}</a>
+                </div>
               </div>
-              <div>
+              <div v-if="office.SEMAIL">
                 <a
-                  :href="'mailto:' + office.SEMAIL"
+                  v-bind:href="'mailto:' + office.SEMAIL"
                   class="card-office-e-mail"
                   >{{ office.SEMAIL }}</a
                 >
@@ -117,6 +133,50 @@
 export default {
   name: "MetroOfficeCard",
   props: ["offices"],
+  data() {
+    return {
+      isOpened: true,
+    };
+  },
+  methods: {
+    getPhones(phones) {
+      let phonesArr = phones.split(";");
+      phonesArr.pop();
+      return phonesArr;
+    },
+    showWorkingHours(office) {
+      let dateNow = new Date();
+      let day = dateNow.getDay();
+      let dateEnd = new Date();
+      day = day == 0 ? 7 : day;
+      const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
+      dateEnd.setHours(endHour);
+      dateEnd.setMinutes(endMinute);
+      let str;
+      if (dateNow < dateEnd) {
+        str = `Открыт до ${dateEnd.getHours()}:${
+          dateEnd.getMinutes() == 0
+            ? dateEnd.getMinutes() + "0"
+            : dateEnd.getMinutes()
+        }`;
+      } else if (dateNow > dateEnd && office.GRAF[day]) {
+        str = `Откроется завтра в ${office.GRAF[day].SBEGIN}`;
+      } else if (dateNow > dateEnd && !office.GRAF[day]) {
+        this.isOpened = false;
+        dateNow.setDate(
+          dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+        );
+        str =
+          "Закрыт до " +
+          ("0" + dateNow.getDate()).slice(-2) +
+          "." +
+          ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+          "." +
+          dateNow.getFullYear();
+      }
+      return str;
+    },
+  },
 };
 </script>
 
