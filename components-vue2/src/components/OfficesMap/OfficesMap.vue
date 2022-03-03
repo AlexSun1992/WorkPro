@@ -364,12 +364,12 @@ export default {
         }
       );
       template = template.replace(
-        /<div class="col-4 pe-0 position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div[^>]*>/g,
+        /<div class="col-4 pe-0">[\n\s]*?<div class="position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div>[\n\s]*?<\/div[^>]*>/g,
         () => {
           let url =
             "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
           return agency.SPATH1
-            ? `<div class="col-4 pe-0 position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div>`
+            ? `<div class="col-4 pe-0"><img src=${url} /><button class="office-image-zoom" type="button"></button></div>`
             : "";
         }
       );
