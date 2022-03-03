@@ -371,7 +371,7 @@ export default {
           let url =
             "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
           return agency.SPATH1
-            ? `<div class="col-4 pe-0"><img src=${url} /><button class="office-image-zoom" type="button"></button></div>`
+            ? `<div class="col-4 pe-0"><div class="position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div></div>`
             : "";
         }
       );
