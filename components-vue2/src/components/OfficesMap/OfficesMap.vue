@@ -247,8 +247,10 @@ export default {
         });
         this.circle = e.target;
         this.circle.attributes.fill.value = "gold";
-        this.$refs["card"].style.top = e.offsetY + "px";
-        this.$refs["card"].style.left = e.offsetX + "px";
+        this.$refs["card"].style.top = e.layerY + "px";
+        this.$refs["card"].style.left = e.layerX + "px";
+        debugger;
+        console.log(e.target);
       }
     },
     async init(_, filters) {
@@ -619,10 +621,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-circle:hover {
-  cursor: pointer;
-  r: 15;
-}
+// circle:hover {
+//   cursor: pointer;
+//   r: 15;
+// }
 .metrowrapper {
   display: flex;
   align-items: center;
