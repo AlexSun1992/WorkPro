@@ -179,6 +179,7 @@ export default {
     getCurrentValue() {
       if (
         this.data.value !== undefined &&
+        this.data.value !== null &&
         this.data.name === "SVEHICLE_MODEL"
       ) {
         return this.data.value.split("|")[1];
