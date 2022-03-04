@@ -1,5 +1,5 @@
 <template>
-  <div class="login-form">
+  <div class="reg-form-content">
     <div class="row justify-content-center">
       <div class="mb-5 col-md-10 col-lg-6">
         <div class="block-registration px-2 px-md-4 pb-3 mt-3">
@@ -187,7 +187,7 @@
                 </b-form-group>
               </div>
               <div class="col-12 col-md-6"></div>
-              <div class="col-12 mt-3">
+              <div class="col-12">
                 <verify-password
                   :v="$v.form"
                   :validateState="validateState"
