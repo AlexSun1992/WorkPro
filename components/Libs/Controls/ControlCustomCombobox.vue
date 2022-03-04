@@ -16,6 +16,7 @@
       :class="validClass"
       :options="data.options"
       :placeholder="data.placeholder"
+      ref="sign"
     >
     </model-select>
     <b-form-invalid-feedback :state="data.state"
@@ -41,6 +42,16 @@ export default {
       type: Boolean,
       required: true,
       default: () => false,
+    },
+  },
+
+  methods: {
+    eventHandlerBlur() {
+      this.$emit("blur", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value,
+      });
     },
   },
   computed: {
