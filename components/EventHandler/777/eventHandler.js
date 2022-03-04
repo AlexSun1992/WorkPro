@@ -48,6 +48,7 @@ async function eventHandler(fields, action, func) {
   const car_title = findField("z-three");
   const drivers_title = findField("z-four");
   const add_driver = findField(`ADD_DRIVER`);
+  const emptyFive = findField("empty-5");
 
   let autoInfo = null;
 
@@ -73,6 +74,7 @@ async function eventHandler(fields, action, func) {
     owner_title,
     car_title,
     drivers_title,
+    emptyFive,
   ];
 
   if (isCaptchaNeeded.value === true) {
