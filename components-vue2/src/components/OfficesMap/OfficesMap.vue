@@ -67,11 +67,12 @@
         </div>
       </b-tab>
       <b-tab title="В списке" title-item-class="office-on-lists">
-        <OfficesList v-if="regionId" :data="getOffices" @open="openOnMap" />
-        <div v-else>
+        <!-- <OfficesList :data="getOffices" @open="openOnMap" /> -->
+        <OfficesList :key="componentKey" :data="getOffices" @open="openOnMap" />
+        <!-- <div v-else>
           По вашему запросу ничего не найдено. Попробуйте изменить критерии
           поиска
-        </div>
+        </div> -->
       </b-tab>
     </b-tabs>
   </div>
@@ -131,6 +132,7 @@ export default {
       currentStation: null,
       useElement: null,
       isInputEmpty: true,
+      componentKey: 0,
     };
   },
   async created() {
@@ -154,8 +156,8 @@ export default {
     clearStation(e) {
       if (e.target.value == "") {
         this.isInputEmpty = true;
-        this.useElement.setAttribute("x", -1000);
-        this.useElement.setAttribute("y", -1000);
+        this.useElement?.setAttribute("x", -1000);
+        this.useElement?.setAttribute("y", -1000);
       } else {
         this.isInputEmpty = false;
       }
@@ -163,8 +165,8 @@ export default {
     clear() {
       this.$refs.search.value = "";
       this.isInputEmpty = true;
-      this.useElement.setAttribute("x", -1000);
-      this.useElement.setAttribute("y", -1000);
+      this.useElement?.setAttribute("x", -1000);
+      this.useElement?.setAttribute("y", -1000);
     },
     openOnMap(e) {
       this.currentTab = 0;
@@ -426,7 +428,7 @@ export default {
       let dateEnd = new Date();
       day = day == 0 ? 7 : day;
 
-      if (!agency.GRAF) return;
+      if (!agency.GRAF) return "";
       const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
       dateEnd.setHours(endHour);
       dateEnd.setMinutes(endMinute);
@@ -644,7 +646,7 @@ export default {
       if (!this.regionId) {
         data = null;
       }
-
+      this.componentKey += 1;
       return data;
     },
     tabVisible() {

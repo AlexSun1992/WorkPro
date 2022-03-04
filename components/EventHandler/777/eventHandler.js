@@ -70,7 +70,6 @@ async function eventHandler(fields, action, func) {
     fillInmanually,
     calculatePolis,
     calculate_btn,
-    reg_number_title,
     owner_title,
     car_title,
     drivers_title,
@@ -89,19 +88,16 @@ async function eventHandler(fields, action, func) {
       showDrivers().length ? showDrivers() : findDriver(1)
     );
   }
+  const drivers = findVisibleDrivers().length
+    ? findVisibleDrivers()
+    : showDrivers().length
+    ? showDrivers()
+    : findDriver(1);
 
   if (driverType.value == 2) {
-    checkNotRegNumberForm = checkNotRegNumberForm.concat(
-      findVisibleDrivers().length
-        ? findVisibleDrivers()
-        : showDrivers().length
-        ? showDrivers()
-        : findDriver(1)
-    );
+    checkNotRegNumberForm = checkNotRegNumberForm.concat(drivers);
     checkNotRegNumberForm.push(add_driver);
-    checkDriversForm = checkDriversForm.concat(
-      showDrivers().length ? showDrivers() : findDriver(1)
-    );
+    checkDriversForm = checkDriversForm.concat(drivers);
     const delDriversFormButtonIndex = checkDriversForm.findIndex(
       (item) => item.name === "DL_BUTTON_1"
     );
@@ -186,7 +182,6 @@ async function eventHandler(fields, action, func) {
   }
 
   if (action.name === "NDRIVER_TYPE" && action.value === "2") {
-    console.log("here");
     invertPropertyElements(checkDriversForm, "visible");
   }
 
