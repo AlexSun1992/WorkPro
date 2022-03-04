@@ -2,13 +2,15 @@
   <b-card :title="office.SSHORTNAME" class="mb-2">
     <b-card-text>
       <div class="card-office-adress row">
-        <div v-if="office.SPATH1" class="col-4 pe-0 position-relative">
-          <img
-            :src="'https://www.reso.ru/export/sites_reso/' + office.SPATH1"
-          />
-          <button class="office-image-zoom" type="button"></button>
+        <div v-if="office.SPATH1" class="col-4 pe-0">
+          <div class="position-relative">
+            <img
+              :src="'https://www.reso.ru/export/sites_reso/' + office.SPATH1"
+            />
+            <button class="office-image-zoom" type="button"></button>
+          </div>
         </div>
-        <div class="col-8">
+        <div :class="[office.SPATH1 ? 'col-8' : 'col-12']">
           <div>{{ office.SADDRESS }}</div>
           <div
             :class="[isOpened ? 'card-office-opened' : 'card-office-closed']"

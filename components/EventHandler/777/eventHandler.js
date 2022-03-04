@@ -714,13 +714,39 @@ async function eventHandler(fields, action, func) {
     findField(`ISSUE_POLICY`).visible = false;
   }
 
+  if (action.name === "SVEHICLE_MODEL" && action.value === null) {
+    findField("SVEHICLE_MODEL").error = "Марка авто не указана";
+  }
+
+  if (action.name === "SVEHICLE_MODEL" && action.value !== null) {
+    findField("SVEHICLE_MODEL").error = null;
+    findField("SVEHICLE_MODEL").state = true;
+  }
+
+  if (action.name === "NYEAR_VEHICLE" && action.value === null) {
+    findField("NYEAR_VEHICLE").error = "Заполните год";
+  }
+
+  if (action.name === "NYEAR_VEHICLE" && action.value !== null) {
+    findField("NYEAR_VEHICLE").error = null;
+    findField("NYEAR_VEHICLE").state = true;
+  }
+
+  /////Обработка по "Рассчитать ОСАГО"
+
   if (action.value === "Item36585") {
     if (findField("SVEHICLE_MODEL").value === undefined) {
       findField("SVEHICLE_MODEL").error = "Марка авто не указана";
     }
+    if (findField("SVEHICLE_MODEL").value !== undefined) {
+      findField("SVEHICLE_MODEL").error = null;
+    }
 
     if (findField("NYEAR_VEHICLE").value === undefined) {
       findField("NYEAR_VEHICLE").error = "Заполните год";
+    }
+    if (findField("NYEAR_VEHICLE").value !== undefined) {
+      findField("NYEAR_VEHICLE").error = null;
     }
 
     if (findField("NHORSE_VEHICLE_POWER").value === undefined) {

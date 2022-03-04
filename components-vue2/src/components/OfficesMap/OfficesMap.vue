@@ -247,8 +247,8 @@ export default {
         });
         this.circle = e.target;
         this.circle.attributes.fill.value = "gold";
-        this.$refs["card"].style.top = e.offsetY + "px";
-        this.$refs["card"].style.left = e.offsetX + "px";
+        this.$refs["card"].style.top = e.layerY + "px";
+        this.$refs["card"].style.left = e.layerX + "px";
       }
     },
     async init(_, filters) {
@@ -308,9 +308,11 @@ export default {
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
-            <div class="col-4 pe-0 position-relative">
-              <img src="" />
-              <button class="office-image-zoom" type="button"></button>
+            <div class="col-4 pe-0">
+              <div class="position-relative">
+                <img src="" />
+                <button class="office-image-zoom" type="button"></button>
+              </div>
             </div>
             <div class="col-8">
               <div>${agency.SADDRESS}</div>
@@ -318,7 +320,7 @@ export default {
             </div>
           </div>
           <div class="card-office-undeground">
-            <span  class="undeground-color"></span>
+            <span class="undeground-color"></span>
             <span>Ленинский проспект</span>
             <span class="card-office-distance"> 1.5 км </span>
           </div>
@@ -362,22 +364,58 @@ export default {
         }
       );
       template = template.replace(
-        /<div class="col-4 pe-0 position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div[^>]*>/g,
+        /<div class="col-4 pe-0">[\n\s]*?<div class="position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div>[\n\s]*?<\/div[^>]*>/g,
         () => {
           let url =
             "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
           return agency.SPATH1
-            ? `<div class="col-4 pe-0 position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div>`
+            ? `<div class="col-4 pe-0"><div class="position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div></div>`
             : "";
         }
       );
 
+      // template = template.replace(
+      //   /<div class="card-office-opened">Открыт до<\/div[^>]>/g,
+      //   () => {
+      //     return `<div class="card-office-opened">${this.showWorkingHours(
+      //       agency
+      //     )}</div>`;
+      //   }
+      // );
+
       template = template.replace(
-        /<div class="card-office-opened">Открыт до<\/div[^>]*>\n/g,
+        /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
         () => {
-          return `<div class="card-office-opened">${this.showWorkingHours(
-            agency
-          )}</div>`;
+          let temp = "";
+          agency.IDUNDERGROUND.forEach((item) => {
+            temp += `<div class="card-office-undeground">
+                    <span class=${
+                      "undeground-color_" + item.IDUNDERLINE
+                    }></span>
+                    <span>${item.SNAME}</span>
+                    <span class="card-office-distance"> 1.5 км </span>
+                  </div>`;
+          });
+          return temp;
+        }
+      );
+
+      template = template.replace(
+        /<div class="col-8">[\n\s]*?<div>[\n\s]*?(.*?)[\n\s]*?<\/div>[\n\s]*?<div class="card-office-opened">[\n\s]*?Открыт до[\n\s]*?<\/div>[\n\s]*?<\/div>/,
+        () => {
+          return agency.SPATH1
+            ? `<div class="col-8">
+                  <div>${agency.SADDRESS}</div>
+                  <div class="card-office-opened">${this.showWorkingHours(
+                    agency
+                  )}</div>
+                </div>`
+            : `<div class="col-12">
+                <div>${agency.SADDRESS}</div>
+                <div class="card-office-opened">${this.showWorkingHours(
+                  agency
+                )}</div>
+            </div>`;
         }
       );
       return template;
@@ -617,10 +655,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-circle:hover {
-  cursor: pointer;
-  r: 15;
-}
+// circle:hover {
+//   cursor: pointer;
+//   r: 15;
+// }
 .metrowrapper {
   display: flex;
   align-items: center;
