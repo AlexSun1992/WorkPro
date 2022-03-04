@@ -10,7 +10,7 @@
         (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
           <span v-html="data.helpText"></span></vue-easy-tooltip></span
     ></template>
-    {{ isMenuShown }}
+    {{ isDirty }}
     <model-select
       v-model="fieldValue"
       :is-disabled="!edit || data.readonly"
@@ -20,7 +20,6 @@
       ref="sign"
     >
     </model-select>
-
     <b-form-invalid-feedback :state="data.state"
       >{{ data.error ? data.error : "Обязательно для заполнения" }}
     </b-form-invalid-feedback>
@@ -39,6 +38,8 @@ export default {
   data() {
     return {
       isRefsExist: false,
+      test: true,
+      flag: 0,
     };
   },
 
@@ -71,8 +72,11 @@ export default {
     },
   },
   computed: {
-    isMenuShown() {
+    isDirty() {
       if (this.isRefsExist === true) {
+        if (this.$refs["sign"].showMenu === this.test) {
+          console.log(this.flag);
+        }
         return this.$refs["sign"].showMenu;
       }
     },
@@ -82,6 +86,10 @@ export default {
         return this.data.value;
       },
       set: function (value) {
+        if (value !== "") {
+          this.isDirty = true;
+          console.log(this.isDirty);
+        }
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -96,13 +104,6 @@ export default {
         return "";
       }
     },
-  },
-  watch: {
-    // isRefsExist() {
-    //   if (this.test === true) {
-    //     console.log(this.$refs["sign"].showMenu);
-    //   }
-    // },
   },
 };
 </script>
