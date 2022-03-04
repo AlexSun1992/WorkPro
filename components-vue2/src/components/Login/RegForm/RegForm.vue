@@ -1,7 +1,7 @@
 <template>
   <div class="reg-form-content">
     <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-6">
+      <div class="mb-5 col-md-10 col-lg-7">
         <div class="block-registration px-2 px-md-4 pb-3 mt-3">
           <ConfirmModal
             :conformation="conformation"
@@ -16,7 +16,9 @@
           }}</b-alert>
 
           <b-nav card-header tabs>
-            <b-nav-item href="/login">Вход</b-nav-item>
+            <b-nav-item href="/login" class="d-none d-lg-inline-block"
+              >Вход</b-nav-item
+            >
             <b-nav-item active>Регистрация</b-nav-item>
           </b-nav>
 

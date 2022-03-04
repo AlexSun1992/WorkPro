@@ -1,7 +1,7 @@
 <template>
   <div class="recovery-form-content">
     <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-6">
+      <div class="mb-5 col-md-10 col-lg-7">
         <div class="px-2 px-md-4 pb-3 mt-3">
           <b-tabs @activate-tab="initData" ref="tabs">
             <b-tab title="Телефон">
@@ -47,25 +47,30 @@
               />
             </b-tab>
           </b-tabs>
-          <verify-password
-            :tab-index="[20, 30]"
-            :v="$v.form"
-            :validateState="validateState"
-          />
-          <div class="row buttons mt-3">
-            <div class="col-12 col-md-6">
-              <b-button href="/login" variant="secondary" class="w-100 d-block"
-                >Отмена</b-button
-              >
-            </div>
-            <div class="col-12 col-md-6 mt-3 mt-md-0">
-              <b-button
-                variant="primary"
-                @click="resetPassword"
-                :disabled="disabled"
-                class="w-100"
-                >Изменить пароль</b-button
-              >
+          <div class="recovery">
+            <verify-password
+              :tab-index="[20, 30]"
+              :v="$v.form"
+              :validateState="validateState"
+            />
+            <div class="row buttons mt-3">
+              <div class="col-12 col-md-6">
+                <b-button
+                  href="/login"
+                  variant="secondary"
+                  class="w-100 d-block"
+                  >Отмена</b-button
+                >
+              </div>
+              <div class="col-12 col-md-6 mt-3 mt-md-0">
+                <b-button
+                  variant="primary"
+                  @click="resetPassword"
+                  :disabled="disabled"
+                  class="w-100"
+                  >Изменить пароль</b-button
+                >
+              </div>
             </div>
           </div>
         </div>
