@@ -89,4 +89,4 @@ sw.*
 
 # Vim swap files
 *.swp
-ents-vue2/public/*
+components-vue2/public/*

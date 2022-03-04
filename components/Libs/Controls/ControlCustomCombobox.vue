@@ -10,6 +10,7 @@
         (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
           <span v-html="data.helpText"></span></vue-easy-tooltip></span
     ></template>
+    {{ isMenuShown }}
     <model-select
       v-model="fieldValue"
       :is-disabled="!edit || data.readonly"
@@ -19,6 +20,7 @@
       ref="sign"
     >
     </model-select>
+
     <b-form-invalid-feedback :state="data.state"
       >{{ data.error ? data.error : "Обязательно для заполнения" }}
     </b-form-invalid-feedback>
@@ -27,11 +29,19 @@
 
 <script>
 import { ModelSelect } from "vue-search-select";
+
 export default {
   name: "ControlCustomCombobox",
   components: {
     ModelSelect,
   },
+
+  data() {
+    return {
+      isRefsExist: false,
+    };
+  },
+
   props: {
     data: {
       type: Object,
@@ -45,6 +55,12 @@ export default {
     },
   },
 
+  mounted() {
+    if (this.$refs["sign"].showMenu !== null) {
+      this.isRefsExist = true;
+    }
+  },
+
   methods: {
     eventHandlerBlur() {
       this.$emit("blur", {
@@ -55,6 +71,12 @@ export default {
     },
   },
   computed: {
+    isMenuShown() {
+      if (this.isRefsExist === true) {
+        return this.$refs["sign"].showMenu;
+      }
+    },
+
     fieldValue: {
       get: function () {
         return this.data.value;
@@ -74,6 +96,13 @@ export default {
         return "";
       }
     },
+  },
+  watch: {
+    // isRefsExist() {
+    //   if (this.test === true) {
+    //     console.log(this.$refs["sign"].showMenu);
+    //   }
+    // },
   },
 };
 </script>

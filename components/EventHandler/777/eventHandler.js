@@ -741,6 +741,7 @@ async function eventHandler(fields, action, func) {
     }
 
     if (findField("NYEAR_VEHICLE").value === undefined) {
+      console.log(findField("NYEAR_VEHICLE"));
       findField("NYEAR_VEHICLE").error = "Заполните год";
     }
     if (findField("NYEAR_VEHICLE").value !== undefined) {
