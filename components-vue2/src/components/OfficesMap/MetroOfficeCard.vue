@@ -143,6 +143,7 @@ export default {
   data() {
     return {
       isOpened: true,
+      isGrafShown: true,
     };
   },
   methods: {
