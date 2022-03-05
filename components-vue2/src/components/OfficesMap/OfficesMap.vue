@@ -247,6 +247,9 @@ export default {
             this.stationOffices.push(office);
           }
         });
+        this.stationOffices.sort((a, b) => {
+          return a.NORDER - b.NORDER;
+        });
         this.circle = e.target;
         this.circle.attributes.fill.value = "gold";
         this.$refs["card"].style.top = e.layerY + "px";
