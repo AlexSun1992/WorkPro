@@ -184,7 +184,6 @@ async function eventHandler(fields, action, func) {
   }
 
   if (action.name === "NDRIVER_TYPE" && action.value === "2") {
-    console.log("here");
     invertPropertyElements(checkDriversForm, "visible");
   }
 
@@ -730,6 +729,14 @@ async function eventHandler(fields, action, func) {
     findField("NYEAR_VEHICLE").state = true;
   }
 
+  if (action.name === "NKH_VEHICLE_POWER" && action.value === undefined) {
+    findField("NKH_VEHICLE_POWER").error = "Мощность не указана";
+  }
+
+  if (action.name === "NHORSE_VEHICLE_POWER" && action.value === undefined) {
+    findField("NHORSE_VEHICLE_POWER").error = "Мощность не указана";
+  }
+
   /////Обработка по "Рассчитать ОСАГО"
 
   if (action.value === "Item36585") {
@@ -741,7 +748,6 @@ async function eventHandler(fields, action, func) {
     }
 
     if (findField("NYEAR_VEHICLE").value === undefined) {
-      console.log(findField("NYEAR_VEHICLE"));
       findField("NYEAR_VEHICLE").error = "Заполните год";
     }
     if (findField("NYEAR_VEHICLE").value !== undefined) {

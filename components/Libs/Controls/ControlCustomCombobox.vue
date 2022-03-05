@@ -20,12 +20,10 @@
       ref="sign"
     >
     </model-select>
-
-    <b-form-invalid-feedback :state="data.state || isDirty"
+    {{ isDirty }}
+    <b-form-invalid-feedback :state="data.state"
       >{{ data.error ? data.error : "Обязательно для заполнения" }}
     </b-form-invalid-feedback>
-    {{ data.state }}
-    {{ isDirty }}
   </b-form-group>
 </template>
 
@@ -67,11 +65,12 @@ export default {
   },
 
   methods: {
-    eventHandlerBlur() {
-      this.$emit("blur", {
+    async eventHandlerBlur(target) {
+      await this.$store.dispatch("data_card/fetchDic", this.data);
+      this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value,
+        value: target,
       });
     },
   },
@@ -80,10 +79,11 @@ export default {
       if (this.isRefsExist === true) {
         if (this.$refs["sign"].showMenu === this.test) {
           this.hub.push(this.flag);
-          console.log(this.hub);
         }
         if (this.$refs["sign"].showMenu === false && this.hub.length > 1) {
-          console.log("сейчас нужно валидировать");
+          // this.fieldValue === undefined
+          //   ? this.eventHandlerBlur(null)
+          //   : this.eventHandlerBlur(this.fieldValue);
           return this.$refs["sign"].showMenu;
         }
       }
@@ -91,18 +91,35 @@ export default {
 
     fieldValue: {
       get: function () {
+        console.log("!!!");
+        console.log(this.data.value);
         return this.data.value;
       },
       set: function (value) {
-        if (value !== "") {
-          this.isDirty = true;
-          console.log(this.isDirty);
+        // console.log(value);
+        // if (this.isRefsExist === true) {
+        //   if (this.$refs["sign"].showMenu === this.test) {
+        //     this.hub.push(this.flag);
+        //   }
+        //   if (this.$refs["sign"].showMenu === false && this.hub.length > 1) {
+        //     this.fieldValue === undefined
+        //       ? this.eventHandlerBlur(null)
+        //       : this.eventHandlerBlur(value);
+        //   }
+        // }
+        // this.$emit("update", {
+        //   fieldId: this.data.fieldId,
+        //   name: this.data.name,
+        //   value,
+        // });
+        // this.fieldValue === undefined
+        //   ? this.eventHandlerBlur(null)
+        //   : this.eventHandlerBlur(value);
+        if (this.isRefsExist === true) {
+          if (this.$refs["sign"].showMenu === this.test) {
+            this.hub.push(this.flag);
+          }
         }
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value,
-        });
       },
     },
     validClass() {
