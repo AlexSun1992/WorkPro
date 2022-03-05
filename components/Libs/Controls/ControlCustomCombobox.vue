@@ -10,7 +10,7 @@
         (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
           <span v-html="data.helpText"></span></vue-easy-tooltip></span
     ></template>
-    {{ isDirty }}
+
     <model-select
       v-model="fieldValue"
       :is-disabled="!edit || data.readonly"
@@ -20,9 +20,12 @@
       ref="sign"
     >
     </model-select>
-    <b-form-invalid-feedback :state="data.state"
+
+    <b-form-invalid-feedback :state="data.state || isDirty"
       >{{ data.error ? data.error : "Обязательно для заполнения" }}
     </b-form-invalid-feedback>
+    {{ data.state }}
+    {{ isDirty }}
   </b-form-group>
 </template>
 
@@ -38,8 +41,9 @@ export default {
   data() {
     return {
       isRefsExist: false,
-      test: true,
-      flag: 0,
+      test: false,
+      flag: 1,
+      hub: [],
     };
   },
 
@@ -75,9 +79,13 @@ export default {
     isDirty() {
       if (this.isRefsExist === true) {
         if (this.$refs["sign"].showMenu === this.test) {
-          console.log(this.flag);
+          this.hub.push(this.flag);
+          console.log(this.hub);
         }
-        return this.$refs["sign"].showMenu;
+        if (this.$refs["sign"].showMenu === false && this.hub.length > 1) {
+          console.log("сейчас нужно валидировать");
+          return this.$refs["sign"].showMenu;
+        }
       }
     },
 
