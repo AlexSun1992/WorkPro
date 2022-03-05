@@ -1,11 +1,15 @@
 <template>
-  <div class="login-form">
+  <div class="login-form-content">
     <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-6">
+      <div class="mb-5 col-md-10 col-lg-7">
         <div class="block-registration px-2 px-md-4 pb-3 mt-3">
           <b-nav card-header tabs>
             <b-nav-item active>Вход</b-nav-item>
-            <b-nav-item href="/login/registration">Регистрация</b-nav-item>
+            <b-nav-item
+              href="/login/registration"
+              class="d-none d-lg-inline-block"
+              >Регистрация</b-nav-item
+            >
           </b-nav>
           <div>{{ errorMessage }}</div>
           <b-form @submit.prevent="onSubmit">
