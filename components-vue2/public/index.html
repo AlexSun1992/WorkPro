@@ -25,7 +25,8 @@
     <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css" />
     <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css" />
     <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_main.css" />
-    <div class="agent-block bg-slider-six">
+
+    <div class="agent-block bg-slider-six d-none">
         <div class="agent-block-dsp">
             Ваш город: <strong class="color-green-one">Владивосток</strong>
         </div>
@@ -36,12 +37,22 @@
         </div>
     </div>
     <div class="container">
-        <component-password-recovery-form></component-password-recovery-form>
-        <component-login-form></component-login-form>
-        <component-reg-form></component-reg-form>
-        <component-card-editor module-id="55" menu-id="777"></component-card-editor>
+        <div class="d-none">
+            <component-password-recovery-form></component-password-recovery-form>
+        </div>
+        <div class="d-none">
+            <component-login-form></component-login-form>
+        </div>
+        <div class="d-none">
+            <component-reg-form></component-reg-form>
+        </div>
+        <div class="d-none">
+            <component-card-editor module-id="55" menu-id="777"></component-card-editor>
+        </div>
     </div>
-    <component-offices-map></component-office-map>
+    <div class="d-none">
+        <component-offices-map></component-office-map>
+    </div>
 </body>
 
 </html>

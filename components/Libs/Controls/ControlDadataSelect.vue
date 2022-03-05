@@ -95,6 +95,7 @@ export default {
   methods: {
     async search(input) {
       if (input.length < 1) {
+        this.group = [];
         return [];
       }
       this.input = input;
