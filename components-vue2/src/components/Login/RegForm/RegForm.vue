@@ -219,6 +219,7 @@
         </div>
       </div>
     </div>
+    <a href="/login" class="login-btn-mobile">ВХОД</a>
   </div>
 </template>
 

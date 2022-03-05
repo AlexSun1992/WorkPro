@@ -70,6 +70,9 @@
         </div>
       </div>
     </div>
+    <a href="/login/registration" class="login-btn-mobile d-lg-none"
+      >Регистрация</a
+    >
   </div>
 </template>
 
