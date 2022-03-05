@@ -29,7 +29,7 @@
             class="align-items-start"
             autocomplete="off"
           >
-            <b-form-group label="Телефон" class="mt-3 w-100">
+            <b-form-group label="Телефон" class="w-100">
               <verify-user
                 ref="verifyUser"
                 @error="showError"
@@ -217,9 +217,9 @@
             </div>
           </b-form>
         </div>
+        <a href="/login" class="login-btn-mobile d-lg-none">ВХОД</a>
       </div>
     </div>
-    <a href="/login" class="login-btn-mobile">ВХОД</a>
   </div>
 </template>
 

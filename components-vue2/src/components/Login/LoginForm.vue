@@ -13,7 +13,7 @@
           </b-nav>
           <div>{{ errorMessage }}</div>
           <b-form @submit.prevent="onSubmit">
-            <b-form-group label="Телефон" label-cols="12" class="mt-4">
+            <b-form-group label="Телефон" label-cols="12">
               <b-form-input
                 ref="phoneInput"
                 v-model="$v.user.username.$model"
@@ -63,6 +63,9 @@
               <b-spinner v-if="authInProcess" variant="light"></b-spinner>
             </b-button>
           </b-form>
+          <a href="/login/registration" class="login-btn-mobile d-lg-none mt-3"
+            >Регистрация</a
+          >
           <div class="mt-3 text-center">
             <span class="forgot-password">Забыли пароль?&nbsp;&nbsp;</span>
             <a href="/login/password-recovery">Восстановить</a>
@@ -70,9 +73,6 @@
         </div>
       </div>
     </div>
-    <a href="/login/registration" class="login-btn-mobile d-lg-none"
-      >Регистрация</a
-    >
   </div>
 </template>
 
