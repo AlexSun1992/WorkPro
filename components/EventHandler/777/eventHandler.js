@@ -48,6 +48,7 @@ async function eventHandler(fields, action, func) {
   const car_title = findField("z-three");
   const drivers_title = findField("z-four");
   const add_driver = findField(`ADD_DRIVER`);
+  const emptyFive = findField("empty-5");
 
   let autoInfo = null;
 
@@ -69,10 +70,10 @@ async function eventHandler(fields, action, func) {
     fillInmanually,
     calculatePolis,
     calculate_btn,
-    reg_number_title,
     owner_title,
     car_title,
     drivers_title,
+    emptyFive,
   ];
 
   if (isCaptchaNeeded.value === true) {
@@ -87,19 +88,16 @@ async function eventHandler(fields, action, func) {
       showDrivers().length ? showDrivers() : findDriver(1)
     );
   }
+  const drivers = findVisibleDrivers().length
+    ? findVisibleDrivers()
+    : showDrivers().length
+    ? showDrivers()
+    : findDriver(1);
 
   if (driverType.value == 2) {
-    checkNotRegNumberForm = checkNotRegNumberForm.concat(
-      findVisibleDrivers().length
-        ? findVisibleDrivers()
-        : showDrivers().length
-        ? showDrivers()
-        : findDriver(1)
-    );
+    checkNotRegNumberForm = checkNotRegNumberForm.concat(drivers);
     checkNotRegNumberForm.push(add_driver);
-    checkDriversForm = checkDriversForm.concat(
-      showDrivers().length ? showDrivers() : findDriver(1)
-    );
+    checkDriversForm = checkDriversForm.concat(drivers);
     const delDriversFormButtonIndex = checkDriversForm.findIndex(
       (item) => item.name === "DL_BUTTON_1"
     );

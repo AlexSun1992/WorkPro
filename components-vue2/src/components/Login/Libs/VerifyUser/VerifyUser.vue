@@ -48,7 +48,7 @@
         "
         @click="executeRecaptcha"
         variant="primary"
-        class="btn-sms"
+        class="w-100"
         >Получить код
       </b-button>
       <b-link v-if="isSendCode" @click="changeNumber">{{
