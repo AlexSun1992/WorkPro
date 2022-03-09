@@ -30,6 +30,7 @@
         :list="list"
         :placeholder="name"
         @update="update"
+        @mousedown="test"
         :isAutoSelectSingleRow="firstValueFromList"
         :isAutoOpenForMultipleRow="InsuredPersonsList"
       />
@@ -247,6 +248,7 @@ export default {
     },
 
     update(e) {
+      console.log(e);
       if (!e?.text && !e?.value && this.isShowAsTemplate) {
         e = { data: e, text: e.SNAME, value: e.SPOLICY };
       }
@@ -277,6 +279,9 @@ export default {
         query,
       });
       console.log("ServerFilter: update выполнился");
+    },
+    test() {
+      console.log("!!");
     },
   },
 };

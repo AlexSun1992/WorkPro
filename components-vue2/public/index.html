@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <style>
-      .login-form {
-        width: 100%;
-      }
-    </style>
-  </head>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
 
-  <body class="container app_body">
+<body class="app_body">
     <noscript>
       <strong
         >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
@@ -22,28 +20,39 @@
       >
     </noscript>
 
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css"
-    />
-    <div class="agent-block bg-slider-six">
-      <div class="agent-block-dsp">
-        Ваш город: <strong class="color-green-one">Владивосток</strong>
-      </div>
-      <div class="agent-block-title">Агентов: 2</div>
-      <div class="agent-block-title"></div>
-      <div class="agent-block-btn">
-        <a class="btn-light" href="/about/contacts"> Найти на карте</a>
-      </div>
+    <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css" />
+    <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css" />
+    <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css" />
+    <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_new.css" />
+    <link rel="stylesheet" href="https://new.reso.ru/export/system/modules/ru.reso.v2/resources/css/style_main.css" />
+
+    <div class="agent-block bg-slider-six d-none">
+        <div class="agent-block-dsp">
+            Ваш город: <strong class="color-green-one">Владивосток</strong>
+        </div>
+        <div class="agent-block-title">Агентов: 2</div>
+        <div class="agent-block-title"></div>
+        <div class="agent-block-btn">
+            <a class="btn-light" href="/about/contacts"> Найти на карте</a>
+        </div>
     </div>
-    
-    <component-login-form></component-login-form>
-    <component-card-editor module-id="55" menu-id="777"></component-card-editor>
-  </body>
+    <div class="container">
+        <div class="d-none">
+            <component-password-recovery-form></component-password-recovery-form>
+        </div>
+        <div class="d-none">
+            <component-login-form></component-login-form>
+        </div>
+        <div class="d-none">
+            <component-reg-form></component-reg-form>
+        </div>
+        <div class="d-none">
+            <component-card-editor module-id="55" menu-id="777"></component-card-editor>
+        </div>
+    </div>
+    <div class="d-none">
+        <component-offices-map></component-office-map>
+    </div>
+</body>
+
 </html>

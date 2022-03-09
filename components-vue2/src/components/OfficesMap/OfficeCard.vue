@@ -2,13 +2,15 @@
   <b-card :title="office.SSHORTNAME" class="mb-2">
     <b-card-text>
       <div class="card-office-adress row">
-        <div v-if="office.SPATH1" class="col-4 pe-0 position-relative">
-          <img
-            :src="'https://www.reso.ru/export/sites_reso/' + office.SPATH1"
-          />
-          <button class="office-image-zoom" type="button"></button>
+        <div v-if="office.SPATH1" class="col-4 pe-0">
+          <div class="position-relative">
+            <img
+              :src="'https://www.reso.ru/export/sites_reso/' + office.SPATH1"
+            />
+            <button class="office-image-zoom" type="button"></button>
+          </div>
         </div>
-        <div class="col-8">
+        <div :class="[office.SPATH1 ? 'col-8' : 'col-12']">
           <div>{{ office.SADDRESS }}</div>
           <div
             :class="[isOpened ? 'card-office-opened' : 'card-office-closed']"
@@ -97,32 +99,34 @@ export default {
       let day = dateNow.getDay();
       let dateEnd = new Date();
       day = day == 0 ? 7 : day;
-      const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
-      dateEnd.setHours(endHour);
-      dateEnd.setMinutes(endMinute);
-      let str;
-      if (dateNow < dateEnd) {
-        str = `Открыт до ${dateEnd.getHours()}:${
-          dateEnd.getMinutes() == 0
-            ? dateEnd.getMinutes() + "0"
-            : dateEnd.getMinutes()
-        }`;
-      } else if (dateNow > dateEnd && office.GRAF[day]) {
-        str = `Откроется завтра в ${office.GRAF[day].SBEGIN}`;
-      } else if (dateNow > dateEnd && !office.GRAF[day]) {
-        this.isOpened = false;
-        dateNow.setDate(
-          dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
-        );
-        str =
-          "Закрыт до " +
-          ("0" + dateNow.getDate()).slice(-2) +
-          "." +
-          ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-          "." +
-          dateNow.getFullYear();
+      if (office.GRAF && office.GRAF[day - 1]) {
+        const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
+        dateEnd.setHours(endHour);
+        dateEnd.setMinutes(endMinute);
+        let str;
+        if (dateNow < dateEnd) {
+          str = `Открыт до ${dateEnd.getHours()}:${
+            dateEnd.getMinutes() == 0
+              ? dateEnd.getMinutes() + "0"
+              : dateEnd.getMinutes()
+          }`;
+        } else if (dateNow > dateEnd && office.GRAF[day]) {
+          str = `Откроется завтра в ${office.GRAF[day].SBEGIN}`;
+        } else if (dateNow > dateEnd && !office.GRAF[day]) {
+          this.isOpened = false;
+          dateNow.setDate(
+            dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+          );
+          str =
+            "Закрыт до " +
+            ("0" + dateNow.getDate()).slice(-2) +
+            "." +
+            ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+            "." +
+            dateNow.getFullYear();
+        }
+        return str;
       }
-      return str;
     },
   },
 };

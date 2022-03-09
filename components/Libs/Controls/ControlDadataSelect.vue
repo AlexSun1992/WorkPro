@@ -88,13 +88,14 @@ export default {
       group: [],
       requestAddress: null,
       id: "",
-      input: null,
+      input: "",
     };
   },
 
   methods: {
     async search(input) {
       if (input.length < 1) {
+        this.group = [];
         return [];
       }
       this.input = input;
@@ -140,6 +141,7 @@ export default {
       const find = this.group.find((i) =>
         this.$refs.autocomplete?.value.includes(i.value)
       );
+
       if (find !== undefined) {
         this.handleSubmit(find);
         return;
@@ -179,10 +181,12 @@ export default {
     getCurrentValue() {
       if (
         this.data.value !== undefined &&
+        this.data.value !== null &&
         this.data.name === "SVEHICLE_MODEL"
       ) {
         return this.data.value.split("|")[1];
       }
+
       return this.data.value;
     },
   },

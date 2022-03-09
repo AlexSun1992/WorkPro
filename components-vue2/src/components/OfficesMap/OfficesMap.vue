@@ -16,7 +16,11 @@
                 id="suggest"
                 ref="search"
               />
-              <button @click="clear" class="suggest-clear"></button>
+              <button
+                v-show="!isInputEmpty"
+                @click="clear"
+                class="suggest-clear"
+              ></button>
             </div>
             <!-- <div v-if="suggest && !getOffices">
               По вашему запросу ничего не найдено. Попробуйте изменить критерии
@@ -53,6 +57,7 @@
             <Mosmetro ref="metro" @click="chooseStation" />
             <div v-show="cardVisible" ref="card" class="card">
               <metro-office-card
+                @open="openOnMap"
                 @close="circleClicked = false"
                 :offices="stationOffices"
               />
@@ -62,11 +67,12 @@
         </div>
       </b-tab>
       <b-tab title="В списке" title-item-class="office-on-lists">
-        <OfficesList v-if="regionId" :data="getOffices" @open="openOnMap" />
-        <div v-else>
+        <!-- <OfficesList :data="getOffices" @open="openOnMap" /> -->
+        <OfficesList :key="componentKey" :data="getOffices" @open="openOnMap" />
+        <!-- <div v-else>
           По вашему запросу ничего не найдено. Попробуйте изменить критерии
           поиска
-        </div>
+        </div> -->
       </b-tab>
     </b-tabs>
   </div>
@@ -125,6 +131,8 @@ export default {
       suggestView: null,
       currentStation: null,
       useElement: null,
+      isInputEmpty: true,
+      componentKey: 0,
     };
   },
   async created() {
@@ -147,14 +155,18 @@ export default {
   methods: {
     clearStation(e) {
       if (e.target.value == "") {
-        this.useElement.setAttribute("x", -1000);
-        this.useElement.setAttribute("y", -1000);
+        this.isInputEmpty = true;
+        this.useElement?.setAttribute("x", -1000);
+        this.useElement?.setAttribute("y", -1000);
+      } else {
+        this.isInputEmpty = false;
       }
     },
     clear() {
       this.$refs.search.value = "";
-      this.useElement.setAttribute("x", -1000);
-      this.useElement.setAttribute("y", -1000);
+      this.isInputEmpty = true;
+      this.useElement?.setAttribute("x", -1000);
+      this.useElement?.setAttribute("y", -1000);
     },
     openOnMap(e) {
       this.currentTab = 0;
@@ -235,10 +247,13 @@ export default {
             this.stationOffices.push(office);
           }
         });
+        this.stationOffices.sort((a, b) => {
+          return a.NORDER - b.NORDER;
+        });
         this.circle = e.target;
         this.circle.attributes.fill.value = "gold";
-        this.$refs["card"].style.top = e.offsetY + "px";
-        this.$refs["card"].style.left = e.offsetX + "px";
+        this.$refs["card"].style.top = e.layerY + "px";
+        this.$refs["card"].style.left = e.layerX + "px";
       }
     },
     async init(_, filters) {
@@ -298,9 +313,11 @@ export default {
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
           <div class="card-office-adress row">
-            <div class="col-4 pe-0 position-relative">
-              <img src="" />
-              <button class="office-image-zoom" type="button"></button>
+            <div class="col-4 pe-0">
+              <div class="position-relative">
+                <img src="" />
+                <button class="office-image-zoom" type="button"></button>
+              </div>
             </div>
             <div class="col-8">
               <div>${agency.SADDRESS}</div>
@@ -308,7 +325,7 @@ export default {
             </div>
           </div>
           <div class="card-office-undeground">
-            <span  class="undeground-color"></span>
+            <span class="undeground-color"></span>
             <span>Ленинский проспект</span>
             <span class="card-office-distance"> 1.5 км </span>
           </div>
@@ -352,16 +369,98 @@ export default {
         }
       );
       template = template.replace(
-        /<div class="col-4">[\n\s]*?<img src="" \/>[\n\s]*?<\/div[^>]*>/g,
+        /<div class="col-4 pe-0">[\n\s]*?<div class="position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div>[\n\s]*?<\/div[^>]*>/g,
         () => {
           let url =
             "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
           return agency.SPATH1
-            ? `<div class="col-4"><img src=${url} /></div>`
+            ? `<div class="col-4 pe-0"><div class="position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div></div>`
             : "";
         }
       );
+
+      // template = template.replace(
+      //   /<div class="card-office-opened">Открыт до<\/div[^>]>/g,
+      //   () => {
+      //     return `<div class="card-office-opened">${this.showWorkingHours(
+      //       agency
+      //     )}</div>`;
+      //   }
+      // );
+
+      template = template.replace(
+        /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
+        () => {
+          let temp = "";
+          agency.IDUNDERGROUND.forEach((item) => {
+            temp += `<div class="card-office-undeground">
+                    <span class=${
+                      "undeground-color_" + item.IDUNDERLINE
+                    }></span>
+                    <span>${item.SNAME}</span>
+                    <span class="card-office-distance"> 1.5 км </span>
+                  </div>`;
+          });
+          return temp;
+        }
+      );
+
+      template = template.replace(
+        /<div class="col-8">[\n\s]*?<div>[\n\s]*?(.*?)[\n\s]*?<\/div>[\n\s]*?<div class="card-office-opened">[\n\s]*?Открыт до[\n\s]*?<\/div>[\n\s]*?<\/div>/,
+        () => {
+          return agency.SPATH1
+            ? `<div class="col-8">
+                  <div>${agency.SADDRESS}</div>
+                  <div class="card-office-opened">${this.showWorkingHours(
+                    agency
+                  )}</div>
+                </div>`
+            : `<div class="col-12">
+                <div>${agency.SADDRESS}</div>
+                <div class="card-office-opened">${this.showWorkingHours(
+                  agency
+                )}</div>
+            </div>`;
+        }
+      );
       return template;
+    },
+    showWorkingHours(agency) {
+      let dateNow = new Date();
+      let day = dateNow.getDay();
+      let dateEnd = new Date();
+      day = day == 0 ? 7 : day;
+
+      if (!agency.GRAF) return "";
+
+      if (agency.GRAF[day - 1]) {
+        const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
+        dateEnd.setHours(endHour);
+        dateEnd.setMinutes(endMinute);
+        let str;
+        if (dateNow < dateEnd) {
+          str = `Открыт до ${dateEnd.getHours()}:${
+            dateEnd.getMinutes() == 0
+              ? dateEnd.getMinutes() + "0"
+              : dateEnd.getMinutes()
+          }`;
+        } else if (dateNow > dateEnd && agency.GRAF[day]) {
+          str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
+        } else if (dateNow > dateEnd && !agency.GRAF[day]) {
+          this.isOpened = false;
+          dateNow.setDate(
+            dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+          );
+          str =
+            "Закрыт до " +
+            ("0" + dateNow.getDate()).slice(-2) +
+            "." +
+            ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+            "." +
+            dateNow.getFullYear();
+        }
+        return str;
+      }
     },
     combineAgencies(agencies, i, count) {
       let arr = [];
@@ -553,7 +652,7 @@ export default {
       if (!this.regionId) {
         data = null;
       }
-
+      this.componentKey += 1;
       return data;
     },
     tabVisible() {
@@ -564,10 +663,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-circle:hover {
-  cursor: pointer;
-  r: 15;
-}
+// circle:hover {
+//   cursor: pointer;
+//   r: 15;
+// }
 .metrowrapper {
   display: flex;
   align-items: center;

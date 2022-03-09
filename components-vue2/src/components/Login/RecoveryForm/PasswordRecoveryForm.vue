@@ -1,8 +1,8 @@
 <template>
-  <div class="login-form">
+  <div class="recovery-form-content">
     <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-6">
-        <div class="block-registration px-2 px-md-4 pb-3 mt-3">
+      <div class="mb-5 col-md-10 col-lg-7">
+        <div class="px-2 px-md-4 pb-3 mt-3">
           <b-tabs @activate-tab="initData" ref="tabs">
             <b-tab title="Телефон">
               <b-alert :show="isErrorMessage" variant="danger">{{
@@ -47,25 +47,30 @@
               />
             </b-tab>
           </b-tabs>
-          <verify-password
-            :tab-index="[20, 30]"
-            :v="$v.form"
-            :validateState="validateState"
-          />
-          <div class="row buttons">
-            <div class="col-12 col-md-6">
-              <b-button href="/login" variant="outline-secondary" class="w-100"
-                >Отмена</b-button
-              >
-            </div>
-            <div class="col-12 col-md-6 mt-3 mt-md-0">
-              <b-button
-                variant="success"
-                @click="resetPassword"
-                :disabled="disabled"
-                class="w-100"
-                >Изменить пароль</b-button
-              >
+          <div class="recovery">
+            <verify-password
+              :tab-index="[20, 30]"
+              :v="$v.form"
+              :validateState="validateState"
+            />
+            <div class="row buttons mt-3">
+              <div class="col-12 col-md-6">
+                <b-button
+                  href="/login"
+                  variant="secondary"
+                  class="w-100 d-block"
+                  >Отмена</b-button
+                >
+              </div>
+              <div class="col-12 col-md-6 mt-3 mt-md-0">
+                <b-button
+                  variant="primary"
+                  @click="resetPassword"
+                  :disabled="disabled"
+                  class="w-100"
+                  >Изменить пароль</b-button
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -272,63 +277,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.login-form {
-  background: url(/img/registration.svg) 50% top no-repeat;
-  height: 100%;
-  min-height: 900px;
-  display: grid;
-}
-.block-registration p {
-  padding: 0 15px;
-}
-.buttons {
-  display: flex;
-}
-.btn-success {
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid #28a745;
-  border-radius: 0.25rem;
-  color: #fff;
-  background-color: #28a745;
-  padding: 0 15px;
-  font-size: 1.125rem;
-  font-weight: 500;
-}
-
-.btn-success:disabled {
-  opacity: 0.6;
-  pointer-events: none;
-}
-.btn-sms {
-  font-size: 1rem;
-  font-weight: 400;
-}
-
-.btn-outline-secondary {
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid #28a745;
-  border-radius: 0.25rem;
-  color: #28a745;
-  background-color: #fff;
-  padding: 0 15px;
-  font-size: 1.125rem;
-  font-weight: 500;
-}
-</style>
-
-<style scoped lang="scss"></style>
+<style scoped></style>
