@@ -10,7 +10,7 @@
         (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
           <span v-html="data.helpText"></span></vue-easy-tooltip></span
     ></template>
-
+    <!-- {{ isDirty }} -->
     <model-select
       v-model="fieldValue"
       :is-disabled="!edit || data.readonly"
@@ -20,7 +20,7 @@
       ref="sign"
     >
     </model-select>
-    {{ isDirty }}
+
     <b-form-invalid-feedback :state="data.state"
       >{{ data.error ? data.error : "Обязательно для заполнения" }}
     </b-form-invalid-feedback>
@@ -42,6 +42,7 @@ export default {
       test: false,
       flag: 1,
       hub: [],
+      point: null,
     };
   },
 
@@ -63,10 +64,39 @@ export default {
       this.isRefsExist = true;
     }
   },
+  // updated() {
+  // if (this.$refs["sign"].showMenu === false && this.hub.length > 1) {
+  //   this.fieldValue === undefined
+  //     ? this.eventHandlerBlur(null)
+  //     : this.eventHandlerBlur(this.fieldValue);
+  //   this.hub = [];
+  // }
+  // if (this.isDirty === false && this.point === null) {
+  //   console.log("updated");
+  // this.fieldValue === undefined
+  //   ? this.eventHandlerBlur(null)
+  //   : this.eventHandlerBlur(this.fieldValue);
+  // console.log("field:", this.data.fieldId);
+  // console.log("name:", this.data.name);
+  // console.log("value:", this.point);
+  // }
+  // if (this.isDirty === false && this.point === null) {
+  //   console.log("Необходима валидация");
+  //   // console.log("field:", this.data.fieldId);
+  //   // console.log("name:", this.data.name);
+  //   // console.log("value:", this.point);
+  //   this.$emit("update", {
+  //     fieldId: this.data.fieldId,
+  //     name: this.data.name,
+  //     value: this.point,
+  //   });
+  //   this.point = "";
+  // }
+  // },
 
   methods: {
     async eventHandlerBlur(target) {
-      await this.$store.dispatch("data_card/fetchDic", this.data);
+      //await this.$store.dispatch("data_card/fetchDic", this.data);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -75,51 +105,32 @@ export default {
     },
   },
   computed: {
-    isDirty() {
-      if (this.isRefsExist === true) {
-        if (this.$refs["sign"].showMenu === this.test) {
-          this.hub.push(this.flag);
-        }
-        if (this.$refs["sign"].showMenu === false && this.hub.length > 1) {
-          // this.fieldValue === undefined
-          //   ? this.eventHandlerBlur(null)
-          //   : this.eventHandlerBlur(this.fieldValue);
-          return this.$refs["sign"].showMenu;
-        }
-      }
-    },
+    // isDirty() {
+    //   if (this.isRefsExist === true) {
+    //     if (this.$refs["sign"].showMenu === this.test) {
+    //       this.hub.push(this.flag);
+    //     }
+    //     if (
+    //       this.$refs["sign"].showMenu === false &&
+    //       this.hub.length > 1 &&
+    //       this.point === null
+    //     ) {
+    //       return this.$refs["sign"].showMenu;
+    //     }
+    //   }
+    // },
 
     fieldValue: {
       get: function () {
-        console.log("!!!");
-        console.log(this.data.value);
         return this.data.value;
       },
       set: function (value) {
-        // console.log(value);
-        // if (this.isRefsExist === true) {
-        //   if (this.$refs["sign"].showMenu === this.test) {
-        //     this.hub.push(this.flag);
-        //   }
-        //   if (this.$refs["sign"].showMenu === false && this.hub.length > 1) {
-        //     this.fieldValue === undefined
-        //       ? this.eventHandlerBlur(null)
-        //       : this.eventHandlerBlur(value);
-        //   }
-        // }
-        // this.$emit("update", {
-        //   fieldId: this.data.fieldId,
-        //   name: this.data.name,
-        //   value,
-        // });
-        // this.fieldValue === undefined
-        //   ? this.eventHandlerBlur(null)
-        //   : this.eventHandlerBlur(value);
-        if (this.isRefsExist === true) {
-          if (this.$refs["sign"].showMenu === this.test) {
-            this.hub.push(this.flag);
-          }
-        }
+        this.point = value;
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value,
+        });
       },
     },
     validClass() {
