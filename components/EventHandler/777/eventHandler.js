@@ -724,7 +724,15 @@ async function eventHandler(fields, action, func) {
     findField("NYEAR_VEHICLE").error = "Заполните год";
   }
 
-  if (action.name === "NYEAR_VEHICLE" && action.value !== null) {
+  if (action.name === "NYEAR_VEHICLE" && action.value === undefined) {
+    findField("NYEAR_VEHICLE").error = "Заполните год";
+  }
+
+  if (
+    action.name === "NYEAR_VEHICLE" &&
+    action.value !== null &&
+    action.value !== undefined
+  ) {
     findField("NYEAR_VEHICLE").error = null;
     findField("NYEAR_VEHICLE").state = true;
   }
