@@ -59,7 +59,7 @@
             <div v-show="cardVisible" ref="card" class="card">
               <metro-office-card
                 @open="openOnMap"
-                @close="circleClicked = false"
+                @close="closeCard"
                 :offices="stationOffices"
               />
             </div>
@@ -155,9 +155,12 @@ export default {
   },
 
   methods: {
+    closeCard() {
+      debugger;
+      this.circleClicked = false;
+      this.setStatus();
+    },
     isOpened(office) {
-      if (office.SNAME == "Рижская") {
-      }
       let dateNow = new Date();
       let day = dateNow.getDay();
       let dateEnd = new Date();
@@ -187,6 +190,8 @@ export default {
               if (candidate) {
                 if (!this.isOpened(office) && office.GRAF) {
                   g[0].children[i].setAttribute("href", "#balloon-close");
+                } else {
+                  g[0].children[i].setAttribute("href", "#balloon-open");
                 }
               }
             });
@@ -203,12 +208,14 @@ export default {
       } else {
         this.isInputEmpty = false;
       }
+      this.setStatus();
     },
     clear() {
       this.$refs.search.value = "";
       this.isInputEmpty = true;
       this.useElement?.setAttribute("x", -1000);
       this.useElement?.setAttribute("y", -1000);
+      this.setStatus();
     },
     openOnMap(e) {
       this.currentTab = 0;
@@ -270,6 +277,7 @@ export default {
     },
     chooseStation(e) {
       if (e.target.tagName == "use") {
+        e.target.setAttribute("href", "#balloon-select");
         this.stationOffices = [];
         this.circleClicked = true;
         let stationName = e.target.dataset.station;
