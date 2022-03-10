@@ -18,6 +18,7 @@
       v-model="fieldValue"
       :allowNegative="false"
       :currency="{ suffix: ` ${data.placeholder}` }"
+      v-on:blur="eventHandlerBlur"
     />
 
     <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
@@ -42,6 +43,16 @@ export default {
       type: Boolean,
       required: true,
       default: () => false,
+    },
+  },
+
+  methods: {
+    eventHandlerBlur() {
+      this.$emit("blur", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.value,
+      });
     },
   },
 

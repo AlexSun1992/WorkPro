@@ -35,6 +35,11 @@ export default {
       type: Object,
       required: false,
     },
+    // isShowMenu: {
+    //   type: Boolean,
+    //   required: false,
+    //   default: this.$refs["select"].showMenu,
+    // },
   },
 
   data() {
@@ -58,6 +63,10 @@ export default {
     },
     isAutoSelectSingleRow(val) {
       this.selectedItem = val;
+    },
+
+    isShowMenu() {
+      console.log(this.selectesItem);
     },
   },
 };

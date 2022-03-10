@@ -1,7 +1,7 @@
 <template>
-  <div class="login-form">
+  <div class="reg-form-content">
     <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-6">
+      <div class="mb-5 col-md-10 col-lg-7">
         <div class="block-registration px-2 px-md-4 pb-3 mt-3">
           <ConfirmModal
             :conformation="conformation"
@@ -16,7 +16,9 @@
           }}</b-alert>
 
           <b-nav card-header tabs>
-            <b-nav-item href="/login">Вход</b-nav-item>
+            <b-nav-item href="/login" class="d-none d-lg-inline-block"
+              >Вход</b-nav-item
+            >
             <b-nav-item active>Регистрация</b-nav-item>
           </b-nav>
 
@@ -27,7 +29,7 @@
             class="align-items-start"
             autocomplete="off"
           >
-            <b-form-group label="Телефон" class="mt-3 w-100">
+            <b-form-group label="Телефон" class="w-100">
               <verify-user
                 ref="verifyUser"
                 @error="showError"
@@ -187,7 +189,7 @@
                 </b-form-group>
               </div>
               <div class="col-12 col-md-6"></div>
-              <div class="col-12 mt-3">
+              <div class="col-12">
                 <verify-password
                   :v="$v.form"
                   :validateState="validateState"
@@ -215,6 +217,7 @@
             </div>
           </b-form>
         </div>
+        <a href="/login" class="login-btn-mobile d-lg-none">ВХОД</a>
       </div>
     </div>
   </div>

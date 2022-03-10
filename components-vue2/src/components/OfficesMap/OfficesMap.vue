@@ -247,6 +247,9 @@ export default {
             this.stationOffices.push(office);
           }
         });
+        this.stationOffices.sort((a, b) => {
+          return a.NORDER - b.NORDER;
+        });
         this.circle = e.target;
         this.circle.attributes.fill.value = "gold";
         this.$refs["card"].style.top = e.layerY + "px";
@@ -429,32 +432,35 @@ export default {
       day = day == 0 ? 7 : day;
 
       if (!agency.GRAF) return "";
-      const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
-      dateEnd.setHours(endHour);
-      dateEnd.setMinutes(endMinute);
-      let str;
-      if (dateNow < dateEnd) {
-        str = `Открыт до ${dateEnd.getHours()}:${
-          dateEnd.getMinutes() == 0
-            ? dateEnd.getMinutes() + "0"
-            : dateEnd.getMinutes()
-        }`;
-      } else if (dateNow > dateEnd && agency.GRAF[day]) {
-        str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
-      } else if (dateNow > dateEnd && !agency.GRAF[day]) {
-        this.isOpened = false;
-        dateNow.setDate(
-          dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
-        );
-        str =
-          "Закрыт до " +
-          ("0" + dateNow.getDate()).slice(-2) +
-          "." +
-          ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-          "." +
-          dateNow.getFullYear();
+
+      if (agency.GRAF[day - 1]) {
+        const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
+        dateEnd.setHours(endHour);
+        dateEnd.setMinutes(endMinute);
+        let str;
+        if (dateNow < dateEnd) {
+          str = `Открыт до ${dateEnd.getHours()}:${
+            dateEnd.getMinutes() == 0
+              ? dateEnd.getMinutes() + "0"
+              : dateEnd.getMinutes()
+          }`;
+        } else if (dateNow > dateEnd && agency.GRAF[day]) {
+          str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
+        } else if (dateNow > dateEnd && !agency.GRAF[day]) {
+          this.isOpened = false;
+          dateNow.setDate(
+            dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+          );
+          str =
+            "Закрыт до " +
+            ("0" + dateNow.getDate()).slice(-2) +
+            "." +
+            ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+            "." +
+            dateNow.getFullYear();
+        }
+        return str;
       }
-      return str;
     },
     combineAgencies(agencies, i, count) {
       let arr = [];
