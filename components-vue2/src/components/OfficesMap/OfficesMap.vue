@@ -540,7 +540,7 @@ export default {
           for (let i = 0; i < maps[0].children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
-              maps[0].children[i].dataset.station == _this.currentStation
+              maps[0].children[i].dataset.station === _this.currentStation
             ) {
               maps[0].children[i].setAttribute("href", "#balloon-select");
             }
