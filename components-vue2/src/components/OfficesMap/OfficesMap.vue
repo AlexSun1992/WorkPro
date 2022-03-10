@@ -538,17 +538,13 @@ export default {
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".maps");
           for (let i = 0; i < maps[0].children.length; i++) {
-            if (maps[0].children[i].innerHTML == _this.currentStation) {
-              let currentCircle = maps[0].children[i - 1];
-              let x = currentCircle.getAttribute("cx");
-              let y = currentCircle.getAttribute("cy");
-              _this.useElement = maps[0].children[maps[0].children.length - 1];
-              _this.useElement.setAttribute("x", x);
-              _this.useElement.setAttribute("y", y);
-              _this.useElement.setAttribute("href", "#balloon-select");
+            if (
+              maps[0].children[i].tagName === "use" &&
+              maps[0].children[i].dataset.station == _this.currentStation
+            ) {
+              maps[0].children[i].setAttribute("href", "#balloon-select");
             }
           }
-          console.log(_this.useElement);
         }
         showOnMap(e.get("item").value);
       }
