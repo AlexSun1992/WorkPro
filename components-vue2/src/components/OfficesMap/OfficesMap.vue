@@ -587,7 +587,8 @@ export default {
             count: 1,
           });
           if (this.address.data.suggestions.length) {
-            this.regionId = 56;
+            this.regionId =
+              this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
           }
         } catch (e) {
           console.log(e);
