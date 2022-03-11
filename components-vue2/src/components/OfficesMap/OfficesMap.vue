@@ -267,7 +267,9 @@ export default {
         });
       }
 
-      this.myClusterer = new ymaps.Clusterer();
+      this.myClusterer = new ymaps.Clusterer({
+        preset: "islands#darkGreenClusterIcons",
+      });
       this.myClusterer.add(this.getGeoObjects(agencies));
 
       let mapState;
@@ -472,20 +474,29 @@ export default {
       }, {});
 
       for (let i = 0; i < agencies.length; i++) {
-        myGeoObjects[i] = new ymaps.GeoObject({
-          geometry: {
-            type: "Point",
-            coordinates: [agencies[i].NLAT, agencies[i].NLONG],
+        myGeoObjects[i] = new ymaps.GeoObject(
+          {
+            geometry: {
+              type: "Point",
+              coordinates: [agencies[i].NLAT, agencies[i].NLONG],
+            },
+            properties: {
+              balloonContentBody: this.combineAgencies(
+                agencies,
+                i,
+                uniqueItemsCount[agencies[i].NLAT]
+              ),
+              hintContent: `${agencies[i].SSHORTNAME}`,
+            },
           },
-          properties: {
-            balloonContentBody: this.combineAgencies(
-              agencies,
-              i,
-              uniqueItemsCount[agencies[i].NLAT]
-            ),
-            hintContent: `${agencies[i].SSHORTNAME}`,
-          },
-        });
+          {
+            iconLayout: "default#image",
+            iconImageHref:
+              "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
+            iconImageSize: [56, 56],
+            iconImageOffset: [0, 0],
+          }
+        );
       }
 
       return myGeoObjects;
