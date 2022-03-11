@@ -20,6 +20,26 @@ async function eventHandler(fields, action, func) {
     });
   };
 
+  const reVisibleDrivers = ([...drivers]) => {
+    const driverFieldNames = [
+      `DL_BUTTON_`,
+      `NDR_AGE_`,
+      `NDR_EXPERIENCE_`,
+      `NDR_NO_CRASH_`,
+    ];
+    const lastDriver = drivers[drivers.length - 1];
+    const lastDriverId = lastDriver.name.replace("DL_BUTTON_", "");
+    const newDrivers = findDrivers().filter(
+      (item) =>
+        item.name.split(
+          driverFieldNames.find(
+            (n) => item.name.indexOf(n) >= 0 && item.type !== "empty"
+          )
+        )[1] <= lastDriverId
+    );
+    return newDrivers;
+  };
+
   const citySettlement = findField("SCITY_SETTLEMENT");
   const ownerAge = findField("NOWNER_AGE");
   const empty = findField("Empty");
@@ -49,6 +69,7 @@ async function eventHandler(fields, action, func) {
   const drivers_title = findField("z-four");
   const add_driver = findField(`ADD_DRIVER`);
   const emptyFive = findField("empty-5");
+  const price = findField("NPRICE");
 
   let autoInfo = null;
 
@@ -91,25 +112,29 @@ async function eventHandler(fields, action, func) {
   const drivers = findVisibleDrivers().length
     ? findVisibleDrivers()
     : showDrivers().length
-    ? showDrivers()
+    ? reVisibleDrivers(showDrivers())
     : findDriver(1);
 
   if (driverType.value == 2) {
     checkNotRegNumberForm = checkNotRegNumberForm.concat(drivers);
     checkNotRegNumberForm.push(add_driver);
     checkDriversForm = checkDriversForm.concat(drivers);
-    const delDriversFormButtonIndex = checkDriversForm.findIndex(
-      (item) => item.name === "DL_BUTTON_1"
-    );
-    const delRegNumberFormButtonIndex = checkNotRegNumberForm.findIndex(
-      (item) => item.name === "DL_BUTTON_1"
-    );
-    if (delDriversFormButtonIndex > 0 && delRegNumberFormButtonIndex > 0) {
-      if (checkDriversForm.length === 6) {
-        checkDriversForm.push(findField("empty_DL_BUTTON_1"));
-        checkNotRegNumberForm.push(findField("empty_DL_BUTTON_1"));
-        checkDriversForm.splice(delDriversFormButtonIndex, 1);
-        checkNotRegNumberForm.splice(delRegNumberFormButtonIndex, 1);
+
+    if (drivers.length === 4) {
+      const delDriversFormButtonIndex = checkDriversForm.findIndex(
+        (item) => item.name.indexOf("DL_BUTTON_1") >= 0
+      );
+      const delRegNumberFormButtonIndex = checkNotRegNumberForm.findIndex(
+        (item) => item.name.indexOf("DL_BUTTON_1") >= 0
+      );
+
+      if (delDriversFormButtonIndex > 0 && delRegNumberFormButtonIndex > 0) {
+        if (checkDriversForm.length === 6) {
+          checkDriversForm.splice(delDriversFormButtonIndex, 1);
+          checkNotRegNumberForm.splice(delRegNumberFormButtonIndex, 1);
+          checkDriversForm.push(findField("empty_DL_BUTTON_1"));
+          checkNotRegNumberForm.push(findField("empty_DL_BUTTON_1"));
+        }
       }
     }
   }
@@ -722,9 +747,25 @@ async function eventHandler(fields, action, func) {
     findField("NYEAR_VEHICLE").error = "Заполните год";
   }
 
-  if (action.name === "NYEAR_VEHICLE" && action.value !== null) {
+  if (action.name === "NYEAR_VEHICLE" && action.value === undefined) {
+    findField("NYEAR_VEHICLE").error = "Заполните год";
+  }
+
+  if (
+    action.name === "NYEAR_VEHICLE" &&
+    action.value !== null &&
+    action.value !== undefined
+  ) {
     findField("NYEAR_VEHICLE").error = null;
     findField("NYEAR_VEHICLE").state = true;
+  }
+
+  if (action.name === "NKH_VEHICLE_POWER" && action.value === undefined) {
+    findField("NKH_VEHICLE_POWER").error = "Мощность не указана";
+  }
+
+  if (action.name === "NHORSE_VEHICLE_POWER" && action.value === undefined) {
+    findField("NHORSE_VEHICLE_POWER").error = "Мощность не указана";
   }
 
   /////Обработка по "Рассчитать ОСАГО"

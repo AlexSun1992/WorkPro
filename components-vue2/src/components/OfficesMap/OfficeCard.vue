@@ -99,7 +99,7 @@ export default {
       let day = dateNow.getDay();
       let dateEnd = new Date();
       day = day == 0 ? 7 : day;
-      if (office && office.GRAF) {
+      if (office.GRAF && office.GRAF[day - 1]) {
         const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
         dateEnd.setHours(endHour);
         dateEnd.setMinutes(endMinute);

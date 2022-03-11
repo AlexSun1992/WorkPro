@@ -48,6 +48,7 @@
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
       <b-tab
+        @click="setStatus"
         v-if="tabVisible"
         title="На схеме метро"
         title-item-class="office-on-undeground"
@@ -58,7 +59,7 @@
             <div v-show="cardVisible" ref="card" class="card">
               <metro-office-card
                 @open="openOnMap"
-                @close="circleClicked = false"
+                @close="closeCard"
                 :offices="stationOffices"
               />
             </div>
@@ -152,7 +153,53 @@ export default {
       console.log(error);
     }
   },
+
   methods: {
+    closeCard() {
+      debugger;
+      this.circleClicked = false;
+      this.setStatus();
+    },
+    isOpened(office) {
+      let dateNow = new Date();
+      let day = dateNow.getDay();
+      let dateEnd = new Date();
+      day = day == 0 ? 7 : day;
+      if (office.GRAF && office.GRAF[day - 1]) {
+        const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
+        dateEnd.setHours(endHour);
+        dateEnd.setMinutes(endMinute);
+        let isOpened = true;
+        if (dateNow > dateEnd) {
+          isOpened = false;
+        }
+        return isOpened;
+      }
+    },
+    setStatus() {
+      let g = document.getElementsByTagName("g");
+      if (g && g[0]) {
+        let offices = this.$store.getters["map/getRegionOffices"];
+        for (let i = 0; i < g[0].children.length; i++) {
+          if (g[0].children[i].tagName === "use") {
+            let name = g[0].children[i].dataset.station;
+            offices.forEach((office) => {
+              let candidate = office.IDUNDERGROUND.find((item) => {
+                return item.SNAME === name;
+              });
+              if (candidate) {
+                if (!this.isOpened(office) && office.GRAF) {
+                  g[0].children[i].setAttribute("href", "#balloon-close");
+                } else {
+                  g[0].children[i].setAttribute("href", "#balloon-open");
+                }
+              }
+            });
+          }
+        }
+      }
+    },
+
     clearStation(e) {
       if (e.target.value == "") {
         this.isInputEmpty = true;
@@ -161,12 +208,14 @@ export default {
       } else {
         this.isInputEmpty = false;
       }
+      this.setStatus();
     },
     clear() {
       this.$refs.search.value = "";
       this.isInputEmpty = true;
       this.useElement?.setAttribute("x", -1000);
       this.useElement?.setAttribute("y", -1000);
+      this.setStatus();
     },
     openOnMap(e) {
       this.currentTab = 0;
@@ -227,13 +276,11 @@ export default {
       this.$refs.metro.setAttribute("transform", scale);
     },
     chooseStation(e) {
-      if (this.circle) {
-        this.circle.attributes.fill.value = "#fff";
-      }
-      if (e.target.tagName == "circle") {
+      if (e.target.tagName == "use") {
+        e.target.setAttribute("href", "#balloon-select");
         this.stationOffices = [];
         this.circleClicked = true;
-        let stationName = e.target.nextSibling.innerHTML;
+        let stationName = e.target.dataset.station;
         let offices = this.$store.getters["map/getRegionOffices"];
         offices.forEach((office) => {
           let candidate = office.IDUNDERGROUND.find((item) => {
@@ -247,8 +294,9 @@ export default {
             this.stationOffices.push(office);
           }
         });
-        this.circle = e.target;
-        this.circle.attributes.fill.value = "gold";
+        this.stationOffices.sort((a, b) => {
+          return a.NORDER - b.NORDER;
+        });
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + "px";
       }
@@ -378,15 +426,6 @@ export default {
         }
       );
 
-      // template = template.replace(
-      //   /<div class="card-office-opened">Открыт до<\/div[^>]>/g,
-      //   () => {
-      //     return `<div class="card-office-opened">${this.showWorkingHours(
-      //       agency
-      //     )}</div>`;
-      //   }
-      // );
-
       template = template.replace(
         /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
         () => {
@@ -431,32 +470,35 @@ export default {
       day = day == 0 ? 7 : day;
 
       if (!agency.GRAF) return "";
-      const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
-      dateEnd.setHours(endHour);
-      dateEnd.setMinutes(endMinute);
-      let str;
-      if (dateNow < dateEnd) {
-        str = `Открыт до ${dateEnd.getHours()}:${
-          dateEnd.getMinutes() == 0
-            ? dateEnd.getMinutes() + "0"
-            : dateEnd.getMinutes()
-        }`;
-      } else if (dateNow > dateEnd && agency.GRAF[day]) {
-        str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
-      } else if (dateNow > dateEnd && !agency.GRAF[day]) {
-        this.isOpened = false;
-        dateNow.setDate(
-          dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
-        );
-        str =
-          "Закрыт до " +
-          ("0" + dateNow.getDate()).slice(-2) +
-          "." +
-          ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-          "." +
-          dateNow.getFullYear();
+
+      if (agency.GRAF[day - 1]) {
+        const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
+        dateEnd.setHours(endHour);
+        dateEnd.setMinutes(endMinute);
+        let str;
+        if (dateNow < dateEnd) {
+          str = `Открыт до ${dateEnd.getHours()}:${
+            dateEnd.getMinutes() == 0
+              ? dateEnd.getMinutes() + "0"
+              : dateEnd.getMinutes()
+          }`;
+        } else if (dateNow > dateEnd && agency.GRAF[day]) {
+          str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
+        } else if (dateNow > dateEnd && !agency.GRAF[day]) {
+          this.isOpened = false;
+          dateNow.setDate(
+            dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+          );
+          str =
+            "Закрыт до " +
+            ("0" + dateNow.getDate()).slice(-2) +
+            "." +
+            ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+            "." +
+            dateNow.getFullYear();
+        }
+        return str;
       }
-      return str;
     },
     combineAgencies(agencies, i, count) {
       let arr = [];
@@ -515,13 +557,11 @@ export default {
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".maps");
           for (let i = 0; i < maps[0].children.length; i++) {
-            if (maps[0].children[i].innerHTML == _this.currentStation) {
-              let currentCircle = maps[0].children[i - 1];
-              let x = currentCircle.getAttribute("cx");
-              let y = currentCircle.getAttribute("cy");
-              _this.useElement = maps[0].children[maps[0].children.length - 1];
-              _this.useElement.setAttribute("x", x);
-              _this.useElement.setAttribute("y", y);
+            if (
+              maps[0].children[i].tagName === "use" &&
+              maps[0].children[i].dataset.station === _this.currentStation
+            ) {
+              maps[0].children[i].setAttribute("href", "#balloon-select");
             }
           }
         }
