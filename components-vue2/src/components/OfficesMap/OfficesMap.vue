@@ -338,6 +338,7 @@ export default {
 
       this.myMap = new ymaps.Map("map", mapState, {
         yandexMapDisablePoiInteractivity: true,
+        hideIconOnBalloonOpen: false,
       });
       this.myMap.behaviors.disable("scrollZoom");
       this.myMap.behaviors.enable(["dblClickZoom", "multiTouch"]);
