@@ -350,6 +350,7 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
+      this.setPlaceholder();
     },
     getTemplate(agency) {
       let phonesArr = agency.SPHONE.split(";");
@@ -530,6 +531,8 @@ export default {
                 uniqueItemsCount[agencies[i].NLAT]
               ),
               hintContent: `${agencies[i].SSHORTNAME}`,
+              balloonPane: "outerBalloon",
+              balloonShadowPane: "outerBalloon",
             },
           },
           {
@@ -584,8 +587,7 @@ export default {
             count: 1,
           });
           if (this.address.data.suggestions.length) {
-            this.regionId =
-              this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
+            this.regionId = 56;
           }
         } catch (e) {
           console.log(e);
@@ -598,6 +600,8 @@ export default {
         {
           iconCaption: caption,
           balloonContent: caption,
+          balloonPane: "outerBalloon",
+          balloonShadowPane: "outerBalloon",
         },
         {
           preset: "islands#redDotIconWithCaption",
@@ -610,6 +614,8 @@ export default {
       placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
+        balloonPane: "outerBalloon",
+        balloonShadowPane: "outerBalloon",
       });
     },
     showResult(obj) {
@@ -681,6 +687,13 @@ export default {
       );
       let _;
       this.init(_, filters);
+    },
+    setPlaceholder() {
+      if (this.regionId == 77 || this.regionId == 78) {
+        this.$refs.search.placeholder = "Введите адрес или метро";
+      } else {
+        this.$refs.search.placeholder = "Введите адрес";
+      }
     },
   },
   computed: {
