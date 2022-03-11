@@ -277,6 +277,7 @@ export default {
     },
     chooseStation(e) {
       if (e.target.tagName == "use") {
+        this.setStatus();
         e.target.setAttribute("href", "#balloon-select");
         this.stationOffices = [];
         this.circleClicked = true;
