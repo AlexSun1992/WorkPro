@@ -537,6 +537,7 @@ export default {
             },
           },
           {
+            hideIconOnBalloonOpen: false,
             iconLayout: "default#image",
             iconImageHref:
               "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
