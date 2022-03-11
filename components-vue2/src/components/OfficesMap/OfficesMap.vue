@@ -48,6 +48,7 @@
         ><div ref="map" id="map" class="map"></div
       ></b-tab>
       <b-tab
+        @click="setStatus"
         v-if="tabVisible"
         title="На схеме метро"
         title-item-class="office-on-undeground"
@@ -58,7 +59,7 @@
             <div v-show="cardVisible" ref="card" class="card">
               <metro-office-card
                 @open="openOnMap"
-                @close="circleClicked = false"
+                @close="closeCard"
                 :offices="stationOffices"
               />
             </div>
@@ -152,7 +153,53 @@ export default {
       console.log(error);
     }
   },
+
   methods: {
+    closeCard() {
+      debugger;
+      this.circleClicked = false;
+      this.setStatus();
+    },
+    isOpened(office) {
+      let dateNow = new Date();
+      let day = dateNow.getDay();
+      let dateEnd = new Date();
+      day = day == 0 ? 7 : day;
+      if (office.GRAF && office.GRAF[day - 1]) {
+        const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
+        dateEnd.setHours(endHour);
+        dateEnd.setMinutes(endMinute);
+        let isOpened = true;
+        if (dateNow > dateEnd) {
+          isOpened = false;
+        }
+        return isOpened;
+      }
+    },
+    setStatus() {
+      let g = document.getElementsByTagName("g");
+      if (g && g[0]) {
+        let offices = this.$store.getters["map/getRegionOffices"];
+        for (let i = 0; i < g[0].children.length; i++) {
+          if (g[0].children[i].tagName === "use") {
+            let name = g[0].children[i].dataset.station;
+            offices.forEach((office) => {
+              let candidate = office.IDUNDERGROUND.find((item) => {
+                return item.SNAME === name;
+              });
+              if (candidate) {
+                if (!this.isOpened(office) && office.GRAF) {
+                  g[0].children[i].setAttribute("href", "#balloon-close");
+                } else {
+                  g[0].children[i].setAttribute("href", "#balloon-open");
+                }
+              }
+            });
+          }
+        }
+      }
+    },
+
     clearStation(e) {
       if (e.target.value == "") {
         this.isInputEmpty = true;
@@ -161,12 +208,14 @@ export default {
       } else {
         this.isInputEmpty = false;
       }
+      this.setStatus();
     },
     clear() {
       this.$refs.search.value = "";
       this.isInputEmpty = true;
       this.useElement?.setAttribute("x", -1000);
       this.useElement?.setAttribute("y", -1000);
+      this.setStatus();
     },
     openOnMap(e) {
       this.currentTab = 0;
@@ -227,13 +276,12 @@ export default {
       this.$refs.metro.setAttribute("transform", scale);
     },
     chooseStation(e) {
-      if (this.circle) {
-        this.circle.attributes.fill.value = "#fff";
-      }
-      if (e.target.tagName == "circle") {
+      if (e.target.tagName == "use") {
+        this.setStatus();
+        e.target.setAttribute("href", "#balloon-select");
         this.stationOffices = [];
         this.circleClicked = true;
-        let stationName = e.target.nextSibling.innerHTML;
+        let stationName = e.target.dataset.station;
         let offices = this.$store.getters["map/getRegionOffices"];
         offices.forEach((office) => {
           let candidate = office.IDUNDERGROUND.find((item) => {
@@ -250,8 +298,6 @@ export default {
         this.stationOffices.sort((a, b) => {
           return a.NORDER - b.NORDER;
         });
-        this.circle = e.target;
-        this.circle.attributes.fill.value = "gold";
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + "px";
       }
@@ -270,7 +316,9 @@ export default {
         });
       }
 
-      this.myClusterer = new ymaps.Clusterer();
+      this.myClusterer = new ymaps.Clusterer({
+        preset: "islands#darkGreenClusterIcons",
+      });
       this.myClusterer.add(this.getGeoObjects(agencies));
 
       let mapState;
@@ -290,6 +338,7 @@ export default {
 
       this.myMap = new ymaps.Map("map", mapState, {
         yandexMapDisablePoiInteractivity: true,
+        hideIconOnBalloonOpen: false,
       });
       this.myMap.behaviors.disable("scrollZoom");
       this.myMap.behaviors.enable(["dblClickZoom", "multiTouch"]);
@@ -302,6 +351,7 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
+      this.setPlaceholder();
     },
     getTemplate(agency) {
       let phonesArr = agency.SPHONE.split(";");
@@ -378,15 +428,6 @@ export default {
             : "";
         }
       );
-
-      // template = template.replace(
-      //   /<div class="card-office-opened">Открыт до<\/div[^>]>/g,
-      //   () => {
-      //     return `<div class="card-office-opened">${this.showWorkingHours(
-      //       agency
-      //     )}</div>`;
-      //   }
-      // );
 
       template = template.replace(
         /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
@@ -478,20 +519,31 @@ export default {
       }, {});
 
       for (let i = 0; i < agencies.length; i++) {
-        myGeoObjects[i] = new ymaps.GeoObject({
-          geometry: {
-            type: "Point",
-            coordinates: [agencies[i].NLAT, agencies[i].NLONG],
+        myGeoObjects[i] = new ymaps.GeoObject(
+          {
+            geometry: {
+              type: "Point",
+              coordinates: [agencies[i].NLAT, agencies[i].NLONG],
+            },
+            properties: {
+              balloonContentBody: this.combineAgencies(
+                agencies,
+                i,
+                uniqueItemsCount[agencies[i].NLAT]
+              ),
+              hintContent: `${agencies[i].SSHORTNAME}`,
+              balloonPane: "outerBalloon",
+              balloonShadowPane: "outerBalloon",
+            },
           },
-          properties: {
-            balloonContentBody: this.combineAgencies(
-              agencies,
-              i,
-              uniqueItemsCount[agencies[i].NLAT]
-            ),
-            hintContent: `${agencies[i].SSHORTNAME}`,
-          },
-        });
+          {
+            iconLayout: "default#image",
+            iconImageHref:
+              "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
+            iconImageSize: [56, 56],
+            iconImageOffset: [0, 0],
+          }
+        );
       }
 
       return myGeoObjects;
@@ -510,13 +562,11 @@ export default {
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".maps");
           for (let i = 0; i < maps[0].children.length; i++) {
-            if (maps[0].children[i].innerHTML == _this.currentStation) {
-              let currentCircle = maps[0].children[i - 1];
-              let x = currentCircle.getAttribute("cx");
-              let y = currentCircle.getAttribute("cy");
-              _this.useElement = maps[0].children[maps[0].children.length - 1];
-              _this.useElement.setAttribute("x", x);
-              _this.useElement.setAttribute("y", y);
+            if (
+              maps[0].children[i].tagName === "use" &&
+              maps[0].children[i].dataset.station === _this.currentStation
+            ) {
+              maps[0].children[i].setAttribute("href", "#balloon-select");
             }
           }
         }
@@ -552,6 +602,8 @@ export default {
         {
           iconCaption: caption,
           balloonContent: caption,
+          balloonPane: "outerBalloon",
+          balloonShadowPane: "outerBalloon",
         },
         {
           preset: "islands#redDotIconWithCaption",
@@ -564,6 +616,8 @@ export default {
       placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
+        balloonPane: "outerBalloon",
+        balloonShadowPane: "outerBalloon",
       });
     },
     showResult(obj) {
@@ -635,6 +689,13 @@ export default {
       );
       let _;
       this.init(_, filters);
+    },
+    setPlaceholder() {
+      if (this.regionId == 77 || this.regionId == 78) {
+        this.$refs.search.placeholder = "Введите адрес или метро";
+      } else {
+        this.$refs.search.placeholder = "Введите адрес";
+      }
     },
   },
   computed: {
