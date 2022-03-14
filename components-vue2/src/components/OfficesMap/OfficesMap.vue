@@ -134,8 +134,6 @@ export default {
       useElement: null,
       isInputEmpty: true,
       componentKey: 0,
-      object:
-        "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
     };
   },
   async created() {
@@ -321,12 +319,6 @@ export default {
         preset: "islands#darkGreenClusterIcons",
       });
       this.myClusterer.add(this.getGeoObjects(agencies));
-      // let setIcon = (e) => {
-      //   this.object = e.get("target");
-      //   this.object.options._options.iconImageHref =
-      //     "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg";
-      // };
-      // this.myClusterer.events.add("click", setIcon.bind(this));
       let mapState;
 
       if (this.mapState) {
@@ -619,7 +611,7 @@ export default {
       }
     },
     updateMap(state, caption, zoom = 12, visibility) {
-      let placemark = new ymaps.Placemark(
+      this.placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
           iconCaption: caption,
@@ -633,10 +625,10 @@ export default {
           openBalloonOnClick: false,
         }
       );
-      this.myMap.geoObjects.add(placemark);
+      this.myMap.geoObjects.add(this.placemark);
       this.myMap.setCenter(state.center, zoom);
-      placemark.geometry.setCoordinates(state.center);
-      placemark.properties.set({
+      this.placemark.geometry.setCoordinates(state.center);
+      this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
         balloonPane: "outerBalloon",
