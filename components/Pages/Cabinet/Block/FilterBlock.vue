@@ -23,7 +23,7 @@
       </li>
     </ul>
 
-    <div class="search" v-if="filterType === 'combobox'">
+    <div class="search" v-else-if="filterType === 'combobox'">
       <b-form-select
         v-model="selected"
         :options="filterItemsCombobox"
@@ -119,7 +119,6 @@ export default {
       ) {
         this.isAllFilters = false;
       }
-
       this.$store.commit("blocks/setFilter", filters);
     } else {
       if (this.defaultValue) {
@@ -140,8 +139,8 @@ export default {
 
   methods: {
     toggleFilter(propertyName, item) {
+      console.log("toggleFilter");
       this.isAllFilters = false;
-
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
         filterType: this.filterType,
@@ -166,7 +165,6 @@ export default {
     },
 
     toggleFilterCombobox(propertyName, item) {
-      console.log(propertyName, item);
       this.$store.commit("blocks/replaceFilter", {
         propertyName: propertyName,
         filter: [item],
@@ -176,7 +174,6 @@ export default {
     },
 
     setQueryURL: function () {
-      console.log("setQueryURL");
       window.history.replaceState(
         null,
         null,
@@ -189,8 +186,6 @@ export default {
             this.$store.getters["blocks/getFilters"]
           )}`,
       };
-
-      console.log(url);
 
       this.$store.commit("menu/setQueriesUrlByIdMenu", {
         ...this.$route.params,
@@ -206,9 +201,7 @@ export default {
       );
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
-
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
-
         const filter =
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
