@@ -452,17 +452,18 @@ export default {
       template = template.replace(
         /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
         () => {
-          let temp = "";
+          let temp = `<div class="card-office-undeground">`;
           agency.IDUNDERGROUND.forEach((item) => {
-            temp += `<div class="card-office-undeground">
+            temp += `<div>
                     <span class=${
                       "undeground-color_" + item.IDUNDERLINE
                     }></span>
                     <span>${item.SNAME}</span>
                     <span class="card-office-distance"> 1.5 км </span>
-                  </div>`;
+                    </div>
+                  `;
           });
-          return temp;
+          return temp + `</div>`;
         }
       );
 
