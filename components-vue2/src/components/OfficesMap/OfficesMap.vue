@@ -134,6 +134,8 @@ export default {
       useElement: null,
       isInputEmpty: true,
       componentKey: 0,
+      object:
+        "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
     };
   },
   async created() {
@@ -156,7 +158,6 @@ export default {
 
   methods: {
     closeCard() {
-      debugger;
       this.circleClicked = false;
       this.setStatus();
     },
@@ -320,7 +321,12 @@ export default {
         preset: "islands#darkGreenClusterIcons",
       });
       this.myClusterer.add(this.getGeoObjects(agencies));
-
+      // let setIcon = (e) => {
+      //   this.object = e.get("target");
+      //   this.object.options._options.iconImageHref =
+      //     "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg";
+      // };
+      // this.myClusterer.events.add("click", setIcon.bind(this));
       let mapState;
 
       if (this.mapState) {
@@ -351,6 +357,20 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
+      // let setIcon = (e) => {
+      //   this.object = e.get("target");
+      //   this.object.options._options.iconImageHref =
+      //     "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg";
+      // };
+      // let test = (e) => {
+      //   alert("Дошло до коллекции объектов карты");
+      //   // Получение ссылки на дочерний объект, на котором произошло событие.
+      //   this.object = e.get("target");
+
+      //   this.object.options._options.iconImageHref =
+      //     "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg";
+      // };
+      // this.myMap.geoObjects.events.add("balloonopen", setIcon.bind(this));
       this.setPlaceholder();
     },
     getTemplate(agency) {
@@ -609,6 +629,7 @@ export default {
         {
           preset: "islands#redDotIconWithCaption",
           visible: visibility,
+          openBalloonOnClick: false,
         }
       );
       this.myMap.geoObjects.add(placemark);
