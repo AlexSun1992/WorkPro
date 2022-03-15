@@ -139,7 +139,6 @@ export default {
 
   methods: {
     toggleFilter(propertyName, item) {
-      console.log("toggleFilter");
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
         propertyName: propertyName,
