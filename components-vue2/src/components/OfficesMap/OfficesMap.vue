@@ -309,7 +309,8 @@ export default {
       this.initSuggestView();
       let agencies = this.$store.getters["map/getRegionOffices"];
       if (filters) {
-        agencies = filterData(agencies, filters);
+        // agencies = filterData(agencies, filters);
+        agencies = filterData(this.getOfficesByCity, filters);
       }
       await this.setPositionAttributes();
       if (!this.currentFilters) {
@@ -668,6 +669,8 @@ export default {
           count: 1,
         });
 
+        this.city = this.address.data.suggestions[0].data.city;
+
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
@@ -680,16 +683,8 @@ export default {
         }
         this.myClusterer?.removeAll();
 
-        // let officesByCity = this.$store.getters["map/getRegionOffices"].filter(
-        //   (office) => {
-        //     debugger;
-        //     return office.SNAME.includes(`${this.city}`)
-        //   }
-        // );
+        this.myClusterer.add(this.getGeoObjects(this.getOfficesByCity));
 
-        this.myClusterer.add(
-          this.getGeoObjects(this.$store.getters["map/getRegionOffices"])
-        );
         this.myMap.geoObjects.add(this.myClusterer);
       } catch (e) {
         console.log(e);
@@ -697,7 +692,7 @@ export default {
 
       if (this.currentFilters) {
         this.filteredOffices = filterData(
-          this.$store.getters["map/getRegionOffices"],
+          this.getOfficesByCity,
           this.currentFilters
         );
       }
@@ -717,7 +712,7 @@ export default {
       });
       this.currentFilters = filters;
       this.filteredOffices = filterData(
-        this.$store.getters["map/getRegionOffices"],
+        this.getOfficesByCity,
         this.currentFilters
       );
       let _;
@@ -732,6 +727,11 @@ export default {
     },
   },
   computed: {
+    getOfficesByCity() {
+      return this.$store.getters["map/getRegionOffices"]?.filter((office) => {
+        return office.SADDRESS.includes(`${this.city}`);
+      });
+    },
     cardVisible() {
       return this.circleClicked && this.stationOffices.length;
     },
@@ -740,7 +740,8 @@ export default {
       if (this.filteredOffices) {
         data = this.filteredOffices;
       } else {
-        data = this.$store.getters["map/getRegionOffices"];
+        // data = this.$store.getters["map/getRegionOffices"];
+        data = this.getOfficesByCity;
       }
 
       if (!this.regionId) {
