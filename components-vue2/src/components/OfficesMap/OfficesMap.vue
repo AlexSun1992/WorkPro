@@ -135,6 +135,7 @@ export default {
       isInputEmpty: true,
       componentKey: 0,
       placemark: null,
+      city: "",
     };
   },
   async created() {
@@ -358,7 +359,6 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
-      console.log(this.myMap.geoObjects);
       // let setIcon = (e) => {
       //   this.object = e.get("target");
       //   this.object.options._options.iconImageHref =
@@ -376,11 +376,11 @@ export default {
       this.setPlaceholder();
     },
     getTemplate(agency) {
-      let phonesArr = agency.SPHONE.split(";");
-      let grafArr = agency.SGRAF.split("\n");
+      let phonesArr = agency.SPHONE?.split(";");
+      let grafArr = agency.SGRAF?.split("\n");
       let email;
-      phonesArr.pop();
-      grafArr.pop();
+      phonesArr?.pop();
+      grafArr?.pop();
       let template = `
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
@@ -426,7 +426,7 @@ export default {
         /<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g,
         () => {
           let temp = "";
-          phonesArr.forEach((phone) => {
+          phonesArr?.forEach((phone) => {
             temp += `<div class="card-office-phone"><a href="tel:${phone}">${phone}</a></div>`;
           });
           return temp;
@@ -614,6 +614,7 @@ export default {
           if (this.address.data.suggestions.length) {
             this.regionId =
               this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
+            this.city = this.address.data.suggestions[0].data.city;
           }
         } catch (e) {
           console.log(e);
@@ -678,6 +679,13 @@ export default {
           this.regionId = null;
         }
         this.myClusterer?.removeAll();
+
+        // let officesByCity = this.$store.getters["map/getRegionOffices"].filter(
+        //   (office) => {
+        //     debugger;
+        //     return office.SNAME.includes(`${this.city}`)
+        //   }
+        // );
 
         this.myClusterer.add(
           this.getGeoObjects(this.$store.getters["map/getRegionOffices"])
