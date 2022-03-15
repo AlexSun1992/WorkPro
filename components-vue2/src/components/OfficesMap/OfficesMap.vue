@@ -134,8 +134,7 @@ export default {
       useElement: null,
       isInputEmpty: true,
       componentKey: 0,
-      object:
-        "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
+      placemark: null,
     };
   },
   async created() {
@@ -206,12 +205,14 @@ export default {
         this.isInputEmpty = true;
         this.useElement?.setAttribute("x", -1000);
         this.useElement?.setAttribute("y", -1000);
+        this.myMap.geoObjects.remove(this.placemark);
       } else {
         this.isInputEmpty = false;
       }
       this.setStatus();
     },
     clear() {
+      this.myMap.geoObjects.remove(this.placemark);
       this.$refs.search.value = "";
       this.isInputEmpty = true;
       this.useElement?.setAttribute("x", -1000);
@@ -357,6 +358,7 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
+      console.log(this.myMap.geoObjects);
       // let setIcon = (e) => {
       //   this.object = e.get("target");
       //   this.object.options._options.iconImageHref =
@@ -619,7 +621,7 @@ export default {
       }
     },
     updateMap(state, caption, zoom = 12, visibility) {
-      let placemark = new ymaps.Placemark(
+      this.placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
           iconCaption: caption,
@@ -633,10 +635,10 @@ export default {
           openBalloonOnClick: false,
         }
       );
-      this.myMap.geoObjects.add(placemark);
+      this.myMap.geoObjects.add(this.placemark);
       this.myMap.setCenter(state.center, zoom);
-      placemark.geometry.setCoordinates(state.center);
-      placemark.properties.set({
+      this.placemark.geometry.setCoordinates(state.center);
+      this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
         balloonPane: "outerBalloon",
