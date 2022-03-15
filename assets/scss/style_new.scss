@@ -680,6 +680,18 @@ footer:not(.modal-footer):after {
     background-size: contain;
 }
 
+.ppl-info.percent100 .ppl-avatar:after {
+    background-size: contain;
+    position: absolute;
+    width: 82px;
+    height: 82px;
+    top: 0px;
+    left: 0px;
+    content: "";
+    border: 4px solid #008b4e;
+    border-radius: 100%;
+}
+
 .ppl-info.percent30 .ppl-avatar:before {
     content: "30%";
 }
@@ -706,6 +718,11 @@ footer:not(.modal-footer):after {
 
 .ppl-info.percent90 .ppl-avatar:before {
     content: "90%";
+}
+
+.ppl-info.percent100 .ppl-avatar:before {
+    content: "100%";
+    right: -47px;
 }
 
 .ppl-info .ppl-avatar:before {
