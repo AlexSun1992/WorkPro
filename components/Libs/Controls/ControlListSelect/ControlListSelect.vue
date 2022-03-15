@@ -19,8 +19,8 @@
           {{ data.value.text || "Выберите из списка" }}
         </b-input>
         <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-          <b-card>
-            <b-col style="width: 60rem">
+          <b-row>
+            <b-col cols="12" md="6" lg="4">
               <wrapper-item-from-template
                 class="mypolices-all-block"
                 :isButtonRender="data"
@@ -31,7 +31,7 @@
                 :template="getData"
               ></wrapper-item-from-template>
             </b-col>
-          </b-card>
+          </b-row>
         </b-collapse>
       </b-form-group>
     </div>

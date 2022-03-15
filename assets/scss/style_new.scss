@@ -3377,6 +3377,10 @@ select:disabled,
     border: 1px solid #dfdfe2;
 }
 
+input.collapsed[readonly="readonly"] {
+    background: #f4f7f5 url('/img/select-arrow.png') center right no-repeat;
+}
+
 select:disabled,
 .ui.selection.dropdown.disabled .text {
     color: #202020;
