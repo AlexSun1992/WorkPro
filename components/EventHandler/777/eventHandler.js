@@ -487,7 +487,7 @@ async function eventHandler(fields, action, func) {
     action.name === `NOWNER_AGE` &&
     findField("NDR_AGE_1").visible === true &&
     findField("NDR_AGE_1").value === undefined &&
-    findField("NDRIVER_TYPE").value === "2"
+    findField("NDRIVER_TYPE").value == "2"
   ) {
     const visibleDriversCount = getVisibleDriversCount();
 
