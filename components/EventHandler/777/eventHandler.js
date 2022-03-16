@@ -98,8 +98,14 @@ async function eventHandler(fields, action, func) {
   ];
 
   if (isCaptchaNeeded.value === true) {
+    //  debugger;
     checkNotRegNumberForm.push(captcha);
   }
+  if (price.visible) {
+    checkNotRegNumberForm.push(price);
+  }
+
+  regNumber.readonly = Boolean(checkNotRegNumber.value);
 
   let checkDriversForm = [crash_years, add_driver];
 
@@ -193,8 +199,12 @@ async function eventHandler(fields, action, func) {
     if (!regNumber.value || !action.value) {
       invertPropertyElements(checkNotRegNumberForm, "visible");
     }
+    if (!action.value) {
+      calculate_btn.visible = false;
+      captcha.visible = false;
+    }
     regNumber.value = "";
-    invertPropertyElements([regNumber], "readonly");
+    // invertPropertyElements([regNumber], "readonly");
   }
 
   if (action.value === "SFILLINMANUALLY") {
@@ -732,6 +742,9 @@ async function eventHandler(fields, action, func) {
     findField(`Item36585`).visible = true;
     findField(`NPRICE`).visible = false;
     findField(`ISSUE_POLICY`).visible = false;
+    if (isCaptchaNeeded.value === true) {
+      captcha.visible = true;
+    }
   }
 
   if (action.name === "SVEHICLE_MODEL" && action.value === null) {
