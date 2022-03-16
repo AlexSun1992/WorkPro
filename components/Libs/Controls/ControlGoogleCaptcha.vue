@@ -37,6 +37,13 @@ export default {
     );
     document.head.appendChild(externalScript);
   },
+
+  updated() {
+    if (this.$store.getters["data_card/saveButtonClicked"] === true) {
+      this.$refs.recaptcha.execute();
+    }
+  },
+
   methods: {
     setToken(token) {
       this.token = token;
