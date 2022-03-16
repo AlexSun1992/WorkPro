@@ -275,8 +275,6 @@ converter.form = async (data, params) => {
     console.error(e);
   }
 
-  //console.log("meta:", meta_readonly);
-
   // ********
   if (errors.length !== 0) {
     throw { response: { data: errors } };
@@ -287,7 +285,6 @@ converter.form = async (data, params) => {
     // Переход на поля JSONWEBFIELDS
     data: converter.type(arr),
     // Метаданные для отображения JSONWEBFIELDS
-    //  meta_readonly?.ALL_FIELDS === "Y" ? true : false
     metaData: {
       data: converter.type(webFieldsArr, meta_readonly),
       captions: data[0]._meta["SPAGECAPTION"],
@@ -302,6 +299,7 @@ converter.type = (data, isReadOnly) => {
   let copy = data;
   let del = [];
 
+  // Пытался присвоить свойству readonly поля RegNumber значения true через метод map (не получается)//
   // if (isReadOnly) {
   //   data = data.map((item) => {
   //     Object.keys(isReadOnly).forEach((elem) => {
@@ -312,15 +310,18 @@ converter.type = (data, isReadOnly) => {
   //   });
   // }
 
+  ////Присваивание свойству readonly поля RegNumber значения true///
   for (let i = 0; i < data.length; i++) {
     if (isReadOnly) {
       Object.keys(isReadOnly).forEach((item) => {
         if (item !== "" && data[i].name === item) {
           data[i].readonly = true;
-          // console.log("data:", data[i]);
+          //Проверка свойства readonly поля RegNumber на наличие true
+          console.log(data[i]);
         }
       });
     }
+    ////////
 
     if (data[i].control !== null) {
       data[i].type = controlConverter.getType(data[i].control);
@@ -341,17 +342,6 @@ converter.type = (data, isReadOnly) => {
     }
     if (data[i].name.substring(0, 2) === `FK`) {
       for (let j = 0; j < data.length; j++) {
-        //////////// Присваивание свойству readOnly значение true
-        if (isReadOnly) {
-          Object.keys(isReadOnly).forEach((item) => {
-            if (item !== "" && data[j].name === item) {
-              //  data[j].readonly = true;
-              console.log("data[j]:", data[j]);
-            }
-          });
-        }
-        //////
-
         if (
           data[i].name.substring(2) === data[j].name &&
           data[j].type !== "combobox" &&
@@ -375,6 +365,7 @@ converter.type = (data, isReadOnly) => {
       }
     }
   }
+
   return converter.remove(copy, del);
 };
 
