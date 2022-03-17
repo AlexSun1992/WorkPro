@@ -303,10 +303,10 @@ converter.type = (data, isReadOnly) => {
     if (isReadOnly) {
       Object.keys(isReadOnly).forEach((item) => {
         if (item !== "" && data[i].name === item) {
-          if (isReadOnly[`${item}`] === "Y") {
+          if (isReadOnly[item] === "Y") {
             data[i].readonly = true;
           }
-          if (isReadOnly[`${item}`] === "N") {
+          if (isReadOnly[item] === "N") {
             data[i].readonly = false;
           }
         }
