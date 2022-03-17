@@ -5,6 +5,18 @@
         <OfficeCard @open="$emit('open', $event)" :office="office" />
       </div>
     </div>
+    <div v-else>
+      <div class="row search-result-row">
+        <div class="col-md-12 col-12 search-results">
+          <div class="search-no-result">
+            <div class="search-no-result-img"></div>
+            <div class="search-no-result-txt">
+              По вашему запросу ничего не найдено
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <Paginator
       v-if="data"
       @update="page = $event"
