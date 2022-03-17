@@ -209,6 +209,7 @@ export const mutations = {
   },
 
   setFilter: (state, data) => {
+    console.log(data);
     if (Array.isArray(data) === true) {
       state.filters = data;
     } else {
@@ -253,17 +254,21 @@ export const mutations = {
         id: id,
       };
       state.filters.push(currentFilter);
+      console.log(state.filters);
     }
     if (filterType === "radiobutton" || filterType === "combobox") {
       currentFilter.filter = [filterItem];
+      console.log(currentFilter);
       return;
     }
     if (currentFilter.filter.includes(filterItem)) {
       currentFilter.filter = currentFilter.filter.filter(
         (item) => item !== filterItem
       );
+      console.log(currentFilter);
     } else {
       currentFilter.filter.push(filterItem);
+      console.log(currentFilter);
     }
   },
   setSearchParams(state, data) {
