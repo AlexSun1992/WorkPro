@@ -6,13 +6,13 @@ describe("модуль блоков", () => {
     const state = { filters: [] };
     mutations.setFilter(state, {
       type: "query",
-      cardId: 900,
+      cardId: 800,
       value: "find",
     });
     expect(state.filters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "cardId": 900,
+          "cardId": 800,
           "type": "query",
           "value": "find",
         },
@@ -23,12 +23,12 @@ describe("модуль блоков", () => {
   it("должен обновлять значение фильтра в списке", () => {});
 });
 
+//Пробные тесты
+
 describe("Неотфильтрованные блоки", () => {
   it("должен возвращать все имеющиеся объекты(неотфильтрованные)", () => {
     const state = { blocks: [] };
-
     getters.getUnfilteredBlockById(state, { id: 712 });
-
     expect(state.blocks).not.toBeNaN();
     // expect(state.blocks).toHaveProperty("data");
   });
