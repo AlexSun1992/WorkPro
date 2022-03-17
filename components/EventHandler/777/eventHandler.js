@@ -75,6 +75,8 @@ async function eventHandler(fields, action, func) {
 
   const url = new URL("/free/v2/osago/findAuto", window.location);
 
+  let regNumberForm = [regNumber, checkNotRegNumber, calculatePolis];
+
   let checkNotRegNumberForm = [
     citySettlement,
     ownerAge,
@@ -196,6 +198,10 @@ async function eventHandler(fields, action, func) {
   }
 
   if (action.name === "LCHECKREGNUMBER") {
+    if (!vehicleModel.visible) {
+      regNumber.value = "";
+      errRegNumNotFoundMob.visible = false;
+    }
     if (!regNumber.value || !action.value) {
       invertPropertyElements(checkNotRegNumberForm, "visible");
     }
@@ -203,12 +209,11 @@ async function eventHandler(fields, action, func) {
       calculate_btn.visible = false;
       captcha.visible = false;
     }
-    regNumber.value = "";
-    // invertPropertyElements([regNumber], "readonly");
   }
 
   if (action.value === "SFILLINMANUALLY") {
-    checkNotRegNumber.value = true;
+    //checkNotRegNumber.value = true;
+    invertPropertyElements(checkNotRegNumberForm, "visible");
   }
 
   if (action.name === "NDRIVER_TYPE" && action.value === "1") {

@@ -204,6 +204,16 @@ export default {
       return null;
     },
   },
+  watch: {
+    data: function (newVal, oldVal) {
+      if (oldVal.value && !newVal.value) {
+        this.numberValue = "";
+        this.codeValue = "";
+        this.isVisitedNumber = false;
+        this.isVisitedCode = false;
+      }
+    },
+  },
 };
 </script>
 
