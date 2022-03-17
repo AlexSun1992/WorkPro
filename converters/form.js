@@ -299,29 +299,19 @@ converter.type = (data, isReadOnly) => {
   let copy = data;
   let del = [];
 
-  // Пытался присвоить свойству readonly поля RegNumber значения true через метод map (не получается)//
-  // if (isReadOnly) {
-  //   data = data.map((item) => {
-  //     Object.keys(isReadOnly).forEach((elem) => {
-  //       if (elem !== "" && item.name === elem) {
-  //         item.readonly = true;
-  //       }
-  //     });
-  //   });
-  // }
-
-  ////Присваивание свойству readonly поля RegNumber значения true///
   for (let i = 0; i < data.length; i++) {
     if (isReadOnly) {
       Object.keys(isReadOnly).forEach((item) => {
         if (item !== "" && data[i].name === item) {
-          data[i].readonly = true;
-          //Проверка свойства readonly поля RegNumber на наличие true
-          console.log(data[i]);
+          if (isReadOnly[`${item}`] === "Y") {
+            data[i].readonly = true;
+          }
+          if (isReadOnly[`${item}`] === "N") {
+            data[i].readonly = false;
+          }
         }
       });
     }
-    ////////
 
     if (data[i].control !== null) {
       data[i].type = controlConverter.getType(data[i].control);
