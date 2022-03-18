@@ -172,6 +172,19 @@ export default {
         return script.eventHandler;
       });
     },
+    async callbackAction(url) {
+      try {
+        this.$store.commit("data_card/setLoading", true);
+        this.$store.commit("data_card/setDisabled", true);
+        const { data } = await this.$axios.get(url);
+        return data;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.$store.commit("data_card/setLoading", false);
+        this.$store.commit("data_card/setDisabled", false);
+      }
+    },
     validateData(data) {
       let valid = true;
       for (let i = 0; i < data.length; i++) {
@@ -248,7 +261,7 @@ export default {
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM === this.menuId
       );
-      await this.callScript(e);
+      await this.callScript(e, this.callbackAction);
       if (field.type === "button" && e.action) {
         const actionId = parseInt(e.value.replace("Item", ""));
         const actionRefreshCard = menu.ACTIONSCUR.find((item) => {

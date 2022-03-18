@@ -200,6 +200,7 @@ async function eventHandler(fields, action, func) {
   if (action.name === "LCHECKREGNUMBER") {
     if (!vehicleModel.visible) {
       regNumber.value = "";
+      regNumber.error = null;
       errRegNumNotFoundMob.visible = false;
     }
     if (!regNumber.value || !action.value) {
@@ -212,8 +213,11 @@ async function eventHandler(fields, action, func) {
   }
 
   if (action.value === "SFILLINMANUALLY") {
-    //checkNotRegNumber.value = true;
-    invertPropertyElements(checkNotRegNumberForm, "visible");
+    if (regNumber.value) {
+      invertPropertyElements(checkNotRegNumberForm, "visible");
+    } else {
+      checkNotRegNumber.value = true;
+    }
   }
 
   if (action.name === "NDRIVER_TYPE" && action.value === "1") {
@@ -270,8 +274,7 @@ async function eventHandler(fields, action, func) {
 
     async function getInfo(regNumberValue) {
       url.searchParams.set("REG_NUMBER", convertRusToRESO(regNumberValue));
-      const response = await fetch(url.href);
-      const dataAuto = await response.json();
+      const dataAuto = await func(url.href);
       return dataAuto;
     }
     if (regNumber.value) {
@@ -280,9 +283,17 @@ async function eventHandler(fields, action, func) {
         showLabelFunc(labelRegNumb, labelRegNumb_Number);
         hideErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
         vehicleModel.value = `${autoInfo[0].BRAND_MODEL_MODIFICATION}|${autoInfo[0].MAKE_MODEL}`;
+        vehicleModel.state = null;
+        vehicleModel.error = null;
         yearVehicle.value = autoInfo[0].NBUILD_YEAR;
+        yearVehicle.state = null;
+        yearVehicle.error = null;
         horseVehiclePower.value = autoInfo[0].OUTPUT;
+        horseVehiclePower.state = null;
+        horseVehiclePower.error = null;
         khVeiclePower.value = autoInfo[0].POWER_KVT;
+        khVeiclePower.state = null;
+        khVeiclePower.error = null;
       } else {
         showErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
         hideLabelFunc(labelRegNumb, labelRegNumb_Number);
@@ -496,12 +507,17 @@ async function eventHandler(fields, action, func) {
   ) {
     const visibleDriversCount = getVisibleDriversCount();
 
-    if (func !== null && action.value >= 18 && func.value < 100) {
-      findField("NDR_AGE_1").value = func.value;
+    if (
+      func !== null &&
+      typeof func !== "function" &&
+      action.value >= 18 &&
+      action.value < 100
+    ) {
+      findField("NDR_AGE_1").value = action.value;
       findField("NDR_AGE_1").state = true;
       findField("NDR_AGE_1").checked = true;
 
-      findField("NDR_EXPERIENCE_1").value = func.value - 18;
+      findField("NDR_EXPERIENCE_1").value = action.value - 18;
       findField("NDR_EXPERIENCE_1").state = true;
       findField("NDR_EXPERIENCE_1").checked = true;
 
