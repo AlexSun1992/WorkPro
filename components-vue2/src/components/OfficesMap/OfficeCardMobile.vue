@@ -1,5 +1,9 @@
 <template>
-  <b-card class="mb-2">
+  <b-card
+    class="office-mobile-list"
+    @click="isInfoShown = !isInfoShown"
+    :class="{ show: isInfoShown }"
+  >
     <b-card-text>
       <div v-if="office.info">
         <div v-for="(item, i) in office.info" :key="i">
@@ -12,71 +16,87 @@
               ></span>
               <span>{{ "м. " + office.station }}</span>
             </div>
-            <button @click="isInfoShown = !isInfoShown">^</button>
+            <button class="oml-btn-open"></button>
           </div>
           <div v-if="i == 0 && !office.station" class="name">
             {{ item.SSHORTNAME }}
             <button @click="isInfoShown = !isInfoShown">^</button>
           </div>
-          <div v-if="i == 0">{{ count(office) }}</div>
+          <div v-if="i == 0" class="count-office">{{ count(office) }}</div>
           <div v-if="isInfoShown">
-            {{ item.SSHORTNAME }}
-            <span v-if="item.NDISTANSE" class="card-office-distance">
-              {{ item.NDISTANSE.toFixed(1) + " км" }}
-            </span>
-            <div class="col-4 pe-0">
-              <div v-if="item.SPATH1" class="position-relative">
-                <img
-                  :src="'https://www.reso.ru/export/sites_reso/' + item.SPATH1"
-                />
-                <button class="office-image-zoom" type="button"></button>
-              </div>
-            </div>
-
-            <div class="col-12">
-              <button
-                @click="$emit('open', item)"
-                type="button"
-                class="show-maps-balloon"
-              >
-                Показать на карте
-              </button>
-            </div>
-
-            <div :class="[item.SPATH1 ? 'col-8' : 'col-12']">
-              <div>{{ item.SADDRESS }}</div>
-              <div
-                :class="[
-                  isOpened ? 'card-office-opened' : 'card-office-closed',
-                ]"
-              >
-                {{ showWorkingHours(item) }}
-              </div>
-            </div>
-            <div v-if="item.SGRAF" class="card-office-time">
-              <button type="button" @click="isGrafShown = !isGrafShown">
-                Режим работы:
-              </button>
-
-              <div v-for="(graf, i) in getGrafs(item.SGRAF)" :key="i">
-                <div v-if="isGrafShown">
-                  <div>{{ graf }}</div>
+            <div class="card-body">
+              <div class="card-title">{{ item.SSHORTNAME }}</div>
+              <div class="card-office-adress row">
+                <div class="col-4 pe-0">
+                  <div v-if="item.SPATH1" class="position-relative">
+                    <img
+                      :src="
+                        'https://www.reso.ru/export/sites_reso/' + item.SPATH1
+                      "
+                    />
+                    <button class="office-image-zoom" type="button"></button>
+                  </div>
+                </div>
+                <div :class="[item.SPATH1 ? 'col-8' : 'col-12']">
+                  <div>{{ item.SADDRESS }}</div>
+                  <div
+                    :class="[
+                      isOpened ? 'card-office-opened' : 'card-office-closed',
+                    ]"
+                  >
+                    {{ showWorkingHours(item) }}
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button
+                    @click="$emit('open', item)"
+                    type="button"
+                    class="show-maps-balloon"
+                  >
+                    Показать на карте
+                  </button>
                 </div>
               </div>
-            </div>
-            <div v-if="item.SPHONE" class="card-office-contacts">
-              <div v-for="(phone, i) in getPhones(item.SPHONE)" :key="i">
-                <div v-if="item.SPHONE" class="card-office-phone">
-                  <a v-bind:href="'tel:' + item.SPHONE">{{ phone }}</a>
+              <div class="card-office-undeground">
+                <div>
+                  <span
+                    :class="
+                      'undeground-color_' + getUnderlineId(office.station, item)
+                    "
+                  ></span>
+                  <span>{{ "м. " + office.station }}</span>
+                  <span v-if="item.NDISTANSE" class="card-office-distance">
+                    {{ item.NDISTANSE.toFixed(1) + " км" }}
+                  </span>
                 </div>
               </div>
-              <div v-if="item.SEMAIL">
-                <a
-                  v-bind:href="'mailto:' + item.SEMAIL"
-                  class="card-office-e-mail"
-                  >{{ item.SEMAIL }}</a
-                >
+              <div v-if="item.SGRAF" class="card-office-time">
+                <button type="button" @click="isGrafShown = !isGrafShown">
+                  Режим работы:
+                </button>
+                <div v-for="(graf, i) in getGrafs(item.SGRAF)" :key="i">
+                  <div v-if="isGrafShown">
+                    <div>{{ graf }}</div>
+                  </div>
+                </div>
               </div>
+              <div v-if="item.SPHONE" class="card-office-contacts">
+                <div v-for="(phone, i) in getPhones(item.SPHONE)" :key="i">
+                  <div v-if="item.SPHONE" class="card-office-phone">
+                    <a v-bind:href="'tel:' + item.SPHONE">{{ phone }}</a>
+                  </div>
+                </div>
+                <div v-if="item.SEMAIL">
+                  <a
+                    v-bind:href="'mailto:' + item.SEMAIL"
+                    class="card-office-e-mail"
+                    >{{ item.SEMAIL }}</a
+                  >
+                </div>
+              </div>
+              <button class="open-office-more-info" type="button">
+                Подробнее
+              </button>
             </div>
           </div>
         </div>

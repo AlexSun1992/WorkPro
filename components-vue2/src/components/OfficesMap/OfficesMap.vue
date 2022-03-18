@@ -171,7 +171,6 @@ export default {
 
   methods: {
     onResize() {
-      debugger;
       this.width = window.innerWidth;
     },
     closeCard() {

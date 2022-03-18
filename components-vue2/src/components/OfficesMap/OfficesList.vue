@@ -13,9 +13,13 @@
         <OfficeCard v-else @open="$emit('open', $event)" :office="office" />
       </div>
     </div>
-    <span @click="isShownMore = !isShownMore">{{
-      !isShownMore ? "Показать еще" : "Свернуть"
-    }}</span>
+    <button
+      class="mobile-pagination"
+      type="button"
+      @click="isShownMore = !isShownMore"
+    >
+      {{ !isShownMore ? "Показать еще" : "Свернуть" }}
+    </button>
     <!-- <div v-else>
       <div class="row search-result-row">
         <div class="col-md-12 col-12 search-results">
