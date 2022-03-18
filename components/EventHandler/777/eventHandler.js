@@ -283,16 +283,16 @@ async function eventHandler(fields, action, func) {
         showLabelFunc(labelRegNumb, labelRegNumb_Number);
         hideErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
         vehicleModel.value = `${autoInfo[0].BRAND_MODEL_MODIFICATION}|${autoInfo[0].MAKE_MODEL}`;
-        vehicleModel.state = null;
+        vehicleModel.state = true;
         vehicleModel.error = null;
         yearVehicle.value = autoInfo[0].NBUILD_YEAR;
-        yearVehicle.state = null;
+        yearVehicle.state = true;
         yearVehicle.error = null;
         horseVehiclePower.value = autoInfo[0].OUTPUT;
-        horseVehiclePower.state = null;
+        horseVehiclePower.state = true;
         horseVehiclePower.error = null;
         khVeiclePower.value = autoInfo[0].POWER_KVT;
-        khVeiclePower.state = null;
+        khVeiclePower.state = true;
         khVeiclePower.error = null;
       } else {
         showErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
