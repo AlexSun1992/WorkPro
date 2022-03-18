@@ -68,8 +68,16 @@
         </div>
       </b-tab>
       <b-tab title="В списке" title-item-class="office-on-lists">
-        <!-- <OfficesList :data="getOffices" @open="openOnMap" /> -->
-        <OfficesList :key="componentKey" :data="getOffices" @open="openOnMap" />
+        <OfficesList
+          :mobile="width < 900"
+          :data="width < 900 ? getOfficesMobile : getOffices"
+          @open="openOnMap"
+        />
+        <!-- <OfficesListMobile
+          :key="componentKey"
+          :data="getOfficesMobile"
+          @open="openOnMap"
+        /> -->
         <!-- <div v-else>
           По вашему запросу ничего не найдено. Попробуйте изменить критерии
           поиска
@@ -107,7 +115,7 @@ export default {
     ZoomComponent,
     BFormInput,
   },
-  props: ["notification"],
+  props: ["notification", "mobile"],
   data() {
     return {
       myMap: null,
@@ -136,10 +144,12 @@ export default {
       componentKey: 0,
       placemark: null,
       city: "",
+      width: window.innerWidth,
     };
   },
   async created() {
     try {
+      window.addEventListener("resize", this.onResize);
       await this.$store.dispatch("map/fetchRegion", {
         id: this.$store.getters["map/getDefaultRegion"],
         coords: this.$store.getters["map/getDefaultCoords"],
@@ -155,8 +165,15 @@ export default {
       console.log(error);
     }
   },
+  destroyed() {
+    window.removeEventListener("resize", this.onResize);
+  },
 
   methods: {
+    onResize() {
+      debugger;
+      this.width = window.innerWidth;
+    },
     closeCard() {
       this.circleClicked = false;
       this.setStatus();
@@ -749,6 +766,9 @@ export default {
       }
       this.componentKey += 1;
       return data;
+    },
+    getOfficesMobile() {
+      return this.getOffices;
     },
     tabVisible() {
       return this.regionId == 77 || this.regionId == 78;
