@@ -279,13 +279,14 @@ converter.form = async (data, params) => {
   if (errors.length !== 0) {
     throw { response: { data: errors } };
   }
+
   return {
     errors: errors,
     // Переход на поля JSONWEBFIELDS
     data: converter.type(arr),
     // Метаданные для отображения JSONWEBFIELDS
     metaData: {
-      data: converter.type(webFieldsArr),
+      data: converter.type(webFieldsArr, meta_readonly),
       captions: data[0]._meta["SPAGECAPTION"],
       cardCaption: data[0]._meta["SCARDCAPTION"],
       btnSave: meta_visible?.BTNSAVE === "N" ? false : true,
@@ -294,10 +295,24 @@ converter.form = async (data, params) => {
   };
 };
 
-converter.type = (data) => {
+converter.type = (data, isReadOnly) => {
   let copy = data;
   let del = [];
+
   for (let i = 0; i < data.length; i++) {
+    if (isReadOnly) {
+      Object.keys(isReadOnly).forEach((item) => {
+        if (item !== "" && data[i].name === item) {
+          if (isReadOnly[item] === "Y") {
+            data[i].readonly = true;
+          }
+          if (isReadOnly[item] === "N") {
+            data[i].readonly = false;
+          }
+        }
+      });
+    }
+
     if (data[i].control !== null) {
       data[i].type = controlConverter.getType(data[i].control);
     } else {
@@ -340,6 +355,7 @@ converter.type = (data) => {
       }
     }
   }
+
   return converter.remove(copy, del);
 };
 

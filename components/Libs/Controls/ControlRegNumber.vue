@@ -38,7 +38,9 @@
         }}</b-form-invalid-feedback
       >
       <b-form-invalid-feedback
-        v-else-if="!this.isVisitedNumber || !this.isVisitedCode"
+        v-else-if="
+          (!this.isVisitedNumber || !this.isVisitedCode) && isDisabled === false
+        "
         :state="data.state"
         >{{
           data.error ? data.error : "Пожалуйста, заполните это поле"
@@ -92,7 +94,6 @@ export default {
       isVisitedNumber: false,
       isVisitedCode: false,
       state: null,
-      isDisabled: false,
     };
   },
   props: {
@@ -202,6 +203,19 @@ export default {
         return this.stateNumber && this.stateCode;
       }
       return null;
+    },
+    isDisabled() {
+      return this.data.disabled || this.data.readonly;
+    },
+  },
+  watch: {
+    data: function (newVal, oldVal) {
+      if (oldVal.value && !newVal.value) {
+        this.numberValue = "";
+        this.codeValue = "";
+        this.isVisitedNumber = false;
+        this.isVisitedCode = false;
+      }
     },
   },
 };

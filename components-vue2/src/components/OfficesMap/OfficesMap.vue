@@ -68,8 +68,16 @@
         </div>
       </b-tab>
       <b-tab title="В списке" title-item-class="office-on-lists">
-        <!-- <OfficesList :data="getOffices" @open="openOnMap" /> -->
-        <OfficesList :key="componentKey" :data="getOffices" @open="openOnMap" />
+        <OfficesList
+          :mobile="width < 900"
+          :data="width < 900 ? getOfficesMobile : getOffices"
+          @open="openOnMap"
+        />
+        <!-- <OfficesListMobile
+          :key="componentKey"
+          :data="getOfficesMobile"
+          @open="openOnMap"
+        /> -->
         <!-- <div v-else>
           По вашему запросу ничего не найдено. Попробуйте изменить критерии
           поиска
@@ -107,7 +115,7 @@ export default {
     ZoomComponent,
     BFormInput,
   },
-  props: ["notification"],
+  props: ["notification", "mobile"],
   data() {
     return {
       myMap: null,
@@ -134,10 +142,14 @@ export default {
       useElement: null,
       isInputEmpty: true,
       componentKey: 0,
+      placemark: null,
+      city: "",
+      width: window.innerWidth,
     };
   },
   async created() {
     try {
+      window.addEventListener("resize", this.onResize);
       await this.$store.dispatch("map/fetchRegion", {
         id: this.$store.getters["map/getDefaultRegion"],
         coords: this.$store.getters["map/getDefaultCoords"],
@@ -153,10 +165,15 @@ export default {
       console.log(error);
     }
   },
+  destroyed() {
+    window.removeEventListener("resize", this.onResize);
+  },
 
   methods: {
+    onResize() {
+      this.width = window.innerWidth;
+    },
     closeCard() {
-      debugger;
       this.circleClicked = false;
       this.setStatus();
     },
@@ -205,12 +222,14 @@ export default {
         this.isInputEmpty = true;
         this.useElement?.setAttribute("x", -1000);
         this.useElement?.setAttribute("y", -1000);
+        this.myMap.geoObjects.remove(this.placemark);
       } else {
         this.isInputEmpty = false;
       }
       this.setStatus();
     },
     clear() {
+      this.myMap.geoObjects.remove(this.placemark);
       this.$refs.search.value = "";
       this.isInputEmpty = true;
       this.useElement?.setAttribute("x", -1000);
@@ -306,7 +325,8 @@ export default {
       this.initSuggestView();
       let agencies = this.$store.getters["map/getRegionOffices"];
       if (filters) {
-        agencies = filterData(agencies, filters);
+        // agencies = filterData(agencies, filters);
+        agencies = filterData(this.getOfficesByCity, filters);
       }
       await this.setPositionAttributes();
       if (!this.currentFilters) {
@@ -320,7 +340,12 @@ export default {
         preset: "islands#darkGreenClusterIcons",
       });
       this.myClusterer.add(this.getGeoObjects(agencies));
-
+      // let setIcon = (e) => {
+      //   this.object = e.get("target");
+      //   this.object.options._options.iconImageHref =
+      //     "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg";
+      // };
+      // this.myClusterer.events.add("click", setIcon.bind(this));
       let mapState;
 
       if (this.mapState) {
@@ -351,14 +376,28 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
+      // let setIcon = (e) => {
+      //   this.object = e.get("target");
+      //   this.object.options._options.iconImageHref =
+      //     "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg";
+      // };
+      // let test = (e) => {
+      //   alert("Дошло до коллекции объектов карты");
+      //   // Получение ссылки на дочерний объект, на котором произошло событие.
+      //   this.object = e.get("target");
+
+      //   this.object.options._options.iconImageHref =
+      //     "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg";
+      // };
+      // this.myMap.geoObjects.events.add("balloonopen", setIcon.bind(this));
       this.setPlaceholder();
     },
     getTemplate(agency) {
-      let phonesArr = agency.SPHONE.split(";");
-      let grafArr = agency.SGRAF.split("\n");
+      let phonesArr = agency.SPHONE?.split(";");
+      let grafArr = agency.SGRAF?.split("\n");
       let email;
-      phonesArr.pop();
-      grafArr.pop();
+      phonesArr?.pop();
+      grafArr?.pop();
       let template = `
         <div class="card-body">
           <h4 class="card-title">${agency.SSHORTNAME}</h4>
@@ -404,7 +443,7 @@ export default {
         /<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g,
         () => {
           let temp = "";
-          phonesArr.forEach((phone) => {
+          phonesArr?.forEach((phone) => {
             temp += `<div class="card-office-phone"><a href="tel:${phone}">${phone}</a></div>`;
           });
           return temp;
@@ -432,17 +471,18 @@ export default {
       template = template.replace(
         /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
         () => {
-          let temp = "";
+          let temp = `<div class="card-office-undeground">`;
           agency.IDUNDERGROUND.forEach((item) => {
-            temp += `<div class="card-office-undeground">
+            temp += `<div>
                     <span class=${
                       "undeground-color_" + item.IDUNDERLINE
                     }></span>
                     <span>${item.SNAME}</span>
                     <span class="card-office-distance"> 1.5 км </span>
-                  </div>`;
+                    </div>
+                  `;
           });
-          return temp;
+          return temp + `</div>`;
         }
       );
 
@@ -537,6 +577,7 @@ export default {
             },
           },
           {
+            hideIconOnBalloonOpen: false,
             iconLayout: "default#image",
             iconImageHref:
               "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
@@ -590,6 +631,7 @@ export default {
           if (this.address.data.suggestions.length) {
             this.regionId =
               this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
+            this.city = this.address.data.suggestions[0].data.city;
           }
         } catch (e) {
           console.log(e);
@@ -597,7 +639,7 @@ export default {
       }
     },
     updateMap(state, caption, zoom = 12, visibility) {
-      let placemark = new ymaps.Placemark(
+      this.placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
           iconCaption: caption,
@@ -608,12 +650,13 @@ export default {
         {
           preset: "islands#redDotIconWithCaption",
           visible: visibility,
+          openBalloonOnClick: false,
         }
       );
-      this.myMap.geoObjects.add(placemark);
+      this.myMap.geoObjects.add(this.placemark);
       this.myMap.setCenter(state.center, zoom);
-      placemark.geometry.setCoordinates(state.center);
-      placemark.properties.set({
+      this.placemark.geometry.setCoordinates(state.center);
+      this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
         balloonPane: "outerBalloon",
@@ -642,6 +685,8 @@ export default {
           count: 1,
         });
 
+        this.city = this.address.data.suggestions[0].data.city;
+
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
@@ -654,9 +699,8 @@ export default {
         }
         this.myClusterer?.removeAll();
 
-        this.myClusterer.add(
-          this.getGeoObjects(this.$store.getters["map/getRegionOffices"])
-        );
+        this.myClusterer.add(this.getGeoObjects(this.getOfficesByCity));
+
         this.myMap.geoObjects.add(this.myClusterer);
       } catch (e) {
         console.log(e);
@@ -664,7 +708,7 @@ export default {
 
       if (this.currentFilters) {
         this.filteredOffices = filterData(
-          this.$store.getters["map/getRegionOffices"],
+          this.getOfficesByCity,
           this.currentFilters
         );
       }
@@ -684,7 +728,7 @@ export default {
       });
       this.currentFilters = filters;
       this.filteredOffices = filterData(
-        this.$store.getters["map/getRegionOffices"],
+        this.getOfficesByCity,
         this.currentFilters
       );
       let _;
@@ -699,6 +743,11 @@ export default {
     },
   },
   computed: {
+    getOfficesByCity() {
+      return this.$store.getters["map/getRegionOffices"]?.filter((office) => {
+        return office.SADDRESS.includes(`${this.city}`);
+      });
+    },
     cardVisible() {
       return this.circleClicked && this.stationOffices.length;
     },
@@ -707,7 +756,8 @@ export default {
       if (this.filteredOffices) {
         data = this.filteredOffices;
       } else {
-        data = this.$store.getters["map/getRegionOffices"];
+        // data = this.$store.getters["map/getRegionOffices"];
+        data = this.getOfficesByCity;
       }
 
       if (!this.regionId) {
@@ -715,6 +765,9 @@ export default {
       }
       this.componentKey += 1;
       return data;
+    },
+    getOfficesMobile() {
+      return this.getOffices;
     },
     tabVisible() {
       return this.regionId == 77 || this.regionId == 78;

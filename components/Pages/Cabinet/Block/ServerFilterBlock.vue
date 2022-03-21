@@ -248,7 +248,6 @@ export default {
     },
 
     update(e) {
-      console.log(e);
       if (!e?.text && !e?.value && this.isShowAsTemplate) {
         e = { data: e, text: e.SNAME, value: e.SPOLICY };
       }
