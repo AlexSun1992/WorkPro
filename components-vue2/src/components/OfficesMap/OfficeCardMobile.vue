@@ -27,8 +27,8 @@
             <div class="card-body">
               <div class="card-title">{{ item.SSHORTNAME }}</div>
               <div class="card-office-adress row">
-                <div class="col-4 pe-0">
-                  <div v-if="item.SPATH1" class="position-relative">
+                <div class="col-4 pe-0" v-if="item.SPATH1">
+                  <div class="position-relative">
                     <img
                       :src="
                         'https://www.reso.ru/export/sites_reso/' + item.SPATH1
@@ -71,13 +71,9 @@
                 </div>
               </div>
               <div v-if="item.SGRAF" class="card-office-time">
-                <button type="button" @click="isGrafShown = !isGrafShown">
-                  Режим работы:
-                </button>
+                <button type="button">Режим работы:</button>
                 <div v-for="(graf, i) in getGrafs(item.SGRAF)" :key="i">
-                  <div v-if="isGrafShown">
-                    <div>{{ graf }}</div>
-                  </div>
+                  <div>{{ graf }}</div>
                 </div>
               </div>
               <div v-if="item.SPHONE" class="card-office-contacts">
