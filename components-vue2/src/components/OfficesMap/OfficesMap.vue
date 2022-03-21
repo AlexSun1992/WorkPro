@@ -171,7 +171,6 @@ export default {
 
   methods: {
     onResize() {
-      debugger;
       this.width = window.innerWidth;
     },
     closeCard() {
@@ -473,8 +472,9 @@ export default {
         /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
         () => {
           let temp = `<div class="card-office-undeground">`;
-          agency.IDUNDERGROUND.forEach((item) => {
-            temp += `<div>
+          if (agency.IDUNDERGROUND.length > 0) {
+            agency.IDUNDERGROUND.forEach((item) => {
+              temp += `<div>
                     <span class=${
                       "undeground-color_" + item.IDUNDERLINE
                     }></span>
@@ -482,8 +482,12 @@ export default {
                     <span class="card-office-distance"> 1.5 км </span>
                     </div>
                   `;
-          });
-          return temp + `</div>`;
+            });
+          } else {
+            temp = "";
+          }
+
+          return temp;
         }
       );
 
