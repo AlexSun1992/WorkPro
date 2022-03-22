@@ -34,7 +34,7 @@
       </div>
     </div> -->
     <Paginator
-      v-if="data && !mobile"
+      v-if="data && !mobile && !station"
       @update="page = $event"
       :items-count="officesLength"
       :pages-count="pagesCount"
@@ -133,6 +133,17 @@ export default {
           let start = this.page * this.pagesCount;
           let end = start + this.pagesCount;
           this.page = null;
+          if (this.station) {
+            let filteredByStation = [];
+            this.data.forEach((item) => {
+              item.IDUNDERGROUND.forEach((station) => {
+                if (station.SNAME.includes(this.station)) {
+                  filteredByStation.push(item);
+                }
+              });
+            });
+            return filteredByStation;
+          }
           return this.data.slice(start, end);
         }
       }
