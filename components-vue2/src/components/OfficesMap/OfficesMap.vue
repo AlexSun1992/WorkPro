@@ -69,8 +69,9 @@
       </b-tab>
       <b-tab title="В списке" title-item-class="office-on-lists">
         <OfficesList
+          :station="currentStation"
           :mobile="width < 900"
-          :data="width < 900 ? getOfficesMobile : getOffices"
+          :data="getOffices"
           @open="openOnMap"
         />
         <!-- <OfficesListMobile
@@ -223,6 +224,7 @@ export default {
         this.useElement?.setAttribute("x", -1000);
         this.useElement?.setAttribute("y", -1000);
         this.myMap.geoObjects.remove(this.placemark);
+        this.currentStation = "";
       } else {
         this.isInputEmpty = false;
       }
@@ -235,6 +237,7 @@ export default {
       this.useElement?.setAttribute("x", -1000);
       this.useElement?.setAttribute("y", -1000);
       this.setStatus();
+      this.currentStation = "";
     },
     openOnMap(e) {
       this.currentTab = 0;

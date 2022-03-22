@@ -14,6 +14,7 @@
       </div>
     </div>
     <button
+      v-if="!station"
       class="mobile-pagination"
       type="button"
       @click="isShownMore = !isShownMore"
@@ -57,6 +58,9 @@ export default {
     },
     mobile: {
       type: Boolean,
+    },
+    station: {
+      type: String,
     },
   },
   components: {
@@ -116,6 +120,11 @@ export default {
           officesArr.push({
             station: key,
             info: countedOffices[key],
+          });
+        }
+        if (this.station) {
+          officesArr = officesArr.filter((item) => {
+            return item.station == this.station;
           });
         }
         return officesArr;
