@@ -23,7 +23,7 @@
             <button @click="isInfoShown = !isInfoShown">^</button>
           </div>
           <div v-if="i == 0" class="count-office">{{ count(office) }}</div>
-          <div v-if="isInfoShown">
+          <div v-show="isInfoShown">
             <div class="card-body">
               <div class="card-title">{{ item.SSHORTNAME }}</div>
               <div class="card-office-adress row">
