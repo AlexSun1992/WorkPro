@@ -100,13 +100,10 @@
             </div>
 
             <div v-if="office.SGRAF" class="card-office-time">
-              <button type="button" @click="isGrafShown = !isGrafShown">
-                Режим работы:
-              </button>
-
-              <div v-for="(graf, i) in getGrafs(office.SGRAF)" :key="i">
-                <div v-if="isGrafShown">
-                  <div>{{ graf }}</div>
+              <button type="button">Режим работы:</button>
+              <div class="card-office-times">
+                <div v-for="(graf, i) in getGrafs(office.SGRAF)" :key="i">
+                  {{ graf }}
                 </div>
               </div>
             </div>

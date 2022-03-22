@@ -72,8 +72,10 @@
               </div>
               <div v-if="item.SGRAF" class="card-office-time">
                 <button type="button">Режим работы:</button>
-                <div v-for="(graf, i) in getGrafs(item.SGRAF)" :key="i">
-                  <div>{{ graf }}</div>
+                <div class="card-office-times">
+                  <div v-for="(graf, i) in getGrafs(item.SGRAF)" :key="i">
+                    {{ graf }}
+                  </div>
                 </div>
               </div>
               <div v-if="item.SPHONE" class="card-office-contacts">
