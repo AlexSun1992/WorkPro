@@ -29,7 +29,22 @@
         </div>
       </div>
     </div>
+
+    <div v-show="getOffices && getOffices.length == 0">
+      <div class="row search-result-row">
+        <div class="col-md-12 col-12 search-results">
+          <div class="search-no-result">
+            <div class="search-no-result-img"></div>
+            <div class="search-no-result-txt">
+              По вашему запросу ничего не найдено
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <b-tabs
+      v-show="getOffices && getOffices.length > 0"
       v-model="currentTab"
       ref="tabs"
       content-class="mt-3 office-tab-content"
@@ -40,8 +55,9 @@
         title="На карте"
         title-item-class="office-on-map"
         content-class="maps-block"
-        ><div ref="map" id="map" class="map"></div
-      ></b-tab>
+      >
+        <div ref="map" id="map" class="map"></div>
+      </b-tab>
       <b-tab
         @click="setStatus"
         v-if="tabVisible"

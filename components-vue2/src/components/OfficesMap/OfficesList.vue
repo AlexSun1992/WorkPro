@@ -11,25 +11,13 @@
       </div>
     </div>
     <button
-      v-if="!station && mobile"
+      v-if="!station && mobile && data.length"
       class="mobile-pagination"
       type="button"
       @click="showMore"
     >
       {{ !isShownMore ? "Показать еще" : "Свернуть" }}
     </button>
-    <!-- <div v-else>
-      <div class="row search-result-row">
-        <div class="col-md-12 col-12 search-results">
-          <div class="search-no-result">
-            <div class="search-no-result-img"></div>
-            <div class="search-no-result-txt">
-              По вашему запросу ничего не найдено
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
