@@ -83,8 +83,6 @@ export default {
       }
       this.load = true;
       await this.$store.dispatch("menu/fetchMenu", this.params);
-      const setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
-      console.log(setting);
       this.list = await this.fetchCard();
     } catch (e) {
       this.$store.commit("data_card/setError", true);

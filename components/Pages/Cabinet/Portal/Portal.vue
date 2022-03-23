@@ -1,7 +1,6 @@
 <template>
   <client-only placeholder="Загрузка...">
     <div>
-      <pre>{{ params.settings }}</pre>
       <div v-show="isShowBlock">
         <v-runtime-template
           :template="templateData"
