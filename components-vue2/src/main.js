@@ -66,6 +66,19 @@ Vue.customElement(
 );
 
 Vue.customElement(
+  "component-list",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/List/List.vue", "./store/index"], (
+        lazyComponent
+      ) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
   "component-card-editor",
   () =>
     new Promise((resolve) => {
