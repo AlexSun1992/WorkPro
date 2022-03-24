@@ -15,6 +15,7 @@
       class="mobile-pagination"
       type="button"
       @click="showMore"
+      :class="[!isShownMore ? 'open' : 'close']"
     >
       {{ !isShownMore ? "Показать еще" : "Свернуть" }}
     </button>
