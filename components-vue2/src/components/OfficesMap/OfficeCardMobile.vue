@@ -20,7 +20,7 @@
           </div>
           <div v-if="i == 0 && !office.station" class="name">
             {{ item.SSHORTNAME }}
-            <!-- <button @click="isInfoShown = !isInfoShown">^</button> -->
+            <button class="oml-btn-open"></button>
           </div>
           <div v-if="i == 0" class="count-office">{{ count(office) }}</div>
           <div v-show="isInfoShown">
