@@ -187,17 +187,14 @@ export default {
       await this.$refs.recaptcha.execute();
     },
     onCaptchaExpired() {
-      console.log("onCaptchaExpired");
       this.$refs.recaptcha.reset();
     },
     setToken(recaptcha) {
       this.captchaRenderAmount = 0;
-      console.log("captchaRenderAmount", this.captchaRenderAmount);
-      console.log("setToken");
+
       this.token = recaptcha;
     },
     async getCodeHelper(params) {
-      console.log("getCodeHelper");
       try {
         const headers = {
           headers: { recaptcha: this.token },
@@ -224,7 +221,6 @@ export default {
     },
 
     async getCode() {
-      console.log("getCode");
       this.v.code.$model = null;
       this.codeFieldShown = false;
       this.isPhoneChanged = false;
