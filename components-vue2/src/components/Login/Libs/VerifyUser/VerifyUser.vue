@@ -182,6 +182,7 @@ export default {
   },
   methods: {
     async executeRecaptcha() {
+      this.captchaRenderAmount += 1;
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
@@ -430,7 +431,7 @@ export default {
       }
     },
     captchaRenderAmount: function () {
-      if (this.captchaRenderAmount > 0) {
+      if (this.captchaRenderAmount > 0 && typeof this.token !== "string") {
         this.loading = false;
       }
     },
