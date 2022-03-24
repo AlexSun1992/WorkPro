@@ -163,10 +163,12 @@ export default {
       token: "",
       loading: false,
       codeFieldShown: false,
+      captchaRenderAmount: 0,
     };
   },
 
   created() {
+    this.captchaRenderAmount = 0;
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
@@ -185,12 +187,17 @@ export default {
       await this.$refs.recaptcha.execute();
     },
     onCaptchaExpired() {
+      console.log("onCaptchaExpired");
       this.$refs.recaptcha.reset();
     },
     setToken(recaptcha) {
+      this.captchaRenderAmount = 0;
+      console.log("captchaRenderAmount", this.captchaRenderAmount);
+      console.log("setToken");
       this.token = recaptcha;
     },
     async getCodeHelper(params) {
+      console.log("getCodeHelper");
       try {
         const headers = {
           headers: { recaptcha: this.token },
@@ -217,6 +224,7 @@ export default {
     },
 
     async getCode() {
+      console.log("getCode");
       this.v.code.$model = null;
       this.codeFieldShown = false;
       this.isPhoneChanged = false;
@@ -332,7 +340,7 @@ export default {
       if (this.loginType === "phone") {
         params = {
           PHONE: this.v.phone.$model,
-          loginType: "phone",
+          loginType: "phone", //
         };
       } else {
         params = {
@@ -423,6 +431,11 @@ export default {
           : (this.loading = true);
 
         this.getCode();
+      }
+    },
+    captchaRenderAmount: function () {
+      if (this.captchaRenderAmount > 0) {
+        this.loading = false;
       }
     },
     error: function () {
