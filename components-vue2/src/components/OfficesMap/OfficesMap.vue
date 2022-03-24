@@ -86,13 +86,22 @@
           @open="openOnMap"
           @showMore="isShownMore = $event"
         />
-        <Paginator
+
+        <!-- <Paginator
           v-if="getOffices && width > 900 && !currentStation"
           class="container"
           @update="page = $event"
           :items-count="getOffices.length"
           :pages-count="pagesCount"
-        />
+        /> -->
+
+        <b-pagination
+          v-show="getOffices && width > 900 && !currentStation"
+          v-model="page"
+          :total-rows="getOffices && getOffices.length"
+          :per-page="15"
+          aria-controls="my-table"
+        ></b-pagination>
       </b-tab>
     </b-tabs>
   </div>
@@ -111,6 +120,7 @@ import { filters, filterData } from "../../../../utils/map/filters";
 import { BTabs, BTab, BButtonGroup, BButton } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
+import { BPagination } from "bootstrap-vue";
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
@@ -127,6 +137,7 @@ export default {
     ZoomComponent,
     BFormInput,
     Paginator,
+    BPagination,
   },
   props: ["notification", "mobile"],
   data() {
@@ -160,6 +171,9 @@ export default {
       width: window.innerWidth,
       pagesCount: 15,
       isShownMore: false,
+
+      perPage: 3,
+      currentPage: 1,
     };
   },
   async created() {
@@ -817,6 +831,9 @@ export default {
         }
       } else {
         if (this.getOffices) {
+          if (this.page) {
+            this.page -= 1;
+          }
           let start = this.page * this.pagesCount;
           let end = start + this.pagesCount;
           this.page = null;
