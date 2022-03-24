@@ -163,10 +163,12 @@ export default {
       token: "",
       loading: false,
       codeFieldShown: false,
+      captchaRenderAmount: 0,
     };
   },
 
   created() {
+    this.captchaRenderAmount = 0;
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
@@ -188,6 +190,8 @@ export default {
       this.$refs.recaptcha.reset();
     },
     setToken(recaptcha) {
+      this.captchaRenderAmount = 0;
+
       this.token = recaptcha;
     },
     async getCodeHelper(params) {
@@ -332,7 +336,7 @@ export default {
       if (this.loginType === "phone") {
         params = {
           PHONE: this.v.phone.$model,
-          loginType: "phone",
+          loginType: "phone", //
         };
       } else {
         params = {
@@ -423,6 +427,11 @@ export default {
           : (this.loading = true);
 
         this.getCode();
+      }
+    },
+    captchaRenderAmount: function () {
+      if (this.captchaRenderAmount > 0) {
+        this.loading = false;
       }
     },
     error: function () {
