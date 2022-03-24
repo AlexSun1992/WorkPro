@@ -165,6 +165,7 @@ export default {
       codeFieldShown: false,
     };
   },
+
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
@@ -417,6 +418,10 @@ export default {
   watch: {
     token: function () {
       if (this.token) {
+        typeof this.token === "string"
+          ? (this.loading = false)
+          : (this.loading = true);
+
         this.getCode();
       }
     },
