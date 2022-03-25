@@ -29,7 +29,6 @@ export const getters = {
 export const actions = {
   async fetchData({ commit, getters, state }) {
     try {
-      debugger;
       await this.$axios.get(encodeURI(`/api/osago`)).then((res) => {
         res.data.captions[0].visible = true;
         res.data.captions[0].displayed = true;
