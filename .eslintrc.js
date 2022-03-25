@@ -1,9 +1,13 @@
 module.exports = {
-  extends: ["plugin:vue/base"],
-  rules: {
-    "no-console": "off",
-    "no-debugger": "off",
-  },
+  root: true,
+  extends: [
+    "eslint:recommended",
+    "airbnb-base",
+    "plugin:vue/essential",
+    "plugin:vue/vue3-recommended",
+    "plugin:nuxt/recommended",
+    "prettier",
+  ],
   parserOptions: {
     sourceType: "module",
     ecmaVersion: 2020,
