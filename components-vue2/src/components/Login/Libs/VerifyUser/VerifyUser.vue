@@ -160,7 +160,6 @@ export default {
       myclass: ["cabinet"],
       duration: 60,
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
-      token: "",
       loading: false,
       codeFieldShown: false,
       captchaRenderAmount: 0,
@@ -184,6 +183,7 @@ export default {
     async executeRecaptcha() {
       this.captchaRenderAmount += 1;
       this.loading = true;
+
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
     },
@@ -337,7 +337,7 @@ export default {
       if (this.loginType === "phone") {
         params = {
           PHONE: this.v.phone.$model,
-          loginType: "phone", //
+          loginType: "phone",
         };
       } else {
         params = {
@@ -431,7 +431,7 @@ export default {
       }
     },
     captchaRenderAmount: function () {
-      if (this.captchaRenderAmount > 0 && typeof this.token !== "string") {
+      if (this.captchaRenderAmount > 0 && this.token === 1) {
         this.loading = false;
       }
     },
