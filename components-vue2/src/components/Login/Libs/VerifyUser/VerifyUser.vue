@@ -141,6 +141,7 @@ export default {
     "textMessage",
     "tabIndex",
     "error",
+    "isError",
   ],
 
   data() {
@@ -183,7 +184,6 @@ export default {
     async executeRecaptcha() {
       this.captchaRenderAmount += 1;
       this.loading = true;
-
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
     },
@@ -192,7 +192,6 @@ export default {
     },
     setToken(recaptcha) {
       this.captchaRenderAmount = 0;
-
       this.token = recaptcha;
     },
     async getCodeHelper(params) {
@@ -431,7 +430,10 @@ export default {
       }
     },
     captchaRenderAmount: function () {
-      if (this.captchaRenderAmount > 0 && this.token === 1) {
+      if (
+        (this.captchaRenderAmount > 0 && this.token === 1) ||
+        typeof this.isError === "string"
+      ) {
         this.loading = false;
       }
     },
