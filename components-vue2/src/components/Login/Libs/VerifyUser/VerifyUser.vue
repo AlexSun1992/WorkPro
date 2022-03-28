@@ -105,7 +105,7 @@ import axios from "axios";
 import _ from "lodash";
 import VerifyTimer from "./VerifyTimer.vue";
 import { mask } from "vue-the-mask";
-import VueRecaptcha from "vue-recaptcha";
+import { VueRecaptcha } from "vue-recaptcha";
 import {
   BFormGroup,
   BFormInput,
@@ -115,6 +115,7 @@ import {
   BLink,
   BSpinner,
 } from "bootstrap-vue";
+import { callbackify } from "util";
 
 export default {
   components: {
@@ -128,6 +129,7 @@ export default {
     BButton,
     BSpinner,
   },
+
   directives: { mask },
   props: [
     "count",
@@ -163,15 +165,29 @@ export default {
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
       loading: false,
       codeFieldShown: false,
-      captchaRenderAmount: 0,
     };
   },
 
   created() {
-    this.captchaRenderAmount = 0;
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
+    //console.log("created document:", document);
+
+    // let observer = new MutationObserver((this.mutationRecords) => {
+    //   console.log(this.mutationRecords); // console.log(изменения)
+    // });
+
+    // let elem = document.getElementById("rc-imageselect");
+
+    // observer.observe(elem, {
+    //   childList: true, // наблюдать за непосредственными детьми
+    //   subtree: true, // и более глубокими потомками
+    //   characterDataOldValue: true, // передавать старое значение в колбэк
+    // });
+
+    //console.log("observer:", observer);
   },
+
   mounted() {
     let externalScript = document.createElement("script");
     externalScript.setAttribute(
@@ -179,10 +195,40 @@ export default {
       "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
     );
     document.head.appendChild(externalScript);
+
+    // let target = document.getElementById("rc-imageselect");
+    // console.log(target);
   },
+
+  // updated() {
+  //   const body = document.querySelector(".app_body");
+  //   let config = { attributes: true, childList: true, characterData: true };
+
+  //   let captchaAppear = new Promise((resolve) => {
+  //     let observer = new MutationObserver(function (mutations) {
+  //       mutations.forEach(function (mutation) {
+  //         console.log(mutation);
+  //       });
+  //     });
+  //     const result = observer.observe(body, config);
+  //     result();
+  //   });
+  //
+  // captchaAppear.then(function (value) {
+  //   console.log(value);
+  // });
+
+  // const myPromise = new Promise(function (resolve) {
+  //   console.log("Выполнение асинхронной операции");
+  //   resolve("Привет мир!");
+  // });
+  // myPromise.then(function (value) {
+  //   console.log(`Из промиса получены данные: ${value}`);
+  // });
+  // },
+  //
   methods: {
     async executeRecaptcha() {
-      this.captchaRenderAmount += 1;
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
@@ -190,8 +236,8 @@ export default {
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
     },
+
     setToken(recaptcha) {
-      this.captchaRenderAmount = 0;
       this.token = recaptcha;
     },
     async getCodeHelper(params) {
@@ -422,21 +468,16 @@ export default {
   watch: {
     token: function () {
       if (this.token) {
-        typeof this.token === "string"
-          ? (this.loading = false)
-          : (this.loading = true);
-
         this.getCode();
       }
     },
-    captchaRenderAmount: function () {
-      if (
-        (this.captchaRenderAmount > 0 && this.token === 1) ||
-        typeof this.isError === "string"
-      ) {
+
+    isError: function (value) {
+      if (typeof value === "string") {
         this.loading = false;
       }
     },
+
     error: function () {
       this.loading = false;
     },
