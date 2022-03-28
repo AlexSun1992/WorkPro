@@ -375,8 +375,6 @@ footer .copyright a {
   .pn-sm-none .product > a {
     display: none;
   }
-  font-size: 1rem;
-  margin-right: 20px;
 }
 @media (min-width: 992px) and (max-width: 1199px) {
   .footer-google,
