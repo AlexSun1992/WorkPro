@@ -298,9 +298,13 @@ async function eventHandler(fields, action, func) {
         showErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
         hideLabelFunc(labelRegNumb, labelRegNumb_Number);
         vehicleModel.value = "";
+        vehicleModel.state = null;
         yearVehicle.value = null;
+        yearVehicle.state = null;
         horseVehiclePower.value = null;
+        horseVehiclePower.state = null;
         khVeiclePower.value = null;
+        khVeiclePower.state = null;
       }
       invertPropertyElements(checkNotRegNumberForm, "visible");
     } else {
