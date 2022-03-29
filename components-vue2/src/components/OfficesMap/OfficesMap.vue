@@ -174,6 +174,7 @@ export default {
 
       perPage: 3,
       currentPage: 1,
+      height: window.innerHeight,
     };
   },
   async created() {
@@ -201,6 +202,9 @@ export default {
   methods: {
     onResize() {
       this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      console.log(this.width);
+      console.log(this.height);
     },
     closeCard() {
       this.circleClicked = false;
@@ -346,8 +350,15 @@ export default {
         this.stationOffices.sort((a, b) => {
           return a.NORDER - b.NORDER;
         });
+
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + "px";
+        if (parseInt(this.$refs["card"].style.left) + 375 > this.width) {
+          this.$refs["card"].style.left = this.width - 375 + "px";
+        }
+        if (parseInt(this.$refs["card"].style.top) + 640 > this.height) {
+          this.$refs["card"].style.top = this.height - 640 + "px";
+        }
       }
     },
     async init(_, filters) {
