@@ -650,7 +650,7 @@ async function eventHandler(fields, action, func) {
         break;
       }
 
-      if (findField(`NDR_AGE_${currentDriverId + 1}`).value) {
+      if ("value" in findField(`NDR_AGE_${currentDriverId + 1}`)) {
         findField(`NDR_AGE_${currentDriverId}`).value = findField(
           `NDR_AGE_${currentDriverId + 1}`
         ).value;
@@ -666,7 +666,7 @@ async function eventHandler(fields, action, func) {
         findField(`NDR_AGE_${currentDriverId}`).checked = null;
       }
 
-      if (findField(`NDR_EXPERIENCE_${currentDriverId + 1}`).value) {
+      if ("value" in findField(`NDR_EXPERIENCE_${currentDriverId + 1}`)) {
         findField(`NDR_EXPERIENCE_${currentDriverId}`).value = findField(
           `NDR_EXPERIENCE_${currentDriverId + 1}`
         ).value;
@@ -682,7 +682,7 @@ async function eventHandler(fields, action, func) {
         findField(`NDR_EXPERIENCE_${currentDriverId}`).checked = null;
       }
 
-      if (findField(`NDR_NO_CRASH_${currentDriverId + 1}`).value) {
+      if ("value" in findField(`NDR_NO_CRASH_${currentDriverId + 1}`)) {
         findField(`NDR_NO_CRASH_${currentDriverId}`).value = findField(
           `NDR_NO_CRASH_${currentDriverId + 1}`
         ).value;
