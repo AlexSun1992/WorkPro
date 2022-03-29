@@ -832,6 +832,7 @@ async function eventHandler(fields, action, func) {
     }
   }
 
+  crash_years.visible = false;
   return fields;
 }
 
