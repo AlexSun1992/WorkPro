@@ -6,7 +6,11 @@
   >
     <div class="container">
       <div class="office-block">
-        <button type="button" class="office-filter"></button>
+        <button
+          type="button"
+          :class="{ select: currentFilters && currentFilters.length }"
+          class="office-filter"
+        ></button>
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
             <div class="position-relative">
