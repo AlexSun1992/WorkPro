@@ -21,6 +21,7 @@
                 :validateState="validateState"
                 :text-message="textMessage"
                 :tab-index="[10, 15]"
+                :isError="errorMessage"
               />
               <b-row class="mt-3">
                 <b-form-group label="Дата рождения" class="col-md-6 col-12">

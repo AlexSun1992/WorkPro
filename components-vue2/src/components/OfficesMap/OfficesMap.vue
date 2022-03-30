@@ -6,7 +6,11 @@
   >
     <div class="container">
       <div class="office-block">
-        <button type="button" class="office-filter"></button>
+        <button
+          type="button"
+          :class="{ select: currentFilters && currentFilters.length }"
+          class="office-filter"
+        ></button>
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
             <div class="position-relative">
@@ -29,7 +33,22 @@
         </div>
       </div>
     </div>
+
+    <div v-show="getOffices && getOffices.length == 0">
+      <div class="row search-result-row">
+        <div class="col-md-12 col-12 search-results">
+          <div class="search-no-result">
+            <div class="search-no-result-img"></div>
+            <div class="search-no-result-txt">
+              По вашему запросу ничего не найдено
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <b-tabs
+      v-show="getOffices && getOffices.length > 0"
       v-model="currentTab"
       ref="tabs"
       content-class="mt-3 office-tab-content"
@@ -40,8 +59,9 @@
         title="На карте"
         title-item-class="office-on-map"
         content-class="maps-block"
-        ><div ref="map" id="map" class="map"></div
-      ></b-tab>
+      >
+        <div ref="map" id="map" class="map"></div>
+      </b-tab>
       <b-tab
         @click="setStatus"
         v-if="tabVisible"
@@ -70,13 +90,22 @@
           @open="openOnMap"
           @showMore="isShownMore = $event"
         />
-        <Paginator
+
+        <!-- <Paginator
           v-if="getOffices && width > 900 && !currentStation"
           class="container"
           @update="page = $event"
           :items-count="getOffices.length"
           :pages-count="pagesCount"
-        />
+        /> -->
+
+        <b-pagination
+          v-show="getOffices && width > 900 && !currentStation"
+          v-model="page"
+          :total-rows="getOffices && getOffices.length"
+          :per-page="15"
+          aria-controls="my-table"
+        ></b-pagination>
       </b-tab>
     </b-tabs>
   </div>
@@ -95,6 +124,7 @@ import { filters, filterData } from "../../../../utils/map/filters";
 import { BTabs, BTab, BButtonGroup, BButton } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
+import { BPagination } from "bootstrap-vue";
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
@@ -111,6 +141,7 @@ export default {
     ZoomComponent,
     BFormInput,
     Paginator,
+    BPagination,
   },
   props: ["notification", "mobile"],
   data() {
@@ -144,6 +175,10 @@ export default {
       width: window.innerWidth,
       pagesCount: 15,
       isShownMore: false,
+
+      perPage: 3,
+      currentPage: 1,
+      height: window.innerHeight,
     };
   },
   async created() {
@@ -171,6 +206,9 @@ export default {
   methods: {
     onResize() {
       this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      console.log(this.width);
+      console.log(this.height);
     },
     closeCard() {
       this.circleClicked = false;
@@ -316,8 +354,15 @@ export default {
         this.stationOffices.sort((a, b) => {
           return a.NORDER - b.NORDER;
         });
+
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + "px";
+        if (parseInt(this.$refs["card"].style.left) + 375 > this.width) {
+          this.$refs["card"].style.left = this.width - 375 + "px";
+        }
+        if (parseInt(this.$refs["card"].style.top) + 640 > this.height) {
+          this.$refs["card"].style.top = this.height - 640 + "px";
+        }
       }
     },
     async init(_, filters) {
@@ -801,6 +846,9 @@ export default {
         }
       } else {
         if (this.getOffices) {
+          if (this.page) {
+            this.page -= 1;
+          }
           let start = this.page * this.pagesCount;
           let end = start + this.pagesCount;
           this.page = null;

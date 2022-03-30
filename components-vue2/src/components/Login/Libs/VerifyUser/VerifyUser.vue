@@ -141,6 +141,7 @@ export default {
     "textMessage",
     "tabIndex",
     "error",
+    "isError",
   ],
 
   data() {
@@ -160,12 +161,14 @@ export default {
       myclass: ["cabinet"],
       duration: 60,
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
-      token: "",
       loading: false,
       codeFieldShown: false,
+      captchaRenderAmount: 0,
     };
   },
+
   created() {
+    this.captchaRenderAmount = 0;
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
@@ -179,6 +182,7 @@ export default {
   },
   methods: {
     async executeRecaptcha() {
+      this.captchaRenderAmount += 1;
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
@@ -187,6 +191,7 @@ export default {
       this.$refs.recaptcha.reset();
     },
     setToken(recaptcha) {
+      this.captchaRenderAmount = 0;
       this.token = recaptcha;
     },
     async getCodeHelper(params) {
@@ -417,7 +422,19 @@ export default {
   watch: {
     token: function () {
       if (this.token) {
+        typeof this.token === "string"
+          ? (this.loading = false)
+          : (this.loading = true);
+
         this.getCode();
+      }
+    },
+    captchaRenderAmount: function () {
+      if (
+        (this.captchaRenderAmount > 0 && this.token === 1) ||
+        typeof this.isError === "string"
+      ) {
+        this.loading = false;
       }
     },
     error: function () {
