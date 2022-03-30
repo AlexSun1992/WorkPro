@@ -207,8 +207,6 @@ export default {
     onResize() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
-      console.log(this.width);
-      console.log(this.height);
     },
     closeCard() {
       this.circleClicked = false;
@@ -479,6 +477,7 @@ export default {
             : "";
         }
       );
+
       template = template.replace(
         /<div class="col-4 pe-0">[\n\s]*?<div class="position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div>[\n\s]*?<\/div[^>]*>/g,
         () => {
@@ -493,8 +492,9 @@ export default {
       template = template.replace(
         /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
         () => {
-          let temp = `<div class="card-office-undeground">`;
+          let temp = "";
           if (agency.IDUNDERGROUND.length > 0) {
+            temp += `<div class="card-office-undeground">`;
             agency.IDUNDERGROUND.forEach((item) => {
               temp += `<div>
                     <span class=${
@@ -505,6 +505,7 @@ export default {
                     </div>
                   `;
             });
+            temp += "</div>";
           } else {
             temp = "";
           }
@@ -597,7 +598,8 @@ export default {
                 agencies,
                 i,
                 uniqueItemsCount[agencies[i].NLAT]
-              ),
+              ).join(""),
+
               hintContent: `${agencies[i].SSHORTNAME}`,
               balloonPane: "outerBalloon",
               balloonShadowPane: "outerBalloon",
