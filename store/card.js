@@ -72,7 +72,7 @@ export const actions = {
         commit("setShowForm", true);
         commit("setShowFilter", false);
       } else {
-        //await dispatch("fetchList");
+        // await dispatch("fetchList");
       }
     }
   },
@@ -181,9 +181,7 @@ export const actions = {
         });
     }
   },
-  async fetchList({ commit, getters }, params) {
-    const page = getters.page;
-    const jsonFilters = JSON.stringify(getters.filters);
+  async fetchList({ commit }, params) {
     const urlJsonFilters = JSON.stringify(params.query);
     commit("setShowList", true);
     commit("setListLoading", true);
@@ -199,7 +197,7 @@ export const actions = {
     } else {
       await this.$axios
         .get(
-          `/api/list/${page.idModule}/${page.idItem}/${encodeURIComponent(
+          `/api/list/${params.idModule}/${params.idItem}/${encodeURIComponent(
             urlJsonFilters
           )}`
         )
@@ -225,7 +223,7 @@ export const actions = {
   },
   async fetchSuggestions({ commit, getters }, params) {
     const type = params.suggestionType;
-    const key = params.key;
+    const { key } = params;
     delete params.suggestionType;
     delete params.key;
     const response = await fetch(
@@ -246,7 +244,7 @@ export const actions = {
   },
   async editCard({ commit, getters }, params) {
     try {
-      const idItem = params.idItem;
+      const { idItem } = params;
       delete params.idItem;
       const response = await this.$axios.put(
         `/am/main/v2/datacard/${getters.page.idModule}/${idItem}/0`,

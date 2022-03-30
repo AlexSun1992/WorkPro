@@ -1,13 +1,13 @@
 <template>
   <div>
-    <component v-bind:is="params.component" :params="params"></component>
+    <component :is="params.component" :params="params" />
   </div>
 </template>
 
 <script>
-import CardPage from "~/components/Pages/Cabinet/Card/Card";
 import PortalPage from "@/components/Pages/Cabinet/Portal/Portal";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
+import CardPage from "~/components/Pages/Cabinet/Card/Card";
 import FormPage from "~/components/Pages/FormPage";
 import FilterBlock from "./Block/FilterBlock.vue";
 
@@ -19,6 +19,36 @@ export default {
     WizardPage,
     FormPage,
     FilterBlock,
+  },
+
+  beforeRouteUpdate(to, from, next) {
+    const cardChanged = this.$store.getters["data_card/cardChanged"];
+    if (cardChanged) {
+      const confirmed = window.confirm("Закрыть без сохранения данных?");
+      if (confirmed) {
+        next();
+      }
+    } else {
+      next();
+    }
+  },
+
+  async beforeRouteLeave(to, from, next) {
+    const cardChanged = this.$store.getters["data_card/cardChanged"];
+    if (to.meta !== "Cabinet") {
+      await this.$store.dispatch(
+        "pages/fetchPageByUrl",
+        to.path === "/" ? "index" : to.path
+      );
+    }
+    if (cardChanged) {
+      const confirmed = window.confirm("Закрыть без сохранения данных?");
+      if (confirmed) {
+        next();
+      }
+    } else {
+      next();
+    }
   },
   computed: {
     params() {
@@ -37,43 +67,8 @@ export default {
       if (settings.isWizard) {
         component = "CardPage";
       }
-
       return { page, settings, component };
     },
-  },
-
-  beforeRouteUpdate(to, from, next) {
-    const cardChanged = this.$store.getters["data_card/cardChanged"];
-    const saveButtonClicked =
-      this.$store.getters["data_card/saveButtonClicked"];
-    if (cardChanged) {
-      const confirmed = window.confirm("Закрыть без сохранения данных?");
-      if (confirmed) {
-        next();
-      }
-    } else {
-      next();
-    }
-  },
-
-  async beforeRouteLeave(to, from, next) {
-    const cardChanged = this.$store.getters["data_card/cardChanged"];
-    const saveButtonClicked =
-      this.$store.getters["data_card/saveButtonClicked"];
-    if (to.meta !== "Cabinet") {
-      await this.$store.dispatch(
-        "pages/fetchPageByUrl",
-        to.path === "/" ? "index" : to.path
-      );
-    }
-    if (cardChanged) {
-      const confirmed = window.confirm("Закрыть без сохранения данных?");
-      if (confirmed) {
-        next();
-      }
-    } else {
-      next();
-    }
   },
 };
 </script>
