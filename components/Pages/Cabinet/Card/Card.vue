@@ -2,21 +2,23 @@
   <div>
     <div class="animated fadeIn">
       <b-button
-        class="mb-2"
         v-if="isAddNewRecord"
-        v-on:click="addNewRecord"
-        type="submit"
-        variant="primary"
-        >Добавить новую запись</b-button
-      >
-      <b-button
         class="mb-2"
-        v-if="isList"
-        v-on:click="refreshCardList"
         type="submit"
         variant="primary"
-        >Обновить</b-button
+        @click="addNewRecord"
       >
+        Добавить новую запись
+      </b-button>
+      <b-button
+        v-if="isList"
+        class="mb-2"
+        type="submit"
+        variant="primary"
+        @click="refreshCardList"
+      >
+        Обновить
+      </b-button>
       <card-list
         v-if="isList"
         :load="isListLoading"
@@ -33,12 +35,6 @@ import CardList from "./CardList";
 
 export default {
   name: "Card",
-  async created() {
-    await this.$store.dispatch("card/fetchList", {
-      ...this.$route.params,
-      query: { ...this.$route.query },
-    });
-  },
   components: { CardList },
   props: {
     params: {
@@ -52,6 +48,37 @@ export default {
       myclass: ["cabinet"],
     };
   },
+  computed: {
+    listData: {
+      get() {
+        return this.$store.getters["card/list"];
+      },
+    },
+    isList: {
+      get() {
+        return this.$store.getters["card/isList"];
+      },
+    },
+    isListLoading: {
+      get() {
+        return this.$store.getters["card/isListLoading"];
+      },
+    },
+    isAddNewRecord: {
+      get() {
+        return this.params.settings.add;
+      },
+    },
+    wizardRel() {
+      return this.$store.getters["wizard/getWizard"]?.REL.split("|")[0];
+    },
+  },
+  async created() {
+    await this.$store.dispatch("card/fetchList", {
+      ...this.$route.params,
+      query: { ...this.$route.query },
+    });
+  },
   methods: {
     async openCardForm(data) {
       if (!this.params.settings.wizard.length) {
@@ -60,12 +87,10 @@ export default {
             path: `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${data.data.item.ID}/${data.data.item.REL}`,
             query: { ref: this.$route.path },
           });
-        } else {
-          if (data.data.item.REL) {
-            this.$router.push(
-              `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${data.data.item.ID}/${data.data.item.REL}`
-            );
-          }
+        } else if (data.data.item.REL) {
+          this.$router.push(
+            `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${data.data.item.ID}/${data.data.item.REL}`
+          );
         }
         return;
       }
@@ -85,17 +110,15 @@ export default {
         this.$router.push(
           `/cabinet/wizard/${this.params.page.idItem}/${this.params.page.idModule}/0/${this.params.settings.wizard[0].idItem}/0/0`
         );
+      } else if (this.params.page.idWizard) {
+        this.$router.push({
+          path: `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${this.params.page.idCard}/0/0`,
+          query: { ref: this.$route.path },
+        });
       } else {
-        if (this.params.page.idWizard) {
-          this.$router.push({
-            path: `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/${this.params.page.idCard}/0/0`,
-            query: { ref: this.$route.path },
-          });
-        } else {
-          this.$router.push(
-            `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/0`
-          );
-        }
+        this.$router.push(
+          `/cabinet/${this.params.page.idModule}/0/${this.params.page.idItem}/0`
+        );
       }
     },
     async deleteRecord(data) {
@@ -152,31 +175,6 @@ export default {
           solid: true,
         });
       }
-    },
-  },
-  computed: {
-    listData: {
-      get: function () {
-        return this.$store.getters["card/list"];
-      },
-    },
-    isList: {
-      get: function () {
-        return this.$store.getters["card/isList"];
-      },
-    },
-    isListLoading: {
-      get: function () {
-        return this.$store.getters["card/isListLoading"];
-      },
-    },
-    isAddNewRecord: {
-      get: function () {
-        return this.params.settings.add;
-      },
-    },
-    wizardRel() {
-      return this.$store.getters["wizard/getWizard"]?.REL.split("|")[0];
     },
   },
 };
