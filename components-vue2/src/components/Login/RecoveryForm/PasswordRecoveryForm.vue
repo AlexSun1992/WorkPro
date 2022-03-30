@@ -129,7 +129,7 @@ export default {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;
     },
-    //
+
     async resetPassword() {
       let params;
       if (this.$refs.tabs.currentTab == 0) {

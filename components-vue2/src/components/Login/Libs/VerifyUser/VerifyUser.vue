@@ -115,7 +115,8 @@ import {
   BLink,
   BSpinner,
 } from "bootstrap-vue";
-import { callbackify } from "util";
+
+import { isCaptchaBecomesHide } from "./captcha.helper";
 
 export default {
   components: {
@@ -165,27 +166,13 @@ export default {
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
       loading: false,
       codeFieldShown: false,
+      allHiddenCaptchas: null,
     };
   },
 
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
-    //console.log("created document:", document);
-
-    // let observer = new MutationObserver((this.mutationRecords) => {
-    //   console.log(this.mutationRecords); // console.log(изменения)
-    // });
-
-    // let elem = document.getElementById("rc-imageselect");
-
-    // observer.observe(elem, {
-    //   childList: true, // наблюдать за непосредственными детьми
-    //   subtree: true, // и более глубокими потомками
-    //   characterDataOldValue: true, // передавать старое значение в колбэк
-    // });
-
-    //console.log("observer:", observer);
   },
 
   mounted() {
@@ -195,44 +182,32 @@ export default {
       "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
     );
     document.head.appendChild(externalScript);
-
-    // let target = document.getElementById("rc-imageselect");
-    // console.log(target);
   },
 
-  // updated() {
-  //   const body = document.querySelector(".app_body");
-  //   let config = { attributes: true, childList: true, characterData: true };
+  updated() {
+    if (this.$refs.userInput.vModelValue.length === 4) {
+      this.allHiddenCaptchas = Array.from(
+        document.querySelector(".app_body").children
+      ).filter((item) => item.style.visibility === "hidden");
+    }
+  },
 
-  //   let captchaAppear = new Promise((resolve) => {
-  //     let observer = new MutationObserver(function (mutations) {
-  //       mutations.forEach(function (mutation) {
-  //         console.log(mutation);
-  //       });
-  //     });
-  //     const result = observer.observe(body, config);
-  //     result();
-  //   });
-  //
-  // captchaAppear.then(function (value) {
-  //   console.log(value);
-  // });
-
-  // const myPromise = new Promise(function (resolve) {
-  //   console.log("Выполнение асинхронной операции");
-  //   resolve("Привет мир!");
-  // });
-  // myPromise.then(function (value) {
-  //   console.log(`Из промиса получены данные: ${value}`);
-  // });
-  // },
-  //
   methods: {
     async executeRecaptcha() {
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
+
+      await isCaptchaBecomesHide();
+      const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
+        .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
+        .filter((item) => item.style.visibility === "visible");
+
+      if (visibleCaptchas.length === 0) {
+        this.loading = false;
+      }
     },
+
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
     },
