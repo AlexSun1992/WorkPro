@@ -123,6 +123,7 @@ export default {
     this.initData();
     this.formLoaded = true;
   },
+
   methods: {
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];

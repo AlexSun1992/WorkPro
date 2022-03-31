@@ -105,7 +105,7 @@ import axios from "axios";
 import _ from "lodash";
 import VerifyTimer from "./VerifyTimer.vue";
 import { mask } from "vue-the-mask";
-import VueRecaptcha from "vue-recaptcha";
+import { VueRecaptcha } from "vue-recaptcha";
 import {
   BFormGroup,
   BFormInput,
@@ -115,6 +115,8 @@ import {
   BLink,
   BSpinner,
 } from "bootstrap-vue";
+
+import { isCaptchaBecomesHide } from "./captcha.helper";
 
 export default {
   components: {
@@ -128,6 +130,7 @@ export default {
     BButton,
     BSpinner,
   },
+
   directives: { mask },
   props: [
     "count",
@@ -163,15 +166,15 @@ export default {
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
       loading: false,
       codeFieldShown: false,
-      captchaRenderAmount: 0,
+      allHiddenCaptchas: null,
     };
   },
 
   created() {
-    this.captchaRenderAmount = 0;
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
+
   mounted() {
     let externalScript = document.createElement("script");
     externalScript.setAttribute(
@@ -180,18 +183,36 @@ export default {
     );
     document.head.appendChild(externalScript);
   },
+
+  updated() {
+    if (this.$refs.userInput.vModelValue.length === 4) {
+      this.allHiddenCaptchas = Array.from(
+        document.querySelector(".app_body").children
+      ).filter((item) => item.style.visibility === "hidden");
+    }
+  },
+
   methods: {
     async executeRecaptcha() {
-      this.captchaRenderAmount += 1;
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
+
+      await isCaptchaBecomesHide();
+      const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
+        .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
+        .filter((item) => item.style.visibility === "visible");
+
+      if (visibleCaptchas.length === 0) {
+        this.loading = false;
+      }
     },
+
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
     },
+
     setToken(recaptcha) {
-      this.captchaRenderAmount = 0;
       this.token = recaptcha;
     },
     async getCodeHelper(params) {
@@ -422,21 +443,16 @@ export default {
   watch: {
     token: function () {
       if (this.token) {
-        typeof this.token === "string"
-          ? (this.loading = false)
-          : (this.loading = true);
-
         this.getCode();
       }
     },
-    captchaRenderAmount: function () {
-      if (
-        (this.captchaRenderAmount > 0 && this.token === 1) ||
-        typeof this.isError === "string"
-      ) {
+
+    isError: function (value) {
+      if (typeof value === "string") {
         this.loading = false;
       }
     },
+
     error: function () {
       this.loading = false;
     },

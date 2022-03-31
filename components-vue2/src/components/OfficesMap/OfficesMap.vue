@@ -8,7 +8,7 @@
       <div class="office-block">
         <button
           type="button"
-          :class="{ select: currentFilters && currentFilters.length }"
+          :class="{ selected: currentFilters && currentFilters.length }"
           class="office-filter"
         ></button>
         <div class="row align-items-center mh-1">
@@ -51,7 +51,7 @@
       v-show="getOffices && getOffices.length > 0"
       v-model="currentTab"
       ref="tabs"
-      content-class="mt-3 office-tab-content"
+      content-class="office-tab-content"
       nav-class="office-tabs text-center mt-3"
       pills
     >
@@ -105,6 +105,13 @@
           :total-rows="getOffices && getOffices.length"
           :per-page="15"
           aria-controls="my-table"
+          first-number
+          last-number
+          class="container mt-3"
+          next-class="next"
+          prev-class="prev"
+          next-text="Вперед"
+          prev-text="Назад"
         ></b-pagination>
       </b-tab>
     </b-tabs>
