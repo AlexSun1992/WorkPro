@@ -14,6 +14,8 @@
               <verify-user
                 ref="verifyUser"
                 @error="showError"
+                @isCodeFieldShown="isFieldShown"
+                @isCodeFieldValid="checkCodeFieldValid"
                 :loginType="'phone'"
                 :mode-type="'RECOVERY'"
                 :v="$v.form"
@@ -24,11 +26,18 @@
                 :isError="errorMessage"
               />
               <b-row class="mt-3">
-                <b-form-group label="Дата рождения" class="col-md-6 col-12">
+                <!-- v-if="!isCodeFieldValid" -->
+                <b-form-group
+                  v-if="!isCodeFieldValid"
+                  label="Дата рождения"
+                  class="col-md-6 col-12"
+                >
                   <birthday-picker
+                    ref="dataPicker"
                     v-model="$v.form.birthdate.$model"
                     :state="validateState('birthdate')"
                     :tabindex="20"
+                    @input="isDataCorrect"
                   />
                 </b-form-group>
               </b-row>
@@ -50,6 +59,7 @@
           </b-tabs>
           <div class="recovery">
             <verify-password
+              v-if="dataCorrect"
               :tab-index="[20, 30]"
               :v="$v.form"
               :validateState="validateState"
@@ -117,6 +127,9 @@ export default {
       isGreater180: false,
       currentTab: 0,
       formLoaded: false,
+      dateOfBirth: false,
+      isCodeFieldValid: true,
+      dataCorrect: false,
     };
   },
   mounted() {
@@ -125,6 +138,19 @@ export default {
   },
 
   methods: {
+    isDataCorrect(value) {
+      if (value) {
+        this.dataCorrect = true;
+        console.log(this.dataCorrect);
+      }
+    },
+    isFieldShown(value) {
+      this.dateOfBirth = value;
+    },
+    checkCodeFieldValid(value) {
+      this.isCodeFieldValid = value;
+    },
+
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;

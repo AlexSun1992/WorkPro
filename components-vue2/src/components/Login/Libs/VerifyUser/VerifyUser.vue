@@ -68,6 +68,7 @@
         </p>
       </div>
     </div>
+    <!-- v-if="codeFieldShown" -->
     <b-form-group v-if="codeFieldShown" label="Код подтверждения">
       <b-form-input
         autofocus
@@ -77,12 +78,13 @@
         v-mask="codeMask"
         :state="validateInput('code', isCodeBlured)"
         @blur="blurField('code', isCodeBlured)"
-        @input="isCodeBlured = false"
+        @input="inputTouch"
         :disabled="disabled"
         autocomplete="off"
         :tabindex="tabIndex[1]"
         placeholder="Код подтверждения"
       ></b-form-input>
+
       <b-form-invalid-feedback v-if="!v.code.$model"
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
@@ -90,6 +92,7 @@
         >Неверный код подтверждения</b-form-invalid-feedback
       >
     </b-form-group>
+
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
@@ -206,6 +209,11 @@ export default {
       if (visibleCaptchas.length === 0) {
         this.loading = false;
       }
+    },
+
+    inputTouch() {
+      this.isUserBlured = false;
+      this.$emit("isCodeFieldValid", this.v["code"].$invalid);
     },
 
     onCaptchaExpired() {
@@ -413,6 +421,8 @@ export default {
         this.isUserBlured = true;
       } else if (field === "code") {
         this.isCodeBlured = true;
+        // console.log(this.v[field].$invalid);
+        // this.$emit("isCodeFieldValid", this.v[field].$invalid);
       }
       this.v[field].$touch();
     },
@@ -455,6 +465,9 @@ export default {
 
     error: function () {
       this.loading = false;
+    },
+    codeFieldShown(value) {
+      this.$emit("isCodeFieldShown", value);
     },
   },
   destroyed() {
