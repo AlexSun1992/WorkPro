@@ -105,6 +105,13 @@
           :total-rows="getOffices && getOffices.length"
           :per-page="15"
           aria-controls="my-table"
+          first-number
+          last-number
+          class="container mt-3"
+          next-class="next"
+          prev-class="prev"
+          next-text="Вперед"
+          prev-text="Назад"
         ></b-pagination>
       </b-tab>
     </b-tabs>
