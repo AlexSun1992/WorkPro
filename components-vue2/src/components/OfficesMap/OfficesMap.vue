@@ -418,6 +418,21 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
+      this.myMap.geoObjects.events.add("balloonopen", (e) => {
+        const target = e.get("target");
+        target.options.set(
+          "iconImageHref",
+          "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
+        );
+      });
+
+      this.myMap.geoObjects.events.add("balloonclose", (e) => {
+        const target = e.get("target");
+        target.options.set(
+          "iconImageHref",
+          "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
+        );
+      });
       this.setPlaceholder();
     },
     getTemplate(agency) {
