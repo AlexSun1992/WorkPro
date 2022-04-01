@@ -68,7 +68,7 @@
         </p>
       </div>
     </div>
-    <!-- v-if="codeFieldShown" -->
+    <!-- inputTouch -->
     <b-form-group v-if="codeFieldShown" label="Код подтверждения">
       <b-form-input
         autofocus
@@ -78,7 +78,7 @@
         v-mask="codeMask"
         :state="validateInput('code', isCodeBlured)"
         @blur="blurField('code', isCodeBlured)"
-        @input="inputTouch"
+        @input="isUserBlured = false"
         :disabled="disabled"
         autocomplete="off"
         :tabindex="tabIndex[1]"
@@ -148,6 +148,7 @@ export default {
     "tabIndex",
     "error",
     "isError",
+    "isCodeFieldInValid",
   ],
 
   data() {
@@ -421,8 +422,6 @@ export default {
         this.isUserBlured = true;
       } else if (field === "code") {
         this.isCodeBlured = true;
-        // console.log(this.v[field].$invalid);
-        // this.$emit("isCodeFieldValid", this.v[field].$invalid);
       }
       this.v[field].$touch();
     },
@@ -466,9 +465,9 @@ export default {
     error: function () {
       this.loading = false;
     },
-    codeFieldShown(value) {
-      this.$emit("isCodeFieldShown", value);
-    },
+    // codeFieldShown(value) {
+    //   this.$emit("isCodeFieldShown", value);
+    // },
   },
   destroyed() {
     this.isSendCode = false;

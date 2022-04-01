@@ -87,6 +87,7 @@ export default {
     state: Boolean,
     disabled: Boolean,
     tabindex: Number,
+    isDateOfBirthValid: Boolean,
   },
   data() {
     return {
@@ -124,16 +125,13 @@ export default {
       this.open = true;
     },
     setDateValue(date) {
-      console.log("setDatevalue:", date);
       this.$emit("input", moment(date).format("DD.MM.YYYY"));
       this.$refs.birthDateInputInstance.setDate(date);
     },
     setButtonFocus() {
       this.buttonFocus = true;
-      console.log(this.buttonFocus);
     },
     blurButtonFocus() {
-      console.log("blurButtonFocus:", this.blurButtonFocus);
       this.buttonFocus = false;
     },
   },

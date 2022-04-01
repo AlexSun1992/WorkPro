@@ -11,11 +11,10 @@
               <div class="mb-3">
                 Введите номер телефона указанный при регистрации
               </div>
+
               <verify-user
                 ref="verifyUser"
                 @error="showError"
-                @isCodeFieldShown="isFieldShown"
-                @isCodeFieldValid="checkCodeFieldValid"
                 :loginType="'phone'"
                 :mode-type="'RECOVERY'"
                 :v="$v.form"
@@ -24,12 +23,13 @@
                 :text-message="textMessage"
                 :tab-index="[10, 15]"
                 :isError="errorMessage"
+                :isCodeFieldInValid="isCodeFieldInValid"
               />
+
               <b-row class="mt-3">
-                <!-- v-if="!isCodeFieldValid" -->
                 <b-form-group
-                  v-if="!isCodeFieldValid"
                   label="Дата рождения"
+                  v-if="!isCodeFieldInValid"
                   class="col-md-6 col-12"
                 >
                   <birthday-picker
@@ -37,8 +37,9 @@
                     v-model="$v.form.birthdate.$model"
                     :state="validateState('birthdate')"
                     :tabindex="20"
-                    @input="isDataCorrect"
                   />
+
+                  {{ isCodeFieldInValid }}
                 </b-form-group>
               </b-row>
             </b-tab>
@@ -59,12 +60,14 @@
           </b-tabs>
           <div class="recovery">
             <verify-password
-              v-if="dataCorrect"
+              v-if="!isBirthdateInValid"
               :tab-index="[20, 30]"
               :v="$v.form"
               :validateState="validateState"
+              :isValid="isSamePassword"
             />
-            <div class="row buttons mt-3">
+
+            <div class="row buttons mt-3" v-if="isSamePassword">
               <div class="col-12 col-md-6">
                 <b-button
                   href="/login"
@@ -128,8 +131,8 @@ export default {
       currentTab: 0,
       formLoaded: false,
       dateOfBirth: false,
-      isCodeFieldValid: true,
-      dataCorrect: false,
+      // isCodeFieldValid: true,
+      // dataCorrect: false,
     };
   },
   mounted() {
@@ -138,18 +141,18 @@ export default {
   },
 
   methods: {
-    isDataCorrect(value) {
-      if (value) {
-        this.dataCorrect = true;
-        console.log(this.dataCorrect);
-      }
-    },
-    isFieldShown(value) {
-      this.dateOfBirth = value;
-    },
-    checkCodeFieldValid(value) {
-      this.isCodeFieldValid = value;
-    },
+    // isDataCorrect(value) {
+    //   if (value) {
+    //     this.dataCorrect = true;
+    //     console.log(this.dataCorrect);
+    //   }
+    // },
+    // isFieldShown(value) {
+    //   this.dateOfBirth = value;
+    // },
+    // checkCodeFieldValid(value) {
+    //   this.isCodeFieldValid = value;
+    // },
 
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
@@ -242,6 +245,20 @@ export default {
     },
   },
   computed: {
+    isCodeFieldInValid() {
+      return this.$v.form.code.$invalid;
+    },
+    isPhoneInValid() {
+      return this.$v.form.phone.$invalid;
+    },
+    isBirthdateInValid() {
+      return this.$v.form.birthdate.$invalid;
+    },
+
+    isSamePassword() {
+      return !this.$v.form.password2.$invalid;
+    },
+
     tabIndex() {
       return this.currentTab == 0 ? [30, 40] : [20, 30];
     },
