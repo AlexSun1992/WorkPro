@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col>
+    <!-- <b-col>
       <b-form-select
         v-model="date.day"
         :options="days"
@@ -29,7 +29,7 @@
         @focus.native="setFocus"
         @blur.native="unsetFocus"
       ></b-form-select>
-    </div>
+    </div> -->
   </b-row>
 </template>
 
