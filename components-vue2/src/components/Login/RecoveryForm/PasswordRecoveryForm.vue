@@ -11,9 +11,11 @@
               <div class="mb-3">
                 Введите номер телефона указанный при регистрации
               </div>
+
               <verify-user
                 ref="verifyUser"
                 @error="showError"
+                @getLoginType="loginType"
                 :loginType="'phone'"
                 :mode-type="'RECOVERY'"
                 :v="$v.form"
@@ -22,10 +24,16 @@
                 :text-message="textMessage"
                 :tab-index="[10, 15]"
                 :isError="errorMessage"
+                :isCodeFieldInValid="isCodeFieldInValid"
               />
               <b-row class="mt-3">
-                <b-form-group label="Дата рождения" class="col-md-6 col-12">
+                <b-form-group
+                  label="Дата рождения"
+                  v-if="!isCodeFieldInValid"
+                  class="col-md-6 col-12"
+                >
                   <birthday-picker
+                    ref="dataPicker"
                     v-model="$v.form.birthdate.$model"
                     :state="validateState('birthdate')"
                     :tabindex="20"
@@ -40,6 +48,7 @@
               <div class="mb-3">Введите e-mail указанный при регистрации</div>
               <verify-user
                 @error="showError"
+                @getLoginType="loginType"
                 :loginType="'email'"
                 :v="$v.form"
                 :count="60"
@@ -50,11 +59,17 @@
           </b-tabs>
           <div class="recovery">
             <verify-password
+              v-if="
+                (!isBirthdateInValid && !isCodeFieldInValid) ||
+                (!isCodeFieldInValid && loginFieldType === 'email')
+              "
               :tab-index="[20, 30]"
               :v="$v.form"
               :validateState="validateState"
+              :isValid="isSamePassword"
             />
-            <div class="row buttons mt-3">
+
+            <div class="row buttons mt-3" v-if="isSamePassword">
               <div class="col-12 col-md-6">
                 <b-button
                   href="/login"
@@ -117,6 +132,8 @@ export default {
       isGreater180: false,
       currentTab: 0,
       formLoaded: false,
+      dateOfBirth: false,
+      loginFieldType: null,
     };
   },
   mounted() {
@@ -125,6 +142,9 @@ export default {
   },
 
   methods: {
+    loginType(value) {
+      this.loginFieldType = value;
+    },
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;
@@ -215,7 +235,20 @@ export default {
       }
     },
   },
+
   computed: {
+    isCodeFieldInValid() {
+      return this.$v.form.code.$invalid;
+    },
+
+    isBirthdateInValid() {
+      return this.$v.form.birthdate.$invalid;
+    },
+
+    isSamePassword() {
+      return !this.$v.form.password2.$invalid;
+    },
+
     tabIndex() {
       return this.currentTab == 0 ? [30, 40] : [20, 30];
     },
