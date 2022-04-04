@@ -68,7 +68,7 @@
         </p>
       </div>
     </div>
-    <!-- inputTouch -->
+
     <b-form-group v-if="codeFieldShown" label="Код подтверждения">
       <b-form-input
         autofocus
@@ -78,7 +78,7 @@
         v-mask="codeMask"
         :state="validateInput('code', isCodeBlured)"
         @blur="blurField('code', isCodeBlured)"
-        @input="isUserBlured = false"
+        @input="inputTouch(loginType)"
         :disabled="disabled"
         autocomplete="off"
         :tabindex="tabIndex[1]"
@@ -214,7 +214,11 @@ export default {
 
     inputTouch() {
       this.isUserBlured = false;
-      this.$emit("isCodeFieldValid", this.v["code"].$invalid);
+      if (this.v["code"].$invalid === false) {
+        this.$emit("getLoginType", this.loginType);
+      } else {
+        this.$emit("getLoginType", null);
+      }
     },
 
     onCaptchaExpired() {
@@ -465,9 +469,6 @@ export default {
     error: function () {
       this.loading = false;
     },
-    // codeFieldShown(value) {
-    //   this.$emit("isCodeFieldShown", value);
-    // },
   },
   destroyed() {
     this.isSendCode = false;

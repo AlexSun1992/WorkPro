@@ -15,6 +15,7 @@
               <verify-user
                 ref="verifyUser"
                 @error="showError"
+                @getLoginType="loginType"
                 :loginType="'phone'"
                 :mode-type="'RECOVERY'"
                 :v="$v.form"
@@ -25,7 +26,6 @@
                 :isError="errorMessage"
                 :isCodeFieldInValid="isCodeFieldInValid"
               />
-
               <b-row class="mt-3">
                 <b-form-group
                   label="Дата рождения"
@@ -38,8 +38,6 @@
                     :state="validateState('birthdate')"
                     :tabindex="20"
                   />
-
-                  {{ isCodeFieldInValid }}
                 </b-form-group>
               </b-row>
             </b-tab>
@@ -50,6 +48,7 @@
               <div class="mb-3">Введите e-mail указанный при регистрации</div>
               <verify-user
                 @error="showError"
+                @getLoginType="loginType"
                 :loginType="'email'"
                 :v="$v.form"
                 :count="60"
@@ -60,7 +59,10 @@
           </b-tabs>
           <div class="recovery">
             <verify-password
-              v-if="!isBirthdateInValid"
+              v-if="
+                (!isBirthdateInValid && !isCodeFieldInValid) ||
+                (!isCodeFieldInValid && loginFieldType === 'email')
+              "
               :tab-index="[20, 30]"
               :v="$v.form"
               :validateState="validateState"
@@ -131,8 +133,7 @@ export default {
       currentTab: 0,
       formLoaded: false,
       dateOfBirth: false,
-      // isCodeFieldValid: true,
-      // dataCorrect: false,
+      loginFieldType: null,
     };
   },
   mounted() {
@@ -141,19 +142,9 @@ export default {
   },
 
   methods: {
-    // isDataCorrect(value) {
-    //   if (value) {
-    //     this.dataCorrect = true;
-    //     console.log(this.dataCorrect);
-    //   }
-    // },
-    // isFieldShown(value) {
-    //   this.dateOfBirth = value;
-    // },
-    // checkCodeFieldValid(value) {
-    //   this.isCodeFieldValid = value;
-    // },
-
+    loginType(value) {
+      this.loginFieldType = value;
+    },
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;
@@ -244,13 +235,12 @@ export default {
       }
     },
   },
+
   computed: {
     isCodeFieldInValid() {
       return this.$v.form.code.$invalid;
     },
-    isPhoneInValid() {
-      return this.$v.form.phone.$invalid;
-    },
+
     isBirthdateInValid() {
       return this.$v.form.birthdate.$invalid;
     },
