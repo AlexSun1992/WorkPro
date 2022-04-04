@@ -68,6 +68,7 @@
         </p>
       </div>
     </div>
+
     <b-form-group v-if="codeFieldShown" label="Код подтверждения">
       <b-form-input
         autofocus
@@ -77,12 +78,13 @@
         v-mask="codeMask"
         :state="validateInput('code', isCodeBlured)"
         @blur="blurField('code', isCodeBlured)"
-        @input="isCodeBlured = false"
+        @input="inputTouch(loginType)"
         :disabled="disabled"
         autocomplete="off"
         :tabindex="tabIndex[1]"
         placeholder="Код подтверждения"
       ></b-form-input>
+
       <b-form-invalid-feedback v-if="!v.code.$model"
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
@@ -90,6 +92,7 @@
         >Неверный код подтверждения</b-form-invalid-feedback
       >
     </b-form-group>
+
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
@@ -105,7 +108,7 @@ import axios from "axios";
 import _ from "lodash";
 import VerifyTimer from "./VerifyTimer.vue";
 import { mask } from "vue-the-mask";
-import VueRecaptcha from "vue-recaptcha";
+import { VueRecaptcha } from "vue-recaptcha";
 import {
   BFormGroup,
   BFormInput,
@@ -115,6 +118,8 @@ import {
   BLink,
   BSpinner,
 } from "bootstrap-vue";
+
+import { isCaptchaBecomesHide } from "./captcha.helper";
 
 export default {
   components: {
@@ -128,6 +133,7 @@ export default {
     BButton,
     BSpinner,
   },
+
   directives: { mask },
   props: [
     "count",
@@ -141,6 +147,8 @@ export default {
     "textMessage",
     "tabIndex",
     "error",
+    "isError",
+    "isCodeFieldInValid",
   ],
 
   data() {
@@ -160,15 +168,17 @@ export default {
       myclass: ["cabinet"],
       duration: 60,
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
-      token: "",
       loading: false,
       codeFieldShown: false,
+      allHiddenCaptchas: null,
     };
   },
+
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
+
   mounted() {
     let externalScript = document.createElement("script");
     externalScript.setAttribute(
@@ -177,15 +187,44 @@ export default {
     );
     document.head.appendChild(externalScript);
   },
+
+  updated() {
+    if (this.$refs.userInput.vModelValue.length === 4) {
+      this.allHiddenCaptchas = Array.from(
+        document.querySelector(".app_body").children
+      ).filter((item) => item.style.visibility === "hidden");
+    }
+  },
+
   methods: {
     async executeRecaptcha() {
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
+
+      await isCaptchaBecomesHide();
+      const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
+        .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
+        .filter((item) => item.style.visibility === "visible");
+
+      if (visibleCaptchas.length === 0) {
+        this.loading = false;
+      }
     },
+
+    inputTouch() {
+      this.isUserBlured = false;
+      if (this.v["code"].$invalid === false) {
+        this.$emit("getLoginType", this.loginType);
+      } else {
+        this.$emit("getLoginType", null);
+      }
+    },
+
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
     },
+
     setToken(recaptcha) {
       this.token = recaptcha;
     },
@@ -420,6 +459,13 @@ export default {
         this.getCode();
       }
     },
+
+    isError: function (value) {
+      if (typeof value === "string") {
+        this.loading = false;
+      }
+    },
+
     error: function () {
       this.loading = false;
     },

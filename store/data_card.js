@@ -407,7 +407,6 @@ export const actions = {
   cancelRequest({ commit, getters, state }) {
     if (getters.getSource) {
       getters.getSource.cancel("Cancelled");
-      console.log("cancel request done");
     }
   },
 };

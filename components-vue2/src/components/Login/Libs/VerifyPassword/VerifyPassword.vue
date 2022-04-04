@@ -51,7 +51,7 @@ import {
   BRow,
 } from "bootstrap-vue";
 export default {
-  props: ["v", "validateState", "disabled", "recovery", "tabIndex"],
+  props: ["v", "validateState", "disabled", "recovery", "tabIndex", "isValid"],
   data() {
     return {
       password: "",

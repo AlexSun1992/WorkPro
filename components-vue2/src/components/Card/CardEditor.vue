@@ -1,19 +1,19 @@
 <template>
   <div>
     <FormBlock
+      v-if="isBlock"
       :data="getForm"
       :edit="!isReadOnly"
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
-      v-if="isBlock"
     />
 
     <Form
+      v-if="!isBlock"
       :data="getForm"
       :edit="!isReadOnly"
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
-      v-if="!isBlock"
     />
 
     <div>
@@ -33,11 +33,11 @@
         pill
         :disabled="isSaving"
         :class="'btn-lg'"
-        v-on:click="saveCard()"
         type="button"
         variant="success"
         class="col-12 col-md-auto mt-3 mt-md-0"
         :style="isButtonDisabled"
+        @click="saveCard()"
       >
         Сохранить
         <b-spinner
@@ -46,7 +46,7 @@
           class="ml-2"
           variant="danger"
           label="Spinning"
-        ></b-spinner>
+        />
       </b-button>
     </div>
   </div>
@@ -60,10 +60,11 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
+
 Vue.use(LoadScript);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
-Vue.component("vue-easy-tooltip", VueEasyTooltip);
+Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
 export default {
   name: "CardEditor",
@@ -114,7 +115,7 @@ export default {
     try {
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
-        this.$axios.defaults.headers.common["Authorization"] = token;
+        this.$axios.defaults.headers.common.Authorization = token;
       }
       if (process?.env?.NODE_ENV === "production") {
         await this.$loadScript(
@@ -155,10 +156,10 @@ export default {
       "getDataFieldByFieldId",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
-    isReadOnly: function () {
+    isReadOnly() {
       return this.$store.getters["data_card/getReadOnly"];
     },
-    isBlock: function () {
+    isBlock() {
       return this.$store.getters["menu/getMenuById"](this.menuId)?.LUSEBLOCK;
     },
     eventLocalHandler() {
@@ -190,7 +191,7 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
-        const error = data[i].error;
+        const { error } = data[i];
         if (
           (data[i].required &&
             !data[i].hidden &&
@@ -211,12 +212,12 @@ export default {
       await this.callScript(e, "beforeSave");
       if (this.validateData(this.getForm)) {
         this.isShowSavedError = false;
-        let moduleId = this.moduleId,
-          itemId = this.menuId,
-          cardId = this.getFormParams.idCard,
-          relId = this.getFormParams.idRel,
-          zone = this.zone;
-        let resp = await this.$store.dispatch("data_card/saveDataCard", {
+        const { moduleId } = this;
+        const itemId = this.menuId;
+        const cardId = this.getFormParams.idCard;
+        const relId = this.getFormParams.idRel;
+        const { zone } = this;
+        const resp = await this.$store.dispatch("data_card/saveDataCard", {
           moduleId,
           itemId,
           cardId,
@@ -234,8 +235,8 @@ export default {
       }
     },
     async callScript(e, action = null) {
-      let data = await this.eventHandler(
-        this.getForm.map((a) => Object.assign({}, a)),
+      const data = await this.eventHandler(
+        this.getForm.map((a) => ({ ...a })),
         e,
         action
       );
@@ -244,12 +245,17 @@ export default {
       }
     },
     async fetchCard() {
-      let { items } = await this.$store.dispatch(
-        "data_card/fetchList",
-        this.params
-      );
-      this.params.idCard = this.cardId || items[0].ID;
-      this.params.idRel = this.rel || items[0].REL;
+      if (this.cardId !== 0) {
+        const { items } = await this.$store.dispatch(
+          "data_card/fetchList",
+          this.params
+        );
+        this.params.idCard = this.cardId || items[0].ID;
+        this.params.idRel = this.rel || items[0].REL;
+      } else {
+        this.params.idCard = 0;
+        this.params.idRel = undefined;
+      }
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
     async updateValue(e) {
@@ -257,7 +263,7 @@ export default {
         fieldId: e.fieldId,
         value: e.value,
       });
-      let field = this.getForm.find((f) => f.fieldId === e.fieldId);
+      const field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM === this.menuId
       );
@@ -274,7 +280,7 @@ export default {
           return item.NTYPE === 4 && item.ID === actionId;
         });
         if (actionSaveCard?.ID === actionId) {
-          let node = document.querySelector('[title="reCAPTCHA"]');
+          const node = document.querySelector('[title="reCAPTCHA"]');
           if (node && !this.$store.getters["data_card/getRecaptchaToken"]) {
             this.$store.commit("data_card/saveButtonClicked", true);
             this.$store.commit("data_card/setUpdateEvent", e);
