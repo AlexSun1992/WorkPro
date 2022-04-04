@@ -68,6 +68,7 @@
         </p>
       </div>
     </div>
+
     <b-form-group v-if="codeFieldShown" label="Код подтверждения">
       <b-form-input
         autofocus
@@ -77,12 +78,13 @@
         v-mask="codeMask"
         :state="validateInput('code', isCodeBlured)"
         @blur="blurField('code', isCodeBlured)"
-        @input="isCodeBlured = false"
+        @input="inputTouch(loginType)"
         :disabled="disabled"
         autocomplete="off"
         :tabindex="tabIndex[1]"
         placeholder="Код подтверждения"
       ></b-form-input>
+
       <b-form-invalid-feedback v-if="!v.code.$model"
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
@@ -90,6 +92,7 @@
         >Неверный код подтверждения</b-form-invalid-feedback
       >
     </b-form-group>
+
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
@@ -145,6 +148,7 @@ export default {
     "tabIndex",
     "error",
     "isError",
+    "isCodeFieldInValid",
   ],
 
   data() {
@@ -205,6 +209,15 @@ export default {
 
       if (visibleCaptchas.length === 0) {
         this.loading = false;
+      }
+    },
+
+    inputTouch() {
+      this.isUserBlured = false;
+      if (this.v["code"].$invalid === false) {
+        this.$emit("getLoginType", this.loginType);
+      } else {
+        this.$emit("getLoginType", null);
       }
     },
 

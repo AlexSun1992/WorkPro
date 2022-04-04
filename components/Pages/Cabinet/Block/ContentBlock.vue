@@ -1,41 +1,37 @@
 <template>
   <div v-if="isOpenCard">
     <div
-      v-for="(item, id) in dataContent.items"
+      v-for="(item, id, index) in dataContent.items"
       :key="id"
       @click.stop="openCard(item)"
     >
-      <slot name="data" :update="update" v-bind:content="item"></slot>
+      <slot
+        name="data"
+        :update="update"
+        :content="item"
+        :index="index"
+      />
     </div>
   </div>
   <div v-else>
     <slot
+      v-for="(item,index) in dataContent.items"
       name="data"
-      v-for="item in dataContent.items"
-      v-bind:content="item"
-    ></slot>
+      :content="item"
+      :index="index"
+    />
     <slot
       :update="update"
       :list="list"
       :componentKey="componentKey"
-      v-bind:content="dataContent.items"
-    ></slot>
+      :content="dataContent.items"
+    />
   </div>
 </template>
 
 <script>
-import FilterBlock from "./FilterBlock.vue";
-import ObjectsOnMap from "../../../Libs/ObjectsOnMap/ObjectsOnMap.vue";
-import Grid from "../../../Libs/Table/Grid.vue";
-
 export default {
   name: "ContentBlock",
-
-  components: {
-    FilterBlock,
-    ObjectsOnMap,
-    Grid,
-  },
 
   props: {
     itemId: {
@@ -93,19 +89,18 @@ export default {
 
   computed: {
     actions: {
-      get: function () {
+      get() {
         return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
       },
     },
 
     dataContent: {
-      get: function () {
+      get() {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
           return block.data;
-        } else {
-          return {};
         }
+        return {};
       },
     },
 
@@ -114,18 +109,17 @@ export default {
     },
 
     parentMenu: {
-      get: function () {
+      get() {
         return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
       },
     },
     isEmptyContent: {
-      get: function () {
+      get() {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
           return !block?.data?.items.length;
-        } else {
-          return false;
         }
+        return false;
       },
     },
   },

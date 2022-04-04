@@ -87,6 +87,7 @@ export default {
     state: Boolean,
     disabled: Boolean,
     tabindex: Number,
+    isDateOfBirthValid: Boolean,
   },
   data() {
     return {
