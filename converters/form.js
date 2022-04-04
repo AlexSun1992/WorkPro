@@ -231,7 +231,7 @@ converter.form = async (data, params) => {
     await Promise.allSettled(promises).then((values) => {
       values.forEach((item, i) => {
         if (item.status === "rejected") {
-          errors.push(item.reason.response.data);
+          errors.push({url: item.reason.response.config, data: item.reason.response.data});
         }
         if (item.status == "fulfilled" && item.value.data) {
           let options = selectConverter.select(item.value.data);
