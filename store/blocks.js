@@ -164,8 +164,6 @@ export const actions = {
       )
       .then(async (resp) => {
         commit("setPoutValue", resp.data.POUTVALUE);
-        if (resp.data.POUTVALUE) return;
-        if (body) return;
         dispatch("updateBlock", itemId);
       });
   },
@@ -209,7 +207,6 @@ export const mutations = {
   },
 
   setFilter: (state, data) => {
-    console.log(data);
     if (Array.isArray(data) === true) {
       state.filters = data;
     } else {
@@ -222,9 +219,16 @@ export const mutations = {
   },
 
   updateServerFilters: (state, data) => {
+    state.serverFilters.forEach((item) => {
+      if (item.propertyName === data.id) {
+        item.filter = data.filterIdNumber.toString();
+      }
+    });
+
     let filter = state.serverFilters.find(
       (item) => item.propertyName == data.propertyName
     );
+
     filter.filter = data.filter;
   },
 
@@ -254,21 +258,17 @@ export const mutations = {
         id: id,
       };
       state.filters.push(currentFilter);
-      console.log(state.filters);
     }
     if (filterType === "radiobutton" || filterType === "combobox") {
       currentFilter.filter = [filterItem];
-      console.log(currentFilter);
       return;
     }
     if (currentFilter.filter.includes(filterItem)) {
       currentFilter.filter = currentFilter.filter.filter(
         (item) => item !== filterItem
       );
-      console.log(currentFilter);
     } else {
       currentFilter.filter.push(filterItem);
-      console.log(currentFilter);
     }
   },
   setSearchParams(state, data) {
