@@ -1,12 +1,14 @@
 import moment from "moment/moment";
-import controlConverter from "../converters/control";
+import controlConverter from "./control";
+import selectConverter from "./select";
+
 const axios = require("axios");
-import selectConverter from "../converters/select";
+
 axios.defaults.baseURL = "https://mobile2.reso.ru";
 const converter = {};
 
 converter.setArrayOfObjectFields = (itemId, items, fields) => {
-  let arr = [];
+  const arr = [];
   for (let i = 0; i < items.length; i++) {
     arr.push(converter.setFieldsParams(itemId, items[i], fields));
   }
@@ -14,10 +16,10 @@ converter.setArrayOfObjectFields = (itemId, items, fields) => {
 };
 
 converter.setFieldsParams = (itemId, item, fields) => {
-  let arr = [];
+  const arr = [];
   fields.sort(converter.compare);
   for (let i = 0; i < fields.length; i++) {
-    let obj = {};
+    const obj = {};
     obj.label = fields[i].CAPTION ? fields[i].CAPTION : fields[i].FIELD;
     obj.value =
       fields[i].TYPE != "resultset"
@@ -67,20 +69,20 @@ converter.form = async (data, params) => {
   const webFieldsArr = [];
   const errors = [];
 
-  let itemId = params.idItem;
-  let zone = params?.zone;
-  let item = data[0]._data.length ? data[0]._data[0] : {};
-  let fields = data[0]._struct;
-  let meta_value = converter.meta(data[0]?._meta.SNEWRECORD) || {};
-  let meta_visible = converter.meta(data[0]?._meta.SVISIBLE) || {};
-  let meta_readonly = converter.meta(data[0]?._meta.SREADONLY) || {};
-  let arr = converter.setFieldsParams(itemId, item, fields);
+  const itemId = params.idItem;
+  const zone = params?.zone;
+  const item = data[0]._data.length ? data[0]._data[0] : {};
+  const fields = data[0]._struct;
+  const meta_value = converter.meta(data[0]?._meta.SNEWRECORD) || {};
+  const meta_visible = converter.meta(data[0]?._meta.SVISIBLE) || {};
+  const meta_readonly = converter.meta(data[0]?._meta.SREADONLY) || {};
+  const arr = converter.setFieldsParams(itemId, item, fields);
 
-  let webFields = data[0]._meta["JSONWEBFIELDS"];
-  webFields = webFields.sort((a, b) => a["NORDER"] - b["NORDER"]);
+  let webFields = data[0]._meta.JSONWEBFIELDS;
+  webFields = webFields.sort((a, b) => a.NORDER - b.NORDER);
 
   for (let i = 0; i < webFields.length; i++) {
-    let obj = {};
+    const obj = {};
     obj.label = webFields[i].SCAPTION || webFields[i].SCAPTIONLONG;
     if (
       item[webFields[i].SNAME] ||
@@ -88,10 +90,8 @@ converter.form = async (data, params) => {
       item[webFields[i].SNAME] === false
     ) {
       obj.value = item[webFields[i].SNAME];
-    } else {
-      if (Object.keys(item).length === 0) {
-        obj.value = meta_value[webFields[i].SNAME];
-      }
+    } else if (Object.keys(item).length === 0) {
+      obj.value = meta_value[webFields[i].SNAME];
     }
     obj.type = webFields[i].STYPE;
     const fieldOfStruct = fields.find((f) => f.FIELD === webFields[i].SNAME);
@@ -185,43 +185,40 @@ converter.form = async (data, params) => {
     obj.colSm = webFields[i].NCOLSM ? webFields[i].NCOLSM : 12;
     obj.colMd = webFields[i].NCOLMD ? webFields[i].NCOLMD : 12;
     obj.colLg = webFields[i].NCOLLG ? webFields[i].NCOLLG : 12;
-    obj.width = webFields[i].NWIDTH ? webFields[i].NWIDTH + "%" : "100%";
+    obj.width = webFields[i].NWIDTH ? `${webFields[i].NWIDTH}%` : "100%";
     obj.name = webFields[i].SNAME;
     obj.labelCols = webFields[i].SCAPTPOS ? webFields[i].SCAPTPOS : "";
     if (
       meta_visible[webFields[i].SNAME.toUpperCase()] === "Y" ||
       meta_visible[webFields[i].SNAME.toUpperCase()] === "N"
     ) {
-      obj.visible =
-        meta_visible[webFields[i].SNAME.toUpperCase()] === "N" ? false : true;
+      obj.visible = meta_visible[webFields[i].SNAME.toUpperCase()] !== "N";
     } else {
-      obj.visible =
+      obj.visible = !(
         webFields[i].LVISIBLE === "N" || webFields[i].LVISIBLE === false
-          ? false
-          : true;
+      );
     }
-    obj.required =
+    obj.required = !(
       webFields[i].LREQUIRED === "N" || webFields[i].LREQUIRED === false
-        ? false
-        : true;
+    );
     obj.page = webFields[i].NPAGE;
     obj.mask = webFields[i].SMASK;
-    obj.readonly =
+    obj.readonly = !(
       webFields[i].LREADONLY === "N" || webFields[i].LREADONLY === false
-        ? false
-        : true;
+    );
     obj.control = null;
     obj.state = (obj.value || obj.value === 0) && obj.required ? true : null;
     obj.checked = obj.value && obj.required ? true : null;
     obj.error = null;
     obj.helpText = webFields[i].SHELPTEXT;
     obj.placeholder = webFields[i].SNULLTEXT;
-    obj.isRelation =
-      webFields[i].LDIC === "N" || webFields[i].LDIC === false ? false : true;
+    obj.isRelation = !(
+      webFields[i].LDIC === "N" || webFields[i].LDIC === false
+    );
     obj.fieldRelation = webFields[i].SCONNECTFIELD
-      ? "FK" + webFields[i].SCONNECTFIELD
+      ? `FK${webFields[i].SCONNECTFIELD}`
       : null;
-    obj.isTab = data[0]._meta["SPAGECAPTION"] ? true : false;
+    obj.isTab = !!data[0]._meta.SPAGECAPTION;
     if (webFields[i].NITEMDIC) {
       obj.menudic = webFields[i].NITEMDIC;
     }
@@ -231,11 +228,14 @@ converter.form = async (data, params) => {
     await Promise.allSettled(promises).then((values) => {
       values.forEach((item, i) => {
         if (item.status === "rejected") {
-          errors.push({url: item.reason.response.config, data: item.reason.response.data});
+          errors.push({
+            url: item.reason.response.config,
+            data: item.reason.response.data,
+          });
         }
         if (item.status == "fulfilled" && item.value.data) {
-          let options = selectConverter.select(item.value.data);
-          const url = item.value.config.url;
+          const options = selectConverter.select(item.value.data);
+          const { url } = item.value.config;
           const isDicwf = url.includes("dicwf");
           const fieldId = null;
           let fieldName = null;
@@ -281,23 +281,23 @@ converter.form = async (data, params) => {
   }
 
   return {
-    errors: errors,
+    errors,
     // Переход на поля JSONWEBFIELDS
     data: converter.type(arr),
     // Метаданные для отображения JSONWEBFIELDS
     metaData: {
       data: converter.type(webFieldsArr, meta_readonly),
-      captions: data[0]._meta["SPAGECAPTION"],
-      cardCaption: data[0]._meta["SCARDCAPTION"],
-      btnSave: meta_visible?.BTNSAVE === "N" ? false : true,
-      readonly: meta_readonly?.ALL_FIELDS === "Y" ? true : false,
+      captions: data[0]._meta.SPAGECAPTION,
+      cardCaption: data[0]._meta.SCARDCAPTION,
+      btnSave: meta_visible?.BTNSAVE !== "N",
+      readonly: meta_readonly?.ALL_FIELDS === "Y",
     },
   };
 };
 
 converter.type = (data, isReadOnly) => {
-  let copy = data;
-  let del = [];
+  const copy = data;
+  const del = [];
 
   for (let i = 0; i < data.length; i++) {
     if (isReadOnly) {
@@ -315,10 +315,8 @@ converter.type = (data, isReadOnly) => {
 
     if (data[i].control !== null) {
       data[i].type = controlConverter.getType(data[i].control);
-    } else {
-      if (data[i].type === `string` && data[i].maxlength > 200) {
-        copy[i].type = `text`;
-      }
+    } else if (data[i].type === `string` && data[i].maxlength > 200) {
+      copy[i].type = `text`;
     }
     if (data[i].type === `timestamp`) {
       if (data[i].value) {
@@ -372,11 +370,11 @@ converter.remove = (arr, toRemove) => {
 
 converter.meta = (meta) => {
   if (meta) {
-    let convert_meta = {};
-    let arr_split = meta.split(`\r`);
+    const convert_meta = {};
+    const arr_split = meta.split(`\r`);
     for (let i = 0; i < arr_split.length; i++) {
-      let field_meta = arr_split[i].split(`=`);
-      let value_meta = arr_split[i].replace(field_meta[0] + "=", "");
+      const field_meta = arr_split[i].split(`=`);
+      const value_meta = arr_split[i].replace(`${field_meta[0]}=`, "");
       convert_meta[field_meta[0].toUpperCase()] = value_meta;
     }
     return convert_meta;
@@ -384,7 +382,7 @@ converter.meta = (meta) => {
 };
 
 converter.save = (data) => {
-  let res = {};
+  const res = {};
   let name = ``;
   for (let i = 0; i < data.length; i++) {
     if (
@@ -417,12 +415,10 @@ converter.save = (data) => {
               )
             : "NULL";
         }
+      } else if (data[i].name.substring(0, 1) === "B") {
+        res[data[i].name] = data[i].value ? "Д" : "Н";
       } else {
-        if (data[i].name.substring(0, 1) === "B") {
-          res[data[i].name] = data[i].value ? "Д" : "Н";
-        } else {
-          res[data[i].name] = data[i].value ? "Y" : "N";
-        }
+        res[data[i].name] = data[i].value ? "Y" : "N";
       }
     } else {
       if (data[i].name.substring(0, 2) === `FK`) {
@@ -449,9 +445,9 @@ converter.save = (data) => {
         // res[name] = data[i].value.value ? data[i].value.value : "NULL";
       } else {
         res[name] = "NULL";
-        let arr = [];
+        const arr = [];
         if (data[i].value) {
-          let items = data[i].value;
+          const items = data[i].value;
           for (let j = 0; j < items.length; j++) {
             arr.push(items[j].value);
           }
