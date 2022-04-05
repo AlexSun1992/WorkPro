@@ -42,11 +42,8 @@ converter.select = (data) => {
           }
         }
       }
-      if(items[i][data[0]?._meta]){
-        obj.meta = items[i][data[0]?._meta];
-      }
     }
-    arr.push(obj);
+    arr.push({ ...items[i], ...obj });
   }
   return arr;
 };
