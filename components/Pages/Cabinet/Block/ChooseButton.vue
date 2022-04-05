@@ -52,7 +52,6 @@ export default {
 
   methods: {
     transferData() {
-      //console.log("chooseButton, transferData:", this.data);
       this.$emit("update", this.data);
     },
   },

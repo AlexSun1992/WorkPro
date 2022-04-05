@@ -81,7 +81,6 @@ export const actions = {
       });
   },
   async deleteForm({ commit, dispatch }, { moduleId, menuId, itemId, relId }) {
-    console.log("я здесь");
     await this.$axios
       .delete(
         `/am/main/v2/datacard/${moduleId}/${menuId}/${itemId}${
@@ -115,10 +114,8 @@ export const actions = {
       });
   },
   async fetchBlock({ commit, dispatch }, params) {
-    // console.log("Вызов метода fethcBlock");
     let url;
     const urlJsonFilters = JSON.stringify(params.query);
-    // console.log("rlJsonFilters:", urlJsonFilters);
     if (!params.zone) {
       url = `/api/list/55/${params.id}/${encodeURIComponent(urlJsonFilters)}`;
     } else {
@@ -127,7 +124,6 @@ export const actions = {
       )}?zone=free`;
     }
     await this.$axios.get(url).then((res) => {
-      // console.log(res);
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });
   },
@@ -161,34 +157,15 @@ export const actions = {
     { commit, dispatch, getters },
     { relId, relActionId, rowId, itemId, actionId, body }
   ) {
-    //console.log("executeAction:");
-    // console.log("relId:", relId);
-    // console.log("relActionId:", relActionId);
-    // console.log("rowId:", rowId);
-    // console.log("itemId:", itemId);
-    // console.log("actionId", actionId);
-    console.log("body", body);
-    console.log("запрос начался axios");
     await this.$axios
       .post(
         `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
         body || {}
       )
       .then(async (resp) => {
-        console.log("resp:", resp);
-        // commit("setPoutValue", resp.data.POUTVALUE);
-        // if (resp.data.POUTVALUE) {
-        //   console.log(resp.data.POUTVALUE);
-        //   return;
-        // }
-        // if (body) {
-        //   console.log(body);
-        //   return;
-        // }
-        // console.log("вызываю метод updateBlock:", itemId);
-        //dispatch("updateBlock", itemId);
+        commit("setPoutValue", resp.data.POUTVALUE);
+        dispatch("updateBlock", itemId);
       });
-    //console.log("запрос закончен axios");
   },
 };
 
@@ -230,7 +207,6 @@ export const mutations = {
   },
 
   setFilter: (state, data) => {
-    console.log(data);
     if (Array.isArray(data) === true) {
       state.filters = data;
     } else {
@@ -243,9 +219,16 @@ export const mutations = {
   },
 
   updateServerFilters: (state, data) => {
+    state.serverFilters.forEach((item) => {
+      if (item.propertyName === data.id) {
+        item.filter = data.filterIdNumber.toString();
+      }
+    });
+
     let filter = state.serverFilters.find(
       (item) => item.propertyName == data.propertyName
     );
+
     filter.filter = data.filter;
   },
 
@@ -275,21 +258,17 @@ export const mutations = {
         id: id,
       };
       state.filters.push(currentFilter);
-      console.log(state.filters);
     }
     if (filterType === "radiobutton" || filterType === "combobox") {
       currentFilter.filter = [filterItem];
-      console.log(currentFilter);
       return;
     }
     if (currentFilter.filter.includes(filterItem)) {
       currentFilter.filter = currentFilter.filter.filter(
         (item) => item !== filterItem
       );
-      console.log(currentFilter);
     } else {
       currentFilter.filter.push(filterItem);
-      console.log(currentFilter);
     }
   },
   setSearchParams(state, data) {

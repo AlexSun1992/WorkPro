@@ -73,14 +73,6 @@ export default {
   methods: {
     async executeAction() {
       try {
-        console.log("Пытаюсь выполнить!");
-        // console.log("relId:", this.relId);
-        // console.log("relActionId:", this.action.REL);
-        // console.log("actionId:", this.actionId);
-        // console.log("rowId:", this.rowId);
-        // console.log("itemId:", this.action.NITEM);
-        console.log("body:", this.body);
-        console.log("начинаю вызывать экшн executeAction");
         await this.$store.dispatch("blocks/executeAction", {
           relId: this.relId,
           relActionId: this.action.REL,
@@ -90,15 +82,7 @@ export default {
           body: this.body,
         });
 
-        //debugger;
-
         if (!this.getUrlAddress) {
-          // console.log("getUrlAdress:отсутствие");
-          // console.log("id:", this.$route.params.idItem);
-          // console.log(
-          //   JSON.stringify(this.$store.getters["blocks/getServerFilters"])
-          // );
-          // console.log("Вызываю метод fetchBlock");
           await this.$store.dispatch("blocks/fetchBlock", {
             id: this.$route.params.idItem,
             query: {
@@ -107,7 +91,6 @@ export default {
               ),
             },
           });
-          console.log("нет адреса,закончил");
         }
         this.$bvToast.toast("Успешно выполнено", {
           title: "",
@@ -118,7 +101,6 @@ export default {
         console.log(err);
       }
       this.$emit("update");
-      // console.log("Должна произойти отмена записи к врачу");
     },
     async startAction() {
       if (this.action.NTYPE === 2) {

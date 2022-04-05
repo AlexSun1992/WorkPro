@@ -30,7 +30,6 @@
         :list="list"
         :placeholder="name"
         @update="update"
-        @mousedown="test"
         :isAutoSelectSingleRow="firstValueFromList"
         :isAutoOpenForMultipleRow="InsuredPersonsList"
       />
@@ -224,6 +223,7 @@ export default {
           filter,
         };
       }
+
       let foundedFilter = this.$store.getters["blocks/getServerFilters"].find(
         (filter) => {
           return filter.propertyName === this.queryParamName;
@@ -231,19 +231,20 @@ export default {
       );
 
       if (foundedFilter) {
-        //console.log("должны обновиться серверные фильтры:", foundedFilter);
         this.$store.commit("blocks/updateServerFilters", {
           propertyName: this.queryParamName,
           filter: this.queryParamValue,
+          id: this.id,
+          filterIdNumber: e.data[this.id],
         });
       } else {
-        //console.log("установление серверных фильтров:", filterObj);
         this.$store.commit("blocks/setServerFilters", filterObj);
-        if (this.id && e.data[this.id])
+        if (this.id && e.data[this.id]) {
           this.$store.commit("blocks/setServerFilters", {
             propertyName: this.id,
             filter: e.data[this.id].toString(),
           });
+        }
       }
     },
 
@@ -251,24 +252,15 @@ export default {
       if (!e?.text && !e?.value && this.isShowAsTemplate) {
         e = { data: e, text: e.SNAME, value: e.SPOLICY };
       }
-      // console.log(e);
+
       this.selectedItem = e.text;
       this.queryParamValue = e.value;
-      // console.log("select:", this.selectedItem);
-      // console.log("query:", this.queryParamValue);
       this.visible = false;
       this.setFilter(e);
 
       let query = {
         [this.queryParamName]: this.queryParamValue,
       };
-
-      console.log("getServerFilters.length  === 1 ,query:", query);
-
-      // console.log(
-      //   "getServerFilters:",
-      //   this.$store.getters["blocks/getServerFilters"]
-      // );
 
       if (this.$store.getters["blocks/getServerFilters"].length > 1) {
         query = {
@@ -277,25 +269,11 @@ export default {
           ),
         };
       }
-      console.log("getServerFilters.length > 1 ,query:", query);
-
-      // console.log(this.$store.getters["blocks/getServerFilters"]);
-      // console.log("ServerFilterBlock query", query);
-      // console.log("id", this.$route.params.idItem);
-      // console.log("Вызываю метод fetchBlock");
-
-      console.log("finally:", query);
-      console.log("id:", this.$route.params.idItem);
 
       this.$store.dispatch("blocks/fetchBlock", {
         id: this.$route.params.idItem,
         query,
       });
-
-      //console.log("ServerFilter: update выполнился");
-    },
-    test() {
-      console.log("!!");
     },
   },
 };
