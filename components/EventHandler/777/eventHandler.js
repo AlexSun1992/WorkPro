@@ -524,7 +524,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience >= 10) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 13
+          (item) => item.SCLASS === "13"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -533,7 +533,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 9) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 12
+          (item) => item.SCLASS === "12"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -542,7 +542,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 8) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 11
+          (item) => item.SCLASS === "11"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -551,7 +551,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 7) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 10
+          (item) => item.SCLASS === "10"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -560,7 +560,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 6) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 9
+          (item) => item.SCLASS === "9"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -569,7 +569,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 5) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 8
+          (item) => item.SCLASS === "8"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -578,7 +578,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 4) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 7
+          (item) => item.SCLASS === "7"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -587,7 +587,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 3) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 6
+          (item) => item.SCLASS === "6"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -596,7 +596,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 2) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 5
+          (item) => item.SCLASS === "5"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -605,7 +605,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 1) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 4
+          (item) => item.SCLASS === "4"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -614,7 +614,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 0) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 3
+          (item) => item.SCLASS === "3"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
