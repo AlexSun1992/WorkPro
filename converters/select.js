@@ -30,21 +30,20 @@ converter.select = (data) => {
           if (items[i][data[0]._meta.SNAMEFIELD]) {
             obj.text =
               items[i][data[0]._meta.SNAMEFIELD.toUpperCase()].toString();
-          } else {
-            if (fields[j].FIELD !== "ID") {
-              obj.text = items[i][fields[j].FIELD].toString();
-            }
+          } else if (fields[j].FIELD !== "ID") {
+            obj.text = items[i][fields[j].FIELD].toString();
           }
           if (items[i][data[0]._meta.SKEYFIELD]) {
             obj.value = items[i][data[0]._meta.SKEYFIELD]
               ? items[i][data[0]._meta.SKEYFIELD.toUpperCase()]
               : items[i].ID;
-          } else {
-            if (fields[j].FIELD === "ID") {
-              obj.value = items[i][fields[j].FIELD];
-            }
+          } else if (fields[j].FIELD === "ID") {
+            obj.value = items[i][fields[j].FIELD];
           }
         }
+      }
+      if(items[i][data[0]?._meta]){
+        obj.meta = items[i][data[0]?._meta];
       }
     }
     arr.push(obj);
