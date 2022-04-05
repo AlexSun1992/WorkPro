@@ -206,6 +206,11 @@ export default {
       console.log(error);
     }
   },
+  mounted() {
+    window.document.addEventListener("on_city_change", () => {
+      console.log("city changed");
+    });
+  },
   destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
