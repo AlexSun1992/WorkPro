@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-modal
-      modal-class="cabinet"
       :id="'confirmAction'"
+      modal-class="cabinet"
       centered
       :title="actionParamsTitle"
       :ok-disabled="actionFormDisabled"
@@ -10,19 +10,19 @@
       cancel-title="Отмена"
       auto-focus-button="ok"
       no-close-on-backdrop
-      @ok="applyAction"
       no-fade
+      @ok="applyAction"
     >
-      <b-alert :show="isActionApplyError" variant="danger">{{
-        actionApplyErrorMessage
-      }}</b-alert>
+      <b-alert :show="isActionApplyError" variant="danger">
+        {{ actionApplyErrorMessage }}
+      </b-alert>
       <b-form @submit="applyAction">
         <Form
           v-if="actionParams.length"
           :data="actionParams"
           :edit="!actionFormDisabled"
           @update="updateActionParams($event)"
-        ></Form>
+        />
       </b-form>
     </b-modal>
     <div v-if="data.length">
@@ -33,33 +33,33 @@
         :tabs="tabs"
         :params="params"
         :is-tabs="isTabs"
+        :edit="edit"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
-        :edit="edit"
-      ></Form>
+      />
       <FormAccordion
         v-if="isAccordion && !isTabs && !isBlock"
         :class="{ 'mt-5': !params.settings && showBtnBack }"
         :data="data"
         :tabs="tabs"
+        :edit="edit"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
-        :edit="edit"
       />
       <FormBlock
         v-if="isBlock && !isTabs && !isAccordion"
         :data="data"
         :tabs="tabs"
         :params="params"
+        :edit="edit"
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
-        :edit="edit"
       />
     </div>
-    <SkeletonBox v-if="!data.length" class="mt-5" :items="8"></SkeletonBox>
+    <SkeletonBox v-if="!data.length" class="mt-5" :items="8" />
   </div>
 </template>
 <script>
@@ -72,39 +72,7 @@ import FormBlock from "@/components/Libs/Form/FormBlock";
 
 export default {
   name: "CardEditor",
-
-  head() {
-    return {
-      script: [
-        {
-          // type: "module",
-          src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
-          callback: () => {
-            this.$root.eventHandler =
-              typeof eventHandler === "function" ? eventHandler : null;
-            this.stripeLoaded();
-          },
-        },
-      ],
-    };
-  },
   components: { FormBlock, FormAccordion, Form, ActionButton, SkeletonBox },
-  data() {
-    return {
-      actionParamsTitle: null,
-      actionParamsId: null,
-      actionFormDisabled: false,
-      isActionApplyError: false,
-      actionApplyErrorMessage: null,
-      disabledButtons: {
-        background: "#dddbdd",
-        boxShadow: "none",
-        border: "none",
-        color: "#dddbdd",
-      },
-      saveSuccess: false,
-    };
-  },
   props: {
     params: {
       type: Object,
@@ -126,6 +94,73 @@ export default {
       required: false,
     },
   },
+  data() {
+    return {
+      actionParamsTitle: null,
+      actionParamsId: null,
+      actionFormDisabled: false,
+      isActionApplyError: false,
+      actionApplyErrorMessage: null,
+      disabledButtons: {
+        background: "#dddbdd",
+        boxShadow: "none",
+        border: "none",
+        color: "#dddbdd",
+      },
+      saveSuccess: false,
+    };
+  },
+
+  head() {
+    return {
+      script: [
+        {
+          // type: "module",
+          src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
+          callback: () => {
+            this.$root.eventHandler =
+              typeof eventHandler === "function" ? eventHandler : null;
+            this.stripeLoaded();
+          },
+        },
+      ],
+    };
+  },
+  computed: {
+    showBtnBack() {
+      const path = this.$store.state.data_card.listPath;
+      // Жестко убрали кнопку с полиса осаго (Игорь)
+      return path && !path.includes("/55/0/19") && !path.includes("/55/0/738");
+    },
+    tabs() {
+      return this.params.tabs;
+    },
+    captions() {
+      return this.$store.getters["data_card/getCaptions"];
+    },
+    isAccordion() {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LACCORDION;
+    },
+    isBlock() {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LUSEBLOCK;
+    },
+    isTabs() {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LTABBED;
+    },
+    actionParams() {
+      return this.$store.getters["data_card/getActionParams"];
+    },
+    actionSettings() {
+      return this.params.actions.find((a) => a.id === this.actionParamsId);
+    },
+    closeAfterSave() {
+      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+        ?.LCLOSEAFTERSAVE;
+    },
+  },
   created() {
     this.$root.eventHandler =
       typeof eventHandler === "function" ? eventHandler : null;
@@ -133,7 +168,7 @@ export default {
   mounted() {
     this.stripeLoaded();
   },
-  destroyed() {
+  unmounted() {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
     this.$store.commit("data_card/setSavedError", false);
@@ -144,14 +179,14 @@ export default {
         if (typeof initHandler === "function") {
           this.$store.commit(
             "data_card/setForm",
-            initHandler(this.data.map((a) => Object.assign({}, a))) || this.data
+            initHandler(this.data.map((a) => ({ ...a }))) || this.data
           );
         }
       } catch {}
     },
 
     async updateValue(e) {
-      let field = this.data.find((f) => f.fieldId === e.fieldId);
+      const field = this.data.find((f) => f.fieldId === e.fieldId);
       // if (field.type !== "button") {
       //   this.$store.commit("data_card/cardChanged", true);
       // }
@@ -179,13 +214,13 @@ export default {
         const menuItem = flatmenu.find((item) => {
           return item.IDITEM == this.$route.params.idItem;
         });
-        let CUR = menuItem.ACTIONSCUR.find((item) => {
+        const CUR = menuItem.ACTIONSCUR.find((item) => {
           return item.ID == actionId;
         });
         if (CUR.NTYPE == 38) {
           this.saveSuccess = false;
-          let data = eventHandler(
-            this.data.map((a) => Object.assign({}, a)),
+          const data = eventHandler(
+            this.data.map((a) => ({ ...a })),
             e,
             "beforeSave"
           );
@@ -196,8 +231,8 @@ export default {
           if (this.saveSuccess) {
             await this.$store.dispatch("data_card/fetchForm", params);
             this.$store.commit("data_card/setDisabled", false);
-            let data = eventHandler(
-              this.data.map((a) => Object.assign({}, a)),
+            const data = eventHandler(
+              this.data.map((a) => ({ ...a })),
               e,
               "afterSave"
             );
@@ -207,11 +242,12 @@ export default {
           }
           this.$store.commit("data_card/setLoading", false);
           return;
-        } else if (CUR.NTYPE == 39) {
+        }
+        if (CUR.NTYPE == 39) {
           this.$store.commit("data_card/setLoading", false);
           this.$store.commit("data_card/setReadOnly", false);
-          let data = eventHandler(
-            this.data.map((a) => Object.assign({}, a)),
+          const data = eventHandler(
+            this.data.map((a) => ({ ...a })),
             e
           );
           if (data) {
@@ -244,8 +280,8 @@ export default {
           this.applyAction();
         }
       } else if (field.type === "button") {
-        let data = eventHandler(
-          this.data.map((a) => Object.assign({}, a)),
+        const data = eventHandler(
+          this.data.map((a) => ({ ...a })),
           e
         );
         if (data) {
@@ -257,10 +293,8 @@ export default {
         value: e.value,
       });
       if (typeof eventHandler === "function" && field.type != "button") {
-        let data = await eventHandler(
-          this.$store.getters["data_card/getForm"].map((a) =>
-            Object.assign({}, a)
-          ),
+        const data = await eventHandler(
+          this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
           e,
           this.$store._actions["data_card/fetchCard"][0]
         );
@@ -297,7 +331,7 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
-        //data[i].checked = true;
+        // data[i].checked = true;
         if (
           data[i].required &&
           !data[i].hidden &&
@@ -335,7 +369,7 @@ export default {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
           }
-          let resp = await this.$store.dispatch("data_card/saveDataCard", {
+          const resp = await this.$store.dispatch("data_card/saveDataCard", {
             moduleId,
             itemId,
             cardId,
@@ -362,7 +396,7 @@ export default {
               this.$store.commit("data_card/setLoading", false);
               const nextIdItem =
                 this.$store.getters["wizard/getWizardPages"].split(";")[step];
-              let tab = this.wizardTabs.find(
+              const tab = this.wizardTabs.find(
                 (w) => w.idItem === parseInt(nextIdItem)
               );
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
@@ -374,18 +408,17 @@ export default {
                 }`
               );
               return;
-            } else {
-              if (this.closeAfterSave) {
-                this.$router.push(`/cabinet/${moduleId}/0/${itemId}`);
-              } else {
-                this.$router.push(
-                  `/cabinet/${moduleId}/0/${itemId}/${cardId}${
-                    relId ? `/${relId}` : ""
-                  }`
-                );
-              }
-              return;
             }
+            if (this.closeAfterSave) {
+              this.$router.push(`/cabinet/${moduleId}/0/${itemId}`);
+            } else {
+              this.$router.push(
+                `/cabinet/${moduleId}/0/${itemId}/${cardId}${
+                  relId ? `/${relId}` : ""
+                }`
+              );
+            }
+            return;
           }
           if (resp?.status === 200) {
             this.saveSuccess = true;
@@ -410,13 +443,11 @@ export default {
               variant: "success",
               solid: true,
             });
-          } else {
-            if (resp?.status === 500) {
-              this.$store.commit("data_card/setLoading", false);
-              this.$store.commit("data_card/setDisabled", false);
-              this.$store.commit("data_card/setSavedError", true);
-              this.$store.commit("data_card/setErrorMessage", resp.data);
-            }
+          } else if (resp?.status === 500) {
+            this.$store.commit("data_card/setLoading", false);
+            this.$store.commit("data_card/setDisabled", false);
+            this.$store.commit("data_card/setSavedError", true);
+            this.$store.commit("data_card/setErrorMessage", resp.data);
           }
           this.$emit("error", null);
         } catch (err) {
@@ -426,7 +457,7 @@ export default {
               err?.response?.data?.INFO || err?.response?.data?.MESSAGE
             );
           }
-          let errorInfo = err?.response?.data?.INFO
+          const errorInfo = err?.response?.data?.INFO
             ? err?.response?.data?.INFO
             : err?.response?.data?.MESSAGE;
           if (errorInfo) {
@@ -456,7 +487,7 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.isActionApplyError = false;
       this.actionFormDisabled = true;
-      let response = await this.$store.dispatch("data_card/executeAction", {
+      const response = await this.$store.dispatch("data_card/executeAction", {
         actionId: this.actionParamsId,
         relActionId: this.actionSettings.relaction,
         relId: this.$route.params.idRel,
@@ -496,41 +527,6 @@ export default {
           solid: true,
         });
       }
-    },
-  },
-  computed: {
-    showBtnBack() {
-      let path = this.$store.state.data_card.listPath;
-      // Жестко убрали кнопку с полиса осаго (Игорь)
-      return path && !path.includes("/55/0/19") && !path.includes("/55/0/738");
-    },
-    tabs() {
-      return this.params.tabs;
-    },
-    captions: function () {
-      return this.$store.getters["data_card/getCaptions"];
-    },
-    isAccordion: function () {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        ?.LACCORDION;
-    },
-    isBlock: function () {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        ?.LUSEBLOCK;
-    },
-    isTabs: function () {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        ?.LTABBED;
-    },
-    actionParams: function () {
-      return this.$store.getters["data_card/getActionParams"];
-    },
-    actionSettings: function () {
-      return this.params.actions.find((a) => a.id === this.actionParamsId);
-    },
-    closeAfterSave: function () {
-      return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-        ?.LCLOSEAFTERSAVE;
     },
   },
 };
