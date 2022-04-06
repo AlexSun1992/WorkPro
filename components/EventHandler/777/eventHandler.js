@@ -236,6 +236,9 @@ async function eventHandler(fields, action, func) {
       calculateBtn.visible = false;
       captcha.visible = false;
     }
+    if (drivers.length === 20) {
+      addDriver.visible = false;
+    }
   }
 
   if (action.value === "SFILLINMANUALLY") {
