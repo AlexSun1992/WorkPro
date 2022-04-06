@@ -23,6 +23,16 @@ async function eventHandler(fields, action, func) {
     );
   }
 
+  function getVisibleDriversCount() {
+    return fields
+      .filter((item) => item.name.includes("NDR_AGE"))
+      .filter((item) => item.visible).length;
+  }
+
+  function getDriversCount() {
+    return fields.filter((item) => item.name.includes("NDR_AGE")).length;
+  }
+
   /**
    * Поиск полей водителя
    * @param {number} driverId
@@ -239,10 +249,14 @@ async function eventHandler(fields, action, func) {
   if (action.name === "NDRIVER_TYPE" && action.value === "1") {
     invertPropertyElements(checkDriversForm, "visible");
     changeElements(findVisibleDrivers(), "visible", false);
+    addDriver.visible = false;
   }
 
   if (action.name === "NDRIVER_TYPE" && action.value === "2") {
     invertPropertyElements(checkDriversForm, "visible");
+    if (drivers.length === 20) {
+      addDriver.visible = false;
+    }
   }
 
   const showErrorFunc = (...params) => {
@@ -701,16 +715,6 @@ async function eventHandler(fields, action, func) {
     findDriver(driverId).forEach((item) => {
       item.visible = true;
     });
-  }
-
-  function getVisibleDriversCount() {
-    return fields
-      .filter((item) => item.name.includes("NDR_AGE"))
-      .filter((item) => item.visible).length;
-  }
-
-  function getDriversCount() {
-    return fields.filter((item) => item.name.includes("NDR_AGE")).length;
   }
 
   if ("action" in action) {
