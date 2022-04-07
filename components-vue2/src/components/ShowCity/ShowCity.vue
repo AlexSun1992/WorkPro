@@ -64,9 +64,9 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-import { cities } from "./cities.js";
 import { BButton, BCollapse, BCard } from "bootstrap-vue";
 import Cookies from "js-cookie";
+import cities from "./cities";
 
 function getParams(input) {
   return {
@@ -101,15 +101,23 @@ export default {
       city: null,
       visible: false,
       kladr: null,
+      lat: null,
+      lon: null,
       popularCities: cities,
       cols: 3,
       request: null,
     };
   },
   async created() {
-    if (Cookies.get("location_user") && Cookies.get("kladr_id")) {
+    if (
+      Cookies.get("location_user") &&
+      Cookies.get("kladr_id") &&
+      Cookies.get("lat") !== "undefined"
+    ) {
       this.kladr = Cookies.get("kladr_id");
       this.city = Cookies.get("location_user");
+      this.lat = Cookies.get("lat");
+      this.lon = Cookies.get("lon");
     } else {
       this.request = await this.$axios
         .get(`/am/free/v2/data/55/800/0/0`)
@@ -123,6 +131,14 @@ export default {
             this.kladr = res.data[0]._data[0].KLADR_ID;
             Cookies.set("kladr_id", this.kladr);
           }
+          if (res.data[0]._data[0].LAT) {
+            this.lat = res.data[0]._data[0].LAT;
+            Cookies.set("lat", this.lat);
+          }
+          if (res.data[0]._data[0].LON) {
+            this.lon = res.data[0]._data[0].LON;
+            Cookies.set("lon", this.lon);
+          }
           if (!res.data[0]._data[0].TOWN) {
             this.city = "Москва";
             Cookies.set("location_user", this.city);
@@ -131,8 +147,19 @@ export default {
             this.kladr = "7700000000000";
             Cookies.set("kladr_id", this.kladr);
           }
+          if (!res.data[0]._data[0].LAT) {
+            this.lat = "55.75396";
+            Cookies.set("lat", this.lat);
+          }
+          if (!res.data[0]._data[0].LON) {
+            this.lon = "37.620393";
+            Cookies.set("lon", this.lon);
+          }
           if (this.city && this.kladr) {
-            this.changeCity({ city: this.city, kladr: this.kladr });
+            this.changeCity({
+              city: this.city,
+              kladr: this.kladr,
+            });
           }
         });
     }
@@ -145,14 +172,29 @@ export default {
       this.kladr = result.data.kladr_id;
       Cookies.set("kladr_id", this.kladr);
       Cookies.set("location_user", this.city);
-      this.changeCity({ city: this.city, kladr: this.kladr });
+      Cookies.set("lat", this.lat);
+      Cookies.set("lon", this.lon);
+      this.changeCity({
+        city: this.city,
+        kladr: this.kladr,
+      });
+      this.$store.dispatch("map/setCity", {
+        city: this.city,
+        coords: [this.lat, this.lon],
+      });
     },
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
       this.city = result.text;
+      this.$store.dispatch("map/setCity", {
+        city: this.city,
+        coords: [result.lat, result.lon],
+      });
       this.kladr = result.kladr_id;
       Cookies.set("kladr_id", this.kladr);
       Cookies.set("location_user", this.city);
+      Cookies.set("lat", result.lat);
+      Cookies.set("lon", result.lon);
       this.changeCity({ city: this.city, kladr: this.kladr });
     },
     setAutoCity(result) {
@@ -191,6 +233,8 @@ export default {
         id: 1,
         kladr_id: "7700000000000",
         text: "Москва",
+        lat: "55.75396",
+        lon: "37.620393",
       });
       return this.popularCities;
     },
