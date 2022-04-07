@@ -353,6 +353,7 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
+      console.log("fields:", fields);
       if (this.validateData(fields)) {
         try {
           let itemId;
@@ -364,6 +365,8 @@ export default {
             moduleId = this.$route.params.idModule;
             cardId = this.$route.params.idCard;
             relId = this.$route.params.idRel;
+            //relId возвращает undefined
+            console.log("relId:", relId);
           } else {
             itemId = this.params.page.idItem;
             moduleId = this.params.page.idModule;

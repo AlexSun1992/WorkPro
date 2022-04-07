@@ -251,15 +251,32 @@ export const actions = {
     }
   },
   async saveDataCard({ commit, state, dispath }, params) {
+    console.log("params:", params);
+    console.log("commit:", { commit });
+    console.log("saveDataCard data_card.js");
     commit("setLoading", true);
     commit("setDisabled", true);
     try {
+      console.log("Начало выполнения запроса");
+
+      // let resp = await this.$axios
+      //   .post(
+      //     `
+      // /am/main/v2/datacard2/48/809/42?REL=CAO18B7427923E407F4AB325204C1751
+      // `
+      //   )
+      //   .then((resp) => {
+      //     console.log("resp:", resp);
+      //   });
+
       let resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
           params.relId
         }${params.zone === "free" ? "?zone=free" : ""}`,
         params.form
       );
+      // Возвращает undefined params.relId
+
       commit("setLoading", false);
       commit("setDisabled", false);
       commit("setSavedError", false);
@@ -492,6 +509,7 @@ export const mutations = {
     state.cardId = data;
   },
   setCardRelId(state, data) {
+    console.log("setCardRelId");
     state.cardRelId = data;
   },
   setModuleId(state, data) {
