@@ -192,7 +192,7 @@ export default {
   async created() {
     try {
       window.addEventListener("resize", this.onResize);
-      if (Cookies.get("kladr_id")) {
+      if (Cookies.get("coords")) {
         await this.$store.dispatch("map/fetchRegion", {
           id: Cookies.get("kladr_id")?.substr(0, 2),
           coords: [Cookies.get("lat"), Cookies.get("lon")],
