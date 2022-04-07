@@ -232,18 +232,22 @@ router.post(
   "/card/actionexec/:rowId/:actionId/:relId?/:relActionId",
   (req, res) => {
     try {
+      console.log("!!!!");
       const mobile2ServiceInstance = mobile2Service();
       if (req.headers.referer) {
+        console.log("!!!!");
         if (req.headers.referer.includes("testdms")) {
           mobile2ServiceInstance.defaults.baseURL =
             "https://mobiletest.reso.ru";
         }
       }
       if (req.headers.authorization) {
+        console.log("!!!!");
         mobile2ServiceInstance.defaults.headers.common.Authorization =
           req.headers.authorization;
       } else {
         if (req.cookies) {
+          console.log("!!!!");
           mobile2ServiceInstance.defaults.headers.common.Authorization =
             req.cookies["auth._token.local"];
         }

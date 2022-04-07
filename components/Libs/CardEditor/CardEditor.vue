@@ -347,6 +347,7 @@ export default {
       return valid;
     },
     async saveDataCard(step = 1) {
+      console.log("CardEditor");
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit("data_card/saveButtonClicked", true);
       this.$store.commit("data_card/setSavedError", false);

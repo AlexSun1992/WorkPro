@@ -209,6 +209,7 @@ export default {
     },
     saveDataCard(step) {
       if (this.$refs.cardEditor) {
+        console.log(this.$refs.cardEditor);
         this.$refs.cardEditor.saveDataCard(step);
       }
     },
