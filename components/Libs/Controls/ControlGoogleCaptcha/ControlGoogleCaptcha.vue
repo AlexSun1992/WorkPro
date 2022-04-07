@@ -13,6 +13,7 @@
 
 <script>
 import { VueRecaptcha } from "vue-recaptcha";
+import { isCaptchaBecomesHide } from "./captchaHelper";
 
 export default {
   name: "ControlGoogleCaptcha",
@@ -27,6 +28,7 @@ export default {
   data() {
     return {
       token: null,
+      testMarker: false,
     };
   },
   mounted() {
@@ -38,9 +40,21 @@ export default {
     document.head.appendChild(externalScript);
   },
 
-  updated() {
-    if (this.$store.getters["data_card/saveButtonClicked"] === true) {
-      this.$refs.recaptcha.execute();
+  async updated() {
+    // if (this.$store.getters["data_card/saveButtonClicked"] === true) {
+    //   this.$refs.recaptcha.execute();
+    // }
+    await isCaptchaBecomesHide();
+    const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
+      .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
+      .filter((item) => item.style.visibility === "visible");
+
+    if (visibleCaptchas.length === 0) {
+      this.testMarker = true;
+      console.log(this.testMarker);
+    } else {
+      this.testMarker = false;
+      console.log(this.testMarker);
     }
   },
 
@@ -70,12 +84,14 @@ export default {
       },
     },
     saveButtonClicked() {
+      console.log("!!!");
       return this.$store.getters["data_card/saveButtonClicked"];
     },
   },
 
   watch: {
     async saveButtonClicked() {
+      console.log("!!!");
       if (!this.$store.getters["data_card/saveButtonClicked"]) return;
       this.$refs.recaptcha.reset();
       await this.recaptchaExecute();

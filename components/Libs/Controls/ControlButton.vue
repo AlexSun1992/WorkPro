@@ -32,6 +32,9 @@ export default {
     updateValue() {
       this.clicked = true;
       if (!this.loading && !this.disabled) {
+        console.log("fieldId:", this.data.fieldId);
+        console.log("value:", this.data.name);
+        console.log("action:", this.data.name);
         this.$emit("update", {
           fieldId: this.data.fieldId,
           value: this.data.name,
