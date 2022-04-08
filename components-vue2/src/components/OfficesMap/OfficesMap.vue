@@ -192,7 +192,7 @@ export default {
   async created() {
     try {
       window.addEventListener("resize", this.onResize);
-      if (Cookies.get("coords")) {
+      if (Cookies.get("lat")) {
         await this.$store.dispatch("map/fetchRegion", {
           id: Cookies.get("kladr_id")?.substr(0, 2),
           coords: [Cookies.get("lat"), Cookies.get("lon")],
@@ -385,8 +385,8 @@ export default {
       }
     },
     async init(_, filters) {
-      let lat = +Cookies.get("lat");
-      let lon = +Cookies.get("lon");
+      let lat = Cookies.get("lat");
+      let lon = Cookies.get("lon");
       if (lat && lon) {
         this.centerCoords = [lat, lon];
       }

@@ -146,6 +146,13 @@ const cities = [
     lon: "73.3674517",
     lat: "54.9848566",
   },
+  {
+    id: 16,
+    kladr_id: "2500000100000",
+    text: "Владивосток",
+    lon: "131.882421",
+    lat: "43.116391",
+  },
 ];
 
 export default cities;
