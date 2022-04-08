@@ -5,24 +5,26 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
-      <template v-slot:label
-        ><span v-html="data.label"></span
-        ><span v-if="data.helpText">
+      <template #label>
+        <span v-html="data.label" /><span v-if="data.helpText">
           (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
-            <span v-html="data.helpText"></span></vue-easy-tooltip></span
-      ></template>
+            <span v-html="data.helpText" /></vue-easy-tooltip
+        ></span>
+      </template>
       <date-picker
         v-model="fieldValue"
         v-mask="maskTemplate"
         :disabled="!edit ? !edit : data.readonly"
         type="date"
-        valueType="DD.MM.YYYY"
+        value-type="DD.MM.YYYY"
         format="DD.MM.YYYY"
         :first-day-of-week="1"
         :lang="lang"
         :input-class="data.state === false ? `${state} is-invalid` : state"
-      ></date-picker>
-      <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
+      />
+      <p v-if="data.dangerText" class="danger-text">
+        {{ data.dangerText }}
+      </p>
       <b-form-invalid-feedback :state="data.state">
         Обязательно для заполнения
       </b-form-invalid-feedback>
@@ -35,18 +37,12 @@ import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import "vue2-datepicker/locale/ru";
 import { applyMask as _mask } from "../../../utils/utils";
+
 export default {
   name: "ControlTimestamp",
   components: { DatePicker },
   directives: {
     mask: _mask,
-  },
-  data() {
-    return {
-      lang: "ru",
-      state: "timestamp form-control",
-      maskTemplate: "##.##.####",
-    };
   },
   props: {
     data: {
@@ -60,13 +56,20 @@ export default {
       default: () => false,
     },
   },
+  data() {
+    return {
+      lang: "ru",
+      state: "timestamp form-control",
+      maskTemplate: "##.##.####",
+    };
+  },
   computed: {
     fieldValue: {
-      get: function () {
+      get() {
         return this.data.value;
       },
-      set: function (value) {
-        this.$emit("update", { fieldId: this.data.fieldId, value: value });
+      set(value) {
+        this.$emit("update", { fieldId: this.data.fieldId, value });
       },
     },
   },
