@@ -11,6 +11,15 @@
           <div :class="'menu-icon-polities'" />
           <span>{{ key }}</span>
         </a>
+        <li
+          v-if="key === 'ДМС' && loggedInUser.IDMEDPARTNER > 0"
+          class="sidebar-nav-item"
+        >
+          <a :href="url" target="blank">
+            <div :class="'menu-icon-policies'" />
+            <span>Телемедицина</span>
+          </a>
+        </li>
         <n-link
           v-for="item in value"
           :key="item.id"
@@ -27,12 +36,6 @@
           </li>
         </n-link>
       </template>
-      <li class="sidebar-nav-item">
-        <a :href="url" target="blank">
-          <div :class="'menu-icon-polities'" />
-          <span>Телемедицина</span>
-        </a>
-      </li>
       <li class="sidebar-nav-item">
         <a href="#" @click="logout()">
           <div :class="'menu-icon-exit'" />
