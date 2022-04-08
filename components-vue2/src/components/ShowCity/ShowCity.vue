@@ -109,22 +109,16 @@ export default {
     };
   },
   async created() {
-    if (
-      Cookies.get("location_user") &&
-      Cookies.get("kladr_id") &&
-      Cookies.get("lat") !== "undefined"
-    ) {
+    if (Cookies.get("location_user") && Cookies.get("kladr_id")) {
       this.kladr = Cookies.get("kladr_id");
       this.city = Cookies.get("location_user");
-      this.lat = Cookies.get("lat");
-      this.lon = Cookies.get("lon");
     } else {
       this.request = await this.$axios
         .get(`/am/free/v2/data/55/800/0/0`)
         .then((res) => {
           this.visible = true;
           if (res.data[0]._data[0].TOWN) {
-            this.city = res.data[0]._data[0].TOWN.replace(/г/gi, "");
+            this.city = res.data[0]._data[0].TOWN.replace(/^г/i, "");
             Cookies.set("location_user", this.city);
           }
           if (res.data[0]._data[0].KLADR_ID) {
@@ -133,11 +127,9 @@ export default {
           }
           if (res.data[0]._data[0].LAT) {
             this.lat = res.data[0]._data[0].LAT;
-            Cookies.set("lat", this.lat);
           }
           if (res.data[0]._data[0].LON) {
             this.lon = res.data[0]._data[0].LON;
-            Cookies.set("lon", this.lon);
           }
           if (!res.data[0]._data[0].TOWN) {
             this.city = "Москва";
@@ -149,11 +141,9 @@ export default {
           }
           if (!res.data[0]._data[0].LAT) {
             this.lat = "55.75396";
-            Cookies.set("lat", this.lat);
           }
           if (!res.data[0]._data[0].LON) {
             this.lon = "37.620393";
-            Cookies.set("lon", this.lon);
           }
           if (this.city && this.kladr) {
             this.changeCity({
@@ -174,6 +164,7 @@ export default {
       Cookies.set("location_user", this.city);
       Cookies.set("lat", this.lat);
       Cookies.set("lon", this.lon);
+
       this.changeCity({
         city: this.city,
         kladr: this.kladr,
@@ -199,6 +190,10 @@ export default {
     },
     setAutoCity(result) {
       this.visible = false;
+      this.$store.dispatch("map/setCity", {
+        city: this.city,
+        coords: [this.lat, this.lon],
+      });
       Cookies.set("kladr_id", this.kladr);
       Cookies.set("location_user", result);
     },
