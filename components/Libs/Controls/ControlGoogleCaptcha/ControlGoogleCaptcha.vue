@@ -7,6 +7,7 @@
       @verify="setToken"
       @expired="onCaptchaExpired"
     />
+
     <b-form-input v-if="false" v-model="fieldValue"></b-form-input>
   </div>
 </template>
@@ -28,9 +29,11 @@ export default {
   data() {
     return {
       token: null,
-      testMarker: false,
+      captchaHired: false,
+      isCaptchaDemanded: false,
     };
   },
+
   mounted() {
     let externalScript = document.createElement("script");
     externalScript.setAttribute(
@@ -38,6 +41,9 @@ export default {
       "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
     );
     document.head.appendChild(externalScript);
+    if (this.data) {
+      this.$refs.recaptcha.execute();
+    }
   },
 
   async updated() {
@@ -50,11 +56,9 @@ export default {
       .filter((item) => item.style.visibility === "visible");
 
     if (visibleCaptchas.length === 0) {
-      this.testMarker = true;
-      console.log(this.testMarker);
+      this.captchaHired = true;
     } else {
-      this.testMarker = false;
-      console.log(this.testMarker);
+      this.captchaHired = false;
     }
   },
 
@@ -83,24 +87,50 @@ export default {
         });
       },
     },
+
+    getData() {
+      return this.data;
+    },
+
     saveButtonClicked() {
-      console.log("!!!");
       return this.$store.getters["data_card/saveButtonClicked"];
+    },
+    saveButtonClickedAmount() {
+      return this.$store.getters["data_card/saveButtonClickedAmount"];
     },
   },
 
   watch: {
     async saveButtonClicked() {
-      console.log("!!!");
+      console.log("saveButtonClicked");
       if (!this.$store.getters["data_card/saveButtonClicked"]) return;
       this.$refs.recaptcha.reset();
       await this.recaptchaExecute();
     },
+    saveButtonClickedAmount(value) {
+      if (value !== null && this.captchaHired === true) {
+        this.$refs.recaptcha.execute();
+      }
+      if (value !== null && this.isCaptchaDemanded === true) {
+        let updateValueFunction =
+          this.$store.getters["data_card/getUpdateValueFunction"];
+
+        let event = this.$store.getters["data_card/getUpdateEvent"];
+        updateValueFunction(event);
+      }
+    },
     token() {
       this.fieldValue = this.token;
+
+      console.log(this.token);
+
       let updateValueFunction =
         this.$store.getters["data_card/getUpdateValueFunction"];
+
+      //console.log(updateValueFunction);
+
       let event = this.$store.getters["data_card/getUpdateEvent"];
+
       updateValueFunction(event);
     },
   },
