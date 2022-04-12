@@ -227,10 +227,6 @@ export default {
 
   methods: {
     fitToViewport() {
-      debugger;
-      // setTimeout(() => {
-      //   this.myMap.container.fitToViewport();
-      // }, 0);
       this.$nextTick(() => {
         this.myMap.container.fitToViewport();
       });
