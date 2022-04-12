@@ -954,6 +954,8 @@ export default {
     position: relative;
     > svg {
       position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 }
