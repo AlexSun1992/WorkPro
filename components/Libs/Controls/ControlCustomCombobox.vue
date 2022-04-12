@@ -4,25 +4,21 @@
     :class="{ required: data.required }"
     :label-for="data.name"
   >
-    <template v-slot:label
-      ><span v-html="data.label"></span
-      ><span v-if="data.helpText">
+    <template #label>
+      <span v-html="data.label" /><span v-if="data.helpText">
         (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
-          <span v-html="data.helpText"></span></vue-easy-tooltip></span
-    ></template>
-
+          <span v-html="data.helpText" /></vue-easy-tooltip
+      ></span>
+    </template>
     <model-select
       v-model="fieldValue"
       :is-disabled="!edit || data.readonly"
       :class="validClass"
       :options="data.options"
       :placeholder="data.placeholder"
-      ref="sign"
-    >
-    </model-select>
-
-    <b-form-invalid-feedback :state="data.state"
-      >{{ data.error ? data.error : "Обязательно для заполнения" }}
+    />
+    <b-form-invalid-feedback :state="data.state">
+      {{ data.error ? data.error : "Обязательно для заполнения" }}
     </b-form-invalid-feedback>
   </b-form-group>
 </template>
@@ -35,16 +31,6 @@ export default {
   components: {
     ModelSelect,
   },
-
-  data() {
-    return {
-      isRefsAlreadyExist: false,
-      visitedTimes: 1,
-      visitsAmount: [],
-      choosenFieldValue: undefined,
-    };
-  },
-
   props: {
     data: {
       type: Object,
@@ -57,35 +43,12 @@ export default {
       default: () => false,
     },
   },
-
-  mounted() {
-    if (this.$refs["sign"].showMenu !== null) {
-      this.isRefsAlreadyExist = true;
-    }
-  },
-
   computed: {
-    isDirty() {
-      if (this.isRefsAlreadyExist === true) {
-        if (this.$refs["sign"].showMenu === false) {
-          this.visitsAmount.push(this.visitedTimes);
-        }
-        if (
-          this.$refs["sign"].showMenu === false &&
-          this.visitsAmount.length > 1 &&
-          this.choosenFieldValue === undefined
-        ) {
-          return this.$refs["sign"].showMenu;
-        }
-      }
-    },
-
     fieldValue: {
-      get: function () {
+      get() {
         return this.data.value;
       },
-      set: function (value) {
-        this.choosenFieldValue = value;
+      set(value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -96,20 +59,8 @@ export default {
     validClass() {
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
-      } else {
-        return "";
       }
-    },
-  },
-  watch: {
-    isDirty(value) {
-      if (value === false) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.choosenFieldValue,
-        });
-      }
+      return "";
     },
   },
 };

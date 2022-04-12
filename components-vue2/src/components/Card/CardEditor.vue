@@ -251,7 +251,11 @@ export default {
           this.params
         );
         this.params.idCard = this.cardId || items[0].ID;
-        this.params.idRel = this.rel || items[0].REL;
+        if (this.rel !== null && this.rel !== "0") {
+          this.params.idRel = this.rel;
+        } else {
+          this.params.idRel = items[0].REL;
+        }
       } else {
         this.params.idCard = 0;
         this.params.idRel = undefined;
