@@ -315,10 +315,8 @@ export default {
     },
 
     setMouseCoords(e) {
-      console.log(e);
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
-      console.log("X=", e.clientX, "Y=", e.clientY);
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
@@ -356,7 +354,6 @@ export default {
     },
     chooseStation(e) {
       if (e.target.tagName == "use") {
-        console.log("aaa");
         this.setStatus();
         e.target.setAttribute("href", "#balloon-select");
         this.stationOffices = [];
@@ -378,12 +375,9 @@ export default {
         this.stationOffices.sort((a, b) => {
           return a.NORDER - b.NORDER;
         });
-        console.log("layerY=", e.layerY, "layerX=", e.layerX);
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + "px";
-        console.log("this.width=", this.width);
         if (e.clientX + 400 > this.width) {
-          console.log();
           this.$refs["card"].style.left = e.layerX - 375 + "px";
           /*          this.$refs["card"].style.left = this.width - 375 + "px";*/
         }
@@ -681,7 +675,7 @@ export default {
         if (e.get("item").value.includes("метро")) {
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".maps");
-          for (let i = 0; i < maps[0].children.length; i++) {
+          for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
               maps[0].children[i].dataset.station === _this.currentStation
@@ -743,13 +737,10 @@ export default {
       );
       this.myMap.geoObjects.add(this.placemark);
       this.myMap.setCenter(state.center, this.qc_geo > 2 ? zoom : 15);
-      console.log(this.qc_geo);
       this.placemark.geometry.setCoordinates(state.center);
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
-        balloonPane: "outerBalloon",
-        balloonShadowPane: "outerBalloon",
       });
     },
     showResult(obj) {
@@ -774,7 +765,6 @@ export default {
           count: 1,
         });
         this.qc_geo = this.address.data.suggestions[0].data.qc_geo;
-        console.log(this.address.data.suggestions[0].data);
         this.city = this.address.data.suggestions[0].data.city;
         if (this.address.data.suggestions.length) {
           this.regionId =
