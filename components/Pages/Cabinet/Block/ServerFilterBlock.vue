@@ -30,7 +30,6 @@
         :list="list"
         :placeholder="name"
         @update="update"
-        @mousedown="test"
         :isAutoSelectSingleRow="firstValueFromList"
         :isAutoOpenForMultipleRow="InsuredPersonsList"
       />
@@ -224,6 +223,7 @@ export default {
           filter,
         };
       }
+
       let foundedFilter = this.$store.getters["blocks/getServerFilters"].find(
         (filter) => {
           return filter.propertyName === this.queryParamName;
@@ -234,14 +234,17 @@ export default {
         this.$store.commit("blocks/updateServerFilters", {
           propertyName: this.queryParamName,
           filter: this.queryParamValue,
+          id: this.id,
+          filterIdNumber: e.data[this.id],
         });
       } else {
         this.$store.commit("blocks/setServerFilters", filterObj);
-        if (this.id && e.data[this.id])
+        if (this.id && e.data[this.id]) {
           this.$store.commit("blocks/setServerFilters", {
             propertyName: this.id,
             filter: e.data[this.id].toString(),
           });
+        }
       }
     },
 
@@ -254,9 +257,11 @@ export default {
       this.queryParamValue = e.value;
       this.visible = false;
       this.setFilter(e);
+
       let query = {
         [this.queryParamName]: this.queryParamValue,
       };
+
       if (this.$store.getters["blocks/getServerFilters"].length > 1) {
         query = {
           filters: JSON.stringify(
@@ -264,13 +269,11 @@ export default {
           ),
         };
       }
+
       this.$store.dispatch("blocks/fetchBlock", {
         id: this.$route.params.idItem,
         query,
       });
-    },
-    test() {
-      console.log("!!");
     },
   },
 };

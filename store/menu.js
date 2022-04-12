@@ -24,7 +24,8 @@ export const getters = {
   },
   getMenuWithOutIcon: (state) => {
     return state.menu[0].children.filter(
-      (m) => m.iconFileName !== undefined && m.iconFileName !== ""
+      (m) =>
+        m.iconFileName !== undefined && m.iconFileName !== "" && m.isVisible
     );
   },
 };

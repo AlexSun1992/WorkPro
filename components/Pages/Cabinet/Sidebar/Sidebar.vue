@@ -1,51 +1,63 @@
 <template>
   <div class="sidebar_client">
-    <header-user-name :user-data="userInfo"></header-user-name>
-
+    <header-user-name :user-data="userInfo" />
     <ul class="sidebar-nav justify-content-center">
-      <n-link
-        v-for="item in navItems"
-        :key="item.id"
-        :to="item.url"
-        v-slot="{ href, route, navigate, isActive, isExactActive }"
-      >
-        <li :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'">
-          <a :href="href" @click="navigate">
-            <div :class="'menu-icon-' + item.iconFileName"></div>
-            <span>{{ item.name }}</span>
+      <template v-for="(value, key) in groupMenuItems">
+        <a
+          v-if="key != 'undefined'"
+          href="#"
+          style="color: grey; text-align: center"
+        >
+          <div :class="'menu-icon-polities'" />
+          <span>{{ key }}</span>
+        </a>
+        <li
+          v-if="key === 'ДМС' && loggedInUser.IDMEDPARTNER > 0"
+          class="sidebar-nav-item"
+        >
+          <a :href="url" target="blank">
+            <div :class="'menu-icon-policies'" />
+            <span>Телемедицина</span>
           </a>
         </li>
-      </n-link>
-      <li class="sidebar-nav-item">
-        <a :href="url" target="blank">
-          <div :class="'menu-icon-polities'"></div>
-          <span>Телемедицина</span>
-        </a>
-      </li>
+        <n-link
+          v-for="item in value"
+          :key="item.id"
+          v-slot="{ href, navigate, isActive }"
+          :to="item.url"
+        >
+          <li
+            :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'"
+          >
+            <a :href="href" @click="navigate">
+              <div :class="'menu-icon-' + item.iconFileName" />
+              <span>{{ item.name }}</span>
+            </a>
+          </li>
+        </n-link>
+      </template>
       <li class="sidebar-nav-item">
         <a href="#" @click="logout()">
-          <div :class="'menu-icon-exit'"></div>
+          <div :class="'menu-icon-exit'" />
           <span>Выйти</span>
         </a>
       </li>
     </ul>
 
     <button
-      v-on:click="minimizeMenu"
       class="sidebar-minimizer"
-      v-bind:class="{ 'position-absolute': endScrollMenu }"
-    ></button>
+      :class="{ 'position-absolute': endScrollMenu }"
+      @click="minimizeMenu"
+    />
 
-    <button
-      v-on:click="minimizeMobileMenu"
-      class="sidebar-mobile_close"
-    ></button>
+    <button class="sidebar-mobile_close" @click="minimizeMobileMenu" />
   </div>
 </template>
 
 <script>
-import HeaderUserName from "../Header/HeaderUserName";
 import { mapGetters } from "vuex";
+import HeaderUserName from "../Header/HeaderUserName";
+
 export default {
   name: "Sidebar",
   components: { HeaderUserName },
@@ -100,18 +112,19 @@ export default {
         console.log(e);
       }
     },
-    /* test() {
-      const tokenKey = this.$auth.$storage._state["_token.local"].replace(
-        "Bearer ",
-        ""
-      );
-      // const url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
-      return tokenKey;
-    }, */
   },
 
   computed: {
     ...mapGetters(["isAuthenticated", "loggedInUser"]),
+    groupMenuItems() {
+      const groups = this.navItems.reduce((acc, item) => {
+        const group = acc[item.groupmenu] || [];
+        group.push(item);
+        acc[item.groupmenu] = group;
+        return acc;
+      }, {});
+      return groups;
+    },
   },
 
   mounted() {

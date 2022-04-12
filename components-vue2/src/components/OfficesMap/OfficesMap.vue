@@ -59,6 +59,7 @@
         title="На карте"
         title-item-class="office-on-map"
         content-class="maps-block"
+        @click="fitToViewport"
       >
         <div ref="map" id="map" class="map"></div>
       </b-tab>
@@ -132,6 +133,7 @@ import { BTabs, BTab, BButtonGroup, BButton } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import { BPagination } from "bootstrap-vue";
+import Cookies from "js-cookie";
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
@@ -191,10 +193,17 @@ export default {
   async created() {
     try {
       window.addEventListener("resize", this.onResize);
-      await this.$store.dispatch("map/fetchRegion", {
-        id: this.$store.getters["map/getDefaultRegion"],
-        coords: this.$store.getters["map/getDefaultCoords"],
-      });
+      if (Cookies.get("lat")) {
+        await this.$store.dispatch("map/fetchRegion", {
+          id: Cookies.get("kladr_id")?.substr(0, 2),
+          coords: [Cookies.get("lat"), Cookies.get("lon")],
+        });
+      } else {
+        await this.$store.dispatch("map/fetchRegion", {
+          id: this.$store.getters["map/getDefaultRegion"],
+          coords: this.$store.getters["map/getDefaultCoords"],
+        });
+      }
       await this.$loadScript(
         `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
       ).then(() => {
@@ -206,11 +215,22 @@ export default {
       console.log(error);
     }
   },
+  mounted() {
+    window.document.addEventListener("on_city_change", () => {
+      console.log("city changed");
+    });
+  },
+
   destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
 
   methods: {
+    fitToViewport() {
+      this.$nextTick(() => {
+        this.myMap.container.fitToViewport();
+      });
+    },
     onResize() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
@@ -371,6 +391,12 @@ export default {
       }
     },
     async init(_, filters) {
+      let lat = Cookies.get("lat");
+      let lon = Cookies.get("lon");
+      if (lat && lon) {
+        this.centerCoords = [lat, lon];
+      }
+
       this.initSuggestView();
       let agencies = this.$store.getters["map/getRegionOffices"];
       if (filters) {
@@ -428,7 +454,7 @@ export default {
 
       this.myMap.geoObjects.events.add("balloonclose", (e) => {
         const target = e.get("target");
-        target.options.set(
+        target?.options.set(
           "iconImageHref",
           "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
         );
@@ -668,25 +694,34 @@ export default {
     },
 
     async setPositionAttributes() {
-      let geolocation = await ymaps.geolocation.get();
-      if (geolocation) {
-        let query = this.suggest
-          ? this.suggest
-          : geolocation.geoObjects.get(0).properties.get("text");
-        this.centerCoords = geolocation.geoObjects.position;
-        try {
-          this.address = await this.$axios.post("/api/suggestions/address", {
-            query,
-            count: 1,
-          });
-          if (this.address.data.suggestions.length) {
-            this.regionId =
-              this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
-            this.city = this.address.data.suggestions[0].data.city;
+      let lat = +Cookies.get("lat");
+      if (!lat) {
+        let geolocation = await ymaps.geolocation.get();
+        if (geolocation) {
+          let query = this.suggest
+            ? this.suggest
+            : geolocation.geoObjects.get(0).properties.get("text");
+          this.centerCoords = geolocation.geoObjects.position;
+          try {
+            this.address = await this.$axios.post("/api/suggestions/address", {
+              query,
+              count: 1,
+            });
+            if (this.address.data.suggestions.length) {
+              this.regionId =
+                this.address.data.suggestions[0].data.city_kladr_id.substr(
+                  0,
+                  2
+                );
+              this.city = this.address.data.suggestions[0].data.city;
+            }
+          } catch (e) {
+            console.log(e);
           }
-        } catch (e) {
-          console.log(e);
         }
+      } else {
+        this.city = Cookies.get("location_user");
+        this.regionId = Cookies.get("kladr_id")?.substr(0, 2);
       }
     },
     updateMap(state, caption, zoom = 12, visibility) {
@@ -728,7 +763,7 @@ export default {
       ].join(" ");
       this.updateMap(this.mapState, shortAddress);
     },
-    async showOnMap(suggest) {
+    async showOnMap(suggest, coords) {
       this.suggest = suggest;
       try {
         this.address = await this.$axios.post("/api/suggestions/address", {
@@ -741,7 +776,7 @@ export default {
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
           await this.$store.dispatch("map/fetchRegion", {
             id: this.regionId,
-            coords: this.centerCoords,
+            coords: coords ? coords : this.centerCoords,
           });
         } else {
           this.regionId = null;
@@ -788,6 +823,9 @@ export default {
     },
   },
   computed: {
+    cityData() {
+      return this.$store.getters["map/getCity"];
+    },
     getOfficesByCity() {
       return this.$store.getters["map/getRegionOffices"]?.filter((office) => {
         return office.SADDRESS.includes(`${this.city}`);
@@ -894,6 +932,15 @@ export default {
 
     tabVisible() {
       return this.regionId == 77 || this.regionId == 78;
+    },
+  },
+
+  watch: {
+    cityData() {
+      this.showOnMap(
+        this.$store.getters["map/getCity"]?.city,
+        this.$store.getters["map/getCity"]?.coords
+      );
     },
   },
 };

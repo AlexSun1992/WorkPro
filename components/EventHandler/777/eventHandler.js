@@ -1,4 +1,82 @@
 async function eventHandler(fields, action, func) {
+  function findVisibleDrivers() {
+    const driverFieldNames = [
+      `DL_BUTTON_`,
+      `NDR_AGE_`,
+      `NDR_EXPERIENCE_`,
+      `NDR_NO_CRASH_`,
+    ];
+    return fields.filter((item) =>
+      driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.visible)
+    );
+  }
+
+  function findDrivers() {
+    const driverFieldNames = [
+      `DL_BUTTON_`,
+      `NDR_AGE_`,
+      `NDR_EXPERIENCE_`,
+      `NDR_NO_CRASH_`,
+    ];
+    return fields.filter((item) =>
+      driverFieldNames.find((n) => item.name.indexOf(n) >= 0)
+    );
+  }
+
+  function getVisibleDriversCount() {
+    return fields
+      .filter((item) => item.name.includes("NDR_AGE"))
+      .filter((item) => item.visible).length;
+  }
+
+  function getDriversCount() {
+    return fields.filter((item) => item.name.includes("NDR_AGE")).length;
+  }
+
+  /**
+   * Поиск полей водителя
+   * @param {number} driverId
+   * @returns { import("./configurator.service.55-777.types").Field777[] }
+   */
+
+  function findDriver(driverId) {
+    const driverFieldNames = [
+      `DL_BUTTON_${driverId}`,
+      `NDR_AGE_${driverId}`,
+      `NDR_EXPERIENCE_${driverId}`,
+      `NDR_NO_CRASH_${driverId}`,
+    ];
+    return fields.filter((item) => driverFieldNames.includes(item.name));
+  }
+
+  function showDrivers() {
+    const driverFieldNames = [
+      `DL_BUTTON_`,
+      `NDR_AGE_`,
+      `NDR_EXPERIENCE_`,
+      `NDR_NO_CRASH_`,
+    ];
+    let drivers = [];
+    fields
+      .filter((item) =>
+        driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.value)
+      )
+      .forEach((i) => {
+        drivers = [
+          ...new Set(
+            drivers.concat(
+              findDriver(
+                i.name.split(
+                  driverFieldNames.find((n) => i.name.indexOf(n) >= 0)
+                )[1]
+              )
+            )
+          ),
+        ];
+      });
+    return drivers;
+  }
+
   function findField(name) {
     const field = fields.find((item) => item.name === name);
     if (field) {
@@ -59,23 +137,21 @@ async function eventHandler(fields, action, func) {
   const errRegNumNotFound = findField("input_label_err_regnum_not_fou");
   const errRegNumNotFoundMob = findField("input_label_Nmber_err_N_F");
   const labelRegNumb = findField("input_label");
-  const labelRegNumb_Number = findField("input_label_Nmber");
-  const crash_years = findField("NNO_CRASH_YEARS");
-  const calculate_btn = findField("Item36585");
+  const labelRegNumber = findField("input_label_Nmber");
+  const crashYears = findField("NNO_CRASH_YEARS");
+  const calculateBtn = findField("Item36585");
   const captcha = findField(`CAPTCHA`);
-  const reg_number_title = findField("z_one");
-  const owner_title = findField("z-two");
-  const car_title = findField("z-three");
-  const drivers_title = findField("z-four");
-  const add_driver = findField(`ADD_DRIVER`);
+  const regTumberTitle = findField("z_one");
+  const ownerTitle = findField("z-two");
+  const carTitle = findField("z-three");
+  const driversTitle = findField("z-four");
+  const addDriver = findField(`ADD_DRIVER`);
   const emptyFive = findField("empty-5");
   const price = findField("NPRICE");
 
   let autoInfo = null;
 
   const url = new URL("/free/v2/osago/findAuto", window.location);
-
-  let regNumberForm = [regNumber, checkNotRegNumber, calculatePolis];
 
   let checkNotRegNumberForm = [
     citySettlement,
@@ -92,10 +168,10 @@ async function eventHandler(fields, action, func) {
     emptyField3,
     fillInmanually,
     calculatePolis,
-    calculate_btn,
-    owner_title,
-    car_title,
-    drivers_title,
+    calculateBtn,
+    ownerTitle,
+    carTitle,
+    driversTitle,
     emptyFive,
   ];
 
@@ -109,10 +185,10 @@ async function eventHandler(fields, action, func) {
 
   regNumber.readonly = Boolean(checkNotRegNumber.value);
 
-  let checkDriversForm = [crash_years, add_driver];
+  let checkDriversForm = [crashYears, addDriver];
 
   if (driverType.value == 1) {
-    checkNotRegNumberForm.push(crash_years);
+    checkNotRegNumberForm.push(crashYears);
     checkDriversForm = checkDriversForm.concat(
       showDrivers().length ? showDrivers() : findDriver(1)
     );
@@ -125,7 +201,7 @@ async function eventHandler(fields, action, func) {
 
   if (driverType.value == 2) {
     checkNotRegNumberForm = checkNotRegNumberForm.concat(drivers);
-    checkNotRegNumberForm.push(add_driver);
+    checkNotRegNumberForm.push(addDriver);
     checkDriversForm = checkDriversForm.concat(drivers);
 
     if (drivers.length === 4) {
@@ -147,56 +223,6 @@ async function eventHandler(fields, action, func) {
     }
   }
 
-  function findVisibleDrivers() {
-    const driverFieldNames = [
-      `DL_BUTTON_`,
-      `NDR_AGE_`,
-      `NDR_EXPERIENCE_`,
-      `NDR_NO_CRASH_`,
-    ];
-    return fields.filter((item) =>
-      driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.visible)
-    );
-  }
-  function findDrivers() {
-    const driverFieldNames = [
-      `DL_BUTTON_`,
-      `NDR_AGE_`,
-      `NDR_EXPERIENCE_`,
-      `NDR_NO_CRASH_`,
-    ];
-    return fields.filter((item) =>
-      driverFieldNames.find((n) => item.name.indexOf(n) >= 0)
-    );
-  }
-  function showDrivers() {
-    const driverFieldNames = [
-      `DL_BUTTON_`,
-      `NDR_AGE_`,
-      `NDR_EXPERIENCE_`,
-      `NDR_NO_CRASH_`,
-    ];
-    let drivers = [];
-    fields
-      .filter((item) =>
-        driverFieldNames.find((n) => item.name.indexOf(n) >= 0 && item.value)
-      )
-      .forEach((i) => {
-        drivers = [
-          ...new Set(
-            drivers.concat(
-              findDriver(
-                i.name.split(
-                  driverFieldNames.find((n) => i.name.indexOf(n) >= 0)
-                )[1]
-              )
-            )
-          ),
-        ];
-      });
-    return drivers;
-  }
-
   if (action.name === "LCHECKREGNUMBER") {
     if (!vehicleModel.visible) {
       regNumber.value = "";
@@ -207,8 +233,11 @@ async function eventHandler(fields, action, func) {
       invertPropertyElements(checkNotRegNumberForm, "visible");
     }
     if (!action.value) {
-      calculate_btn.visible = false;
+      calculateBtn.visible = false;
       captcha.visible = false;
+    }
+    if (drivers.length === 20) {
+      addDriver.visible = false;
     }
   }
 
@@ -223,10 +252,14 @@ async function eventHandler(fields, action, func) {
   if (action.name === "NDRIVER_TYPE" && action.value === "1") {
     invertPropertyElements(checkDriversForm, "visible");
     changeElements(findVisibleDrivers(), "visible", false);
+    addDriver.visible = false;
   }
 
   if (action.name === "NDRIVER_TYPE" && action.value === "2") {
     invertPropertyElements(checkDriversForm, "visible");
+    if (drivers.length === 20) {
+      addDriver.visible = false;
+    }
   }
 
   const showErrorFunc = (...params) => {
@@ -245,42 +278,43 @@ async function eventHandler(fields, action, func) {
     params.forEach((el) => (el.visible = false));
   };
 
-  if (action.value === "SCALCULATEPOLIS") {
-    function convertRusToRESO(regNumber) {
-      const ruLatLetters = {
-        А: "A",
-        В: "B",
-        Е: "E",
-        К: "K",
-        М: "M",
-        Н: "N",
-        О: "O",
-        Р: "P",
-        С: "C",
-        Т: "T",
-        У: "Y",
-        Х: "X",
-      };
-      let resStr = "";
-      regNumber
-        .split("")
-        .forEach((_, i) =>
-          ruLatLetters[regNumber[i]]
-            ? (resStr += ruLatLetters[regNumber[i]])
-            : (resStr += regNumber[i])
-        );
-      return resStr;
-    }
+  function convertRusToRESO(regNumberString) {
+    const ruLatLetters = {
+      А: "A",
+      В: "B",
+      Е: "E",
+      К: "K",
+      М: "M",
+      Н: "N",
+      О: "O",
+      Р: "P",
+      С: "C",
+      Т: "T",
+      У: "Y",
+      Х: "X",
+    };
+    let resStr = "";
+    regNumberString.split("").forEach((_, i) => {
+      if (ruLatLetters[regNumberString[i]]) {
+        resStr += ruLatLetters[regNumberString[i]];
+      } else {
+        resStr += regNumberString[i];
+      }
+    });
+    return resStr;
+  }
 
-    async function getInfo(regNumberValue) {
-      url.searchParams.set("REG_NUMBER", convertRusToRESO(regNumberValue));
-      const dataAuto = await func(url.href);
-      return dataAuto;
-    }
+  async function getInfo(regNumberValue) {
+    url.searchParams.set("REG_NUMBER", convertRusToRESO(regNumberValue));
+    const dataAuto = await func(url.href);
+    return dataAuto;
+  }
+
+  if (action.value === "SCALCULATEPOLIS") {
     if (regNumber.value) {
       autoInfo = regNumber.value ? await getInfo(regNumber.value) : [];
       if (!!autoInfo && autoInfo.length > 0) {
-        showLabelFunc(labelRegNumb, labelRegNumb_Number);
+        showLabelFunc(labelRegNumb, labelRegNumber);
         hideErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
         vehicleModel.value = `${autoInfo[0].BRAND_MODEL_MODIFICATION}|${autoInfo[0].MAKE_MODEL}`;
         vehicleModel.state = true;
@@ -296,7 +330,7 @@ async function eventHandler(fields, action, func) {
         khVeiclePower.error = null;
       } else {
         showErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
-        hideLabelFunc(labelRegNumb, labelRegNumb_Number);
+        hideLabelFunc(labelRegNumb, labelRegNumber);
         vehicleModel.value = "";
         vehicleModel.state = null;
         yearVehicle.value = null;
@@ -321,7 +355,7 @@ async function eventHandler(fields, action, func) {
   const minAgeDriver = 18;
   const maxAgeDriver = 99;
 
-  const isValidAge = function ({ age, min, max }) {
+  function isValidAge({ age, min, max }) {
     let isValid = false;
     if (age !== undefined && age !== null && age !== "") {
       if (age >= min && age <= max) {
@@ -329,14 +363,14 @@ async function eventHandler(fields, action, func) {
       }
     }
     return isValid;
-  };
+  }
 
-  const isValidExperience = function ({ age, experience }) {
+  function isValidExperience({ age, experience }) {
     let isValid = false;
     if (experience !== undefined && experience !== null && experience !== "") {
       if (
         isValidAge({
-          age: age,
+          age,
           min: minAgeDriver,
           max: maxAgeDriver,
         }) === true
@@ -344,14 +378,12 @@ async function eventHandler(fields, action, func) {
         if (experience <= age - minAgeDriver) {
           isValid = true;
         }
-      } else {
-        if (experience <= maxAgeDriver - minAgeDriver) {
-          isValid = true;
-        }
+      } else if (experience <= maxAgeDriver - minAgeDriver) {
+        isValid = true;
       }
     }
     return isValid;
-  };
+  }
 
   function setFields({ fieldName }) {
     const field = fields.find((f) => f.name === fieldName);
@@ -393,11 +425,9 @@ async function eventHandler(fields, action, func) {
         ) {
           fieldExperience.state = true;
           delete fieldExperience.error;
-        } else {
-          if (fieldExperience.state !== null) {
-            fieldExperience.state = false;
-            fieldExperience.error = "Некорректное значение";
-          }
+        } else if (fieldExperience.state !== null) {
+          fieldExperience.state = false;
+          fieldExperience.error = "Некорректное значение";
         }
       }
     }
@@ -487,30 +517,12 @@ async function eventHandler(fields, action, func) {
     setFields({ fieldName: action.name });
   }
 
-  /**
-   * Поиск полей водителя
-   * @param {number} driverId
-   * @returns { import("./configurator.service.55-777.types").Field777[] }
-   */
-
-  function findDriver(driverId) {
-    const driverFieldNames = [
-      `DL_BUTTON_${driverId}`,
-      `NDR_AGE_${driverId}`,
-      `NDR_EXPERIENCE_${driverId}`,
-      `NDR_NO_CRASH_${driverId}`,
-    ];
-    return fields.filter((item) => driverFieldNames.includes(item.name));
-  }
-
   if (
     action.name === `NOWNER_AGE` &&
     findField("NDR_AGE_1").visible === true &&
     findField("NDR_AGE_1").value === undefined &&
     findField("NDRIVER_TYPE").value == "2"
   ) {
-    const visibleDriversCount = getVisibleDriversCount();
-
     if (
       func !== null &&
       typeof func !== "function" &&
@@ -529,7 +541,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience >= 10) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 13
+          (item) => item.SCLASS === "13"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -538,7 +550,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 9) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 12
+          (item) => item.SCLASS === "12"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -547,7 +559,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 8) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 11
+          (item) => item.SCLASS === "11"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -556,7 +568,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 7) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 10
+          (item) => item.SCLASS === "10"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -565,7 +577,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 6) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 9
+          (item) => item.SCLASS === "9"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -574,7 +586,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 5) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 8
+          (item) => item.SCLASS === "8"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -583,7 +595,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 4) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 7
+          (item) => item.SCLASS === "7"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -592,7 +604,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 3) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 6
+          (item) => item.SCLASS === "6"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -601,7 +613,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 2) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 5
+          (item) => item.SCLASS === "5"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -610,7 +622,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 1) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 4
+          (item) => item.SCLASS === "4"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -619,7 +631,7 @@ async function eventHandler(fields, action, func) {
 
       if (currentExperience === 0) {
         const result = findField("NDR_NO_CRASH_1").options.filter(
-          (item) => item.value === 3
+          (item) => item.SCLASS === "3"
         );
         findField("NDR_NO_CRASH_1").value = result[0].value;
         findField("NDR_NO_CRASH_1").state = true;
@@ -706,16 +718,6 @@ async function eventHandler(fields, action, func) {
     findDriver(driverId).forEach((item) => {
       item.visible = true;
     });
-  }
-
-  function getVisibleDriversCount() {
-    return fields
-      .filter((item) => item.name.includes("NDR_AGE"))
-      .filter((item) => item.visible).length;
-  }
-
-  function getDriversCount() {
-    return fields.filter((item) => item.name.includes("NDR_AGE")).length;
   }
 
   if ("action" in action) {
@@ -806,7 +808,7 @@ async function eventHandler(fields, action, func) {
     findField("NHORSE_VEHICLE_POWER").error = "Мощность не указана";
   }
 
-  /////Обработка по "Рассчитать ОСАГО"
+  // Обработка по "Рассчитать ОСАГО"
 
   if (action.value === "Item36585") {
     if (findField("SVEHICLE_MODEL").value === undefined) {
@@ -832,7 +834,7 @@ async function eventHandler(fields, action, func) {
     }
   }
 
-  crash_years.visible = false;
+  crashYears.visible = false;
   return fields;
 }
 
