@@ -188,6 +188,7 @@ export default {
       perPage: 3,
       currentPage: 1,
       height: window.innerHeight,
+      qc_geo: null,
     };
   },
   async created() {
@@ -214,11 +215,6 @@ export default {
     } catch (error) {
       console.log(error);
     }
-  },
-  mounted() {
-    window.document.addEventListener("on_city_change", () => {
-      console.log("city changed");
-    });
   },
 
   destroyed() {
@@ -740,7 +736,8 @@ export default {
         }
       );
       this.myMap.geoObjects.add(this.placemark);
-      this.myMap.setCenter(state.center, zoom);
+      this.myMap.setCenter(state.center, this.qc_geo > 2 ? zoom : 15);
+      console.log(this.qc_geo);
       this.placemark.geometry.setCoordinates(state.center);
       this.placemark.properties.set({
         iconCaption: caption,
@@ -770,6 +767,8 @@ export default {
           query: suggest,
           count: 1,
         });
+        this.qc_geo = this.address.data.suggestions[0].data.qc_geo;
+        console.log(this.address.data.suggestions[0].data);
         this.city = this.address.data.suggestions[0].data.city;
         if (this.address.data.suggestions.length) {
           this.regionId =
