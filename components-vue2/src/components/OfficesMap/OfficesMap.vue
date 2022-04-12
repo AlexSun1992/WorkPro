@@ -954,7 +954,9 @@ export default {
   & > div {
     position: relative;
     > svg {
-      position: absolute;
+      margin: 0 auto;
+      display: block;
+      position: relative;
     }
   }
 }
