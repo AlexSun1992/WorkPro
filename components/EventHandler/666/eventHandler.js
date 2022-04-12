@@ -19,6 +19,7 @@ function eventHandler(fields, action, func) {
     // console.log("afterSave");
     // console.log(action);
     // console.log(fields);
+    // findField(`Item36918`).checked;
     // findField("SCAPTCHA").execute();
   }
 

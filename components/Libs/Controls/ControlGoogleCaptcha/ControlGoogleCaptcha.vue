@@ -7,7 +7,6 @@
       @verify="setToken"
       @expired="onCaptchaExpired"
     />
-
     <b-form-input v-if="false" v-model="fieldValue"></b-form-input>
   </div>
 </template>
@@ -30,7 +29,6 @@ export default {
     return {
       token: null,
       captchaHired: false,
-      isCaptchaDemanded: false,
     };
   },
 
@@ -41,15 +39,13 @@ export default {
       "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
     );
     document.head.appendChild(externalScript);
-    if (this.data) {
-      this.$refs.recaptcha.execute();
-    }
+
+    // if (this.data) {
+    //   console.log("data:", this.data);
+    // }
   },
 
   async updated() {
-    // if (this.$store.getters["data_card/saveButtonClicked"] === true) {
-    //   this.$refs.recaptcha.execute();
-    // }
     await isCaptchaBecomesHide();
     const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
       .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
@@ -64,6 +60,7 @@ export default {
 
   methods: {
     setToken(token) {
+      console.log("setToken:", token);
       this.token = token;
       this.$store.commit("data_card/setRecaptchaToken", this.token);
     },
@@ -101,8 +98,8 @@ export default {
   },
 
   watch: {
-    async saveButtonClicked() {
-      console.log("saveButtonClicked");
+    async saveButtonClicked(value) {
+      console.log(value);
       if (!this.$store.getters["data_card/saveButtonClicked"]) return;
       this.$refs.recaptcha.reset();
       await this.recaptchaExecute();
@@ -111,24 +108,18 @@ export default {
       if (value !== null && this.captchaHired === true) {
         this.$refs.recaptcha.execute();
       }
-      if (value !== null && this.isCaptchaDemanded === true) {
-        let updateValueFunction =
-          this.$store.getters["data_card/getUpdateValueFunction"];
-
-        let event = this.$store.getters["data_card/getUpdateEvent"];
-        updateValueFunction(event);
+      if (value) {
+        this.$refs.recaptcha.execute();
       }
     },
     token() {
+      console.log("watcher token");
+      console.log("fieldValue: до обновления:", this.fieldValue);
       this.fieldValue = this.token;
-
-      console.log(this.token);
+      console.log("fieldValue:после обновления:", this.fieldValue);
 
       let updateValueFunction =
         this.$store.getters["data_card/getUpdateValueFunction"];
-
-      //console.log(updateValueFunction);
-
       let event = this.$store.getters["data_card/getUpdateEvent"];
 
       updateValueFunction(event);
@@ -138,3 +129,4 @@ export default {
 </script>
 
 <style scoped></style>
+s
