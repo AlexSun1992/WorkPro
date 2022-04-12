@@ -315,8 +315,10 @@ export default {
     },
 
     setMouseCoords(e) {
+      console.log(e);
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
+      console.log("X=", e.clientX, "Y=", e.clientY);
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
@@ -354,6 +356,7 @@ export default {
     },
     chooseStation(e) {
       if (e.target.tagName == "use") {
+        console.log("aaa");
         this.setStatus();
         e.target.setAttribute("href", "#balloon-select");
         this.stationOffices = [];
@@ -375,11 +378,14 @@ export default {
         this.stationOffices.sort((a, b) => {
           return a.NORDER - b.NORDER;
         });
-
+        console.log("layerY=", e.layerY, "layerX=", e.layerX);
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + "px";
-        if (parseInt(this.$refs["card"].style.left) + 375 > this.width) {
-          this.$refs["card"].style.left = this.width - 375 + "px";
+        console.log("this.width=", this.width);
+        if (e.clientX + 400 > this.width) {
+          console.log();
+          this.$refs["card"].style.left = e.layerX - 375 + "px";
+          /*          this.$refs["card"].style.left = this.width - 375 + "px";*/
         }
         if (parseInt(this.$refs["card"].style.top) + 640 > this.height) {
           this.$refs["card"].style.top = this.height - 640 + "px";
