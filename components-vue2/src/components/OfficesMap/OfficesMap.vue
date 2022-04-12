@@ -189,6 +189,7 @@ export default {
       currentPage: 1,
       height: window.innerHeight,
       qc_geo: null,
+      isMetroSuggest: false,
     };
   },
   async created() {
@@ -672,7 +673,9 @@ export default {
       let _this = this;
       func._this = this;
       function func(e) {
+        _this.isMetroSuggest = false;
         if (e.get("item").value.includes("метро")) {
+          _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".maps");
           for (let i = 0; i < maps[0]?.children.length; i++) {
@@ -736,7 +739,10 @@ export default {
         }
       );
       this.myMap.geoObjects.add(this.placemark);
-      this.myMap.setCenter(state.center, this.qc_geo > 2 ? zoom : 15);
+      this.myMap.setCenter(
+        state.center,
+        this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
+      );
       this.placemark.geometry.setCoordinates(state.center);
       this.placemark.properties.set({
         iconCaption: caption,
