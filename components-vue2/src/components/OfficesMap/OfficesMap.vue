@@ -953,9 +953,9 @@ export default {
   & > div {
     position: relative;
     > svg {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      margin: 0 auto;
+      display: block;
+      position: relative;
     }
   }
 }
