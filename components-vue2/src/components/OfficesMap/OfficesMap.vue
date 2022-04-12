@@ -725,7 +725,6 @@ export default {
       }
     },
     updateMap(state, caption, zoom = 12, visibility) {
-      debugger;
       this.placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
@@ -741,7 +740,7 @@ export default {
         }
       );
       this.myMap.geoObjects.add(this.placemark);
-      this.myMap.setCenter(state.center, 15);
+      this.myMap.setCenter(state.center, zoom);
       this.placemark.geometry.setCoordinates(state.center);
       this.placemark.properties.set({
         iconCaption: caption,
@@ -954,9 +953,7 @@ export default {
   & > div {
     position: relative;
     > svg {
-      margin: 0 auto;
-      display: block;
-      position: relative;
+      position: absolute;
     }
   }
 }
