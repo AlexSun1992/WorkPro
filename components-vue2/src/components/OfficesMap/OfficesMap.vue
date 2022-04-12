@@ -59,6 +59,7 @@
         title="На карте"
         title-item-class="office-on-map"
         content-class="maps-block"
+        @click="fitToViewport"
       >
         <div ref="map" id="map" class="map"></div>
       </b-tab>
@@ -225,6 +226,15 @@ export default {
   },
 
   methods: {
+    fitToViewport() {
+      debugger;
+      // setTimeout(() => {
+      //   this.myMap.container.fitToViewport();
+      // }, 0);
+      this.$nextTick(() => {
+        this.myMap.container.fitToViewport();
+      });
+    },
     onResize() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
