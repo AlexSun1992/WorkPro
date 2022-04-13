@@ -33,7 +33,6 @@
         </div>
       </div>
     </div>
-    {{ getLoading }}
     <div v-show="getOffices && getOffices.length == 0 && !getLoading">
       <div class="row search-result-row">
         <div class="col-md-12 col-12 search-results">
