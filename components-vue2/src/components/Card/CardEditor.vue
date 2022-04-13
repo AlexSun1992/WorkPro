@@ -109,6 +109,8 @@ export default {
       isButtonDisabled: false,
       isSaving: false,
       isShowButtonSave: false,
+      isCaptchaNeeded: null,
+      captchaIsDemandedNow: false,
     };
   },
   async created() {
@@ -166,6 +168,9 @@ export default {
       return () =>
         import(`/../components/EventHandler/${this.menuId}/eventHandler`);
     },
+    isCaptchaNeededCheck() {
+      return this.isCaptchaNeeded;
+    },
   },
   methods: {
     async loadScript() {
@@ -208,7 +213,7 @@ export default {
       }
       return valid;
     },
-    async saveCard(e = {}) {
+    async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
 
       const isReCapthcaNeededBeforeSave = await this.eventHandler(
