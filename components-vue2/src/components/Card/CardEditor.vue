@@ -217,12 +217,10 @@ export default {
     async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
 
-      const beforeSaveFields = await this.eventHandler(
+      const isReCapthcaNeededBeforeSave = await this.eventHandler(
         this.getForm.map((a) => ({ ...a })),
         e
-      ).find((item) => item.name === "SCAPTCHA").visible;
-
-      const isReCapthcaNeededBeforeSave = beforeSaveFields;
+      ).find((item) => item.name === "SCAPTCHA")?.visible;
 
       if (this.validateData(this.getForm)) {
         this.isShowSavedError = false;
@@ -245,12 +243,10 @@ export default {
             zone: this.zone,
           });
 
-          const afterSaveFields = await this.eventHandler(
+          const isReCapthcaNeededAfterSave = await this.eventHandler(
             this.getForm.map((a) => ({ ...a })),
             e
-          ).find((item) => item.name === "SCAPTCHA").visible;
-
-          const isReCapthcaNeededAfterSave = afterSaveFields;
+          ).find((item) => item.name === "SCAPTCHA")?.visible;
 
           if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
             await this.callScript(e, "beforeSave");
@@ -258,6 +254,7 @@ export default {
             this.isCaptchaNeeded = true;
             return;
           }
+
           await this.callScript(e, "afterSave");
         }
       }
@@ -362,7 +359,7 @@ export default {
     },
   },
   watch: {
-    isCaptchaNeededCheck(value) {
+    isCaptchaNeededCheck() {
       this.$store.commit("data_card/saveButtonClicked", true);
       this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
       this.$store.commit("data_card/setUpdateValueFunction", this.updateValue);
