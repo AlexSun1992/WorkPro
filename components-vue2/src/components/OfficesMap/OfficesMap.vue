@@ -33,8 +33,7 @@
         </div>
       </div>
     </div>
-
-    <div v-show="getOffices && getOffices.length == 0">
+    <div v-show="getOffices && getOffices.length == 0 && !getLoading">
       <div class="row search-result-row">
         <div class="col-md-12 col-12 search-results">
           <div class="search-no-result">
@@ -72,13 +71,13 @@
         <div class="metrowrapper">
           <div>
             <Mosmetro ref="metro" @click="chooseStation" />
-            <div v-show="cardVisible" ref="card" class="card">
-              <metro-office-card
-                @open="openOnMap"
-                @close="closeCard"
-                :offices="stationOffices"
-              />
-            </div>
+          </div>
+          <div v-show="cardVisible" ref="card" class="card">
+            <metro-office-card
+              @open="openOnMap"
+              @close="closeCard"
+              :offices="stationOffices"
+            />
           </div>
           <ZoomComponent @zoom="zoom" />
         </div>
@@ -253,6 +252,8 @@ export default {
       }
     },
     setStatus() {
+      let geshechka = document.getElementsByClassName("g-svg-metromap");
+      console.log(geshechka);
       let g = document.getElementsByTagName("g");
       if (g && g[0]) {
         let offices = this.$store.getters["map/getRegionOffices"];
@@ -334,24 +335,31 @@ export default {
       this.oldPosY = svg.style.top;
     },
     zoom(param) {
-      let scale;
-      let transform = this.$refs.metro.getAttribute("transform");
+      let step = 0.5;
       if (param == "+") {
-        scale = "scale(2)";
-        if (transform) {
-          transform = transform.split("");
-          transform[6] = +transform[6] + 1;
-          scale = transform.join("");
+        if (this.$refs["metro"].style.transform == "") {
+          this.$refs.metro.style.transform = "scale(" + (1 + step) + ")";
+          this.$refs.metro.setAttribute("data-scale", 1 + step);
+        } else {
+          let atr_scale =
+            Number(this.$refs.metro.getAttribute("data-scale")) + step;
+          this.$refs.metro.style.transform = "scale(" + atr_scale + ")";
+          this.$refs.metro.setAttribute("data-scale", atr_scale);
         }
       } else if (param == "-") {
-        if (!transform || transform == "scale(1)") return;
-        transform = transform.split("");
-        transform[6] = +transform[6] - 1;
-        scale = transform.join("");
-      } else {
-        scale = "scale(1)";
+        if (this.$refs["metro"].style.transform == "") {
+          this.$refs.metro.style.transform = "scale(" + (1 - step) + ")";
+          this.$refs.metro.setAttribute("data-scale", 1 - step);
+        } else {
+          let atr_scale =
+            Number(this.$refs.metro.getAttribute("data-scale")) - step;
+          if (atr_scale < 0) {
+            atr_scale = 0;
+          }
+          this.$refs.metro.style.transform = "scale(" + atr_scale + ")";
+          this.$refs.metro.setAttribute("data-scale", atr_scale);
+        }
       }
-      this.$refs.metro.setAttribute("transform", scale);
     },
     chooseStation(e) {
       if (e.target.tagName == "use") {
@@ -362,6 +370,7 @@ export default {
         let stationName = e.target.dataset.station;
         let offices = this.$store.getters["map/getRegionOffices"];
         offices.forEach((office) => {
+          if (!office.NORDER) office.NORDER = 0;
           let candidate = office.IDUNDERGROUND.find((item) => {
             if (item.SNAME.includes(", ")) {
               return item.SNAME.split(", ").includes(stationName);
@@ -376,14 +385,21 @@ export default {
         this.stationOffices.sort((a, b) => {
           return a.NORDER - b.NORDER;
         });
-        this.$refs["card"].style.top = e.layerY + "px";
-        this.$refs["card"].style.left = e.layerX + "px";
-        if (e.clientX + 400 > this.width) {
-          this.$refs["card"].style.left = e.layerX - 375 + "px";
-          /*          this.$refs["card"].style.left = this.width - 375 + "px";*/
+
+        let body_size = (document.querySelector("body").clientWidth - 1200) / 2;
+        if (body_size < 0) {
+          body_size = 0;
         }
-        if (parseInt(this.$refs["card"].style.top) + 640 > this.height) {
-          this.$refs["card"].style.top = this.height - 640 + "px";
+        this.$refs["card"].style.top = e.layerY + "px";
+        this.$refs["card"].style.left = e.layerX + body_size + "px";
+        if (e.clientX + 400 > this.width) {
+          this.$refs["card"].style.left = e.layerX - 375 + body_size + "px";
+        }
+        if (e.layerY > 500) {
+          this.$refs["card"].style.transform = "translateY(-100%)";
+        }
+        if (e.layerY < 500) {
+          this.$refs["card"].style.transform = "translateY(0)";
         }
       }
     },
@@ -740,10 +756,10 @@ export default {
       );
       this.myMap.geoObjects.add(this.placemark);
       this.myMap.setCenter(
-        state.center,
+        this.centerCoords ? this.centerCoords : state.center,
         this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
       );
-      this.placemark.geometry.setCoordinates(state.center);
+      this.placemark.geometry.setCoordinates(this.centerCoords);
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
@@ -772,6 +788,10 @@ export default {
         });
         this.qc_geo = this.address.data.suggestions[0].data.qc_geo;
         this.city = this.address.data.suggestions[0].data.city;
+        this.centerCoords = [
+          this.address.data.suggestions[0].data.geo_lat,
+          this.address.data.suggestions[0].data.geo_lon,
+        ];
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
@@ -824,6 +844,9 @@ export default {
     },
   },
   computed: {
+    getLoading() {
+      return this.$store.getters["map/getLoading"];
+    },
     cityData() {
       return this.$store.getters["map/getCity"];
     },
@@ -932,7 +955,7 @@ export default {
     },
 
     tabVisible() {
-      return this.regionId == 77 || this.regionId == 78;
+      return this.regionId == 77;
     },
   },
 
@@ -952,7 +975,6 @@ export default {
   display: flex;
   align-items: center;
   & > div {
-    position: relative;
     > svg {
       position: absolute;
     }
