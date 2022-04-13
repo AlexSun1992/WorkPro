@@ -740,10 +740,10 @@ export default {
       );
       this.myMap.geoObjects.add(this.placemark);
       this.myMap.setCenter(
-        state.center,
+        this.centerCoords ? this.centerCoords : state.center,
         this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
       );
-      this.placemark.geometry.setCoordinates(state.center);
+      this.placemark.geometry.setCoordinates(this.centerCoords);
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
@@ -772,6 +772,10 @@ export default {
         });
         this.qc_geo = this.address.data.suggestions[0].data.qc_geo;
         this.city = this.address.data.suggestions[0].data.city;
+        this.centerCoords = [
+          this.address.data.suggestions[0].data.geo_lat,
+          this.address.data.suggestions[0].data.geo_lon,
+        ];
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
