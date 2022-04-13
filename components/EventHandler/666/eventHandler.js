@@ -14,13 +14,7 @@ function eventHandler(fields, action, func) {
   }
 
   if (func == "afterSave") {
-    // this.$refs.recaptcha.execute();
-    // findField(`Item36918`).visible = false;
-    // console.log("afterSave");
-    // console.log(action);
-    // console.log(fields);
-    // findField(`Item36918`).checked;
-    // findField("SCAPTCHA").execute();
+    findField(`Item36918`).visible = false;
   }
 
   return fields;
