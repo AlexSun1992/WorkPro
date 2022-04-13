@@ -937,7 +937,7 @@ export default {
     },
 
     tabVisible() {
-      return this.regionId == 77 || this.regionId == 78;
+      return this.regionId == 77;
     },
   },
 
