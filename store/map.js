@@ -2,7 +2,8 @@
 export const state = () => ({
   regionOffices: null,
   defaultRegion: 77,
-  defaultCoords: [55, 37],
+  defaultCoords: [55.75396, 37.620393],
+  city: null,
 });
 
 export const actions = {
@@ -16,11 +17,18 @@ export const actions = {
       console.log(e);
     }
   },
+  setCity({ commit }, params) {
+    commit("setCity", params);
+  },
 };
 
 export const mutations = {
   setRegionOffices(state, params) {
     state.regionOffices = params;
+  },
+  setCity(state, params) {
+    console.log(params);
+    state.city = params;
   },
 };
 
@@ -33,5 +41,8 @@ export const getters = {
   },
   getRegionOffices(state) {
     return state.regionOffices;
+  },
+  getCity(state) {
+    return state.city;
   },
 };
