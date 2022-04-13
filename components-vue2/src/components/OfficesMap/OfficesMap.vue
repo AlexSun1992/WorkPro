@@ -362,6 +362,7 @@ export default {
         let stationName = e.target.dataset.station;
         let offices = this.$store.getters["map/getRegionOffices"];
         offices.forEach((office) => {
+          if (!office.NORDER) office.NORDER = 0;
           let candidate = office.IDUNDERGROUND.find((item) => {
             if (item.SNAME.includes(", ")) {
               return item.SNAME.split(", ").includes(stationName);
