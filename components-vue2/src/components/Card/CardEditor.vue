@@ -60,7 +60,6 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
-import { isCaptchaBecomesHide } from "../../../../components/Libs/Controls/ControlGoogleCaptcha/captchaHelper";
 
 Vue.use(LoadScript);
 Vue.use(BootstrapVue);
@@ -111,7 +110,7 @@ export default {
       isSaving: false,
       isShowButtonSave: false,
       isCaptchaNeeded: null,
-      test: null,
+      captchaIsDemandedNow: false,
     };
   },
   async created() {
@@ -175,13 +174,11 @@ export default {
   },
   methods: {
     async loadScript() {
-      console.log("loadScript");
       return this.eventLocalHandler().then((script) => {
         return script.eventHandler;
       });
     },
     async callbackAction(url) {
-      console.log("callbackAction");
       try {
         this.$store.commit("data_card/setLoading", true);
         this.$store.commit("data_card/setDisabled", true);
@@ -195,7 +192,6 @@ export default {
       }
     },
     validateData(data) {
-      console.log("validateData");
       let valid = true;
       for (let i = 0; i < data.length; i++) {
         const value =
@@ -258,23 +254,16 @@ export default {
 
           if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
             await this.callScript(e, "beforeSave");
-            this.test = e;
+            this.captchaIsDemandedNow = e;
             this.isCaptchaNeeded = true;
-            console.log("isCaptchaNeeded:", this.isCaptchaNeeded);
             return;
           }
           await this.callScript(e, "afterSave");
-          // const afterSaveFields = await this.eventHandler(
-          //   this.getForm.map((a) => ({ ...a })),
-          //   e
-          // ).find((item) => item.name === "SCAPTCHA").visible;
-          // console.log("afterSaveFields:", afterSaveFields);
         }
       }
     },
 
     async callScript(e, action = null) {
-      console.log("callScript");
       const data = await this.eventHandler(
         this.getForm.map((a) => ({ ...a })),
         e,
@@ -286,7 +275,6 @@ export default {
     },
 
     async fetchCard() {
-      console.log("fetchCard");
       if (this.cardId !== 0) {
         const { items } = await this.$store.dispatch(
           "data_card/fetchList",
@@ -301,7 +289,6 @@ export default {
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
     async updateValue(e) {
-      console.log("updateValue");
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
         value: e.value,
@@ -328,20 +315,8 @@ export default {
             this.getForm.map((a) => ({ ...a })),
             e
           );
-          console.log("data:", data);
-          ///////необходимо сравнение добавить сюда
-          // if (this.isCaptchaNeeded !== null) {
-          //   console.log("!!!");
-          // }
 
-          // const afterSaveFields = await this.eventHandler(
-          //   this.getForm.map((a) => ({ ...a })),
-          //   e
-          // ).find((item) => item.name === "SCAPTCHA").visible;
-          // console.log("afterSaveFields:", afterSaveFields);
-          console.log("isCaptchaNeeded:", this.isCaptchaNeeded);
           if (node && !this.$store.getters["data_card/getRecaptchaToken"]) {
-            console.log("Я здесь!");
             this.$store.commit("data_card/saveButtonClicked", true);
             this.$store.commit("data_card/setUpdateEvent", e);
             this.$store.commit(
@@ -384,9 +359,8 @@ export default {
   },
   watch: {
     isCaptchaNeededCheck(value) {
-      console.log(value);
       this.$store.commit("data_card/saveButtonClicked", true);
-      this.$store.commit("data_card/setUpdateEvent", this.test);
+      this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
       this.$store.commit("data_card/setUpdateValueFunction", this.updateValue);
     },
   },

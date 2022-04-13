@@ -39,10 +39,6 @@ export default {
       "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
     );
     document.head.appendChild(externalScript);
-
-    // if (this.data) {
-    //   console.log("data:", this.data);
-    // }
   },
 
   async updated() {
@@ -60,7 +56,6 @@ export default {
 
   methods: {
     setToken(token) {
-      console.log("setToken:", token);
       this.token = token;
       this.$store.commit("data_card/setRecaptchaToken", this.token);
     },
@@ -99,7 +94,6 @@ export default {
 
   watch: {
     async saveButtonClicked(value) {
-      console.log(value);
       if (!this.$store.getters["data_card/saveButtonClicked"]) return;
       this.$refs.recaptcha.reset();
       await this.recaptchaExecute();
@@ -113,10 +107,7 @@ export default {
       }
     },
     token() {
-      console.log("watcher token");
-      console.log("fieldValue: до обновления:", this.fieldValue);
       this.fieldValue = this.token;
-      console.log("fieldValue:после обновления:", this.fieldValue);
 
       let updateValueFunction =
         this.$store.getters["data_card/getUpdateValueFunction"];
@@ -129,4 +120,3 @@ export default {
 </script>
 
 <style scoped></style>
-s

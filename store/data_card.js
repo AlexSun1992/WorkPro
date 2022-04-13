@@ -422,7 +422,6 @@ export const mutations = {
   },
   saveButtonClicked(state, data) {
     state.saveButtonClickedAmount += 1;
-    //console.log(state.saveButtonClickedAmount);
     state.saveButtonClicked = data;
   },
   filterFields(state, data) {
@@ -581,14 +580,10 @@ export const mutations = {
     state.recaptchaToken = params;
   },
   setUpdateValueFunction(state, params) {
-    console.log("setUpdateValueFunction");
     state.updateValueFunction = params;
-    console.log("updateValueFunction:", state.updateValueFunction);
   },
   setUpdateEvent(state, params) {
-    console.log("setUpdateEvent");
     state.updateEvent = params;
-    console.log("updateEvent:", state.updateEvent);
   },
   setEnumOptions(state, params) {
     const item = state.form.find((d) => d.fieldId === params.fieldId);
