@@ -33,8 +33,7 @@
         </div>
       </div>
     </div>
-
-    <div v-show="getOffices && getOffices.length == 0">
+    <div v-show="getOffices && getOffices.length == 0 && !getLoading">
       <div class="row search-result-row">
         <div class="col-md-12 col-12 search-results">
           <div class="search-no-result">
@@ -188,6 +187,8 @@ export default {
       perPage: 3,
       currentPage: 1,
       height: window.innerHeight,
+      qc_geo: null,
+      isMetroSuggest: false,
     };
   },
   async created() {
@@ -214,11 +215,6 @@ export default {
     } catch (error) {
       console.log(error);
     }
-  },
-  mounted() {
-    window.document.addEventListener("on_city_change", () => {
-      console.log("city changed");
-    });
   },
 
   destroyed() {
@@ -374,6 +370,7 @@ export default {
         let stationName = e.target.dataset.station;
         let offices = this.$store.getters["map/getRegionOffices"];
         offices.forEach((office) => {
+          if (!office.NORDER) office.NORDER = 0;
           let candidate = office.IDUNDERGROUND.find((item) => {
             if (item.SNAME.includes(", ")) {
               return item.SNAME.split(", ").includes(stationName);
@@ -388,6 +385,7 @@ export default {
         this.stationOffices.sort((a, b) => {
           return a.NORDER - b.NORDER;
         });
+
         let body_size = (document.querySelector("body").clientWidth - 1200) / 2;
         if (body_size < 0) {
           body_size = 0;
@@ -397,22 +395,7 @@ export default {
         if (e.clientX + 400 > this.width) {
           this.$refs["card"].style.left = e.layerX - 375 + body_size + "px";
         }
-        /*if (e.layerY > 400 && e.layerY < 600) {
-          console.log(this.$refs["card"].height);
-          console.log(
-            this.$refs["metro"].firstChild.transform.animVal[0].matrix.e
-          );*/
-        /*this.$refs["metro"].firstChild.style.transform =            "translate(20px, -120px)";
-          if (900 - e.layerY - this.$refs["card"].clientHeight > 10) {
-            this.$refs["card"].style.left = e.layerY + "px";
-          } else {
-            console.log("KARAYL");
-          }*/
-        /*          this.$refs["card"].style.top = this.height - 640 + "px";
-          }
-          */
         if (e.layerY > 500) {
-          console.log("e.layerY", e.layerY);
           this.$refs["card"].style.transform = "translateY(-100%)";
         }
         if (e.layerY < 500) {
@@ -706,10 +689,12 @@ export default {
       let _this = this;
       func._this = this;
       function func(e) {
+        _this.isMetroSuggest = false;
         if (e.get("item").value.includes("метро")) {
+          _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".maps");
-          for (let i = 0; i < maps[0].children.length; i++) {
+          for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
               maps[0].children[i].dataset.station === _this.currentStation
@@ -770,13 +755,14 @@ export default {
         }
       );
       this.myMap.geoObjects.add(this.placemark);
-      this.myMap.setCenter(state.center, zoom);
-      this.placemark.geometry.setCoordinates(state.center);
+      this.myMap.setCenter(
+        this.centerCoords ? this.centerCoords : state.center,
+        this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
+      );
+      this.placemark.geometry.setCoordinates(this.centerCoords);
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
-        balloonPane: "outerBalloon",
-        balloonShadowPane: "outerBalloon",
       });
     },
     showResult(obj) {
@@ -800,7 +786,12 @@ export default {
           query: suggest,
           count: 1,
         });
+        this.qc_geo = this.address.data.suggestions[0].data.qc_geo;
         this.city = this.address.data.suggestions[0].data.city;
+        this.centerCoords = [
+          this.address.data.suggestions[0].data.geo_lat,
+          this.address.data.suggestions[0].data.geo_lon,
+        ];
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
@@ -853,6 +844,9 @@ export default {
     },
   },
   computed: {
+    getLoading() {
+      return this.$store.getters["map/getLoading"];
+    },
     cityData() {
       return this.$store.getters["map/getCity"];
     },
@@ -961,7 +955,7 @@ export default {
     },
 
     tabVisible() {
-      return this.regionId == 77 || this.regionId == 78;
+      return this.regionId == 77;
     },
   },
 
@@ -982,9 +976,7 @@ export default {
   align-items: center;
   & > div {
     > svg {
-      margin: 0 auto;
-      display: block;
-      position: relative;
+      position: absolute;
     }
   }
 }
