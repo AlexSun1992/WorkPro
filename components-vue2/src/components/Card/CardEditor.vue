@@ -109,8 +109,6 @@ export default {
       isButtonDisabled: false,
       isSaving: false,
       isShowButtonSave: false,
-      isCaptchaNeeded: null,
-      captchaIsDemandedNow: false,
     };
   },
   async created() {
@@ -168,9 +166,6 @@ export default {
       return () =>
         import(`/../components/EventHandler/${this.menuId}/eventHandler`);
     },
-    isCaptchaNeededCheck() {
-      return this.isCaptchaNeeded;
-    },
   },
   methods: {
     async loadScript() {
@@ -213,17 +208,8 @@ export default {
       }
       return valid;
     },
-
-    async saveCard(e = {}, action = null) {
+    async saveCard(e = {}) {
       await this.callScript(e, "beforeSave");
-
-      const beforeSaveFields = await this.eventHandler(
-        this.getForm.map((a) => ({ ...a })),
-        e
-      ).find((item) => item.name === "SCAPTCHA").visible;
-
-      const isReCapthcaNeededBeforeSave = beforeSaveFields;
-
       if (this.validateData(this.getForm)) {
         this.isShowSavedError = false;
         const { moduleId } = this;
@@ -244,25 +230,10 @@ export default {
             ...this.getFormParams,
             zone: this.zone,
           });
-
-          const afterSaveFields = await this.eventHandler(
-            this.getForm.map((a) => ({ ...a })),
-            e
-          ).find((item) => item.name === "SCAPTCHA").visible;
-
-          const isReCapthcaNeededAfterSave = afterSaveFields;
-
-          if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
-            await this.callScript(e, "beforeSave");
-            this.captchaIsDemandedNow = e;
-            this.isCaptchaNeeded = true;
-            return;
-          }
           await this.callScript(e, "afterSave");
         }
       }
     },
-
     async callScript(e, action = null) {
       const data = await this.eventHandler(
         this.getForm.map((a) => ({ ...a })),
@@ -273,7 +244,6 @@ export default {
         this.$store.commit("data_card/setForm", data || this.getForm);
       }
     },
-
     async fetchCard() {
       if (this.cardId !== 0) {
         const { items } = await this.$store.dispatch(
@@ -315,11 +285,6 @@ export default {
         });
         if (actionSaveCard?.ID === actionId) {
           const node = document.querySelector('[title="reCAPTCHA"]');
-          const data = await this.eventHandler(
-            this.getForm.map((a) => ({ ...a })),
-            e
-          );
-
           if (node && !this.$store.getters["data_card/getRecaptchaToken"]) {
             this.$store.commit("data_card/saveButtonClicked", true);
             this.$store.commit("data_card/setUpdateEvent", e);
@@ -359,13 +324,6 @@ export default {
     },
     updateBlurValue($event) {
       this.callScript($event, $event);
-    },
-  },
-  watch: {
-    isCaptchaNeededCheck(value) {
-      this.$store.commit("data_card/saveButtonClicked", true);
-      this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
-      this.$store.commit("data_card/setUpdateValueFunction", this.updateValue);
     },
   },
 };
