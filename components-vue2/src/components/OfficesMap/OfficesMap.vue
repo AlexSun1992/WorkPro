@@ -33,8 +33,8 @@
         </div>
       </div>
     </div>
-
-    <div v-show="getOffices && getOffices.length == 0">
+    {{ getLoading }}
+    <div v-show="getOffices && getOffices.length == 0 && !getLoading">
       <div class="row search-result-row">
         <div class="col-md-12 col-12 search-results">
           <div class="search-no-result">
@@ -829,6 +829,9 @@ export default {
     },
   },
   computed: {
+    getLoading() {
+      return this.$store.getters["map/getLoading"];
+    },
     cityData() {
       return this.$store.getters["map/getCity"];
     },
