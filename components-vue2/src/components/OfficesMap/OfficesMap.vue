@@ -59,6 +59,7 @@
         title="На карте"
         title-item-class="office-on-map"
         content-class="maps-block"
+        @click="fitToViewport"
       >
         <div ref="map" id="map" class="map"></div>
       </b-tab>
@@ -187,12 +188,14 @@ export default {
       perPage: 3,
       currentPage: 1,
       height: window.innerHeight,
+      qc_geo: null,
+      isMetroSuggest: false,
     };
   },
   async created() {
     try {
       window.addEventListener("resize", this.onResize);
-      if (Cookies.get("kladr_id")) {
+      if (Cookies.get("lat")) {
         await this.$store.dispatch("map/fetchRegion", {
           id: Cookies.get("kladr_id")?.substr(0, 2),
           coords: [Cookies.get("lat"), Cookies.get("lon")],
@@ -214,17 +217,17 @@ export default {
       console.log(error);
     }
   },
-  mounted() {
-    window.document.addEventListener("on_city_change", () => {
-      console.log("city changed");
-    });
-  },
 
   destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
 
   methods: {
+    fitToViewport() {
+      this.$nextTick(() => {
+        this.myMap.container.fitToViewport();
+      });
+    },
     onResize() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
@@ -373,11 +376,11 @@ export default {
         this.stationOffices.sort((a, b) => {
           return a.NORDER - b.NORDER;
         });
-
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + "px";
-        if (parseInt(this.$refs["card"].style.left) + 375 > this.width) {
-          this.$refs["card"].style.left = this.width - 375 + "px";
+        if (e.clientX + 400 > this.width) {
+          this.$refs["card"].style.left = e.layerX - 375 + "px";
+          /*          this.$refs["card"].style.left = this.width - 375 + "px";*/
         }
         if (parseInt(this.$refs["card"].style.top) + 640 > this.height) {
           this.$refs["card"].style.top = this.height - 640 + "px";
@@ -385,8 +388,8 @@ export default {
       }
     },
     async init(_, filters) {
-      let lat = +Cookies.get("lat");
-      let lon = +Cookies.get("lon");
+      let lat = Cookies.get("lat");
+      let lon = Cookies.get("lon");
       if (lat && lon) {
         this.centerCoords = [lat, lon];
       }
@@ -670,10 +673,12 @@ export default {
       let _this = this;
       func._this = this;
       function func(e) {
+        _this.isMetroSuggest = false;
         if (e.get("item").value.includes("метро")) {
+          _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".maps");
-          for (let i = 0; i < maps[0].children.length; i++) {
+          for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
               maps[0].children[i].dataset.station === _this.currentStation
@@ -734,13 +739,14 @@ export default {
         }
       );
       this.myMap.geoObjects.add(this.placemark);
-      this.myMap.setCenter(state.center, zoom);
+      this.myMap.setCenter(
+        state.center,
+        this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
+      );
       this.placemark.geometry.setCoordinates(state.center);
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
-        balloonPane: "outerBalloon",
-        balloonShadowPane: "outerBalloon",
       });
     },
     showResult(obj) {
@@ -764,6 +770,7 @@ export default {
           query: suggest,
           count: 1,
         });
+        this.qc_geo = this.address.data.suggestions[0].data.qc_geo;
         this.city = this.address.data.suggestions[0].data.city;
         if (this.address.data.suggestions.length) {
           this.regionId =
