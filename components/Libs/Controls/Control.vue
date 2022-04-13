@@ -49,7 +49,7 @@ import ControlLabelMoney from "./ControlLabelMoney";
 import ControlDadataSelect from "./ControlDadataSelect.vue";
 import ControlCustomCombobox from "./ControlCustomCombobox.vue";
 import ControlCustomDouble from "./ControlCustomDouble.vue";
-import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha.vue";
+import ControlGoogleCaptcha from "./ControlGoogleCaptcha.vue";
 import ControlMap from "./ControlMap.vue";
 import ControlListSelect from "./ControlListSelect/ControlListSelect.vue";
 import ControlRegNumber from "./ControlRegNumber.vue";
