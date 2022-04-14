@@ -16,6 +16,7 @@ export const state = () => ({
   cardCaption: null,
   cardChanged: false,
   saveButtonClicked: false,
+  saveButtonClickedAmount: null,
   listPath: "",
   actionParams: [],
   isSave: true,
@@ -46,6 +47,7 @@ export const getters = {
   },
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
+  saveButtonClickedAmount: (state) => state.saveButtonClickedAmount,
   getError: (state) => state.isError,
   getSavedError: (state) => state.isSavedError,
   getErrorMessage: (state) => getErrorMessage(state.errorMessage),
@@ -419,6 +421,7 @@ export const mutations = {
     state.cardChanged = data;
   },
   saveButtonClicked(state, data) {
+    state.saveButtonClickedAmount += 1;
     state.saveButtonClicked = data;
   },
   filterFields(state, data) {

@@ -109,6 +109,8 @@ export default {
       isButtonDisabled: false,
       isSaving: false,
       isShowButtonSave: false,
+      isCaptchaNeeded: null,
+      captchaIsDemandedNow: false,
     };
   },
   async created() {
@@ -166,6 +168,9 @@ export default {
       return () =>
         import(`/../components/EventHandler/${this.menuId}/eventHandler`);
     },
+    isCaptchaNeededCheck() {
+      return this.isCaptchaNeeded;
+    },
   },
   methods: {
     async loadScript() {
@@ -208,7 +213,8 @@ export default {
       }
       return valid;
     },
-    async saveCard(e = {}) {
+
+    async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
 
       const isReCapthcaNeededBeforeSave = await this.eventHandler(
@@ -253,6 +259,7 @@ export default {
         }
       }
     },
+
     async callScript(e, action = null) {
       const data = await this.eventHandler(
         this.getForm.map((a) => ({ ...a })),
@@ -263,6 +270,7 @@ export default {
         this.$store.commit("data_card/setForm", data || this.getForm);
       }
     },
+
     async fetchCard() {
       if (this.cardId !== 0) {
         const { items } = await this.$store.dispatch(
@@ -304,6 +312,11 @@ export default {
         });
         if (actionSaveCard?.ID === actionId) {
           const node = document.querySelector('[title="reCAPTCHA"]');
+          const data = await this.eventHandler(
+            this.getForm.map((a) => ({ ...a })),
+            e
+          );
+
           if (node && !this.$store.getters["data_card/getRecaptchaToken"]) {
             this.$store.commit("data_card/saveButtonClicked", true);
             this.$store.commit("data_card/setUpdateEvent", e);
@@ -345,7 +358,6 @@ export default {
       this.callScript($event, $event);
     },
   },
-
   watch: {
     isCaptchaNeededCheck() {
       this.$store.commit("data_card/saveButtonClicked", true);
