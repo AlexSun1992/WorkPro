@@ -217,10 +217,10 @@ export default {
     async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
 
-      const isReCapthcaNeededBeforeSave = await this.eventHandler(
-        this.getForm.map((a) => ({ ...a })),
-        e
-      ).find((item) => item.name === "SCAPTCHA")?.visible;
+      // const isReCapthcaNeededBeforeSave = await this.eventHandler(
+      //   this.getForm.map((a) => ({ ...a })),
+      //   e
+      // )?.find((item) => item.name === "SCAPTCHA")?.visible;
 
       if (this.validateData(this.getForm)) {
         this.isShowSavedError = false;
@@ -243,17 +243,17 @@ export default {
             zone: this.zone,
           });
 
-          const isReCapthcaNeededAfterSave = await this.eventHandler(
-            this.getForm.map((a) => ({ ...a })),
-            e
-          ).find((item) => item.name === "SCAPTCHA")?.visible;
+          // const isReCapthcaNeededAfterSave = await this.eventHandler(
+          //   this.getForm.map((a) => ({ ...a })),
+          //   e
+          // )?.find((item) => item.name === "SCAPTCHA")?.visible;
 
-          if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
-            await this.callScript(e, "beforeSave");
-            this.captchaIsDemandedNow = e;
-            this.isCaptchaNeeded = true;
-            return;
-          }
+          // if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
+          //   await this.callScript(e, "beforeSave");
+          //   this.captchaIsDemandedNow = e;
+          //   this.isCaptchaNeeded = true;
+          //   return;
+          // }
 
           await this.callScript(e, "afterSave");
         }
