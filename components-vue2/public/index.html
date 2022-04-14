@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"></script>
+    <!-- <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" ></script>  -->
+ <!-- <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>  -->
   </head>
 
   <body class="app_body">
@@ -50,22 +51,26 @@
       </div>
     </div>
     <div class="container">
-      <!--      <div class="d-none">-->
-      <!--        <component-password-recovery-form></component-password-recovery-form>-->
-      <!--      </div>-->
-      <div>
+        <div class="d-none">
+          <component-password-recovery-form></component-password-recovery-form>
+        </div>
+           
+      <!-- <div class="d-none">
         <component-login-form></component-login-form>
-      </div>
-      <!--      <div class="d-none">-->
-      <!--        <component-reg-form></component-reg-form>-->
-      <!--      </div>-->
-      <div>
-        <!--        <component-card-editor-->
-        <!--          module-id="55"-->
-        <!--          menu-id="777"-->
-        <!--        ></component-card-editor>-->
-      </div>
 
+      </div> -->
+      
+           <!-- <div>
+             <component-reg-form></component-reg-form>
+           </div> -->
+
+      <!-- <div>
+        <component-card-editor
+          module-id="55"
+          menu-id="777"
+         zone="token"
+        ></component-card-editor>
+      </div> -->
       <div>
         <component-card-editor
           module-id="55"
@@ -73,21 +78,13 @@
 
         ></component-card-editor>
       </div>
-
-
-
-      <!-- <div>
-        <component-card-editor
-          module-id="55"
-          menu-id="916"
-          rel="0"
-        ></component-card-editor>
-      </div> -->
     </div>
     <!--    <div class="d-none">-->
     <!--      <component-offices-map></component-offices-map>-->
     <!--    </div>-->
-    <!-- <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer>
-    </script> -->
+
+    
+      <!-- <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
+   </script>
   </body>
 </html>
