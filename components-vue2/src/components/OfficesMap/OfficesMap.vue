@@ -230,6 +230,14 @@ export default {
   },
 
   methods: {
+    getTime(distance) {
+      const mins = (distance / 3) * 60;
+      const hours = Math.trunc(mins / 60);
+      const minutes = mins % 60;
+      return hours > 0
+        ? `${hours} ч ${parseInt(minutes)} мин`
+        : `${parseInt(minutes)} мин`;
+    },
     fitToViewport() {
       this.$nextTick(() => {
         this.myMap.container.fitToViewport();
@@ -505,7 +513,9 @@ export default {
           <div class="card-office-undeground">
             <span class="undeground-color"></span>
             <span>Ленинский проспект</span>
-            <span class="card-office-distance"> 1.5 км </span>
+            <span class="card-office-distance"> ${this.getTime(
+              agency.NDISTANSE
+            )} </span>
           </div>
           <div class="card-office-time">
             <button type="button">Режим работы:</button>
@@ -514,7 +524,9 @@ export default {
           <div class="card-office-contacts">
             <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
             <div>
-              <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
+              <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${
+        agency.SEMAIL
+      }</a>
             </div>
           </div>
         </div>`;
