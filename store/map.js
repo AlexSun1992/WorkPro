@@ -4,20 +4,16 @@ export const state = () => ({
   defaultRegion: 77,
   defaultCoords: [55.75396, 37.620393],
   city: null,
-  loading: false,
 });
 
 export const actions = {
   async fetchRegion({ commit }, params) {
     try {
-      commit("setLoading", true);
       const { data } = await this.$axios.get(
         `/free/v2/agencies/${params.id}?lat=${params.coords[0]}&long=${params.coords[1]}`
       );
-      commit("setLoading", false);
       commit("setRegionOffices", data);
     } catch (e) {
-      commit("setloading", false);
       console.log(e);
     }
   },
@@ -34,9 +30,6 @@ export const mutations = {
     console.log(params);
     state.city = params;
   },
-  setLoading(state, params) {
-    state.loading = params;
-  },
 };
 
 export const getters = {
@@ -51,8 +44,5 @@ export const getters = {
   },
   getCity(state) {
     return state.city;
-  },
-  getLoading(state) {
-    return state.loading;
   },
 };

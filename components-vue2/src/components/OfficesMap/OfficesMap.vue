@@ -33,7 +33,8 @@
         </div>
       </div>
     </div>
-    <div v-show="getOffices && getOffices.length == 0 && !getLoading">
+
+    <div v-show="getOffices && getOffices.length == 0">
       <div class="row search-result-row">
         <div class="col-md-12 col-12 search-results">
           <div class="search-no-result">
@@ -370,7 +371,6 @@ export default {
         let stationName = e.target.dataset.station;
         let offices = this.$store.getters["map/getRegionOffices"];
         offices.forEach((office) => {
-          if (!office.NORDER) office.NORDER = 0;
           let candidate = office.IDUNDERGROUND.find((item) => {
             if (item.SNAME.includes(", ")) {
               return item.SNAME.split(", ").includes(stationName);
@@ -756,10 +756,10 @@ export default {
       );
       this.myMap.geoObjects.add(this.placemark);
       this.myMap.setCenter(
-        this.centerCoords ? this.centerCoords : state.center,
+        state.center,
         this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
       );
-      this.placemark.geometry.setCoordinates(this.centerCoords);
+      this.placemark.geometry.setCoordinates(state.center);
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
@@ -788,10 +788,6 @@ export default {
         });
         this.qc_geo = this.address.data.suggestions[0].data.qc_geo;
         this.city = this.address.data.suggestions[0].data.city;
-        this.centerCoords = [
-          this.address.data.suggestions[0].data.geo_lat,
-          this.address.data.suggestions[0].data.geo_lon,
-        ];
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
@@ -844,9 +840,6 @@ export default {
     },
   },
   computed: {
-    getLoading() {
-      return this.$store.getters["map/getLoading"];
-    },
     cityData() {
       return this.$store.getters["map/getCity"];
     },
@@ -955,7 +948,7 @@ export default {
     },
 
     tabVisible() {
-      return this.regionId == 77;
+      return this.regionId == 77 || this.regionId == 78;
     },
   },
 
