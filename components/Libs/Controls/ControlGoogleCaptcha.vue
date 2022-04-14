@@ -13,7 +13,6 @@
 
 <script>
 import { VueRecaptcha } from "vue-recaptcha";
-import { isCaptchaBecomesHide } from "./captchaHelper";
 
 export default {
   name: "ControlGoogleCaptcha",
@@ -28,10 +27,8 @@ export default {
   data() {
     return {
       token: null,
-      captchaHired: false,
     };
   },
-
   mounted() {
     let externalScript = document.createElement("script");
     externalScript.setAttribute(
@@ -41,16 +38,9 @@ export default {
     document.head.appendChild(externalScript);
   },
 
-  async updated() {
-    await isCaptchaBecomesHide();
-    const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
-      .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
-      .filter((item) => item.style.visibility === "visible");
-
-    if (visibleCaptchas.length === 0) {
-      this.captchaHired = true;
-    } else {
-      this.captchaHired = false;
+  updated() {
+    if (this.$store.getters["data_card/saveButtonClicked"] === true) {
+      this.$refs.recaptcha.execute();
     }
   },
 
@@ -79,40 +69,22 @@ export default {
         });
       },
     },
-
-    getData() {
-      return this.data;
-    },
-
     saveButtonClicked() {
       return this.$store.getters["data_card/saveButtonClicked"];
-    },
-    saveButtonClickedAmount() {
-      return this.$store.getters["data_card/saveButtonClickedAmount"];
     },
   },
 
   watch: {
-    async saveButtonClicked(value) {
+    async saveButtonClicked() {
       if (!this.$store.getters["data_card/saveButtonClicked"]) return;
       this.$refs.recaptcha.reset();
       await this.recaptchaExecute();
     },
-    saveButtonClickedAmount(value) {
-      if (value !== null && this.captchaHired === true) {
-        this.$refs.recaptcha.execute();
-      }
-      if (value) {
-        this.$refs.recaptcha.execute();
-      }
-    },
     token() {
       this.fieldValue = this.token;
-
       let updateValueFunction =
         this.$store.getters["data_card/getUpdateValueFunction"];
       let event = this.$store.getters["data_card/getUpdateEvent"];
-
       updateValueFunction(event);
     },
   },
