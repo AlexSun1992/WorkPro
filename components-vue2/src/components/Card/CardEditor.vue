@@ -213,7 +213,7 @@ export default {
       }
       return valid;
     },
-    async saveCard(e = {}) {
+    async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
 
       const isReCapthcaNeededBeforeSave = await this.eventHandler(
