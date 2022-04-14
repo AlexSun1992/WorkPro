@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div v-show="getOffices && getOffices.length == 0 && !getLoading">
+    <!-- <div v-show="getOffices && getOffices.length == 0 && !getLoading">
       <div class="row search-result-row">
         <div class="col-md-12 col-12 search-results">
           <div class="search-no-result">
@@ -44,10 +44,17 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <b-tabs
+    <!-- <b-tabs
       v-show="getOffices && getOffices.length > 0"
+      v-model="currentTab"
+      ref="tabs"
+      content-class="office-tab-content"
+      nav-class="office-tabs text-center mt-3"
+      pills
+    > -->
+    <b-tabs
       v-model="currentTab"
       ref="tabs"
       content-class="office-tab-content"
@@ -189,6 +196,7 @@ export default {
       height: window.innerHeight,
       qc_geo: null,
       isMetroSuggest: false,
+      cityHasOffices: false,
     };
   },
   async created() {
@@ -739,6 +747,11 @@ export default {
         }
       );
       this.myMap.geoObjects.add(this.placemark);
+
+      if (!this.cityHasOffices) {
+        zoom = 7;
+      }
+
       this.myMap.setCenter(
         this.centerCoords ? this.centerCoords : state.center,
         this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
@@ -835,9 +848,16 @@ export default {
       return this.$store.getters["map/getCity"];
     },
     getOfficesByCity() {
-      return this.$store.getters["map/getRegionOffices"]?.filter((office) => {
+      const filteredOffices = this.$store.getters[
+        "map/getRegionOffices"
+      ]?.filter((office) => {
         return office.SADDRESS.includes(`${this.city}`);
       });
+
+      if (filteredOffices?.length) {
+        return filteredOffices;
+      }
+      return this.$store.getters["map/getRegionOffices"];
     },
     cardVisible() {
       return this.circleClicked && this.stationOffices.length;
@@ -949,6 +969,16 @@ export default {
         this.$store.getters["map/getCity"]?.city,
         this.$store.getters["map/getCity"]?.coords
       );
+    },
+    getOfficesByCity(offices) {
+      const filteredOffices = offices.filter((office) => {
+        return office.SADDRESS.includes(`${this.city}`);
+      });
+      if (filteredOffices.length == 0) {
+        this.cityHasOffices = false;
+      } else {
+        this.cityHasOffices = true;
+      }
     },
   },
 };
