@@ -514,9 +514,7 @@ export default {
           <div class="card-office-undeground">
             <span class="undeground-color"></span>
             <span>Ленинский проспект</span>
-            <span class="card-office-distance"> ${this.getTime(
-              agency.NDISTANSE
-            )} </span>
+            <span class="card-office-distance"> 1.5 км </span>
           </div>
           <div class="card-office-time">
             <button type="button">Режим работы:</button>
@@ -525,9 +523,7 @@ export default {
           <div class="card-office-contacts">
             <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
             <div>
-              <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${
-        agency.SEMAIL
-      }</a>
+              <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
             </div>
           </div>
         </div>`;
