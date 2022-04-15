@@ -80,10 +80,6 @@ export default {
       },
     },
 
-    getData() {
-      return this.data;
-    },
-
     saveButtonClicked() {
       return this.$store.getters["data_card/saveButtonClicked"];
     },

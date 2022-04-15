@@ -61,6 +61,8 @@ import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 
+import { isCaptchaNeeded } from "./isCaptchaNeeded";
+
 Vue.use(LoadScript);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -217,10 +219,7 @@ export default {
     async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
 
-      // const isReCapthcaNeededBeforeSave = await this.eventHandler(
-      //   this.getForm.map((a) => ({ ...a })),
-      //   e
-      // )?.find((item) => item.name === "SCAPTCHA")?.visible;
+      const isReCapthcaNeededBeforeSave = isCaptchaNeeded(this.getForm);
 
       if (this.validateData(this.getForm)) {
         this.isShowSavedError = false;
@@ -243,17 +242,14 @@ export default {
             zone: this.zone,
           });
 
-          // const isReCapthcaNeededAfterSave = await this.eventHandler(
-          //   this.getForm.map((a) => ({ ...a })),
-          //   e
-          // )?.find((item) => item.name === "SCAPTCHA")?.visible;
+          const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
 
-          // if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
-          //   await this.callScript(e, "beforeSave");
-          //   this.captchaIsDemandedNow = e;
-          //   this.isCaptchaNeeded = true;
-          //   return;
-          // }
+          if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
+            await this.callScript(e, "beforeSave");
+            this.captchaIsDemandedNow = e;
+            this.isCaptchaNeeded = true;
+            return;
+          }
 
           await this.callScript(e, "afterSave");
         }
