@@ -70,7 +70,6 @@
         <div ref="map" id="map" class="map"></div>
       </b-tab>
       <b-tab
-        @click="setStatus"
         v-if="tabVisible"
         title="На схеме метро"
         title-item-class="office-on-undeground"
@@ -295,6 +294,7 @@ export default {
 
     clearStation(e) {
       if (e.target.value == "") {
+        this.closeCard();
         this.isInputEmpty = true;
         this.useElement?.setAttribute("x", -1000);
         this.useElement?.setAttribute("y", -1000);
@@ -306,6 +306,7 @@ export default {
       this.setStatus();
     },
     clear() {
+      this.closeCard();
       this.myMap.geoObjects.remove(this.placemark);
       this.$refs.search.value = "";
       this.isInputEmpty = true;
@@ -706,6 +707,7 @@ export default {
         this.suggestView.destroy();
       }
       let showOnMap = this.showOnMap.bind(this);
+      this.closeCard();
       let _this = this;
       func._this = this;
       function func(e) {
@@ -713,7 +715,7 @@ export default {
         if (e.get("item").value.includes("метро")) {
           _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
-          let maps = document.querySelectorAll(".maps");
+          let maps = document.querySelectorAll(".g-svg-metromap");
           for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
@@ -781,10 +783,16 @@ export default {
       }
 
       this.myMap.setCenter(
-        this.centerCoords ? this.centerCoords : state.center,
+        this.centerCoords && !this.isMetroSuggest
+          ? this.centerCoords
+          : state.center,
         this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
       );
-      this.placemark.geometry.setCoordinates(this.centerCoords);
+      this.placemark.geometry.setCoordinates(
+        this.centerCoords && !this.isMetroSuggest
+          ? this.centerCoords
+          : state.center
+      );
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
