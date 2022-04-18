@@ -568,7 +568,7 @@ export default {
       );
 
       template = template.replace(
-        /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
+        /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>[^<]*?<\/span>[\n\s]*?<span class="card-office-distance">[^<]*?<\/span>[\n\s]*?<\/div>/,
         () => {
           let temp = "";
           if (agency.IDUNDERGROUND.length > 0) {
@@ -579,7 +579,9 @@ export default {
                       "undeground-color_" + item.IDUNDERLINE
                     }></span>
                     <span>${item.SNAME}</span>
-                    <span class="card-office-distance"> 1.5 км </span>
+                    <span class="card-office-distance"> ${this.getTime(
+                      agency.NDISTANSE
+                    )} </span>
                     </div>
                   `;
             });
