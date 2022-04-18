@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div v-show="getOffices && getOffices.length == 0 && !getLoading">
+    <!-- <div v-show="getOffices && getOffices.length == 0 && !getLoading">
       <div class="row search-result-row">
         <div class="col-md-12 col-12 search-results">
           <div class="search-no-result">
@@ -44,10 +44,17 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <b-tabs
+    <!-- <b-tabs
       v-show="getOffices && getOffices.length > 0"
+      v-model="currentTab"
+      ref="tabs"
+      content-class="office-tab-content"
+      nav-class="office-tabs text-center mt-3"
+      pills
+    > -->
+    <b-tabs
       v-model="currentTab"
       ref="tabs"
       content-class="office-tab-content"
@@ -63,7 +70,6 @@
         <div ref="map" id="map" class="map"></div>
       </b-tab>
       <b-tab
-        @click="setStatus"
         v-if="tabVisible"
         title="На схеме метро"
         title-item-class="office-on-undeground"
@@ -189,6 +195,7 @@ export default {
       height: window.innerHeight,
       qc_geo: null,
       isMetroSuggest: false,
+      cityHasOffices: false,
     };
   },
   async created() {
@@ -222,6 +229,14 @@ export default {
   },
 
   methods: {
+    getTime(distance) {
+      const mins = (distance / 3) * 60;
+      const hours = Math.trunc(mins / 60);
+      const minutes = mins % 60;
+      return hours > 0
+        ? `${hours} ч ${parseInt(minutes)} мин`
+        : `${parseInt(minutes)} мин`;
+    },
     fitToViewport() {
       this.$nextTick(() => {
         this.myMap.container.fitToViewport();
@@ -279,6 +294,7 @@ export default {
 
     clearStation(e) {
       if (e.target.value == "") {
+        this.closeCard();
         this.isInputEmpty = true;
         this.useElement?.setAttribute("x", -1000);
         this.useElement?.setAttribute("y", -1000);
@@ -290,6 +306,7 @@ export default {
       this.setStatus();
     },
     clear() {
+      this.closeCard();
       this.myMap.geoObjects.remove(this.placemark);
       this.$refs.search.value = "";
       this.isInputEmpty = true;
@@ -686,6 +703,7 @@ export default {
         this.suggestView.destroy();
       }
       let showOnMap = this.showOnMap.bind(this);
+      this.closeCard();
       let _this = this;
       func._this = this;
       function func(e) {
@@ -693,7 +711,7 @@ export default {
         if (e.get("item").value.includes("метро")) {
           _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
-          let maps = document.querySelectorAll(".maps");
+          let maps = document.querySelectorAll(".g-svg-metromap");
           for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
@@ -755,11 +773,22 @@ export default {
         }
       );
       this.myMap.geoObjects.add(this.placemark);
+
+      if (!this.cityHasOffices) {
+        zoom = 7;
+      }
+
       this.myMap.setCenter(
-        this.centerCoords ? this.centerCoords : state.center,
+        this.centerCoords && !this.isMetroSuggest
+          ? this.centerCoords
+          : state.center,
         this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
       );
-      this.placemark.geometry.setCoordinates(this.centerCoords);
+      this.placemark.geometry.setCoordinates(
+        this.centerCoords && !this.isMetroSuggest
+          ? this.centerCoords
+          : state.center
+      );
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
@@ -851,9 +880,16 @@ export default {
       return this.$store.getters["map/getCity"];
     },
     getOfficesByCity() {
-      return this.$store.getters["map/getRegionOffices"]?.filter((office) => {
+      const filteredOffices = this.$store.getters[
+        "map/getRegionOffices"
+      ]?.filter((office) => {
         return office.SADDRESS.includes(`${this.city}`);
       });
+
+      if (filteredOffices?.length) {
+        return filteredOffices;
+      }
+      return this.$store.getters["map/getRegionOffices"];
     },
     cardVisible() {
       return this.circleClicked && this.stationOffices.length;
@@ -965,6 +1001,16 @@ export default {
         this.$store.getters["map/getCity"]?.city,
         this.$store.getters["map/getCity"]?.coords
       );
+    },
+    getOfficesByCity(offices) {
+      const filteredOffices = offices.filter((office) => {
+        return office.SADDRESS.includes(`${this.city}`);
+      });
+      if (filteredOffices.length == 0) {
+        this.cityHasOffices = false;
+      } else {
+        this.cityHasOffices = true;
+      }
     },
   },
 };

@@ -1,13 +1,12 @@
-import converter from "../converters/menu";
-import consts from "../api/urls";
-
 import axios from "axios";
+import converter from "../converters/menu";
+import consts from "./urls";
+import { mobile2Service } from "../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
-const app = express();
-const router = express.Router();
 
+const router = express.Router();
 router.use(express.json());
 router.use(cookieParser());
 
@@ -16,24 +15,24 @@ const menu = {};
 
 router.get("/module", (req, res) => {
   try {
-    axios.defaults.baseURL = "https://mobile2.reso.ru";
+    const mobile2ServiceInstance = mobile2Service();
+    mobile2ServiceInstance.defaults.baseURL = "https://mobile2.reso.ru";
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
-        axios.defaults.baseURL = "https://mobiletest.reso.ru";
+        mobile2ServiceInstance.defaults.baseURL = "https://mobiletest.reso.ru";
       }
     }
-    axios.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     if (req?.headers?.authorization) {
-      axios.defaults.headers.common.Authorization = req.headers.authorization;
-    } else {
-      if (req?.cookies["auth._token.local"]) {
-        axios.defaults.headers.common.Authorization =
-          req?.cookies["auth._token.local"];
-      }
+      mobile2ServiceInstance.defaults.headers.common.Authorization =
+        req.headers.authorization;
+    } else if (req?.cookies["auth._token.local"]) {
+      mobile2ServiceInstance.defaults.headers.common.Authorization =
+        req?.cookies["auth._token.local"];
     }
     modules.getItems = () => {
       return new Promise((resolve, reject) => {
-        axios({ url: `${consts.MODULE}`, method: "GET" })
+        mobile2ServiceInstance({ url: `${consts.MODULE}`, method: "GET" })
           .then((resp) => {
             const modules = converter.modules(resp.data);
             resolve(modules);
@@ -45,8 +44,11 @@ router.get("/module", (req, res) => {
     };
     menu.getItems = (modules) => {
       return new Promise((resolve, reject) => {
-        axios
-          .all(modules.map((l) => axios.get(`${consts.CLIENTMENU}/${l.id}`)))
+        Promise.all(
+          modules.map((l) =>
+            mobile2ServiceInstance.get(`${consts.CLIENTMENU}/${l.id}`)
+          )
+        )
           .then(
             axios.spread(function (...res) {
               resolve(res);
@@ -65,6 +67,7 @@ router.get("/module", (req, res) => {
           res.send(modules);
         })
         .catch((err) => {
+          console.log(err);
           res.status(err.response.data.STATUS).send(err.response.data);
         });
     });
