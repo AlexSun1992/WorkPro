@@ -61,6 +61,8 @@ import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 
+import { isCaptchaNeeded } from "./isCaptchaNeeded";
+
 Vue.use(LoadScript);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -109,6 +111,8 @@ export default {
       isButtonDisabled: false,
       isSaving: false,
       isShowButtonSave: false,
+      isCaptchaNeeded: null,
+      captchaIsDemandedNow: false,
     };
   },
   async created() {
@@ -166,6 +170,9 @@ export default {
       return () =>
         import(`/../components/EventHandler/${this.menuId}/eventHandler`);
     },
+    isCaptchaNeededCheck() {
+      return this.isCaptchaNeeded;
+    },
   },
   methods: {
     async loadScript() {
@@ -208,8 +215,9 @@ export default {
       }
       return valid;
     },
-    async saveCard(e = {}) {
+    async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
+      const isReCapthcaNeededBeforeSave = isCaptchaNeeded(this.getForm);
       if (this.validateData(this.getForm)) {
         this.isShowSavedError = false;
         const { moduleId } = this;
@@ -230,6 +238,13 @@ export default {
             ...this.getFormParams,
             zone: this.zone,
           });
+          const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
+          if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
+            await this.callScript(e, "beforeSave");
+            this.captchaIsDemandedNow = e;
+            this.isCaptchaNeeded = true;
+            return;
+          }
           await this.callScript(e, "afterSave");
         }
       }
@@ -324,6 +339,13 @@ export default {
     },
     updateBlurValue($event) {
       this.callScript($event, $event);
+    },
+  },
+  watch: {
+    isCaptchaNeededCheck() {
+      this.$store.commit("data_card/saveButtonClicked", true);
+      this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
+      this.$store.commit("data_card/setUpdateValueFunction", this.updateValue);
     },
   },
 };
