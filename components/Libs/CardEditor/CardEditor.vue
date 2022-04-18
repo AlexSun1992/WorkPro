@@ -365,8 +365,6 @@ export default {
             moduleId = this.$route.params.idModule;
             cardId = this.$route.params.idCard;
             relId = this.$route.params.idRel;
-            //relId возвращает undefined
-            console.log("relId:", relId);
           } else {
             itemId = this.params.page.idItem;
             moduleId = this.params.page.idModule;
@@ -380,6 +378,7 @@ export default {
             relId,
             form: fields,
           });
+          //console.log("resp:", resp);
           if (this.$route.params.idItem === "710") {
             await this.$store.dispatch("updateUser");
           }
@@ -448,6 +447,7 @@ export default {
               solid: true,
             });
           } else if (resp?.status === 500) {
+            //console.log("requestStatus:", 500);
             this.$store.commit("data_card/setLoading", false);
             this.$store.commit("data_card/setDisabled", false);
             this.$store.commit("data_card/setSavedError", true);

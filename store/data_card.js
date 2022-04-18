@@ -251,24 +251,12 @@ export const actions = {
     }
   },
   async saveDataCard({ commit, state, dispath }, params) {
-    console.log("params:", params);
-    console.log("commit:", { commit });
-    console.log("saveDataCard data_card.js");
+    console.log("saveDataCard:", params);
     commit("setLoading", true);
     commit("setDisabled", true);
     try {
-      console.log("Начало выполнения запроса");
-
-      // let resp = await this.$axios
-      //   .post(
-      //     `
-      // /am/main/v2/datacard2/48/809/42?REL=CAO18B7427923E407F4AB325204C1751
-      // `
-      //   )
-      //   .then((resp) => {
-      //     console.log("resp:", resp);
-      //   });
-
+      console.log("saveDataCard!!!! запрос!!");
+      console.log("params:", params);
       let resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
           params.relId
@@ -276,12 +264,15 @@ export const actions = {
         params.form
       );
       // Возвращает undefined params.relId
-
+      console.log("Запрос выполнился???????????");
+      console.log("resp:", resp);
+      console.log("data_card.js:saveDataCard: params:", params);
       commit("setLoading", false);
       commit("setDisabled", false);
       commit("setSavedError", false);
       commit("setCardId", resp.data.ID);
       commit("setCardRelId", resp.data.REL);
+      console.log("");
       return resp;
     } catch (e) {
       commit("setLoading", false);
