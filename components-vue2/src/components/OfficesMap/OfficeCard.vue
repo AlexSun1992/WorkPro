@@ -33,7 +33,8 @@
           <span :class="'undeground-color_' + item.IDUNDERLINE"></span>
           <span>{{ item.SNAME }}</span>
           <span v-if="office.NDISTANSE" class="card-office-distance">
-            {{ office.NDISTANSE.toFixed(1) + " км" }}
+            <!-- {{ office.NDISTANSE.toFixed(1) + " км" }} -->
+            {{ getTime(office.NDISTANSE) }}
           </span>
         </div>
       </div>
@@ -83,6 +84,14 @@ export default {
     };
   },
   methods: {
+    getTime(distance) {
+      const mins = (distance / 3) * 60;
+      const hours = Math.trunc(mins / 60);
+      const minutes = mins % 60;
+      return hours > 0
+        ? `${hours} ч ${parseInt(minutes)} мин`
+        : `${parseInt(minutes)} мин`;
+    },
     getPhones(phones) {
       let phonesArr = phones.split(";");
       phonesArr.pop();

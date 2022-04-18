@@ -46,13 +46,18 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
-        const data = await formConverter.form(resp.data, {
-          ...req.query,
-          ...req.params,
-        });
+        const data = await formConverter.form(
+          resp.data,
+          {
+            ...req.query,
+            ...req.params,
+          },
+          mobile2ServiceInstance
+        );
         res.send(data);
       })
       .catch((err) => {
+        console.log(err);
         if (err?.response?.data?.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
@@ -94,6 +99,7 @@ router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
         const data = await formConverter.form(resp.data, {
           ...req.query,
           ...req.params,
+          mobile2ServiceInstance,
         });
         res.send(data);
       })

@@ -25,7 +25,7 @@
     "@types/webpack-hot-middleware": "^2.25.3",
     "@vue/composition-api": "^1.4.9",
     "@vue/eslint-config-airbnb": "^6.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.26.1",
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
     "compress-json": "^2.0.1",
