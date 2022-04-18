@@ -60,7 +60,6 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
-
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 
 Vue.use(LoadScript);
@@ -308,10 +307,6 @@ export default {
         });
         if (actionSaveCard?.ID === actionId) {
           const node = document.querySelector('[title="reCAPTCHA"]');
-          const data = await this.eventHandler(
-            this.getForm.map((a) => ({ ...a })),
-            e
-          );
 
           if (node && !this.$store.getters["data_card/getRecaptchaToken"]) {
             this.$store.commit("data_card/saveButtonClicked", true);
