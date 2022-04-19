@@ -5,21 +5,22 @@
       :class="{ required: data.required }"
       :label-for="data.name"
     >
-      <template v-slot:label
-        ><span v-html="data.label"></span
-        ><span v-if="data.helpText">
+      <template #label>
+        <span v-html="data.label" /><span v-if="data.helpText">
           (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
-            <span v-html="data.helpText"></span></vue-easy-tooltip></span
-      ></template>
+            <span v-html="data.helpText" /></vue-easy-tooltip
+        ></span>
+      </template>
       <b-form-select
-        v-model="data.value"
-        @change="update"
-        :options="data.options"
+        v-model="value"
+        :options="options"
         :disabled="!edit ? !edit : data.readonly"
         :class="{ 'error-outline': isValid == false }"
         :state="data.state"
-      ></b-form-select>
-      <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>
+      />
+      <p v-if="data.dangerText" class="danger-text">
+        {{ data.dangerText }}
+      </p>
       <b-form-invalid-feedback>
         Обязательно для заполнения
       </b-form-invalid-feedback>
@@ -42,34 +43,39 @@ export default {
       default: () => false,
     },
   },
-  methods: {
-    update() {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: String(this.data.value),
-      });
-    },
-  },
   computed: {
     isValid() {
       return this.$store.getters["data_card/getDataFieldByFieldId"](
         `${this.data.fieldId}`
       )?.state;
     },
+    value: {
+      get() {
+        return this.data.value;
+      },
+      set(value) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: String(value),
+        });
+      },
+    },
+    options() {
+      return this.data.options;
+    },
   },
 
   created() {
-    this.data.value = this.data.value ? this.data.value : null;
-    if (this.data.placeholder !== undefined && this.data.value === null) {
+    this.value = this.value ? this.value : null;
+    if (this.data.placeholder !== undefined && this.value === null) {
       const item = {
         value: null,
         text: this.data.placeholder,
         disabled: true,
       };
-
-      if (this.data.options[0].text !== this.data.placeholder) {
-        this.data.options.unshift(item);
+      if (this.options[0].text !== this.data.placeholder) {
+        this.options.unshift(item);
       }
     }
   },
