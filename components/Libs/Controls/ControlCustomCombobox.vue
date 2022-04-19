@@ -17,6 +17,16 @@
       :options="data.options"
       :placeholder="data.placeholder"
     />
+    <autocomplete
+      ref="autocomplete"
+      :placeholder="data.placeholder"
+      :class="validClass"
+      :auto-select="true"
+      :search="search"
+      :get-result-value="getResultValue"
+      @submit="handleSubmit"
+      @blur="handleBlur"
+    />
     <b-form-invalid-feedback :state="data.state">
       {{ data.error ? data.error : "Обязательно для заполнения" }}
     </b-form-invalid-feedback>
@@ -26,10 +36,14 @@
 <script>
 import { ModelSelect } from "vue-search-select";
 
+import Autocomplete from "@trevoreyre/autocomplete-vue";
+import "@trevoreyre/autocomplete-vue/dist/style.css";
+
 export default {
   name: "ControlCustomCombobox",
   components: {
     ModelSelect,
+    Autocomplete,
   },
   props: {
     data: {
@@ -61,6 +75,40 @@ export default {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
       return "";
+    },
+  },
+  methods: {
+    search(value) {
+      if (
+        value.length < 1 ||
+        this.data.options.find((item) => item.value === this.data?.value)
+          ?.text === value
+      ) {
+        return this.data.options;
+      }
+      return this.data.options.filter((item) => item.text.includes(value));
+    },
+    getResultValue(item) {
+      return item.text;
+    },
+    handleSubmit(result) {
+      document.activeElement.blur();
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: result?.value || null,
+      });
+    },
+    handleBlur() {
+      if (Boolean(this.$refs.autocomplete.value) === false) {
+        const value = this.data.options.find(
+          (item) => item.value === this.data?.value
+        );
+        if (value) {
+          this.$refs.autocomplete.value = value.text;
+          this.handleSubmit(value);
+        }
+      }
     },
   },
 };
