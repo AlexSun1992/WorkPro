@@ -57,12 +57,12 @@ export default {
   watch: {
     async saveButtonClicked() {
       if (!this.$store.getters["data_card/saveButtonClicked"]) return;
-      this.$refs.recaptcha.reset();
+      this.$refs?.recaptcha?.reset();
       await this.recaptchaExecute();
     },
     saveButtonClickedAmount(value) {
       if (value !== null && this.captchaHired === true) {
-        this.$refs.recaptcha.execute();
+        this.$refs?.recaptcha?.execute();
       }
     },
     token() {
