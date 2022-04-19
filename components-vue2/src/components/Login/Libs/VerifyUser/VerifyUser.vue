@@ -188,6 +188,14 @@ export default {
     document.head.appendChild(externalScript);
   },
 
+  updated() {
+    if (this.$refs.userInput.vModelValue.length === 4) {
+      this.allHiddenCaptchas = Array.from(
+        document.querySelector(".app_body").children
+      ).filter((item) => item.style.visibility === "hidden");
+    }
+  },
+
   methods: {
     async executeRecaptcha() {
       this.loading = true;

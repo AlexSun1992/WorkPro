@@ -214,12 +214,9 @@ export default {
       }
       return valid;
     },
-
     async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
-
       const isReCapthcaNeededBeforeSave = isCaptchaNeeded(this.getForm);
-
       if (this.validateData(this.getForm)) {
         this.isShowSavedError = false;
         const { moduleId } = this;
@@ -240,21 +237,17 @@ export default {
             ...this.getFormParams,
             zone: this.zone,
           });
-
           const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
-
           if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
             await this.callScript(e, "beforeSave");
             this.captchaIsDemandedNow = e;
             this.isCaptchaNeeded = true;
             return;
           }
-
           await this.callScript(e, "afterSave");
         }
       }
     },
-
     async callScript(e, action = null) {
       const data = await this.eventHandler(
         this.getForm.map((a) => ({ ...a })),
@@ -265,7 +258,6 @@ export default {
         this.$store.commit("data_card/setForm", data || this.getForm);
       }
     },
-
     async fetchCard() {
       if (this.cardId !== 0) {
         const { items } = await this.$store.dispatch(

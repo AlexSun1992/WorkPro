@@ -16,7 +16,6 @@ export const state = () => ({
   cardCaption: null,
   cardChanged: false,
   saveButtonClicked: false,
-  saveButtonClickedAmount: null,
   listPath: "",
   actionParams: [],
   isSave: true,

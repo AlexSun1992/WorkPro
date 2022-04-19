@@ -1,10 +1,8 @@
+/* eslint-disable */
 import moment from "moment/moment";
 import controlConverter from "./control";
 import selectConverter from "./select";
 
-const axios = require("axios");
-
-axios.defaults.baseURL = "https://mobile2.reso.ru";
 const converter = {};
 
 converter.setArrayOfObjectFields = (itemId, items, fields) => {
@@ -64,7 +62,7 @@ converter.subcompare = (a, b) => {
   return 0;
 };
 
-converter.form = async (data, params) => {
+converter.form = async (data, params, instance) => {
   const promises = [];
   const webFieldsArr = [];
   const errors = [];
@@ -121,7 +119,7 @@ converter.form = async (data, params) => {
       obj.type = webFields[i].IDCONTROL == 15 ? "combobox" : "customCombobox";
       if (webFields[i].LDIC === true) {
         promises.push(
-          axios.get(
+          instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
               webFields[i].ID
             }`
@@ -130,7 +128,7 @@ converter.form = async (data, params) => {
       }
       if (webFields[i].LDIC === false) {
         promises.push(
-          axios.get(
+          instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
               webFields[i].IDADMMODULE
             }/${itemId}/${webFields[i].SNAME}`
@@ -171,7 +169,7 @@ converter.form = async (data, params) => {
     } else if (webFields[i].IDCONTROL == 44) {
       obj.type = "RadioButton";
       promises.push(
-        axios.get(
+        instance.get(
           `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`
         )
       );

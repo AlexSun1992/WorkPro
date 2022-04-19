@@ -33,8 +33,7 @@
         </div>
       </div>
     </div>
-
-    <div v-show="getOffices && getOffices.length == 0">
+    <!-- <div v-show="getOffices && getOffices.length == 0 && !getLoading">
       <div class="row search-result-row">
         <div class="col-md-12 col-12 search-results">
           <div class="search-no-result">
@@ -45,10 +44,17 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <b-tabs
+    <!-- <b-tabs
       v-show="getOffices && getOffices.length > 0"
+      v-model="currentTab"
+      ref="tabs"
+      content-class="office-tab-content"
+      nav-class="office-tabs text-center mt-3"
+      pills
+    > -->
+    <b-tabs
       v-model="currentTab"
       ref="tabs"
       content-class="office-tab-content"
@@ -64,7 +70,6 @@
         <div ref="map" id="map" class="map"></div>
       </b-tab>
       <b-tab
-        @click="setStatus"
         v-if="tabVisible"
         title="На схеме метро"
         title-item-class="office-on-undeground"
@@ -72,13 +77,13 @@
         <div class="metrowrapper">
           <div>
             <Mosmetro ref="metro" @click="chooseStation" />
-            <div v-show="cardVisible" ref="card" class="card">
-              <metro-office-card
-                @open="openOnMap"
-                @close="closeCard"
-                :offices="stationOffices"
-              />
-            </div>
+          </div>
+          <div v-show="cardVisible" ref="card" class="card">
+            <metro-office-card
+              @open="openOnMap"
+              @close="closeCard"
+              :offices="stationOffices"
+            />
           </div>
           <ZoomComponent @zoom="zoom" />
         </div>
@@ -173,6 +178,9 @@ export default {
       oldPosY: null,
       curPosX: null,
       curPosY: null,
+      cardPosY: null,
+      cardPosX: null,
+      svgScale:1,
       currentTab: 0,
       suggestView: null,
       currentStation: null,
@@ -190,6 +198,7 @@ export default {
       height: window.innerHeight,
       qc_geo: null,
       isMetroSuggest: false,
+      cityHasOffices: false,
     };
   },
   async created() {
@@ -223,6 +232,14 @@ export default {
   },
 
   methods: {
+    getTime(distance) {
+      const mins = (distance / 3) * 60;
+      const hours = Math.trunc(mins / 60);
+      const minutes = mins % 60;
+      return hours > 0
+        ? `${hours} ч ${parseInt(minutes)} мин`
+        : `${parseInt(minutes)} мин`;
+    },
     fitToViewport() {
       this.$nextTick(() => {
         this.myMap.container.fitToViewport();
@@ -253,6 +270,7 @@ export default {
       }
     },
     setStatus() {
+      let geshechka = document.getElementsByClassName("g-svg-metromap");
       let g = document.getElementsByTagName("g");
       if (g && g[0]) {
         let offices = this.$store.getters["map/getRegionOffices"];
@@ -278,6 +296,7 @@ export default {
 
     clearStation(e) {
       if (e.target.value == "") {
+        this.closeCard();
         this.isInputEmpty = true;
         this.useElement?.setAttribute("x", -1000);
         this.useElement?.setAttribute("y", -1000);
@@ -289,6 +308,7 @@ export default {
       this.setStatus();
     },
     clear() {
+      this.closeCard();
       this.myMap.geoObjects.remove(this.placemark);
       this.$refs.search.value = "";
       this.isInputEmpty = true;
@@ -322,36 +342,48 @@ export default {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
       }
+      this.cardposX = parseInt(this.$refs["card"].style.marginLeft);
+      this.cardposY = parseInt(this.$refs["card"].style.marginTop);
+      console.log(this.cardposX, this.cardposY);
+      document.addEventListener("mousemove", this.onMouseMove);
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
     },
     onMouseMove(e) {
-      let svg = document.querySelector("svg");
+      e.preventDefault();
+      let svg = document.querySelector(".g-svg-metromap");
       svg.style.left = e.clientX - this.curPosX + "px";
       svg.style.top = e.clientY - this.curPosY + "px";
       this.oldPosX = svg.style.left;
       this.oldPosY = svg.style.top;
+      this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
+      this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
+      svg.setAttribute("transform","matrix("+this.svgScale+",0,0,"+this.svgScale+"," +  parseInt(this.oldPosX) + "," +  parseInt(this.oldPosY) + ")");
+      this.$refs["card"].style.marginLeft = this.cardposX + "px";
+      this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
     zoom(param) {
-      let scale;
-      let transform = this.$refs.metro.getAttribute("transform");
+      let step = 0.5;
       if (param == "+") {
-        scale = "scale(2)";
-        if (transform) {
-          transform = transform.split("");
-          transform[6] = +transform[6] + 1;
-          scale = transform.join("");
+        this.svgScale = this.svgScale + step;
+        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+",0,0)");
+        } else {
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
         }
       } else if (param == "-") {
-        if (!transform || transform == "scale(1)") return;
-        transform = transform.split("");
-        transform[6] = +transform[6] - 1;
-        scale = transform.join("");
-      } else {
-        scale = "scale(1)";
+        this.svgScale = this.svgScale - step;
+        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+",0,0)");
+        } else {
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
+          if (this.svgScale  < 0) {
+            this.$refs.["metro"].firstChild.setAttribute("transform", "matrix(0.1,0,0,0.1,"+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
+          }
+
+        }
       }
-      this.$refs.metro.setAttribute("transform", scale);
     },
     chooseStation(e) {
       if (e.target.tagName == "use") {
@@ -362,6 +394,7 @@ export default {
         let stationName = e.target.dataset.station;
         let offices = this.$store.getters["map/getRegionOffices"];
         offices.forEach((office) => {
+          if (!office.NORDER) office.NORDER = 0;
           let candidate = office.IDUNDERGROUND.find((item) => {
             if (item.SNAME.includes(", ")) {
               return item.SNAME.split(", ").includes(stationName);
@@ -376,14 +409,23 @@ export default {
         this.stationOffices.sort((a, b) => {
           return a.NORDER - b.NORDER;
         });
-        this.$refs["card"].style.top = e.layerY + "px";
-        this.$refs["card"].style.left = e.layerX + "px";
-        if (e.clientX + 400 > this.width) {
-          this.$refs["card"].style.left = e.layerX - 375 + "px";
-          /*          this.$refs["card"].style.left = this.width - 375 + "px";*/
+
+        let body_size = (document.querySelector("body").clientWidth - 1200) / 2;
+        if (body_size < 0) {
+          body_size = 0;
         }
-        if (parseInt(this.$refs["card"].style.top) + 640 > this.height) {
-          this.$refs["card"].style.top = this.height - 640 + "px";
+        this.$refs["card"].style.marginLeft = 0;
+        this.$refs["card"].style.marginTop = 0;
+        this.$refs["card"].style.top = e.layerY + "px";
+        this.$refs["card"].style.left = e.layerX + body_size + "px";
+        if (e.clientX + 400 > this.width) {
+          this.$refs["card"].style.left = e.layerX - 375 + body_size + "px";
+        }
+        if (e.layerY > 500) {
+          this.$refs["card"].style.transform = "translateY(-100%)";
+        }
+        if (e.layerY < 500) {
+          this.$refs["card"].style.transform = "translateY(0)";
         }
       }
     },
@@ -535,7 +577,7 @@ export default {
       );
 
       template = template.replace(
-        /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>Ленинский проспект<\/span>[\n\s]*?<span class="card-office-distance"> 1.5 км <\/span>[\n\s]*?<\/div>/,
+        /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>[^<]*?<\/span>[\n\s]*?<span class="card-office-distance">[^<]*?<\/span>[\n\s]*?<\/div>/,
         () => {
           let temp = "";
           if (agency.IDUNDERGROUND.length > 0) {
@@ -546,7 +588,9 @@ export default {
                       "undeground-color_" + item.IDUNDERLINE
                     }></span>
                     <span>${item.SNAME}</span>
-                    <span class="card-office-distance"> 1.5 км </span>
+                    <span class="card-office-distance"> ${this.getTime(
+                      agency.NDISTANSE
+                    )} </span>
                     </div>
                   `;
             });
@@ -670,6 +714,7 @@ export default {
         this.suggestView.destroy();
       }
       let showOnMap = this.showOnMap.bind(this);
+      this.closeCard();
       let _this = this;
       func._this = this;
       function func(e) {
@@ -677,7 +722,7 @@ export default {
         if (e.get("item").value.includes("метро")) {
           _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
-          let maps = document.querySelectorAll(".maps");
+          let maps = document.querySelectorAll(".g-svg-metromap");
           for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
@@ -739,11 +784,22 @@ export default {
         }
       );
       this.myMap.geoObjects.add(this.placemark);
+
+      if (!this.cityHasOffices) {
+        zoom = 7;
+      }
+
       this.myMap.setCenter(
-        state.center,
+        this.centerCoords && !this.isMetroSuggest
+          ? this.centerCoords
+          : state.center,
         this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
       );
-      this.placemark.geometry.setCoordinates(state.center);
+      this.placemark.geometry.setCoordinates(
+        this.centerCoords && !this.isMetroSuggest
+          ? this.centerCoords
+          : state.center
+      );
       this.placemark.properties.set({
         iconCaption: caption,
         balloonContent: caption,
@@ -772,6 +828,10 @@ export default {
         });
         this.qc_geo = this.address.data.suggestions[0].data.qc_geo;
         this.city = this.address.data.suggestions[0].data.city;
+        this.centerCoords = [
+          this.address.data.suggestions[0].data.geo_lat,
+          this.address.data.suggestions[0].data.geo_lon,
+        ];
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
@@ -824,13 +884,23 @@ export default {
     },
   },
   computed: {
+    getLoading() {
+      return this.$store.getters["map/getLoading"];
+    },
     cityData() {
       return this.$store.getters["map/getCity"];
     },
     getOfficesByCity() {
-      return this.$store.getters["map/getRegionOffices"]?.filter((office) => {
+      const filteredOffices = this.$store.getters[
+        "map/getRegionOffices"
+      ]?.filter((office) => {
         return office.SADDRESS.includes(`${this.city}`);
       });
+
+      if (filteredOffices?.length) {
+        return filteredOffices;
+      }
+      return this.$store.getters["map/getRegionOffices"];
     },
     cardVisible() {
       return this.circleClicked && this.stationOffices.length;
@@ -932,7 +1002,7 @@ export default {
     },
 
     tabVisible() {
-      return this.regionId == 77 || this.regionId == 78;
+      return this.regionId == 77;
     },
   },
 
@@ -943,6 +1013,16 @@ export default {
         this.$store.getters["map/getCity"]?.coords
       );
     },
+    getOfficesByCity(offices) {
+      const filteredOffices = offices.filter((office) => {
+        return office.SADDRESS.includes(`${this.city}`);
+      });
+      if (filteredOffices.length == 0) {
+        this.cityHasOffices = false;
+      } else {
+        this.cityHasOffices = true;
+      }
+    },
   },
 };
 </script>
@@ -952,7 +1032,6 @@ export default {
   display: flex;
   align-items: center;
   & > div {
-    position: relative;
     > svg {
       position: absolute;
     }
