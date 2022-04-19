@@ -102,9 +102,11 @@ export default {
   methods: {
     setToken(token) {
       this.token = token;
+      console.log("setToken:", setToken);
       this.$store.commit("data_card/setRecaptchaToken", this.token);
     },
     recaptchaExecute() {
+      console.log("recaptchaExecute");
       this.$refs.recaptcha.execute();
     },
     onCaptchaExpired() {
