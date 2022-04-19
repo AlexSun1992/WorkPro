@@ -55,7 +55,7 @@ export default {
   },
 
   watch: {
-    async saveButtonClicked(value) {
+    async saveButtonClicked() {
       if (!this.$store.getters["data_card/saveButtonClicked"]) return;
       this.$refs.recaptcha.reset();
       await this.recaptchaExecute();
