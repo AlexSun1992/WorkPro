@@ -67,7 +67,6 @@ export default {
     },
     token() {
       this.fieldValue = this.token;
-
       const updateValueFunction =
         this.$store.getters["data_card/getUpdateValueFunction"];
       const event = this.$store.getters["data_card/getUpdateEvent"];
