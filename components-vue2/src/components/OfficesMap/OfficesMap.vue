@@ -33,27 +33,7 @@
         </div>
       </div>
     </div>
-    <!-- <div v-show="getOffices && getOffices.length == 0 && !getLoading">
-      <div class="row search-result-row">
-        <div class="col-md-12 col-12 search-results">
-          <div class="search-no-result">
-            <div class="search-no-result-img"></div>
-            <div class="search-no-result-txt">
-              По вашему запросу ничего не найдено
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
-    <!-- <b-tabs
-      v-show="getOffices && getOffices.length > 0"
-      v-model="currentTab"
-      ref="tabs"
-      content-class="office-tab-content"
-      nav-class="office-tabs text-center mt-3"
-      pills
-    > -->
     <b-tabs
       v-model="currentTab"
       ref="tabs"
@@ -97,14 +77,6 @@
           @showMore="isShownMore = $event"
         />
 
-        <!-- <Paginator
-          v-if="getOffices && width > 900 && !currentStation"
-          class="container"
-          @update="page = $event"
-          :items-count="getOffices.length"
-          :pages-count="pagesCount"
-        /> -->
-
         <b-pagination
           v-show="getOffices && width > 900 && !currentStation"
           v-model="page"
@@ -126,15 +98,13 @@
 
 <script>
 import Paginator from "./Paginator.vue";
-import { BFormInput } from "bootstrap-vue";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
-import Notification from "./Notification.vue";
 import ZoomComponent from "./ZoomComponent.vue";
 import OfficesList from "./OfficesList.vue";
 import MetroOfficeCard from "./MetroOfficeCard.vue";
 import { filters, filterData } from "../../../../utils/map/filters";
-import { BTabs, BTab, BButtonGroup, BButton } from "bootstrap-vue";
+import { BTabs, BTab } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import { BPagination } from "bootstrap-vue";
@@ -145,16 +115,11 @@ export default {
   components: {
     OfficesList,
     FilterComponent,
-    Notification,
     BTabs,
     BTab,
     Mosmetro,
     MetroOfficeCard,
-    BButtonGroup,
-    BButton,
     ZoomComponent,
-    BFormInput,
-    Paginator,
     BPagination,
   },
   props: ["notification", "mobile"],
@@ -171,13 +136,15 @@ export default {
       currentFilters: null,
       address: null,
       suggest: null,
-      circleColor: null,
       stationOffices: [],
       circleClicked: false,
       oldPosX: null,
       oldPosY: null,
       curPosX: null,
       curPosY: null,
+      cardPosY: null,
+      cardPosX: null,
+      svgScale:1,
       currentTab: 0,
       suggestView: null,
       currentStation: null,
@@ -189,9 +156,6 @@ export default {
       width: window.innerWidth,
       pagesCount: 15,
       isShownMore: false,
-
-      perPage: 3,
-      currentPage: 1,
       height: window.innerHeight,
       qc_geo: null,
       isMetroSuggest: false,
@@ -267,8 +231,6 @@ export default {
       }
     },
     setStatus() {
-      let geshechka = document.getElementsByClassName("g-svg-metromap");
-      console.log(geshechka);
       let g = document.getElementsByTagName("g");
       if (g && g[0]) {
         let offices = this.$store.getters["map/getRegionOffices"];
@@ -327,11 +289,6 @@ export default {
         false
       );
     },
-    getPhones(phones) {
-      let phonesArr = phones.split(";");
-      phonesArr.pop();
-      return phonesArr;
-    },
 
     setMouseCoords(e) {
       this.curPosX = e.clientX;
@@ -340,41 +297,46 @@ export default {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
       }
+      this.cardposX = parseInt(this.$refs["card"].style.marginLeft);
+      this.cardposY = parseInt(this.$refs["card"].style.marginTop);
+      console.log(this.cardposX, this.cardposY);
+      document.addEventListener("mousemove", this.onMouseMove);
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
     },
     onMouseMove(e) {
-      let svg = document.querySelector("svg");
+      e.preventDefault();
+      let svg = document.querySelector(".g-svg-metromap");
       svg.style.left = e.clientX - this.curPosX + "px";
       svg.style.top = e.clientY - this.curPosY + "px";
       this.oldPosX = svg.style.left;
       this.oldPosY = svg.style.top;
+      this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
+      this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
+      svg.setAttribute("transform","matrix("+this.svgScale+",0,0,"+this.svgScale+"," +  parseInt(this.oldPosX) + "," +  parseInt(this.oldPosY) + ")");
+      this.$refs["card"].style.marginLeft = this.cardposX + "px";
+      this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
     zoom(param) {
       let step = 0.5;
       if (param == "+") {
-        if (this.$refs["metro"].style.transform == "") {
-          this.$refs.metro.style.transform = "scale(" + (1 + step) + ")";
-          this.$refs.metro.setAttribute("data-scale", 1 + step);
+        this.svgScale = this.svgScale + step;
+        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+",0,0)");
         } else {
-          let atr_scale =
-            Number(this.$refs.metro.getAttribute("data-scale")) + step;
-          this.$refs.metro.style.transform = "scale(" + atr_scale + ")";
-          this.$refs.metro.setAttribute("data-scale", atr_scale);
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
         }
       } else if (param == "-") {
-        if (this.$refs["metro"].style.transform == "") {
-          this.$refs.metro.style.transform = "scale(" + (1 - step) + ")";
-          this.$refs.metro.setAttribute("data-scale", 1 - step);
+        this.svgScale = this.svgScale - step;
+        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+",0,0)");
         } else {
-          let atr_scale =
-            Number(this.$refs.metro.getAttribute("data-scale")) - step;
-          if (atr_scale < 0) {
-            atr_scale = 0;
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
+          if (this.svgScale  < 0) {
+            this.$refs.["metro"].firstChild.setAttribute("transform", "matrix(0.1,0,0,0.1,"+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
           }
-          this.$refs.metro.style.transform = "scale(" + atr_scale + ")";
-          this.$refs.metro.setAttribute("data-scale", atr_scale);
+
         }
       }
     },
@@ -407,6 +369,8 @@ export default {
         if (body_size < 0) {
           body_size = 0;
         }
+        this.$refs["card"].style.marginLeft = 0;
+        this.$refs["card"].style.marginTop = 0;
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + body_size + "px";
         if (e.clientX + 400 > this.width) {
