@@ -142,6 +142,9 @@ export default {
       oldPosY: null,
       curPosX: null,
       curPosY: null,
+      cardPosY: null,
+      cardPosX: null,
+      svgScale:1,
       currentTab: 0,
       suggestView: null,
       currentStation: null,
@@ -294,41 +297,46 @@ export default {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
       }
+      this.cardposX = parseInt(this.$refs["card"].style.marginLeft);
+      this.cardposY = parseInt(this.$refs["card"].style.marginTop);
+      console.log(this.cardposX, this.cardposY);
+      document.addEventListener("mousemove", this.onMouseMove);
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
     },
     onMouseMove(e) {
-      let svg = document.querySelector("svg");
+      e.preventDefault();
+      let svg = document.querySelector(".g-svg-metromap");
       svg.style.left = e.clientX - this.curPosX + "px";
       svg.style.top = e.clientY - this.curPosY + "px";
       this.oldPosX = svg.style.left;
       this.oldPosY = svg.style.top;
+      this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
+      this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
+      svg.setAttribute("transform","matrix("+this.svgScale+",0,0,"+this.svgScale+"," +  parseInt(this.oldPosX) + "," +  parseInt(this.oldPosY) + ")");
+      this.$refs["card"].style.marginLeft = this.cardposX + "px";
+      this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
     zoom(param) {
       let step = 0.5;
       if (param == "+") {
-        if (this.$refs["metro"].style.transform == "") {
-          this.$refs.metro.style.transform = "scale(" + (1 + step) + ")";
-          this.$refs.metro.setAttribute("data-scale", 1 + step);
+        this.svgScale = this.svgScale + step;
+        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+",0,0)");
         } else {
-          let atr_scale =
-            Number(this.$refs.metro.getAttribute("data-scale")) + step;
-          this.$refs.metro.style.transform = "scale(" + atr_scale + ")";
-          this.$refs.metro.setAttribute("data-scale", atr_scale);
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
         }
       } else if (param == "-") {
-        if (this.$refs["metro"].style.transform == "") {
-          this.$refs.metro.style.transform = "scale(" + (1 - step) + ")";
-          this.$refs.metro.setAttribute("data-scale", 1 - step);
+        this.svgScale = this.svgScale - step;
+        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+",0,0)");
         } else {
-          let atr_scale =
-            Number(this.$refs.metro.getAttribute("data-scale")) - step;
-          if (atr_scale < 0) {
-            atr_scale = 0;
+          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
+          if (this.svgScale  < 0) {
+            this.$refs.["metro"].firstChild.setAttribute("transform", "matrix(0.1,0,0,0.1,"+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
           }
-          this.$refs.metro.style.transform = "scale(" + atr_scale + ")";
-          this.$refs.metro.setAttribute("data-scale", atr_scale);
+
         }
       }
     },
@@ -361,6 +369,8 @@ export default {
         if (body_size < 0) {
           body_size = 0;
         }
+        this.$refs["card"].style.marginLeft = 0;
+        this.$refs["card"].style.marginTop = 0;
         this.$refs["card"].style.top = e.layerY + "px";
         this.$refs["card"].style.left = e.layerX + body_size + "px";
         if (e.clientX + 400 > this.width) {
