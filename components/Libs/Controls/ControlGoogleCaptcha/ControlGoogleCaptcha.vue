@@ -75,15 +75,6 @@ export default {
     },
   },
 
-  mounted() {
-    const externalScript = document.createElement("script");
-    externalScript.setAttribute(
-      "src",
-      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
-    );
-    document.head.appendChild(externalScript);
-  },
-
   async updated() {
     await isCaptchaBecomesHide();
     const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
