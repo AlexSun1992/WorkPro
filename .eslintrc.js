@@ -13,6 +13,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   env: {
+    jest: true,
     es6: true,
   },
 };
