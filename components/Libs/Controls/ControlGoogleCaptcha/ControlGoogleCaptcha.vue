@@ -77,14 +77,14 @@ export default {
   },
 
   ////// Подключение капчи
-  // mounted() {
-  //   const externalScript = document.createElement("script");
-  //   externalScript.setAttribute(
-  //     "src",
-  //     "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
-  //   );
-  //   document.head.appendChild(externalScript);
-  // },
+  mounted() {
+    const externalScript = document.createElement("script");
+    externalScript.setAttribute(
+      "src",
+      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
+    );
+    document.head.appendChild(externalScript);
+  },
 
   async updated() {
     await isCaptchaBecomesHide();
