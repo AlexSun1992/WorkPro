@@ -64,9 +64,6 @@ export default {
       if (value !== null && this.captchaHired === true) {
         this.$refs.recaptcha.execute();
       }
-      if (value) {
-        this.$refs.recaptcha.execute();
-      }
     },
     token() {
       this.fieldValue = this.token;
