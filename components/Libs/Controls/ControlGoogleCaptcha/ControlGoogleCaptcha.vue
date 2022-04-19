@@ -32,40 +32,6 @@ export default {
     };
   },
 
-  mounted() {
-    let externalScript = document.createElement("script");
-    externalScript.setAttribute(
-      "src",
-      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
-    );
-    document.head.appendChild(externalScript);
-  },
-
-  async updated() {
-    await isCaptchaBecomesHide();
-    const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
-      .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
-      .filter((item) => item.style.visibility === "visible");
-
-    if (visibleCaptchas.length === 0) {
-      this.captchaHired = true;
-    } else {
-      this.captchaHired = false;
-    }
-  },
-
-  methods: {
-    setToken(token) {
-      this.token = token;
-      this.$store.commit("data_card/setRecaptchaToken", this.token);
-    },
-    recaptchaExecute() {
-      this.$refs.recaptcha.execute();
-    },
-    onCaptchaExpired() {
-      this.$refs.recaptcha.reset();
-    },
-  },
   computed: {
     fieldValue: {
       get: function () {
@@ -105,11 +71,46 @@ export default {
     token() {
       this.fieldValue = this.token;
 
-      let updateValueFunction =
+      const updateValueFunction =
         this.$store.getters["data_card/getUpdateValueFunction"];
-      let event = this.$store.getters["data_card/getUpdateEvent"];
+      const event = this.$store.getters["data_card/getUpdateEvent"];
 
       updateValueFunction(event);
+    },
+  },
+
+  mounted() {
+    const externalScript = document.createElement("script");
+    externalScript.setAttribute(
+      "src",
+      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
+    );
+    document.head.appendChild(externalScript);
+  },
+
+  async updated() {
+    await isCaptchaBecomesHide();
+    const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
+      .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
+      .filter((item) => item.style.visibility === "visible");
+
+    if (visibleCaptchas.length === 0) {
+      this.captchaHired = true;
+    } else {
+      this.captchaHired = false;
+    }
+  },
+
+  methods: {
+    setToken(token) {
+      this.token = token;
+      this.$store.commit("data_card/setRecaptchaToken", this.token);
+    },
+    recaptchaExecute() {
+      this.$refs.recaptcha.execute();
+    },
+    onCaptchaExpired() {
+      this.$refs.recaptcha.reset();
     },
   },
 };
