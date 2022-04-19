@@ -38,7 +38,6 @@ export default {
         return this.data.value;
       },
       set: function (value) {
-        console.log("value:", value);
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -68,7 +67,6 @@ export default {
     },
     token() {
       this.fieldValue = this.token;
-
       const updateValueFunction =
         this.$store.getters["data_card/getUpdateValueFunction"];
       const event = this.$store.getters["data_card/getUpdateEvent"];
@@ -102,11 +100,9 @@ export default {
   methods: {
     setToken(token) {
       this.token = token;
-      console.log("setToken:", setToken);
       this.$store.commit("data_card/setRecaptchaToken", this.token);
     },
     recaptchaExecute() {
-      console.log("recaptchaExecute");
       this.$refs.recaptcha.execute();
     },
     onCaptchaExpired() {
