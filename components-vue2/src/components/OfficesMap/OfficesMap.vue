@@ -33,27 +33,7 @@
         </div>
       </div>
     </div>
-    <!-- <div v-show="getOffices && getOffices.length == 0 && !getLoading">
-      <div class="row search-result-row">
-        <div class="col-md-12 col-12 search-results">
-          <div class="search-no-result">
-            <div class="search-no-result-img"></div>
-            <div class="search-no-result-txt">
-              По вашему запросу ничего не найдено
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
-    <!-- <b-tabs
-      v-show="getOffices && getOffices.length > 0"
-      v-model="currentTab"
-      ref="tabs"
-      content-class="office-tab-content"
-      nav-class="office-tabs text-center mt-3"
-      pills
-    > -->
     <b-tabs
       v-model="currentTab"
       ref="tabs"
@@ -97,14 +77,6 @@
           @showMore="isShownMore = $event"
         />
 
-        <!-- <Paginator
-          v-if="getOffices && width > 900 && !currentStation"
-          class="container"
-          @update="page = $event"
-          :items-count="getOffices.length"
-          :pages-count="pagesCount"
-        /> -->
-
         <b-pagination
           v-show="getOffices && width > 900 && !currentStation"
           v-model="page"
@@ -126,15 +98,13 @@
 
 <script>
 import Paginator from "./Paginator.vue";
-import { BFormInput } from "bootstrap-vue";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
-import Notification from "./Notification.vue";
 import ZoomComponent from "./ZoomComponent.vue";
 import OfficesList from "./OfficesList.vue";
 import MetroOfficeCard from "./MetroOfficeCard.vue";
 import { filters, filterData } from "../../../../utils/map/filters";
-import { BTabs, BTab, BButtonGroup, BButton } from "bootstrap-vue";
+import { BTabs, BTab } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import { BPagination } from "bootstrap-vue";
@@ -145,16 +115,11 @@ export default {
   components: {
     OfficesList,
     FilterComponent,
-    Notification,
     BTabs,
     BTab,
     Mosmetro,
     MetroOfficeCard,
-    BButtonGroup,
-    BButton,
     ZoomComponent,
-    BFormInput,
-    Paginator,
     BPagination,
   },
   props: ["notification", "mobile"],
@@ -171,7 +136,6 @@ export default {
       currentFilters: null,
       address: null,
       suggest: null,
-      circleColor: null,
       stationOffices: [],
       circleClicked: false,
       oldPosX: null,
@@ -189,9 +153,6 @@ export default {
       width: window.innerWidth,
       pagesCount: 15,
       isShownMore: false,
-
-      perPage: 3,
-      currentPage: 1,
       height: window.innerHeight,
       qc_geo: null,
       isMetroSuggest: false,
@@ -267,8 +228,6 @@ export default {
       }
     },
     setStatus() {
-      let geshechka = document.getElementsByClassName("g-svg-metromap");
-      console.log(geshechka);
       let g = document.getElementsByTagName("g");
       if (g && g[0]) {
         let offices = this.$store.getters["map/getRegionOffices"];
@@ -326,11 +285,6 @@ export default {
         20,
         false
       );
-    },
-    getPhones(phones) {
-      let phonesArr = phones.split(";");
-      phonesArr.pop();
-      return phonesArr;
     },
 
     setMouseCoords(e) {
