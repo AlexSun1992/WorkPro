@@ -114,6 +114,41 @@ export default {
       captchaIsDemandedNow: false,
     };
   },
+
+  computed: {
+    ...mapGetters("data_card", [
+      "getForm",
+      "getFormParams",
+      "getErrorMessage",
+      "getSavedError",
+      "getError",
+      "getBtnSave",
+      "getDataFieldByFieldId",
+    ]),
+    ...mapGetters("auth", ["getLogged", "getUser"]),
+    isReadOnly() {
+      return this.$store.getters["data_card/getReadOnly"];
+    },
+    isBlock() {
+      return this.$store.getters["menu/getMenuById"](this.menuId)?.LUSEBLOCK;
+    },
+    eventLocalHandler() {
+      return () =>
+        import(`/../components/EventHandler/${this.menuId}/eventHandler`);
+    },
+    isCaptchaNeededCheck() {
+      return this.isCaptchaNeeded;
+    },
+  },
+
+  watch: {
+    isCaptchaNeededCheck() {
+      this.$store.commit("data_card/saveButtonClicked", true);
+      this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
+      this.$store.commit("data_card/setUpdateValueFunction", this.updateValue);
+    },
+  },
+
   async created() {
     try {
       const token = Cookies.get(TOKEN_NAME);
@@ -148,31 +183,7 @@ export default {
       this.$store.commit("data_card/setDisabled", false);
     }
   },
-  computed: {
-    ...mapGetters("data_card", [
-      "getForm",
-      "getFormParams",
-      "getErrorMessage",
-      "getSavedError",
-      "getError",
-      "getBtnSave",
-      "getDataFieldByFieldId",
-    ]),
-    ...mapGetters("auth", ["getLogged", "getUser"]),
-    isReadOnly() {
-      return this.$store.getters["data_card/getReadOnly"];
-    },
-    isBlock() {
-      return this.$store.getters["menu/getMenuById"](this.menuId)?.LUSEBLOCK;
-    },
-    eventLocalHandler() {
-      return () =>
-        import(`/../components/EventHandler/${this.menuId}/eventHandler`);
-    },
-    isCaptchaNeededCheck() {
-      return this.isCaptchaNeeded;
-    },
-  },
+
   methods: {
     async loadScript() {
       return this.eventLocalHandler().then((script) => {
@@ -339,13 +350,6 @@ export default {
     },
     updateBlurValue($event) {
       this.callScript($event, $event);
-    },
-  },
-  watch: {
-    isCaptchaNeededCheck() {
-      this.$store.commit("data_card/saveButtonClicked", true);
-      this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
-      this.$store.commit("data_card/setUpdateValueFunction", this.updateValue);
     },
   },
 };
