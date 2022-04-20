@@ -145,7 +145,6 @@ export default {
     isCaptchaNeededCheck() {
       this.$store.commit("data_card/saveButtonClicked", true);
       this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
-      this.$store.commit("data_card/setUpdateValueFunction", this.updateValue);
     },
   },
 
@@ -314,10 +313,6 @@ export default {
           if (node && !this.$store.getters["data_card/getRecaptchaToken"]) {
             this.$store.commit("data_card/saveButtonClicked", true);
             this.$store.commit("data_card/setUpdateEvent", e);
-            this.$store.commit(
-              "data_card/setUpdateValueFunction",
-              this.updateValue
-            );
             return;
           }
           await this.saveCard(e);

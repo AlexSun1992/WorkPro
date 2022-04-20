@@ -27,14 +27,12 @@ export default {
     menuId: false,
     source: "",
     recaptchaToken: null,
-    updateValueFunction: null,
     updateEvent: null,
     filters: {},
   }),
   getters: {
     getSuggestions: (state) => state.options,
     getUpdateEvent: (state) => state.updateEvent,
-    getUpdateValueFunction: (state) => state.updateValueFunction,
     getRecaptchaToken: (state) => state.recaptchaToken,
     getForm: (state) => state.form,
     getFormParams: (state) => {
@@ -579,9 +577,6 @@ export default {
     },
     setRecaptchaToken(state, params) {
       state.recaptchaToken = params;
-    },
-    setUpdateValueFunction(state, params) {
-      state.updateValueFunction = params;
     },
     setUpdateEvent(state, params) {
       state.updateEvent = params;
