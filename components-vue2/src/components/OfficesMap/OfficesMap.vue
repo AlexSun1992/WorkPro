@@ -53,6 +53,7 @@
         v-if="tabVisible"
         title="На схеме метро"
         title-item-class="office-on-undeground"
+        @click="fitToViewportMetro"
       >
         <div class="metrowrapper">
           <div>
@@ -143,7 +144,10 @@ export default {
       curPosY: null,
       cardPosY: null,
       cardPosX: null,
-      svgScale: 1,
+      translateX:null,
+      translateY:null,
+      mapsFit:false,
+      svgScale:1,
       currentTab: 0,
       suggestView: null,
       currentStation: null,
@@ -186,7 +190,16 @@ export default {
       console.log(error);
     }
   },
-
+  /*mounted(){
+      if (this.width < 900) {
+        this.$nextTick(function () {console.log('aaaa');
+          let sla = document.querySelector(".g-svg-metromap");
+          sla.setAttribute("transform", "matrix(0.5,0,0,0.5,100,0");
+          console.log(sla)
+        this.svgScale= 0.5;
+        })
+      }
+  },*/
   destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
@@ -195,6 +208,20 @@ export default {
     fitToViewport() {
       this.$nextTick(() => {
         this.myMap.container.fitToViewport();
+      });
+    },
+    fitToViewportMetro() {
+      this.$nextTick(() => {
+        if (this.width < 992 && this.mapsFit != true) {
+           document.querySelector(".g-svg-metromap").setAttribute("transform", "matrix(0.5,0,0,0.5,"+((this.width - 1286*0.5)/2+30)+",0)");
+           this.svgScale= 0.5;
+           this.mapsFit = true;
+        }
+        else if (this.width > 1200 && this.mapsFit != true) {
+        document.querySelector(".g-svg-metromap").setAttribute("transform", "matrix(1.5,0,0,1.5,"+((this.width - 1286*1.5)/2+30)+",-210)");
+           this.svgScale= 1.5;
+           this.mapsFit = true;
+        }
       });
     },
     onResize() {
@@ -268,45 +295,40 @@ export default {
     setMouseCoords(e) {
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
+      this.translateX= this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e;
+      this.translateY= this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f;
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
       }
       this.cardposX = parseInt(this.$refs["card"].style.marginLeft);
       this.cardposY = parseInt(this.$refs["card"].style.marginTop);
-      console.log(this.cardposX, this.cardposY);
       document.addEventListener("mousemove", this.onMouseMove);
+      /*document.addEventListener("touchmove", this.onMouseMove);*/
+
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
+      /*document.removeEventListener("touchmove", this.onMouseMove);*/
     },
     onMouseMove(e) {
+      /*console.log(this.curPosX);*/
       e.preventDefault();
       let svg = document.querySelector(".g-svg-metromap");
-      svg.style.left = e.clientX - this.curPosX + "px";
-      svg.style.top = e.clientY - this.curPosY + "px";
-      this.oldPosX = svg.style.left;
-      this.oldPosY = svg.style.top;
+      /*console.log("x:",e.changedTouches[0].clientX,);*/
+      /*console.log(e.movementX,e.movementY);
+      */
+      this.translateX = this.translateX + e.movementX / e.view.devicePixelRatio;
+      this.translateY = this.translateY + e.movementY / e.view.devicePixelRatio;
       this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
       this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
-      svg.setAttribute(
-        "transform",
-        "matrix(" +
-          this.svgScale +
-          ",0,0," +
-          this.svgScale +
-          "," +
-          parseInt(this.oldPosX) +
-          "," +
-          parseInt(this.oldPosY) +
-          ")"
-      );
+      svg.setAttribute("transform","matrix("+this.svgScale+",0,0,"+this.svgScale+"," +  this.translateX + "," +  this.translateY + ")");
       this.$refs["card"].style.marginLeft = this.cardposX + "px";
       this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
     zoom(param) {
       let step = 0.5;
-      if (param == "+") {
+      if (param == "+") {this.closeCard();
         this.svgScale = this.svgScale + step;
         if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
           this.$refs["metro"].firstChild.setAttribute(
@@ -328,6 +350,7 @@ export default {
           );
         }
       } else if (param == "-") {
+        this.closeCard();
         this.svgScale = this.svgScale - step;
         if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
           this.$refs["metro"].firstChild.setAttribute(
@@ -392,9 +415,9 @@ export default {
         this.$refs["card"].style.marginLeft = 0;
         this.$refs["card"].style.marginTop = 0;
         this.$refs["card"].style.top = e.layerY + "px";
-        this.$refs["card"].style.left = e.layerX + body_size + "px";
+        this.$refs["card"].style.left = e.layerX + "px";
         if (e.clientX + 400 > this.width) {
-          this.$refs["card"].style.left = e.layerX - 375 + body_size + "px";
+          this.$refs["card"].style.left = e.layerX - 375 + "px";
         }
         if (e.layerY > 500) {
           this.$refs["card"].style.transform = "translateY(-100%)";
@@ -539,6 +562,7 @@ export default {
           _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".g-svg-metromap");
+
           for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
