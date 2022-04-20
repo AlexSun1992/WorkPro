@@ -10,20 +10,15 @@
           <span v-html="data.helpText" /></vue-easy-tooltip
       ></span>
     </template>
-    <model-select
-      v-model="fieldValue"
-      :is-disabled="!edit || data.readonly"
-      :class="validClass"
-      :options="data.options"
-      :placeholder="data.placeholder"
-    />
     <autocomplete
       ref="autocomplete"
-      :placeholder="data.placeholder"
+      :placeholder="placeholder"
       :class="validClass"
       :auto-select="true"
       :search="search"
       :get-result-value="getResultValue"
+      :default-value="getCurrentValue"
+      :disabled="!edit ? !edit : data.readonly"
       @submit="handleSubmit"
       @blur="handleBlur"
     />
@@ -34,15 +29,12 @@
 </template>
 
 <script>
-import { ModelSelect } from "vue-search-select";
-
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 
 export default {
   name: "ControlCustomCombobox",
   components: {
-    ModelSelect,
     Autocomplete,
   },
   props: {
@@ -57,24 +49,31 @@ export default {
       default: () => false,
     },
   },
+  data() {
+    return {
+      placeholderValue: null,
+    };
+  },
   computed: {
-    fieldValue: {
-      get() {
-        return this.data.value;
-      },
-      set(value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value,
-        });
-      },
-    },
     validClass() {
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
       return "";
+    },
+    placeholder() {
+      return this.placeholderValue
+        ? this.placeholderValue
+        : this.data.placeholder;
+    },
+    getCurrentValue() {
+      return this.data.options.find((item) => item.value === this.data?.value)
+        ?.text;
+    },
+  },
+  watch: {
+    getCurrentValue(value) {
+      this.$refs.autocomplete.value = value;
     },
   },
   methods: {
@@ -84,6 +83,8 @@ export default {
         this.data.options.find((item) => item.value === this.data?.value)
           ?.text === value
       ) {
+        this.placeholderValue = value;
+        this.$refs.autocomplete.value = "";
         return this.data.options;
       }
       return this.data.options.filter((item) => item.text.includes(value));
@@ -115,6 +116,10 @@ export default {
         if (find !== undefined) {
           this.$refs.autocomplete.value = find.text;
           this.handleSubmit(find);
+        } else {
+          this.$refs.autocomplete.value = "";
+          this.placeholderValue = "";
+          this.handleSubmit(null);
         }
       }
     },

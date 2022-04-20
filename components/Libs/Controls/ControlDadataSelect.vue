@@ -96,14 +96,6 @@ export default {
     disabled() {
       return this.$store.getters["data_card/getReadOnly"];
     },
-    errorText() {
-      if (this.data.state === false) {
-        if (this.$refs.autocomplete.value !== "") {
-          return this.data?.helpText ? this.data.helpText : errorText;
-        }
-        return errorText;
-      }
-    },
     validClass() {
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
