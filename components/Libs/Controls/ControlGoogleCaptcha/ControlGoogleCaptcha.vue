@@ -7,7 +7,9 @@
       :sitekey="data.value"
       @verify="setToken"
       @expired="onCaptchaExpired"
+      @render="captchaHasBeenRendered"
     />
+
     <b-form-input v-if="false" v-model="fieldValue"></b-form-input>
   </div>
 </template>
@@ -30,6 +32,7 @@ export default {
     return {
       token: null,
       captchaHired: false,
+      captchaMounted: null,
     };
   },
 
@@ -47,6 +50,10 @@ export default {
       },
     },
 
+    isCaptchaBeenMounted() {
+      return this.captchaMounted;
+    },
+
     saveButtonClicked() {
       return this.$store.getters["data_card/saveButtonClicked"];
     },
@@ -58,8 +65,10 @@ export default {
   watch: {
     async saveButtonClicked() {
       if (!this.$store.getters["data_card/saveButtonClicked"]) return;
-      this.$refs?.recaptcha?.reset();
-      await this.recaptchaExecute();
+      if (this.isCaptchaBeenMounted !== null) {
+        this.$refs?.recaptcha?.reset();
+        await this.recaptchaExecute();
+      }
     },
     saveButtonClickedAmount(value) {
       if (value !== null && this.captchaHired === true) {
@@ -71,7 +80,6 @@ export default {
       const updateValueFunction =
         this.$store.getters["data_card/getUpdateValueFunction"];
       const event = this.$store.getters["data_card/getUpdateEvent"];
-
       updateValueFunction(event);
     },
   },
@@ -103,6 +111,9 @@ export default {
     setToken(token) {
       this.token = token;
       this.$store.commit("data_card/setRecaptchaToken", this.token);
+    },
+    captchaHasBeenRendered(id) {
+      this.captchaMounted = id;
     },
     recaptchaExecute() {
       this.$refs.recaptcha.execute();
