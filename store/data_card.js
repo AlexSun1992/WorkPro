@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
@@ -18,6 +19,7 @@ export default {
     cardChanged: false,
     saveButtonClicked: false,
     saveButtonClickedAmount: null,
+    beforeSavePromises: [],
     listPath: "",
     actionParams: [],
     isSave: true,
@@ -26,14 +28,12 @@ export default {
     moduleId: false,
     menuId: false,
     source: "",
-    recaptchaToken: null,
     updateEvent: null,
     filters: {},
   }),
   getters: {
     getSuggestions: (state) => state.options,
     getUpdateEvent: (state) => state.updateEvent,
-    getRecaptchaToken: (state) => state.recaptchaToken,
     getForm: (state) => state.form,
     getFormParams: (state) => {
       return {
@@ -112,6 +112,12 @@ export default {
     },
   },
   actions: {
+    addBeforeSavePromise({ commit }, payload) {
+      commit("addBeforeSavePromise", payload);
+    },
+    deleteBeforeSavePromise({ commit }, payload) {
+      commit("deleteBeforeSavePromise", payload);
+    },
     async askSuggestions({ commit }, payload) {
       let url = "";
       if (payload.data.fieldId !== undefined) {
@@ -254,6 +260,7 @@ export default {
     async saveDataCard({ commit, state, dispath }, params) {
       commit("setLoading", true);
       commit("setDisabled", true);
+      await Promise.all(state.beforeSavePromises.map((func) => func()));
       try {
         let resp = await this.$axios.post(
           `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
@@ -261,18 +268,17 @@ export default {
           }${params.zone === "free" ? "?zone=free" : ""}`,
           params.form
         );
-        commit("setLoading", false);
-        commit("setDisabled", false);
         commit("setSavedError", false);
         commit("setCardId", resp.data.ID);
         commit("setCardRelId", resp.data.REL);
         return resp;
       } catch (e) {
-        commit("setLoading", false);
-        commit("setDisabled", false);
         commit("setSavedError", true);
         commit("setErrorMessage", e.response.data);
         return e.response;
+      } finally {
+        commit("setLoading", false);
+        commit("setDisabled", false);
       }
     },
     async executeAction(
@@ -412,6 +418,14 @@ export default {
     },
   },
   mutations: {
+    addBeforeSavePromise(state, func) {
+      state.beforeSavePromises.push(func);
+    },
+    deleteBeforeSavePromise(state, func) {
+      state.beforeSavePromises = state.beforeSavePromises.filter(
+        (item) => item !== func
+      );
+    },
     setData(state, suggestions) {
       state.options = suggestions;
     },
@@ -574,9 +588,6 @@ export default {
     },
     setSource(state, params) {
       state.source = params;
-    },
-    setRecaptchaToken(state, params) {
-      state.recaptchaToken = params;
     },
     setUpdateEvent(state, params) {
       state.updateEvent = params;
