@@ -53,6 +53,7 @@
         v-if="tabVisible"
         title="На схеме метро"
         title-item-class="office-on-undeground"
+        @click="fitToViewportMetro"
       >
         <div class="metrowrapper">
           <div>
@@ -97,7 +98,6 @@
 </template>
 
 <script>
-import Paginator from "./Paginator.vue";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
 import ZoomComponent from "./ZoomComponent.vue";
@@ -109,6 +109,7 @@ import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import { BPagination } from "bootstrap-vue";
 import Cookies from "js-cookie";
+import { isOpened, getTemplate } from "../../../../utils/map/helpers";
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
@@ -122,7 +123,6 @@ export default {
     ZoomComponent,
     BPagination,
   },
-  props: ["notification", "mobile"],
   data() {
     return {
       myMap: null,
@@ -144,6 +144,9 @@ export default {
       curPosY: null,
       cardPosY: null,
       cardPosX: null,
+      translateX:null,
+      translateY:null,
+      mapsFit:false,
       svgScale:1,
       currentTab: 0,
       suggestView: null,
@@ -187,23 +190,38 @@ export default {
       console.log(error);
     }
   },
-
+  /*mounted(){
+      if (this.width < 900) {
+        this.$nextTick(function () {console.log('aaaa');
+          let sla = document.querySelector(".g-svg-metromap");
+          sla.setAttribute("transform", "matrix(0.5,0,0,0.5,100,0");
+          console.log(sla)
+        this.svgScale= 0.5;
+        })
+      }
+  },*/
   destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
 
   methods: {
-    getTime(distance) {
-      const mins = (distance / 3) * 60;
-      const hours = Math.trunc(mins / 60);
-      const minutes = mins % 60;
-      return hours > 0
-        ? `${hours} ч ${parseInt(minutes)} мин`
-        : `${parseInt(minutes)} мин`;
-    },
     fitToViewport() {
       this.$nextTick(() => {
         this.myMap.container.fitToViewport();
+      });
+    },
+    fitToViewportMetro() {
+      this.$nextTick(() => {
+        if (this.width < 992 && this.mapsFit != true) {
+           document.querySelector(".g-svg-metromap").setAttribute("transform", "matrix(0.5,0,0,0.5,"+((this.width - 1286*0.5)/2+30)+",0)");
+           this.svgScale= 0.5;
+           this.mapsFit = true;
+        }
+        else if (this.width > 1200 && this.mapsFit != true) {
+        document.querySelector(".g-svg-metromap").setAttribute("transform", "matrix(1.5,0,0,1.5,"+((this.width - 1286*1.5)/2+30)+",-210)");
+           this.svgScale= 1.5;
+           this.mapsFit = true;
+        }
       });
     },
     onResize() {
@@ -213,22 +231,6 @@ export default {
     closeCard() {
       this.circleClicked = false;
       this.setStatus();
-    },
-    isOpened(office) {
-      let dateNow = new Date();
-      let day = dateNow.getDay();
-      let dateEnd = new Date();
-      day = day == 0 ? 7 : day;
-      if (office.GRAF && office.GRAF[day - 1]) {
-        const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
-        dateEnd.setHours(endHour);
-        dateEnd.setMinutes(endMinute);
-        let isOpened = true;
-        if (dateNow > dateEnd) {
-          isOpened = false;
-        }
-        return isOpened;
-      }
     },
     setStatus() {
       let g = document.getElementsByTagName("g");
@@ -242,7 +244,7 @@ export default {
                 return item.SNAME === name;
               });
               if (candidate) {
-                if (!this.isOpened(office) && office.GRAF) {
+                if (!isOpened(office) && office.GRAF) {
                   g[0].children[i].setAttribute("href", "#balloon-close");
                 } else {
                   g[0].children[i].setAttribute("href", "#balloon-open");
@@ -293,50 +295,91 @@ export default {
     setMouseCoords(e) {
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
+      this.translateX= this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e;
+      this.translateY= this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f;
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
       }
       this.cardposX = parseInt(this.$refs["card"].style.marginLeft);
       this.cardposY = parseInt(this.$refs["card"].style.marginTop);
-      console.log(this.cardposX, this.cardposY);
       document.addEventListener("mousemove", this.onMouseMove);
+      /*document.addEventListener("touchmove", this.onMouseMove);*/
+
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
+      /*document.removeEventListener("touchmove", this.onMouseMove);*/
     },
     onMouseMove(e) {
+      /*console.log(this.curPosX);*/
       e.preventDefault();
       let svg = document.querySelector(".g-svg-metromap");
-      svg.style.left = e.clientX - this.curPosX + "px";
-      svg.style.top = e.clientY - this.curPosY + "px";
-      this.oldPosX = svg.style.left;
-      this.oldPosY = svg.style.top;
+      /*console.log("x:",e.changedTouches[0].clientX,);*/
+      /*console.log(e.movementX,e.movementY);
+      */
+      this.translateX = this.translateX + e.movementX / e.view.devicePixelRatio;
+      this.translateY = this.translateY + e.movementY / e.view.devicePixelRatio;
       this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
       this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
-      svg.setAttribute("transform","matrix("+this.svgScale+",0,0,"+this.svgScale+"," +  parseInt(this.oldPosX) + "," +  parseInt(this.oldPosY) + ")");
+      svg.setAttribute("transform","matrix("+this.svgScale+",0,0,"+this.svgScale+"," +  this.translateX + "," +  this.translateY + ")");
       this.$refs["card"].style.marginLeft = this.cardposX + "px";
       this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
     zoom(param) {
       let step = 0.5;
-      if (param == "+") {
+      if (param == "+") {this.closeCard();
         this.svgScale = this.svgScale + step;
         if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
-          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+",0,0)");
+          this.$refs["metro"].firstChild.setAttribute(
+            "transform",
+            "matrix(" + this.svgScale + ",0,0," + this.svgScale + ",0,0)"
+          );
         } else {
-          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
+          this.$refs["metro"].firstChild.setAttribute(
+            "transform",
+            "matrix(" +
+              this.svgScale +
+              ",0,0," +
+              this.svgScale +
+              "," +
+              this.$refs["metro"].firstChild.transform.animVal[0].matrix.e +
+              "," +
+              this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
+              ")"
+          );
         }
       } else if (param == "-") {
+        this.closeCard();
         this.svgScale = this.svgScale - step;
         if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
-          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+",0,0)");
+          this.$refs["metro"].firstChild.setAttribute(
+            "transform",
+            "matrix(" + this.svgScale + ",0,0," + this.svgScale + ",0,0)"
+          );
         } else {
-          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
-          if (this.svgScale  < 0) {
-            this.$refs.["metro"].firstChild.setAttribute("transform", "matrix(0.1,0,0,0.1,"+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
+          this.$refs["metro"].firstChild.setAttribute(
+            "transform",
+            "matrix(" +
+              this.svgScale +
+              ",0,0," +
+              this.svgScale +
+              "," +
+              this.$refs["metro"].firstChild.transform.animVal[0].matrix.e +
+              "," +
+              this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
+              ")"
+          );
+          if (this.svgScale < 0) {
+            this.$refs["metro"].firstChild.setAttribute(
+              "transform",
+              "matrix(0.1,0,0,0.1," +
+                this.$refs["metro"].firstChild.transform.animVal[0].matrix.e +
+                "," +
+                this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
+                ")"
+            );
           }
-
         }
       }
     },
@@ -372,9 +415,9 @@ export default {
         this.$refs["card"].style.marginLeft = 0;
         this.$refs["card"].style.marginTop = 0;
         this.$refs["card"].style.top = e.layerY + "px";
-        this.$refs["card"].style.left = e.layerX + body_size + "px";
+        this.$refs["card"].style.left = e.layerX + "px";
         if (e.clientX + 400 > this.width) {
-          this.$refs["card"].style.left = e.layerX - 375 + body_size + "px";
+          this.$refs["card"].style.left = e.layerX - 375 + "px";
         }
         if (e.layerY > 500) {
           this.$refs["card"].style.transform = "translateY(-100%)";
@@ -455,170 +498,11 @@ export default {
       });
       this.setPlaceholder();
     },
-    getTemplate(agency) {
-      let phonesArr = agency.SPHONE?.split(";");
-      let grafArr = agency.SGRAF?.split("\n");
-      phonesArr?.pop();
-      grafArr?.pop();
-      let template = `
-        <div class="card-body">
-          <h4 class="card-title">${agency.SSHORTNAME}</h4>
-          <div class="card-office-adress row">
-            <div class="col-4 pe-0">
-              <div class="position-relative">
-                <img src="" />
-                <button class="office-image-zoom" type="button"></button>
-              </div>
-            </div>
-            <div class="col-8">
-              <div>${agency.SADDRESS}</div>
-              <div class="card-office-opened">Открыт до</div>
-            </div>
-          </div>
-          <div class="card-office-undeground">
-            <span class="undeground-color"></span>
-            <span>Ленинский проспект</span>
-            <span class="card-office-distance"> 1.5 км </span>
-          </div>
-          <div class="card-office-time">
-            <button type="button">Режим работы:</button>
-            <div class="card-office-times">${agency.SGRAF}</div>
-          </div>
-          <div class="card-office-contacts">
-            <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
-            <div>
-              <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
-            </div>
-          </div>
-        </div>`;
-      template = template.replace(
-        /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
-        () => {
-          let temp = "";
-          grafArr.forEach((graf) => {
-            temp += `<div class="card-office-times">${graf}</div>`;
-          });
-          return temp;
-        }
-      );
-      template = template.replace(
-        /<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g,
-        () => {
-          let temp = "";
-          phonesArr?.forEach((phone) => {
-            temp += `<div class="card-office-phone"><a href="tel:${phone}">${phone}</a></div>`;
-          });
-          return temp;
-        }
-      );
-      template = template.replace(
-        /<a href="mailto:[^"].+? class="card-office-e-mail">(.*?)<\/a[^>]*?>/g,
-        () => {
-          return agency.SEMAIL
-            ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>`
-            : "";
-        }
-      );
 
-      template = template.replace(
-        /<div class="col-4 pe-0">[\n\s]*?<div class="position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div>[\n\s]*?<\/div[^>]*>/g,
-        () => {
-          let url =
-            "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
-          return agency.SPATH1
-            ? `<div class="col-4 pe-0"><div class="position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div></div>`
-            : "";
-        }
-      );
-
-      template = template.replace(
-        /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>[^<]*?<\/span>[\n\s]*?<span class="card-office-distance">[^<]*?<\/span>[\n\s]*?<\/div>/,
-        () => {
-          let temp = "";
-          if (agency.IDUNDERGROUND.length > 0) {
-            temp += `<div class="card-office-undeground">`;
-            agency.IDUNDERGROUND.forEach((item) => {
-              temp += `<div>
-                    <span class=${
-                      "undeground-color_" + item.IDUNDERLINE
-                    }></span>
-                    <span>${item.SNAME}</span>
-                    <span class="card-office-distance"> ${this.getTime(
-                      agency.NDISTANSE
-                    )} </span>
-                    </div>
-                  `;
-            });
-            temp += "</div>";
-          } else {
-            temp = "";
-          }
-
-          return temp;
-        }
-      );
-
-      template = template.replace(
-        /<div class="col-8">[\n\s]*?<div>[\n\s]*?(.*?)[\n\s]*?<\/div>[\n\s]*?<div class="card-office-opened">[\n\s]*?Открыт до[\n\s]*?<\/div>[\n\s]*?<\/div>/,
-        () => {
-          return agency.SPATH1
-            ? `<div class="col-8">
-                  <div>${agency.SADDRESS}</div>
-                  <div class="card-office-opened">${this.showWorkingHours(
-                    agency
-                  )}</div>
-                </div>`
-            : `<div class="col-12">
-                <div>${agency.SADDRESS}</div>
-                <div class="card-office-opened">${this.showWorkingHours(
-                  agency
-                )}</div>
-            </div>`;
-        }
-      );
-      return template;
-    },
-    showWorkingHours(agency) {
-      let dateNow = new Date();
-      let day = dateNow.getDay();
-      let dateEnd = new Date();
-      day = day == 0 ? 7 : day;
-
-      if (!agency.GRAF) return "";
-
-      if (agency.GRAF[day - 1]) {
-        const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
-        dateEnd.setHours(endHour);
-        dateEnd.setMinutes(endMinute);
-        let str;
-        if (dateNow < dateEnd) {
-          str = `Открыт до ${dateEnd.getHours()}:${
-            dateEnd.getMinutes() == 0
-              ? dateEnd.getMinutes() + "0"
-              : dateEnd.getMinutes()
-          }`;
-        } else if (dateNow > dateEnd && agency.GRAF[day]) {
-          str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
-        } else if (dateNow > dateEnd && !agency.GRAF[day]) {
-          this.isOpened = false;
-          dateNow.setDate(
-            dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
-          );
-          str =
-            "Закрыт до " +
-            ("0" + dateNow.getDate()).slice(-2) +
-            "." +
-            ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-            "." +
-            dateNow.getFullYear();
-        }
-        return str;
-      }
-    },
     combineAgencies(agencies, i, count) {
       let arr = [];
       agencies.slice(i, i + count).forEach((item) => {
-        arr.push(this.getTemplate(item));
+        arr.push(getTemplate(item));
       });
       return arr;
     },
@@ -678,6 +562,7 @@ export default {
           _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".g-svg-metromap");
+
           for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&

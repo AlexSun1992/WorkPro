@@ -60,7 +60,6 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
-
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 
 Vue.use(LoadScript);
@@ -115,6 +114,41 @@ export default {
       captchaIsDemandedNow: false,
     };
   },
+
+  computed: {
+    ...mapGetters("data_card", [
+      "getForm",
+      "getFormParams",
+      "getErrorMessage",
+      "getSavedError",
+      "getError",
+      "getBtnSave",
+      "getDataFieldByFieldId",
+    ]),
+    ...mapGetters("auth", ["getLogged", "getUser"]),
+    isReadOnly() {
+      return this.$store.getters["data_card/getReadOnly"];
+    },
+    isBlock() {
+      return this.$store.getters["menu/getMenuById"](this.menuId)?.LUSEBLOCK;
+    },
+    eventLocalHandler() {
+      return () =>
+        import(`/../components/EventHandler/${this.menuId}/eventHandler`);
+    },
+    isCaptchaNeededCheck() {
+      return this.isCaptchaNeeded;
+    },
+  },
+
+  watch: {
+    isCaptchaNeededCheck() {
+      this.$store.commit("data_card/saveButtonClicked", true);
+      this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
+      this.$store.commit("data_card/setUpdateValueFunction", this.updateValue);
+    },
+  },
+
   async created() {
     try {
       const token = Cookies.get(TOKEN_NAME);
@@ -149,31 +183,7 @@ export default {
       this.$store.commit("data_card/setDisabled", false);
     }
   },
-  computed: {
-    ...mapGetters("data_card", [
-      "getForm",
-      "getFormParams",
-      "getErrorMessage",
-      "getSavedError",
-      "getError",
-      "getBtnSave",
-      "getDataFieldByFieldId",
-    ]),
-    ...mapGetters("auth", ["getLogged", "getUser"]),
-    isReadOnly() {
-      return this.$store.getters["data_card/getReadOnly"];
-    },
-    isBlock() {
-      return this.$store.getters["menu/getMenuById"](this.menuId)?.LUSEBLOCK;
-    },
-    eventLocalHandler() {
-      return () =>
-        import(`/../components/EventHandler/${this.menuId}/eventHandler`);
-    },
-    isCaptchaNeededCheck() {
-      return this.isCaptchaNeeded;
-    },
-  },
+
   methods: {
     async loadScript() {
       return this.eventLocalHandler().then((script) => {
@@ -300,6 +310,7 @@ export default {
         });
         if (actionSaveCard?.ID === actionId) {
           const node = document.querySelector('[title="reCAPTCHA"]');
+
           if (node && !this.$store.getters["data_card/getRecaptchaToken"]) {
             this.$store.commit("data_card/saveButtonClicked", true);
             this.$store.commit("data_card/setUpdateEvent", e);
@@ -339,13 +350,6 @@ export default {
     },
     updateBlurValue($event) {
       this.callScript($event, $event);
-    },
-  },
-  watch: {
-    isCaptchaNeededCheck() {
-      this.$store.commit("data_card/saveButtonClicked", true);
-      this.$store.commit("data_card/setUpdateEvent", this.captchaIsDemandedNow);
-      this.$store.commit("data_card/setUpdateValueFunction", this.updateValue);
     },
   },
 };

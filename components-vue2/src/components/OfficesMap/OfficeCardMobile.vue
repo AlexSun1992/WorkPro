@@ -99,6 +99,12 @@
 
 <script>
 import { BCard, BButton, BCardText } from "bootstrap-vue";
+import {
+  count,
+  getUnderlineId,
+  getPhones,
+  getGrafs,
+} from "../../../../utils/map/helpers";
 export default {
   name: "OfficeCardMobile",
   components: {
@@ -109,40 +115,44 @@ export default {
   props: ["office"],
   data() {
     return {
+      count,
+      getUnderlineId,
+      getPhones,
+      getGrafs,
       isInfoShown: false,
       isGrafShown: false,
       isOpened: true,
     };
   },
   methods: {
-    count(office) {
-      let str;
-      if (!office.info) return;
-      if (office.info.length == 1) {
-        str = office.info.length + " отделение";
-      } else if (office.info.length > 1 && office.info.length < 5) {
-        str = office.info.length + " отделения";
-      } else {
-        str = office.info.length + " отделений";
-      }
-      return str;
-    },
-    getUnderlineId(station, item) {
-      let obj = item.IDUNDERGROUND.find((element) => {
-        return element.SNAME.includes(station);
-      });
-      return obj?.IDUNDERLINE;
-    },
-    getPhones(phones) {
-      let phonesArr = phones.split(";");
-      phonesArr.pop();
-      return phonesArr;
-    },
-    getGrafs(grafs) {
-      let grafsArr = grafs.split("\n");
-      grafsArr.pop();
-      return grafsArr;
-    },
+    // count(office) {
+    //   let str;
+    //   if (!office.info) return;
+    //   if (office.info.length == 1) {
+    //     str = office.info.length + " отделение";
+    //   } else if (office.info.length > 1 && office.info.length < 5) {
+    //     str = office.info.length + " отделения";
+    //   } else {
+    //     str = office.info.length + " отделений";
+    //   }
+    //   return str;
+    // },
+    // getUnderlineId(station, item) {
+    //   let obj = item.IDUNDERGROUND.find((element) => {
+    //     return element.SNAME.includes(station);
+    //   });
+    //   return obj?.IDUNDERLINE;
+    // },
+    // getPhones(phones) {
+    //   let phonesArr = phones.split(";");
+    //   phonesArr.pop();
+    //   return phonesArr;
+    // },
+    // getGrafs(grafs) {
+    //   let grafsArr = grafs.split("\n");
+    //   grafsArr.pop();
+    //   return grafsArr;
+    // },
     showWorkingHours(office) {
       let dateNow = new Date();
       let day = dateNow.getDay();
