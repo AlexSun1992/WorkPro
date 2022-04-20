@@ -69,6 +69,7 @@
 
 <script>
 import { BCard, BButton, BCardText } from "bootstrap-vue";
+import { getTime, getPhones, getGrafs } from "../../../../utils/map/helpers";
 export default {
   name: "OfficeCard",
   components: {
@@ -79,29 +80,14 @@ export default {
   props: ["office"],
   data() {
     return {
+      getTime,
+      getPhones,
+      getGrafs,
       isGrafShown: false,
       isOpened: true,
     };
   },
   methods: {
-    getTime(distance) {
-      const mins = (distance / 3) * 60;
-      const hours = Math.trunc(mins / 60);
-      const minutes = mins % 60;
-      return hours > 0
-        ? `${hours} ч ${parseInt(minutes)} мин`
-        : `${parseInt(minutes)} мин`;
-    },
-    getPhones(phones) {
-      let phonesArr = phones.split(";");
-      phonesArr.pop();
-      return phonesArr;
-    },
-    getGrafs(grafs) {
-      let grafsArr = grafs.split("\n");
-      grafsArr.pop();
-      return grafsArr;
-    },
     showWorkingHours(office) {
       let dateNow = new Date();
       let day = dateNow.getDay();

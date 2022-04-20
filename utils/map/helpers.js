@@ -1,5 +1,6 @@
 const getTime = (distance) => {
   const mins = (distance / 3) * 60;
+  if (mins > 20) return `${distance.toFixed(1)} км`;
   const hours = Math.trunc(mins / 60);
   const minutes = mins % 60;
   return hours > 0
@@ -143,9 +144,8 @@ const getTemplate = (agency) => {
           temp += `<div>
                   <span class=${"undeground-color_" + item.IDUNDERLINE}></span>
                   <span>${item.SNAME}</span>
-                  <span class="card-office-distance"> ${getTime(
-                    agency.NDISTANSE
-                  )} </span>
+                  <span class="card-office-distance"> 
+                  ${getTime(agency.NDISTANSE)} </span>
                   </div>
                 `;
         });
@@ -177,9 +177,45 @@ const getTemplate = (agency) => {
   return template;
 };
 
+const count = (office) => {
+  let str;
+  if (!office.info) return;
+  if (office.info.length == 1) {
+    str = office.info.length + " отделение";
+  } else if (office.info.length > 1 && office.info.length < 5) {
+    str = office.info.length + " отделения";
+  } else {
+    str = office.info.length + " отделений";
+  }
+  return str;
+};
+
+const getUnderlineId = (station, item) => {
+  let obj = item.IDUNDERGROUND.find((element) => {
+    return element.SNAME.includes(station);
+  });
+  return obj?.IDUNDERLINE;
+};
+
+const getPhones = (phones) => {
+  let phonesArr = phones.split(";");
+  phonesArr.pop();
+  return phonesArr;
+};
+
+const getGrafs = (grafs) => {
+  let grafsArr = grafs.split("\n");
+  grafsArr.pop();
+  return grafsArr;
+};
+
 module.exports = {
   getTime,
   isOpened,
   showWorkingHours,
   getTemplate,
+  count,
+  getUnderlineId,
+  getPhones,
+  getGrafs,
 };
