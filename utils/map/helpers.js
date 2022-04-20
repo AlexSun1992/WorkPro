@@ -177,9 +177,45 @@ const getTemplate = (agency) => {
   return template;
 };
 
+const count = (office) => {
+  let str;
+  if (!office.info) return;
+  if (office.info.length == 1) {
+    str = office.info.length + " отделение";
+  } else if (office.info.length > 1 && office.info.length < 5) {
+    str = office.info.length + " отделения";
+  } else {
+    str = office.info.length + " отделений";
+  }
+  return str;
+};
+
+const getUnderlineId = (station, item) => {
+  let obj = item.IDUNDERGROUND.find((element) => {
+    return element.SNAME.includes(station);
+  });
+  return obj?.IDUNDERLINE;
+};
+
+const getPhones = (phones) => {
+  let phonesArr = phones.split(";");
+  phonesArr.pop();
+  return phonesArr;
+};
+
+const getGrafs = (grafs) => {
+  let grafsArr = grafs.split("\n");
+  grafsArr.pop();
+  return grafsArr;
+};
+
 module.exports = {
   getTime,
   isOpened,
   showWorkingHours,
   getTemplate,
+  count,
+  getUnderlineId,
+  getPhones,
+  getGrafs,
 };
