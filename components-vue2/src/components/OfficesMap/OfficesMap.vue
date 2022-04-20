@@ -144,14 +144,10 @@ export default {
       curPosY: null,
       cardPosY: null,
       cardPosX: null,
-<<<<<<< HEAD
       translateX:null,
       translateY:null,
       mapsFit:false,
       svgScale:1,
-=======
-      svgScale: 1,
->>>>>>> master
       currentTab: 0,
       suggestView: null,
       currentStation: null,
@@ -326,22 +322,7 @@ export default {
       this.translateY = this.translateY + e.movementY / e.view.devicePixelRatio;
       this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
       this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
-<<<<<<< HEAD
       svg.setAttribute("transform","matrix("+this.svgScale+",0,0,"+this.svgScale+"," +  this.translateX + "," +  this.translateY + ")");
-=======
-      svg.setAttribute(
-        "transform",
-        "matrix(" +
-          this.svgScale +
-          ",0,0," +
-          this.svgScale +
-          "," +
-          parseInt(this.oldPosX) +
-          "," +
-          parseInt(this.oldPosY) +
-          ")"
-      );
->>>>>>> master
       this.$refs["card"].style.marginLeft = this.cardposX + "px";
       this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
@@ -377,12 +358,6 @@ export default {
             "matrix(" + this.svgScale + ",0,0," + this.svgScale + ",0,0)"
           );
         } else {
-<<<<<<< HEAD
-          this.$refs.["metro"].firstChild.setAttribute("transform", "matrix("+this.svgScale+",0,0,"+this.svgScale+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
-          if (this.svgScale  <= 0) {
-            this.svgScale = 0;
-            this.$refs.["metro"].firstChild.setAttribute("transform", "matrix(0.1,0,0,0.1,"+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.e+","+this.$refs.["metro"].firstChild.transform.animVal[0].matrix.f+")");
-=======
           this.$refs["metro"].firstChild.setAttribute(
             "transform",
             "matrix(" +
@@ -404,7 +379,6 @@ export default {
                 this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
                 ")"
             );
->>>>>>> master
           }
         }
       }
