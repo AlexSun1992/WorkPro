@@ -3,6 +3,7 @@
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
+      :loadRecaptchaScript="true"
       :sitekey="data.value"
       @verify="setToken"
       @expired="onCaptchaExpired"
@@ -32,8 +33,52 @@ export default {
     };
   },
 
+  computed: {
+    fieldValue: {
+      get: function () {
+        return this.data.value;
+      },
+      set: function (value) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: value,
+        });
+      },
+    },
+
+    saveButtonClicked() {
+      return this.$store.getters["data_card/saveButtonClicked"];
+    },
+    saveButtonClickedAmount() {
+      return this.$store.getters["data_card/saveButtonClickedAmount"];
+    },
+  },
+
+  watch: {
+    async saveButtonClicked() {
+      if (!this.$store.getters["data_card/saveButtonClicked"]) return;
+      this.$refs?.recaptcha?.reset();
+      await this.recaptchaExecute();
+    },
+    saveButtonClickedAmount(value) {
+      if (value !== null && this.captchaHired === true) {
+        this.$refs?.recaptcha?.execute();
+      }
+    },
+    token() {
+      this.fieldValue = this.token;
+      const updateValueFunction =
+        this.$store.getters["data_card/getUpdateValueFunction"];
+      const event = this.$store.getters["data_card/getUpdateEvent"];
+
+      updateValueFunction(event);
+    },
+  },
+
+  ////// Подключение капчи
   mounted() {
-    let externalScript = document.createElement("script");
+    const externalScript = document.createElement("script");
     externalScript.setAttribute(
       "src",
       "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
@@ -64,52 +109,6 @@ export default {
     },
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
-    },
-  },
-  computed: {
-    fieldValue: {
-      get: function () {
-        return this.data.value;
-      },
-      set: function (value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: value,
-        });
-      },
-    },
-
-    saveButtonClicked() {
-      return this.$store.getters["data_card/saveButtonClicked"];
-    },
-    saveButtonClickedAmount() {
-      return this.$store.getters["data_card/saveButtonClickedAmount"];
-    },
-  },
-
-  watch: {
-    async saveButtonClicked(value) {
-      if (!this.$store.getters["data_card/saveButtonClicked"]) return;
-      this.$refs.recaptcha.reset();
-      await this.recaptchaExecute();
-    },
-    saveButtonClickedAmount(value) {
-      if (value !== null && this.captchaHired === true) {
-        this.$refs.recaptcha.execute();
-      }
-      if (value) {
-        this.$refs.recaptcha.execute();
-      }
-    },
-    token() {
-      this.fieldValue = this.token;
-
-      let updateValueFunction =
-        this.$store.getters["data_card/getUpdateValueFunction"];
-      let event = this.$store.getters["data_card/getUpdateEvent"];
-
-      updateValueFunction(event);
     },
   },
 };
