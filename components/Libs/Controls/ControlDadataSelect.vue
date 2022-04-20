@@ -168,7 +168,7 @@ export default {
       });
     },
 
-    handleBlur(value) {
+    handleBlur() {
       const find = this.group.find((i) =>
         this.$refs.autocomplete?.value.includes(i.value)
       );

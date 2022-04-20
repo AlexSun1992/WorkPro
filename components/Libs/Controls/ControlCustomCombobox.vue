@@ -108,6 +108,14 @@ export default {
           this.$refs.autocomplete.value = value.text;
           this.handleSubmit(value);
         }
+      } else {
+        const find = this.data.options.find((i) =>
+          i.text.includes(this.$refs.autocomplete?.value)
+        );
+        if (find !== undefined) {
+          this.$refs.autocomplete.value = find.text;
+          this.handleSubmit(find);
+        }
       }
     },
   },
