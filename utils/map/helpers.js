@@ -1,5 +1,6 @@
 const getTime = (distance) => {
   const mins = (distance / 3) * 60;
+  if (mins > 20) return `${distance.toFixed(1)} км`;
   const hours = Math.trunc(mins / 60);
   const minutes = mins % 60;
   return hours > 0
@@ -143,9 +144,8 @@ const getTemplate = (agency) => {
           temp += `<div>
                   <span class=${"undeground-color_" + item.IDUNDERLINE}></span>
                   <span>${item.SNAME}</span>
-                  <span class="card-office-distance"> ${getTime(
-                    agency.NDISTANSE
-                  )} </span>
+                  <span class="card-office-distance"> 
+                  ${getTime(agency.NDISTANSE)} </span>
                   </div>
                 `;
         });
