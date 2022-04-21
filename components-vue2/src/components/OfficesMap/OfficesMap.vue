@@ -293,6 +293,7 @@ export default {
       this.currentStation = "";
     },
     openOnMap(e) {
+      this.myMap.geoObjects.remove(this.placemark);
       this.currentTab = 0;
       this.updateMap(
         {
@@ -301,7 +302,7 @@ export default {
         },
         e.SADDRESS,
         20,
-        false
+        true
       );
     },
 
@@ -634,7 +635,7 @@ export default {
         this.regionId = Cookies.get("kladr_id")?.substr(0, 2);
       }
     },
-    updateMap(state, caption, zoom = 12, visibility) {
+    updateMap(state, caption, zoom = 12, visibility = true) {
       this.placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
@@ -656,13 +657,13 @@ export default {
       }
 
       this.myMap.setCenter(
-        this.centerCoords && !this.isMetroSuggest
+        this.centerCoords && !this.isMetroSuggest && !state.center
           ? this.centerCoords
           : state.center,
         this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
       );
       this.placemark.geometry.setCoordinates(
-        this.centerCoords && !this.isMetroSuggest
+        this.centerCoords && !this.isMetroSuggest && !state.center
           ? this.centerCoords
           : state.center
       );
