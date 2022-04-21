@@ -308,15 +308,8 @@ export default {
           return item.NTYPE === 4 && item.ID === actionId;
         });
         if (actionSaveCard?.ID === actionId) {
-          const node = document.querySelector('[title="reCAPTCHA"]');
-
-          if (node && !this.$store.getters["data_card/getRecaptchaToken"]) {
-            this.$store.commit("data_card/saveButtonClicked", true);
-            this.$store.commit("data_card/setUpdateEvent", e);
-            return;
-          }
+          this.$store.commit("data_card/saveButtonClicked", true);
           await this.saveCard(e);
-          this.$store.commit("data_card/setRecaptchaToken", null);
           this.$store.commit("data_card/saveButtonClicked", false);
         }
         if (actionRefreshCard?.ID === actionId) {
