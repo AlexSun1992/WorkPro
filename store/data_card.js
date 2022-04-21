@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
@@ -17,6 +18,7 @@ export const state = () => ({
   cardChanged: false,
   saveButtonClicked: false,
   saveButtonClickedAmount: null,
+  beforeSavePromises: [],
   listPath: "",
   actionParams: [],
   isSave: true,
@@ -25,8 +27,6 @@ export const state = () => ({
   moduleId: false,
   menuId: false,
   source: "",
-  recaptchaToken: null,
-  updateValueFunction: null,
   updateEvent: null,
   filters: {},
 });
@@ -34,8 +34,6 @@ export const state = () => ({
 export const getters = {
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
-  getUpdateValueFunction: (state) => state.updateValueFunction,
-  getRecaptchaToken: (state) => state.recaptchaToken,
   getForm: (state) => state.form,
   getFormParams: (state) => {
     return {
@@ -61,7 +59,7 @@ export const getters = {
   getReadOnly: (state) => state.isReadOnly,
   getActionParams: (state) =>
     typeof state.actionParams.map === "function"
-      ? state.actionParams.map((a) => Object.assign({}, a))
+      ? state.actionParams.map((a) => ({ ...a }))
       : [],
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
@@ -115,13 +113,19 @@ export const getters = {
 };
 
 export const actions = {
-  async askSuggestions({ dispatch, commit, getters, state }, payload) {
+  addBeforeSavePromise({ commit }, payload) {
+    commit("addBeforeSavePromise", payload);
+  },
+  deleteBeforeSavePromise({ commit }, payload) {
+    commit("deleteBeforeSavePromise", payload);
+  },
+  async askSuggestions({ commit }, payload) {
     let url = "";
     if (payload.data.fieldId !== undefined) {
       url = `/api/dicwf/${payload.data.fieldId}/${payload.relationValue.value}`;
     }
 
-    let response = await Axios({ url: url, method: "GET" });
+    const response = await Axios({ url, method: "GET" });
     commit("setData", response.data);
   },
 
@@ -163,9 +167,11 @@ export const actions = {
               if (params.query[item.name]) {
                 if (item.name.substring(0, 2) === `FK`) {
                   const text = params.query[item.name];
-                  const s_value = params.query[item.name.substring(2)];
+                  const sValue = params.query[item.name.substring(2)];
                   const value =
-                    isNaN(s_value) === false ? parseInt(s_value) : s_value;
+                    Number.isNaN(sValue) === false
+                      ? parseInt(sValue, 10)
+                      : sValue;
                   item.value = { text, value };
                 } else {
                   item.value = params.query[item.name];
@@ -255,6 +261,7 @@ export const actions = {
   async saveDataCard({ commit, state, dispath }, params) {
     commit("setLoading", true);
     commit("setDisabled", true);
+    await Promise.all(state.beforeSavePromises.map((func) => func()));
     try {
       let resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
@@ -262,18 +269,17 @@ export const actions = {
         }${params.zone === "free" ? "?zone=free" : ""}`,
         params.form
       );
-      commit("setLoading", false);
-      commit("setDisabled", false);
       commit("setSavedError", false);
       commit("setCardId", resp.data.ID);
       commit("setCardRelId", resp.data.REL);
       return resp;
     } catch (e) {
-      commit("setLoading", false);
-      commit("setDisabled", false);
       commit("setSavedError", true);
       commit("setErrorMessage", e.response.data);
       return e.response;
+    } finally {
+      commit("setLoading", false);
+      commit("setDisabled", false);
     }
   },
   async executeAction(
@@ -412,7 +418,16 @@ export const actions = {
     }
   },
 };
+
 export const mutations = {
+  addBeforeSavePromise(state, func) {
+    state.beforeSavePromises.push(func);
+  },
+  deleteBeforeSavePromise(state, func) {
+    state.beforeSavePromises = state.beforeSavePromises.filter(
+      (item) => item !== func
+    );
+  },
   setData(state, suggestions) {
     state.options = suggestions;
   },
@@ -575,12 +590,6 @@ export const mutations = {
   },
   setSource(state, params) {
     state.source = params;
-  },
-  setRecaptchaToken(state, params) {
-    state.recaptchaToken = params;
-  },
-  setUpdateValueFunction(state, params) {
-    state.updateValueFunction = params;
   },
   setUpdateEvent(state, params) {
     state.updateEvent = params;

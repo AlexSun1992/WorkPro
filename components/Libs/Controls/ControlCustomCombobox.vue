@@ -10,12 +10,17 @@
           <span v-html="data.helpText" /></vue-easy-tooltip
       ></span>
     </template>
-    <model-select
-      v-model="fieldValue"
-      :is-disabled="!edit || data.readonly"
+    <autocomplete
+      ref="autocomplete"
+      :placeholder="placeholder"
       :class="validClass"
-      :options="data.options"
-      :placeholder="data.placeholder"
+      :auto-select="true"
+      :search="search"
+      :get-result-value="getResultValue"
+      :default-value="getCurrentValue"
+      :disabled="!edit ? !edit : data.readonly"
+      @submit="handleSubmit"
+      @blur="handleBlur"
     />
     <b-form-invalid-feedback :state="data.state">
       {{ data.error ? data.error : "Обязательно для заполнения" }}
@@ -24,12 +29,13 @@
 </template>
 
 <script>
-import { ModelSelect } from "vue-search-select";
+import Autocomplete from "@trevoreyre/autocomplete-vue";
+import "@trevoreyre/autocomplete-vue/dist/style.css";
 
 export default {
   name: "ControlCustomCombobox",
   components: {
-    ModelSelect,
+    Autocomplete,
   },
   props: {
     data: {
@@ -43,24 +49,79 @@ export default {
       default: () => false,
     },
   },
+  data() {
+    return {
+      placeholderValue: null,
+    };
+  },
   computed: {
-    fieldValue: {
-      get() {
-        return this.data.value;
-      },
-      set(value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value,
-        });
-      },
-    },
     validClass() {
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
       return "";
+    },
+    placeholder() {
+      return this.placeholderValue
+        ? this.placeholderValue
+        : this.data.placeholder;
+    },
+    getCurrentValue() {
+      return this.data.options.find((item) => item.value === this.data?.value)
+        ?.text;
+    },
+  },
+  watch: {
+    getCurrentValue(value) {
+      this.$refs.autocomplete.value = value;
+    },
+  },
+  methods: {
+    search(value) {
+      if (
+        value.length < 1 ||
+        this.data.options.find((item) => item.value === this.data?.value)
+          ?.text === value
+      ) {
+        this.placeholderValue = value;
+        this.$refs.autocomplete.value = "";
+        return this.data.options;
+      }
+      return this.data.options.filter((item) => item.text.includes(value));
+    },
+    getResultValue(item) {
+      return item.text;
+    },
+    handleSubmit(result) {
+      document.activeElement.blur();
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: result?.value || null,
+      });
+    },
+    handleBlur() {
+      if (Boolean(this.$refs.autocomplete.value) === false) {
+        const value = this.data.options.find(
+          (item) => item.value === this.data?.value
+        );
+        if (value) {
+          this.$refs.autocomplete.value = value.text;
+          this.handleSubmit(value);
+        }
+      } else {
+        const find = this.data.options.find((i) =>
+          i.text.includes(this.$refs.autocomplete?.value)
+        );
+        if (find !== undefined) {
+          this.$refs.autocomplete.value = find.text;
+          this.handleSubmit(find);
+        } else {
+          this.$refs.autocomplete.value = "";
+          this.placeholderValue = "";
+          this.handleSubmit(null);
+        }
+      }
     },
   },
 };

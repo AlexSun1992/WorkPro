@@ -3,20 +3,21 @@
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
-      :loadRecaptchaScript="true"
       :sitekey="data.value"
       @verify="setToken"
       @expired="onCaptchaExpired"
-      @render="captchaHasBeenRendered"
     />
 
-    <b-form-input v-if="false" v-model="fieldValue"></b-form-input>
+    <b-form-input v-if="false" v-model="fieldValue" />
   </div>
 </template>
 
 <script>
 import { VueRecaptcha } from "vue-recaptcha";
-import { isCaptchaBecomesHide } from "./captchaHelper";
+
+function debug(message = "") {
+  console.info(new Date().toISOString(), "ControlGoogleCaptcha", message);
+}
 
 export default {
   name: "ControlGoogleCaptcha",
@@ -28,96 +29,58 @@ export default {
       default: () => {},
     },
   },
+  emits: ["update"],
   data() {
     return {
-      token: null,
-      captchaHired: false,
-      captchaMounted: null,
+      waitCaptcha: Promise.resolve(),
+      resolveCaptcha: () => {},
     };
   },
 
   computed: {
-    fieldValue: {
-      get: function () {
+    token: {
+      get() {
         return this.data.value;
       },
-      set: function (value) {
+      set(value) {
+        debug(`new token ${value.substring(1, 5)}...`);
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: value,
+          value,
         });
+        this.resolveCaptcha();
+        this.$refs.recaptcha.reset();
       },
     },
-
-    isCaptchaBeenMounted() {
-      return this.captchaMounted;
-    },
-
-    saveButtonClicked() {
-      return this.$store.getters["data_card/saveButtonClicked"];
-    },
-    saveButtonClickedAmount() {
-      return this.$store.getters["data_card/saveButtonClickedAmount"];
-    },
   },
 
-  watch: {
-    async saveButtonClicked() {
-      if (!this.$store.getters["data_card/saveButtonClicked"]) return;
-      if (this.isCaptchaBeenMounted !== null) {
-        this.$refs?.recaptcha?.reset();
-        await this.recaptchaExecute();
-      }
-    },
-    saveButtonClickedAmount(value) {
-      if (value !== null && this.captchaHired === true) {
-        this.$refs?.recaptcha?.execute();
-      }
-    },
-    token() {
-      this.fieldValue = this.token;
-      const updateValueFunction =
-        this.$store.getters["data_card/getUpdateValueFunction"];
-      const event = this.$store.getters["data_card/getUpdateEvent"];
-      updateValueFunction(event);
-    },
-  },
-
-  ////// Подключение капчи
   mounted() {
-    const externalScript = document.createElement("script");
-    externalScript.setAttribute(
-      "src",
-      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
+    debug("mounted");
+    this.$store.commit(
+      "data_card/addBeforeSavePromise",
+      this.beforeSaveFunction
     );
-    document.head.appendChild(externalScript);
-  },
-
-  async updated() {
-    await isCaptchaBecomesHide();
-    const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
-      .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
-      .filter((item) => item.style.visibility === "visible");
-
-    if (visibleCaptchas.length === 0) {
-      this.captchaHired = true;
-    } else {
-      this.captchaHired = false;
-    }
   },
 
   methods: {
+    async beforeSaveFunction() {
+      debug("beforeSaveFunction");
+      this.recaptchaExecute();
+      await this.waitCaptcha;
+    },
+
     setToken(token) {
       this.token = token;
-      this.$store.commit("data_card/setRecaptchaToken", this.token);
     },
-    captchaHasBeenRendered(id) {
-      this.captchaMounted = id;
-    },
+
     recaptchaExecute() {
+      this.waitCaptcha = new Promise((resolve) => {
+        this.resolveCaptcha = resolve;
+      });
       this.$refs.recaptcha.execute();
     },
+
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
     },
