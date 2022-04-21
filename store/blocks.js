@@ -229,6 +229,8 @@ export const mutations = {
       (item) => item.propertyName == data.propertyName
     );
 
+    console.log(state, data);
+
     filter.filter = data.filter;
   },
 
