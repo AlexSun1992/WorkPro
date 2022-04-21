@@ -14,6 +14,7 @@
 
 <script>
 import { VueRecaptcha } from "vue-recaptcha";
+import { waitCaptchaHide } from "./captchaHelper";
 
 function debug(message = "") {
   console.info(new Date().toISOString(), "ControlGoogleCaptcha", message);
@@ -75,8 +76,11 @@ export default {
     },
 
     recaptchaExecute() {
-      this.waitCaptcha = new Promise((resolve) => {
+      this.waitCaptcha = new Promise((resolve, reject) => {
         this.resolveCaptcha = resolve;
+        waitCaptchaHide().then(() => {
+          reject(new Error("Для продолжения заполните капчу"));
+        });
       });
       this.$refs.recaptcha.execute();
     },

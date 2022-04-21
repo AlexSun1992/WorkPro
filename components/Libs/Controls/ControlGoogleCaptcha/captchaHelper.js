@@ -10,7 +10,7 @@ function getCurrentVisibleCaptcha() {
     .filter((item) => item.style.visibility === "visible");
 }
 
-async function waitCaptchaBecomesVisible() {
+export async function waitCaptchaVisible() {
   const nodeElem = document.querySelector("body");
   const config = {
     attributes: true,
@@ -30,8 +30,8 @@ async function waitCaptchaBecomesVisible() {
   });
 }
 
-export async function isCaptchaBecomesHide() {
-  const getInfoAboutCaptchaVisibility = await waitCaptchaBecomesVisible();
+export async function waitCaptchaHide() {
+  const getInfoAboutCaptchaVisibility = await waitCaptchaVisible();
   const checkVisibleCaptchaConfig = { attributes: true };
   return new Promise((resolve) => {
     const observer = new MutationObserver(() => {
