@@ -216,6 +216,7 @@ export const mutations = {
 
   setServerFilters: (state, data) => {
     state.serverFilters.push(data);
+    console.log("setServerFilters", state.serverFilters);
   },
 
   updateServerFilters: (state, data) => {
@@ -228,8 +229,6 @@ export const mutations = {
     let filter = state.serverFilters.find(
       (item) => item.propertyName == data.propertyName
     );
-
-    console.log(state, data);
 
     filter.filter = data.filter;
   },
