@@ -179,15 +179,6 @@ export default {
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
 
-  mounted() {
-    let externalScript = document.createElement("script");
-    externalScript.setAttribute(
-      "src",
-      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
-    );
-    document.head.appendChild(externalScript);
-  },
-
   updated() {
     if (this.$refs.userInput.vModelValue.length === 4) {
       this.allHiddenCaptchas = Array.from(
