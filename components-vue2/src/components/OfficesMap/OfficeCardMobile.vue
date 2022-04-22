@@ -1,7 +1,7 @@
 <template>
   <b-card
     class="office-mobile-list"
-    :class="{ show: !office.station, 'single-office': !office.station }"
+    :class="{ 'single-office show': !office.station }"
   >
     <b-card-text>
       <div v-if="office.info">
