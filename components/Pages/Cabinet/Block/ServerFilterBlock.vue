@@ -230,20 +230,21 @@ export default {
         }
       );
 
-      if (foundedFilter && e.data) {
+      if (foundedFilter) {
         this.$store.commit("blocks/updateServerFilters", {
           propertyName: this.queryParamName,
           filter: this.queryParamValue,
-          id: this?.id,
-          filterIdNumber: e?.data[this?.id],
-        });
-      } else if (this.id && e.data[this.id]) {
-        this.$store.commit("blocks/setServerFilters", {
-          propertyName: this.id,
-          filter: e.data[this.id].toString(),
+          id: this.id,
+          filterIdNumber: e.data[this.id],
         });
       } else {
         this.$store.commit("blocks/setServerFilters", filterObj);
+        if (this.id && e.data[this.id]) {
+          this.$store.commit("blocks/setServerFilters", {
+            propertyName: this.id,
+            filter: e.data[this.id].toString(),
+          });
+        }
       }
     },
 
