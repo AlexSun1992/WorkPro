@@ -4,6 +4,7 @@
       ref="recaptcha"
       size="invisible"
       :sitekey="data.value"
+      :load-recaptcha-script="false"
       @verify="setToken"
       @expired="onCaptchaExpired"
     />
@@ -35,6 +36,7 @@ export default {
     return {
       waitCaptcha: Promise.resolve(),
       resolveCaptcha: () => {},
+      recaptchaScriptId: "__RECAPTCHA_SCRIPT",
     };
   },
 
@@ -58,6 +60,7 @@ export default {
 
   mounted() {
     debug("mounted");
+    this.loadRecaptchaScript();
     this.$store.commit(
       "data_card/addBeforeSavePromise",
       this.beforeSaveFunction
@@ -65,6 +68,21 @@ export default {
   },
 
   methods: {
+    loadRecaptchaScript() {
+      window.recapthaCustomLoaded = () => {
+        debug("recaptcha loaded");
+        window.vueRecaptchaApiLoaded();
+      };
+      if (!document.querySelector(`#${this.recaptchaScriptId}`)) {
+        const script = document.createElement("script");
+        script.id = this.recaptchaScriptId;
+        script.src = `https://www.google.com/recaptcha/api.js?onload=recapthaCustomLoaded&render=explicit`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+    },
+
     async beforeSaveFunction() {
       debug("beforeSaveFunction");
       this.recaptchaExecute();
