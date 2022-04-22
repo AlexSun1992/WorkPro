@@ -1,5 +1,8 @@
 <template>
-  <b-card class="office-mobile-list">
+  <b-card
+    class="office-mobile-list"
+    :class="{ 'single-office show': !office.station }"
+  >
     <b-card-text>
       <div v-if="office.info">
         <div v-for="(item, i) in office.info" :key="i">
@@ -16,11 +19,18 @@
           </div>
           <div v-if="i == 0 && !office.station" class="name">
             {{ item.SSHORTNAME }}
-            <button class="oml-btn-open"></button>
+            <button v-if="office.station" class="oml-btn-open"></button>
           </div>
-          <div v-if="i == 0" class="count-office">{{ count(office) }}</div>
+          <div v-if="i == 0 && office.station" class="count-office">
+            {{ count(office) }}
+          </div>
           <div class="card-body">
-            <div class="card-title">{{ item.SSHORTNAME }}</div>
+            <div v-if="office.station" class="card-title">
+              {{ item.SSHORTNAME }}
+            </div>
+            <div v-if="!office.station" class="count-office">
+              <!-- {{ count(office) }} -->
+            </div>
             <div class="card-office-adress row">
               <div class="col-4 pe-0" v-if="item.SPATH1">
                 <div class="position-relative">
