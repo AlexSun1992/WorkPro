@@ -9,6 +9,7 @@
     "component": "vue-cli-service build --target lib --inline-vue --mode production --name components src/main.js"
   },
   "dependencies": {
+    "bootstrap-vue": "^2.22.0",
     "core-js": "^3.6.5",
     "js-cookie": "^2.2.1",
     "marked": "^3.0.7",
