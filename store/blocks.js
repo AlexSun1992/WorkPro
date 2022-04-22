@@ -216,6 +216,7 @@ export const mutations = {
 
   setServerFilters: (state, data) => {
     state.serverFilters.push(data);
+    console.log("setServerFilters", state.serverFilters);
   },
 
   updateServerFilters: (state, data) => {
