@@ -231,12 +231,20 @@ export default {
       );
 
       if (foundedFilter) {
-        this.$store.commit("blocks/updateServerFilters", {
-          propertyName: this.queryParamName,
-          filter: this.queryParamValue,
-          id: this.id,
-          filterIdNumber: e.data[this.id],
-        });
+        if (foundedFilter && e.data) {
+          this.$store.commit("blocks/updateServerFilters", {
+            propertyName: this.queryParamName,
+            filter: this.queryParamValue,
+            id: this?.id,
+            filterIdNumber: e?.data[this.id],
+          });
+        }
+        if (foundedFilter && !e.data) {
+          this.$store.commit("blocks/updateServerFilters", {
+            propertyName: this.queryParamName,
+            filter: this.queryParamValue,
+          });
+        }
       } else {
         this.$store.commit("blocks/setServerFilters", filterObj);
         if (this.id && e.data[this.id]) {
