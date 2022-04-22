@@ -10,6 +10,7 @@ build_compoments:
     paths:
       - node_modules/
   script:
+    - npm config set registry https://nexus.reso.ru/repository/npm/
     - npm install
     - npm test
     - cd components-vue2
