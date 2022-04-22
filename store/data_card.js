@@ -261,8 +261,8 @@ export const actions = {
   async saveDataCard({ commit, state, dispath }, params) {
     commit("setLoading", true);
     commit("setDisabled", true);
-    await Promise.all(state.beforeSavePromises.map((func) => func()));
     try {
+      await Promise.all(state.beforeSavePromises.map((func) => func()));
       let resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
           params.relId
@@ -273,10 +273,13 @@ export const actions = {
       commit("setCardId", resp.data.ID);
       commit("setCardRelId", resp.data.REL);
       return resp;
-    } catch (e) {
+    } catch (err) {
       commit("setSavedError", true);
-      commit("setErrorMessage", e.response.data);
-      return e.response;
+      commit("setErrorMessage", err.response?.data || err.message);
+      if (err.response) {
+        return err.response;
+      }
+      throw err;
     } finally {
       commit("setLoading", false);
       commit("setDisabled", false);
