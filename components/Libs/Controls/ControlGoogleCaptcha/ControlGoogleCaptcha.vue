@@ -1,27 +1,19 @@
 <template>
-  <div>
-    <vue-recaptcha
-      ref="recaptcha"
-      size="invisible"
-      :sitekey="data.value"
-      @verify="setToken"
-      @expired="onCaptchaExpired"
-    />
-
-    <b-form-input v-if="false" v-model="fieldValue" />
-  </div>
+  <vue-recaptcha
+    ref="recaptcha"
+    size="invisible"
+    :sitekey="siteKey"
+    @verify="setToken"
+    @expired="onCaptchaExpired"
+  >
+    <button @click="onEvent">Click me</button>
+  </vue-recaptcha>
 </template>
 
 <script>
 import { VueRecaptcha } from "vue-recaptcha";
-import { waitCaptchaHide } from "./captchaHelper";
-
-function debug(message = "") {
-  console.info(new Date().toISOString(), "ControlGoogleCaptcha", message);
-}
 
 export default {
-  name: "ControlGoogleCaptcha",
   components: { VueRecaptcha },
   props: {
     data: {
@@ -29,62 +21,32 @@ export default {
       required: true,
       default: () => {},
     },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false,
+    },
   },
-  emits: ["update"],
   data() {
     return {
-      waitCaptcha: Promise.resolve(),
-      resolveCaptcha: () => {},
+      siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
     };
   },
-
-  computed: {
-    token: {
-      get() {
-        return this.data.value;
-      },
-      set(value) {
-        debug(`new token ${value.substring(1, 5)}...`);
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value,
-        });
-        this.resolveCaptcha();
-        this.$refs.recaptcha.reset();
-      },
-    },
-  },
-
   mounted() {
-    debug("mounted");
-    this.$store.commit(
-      "data_card/addBeforeSavePromise",
-      this.beforeSaveFunction
+    const externalScript = document.createElement("script");
+    externalScript.setAttribute(
+      "src",
+      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
     );
+    document.head.appendChild(externalScript);
   },
-
   methods: {
-    async beforeSaveFunction() {
-      debug("beforeSaveFunction");
-      this.recaptchaExecute();
-      await this.waitCaptcha;
-    },
-
-    setToken(token) {
-      this.token = token;
-    },
-
-    recaptchaExecute() {
-      this.waitCaptcha = new Promise((resolve, reject) => {
-        this.resolveCaptcha = resolve;
-        waitCaptchaHide().then(() => {
-          reject(new Error("Для продолжения заполните капчу"));
-        });
-      });
+    onEvent() {
       this.$refs.recaptcha.execute();
     },
-
+    setToken(recaptcha) {
+      this.token = recaptcha;
+    },
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
     },
