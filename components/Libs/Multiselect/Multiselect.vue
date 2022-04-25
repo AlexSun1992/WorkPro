@@ -65,9 +65,9 @@ export default {
       this.selectedItem = val;
     },
 
-    isShowMenu() {
-      console.log(this.selectesItem);
-    },
+    // isShowMenu() {
+    //   console.log(this.selectesItem);
+    // },
   },
 };
 </script>
