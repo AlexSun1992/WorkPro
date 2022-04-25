@@ -3,15 +3,16 @@
     ref="recaptcha"
     size="invisible"
     :sitekey="siteKey"
+    :load-recaptcha-script="true"
     @verify="setToken"
     @expired="onCaptchaExpired"
   >
-    <button @click="onEvent">Click me</button>
+    <button @click="onEvent">Click me123</button>
   </vue-recaptcha>
 </template>
 
 <script>
-import { VueRecaptcha } from "vue-recaptcha";
+import VueRecaptcha from "vue-recaptcha";
 
 export default {
   components: { VueRecaptcha },
@@ -30,15 +31,8 @@ export default {
   data() {
     return {
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
+      load: false,
     };
-  },
-  mounted() {
-    const externalScript = document.createElement("script");
-    externalScript.setAttribute(
-      "src",
-      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
-    );
-    document.head.appendChild(externalScript);
   },
   methods: {
     onEvent() {
