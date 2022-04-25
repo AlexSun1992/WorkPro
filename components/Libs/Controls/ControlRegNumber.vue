@@ -113,14 +113,21 @@ export default {
   methods: {
     numberUpdateValue() {
       let setValue = null;
+      console.log("NUMBERUPDATEVALUE");
+      console.log("numberAndCodeValue:", this.numberAndCodeValue);
+      console.log("name:", this.data.name);
+      console.log("value:", this.data.fieldId);
       if (isNumberValid(this.numberValue.replace(/ /g, ""))) {
         this.$refs.code.$el.focus();
         if (this.stateNumber && this.stateCode) {
           setValue = this.numberAndCodeValue;
           this.isVisitedNumber = true;
+          // console.log("numberUpdateValue setValue:", setValue);
         }
       }
       if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
+        ///Вызывается eventHandler
+        console.log("setValue:", setValue);
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -130,10 +137,15 @@ export default {
     },
     codeUpdateValue(value) {
       let setValue = null;
+      console.log("CODEUPDATEVALUE");
+      console.log("numberAndCodeValue:", this.numberAndCodeValue);
+      console.log("name:", this.data.name);
+      console.log("value:", this.data.fieldId);
       if (isCodeValid(value)) {
         if (this.stateNumber && this.stateCode) {
           setValue = this.numberAndCodeValue;
           this.isVisitedCode = true;
+          //console.log("codeUpdateValue setValue:", setValue);
         }
       }
       if ((this.isVisitedNumber && this.isVisitedCode) || setValue) {
