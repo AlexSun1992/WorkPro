@@ -161,10 +161,14 @@ export default {
     async setOptions() {
       if (this.dictionary?.length) {
         for (let item of this.dictionary) {
-          this.list.push({
-            text: item,
-            value: item.split(":")[1],
-          });
+          if (typeof item === "string") {
+            this.list.push({
+              text: item,
+              value: item,
+            });
+          } else {
+            this.list.push(item);
+          }
         }
       } else {
         let fkFields = this.fk.match(/\w+/gi);
