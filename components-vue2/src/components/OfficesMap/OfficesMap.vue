@@ -79,9 +79,10 @@
         />
 
         <b-pagination
+          v-if="getOffices"
           v-show="getOffices && width > 900 && !currentStation"
           v-model="page"
-          :total-rows="getOffices && getOffices.length"
+          :total-rows="getOffices.length"
           :per-page="15"
           aria-controls="my-table"
           first-number
@@ -310,9 +311,9 @@ export default {
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
       this.translateX =
-        this.$refs["metro"].firstChild.transform.animVal[0]?.matrix.e;
+        this.$refs["metro"]?.firstChild.transform.animVal[0]?.matrix.e;
       this.translateY =
-        this.$refs["metro"].firstChild.transform.animVal[0]?.matrix.f;
+        this.$refs["metro"]?.firstChild.transform.animVal[0]?.matrix.f;
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
@@ -337,18 +338,22 @@ export default {
       this.translateY = this.translateY + e.movementY / e.view.devicePixelRatio;
       this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
       this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
-      svg.setAttribute(
-        "transform",
-        "matrix(" +
-          this.svgScale +
-          ",0,0," +
-          this.svgScale +
-          "," +
-          this.translateX +
-          "," +
-          this.translateY +
-          ")"
-      );
+
+      if (!Number.isNaN(this.translateX) && !Number.isNaN(this.translateX)) {
+        svg.setAttribute(
+          "transform",
+          "matrix(" +
+            this.svgScale +
+            ",0,0," +
+            this.svgScale +
+            "," +
+            this.translateX +
+            "," +
+            this.translateY +
+            ")"
+        );
+      }
+
       this.$refs["card"].style.marginLeft = this.cardposX + "px";
       this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
