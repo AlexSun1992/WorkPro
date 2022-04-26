@@ -108,7 +108,7 @@ import axios from "axios";
 import _ from "lodash";
 import VerifyTimer from "./VerifyTimer.vue";
 import { mask } from "vue-the-mask";
-import { VueRecaptcha } from "vue-recaptcha";
+import VueRecaptcha from "vue-recaptcha";
 import {
   BFormGroup,
   BFormInput,
