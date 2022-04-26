@@ -517,7 +517,6 @@ export const mutations = {
     state.cardId = data;
   },
   setCardRelId(state, data) {
-    console.log("setCardRelId");
     state.cardRelId = data;
   },
   setModuleId(state, data) {
