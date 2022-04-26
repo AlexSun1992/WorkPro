@@ -144,8 +144,10 @@ export default {
       curPosY: null,
       cardPosY: null,
       cardPosX: null,
-      translateX: null,
-      translateY: null,
+      translateX: 0,
+      translateY: 0,
+      centerX: null,
+      centerY: null,
       mapsFit: false,
       svgScale: 1,
       currentTab: 0,
@@ -168,6 +170,7 @@ export default {
   async created() {
     try {
       window.addEventListener("resize", this.onResize);
+
       if (Cookies.get("lat")) {
         await this.$store.dispatch("map/fetchRegion", {
           id: Cookies.get("kladr_id")?.substr(0, 2),
@@ -213,28 +216,42 @@ export default {
     fitToViewportMetro() {
       this.$nextTick(() => {
         if (this.width < 992 && this.mapsFit != true) {
-          document
-            .querySelector(".g-svg-metromap")
-            .setAttribute(
-              "transform",
-              "matrix(0.5,0,0,0.5," +
-                ((this.width - 1286 * 0.5) / 2 + 30) +
-                ",0)"
-            );
           this.svgScale = 0.5;
-          this.mapsFit = true;
         } else if (this.width > 1200 && this.mapsFit != true) {
-          document
-            .querySelector(".g-svg-metromap")
-            .setAttribute(
-              "transform",
-              "matrix(1.5,0,0,1.5," +
-                ((this.width - 1286 * 1.5) / 2 + 30) +
-                ",-210)"
-            );
-          this.svgScale = 1.5;
-          this.mapsFit = true;
+          this.svgScale = 1;
         }
+
+        this.centerX =
+          (this.$refs.metro.clientWidth - 1286 * this.svgScale) / 2 +
+          121 * this.svgScale +
+          this.translateX;
+        this.centerY =
+          (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
+          137 * this.svgScale +
+          this.translateY;
+        document
+          .querySelector(".g-svg-metromap")
+          .setAttribute(
+            "transform",
+            "matrix(" +
+              this.svgScale +
+              ",0,0," +
+              this.svgScale +
+              "," +
+              this.centerX +
+              "," +
+              this.centerY +
+              ")"
+          );
+        this.mapsFit = true;
+        console.log(
+          "w=",
+          this.$refs.metro.clientWidth,
+          "h=",
+          this.$refs.metro.clientHeight,
+          this.centerX,
+          this.centerY
+        );
       });
     },
     onResize() {
@@ -309,10 +326,14 @@ export default {
     setMouseCoords(e) {
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
-      this.translateX =
-        this.$refs["metro"].firstChild.transform.animVal[0]?.matrix.e;
-      this.translateY =
-        this.$refs["metro"].firstChild.transform.animVal[0]?.matrix.f;
+      /*
+      if (this.$refs["metro"].firstChild.transform.animVal[0]) {
+        this.translateX =
+          this.$refs["metro"].firstChild.transform.animVal[0].matrix.e;
+        this.translateY =
+          this.$refs["metro"].firstChild.transform.animVal[0].matrix.f;
+      }*/
+
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
@@ -337,77 +358,26 @@ export default {
       this.translateY = this.translateY + e.movementY / e.view.devicePixelRatio;
       this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
       this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
-      svg.setAttribute(
-        "transform",
-        "matrix(" +
-          this.svgScale +
-          ",0,0," +
-          this.svgScale +
-          "," +
-          this.translateX +
-          "," +
-          this.translateY +
-          ")"
-      );
+      this.fitToViewportMetro();
       this.$refs["card"].style.marginLeft = this.cardposX + "px";
       this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
     zoom(param) {
-      let step = 0.5;
+      let step = 0.2;
       if (param == "+") {
         this.closeCard();
         this.svgScale = this.svgScale + step;
-        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
-          this.$refs["metro"].firstChild.setAttribute(
-            "transform",
-            "matrix(" + this.svgScale + ",0,0," + this.svgScale + ",0,0)"
-          );
-        } else {
-          this.$refs["metro"].firstChild.setAttribute(
-            "transform",
-            "matrix(" +
-              this.svgScale +
-              ",0,0," +
-              this.svgScale +
-              "," +
-              this.$refs["metro"].firstChild.transform.animVal[0].matrix.e +
-              "," +
-              this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
-              ")"
-          );
+        if (this.svgScale > 2) {
+          this.svgScale = 2;
         }
+        this.fitToViewportMetro();
       } else if (param == "-") {
         this.closeCard();
         this.svgScale = this.svgScale - step;
-        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
-          this.$refs["metro"].firstChild.setAttribute(
-            "transform",
-            "matrix(" + this.svgScale + ",0,0," + this.svgScale + ",0,0)"
-          );
-        } else {
-          this.$refs["metro"].firstChild.setAttribute(
-            "transform",
-            "matrix(" +
-              this.svgScale +
-              ",0,0," +
-              this.svgScale +
-              "," +
-              this.$refs["metro"].firstChild.transform.animVal[0].matrix.e +
-              "," +
-              this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
-              ")"
-          );
-          if (this.svgScale < 0) {
-            this.$refs["metro"].firstChild.setAttribute(
-              "transform",
-              "matrix(0.1,0,0,0.1," +
-                this.$refs["metro"].firstChild.transform.animVal[0].matrix.e +
-                "," +
-                this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
-                ")"
-            );
-          }
+        if (this.svgScale < step) {
+          this.svgScale = 0.2;
         }
+        this.fitToViewportMetro();
       }
     },
     chooseStation(e) {
