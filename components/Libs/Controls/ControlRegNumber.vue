@@ -113,11 +113,7 @@ export default {
   methods: {
     numberUpdateValue() {
       let setValue = null;
-      console.log("NUMBERUPDATEVALUE");
-      console.log("numberAndCodeValue:", this.numberAndCodeValue);
-      console.log("name:", this.data.name);
-      console.log("value:", this.data.fieldId);
-
+      // emit на каждый ввод символа, нужен для регуляции скрытия сообщения о несуществующем госномере
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -141,10 +137,7 @@ export default {
     },
     codeUpdateValue(value) {
       let setValue = null;
-      console.log("CODEUPDATEVALUE");
-      console.log("numberAndCodeValue:", this.numberAndCodeValue);
-      console.log("name:", this.data.name);
-      console.log("value:", this.data.fieldId);
+      // emit на каждый ввод символа , нужен для регуляции скрытия сообщения о несуществующем госномере
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -220,7 +213,6 @@ export default {
     },
     isValid() {
       if (this.isVisitedNumber === true && this.isVisitedCode === true) {
-        console.log(this.stateNumber && this.stateCode);
         return this.stateNumber && this.stateCode;
       }
       return null;
