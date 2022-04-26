@@ -65,6 +65,14 @@ export default {
     );
   },
 
+  unmounted() {
+    debug("unmounted");
+    this.$store.commit(
+      "data_card/deleteBeforeSavePromise",
+      this.beforeSaveFunction
+    );
+  },
+
   methods: {
     async beforeSaveFunction() {
       debug("beforeSaveFunction");
