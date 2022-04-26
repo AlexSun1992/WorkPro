@@ -108,7 +108,7 @@ import axios from "axios";
 import _ from "lodash";
 import VerifyTimer from "./VerifyTimer.vue";
 import { mask } from "vue-the-mask";
-import { VueRecaptcha } from "vue-recaptcha";
+import VueRecaptcha from "vue-recaptcha";
 import {
   BFormGroup,
   BFormInput,
@@ -177,15 +177,6 @@ export default {
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
-  },
-
-  mounted() {
-    let externalScript = document.createElement("script");
-    externalScript.setAttribute(
-      "src",
-      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
-    );
-    document.head.appendChild(externalScript);
   },
 
   updated() {

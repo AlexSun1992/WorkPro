@@ -4,16 +4,22 @@
       ref="recaptcha"
       size="invisible"
       :sitekey="data.value"
+      :load-recaptcha-script="true"
       @verify="setToken"
       @expired="onCaptchaExpired"
     />
-    <b-form-input v-if="false" v-model="fieldValue"></b-form-input>
+
+    <b-form-input v-if="false" v-model="fieldValue" />
   </div>
 </template>
 
 <script>
-import { VueRecaptcha } from "vue-recaptcha";
-import { isCaptchaBecomesHide } from "./captchaHelper";
+import VueRecaptcha from "vue-recaptcha";
+import { waitCaptchaHide } from "./captchaHelper";
+
+function debug(message = "") {
+  console.info(new Date().toISOString(), "ControlGoogleCaptcha", message);
+}
 
 export default {
   name: "ControlGoogleCaptcha",
@@ -25,91 +31,72 @@ export default {
       default: () => {},
     },
   },
+  emits: ["update"],
   data() {
     return {
-      token: null,
-      captchaHired: false,
+      waitCaptcha: Promise.resolve(),
+      resolveCaptcha: () => {},
     };
   },
 
-  mounted() {
-    let externalScript = document.createElement("script");
-    externalScript.setAttribute(
-      "src",
-      "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
-    );
-    document.head.appendChild(externalScript);
-  },
-
-  async updated() {
-    await isCaptchaBecomesHide();
-    const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
-      .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
-      .filter((item) => item.style.visibility === "visible");
-
-    if (visibleCaptchas.length === 0) {
-      this.captchaHired = true;
-    } else {
-      this.captchaHired = false;
-    }
-  },
-
-  methods: {
-    setToken(token) {
-      this.token = token;
-      this.$store.commit("data_card/setRecaptchaToken", this.token);
-    },
-    recaptchaExecute() {
-      this.$refs.recaptcha.execute();
-    },
-    onCaptchaExpired() {
-      this.$refs.recaptcha.reset();
-    },
-  },
   computed: {
-    fieldValue: {
-      get: function () {
+    token: {
+      get() {
         return this.data.value;
       },
-      set: function (value) {
+      set(value) {
+        debug(`new token ${value.substring(1, 5)}...`);
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: value,
+          value,
         });
+        this.resolveCaptcha();
+        this.$refs.recaptcha.reset();
       },
-    },
-
-    saveButtonClicked() {
-      return this.$store.getters["data_card/saveButtonClicked"];
-    },
-    saveButtonClickedAmount() {
-      return this.$store.getters["data_card/saveButtonClickedAmount"];
     },
   },
 
-  watch: {
-    async saveButtonClicked(value) {
-      if (!this.$store.getters["data_card/saveButtonClicked"]) return;
+  mounted() {
+    debug("mounted");
+    this.$store.commit(
+      "data_card/addBeforeSavePromise",
+      this.beforeSaveFunction
+    );
+  },
+
+  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
+  destroyed() {
+    debug("unmounted");
+    this.$store.commit(
+      "data_card/deleteBeforeSavePromise",
+      this.beforeSaveFunction
+    );
+  },
+
+  methods: {
+    async beforeSaveFunction() {
+      debug("beforeSaveFunction");
+      this.recaptchaExecute();
+      await this.waitCaptcha;
+    },
+
+    setToken(token) {
+      this.token = token;
+    },
+
+    recaptchaExecute() {
+      this.waitCaptcha = new Promise((resolve, reject) => {
+        this.resolveCaptcha = resolve;
+        waitCaptchaHide().then(() => {
+          reject(new Error("Для продолжения заполните капчу"));
+        });
+      });
+      this.$refs.recaptcha.execute();
+    },
+
+    onCaptchaExpired() {
       this.$refs.recaptcha.reset();
-      await this.recaptchaExecute();
-    },
-    saveButtonClickedAmount(value) {
-      if (value !== null && this.captchaHired === true) {
-        this.$refs.recaptcha.execute();
-      }
-      if (value) {
-        this.$refs.recaptcha.execute();
-      }
-    },
-    token() {
-      this.fieldValue = this.token;
-
-      let updateValueFunction =
-        this.$store.getters["data_card/getUpdateValueFunction"];
-      let event = this.$store.getters["data_card/getUpdateEvent"];
-
-      updateValueFunction(event);
     },
   },
 };

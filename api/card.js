@@ -96,14 +96,18 @@ router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
-        const data = await formConverter.form(resp.data, {
-          ...req.query,
-          ...req.params,
-          mobile2ServiceInstance,
-        });
+        const data = await formConverter.form(
+          resp.data,
+          {
+            ...req.query,
+            ...req.params,
+          },
+          mobile2ServiceInstance
+        );
         res.send(data);
       })
       .catch((err) => {
+        console.error(err);
         if (err?.response?.data.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {

@@ -33,27 +33,7 @@
         </div>
       </div>
     </div>
-    <!-- <div v-show="getOffices && getOffices.length == 0 && !getLoading">
-      <div class="row search-result-row">
-        <div class="col-md-12 col-12 search-results">
-          <div class="search-no-result">
-            <div class="search-no-result-img"></div>
-            <div class="search-no-result-txt">
-              По вашему запросу ничего не найдено
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
-    <!-- <b-tabs
-      v-show="getOffices && getOffices.length > 0"
-      v-model="currentTab"
-      ref="tabs"
-      content-class="office-tab-content"
-      nav-class="office-tabs text-center mt-3"
-      pills
-    > -->
     <b-tabs
       v-model="currentTab"
       ref="tabs"
@@ -73,6 +53,7 @@
         v-if="tabVisible"
         title="На схеме метро"
         title-item-class="office-on-undeground"
+        @click="fitToViewportMetro"
       >
         <div class="metrowrapper">
           <div>
@@ -97,18 +78,11 @@
           @showMore="isShownMore = $event"
         />
 
-        <!-- <Paginator
-          v-if="getOffices && width > 900 && !currentStation"
-          class="container"
-          @update="page = $event"
-          :items-count="getOffices.length"
-          :pages-count="pagesCount"
-        /> -->
-
         <b-pagination
+          v-if="getOffices"
           v-show="getOffices && width > 900 && !currentStation"
           v-model="page"
-          :total-rows="getOffices && getOffices.length"
+          :total-rows="getOffices.length"
           :per-page="15"
           aria-controls="my-table"
           first-number
@@ -125,39 +99,31 @@
 </template>
 
 <script>
-import Paginator from "./Paginator.vue";
-import { BFormInput } from "bootstrap-vue";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
-import Notification from "./Notification.vue";
 import ZoomComponent from "./ZoomComponent.vue";
 import OfficesList from "./OfficesList.vue";
 import MetroOfficeCard from "./MetroOfficeCard.vue";
 import { filters, filterData } from "../../../../utils/map/filters";
-import { BTabs, BTab, BButtonGroup, BButton } from "bootstrap-vue";
+import { BTabs, BTab } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import { BPagination } from "bootstrap-vue";
 import Cookies from "js-cookie";
+import { isOpened, getTemplate } from "../../../../utils/map/helpers";
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
   components: {
     OfficesList,
     FilterComponent,
-    Notification,
     BTabs,
     BTab,
     Mosmetro,
     MetroOfficeCard,
-    BButtonGroup,
-    BButton,
     ZoomComponent,
-    BFormInput,
-    Paginator,
     BPagination,
   },
-  props: ["notification", "mobile"],
   data() {
     return {
       myMap: null,
@@ -171,13 +137,18 @@ export default {
       currentFilters: null,
       address: null,
       suggest: null,
-      circleColor: null,
       stationOffices: [],
       circleClicked: false,
       oldPosX: null,
       oldPosY: null,
       curPosX: null,
       curPosY: null,
+      cardPosY: null,
+      cardPosX: null,
+      translateX: null,
+      translateY: null,
+      mapsFit: false,
+      svgScale: 1,
       currentTab: 0,
       suggestView: null,
       currentStation: null,
@@ -189,9 +160,6 @@ export default {
       width: window.innerWidth,
       pagesCount: 15,
       isShownMore: false,
-
-      perPage: 3,
-      currentPage: 1,
       height: window.innerHeight,
       qc_geo: null,
       isMetroSuggest: false,
@@ -223,23 +191,51 @@ export default {
       console.log(error);
     }
   },
-
+  /*mounted(){
+      if (this.width < 900) {
+        this.$nextTick(function () {console.log('aaaa');
+          let sla = document.querySelector(".g-svg-metromap");
+          sla.setAttribute("transform", "matrix(0.5,0,0,0.5,100,0");
+          console.log(sla)
+        this.svgScale= 0.5;
+        })
+      }
+  },*/
   destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
 
   methods: {
-    getTime(distance) {
-      const mins = (distance / 3) * 60;
-      const hours = Math.trunc(mins / 60);
-      const minutes = mins % 60;
-      return hours > 0
-        ? `${hours} ч ${parseInt(minutes)} мин`
-        : `${parseInt(minutes)} мин`;
-    },
     fitToViewport() {
       this.$nextTick(() => {
         this.myMap.container.fitToViewport();
+      });
+    },
+    fitToViewportMetro() {
+      this.$nextTick(() => {
+        if (this.width < 992 && this.mapsFit != true) {
+          document
+            .querySelector(".g-svg-metromap")
+            .setAttribute(
+              "transform",
+              "matrix(0.5,0,0,0.5," +
+                ((this.width - 1286 * 0.5) / 2 + 30) +
+                ",0)"
+            );
+          this.svgScale = 0.5;
+          this.mapsFit = true;
+        } else if (this.width > 1200 && this.mapsFit != true) {
+          document
+            .querySelector(".g-svg-metromap")
+            .setAttribute(
+              "transform",
+              "matrix(1.5,0,0,1.5," +
+                ((this.width - 1286 * 1.5) / 2 + 30) +
+                ",-210)"
+            );
+          this.svgScale = 1.5;
+          this.mapsFit = true;
+        }
       });
     },
     onResize() {
@@ -250,25 +246,7 @@ export default {
       this.circleClicked = false;
       this.setStatus();
     },
-    isOpened(office) {
-      let dateNow = new Date();
-      let day = dateNow.getDay();
-      let dateEnd = new Date();
-      day = day == 0 ? 7 : day;
-      if (office.GRAF && office.GRAF[day - 1]) {
-        const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
-        dateEnd.setHours(endHour);
-        dateEnd.setMinutes(endMinute);
-        let isOpened = true;
-        if (dateNow > dateEnd) {
-          isOpened = false;
-        }
-        return isOpened;
-      }
-    },
     setStatus() {
-      let geshechka = document.getElementsByClassName("g-svg-metromap");
-      console.log(geshechka);
       let g = document.getElementsByTagName("g");
       if (g && g[0]) {
         let offices = this.$store.getters["map/getRegionOffices"];
@@ -280,7 +258,7 @@ export default {
                 return item.SNAME === name;
               });
               if (candidate) {
-                if (!this.isOpened(office) && office.GRAF) {
+                if (!isOpened(office) && office.GRAF) {
                   g[0].children[i].setAttribute("href", "#balloon-close");
                 } else {
                   g[0].children[i].setAttribute("href", "#balloon-open");
@@ -316,6 +294,7 @@ export default {
       this.currentStation = "";
     },
     openOnMap(e) {
+      this.myMap.geoObjects.remove(this.placemark);
       this.currentTab = 0;
       this.updateMap(
         {
@@ -324,57 +303,115 @@ export default {
         },
         e.SADDRESS,
         20,
-        false
+        true
       );
-    },
-    getPhones(phones) {
-      let phonesArr = phones.split(";");
-      phonesArr.pop();
-      return phonesArr;
     },
 
     setMouseCoords(e) {
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
+      this.translateX =
+        this.$refs["metro"]?.firstChild.transform.animVal[0]?.matrix.e;
+      this.translateY =
+        this.$refs["metro"]?.firstChild.transform.animVal[0]?.matrix.f;
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
       }
+      this.cardposX = parseInt(this.$refs["card"]?.style.marginLeft);
+      this.cardposY = parseInt(this.$refs["card"]?.style.marginTop);
+      document.addEventListener("mousemove", this.onMouseMove);
+      /*document.addEventListener("touchmove", this.onMouseMove);*/
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
+      /*document.removeEventListener("touchmove", this.onMouseMove);*/
     },
     onMouseMove(e) {
-      let svg = document.querySelector("svg");
-      svg.style.left = e.clientX - this.curPosX + "px";
-      svg.style.top = e.clientY - this.curPosY + "px";
-      this.oldPosX = svg.style.left;
-      this.oldPosY = svg.style.top;
+      /*console.log(this.curPosX);*/
+      e.preventDefault();
+      let svg = document.querySelector(".g-svg-metromap");
+      /*console.log("x:",e.changedTouches[0].clientX,);*/
+      /*console.log(e.movementX,e.movementY);
+       */
+      this.translateX = this.translateX + e.movementX / e.view.devicePixelRatio;
+      this.translateY = this.translateY + e.movementY / e.view.devicePixelRatio;
+      this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
+      this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
+
+      if (!Number.isNaN(this.translateX) && !Number.isNaN(this.translateX)) {
+        svg.setAttribute(
+          "transform",
+          "matrix(" +
+            this.svgScale +
+            ",0,0," +
+            this.svgScale +
+            "," +
+            this.translateX +
+            "," +
+            this.translateY +
+            ")"
+        );
+      }
+
+      this.$refs["card"].style.marginLeft = this.cardposX + "px";
+      this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
     zoom(param) {
       let step = 0.5;
       if (param == "+") {
-        if (this.$refs["metro"].style.transform == "") {
-          this.$refs.metro.style.transform = "scale(" + (1 + step) + ")";
-          this.$refs.metro.setAttribute("data-scale", 1 + step);
+        this.closeCard();
+        this.svgScale = this.svgScale + step;
+        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
+          this.$refs["metro"].firstChild.setAttribute(
+            "transform",
+            "matrix(" + this.svgScale + ",0,0," + this.svgScale + ",0,0)"
+          );
         } else {
-          let atr_scale =
-            Number(this.$refs.metro.getAttribute("data-scale")) + step;
-          this.$refs.metro.style.transform = "scale(" + atr_scale + ")";
-          this.$refs.metro.setAttribute("data-scale", atr_scale);
+          this.$refs["metro"].firstChild.setAttribute(
+            "transform",
+            "matrix(" +
+              this.svgScale +
+              ",0,0," +
+              this.svgScale +
+              "," +
+              this.$refs["metro"].firstChild.transform.animVal[0].matrix.e +
+              "," +
+              this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
+              ")"
+          );
         }
       } else if (param == "-") {
-        if (this.$refs["metro"].style.transform == "") {
-          this.$refs.metro.style.transform = "scale(" + (1 - step) + ")";
-          this.$refs.metro.setAttribute("data-scale", 1 - step);
+        this.closeCard();
+        this.svgScale = this.svgScale - step;
+        if (this.$refs["metro"].firstChild.transform.animVal.length == "0") {
+          this.$refs["metro"].firstChild.setAttribute(
+            "transform",
+            "matrix(" + this.svgScale + ",0,0," + this.svgScale + ",0,0)"
+          );
         } else {
-          let atr_scale =
-            Number(this.$refs.metro.getAttribute("data-scale")) - step;
-          if (atr_scale < 0) {
-            atr_scale = 0;
+          this.$refs["metro"].firstChild.setAttribute(
+            "transform",
+            "matrix(" +
+              this.svgScale +
+              ",0,0," +
+              this.svgScale +
+              "," +
+              this.$refs["metro"].firstChild.transform.animVal[0].matrix.e +
+              "," +
+              this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
+              ")"
+          );
+          if (this.svgScale < 0) {
+            this.$refs["metro"].firstChild.setAttribute(
+              "transform",
+              "matrix(0.1,0,0,0.1," +
+                this.$refs["metro"].firstChild.transform.animVal[0].matrix.e +
+                "," +
+                this.$refs["metro"].firstChild.transform.animVal[0].matrix.f +
+                ")"
+            );
           }
-          this.$refs.metro.style.transform = "scale(" + atr_scale + ")";
-          this.$refs.metro.setAttribute("data-scale", atr_scale);
         }
       }
     },
@@ -407,10 +444,12 @@ export default {
         if (body_size < 0) {
           body_size = 0;
         }
+        this.$refs["card"].style.marginLeft = 0;
+        this.$refs["card"].style.marginTop = 0;
         this.$refs["card"].style.top = e.layerY + "px";
-        this.$refs["card"].style.left = e.layerX + body_size + "px";
+        this.$refs["card"].style.left = e.layerX + "px";
         if (e.clientX + 400 > this.width) {
-          this.$refs["card"].style.left = e.layerX - 375 + body_size + "px";
+          this.$refs["card"].style.left = e.layerX - 375 + "px";
         }
         if (e.layerY > 500) {
           this.$refs["card"].style.transform = "translateY(-100%)";
@@ -491,170 +530,11 @@ export default {
       });
       this.setPlaceholder();
     },
-    getTemplate(agency) {
-      let phonesArr = agency.SPHONE?.split(";");
-      let grafArr = agency.SGRAF?.split("\n");
-      phonesArr?.pop();
-      grafArr?.pop();
-      let template = `
-        <div class="card-body">
-          <h4 class="card-title">${agency.SSHORTNAME}</h4>
-          <div class="card-office-adress row">
-            <div class="col-4 pe-0">
-              <div class="position-relative">
-                <img src="" />
-                <button class="office-image-zoom" type="button"></button>
-              </div>
-            </div>
-            <div class="col-8">
-              <div>${agency.SADDRESS}</div>
-              <div class="card-office-opened">Открыт до</div>
-            </div>
-          </div>
-          <div class="card-office-undeground">
-            <span class="undeground-color"></span>
-            <span>Ленинский проспект</span>
-            <span class="card-office-distance"> 1.5 км </span>
-          </div>
-          <div class="card-office-time">
-            <button type="button">Режим работы:</button>
-            <div class="card-office-times">${agency.SGRAF}</div>
-          </div>
-          <div class="card-office-contacts">
-            <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
-            <div>
-              <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
-            </div>
-          </div>
-        </div>`;
-      template = template.replace(
-        /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
-        () => {
-          let temp = "";
-          grafArr.forEach((graf) => {
-            temp += `<div class="card-office-times">${graf}</div>`;
-          });
-          return temp;
-        }
-      );
-      template = template.replace(
-        /<a href="tel:[^"]*">(.*?)<\/a[^>]*>/g,
-        () => {
-          let temp = "";
-          phonesArr?.forEach((phone) => {
-            temp += `<div class="card-office-phone"><a href="tel:${phone}">${phone}</a></div>`;
-          });
-          return temp;
-        }
-      );
-      template = template.replace(
-        /<a href="mailto:[^"].+? class="card-office-e-mail">(.*?)<\/a[^>]*?>/g,
-        () => {
-          return agency.SEMAIL
-            ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>`
-            : "";
-        }
-      );
 
-      template = template.replace(
-        /<div class="col-4 pe-0">[\n\s]*?<div class="position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div>[\n\s]*?<\/div[^>]*>/g,
-        () => {
-          let url =
-            "https://www.reso.ru/export/sites_reso/" + `${agency.SPATH1}`;
-          return agency.SPATH1
-            ? `<div class="col-4 pe-0"><div class="position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div></div>`
-            : "";
-        }
-      );
-
-      template = template.replace(
-        /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>[^<]*?<\/span>[\n\s]*?<span class="card-office-distance">[^<]*?<\/span>[\n\s]*?<\/div>/,
-        () => {
-          let temp = "";
-          if (agency.IDUNDERGROUND.length > 0) {
-            temp += `<div class="card-office-undeground">`;
-            agency.IDUNDERGROUND.forEach((item) => {
-              temp += `<div>
-                    <span class=${
-                      "undeground-color_" + item.IDUNDERLINE
-                    }></span>
-                    <span>${item.SNAME}</span>
-                    <span class="card-office-distance"> ${this.getTime(
-                      agency.NDISTANSE
-                    )} </span>
-                    </div>
-                  `;
-            });
-            temp += "</div>";
-          } else {
-            temp = "";
-          }
-
-          return temp;
-        }
-      );
-
-      template = template.replace(
-        /<div class="col-8">[\n\s]*?<div>[\n\s]*?(.*?)[\n\s]*?<\/div>[\n\s]*?<div class="card-office-opened">[\n\s]*?Открыт до[\n\s]*?<\/div>[\n\s]*?<\/div>/,
-        () => {
-          return agency.SPATH1
-            ? `<div class="col-8">
-                  <div>${agency.SADDRESS}</div>
-                  <div class="card-office-opened">${this.showWorkingHours(
-                    agency
-                  )}</div>
-                </div>`
-            : `<div class="col-12">
-                <div>${agency.SADDRESS}</div>
-                <div class="card-office-opened">${this.showWorkingHours(
-                  agency
-                )}</div>
-            </div>`;
-        }
-      );
-      return template;
-    },
-    showWorkingHours(agency) {
-      let dateNow = new Date();
-      let day = dateNow.getDay();
-      let dateEnd = new Date();
-      day = day == 0 ? 7 : day;
-
-      if (!agency.GRAF) return "";
-
-      if (agency.GRAF[day - 1]) {
-        const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
-        dateEnd.setHours(endHour);
-        dateEnd.setMinutes(endMinute);
-        let str;
-        if (dateNow < dateEnd) {
-          str = `Открыт до ${dateEnd.getHours()}:${
-            dateEnd.getMinutes() == 0
-              ? dateEnd.getMinutes() + "0"
-              : dateEnd.getMinutes()
-          }`;
-        } else if (dateNow > dateEnd && agency.GRAF[day]) {
-          str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
-        } else if (dateNow > dateEnd && !agency.GRAF[day]) {
-          this.isOpened = false;
-          dateNow.setDate(
-            dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
-          );
-          str =
-            "Закрыт до " +
-            ("0" + dateNow.getDate()).slice(-2) +
-            "." +
-            ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-            "." +
-            dateNow.getFullYear();
-        }
-        return str;
-      }
-    },
     combineAgencies(agencies, i, count) {
       let arr = [];
       agencies.slice(i, i + count).forEach((item) => {
-        arr.push(this.getTemplate(item));
+        arr.push(getTemplate(item));
       });
       return arr;
     },
@@ -714,6 +594,7 @@ export default {
           _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
           let maps = document.querySelectorAll(".g-svg-metromap");
+
           for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
@@ -754,12 +635,13 @@ export default {
             console.log(e);
           }
         }
-      } else {
+      }
+      if (!this.suggest && lat) {
         this.city = Cookies.get("location_user");
         this.regionId = Cookies.get("kladr_id")?.substr(0, 2);
       }
     },
-    updateMap(state, caption, zoom = 12, visibility) {
+    updateMap(state, caption, zoom = 12, visibility = true) {
       this.placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
@@ -781,13 +663,13 @@ export default {
       }
 
       this.myMap.setCenter(
-        this.centerCoords && !this.isMetroSuggest
+        this.centerCoords && !this.isMetroSuggest && !state.center
           ? this.centerCoords
           : state.center,
         this.qc_geo > 2 && !this.isMetroSuggest ? zoom : 15
       );
       this.placemark.geometry.setCoordinates(
-        this.centerCoords && !this.isMetroSuggest
+        this.centerCoords && !this.isMetroSuggest && !state.center
           ? this.centerCoords
           : state.center
       );

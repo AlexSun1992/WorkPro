@@ -1,5 +1,8 @@
 <template>
-  <b-card class="office-mobile-list">
+  <b-card
+    class="office-mobile-list"
+    :class="{ 'single-office show': !office.station }"
+  >
     <b-card-text>
       <div v-if="office.info">
         <div v-for="(item, i) in office.info" :key="i">
@@ -16,11 +19,18 @@
           </div>
           <div v-if="i == 0 && !office.station" class="name">
             {{ item.SSHORTNAME }}
-            <button class="oml-btn-open"></button>
+            <button v-if="office.station" class="oml-btn-open"></button>
           </div>
-          <div v-if="i == 0" class="count-office">{{ count(office) }}</div>
+          <div v-if="i == 0 && office.station" class="count-office">
+            {{ count(office) }}
+          </div>
           <div class="card-body">
-            <div class="card-title">{{ item.SSHORTNAME }}</div>
+            <div v-if="office.station" class="card-title">
+              {{ item.SSHORTNAME }}
+            </div>
+            <div v-if="!office.station" class="count-office">
+              <!-- {{ count(office) }} -->
+            </div>
             <div class="card-office-adress row">
               <div class="col-4 pe-0" v-if="item.SPATH1">
                 <div class="position-relative">
@@ -61,7 +71,7 @@
                 ></span>
                 <span>{{ "м. " + office.station }}</span>
                 <span v-if="item.NDISTANSE" class="card-office-distance">
-                  {{ item.NDISTANSE.toFixed(1) + " км" }}
+                  {{ getTime(item.NDISTANSE) }}
                 </span>
               </div>
             </div>
@@ -99,6 +109,13 @@
 
 <script>
 import { BCard, BButton, BCardText } from "bootstrap-vue";
+import {
+  count,
+  getUnderlineId,
+  getPhones,
+  getGrafs,
+  getTime,
+} from "../../../../utils/map/helpers";
 export default {
   name: "OfficeCardMobile",
   components: {
@@ -109,40 +126,17 @@ export default {
   props: ["office"],
   data() {
     return {
+      count,
+      getUnderlineId,
+      getPhones,
+      getGrafs,
+      getTime,
       isInfoShown: false,
       isGrafShown: false,
       isOpened: true,
     };
   },
   methods: {
-    count(office) {
-      let str;
-      if (!office.info) return;
-      if (office.info.length == 1) {
-        str = office.info.length + " отделение";
-      } else if (office.info.length > 1 && office.info.length < 5) {
-        str = office.info.length + " отделения";
-      } else {
-        str = office.info.length + " отделений";
-      }
-      return str;
-    },
-    getUnderlineId(station, item) {
-      let obj = item.IDUNDERGROUND.find((element) => {
-        return element.SNAME.includes(station);
-      });
-      return obj?.IDUNDERLINE;
-    },
-    getPhones(phones) {
-      let phonesArr = phones.split(";");
-      phonesArr.pop();
-      return phonesArr;
-    },
-    getGrafs(grafs) {
-      let grafsArr = grafs.split("\n");
-      grafsArr.pop();
-      return grafsArr;
-    },
     showWorkingHours(office) {
       let dateNow = new Date();
       let day = dateNow.getDay();

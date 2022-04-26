@@ -72,7 +72,6 @@ module.exports = {
     ["@nuxtjs/axios", { proxy: true }],
     "@nuxtjs/auth-next",
     ["cookie-universal-nuxt", { alias: "cookiz" }],
-    "@nuxtjs/recaptcha",
   ],
   recaptcha: {
     hideBadge: false,

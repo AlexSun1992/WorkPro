@@ -12,7 +12,12 @@ module.exports = {
     sourceType: "module",
     ecmaVersion: 2020,
   },
+  rules: {
+    // https://github.com/prettier/eslint-plugin-prettier/issues/94#issuecomment-642336945
+    "vue/max-attributes-per-line": "off",
+  },
   env: {
+    jest: true,
     es6: true,
   },
 };

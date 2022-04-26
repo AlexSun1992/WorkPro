@@ -113,6 +113,13 @@ export default {
   methods: {
     numberUpdateValue() {
       let setValue = null;
+      // emit на каждый ввод символа, нужен для регуляции скрытия сообщения о несуществующем госномере
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.numberAndCodeValue,
+      });
+
       if (isNumberValid(this.numberValue.replace(/ /g, ""))) {
         this.$refs.code.$el.focus();
         if (this.stateNumber && this.stateCode) {
@@ -130,6 +137,12 @@ export default {
     },
     codeUpdateValue(value) {
       let setValue = null;
+      // emit на каждый ввод символа , нужен для регуляции скрытия сообщения о несуществующем госномере
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.numberAndCodeValue,
+      });
       if (isCodeValid(value)) {
         if (this.stateNumber && this.stateCode) {
           setValue = this.numberAndCodeValue;

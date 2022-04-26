@@ -461,9 +461,10 @@ export default {
               err?.response?.data?.INFO || err?.response?.data?.MESSAGE
             );
           }
-          const errorInfo = err?.response?.data?.INFO
-            ? err?.response?.data?.INFO
-            : err?.response?.data?.MESSAGE;
+          const errorInfo =
+            err?.response?.data?.INFO ||
+            err?.response?.data?.MESSAGE ||
+            err.message;
           if (errorInfo) {
             this.$store.commit("data_card/setFieldError", errorInfo);
           }

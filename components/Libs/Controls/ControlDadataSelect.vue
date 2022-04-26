@@ -1,26 +1,25 @@
 <template>
   <div>
     <b-form-group :class="{ required: data.required }">
-      <template v-slot:label
-        ><span v-html="data.label"></span
-        ><span v-if="data.helpText">
+      <template #label>
+        <span v-html="data.label" /><span v-if="data.helpText">
           (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-            <span v-html="data.helpText"></span></vue-easy-tooltip></span
-      ></template>
+            <span v-html="data.helpText" /></vue-easy-tooltip
+        ></span>
+      </template>
       <autocomplete
-        :placeholder="data.placeholder"
         ref="autocomplete"
+        :placeholder="data.placeholder"
         :class="validClass"
         :auto-select="true"
         :debounce-time="300"
         :search="search"
         :get-result-value="getResultValue"
         :default-value="getCurrentValue"
+        :disabled="!edit ? !edit : data.readonly"
         @submit="handleSubmit"
         @blur="handleBlur"
-        :disabled="!edit ? !edit : data.readonly"
-      >
-      </autocomplete>
+      />
       <b-form-invalid-feedback :state="data.state">
         {{ data.error ? data.error : "Обязательно для заполнения" }}
       </b-form-invalid-feedback>
@@ -31,6 +30,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+
 function getQueryParams(queryType, input) {
   if (queryType.includes("ADDRESS")) {
     return {
@@ -92,6 +92,29 @@ export default {
     };
   },
 
+  computed: {
+    disabled() {
+      return this.$store.getters["data_card/getReadOnly"];
+    },
+    validClass() {
+      if (this.data.state !== null && this.data.state !== undefined) {
+        return this.data.state === true ? "is-valid" : "is-invalid";
+      }
+      return "";
+    },
+    getCurrentValue() {
+      if (
+        this.data.value !== undefined &&
+        this.data.value !== null &&
+        this.data.name === "SVEHICLE_MODEL"
+      ) {
+        return this.data.value.split("|")[1];
+      }
+
+      return this.data.value;
+    },
+  },
+
   methods: {
     async search(input) {
       if (input.length < 1) {
@@ -137,7 +160,7 @@ export default {
       });
     },
 
-    handleBlur(value) {
+    handleBlur() {
       const find = this.group.find((i) =>
         this.$refs.autocomplete?.value.includes(i.value)
       );
@@ -156,38 +179,6 @@ export default {
         this.$refs.autocomplete.value = this.group[0].value;
         this.handleSubmit(this.group[0]);
       }
-    },
-  },
-
-  computed: {
-    disabled() {
-      return this.$store.getters["data_card/getReadOnly"];
-    },
-    errorText() {
-      if (this.data.state === false) {
-        if (this.$refs.autocomplete.value !== "") {
-          return this.data?.helpText ? this.data.helpText : errorText;
-        }
-        return errorText;
-      }
-    },
-    validClass() {
-      if (this.data.state !== null && this.data.state !== undefined) {
-        return this.data.state === true ? "is-valid" : "is-invalid";
-      } else {
-        return "";
-      }
-    },
-    getCurrentValue() {
-      if (
-        this.data.value !== undefined &&
-        this.data.value !== null &&
-        this.data.name === "SVEHICLE_MODEL"
-      ) {
-        return this.data.value.split("|")[1];
-      }
-
-      return this.data.value;
     },
   },
 };

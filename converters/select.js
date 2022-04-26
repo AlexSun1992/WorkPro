@@ -31,7 +31,7 @@ converter.select = (data) => {
             obj.text =
               items[i][data[0]._meta.SNAMEFIELD.toUpperCase()].toString();
           } else if (fields[j].FIELD !== "ID") {
-            obj.text = items[i][fields[j].FIELD].toString();
+            obj.text = items[i][fields[j].FIELD]?.toString();
           }
           if (items[i][data[0]._meta.SKEYFIELD]) {
             obj.value = items[i][data[0]._meta.SKEYFIELD]
