@@ -1,42 +1,6 @@
 <template>
   <div>
-    <div v-if="getData">
-      <b-form-group
-        :label="data.label"
-        :class="{ required: data.required }"
-        :label-for="data.name"
-        v-if="getData"
-      >
-        <b-input
-          v-model="data.value.text || 'Выберите из списка'"
-          :readonly="true"
-          class="mb-2"
-          :class="visible ? null : 'collapsed'"
-          :aria-expanded="visible ? 'true' : 'false'"
-          aria-controls="collapse-4"
-          @click="openList"
-        >
-          {{ data.value.text || "Выберите из списка" }}
-        </b-input>
-        <b-collapse id="collapse-4" v-model="visible" class="mt-2">
-          <b-row>
-            <b-col cols="12" md="6" lg="4">
-              <wrapper-item-from-template
-                class="mypolices-all-block"
-                :isButtonRender="data"
-                @openList="openList"
-                @update="update"
-                :itemId="data.menudic"
-                :isEmpty="isEmptyContent"
-                :template="getData"
-              ></wrapper-item-from-template>
-            </b-col>
-          </b-row>
-        </b-collapse>
-      </b-form-group>
-    </div>
-
-    <div v-click-outside="outside" v-else>
+    <div v-click-outside="outside">
       <b-form-group
         :label="data.label"
         :class="{ required: data.required }"
@@ -57,47 +21,40 @@
       </b-form-group>
       <div class="col-lg-2 pt-lg-2 text-nowrap">
         <b-button
-          @click="clearItem"
           v-if="!isLoad && itemValue[optionsValue] && getData"
           class="reload-captcha mt-1"
           variant="outline-success"
-          >{{ data.placeholder || "Очистить" }}</b-button
+          @click="clearItem"
         >
+          {{ data.placeholder || "Очистить" }}
+        </b-button>
         <b-spinner v-if="isLoad" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import VRuntimeTemplate from "v-runtime-template";
-import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
-import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
-import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
-import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
-import WrapperItemFromTemplate from "./WrapperItemFromTemplate.vue";
-import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
 import ControlWrapperSelect from "../ControlWrapperSelect";
-import RefuseButton from "../../../Pages/Cabinet/Block/RefuseButton.vue";
 
 export default {
   name: "ControlListSelect",
   components: {
-    ContentBlock,
     ControlWrapperSelect,
-    VRuntimeTemplate,
-    SelectItemFromTemplate,
-    WrapperItemFromTemplate,
-    ChooseButton,
-    FilterBlock,
-    ObjectsOnMap,
-    RefuseButton,
   },
-
-  data() {
-    return {
-      visible: false,
-      isLoad: false,
-    };
+  directives: {
+    clickOutside: {
+      bind(el, binding, vnode) {
+        el.clickOutsideEvent = function (event) {
+          if (!(el == event.target || el.contains(event.target))) {
+            vnode.context[binding.expression](event);
+          }
+        };
+        document.body.addEventListener("click", el.clickOutsideEvent);
+      },
+      unbind(el) {
+        document.body.removeEventListener("click", el.clickOutsideEvent);
+      },
+    },
   },
   props: {
     itemId: {
@@ -127,43 +84,49 @@ export default {
     },
   },
 
+  data() {
+    return {
+      visible: false,
+      isLoad: false,
+    };
+  },
+
   computed: {
     dataContent: {
-      get: function () {
+      get() {
         const block = this.$store.getters["blocks/getUnfilteredBlockById"](
           this.data.menudic
         );
         if (block) {
           return block.data;
-        } else {
-          return {};
         }
+        return {};
       },
     },
     options: {
-      get: function () {
+      get() {
         return this.dataContent.items || [];
       },
     },
     optionsValue: {
-      get: function () {
+      get() {
         if (this.dataContent?.fields?.length > 1) {
           return this.dataContent?.fields[1].key || "ID";
         }
       },
     },
     itemValue: {
-      get: function () {
+      get() {
         return this.data?.value?.value || {};
       },
     },
     selectId: {
-      get: function () {
+      get() {
         return `id${this.data.fieldId}`;
       },
     },
     getData: {
-      get: function () {
+      get() {
         const data = this.$store.getters["menu/getMenuById"](
           this.data.menudic
         ).SVJCARDGRID;
@@ -173,83 +136,41 @@ export default {
       },
     },
     isEmptyContent: {
-      get: function () {
+      get() {
         const block = this.$store.getters["blocks/getBlockById"](
           this.data.menudic
         );
         if (block) {
           return !block?.data?.items.length;
-        } else {
-          return false;
         }
+        return false;
       },
     },
   },
 
   methods: {
-    update(event) {
-      Object.keys(event).map(function (key, index) {
-        if (Number.isInteger(event[key]) === false) {
-          try {
-            JSON.parse(event[key]);
-            delete event[key];
-          } catch (e) {
-            event[key] = event[key];
-          }
-        } else {
-          event[key] = event[key];
-        }
-      });
-      this.visible = false;
-
-      this.$store.commit("data_card/setFilters", event);
-
-      if (event?.SNAME || event?.SFIRSTNAME || event?.SSECONDNAME) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: {
-            value: event,
-            text: event.SNAME || event.SFIRSTNAME + " " + event.SSECONDNAME,
-          },
-        });
-      } else {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: {
-            value: event,
-            text: "",
-          },
-        });
-      }
-    },
-    displayText: function (item) {
+    displayText(item) {
       return this.$root.eventHandler(this.data, item, "displayText");
     },
     selectItem(value) {
-      const value_prepare = { ...value };
-      Object.keys(value_prepare).map(function (key) {
-        if (Number.isInteger(value_prepare[key]) === false) {
+      const valuePrepare = { ...value };
+      Object.keys(valuePrepare).map((key) => {
+        if (Number.isInteger(valuePrepare[key]) === false) {
           try {
-            JSON.parse(value_prepare[key]);
-            delete value_prepare[key];
+            JSON.parse(valuePrepare[key]);
+            delete valuePrepare[key];
           } catch (e) {
-            value_prepare[key] = value_prepare[key];
+            console.error(e);
           }
-        } else {
-          value_prepare[key] = value_prepare[key];
         }
       });
       this.visible = false;
-
-      this.$store.commit("data_card/setFilters", value_prepare);
-
+      this.$store.commit("data_card/setFilters", valuePrepare);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: {
-          value: value_prepare,
+          value: valuePrepare,
           text:
             value[this.data.name.substring(2)] ||
             value[this.dataContent.fields[1].label],
@@ -270,7 +191,6 @@ export default {
     },
     async openList() {
       this.visible = !this.visible;
-
       if (this.visible) {
         try {
           this.isLoad = true;
@@ -283,21 +203,6 @@ export default {
           console.log(err);
         }
       }
-    },
-  },
-  directives: {
-    clickOutside: {
-      bind: function (el, binding, vnode) {
-        el.clickOutsideEvent = function (event) {
-          if (!(el == event.target || el.contains(event.target))) {
-            vnode.context[binding.expression](event);
-          }
-        };
-        document.body.addEventListener("click", el.clickOutsideEvent);
-      },
-      unbind: function (el) {
-        document.body.removeEventListener("click", el.clickOutsideEvent);
-      },
     },
   },
 };

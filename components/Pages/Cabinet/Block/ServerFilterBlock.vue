@@ -161,10 +161,14 @@ export default {
     async setOptions() {
       if (this.dictionary?.length) {
         for (let item of this.dictionary) {
-          this.list.push({
-            text: item,
-            value: item,
-          });
+          if (typeof item === "string") {
+            this.list.push({
+              text: item,
+              value: item,
+            });
+          } else {
+            this.list.push(item);
+          }
         }
       } else {
         let fkFields = this.fk.match(/\w+/gi);
@@ -231,12 +235,20 @@ export default {
       );
 
       if (foundedFilter) {
-        this.$store.commit("blocks/updateServerFilters", {
-          propertyName: this.queryParamName,
-          filter: this.queryParamValue,
-          id: this.id,
-          filterIdNumber: e.data[this.id],
-        });
+        if (foundedFilter && e.data) {
+          this.$store.commit("blocks/updateServerFilters", {
+            propertyName: this.queryParamName,
+            filter: this.queryParamValue,
+            id: this?.id,
+            filterIdNumber: e?.data[this.id],
+          });
+        }
+        if (foundedFilter && !e.data) {
+          this.$store.commit("blocks/updateServerFilters", {
+            propertyName: this.queryParamName,
+            filter: this.queryParamValue,
+          });
+        }
       } else {
         this.$store.commit("blocks/setServerFilters", filterObj);
         if (this.id && e.data[this.id]) {
@@ -252,7 +264,6 @@ export default {
       if (!e?.text && !e?.value && this.isShowAsTemplate) {
         e = { data: e, text: e.SNAME, value: e.SPOLICY };
       }
-
       this.selectedItem = e.text;
       this.queryParamValue = e.value;
       this.visible = false;

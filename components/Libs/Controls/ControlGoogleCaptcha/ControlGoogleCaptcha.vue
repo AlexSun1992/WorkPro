@@ -4,6 +4,7 @@
       ref="recaptcha"
       size="invisible"
       :sitekey="data.value"
+      :load-recaptcha-script="true"
       @verify="setToken"
       @expired="onCaptchaExpired"
     />
@@ -13,7 +14,7 @@
 </template>
 
 <script>
-import { VueRecaptcha } from "vue-recaptcha";
+import VueRecaptcha from "vue-recaptcha";
 import { waitCaptchaHide } from "./captchaHelper";
 
 function debug(message = "") {
@@ -60,6 +61,15 @@ export default {
     debug("mounted");
     this.$store.commit(
       "data_card/addBeforeSavePromise",
+      this.beforeSaveFunction
+    );
+  },
+
+  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
+  destroyed() {
+    debug("unmounted");
+    this.$store.commit(
+      "data_card/deleteBeforeSavePromise",
       this.beforeSaveFunction
     );
   },

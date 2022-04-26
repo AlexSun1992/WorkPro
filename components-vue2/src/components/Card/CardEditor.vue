@@ -114,7 +114,6 @@ export default {
       captchaIsDemandedNow: false,
     };
   },
-
   computed: {
     ...mapGetters("data_card", [
       "getForm",
