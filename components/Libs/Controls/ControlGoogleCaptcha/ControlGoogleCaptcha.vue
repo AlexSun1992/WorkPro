@@ -4,7 +4,7 @@
       ref="recaptcha"
       size="invisible"
       :sitekey="data.value"
-      :load-recaptcha-script="false"
+      :load-recaptcha-script="true"
       @verify="setToken"
       @expired="onCaptchaExpired"
     />
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { VueRecaptcha } from "vue-recaptcha";
+import VueRecaptcha from "vue-recaptcha";
 import { waitCaptchaHide } from "./captchaHelper";
 
 function debug(message = "") {
@@ -36,7 +36,6 @@ export default {
     return {
       waitCaptcha: Promise.resolve(),
       resolveCaptcha: () => {},
-      recaptchaScriptId: "__RECAPTCHA_SCRIPT",
     };
   },
 
@@ -60,29 +59,22 @@ export default {
 
   mounted() {
     debug("mounted");
-    this.loadRecaptchaScript();
     this.$store.commit(
       "data_card/addBeforeSavePromise",
       this.beforeSaveFunction
     );
   },
 
-  methods: {
-    loadRecaptchaScript() {
-      window.recapthaCustomLoaded = () => {
-        debug("recaptcha loaded");
-        window.vueRecaptchaApiLoaded();
-      };
-      if (!document.querySelector(`#${this.recaptchaScriptId}`)) {
-        const script = document.createElement("script");
-        script.id = this.recaptchaScriptId;
-        script.src = `https://www.google.com/recaptcha/api.js?onload=recapthaCustomLoaded&render=explicit`;
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-      }
-    },
+  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
+  destroyed() {
+    debug("unmounted");
+    this.$store.commit(
+      "data_card/deleteBeforeSavePromise",
+      this.beforeSaveFunction
+    );
+  },
 
+  methods: {
     async beforeSaveFunction() {
       debug("beforeSaveFunction");
       this.recaptchaExecute();
