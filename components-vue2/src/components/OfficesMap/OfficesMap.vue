@@ -4,7 +4,6 @@
     @mouseup="removeListener"
     class="map-container mt-3"
   >
-    {{ suggest }}
     <div class="container">
       <div class="office-block">
         <button
