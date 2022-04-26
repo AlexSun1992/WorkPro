@@ -353,6 +353,16 @@ async function eventHandler(fields, action, func) {
     }
   }
 
+  /// Дизэйбл и очищение поля RegNumber по нажатию checkbox при наличии ошибки "Госномера еще нет"
+  if (
+    action.name === "LCHECKREGNUMBER" &&
+    errRegNumNotFoundMob.visible === true
+  ) {
+    regNumber.readonly = true;
+    regNumber.value = "";
+    hideErrorFunc(errRegNumNotFoundMob);
+  }
+
   // Скрытие сообщения о госномере и сброс до исходного состояния
   if (action.name === "SREGNUMBER" && errRegNumNotFoundMob.visible === true) {
     hideErrorFunc(errRegNumNotFoundMob);
