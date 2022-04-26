@@ -4,6 +4,7 @@
     @mouseup="removeListener"
     class="map-container mt-3"
   >
+    {{ suggest }}
     <div class="container">
       <div class="office-block">
         <button
@@ -318,8 +319,8 @@ export default {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
       }
-      this.cardposX = parseInt(this.$refs["card"].style.marginLeft);
-      this.cardposY = parseInt(this.$refs["card"].style.marginTop);
+      this.cardposX = parseInt(this.$refs["card"]?.style.marginLeft);
+      this.cardposY = parseInt(this.$refs["card"]?.style.marginTop);
       document.addEventListener("mousemove", this.onMouseMove);
       /*document.addEventListener("touchmove", this.onMouseMove);*/
     },
@@ -635,7 +636,8 @@ export default {
             console.log(e);
           }
         }
-      } else {
+      }
+      if (!this.suggest && lat) {
         this.city = Cookies.get("location_user");
         this.regionId = Cookies.get("kladr_id")?.substr(0, 2);
       }
