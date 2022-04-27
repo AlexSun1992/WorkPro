@@ -110,7 +110,11 @@ import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import { BPagination } from "bootstrap-vue";
 import Cookies from "js-cookie";
-import { isOpened, getTemplate } from "../../../../utils/map/helpers";
+import {
+  isOpened,
+  getTemplate,
+  checkClusterStatus,
+} from "../../../../utils/map/helpers";
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
@@ -123,6 +127,7 @@ export default {
     MetroOfficeCard,
     ZoomComponent,
     BPagination,
+    checkClusterStatus,
   },
   data() {
     return {
@@ -444,7 +449,9 @@ export default {
       this.myClusterer = new ymaps.Clusterer({
         preset: "islands#darkGreenClusterIcons",
       });
+
       this.myClusterer.add(this.getGeoObjects(agencies));
+
       let mapState;
 
       if (this.mapState) {
@@ -491,6 +498,8 @@ export default {
         );
       });
       this.setPlaceholder();
+
+      checkClusterStatus(this.myClusterer);
     },
 
     combineAgencies(agencies, i, count) {
@@ -523,7 +532,6 @@ export default {
               ).join(""),
 
               hintContent: `${agencies[i].SSHORTNAME}`,
-              balloonPane: "outerBalloon",
               balloonShadowPane: "outerBalloon",
             },
           },
