@@ -548,7 +548,6 @@ export default {
       return arr;
     },
     getGeoObjects(agencies) {
-      debugger;
       let myGeoObjects = [];
 
       let uniqueItemsCount = agencies.reduce((acc, item) => {
@@ -571,7 +570,6 @@ export default {
               ).join(""),
 
               hintContent: `${agencies[i].SSHORTNAME}`,
-              balloonPane: "test",
               balloonShadowPane: "outerBalloon",
             },
           },

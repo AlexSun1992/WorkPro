@@ -9,12 +9,12 @@ const getTime = (distance) => {
 };
 
 const isOpened = (office) => {
-  let isOpened = true;
-  // if (
-  //   office.SSHORTNAME === "ДПМосква-Северо-Запад(РЕСО-73)" ||
-  //   office.SSHORTNAME === "РЕСО-735"
-  // )
-  //   return false;
+  let opened = true;
+  if (
+    office.SSHORTNAME === "ДПМосква-Северо-Запад(РЕСО-73)" ||
+    office.SSHORTNAME === "РЕСО-735"
+  )
+    return false;
   let dateNow = new Date();
   let day = dateNow.getDay();
   let dateEnd = new Date();
@@ -24,10 +24,10 @@ const isOpened = (office) => {
     dateEnd.setHours(endHour);
     dateEnd.setMinutes(endMinute);
     if (dateNow > dateEnd) {
-      isOpened = false;
+      opened = false;
     }
   }
-  return isOpened;
+  return opened;
 };
 
 const showWorkingHours = (agency) => {
@@ -169,9 +169,9 @@ const getTemplate = (agency) => {
       return agency.SPATH1
         ? `<div class="col-8">
                 <div>${agency.SADDRESS}</div>
-                <div class="card-office-opened">${showWorkingHours(
-                  agency
-                )}</div>
+                <div class="card-office-${
+                  isOpened(agency) ? "opened" : "closed"
+                }">${showWorkingHours(agency)}</div>
               </div>`
         : `<div class="col-12">
               <div>${agency.SADDRESS}</div>
@@ -244,7 +244,7 @@ const checkClusterStatus = (clusterer) => {
     if (counter === clusterer.getClusters()[i]?.getGeoObjects().length) {
       clusterer
         .getClusters()
-        [i].options.set("preset", "islands#invertedVioletClusterIcons");
+        [i].options.set("preset", "islands#invertedGrayClusterIcons");
     }
   }
 };
