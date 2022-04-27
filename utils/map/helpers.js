@@ -10,11 +10,11 @@ const getTime = (distance) => {
 
 const isOpened = (office) => {
   let opened = true;
-  if (
-    office.SSHORTNAME === "ДПМосква-Северо-Запад(РЕСО-73)" ||
-    office.SSHORTNAME === "РЕСО-735"
-  )
-    return false;
+  // if (
+  //   office.SSHORTNAME === "ДПМосква-Северо-Запад(РЕСО-73)" ||
+  //   office.SSHORTNAME === "РЕСО-735"
+  // )
+  //   return false;
   let dateNow = new Date();
   let day = dateNow.getDay();
   let dateEnd = new Date();
