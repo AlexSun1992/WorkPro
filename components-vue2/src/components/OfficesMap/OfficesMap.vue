@@ -266,6 +266,11 @@ export default {
     closeCard() {
       this.circleClicked = false;
       this.setStatus();
+      if (document.querySelector(".metrowrapper.modal_opened")) {
+        document
+          .querySelector(".metrowrapper")
+          .classList.remove("modal_opened");
+      }
     },
     setStatus() {
       let g = document.getElementsByTagName("g");
@@ -411,6 +416,7 @@ export default {
         if (body_size < 0) {
           body_size = 0;
         }
+        document.querySelector(".metrowrapper").classList.add("modal_opened");
         this.$refs["card"].style.marginLeft = 0;
         this.$refs["card"].style.marginTop = 0;
         this.$refs["card"].style.top = e.layerY + "px";
