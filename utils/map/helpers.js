@@ -9,6 +9,12 @@ const getTime = (distance) => {
 };
 
 const isOpened = (office) => {
+  let opened = true;
+  // if (
+  //   office.SSHORTNAME === "ДПМосква-Северо-Запад(РЕСО-73)" ||
+  //   office.SSHORTNAME === "РЕСО-735"
+  // )
+  //   return false;
   let dateNow = new Date();
   let day = dateNow.getDay();
   let dateEnd = new Date();
@@ -17,12 +23,11 @@ const isOpened = (office) => {
     const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
     dateEnd.setHours(endHour);
     dateEnd.setMinutes(endMinute);
-    let isOpened = true;
     if (dateNow > dateEnd) {
-      isOpened = false;
+      opened = false;
     }
-    return isOpened;
   }
+  return opened;
 };
 
 const showWorkingHours = (agency) => {
@@ -164,13 +169,15 @@ const getTemplate = (agency) => {
       return agency.SPATH1
         ? `<div class="col-8">
                 <div>${agency.SADDRESS}</div>
-                <div class="card-office-opened">${showWorkingHours(
-                  agency
-                )}</div>
+                <div class="card-office-${
+                  isOpened(agency) ? "opened" : "closed"
+                }">${showWorkingHours(agency)}</div>
               </div>`
         : `<div class="col-12">
               <div>${agency.SADDRESS}</div>
-              <div class="card-office-opened">${showWorkingHours(agency)}</div>
+              <div class="card-office-${
+                isOpened(agency) ? "opened" : "closed"
+              }">${showWorkingHours(agency)}</div>
           </div>`;
     }
   );
@@ -209,6 +216,42 @@ const getGrafs = (grafs) => {
   return grafsArr;
 };
 
+const checkClusterStatus = (clusterer) => {
+  for (let i = 0; i <= clusterer.getClusters().length; i++) {
+    let counter = 0;
+    for (
+      let j = 0;
+      j <= clusterer.getClusters()[i]?.getGeoObjects().length;
+      j++
+    ) {
+      let isOpened = clusterer
+        .getClusters()
+        [i].getGeoObjects()
+        [j]?.properties.get("balloonContentBody")
+        .includes("opened");
+
+      if (
+        clusterer
+          .getClusters()
+          [i].getGeoObjects()
+          [j]?.properties.get("balloonContentBody")
+          .match(/card-office-closed/g)
+      )
+        counter++;
+      if (isOpened) {
+        clusterer
+          .getClusters()
+          [i].options.set("preset", "islands#darkGreenClusterIcons");
+      }
+    }
+    if (counter === clusterer.getClusters()[i]?.getGeoObjects().length) {
+      clusterer
+        .getClusters()
+        [i].options.set("preset", "islands#invertedGrayClusterIcons");
+    }
+  }
+};
+
 module.exports = {
   getTime,
   isOpened,
@@ -218,4 +261,5 @@ module.exports = {
   getUnderlineId,
   getPhones,
   getGrafs,
+  checkClusterStatus,
 };

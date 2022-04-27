@@ -369,6 +369,11 @@ async function eventHandler(fields, action, func) {
     invertPropertyElements(checkNotRegNumberForm, "visible");
   }
 
+  // Возвращение формы к исходному состоянию при изменении regNumber при правильном regNumber
+  if (action.name === "SREGNUMBER" && vehicleModel.visible === true) {
+    invertPropertyElements(checkNotRegNumberForm, "visible");
+  }
+
   /**
    * Расчет мощностей
    */
