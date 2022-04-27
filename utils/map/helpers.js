@@ -229,12 +229,15 @@ const checkClusterStatus = (clusterer) => {
         [i].getGeoObjects()
         [j]?.properties.get("balloonContentBody")
         .includes("opened");
-      let result = clusterer
-        .getClusters()
-        [i].getGeoObjects()
-        [j]?.properties.get("balloonContentBody")
-        .match(/card-office-closed/g);
-      if (result) counter++;
+
+      if (
+        clusterer
+          .getClusters()
+          [i].getGeoObjects()
+          [j]?.properties.get("balloonContentBody")
+          .match(/card-office-closed/g)
+      )
+        counter++;
       if (isOpened) {
         clusterer
           .getClusters()
