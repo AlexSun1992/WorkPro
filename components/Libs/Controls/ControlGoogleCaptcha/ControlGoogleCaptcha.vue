@@ -65,6 +65,15 @@ export default {
     );
   },
 
+  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
+  destroyed() {
+    debug("unmounted");
+    this.$store.commit(
+      "data_card/deleteBeforeSavePromise",
+      this.beforeSaveFunction
+    );
+  },
+
   methods: {
     async beforeSaveFunction() {
       debug("beforeSaveFunction");

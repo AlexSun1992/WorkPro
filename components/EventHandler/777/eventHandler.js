@@ -11,6 +11,8 @@ async function eventHandler(fields, action, func) {
     );
   }
 
+  //errRegNumNotFoundMob;
+
   function findDrivers() {
     const driverFieldNames = [
       `DL_BUTTON_`,
@@ -117,7 +119,7 @@ async function eventHandler(fields, action, func) {
     );
     return newDrivers;
   };
-
+  // SFILLINMANUALLY
   const citySettlement = findField("SCITY_SETTLEMENT");
   const ownerAge = findField("NOWNER_AGE");
   const empty = findField("Empty");
@@ -148,8 +150,13 @@ async function eventHandler(fields, action, func) {
   const addDriver = findField(`ADD_DRIVER`);
   const emptyFive = findField("empty-5");
   const price = findField("NPRICE");
+  const firstDriverAge = findField("NDR_AGE_1");
+  const firstDriveExperience = findField("NDR_EXPERIENCE_1");
+  const firstDriverNoCrash = findField("NDR_NO_CRASH_1");
 
   let autoInfo = null;
+
+  //ownerTitle,citySettlement,ownerAge,carTitle,vehicleModel,yearVehicle,horseVehiclePower,khVeiclePower,driversTitle,driverType
 
   const url = new URL("/free/v2/osago/findAuto", window.location);
 
@@ -344,6 +351,22 @@ async function eventHandler(fields, action, func) {
     } else {
       regNumber.state = false;
     }
+  }
+
+  /// Дизэйбл и очищение поля RegNumber по нажатию checkbox при наличии ошибки "Госномера еще нет"
+  if (
+    action.name === "LCHECKREGNUMBER" &&
+    errRegNumNotFoundMob.visible === true
+  ) {
+    regNumber.readonly = true;
+    regNumber.value = "";
+    hideErrorFunc(errRegNumNotFoundMob);
+  }
+
+  // Скрытие сообщения о госномере и сброс до исходного состояния
+  if (action.name === "SREGNUMBER" && errRegNumNotFoundMob.visible === true) {
+    hideErrorFunc(errRegNumNotFoundMob);
+    invertPropertyElements(checkNotRegNumberForm, "visible");
   }
 
   /**
