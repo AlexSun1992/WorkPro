@@ -7,7 +7,7 @@
       ref="file"
       type="file"
       style="display: none"
-      v-on:change="handleFileUpload()"
+      v-on:change="handleFileUpload($event)"
     />
     {{ fileSize }}
     {{ fileType }}
@@ -35,7 +35,25 @@ export default {
   methods: {
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
-      this.submitFile();
+
+      /// Использование объекта FileReader
+      // const reader = new FileReader();
+      // reader.readAsText(this.file);
+      // reader.onload = () => console.log(reader.result);
+      ///
+
+      /// Использование объекта FormData
+      const formData = new FormData();
+      formData.append("testFile", this.file, `${this.file.name}`);
+      console.log("formData:", formData);
+      ///
+      // this.submitFile();
+
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: formData,
+      });
     },
     submitFile() {
       return true;

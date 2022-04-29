@@ -259,11 +259,15 @@ export const actions = {
     }
   },
   async saveDataCard({ commit, state, dispath }, params) {
-    console.log("saveDataCard:", params);
     commit("setLoading", true);
     commit("setDisabled", true);
+
     try {
+      // console.log("saveDataCard:", params);
       await Promise.all(state.beforeSavePromises.map((func) => func()));
+
+      // let testResp = await this.$axios.post(`/am/main/v2/datacard2/55/912/0`);
+      // console.log("testResp:", testResp);
 
       let resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
@@ -271,20 +275,23 @@ export const actions = {
         }${params.zone === "free" ? "?zone=free" : ""}`,
         params.form
       );
-
+      //console.log("resp:", resp);
       commit("setSavedError", false);
       commit("setCardId", resp.data.ID);
       commit("setCardRelId", resp.data.REL);
-      console.log("");
+
       return resp;
     } catch (err) {
+      //console.log("err:", err);
       commit("setSavedError", true);
       commit("setErrorMessage", err.response?.data || err.message);
       if (err.response) {
+        //console.log("err.response:", err.response);
         return err.response;
       }
       throw err;
     } finally {
+      //console.log("finally:");
       commit("setLoading", false);
       commit("setDisabled", false);
     }
@@ -580,6 +587,7 @@ export const mutations = {
         let copyField = state.copyForm.find(
           (field) => field.fieldId === item.fieldId
         );
+
         if (copyField.readonly) {
           item.readonly = true;
         } else {

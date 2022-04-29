@@ -186,10 +186,13 @@ export default {
     },
 
     async updateValue(e) {
+      console.log("e:", e);
       const field = this.data.find((f) => f.fieldId === e.fieldId);
+      console.log("field:", field);
       // if (field.type !== "button") {
       //   this.$store.commit("data_card/cardChanged", true);
       // }
+
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");
@@ -352,9 +355,9 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
-      debugger;
+
       if (this.validateData(fields)) {
-        debugger;
+        console.log("CardEditor fields:", fields);
         try {
           let itemId;
           let moduleId;
@@ -367,12 +370,12 @@ export default {
             cardId = this.$route.params.idCard;
             relId = this.$route.params.idRel;
           } else {
-            debugger;
             itemId = this.params.page.idItem;
             moduleId = this.params.page.idModule;
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
           }
+
           const resp = await this.$store.dispatch("data_card/saveDataCard", {
             moduleId,
             itemId,
@@ -381,10 +384,7 @@ export default {
             form: fields,
           });
 
-          console.log("resp:", resp);
-
           if (this.$route.params.idItem === "710") {
-            debugger;
             await this.$store.dispatch("updateUser");
           }
           if (
@@ -392,11 +392,9 @@ export default {
             !this.$route.query?.ref &&
             resp?.status !== 500
           ) {
-            debugger;
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
             if (this.$route.params.idWizard) {
-              debugger;
               this.$store.commit("data_card/setLoading", true);
               await this.$store.dispatch("wizard/fetchWizard", {
                 idModule: this.$route.params.idModule,
@@ -420,10 +418,8 @@ export default {
               return;
             }
             if (this.closeAfterSave) {
-              debugger;
               this.$router.push(`/cabinet/${moduleId}/0/${itemId}`);
             } else {
-              debugger;
               this.$router.push(
                 `/cabinet/${moduleId}/0/${itemId}/${cardId}${
                   relId ? `/${relId}` : ""
@@ -433,21 +429,18 @@ export default {
             return;
           }
           if (resp?.status === 200) {
-            debugger;
             this.saveSuccess = true;
             if (this.$route.query?.ref && resp) {
               this.$router.push(this.$route.query?.ref);
               return;
             }
             if (this.$route.params.idCard) {
-              debugger;
               await this.$store.dispatch(
                 "data_card/fetchForm",
                 this.$route.params
               );
             }
             if (this.wizardTabs) {
-              debugger;
               await this.$store.dispatch(
                 "wizard/fetchWizard",
                 this.$route.params
@@ -459,7 +452,6 @@ export default {
               solid: true,
             });
           } else if (resp?.status === 500) {
-            debugger;
             this.$store.commit("data_card/setLoading", false);
             this.$store.commit("data_card/setDisabled", false);
             this.$store.commit("data_card/setSavedError", true);
@@ -468,7 +460,6 @@ export default {
           this.$emit("error", null);
         } catch (err) {
           if (this.$route.path.includes("55/0/19")) {
-            debugger;
             this.$emit(
               "error",
               err?.response?.data?.INFO || err?.response?.data?.MESSAGE
@@ -483,7 +474,6 @@ export default {
           }
         }
       } else {
-        debugger;
         this.$store.commit("data_card/setSavedError", true);
         this.$store.commit("data_card/setErrorMessage", {
           MESSAGE: "Проверьте правильность заполнения формы!",
