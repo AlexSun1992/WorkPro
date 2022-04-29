@@ -221,6 +221,14 @@ export default {
     },
     positionSelectBalloon() {
       let gsvg = document.querySelector('use[href="#balloon-select"]');
+      if (document.querySelector('use[href="#balloon-select"]')) {
+        console.log(
+          gsvg.getAttribute("x"),
+          gsvg.getAttribute("y"),
+          this.centerX,
+          this.centerY
+        );
+      }
       /*console.log(gsvg.getAttribute("x"), gsvg.getAttribute("y"));*/
     },
     fitToViewportMetro() {
@@ -238,10 +246,6 @@ export default {
           (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
           137 * this.svgScale +
           this.translateY;
-        if (this.mapsFit != true) {
-          this.positionSelectBalloon();
-        }
-
         document
           .querySelector(".g-svg-metromap")
           .setAttribute(
@@ -256,6 +260,7 @@ export default {
               this.centerY +
               ")"
           );
+        this.positionSelectBalloon();
         this.mapsFit = true;
       });
     },
@@ -343,11 +348,16 @@ export default {
       this.cardposX = parseInt(this.$refs["card"]?.style.marginLeft);
       this.cardposY = parseInt(this.$refs["card"]?.style.marginTop);
       document.addEventListener("mousemove", this.onMouseMove);
+      document.addEventListener("mouseout", this.onMouseOute);
+      window.addEventListener("mouseup", this.removeListener);
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
+      document.removeEventListener("mouseout", this.onMouseOute);
+      window.removeEventListener("mouseup", this.removeListener);
     },
     onMouseMove(e) {
+      console.log("aaa");
       e.preventDefault();
       let svg = document.querySelector(".g-svg-metromap");
       this.translateX = this.translateX + e.movementX / e.view.devicePixelRatio;
@@ -355,12 +365,12 @@ export default {
       this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
       this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
 
-      if (Math.abs(this.translateX) >= this.$refs.metro.clientWidth / 2) {
+      if (Math.abs(this.translateX) >= (1285 * this.svgScale) / 2) {
         this.cardposX = this.cardposX - e.movementX / e.view.devicePixelRatio;
         this.translateX =
           this.translateX - e.movementX / e.view.devicePixelRatio;
       }
-      if (Math.abs(this.translateY) >= this.$refs.metro.clientHeight / 2) {
+      if (Math.abs(this.translateY) >= (1295 * this.svgScale) / 2) {
         this.translateY =
           this.translateY - e.movementY / e.view.devicePixelRatio;
         this.cardposY = this.cardposY - e.movementY / e.view.devicePixelRatio;
@@ -583,6 +593,9 @@ export default {
                 /*,elmaps[0].transform.animVal[0].matrix.e,
                 elmaps[0].transform.animVal[0].matrix.f*/
               );
+              if (_this.mapsFit != true) {
+                _this.positionSelectBalloon();
+              }
             }
           }
         }
