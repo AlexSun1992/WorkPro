@@ -96,6 +96,7 @@
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
+      :load-recaptcha-script="true"
       :sitekey="siteKey"
       @verify="setToken"
       @expired="onCaptchaExpired"
