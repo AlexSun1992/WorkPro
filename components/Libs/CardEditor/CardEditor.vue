@@ -177,6 +177,7 @@ export default {
     stripeLoaded() {
       try {
         if (typeof initHandler === "function") {
+          console.log("нашел!!!");
           this.$store.commit(
             "data_card/setForm",
             initHandler(this.data.map((a) => ({ ...a }))) || this.data
@@ -186,9 +187,9 @@ export default {
     },
 
     async updateValue(e) {
-      console.log("e:", e);
+      //console.log("e:", e);
       const field = this.data.find((f) => f.fieldId === e.fieldId);
-      console.log("field:", field);
+      //console.log("field:", field);
       // if (field.type !== "button") {
       //   this.$store.commit("data_card/cardChanged", true);
       // }
@@ -228,6 +229,7 @@ export default {
             "beforeSave"
           );
           if (data) {
+            console.log("data:", data);
             this.$store.commit("data_card/setForm", data || this.data);
           }
           await this.saveDataCard();
@@ -240,6 +242,7 @@ export default {
               "afterSave"
             );
             if (data) {
+              console.log("data:", data);
               this.$store.commit("data_card/setForm", data || this.data);
             }
           }
@@ -254,6 +257,7 @@ export default {
             e
           );
           if (data) {
+            console.log("нашел!!!");
             this.$store.commit("data_card/setForm", data || this.data);
           }
           await this.$store.dispatch("data_card/fetchList", params);
@@ -288,6 +292,7 @@ export default {
           e
         );
         if (data) {
+          console.log("нашел!!!");
           this.$store.commit("data_card/setForm", data || this.data);
         }
       }
@@ -302,6 +307,7 @@ export default {
           this.$store._actions["data_card/fetchCard"][0]
         );
         if (data) {
+          console.log("нашел!!!");
           this.$store.commit("data_card/setForm", data);
         }
       }
@@ -357,14 +363,12 @@ export default {
       const fields = this.$store.getters["data_card/getForm"];
 
       if (this.validateData(fields)) {
-        console.log("CardEditor fields:", fields);
         try {
           let itemId;
           let moduleId;
           let cardId;
           let relId;
           if (!this.params.page) {
-            debugger;
             itemId = this.$route.params.idItem;
             moduleId = this.$route.params.idModule;
             cardId = this.$route.params.idCard;
@@ -376,6 +380,12 @@ export default {
             relId = this.$store.getters["data_card/getCardRelId"];
           }
 
+          // console.log("moduleId:", moduleId);
+          // console.log("itemId:", itemId);
+          // console.log("cardId:", cardId);
+          // console.log("relId:", relId); // приходит undefined;
+          // console.log("form:", fields);
+
           const resp = await this.$store.dispatch("data_card/saveDataCard", {
             moduleId,
             itemId,
@@ -383,6 +393,14 @@ export default {
             relId,
             form: fields,
           });
+
+          // const resp = await this.$store.dispatch("data_card/saveDataCard2", {
+          //   moduleId,
+          //   itemId,
+          //   cardId,
+          //   relId,
+          //   form: fields,
+          // });
 
           if (this.$route.params.idItem === "710") {
             await this.$store.dispatch("updateUser");
@@ -481,6 +499,7 @@ export default {
       }
     },
     cancelDataCard() {
+      console.log("нашел!!!");
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit(
         "data_card/setForm",

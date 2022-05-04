@@ -259,43 +259,91 @@ export const actions = {
     }
   },
   async saveDataCard({ commit, state, dispath }, params) {
-    commit("setLoading", true);
-    commit("setDisabled", true);
+    console.log("commit:", commit);
+    console.log("state:", state);
+    console.log("dispath:", dispath);
+    console.log("params:", params);
+    // commit("setLoading", true);
+    // commit("setDisabled", true);
 
-    try {
-      // console.log("saveDataCard:", params);
-      await Promise.all(state.beforeSavePromises.map((func) => func()));
+    // try {
+    //   await Promise.all(state.beforeSavePromises.map((func) => func()));
 
-      // let testResp = await this.$axios.post(`/am/main/v2/datacard2/55/912/0`);
-      // console.log("testResp:", testResp);
+    //   let resp = await this.$axios.post(
+    //     `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
+    //       params.relId
+    //     }${params.zone === "free" ? "?zone=free" : ""}`,
+    //     params.form
+    //   );
 
-      let resp = await this.$axios.post(
-        `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
-          params.relId
-        }${params.zone === "free" ? "?zone=free" : ""}`,
-        params.form
-      );
-      //console.log("resp:", resp);
-      commit("setSavedError", false);
-      commit("setCardId", resp.data.ID);
-      commit("setCardRelId", resp.data.REL);
+    //   //console.log("resp:", resp);
 
-      return resp;
-    } catch (err) {
-      //console.log("err:", err);
-      commit("setSavedError", true);
-      commit("setErrorMessage", err.response?.data || err.message);
-      if (err.response) {
-        //console.log("err.response:", err.response);
-        return err.response;
-      }
-      throw err;
-    } finally {
-      //console.log("finally:");
-      commit("setLoading", false);
-      commit("setDisabled", false);
-    }
+    //   commit("setSavedError", false);
+    //   commit("setCardId", resp.data.ID);
+    //   commit("setCardRelId", resp.data.REL);
+    //   return resp;
+    // } catch (err) {
+    //   commit("setSavedError", true);
+    //   commit("setErrorMessage", err.response?.data || err.message);
+    //   if (err.response) {
+    //     return err.response;
+    //   }
+    //   throw err;
+    // } finally {
+    //   commit("setLoading", false);
+    //   commit("setDisabled", false);
+    // }
   },
+
+  async saveDataCard2({ state }, params) {
+    const myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer 1808ea656b0984cb3d9c5f7bdff47e54c9fce8d79393b3e44a4bd54d6431fe770f07a6b4b3c22c6903789117f4c"
+    );
+
+    const downloadedFile = state.form.find(
+      (elem) => elem.label === "Загрузить документ"
+    );
+
+    const file = new File([downloadedFile.value], downloadedFile.value.name, {
+      type: "field/blob",
+    });
+
+    const formData = new FormData();
+
+    formData.append("file1", file);
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: formData,
+      redirect: "follow",
+    };
+
+    const resp = fetch("/am/main/v2/datacard2/55/912/0", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
+    // const resp = await fetch("/am/main/v2/datacard2/55/912/0", requestOptions);
+    // console.log(resp);
+
+    // let resp = await this.$axios({
+    //   method: "post",
+    //   url: "/am/main/v2/datacard2/55/912/0",
+    //   data: requestOptions,
+    // });
+
+    // console.log("resp:", resp);
+
+    // let resp = await fetch("/am/main/v2/datacard2/55/912/0", {
+    //   method: "POST",
+    //   body: formData,
+    // });
+    // console.log(resp);
+  },
+
   async executeAction(
     { dispatch, commit },
     { relId, relActionId, rowId, actionId, body }

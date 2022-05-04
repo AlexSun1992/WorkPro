@@ -31,7 +31,7 @@ export default {
       file: null,
     };
   },
-  created() {},
+
   methods: {
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
@@ -45,14 +45,13 @@ export default {
       /// Использование объекта FormData
       const formData = new FormData();
       formData.append("testFile", this.file, `${this.file.name}`);
-      console.log("formData:", formData);
-      ///
+      //console.log("formData:", formData);
       // this.submitFile();
 
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: formData,
+        value: this.file,
       });
     },
     submitFile() {

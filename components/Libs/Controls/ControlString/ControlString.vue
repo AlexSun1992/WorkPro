@@ -52,6 +52,7 @@ export default {
   },
   methods: {
     updateField(e) {
+      this.data.value = e.value;
       this.$emit("update", e);
     },
   },
