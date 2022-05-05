@@ -220,14 +220,62 @@ export default {
       });
     },
     positionSelectBalloon() {
+      this.translateX=0;
+      this.translateY=0;
       let gsvg = document.querySelector('use[href="#balloon-select"]');
-      if (document.querySelector('use[href="#balloon-select"]')) {
-        console.log(
-          gsvg.getAttribute("x"),
-          gsvg.getAttribute("y"),
-          this.centerX,
-          this.centerY
-        );
+      if (
+        document.querySelector('use[href="#balloon-select"]') &&
+        this.centerX != null
+      ) {
+        if (this.$refs.["metro"].clientHeight - 1295 * this.svgScale < 0) {
+            let XX = this.$refs.["metro"].clientHeight;
+            let XXX = 1295 * this.svgScale;
+            let XXXX =  Math.abs(XX  - XXX)/2;
+            let XXXXX= gsvg.getAttribute("y")*this.svgScale;
+            if (XXXXX < XXXX - this.centerY - (137 * this.svgScale/2)) {
+                this.centerY = Math.abs(XXXXX - XXXX + 137 * this.svgScale);
+            }
+            if(XXXXX >  this.$refs.["metro"].clientHeight-this.centerY) {
+                this.centerY = (XX - XXXXX)*2;
+            }
+
+          document
+            .querySelector(".g-svg-metromap")
+            .setAttribute(
+              "transform",
+              "matrix(" +
+                this.svgScale +
+                ",0,0," +
+                this.svgScale +
+                "," +
+                this.centerX +
+                "," +
+                this.centerY +
+                ")"
+            );
+        }
+
+        if (
+          document.querySelector(".g-svg-metromap").getAttribute("transform") !=
+          null
+        ) {
+        }
+      }
+      if(gsvg != null)
+      {this.chooseStation({          target: gsvg}        );
+      let sla = document.querySelector('use[href="#balloon-select"]').getBoundingClientRect().top - document.querySelector('.svg-metromap').getBoundingClientRect().top+21;
+      let slaa = document.querySelector('use[href="#balloon-select"]').getBoundingClientRect().left - document.querySelector('.svg-metromap').getBoundingClientRect().left+21;
+      this.$refs["card"].style.top = sla + "px";
+      this.$refs["card"].style.left = slaa + "px";
+      if (slaa + 400 > this.width) {
+          this.$refs["card"].style.left =slaa - 375 + "px";
+        }
+        if (sla > 500) {
+          this.$refs["card"].style.transform = "translateY(-100%)";
+        }
+        if (sla < 500) {
+          this.$refs["card"].style.transform = "translateY(0)";
+        }
       }
       /*console.log(gsvg.getAttribute("x"), gsvg.getAttribute("y"));*/
     },
@@ -238,15 +286,19 @@ export default {
         } else if (this.width > 1200 && this.mapsFit != true) {
           this.svgScale = 1;
         }
+
+      if (this.mapsFit != true) {
+      /*  let g_cX = (document.querySelector('.svg-metromap').getBoundingClientRect().width - document.querySelector('.g-svg-metromap').getBoundingClientRect().width)/2 -document.querySelector('.g-svg-metromap').getBoundingClientRect().x ;
+      let g_cY = (document.querySelector('.svg-metromap').getBoundingClientRect().height - document.querySelector('.g-svg-metromap').getBoundingClientRect().height)/2 +document.querySelector('.g-svg-metromap').getBoundingClientRect().y;*/
         this.centerX =
           (this.$refs.metro.clientWidth - 1286 * this.svgScale) / 2 +
-          121 * this.svgScale +
-          this.translateX;
+          121 * this.svgScale
+           + this.translateX;
         this.centerY =
           (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
           137 * this.svgScale +
           this.translateY;
-        document
+      document
           .querySelector(".g-svg-metromap")
           .setAttribute(
             "transform",
@@ -260,8 +312,30 @@ export default {
               this.centerY +
               ")"
           );
-        this.positionSelectBalloon();
-        this.mapsFit = true;
+      }
+      else {
+          document
+          .querySelector(".g-svg-metromap")
+          .setAttribute(
+            "transform",
+            "matrix(" +
+              this.svgScale +
+              ",0,0," +
+              this.svgScale +
+              "," +
+              (this.centerX + this.translateX)+
+              "," +
+              (this.centerY + this.translateY)+
+              ")"
+          );
+     }
+
+        if (this.mapsFit != true) {
+          this.positionSelectBalloon();
+        }
+        if (this.$refs.metro.clientWidth > 0) {
+          this.mapsFit = true;
+        }
       });
     },
     onResize() {
@@ -339,11 +413,14 @@ export default {
     },
 
     setMouseCoords(e) {
+      if(this.curPosX === null){
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
+      }
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
+        console.log(this.curPosX,this.curPosY);
       }
       this.cardposX = parseInt(this.$refs["card"]?.style.marginLeft);
       this.cardposY = parseInt(this.$refs["card"]?.style.marginTop);
@@ -357,7 +434,6 @@ export default {
       window.removeEventListener("mouseup", this.removeListener);
     },
     onMouseMove(e) {
-      console.log("aaa");
       e.preventDefault();
       let svg = document.querySelector(".g-svg-metromap");
       this.translateX = this.translateX + e.movementX / e.view.devicePixelRatio;
@@ -365,21 +441,30 @@ export default {
       this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
       this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
 
-      if (Math.abs(this.translateX) >= (1285 * this.svgScale) / 2) {
+      if (Math.abs(this.translateX)*this.svgScale >= (1285 * this.svgScale) / 2) {
         this.cardposX = this.cardposX - e.movementX / e.view.devicePixelRatio;
         this.translateX =
           this.translateX - e.movementX / e.view.devicePixelRatio;
+          console.log(this.translateX,e.movementX);
       }
-      if (Math.abs(this.translateY) >= (1295 * this.svgScale) / 2) {
+      if (Math.abs(this.translateY)*this.svgScale >= (1295 * this.svgScale) / 2) {
         this.translateY =
           this.translateY - e.movementY / e.view.devicePixelRatio;
         this.cardposY = this.cardposY - e.movementY / e.view.devicePixelRatio;
+        console.log(this.translateY);
       }
+      console.log('bbb');
       this.fitToViewportMetro();
       this.$refs["card"].style.marginLeft = this.cardposX + "px";
       this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
     zoom(param) {
+      /*console.log(document.querySelector('.g-svg-metromap').getBoundingClientRect());
+      console.log(document.querySelector('.svg-metromap').getBoundingClientRect());
+      //console.log(this.centerY,this.centerX);
+      let g_cX = (document.querySelector('.svg-metromap').getBoundingClientRect().width - document.querySelector('.g-svg-metromap').getBoundingClientRect().width)/2;
+      let g_cY = (document.querySelector('.svg-metromap').getBoundingClientRect().height - document.querySelector('.g-svg-metromap').getBoundingClientRect().height)/2;
+      console.log("center=",g_cX,g_cY);*/
       let step = 0.2;
       if (param == "+") {
         this.closeCard();
@@ -587,15 +672,8 @@ export default {
               maps[0].children[i].dataset.station === _this.currentStation
             ) {
               maps[0].children[i].setAttribute("href", "#balloon-select");
-              console.log(
-                maps[0].children[i].getAttribute("x"),
-                maps[0].children[i].getAttribute("y")
-                /*,elmaps[0].transform.animVal[0].matrix.e,
-                elmaps[0].transform.animVal[0].matrix.f*/
-              );
-              if (_this.mapsFit != true) {
-                _this.positionSelectBalloon();
-              }
+
+              _this.positionSelectBalloon();
             }
           }
         }
