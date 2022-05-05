@@ -10,11 +10,11 @@ const getTime = (distance) => {
 
 const isOpened = (office) => {
   let opened = true;
-  if (
-    office.SSHORTNAME === "ДПМосква-Северо-Запад(РЕСО-73)" ||
-    office.SSHORTNAME === "РЕСО-735"
-  )
-    return false;
+  // if (
+  //   office.SSHORTNAME === "ДПМосква-Северо-Запад(РЕСО-73)" ||
+  //   office.SSHORTNAME === "РЕСО-735"
+  // )
+  //   return false;
   let dateNow = new Date();
   let day = dateNow.getDay();
   let dateEnd = new Date();
@@ -229,12 +229,15 @@ const checkClusterStatus = (clusterer) => {
         [i].getGeoObjects()
         [j]?.properties.get("balloonContentBody")
         .includes("opened");
-      let result = clusterer
-        .getClusters()
-        [i].getGeoObjects()
-        [j]?.properties.get("balloonContentBody")
-        .match(/card-office-closed/g);
-      if (result) counter++;
+
+      if (
+        clusterer
+          .getClusters()
+          [i].getGeoObjects()
+          [j]?.properties.get("balloonContentBody")
+          .match(/card-office-closed/g)
+      )
+        counter++;
       if (isOpened) {
         clusterer
           .getClusters()
