@@ -45,6 +45,7 @@ export default {
       /// Использование объекта FormData
       const formData = new FormData();
       formData.append("testFile", this.file, `${this.file.name}`);
+
       //console.log("formData:", formData);
       // this.submitFile();
 

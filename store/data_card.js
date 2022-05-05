@@ -31,6 +31,20 @@ export const state = () => ({
   filters: {},
 });
 
+function deleteRedundantProperty(currentObject) {
+  Object.keys(currentObject).forEach((property) => {
+    if (property !== "name") {
+      delete currentObject[property];
+    }
+  });
+  return currentObject;
+}
+
+function changeObject(arrayObjects) {
+  const filterArrayObjects = arrayObjects.map(deleteRedundantProperty);
+  return filterArrayObjects;
+}
+
 export const getters = {
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
@@ -259,47 +273,80 @@ export const actions = {
     }
   },
   async saveDataCard({ commit, state, dispath }, params) {
-    console.log("commit:", commit);
-    console.log("state:", state);
-    console.log("dispath:", dispath);
-    console.log("params:", params);
-    // commit("setLoading", true);
-    // commit("setDisabled", true);
+    // console.log("commit:", commit);
+    // console.log("state:", state);
+    // console.log("dispath:", dispath);
+    // console.log("params:", params);
+    commit("setLoading", true);
+    commit("setDisabled", true);
 
-    // try {
-    //   await Promise.all(state.beforeSavePromises.map((func) => func()));
+    try {
+      await Promise.all(state.beforeSavePromises.map((func) => func()));
 
-    //   let resp = await this.$axios.post(
-    //     `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
-    //       params.relId
-    //     }${params.zone === "free" ? "?zone=free" : ""}`,
-    //     params.form
-    //   );
+      let resp = await this.$axios.post(
+        `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
+          params.relId
+        }${params.zone === "free" ? "?zone=free" : ""}`,
+        params.form
+      );
 
-    //   //console.log("resp:", resp);
+      //console.log("resp:", resp);
 
-    //   commit("setSavedError", false);
-    //   commit("setCardId", resp.data.ID);
-    //   commit("setCardRelId", resp.data.REL);
-    //   return resp;
-    // } catch (err) {
-    //   commit("setSavedError", true);
-    //   commit("setErrorMessage", err.response?.data || err.message);
-    //   if (err.response) {
-    //     return err.response;
-    //   }
-    //   throw err;
-    // } finally {
-    //   commit("setLoading", false);
-    //   commit("setDisabled", false);
-    // }
+      commit("setSavedError", false);
+      commit("setCardId", resp.data.ID);
+      commit("setCardRelId", resp.data.REL);
+      return resp;
+    } catch (err) {
+      commit("setSavedError", true);
+      commit("setErrorMessage", err.response?.data || err.message);
+      if (err.response) {
+        return err.response;
+      }
+      throw err;
+    } finally {
+      commit("setLoading", false);
+      commit("setDisabled", false);
+    }
   },
 
-  async saveDataCard2({ state }, params) {
+  async saveDataCard2({ commit, state }, params) {
+    const uploaderFields = state.form.filter(
+      (field) => field.type === "Uploader"
+    );
+
+    for (let i = 0; i < uploaderFields.length; i++) {
+      uploaderFields[i] = new File(
+        [uploaderFields[i]],
+        uploaderFields[i].value.name,
+        {
+          type: "field/blob",
+        }
+      );
+    }
+
+    // const fieldsValues = state.form.filter(
+    //   (field) => field.type !== "Uploader"
+    // );
+
+    // console.log(fieldsValues);
+
+    // const convertedToJSONfieldsValues = fieldsValues.map((objs) =>
+    //   Object.entries(objs)
+    // );
+
+    // const convertedToJSONfieldsValues = fieldsValues.map((i) =>
+    //   JSON.stringify(i)
+    // );
+
+    // console.log(convertedToJSONfieldsValues);
+
+    // commit("setDataTypeBlob", uploaderFields);
+
+    // Реализация успешного сохранения для документа типа field/blob
     const myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
-      "Bearer 1808ea656b0984cb3d9c5f7bdff47e54c9fce8d79393b3e44a4bd54d6431fe770f07a6b4b3c22c6903789117f4c"
+      "Bearer 1808f4d4412e0abbe0b2fa5c983e378de77fef70615961175602a1b5d569468037993541fb3995fbcc448c510a4"
     );
 
     const downloadedFile = state.form.find(
@@ -311,13 +358,14 @@ export const actions = {
     });
 
     const formData = new FormData();
-
     formData.append("file1", file);
+
+    console.log("state.form:", state.form);
 
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: formData,
+      body: state.form,
       redirect: "follow",
     };
 
@@ -326,22 +374,7 @@ export const actions = {
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
 
-    // const resp = await fetch("/am/main/v2/datacard2/55/912/0", requestOptions);
-    // console.log(resp);
-
-    // let resp = await this.$axios({
-    //   method: "post",
-    //   url: "/am/main/v2/datacard2/55/912/0",
-    //   data: requestOptions,
-    // });
-
-    // console.log("resp:", resp);
-
-    // let resp = await fetch("/am/main/v2/datacard2/55/912/0", {
-    //   method: "POST",
-    //   body: formData,
-    // });
-    // console.log(resp);
+    console.log(resp);
   },
 
   async executeAction(
@@ -482,6 +515,17 @@ export const actions = {
 };
 
 export const mutations = {
+  setDataTypeBlob(state, blobData) {
+    // state.form = state.form.filter((item) => item !== "Uploader");
+    // console.log(state.form);
+    // blobData.forEach((field) => state.form.push(field));
+    // console.log(state.form);
+    // for (let i = 0; i < blobData.length; i++) {
+    //   const formData = new FormData();
+    //   formData.append(`file${i}`, blobData[i]);
+    //   testGroup.push(formData);
+    // }
+  },
   addBeforeSavePromise(state, func) {
     state.beforeSavePromises.push(func);
   },

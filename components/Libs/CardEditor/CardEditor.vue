@@ -386,21 +386,21 @@ export default {
           // console.log("relId:", relId); // приходит undefined;
           // console.log("form:", fields);
 
-          const resp = await this.$store.dispatch("data_card/saveDataCard", {
-            moduleId,
-            itemId,
-            cardId,
-            relId,
-            form: fields,
-          });
-
-          // const resp = await this.$store.dispatch("data_card/saveDataCard2", {
+          // const resp = await this.$store.dispatch("data_card/saveDataCard", {
           //   moduleId,
           //   itemId,
           //   cardId,
           //   relId,
           //   form: fields,
           // });
+
+          const resp = await this.$store.dispatch("data_card/saveDataCard2", {
+            moduleId,
+            itemId,
+            cardId,
+            relId,
+            form: fields,
+          });
 
           if (this.$route.params.idItem === "710") {
             await this.$store.dispatch("updateUser");
