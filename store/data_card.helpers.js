@@ -1,3 +1,5 @@
+const FormData = require("form-data");
+
 export function getFieldsValueTypeIsNotUploader(fieldsValues) {
   const notUploaderTypeFieldsValues = fieldsValues.filter(
     (field) => field.type !== "Uploader"
@@ -46,7 +48,6 @@ export function getFieldsValueTypeUploader(fieldsValues) {
   const notUploaderTypeFieldsValues = fieldsValues.filter(
     (field) => field.type === "Uploader"
   );
-
   return notUploaderTypeFieldsValues;
 }
 

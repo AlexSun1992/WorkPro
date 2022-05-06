@@ -5,6 +5,7 @@ import { getSplicedObjects } from "./data_card.helpers";
 import { getFieldsValueTypeUploader } from "./data_card.helpers";
 import { restructureData } from "./data_card.helpers";
 import { data } from "./data_card.helpers.fixtures";
+const FormData = require("form-data");
 
 describe("Модуль подготовки данных", () => {
   it("получает объекты кроме типа Uploader", () => {
@@ -31,17 +32,19 @@ describe("Модуль подготовки данных", () => {
     expect(Array.isArray(objectsReadyForServerTransfer)).toBe(true);
   });
 
-  it("получаем объекты из файла Uploader", () => {
-    const TEST_DATA = [...data];
-    const uploaderFieldsValue = getFieldsValueTypeUploader(TEST_DATA);
-    console.log(uploaderFieldsValue);
-    expect(Array.isArray(uploaderFieldsValue)).toBe(true);
-  });
-
   it("Преобразованы данные для отправки на сервер", () => {
     const TEST_DATA = [...data];
     const convertedData = restructureData(TEST_DATA);
-    console.log(convertedData);
+    console.log("covertedData:", convertedData);
     expect(typeof convertedData).toBe("string");
+  });
+
+  it("получаем объекты из файла Uploader", () => {
+    const TEST_DATA = [...data];
+    const body = new FormData();
+    // console.log(body);
+    const uploaderFieldsValue = getFieldsValueTypeUploader(TEST_DATA);
+
+    expect(Array.isArray(uploaderFieldsValue)).toBe(true);
   });
 });
