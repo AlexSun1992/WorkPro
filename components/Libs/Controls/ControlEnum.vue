@@ -166,11 +166,6 @@ export default {
   color: #f86c6b;
 }
 
-.required > legend:after {
-  content: "*";
-  color: red;
-}
-
 .ui.selection.dropdown.error {
   border-color: #f86c6b;
   background: none;

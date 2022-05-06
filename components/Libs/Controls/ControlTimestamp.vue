@@ -89,9 +89,4 @@ export default {
   color: #f86c6b;
   margin-top: 9px;
 }
-
-.required > legend:after {
-  content: "*";
-  color: red;
-}
 </style>

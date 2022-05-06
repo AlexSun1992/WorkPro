@@ -97,11 +97,6 @@ export default {
   color: #f86c6b;
 }
 
-.required > legend:after {
-  content: "*";
-  color: #f86c6b;
-}
-
 .error-outline {
   border: 1px solid #f86c6b;
 }
