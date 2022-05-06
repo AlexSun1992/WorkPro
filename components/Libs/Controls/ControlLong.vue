@@ -51,10 +51,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.required > legend:after {
-  content: "*";
-  color: red;
-}
-</style>
