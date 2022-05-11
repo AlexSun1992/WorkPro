@@ -1,7 +1,15 @@
 /* eslint-disable no-param-reassign */
 import Axios from "axios";
+import { filter } from "lodash";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
+import { getFieldsValueTypeIsNotUploader } from "./data_card.helpers";
+import { rebuildObject } from "./data_card.helpers";
+import { deleteRedundantProperty } from "./data_card.helpers";
+import { getSplicedObjects } from "./data_card.helpers";
+import { reSet } from "./data_card.helpers";
+import { changeObj } from "./data_card.helpers";
+import { getFieldsValueTypeUploader } from "./data_card.helpers";
 
 export const state = () => ({
   options: [],
@@ -31,14 +39,14 @@ export const state = () => ({
   filters: {},
 });
 
-function deleteRedundantProperty(currentObject) {
-  Object.keys(currentObject).forEach((property) => {
-    if (property !== "name") {
-      delete currentObject[property];
-    }
-  });
-  return currentObject;
-}
+// function deleteRedundantProperty(currentObject) {
+//   Object.keys(currentObject).forEach((property) => {
+//     if (property !== "name") {
+//       delete currentObject[property];
+//     }
+//   });
+//   return currentObject;
+// }
 
 function changeObject(arrayObjects) {
   const filterArrayObjects = arrayObjects.map(deleteRedundantProperty);
@@ -273,10 +281,6 @@ export const actions = {
     }
   },
   async saveDataCard({ commit, state, dispath }, params) {
-    // console.log("commit:", commit);
-    // console.log("state:", state);
-    // console.log("dispath:", dispath);
-    // console.log("params:", params);
     commit("setLoading", true);
     commit("setDisabled", true);
 
@@ -289,8 +293,6 @@ export const actions = {
         }${params.zone === "free" ? "?zone=free" : ""}`,
         params.form
       );
-
-      //console.log("resp:", resp);
 
       commit("setSavedError", false);
       commit("setCardId", resp.data.ID);
@@ -310,71 +312,66 @@ export const actions = {
   },
 
   async saveDataCard2({ commit, state }, params) {
-    const uploaderFields = state.form.filter(
-      (field) => field.type === "Uploader"
-    );
+    // // Подготовка данных полей типа не Uploader
 
-    for (let i = 0; i < uploaderFields.length; i++) {
-      uploaderFields[i] = new File(
-        [uploaderFields[i]],
-        uploaderFields[i].value.name,
-        {
-          type: "field/blob",
-        }
-      );
+    const fieldsTypeNotUploader = getFieldsValueTypeIsNotUploader(state.form);
+
+    const copyofFieldsTypeNotUploader = rebuildObject(fieldsTypeNotUploader);
+
+    const splicedObjects = getSplicedObjects(copyofFieldsTypeNotUploader);
+
+    const dataUploader = changeObj(splicedObjects);
+
+    console.log("dataUploader:", dataUploader);
+
+    // // Подготовка данных полей типа Uploader
+
+    const fieldsTypeUploader = getFieldsValueTypeUploader(state.form);
+    for (let i = 0; i < fieldsTypeUploader.length; i++) {
+      if (fieldsTypeUploader[i].value) {
+        fieldsTypeUploader[i] = new File(
+          [fieldsTypeUploader[i]],
+          fieldsTypeUploader[i].value.name,
+          {
+            type: "field/blob",
+          }
+        );
+      }
     }
+    console.log("fieldsTypeUploader:", ...fieldsTypeUploader);
+    ///попробовать добавить в массив
 
-    // const fieldsValues = state.form.filter(
-    //   (field) => field.type !== "Uploader"
-    // );
-
-    // console.log(fieldsValues);
-
-    // const convertedToJSONfieldsValues = fieldsValues.map((objs) =>
-    //   Object.entries(objs)
-    // );
-
-    // const convertedToJSONfieldsValues = fieldsValues.map((i) =>
-    //   JSON.stringify(i)
-    // );
-
-    // console.log(convertedToJSONfieldsValues);
-
-    // commit("setDataTypeBlob", uploaderFields);
-
-    // Реализация успешного сохранения для документа типа field/blob
+    //Реализация успешного сохранения для документа типа field/blob
     const myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
-      "Bearer 1808f4d4412e0abbe0b2fa5c983e378de77fef70615961175602a1b5d569468037993541fb3995fbcc448c510a4"
+      "Bearer 180b3b140b76a6e41c1302b0bcece737d4163e5a473fb559e07b909a0b79261478dc84a5643775758175ad12f62"
     );
 
-    const downloadedFile = state.form.find(
-      (elem) => elem.label === "Загрузить документ"
-    );
+    // const downloadedFile = state.form.find(
+    //   (elem) => elem.label === "Загрузить документ"
+    // );
 
-    const file = new File([downloadedFile.value], downloadedFile.value.name, {
+    console.log("fieldsTypeUploader:", ...fieldsTypeUploader);
+    console.log("dataUploader:", dataUploader);
+
+    const file = new File([...fieldsTypeUploader, dataUploader], "test", {
       type: "field/blob",
     });
 
     const formData = new FormData();
     formData.append("file1", file);
-
-    console.log("state.form:", state.form);
-
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: state.form,
+      body: formData,
       redirect: "follow",
     };
-
     const resp = fetch("/am/main/v2/datacard2/55/912/0", requestOptions)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
-
-    console.log(resp);
+    console.log("resp:", resp);
   },
 
   async executeAction(
