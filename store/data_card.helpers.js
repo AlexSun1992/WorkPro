@@ -1,4 +1,4 @@
-const FormData = require("form-data");
+//const FormData = require("form-data");
 
 export function getFieldsValueTypeIsNotUploader(fieldsValues) {
   const notUploaderTypeFieldsValues = fieldsValues.filter(
@@ -44,11 +44,18 @@ export function getSplicedObjects(fieldsValues) {
   return splicedObjects;
 }
 
-export function getFieldsValueTypeUploader(fieldsValues) {
-  const notUploaderTypeFieldsValues = fieldsValues.filter(
-    (field) => field.type === "Uploader"
-  );
-  return notUploaderTypeFieldsValues;
+export function reSet(object) {
+  const collection = [];
+  const group = [];
+  Object.keys(object).forEach((i) => group.push(object[i]));
+  collection.push(group);
+  return Object.fromEntries(collection);
+}
+
+export function changeObj(arrayObjects) {
+  const filterArrayObjects = arrayObjects.map((i) => reSet(i));
+  const resultData = Object.assign({}, ...filterArrayObjects);
+  return JSON.stringify(resultData);
 }
 
 export function restructureData(fieldsValues) {
@@ -58,4 +65,11 @@ export function restructureData(fieldsValues) {
 
   const resultData = JSON.stringify(Object.fromEntries(rebuildObjects));
   return resultData;
+}
+
+export function getFieldsValueTypeUploader(fieldsValues) {
+  const notUploaderTypeFieldsValues = fieldsValues.filter(
+    (field) => field.type === "Uploader"
+  );
+  return notUploaderTypeFieldsValues;
 }

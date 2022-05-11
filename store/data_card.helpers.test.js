@@ -4,14 +4,18 @@ import { convertFieldValuesToJSON } from "./data_card.helpers";
 import { getSplicedObjects } from "./data_card.helpers";
 import { getFieldsValueTypeUploader } from "./data_card.helpers";
 import { restructureData } from "./data_card.helpers";
+import { reSet } from "./data_card.helpers";
+import { changeObj } from "./data_card.helpers";
 import { data } from "./data_card.helpers.fixtures";
+
 const FormData = require("form-data");
 
 describe("Модуль подготовки данных", () => {
   it("получает объекты кроме типа Uploader", () => {
     const TEST_DATA = [...data];
-    const arrayOfFieldsWithOut = getFieldsValueTypeIsNotUploader(TEST_DATA);
-    expect(Array.isArray(arrayOfFieldsWithOut)).toBe(true);
+    const arrayOfFieldsWithOutUploader =
+      getFieldsValueTypeIsNotUploader(TEST_DATA);
+    expect(Array.isArray(arrayOfFieldsWithOutUploader)).toBe(true);
   });
 
   it("преобразовывает все объекты массива в JSON", () => {
@@ -34,17 +38,17 @@ describe("Модуль подготовки данных", () => {
 
   it("Преобразованы данные для отправки на сервер", () => {
     const TEST_DATA = [...data];
-    const convertedData = restructureData(TEST_DATA);
-    console.log("covertedData:", convertedData);
-    expect(typeof convertedData).toBe("string");
+    // testSplicedData можно передать в changeObj вместо TEST_DATA;
+    //const testSplicedData = getSplicedObjects(TEST_DATA);
+    const restructuredData = changeObj(TEST_DATA);
+    console.log("restructuredData:", restructuredData);
+    expect(typeof restructuredData).toBe("string");
   });
 
   it("получаем объекты из файла Uploader", () => {
     const TEST_DATA = [...data];
     const body = new FormData();
-    // console.log(body);
     const uploaderFieldsValue = getFieldsValueTypeUploader(TEST_DATA);
-
     expect(Array.isArray(uploaderFieldsValue)).toBe(true);
   });
 });
