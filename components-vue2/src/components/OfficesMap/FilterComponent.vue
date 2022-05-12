@@ -1,12 +1,6 @@
 <template>
   <div
-    class="
-      filters-container
-      row
-      align-items-center
-      mh-1
-      justify-content-between
-    "
+    class="filters-container row align-items-center mh-1 justify-content-between"
   >
     <button class="popup-mobile-close" type="button"></button>
     <div class="d-lg-none col-12">
@@ -36,7 +30,8 @@
         @click="clearFilters"
         class="del-office-filters"
       >
-        Сбросить
+        <span class="d-none d-lg-block">Сбросить</span
+        ><span class="d-lg-none">Очистить фильтр</span>
       </button>
     </div>
   </div>
