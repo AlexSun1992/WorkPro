@@ -80,7 +80,7 @@
         />
 
         <b-pagination
-          v-if="getOffices"
+          v-if="getOffices && getOffices.length > 15"
           v-show="getOffices && width > 900 && !currentStation"
           v-model="page"
           :total-rows="getOffices.length"
