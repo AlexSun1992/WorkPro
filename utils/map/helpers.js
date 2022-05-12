@@ -38,8 +38,10 @@ const showWorkingHours = (agency) => {
 
   if (!agency.GRAF) return "";
 
-  if (agency.GRAF[day - 1]) {
-    const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
+  let dayObj = agency.GRAF.find((item) => item.NDAY == day);
+
+  if (agency.GRAF[day]) {
+    const [endHour, endMinute] = dayObj?.SEND.split(".");
     dateEnd.setHours(endHour);
     dateEnd.setMinutes(endMinute);
     let str;
