@@ -1,6 +1,7 @@
 <template>
   <div
     @mousedown="setMouseCoords"
+    @touchstart="setTouchCoords"
     @mouseup="removeListener"
     class="map-container mt-3"
   >
@@ -79,7 +80,7 @@
         />
 
         <b-pagination
-          v-if="getOffices"
+          v-if="getOffices && getOffices.length > 15"
           v-show="getOffices && width > 900 && !currentStation"
           v-model="page"
           :total-rows="getOffices.length"
@@ -152,6 +153,10 @@ export default {
       cardPosX: null,
       translateX: 0,
       translateY: 0,
+      touchX: 0,
+      touchY: 0,
+      touchstartX: 0,
+      touchstartY: 0,
       centerX: null,
       centerY: null,
       mapsFit: false,
@@ -313,7 +318,7 @@ export default {
               ")"
           );
       }
-      else {
+      else {console.log('Xxx');
           document
           .querySelector(".g-svg-metromap")
           .setAttribute(
@@ -328,6 +333,7 @@ export default {
               (this.centerY + this.translateY)+
               ")"
           );
+          console.log(this.centerY);
      }
 
         if (this.mapsFit != true) {
@@ -413,22 +419,47 @@ export default {
     },
 
     setMouseCoords(e) {
-      if(this.curPosX === null){
+/*      if(this.curPosX === null){
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
       }
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
-        console.log(this.curPosX,this.curPosY);
-      }
+      }*/
       this.cardposX = parseInt(this.$refs["card"]?.style.marginLeft);
       this.cardposY = parseInt(this.$refs["card"]?.style.marginTop);
       document.addEventListener("mousemove", this.onMouseMove);
       document.addEventListener("mouseout", this.onMouseOute);
       window.addEventListener("mouseup", this.removeListener);
+
+    },
+    setTouchCoords(e) {
+      this.touchX = e.changedTouches[0].clientX;
+      this.touchY = e.changedTouches[0].clientY;
+      if(document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0]) {
+      this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.e;
+      this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.f;
+      this.centerX =0;
+      this.centerY =0;
+      console.log(this.oldPosX,this.oldPosY);
+      }
+      this.touchstartX= 0;
+      this.touchstartY= 0;
+      document.addEventListener("touchmove", this.onMouseMoveOne);
+
+    },
+    onMouseMoveOne(e){
+      this.touchstartX = (this.touchX - e.changedTouches[0].clientX) *-1;
+      this.touchstartY = (this.touchY - e.changedTouches[0].clientY)*-1;
+      console.log(this.touchstartX);
+      this.translateX =this.oldPosX+ this.touchstartX;
+      this.translateY =this.oldPosY+ this.touchstartY;
+      this.fitToViewportMetro();
+//      console.log(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
     },
     removeListener(e) {
+      console.log('ccc');
       document.removeEventListener("mousemove", this.onMouseMove);
       document.removeEventListener("mouseout", this.onMouseOute);
       window.removeEventListener("mouseup", this.removeListener);
@@ -451,9 +482,7 @@ export default {
         this.translateY =
           this.translateY - e.movementY / e.view.devicePixelRatio;
         this.cardposY = this.cardposY - e.movementY / e.view.devicePixelRatio;
-        console.log(this.translateY);
       }
-      console.log('bbb');
       this.fitToViewportMetro();
       this.$refs["card"].style.marginLeft = this.cardposX + "px";
       this.$refs["card"].style.marginTop = this.cardposY + "px";
