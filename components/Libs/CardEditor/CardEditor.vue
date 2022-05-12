@@ -380,12 +380,6 @@ export default {
             relId = this.$store.getters["data_card/getCardRelId"];
           }
 
-          // console.log("moduleId:", moduleId);
-          // console.log("itemId:", itemId);
-          // console.log("cardId:", cardId);
-          // console.log("relId:", relId); // приходит undefined;
-          // console.log("form:", fields);
-
           // const resp = await this.$store.dispatch("data_card/saveDataCard", {
           //   moduleId,
           //   itemId,

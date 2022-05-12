@@ -39,20 +39,6 @@ export const state = () => ({
   filters: {},
 });
 
-// function deleteRedundantProperty(currentObject) {
-//   Object.keys(currentObject).forEach((property) => {
-//     if (property !== "name") {
-//       delete currentObject[property];
-//     }
-//   });
-//   return currentObject;
-// }
-
-function changeObject(arrayObjects) {
-  const filterArrayObjects = arrayObjects.map(deleteRedundantProperty);
-  return filterArrayObjects;
-}
-
 export const getters = {
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
@@ -312,8 +298,7 @@ export const actions = {
   },
 
   async saveDataCard2({ commit, state }, params) {
-    // // Подготовка данных полей типа не Uploader
-
+    //  Подготовка данных полей типа не Uploader
     const fieldsTypeNotUploader = getFieldsValueTypeIsNotUploader(state.form);
 
     const copyofFieldsTypeNotUploader = rebuildObject(fieldsTypeNotUploader);
@@ -325,7 +310,6 @@ export const actions = {
     console.log("dataUploader:", dataUploader);
 
     // // Подготовка данных полей типа Uploader
-
     const fieldsTypeUploader = getFieldsValueTypeUploader(state.form);
     for (let i = 0; i < fieldsTypeUploader.length; i++) {
       if (fieldsTypeUploader[i].value) {
@@ -338,22 +322,12 @@ export const actions = {
         );
       }
     }
-    console.log("fieldsTypeUploader:", ...fieldsTypeUploader);
-    ///попробовать добавить в массив
 
-    //Реализация успешного сохранения для документа типа field/blob
     const myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
       "Bearer 180b3b140b76a6e41c1302b0bcece737d4163e5a473fb559e07b909a0b79261478dc84a5643775758175ad12f62"
     );
-
-    // const downloadedFile = state.form.find(
-    //   (elem) => elem.label === "Загрузить документ"
-    // );
-
-    console.log("fieldsTypeUploader:", ...fieldsTypeUploader);
-    console.log("dataUploader:", dataUploader);
 
     const file = new File([...fieldsTypeUploader, dataUploader], "test", {
       type: "field/blob",
@@ -371,7 +345,6 @@ export const actions = {
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
-    console.log("resp:", resp);
   },
 
   async executeAction(
