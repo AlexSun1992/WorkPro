@@ -1,7 +1,7 @@
 <template>
   <div class="row mt-3">
     <b-col sm="12" md="6">
-      <b-form-group :label="showLabel" label-cols="12">
+      <b-form-group :label="showLabel" label-cols="12" class="required">
         <b-form-input
           :id="Math.random().toString()"
           type="password"
@@ -23,7 +23,11 @@
       sm="12"
       md="6"
     >
-      <b-form-group :label="'Повторите пароль'" label-cols="12">
+      <b-form-group
+        :label="'Повторите пароль'"
+        label-cols="12"
+        class="required"
+      >
         <b-form-input
           :id="Math.random().toString()"
           type="password"
@@ -35,7 +39,7 @@
           :disabled="disabled"
           :tabindex="tabIndex[1]"
         ></b-form-input>
-        <b-form-invalid-feedback>Повторите пароль</b-form-invalid-feedback>
+        <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>
     </b-col>
     <b-col sm="12" v-if="recovery"></b-col>
