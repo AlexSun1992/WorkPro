@@ -437,13 +437,15 @@ export default {
     setTouchCoords(e) {
       this.touchX = e.changedTouches[0].clientX;
       this.touchY = e.changedTouches[0].clientY;
-      this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0];
-      this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0];
+      if(document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0]) {
+      this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.e;
+      this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.f;
+      this.centerX =0;
+      this.centerY =0;
       console.log(this.oldPosX,this.oldPosY);
+      }
       this.touchstartX= 0;
       this.touchstartY= 0;
-      console.log(document.getElementsByClassName("g-svg-metromap"));
-
       document.addEventListener("touchmove", this.onMouseMoveOne);
 
     },
@@ -451,8 +453,8 @@ export default {
       this.touchstartX = (this.touchX - e.changedTouches[0].clientX) *-1;
       this.touchstartY = (this.touchY - e.changedTouches[0].clientY)*-1;
       console.log(this.touchstartX);
-      this.translateX = this.touchstartX;
-      this.translateY = this.touchstartY;
+      this.translateX =this.oldPosX+ this.touchstartX;
+      this.translateY =this.oldPosY+ this.touchstartY;
       this.fitToViewportMetro();
 //      console.log(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
     },
