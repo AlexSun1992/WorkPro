@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12 col-md-6">
-      <b-form-group>
+      <b-form-group class="required">
         <b-form-input
           v-if="loginType === 'phone'"
           ref="userInput"
@@ -407,6 +407,10 @@ export default {
               this.v[field].$params.minLength.min) ||
           bluredField
         ) {
+          if (this.validateState("code") === true && field === "code") {
+            this.$emit("checkCodeFieldValid", true);
+          }
+
           return this.validateState(field);
         }
       }
