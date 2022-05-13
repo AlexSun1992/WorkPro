@@ -7,7 +7,7 @@
       <div v-if="office.info">
         <div v-for="(item, i) in office.info" :key="i">
           <div v-if="i == 0 && office.station" class="name">
-            <div>
+            <div v-if="office.station">
               <span
                 :class="
                   'undeground-color_' + getUnderlineId(office.station, item)
@@ -62,7 +62,7 @@
                 </button>
               </div>
             </div>
-            <div class="card-office-undeground">
+            <div v-if="office.station" class="card-office-undeground">
               <div>
                 <span
                   :class="
