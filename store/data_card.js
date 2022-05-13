@@ -299,17 +299,17 @@ export const actions = {
 
   async saveDataCard2({ commit, state }, params) {
     //  Подготовка данных полей типа не Uploader
-    const fieldsTypeNotUploader = getFieldsValueTypeIsNotUploader(state.form);
+    const fieldsTypeNotUploader = getFieldsValueTypeIsNotUploader(state.form); // получаем значения поля не uploader типа
 
-    const copyofFieldsTypeNotUploader = rebuildObject(fieldsTypeNotUploader);
+    const copyofFieldsTypeNotUploader = rebuildObject(fieldsTypeNotUploader); // копия массива значений полей не uploader типа
 
-    const splicedObjects = getSplicedObjects(copyofFieldsTypeNotUploader);
+    const splicedObjects = getSplicedObjects(copyofFieldsTypeNotUploader); // отрезаем лишние свойства у объектов
 
-    const dataUploader = changeObj(splicedObjects);
+    const dataUploader = changeObj(splicedObjects); // формирование нужного JSON-файла
 
     console.log("dataUploader:", dataUploader);
 
-    // // Подготовка данных полей типа Uploader
+    // // Подготовка данных полей типа Uploader (присвоение загружаемым документам типа "field/blob")
     const fieldsTypeUploader = getFieldsValueTypeUploader(state.form);
     for (let i = 0; i < fieldsTypeUploader.length; i++) {
       if (fieldsTypeUploader[i].value) {
@@ -323,18 +323,27 @@ export const actions = {
       }
     }
 
+    console.log(fieldsTypeUploader);
+
     const myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
-      "Bearer 180b3b140b76a6e41c1302b0bcece737d4163e5a473fb559e07b909a0b79261478dc84a5643775758175ad12f62"
+      "Bearer 180bcef0a13226eeb75d5215d1ac3428eecb586752e5e25d66ed7db9f1500e266da5b209f34bfa52d90732c55d3"
     );
 
-    const file = new File([...fieldsTypeUploader, dataUploader], "test", {
+    const fileUploaders = new File([...fieldsTypeUploader], "UploaderFiles", {
       type: "field/blob",
     });
 
+    const fileText = new File([dataUploader], "TextFiles", {
+      type: "plain/text",
+    });
+
+    console.log("file:", fileUploaders);
+
     const formData = new FormData();
-    formData.append("file1", file);
+    formData.append("file1", fileUploaders);
+    formData.append("file2", fileText);
     const requestOptions = {
       method: "POST",
       headers: myHeaders,

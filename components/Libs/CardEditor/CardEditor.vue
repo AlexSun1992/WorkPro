@@ -257,7 +257,6 @@ export default {
             e
           );
           if (data) {
-            console.log("нашел!!!");
             this.$store.commit("data_card/setForm", data || this.data);
           }
           await this.$store.dispatch("data_card/fetchList", params);
@@ -292,7 +291,6 @@ export default {
           e
         );
         if (data) {
-          console.log("нашел!!!");
           this.$store.commit("data_card/setForm", data || this.data);
         }
       }
@@ -307,7 +305,6 @@ export default {
           this.$store._actions["data_card/fetchCard"][0]
         );
         if (data) {
-          console.log("нашел!!!");
           this.$store.commit("data_card/setForm", data);
         }
       }
