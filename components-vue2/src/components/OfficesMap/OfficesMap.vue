@@ -1,10 +1,5 @@
 <template>
-  <div
-    @mousedown="setMouseCoords"
-    @touchstart="setTouchCoords"
-    @mouseup="removeListener"
-    class="map-container mt-3"
-  >
+  <div class="map-container mt-3">
     <div class="container">
       <div class="office-block">
         <button
@@ -57,7 +52,12 @@
         @click="fitToViewportMetro"
       >
         <div class="metrowrapper">
-          <div>
+          <div
+            @touchstart="setTouchCoords"
+            @touchend="removeListenerTouch"
+            @mousedown="setMouseCoords"
+            @mouseup="removeListener"
+          >
             <Mosmetro ref="metro" @click="chooseStation" />
           </div>
           <div v-show="cardVisible" ref="card" class="card">
@@ -282,7 +282,6 @@ export default {
           this.$refs["card"].style.transform = "translateY(0)";
         }
       }
-      /*console.log(gsvg.getAttribute("x"), gsvg.getAttribute("y"));*/
     },
     fitToViewportMetro() {
       this.$nextTick(() => {
@@ -318,7 +317,7 @@ export default {
               ")"
           );
       }
-      else {console.log('Xxx');
+      else {
           document
           .querySelector(".g-svg-metromap")
           .setAttribute(
@@ -333,7 +332,6 @@ export default {
               (this.centerY + this.translateY)+
               ")"
           );
-          console.log(this.centerY);
      }
 
         if (this.mapsFit != true) {
@@ -434,30 +432,31 @@ export default {
       window.addEventListener("mouseup", this.removeListener);
 
     },
-    setTouchCoords(e) {
+ setTouchCoords(e) {
       this.touchX = e.changedTouches[0].clientX;
       this.touchY = e.changedTouches[0].clientY;
-      this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0];
-      this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0];
-      console.log(this.oldPosX,this.oldPosY);
+      if(document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0]) {
+      this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.e;
+      this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.f;
+      this.centerX =0;
+      this.centerY =0;
+      }
       this.touchstartX= 0;
       this.touchstartY= 0;
-      console.log(document.getElementsByClassName("g-svg-metromap"));
-
       document.addEventListener("touchmove", this.onMouseMoveOne);
 
     },
     onMouseMoveOne(e){
       this.touchstartX = (this.touchX - e.changedTouches[0].clientX) *-1;
       this.touchstartY = (this.touchY - e.changedTouches[0].clientY)*-1;
-      console.log(this.touchstartX);
-      this.translateX = this.touchstartX;
-      this.translateY = this.touchstartY;
+      this.translateX =this.oldPosX+ this.touchstartX;
+      this.translateY =this.oldPosY+ this.touchstartY;
       this.fitToViewportMetro();
-//      console.log(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
+    },
+    removeListenerTouch(e){
+      document.removeEventListener("touchmove", this.onMouseMoveOne);
     },
     removeListener(e) {
-      console.log('ccc');
       document.removeEventListener("mousemove", this.onMouseMove);
       document.removeEventListener("mouseout", this.onMouseOute);
       window.removeEventListener("mouseup", this.removeListener);
@@ -474,7 +473,6 @@ export default {
         this.cardposX = this.cardposX - e.movementX / e.view.devicePixelRatio;
         this.translateX =
           this.translateX - e.movementX / e.view.devicePixelRatio;
-          console.log(this.translateX,e.movementX);
       }
       if (Math.abs(this.translateY)*this.svgScale >= (1295 * this.svgScale) / 2) {
         this.translateY =
@@ -486,12 +484,6 @@ export default {
       this.$refs["card"].style.marginTop = this.cardposY + "px";
     },
     zoom(param) {
-      /*console.log(document.querySelector('.g-svg-metromap').getBoundingClientRect());
-      console.log(document.querySelector('.svg-metromap').getBoundingClientRect());
-      //console.log(this.centerY,this.centerX);
-      let g_cX = (document.querySelector('.svg-metromap').getBoundingClientRect().width - document.querySelector('.g-svg-metromap').getBoundingClientRect().width)/2;
-      let g_cY = (document.querySelector('.svg-metromap').getBoundingClientRect().height - document.querySelector('.g-svg-metromap').getBoundingClientRect().height)/2;
-      console.log("center=",g_cX,g_cY);*/
       let step = 0.2;
       if (param == "+") {
         this.closeCard();
