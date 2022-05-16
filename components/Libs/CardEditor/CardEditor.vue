@@ -187,9 +187,8 @@ export default {
     },
 
     async updateValue(e) {
-      //console.log("e:", e);
       const field = this.data.find((f) => f.fieldId === e.fieldId);
-      //console.log("field:", field);
+
       // if (field.type !== "button") {
       //   this.$store.commit("data_card/cardChanged", true);
       // }
@@ -365,6 +364,7 @@ export default {
           let moduleId;
           let cardId;
           let relId;
+          let action;
           if (!this.params.page) {
             itemId = this.$route.params.idItem;
             moduleId = this.$route.params.idModule;
@@ -377,15 +377,15 @@ export default {
             relId = this.$store.getters["data_card/getCardRelId"];
           }
 
-          // const resp = await this.$store.dispatch("data_card/saveDataCard", {
-          //   moduleId,
-          //   itemId,
-          //   cardId,
-          //   relId,
-          //   form: fields,
-          // });
+          const isUploaderFieldValueExist = fields.find(
+            (elem) => elem.type === "Uploader" && elem.value !== undefined
+          );
 
-          const resp = await this.$store.dispatch("data_card/saveDataCard2", {
+          if (isUploaderFieldValueExist === undefined) {
+            action = "saveDataCard";
+          } else action = "saveDataCardUploaders";
+
+          const resp = await this.$store.dispatch(`data_card/${action}`, {
             moduleId,
             itemId,
             cardId,

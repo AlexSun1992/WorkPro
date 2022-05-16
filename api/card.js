@@ -241,9 +241,7 @@ router.get("/file/:idReport/:idCard", (req, res) => {
 router.post(
   "/card/actionexec/:rowId/:actionId/:relId?/:relActionId",
   (req, res) => {
-    console.log("!!");
     try {
-      console.log(req, res);
       const mobile2ServiceInstance = mobile2Service();
       if (req.headers.referer) {
         if (req.headers.referer.includes("testdms")) {
@@ -283,10 +281,8 @@ router.post(
 );
 
 router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
-  console.log("??");
   try {
     const mobile2ServiceInstance = mobile2Service();
-    console.log("mobile2ServiceInstance:", mobile2ServiceInstance);
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance.defaults.baseURL = "https://mobiletest.reso.ru";

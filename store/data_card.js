@@ -266,13 +266,12 @@ export const actions = {
       }
     }
   },
-  async saveDataCard({ commit, state, dispath }, params) {
+  async saveDataCard({ commit, state, dispatch }, params) {
     commit("setLoading", true);
     commit("setDisabled", true);
 
     try {
       await Promise.all(state.beforeSavePromises.map((func) => func()));
-
       let resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
           params.relId
@@ -297,8 +296,9 @@ export const actions = {
     }
   },
 
-  async saveDataCard2({ commit, state }, params) {
+  async saveDataCardUploaders({ commit, state }, params) {
     //  Подготовка данных полей типа не Uploader
+
     const fieldsTypeNotUploader = getFieldsValueTypeIsNotUploader(state.form); // получаем значения поля не uploader типа
 
     const copyofFieldsTypeNotUploader = rebuildObject(fieldsTypeNotUploader); // копия массива значений полей не uploader типа
@@ -307,9 +307,7 @@ export const actions = {
 
     const dataUploader = changeObj(splicedObjects); // формирование нужного JSON-файла
 
-    console.log("dataUploader:", dataUploader);
-
-    // // Подготовка данных полей типа Uploader (присвоение загружаемым документам типа "field/blob")
+    // Подготовка данных полей типа Uploader (присвоение загружаемым документам типа "field/blob")
     const fieldsTypeUploader = getFieldsValueTypeUploader(state.form);
     for (let i = 0; i < fieldsTypeUploader.length; i++) {
       if (fieldsTypeUploader[i].value) {
@@ -323,37 +321,22 @@ export const actions = {
       }
     }
 
-    console.log(fieldsTypeUploader);
-
-    const myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer 180bcef0a13226eeb75d5215d1ac3428eecb586752e5e25d66ed7db9f1500e266da5b209f34bfa52d90732c55d3"
-    );
-
     const fileUploaders = new File([...fieldsTypeUploader], "UploaderFiles", {
       type: "field/blob",
     });
 
-    const fileText = new File([dataUploader], "TextFiles", {
-      type: "plain/text",
-    });
-
-    console.log("file:", fileUploaders);
-
     const formData = new FormData();
-    formData.append("file1", fileUploaders);
-    formData.append("file2", fileText);
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: formData,
-      redirect: "follow",
-    };
-    const resp = fetch("/am/main/v2/datacard2/55/912/0", requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+    formData.append("uploaderDocs:", fileUploaders);
+    formData.append("fieldValues:", dataUploader);
+
+    console.log("relId:", params.relId);
+
+    let resp = this.$axios.post(
+      `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
+        params.cardId
+      }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
+      formData
+    );
   },
 
   async executeAction(
@@ -494,17 +477,6 @@ export const actions = {
 };
 
 export const mutations = {
-  setDataTypeBlob(state, blobData) {
-    // state.form = state.form.filter((item) => item !== "Uploader");
-    // console.log(state.form);
-    // blobData.forEach((field) => state.form.push(field));
-    // console.log(state.form);
-    // for (let i = 0; i < blobData.length; i++) {
-    //   const formData = new FormData();
-    //   formData.append(`file${i}`, blobData[i]);
-    //   testGroup.push(formData);
-    // }
-  },
   addBeforeSavePromise(state, func) {
     state.beforeSavePromises.push(func);
   },
