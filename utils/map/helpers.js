@@ -2,7 +2,8 @@ const getTime = (distance) => {
   const mins = (distance / 3) * 60;
   if (mins > 20) return `${distance.toFixed(1)} км`;
   const hours = Math.trunc(mins / 60);
-  const minutes = mins % 60;
+  const minutes = mins == 0 ? 1 : mins % 60;
+
   return hours > 0
     ? `${hours} ч ${parseInt(minutes)} мин`
     : `${parseInt(minutes)} мин`;
