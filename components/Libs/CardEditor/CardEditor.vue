@@ -177,7 +177,6 @@ export default {
     stripeLoaded() {
       try {
         if (typeof initHandler === "function") {
-          console.log("нашел!!!");
           this.$store.commit(
             "data_card/setForm",
             initHandler(this.data.map((a) => ({ ...a }))) || this.data
@@ -228,7 +227,6 @@ export default {
             "beforeSave"
           );
           if (data) {
-            console.log("data:", data);
             this.$store.commit("data_card/setForm", data || this.data);
           }
           await this.saveDataCard();
@@ -241,7 +239,6 @@ export default {
               "afterSave"
             );
             if (data) {
-              console.log("data:", data);
               this.$store.commit("data_card/setForm", data || this.data);
             }
           }
