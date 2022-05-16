@@ -36,9 +36,6 @@ export default {
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
 
-      const formData = new FormData();
-      formData.append("testFile", this.file, `${this.file.name}`);
-
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
