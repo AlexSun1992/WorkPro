@@ -29,7 +29,7 @@
             class="align-items-start"
             autocomplete="off"
           >
-            <b-form-group label="Телефон" class="w-100">
+            <b-form-group label="Телефон" class="w-100 required">
               <verify-user
                 ref="verifyUser"
                 @error="showError"
@@ -43,12 +43,18 @@
                 :text-message="textMessage"
                 :tab-index="[10, 15]"
                 :error="errorMessage"
+                @checkCodeFieldValid="isCodeFieldValid"
               />
             </b-form-group>
             <!-- Фамилия -->
             <div class="row">
               <div class="col-12 col-md-6 mt-3">
-                <b-form-group label="Фамилия" label-cols="12">
+                <b-form-group
+                  class="required"
+                  v-if="codeFieldValid"
+                  label="Фамилия"
+                  label-cols="12"
+                >
                   <b-form-input
                     list="my-list-id"
                     :id="Math.random().toString()"
@@ -82,7 +88,12 @@
               <!-- ///// -->
               <div class="col-12 col-md-6 mt-2 mt-md-3">
                 <!-- Имя -->
-                <b-form-group label="Имя" label-cols="12">
+                <b-form-group
+                  v-if="codeFieldValid"
+                  label="Имя"
+                  label-cols="12"
+                  class="required"
+                >
                   <b-form-input
                     list="my-list-id"
                     :id="Math.random().toString()"
@@ -116,7 +127,12 @@
 
               <div class="col-12 col-md-6 mt-2 mt-md-3">
                 <!-- Отчество -->
-                <b-form-group label="Отчество" label-cols="12">
+                <b-form-group
+                  v-if="codeFieldValid"
+                  label="Отчество"
+                  label-cols="12"
+                  class="required"
+                >
                   <b-form-input
                     list="my-list-id"
                     :id="Math.random().toString()"
@@ -148,7 +164,12 @@
                 <!-- ////// -->
               </div>
               <div class="col-12 col-md-6 mt-2 mt-md-3">
-                <b-form-group label="Дата рождения" label-cols="12">
+                <b-form-group
+                  v-if="codeFieldValid"
+                  label="Дата рождения"
+                  label-cols="12"
+                  class="required"
+                >
                   <birthday-picker
                     v-model="$v.form.birthdate.$model"
                     :state="validateState('birthdate')"
@@ -158,7 +179,12 @@
                 </b-form-group>
               </div>
               <div class="col-12 col-md-6 mt-3">
-                <b-form-group label="E-mail" label-cols="12">
+                <b-form-group
+                  class="required"
+                  v-if="codeFieldValid"
+                  label="E-mail"
+                  label-cols="12"
+                >
                   <b-form-input
                     :id="Math.random().toString()"
                     v-model="$v.form.email.$model"
@@ -177,7 +203,11 @@
 
               <div class="col-12 col-md-6"></div>
               <div class="col-12 col-md-6 mt-3">
-                <b-form-group label="Номер полиса" label-cols="12">
+                <b-form-group
+                  v-if="codeFieldValid"
+                  label="Номер полиса (Необязательно)"
+                  label-cols="12"
+                >
                   <b-form-input
                     :id="Math.random().toString()"
                     v-model="form.policyNumber"
@@ -191,6 +221,7 @@
               <div class="col-12 col-md-6"></div>
               <div class="col-12">
                 <verify-password
+                  v-if="codeFieldValid"
                   :v="$v.form"
                   :validateState="validateState"
                   :disabled="registrationInProcess"
@@ -199,6 +230,7 @@
               </div>
               <div class="col-12 pt-3">
                 <b-button
+                  v-if="codeFieldValid"
                   @click.stop.prevent="onSubmit"
                   class="w-100"
                   type="submit"
@@ -272,7 +304,13 @@ export default {
 
   data() {
     return {
+      isSurnameValid: false,
+      isNameValid: false,
+      isPatronymicValid: false,
+      isDateOfBirthValid: false,
+      isEmailValid: false,
       array: [],
+      codeFieldValid: false,
       form: {
         phone: "",
         email: "",
@@ -350,6 +388,10 @@ export default {
   },
 
   methods: {
+    isCodeFieldValid(data) {
+      this.codeFieldValid = data;
+    },
+
     clearArray() {
       this.array = [];
     },
@@ -422,6 +464,7 @@ export default {
 
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
+
       return $dirty ? !$error : null;
     },
 

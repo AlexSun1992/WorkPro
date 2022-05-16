@@ -19,14 +19,16 @@ const isOpened = (office) => {
   let day = dateNow.getDay();
   let dateEnd = new Date();
   day = day == 0 ? 7 : day;
-  if (office.GRAF && office.GRAF[day - 1]) {
-    const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
+  let dayObj = office.GRAF?.find((item) => item.NDAY == day);
+  if (office.GRAF && dayObj) {
+    const [endHour, endMinute] = dayObj?.SEND.split(".");
     dateEnd.setHours(endHour);
     dateEnd.setMinutes(endMinute);
     if (dateNow > dateEnd) {
       opened = false;
     }
   }
+  if (!dayObj) opened = false;
   return opened;
 };
 
@@ -38,8 +40,18 @@ const showWorkingHours = (agency) => {
 
   if (!agency.GRAF) return "";
 
-  if (agency.GRAF[day - 1]) {
-    const [endHour, endMinute] = agency.GRAF[day - 1]?.SEND.split(".");
+  let dayObj = agency.GRAF?.find((item) => item.NDAY == day);
+  let nexDayObj = agency.GRAF?.find((item) => item.NDAY == day + 1);
+  let closedString =
+    "Закрыт до " +
+    ("0" + (dateNow.getDate() + 1)).slice(-2) +
+    "." +
+    ("0" + (dateNow.getMonth() + 1)).slice(-2) +
+    "." +
+    dateNow.getFullYear();
+
+  if (dayObj) {
+    const [endHour, endMinute] = dayObj?.SEND.split(".");
     dateEnd.setHours(endHour);
     dateEnd.setMinutes(endMinute);
     let str;
@@ -49,22 +61,18 @@ const showWorkingHours = (agency) => {
           ? dateEnd.getMinutes() + "0"
           : dateEnd.getMinutes()
       }`;
-    } else if (dateNow > dateEnd && agency.GRAF[day]) {
-      str = `Откроется завтра в ${agency.GRAF[day].SBEGIN}`;
-    } else if (dateNow > dateEnd && !agency.GRAF[day]) {
-      dateNow.setDate(
-        dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
-      );
-      str =
-        "Закрыт до " +
-        ("0" + dateNow.getDate()).slice(-2) +
-        "." +
-        ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-        "." +
-        dateNow.getFullYear();
+    } else if (dateNow > dateEnd) {
+      str = `Откроется завтра в ${nexDayObj.SBEGIN}`;
     }
+    // else if (dateNow > dateEnd) {
+    //   dateNow.setDate(
+    //     dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
+    //   );
+    //   str = closedString;
+    // }
     return str;
   }
+  return closedString;
 };
 
 const getTemplate = (agency) => {

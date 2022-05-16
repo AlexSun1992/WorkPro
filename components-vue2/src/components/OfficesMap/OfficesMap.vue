@@ -1,9 +1,5 @@
 <template>
-  <div
-    @mousedown="setMouseCoords"
-    @mouseup="removeListener"
-    class="map-container mt-3"
-  >
+  <div class="map-container mt-3">
     <div class="container">
       <div class="office-block">
         <button
@@ -56,7 +52,12 @@
         @click="fitToViewportMetro"
       >
         <div class="metrowrapper">
-          <div>
+          <div
+            @touchstart="setTouchCoords"
+            @touchend="removeListenerTouch"
+            @mousedown="setMouseCoords"
+            @mouseup="removeListener"
+          >
             <Mosmetro ref="metro" @click="chooseStation" />
           </div>
           <div v-show="cardVisible" ref="card" class="card">
@@ -79,7 +80,7 @@
         />
 
         <b-pagination
-          v-if="getOffices"
+          v-if="getOffices && getOffices.length > 15"
           v-show="getOffices && width > 900 && !currentStation"
           v-model="page"
           :total-rows="getOffices.length"
@@ -135,7 +136,7 @@ export default {
       myClusterer: null,
       filters,
       filteredOffices: null,
-      page: 0,
+      page: 1,
       mapState: null,
       regionId: null,
       centerCoords: null,
@@ -152,6 +153,10 @@ export default {
       cardPosX: null,
       translateX: 0,
       translateY: 0,
+      touchX: 0,
+      touchY: 0,
+      touchstartX: 0,
+      touchstartY: 0,
       centerX: null,
       centerY: null,
       mapsFit: false,
@@ -220,8 +225,63 @@ export default {
       });
     },
     positionSelectBalloon() {
+      this.translateX=0;
+      this.translateY=0;
       let gsvg = document.querySelector('use[href="#balloon-select"]');
-      /*console.log(gsvg.getAttribute("x"), gsvg.getAttribute("y"));*/
+      if (
+        document.querySelector('use[href="#balloon-select"]') &&
+        this.centerX != null
+      ) {
+        if (this.$refs.["metro"].clientHeight - 1295 * this.svgScale < 0) {
+            let XX = this.$refs.["metro"].clientHeight;
+            let XXX = 1295 * this.svgScale;
+            let XXXX =  Math.abs(XX  - XXX)/2;
+            let XXXXX= gsvg.getAttribute("y")*this.svgScale;
+            if (XXXXX < XXXX - this.centerY - (137 * this.svgScale/2)) {
+                this.centerY = Math.abs(XXXXX - XXXX + 137 * this.svgScale);
+            }
+            if(XXXXX >  this.$refs.["metro"].clientHeight-this.centerY) {
+                this.centerY = (XX - XXXXX)*2;
+            }
+
+          document
+            .querySelector(".g-svg-metromap")
+            .setAttribute(
+              "transform",
+              "matrix(" +
+                this.svgScale +
+                ",0,0," +
+                this.svgScale +
+                "," +
+                this.centerX +
+                "," +
+                this.centerY +
+                ")"
+            );
+        }
+
+        if (
+          document.querySelector(".g-svg-metromap").getAttribute("transform") !=
+          null
+        ) {
+        }
+      }
+      if(gsvg != null)
+      {this.chooseStation({          target: gsvg}        );
+      let sla = document.querySelector('use[href="#balloon-select"]').getBoundingClientRect().top - document.querySelector('.svg-metromap').getBoundingClientRect().top+21;
+      let slaa = document.querySelector('use[href="#balloon-select"]').getBoundingClientRect().left - document.querySelector('.svg-metromap').getBoundingClientRect().left+21;
+      this.$refs["card"].style.top = sla + "px";
+      this.$refs["card"].style.left = slaa + "px";
+      if (slaa + 400 > this.width) {
+          this.$refs["card"].style.left =slaa - 375 + "px";
+        }
+        if (sla > 500) {
+          this.$refs["card"].style.transform = "translateY(-100%)";
+        }
+        if (sla < 500) {
+          this.$refs["card"].style.transform = "translateY(0)";
+        }
+      }
     },
     fitToViewportMetro() {
       this.$nextTick(() => {
@@ -230,19 +290,19 @@ export default {
         } else if (this.width > 1200 && this.mapsFit != true) {
           this.svgScale = 1;
         }
+
+      if (this.mapsFit != true) {
+      /*  let g_cX = (document.querySelector('.svg-metromap').getBoundingClientRect().width - document.querySelector('.g-svg-metromap').getBoundingClientRect().width)/2 -document.querySelector('.g-svg-metromap').getBoundingClientRect().x ;
+      let g_cY = (document.querySelector('.svg-metromap').getBoundingClientRect().height - document.querySelector('.g-svg-metromap').getBoundingClientRect().height)/2 +document.querySelector('.g-svg-metromap').getBoundingClientRect().y;*/
         this.centerX =
           (this.$refs.metro.clientWidth - 1286 * this.svgScale) / 2 +
-          121 * this.svgScale +
-          this.translateX;
+          121 * this.svgScale
+           + this.translateX;
         this.centerY =
           (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
           137 * this.svgScale +
           this.translateY;
-        if (this.mapsFit != true) {
-          this.positionSelectBalloon();
-        }
-
-        document
+      document
           .querySelector(".g-svg-metromap")
           .setAttribute(
             "transform",
@@ -256,7 +316,30 @@ export default {
               this.centerY +
               ")"
           );
-        this.mapsFit = true;
+      }
+      else {
+          document
+          .querySelector(".g-svg-metromap")
+          .setAttribute(
+            "transform",
+            "matrix(" +
+              this.svgScale +
+              ",0,0," +
+              this.svgScale +
+              "," +
+              (this.centerX + this.translateX)+
+              "," +
+              (this.centerY + this.translateY)+
+              ")"
+          );
+     }
+
+        if (this.mapsFit != true) {
+          this.positionSelectBalloon();
+        }
+        if (this.$refs.metro.clientWidth > 0) {
+          this.mapsFit = true;
+        }
       });
     },
     onResize() {
@@ -334,18 +417,49 @@ export default {
     },
 
     setMouseCoords(e) {
+/*      if(this.curPosX === null){
       this.curPosX = e.clientX;
       this.curPosY = e.clientY;
+      }
       if (this.oldPosX) {
         this.curPosX = e.clientX - parseInt(this.oldPosX);
         this.curPosY = e.clientY - parseInt(this.oldPosY);
-      }
+      }*/
       this.cardposX = parseInt(this.$refs["card"]?.style.marginLeft);
       this.cardposY = parseInt(this.$refs["card"]?.style.marginTop);
       document.addEventListener("mousemove", this.onMouseMove);
+      document.addEventListener("mouseout", this.onMouseOute);
+      window.addEventListener("mouseup", this.removeListener);
+
+    },
+ setTouchCoords(e) {
+      this.touchX = e.changedTouches[0].clientX;
+      this.touchY = e.changedTouches[0].clientY;
+      if(document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0]) {
+      this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.e;
+      this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.f;
+      this.centerX =0;
+      this.centerY =0;
+      }
+      this.touchstartX= 0;
+      this.touchstartY= 0;
+      document.addEventListener("touchmove", this.onMouseMoveOne);
+
+    },
+    onMouseMoveOne(e){
+      this.touchstartX = (this.touchX - e.changedTouches[0].clientX) *-1;
+      this.touchstartY = (this.touchY - e.changedTouches[0].clientY)*-1;
+      this.translateX =this.oldPosX+ this.touchstartX;
+      this.translateY =this.oldPosY+ this.touchstartY;
+      this.fitToViewportMetro();
+    },
+    removeListenerTouch(e){
+      document.removeEventListener("touchmove", this.onMouseMoveOne);
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
+      document.removeEventListener("mouseout", this.onMouseOute);
+      window.removeEventListener("mouseup", this.removeListener);
     },
     onMouseMove(e) {
       e.preventDefault();
@@ -355,12 +469,12 @@ export default {
       this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
       this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
 
-      if (Math.abs(this.translateX) >= this.$refs.metro.clientWidth / 2) {
+      if (Math.abs(this.translateX)*this.svgScale >= (1285 * this.svgScale) / 2) {
         this.cardposX = this.cardposX - e.movementX / e.view.devicePixelRatio;
         this.translateX =
           this.translateX - e.movementX / e.view.devicePixelRatio;
       }
-      if (Math.abs(this.translateY) >= this.$refs.metro.clientHeight / 2) {
+      if (Math.abs(this.translateY)*this.svgScale >= (1295 * this.svgScale) / 2) {
         this.translateY =
           this.translateY - e.movementY / e.view.devicePixelRatio;
         this.cardposY = this.cardposY - e.movementY / e.view.devicePixelRatio;
@@ -577,12 +691,8 @@ export default {
               maps[0].children[i].dataset.station === _this.currentStation
             ) {
               maps[0].children[i].setAttribute("href", "#balloon-select");
-              console.log(
-                maps[0].children[i].getAttribute("x"),
-                maps[0].children[i].getAttribute("y")
-                /*,elmaps[0].transform.animVal[0].matrix.e,
-                elmaps[0].transform.animVal[0].matrix.f*/
-              );
+
+              _this.positionSelectBalloon();
             }
           }
         }
@@ -834,12 +944,8 @@ export default {
         }
       } else {
         if (this.getOffices) {
-          if (this.page) {
-            this.page -= 1;
-          }
-          let start = this.page * this.pagesCount;
+          let start = (this.page - 1) * this.pagesCount;
           let end = start + this.pagesCount;
-          this.page = null;
           if (this.currentStation) {
             let filteredByStation = [];
             this.getOffices.forEach((item) => {

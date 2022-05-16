@@ -91,8 +91,4 @@ export default {
   font-size: 12px;
   margin-top: 10px;
 }
-.required > legend:after {
-  content: "*";
-  color: red;
-}
 </style>

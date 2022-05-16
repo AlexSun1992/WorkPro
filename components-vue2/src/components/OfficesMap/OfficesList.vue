@@ -11,7 +11,7 @@
       </div>
     </div>
     <button
-      v-if="!station && mobile && data.length"
+      v-if="!station && mobile && data.length >= 6"
       class="mobile-pagination"
       type="button"
       @click="showMore"

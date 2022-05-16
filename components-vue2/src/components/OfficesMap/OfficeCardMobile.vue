@@ -7,7 +7,7 @@
       <div v-if="office.info">
         <div v-for="(item, i) in office.info" :key="i">
           <div v-if="i == 0 && office.station" class="name">
-            <div>
+            <div v-if="office.station">
               <span
                 :class="
                   'undeground-color_' + getUnderlineId(office.station, item)
@@ -62,7 +62,7 @@
                 </button>
               </div>
             </div>
-            <div class="card-office-undeground">
+            <div v-if="office.station" class="card-office-undeground">
               <div>
                 <span
                   :class="
@@ -142,8 +142,9 @@ export default {
       let day = dateNow.getDay();
       let dateEnd = new Date();
       day = day == 0 ? 7 : day;
-      if (office.GRAF && office.GRAF[day - 1]) {
-        const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
+      let dayObj = office.GRAF?.find((item) => item.NDAY == day);
+      if (office.GRAF && dayObj) {
+        const [endHour, endMinute] = dayObj?.SEND.split(".");
         dateEnd.setHours(endHour);
         dateEnd.setMinutes(endMinute);
         let str;
