@@ -36,18 +36,8 @@ export default {
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
 
-      /// Использование объекта FileReader
-      // const reader = new FileReader();
-      // reader.readAsText(this.file);
-      // reader.onload = () => console.log(reader.result);
-      ///
-
-      /// Использование объекта FormData
       const formData = new FormData();
       formData.append("testFile", this.file, `${this.file.name}`);
-
-      //console.log("formData:", formData);
-      // this.submitFile();
 
       this.$emit("update", {
         fieldId: this.data.fieldId,
