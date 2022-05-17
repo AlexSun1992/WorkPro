@@ -602,7 +602,7 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
-      let body = document.getElementsByClassName('app_body')[0]
+      let body = document.getElementsByTagName('body')[0]
       this.myMap.geoObjects.events.add("balloonopen", (e) => {
         body.classList.add('open-balloon')
         const target = e.get("target");
