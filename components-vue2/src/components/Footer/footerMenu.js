@@ -55,6 +55,53 @@ const footerMenu = [
       { title: "Карта сайта", ref: "/sitemap" },
     ],
   },
+
+  {
+    title: "AppGoogleStoreRefs",
+    items: [
+      {
+        class: "btn-light btn-icon icon-ios",
+        ref: "https://apps.apple.com/us/app/resomobile/id1127266069",
+        title: "Apple Store",
+      },
+      {
+        class: "btn-light btn-icon icon-android",
+        ref: "https://play.google.com/store/apps/details?id=ru.reso.app",
+        title: "Google Play",
+      },
+    ],
+  },
+
+  {
+    title: "socialNetworks",
+    items: [
+      {
+        class: "footer-fb",
+        ref: "https://ru-ru.facebook.com/reso.ru",
+      },
+      {
+        class: "footer-vk",
+        ref: "http://vk.com/reso_garantia",
+      },
+      {
+        class: "footer-in",
+        ref: "https://www.instagram.com/reso.ru_official/",
+      },
+    ],
+  },
 ];
 
 export default footerMenu;
+
+// export const AppGoogleStoreRefs = [
+//   {
+//     class: "btn-light btn-icon icon-ios",
+//     ref: "https://apps.apple.com/us/app/resomobile/id1127266069",
+//     title: "Apple Store",
+//   },
+//   {
+//     class: "btn-light btn-icon icon-android",
+//     ref: "https://play.google.com/store/apps/details?id=ru.reso.app",
+//     title: "Google Play",
+//   },
+// ];

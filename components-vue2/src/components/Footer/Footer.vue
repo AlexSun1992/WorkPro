@@ -61,7 +61,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="info_all block-v-line-lg pn-sm-none"></div> -->
             <div class="info_all block-v-line-lg pn-sm-none">
               <a href="/about/">О компании</a>
               <div class="product menu-med">
@@ -94,23 +93,23 @@
           </div>
           <div class="footer-app-btn">
             <a
-              class="btn-light btn-icon icon-ios"
-              href="https://apps.apple.com/us/app/resomobile/id1127266069"
-              >Apple Store</a
+              v-for="(item, index) in appGoogleStoreRefs[0].items"
+              :key="index"
+              :href="item.ref"
+              :class="item.class"
             >
-            <a
-              class="btn-light btn-icon icon-android"
-              href="https://play.google.com/store/apps/details?id=ru.reso.app"
-              >Google Play</a
-            >
+              {{ item.title }}
+            </a>
           </div>
           <div class="social mt-3 mt-sm-0">
-            <a href="https://ru-ru.facebook.com/reso.ru" class="footer-fb"></a>
-            <a href="http://vk.com/reso_garantia " class="footer-vk"></a>
             <a
-              href="https://www.instagram.com/reso.ru_official/"
-              class="footer-in"
-            ></a>
+              v-for="(item, index) in socialNetworks[0].items"
+              :key="index"
+              :href="item.ref"
+              :class="item.class"
+            >
+              {{ item.title }}
+            </a>
           </div>
 
           <div class="iconix">
@@ -127,6 +126,7 @@
 
 <script>
 import footerMenu from "./footerMenu";
+import getSpecificObject from "./footerHelper";
 
 export default {
   name: "Footer",
@@ -138,24 +138,25 @@ export default {
       footerMenuAboutCompany: [],
       footerMenuHealth: [],
       footerMenuProperty: [],
+      appGoogleStoreRefs: [],
+      socialNetworks: [],
     };
   },
   created() {
-    this.footerMenuProperty = footerMenu.filter((item) => {
-      return item.title === "Имущество";
-    });
+    this.footerMenuProperty = getSpecificObject(footerMenu, "Имущество");
 
-    this.footerMenuAboutCompany = footerMenu.filter((item) => {
-      return item.title === "О компании";
-    });
+    this.footerMenuAboutCompany = getSpecificObject(footerMenu, "О компании");
 
-    this.footerMenuHealth = footerMenu.filter((item) => {
-      return item.title === "Жизнь и здоровье";
-    });
+    this.footerMenuHealth = getSpecificObject(footerMenu, "Жизнь и здоровье");
 
-    this.footerMenuCarSave = footerMenu.filter((item) => {
-      return item.title === "Автострахование";
-    });
+    this.footerMenuCarSave = getSpecificObject(footerMenu, "Автострахование");
+
+    this.appGoogleStoreRefs = getSpecificObject(
+      footerMenu,
+      "AppGoogleStoreRefs"
+    );
+
+    this.socialNetworks = getSpecificObject(footerMenu, "socialNetworks");
 
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
@@ -164,14 +165,6 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    // toggleVisibility(index) {
-    //   console.log(index);
-
-    //   //console.log(this.$refs.index[index].style.display);
-    //   //   if (this.$refs.index[index].style.display === "block") {
-    //   //     this.$refs.index[index].style.display = "none";
-    //   //   } else this.$refs.index[index].style.display = "block";
-    // },
     handleResize() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
