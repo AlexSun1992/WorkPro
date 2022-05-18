@@ -3,7 +3,3 @@ export default function getSpecificObject(arrayOfObjects, specificObjectTitle) {
     return item.title === specificObjectTitle;
   });
 }
-
-// footerMenu.filter((item) => {
-//     return item.title === "О компании";
-//   });
