@@ -1014,4 +1014,10 @@
         .footer-info {
             display: none;
         }
+        .color-footer {
+            padding: 60px 0 10px;
+        }
+        .open-info.open+.footer-info {
+            display: block;
+        }
     }
