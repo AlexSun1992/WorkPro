@@ -45,8 +45,8 @@
           <div class="row">
             <div
               :class="`col-lg-${12 / cols}`"
-              v-for="column in columns"
-              :key="column.id"
+              v-for="(column, index) in columns"
+              :key="index"
             >
               <div v-for="item in column" :key="item.id">
                 <span @click="setPopularCity(item)" style="cursor: pointer">{{
@@ -225,7 +225,7 @@ export default {
       }
       this.popularCities.sort(compare);
       this.popularCities.unshift({
-        id: 1,
+        id: 122,
         kladr_id: "7700000000000",
         text: "Москва",
         lat: "55.75396",
