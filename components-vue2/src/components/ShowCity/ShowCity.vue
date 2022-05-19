@@ -223,15 +223,17 @@ export default {
         if (a.text > b.text) return 1;
         return 0;
       }
-      this.popularCities.sort(compare);
-      this.popularCities.unshift({
+
+      const popularCities = [...this.popularCities];
+      popularCities.sort(compare);
+      popularCities.unshift({
         id: 122,
         kladr_id: "7700000000000",
         text: "Москва",
         lat: "55.75396",
         lon: "37.620393",
       });
-      return this.popularCities;
+      return popularCities;
     },
     columns() {
       const columns = [];
