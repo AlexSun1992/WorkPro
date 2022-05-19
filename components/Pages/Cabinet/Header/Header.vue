@@ -64,6 +64,7 @@
               <button type="button" class="btn select-sity btn-link">
                 Владивосток
               </button>
+              <!-- <show-city></show-city> -->
             </div>
           </div>
           <div class="float-md-start ms-lg-5 mt-3 mt-lg-0">
@@ -88,6 +89,7 @@
           <button type="button" class="btn dropdown-toggle btn-login-link">
             Вячеслав Головлев
           </button>
+          <!-- <login-button></login-button> -->
         </div>
       </div>
     </div>
@@ -95,8 +97,15 @@
 </template>
 
 <script>
+import LoginButton from "../../../../components-vue2/src/components/Login/LoginButton.vue";
+import ShowCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
+
 export default {
   name: "Header",
+  components: {
+    LoginButton,
+    ShowCity,
+  },
   methods: {
     mobileMenu() {
       this.$emit("mini-sidebar");
