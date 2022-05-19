@@ -122,7 +122,9 @@
           </div>
         </div>
         <div class="col-lg-12 col-md-6 col-12 order-2 order-lg-3 h-line-footer">
-          <button class="open-info">Раскрытие обязательной информации</button>
+          <button @click="toggleClassOpen" class="open-info">
+            Раскрытие обязательной информации
+          </button>
           <div class="footer-info">
             <div class="info mb-2">
               САО «РЕСО-Гарантия» раскрывает информацию на странице в сети
@@ -213,6 +215,9 @@ export default {
         e.target.parentElement.classList.toggle("active");
         return;
       }
+    },
+    toggleClassOpen(e) {
+      e.target.classList.toggle("open");
     },
     handleResize() {
       this.width = window.innerWidth;
