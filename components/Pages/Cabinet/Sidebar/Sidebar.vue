@@ -3,11 +3,7 @@
     <header-user-name :user-data="userInfo" />
     <ul class="sidebar-nav justify-content-center">
       <template v-for="(value, key) in groupMenuItems">
-        <a
-          v-if="key != 'undefined'"
-          href="#"
-          style="color: grey; text-align: center"
-        >
+        <a v-if="key != 'undefined'" href="#">
           <div :class="'menu-icon-polities'" />
           <span>{{ key }}</span>
         </a>
