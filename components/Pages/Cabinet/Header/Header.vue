@@ -61,11 +61,11 @@
               ><span class="d-inline-block light-gray">Ваш город:</span></span
             >
             <div class="d-inline-block">
-              <!-- <button type="button" class="btn select-sity btn-link">
+              <button type="button" class="btn select-sity btn-link">
                 Владивосток
-              </button> -->
+              </button>
               <!-- <change-city :changeCity="test"></change-city> -->
-              <show-city :changeCity="test"></show-city>
+              <!-- <show-city :changeCity="test"></show-city> -->
             </div>
           </div>
           <div class="float-md-start ms-lg-5 mt-3 mt-lg-0">
