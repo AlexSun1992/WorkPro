@@ -72,14 +72,23 @@
                 @click="toggleClassActive"
                 >{{ item.title }}</a
               >
-              <div class="priduct_link">
+              <div class="product">
                 <a
-                  v-for="(item, index) in footerMenuAboutCompany[0].items"
+                  v-for="(item, index) in footerMenuAboutCompany"
                   :key="index"
-                  :href="item.ref"
+                  :href="item.titleRef"
+                  @click="toggleClassActive"
+                  >{{ item.title }}</a
                 >
-                  {{ item.title }}
-                </a>
+                <div class="priduct_link">
+                  <a
+                    v-for="(item, index) in footerMenuAboutCompany[0].items"
+                    :key="index"
+                    :href="item.ref"
+                  >
+                    {{ item.title }}
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -111,12 +120,43 @@
               {{ item.title }}
             </a>
           </div>
-
-          <div class="iconix">
-            Дизайн:
-            <img
-              src="/export/system/modules/ru.reso.v2/resources/img/icons/iconix.svg"
-            />
+        </div>
+        <div class="col-lg-12 col-md-6 col-12 order-2 order-lg-3 h-line-footer">
+          <button class="open-info">Раскрытие обязательной информации</button>
+          <div class="footer-info">
+            <div class="info mb-2">
+              САО «РЕСО-Гарантия» раскрывает информацию на странице в сети
+              Интернет информационного агентства, аккредитованного ЦБ РФ на
+              раскрытие информации, по адресу:
+              <a href="http://www.disclosure.ru/issuer/7710045520/"
+                >http://www.disclosure.ru/issuer/7710045520/</a
+              >
+            </div>
+            <div class="info info_ppl mb-2 mt-4 mt-lg-0">
+              <a
+                href="https://reso.ru/About/Shareholders/list-of-participants-28072021.pdf"
+                >Информация об акционерах и лицах, под контролем или
+                значительным влиянием которых находится страховщик на 28.07.2021
+                год</a
+              >
+            </div>
+            <div>
+              Сайт защищён reCAPTCHA с применением
+              <a href="https://policies.google.com/privacy"
+                >Политики конфиденциальности</a
+              >
+              и
+              <a href="https://policies.google.com/terms"
+                >Условий использования</a
+              >
+              от Google.
+            </div>
+            <div class="copyright">
+              © 2022, «РЕСО-Гарантия»&nbsp;&nbsp;&nbsp;&nbsp;<a
+                href="https://www.reso.ru/regulations/personal-information.html"
+                >Конфиденциальность</a
+              >
+            </div>
           </div>
         </div>
       </div>
