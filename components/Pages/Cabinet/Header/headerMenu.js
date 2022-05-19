@@ -1,6 +1,3 @@
-// const headerMenu = ["Купить полис", "Страховой случай", "Бизнесу"];
-// export default headerMenu;
-
 const items = [
   {
     class: "product",

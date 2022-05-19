@@ -17,6 +17,7 @@
               <div>
                 <a href="/individual" class="d-none d-md-block">Купить полис</a>
                 <a href="" class="d-md-none">Купить полис</a>
+                <!-- ///// -->
                 <div class="product">
                   <a
                     href="/individual/auto/"
@@ -30,6 +31,22 @@
                     <a href="/individual/auto/greencard/">Зеленая карта</a>
                   </div>
                 </div>
+                <!-- //// есть ошибка -->
+                <!-- <div
+                  v-for="(item, index) in products"
+                  :key="index"
+                  :class="item.class"
+                >
+                  <a
+                    v-for="(item, index) in products[item].titleRef"
+                    :href="products[item].titleRef.ref"
+                    :class="products[item].titleRef[item].class"
+                    :key="index"
+                  >
+                    {{ products[item].titleRef[item].title }}
+                  </a>
+                </div> -->
+                <!-- ///// -->
                 <div class="product">
                   <a
                     href="/individual/health/"
@@ -195,17 +212,19 @@
 </template>
 
 <script>
-import headerMenu from "./headerMenu";
+import items from "./headerMenu";
 
 export default {
   name: "Header",
   data() {
     return {
       headerMenu: null,
+      products: null,
     };
   },
   created() {
-    this.headerMenu = headerMenu;
+    // this.headerMenu = headerMenu;
+    this.products = items;
   },
 };
 </script>
