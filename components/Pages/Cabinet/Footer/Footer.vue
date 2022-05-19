@@ -171,14 +171,11 @@ export default {
       if (this.width < 992) {
         e.preventDefault();
         e.target.parentElement.classList.toggle("active");
-        console.log(e.target.parentElement.classList);
         return;
       }
     },
     handleResize() {
       this.width = window.innerWidth;
-      this.height = window.innerHeight;
-      console.log("width:", this.width);
     },
   },
 };
