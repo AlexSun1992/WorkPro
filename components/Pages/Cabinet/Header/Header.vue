@@ -61,9 +61,10 @@
               ><span class="d-inline-block light-gray">Ваш город:</span></span
             >
             <div class="d-inline-block">
-              <button type="button" class="btn select-sity btn-link">
+              <!-- <button type="button" class="btn select-sity btn-link">
                 Владивосток
-              </button>
+              </button> -->
+              <change-city></change-city>
               <!-- <show-city></show-city> -->
             </div>
           </div>
@@ -86,10 +87,12 @@
       </div>
       <div class="login-form">
         <div class="LoginButton">
-          <button type="button" class="btn dropdown-toggle btn-login-link">
+          <!-- <button type="button" class="btn dropdown-toggle btn-login-link">
             Вячеслав Головлев
-          </button>
+          </button> -->
           <!-- <login-button></login-button> -->
+
+          <header-user-name :user-data="userInfo"></header-user-name>
         </div>
       </div>
     </div>
@@ -98,13 +101,20 @@
 
 <script>
 import LoginButton from "../../../../components-vue2/src/components/Login/LoginButton.vue";
-import ShowCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
+import ChangeCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
+import HeaderUserName from "./HeaderUserName.vue";
 
 export default {
   name: "Header",
   components: {
     LoginButton,
-    ShowCity,
+    ChangeCity,
+    HeaderUserName,
+  },
+  data() {
+    return {
+      userInfo: null,
+    };
   },
   methods: {
     mobileMenu() {
@@ -123,6 +133,9 @@ export default {
     goToNotify() {
       this.$router.push("/cabinet/55/0/705");
     },
+  },
+  created() {
+    this.userInfo = this.$auth.user;
   },
 };
 </script>
