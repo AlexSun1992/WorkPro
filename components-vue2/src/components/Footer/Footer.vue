@@ -12,7 +12,6 @@
                   v-for="(item, index) in footerMenuCarSave"
                   :key="index"
                   :href="item.titleRef"
-                  @click="toggleClassActive"
                   >{{ item.title }}</a
                 >
                 <div class="priduct_link">
@@ -31,7 +30,6 @@
                   v-for="(item, index) in footerMenuProperty"
                   :key="index"
                   :href="item.titleRef"
-                  @click="toggleClassActive"
                   >{{ item.title }}</a
                 >
                 <div class="priduct_link">
@@ -50,7 +48,6 @@
                   v-for="(item, index) in footerMenuHealth"
                   :key="index"
                   :href="item.titleRef"
-                  @click="toggleClassActive"
                   >{{ item.title }}</a
                 >
                 <div class="priduct_link">
@@ -65,22 +62,25 @@
               </div>
             </div>
             <div class="info_all block-v-line-lg pn-sm-none">
-              <a
-                v-for="(item, index) in footerMenuAboutCompany"
-                :key="index"
-                :href="item.titleRef"
-                @click="toggleClassActive"
-                >{{ item.title }}</a
-              >
-              <div class="priduct_link">
+              <a href="/about/">О компании</a>
+              <div class="product menu-med">
                 <a
-                  v-for="(item, index) in footerMenuAboutCompany[0].items"
+                  v-for="(item, index) in footerMenuAboutCompany"
                   :key="index"
-                  :href="item.ref"
+                  :href="item.titleRef"
+                  >{{ item.title }}</a
                 >
-                  {{ item.title }}
-                </a>
+                <div class="priduct_link">
+                  <a
+                    v-for="(item, index) in footerMenuAboutCompany[0].items"
+                    :key="index"
+                    :href="item.ref"
+                  >
+                    {{ item.title }}
+                  </a>
+                </div>
               </div>
+              <!-- ///// -->
             </div>
           </div>
         </div>
@@ -142,7 +142,6 @@ export default {
       socialNetworks: [],
     };
   },
-
   created() {
     this.footerMenuProperty = getSpecificObject(footerMenu, "Имущество");
 
@@ -158,8 +157,7 @@ export default {
     );
 
     this.socialNetworks = getSpecificObject(footerMenu, "socialNetworks");
-  },
-  mounted() {
+
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
   },
@@ -167,15 +165,9 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    toggleClassActive(e) {
-      if (this.width < 992) {
-        e.preventDefault();
-        e.target.parentElement.classList.toggle("active");
-        return;
-      }
-    },
     handleResize() {
       this.width = window.innerWidth;
+      this.height = window.innerHeight;
     },
   },
 };
