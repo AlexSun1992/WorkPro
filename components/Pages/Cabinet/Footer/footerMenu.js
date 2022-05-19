@@ -92,16 +92,3 @@ const footerMenu = [
 ];
 
 export default footerMenu;
-
-// export const AppGoogleStoreRefs = [
-//   {
-//     class: "btn-light btn-icon icon-ios",
-//     ref: "https://apps.apple.com/us/app/resomobile/id1127266069",
-//     title: "Apple Store",
-//   },
-//   {
-//     class: "btn-light btn-icon icon-android",
-//     ref: "https://play.google.com/store/apps/details?id=ru.reso.app",
-//     title: "Google Play",
-//   },
-// ];
