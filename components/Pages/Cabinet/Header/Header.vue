@@ -64,8 +64,8 @@
               <!-- <button type="button" class="btn select-sity btn-link">
                 Владивосток
               </button> -->
-              <change-city></change-city>
-              <!-- <show-city></show-city> -->
+              <!-- <change-city :changeCity="test"></change-city> -->
+              <show-city :changeCity="test"></show-city>
             </div>
           </div>
           <div class="float-md-start ms-lg-5 mt-3 mt-lg-0">
@@ -100,15 +100,15 @@
 </template>
 
 <script>
-import LoginButton from "../../../../components-vue2/src/components/Login/LoginButton.vue";
-import ChangeCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
+// import LoginButton from "../../../../components-vue2/src/components/Login/LoginButton.vue";
+import ShowCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
 import HeaderUserName from "./HeaderUserName.vue";
 
 export default {
   name: "Header",
   components: {
-    LoginButton,
-    ChangeCity,
+    // LoginButton,
+    ShowCity,
     HeaderUserName,
   },
   data() {
@@ -117,6 +117,7 @@ export default {
     };
   },
   methods: {
+    test() {},
     mobileMenu() {
       this.$emit("mini-sidebar");
     },
