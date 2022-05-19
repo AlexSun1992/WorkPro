@@ -182,7 +182,7 @@ export default {
     try {
       window.addEventListener("resize", this.onResize);
 
-      if (Cookies.get("lat")) {
+      if (Cookies.get("lat") && Cookies.get("lat") !== 'null') {
         await this.$store.dispatch("map/fetchRegion", {
           id: Cookies.get("kladr_id")?.substr(0, 2),
           coords: [Cookies.get("lat"), Cookies.get("lon")],
@@ -971,7 +971,12 @@ export default {
   },
 
   watch: {
-    cityData() {
+    async cityData() {
+      this.myMap.geoObjects.remove(this.placemark);
+      await this.$store.dispatch("map/fetchRegion", {
+          id: this.$store.getters["map/getCity"]?.city,
+          coords: this.$store.getters["map/getCity"]?.coords,
+        });
       this.showOnMap(
         this.$store.getters["map/getCity"]?.city,
         this.$store.getters["map/getCity"]?.coords
