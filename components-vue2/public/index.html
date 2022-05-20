@@ -2,343 +2,59 @@
 <html lang="">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title>
-        <%= htmlWebpackPlugin.options.title %>
-    </title>
-    <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" ></script>  -->
-    <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>  -->
-    <link rel="stylesheet" href="https://new.reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css" />
-    <link rel="stylesheet" href="https://new.reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css" />
-    <link rel="stylesheet" href="https://new.reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css" />
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+  <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" ></script>  -->
+  <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>  -->
 </head>
 
-<body>
-    <header>
-        <div class="menu-container">
-            <a href="/" aria-current="page" class="logo router-link-exact-active router-link-active"></a>
-            <button class="burger mr-4 d-block d-md-none"></button>
-            <div class="row header-height align-items-start align-items-md-center">
-                <div class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2">
-                    <div class="menu-link d-md-flex ms-md-3 ms-lg-0">
-                        <div class="slogan-reso">С нами надёжнее!</div>
-                        <div>
-                            <a href="/individual" class="d-none d-md-block">Купить полис</a>
-                        </div>
-                        <div>
-                            <a href="/incase" class="d-none d-md-block">Страховой случай</a>
-                        </div>
-                        <div>
-                            <a href="/corporate" class="d-none d-md-block">Бизнесу</a>
-                        </div>
-                    </div>
-                    <div class="anonsed-block">
-                        <button class="anonsed" type="button"></button>
-                    </div>
-                </div>
-                <div class="top_menu mt-4 mt-md-0">
-                    <div class="float-md-start">
-                        <span class="icon-left icon-location"><span class="d-inline-block light-gray">Ваш город:</span></span>
-                        <div class="d-inline-block">
-                            <button type="button" class="btn select-sity btn-link">
-                  Владивосток
-                </button>
-                        </div>
-                    </div>
-                    <div class="float-md-start ms-lg-5 mt-3 mt-lg-0">
-                        <a class="icon-left icon-search-office gray-one txtdn" href="/about/contacts">Офисы и отделения</a
-              >
-            </div>
-            <div class="float-md-end d-none d-lg-block">
-              <a
-                href=""
-                class="icon-left icon-eye gray-one txtdn visuallyImpairedButton"
-                >Версия для слабовидящих</a
-              >
-            </div>
-            <div class="clearfix"></div>
-          </div>
-        </div>
-        <div class="login-form">
-          <div class="LoginButton">
-            <button type="button" class="btn dropdown-toggle btn-login-link">
-              Вячеслав Головлев
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
-    <div class="container">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/">Главная</a>
-                        </li>
-                        <li class="breadcrumb-item">Личный кабинет</li>
-                        </ol>
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="sidebar_client">
-                                    <ul class="sidebar-nav justify-content-center">
-                                        <a href="#">
-                                            <div class="menu-icon-polities"></div>
-                                            <span>ЛК v.2</span></a>
-                                        <li class="sidebar-nav-item active">
-                                            <a href="/cabinet/55/0/701">
-                                                <div class="menu-icon-profile"></div>
-                                                <span>Личный кабинет</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/710">
-                                                <div class="menu-icon-customization"></div>
-                                                <span>Мой Профиль</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/712">
-                                                <div class="menu-icon-policies"></div>
-                                                <span>Мои Полисы</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/707">
-                                                <div class="menu-icon-buy"></div>
-                                                <span>Купить полис</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/713">
-                                                <div class="menu-icon-insuredevents"></div>
-                                                <span>Страховые случаи</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/705">
-                                                <div class="menu-icon-notifications"></div>
-                                                <span>Уведомления</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/6">
-                                                <div class="menu-icon-policies"></div>
-                                                <span>Мои агенты</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/12">
-                                                <div class="menu-icon-customization"></div>
-                                                <span>Оплатить полис</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/765">
-                                                <div class="menu-icon-policies"></div>
-                                                <span>Проверка БСО</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/917">
-                                                <div class="menu-icon-promotions"></div>
-                                                <span>Обратная связь</span></a>
-                                        </li>
-                                        <a href="#">
-                                            <div class="menu-icon-polities"></div>
-                                            <span>ДМС</span></a>
-                                        <li class="sidebar-nav-item">
-                                            <a href="https://dms.reso.ru/DMSResoRu/reso_iframe?token=180d8678a89a80dd338fe8061b4b53be57d60f766d8e54a94e4a2679062d9b75df2c6d1e8665d5e3abcddadba98" target="blank">
-                                                <div class="menu-icon-policies"></div>
-                                                <span>Телемедицина</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/333">
-                                                <div class="menu-icon-policies"></div>
-                                                <span>Запросить гарантийное письмо</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/901">
-                                                <div class="menu-icon-policies"></div>
-                                                <span>Мои записи (MS)</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/907">
-                                                <div class="menu-icon-insuredevents"></div>
-                                                <span>Вызов врача</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/919">
-                                                <div class="menu-icon-promotions"></div>
-                                                <span>Заявка на туристический полис</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/923">
-                                                <div class="menu-icon-policies"></div>
-                                                <span>Записаться к врачу</span></a>
-                                        </li>
-                                        <a href="#">
-                                            <div class="menu-icon-polities"></div>
-                                            <span>Заявление на страховую выплату</span></a>
-                                        <li class="sidebar-nav-item">
-                                            <a href="/cabinet/55/0/903">
-                                                <div class="menu-icon-insuredevents"></div>
-                                                <span>Заявление на страховую выплату</span></a>
-                                        </li>
-                                        <li class="sidebar-nav-item">
-                                            <a href="#">
-                                                <div class="menu-icon-exit"></div>
-                                                <span>Выйти</span></a>
-                                        </li>
-                                    </ul>
-                                    <button class="sidebar-minimizer"></button>
-                                    <button class="sidebar-mobile_close"></button>
-                                </div>
-                            </div>
-                            <div class="col-8 content-block">
-                                <div class="anonsed-blocks row">
-                                    <div class="col-12 col-lg-6">
-                                        <div class="anonsed-block warning">
-                                            <div class="title">Продлите полис XXX1012456879</div>
-                                            <div class="description">
-                                                Срок действия полиса истекает 25.04.2022
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <div class="anonsed-block warning">
-                                            <div class="title">Оплатите рассрочку по SYS1012456879</div>
-                                            <div class="description">
-                                                Оплатить очередной платёж по полису необходимо платёж по полису необходимо
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="border-block mt-3">
-                                    <div class="row nav justify-content-between align-items-center">
-                                        <div class="col-auto">
-                                            <div class="title">Мои полисы</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="link">
-                                                Смотреть все <i class="icon-chevron-r"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-12 col-lg-6">
-                                            <div class="block-policy" data-id="1">
-                                                <div class="title">ДМС</div>
-                                                <div class="description">
-                                                    <div>308095-13/21-ИС204</div>
-                                                    <div>Петров Андрей Алексеевич</div>
-                                                    <div>Действует до 30.06.2022</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-6">
-                                            <div class="block-policy" data-id="2">
-                                                <div class="title">ОСАГО</div>
-                                                <div class="description">
-                                                    <div>XXX0227258562</div>
-                                                    <div>Гос.номер: O234OE750</div>
-                                                    <div>Действует до: 29.03.2023</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="border-block mt-4">
-                                    <div class="row nav justify-content-between align-items-center">
-                                        <div class="col-auto">
-                                            <div class="title">Мои страховые случаи</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="link">
-                                                Смотреть все <i class="icon-chevron-r"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-12 col-lg-4">
-                                            <div class="insured-events" data-id="1">
-                                                <div class="title">ОСАГО</div>
-                                                <div class="description">
-                                                    <div class="date">07.07.2017</div>
-                                                    <div class="number">EEE09719608</div>
-                                                </div>
-                                                <div class="settlement">Урегулирован</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="insured-events" data-id="1">
-                                                <div class="title">ОСАГО</div>
-                                                <div class="description">
-                                                    <div class="date">07.07.2017</div>
-                                                    <div class="number">EEE09719608</div>
-                                                </div>
-                                                <div class="settlement">Урегулирован</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="insured-events" data-id="3">
-                                                <div class="title">УЩЕРБ</div>
-                                                <div class="description">
-                                                    <div class="date">07.07.2017</div>
-                                                    <div class="number">EEE09719608</div>
-                                                </div>
-                                                <div class="settlement">Рассмотрение претензии приостановлено, просьба связаться с СК</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="border-block mt-4">
-                                    <div class="row nav justify-content-between align-items-center">
-                                        <div class="col-auto">
-                                            <div class="title">Мои визиты к врачу</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="link">
-                                                Смотреть все <i class="icon-chevron-r"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-12 col-lg-6">
-                                            <div class="block-visit">
-                                                <div class="title">Эндокринолог</div>
-                                                <div class="clinic">Medswiss Нагорная</div>
-                                                <div class="planning planned">планируемый</div>
-                                                <div class="date">11.11.2022</div>
-                                                <div class="name">Быстрова Татьяна Викторовна</div>
+<body class="app_body">
+<noscript>
+  <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+    properly without JavaScript enabled. Please enable it to
+    continue..</strong>
+</noscript>
 
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-6">
-                                            <div class="block-visit">
-                                                <div class="title">Эндокринолог</div>
-                                                <div class="clinic">Medswiss Нагорная</div>
-                                                <div class="planning past">планируемый</div>
-                                                <div class="date">11.11.2022</div>
-                                                <div class="name">Быстрова Татьяна Викторовна</div>
+<link rel="stylesheet" href="https://new.reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css" />
+<link rel="stylesheet" href="https://new.reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css" />
+<link rel="stylesheet" href="https://new.reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css" />
+<link rel="stylesheet" href="https://new.reso.ru/system/modules/ru.reso.v2/resources/css/style_new.css" />
+<link rel="stylesheet" href="https://new.reso.ru/system/modules/ru.reso.v2/resources/css/style_main.css" />
+<script type="text/javascript"
+        src="https://www.reso.ru/system/modules/ru.reso.bootstrap4/resources/js/jquery.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.bootstrap4/resources/js/util.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.bootstrap4/resources/js/popper.min.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.bootstrap4/resources/js/tooltip.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.bootstrap4/resources/js/migrate.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.bootstrap4/resources/js/library.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.bootstrap4/resources/js/script.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery-ui.min.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.v2/resources/scripts/js/jquery.cookie.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.v2/resources/scripts/js/jquery.inputmask.min.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.v2/resources/scripts/js/jquery.inputmask.numeric.extensions.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.v2/resources/scripts/js/jquery-custom-widgets.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.v2/resources/scripts/js/common-functions-forms.js"></script>
+<script type="text/javascript"
+        src="https://new.reso.ru/system/modules/ru.reso.v2/resources/scripts/js/region-location-user.js"></script>
 
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="border-block mt-4">
-                                    <div class="row nav justify-content-between align-items-center">
-                                        <div class="col-auto">
-                                            <div class="title">Только для вас</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="link">
-                                                Смотреть все <i class="icon-chevron-r"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-</body>
-
-</html>
-
-
-<!--
 <div class="agent-block bg-slider-six d-none">
   <div class="agent-block-dsp">
     Ваш город: <strong class="color-green-one">Владивосток</strong>
@@ -350,41 +66,48 @@
   </div>
 </div>
 <div class="container">
-  
-  <div class="d-none">
-    <component-header>/</component-header>
+
+  <div >
+<!--    <component-header>/</component-header>-->
   </div>
 
-  <div class="container">
-    
-    <div class="d-none">
-      <component-header>/</component-header>
-    </div>
+  <div class="d-none">
+    <component-footer>/</component-footer>
+  </div>
 
-    <div class="d-none">
-      <component-footer>/</component-footer>
-    </div>
+  <div class="d-none">
+    <component-password-recovery-form></component-password-recovery-form>
+  </div>
 
-    <div class="d-none">
-      <component-password-recovery-form></component-password-recovery-form>
-    </div>
+  <div class="d-block">
+    <component-show-city/>
+    <component-login-form></component-login-form>
+  </div>
 
-     <div>
-         <component-login-form></component-login-form>
-     </div>
+  <div  class="d-none">
+    <component-reg-form></component-reg-form>
+  </div>
 
-    <div class="d-none">
-     <component-login-form></component-login-form>
-    </div>
+  <div class="d-block">
+    <component-show-city/>
+    <component-card-editor module-id="55" menu-id="777" zone="free"></component-card-editor>
+  </div>
 
-    <div  class="d-none">
-          <component-reg-form></component-reg-form>
-    </div>
+  <!-- <div>
+          <component-card-editor
+            module-id="55"
+            menu-id="666"
+          ></component-card-editor>
+        </div> -->
 
-    <div class="d-none">
-      <component-card-editor module-id="55" menu-id="777" zone="free"></component-card-editor>
-    </div>
+</div>
+<div class="d-none">
+  <component-offices-map></component-offices-map>
+</div>
 
-     <div>
-      <component-show-city></component-show-city>
-    </div> -->
+
+<!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
+</script>
+</body>
+
+</html>
