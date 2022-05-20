@@ -438,7 +438,7 @@
     .border-block {
         border: 1px solid #DFE3E5;
         border-radius: 16px;
-        padding: 24px;
+        padding: 20px;
     }
     
     .align-items-center {
@@ -593,7 +593,7 @@
         background-color: #EDF8EA;
     }
     
-    .insured-events[data-id="3"] {
+    .insured-events[data-id="2"] {
         background-color: #ECF3FA;
     }
     
@@ -609,7 +609,7 @@
         background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
     }
     
-    .insured-events[data-id="3"]:after {
+    .insured-events[data-id="2"]:after {
         width: 70px;
         height: 70px;
         border-radius: 70px;
@@ -1020,4 +1020,23 @@
         .open-info.open+.footer-info {
             display: block;
         }
+    }
+    
+    .freecard {
+        border: 0;
+        background-color: transparent;
+        padding: 0;
+        transition: 0.3s;
+    }
+    
+    .br24 {
+        border-radius: 24px;
+    }
+    
+    .br30 {
+        border-radius: 30px;
+    }
+    
+    .freecard:hover {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     }

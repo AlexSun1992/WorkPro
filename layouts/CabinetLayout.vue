@@ -27,9 +27,7 @@
         <div class="col-8">
           <div class="body">
             <main class="main">
-              <div class="container-fluid">
-                <nuxt />
-              </div>
+              <nuxt />
             </main>
           </div>
         </div>
