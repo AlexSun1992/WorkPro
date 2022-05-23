@@ -1,6 +1,5 @@
 <template>
   <div class="sidebar_client">
-    <header-user-name :user-data="userInfo" />
     <ul class="sidebar-nav justify-content-center">
       <template v-for="(value, key) in groupMenuItems">
         <a v-if="key != 'undefined'" href="#">
