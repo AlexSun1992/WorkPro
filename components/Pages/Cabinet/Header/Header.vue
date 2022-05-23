@@ -1,32 +1,4 @@
 <template>
-  <!--  <header>
-    <div class="relative">
-      <a href="/" class="header-logo"></a>
-      <div class="header-text col-auto mr-auto">
-        Страхование на все случаи жизни
-      </div>
-      <ul class="header-nav col-auto">
-        <li class="header-nav-item">
-          <button
-            v-on:click="goToNotify()"
-            type="button"
-            class="header-nav-notifications"
-          />
-        </li>
-        <li class="header-nav-item">
-          <button v-on:click="logout()" type="button" class="header-nav-exit" />
-        </li>
-        <li class="header-nav-item mobile-menu-btn">
-          <button
-            v-on:click="mobileMenu()"
-            type="button"
-            class="header-nav-mobile"
-          />
-        </li>
-      </ul>
-    </div>
-  </header>
-  -->
   <header>
     <div class="menu-container">
       <a
@@ -61,11 +33,7 @@
               ><span class="d-inline-block light-gray">Ваш город:</span></span
             >
             <div class="d-inline-block">
-              <!-- <button type="button" class="btn select-sity btn-link">
-                Владивосток
-              </button> -->
-              <!-- <change-city :changeCity="test"></change-city> -->
-              <show-city :changeCity="test"></show-city>
+              <show-city></show-city>
             </div>
           </div>
           <div class="float-md-start ms-lg-5 mt-3 mt-lg-0">
@@ -87,11 +55,6 @@
       </div>
       <div class="login-form">
         <div class="LoginButton">
-          <!-- <button type="button" class="btn dropdown-toggle btn-login-link">
-            Вячеслав Головлев
-          </button> -->
-          <!-- <login-button></login-button> -->
-
           <header-user-name :user-data="userInfo"></header-user-name>
         </div>
       </div>
@@ -100,14 +63,12 @@
 </template>
 
 <script>
-// import LoginButton from "../../../../components-vue2/src/components/Login/LoginButton.vue";
 import ShowCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
 import HeaderUserName from "./HeaderUserName.vue";
 
 export default {
   name: "Header",
   components: {
-    // LoginButton,
     ShowCity,
     HeaderUserName,
   },
@@ -117,7 +78,10 @@ export default {
     };
   },
   methods: {
-    test() {},
+    // test() {
+    //   console.log("!!!");
+    // },
+    /// использовано в качестве заглушки
     mobileMenu() {
       this.$emit("mini-sidebar");
     },
