@@ -558,6 +558,7 @@ export default {
       if (filters) {
         agencies = filterData(this.getOfficesByCity, filters);
       }
+      console.log(agencies)
       await this.setPositionAttributes();
       if (!this.currentFilters) {
         await this.$store.dispatch("map/fetchRegion", {
