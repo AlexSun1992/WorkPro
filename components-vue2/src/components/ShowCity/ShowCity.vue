@@ -162,8 +162,8 @@ export default {
       this.kladr = result.data.kladr_id;
       Cookies.set("kladr_id", this.kladr);
       Cookies.set("location_user", this.city);
-      Cookies.set("lat", this.lat);
-      Cookies.set("lon", this.lon);
+      Cookies.set("lat", result.data.geo_lat);
+      Cookies.set("lon", result.data.geo_lon);
 
       this.changeCity({
         city: this.city,
@@ -171,7 +171,7 @@ export default {
       });
       this.$store.dispatch("map/setCity", {
         city: this.city,
-        coords: [this.lat, this.lon],
+        coords: [result.data.geo_lat, result.data.geo_lon],
       });
     },
     setPopularCity(result) {
