@@ -31,7 +31,6 @@ export const mutations = {
     state.regionOffices = params;
   },
   setCity(state, params) {
-    console.log(params);
     state.city = params;
   },
   setLoading(state, params) {

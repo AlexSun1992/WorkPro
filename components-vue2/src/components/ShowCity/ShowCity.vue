@@ -63,7 +63,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-import { BButton, BCollapse, BCard } from "bootstrap-vue";
+import { BButton, BCard } from "bootstrap-vue";
 import Cookies from "js-cookie";
 import cities from "./cities";
 
@@ -86,7 +86,6 @@ export default {
   components: {
     Autocomplete,
     BButton,
-    BCollapse,
     BCard,
   },
   props: {
