@@ -188,6 +188,7 @@ export default {
           coords: [Cookies.get("lat"), Cookies.get("lon")],
         });
       } else {
+        console.log('Координаты офиса lat, lon не получены от dadata. Адрес отсутствует в справочнике, либо координаты офиса некорректны')
         await this.$store.dispatch("map/fetchRegion", {
           id: this.$store.getters["map/getDefaultRegion"],
           coords: this.$store.getters["map/getDefaultCoords"],
@@ -558,7 +559,6 @@ export default {
       if (filters) {
         agencies = filterData(this.getOfficesByCity, filters);
       }
-      console.log(agencies)
       await this.setPositionAttributes();
       if (!this.currentFilters) {
         await this.$store.dispatch("map/fetchRegion", {
