@@ -6,7 +6,7 @@
         aria-current="page"
         class="logo router-link-exact-active router-link-active"
       ></a>
-      <button class="burger mr-4 d-block d-md-none"></button>
+      <button class="burger" @click="toggleClassActive"></button>
       <div class="row header-height align-items-start align-items-md-center">
         <div
           class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2"
@@ -78,6 +78,11 @@ export default {
     };
   },
   methods: {
+    toggleClassActive(e) {
+      document.querySelector("body").classList.toggle("menu-open");
+      document.querySelector(".menu").classList.toggle("show");
+      return;
+    },
     // test() {
     //   console.log("!!!");
     // },
@@ -105,4 +110,31 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+body:after {
+  left: -100%;
+  transition: 0.5s;
+  content: "";
+  width: 100%;
+  height: 100%;
+}
+body.menu-open {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+body.menu-open:after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  top: 0;
+  left: 0;
+  position: absolute;
+  transition: 0.5s;
+  z-index: 1;
+}
+body.menu-open header {
+  z-index: 0;
+}
+</style>
