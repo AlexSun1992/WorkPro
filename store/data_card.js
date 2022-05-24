@@ -1,11 +1,14 @@
 /* eslint-disable no-param-reassign */
 import Axios from "axios";
+import { at, property } from "lodash";
 
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import { getFieldsValueTypeIsNotUploader } from "./data_card.helpers";
 import { rebuildObject } from "./data_card.helpers";
+import { deleteRedundantProperty } from "./data_card.helpers";
 import { getSplicedObjects } from "./data_card.helpers";
+import { reSet } from "./data_card.helpers";
 import { changeObj } from "./data_card.helpers";
 import { getFieldsValueTypeUploader } from "./data_card.helpers";
 
@@ -265,7 +268,6 @@ export const actions = {
     }
   },
   async saveDataCard({ commit, state, dispatch }, params) {
-    console.log("I am saveDataCard");
     commit("setLoading", true);
     commit("setDisabled", true);
 
@@ -328,7 +330,7 @@ export const actions = {
     formData.append("uploaderDocs:", fileUploaders);
     formData.append("fieldValues:", dataUploader);
 
-    let resp = this.$axios.post(
+    this.$axios.post(
       `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
         params.cardId
       }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,

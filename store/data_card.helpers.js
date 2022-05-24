@@ -7,25 +7,19 @@ export function getFieldsValueTypeIsNotUploader(fieldsValues) {
   return notUploaderTypeFieldsValues;
 }
 
-export function convertFieldValuesToJSON(fieldsValues) {
-  const notUploaderTypeFieldsValues =
-    getFieldsValueTypeIsNotUploader(fieldsValues);
-  const convertFieldValues = notUploaderTypeFieldsValues.map((field) =>
-    JSON.stringify(field)
+export function getFieldsValueTypeUploader(fieldsValues) {
+  const notUploaderTypeFieldsValues = fieldsValues.filter(
+    (field) => field.type === "Uploader"
   );
-  return convertFieldValues;
+  return notUploaderTypeFieldsValues;
 }
 
 export function rebuildObject(fieldsValues) {
-  const objectsNeededForBackEnd = [];
+  const copyArrayOfObjects = getFieldsValueTypeIsNotUploader(fieldsValues).map(
+    (item) => ({ ...item })
+  );
 
-  const arrOfFieldsValues = getFieldsValueTypeIsNotUploader(fieldsValues);
-
-  arrOfFieldsValues.forEach((item) => {
-    objectsNeededForBackEnd.push(item);
-  });
-
-  return objectsNeededForBackEnd;
+  return copyArrayOfObjects;
 }
 
 export function deleteRedundantProperty(currentObject) {
@@ -34,6 +28,7 @@ export function deleteRedundantProperty(currentObject) {
       delete currentObject[property];
     }
   });
+
   return currentObject;
 }
 
@@ -55,21 +50,24 @@ export function reSet(object) {
 export function changeObj(arrayObjects) {
   const filterArrayObjects = arrayObjects.map((i) => reSet(i));
   const resultData = Object.assign({}, ...filterArrayObjects);
+
   return JSON.stringify(resultData);
 }
 
-export function restructureData(fieldsValues) {
-  const rebuildObjects = getSplicedObjects(fieldsValues)
-    .map((item) => `${item.name}:${item.value}`)
-    .map((item) => item.split(":"));
+// export function convertFieldValuesToJSON(fieldsValues) {
+//   const notUploaderTypeFieldsValues =
+//     getFieldsValueTypeIsNotUploader(fieldsValues);
+//   const convertFieldValues = notUploaderTypeFieldsValues.map((field) =>
+//     JSON.stringify(field)
+//   );
+//   return convertFieldValues;
+// }
 
-  const resultData = JSON.stringify(Object.fromEntries(rebuildObjects));
-  return resultData;
-}
+// export function restructureData(fieldsValues) {
+//   const rebuildObjects = getSplicedObjects(fieldsValues)
+//     .map((item) => `${item.name}:${item.value}`)
+//     .map((item) => item.split(":"));
 
-export function getFieldsValueTypeUploader(fieldsValues) {
-  const notUploaderTypeFieldsValues = fieldsValues.filter(
-    (field) => field.type === "Uploader"
-  );
-  return notUploaderTypeFieldsValues;
-}
+//   const resultData = JSON.stringify(Object.fromEntries(rebuildObjects));
+//   return resultData;
+// }
