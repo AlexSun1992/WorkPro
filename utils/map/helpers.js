@@ -162,7 +162,7 @@ const getTemplate = (agency) => {
             }></span>
                     <span>${item.SNAME}</span>
                     <span class="card-office-distance"> 
-                    ${getTime(agency.NDISTANSE)} </span>
+                    ${getTime(item.DISTANCE)} </span>
                     </div>
                   `;
           });

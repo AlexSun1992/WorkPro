@@ -86,16 +86,13 @@
                 </button>
               </div>
             </div>
-            <div
-              v-if="office.IDUNDERGROUND.length"
-              class="card-office-undeground"
-            >
-              <div v-for="(item, i) in office.IDUNDERGROUND" :key="i">
+            <div v-if="office.SDADATAMETRO" class="card-office-undeground">
+              <div v-for="(item, i) in office.SDADATAMETRO" :key="i">
                 <span :class="'undeground-color_' + item.IDUNDERLINE"></span>
                 <span>{{ item.SNAME }}</span>
-                <span v-if="office.NDISTANSE" class="card-office-distance">
+                <span v-if="item.DISTANCE" class="card-office-distance">
                   <!-- {{ office.NDISTANSE.toFixed(1) + " км" }} -->
-                  {{ getTime(office.NDISTANSE) }}
+                  {{ getTime(item.DISTANCE) }}
                 </span>
               </div>
             </div>
