@@ -5,8 +5,7 @@
     <template v-for="(value, key) in groupMenuItems">
       <div class="sidebar-nav-container">
         <a v-if="key != 'undefined'" href="#" @click="openSidebarnav">
-          <div :class="'menu-icon-polities'" />
-          <span>{{ key }}</span>
+          {{ key }}
         </a>
         <ul class="sidebar-nav justify-content-center">
           <li
@@ -79,7 +78,8 @@ export default {
   },
   methods: {
     openSidebarnav(e) {
-      e.path[1].nextElementSibling.classList.toggle("show");
+      console.log(e);
+      e.path[1].classList.toggle("show");
       e.path[0].classList.toggle("active");
     },
     toggleClassActive(e) {
