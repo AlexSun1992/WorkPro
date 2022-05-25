@@ -154,7 +154,7 @@ const getTemplate = (agency) => {
       let temp = "";
       if (agency.SDADATAMETRO) {
         temp += `<div class="card-office-undeground">`;
-        if (agency.SDADATAMETRO) {
+        if (agency.SDADATAMETRO && Array.isArray(agency.SDADATAMETRO)) {
           agency.SDADATAMETRO.forEach((item) => {
             temp += `<div>
                     <span class=${"undeground-color_"} data-line=${
