@@ -5,8 +5,8 @@
         href="/"
         aria-current="page"
         class="logo router-link-exact-active router-link-active"
-      ></a>
-      <button class="burger" @click="toggleClassActive"></button>
+      />
+      <button class="burger" @click="toggleClassActive" />
       <div class="row header-height align-items-start align-items-md-center">
         <div
           class="middle_menu col-lg-7 col-md-8 pl-md-4 pr-md-0 offset-lg-2 offset-md-2"
@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="anonsed-block">
-            <button class="anonsed" type="button"></button>
+            <button class="anonsed" type="button" />
           </div>
         </div>
         <div class="top_menu mt-4 mt-md-0">
@@ -33,7 +33,7 @@
               ><span class="d-inline-block light-gray">Ваш город:</span></span
             >
             <div class="d-inline-block">
-              <show-city></show-city>
+              <show-city />
             </div>
           </div>
           <div class="float-md-start ms-lg-5 mt-3 mt-lg-0">
@@ -50,12 +50,12 @@
               >Версия для слабовидящих</a
             >
           </div>
-          <div class="clearfix"></div>
+          <div class="clearfix" />
         </div>
       </div>
       <div class="login-form">
         <div class="LoginButton">
-          <header-user-name :user-data="userInfo"></header-user-name>
+          <header-user-name :user-data="userInfo" />
         </div>
       </div>
     </div>
@@ -77,16 +77,14 @@ export default {
       userInfo: null,
     };
   },
+  created() {
+    this.userInfo = this.$auth.user;
+  },
   methods: {
     toggleClassActive(e) {
       document.querySelector("body").classList.toggle("menu-open");
       document.querySelector(".menu").classList.toggle("show");
-      return;
     },
-    // test() {
-    //   console.log("!!!");
-    // },
-    /// использовано в качестве заглушки
     mobileMenu() {
       this.$emit("mini-sidebar");
     },
@@ -103,9 +101,6 @@ export default {
     goToNotify() {
       this.$router.push("/cabinet/55/0/705");
     },
-  },
-  created() {
-    this.userInfo = this.$auth.user;
   },
 };
 </script>
