@@ -50,8 +50,36 @@ export function reSet(object) {
 export function changeObj(arrayObjects) {
   const filterArrayObjects = arrayObjects.map((i) => reSet(i));
   const resultData = Object.assign({}, ...filterArrayObjects);
-
   return JSON.stringify(resultData);
+}
+
+export function preparing(obj) {
+  const arrayOfFieldsValueTypeBlob = [];
+  const formData = new FormData();
+
+  Object.keys(obj).forEach((item) => {
+    if (obj[item].type === "field/blob") {
+      arrayOfFieldsValueTypeBlob.push(obj[item]);
+      delete obj[item];
+    }
+  });
+  const filedValuesTypeBlob = new File(
+    [...arrayOfFieldsValueTypeBlob],
+    "UploaderFiles",
+    {
+      type: "field/blob",
+    }
+  );
+
+  formData.append("Blobs:", filedValuesTypeBlob);
+  formData.append("NotBlob:", JSON.stringify(obj));
+
+  // for (let pair of formData.entries()) {
+  //   console.log(pair);
+  // }
+  /// Перебор объекта FormData
+  console.log(typeof formData);
+  return formData;
 }
 
 // export function convertFieldValuesToJSON(fieldsValues) {

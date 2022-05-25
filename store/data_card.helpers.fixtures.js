@@ -417,3 +417,22 @@ export const data = [
     isTab: true,
   },
 ];
+export const testData = {
+  "Общие данные": "NULL",
+  SSECONDNAME: "Васильева",
+  SFIRSTNAME: "Владимир",
+  STHIRDNAME: "Владимировна",
+  DBIRTHDATE: "2022-05-04 00:00:00",
+  ADDRESS_REG: "Волгоградская обл",
+  "Удостоверение Личности": "NULL",
+  IDCOUNTRY: 11,
+  FKIDDOCTYPE: "паспорт",
+  SDOCSERIES: "11",
+  SDOCNUMBER: "11111",
+  SLICENSE_NUMBER: "NULL",
+  S_REASON: {},
+  SDOCUMENT_UPLOADER: {},
+  Emptyblock: "NULL",
+  Save_37420: "NULL",
+  Cancel_37421: "NULL",
+};

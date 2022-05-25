@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import Axios from "axios";
-import { at, property } from "lodash";
 
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
@@ -11,6 +10,8 @@ import { getSplicedObjects } from "./data_card.helpers";
 import { reSet } from "./data_card.helpers";
 import { changeObj } from "./data_card.helpers";
 import { getFieldsValueTypeUploader } from "./data_card.helpers";
+import converter from "../converters/form";
+import { preparing } from "./data_card.helpers";
 
 export const state = () => ({
   options: [],
@@ -298,43 +299,81 @@ export const actions = {
   },
 
   async saveDataCardUploaders({ commit, state }, params) {
+    //  Решение c помощью функций из модуля data_card.helpers.js
     //  Подготовка данных полей типа не Uploader
+    // const fieldsTypeNotUploader = getFieldsValueTypeIsNotUploader(state.form); // получаем значения поля не uploader типа
+    // const copyofFieldsTypeNotUploader = rebuildObject(fieldsTypeNotUploader); // копия массива значений полей не uploader типа
+    // const splicedObjects = getSplicedObjects(copyofFieldsTypeNotUploader); // отрезаем лишние свойства у объектов
+    // const dataUploader = changeObj(splicedObjects); // формирование нужного JSON-файла
+    // console.log("dataUploader:", dataUploader);
+    // const converterMethod = JSON.stringify(converter.save(state.form));
+    // //Подготовка данных полей типа Uploader (присвоение загружаемым документам типа "field/blob")
+    // const fieldsTypeUploader = getFieldsValueTypeUploader(state.form);
+    // console.log("fieldsTypeUploader:", fieldsTypeUploader);
+    // for (let i = 0; i < fieldsTypeUploader.length; i++) {
+    //   if (fieldsTypeUploader[i].value) {
+    //     fieldsTypeUploader[i] = new File(
+    //       [fieldsTypeUploader[i]],
+    //       fieldsTypeUploader[i].value.name,
+    //       {
+    //         type: "field/blob",
+    //       }
+    //     );
+    //   }
+    // }
+    // console.log("fieldsTypeUploader:", fieldsTypeUploader);
+    // const fileUploaders = new File([...fieldsTypeUploader], "UploaderFiles", {
+    //   type: "field/blob",
+    // });
+    // console.log("fileUploadersDocs:", fileUploaders);
+    // console.log("fieldValues:", dataUploader);
+    // const formData = new FormData();
+    // formData.append("uploaderDocs:", fileUploaders);
+    // formData.append("fieldValues:", dataUploader);
+    // this.$axios.post(
+    //   `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
+    //     params.cardId
+    //   }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
+    //   formData
+    // );
+    //// Решение c помощью функций из модуля data_card.helpers.js
+    ////
+    /// Дополнен метод converter.save для работы с field/blob;
+    // const getFieldData = converter.save(state.form);
+    // const arrayOfFieldsValueTypeBlob = [];
+    // const formData = new FormData();
+    // Object.keys(getFieldData).forEach((item) => {
+    //   if (getFieldData[item].type === "field/blob") {
+    //     arrayOfFieldsValueTypeBlob.push(getFieldData[item]);
+    //     delete getFieldData[item];
+    //   }
+    // });
+    // const filedValuesTypeBlob = new File(
+    //   [...arrayOfFieldsValueTypeBlob],
+    //   "UploaderFiles",
+    //   {
+    //     type: "field/blob",
+    //   }
+    // );
+    // formData.append("Blobs:", filedValuesTypeBlob);
+    // formData.append("NotBlob:", JSON.stringify(getFieldData));
+    // this.$axios.post(
+    //   `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
+    //     params.cardId
+    //   }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
+    //   formData
+    // );
+    ///
+    /// Дополнен метод converter.save функция в отдельном модуле
 
-    const fieldsTypeNotUploader = getFieldsValueTypeIsNotUploader(state.form); // получаем значения поля не uploader типа
-
-    const copyofFieldsTypeNotUploader = rebuildObject(fieldsTypeNotUploader); // копия массива значений полей не uploader типа
-
-    const splicedObjects = getSplicedObjects(copyofFieldsTypeNotUploader); // отрезаем лишние свойства у объектов
-
-    const dataUploader = changeObj(splicedObjects); // формирование нужного JSON-файла
-
-    // Подготовка данных полей типа Uploader (присвоение загружаемым документам типа "field/blob")
-    const fieldsTypeUploader = getFieldsValueTypeUploader(state.form);
-    for (let i = 0; i < fieldsTypeUploader.length; i++) {
-      if (fieldsTypeUploader[i].value) {
-        fieldsTypeUploader[i] = new File(
-          [fieldsTypeUploader[i]],
-          fieldsTypeUploader[i].value.name,
-          {
-            type: "field/blob",
-          }
-        );
-      }
-    }
-
-    const fileUploaders = new File([...fieldsTypeUploader], "UploaderFiles", {
-      type: "field/blob",
-    });
-
-    const formData = new FormData();
-    formData.append("uploaderDocs:", fileUploaders);
-    formData.append("fieldValues:", dataUploader);
+    const getFieldData = converter.save(state.form);
+    const dataIsReadyToTransfer = preparing(getFieldData);
 
     this.$axios.post(
       `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
         params.cardId
       }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
-      formData
+      dataIsReadyToTransfer
     );
   },
 
