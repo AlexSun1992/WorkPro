@@ -212,7 +212,7 @@ const count = (office) => {
 
 const getUnderlineId = (station, item) => {
   let obj = item.IDUNDERGROUND.find((element) => {
-    return element.SNAME.includes(station);
+    return element.SNAME.toLowerCase().includes(station.toLowerCase());
   });
   return obj?.IDUNDERLINE;
 };

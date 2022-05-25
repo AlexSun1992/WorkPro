@@ -365,6 +365,8 @@ export default {
             let name = g[0].children[i].dataset.station;
             offices.forEach((office) => {
               let candidate = office.IDUNDERGROUND.find((item) => {
+                name = name.toLowerCase().replace("ё", "е");
+                item.SNAME = item.SNAME.toLowerCase().replace("ё", "е");
                 return item.SNAME === name;
               });
               if (candidate) {
@@ -513,6 +515,8 @@ export default {
         offices.forEach((office) => {
           if (!office.NORDER) office.NORDER = 0;
           let candidate = office.IDUNDERGROUND.find((item) => {
+             stationName = stationName.toLowerCase().replace("ё", "е");
+              item.SNAME = item.SNAME.toLowerCase().replace("ё", "е");
             if (item.SNAME.includes(", ")) {
               return item.SNAME.split(", ").includes(stationName);
             } else {
@@ -952,13 +956,13 @@ export default {
           let end = start + this.pagesCount;
           if (this.currentStation) {
             let filteredByStation = [];
-            this.getOffices.forEach((item) => {
-              item.IDUNDERGROUND.forEach((station) => {
-                if (station.SNAME.includes(this.currentStation)) {
-                  filteredByStation.push(item);
-                }
-              });
-            });
+            // this.getOffices.forEach((item) => {
+            //   item.IDUNDERGROUND.forEach((station) => {
+            //     if (station.SNAME.includes(this.currentStation)) {
+            //       filteredByStation.push(item);
+            //     }
+            //   });
+            // });
             return filteredByStation;
           }
           return this.getOffices.slice(start, end);
