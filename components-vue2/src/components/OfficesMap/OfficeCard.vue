@@ -35,8 +35,8 @@
           <!-- <span v-if="office.NDISTANSE" class="card-office-distance">
             {{ getTime(office.NDISTANSE) }}
           </span> -->
-          <span v-if="office.NDISTANSE" class="card-office-distance">
-            {{ getTime(office.NDISTANSE) }}
+          <span v-if="item.DISTANCE" class="card-office-distance">
+            {{ getTime(item.DISTANCE) }}
           </span>
         </div>
       </div>
