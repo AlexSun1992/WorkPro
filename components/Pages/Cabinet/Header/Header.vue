@@ -113,10 +113,14 @@ export default {
 <style>
 body:after {
   left: -100%;
-  transition: 0.5s;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: left 0.3s;
   content: "";
   width: 100%;
   height: 100%;
+  top: 0;
+  position: absolute;
+  z-index: 1;
 }
 body.menu-open {
   width: 100vw;
@@ -124,15 +128,8 @@ body.menu-open {
   overflow: hidden;
 }
 body.menu-open:after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  top: 0;
   left: 0;
-  position: absolute;
-  transition: 0.5s;
-  z-index: 1;
+  transition: left 0.3s;
 }
 body.menu-open header {
   z-index: 0;
