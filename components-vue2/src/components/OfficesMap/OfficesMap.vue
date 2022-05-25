@@ -956,13 +956,13 @@ export default {
           let end = start + this.pagesCount;
           if (this.currentStation) {
             let filteredByStation = [];
-            // this.getOffices.forEach((item) => {
-            //   item.IDUNDERGROUND.forEach((station) => {
-            //     if (station.SNAME.includes(this.currentStation)) {
-            //       filteredByStation.push(item);
-            //     }
-            //   });
-            // });
+            this.getOffices.forEach((item) => {
+              item.IDUNDERGROUND.forEach((station) => {
+                if (station.SNAME.includes(this.currentStation)) {
+                  filteredByStation.push(item);
+                }
+              });
+            });
             return filteredByStation;
           }
           return this.getOffices.slice(start, end);
