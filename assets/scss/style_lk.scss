@@ -467,6 +467,7 @@
         padding-right: 27px;
         position: relative;
         cursor: pointer;
+        text-decoration: none;
     }
     
     .icon-chevron-r {
@@ -1029,6 +1030,12 @@
         background-color: transparent;
         padding: 0;
         transition: 0.3s;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .br12 {
+        border-radius: 12px;
     }
     
     .br24 {
@@ -1162,5 +1169,15 @@
         }
         .sidebar-nav-container {
             margin-bottom: 20px;
+        }
+        .border-block {
+            border: 0;
+            padding: 0;
+            overflow: hidden;
+            border-radius: 0;
+        }
+        .anonsed-blocks,
+        .border-block .flex-nowrap {
+            overflow-x: auto;
         }
     }
