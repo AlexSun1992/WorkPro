@@ -154,13 +154,13 @@ const getTemplate = (agency) => {
       let temp = "";
       if (agency.SDADATAMETRO) {
         temp += `<div class="card-office-undeground">`;
-        if (agency.SDADATAMETRO) {
+        if (agency.SDADATAMETRO && Array.isArray(agency.SDADATAMETRO)) {
           agency.SDADATAMETRO.forEach((item) => {
             temp += `<div>
                     <span class=${"undeground-color_"} data-line=${
               item.LINE
             }></span>
-                    <span>${item.SNAME}</span>
+                    <span>${item.NAME}</span>
                     <span class="card-office-distance"> 
                     ${getTime(item.DISTANCE)} </span>
                     </div>
@@ -212,7 +212,7 @@ const count = (office) => {
 
 const getUnderlineId = (station, item) => {
   let obj = item.IDUNDERGROUND.find((element) => {
-    return element.SNAME.includes(station);
+    return element.SNAME.toLowerCase().includes(station.toLowerCase());
   });
   return obj?.IDUNDERLINE;
 };

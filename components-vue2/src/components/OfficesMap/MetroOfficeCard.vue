@@ -88,8 +88,11 @@
             </div>
             <div v-if="office.SDADATAMETRO" class="card-office-undeground">
               <div v-for="(item, i) in office.SDADATAMETRO" :key="i">
-                <span :class="'undeground-color_' + item.IDUNDERLINE"></span>
-                <span>{{ item.SNAME }}</span>
+                <span
+                  :class="'undeground-color_'"
+                  :data-line="item.LINE"
+                ></span>
+                <span>{{ item.NAME }}</span>
                 <span v-if="item.DISTANCE" class="card-office-distance">
                   <!-- {{ office.NDISTANSE.toFixed(1) + " км" }} -->
                   {{ getTime(item.DISTANCE) }}

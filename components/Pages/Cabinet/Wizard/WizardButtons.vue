@@ -8,12 +8,12 @@
           : 'col-12',
       ]"
     >
-      <b-button v-if="currentTab.order > 1" @click="goBack">Назад</b-button>
+      <b-button v-if="currentTab.order > 1" @click="goBack"> Назад </b-button>
       <div>
         <b-button
+          v-if="currentTab.order != qty && $route.params.idCard != 0"
           :disabled="loading"
           variant="success"
-          v-if="currentTab.order != qty && $route.params.idCard != 0"
           @click="saveCard"
         >
           {{ showBtnNameSave }}
@@ -23,12 +23,12 @@
             class="ml-2"
             variant="danger"
             label="Spinning"
-          ></b-spinner>
+          />
         </b-button>
         <b-button
+          v-if="currentTab.order != qty && $route.params.idCard != 0"
           :disabled="loading"
           variant="success"
-          v-if="currentTab.order != qty && $route.params.idCard != 0"
           @click="goNext"
         >
           {{ showBtnNameContinue }}
@@ -38,7 +38,7 @@
             class="ml-2"
             variant="danger"
             label="Spinning"
-          ></b-spinner>
+          />
         </b-button>
       </div>
     </div>
@@ -46,10 +46,49 @@
 </template>
 
 <script>
-import { getErrorMessage } from "@/utils/transform";
 export default {
   name: "WizardButtons",
   props: ["currentTab", "tabs", "qty", "loading"],
+  computed: {
+    showBtnNameContinue() {
+      const menu = this.$store.getters["menu/flatmenu"]?.find(
+        (item) => item.IDITEM == this.currentTab.idItem
+      );
+      const formData = this.$store.getters["data_card/getForm"];
+      const fields = formData.length ? formData : formData.data || [];
+      const wizardButtonContinue = fields.find((item) => {
+        if (item.type === "WizardButton" && item.name === "Continue") {
+          return true;
+        }
+      });
+      if (menu.ACTIONSCUR[0]?.NTYPE == 35) {
+        return menu.ACTIONSCUR[0].SNAME;
+      }
+      return wizardButtonContinue?.label
+        ? wizardButtonContinue.label
+        : "Продолжить";
+    },
+    showBtnNameSave() {
+      const formData = this.$store.getters["data_card/getForm"];
+      const fields = formData.length ? formData : formData.data || [];
+      console.log(fields);
+      const wizardButtonSave = fields.find((item) => {
+        if (item.type === "WizardButton" && item.name === "Save") {
+          return true;
+        }
+      });
+      return wizardButtonSave?.label ? wizardButtonSave.label : "Сохранить";
+    },
+    isError() {
+      return this.$store.getters["data_card/getError"];
+    },
+    isUseCardTemplate() {
+      return Boolean(
+        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
+          ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
+      );
+    },
+  },
   methods: {
     getCurrentIndex() {
       return this.tabs.findIndex(
@@ -62,9 +101,9 @@ export default {
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM == this.currentTab.idItem
       );
-      let action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
+      const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
       if (action) {
-        let response = await this.$store.dispatch("data_card/executeAction", {
+        const response = await this.$store.dispatch("data_card/executeAction", {
           actionId: action.ID,
           relActionId: action.REL,
           relId: this.$route.params.idRel,
@@ -81,60 +120,17 @@ export default {
         }
       }
       await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
-      let tab = this.tabs[this.getCurrentIndex() + 1];
+      const tab = this.tabs[this.getCurrentIndex() + 1];
       this.$emit("goNext", tab);
     },
     goBack() {
       this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
-      let tab = this.tabs[this.getCurrentIndex() - 1];
+      const tab = this.tabs[this.getCurrentIndex() - 1];
       this.$emit("goBack", tab);
     },
     saveCard() {
       this.$parent.loading = true;
       this.$emit("saveCard");
-    },
-  },
-  computed: {
-    showBtnNameContinue() {
-      const menu = this.$store.getters["menu/flatmenu"].find(
-        (item) => item.IDITEM == this.currentTab.idItem
-      );
-      const wizardButtonContinue = this.$store.getters[
-        "data_card/getForm"
-      ].find((item) => {
-        if (item.type === "WizardButton" && item.name === "Continue") {
-          return true;
-        }
-      });
-      if (menu.ACTIONSCUR[0]?.NTYPE == 35) {
-        return menu.ACTIONSCUR[0].SNAME;
-      } else {
-        return wizardButtonContinue?.label
-          ? wizardButtonContinue.label
-          : "Продолжить";
-      }
-    },
-    showBtnNameSave() {
-      const wizardButtonSave = this.$store.getters["data_card/getForm"].find(
-        (item) => {
-          if (item.type === "WizardButton" && item.name === "Save") {
-            return true;
-          }
-        }
-      );
-      return wizardButtonSave?.label ? wizardButtonSave.label : "Сохранить";
-    },
-    // loading() {
-    //   return this.$store.getters["data_card/getLoading"];
-    // },
-    isError() {
-      return this.$store.getters["data_card/getError"];
-    },
-    isUseCardTemplate() {
-      return Boolean(
-        this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
-          ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
-      );
     },
   },
 };

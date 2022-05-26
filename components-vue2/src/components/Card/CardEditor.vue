@@ -56,14 +56,13 @@ import { mapGetters } from "vuex";
 import Form from "/../components/Libs/Form/Form.vue";
 import FormBlock from "/../components/Libs/Form/FormBlock.vue";
 import Vue from "vue";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import { IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 
 Vue.use(LoadScript);
-Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
