@@ -92,7 +92,6 @@ const getTemplate = (agency) => {
             </div>
           </div>
           <div class="col-8">
-          ${agency.NORDER}
             <div>${agency.SADDRESS}</div>
             <div class="card-office-opened">Открыт до</div>
           </div>
