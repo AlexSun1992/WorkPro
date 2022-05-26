@@ -53,7 +53,7 @@ export function changeObj(arrayObjects) {
   return JSON.stringify(resultData);
 }
 
-export function preparing(obj) {
+export function convertUploaderFilesToFormData(obj) {
   const arrayOfFieldsValueTypeBlob = [];
   const formData = new FormData();
 
@@ -74,11 +74,6 @@ export function preparing(obj) {
   formData.append("Blobs:", filedValuesTypeBlob);
   formData.append("NotBlob:", JSON.stringify(obj));
 
-  // for (let pair of formData.entries()) {
-  //   console.log(pair);
-  // }
-  /// Перебор объекта FormData
-  console.log(typeof formData);
   return formData;
 }
 

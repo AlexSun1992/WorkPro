@@ -388,24 +388,8 @@ converter.save = (data) => {
       data[i].type !== "multi" &&
       data[i].type !== "listSelect"
     ) {
-      // debugger;
-
-      // if (data[i].type === "Uploader") {
-      //   res[data[i].name] = data[i].value
-      //     ? new File(data[i].value, data[i].value.name, { type: "field/blob" })
-      //     : "NULL";
-      //   console.log("!!!");
-      // }
-
-      // if (data[i].type === "Uploader" && data[i].value) {
-      //   console.log(data[i].value);
-      // }
-
       if (data[i].type !== "boolean") {
-        //debugger;
         if (data[i].type !== "timestamp") {
-          ////добавить обработку файла
-          //console.log("data[i]:", data[i]);
           res[data[i].name] =
             data[i].value !== null && data[i].value !== undefined
               ? data[i].value
@@ -423,18 +407,15 @@ converter.save = (data) => {
           if (data[i].structType === "boolrus") {
             res[data[i].name] =
               data[i].value === "true" || data[i].value === true ? "Д" : "Н";
-            //debugger;
           }
 
           if (data[i].structType === "long") {
             res[data[i].name] =
               data[i].value !== null ? parseInt(data[i].value) : "NULL";
-            // debugger;
           }
           if (data[i].structType === "double") {
             res[data[i].name] =
               data[i].value !== null ? parseFloat(data[i].value) : "NULL";
-            //debugger;
           }
         } else {
           res[data[i].name] = data[i].value
@@ -442,65 +423,49 @@ converter.save = (data) => {
                 "YYYY-MM-DD HH:mm:ss"
               )
             : "NULL";
-          //debugger;
         }
       } else if (data[i].name.substring(0, 1) === "B") {
         res[data[i].name] = data[i].value ? "Д" : "Н";
-        //debugger;
       } else {
         res[data[i].name] = data[i].value ? "Y" : "N";
-        //debugger;
       }
     } else {
-      //debugger;
       if (data[i].name.substring(0, 2) === `FK`) {
         name = data[i].name.substring(2);
-        //debugger;
       } else {
         name = data[i].name;
-        //debugger;
       }
       if (data[i].type !== "multi") {
-        //debugger;
         if (data[i].value.value) {
-          //debugger;
           if (
             typeof data[i].value.value === "object" &&
             !Array.isArray(data[i].value.value) &&
             data[i].value.value !== null
           ) {
-            //console.log("object");
             res[name] = JSON.stringify(data[i].value.value);
-            // debugger;
           } else {
-            //debugger;
             res[name] = data[i].value.value;
           }
         } else if (data[i].value.value == 0) {
-          //debugger;
           res[name] = 0;
         } else {
-          //debugger;
           res[name] = "NULL";
         }
-        // res[name] = data[i].value.value ? data[i].value.value : "NULL";
       } else {
         res[name] = "NULL";
         const arr = [];
         if (data[i].value) {
           const items = data[i].value;
-          //debugger;
+
           for (let j = 0; j < items.length; j++) {
             arr.push(items[j].value);
           }
         }
         res[name] = arr.toString();
-        //debugger;
       }
     }
   }
-  //debugger;
-  //console.log("res:", res);
+
   return res;
 };
 
