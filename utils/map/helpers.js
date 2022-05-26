@@ -160,7 +160,7 @@ const getTemplate = (agency) => {
                     <span class=${"undeground-color_"} data-line=${
               item.LINE
             }></span>
-                    <span>${item.SNAME}</span>
+                    <span>${item.NAME}</span>
                     <span class="card-office-distance"> 
                     ${getTime(item.DISTANCE)} </span>
                     </div>

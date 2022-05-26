@@ -92,7 +92,7 @@
                   :class="'undeground-color_'"
                   :data-line="item.LINE"
                 ></span>
-                <span>{{ item.SNAME }}</span>
+                <span>{{ item.NAME }}</span>
                 <span v-if="item.DISTANCE" class="card-office-distance">
                   <!-- {{ office.NDISTANSE.toFixed(1) + " км" }} -->
                   {{ getTime(item.DISTANCE) }}
