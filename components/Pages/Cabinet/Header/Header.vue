@@ -113,7 +113,7 @@ export default {
 <style>
 body:after {
   left: -100%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
   transition: left 0.3s;
   content: "";
   width: 100%;
