@@ -188,6 +188,7 @@ export default {
           coords: [Cookies.get("lat"), Cookies.get("lon")],
         });
       } else {
+        console.log('Координаты офиса lat, lon не получены от dadata. Адрес отсутствует в справочнике, либо координаты офиса некорректны')
         await this.$store.dispatch("map/fetchRegion", {
           id: this.$store.getters["map/getDefaultRegion"],
           coords: this.$store.getters["map/getDefaultCoords"],
@@ -364,6 +365,8 @@ export default {
             let name = g[0].children[i].dataset.station;
             offices.forEach((office) => {
               let candidate = office.IDUNDERGROUND.find((item) => {
+                name = name.toLowerCase().replace("ё", "е");
+                item.SNAME = item.SNAME.toLowerCase().replace("ё", "е");
                 return item.SNAME === name;
               });
               if (candidate) {
@@ -512,6 +515,8 @@ export default {
         offices.forEach((office) => {
           if (!office.NORDER) office.NORDER = 0;
           let candidate = office.IDUNDERGROUND.find((item) => {
+             stationName = stationName.toLowerCase().replace("ё", "е");
+              item.SNAME = item.SNAME.toLowerCase().replace("ё", "е");
             if (item.SNAME.includes(", ")) {
               return item.SNAME.split(", ").includes(stationName);
             } else {

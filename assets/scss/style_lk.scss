@@ -271,7 +271,7 @@
         padding: 12px 0;
     }
     
-    .sidebar_client ul a {
+    .sidebar-nav-container a {
         display: block;
     }
     
@@ -282,7 +282,7 @@
         align-items: center;
     }
     
-    .sidebar_client ul>a {
+    .sidebar-nav-container>a {
         padding-left: 32px;
         padding-right: 32px;
         font-family: 'Raleway';
@@ -299,7 +299,7 @@
     }
     
     .sidebar_client ul li+* {
-        margin-top: 12px;
+        margin-top: 2px;
     }
     
     .sidebar_client ul>li a {
@@ -309,11 +309,13 @@
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 600;
-        font-size: 1.25rem;
+        font-size: 1.125rem;
         line-height: 1.5rem;
         font-feature-settings: 'pnum'on, 'lnum'on;
         color: #292929;
         text-decoration: none;
+        width: 100%;
+        display: block;
     }
     
     .sidebar_client ul>li a div {
@@ -1039,4 +1041,126 @@
     
     .freecard:hover {
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    body.menu-open {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+    
+    .burger,
+    .menu-burger,
+    .sidebar_client .logo {
+        display: none;
+    }
+    
+    @media (max-width: 992px) {
+        .menu-burger,
+        .burger {
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            border: 0;
+            background: #fff url(/img/burger.svg) 50% 50% no-repeat;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: block;
+            position: absolute;
+        }
+        .menu-burger {
+            background: #009639 url(/img/cross.svg) 50% 50% no-repeat;
+            top: 16px;
+            transform: none;
+        }
+        header {
+            background: #ECF3FA;
+            height: 72px;
+            padding: 0;
+            margin: 0
+        }
+        .row.header-height {
+            display: none;
+        }
+        header:after,
+        header:before {
+            display: none;
+        }
+        .menu {
+            position: absolute;
+            top: 0;
+            background: #FFF;
+            z-index: 4;
+            padding: 0;
+            width: auto;
+            transition: 0.5s;
+            height: 100%;
+            overflow-y: auto;
+            left: -100%;
+            transition: 0.3s;
+        }
+        .logo {
+            width: 110px;
+            left: 72px;
+            height: 31px;
+            background-size: contain;
+        }
+        .menu-container {
+            width: 100%;
+            height: 100%;
+        }
+        .menu.show {
+            left: 0;
+        }
+        .sidebar_client .logo {
+            top: 22px;
+            transform: none;
+            display: block;
+        }
+        .sidebar-nav-container>a {
+            padding: 0 52px 0 16px;
+            position: relative;
+        }
+        .sidebar-nav-container>a:after {
+            background: url(/img/plus.svg)50% 50% no-repeat;
+            content: "";
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 16px;
+            width: 20px;
+            height: 20px;
+        }
+        .sidebar-nav-container>a.active:after {
+            background: url(/img/minus.svg) center right no-repeat;
+        }
+        .sidebar_client ul>li a {
+            padding-left: 56px;
+            padding-right: 21px;
+            font-size: 0.875rem;
+            font-weight: 400;
+        }
+        .sidebar_client ul>li a div {
+            left: 16px;
+        }
+        .sidebar_client {
+            padding-top: 80px;
+        }
+        .sidebar-nav-container .sidebar-nav {
+            height: 0;
+            overflow: auto;
+        }
+        .sidebar-nav-container.show .sidebar-nav {
+            height: auto;
+        }
+        .sidebar-nav.d-block {
+            height: auto;
+        }
+        .sidebar_client {
+            box-shadow: none;
+        }
+        .sidebar-nav-container {
+            margin-bottom: 20px;
+        }
     }
