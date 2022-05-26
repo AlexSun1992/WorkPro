@@ -1088,10 +1088,17 @@
             display: none;
         }
         .menu {
-            left: -100%;
             position: absolute;
             top: 0;
+            background: #FFF;
+            z-index: 4;
+            padding: 0;
+            width: auto;
             transition: 0.5s;
+            height: 100%;
+            overflow-y: auto;
+            left: -100%;
+            transition: 0.3s;
         }
         .logo {
             width: 110px;
@@ -1105,15 +1112,6 @@
         }
         .menu.show {
             left: 0;
-            position: absolute;
-            top: 0;
-            background: #FFF;
-            z-index: 2;
-            padding: 0;
-            width: auto;
-            transition: 0.5s;
-            height: 100%;
-            overflow-y: auto;
         }
         .sidebar_client .logo {
             top: 22px;
@@ -1123,7 +1121,6 @@
         .sidebar-nav-container>a {
             padding: 0 52px 0 16px;
             position: relative;
-            margin-top: 16px;
         }
         .sidebar-nav-container>a:after {
             background: url(/img/plus.svg)50% 50% no-repeat;
@@ -1141,6 +1138,8 @@
         .sidebar_client ul>li a {
             padding-left: 56px;
             padding-right: 21px;
+            font-size: 0.875rem;
+            font-weight: 400;
         }
         .sidebar_client ul>li a div {
             left: 16px;
@@ -1157,5 +1156,11 @@
         }
         .sidebar-nav.d-block {
             height: auto;
+        }
+        .sidebar_client {
+            box-shadow: none;
+        }
+        .sidebar-nav-container {
+            margin-bottom: 20px;
         }
     }

@@ -115,7 +115,7 @@ body:after {
   height: 100%;
   top: 0;
   position: absolute;
-  z-index: 1;
+  z-index: 3;
 }
 body.menu-open {
   width: 100vw;
@@ -125,8 +125,5 @@ body.menu-open {
 body.menu-open:after {
   left: 0;
   transition: left 0.3s;
-}
-body.menu-open header {
-  z-index: 0;
 }
 </style>
