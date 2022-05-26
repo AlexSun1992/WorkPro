@@ -24,7 +24,7 @@
             />
           </div>
         </div>
-        <div class="col-12 col-lg-12">
+        <div class="col-12 col-lg-8">
           <div class="body">
             <main class="main">
               <nuxt />
