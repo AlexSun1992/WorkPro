@@ -2,14 +2,11 @@
   <client-only placeholder="Загрузка...">
     <div>
       <div v-show="isShowBlock">
-        <v-runtime-template
-          :template="templateData"
-          :params="params"
-        ></v-runtime-template>
+        <v-runtime-template :template="templateData" :params="params" />
       </div>
       <div v-if="!isShowBlock">
         <div style="text-align: center">
-          <b-spinner class="m-5"></b-spinner>
+          <b-spinner class="m-5" />
         </div>
       </div>
     </div>
@@ -17,6 +14,7 @@
 </template>
 
 <script>
+import VRuntimeTemplate from "v-runtime-template";
 import PortalList from "./PortalList";
 import PortalCard from "./PortalCard";
 import NotifyBlock from "../Block/NotifyBlock";
@@ -27,7 +25,6 @@ import ActionButton from "../Block/ActionButton";
 import AddToCalendarButton from "../Block/AddToCalendarButton.vue";
 import FormPage from "~/components/Pages/FormPage";
 import OpenCardButton from "../Block/OpenCardButton";
-import VRuntimeTemplate from "v-runtime-template";
 import DeleteCardButton from "../Block/DeleteCardButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FilterBlock from "../Block/FilterBlock.vue";
@@ -97,27 +94,26 @@ export default {
       )?.SVJCARDTEMPLATE;
     },
     isForm: {
-      get: function () {
+      get() {
         return this.$store.getters["blocks/getForm"]?.length;
       },
     },
     isEdit: {
-      get: function () {
+      get() {
         return this.params.settings.edit;
       },
     },
     isEmptyContent: {
-      get: function () {
+      get() {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
           return !block.data.items.length;
-        } else {
-          return false;
         }
+        return false;
       },
     },
     isShowBlock: {
-      get: function () {
+      get() {
         return (
           Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) ||
           this.params.settings.compType === 16
@@ -125,10 +121,13 @@ export default {
       },
     },
     actions: {
-      get: function () {
+      get() {
         return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
       },
     },
+  },
+  unmounted() {
+    this.$store.dispatch("blocks/clearBlock");
   },
   methods: {
     refreshWizardList() {
@@ -137,9 +136,6 @@ export default {
         cardId: this.cardId,
       });
     },
-  },
-  destroyed() {
-    this.$store.dispatch("blocks/clearBlock");
   },
 };
 </script>

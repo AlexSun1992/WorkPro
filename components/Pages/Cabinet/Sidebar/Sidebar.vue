@@ -1,41 +1,41 @@
 <template>
   <div class="sidebar_client">
-    <header-user-name :user-data="userInfo" />
-    <ul class="sidebar-nav justify-content-center">
-      <template v-for="(value, key) in groupMenuItems">
-        <a
-          v-if="key != 'undefined'"
-          href="#"
-          style="color: grey; text-align: center"
-        >
-          <div :class="'menu-icon-polities'" />
-          <span>{{ key }}</span>
+    <a href="/" aria-current="page" class="logo"></a>
+    <button class="menu-burger" @click="toggleClassActive"></button>
+    <template v-for="(value, key) in groupMenuItems">
+      <div class="sidebar-nav-container">
+        <a v-if="key != 'undefined'" href="#" @click="openSidebarnav">
+          {{ key }}
         </a>
-        <li
-          v-if="key === 'ДМС' && loggedInUser.IDMEDPARTNER > 0"
-          class="sidebar-nav-item"
-        >
-          <a :href="url" target="blank">
-            <div :class="'menu-icon-policies'" />
-            <span>Телемедицина</span>
-          </a>
-        </li>
-        <n-link
-          v-for="item in value"
-          :key="item.id"
-          v-slot="{ href, navigate, isActive }"
-          :to="item.url"
-        >
+        <ul class="sidebar-nav justify-content-center">
           <li
-            :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'"
+            v-if="key === 'ДМС' && loggedInUser.IDMEDPARTNER > 0"
+            class="sidebar-nav-item"
           >
-            <a :href="href" @click="navigate">
-              <div :class="'menu-icon-' + item.iconFileName" />
-              <span>{{ item.name }}</span>
+            <a :href="url" target="blank">
+              <div :class="'menu-icon-policies'" />
+              <span>Телемедицина</span>
             </a>
           </li>
-        </n-link>
-      </template>
+          <n-link
+            v-for="item in value"
+            :key="item.id"
+            v-slot="{ href, navigate, isActive }"
+            :to="item.url"
+          >
+            <li
+              :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'"
+            >
+              <a :href="href" @click="navigate">
+                <div :class="'menu-icon-' + item.iconFileName" />
+                <span>{{ item.name }}</span>
+              </a>
+            </li>
+          </n-link>
+        </ul>
+      </div>
+    </template>
+    <ul class="sidebar-nav d-block">
       <li class="sidebar-nav-item">
         <a href="#" @click="logout()">
           <div :class="'menu-icon-exit'" />
@@ -43,14 +43,6 @@
         </a>
       </li>
     </ul>
-
-    <button
-      class="sidebar-minimizer"
-      :class="{ 'position-absolute': endScrollMenu }"
-      @click="minimizeMenu"
-    />
-
-    <button class="sidebar-mobile_close" @click="minimizeMobileMenu" />
   </div>
 </template>
 
@@ -85,6 +77,16 @@ export default {
     this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
   },
   methods: {
+    openSidebarnav(e) {
+      console.log(e);
+      e.path[1].classList.toggle("show");
+      e.path[0].classList.toggle("active");
+    },
+    toggleClassActive(e) {
+      document.querySelector(".menu").classList.toggle("show");
+      document.querySelector("body").classList.toggle("menu-open");
+      return;
+    },
     updateScroll() {
       this.endScrollMenu =
         Math.max(
@@ -94,13 +96,6 @@ export default {
         ) +
           window.innerHeight >=
         document.documentElement.offsetHeight - 120;
-    },
-    minimizeMenu() {
-      this.$emit("mini-sidebar");
-      setTimeout(() => this.updateScroll(), 100);
-    },
-    minimizeMobileMenu() {
-      this.$emit("mini-mobile-sidebar");
     },
     async logout() {
       try {

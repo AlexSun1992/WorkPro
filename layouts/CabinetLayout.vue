@@ -1,27 +1,43 @@
 <template>
   <div class="app cabinet">
     <Header @mini-sidebar="changeMobileSidebar" />
-    <div
-      class="wrapper"
-      v-bind:class="{
-        'sidebar-min': sideBarMini,
-        mobile_menu: sideBarMobileMini,
-      }"
-    >
-      <Sidebar
-        @mini-sidebar="changeSidebar"
-        @mini-mobile-sidebar="changeMobileSidebar"
-        :nav-items="menuWithOutIcon"
-      />
-      <div class="body">
-        <main class="main">
-          <div class="container-fluid">
-            <nuxt />
+    <div class="container">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="/">Главная</a>
+        </li>
+        <li class="breadcrumb-item">Личный кабинет</li>
+      </ol>
+      <div class="row">
+        <div class="col-lg-4 col-12 menu">
+          <div
+            class="wrapper"
+            v-bind:class="{
+              'sidebar-min': sideBarMini,
+              mobile_menu: sideBarMobileMini,
+            }"
+          >
+            <Sidebar
+              @mini-sidebar="changeSidebar"
+              @mini-mobile-sidebar="changeMobileSidebar"
+              :nav-items="menuWithOutIcon"
+            />
           </div>
-        </main>
+        </div>
+        <div class="col-12 col-lg-8">
+          <div class="body">
+            <main class="main">
+              <nuxt />
+            </main>
+          </div>
+        </div>
       </div>
     </div>
-    <Footer />
+    <div class="color-footer">
+      <div class="container">
+        <Footer />
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -93,9 +109,9 @@ export default {
 </script>
 <style lang="scss">
 .cabinet {
-  @import "~/assets/scss/style_new.scss";
+  @import "~/assets/scss/style_lk.scss";
 }
-
+/*
 .cabinet {
   display: grid;
   grid-template-rows: 80px auto min-content;
@@ -131,5 +147,5 @@ export default {
 .toast button:focus {
   outline: 0px;
   outline: 0px auto transparent;
-}
+}*/
 </style>

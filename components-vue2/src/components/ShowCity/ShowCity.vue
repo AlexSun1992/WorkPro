@@ -5,14 +5,14 @@
     </b-button>
     <b-collapse v-model="visible" class="sity-question">
       <b-card>
-        <div class="close-sity-block"></div>
+        <div class="close-sity-block" />
         <div class="sity-block-text">
           Ваш город: <b>{{ city }}</b>
         </div>
         <b-button
           variant="primary"
-          @click="setAutoCity(city)"
           class="btn-icon-left"
+          @click="setAutoCity(city)"
         >
           Да, верно
         </b-button>
@@ -26,30 +26,29 @@
       </b-card>
     </b-collapse>
     <b-modal id="select-city" size="lg" hide-footer>
-      <template #modal-title>Выберите город</template>
+      <template #modal-title> Выберите город </template>
       <div>
         <div class="mb-2">
           <strong> Ваш город: {{ city }} </strong>
         </div>
         <autocomplete
-          placeholder="Поиск города"
           ref="autocomplete"
+          placeholder="Поиск города"
           :debounce-time="300"
           :search="search"
           :get-result-value="getResultValue"
+          :default-value="city"
           @submit="setSearchedCity"
-          :defaultValue="city"
-        >
-        </autocomplete>
+        />
         <div class="mt-2">
           <div class="row">
             <div
-              :class="`col-lg-${12 / cols}`"
               v-for="column in columns"
               :key="column.id"
+              :class="`col-lg-${12 / cols}`"
             >
               <div v-for="item in column" :key="item.id">
-                <span @click="setPopularCity(item)" style="cursor: pointer">{{
+                <span style="cursor: pointer" @click="setPopularCity(item)">{{
                   item.text
                 }}</span>
               </div>
@@ -64,7 +63,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-import { BButton, BCollapse, BCard } from "bootstrap-vue";
+import { BButton, BCard } from "bootstrap-vue";
 import Cookies from "js-cookie";
 import cities from "./cities";
 
@@ -87,13 +86,13 @@ export default {
   components: {
     Autocomplete,
     BButton,
-    BCollapse,
     BCard,
   },
   props: {
     changeCity: {
       type: Function,
       required: false,
+      default: () => console.error("Отсутствует функция"),
     },
   },
   data() {
@@ -103,12 +102,38 @@ export default {
       kladr: null,
       lat: null,
       lon: null,
-      popularCities: cities,
+      popularCities: [...cities].sort((a, b) => {
+        if (a.text < b.text) return -1;
+        if (a.text > b.text) return 1;
+        return 0;
+      }),
       cols: 3,
       request: null,
     };
   },
+  computed: {
+    sortedPopularCities() {
+      return this.popularCities;
+    },
+    columns() {
+      const columns = [];
+      const mid = Math.ceil(this.sortedPopularCities.length / this.cols);
+      for (let col = 0; col < this.cols; col++) {
+        columns.push(
+          this.sortedPopularCities.slice(col * mid, col * mid + mid)
+        );
+      }
+      return columns;
+    },
+  },
   async created() {
+    this.popularCities.unshift({
+      id: 1,
+      kladr_id: "7700000000000",
+      text: "Москва",
+      lat: "55.75396",
+      lon: "37.620393",
+    });
     if (Cookies.get("location_user") && Cookies.get("kladr_id")) {
       this.kladr = Cookies.get("kladr_id");
       this.city = Cookies.get("location_user");
@@ -156,14 +181,14 @@ export default {
   },
   methods: {
     setSearchedCity(result) {
-      if (result.data["city"]) {
-        this.city = result.data["city"];
+      if (result.data.city) {
+        this.city = result.data.city;
       }
       this.kladr = result.data.kladr_id;
       Cookies.set("kladr_id", this.kladr);
       Cookies.set("location_user", this.city);
-      Cookies.set("lat", this.lat);
-      Cookies.set("lon", this.lon);
+      Cookies.set("lat", result.data.geo_lat);
+      Cookies.set("lon", result.data.geo_lon);
 
       this.changeCity({
         city: this.city,
@@ -171,7 +196,7 @@ export default {
       });
       this.$store.dispatch("map/setCity", {
         city: this.city,
-        coords: [this.lat, this.lon],
+        coords: [result.data.geo_lat, result.data.geo_lon],
       });
     },
     setPopularCity(result) {
@@ -214,34 +239,6 @@ export default {
     },
     getResultValue(item) {
       return item.value;
-    },
-  },
-  computed: {
-    sortedPopularCities: function () {
-      function compare(a, b) {
-        if (a.text < b.text) return -1;
-        if (a.text > b.text) return 1;
-        return 0;
-      }
-      this.popularCities.sort(compare);
-      this.popularCities.unshift({
-        id: 1,
-        kladr_id: "7700000000000",
-        text: "Москва",
-        lat: "55.75396",
-        lon: "37.620393",
-      });
-      return this.popularCities;
-    },
-    columns() {
-      const columns = [];
-      const mid = Math.ceil(this.sortedPopularCities.length / this.cols);
-      for (let col = 0; col < this.cols; col++) {
-        columns.push(
-          this.sortedPopularCities.slice(col * mid, col * mid + mid)
-        );
-      }
-      return columns;
     },
   },
 };

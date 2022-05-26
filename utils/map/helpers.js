@@ -2,7 +2,8 @@ const getTime = (distance) => {
   const mins = (distance / 3) * 60;
   if (mins > 20) return `${distance.toFixed(1)} км`;
   const hours = Math.trunc(mins / 60);
-  const minutes = mins % 60;
+  const minutes = mins == 0 ? 1 : mins % 60;
+
   return hours > 0
     ? `${hours} ч ${parseInt(minutes)} мин`
     : `${parseInt(minutes)} мин`;
@@ -151,18 +152,22 @@ const getTemplate = (agency) => {
     /<div class="card-office-undeground">[\n\s]*?<span class="undeground-color"><\/span>[\n\s]*?<span>[^<]*?<\/span>[\n\s]*?<span class="card-office-distance">[^<]*?<\/span>[\n\s]*?<\/div>/,
     () => {
       let temp = "";
-      if (agency.IDUNDERGROUND.length > 0) {
+      if (agency.SDADATAMETRO) {
         temp += `<div class="card-office-undeground">`;
-        agency.IDUNDERGROUND.forEach((item) => {
-          temp += `<div>
-                  <span class=${"undeground-color_" + item.IDUNDERLINE}></span>
-                  <span>${item.SNAME}</span>
-                  <span class="card-office-distance"> 
-                  ${getTime(agency.NDISTANSE)} </span>
-                  </div>
-                `;
-        });
-        temp += "</div>";
+        if (agency.SDADATAMETRO && Array.isArray(agency.SDADATAMETRO)) {
+          agency.SDADATAMETRO.forEach((item) => {
+            temp += `<div>
+                    <span class=${"undeground-color_"} data-line=${
+              item.LINE
+            }></span>
+                    <span>${item.NAME}</span>
+                    <span class="card-office-distance"> 
+                    ${getTime(item.DISTANCE)} </span>
+                    </div>
+                  `;
+          });
+          temp += "</div>";
+        }
       } else {
         temp = "";
       }
@@ -207,7 +212,7 @@ const count = (office) => {
 
 const getUnderlineId = (station, item) => {
   let obj = item.IDUNDERGROUND.find((element) => {
-    return element.SNAME.includes(station);
+    return element.SNAME.toLowerCase().includes(station.toLowerCase());
   });
   return obj?.IDUNDERLINE;
 };
