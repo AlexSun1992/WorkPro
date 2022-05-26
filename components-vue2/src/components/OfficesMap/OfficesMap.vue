@@ -632,8 +632,14 @@ export default {
 
     combineAgencies(agencies, i, count) {
       let arr = [];
-      agencies.slice(i, i + count).forEach((item) => {
-        arr.push(getTemplate(item));
+      let slicedAgencies = agencies.slice(i, i + count)
+      slicedAgencies.sort((a, b) => {
+        if (!a.NORDER) a.NORDER = 0
+        if (!b.NORDER) b.NORDER = 0
+        return a.NORDER - b.NORDER
+      })
+      slicedAgencies.forEach((item) => {
+        arr.push(getTemplate(item))
       });
       return arr;
     },
