@@ -5,9 +5,7 @@
         {{ cardCaption }}
       </div>
       <template v-if="isShowCardTemplate">
-        <v-runtime-template
-          :template="settings.cardtemplate"
-        ></v-runtime-template>
+        <v-runtime-template :template="settings.cardtemplate" />
       </template>
       <b-nav v-else-if="pages" tabs justified class="mb-2 sticky-top">
         <b-nav-item
@@ -16,8 +14,9 @@
           :to="getURL(item, index)"
           exact
           exact-active-class="active"
-          >{{ item.name }}</b-nav-item
         >
+          {{ item.name }}
+        </b-nav-item>
       </b-nav>
       <nuxt-child
         ref="child"
@@ -34,120 +33,50 @@
               : 'col-12'
           "
         >
-          <b-alert :show="isErrorActionExecuteMessage" variant="danger">{{
-            errorActionExecuteMessage
-          }}</b-alert>
+          <b-alert :show="isErrorActionExecuteMessage" variant="danger">
+            {{ errorActionExecuteMessage }}
+          </b-alert>
         </div>
       </div>
 
       <wizard-buttons
-        :currentTab="currentTab"
+        :current-tab="currentTab"
         :tabs="tabs"
         :qty="settings.wizard.length"
         :loading="loading"
         @goNext="goNext($event)"
         @goBack="goBack($event)"
         @saveCard="saveCard($event)"
-      ></wizard-buttons>
+      />
     </div>
-    <div v-else>{{ wizardErrorMessage }}</div>
+    <div v-else>
+      {{ wizardErrorMessage }}
+    </div>
   </div>
 </template>
 
 <script>
+import VRuntimeTemplate from "v-runtime-template";
 import breadcrumbs from "~/converters/breadcrumbs";
 import wizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
-import VRuntimeTemplate from "v-runtime-template";
+
 export default {
   name: "Wizard",
-  async fetch({ store, route }) {
-    await store.dispatch("wizard/fetchWizard", route.params);
+  components: {
+    wizardButtons,
+    VRuntimeTemplate,
   },
   data() {
     return {
       loading: false,
     };
   },
-  components: {
-    wizardButtons,
-    VRuntimeTemplate,
-  },
-  created() {
-    if (process.client) {
-      if (window.opener) {
-        if (window.location.href === window.opener.location.href) {
-          window.opener.location.reload();
-          window.close();
-        }
-      }
-    }
-  },
-  methods: {
-    getURL(item, index) {
-      if (this.$route.params.idCard === "0") {
-        return `/cabinet/wizard/${this.$route.params.idWizard}${
-          item.list ? `/list/55/0/` : `/55/0/`
-        }${item.idItem}/0/0`;
-      } else {
-        return `/cabinet/wizard/${this.$route.params.idWizard}${
-          item.list ? `/list/55/0/` : `/55/0/`
-        }${item.idItem}/${this.$route.params.idCard}/${
-          this.rels.split("|")[item.order - 1]
-        }`;
-      }
-    },
-    async goNext(e) {
-      this.loading = true;
-      if (!this.currentTab.list) {
-        if (this.$store.getters["data_card/getBtnSave"]) {
-          if (this.$refs["child"].$refs["cardEditor"] !== undefined) {
-            await this.$refs["child"].$refs["cardEditor"].saveDataCard();
-            if (this.isSavedError === true) {
-              this.loading = false;
-              return;
-            }
-          } else {
-            let itemId = this.$route.params.idItem;
-            let moduleId = this.$route.params.idModule;
-            let cardId = this.$route.params.idCard;
-            let relId = this.$route.params.idRel;
-            let resp = await this.$store.dispatch("data_card/saveDataCard", {
-              moduleId,
-              itemId,
-              cardId,
-              relId,
-              form: this.$store.getters["data_card/getForm"]?.data,
-            });
-            if (this.isSavedError === true) {
-              this.loading = false;
-              return;
-            }
-          }
-        }
-      }
-      this.$router.push(this.getURL(e));
-    },
-    async goBack(e) {
-      this.$router.push(this.getURL(e));
-    },
-    async saveCard(e) {
-      this.loading = true;
-      if (this.$refs["child"].$refs["cardEditor"] !== undefined) {
-        await this.$refs["child"].$refs["cardEditor"].saveDataCard();
-        if (this.isSavedError === true) {
-          this.loading = false;
-          return;
-        }
-      }
-      this.loading = false;
-    },
-  },
-  destroyed() {
-    this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
+  async fetch({ store, route }) {
+    await store.dispatch("wizard/fetchWizard", route.params);
   },
   computed: {
     settings: {
-      get: function () {
+      get() {
         return breadcrumbs
           .getData(this.$store.getters["menu/menu"], {
             idModule: 55,
@@ -162,16 +91,15 @@ export default {
       const rel = this.$store.getters["wizard/getWizard"]?.REL;
       if (this.$route.params.idCard !== "0" && rel) {
         return rel;
-      } else {
-        return "|";
       }
+      return "|";
     },
     pages() {
       return this.$store.getters["wizard/getWizardPages"];
     },
     tabs() {
-      let t = this.settings.wizard;
-      let arr = [];
+      const t = this.settings.wizard;
+      const arr = [];
       if (this.pages) {
         const p_arr = this.pages.split(";");
         for (let i = 0; i < t.length; i++) {
@@ -218,6 +146,79 @@ export default {
         this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
           ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
       );
+    },
+  },
+  created() {
+    if (process.client) {
+      if (window.opener) {
+        if (window.location.href === window.opener.location.href) {
+          window.opener.location.reload();
+          window.close();
+        }
+      }
+    }
+  },
+  unmounted() {
+    this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
+  },
+  methods: {
+    getURL(item, index) {
+      if (this.$route.params.idCard === "0") {
+        return `/cabinet/wizard/${this.$route.params.idWizard}${
+          item.list ? `/list/55/0/` : `/55/0/`
+        }${item.idItem}/0/0`;
+      }
+      return `/cabinet/wizard/${this.$route.params.idWizard}${
+        item.list ? `/list/55/0/` : `/55/0/`
+      }${item.idItem}/${this.$route.params.idCard}/${
+        this.rels.split("|")[item.order - 1]
+      }`;
+    },
+    async goNext(e) {
+      this.loading = true;
+      if (!this.currentTab.list) {
+        if (this.$store.getters["data_card/getBtnSave"]) {
+          if (this.$refs.child.$refs.cardEditor !== undefined) {
+            await this.$refs.child.$refs.cardEditor.saveDataCard();
+            if (this.isSavedError === true) {
+              this.loading = false;
+              return;
+            }
+          } else {
+            const itemId = this.$route.params.idItem;
+            const moduleId = this.$route.params.idModule;
+            const cardId = this.$route.params.idCard;
+            const relId = this.$route.params.idRel;
+            const formData = this.$store.getters["data_card/getForm"];
+            const resp = await this.$store.dispatch("data_card/saveDataCard", {
+              moduleId,
+              itemId,
+              cardId,
+              relId,
+              form: formData.length ? formData : formData.data,
+            });
+            if (this.isSavedError === true) {
+              this.loading = false;
+              return;
+            }
+          }
+        }
+      }
+      this.$router.push(this.getURL(e));
+    },
+    async goBack(e) {
+      this.$router.push(this.getURL(e));
+    },
+    async saveCard(e) {
+      this.loading = true;
+      if (this.$refs.child.$refs.cardEditor !== undefined) {
+        await this.$refs.child.$refs.cardEditor.saveDataCard();
+        if (this.isSavedError === true) {
+          this.loading = false;
+          return;
+        }
+      }
+      this.loading = false;
     },
   },
 };
