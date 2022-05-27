@@ -10,8 +10,7 @@
       v-on:change="handleFileUpload($event)"
       multiple
     />
-    <!-- {{ fileSize }}
-    {{ fileType }} -->
+    {{ fileSize }}
   </div>
 </template>
 
@@ -30,12 +29,23 @@ export default {
       uploadPercentage: 0,
       percentsVisible: false,
       file: null,
+      size: null,
     };
+  },
+
+  computed: {
+    fileSize() {
+      return this.file !== null ? this.size + "кб" : null;
+    },
   },
 
   methods: {
     handleFileUpload() {
       this.file = this.$refs.file.files;
+      this.size = Object.values(this.file).reduce((sum, item) => {
+        return sum + item.size;
+      }, 0);
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -45,16 +55,6 @@ export default {
     submitFile() {
       return true;
     },
-  },
-  computed: {
-    // fileSize() {
-    //   return (this.file?.size / 1024000).toFixed(1) + "мб";
-    // },
-    // fileType() {
-    //   if (this.file?.type) {
-    //     return this.file.type;
-    //   }
-    // },
   },
 };
 </script>
