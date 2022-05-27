@@ -53,10 +53,14 @@ export function changeObj(arrayObjects) {
   return JSON.stringify(resultData);
 }
 
+export function copyObject(obj) {
+  return Object.assign({}, obj);
+}
+
 export function convertUploaderFilesToFormData(obj) {
   const formData = new FormData();
-  const copyObjBlobs = Object.assign({}, obj);
-  const copyObjNotBlob = Object.assign({}, obj);
+  const copyObjBlobs = copyObject(obj);
+  const copyObjNotBlob = copyObject(obj);
 
   Object.keys(copyObjBlobs).forEach((item) => {
     if (!Array.isArray(copyObjBlobs[item])) {
