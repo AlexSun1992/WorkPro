@@ -710,7 +710,13 @@ export default {
             }
           }
         }
-        showOnMap(e.get("item").value);
+        let addressArr;
+        if (e.get("item").value.includes('линия')) {
+          addressArr = e.get("item").value.split(', ')
+          addressArr.splice(2,1)
+          addressArr = addressArr.join()
+        }
+        showOnMap(addressArr ? addressArr : e.get("item").value);
       }
       this.suggestView.events.add("select", func);
     },
@@ -964,7 +970,7 @@ export default {
             let filteredByStation = [];
             this.getOffices.forEach((item) => {
               item.IDUNDERGROUND.forEach((station) => {
-                if (station.SNAME.includes(this.currentStation)) {
+                if (station.SNAME.toLowerCase().replace("ё", "е").includes(this.currentStation.toLowerCase().replace("ё", "е"))) {
                   filteredByStation.push(item);
                 }
               });
