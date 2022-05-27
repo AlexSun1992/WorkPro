@@ -8,9 +8,10 @@
       type="file"
       style="display: none"
       v-on:change="handleFileUpload($event)"
+      multiple
     />
-    {{ fileSize }}
-    {{ fileType }}
+    <!-- {{ fileSize }}
+    {{ fileType }} -->
   </div>
 </template>
 
@@ -34,8 +35,7 @@ export default {
 
   methods: {
     handleFileUpload() {
-      this.file = this.$refs.file.files[0];
-
+      this.file = this.$refs.file.files;
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -47,16 +47,14 @@ export default {
     },
   },
   computed: {
-    fileSize() {
-      if (this.file?.size) {
-        return (this.file.size / 1024000).toFixed(1) + "мб";
-      }
-    },
-    fileType() {
-      if (this.file?.type) {
-        return this.file.type;
-      }
-    },
+    // fileSize() {
+    //   return (this.file?.size / 1024000).toFixed(1) + "мб";
+    // },
+    // fileType() {
+    //   if (this.file?.type) {
+    //     return this.file.type;
+    //   }
+    // },
   },
 };
 </script>

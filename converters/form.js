@@ -394,14 +394,18 @@ converter.save = (data) => {
             data[i].value !== null && data[i].value !== undefined
               ? data[i].value
               : "NULL";
-
           if (data[i].type === "Uploader") {
-            res[data[i].name] =
-              data[i].value !== null && data[i].value !== undefined
-                ? new File([data[i].value], data[i].value.name, {
-                    type: "field/blob",
-                  })
-                : "NULL";
+            if (res[data[i].name] !== "NULL") {
+              res[data[i].name] =
+                data[i].value !== null && data[i].value !== undefined
+                  ? Object.values(data[i].value).map(
+                      (item) =>
+                        (item = new File([item], item.name, {
+                          type: "field/blob",
+                        }))
+                    )
+                  : "NULL";
+            }
           }
 
           if (data[i].structType === "boolrus") {

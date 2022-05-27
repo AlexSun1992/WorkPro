@@ -54,43 +54,28 @@ export function changeObj(arrayObjects) {
 }
 
 export function convertUploaderFilesToFormData(obj) {
-  const arrayOfFieldsValueTypeBlob = [];
   const formData = new FormData();
+  const copyObjBlobs = Object.assign({}, obj);
+  const copyObjNotBlob = Object.assign({}, obj);
 
-  Object.keys(obj).forEach((item) => {
-    if (obj[item].type === "field/blob") {
-      arrayOfFieldsValueTypeBlob.push(obj[item]);
-      delete obj[item];
+  Object.keys(copyObjBlobs).forEach((item) => {
+    if (!Array.isArray(copyObjBlobs[item])) {
+      delete copyObjBlobs[item];
     }
   });
-  const filedValuesTypeBlob = new File(
-    [...arrayOfFieldsValueTypeBlob],
-    "UploaderFiles",
-    {
-      type: "field/blob",
+
+  Object.keys(copyObjNotBlob).forEach((item) => {
+    if (Array.isArray(copyObjNotBlob[item])) {
+      delete copyObjNotBlob[item];
     }
-  );
+  });
 
-  formData.append("Blobs:", filedValuesTypeBlob);
-  formData.append("NotBlob:", JSON.stringify(obj));
+  Object.keys(copyObjBlobs).forEach((item) => {
+    for (let i = 0; i < copyObjBlobs[item].length; i++) {
+      formData.append(`${item}`, copyObjBlobs[item][i]);
+    }
+  });
 
+  formData.append("JSON", JSON.stringify(copyObjNotBlob));
   return formData;
 }
-
-// export function convertFieldValuesToJSON(fieldsValues) {
-//   const notUploaderTypeFieldsValues =
-//     getFieldsValueTypeIsNotUploader(fieldsValues);
-//   const convertFieldValues = notUploaderTypeFieldsValues.map((field) =>
-//     JSON.stringify(field)
-//   );
-//   return convertFieldValues;
-// }
-
-// export function restructureData(fieldsValues) {
-//   const rebuildObjects = getSplicedObjects(fieldsValues)
-//     .map((item) => `${item.name}:${item.value}`)
-//     .map((item) => item.split(":"));
-
-//   const resultData = JSON.stringify(Object.fromEntries(rebuildObjects));
-//   return resultData;
-// }

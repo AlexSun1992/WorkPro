@@ -301,6 +301,7 @@ export const actions = {
   async saveDataCardUploaders({ commit, state }, params) {
     /// Дополнен метод converter.save функция в отдельном модуле
     const getFieldData = converter.save(state.form);
+
     const dataIsReadyToTransfer = convertUploaderFilesToFormData(getFieldData);
 
     this.$axios.post(

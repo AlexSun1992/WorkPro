@@ -377,7 +377,7 @@ export default {
           const isUploaderFieldValueExist = fields.find(
             (elem) => elem.type === "Uploader" && elem.value !== undefined
           );
-
+          //console.log("isUploaderFieldValueExist:", isUploaderFieldValueExist);
           if (isUploaderFieldValueExist === undefined) {
             action = "saveDataCard";
           } else action = "saveDataCardUploaders";
