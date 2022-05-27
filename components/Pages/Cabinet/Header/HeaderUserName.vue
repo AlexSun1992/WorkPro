@@ -5,9 +5,6 @@
       :class="'ppl-info percent' + percent + ' ppl-' + sex"
     >
       <div @click="goToProfile">
-        <div class="ppl-avatar">
-          <img src="" />
-        </div>
         <span class="ppl-name">{{ user }}</span>
       </div>
     </div>

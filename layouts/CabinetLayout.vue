@@ -23,6 +23,15 @@
               :nav-items="menuWithOutIcon"
             />
           </div>
+          <div class="feedback border-block mt-4">
+            <div class="title">Обратная связь</div>
+            <div class="description">
+              Напишите нам и мы оперативно свяжемся с вами
+            </div>
+            <button type="button" class="btn_one icon-feedback">
+              Написать
+            </button>
+          </div>
         </div>
         <div class="col-12 col-lg-8">
           <div class="body">

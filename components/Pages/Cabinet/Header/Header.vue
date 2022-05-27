@@ -23,9 +23,6 @@
               <a href="/corporate" class="d-none d-md-block">Бизнесу</a>
             </div>
           </div>
-          <div class="anonsed-block">
-            <button class="anonsed" type="button" />
-          </div>
         </div>
         <div class="top_menu mt-4 mt-md-0">
           <div class="float-md-start">
@@ -54,6 +51,9 @@
         </div>
       </div>
       <div class="login-form">
+        <div class="anonsed-block">
+          <button type="button" class="anonsed"></button>
+        </div>
         <div class="LoginButton">
           <header-user-name :user-data="userInfo" />
         </div>
