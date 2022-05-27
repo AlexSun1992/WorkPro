@@ -1332,3 +1332,86 @@
                 margin: 0 21px 0 16px;
             }
         }
+        
+        input,
+        optgroup,
+        select,
+        textarea,
+        .search.selection.dropdown {
+            background: #FFFFFF;
+            border: 1px solid #C3C3C3;
+            border-radius: 15px;
+            padding: 17px 20px;
+            width: 100%;
+            font-family: 'SF Pro Display';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 1rem;
+            color: #686868;
+        }
+        
+        .timestamp.form-control:disabled,
+        .form-control.disabled {
+            color: #686868;
+        }
+        
+        input:hover,
+        optgroup:hover,
+        select:hover,
+        textarea:hover,
+        .search.selection.dropdown:hover {
+            border: 1px solid #686868;
+        }
+        
+        input:active,
+        optgroup:active,
+        select:active,
+        textarea:active {
+            color: #292929;
+        }
+        
+        .search.selection.dropdown {
+            padding: 21px 20px;
+        }
+        
+        .ui.search.dropdown>.text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+        
+        .invalid-feedback {
+            color: red;
+            font-size: 0.875rem;
+            display: none;
+        }
+        
+        p.error {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .search.selection.dropdown.disabled,
+         :disabled {
+            background: #F2F2F2;
+            color: #c3c3c3;
+        }
+        
+        .mx-datepicker {
+            width: 100%;
+        }
+        
+        label {
+            font-family: 'SF Pro Display';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #686868;
+            margin-bottom: 10px;
+        }
+        
+        .ui.disabled.dropdown,
+        .ui.dropdown .menu>.disabled.item {
+            opacity: 1;
+        }
