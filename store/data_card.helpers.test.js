@@ -2,10 +2,11 @@ import { getFieldsValueTypeIsNotUploader } from "./data_card.helpers";
 //import { convertFieldValuesToJSON } from "./data_card.helpers";
 import { getSplicedObjects } from "./data_card.helpers";
 import { getFieldsValueTypeUploader } from "./data_card.helpers";
-import { preparing } from "./data_card.helpers";
+// import { preparing } from "./data_card.helpers";
 import { changeObj } from "./data_card.helpers";
 import { data } from "./data_card.helpers.fixtures";
 import { testData } from "./data_card.helpers.fixtures";
+// import {copyObject} from "./data_card.helpers"
 
 describe("Модуль подготовки данных", () => {
   it("получает объекты кроме типа Uploader", () => {
@@ -44,4 +45,5 @@ describe("Модуль подготовки данных", () => {
     const getFilesTypeBlob = preparing(testData);
     expect(typeof getFilesTypeBlob === "object").toBe(true);
   });
+  it();
 });
