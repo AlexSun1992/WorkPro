@@ -173,6 +173,8 @@ converter.form = async (data, params, instance) => {
           `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`
         )
       );
+    } else if (webFields[i].IDCONTROL == 46) {
+      obj.type = "DoctorsSchedule";
     } else {
       obj.type = "string";
     }
@@ -336,7 +338,11 @@ converter.type = (data, isReadOnly) => {
           copy[i].type = `enum`;
           if (data[i].menudic) {
             copy[i].type = `listSelect`;
+            // if (webFields[i].IDCONTROL === 46) {
+            //   copy[i].type = "DoctorSchedule";
+            // }
           }
+
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
           copy[i].dic = data[j].name;
