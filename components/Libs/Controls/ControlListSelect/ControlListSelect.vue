@@ -6,14 +6,15 @@
         :class="{ required: data.required }"
         :label-for="data.name"
       >
+        <!-- @openList="openList" -->
         <control-wrapper-select
           :options="options"
           :select-id="selectId"
           :item-value="itemValue"
           :options-value="optionsValue"
           :display-text="displayText"
-          @openList="openList"
           @selectItem="selectItem"
+          @openList="openList"
         />
         <b-form-invalid-feedback>
           Обязательно для заполнения
@@ -191,9 +192,18 @@ export default {
     },
     async openList() {
       this.visible = !this.visible;
+      console.log("openList");
       if (this.visible) {
         try {
           this.isLoad = true;
+          const result = this.$store.getters["data_card/getFiltersAllFields"];
+          console.log("result:", result);
+
+          const test = await this.$store.dispatch("blocks/fetchBlock", {
+            id: this.data.menudic,
+            query: this.$store.getters["data_card/getFiltersAllFields"],
+          });
+          console.log("test:", test);
           await this.$store.dispatch("blocks/fetchBlock", {
             id: this.data.menudic,
             query: this.$store.getters["data_card/getFiltersAllFields"],

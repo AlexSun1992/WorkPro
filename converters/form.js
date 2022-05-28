@@ -174,7 +174,7 @@ converter.form = async (data, params, instance) => {
         )
       );
     } else if (webFields[i].IDCONTROL == 46) {
-      obj.type = "DoctorsSchedule";
+      obj.type = "DoctorSchedule";
     } else {
       obj.type = "string";
     }
@@ -341,6 +341,12 @@ converter.type = (data, isReadOnly) => {
             // if (webFields[i].IDCONTROL === 46) {
             //   copy[i].type = "DoctorSchedule";
             // }
+            //console.log("data:", data[i].menudic);
+            //console.log("data:label", data[i].label);
+            if (data[i].label === "Расписание") {
+              copy[i].type = `doctorSchedule`;
+              console.log("data:", data[i].menudic);
+            }
           }
 
           copy[i].label = copy[j].label;
