@@ -805,6 +805,7 @@ export default {
       this.updateMap(this.mapState, shortAddress);
     },
     async showOnMap(suggest, coords) {
+      debugger
       this.suggest = suggest;
       try {
         this.address = await this.$axios.post("/api/suggestions/address", {
@@ -828,7 +829,19 @@ export default {
           this.regionId = null;
         }
         this.myClusterer?.removeAll();
-        this.myClusterer.add(this.getGeoObjects(this.getOfficesByCity));
+
+        let offices
+
+        if (this.currentFilters) {
+                    debugger
+          offices = filterData(this.getOfficesByCity, this.currentFilters);
+
+        } else {
+          offices = this.getOfficesByCity
+        }
+
+
+        this.myClusterer.add(this.getGeoObjects(offices));
         this.myMap.geoObjects.add(this.myClusterer);
       } catch (e) {
         console.log(e);
@@ -848,6 +861,7 @@ export default {
       });
     },
     async filterOffices(filters) {
+      debugger
       await this.$store.dispatch("map/fetchRegion", {
         id: this.regionId,
         coords: this.centerCoords,
@@ -989,6 +1003,7 @@ export default {
 
   watch: {
     async cityData() {
+      debugger
       this.myMap.geoObjects.remove(this.placemark);
       await this.$store.dispatch("map/fetchRegion", {
           id: this.$store.getters["map/getCity"]?.city,
