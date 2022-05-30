@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :data-card-id="this.$route.params.idItem">
     <b-modal
       :id="'confirmAction'"
       modal-class="cabinet"

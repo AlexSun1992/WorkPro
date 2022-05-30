@@ -1184,6 +1184,255 @@
             background: #fff url(/img/sale.svg) 50% 50% no-repeat;
         }
         
+        input,
+        optgroup,
+        select,
+        textarea,
+        .search.selection.dropdown {
+            background: #FFFFFF;
+            border: 1px solid #C3C3C3;
+            border-radius: 15px;
+            padding: 17px 20px;
+            width: 100%;
+            font-family: 'SF Pro Display';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 1rem;
+            color: #686868;
+        }
+        
+        .timestamp.form-control:disabled,
+        .form-control.disabled {
+            color: #686868;
+        }
+        
+        input:hover,
+        optgroup:hover,
+        select:hover,
+        textarea:hover,
+        .search.selection.dropdown:hover {
+            border: 1px solid #686868;
+        }
+        
+        input:active,
+        optgroup:active,
+        select:active,
+        textarea:active {
+            color: #292929;
+        }
+        
+        .search.selection.dropdown {
+            padding: 21px 20px;
+            height: 60px;
+            line-height: 1;
+        }
+        
+        .ui.search.selection.dropdown>input.search,
+        .ui.search.selection.dropdown>span.sizer {
+            padding: 0 !important;
+            line-height: 1;
+            font-size: 1rem;
+            padding: 17px 20px !important;
+            height: 60px;
+        }
+        
+        .ui.search.dropdown>.text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+        
+        .invalid-feedback {
+            color: red;
+            font-size: 0.875rem;
+            display: none;
+        }
+        
+        p.error {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .search.selection.dropdown.disabled,
+         :disabled {
+            background: #F2F2F2;
+            color: #c3c3c3;
+        }
+        
+        .mx-datepicker {
+            width: 100%;
+        }
+        
+        label {
+            font-family: 'SF Pro Display';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #686868;
+            margin-bottom: 10px;
+        }
+        
+        .ui.disabled.dropdown,
+        .ui.dropdown .menu>.disabled.item {
+            opacity: 1;
+        }
+        
+        .checkbox-hide {
+            position: relative;
+        }
+        
+        .checkbox-hide input,
+        input.checkbox-hide {
+            display: none;
+        }
+        
+        .checkbox-hide label,
+        input.checkbox-hide+label {
+            font-weight: 400;
+            font-size: 1rem;
+            line-height: 1;
+            color: #292929;
+            padding-left: 50px;
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+        
+        .checkbox-hide label:after,
+        input.checkbox-hide+label:after {
+            content: "";
+            width: 34px;
+            height: 34px;
+            left: 0;
+            border: 2px solid #C3C3C3;
+            box-sizing: border-box;
+            border-radius: 6px;
+            ;
+            top: 50%;
+            transform: translateY(-52%);
+            position: absolute;
+        }
+        
+        .checkbox-hide input:checked+label:after,
+        .checkbox-hide:checked+label:after {
+            border-color: #43B02A;
+            background: #43B02A;
+        }
+        
+        .checkbox-hide input:checked+label:before,
+        .checkbox-hide:checked+label:before {
+            content: "";
+            width: 15px;
+            height: 9px;
+            left: 11px;
+            border-left: 3px solid #fff;
+            border-bottom: 3px solid #fff;
+            box-sizing: border-box;
+            transform: rotate(-45deg);
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            margin-top: -8px;
+        }
+        
+        .checkbox-btn {
+            position: relative;
+        }
+        
+        .checkbox-btn input,
+        input.checkbox-btn {
+            display: none;
+        }
+        
+        .btn-success,
+        .btn-secondary,
+        .btn-primary {
+            text-align: center;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 1rem;
+            line-height: 1rem;
+            box-sizing: border-box;
+            border: 2px solid #FE7333;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        
+        a.btn-primary,
+        a.btn-secondary,
+        a.btn-success {
+            text-decoration: none;
+        }
+        
+        a.btn-primary,
+        a.btn-success,
+        .btn-success,
+        .btn-primary {
+            background-color: #FE7333;
+            color: #FFFFFF;
+        }
+        
+        .btn-success:hover,
+        .btn-primary:hover {
+            background-color: #FE8F5C;
+            color: #FFFFFF;
+            border: 2px solid #FE8F5C;
+        }
+        
+        .btn-primary:focus {
+            background-color: #FE7333;
+            border: 2px solid #E24700;
+        }
+        
+        .btn-primary:active {
+            background-color: #FF5000;
+            border: 2px solid #FF5000;
+        }
+        
+        a.btn-secondary,
+        .btn-secondary {
+            border: 2px solid #FE7333;
+            color: #FE7333;
+            line-height: 1;
+            background: #fff;
+        }
+        
+        a.btn-secondary:hover,
+        .btn-secondary:hover {
+            background-color: rgba(254, 115, 51, 0.1);
+            border: 2px solid #FE8F5C;
+            color: #FE8F5C;
+        }
+        
+        .btn-primary:disabled {
+            background-color: #F2F2F2;
+            color: #C3C3C3 !important;
+            border: 2px solid #F2F2F2;
+            ;
+        }
+        
+        .mt-checkbox {
+            margin-top: 65px;
+        }
+        
+        .conf-block {
+            border: 1px solid #EFF1F3;
+            border-radius: 16px;
+            padding: 24px 20px;
+        }
+        
+        .title-conf-block {
+            font-family: 'Raleway';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 1.25rem;
+            line-height: 1;
+            font-feature-settings: 'pnum' on, 'lnum' on;
+            color: #292929;
+            margin-bottom: 1.5rem;
+        }
+        
         @media (max-width: 992px) {
             .menu-burger,
             .burger {
@@ -1331,87 +1580,7 @@
             .feedback {
                 margin: 0 21px 0 16px;
             }
-        }
-        
-        input,
-        optgroup,
-        select,
-        textarea,
-        .search.selection.dropdown {
-            background: #FFFFFF;
-            border: 1px solid #C3C3C3;
-            border-radius: 15px;
-            padding: 17px 20px;
-            width: 100%;
-            font-family: 'SF Pro Display';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 1rem;
-            color: #686868;
-        }
-        
-        .timestamp.form-control:disabled,
-        .form-control.disabled {
-            color: #686868;
-        }
-        
-        input:hover,
-        optgroup:hover,
-        select:hover,
-        textarea:hover,
-        .search.selection.dropdown:hover {
-            border: 1px solid #686868;
-        }
-        
-        input:active,
-        optgroup:active,
-        select:active,
-        textarea:active {
-            color: #292929;
-        }
-        
-        .search.selection.dropdown {
-            padding: 21px 20px;
-        }
-        
-        .ui.search.dropdown>.text {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
-        
-        .invalid-feedback {
-            color: red;
-            font-size: 0.875rem;
-            display: none;
-        }
-        
-        p.error {
-            margin: 0;
-            padding: 0;
-        }
-        
-        .search.selection.dropdown.disabled,
-         :disabled {
-            background: #F2F2F2;
-            color: #c3c3c3;
-        }
-        
-        .mx-datepicker {
-            width: 100%;
-        }
-        
-        label {
-            font-family: 'SF Pro Display';
-            font-style: normal;
-            font-weight: 600;
-            font-size: 0.875rem;
-            color: #686868;
-            margin-bottom: 10px;
-        }
-        
-        .ui.disabled.dropdown,
-        .ui.dropdown .menu>.disabled.item {
-            opacity: 1;
+            .mt-checkbox {
+                margin-top: 2rem;
+            }
         }
