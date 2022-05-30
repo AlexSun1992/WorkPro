@@ -8,10 +8,7 @@
       <p>ЛПУ:{{ item.FKIDLPU }}</p>
       <div v-for="elem in item.STIMELIST" :key="elem.id">
         <button @click="chooseTimeToVisit(elem, item)">
-          C {{ elem.DFROM }}
-        </button>
-        <button @click="chooseTimeToVisit(elem, item)">
-          ПО {{ elem.DTO }}
+          C {{ elem.DFROM }} ПО {{ elem.DTO }}
         </button>
       </div>
     </div>
@@ -56,17 +53,13 @@ export default {
   },
   methods: {
     chooseTimeToVisit(elem, item) {
-      // console.log("elem:", elem);
-      // console.log("item:", item);
-      console.log("name:", this.data.name);
-      console.log("fieldId:", this.data.fieldId);
-      console.log("elem:", elem);
-      console.log("item:", item);
-      // this.$emit("update", {
-      //   fieldId: this.data.fieldId,
-      //   name: this.data.name,
-      //   value: elem,
-      // });
+      const copyChoosenElement = Object.assign({}, item, elem);
+
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: copyChoosenElement,
+      });
     },
   },
 };
