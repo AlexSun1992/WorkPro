@@ -7,8 +7,12 @@
       <p>DDATE:{{ item.DDATE }}</p>
       <p>ЛПУ:{{ item.FKIDLPU }}</p>
       <div v-for="elem in item.STIMELIST" :key="elem.id">
-        <button @click="test">C {{ elem.DFROM }}</button>
-        <button @click="test">До {{ elem.DTO }}</button>
+        <button @click="chooseTimeToVisit(elem, item)">
+          C {{ elem.DFROM }}
+        </button>
+        <button @click="chooseTimeToVisit(elem, item)">
+          ПО {{ elem.DTO }}
+        </button>
       </div>
     </div>
   </div>
@@ -51,14 +55,18 @@ export default {
     },
   },
   methods: {
-    // async press() {
-    //   await this.$store.dispatch("blocks/fetchBlock", {
-    //     id: this.data.menudic,
-    //     query: this.$store.getters["data_card/getFiltersAllFields"],
-    //   });
-    // },
-    test() {
-      console.log("test");
+    chooseTimeToVisit(elem, item) {
+      // console.log("elem:", elem);
+      // console.log("item:", item);
+      console.log("name:", this.data.name);
+      console.log("fieldId:", this.data.fieldId);
+      console.log("elem:", elem);
+      console.log("item:", item);
+      // this.$emit("update", {
+      //   fieldId: this.data.fieldId,
+      //   name: this.data.name,
+      //   value: elem,
+      // });
     },
   },
 };

@@ -166,6 +166,14 @@ export default {
       });
       this.visible = false;
       this.$store.commit("data_card/setFilters", valuePrepare);
+      console.log("fieldId:", this.data.fieldId);
+      console.log("name:", this.data.name);
+      console.log("value:", valuePrepare);
+      console.log(
+        "text:",
+        value[this.data.name.substring(2)] ||
+          value[this.dataContent.fields[1].label]
+      );
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
