@@ -23,6 +23,19 @@
               :nav-items="menuWithOutIcon"
             />
           </div>
+          <div class="feedback mt-4">
+            <div class="title">Обратная связь</div>
+            <div class="description">
+              Напишите нам и мы оперативно<br />свяжемся с вами
+            </div>
+            <a
+              href="/cabinet/55/0/917"
+              type="button"
+              class="btn_one icon-feedback"
+            >
+              Написать
+            </a>
+          </div>
         </div>
         <div class="col-12 col-lg-8">
           <div class="body">

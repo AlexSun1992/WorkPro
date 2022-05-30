@@ -2,12 +2,12 @@
   <footer>
     <div class="container">
       <div class="row">
-        <div class="col-lg-8 col-12 order-1 pl-md-0 px-0">
-          <div class="menu-link d-md-flex">
+        <div class="col-lg-8 col-12 order-1 pl-lg-0 px-0">
+          <div class="menu-link d-lg-flex">
             <div class="products_all ps-0">
               <a href>Оформить страховой полис</a>
 
-              <div class="product menu-auto mb-md-4 pb-md-4 position-relative">
+              <div class="product menu-auto mb-lg-4 pb-lg-4 position-relative">
                 <a
                   v-for="(item, index) in footerMenuCarSave"
                   :key="index"
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div
-          class="col-lg-4 pl-lg-4 col-md-6 col-12 order-2 order-md-3 order-lg-2 pt-4 pt-lg-0 pl-md-3"
+          class="col-lg-4 pl-lg-4 col-12 order-2 order-lg-2 pt-4 pt-lg-0 pl-md-3"
         >
           <div class="title mt-0 mb-0 mb-lg-3">
             <a href="tel:+78002341802" class="footer-tel">8 (800) 234-18-02</a>
@@ -121,7 +121,7 @@
             </a>
           </div>
         </div>
-        <div class="col-lg-12 col-md-6 col-12 order-2 order-lg-3 h-line-footer">
+        <div class="col-lg-12 col-12 order-2 order-lg-3 h-line-footer">
           <button @click="toggleClassOpen" class="open-info">
             Раскрытие обязательной информации
           </button>
