@@ -1,12 +1,9 @@
 import { getFieldsValueTypeIsNotUploader } from "./data_card.helpers";
-//import { convertFieldValuesToJSON } from "./data_card.helpers";
 import { getSplicedObjects } from "./data_card.helpers";
 import { getFieldsValueTypeUploader } from "./data_card.helpers";
-// import { preparing } from "./data_card.helpers";
 import { changeObj } from "./data_card.helpers";
 import { data } from "./data_card.helpers.fixtures";
 import { testData } from "./data_card.helpers.fixtures";
-// import {copyObject} from "./data_card.helpers"
 
 describe("Модуль подготовки данных", () => {
   it("получает объекты кроме типа Uploader", () => {
@@ -15,13 +12,6 @@ describe("Модуль подготовки данных", () => {
       getFieldsValueTypeIsNotUploader(TEST_DATA);
     expect(Array.isArray(arrayOfFieldsWithOutUploader)).toBe(true);
   });
-
-  // it("преобразовывает все объекты массива в JSON", () => {
-  //   const TEST_DATA = [...data];
-  //   const arrayOfJSON = convertFieldValuesToJSON(TEST_DATA);
-  //   // console.log("arrayOfJSON:", arrayOfJSON);
-  //   expect(Array.isArray(arrayOfJSON)).toBe(true);
-  // });
 
   it("удаляем ненужные свойства у объектов", () => {
     const TEST_DATA = [...data];

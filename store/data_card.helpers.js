@@ -1,5 +1,3 @@
-//const FormData = require("form-data");
-
 export function getFieldsValueTypeIsNotUploader(fieldsValues) {
   const notUploaderTypeFieldsValues = fieldsValues.filter(
     (field) => field.type !== "Uploader"
@@ -59,7 +57,9 @@ export function copyObject(obj) {
 
 export function convertUploaderFilesToFormData(obj) {
   const formData = new FormData();
+
   const copyObjBlobs = copyObject(obj);
+
   const copyObjNotBlob = copyObject(obj);
 
   Object.keys(copyObjBlobs).forEach((item) => {

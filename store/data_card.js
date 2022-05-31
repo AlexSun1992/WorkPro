@@ -1,15 +1,7 @@
 /* eslint-disable no-param-reassign */
 import Axios from "axios";
-
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
-import { getFieldsValueTypeIsNotUploader } from "./data_card.helpers";
-import { rebuildObject } from "./data_card.helpers";
-import { deleteRedundantProperty } from "./data_card.helpers";
-import { getSplicedObjects } from "./data_card.helpers";
-import { reSet } from "./data_card.helpers";
-import { changeObj } from "./data_card.helpers";
-import { getFieldsValueTypeUploader } from "./data_card.helpers";
 import converter from "../converters/form";
 import { convertUploaderFilesToFormData } from "./data_card.helpers";
 
@@ -299,7 +291,9 @@ export const actions = {
   },
 
   async saveDataCardUploaders({ commit, state }, params) {
-    const getFieldData = converter.save(state.form);
+    const copyFieldData = state.form.map((item) => ({ ...item }));
+
+    const getFieldData = converter.save(copyFieldData);
 
     const dataIsReadyToTransfer = convertUploaderFilesToFormData(getFieldData);
 
