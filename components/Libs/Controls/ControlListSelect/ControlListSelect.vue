@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <div v-click-outside="outside">
+    <div v-click-outside="outside"         class="position-relative">
       <b-form-group
         :label="data.label"
         :class="{ required: data.required }"
         :label-for="data.name"
+
       >
         <control-wrapper-select
           :options="options"
@@ -19,18 +19,14 @@
           Обязательно для заполнения
         </b-form-invalid-feedback>
       </b-form-group>
-      <div class="col-lg-2 pt-lg-2 text-nowrap">
-        <b-button
+        <button
           v-if="!isLoad && itemValue[optionsValue] && getData"
-          class="reload-captcha mt-1"
+          class="btn-abs-cleare"
           variant="outline-success"
           @click="clearItem"
         >
           {{ data.placeholder || "Очистить" }}
-        </b-button>
-        <b-spinner v-if="isLoad" />
-      </div>
-    </div>
+        </button>
   </div>
 </template>
 <script>
