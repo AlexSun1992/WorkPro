@@ -829,13 +829,11 @@ export default {
         }
         this.myClusterer?.removeAll();
 
-        let offices;
+        let offices = this.getOfficesByCity
 
         if (this.currentFilters) {
           offices = filterData(this.getOfficesByCity, this.currentFilters);
         }
-
-        offices = this.getOfficesByCity
 
         this.myClusterer.add(this.getGeoObjects(offices));
         this.myMap.geoObjects.add(this.myClusterer);
