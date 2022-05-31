@@ -1493,6 +1493,14 @@
             left: 0;
         }
         
+        .ui.selection.active.dropdown,
+        .ui.selection.active.dropdown .menu {
+            border: 1px solid #686868;
+            box-shadow: none;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        
         @media (max-width: 992px) {
             .menu-burger,
             .burger {
