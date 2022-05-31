@@ -1472,6 +1472,27 @@
             right: 10px;
         }
         
+        .p1 {
+            font-size: 1.25rem;
+        }
+        
+        .my-location {
+            height: inherit;
+            display: inline-block;
+            position: relative;
+            width: 24px;
+        }
+        
+        .my-location:after {
+            content: "";
+            background: url(/img/my-location.svg) 50% 50% no-repeat;
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            top: -19px;
+            left: 0;
+        }
+        
         @media (max-width: 992px) {
             .menu-burger,
             .burger {
