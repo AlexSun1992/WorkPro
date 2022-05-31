@@ -35,5 +35,4 @@ describe("Модуль подготовки данных", () => {
     const getFilesTypeBlob = preparing(testData);
     expect(typeof getFilesTypeBlob === "object").toBe(true);
   });
-  it();
 });
