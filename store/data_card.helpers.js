@@ -1,3 +1,5 @@
+import { isArray } from "lodash";
+
 export function getFieldsValueTypeIsNotUploader(fieldsValues) {
   const notUploaderTypeFieldsValues = fieldsValues.filter(
     (field) => field.type !== "Uploader"
@@ -55,31 +57,26 @@ export function copyObject(obj) {
   return Object.assign({}, obj);
 }
 
+export function isArrayOfBlobs(obj) {
+  return Array.isArray(obj) ? true : false;
+}
+
+export function isTypeBlob(array) {
+  return array.every((item) => item.type === "field/blob");
+}
+
 export function convertUploaderFilesToFormData(obj) {
   const formData = new FormData();
 
-  const copyObjBlobs = copyObject(obj);
-
-  const copyObjNotBlob = copyObject(obj);
-
-  Object.keys(copyObjBlobs).forEach((item) => {
-    if (!Array.isArray(copyObjBlobs[item])) {
-      delete copyObjBlobs[item];
+  const noBlobs = Object.entries(obj).filter(([key, value]) => {
+    if (isArrayOfBlobs(value) && isTypeBlob) {
+      value.forEach((item) => formData.append(key, item));
+      return false;
     }
+    return true;
   });
 
-  Object.keys(copyObjNotBlob).forEach((item) => {
-    if (Array.isArray(copyObjNotBlob[item])) {
-      delete copyObjNotBlob[item];
-    }
-  });
+  formData.append("JSON", JSON.stringify(Object.fromEntries(noBlobs)));
 
-  Object.keys(copyObjBlobs).forEach((item) => {
-    for (let i = 0; i < copyObjBlobs[item].length; i++) {
-      formData.append(`${item}`, copyObjBlobs[item][i]);
-    }
-  });
-
-  formData.append("JSON", JSON.stringify(copyObjNotBlob));
   return formData;
 }
