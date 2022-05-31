@@ -1,11 +1,6 @@
 <template>
-  <div class="mt-1 mb-2">
-    <p>
-      <strong>
-        {{ data.label }}
-      </strong>
-    </p>
-    <hr />
+  <div class="title-conf-block">
+    {{ data.label }}
   </div>
 </template>
 
