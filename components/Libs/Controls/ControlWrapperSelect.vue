@@ -8,6 +8,7 @@
       :option-value="optionsValue"
       :custom-text="displayText"
       :placeholder="placeholder || 'Выберите из списка'"
+      :is-disabled="isDisabled"
     >
     </model-list-select>
   </div>
@@ -47,6 +48,11 @@ export default {
       type: String,
       required: false,
     },
+    isDisabled: {
+      type: Boolean,
+      required: true,
+      default: () => false,
+    },
   },
   mounted() {
     if (this.$refs[this.selectId]) {
@@ -61,6 +67,7 @@ export default {
         return this.itemValue;
       },
       set: function (value) {
+        console.log("wrapperSelect value:", value);
         this.$emit("selectItem", value);
       },
     },

@@ -14,7 +14,11 @@
           :display-text="displayText"
           @openList="openList"
           @selectItem="selectItem"
+          :is-disabled="getTrue"
+          ref="element"
         />
+        {{ arrayOfFields.length }}
+        {{ getTrue }}
         <b-form-invalid-feedback>
           Обязательно для заполнения
         </b-form-invalid-feedback>
@@ -88,10 +92,22 @@ export default {
     return {
       visible: false,
       isLoad: false,
+      arrayOfFields: [],
+      isFilled: false,
+      isVisited: false,
     };
   },
 
   computed: {
+    getTrue: {
+      get() {
+        if (this.data.label === "Застрахованный") {
+          return false;
+        }
+        return true;
+      },
+    },
+
     dataContent: {
       get() {
         const block = this.$store.getters["blocks/getUnfilteredBlockById"](
@@ -148,12 +164,33 @@ export default {
     },
   },
 
+  watch: {
+    arrayOfFields() {
+      if (this.arrayOfFields.length > 0) {
+        if (this.arrayOfFields[0].label === "Застрахованный") {
+          this.isVisited = true;
+        }
+      }
+      if (this.arrayOfFields.length === 0) {
+        this.isVisited = false;
+      }
+    },
+  },
+
+  created() {
+    //this.isFilled = this.data.label === "Застрахованный" ? true : false;
+    //console.log('data:',)
+  },
+
+  updated() {},
+
   methods: {
     displayText(item) {
       return this.$root.eventHandler(this.data, item, "displayText");
     },
     selectItem(value) {
       const valuePrepare = { ...value };
+      this.arrayOfFields.push(value);
       Object.keys(valuePrepare).map((key) => {
         if (Number.isInteger(valuePrepare[key]) === false) {
           try {
