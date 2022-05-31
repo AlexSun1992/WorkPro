@@ -723,31 +723,31 @@ export default {
 
     async setPositionAttributes() {
       let lat = +Cookies.get("lat");
-      if (!lat) {
-        let geolocation = await ymaps.geolocation.get();
-        if (geolocation) {
-          let query = this.suggest
-            ? this.suggest
-            : geolocation.geoObjects.get(0).properties.get("text");
-          this.centerCoords = geolocation.geoObjects.position;
-          try {
-            this.address = await this.$axios.post("/api/suggestions/address", {
-              query,
-              count: 1,
-            });
-            if (this.address.data.suggestions.length) {
-              this.regionId =
-                this.address.data.suggestions[0].data.city_kladr_id.substr(
-                  0,
-                  2
-                );
-              this.city = this.address.data.suggestions[0].data.city;
-            }
-          } catch (e) {
-            console.log(e);
-          }
-        }
-      }
+      // if (!lat) {
+      //   let geolocation = await ymaps.geolocation.get();
+      //   if (geolocation) {
+      //     let query = this.suggest
+      //       ? this.suggest
+      //       : geolocation.geoObjects.get(0).properties.get("text");
+      //     this.centerCoords = geolocation.geoObjects.position;
+      //     try {
+      //       this.address = await this.$axios.post("/api/suggestions/address", {
+      //         query,
+      //         count: 1,
+      //       });
+      //       if (this.address.data.suggestions.length) {
+      //         this.regionId =
+      //           this.address.data.suggestions[0].data.city_kladr_id.substr(
+      //             0,
+      //             2
+      //           );
+      //         this.city = this.address.data.suggestions[0].data.city;
+      //       }
+      //     } catch (e) {
+      //       console.log(e);
+      //     }
+      //   }
+      // }
       if (!this.suggest && lat) {
         this.city = Cookies.get("location_user");
         this.regionId = Cookies.get("kladr_id")?.substr(0, 2);
