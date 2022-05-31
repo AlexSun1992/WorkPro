@@ -632,8 +632,14 @@ export default {
 
     combineAgencies(agencies, i, count) {
       let arr = [];
-      agencies.slice(i, i + count).forEach((item) => {
-        arr.push(getTemplate(item));
+      let slicedAgencies = agencies.slice(i, i + count)
+      slicedAgencies.sort((a, b) => {
+        if (!a.NORDER) a.NORDER = 0
+        if (!b.NORDER) b.NORDER = 0
+        return a.NORDER - b.NORDER
+      })
+      slicedAgencies.forEach((item) => {
+        arr.push(getTemplate(item))
       });
       return arr;
     },
@@ -704,38 +710,44 @@ export default {
             }
           }
         }
-        showOnMap(e.get("item").value);
+        let addressArr;
+        if (e.get("item").value.includes('линия')) {
+          addressArr = e.get("item").value.split(', ')
+          addressArr.splice(2,1)
+          addressArr = addressArr.join()
+        }
+        showOnMap(addressArr ? addressArr : e.get("item").value);
       }
       this.suggestView.events.add("select", func);
     },
 
     async setPositionAttributes() {
       let lat = +Cookies.get("lat");
-      if (!lat) {
-        let geolocation = await ymaps.geolocation.get();
-        if (geolocation) {
-          let query = this.suggest
-            ? this.suggest
-            : geolocation.geoObjects.get(0).properties.get("text");
-          this.centerCoords = geolocation.geoObjects.position;
-          try {
-            this.address = await this.$axios.post("/api/suggestions/address", {
-              query,
-              count: 1,
-            });
-            if (this.address.data.suggestions.length) {
-              this.regionId =
-                this.address.data.suggestions[0].data.city_kladr_id.substr(
-                  0,
-                  2
-                );
-              this.city = this.address.data.suggestions[0].data.city;
-            }
-          } catch (e) {
-            console.log(e);
-          }
-        }
-      }
+      // if (!lat) {
+      //   let geolocation = await ymaps.geolocation.get();
+      //   if (geolocation) {
+      //     let query = this.suggest
+      //       ? this.suggest
+      //       : geolocation.geoObjects.get(0).properties.get("text");
+      //     this.centerCoords = geolocation.geoObjects.position;
+      //     try {
+      //       this.address = await this.$axios.post("/api/suggestions/address", {
+      //         query,
+      //         count: 1,
+      //       });
+      //       if (this.address.data.suggestions.length) {
+      //         this.regionId =
+      //           this.address.data.suggestions[0].data.city_kladr_id.substr(
+      //             0,
+      //             2
+      //           );
+      //         this.city = this.address.data.suggestions[0].data.city;
+      //       }
+      //     } catch (e) {
+      //       console.log(e);
+      //     }
+      //   }
+      // }
       if (!this.suggest && lat) {
         this.city = Cookies.get("location_user");
         this.regionId = Cookies.get("kladr_id")?.substr(0, 2);
@@ -816,7 +828,14 @@ export default {
           this.regionId = null;
         }
         this.myClusterer?.removeAll();
-        this.myClusterer.add(this.getGeoObjects(this.getOfficesByCity));
+
+        let offices = this.getOfficesByCity
+
+        if (this.currentFilters) {
+          offices = filterData(this.getOfficesByCity, this.currentFilters);
+        }
+
+        this.myClusterer.add(this.getGeoObjects(offices));
         this.myMap.geoObjects.add(this.myClusterer);
       } catch (e) {
         console.log(e);
@@ -958,7 +977,7 @@ export default {
             let filteredByStation = [];
             this.getOffices.forEach((item) => {
               item.IDUNDERGROUND.forEach((station) => {
-                if (station.SNAME.includes(this.currentStation)) {
+                if (station.SNAME.toLowerCase().replace("ё", "е").includes(this.currentStation.toLowerCase().replace("ё", "е"))) {
                   filteredByStation.push(item);
                 }
               });

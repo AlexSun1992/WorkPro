@@ -89,12 +89,14 @@ export const getters = {
           ...accumulator,
           [currentValue.name.substring(2)]: currentValue.value?.value,
         };
-      } else if (currentValue.type === "listSelect") {
+      }
+      if (currentValue.type === "listSelect") {
         return {
           ...accumulator,
           ...currentValue.value?.value,
         };
-      } else if (currentValue.type === "timestamp") {
+      }
+      if (currentValue.type === "timestamp") {
         return {
           ...accumulator,
 
@@ -104,12 +106,11 @@ export const getters = {
                 .format("YYYY-MM-DD HH:mm:ss")
             : "",
         };
-      } else {
-        return {
-          ...accumulator,
-          [currentValue.name]: currentValue.value,
-        };
       }
+      return {
+        ...accumulator,
+        [currentValue.name]: currentValue.value,
+      };
     }, {});
   },
 };
@@ -165,7 +166,7 @@ export const actions = {
             res.data.metaData.data.length ? res.data.metaData.data : res.data
           );
           if (params.idCard === "0") {
-            getters["getForm"].forEach((item) => {
+            getters.getForm.forEach((item) => {
               if (params.query[item.name]) {
                 if (item.name.substring(0, 2) === `FK`) {
                   const text = params.query[item.name];
@@ -182,10 +183,10 @@ export const actions = {
             });
           }
           if (res.data.metaData.data.length) {
-            if (getters["getDataFieldByType"]("captcha")) {
+            if (getters.getDataFieldByType("captcha")) {
               dispatch("fetchCaptcha", {
-                params: getters["getFormParams"],
-                data: getters["getDataFieldByType"]("captcha"),
+                params: getters.getFormParams,
+                data: getters.getDataFieldByType("captcha"),
               });
             }
           }
@@ -266,7 +267,7 @@ export const actions = {
 
     try {
       await Promise.all(state.beforeSavePromises.map((func) => func()));
-      let resp = await this.$axios.post(
+      const resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
           params.relId
         }${params.zone === "free" ? "?zone=free" : ""}`,
@@ -332,13 +333,13 @@ export const actions = {
     { moduleId, actionId, cardId }
   ) {
     try {
-      //commit("setLoading", true);
-      //commit("setDisabled", true);
+      // commit("setLoading", true);
+      // commit("setDisabled", true);
       return await this.$axios
         .get(`/api/action/${moduleId}/${actionId}/${cardId}`)
         .then((resp) => {
-          //commit("setLoading", false);
-          //commit("setDisabled", false);
+          // commit("setLoading", false);
+          // commit("setDisabled", false);
           commit("setActionParams", resp.data);
           return resp.data;
         });
@@ -360,7 +361,7 @@ export const actions = {
           )
         )
         .then((res) => {
-          commit("setCaptcha", { captcha: res.data, data: data });
+          commit("setCaptcha", { captcha: res.data, data });
           return res.data;
         });
     } catch (error) {
@@ -404,13 +405,13 @@ export const actions = {
       let relationValue;
       let url;
       if (isRelation && fieldRelation) {
-        relationValue = getters["getDataFieldByName"](fieldRelation);
+        relationValue = getters.getDataFieldByName(fieldRelation);
         url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
       } else {
         url = `/api/dic/55/${id}/${dic}`;
       }
       const data = await this.$axios.get(encodeURI(url));
-      commit("setEnumOptions", { options: data.data, fieldId: fieldId });
+      commit("setEnumOptions", { options: data.data, fieldId });
     } catch (error) {
       if (error.response) {
         commit("setError", true);
@@ -423,7 +424,7 @@ export const actions = {
     try {
       dispatch("cancelRequest");
       commit("setSource", this.$axios.CancelToken.source());
-      let result = await this.$axios[params.method](params.url, {
+      const result = await this.$axios[params.method](params.url, {
         cancelToken: getters.getSource.token,
       });
 
@@ -517,8 +518,7 @@ export const mutations = {
               item.value = item.options[0];
             }
           } else {
-            item.state =
-              item.value.value || item.value.value == 0 ? true : false;
+            item.state = !!(item.value.value || item.value.value == 0);
           }
         }
       }
@@ -551,7 +551,7 @@ export const mutations = {
   clearFormRelationField(state, { name }) {
     let currentFieldName = name;
     while (true) {
-      let item = state.form.find((d) => d.fieldRelation === currentFieldName);
+      const item = state.form.find((d) => d.fieldRelation === currentFieldName);
       if (item) {
         item.value = {};
         item.options = [];
@@ -563,8 +563,8 @@ export const mutations = {
   },
   setFieldError(state, data) {
     try {
-      let [fieldName, fieldValue] = data.split("=");
-      let field = state.form.find((item) => item.name === fieldName);
+      const [fieldName, fieldValue] = data.split("=");
+      const field = state.form.find((item) => item.name === fieldName);
       field.error = fieldValue || data;
     } catch (error) {
       // console.log(error);
@@ -593,7 +593,7 @@ export const mutations = {
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {
       state.form = state.form.map((item) => {
-        let copyField = state.copyForm.find(
+        const copyField = state.copyForm.find(
           (field) => field.fieldId === item.fieldId
         );
 

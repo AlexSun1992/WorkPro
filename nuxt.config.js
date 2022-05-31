@@ -30,14 +30,14 @@ module.exports = {
      ** Global CSS
      */
     css: [
-        { src: "~/assets/scss/style2022", lang: "scss" },
         { src: "~/assets/scss/font2022", lang: "scss" },
+        { src: "~/assets/scss/style2022", lang: "scss" },
         /*{ src: "~/assets/scss/bootstrap/bootstrap", lang: "scss" },
-                { src: "~/assets/scss/bootstrap/bootstrap-grid", lang: "scss" },
-                { src: "~/assets/scss/bootstrap/bootstrap-reboot", lang: "scss" },
-                { src: "~/assets/scss/bootstrap/modal", lang: "scss" },
-                { src: "~/assets/scss/font", lang: "scss" },
-                { src: "~/assets/scss/_custom", lang: "scss" },*/
+                    { src: "~/assets/scss/bootstrap/bootstrap-grid", lang: "scss" },
+                    { src: "~/assets/scss/bootstrap/bootstrap-reboot", lang: "scss" },
+                    { src: "~/assets/scss/bootstrap/modal", lang: "scss" },
+                    { src: "~/assets/scss/font", lang: "scss" },
+                    { src: "~/assets/scss/_custom", lang: "scss" },*/
     ],
     /*
      ** Plugins to load before mounting the App
