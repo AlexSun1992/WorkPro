@@ -1,32 +1,31 @@
 <template>
-    <div v-click-outside="outside"         class="position-relative">
-      <b-form-group
-        :label="data.label"
-        :class="{ required: data.required }"
-        :label-for="data.name"
-
-      >
-        <control-wrapper-select
-          :options="options"
-          :select-id="selectId"
-          :item-value="itemValue"
-          :options-value="optionsValue"
-          :display-text="displayText"
-          @openList="openList"
-          @selectItem="selectItem"
-        />
-        <b-form-invalid-feedback>
-          Обязательно для заполнения
-        </b-form-invalid-feedback>
-      </b-form-group>
-        <button
-          v-if="!isLoad && itemValue[optionsValue] && getData"
-          class="btn-abs-cleare"
-          variant="outline-success"
-          @click="clearItem"
-        >
-          {{ data.placeholder || "Очистить" }}
-        </button>
+  <div v-click-outside="outside" class="position-relative">
+    <b-form-group
+      :label="data.label"
+      :class="{ required: data.required }"
+      :label-for="data.name"
+    >
+      <control-wrapper-select
+        :options="options"
+        :select-id="selectId"
+        :item-value="itemValue"
+        :options-value="optionsValue"
+        :display-text="displayText"
+        @openList="openList"
+        @selectItem="selectItem"
+      />
+      <b-form-invalid-feedback>
+        Обязательно для заполнения
+      </b-form-invalid-feedback>
+    </b-form-group>
+    <button
+      v-if="!isLoad && itemValue[optionsValue] && getData"
+      class="btn-abs-cleare"
+      variant="outline-success"
+      @click="clearItem"
+    >
+      {{ data.placeholder || "Очистить" }}
+    </button>
   </div>
 </template>
 <script>
@@ -146,7 +145,10 @@ export default {
 
   methods: {
     displayText(item) {
-      return this.$root.eventHandler(this.data, item, "displayText");
+      if (typeof this.$root.eventHandler === "function") {
+        return this.$root.eventHandler(this.data, item, "displayText");
+      }
+      return null;
     },
     selectItem(value) {
       const valuePrepare = { ...value };
