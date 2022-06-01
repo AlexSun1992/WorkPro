@@ -70,6 +70,58 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
     res.send(e);
   }
 });
+router.get("/card/:idModule/:idItem", (req, res) => {
+  try {
+    let mobile2ServiceInstance = mobile2Service();
+    if (req.headers.referer) {
+      if (req.headers.referer.includes("testdms")) {
+        mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");
+      }
+    }
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    if (req.query.zone !== "free") {
+      if (req?.headers?.authorization) {
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
+          req.headers.authorization;
+      } else {
+        if (req?.cookies["auth._token.local"]) {
+          mobile2ServiceInstance.defaults.headers.common.Authorization =
+            req?.cookies["auth._token.local"];
+        }
+      }
+    }
+    const URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${
+      req.params.idItem
+    }?json=${encodeURIComponent(JSON.stringify(req.query))}`;
+    mobile2ServiceInstance({
+      url: URL_ADDRESS,
+      method: "GET",
+    })
+      .then(async (resp) => {
+        const data = await formConverter.form(
+          resp.data,
+          {
+            ...req.query,
+            ...req.params,
+          },
+          mobile2ServiceInstance
+        );
+        res.send(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err?.response?.data?.STATUS == 401) {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        } else {
+          res
+            .status(err?.response?.data?.STATUS || 500)
+            .send(err?.response?.data || err);
+        }
+      });
+  } catch (e) {
+    res.send(e);
+  }
+});
 router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();

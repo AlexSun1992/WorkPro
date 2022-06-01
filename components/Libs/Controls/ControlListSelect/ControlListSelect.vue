@@ -1,36 +1,31 @@
 <template>
-  <div>
-    <div v-click-outside="outside">
-      <b-form-group
-        :label="data.label"
-        :class="{ required: data.required }"
-        :label-for="data.name"
-      >
-        <control-wrapper-select
-          :options="options"
-          :select-id="selectId"
-          :item-value="itemValue"
-          :options-value="optionsValue"
-          :display-text="displayText"
-          @selectItem="selectItem"
-          @openList="openList"
-        />
-        <b-form-invalid-feedback>
-          Обязательно для заполнения
-        </b-form-invalid-feedback>
-      </b-form-group>
-      <div class="col-lg-2 pt-lg-2 text-nowrap">
-        <b-button
-          v-if="!isLoad && itemValue[optionsValue] && getData"
-          class="reload-captcha mt-1"
-          variant="outline-success"
-          @click="clearItem"
-        >
-          {{ data.placeholder || "Очистить" }}
-        </b-button>
-        <b-spinner v-if="isLoad" />
-      </div>
-    </div>
+  <div v-click-outside="outside" class="position-relative">
+    <b-form-group
+      :label="data.label"
+      :class="{ required: data.required }"
+      :label-for="data.name"
+    >
+      <control-wrapper-select
+        :options="options"
+        :select-id="selectId"
+        :item-value="itemValue"
+        :options-value="optionsValue"
+        :display-text="displayText"
+        @openList="openList"
+        @selectItem="selectItem"
+      />
+      <b-form-invalid-feedback>
+        Обязательно для заполнения
+      </b-form-invalid-feedback>
+    </b-form-group>
+    <button
+      v-if="!isLoad && itemValue[optionsValue] && getData"
+      class="btn-abs-cleare"
+      variant="outline-success"
+      @click="clearItem"
+    >
+      {{ data.placeholder || "Очистить" }}
+    </button>
   </div>
 </template>
 <script>
@@ -150,7 +145,10 @@ export default {
 
   methods: {
     displayText(item) {
-      return this.$root.eventHandler(this.data, item, "displayText");
+      if (typeof this.$root.eventHandler === "function") {
+        return this.$root.eventHandler(this.data, item, "displayText");
+      }
+      return null;
     },
     selectItem(value) {
       const valuePrepare = { ...value };
