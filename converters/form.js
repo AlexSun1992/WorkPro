@@ -338,11 +338,6 @@ converter.type = (data, isReadOnly) => {
           copy[i].type = `enum`;
           if (data[i].menudic) {
             copy[i].type = `listSelect`;
-            // if (webFields[i].IDCONTROL === 46) {
-            //   copy[i].type = "DoctorSchedule";
-            // }
-            //console.log("data:", data[i].menudic);
-            //console.log("data:label", data[i].label);
             if (data[i].label === "Расписание") {
               copy[i].type = `doctorSchedule`;
               console.log("data:", data[i].menudic);

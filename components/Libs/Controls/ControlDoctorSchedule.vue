@@ -53,12 +53,11 @@ export default {
   },
   methods: {
     chooseTimeToVisit(elem, item) {
-      const copyChoosenElement = Object.assign({}, item, elem);
-
+      const copyValue = Object.assign({}, item, elem);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: copyChoosenElement,
+        value: { value: copyValue },
       });
     },
   },
