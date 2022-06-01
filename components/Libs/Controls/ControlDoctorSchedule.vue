@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div v-for="item in options" :key="item.id" class="wrapper">
+    <div v-for="item in options" :key="item.id">
       <p>Врач: {{ item.SPERSON }}</p>
       <p>Время приема и специалист:{{ item.SNAME }}</p>
       <p>Время начала приема:{{ item.SDATETIME }}</p>
       <p>DDATE:{{ item.DDATE }}</p>
       <p>ЛПУ:{{ item.FKIDLPU }}</p>
       <div v-for="elem in item.STIMELIST" :key="elem.id">
-        <button @click="chooseTimeToVisit(elem, item)">
+        <b-button @click="chooseTimeToVisit(elem, item)">
           C {{ elem.DFROM }} ПО {{ elem.DTO }}
-        </button>
+        </b-button>
       </div>
     </div>
   </div>
@@ -47,7 +47,6 @@ export default {
     },
     options: {
       get() {
-        console.log("options:", options);
         return this.dataContent.items || [];
       },
     },
