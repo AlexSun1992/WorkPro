@@ -47,6 +47,7 @@ export default {
     },
     options: {
       get() {
+        console.log("options:", options);
         return this.dataContent.items || [];
       },
     },
