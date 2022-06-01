@@ -64,8 +64,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.wrapper {
-  box-shadow: 0 0 2px 2px black;
-}
-</style>
+<style scoped></style>
