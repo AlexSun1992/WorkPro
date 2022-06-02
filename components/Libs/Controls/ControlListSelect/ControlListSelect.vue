@@ -15,6 +15,7 @@
         @selectItem="selectItem"
         :is-disabled="!edit ? !edit : data.readonly"
       />
+
       <b-form-invalid-feedback>
         Обязательно для заполнения
       </b-form-invalid-feedback>
