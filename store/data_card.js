@@ -146,13 +146,13 @@ export const actions = {
         url = encodeURI(
           `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${params.idCard}/0`
         );
-      } else if (params.idRel) {
+      } else if (params.idRel || params.idCard === "0") {
         url = encodeURI(
           `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${
             params.idRel
           }${params.zone === "free" ? "?zone=free" : ""}`
         );
-      } else {
+      } else if (params.idCard !== "0") {
         const queryParams = { ID: params.idCard, ...params.query };
         const queryString = Object.keys(queryParams)
           .map((key) => `${key}=${queryParams[key]}`)
