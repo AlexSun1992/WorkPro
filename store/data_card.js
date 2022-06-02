@@ -2,6 +2,8 @@
 import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
+import converter from "../converters/form";
+import { convertUploaderFilesToFormData } from "./data_card.helpers";
 
 export const state = () => ({
   options: [],
@@ -267,9 +269,10 @@ export const actions = {
       }
     }
   },
-  async saveDataCard({ commit, state, dispath }, params) {
+  async saveDataCard({ commit, state, dispatch }, params) {
     commit("setLoading", true);
     commit("setDisabled", true);
+
     try {
       await Promise.all(state.beforeSavePromises.map((func) => func()));
       const resp = await this.$axios.post(
@@ -278,6 +281,7 @@ export const actions = {
         }${params.zone === "free" ? "?zone=free" : ""}`,
         params.form
       );
+
       commit("setSavedError", false);
       commit("setCardId", resp.data.ID);
       commit("setCardRelId", resp.data.REL);
@@ -294,6 +298,22 @@ export const actions = {
       commit("setDisabled", false);
     }
   },
+
+  async saveDataCardUploaders({ commit, state }, params) {
+    const copyFieldData = state.form.map((item) => ({ ...item }));
+
+    const getFieldData = converter.save(copyFieldData);
+
+    const dataIsReadyToTransfer = convertUploaderFilesToFormData(getFieldData);
+
+    this.$axios.post(
+      `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
+        params.cardId
+      }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
+      dataIsReadyToTransfer
+    );
+  },
+
   async executeAction(
     { dispatch, commit },
     { relId, relActionId, rowId, actionId, body }
@@ -584,6 +604,7 @@ export const mutations = {
         const copyField = state.copyForm.find(
           (field) => field.fieldId === item.fieldId
         );
+
         if (copyField.readonly) {
           item.readonly = true;
         } else {

@@ -187,6 +187,7 @@ export default {
 
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
+
       // if (field.type !== "button") {
       //   this.$store.commit("data_card/cardChanged", true);
       // }
@@ -353,12 +354,14 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
+
       if (this.validateData(fields)) {
         try {
           let itemId;
           let moduleId;
           let cardId;
           let relId;
+          let action;
           if (!this.params.page) {
             itemId = this.$route.params.idItem;
             moduleId = this.$route.params.idModule;
@@ -370,13 +373,23 @@ export default {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
           }
-          const resp = await this.$store.dispatch("data_card/saveDataCard", {
+
+          const isUploaderFieldValueExist = fields.find(
+            (elem) => elem.type === "Uploader" && elem.value !== undefined
+          );
+
+          if (isUploaderFieldValueExist === undefined) {
+            action = "saveDataCard";
+          } else action = "saveDataCardUploaders";
+
+          const resp = await this.$store.dispatch(`data_card/${action}`, {
             moduleId,
             itemId,
             cardId,
             relId,
             form: fields,
           });
+
           if (this.$route.params.idItem === "710") {
             await this.$store.dispatch("updateUser");
           }
@@ -478,6 +491,7 @@ export default {
       }
     },
     cancelDataCard() {
+      console.log("нашел!!!");
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit(
         "data_card/setForm",
