@@ -12,15 +12,15 @@
         <div class="col-lg-4 col-12 menu">
           <div
             class="wrapper"
-            v-bind:class="{
+            :class="{
               'sidebar-min': sideBarMini,
               mobile_menu: sideBarMobileMini,
             }"
           >
             <Sidebar
+              :nav-items="menuWithOutIcon"
               @mini-sidebar="changeSidebar"
               @mini-mobile-sidebar="changeMobileSidebar"
-              :nav-items="menuWithOutIcon"
             />
           </div>
           <div class="feedback mt-4">
@@ -60,14 +60,7 @@ import Sidebar from "~/components/Pages/Cabinet/Sidebar/Sidebar";
 import breadcrumbs from "~/converters/breadcrumbs";
 
 export default {
-  name: "full",
-  head() {
-    return {
-      title: this.$store.getters["menu/breadcrumbs"][2].text
-        ? this.$store.getters["menu/breadcrumbs"][2].text
-        : "РЕСО-Гарантия",
-    };
-  },
+  name: "Full",
   components: {
     Header,
     Sidebar,
@@ -78,6 +71,27 @@ export default {
       sideBarMini: false,
       sideBarMobileMini: false,
     };
+  },
+  head() {
+    return {
+      title: this.$store.getters["menu/breadcrumbs"][2]?.text
+        ? this.$store.getters["menu/breadcrumbs"][2]?.text
+        : "РЕСО-Гарантия",
+    };
+  },
+  computed: {
+    menuWithOutIcon() {
+      return this.$store.getters["menu/getMenuWithOutIcon"];
+    },
+    nav() {
+      return this.$store.getters["menu/menu"][0].children;
+    },
+    name() {
+      return this.$route.name;
+    },
+    items() {
+      return this.$store.getters["menu/breadcrumbs"];
+    },
   },
   watch: {
     $route(to, from) {
@@ -102,20 +116,6 @@ export default {
     changeMobileSidebar() {
       this.sideBarMobileMini = !this.sideBarMobileMini;
       this.sideBarMini = false;
-    },
-  },
-  computed: {
-    menuWithOutIcon() {
-      return this.$store.getters["menu/getMenuWithOutIcon"];
-    },
-    nav() {
-      return this.$store.getters["menu/menu"][0].children;
-    },
-    name() {
-      return this.$route.name;
-    },
-    items() {
-      return this.$store.getters["menu/breadcrumbs"];
     },
   },
 };
