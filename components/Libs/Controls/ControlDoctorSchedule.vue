@@ -8,7 +8,7 @@
       <p>ЛПУ:{{ item.FKIDLPU }}</p>
       <div v-for="elem in item.STIMELIST" :key="elem.id">
         <b-button @click="chooseTimeToVisit(elem, item)">
-          C {{ elem.DFROM }} ПО {{ elem.DTO }}
+          {{ elem.DFROM }}
         </b-button>
       </div>
     </div>

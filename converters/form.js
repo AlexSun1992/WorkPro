@@ -340,7 +340,6 @@ converter.type = (data, isReadOnly) => {
             copy[i].type = `listSelect`;
             if (data[i].label === "Расписание") {
               copy[i].type = `doctorSchedule`;
-              console.log("data:", data[i].menudic);
             }
           }
 
