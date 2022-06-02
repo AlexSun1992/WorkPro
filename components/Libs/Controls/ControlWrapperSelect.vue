@@ -67,7 +67,6 @@ export default {
         return this.itemValue;
       },
       set: function (value) {
-        console.log("wrapperSelect value:", value);
         this.$emit("selectItem", value);
       },
     },
