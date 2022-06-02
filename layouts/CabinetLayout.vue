@@ -9,7 +9,7 @@
         <li class="breadcrumb-item">Личный кабинет</li>
       </ol>
       <div class="row">
-        <div class="col-lg-4 col-12 menu">
+        <div class="col-lg-3 col-12 menu">
           <div
             class="wrapper"
             :class="{
@@ -23,7 +23,7 @@
               @mini-mobile-sidebar="changeMobileSidebar"
             />
           </div>
-          <div class="feedback mt-4">
+          <div class="feedback mt-4 d-none d-lg-block">
             <div class="title">Обратная связь</div>
             <div class="description">
               Напишите нам и мы оперативно<br />свяжемся с вами
@@ -37,7 +37,7 @@
             </a>
           </div>
         </div>
-        <div class="col-12 col-lg-8">
+        <div class="col-12 col-lg-9">
           <div class="body">
             <main class="main">
               <nuxt />
