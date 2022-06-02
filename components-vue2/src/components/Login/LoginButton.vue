@@ -1,5 +1,5 @@
 <template>
-  <div class="LoginButton">
+  <div class="LoginButton" id="btn_lk_head_all">
     <b-dropdown
       variant="login-link"
       v-if="isAuthentificated"
