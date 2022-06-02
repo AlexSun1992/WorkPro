@@ -25,7 +25,9 @@
                 :tab-index="[10, 15]"
                 :isError="errorMessage"
                 :isCodeFieldInValid="isCodeFieldInValid"
+                id="btn_code_recovery-password_tel_lk"
               />
+
               <b-row class="mt-3">
                 <b-form-group
                   label="Дата рождения"
@@ -54,6 +56,7 @@
                 :count="60"
                 :validateState="validateState"
                 :tab-index="[10, 15]"
+                id="btn_code_recovery-password_mail_lk"
               />
             </b-tab>
           </b-tabs>
