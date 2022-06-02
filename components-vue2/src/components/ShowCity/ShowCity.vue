@@ -1,6 +1,11 @@
 <template>
   <div>
-    <b-button class="select-sity" variant="link" @click="visible = !visible">
+    <b-button
+      class="select-sity"
+      variant="link"
+      @click="visible = !visible"
+      id="btn_city_head_all"
+    >
       {{ city }}
     </b-button>
     <b-collapse v-model="visible" class="sity-question">
@@ -13,6 +18,7 @@
           variant="primary"
           class="btn-icon-left"
           @click="setAutoCity(city)"
+          id="btn_yes_city_head_all"
         >
           Да, верно
         </b-button>
@@ -20,6 +26,7 @@
           variant="secondary"
           class="ml-3"
           @click="showModalSelectCity()"
+          id="btn_change_city_head_all"
         >
           Нет, другой
         </b-button>
