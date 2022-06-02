@@ -1,43 +1,4 @@
 <template>
-  <!-- <<<<<<< HEAD
-  <div>
-    <div v-click-outside="outside">
-      <b-form-group
-        :label="data.label"
-        :class="{ required: data.required }"
-        :label-for="data.name"
-      >
-        <control-wrapper-select
-          :options="options"
-          :select-id="selectId"
-          :item-value="itemValue"
-          :options-value="optionsValue"
-          :display-text="displayText"
-          @openList="openList"
-          @selectItem="selectItem"
-          :is-disabled="
-            isInsuredPersonChoosen === false ? getInsuredInDisabled : false
-          "
-          ref="element"
-        />
-
-        <b-form-invalid-feedback>
-          Обязательно для заполнения
-        </b-form-invalid-feedback>
-      </b-form-group>
-      <div class="col-lg-2 pt-lg-2 text-nowrap">
-        <b-button
-          v-if="!isLoad && itemValue[optionsValue] && getData"
-          class="reload-captcha mt-1"
-          variant="outline-success"
-          @click="clearItem"
-        >
-          {{ data.placeholder || "Очистить" }}
-        </b-button>
-        <b-spinner v-if="isLoad" />
-      </div>
-    </div>
-======= -->
   <div v-click-outside="outside" class="position-relative">
     <b-form-group
       :label="data.label"
@@ -68,7 +29,6 @@
     >
       {{ data.placeholder || "Очистить" }}
     </button>
-    >>>>>>> master
   </div>
 </template>
 <script>
@@ -128,6 +88,7 @@ export default {
       visible: false,
       isLoad: false,
       isInsuredPersonChoosen: false,
+      isInsuredPersonFieldVisited: false,
     };
   },
 
@@ -198,8 +159,9 @@ export default {
   },
 
   updated() {
-    this.test = this.$store.getters["blocks/isVisitedChecked"];
-    if (this.test === true) {
+    this.isInsuredPersonFieldVisited =
+      this.$store.getters["blocks/isVisitedChecked"];
+    if (this.isInsuredPersonFieldVisited === true) {
       this.isInsuredPersonChoosen = true;
     }
   },
