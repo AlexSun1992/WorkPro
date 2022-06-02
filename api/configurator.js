@@ -55,7 +55,7 @@ router.get("/module", (req, res) => {
             })
           )
           .catch((err) => {
-            res.status(err.response.data.STATUS).send(err.response.data);
+            res.status(err?.response?.data?.STATUS).send(err?.response?.data);
           });
       });
     };

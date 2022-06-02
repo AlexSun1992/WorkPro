@@ -9,21 +9,21 @@
         <li class="breadcrumb-item">Личный кабинет</li>
       </ol>
       <div class="row">
-        <div class="col-lg-4 col-12 menu">
+        <div class="col-lg-3 col-12 menu">
           <div
             class="wrapper"
-            v-bind:class="{
+            :class="{
               'sidebar-min': sideBarMini,
               mobile_menu: sideBarMobileMini,
             }"
           >
             <Sidebar
+              :nav-items="menuWithOutIcon"
               @mini-sidebar="changeSidebar"
               @mini-mobile-sidebar="changeMobileSidebar"
-              :nav-items="menuWithOutIcon"
             />
           </div>
-          <div class="feedback mt-4">
+          <div class="feedback mt-4 d-none d-lg-block">
             <div class="title">Обратная связь</div>
             <div class="description">
               Напишите нам и мы оперативно<br />свяжемся с вами
@@ -37,7 +37,7 @@
             </a>
           </div>
         </div>
-        <div class="col-12 col-lg-8">
+        <div class="col-12 col-lg-9">
           <div class="body">
             <main class="main">
               <nuxt />
@@ -60,14 +60,7 @@ import Sidebar from "~/components/Pages/Cabinet/Sidebar/Sidebar";
 import breadcrumbs from "~/converters/breadcrumbs";
 
 export default {
-  name: "full",
-  head() {
-    return {
-      title: this.$store.getters["menu/breadcrumbs"][2].text
-        ? this.$store.getters["menu/breadcrumbs"][2].text
-        : "РЕСО-Гарантия",
-    };
-  },
+  name: "Full",
   components: {
     Header,
     Sidebar,
@@ -78,6 +71,27 @@ export default {
       sideBarMini: false,
       sideBarMobileMini: false,
     };
+  },
+  head() {
+    return {
+      title: this.$store.getters["menu/breadcrumbs"][2]?.text
+        ? this.$store.getters["menu/breadcrumbs"][2]?.text
+        : "РЕСО-Гарантия",
+    };
+  },
+  computed: {
+    menuWithOutIcon() {
+      return this.$store.getters["menu/getMenuWithOutIcon"];
+    },
+    nav() {
+      return this.$store.getters["menu/menu"][0].children;
+    },
+    name() {
+      return this.$route.name;
+    },
+    items() {
+      return this.$store.getters["menu/breadcrumbs"];
+    },
   },
   watch: {
     $route(to, from) {
@@ -102,20 +116,6 @@ export default {
     changeMobileSidebar() {
       this.sideBarMobileMini = !this.sideBarMobileMini;
       this.sideBarMini = false;
-    },
-  },
-  computed: {
-    menuWithOutIcon() {
-      return this.$store.getters["menu/getMenuWithOutIcon"];
-    },
-    nav() {
-      return this.$store.getters["menu/menu"][0].children;
-    },
-    name() {
-      return this.$route.name;
-    },
-    items() {
-      return this.$store.getters["menu/breadcrumbs"];
     },
   },
 };

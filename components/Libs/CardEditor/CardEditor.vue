@@ -1,5 +1,5 @@
 <template>
-  <div :data-card-id="this.$route.params.idItem">
+  <div :data-card-id="$route.params.idItem">
     <b-modal
       :id="'confirmAction'"
       modal-class="cabinet"
@@ -187,9 +187,11 @@ export default {
 
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
+
       // if (field.type !== "button") {
       //   this.$store.commit("data_card/cardChanged", true);
       // }
+
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
         const actionId = e.value.replace("Item", "");
@@ -352,12 +354,14 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
+
       if (this.validateData(fields)) {
         try {
           let itemId;
           let moduleId;
           let cardId;
           let relId;
+          let action;
           if (!this.params.page) {
             itemId = this.$route.params.idItem;
             moduleId = this.$route.params.idModule;
@@ -369,13 +373,23 @@ export default {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
           }
-          const resp = await this.$store.dispatch("data_card/saveDataCard", {
+
+          const isUploaderFieldValueExist = fields.find(
+            (elem) => elem.type === "Uploader" && elem.value !== undefined
+          );
+
+          if (isUploaderFieldValueExist === undefined) {
+            action = "saveDataCard";
+          } else action = "saveDataCardUploaders";
+
+          const resp = await this.$store.dispatch(`data_card/${action}`, {
             moduleId,
             itemId,
             cardId,
             relId,
             form: fields,
           });
+
           if (this.$route.params.idItem === "710") {
             await this.$store.dispatch("updateUser");
           }
@@ -411,6 +425,10 @@ export default {
             }
             if (this.closeAfterSave) {
               this.$router.push(`/cabinet/${moduleId}/0/${itemId}`);
+            } else if (resp?.data?.RESULT?.POUTVALUE) {
+              if (resp?.data?.RESULT?.POUTVALUE.includes("/")) {
+                this.$router.push(resp?.data?.RESULT?.POUTVALUE);
+              }
             } else {
               this.$router.push(
                 `/cabinet/${moduleId}/0/${itemId}/${cardId}${
@@ -473,6 +491,7 @@ export default {
       }
     },
     cancelDataCard() {
+      console.log("нашел!!!");
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit(
         "data_card/setForm",
