@@ -13,9 +13,7 @@
         :display-text="displayText"
         @openList="openList"
         @selectItem="selectItem"
-        :is-disabled="
-          isInsuredPersonChoosen === false ? getInsuredInDisabled : false
-        "
+        :is-disabled="!edit ? !edit : data.readonly"
       />
       <b-form-invalid-feedback>
         Обязательно для заполнения
@@ -87,21 +85,10 @@ export default {
     return {
       visible: false,
       isLoad: false,
-      isInsuredPersonChoosen: false,
-      isInsuredPersonFieldVisited: false,
     };
   },
 
   computed: {
-    getInsuredInDisabled: {
-      get() {
-        if (this.data.label !== "Застрахованный") {
-          return true;
-        }
-        return false;
-      },
-    },
-
     dataContent: {
       get() {
         const block = this.$store.getters["blocks/getUnfilteredBlockById"](
@@ -158,14 +145,6 @@ export default {
     },
   },
 
-  updated() {
-    this.isInsuredPersonFieldVisited =
-      this.$store.getters["blocks/isVisitedChecked"];
-    if (this.isInsuredPersonFieldVisited === true) {
-      this.isInsuredPersonChoosen = true;
-    }
-  },
-
   methods: {
     displayText(item) {
       if (typeof this.$root.eventHandler === "function") {
@@ -174,8 +153,6 @@ export default {
       return null;
     },
     selectItem(value) {
-      this.$store.commit("blocks/haveBeenVisited", value);
-
       const valuePrepare = { ...value };
 
       Object.keys(valuePrepare).map((key) => {

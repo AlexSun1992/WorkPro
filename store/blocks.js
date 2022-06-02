@@ -9,12 +9,9 @@ export const state = () => ({
   serverFilters: [],
   searchParams: null,
   PoutValue: "",
-  isVisited: false,
 });
 
 export const getters = {
-  isVisitedChecked: (state) => state.isVisited,
-
   getServerFilters: (state) => state.serverFilters,
 
   getUnfilteredBlockById: (state) => (id) => {
@@ -175,12 +172,6 @@ export const actions = {
 export const mutations = {
   setPoutValue(state, address) {
     state.PoutValue = address;
-  },
-
-  haveBeenVisited(state, payload) {
-    typeof payload === "object"
-      ? (state.isVisited = true)
-      : (state.isVisited = false);
   },
 
   setForm(state, data) {
