@@ -69,7 +69,9 @@
           >
           <div class="mt-3 text-center">
             <span class="forgot-password">Забыли пароль?&nbsp;&nbsp;</span>
-            <a href="/login/password-recovery">Восстаноь</a>
+            <a href="/login/password-recovery" id="btn_recovery-password_lk"
+              >Восстановить</a
+            >
           </div>
         </div>
       </div>
