@@ -58,6 +58,7 @@
               type="submit"
               :disabled="authInProcess"
               class="w-100 mt-3"
+              id="btn_entry_lk"
             >
               Авторизоваться
               <b-spinner v-if="authInProcess" variant="light"></b-spinner>
