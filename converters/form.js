@@ -394,10 +394,25 @@ converter.save = (data) => {
             data[i].value !== null && data[i].value !== undefined
               ? data[i].value
               : "NULL";
+          if (data[i].type === "Uploader") {
+            if (res[data[i].name] !== "NULL") {
+              res[data[i].name] =
+                data[i].value !== null && data[i].value !== undefined
+                  ? Object.values(data[i].value).map(
+                      (item) =>
+                        (item = new File([item], item.name, {
+                          type: "field/blob",
+                        }))
+                    )
+                  : "NULL";
+            }
+          }
+
           if (data[i].structType === "boolrus") {
             res[data[i].name] =
               data[i].value === "true" || data[i].value === true ? "Д" : "Н";
           }
+
           if (data[i].structType === "long") {
             res[data[i].name] =
               data[i].value !== null ? parseInt(data[i].value) : "NULL";
@@ -440,12 +455,12 @@ converter.save = (data) => {
         } else {
           res[name] = "NULL";
         }
-        // res[name] = data[i].value.value ? data[i].value.value : "NULL";
       } else {
         res[name] = "NULL";
         const arr = [];
         if (data[i].value) {
           const items = data[i].value;
+
           for (let j = 0; j < items.length; j++) {
             arr.push(items[j].value);
           }
@@ -454,6 +469,7 @@ converter.save = (data) => {
       }
     }
   }
+
   return res;
 };
 
