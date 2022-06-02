@@ -1,9 +1,10 @@
-import { getFieldsValueTypeIsNotUploader } from "./data_card.helpers";
-import { getSplicedObjects } from "./data_card.helpers";
-import { getFieldsValueTypeUploader } from "./data_card.helpers";
-import { changeObj } from "./data_card.helpers";
-import { data } from "./data_card.helpers.fixtures";
-import { testData } from "./data_card.helpers.fixtures";
+import {
+  getFieldsValueTypeIsNotUploader,
+  getSplicedObjects,
+  getFieldsValueTypeUploader,
+  changeObj,
+} from "./data_card.helpers";
+import { data, testData } from "./data_card.helpers.fixtures";
 
 describe("Модуль подготовки данных", () => {
   it("получает объекты кроме типа Uploader", () => {
@@ -29,10 +30,5 @@ describe("Модуль подготовки данных", () => {
     const TEST_DATA = [...data];
     const uploaderFieldsValue = getFieldsValueTypeUploader(TEST_DATA);
     expect(Array.isArray(uploaderFieldsValue)).toBe(true);
-  });
-
-  it("готовим данные для отправки на сервер", () => {
-    const getFilesTypeBlob = preparing(testData);
-    expect(typeof getFilesTypeBlob === "object").toBe(true);
   });
 });
