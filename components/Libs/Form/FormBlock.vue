@@ -3,7 +3,7 @@
     <div
       v-for="(tab, index) in captions"
       :key="index"
-      class="bg-six border-green block p-block"
+      class="conf-block"
       :class="{ 'mb-4': index < captions.length - 1 }"
     >
       <div class="row">
@@ -79,7 +79,9 @@ export default {
   },
   computed: {
     captions: function () {
-      return this.$store.getters["data_card/getCaptions"];
+      return this.$store.getters["data_card/getCaptions"].filter(
+        (_, idx) => this.items(idx).length > 0
+      );
     },
   },
 };

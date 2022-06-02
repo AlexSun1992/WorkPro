@@ -146,11 +146,19 @@ export const actions = {
         url = encodeURI(
           `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${params.idCard}/0`
         );
-      } else {
+      } else if (params.idRel || params.idCard === "0") {
         url = encodeURI(
           `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${
             params.idRel
           }${params.zone === "free" ? "?zone=free" : ""}`
+        );
+      } else if (params.idCard !== "0") {
+        const queryParams = { ID: params.idCard, ...params.query };
+        const queryString = Object.keys(queryParams)
+          .map((key) => `${key}=${queryParams[key]}`)
+          .join("&");
+        url = encodeURI(
+          `/api/card/${params.idModule}/${params.idItem}?${queryString}`
         );
       }
       await this.$axios

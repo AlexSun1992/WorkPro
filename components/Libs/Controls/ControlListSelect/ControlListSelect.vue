@@ -1,4 +1,5 @@
 <template>
+  <!-- <<<<<<< HEAD
   <div>
     <div v-click-outside="outside">
       <b-form-group
@@ -36,6 +37,38 @@
         <b-spinner v-if="isLoad" />
       </div>
     </div>
+======= -->
+  <div v-click-outside="outside" class="position-relative">
+    <b-form-group
+      :label="data.label"
+      :class="{ required: data.required }"
+      :label-for="data.name"
+    >
+      <control-wrapper-select
+        :options="options"
+        :select-id="selectId"
+        :item-value="itemValue"
+        :options-value="optionsValue"
+        :display-text="displayText"
+        @openList="openList"
+        @selectItem="selectItem"
+        :is-disabled="
+          isInsuredPersonChoosen === false ? getInsuredInDisabled : false
+        "
+      />
+      <b-form-invalid-feedback>
+        Обязательно для заполнения
+      </b-form-invalid-feedback>
+    </b-form-group>
+    <button
+      v-if="!isLoad && itemValue[optionsValue] && getData"
+      class="btn-abs-cleare"
+      variant="outline-success"
+      @click="clearItem"
+    >
+      {{ data.placeholder || "Очистить" }}
+    </button>
+    >>>>>>> master
   </div>
 </template>
 <script>
@@ -173,7 +206,10 @@ export default {
 
   methods: {
     displayText(item) {
-      return this.$root.eventHandler(this.data, item, "displayText");
+      if (typeof this.$root.eventHandler === "function") {
+        return this.$root.eventHandler(this.data, item, "displayText");
+      }
+      return null;
     },
     selectItem(value) {
       this.$store.commit("blocks/haveBeenVisited", value);

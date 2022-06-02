@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :data-card-id="$route.params.idItem">
     <b-modal
       :id="'confirmAction'"
       modal-class="cabinet"
@@ -411,6 +411,10 @@ export default {
             }
             if (this.closeAfterSave) {
               this.$router.push(`/cabinet/${moduleId}/0/${itemId}`);
+            } else if (resp?.data?.RESULT?.POUTVALUE) {
+              if (resp?.data?.RESULT?.POUTVALUE.includes("/")) {
+                this.$router.push(resp?.data?.RESULT?.POUTVALUE);
+              }
             } else {
               this.$router.push(
                 `/cabinet/${moduleId}/0/${itemId}/${cardId}${
