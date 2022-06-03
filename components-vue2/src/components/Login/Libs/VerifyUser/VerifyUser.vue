@@ -49,6 +49,7 @@
         @click="executeRecaptcha"
         variant="primary"
         class="w-100"
+        id="btn_code_verification_lk"
         >Получить код
       </b-button>
       <b-link v-if="isSendCode" @click="changeNumber">{{

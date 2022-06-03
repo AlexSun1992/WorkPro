@@ -1,5 +1,5 @@
 <template>
-  <div class="LoginButton" id="btn_lk_head_all">
+  <div class="LoginButton">
     <b-dropdown
       variant="login-link"
       v-if="isAuthentificated"
@@ -14,7 +14,11 @@
         {{ item }}
       </b-dropdown-item>
     </b-dropdown>
-    <b-button variant="login-btn" v-else @click="redirectToLoginPage"
+    <b-button
+      variant="login-btn"
+      v-else
+      @click="redirectToLoginPage"
+      id="btn_lk_head_all"
       >Личный кабинет</b-button
     >
   </div>

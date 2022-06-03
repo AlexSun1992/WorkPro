@@ -44,7 +44,6 @@
                 :tab-index="[10, 15]"
                 :error="errorMessage"
                 @checkCodeFieldValid="isCodeFieldValid"
-                id="btn_code_registration_lk"
               />
             </b-form-group>
             <!-- Фамилия -->

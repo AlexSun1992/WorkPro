@@ -13,7 +13,7 @@
               </div>
 
               <verify-user
-                ref="verifyUser"
+                ref="verify"
                 @error="showError"
                 @getLoginType="loginType"
                 :loginType="'phone'"
@@ -25,7 +25,7 @@
                 :tab-index="[10, 15]"
                 :isError="errorMessage"
                 :isCodeFieldInValid="isCodeFieldInValid"
-                id="btn_code_recovery-password_tel_lk"
+                id="test"
               />
 
               <b-row class="mt-3">
@@ -56,7 +56,7 @@
                 :count="60"
                 :validateState="validateState"
                 :tab-index="[10, 15]"
-                id="btn_code_recovery-password_mail_lk"
+                ref="verify"
               />
             </b-tab>
           </b-tabs>
@@ -87,6 +87,11 @@
                   @click="resetPassword"
                   :disabled="disabled"
                   class="w-100"
+                  :id="
+                    this.currentTab === 0
+                      ? 'btn_change-password_tel_lk'
+                      : 'btn_change-password_mail_lk'
+                  "
                   >Изменить пароль</b-button
                 >
               </div>
