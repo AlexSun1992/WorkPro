@@ -58,6 +58,7 @@
               type="submit"
               :disabled="authInProcess"
               class="w-100 mt-3"
+              id="btn_entry_lk"
             >
               Авторизоваться
               <b-spinner v-if="authInProcess" variant="light"></b-spinner>
@@ -68,7 +69,9 @@
           >
           <div class="mt-3 text-center">
             <span class="forgot-password">Забыли пароль?&nbsp;&nbsp;</span>
-            <a href="/login/password-recovery">Восстановить</a>
+            <a href="/login/password-recovery" id="btn_recovery-password_lk"
+              >Восстановить</a
+            >
           </div>
         </div>
       </div>

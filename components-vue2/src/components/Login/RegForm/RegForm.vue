@@ -237,6 +237,7 @@
                   variant="primary"
                   :disabled="registrationInProcess"
                   tabindex="100"
+                  id="btn_chek_registration_lk"
                 >
                   Зарегистрироваться
                   <b-spinner

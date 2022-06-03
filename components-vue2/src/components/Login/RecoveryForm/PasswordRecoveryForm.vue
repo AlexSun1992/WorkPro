@@ -26,6 +26,7 @@
                 :isError="errorMessage"
                 :isCodeFieldInValid="isCodeFieldInValid"
               />
+
               <b-row class="mt-3">
                 <b-form-group
                   label="Дата рождения"
@@ -84,6 +85,11 @@
                   @click="resetPassword"
                   :disabled="disabled"
                   class="w-100"
+                  :id="
+                    this.currentTab === 0
+                      ? 'btn_change-password_tel_lk'
+                      : 'btn_change-password_mail_lk'
+                  "
                   >Изменить пароль</b-button
                 >
               </div>
