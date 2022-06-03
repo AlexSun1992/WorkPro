@@ -62,7 +62,7 @@ const showWorkingHours = (agency) => {
           ? dateEnd.getMinutes() + "0"
           : dateEnd.getMinutes()
       }`;
-    } else if (dateNow > dateEnd) {
+    } else if (dateNow > dateEnd && nexDayObj) {
       str = `Откроется завтра в ${nexDayObj.SBEGIN}`;
     }
     // else if (dateNow > dateEnd) {
