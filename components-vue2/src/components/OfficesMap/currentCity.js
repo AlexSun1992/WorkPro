@@ -2,7 +2,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const instance = axios.create({});
-// instance.defaults.baseURL = "https://mobile2.reso.ru";
+if (typeof window === "undefined") {
+  instance.defaults.baseURL = "https://mobile2.reso.ru";
+}
 instance.defaults.headers.common["X-Application"] = "VueJS";
 
 let currentCityPromise = null;
@@ -15,7 +17,7 @@ function getCurrentCity() {
   let lat;
   let lon;
   currentCityPromise = new Promise((resolve) => {
-    axios
+    instance
       .get(`/am/free/v2/data/55/800/0/0`)
       .then((res) => {
         if (res.data[0]._data[0].TOWN) {
