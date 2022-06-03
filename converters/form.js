@@ -392,7 +392,8 @@ converter.save = (data) => {
     if (
       data[i].type !== "enum" &&
       data[i].type !== "multi" &&
-      data[i].type !== "listSelect"
+      data[i].type !== "listSelect" &&
+      data[i].type !== "doctorSchedule"
     ) {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
