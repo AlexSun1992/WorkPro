@@ -1752,3 +1752,35 @@
             align-items: center;
             color: #292929;
         }
+        
+        .make-anonsed {
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            display: block;
+            border: 0;
+            padding: 0;
+            background: transparent
+        }
+        
+        .anonsed-blocks .freecard:hover .make-anonsed {
+            position: absolute;
+            top: -10px;
+            right: 0px;
+            width: 24px;
+            height: 24px;
+            border-radius: 24px;
+            background: #fff url(/img/icon-red-cross.svg) 50% 50% no-repeat;
+            border: 1px solid red;
+            z-index: 1;
+            font-size: 0;
+        }
+        
+        .anonsed-blocks .freecard:hover {
+            box-shadow: none;
+        }
+        
+        .anonsed-blocks .freecard:hover .anonsed-block {
+            border: 1px solid red;
+            transition: 0.3s;
+        }
