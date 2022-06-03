@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 let currentCityPromise = null;
-
+axios.defaults.baseURL = "https://mobile2.reso.ru";
 function getCurrentCity() {
   if (currentCityPromise) {
     return currentCityPromise;

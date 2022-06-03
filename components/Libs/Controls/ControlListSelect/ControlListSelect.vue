@@ -159,7 +159,7 @@ export default {
             JSON.parse(valuePrepare[key]);
             delete valuePrepare[key];
           } catch (e) {
-            console.error(e);
+            return null;
           }
         }
       });
