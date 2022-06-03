@@ -153,7 +153,8 @@ export default {
 </style>
 
 <style lang="scss">
-[data-action-id="37309"] {
+/*[data-action-id="37309"]*/
+.modal-dialog {
   .modal-header{padding:0;border:0;}
   .modal-header .close {
     position: absolute;
