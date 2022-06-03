@@ -1,6 +1,11 @@
 <template>
   <div>
-    <b-button class="select-sity" variant="link" @click="visible = !visible">
+    <b-button
+      class="select-sity"
+      variant="link"
+      @click="visible = !visible"
+      id="btn_city_head_all"
+    >
       {{ city }}
     </b-button>
     <b-collapse v-model="visible" class="sity-question">
@@ -13,6 +18,7 @@
           variant="primary"
           class="btn-icon-left"
           @click="setAutoCity(city)"
+          id="btn_yes_city_head_all"
         >
           Да, верно
         </b-button>
@@ -20,6 +26,7 @@
           variant="secondary"
           class="ml-3"
           @click="showModalSelectCity()"
+          id="btn_change_city_head_all"
         >
           Нет, другой
         </b-button>
@@ -66,6 +73,7 @@ import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BButton, BCard } from "bootstrap-vue";
 import Cookies from "js-cookie";
 import cities from "./cities";
+import getCurrentCity from "../../components/OfficesMap/currentCity";
 
 function getParams(input) {
   return {
@@ -138,45 +146,17 @@ export default {
       this.kladr = Cookies.get("kladr_id");
       this.city = Cookies.get("location_user");
     } else {
-      this.request = await this.$axios
-        .get(`/am/free/v2/data/55/800/0/0`)
-        .then((res) => {
-          this.visible = true;
-          if (res.data[0]._data[0].TOWN) {
-            this.city = res.data[0]._data[0].TOWN.replace(/^г/i, "");
-            Cookies.set("location_user", this.city);
-          }
-          if (res.data[0]._data[0].KLADR_ID) {
-            this.kladr = res.data[0]._data[0].KLADR_ID;
-            Cookies.set("kladr_id", this.kladr);
-          }
-          if (res.data[0]._data[0].LAT) {
-            this.lat = res.data[0]._data[0].LAT;
-          }
-          if (res.data[0]._data[0].LON) {
-            this.lon = res.data[0]._data[0].LON;
-          }
-          if (!res.data[0]._data[0].TOWN) {
-            this.city = "Москва";
-            Cookies.set("location_user", this.city);
-          }
-          if (!res.data[0]._data[0].KLADR_ID) {
-            this.kladr = "7700000000000";
-            Cookies.set("kladr_id", this.kladr);
-          }
-          if (!res.data[0]._data[0].LAT) {
-            this.lat = "55.75396";
-          }
-          if (!res.data[0]._data[0].LON) {
-            this.lon = "37.620393";
-          }
-          if (this.city && this.kladr) {
-            this.changeCity({
-              city: this.city,
-              kladr: this.kladr,
-            });
-          }
-        });
+      getCurrentCity().then(({ kladr, city }) => {
+        this.visible = true;
+        if (city && kladr) {
+          this.city = city;
+          this.kladr = kladr;
+          this.changeCity({
+            city,
+            kladr,
+          });
+        }
+      });
     }
   },
   methods: {

@@ -288,15 +288,15 @@
             padding-right: 32px;
             font-family: 'Raleway';
             font-style: normal;
-            font-weight: 600;
-            font-size: 1.25rem;
+            font-weight: 400;
+            font-size: 0.875rem;
             line-height: 1.5rem;
             font-feature-settings: 'pnum'on, 'lnum'on;
             color: #29292970;
             text-decoration: none;
             cursor: text;
             padding-top: 32px;
-            padding-bottom: 24px;
+            padding-bottom: 10px;
         }
         
         .sidebar_client ul li+* {
@@ -309,8 +309,8 @@
             position: relative;
             font-family: 'Raleway';
             font-style: normal;
-            font-weight: 600;
-            font-size: 1.125rem;
+            font-weight: 400;
+            font-size: 1rem;
             line-height: 1.5rem;
             font-feature-settings: 'pnum'on, 'lnum'on;
             color: #292929;
@@ -448,8 +448,9 @@
             min-height: 1px;
         }
         
+        .nb-block>.nav .title,
         .border-block>.nav .title {
-            font-family: 'Raleway';
+            font-family: 'SF Pro Display';
             font-style: normal;
             font-weight: 600;
             font-size: 1.25rem;
@@ -458,10 +459,11 @@
             color: #292929;
         }
         
+        .nb-block>.nav .link,
         .border-block>.nav .link {
             font-family: 'SF Pro Display';
             font-style: normal;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1rem;
             line-height: 1.25rem;
             color: #43B02A;
@@ -476,6 +478,16 @@
             width: 8px;
             height: 14px;
             background: url(/img/icon-chevron-r.svg) 50% 50% no-repeat;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .icon-green-plus {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: url(/img/icon-green-plus.svg) 50% 50% no-repeat;
             right: 0;
             top: 50%;
             transform: translateY(-50%);
@@ -558,13 +570,21 @@
             background-color: #ECF30070;
         }
         
+        .insured-events .title,
         .block-policy .title {
-            margin-top: 140px;
             font-family: 'SF Pro Display';
             font-weight: 700;
-            font-size: 1.125rem;
-            line-height: 1.25rem;
+            font-size: 1rem;
+            line-height: 1rem;
+        }
+        
+        .block-policy .title {
+            margin-top: 140px;
             margin-bottom: 12px;
+        }
+        
+        .block-policy .description * {
+            font-size: 0.875rem;
         }
         
         .insured-events {
@@ -574,8 +594,8 @@
             min-height: 246px;
             grid-template-areas: "title .""description .""settlement settlement";
             grid-template-columns: auto 70px;
-            grid-template-rows: minmax(30px, -webkit-max-content) minmax(40px, -webkit-max-content) auto;
-            grid-template-rows: minmax(30px, max-content) minmax(40px, max-content) auto;
+            grid-template-rows: minmax(25px, -webkit-max-content) minmax(40px, -webkit-max-content) auto;
+            grid-template-rows: minmax(25px, max-content) minmax(40px, max-content) auto;
             display: grid;
             overflow: hidden;
             position: relative;
@@ -592,12 +612,6 @@
         }
         
         .insured-events .title {
-            font-family: 'Raleway';
-            font-style: normal;
-            font-weight: 600;
-            font-size: 1.25rem;
-            line-height: 1.5rem;
-            font-feature-settings: 'pnum'on, 'lnum'on;
             color: #292929;
             grid-area: title;
             z-index: 2;
@@ -621,6 +635,7 @@
             align-self: end;
             line-height: 1.625rem;
             z-index: 2;
+            font-size: 0.875rem;
         }
         
         .insured-events[data-id="1"] {
@@ -673,7 +688,7 @@
             grid-area: title;
             font-family: 'Raleway';
             font-style: normal;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1.25rem;
             line-height: 1.5rem;
         }
@@ -928,6 +943,20 @@
             color: #292929;
         }
         
+        .mt-btn-form {
+            margin-top: 31px;
+        }
+        
+        .mt-btn-form-3 {
+            margin-top: 47px;
+        }
+        
+        .btn-100 button {
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        
         @media (max-width: 992px) {
             .menu-link {
                 padding: 0;
@@ -1139,10 +1168,10 @@
         
         .block-advertising .title,
         .feedback .title {
-            font-family: 'Raleway';
+            font-family: 'SF Pro Display';
             font-style: normal;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1rem;
             line-height: 1.5rem;
             font-feature-settings: 'pnum'on, 'lnum'on;
             color: #292929;
@@ -1189,6 +1218,7 @@
         select,
         textarea,
         .search.selection.dropdown {
+            outline: none;
             background: #FFFFFF;
             border: 1px solid #C3C3C3;
             border-radius: 15px;
@@ -1212,13 +1242,18 @@
         textarea:hover,
         .search.selection.dropdown:hover {
             border: 1px solid #686868;
+            outline: none;
         }
         
         input:active,
+        input:focus,
         optgroup:active,
         select:active,
-        textarea:active {
+        select:focus,
+        textarea:active,
+        textarea:focus {
             color: #292929;
+            outline: none;
         }
         
         .search.selection.dropdown {
@@ -1606,12 +1641,14 @@
             .sidebar-nav-container {
                 margin-bottom: 20px;
             }
+            .nb-block,
             .border-block {
                 border: 0;
                 padding: 0;
                 overflow: hidden;
                 border-radius: 0;
             }
+            .nb-block .flex-nowrap,
             .anonsed-blocks,
             .border-block .flex-nowrap {
                 overflow-x: auto;
@@ -1651,4 +1688,99 @@
             .mt-checkbox {
                 margin-top: 2rem;
             }
+            .mt-btn-form,
+            .mt-btn-form-3 {
+                margin-top: 1rem;
+            }
+        }
+        
+        .search.selection.dropdown.disabled>.dropdown.icon,
+        input:disabled+.mx-icon-calendar {
+            opacity: 0.3;
+        }
+        
+        .agent-blocks {
+            border: 1px solid #F0F0F0;
+            border-radius: 24px;
+            height: 100%;
+            width: 100%;
+            padding: 20px;
+            grid-template-areas: "title " "description" "phone";
+            grid-template-rows: minmax(25px, -webkit-max-content) auto minmax(20px, -webkit-max-content);
+            grid-template-rows: minmax(25px, max-content) auto minmax(20px, max-content);
+            display: grid;
+        }
+        
+        .agent-blocks .title {
+            font-family: 'SF Pro Display';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1rem;
+            grid-area: title;
+        }
+        
+        .agent-blocks .description {
+            font-family: 'SF Pro Display';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 0.875;
+            line-height: 1;
+            grid-area: description;
+        }
+        
+        .agent-blocks .phone a {
+            grid-area: phone;
+            font-family: 'SF Pro Display';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 0.875rem;
+            line-height: 1;
+            color: #3B86C8;
+            margin-top: 10px;
+            text-decoration: none;
+            display: table;
+        }
+        
+        .title-page {
+            font-family: 'SF Pro Display';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 32px;
+            display: flex;
+            align-items: center;
+            color: #292929;
+        }
+        
+        .make-anonsed {
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            display: block;
+            border: 0;
+            padding: 0;
+            background: transparent
+        }
+        
+        .anonsed-blocks .freecard:hover .make-anonsed {
+            position: absolute;
+            top: -10px;
+            right: 0px;
+            width: 24px;
+            height: 24px;
+            border-radius: 24px;
+            background: #fff url(/img/icon-red-cross.svg) 50% 50% no-repeat;
+            border: 1px solid red;
+            z-index: 1;
+            font-size: 0;
+        }
+        
+        .anonsed-blocks .freecard:hover {
+            box-shadow: none;
+        }
+        
+        .anonsed-blocks .freecard:hover .anonsed-block {
+            border: 1px solid red;
+            transition: 0.3s;
         }

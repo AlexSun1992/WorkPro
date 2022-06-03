@@ -162,17 +162,18 @@ export default {
             JSON.parse(valuePrepare[key]);
             delete valuePrepare[key];
           } catch (e) {
-            console.error(e);
+            return null;
           }
         }
       });
       this.visible = false;
       this.$store.commit("data_card/setFilters", valuePrepare);
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: {
-          value: valuePrepare,
+          value: { ...valuePrepare },
           text:
             value[this.data.name.substring(2)] ||
             value[this.dataContent.fields[1].label],
@@ -193,9 +194,11 @@ export default {
     },
     async openList() {
       this.visible = !this.visible;
+
       if (this.visible) {
         try {
           this.isLoad = true;
+
           await this.$store.dispatch("blocks/fetchBlock", {
             id: this.data.menudic,
             query: this.$store.getters["data_card/getFiltersAllFields"],

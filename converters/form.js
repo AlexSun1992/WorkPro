@@ -173,6 +173,8 @@ converter.form = async (data, params, instance) => {
           `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`
         )
       );
+    } else if (webFields[i].IDCONTROL == 46) {
+      obj.type = "DoctorSchedule";
     } else {
       obj.type = "string";
     }
@@ -336,7 +338,11 @@ converter.type = (data, isReadOnly) => {
           copy[i].type = `enum`;
           if (data[i].menudic) {
             copy[i].type = `listSelect`;
+            if (data[i].label === "Расписание") {
+              copy[i].type = `doctorSchedule`;
+            }
           }
+
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
           copy[i].dic = data[j].name;
@@ -386,7 +392,8 @@ converter.save = (data) => {
     if (
       data[i].type !== "enum" &&
       data[i].type !== "multi" &&
-      data[i].type !== "listSelect"
+      data[i].type !== "listSelect" &&
+      data[i].type !== "doctorSchedule"
     ) {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
