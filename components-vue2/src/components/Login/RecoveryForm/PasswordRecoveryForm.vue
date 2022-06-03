@@ -13,7 +13,7 @@
               </div>
 
               <verify-user
-                ref="verify"
+                ref="verifyUser"
                 @error="showError"
                 @getLoginType="loginType"
                 :loginType="'phone'"
@@ -55,7 +55,6 @@
                 :count="60"
                 :validateState="validateState"
                 :tab-index="[10, 15]"
-                ref="verify"
               />
             </b-tab>
           </b-tabs>
