@@ -25,7 +25,6 @@
                 :tab-index="[10, 15]"
                 :isError="errorMessage"
                 :isCodeFieldInValid="isCodeFieldInValid"
-                id="test"
               />
 
               <b-row class="mt-3">
