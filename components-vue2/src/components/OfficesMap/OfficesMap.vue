@@ -116,6 +116,7 @@ import {
   getTemplate,
   checkClusterStatus,
 } from "../../../../utils/map/helpers";
+import getCurrentCity from './currentCity'
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
@@ -188,11 +189,17 @@ export default {
           coords: [Cookies.get("lat"), Cookies.get("lon")],
         });
       } else {
-        console.log('Координаты офиса lat, lon не получены от dadata. Адрес отсутствует в справочнике, либо координаты офиса некорректны')
-        await this.$store.dispatch("map/fetchRegion", {
-          id: this.$store.getters["map/getDefaultRegion"],
-          coords: this.$store.getters["map/getDefaultCoords"],
-        });
+        await getCurrentCity().then(async ({lat = "55.75396", lon = "37.620393", kladr = "7700000000000"}) => {
+          this.lat = lat
+          this.lon = lon
+          Cookies.set('lat', lat)
+          Cookies.set('lon', lon)
+          Cookies.set('kladr_id', kladr)
+          await this.$store.dispatch("map/fetchRegion", {
+            id: kladr.substr(0, 2),
+            coords: [lat, lon],
+          }).catch(e => console.log(e));
+        })
       }
       await this.$loadScript(
         `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
@@ -819,7 +826,7 @@ export default {
         ];
         if (this.address.data.suggestions.length) {
           this.regionId =
-            this.address.data.suggestions[0].data.city_kladr_id.substr(0, 2);
+            this.address.data.suggestions[0].data.city_kladr_id?.substr(0, 2) || this.address.data.suggestions[0].data.kladr_id?.substr(0, 2);
           await this.$store.dispatch("map/fetchRegion", {
             id: this.regionId,
             coords: coords ? coords : this.centerCoords,

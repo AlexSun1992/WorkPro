@@ -8,9 +8,6 @@
       no-close-on-backdrop
       hide-footer
     >
-      <div class="title-page position-relative">
-        {{ params.settings.text }}
-      </div>
       <div class="profile row">
         <div class="col">
           <card-editor

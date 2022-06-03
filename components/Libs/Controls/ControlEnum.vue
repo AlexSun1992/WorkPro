@@ -25,8 +25,8 @@
       >
       </model-list-select>
 
-      <div class="mt-2">
-        <span class="error" v-if="isValid == false">
+      <div class="mt-2" v-if="isValid == false">
+        <span class="error">
           Обязательно для заполнения
         </span>
       </div>
