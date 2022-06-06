@@ -61,7 +61,12 @@ export const getters = {
   getReadOnly: (state) => state.isReadOnly,
   getActionParams: (state) =>
     typeof state.actionParams.map === "function"
-      ? state.actionParams.map((a) => ({ ...a }))
+      ? state.actionParams.map((a) => {
+          if (a.fromDataCard === true) {
+            a.value = state.form.find((b) => b.name === a.name)?.value;
+          }
+          return { ...a };
+        })
       : [],
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
@@ -347,13 +352,9 @@ export const actions = {
     { moduleId, actionId, cardId }
   ) {
     try {
-      // commit("setLoading", true);
-      // commit("setDisabled", true);
       return await this.$axios
         .get(`/api/action/${moduleId}/${actionId}/${cardId}`)
         .then((resp) => {
-          // commit("setLoading", false);
-          // commit("setDisabled", false);
           commit("setActionParams", resp.data);
           return resp.data;
         });

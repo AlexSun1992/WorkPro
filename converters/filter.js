@@ -22,6 +22,7 @@ converter.filter = (data, id) => {
     obj.value = items[i].SDEFAULT;
     obj.name = items[i].SNAME;
     obj.required = items[i].LREQUIRED;
+    obj.fromDataCard = items[i].LFROMDATASET;
     obj.state = null;
     obj.mask = items[i].SMASK;
     obj.type = converter.type(items[i]);
