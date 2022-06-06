@@ -790,7 +790,7 @@
             padding: 24px;
             height: 100%;
             grid-template-areas: "title planned""clinic date""name name";
-            grid-template-columns: auto 90px;
+            grid-template-columns: auto 120px;
             grid-template-rows: minmax(30px, -webkit-max-content) minmax(30px, -webkit-max-content) auto;
             grid-template-rows: minmax(30px, max-content) minmax(30px, max-content) auto;
             display: grid;
@@ -1930,4 +1930,18 @@
         
         [data-card-id="901"] .conf-block+.conf-block .title-conf-block {
             padding-left: 20px;
+        }
+        
+        .have_btn {
+            padding: 24px 24px 90px 24px;
+        }
+        
+        .cancel-doctor {
+            position: absolute;
+            bottom: 24px;
+            left: 34px;
+        }
+        
+        .btn-secondary.h48 {
+            padding: 14px 24px;
         }
