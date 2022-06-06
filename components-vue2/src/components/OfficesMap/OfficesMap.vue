@@ -184,7 +184,6 @@ export default {
       window.addEventListener("resize", this.onResize);
 
       if (Cookies.get("lat") && Cookies.get("lat") !== 'null') {
-        debugger
         await this.$store.dispatch("map/fetchRegion", {
           id: Cookies.get("kladr_id")?.substr(0, 2),
           coords: [Cookies.get("lat"), Cookies.get("lon")],
@@ -196,7 +195,6 @@ export default {
           Cookies.set('lat', lat)
           Cookies.set('lon', lon)
           Cookies.set('kladr_id', kladr)
-          debugger
           await this.$store.dispatch("map/fetchRegion", {
             id: kladr.substr(0, 2),
             coords: [lat, lon],
@@ -829,7 +827,6 @@ export default {
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id?.substr(0, 2) || this.address.data.suggestions[0].data.kladr_id?.substr(0, 2);
-            debugger
           await this.$store.dispatch("map/fetchRegion", {
             id: this.regionId,
             coords: coords ? coords : this.centerCoords,
@@ -865,7 +862,6 @@ export default {
       });
     },
     async filterOffices(filters) {
-      debugger
       await this.$store.dispatch("map/fetchRegion", {
         id: this.regionId,
         coords: this.centerCoords,
@@ -1008,7 +1004,6 @@ export default {
   watch: {
     async cityData() {
       this.myMap.geoObjects.remove(this.placemark);
-      debugger
       await this.$store.dispatch("map/fetchRegion", {
           id: this.$store.getters["map/getCity"]?.city,
           coords: this.$store.getters["map/getCity"]?.coords,
