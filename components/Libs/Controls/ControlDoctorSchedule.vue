@@ -1,5 +1,13 @@
 <template>
   <div>
+    <!-- <p>Здесь будет спиннер{{ options.length }}</p> -->
+    <b-spinner
+      v-if="options.length === 0"
+      class="ml-2"
+      style="width: 1.2rem; height: 1.2rem"
+      variant="success"
+      label="Загрузка..."
+    ></b-spinner>
     <div
       v-for="item in options"
       :key="item.id"
