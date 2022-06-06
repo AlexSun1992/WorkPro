@@ -1,15 +1,15 @@
 <template>
   <div class="docs-searching-results">
     <div v-for="item in options" :key="item.id">
+      <div class="doc-date">{{ new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE)) }}</div>
       <div class="doc-expert"></div>
       <div class="doc-name">{{ item.SPERSON }}</div>
-      <div class="doc-date">{{ new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE)) }}</div>
       <div class="doc-location">{{ item.FKIDLPU }}</div>
       <div class="doc-adress"><i class="my-location"></i>{{ item.SADDRESS }}</div>
       <div v-for="elem in item.STIMELIST" :key="elem.id" class="doc-time">
-        <b-button @click="chooseTimeToVisit(elem, item)" class="btn-doc-time">
+        <button @click="chooseTimeToVisit(elem, item)" class="btn-doc-time">
           {{ elem.DFROM }}
-        </b-button>
+        </button>
       </div>
     </div>
   </div>
@@ -90,7 +90,7 @@ font-family: 'SF Pro Display';
 font-style: normal;
 font-weight: 600;
 font-size: 20px;
-line-height: 32px;
+line-height: 32px;margin-top:40px;
 }
 .doc-adress {
 font-family: 'SF Pro Display';
@@ -100,14 +100,17 @@ font-size: 20px;
 line-height: 32px;
 color: #292929;
 }
-.doc-time {display:inline-block;}
+.doc-time {display:inline-block;
+margin-right:20px;margin-top:20px;}
 .btn-doc-time {background: #EDF8EA;
-border-radius: 15px;padding:20px;
+border-radius: 15px;padding:22px 20px;border:0;
 font-family: 'SF Pro Display';
 font-style: normal;
 font-weight: 700;
 font-size: 16px;
-line-height: 1px;
+line-height: 1;
 color: #009639;
+min-width:84px;
+text-align:center;
 }
 </style>
