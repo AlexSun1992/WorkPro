@@ -15,7 +15,6 @@
         @selectItem="selectItem"
         :is-disabled="!edit ? !edit : data.readonly"
       />
-
       <b-form-invalid-feedback>
         Обязательно для заполнения
       </b-form-invalid-feedback>
@@ -38,7 +37,6 @@ export default {
   components: {
     ControlWrapperSelect,
   },
-
   directives: {
     clickOutside: {
       bind(el, binding, vnode) {
