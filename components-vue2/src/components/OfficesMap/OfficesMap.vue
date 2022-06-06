@@ -571,12 +571,12 @@ export default {
         agencies = filterData(this.getOfficesByCity, filters);
       }
       await this.setPositionAttributes();
-      if (!this.currentFilters) {
-        await this.$store.dispatch("map/fetchRegion", {
-          id: this.regionId,
-          coords: this.centerCoords,
-        });
-      }
+      // if (!this.currentFilters) {
+        // await this.$store.dispatch("map/fetchRegion", {
+        //   id: this.regionId,
+        //   coords: this.centerCoords,
+        // });
+      // }
 
       this.myClusterer = new ymaps.Clusterer({
         preset: "islands#darkGreenClusterIcons",
