@@ -176,7 +176,7 @@ export default {
               : dateEnd.getMinutes()
           }`;
         } else if (dateNow > dateEnd && office.GRAF[day]) {
-          str = `Откроется завтра в ${office.GRAF[day].SBEGIN}`;
+          str = `Откроется завтра в ${office?.GRAF[day]?.SBEGIN}`;
         } else if (dateNow > dateEnd && !office.GRAF[day]) {
           this.isOpened = false;
           dateNow.setDate(

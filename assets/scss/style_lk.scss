@@ -1631,8 +1631,17 @@
             right: 10px;
         }
         
+        .ldp1>div {
+            font-size: 1.25rem;
+        }
+        
         .p1 {
             font-size: 1.25rem;
+        }
+        
+        .ld_my-location>div {
+            padding-left: 30px;
+            background: url(/img/my-location.svg) 0 2px no-repeat;
         }
         
         .my-location {
@@ -1912,4 +1921,13 @@
         a.free {
             color: inherit;
             text-decoration: none;
+        }
+        
+        [data-card-id="901"] .conf-block+.conf-block {
+            padding: 0;
+            border: 0;
+        }
+        
+        [data-card-id="901"] .conf-block+.conf-block .title-conf-block {
+            padding-left: 20px;
         }
