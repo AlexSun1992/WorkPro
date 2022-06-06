@@ -510,7 +510,7 @@ export default {
       const response = await this.$store.dispatch("data_card/executeAction", {
         actionId: this.actionParamsId,
         relActionId: this.actionSettings.relaction,
-        relId: this.$route.params.idRel,
+        relId: this.$route.params.idRel || this.$route.query.rel,
         rowId: this.$route.params.idCard,
         body: this.actionParams,
       });
