@@ -1,6 +1,6 @@
 <template>
-  <div class="docs-searching-results">
-    <div v-for="item in options" :key="item.id">
+  <div>
+    <div v-for="item in options" :key="item.id" class="docs-searching-results mb-4">
       <div class="doc-date">{{ new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE)) }}</div>
       <div class="doc-expert">{{ item.SSPECIALISTNAME }}</div>
       <div class="doc-name">{{ item.SPERSON }}</div>
@@ -70,18 +70,24 @@ export default {
 .docs-searching-results{
 border: 1px solid #EFF1F3;
 border-radius: 16px;padding:24px 54px 24px 20px;}
+.doc-expert{
+  font-family: 'SF Pro Display';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+}
 .doc-name{font-family: 'Raleway';
 font-style: normal;
 font-weight: 700;
 font-size: 20px;
 line-height: 24px;
+margin-top:10px;
 }
 .doc-date{
 font-family: 'Raleway'; float:right;
 font-style: normal;
 font-weight: 700;
 font-size: 20px;
-line-height: 24px;
 font-feature-settings: 'pnum' on, 'lnum' on;
 color: #009639;
 }
