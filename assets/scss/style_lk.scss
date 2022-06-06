@@ -524,36 +524,29 @@
             z-index: 1;
         }
         
-        .block-policy[data-id="1"]:after {
-            background-color: #EDF8EA;
-        }
-        
-        .block-policy[data-id="2"]:after {
+        .block-policy[data-id="1"]:after,
+        .block-policy[data-id="8"]:after,
+        .block-policy[data-id="10"]:after {
             background-color: #ECF3FA;
         }
         
-        .block-policy[data-id="3"]:after {
-            background-color: #ECEBF4;
+        .block-policy[data-id="2"]:after,
+        .block-policy[data-id="3"]:after,
+        .block-policy[data-id="5"]:after {
+            background-color: #EDF8EA;
         }
         
         .block-policy[data-id="4"]:after {
-            background-color: #EDF8EA;
-        }
-        
-        .block-policy[data-id="5"]:after {
-            background-color: #ECF3FA;
-        }
-        
-        .block-policy[data-id="6"]:after {
             background-color: #ECEBF4;
         }
         
-        .block-policy[data-id="7"]:after {
+        .block-policy[data-id="5"]:after {
             background-color: #EDF8EA;
         }
         
-        .block-policy[data-id="8"]:after {
-            background-color: #ECF3FA;
+        .block-policy[data-id="6"]:after,
+        .block-policy[data-id="7"]:after {
+            background-color: #FFF8E6;
         }
         
         .block-policy[data-id="1"]:before {
@@ -565,7 +558,7 @@
         }
         
         .block-policy[data-id="3"]:before {
-            background: url(/img/product-id2.png) 50% 50% no-repeat;
+            background: url(/img/product-id3.png) 50% 50% no-repeat;
         }
         
         .block-policy[data-id="4"]:before {
@@ -577,15 +570,19 @@
         }
         
         .block-policy[data-id="6"]:before {
-            background: url(/img/product-id3.png) 50% 50% no-repeat;
+            background: url(/img/product-id6.png) 50% 50% no-repeat;
         }
         
         .block-policy[data-id="7"]:before {
-            background: url(/img/product-id1.png) 50% 50% no-repeat;
+            background: url(/img/product-id7.png) 50% 50% no-repeat;
         }
         
         .block-policy[data-id="8"]:before {
             background: url(/img/product-id1.png) 50% 50% no-repeat;
+        }
+        
+        .block-policy[data-id="10"]:before {
+            background: url(/img/product-id10.png) 50% 50% no-repeat;
         }
         
         .insured-events .title,
@@ -656,132 +653,85 @@
             font-size: 0.875rem;
         }
         
-        .insured-events[data-id="1"] {
-            background-color: #EDF8EA;
-        }
-        
-        .insured-events[data-id="2"] {
+        .insured-events[data-id="1"],
+        .insured-events[data-id="8"],
+        .insured-events[data-id="10"] {
             background-color: #ECF3FA;
         }
         
-        .insured-events[data-id="3"] {
+        .insured-events[data-id="2"],
+        .insured-events[data-id="3"],
+        .insured-events[data-id="5"] {
             background-color: #EDF8EA;
         }
         
         .insured-events[data-id="4"] {
-            background-color: #ECF3FA;
+            background-color: #ECEBF4;
         }
         
         .insured-events[data-id="5"] {
             background-color: #EDF8EA;
         }
         
-        .insured-events[data-id="6"] {
-            background-color: #ECF3FA;
-        }
-        
+        .insured-events[data-id="6"],
         .insured-events[data-id="7"] {
-            background-color: #EDF8EA;
+            background-color: #FFF8E6;
         }
         
-        .insured-events[data-id="8"] {
-            background-color: #ECF3FA;
+        .insured-events[data-id]:after {
+            width: 70px;
+            height: 70px;
+            border-radius: 70px;
+            border: 11px solid transparent;
+            content: "";
+            position: absolute;
+            right: 13px;
+            top: 13px;
         }
         
         .insured-events[data-id="1"]:after {
-            width: 70px;
-            height: 70px;
-            border-radius: 70px;
-            border: 11px solid #ffffff20;
-            content: "";
-            position: absolute;
-            right: 13px;
-            top: 13px;
             background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
+            border-color: #ECF3FA;
         }
         
         .insured-events[data-id="2"]:after {
-            width: 70px;
-            height: 70px;
-            border-radius: 70px;
-            border: 11px solid #ffffff20;
-            content: "";
-            position: absolute;
-            right: 13px;
-            top: 13px;
-            background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
+            background: url(/img/icon-insured-events2.svg) 50% 50% no-repeat;
+            border-color: #EDF8EA;
         }
         
         .insured-events[data-id="3"]:after {
-            width: 70px;
-            height: 70px;
-            border-radius: 70px;
-            border: 11px solid #ffffff20;
-            content: "";
-            position: absolute;
-            right: 13px;
-            top: 13px;
-            background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
+            background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
+            border-color: #EDF8EA;
         }
         
         .insured-events[data-id="4"]:after {
-            width: 70px;
-            height: 70px;
-            border-radius: 70px;
-            border: 11px solid #ffffff20;
-            content: "";
-            position: absolute;
-            right: 13px;
-            top: 13px;
-            background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
+            background: url(/img/icon-insured-events4.svg) 50% 50% no-repeat;
+            border-color: #ECEBF4;
         }
         
         .insured-events[data-id="5"]:after {
-            width: 70px;
-            height: 70px;
-            border-radius: 70px;
-            border: 11px solid #ffffff20;
-            content: "";
-            position: absolute;
-            right: 13px;
-            top: 13px;
             background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
+            border-color: #EDF8EA;
         }
         
         .insured-events[data-id="6"]:after {
-            width: 70px;
-            height: 70px;
-            border-radius: 70px;
-            border: 11px solid #ffffff20;
-            content: "";
-            position: absolute;
-            right: 13px;
-            top: 13px;
-            background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
+            background: url(/img/icon-insured-events6.svg) 50% 50% no-repeat;
+            border-color: #FFF8E6;
         }
         
         .insured-events[data-id="7"]:after {
-            width: 70px;
-            height: 70px;
-            border-radius: 70px;
-            border: 11px solid #ffffff20;
-            content: "";
-            position: absolute;
-            right: 13px;
-            top: 13px;
-            background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
+            background: url(/img/icon-insured-events7.svg) 50% 50% no-repeat;
+            border-color: #FFF8E6;
         }
         
         .insured-events[data-id="8"]:after {
-            width: 70px;
-            height: 70px;
-            border-radius: 70px;
-            border: 11px solid #ffffff20;
-            content: "";
-            position: absolute;
-            right: 13px;
-            top: 13px;
             background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
+            border-color: #ECF3FA;
+        }
+        
+        .insured-events[data-id="10"]:after {
+            background: url(/img/icon-insured-events10.svg) 50% 50% no-repeat;
+            border-color: #ECF3FA;
         }
         
         .block-visit {
