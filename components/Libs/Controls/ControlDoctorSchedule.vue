@@ -2,7 +2,7 @@
   <div class="docs-searching-results">
     <div v-for="item in options" :key="item.id">
       <div class="doc-date">{{ new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE)) }}</div>
-      <div class="doc-expert"></div>
+      <div class="doc-expert">{{ item.SSPECIALISTNAME }}</div>
       <div class="doc-name">{{ item.SPERSON }}</div>
       <div class="doc-location">{{ item.FKIDLPU }}</div>
       <div class="doc-adress"><i class="my-location"></i>{{ item.SADDRESS }}</div>
