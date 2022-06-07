@@ -35,7 +35,6 @@
     "devextreme": "19.2.3",
     "devextreme-intl": "^19.1.8",
     "devextreme-vue": "19.2.3",
-    "eslint-config-airbnb-typescript-prettier": "^3.1.0",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.16.4",
     "file-saver": "^2.0.2",
