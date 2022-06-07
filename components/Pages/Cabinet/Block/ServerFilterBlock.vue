@@ -29,7 +29,7 @@
         :list="list"
         :placeholder="name"
         :is-auto-select-single-row="firstValueFromList"
-        :is-auto-open-for-multiple-row="InsuredPersonsList"
+        :is-auto-open="isAutoOpen"
         @update="update"
       />
     </div>
@@ -105,6 +105,11 @@ export default {
       type: Boolean,
       required: false,
       default: () => true,
+    },
+    isAutoOpen: {
+      type: Boolean,
+      required: false,
+      default: () => false,
     },
   },
 
@@ -205,7 +210,11 @@ export default {
         this.InsuredPersonsList = this.list;
       }
 
-      if (this.list.length > 1 && this.isShowAsTemplate === true) {
+      if (
+        this.list.length > 1 &&
+        this.isShowAsTemplate === true &&
+        this.isAutoOpen
+      ) {
         this.openList();
       }
 

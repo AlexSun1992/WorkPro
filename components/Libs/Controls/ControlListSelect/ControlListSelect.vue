@@ -11,9 +11,9 @@
         :item-value="itemValue"
         :options-value="optionsValue"
         :display-text="displayText"
+        :is-disabled="!edit ? !edit : data.readonly"
         @openList="openList"
         @selectItem="selectItem"
-        :is-disabled="!edit ? !edit : data.readonly"
       />
       <b-form-invalid-feedback>
         Обязательно для заполнения
