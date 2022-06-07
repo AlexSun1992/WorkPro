@@ -3,7 +3,7 @@ stages:
   - deploy
 
 build_compoments:
-  image: node:16
+  image: node:16.14
   stage: pre_deploy
   cache:
     key: ${CI_COMMIT_REF_SLUG}
