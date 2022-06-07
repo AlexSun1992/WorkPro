@@ -219,6 +219,13 @@ export default {
         const CUR = menuItem.ACTIONSCUR.find((item) => {
           return item.ID == actionId;
         });
+        await this.$store.dispatch("data_card/fetchActionParams", {
+          moduleId,
+          actionId,
+          cardId,
+        });
+        this.actionParamsTitle = field.label;
+        this.actionParamsId = parseInt(actionId);
         if (CUR.NTYPE == 38) {
           this.saveSuccess = false;
           const data = eventHandler(
@@ -268,13 +275,6 @@ export default {
         // else {
         //   throw new Error("Ошибка: Тип действия не задан");
         // }
-        await this.$store.dispatch("data_card/fetchActionParams", {
-          moduleId,
-          actionId,
-          cardId,
-        });
-        this.actionParamsTitle = field.label;
-        this.actionParamsId = parseInt(actionId);
         if (this.actionSettings.isDialog) {
           this.$store.commit("data_card/setLoading", false);
           this.$bvModal.show("confirmAction");
@@ -510,7 +510,7 @@ export default {
       const response = await this.$store.dispatch("data_card/executeAction", {
         actionId: this.actionParamsId,
         relActionId: this.actionSettings.relaction,
-        relId: this.$route.params.idRel,
+        relId: this.$route.params.idRel || this.$route.query.rel,
         rowId: this.$route.params.idCard,
         body: this.actionParams,
       });

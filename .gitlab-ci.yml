@@ -3,7 +3,7 @@ stages:
   - deploy
 
 build_compoments:
-  image: node:16
+  image: node:16.14
   stage: pre_deploy
   cache:
     key: ${CI_COMMIT_REF_SLUG}
@@ -11,10 +11,10 @@ build_compoments:
       - node_modules/
   script:
     - npm config set registry https://nexus.reso.ru/repository/npm/
-    - npm install
+    - npm ci
     - npm test
     - cd components-vue2
-    - npm install
+    - npm ci
     - npm run component
   artifacts:
     paths:

@@ -188,6 +188,7 @@ converter.form = async (data, params, instance) => {
     obj.width = webFields[i].NWIDTH ? `${webFields[i].NWIDTH}%` : "100%";
     obj.name = webFields[i].SNAME;
     obj.labelCols = webFields[i].SCAPTPOS ? webFields[i].SCAPTPOS : "";
+    obj.webId = webFields[i].SWEBID ? webFields[i].SWEBID : "";
     if (
       meta_visible[webFields[i].SNAME.toUpperCase()] === "Y" ||
       meta_visible[webFields[i].SNAME.toUpperCase()] === "N"
@@ -338,7 +339,7 @@ converter.type = (data, isReadOnly) => {
           copy[i].type = `enum`;
           if (data[i].menudic) {
             copy[i].type = `listSelect`;
-            if (data[i].label === "Расписание") {
+            if (data[i].fieldId === 38003) {
               copy[i].type = `doctorSchedule`;
             }
           }

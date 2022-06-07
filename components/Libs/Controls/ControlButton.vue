@@ -1,5 +1,10 @@
 <template>
-  <button type="button" @click="updateValue()" :disabled="loading || disabled">
+  <button
+    type="button"
+    @click="updateValue()"
+    :id="data.webId ? data.webId : ''"
+    :disabled="loading || disabled"
+  >
     {{ data.label }}
     <b-spinner
       v-if="loading && clicked"
