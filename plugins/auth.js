@@ -4,7 +4,7 @@ import { getErrorMessage } from "../utils/transform";
 export default function ({ app, store, redirect, $auth }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
-      redirect(`/login?ref=${app.router.history.current.fullPath}`);
+      return;
     }
     if (!error?.response?.config) {
       return;
@@ -12,7 +12,6 @@ export default function ({ app, store, redirect, $auth }) {
     if (error.response?.config?.url.includes("/am/auth/v2/token_refresh")) {
       return;
     }
-
     const {
       config,
       response: { status },

@@ -25,21 +25,18 @@ export default {
     placeholder: {
       type: String,
       required: false,
-    },
-    isAutoOpenForMultipleRow: {
-      type: Array,
-      required: false,
+      default: () => "",
     },
 
     isAutoSelectSingleRow: {
       type: Object,
       required: false,
     },
-    // isShowMenu: {
-    //   type: Boolean,
-    //   required: false,
-    //   default: this.$refs["select"].showMenu,
-    // },
+    isAutoOpen: {
+      type: Boolean,
+      required: true,
+      default: () => true,
+    },
   },
 
   data() {
@@ -50,24 +47,20 @@ export default {
       },
     };
   },
-
-  methods: {},
   watch: {
     selectedItem(val) {
       this.$emit("update", val);
     },
-    isAutoOpenForMultipleRow(val) {
-      if (val.length > 1) {
+    list(val) {
+      if (val.length > 1 && this.isAutoOpen) {
         this.$refs["select"].showMenu = true;
       }
     },
     isAutoSelectSingleRow(val) {
       this.selectedItem = val;
     },
-
-    // isShowMenu() {
-    //   console.log(this.selectesItem);
-    // },
   },
+
+  methods: {},
 };
 </script>

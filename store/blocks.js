@@ -20,8 +20,6 @@ export const getters = {
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
     if (currentBlock) {
-      const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
-
       const items = currentBlock.data.items
         .filter((item) => {
           let isItemShow = true;
@@ -203,7 +201,6 @@ export const mutations = {
     state.filters = state.filters.filter(
       (item) => item.propertyName !== propertyName
     );
-    return;
   },
 
   setFilter: (state, data) => {
@@ -225,7 +222,7 @@ export const mutations = {
       }
     });
 
-    let filter = state.serverFilters.find(
+    const filter = state.serverFilters.find(
       (item) => item.propertyName == data.propertyName
     );
 
@@ -255,7 +252,7 @@ export const mutations = {
       currentFilter = {
         propertyName,
         filter: [],
-        id: id,
+        id,
       };
       state.filters.push(currentFilter);
     }
