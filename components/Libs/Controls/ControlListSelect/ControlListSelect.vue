@@ -1,5 +1,5 @@
 <template>
-  <div v-click-outside="outside" class="position-relative one">
+  <div v-click-outside="outside" class="position-relative">
     <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
