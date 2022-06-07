@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <p>Здесь будет спиннер{{ options.length }}</p> -->
     <b-spinner
       v-if="options.length === 0"
       class="ml-2"
@@ -40,6 +39,11 @@ export default {
       required: true,
       default: () => {},
     },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false,
+    },
   },
 
   computed: {
@@ -74,7 +78,7 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: { value: copyValue },
+        value: { value: { ...copyValue } },
       });
     },
   },

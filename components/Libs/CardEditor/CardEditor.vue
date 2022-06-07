@@ -187,7 +187,6 @@ export default {
 
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
-
       // if (field.type !== "button") {
       //   this.$store.commit("data_card/cardChanged", true);
       // }
@@ -233,6 +232,7 @@ export default {
             e,
             "beforeSave"
           );
+
           if (data) {
             this.$store.commit("data_card/setForm", data || this.data);
           }
@@ -245,6 +245,7 @@ export default {
               e,
               "afterSave"
             );
+
             if (data) {
               this.$store.commit("data_card/setForm", data || this.data);
             }
@@ -259,6 +260,7 @@ export default {
             this.data.map((a) => ({ ...a })),
             e
           );
+
           if (data) {
             this.$store.commit("data_card/setForm", data || this.data);
           }
@@ -295,6 +297,7 @@ export default {
         value: e.value,
       });
       if (typeof eventHandler === "function" && field.type != "button") {
+        //debugger;
         const data = await eventHandler(
           this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
           e,
@@ -491,7 +494,6 @@ export default {
       }
     },
     cancelDataCard() {
-      console.log("нашел!!!");
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit(
         "data_card/setForm",

@@ -123,6 +123,9 @@ export const actions = {
         urlJsonFilters
       )}?zone=free`;
     }
+    //Передается пустой объект с целью инвалидации кэша
+    commit("addBlock", { blockId: parseInt(params.id), data: {} });
+
     await this.$axios.get(url).then((res) => {
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });

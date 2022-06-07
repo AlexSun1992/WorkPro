@@ -3,22 +3,21 @@
     <div v-if="isShowAsTemplate === true">
       <b-form-group>
         <b-input
-          aria-controls="collapse-4"
-          @click="openList"
-          :placeholder="name"
           v-model="selectedItem"
-        ></b-input>
+          aria-controls="collapse-4"
+          :placeholder="name"
+          @click="openList"
+        />
         <b-collapse id="collapse-4" v-model="visible">
           <b-card>
             <b-col>
               <wrapper-item-from-template
-                :itemId="Number(itemId)"
+                :item-id="Number(itemId)"
                 :template="getData"
-                :isEmpty="isEmptyContent"
-                :isButtonRender="getData"
+                :is-empty="isEmptyContent"
+                :is-button-render="getData"
                 @update="update"
-              >
-              </wrapper-item-from-template>
+              />
             </b-col>
           </b-card>
         </b-collapse>
@@ -29,19 +28,20 @@
         v-if="list"
         :list="list"
         :placeholder="name"
+        :is-auto-select-single-row="firstValueFromList"
+        :is-auto-open-for-multiple-row="InsuredPersonsList"
         @update="update"
-        :isAutoSelectSingleRow="firstValueFromList"
-        :isAutoOpenForMultipleRow="InsuredPersonsList"
       />
     </div>
   </div>
 </template>
 <script>
-import Multiselect from "../../../Libs/Multiselect/Multiselect.vue";
 import VRuntimeTemplate from "v-runtime-template";
+import Multiselect from "../../../Libs/Multiselect/Multiselect.vue";
 import SelectItemFromTemplate from "../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
 import WrapperItemFromTemplate from "../../../Libs/Controls/ControlListSelect/WrapperItemFromTemplate.vue";
 import ChooseButton from "./ChooseButton.vue";
+
 export default {
   name: "ServerFilterBlock",
   components: {
@@ -50,18 +50,6 @@ export default {
     SelectItemFromTemplate,
     WrapperItemFromTemplate,
     ChooseButton,
-  },
-
-  data() {
-    return {
-      list: [],
-      queryParamValue: null,
-      itemId: null,
-      visible: false,
-      selectedItem: "",
-      firstValueFromList: null,
-      InsuredPersonsList: null,
-    };
   },
 
   props: {
@@ -120,16 +108,21 @@ export default {
     },
   },
 
-  created() {
-    this.setOptions();
-    if (this.menuDic !== undefined) {
-      this.itemId = this.menuDic;
-    }
+  data() {
+    return {
+      list: [],
+      queryParamValue: null,
+      itemId: null,
+      visible: false,
+      selectedItem: "",
+      firstValueFromList: null,
+      InsuredPersonsList: null,
+    };
   },
 
   computed: {
     getData: {
-      get: function () {
+      get() {
         if (this.itemId !== null) {
           const data = this.$store.getters["menu/getMenuById"](
             this.itemId
@@ -141,17 +134,23 @@ export default {
       },
     },
     isEmptyContent: {
-      get: function () {
+      get() {
         if (this.itemId !== null) {
           const block = this.$store.getters["blocks/getBlockById"](this.itemId);
           if (block) {
             return !block?.data?.items.length;
-          } else {
-            return false;
           }
+          return false;
         }
       },
     },
+  },
+
+  created() {
+    this.setOptions();
+    if (this.menuDic !== undefined) {
+      this.itemId = this.menuDic;
+    }
   },
 
   methods: {
@@ -160,7 +159,7 @@ export default {
     },
     async setOptions() {
       if (this.dictionary?.length) {
-        for (let item of this.dictionary) {
+        for (const item of this.dictionary) {
           if (typeof item === "string") {
             this.list.push({
               text: item,
@@ -171,8 +170,8 @@ export default {
           }
         }
       } else {
-        let fkFields = this.fk.match(/\w+/gi);
-        let { _, items } = await this.$store.dispatch("data_card/fetchList", {
+        const fkFields = this.fk.match(/\w+/gi);
+        const { _, items } = await this.$store.dispatch("data_card/fetchList", {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
         });
@@ -228,7 +227,7 @@ export default {
         };
       }
 
-      let foundedFilter = this.$store.getters["blocks/getServerFilters"].find(
+      const foundedFilter = this.$store.getters["blocks/getServerFilters"].find(
         (filter) => {
           return filter.propertyName === this.queryParamName;
         }
