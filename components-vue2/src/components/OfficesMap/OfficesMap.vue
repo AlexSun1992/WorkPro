@@ -983,8 +983,10 @@ export default {
           if (this.currentStation) {
             let filteredByStation = [];
             this.getOffices.forEach((item) => {
-              item.IDUNDERGROUND.forEach((station) => {
-                if (station.SNAME.toLowerCase().replace("ё", "е").includes(this.currentStation.toLowerCase().replace("ё", "е"))) {
+              item.IDUNDERGROUND.forEach((s) => {
+                let station = s.SNAME.toLowerCase().replace("ё", "е")
+                let currentStation = this.currentStation.toLowerCase().replace("ё", "е")
+                if (station === currentStation && station.length === currentStation.length) {
                   filteredByStation.push(item);
                 }
               });
