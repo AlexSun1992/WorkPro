@@ -78,7 +78,7 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: { value: { ...copyValue } },
+        value: { value: copyValue },
       });
     },
   },

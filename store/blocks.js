@@ -121,8 +121,8 @@ export const actions = {
         urlJsonFilters
       )}?zone=free`;
     }
-    //Передается пустой объект с целью инвалидации кэша
-    commit("addBlock", { blockId: parseInt(params.id), data: {} });
+    //Передается пустой массив с целью инвалидации кэша
+    commit("addBlock", { blockId: parseInt(params.id), data: [] });
 
     await this.$axios.get(url).then((res) => {
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
@@ -182,9 +182,11 @@ export const mutations = {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
     if (bs) {
       bs.data = block.data;
+      //console.log("bs:", bs);
     } else {
       state.blocks.push(block);
     }
+    // console.log("state.blocks:", state.blocks);
   },
   updateBlock(state, block) {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
