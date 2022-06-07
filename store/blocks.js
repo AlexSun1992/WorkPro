@@ -19,6 +19,7 @@ export const getters = {
   },
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
+    console.log("currentBlock:", currentBlock);
     //Добавлено условие для избежания ошибки при инвалидации в Записаться к Врачу
     //currentBlock.data.items !== undefined
     if (currentBlock) {
@@ -123,12 +124,9 @@ export const actions = {
         urlJsonFilters
       )}?zone=free`;
     }
-    //Передается пустой массив с целью инвалидации кэша
 
-    //commit("addBlock", { blockId: parseInt(params.id), data: [] });
-
+    commit("clearBlock");
     await this.$axios.get(url).then((res) => {
-      //console.log("res.data:", res.data);
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });
   },
@@ -184,13 +182,13 @@ export const mutations = {
   },
   addBlock(state, block) {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
+    console.log("bs:", bs);
     if (bs) {
       bs.data = block.data;
-      //console.log("bs:", bs);
     } else {
       state.blocks.push(block);
     }
-    // console.log("state.blocks:", state.blocks);
+    console.log("blocks:", state.blocks);
   },
   updateBlock(state, block) {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
