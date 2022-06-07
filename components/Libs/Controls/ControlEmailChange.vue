@@ -23,12 +23,11 @@
           >
         </b-form-group>
         <div class="col-auto">
-          <label class="d-none d-md-block">&nbsp;</label>
           <b-button
             type="submit"
             @click="verifyUser"
             variant="success"
-            class="btn-sms mb-3"
+            class="mt-btn-form"
             :disabled="$v.newEmail.$invalid || loading || isSendCode"
             >Получить код
             <b-spinner

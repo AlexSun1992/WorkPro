@@ -1,5 +1,5 @@
 <template>
-  <span>
+    
     <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
@@ -31,8 +31,7 @@
         </span>
       </div>
     </b-form-group>
-  </span>
-</template>
+  </template>
 
 <script>
 import "vue-search-select/dist/VueSearchSelect.css";
