@@ -19,6 +19,8 @@ export const getters = {
   },
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
+    //Добавлено условие для избежания ошибки при инвалидации в Записаться к Врачу
+    //currentBlock.data.items !== undefined
     if (currentBlock) {
       const items = currentBlock.data.items
         .filter((item) => {
@@ -122,9 +124,11 @@ export const actions = {
       )}?zone=free`;
     }
     //Передается пустой массив с целью инвалидации кэша
-    commit("addBlock", { blockId: parseInt(params.id), data: [] });
+
+    //commit("addBlock", { blockId: parseInt(params.id), data: [] });
 
     await this.$axios.get(url).then((res) => {
+      //console.log("res.data:", res.data);
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });
   },
