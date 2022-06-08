@@ -2053,3 +2053,75 @@
                     transform: rotate(360deg);
                 }
             }
+            
+            .step {
+                width: 48px;
+                height: 48px;
+                background-color: #F0F0F0;
+                border-radius: 100px;
+                margin: 0 auto;
+                background-position: 50% 50%;
+                background-repeat: no-repeat;
+            }
+            
+            .active>.step {
+                background-color: #FFFFFF;
+                box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
+            }
+            
+            .step-text {
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 23px;
+                position: absolute;
+                transform: translateX(-50%);
+                left: 50%;
+            }
+            
+            .step-block.telemed,
+            .step-block.harvestmite,
+            .step-block.osago {
+                padding-bottom: 60px;
+            }
+            
+            .step-block .dotted {
+                width: 30px;
+                height: 2px;
+                margin: 0 auto;
+                background: url(/img/osagostap0.svg) 50% 50% no-repeat;
+                margin-top: 24px;
+            }
+            
+            .active .step-text {
+                font-weight: 700;
+            }
+            
+            .telemed .step[data-step="1"],
+            .harvestmite .step[data-step="1"],
+            .osago .step[data-step="1"] {
+                background-image: url(/img/osagostap1.svg);
+            }
+            
+            .osago .step[data-step="2"] {
+                background-image: url(/img/osagostap2.svg);
+            }
+            
+            .osago .step[data-step="3"] {
+                background-image: url(/img/osagostap3.svg);
+            }
+            
+            .osago .step[data-step="4"] {
+                background-image: url(/img/osagostap4.svg);
+            }
+            
+            .osago .step[data-step="5"] {
+                background-image: url(/img/osagostap5.svg);
+            }
+            
+            .telemed .step[data-step="3"],
+            .harvestmite .step[data-step="3"],
+            .osago .step[data-step="6"] {
+                background-image: url(/img/osagostap6.svg);
+            }
