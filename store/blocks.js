@@ -123,6 +123,7 @@ export const actions = {
     }
 
     await this.$axios.get(url).then((res) => {
+      commit("addBlock", { blockId: parseInt(params.id), data: [] });
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });
   },
