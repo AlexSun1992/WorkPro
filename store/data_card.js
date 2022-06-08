@@ -32,7 +32,6 @@ export const state = () => ({
   updateEvent: null,
   filters: {},
 });
-
 export const getters = {
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
@@ -433,27 +432,6 @@ export const actions = {
         commit("setErrorMessage", error.response.data);
         return error.response;
       }
-    }
-  },
-  async fetchCard({ commit, dispatch, getters, state }, params) {
-    try {
-      dispatch("cancelRequest");
-      commit("setSource", this.$axios.CancelToken.source());
-      const result = await this.$axios[params.method](params.url, {
-        cancelToken: getters.getSource.token,
-      });
-
-      if (result) {
-        commit("setSource", "");
-        return result.data[0];
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  },
-  cancelRequest({ commit, getters, state }) {
-    if (getters.getSource) {
-      getters.getSource.cancel("Cancelled");
     }
   },
 };

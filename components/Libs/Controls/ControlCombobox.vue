@@ -12,11 +12,12 @@
         ></span>
       </template>
       <b-form-select
-        v-model="value"
+        :value="value"
         :options="options"
         :disabled="!edit ? !edit : data.readonly"
         :class="{ 'error-outline': isValid == false }"
         :state="data.state"
+        @change="changeValue"
       />
       <p v-if="data.dangerText" class="danger-text">
         {{ data.dangerText }}
@@ -54,18 +55,13 @@ export default {
         return this.data.value;
       },
       set(value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: String(value),
-        });
+        return value;
       },
     },
     options() {
       return this.data.options;
     },
   },
-
   created() {
     this.value = this.value ? this.value : null;
     if (this.data.placeholder !== undefined && this.value === null) {
@@ -78,6 +74,15 @@ export default {
         this.options.unshift(item);
       }
     }
+  },
+  methods: {
+    changeValue(value) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: String(value),
+      });
+    },
   },
 };
 </script>
