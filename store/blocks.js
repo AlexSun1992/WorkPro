@@ -19,9 +19,6 @@ export const getters = {
   },
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
-    console.log("currentBlock:", currentBlock);
-    //Добавлено условие для избежания ошибки при инвалидации в Записаться к Врачу
-    //currentBlock.data.items !== undefined
     if (currentBlock) {
       const items = currentBlock.data.items
         .filter((item) => {
@@ -182,13 +179,11 @@ export const mutations = {
   },
   addBlock(state, block) {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
-    console.log("bs:", bs);
     if (bs) {
       bs.data = block.data;
     } else {
       state.blocks.push(block);
     }
-    console.log("blocks:", state.blocks);
   },
   updateBlock(state, block) {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
