@@ -122,7 +122,6 @@ export const actions = {
       )}?zone=free`;
     }
 
-    commit("clearBlock");
     await this.$axios.get(url).then((res) => {
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });
