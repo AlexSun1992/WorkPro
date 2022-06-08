@@ -24,11 +24,10 @@
           </b-form-invalid-feedback>
         </b-form-group>
         <div class="col-auto">
-          <label class="d-none d-md-block">&nbsp;</label>
           <b-button
             type="submit"
             variant="success"
-            class="btn-sms mb-3"
+            class="mt-btn-form"
             :disabled="$v.newPhone.$invalid || loading || isSendCode"
             @click="verifyUser"
           >
