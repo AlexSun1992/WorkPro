@@ -15,7 +15,6 @@
         @openList="openList"
         @selectItem="selectItem"
       />
-
       <b-form-invalid-feedback>
         Обязательно для заполнения
       </b-form-invalid-feedback>
@@ -38,7 +37,6 @@ export default {
   components: {
     ControlWrapperSelect,
   },
-
   directives: {
     clickOutside: {
       bind(el, binding, vnode) {

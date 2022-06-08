@@ -4,7 +4,7 @@
       <div class="mb-5 col-md-10 col-lg-7">
         <div class="px-2 px-md-4 pb-3 mt-3">
           <b-tabs @activate-tab="initData" ref="tabs">
-            <b-tab title="Телефон">
+            <b-tab title="Телефон" button-id="tab_tel_lk">
               <b-alert :show="isErrorMessage" variant="danger">{{
                 errorMessage
               }}</b-alert>
@@ -42,7 +42,7 @@
                 </b-form-group>
               </b-row>
             </b-tab>
-            <b-tab title="Email">
+            <b-tab title="Email" button-id="tab_mail_lk">
               <b-alert :show="isErrorMessage" variant="danger">{{
                 errorMessage
               }}</b-alert>
