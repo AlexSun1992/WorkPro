@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="position-relative">
     <b-spinner
       v-if="options.length === 0"
-      class="ml-2"
+      class="big-spinner"
       style="width: 1.2rem; height: 1.2rem"
       variant="success"
       label="Загрузка..."

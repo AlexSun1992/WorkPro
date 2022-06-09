@@ -19,7 +19,6 @@ export const getters = {
   },
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
-    //console.log("currentBlock:", currentBlock);
     if (currentBlock) {
       const items = currentBlock.data.items
         .filter((item) => {
