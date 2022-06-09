@@ -2168,6 +2168,7 @@
                 background: #EDF8EA url(/img/mypolicy-id2.png) top right no-repeat;
             }
             
+            .my-policy[data-id="8"],
             .my-policy[data-id="1"] {
                 overflow: hidden;
                 background: #ECF3FA url(/img/mypolicy-id1.png) top right no-repeat;
@@ -2194,6 +2195,7 @@
                 background: url(/img/icon-download-auto.svg) left center no-repeat;
             }
             
+            .my-policy[data-id="8"] .btn-download,
             .my-policy[data-id="1"] .btn-download {
                 color: #3B86C8;
                 background: url(/img/icon-download-dms.svg) left center no-repeat;
@@ -2247,4 +2249,8 @@
                 line-height: 23px;
                 color: #292929;
                 text-decoration: none;
+            }
+            
+            .coating {
+                line-height: 1.2;
             }
