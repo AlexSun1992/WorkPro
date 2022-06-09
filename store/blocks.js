@@ -19,6 +19,7 @@ export const getters = {
   },
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
+    //console.log("currentBlock:", currentBlock);
     if (currentBlock) {
       const items = currentBlock.data.items
         .filter((item) => {
@@ -111,7 +112,7 @@ export const actions = {
         dispatch("updateBlock", state.blockId);
       });
   },
-  async fetchBlock({ commit, dispatch }, params) {
+  async fetchBlock({ commit, dispatch, state }, params) {
     let url;
     const urlJsonFilters = JSON.stringify(params.query);
     if (!params.zone) {
@@ -122,8 +123,20 @@ export const actions = {
       )}?zone=free`;
     }
 
+    // if (Object.keys(params.query).length > 0) {
+    //   console.log("query:", params.query);
+    //   commit("addBlock", { blockId: parseInt(params.id), data: [] });
+    // }
+
+    // if (params.query.GET_TIMETABLE !== undefined) {
+    //   commit("addBlock", { blockId: parseInt(params.id), data: [] });
+    // }
+
+    // if (parseInt(params.id) === 908) {
+    //   commit("addBlock", { blockId: parseInt(params.id), data: [] });
+    // }
+    //commit("addBlock", { blockId: parseInt(params.id), data: [] });
     await this.$axios.get(url).then((res) => {
-      commit("addBlock", { blockId: parseInt(params.id), data: [] });
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });
   },
