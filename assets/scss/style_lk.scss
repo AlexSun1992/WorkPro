@@ -678,10 +678,6 @@
                 background-color: #ECEBF4;
             }
             
-            .insured-events[data-id="5"] {
-                background-color: #EDF8EA;
-            }
-            
             .insured-events[data-id="6"],
             .insured-events[data-id="7"] {
                 background-color: #FFF8E6;
@@ -2133,6 +2129,7 @@
                 overflow: hidden;
             }
             
+            .insurance-case .title,
             .my-policy .title {
                 font-family: 'SF Pro Display';
                 font-style: normal;
@@ -2253,4 +2250,213 @@
             
             .coating {
                 line-height: 1.2;
+            }
+            
+            .insurance-case {
+                padding: 20px;
+                border-radius: 16px;
+            }
+            
+            .block-policy .settlement,
+            .insurance-case .settlement {
+                border-radius: 24px;
+                padding: 4px 12px;
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 23px;
+                margin-top: 1.5rem;
+                display: table;
+            }
+            
+            .insurance-case .label {
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 23px;
+                color: #629ED3;
+                margin-top: 1rem;
+            }
+            
+            .insurance-case .text {
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 26px;
+                color: #292929;
+            }
+            
+            .insurance-case[data-id="1"],
+            .insurance-case[data-id="8"],
+            .insurance-case[data-id="10"] {
+                background: linear-gradient(180deg, #ECF3FA 0%, #FFFFFF 53.12%);
+            }
+            
+            .insurance-case[data-id="2"],
+            .insurance-case[data-id="3"],
+            .insurance-case[data-id="5"] {
+                background: linear-gradient(180deg, #EDF8EA 0%, #FFFFFF 53.12%);
+            }
+            
+            .insurance-case[data-id="4"] {
+                background: linear-gradient(180deg, #ECEBF4 0%, #FFFFFF 53.12%);
+            }
+            
+            .insurance-case[data-id="5"] {
+                background: linear-gradient(180deg, #EDF8EA 0%, #FFFFFF 53.12%);
+            }
+            
+            .insurance-case[data-id="6"],
+            .insurance-case[data-id="7"] {
+                background: linear-gradient(180deg, #FFF8E6 0%, #FFFFFF 53.12%);
+            }
+            
+            .block-policy[data-id="1"] .policy-payment:hover,
+            .block-policy[data-id="8"] .policy-payment:hover,
+            .block-policy[data-id="10"] .policy-payment:hover,
+            .block-policy[data-id="1"] .settlement,
+            .block-policy[data-id="8"] .settlement,
+            .block-policy[data-id="10"] .settlement,
+            .insurance-case[data-id="1"] .settlement,
+            .insurance-case[data-id="8"] .settlement,
+            .insurance-case[data-id="10"] .settlement {
+                background-color: #D8E7F4;
+                color: #3B86C8;
+            }
+            
+            .block-policy[data-id="2"] .policy-payment:hover,
+            .block-policy[data-id="3"] .policy-payment:hover,
+            .block-policy[data-id="5"] .policy-payment:hover,
+            .block-policy[data-id="2"] .settlement,
+            .block-policy[data-id="3"] .settlement,
+            .block-policy[data-id="5"] .settlement,
+            .insurance-case[data-id="2"] .settlement,
+            .insurance-case[data-id="3"] .settlement,
+            .insurance-case[data-id="5"] .settlement {
+                background-color: #D9EFD4;
+                color: #009639;
+            }
+            
+            .block-policy[data-id="4"] .policy-payment:hover,
+            .block-policy[data-id="4"] .settlement,
+            .insurance-case[data-id="4"] .settlement {
+                background-color: #D8D6E8;
+                color: #3D348B;
+            }
+            
+            .block-policy[data-id="6"] .policy-payment:hover,
+            .block-policy[data-id="7"] .policy-payment:hover,
+            .block-policy[data-id="6"] .settlement,
+            .block-policy[data-id="7"] .settlement,
+            .insurance-case[data-id="6"] .settlement,
+            .insurance-case[data-id="7"] .settlement {
+                background-color: #FDF1CC;
+                color: #F7B801;
+            }
+            
+            .insurance-case[data-id="1"] .label,
+            .insurance-case[data-id="8"] .label,
+            .insurance-case[data-id="10"] .label {
+                color: #629ED3;
+            }
+            
+            .insurance-case[data-id="2"] .label,
+            .insurance-case[data-id="3"] .label,
+            .insurance-case[data-id="5"] .label {
+                color: #69C055;
+            }
+            
+            .insurance-case[data-id="4"] .label {
+                color: #645DA2;
+            }
+            
+            .insurance-case[data-id="6"] .label,
+            .insurance-case[data-id="7"] .label {
+                color: #F8C634;
+            }
+            
+            .policy-payments .block-policy {
+                border-radius: 24px;
+                padding: 43px 40px 80px 40px;
+            }
+            
+            .policy-payments .block-policy:after {
+                height: 61px;
+            }
+            
+            .policy-payments .block-policy .settlement {
+                margin: 95px auto 0;
+            }
+            
+            .policy-payments .block-policy .title {
+                margin-top: 1rem;
+            }
+            
+            .policy-payments .block-policy:before {
+                top: 15px;
+            }
+            
+            .policy-payment {
+                position: absolute;
+                bottom: 0;
+                display: block;
+                width: 100%;
+                left: 0;
+                border-radius: 0 0 24PX 24PX;
+                border-width: 1px;
+            }
+            
+            .policy-payment:hover {
+                border-width: 1px;
+                transition: 0.3s;
+            }
+            
+            .block-policy[data-id="1"] .policy-payment,
+            .block-policy[data-id="8"] .policy-payment,
+            .block-policy[data-id="10"] .policy-payment {
+                border-color: #629ED3;
+                color: #629ED3;
+            }
+            
+            .block-policy[data-id="2"] .policy-payment,
+            .block-policy[data-id="3"] .policy-payment,
+            .block-policy[data-id="5"] .policy-payment {
+                border-color: #009639;
+                color: #009639;
+            }
+            
+            .block-policy[data-id="4"] .policy-payment {
+                border-color: #645DA2;
+                color: #645DA2
+            }
+            
+            .block-policy[data-id="6"] .policy-payment,
+            .block-policy[data-id="7"] .policy-payment {
+                border-color: #F8C634;
+                color: #F8C634;
+            }
+            
+            .big-spinner {
+                width: 40px !important;
+                height: 40px !important;
+                position: relative;
+                display: block;
+                margin-left: 20px;
+            }
+            
+            .big-spinner .sr-only {
+                background: linear-gradient(to right, green 5%, rgba(0, 255, 0, 0) 40%);
+                width: 40px;
+                height: 40px;
+            }
+            
+            .big-spinner .sr-only:before {
+                background: green;
+            }
+            
+            .big-spinner .sr-only:after {
+                background: #fff;
             }
