@@ -70,6 +70,7 @@ import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 
+let controller;
 export default {
   name: "CardEditor",
   components: { FormBlock, FormAccordion, Form, ActionButton, SkeletonBox },
@@ -301,7 +302,7 @@ export default {
         const data = await eventHandler(
           this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
           e,
-          this.$store._actions["data_card/fetchCard"][0]
+          this.callbackAction
         );
         if (data) {
           this.$store.commit("data_card/setForm", data);
@@ -548,6 +549,20 @@ export default {
           variant: "success",
           solid: true,
         });
+      }
+    },
+    async callbackAction(url) {
+      try {
+        if (controller) {
+          controller.abort();
+        }
+        controller = new AbortController();
+        const { data } = await this.$axios.get(url, {
+          signal: controller.signal,
+        });
+        return data;
+      } catch (e) {
+        console.error(e);
       }
     },
   },

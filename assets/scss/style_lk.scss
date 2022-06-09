@@ -2053,3 +2053,204 @@
                     transform: rotate(360deg);
                 }
             }
+            
+            .step {
+                width: 48px;
+                height: 48px;
+                background-color: #F0F0F0;
+                border-radius: 100px;
+                margin: 0 auto;
+                background-position: 50% 50%;
+                background-repeat: no-repeat;
+            }
+            
+            .active>.step {
+                background-color: #FFFFFF;
+                box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
+            }
+            
+            .step-text {
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 23px;
+                position: absolute;
+                transform: translateX(-50%);
+                left: 50%;
+            }
+            
+            .step-block.telemed,
+            .step-block.harvestmite,
+            .step-block.osago {
+                padding-bottom: 60px;
+            }
+            
+            .step-block .dotted {
+                width: 30px;
+                height: 2px;
+                margin: 0 auto;
+                background: url(/img/osagostap0.svg) 50% 50% no-repeat;
+                margin-top: 24px;
+            }
+            
+            .active .step-text {
+                font-weight: 700;
+            }
+            
+            .telemed .step[data-step="1"],
+            .harvestmite .step[data-step="1"],
+            .osago .step[data-step="1"] {
+                background-image: url(/img/osagostap1.svg);
+            }
+            
+            .osago .step[data-step="2"] {
+                background-image: url(/img/osagostap2.svg);
+            }
+            
+            .osago .step[data-step="3"] {
+                background-image: url(/img/osagostap3.svg);
+            }
+            
+            .osago .step[data-step="4"] {
+                background-image: url(/img/osagostap4.svg);
+            }
+            
+            .osago .step[data-step="5"] {
+                background-image: url(/img/osagostap5.svg);
+            }
+            
+            .telemed .step[data-step="3"],
+            .harvestmite .step[data-step="3"],
+            .osago .step[data-step="6"] {
+                background-image: url(/img/osagostap6.svg);
+            }
+            
+            .my-policy {
+                border-radius: 16px;
+                padding: 20px;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .my-policy .title {
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 1;
+            }
+            
+            .my-policy .description {
+                width: 55%;
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 23px;
+                position: relative;
+                z-index: 1;
+            }
+            
+            .my-policy:after {
+                content: "";
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                background: url(/img/mypolicy_circle.svg) top right no-repeat;
+                width: 656px;
+                height: 414px;
+            }
+            
+            .my-policy[data-id="3"],
+            .my-policy[data-id="2"] {
+                overflow: hidden;
+                background: #EDF8EA url(/img/mypolicy-id2.png) top right no-repeat;
+            }
+            
+            .my-policy[data-id="8"],
+            .my-policy[data-id="1"] {
+                overflow: hidden;
+                background: #ECF3FA url(/img/mypolicy-id1.png) top right no-repeat;
+            }
+            
+            .my-policy[data-id="4"] {
+                overflow: hidden;
+                background: #ECEBF4 url(/img/mypolicy-id4.png) top right no-repeat;
+            }
+            
+            .btn-download {
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 26px;
+                padding-left: 30px;
+                text-decoration: none;
+            }
+            
+            .my-policy[data-id="2"] .btn-download,
+            .my-policy[data-id="3"] .btn-download {
+                color: #009639;
+                background: url(/img/icon-download-auto.svg) left center no-repeat;
+            }
+            
+            .my-policy[data-id="8"] .btn-download,
+            .my-policy[data-id="1"] .btn-download {
+                color: #3B86C8;
+                background: url(/img/icon-download-dms.svg) left center no-repeat;
+            }
+            
+            .my-policy[data-id="4"] .btn-download {
+                color: #645DA2;
+                background: url(/img/icon-download-mortgage.svg) left center no-repeat;
+            }
+            
+            a.action img {
+                width: 56px;
+                height: 56px;
+                display: block;
+                margin: 0 auto 8px;
+            }
+            
+            a.action {
+                padding: 24px;
+                width: 100%;
+                height: 100%;
+                border-radius: 16px;
+                box-shadow: 0px 3px 8px rgb(0 0 0 / 8%);
+                display: block;
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 26px;
+                text-align: center;
+                color: #292929;
+                text-decoration: none;
+                transition: box-shadow 0.3s;
+            }
+            
+            a.action:hover {
+                box-shadow: 0px 3px 8px rgb(0 0 0 / 35%);
+                transition: 0.3s;
+            }
+            
+            .my-policy[data-id="1"] .description a {
+                color: #3B86C8;
+                text-decoration: none;
+            }
+            
+            .my-policy .description a.phone {
+                font-family: 'SF Pro Display';
+                font-style: normal;
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 23px;
+                color: #292929;
+                text-decoration: none;
+            }
+            
+            .coating {
+                line-height: 1.2;
+            }
