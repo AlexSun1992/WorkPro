@@ -116,7 +116,7 @@ import {
   getTemplate,
   checkClusterStatus,
 } from "../../../../utils/map/helpers";
-import getCurrentCity from './currentCity'
+import getCurrentCity from "./currentCity";
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
@@ -148,8 +148,6 @@ export default {
       circleClicked: false,
       oldPosX: null,
       oldPosY: null,
-      curPosX: null,
-      curPosY: null,
       cardPosY: null,
       cardPosX: null,
       translateX: 0,
@@ -183,23 +181,31 @@ export default {
     try {
       window.addEventListener("resize", this.onResize);
 
-      if (Cookies.get("lat") && Cookies.get("lat") !== 'null') {
+      if (Cookies.get("lat") && Cookies.get("lat") !== "null") {
         await this.$store.dispatch("map/fetchRegion", {
           id: Cookies.get("kladr_id")?.substr(0, 2),
           coords: [Cookies.get("lat"), Cookies.get("lon")],
         });
       } else {
-        await getCurrentCity().then(async ({lat = "55.75396", lon = "37.620393", kladr = "7700000000000"}) => {
-          this.lat = lat
-          this.lon = lon
-          Cookies.set('lat', lat)
-          Cookies.set('lon', lon)
-          Cookies.set('kladr_id', kladr)
-          await this.$store.dispatch("map/fetchRegion", {
-            id: kladr.substr(0, 2),
-            coords: [lat, lon],
-          }).catch(e => console.log(e));
-        })
+        await getCurrentCity().then(
+          async ({
+            lat = "55.75396",
+            lon = "37.620393",
+            kladr = "7700000000000",
+          }) => {
+            this.lat = lat;
+            this.lon = lon;
+            Cookies.set("lat", lat);
+            Cookies.set("lon", lon);
+            Cookies.set("kladr_id", kladr);
+            await this.$store
+              .dispatch("map/fetchRegion", {
+                id: kladr.substr(0, 2),
+                coords: [lat, lon],
+              })
+              .catch((e) => console.log(e));
+          }
+        );
       }
       await this.$loadScript(
         `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
@@ -212,16 +218,7 @@ export default {
       console.log(error);
     }
   },
-  /*mounted(){
-      if (this.width < 900) {
-        this.$nextTick(function () {console.log('aaaa');
-          let sla = document.querySelector(".g-svg-metromap");
-          sla.setAttribute("transform", "matrix(0.5,0,0,0.5,100,0");
-          console.log(sla)
-        this.svgScale= 0.5;
-        })
-      }
-  },*/
+
   destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
@@ -233,24 +230,24 @@ export default {
       });
     },
     positionSelectBalloon() {
-      this.translateX=0;
-      this.translateY=0;
+      this.translateX = 0;
+      this.translateY = 0;
       let gsvg = document.querySelector('use[href="#balloon-select"]');
       if (
         document.querySelector('use[href="#balloon-select"]') &&
         this.centerX != null
       ) {
-        if (this.$refs.["metro"].clientHeight - 1295 * this.svgScale < 0) {
-            let XX = this.$refs.["metro"].clientHeight;
-            let XXX = 1295 * this.svgScale;
-            let XXXX =  Math.abs(XX  - XXX)/2;
-            let XXXXX= gsvg.getAttribute("y")*this.svgScale;
-            if (XXXXX < XXXX - this.centerY - (137 * this.svgScale/2)) {
-                this.centerY = Math.abs(XXXXX - XXXX + 137 * this.svgScale);
-            }
-            if(XXXXX >  this.$refs.["metro"].clientHeight-this.centerY) {
-                this.centerY = (XX - XXXXX)*2;
-            }
+        if (this.$refs.metro.clientHeight - 1295 * this.svgScale < 0) {
+          let XX = this.$refs.metro.clientHeight;
+          let XXX = 1295 * this.svgScale;
+          let XXXX = Math.abs(XX - XXX) / 2;
+          let XXXXX = gsvg.getAttribute("y") * this.svgScale;
+          if (XXXXX < XXXX - this.centerY - (137 * this.svgScale) / 2) {
+            this.centerY = Math.abs(XXXXX - XXXX + 137 * this.svgScale);
+          }
+          if (XXXXX > this.$refs.metro.clientHeight - this.centerY) {
+            this.centerY = (XX - XXXXX) * 2;
+          }
 
           document
             .querySelector(".g-svg-metromap")
@@ -274,75 +271,82 @@ export default {
         ) {
         }
       }
-      if(gsvg != null)
-      {this.chooseStation({          target: gsvg}        );
-      let sla = document.querySelector('use[href="#balloon-select"]').getBoundingClientRect().top - document.querySelector('.svg-metromap').getBoundingClientRect().top+21;
-      let slaa = document.querySelector('use[href="#balloon-select"]').getBoundingClientRect().left - document.querySelector('.svg-metromap').getBoundingClientRect().left+21;
-      this.$refs["card"].style.top = sla + "px";
-      this.$refs["card"].style.left = slaa + "px";
-      if (slaa + 400 > this.width) {
-          this.$refs["card"].style.left =slaa - 375 + "px";
+      if (gsvg != null) {
+        this.chooseStation({ target: gsvg });
+        let sla =
+          document
+            .querySelector('use[href="#balloon-select"]')
+            .getBoundingClientRect().top -
+          document.querySelector(".svg-metromap").getBoundingClientRect().top +
+          21;
+        let slaa =
+          document
+            .querySelector('use[href="#balloon-select"]')
+            .getBoundingClientRect().left -
+          document.querySelector(".svg-metromap").getBoundingClientRect().left +
+          21;
+        this.$refs.card.style.top = sla + "px";
+        this.$refs.card.style.left = slaa + "px";
+        if (slaa + 400 > this.width) {
+          this.$refs.card.style.left = slaa - 375 + "px";
         }
         if (sla > 500) {
-          this.$refs["card"].style.transform = "translateY(-100%)";
+          this.$refs.card.style.transform = "translateY(-100%)";
         }
         if (sla < 500) {
-          this.$refs["card"].style.transform = "translateY(0)";
+          this.$refs.card.style.transform = "translateY(0)";
         }
       }
     },
     fitToViewportMetro() {
       this.$nextTick(() => {
-        if (this.width < 992 && this.mapsFit != true) {
+        if (this.width < 992 && this.mapsFit !== true) {
           this.svgScale = 0.5;
-        } else if (this.width > 1200 && this.mapsFit != true) {
+        } else if (this.width > 1200 && this.mapsFit !== true) {
           this.svgScale = 1;
         }
 
-      if (this.mapsFit != true) {
-      /*  let g_cX = (document.querySelector('.svg-metromap').getBoundingClientRect().width - document.querySelector('.g-svg-metromap').getBoundingClientRect().width)/2 -document.querySelector('.g-svg-metromap').getBoundingClientRect().x ;
-      let g_cY = (document.querySelector('.svg-metromap').getBoundingClientRect().height - document.querySelector('.g-svg-metromap').getBoundingClientRect().height)/2 +document.querySelector('.g-svg-metromap').getBoundingClientRect().y;*/
-        this.centerX =
-          (this.$refs.metro.clientWidth - 1286 * this.svgScale) / 2 +
-          121 * this.svgScale
-           + this.translateX;
-        this.centerY =
-          (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
-          137 * this.svgScale +
-          this.translateY;
-      document
-          .querySelector(".g-svg-metromap")
-          .setAttribute(
-            "transform",
-            "matrix(" +
-              this.svgScale +
-              ",0,0," +
-              this.svgScale +
-              "," +
-              this.centerX +
-              "," +
-              this.centerY +
-              ")"
-          );
-      }
-      else {
+        if (this.mapsFit !== true) {
+          this.centerX =
+            (this.$refs.metro.clientWidth - 1286 * this.svgScale) / 2 +
+            121 * this.svgScale +
+            this.translateX;
+          this.centerY =
+            (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
+            137 * this.svgScale +
+            this.translateY;
           document
-          .querySelector(".g-svg-metromap")
-          .setAttribute(
-            "transform",
-            "matrix(" +
-              this.svgScale +
-              ",0,0," +
-              this.svgScale +
-              "," +
-              (this.centerX + this.translateX)+
-              "," +
-              (this.centerY + this.translateY)+
-              ")"
-          );
-     }
+            .querySelector(".g-svg-metromap")
+            .setAttribute(
+              "transform",
+              "matrix(" +
+                this.svgScale +
+                ",0,0," +
+                this.svgScale +
+                "," +
+                this.centerX +
+                "," +
+                this.centerY +
+                ")"
+            );
+        } else {
+          document
+            .querySelector(".g-svg-metromap")
+            .setAttribute(
+              "transform",
+              "matrix(" +
+                this.svgScale +
+                ",0,0," +
+                this.svgScale +
+                "," +
+                (this.centerX + this.translateX) +
+                "," +
+                (this.centerY + this.translateY) +
+                ")"
+            );
+        }
 
-        if (this.mapsFit != true) {
+        if (this.mapsFit !== true) {
           this.positionSelectBalloon();
         }
         if (this.$refs.metro.clientWidth > 0) {
@@ -390,7 +394,7 @@ export default {
     },
 
     clearStation(e) {
-      if (e.target.value == "") {
+      if (e.target.value === "") {
         this.closeCard();
         this.isInputEmpty = true;
         this.useElement?.setAttribute("x", -1000);
@@ -427,43 +431,42 @@ export default {
     },
 
     setMouseCoords(e) {
-/*      if(this.curPosX === null){
-      this.curPosX = e.clientX;
-      this.curPosY = e.clientY;
-      }
-      if (this.oldPosX) {
-        this.curPosX = e.clientX - parseInt(this.oldPosX);
-        this.curPosY = e.clientY - parseInt(this.oldPosY);
-      }*/
       this.cardposX = parseInt(this.$refs["card"]?.style.marginLeft);
       this.cardposY = parseInt(this.$refs["card"]?.style.marginTop);
       document.addEventListener("mousemove", this.onMouseMove);
       document.addEventListener("mouseout", this.onMouseOute);
       window.addEventListener("mouseup", this.removeListener);
-
     },
- setTouchCoords(e) {
+    setTouchCoords(e) {
       this.touchX = e.changedTouches[0].clientX;
       this.touchY = e.changedTouches[0].clientY;
-      if(document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0]) {
-      this.oldPosX = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.e;
-      this.oldPosY = document.getElementsByClassName("g-svg-metromap")[0].transform.animVal[0].matrix.f;
-      this.centerX =0;
-      this.centerY =0;
+      if (
+        document.getElementsByClassName("g-svg-metromap")[0].transform
+          .animVal[0]
+      ) {
+        this.oldPosX =
+          document.getElementsByClassName(
+            "g-svg-metromap"
+          )[0].transform.animVal[0].matrix.e;
+        this.oldPosY =
+          document.getElementsByClassName(
+            "g-svg-metromap"
+          )[0].transform.animVal[0].matrix.f;
+        this.centerX = 0;
+        this.centerY = 0;
       }
-      this.touchstartX= 0;
-      this.touchstartY= 0;
+      this.touchstartX = 0;
+      this.touchstartY = 0;
       document.addEventListener("touchmove", this.onMouseMoveOne);
-
     },
-    onMouseMoveOne(e){
-      this.touchstartX = (this.touchX - e.changedTouches[0].clientX) *-1;
-      this.touchstartY = (this.touchY - e.changedTouches[0].clientY)*-1;
-      this.translateX =this.oldPosX+ this.touchstartX;
-      this.translateY =this.oldPosY+ this.touchstartY;
+    onMouseMoveOne(e) {
+      this.touchstartX = (this.touchX - e.changedTouches[0].clientX) * -1;
+      this.touchstartY = (this.touchY - e.changedTouches[0].clientY) * -1;
+      this.translateX = this.oldPosX + this.touchstartX;
+      this.translateY = this.oldPosY + this.touchstartY;
       this.fitToViewportMetro();
     },
-    removeListenerTouch(e){
+    removeListenerTouch(e) {
       document.removeEventListener("touchmove", this.onMouseMoveOne);
     },
     removeListener(e) {
@@ -479,12 +482,18 @@ export default {
       this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
       this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
 
-      if (Math.abs(this.translateX)*this.svgScale >= (1285 * this.svgScale) / 2) {
+      if (
+        Math.abs(this.translateX) * this.svgScale >=
+        (1285 * this.svgScale) / 2
+      ) {
         this.cardposX = this.cardposX - e.movementX / e.view.devicePixelRatio;
         this.translateX =
           this.translateX - e.movementX / e.view.devicePixelRatio;
       }
-      if (Math.abs(this.translateY)*this.svgScale >= (1295 * this.svgScale) / 2) {
+      if (
+        Math.abs(this.translateY) * this.svgScale >=
+        (1295 * this.svgScale) / 2
+      ) {
         this.translateY =
           this.translateY - e.movementY / e.view.devicePixelRatio;
         this.cardposY = this.cardposY - e.movementY / e.view.devicePixelRatio;
@@ -522,8 +531,8 @@ export default {
         offices.forEach((office) => {
           if (!office.NORDER) office.NORDER = 0;
           let candidate = office.IDUNDERGROUND.find((item) => {
-             stationName = stationName.toLowerCase().replace("ё", "е");
-              item.SNAME = item.SNAME.toLowerCase().replace("ё", "е");
+            stationName = stationName.toLowerCase().replace("ё", "е");
+            item.SNAME = item.SNAME.toLowerCase().replace("ё", "е");
             if (item.SNAME.includes(", ")) {
               return item.SNAME.split(", ").includes(stationName);
             } else {
@@ -571,12 +580,6 @@ export default {
         agencies = filterData(this.getOfficesByCity, filters);
       }
       await this.setPositionAttributes();
-      // if (!this.currentFilters) {
-        // await this.$store.dispatch("map/fetchRegion", {
-        //   id: this.regionId,
-        //   coords: this.centerCoords,
-        // });
-      // }
 
       this.myClusterer = new ymaps.Clusterer({
         preset: "islands#darkGreenClusterIcons",
@@ -614,9 +617,9 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
-      let body = document.getElementsByTagName('body')[0]
+      let body = document.getElementsByTagName("body")[0];
       this.myMap.geoObjects.events.add("balloonopen", (e) => {
-        body.classList.add('open-balloon')
+        body.classList.add("open-balloon");
         const target = e.get("target");
         target.options.set(
           "iconImageHref",
@@ -625,7 +628,7 @@ export default {
       });
 
       this.myMap.geoObjects.events.add("balloonclose", (e) => {
-        body.classList.remove('open-balloon')
+        body.classList.remove("open-balloon");
         const target = e.get("target");
         target?.options.set(
           "iconImageHref",
@@ -639,14 +642,14 @@ export default {
 
     combineAgencies(agencies, i, count) {
       let arr = [];
-      let slicedAgencies = agencies.slice(i, i + count)
+      let slicedAgencies = agencies.slice(i, i + count);
       slicedAgencies.sort((a, b) => {
-        if (!a.NORDER) a.NORDER = 0
-        if (!b.NORDER) b.NORDER = 0
-        return a.NORDER - b.NORDER
-      })
+        if (!a.NORDER) a.NORDER = 0;
+        if (!b.NORDER) b.NORDER = 0;
+        return a.NORDER - b.NORDER;
+      });
       slicedAgencies.forEach((item) => {
-        arr.push(getTemplate(item))
+        arr.push(getTemplate(item));
       });
       return arr;
     },
@@ -718,10 +721,10 @@ export default {
           }
         }
         let addressArr;
-        if (e.get("item").value.includes('линия')) {
-          addressArr = e.get("item").value.split(', ')
-          addressArr.splice(2,1)
-          addressArr = addressArr.join()
+        if (e.get("item").value.includes("линия")) {
+          addressArr = e.get("item").value.split(", ");
+          addressArr.splice(2, 1);
+          addressArr = addressArr.join();
         }
         showOnMap(addressArr ? addressArr : e.get("item").value);
       }
@@ -730,31 +733,6 @@ export default {
 
     async setPositionAttributes() {
       let lat = +Cookies.get("lat");
-      // if (!lat) {
-      //   let geolocation = await ymaps.geolocation.get();
-      //   if (geolocation) {
-      //     let query = this.suggest
-      //       ? this.suggest
-      //       : geolocation.geoObjects.get(0).properties.get("text");
-      //     this.centerCoords = geolocation.geoObjects.position;
-      //     try {
-      //       this.address = await this.$axios.post("/api/suggestions/address", {
-      //         query,
-      //         count: 1,
-      //       });
-      //       if (this.address.data.suggestions.length) {
-      //         this.regionId =
-      //           this.address.data.suggestions[0].data.city_kladr_id.substr(
-      //             0,
-      //             2
-      //           );
-      //         this.city = this.address.data.suggestions[0].data.city;
-      //       }
-      //     } catch (e) {
-      //       console.log(e);
-      //     }
-      //   }
-      // }
       if (!this.suggest && lat) {
         this.city = Cookies.get("location_user");
         this.regionId = Cookies.get("kladr_id")?.substr(0, 2);
@@ -826,7 +804,8 @@ export default {
         ];
         if (this.address.data.suggestions.length) {
           this.regionId =
-            this.address.data.suggestions[0].data.city_kladr_id?.substr(0, 2) || this.address.data.suggestions[0].data.kladr_id?.substr(0, 2);
+            this.address.data.suggestions[0].data.city_kladr_id?.substr(0, 2) ||
+            this.address.data.suggestions[0].data.kladr_id?.substr(0, 2);
           await this.$store.dispatch("map/fetchRegion", {
             id: this.regionId,
             coords: coords ? coords : this.centerCoords,
@@ -836,7 +815,7 @@ export default {
         }
         this.myClusterer?.removeAll();
 
-        let offices = this.getOfficesByCity
+        let offices = this.getOfficesByCity;
 
         if (this.currentFilters) {
           offices = filterData(this.getOfficesByCity, this.currentFilters);
@@ -984,9 +963,14 @@ export default {
             let filteredByStation = [];
             this.getOffices.forEach((item) => {
               item.IDUNDERGROUND.forEach((s) => {
-                let station = s.SNAME.toLowerCase().replace("ё", "е")
-                let currentStation = this.currentStation.toLowerCase().replace("ё", "е")
-                if (station === currentStation && station.length === currentStation.length) {
+                let station = s.SNAME.toLowerCase().replace("ё", "е");
+                let currentStation = this.currentStation
+                  .toLowerCase()
+                  .replace("ё", "е");
+                if (
+                  station === currentStation &&
+                  station.length === currentStation.length
+                ) {
                   filteredByStation.push(item);
                 }
               });
@@ -1007,9 +991,9 @@ export default {
     async cityData() {
       this.myMap.geoObjects.remove(this.placemark);
       await this.$store.dispatch("map/fetchRegion", {
-          id: this.$store.getters["map/getCity"]?.city,
-          coords: this.$store.getters["map/getCity"]?.coords,
-        });
+        id: this.$store.getters["map/getCity"]?.city,
+        coords: this.$store.getters["map/getCity"]?.coords,
+      });
       this.showOnMap(
         this.$store.getters["map/getCity"]?.city,
         this.$store.getters["map/getCity"]?.coords
