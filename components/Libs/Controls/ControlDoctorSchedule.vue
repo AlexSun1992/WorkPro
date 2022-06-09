@@ -1,12 +1,12 @@
 <template>
   <div class="position-relative">
     <b-spinner
-      v-if="options.length === 0"
+      v-if="isRequestFinish === false"
       class="big-spinner"
       style="width: 1.2rem; height: 1.2rem"
       variant="success"
       label="Загрузка..."
-    ></b-spinner>
+    />
     <div
       v-for="item in options"
       :key="item.id"
@@ -61,6 +61,11 @@ export default {
     options: {
       get() {
         return this.dataContent.items || [];
+      },
+    },
+    isRequestFinish: {
+      get() {
+        return this.$store.getters["blocks/getRequestStatus"];
       },
     },
   },

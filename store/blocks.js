@@ -9,10 +9,13 @@ export const state = () => ({
   serverFilters: [],
   searchParams: null,
   PoutValue: "",
+  requestFinish: false,
 });
 
 export const getters = {
   getServerFilters: (state) => state.serverFilters,
+
+  getRequestStatus: (state) => state.requestFinish,
 
   getUnfilteredBlockById: (state) => (id) => {
     return state.blocks.find((b) => b.blockId === parseInt(id));
@@ -122,9 +125,24 @@ export const actions = {
       )}?zone=free`;
     }
     commit("clearBlockById", params.id);
-    await this.$axios.get(url).then((res) => {
-      commit("addBlock", { blockId: parseInt(params.id), data: res.data });
-    });
+    // await this.$axios.get(url).then((res) => {
+    //   console.log(res.data);
+    //   commit("addBlock", { blockId: parseInt(params.id), data: res.data });
+    // });
+    commit("requestState", false);
+    try {
+      const response = await this.$axios.get(url);
+      const responseData = await response.data;
+
+      await commit("addBlock", {
+        blockId: parseInt(params.id),
+        data: responseData,
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      commit("requestState", true);
+    }
   },
   async fetchWizardBlock({ commit, dispatch }, { itemId, cardId }) {
     await this.$axios
@@ -171,6 +189,10 @@ export const actions = {
 export const mutations = {
   setPoutValue(state, address) {
     state.PoutValue = address;
+  },
+
+  requestState(state, reqStatus) {
+    state.requestFinish = reqStatus;
   },
 
   setForm(state, data) {
