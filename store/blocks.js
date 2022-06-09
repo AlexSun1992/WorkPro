@@ -122,20 +122,7 @@ export const actions = {
         urlJsonFilters
       )}?zone=free`;
     }
-
-    // if (Object.keys(params.query).length > 0) {
-    //   console.log("query:", params.query);
-    //   commit("addBlock", { blockId: parseInt(params.id), data: [] });
-    // }
-
-    // if (params.query.GET_TIMETABLE !== undefined) {
-    //   commit("addBlock", { blockId: parseInt(params.id), data: [] });
-    // }
-
-    // if (parseInt(params.id) === 908) {
-    //   commit("addBlock", { blockId: parseInt(params.id), data: [] });
-    // }
-    //commit("addBlock", { blockId: parseInt(params.id), data: [] });
+    commit("clearBlockById", params.id);
     await this.$axios.get(url).then((res) => {
       commit("addBlock", { blockId: parseInt(params.id), data: res.data });
     });
@@ -202,6 +189,11 @@ export const mutations = {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
     bs.data = block.data;
   },
+
+  clearBlockById(state, blockId) {
+    state.blocks = state.blocks.filter((item) => item.blockId !== blockId);
+  },
+
   clearBlock(state) {
     state.blocks = [];
   },
