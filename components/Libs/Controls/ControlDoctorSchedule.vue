@@ -84,6 +84,8 @@ export default {
       })
       .then(() => {
         this.$store.commit("blocks/isRequestFinish", true);
+      })
+      .finally(() => {
         this.$store.commit("data_card/setDisabled", false);
       });
   },
