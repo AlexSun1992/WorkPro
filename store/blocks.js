@@ -1,3 +1,5 @@
+import axios, { Axios } from "axios";
+
 export const state = () => ({
   blocks: [],
   form: [],
@@ -116,6 +118,8 @@ export const actions = {
   },
   async fetchBlock({ commit, dispatch, state }, params) {
     let url;
+    const controller = new AbortController();
+    //controller.abort();
     const urlJsonFilters = JSON.stringify(params.query);
     if (!params.zone) {
       url = `/api/list/55/${params.id}/${encodeURIComponent(urlJsonFilters)}`;
@@ -124,9 +128,7 @@ export const actions = {
         urlJsonFilters
       )}?zone=free`;
     }
-    commit("clearBlockById", params.id);
 
-    commit("isRequestFinish", false);
     try {
       const response = await this.$axios.get(url);
       const responseData = await response.data;
@@ -138,7 +140,7 @@ export const actions = {
     } catch (err) {
       console.error(new Error("error:", err));
     } finally {
-      commit("isRequestFinish", true);
+      // здесь планируется абортировать запрос
     }
   },
   async fetchWizardBlock({ commit, dispatch }, { itemId, cardId }) {

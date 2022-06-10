@@ -73,11 +73,17 @@ export default {
     },
   },
 
-  created() {
-    this.$store.dispatch("blocks/fetchBlock", {
-      id: this.data.menudic,
-      query: this.$store.getters["data_card/getFiltersAllFields"],
-    });
+  async created() {
+    this.$store.commit("blocks/clearBlockById", this.data.menudic);
+    this.$store.commit("blocks/isRequestFinish", false);
+    return this.$store
+      .dispatch("blocks/fetchBlock", {
+        id: this.data.menudic,
+        query: this.$store.getters["data_card/getFiltersAllFields"],
+      })
+      .then(() => {
+        this.$store.commit("blocks/isRequestFinish", true);
+      });
   },
 
   methods: {
