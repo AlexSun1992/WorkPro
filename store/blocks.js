@@ -126,7 +126,7 @@ export const actions = {
     }
     commit("clearBlockById", params.id);
 
-    commit("requestState", false);
+    commit("isRequestFinish", false);
     try {
       const response = await this.$axios.get(url);
       const responseData = await response.data;
@@ -138,7 +138,7 @@ export const actions = {
     } catch (err) {
       console.error(new Error("error:", err));
     } finally {
-      commit("requestState", true);
+      commit("isRequestFinish", true);
     }
   },
   async fetchWizardBlock({ commit, dispatch }, { itemId, cardId }) {
@@ -188,8 +188,8 @@ export const mutations = {
     state.PoutValue = address;
   },
 
-  requestState(state, reqStatus) {
-    state.requestFinish = reqStatus;
+  isRequestFinish(state, reqState) {
+    state.requestFinish = reqState;
   },
 
   setForm(state, data) {
