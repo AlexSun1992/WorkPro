@@ -125,10 +125,7 @@ export const actions = {
       )}?zone=free`;
     }
     commit("clearBlockById", params.id);
-    // await this.$axios.get(url).then((res) => {
-    //   console.log(res.data);
-    //   commit("addBlock", { blockId: parseInt(params.id), data: res.data });
-    // });
+
     commit("requestState", false);
     try {
       const response = await this.$axios.get(url);
@@ -139,7 +136,7 @@ export const actions = {
         data: responseData,
       });
     } catch (err) {
-      console.log(err);
+      console.error(new Error("error:", err));
     } finally {
       commit("requestState", true);
     }

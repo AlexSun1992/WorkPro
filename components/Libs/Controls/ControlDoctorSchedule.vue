@@ -7,24 +7,26 @@
       variant="success"
       label="Загрузка..."
     />
-    <div
-      v-for="item in options"
-      :key="item.id"
-      class="docs-searching-results mb-4"
-    >
-      <div class="doc-date">
-        {{ new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE)) }}
-      </div>
-      <div class="doc-expert">{{ item.SSPECIALISTNAME }}</div>
-      <div class="doc-name">{{ item.SPERSON }}</div>
-      <div class="doc-location">{{ item.FKIDLPU }}</div>
-      <div class="doc-adress">
-        <i class="my-location"></i>{{ item.SADDRESS }}
-      </div>
-      <div v-for="elem in item.STIMELIST" :key="elem.id" class="doc-time">
-        <button @click="chooseTimeToVisit(elem, item)" class="btn-doc-time">
-          {{ elem.DFROM }}
-        </button>
+    <div v-if="isRequestFinish === true">
+      <div
+        v-for="item in options"
+        :key="item.id"
+        class="docs-searching-results mb-4"
+      >
+        <div class="doc-date">
+          {{ new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE)) }}
+        </div>
+        <div class="doc-expert">{{ item.SSPECIALISTNAME }}</div>
+        <div class="doc-name">{{ item.SPERSON }}</div>
+        <div class="doc-location">{{ item.FKIDLPU }}</div>
+        <div class="doc-adress">
+          <i class="my-location" />{{ item.SADDRESS }}
+        </div>
+        <div v-for="elem in item.STIMELIST" :key="elem.id" class="doc-time">
+          <button class="btn-doc-time" @click="chooseTimeToVisit(elem, item)">
+            {{ elem.DFROM }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -45,6 +47,7 @@ export default {
       default: () => false,
     },
   },
+  emits: ["update"],
 
   computed: {
     dataContent: {
@@ -79,7 +82,7 @@ export default {
 
   methods: {
     chooseTimeToVisit(elem, item) {
-      const copyValue = Object.assign({}, item, elem);
+      const copyValue = { ...item, ...elem };
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
