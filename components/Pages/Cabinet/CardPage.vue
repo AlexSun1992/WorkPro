@@ -76,15 +76,22 @@
             {{ item.SNAME }}
           </b-button>
         </div>
-        <div v-if="!isWizard || (isWizard && $route.params.idCard == 0)">
-          <div v-if="getFormData">
+        <div
+          v-if="
+            (!isWizard || (isWizard && $route.params.idCard == 0)) &&
+            getFormData
+          "
+          class="row"
+        >
+          <div
+            class="col-12 col-md-auto"
+            v-if="isButtonSave && isWizard && $route.params.idCard === '0'"
+          >
             <b-button
-              v-if="isButtonSave && isWizard && $route.params.idCard === '0'"
               pill
               :disabled="loading"
               type="button"
               variant="success"
-              class="col-12 col-md-auto"
               :style="isButtonDisabled"
               @click="saveDataCard(0)"
             >
@@ -97,13 +104,13 @@
                 label="Spinning"
               />
             </b-button>
+          </div>
+          <div class="col-12 col-md-auto mt-3 mt-md-0" v-if="isButtonSave">
             <b-button
-              v-if="isButtonSave"
               pill
               :disabled="loading"
               type="button"
               variant="success"
-              class="col-12 col-md-auto mt-3 mt-md-0"
               :style="isButtonDisabled"
               @click="saveDataCard(1)"
             >
@@ -116,12 +123,12 @@
                 label="Spinning"
               />
             </b-button>
+          </div>
+          <div v-if="ref" class="col-12 col-md-auto mt-2 mt-md-0">
             <b-button
-              v-if="ref"
               pill
               type="button"
               variant="outline-success"
-              class="col-12 col-md-auto mt-2 mt-md-0"
               :style="isButtonDisabled"
               @click="$router.push(ref)"
             >
