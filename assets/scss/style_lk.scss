@@ -435,6 +435,10 @@
                 text-overflow: ellipsis;
             }
             
+            .all_anonsed.anonsed-blocks .anonsed-block .description {
+                white-space: normal;
+            }
+            
             .anonsed-blocks .anonsed-block.warning .title {
                 color: #EB5757;
             }
