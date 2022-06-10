@@ -74,6 +74,7 @@ export default {
   },
 
   async created() {
+    this.$store.commit("data_card/setDisabled", true);
     this.$store.commit("blocks/clearBlockById", this.data.menudic);
     this.$store.commit("blocks/isRequestFinish", false);
     return this.$store
@@ -83,6 +84,7 @@ export default {
       })
       .then(() => {
         this.$store.commit("blocks/isRequestFinish", true);
+        this.$store.commit("data_card/setDisabled", false);
       });
   },
 
