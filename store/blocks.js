@@ -118,8 +118,7 @@ export const actions = {
   },
   async fetchBlock({ commit, dispatch, state }, params) {
     let url;
-    const controller = new AbortController();
-    //controller.abort();
+
     const urlJsonFilters = JSON.stringify(params.query);
     if (!params.zone) {
       url = `/api/list/55/${params.id}/${encodeURIComponent(urlJsonFilters)}`;
@@ -139,8 +138,6 @@ export const actions = {
       });
     } catch (err) {
       console.error(new Error("error:", err));
-    } finally {
-      // здесь планируется абортировать запрос
     }
   },
   async fetchWizardBlock({ commit, dispatch }, { itemId, cardId }) {
