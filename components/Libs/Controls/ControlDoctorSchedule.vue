@@ -7,7 +7,7 @@
       variant="success"
       label="Загрузка..."
     />
-    <div v-if="isRequestFinish === true">
+    <div v-if="isRequestFinish === true && options.length">
       <div
         v-for="item in options"
         :key="item.id"
@@ -38,6 +38,9 @@
           </button>
         </div>
       </div>
+    </div>
+    <div v-else-if="isRequestFinish" class="docs-searching-results mb-4">
+      Записей нет
     </div>
   </div>
 </template>
