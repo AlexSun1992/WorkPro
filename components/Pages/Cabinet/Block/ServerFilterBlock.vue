@@ -189,8 +189,10 @@ export default {
           for (let j = 0; j < fkFields.length; j++) {
             if (items[i][fkFields[j]]) {
               if (fkFields[j] === this.idParamName) {
-                value = items[i][fkFields[j]];
+                // value = items[i][fkFields[j]];
+                value = this.idParamName;
               }
+              // избавился от SPOLICY в props FK в конфигураторе
               str = str.replace(fkFields[j], items[i][fkFields[j]]);
             }
           }
