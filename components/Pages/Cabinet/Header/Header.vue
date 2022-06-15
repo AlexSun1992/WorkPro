@@ -51,9 +51,9 @@
         </div>
       </div>
       <div class="login-form">
-        <div class="anonsed-block">
+        <nuxt-link class="anonsed-block" to="/cabinet/55/0/705">
           <button type="button" class="anonsed"></button>
-        </div>
+        </nuxt-link>
         <div class="LoginButton">
           <header-user-name :user-data="userInfo" />
         </div>
