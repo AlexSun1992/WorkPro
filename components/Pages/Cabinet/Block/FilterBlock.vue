@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="menu" v-if="filterType !== 'query' && filterType !== 'combobox'">
+    <ul v-if="filterType !== 'query' && filterType !== 'combobox'" class="menu">
       <li v-for="item in filterItems" :key="item.name">
         <b-button
           :class="{
@@ -9,6 +9,7 @@
           v-on:click="toggleFilter(propertyName, item.name)"
         >
           {{ item.name }}
+          {{ getSameTimeUnits(getUnfilteredItems, item.name) }}
         </b-button>
       </li>
       <li>
@@ -18,8 +19,9 @@
             'filter-checked': isAllFilters,
           }"
           v-on:click="clearFilter(propertyName)"
-          >{{ AllUnits }}</b-button
-        >
+          >{{ allItemsButtonName !== "" ? allItemsButtonName : AllUnits }}
+          {{ getUnfilteredItems.length }}
+        </b-button>
       </li>
     </ul>
 
@@ -46,16 +48,6 @@
 import { changeKeyboardLayout } from "../../../../utils/utils";
 export default {
   name: "FilterBlock",
-  data() {
-    return {
-      AllUnits: "Все",
-      isAllFilters: true,
-      searchString: "",
-      id: null,
-      selected: "placeholder",
-      placeHolder: { item: "placeholder", name: "Выберите время посещения" },
-    };
-  },
 
   props: {
     uniqueItems: {
@@ -89,6 +81,91 @@ export default {
       required: false,
       default: () => false,
     },
+    allItemsButtonName: {
+      type: String,
+      required: false,
+      default: () => "",
+    },
+    showFilteredItemsCount: {
+      type: Boolean,
+      required: false,
+      default: () => true,
+    },
+  },
+
+  data() {
+    return {
+      AllUnits: "Все",
+      isAllFilters: true,
+      searchString: "",
+      id: null,
+      selected: "placeholder",
+      placeHolder: { item: "placeholder", name: "Выберите время посещения" },
+    };
+  },
+
+  computed: {
+    getAmountOfEachTypeItems(elem, allItems) {
+      const sameTypeItemsHub = allItems.map((item) =>
+        Object.values(item).forEach((unit) => unit === elem)
+      );
+      return sameTypeItemsHub.length;
+    },
+
+    filterItems() {
+      const block = this.$store.getters["blocks/getUnfilteredBlockById"](
+        this.itemId
+      );
+      if (block) {
+        const items = block.data.items.map((item) => item[this.propertyName]);
+        const uniqueItems = this.uniqueItems || Array.from(new Set(items));
+        const filter =
+          this.$store.getters["blocks/getFilters"].find(
+            (item) => item.propertyName === this.propertyName
+          )?.filter || [];
+
+        return uniqueItems.map((name) => ({
+          name,
+          isChecked: filter.includes(name),
+        }));
+      }
+      return [];
+    },
+
+    getUnfilteredItems() {
+      const allBlocks = this.$store.getters["blocks/getUnfilteredBlockById"](
+        this.itemId
+      );
+      if (allBlocks) {
+        return allBlocks.data.items;
+      }
+      return [];
+    },
+
+    filterItemsCombobox() {
+      let options = this.filterItems.map(({ name }, idx) => ({
+        item: idx,
+        name,
+      }));
+
+      options.push(this.placeHolder);
+
+      return options;
+    },
+  },
+
+  watch: {
+    searchString(str) {
+      this.$store.commit("blocks/setSearchParams", {
+        searchString: changeKeyboardLayout(str),
+        searchProperty: this.propertyName,
+        id: this.itemId,
+      });
+    },
+  },
+
+  destroyed() {
+    this.$store.commit("blocks/setFilter", []);
   },
 
   created() {
@@ -133,11 +210,18 @@ export default {
     this.$store.commit("blocks/setSearchParams", null);
   },
 
-  destroyed() {
-    this.$store.commit("blocks/setFilter", []);
-  },
-
   methods: {
+    getSameTimeUnits(allItems, target) {
+      const hub = [];
+      allItems.forEach((item) => {
+        Object.values(item).forEach((elem) => {
+          if (elem === target) {
+            hub.push(elem);
+          }
+        });
+      });
+      return hub.length;
+    },
     toggleFilter(propertyName, item) {
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
@@ -189,48 +273,6 @@ export default {
       this.$store.commit("menu/setQueriesUrlByIdMenu", {
         ...this.$route.params,
         url,
-      });
-    },
-  },
-
-  computed: {
-    filterItems() {
-      const block = this.$store.getters["blocks/getUnfilteredBlockById"](
-        this.itemId
-      );
-      if (block) {
-        const items = block.data.items.map((item) => item[this.propertyName]);
-        const uniqueItems = this.uniqueItems || Array.from(new Set(items));
-        const filter =
-          this.$store.getters["blocks/getFilters"].find(
-            (item) => item.propertyName === this.propertyName
-          )?.filter || [];
-
-        return uniqueItems.map((name) => ({
-          name,
-          isChecked: filter.includes(name),
-        }));
-      }
-      return [];
-    },
-
-    filterItemsCombobox() {
-      let options = this.filterItems.map(({ name }, idx) => ({
-        item: idx,
-        name,
-      }));
-
-      options.push(this.placeHolder);
-
-      return options;
-    },
-  },
-  watch: {
-    searchString(str) {
-      this.$store.commit("blocks/setSearchParams", {
-        searchString: changeKeyboardLayout(str),
-        searchProperty: this.propertyName,
-        id: this.itemId,
       });
     },
   },
