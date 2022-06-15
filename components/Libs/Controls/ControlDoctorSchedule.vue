@@ -7,18 +7,28 @@
       variant="success"
       label="Загрузка..."
     />
-    <div v-if="isRequestFinish === true">
+    <div v-if="isRequestFinish === true && options.length">
       <div
         v-for="item in options"
         :key="item.id"
         class="docs-searching-results mb-4"
       >
         <div class="doc-date">
-          {{ new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE)) }}
+          {{
+            item.DDATE
+              ? new Intl.DateTimeFormat("ru-RU").format(new Date(item.DDATE))
+              : ""
+          }}
         </div>
-        <div class="doc-expert">{{ item.SSPECIALISTNAME }}</div>
-        <div class="doc-name">{{ item.SPERSON }}</div>
-        <div class="doc-location">{{ item.FKIDLPU }}</div>
+        <div class="doc-expert">
+          {{ item.SSPECIALISTNAME }}
+        </div>
+        <div class="doc-name">
+          {{ item.SPERSON }}
+        </div>
+        <div class="doc-location">
+          {{ item.FKIDLPU }}
+        </div>
         <div class="doc-adress">
           <i class="my-location" />{{ item.SADDRESS }}
         </div>
@@ -28,6 +38,9 @@
           </button>
         </div>
       </div>
+    </div>
+    <div v-else-if="isRequestFinish" class="docs-searching-results mb-4">
+      Записей нет
     </div>
   </div>
 </template>
