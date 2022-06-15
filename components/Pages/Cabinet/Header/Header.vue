@@ -37,22 +37,22 @@
             <a
               class="icon-left icon-search-office gray-one txtdn"
               href="/about/contacts"
-              >Офисы и отделения</a
-            >
+              v-text="'Офисы и отделения'"
+            />
           </div>
           <div class="float-md-end d-none d-lg-block">
             <a
               href=""
               class="icon-left icon-eye gray-one txtdn visuallyImpairedButton"
-              >Версия для слабовидящих</a
-            >
+              v-text="'Версия для слабовидящих'"
+            />
           </div>
           <div class="clearfix" />
         </div>
       </div>
       <div class="login-form">
         <nuxt-link class="anonsed-block" to="/cabinet/55/0/705">
-          <button type="button" class="anonsed"></button>
+          <button type="button" class="anonsed" />
         </nuxt-link>
         <div class="LoginButton">
           <header-user-name :user-data="userInfo" />
@@ -72,6 +72,7 @@ export default {
     ShowCity,
     HeaderUserName,
   },
+  emits: { "mini-sidebar": null },
   data() {
     return {
       userInfo: null,
@@ -81,7 +82,7 @@ export default {
     this.userInfo = this.$auth.user;
   },
   methods: {
-    toggleClassActive(e) {
+    toggleClassActive() {
       document.querySelector("body").classList.toggle("menu-open");
       document.querySelector(".menu").classList.toggle("show");
     },
@@ -95,7 +96,7 @@ export default {
         window.$nuxt.$cookiz?.remove("url");
         window.location.href = "/";
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
     goToNotify() {
