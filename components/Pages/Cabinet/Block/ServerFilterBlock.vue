@@ -181,12 +181,16 @@ export default {
 
         const fkFields = [this.queryParamName, this.fk];
 
+        // console.log("queryParamName:", this.queryParamName);
+        // console.log("fk:", this.fk);
+
         const { _, items } = await this.$store.dispatch("data_card/fetchList", {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
         });
 
-        let str = this.fk;
+        //let str = this.fk;
+        let str;
 
         for (let i = 0; i < items.length; i++) {
           str = this.fk;
@@ -197,7 +201,10 @@ export default {
                 value = items[i][fkFields[j]];
               }
               // избавился от SPOLICY в props FK в конфигураторе
-              str = str.replace(fkFields[j], items[i][fkFields[j]]);
+              // console.log("fkFields[j]:", fkFields[j]);
+              // console.log("items[i][fkFields[j]]:", items[i][fkFields[j]]);
+              // str = str.replace(fkFields[j], items[i][fkFields[j]]);
+              str = items[i][fkFields[j]];
             }
           }
           this.list.push({
