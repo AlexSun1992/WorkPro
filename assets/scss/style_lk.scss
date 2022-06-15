@@ -1181,8 +1181,10 @@
                 border-radius: 30px;
             }
             
+            a.freecard .block-policy:hover,
             .freecard:hover {
                 box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+                transition: 0.3s;
             }
             
             body.menu-open {
@@ -1329,6 +1331,16 @@
                 outline: none;
             }
             
+            input:disabled:hover,
+            optgroup:disabled:hover,
+            select:disabled:hover,
+            textarea:disabled:hover,
+            .search.selection.dropdown:disabled:hover {
+                border-color: #C3C3C3;
+                color: #c3c3c3;
+                cursor: default;
+            }
+            
             .search.selection.dropdown {
                 padding: 21px 35px 21px 20px;
                 height: 60px;
@@ -1366,6 +1378,7 @@
              :disabled {
                 background: #F2F2F2;
                 color: #c3c3c3;
+                border-color: #c3c3c3;
             }
             
             .mx-datepicker {
@@ -1425,6 +1438,7 @@
             
             .checkbox-hide input:disabled+label:after {
                 background: #F2F2F2;
+                cursor: default;
             }
             
             .checkbox-hide input:checked+label:after,
@@ -2143,7 +2157,6 @@
             }
             
             .my-policy .description {
-                width: 55%;
                 font-family: 'SF Pro Display';
                 font-style: normal;
                 font-weight: 400;
@@ -2156,28 +2169,59 @@
             .my-policy:after {
                 content: "";
                 position: absolute;
-                top: 0px;
-                right: 0px;
-                background: url(/img/mypolicy_circle.svg) top right no-repeat;
-                width: 656px;
-                height: 414px;
+                bottom: 20px;
+                right: 20px;
+                width: 271px;
+                height: 271px;
             }
             
-            .my-policy[data-id="3"],
-            .my-policy[data-id="2"] {
+            .my-policy[data-id="2"],
+            .my-policy[data-id="3"] {
+                background: #EDF8EA;
+            }
+            
+            .my-policy[data-id="3"]:after,
+            .my-policy[data-id="2"]:after {
                 overflow: hidden;
-                background: #EDF8EA url(/img/mypolicy-id2.png) top right no-repeat;
+                background: url(/img/mypolicy-id2.svg) top right no-repeat;
             }
             
             .my-policy[data-id="8"],
             .my-policy[data-id="1"] {
+                background: #ECF3FA;
+            }
+            
+            .my-policy[data-id="8"]:after,
+            .my-policy[data-id="1"]:after {
                 overflow: hidden;
-                background: #ECF3FA url(/img/mypolicy-id1.png) top right no-repeat;
+                background: url(/img/mypolicy-id1.svg) top right no-repeat;
             }
             
             .my-policy[data-id="4"] {
+                background: #ECEBF4;
+            }
+            
+            .my-policy[data-id="4"]:after {
                 overflow: hidden;
-                background: #ECEBF4 url(/img/mypolicy-id4.png) top right no-repeat;
+                background: url(/img/mypolicy-id4.svg) top right no-repeat;
+            }
+            
+            .my-policy[data-id="6"] {
+                background: #FFF8E6;
+            }
+            
+            .my-policy[data-id="6"]:after {
+                overflow: hidden;
+                background: url(/img/mypolicy-id6.svg) top right no-repeat;
+            }
+            
+            .my-policy[data-id="10"] {
+                background: #ECEBF4
+            }
+            
+            .my-policy[data-id="10"]:after {
+                overflow: hidden;
+                background: url(/img/mypolicy-id10.svg) top right no-repeat;
             }
             
             .btn-download {
@@ -2192,7 +2236,7 @@
             
             .my-policy[data-id="2"] .btn-download,
             .my-policy[data-id="3"] .btn-download {
-                color: #009639;
+                color: #43B02A;
                 background: url(/img/icon-download-auto.svg) left center no-repeat;
             }
             
@@ -2205,6 +2249,50 @@
             .my-policy[data-id="4"] .btn-download {
                 color: #645DA2;
                 background: url(/img/icon-download-mortgage.svg) left center no-repeat;
+            }
+            
+            .my-policy .nav.nav-tabs {
+                margin: 0;
+                padding: 0;
+            }
+            
+            .my-policy .nav-item {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                display: inline-block;
+            }
+            
+            .my-policy .nav-item a {
+                color: #292929;
+                text-decoration: none;
+                position: relative;
+            }
+            
+            .my-policy .nav-item a.active:after {
+                background-color: #43B02A;
+            }
+            
+            .my-policy .nav-item a:after {
+                content: "";
+                width: 100%;
+                left: 0;
+                bottom: -5px;
+                height: 3px;
+                position: absolute;
+                transition: 0.3s;
+            }
+            
+            .my-policy .nav-item a.active:hover:after {
+                background-color: #009639;
+            }
+            
+            .my-policy .nav-item a:hover:after {
+                background-color: #DFE3E5;
+            }
+            
+            .my-policy .nav-item+.nav-item {
+                margin-left: 30px;
             }
             
             a.action img {
