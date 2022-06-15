@@ -191,10 +191,13 @@ export default {
 
         //let str = this.fk;
         let str;
+        let value;
+        console.log("items:", items);
+        console.log("fkFields:", fkFields);
 
         for (let i = 0; i < items.length; i++) {
-          str = this.fk;
-          let value = null;
+          // str = this.fk;
+          // let value = null;
           for (let j = 0; j < fkFields.length; j++) {
             if (items[i][fkFields[j]]) {
               if (fkFields[j] === this.idParamName) {
@@ -213,6 +216,8 @@ export default {
             data: items[i],
           });
         }
+        console.log("str:", str);
+        console.log("value:", value);
       }
 
       if (this.list.length === 1 && this.isShowAsTemplate === false) {
