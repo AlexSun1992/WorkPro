@@ -20,7 +20,7 @@
       </b-form-invalid-feedback>
     </b-form-group>
     <button
-      v-if="!isLoad && itemValue[optionsValue] && getData"
+      v-if="!isLoad && itemValue[optionsValue] && getData && !data.required"
       class="btn-abs-cleare"
       variant="outline-success"
       @click="clearItem"
