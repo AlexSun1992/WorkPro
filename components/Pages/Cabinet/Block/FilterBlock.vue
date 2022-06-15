@@ -6,7 +6,7 @@
           :class="{
             'filter-checked': item.isChecked,
           }"
-          v-on:click="toggleFilter(propertyName, item.name)"
+          @click="toggleFilter(propertyName, item.name)"
         >
           {{ item.name }}
           {{ getSameTimeUnits(getUnfilteredItems, item.name) }}
@@ -18,25 +18,24 @@
           :class="{
             'filter-checked': isAllFilters,
           }"
-          v-on:click="clearFilter(propertyName)"
+          @click="clearFilter(propertyName)"
           >{{ allItemsButtonName !== "" ? allItemsButtonName : AllUnits }}
           {{ getUnfilteredItems.length }}
         </b-button>
       </li>
     </ul>
 
-    <div class="search" v-else-if="filterType === 'combobox'">
+    <div v-else-if="filterType === 'combobox'" class="search">
       <b-form-select
         v-model="selected"
         :options="filterItemsCombobox"
         value-field="item"
         text-field="name"
         @change="toggleFilter(propertyName, filterItemsCombobox[selected].name)"
-      >
-      </b-form-select>
+      />
     </div>
 
-    <div class="search" v-else>
+    <div v-else class="search">
       <b-form-input
         v-model="searchString"
         placeholder="Введите поисковый запрос"
@@ -84,7 +83,7 @@ export default {
     allItemsButtonName: {
       type: String,
       required: false,
-      default: () => "",
+      default: () => "Все",
     },
     showFilteredItemsCount: {
       type: Boolean,
@@ -105,13 +104,6 @@ export default {
   },
 
   computed: {
-    getAmountOfEachTypeItems(elem, allItems) {
-      const sameTypeItemsHub = allItems.map((item) =>
-        Object.values(item).forEach((unit) => unit === elem)
-      );
-      return sameTypeItemsHub.length;
-    },
-
     filterItems() {
       const block = this.$store.getters["blocks/getUnfilteredBlockById"](
         this.itemId
@@ -143,7 +135,7 @@ export default {
     },
 
     filterItemsCombobox() {
-      let options = this.filterItems.map(({ name }, idx) => ({
+      const options = this.filterItems.map(({ name }, idx) => ({
         item: idx,
         name,
       }));
@@ -164,7 +156,7 @@ export default {
     },
   },
 
-  destroyed() {
+  unmounted() {
     this.$store.commit("blocks/setFilter", []);
   },
 
@@ -197,35 +189,29 @@ export default {
         this.isAllFilters = false;
       }
       this.$store.commit("blocks/setFilter", filters);
-    } else {
-      if (this.defaultValue) {
-        this.isAllFilters = false;
-        this.$store.commit("blocks/setFilter", {
-          propertyName: this.propertyName,
-          filter: this.defaultValue,
-          id: this.itemId,
-        });
-      }
+    } else if (this.defaultValue) {
+      this.isAllFilters = false;
+      this.$store.commit("blocks/setFilter", {
+        propertyName: this.propertyName,
+        filter: this.defaultValue,
+        id: this.itemId,
+      });
     }
     this.$store.commit("blocks/setSearchParams", null);
   },
 
   methods: {
     getSameTimeUnits(allItems, target) {
-      const hub = [];
-      allItems.forEach((item) => {
-        Object.values(item).forEach((elem) => {
-          if (elem === target) {
-            hub.push(elem);
-          }
-        });
-      });
-      return hub.length;
+      const sameTypeUnitLength = allItems.filter((item) =>
+        Object.values(item).includes(target)
+      );
+      return sameTypeUnitLength.length;
     },
+
     toggleFilter(propertyName, item) {
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
-        propertyName: propertyName,
+        propertyName,
         filterType: this.filterType,
         filterItem: item,
         id: this.itemId,
@@ -238,10 +224,10 @@ export default {
         this.isAllFilters = true;
       }
     },
-    clearFilter: function (propertyName) {
+    clearFilter(propertyName) {
       this.isAllFilters = true;
       this.$store.commit("blocks/clearFilter", {
-        propertyName: propertyName,
+        propertyName,
         filterType: this.filterType,
       });
       this.setQueryURL();
@@ -249,25 +235,23 @@ export default {
 
     toggleFilterCombobox(propertyName, item) {
       this.$store.commit("blocks/replaceFilter", {
-        propertyName: propertyName,
+        propertyName,
         filter: [item],
         id: this.itemId,
       });
       this.setQueryURL();
     },
 
-    setQueryURL: function () {
+    setQueryURL() {
       window.history.replaceState(
         null,
         null,
         `?filters=${JSON.stringify(this.$store.getters["blocks/getFilters"])}`
       );
       const { url } = {
-        url:
-          this.$route.path +
-          `?filters=${JSON.stringify(
-            this.$store.getters["blocks/getFilters"]
-          )}`,
+        url: `${this.$route.path}?filters=${JSON.stringify(
+          this.$store.getters["blocks/getFilters"]
+        )}`,
       };
 
       this.$store.commit("menu/setQueriesUrlByIdMenu", {
