@@ -3,13 +3,28 @@
     <ul v-if="filterType !== 'query' && filterType !== 'combobox'" class="menu">
       <li v-for="item in filterItems" :key="item.name">
         <b-button
+          :disabled="
+            getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) === 0
+              ? true
+              : false
+          "
           :class="{
             'filter-checked': item.isChecked,
           }"
           @click="toggleFilter(propertyName, item.name)"
         >
           {{ item.name }}
-          {{ getSameTimeUnits(getUnfilteredItems, item.name) }}
+          <span
+            v-if="
+              getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) !== 0
+            "
+          >
+            {{
+              showFilteredItemsCount === true
+                ? getSameTypeUnitsCount(getUnfilteredItemsCount, item.name)
+                : null
+            }}</span
+          >
         </b-button>
       </li>
       <li>
@@ -19,8 +34,13 @@
             'filter-checked': isAllFilters,
           }"
           @click="clearFilter(propertyName)"
-          >{{ allItemsButtonName !== "" ? allItemsButtonName : AllUnits }}
-          {{ getUnfilteredItems.length }}
+          >{{ allItemsButtonName }}
+
+          {{
+            showFilteredItemsCount === true
+              ? getUnfilteredItemsCount.length
+              : null
+          }}
         </b-button>
       </li>
     </ul>
@@ -44,7 +64,7 @@
   </div>
 </template>
 <script>
-import { changeKeyboardLayout } from "../../../../utils/utils";
+import { changeKeyboardLayout } from "../../../../../utils/utils";
 export default {
   name: "FilterBlock",
 
@@ -85,16 +105,16 @@ export default {
       required: false,
       default: () => "Все",
     },
+
     showFilteredItemsCount: {
       type: Boolean,
-      required: false,
-      default: () => true,
+      required: true,
+      default: () => false,
     },
   },
 
   data() {
     return {
-      AllUnits: "Все",
       isAllFilters: true,
       searchString: "",
       id: null,
@@ -124,7 +144,7 @@ export default {
       return [];
     },
 
-    getUnfilteredItems() {
+    getUnfilteredItemsCount() {
       const allBlocks = this.$store.getters["blocks/getUnfilteredBlockById"](
         this.itemId
       );
@@ -201,7 +221,7 @@ export default {
   },
 
   methods: {
-    getSameTimeUnits(allItems, target) {
+    getSameTypeUnitsCount(allItems, target) {
       const sameTypeUnitLength = allItems.filter((item) =>
         Object.values(item).includes(target)
       );
