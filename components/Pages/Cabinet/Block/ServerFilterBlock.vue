@@ -216,6 +216,7 @@ export default {
             data: items[i],
           });
         }
+        console.log("list", this.list);
         console.log("str:", str);
         console.log("value:", value);
       }
