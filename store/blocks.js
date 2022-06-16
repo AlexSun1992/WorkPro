@@ -1,3 +1,5 @@
+import axios, { Axios } from "axios";
+
 export const state = () => ({
   blocks: [],
   form: [],
@@ -9,10 +11,13 @@ export const state = () => ({
   serverFilters: [],
   searchParams: null,
   PoutValue: "",
+  requestFinish: false,
 });
 
 export const getters = {
   getServerFilters: (state) => state.serverFilters,
+
+  getRequestStatus: (state) => state.requestFinish,
 
   getUnfilteredBlockById: (state) => (id) => {
     return state.blocks.find((b) => b.blockId === parseInt(id));
@@ -111,8 +116,9 @@ export const actions = {
         dispatch("updateBlock", state.blockId);
       });
   },
-  async fetchBlock({ commit, dispatch }, params) {
+  async fetchBlock({ commit, dispatch, state }, params) {
     let url;
+
     const urlJsonFilters = JSON.stringify(params.query);
     if (!params.zone) {
       url = `/api/list/55/${params.id}/${encodeURIComponent(urlJsonFilters)}`;
@@ -121,9 +127,18 @@ export const actions = {
         urlJsonFilters
       )}?zone=free`;
     }
-    await this.$axios.get(url).then((res) => {
-      commit("addBlock", { blockId: parseInt(params.id), data: res.data });
-    });
+
+    try {
+      const response = await this.$axios.get(url);
+      const responseData = await response.data;
+
+      await commit("addBlock", {
+        blockId: parseInt(params.id),
+        data: responseData,
+      });
+    } catch (err) {
+      console.error(new Error("error:", err));
+    }
   },
   async fetchWizardBlock({ commit, dispatch }, { itemId, cardId }) {
     await this.$axios
@@ -172,6 +187,10 @@ export const mutations = {
     state.PoutValue = address;
   },
 
+  isRequestFinish(state, reqState) {
+    state.requestFinish = reqState;
+  },
+
   setForm(state, data) {
     state.form = data;
   },
@@ -187,6 +206,11 @@ export const mutations = {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
     bs.data = block.data;
   },
+
+  clearBlockById(state, blockId) {
+    state.blocks = state.blocks.filter((item) => item.blockId !== blockId);
+  },
+
   clearBlock(state) {
     state.blocks = [];
   },

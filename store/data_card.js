@@ -32,7 +32,6 @@ export const state = () => ({
   updateEvent: null,
   filters: {},
 });
-
 export const getters = {
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
@@ -435,27 +434,6 @@ export const actions = {
       }
     }
   },
-  async fetchCard({ commit, dispatch, getters, state }, params) {
-    try {
-      dispatch("cancelRequest");
-      commit("setSource", this.$axios.CancelToken.source());
-      const result = await this.$axios[params.method](params.url, {
-        cancelToken: getters.getSource.token,
-      });
-
-      if (result) {
-        commit("setSource", "");
-        return result.data[0];
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  },
-  cancelRequest({ commit, getters, state }) {
-    if (getters.getSource) {
-      getters.getSource.cancel("Cancelled");
-    }
-  },
 };
 
 export const mutations = {
@@ -608,15 +586,7 @@ export const mutations = {
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {
       state.form = state.form.map((item) => {
-        const copyField = state.copyForm.find(
-          (field) => field.fieldId === item.fieldId
-        );
-
-        if (copyField.readonly) {
-          item.readonly = true;
-        } else {
-          item.readonly = params;
-        }
+        item.readonly = params;
         return item;
       });
     }

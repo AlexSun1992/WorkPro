@@ -144,9 +144,8 @@ export default {
           const block = this.$store.getters["blocks/getBlockById"](this.itemId);
           if (block) {
             return !block?.data?.items.length;
-          } else {
-            return false;
           }
+          return false;
         }
       },
     },
@@ -165,7 +164,7 @@ export default {
     },
     async setOptions() {
       if (this.dictionary?.length) {
-        for (let item of this.dictionary) {
+        for (const item of this.dictionary) {
           if (typeof item === "string") {
             this.list.push({
               text: item,
@@ -176,8 +175,8 @@ export default {
           }
         }
       } else {
-        let fkFields = this.fk.match(/\w+/gi);
-        let { _, items } = await this.$store.dispatch("data_card/fetchList", {
+        const fkFields = this.fk.match(/\w+/gi);
+        const { _, items } = await this.$store.dispatch("data_card/fetchList", {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
         });
@@ -237,7 +236,7 @@ export default {
         };
       }
 
-      let foundedFilter = this.$store.getters["blocks/getServerFilters"].find(
+      const foundedFilter = this.$store.getters["blocks/getServerFilters"].find(
         (filter) => {
           return filter.propertyName === this.queryParamName;
         }

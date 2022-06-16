@@ -21,6 +21,7 @@
         :first-day-of-week="1"
         :lang="lang"
         :input-class="data.state === false ? `${state} is-invalid` : state"
+        :clearable="!data.required"
       />
       <p v-if="data.dangerText" class="danger-text">
         {{ data.dangerText }}
@@ -69,7 +70,11 @@ export default {
         return this.data.value;
       },
       set(value) {
-        this.$emit("update", { fieldId: this.data.fieldId, value });
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value,
+        });
       },
     },
   },

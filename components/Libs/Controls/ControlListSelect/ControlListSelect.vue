@@ -15,13 +15,12 @@
         @openList="openList"
         @selectItem="selectItem"
       />
-
       <b-form-invalid-feedback>
         Обязательно для заполнения
       </b-form-invalid-feedback>
     </b-form-group>
     <button
-      v-if="!isLoad && itemValue[optionsValue] && getData"
+      v-if="!isLoad && itemValue[optionsValue] && getData && !data.required"
       class="btn-abs-cleare"
       variant="outline-success"
       @click="clearItem"
@@ -38,7 +37,6 @@ export default {
   components: {
     ControlWrapperSelect,
   },
-
   directives: {
     clickOutside: {
       bind(el, binding, vnode) {
@@ -115,7 +113,13 @@ export default {
     },
     itemValue: {
       get() {
-        return this.data?.value?.value || {};
+        if (typeof this.data?.value?.value === "string") {
+          return JSON.parse(this.data?.value?.value);
+        }
+        if (typeof this.data?.value?.value === "object") {
+          return this.data?.value?.value;
+        }
+        return {};
       },
     },
     selectId: {

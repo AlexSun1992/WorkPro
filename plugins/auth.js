@@ -50,7 +50,7 @@ export default function ({ app, store, redirect, $auth }) {
           $nuxt.$bvToast.toast(error.response.data.MESSAGE, {
             title: "Ошибка",
             variant: "danger",
-            autoHideDelay: 5000,
+            noAutoHide: true,
           });
           console.log(error.response.data);
           if (
