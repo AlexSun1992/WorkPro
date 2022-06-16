@@ -1,22 +1,22 @@
 <template>
   <div>
     <model-list-select
-      :ref="selectId"
       :id="selectId"
-      :list="options"
+      :ref="selectId"
       v-model="selectValue"
+      :list="options"
       :option-value="optionsValue"
       :custom-text="displayText"
       :placeholder="placeholder || 'Выберите из списка'"
       :is-disabled="isDisabled"
-    >
-    </model-list-select>
+    />
   </div>
 </template>
 
 <script>
 import "vue-search-select/dist/VueSearchSelect.css";
 import { ModelListSelect } from "vue-search-select";
+
 export default {
   name: "ControlWrapperSelect",
   components: { ModelListSelect },
@@ -54,22 +54,22 @@ export default {
       default: () => false,
     },
   },
+  computed: {
+    selectValue: {
+      get() {
+        return this.itemValue;
+      },
+      set(value) {
+        this.$emit("selectItem", value);
+      },
+    },
+  },
   mounted() {
     if (this.$refs[this.selectId]) {
       this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
         this.$emit("openList");
       };
     }
-  },
-  computed: {
-    selectValue: {
-      get: function () {
-        return this.itemValue;
-      },
-      set: function (value) {
-        this.$emit("selectItem", value);
-      },
-    },
   },
 };
 </script>
