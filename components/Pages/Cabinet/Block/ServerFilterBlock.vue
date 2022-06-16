@@ -177,48 +177,18 @@ export default {
           }
         }
       } else {
-        //const fkFields = this.fk.match(/\w+/gi); /// избавился от SPOLICY в props FK в конфигураторе
-
-        const fkFields = [this.queryParamName, this.fk];
-
-        // console.log("queryParamName:", this.queryParamName);
-        // console.log("fk:", this.fk);
-
         const { _, items } = await this.$store.dispatch("data_card/fetchList", {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
         });
 
-        //let str = this.fk;
-        let str;
-        let value;
-        console.log("items:", items);
-        console.log("fkFields:", fkFields);
-
         for (let i = 0; i < items.length; i++) {
-          // str = this.fk;
-          // let value = null;
-          for (let j = 0; j < fkFields.length; j++) {
-            if (items[i][fkFields[j]]) {
-              if (fkFields[j] === this.idParamName) {
-                value = items[i][fkFields[j]];
-              }
-              // избавился от SPOLICY в props FK в конфигураторе
-              // console.log("fkFields[j]:", fkFields[j]);
-              // console.log("items[i][fkFields[j]]:", items[i][fkFields[j]]);
-              // str = str.replace(fkFields[j], items[i][fkFields[j]]);
-              str = items[i][fkFields[j]];
-            }
-          }
           this.list.push({
-            value,
-            text: str,
+            value: items[i][this.queryParamName],
+            text: items[i][this.fk],
             data: items[i],
           });
         }
-        console.log("list", this.list);
-        console.log("str:", str);
-        console.log("value:", value);
       }
 
       if (this.list.length === 1 && this.isShowAsTemplate === false) {
