@@ -113,7 +113,13 @@ export default {
     },
     itemValue: {
       get() {
-        return this.data?.value?.value || {};
+        if (typeof this.data?.value?.value === "string") {
+          return JSON.parse(this.data?.value?.value);
+        }
+        if (typeof this.data?.value?.value === "object") {
+          return this.data?.value?.value;
+        }
+        return {};
       },
     },
     selectId: {

@@ -298,7 +298,7 @@ export default {
         value: e.value,
       });
       if (typeof eventHandler === "function" && field.type != "button") {
-        //debugger;
+        // debugger;
         const data = await eventHandler(
           this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
           e,
@@ -393,7 +393,14 @@ export default {
             relId,
             form: fields,
           });
-
+          if (resp?.status !== 500) {
+            this.$root.$bvToast.toast(resp?.data?.MESSAGE, {
+              title: "",
+              variant: "success",
+              noAutoHide: true,
+              solid: true,
+            });
+          }
           if (this.$route.params.idItem === "710") {
             await this.$store.dispatch("updateUser");
           }
@@ -460,11 +467,6 @@ export default {
                 this.$route.params
               );
             }
-            this.$bvToast.toast("Успешно сохранено", {
-              title: "",
-              variant: "success",
-              solid: true,
-            });
           } else if (resp?.status === 500) {
             this.$store.commit("data_card/setLoading", false);
             this.$store.commit("data_card/setDisabled", false);
@@ -529,13 +531,23 @@ export default {
         }
       }
       if (response?.status === 200) {
+        this.$bvModal.hide("confirmAction");
+        this.$root.$bvToast.toast(response.data?.MESSAGE, {
+          title: "",
+          variant: "success",
+          solid: true,
+          noAutoHide: true,
+        });
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
-            this.$bvModal.hide("confirmAction");
-            window.open(
-              response.data.POUTVALUE,
-              this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
-            );
+            if (response.data.POUTVALUE.includes("cabinet")) {
+              this.$router.push(response.data.POUTVALUE);
+            } else {
+              window.open(
+                response.data.POUTVALUE,
+                this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
+              );
+            }
           }
         }
         await this.$store.dispatch("data_card/fetchForm", this.$route.params);
@@ -543,12 +555,6 @@ export default {
           await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
         }
         this.$store.commit("data_card/setLoading", false);
-        this.$bvModal.hide("confirmAction");
-        this.$bvToast.toast("Успешно выполнено", {
-          title: "",
-          variant: "success",
-          solid: true,
-        });
       }
     },
     async callbackAction(url) {
