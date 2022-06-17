@@ -148,7 +148,10 @@ export default {
   methods: {
     displayText(item) {
       if (typeof this.$root.eventHandler === "function") {
-        return this.$root.eventHandler(this.data, item, "displayText");
+        const text = this.$root.eventHandler(this.data, item, "displayText");
+        if (typeof text === "string") {
+          return text;
+        }
       }
       return null;
     },
