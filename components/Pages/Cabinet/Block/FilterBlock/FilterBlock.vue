@@ -1,49 +1,46 @@
 <template>
   <div>
-    <ul v-if="filterType !== 'query' && filterType !== 'combobox'" class="menu">
-      <li v-for="item in filterItems" :key="item.name">
-        <b-button
-          :disabled="
-            getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) === 0
-              ? true
-              : false
-          "
-          :class="{
-            'filter-checked': item.isChecked,
-          }"
-          @click="toggleFilter(propertyName, item.name)"
-        >
-          {{ item.name }}
-          <span
-            v-if="
-              getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) !== 0
-            "
-          >
-            {{
-              showFilteredItemsCount === true
-                ? getSameTypeUnitsCount(getUnfilteredItemsCount, item.name)
-                : null
-            }}</span
-          >
-        </b-button>
-      </li>
-      <li>
-        <b-button
-          v-if="showButtonAll"
-          :class="{
-            'filter-checked': isAllFilters,
-          }"
-          @click="clearFilter(propertyName)"
-          >{{ allItemsButtonName }}
+    <div
+      v-if="filterType !== 'query' && filterType !== 'combobox'"
+      class="filterblock"
+    >
+      <button
+        v-for="item in filterItems"
+        :data-activeitems="
+          showFilteredItemsCount === true
+            ? getSameTypeUnitsCount(getUnfilteredItemsCount, item.name)
+            : null
+        "
+        :key="item.name"
+        :disabled="
+          getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) === 0
+            ? true
+            : false
+        "
+        :class="{
+          'filter-checked': item.isChecked,
+        }"
+        @click="toggleFilter(propertyName, item.name)"
+      >
+        {{ item.name }}
+      </button>
 
-          {{
-            showFilteredItemsCount === true
-              ? getUnfilteredItemsCount.length
-              : null
-          }}
-        </b-button>
-      </li>
-    </ul>
+      <button
+        v-if="showButtonAll"
+        :class="{
+          'filter-checked': isAllFilters,
+        }"
+        @click="clearFilter(propertyName)"
+      >
+        {{ allItemsButtonName }}
+
+        {{
+          showFilteredItemsCount === true
+            ? getUnfilteredItemsCount.length
+            : null
+        }}
+      </button>
+    </div>
 
     <div v-else-if="filterType === 'combobox'" class="search">
       <b-form-select
