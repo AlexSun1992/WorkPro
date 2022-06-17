@@ -1,5 +1,5 @@
 import { data } from "./isFieldNameBelogToAutocomplete.fixtures";
-import isFieldNameBelogToAutocomplete from "./isFieldNameBelogToAutocomplete";
+import { isFieldNameBelogToAutocomplete } from "./isFieldNameBelogToAutocomplete";
 
 describe("Определяем какому типу control соответствует field", () => {
   it("Выявить принадлежность field к типу контрола Autocomplete", () => {
