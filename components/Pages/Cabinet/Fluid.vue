@@ -9,7 +9,7 @@ import PortalPage from "@/components/Pages/Cabinet/Portal/Portal";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
 import CardPage from "~/components/Pages/Cabinet/Card/Card";
 import FormPage from "~/components/Pages/FormPage";
-import FilterBlock from "./Block/FilterBlock.vue";
+import FilterBlock from "./Block/FilterBlock/FilterBlock.vue";
 
 export default {
   name: "Fluid",

@@ -136,6 +136,7 @@ export default {
             return data;
           }
         }
+        return null;
       },
     },
     isEmptyContent: {
@@ -147,6 +148,7 @@ export default {
           }
           return false;
         }
+        return null;
       },
     },
   },
@@ -175,28 +177,15 @@ export default {
           }
         }
       } else {
-        const fkFields = this.fk.match(/\w+/gi);
         const { _, items } = await this.$store.dispatch("data_card/fetchList", {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
         });
 
-        let str = this.fk;
-
         for (let i = 0; i < items.length; i++) {
-          str = this.fk;
-          let value = null;
-          for (let j = 0; j < fkFields.length; j++) {
-            if (items[i][fkFields[j]]) {
-              if (fkFields[j] === this.idParamName) {
-                value = items[i][fkFields[j]];
-              }
-              str = str.replace(fkFields[j], items[i][fkFields[j]]);
-            }
-          }
           this.list.push({
-            value,
-            text: str,
+            value: items[i][this.queryParamName],
+            text: items[i][this.fk],
             data: items[i],
           });
         }
