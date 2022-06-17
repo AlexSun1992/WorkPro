@@ -1,6 +1,6 @@
-export default function getSameTypeUnitsCount(allItems, target) {
-  const sameTypeUnitLength = allItems.filter((item) =>
+export function getSameTypeUnitsCount(allItems, target) {
+  const sameTypeUnit = allItems.filter((item) =>
     Object.values(item).includes(target)
   );
-  return sameTypeUnitLength.length;
+  return sameTypeUnit.length;
 }

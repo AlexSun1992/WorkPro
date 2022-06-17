@@ -62,6 +62,8 @@
 </template>
 <script>
 import { changeKeyboardLayout } from "../../../../../utils/utils";
+import { getSameTypeUnitsCount } from "./FilterBlock.helper";
+
 export default {
   name: "FilterBlock",
 
@@ -218,13 +220,7 @@ export default {
   },
 
   methods: {
-    getSameTypeUnitsCount(allItems, target) {
-      const sameTypeUnitLength = allItems.filter((item) =>
-        Object.values(item).includes(target)
-      );
-      return sameTypeUnitLength.length;
-    },
-
+    getSameTypeUnitsCount,
     toggleFilter(propertyName, item) {
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
