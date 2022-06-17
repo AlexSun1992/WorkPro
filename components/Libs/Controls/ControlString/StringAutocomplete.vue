@@ -3,6 +3,7 @@
     <b-form-input
       class="form-control"
       autocomplete="off"
+      v-if="!data.mask && checkFieldName(fieldsNameHub, data.name)"
       type="search"
       v-model="data.value"
       :disabled="!edit ? !edit : data.readonly"
@@ -49,6 +50,17 @@ export default {
       suggestions: {},
       debouncedClose: null,
       debouncedChange: null,
+      fieldsNameHub: [
+        "SFIRSTNAME",
+        "SSECONDNAME",
+        "STHIRDNAME",
+        "ADDRESS",
+        "SISSUED_WHERE",
+        "SDOCDEP",
+        "SNEWPHONE",
+        "SCODEFIELD",
+        "SNEWEMAIL",
+      ],
     };
   },
   props: ["data", "edit"],
@@ -57,6 +69,13 @@ export default {
     this.debouncedChange = _.debounce(this.changeValue, 300);
   },
   methods: {
+    checkFieldName(fieldsNameHub, compareName) {
+      const isAutocompleteField = fieldsNameHub.find((item) =>
+        item.includes(compareName)
+      );
+
+      return Boolean(isAutocompleteField);
+    },
     changeValue() {
       let value;
       const fields = this.$store.getters["data_card/getForm"];
