@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
+import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock/FilterBlock.vue";
 import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
 import Loader from "./Loader.vue";
 

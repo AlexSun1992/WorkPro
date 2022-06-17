@@ -1,5 +1,5 @@
 <template>
-  <div v-click-outside="outside" class="position-relative">
+  <div class="position-relative">
     <b-form-group
       :label="data.label"
       :class="{ required: data.required }"
@@ -36,21 +36,6 @@ export default {
   name: "ControlListSelect",
   components: {
     ControlWrapperSelect,
-  },
-  directives: {
-    clickOutside: {
-      bind(el, binding, vnode) {
-        el.clickOutsideEvent = function (event) {
-          if (!(el == event.target || el.contains(event.target))) {
-            vnode.context[binding.expression](event);
-          }
-        };
-        document.body.addEventListener("click", el.clickOutsideEvent);
-      },
-      unbind(el) {
-        document.body.removeEventListener("click", el.clickOutsideEvent);
-      },
-    },
   },
   props: {
     itemId: {
@@ -101,7 +86,13 @@ export default {
     },
     options: {
       get() {
-        return this.dataContent.items || [];
+        if (this.dataContent.items) {
+          return this.dataContent.items;
+        }
+        if (Object.keys(this.itemValue).length !== 0) {
+          return [this.itemValue];
+        }
+        return [];
       },
     },
     optionsValue: {
@@ -109,6 +100,10 @@ export default {
         if (this.dataContent?.fields?.length > 1) {
           return this.dataContent?.fields[1].key || "ID";
         }
+        if (Object.keys(this.itemValue).length !== 0) {
+          return Object.keys(this.itemValue)[0];
+        }
+        return null;
       },
     },
     itemValue: {
@@ -153,7 +148,10 @@ export default {
   methods: {
     displayText(item) {
       if (typeof this.$root.eventHandler === "function") {
-        return this.$root.eventHandler(this.data, item, "displayText");
+        const text = this.$root.eventHandler(this.data, item, "displayText");
+        if (typeof text === "string") {
+          return text;
+        }
       }
       return null;
     },

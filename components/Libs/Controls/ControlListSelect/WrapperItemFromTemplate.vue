@@ -9,7 +9,7 @@ import SelectItemFromTemplate from "./SelectItemFromTemplate.vue";
 import VRuntimeTemplate from "v-runtime-template";
 import ChooseButton from "../../../Pages/Cabinet/Block/ChooseButton.vue";
 import RefuseButton from "../../../Pages/Cabinet/Block/RefuseButton.vue";
-import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock.vue";
+import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock/FilterBlock.vue";
 import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
 import ContentBlock from "../../../Pages/Cabinet/Block/ContentBlock.vue";
 import Loader from "./Loader.vue";

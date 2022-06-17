@@ -1,10 +1,10 @@
 <template>
   <div>
     <model-select
+      ref="select"
       :options="list"
       v-model="selectedItem"
       :placeholder="placeholder"
-      ref="select"
     >
     </model-select>
   </div>
@@ -21,6 +21,7 @@ export default {
     list: {
       type: Array,
       required: true,
+      default: () => [],
     },
     placeholder: {
       type: String,
@@ -47,6 +48,7 @@ export default {
       },
     };
   },
+
   watch: {
     selectedItem(val) {
       this.$emit("update", val);
