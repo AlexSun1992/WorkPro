@@ -19,14 +19,18 @@
     ></string-masked>
 
     <string-autocomplete
-      v-if="!data.mask && checkFieldName(fieldsNameHub, data.name)"
+      v-if="
+        !data.mask && isFieldNameBelogToAutocomplete(fieldsNameHub, data.name)
+      "
       :data="data"
       :edit="edit"
       @update="updateField($event)"
     ></string-autocomplete>
 
     <string-text
-      v-if="!data.mask && !checkFieldName(fieldsNameHub, data.name)"
+      v-if="
+        !data.mask && !isFieldNameBelogToAutocomplete(fieldsNameHub, data.name)
+      "
       :data="data"
       :edit="edit"
       @update="updateField($event)"
@@ -39,7 +43,7 @@
 import StringAutocomplete from "./StringAutocomplete.vue";
 import StringMasked from "./StringMasked.vue";
 import StringText from "./StringText.vue";
-import isFieldNameBelogToAutocomplete from "./isFieldNameBelogToAutocomplete.js";
+import { isFieldNameBelogToAutocomplete } from "./isFieldNameBelogToAutocomplete.js";
 
 export default {
   name: "ControlString",
@@ -79,7 +83,7 @@ export default {
     },
   },
   methods: {
-    checkFieldName(fieldsNameHub, compareName) {
+    isFieldNameBelogToAutocomplete(fieldsNameHub, compareName) {
       const isAutocompleteField = fieldsNameHub.find((item) =>
         item.includes(compareName)
       );
