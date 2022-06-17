@@ -179,10 +179,10 @@ export default {
 
   created() {
     if (this.$route.query.filters) {
+      console.log("1111");
       const filters = JSON.parse(this.$route.query.filters.toString());
-
       if (this.filterType === "radiobutton" && this.defaultValue === null) {
-        this.isAllFilters = false;
+        this.isAllFilters = true;
       }
 
       if (this.filterType === "radiobutton" && this.defaultValue !== null) {
@@ -207,6 +207,7 @@ export default {
       }
       this.$store.commit("blocks/setFilter", filters);
     } else if (this.defaultValue) {
+      console.log("2222");
       this.isAllFilters = false;
       this.$store.commit("blocks/setFilter", {
         propertyName: this.propertyName,
@@ -214,6 +215,7 @@ export default {
         id: this.itemId,
       });
     }
+
     this.$store.commit("blocks/setSearchParams", null);
   },
 
@@ -303,9 +305,10 @@ export default {
     background: #fff;
     color: #43b02a;
     display: initial;
-    padding: 3px 5px;
+    padding: 3px 8px;
     font-weight: 700;
     font-size: 14px;
+    margin-left: 5px;
   }
   &.filter-checked {
     background: #009639;
