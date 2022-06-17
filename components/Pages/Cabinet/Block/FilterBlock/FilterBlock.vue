@@ -179,7 +179,6 @@ export default {
 
   created() {
     if (this.$route.query.filters) {
-      console.log("1111");
       const filters = JSON.parse(this.$route.query.filters.toString());
       if (this.filterType === "radiobutton" && this.defaultValue === null) {
         this.isAllFilters = true;
@@ -207,7 +206,6 @@ export default {
       }
       this.$store.commit("blocks/setFilter", filters);
     } else if (this.defaultValue) {
-      console.log("2222");
       this.isAllFilters = false;
       this.$store.commit("blocks/setFilter", {
         propertyName: this.propertyName,
