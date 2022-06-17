@@ -17,6 +17,7 @@
         :disabled="!edit ? !edit : data.readonly"
         type="date"
         value-type="DD.MM.YYYY"
+        :placeholder="data.placeholder"
         format="DD.MM.YYYY"
         :first-day-of-week="1"
         :lang="lang"
