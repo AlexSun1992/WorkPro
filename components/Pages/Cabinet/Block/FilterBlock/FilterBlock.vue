@@ -276,12 +276,43 @@ export default {
 
 <style scoped lang="scss">
 .filterblock > button {
+  margin-bottom: 1rem;
+  background: #edf8ea;
+  border-radius: 100px;
   position: relative;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 30px;
+  color: #292929;
+  border: 0;
+  padding: 3px 12px;
+  margin-right: 8px;
+  &:disabled {
+    background: #eff1f3;
+    color: #c3c3c3;
+    &:after {
+      display: none;
+    }
+  }
   &:after {
-    display: inline-block;
-    padding: 10px;
     content: attr(data-activeitems);
-    border: 1px solid red;
+    min-width: 25px;
+    text-align: center;
+    height: 23px;
+    border-radius: 23px;
+    background: #fff;
+    color: #43b02a;
+    display: initial;
+    padding: 3px 5px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  &.filter-checked {
+    background: #009639;
+    color: #fff;
+    &:after {
+      color: #292929;
+    }
   }
 }
 </style>
