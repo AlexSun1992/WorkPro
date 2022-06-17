@@ -2269,10 +2269,6 @@
                 position: relative;
             }
             
-            .my-policy .nav-item a.active:after {
-                background-color: #43B02A;
-            }
-            
             .my-policy .nav-item a:after {
                 content: "";
                 width: 100%;
@@ -2551,4 +2547,32 @@
             
             .big-spinner .sr-only:after {
                 background: #fff;
+            }
+            
+            .filters-block-title {
+                font-weight: 700;
+                font-size: 18px;
+                line-height: 30px;
+                color: #5d737e;
+            }
+            
+            .my-policy[data-id="1"] .nav-item a.active:after,
+            .my-policy[data-id="8"] .nav-item a.active:after,
+            .my-policy[data-id="10"] .nav-item a.active:after {
+                background-color: #3B86C8;
+            }
+            
+            .my-policy[data-id="2"] .nav-item a.active:after,
+            .my-policy[data-id="3"] .nav-item a.active:after,
+            .my-policy[data-id="5"] .nav-item a.active:after {
+                background-color: #43B02A;
+            }
+            
+            .my-policy[data-id="4"] .nav-item a.active:after {
+                background-color: #FE8F5C;
+            }
+            
+            .my-policy[data-id="6"] .nav-item a.active:after,
+            .my-policy[data-id="7"] .nav-item a.active:after {
+                background-color: #645DA2;
             }
