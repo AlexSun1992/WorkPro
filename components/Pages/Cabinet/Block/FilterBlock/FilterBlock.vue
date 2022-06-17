@@ -5,6 +5,20 @@
       class="filterblock"
     >
       <button
+        v-if="showButtonAll"
+        :data-activeitems="
+          showFilteredItemsCount === true
+            ? getUnfilteredItemsCount.length
+            : null
+        "
+        :class="{
+          'filter-checked': isAllFilters,
+        }"
+        @click="clearFilter(propertyName)"
+      >
+        {{ allItemsButtonName }}
+      </button>
+      <button
         v-for="item in filterItems"
         :data-activeitems="
           showFilteredItemsCount === true
@@ -23,22 +37,6 @@
         @click="toggleFilter(propertyName, item.name)"
       >
         {{ item.name }}
-      </button>
-
-      <button
-        v-if="showButtonAll"
-        :class="{
-          'filter-checked': isAllFilters,
-        }"
-        @click="clearFilter(propertyName)"
-      >
-        {{ allItemsButtonName }}
-
-        {{
-          showFilteredItemsCount === true
-            ? getUnfilteredItemsCount.length
-            : null
-        }}
       </button>
     </div>
 
@@ -276,21 +274,15 @@ export default {
 };
 </script>
 
-<style scoped>
-.menu {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.red {
-  background-color: red;
-}
-
-li {
-  list-style: none;
-  cursor: pointer;
-  white-space: nowrap;
-  margin-bottom: 5px;
+<style scoped lang="scss">
+.filterblock > button {
+  position: relative;
+  &:after {
+    display: inline-block;
+    padding: 10px;
+    content: attr(data-activeitems);
+    border: 1px solid red;
+  }
 }
 </style>
 <style>
