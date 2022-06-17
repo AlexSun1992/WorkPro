@@ -1,0 +1,11 @@
+export const data = [
+  "SFIRSTNAME",
+  "SSECONDNAME",
+  "STHIRDNAME",
+  "ADDRESS",
+  "SISSUED_WHERE",
+  "SDOCDEP",
+  "SNEWPHONE",
+  "SCODEFIELD",
+  "SNEWEMAIL",
+];

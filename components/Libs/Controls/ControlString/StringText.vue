@@ -1,7 +1,6 @@
 <template>
   <div>
     <b-form-input
-      v-if="!data.mask && !checkFieldName(fieldsNameHub, data.name)"
       v-model="data.value"
       @input="updateValue($event)"
       class="form-control"
@@ -31,21 +30,6 @@ export default {
       required: true,
       default: () => false,
     },
-  },
-  data() {
-    return {
-      fieldsNameHub: [
-        "SFIRSTNAME",
-        "SSECONDNAME",
-        "STHIRDNAME",
-        "ADDRESS",
-        "SISSUED_WHERE",
-        "SDOCDEP",
-        "SNEWPHONE",
-        "SCODEFIELD",
-        "SNEWEMAIL",
-      ],
-    };
   },
 
   methods: {

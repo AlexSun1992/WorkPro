@@ -11,6 +11,7 @@
           <span v-html="data.helpText"></span></vue-easy-tooltip></span
     ></template>
     <string-masked
+      v-if="data.mask"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
@@ -18,20 +19,28 @@
     ></string-masked>
 
     <string-autocomplete
+      v-if="!data.mask && checkFieldName(fieldsNameHub, data.name)"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
     ></string-autocomplete>
 
-    <string-text :data="data" :edit="edit" @update="updateField($event)">
+    <string-text
+      v-if="!data.mask && !checkFieldName(fieldsNameHub, data.name)"
+      :data="data"
+      :edit="edit"
+      @update="updateField($event)"
+    >
     </string-text>
   </b-form-group>
 </template>
 
 <script>
-import StringAutocomplete from "./StringAutocomplete";
-import StringMasked from "./StringMasked";
+import StringAutocomplete from "./StringAutocomplete.vue";
+import StringMasked from "./StringMasked.vue";
 import StringText from "./StringText.vue";
+import isFieldNameBelogToAutocomplete from "./isFieldNameBelogToAutocomplete.js";
+
 export default {
   name: "ControlString",
   components: { StringAutocomplete, StringMasked, StringText },
@@ -47,12 +56,36 @@ export default {
       default: () => false,
     },
   },
+
+  data() {
+    return {
+      fieldsNameHub: [
+        "SFIRSTNAME",
+        "SSECONDNAME",
+        "STHIRDNAME",
+        "ADDRESS",
+        "SISSUED_WHERE",
+        "SDOCDEP",
+        "SNEWPHONE",
+        "SCODEFIELD",
+        "SNEWEMAIL",
+      ],
+    };
+  },
+
   computed: {
     label() {
       return `${this.data.label}`;
     },
   },
   methods: {
+    checkFieldName(fieldsNameHub, compareName) {
+      const isAutocompleteField = fieldsNameHub.find((item) =>
+        item.includes(compareName)
+      );
+
+      return Boolean(isAutocompleteField);
+    },
     updateField(e) {
       this.data.value = e.value;
       this.$emit("update", e);
