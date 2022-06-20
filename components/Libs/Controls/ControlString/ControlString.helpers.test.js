@@ -1,8 +1,8 @@
-import { data } from "./isFieldNameBelogToAutocomplete.fixtures";
-import { isFieldNameBelogToAutocomplete } from "./isFieldNameBelogToAutocomplete";
+import { data } from "./ControlString.helpers.fixtures";
+import { isFieldNameBelogToAutocomplete } from "./ControlString.helpers";
 
 describe("Определяем какому типу control соответствует field", () => {
-  it("Выявить принадлежность field к типу контрола Autocomplete", () => {
+  it("Выбранное поле не приндлежит к типу Autocomplete", () => {
     const TEST_DATA = [...data];
     const isAutocomplete = isFieldNameBelogToAutocomplete(
       TEST_DATA,
@@ -10,7 +10,7 @@ describe("Определяем какому типу control соответст�
     );
     expect(isAutocomplete).toBe(false);
   });
-  it("Выявить принадлежность поля для типа Autocomplete", () => {
+  it("Выбранное поле принадлежит к типу Autocomplete", () => {
     const TEST_DATA = [...data];
     const isBelongToAutocomplete = isFieldNameBelogToAutocomplete(
       TEST_DATA,

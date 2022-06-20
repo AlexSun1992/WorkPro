@@ -27,7 +27,7 @@
       @update="updateField($event)"
     ></string-autocomplete>
 
-    <string-text
+    <string-simple
       v-if="
         !data.mask && !isFieldNameBelogToAutocomplete(fieldsNameHub, data.name)
       "
@@ -35,19 +35,19 @@
       :edit="edit"
       @update="updateField($event)"
     >
-    </string-text>
+    </string-simple>
   </b-form-group>
 </template>
 
 <script>
 import StringAutocomplete from "./StringAutocomplete.vue";
 import StringMasked from "./StringMasked.vue";
-import StringText from "./StringText.vue";
-import { isFieldNameBelogToAutocomplete } from "./isFieldNameBelogToAutocomplete";
+import StringSimple from "./StringSimple.vue";
+import { isFieldNameBelogToAutocomplete } from "./ControlString.helpers";
 
 export default {
   name: "ControlString",
-  components: { StringAutocomplete, StringMasked, StringText },
+  components: { StringAutocomplete, StringMasked, StringSimple },
   props: {
     data: {
       type: Object,
