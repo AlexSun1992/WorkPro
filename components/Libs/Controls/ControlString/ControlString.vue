@@ -43,7 +43,7 @@
 import StringAutocomplete from "./StringAutocomplete.vue";
 import StringMasked from "./StringMasked.vue";
 import StringSimple from "./StringSimple.vue";
-import { isFieldNameBelogToAutocomplete } from "./ControlString.helpers";
+import { isFieldNameBelogToAutocomplete } from "./StringAutocomplete.helpers";
 
 export default {
   name: "ControlString",
