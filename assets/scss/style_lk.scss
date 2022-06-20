@@ -476,6 +476,24 @@
                 background: url(/img/icon-menu-dms3-active.svg) 50% 50% no-repeat
             }
             
+            .sidebar-nav-item .menu-icon-dms4 {
+                background: url(/img/icon-menu-dms4.svg) 50% 50% no-repeat
+            }
+            
+            .sidebar-nav-item.active .menu-icon-dms4,
+            .sidebar-nav-item:hover .menu-icon-dms4 {
+                background: url(/img/icon-menu-dms4-active.svg) 50% 50% no-repeat
+            }
+            
+            .sidebar-nav-item .menu-icon-dms5 {
+                background: url(/img/icon-menu-dms5.svg) 50% 50% no-repeat
+            }
+            
+            .sidebar-nav-item.active .menu-icon-dms5,
+            .sidebar-nav-item:hover .menu-icon-dms5 {
+                background: url(/img/icon-menu-dms5-active.svg) 50% 50% no-repeat
+            }
+            
             .sidebar-nav-item .menu-icon-telemed {
                 background: url(/img/icon-menu-dms2.svg) 50% 50% no-repeat
             }
@@ -2648,4 +2666,71 @@
             .my-policy[data-id="6"] .nav-item a.active:after,
             .my-policy[data-id="7"] .nav-item a.active:after {
                 background-color: #645DA2;
+            }
+            
+            .LoginButton .btn-login-link {
+                font-size: 1rem;
+                line-height: 1.125rem;
+                color: #292929;
+                border: 0;
+                background: transparent url(/img/chevron-down.svg) right center no-repeat;
+                padding: 0 20px 0 0;
+                outline: none;
+                max-width: 251px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            
+            .LoginButton .dropdown-menu {
+                display: none;
+            }
+            
+            .LoginButton .dropdown-menu.show {
+                display: block;
+            }
+            
+            .LoginButton .dropdown.show .dropdown-menu {
+                display: block;
+                list-style: none;
+                line-height: 1.5rem;
+                padding: 10px 30px;
+                background: #fff;
+                box-sizing: border-box;
+                border-radius: 14px;
+                margin-top: 11px;
+                right: 0;
+                left: auto !important;
+                border: 1px solid #DFE3E5;
+                box-sizing: border-box;
+                box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
+                border-radius: 30px;
+                outline: none;
+            }
+            
+            .LoginButton .dropdown.show .dropdown-menu li a {
+                line-height: 4rem;
+                display: block;
+                font-size: 1rem;
+                white-space: nowrap;
+                color: #292929;
+                text-decoration: none;
+                font-weight: 700;
+                padding-left: 35px;
+            }
+            
+            .LoginButton .dropdown.show .dropdown-menu li {
+                border-bottom: 1px solid #DADADA;
+            }
+            
+            .LoginButton .dropdown.show .dropdown-menu li:last-of-type {
+                border-bottom: 0;
+            }
+            
+            .LoginButton .dropdown.show .dropdown-menu li:nth-child(1) a {
+                background: transparent url(/img/icon-menu-1-black.svg) left center no-repeat !important;
+            }
+            
+            .LoginButton .dropdown.show .dropdown-menu li:nth-child(2) a {
+                background: transparent url(/img/exit.svg) left center no-repeat !important;
             }
