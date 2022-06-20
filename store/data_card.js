@@ -117,10 +117,6 @@ export const getters = {
             : "",
         };
       }
-      console.log({
-        ...accumulator,
-        [currentValue.name]: currentValue.value,
-      });
       return {
         ...accumulator,
         [currentValue.name]: currentValue.value,
