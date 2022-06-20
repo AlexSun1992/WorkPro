@@ -1,5 +1,5 @@
-import { data } from "./ControlString.helpers.fixtures";
-import { isFieldNameBelogToAutocomplete } from "./ControlString.helpers";
+import { data } from "./StringAutocomplete.helpers.fixtures";
+import { isFieldNameBelogToAutocomplete } from "./StringAutocomplete.helpers";
 
 describe("Определяем какому типу control соответствует field", () => {
   it("Выбранное поле не приндлежит к типу Autocomplete", () => {
