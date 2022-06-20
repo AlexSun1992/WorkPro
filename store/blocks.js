@@ -227,6 +227,10 @@ export const mutations = {
     );
   },
 
+  clearFilters: (state) => {
+    state.filters = [];
+  },
+
   setFilter: (state, data) => {
     if (Array.isArray(data) === true) {
       state.filters = data;
