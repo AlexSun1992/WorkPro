@@ -16,9 +16,12 @@
       :masked="false"
       :tokens="customTokens"
     ></the-mask>
-    <b-form-invalid-feedback :state="isState">{{
-      data.error ? data.error : "Обязательно для заполнения"
-    }}</b-form-invalid-feedback>
+    <!-- привязал b-form-invalid-feedback к data.error вместо isState  -->
+    <b-form-invalid-feedback :state="data.error"
+      >{{ data.error ? data.error : "Обязательно для заполнения" }}
+      <p>data.error:{{ data.error }}</p>
+      <p>isState:{{ isState }}</p>
+    </b-form-invalid-feedback>
   </div>
 </template>
 
@@ -27,6 +30,18 @@ import { TheMask } from "vue-the-mask";
 export default {
   name: "StringMasked",
   components: { TheMask },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false,
+    },
+  },
   data() {
     return {
       customTokens: {
@@ -41,18 +56,41 @@ export default {
       },
     };
   },
-  props: {
-    data: {
-      type: Object,
-      required: true,
-      default: () => {},
+
+  computed: {
+    isState() {
+      let state = null;
+
+      if (this.data.state === false) {
+        console.log("!!!");
+        state = false;
+      }
+      if (Boolean(this.data.error)) {
+        console.log("!!!");
+        if (this.data.error !== null) {
+          console.log("!!!");
+          state = false;
+        }
+      }
+      if (this.data.state) {
+        console.log("!!!");
+        state = !Boolean(this.data.error);
+      }
+      console.log(state);
+      return state;
     },
-    edit: {
-      type: Boolean,
-      required: true,
-      default: () => false,
+    validClass() {
+      if (this.isState !== null) {
+        return this.isState === true ? "is-valid" : "is-invalid";
+      } else {
+        return "";
+      }
+    },
+    dataValue() {
+      return this.data.value;
     },
   },
+
   methods: {
     updateValue(val) {
       if (this.data.value !== val) {
@@ -80,33 +118,6 @@ export default {
           value: val,
         });
       }
-    },
-  },
-  computed: {
-    isState() {
-      let state = null;
-      if (this.data.state === false) {
-        state = false;
-      }
-      if (Boolean(this.data.error)) {
-        if (this.data.error !== null) {
-          state = false;
-        }
-      }
-      if (this.data.state) {
-        state = !Boolean(this.data.error);
-      }
-      return state;
-    },
-    validClass() {
-      if (this.isState !== null) {
-        return this.isState === true ? "is-valid" : "is-invalid";
-      } else {
-        return "";
-      }
-    },
-    dataValue() {
-      return this.data.value;
     },
   },
 };
