@@ -1,4 +1,3 @@
-//import { data } from "./StringAutocomplete.helpers.fixtures";
 import { isFieldNameBelogToAutocomplete } from "./StringAutocomplete.helpers";
 
 describe("Определяем какому типу control соответствует field", () => {
@@ -6,9 +5,15 @@ describe("Определяем какому типу control соответст�
     const isAutocomplete = isFieldNameBelogToAutocomplete("SOCCASION");
     expect(isAutocomplete).toBe(false);
   });
+
   it("Выбранное поле принадлежит к типу Autocomplete", () => {
     const isBelongToAutocomplete =
       isFieldNameBelogToAutocomplete("SSECONDNAME");
     expect(isBelongToAutocomplete).toBe(true);
+  });
+
+  it("Выбранное поле не принадлежит к типу Autocomplete", () => {
+    const isBelongToAutocomplete = isFieldNameBelogToAutocomplete("FIRSTNA");
+    expect(isBelongToAutocomplete).toBe(false);
   });
 });

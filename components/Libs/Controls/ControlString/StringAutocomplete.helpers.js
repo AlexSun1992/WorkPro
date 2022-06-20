@@ -10,7 +10,7 @@ export function isFieldNameBelogToAutocomplete(compareName) {
     "SCODEFIELD",
     "SNEWEMAIL",
   ];
-  const isAutocompleteField = data.find((item) => item.includes(compareName));
+  const isAutocompleteField = data.find((item) => item === compareName);
 
   return Boolean(isAutocompleteField);
 }
