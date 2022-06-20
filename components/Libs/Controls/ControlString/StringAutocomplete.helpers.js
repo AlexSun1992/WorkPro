@@ -1,4 +1,8 @@
+// eslint-disable-next-line import/prefer-default-export
 export function isFieldNameBelogToAutocomplete(compareName) {
+  if (compareName.includes("ADDRESS")) {
+    return true;
+  }
   const data = [
     "SFIRSTNAME",
     "SSECONDNAME",
@@ -10,7 +14,10 @@ export function isFieldNameBelogToAutocomplete(compareName) {
     "SCODEFIELD",
     "SNEWEMAIL",
   ];
-  const isAutocompleteField = data.find((item) => item === compareName);
 
-  return Boolean(isAutocompleteField);
+  if (data.includes(compareName)) {
+    return true;
+  }
+
+  return false;
 }

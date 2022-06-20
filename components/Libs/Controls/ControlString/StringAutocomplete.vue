@@ -49,17 +49,6 @@ export default {
       suggestions: {},
       debouncedClose: null,
       debouncedChange: null,
-      fieldsNameHub: [
-        "SFIRSTNAME",
-        "SSECONDNAME",
-        "STHIRDNAME",
-        "ADDRESS",
-        "SISSUED_WHERE",
-        "SDOCDEP",
-        "SNEWPHONE",
-        "SCODEFIELD",
-        "SNEWEMAIL",
-      ],
     };
   },
   props: ["data", "edit"],
