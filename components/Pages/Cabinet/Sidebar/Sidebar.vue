@@ -37,14 +37,6 @@
         </ul>
       </div>
     </template>
-    <ul class="sidebar-nav lk_logout">
-      <li class="sidebar-nav-item">
-        <a href="#" @click="logout()">
-          <div :class="'menu-icon-exit'" />
-          <span class="d-none d-lg-block">Выйти</span>
-        </a>
-      </li>
-    </ul>
   </div>
 </template>
 
