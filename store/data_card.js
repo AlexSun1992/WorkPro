@@ -541,6 +541,9 @@ export const mutations = {
     state.captions = null;
     state.form = [];
   },
+  clearFilters(state) {
+    state.filters = {};
+  },
   clearFormRelationField(state, { name }) {
     let currentFieldName = name;
     while (true) {

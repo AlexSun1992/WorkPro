@@ -144,7 +144,6 @@ export default {
       },
     },
   },
-
   methods: {
     displayText(item) {
       if (typeof this.$root.eventHandler === "function") {
@@ -157,7 +156,6 @@ export default {
     },
     selectItem(value) {
       const valuePrepare = { ...value };
-
       Object.keys(valuePrepare).map((key) => {
         if (Number.isInteger(valuePrepare[key]) === false) {
           try {
@@ -203,11 +201,11 @@ export default {
 
           await this.$store.dispatch("blocks/fetchBlock", {
             id: this.data.menudic,
-            query: this.$store.getters["data_card/getFiltersAllFields"],
+            query: this.$store.getters["data_card/getFilters"],
           });
           this.isLoad = false;
         } catch (err) {
-          console.log(err);
+          console.error(err);
         }
       }
     },
