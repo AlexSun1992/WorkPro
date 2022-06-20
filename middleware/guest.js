@@ -1,6 +1,8 @@
 /* eslint-disable */
 export default function ({ app, store, redirect, route }) {
   store.commit("data_card/clearFormData");
+  store.commit("data_card/clearFilters");
+  store.commit("blocks/clearBlock");
   store.commit("data_card/setError", false);
   if (process.server) {
     return app.$auth

@@ -117,6 +117,10 @@ export const getters = {
             : "",
         };
       }
+      console.log({
+        ...accumulator,
+        [currentValue.name]: currentValue.value,
+      });
       return {
         ...accumulator,
         [currentValue.name]: currentValue.value,
@@ -540,6 +544,9 @@ export const mutations = {
   clearFormData(state) {
     state.captions = null;
     state.form = [];
+  },
+  clearFilters(state) {
+    state.filters = {};
   },
   clearFormRelationField(state, { name }) {
     let currentFieldName = name;
