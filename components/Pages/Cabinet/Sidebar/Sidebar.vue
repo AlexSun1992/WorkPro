@@ -9,12 +9,14 @@
         </a>
         <ul class="sidebar-nav justify-content-center">
           <li
-            v-if="key === 'ДМС' && loggedInUser.IDMEDPARTNER > 0"
+            v-if="
+              key === 'страховой случай по ДМС' && loggedInUser.IDMEDPARTNER > 0
+            "
             class="sidebar-nav-item"
           >
             <a :href="url" target="blank">
-              <div :class="'menu-icon-policies'" />
-              <span>Телемедицина</span>
+              <div :class="'menu-icon-telemed'" />
+              <span>Видео-консультация</span>
             </a>
           </li>
           <n-link
