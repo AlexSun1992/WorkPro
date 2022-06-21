@@ -188,12 +188,13 @@ export default {
 
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
-      // if (field.type !== "button") {
-      //   this.$store.commit("data_card/cardChanged", true);
-      // }
-
+      if (field.type === "button") {
+        this.$store.commit("data_card/setError", false);
+        this.$store.commit("data_card/setSavedError", false);
+      }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
+
         const actionId = e.value.replace("Item", "");
         let moduleId;
         let cardId;
