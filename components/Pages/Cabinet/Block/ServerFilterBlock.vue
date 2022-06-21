@@ -25,6 +25,7 @@
     </div>
     <div v-if="isShowAsTemplate === false">
       <Multiselect
+        ref="multiselect"
         v-if="list"
         :list="list"
         :placeholder="name"
@@ -122,6 +123,7 @@ export default {
       selectedItem: "",
       firstValueFromList: null,
       InsuredPersonsList: null,
+      componentUpdatedCount: 0,
     };
   },
 
@@ -157,6 +159,17 @@ export default {
     this.setOptions();
     if (this.menuDic !== undefined) {
       this.itemId = this.menuDic;
+    }
+  },
+
+  mounted() {
+    const defaultItem = this.dictionary?.find((item) => item.isDefault);
+    if (defaultItem && this.$refs.multiselect) {
+      this.$refs.multiselect.selectedItem = {
+        text: defaultItem.text,
+        value: defaultItem.value,
+        isDefault: defaultItem.isDefault,
+      };
     }
   },
 
@@ -258,6 +271,8 @@ export default {
     },
 
     update(e) {
+      this.componentUpdatedCount++;
+      if (e.isDefault && this.componentUpdatedCount === 1) return;
       if (!e?.text && !e?.value && this.isShowAsTemplate) {
         e = { data: e, text: e.SNAME, value: e.SPOLICY };
       }
