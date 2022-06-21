@@ -54,8 +54,16 @@
         <nuxt-link class="anonsed-block" to="/cabinet/55/0/705">
           <button type="button" class="anonsed" />
         </nuxt-link>
+
         <div class="LoginButton">
-          <header-user-name :user-data="userInfo" />
+            <b-dropdown variant="login-link" toggle-class="text-decoration-none" no-caret>
+              <template #button-content>
+                  {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
+              </template>
+              <b-dropdown-item href="https://new.reso.ru">На главную страницу РЕСО</b-dropdown-item>
+              <b-dropdown-item href="#" @click="logout()">Ввыйти из аккаунта</b-dropdown-item>
+            </b-dropdown>
+          </div>
         </div>
       </div>
     </div>
@@ -63,12 +71,14 @@
 </template>
 
 <script>
+import LoginButton from "../../../../components-vue2/src/components/Login/LoginButton.vue";
 import ShowCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
 import HeaderUserName from "./HeaderUserName.vue";
 
 export default {
   name: "Header",
   components: {
+    LoginButton,
     ShowCity,
     HeaderUserName,
   },

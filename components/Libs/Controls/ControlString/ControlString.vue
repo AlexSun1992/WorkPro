@@ -19,20 +19,35 @@
     ></string-masked>
 
     <string-autocomplete
-      v-else
+      v-if="
+        !data.mask && isFieldNameBelogToAutocomplete(fieldsNameHub, data.name)
+      "
       :data="data"
       :edit="edit"
       @update="updateField($event)"
     ></string-autocomplete>
+
+    <string-simple
+      v-if="
+        !data.mask && !isFieldNameBelogToAutocomplete(fieldsNameHub, data.name)
+      "
+      :data="data"
+      :edit="edit"
+      @update="updateField($event)"
+    >
+    </string-simple>
   </b-form-group>
 </template>
 
 <script>
-import StringAutocomplete from "./StringAutocomplete";
-import StringMasked from "./StringMasked";
+import StringAutocomplete from "./StringAutocomplete.vue";
+import StringMasked from "./StringMasked.vue";
+import StringSimple from "./StringSimple.vue";
+import { isFieldNameBelogToAutocomplete } from "./StringAutocomplete.helpers";
+
 export default {
   name: "ControlString",
-  components: { StringAutocomplete, StringMasked },
+  components: { StringAutocomplete, StringMasked, StringSimple },
   props: {
     data: {
       type: Object,
@@ -45,12 +60,30 @@ export default {
       default: () => false,
     },
   },
+
+  data() {
+    return {
+      fieldsNameHub: [
+        "SFIRSTNAME",
+        "SSECONDNAME",
+        "STHIRDNAME",
+        "ADDRESS",
+        "SISSUED_WHERE",
+        "SDOCDEP",
+        "SNEWPHONE",
+        "SCODEFIELD",
+        "SNEWEMAIL",
+      ],
+    };
+  },
+
   computed: {
     label() {
       return `${this.data.label}`;
     },
   },
   methods: {
+    isFieldNameBelogToAutocomplete,
     updateField(e) {
       this.data.value = e.value;
       this.$emit("update", e);
