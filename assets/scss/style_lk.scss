@@ -33,7 +33,7 @@
             }
             
             .logo {
-                background: url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/logo.svg) 0 0 no-repeat;
+                background: url(/img/logo.svg) 0 0 no-repeat;
                 width: 168px;
                 height: 47px;
                 display: block;
@@ -313,7 +313,7 @@
                 font-size: 1rem;
                 line-height: 1.5rem;
                 font-feature-settings: 'pnum'on, 'lnum'on;
-                color: #292929;
+                color: #686868;
                 text-decoration: none;
                 width: 100%;
                 display: block;
@@ -330,6 +330,13 @@
             .sidebar_client ul>li:hover,
             .sidebar_client ul>li.active {
                 background: #EDF8EA;
+                transition: 0.3s;
+            }
+            
+            .sidebar_client ul>li:hover a,
+            .sidebar_client ul>li.active a {
+                color: #292929;
+                transition: 0.3s;
             }
             
             .sidebar-nav-item .menu-icon-notifications {
@@ -839,7 +846,7 @@
                 padding: 24px;
                 height: 100%;
                 grid-template-areas: "title planned""clinic date""name name";
-                grid-template-columns: auto 120px;
+                grid-template-columns: minmax(30px, auto) 120px;
                 grid-template-rows: minmax(30px, -webkit-max-content) minmax(30px, -webkit-max-content) auto;
                 grid-template-rows: minmax(30px, max-content) minmax(30px, max-content) auto;
                 display: grid;
@@ -1271,7 +1278,8 @@
                 border-radius: 30px;
             }
             
-            a.freecard .block-policy:hover,
+            .block-visit:hover,
+            .freecard .block-policy:hover,
             .freecard:hover {
                 box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
                 transition: 0.3s;
@@ -1398,7 +1406,7 @@
             
             .timestamp.form-control:disabled,
             .form-control.disabled {
-                color: #686868;
+                color: #c3c3c3;
             }
             
             input:hover,
@@ -2733,4 +2741,133 @@
             
             .LoginButton .dropdown.show .dropdown-menu li:nth-child(2) a {
                 background: transparent url(/img/exit.svg) left center no-repeat !important;
+            }
+            
+            input.is-invalid {
+                border-color: #EB5757;
+            }
+            
+            [data-card-id="705"] {
+                padding: 12px 24px;
+                border: 1px solid #DFE3E5;
+                border-radius: 12px;
+                position: relative;
+                min-height: 222px;
+            }
+            
+            [data-card-id="705"]:after {
+                position: absolute;
+                width: 182px;
+                height: 182px;
+                top: 20px;
+                right: 20px;
+                content: "";
+                background: url(/img/anonsedbg.svg) 0 0 no-repeat;
+            }
+            
+            .anonsed-date {
+                display: inline-block !important;
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 32px;
+                color: #292929;
+            }
+            
+            @media (max-width: 450px) {
+                .LoginButton .btn-login-link {
+                    max-width: 175px;
+                }
+            }
+            
+            @media (max-width:992px) {
+                .block-policy:before {
+                    width: 50%;
+                    height: 80px;
+                    background-size: contain !important;
+                    right: 0;
+                    left: auto;
+                    top: 31px;
+                }
+                .block-policy:after {
+                    height: 80px;
+                }
+                .block-policy .policy-date {
+                    color: #43B02A;
+                    position: absolute;
+                    z-index: 1;
+                    font-weight: 700;
+                    font-size: 12px;
+                    line-height: 20px;
+                    top: 28px;
+                    left: 16px;
+                }
+                .br30 {
+                    border-radius: 24px;
+                }
+                .insured-events .title,
+                .block-policy .title {
+                    font-family: 'Raleway';
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 24px;
+                }
+                .block-policy .title {
+                    margin: 0;
+                    top: 45px;
+                    position: absolute;
+                    left: 16px;
+                    z-index: 1;
+                }
+                .block-policy {
+                    padding: 16px;
+                    min-height: 160px;
+                    border-radius: 24px;
+                }
+                .block-policy .description {
+                    margin-top: 88px;
+                }
+                .block-policy .policy-number {
+                    display: none;
+                }
+                .block-policy .policy-object {
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 24px;
+                    text-align: left;
+                }
+                .block-visit:hover,
+                .freecard .block-policy:hover,
+                .freecard:hover {
+                    box-shadow: none;
+                    transition: 0;
+                }
+                .block-visit,
+                .insured-events,
+                .block-policy {
+                    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.08);
+                }
+                .insured-events {
+                    min-height: 150px;
+                    padding: 16px;
+                }
+                .insured-events:before {
+                    width: 600px;
+                    height: 600px;
+                    content: "";
+                    position: absolute;
+                    left: 101px;
+                    top: -433px;
+                    background: url(/img/ellipse2.svg) 50% 50% no-repeat;
+                    background-size: contain;
+                }
+                .border-block {
+                    overflow: visible;
+                }
+                .block-visit {
+                    padding: 16px;
+                }
+                .block-visit .name {
+                    align-self: end;
+                }
             }
