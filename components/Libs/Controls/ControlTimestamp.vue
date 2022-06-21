@@ -28,7 +28,7 @@
         {{ data.dangerText }}
       </p>
       <b-form-invalid-feedback :state="data.state">
-        Обязательно для заполнения
+        {{ data.error ? data.error : "Обязательное поле" }}
       </b-form-invalid-feedback>
     </b-form-group>
   </div>
@@ -65,6 +65,7 @@ export default {
       maskTemplate: "##.##.####",
     };
   },
+
   computed: {
     fieldValue: {
       get() {
