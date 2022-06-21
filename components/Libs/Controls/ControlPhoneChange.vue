@@ -178,7 +178,7 @@ export default {
       // Очищаем поле с кодом СМС
       const formFields = this.$store.getters["data_card/getForm"];
       const fieldCodeSMS = formFields.find((d) => d.fieldId === 26713);
-      console.log(fieldCodeSMS);
+
       if (fieldCodeSMS.error !== null) {
         this.$store.commit("data_card/setFormField", {
           fieldId: 26713,

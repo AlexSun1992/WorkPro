@@ -1,8 +1,8 @@
 <template>
   <div>
     <the-mask
-      v-b-tooltip.hover.top="data.helpText"
       v-if="data.mask"
+      v-b-tooltip.hover.top="data.helpText"
       :mask="data.mask"
       class="form-control"
       :class="validClass"
@@ -15,18 +15,17 @@
       type="text"
       :masked="false"
       :tokens="customTokens"
-    ></the-mask>
-    <!-- привязал b-form-invalid-feedback к data.error вместо isState  -->
-    <b-form-invalid-feedback :state="data.error"
-      >{{ data.error ? data.error : "Обязательно для заполнения" }}
-      <p>data.error:{{ data.error }}</p>
-      <p>isState:{{ isState }}</p>
+    />
+
+    <b-form-invalid-feedback :state="isState">
+      {{ data.error ? data.error : "Обязательно для заполнения" }}
     </b-form-invalid-feedback>
   </div>
 </template>
 
 <script>
 import { TheMask } from "vue-the-mask";
+
 export default {
   name: "StringMasked",
   components: { TheMask },
@@ -62,29 +61,24 @@ export default {
       let state = null;
 
       if (this.data.state === false) {
-        console.log("!!!");
         state = false;
       }
-      if (Boolean(this.data.error)) {
-        console.log("!!!");
+      if (this.data.error) {
         if (this.data.error !== null) {
-          console.log("!!!");
           state = false;
         }
       }
       if (this.data.state) {
-        console.log("!!!");
-        state = !Boolean(this.data.error);
+        state = !this.data.error;
       }
-      console.log(state);
+
       return state;
     },
     validClass() {
       if (this.isState !== null) {
         return this.isState === true ? "is-valid" : "is-invalid";
-      } else {
-        return "";
       }
+      return "";
     },
     dataValue() {
       return this.data.value;
