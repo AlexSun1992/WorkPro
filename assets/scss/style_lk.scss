@@ -816,7 +816,7 @@
             }
             
             .insured-events[data-id="5"]:after {
-                background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
+                background: url(/img/icon-insured-events2.svg) 50% 50% no-repeat;
                 border-color: #EDF8EA;
             }
             
@@ -831,7 +831,7 @@
             }
             
             .insured-events[data-id="8"]:after {
-                background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
+                background: url(/img/icon-insured-events8.svg) 50% 50% no-repeat;
                 border-color: #ECF3FA;
             }
             
@@ -2870,4 +2870,46 @@
                 .block-visit .name {
                     align-self: end;
                 }
+            }
+            
+            .select-sity {
+                border: 0;
+                background: transparent url(/img/chevron-down.svg) right 7px no-repeat;
+                color: #292929;
+                padding: 0 1rem 0 0;
+                line-height: 1.5;
+            }
+            
+            .collapse {
+                display: none;
+            }
+            
+            .collapse.show {
+                position: absolute;
+                display: block;
+                list-style: none;
+                padding: 2rem;
+                margin-top: 11px;
+                background: #FFFFFF;
+                border: 1px solid #DFE3E5;
+                box-sizing: border-box;
+                box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
+                border-radius: 30px;
+                z-index: 1;
+            }
+            
+            .sity-question .card-body {
+                display: flex;
+            }
+            
+            .sity-block-text {
+                displaY: none;
+            }
+            
+            .ml-3 {
+                margin-left: 1rem;
+            }
+            
+            textarea {
+                overflow-y: auto !important;
             }
