@@ -464,7 +464,6 @@ export default {
                 centered: true,
               })
               .then((value) => {
-                debugger;
                 if (this.$route.query?.ref && resp) {
                   this.$router.push(this.$route.query?.ref);
                   return;
