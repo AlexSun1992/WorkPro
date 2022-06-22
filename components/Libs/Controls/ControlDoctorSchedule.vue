@@ -101,7 +101,9 @@ export default {
   watch: {
     options() {
       if (this.$store.getters["data_card/getForm"]) {
-       const [dd, mm, yyyy] = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE").value.split(".")
+       const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE")
+       if (!appointmentObject.value) return;
+       const [dd, mm, yyyy] = appointmentObject.value.split(".")
        if (this.dataContent && this.dataContent.items) {
         const candidate = this.dataContent.items.find((item) => {
           const appointmentDate = new Date(item.DDATE);
