@@ -832,7 +832,6 @@
             
             .insured-events[data-id="8"]:after {
                 background: url(/img/icon-insured-events8.svg) 50% 50% no-repeat;
-                border-color: #ECF3FA;
             }
             
             .insured-events[data-id="10"]:after {
@@ -2672,12 +2671,12 @@
             }
             
             .my-policy[data-id="4"] .nav-item a.active:after {
-                background-color: #FE8F5C;
+                background-color: #645DA2;
             }
             
             .my-policy[data-id="6"] .nav-item a.active:after,
             .my-policy[data-id="7"] .nav-item a.active:after {
-                background-color: #645DA2;
+                background-color: #FE8F5C;
             }
             
             .LoginButton .btn-login-link {
