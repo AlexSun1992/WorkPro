@@ -854,9 +854,14 @@
                 position: relative;
             }
             
+            .pay-page .block-visit {
+                grid-template-columns: minmax(30px, auto) 160px;
+                grid-template-rows: minmax(24px, -webkit-max-content) minmax(24px, -webkit-max-content) auto;
+                grid-template-rows: minmax(24px, max-content) minmax(24px, max-content) auto;
+            }
+            
             .block-visit .title {
                 grid-area: title;
-                font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
                 font-size: 1.25rem;
@@ -1671,7 +1676,6 @@
             }
             
             .title-conf-block {
-                font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
                 font-size: 1.25rem;
@@ -2806,7 +2810,6 @@
                 }
                 .insured-events .title,
                 .block-policy .title {
-                    font-family: 'Raleway';
                     font-style: normal;
                     font-weight: 600;
                     font-size: 16px;
