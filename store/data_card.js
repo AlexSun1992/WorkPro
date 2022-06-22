@@ -541,6 +541,10 @@ export const mutations = {
     state.captions = null;
     state.form = [];
   },
+  clearFormField(state, data) {
+    const item = state.form.find((d) => d.fieldId === data.fieldId);
+    item.value = null;
+  },
   clearFilters(state) {
     state.filters = {};
   },
