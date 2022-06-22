@@ -7,6 +7,12 @@
       variant="success"
       label="Загрузка..."
     />
+
+    <div v-if="notFound && options.length">
+      <p>К сожалению, на выбранную дату свободных врачей не найдено <span>&#128532</span></p>
+      <p>Ниже список ближайших доступных дат</p>
+    </div>
+    
     <div v-if="isRequestFinish === true && options.length">
       <div
         v-for="item in options"
@@ -62,6 +68,12 @@ export default {
   },
   emits: ["update"],
 
+  data() {
+    return {
+      notFound: false,
+    };
+  },
+
   computed: {
     dataContent: {
       get() {
@@ -83,6 +95,28 @@ export default {
       get() {
         return this.$store.getters["blocks/getRequestStatus"];
       },
+    },
+  },
+
+  watch: {
+    options() {
+      if (this.$store.getters["data_card/getForm"]) {
+       const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE")
+       if (!appointmentObject.value) return;
+       const [dd, mm, yyyy] = appointmentObject.value.split(".")
+       if (this.dataContent && this.dataContent.items) {
+        const candidate = this.dataContent.items.find((item) => {
+          const appointmentDate = new Date(item.DDATE);
+          appointmentDate.setHours(appointmentDate.getHours() - 3);
+          const chosenDate = new Date(yyyy, mm, dd);
+          chosenDate.setMonth(chosenDate.getMonth() - 1);
+          return +appointmentDate === +chosenDate;
+        });
+        if (!candidate) {
+          this.notFound = true;
+        }
+      }
+      }
     },
   },
 
