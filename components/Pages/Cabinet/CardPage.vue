@@ -84,8 +84,8 @@
           class="row"
         >
           <div
-            class="col-12 col-md-auto"
             v-if="isButtonSave && isWizard && $route.params.idCard === '0'"
+            class="col-12 col-md-auto"
           >
             <b-button
               pill
@@ -105,7 +105,7 @@
               />
             </b-button>
           </div>
-          <div class="col-12 col-md-auto mt-3 mt-md-0" v-if="isButtonSave">
+          <div v-if="isButtonSave" class="col-12 col-md-auto mt-3 mt-md-0">
             <b-button
               pill
               :disabled="loading"
