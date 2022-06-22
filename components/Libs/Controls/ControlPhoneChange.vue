@@ -16,8 +16,8 @@
             autocomplete="off"
             autofocus
             :disabled="isShowCodeEnter"
-            @blur="update"
             type="tel"
+            @blur="update"
           />
           <b-form-invalid-feedback>
             Пожалуйста, заполните это поле
@@ -48,27 +48,27 @@
           </b-link>
         </div>
       </div>
-      <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
     </div>
     <div v-if="isShowCodeEnter" class="resend-block">
-      <p>
-        <template v-if="disabledResend">
+      <template v-if="disabledResend">
+        <p>
           На указанный номер мы направили sms-код, просим ввести его в поле
           ниже.<br />
           Повторный код можно запросить через
           <verify-timer :duration="duration" @onFinish="stopTimer" />
           сек.
-        </template>
-      </p>
+        </p>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-import VerifyTimer from "../VerifyUser/VerifyTimer";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
+import VerifyTimer from "../VerifyUser/VerifyTimer";
+
 export default {
   name: "ControlPhoneChange",
   components: { VerifyTimer },
@@ -156,41 +156,22 @@ export default {
       const { $dirty, $error } = this.$v[name];
       return $dirty ? !$error : null;
     },
-    onError(error) {
-      console.log("Error:", error);
-    },
-    onSuccess(token) {
-      this.token = token;
-      console.log("Succeeded:", token);
-    },
-    onExpired() {
-      console.log("Expired");
-    },
-    async getCaptcha() {
-      try {
-        await this.$recaptcha.getResponse();
-      } catch (error) {
-        console.log("Login error:", error);
-      }
-    },
-
     async getCode() {
       // Очищаем поле с кодом СМС
-      this.$store.commit("data_card/setFormField", {
+      this.$store.commit("data_card/clearFormField", {
         fieldId: 26713,
-        value: null,
       });
 
       if (!this.newPhone) return;
       this.isPhoneChanged = false;
-      let actionParams = {
+      const actionParams = {
         name: "SNEWPHONE",
         value: this.newPhone,
       };
       try {
         this.loading = true;
         this.disabledResend = true;
-        let response = await this.$store.dispatch("data_card/executeAction", {
+        const response = await this.$store.dispatch("data_card/executeAction", {
           actionId: this.params.actions[0].id,
           relActionId: this.params.actions[0].relaction,
           relId: this.$route.params.idRel,
@@ -201,9 +182,8 @@ export default {
           this.loading = false;
           this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
-          this.$store.commit("data_card/setFormField", {
+          this.$store.commit("data_card/clearFormField", {
             fieldId: 26713,
-            value: "",
           });
         }
         if (response?.status === 200) {

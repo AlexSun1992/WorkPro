@@ -61,7 +61,7 @@
                   {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
               </template>
               <b-dropdown-item href="https://new.reso.ru">На главную страницу РЕСО</b-dropdown-item>
-              <b-dropdown-item href="#" @click="logout()">Ввыйти из аккаунта</b-dropdown-item>
+              <b-dropdown-item href="#" @click="logout()">Выйти из аккаунта</b-dropdown-item>
             </b-dropdown>
           </div>
         </div>

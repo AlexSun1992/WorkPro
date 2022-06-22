@@ -7,13 +7,12 @@
       :style="{ width: data.width ? data.width : '100%' }"
     >
       <component
-        :class="data.labelCols"
         :is="comp"
+        :class="data.labelCols"
         :data="data"
         :params="params"
         :edit="edit"
         :store="store"
-        :disabled="disabled"
         :loading="loading"
         @blur="$emit('blur', $event)"
         @update="$emit('update', $event)"
@@ -130,20 +129,18 @@ export default {
     },
   },
   computed: {
-    comp: function () {
-      return (
-        "Control" +
-        this.data.type.charAt(0).toUpperCase() +
-        this.data.type.slice(1)
-      );
+    comp() {
+      return `Control${this.data.type
+        .charAt(0)
+        .toUpperCase()}${this.data.type.slice(1)}`;
     },
-    colXl: function () {
+    colXl() {
       return (12 / this.cols) * this.data.col;
     },
-    colMd: function () {
+    colMd() {
       return this.data.colMd ? this.data.colMd : 12;
     },
-    colSm: function () {
+    colSm() {
       return this.data.colSm ? this.data.colSm : 12;
     },
   },
