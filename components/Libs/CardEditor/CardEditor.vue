@@ -451,32 +451,11 @@ export default {
             return;
           }
           if (resp?.status === 200) {
-            debugger;
-
-            this.$bvModal
-              .msgBoxOk(`${resp.data.MESSAGE}`, {
-                title: "Уведомление",
-                size: "sm",
-                buttonSize: "sm",
-                okVariant: "success",
-                headerClass: "p-2 border-bottom-0",
-                footerClass: "p-2 border-top-0",
-                centered: true,
-              })
-              .then((value) => {
-                if (this.$route.query?.ref && resp) {
-                  this.$router.push(this.$route.query?.ref);
-                  return;
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
             this.saveSuccess = true;
-            // if (this.$route.query?.ref && resp) {
-            // this.$router.push(this.$route.query?.ref);
-            //   return;
-            // }
+            if (this.$route.query?.ref && resp) {
+              this.$router.push(this.$route.query?.ref);
+              return;
+            }
             if (this.$route.params.idCard) {
               await this.$store.dispatch(
                 "data_card/fetchForm",
