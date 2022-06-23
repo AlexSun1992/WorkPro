@@ -16,22 +16,21 @@
       :edit="edit"
       @update="updateField($event)"
       @blur="$emit('blur', $event)"
-    ></string-masked>
+    />
 
     <string-autocomplete
       v-if="!data.mask && isFieldNameBelogToAutocomplete(data.name)"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
-    ></string-autocomplete>
+    />
 
     <string-simple
       v-if="!data.mask && !isFieldNameBelogToAutocomplete(data.name)"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
-    >
-    </string-simple>
+    />
   </b-form-group>
 </template>
 

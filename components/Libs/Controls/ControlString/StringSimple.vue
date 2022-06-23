@@ -1,20 +1,21 @@
 <template>
   <div>
     <b-form-input
+      :id="data.name"
       v-model="data.value"
-      @input="updateValue($event)"
       class="form-control"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
       type="text"
       :placeholder="data.placeholder"
-      :id="data.name"
-    >
-    </b-form-input>
-    <b-form-invalid-feedback
-      >Обязательно для заполнения</b-form-invalid-feedback
-    >
+      @input="updateValue($event)"
+      @blur="updateValueBlur()"
+    />
+
+    <b-form-invalid-feedback :state="isState">{{
+      data.error ? data.error : "Обязательно для заполнения"
+    }}</b-form-invalid-feedback>
   </div>
 </template>
 <script>
@@ -31,7 +32,23 @@ export default {
       default: () => false,
     },
   },
-
+  computed: {
+    isState() {
+      let state = null;
+      if (this.data.state === false) {
+        state = false;
+      }
+      if (this.data.error) {
+        if (this.data.error !== null) {
+          state = false;
+        }
+      }
+      if (this.data.state) {
+        state = !this.data.error;
+      }
+      return state;
+    },
+  },
   methods: {
     checkFieldName(fieldsNameHub, compareName) {
       const isAutocompleteField = fieldsNameHub.find((item) =>
@@ -41,15 +58,18 @@ export default {
       return Boolean(isAutocompleteField);
     },
     updateValue(val) {
-      if (this.data.value !== val) {
-        if (val !== null && val !== undefined) {
-          this.$emit("update", {
-            fieldId: this.data.fieldId,
-            name: this.data.name,
-            value: val,
-          });
-        }
-      }
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: val,
+      });
+    },
+    updateValueBlur() {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.value,
+      });
     },
   },
 };

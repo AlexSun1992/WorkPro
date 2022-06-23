@@ -1,10 +1,11 @@
 <template>
   <div class="autocomplete">
     <b-form-input
+      :id="data.name"
+      v-model="data.value"
       class="form-control"
       autocomplete="off"
       type="search"
-      v-model="data.value"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
@@ -15,9 +16,8 @@
       @keydown.up="up"
       @input="getSuggestions(data.name)"
       @blur="debouncedClose()"
-      :id="data.name"
       @change="debouncedChange()"
-    ></b-form-input>
+    />
     <b-form-invalid-feedback
       >Обязательно для заполнения</b-form-invalid-feedback
     >
@@ -41,6 +41,7 @@
 
 <script>
 import _ from "lodash";
+
 export default {
   data() {
     return {
@@ -86,19 +87,17 @@ export default {
         });
 
         this.$store.commit("data_card/filterFields");
-      } else {
-        if (this.suggestions.data && this.suggestions.data.length) {
-          if (this.index >= 0) {
-            value = this.suggestions.data[this.index];
-          } else {
-            value = this.data.value;
-          }
-          this.$emit("update", {
-            fieldId: this.data.fieldId,
-            name: this.data.name,
-            value,
-          });
+      } else if (this.suggestions.data && this.suggestions.data.length) {
+        if (this.index >= 0) {
+          value = this.suggestions.data[this.index];
+        } else {
+          value = this.data.value;
         }
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value,
+        });
       }
       this.$forceUpdate();
     },
