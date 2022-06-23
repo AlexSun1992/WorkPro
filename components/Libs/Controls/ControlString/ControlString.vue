@@ -19,18 +19,14 @@
     ></string-masked>
 
     <string-autocomplete
-      v-if="
-        !data.mask && isFieldNameBelogToAutocomplete(fieldsNameHub, data.name)
-      "
+      v-if="!data.mask && isFieldNameBelogToAutocomplete(data.name)"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
     ></string-autocomplete>
 
     <string-simple
-      v-if="
-        !data.mask && !isFieldNameBelogToAutocomplete(fieldsNameHub, data.name)
-      "
+      v-if="!data.mask && !isFieldNameBelogToAutocomplete(data.name)"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
