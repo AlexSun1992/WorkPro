@@ -68,7 +68,6 @@ export default {
       list: null,
     };
   },
-
   computed: {
     name() {
       return this.params.settings.text;
@@ -92,6 +91,9 @@ export default {
       return this.$store.getters["menu/getMenuById"](
         this.$store.getters["blocks/blockId"]
       )?.SVJCARDTEMPLATE;
+    },
+    filters() {
+      return this.$store.getters["blocks/getFilters"];
     },
     isForm: {
       get() {
@@ -125,9 +127,6 @@ export default {
         return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
       },
     },
-  },
-  unmounted() {
-    this.$store.dispatch("blocks/clearBlock");
   },
   methods: {
     refreshWizardList() {
