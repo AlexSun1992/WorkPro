@@ -18,9 +18,9 @@
       @blur="debouncedClose()"
       @change="debouncedChange()"
     />
-    <b-form-invalid-feedback
-      >Обязательно для заполнения</b-form-invalid-feedback
-    >
+    <b-form-invalid-feedback :state="isState">{{
+      data.error ? data.error : "Обязательно для заполнения"
+    }}</b-form-invalid-feedback>
     <p class="error">{{ data.error }}</p>
 
     <ul
@@ -53,6 +53,24 @@ export default {
     };
   },
   props: ["data", "edit"],
+
+  computed: {
+    isState() {
+      let state = null;
+      if (this.data.state === false) {
+        state = false;
+      }
+      if (this.data.error) {
+        if (this.data.error !== null) {
+          state = false;
+        }
+      }
+      if (this.data.state) {
+        state = !this.data.error;
+      }
+      return state;
+    },
+  },
   created() {
     this.debouncedClose = _.debounce(this.closeList, 300);
     this.debouncedChange = _.debounce(this.changeValue, 300);
@@ -63,6 +81,11 @@ export default {
       const fields = this.$store.getters["data_card/getForm"];
       let relatedValue;
       const type = this.suggestions.type;
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.value,
+      });
       if (
         this.suggestions.type === "SISSUED_WHERE" ||
         this.suggestions.type === "SDOCDEP"
@@ -207,9 +230,11 @@ export default {
     showPlaceholder(name) {
       if (name === "SNEWPHONE") {
         return "Введите 10 цифр Вашего телефона";
-      } else if (name === "SCODEFIELD") {
+      }
+      if (name === "SCODEFIELD") {
         return "Введите код";
-      } else if (name === "SNEWEMAIL") {
+      }
+      if (name === "SNEWEMAIL") {
         return "Введите новый email";
       }
     },
