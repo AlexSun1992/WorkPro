@@ -34,9 +34,6 @@ export default {
 
   computed: {
     isState() {
-      if (this.data.name === "SOCCASION") {
-        return this.data.state;
-      }
       return this.data.state;
     },
   },
