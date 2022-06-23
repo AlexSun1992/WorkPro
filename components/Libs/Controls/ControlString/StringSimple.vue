@@ -10,7 +10,6 @@
       type="text"
       :placeholder="data.placeholder"
       @input="updateValue($event)"
-      @blur="updateValueBlur()"
     />
 
     <b-form-invalid-feedback :state="isState">{{
@@ -32,43 +31,22 @@ export default {
       default: () => false,
     },
   },
+
   computed: {
     isState() {
-      let state = null;
-      if (this.data.state === false) {
-        state = false;
+      if (this.data.name === "SOCCASION") {
+        return this.data.state;
       }
-      if (this.data.error) {
-        if (this.data.error !== null) {
-          state = false;
-        }
-      }
-      if (this.data.state) {
-        state = !this.data.error;
-      }
-      return state;
+      return this.data.state;
     },
   },
-  methods: {
-    checkFieldName(fieldsNameHub, compareName) {
-      const isAutocompleteField = fieldsNameHub.find((item) =>
-        item.includes(compareName)
-      );
 
-      return Boolean(isAutocompleteField);
-    },
+  methods: {
     updateValue(val) {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: val,
-      });
-    },
-    updateValueBlur() {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.data.value,
       });
     },
   },
