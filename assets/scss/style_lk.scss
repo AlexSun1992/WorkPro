@@ -1343,7 +1343,15 @@
                 padding: 20px;
             }
             
-            .block-advertising .title,
+            .block-advertising .title {
+                font-weight: 700;
+                font-size: 1rem;
+                line-height: 26px;
+                z-index: 1;
+                position: relative;
+                grid-area: title;
+            }
+            
             .feedback .title {
                 font-family: 'SF Pro Display';
                 font-style: normal;
@@ -1354,7 +1362,24 @@
                 color: #292929;
             }
             
-            .block-advertising .description,
+            .block-advertising .description {
+                z-index: 1;
+                position: relative;
+                font-weight: 400;
+                font-size: 1rem;
+                line-height: 26px;
+                margin-top: 0.5rem;
+                grid-area: description;
+            }
+            
+            .block-advertising .button {
+                margin-top: 56px;
+                z-index: 1;
+                position: relative;
+                grid-area: button;
+                align-self: end;
+            }
+            
             .feedback .description {
                 font-family: 'SF Pro Display';
                 font-style: normal;
@@ -2922,4 +2947,81 @@
             
             textarea {
                 overflow-y: auto !important;
+            }
+            
+            .block-advertising {
+                height: 100%;
+                overflow: hidden;
+                position: relative;
+            }
+            
+            .block-advertising[data-id="6"] {
+                background: #FFF8E6;
+            }
+            
+            .block-advertising[data-id="1"] {
+                background: #ECF3FA;
+            }
+            
+            .block-advertising[data-id="6"]:after {
+                border: 190px solid #FDF1CC;
+                position: absolute;
+                width: 1055px;
+                height: 1055px;
+                box-sizing: border-box;
+                top: -263px;
+                left: 126px;
+                content: "";
+                border-radius: 1055px;
+            }
+            
+            .block-advertising[data-id="1"]:after {
+                border: 190px solid #D8E7F4;
+                position: absolute;
+                width: 884px;
+                height: 884px;
+                box-sizing: border-box;
+                top: -197px;
+                left: -501px;
+                content: "";
+                border-radius: 1055px;
+            }
+            
+            .block-advertising .button span {
+                color: #fff;
+                padding: 4px 12px;
+                border-radius: 100px;
+            }
+            
+            .block-advertising[data-id="6"] .button span {
+                background-color: #FE7333;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.06);
+            }
+            
+            .block-advertising[data-id="1"] .button span {
+                background: #3B86C8;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.06);
+            }
+            
+            .block-advertising .block-img {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                z-index: 1;
+            }
+            
+            .block-advertising {
+                display: grid;
+                grid-template-areas: "title" "description" "button";
+                grid-template-rows: minmax(25px, -webkit-max-content) minmax(40px, -webkit-max-content) auto;
+                grid-template-rows: minmax(25px, max-content) minmax(40px, max-content) auto;
+            }
+            
+            .ui.selection.dropdown .menu>.item {
+                font-size: 1rem;
+                line-height: 1.25rem;
+            }
+            
+            .ui.selection.dropdown .menu>.item.selected {
+                background: #F2F4F5;
             }
