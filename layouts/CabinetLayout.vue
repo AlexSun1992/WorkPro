@@ -206,4 +206,8 @@ export default {
   background: #fff url(/img/close-toaster.svg) 50% 50% no-repeat;
   border: 1px solid #eb5757;
 }
+.b-toast-success .toast .toast-header .close {
+  background: #fff url(/img/close-toaster-success.svg) 50% 50% no-repeat;
+  border: 1px solid #009639;
+}
 </style>
