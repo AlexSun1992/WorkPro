@@ -19,14 +19,14 @@
     />
 
     <string-autocomplete
-      v-if="!data.mask && isFieldNameBelogToAutocomplete(data.name)"
+      v-if="!data.mask && isAutocomplete"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
     />
 
     <string-simple
-      v-if="!data.mask && !isFieldNameBelogToAutocomplete(data.name)"
+      v-if="!data.mask && !isAutocomplete"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
@@ -73,12 +73,15 @@ export default {
   },
 
   computed: {
+    isAutocomplete() {
+      return isFieldNameBelogToAutocomplete(this.data.name);
+    },
+
     label() {
       return `${this.data.label}`;
     },
   },
   methods: {
-    isFieldNameBelogToAutocomplete,
     updateField(e) {
       this.data.value = e.value;
       this.$emit("update", e);
