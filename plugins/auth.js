@@ -51,6 +51,7 @@ export default function ({ app, store, redirect, $auth }) {
             title: "Ошибка",
             variant: "danger",
             noAutoHide: true,
+            toaster: "b-toaster-top-full",
           });
           console.log(error.response.data);
           if (
@@ -69,6 +70,7 @@ export default function ({ app, store, redirect, $auth }) {
               title: "Ошибка",
               variant: "danger",
               autoHideDelay: 5000,
+              toaster: "b-toaster-top-full",
             });
           }
         }

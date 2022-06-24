@@ -398,8 +398,9 @@ export default {
             this.$root.$bvToast.toast(resp?.data?.MESSAGE, {
               title: "",
               variant: "success",
-              noAutoHide: true,
+              autoHideDelay: 5000,
               solid: true,
+              toaster: "b-toaster-top-full",
             });
           }
           if (this.$route.params.idItem === "710") {
@@ -537,7 +538,8 @@ export default {
           title: "",
           variant: "success",
           solid: true,
-          noAutoHide: true,
+          autoHideDelay: 5000,
+          toaster: "b-toaster-top-full",
         });
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
