@@ -2,7 +2,7 @@
   <div>
     <b-form-group :class="{ required: data.required }">
       <template #label>
-        <span v-html="data.label" /><span v-if="data.helpText">
+        <span v-html="data.label" /><span v-if="data.helpText" class="tooltip">
           (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
             <span v-html="data.helpText" /></vue-easy-tooltip
         ></span>
