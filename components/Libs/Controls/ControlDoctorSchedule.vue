@@ -12,7 +12,7 @@
       <p>К сожалению, на выбранную дату свободных врачей не найдено <span>&#128532</span></p>
       <p>Ниже список ближайших доступных дат</p>
     </div>
-    
+
     <div v-if="isRequestFinish === true && options.length">
       <div
         v-for="item in options"
@@ -105,7 +105,7 @@ export default {
         return false
       }
     },
-   
+
     isRequestFinish: {
       get() {
         return this.$store.getters["blocks/getRequestStatus"];
@@ -132,11 +132,10 @@ export default {
 
   methods: {
     chooseTimeToVisit(elem, item) {
-      const copyValue = { ...item, ...elem };
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: { value: copyValue },
+        value: { value: { ...item, ...elem } },
       });
     },
   },
