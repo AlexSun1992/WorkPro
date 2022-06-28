@@ -255,8 +255,6 @@ export const mutations = {
     );
 
     filter.filter = data.filter;
-
-    //console.log("blocks.js:", state.serverFilters);
   },
 
   replaceFilter: (state, { propertyName, filter, id }) => {
