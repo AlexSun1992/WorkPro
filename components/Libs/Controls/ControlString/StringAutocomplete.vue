@@ -2,7 +2,7 @@
   <div class="autocomplete">
     <b-form-input
       :id="data.name"
-      v-model="data.value"
+      v-model="dataValue"
       class="form-control"
       autocomplete="off"
       type="search"
@@ -69,6 +69,9 @@ export default {
         state = !this.data.error;
       }
       return state;
+    },
+    dataValue() {
+      return this.data.value;
     },
   },
   created() {

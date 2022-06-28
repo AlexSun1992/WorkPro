@@ -2,7 +2,7 @@
   <div>
     <b-form-input
       :id="data.name"
-      v-model="data.value"
+      v-model="dataValue"
       class="form-control"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
@@ -35,6 +35,9 @@ export default {
   computed: {
     isState() {
       return this.data.state;
+    },
+    dataValue() {
+      return this.data?.value;
     },
   },
 
