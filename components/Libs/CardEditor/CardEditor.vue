@@ -192,6 +192,9 @@ export default {
         this.$store.commit("data_card/setError", false);
         this.$store.commit("data_card/setSavedError", false);
       }
+      if (field.type !== "button") {
+        this.$store.commit("data_card/cardChanged", true);
+      }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
 

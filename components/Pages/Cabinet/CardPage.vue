@@ -145,15 +145,12 @@
 import VRuntimeTemplate from "v-runtime-template";
 import { saveAs } from "file-saver";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
-import ControlButton from "~/components/Libs/Controls/ControlButton";
 
 export default {
   name: "CardPage",
-  components: { CardEditor, VRuntimeTemplate, ControlButton },
+  components: { CardEditor, VRuntimeTemplate },
   beforeRouteLeave(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
-    const saveButtonClicked =
-      this.$store.getters["data_card/saveButtonClicked"];
     if (cardChanged) {
       this.$bvModal
         .msgBoxConfirm("Закрыть страницу без сохранения данных?", {
@@ -170,6 +167,7 @@ export default {
         })
         .then(async (value) => {
           if (value) {
+            this.$store.commit("data_card/cardChanged", false);
             next();
           }
         })
