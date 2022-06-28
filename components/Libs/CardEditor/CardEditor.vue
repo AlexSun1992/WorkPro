@@ -192,6 +192,9 @@ export default {
         this.$store.commit("data_card/setError", false);
         this.$store.commit("data_card/setSavedError", false);
       }
+      if (field.type !== "button") {
+        this.$store.commit("data_card/cardChanged", true);
+      }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
 
@@ -398,8 +401,9 @@ export default {
             this.$root.$bvToast.toast(resp?.data?.MESSAGE, {
               title: "",
               variant: "success",
-              noAutoHide: true,
+              autoHideDelay: 5000,
               solid: true,
+              toaster: "b-toaster-top-full",
             });
           }
           if (this.$route.params.idItem === "710") {
@@ -537,7 +541,8 @@ export default {
           title: "",
           variant: "success",
           solid: true,
-          noAutoHide: true,
+          autoHideDelay: 5000,
+          toaster: "b-toaster-top-full",
         });
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
