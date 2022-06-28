@@ -1,17 +1,5 @@
 <template>
   <div class="map-container mt-3">
-    <div class="container">
-      <div class="office-block">
-        <div class="row align-items-center mh-1">
-          <div class="col-12 col-lg-5">
-            <div class="position-relative">
-              <input type="text" id="suggest" ref="search" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="office-tab-content">
       <div ref="map" id="map" class="map"></div>
     </div>
@@ -19,41 +7,28 @@
 </template>
 
 <script>
-import { filters, filterData } from "../../../../utils/map/filters";
-// import { BTabs, BTab } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
-import { isOpened, getTemplate } from "../../../../utils/map/helpers";
+import { getTemplate } from "../../../../utils/map/helpers";
 import getCurrentCity from "./currentCity";
 Vue.use(LoadScript);
 export default {
-  name: "OfficesMap",
+  name: "PaymentMap",
 
   data() {
     return {
       myMap: null,
       myClusterer: null,
-      filters,
-      filteredOffices: null,
-      page: 1,
       mapState: null,
       regionId: null,
       centerCoords: null,
-      currentFilters: null,
       address: null,
-      suggest: null,
-      suggestView: null,
-      currentStation: null,
-      isInputEmpty: true,
       placemark: null,
       city: "",
-      width: window.innerWidth,
-      isShownMore: false,
-      height: window.innerHeight,
       qc_geo: null,
       isMetroSuggest: false,
-      cityHasOffices: false,
+      regCenters: null,
     };
   },
   async created() {
@@ -70,8 +45,6 @@ export default {
             lon = "37.620393",
             kladr = "7700000000000",
           }) => {
-            this.lat = lat;
-            this.lon = lon;
             Cookies.set("lat", lat);
             Cookies.set("lon", lon);
             Cookies.set("kladr_id", kladr);
@@ -87,7 +60,10 @@ export default {
       await this.$loadScript(
         `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
       ).then(() => {
-        if (this.$store.getters["map/getRegionOffices"]) {
+        this.regCenters = this.$store.getters["map/getRegionOffices"].filter(
+          (item) => item.LREG_CENTER
+        );
+        if (this.regCenters.length) {
           ymaps.ready(this.init);
         }
       });
@@ -97,28 +73,17 @@ export default {
   },
 
   methods: {
-    async init(_, filters) {
-      let lat = Cookies.get("lat");
-      let lon = Cookies.get("lon");
+    async init() {
+      const lat = Cookies.get("lat");
+      const lon = Cookies.get("lon");
       if (lat && lon) {
         this.centerCoords = [lat, lon];
       }
-
-      this.initSuggestView();
-      let agencies = this.$store.getters["map/getRegionOffices"];
-      if (filters) {
-        agencies = filterData(this.getOfficesByCity, filters);
-      }
-      // await this.setPositionAttributes();
-
       this.myClusterer = new ymaps.Clusterer({
         preset: "islands#darkGreenClusterIcons",
       });
-
-      // this.myClusterer.add(this.getGeoObjects(agencies));
-
+      this.myClusterer.add(this.getGeoObjects(this.regCenters));
       let mapState;
-
       if (this.mapState) {
         mapState = this.mapState;
         this.mapState.zoom = 12;
@@ -146,80 +111,131 @@ export default {
           right: "100px",
         },
       });
-      // this.myMap.geoObjects.add(this.myClusterer);
-      // let body = document.getElementsByTagName("body")[0];
-      // this.myMap.geoObjects.events.add("balloonopen", (e) => {
-      //   body.classList.add("open-balloon");
-      //   const target = e.get("target");
-      //   target.options.set(
-      //     "iconImageHref",
-      //     "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
-      //   );
-      // });
-
-      // this.myMap.geoObjects.events.add("balloonclose", (e) => {
-      //   body.classList.remove("open-balloon");
-      //   const target = e.get("target");
-      //   target?.options.set(
-      //     "iconImageHref",
-      //     "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
-      //   );
-      // });
-      // this.setPlaceholder();
+      this.myMap.geoObjects.add(this.myClusterer);
+      const body = document.getElementsByTagName("body")[0];
+      this.myMap.geoObjects.events.add("balloonopen", (e) => {
+        body.classList.add("open-balloon");
+        const target = e.get("target");
+        target.options.set(
+          "iconImageHref",
+          "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
+        );
+      });
+      this.myMap.geoObjects.events.add("balloonclose", (e) => {
+        body.classList.remove("open-balloon");
+        const target = e.get("target");
+        target?.options.set(
+          "iconImageHref",
+          "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
+        );
+      });
+      this.myClusterer
+        .getGeoObjects()[0]
+        .balloon.open([this.regCenters[0].NLAT, this.regCenters[0].NLON]);
     },
 
-    initSuggestView() {
-      this.suggestView = new ymaps.SuggestView("suggest");
-      if (this.myMap) {
-        this.myMap.destroy();
-        this.suggestView.destroy();
-      }
-      let showOnMap = this.showOnMap.bind(this);
-      // this.closeCard();
-      let _this = this;
-      func._this = this;
-      function func(e) {
-        _this.isMetroSuggest = false;
-        if (e.get("item").value.includes("метро")) {
-          _this.isMetroSuggest = true;
-          _this.currentStation = e.get("item").value.split(" метро")[1].trim();
-          let maps = document.querySelectorAll(".g-svg-metromap");
-          let elmaps = document.getElementsByClassName("g-svg-metromap");
-          for (let i = 0; i < maps[0]?.children.length; i++) {
-            if (
-              maps[0].children[i].tagName === "use" &&
-              maps[0].children[i].dataset.station === _this.currentStation
-            ) {
-              maps[0].children[i].setAttribute("href", "#balloon-select");
+    combineAgencies(agencies, i, count) {
+      const agenciesArr = [];
+      const slicedAgencies = agencies.slice(i, i + count);
+      slicedAgencies.forEach((item) => {
+        agenciesArr.push(getTemplate(item));
+      });
+      return agenciesArr;
+    },
+    getGeoObjects(agencies) {
+      const myGeoObjects = [];
+      const uniqueItemsCount = agencies.reduce((acc, item) => {
+        acc[item["NLAT"]] = (acc[item["NLAT"]] || 0) + 1;
+        return acc;
+      }, {});
 
-              _this.positionSelectBalloon();
-            }
+      for (let i = 0; i < agencies.length; i++) {
+        myGeoObjects[i] = new ymaps.GeoObject(
+          {
+            geometry: {
+              type: "Point",
+              coordinates: [agencies[i].NLAT, agencies[i].NLONG],
+            },
+            properties: {
+              balloonContentBody: this.combineAgencies(
+                agencies,
+                i,
+                uniqueItemsCount[agencies[i].NLAT]
+              ).join(""),
+
+              hintContent: `${agencies[i].SSHORTNAME}`,
+              balloonShadowPane: "outerBalloon",
+            },
+          },
+          {
+            hideIconOnBalloonOpen: false,
+            iconLayout: "default#image",
+            iconImageHref:
+              "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
+            iconImageSize: [56, 56],
+            iconImageOffset: [0, 0],
           }
-        }
-        let addressArr;
-        if (e.get("item").value.includes("линия")) {
-          addressArr = e.get("item").value.split(", ");
-          addressArr.splice(2, 1);
-          addressArr = addressArr.join();
-        }
-        showOnMap(addressArr ? addressArr : e.get("item").value);
+        );
       }
-      this.suggestView.events.add("select", func);
+      return myGeoObjects;
+    },
+
+    updateMap(state, caption, zoom = 12, visibility = true) {
+      this.placemark = new ymaps.Placemark(
+        this.myMap.getCenter(),
+        {
+          iconCaption: caption,
+          balloonContent: caption,
+          balloonPane: "outerBalloon",
+          balloonShadowPane: "outerBalloon",
+        },
+        {
+          preset: "islands#redDotIconWithCaption",
+          visible: visibility,
+          openBalloonOnClick: false,
+        }
+      );
+      this.myMap.geoObjects.add(this.placemark);
+      this.myMap.setCenter(
+        this.centerCoords && !state.center ? this.centerCoords : state.center,
+        this.qc_geo > 2 ? zoom : 15
+      );
+      this.placemark.geometry.setCoordinates(
+        this.centerCoords && !state.center ? this.centerCoords : state.center
+      );
+      this.placemark.properties.set({
+        iconCaption: caption,
+        balloonContent: caption,
+      });
+      this.myClusterer
+        .getGeoObjects()[0]
+        .balloon.open([this.regCenters[0].NLAT, this.regCenters[0].NLON]);
+    },
+
+    showResult(obj) {
+      const mapContainer = document.getElementById("map");
+      const bounds = obj.properties.get("boundedBy");
+      this.mapState = ymaps.util.bounds.getCenterAndZoom(bounds, [
+        mapContainer.clientWidth,
+        mapContainer.clientHeight,
+      ]);
+      let shortAddress = [
+        obj.getThoroughfare(),
+        obj.getPremiseNumber(),
+        obj.getPremise(),
+      ].join(" ");
+      this.updateMap(this.mapState, shortAddress);
     },
 
     async showOnMap(suggest, coords) {
-      this.suggest = suggest;
       try {
         this.address = await this.$axios.post("/api/suggestions/address", {
           query: suggest,
           count: 1,
         });
         this.qc_geo = this.address.data.suggestions[0].data.qc_geo;
-        this.city = this.address.data.suggestions[0].data.city;
-        this.centerCoords = [
-          this.address.data.suggestions[0].data.geo_lat,
-          this.address.data.suggestions[0].data.geo_lon,
-        ];
+        this.city = suggest;
+        this.centerCoords = coords;
         if (this.address.data.suggestions.length) {
           this.regionId =
             this.address.data.suggestions[0].data.city_kladr_id?.substr(0, 2) ||
@@ -233,30 +249,33 @@ export default {
         }
         this.myClusterer?.removeAll();
 
-        // let offices = this.getOfficesByCity;
-
-        // if (this.currentFilters) {
-        //   offices = filterData(this.getOfficesByCity, this.currentFilters);
-        // }
-
+        const offices = this.$store.getters["map/getRegionOffices"].filter(
+          (item) => item.LREG_CENTER
+        );
         this.myClusterer.add(this.getGeoObjects(offices));
         this.myMap.geoObjects.add(this.myClusterer);
       } catch (e) {
         console.log(e);
       }
-      // if (this.currentFilters) {
-      //   this.filteredOffices = filterData(
-      //     this.getOfficesByCity,
-      //     this.currentFilters
-      //   );
-      // }
-      let showResult = this.showResult.bind(this);
-      ymaps.geocode(suggest).then(function (res, context) {
-        let obj = res.geoObjects.get(0);
-        if (obj) {
-          showResult(obj);
-        }
+      const showResult = this.showResult.bind(this);
+      ymaps.geocode(suggest).then((res) => {
+        showResult(res.geoObjects.get(0));
       });
+    },
+  },
+  computed: {
+    cityData() {
+      return this.$store.getters["map/getCity"];
+    },
+  },
+
+  watch: {
+    async cityData() {
+      this.myMap.geoObjects.remove(this.placemark);
+      this.showOnMap(
+        this.$store.getters["map/getCity"]?.city,
+        this.$store.getters["map/getCity"]?.coords
+      );
     },
   },
 };
