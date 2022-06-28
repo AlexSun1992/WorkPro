@@ -261,19 +261,8 @@ export default {
         }
       );
 
-      //console.log("foundedFilter:", foundedFilter);
-
       if (foundedFilter) {
         if (foundedFilter && e.data) {
-          //debugger;
-          //const test = this.$store.getters["blocks/getBlockById"](this.itemId);
-          // const test = this.$store.getters["blocks/getServerFilters"];
-          // console.log("test:", test);
-          // console.log("???");
-          // console.log("propertyName:", this.queryParamName);
-          // console.log("filter:", this.queryParamValue);
-          // console.log("id:", this?.id);
-          // console.log("filterIdNumber:", e?.data[this.id]);
           this.$store.commit("blocks/updateServerFilters", {
             propertyName: this.queryParamName,
             filter: this.queryParamValue,
@@ -282,22 +271,15 @@ export default {
           });
         }
         if (foundedFilter && !e.data) {
-          //console.log("!!!");
-          //console.log("propertyName:", this.queryParamName);
-          //console.log("filter:", this.queryParamValue);
-          //debugger;
           this.$store.commit("blocks/updateServerFilters", {
             propertyName: this.queryParamName,
             filter: this.queryParamValue,
           });
         }
       } else {
-        //debugger;
         this.$store.commit("blocks/setServerFilters", filterObj);
-        //console.log("777");
+
         if (this.id && e.data[this.id]) {
-          //console.log("666");
-          //debugger;
           this.$store.commit("blocks/setServerFilters", {
             propertyName: this.id,
             filter: e.data[this.id].toString(),
