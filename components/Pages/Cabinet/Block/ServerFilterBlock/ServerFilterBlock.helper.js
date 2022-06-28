@@ -51,14 +51,19 @@ export function elementShoudBeChoosen(
   firstParam,
   secondParam
 ) {
-  const interSection = interSectionElement(
+  const interSectionArray = interSectionElement(
     dictionary,
     dataBlocks,
     firstParam,
     secondParam
   );
 
-  // console.log("dictionary:", dictionary);
+  const getInterSection = interSectionArray.find(
+    (item) => typeof item === "string"
+  );
+  const currentIntersection = dictionary.find(
+    (item) => item.value === getInterSection
+  );
 
-  return interSection;
+  return currentIntersection;
 }

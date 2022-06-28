@@ -42,6 +42,13 @@ import Multiselect from "../../../../Libs/Multiselect/Multiselect.vue";
 import SelectItemFromTemplate from "../../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
 import WrapperItemFromTemplate from "../../../../Libs/Controls/ControlListSelect/WrapperItemFromTemplate.vue";
 import ChooseButton from "../ChooseButton.vue";
+import { getCopyFiltersFromServerFilters } from "./ServerFilterBlock.helper";
+import { getArrayOfArrays } from "./ServerFilterBlock.helper";
+import { concatArrays } from "./ServerFilterBlock.helper";
+import { filterInnerArrays } from "./ServerFilterBlock.helper";
+import { uniqueElementsOfArray } from "./ServerFilterBlock.helper";
+import { interSectionElement } from "./ServerFilterBlock.helper";
+import { elementShoudBeChoosen } from "./ServerFilterBlock.helper";
 
 export default {
   name: "ServerFilterBlock",
@@ -167,19 +174,58 @@ export default {
     //console.log("defaultItem:", defaultItem);
     if (defaultItem && this.$refs.multiselect) {
       const blocks = this.$store.getters["blocks/getServerFilters"];
-      console.log("blocks:", blocks);
-      console.log("dictionary:", this.dictionary);
+      // console.log("blocks:", blocks);
+      // console.log("dictionary:", this.dictionary);
+      const copyServerFilters = getCopyFiltersFromServerFilters(blocks);
+      const arrayOfArrServerFilters = getArrayOfArrays(blocks);
+      const concatArrServerFilters = concatArrays(blocks);
+      const rebuildArrServerFilters = filterInnerArrays(blocks, "filter");
+      const uniqueItemsArrayFromServerFilters = uniqueElementsOfArray(
+        blocks,
+        "filter"
+      );
+      console.log(
+        "uniqueItemsArrayFromServerFilters:",
+        uniqueItemsArrayFromServerFilters
+      );
+
+      const copyDictionary = getCopyFiltersFromServerFilters(this.dictionary);
+      const arrayOfDictionary = getArrayOfArrays(this.dictionary);
+      const concatArrDictionary = concatArrays(this.dictionary);
+      const rebuildArrdictionary = filterInnerArrays(this.dictionary, "value");
+      const uniqueItemsArrayDictionary = uniqueElementsOfArray(
+        this.dictionary,
+        "value"
+      );
+
+      interSectionElement(this.dictionary, blocks, "value", "filter");
+
+      const elementChoosen = elementShoudBeChoosen(
+        this.dictionary,
+        blocks,
+        "value",
+        "filter"
+      );
+
+      console.log("elementChoosen:", elementChoosen);
+
+      this.$refs.multiselect.selectedItem = {
+        text: elementChoosen?.text,
+        value: elementChoosen?.value,
+      };
+
       //проверить на наличие фильтров
       // console.log("blocks:", blocks);
       // console.log("list:", this.list);
       // console.log("text:", defaultItem.text);
       // console.log("value:", defaultItem.value);
       // console.log("isDefault:", defaultItem.isDefault);
-      this.$refs.multiselect.selectedItem = {
-        text: defaultItem.text,
-        value: defaultItem.value,
-        isDefault: defaultItem.isDefault,
-      };
+
+      // this.$refs.multiselect.selectedItem = {
+      //   text: defaultItem.text,
+      //   value: defaultItem.value,
+      //   isDefault: defaultItem.isDefault,
+      // };
       //console.log(this.$refs.multiselect.selectedItem);
     }
   },

@@ -78,7 +78,7 @@ describe("Модуль подготовки данных", () => {
 
   ////// пересекающийся элемент массивов
 
-  it("получение пересекающегося элемента", () => {
+  it("получение пересекающегося элемента, массив значений", () => {
     const DICTIONARY_ARRAY = [...dictionary];
     const SERVER_FILTER_ARRAY = [...dataBlocks];
     const interSection = interSectionElement(
@@ -87,11 +87,11 @@ describe("Модуль подготовки данных", () => {
       "value",
       "filter"
     );
-    console.log("interSection:", ...interSection);
+
     expect(typeof interSection === "object").toBe(true);
   });
 
-  it("получение пересекающегося элемента !!!!!", () => {
+  it("получение пересекающегося элемента объект значений", () => {
     const DICTIONARY_ARRAY = [...dictionary];
     const SERVER_FILTER_ARRAY = [...dataBlocks];
     const element = elementShoudBeChoosen(
@@ -100,7 +100,7 @@ describe("Модуль подготовки данных", () => {
       "value",
       "filter"
     );
-    // console.log("element:", ...element);
+
     expect(typeof element === "object").toBe(true);
   });
 });
