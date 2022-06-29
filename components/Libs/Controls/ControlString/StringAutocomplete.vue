@@ -1,10 +1,11 @@
 <template>
   <div class="autocomplete">
     <b-form-input
+      :id="data.name"
+      v-model="dataValue"
       class="form-control"
       autocomplete="off"
       type="search"
-      v-model="data.value"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
@@ -15,12 +16,11 @@
       @keydown.up="up"
       @input="getSuggestions(data.name)"
       @blur="debouncedClose()"
-      :id="data.name"
       @change="debouncedChange()"
-    ></b-form-input>
-    <b-form-invalid-feedback
-      >Обязательно для заполнения</b-form-invalid-feedback
-    >
+    />
+    <b-form-invalid-feedback :state="isState">{{
+      data.error ? data.error : "Обязательно для заполнения"
+    }}</b-form-invalid-feedback>
     <p class="error">{{ data.error }}</p>
 
     <ul
@@ -41,6 +41,7 @@
 
 <script>
 import _ from "lodash";
+
 export default {
   data() {
     return {
@@ -52,6 +53,27 @@ export default {
     };
   },
   props: ["data", "edit"],
+
+  computed: {
+    isState() {
+      let state = null;
+      if (this.data.state === false) {
+        state = false;
+      }
+      if (this.data.error) {
+        if (this.data.error !== null) {
+          state = false;
+        }
+      }
+      if (this.data.state) {
+        state = !this.data.error;
+      }
+      return state;
+    },
+    dataValue() {
+      return this.data.value;
+    },
+  },
   created() {
     this.debouncedClose = _.debounce(this.closeList, 300);
     this.debouncedChange = _.debounce(this.changeValue, 300);
@@ -62,6 +84,11 @@ export default {
       const fields = this.$store.getters["data_card/getForm"];
       let relatedValue;
       const type = this.suggestions.type;
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.data.value,
+      });
       if (
         this.suggestions.type === "SISSUED_WHERE" ||
         this.suggestions.type === "SDOCDEP"
@@ -86,19 +113,17 @@ export default {
         });
 
         this.$store.commit("data_card/filterFields");
-      } else {
-        if (this.suggestions.data && this.suggestions.data.length) {
-          if (this.index >= 0) {
-            value = this.suggestions.data[this.index];
-          } else {
-            value = this.data.value;
-          }
-          this.$emit("update", {
-            fieldId: this.data.fieldId,
-            name: this.data.name,
-            value,
-          });
+      } else if (this.suggestions.data && this.suggestions.data.length) {
+        if (this.index >= 0) {
+          value = this.suggestions.data[this.index];
+        } else {
+          value = this.data.value;
         }
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value,
+        });
       }
       this.$forceUpdate();
     },
@@ -208,9 +233,11 @@ export default {
     showPlaceholder(name) {
       if (name === "SNEWPHONE") {
         return "Введите 10 цифр Вашего телефона";
-      } else if (name === "SCODEFIELD") {
+      }
+      if (name === "SCODEFIELD") {
         return "Введите код";
-      } else if (name === "SNEWEMAIL") {
+      }
+      if (name === "SNEWEMAIL") {
         return "Введите новый email";
       }
     },
