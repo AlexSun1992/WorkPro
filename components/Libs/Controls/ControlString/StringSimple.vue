@@ -36,8 +36,13 @@ export default {
     isState() {
       return this.data.state;
     },
-    dataValue() {
-      return this.data?.value;
+    dataValue: {
+      set() {
+        return this.data?.value;
+      },
+      get() {
+        return this.data?.value;
+      },
     },
   },
 
