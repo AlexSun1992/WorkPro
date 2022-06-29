@@ -12,9 +12,9 @@
       @input="updateValue($event)"
     />
 
-    <b-form-invalid-feedback :state="isState">{{
-      data.error ? data.error : "Обязательно для заполнения"
-    }}</b-form-invalid-feedback>
+    <b-form-invalid-feedback :state="isState">
+      {{ data.error ? data.error : "Обязательно для заполнения" }}
+    </b-form-invalid-feedback>
   </div>
 </template>
 <script>
@@ -37,8 +37,8 @@ export default {
       return this.data.state;
     },
     dataValue: {
-      set() {
-        return this.data?.value;
+      set(value) {
+        return value;
       },
       get() {
         return this.data?.value;
