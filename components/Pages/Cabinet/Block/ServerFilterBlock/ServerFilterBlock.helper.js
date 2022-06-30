@@ -1,69 +1,80 @@
-// eslint-disable-next-line import/prefer-default-export
-export function getCopyArrayOfObjects(serverFilters) {
+export function getCopyOfServerFilterBlockData(serverFilters) {
   const copyArrayOfFilters = serverFilters.map((item) => ({ ...item }));
   return copyArrayOfFilters;
 }
 
-export function convertingArrayOfObjectsToArrayOfArrays(serverFilters) {
-  const copyArray = getCopyArrayOfObjects(serverFilters);
-  const entriesFromServerFilters = copyArray.map((i) => {
+export function convertingServerFilterBlockData(serverFilters) {
+  const copyArrayServerFilters = getCopyOfServerFilterBlockData(serverFilters);
+  const getEntriesFromServerFilters = copyArrayServerFilters.map((i) => {
     return Object.entries(i);
   });
-  return entriesFromServerFilters;
+  return getEntriesFromServerFilters;
 }
 
-export function makingArrayOfConcatArrays(serverFilters) {
-  const arrayOfArray = convertingArrayOfObjectsToArrayOfArrays(serverFilters);
-  const concatInnerArray = [].concat(...arrayOfArray);
-  return concatInnerArray;
-}
-
-export function filterInnerArrays(serverFilters, target) {
-  const notFilteredArray = makingArrayOfConcatArrays(serverFilters);
-  const filteredArray = notFilteredArray.filter((item) =>
-    item.includes(target)
+export function rebuildArrayOfServerFilterBlockData(serverFilters) {
+  const arrayOfServerFilterBlockData =
+    convertingServerFilterBlockData(serverFilters);
+  const concatServerFilterBlockData = [].concat(
+    ...arrayOfServerFilterBlockData
   );
-  return filteredArray;
+  return concatServerFilterBlockData;
 }
 
-export function createArrayOfUniqueElements(serverFilters, target) {
-  const notFilteredElements = filterInnerArrays(serverFilters, target);
-  const concatElements = [].concat(...notFilteredElements);
-  const uniqueConcatElements = [...new Set(concatElements)];
-  return uniqueConcatElements;
+export function getUniqueArraysOfServerFilters(serverFilters, property) {
+  const notFiltereServerFilters =
+    rebuildArrayOfServerFilterBlockData(serverFilters);
+
+  const arrOfUniqueServerFilters = notFiltereServerFilters.filter((item) =>
+    item.includes(property)
+  );
+
+  return arrOfUniqueServerFilters;
 }
 
-export function interSectionElementArray(
-  dictionary,
+export function uniqueServerFilters(serverFilters, property) {
+  const notFilteredServerFilters = getUniqueArraysOfServerFilters(
+    serverFilters,
+    property
+  );
+  const reducedArrayServerFilters = [].concat(...notFilteredServerFilters);
+  const uniqueFilters = [...new Set(reducedArrayServerFilters)];
+  return uniqueFilters;
+}
+
+export function interSectionBetweenDropListServerFilters(
+  dropList,
   dataBlocks,
-  firstParam,
-  secondParam
+  dropListValue,
+  dataBlocksValue
 ) {
-  const firstArr = createArrayOfUniqueElements(dictionary, firstParam);
-  const secondArray = createArrayOfUniqueElements(dataBlocks, secondParam);
-  const intersection = firstArr.filter((x) => secondArray.includes(x));
-  return intersection;
+  const dropDownList = uniqueServerFilters(dropList, dropListValue);
+  const serverFilterBlocks = uniqueServerFilters(dataBlocks, dataBlocksValue);
+  const intersectionDropListdataBlocks = dropDownList.filter((x) =>
+    serverFilterBlocks.includes(x)
+  );
+  return intersectionDropListdataBlocks;
 }
 
 export function elementDateWasChoosenByUser(
-  dictionary,
+  dropList,
   dataBlocks,
-  firstParam,
-  secondParam
+  dropListValue,
+  dataBlocksValue
 ) {
-  const interSectionArray = interSectionElementArray(
-    dictionary,
+  const interSectionArray = interSectionBetweenDropListServerFilters(
+    dropList,
     dataBlocks,
-    firstParam,
-    secondParam
+    dropListValue,
+    dataBlocksValue
   );
 
-  const getInterSection = interSectionArray.find(
+  const dateChoosenByUser = interSectionArray.find(
     (item) => typeof item === "string"
   );
-  const currentIntersection = dictionary.find(
-    (item) => item.value === getInterSection
+
+  const objectShouldBeCashed = dropList.find(
+    (item) => item.value === dateChoosenByUser
   );
 
-  return currentIntersection;
+  return objectShouldBeCashed;
 }

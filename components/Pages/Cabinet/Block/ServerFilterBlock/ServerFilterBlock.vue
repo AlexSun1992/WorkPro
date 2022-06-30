@@ -168,7 +168,6 @@ export default {
 
     if (defaultItem && this.$refs.multiselect) {
       const serverFilters = this.$store.getters["blocks/getServerFilters"];
-
       const choosenElement = elementDateWasChoosenByUser(
         this.dictionary,
         serverFilters,

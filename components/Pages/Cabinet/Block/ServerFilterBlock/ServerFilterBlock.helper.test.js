@@ -1,144 +1,147 @@
 import {
-  getCopyArrayOfObjects,
-  convertingArrayOfObjectsToArrayOfArrays,
-  makingArrayOfConcatArrays,
-  filterInnerArrays,
-  createArrayOfUniqueElements,
-  interSectionElementArray,
+  getCopyOfServerFilterBlockData,
+  convertingServerFilterBlockData,
+  rebuildArrayOfServerFilterBlockData,
+  getUniqueArraysOfServerFilters,
+  uniqueServerFilters,
+  interSectionBetweenDropListServerFilters,
   elementDateWasChoosenByUser,
 } from "./ServerFilterBlock.helper";
 import { dataBlocks, dictionary } from "./ServerFilterBlock.helper.fixtures";
 
-describe("Модуль подготовки данных", () => {
-  /////////  dataBlocks тесты со значениями серверных фильтров из store геттер serverFilters (моковые данные)
+describe("Модуль определения данных, необходимых для кэширования", () => {
+  ///  dataBlocks тесты со значениями серверных фильтров из store геттер serverFilters (моковые данные)
 
-  it("копия массива объектов", () => {
+  it("копия массива объектов серверных фильтров", () => {
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const getCopy = getCopyArrayOfObjects(SERVER_FILTER_ARRAY);
+    const getCopy = getCopyOfServerFilterBlockData(SERVER_FILTER_ARRAY);
     expect(typeof getCopy === "object").toBe(true);
   });
 
   it("проверяем длину полученной копии", () => {
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const getCopy = getCopyArrayOfObjects(SERVER_FILTER_ARRAY);
-    expect(getCopy.length > 0).toBe(true);
+    const getDeepCopy = getCopyOfServerFilterBlockData(SERVER_FILTER_ARRAY);
+    expect(getDeepCopy.length > 0).toBe(true);
   });
 
-  it("преобразование массива объектов в массив массивов", () => {
+  it("преобразование значений серверных фильтров в массив массивов", () => {
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const arrayOfObjects =
-      convertingArrayOfObjectsToArrayOfArrays(SERVER_FILTER_ARRAY);
-    expect(typeof arrayOfObjects === "object").toBe(true);
+    const arrayOServerFilterBlockData =
+      convertingServerFilterBlockData(SERVER_FILTER_ARRAY);
+    expect(typeof arrayOServerFilterBlockData === "object").toBe(true);
   });
 
-  it("получение массива с объединенными внутренними массивами(упрощаем структуру, вложения массивов)", () => {
+  it("упрощаем структуру данных серверных фильтров, избавляемся от вложения массивов", () => {
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const reducedArray = makingArrayOfConcatArrays(SERVER_FILTER_ARRAY);
-    expect(typeof reducedArray === "object").toBe(true);
+    const optimizedServerFilterBlockData =
+      rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
+    expect(typeof optimizedServerFilterBlockData === "object").toBe(true);
   });
 
-  it("сравниваем длинну массива после конкатенации вложенных массивов с исходной длинной массива", () => {
+  it("сравниваем длинну массива серверных фильтров после конкатенации вложенных массивов с исходной длинной массива", () => {
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const arrayOfObjects =
-      convertingArrayOfObjectsToArrayOfArrays(SERVER_FILTER_ARRAY);
-    const reducedArray = makingArrayOfConcatArrays(SERVER_FILTER_ARRAY);
-    expect(reducedArray.length > arrayOfObjects.length).toBe(true);
+    const arrayOfFiltersChoosenByUser =
+      convertingServerFilterBlockData(SERVER_FILTER_ARRAY);
+    const organizedFilterStructure =
+      rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
+    console.log();
+    expect(
+      organizedFilterStructure.length > arrayOfFiltersChoosenByUser.length
+    ).toBe(true);
   });
 
-  it("получение отфильтрованного массива,(массив уникальных массивов)", () => {
+  it("массив уникальных массивов значений серверных фильтров", () => {
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const filteredArray = filterInnerArrays(SERVER_FILTER_ARRAY, "filter");
-    expect(typeof filteredArray === "object").toBe(true);
+    const filteredServerFilters = getUniqueArraysOfServerFilters(
+      SERVER_FILTER_ARRAY,
+      "filter"
+    );
+    expect(typeof filteredServerFilters === "object").toBe(true);
   });
 
-  it("сравнение длинны массива уникальных значений с исходным массивом", () => {
+  it("сравнение длинны массива уникальных значений серверных фильтров с исходным массивом", () => {
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const reducedArray = makingArrayOfConcatArrays(SERVER_FILTER_ARRAY);
-    const filteredArray = filterInnerArrays(SERVER_FILTER_ARRAY, "filter");
+    const reducedArray =
+      rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
+    const filteredArray = getUniqueArraysOfServerFilters(
+      SERVER_FILTER_ARRAY,
+      "filter"
+    );
     expect(reducedArray.length > filteredArray.length).toBe(true);
   });
 
-  it("получение отфильтрованного масcива уникальных значений", () => {
+  it("получение отфильтрованного масcива уникальных значений Серверных фильтров", () => {
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const uniqueElements = createArrayOfUniqueElements(
-      SERVER_FILTER_ARRAY,
-      "filter"
-    );
-    expect(typeof uniqueElements === "object").toBe(true);
+    const serverFilters = uniqueServerFilters(SERVER_FILTER_ARRAY, "filter");
+    expect(typeof serverFilters === "object").toBe(true);
   });
 
-  it("проверка полученного массива на наличие элемента", () => {
+  it("проверка полученного массива ServerFiletrBlock на наличие элемента", () => {
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const uniqueElements = createArrayOfUniqueElements(
-      SERVER_FILTER_ARRAY,
-      "filter"
-    );
+    const uniqueElements = uniqueServerFilters(SERVER_FILTER_ARRAY, "filter");
     expect(uniqueElements).toContain("filter");
   });
 
-  /////////// Тесты со значениями из property dictionary (моковые данные)
+  //  Тесты со значениями из property dictionary (моковые данные)
 
-  it("копия массива объектов", () => {
+  it("копия массива объектов выпадающего списка компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...dictionary];
-    const result = getCopyArrayOfObjects(DICTIONARY_ARRAY);
-    expect(typeof result === "object").toBe(true);
+    const dropListCopy = getCopyOfServerFilterBlockData(DICTIONARY_ARRAY);
+    expect(typeof dropListCopy === "object").toBe(true);
   });
 
-  it("преобразование массива объектов", () => {
+  it("преобразование массива объектов выпадающего списка компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...dictionary];
-    const arrayOfObjects =
-      convertingArrayOfObjectsToArrayOfArrays(DICTIONARY_ARRAY);
-    expect(typeof arrayOfObjects === "object").toBe(true);
+    const dropListArray = convertingServerFilterBlockData(DICTIONARY_ARRAY);
+    expect(typeof dropListArray === "object").toBe(true);
   });
 
-  it("получение массива с объединенными внутренними объетами", () => {
+  it("получение массива с объединенными внутренними объектами выпадающего списка компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...dictionary];
-    const reducedArray = makingArrayOfConcatArrays(DICTIONARY_ARRAY);
-    expect(typeof reducedArray === "object").toBe(true);
+    const rebuildedDropListStructured =
+      rebuildArrayOfServerFilterBlockData(DICTIONARY_ARRAY);
+    expect(typeof rebuildedDropListStructured === "object").toBe(true);
   });
 
-  it("получение отфильтрованного масива", () => {
+  it("получение уникальных массивов dropList ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...dictionary];
-    const filteredArray = filterInnerArrays(DICTIONARY_ARRAY, "value");
-    expect(typeof filteredArray === "object").toBe(true);
-  });
-
-  it("получение отфильтрованного масива", () => {
-    const DICTIONARY_ARRAY = [...dictionary];
-    const uniqueElements = createArrayOfUniqueElements(
+    const getUniqueArraysDataDropList = getUniqueArraysOfServerFilters(
       DICTIONARY_ARRAY,
       "value"
     );
+    expect(typeof getUniqueArraysDataDropList === "object").toBe(true);
+  });
+
+  it("получение массива неуникальных значений выпадающего списка компонента ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...dictionary];
+    const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY, "value");
     expect(typeof uniqueElements === "object").toBe(true);
   });
 
   it("проверка массива на наличие элемента", () => {
     const DICTIONARY_ARRAY = [...dictionary];
-    const uniqueElements = createArrayOfUniqueElements(
-      DICTIONARY_ARRAY,
-      "value"
-    );
+    const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY, "value");
     expect(uniqueElements).toContain("value");
   });
 
-  ////// пересекающийся элемент массивов (этот элемент выбрал пользователь)
+  // ////// пересекающийся элемент массивов (этот элемент выбрал пользователь)
 
   it("получение пересекающегося элемента массивов, (тип данных массив)", () => {
     const DICTIONARY_ARRAY = [...dictionary];
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const interSection = interSectionElementArray(
+    const elementShouldBeCashedArray = interSectionBetweenDropListServerFilters(
       DICTIONARY_ARRAY,
       SERVER_FILTER_ARRAY,
       "value",
       "filter"
     );
-    expect(typeof interSection === "object").toBe(true);
+    expect(typeof elementShouldBeCashedArray === "object").toBe(true);
   });
 
   it("Проверка массива на количество элементов", () => {
     const DICTIONARY_ARRAY = [...dictionary];
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const interSection = interSectionElementArray(
+    const interSection = interSectionBetweenDropListServerFilters(
       DICTIONARY_ARRAY,
       SERVER_FILTER_ARRAY,
       "value",
@@ -150,24 +153,24 @@ describe("Модуль подготовки данных", () => {
   it("получение пересекающегося элемента двух массивов, (тип данных объект)", () => {
     const DICTIONARY_ARRAY = [...dictionary];
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const element = elementDateWasChoosenByUser(
+    const datashouldBeCashed = elementDateWasChoosenByUser(
       DICTIONARY_ARRAY,
       SERVER_FILTER_ARRAY,
       "value",
       "filter"
     );
-    expect(typeof element === "object").toBe(true);
+    expect(typeof datashouldBeCashed === "object").toBe(true);
   });
 
   it("проверка объекта на наличие необходимого свойства", () => {
     const DICTIONARY_ARRAY = [...dictionary];
     const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const element = elementDateWasChoosenByUser(
+    const propertyshouldBeFind = elementDateWasChoosenByUser(
       DICTIONARY_ARRAY,
       SERVER_FILTER_ARRAY,
       "value",
       "filter"
     );
-    expect(element).toHaveProperty("text");
+    expect(propertyshouldBeFind).toHaveProperty("text");
   });
 });
