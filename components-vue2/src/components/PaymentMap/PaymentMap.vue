@@ -1,6 +1,7 @@
 <template>
   <div class="map-container mt-3">
-    <div class="office-tab-content">
+    <div id="regcenter" v-html="templatesToShow.join('')" class="card"></div>
+    <div class="office-tab-content" style="position: relative">
       <div ref="map" id="map" class="map"></div>
     </div>
   </div>
@@ -27,8 +28,11 @@ export default {
       placemark: null,
       city: "",
       qc_geo: null,
-      isMetroSuggest: false,
       regCenters: null,
+      isCardVisible: false,
+      geoObjectTemplates: [],
+      templatesToShow: [],
+      balloonTemplate: "",
     };
   },
   async created() {
@@ -114,14 +118,21 @@ export default {
       this.myMap.geoObjects.add(this.myClusterer);
       const body = document.getElementsByTagName("body")[0];
       this.myMap.geoObjects.events.add("balloonopen", (e) => {
+        // this.isCardVisible = false;
         body.classList.add("open-balloon");
         const target = e.get("target");
+        this.balloonTemplate = target.properties.get("balloonContentBody");
+        this.templatesToShow = this.geoObjectTemplates.filter(
+          (template) => !this.balloonTemplate.includes(template)
+        );
+        if (this.templatesToShow.length) this.isCardVisible = true;
         target.options.set(
           "iconImageHref",
           "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
         );
       });
       this.myMap.geoObjects.events.add("balloonclose", (e) => {
+        this.isCardVisible = false;
         body.classList.remove("open-balloon");
         const target = e.get("target");
         target?.options.set(
@@ -129,9 +140,9 @@ export default {
           "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
         );
       });
-      this.myClusterer
-        .getGeoObjects()[0]
-        .balloon.open([this.regCenters[0].NLAT, this.regCenters[0].NLON]);
+
+      // Fires by F5
+      this.openBalloon();
     },
 
     combineAgencies(agencies, i, count) {
@@ -207,9 +218,11 @@ export default {
         iconCaption: caption,
         balloonContent: caption,
       });
-      this.myClusterer
-        .getGeoObjects()[0]
-        .balloon.open([this.regCenters[0].NLAT, this.regCenters[0].NLON]);
+
+      this.geoObjectTemplates.length = 0;
+
+      // Fires by changing city
+      this.openBalloon();
     },
 
     showResult(obj) {
@@ -262,6 +275,13 @@ export default {
         showResult(res.geoObjects.get(0));
       });
     },
+
+    openBalloon() {
+      this.myClusterer.getGeoObjects().forEach((obj, i) => {
+        this.geoObjectTemplates.push(obj.properties.get("balloonContentBody"));
+        obj.balloon.open([this.regCenters[i].NLAT, this.regCenters[i].NLON]);
+      });
+    },
   },
   computed: {
     cityData() {
@@ -281,4 +301,15 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.card {
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  z-index: 1000;
+  background-color: #fff;
+  min-width: 350px;
+  border-radius: 20px;
+  padding: 30px;
+}
+</style>
