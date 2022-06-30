@@ -54,7 +54,7 @@ export default function ({ app, store, redirect, $auth, $sentry }) {
             noAutoHide: true,
             toaster: "b-toaster-top-full",
           });
-          console.log(error.response.data);
+          $sentry.setUser($auth.user);
           $sentry.captureException(error.response.data);
           if (
             !originalRequest.__isRetryRequest &&
