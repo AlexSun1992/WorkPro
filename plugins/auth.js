@@ -1,8 +1,9 @@
 /* eslint-disable */
 import converter from "@/converters/menu";
 import { getErrorMessage } from "../utils/transform";
-export default function ({ app, store, redirect, $auth }) {
+export default function ({ app, store, redirect, $auth, $sentry }) {
   app.$axios.onResponseError((error) => {
+    $sentry.captureException(error);
     if (!error?.response) {
       return;
     }
@@ -54,6 +55,7 @@ export default function ({ app, store, redirect, $auth }) {
             toaster: "b-toaster-top-full",
           });
           console.log(error.response.data);
+          $sentry.captureException(error.response.data);
           if (
             !originalRequest.__isRetryRequest &&
             error.response.data?.MESSAGE
