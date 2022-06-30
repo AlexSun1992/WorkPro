@@ -24,11 +24,21 @@
             :key="item.id"
             v-slot="{ href, navigate, isActive }"
             :to="item.url"
+            @click="toggleClassActive"
           >
             <li
               :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'"
             >
-              <a :href="href" @click="navigate">
+              <a
+                :href="href"
+                @click="
+                  (e) => {
+                    navigate(e);
+                    toggleClassActive(e);
+                  }
+                "
+                class="slava"
+              >
                 <div :class="'menu-icon-' + item.iconFileName" />
                 <span>{{ item.name }}</span>
               </a>
@@ -76,10 +86,15 @@ export default {
       e.path[1].classList.toggle("show");
       e.path[0].classList.toggle("active");
     },
+    slava() {
+      console.log("bla bla bla");
+    },
     toggleClassActive(e) {
-      document.querySelector(".menu").classList.toggle("show");
-      document.querySelector("body").classList.toggle("menu-open");
-      return;
+      if (window.innerWidth <= 992) {
+        document.querySelector(".menu").classList.toggle("show");
+        document.querySelector("body").classList.toggle("menu-open");
+        return;
+      }
     },
     updateScroll() {
       this.endScrollMenu =
