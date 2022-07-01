@@ -34,9 +34,9 @@ const isOpened = (office) => {
 };
 
 const showWorkingHours = (agency) => {
-  let dateNow = new Date();
+  const dateNow = new Date();
   let day = dateNow.getDay();
-  let dateEnd = new Date();
+  const dateEnd = new Date();
   day = day == 0 ? 7 : day;
 
   if (!agency.GRAF) return "";
@@ -77,8 +77,8 @@ const showWorkingHours = (agency) => {
 };
 
 const getTemplate = (agency) => {
-  let phonesArr = agency.SPHONE?.split(";");
-  let grafArr = agency.SGRAF?.split("\n");
+  const phonesArr = agency.SPHONE?.split(";");
+  const grafArr = agency.SGRAF?.split("\n");
   phonesArr?.pop();
   grafArr?.pop();
   let template = `
@@ -211,21 +211,21 @@ const count = (office) => {
 };
 
 const getUnderlineId = (station, item) => {
-  let obj = item.IDUNDERGROUND.find((element) => {
+  const obj = item.IDUNDERGROUND.find((element) => {
     return element.SNAME.toLowerCase().includes(station.toLowerCase());
   });
   return obj?.IDUNDERLINE;
 };
 
 const getPhones = (phones) => {
-  let phonesArr = phones.split(";");
+  const phonesArr = phones.split(";");
   phonesArr.pop();
   return phonesArr;
 };
 
 const getGrafs = (grafs) => {
-  let grafsArr = grafs.split("\n");
-  grafsArr.pop();
+  const grafsArr = grafs.split("\n");
+  if (grafsArr.length > 1) grafsArr.pop();
   return grafsArr;
 };
 
@@ -237,7 +237,7 @@ const checkClusterStatus = (clusterer) => {
       j <= clusterer.getClusters()[i]?.getGeoObjects().length;
       j++
     ) {
-      let isOpened = clusterer
+      const isOpened = clusterer
         .getClusters()
         [i].getGeoObjects()
         [j]?.properties.get("balloonContentBody")
