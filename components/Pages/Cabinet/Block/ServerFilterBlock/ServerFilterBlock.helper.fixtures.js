@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/prefer-default-export
-export const dataBlocks = [
+export const serverFilters = [
   {
     propertyName: "SPOLICY",
     filter: "2529400-13/22",
@@ -14,7 +14,7 @@ export const dataBlocks = [
   },
 ];
 
-export const dictionary = [
+export const selectOptionItems = [
   {
     text: "Предстоящие: 27.06.2022",
     value: "2022-06-27",
