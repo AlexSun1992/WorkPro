@@ -18,16 +18,16 @@
             <button class="oml-btn-open"></button>
           </div>
           <div v-if="i == 0 && !office.station" class="name">
-            {{ item.SSHORTNAME }}
+            <!-- {{ item.SSHORTNAME }} -->
             <button v-if="office.station" class="oml-btn-open"></button>
           </div>
           <div v-if="i == 0 && office.station" class="count-office">
             {{ count(office) }}
           </div>
           <div class="card-body">
-            <div v-if="office.station" class="card-title">
+            <!-- <div v-if="office.station" class="card-title">
               {{ item.SSHORTNAME }}
-            </div>
+            </div> -->
             <div v-if="!office.station" class="count-office">
               <!-- {{ count(office) }} -->
             </div>
@@ -43,6 +43,7 @@
                 </div>
               </div>
               <div :class="[item.SPATH1 ? 'col-8' : 'col-12']">
+                <div class="card-title mb-2">{{ item.SSHORTNAME }}</div>
                 <div>{{ item.SADDRESS }}</div>
                 <div
                   :class="[
