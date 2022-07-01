@@ -1,5 +1,5 @@
 /* eslint-disable */
-export default function ({ app, store, redirect, route }) {
+export default function ({ app, store, redirect, route, $auth, $sentry }) {
   store.commit("data_card/clearFormData");
   store.commit("data_card/clearFilters");
   store.commit("blocks/clearBlock");
@@ -19,6 +19,7 @@ export default function ({ app, store, redirect, route }) {
       });
   }
   if (process.client) {
+    $sentry.setUser($auth.user);
     if (!app.$cookiz.get("auth._token.local")) {
       if (window !== undefined) {
         window.location.href = "/login";
