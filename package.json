@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "postinstall": "git config blame.ignoreRevsFile .git-blame-ignore-revs || true",
-    "dev": "cross-env  NODE_ENV=development nodemon server/index.js --watch server converters",
+    "dev": "cross-env NODE_ENV=development NODE_EXTRA_CA_CERTS=reso.crt nodemon server/index.js --watch server converters",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "generate": "nuxt generate",

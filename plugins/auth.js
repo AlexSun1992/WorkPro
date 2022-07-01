@@ -53,7 +53,6 @@ export default function ({ app, store, redirect, $auth, $sentry }) {
             noAutoHide: true,
             toaster: "b-toaster-top-full",
           });
-          $sentry.setUser($auth.user);
           $sentry.captureException(error.response.data);
           if (
             !originalRequest.__isRetryRequest &&
@@ -82,6 +81,6 @@ export default function ({ app, store, redirect, $auth, $sentry }) {
     console.log(`Making request to ${config.url}`);
   });
   $auth.onError((error, name, endpoint) => {
-    //console.log(name, error);
+    $sentry.captureException(error);
   });
 }
