@@ -90,9 +90,10 @@ export default {
       get() {
         if (this.$store.getters["data_card/getForm"]) {
           const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE")
-          if (!appointmentObject.value) return false;
-          const [dd, mm, yyyy] = appointmentObject.value.split(".")
-          if (this.options.length) {
+          if (!appointmentObject.value && this.options.length) return true
+          if (appointmentObject.value) {
+            const [dd, mm, yyyy] = appointmentObject.value.split(".")
+          if (appointmentObject.value && this.options.length) {
             return this.options.find((item) => {
               const appointmentDate = new Date(item.DDATE);
               appointmentDate.setHours(appointmentDate.getHours() - 3);
@@ -100,6 +101,7 @@ export default {
               chosenDate.setMonth(chosenDate.getMonth() - 1);
               return +appointmentDate === +chosenDate;
             });
+          } 
           }
         }
         return false
