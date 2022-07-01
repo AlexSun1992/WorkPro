@@ -194,7 +194,7 @@ describe("Модуль определения данных, необходимы
       }
       return a + b;
     }
-    expect(() => sum("1", 3)).toThrowError();
+    expect(() => sum("1", 3)).toThrowError("not number");
     expect(sum(1, 3)).toBe(4);
   });
 });
