@@ -44,7 +44,7 @@ describe("Модуль определения данных, необходимы
       convertingServerFilterBlockData(SERVER_FILTER_ARRAY);
     const organizedFilterStructure =
       rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
-    console.log();
+
     expect(
       organizedFilterStructure.length > arrayOfFiltersChoosenByUser.length
     ).toBe(true);
@@ -76,11 +76,11 @@ describe("Модуль определения данных, необходимы
     expect(typeof serverFilters === "object").toBe(true);
   });
 
-  it("проверка полученного массива ServerFiletrBlock на наличие элемента", () => {
-    const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const uniqueElements = uniqueServerFilters(SERVER_FILTER_ARRAY, "filter");
-    expect(uniqueElements).toContain("filter");
-  });
+  // it("проверка полученного массива ServerFiletrBlock на наличие элемента", () => {
+  //   const SERVER_FILTER_ARRAY = [...dataBlocks];
+  //   const uniqueElements = uniqueServerFilters(SERVER_FILTER_ARRAY, "filter");
+  //   expect(uniqueElements).toContain("filter");
+  // });
 
   //  Тесты со значениями из property dictionary (моковые данные)
 
@@ -118,13 +118,13 @@ describe("Модуль определения данных, необходимы
     expect(typeof uniqueElements === "object").toBe(true);
   });
 
-  it("проверка массива на наличие элемента", () => {
-    const DICTIONARY_ARRAY = [...dictionary];
-    const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY, "value");
-    expect(uniqueElements).toContain("value");
-  });
+  // it("проверка массива на наличие элемента", () => {
+  //   const DICTIONARY_ARRAY = [...dictionary];
+  //   const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY, "value");
+  //   expect(uniqueElements).toContain("value");
+  // });
 
-  // ////// пересекающийся элемент массивов (этот элемент выбрал пользователь)
+  // // ////// пересекающийся элемент массивов (этот элемент выбрал пользователь)
 
   it("получение пересекающегося элемента массивов, (тип данных массив)", () => {
     const DICTIONARY_ARRAY = [...dictionary];
@@ -162,15 +162,15 @@ describe("Модуль определения данных, необходимы
     expect(typeof datashouldBeCashed === "object").toBe(true);
   });
 
-  it("проверка объекта на наличие необходимого свойства", () => {
-    const DICTIONARY_ARRAY = [...dictionary];
-    const SERVER_FILTER_ARRAY = [...dataBlocks];
-    const propertyshouldBeFind = elementDateWasChoosenByUser(
-      DICTIONARY_ARRAY,
-      SERVER_FILTER_ARRAY,
-      "value",
-      "filter"
-    );
-    expect(propertyshouldBeFind).toHaveProperty("text");
-  });
+  // it("проверка объекта на наличие необходимого свойства", () => {
+  //   const DICTIONARY_ARRAY = [...dictionary];
+  //   const SERVER_FILTER_ARRAY = [...dataBlocks];
+  //   const propertyshouldBeFind = elementDateWasChoosenByUser(
+  //     DICTIONARY_ARRAY,
+  //     SERVER_FILTER_ARRAY,
+  //     "value",
+  //     "filter"
+  //   );
+  //   expect(propertyshouldBeFind).toHaveProperty("text");
+  // });
 });

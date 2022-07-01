@@ -170,9 +170,7 @@ export default {
       const serverFilters = this.$store.getters["blocks/getServerFilters"];
       const choosenElement = elementDateWasChoosenByUser(
         this.dictionary,
-        serverFilters,
-        "value",
-        "filter"
+        serverFilters
       );
 
       if (choosenElement !== undefined) {

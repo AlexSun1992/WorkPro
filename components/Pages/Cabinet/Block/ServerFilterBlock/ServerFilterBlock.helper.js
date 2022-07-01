@@ -14,58 +14,50 @@ export function convertingServerFilterBlockData(serverFilters) {
 export function rebuildArrayOfServerFilterBlockData(serverFilters) {
   const arrayOfServerFilterBlockData =
     convertingServerFilterBlockData(serverFilters);
+
   const concatServerFilterBlockData = [].concat(
     ...arrayOfServerFilterBlockData
   );
+
   return concatServerFilterBlockData;
 }
 
-export function getUniqueArraysOfServerFilters(serverFilters, property) {
+export function getUniqueArraysOfServerFilters(serverFilters) {
   const notFiltereServerFilters =
     rebuildArrayOfServerFilterBlockData(serverFilters);
 
-  const arrOfUniqueServerFilters = notFiltereServerFilters.filter((item) =>
-    item.includes(property)
+  const ServerFiltersConcat = [].concat(...notFiltereServerFilters);
+
+  const arrOfUniqueServerFilters = ServerFiltersConcat.filter((item) =>
+    parseInt(item, 10)
   );
 
   return arrOfUniqueServerFilters;
 }
 
-export function uniqueServerFilters(serverFilters, property) {
-  const notFilteredServerFilters = getUniqueArraysOfServerFilters(
-    serverFilters,
-    property
-  );
+export function uniqueServerFilters(serverFilters) {
+  const notFilteredServerFilters =
+    getUniqueArraysOfServerFilters(serverFilters);
   const reducedArrayServerFilters = [].concat(...notFilteredServerFilters);
+
   const uniqueFilters = [...new Set(reducedArrayServerFilters)];
+
   return uniqueFilters;
 }
 
-export function interSectionBetweenDropListServerFilters(
-  dropList,
-  dataBlocks,
-  dropListValue,
-  dataBlocksValue
-) {
-  const dropDownList = uniqueServerFilters(dropList, dropListValue);
-  const serverFilterBlocks = uniqueServerFilters(dataBlocks, dataBlocksValue);
+export function interSectionBetweenDropListServerFilters(dropList, dataBlocks) {
+  const dropDownList = uniqueServerFilters(dropList);
+  const serverFilterBlocks = uniqueServerFilters(dataBlocks);
   const intersectionDropListdataBlocks = dropDownList.filter((x) =>
     serverFilterBlocks.includes(x)
   );
   return intersectionDropListdataBlocks;
 }
 
-export function elementDateWasChoosenByUser(
-  dropList,
-  dataBlocks,
-  dropListValue,
-  dataBlocksValue
-) {
+export function elementDateWasChoosenByUser(dropList, dataBlocks) {
   const interSectionArray = interSectionBetweenDropListServerFilters(
     dropList,
-    dataBlocks,
-    dropListValue,
-    dataBlocksValue
+    dataBlocks
   );
 
   const dateChoosenByUser = interSectionArray.find(
