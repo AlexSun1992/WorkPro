@@ -2,7 +2,7 @@
   <div class="app">
     <Header />
     <div class="app-body">
-      <Sidebar :navItems="nav" />
+      <Sidebar :nav-items="nav" />
       <main class="main">
         <b-breadcrumb :items="items" />
         <div class="container-fluid">
@@ -20,17 +20,25 @@ import Sidebar from "~/components/Sidebar/Sidebar";
 import breadcrumbs from "~/converters/breadcrumbs";
 
 export default {
-  name: "full",
-  head: {
-    title: "РЕСО-Гарантия",
-  },
+  name: "Full",
   components: {
     Header,
     Sidebar,
     Footer,
   },
-  mounted() {
-    // this.$store.dispatch('menu/fetchMenu', this.$route.params)
+  head: {
+    title: "РЕСО-Гарантия",
+  },
+  computed: {
+    nav() {
+      return this.$store.getters["menu/menu"][0].children;
+    },
+    name() {
+      return this.$route.name;
+    },
+    items() {
+      return this.$store.getters["menu/breadcrumbs"];
+    },
   },
   watch: {
     $route(to, from, next) {
@@ -57,17 +65,6 @@ export default {
         page: this.$route.params,
         settings: bc.slice(-1).pop(),
       });
-    },
-  },
-  computed: {
-    nav() {
-      return this.$store.getters["menu/menu"][0].children;
-    },
-    name() {
-      return this.$route.name;
-    },
-    items() {
-      return this.$store.getters["menu/breadcrumbs"];
     },
   },
 };
