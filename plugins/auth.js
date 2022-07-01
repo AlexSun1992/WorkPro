@@ -1,7 +1,7 @@
 /* eslint-disable */
 import converter from "@/converters/menu";
 import { getErrorMessage } from "../utils/transform";
-export default function ({ app, store, redirect, $auth }) {
+export default function ({ app, store, redirect, $auth, $sentry }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
       return;
@@ -51,8 +51,9 @@ export default function ({ app, store, redirect, $auth }) {
             title: "Ошибка",
             variant: "danger",
             noAutoHide: true,
+            toaster: "b-toaster-top-full",
           });
-          console.log(error.response.data);
+          $sentry.captureException(error.response.data);
           if (
             !originalRequest.__isRetryRequest &&
             error.response.data?.MESSAGE
@@ -69,6 +70,7 @@ export default function ({ app, store, redirect, $auth }) {
               title: "Ошибка",
               variant: "danger",
               autoHideDelay: 5000,
+              toaster: "b-toaster-top-full",
             });
           }
         }
@@ -79,6 +81,6 @@ export default function ({ app, store, redirect, $auth }) {
     console.log(`Making request to ${config.url}`);
   });
   $auth.onError((error, name, endpoint) => {
-    //console.log(name, error);
+    $sentry.captureException(error);
   });
 }

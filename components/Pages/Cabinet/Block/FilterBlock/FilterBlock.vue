@@ -20,12 +20,12 @@
       </button>
       <button
         v-for="item in filterItems"
+        :key="item.name"
         :data-activeitems="
           showFilteredItemsCount === true
             ? getSameTypeUnitsCount(getUnfilteredItemsCount, item.name)
             : null
         "
-        :key="item.name"
         :disabled="
           getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) === 0
             ? true
@@ -54,7 +54,7 @@
       <b-form-input
         v-model="searchString"
         placeholder="Введите поисковый запрос"
-      ></b-form-input>
+      />
     </div>
   </div>
 </template>
@@ -254,16 +254,16 @@ export default {
     },
 
     setQueryURL() {
-      window.history.replaceState(
-        null,
-        null,
-        `?filters=${JSON.stringify(this.$store.getters["blocks/getFilters"])}`
+      const urlObject = new URL(window.location.href);
+
+      urlObject.searchParams.set(
+        "filters",
+        JSON.stringify(this.$store.getters["blocks/getFilters"])
       );
-      const { url } = {
-        url: `${this.$route.path}?filters=${JSON.stringify(
-          this.$store.getters["blocks/getFilters"]
-        )}`,
-      };
+
+      window.history.replaceState(null, null, urlObject.search);
+
+      const url = `${this.$route.path}${urlObject.search}`;
 
       this.$store.commit("menu/setQueriesUrlByIdMenu", {
         ...this.$route.params,

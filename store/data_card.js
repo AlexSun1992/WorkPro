@@ -100,12 +100,6 @@ export const getters = {
           ...currentValue.value?.value,
         };
       }
-      if (currentValue.type === "doctorSchedule") {
-        return {
-          ...accumulator,
-          ...currentValue.value?.value,
-        };
-      }
       if (currentValue.type === "timestamp") {
         return {
           ...accumulator,

@@ -81,7 +81,6 @@ export const actions = {
       return e.response;
     }
   },
-
   async updateUser({ commit }) {
     try {
       const { data } = await this.$axios.get("/am/main/v2/userinfo");

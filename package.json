@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "postinstall": "git config blame.ignoreRevsFile .git-blame-ignore-revs || true",
-    "dev": "cross-env  NODE_ENV=development nodemon server/index.js --watch server converters",
+    "dev": "cross-env NODE_ENV=development NODE_EXTRA_CA_CERTS=reso.crt nodemon server/index.js --watch server converters",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "generate": "nuxt generate",
@@ -20,6 +20,7 @@
     "@nuxtjs/auth-next": "^5.0.0-1591630887.eba51b3",
     "@nuxtjs/axios": "^5.10.3",
     "@nuxtjs/recaptcha": "^0.6.2",
+    "@nuxtjs/sentry": "^5.1.7",
     "@nuxtjs/style-resources": "^1.0.0",
     "@trevoreyre/autocomplete-vue": "^2.2.0",
     "@types/webpack-hot-middleware": "^2.25.3",

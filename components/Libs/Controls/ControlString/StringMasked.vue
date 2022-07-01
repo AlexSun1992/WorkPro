@@ -1,21 +1,21 @@
 <template>
   <div>
     <the-mask
-      v-b-tooltip.hover.top="data.helpText"
       v-if="data.mask"
+      v-b-tooltip.hover.top="data.helpText"
       :mask="data.mask"
       class="form-control"
       :class="validClass"
       :placeholder="data.placeholder"
       :disabled="!edit ? !edit : data.readonly"
-      v-bind:value="dataValue"
-      @input="updateValue($event)"
-      @input.native="eventHandlerInputNative($event.target.value)"
-      @blur.native="eventHandlerBlur($event)"
+      :value="dataValue"
       type="text"
       :masked="false"
       :tokens="customTokens"
-    ></the-mask>
+      @input="updateValue($event)"
+      @input.native="eventHandlerInputNative($event.target.value)"
+      @blur.native="eventHandlerBlur($event)"
+    />
     <b-form-invalid-feedback :state="isState">{{
       data.error ? data.error : "Обязательно для заполнения"
     }}</b-form-invalid-feedback>
@@ -27,6 +27,18 @@ import { TheMask } from "vue-the-mask";
 export default {
   name: "StringMasked",
   components: { TheMask },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false,
+    },
+  },
   data() {
     return {
       customTokens: {
@@ -41,16 +53,31 @@ export default {
       },
     };
   },
-  props: {
-    data: {
-      type: Object,
-      required: true,
-      default: () => {},
+
+  computed: {
+    isState() {
+      let state = null;
+      if (this.data.state === false) {
+        state = false;
+      }
+      if (this.data.error) {
+        if (this.data.error !== null) {
+          state = false;
+        }
+      }
+      if (this.data.state) {
+        state = !this.data.error;
+      }
+      return state;
     },
-    edit: {
-      type: Boolean,
-      required: true,
-      default: () => false,
+    validClass() {
+      if (this.isState !== null) {
+        return this.isState === true ? "is-valid" : "is-invalid";
+      }
+      return "";
+    },
+    dataValue() {
+      return this.data.value;
     },
   },
   methods: {
@@ -80,33 +107,6 @@ export default {
           value: val,
         });
       }
-    },
-  },
-  computed: {
-    isState() {
-      let state = null;
-      if (this.data.state === false) {
-        state = false;
-      }
-      if (Boolean(this.data.error)) {
-        if (this.data.error !== null) {
-          state = false;
-        }
-      }
-      if (this.data.state) {
-        state = !Boolean(this.data.error);
-      }
-      return state;
-    },
-    validClass() {
-      if (this.isState !== null) {
-        return this.isState === true ? "is-valid" : "is-invalid";
-      } else {
-        return "";
-      }
-    },
-    dataValue() {
-      return this.data.value;
     },
   },
 };
