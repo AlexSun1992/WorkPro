@@ -519,12 +519,12 @@
             
             .anonsed-blocks .anonsed-block .title {
                 font-weight: 700;
-                font-size: 1rem;
+                font-size: 0.875rem;
                 line-height: 1.625rem;
             }
             
             .anonsed-blocks .anonsed-block .description {
-                font-size: 1rem;
+                font-size: 0.875rem;
                 line-height: 1.625rem;
                 width: 100%;
                 white-space: nowrap;
@@ -1853,7 +1853,7 @@
                 font-family: 'SF Pro Display';
                 font-style: normal;
                 font-weight: 600;
-                font-size: 20px;
+                font-size: 1.25rem;
                 line-height: 32px;
                 display: flex;
                 align-items: center;
@@ -2092,6 +2092,7 @@
                     border: 1px solid red;
                     z-index: 1;
                     font-size: 0;
+                    padding: 0;
                 }
                 .anonsed-blocks .freecard .anonsed-block,
                 .anonsed-blocks .freecard:hover .anonsed-block {
@@ -2645,6 +2646,8 @@
                 left: 0;
                 border-radius: 0 0 24PX 24PX;
                 border-width: 1px;
+                padding: 20px 0;
+                text-align: center;
             }
             
             .policy-payment:hover {
@@ -2895,6 +2898,8 @@
                     position: absolute;
                     left: 16px;
                     z-index: 1;
+                    max-width: 220px;
+                    text-align: left;
                 }
                 .block-policy .date {
                     position: absolute;
@@ -2903,7 +2908,7 @@
                 }
                 .block-policy {
                     padding: 16px;
-                    min-height: 160px;
+                    min-height: 130px;
                     border-radius: 24px;
                 }
                 .block-policy .description {
@@ -3114,6 +3119,10 @@
             }
             
             @media (max-width:992px) {
+                .title-page,
+                .title-conf-block {
+                    font-size: 1rem;
+                }
                 .sidebar-nav-item.active .menu-icon-profile,
                 .sidebar-nav-item:hover .menu-icon-profile {
                     background: url(/img/icon-menu-1-active-m.svg) 50% 50% no-repeat
@@ -3169,5 +3178,31 @@
                 .sidebar-nav-item.active .menu-icon-dms5,
                 .sidebar-nav-item:hover .menu-icon-dms5 {
                     background: url(/img/icon-menu-dms5-active-m.svg) 50% 50% no-repeat
+                }
+                [data-card-id="705"]:after {
+                    position: absolute;
+                    width: 80px;
+                    height: 80px;
+                    bottom: 10px;
+                    right: 0px;
+                    top: auto;
+                    content: "";
+                    background: url(/img/anonsedbg.svg) 0 0 no-repeat;
+                    background-size: contain;
+                }
+                .my-policy:after {
+                    width: 101px;
+                    height: 101px;
+                    background-size: cover !important;
+                }
+                .my-policy .title {
+                    font-size: 1rem;
+                }
+                .btn-outline-success,
+                .btn-success,
+                .btn-secondary,
+                .btn-primary,
+                .btn-warning {
+                    padding: 15px 24px;
                 }
             }
