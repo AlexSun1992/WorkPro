@@ -1677,12 +1677,20 @@
                 background: #fff;
             }
             
+            .btn-outline-success:active,
+            a.btn-outline-success:active,
+            a.btn-secondary:active,
+            .btn-secondary:active {
+                background-color: #FFF1EB;
+                border: 2px solid #FF5000;
+            }
+            
             .btn-outline-success:hover,
             a.btn-outline-success:hover,
             a.btn-secondary:hover,
             .btn-secondary:hover {
-                background-color: rgba(254, 115, 51, 0.1);
-                border: 2px solid #FE8F5C;
+                background-color: #FFF1EB;
+                border: 2px solid #FE7333;
                 color: #FE8F5C;
             }
             
@@ -3108,7 +3116,7 @@
                 height: auto;
             }
             
-            .tooltip {
+            .tooltipster {
                 background: url(/img/tooltip.svg) 50% 50% no-repeat;
                 font-size: 0;
                 display: inline-block;
@@ -3204,5 +3212,8 @@
                 .btn-primary,
                 .btn-warning {
                     padding: 15px 24px;
+                }
+                .have_btn {
+                    padding: 16px 16px 85px 16px;
                 }
             }
