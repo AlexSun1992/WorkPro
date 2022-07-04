@@ -25,7 +25,7 @@
         />
       </b-form>
     </b-modal>
-    <div v-if="data.length">
+    <div v-if="data.length && isLoadedScript">
       <Form
         v-if="!isAccordion && !isBlock"
         class="block-profile"
@@ -59,7 +59,11 @@
         @open-card="openCard($event)"
       />
     </div>
-    <SkeletonBox v-if="!data.length" class="mt-5" :items="8" />
+    <SkeletonBox
+      v-if="!data.length || !isLoadedScript"
+      class="mt-5"
+      :items="8"
+    />
   </div>
 </template>
 <script>
@@ -109,22 +113,7 @@ export default {
         color: "#dddbdd",
       },
       saveSuccess: false,
-    };
-  },
-
-  head() {
-    return {
-      script: [
-        {
-          // type: "module",
-          src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
-          callback: () => {
-            this.$root.eventHandler =
-              typeof eventHandler === "function" ? eventHandler : null;
-            this.stripeLoaded();
-          },
-        },
-      ],
+      isLoadedScript: false,
     };
   },
   computed: {
@@ -162,12 +151,16 @@ export default {
         ?.LCLOSEAFTERSAVE;
     },
   },
-  created() {
+  async created() {
+    await this.$loadScript(
+      `/api/card/js/${this.$route.params.idModule}/${
+        this.$route.params.idItem
+      }&time=${Date.now()}`
+    );
     this.$root.eventHandler =
       typeof eventHandler === "function" ? eventHandler : null;
-  },
-  mounted() {
     this.stripeLoaded();
+    this.isLoadedScript = true;
   },
   unmounted() {
     this.$store.commit("data_card/cardChanged", false);
