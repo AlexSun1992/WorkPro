@@ -165,6 +165,16 @@ describe("Модуль определения данных, необходимы
     expect(propertyshouldBeFind).toHaveProperty("text");
   });
 
+  it("проверка на отсутствие выбранного элемента", () => {
+    const DICTIONARY_ARRAY = [];
+    const SERVER_FILTER_ARRAY = [];
+    const propertyshouldBeFind = elementDateWasChoosenByUser(
+      DICTIONARY_ARRAY,
+      SERVER_FILTER_ARRAY
+    );
+    expect(propertyshouldBeFind).toBe(undefined);
+  });
+
   // =======
   it("корректно выбирает фильтр из списка", () => {
     const propertyshouldBeFind = elementDateWasChoosenByUser(
