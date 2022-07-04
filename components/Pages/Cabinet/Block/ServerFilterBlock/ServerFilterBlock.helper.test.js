@@ -181,7 +181,9 @@ describe("Модуль определения данных, необходимы
       selectOptionItems,
       serverFilters
     );
+
     expect(propertyshouldBeFind).toHaveProperty("text");
+    expect(propertyshouldBeFind.text).toBe("За пол года: 29.12.2021");
   });
 
   it("sum func", () => {
