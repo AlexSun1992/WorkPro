@@ -82,12 +82,6 @@ describe("Модуль определения данных, необходимы
     expect(typeof serverFiltersUnique === "object").toBe(true);
   });
 
-  it("проверка полученного массива ServerFiletrBlock на наличие элемента", () => {
-    const SERVER_FILTER_ARRAY = [...serverFilters];
-    const uniqueElements = uniqueServerFilters(SERVER_FILTER_ARRAY, "filter");
-    expect(uniqueElements).toContain("filter");
-  });
-
   //  Тесты со значениями из property dictionary (моковые данные)
 
   it("копия массива объектов выпадающего списка компонента ServerFilterBlock", () => {
@@ -124,12 +118,7 @@ describe("Модуль определения данных, необходимы
     expect(typeof uniqueElements === "object").toBe(true);
   });
 
-  it("проверка массива на наличие элемента", () => {
-    const DICTIONARY_ARRAY = [...selectOptionItems];
-    const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY, "value");
-    expect(uniqueElements).toContain("value");
-  });
-  // // ////// пересекающийся элемент массивов (этот элемент выбрал пользователь)
+  //  пересекающийся элемент массивов (этот элемент выбрал пользователь)
 
   it("получение пересекающегося элемента массивов, (тип данных массив)", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
@@ -148,9 +137,7 @@ describe("Модуль определения данных, необходимы
     const SERVER_FILTER_ARRAY = [...serverFilters];
     const interSection = interSectionBetweenDropListServerFilters(
       DICTIONARY_ARRAY,
-      SERVER_FILTER_ARRAY,
-      "value",
-      "filter"
+      SERVER_FILTER_ARRAY
     );
     expect(interSection).toHaveLength(1);
   });
@@ -158,9 +145,7 @@ describe("Модуль определения данных, необходимы
   it("корректно выбирает фильтр из списка", () => {
     const datashouldBeCashed = elementDateWasChoosenByUser(
       selectOptionItems,
-      serverFilters,
-      "value",
-      "filter"
+      serverFilters
     );
     expect(datashouldBeCashed).toMatchInlineSnapshot(`
       Object {
@@ -170,43 +155,39 @@ describe("Модуль определения данных, необходимы
     `);
   });
 
-  //   // it("проверка объекта на наличие необходимого свойства", () => {
-  //   //   const DICTIONARY_ARRAY = [...dictionary];
-  //   //   const SERVER_FILTER_ARRAY = [...dataBlocks];
-  //   //   const propertyshouldBeFind = elementDateWasChoosenByUser(
-  //   //     DICTIONARY_ARRAY,
-  //   //     SERVER_FILTER_ARRAY,
-  //   //     "value",
-  //   //     "filter"
-  //   //   );
-  //   //   expect(propertyshouldBeFind).toHaveProperty("text");
-  //   // });
+  it("проверка объекта на наличие необходимого свойства", () => {
+    const DICTIONARY_ARRAY = [...selectOptionItems];
+    const SERVER_FILTER_ARRAY = [...serverFilters];
+    const propertyshouldBeFind = elementDateWasChoosenByUser(
+      DICTIONARY_ARRAY,
+      SERVER_FILTER_ARRAY
+    );
+    expect(propertyshouldBeFind).toHaveProperty("text");
+  });
+
   // =======
+  it("корректно выбирает фильтр из списка", () => {
+    const propertyshouldBeFind = elementDateWasChoosenByUser(
+      selectOptionItems,
+      serverFilters
+    );
+    expect(propertyshouldBeFind).toHaveProperty("text");
+  });
 
-  // it("корректно выбирает фильтр из списка", () => {
-  //   const propertyshouldBeFind = elementDateWasChoosenByUser(
-  //     selectOptionItems,
-  //     serverFilters,
-  //     "value",
-  //     "filter"
-  //   );
-  //   expect(propertyshouldBeFind).toHaveProperty("text");
-  // });
-
-  // it("sum func", () => {
-  //   /**
-  //    *
-  //    * @param {Number} a
-  //    * @param {Number} b
-  //    * @returns Number
-  //    */
-  //   function sum(a, b) {
-  //     if (typeof a !== "number") {
-  //       throw new Error(`a not number`);
-  //     }
-  //     return a + b;
-  //   }
-  //   expect(() => sum("1", 3)).toThrowError("not number");
-  //   expect(sum(1, 3)).toBe(4);
-  // });
+  it("sum func", () => {
+    /**
+     *
+     * @param {Number} a
+     * @param {Number} b
+     * @returns Number
+     */
+    function sum(a, b) {
+      if (typeof a !== "number") {
+        throw new Error(`a not number`);
+      }
+      return a + b;
+    }
+    expect(() => sum("1", 3)).toThrowError("not number");
+    expect(sum(1, 3)).toBe(4);
+  });
 });
