@@ -19,7 +19,6 @@ export default function ({ app, store, redirect, route, $auth, $sentry }) {
       });
   }
   if (process.client) {
-    $sentry.setUser($auth.user);
     if (!app.$cookiz.get("auth._token.local")) {
       if (window !== undefined) {
         window.location.href = "/login";

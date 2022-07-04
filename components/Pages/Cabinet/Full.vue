@@ -31,6 +31,14 @@ export default {
       console.log(error?.response);
     }
   },
+  mounted() {
+    this.$sentry.setUser({
+      ...this.$auth.user,
+      username: this.$auth.user.SUSERNAME,
+      id: this.$auth.user.ID,
+      email: this.$auth.user.SEMAIL,
+    });
+  },
 };
 </script>
 
