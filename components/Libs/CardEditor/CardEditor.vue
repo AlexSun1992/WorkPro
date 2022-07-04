@@ -152,15 +152,19 @@ export default {
     },
   },
   async created() {
-    await this.$loadScript(
-      `/api/card/js/${this.$route.params.idModule}/${
-        this.$route.params.idItem
-      }&time=${Date.now()}`
-    );
-    this.$root.eventHandler =
-      typeof eventHandler === "function" ? eventHandler : null;
-    this.stripeLoaded();
-    this.isLoadedScript = true;
+    try {
+      await this.$loadScript(
+        `/api/card/js/${this.$route.params.idModule}/${
+          this.$route.params.idItem
+        }&time=${Date.now()}`
+      );
+      this.$root.eventHandler =
+        typeof eventHandler === "function" ? eventHandler : null;
+      this.stripeLoaded();
+      this.isLoadedScript = true;
+    } catch (e) {
+      console.error(e);
+    }
   },
   unmounted() {
     this.$store.commit("data_card/cardChanged", false);
