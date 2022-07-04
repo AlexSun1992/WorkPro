@@ -82,19 +82,11 @@ describe("Модуль определения данных, необходимы
     expect(typeof serverFiltersUnique === "object").toBe(true);
   });
 
-<<<<<<< HEAD
-  // it("проверка полученного массива ServerFiletrBlock на наличие элемента", () => {
-  //   const SERVER_FILTER_ARRAY = [...dataBlocks];
-  //   const uniqueElements = uniqueServerFilters(SERVER_FILTER_ARRAY, "filter");
-  //   expect(uniqueElements).toContain("filter");
-  // });
-=======
   it("проверка полученного массива ServerFiletrBlock на наличие элемента", () => {
     const SERVER_FILTER_ARRAY = [...serverFilters];
     const uniqueElements = uniqueServerFilters(SERVER_FILTER_ARRAY, "filter");
     expect(uniqueElements).toContain("filter");
   });
->>>>>>> fa958f5d96687bf4387c0d3664ed5bf1dbf02053
 
   //  Тесты со значениями из property dictionary (моковые данные)
 
@@ -132,20 +124,11 @@ describe("Модуль определения данных, необходимы
     expect(typeof uniqueElements === "object").toBe(true);
   });
 
-<<<<<<< HEAD
-  // it("проверка массива на наличие элемента", () => {
-  //   const DICTIONARY_ARRAY = [...dictionary];
-  //   const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY, "value");
-  //   expect(uniqueElements).toContain("value");
-  // });
-=======
   it("проверка массива на наличие элемента", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
     const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY, "value");
     expect(uniqueElements).toContain("value");
   });
->>>>>>> fa958f5d96687bf4387c0d3664ed5bf1dbf02053
-
   // // ////// пересекающийся элемент массивов (этот элемент выбрал пользователь)
 
   it("получение пересекающегося элемента массивов, (тип данных массив)", () => {
@@ -187,44 +170,43 @@ describe("Модуль определения данных, необходимы
     `);
   });
 
-<<<<<<< HEAD
-  // it("проверка объекта на наличие необходимого свойства", () => {
-  //   const DICTIONARY_ARRAY = [...dictionary];
-  //   const SERVER_FILTER_ARRAY = [...dataBlocks];
+  //   // it("проверка объекта на наличие необходимого свойства", () => {
+  //   //   const DICTIONARY_ARRAY = [...dictionary];
+  //   //   const SERVER_FILTER_ARRAY = [...dataBlocks];
+  //   //   const propertyshouldBeFind = elementDateWasChoosenByUser(
+  //   //     DICTIONARY_ARRAY,
+  //   //     SERVER_FILTER_ARRAY,
+  //   //     "value",
+  //   //     "filter"
+  //   //   );
+  //   //   expect(propertyshouldBeFind).toHaveProperty("text");
+  //   // });
+  // =======
+
+  // it("корректно выбирает фильтр из списка", () => {
   //   const propertyshouldBeFind = elementDateWasChoosenByUser(
-  //     DICTIONARY_ARRAY,
-  //     SERVER_FILTER_ARRAY,
+  //     selectOptionItems,
+  //     serverFilters,
   //     "value",
   //     "filter"
   //   );
   //   expect(propertyshouldBeFind).toHaveProperty("text");
   // });
-=======
-  it("корректно выбирает фильтр из списка", () => {
-    const propertyshouldBeFind = elementDateWasChoosenByUser(
-      selectOptionItems,
-      serverFilters,
-      "value",
-      "filter"
-    );
-    expect(propertyshouldBeFind).toHaveProperty("text");
-  });
 
-  it("sum func", () => {
-    /**
-     *
-     * @param {Number} a
-     * @param {Number} b
-     * @returns Number
-     */
-    function sum(a, b) {
-      if (typeof a !== "number") {
-        throw new Error(`a not number`);
-      }
-      return a + b;
-    }
-    expect(() => sum("1", 3)).toThrowError("not number");
-    expect(sum(1, 3)).toBe(4);
-  });
->>>>>>> fa958f5d96687bf4387c0d3664ed5bf1dbf02053
+  // it("sum func", () => {
+  //   /**
+  //    *
+  //    * @param {Number} a
+  //    * @param {Number} b
+  //    * @returns Number
+  //    */
+  //   function sum(a, b) {
+  //     if (typeof a !== "number") {
+  //       throw new Error(`a not number`);
+  //     }
+  //     return a + b;
+  //   }
+  //   expect(() => sum("1", 3)).toThrowError("not number");
+  //   expect(sum(1, 3)).toBe(4);
+  // });
 });
