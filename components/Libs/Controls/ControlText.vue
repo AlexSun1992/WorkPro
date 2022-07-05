@@ -1,8 +1,5 @@
 <template>
-  <b-form-group
-    :label="label"
-    :label-for="data.name"
-  >
+  <b-form-group :label="label" :label-for="data.name">
     <b-form-textarea
       id="textarea1"
       v-model="fieldValue"
@@ -12,16 +9,14 @@
       :rows="3"
       :max-rows="6"
     />
-    <template
-      #label
-    >
-      <span v-html="data.label" /><span v-if="data.helpText">
-        (?)<vue-easy-tooltip
-          with-arrow="true"
-          position="top"
-          offset="4"
-        >
-          <span v-html="data.helpText" /></vue-easy-tooltip></span>
+    <template #label>
+      <span v-html="data.label" /><span
+        v-if="data.helpText"
+        class="tooltipster"
+      >
+        (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+          <span v-html="data.helpText" /></vue-easy-tooltip
+      ></span>
     </template>
     <b-form-invalid-feedback>
       Обязательно для заполнения
@@ -49,10 +44,10 @@ export default {
       return this.data.label;
     },
     fieldValue: {
-      get () {
+      get() {
         return this.data.value;
       },
-      set (value) {
+      set(value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,

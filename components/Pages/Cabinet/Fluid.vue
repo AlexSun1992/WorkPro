@@ -20,36 +20,6 @@ export default {
     FormPage,
     FilterBlock,
   },
-
-  beforeRouteUpdate(to, from, next) {
-    const cardChanged = this.$store.getters["data_card/cardChanged"];
-    if (cardChanged) {
-      const confirmed = window.confirm("Закрыть без сохранения данных?");
-      if (confirmed) {
-        next();
-      }
-    } else {
-      next();
-    }
-  },
-
-  async beforeRouteLeave(to, from, next) {
-    const cardChanged = this.$store.getters["data_card/cardChanged"];
-    if (to.meta !== "Cabinet") {
-      await this.$store.dispatch(
-        "pages/fetchPageByUrl",
-        to.path === "/" ? "index" : to.path
-      );
-    }
-    if (cardChanged) {
-      const confirmed = window.confirm("Закрыть без сохранения данных?");
-      if (confirmed) {
-        next();
-      }
-    } else {
-      next();
-    }
-  },
   computed: {
     params() {
       const page = this.$route.params;

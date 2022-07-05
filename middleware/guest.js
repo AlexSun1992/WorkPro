@@ -1,5 +1,5 @@
 /* eslint-disable */
-export default function ({ app, store, redirect, route }) {
+export default function ({ app, store, redirect, route, $auth, $sentry }) {
   store.commit("data_card/clearFormData");
   store.commit("data_card/clearFilters");
   store.commit("blocks/clearBlock");

@@ -6,7 +6,7 @@
   >
     <template v-slot:label
       ><span v-html="label"></span
-      ><span v-if="data.helpText">
+      ><span v-if="data.helpText" class="tooltipster">
         (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
           <span v-html="data.helpText"></span></vue-easy-tooltip></span
     ></template>
@@ -16,26 +16,21 @@
       :edit="edit"
       @update="updateField($event)"
       @blur="$emit('blur', $event)"
-    ></string-masked>
+    />
 
     <string-autocomplete
-      v-if="
-        !data.mask && isFieldNameBelogToAutocomplete(fieldsNameHub, data.name)
-      "
+      v-if="!data.mask && isAutocomplete"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
-    ></string-autocomplete>
+    />
 
     <string-simple
-      v-if="
-        !data.mask && !isFieldNameBelogToAutocomplete(fieldsNameHub, data.name)
-      "
+      v-if="!data.mask && !isAutocomplete"
       :data="data"
       :edit="edit"
       @update="updateField($event)"
-    >
-    </string-simple>
+    />
   </b-form-group>
 </template>
 
@@ -78,12 +73,15 @@ export default {
   },
 
   computed: {
+    isAutocomplete() {
+      return isFieldNameBelogToAutocomplete(this.data.name);
+    },
+
     label() {
       return `${this.data.label}`;
     },
   },
   methods: {
-    isFieldNameBelogToAutocomplete,
     updateField(e) {
       this.data.value = e.value;
       this.$emit("update", e);

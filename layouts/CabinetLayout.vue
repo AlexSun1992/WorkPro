@@ -157,4 +157,57 @@ export default {
   outline: 0px;
   outline: 0px auto transparent;
 }*/
+
+.b-toast {
+  padding: 12px 24px;
+  border: 1px solid #dfe3e5;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.b-toast.b-toast-danger {
+  background-color: #ffebeb;
+}
+
+.b-toast.b-toast-success {
+  background-color: #edf8ea;
+}
+
+.b-toaster-top-right .b-toaster-slot {
+  top: 30px;
+  right: 30px;
+}
+
+.toast .toast-header,
+.b-toast .toast {
+  background: transparent !important;
+}
+
+.b-toast-danger .toast .toast-header {
+  color: #eb5757;
+}
+.b-toast-success .toast .toast-header {
+  color: #009639;
+}
+.toast .toast-body {
+  color: #292929;
+}
+
+.toast .toast-header .close {
+  font-size: 0;
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  border-radius: 24px;
+  height: 24px;
+  width: 24px;
+}
+.b-toast-danger .toast .toast-header .close {
+  background: #fff url(/img/close-toaster.svg) 50% 50% no-repeat;
+  border: 1px solid #eb5757;
+}
+.b-toast-success .toast .toast-header .close {
+  background: #fff url(/img/close-toaster-success.svg) 50% 50% no-repeat;
+  border: 1px solid #009639;
+}
 </style>

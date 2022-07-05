@@ -25,7 +25,7 @@
         />
       </b-form>
     </b-modal>
-    <div v-if="data.length">
+    <div v-if="data.length && isLoadedScript">
       <Form
         v-if="!isAccordion && !isBlock"
         class="block-profile"
@@ -59,7 +59,11 @@
         @open-card="openCard($event)"
       />
     </div>
-    <SkeletonBox v-if="!data.length" class="mt-5" :items="8" />
+    <SkeletonBox
+      v-if="!data.length || !isLoadedScript"
+      class="mt-5"
+      :items="8"
+    />
   </div>
 </template>
 <script>
@@ -109,22 +113,8 @@ export default {
         color: "#dddbdd",
       },
       saveSuccess: false,
-    };
-  },
-
-  head() {
-    return {
-      script: [
-        {
-          // type: "module",
-          src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
-          callback: () => {
-            this.$root.eventHandler =
-              typeof eventHandler === "function" ? eventHandler : null;
-            this.stripeLoaded();
-          },
-        },
-      ],
+      isLoadedScript: false,
+      urlScript: null,
     };
   },
   computed: {
@@ -162,12 +152,26 @@ export default {
         ?.LCLOSEAFTERSAVE;
     },
   },
-  created() {
-    this.$root.eventHandler =
-      typeof eventHandler === "function" ? eventHandler : null;
+  async created() {
+    try {
+      this.urlScript = `/api/card/js/${this.$route.params.idModule}/${
+        this.$route.params.idItem
+      }&time=${Date.now()}`;
+      await this.$loadScript(this.urlScript);
+      this.$root.eventHandler =
+        typeof eventHandler === "function" ? eventHandler : null;
+      this.stripeLoaded();
+      this.isLoadedScript = true;
+    } catch (e) {
+      console.error(e);
+    }
   },
-  mounted() {
-    this.stripeLoaded();
+  async beforeDestroy() {
+    try {
+      await this.$unloadScript(this.urlScript);
+    } catch (e) {
+      console.error(e);
+    }
   },
   unmounted() {
     this.$store.commit("data_card/cardChanged", false);
@@ -191,6 +195,9 @@ export default {
       if (field.type === "button") {
         this.$store.commit("data_card/setError", false);
         this.$store.commit("data_card/setSavedError", false);
+      }
+      if (field.type !== "button") {
+        this.$store.commit("data_card/cardChanged", true);
       }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
@@ -398,8 +405,9 @@ export default {
             this.$root.$bvToast.toast(resp?.data?.MESSAGE, {
               title: "",
               variant: "success",
-              noAutoHide: true,
+              autoHideDelay: 5000,
               solid: true,
+              toaster: "b-toaster-top-full",
             });
           }
           if (this.$route.params.idItem === "710") {
@@ -537,7 +545,8 @@ export default {
           title: "",
           variant: "success",
           solid: true,
-          noAutoHide: true,
+          autoHideDelay: 5000,
+          toaster: "b-toaster-top-full",
         });
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {

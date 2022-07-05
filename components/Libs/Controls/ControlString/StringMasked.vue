@@ -8,18 +8,17 @@
       :class="validClass"
       :placeholder="data.placeholder"
       :disabled="!edit ? !edit : data.readonly"
-      v-bind:value="dataValue"
-      @input="updateValue($event)"
-      @input.native="eventHandlerInputNative($event.target.value)"
-      @blur.native="eventHandlerBlur($event)"
+      :value="dataValue"
       type="text"
       :masked="false"
       :tokens="customTokens"
+      @input="updateValue($event)"
+      @input.native="eventHandlerInputNative($event.target.value)"
+      @blur.native="eventHandlerBlur($event)"
     />
-
-    <b-form-invalid-feedback :state="isState">
-      {{ data.error ? data.error : "Обязательно для заполнения" }}
-    </b-form-invalid-feedback>
+    <b-form-invalid-feedback :state="isState">{{
+      data.error ? data.error : "Обязательно для заполнения"
+    }}</b-form-invalid-feedback>
   </div>
 </template>
 

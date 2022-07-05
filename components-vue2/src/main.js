@@ -190,3 +190,14 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-payment-map",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/PaymentMap/PaymentMap.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);

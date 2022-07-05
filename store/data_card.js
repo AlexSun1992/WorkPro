@@ -100,12 +100,6 @@ export const getters = {
           ...currentValue.value?.value,
         };
       }
-      if (currentValue.type === "doctorSchedule") {
-        return {
-          ...accumulator,
-          ...currentValue.value?.value,
-        };
-      }
       if (currentValue.type === "timestamp") {
         return {
           ...accumulator,
@@ -541,6 +535,10 @@ export const mutations = {
   clearFormData(state) {
     state.captions = null;
     state.form = [];
+  },
+  clearFormField(state, data) {
+    const item = state.form.find((d) => d.fieldId === data.fieldId);
+    item.value = null;
   },
   clearFilters(state) {
     state.filters = {};

@@ -417,6 +417,7 @@ export default {
       this.currentStation = "";
     },
     openOnMap(e) {
+      debugger;
       this.myMap.geoObjects.remove(this.placemark);
       this.currentTab = 0;
       this.updateMap(
@@ -587,13 +588,8 @@ export default {
 
       this.myClusterer.add(this.getGeoObjects(agencies));
 
-      let mapState;
-
-      if (this.mapState) {
-        mapState = this.mapState;
-        this.mapState.zoom = 12;
-      } else {
-        mapState = {
+      if (!this.mapState) {
+        this.mapState = {
           center: this.centerCoords
             ? this.centerCoords
             : this.$store.getters["map/getDefaultCoords"],
@@ -602,7 +598,7 @@ export default {
         };
       }
 
-      this.myMap = new ymaps.Map("map", mapState, {
+      this.myMap = new ymaps.Map("map", this.mapState, {
         yandexMapDisablePoiInteractivity: true,
         hideIconOnBalloonOpen: false,
       });
@@ -637,7 +633,7 @@ export default {
       });
       this.setPlaceholder();
 
-      checkClusterStatus(this.myClusterer);
+      // checkClusterStatus(this.myClusterer);
     },
 
     combineAgencies(agencies, i, count) {
@@ -739,6 +735,7 @@ export default {
       }
     },
     updateMap(state, caption, zoom = 12, visibility = true) {
+      debugger;
       this.placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
@@ -787,6 +784,7 @@ export default {
         obj.getPremiseNumber(),
         obj.getPremise(),
       ].join(" ");
+      debugger;
       this.updateMap(this.mapState, shortAddress);
     },
     async showOnMap(suggest, coords) {

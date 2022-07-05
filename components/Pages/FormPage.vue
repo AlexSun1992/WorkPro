@@ -2,74 +2,118 @@
   <div>
     <component
       :is="params.settings.isModal ? 'b-modal' : 'div'"
-      :modal-class="myclass"
-      @close="closeModal"
       id="modal"
+      :modal-class="myclass"
       no-close-on-backdrop
       hide-footer
+      @close="closeModal"
     >
       <div class="profile row">
         <div class="col">
           <card-editor
             ref="cardEditor"
-            @error="$emit('error')"
             :data="dataForm"
             :edit="isReadOnly === false"
             :params="params"
-          ></card-editor>
+            @error="$emit('error')"
+          />
         </div>
 
         <v-runtime-template
           v-if="params.settings.cardtemplate"
           :template="params.settings.cardtemplate"
-        ></v-runtime-template>
+        />
       </div>
     </component>
     <div v-if="isButtonSave" class="mt-3 row button-container">
-      <div class="col-12" v-if="params.settings.edit">
+      <div v-if="params.settings.edit" class="col-12">
         <b-button
           pill
-          v-on:click="saveDataCard"
           type="button"
           variant="success"
           class="col-12 col-md-auto mr-4"
           :style="isButtonDisabled"
-          >Сохранить
+          @click="saveDataCard"
+        >
+          Сохранить
         </b-button>
         <b-button
           pill
-          v-on:click="cancelDataCard"
           type="button"
           variant="outline-success"
           class="col-12 col-md-auto mt-2 mt-md-0"
           :style="isButtonDisabled"
-          >Отменить</b-button
+          @click="cancelDataCard"
         >
+          Отменить
+        </b-button>
       </div>
     </div>
 
     <div class="row">
-      <b-alert class="mt-3" show v-if="isErrorExist" variant="danger">{{
-        errorMessage
-      }}</b-alert>
+      <b-alert v-if="isErrorExist" class="mt-3" show variant="danger">
+        {{ errorMessage }}
+      </b-alert>
     </div>
   </div>
 </template>
 
 <script>
-import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import VRuntimeTemplate from "v-runtime-template";
+import CardEditor from "~/components/Libs/CardEditor/CardEditor";
+
 export default {
   name: "FormPage",
   components: { CardEditor, VRuntimeTemplate },
   props: ["params"],
-
   data() {
     return {
       myclass: ["cabinet"],
       isErrorExist: false,
     };
   },
+  computed: {
+    isButtonDisabled() {
+      if (this.$refs.CardEditor) {
+        return this.$refs.cardEditor.isButtonDisabled;
+      }
+    },
+
+    // Получение массива с полями
+    dataForm() {
+      return JSON.parse(
+        JSON.stringify(this.$store.getters["data_card/getForm"])
+      );
+    },
+
+    errorMessage() {
+      return this.$store.getters["data_card/getErrorMessage"];
+    },
+
+    isError() {
+      return this.$store.getters["data_card/getError"];
+    },
+    isButtonSave() {
+      return this.$store.getters["data_card/getBtnSave"];
+    },
+    isReadOnly() {
+      return (
+        this.$store.getters["data_card/getReadOnly"] ||
+        this.params?.settings.edit === false
+      );
+    },
+  },
+
+  // watch: {
+  //   errorMessage() {
+  //     if (this.errorMessage === null) {
+  //       this.isErrorExist = false;
+  //     }
+  //     if (this.errorMessage != null) {
+  //       this.isErrorExist = true;
+  //     }
+  //   },
+  // },
 
   async created() {
     try {
@@ -105,49 +149,6 @@ export default {
       if (this.$refs.cardEditor) {
         this.$refs.cardEditor.cancelDataCard();
       }
-    },
-  },
-
-  watch: {
-    errorMessage() {
-      if (this.errorMessage === null) {
-        this.isErrorExist = false;
-      }
-      if (this.errorMessage != null) {
-        this.isErrorExist = true;
-      }
-    },
-  },
-
-  computed: {
-    isButtonDisabled() {
-      if (this.$refs.CardEditor) {
-        return this.$refs.cardEditor.isButtonDisabled;
-      }
-    },
-
-    // Получение массива с полями
-    dataForm() {
-      return JSON.parse(
-        JSON.stringify(this.$store.getters["data_card/getForm"])
-      );
-    },
-
-    errorMessage() {
-      return this.$store.getters["data_card/getErrorMessage"];
-    },
-
-    isError() {
-      return this.$store.getters["data_card/getError"];
-    },
-    isButtonSave: function () {
-      return this.$store.getters["data_card/getBtnSave"];
-    },
-    isReadOnly: function () {
-      return (
-        this.$store.getters["data_card/getReadOnly"] ||
-        this.params?.settings.edit === false
-      );
     },
   },
 };

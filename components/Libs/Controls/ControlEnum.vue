@@ -5,9 +5,13 @@
     :label-for="data.name"
   >
     <template #label>
-      <span v-html="data.label" /><span v-if="data.helpText">
-        (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
-          <span v-html="data.helpText" /></vue-easy-tooltip></span>
+      <span v-html="data.label" /><span
+        v-if="data.helpText"
+        class="tooltipster"
+      >
+        (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+          <span v-html="data.helpText" /></vue-easy-tooltip
+      ></span>
     </template>
     <model-list-select
       :id="selectId"
@@ -23,9 +27,7 @@
     />
 
     <div v-if="isValid == false" class="mt-2">
-      <span class="error">
-        Обязательно для заполнения
-      </span>
+      <span class="error"> Обязательно для заполнения </span>
     </div>
   </b-form-group>
 </template>
@@ -56,12 +58,12 @@ export default {
   },
   computed: {
     fieldValue: {
-      get () {
+      get() {
         return this.$store.getters["data_card/getDataFieldByName"](
           this.data.name
         )?.value;
       },
-      set (value) {
+      set(value) {
         if (value?.value !== this.fieldValue?.value) {
           this.$store.commit("data_card/clearFormRelationField", this.data);
         }
@@ -73,7 +75,7 @@ export default {
       },
     },
     relationValue: {
-      get () {
+      get() {
         return this.$store.getters["data_card/getDataFieldByName"](
           this.data.fieldRelation
         )?.value;
@@ -94,11 +96,10 @@ export default {
           ) === false
         );
       }
-        return false;
-
+      return false;
     },
     options: {
-      get () {
+      get() {
         if (
           this.$store.getters["data_card/getDataFieldByFieldId"](
             this.data.fieldId
@@ -116,7 +117,7 @@ export default {
     },
   },
   watch: {
-    relationValue (newVal, oldVal) {
+    relationValue(newVal, oldVal) {
       if (newVal?.value !== oldVal?.value) {
         if (newVal?.value) {
           this.initData();
