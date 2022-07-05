@@ -51,7 +51,7 @@ import ControlCustomDouble from "./ControlCustomDouble.vue";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha.vue";
 import ControlMap from "./ControlMap.vue";
 import ControlListSelect from "./ControlListSelect/ControlListSelect.vue";
-import ControlRegNumber from "./ControlRegNumber/ControlRegNumber.vue";
+import ControlRegNumber from "./ControlRegNumber.vue";
 import ControlRadioButton from "./ControlRadioButton.vue";
 import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
 
