@@ -189,19 +189,10 @@ export default {
           this.loading = false;
           this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
-<<<<<<< HEAD
 
-          if (fieldCodeSMS.error !== null) {
-            this.$store.commit("data_card/setFormField", {
-              fieldId: 26713,
-              value: "",
-            });
-          }
-=======
           this.$store.commit("data_card/clearFormField", {
             fieldId: 26713,
           });
->>>>>>> master
         }
         if (response?.status === 200) {
           this.loading = false;
