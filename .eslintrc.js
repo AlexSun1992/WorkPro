@@ -4,7 +4,6 @@ module.exports = {
     "eslint:recommended",
     "airbnb-base",
     "plugin:vue/essential",
-    "plugin:vue/vue3-recommended",
     "plugin:nuxt/recommended",
     "prettier",
   ],

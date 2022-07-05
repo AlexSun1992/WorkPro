@@ -114,6 +114,7 @@ export default {
       },
       saveSuccess: false,
       isLoadedScript: false,
+      urlScript: null,
     };
   },
   computed: {
@@ -153,15 +154,21 @@ export default {
   },
   async created() {
     try {
-      await this.$loadScript(
-        `/api/card/js/${this.$route.params.idModule}/${
-          this.$route.params.idItem
-        }&time=${Date.now()}`
-      );
+      this.urlScript = `/api/card/js/${this.$route.params.idModule}/${
+        this.$route.params.idItem
+      }&time=${Date.now()}`;
+      await this.$loadScript(this.urlScript);
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
       this.stripeLoaded();
       this.isLoadedScript = true;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  async beforeDestroy() {
+    try {
+      await this.$unloadScript(this.urlScript);
     } catch (e) {
       console.error(e);
     }
