@@ -48,9 +48,16 @@ export function uniqueServerFilters(serverFilters) {
 export function interSectionBetweenDropListServerFilters(dropList, dataBlocks) {
   const dropDownList = uniqueServerFilters(dropList);
   const serverFilterBlocks = uniqueServerFilters(dataBlocks);
+  /////// ошибка здесь
   const intersectionDropListdataBlocks = dropDownList.filter((x) =>
     serverFilterBlocks.includes(x)
   );
+
+  // console.log(
+  //   "intersectionDropListdataBlocks:",
+  //   intersectionDropListdataBlocks
+  // );
+
   return intersectionDropListdataBlocks;
 }
 
@@ -60,13 +67,16 @@ export function elementDateWasChoosenByUser(dropList, dataBlocks) {
     dataBlocks
   );
 
+  // console.log("intersectionArray", interSectionArray);
+
   const dateChoosenByUser = interSectionArray.find(
     (item) => typeof item === "string"
   );
-
+  // console.log("dateChoosenByUser:", dateChoosenByUser);
   const objectShouldBeCashed = dropList.find(
     (item) => item.value === dateChoosenByUser
   );
+  // console.log("objectShouldBeCashed:", objectShouldBeCashed);
 
   return objectShouldBeCashed;
 }

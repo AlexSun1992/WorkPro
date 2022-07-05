@@ -37,3 +37,61 @@ export const selectOptionItems = [
     value: "2021-06-27",
   },
 ];
+
+export const serverFilterUsers = [
+  {
+    propertyName: "SPOLICY",
+    filter: "2532031-13/22",
+  },
+  {
+    propertyName: "IDMEDPARTNER",
+    filter: "126227",
+  },
+  {
+    propertyName: "DDATE",
+    filter: "2021-07-04",
+  },
+];
+
+export const list = [
+  {
+    value: "2532031-13/22",
+    text: "Горчилин Дмитрий Вячеславович",
+    data: {
+      SPOLICY: "2532031-13/22",
+      POLICY: 2151938004,
+      SNAME: "Горчилин Дмитрий Вячеславович",
+      IDMEDPARTNER: 126227,
+    },
+  },
+  {
+    value: "2541669-13/22",
+    text: "Горчилин Константин Дмитриевич",
+    data: {
+      SPOLICY: "2541669-13/22",
+      POLICY: 2152199188,
+      SNAME: "Горчилин Константин Дмитриевич",
+      IDMEDPARTNER: 126228,
+    },
+  },
+  {
+    value: "2541667-13/22",
+    text: "Горчилина Александра Дмитриевна",
+    data: {
+      SPOLICY: "2541667-13/22",
+      POLICY: 2152199183,
+      SNAME: "Горчилина Александра Дмитриевна",
+      IDMEDPARTNER: 126229,
+    },
+  },
+  {
+    value: "2541668-13/22",
+    text: "Горчилина Ольга Викторовна",
+    data: {
+      SPOLICY: "2541668-13/22",
+      POLICY: 2152199185,
+      SNAME: "Горчилина Ольга Викторовна",
+      IDMEDPARTNER: 423091,
+    },
+  },
+];

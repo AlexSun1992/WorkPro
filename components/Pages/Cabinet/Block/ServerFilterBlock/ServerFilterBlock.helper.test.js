@@ -10,11 +10,12 @@ import {
 import {
   serverFilters,
   selectOptionItems,
+  serverFilterUsers,
+  list,
 } from "./ServerFilterBlock.helper.fixtures";
 
 describe("Модуль определения данных, необходимых для кэширования", () => {
   ///  dataBlocks тесты со значениями серверных фильтров из store геттер serverFilters (моковые данные)
-
   it("копия массива объектов серверных фильтров", () => {
     const SERVER_FILTER_ARRAY = [...serverFilters];
     const getCopy = getCopyOfServerFilterBlockData(SERVER_FILTER_ARRAY);
@@ -55,10 +56,8 @@ describe("Модуль определения данных, необходимы
 
   it("массив уникальных массивов значений серверных фильтров", () => {
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const filteredServerFilters = getUniqueArraysOfServerFilters(
-      SERVER_FILTER_ARRAY,
-      "filter"
-    );
+    const filteredServerFilters =
+      getUniqueArraysOfServerFilters(SERVER_FILTER_ARRAY);
     expect(typeof filteredServerFilters === "object").toBe(true);
   });
 
@@ -66,23 +65,19 @@ describe("Модуль определения данных, необходимы
     const SERVER_FILTER_ARRAY = [...serverFilters];
     const reducedArray =
       rebuildArrayOfServerFilterBlockData(SERVER_FILTER_ARRAY);
-    const filteredArray = getUniqueArraysOfServerFilters(
-      SERVER_FILTER_ARRAY,
-      "filter"
-    );
+    const filteredArray = getUniqueArraysOfServerFilters(SERVER_FILTER_ARRAY);
     expect(reducedArray.length > filteredArray.length).toBe(true);
   });
 
   it("получение отфильтрованного масcива уникальных значений Серверных фильтров", () => {
     const SERVER_FILTER_ARRAY = [...serverFilters];
-    const serverFiltersUnique = uniqueServerFilters(
-      SERVER_FILTER_ARRAY,
-      "filter"
-    );
+    const serverFiltersUnique = uniqueServerFilters(SERVER_FILTER_ARRAY);
     expect(typeof serverFiltersUnique === "object").toBe(true);
   });
 
-  //  Тесты со значениями из property dictionary (моковые данные)
+  Тесты со значениями из списка застрахованных;
+  Тесты со значениями из списка застрахованных;
+   Тесты со значениями из property dictionary (моковые данные);
 
   it("копия массива объектов выпадающего списка компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
@@ -105,30 +100,109 @@ describe("Модуль определения данных, необходимы
 
   it("получение уникальных массивов dropList ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
-    const getUniqueArraysDataDropList = getUniqueArraysOfServerFilters(
-      DICTIONARY_ARRAY,
-      "value"
-    );
+    const getUniqueArraysDataDropList =
+      getUniqueArraysOfServerFilters(DICTIONARY_ARRAY);
     expect(typeof getUniqueArraysDataDropList === "object").toBe(true);
   });
 
   it("получение массива неуникальных значений выпадающего списка компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
-    const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY, "value");
+    const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY);
     expect(typeof uniqueElements === "object").toBe(true);
   });
 
-  //  пересекающийся элемент массивов (этот элемент выбрал пользователь)
+  // Тесты со значениями из списка застрахованных
+
+  it("копия массива объектов списка пользователей компонента ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...list];
+    const dropListCopy = getCopyOfServerFilterBlockData(DICTIONARY_ARRAY);
+    expect(typeof dropListCopy === "object").toBe(true);
+  });
+
+  it("преобразование массива объектов списка пользователей компонента ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...list];
+    const dropListArray = convertingServerFilterBlockData(DICTIONARY_ARRAY);
+    expect(typeof dropListArray === "object").toBe(true);
+  });
+
+  it("получение массива с объединенными внутренними объектами списка пользователей компонента ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...list];
+    const rebuildedDropListStructured =
+      rebuildArrayOfServerFilterBlockData(DICTIONARY_ARRAY);
+    expect(typeof rebuildedDropListStructured === "object").toBe(true);
+  });
+
+  it("получение уникальных массивов списка пользователей ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...list];
+    const getUniqueArraysDataDropList =
+      getUniqueArraysOfServerFilters(DICTIONARY_ARRAY);
+    expect(typeof getUniqueArraysDataDropList === "object").toBe(true);
+  });
+
+  it("получение массива неуникальных значений списка пользователей компонента ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...list];
+    const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY);
+    console.log("uniqueElementsList:", uniqueElements);
+    expect(typeof uniqueElements === "object").toBe(true);
+  });
+
+  // Значения списка serverFilters
+  it("копия массива объектов списка пользователей компонента ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...serverFilterUsers];
+    const dropListCopy = getCopyOfServerFilterBlockData(DICTIONARY_ARRAY);
+    expect(typeof dropListCopy === "object").toBe(true);
+  });
+
+  it("преобразование массива объектов списка пользователей компонента ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...serverFilterUsers];
+    const dropListArray = convertingServerFilterBlockData(DICTIONARY_ARRAY);
+    expect(typeof dropListArray === "object").toBe(true);
+  });
+
+  it("получение массива с объединенными внутренними объектами списка пользователей компонента ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...serverFilterUsers];
+    const rebuildedDropListStructured =
+      rebuildArrayOfServerFilterBlockData(DICTIONARY_ARRAY);
+    expect(typeof rebuildedDropListStructured === "object").toBe(true);
+  });
+
+  it("получение уникальных массивов списка пользователей ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...serverFilterUsers];
+    const getUniqueArraysDataDropList =
+      getUniqueArraysOfServerFilters(DICTIONARY_ARRAY);
+    expect(typeof getUniqueArraysDataDropList === "object").toBe(true);
+  });
+
+  it("получение массива неуникальных значений списка пользователей компонента ServerFilterBlock", () => {
+    const DICTIONARY_ARRAY = [...serverFilterUsers];
+    const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY);
+    console.log("uniqueElementsServerFilters:", uniqueElements);
+    expect(typeof uniqueElements === "object").toBe(true);
+  });
+  //
+
+  // Пересекающийся элемент массивов (этот элемент выбрал пользователь)
 
   it("получение пересекающегося элемента массивов, (тип данных массив)", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
     const SERVER_FILTER_ARRAY = [...serverFilters];
     const elementShouldBeCashedArray = interSectionBetweenDropListServerFilters(
       DICTIONARY_ARRAY,
-      SERVER_FILTER_ARRAY,
-      "value",
-      "filter"
+      SERVER_FILTER_ARRAY
     );
+    // console.log("elementShouldBeCashedArray:", elementShouldBeCashedArray);
+    expect(typeof elementShouldBeCashedArray === "object").toBe(true);
+  });
+
+  it("получение пересекающегося элемента между пользователями и фильтрами , (тип данных массив)", () => {
+    const DICTIONARY_ARRAY = [...list];
+    const SERVER_FILTER_ARRAY = [...serverFilterUsers];
+
+    const elementShouldBeCashedArray = interSectionBetweenDropListServerFilters(
+      DICTIONARY_ARRAY,
+      SERVER_FILTER_ARRAY
+    );
+    console.log("elementShouldBeCashedArray:", elementShouldBeCashedArray);
     expect(typeof elementShouldBeCashedArray === "object").toBe(true);
   });
 
@@ -139,7 +213,21 @@ describe("Модуль определения данных, необходимы
       DICTIONARY_ARRAY,
       SERVER_FILTER_ARRAY
     );
+    console.log("interSection:", interSection);
     expect(interSection).toHaveLength(1);
+  });
+
+  it("Возвращаем выбранного пользователя", () => {
+    const listUsers = [...list];
+    const serverFiltersUsers = [...serverFilterUsers];
+    console.log("list:", listUsers);
+    console.log("serverFilterUsers", serverFiltersUsers);
+    const propertyshouldBeFind = elementDateWasChoosenByUser(
+      listUsers,
+      serverFiltersUsers
+    );
+    console.log("propertyshouldBeFind:", propertyshouldBeFind);
+    expect(typeof propertyshouldBeFind === "object").toBe(true);
   });
 
   it("корректно выбирает фильтр из списка", () => {
