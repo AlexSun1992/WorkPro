@@ -52,29 +52,29 @@
 <script>
 const isNumberValid = function (value) {
   if (
-    /^[АВЕКМНОРСТУХABEKMNOPCTYX]\d{3}(?<!000)[АВЕКМНОРСТУХABEKMNOPCTYX]{2}$/iu.test(
+    /^[АВЕКМНОРСТУХABEHKMNOPCTYX]\d{3}(?<!000)[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}$/iu.test(
       value
     )
   ) {
     return true;
   }
-  if (/^[АВЕКМНОРСТУХABEKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
+  if (/^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
     return true;
   }
-  if (/^[АВЕКМНОРСТУХABEKMNOPCTYX]{2}\d{4}(?<!0000)$/iu.test(value)) {
+  if (/^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{4}(?<!0000)$/iu.test(value)) {
     return true;
   }
-  if (/^\d{4}(?<!0000)[АВЕКМНОРСТУХABEKMNOPCTYX]{2}$/iu.test(value)) {
+  if (/^\d{4}(?<!0000)[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}$/iu.test(value)) {
     return true;
   }
   if (
-    /^[АВЕКМНОРСТУХABEKMNOPCTYX]{2}\d{3}(?<!000)[АВЕКМНОРСТУХABEKMNOPCTYX]$/iu.test(
+    /^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}(?<!000)[АВЕКМНОРСТУХABEHKMNOPCTYX]$/iu.test(
       value
     )
   ) {
     return true;
   }
-  if (/^Т[АВЕКМНОРСТУХABEKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
+  if (/^Т[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
     return true;
   }
   return false;
@@ -161,7 +161,7 @@ export default {
       let formatValue = value.toUpperCase();
       if (isNumberValid(value)) {
         formatValue = formatValue.replace(
-          /[АВЕКМНОРСТУХABEKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEKMNOPCTYX])/gi,
+          /[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi,
           "$& "
         );
       } else {
@@ -184,7 +184,7 @@ export default {
     numberKeydown(e) {
       if (e.key !== "Backspace" && e.key !== "Delete") {
         if (
-          /^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEKMNOPCTYXabekmnopctyx]$/iu.test(
+          /^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEHKMNOPCTYXabehkmnopctyx]$/iu.test(
             e.key
           ) === false
         ) {
@@ -222,7 +222,7 @@ export default {
     },
   },
   watch: {
-    data: function (newVal, oldVal) {
+    data(newVal, oldVal) {
       if (oldVal.value && !newVal.value) {
         this.numberValue = "";
         this.codeValue = "";
