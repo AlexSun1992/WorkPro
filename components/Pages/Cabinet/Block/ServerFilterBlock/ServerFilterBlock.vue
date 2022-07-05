@@ -166,20 +166,6 @@ export default {
   mounted() {
     const defaultItem = this.dictionary?.find((item) => item.isDefault);
 
-    if (this.dictionary === undefined) {
-      const serverFiltersTest = this.$store.getters["blocks/getServerFilters"];
-      if (serverFiltersTest.length > 0) {
-        // console.log("serverFilterstest:", serverFiltersTest);
-        // console.log("list:", JSON.stringify(this.list));
-
-        const choosenElementTest = elementDateWasChoosenByUser(
-          this.list,
-          serverFiltersTest
-        );
-        // console.log("choosenElementTest:", choosenElementTest);
-      }
-    }
-
     if (defaultItem && this.$refs.multiselect) {
       const serverFilters = this.$store.getters["blocks/getServerFilters"];
       const selectOptionItems = this.dictionary;
@@ -234,12 +220,13 @@ export default {
       const serverFiltersTest = this.$store.getters["blocks/getServerFilters"];
 
       if (serverFiltersTest.length > 0) {
-        const choosenElementTest = elementDateWasChoosenByUser(
+        const choosenElement = elementDateWasChoosenByUser(
           this.list,
           serverFiltersTest
         );
-
-        this.firstValueFromList = choosenElementTest;
+        if (choosenElement !== undefined) {
+          this.firstValueFromList = choosenElement;
+        }
       }
 
       if (this.list.length === 1 && this.isShowAsTemplate === false) {
@@ -281,8 +268,6 @@ export default {
           return filter.propertyName === this.queryParamName;
         }
       );
-
-      //console.log("foundedFilter:", foundedFilter);
 
       if (foundedFilter) {
         if (foundedFilter && e.data) {

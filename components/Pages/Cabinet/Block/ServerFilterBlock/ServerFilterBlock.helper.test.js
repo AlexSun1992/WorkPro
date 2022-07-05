@@ -75,9 +75,8 @@ describe("Модуль определения данных, необходимы
     expect(typeof serverFiltersUnique === "object").toBe(true);
   });
 
-  Тесты со значениями из списка застрахованных;
-  Тесты со значениями из списка застрахованных;
-   Тесты со значениями из property dictionary (моковые данные);
+  // Тесты со значениями из списка застрахованных;
+  //  Тесты со значениями из property dictionary (моковые данные);
 
   it("копия массива объектов выпадающего списка компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...selectOptionItems];
@@ -142,7 +141,6 @@ describe("Модуль определения данных, необходимы
   it("получение массива неуникальных значений списка пользователей компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...list];
     const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY);
-    console.log("uniqueElementsList:", uniqueElements);
     expect(typeof uniqueElements === "object").toBe(true);
   });
 
@@ -176,7 +174,6 @@ describe("Модуль определения данных, необходимы
   it("получение массива неуникальных значений списка пользователей компонента ServerFilterBlock", () => {
     const DICTIONARY_ARRAY = [...serverFilterUsers];
     const uniqueElements = uniqueServerFilters(DICTIONARY_ARRAY);
-    console.log("uniqueElementsServerFilters:", uniqueElements);
     expect(typeof uniqueElements === "object").toBe(true);
   });
   //
@@ -190,7 +187,6 @@ describe("Модуль определения данных, необходимы
       DICTIONARY_ARRAY,
       SERVER_FILTER_ARRAY
     );
-    // console.log("elementShouldBeCashedArray:", elementShouldBeCashedArray);
     expect(typeof elementShouldBeCashedArray === "object").toBe(true);
   });
 
@@ -202,7 +198,7 @@ describe("Модуль определения данных, необходимы
       DICTIONARY_ARRAY,
       SERVER_FILTER_ARRAY
     );
-    console.log("elementShouldBeCashedArray:", elementShouldBeCashedArray);
+
     expect(typeof elementShouldBeCashedArray === "object").toBe(true);
   });
 
@@ -213,20 +209,19 @@ describe("Модуль определения данных, необходимы
       DICTIONARY_ARRAY,
       SERVER_FILTER_ARRAY
     );
-    console.log("interSection:", interSection);
+
     expect(interSection).toHaveLength(1);
   });
 
   it("Возвращаем выбранного пользователя", () => {
     const listUsers = [...list];
     const serverFiltersUsers = [...serverFilterUsers];
-    console.log("list:", listUsers);
-    console.log("serverFilterUsers", serverFiltersUsers);
+
     const propertyshouldBeFind = elementDateWasChoosenByUser(
       listUsers,
       serverFiltersUsers
     );
-    console.log("propertyshouldBeFind:", propertyshouldBeFind);
+
     expect(typeof propertyshouldBeFind === "object").toBe(true);
   });
 
