@@ -127,6 +127,7 @@ export default {
         );
         if (this.templatesToShow.length) {
           this.isCardVisible = true;
+          document.querySelector("#regcenter").classList.remove("is-active");
           document.querySelector("#regcenter").style.top =
             40 +
             document.querySelector(".ymaps-2-1-79-balloon").offsetHeight +
