@@ -1,4 +1,4 @@
- isNumberValid(value) {
+export const isValid =  isNumberValid(value) {
     if (
       /^[АВЕКМНОРСТУХABEHKMNOPCTYX]\d{3}(?<!000)[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}$/iu.test(
         value
