@@ -158,17 +158,10 @@ export default {
     },
     async getCode() {
       // Очищаем поле с кодом СМС
-
       this.$store.commit("data_card/clearFormField", {
         fieldId: 26713,
       });
 
-      if (fieldCodeSMS.error !== null) {
-        this.$store.commit("data_card/setFormField", {
-          fieldId: 26713,
-          value: null,
-        });
-      }
       if (!this.newPhone) return;
       this.isPhoneChanged = false;
       const actionParams = {
@@ -189,7 +182,6 @@ export default {
           this.loading = false;
           this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
-
           this.$store.commit("data_card/clearFormField", {
             fieldId: 26713,
           });

@@ -148,10 +148,15 @@ export default {
     },
 
     async getCode() {
-      this.$store.commit("data_card/setFormField", {
+      // this.$store.commit("data_card/setFormField", {
+      //   fieldId: 35622,
+      //   value: null,
+      // });
+      // Очищаем поле с кодом СМС
+      this.$store.commit("data_card/clearFormField", {
         fieldId: 35622,
-        value: null,
       });
+
       if (!this.newEmail) return;
       this.isEmailChanged = false;
       let actionParams = {
