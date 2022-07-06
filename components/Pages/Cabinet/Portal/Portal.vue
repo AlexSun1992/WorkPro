@@ -30,7 +30,7 @@ import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FilterBlock from "../Block/FilterBlock/FilterBlock.vue";
 import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap";
 import ControlMap from "~/components/Libs/Controls/ControlMap";
-import ServerFilterBlock from "../Block/ServerFilterBlock.vue";
+import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock.vue";
 import Grid from "../../../Libs/Table/Grid.vue";
 
 export default {

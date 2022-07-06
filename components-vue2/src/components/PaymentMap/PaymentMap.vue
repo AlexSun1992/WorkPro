@@ -130,7 +130,14 @@ export default {
         this.templatesToShow = this.geoObjectTemplates.filter(
           (template) => !this.balloonTemplate.includes(template)
         );
-        if (this.templatesToShow.length) this.isCardVisible = true;
+        if (this.templatesToShow.length) {
+          this.isCardVisible = true;
+          document.querySelector("#regcenter").classList.remove("is-active");
+          document.querySelector("#regcenter").style.top =
+            40 +
+            document.querySelector(".ymaps-2-1-79-balloon").offsetHeight +
+            "px";
+        }
         target.options.set(
           "iconImageHref",
           "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
@@ -306,15 +313,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.card {
-  position: absolute;
-  top: 50%;
-  left: 20%;
-  z-index: 1000;
-  background-color: #fff;
-  min-width: 350px;
-  border-radius: 20px;
-  padding: 30px;
-}
-</style>
+<style scoped lang="scss"></style>
