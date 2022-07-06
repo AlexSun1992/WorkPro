@@ -50,13 +50,11 @@
     </div>
     <div class="resend-block" v-if="isShowCodeEnter">
       <p>
-        <template v-if="disabledResend"
-          >На указанный email мы направили код, просим ввести его в поле
-          ниже.<br />
-          Повторный код можно запросить через
-          <verify-timer @onFinish="stopTimer" :duration="duration" />
-          сек.</template
-        >
+        <template v-if="disabledResend">
+          Проверочный код выслан на указанный емейл.<br />Повторно код можно
+          запросить через
+          <verify-timer @onFinish="stopTimer" :duration="duration" /> сек.
+        </template>
       </p>
     </div>
   </div>
