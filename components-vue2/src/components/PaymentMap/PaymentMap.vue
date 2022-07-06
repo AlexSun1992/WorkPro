@@ -1,6 +1,11 @@
 <template>
   <div class="map-container mt-3">
-    <div id="regcenter" v-html="templatesToShow.join('')" class="card"></div>
+    <div
+      v-if="templatesToShow.length"
+      id="regcenter"
+      v-html="templatesToShow.join('')"
+      class="card"
+    ></div>
     <div class="office-tab-content" style="position: relative">
       <div ref="map" id="map" class="map"></div>
     </div>
