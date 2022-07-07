@@ -132,8 +132,8 @@ export default {
         );
         if (this.templatesToShow.length) {
           this.isCardVisible = true;
-          if (document.querySelector("#regcenter")) {
-            const regCenter = document.querySelector("#regcenter");
+          const regCenter = document.querySelector("#regcenter");
+          if (regCenter) {
             regCenter.classList.remove("is-active");
             regCenter.style.top =
               40 +
