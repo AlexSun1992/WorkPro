@@ -1,6 +1,11 @@
 <template>
   <div class="map-container mt-3">
-    <div id="regcenter" v-html="templatesToShow.join('')" class="card"></div>
+    <div
+      v-if="templatesToShow.length"
+      id="regcenter"
+      v-html="templatesToShow.join('')"
+      class="card"
+    ></div>
     <div class="office-tab-content" style="position: relative">
       <div ref="map" id="map" class="map"></div>
     </div>
@@ -12,7 +17,7 @@ import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import { getTemplate } from "../../../../utils/map/helpers";
-import getCurrentCity from "./currentCity";
+import getCurrentCity from "../../../../utils/map/currentCity";
 Vue.use(LoadScript);
 export default {
   name: "PaymentMap",
@@ -125,7 +130,14 @@ export default {
         this.templatesToShow = this.geoObjectTemplates.filter(
           (template) => !this.balloonTemplate.includes(template)
         );
-        if (this.templatesToShow.length) this.isCardVisible = true;
+        if (this.templatesToShow.length) {
+          this.isCardVisible = true;
+          document.querySelector("#regcenter").classList.remove("is-active");
+          document.querySelector("#regcenter").style.top =
+            40 +
+            document.querySelector(".ymaps-2-1-79-balloon").offsetHeight +
+            "px";
+        }
         target.options.set(
           "iconImageHref",
           "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
@@ -301,15 +313,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.card {
-  position: absolute;
-  top: 50%;
-  left: 20%;
-  z-index: 1000;
-  background-color: #fff;
-  min-width: 350px;
-  border-radius: 20px;
-  padding: 30px;
-}
-</style>
+<style scoped lang="scss"></style>

@@ -37,12 +37,12 @@
         </div>
         <div class="doc-adress">
           <i class="my-location" />{{ item.SADDRESS }}
-        </div>
+        </div><div class="Recording time">
         <div v-for="elem in item.STIMELIST" :key="elem.id" class="doc-time">
           <button class="btn-doc-time" @click="chooseTimeToVisit(elem, item)">
             {{ elem.DFROM }}
           </button>
-        </div>
+        </div></div>
       </div>
     </div>
     <div v-else-if="isRequestFinish" class="docs-searching-results mb-4">
