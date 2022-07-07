@@ -132,11 +132,14 @@ export default {
         );
         if (this.templatesToShow.length) {
           this.isCardVisible = true;
-          document.querySelector("#regcenter").classList.remove("is-active");
-          document.querySelector("#regcenter").style.top =
-            40 +
-            document.querySelector(".ymaps-2-1-79-balloon").offsetHeight +
-            "px";
+          if (document.querySelector("#regcenter")) {
+            const regCenter = document.querySelector("#regcenter");
+            regCenter.classList.remove("is-active");
+            regCenter.style.top =
+              40 +
+              document.querySelector(".ymaps-2-1-79-balloon").offsetHeight +
+              "px";
+          }
         }
         target.options.set(
           "iconImageHref",
