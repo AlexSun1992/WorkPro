@@ -127,16 +127,6 @@ export default {
       const { $dirty, $error } = this.$v[name];
       return $dirty ? !$error : null;
     },
-    onError(error) {
-      console.log("Error:", error);
-    },
-    onSuccess(token) {
-      this.token = token;
-      console.log("Succeeded:", token);
-    },
-    onExpired() {
-      console.log("Expired");
-    },
     async getCaptcha() {
       try {
         await this.$recaptcha.getResponse();
