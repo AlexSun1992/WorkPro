@@ -24,6 +24,7 @@
 
 <script>
 import { TheMask } from "vue-the-mask";
+
 export default {
   name: "StringMasked",
   components: { TheMask },
@@ -57,6 +58,7 @@ export default {
   computed: {
     isState() {
       let state = null;
+
       if (this.data.state === false) {
         state = false;
       }
@@ -68,6 +70,7 @@ export default {
       if (this.data.state) {
         state = !this.data.error;
       }
+
       return state;
     },
     validClass() {
@@ -80,6 +83,7 @@ export default {
       return this.data.value;
     },
   },
+
   methods: {
     updateValue(val) {
       if (this.data.value !== val) {
