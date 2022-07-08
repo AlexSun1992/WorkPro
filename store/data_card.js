@@ -506,7 +506,6 @@ export const mutations = {
             }
           } else {
             item.state = !!(item.value.value || item.value.value == 0);
-            console.log("state:", item.state);
           }
         }
       }
