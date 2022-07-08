@@ -1,6 +1,11 @@
 <template>
   <div class="map-container mt-3">
-    <div id="regcenter" v-html="templatesToShow.join('')" class="card"></div>
+    <div
+      v-if="templatesToShow.length"
+      id="regcenter"
+      v-html="templatesToShow.join('')"
+      class="card"
+    ></div>
     <div class="office-tab-content" style="position: relative">
       <div ref="map" id="map" class="map"></div>
     </div>
@@ -12,7 +17,7 @@ import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import { getTemplate } from "../../../../utils/map/helpers";
-import getCurrentCity from "./currentCity";
+import getCurrentCity from "../../../../utils/map/currentCity";
 Vue.use(LoadScript);
 export default {
   name: "PaymentMap",
@@ -127,11 +132,14 @@ export default {
         );
         if (this.templatesToShow.length) {
           this.isCardVisible = true;
-          document.querySelector("#regcenter").classList.remove("is-active");
-          document.querySelector("#regcenter").style.top =
-            40 +
-            document.querySelector(".ymaps-2-1-79-balloon").offsetHeight +
-            "px";
+          const regCenter = document.querySelector("#regcenter");
+          if (regCenter) {
+            regCenter.classList.remove("is-active");
+            regCenter.style.top =
+              40 +
+              document.querySelector(".ymaps-2-1-79-balloon").offsetHeight +
+              "px";
+          }
         }
         target.options.set(
           "iconImageHref",

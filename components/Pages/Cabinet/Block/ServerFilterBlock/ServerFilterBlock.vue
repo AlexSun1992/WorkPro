@@ -38,10 +38,11 @@
 </template>
 <script>
 import VRuntimeTemplate from "v-runtime-template";
-import Multiselect from "../../../Libs/Multiselect/Multiselect.vue";
-import SelectItemFromTemplate from "../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
-import WrapperItemFromTemplate from "../../../Libs/Controls/ControlListSelect/WrapperItemFromTemplate.vue";
-import ChooseButton from "./ChooseButton.vue";
+import Multiselect from "../../../../Libs/Multiselect/Multiselect.vue";
+import SelectItemFromTemplate from "../../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
+import WrapperItemFromTemplate from "../../../../Libs/Controls/ControlListSelect/WrapperItemFromTemplate.vue";
+import ChooseButton from "../ChooseButton.vue";
+import { elementDateWasChoosenByUser } from "./ServerFilterBlock.helper";
 
 export default {
   name: "ServerFilterBlock",
@@ -164,12 +165,26 @@ export default {
 
   mounted() {
     const defaultItem = this.dictionary?.find((item) => item.isDefault);
+
     if (defaultItem && this.$refs.multiselect) {
-      this.$refs.multiselect.selectedItem = {
-        text: defaultItem.text,
-        value: defaultItem.value,
-        isDefault: defaultItem.isDefault,
-      };
+      const serverFilters = this.$store.getters["blocks/getServerFilters"];
+      const selectOptionItems = this.dictionary;
+      const choosenElement = elementDateWasChoosenByUser(
+        selectOptionItems,
+        serverFilters
+      );
+
+      if (choosenElement !== undefined) {
+        this.$refs.multiselect.selectedItem = {
+          text: choosenElement.text,
+          value: choosenElement.value,
+        };
+      } else
+        this.$refs.multiselect.selectedItem = {
+          text: defaultItem.text,
+          value: defaultItem.value,
+          isDefault: defaultItem.isDefault,
+        };
     }
   },
 
@@ -194,13 +209,23 @@ export default {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
         });
-
         for (let i = 0; i < items.length; i++) {
           this.list.push({
             value: items[i][this.queryParamName],
             text: items[i][this.fk],
             data: items[i],
           });
+        }
+      }
+      const serverFiltersTest = this.$store.getters["blocks/getServerFilters"];
+
+      if (serverFiltersTest.length > 0) {
+        const choosenElement = elementDateWasChoosenByUser(
+          this.list,
+          serverFiltersTest
+        );
+        if (choosenElement !== undefined) {
+          this.firstValueFromList = choosenElement;
         }
       }
 
@@ -261,6 +286,7 @@ export default {
         }
       } else {
         this.$store.commit("blocks/setServerFilters", filterObj);
+
         if (this.id && e.data[this.id]) {
           this.$store.commit("blocks/setServerFilters", {
             propertyName: this.id,

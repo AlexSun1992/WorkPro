@@ -116,7 +116,7 @@ import {
   getTemplate,
   checkClusterStatus,
 } from "../../../../utils/map/helpers";
-import getCurrentCity from "./currentCity";
+import getCurrentCity from "../../../../utils/map/currentCity";
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
