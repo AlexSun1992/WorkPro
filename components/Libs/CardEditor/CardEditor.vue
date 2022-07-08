@@ -157,7 +157,9 @@ export default {
       this.urlScript = `/api/card/js/${this.$route.params.idModule}/${
         this.$route.params.idItem
       }&time=${Date.now()}`;
-      await this.$loadScript(this.urlScript);
+      if (process.client) {
+        await this.$loadScript(this.urlScript);
+      }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
       this.stripeLoaded();

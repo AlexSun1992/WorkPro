@@ -52,7 +52,7 @@ module.exports = {
     "~/plugins/vue-agile",
     { src: "~plugins/vcalendar.js", ssr: false },
     // { src: "~/plugins/load-script.js" },
-    "~/plugins/loadScript.js",
+    { src: "~/plugins/loadScript.js", ssr: false },
     "~/plugins/quizCalculator.js",
     "~/plugins/fileUploader.js",
     "~/plugins/fileDownload.js",
