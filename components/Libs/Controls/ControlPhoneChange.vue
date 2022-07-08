@@ -50,15 +50,15 @@
       </div>
     </div>
     <div v-if="isShowCodeEnter" class="resend-block">
-      <template v-if="disabledResend">
-        <p>
+      <p>
+        <template v-if="disabledResend">
           На указанный номер мы направили sms-код, просим ввести его в поле
           ниже.<br />
           Повторный код можно запросить через
           <verify-timer :duration="duration" @onFinish="stopTimer" />
           сек.
-        </p>
-      </template>
+        </template>
+      </p>
     </div>
   </div>
 </template>
