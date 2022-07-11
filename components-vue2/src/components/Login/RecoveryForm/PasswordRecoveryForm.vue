@@ -27,12 +27,8 @@
                 :isCodeFieldInValid="isCodeFieldInValid"
               />
 
-              <b-row class="mt-3">
-                <b-form-group
-                  label="Дата рождения"
-                  v-if="!isCodeFieldInValid"
-                  class="col-md-6 col-12"
-                >
+              <b-row class="mt-3" v-if="!isCodeFieldInValid">
+                <b-form-group label="Дата рождения" class="col-md-6 col-12">
                   <birthday-picker
                     ref="dataPicker"
                     v-model="$v.form.birthdate.$model"
