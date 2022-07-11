@@ -46,7 +46,6 @@
           </b-link>
         </div>
       </div>
-      <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
     </div>
     <div class="resend-block" v-if="isShowCodeEnter">
       <p>
@@ -61,10 +60,11 @@
 </template>
 
 <script>
-import VerifyTimer from "../VerifyUser/VerifyTimer";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 import _ from "lodash";
+import VerifyTimer from "../VerifyUser/VerifyTimer";
+
 export default {
   components: { VerifyTimer },
   mixins: [validationMixin],
@@ -127,16 +127,6 @@ export default {
       const { $dirty, $error } = this.$v[name];
       return $dirty ? !$error : null;
     },
-    onError(error) {
-      console.log("Error:", error);
-    },
-    onSuccess(token) {
-      this.token = token;
-      console.log("Succeeded:", token);
-    },
-    onExpired() {
-      console.log("Expired");
-    },
     async getCaptcha() {
       try {
         await this.$recaptcha.getResponse();
@@ -146,20 +136,21 @@ export default {
     },
 
     async getCode() {
-      this.$store.commit("data_card/setFormField", {
+      // Очищаем поле с кодом СМС
+      this.$store.commit("data_card/clearFormField", {
         fieldId: 35622,
-        value: null,
       });
+
       if (!this.newEmail) return;
       this.isEmailChanged = false;
-      let actionParams = {
+      const actionParams = {
         name: "SNEWEMAIL",
         value: this.newEmail,
       };
       try {
         this.loading = true;
         this.disabledResend = true;
-        let response = await this.$store.dispatch("data_card/executeAction", {
+        const response = await this.$store.dispatch("data_card/executeAction", {
           actionId: this.params.actions[0].id,
           relActionId: this.params.actions[0].relaction,
           relId: this.$route.params.idRel,

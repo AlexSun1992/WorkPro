@@ -49,7 +49,12 @@ export const getters = {
   saveButtonClickedAmount: (state) => state.saveButtonClickedAmount,
   getError: (state) => state.isError,
   getSavedError: (state) => state.isSavedError,
-  getErrorMessage: (state) => getErrorMessage(state.errorMessage),
+  getErrorMessage: (state) => {
+    if (typeof getErrorMessage(state.errorMessage) === "object") {
+      return getErrorMessage(state.errorMessage)?.description;
+    }
+    return getErrorMessage(state.errorMessage);
+  },
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
   getCardId: (state) => state.cardId,
@@ -273,7 +278,7 @@ export const actions = {
       }
     }
   },
-  async saveDataCard({ commit, state, dispatch }, params) {
+  async saveDataCard({ commit, state, dispatch, getters }, params) {
     commit("setLoading", true);
     commit("setDisabled", true);
 
@@ -293,6 +298,7 @@ export const actions = {
     } catch (err) {
       commit("setSavedError", true);
       commit("setErrorMessage", err.response?.data || err.message);
+      commit("setFieldJsonError", getErrorMessage(err.response?.data));
       if (err.response) {
         return err.response;
       }
@@ -319,7 +325,7 @@ export const actions = {
   },
 
   async executeAction(
-    { dispatch, commit },
+    { dispatch, commit, getters },
     { relId, relActionId, rowId, actionId, body }
   ) {
     try {
@@ -337,6 +343,7 @@ export const actions = {
       commit("setDisabled", false);
       commit("setSavedError", true);
       commit("setErrorMessage", e.response.data);
+      commit("setFieldJsonError", getErrorMessage(e.response?.data));
       return e.response;
     }
   },
@@ -561,7 +568,18 @@ export const mutations = {
       const field = state.form.find((item) => item.name === fieldName);
       field.error = fieldValue || data;
     } catch (error) {
-      // console.log(error);
+      console.error(error);
+    }
+  },
+  setFieldJsonError(state, data) {
+    try {
+      if (typeof data === "object") {
+        const field = state.form.find((item) => item.name === data.path);
+        field.error = data.description;
+        field.state = false;
+      }
+    } catch (error) {
+      console.error(error);
     }
   },
   setListPath(state, data) {

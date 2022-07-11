@@ -63,6 +63,13 @@
               Авторизоваться
               <b-spinner v-if="authInProcess" variant="light"></b-spinner>
             </b-button>
+            <div class="mt-3 text-center">
+              <a
+                href="https://client.reso.ru/loginesia/loginesia/prod"
+                id="btn_recovery-password_lk"
+                >Войти через Госуслуги</a
+              >
+            </div>
           </b-form>
           <a href="/login/registration" class="login-btn-mobile d-lg-none mt-3"
             >Регистрация</a
@@ -97,7 +104,7 @@ import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
 
-//const COOKIE_NAME = "url";
+// const COOKIE_NAME = "url";
 
 export default {
   components: {
@@ -140,7 +147,7 @@ export default {
     async fetchToken() {
       try {
         this.authInProcess = true;
-        let {
+        const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
         } = await axios.post("/am/auth/v2/authorize", {
           mode: 2,

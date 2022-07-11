@@ -6,7 +6,7 @@ import Dashboard from "~/components/Pages/Cabinet/Dashboard";
 import Fluid from "~/components/Pages/Cabinet/Fluid";
 import CardPage from "~/components/Pages/Cabinet/CardPage";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
-import LoginEsia from "@/components/Pages/Cabinet/Esia/LoginEsia";
+import LoginEsia from "@/components/Pages/Esia/LoginEsia";
 
 Vue.use(Router);
 
