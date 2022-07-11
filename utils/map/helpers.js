@@ -116,7 +116,7 @@ const getTemplate = (agency) => {
     /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
     () => {
       let temp = "";
-      grafArr.forEach((graf) => {
+      grafArr?.forEach((graf) => {
         temp += `<div class="card-office-times">${graf}</div>`;
       });
       return temp;
