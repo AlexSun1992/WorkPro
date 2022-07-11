@@ -74,6 +74,10 @@ import { BButton, BCard } from "bootstrap-vue";
 import Cookies from "js-cookie";
 import cities from "./cities";
 import getCurrentCity from "../../../../utils/map/currentCity";
+import {
+  addListener,
+  notifyListeners,
+} from "../../../../utils/map/listeners.service";
 
 function getParams(input) {
   return {
@@ -135,6 +139,7 @@ export default {
     },
   },
   async created() {
+    addListener(this.setCookies);
     this.popularCities.unshift({
       id: 1,
       kladr_id: "7700000000000",
@@ -179,6 +184,14 @@ export default {
         coords: [result.data.geo_lat, result.data.geo_lon],
       });
     },
+
+    setCookies() {
+      if (Cookies.get("location_user") && Cookies.get("kladr_id")) {
+        this.kladr = Cookies.get("kladr_id");
+        this.city = Cookies.get("location_user");
+      }
+    },
+
     setPopularCity(result) {
       this.$refs.autocomplete.value = result.text;
       this.city = result.text;
@@ -192,6 +205,7 @@ export default {
       Cookies.set("lat", result.lat);
       Cookies.set("lon", result.lon);
       this.changeCity({ city: this.city, kladr: this.kladr });
+      notifyListeners();
     },
     setAutoCity(result) {
       this.visible = false;
