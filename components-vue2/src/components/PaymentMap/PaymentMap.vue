@@ -1,7 +1,7 @@
 <template>
   <div class="map-container mt-3">
     <div
-      v-if="templatesToShow.length"
+      :class="[templatesToShow.length ? '' : 'd-none']"
       id="regcenter"
       v-html="templatesToShow.join('')"
       class="card"
@@ -54,6 +54,7 @@ export default {
             lon = "37.620393",
             kladr = "7700000000000",
           }) => {
+            debugger;
             Cookies.set("lat", lat);
             Cookies.set("lon", lon);
             Cookies.set("kladr_id", kladr);
@@ -292,10 +293,14 @@ export default {
     },
 
     openBalloon() {
-      this.myClusterer.getGeoObjects().forEach((obj, i) => {
-        this.geoObjectTemplates.push(obj.properties.get("balloonContentBody"));
-        obj.balloon.open([this.regCenters[i].NLAT, this.regCenters[i].NLON]);
-      });
+      if (window.innerWidth > 992) {
+        this.myClusterer.getGeoObjects().forEach((obj, i) => {
+          this.geoObjectTemplates.push(
+            obj.properties.get("balloonContentBody")
+          );
+          obj.balloon.open([this.regCenters[i].NLAT, this.regCenters[i].NLON]);
+        });
+      }
     },
   },
   computed: {
