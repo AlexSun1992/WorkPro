@@ -122,6 +122,7 @@ import {
 } from "bootstrap-vue";
 
 import { isCaptchaBecomesHide } from "./captcha.helper";
+import { getSuccessSendSMSText } from "./verifyUser.helper";
 
 export default {
   components: {
@@ -173,6 +174,7 @@ export default {
       loading: false,
       codeFieldShown: false,
       allHiddenCaptchas: null,
+      meassageWasSend: null,
     };
   },
 
@@ -231,16 +233,23 @@ export default {
           this.modeType === "REG" ||
           this.modeType === "RECOVERY"
         ) {
-          let method = params.error ? "sendsmscode2" : "sendsmscode";
-          return await axios.post(
+          const method = params.error ? "sendsmscode2" : "sendsmscode";
+
+          const response = await axios.post(
             `/free/v2/${method}` +
               `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,
             params,
             headers
           );
-        } else {
-          return await axios.post("/free/v2/sendemailcode", params, headers);
+
+          const getSuccessSendMessageText = getSuccessSendSMSText(response);
+
+          if (getSuccessSendMessageText !== undefined) {
+            this.$emit("messageText", getSuccessSendMessageText);
+          }
+          return response;
         }
+        return await axios.post("/free/v2/sendemailcode", params, headers);
       } catch (e) {
         this.loading = false;
         this.$emit("error", e.response.data.INFO);
@@ -451,6 +460,11 @@ export default {
     },
   },
   watch: {
+    // meassageWasSend(value) {
+    //   console.log("value:", value);
+    //   this.$emit("get", value);
+    // },
+
     token: function () {
       if (this.token) {
         this.getCode();
