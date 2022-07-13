@@ -5,11 +5,16 @@ export default function ({ app, store, redirect, $auth, $sentry }) {
   let toastCount = 0;
   const makeToast = (error) => {
     toastCount++;
-    if (toastCount > 2) return;
+    if (toastCount > 2) {
+      $nuxt.$bvToast.hide(toastCount - 2);
+    }
+
     $nuxt.$bvToast.toast(error.MESSAGE, {
+      id: toastCount,
       title: "Ошибка",
       variant: "danger",
       autoHideDelay: 20000,
+      appendToast: false,
       toaster: "b-toaster-top-full",
     });
   };
@@ -58,13 +63,7 @@ export default function ({ app, store, redirect, $auth, $sentry }) {
     if (error.response.status !== 401) {
       try {
         if ($nuxt) {
-          // makeToast(error.response.data);
-          $nuxt.$bvToast.toast(error.MESSAGE, {
-            title: "Ошибка",
-            variant: "danger",
-            autoHideDelay: 20000,
-            toaster: "b-toaster-top-full",
-          });
+          makeToast(error.response.data);
           $sentry.captureException(error.response.data);
           if (
             !originalRequest.__isRetryRequest &&
