@@ -2,6 +2,17 @@
 import converter from "@/converters/menu";
 import { getErrorMessage } from "../utils/transform";
 export default function ({ app, store, redirect, $auth, $sentry }) {
+  let toastCount = 0;
+  const makeToast = (error) => {
+    toastCount++;
+    if (toastCount > 2) return;
+    $nuxt.$bvToast.toast(error.MESSAGE, {
+      title: "Ошибка",
+      variant: "danger",
+      autoHideDelay: 20000,
+      toaster: "b-toaster-top-full",
+    });
+  };
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
       return;
@@ -47,12 +58,7 @@ export default function ({ app, store, redirect, $auth, $sentry }) {
     if (error.response.status !== 401) {
       try {
         if ($nuxt) {
-          $nuxt.$bvToast.toast(error.response.data.MESSAGE, {
-            title: "Ошибка",
-            variant: "danger",
-            noAutoHide: true,
-            toaster: "b-toaster-top-full",
-          });
+          makeToast(error.response.data);
           $sentry.captureException(error.response.data);
           if (
             !originalRequest.__isRetryRequest &&
