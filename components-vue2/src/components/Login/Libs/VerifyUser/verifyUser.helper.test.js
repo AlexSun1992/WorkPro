@@ -5,7 +5,7 @@ import {
   getArrayContainMessage,
   getRestructuredArrayContainMessage,
   getObjWithTextMessage,
-  getSuccessSendSMSText,
+  getMessageAfterSuccessSMSSend,
 } from "./verifyUser.helper";
 
 describe("Модуль получения данных, необходимых для отображения (в случае удачной отправке смс))", () => {
@@ -44,7 +44,7 @@ describe("Модуль получения данных, необходимых �
 
   it("получение сообщения", () => {
     const getResponseCopy = JSON.parse(JSON.stringify(response));
-    const message = getSuccessSendSMSText(getResponseCopy);
+    const message = getMessageAfterSuccessSMSSend(getResponseCopy);
     expect(typeof message === "string").toBe(true);
   });
 });
