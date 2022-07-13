@@ -201,3 +201,14 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-show-city-payment",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/PaymentMap/ShowCityPayment"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
