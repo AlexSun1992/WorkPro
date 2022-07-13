@@ -460,11 +460,6 @@ export default {
     },
   },
   watch: {
-    // meassageWasSend(value) {
-    //   console.log("value:", value);
-    //   this.$emit("get", value);
-    // },
-
     token: function () {
       if (this.token) {
         this.getCode();
