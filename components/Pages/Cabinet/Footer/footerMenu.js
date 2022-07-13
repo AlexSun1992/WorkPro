@@ -52,6 +52,7 @@ const footerMenu = [
         ref: "/about/consumer-information/",
       },
       { title: "Правила и тарифы", ref: "/about/consumer-information/rules/" },
+      { title: "Обратная связь", ref: "/feedback/" },
       { title: "Карта сайта", ref: "/sitemap" },
     ],
   },
@@ -75,18 +76,18 @@ const footerMenu = [
   {
     title: "socialNetworks",
     items: [
-      {
-        class: "footer-fb",
-        ref: "https://ru-ru.facebook.com/reso.ru",
-      },
+      // {
+      //   class: "footer-fb",
+      //   ref: "https://ru-ru.facebook.com/reso.ru",
+      // },
       {
         class: "footer-vk",
         ref: "http://vk.com/reso_garantia",
       },
-      {
-        class: "footer-in",
-        ref: "https://www.instagram.com/reso.ru_official/",
-      },
+      // {
+      //   class: "footer-in",
+      //   ref: "https://www.instagram.com/reso.ru_official/",
+      // },
     ],
   },
 ];
