@@ -58,7 +58,13 @@ export default function ({ app, store, redirect, $auth, $sentry }) {
     if (error.response.status !== 401) {
       try {
         if ($nuxt) {
-          makeToast(error.response.data);
+          // makeToast(error.response.data);
+          $nuxt.$bvToast.toast(error.MESSAGE, {
+            title: "Ошибка",
+            variant: "danger",
+            autoHideDelay: 20000,
+            toaster: "b-toaster-top-full",
+          });
           $sentry.captureException(error.response.data);
           if (
             !originalRequest.__isRetryRequest &&
