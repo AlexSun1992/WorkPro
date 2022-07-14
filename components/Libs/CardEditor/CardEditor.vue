@@ -1,6 +1,5 @@
 <template>
   <div :data-card-id="$route.params.idItem">
-    {{ "editor" }}
     <b-modal
       :id="'confirmAction'"
       modal-class="cabinet"
@@ -18,7 +17,6 @@
         {{ actionApplyErrorMessage }}
       </b-alert>
       <b-form @submit="applyAction">
-        {{ "form1" }}
         <Form
           v-if="actionParams.length"
           :data="actionParams"
@@ -28,7 +26,6 @@
       </b-form>
     </b-modal>
     <div v-if="data.length && isLoadedScript">
-      {{ "form2" }}
       <Form
         v-if="!isAccordion && !isBlock"
         class="block-profile"
@@ -51,7 +48,7 @@
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
       />
-      <!-- <FormBlock
+      <FormBlock
         v-if="isBlock && !isTabs && !isAccordion"
         :data="data"
         :tabs="tabs"
@@ -60,7 +57,7 @@
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
-      /> -->
+      />
     </div>
     <SkeletonBox
       v-if="!data.length || !isLoadedScript"
