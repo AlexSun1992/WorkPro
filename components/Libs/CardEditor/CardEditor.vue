@@ -25,7 +25,7 @@
         />
       </b-form>
     </b-modal>
-    <div v-if="data.length">
+    <div v-if="data.length && isLoadedScript">
       <Form
         v-if="!isAccordion && !isBlock"
         class="block-profile"
