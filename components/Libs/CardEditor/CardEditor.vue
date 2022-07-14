@@ -18,6 +18,7 @@
         {{ actionApplyErrorMessage }}
       </b-alert>
       <b-form @submit="applyAction">
+        {{ "form1" }}
         <Form
           v-if="actionParams.length"
           :data="actionParams"
@@ -27,6 +28,7 @@
       </b-form>
     </b-modal>
     <div v-if="data.length && isLoadedScript">
+      {{ "form2" }}
       <Form
         v-if="!isAccordion && !isBlock"
         class="block-profile"
