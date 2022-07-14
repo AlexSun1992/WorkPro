@@ -41,7 +41,7 @@
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
       />
-      <FormAccordion
+      <!-- <FormAccordion
         v-if="isAccordion && !isTabs && !isBlock"
         :class="{ 'mt-5': !params.settings && showBtnBack }"
         :data="data"
@@ -60,7 +60,7 @@
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
-      />
+      /> -->
     </div>
     <SkeletonBox
       v-if="!data.length || !isLoadedScript"
