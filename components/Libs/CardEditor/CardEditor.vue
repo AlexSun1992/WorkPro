@@ -25,7 +25,7 @@
         />
       </b-form>
     </b-modal>
-    <div v-if="data.length && isLoadedScript">
+    <div v-if="data.length">
       <Form
         v-if="!isAccordion && !isBlock"
         class="block-profile"
@@ -59,11 +59,7 @@
         @open-card="openCard($event)"
       />
     </div>
-    <SkeletonBox
-      v-if="!data.length || !isLoadedScript"
-      class="mt-5"
-      :items="8"
-    />
+    <SkeletonBox v-if="!data.length" class="mt-5" :items="8" />
   </div>
 </template>
 <script>
@@ -117,6 +113,21 @@ export default {
       urlScript: null,
     };
   },
+  head() {
+    return {
+      script: [
+        {
+          // type: "module",
+          src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
+          callback: () => {
+            this.$root.eventHandler =
+              typeof eventHandler === "function" ? eventHandler : null;
+            this.stripeLoaded();
+          },
+        },
+      ],
+    };
+  },
   computed: {
     showBtnBack() {
       const path = this.$store.state.data_card.listPath;
@@ -154,12 +165,11 @@ export default {
   },
   async created() {
     try {
-      this.urlScript = `/api/card/js/${this.$route.params.idModule}/${
-        this.$route.params.idItem
-      }&time=${Date.now()}`;
-      if (process.client) {
-        await this.$loadScript(this.urlScript);
-      }
+      await this.$loadScript(
+        `/api/card/js/${this.$route.params.idModule}/${
+          this.$route.params.idItem
+        }&time=${Date.now()}`
+      );
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
       this.stripeLoaded();

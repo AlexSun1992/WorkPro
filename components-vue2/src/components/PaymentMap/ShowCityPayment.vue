@@ -1,46 +1,52 @@
 <template>
   <div>
     <b-button
-      @click="showSelectCity()"
       class="select-sity"
       variant="link"
+      @click="showModalSelectCity()"
       id="btn_city_head_all"
     >
       {{ city }}
     </b-button>
-    <div v-if="isSelectShown">
-      <autocomplete
-        ref="autocomplete"
-        placeholder="Поиск города"
-        :debounce-time="300"
-        :search="search"
-        :get-result-value="getResultValue"
-        :default-value="city"
-        @submit="setSearchedCity"
-      />
-      <div class="mt-2 list">
-        <div class="row">
-          <div
-            v-for="column in columns"
-            :key="column.id"
-            :class="`col-lg-${12 / cols}`"
-          >
-            <div v-for="item in column" :key="item.id">
-              <span style="cursor: pointer" @click="setPopularCity(item)">{{
-                item.text
-              }}</span>
+    <b-modal id="select-city" size="lg" hide-footer>
+      <template #modal-title> Выберите город </template>
+      <div>
+        <div class="mb-2">
+          <strong> Ваш город: {{ city }} </strong>
+        </div>
+        <autocomplete
+          ref="autocomplete"
+          placeholder="Поиск города"
+          :debounce-time="300"
+          :search="search"
+          :get-result-value="getResultValue"
+          :default-value="city"
+          @submit="setSearchedCity"
+        />
+        <div class="mt-2">
+          <div class="row">
+            <div
+              v-for="column in columns"
+              :key="column.id"
+              :class="`col-lg-${12 / cols}`"
+            >
+              <div v-for="item in column" :key="item.id">
+                <span style="cursor: pointer" @click="setPopularCity(item)">{{
+                  item.text
+                }}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
-import { BButton } from "bootstrap-vue";
+import { BButton, BCard } from "bootstrap-vue";
 import Cookies from "js-cookie";
 import cities from "./cities";
 import getCurrentCity from "../../../../utils/map/currentCity";
@@ -64,10 +70,11 @@ function getParams(input) {
   };
 }
 export default {
-  name: "ChangeCity",
+  name: "ShowCityPayment",
   components: {
     Autocomplete,
     BButton,
+    BCard,
   },
   props: {
     changeCity: {
@@ -79,7 +86,6 @@ export default {
   data() {
     return {
       city: null,
-      visible: false,
       kladr: null,
       lat: null,
       lon: null,
@@ -90,7 +96,6 @@ export default {
       }),
       cols: 3,
       request: null,
-      isSelectShown: false,
     };
   },
   computed: {
@@ -122,7 +127,6 @@ export default {
       this.city = Cookies.get("location_user");
     } else {
       getCurrentCity().then(({ kladr, city }) => {
-        this.visible = true;
         if (city && kladr) {
           this.city = city;
           this.kladr = kladr;
@@ -177,18 +181,9 @@ export default {
       this.changeCity({ city: this.city, kladr: this.kladr });
       notifyListeners();
     },
-    setAutoCity(result) {
-      this.visible = false;
-      this.$store.dispatch("map/setCity", {
-        city: this.city,
-        coords: [this.lat, this.lon],
-      });
-      Cookies.set("kladr_id", this.kladr);
-      Cookies.set("location_user", result);
-    },
-    showSelectCity() {
-      this.visible = false;
-      this.isSelectShown = !this.isSelectShown;
+
+    showModalSelectCity() {
+      this.$bvModal.show("select-city");
     },
     async search(input) {
       if (input.length < 1) {
@@ -208,13 +203,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.list {
-  // position: absolute;
-  // z-index: 10000;
-  // background: #fff;
-  // width: 100%;
-  // border-radius: 10px;
-  // padding: 10px;
-}
-</style>
+<style lang="scss" scoped></style>
