@@ -5,7 +5,7 @@ import {
   getArrayContainMessage,
   getRestructuredArrayContainMessage,
   getObjWithTextMessage,
-  getMessageAfterSuccessSMSSend as getMessageFromSuccessResponse,
+  getMessageFromSuccessResponse,
 } from "./verifyUser.helper";
 
 describe("Модуль получения данных, необходимых для отображения (в случае удачной отправке смс))", () => {
