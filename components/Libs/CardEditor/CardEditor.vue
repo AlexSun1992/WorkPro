@@ -50,7 +50,7 @@
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
-      />
+      /> -->
       <FormBlock
         v-if="isBlock && !isTabs && !isAccordion"
         :data="data"
@@ -60,7 +60,7 @@
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
-      /> -->
+      />
     </div>
     <SkeletonBox
       v-if="!data.length || !isLoadedScript"
