@@ -1,5 +1,6 @@
 <template>
   <div :data-card-id="$route.params.idItem">
+    {{ "editor" }}
     <b-modal
       :id="'confirmAction'"
       modal-class="cabinet"
