@@ -14,8 +14,8 @@
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @input="isUserBlured = false"
           @click="loginTouchesCount = 2"
-          tabindex="10"
           autocomplete="off"
+          tabindex="10"
         ></b-form-input>
 
         <b-form-input
@@ -29,10 +29,11 @@
           @input="isUserBlured = false"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
-          :tabindex="tabIndex[0]"
           placeholder="E-mail"
           autocomplete="off"
+          :tabindex="tabIndex[0]"
         ></b-form-input>
+
         <b-form-invalid-feedback
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
