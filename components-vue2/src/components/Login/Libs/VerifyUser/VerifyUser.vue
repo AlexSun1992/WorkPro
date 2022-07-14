@@ -122,7 +122,7 @@ import {
 } from "bootstrap-vue";
 
 import { isCaptchaBecomesHide } from "./captcha.helper";
-import { getMessageAfterSuccessSMSSend } from "./verifyUser.helper";
+import { getMessageFromSuccessResponse } from "./verifyUser.helper";
 
 export default {
   components: {
@@ -243,7 +243,7 @@ export default {
           );
 
           const getSuccessSendMessageText =
-            getMessageAfterSuccessSMSSend(response);
+            getMessageFromSuccessResponse(response);
 
           if (getSuccessSendMessageText !== undefined) {
             this.$emit("messageText", getSuccessSendMessageText);

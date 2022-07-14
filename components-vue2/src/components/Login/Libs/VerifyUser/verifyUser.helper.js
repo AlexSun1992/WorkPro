@@ -31,7 +31,7 @@ export function getObjWithTextMessage(response) {
   return getObjWithMessage;
 }
 
-export function getMessageAfterSuccessSMSSend(response) {
+export function getMessageFromSuccessResponse(response) {
   const getObjWithMessage = getObjWithTextMessage(response);
   const message = getObjWithMessage?.MESSAGE;
   return message;
