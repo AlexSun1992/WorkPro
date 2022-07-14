@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export function getResponseEntries(response) {
   const responseEntries = Object.entries(response);
   return responseEntries;
@@ -9,7 +8,6 @@ export function getArrayContainMessage(response) {
   const getArraysOfArrays = responseEntries.find((item) =>
     item.includes("data")
   );
-
   return getArraysOfArrays;
 }
 
@@ -27,7 +25,9 @@ export function getArrayWithObjectContainMessage(response) {
 
 export function getObjWithTextMessage(response) {
   const concatObj = getArrayWithObjectContainMessage(response);
-  const getObjWithMessage = concatObj.find((item) => item.MESSAGE);
+  const getObjWithMessage = concatObj.find((item) =>
+    item.hasOwnProperty("MESSAGE")
+  );
   return getObjWithMessage;
 }
 
