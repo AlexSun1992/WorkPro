@@ -14,7 +14,7 @@
           <div class="menu-link d-md-flex ms-md-3 ms-lg-0">
             <div class="slogan-reso">С нами надёжнее!</div>
             <div>
-              <a href="/individual" class="d-none d-md-block">Купить полис</a>
+              <a href="/individual" class="d-none d-md-block">Частным лицам</a>
             </div>
             <div>
               <a href="/incase" class="d-none d-md-block">Страховой случай</a>
