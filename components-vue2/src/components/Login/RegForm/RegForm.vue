@@ -64,7 +64,7 @@
                     @blur="$v.form.family.$touch(), clearArray()"
                     placeholder="Фамилия"
                     :disabled="registrationInProcess"
-                    tabindex="40"
+                    tabindex="20"
                     autocomplete="new-password"
                     @input="askSuggestions('surname')"
                   ></b-form-input>
@@ -103,7 +103,7 @@
                     @blur="$v.form.name.$touch(), clearArray()"
                     placeholder="Имя"
                     :disabled="registrationInProcess"
-                    tabindex="50"
+                    tabindex="30"
                     autocomplete="new-password"
                     @input="askSuggestions('name')"
                   ></b-form-input>
@@ -142,7 +142,7 @@
                     @blur="$v.form.patronymic.$touch(), clearArray()"
                     placeholder="Отчество"
                     :disabled="registrationInProcess"
-                    tabindex="60"
+                    tabindex="40"
                     autocomplete="new-password"
                     @input="askSuggestions('patronymic')"
                   ></b-form-input>
@@ -174,7 +174,7 @@
                   <birthday-picker
                     v-model="$v.form.birthdate.$model"
                     :state="validateState('birthdate')"
-                    :tabindex="30"
+                    :tabindex="50"
                     :disabled="registrationInProcess"
                   />
                 </b-form-group>
@@ -193,9 +193,10 @@
                     @blur="$v.form.email.$touch()"
                     placeholder="E-mail"
                     :disabled="registrationInProcess"
-                    tabindex="20"
                     autocomplete="new-password"
+                    :tabindex="60"
                   ></b-form-input>
+
                   <b-form-invalid-feedback>
                     Пожалуйста, заполните это поле
                   </b-form-invalid-feedback>
