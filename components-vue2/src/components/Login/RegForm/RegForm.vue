@@ -40,10 +40,11 @@
                 :mode-type="'REG'"
                 :validateState="validateState"
                 :disabled="registrationInProcess"
-                :text-message="textMessage"
+                :text-message="successSendMessageText"
                 :tab-index="[10, 15]"
                 :error="errorMessage"
                 @checkCodeFieldValid="isCodeFieldValid"
+                @messageText="getTextMessage"
               />
             </b-form-group>
             <!-- Фамилия -->
@@ -332,6 +333,7 @@ export default {
       captchaToken: null,
       isRegConfirmed: null,
       token: 1,
+      successSendMessageText: null,
       textMessage:
         "На Ваш номер телефона был отправлен код, который необходимо ввести.",
       errorMessage: null,
@@ -389,6 +391,10 @@ export default {
   },
 
   methods: {
+    getTextMessage(value) {
+      this.successSendMessageText = value;
+    },
+
     isCodeFieldValid(data) {
       this.codeFieldValid = data;
     },
