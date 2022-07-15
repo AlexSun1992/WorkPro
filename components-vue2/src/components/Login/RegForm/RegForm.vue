@@ -272,6 +272,7 @@ import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import ConfirmModal from "./ConfirmModal.vue";
+import { responseTest } from "../Libs/VerifyUser/verifyUser.helper.fixtures";
 import {
   BForm,
   BFormGroup,
@@ -283,6 +284,7 @@ import {
   BNav,
   BNavItem,
 } from "bootstrap-vue";
+import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -498,16 +500,25 @@ export default {
         const headers = {
           headers: { recaptcha: params.token },
         };
-        const response = await axios.post(
-          "/free/v2/registration",
-          params,
-          headers
-        );
+        // const response = await axios.post(
+        //   "/free/v2/registration",
+        //   params,
+        //   headers
+        // );
+        // ("Вы успешно зарегистрированы в системе!!!!");
+        const response = responseTest;
+
+        console.log("response:", response);
 
         this.registrationInProcess = false;
         if (response?.status === 200) {
+          debugger;
+          console.log("response:", response);
+          const test = getMessageFromSuccessResponse(response);
+          console.log("test:", test);
+          console.log("successMessageText:", this.successSendMessageText);
           this.$bvModal
-            .msgBoxOk("Вы успешно зарегистрированы в системе!", {
+            .msgBoxOk(`${this.successSendMessageText}`, {
               title: "Подтверждение",
               size: "md",
               buttonSize: "md",
@@ -526,10 +537,12 @@ export default {
               console.log(err);
             });
         } else if (response?.status !== 200) {
+          debugger;
           this.isErrorMessage = true;
           this.errorMessage = response.data.INFO;
         }
       } catch (e) {
+        debugger;
         this.isErrorMessage = true;
         this.errorMessage = e.response.data.INFO;
         this.registrationInProcess = false;
@@ -551,6 +564,7 @@ export default {
         }
         this.register(this);
       } catch (e) {
+        debugger;
         console.log(e);
       }
     },
