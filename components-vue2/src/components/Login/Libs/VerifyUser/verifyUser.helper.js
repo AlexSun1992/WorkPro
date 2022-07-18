@@ -32,7 +32,12 @@ export function getObjWithTextMessage(response) {
 }
 
 export function getMessageFromSuccessResponse(response) {
-  const getObjWithMessage = getObjWithTextMessage(response);
-  const message = getObjWithMessage?.MESSAGE;
-  return message;
+  const isAxiosResponse = response.hasOwnProperty("data");
+  if (isAxiosResponse) {
+    const getObjWithMessage = getObjWithTextMessage(response);
+    const message = getObjWithMessage?.MESSAGE;
+    return message;
+  }
+
+  throw new Error("Невозможно обработать axiosResponse");
 }
