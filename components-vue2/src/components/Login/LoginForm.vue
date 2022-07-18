@@ -107,6 +107,7 @@ import Cookies from "js-cookie";
 // const COOKIE_NAME = "url";
 
 export default {
+  name: "LoginForm",
   components: {
     BForm,
     BFormGroup,
@@ -145,6 +146,7 @@ export default {
 
   methods: {
     getToRegistration() {
+      // this.$emit("test", "registration");
       window.history.pushState(null, "", "/login/registration");
     },
     async fetchToken() {

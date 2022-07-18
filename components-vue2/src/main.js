@@ -3,6 +3,7 @@ import vueCustomElement from "vue-custom-element";
 import { ModalPlugin, DropdownPlugin, BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 import { store } from "./store/index";
+import { resolve } from "path";
 
 store.$axios = axios;
 Vue.prototype.$axios = axios;
@@ -22,6 +23,24 @@ Vue.customElement(
       });
     })
 );
+
+// Vue.customElement(
+//   ["./components/Login/AuthForm/AuthForm.vue"],
+//   (lazyComponent) => {
+//     resolve(lazyComponent.default);
+//   }
+// );
+
+Vue.customElement(
+  "component-auth-form",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/Login/AuthForm/AuthForm"], (lazyComponent) => {
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
 Vue.customElement(
   "component-login-form",
   () =>
