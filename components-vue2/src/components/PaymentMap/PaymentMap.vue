@@ -38,10 +38,13 @@ export default {
       geoObjectTemplates: [],
       templatesToShow: [],
       balloonTemplate: "",
+      width: window.innerWidth,
+      height: window.innerHeight,
     };
   },
   async created() {
     try {
+      window.addEventListener("resize", this.onResize);
       if (Cookies.get("lat") && Cookies.get("lat") !== "null") {
         await this.$store.dispatch("map/fetchRegion", {
           id: Cookies.get("kladr_id")?.substr(0, 2),
@@ -54,7 +57,6 @@ export default {
             lon = "37.620393",
             kladr = "7700000000000",
           }) => {
-            debugger;
             Cookies.set("lat", lat);
             Cookies.set("lon", lon);
             Cookies.set("kladr_id", kladr);
@@ -80,6 +82,10 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  destroyed() {
+    window.removeEventListener("resize", this.onResize);
   },
 
   methods: {
@@ -123,8 +129,8 @@ export default {
       });
       this.myMap.geoObjects.add(this.myClusterer);
       const body = document.getElementsByTagName("body")[0];
+      this.myMap.geoObjects.events.add.bind(this);
       this.myMap.geoObjects.events.add("balloonopen", (e) => {
-        // this.isCardVisible = false;
         body.classList.add("open-balloon");
         const target = e.get("target");
         this.balloonTemplate = target.properties.get("balloonContentBody");
@@ -159,6 +165,11 @@ export default {
 
       // Fires by F5
       this.openBalloon();
+    },
+
+    onResize() {
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
     },
 
     combineAgencies(agencies, i, count) {
@@ -300,6 +311,19 @@ export default {
           );
           obj.balloon.open([this.regCenters[i].NLAT, this.regCenters[i].NLON]);
         });
+      } else {
+        this.myMap.options.set("balloonAutoPan", false);
+        this.regCenters = this.$store.getters["map/getRegionOffices"].filter(
+          (item) => item.LREG_CENTER
+        );
+
+        this.myMap.setCenter(
+          [
+            this.regCenters[0].NLAT,
+            this.regCenters[0].NLON || this.regCenters[0].NLONG,
+          ],
+          12
+        );
       }
     },
   },

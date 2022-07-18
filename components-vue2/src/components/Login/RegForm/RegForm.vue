@@ -284,6 +284,7 @@ import {
   BNav,
   BNavItem,
 } from "bootstrap-vue";
+import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -510,8 +511,10 @@ export default {
 
         this.registrationInProcess = false;
         if (response?.status === 200) {
+          const messageAfterSuccessRegistration =
+            getMessageFromSuccessResponse(response);
           this.$bvModal
-            .msgBoxOk("Вы успешно зарегистрированы в системе!", {
+            .msgBoxOk(`${messageAfterSuccessRegistration}`, {
               title: "Подтверждение",
               size: "md",
               buttonSize: "md",
