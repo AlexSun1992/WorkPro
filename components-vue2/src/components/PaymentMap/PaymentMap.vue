@@ -57,7 +57,6 @@ export default {
             lon = "37.620393",
             kladr = "7700000000000",
           }) => {
-            debugger;
             Cookies.set("lat", lat);
             Cookies.set("lon", lon);
             Cookies.set("kladr_id", kladr);
@@ -132,10 +131,6 @@ export default {
       const body = document.getElementsByTagName("body")[0];
       this.myMap.geoObjects.events.add.bind(this);
       this.myMap.geoObjects.events.add("balloonopen", (e) => {
-        debugger;
-        let test = this.width;
-        debugger;
-        // this.isCardVisible = false;
         body.classList.add("open-balloon");
         const target = e.get("target");
         this.balloonTemplate = target.properties.get("balloonContentBody");
@@ -310,7 +305,6 @@ export default {
 
     openBalloon() {
       if (window.innerWidth > 992) {
-        debugger;
         this.myClusterer.getGeoObjects().forEach((obj, i) => {
           this.geoObjectTemplates.push(
             obj.properties.get("balloonContentBody")
