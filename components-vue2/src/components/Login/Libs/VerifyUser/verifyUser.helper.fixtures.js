@@ -48,7 +48,7 @@ export const response = {
 export const responseTest = {
   data: [
     {
-      MESSAGE: "Вроде бы работает!!",
+      MESSAGE: "Ты зарегистрирован в лучшей системе в мире!!!",
       MESSAGE_CODE: 200,
     },
   ],
