@@ -507,10 +507,10 @@ export default {
 
         this.registrationInProcess = false;
         if (response?.status === 200) {
-          const getMessageAfterSuccessRegistration =
+          const messageAfterSuccessRegistration =
             getMessageFromSuccessResponse(response);
           this.$bvModal
-            .msgBoxOk(`${getMessageAfterSuccessRegistration}`, {
+            .msgBoxOk(`${messageAfterSuccessRegistration}`, {
               title: "Подтверждение",
               size: "md",
               buttonSize: "md",
@@ -554,7 +554,6 @@ export default {
         }
         this.register(this);
       } catch (e) {
-        debugger;
         console.log(e);
       }
     },
