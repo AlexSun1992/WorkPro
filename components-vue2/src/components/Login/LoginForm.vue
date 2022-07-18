@@ -6,8 +6,8 @@
           <b-nav card-header tabs>
             <b-nav-item active>Вход</b-nav-item>
             <b-nav-item
-              href="/login/registration"
               class="d-none d-lg-inline-block"
+              @click="getToRegistration"
               >Регистрация</b-nav-item
             >
           </b-nav>
@@ -144,6 +144,9 @@ export default {
   },
 
   methods: {
+    getToRegistration() {
+      window.history.pushState(null, "", "/login/registration");
+    },
     async fetchToken() {
       try {
         this.authInProcess = true;

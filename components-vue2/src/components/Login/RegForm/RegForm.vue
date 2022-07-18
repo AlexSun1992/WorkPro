@@ -16,9 +16,10 @@
           }}</b-alert>
 
           <b-nav card-header tabs>
-            <b-nav-item href="/login" class="d-none d-lg-inline-block"
+            <b-nav-item @click="getToEnter" class="d-none d-lg-inline-block"
               >Вход</b-nav-item
             >
+            <!-- href="/login" -->
             <b-nav-item active>Регистрация</b-nav-item>
           </b-nav>
 
@@ -392,6 +393,9 @@ export default {
   },
 
   methods: {
+    getToEnter() {
+      window.history.pushState(null, "", "/login");
+    },
     getTextMessage(value) {
       this.successSendMessageText = value;
     },
