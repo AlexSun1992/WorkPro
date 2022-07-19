@@ -197,15 +197,14 @@ const getTemplate = (agency) => {
   return template;
 };
 
-const count = (office) => {
+const countOffices = (office) => {
   let str;
-  if (!office.info) return;
-  if (office.info.length == 1) {
-    str = office.info.length + " отделение";
+  if (office.info.length === 1) {
+    str = `${office.info.length} отделение`;
   } else if (office.info.length > 1 && office.info.length < 5) {
-    str = office.info.length + " отделения";
+    str = `${office.info.length} отделения`;
   } else {
-    str = office.info.length + " отделений";
+    str = `${office.info.length} отделений`;
   }
   return str;
 };
@@ -270,7 +269,7 @@ module.exports = {
   isOpened,
   showWorkingHours,
   getTemplate,
-  count,
+  countOffices,
   getUnderlineId,
   getPhones,
   getGrafs,
