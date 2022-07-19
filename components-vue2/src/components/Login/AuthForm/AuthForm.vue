@@ -3,33 +3,23 @@
     <div class="block-registration">
       <b-nav card-header tabs>
         <b-nav-item
-          @click="getToEnter"
-          :active="isRegistrationInURL || registrationRender ? false : true"
+          @click="toggleForm"
+          :active="visibleForm === 'login' ? true : false"
           >Вход</b-nav-item
         >
         <b-nav-item
-          @click="getToRegistration"
-          :active="isRegistrationInURL || registrationRender ? true : false"
+          @click="toggleForm"
+          :active="visibleForm === 'registration' ? true : false"
           >Регистрация</b-nav-item
         >
       </b-nav>
     </div>
-    <login-form v-if="!registrationRender && !isRegistrationInURL"></login-form>
-    <reg-form v-if="registrationRender || isRegistrationInURL"></reg-form>
-    <button
-      v-if="!registrationRender && !isRegistrationInURL"
-      @click="getToRegistration"
-      class="login-btn-mobile d-lg-none mt-3"
-    >
+    <login-form v-if="visibleForm === 'login'"></login-form>
+    <reg-form v-else></reg-form>
+    <button @click="toggleForm" class="login-btn-mobile d-lg-none mt-3">
       Регистрация
     </button>
-    <button
-      v-if="registrationRender || isRegistrationInURL"
-      @click="getToEnter"
-      class="login-btn-mobile d-lg-none"
-    >
-      ВХОД
-    </button>
+    <button @click="toggleForm" class="login-btn-mobile d-lg-none">ВХОД</button>
   </div>
 </template>
 <script>
@@ -44,9 +34,7 @@ export default {
   },
   data() {
     return {
-      registrationRender: null,
-      isRegistrationInURL: null,
-      isLoginExistInURL: null,
+      visibleForm: null,
     };
   },
   methods: {
@@ -59,11 +47,23 @@ export default {
       window.history.pushState(null, "", "/login/registration");
       this.registrationRender = true;
     },
+    toggleForm() {
+      if (this.visibleForm === "registration") {
+        this.visibleForm = "login";
+        window.history.pushState(null, "", "/login");
+      } else {
+        this.visibleForm = "registration";
+        window.history.pushState(null, "", "/login/registration");
+      }
+    },
   },
   mounted() {
     const currentURL = window.location.pathname;
     this.isRegistrationInURL = currentURL.includes("registration");
     this.isLoginExistInURL = currentURL.includes("login");
+    this.visibleForm = currentURL.includes("registration")
+      ? "registration"
+      : "login";
   },
 };
 </script>
