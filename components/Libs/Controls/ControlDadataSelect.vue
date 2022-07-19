@@ -62,6 +62,12 @@ function getQueryParams(queryType, input) {
       query: "brandmodel",
       body: {
         query: input,
+        filters: [
+          { car_type: "Л" },
+          { car_type: "Д" },
+          { car_type: "МА" },
+          { car_type: "МЛ" },
+        ],
       },
       id: "brand_model_code",
     };
@@ -127,6 +133,7 @@ export default {
       this.input = input;
       this.group = [];
       const { query, body, id } = getQueryParams(this.data.name, input);
+
       if (id) {
         this.id = id;
       }
@@ -139,6 +146,7 @@ export default {
         },
         body: JSON.stringify(body),
       });
+
       const result = await response.json();
 
       result.suggestions.forEach((item) => {
