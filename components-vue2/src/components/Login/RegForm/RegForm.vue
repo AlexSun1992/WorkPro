@@ -1,34 +1,18 @@
 <template>
   <div>
-    <!-- class="reg-form-content">
-    <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-7">
-        <div class="block-registration px-2 px-md-4 pb-3 mt-3">-->
     <ConfirmModal
       :conformation="conformation"
       @agree="isRegConfirmed = $event"
     />
-    <!-- Алерт ошибки кода регистрации Андрея (на восстановлении у Жени) -->
-    <!-- <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert> -->
-    <!--  -->
-    <!-- Алерт ошибки кода регистрации (удалить после восстановления) -->
     <b-alert :show="!!errorMessage" variant="danger">{{
       errorMessage
     }}</b-alert>
-
-    <!-- <b-nav card-header tabs>
-            <b-nav-item @click="getToEnter" class="d-none d-lg-inline-block"
-              >Вход</b-nav-item
-            >
-            <b-nav-item active>Регистрация</b-nav-item>
-          </b-nav> -->
 
     <b-form
       @submit.stop.prevent
       @keydown.enter.prevent="onSubmit"
       inline
       class="align-items-start"
-      autocomplete="off"
     >
       <b-form-group label="Телефон" class="w-100 required">
         <verify-user
@@ -48,7 +32,6 @@
           @messageText="getTextMessage"
         />
       </b-form-group>
-      <!-- Фамилия -->
       <div class="row">
         <div class="col-12 col-md-6 mt-3">
           <b-form-group
@@ -85,9 +68,7 @@
             </datalist>
           </b-form-group>
         </div>
-        <!-- ///// -->
         <div class="col-12 col-md-6 mt-2 mt-md-3">
-          <!-- Имя -->
           <b-form-group
             v-if="codeFieldValid"
             label="Имя"
@@ -120,11 +101,9 @@
               </option>
             </datalist>
           </b-form-group>
-          <!-- /////// -->
         </div>
 
         <div class="col-12 col-md-6 mt-2 mt-md-3">
-          <!-- Отчество -->
           <b-form-group
             v-if="codeFieldValid"
             label="Отчество"
@@ -159,7 +138,6 @@
               </option>
             </datalist>
           </b-form-group>
-          <!-- ////// -->
         </div>
         <div class="col-12 col-md-6 mt-2 mt-md-3">
           <b-form-group
@@ -248,10 +226,6 @@
         </div>
       </div>
     </b-form>
-    <!--/div>-->
-
-    <!--</div>
-    </div>-->
   </div>
 </template>
 
