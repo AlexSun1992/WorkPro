@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export async function getSuggestions() {
+export async function getSuggestionsWithFilters() {
   const body = {
-    query: "авто",
+    query: "автобус",
     filters: [
       {
         car_type: "Л",
@@ -21,18 +21,6 @@ export async function getSuggestions() {
 
   const group = [];
 
-  //   const response = await axios(
-  //     `https://dadata.reso.ru/api/suggestions/brandmodel`,
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //       },
-  //       body: JSON.stringify(body),
-  //     }
-  //   );
-
   const response = await axios({
     method: "post",
     url: "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/brandmodel",
@@ -46,7 +34,28 @@ export async function getSuggestions() {
     group.push(item);
   });
 
-  console.log("group:", group);
+  return group;
+}
+
+export async function getSuggestionsWithOutFilters() {
+  const body = {
+    query: "автобус",
+  };
+
+  const group = [];
+
+  const response = await axios({
+    method: "post",
+    url: "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/brandmodel",
+
+    data: body,
+  });
+
+  const result = response.data;
+
+  result.suggestions.forEach((item) => {
+    group.push(item);
+  });
 
   return group;
 }
