@@ -2,14 +2,10 @@
   <div class="login-form-content">
     <div class="block-registration">
       <b-nav card-header tabs>
-        <b-nav-item
-          @click="toggleForm"
-          :active="visibleForm === 'login' ? true : false"
+        <b-nav-item @click="toggleForm" :active="visibleForm === 'login'"
           >Вход</b-nav-item
         >
-        <b-nav-item
-          @click="toggleForm"
-          :active="visibleForm === 'registration' ? true : false"
+        <b-nav-item @click="toggleForm" :active="visibleForm === 'registration'"
           >Регистрация</b-nav-item
         >
       </b-nav>
@@ -38,15 +34,6 @@ export default {
     };
   },
   methods: {
-    getToEnter() {
-      window.history.pushState(null, "", "/login");
-      this.registrationRender = false;
-      this.isRegistrationInURL = false;
-    },
-    getToRegistration() {
-      window.history.pushState(null, "", "/login/registration");
-      this.registrationRender = true;
-    },
     toggleForm() {
       if (this.visibleForm === "registration") {
         this.visibleForm = "login";
@@ -59,8 +46,6 @@ export default {
   },
   mounted() {
     const currentURL = window.location.pathname;
-    this.isRegistrationInURL = currentURL.includes("registration");
-    this.isLoginExistInURL = currentURL.includes("login");
     this.visibleForm = currentURL.includes("registration")
       ? "registration"
       : "login";
