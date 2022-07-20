@@ -115,7 +115,7 @@ import {
   isOpened,
   getTemplate,
   checkClusterStatus,
-} from "../../../../utils/map/helpers";
+} from "../../../../utils/map/helpers/helpers";
 import getCurrentCity from "../../../../utils/map/currentCity";
 Vue.use(LoadScript);
 export default {
