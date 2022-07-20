@@ -19,6 +19,7 @@
   </div>
 </template>
 <script>
+import { BNav, BNavItem } from "bootstrap-vue";
 import LoginForm from "../LoginForm.vue";
 import RegForm from "../RegForm/RegForm.vue";
 
@@ -27,6 +28,8 @@ export default {
   components: {
     LoginForm,
     RegForm,
+    BNav,
+    BNavItem,
   },
   data() {
     return {

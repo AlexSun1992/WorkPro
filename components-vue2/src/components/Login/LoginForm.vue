@@ -1,17 +1,5 @@
 <template>
   <div>
-    <!--  <div class="login-form-content">
-    <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-7">
-        <div class="block-registration px-2 px-md-4 pb-3 mt-3">
-  <b-nav card-header tabs>
-            <b-nav-item active>Вход</b-nav-item>
-            <b-nav-item
-              class="d-none d-lg-inline-block"
-              @click="getToRegistration"
-              >Регистрация</b-nav-item
-            >
-          </b-nav> -->
     <div>{{ errorMessage }}</div>
     <b-form @submit.prevent="onSubmit">
       <b-form-group label="Телефон" label-cols="12">
@@ -79,9 +67,6 @@
         >Восстановить</a
       >
     </div>
-    <!--</div>
-      </div>
-    </div>-->
   </div>
 </template>
 
@@ -95,15 +80,11 @@ import {
   BFormInvalidFeedback,
   BSpinner,
   BButton,
-  BNav,
-  BNavItem,
 } from "bootstrap-vue";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
-
-// const COOKIE_NAME = "url";
 
 export default {
   name: "LoginForm",
@@ -114,8 +95,6 @@ export default {
     BFormInvalidFeedback,
     BSpinner,
     BButton,
-    BNav,
-    BNavItem,
   },
   mixins: [validationMixin],
   directives: { mask },
