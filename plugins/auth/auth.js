@@ -1,23 +1,7 @@
 /* eslint-disable */
-import converter from "@/converters/menu";
-import { getErrorMessage } from "../utils/transform";
-export default function ({ app, store, redirect, $auth, $sentry }) {
-  let toastCount = 0;
-  const makeToast = (error) => {
-    toastCount++;
-    if (toastCount > 2) {
-      $nuxt.$bvToast.hide(toastCount - 2);
-    }
+import { makeToast } from "./toast";
 
-    $nuxt.$bvToast.toast(error.MESSAGE, {
-      id: toastCount,
-      title: "Ошибка",
-      variant: "danger",
-      autoHideDelay: 20000,
-      appendToast: false,
-      toaster: "b-toaster-top-full",
-    });
-  };
+export default function ({ app, redirect, $auth, $sentry }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
       return;

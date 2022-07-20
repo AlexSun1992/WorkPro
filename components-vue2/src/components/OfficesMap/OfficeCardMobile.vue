@@ -22,14 +22,14 @@
             <button v-if="office.station" class="oml-btn-open"></button>
           </div>
           <div v-if="i == 0 && office.station" class="count-office">
-            {{ count(office) }}
+            {{ countOffices(office) }}
           </div>
           <div class="card-body">
             <!-- <div v-if="office.station" class="card-title">
               {{ item.SSHORTNAME }}
             </div> -->
             <div v-if="!office.station" class="count-office">
-              <!-- {{ count(office) }} -->
+              <!-- {{ countOffices(office) }} -->
             </div>
             <div class="card-office-adress row">
               <div class="col-4 pe-0" v-if="item.SPATH1">
@@ -111,12 +111,12 @@
 <script>
 import { BCard, BButton, BCardText } from "bootstrap-vue";
 import {
-  count,
+  countOffices,
   getUnderlineId,
   getPhones,
   getGrafs,
   getTime,
-} from "../../../../utils/map/helpers";
+} from "../../../../utils/map/helpers/helpers";
 export default {
   name: "OfficeCardMobile",
   components: {
@@ -127,7 +127,7 @@ export default {
   props: ["office"],
   data() {
     return {
-      count,
+      countOffices,
       getUnderlineId,
       getPhones,
       getGrafs,

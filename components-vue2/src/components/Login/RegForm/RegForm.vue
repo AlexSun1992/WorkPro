@@ -40,10 +40,11 @@
                 :mode-type="'REG'"
                 :validateState="validateState"
                 :disabled="registrationInProcess"
-                :text-message="textMessage"
+                :text-message="successSendMessageText"
                 :tab-index="[10, 15]"
                 :error="errorMessage"
                 @checkCodeFieldValid="isCodeFieldValid"
+                @messageText="getTextMessage"
               />
             </b-form-group>
             <!-- Фамилия -->
@@ -282,6 +283,7 @@ import {
   BNav,
   BNavItem,
 } from "bootstrap-vue";
+import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -333,6 +335,7 @@ export default {
       captchaToken: null,
       isRegConfirmed: null,
       token: 1,
+      successSendMessageText: null,
       textMessage:
         "На Ваш номер телефона был отправлен код, который необходимо ввести.",
       errorMessage: null,
@@ -390,6 +393,10 @@ export default {
   },
 
   methods: {
+    getTextMessage(value) {
+      this.successSendMessageText = value;
+    },
+
     isCodeFieldValid(data) {
       this.codeFieldValid = data;
     },
@@ -500,8 +507,10 @@ export default {
 
         this.registrationInProcess = false;
         if (response?.status === 200) {
+          const messageAfterSuccessRegistration =
+            getMessageFromSuccessResponse(response);
           this.$bvModal
-            .msgBoxOk("Вы успешно зарегистрированы в системе!", {
+            .msgBoxOk(`${messageAfterSuccessRegistration}`, {
               title: "Подтверждение",
               size: "md",
               buttonSize: "md",

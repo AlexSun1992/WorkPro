@@ -124,6 +124,7 @@ import {
 } from "bootstrap-vue";
 
 import { isCaptchaBecomesHide } from "./captcha.helper";
+import { getMessageFromSuccessResponse } from "./verifyUser.helper";
 
 export default {
   components: {
@@ -175,6 +176,7 @@ export default {
       loading: false,
       codeFieldShown: false,
       allHiddenCaptchas: null,
+      meassageWasSend: null,
     };
   },
 
@@ -233,16 +235,24 @@ export default {
           this.modeType === "REG" ||
           this.modeType === "RECOVERY"
         ) {
-          let method = params.error ? "sendsmscode2" : "sendsmscode";
-          return await axios.post(
+          const method = params.error ? "sendsmscode2" : "sendsmscode";
+
+          const response = await axios.post(
             `/free/v2/${method}` +
               `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,
             params,
             headers
           );
-        } else {
-          return await axios.post("/free/v2/sendemailcode", params, headers);
+
+          const getSuccessSendMessageText =
+            getMessageFromSuccessResponse(response);
+
+          if (getSuccessSendMessageText !== undefined) {
+            this.$emit("messageText", getSuccessSendMessageText);
+          }
+          return response;
         }
+        return await axios.post("/free/v2/sendemailcode", params, headers);
       } catch (e) {
         this.loading = false;
         this.$emit("error", e.response.data.INFO);

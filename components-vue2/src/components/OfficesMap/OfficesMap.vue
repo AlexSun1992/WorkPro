@@ -115,7 +115,7 @@ import {
   isOpened,
   getTemplate,
   checkClusterStatus,
-} from "../../../../utils/map/helpers";
+} from "../../../../utils/map/helpers/helpers";
 import getCurrentCity from "../../../../utils/map/currentCity";
 Vue.use(LoadScript);
 export default {
@@ -417,7 +417,6 @@ export default {
       this.currentStation = "";
     },
     openOnMap(e) {
-      debugger;
       this.myMap.geoObjects.remove(this.placemark);
       this.currentTab = 0;
       this.updateMap(
@@ -632,6 +631,9 @@ export default {
         );
       });
       this.setPlaceholder();
+      if (window.innerWidth < 992) {
+        this.myMap.options.set("balloonAutoPan", false);
+      }
 
       // checkClusterStatus(this.myClusterer);
     },
@@ -735,7 +737,6 @@ export default {
       }
     },
     updateMap(state, caption, zoom = 12, visibility = true) {
-      debugger;
       this.placemark = new ymaps.Placemark(
         this.myMap.getCenter(),
         {
@@ -784,7 +785,6 @@ export default {
         obj.getPremiseNumber(),
         obj.getPremise(),
       ].join(" ");
-      debugger;
       this.updateMap(this.mapState, shortAddress);
     },
     async showOnMap(suggest, coords) {
