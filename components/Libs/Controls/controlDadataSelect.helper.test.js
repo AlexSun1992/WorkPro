@@ -4,15 +4,18 @@ import { getSuggestionsWithOutFilters } from "./controlDadataSelect.helper";
 describe("сравнение значений возвращаемых из справочника dadata", () => {
   it("получение данных с фильтрами", async () => {
     const suggestionsWithFilters = await getSuggestionsWithFilters();
-
-    expect(suggestionsWithFilters.length).toBe(0);
+    const objectWithValueIncludesBus = suggestionsWithFilters.find((item) =>
+      item.value.includes("АВТОБУС")
+    );
+    expect(objectWithValueIncludesBus).toBe(undefined);
   });
   it("получение данных без фильтров", async () => {
     const suggestionsWithOutFilters = await getSuggestionsWithOutFilters();
-    const isBus = suggestionsWithOutFilters.find((item) =>
+    const objectWithValueIncludesBus = suggestionsWithOutFilters.find((item) =>
       item.value.includes("АВТОБУС")
     );
 
-    expect(typeof isBus).toBe("object");
+    const isBusExist = objectWithValueIncludesBus.value.includes("АВТОБУС");
+    expect(isBusExist).toBe(true);
   });
 });
