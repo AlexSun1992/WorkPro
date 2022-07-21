@@ -18,7 +18,7 @@ export function makeToast(error) {
   }
 
   const errorText = getErrorMessage(error.MESSAGE);
-  const result = errorText.replace(/[^a-zа-яё0-9\s]/gi, " ");
+  const result = errorText?.replace(/[^a-zа-яё0-9\s]/gi, " ");
 
   const getArr = convertErrorMessageToArray(error.MESSAGE);
   const isORA = isORAexist(getArr);
