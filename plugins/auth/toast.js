@@ -15,8 +15,6 @@ export function makeToast(error) {
 
   const errorText = getErrorMessage(error.MESSAGE);
 
-  console.log("errorText", errorText);
-
   $nuxt.$bvToast.toast(errorText, {
     id: toastCount,
     title: "Ошибка",
