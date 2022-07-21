@@ -12,10 +12,16 @@
     </div>
     <login-form v-if="visibleForm === 'login'"></login-form>
     <reg-form v-else></reg-form>
-    <button @click="toggleForm" class="login-btn-mobile d-lg-none mt-3">
-      Регистрация
+    <button
+      v-if="visibleForm === 'login'"
+      @click="toggleForm"
+      class="login-btn-mobile d-lg-none mt-3"
+    >
+      РЕГИСТРАЦИЯ
     </button>
-    <button @click="toggleForm" class="login-btn-mobile d-lg-none">ВХОД</button>
+    <button v-else @click="toggleForm" class="login-btn-mobile d-lg-none">
+      ВХОД
+    </button>
   </div>
 </template>
 <script>
