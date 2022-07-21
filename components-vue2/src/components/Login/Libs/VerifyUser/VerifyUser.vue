@@ -54,9 +54,14 @@
         :tabindex="tabIndex[2]"
         >Получить код
       </b-button>
-      <b-link v-if="isSendCode" @click="changeNumber">{{
-        loginType === "phone" ? "Изменить номер" : "Изменить email"
-      }}</b-link>
+      <button
+        v-if="isSendCode"
+        @click="changeNumber"
+        class="btn-link"
+        type="button"
+      >
+        {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
+      </button>
     </div>
 
     <div v-if="isShowCodeEnter">
