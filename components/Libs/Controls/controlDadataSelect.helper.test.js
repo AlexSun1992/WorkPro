@@ -1,4 +1,4 @@
-import { getBrandmodelSuggestions } from "./ControlDadataSelect.helper";
+import { getBrandmodelSuggestions } from "./controlDadataSelect.helper";
 
 describe("сравнение значений возвращаемых из справочника dadata", () => {
   it("получение данных с фильтрами", async () => {
