@@ -1,13 +1,19 @@
 import axios from "axios";
 
-export async function getSuggestionsWithFilters(body) {
+/**
+ * Подсказки Dadata по справочнику brandmodel
+ * @param {String} query   Строка для поиска
+ * @param {Array} filters  Набор фильтров
+ * @returns Результаты поиска
+ */
+export async function getBrandmodelSuggestions(query, filters) {
   const group = [];
 
   const response = await axios({
     method: "post",
     url: "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/brandmodel",
 
-    data: body,
+    data: { query, filters },
   });
 
   const result = response.data;
