@@ -1,8 +1,3 @@
-export function getCopy(errorMessage) {
-  //   const copyErrorMessage = JSON.parse(JSON.stringify(errorMessage));
-  return errorMessage;
-}
-
 export function convertErrorMessageToArray(errorMessage) {
   const result = errorMessage.split("\n");
   return result;

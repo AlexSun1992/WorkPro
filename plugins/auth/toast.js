@@ -1,4 +1,8 @@
-import { getErrorMessage } from "./toast.helper";
+import {
+  getErrorMessage,
+  isORAexist,
+  convertErrorMessageToArray,
+} from "./toast.helper";
 
 let toastCount = 0;
 
@@ -14,23 +18,27 @@ export function makeToast(error) {
   }
 
   const errorText = getErrorMessage(error.MESSAGE);
+  const result = errorText.replace(/[^a-zа-яё0-9\s]/gi, " ");
 
-  $nuxt.$bvToast.toast(errorText, {
-    id: toastCount,
-    title: "Ошибка",
-    variant: "danger",
-    autoHideDelay: 20000,
-    appendToast: false,
-    toaster: "b-toaster-top-full",
-  });
+  const getArr = convertErrorMessageToArray(error.MESSAGE);
+  const isORA = isORAexist(getArr);
 
-  // else
-  //   $nuxt.$bvToast.toast(error.MESSAGE, {
-  //     id: toastCount,
-  //     title: "Ошибка",
-  //     variant: "danger",
-  //     autoHideDelay: 20000,
-  //     appendToast: false,
-  //     toaster: "b-toaster-top-full",
-  //   });
+  if (isORA) {
+    $nuxt.$bvToast.toast(result, {
+      id: toastCount,
+      title: "Ошибка",
+      variant: "danger",
+      autoHideDelay: 20000,
+      appendToast: false,
+      toaster: "b-toaster-top-full",
+    });
+  } else
+    $nuxt.$bvToast.toast(error.MESSAGE, {
+      id: toastCount,
+      title: "Ошибка",
+      variant: "danger",
+      autoHideDelay: 20000,
+      appendToast: false,
+      toaster: "b-toaster-top-full",
+    });
 }
