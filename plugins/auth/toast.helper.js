@@ -11,6 +11,6 @@ export function isORAexist(errorMessage) {
 export function getErrorMessage(errorMessage) {
   const err = convertErrorMessageToArray(errorMessage);
   const isRes = isORAexist(err);
-  const result = isRes.split(":")[1];
+  const result = isRes?.split(":")[1];
   return result;
 }
