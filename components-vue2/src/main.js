@@ -22,6 +22,17 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-auth-form",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/Login/AuthForm/AuthForm"], (lazyComponent) => {
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
 Vue.customElement(
   "component-login-form",
   () =>

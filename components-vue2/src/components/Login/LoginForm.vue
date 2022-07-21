@@ -1,87 +1,71 @@
 <template>
-  <div class="login-form-content">
-    <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-7">
-        <div class="block-registration px-2 px-md-4 pb-3 mt-3">
-          <b-nav card-header tabs>
-            <b-nav-item active>Вход</b-nav-item>
-            <b-nav-item
-              href="/login/registration"
-              class="d-none d-lg-inline-block"
-              >Регистрация</b-nav-item
-            >
-          </b-nav>
-          <div>{{ errorMessage }}</div>
-          <b-form @submit.prevent="onSubmit">
-            <b-form-group label="Телефон" label-cols="12">
-              <b-form-input
-                ref="phoneInput"
-                v-model="$v.user.username.$model"
-                v-mask="usernameMask"
-                :placeholder="placeholder"
-                autofocus
-                type="tel"
-                :state="validateInput('username', isUsernameBlured)"
-                @blur="debouncedUpdate('username', isUsernameBlured)"
-                @input="isUsernameBlured = false"
-                @click="loginTouchesCount = 2"
-                :disabled="authInProcess"
-                class="form-control"
-              >
-              </b-form-input>
+  <div>
+    <div>{{ errorMessage }}</div>
+    <b-form @submit.prevent="onSubmit">
+      <b-form-group label="Телефон" label-cols="12">
+        <b-form-input
+          ref="phoneInput"
+          v-model="$v.user.username.$model"
+          v-mask="usernameMask"
+          :placeholder="placeholder"
+          autofocus
+          type="tel"
+          :state="validateInput('username', isUsernameBlured)"
+          @blur="debouncedUpdate('username', isUsernameBlured)"
+          @input="isUsernameBlured = false"
+          @click="loginTouchesCount = 2"
+          :disabled="authInProcess"
+          class="form-control"
+        >
+        </b-form-input>
 
-              <b-form-invalid-feedback
-                >Пожалуйста, введите корректный номер
-                телефона</b-form-invalid-feedback
-              >
-            </b-form-group>
+        <b-form-invalid-feedback
+          >Пожалуйста, введите корректный номер
+          телефона</b-form-invalid-feedback
+        >
+      </b-form-group>
 
-            <b-form-group label="Пароль" label-cols="12" class="mt-3">
-              <b-form-input
-                v-model="$v.user.password.$model"
-                placeholder="Пароль"
-                type="password"
-                :state="validateInput('password', isPasswordBlured)"
-                @blur="blurField('password', isPasswordBlured)"
-                @input="isPasswordBlured = false"
-                class="form-control"
-                :disabled="authInProcess"
-              ></b-form-input>
-              <b-form-invalid-feedback
-                >Пожалуйста, введите пароль
-              </b-form-invalid-feedback>
-            </b-form-group>
+      <b-form-group label="Пароль" label-cols="12" class="mt-3">
+        <b-form-input
+          v-model="$v.user.password.$model"
+          placeholder="Пароль"
+          type="password"
+          :state="validateInput('password', isPasswordBlured)"
+          @blur="blurField('password', isPasswordBlured)"
+          @input="isPasswordBlured = false"
+          class="form-control"
+          :disabled="authInProcess"
+        ></b-form-input>
+        <b-form-invalid-feedback
+          >Пожалуйста, введите пароль
+        </b-form-invalid-feedback>
+      </b-form-group>
 
-            <b-button
-              v-on:enter="fetchToken()"
-              variant="primary"
-              type="submit"
-              :disabled="authInProcess"
-              class="w-100 mt-3"
-              id="btn_entry_lk"
-            >
-              Авторизоваться
-              <b-spinner v-if="authInProcess" variant="light"></b-spinner>
-            </b-button>
-            <div class="mt-3 text-center">
-              <a
-                href="https://client.reso.ru/loginesia/loginesia/prod"
-                id="btn_recovery-password_lk"
-                >Войти через Госуслуги</a
-              >
-            </div>
-          </b-form>
-          <a href="/login/registration" class="login-btn-mobile d-lg-none mt-3"
-            >Регистрация</a
-          >
-          <div class="mt-3 text-center">
-            <span class="forgot-password">Забыли пароль?&nbsp;&nbsp;</span>
-            <a href="/login/password-recovery" id="btn_recovery-password_lk"
-              >Восстановить</a
-            >
-          </div>
-        </div>
+      <b-button
+        v-on:enter="fetchToken()"
+        variant="primary"
+        type="submit"
+        :disabled="authInProcess"
+        class="w-100 mt-3"
+        id="btn_entry_lk"
+      >
+        Авторизоваться
+        <b-spinner v-if="authInProcess" variant="light"></b-spinner>
+      </b-button>
+      <div class="mt-3 text-center">
+        <a
+          href="https://client.reso.ru/loginesia/loginesia/prod"
+          id="btn_recovery-password_lk"
+          >Войти через Госуслуги</a
+        >
       </div>
+    </b-form>
+
+    <div class="mt-3 text-center">
+      <span class="forgot-password">Забыли пароль?&nbsp;&nbsp;</span>
+      <a href="/login/password-recovery" id="btn_recovery-password_lk"
+        >Восстановить</a
+      >
     </div>
   </div>
 </template>
@@ -96,17 +80,14 @@ import {
   BFormInvalidFeedback,
   BSpinner,
   BButton,
-  BNav,
-  BNavItem,
 } from "bootstrap-vue";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
 
-// const COOKIE_NAME = "url";
-
 export default {
+  name: "LoginForm",
   components: {
     BForm,
     BFormGroup,
@@ -114,8 +95,6 @@ export default {
     BFormInvalidFeedback,
     BSpinner,
     BButton,
-    BNav,
-    BNavItem,
   },
   mixins: [validationMixin],
   directives: { mask },
