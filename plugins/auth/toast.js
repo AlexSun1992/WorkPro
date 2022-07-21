@@ -1,3 +1,5 @@
+import { getErrorMessage } from "./toast.helper";
+
 let toastCount = 0;
 
 export function makeToast(error) {
@@ -11,7 +13,11 @@ export function makeToast(error) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
 
-  $nuxt.$bvToast.toast(error.MESSAGE, {
+  const errorText = getErrorMessage(error.MESSAGE);
+
+  console.log("errorText", errorText);
+
+  $nuxt.$bvToast.toast(errorText, {
     id: toastCount,
     title: "Ошибка",
     variant: "danger",
@@ -19,4 +25,14 @@ export function makeToast(error) {
     appendToast: false,
     toaster: "b-toaster-top-full",
   });
+
+  // else
+  //   $nuxt.$bvToast.toast(error.MESSAGE, {
+  //     id: toastCount,
+  //     title: "Ошибка",
+  //     variant: "danger",
+  //     autoHideDelay: 20000,
+  //     appendToast: false,
+  //     toaster: "b-toaster-top-full",
+  //   });
 }
