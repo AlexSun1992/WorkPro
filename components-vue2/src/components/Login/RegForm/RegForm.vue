@@ -33,13 +33,8 @@
         />
       </b-form-group>
       <div class="row">
-        <div class="col-12 col-md-6 mt-3">
-          <b-form-group
-            class="required"
-            v-if="codeFieldValid"
-            label="Фамилия"
-            label-cols="12"
-          >
+        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+          <b-form-group class="required" label="Фамилия" label-cols="12">
             <b-form-input
               list="my-list-id"
               :id="Math.random().toString()"
@@ -68,13 +63,8 @@
             </datalist>
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-2 mt-md-3">
-          <b-form-group
-            v-if="codeFieldValid"
-            label="Имя"
-            label-cols="12"
-            class="required"
-          >
+        <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
+          <b-form-group label="Имя" label-cols="12" class="required">
             <b-form-input
               list="my-list-id"
               :id="Math.random().toString()"
@@ -103,13 +93,8 @@
           </b-form-group>
         </div>
 
-        <div class="col-12 col-md-6 mt-2 mt-md-3">
-          <b-form-group
-            v-if="codeFieldValid"
-            label="Отчество"
-            label-cols="12"
-            class="required"
-          >
+        <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
+          <b-form-group label="Отчество" label-cols="12" class="required">
             <b-form-input
               list="my-list-id"
               :id="Math.random().toString()"
@@ -139,13 +124,8 @@
             </datalist>
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-2 mt-md-3">
-          <b-form-group
-            v-if="codeFieldValid"
-            label="Дата рождения"
-            label-cols="12"
-            class="required"
-          >
+        <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
+          <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
@@ -154,13 +134,8 @@
             />
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-3">
-          <b-form-group
-            class="required"
-            v-if="codeFieldValid"
-            label="E-mail"
-            label-cols="12"
-          >
+        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+          <b-form-group class="required" label="E-mail" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
               v-model="$v.form.email.$model"
@@ -179,12 +154,8 @@
         </div>
 
         <div class="col-12 col-md-6"></div>
-        <div class="col-12 col-md-6 mt-3">
-          <b-form-group
-            v-if="codeFieldValid"
-            label="Номер полиса (Необязательно)"
-            label-cols="12"
-          >
+        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+          <b-form-group label="Номер полиса (Необязательно)" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
               v-model="form.policyNumber"
@@ -196,9 +167,8 @@
           </b-form-group>
         </div>
         <div class="col-12 col-md-6"></div>
-        <div class="col-12">
+        <div class="col-12" v-if="codeFieldValid">
           <verify-password
-            v-if="codeFieldValid"
             :v="$v.form"
             :validateState="validateState"
             :disabled="registrationInProcess"
