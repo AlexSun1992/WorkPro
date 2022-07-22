@@ -1,8 +1,4 @@
-import {
-  getErrorMessage,
-  isORAexist,
-  convertErrorMessageToArray,
-} from "./toast.helper";
+import { getErrorMessage } from "./toast.helper";
 
 let toastCount = 0;
 
@@ -17,24 +13,12 @@ export function makeToast(error) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
 
-  const errorText = getErrorMessage(error.MESSAGE);
-
-  if (errorText) {
-    $nuxt.$bvToast.toast(errorText, {
-      id: toastCount,
-      title: "Ошибка",
-      variant: "danger",
-      autoHideDelay: 20000,
-      appendToast: false,
-      toaster: "b-toaster-top-full",
-    });
-  } else
-    $nuxt.$bvToast.toast(error.MESSAGE, {
-      id: toastCount,
-      title: "Ошибка",
-      variant: "danger",
-      autoHideDelay: 20000,
-      appendToast: false,
-      toaster: "b-toaster-top-full",
-    });
+  $nuxt.$bvToast.toast(getErrorMessage(error.MESSAGE), {
+    id: toastCount,
+    title: "Ошибка",
+    variant: "danger",
+    autoHideDelay: 20000,
+    appendToast: false,
+    toaster: "b-toaster-top-full",
+  });
 }
