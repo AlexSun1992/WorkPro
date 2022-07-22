@@ -1,48 +1,27 @@
-import {
-  errorDataMessage,
-  errorDataMessageWithoutORA,
-} from "./toast.helper.fixtures";
-import {
-  convertErrorMessageToArray,
-  isORAexist,
-  getErrorMessage,
-} from "./toast.helper";
+import { getErrorMessage } from "./toast.helper";
 
 describe("Модуль вывода сообщения об ошибке", () => {
-  it("Преобразуем данные об ошибке из строки в массив", () => {
-    const errorMessageConvertToArray =
-      convertErrorMessageToArray(errorDataMessage);
-    expect(Array.isArray(errorMessageConvertToArray)).toBe(true);
+  it("Тестирование сообщения с ORA в тексте без скобок", () => {
+    const errorMessageText =
+      'ORA-20105: Некорректный номер телефона\nORA-06512: на  "MOBILE.CLIENTUTILS", line 934\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
+    const errorMessageWithoutORA = getErrorMessage(errorMessageText);
+
+    expect(errorMessageWithoutORA).toBe("Некорректный номер телефона");
   });
 
-  it("Определяем наличие ORA в массиве", () => {
-    const arrayFromErrorMessage = convertErrorMessageToArray(errorDataMessage);
-    const errorMessageWithORA = isORAexist(arrayFromErrorMessage);
-    expect(errorMessageWithORA).not.toBe(undefined);
-  });
+  it("Тестирование сообщения с ORA в тексте с квадратными скобками", () => {
+    const errorMessageText =
+      'ORA-20105: [Данный номер уже использован в другом личном кабинете]\nORA-06512: на  "MOBILE.CLIENTUTILS", line 954\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
+    const errorMessageBrackets = getErrorMessage(errorMessageText);
 
-  it("Получаем сообщение об ошибке", () => {
-    const errorMessageWithoutORA = getErrorMessage(errorDataMessage);
-    expect(typeof errorMessageWithoutORA).toBe("string");
-  });
-  ///
-  it("Преобразуем данные об ошибке из строки в массив", () => {
-    const errorMessageConvertToArray = convertErrorMessageToArray(
-      errorDataMessageWithoutORA
+    expect(errorMessageBrackets).toBe(
+      "Данный номер уже использован в другом личном кабинете"
     );
-    expect(Array.isArray(errorMessageConvertToArray)).toBe(true);
   });
 
-  it("Определяем наличие ORA в массиве", () => {
-    const arrayFromErrorMessage = convertErrorMessageToArray(
-      errorDataMessageWithoutORA
-    );
-    const errorMessageWithORA = isORAexist(arrayFromErrorMessage);
-    expect(errorMessageWithORA).not.toBe(undefined);
-  });
-
-  it("Получаем сообщение об ошибке", () => {
-    const errorMessageWithoutORA = getErrorMessage(errorDataMessageWithoutORA);
-    expect(typeof errorMessageWithoutORA).toBe("string");
+  it("Тестирование сообщения об ошибке без ORA в тексте", () => {
+    const errorMessageText = "Некорректный номер телефона";
+    const errorMessageWithoutORA = getErrorMessage(errorMessageText);
+    expect(errorMessageWithoutORA).toBe(null);
   });
 });

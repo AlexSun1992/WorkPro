@@ -18,12 +18,9 @@ export function makeToast(error) {
   }
 
   const errorText = getErrorMessage(error.MESSAGE);
-  const errorTextWithoutSymbols = errorText?.replace(/[^a-zа-яё0-9\s]/gi, " ");
-  const getArrFromErrorText = convertErrorMessageToArray(error.MESSAGE);
-  const isORAinErrorText = isORAexist(getArrFromErrorText);
 
-  if (isORAinErrorText) {
-    $nuxt.$bvToast.toast(errorTextWithoutSymbols, {
+  if (errorText) {
+    $nuxt.$bvToast.toast(errorText, {
       id: toastCount,
       title: "Ошибка",
       variant: "danger",
