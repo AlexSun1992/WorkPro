@@ -1,4 +1,4 @@
-import { countOffices, getUnderlineId } from "./helpers";
+import { countOffices, getUnderlineId, getTime } from "./helpers";
 
 describe("countOffices from helpers module", () => {
   it("should return string '1 отделение' if offices countOffices is equal to 1", () => {
@@ -48,5 +48,21 @@ describe("getUnderlineId from helpers module", () => {
       ],
     };
     expect(getUnderlineId(station, office)).toBeDefined();
+  });
+});
+
+describe("getTime from helpers module", () => {
+  it("should return distance to office in minutes", () => {
+    const distance = 1;
+    expect(getTime(distance)).toBe("20 мин");
+  });
+
+  it("should return distance to office in km", () => {
+    const distance = 5.5;
+    expect(getTime(distance)).toBe("5.5 км");
+  });
+
+  it("should return empty string if nothing passed", () => {
+    expect(getTime());
   });
 });

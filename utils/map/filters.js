@@ -19,62 +19,24 @@ export const filters = [
   },
 ];
 
-// export const filterData = function (data, filters) {
-//   debugger;
-//   let candidates = [];
-//   data.forEach((office) => {
-//     let counter = 0;
-//     filters.forEach((filter) => {
-//       if (
-//         office[filter.name] === filter.value ||
-//         (office.hasOwnProperty(filter.name) && filter.value === "")
-//       ) {
-//         counter++;
-//       }
-//     });
-//     if (counter == filters.length) {
-//       candidates.push(office);
-//     }
-//   });
-//   return candidates;
-// };
-
-export const filterData = function (data, filters) {
-  let set = new Set();
-  // let candidates = [];
+export const filterData = (data, appliedFilters) => {
+  const set = new Set();
   data.forEach((office) => {
-    let counter = 0;
-    filters.forEach((filter) => {
+    appliedFilters.forEach((filter) => {
       if (office[filter.name] === filter.value) {
         set.add(office);
       }
     });
-    if (counter == filters.length) {
+    if (appliedFilters.length === 0) {
       set.add(office);
     }
   });
   return Array.from(set);
 };
 
-export const getFilters = function (filters) {
-  let arr = [];
-  // let name;
-  let filtersArray = [...filters];
-  // filtersArray.reduce((sum, filter) => {
-  //   sum[filter.name] = (sum[filter.name] || 0) + 1;
-  //   if (sum[filter.name] > 1) {
-  //     name = filter.name;
-  //     let obj = { ...filter };
-  //     obj.value = "";
-  //     arr.push(obj);
-  //   }
-  //   return sum;
-  // }, {});
-  // if (name) {
-  //   arr.push(...filtersArray.filter((item) => item.name !== name));
-  // }
-  // else {
+export const getFilters = (appliedFilters) => {
+  const arr = [];
+  const filtersArray = [...appliedFilters];
   filtersArray.forEach((item) => arr.push(item));
-  // }
   return arr;
 };

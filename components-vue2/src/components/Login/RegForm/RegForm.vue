@@ -26,20 +26,15 @@
           :validateState="validateState"
           :disabled="registrationInProcess"
           :text-message="successSendMessageText"
-          :tab-index="[10, 15]"
+          :tab-index="[10, 14, 16]"
           :error="errorMessage"
           @checkCodeFieldValid="isCodeFieldValid"
           @messageText="getTextMessage"
         />
       </b-form-group>
       <div class="row">
-        <div class="col-12 col-md-6 mt-3">
-          <b-form-group
-            class="required"
-            v-if="codeFieldValid"
-            label="Фамилия"
-            label-cols="12"
-          >
+        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+          <b-form-group class="required" label="Фамилия" label-cols="12">
             <b-form-input
               list="my-list-id"
               :id="Math.random().toString()"
@@ -48,7 +43,6 @@
               @blur="$v.form.family.$touch(), clearArray()"
               placeholder="Фамилия"
               :disabled="registrationInProcess"
-              tabindex="20"
               autocomplete="new-password"
               @input="askSuggestions('surname')"
             ></b-form-input>
@@ -68,13 +62,8 @@
             </datalist>
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-2 mt-md-3">
-          <b-form-group
-            v-if="codeFieldValid"
-            label="Имя"
-            label-cols="12"
-            class="required"
-          >
+        <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
+          <b-form-group label="Имя" label-cols="12" class="required">
             <b-form-input
               list="my-list-id"
               :id="Math.random().toString()"
@@ -83,7 +72,6 @@
               @blur="$v.form.name.$touch(), clearArray()"
               placeholder="Имя"
               :disabled="registrationInProcess"
-              tabindex="30"
               autocomplete="new-password"
               @input="askSuggestions('name')"
             ></b-form-input>
@@ -103,13 +91,8 @@
           </b-form-group>
         </div>
 
-        <div class="col-12 col-md-6 mt-2 mt-md-3">
-          <b-form-group
-            v-if="codeFieldValid"
-            label="Отчество"
-            label-cols="12"
-            class="required"
-          >
+        <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
+          <b-form-group label="Отчество" label-cols="12" class="required">
             <b-form-input
               list="my-list-id"
               :id="Math.random().toString()"
@@ -118,7 +101,6 @@
               @blur="$v.form.patronymic.$touch(), clearArray()"
               placeholder="Отчество"
               :disabled="registrationInProcess"
-              tabindex="40"
               autocomplete="new-password"
               @input="askSuggestions('patronymic')"
             ></b-form-input>
@@ -139,28 +121,17 @@
             </datalist>
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-2 mt-md-3">
-          <b-form-group
-            v-if="codeFieldValid"
-            label="Дата рождения"
-            label-cols="12"
-            class="required"
-          >
+        <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
+          <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
-              :tabindex="50"
               :disabled="registrationInProcess"
             />
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-3">
-          <b-form-group
-            class="required"
-            v-if="codeFieldValid"
-            label="E-mail"
-            label-cols="12"
-          >
+        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+          <b-form-group class="required" label="E-mail" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
               v-model="$v.form.email.$model"
@@ -169,7 +140,6 @@
               placeholder="E-mail"
               :disabled="registrationInProcess"
               autocomplete="new-password"
-              :tabindex="60"
             ></b-form-input>
 
             <b-form-invalid-feedback>
@@ -179,30 +149,24 @@
         </div>
 
         <div class="col-12 col-md-6"></div>
-        <div class="col-12 col-md-6 mt-3">
-          <b-form-group
-            v-if="codeFieldValid"
-            label="Номер полиса (Необязательно)"
-            label-cols="12"
-          >
+        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+          <b-form-group label="Номер полиса (Необязательно)" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
               v-model="form.policyNumber"
               placeholder="Номер полиса"
               :disabled="registrationInProcess"
-              tabindex="70"
               autocomplete="new-password"
             ></b-form-input>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6"></div>
-        <div class="col-12">
+        <div class="col-12" v-if="codeFieldValid">
           <verify-password
-            v-if="codeFieldValid"
             :v="$v.form"
             :validateState="validateState"
             :disabled="registrationInProcess"
-            :tab-index="[80, 90]"
+            :tab-index="[50, 60]"
           />
         </div>
         <div class="col-12 pt-3">
@@ -213,7 +177,6 @@
             type="submit"
             variant="primary"
             :disabled="registrationInProcess"
-            tabindex="100"
             id="btn_chek_registration_lk"
           >
             Зарегистрироваться
