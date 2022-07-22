@@ -1,4 +1,7 @@
-import { errorDataMessage } from "./toast.helper.fixtures";
+import {
+  errorDataMessage,
+  errorDataMessageWithoutORA,
+} from "./toast.helper.fixtures";
 import {
   convertErrorMessageToArray,
   isORAexist,
@@ -13,14 +16,33 @@ describe("Модуль вывода сообщения об ошибке", () =>
   });
 
   it("Определяем наличие ORA в массиве", () => {
-    const err = convertErrorMessageToArray(errorDataMessage);
-    const test = isORAexist(err);
-    expect(test).not.toBe(undefined);
+    const arrayFromErrorMessage = convertErrorMessageToArray(errorDataMessage);
+    const errorMessageWithORA = isORAexist(arrayFromErrorMessage);
+    expect(errorMessageWithORA).not.toBe(undefined);
   });
 
   it("Получаем сообщение об ошибке", () => {
-    const resultErr = getErrorMessage(errorDataMessage);
-    console.log("resultErr:", resultErr);
-    expect(typeof resultErr).toBe("string");
+    const errorMessageWithoutORA = getErrorMessage(errorDataMessage);
+    expect(typeof errorMessageWithoutORA).toBe("string");
+  });
+  ///
+  it("Преобразуем данные об ошибке из строки в массив", () => {
+    const errorMessageConvertToArray = convertErrorMessageToArray(
+      errorDataMessageWithoutORA
+    );
+    expect(Array.isArray(errorMessageConvertToArray)).toBe(true);
+  });
+
+  it("Определяем наличие ORA в массиве", () => {
+    const arrayFromErrorMessage = convertErrorMessageToArray(
+      errorDataMessageWithoutORA
+    );
+    const errorMessageWithORA = isORAexist(arrayFromErrorMessage);
+    expect(errorMessageWithORA).not.toBe(undefined);
+  });
+
+  it("Получаем сообщение об ошибке", () => {
+    const errorMessageWithoutORA = getErrorMessage(errorDataMessageWithoutORA);
+    expect(typeof errorMessageWithoutORA).toBe("string");
   });
 });

@@ -1,16 +1,16 @@
 export function convertErrorMessageToArray(errorMessage) {
-  const result = errorMessage.split("\n");
-  return result;
+  const getArrayFromErrorTextMessageString = errorMessage.split("\n");
+  return getArrayFromErrorTextMessageString;
 }
 
 export function isORAexist(errorMessage) {
-  const result = errorMessage.find((item) => item.includes("ORA"));
-  return result;
+  const getStringWithORA = errorMessage.find((item) => item.includes("ORA"));
+  return getStringWithORA;
 }
 
 export function getErrorMessage(errorMessage) {
-  const err = convertErrorMessageToArray(errorMessage);
-  const isRes = isORAexist(err);
-  const result = isRes?.split(":")[1];
-  return result;
+  const arrayFromErrorMessage = convertErrorMessageToArray(errorMessage);
+  const errorMessageWithORA = isORAexist(arrayFromErrorMessage);
+  const errorMessageWithoutORA = errorMessageWithORA?.split(":")[1];
+  return errorMessageWithoutORA;
 }
