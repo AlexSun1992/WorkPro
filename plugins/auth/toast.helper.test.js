@@ -30,4 +30,10 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessage = getErrorMessage(errorMessageText);
     expect(errorMessage).toBe("Перечень полей с ошибками: имя, фамилия");
   });
+
+  it("Тестирование сообщения со словом ORACLE в начале", () => {
+    const errorMessageText = "ORACLE-скрипт не валидный";
+    const errorMessage = getErrorMessage(errorMessageText);
+    expect(errorMessage).toBe("ORACLE-скрипт не валидный");
+  });
 });
