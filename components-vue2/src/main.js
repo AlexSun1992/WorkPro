@@ -22,6 +22,17 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-auth-form",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/Login/AuthForm/AuthForm"], (lazyComponent) => {
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
 Vue.customElement(
   "component-login-form",
   () =>
@@ -196,6 +207,17 @@ Vue.customElement(
   () =>
     new Promise((resolve) => {
       require(["./components/PaymentMap/PaymentMap.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
+  "component-show-city-payment",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/PaymentMap/ShowCityPayment"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

@@ -14,8 +14,8 @@
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @input="isUserBlured = false"
           @click="loginTouchesCount = 2"
-          tabindex="10"
           autocomplete="off"
+          :tabindex="tabIndex[1]"
         ></b-form-input>
 
         <b-form-input
@@ -29,10 +29,11 @@
           @input="isUserBlured = false"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
-          :tabindex="tabIndex[0]"
           placeholder="E-mail"
           autocomplete="off"
+          :tabindex="tabIndex[0]"
         ></b-form-input>
+
         <b-form-invalid-feedback
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
@@ -50,11 +51,17 @@
         variant="primary"
         class="w-100"
         id="btn_code_verification_lk"
+        :tabindex="tabIndex[2]"
         >Получить код
       </b-button>
-      <b-link v-if="isSendCode" @click="changeNumber">{{
-        loginType === "phone" ? "Изменить номер" : "Изменить email"
-      }}</b-link>
+      <button
+        v-if="isSendCode"
+        @click="changeNumber"
+        class="btn-link"
+        type="button"
+      >
+        {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
+      </button>
     </div>
 
     <div v-if="isShowCodeEnter">
@@ -82,10 +89,9 @@
         @input="inputTouch(loginType)"
         :disabled="disabled"
         autocomplete="off"
-        :tabindex="tabIndex[1]"
         placeholder="Код подтверждения"
       ></b-form-input>
-
+      <!-- :tabindex="tabIndex[1]" -->
       <b-form-invalid-feedback v-if="!v.code.$model"
         >Пожалуйста, заполните это поле</b-form-invalid-feedback
       >
@@ -122,6 +128,7 @@ import {
 } from "bootstrap-vue";
 
 import { isCaptchaBecomesHide } from "./captcha.helper";
+import { getMessageFromSuccessResponse } from "./verifyUser.helper";
 
 export default {
   components: {
@@ -173,6 +180,7 @@ export default {
       loading: false,
       codeFieldShown: false,
       allHiddenCaptchas: null,
+      meassageWasSend: null,
     };
   },
 
@@ -231,16 +239,24 @@ export default {
           this.modeType === "REG" ||
           this.modeType === "RECOVERY"
         ) {
-          let method = params.error ? "sendsmscode2" : "sendsmscode";
-          return await axios.post(
+          const method = params.error ? "sendsmscode2" : "sendsmscode";
+
+          const response = await axios.post(
             `/free/v2/${method}` +
               `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,
             params,
             headers
           );
-        } else {
-          return await axios.post("/free/v2/sendemailcode", params, headers);
+
+          const getSuccessSendMessageText =
+            getMessageFromSuccessResponse(response);
+
+          if (getSuccessSendMessageText !== undefined) {
+            this.$emit("messageText", getSuccessSendMessageText);
+          }
+          return response;
         }
+        return await axios.post("/free/v2/sendemailcode", params, headers);
       } catch (e) {
         this.loading = false;
         this.$emit("error", e.response.data.INFO);

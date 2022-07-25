@@ -11,7 +11,6 @@
           @blur="v.password.$touch()"
           autocomplete="new-password"
           :disabled="disabled"
-          :tabindex="tabIndex[0]"
         ></b-form-input>
         <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
       </b-form-group>
@@ -37,7 +36,6 @@
           placeholder="Повторите пароль"
           @blur="v.password2.$touch()"
           :disabled="disabled"
-          :tabindex="tabIndex[1]"
         ></b-form-input>
         <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>

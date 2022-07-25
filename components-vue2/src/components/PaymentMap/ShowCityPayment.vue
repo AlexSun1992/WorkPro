@@ -3,35 +3,11 @@
     <b-button
       class="select-sity"
       variant="link"
-      @click="visible = !visible"
+      @click="showModalSelectCity()"
       id="btn_city_head_all"
     >
       {{ city }}
     </b-button>
-    <b-collapse v-model="visible" class="sity-question">
-      <b-card>
-        <div class="close-sity-block" />
-        <div class="sity-block-text">
-          Ваш город: <b>{{ city }}</b>
-        </div>
-        <b-button
-          variant="primary"
-          class="btn-icon-left"
-          @click="setAutoCity(city)"
-          id="btn_yes_city_head_all"
-        >
-          Да, верно
-        </b-button>
-        <b-button
-          variant="secondary"
-          class="ml-3"
-          @click="showModalSelectCity()"
-          id="btn_change_city_head_all"
-        >
-          Нет, другой
-        </b-button>
-      </b-card>
-    </b-collapse>
     <b-modal id="select-city" size="lg" hide-footer>
       <template #modal-title> Выберите город </template>
       <div>
@@ -94,7 +70,7 @@ function getParams(input) {
   };
 }
 export default {
-  name: "ChangeCity",
+  name: "ShowCityPayment",
   components: {
     Autocomplete,
     BButton,
@@ -110,7 +86,6 @@ export default {
   data() {
     return {
       city: null,
-      visible: false,
       kladr: null,
       lat: null,
       lon: null,
@@ -152,7 +127,6 @@ export default {
       this.city = Cookies.get("location_user");
     } else {
       getCurrentCity().then(({ kladr, city }) => {
-        this.visible = true;
         if (city && kladr) {
           this.city = city;
           this.kladr = kladr;
@@ -207,17 +181,8 @@ export default {
       this.changeCity({ city: this.city, kladr: this.kladr });
       notifyListeners();
     },
-    setAutoCity(result) {
-      this.visible = false;
-      this.$store.dispatch("map/setCity", {
-        city: this.city,
-        coords: [this.lat, this.lon],
-      });
-      Cookies.set("kladr_id", this.kladr);
-      Cookies.set("location_user", result);
-    },
+
     showModalSelectCity() {
-      this.visible = false;
       this.$bvModal.show("select-city");
     },
     async search(input) {

@@ -18,19 +18,13 @@
             <button class="oml-btn-open"></button>
           </div>
           <div v-if="i == 0 && !office.station" class="name">
-            <!-- {{ item.SSHORTNAME }} -->
             <button v-if="office.station" class="oml-btn-open"></button>
           </div>
           <div v-if="i == 0 && office.station" class="count-office">
-            {{ count(office) }}
+            {{ countOffices(office) }}
           </div>
           <div class="card-body">
-            <!-- <div v-if="office.station" class="card-title">
-              {{ item.SSHORTNAME }}
-            </div> -->
-            <div v-if="!office.station" class="count-office">
-              <!-- {{ count(office) }} -->
-            </div>
+            <div v-if="!office.station" class="count-office"></div>
             <div class="card-office-adress row">
               <div class="col-4 pe-0" v-if="item.SPATH1">
                 <div class="position-relative">
@@ -109,25 +103,25 @@
 </template>
 
 <script>
-import { BCard, BButton, BCardText } from "bootstrap-vue";
+import { BCard, BCardText } from "bootstrap-vue";
 import {
-  count,
+  countOffices,
   getUnderlineId,
   getPhones,
   getGrafs,
   getTime,
-} from "../../../../utils/map/helpers";
+  showWorkingHours,
+} from "../../../../utils/map/helpers/helpers";
 export default {
   name: "OfficeCardMobile",
   components: {
     BCard,
-    BButton,
     BCardText,
   },
   props: ["office"],
   data() {
     return {
-      count,
+      countOffices,
       getUnderlineId,
       getPhones,
       getGrafs,
@@ -135,44 +129,8 @@ export default {
       isInfoShown: false,
       isGrafShown: false,
       isOpened: true,
+      showWorkingHours,
     };
-  },
-  methods: {
-    showWorkingHours(office) {
-      let dateNow = new Date();
-      let day = dateNow.getDay();
-      let dateEnd = new Date();
-      day = day == 0 ? 7 : day;
-      let dayObj = office.GRAF?.find((item) => item.NDAY == day);
-      if (office.GRAF && dayObj) {
-        const [endHour, endMinute] = dayObj?.SEND.split(".");
-        dateEnd.setHours(endHour);
-        dateEnd.setMinutes(endMinute);
-        let str;
-        if (dateNow < dateEnd) {
-          str = `Открыт до ${dateEnd.getHours()}:${
-            dateEnd.getMinutes() == 0
-              ? dateEnd.getMinutes() + "0"
-              : dateEnd.getMinutes()
-          }`;
-        } else if (dateNow > dateEnd && office.GRAF[day]) {
-          str = `Откроется завтра в ${office.GRAF[day].SBEGIN}`;
-        } else if (dateNow > dateEnd && !office.GRAF[day]) {
-          this.isOpened = false;
-          dateNow.setDate(
-            dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
-          );
-          str =
-            "Закрыт до " +
-            ("0" + dateNow.getDate()).slice(-2) +
-            "." +
-            ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-            "." +
-            dateNow.getFullYear();
-        }
-        return str;
-      }
-    },
   },
 };
 </script>

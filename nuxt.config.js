@@ -154,7 +154,7 @@ module.exports = {
       home: false,
       user: false,
     },
-    plugins: ["~/plugins/auth.js"],
+    plugins: ["~/plugins/auth/auth.js"],
   },
   server: {
     port: 8000, // default: 3000

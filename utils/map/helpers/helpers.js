@@ -1,26 +1,18 @@
 const getTime = (distance) => {
+  if (!distance) return "";
   const mins = (distance / 3) * 60;
   if (mins > 20) return `${distance.toFixed(1)} км`;
-  const hours = Math.trunc(mins / 60);
-  const minutes = mins == 0 ? 1 : mins % 60;
-
-  return hours > 0
-    ? `${hours} ч ${parseInt(minutes)} мин`
-    : `${parseInt(minutes)} мин`;
+  const minutes = mins === 0 ? 1 : mins % 60;
+  return `${parseInt(minutes)} мин`;
 };
 
 const isOpened = (office) => {
   let opened = true;
-  // if (
-  //   office.SSHORTNAME === "ДПМосква-Северо-Запад(РЕСО-73)" ||
-  //   office.SSHORTNAME === "РЕСО-735"
-  // )
-  //   return false;
-  let dateNow = new Date();
+  const dateNow = new Date();
   let day = dateNow.getDay();
   let dateEnd = new Date();
-  day = day == 0 ? 7 : day;
-  let dayObj = office.GRAF?.find((item) => item.NDAY == day);
+  day = day === 0 ? 7 : day;
+  let dayObj = office.GRAF?.find((item) => item.NDAY === day);
   if (office.GRAF && dayObj) {
     const [endHour, endMinute] = dayObj?.SEND.split(".");
     dateEnd.setHours(endHour);
@@ -65,12 +57,6 @@ const showWorkingHours = (agency) => {
     } else if (dateNow > dateEnd && nexDayObj) {
       str = `Откроется завтра в ${nexDayObj.SBEGIN}`;
     }
-    // else if (dateNow > dateEnd) {
-    //   dateNow.setDate(
-    //     dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
-    //   );
-    //   str = closedString;
-    // }
     return str;
   }
   return closedString;
@@ -197,15 +183,14 @@ const getTemplate = (agency) => {
   return template;
 };
 
-const count = (office) => {
+const countOffices = (office) => {
   let str;
-  if (!office.info) return;
-  if (office.info.length == 1) {
-    str = office.info.length + " отделение";
+  if (office.info.length === 1) {
+    str = `${office.info.length} отделение`;
   } else if (office.info.length > 1 && office.info.length < 5) {
-    str = office.info.length + " отделения";
+    str = `${office.info.length} отделения`;
   } else {
-    str = office.info.length + " отделений";
+    str = `${office.info.length} отделений`;
   }
   return str;
 };
@@ -270,7 +255,7 @@ module.exports = {
   isOpened,
   showWorkingHours,
   getTemplate,
-  count,
+  countOffices,
   getUnderlineId,
   getPhones,
   getGrafs,
