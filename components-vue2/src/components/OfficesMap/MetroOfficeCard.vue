@@ -94,7 +94,6 @@
                 ></span>
                 <span>{{ item.SNAME }}</span>
                 <span v-if="item.DISTANCE" class="card-office-distance">
-                  <!-- {{ office.NDISTANSE.toFixed(1) + " км" }} -->
                   {{ getTime(item.DISTANCE) }}
                 </span>
               </div>
@@ -131,7 +130,12 @@
 </template>
 
 <script>
-import { showWorkingHours } from "../../../../utils/map/helpers/helpers";
+import {
+  showWorkingHours,
+  getTime,
+  getGrafs,
+  getPhones,
+} from "../../../../utils/map/helpers/helpers";
 
 export default {
   name: "MetroOfficeCard",
@@ -141,63 +145,10 @@ export default {
       isOpened: true,
       isGrafShown: false,
       showWorkingHours,
+      getTime,
+      getGrafs,
+      getPhones,
     };
-  },
-  methods: {
-    getTime(distance) {
-      const mins = (distance / 3) * 60;
-      const hours = Math.trunc(mins / 60);
-      const minutes = mins % 60;
-      return hours > 0
-        ? `${hours} ч ${parseInt(minutes)} мин`
-        : `${parseInt(minutes)} мин`;
-    },
-    getGrafs(grafs) {
-      let grafsArr = grafs.split("\n");
-      grafsArr.pop();
-      return grafsArr;
-    },
-    getPhones(phones) {
-      let phonesArr = phones.split(";");
-      phonesArr.pop();
-      return phonesArr;
-    },
-    // showWorkingHours(agency) {
-    //   const dateNow = new Date();
-    //   let day = dateNow.getDay();
-    //   const dateEnd = new Date();
-    //   day = day == 0 ? 7 : day;
-
-    //   if (!agency.GRAF) return "";
-
-    //   let dayObj = agency.GRAF?.find((item) => item.NDAY == day);
-    //   let nexDayObj = agency.GRAF?.find((item) => item.NDAY == day + 1);
-    //   let closedString =
-    //     "Закрыт до " +
-    //     ("0" + (dateNow.getDate() + 1)).slice(-2) +
-    //     "." +
-    //     ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-    //     "." +
-    //     dateNow.getFullYear();
-
-    //   if (dayObj) {
-    //     const [endHour, endMinute] = dayObj?.SEND.split(".");
-    //     dateEnd.setHours(endHour);
-    //     dateEnd.setMinutes(endMinute);
-    //     let str;
-    //     if (dateNow < dateEnd) {
-    //       str = `Открыт до ${dateEnd.getHours()}:${
-    //         dateEnd.getMinutes() == 0
-    //           ? dateEnd.getMinutes() + "0"
-    //           : dateEnd.getMinutes()
-    //       }`;
-    //     } else if (dateNow > dateEnd && nexDayObj) {
-    //       str = `Откроется завтра в ${nexDayObj.SBEGIN}`;
-    //     }
-    //     return str;
-    //   }
-    //   return closedString;
-    // },
   },
 };
 </script>
