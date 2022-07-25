@@ -26,7 +26,7 @@
           :validateState="validateState"
           :disabled="registrationInProcess"
           :text-message="successSendMessageText"
-          :tab-index="[10, 15]"
+          :tab-index="[10, 14, 16]"
           :error="errorMessage"
           @checkCodeFieldValid="isCodeFieldValid"
           @messageText="getTextMessage"
@@ -43,7 +43,6 @@
               @blur="$v.form.family.$touch(), clearArray()"
               placeholder="Фамилия"
               :disabled="registrationInProcess"
-              tabindex="20"
               autocomplete="new-password"
               @input="askSuggestions('surname')"
             ></b-form-input>
@@ -73,7 +72,6 @@
               @blur="$v.form.name.$touch(), clearArray()"
               placeholder="Имя"
               :disabled="registrationInProcess"
-              tabindex="30"
               autocomplete="new-password"
               @input="askSuggestions('name')"
             ></b-form-input>
@@ -103,7 +101,6 @@
               @blur="$v.form.patronymic.$touch(), clearArray()"
               placeholder="Отчество"
               :disabled="registrationInProcess"
-              tabindex="40"
               autocomplete="new-password"
               @input="askSuggestions('patronymic')"
             ></b-form-input>
@@ -129,7 +126,6 @@
             <birthday-picker
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
-              :tabindex="50"
               :disabled="registrationInProcess"
             />
           </b-form-group>
@@ -144,7 +140,6 @@
               placeholder="E-mail"
               :disabled="registrationInProcess"
               autocomplete="new-password"
-              :tabindex="60"
             ></b-form-input>
 
             <b-form-invalid-feedback>
@@ -161,7 +156,6 @@
               v-model="form.policyNumber"
               placeholder="Номер полиса"
               :disabled="registrationInProcess"
-              tabindex="70"
               autocomplete="new-password"
             ></b-form-input>
           </b-form-group>
@@ -172,7 +166,7 @@
             :v="$v.form"
             :validateState="validateState"
             :disabled="registrationInProcess"
-            :tab-index="[80, 90]"
+            :tab-index="[50, 60]"
           />
         </div>
         <div class="col-12 pt-3">
@@ -183,7 +177,6 @@
             type="submit"
             variant="primary"
             :disabled="registrationInProcess"
-            tabindex="100"
             id="btn_chek_registration_lk"
           >
             Зарегистрироваться
