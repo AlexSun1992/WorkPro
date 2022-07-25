@@ -23,4 +23,11 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageWithoutORA = getErrorMessage(errorMessageText);
     expect(errorMessageWithoutORA).toBe("Некорректный номер телефона");
   });
+
+  it("Тестирование сообщения с двоеточием в тексте ошибки", () => {
+    const errorMessageText =
+      'ORA-20105: Перечень полей с ошибками: имя, фамилия\nORA-06512: на  "MOBILE.CLIENTUTILS", line 954\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
+    const errorMessage = getErrorMessage(errorMessageText);
+    expect(errorMessage).toBe("Перечень полей с ошибками: имя, фамилия");
+  });
 });
