@@ -34,9 +34,9 @@ export function getErrorMessage(errorMessage) {
 
     const pureError = errorWithORAandSymbols.slice(1);
 
-    const again = pureError.trim();
+    const pureErrorTrimed = pureError.trim();
 
-    return again;
+    return pureErrorTrimed;
   }
   return errorMessage;
 }
