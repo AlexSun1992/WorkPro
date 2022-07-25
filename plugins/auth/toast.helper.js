@@ -25,14 +25,18 @@ export function isORAexist(errorMessage) {
 export function getErrorMessage(errorMessage) {
   const arrayFromErrorMessage = convertErrorMessageToArray(errorMessage);
   const errorMessageWithORA = isORAexist(arrayFromErrorMessage);
+
   if (errorMessageWithORA) {
-    const errorMessageWithoutORA = errorMessageWithORA.split(":")[1];
-    const errorMessageWithoutExtraSymbols = errorMessageWithoutORA.replace(
-      /[^a-zа-яё0-9\s]/gi,
-      " "
+    const errorWithORAandSymbols = errorMessageWithORA.replace(
+      /[^а-яё:,\s]/gi,
+      ""
     );
-    const errorMessageWithoutORAtrimed = errorMessageWithoutExtraSymbols.trim();
-    return errorMessageWithoutORAtrimed;
+
+    const pureError = errorWithORAandSymbols.slice(1);
+
+    const again = pureError.trim();
+
+    return again;
   }
   return errorMessage;
 }
