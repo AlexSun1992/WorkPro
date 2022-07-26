@@ -15,8 +15,5 @@ export function convertErrorMessageToArray(errorMessage) {
  */
 export function getErrorMessage(errorMessage) {
   const arrayFromErrorMessage = convertErrorMessageToArray(errorMessage);
-  if (Array.isArray(arrayFromErrorMessage)) {
-    return arrayFromErrorMessage[0];
-  }
-  return errorMessage;
+  return arrayFromErrorMessage[0].replace(/[^a-zа-яё:,-\s]/gi, "");
 }
