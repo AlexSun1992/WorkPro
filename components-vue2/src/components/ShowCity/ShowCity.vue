@@ -72,7 +72,7 @@ import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BButton, BCard } from "bootstrap-vue";
 import Cookies from "js-cookie";
-import cities from "./cities";
+import cities from "../../../../utils/cities";
 import getCurrentCity from "../../../../utils/map/currentCity";
 import {
   addListener,

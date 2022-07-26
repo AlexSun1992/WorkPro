@@ -2356,7 +2356,7 @@
                 overflow: hidden;
                 background: url(/img/mypolicy-id4.svg) top right no-repeat;
             }
-            
+            .my-policy[data-id="7"],
             .my-policy[data-id="6"] {
                 background: #FFF8E6;
             }
@@ -2364,6 +2364,10 @@
             .my-policy[data-id="6"]:after {
                 overflow: hidden;
                 background: url(/img/mypolicy-id6.svg) top right no-repeat;
+            }
+            .my-policy[data-id="7"]:after {
+                overflow: hidden;
+                background: url(/img/mypolicy-id07.svg) top right no-repeat;
             }
             
             .my-policy[data-id="10"] {

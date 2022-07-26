@@ -94,7 +94,6 @@
                 ></span>
                 <span>{{ item.SNAME }}</span>
                 <span v-if="item.DISTANCE" class="card-office-distance">
-                  <!-- {{ office.NDISTANSE.toFixed(1) + " км" }} -->
                   {{ getTime(item.DISTANCE) }}
                 </span>
               </div>
@@ -131,6 +130,13 @@
 </template>
 
 <script>
+import {
+  showWorkingHours,
+  getTime,
+  getGrafs,
+  getPhones,
+} from "../../../../utils/map/helpers/helpers";
+
 export default {
   name: "MetroOfficeCard",
   props: ["offices"],
@@ -138,61 +144,11 @@ export default {
     return {
       isOpened: true,
       isGrafShown: false,
+      showWorkingHours,
+      getTime,
+      getGrafs,
+      getPhones,
     };
-  },
-  methods: {
-    getTime(distance) {
-      const mins = (distance / 3) * 60;
-      const hours = Math.trunc(mins / 60);
-      const minutes = mins % 60;
-      return hours > 0
-        ? `${hours} ч ${parseInt(minutes)} мин`
-        : `${parseInt(minutes)} мин`;
-    },
-    getGrafs(grafs) {
-      let grafsArr = grafs.split("\n");
-      grafsArr.pop();
-      return grafsArr;
-    },
-    getPhones(phones) {
-      let phonesArr = phones.split(";");
-      phonesArr.pop();
-      return phonesArr;
-    },
-    showWorkingHours(office) {
-      let dateNow = new Date();
-      let day = dateNow.getDay();
-      let dateEnd = new Date();
-      day = day == 0 ? 7 : day;
-      if (office.GRAF && office.GRAF[day - 1]) {
-        const [endHour, endMinute] = office.GRAF[day - 1]?.SEND.split(".");
-        dateEnd.setHours(endHour);
-        dateEnd.setMinutes(endMinute);
-        let str;
-        if (dateNow < dateEnd) {
-          str = `Открыт до ${dateEnd.getHours()}:${
-            dateEnd.getMinutes() == 0
-              ? dateEnd.getMinutes() + "0"
-              : dateEnd.getMinutes()
-          }`;
-        } else if (dateNow > dateEnd && office.GRAF[day]) {
-          str = `Откроется завтра в ${office?.GRAF[day]?.SBEGIN}`;
-        } else if (dateNow > dateEnd && !office.GRAF[day]) {
-          this.isOpened = false;
-          dateNow.setDate(
-            dateNow.getDate() + ((1 + 7 - dateNow.getDay()) % 7 || 7)
-          );
-          str =
-            "Закрыт до " +
-            ("0" + dateNow.getDate()).slice(-2) +
-            "." +
-            ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-            "." +
-            dateNow.getFullYear();
-        }
-        return str;
-      }
-    },
   },
 };
 </script>
