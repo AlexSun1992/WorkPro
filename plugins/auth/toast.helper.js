@@ -1,42 +1,22 @@
 /**
- * Разбивает строку в массив по "\n"
- * @param {string} errorMessage Строка с ошибкой, содержащая ORA и квадратные скобки
- * @returns {string[]}
+ * Разбивает строку в массив по регулярному выражению, содержащему ORA-\d{5}
+ * @param {string} errorMessage Строка с ошибкой, содержащая ORA и квадратные скобки, или не содержащая таковых.
+ * @returns {string[]} Отфильтрованный массив без пустых строк
  */
 export function convertErrorMessageToArray(errorMessage) {
-  const getArrayFromErrorTextMessageString = errorMessage.split("\n");
-  return getArrayFromErrorTextMessageString;
+  const getArrayFromMess = errorMessage.split(/\s?ORA-\d{5}: /g);
+  const arrWithoutEmptyString = getArrayFromMess.filter((item) => item !== "");
+  return arrWithoutEmptyString;
 }
 
 /**
- * @param {Array} arrayFromErrorMessage Массив, полученный из сообщения об ошибке
- * @returns {(string|undefined)} @type {string} при наличии ORA в массиве, @type {undefined} при отсутсвии ORA в массиве
- */
-export function isORAexist(errorMessage) {
-  const getStringWithORA = errorMessage.find((item) => item.includes("ORA"));
-  return getStringWithORA;
-}
-
-/**
- * @param {string} errorMessage Строка с ошибкой, содержащая ORA и квадратные скобки
- * @returns {string } При наличии ORA в "errorMessage" :cтрока, содержащая только сообщение об ошибке(без квадратных скобок и пробелов по краям)
- * При отсутствии ORA: возвращается null
+ * @param {string} errorMessage Строка с ошибкой, содержащая ORA и квадратные скобки, или не содержащая таковых.
+ * @returns {string } При наличии ORA в "errorMessage" возвращает текст после ORA, при отсутствии ORA дефолтный текст
  */
 export function getErrorMessage(errorMessage) {
   const arrayFromErrorMessage = convertErrorMessageToArray(errorMessage);
-  const errorMessageWithORA = isORAexist(arrayFromErrorMessage);
-
-  if (errorMessageWithORA) {
-    const errorWithORAandSymbols = errorMessageWithORA.replace(
-      /[^а-яё:,\s]/gi,
-      ""
-    );
-
-    const pureError = errorWithORAandSymbols.slice(1);
-
-    const pureErrorTrimed = pureError.trim();
-
-    return pureErrorTrimed;
+  if (Array.isArray(arrayFromErrorMessage)) {
+    return arrayFromErrorMessage[0];
   }
   return errorMessage;
 }
