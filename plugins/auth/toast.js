@@ -1,3 +1,5 @@
+import { getErrorMessage } from "./toast.helper";
+
 let toastCount = 0;
 
 export function makeToast(error) {
@@ -11,7 +13,7 @@ export function makeToast(error) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
 
-  $nuxt.$bvToast.toast(error.MESSAGE, {
+  $nuxt.$bvToast.toast(getErrorMessage(error.MESSAGE), {
     id: toastCount,
     title: "Ошибка",
     variant: "danger",
