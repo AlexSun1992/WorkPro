@@ -40,4 +40,10 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessage = getErrorMessage(errorMessageText);
     expect(errorMessage).toBe("15 ошибок не обработано");
   });
+
+  it("Должен обрабатывать сообщения с точкой", () => {
+    const errorMessageText = "Произошла ошибка. Обратитесь в техподдержку";
+    const errorMessage = getErrorMessage(errorMessageText);
+    expect(errorMessage).toBe("Произошла ошибка. Обратитесь в техподдержку");
+  });
 });
