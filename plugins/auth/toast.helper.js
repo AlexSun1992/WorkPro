@@ -15,5 +15,16 @@ export function convertErrorMessageToArray(errorMessage) {
  */
 export function getErrorMessage(errorMessage) {
   const arrayFromErrorMessage = convertErrorMessageToArray(errorMessage);
-  return arrayFromErrorMessage[0].replace(/\[|]$/g, "");
+
+  const arrayFromErrorMessageWithOutExtremeBrackets =
+    arrayFromErrorMessage[0].replace(/\[|]$/g, "");
+
+  const arrayFromErrorMessageWithoutBracketsFollowText =
+    arrayFromErrorMessageWithOutExtremeBrackets.replace(/\].+/, "");
+
+  const arrayFromErrorMessageWithoutBracketsFollowTextCompletely =
+    arrayFromErrorMessageWithoutBracketsFollowText.replace(/.+\[/, "");
+
+  return arrayFromErrorMessageWithoutBracketsFollowTextCompletely;
 }
+//
