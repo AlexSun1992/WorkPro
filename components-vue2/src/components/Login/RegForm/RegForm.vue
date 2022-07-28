@@ -131,33 +131,19 @@
           </b-form-group>
         </div>
         <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
-          <b-form-group class="required" label="E-mail" label-cols="12">
+          <b-form-group label="Номер полиса" label-cols="12" class="required">
             <b-form-input
               :id="Math.random().toString()"
-              v-model="$v.form.email.$model"
-              :state="validateState('email')"
-              @blur="$v.form.email.$touch()"
-              placeholder="E-mail"
-              :disabled="registrationInProcess"
-              autocomplete="new-password"
-            ></b-form-input>
-
-            <b-form-invalid-feedback>
-              Пожалуйста, заполните это поле
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </div>
-
-        <div class="col-12 col-md-6"></div>
-        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
-          <b-form-group label="Номер полиса (Необязательно)" label-cols="12">
-            <b-form-input
-              :id="Math.random().toString()"
-              v-model="form.policyNumber"
+              v-model="$v.form.policyNumber.$model"
+              :state="validateState('policyNumber')"
               placeholder="Номер полиса"
               :disabled="registrationInProcess"
               autocomplete="new-password"
+              @blur="$v.form.policyNumber.$touch()"
             ></b-form-input>
+            <b-form-invalid-feedback>
+              Пожалуйста, заполните это поле
+            </b-form-invalid-feedback>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6"></div>
@@ -195,13 +181,7 @@
 <script>
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import {
-  required,
-  email,
-  minLength,
-  sameAs,
-  helpers,
-} from "vuelidate/lib/validators";
+import { required, minLength, sameAs, helpers } from "vuelidate/lib/validators";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
@@ -242,16 +222,10 @@ export default {
 
   data() {
     return {
-      isSurnameValid: false,
-      isNameValid: false,
-      isPatronymicValid: false,
-      isDateOfBirthValid: false,
-      isEmailValid: false,
       array: [],
       codeFieldValid: false,
       form: {
         phone: "",
-        email: "",
         family: "",
         name: "",
         patronymic: "",
@@ -311,9 +285,9 @@ export default {
         required,
         minLength: minLength(17),
       },
-      email: {
+
+      policyNumber: {
         required,
-        email,
       },
     },
   },
@@ -422,9 +396,8 @@ export default {
           THIRDNAME: this.$v.form.patronymic.$model,
           BIRTHDATE: this.$v.form.birthdate.$model,
           PHONE: this.$v.form.phone.$model,
-          EMAIL: this.$v.form.email.$model,
           CODE: this.$v.form.code.$model,
-          POLICY_NUMBER: this.form.policyNumber,
+          POLICY_NUMBER: this.$v.form.policyNumber.$model,
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",

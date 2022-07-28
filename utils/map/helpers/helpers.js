@@ -56,6 +56,8 @@ const showWorkingHours = (agency) => {
       }`;
     } else if (dateNow > dateEnd && nexDayObj) {
       str = `Откроется завтра в ${nexDayObj.SBEGIN}`;
+    } else {
+      str = "";
     }
     return str;
   }
