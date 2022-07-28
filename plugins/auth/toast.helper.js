@@ -17,14 +17,59 @@ export function getErrorMessage(errorMessage) {
   const arrayFromErrorMessage = convertErrorMessageToArray(errorMessage);
 
   const arrayFromErrorMessageWithOutExtremeBrackets =
-    arrayFromErrorMessage[0].replace(/\[|]$/g, "");
+    arrayFromErrorMessage[0].replace(/\[|]$/, "");
 
   const arrayFromErrorMessageWithoutBracketsFollowText =
-    arrayFromErrorMessageWithOutExtremeBrackets.replace(/\].+/, "");
+    arrayFromErrorMessageWithOutExtremeBrackets.replace(/\].+$/, "");
 
   const arrayFromErrorMessageWithoutBracketsFollowTextCompletely =
     arrayFromErrorMessageWithoutBracketsFollowText.replace(/.+\[/, "");
 
   return arrayFromErrorMessageWithoutBracketsFollowTextCompletely;
+
+  // const turnMessageToArray =
+  //   arrayFromErrorMessageWithOutExtremeBrackets.split("");
+
+  // const openBracket = turnMessageToArray.indexOf(
+  //   turnMessageToArray.find((item) => item === "[")
+  // );
+
+  // const arrWithoutPreviousText = turnMessageToArray.filter((item, i) => {
+  //   return i > openBracket;
+  // });
+
+  // const arrWithoutPreviousTextReversed = arrWithoutPreviousText
+  //   .reverse()
+  //   .join("");
+
+  // const closeBracket = arrWithoutPreviousTextReversed.indexOf(
+  //   arrWithoutPreviousTextReversed.find((item) => item === "]")
+  // );
+
+  // const arrWithoutTextAfterBeforeBrackets =
+  //   arrWithoutPreviousTextReversed.filter((item, i) => {
+  //     return i > closeBracket;
+  //   });
+
+  // const backReversed = arrWithoutTextAfterBeforeBrackets.reverse().join("");
+
+  // const arrayFromErrorMessageWithOutExtremeBrackets =
+  //   arrayFromErrorMessage[0].replace(/\[|]$/g, "");
+
+  // const arrayFromErrorMessageWithoutBracketsFollowText =
+  //   arrayFromErrorMessageWithOutExtremeBrackets.replace(/\].+$/, "");
+
+  // const arrayFromErrorMessageWithoutBracketsFollowTextCompletely =
+  //   arrayFromErrorMessageWithoutBracketsFollowText.replace(/^.+\[/, "");
+
+  // return arrayFromErrorMessageWithoutBracketsFollowTextCompletely;
+  /////
+  // const arrayFromErrorMessageWithoutBracketsFollowText =
+  //   arrayFromErrorMessage[0].replace(/\]$/, "");
+
+  // const arrayFromErrorMessageWithoutBracketsFollowTextCompletely =
+  //   arrayFromErrorMessageWithoutBracketsFollowText.replace(/\[/, "");
+
+  //return arrayFromErrorMessageWithoutBracketsFollowTextCompletely;
 }
 //
