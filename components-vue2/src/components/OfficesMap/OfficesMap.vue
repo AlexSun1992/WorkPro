@@ -309,7 +309,7 @@ export default {
         if (this.mapsFit !== true) {
           this.centerX =
             (this.$refs.metro.clientWidth - 1286 * this.svgScale) / 2 +
-            121 * this.svgScale +
+            31 * this.svgScale +
             this.translateX;
           this.centerY =
             (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
@@ -329,6 +329,7 @@ export default {
                 this.centerY +
                 ")"
             );
+          console.log("1");
         } else {
           document
             .querySelector(".g-svg-metromap")
@@ -344,6 +345,7 @@ export default {
                 (this.centerY + this.translateY) +
                 ")"
             );
+          console.log("2");
         }
 
         if (this.mapsFit !== true) {
@@ -366,6 +368,7 @@ export default {
           .querySelector(".metrowrapper")
           .classList.remove("modal_opened");
       }
+      document.body.classList.remove("overflow-hidden");
     },
     setStatus() {
       let g = document.getElementsByTagName("g");
@@ -458,6 +461,7 @@ export default {
       this.touchstartX = 0;
       this.touchstartY = 0;
       document.addEventListener("touchmove", this.onMouseMoveOne);
+      document.body.classList.add("overflow-hidden");
     },
     onMouseMoveOne(e) {
       this.touchstartX = (this.touchX - e.changedTouches[0].clientX) * -1;
@@ -468,6 +472,7 @@ export default {
     },
     removeListenerTouch(e) {
       document.removeEventListener("touchmove", this.onMouseMoveOne);
+      document.body.classList.remove("overflow-hidden");
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
@@ -564,6 +569,9 @@ export default {
         }
         if (e.layerY < 500) {
           this.$refs["card"].style.transform = "translateY(0)";
+        }
+        if (document.querySelector("body").clientWidth <= 992) {
+          document.body.classList.add("overflow-hidden");
         }
       }
     },
