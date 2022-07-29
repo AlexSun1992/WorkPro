@@ -10,10 +10,17 @@ export function convertErrorMessageToArray(errorMessage) {
 }
 
 /**
+ * При наличии ORA в "errorMessage" возвращает текст после ORA, при отсутствии ORA дефолтный текст
  * @param {string} errorMessage Строка с ошибкой, содержащая ORA и квадратные скобки, или не содержащая таковых.
- * @returns {string } При наличии ORA в "errorMessage" возвращает текст после ORA, при отсутствии ORA дефолтный текст
+ * @returns {string}
  */
 export function getErrorMessage(errorMessage) {
-  const arrayFromErrorMessage = convertErrorMessageToArray(errorMessage);
-  return arrayFromErrorMessage[0].replace(/\[|]$/g, "");
+  const [errMessageString] = convertErrorMessageToArray(errorMessage);
+
+  const stringWithBrackets = errMessageString.match(/\[(.+)]/);
+  if (stringWithBrackets) {
+    return stringWithBrackets[1];
+  }
+
+  return errMessageString;
 }
