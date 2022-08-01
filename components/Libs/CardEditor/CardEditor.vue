@@ -25,7 +25,7 @@
         />
       </b-form>
     </b-modal>
-    <div v-if="data.length">
+    <div v-if="data.length && isLoadedScript">
       <Form
         v-if="!isAccordion && !isBlock"
         class="block-profile"
@@ -113,21 +113,6 @@ export default {
       urlScript: null,
     };
   },
-  head() {
-    return {
-      script: [
-        {
-          // type: "module",
-          src: `/api/card/js/${this.$route.params.idModule}/${this.$route.params.idItem}`,
-          callback: () => {
-            this.$root.eventHandler =
-              typeof eventHandler === "function" ? eventHandler : null;
-            this.stripeLoaded();
-          },
-        },
-      ],
-    };
-  },
   computed: {
     showBtnBack() {
       const path = this.$store.state.data_card.listPath;
@@ -165,11 +150,12 @@ export default {
   },
   async created() {
     try {
-      await this.$loadScript(
-        `/api/card/js/${this.$route.params.idModule}/${
-          this.$route.params.idItem
-        }&time=${Date.now()}`
-      );
+      this.urlScript = `/api/card/js/${this.$route.params.idModule}/${
+        this.$route.params.idItem
+      }&time=${Date.now()}`;
+      if (process.client) {
+        await this.$loadScript(this.urlScript);
+      }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
       this.stripeLoaded();
