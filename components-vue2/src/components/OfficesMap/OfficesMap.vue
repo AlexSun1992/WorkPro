@@ -493,7 +493,7 @@ export default {
           );
 
           if (this.zoomtouch > slatt) {
-            this.svgScale = this.svgScale - 0.01;
+            this.svgScale = this.svgScale - 0.1;
             document
               .querySelector(".g-svg-metromap")
               .setAttribute(
@@ -510,7 +510,7 @@ export default {
               );
           }
           if (this.zoomtouch < slatt) {
-            this.svgScale = this.svgScale + 0.01;
+            this.svgScale = this.svgScale + 0.1;
             document
               .querySelector(".g-svg-metromap")
               .setAttribute(
