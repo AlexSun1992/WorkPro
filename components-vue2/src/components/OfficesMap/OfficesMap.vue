@@ -360,7 +360,9 @@ export default {
     },
     closeCard() {
       this.circleClicked = false;
-      this.setStatus();
+      if (this.currentFilters?.length === 0) {
+        this.setStatus();
+      }
       if (document.querySelector(".metrowrapper.modal_opened")) {
         document
           .querySelector(".metrowrapper")
@@ -848,6 +850,16 @@ export default {
         this.getOfficesByCity,
         this.currentFilters
       );
+
+      const offices = this.filteredOffices?.reduce((acc, office) => {
+        if (office.IDUNDERGROUND.length > 0) {
+          this.getOfficesByStations(acc, office);
+        }
+        return acc;
+      }, {});
+
+      this.changeStationAttribute(offices);
+
       let _;
       this.init(_, filters);
     },
@@ -856,6 +868,40 @@ export default {
         this.$refs.search.placeholder = "Введите адрес или метро";
       } else {
         this.$refs.search.placeholder = "Введите адрес";
+      }
+    },
+
+    getOfficesByStations(acc, office) {
+      office.IDUNDERGROUND.forEach((metroObj) => {
+        let stationsArr = [];
+        if (metroObj.SNAME.includes(",")) {
+          stationsArr = metroObj.SNAME.split(", ");
+          stationsArr.forEach((station) => {
+            if (acc[station]) {
+              acc[station].push(office);
+            } else {
+              acc[station] = [office];
+            }
+          });
+        } else {
+          if (acc[metroObj.SNAME]) {
+            acc[metroObj.SNAME].push(office);
+          } else {
+            acc[metroObj.SNAME] = [office];
+          }
+        }
+      });
+    },
+
+    changeStationAttribute(offices) {
+      const useNodes = document.getElementsByTagName("use");
+      for (let use of useNodes) {
+        const station = use.getAttribute("data-station");
+        if (offices[station]) {
+          use.setAttribute("href", "#balloon-open");
+        } else {
+          use.setAttribute("href", "");
+        }
       }
     },
   },
@@ -899,30 +945,13 @@ export default {
       });
       return data;
     },
+
     offices() {
       if (this.width < 900) {
         let officesArr = [];
         let countedOffices = this.getOffices?.reduce((acc, office) => {
           if (office.IDUNDERGROUND.length > 0) {
-            office.IDUNDERGROUND.forEach((metroObj) => {
-              let stationsArr = [];
-              if (metroObj.SNAME.includes(",")) {
-                stationsArr = metroObj.SNAME.split(", ");
-                stationsArr.forEach((station) => {
-                  if (acc[station]) {
-                    acc[station].push(office);
-                  } else {
-                    acc[station] = [office];
-                  }
-                });
-              } else {
-                if (acc[metroObj.SNAME]) {
-                  acc[metroObj.SNAME].push(office);
-                } else {
-                  acc[metroObj.SNAME] = [office];
-                }
-              }
-            });
+            this.getOfficesByStations(acc, office);
           } else {
             officesArr.push({
               station: "",
