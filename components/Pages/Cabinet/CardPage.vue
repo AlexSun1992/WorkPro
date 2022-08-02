@@ -332,6 +332,9 @@ export default {
     getFieldValue(name, data = undefined) {
       return this.getField(name, data) ? this.getField(name, data).value : "";
     },
+    getVisible() {
+      return this.$store.getters["data_card/getVisible"];
+    },
     saveFile(idReport, fileName, event) {
       if (event) {
         event.preventDefault();

@@ -292,6 +292,7 @@ converter.form = async (data, params, instance) => {
       cardCaption: data[0]._meta.SCARDCAPTION,
       btnSave: meta_visible?.BTNSAVE !== "N",
       readonly: meta_readonly?.ALL_FIELDS === "Y",
+      visible: meta_visible,
     },
   };
 };

@@ -31,6 +31,7 @@ export const state = () => ({
   source: "",
   updateEvent: null,
   filters: {},
+  visible: {},
 });
 export const getters = {
   getSuggestions: (state) => state.options,
@@ -88,6 +89,7 @@ export const getters = {
   },
   getLoading: (state) => state.loading,
   getFilters: (state) => state.filters,
+  getVisible: (state) => state.visible,
   getFiltersAllFields: (state) => {
     return state.form.reduce((accumulator, currentValue) => {
       if (
@@ -227,6 +229,7 @@ export const actions = {
             commit("setReadOnly", res.data.metaData.readonly);
           }
           commit("setCardCaption", res.data.metaData.cardCaption);
+          commit("setVisible", res.data.metaData.visible);
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -601,6 +604,9 @@ export const mutations = {
   },
   setLoading(state, params) {
     state.loading = params;
+  },
+  setVisible(state, params) {
+    state.visible = params;
   },
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {
