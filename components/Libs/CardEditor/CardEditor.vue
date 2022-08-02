@@ -59,7 +59,11 @@
         @open-card="openCard($event)"
       />
     </div>
-    <SkeletonBox v-if="!data.length" class="mt-5" :items="8" />
+    <SkeletonBox
+      v-if="!data.length || !isLoadedScript"
+      class="mt-5"
+      :items="8"
+    />
   </div>
 </template>
 <script>
@@ -155,11 +159,11 @@ export default {
       }&time=${Date.now()}`;
       if (process.client) {
         await this.$loadScript(this.urlScript);
+        this.isLoadedScript = true;
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
       this.stripeLoaded();
-      this.isLoadedScript = true;
     } catch (e) {
       console.error(e);
     }
