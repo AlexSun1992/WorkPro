@@ -3218,3 +3218,15 @@ textarea {
         padding: 16px 16px 85px 16px
     }
 }
+
+.conf-block>.row>[class*="col-"] {
+    margin-top: 1rem
+}
+
+.conf-block>.row>[class*="col-"]:first-child {
+    margin-top: 0
+}
+
+.conf-block>.row>[class*="col-"] .title-conf-block {
+    margin-bottom: 0
+}
