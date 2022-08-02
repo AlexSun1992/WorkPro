@@ -154,8 +154,14 @@ export default {
       translateY: 0,
       touchX: 0,
       touchY: 0,
+      touch2X: 0,
+      touch2Y: 0,
       touchstartX: 0,
       touchstartY: 0,
+      touchnumber: 0,
+      touchstart2X: 0,
+      touchstart2Y: 0,
+      zoomtouch: 0,
       centerX: null,
       centerY: null,
       mapsFit: false,
@@ -309,7 +315,7 @@ export default {
         if (this.mapsFit !== true) {
           this.centerX =
             (this.$refs.metro.clientWidth - 1286 * this.svgScale) / 2 +
-            121 * this.svgScale +
+            31 * this.svgScale +
             this.translateX;
           this.centerY =
             (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
@@ -368,6 +374,7 @@ export default {
           .querySelector(".metrowrapper")
           .classList.remove("modal_opened");
       }
+      document.body.classList.remove("overflow-hidden");
     },
     setStatus() {
       let g = document.getElementsByTagName("g");
@@ -440,36 +447,102 @@ export default {
       window.addEventListener("mouseup", this.removeListener);
     },
     setTouchCoords(e) {
-      this.touchX = e.changedTouches[0].clientX;
-      this.touchY = e.changedTouches[0].clientY;
-      if (
-        document.getElementsByClassName("g-svg-metromap")[0].transform
-          .animVal[0]
-      ) {
-        this.oldPosX =
-          document.getElementsByClassName(
-            "g-svg-metromap"
-          )[0].transform.animVal[0].matrix.e;
-        this.oldPosY =
-          document.getElementsByClassName(
-            "g-svg-metromap"
-          )[0].transform.animVal[0].matrix.f;
-        this.centerX = 0;
-        this.centerY = 0;
+      this.touchnumber = this.touchnumber + 1;
+      if (this.touchnumber == 1) {
+        this.touchX = e.changedTouches[0].clientX;
+        this.touchY = e.changedTouches[0].clientY;
+        if (
+          document.getElementsByClassName("g-svg-metromap")[0].transform
+            .animVal[0]
+        ) {
+          this.oldPosX =
+            document.getElementsByClassName(
+              "g-svg-metromap"
+            )[0].transform.animVal[0].matrix.e;
+          this.oldPosY =
+            document.getElementsByClassName(
+              "g-svg-metromap"
+            )[0].transform.animVal[0].matrix.f;
+          this.centerX = 0;
+          this.centerY = 0;
+        }
+        this.touchstartX = 0;
+        this.touchstartY = 0;
+      } else if (this.touchnumber == 2) {
+        this.touch2X = e.changedTouches[0].clientX;
+        this.touch2Y = e.changedTouches[0].clientY;
+        this.touchstart2X = 0;
+        this.touchstart2Y = 0;
       }
-      this.touchstartX = 0;
-      this.touchstartY = 0;
+
       document.addEventListener("touchmove", this.onMouseMoveOne);
+      document.body.classList.add("overflow-hidden");
     },
     onMouseMoveOne(e) {
-      this.touchstartX = (this.touchX - e.changedTouches[0].clientX) * -1;
-      this.touchstartY = (this.touchY - e.changedTouches[0].clientY) * -1;
-      this.translateX = this.oldPosX + this.touchstartX;
-      this.translateY = this.oldPosY + this.touchstartY;
-      this.fitToViewportMetro();
+      e.preventDefault();
+      switch (e.touches.length) {
+        case 1:
+          this.touchstartX = (this.touchX - e.changedTouches[0].clientX) * -1;
+          this.touchstartY = (this.touchY - e.changedTouches[0].clientY) * -1;
+          this.translateX = this.oldPosX + this.touchstartX;
+          this.translateY = this.oldPosY + this.touchstartY;
+          this.fitToViewportMetro();
+          break;
+        case 2:
+          var slatt = Math.sqrt(
+            Math.pow(e.touches[1].clientX - e.touches[0].clientX, 2) +
+              Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
+          );
+
+          if (this.zoomtouch > slatt) {
+            this.svgScale = this.svgScale - 0.05;
+            document
+              .querySelector(".g-svg-metromap")
+              .setAttribute(
+                "transform",
+                "matrix(" +
+                  this.svgScale +
+                  ",0,0," +
+                  this.svgScale +
+                  "," +
+                  this.centerX +
+                  "," +
+                  this.centerY +
+                  ")"
+              );
+          }
+          if (this.zoomtouch < slatt) {
+            this.svgScale = this.svgScale + 0.05;
+            document
+              .querySelector(".g-svg-metromap")
+              .setAttribute(
+                "transform",
+                "matrix(" +
+                  this.svgScale +
+                  ",0,0," +
+                  this.svgScale +
+                  "," +
+                  this.centerX +
+                  "," +
+                  this.centerY +
+                  ")"
+              );
+          }
+          this.zoomtouch = slatt;
+          break;
+        case 3:
+          console.log("tach 3");
+          break;
+        default:
+          console.log("Not supported");
+          break;
+      }
     },
     removeListenerTouch(e) {
       document.removeEventListener("touchmove", this.onMouseMoveOne);
+      document.body.classList.remove("overflow-hidden");
+      this.touchnumber = 0;
+      this.zoomtouch = 0;
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
@@ -566,6 +639,9 @@ export default {
         }
         if (e.layerY < 500) {
           this.$refs["card"].style.transform = "translateY(0)";
+        }
+        if (document.querySelector("body").clientWidth <= 992) {
+          document.body.classList.add("overflow-hidden");
         }
       }
     },
