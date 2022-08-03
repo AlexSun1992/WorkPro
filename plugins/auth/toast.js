@@ -14,7 +14,7 @@ export function makeToast(error) {
   }
 
   $nuxt.$bvToast.toast(getErrorMessage(error.MESSAGE), {
-    id: toastCount,
+    id: toastCount.toString(),
     title: "Ошибка",
     variant: "danger",
     autoHideDelay: 20000,

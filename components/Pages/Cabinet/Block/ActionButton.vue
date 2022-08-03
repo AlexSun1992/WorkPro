@@ -47,9 +47,9 @@ export default {
       default: () => null,
     },
     rowId: {
-      type: Number,
+      type: Number | String,
       required: false,
-      default: () => Math.random(),
+      default: () => null,
     },
     body: {
       type: Object | Array,
@@ -108,29 +108,26 @@ export default {
         if (this.action.SCONST) {
           this.$router.push(`/cabinet/55/0/${this.action.SCONST}`);
         }
-      } else {
-        if (this.action.LHIDEDLG) {
-          await this.executeAction();
-          if (this.getUrlAddress) {
-            window.open(this.getUrlAddress, "_self");
-          }
-        } else {
-          this.$bvModal.show(String(this.rowId));
+      } else if (this.action.LHIDEDLG) {
+        await this.executeAction();
+        if (this.getUrlAddress) {
+          window.open(this.getUrlAddress, "_self");
         }
+      } else {
+        this.$bvModal.show(String(this.rowId));
       }
     },
   },
 
   computed: {
     action: {
-      get: function () {
+      get() {
         const action = this.actions.find(
           (a) => a.ID === parseInt(this.actionId)
         );
         return action || null;
       },
     },
-
     getUrlAddress() {
       const resultUrl = this.$store.getters["blocks/getUrl"];
       return resultUrl;

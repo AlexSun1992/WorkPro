@@ -145,10 +145,11 @@
 import VRuntimeTemplate from "v-runtime-template";
 import { saveAs } from "file-saver";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
+import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 
 export default {
   name: "CardPage",
-  components: { CardEditor, VRuntimeTemplate },
+  components: { CardEditor, VRuntimeTemplate, ActionButton },
   beforeRouteLeave(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
     if (cardChanged) {
@@ -279,6 +280,12 @@ export default {
     ref() {
       return this.$route.query?.ref;
     },
+    cardId() {
+      return this.$route.params.idCard;
+    },
+    relId() {
+      return this.$route.params.idRel;
+    },
     isShowCardEditor() {
       return (
         (!!this.getFormData || (this.editable && !this.isError)) &&
@@ -332,8 +339,19 @@ export default {
     getFieldValue(name, data = undefined) {
       return this.getField(name, data) ? this.getField(name, data).value : "";
     },
-    getVisible() {
-      return this.$store.getters["data_card/getVisible"];
+    getVisible(property) {
+      const visible = this.$store.getters["data_card/getVisible"];
+      if (visible[property] === "Y") {
+        return true;
+      }
+      if (visible[property] === "N") {
+        return false;
+      }
+      throw new Error(
+        `В методе getVisible свойство ${property}  не сущесвует или задано неверно. Доступные свойства: ${JSON.stringify(
+          visible
+        )}`
+      );
     },
     saveFile(idReport, fileName, event) {
       if (event) {
