@@ -366,9 +366,9 @@ export default {
     },
     closeCard() {
       this.circleClicked = false;
-      if (this.currentFilters?.length === 0) {
-        this.setStatus();
-      }
+      // if (this.currentFilters?.length === 0) {
+      this.setStatus();
+      // }
       if (document.querySelector(".metrowrapper.modal_opened")) {
         document
           .querySelector(".metrowrapper")
