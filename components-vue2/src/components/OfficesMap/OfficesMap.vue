@@ -507,8 +507,9 @@ export default {
           );
           var ssll = this.zoomtouch_twoo - slatt;
           if (this.zoomtouch > slatt) {
-            if (ssll <= -10) {
-              this.svgScale = this.svgScale + 0.1;
+            console.log(ssll, this.zoomtouch_twoo, slatt);
+            if (ssll >= 10) {
+              this.svgScale = this.svgScale - 0.1;
               this.zoomtouch_twoo = slatt;
               document
                 .querySelector(".g-svg-metromap")
@@ -524,7 +525,6 @@ export default {
                     this.centerY +
                     ")"
                 );
-              console.log(ssll, this.zoomtouch_twoo, slatt);
             }
             //Math.round(this.zoomtouch_twoo) - slatt
             /*this.svgScale = this.svgScale - 0.05;
@@ -544,8 +544,9 @@ export default {
               );*/
           }
           if (this.zoomtouch < slatt) {
-            if (ssll >= 10) {
-              this.svgScale = this.svgScale - 0.1;
+            console.log(ssll, this.zoomtouch_twoo, slatt);
+            if (ssll <= -10) {
+              this.svgScale = this.svgScale + 0.1;
               this.zoomtouch_twoo = slatt;
               document
                 .querySelector(".g-svg-metromap")
