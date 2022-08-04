@@ -486,6 +486,9 @@ export default {
               )
           )
         );
+        var elem = document.createElement("div");
+        elem.className = "sla";
+        document.querySelector(".map-container").appendChild(elem);
       }
 
       document.addEventListener("touchmove", this.onMouseMoveOne);
@@ -506,6 +509,9 @@ export default {
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           );
           var ssll = this.zoomtouch_twoo - slatt;
+          var elem = document.createElement("div");
+          elem.innerText = ssll + "/" + this.zoomtouch_twoo + "/" + slatt + "";
+          document.querySelector(".sla").appendChild(elem);
           if (this.zoomtouch > slatt) {
             console.log(ssll, this.zoomtouch_twoo, slatt);
             if (ssll >= 10) {
@@ -596,6 +602,7 @@ export default {
       document.body.classList.remove("overflow-hidden");
       this.touchnumber = 0;
       this.zoomtouch = 0;
+      document.querySelector(".sla").remove();
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
