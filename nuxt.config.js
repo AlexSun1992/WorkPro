@@ -109,9 +109,9 @@ module.exports = {
     transpile: ["vue-agile", "vue-plugin-load-script"],
   },
   proxy: {
-    "/free": "https://mobile.reso.ru",
-    "/am": "https://mobile2.reso.ru",
-    "/main": "https://mobile2.reso.ru",
+    "/free": process.env.MOBILE_URL ?? "https://mobile.reso.ru",
+    "/am": process.env.MOBILE2_URL ?? "https://mobile2.reso.ru",
+    "/main": process.env.MOBILE2_URL ?? "https://mobile2.reso.ru",
     "/suggestions": "https://dadata.reso.ru",
   },
   serverMiddleware: ["~/routes/routes.js"],
