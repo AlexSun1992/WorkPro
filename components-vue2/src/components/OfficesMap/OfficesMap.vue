@@ -502,14 +502,8 @@ export default {
           break;
         case 2:
           var slatt = Math.sqrt(
-            Math.pow(
-              e.touches[1].clientX - e.touches[0].clientX,
-              window.devicePixelRatio
-            ) +
-              Math.pow(
-                e.touches[1].clientY - e.touches[0].clientY,
-                window.devicePixelRatio
-              )
+            Math.pow(e.touches[1].clientX - e.touches[0].clientX, 2) +
+              Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           );
           var ssll = this.zoomtouch_twoo - slatt;
           if (this.zoomtouch > slatt) {
