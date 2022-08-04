@@ -510,7 +510,13 @@ export default {
           );
           var ssll = this.zoomtouch_twoo - slatt;
           var elem = document.createElement("div");
-          elem.innerText = ssll + "/" + this.zoomtouch_twoo + "/" + slatt + "";
+          elem.innerText =
+            Math.round(ssll) +
+            "/" +
+            Math.round(this.zoomtouch_twoo) +
+            "/" +
+            Math.round(slatt) +
+            "";
           document.querySelector(".sla").appendChild(elem);
           if (this.zoomtouch > slatt) {
             console.log(ssll, this.zoomtouch_twoo, slatt);
@@ -602,7 +608,7 @@ export default {
       document.body.classList.remove("overflow-hidden");
       this.touchnumber = 0;
       this.zoomtouch = 0;
-      document.querySelector(".sla").remove();
+      // document.querySelector(".sla").remove();
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);
