@@ -162,6 +162,7 @@ export default {
       touchstart2X: 0,
       touchstart2Y: 0,
       zoomtouch: 0,
+      zoomtouch_twoo: 0,
       centerX: null,
       centerY: null,
       mapsFit: false,
@@ -473,13 +474,27 @@ export default {
         this.touch2Y = e.changedTouches[0].clientY;
         this.touchstart2X = 0;
         this.touchstart2Y = 0;
+        this.zoomtouch_twoo = Math.round(
+          Math.sqrt(
+            Math.pow(
+              e.touches[1].clientX - e.touches[0].clientX,
+              window.devicePixelRatio
+            ) +
+              Math.pow(
+                e.touches[1].clientY - e.touches[0].clientY,
+                window.devicePixelRatio
+              )
+          )
+        );
+        var elem = document.createElement("div");
+        elem.className = "sla";
+        document.querySelector(".map-container").appendChild(elem);
       }
 
       document.addEventListener("touchmove", this.onMouseMoveOne);
       document.body.classList.add("overflow-hidden");
     },
     onMouseMoveOne(e) {
-      e.preventDefault();
       switch (e.touches.length) {
         case 1:
           this.touchstartX = (this.touchX - e.changedTouches[0].clientX) * -1;
@@ -493,9 +508,38 @@ export default {
             Math.pow(e.touches[1].clientX - e.touches[0].clientX, 2) +
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           );
-
+          var ssll = this.zoomtouch_twoo - slatt;
+          var elem = document.createElement("div");
+          elem.innerText =
+            Math.round(ssll) +
+            "/" +
+            Math.round(this.zoomtouch_twoo) +
+            "/" +
+            Math.round(slatt) +
+            "";
+          document.querySelector(".sla").appendChild(elem);
           if (this.zoomtouch > slatt) {
-            this.svgScale = this.svgScale - 0.05;
+            console.log(ssll, this.zoomtouch_twoo, slatt);
+            if (ssll >= 10) {
+              this.svgScale = this.svgScale - 0.1;
+              this.zoomtouch_twoo = slatt;
+              document
+                .querySelector(".g-svg-metromap")
+                .setAttribute(
+                  "transform",
+                  "matrix(" +
+                    this.svgScale +
+                    ",0,0," +
+                    this.svgScale +
+                    "," +
+                    this.centerX +
+                    "," +
+                    this.centerY +
+                    ")"
+                );
+            }
+            //Math.round(this.zoomtouch_twoo) - slatt
+            /*this.svgScale = this.svgScale - 0.05;
             document
               .querySelector(".g-svg-metromap")
               .setAttribute(
@@ -509,9 +553,30 @@ export default {
                   "," +
                   this.centerY +
                   ")"
-              );
+              );*/
           }
           if (this.zoomtouch < slatt) {
+            console.log(ssll, this.zoomtouch_twoo, slatt);
+            if (ssll <= -10) {
+              this.svgScale = this.svgScale + 0.1;
+              this.zoomtouch_twoo = slatt;
+              document
+                .querySelector(".g-svg-metromap")
+                .setAttribute(
+                  "transform",
+                  "matrix(" +
+                    this.svgScale +
+                    ",0,0," +
+                    this.svgScale +
+                    "," +
+                    this.centerX +
+                    "," +
+                    this.centerY +
+                    ")"
+                );
+              console.log(ssll, this.zoomtouch_twoo, slatt);
+            }
+            /*
             this.svgScale = this.svgScale + 0.05;
             document
               .querySelector(".g-svg-metromap")
@@ -526,7 +591,7 @@ export default {
                   "," +
                   this.centerY +
                   ")"
-              );
+              );*/
           }
           this.zoomtouch = slatt;
           break;
@@ -543,6 +608,7 @@ export default {
       document.body.classList.remove("overflow-hidden");
       this.touchnumber = 0;
       this.zoomtouch = 0;
+      // document.querySelector(".sla").remove();
     },
     removeListener(e) {
       document.removeEventListener("mousemove", this.onMouseMove);

@@ -1,51 +1,31 @@
-stages:
-  - pre_deploy
-  - deploy
-
-build_compoments:
-  image: node:16.14
-  stage: pre_deploy
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
+docker-build-master:
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - npm config set registry https://nexus.reso.ru/repository/npm/
-    - npm ci
-    - npm test
-    - cd components-vue2
-    - npm ci
-    - npm run component
-  artifacts:
-    paths:
-      - static/js
-    untracked: false
-    expire_in: 1 days
+    - export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+    - docker build --pull --build-arg APP_VERSION=$VERSION --tag "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA" .
+    - docker push "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA"
   tags:
-    - git-docker
+    - docker
 
-deploy_staging:
-  image: instrumentisto/rsync-ssh
+deploy_production:
+  image: curlimages/curl:7.78.0
   stage: deploy
-  cache: {}
   script:
-    - eval $(ssh-agent -s)
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - chmod 600 $PRIVATE_KEY
-    - ssh-add $PRIVATE_KEY
-    - ssh-keyscan -H -p $TEST_PORT $TEST_HOST >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - rsync --recursive --delete-after --rsh "ssh -p $TEST_PORT" . nodejs@$TEST_HOST:nuxt-vue
-    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '\. ~/.nvm/nvm.sh; cd ~/nuxt-vue; npm install'
-    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '\. ~/.nvm/nvm.sh; cd ~/nuxt-vue; npm run build'
-    - ssh -p $TEST_PORT nodejs@$TEST_HOST -- '\. ~/.nvm/nvm.sh; pm2 restart all'
-  environment:
-    name: test
-    url: http://new.reso.ru/
-  dependencies:
-    - build_compoments
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_PRODUCTION_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   only:
     - master
   tags:
-    - git-docker
+    - docker
+
+deploy_test:
+  image: curlimages/curl:7.78.0
+  stage: deploy
+  script:
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_TEST_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+  tags:
+    - docker
