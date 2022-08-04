@@ -631,11 +631,13 @@ export const mutations = {
   setEnumOptions(state, params) {
     const item = state.form.find((d) => d.fieldId === params.fieldId);
     item.options = params.options;
-    if (item.options.length === 1) {
-      item.value = item.options[0];
-    }
-    if (item.options.length === 2) {
-      item.value = item.options[1];
+    if (!item.value?.value) {
+      if (item.options.length === 1) {
+        item.value = params.options[0];
+      }
+      if (item.options.length === 2) {
+        item.value = params.options[0];
+      }
     }
   },
   setFilters(state, data) {
