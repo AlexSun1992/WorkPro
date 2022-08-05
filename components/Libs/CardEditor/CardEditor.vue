@@ -186,7 +186,10 @@ export default {
         if (typeof initHandler === "function") {
           this.$store.commit(
             "data_card/setForm",
-            initHandler(this.data.map((a) => ({ ...a }))) || this.data
+            initHandler(
+              this.data.map((a) => ({ ...a })),
+              { ...this.params, edit: this.edit }
+            ) || this.data
           );
         }
       } catch {}
