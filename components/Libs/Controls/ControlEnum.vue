@@ -147,11 +147,11 @@ export default {
   methods: {
     async initData() {
       await this.$store.dispatch("data_card/fetchDic", this.data);
-      if (this.data.fieldRelation && !this.data.value?.value) {
+      if (this.data.fieldRelation) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: {},
+          value: this.data.value?.value ? this.data.value : {},
         });
       }
     },
