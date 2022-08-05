@@ -480,9 +480,6 @@ export default {
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           )
         );
-        var elem = document.createElement("div");
-        elem.className = "sla";
-        document.querySelector(".map-container").appendChild(elem);
       }
 
       document.addEventListener("touchmove", this.onMouseMoveOne);
@@ -498,25 +495,15 @@ export default {
           this.fitToViewportMetro();
           break;
         case 2:
-          var slatt = Math.sqrt(
+          var summxy = Math.sqrt(
             Math.pow(e.touches[1].clientX - e.touches[0].clientX, 2) +
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           );
-          var ssll = this.zoomtouch_twoo - slatt;
-          var elem = document.createElement("div");
-          elem.innerText = this.touchnumber + "|";
-          Math.round(ssll) +
-            "|" +
-            Math.round(this.zoomtouch_twoo) +
-            "|" +
-            Math.round(slatt) +
-            "";
-          document.querySelector(".sla").appendChild(elem);
-          if (this.zoomtouch > slatt) {
-            console.log(ssll, this.zoomtouch_twoo, slatt);
-            if (ssll >= 10) {
+          var offset_touch = this.zoomtouch_twoo - summxy;
+          if (this.zoomtouch > summxy) {
+            if (offset_touch >= 10) {
               this.svgScale = this.svgScale - 0.1;
-              this.zoomtouch_twoo = slatt;
+              this.zoomtouch_twoo = summxy;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
@@ -532,7 +519,7 @@ export default {
                     ")"
                 );
             }
-            //Math.round(this.zoomtouch_twoo) - slatt
+            //Math.round(this.zoomtouch_twoo) - summxy
             /*this.svgScale = this.svgScale - 0.05;
             document
               .querySelector(".g-svg-metromap")
@@ -549,11 +536,10 @@ export default {
                   ")"
               );*/
           }
-          if (this.zoomtouch < slatt) {
-            console.log(ssll, this.zoomtouch_twoo, slatt);
-            if (ssll <= -10) {
+          if (this.zoomtouch < summxy) {
+            if (offset_touch <= -10) {
               this.svgScale = this.svgScale + 0.1;
-              this.zoomtouch_twoo = slatt;
+              this.zoomtouch_twoo = summxy;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
@@ -568,7 +554,6 @@ export default {
                     this.centerY +
                     ")"
                 );
-              console.log(ssll, this.zoomtouch_twoo, slatt);
             }
             /*
             this.svgScale = this.svgScale + 0.05;
@@ -587,7 +572,7 @@ export default {
                   ")"
               );*/
           }
-          this.zoomtouch = slatt;
+          this.zoomtouch = summxy;
           break;
         case 3:
           console.log("tach 3");
