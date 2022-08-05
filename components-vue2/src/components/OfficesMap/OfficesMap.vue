@@ -476,14 +476,8 @@ export default {
         this.touchstart2Y = 0;
         this.zoomtouch_twoo = Math.round(
           Math.sqrt(
-            Math.pow(
-              e.touches[1].clientX - e.touches[0].clientX,
-              window.devicePixelRatio
-            ) +
-              Math.pow(
-                e.touches[1].clientY - e.touches[0].clientY,
-                window.devicePixelRatio
-              )
+            Math.pow(e.touches[1].clientX - e.touches[0].clientX, 2) +
+              Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           )
         );
         var elem = document.createElement("div");
@@ -510,11 +504,11 @@ export default {
           );
           var ssll = this.zoomtouch_twoo - slatt;
           var elem = document.createElement("div");
-          elem.innerText =
-            Math.round(ssll) +
-            "/" +
+          elem.innerText = this.touchnumber + "|";
+          Math.round(ssll) +
+            "|" +
             Math.round(this.zoomtouch_twoo) +
-            "/" +
+            "|" +
             Math.round(slatt) +
             "";
           document.querySelector(".sla").appendChild(elem);
