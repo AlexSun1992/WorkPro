@@ -56,6 +56,16 @@ export default {
       selectId: `id${this.data.fieldId}`,
     };
   },
+  created() {
+    if (this.data.fieldRelation) {
+      const relationValue = this.$store.getters["data_card/getDataFieldByName"](
+        this.data.fieldRelation
+      )?.value;
+      if (relationValue?.value) {
+        this.initData();
+      }
+    }
+  },
   computed: {
     fieldValue: {
       get() {
@@ -137,7 +147,7 @@ export default {
   methods: {
     async initData() {
       await this.$store.dispatch("data_card/fetchDic", this.data);
-      if (this.data.fieldRelation) {
+      if (this.data.fieldRelation && !this.data.value?.value) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
