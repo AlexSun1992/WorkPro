@@ -14,7 +14,7 @@ export const getters = {
   menu: (state) => state.menu,
   flatmenu: (state) => state.flatmenu,
   getSettingsByIdItem: (state) => (id) => {
-    return state.menu[0].children.find((m) => console.log(m));
+    return state.menu[0].children.find((m) => m.idItem === parseInt(id));
   },
   getMenuById: (state) => (id) => {
     return state.flatmenu.find((m) => m.IDITEM === parseInt(id));
@@ -32,6 +32,7 @@ export const getters = {
 
 export const actions = {
   async fetchMenu({ commit, dispatch }, params) {
+    console.log(params);
     const URL =
       params.zone === "free"
         ? `/api/menu/55/${params.idItem}?zone=free`
