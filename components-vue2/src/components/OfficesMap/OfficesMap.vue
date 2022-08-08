@@ -167,6 +167,10 @@ export default {
       centerY: null,
       mapsFit: false,
       svgScale: 1,
+      gScaleTransformX: 0,
+      gScaleTransformY: 0,
+      gWidth: 0,
+      gHeight: 0,
       currentTab: 0,
       suggestView: null,
       currentStation: null,
@@ -314,14 +318,29 @@ export default {
         }
 
         if (this.mapsFit !== true) {
-          this.centerX =
-            (this.$refs.metro.clientWidth - 1286 * this.svgScale) / 2 +
-            31 * this.svgScale +
-            this.translateX;
-          this.centerY =
-            (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
-            137 * this.svgScale +
-            this.translateY;
+          this.gWidth = document
+            .querySelector(".g-svg-metromap")
+            .getBoundingClientRect().width;
+          this.gHeight = document
+            .querySelector(".g-svg-metromap")
+            .getBoundingClientRect().height;
+          if (
+            document.querySelector(".svg-metromap").getBoundingClientRect()
+              .width >= this.gWidth
+          ) {
+            this.centerX =
+              document.querySelector(".svg-metromap").getBoundingClientRect()
+                .width /
+                2 -
+              (this.gWidth / 2) * this.svgScale;
+          } else {
+            this.centerX =
+              (this.gWidth / 2) * this.svgScale -
+              document.querySelector(".svg-metromap").getBoundingClientRect()
+                .width;
+          }
+
+          this.centerY = 0;
           document
             .querySelector(".g-svg-metromap")
             .setAttribute(
@@ -346,9 +365,9 @@ export default {
                 ",0,0," +
                 this.svgScale +
                 "," +
-                (this.centerX + this.translateX) +
+                (this.centerX + this.translateX + this.gScaleTransformX) +
                 "," +
-                (this.centerY + this.translateY) +
+                (this.centerY + this.translateY + this.gScaleTransformY) +
                 ")"
             );
         }
@@ -469,6 +488,7 @@ export default {
         }
         this.touchstartX = 0;
         this.touchstartY = 0;
+        console.log("touch");
       } else if (this.touchnumber == 2) {
         this.touch2X = e.changedTouches[0].clientX;
         this.touch2Y = e.changedTouches[0].clientY;
@@ -480,6 +500,8 @@ export default {
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           )
         );
+        var centerX = (e.touches[1].clientX + e.touches[0].clientX) / 2;
+        var centerY = (e.touches[1].clientY + e.touches[0].clientY) / 2;
       }
 
       document.addEventListener("touchmove", this.onMouseMoveOne);
@@ -625,17 +647,20 @@ export default {
     zoom(param) {
       let step = 0.2;
       if (param == "+") {
-        this.closeCard();
-        this.svgScale = this.svgScale + step;
-        if (this.svgScale > 2) {
-          this.svgScale = 2;
+        if (this.svgScale < 1.9) {
+          this.closeCard();
+          this.svgScale = this.svgScale + step;
+          this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
+          this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
         }
+
         this.fitToViewportMetro();
       } else if (param == "-") {
-        this.closeCard();
-        this.svgScale = this.svgScale - step;
-        if (this.svgScale < step) {
-          this.svgScale = 0.2;
+        if (this.svgScale > 0.3) {
+          this.closeCard();
+          this.svgScale = this.svgScale - step;
+          this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
+          this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
         }
         this.fitToViewportMetro();
       }
