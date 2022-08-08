@@ -526,6 +526,8 @@ export default {
             if (offset_touch >= 10) {
               this.svgScale = this.svgScale - 0.1;
               this.zoomtouch_twoo = summxy;
+              this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
+              this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
@@ -535,9 +537,9 @@ export default {
                     ",0,0," +
                     this.svgScale +
                     "," +
-                    this.centerX +
+                    (this.centerX + this.translateX + this.gScaleTransformX) +
                     "," +
-                    this.centerY +
+                    (this.centerY + this.translateY + this.gScaleTransformY) +
                     ")"
                 );
             }
@@ -562,6 +564,8 @@ export default {
             if (offset_touch <= -10) {
               this.svgScale = this.svgScale + 0.1;
               this.zoomtouch_twoo = summxy;
+              this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
+              this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
@@ -571,9 +575,9 @@ export default {
                     ",0,0," +
                     this.svgScale +
                     "," +
-                    this.centerX +
+                    (this.centerX + this.translateX + this.gScaleTransformX) +
                     "," +
-                    this.centerY +
+                    (this.centerY + this.translateY + this.gScaleTransformY) +
                     ")"
                 );
             }
