@@ -488,7 +488,7 @@ export default {
         }
         this.touchstartX = 0;
         this.touchstartY = 0;
-        console.log("touch");
+        console.log();
       } else if (this.touchnumber == 2) {
         this.touch2X = e.changedTouches[0].clientX;
         this.touch2Y = e.changedTouches[0].clientY;
@@ -514,6 +514,8 @@ export default {
           this.touchstartY = (this.touchY - e.changedTouches[0].clientY) * -1;
           this.translateX = this.oldPosX + this.touchstartX;
           this.translateY = this.oldPosY + this.touchstartY;
+          this.gScaleTransformX = 0;
+          this.gScaleTransformY = 0;
           this.fitToViewportMetro();
           break;
         case 2:
