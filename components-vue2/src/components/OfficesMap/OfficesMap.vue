@@ -332,12 +332,13 @@ export default {
               document.querySelector(".svg-metromap").getBoundingClientRect()
                 .width /
                 2 -
-              (this.gWidth / 2) * this.svgScale;
+              ((this.gWidth - 87 * this.svgScale) / 2) * this.svgScale;
           } else {
             this.centerX =
-              (this.gWidth / 2) * this.svgScale -
               document.querySelector(".svg-metromap").getBoundingClientRect()
-                .width;
+                .width /
+                2 -
+              (this.gWidth / 2 - 87 * this.svgScale) * this.svgScale;
           }
 
           this.centerY = 0;
@@ -488,7 +489,6 @@ export default {
         }
         this.touchstartX = 0;
         this.touchstartY = 0;
-        console.log();
       } else if (this.touchnumber == 2) {
         this.touch2X = e.changedTouches[0].clientX;
         this.touch2Y = e.changedTouches[0].clientY;
@@ -603,7 +603,6 @@ export default {
           this.zoomtouch = summxy;
           break;
         case 3:
-          console.log("tach 3");
           break;
         default:
           console.log("Not supported");
@@ -1201,5 +1200,8 @@ export default {
       position: absolute;
     }
   }
+}
+.nav-item.office-on-lists {
+  margin-right: 0;
 }
 </style>
