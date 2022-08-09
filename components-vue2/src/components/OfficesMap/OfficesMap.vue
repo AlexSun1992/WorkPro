@@ -524,18 +524,28 @@ export default {
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           );
           var offset_touch = this.zoomtouch_twoo - summxy;
-          var oldPosX =
-            document.getElementsByClassName("g-svg-metromap")[0].transform
-              .animVal[0].matrix.e;
-          var oldPosY =
-            document.getElementsByClassName("g-svg-metromap")[0].transform
-              .animVal[0].matrix.f;
           if (this.zoomtouch > summxy) {
-            if (offset_touch >= 10) {
+            if (offset_touch >= 50 && this.svgScale >= 0.3) {
+              this.oldPosX =
+                document.getElementsByClassName(
+                  "g-svg-metromap"
+                )[0].transform.animVal[0].matrix.e;
+              this.oldPosY =
+                document.getElementsByClassName(
+                  "g-svg-metromap"
+                )[0].transform.animVal[0].matrix.f;
+              var width_prev = document
+                .querySelector(".g-svg-metromap")
+                .getBoundingClientRect().width;
+              var height_prev = document
+                .querySelector(".g-svg-metromap")
+                .getBoundingClientRect().height;
               this.svgScale = this.svgScale - 0.1;
               this.zoomtouch_twoo = summxy;
-              this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
-              this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
+              this.gScaleTransformX =
+                (width_prev - this.gWidth * this.svgScale) / 2;
+              this.gScaleTransformY =
+                (height_prev - this.gHeight * this.svgScale) / 2;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
@@ -545,9 +555,9 @@ export default {
                     ",0,0," +
                     this.svgScale +
                     "," +
-                    (oldPosX + this.gScaleTransformX) +
+                    (this.oldPosX + this.gScaleTransformX) +
                     "," +
-                    (oldPosY + this.gScaleTransformY) +
+                    (this.oldPosY + this.gScaleTransformY) +
                     ")"
                 );
             }
@@ -569,11 +579,27 @@ export default {
               );*/
           }
           if (this.zoomtouch < summxy) {
-            if (offset_touch <= -10) {
+            if (offset_touch <= -50 && this.svgScale <= 1.9) {
+              this.oldPosX =
+                document.getElementsByClassName(
+                  "g-svg-metromap"
+                )[0].transform.animVal[0].matrix.e;
+              this.oldPosY =
+                document.getElementsByClassName(
+                  "g-svg-metromap"
+                )[0].transform.animVal[0].matrix.f;
+              var width_prev = document
+                .querySelector(".g-svg-metromap")
+                .getBoundingClientRect().width;
+              var height_prev = document
+                .querySelector(".g-svg-metromap")
+                .getBoundingClientRect().height;
               this.svgScale = this.svgScale + 0.1;
               this.zoomtouch_twoo = summxy;
-              this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
-              this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
+              this.gScaleTransformX =
+                (width_prev - this.gWidth * this.svgScale) / 2;
+              this.gScaleTransformY =
+                (height_prev - this.gHeight * this.svgScale) / 2;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
@@ -583,9 +609,9 @@ export default {
                     ",0,0," +
                     this.svgScale +
                     "," +
-                    (oldPosX + this.gScaleTransformX) +
+                    (this.oldPosX + this.gScaleTransformX) +
                     "," +
-                    (oldPosY + this.gScaleTransformY) +
+                    (this.oldPosY + this.gScaleTransformY) +
                     ")"
                 );
             }
