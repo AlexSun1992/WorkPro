@@ -155,6 +155,7 @@ export default {
   .modal-header {
     padding: 0;
     border: 0;
+    position: relative;
   }
   .modal-header .close {
     position: absolute;
