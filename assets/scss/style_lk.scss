@@ -1438,7 +1438,7 @@ textarea {
     background: #fff;
     border: 1px solid #c3c3c3;
     border-radius: 15px;
-    padding: 17px 20px;
+    padding: 14px 20px;
     width: 100%;
     font-family: 'SF Pro Display';
     font-style: normal;
@@ -1483,8 +1483,8 @@ textarea:disabled:hover {
 }
 
 .search.selection.dropdown {
-    padding: 21px 35px 21px 20px;
-    height: 60px;
+    padding: 18px 35px 18px 20px;
+    height: 54px;
     line-height: 1
 }
 
@@ -1493,8 +1493,8 @@ textarea:disabled:hover {
     padding: 0 !important;
     line-height: 1;
     font-size: 1rem;
-    padding: 17px 20px !important;
-    height: 60px
+    padding: 14px 20px !important;
+    height: 54px
 }
 
 .ui.search.dropdown>.text {
@@ -1533,7 +1533,7 @@ legend {
     font-weight: 600;
     font-size: .875rem;
     color: #686868;
-    margin-bottom: 10px
+    margin-bottom: 6px
 }
 
 .ui.disabled.dropdown,
@@ -1618,7 +1618,7 @@ input.checkbox-btn {
 .btn-success,
 .btn-warning {
     text-align: center;
-    padding: 20px 40px;
+    padding: 17px 40px;
     border-radius: 15px;
     font-size: 1rem;
     line-height: 1rem;
@@ -1711,7 +1711,7 @@ a.btn-warning {
 }
 
 .mt-checkbox-hl {
-    margin-top: 50px
+    margin-top: 45px
 }
 
 .conf-block {
@@ -3229,4 +3229,8 @@ textarea {
 
 .conf-block>.row>[class*="col-"] .title-conf-block {
     margin-bottom: 0
+}
+
+.autocomplete-input {
+    padding: 14px 12px 14px 48px !important;
 }

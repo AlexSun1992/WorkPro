@@ -167,6 +167,10 @@ export default {
       centerY: null,
       mapsFit: false,
       svgScale: 1,
+      gScaleTransformX: 0,
+      gScaleTransformY: 0,
+      gWidth: 0,
+      gHeight: 0,
       currentTab: 0,
       suggestView: null,
       currentStation: null,
@@ -314,14 +318,30 @@ export default {
         }
 
         if (this.mapsFit !== true) {
-          this.centerX =
-            (this.$refs.metro.clientWidth - 1286 * this.svgScale) / 2 +
-            31 * this.svgScale +
-            this.translateX;
-          this.centerY =
-            (this.$refs.metro.clientHeight - 1295 * this.svgScale) / 2 +
-            137 * this.svgScale +
-            this.translateY;
+          this.gWidth = document
+            .querySelector(".g-svg-metromap")
+            .getBoundingClientRect().width;
+          this.gHeight = document
+            .querySelector(".g-svg-metromap")
+            .getBoundingClientRect().height;
+          if (
+            document.querySelector(".svg-metromap").getBoundingClientRect()
+              .width >= this.gWidth
+          ) {
+            this.centerX =
+              document.querySelector(".svg-metromap").getBoundingClientRect()
+                .width /
+                2 -
+              ((this.gWidth - 87 * this.svgScale) / 2) * this.svgScale;
+          } else {
+            this.centerX =
+              document.querySelector(".svg-metromap").getBoundingClientRect()
+                .width /
+                2 -
+              (this.gWidth / 2 - 87 * this.svgScale) * this.svgScale;
+          }
+
+          this.centerY = 0;
           document
             .querySelector(".g-svg-metromap")
             .setAttribute(
@@ -346,9 +366,9 @@ export default {
                 ",0,0," +
                 this.svgScale +
                 "," +
-                (this.centerX + this.translateX) +
+                (this.centerX + this.translateX + this.gScaleTransformX) +
                 "," +
-                (this.centerY + this.translateY) +
+                (this.centerY + this.translateY + this.gScaleTransformY) +
                 ")"
             );
         }
@@ -480,6 +500,8 @@ export default {
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           )
         );
+        this.centerX = (e.touches[1].clientX + e.touches[0].clientX) / 2;
+        this.centerY = (e.touches[1].clientY + e.touches[0].clientY) / 2;
       }
 
       document.addEventListener("touchmove", this.onMouseMoveOne);
@@ -492,6 +514,8 @@ export default {
           this.touchstartY = (this.touchY - e.changedTouches[0].clientY) * -1;
           this.translateX = this.oldPosX + this.touchstartX;
           this.translateY = this.oldPosY + this.touchstartY;
+          this.gScaleTransformX = 0;
+          this.gScaleTransformY = 0;
           this.fitToViewportMetro();
           break;
         case 2:
@@ -501,9 +525,27 @@ export default {
           );
           var offset_touch = this.zoomtouch_twoo - summxy;
           if (this.zoomtouch > summxy) {
-            if (offset_touch >= 10) {
+            if (offset_touch >= 50 && this.svgScale >= 0.3) {
+              this.oldPosX =
+                document.getElementsByClassName(
+                  "g-svg-metromap"
+                )[0].transform.animVal[0].matrix.e;
+              this.oldPosY =
+                document.getElementsByClassName(
+                  "g-svg-metromap"
+                )[0].transform.animVal[0].matrix.f;
+              var width_prev = document
+                .querySelector(".g-svg-metromap")
+                .getBoundingClientRect().width;
+              var height_prev = document
+                .querySelector(".g-svg-metromap")
+                .getBoundingClientRect().height;
               this.svgScale = this.svgScale - 0.1;
               this.zoomtouch_twoo = summxy;
+              this.gScaleTransformX =
+                (width_prev - this.gWidth * this.svgScale) / 2;
+              this.gScaleTransformY =
+                (height_prev - this.gHeight * this.svgScale) / 2;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
@@ -513,9 +555,9 @@ export default {
                     ",0,0," +
                     this.svgScale +
                     "," +
-                    this.centerX +
+                    (this.oldPosX + this.gScaleTransformX) +
                     "," +
-                    this.centerY +
+                    (this.oldPosY + this.gScaleTransformY) +
                     ")"
                 );
             }
@@ -537,9 +579,27 @@ export default {
               );*/
           }
           if (this.zoomtouch < summxy) {
-            if (offset_touch <= -10) {
+            if (offset_touch <= -50 && this.svgScale <= 1.9) {
+              this.oldPosX =
+                document.getElementsByClassName(
+                  "g-svg-metromap"
+                )[0].transform.animVal[0].matrix.e;
+              this.oldPosY =
+                document.getElementsByClassName(
+                  "g-svg-metromap"
+                )[0].transform.animVal[0].matrix.f;
+              var width_prev = document
+                .querySelector(".g-svg-metromap")
+                .getBoundingClientRect().width;
+              var height_prev = document
+                .querySelector(".g-svg-metromap")
+                .getBoundingClientRect().height;
               this.svgScale = this.svgScale + 0.1;
               this.zoomtouch_twoo = summxy;
+              this.gScaleTransformX =
+                (width_prev - this.gWidth * this.svgScale) / 2;
+              this.gScaleTransformY =
+                (height_prev - this.gHeight * this.svgScale) / 2;
               document
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
@@ -549,9 +609,9 @@ export default {
                     ",0,0," +
                     this.svgScale +
                     "," +
-                    this.centerX +
+                    (this.oldPosX + this.gScaleTransformX) +
                     "," +
-                    this.centerY +
+                    (this.oldPosY + this.gScaleTransformY) +
                     ")"
                 );
             }
@@ -575,7 +635,6 @@ export default {
           this.zoomtouch = summxy;
           break;
         case 3:
-          console.log("tach 3");
           break;
         default:
           console.log("Not supported");
@@ -625,17 +684,20 @@ export default {
     zoom(param) {
       let step = 0.2;
       if (param == "+") {
-        this.closeCard();
-        this.svgScale = this.svgScale + step;
-        if (this.svgScale > 2) {
-          this.svgScale = 2;
+        if (this.svgScale < 1.9) {
+          this.closeCard();
+          this.svgScale = this.svgScale + step;
+          this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
+          this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
         }
+
         this.fitToViewportMetro();
       } else if (param == "-") {
-        this.closeCard();
-        this.svgScale = this.svgScale - step;
-        if (this.svgScale < step) {
-          this.svgScale = 0.2;
+        if (this.svgScale > 0.3) {
+          this.closeCard();
+          this.svgScale = this.svgScale - step;
+          this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
+          this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
         }
         this.fitToViewportMetro();
       }
@@ -1170,5 +1232,8 @@ export default {
       position: absolute;
     }
   }
+}
+.nav-item.office-on-lists {
+  margin-right: 0;
 }
 </style>
