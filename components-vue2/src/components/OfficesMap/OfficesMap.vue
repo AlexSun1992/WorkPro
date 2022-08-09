@@ -500,8 +500,8 @@ export default {
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           )
         );
-        var centerX = (e.touches[1].clientX + e.touches[0].clientX) / 2;
-        var centerY = (e.touches[1].clientY + e.touches[0].clientY) / 2;
+        this.centerX = (e.touches[1].clientX + e.touches[0].clientX) / 2;
+        this.centerY = (e.touches[1].clientY + e.touches[0].clientY) / 2;
       }
 
       document.addEventListener("touchmove", this.onMouseMoveOne);
@@ -524,6 +524,12 @@ export default {
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
           );
           var offset_touch = this.zoomtouch_twoo - summxy;
+          var oldPosX =
+            document.getElementsByClassName("g-svg-metromap")[0].transform
+              .animVal[0].matrix.e;
+          var oldPosY =
+            document.getElementsByClassName("g-svg-metromap")[0].transform
+              .animVal[0].matrix.f;
           if (this.zoomtouch > summxy) {
             if (offset_touch >= 10) {
               this.svgScale = this.svgScale - 0.1;
@@ -539,9 +545,9 @@ export default {
                     ",0,0," +
                     this.svgScale +
                     "," +
-                    (this.centerX + this.translateX + this.gScaleTransformX) +
+                    (oldPosX + this.gScaleTransformX) +
                     "," +
-                    (this.centerY + this.translateY + this.gScaleTransformY) +
+                    (oldPosY + this.gScaleTransformY) +
                     ")"
                 );
             }
@@ -577,9 +583,9 @@ export default {
                     ",0,0," +
                     this.svgScale +
                     "," +
-                    (this.centerX + this.translateX + this.gScaleTransformX) +
+                    (oldPosX + this.gScaleTransformX) +
                     "," +
-                    (this.centerY + this.translateY + this.gScaleTransformY) +
+                    (oldPosY + this.gScaleTransformY) +
                     ")"
                 );
             }
