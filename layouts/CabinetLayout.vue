@@ -2,12 +2,7 @@
   <div class="app cabinet">
     <Header @mini-sidebar="changeMobileSidebar" />
     <div class="container">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/">Главная</a>
-        </li>
-        <li class="breadcrumb-item">Личный кабинет</li>
-      </ol>
+      <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
       <div class="row">
         <div class="col-lg-3 col-12 menu">
           <div
@@ -87,6 +82,19 @@ export default {
     },
     items() {
       return this.$store.getters["menu/breadcrumbs"];
+    },
+    breadcrumbs() {
+      const firstCrumb = { text: "Главная", href: "/" };
+      const settings = this.$store.getters["menu/getSettingsByIdItem"](
+        this.$route.params.idWizard || this.$route.params.idItem
+      );
+      const nextCrumb = { text: settings.name, href: settings.url };
+      if (this.$route.params.idCard) {
+        const cardCaption = this.$store.getters["data_card/cardCaption"];
+        const lastCrumb = { text: cardCaption || "Карточка" };
+        return [firstCrumb, nextCrumb, lastCrumb];
+      }
+      return [firstCrumb, nextCrumb];
     },
   },
   watch: {

@@ -1,11 +1,5 @@
 <template>
   <div>
-    <div
-      v-if="cardCaption && !isWizard"
-      class="title-page position-relative ml-0"
-    >
-      <i class="icon-my-profile" />{{ cardCaption }}
-    </div>
     <b-modal
       v-if="!isError && settings.isModal"
       id="modal"

@@ -1,7 +1,54 @@
 <template>
   <div>
-    <div>{{ errorMessage }}</div>
+    <b-modal id="sms-confirm" hide-footer @hidden="closeModalConfirmSMSCode">
+      <div class="d-block text-center">
+        <h4>Введите код</h4>
+        На номер телефона {{ user.username }} был отправлен код подверждения
+        <b-form @submit.prevent="onSubmitWithCodeSMS">
+          <b-form-input
+            autofocus
+            autocomplete="off"
+            placeholder="12345"
+            type="number"
+            :disabled="authInProcess"
+            v-model="$v.user.code.$model"
+            :state="isValidStateCodeSMS"
+            @focus="isValidStateCodeSMS = null"
+            class="form-control mt-3"
+          ></b-form-input>
+          <b-form-invalid-feedback
+            >Неверный код. Попробуйте еще раз.
+          </b-form-invalid-feedback>
+          <b-row v-if="isRetrySendCodeSMS">
+            <b-button @click="retrySendCodeSMS()" class="mt-3" block
+              >Отправить повторно</b-button
+            >
+          </b-row>
+          <div v-else class="mt-3">
+            Отправить повторно можно через
+            <verify-timer
+              @onFinish="isRetrySendCodeSMS = true"
+              :duration="duration"
+              class="mt-3"
+            />
+            сек.
+          </div>
+          <b-row>
+            <b-button
+              :disabled="authInProcess || user.code === ''"
+              variant="primary"
+              class="mt-3"
+              block
+              @click="fetchToken()"
+              >Продолжить
+              <b-spinner v-if="authInProcess" variant="light"></b-spinner
+            ></b-button>
+          </b-row>
+        </b-form>
+      </div>
+    </b-modal>
     <b-form @submit.prevent="onSubmit">
+      <div>{{ errorMessage }}</div>
       <b-form-group label="Телефон" label-cols="12">
         <b-form-input
           ref="phoneInput"
@@ -80,11 +127,13 @@ import {
   BFormInvalidFeedback,
   BSpinner,
   BButton,
+  BModal,
 } from "bootstrap-vue";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
+import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
 
 export default {
   name: "LoginForm",
@@ -95,6 +144,8 @@ export default {
     BFormInvalidFeedback,
     BSpinner,
     BButton,
+    BModal,
+    VerifyTimer,
   },
   mixins: [validationMixin],
   directives: { mask },
@@ -103,9 +154,14 @@ export default {
       user: {
         username: "",
         password: "",
+        code: "",
       },
+      duration: 60,
       isUsernameBlured: true,
       isPasswordBlured: true,
+      isValidStateCodeSMS: null,
+      isRetrySendCodeSMS: false,
+      isSendingCodeSMS: false,
       autofocus: true,
       usernameMask: "+7(###)-###-##-##",
       placeholder: "+7(___)-___-__-__",
@@ -121,18 +177,23 @@ export default {
     this.initialCount = this.count;
     this.resendCount = this.count;
   },
-
   methods: {
     async fetchToken() {
       try {
         this.authInProcess = true;
-        const {
-          data: { ACCESS_TOKEN, REFRESH_TOKEN },
-        } = await axios.post("/am/auth/v2/authorize", {
+        let body = {
           mode: 2,
           password: this.$v.user.password.$model,
           username: this.$v.user.username.$model,
-        });
+        };
+        if (this.user.code !== "" && this.isSendingCodeSMS === false) {
+          body = { ...body, code: this.$v.user.code.$model };
+        }
+        const {
+          data: { ACCESS_TOKEN, REFRESH_TOKEN },
+        } = await axios.post("/am/authw/v2/authorize", body);
+
+        this.$bvModal.hide("sms-confirm");
         document.cookie = `auth.strategy=local;`;
         document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN};`;
         document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
@@ -144,12 +205,34 @@ export default {
           window.location.href = `${attempt.searchParams.get("ref")}`;
         }
       } catch (e) {
-        this.errorMessage = "Неверный телефон или пароль";
         this.authInProcess = false;
-        console.log(e);
+        if (e?.response?.data.CODE === 105 || e?.response?.data.CODE === 106) {
+          this.isValidStateCodeSMS = false;
+          this.user.code = "";
+          return;
+        }
+        if (
+          e?.response?.data.STATUS === 500 ||
+          e?.response?.data.CODE === 104
+        ) {
+          this.$bvModal.show("sms-confirm");
+          return;
+        }
+        this.errorMessage = "Неверный телефон или пароль";
       }
     },
-
+    retrySendCodeSMS() {
+      this.isSendingCodeSMS = true;
+      this.fetchToken().finally(() => {
+        this.isSendingCodeSMS = false;
+        this.isRetrySendCodeSMS = false;
+      });
+    },
+    closeModalConfirmSMSCode(e) {
+      this.isValidStateCodeSMS = false;
+      this.isRetrySendCodeSMS = false;
+      this.user.code = "";
+    },
     validateInput(field, bluredField) {
       if (this.errorMessage) {
         return false;
@@ -186,9 +269,13 @@ export default {
       const { $dirty, $error } = this.$v.user[name];
       return $dirty ? !$error : null;
     },
-
     onSubmit() {
       this.fetchToken();
+    },
+    onSubmitWithCodeSMS() {
+      if (this.user.code !== "") {
+        this.fetchToken();
+      }
     },
   },
 
@@ -200,6 +287,10 @@ export default {
       },
       password: {
         required,
+      },
+      code: {
+        required,
+        minLength: minLength(5),
       },
     },
   },

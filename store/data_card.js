@@ -635,9 +635,6 @@ export const mutations = {
       if (item.options.length === 1) {
         item.value = params.options[0];
       }
-      if (item.options.length === 2) {
-        item.value = params.options[0];
-      }
     }
   },
   setFilters(state, data) {

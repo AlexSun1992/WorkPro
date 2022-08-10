@@ -11,6 +11,7 @@
       <div class="profile row">
         <div class="col">
           <card-editor
+            v-if="dataForm.length"
             ref="cardEditor"
             :data="dataForm"
             :edit="isReadOnly === false"

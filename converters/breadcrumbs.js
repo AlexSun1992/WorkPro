@@ -57,6 +57,9 @@ bcItem.getData = (data) => {
   obj.parentMenu = data.parentMenu;
   obj.groupmenu = data.groupmenu;
   obj.isVisible = data.isVisible;
+  obj.idItem = data.idItem;
+  obj.idParent = data.idParent;
+  obj.parentMenu = data.parentMenu;
   return obj;
 };
 
