@@ -1,12 +1,18 @@
 <template>
   <div>
-    <b-modal id="sms-confirm" hide-footer @hidden="closeModalConfirmSMSCode">
+    <b-modal
+      id="sms-confirm"
+      hide-footer
+      @shown="setFocusSMSCode()"
+      @hidden="closeModalConfirmSMSCode"
+      :centered="true"
+    >
       <div class="d-block text-center">
         <h4>Введите код</h4>
         На номер телефона {{ user.username }} был отправлен код подверждения
         <b-form @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
-            autofocus
+            ref="focusCodeSMS"
             autocomplete="off"
             placeholder="12345"
             type="number"
@@ -220,6 +226,9 @@ export default {
         }
         this.errorMessage = "Неверный телефон или пароль";
       }
+    },
+    setFocusSMSCode() {
+      this.$refs.focusCodeSMS.focus();
     },
     retrySendCodeSMS() {
       this.isSendingCodeSMS = true;
