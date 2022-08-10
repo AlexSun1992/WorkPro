@@ -3217,6 +3217,47 @@ textarea {
     .have_btn {
         padding: 16px 16px 85px 16px
     }
+    .policy-payments .block-policy:before {
+        top: 15px;
+        max-height: 100px;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .policy-payments .block-policy .settlement {
+        margin: 83px auto 0;
+    }
+    .policy-payments .block-policy .title {
+        position: relative;
+        top: 0;
+        text-align: center;
+    }
+    .policy-payments .block-policy .description {
+        margin-top: 1rem;
+        font-weight: 400;
+        font-size: 0.875rem;
+    }
+    .block-policy[data-id="1"] .policy-payment,
+    .block-policy[data-id="10"] .policy-payment,
+    .block-policy[data-id="8"] .policy-payment {
+        background-color: #d8e7f4;
+        color: #3b86c8
+    }
+    .block-policy[data-id="2"] .policy-payment,
+    .block-policy[data-id="3"] .policy-payment,
+    .block-policy[data-id="5"] .policy-payment {
+        background-color: #d9efd4;
+        color: #009639
+    }
+    .block-policy[data-id="4"] .policy-payment {
+        background-color: #d8d6e8;
+        color: #3d348b
+    }
+    .block-policy[data-id="6"] .policy-payment,
+    .block-policy[data-id="7"] .policy-payment {
+        background-color: #fdf1cc;
+        color: #f7b801
+    }
 }
 
 .conf-block>.row>[class*="col-"] {
@@ -3229,8 +3270,4 @@ textarea {
 
 .conf-block>.row>[class*="col-"] .title-conf-block {
     margin-bottom: 0
-}
-
-.autocomplete-input {
-    padding: 14px 12px 14px 48px !important;
 }
