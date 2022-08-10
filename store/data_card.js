@@ -2,7 +2,7 @@
 import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
-import converter from "../converters/form";
+import converter from "../converters/dataform";
 import { convertUploaderFilesToFormData } from "./data_card.helpers";
 
 export const state = () => ({
@@ -32,6 +32,7 @@ export const state = () => ({
   updateEvent: null,
   filters: {},
   visible: {},
+  addFields: {},
 });
 export const getters = {
   getSuggestions: (state) => state.options,
@@ -90,6 +91,7 @@ export const getters = {
   getLoading: (state) => state.loading,
   getFilters: (state) => state.filters,
   getVisible: (state) => state.visible,
+  getAddFields: (state) => state.addFields,
   getFiltersAllFields: (state) => {
     return state.form.reduce((accumulator, currentValue) => {
       if (
@@ -230,6 +232,7 @@ export const actions = {
           }
           commit("setCardCaption", res.data.metaData.cardCaption);
           commit("setVisible", res.data.metaData.visible);
+          commit("setAddFields", res.data.metaData.addFields);
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -607,6 +610,9 @@ export const mutations = {
   },
   setVisible(state, params) {
     state.visible = params;
+  },
+  setAddFields(state, params) {
+    state.addFields = params;
   },
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {

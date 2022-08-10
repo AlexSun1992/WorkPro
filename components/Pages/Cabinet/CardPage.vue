@@ -347,6 +347,20 @@ export default {
         )}`
       );
     },
+    getAddField(property) {
+      const addFields = this.$store.getters["data_card/getAddFields"];
+      if (addFields) {
+        if (addFields[property]) {
+          return addFields[property];
+        }
+        throw new Error(
+          `В методе getAddField свойство ${property}  не сущесвует или задано неверно. Доступные свойства: ${JSON.stringify(
+            addFields
+          )}`
+        );
+      }
+      throw new Error("Метод getAddField не может быть выполнен.");
+    },
     saveFile(idReport, fileName, event) {
       if (event) {
         event.preventDefault();

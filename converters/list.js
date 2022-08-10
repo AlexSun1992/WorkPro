@@ -16,6 +16,7 @@ converter.list = (data) => {
   const arr = [];
   const obj = {};
   const fields = data[0]._struct;
+  const metaAddFields = converter.meta(data[0]?._meta.SADDFIELDS) || {};
   fields.sort(converter.compare);
   for (let i = 0; i < fields.length; i++) {
     if (fields[i].VISIBLE) {
@@ -33,6 +34,7 @@ converter.list = (data) => {
   obj.fields.unshift({ key: "index", label: "Действия" });
   obj.items = data[0]._data;
   obj.total = obj.items.length;
+  obj.addFields = metaAddFields;
   return obj;
 };
 
@@ -62,6 +64,19 @@ converter.getFilterParams = (filters) => {
     }
   }
   return JSON.stringify(obj);
+};
+
+converter.meta = (meta) => {
+  if (meta) {
+    const convert_meta = {};
+    const arr_split = meta.split(`\r`);
+    for (let i = 0; i < arr_split.length; i++) {
+      const field_meta = arr_split[i].split(`=`);
+      const value_meta = arr_split[i].replace(`${field_meta[0]}=`, "");
+      convert_meta[field_meta[0].toUpperCase()] = value_meta;
+    }
+    return convert_meta;
+  }
 };
 
 export default converter;

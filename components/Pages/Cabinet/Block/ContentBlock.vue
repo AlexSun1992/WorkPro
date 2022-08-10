@@ -5,17 +5,12 @@
       :key="id"
       @click.stop="openCard(item)"
     >
-      <slot
-        name="data"
-        :update="update"
-        :content="item"
-        :index="index"
-      />
+      <slot name="data" :update="update" :content="item" :index="index" />
     </div>
   </div>
   <div v-else>
     <slot
-      v-for="(item,index) in dataContent.items"
+      v-for="(item, index) in dataContent.items"
       name="data"
       :content="item"
       :index="index"
@@ -23,6 +18,7 @@
     <slot
       :update="update"
       :list="list"
+      :getAddField="getAddField"
       :componentKey="componentKey"
       :content="dataContent.items"
     />
@@ -103,11 +99,9 @@ export default {
         return {};
       },
     },
-
     list() {
       return this.dataContent;
     },
-
     parentMenu: {
       get() {
         return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
@@ -129,7 +123,6 @@ export default {
       this.componentKey += 1;
       this.$emit("update", event);
     },
-
     openCard(item) {
       try {
         if (this.isOpenCard) {
@@ -147,6 +140,20 @@ export default {
           solid: true,
         });
       }
+    },
+    getAddField(property) {
+      const addFields = this.dataContent?.addFields;
+      if (addFields) {
+        if (addFields[property]) {
+          return addFields[property];
+        }
+        throw new Error(
+          `В методе getAddField свойство ${property}  не сущесвует или задано неверно. Доступные свойства: ${JSON.stringify(
+            addFields
+          )}`
+        );
+      }
+      throw new Error("Метод getAddField не может быть выполнен.");
     },
   },
 };

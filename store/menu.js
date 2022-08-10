@@ -32,7 +32,6 @@ export const getters = {
 
 export const actions = {
   async fetchMenu({ commit, dispatch }, params) {
-    console.log(params);
     const URL =
       params.zone === "free"
         ? `/api/menu/55/${params.idItem}?zone=free`

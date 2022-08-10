@@ -1,4 +1,3 @@
-/* eslint-disable */
 import moment from "moment/moment";
 import controlConverter from "./control";
 import selectConverter from "./select";
@@ -74,6 +73,7 @@ converter.form = async (data, params, instance) => {
   const meta_value = converter.meta(data[0]?._meta.SNEWRECORD) || {};
   const meta_visible = converter.meta(data[0]?._meta.SVISIBLE) || {};
   const meta_readonly = converter.meta(data[0]?._meta.SREADONLY) || {};
+  const meta_addfields = converter.meta(data[0]?._meta.SADDFIELDS) || {};
   const arr = converter.setFieldsParams(itemId, item, fields);
 
   let webFields = data[0]._meta.JSONWEBFIELDS;
@@ -293,6 +293,7 @@ converter.form = async (data, params, instance) => {
       btnSave: meta_visible?.BTNSAVE !== "N",
       readonly: meta_readonly?.ALL_FIELDS === "Y",
       visible: meta_visible,
+      addFields: meta_addfields,
     },
   };
 };

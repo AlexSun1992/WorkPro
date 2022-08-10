@@ -104,7 +104,7 @@ export default {
     changeCity: {
       type: Function,
       required: false,
-      default: () => console.error("Отсутствует функция"),
+      default: () => "",
     },
   },
   data() {
