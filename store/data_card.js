@@ -233,6 +233,7 @@ export const actions = {
           commit("setCardCaption", res.data.metaData.cardCaption);
           commit("setVisible", res.data.metaData.visible);
           commit("setAddFields", res.data.metaData.addFields);
+          dispatch("menu/fetchMenu", null, { root: true });
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -350,6 +351,7 @@ export const actions = {
       commit("setSavedError", true);
       commit("setErrorMessage", e.response.data);
       commit("setFieldJsonError", getErrorMessage(e.response?.data));
+      dispatch("menu/fetchMenu", null, { root: true });
       return e.response;
     }
   },

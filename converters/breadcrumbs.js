@@ -60,6 +60,7 @@ bcItem.getData = (data) => {
   obj.idItem = data.idItem;
   obj.idParent = data.idParent;
   obj.parentMenu = data.parentMenu;
+  obj.newCount = data.newCount;
   return obj;
 };
 
