@@ -3275,3 +3275,18 @@ textarea {
 .autocomplete-input {
     padding: 14px 20px !important
 }
+
+.autocomplete-result:hover,
+.autocomplete-result[aria-selected=true] {
+    background: #f4f7f5 !important;
+    transition: .2s;
+    cursor: pointer
+}
+
+.autocomplete-result {
+    padding: 12px 12px 12px 38px;
+}
+
+[data-position=below] .autocomplete-result-list {
+    padding-bottom: 0 !important
+}
