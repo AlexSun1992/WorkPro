@@ -290,6 +290,7 @@ export default {
             .getBoundingClientRect().top -
           document.querySelector(".svg-metromap").getBoundingClientRect().top +
           21;
+
         let slaa =
           document
             .querySelector('use[href="#balloon-select"]')
