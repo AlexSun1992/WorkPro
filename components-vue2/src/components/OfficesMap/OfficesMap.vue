@@ -243,7 +243,7 @@ export default {
     positionSelectBalloon() {
       this.translateX = 0;
       this.translateY = 0;
-      let gsvg = document.querySelector('use[href="#balloon-select"]');
+      const gsvg = document.querySelector('use[href="#balloon-select"]');
       if (
         document.querySelector('use[href="#balloon-select"]') &&
         this.centerX != null
@@ -388,8 +388,13 @@ export default {
     closeCard() {
       this.circleClicked = false;
       // if (this.currentFilters?.length === 0) {
-      this.setStatus();
+      // this.setStatus();
+
       // }
+      let gsvg = document.querySelector('use[href="#balloon-select"]');
+      if (gsvg) {
+        gsvg.setAttribute("href", "#balloon-open");
+      }
       if (document.querySelector(".metrowrapper.modal_opened")) {
         document
           .querySelector(".metrowrapper")
@@ -434,7 +439,7 @@ export default {
       } else {
         this.isInputEmpty = false;
       }
-      this.setStatus();
+      // this.setStatus();
     },
     clear() {
       this.closeCard();
@@ -443,7 +448,7 @@ export default {
       this.isInputEmpty = true;
       this.useElement?.setAttribute("x", -1000);
       this.useElement?.setAttribute("y", -1000);
-      this.setStatus();
+      // this.setStatus();
       this.currentStation = "";
     },
     openOnMap(e) {
@@ -703,8 +708,12 @@ export default {
       }
     },
     chooseStation(e) {
+      let gsvg = document.querySelector('use[href="#balloon-select"]');
+      if (gsvg) {
+        gsvg.setAttribute("href", "#balloon-open");
+      }
       if (e.target.tagName == "use") {
-        this.setStatus();
+        // this.setStatus();
         e.target.setAttribute("href", "#balloon-select");
         this.stationOffices = [];
         this.circleClicked = true;
@@ -753,8 +762,8 @@ export default {
       }
     },
     async init(_, filters) {
-      let lat = Cookies.get("lat");
-      let lon = Cookies.get("lon");
+      const lat = Cookies.get("lat");
+      const lon = Cookies.get("lon");
       if (lat && lon) {
         this.centerCoords = [lat, lon];
       }
@@ -797,7 +806,7 @@ export default {
         },
       });
       this.myMap.geoObjects.add(this.myClusterer);
-      let body = document.getElementsByTagName("body")[0];
+      const body = document.getElementsByTagName("body")[0];
       this.myMap.geoObjects.events.add("balloonopen", (e) => {
         body.classList.add("open-balloon");
         const target = e.get("target");
@@ -824,8 +833,8 @@ export default {
     },
 
     combineAgencies(agencies, i, count) {
-      let arr = [];
-      let slicedAgencies = agencies.slice(i, i + count);
+      const arr = [];
+      const slicedAgencies = agencies.slice(i, i + count);
       slicedAgencies.sort((a, b) => {
         if (!a.NORDER) a.NORDER = 0;
         if (!b.NORDER) b.NORDER = 0;
@@ -837,9 +846,9 @@ export default {
       return arr;
     },
     getGeoObjects(agencies) {
-      let myGeoObjects = [];
+      const myGeoObjects = [];
 
-      let uniqueItemsCount = agencies.reduce((acc, item) => {
+      const uniqueItemsCount = agencies.reduce((acc, item) => {
         acc[item["NLAT"]] = (acc[item["NLAT"]] || 0) + 1;
         return acc;
       }, {});
@@ -881,17 +890,17 @@ export default {
         this.myMap.destroy();
         this.suggestView.destroy();
       }
-      let showOnMap = this.showOnMap.bind(this);
+      const showOnMap = this.showOnMap.bind(this);
       this.closeCard();
-      let _this = this;
+      const _this = this;
       func._this = this;
       function func(e) {
         _this.isMetroSuggest = false;
         if (e.get("item").value.includes("метро")) {
           _this.isMetroSuggest = true;
           _this.currentStation = e.get("item").value.split(" метро")[1].trim();
-          let maps = document.querySelectorAll(".g-svg-metromap");
-          let elmaps = document.getElementsByClassName("g-svg-metromap");
+          const maps = document.querySelectorAll(".g-svg-metromap");
+
           for (let i = 0; i < maps[0]?.children.length; i++) {
             if (
               maps[0].children[i].tagName === "use" &&
@@ -915,7 +924,7 @@ export default {
     },
 
     async setPositionAttributes() {
-      let lat = +Cookies.get("lat");
+      const lat = +Cookies.get("lat");
       if (!this.suggest && lat) {
         this.city = Cookies.get("location_user");
         this.regionId = Cookies.get("kladr_id")?.substr(0, 2);
@@ -959,13 +968,13 @@ export default {
       });
     },
     showResult(obj) {
-      let mapContainer = document.getElementById("map");
-      let bounds = obj.properties.get("boundedBy");
+      const mapContainer = document.getElementById("map");
+      const bounds = obj.properties.get("boundedBy");
       this.mapState = ymaps.util.bounds.getCenterAndZoom(bounds, [
         mapContainer.clientWidth,
         mapContainer.clientHeight,
       ]);
-      let shortAddress = [
+      const shortAddress = [
         obj.getThoroughfare(),
         obj.getPremiseNumber(),
         obj.getPremise(),
@@ -1015,9 +1024,9 @@ export default {
           this.currentFilters
         );
       }
-      let showResult = this.showResult.bind(this);
+      const showResult = this.showResult.bind(this);
       ymaps.geocode(suggest).then(function (res, context) {
-        let obj = res.geoObjects.get(0);
+        const obj = res.geoObjects.get(0);
         if (obj) {
           showResult(obj);
         }
