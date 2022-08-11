@@ -3290,3 +3290,42 @@ textarea {
 [data-position=below] .autocomplete-result-list {
     padding-bottom: 0 !important
 }
+
+.calc-block-info {
+    background: #87cefa38;
+    padding: 11px 11px;
+    border-radius: 9px;
+}
+
+.price-block .block-description {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.price-block .price-description {
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.price-block .price {
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #27693c;
+    display: inline-block;
+}
+
+.price-block .price>span {
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: #292929;
+}
+
+.price .rub {
+    background: url(/img/rub.svg) top right no-repeat;
+    width: 26px;
+    height: 28px;
+    display: inline-block;
+    background-size: contain;
+}
