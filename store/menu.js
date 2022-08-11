@@ -33,13 +33,15 @@ export const getters = {
 export const actions = {
   async fetchMenu({ commit, dispatch }, params) {
     const URL =
-      params.zone === "free"
+      params?.zone === "free"
         ? `/api/menu/55/${params.idItem}?zone=free`
         : "/api/menu/55/null";
-    if (params.zone !== "free") {
+    if (params?.zone !== "free") {
       await this.$axios.get("/api/module").then((res) => {
         commit("setMenu", res.data);
-        commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
+        if (params) {
+          commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
+        }
       });
     }
     await this.$axios.get(URL).then((res) => {

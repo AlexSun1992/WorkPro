@@ -41,6 +41,7 @@
               >
                 <div :class="'menu-icon-' + item.iconFileName" />
                 <span>{{ item.name }}</span>
+                <b-badge v-if="item.newCount">{{ item.newCount }}</b-badge>
               </a>
             </li>
           </n-link>
@@ -93,7 +94,6 @@ export default {
       if (window.innerWidth <= 992) {
         document.querySelector(".menu").classList.toggle("show");
         document.querySelector("body").classList.toggle("menu-open");
-        return;
       }
     },
     updateScroll() {

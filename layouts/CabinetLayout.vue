@@ -88,7 +88,10 @@ export default {
       const settings = this.$store.getters["menu/getSettingsByIdItem"](
         this.$route.params.idWizard || this.$route.params.idItem
       );
-      const nextCrumb = { text: settings.name, href: settings.url };
+      const nextCrumb = {
+        text: settings?.name || "Список",
+        to: settings?.url || "/",
+      };
       if (this.$route.params.idCard) {
         const cardCaption = this.$store.getters["data_card/cardCaption"];
         const lastCrumb = { text: cardCaption || "Карточка" };

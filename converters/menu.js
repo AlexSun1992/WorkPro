@@ -112,6 +112,7 @@ converter.menuObject = (data) => {
   obj.closeAfterSave = data.LCLOSEAFTERSAVE;
   obj.groupmenu = data.SGROUPMENU;
   obj.isVisible = data.LVISIBLE;
+  obj.newCount = data.NNEWCOUNT || null;
   return obj;
 };
 
