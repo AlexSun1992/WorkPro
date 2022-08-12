@@ -1,46 +1,25 @@
 <template>
-  <div class="row">
+  <div class="mt-4 buttons row">
+    <div class="col" v-if="currentTab.order > 1">
+      <b-button @click="goBack"> Назад </b-button>
+    </div>
     <div
-      class="mt-3 buttons"
-      :class="[
-        isUseCardTemplate
-          ? 'col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12'
-          : 'col-12',
-      ]"
+      class="col"
+      v-if="currentTab.order != qty && $route.params.idCard != 0"
     >
-      <b-button v-if="currentTab.order > 1" @click="goBack"> Назад </b-button>
-      <div>
-        <b-button
-          v-if="currentTab.order != qty && $route.params.idCard != 0"
-          :disabled="loading"
-          variant="success"
-          @click="saveCard"
-        >
-          {{ showBtnNameSave }}
-          <b-spinner
-            v-if="loading"
-            style="width: 1rem; height: 1rem"
-            class="ml-2"
-            variant="danger"
-            label="Spinning"
-          />
-        </b-button>
-        <b-button
-          v-if="currentTab.order != qty && $route.params.idCard != 0"
-          :disabled="loading"
-          variant="success"
-          @click="goNext"
-        >
-          {{ showBtnNameContinue }}
-          <b-spinner
-            v-if="loading"
-            style="width: 1rem; height: 1rem"
-            class="ml-2"
-            variant="danger"
-            label="Spinning"
-          />
-        </b-button>
-      </div>
+      <b-button :disabled="loading" variant="success" @click="saveCard">
+        {{ showBtnNameSave }}
+        <b-spinner v-if="loading" variant="danger" label="Spinning" />
+      </b-button>
+    </div>
+    <div
+      class="col"
+      v-if="currentTab.order != qty && $route.params.idCard != 0"
+    >
+      <b-button :disabled="loading" variant="success" @click="goNext">
+        {{ showBtnNameContinue }}
+        <b-spinner v-if="loading" variant="danger" label="Spinning" />
+      </b-button>
     </div>
   </div>
 </template>
@@ -136,9 +115,4 @@ export default {
 };
 </script>
 
-<style>
-.buttons {
-  display: flex;
-  justify-content: space-between;
-}
-</style>
+<style></style>
