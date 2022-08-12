@@ -1,10 +1,10 @@
 <template>
   <div class="mt-4 buttons row">
-    <div class="col" v-if="currentTab.order > 1">
+    <div class="col-auto" v-if="currentTab.order > 1">
       <b-button @click="goBack"> Назад </b-button>
     </div>
     <div
-      class="col"
+      class="col-auto"
       v-if="currentTab.order != qty && $route.params.idCard != 0"
     >
       <b-button :disabled="loading" variant="success" @click="saveCard">
@@ -13,7 +13,7 @@
       </b-button>
     </div>
     <div
-      class="col"
+      class="colauto"
       v-if="currentTab.order != qty && $route.params.idCard != 0"
     >
       <b-button :disabled="loading" variant="success" @click="goNext">
