@@ -16,6 +16,9 @@ module.exports = {
       "^/suggestions": {
         target: "http://localhost:8000",
       },
+      "^/loginesia": {
+        target: "http://localhost:8000",
+      },
       // "^/Branches": {
       //   target: "https://www.reso.ru/export/sites_reso",
       // },

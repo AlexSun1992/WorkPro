@@ -1,3 +1,5 @@
+import { getErrorMessage } from "../plugins/auth/toast.helper";
+
 export default function ({ route, redirect, $axios, $cookiz }) {
   const url = `/am/free/v2/datacard/55/801`;
   return $axios
@@ -9,7 +11,9 @@ export default function ({ route, redirect, $axios, $cookiz }) {
       return redirect("/cabinet");
     })
     .catch((error) => {
-      console.error(error);
-      return redirect("/login");
+      console.error(error.response.data);
+      return redirect(
+        `/login?error=${getErrorMessage(error.response.data.MESSAGE)}`
+      );
     });
 }

@@ -180,8 +180,13 @@ export default {
 
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
-    this.initialCount = this.count;
-    this.resendCount = this.count;
+    // eslint-disable-next-line nuxt/no-globals-in-created
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop),
+    });
+    if (params?.error) {
+      this.errorMessage = params?.error;
+    }
   },
   methods: {
     async fetchToken() {
