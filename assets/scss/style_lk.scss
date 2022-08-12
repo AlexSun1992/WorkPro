@@ -1711,7 +1711,7 @@ a.btn-warning {
 }
 
 .mt-checkbox-hl {
-    margin-top: 45px
+    margin-top: 40px
 }
 
 .conf-block {
@@ -3334,4 +3334,33 @@ textarea {
 a.color-black,
 .color-black {
     color: #292929;
+}
+
+.mx-btn {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #292929;
+}
+
+.mx-table-date td,
+.mx-table-date th {
+    font-size: 1rem;
+    color: #292929;
+}
+
+.mx-table-date .today {
+    font-weight: 700;
+}
+
+.mx-table.mx-table-date {
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: #868686;
+}
+
+.mx-calendar-content .cell:hover,
+.mx-calendar-content .cell.active {
+    background: #009639;
+    border-radius: 8px;
+    color: #fff;
 }
