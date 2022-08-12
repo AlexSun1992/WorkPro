@@ -13,7 +13,7 @@
       </b-button>
     </div>
     <div
-      class="colauto"
+      class="col-auto"
       v-if="currentTab.order != qty && $route.params.idCard != 0"
     >
       <b-button :disabled="loading" variant="success" @click="goNext">
