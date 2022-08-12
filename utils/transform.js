@@ -16,6 +16,9 @@ const getErrorMessage = (data) => {
   if (data?.MESSAGE) {
     return data?.MESSAGE;
   }
+  if (data?.message) {
+    return data?.message;
+  }
   if (Array.isArray(data)) {
     return JSON.stringify(data);
   }
