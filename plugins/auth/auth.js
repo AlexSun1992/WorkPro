@@ -60,14 +60,6 @@ export default function ({ app, redirect, $auth, $sentry }) {
               return app.$axios(originalRequest);
             }
           }
-          if (Boolean(error.response.data?.INFO) === false) {
-            $nuxt.$bvToast.toast("Неизвестная ошибка", {
-              title: "Ошибка",
-              variant: "danger",
-              autoHideDelay: 5000,
-              toaster: "b-toaster-top-full",
-            });
-          }
         }
       } catch (e) {}
     }
