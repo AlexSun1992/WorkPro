@@ -233,7 +233,7 @@ export const actions = {
           commit("setCardCaption", res.data.metaData.cardCaption);
           commit("setVisible", res.data.metaData.visible);
           commit("setAddFields", res.data.metaData.addFields);
-          dispatch("menu/fetchMenu", null, { root: true });
+          // dispatch("menu/fetchMenu", null, { root: true });
         })
         .catch((error) => {
           console.log(error.response.data);
