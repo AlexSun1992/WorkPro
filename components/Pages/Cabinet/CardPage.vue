@@ -147,28 +147,28 @@ export default {
   beforeRouteLeave(to, from, next) {
     const cardChanged = this.$store.getters["data_card/cardChanged"];
     if (cardChanged) {
-      this.$bvModal
-        .msgBoxConfirm("Закрыть страницу без сохранения данных?", {
-          title: "Переход на другую страницу",
-          size: "sm",
-          buttonSize: "sm",
-          okVariant: "primary",
-          okTitle: "Закрыть",
-          cancelTitle: "Отмена",
-          footerClass: "p-2",
-          modalClass: this.myclass,
-          hideHeaderClose: false,
-          centered: true,
-        })
-        .then(async (value) => {
-          if (value) {
-            this.$store.commit("data_card/cardChanged", false);
-            next();
-          }
-        })
-        .catch((err) => {
-          next(err);
-        });
+      // this.$bvModal
+      //   .msgBoxConfirm("Закрыть страницу без сохранения данных?", {
+      //     title: "Переход на другую страницу",
+      //     size: "sm",
+      //     buttonSize: "sm",
+      //     okVariant: "primary",
+      //     okTitle: "Закрыть",
+      //     cancelTitle: "Отмена",
+      //     footerClass: "p-2",
+      //     modalClass: this.myclass,
+      //     hideHeaderClose: false,
+      //     centered: true,
+      //   })
+      //   .then(async (value) => {
+      //     if (value) {
+      //       this.$store.commit("data_card/cardChanged", false);
+      //       next();
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     next(err);
+      //   });
     } else {
       next();
     }

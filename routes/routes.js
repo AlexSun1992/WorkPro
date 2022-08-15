@@ -10,6 +10,7 @@ const { routerUser } = require("./../api/user");
 const { routerRefresh } = require("./../api/refresh");
 const { routerDadata } = require("./../api/dadata");
 const { routerMenu } = require("./../api/menu");
+const { routerHealthcheck } = require("./../api/healthcheck");
 
 app.use(routerList);
 app.use(routerCard);
@@ -20,6 +21,7 @@ app.use(routerUser);
 app.use(routerRefresh);
 app.use(routerDadata);
 app.use(routerMenu);
+app.use(routerHealthcheck);
 
 module.exports = {
   path: "/api",
