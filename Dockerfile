@@ -18,5 +18,5 @@ RUN npm run build
 ARG APP_VERSION
 ENV APP_VERSION=$APP_VERSION
 EXPOSE 8000
-HEALTHCHECK --interval=12s --timeout=12s --start-period=30s --retries=3 CMD curl --fail http://localhost:8000/api/healthcheck || exit 1
 CMD [ "npm", "start" ]
+HEALTHCHECK --interval=12s --timeout=12s --start-period=30s --retries=3 CMD curl --fail http://localhost:8000/api/healthcheck || exit 1
