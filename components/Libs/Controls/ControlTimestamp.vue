@@ -39,7 +39,7 @@
 
 <script>
 import DatePicker from "vue2-datepicker";
-import "~/assets/scss/vue2-datepicker.css";
+import "assets/scss/vue2-datepicker.css";
 import "vue2-datepicker/locale/ru";
 import { applyMask as _mask } from "../../../utils/utils";
 
