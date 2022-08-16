@@ -5,7 +5,10 @@
  */
 export function convertErrorMessageToArray(errorMessage) {
   const getArrayFromMess = errorMessage.split(/\s?ORA-\d{5}: /g);
-  const arrWithoutEmptyString = getArrayFromMess.filter((item) => item !== "");
+  const arrWithoutEmptyString = getArrayFromMess.filter(
+    (item) =>
+      item !== "" && !item.includes("сбой распределенной операции обновления")
+  );
   return arrWithoutEmptyString;
 }
 
