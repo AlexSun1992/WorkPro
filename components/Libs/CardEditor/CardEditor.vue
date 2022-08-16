@@ -165,7 +165,7 @@ export default {
         typeof eventHandler === "function" ? eventHandler : null;
       this.stripeLoaded();
     } catch (e) {
-      console.error(e);
+      throw new Error(`Ошибка загрузки скрипта`);
     }
   },
   async beforeDestroy() {
