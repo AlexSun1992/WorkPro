@@ -3335,3 +3335,18 @@ a.color-black,
 .color-black {
     color: #292929;
 }
+
+a[data-newcount]:after {
+    content: attr(data-newcount);
+    min-width: 30px;
+    text-align: center;
+    height: 30px;
+    border-radius: 30px;
+    background: #F0F9EE;
+    color: #43B02A;
+    display: inline-table;
+    padding: 3px 7px;
+    font-weight: 400;
+    font-size: 0.875rem;
+    margin-left: 5px;
+}
