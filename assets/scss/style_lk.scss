@@ -2086,8 +2086,8 @@ a.free {
     }
     .anonsed-blocks .freecard .make-anonsed {
         position: absolute;
-        top: -10px;
-        right: -10px;
+        top: -3px;
+        right: 0px;
         width: 24px;
         height: 24px;
         border-radius: 24px;
@@ -2096,6 +2096,11 @@ a.free {
         z-index: 1;
         font-size: 0;
         padding: 0
+    }
+    .anonsed-blocks .freecard:hover .make-anonsed {
+        position: absolute;
+        top: -3px;
+        right: 0px;
     }
     .anonsed-blocks .freecard .anonsed-block,
     .anonsed-blocks .freecard:hover .anonsed-block {
