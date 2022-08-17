@@ -38,6 +38,7 @@
                 "
                 :class="'menu-icon-' + item.iconFileName"
                 :data-newcount="item.newCount"
+                :data-newcolor="item.newCountColor"
               >
                 {{ item.name }}
               </a>
