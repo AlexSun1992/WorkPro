@@ -37,7 +37,7 @@
         </div>
         <div class="doc-adress">
           <i class="my-location" />{{ item.SADDRESS }}
-        </div><div class="Recording time">
+        </div><div class="recording time">
         <div v-for="elem in item.STIMELIST" :key="elem.id" class="doc-time">
           <button class="btn-doc-time" @click="chooseTimeToVisit(elem, item)">
             {{ elem.DFROM }}
@@ -149,27 +149,39 @@ export default {
   border: 1px solid #eff1f3;
   border-radius: 16px;
   padding: 24px 54px 24px 20px;
+  display:grid;
+  grid-template-areas:
+        "doc date"
+        "name name"
+        "lpu lpu"
+        "adress adress"
+        "time time";
+    grid-template-columns: auto 116px;
+  
 }
 .doc-expert {
+  grid-area: doc;
   font-family: "SF Pro Display";
   font-style: normal;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 .doc-name {
+  grid-area: name;
   font-family: "Raleway";
   font-style: normal;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 24px;
   margin-top: 10px;
 }
 .doc-date {
+  text-align:right;
   font-family: "Raleway";
-  float: right;
+  grid-area: date;
   font-style: normal;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-feature-settings: "pnum" on, "lnum" on;
   color: #009639;
 }
@@ -177,18 +189,21 @@ export default {
   font-family: "SF Pro Display";
   font-style: normal;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 32px;
   margin-top: 40px;
+  grid-area: lpu;
 }
 .doc-adress {
+  grid-area: adress;
   font-family: "SF Pro Display";
   font-style: normal;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 32px;
   color: #292929;
 }
+.recording.time{ grid-area: time;}
 .doc-time {
   display: inline-block;
   margin-right: 20px;
@@ -202,10 +217,71 @@ export default {
   font-family: "SF Pro Display";
   font-style: normal;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1;
   color: #009639;
   min-width: 84px;
   text-align: center;
 }
+.recording.time {margin-right:-30px;}
+@media (max-width: 992px){
+  .docs-searching-results{
+    padding:16px;
+    grid-template-areas:
+        "doc" "date"
+        "name"
+        "lpu"
+        "adress"
+        "time";
+    grid-template-columns: 100%;
+  }
+.doc-expert {
+  font-weight:600;
+  font-size: 1rem;
+}
+.doc-name {
+  font-weight: 400;
+  font-size: 0.875rem;
+  color:#686868;
+  line-height:1.2;
+}
+.doc-date {
+  text-align:left;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #292929;
+}
+.doc-location {
+  font-weight: 700;
+  font-size: 0.875rem;
+  margin-top: 20px;line-height:1.2;
+  
+}
+.doc-adress .my-location{
+  position: absolute;
+  top: 16px;
+  left: -4px;}
+
+.doc-adress {
+  font-size: 1rem;
+  position:relative;
+  padding-left:20px;
+  line-height:1.2;margin-top:10px;
+}
+.recording.time{ grid-area: time;}
+.doc-time {
+  display: inline-block;
+  margin-right: 16px;
+  margin-top: 16px;
+}
+.btn-doc-time {
+  background: #edf8ea;
+  border-radius: 15px;
+  padding: 15px 12px;
+  font-size: 0.875rem;
+  min-width: 62px;
+}
+
+}
+
 </style>
