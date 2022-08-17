@@ -3355,3 +3355,8 @@ a[data-newcount]:after {
     font-size: 0.875rem;
     margin-left: 5px;
 }
+
+a[data-newcount][data-newcolor="RED"]:after {
+    background: #FFF1EB;
+    color: #EB5757;
+}
