@@ -47,7 +47,7 @@
               @input="askSuggestions('surname')"
             ></b-form-input>
 
-            <b-form-invalid-feedback v-if="this.$v.form.family.$model === ''"
+            <b-form-invalid-feedback v-if="family === ''"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
             <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false"
@@ -76,7 +76,7 @@
               @input="askSuggestions('name')"
             ></b-form-input>
 
-            <b-form-invalid-feedback v-if="this.$v.form.name.$model === ''"
+            <b-form-invalid-feedback v-if="name === ''"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
             <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false"
@@ -105,8 +105,7 @@
               @input="askSuggestions('patronymic')"
             ></b-form-input>
 
-            <b-form-invalid-feedback
-              v-if="this.$v.form.patronymic.$model === ''"
+            <b-form-invalid-feedback v-if="patronymic === ''"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
             <b-form-invalid-feedback
@@ -235,7 +234,9 @@ export default {
         password: "",
         password2: "",
       },
-
+      userSurname: "",
+      userName: "",
+      userPatronymic: "",
       conformation: false,
       show: true,
       password2: "",
@@ -249,6 +250,7 @@ export default {
       errorMessage: null,
       isErrorMessage: false,
       myclass: ["cabinet"],
+      gender: "",
     };
   },
 
@@ -298,6 +300,31 @@ export default {
         console.log(this.$v.form.name.$model);
       }
     },
+    family() {
+      return this.$v.form.family.$model;
+    },
+
+    name() {
+      return this.$v.form.name.$model;
+    },
+
+    patronymic() {
+      return this.$v.form.patronymic.$model;
+    },
+  },
+
+  watch: {
+    family(value) {
+      this.userSurname = value;
+    },
+
+    name(value) {
+      this.userName = value;
+    },
+
+    patronymic(value) {
+      this.userPatronymic = value;
+    },
   },
 
   methods: {
@@ -318,6 +345,12 @@ export default {
       const key = params.key;
       delete params.suggestionType;
       delete params.key;
+
+      if (this.family === "" && this.name === "" && this.patronymic === "") {
+        this.gender = "UNKNOWN";
+      }
+      params.gender = this.gender;
+
       const response = await fetch(
         `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
         {
@@ -348,15 +381,49 @@ export default {
       if (target === "patronymic") {
         params.query = this.$v.form.patronymic.$model;
         params.parts = ["PATRONYMIC"];
+        params.gender = this.gender;
       } else if (target === "surname") {
         params.query = this.$v.form.family.$model;
         params.parts = ["SURNAME"];
+        params.gender = this.gender;
       } else if (target === "name") {
         params.query = this.$v.form.name.$model;
         params.parts = ["NAME"];
+        params.gender = this.gender;
       }
 
       const result = await this.fetchSuggestions(params);
+
+      // userSurnameGender
+      const userSurnameGender = result.find(
+        (item) => item.value === this.userSurname
+      );
+      if (userSurnameGender !== undefined) {
+        this.gender = userSurnameGender.data.gender;
+      }
+      //
+
+      //  userNameGender
+      const userNameGender = result.find(
+        (item) => item.value === this.userName
+      );
+
+      if (userNameGender !== undefined) {
+        this.gender = userNameGender.data.gender;
+      }
+
+      //
+
+      // userPatronymicGender
+      const userPatronymicGender = result.find(
+        (item) => item.value === this.userPatronymic
+      );
+
+      if (userPatronymicGender !== undefined) {
+        this.gender = userPatronymicGender.data.gender;
+      }
+
+      //
 
       if (target === "surname" && this.$v.form.family.alpha !== false) {
         this.array.length = 0;
