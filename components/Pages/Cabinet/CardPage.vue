@@ -278,6 +278,7 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch("menu/fetchCounters", null);
     this.$store.commit("data_card/setLoading", false);
     this.editable;
   },
