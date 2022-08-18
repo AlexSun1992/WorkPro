@@ -178,7 +178,7 @@ export const actions = {
       .then(async (resp) => {
         commit("setPoutValue", resp.data.POUTVALUE);
         dispatch("updateBlock", itemId);
-        dispatch("menu/fetchMenu", null, { root: true });
+        dispatch("menu/fetchCounters", null, { root: true });
       });
   },
 };

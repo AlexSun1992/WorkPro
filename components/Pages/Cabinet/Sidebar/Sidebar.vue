@@ -14,9 +14,8 @@
             "
             class="sidebar-nav-item"
           >
-            <a :href="url" target="blank">
-              <div :class="'menu-icon-telemed'" />
-              <span>Видео-консультация</span>
+            <a :href="url" target="blank" :class="'menu-icon-telemed'">
+              Видео-консультация
             </a>
           </li>
           <n-link
@@ -37,11 +36,11 @@
                     toggleClassActive(e);
                   }
                 "
-                class="slava"
+                :class="'menu-icon-' + item.iconFileName"
+                :data-newcount="item.newCount"
+                :data-newcolor="item.newCountColor"
               >
-                <div :class="'menu-icon-' + item.iconFileName" />
-                <span>{{ item.name }}</span>
-                <b-badge v-if="item.newCount">{{ item.newCount }}</b-badge>
+                {{ item.name }}
               </a>
             </li>
           </n-link>
@@ -86,9 +85,6 @@ export default {
       console.log(e);
       e.path[1].classList.toggle("show");
       e.path[0].classList.toggle("active");
-    },
-    slava() {
-      console.log("bla bla bla");
     },
     toggleClassActive(e) {
       if (window.innerWidth <= 992) {
