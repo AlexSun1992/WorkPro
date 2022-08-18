@@ -197,6 +197,7 @@ import {
   BNavItem,
 } from "bootstrap-vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
+import { test } from "./regFormDadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -341,6 +342,7 @@ export default {
     },
 
     async fetchSuggestions(params) {
+      test("Петя");
       const type = params.suggestionType;
       const key = params.key;
       delete params.suggestionType;
@@ -351,18 +353,15 @@ export default {
       }
       params.gender = this.gender;
 
-      const response = await fetch(
-        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Token ${key}`,
-          },
-          body: JSON.stringify(params),
-        }
-      );
+      const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Token ${key}`,
+        },
+        body: JSON.stringify(params),
+      });
       const result = await response.json();
       return result.suggestions;
     },
