@@ -618,7 +618,14 @@ export const mutations = {
   setDisabled(state, params) {
     if (Array.isArray(state.form)) {
       state.form = state.form.map((item) => {
-        item.readonly = params;
+        const copyField = state.copyForm.find(
+          (field) => field.fieldId === item.fieldId
+        );
+        if (copyField.readonly) {
+          item.readonly = true;
+        } else {
+          item.readonly = params;
+        }
         return item;
       });
     }
