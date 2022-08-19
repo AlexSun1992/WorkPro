@@ -197,7 +197,8 @@ import {
   BNavItem,
 } from "bootstrap-vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
-import { test } from "./regFormDadata.helper";
+
+import { fetchSuggestions } from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -341,31 +342,6 @@ export default {
       this.array = [];
     },
 
-    async fetchSuggestions(params) {
-      test("Петя");
-      const type = params.suggestionType;
-      const key = params.key;
-      delete params.suggestionType;
-      delete params.key;
-
-      if (this.family === "" && this.name === "" && this.patronymic === "") {
-        this.gender = "UNKNOWN";
-      }
-      params.gender = this.gender;
-
-      const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Token ${key}`,
-        },
-        body: JSON.stringify(params),
-      });
-      const result = await response.json();
-      return result.suggestions;
-    },
-
     async askSuggestions(target) {
       const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
       let suggestionType = "fio";
@@ -391,7 +367,7 @@ export default {
         params.gender = this.gender;
       }
 
-      const result = await this.fetchSuggestions(params);
+      const result = await fetchSuggestions(params);
 
       // userSurnameGender
       const userSurnameGender = result.find(
