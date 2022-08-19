@@ -26,9 +26,9 @@ describe("Модуль тестирования подсказок по ФИО d
     expect(typeof requestParams === "object").toBe(true);
   });
 
-  it("Получение конкретных подсказок", async () => {
-    const suggestions = await getSuggestions();
-    console.log(suggestions);
-    expect(typeof suggestions === "object").toBe(true);
-  });
+  //   it("Получение конкретных подсказок", async () => {
+  //     const suggestions = await getSuggestions();
+  //     console.log(suggestions);
+  //     expect(typeof suggestions === "object").toBe(true);
+  //   });
 });
