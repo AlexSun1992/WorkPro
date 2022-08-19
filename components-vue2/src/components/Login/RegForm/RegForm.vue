@@ -197,8 +197,11 @@ import {
   BNavItem,
 } from "bootstrap-vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
-
-import { fetchSuggestions } from "./dadata.helper";
+import {
+  createParamsForRequest,
+  fetchSuggestions,
+  getSuggestions,
+} from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -343,82 +346,23 @@ export default {
     },
 
     async askSuggestions(target) {
-      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-      let suggestionType = "fio";
-      let query;
-
-      const params = {
-        query: query,
-        suggestionType,
-        key: API_KEY,
-      };
-
-      if (target === "patronymic") {
-        params.query = this.$v.form.patronymic.$model;
-        params.parts = ["PATRONYMIC"];
-        params.gender = this.gender;
-      } else if (target === "surname") {
-        params.query = this.$v.form.family.$model;
-        params.parts = ["SURNAME"];
-        params.gender = this.gender;
-      } else if (target === "name") {
-        params.query = this.$v.form.name.$model;
-        params.parts = ["NAME"];
-        params.gender = this.gender;
-      }
-
-      const result = await fetchSuggestions(params);
-
-      // userSurnameGender
-      const userSurnameGender = result.find(
-        (item) => item.value === this.userSurname
-      );
-      if (userSurnameGender !== undefined) {
-        this.gender = userSurnameGender.data.gender;
-      }
-      //
-
-      //  userNameGender
-      const userNameGender = result.find(
-        (item) => item.value === this.userName
+      const resultParams = createParamsForRequest(
+        target,
+        this.$v.form.name.$model,
+        this.$v.form.family.$model,
+        this.$v.form.patronymic.$model,
+        this.gender
       );
 
-      if (userNameGender !== undefined) {
-        this.gender = userNameGender.data.gender;
-      }
-
-      //
-
-      // userPatronymicGender
-      const userPatronymicGender = result.find(
-        (item) => item.value === this.userPatronymic
+      const result = await fetchSuggestions(resultParams);
+      const test = await getSuggestions(
+        target,
+        result,
+        this.array,
+        this.$v.form.family.alpha,
+        this.$v.form.name.alpha,
+        this.$v.form.patronymic.alpha
       );
-
-      if (userPatronymicGender !== undefined) {
-        this.gender = userPatronymicGender.data.gender;
-      }
-
-      //
-
-      if (target === "surname" && this.$v.form.family.alpha !== false) {
-        this.array.length = 0;
-        await result.forEach((item) => {
-          this.array.push(item.data.surname);
-        });
-      } else if (target === "name" && this.$v.form.name.alpha !== false) {
-        this.array.length = 0;
-        await result.forEach((item) => {
-          this.array.push(item.data.name);
-        });
-      } else if (
-        target === "patronymic" &&
-        this.$v.form.patronymic.alpha !== false
-      ) {
-        this.array.length = 0;
-        await result.forEach((item) => {
-          this.array.push(item.data.patronymic);
-        });
-      }
     },
 
     validateState(name) {
