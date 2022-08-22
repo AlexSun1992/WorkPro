@@ -1,4 +1,4 @@
- async function fetchSuggestions(params:object) {
+ async function fetchSuggestions(params:object){
     const type:string = params.suggestionType
     const key:string = params.key;
     delete params.suggestionType;
