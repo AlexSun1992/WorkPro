@@ -167,8 +167,10 @@ export default {
       if (process?.env?.NODE_ENV === "development") {
         this.eventHandler = await this.loadScript();
       }
-      await this.$store.dispatch("menu/fetchMenu", this.params);
-      await this.fetchCard();
+      await Promise.all([
+        this.$store.dispatch("menu/fetchMenu", this.params),
+        this.fetchCard(),
+      ]);
       this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
       this.isShowButtonSave = true;
     } catch (e) {
