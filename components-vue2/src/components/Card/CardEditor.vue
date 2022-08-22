@@ -60,12 +60,14 @@ import { IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
+import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
+const startTime = Date.now();
 export default {
   name: "CardEditor",
   components: { FormBlock, Form },
@@ -122,6 +124,7 @@ export default {
       "getError",
       "getBtnSave",
       "getDataFieldByFieldId",
+      "getLoading",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
     isReadOnly() {
@@ -175,12 +178,19 @@ export default {
         "data_card/setErrorMessage",
         e?.response?.data || { MESSAGE: "Ошибка отображения компонента" }
       );
+      Sentry.captureException(
+        e?.response?.data || "Ошибка отображения компонента"
+      );
     } finally {
       this.$store.commit("data_card/setLoading", false);
       this.$store.commit("data_card/setDisabled", false);
+      Sentry.captureMessage(
+        `Компонент  "${this.menuId}" грузился  ${
+          Date.now() - startTime
+        } миллисекунд(ы)`
+      );
     }
   },
-
   methods: {
     async loadScript() {
       return this.eventLocalHandler().then((script) => {
