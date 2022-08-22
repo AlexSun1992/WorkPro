@@ -84,3 +84,24 @@ export function revealGender(name, surname, patronymic) {
   }
   return true;
 }
+
+export function userSurnameGender(suggestionsFetched, userSurname) {
+  const getGenderFromSurname = suggestionsFetched.find(
+    (item) => item.value === userSurname
+  );
+  return getGenderFromSurname?.data.gender;
+}
+
+export function userNameGender(suggestionsFetched, userName) {
+  const getGenderFromName = suggestionsFetched.find(
+    (item) => item.value === userName
+  );
+  return getGenderFromName?.data.gender;
+}
+
+export function userPatronymicGender(suggestionsFetched, patronimyc) {
+  const getGenderFromPatronimyc = suggestionsFetched.find(
+    (item) => item.value === patronimyc
+  );
+  return getGenderFromPatronimyc?.data.gender;
+}

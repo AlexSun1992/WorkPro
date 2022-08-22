@@ -202,6 +202,9 @@ import {
   fetchSuggestions,
   getSuggestions,
   revealGender,
+  userSurnameGender,
+  userNameGender,
+  userPatronymicGender,
 } from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
@@ -347,6 +350,20 @@ export default {
     },
 
     async askSuggestions(target) {
+      const isFieldFioEmpty = revealGender(
+        this.name,
+        this.family,
+        this.patronymic
+      );
+
+      if (isFieldFioEmpty === false) {
+        this.gender = "UNKNOWN";
+      }
+
+      if (this.family === "" && this.name === "" && this.patronymic === "") {
+        this.gender = "UNKNOWN";
+      }
+
       const resultParams = createParamsForRequest(
         target,
         this.$v.form.name.$model,
@@ -355,14 +372,30 @@ export default {
         this.gender
       );
 
-      const isFieldFioEmpty = revealGender(
-        this.name,
-        this.family,
-        this.patronymic
+      const result = await fetchSuggestions(resultParams);
+
+      const surnameGender = userSurnameGender(result, this.family);
+
+      if (surnameGender !== undefined) {
+        this.gender = surnameGender;
+      }
+
+      const nameGender = userNameGender(result, this.name);
+
+      if (nameGender !== undefined) {
+        this.gender = nameGender;
+      }
+
+      const patonimycGender = userPatronymicGender(
+        result,
+        this.userPatronymicGender
       );
 
-      const result = await fetchSuggestions(resultParams);
-      const test = await getSuggestions(
+      if (patonimycGender !== undefined) {
+        this.gender = patonimycGender;
+      }
+
+      await getSuggestions(
         target,
         result,
         this.array,

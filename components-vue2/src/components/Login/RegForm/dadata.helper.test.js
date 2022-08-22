@@ -3,6 +3,9 @@ import { fetchSuggestions } from "./dadata.helper";
 import { suggestionsSurnames } from "./dadata.helper.fixtures";
 import { createParamsForRequest, getSuggestions } from "./dadata.helper";
 import { revealGender } from "./dadata.helper";
+import { userSurnameGender } from "./dadata.helper";
+import { userNameGender } from "./dadata.helper";
+import { userPatronymicGender } from "./dadata.helper";
 import { paramsSurname } from "./dadata.helper.fixtures";
 import { suggestionsNames } from "./dadata.helper.fixtures";
 import { paramsName } from "./dadata.helper.fixtures";
@@ -19,6 +22,7 @@ describe("Модуль тестирования подсказок по ФИО d
       .fn()
       .mockImplementation(() => Promise.resolve(suggestionsDataSurnames));
     const result = await mockFn();
+
     expect(typeof result === "object").toBe(true);
   });
 
@@ -32,9 +36,21 @@ describe("Модуль тестирования подсказок по ФИО d
     expect(checkFIOFields).toBe(false);
   });
 
-  //   it("Получение конкретных подсказок", async () => {
-  //     const suggestions = await getSuggestions();
-  //     console.log(suggestions);
-  //     expect(typeof suggestions === "object").toBe(true);
-  //   });
+  it("Выявляем пол по фамилии пользователя", () => {
+    const checkGender = userSurnameGender(suggestionsSurnames, "Антонов");
+    expect(checkGender).toBe("MALE");
+  });
+
+  it("Выявляем пол по имени пользователя", () => {
+    const checkGender = userNameGender(suggestionsNames, "Александр");
+    expect(checkGender).toBe("MALE");
+  });
+
+  it("Выявляем пол по отчеству пользователя", () => {
+    const checkGender = userPatronymicGender(
+      suggestionsPatronymic,
+      "Константинович"
+    );
+    expect(checkGender).toBe("MALE");
+  });
 });
