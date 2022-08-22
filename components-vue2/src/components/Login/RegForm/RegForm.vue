@@ -201,6 +201,7 @@ import {
   createParamsForRequest,
   fetchSuggestions,
   getSuggestions,
+  revealGender,
 } from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
@@ -352,6 +353,12 @@ export default {
         this.$v.form.family.$model,
         this.$v.form.patronymic.$model,
         this.gender
+      );
+
+      const isFieldFioEmpty = revealGender(
+        this.name,
+        this.family,
+        this.patronymic
       );
 
       const result = await fetchSuggestions(resultParams);

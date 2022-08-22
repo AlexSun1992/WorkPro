@@ -77,3 +77,10 @@ export async function getSuggestions(
   }
   return currentSuggestions;
 }
+
+export function revealGender(name, surname, patronymic) {
+  if (name === "" && surname === "" && patronymic === "") {
+    return false;
+  }
+  return true;
+}

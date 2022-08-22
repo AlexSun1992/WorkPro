@@ -4,13 +4,6 @@
     delete params.suggestionType;
     delete params.key;
   
-    
-
-    //   if (this.family === "" && this.name === "" && this.patronymic === "") {
-    //     this.gender = "UNKNOWN";
-    //   }
-    //   params.gender = this.gender;
-   
     const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
       method: "POST",
       headers: {
