@@ -525,6 +525,9 @@ export default {
           this.fitToViewportMetro();
           break;
         case 2:
+          if (e.scale > 1) {
+            e.preventDefault();
+          }
           var summxy = Math.sqrt(
             Math.pow(e.touches[1].clientX - e.touches[0].clientX, 2) +
               Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
