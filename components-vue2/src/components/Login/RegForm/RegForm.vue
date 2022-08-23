@@ -35,7 +35,7 @@
       <div class="row">
         <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
           <b-form-group class="required" label="Фамилия" label-cols="12">
-            <b-form-input
+            <!-- <b-form-input
               list="my-list-id"
               :id="Math.random().toString()"
               v-model="$v.form.family.$model"
@@ -59,12 +59,18 @@
               <option v-for="(item, index) in array" :key="index">
                 {{ item }}
               </option>
-            </datalist>
+            </datalist> -->
+            <autocomplete
+              ref="autocomplete"
+              :search="getSurNameSuggestions"
+              :get-result-value="getResultValue"
+              @blur="handleBlur"
+            />
           </b-form-group>
         </div>
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
           <b-form-group label="Имя" label-cols="12" class="required">
-            <b-form-input
+            <!-- <b-form-input
               list="my-list-id"
               :id="Math.random().toString()"
               v-model="$v.form.name.$model"
@@ -87,13 +93,19 @@
               <option v-for="(item, index) in array" :key="index">
                 {{ item }}
               </option>
-            </datalist>
+            </datalist> -->
+            <autocomplete
+              ref="autocomplete"
+              :search="getNameSuggestions"
+              :get-result-value="getResultValue"
+              @blur="handleBlur"
+            />
           </b-form-group>
         </div>
 
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
           <b-form-group label="Отчество" label-cols="12" class="required">
-            <b-form-input
+            <!-- <b-form-input
               list="my-list-id"
               :id="Math.random().toString()"
               v-model="$v.form.patronymic.$model"
@@ -117,7 +129,13 @@
               <option v-for="(item, index) in array" :key="index">
                 {{ item }}
               </option>
-            </datalist>
+            </datalist> -->
+            <autocomplete
+              ref="autocomplete"
+              :search="getPatronimycSuggestions"
+              :get-result-value="getResultValue"
+              @blur="handleBlur"
+            />
           </b-form-group>
         </div>
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
@@ -196,6 +214,7 @@ import {
   BNav,
   BNavItem,
 } from "bootstrap-vue";
+import Autocomplete from "@trevoreyre/autocomplete-vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
 import {
   createParamsForRequest,
@@ -211,6 +230,7 @@ const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
 export default {
   components: {
+    Autocomplete,
     birthdayPicker,
     VerifyUser,
     VerifyPassword,
@@ -222,8 +242,6 @@ export default {
     BAlert,
     BButton,
     BSpinner,
-    BNav,
-    BNavItem,
   },
 
   mixins: [validationMixin],
@@ -231,6 +249,7 @@ export default {
   data() {
     return {
       array: [],
+      suggestionsHub: [],
       codeFieldValid: false,
       form: {
         phone: "",
@@ -337,6 +356,14 @@ export default {
   },
 
   methods: {
+    handleBlur() {
+      console.log("!!!");
+      console.log(this.$refs.autocomplete);
+    },
+
+    getResultValue(item) {
+      return item.value;
+    },
     getTextMessage(value) {
       this.successSendMessageText = value;
     },
@@ -349,61 +376,166 @@ export default {
       this.array = [];
     },
 
-    async askSuggestions(target) {
-      const isFieldFioEmpty = revealGender(
-        this.name,
-        this.family,
-        this.patronymic
+    async getSurNameSuggestions(input) {
+      this.suggestionsHub = [];
+      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+      let suggestionType = "fio";
+      const params = {
+        query: input,
+        suggestionType,
+        key: API_KEY,
+        parts: ["SURNAME"],
+      };
+      const type = params.suggestionType;
+      const key = params.key;
+
+      const response = await fetch(
+        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Token ${key}`,
+          },
+          body: JSON.stringify(params),
+        }
       );
 
-      if (isFieldFioEmpty === false) {
-        this.gender = "UNKNOWN";
-      }
+      const result = await response.json();
 
-      if (this.family === "" && this.name === "" && this.patronymic === "") {
-        this.gender = "UNKNOWN";
-      }
+      result.suggestions.forEach((item) => {
+        this.suggestionsHub.push(item);
+      });
 
-      const resultParams = createParamsForRequest(
-        target,
-        this.$v.form.name.$model,
-        this.$v.form.family.$model,
-        this.$v.form.patronymic.$model,
-        this.gender
-      );
-
-      const result = await fetchSuggestions(resultParams);
-
-      const surnameGender = userSurnameGender(result, this.family);
-
-      if (surnameGender !== undefined) {
-        this.gender = surnameGender;
-      }
-
-      const nameGender = userNameGender(result, this.name);
-
-      if (nameGender !== undefined) {
-        this.gender = nameGender;
-      }
-
-      const patonimycGender = userPatronymicGender(
-        result,
-        this.userPatronymicGender
-      );
-
-      if (patonimycGender !== undefined) {
-        this.gender = patonimycGender;
-      }
-
-      await getSuggestions(
-        target,
-        result,
-        this.array,
-        this.$v.form.family.alpha,
-        this.$v.form.name.alpha,
-        this.$v.form.patronymic.alpha
-      );
+      return this.suggestionsHub;
     },
+
+    async getNameSuggestions(input) {
+      this.suggestionsHub = [];
+      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+      let suggestionType = "fio";
+      const params = {
+        query: input,
+        suggestionType,
+        key: API_KEY,
+        parts: ["NAME"],
+      };
+      const type = params.suggestionType;
+      const key = params.key;
+
+      const response = await fetch(
+        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Token ${key}`,
+          },
+          body: JSON.stringify(params),
+        }
+      );
+
+      const result = await response.json();
+
+      result.suggestions.forEach((item) => {
+        this.suggestionsHub.push(item);
+      });
+
+      return this.suggestionsHub;
+    },
+
+    async getPatronimycSuggestions(input) {
+      this.suggestionsHub = [];
+      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+      let suggestionType = "fio";
+      const params = {
+        query: input,
+        suggestionType,
+        key: API_KEY,
+        parts: ["PATRONYMIC"],
+      };
+      const type = params.suggestionType;
+      const key = params.key;
+
+      const response = await fetch(
+        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Token ${key}`,
+          },
+          body: JSON.stringify(params),
+        }
+      );
+
+      const result = await response.json();
+
+      result.suggestions.forEach((item) => {
+        this.suggestionsHub.push(item);
+      });
+
+      return this.suggestionsHub;
+    },
+
+    // async askSuggestions(target) {
+    //   const isFieldFioEmpty = revealGender(
+    //     this.name,
+    //     this.family,
+    //     this.patronymic
+    //   );
+
+    //   if (isFieldFioEmpty === false) {
+    //     this.gender = "UNKNOWN";
+    //   }
+
+    //   if (this.family === "" && this.name === "" && this.patronymic === "") {
+    //     this.gender = "UNKNOWN";
+    //   }
+
+    //   const resultParams = createParamsForRequest(
+    //     target,
+    //     this.$v.form.name.$model,
+    //     this.$v.form.family.$model,
+    //     this.$v.form.patronymic.$model,
+    //     this.gender
+    //   );
+
+    //   const result = await fetchSuggestions(resultParams);
+
+    //   const surnameGender = userSurnameGender(result, this.family);
+
+    //   if (surnameGender !== undefined) {
+    //     this.gender = surnameGender;
+    //   }
+
+    //   const nameGender = userNameGender(result, this.name);
+
+    //   if (nameGender !== undefined) {
+    //     this.gender = nameGender;
+    //   }
+
+    //   const patonimycGender = userPatronymicGender(
+    //     result,
+    //     this.userPatronymicGender
+    //   );
+
+    //   if (patonimycGender !== undefined) {
+    //     this.gender = patonimycGender;
+    //   }
+
+    //   await getSuggestions(
+    //     target,
+    //     result,
+    //     this.array,
+    //     this.$v.form.family.alpha,
+    //     this.$v.form.name.alpha,
+    //     this.$v.form.patronymic.alpha
+    //   );
+    // },
 
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
