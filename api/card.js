@@ -11,6 +11,8 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 
+let controller;
+
 router.use(express.json());
 router.use(cookieParser());
 
@@ -225,9 +227,14 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
         `${consts.CLIENTFREEMENU}/${req.params.idModule}/${req.params.idItem}`
       );
     }
+    if (controller) {
+      controller.abort();
+    }
+    controller = new AbortController();
     mobile2ServiceInstance({
       url: URL_ADDRESS,
       method: "GET",
+      signal: controller.signal,
     })
       .then(async (resp) => {
         res.set("Content-Type", "text/javascript");

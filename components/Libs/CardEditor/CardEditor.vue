@@ -156,7 +156,7 @@ export default {
     try {
       this.urlScript = `/api/card/js/${this.$route.params.idModule}/${
         this.$route.params.idItem
-      }&time=${Date.now()}`;
+      }?time=${Date.now()}`;
       if (process.client) {
         await this.$loadScript(this.urlScript);
         this.isLoadedScript = true;
@@ -165,7 +165,7 @@ export default {
         typeof eventHandler === "function" ? eventHandler : null;
       this.stripeLoaded();
     } catch (e) {
-      throw new Error(`Ошибка загрузки скрипта`);
+      console.warn(`Ошибка загрузки скрипта`);
     }
   },
   async beforeDestroy() {

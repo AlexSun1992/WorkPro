@@ -60,12 +60,14 @@ import { IconsPlugin } from "bootstrap-vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
+import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
+const startTime = Date.now();
 export default {
   name: "CardEditor",
   components: { FormBlock, Form },
@@ -122,6 +124,7 @@ export default {
       "getError",
       "getBtnSave",
       "getDataFieldByFieldId",
+      "getLoading",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
     isReadOnly() {
@@ -164,8 +167,10 @@ export default {
       if (process?.env?.NODE_ENV === "development") {
         this.eventHandler = await this.loadScript();
       }
-      await this.$store.dispatch("menu/fetchMenu", this.params);
-      await this.fetchCard();
+      await Promise.all([
+        this.$store.dispatch("menu/fetchMenu", this.params),
+        this.fetchCard(),
+      ]);
       this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
       this.isShowButtonSave = true;
     } catch (e) {
@@ -173,14 +178,26 @@ export default {
       this.$store.commit("data_card/setSavedError", true);
       this.$store.commit(
         "data_card/setErrorMessage",
-        e?.response?.data || { MESSAGE: "Ошибка отображения компонента" }
+        e?.response?.data || {
+          MESSAGE: `Ошибка отображения компонента ${this.menuId}`,
+        }
       );
+      Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
+        scope.setTransactionName(
+          `Ошибка отображения компонента "${this.menuId}"`
+        );
+        return scope;
+      });
     } finally {
       this.$store.commit("data_card/setLoading", false);
       this.$store.commit("data_card/setDisabled", false);
+      Sentry.captureMessage(
+        `Компонент  "${this.menuId}" грузился  ${
+          Date.now() - startTime
+        } миллисекунд(ы)`
+      );
     }
   },
-
   methods: {
     async loadScript() {
       return this.eventLocalHandler().then((script) => {

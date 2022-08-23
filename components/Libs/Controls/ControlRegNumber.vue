@@ -51,33 +51,33 @@
 </template>
 <script>
 const isNumberValid = function (value) {
-  if (
-    /^[АВЕКМНОРСТУХABEHKMNOPCTYX]\d{3}(?<!000)[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}$/iu.test(
-      value
-    )
-  ) {
-    return true;
-  }
-  if (/^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
-    return true;
-  }
-  if (/^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{4}(?<!0000)$/iu.test(value)) {
-    return true;
-  }
-  if (/^\d{4}(?<!0000)[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}$/iu.test(value)) {
-    return true;
-  }
-  if (
-    /^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}(?<!000)[АВЕКМНОРСТУХABEHKMNOPCTYX]$/iu.test(
-      value
-    )
-  ) {
-    return true;
-  }
-  if (/^Т[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
-    return true;
-  }
-  return false;
+  // if (
+  //   /^[АВЕКМНОРСТУХABEHKMNOPCTYX]\d{3}(?<!000)[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}$/iu.test(
+  //     value
+  //   )
+  // ) {
+  //   return true;
+  // }
+  // if (/^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
+  //   return true;
+  // }
+  // if (/^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{4}(?<!0000)$/iu.test(value)) {
+  //   return true;
+  // }
+  // if (/^\d{4}(?<!0000)[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}$/iu.test(value)) {
+  //   return true;
+  // }
+  // if (
+  //   /^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}(?<!000)[АВЕКМНОРСТУХABEHKMNOPCTYX]$/iu.test(
+  //     value
+  //   )
+  // ) {
+  //   return true;
+  // }
+  // if (/^Т[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}(?<!000)$/iu.test(value)) {
+  //   return true;
+  // }
+  return true;
 };
 const isCodeValid = function (value) {
   if (/^\d+$/iu.test(value) && value.length > 1) {
@@ -164,10 +164,8 @@ export default {
           /[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi,
           "$& "
         );
-      } else {
-        if (formatValue.replace(/ /g, "").length > 6) {
-          return formatValue.substring(0, formatValue.length - 1);
-        }
+      } else if (formatValue.replace(/ /g, "").length > 6) {
+        return formatValue.substring(0, formatValue.length - 1);
       }
       return formatValue;
     },
@@ -177,9 +175,8 @@ export default {
           return value.substring(0, 3);
         }
         return value;
-      } else {
-        return value.substring(0, value.length - 1);
       }
+      return value.substring(0, value.length - 1);
     },
     numberKeydown(e) {
       if (e.key !== "Backspace" && e.key !== "Delete") {
