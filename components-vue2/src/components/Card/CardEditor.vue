@@ -181,7 +181,7 @@ export default {
         e?.response?.data || { MESSAGE: "Ошибка отображения компонента" }
       );
       Sentry.captureException(
-        e
+        e?.response?.data || { MESSAGE: `Ошибка отображения компонента "${this.menuId}"` }
       );
     } finally {
       this.$store.commit("data_card/setLoading", false);
