@@ -1,10 +1,11 @@
 module.exports = {
   outputDir: "../static/js/",
   css: { extract: false },
+  runtimeCompiler: true,
   devServer: {
     proxy: {
       "^/free": {
-        target: "https://mobile2.reso.ru",
+        target: "https://mobile.reso.ru",
       },
       "^/am": {
         target: "https://mobile2.reso.ru",
@@ -15,6 +16,22 @@ module.exports = {
       "^/suggestions": {
         target: "http://localhost:8000",
       },
+      "^/loginesia": {
+        target: "http://localhost:8000",
+      },
+      // "^/Branches": {
+      //   target: "https://www.reso.ru/export/sites_reso",
+      // },
     },
+  },
+  chainWebpack: (config) => {
+    const svgRule = config.module.rule("svg");
+    svgRule.uses.clear();
+    svgRule
+      .use("babel-loader")
+      .loader("babel-loader")
+      .end()
+      .use("vue-svg-loader")
+      .loader("vue-svg-loader");
   },
 };
