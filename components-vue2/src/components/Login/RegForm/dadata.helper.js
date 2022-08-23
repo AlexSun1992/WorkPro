@@ -16,8 +16,6 @@ export async function fetchSuggestions(params) {
 
   const result = await response.json();
 
-  console.log("result:", result);
-
   return result.suggestions;
 }
 
@@ -33,4 +31,13 @@ export function userGender(suggestionsFetched, userSurname) {
     (item) => item.value === userSurname
   );
   return getGenderFromSurname?.data.gender;
+}
+
+export function getSuggestions(fetchedSuggestions, suggestions) {
+  fetchedSuggestions.forEach((item) => {
+    suggestions.push(item);
+  });
+
+  const result = suggestions;
+  return result;
 }

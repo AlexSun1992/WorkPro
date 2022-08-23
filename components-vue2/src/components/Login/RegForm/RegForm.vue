@@ -227,7 +227,12 @@ import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import ConfirmModal from "./ConfirmModal.vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
 
-import { fetchSuggestions, revealGender, userGender } from "./dadata.helper";
+import {
+  fetchSuggestions,
+  revealGender,
+  userGender,
+  getSuggestions,
+} from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -408,11 +413,9 @@ export default {
 
       const result = await fetchSuggestions(params);
 
-      result.forEach((item) => {
-        this.suggestionsHub.push(item);
-      });
+      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
 
-      return this.suggestionsHub;
+      return fetchedSuggestions;
     },
 
     validateState(name) {

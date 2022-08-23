@@ -1,7 +1,7 @@
 import { fetchSuggestions } from "./dadata.helper";
 
 import { suggestionsSurnames } from "./dadata.helper.fixtures";
-import { createParamsForRequest, getSuggestions } from "./dadata.helper";
+import { createParamsForRequest } from "./dadata.helper";
 import { revealGender } from "./dadata.helper";
 import { userSurnameGender } from "./dadata.helper";
 import { userGender } from "./dadata.helper";
@@ -12,7 +12,7 @@ import { paramsName } from "./dadata.helper.fixtures";
 import { suggestionsPatronymic } from "./dadata.helper.fixtures";
 import { paramsPatronymic } from "./dadata.helper.fixtures";
 import { getSuggestionsFIO } from "./dadata.helper";
-
+import { getSuggestions } from "./dadata.helper";
 import { fetch, Response } from "node-fetch";
 import { jest } from "@jest/globals";
 
@@ -47,6 +47,10 @@ describe("Модуль тестирования подсказок по ФИО d
     expect(checkGender).toBe("MALE");
   });
 
+  it("собирем подсказки в массив", () => {});
+  const emptyArr = [];
+  const testResult = getSuggestions(suggestionsSurnames, emptyArr);
+  expect(Array.isArray(testResult)).toBe(true);
   // it.only("Получаем массив с подсказками по ФИО", () => {
   //   const suggestionsDataSurnames = suggestionsSurnames;
   //   const suggestionsFIO = getSuggestions(suggestionsDataSurnames, []);
