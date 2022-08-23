@@ -210,6 +210,11 @@ export default {
           idModule: this.$route.params.idModule,
         });
         for (let i = 0; i < items.length; i++) {
+          if (!items[i][this.queryParamName]) {
+            console.log(
+              `В элементе словаря c ID ${this.menuDic} отсутствует поле ${this.queryParamName}`
+            );
+          }
           this.list.push({
             value: items[i][this.queryParamName],
             text: items[i][this.fk],
