@@ -178,11 +178,16 @@ export default {
       this.$store.commit("data_card/setSavedError", true);
       this.$store.commit(
         "data_card/setErrorMessage",
-        e?.response?.data || { MESSAGE: "Ошибка отображения компонента" }
+        e?.response?.data || {
+          MESSAGE: `Ошибка отображения компонента ${this.menuId}`,
+        }
       );
-      Sentry.captureException(
-        e?.response?.data || `Ошибка отображения компонента "${this.menuId}"`
-      );
+      Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
+        scope.setTransactionName(
+          `Ошибка отображения компонента "${this.menuId}"`
+        );
+        return scope;
+      });
     } finally {
       this.$store.commit("data_card/setLoading", false);
       this.$store.commit("data_card/setDisabled", false);
