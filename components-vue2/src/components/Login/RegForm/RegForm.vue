@@ -47,25 +47,33 @@
               @input="askSuggestions('surname')"
             ></b-form-input>
 
-            <b-form-invalid-feedback v-if="family === ''"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            >
+       
             <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
             >
-
-            <datalist id="my-list-id">
+               <b-form-invalid-feedback v-if="family === ''"
+              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            > -->
+            <!-- <datalist id="my-list-id">
               <option v-for="(item, index) in array" :key="index">
                 {{ item }}
               </option>
             </datalist> -->
+
             <autocomplete
-              ref="autocomplete"
-              :search="getSurNameSuggestions"
+              ref="autocompleteSurname"
+              :search="getSuggestions"
               :get-result-value="getResultValue"
               @blur="handleBlur"
+              placeholder="Фамилия"
+              @focus="paramsPart = ['SURNAME']"
             />
+
+            <!-- <b-form-invalid-feedback
+              v-if="$refs.autocompleteSurname.value === ''"
+              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            > -->
           </b-form-group>
         </div>
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
@@ -95,10 +103,12 @@
               </option>
             </datalist> -->
             <autocomplete
-              ref="autocomplete"
-              :search="getNameSuggestions"
+              ref="autocompleteName"
+              placeholder="Имя"
+              :search="getSuggestions"
               :get-result-value="getResultValue"
               @blur="handleBlur"
+              @focus="paramsPart = ['NAME']"
             />
           </b-form-group>
         </div>
@@ -131,10 +141,12 @@
               </option>
             </datalist> -->
             <autocomplete
-              ref="autocomplete"
-              :search="getPatronimycSuggestions"
+              ref="autocompletePatronymic"
+              placeholder="Отчество"
+              :search="getSuggestions"
               :get-result-value="getResultValue"
               @blur="handleBlur"
+              @focus="paramsPart = ['PATRONYMIC']"
             />
           </b-form-group>
         </div>
@@ -199,10 +211,6 @@
 import axios from "axios";
 import { validationMixin } from "vuelidate";
 import { required, minLength, sameAs, helpers } from "vuelidate/lib/validators";
-import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
-import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
-import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
-import ConfirmModal from "./ConfirmModal.vue";
 import {
   BForm,
   BFormGroup,
@@ -211,20 +219,15 @@ import {
   BAlert,
   BButton,
   BSpinner,
-  BNav,
-  BNavItem,
 } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
+import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
+import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
+import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
+import ConfirmModal from "./ConfirmModal.vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
-import {
-  createParamsForRequest,
-  fetchSuggestions,
-  getSuggestions,
-  revealGender,
-  userSurnameGender,
-  userNameGender,
-  userPatronymicGender,
-} from "./dadata.helper";
+
+import { fetchSuggestions, revealGender, userGender } from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -248,6 +251,7 @@ export default {
 
   data() {
     return {
+      surName: "",
       array: [],
       suggestionsHub: [],
       codeFieldValid: false,
@@ -279,6 +283,7 @@ export default {
       isErrorMessage: false,
       myclass: ["cabinet"],
       gender: "",
+      paramsPart: null,
     };
   },
 
@@ -329,36 +334,39 @@ export default {
       }
     },
     family() {
-      return this.$v.form.family.$model;
+      return this.$refs.autocompleteSurname?.value;
     },
 
     name() {
-      return this.$v.form.name.$model;
+      return this.$refs.autocompleteName?.value;
     },
 
     patronymic() {
-      return this.$v.form.patronymic.$model;
-    },
-  },
-
-  watch: {
-    family(value) {
-      this.userSurname = value;
-    },
-
-    name(value) {
-      this.userName = value;
-    },
-
-    patronymic(value) {
-      this.userPatronymic = value;
+      return this.$refs.autocompletePatronymic?.value;
     },
   },
 
   methods: {
     handleBlur() {
-      console.log("!!!");
-      console.log(this.$refs.autocomplete);
+      this.paramsPart = null;
+
+      // surnameGender
+      const surname = userGender(this.suggestionsHub, this.family);
+      if (surname !== undefined) {
+        this.gender = surname;
+      }
+
+      // nameGender
+      const name = userGender(this.suggestionsHub, this.name);
+      if (name !== undefined) {
+        this.gender = name;
+      }
+
+      // patronymicGender
+      const patronymic = userGender(this.suggestionsHub, this.patronymic);
+      if (patronymic !== undefined) {
+        this.gender = patronymic;
+      }
     },
 
     getResultValue(item) {
@@ -372,170 +380,40 @@ export default {
       this.codeFieldValid = data;
     },
 
-    clearArray() {
-      this.array = [];
-    },
-
-    async getSurNameSuggestions(input) {
+    async getSuggestions(input) {
       this.suggestionsHub = [];
+
+      const suggestionType = "fio";
+
       const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-      let suggestionType = "fio";
+
       const params = {
         query: input,
         suggestionType,
         key: API_KEY,
-        parts: ["SURNAME"],
+        parts: this.paramsPart,
       };
-      const type = params.suggestionType;
-      const key = params.key;
 
-      const response = await fetch(
-        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Token ${key}`,
-          },
-          body: JSON.stringify(params),
-        }
+      const isGenderRevealed = revealGender(
+        this.family,
+        this.name,
+        this.patronymic
       );
 
-      const result = await response.json();
+      if (isGenderRevealed === true) {
+        this.gender = "UNKNOWN";
+      }
 
-      result.suggestions.forEach((item) => {
+      params.gender = this.gender;
+
+      const result = await fetchSuggestions(params);
+
+      result.forEach((item) => {
         this.suggestionsHub.push(item);
       });
 
       return this.suggestionsHub;
     },
-
-    async getNameSuggestions(input) {
-      this.suggestionsHub = [];
-      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-      let suggestionType = "fio";
-      const params = {
-        query: input,
-        suggestionType,
-        key: API_KEY,
-        parts: ["NAME"],
-      };
-      const type = params.suggestionType;
-      const key = params.key;
-
-      const response = await fetch(
-        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Token ${key}`,
-          },
-          body: JSON.stringify(params),
-        }
-      );
-
-      const result = await response.json();
-
-      result.suggestions.forEach((item) => {
-        this.suggestionsHub.push(item);
-      });
-
-      return this.suggestionsHub;
-    },
-
-    async getPatronimycSuggestions(input) {
-      this.suggestionsHub = [];
-      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-      let suggestionType = "fio";
-      const params = {
-        query: input,
-        suggestionType,
-        key: API_KEY,
-        parts: ["PATRONYMIC"],
-      };
-      const type = params.suggestionType;
-      const key = params.key;
-
-      const response = await fetch(
-        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/${type}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Token ${key}`,
-          },
-          body: JSON.stringify(params),
-        }
-      );
-
-      const result = await response.json();
-
-      result.suggestions.forEach((item) => {
-        this.suggestionsHub.push(item);
-      });
-
-      return this.suggestionsHub;
-    },
-
-    // async askSuggestions(target) {
-    //   const isFieldFioEmpty = revealGender(
-    //     this.name,
-    //     this.family,
-    //     this.patronymic
-    //   );
-
-    //   if (isFieldFioEmpty === false) {
-    //     this.gender = "UNKNOWN";
-    //   }
-
-    //   if (this.family === "" && this.name === "" && this.patronymic === "") {
-    //     this.gender = "UNKNOWN";
-    //   }
-
-    //   const resultParams = createParamsForRequest(
-    //     target,
-    //     this.$v.form.name.$model,
-    //     this.$v.form.family.$model,
-    //     this.$v.form.patronymic.$model,
-    //     this.gender
-    //   );
-
-    //   const result = await fetchSuggestions(resultParams);
-
-    //   const surnameGender = userSurnameGender(result, this.family);
-
-    //   if (surnameGender !== undefined) {
-    //     this.gender = surnameGender;
-    //   }
-
-    //   const nameGender = userNameGender(result, this.name);
-
-    //   if (nameGender !== undefined) {
-    //     this.gender = nameGender;
-    //   }
-
-    //   const patonimycGender = userPatronymicGender(
-    //     result,
-    //     this.userPatronymicGender
-    //   );
-
-    //   if (patonimycGender !== undefined) {
-    //     this.gender = patonimycGender;
-    //   }
-
-    //   await getSuggestions(
-    //     target,
-    //     result,
-    //     this.array,
-    //     this.$v.form.family.alpha,
-    //     this.$v.form.name.alpha,
-    //     this.$v.form.patronymic.alpha
-    //   );
-    // },
 
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
@@ -548,7 +426,7 @@ export default {
         this.isErrorMessage = false;
         this.errorMessage = null;
         this.registrationInProcess = true;
-        let params = {
+        const params = {
           SECONDNAME: this.$v.form.family.$model,
           FIRSTNAME: this.$v.form.name.$model,
           THIRDNAME: this.$v.form.patronymic.$model,
