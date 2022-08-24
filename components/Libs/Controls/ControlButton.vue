@@ -3,7 +3,7 @@
     type="button"
     @click="updateValue()"
     :id="data.webId ? data.webId : ''"
-    :disabled="loading || disabled"
+    :disabled="disabled"
     :class="loading ? '' : 'spinning'"
   >
     {{ data.label }}
