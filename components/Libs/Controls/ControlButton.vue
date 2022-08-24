@@ -4,6 +4,7 @@
     @click="updateValue()"
     :id="data.webId ? data.webId : ''"
     :disabled="loading || disabled"
+    :class="loading ? '' : 'spinning'"
   >
     {{ data.label }}
     <b-spinner
