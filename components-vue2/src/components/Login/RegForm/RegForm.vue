@@ -63,11 +63,10 @@
 
             <autocomplete
               ref="autocompleteSurname"
-              :search="getSuggestions"
+              :search="getSuggestionsSurname"
               :get-result-value="getResultValue"
-              @blur="handleBlur"
               placeholder="Фамилия"
-              @focus="paramsPart = ['SURNAME']"
+              @blur="handleBlur"
             />
 
             <!-- <b-form-invalid-feedback
@@ -105,10 +104,9 @@
             <autocomplete
               ref="autocompleteName"
               placeholder="Имя"
-              :search="getSuggestions"
+              :search="getSuggestionsName"
               :get-result-value="getResultValue"
               @blur="handleBlur"
-              @focus="paramsPart = ['NAME']"
             />
           </b-form-group>
         </div>
@@ -143,10 +141,9 @@
             <autocomplete
               ref="autocompletePatronymic"
               placeholder="Отчество"
-              :search="getSuggestions"
+              :search="getSuggestionsPatronymic"
               :get-result-value="getResultValue"
               @blur="handleBlur"
-              @focus="paramsPart = ['PATRONYMIC']"
             />
           </b-form-group>
         </div>
@@ -353,8 +350,6 @@ export default {
 
   methods: {
     handleBlur() {
-      this.paramsPart = null;
-
       // surnameGender
       const surname = userGender(this.suggestionsHub, this.family);
       if (surname !== undefined) {
@@ -385,7 +380,7 @@ export default {
       this.codeFieldValid = data;
     },
 
-    async getSuggestions(input) {
+    async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
 
       const suggestionType = "fio";
@@ -396,7 +391,73 @@ export default {
         query: input,
         suggestionType,
         key: API_KEY,
-        parts: this.paramsPart,
+        parts: ["SURNAME"],
+      };
+
+      const isGenderRevealed = revealGender(
+        this.family,
+        this.name,
+        this.patronymic
+      );
+
+      if (isGenderRevealed === true) {
+        this.gender = "UNKNOWN";
+      }
+
+      params.gender = this.gender;
+
+      const result = await fetchSuggestions(params);
+
+      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+
+      return fetchedSuggestions;
+    },
+
+    async getSuggestionsName(input) {
+      this.suggestionsHub = [];
+
+      const suggestionType = "fio";
+
+      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+
+      const params = {
+        query: input,
+        suggestionType,
+        key: API_KEY,
+        parts: ["NAME"],
+      };
+
+      const isGenderRevealed = revealGender(
+        this.family,
+        this.name,
+        this.patronymic
+      );
+
+      if (isGenderRevealed === true) {
+        this.gender = "UNKNOWN";
+      }
+
+      params.gender = this.gender;
+
+      const result = await fetchSuggestions(params);
+
+      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+
+      return fetchedSuggestions;
+    },
+
+    async getSuggestionsPatronymic(input) {
+      this.suggestionsHub = [];
+
+      const suggestionType = "fio";
+
+      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+
+      const params = {
+        query: input,
+        suggestionType,
+        key: API_KEY,
+        parts: ["PATRONYMIC"],
       };
 
       const isGenderRevealed = revealGender(
