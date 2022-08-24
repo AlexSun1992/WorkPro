@@ -3,13 +3,8 @@
 </template>
 
 <script>
-import LoginButton from "@/components/Login/LoginButton";
-import LoginForm from "@/components/Login/LoginForm";
 export default {
   name: "App",
-  components: {
-    LoginButton,
-  },
 };
 </script>
 

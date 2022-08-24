@@ -48,6 +48,27 @@ export const actions = {
       commit("setFlatMenu", res.data[0]._data);
     });
   },
+  async fetchCounters({ commit, state }, params) {
+    await this.$axios.get("/am/main/v2/data/55/802").then((res) => {
+      const menuItems = state.menu[0].children;
+      const counters = res.data[0]._data;
+      menuItems.forEach((item) => {
+        const counter = counters.find((c) => c.IDITEM === item.idItem);
+        if (counter) {
+          if (
+            ["RED", "GREEN"].includes(counter.SCOLOR) &&
+            counter.NCOUNT !== null
+          ) {
+            commit("setCounter", counter);
+          } else {
+            console.warn(
+              `Неверно заданы параметры счетчика для пункта меню ${item.idItem}`
+            );
+          }
+        }
+      });
+    });
+  },
 };
 
 export const mutations = {
@@ -68,5 +89,11 @@ export const mutations = {
   },
   setBreadcrumbs(state, data) {
     state.breadcrumbs = data;
+  },
+  setCounter(state, data) {
+    const menuItems = state.menu[0].children;
+    const item = menuItems.find((i) => i.idItem === data.IDITEM);
+    item.newCount = data.NCOUNT;
+    item.newCountColor = data.SCOLOR;
   },
 };

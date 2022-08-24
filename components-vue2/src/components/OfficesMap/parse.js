@@ -2,12 +2,12 @@ const { writeFileSync } = require("fs");
 const { join } = require("path");
 
 const playwright = require("playwright");
-const axios = require("../../../node_modules/axios/lib/axios");
+const axios = require("axios");
 
 async function main() {
   const browser = await playwright.chromium.launch({
     headless: false,
-    // devtools: true,
+    devtools: true,
   });
   const page = await browser.newPage({
     bypassCSP: true,
@@ -22,11 +22,11 @@ async function main() {
   const { data } = await axios.get(
     `https://mobile.reso.ru/free/v2/agencies/77?lat=55.7540471&long=37.62040&dfdsf`
   );
-  let svg = await page.evaluate((agencies) => {
-    let g = document.getElementsByTagName("g");
+  const svg = await page.evaluate((agencies) => {
+    const g = document.getElementsByTagName("g");
 
-    let set = new Set();
-    let use = document.createElement("use");
+    const offices = new Set();
+    const use = document.createElement("use");
 
     for (let i = 0; i < g[0].children.length; i++) {
       let name = g[0].children[i].innerHTML;
@@ -34,19 +34,19 @@ async function main() {
         office.IDUNDERGROUND.forEach((item) => {
           name = name.toLowerCase().replace("ё", "е");
           if (item.SNAME.toLowerCase() === name) {
-            let x = g[0].children[i - 1].getAttribute("cx");
-            let y = g[0].children[i - 1].getAttribute("cy");
+            const x = g[0].children[i - 1].getAttribute("cx");
+            const y = g[0].children[i - 1].getAttribute("cy");
 
             use.setAttribute("x", x - 12);
             use.setAttribute("y", y - 12);
             use.setAttribute("href", "#balloon-open");
             use.setAttribute("data-station", `${g[0].children[i].innerHTML}`);
-            set.add(use.outerHTML);
+            office.add(use.outerHTML);
           }
         });
       });
     }
-    for (let use of set) {
+    for (let use of offices) {
       g[0].insertAdjacentHTML("beforeend", `${use}`);
     }
     document.body.querySelector("svg").removeAttribute("transform");
