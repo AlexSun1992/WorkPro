@@ -3,6 +3,7 @@ import vueCustomElement from "vue-custom-element";
 import { ModalPlugin, DropdownPlugin, BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 import * as Sentry from "@sentry/vue";
+import { BrowserTracing } from "@sentry/tracing";
 import { store } from "./store/index";
 
 store.$axios = axios;
@@ -16,6 +17,9 @@ Vue.config.productionTip = false;
 Sentry.init({
   Vue,
   dsn: "https://fca88a91b8d24be68356c28c1c625893@sentry.reso.ru/2",
+  integrations: [new BrowserTracing()],
+  trackComponents: ["CardEditor"],
+  hooks: ["create", "mount"],
   tracesSampleRate: 1.0,
 });
 
