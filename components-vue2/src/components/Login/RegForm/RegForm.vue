@@ -353,6 +353,7 @@ export default {
 
   methods: {
     handleBlur() {
+      905;
       this.paramsPart = null;
 
       // surnameGender
