@@ -64,10 +64,10 @@
             <autocomplete
               ref="autocompleteSurname"
               :search="getSuggestionsSurname"
-              :class="surnameClass"
               :get-result-value="getResultValue"
               :disabled="registrationInProcess"
               placeholder="Фамилия"
+              :class="surnameClass"
               @blur="handleBlur('surname')"
             />
 
@@ -105,10 +105,10 @@
             <autocomplete
               ref="autocompleteName"
               placeholder="Имя"
-              :class="nameClass"
               :search="getSuggestionsName"
               :get-result-value="getResultValue"
               :disabled="registrationInProcess"
+              :class="nameClass"
               @blur="handleBlur('name')"
             />
             <b-form-invalid-feedback :state="isName"
@@ -296,12 +296,14 @@ export default {
       isFieldsFIOEXist: false,
       isPartronymic: true,
       isPatronTouch: false,
+      isPatronymicValidSigns: true,
       //
       isName: true,
       isNameTouch: false,
       //
       isSurname: true,
       isSurnameTouch: false,
+      isSurnameValidSigns: true,
       //
       // classes
       patronymicClassHub: [],
@@ -414,17 +416,17 @@ export default {
         }
       }
 
-      if (field === "name") {
-        if (this.name === "") {
-          this.isName = false;
-          this.nameClassHub.push("is-invalid");
-        }
-      }
-
       if (field === "surname") {
         if (this.family === "") {
           this.isSurname = false;
           this.surnameClassHub.push("is-invalid");
+        }
+      }
+
+      if (field === "name") {
+        if (this.name === "") {
+          this.isName = false;
+          this.nameClassHub.push("is-invalid");
         }
       }
 
@@ -463,14 +465,14 @@ export default {
       this.suggestionsHub = [];
 
       if (input.length > 0) {
-        this.isPatronTouch = true;
-        this.isPartronymic = true;
+        this.isPatronymicTouch = true;
+        this.isPatronymic = true;
         this.patronymicClassHub = [];
         this.patronymicClassHub.push("is-valid");
       }
 
-      if (this.isPatronTouch && input === "") {
-        this.isPartronymic = false;
+      if (this.isPatronymicTouch && input === "") {
+        this.isPatronymic = false;
         this.patronymicClassHub = [];
         this.patronymicClassHub.push("is-invalid");
       }
