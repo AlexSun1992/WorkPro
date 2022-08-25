@@ -65,14 +65,14 @@
               ref="autocompleteSurname"
               :search="getSuggestionsSurname"
               :get-result-value="getResultValue"
+              :disabled="registrationInProcess"
               placeholder="Фамилия"
-              @blur="handleBlur"
+              @blur="handleBlur('surname')"
             />
 
-            <!-- <b-form-invalid-feedback
-              v-if="$refs.autocompleteSurname.value === ''"
+            <b-form-invalid-feedback :state="isSurname"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            > -->
+            >
           </b-form-group>
         </div>
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
@@ -106,8 +106,12 @@
               placeholder="Имя"
               :search="getSuggestionsName"
               :get-result-value="getResultValue"
-              @blur="handleBlur"
+              :disabled="registrationInProcess"
+              @blur="handleBlur('name')"
             />
+            <b-form-invalid-feedback :state="isName"
+              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            >
           </b-form-group>
         </div>
 
@@ -143,8 +147,13 @@
               placeholder="Отчество"
               :search="getSuggestionsPatronymic"
               :get-result-value="getResultValue"
-              @blur="handleBlur"
+              :disabled="registrationInProcess"
+              @blur="handleBlur('patronymic')"
             />
+
+            <b-form-invalid-feedback :state="isPartronymic"
+              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            >
           </b-form-group>
         </div>
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
@@ -253,8 +262,6 @@ export default {
 
   data() {
     return {
-      surName: "",
-      array: [],
       suggestionsHub: [],
       codeFieldValid: false,
       form: {
@@ -268,9 +275,7 @@ export default {
         password: "",
         password2: "",
       },
-      userSurname: "",
-      userName: "",
-      userPatronymic: "",
+
       conformation: false,
       show: true,
       password2: "",
@@ -285,7 +290,15 @@ export default {
       isErrorMessage: false,
       myclass: ["cabinet"],
       gender: "",
-      paramsPart: null,
+      isFieldsFIOEXist: false,
+      isPartronymic: true,
+      isPatronTouch: false,
+      //
+      isName: true,
+      isNameTouch: false,
+      //
+      isSurname: true,
+      isSurnameTouch: false,
     };
   },
 
@@ -329,27 +342,103 @@ export default {
     },
   },
 
+  updated() {
+    if (this.codeFieldValid) {
+      this.isFieldsFIOEXist = true;
+    }
+  },
   computed: {
     errorReset() {
       if (!this.$v.form.name.$model) {
         console.log(this.$v.form.name.$model);
       }
     },
+
+    isPatronymicValid() {
+      if (this.$refs.autocompleteSurname?.value) {
+        return true;
+      }
+      return false;
+    },
+
     family() {
-      return this.$refs.autocompleteSurname?.value;
+      if (this.codeFieldValid) {
+        if (this.isFieldsFIOEXist) {
+          return this.$refs.autocompleteSurname.value;
+        }
+      }
+      return false;
     },
 
     name() {
-      return this.$refs.autocompleteName?.value;
+      if (this.codeFieldValid) {
+        if (this.isFieldsFIOEXist) {
+          return this.$refs.autocompleteName.value;
+        }
+      }
+      return false;
     },
 
     patronymic() {
-      return this.$refs.autocompletePatronymic?.value;
+      if (this.codeFieldValid) {
+        if (this.isFieldsFIOEXist) {
+          return this.$refs.autocompletePatronymic.value;
+        }
+      }
+      return false;
     },
+
+    // isPatronymic() {
+    //   return this.$refs.autocompletePatronymic.value;
+    // },
+  },
+
+  watch: {
+    // patronymic(value) {
+    //   console.log("valuePatronymic:", value);
+    // },
+    // name(value) {
+    //   console.log("value:", value);
+    // },
+    // isPartronymic(value) {
+    //   console.log("isPatronymic", value);
+    // },
+    // codeFieldValid(value) {
+    //   if (value) {
+    //     console.log(this.$refs.autocompletePatronymic);
+    //   }
+    // },
+    // isFieldsFIOEXist() {
+    //   // autocompletePatronymic
+    //   if (this.$refs.autocompletePatronymic) {
+    //     this.isFieldsFIOEXist = true;
+    //   }
+    // },
   },
 
   methods: {
-    handleBlur() {
+    handleBlur(field) {
+      // Валидация
+      if (field === "patronymic") {
+        if (this.patronymic === "") {
+          this.isPartronymic = false;
+        }
+      }
+
+      if (field === "name") {
+        if (this.name === "") {
+          this.isName = false;
+        }
+      }
+
+      if (field === "surname") {
+        if (this.family === "") {
+          this.isSurname = false;
+        }
+      }
+
+      //
+      // Определение пола пользователя
       // surnameGender
       const surname = userGender(this.suggestionsHub, this.family);
       if (surname !== undefined) {
@@ -380,8 +469,65 @@ export default {
       this.codeFieldValid = data;
     },
 
+    async getSuggestionsPatronymic(input) {
+      this.suggestionsHub = [];
+
+      if (input.length > 0) {
+        this.isPatronTouch = true;
+      }
+
+      if (this.isPatronTouch && input === "") {
+        this.isPartronymic = false;
+      }
+
+      if (input.length > 0) {
+        this.isPartronymic = true;
+      }
+
+      const suggestionType = "fio";
+
+      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+
+      const params = {
+        query: input,
+        suggestionType,
+        key: API_KEY,
+        parts: ["PATRONYMIC"],
+      };
+
+      const isGenderRevealed = revealGender(
+        this.family,
+        this.name,
+        this.patronymic
+      );
+
+      if (isGenderRevealed === true) {
+        this.gender = "UNKNOWN";
+      }
+
+      params.gender = this.gender;
+
+      const result = await fetchSuggestions(params);
+
+      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+
+      return fetchedSuggestions;
+    },
+
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
+
+      if (input.length > 0) {
+        this.isSurnameTouch = true;
+      }
+
+      if (this.isSurnameTouch && input === "") {
+        this.isSurname = false;
+      }
+
+      if (input.length > 0) {
+        this.isSurname = true;
+      }
 
       const suggestionType = "fio";
 
@@ -416,6 +562,18 @@ export default {
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
 
+      if (input.length > 0) {
+        this.isNameTouch = true;
+      }
+
+      if (this.isNameTouch && input === "") {
+        this.isName = false;
+      }
+
+      if (input.length > 0) {
+        this.isName = true;
+      }
+
       const suggestionType = "fio";
 
       const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
@@ -425,39 +583,6 @@ export default {
         suggestionType,
         key: API_KEY,
         parts: ["NAME"],
-      };
-
-      const isGenderRevealed = revealGender(
-        this.family,
-        this.name,
-        this.patronymic
-      );
-
-      if (isGenderRevealed === true) {
-        this.gender = "UNKNOWN";
-      }
-
-      params.gender = this.gender;
-
-      const result = await fetchSuggestions(params);
-
-      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
-
-      return fetchedSuggestions;
-    },
-
-    async getSuggestionsPatronymic(input) {
-      this.suggestionsHub = [];
-
-      const suggestionType = "fio";
-
-      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-
-      const params = {
-        query: input,
-        suggestionType,
-        key: API_KEY,
-        parts: ["PATRONYMIC"],
       };
 
       const isGenderRevealed = revealGender(
