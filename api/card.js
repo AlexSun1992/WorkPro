@@ -35,6 +35,8 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
             req?.cookies["auth._token.local"];
         }
       }
+    } else {
+      mobile2ServiceInstance.defaults.headers.common["Cookie"] = req?.cookies;
     }
     const URL_ADDRESSS = encodeURI(
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
@@ -362,6 +364,8 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
             req.cookies["auth._token.local"];
         }
       }
+    } else {
+      mobile2ServiceInstance.defaults.headers.common["Cookie"] = req?.cookies;
     }
     const typeReq = req.params.id === 0 ? "post" : "put";
     mobile2ServiceInstance[typeReq](
