@@ -64,6 +64,7 @@
             <autocomplete
               ref="autocompleteSurname"
               :search="getSuggestionsSurname"
+              :class="surnameClass"
               :get-result-value="getResultValue"
               :disabled="registrationInProcess"
               placeholder="Фамилия"
@@ -104,6 +105,7 @@
             <autocomplete
               ref="autocompleteName"
               placeholder="Имя"
+              :class="nameClass"
               :search="getSuggestionsName"
               :get-result-value="getResultValue"
               :disabled="registrationInProcess"
@@ -148,6 +150,7 @@
               :search="getSuggestionsPatronymic"
               :get-result-value="getResultValue"
               :disabled="registrationInProcess"
+              :class="patronymicClass"
               @blur="handleBlur('patronymic')"
             />
 
@@ -299,6 +302,13 @@ export default {
       //
       isSurname: true,
       isSurnameTouch: false,
+      //
+      // classes
+      patronymicClassHub: [],
+      //
+      surnameClassHub: [],
+      //
+      nameClassHub: [],
     };
   },
 
@@ -354,13 +364,6 @@ export default {
       }
     },
 
-    isPatronymicValid() {
-      if (this.$refs.autocompleteSurname?.value) {
-        return true;
-      }
-      return false;
-    },
-
     family() {
       if (this.codeFieldValid) {
         if (this.isFieldsFIOEXist) {
@@ -388,32 +391,17 @@ export default {
       return false;
     },
 
-    // isPatronymic() {
-    //   return this.$refs.autocompletePatronymic.value;
-    // },
-  },
+    patronymicClass() {
+      return this.patronymicClassHub;
+    },
 
-  watch: {
-    // patronymic(value) {
-    //   console.log("valuePatronymic:", value);
-    // },
-    // name(value) {
-    //   console.log("value:", value);
-    // },
-    // isPartronymic(value) {
-    //   console.log("isPatronymic", value);
-    // },
-    // codeFieldValid(value) {
-    //   if (value) {
-    //     console.log(this.$refs.autocompletePatronymic);
-    //   }
-    // },
-    // isFieldsFIOEXist() {
-    //   // autocompletePatronymic
-    //   if (this.$refs.autocompletePatronymic) {
-    //     this.isFieldsFIOEXist = true;
-    //   }
-    // },
+    surnameClass() {
+      return this.surnameClassHub;
+    },
+
+    nameClass() {
+      return this.nameClassHub;
+    },
   },
 
   methods: {
@@ -422,18 +410,21 @@ export default {
       if (field === "patronymic") {
         if (this.patronymic === "") {
           this.isPartronymic = false;
+          this.patronymicClassHub.push("is-invalid");
         }
       }
 
       if (field === "name") {
         if (this.name === "") {
           this.isName = false;
+          this.nameClassHub.push("is-invalid");
         }
       }
 
       if (field === "surname") {
         if (this.family === "") {
           this.isSurname = false;
+          this.surnameClassHub.push("is-invalid");
         }
       }
 
@@ -478,10 +469,12 @@ export default {
 
       if (this.isPatronTouch && input === "") {
         this.isPartronymic = false;
+        this.patronymicClassHub.push("is-invalid");
       }
 
       if (input.length > 0) {
         this.isPartronymic = true;
+        this.patronymicClassHub = [];
       }
 
       const suggestionType = "fio";
@@ -527,6 +520,7 @@ export default {
 
       if (input.length > 0) {
         this.isSurname = true;
+        this.surnameClassHub = [];
       }
 
       const suggestionType = "fio";
@@ -572,6 +566,7 @@ export default {
 
       if (input.length > 0) {
         this.isName = true;
+        this.nameClassHub = [];
       }
 
       const suggestionType = "fio";
