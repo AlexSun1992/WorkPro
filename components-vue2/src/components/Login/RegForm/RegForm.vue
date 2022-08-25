@@ -154,8 +154,12 @@
               @blur="handleBlur('patronymic')"
             />
 
-            <b-form-invalid-feedback :state="isPartronymic"
+            <b-form-invalid-feedback :state="isPatronymic"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            >
+            <b-form-invalid-feedback :state="isPatronymicValidSigns"
+              >Просьба указать ФИО в русской
+              транскрипции</b-form-invalid-feedback
             >
           </b-form-group>
         </div>
@@ -294,12 +298,14 @@ export default {
       myclass: ["cabinet"],
       gender: "",
       isFieldsFIOEXist: false,
-      isPartronymic: true,
-      isPatronTouch: false,
+      //
+      isPatronymic: true,
+      isPatronymicTouch: false,
       isPatronymicValidSigns: true,
       //
       isName: true,
       isNameTouch: false,
+      isNameValidSigns: true,
       //
       isSurname: true,
       isSurnameTouch: false,
@@ -411,7 +417,7 @@ export default {
       // Валидация
       if (field === "patronymic") {
         if (this.patronymic === "") {
-          this.isPartronymic = false;
+          this.isPatronymic = false;
           this.patronymicClassHub.push("is-invalid");
         }
       }
@@ -464,15 +470,27 @@ export default {
     async getSuggestionsPatronymic(input) {
       this.suggestionsHub = [];
 
+      const regex = /^[а-яА-Я- ]*$/;
+
       if (input.length > 0) {
-        this.isPatronymicTouch = true;
-        this.isPatronymic = true;
-        this.patronymicClassHub = [];
-        this.patronymicClassHub.push("is-valid");
+        if (input.match(regex) !== null) {
+          this.isPatronymicTouch = true;
+          this.isPatronymic = true;
+          this.patronymicClassHub = [];
+          this.patronymicClassHub.push("is-valid");
+        }
+        if (input.match(regex) === null) {
+          this.isPatronymic = true;
+          this.isPatronymicTouch = true;
+          this.isPatronymicValidSigns = false;
+          this.patronymicClassHub = [];
+          this.patronymicClassHub.push("is-invalid");
+        }
       }
 
       if (this.isPatronymicTouch && input === "") {
         this.isPatronymic = false;
+        this.isPatronymicValidSigns = true;
         this.patronymicClassHub = [];
         this.patronymicClassHub.push("is-invalid");
       }
