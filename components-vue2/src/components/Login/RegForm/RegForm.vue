@@ -428,7 +428,6 @@ export default {
         }
       }
 
-      //
       // Определение пола пользователя
       // surnameGender
       const surname = userGender(this.suggestionsHub, this.family);
@@ -465,16 +464,15 @@ export default {
 
       if (input.length > 0) {
         this.isPatronTouch = true;
+        this.isPartronymic = true;
+        this.patronymicClassHub = [];
+        this.patronymicClassHub.push("is-valid");
       }
 
       if (this.isPatronTouch && input === "") {
         this.isPartronymic = false;
-        this.patronymicClassHub.push("is-invalid");
-      }
-
-      if (input.length > 0) {
-        this.isPartronymic = true;
         this.patronymicClassHub = [];
+        this.patronymicClassHub.push("is-invalid");
       }
 
       const suggestionType = "fio";
@@ -512,15 +510,15 @@ export default {
 
       if (input.length > 0) {
         this.isSurnameTouch = true;
+        this.isSurname = true;
+        this.surnameClassHub = [];
+        this.surnameClassHub.push("is-valid");
       }
 
       if (this.isSurnameTouch && input === "") {
         this.isSurname = false;
-      }
-
-      if (input.length > 0) {
-        this.isSurname = true;
         this.surnameClassHub = [];
+        this.surnameClassHub.push("is-invalid");
       }
 
       const suggestionType = "fio";
@@ -558,15 +556,15 @@ export default {
 
       if (input.length > 0) {
         this.isNameTouch = true;
+        this.isName = true;
+        this.nameClassHub = [];
+        this.nameClassHub.push("is-valid");
       }
 
       if (this.isNameTouch && input === "") {
         this.isName = false;
-      }
-
-      if (input.length > 0) {
-        this.isName = true;
         this.nameClassHub = [];
+        this.nameClassHub.push("is-invalid");
       }
 
       const suggestionType = "fio";
