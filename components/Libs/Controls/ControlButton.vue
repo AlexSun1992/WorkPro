@@ -3,13 +3,12 @@
     type="button"
     @click="updateValue()"
     :id="data.webId ? data.webId : ''"
-    :disabled="loading || disabled"
+    :disabled="disabled && !loading"
+    :class="loading ? 'spinning' : ''"
   >
     {{ data.label }}
     <b-spinner
       v-if="loading && clicked"
-      class="ml-2"
-      style="width: 1.2rem; height: 1.2rem"
       variant="success"
       label="Spinning"
     ></b-spinner>
