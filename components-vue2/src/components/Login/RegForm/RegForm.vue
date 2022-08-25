@@ -35,32 +35,6 @@
       <div class="row">
         <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
           <b-form-group class="required" label="Фамилия" label-cols="12">
-            <!-- <b-form-input
-              list="my-list-id"
-              :id="Math.random().toString()"
-              v-model="$v.form.family.$model"
-              :state="validateState('family')"
-              @blur="$v.form.family.$touch(), clearArray()"
-              placeholder="Фамилия"
-              :disabled="registrationInProcess"
-              autocomplete="new-password"
-              @input="askSuggestions('surname')"
-            ></b-form-input>
-
-       
-            <b-form-invalid-feedback v-if="this.$v.form.family.alpha === false"
-              >Просьба указать ФИО в русской
-              транскрипции</b-form-invalid-feedback
-            >
-               <b-form-invalid-feedback v-if="family === ''"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            > -->
-            <!-- <datalist id="my-list-id">
-              <option v-for="(item, index) in array" :key="index">
-                {{ item }}
-              </option>
-            </datalist> -->
-
             <autocomplete
               ref="autocompleteSurname"
               :search="getSuggestionsSurname"
@@ -74,34 +48,14 @@
             <b-form-invalid-feedback :state="isSurname"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
+            <b-form-invalid-feedback :state="isSurnameValidSigns"
+              >Просьба указать ФИО в русской
+              транскрипции</b-form-invalid-feedback
+            >
           </b-form-group>
         </div>
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
           <b-form-group label="Имя" label-cols="12" class="required">
-            <!-- <b-form-input
-              list="my-list-id"
-              :id="Math.random().toString()"
-              v-model="$v.form.name.$model"
-              :state="validateState('name')"
-              @blur="$v.form.name.$touch(), clearArray()"
-              placeholder="Имя"
-              :disabled="registrationInProcess"
-              autocomplete="new-password"
-              @input="askSuggestions('name')"
-            ></b-form-input>
-
-            <b-form-invalid-feedback v-if="name === ''"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            >
-            <b-form-invalid-feedback v-if="this.$v.form.name.alpha === false"
-              >Просьба указать ФИО в русской
-              транскрипции</b-form-invalid-feedback
-            >
-            <datalist id="my-list-id">
-              <option v-for="(item, index) in array" :key="index">
-                {{ item }}
-              </option>
-            </datalist> -->
             <autocomplete
               ref="autocompleteName"
               placeholder="Имя"
@@ -114,36 +68,15 @@
             <b-form-invalid-feedback :state="isName"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
+            <b-form-invalid-feedback :state="isNameValidSigns"
+              >Просьба указать ФИО в русской
+              транскрипции</b-form-invalid-feedback
+            >
           </b-form-group>
         </div>
 
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
           <b-form-group label="Отчество" label-cols="12" class="required">
-            <!-- <b-form-input
-              list="my-list-id"
-              :id="Math.random().toString()"
-              v-model="$v.form.patronymic.$model"
-              :state="validateState('patronymic')"
-              @blur="$v.form.patronymic.$touch(), clearArray()"
-              placeholder="Отчество"
-              :disabled="registrationInProcess"
-              autocomplete="new-password"
-              @input="askSuggestions('patronymic')"
-            ></b-form-input>
-
-            <b-form-invalid-feedback v-if="patronymic === ''"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            >
-            <b-form-invalid-feedback
-              v-if="this.$v.form.patronymic.alpha === false"
-              >Просьба указать ФИО в русской
-              транскрипции</b-form-invalid-feedback
-            >
-            <datalist id="my-list-id">
-              <option v-for="(item, index) in array" :key="index">
-                {{ item }}
-              </option>
-            </datalist> -->
             <autocomplete
               ref="autocompletePatronymic"
               placeholder="Отчество"
@@ -478,6 +411,7 @@ export default {
           this.isPatronymic = true;
           this.patronymicClassHub = [];
           this.patronymicClassHub.push("is-valid");
+          this.isPatronymicValidSigns = true;
         }
         if (input.match(regex) === null) {
           this.isPatronymic = true;
@@ -527,16 +461,27 @@ export default {
 
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
-
+      const regex = /^[а-яА-Я- ]*$/;
       if (input.length > 0) {
-        this.isSurnameTouch = true;
-        this.isSurname = true;
-        this.surnameClassHub = [];
-        this.surnameClassHub.push("is-valid");
+        if (input.match(regex) !== null) {
+          this.isSurnameTouch = true;
+          this.isSurname = true;
+          this.isSurnameValidSigns = true;
+          this.surnameClassHub = [];
+          this.surnameClassHub.push("is-valid");
+        }
+        if (input.match(regex) === null) {
+          this.isSurname = true;
+          this.isSurnameTouch = true;
+          this.isSurnameValidSigns = false;
+          this.surnameClassHub = [];
+          this.surnameClassHub.push("is-invalid");
+        }
       }
 
       if (this.isSurnameTouch && input === "") {
         this.isSurname = false;
+        this.isSurnameValidSigns = true;
         this.surnameClassHub = [];
         this.surnameClassHub.push("is-invalid");
       }
@@ -574,15 +519,27 @@ export default {
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
 
+      const regex = /^[а-яА-Я- ]*$/;
       if (input.length > 0) {
-        this.isNameTouch = true;
-        this.isName = true;
-        this.nameClassHub = [];
-        this.nameClassHub.push("is-valid");
+        if (input.match(regex) !== null) {
+          this.isNameTouch = true;
+          this.isName = true;
+          this.isNameValidSigns = true;
+          this.nameClassHub = [];
+          this.nameClassHub.push("is-valid");
+        }
+        if (input.match(regex) === null) {
+          this.isName = true;
+          this.isNameTouch = true;
+          this.isNameValidSigns = false;
+          this.nameClassHub = [];
+          this.nameClassHub.push("is-invalid");
+        }
       }
 
       if (this.isNameTouch && input === "") {
         this.isName = false;
+        this.isNameValidSigns = true;
         this.nameClassHub = [];
         this.nameClassHub.push("is-invalid");
       }
