@@ -2326,11 +2326,12 @@ a.free {
     height: 271px
 }
 
-.my-policy[data-id="2"],
+.my-policy[data-id="5"] .my-policy[data-id="2"],
 .my-policy[data-id="3"] {
     background: #edf8ea
 }
 
+.my-policy[data-id="5"]:after,
 .my-policy[data-id="2"]:after,
 .my-policy[data-id="3"]:after {
     overflow: hidden;
@@ -3359,4 +3360,12 @@ a[data-newcount]:after {
 a[data-newcount][data-newcolor="RED"]:after {
     background: #FFF1EB;
     color: #EB5757;
+}
+
+.insured-events .settlement[data-color="0"] {
+    color: red;
+}
+
+.insured-events .settlement[data-color="1"] {
+    color: green;
 }
