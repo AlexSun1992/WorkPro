@@ -11,8 +11,6 @@ async function eventHandler(fields, action, func) {
     );
   }
 
-  //errRegNumNotFoundMob;
-
   function findDrivers() {
     const driverFieldNames = [
       `DL_BUTTON_`,
@@ -119,7 +117,7 @@ async function eventHandler(fields, action, func) {
     );
     return newDrivers;
   };
-  // SFILLINMANUALLY
+
   const citySettlement = findField("SCITY_SETTLEMENT");
   const ownerAge = findField("NOWNER_AGE");
   const empty = findField("Empty");
@@ -142,7 +140,7 @@ async function eventHandler(fields, action, func) {
   const labelRegNumber = findField("input_label_Nmber");
   const crashYears = findField("NNO_CRASH_YEARS");
   const calculateBtn = findField("Item36585");
-  const captcha = findField(`CAPTCHA`);
+  const captcha = findField(`SRECAPTCHA`);
   const regTumberTitle = findField("z_one");
   const ownerTitle = findField("z-two");
   const carTitle = findField("z-three");
@@ -150,15 +148,8 @@ async function eventHandler(fields, action, func) {
   const addDriver = findField(`ADD_DRIVER`);
   const emptyFive = findField("empty-5");
   const price = findField("NPRICE");
-  const firstDriverAge = findField("NDR_AGE_1");
-  const firstDriveExperience = findField("NDR_EXPERIENCE_1");
-  const firstDriverNoCrash = findField("NDR_NO_CRASH_1");
 
   let autoInfo = null;
-
-  //ownerTitle,citySettlement,ownerAge,carTitle,vehicleModel,yearVehicle,horseVehiclePower,khVeiclePower,driversTitle,driverType
-
-  const url = new URL("/free/v2/osago/findAuto", window.location);
 
   let checkNotRegNumberForm = [
     citySettlement,
@@ -292,7 +283,7 @@ async function eventHandler(fields, action, func) {
       Е: "E",
       К: "K",
       М: "M",
-      Н: "N",
+      Н: "H",
       О: "O",
       Р: "P",
       С: "C",
@@ -312,6 +303,14 @@ async function eventHandler(fields, action, func) {
   }
 
   async function getInfo(regNumberValue) {
+    const url = new URL("/am/free/v2/osago/findAuto", window.location);
+    url.searchParams.set("REG_NUMBER", convertRusToRESO(regNumberValue));
+    const dataAuto = await func(url.href);
+    return dataAuto;
+  }
+
+  async function getInfoAuth(regNumberValue) {
+    const url = new URL("/am/main/v2/osago/findAuto", window.location);
     url.searchParams.set("REG_NUMBER", convertRusToRESO(regNumberValue));
     const dataAuto = await func(url.href);
     return dataAuto;
@@ -319,7 +318,9 @@ async function eventHandler(fields, action, func) {
 
   if (action.value === "SCALCULATEPOLIS") {
     if (regNumber.value) {
-      autoInfo = regNumber.value ? await getInfo(regNumber.value) : [];
+      autoInfo =
+        (await getInfoAuth(regNumber.value)) ||
+        (await getInfo(regNumber.value));
       if (!!autoInfo && autoInfo.length > 0) {
         showLabelFunc(labelRegNumb, labelRegNumber);
         hideErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
@@ -335,6 +336,11 @@ async function eventHandler(fields, action, func) {
         khVeiclePower.value = autoInfo[0].POWER_KVT;
         khVeiclePower.state = true;
         khVeiclePower.error = null;
+        ownerAge.value = autoInfo[0].NOWNER_AGE;
+        if (ownerAge.value) {
+          ownerAge.state = true;
+          ownerAge.error = null;
+        }
       } else {
         showErrorFunc(errRegNumNotFound, errRegNumNotFoundMob);
         hideLabelFunc(labelRegNumb, labelRegNumber);
@@ -372,6 +378,7 @@ async function eventHandler(fields, action, func) {
   // Возвращение формы к исходному состоянию при изменении regNumber при правильном regNumber
   if (action.name === "SREGNUMBER" && vehicleModel.visible === true) {
     invertPropertyElements(checkNotRegNumberForm, "visible");
+    findField(`Item36585`).visible = false;
   }
 
   /**
@@ -865,5 +872,4 @@ async function eventHandler(fields, action, func) {
   crashYears.visible = false;
   return fields;
 }
-
 export { eventHandler };
