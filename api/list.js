@@ -40,6 +40,8 @@ router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
       formConverter.save(JSON.parse(req.params.filters))
     );
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] =
+      req.headers?.cookie;
     if (req?.query.zone !== "free") {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
@@ -54,7 +56,6 @@ router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
         req.params.idItem
       }?json=${encodeURIComponent(req.params.filters)}`;
     } else {
-      mobile2ServiceInstance.defaults.headers.common["Cookie"] = req?.cookies;
       URL_ADDRESS = `${consts.FREEDATA}/${req.params.idModule}/${req.params.idItem}/0/0`;
     }
     mobile2ServiceInstance({

@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { getErrorMessage as aErrorMessage } from "../plugins/auth/toast.helper";
 const getErrorMessage = (data) => {
   if (data?.INFO) {
     const isJson =
@@ -14,7 +15,7 @@ const getErrorMessage = (data) => {
     return data?.INFO.replace(/^\[|\]$/g, "");
   }
   if (data?.MESSAGE) {
-    return data?.MESSAGE;
+    return aErrorMessage(data?.MESSAGE);
   }
   if (data?.message) {
     return data?.message;
