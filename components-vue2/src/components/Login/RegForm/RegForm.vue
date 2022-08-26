@@ -106,19 +106,14 @@
           </b-form-group>
         </div>
         <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
-          <b-form-group label="Номер полиса" label-cols="12" class="required">
+          <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
-              v-model="$v.form.policyNumber.$model"
-              :state="validateState('policyNumber')"
+              v-model="form.policyNumber"
               placeholder="Номер полиса"
               :disabled="registrationInProcess"
               autocomplete="new-password"
-              @blur="$v.form.policyNumber.$touch()"
             ></b-form-input>
-            <b-form-invalid-feedback>
-              Пожалуйста, заполните это поле
-            </b-form-invalid-feedback>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6"></div>
@@ -592,7 +587,7 @@ export default {
           BIRTHDATE: this.$v.form.birthdate.$model,
           PHONE: this.$v.form.phone.$model,
           CODE: this.$v.form.code.$model,
-          POLICY_NUMBER: this.$v.form.policyNumber.$model,
+          POLICY_NUMBER: this.form.policyNumber,
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
