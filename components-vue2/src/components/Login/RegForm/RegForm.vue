@@ -447,11 +447,16 @@ export default {
 
       params.gender = this.gender;
 
-      const result = await fetchSuggestions(params);
+      const isValid = this.surnameClassHub.find((item) => item === "is-valid");
 
-      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+      if (isValid) {
+        const result = await fetchSuggestions(params);
 
-      return fetchedSuggestions;
+        const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+
+        return fetchedSuggestions;
+      }
+      return null;
     },
 
     async getSuggestionsSurname(input) {
@@ -504,11 +509,16 @@ export default {
 
       params.gender = this.gender;
 
-      const result = await fetchSuggestions(params);
+      const isValid = this.surnameClassHub.find((item) => item === "is-valid");
 
-      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+      if (isValid) {
+        const result = await fetchSuggestions(params);
 
-      return fetchedSuggestions;
+        const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+
+        return fetchedSuggestions;
+      }
+      return null;
     },
 
     async getSuggestionsName(input) {
@@ -562,11 +572,15 @@ export default {
 
       params.gender = this.gender;
 
-      const result = await fetchSuggestions(params);
+      const isValid = this.nameClassHub.find((item) => item === "is-valid");
 
-      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+      if (isValid) {
+        const result = await fetchSuggestions(params);
+        const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+        return fetchedSuggestions;
+      }
 
-      return fetchedSuggestions;
+      return null;
     },
 
     validateState(name) {
