@@ -85,6 +85,7 @@
               :disabled="registrationInProcess"
               :class="patronymicClass"
               @blur="handleBlur('patronymic')"
+              @update="updateSuggestions"
             />
 
             <b-form-invalid-feedback :state="isPatronymic"
@@ -341,6 +342,9 @@ export default {
   },
 
   methods: {
+    updateSuggestions(result) {
+      console.log("result:", result);
+    },
     handleBlur(field) {
       // Валидация
       if (field === "patronymic") {
@@ -447,15 +451,30 @@ export default {
 
       params.gender = this.gender;
 
-      const isValid = this.surnameClassHub.find((item) => item === "is-valid");
+      const isValid = this.patronymicClassHub.find(
+        (item) => item === "is-valid"
+      );
+      const isInvalid = this.patronymicClassHub.find(
+        (item) => item === "is-invalid"
+      );
 
       if (isValid) {
         const result = await fetchSuggestions(params);
 
         const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
 
+        console.log(this.suggestionsHub);
+
+        console.log(fetchedSuggestions);
+
         return fetchedSuggestions;
       }
+
+      if (isInvalid) {
+        this.suggestionsHub.splice(0, this.suggestionsHub.length);
+        console.log(this.suggestionsHub);
+      }
+
       return null;
     },
 
