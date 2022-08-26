@@ -280,10 +280,6 @@ export default {
         required,
         minLength: minLength(17),
       },
-
-      policyNumber: {
-        required,
-      },
     },
   },
 
