@@ -199,6 +199,14 @@ export default {
     }
   },
   methods: {
+    scrollToError() {
+      const divWithInvalidClass =
+        document.getElementsByClassName("is-invalid")[0];
+      if (divWithInvalidClass) {
+        const divWithControlClass = divWithInvalidClass.closest(".control");
+        divWithControlClass.scrollIntoView();
+      }
+    },
     async loadScript() {
       return this.eventLocalHandler().then((script) => {
         return script.eventHandler;
@@ -325,6 +333,7 @@ export default {
         if (actionSaveCard?.ID === actionId) {
           this.$store.commit("data_card/saveButtonClicked", true);
           await this.saveCard(e);
+          this.scrollToError();
           this.$store.commit("data_card/saveButtonClicked", false);
         }
         if (actionRefreshCard?.ID === actionId) {
