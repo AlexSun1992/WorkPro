@@ -1,4 +1,3 @@
-// import { getErrorMessage } from "./toast.helper";
 import { getErrorMessage } from "../../utils/transform";
 
 let toastCount = 0;
