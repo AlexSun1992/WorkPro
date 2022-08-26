@@ -174,7 +174,8 @@ import {
   userGender,
   getSuggestions,
   isEnoughDataForGenderDefine,
-  isFieldFIOValid,
+  isFieldFIONotValid,
+  getArrayWithClass,
 } from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
@@ -401,21 +402,20 @@ export default {
       this.suggestionsHub = [];
 
       const regex = /^[а-яА-Я- ]*$/;
-
+      const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
-        if (input.match(regex) !== null) {
+        if (!isInputNotValid) {
           this.isPatronymicTouch = true;
           this.isPatronymic = true;
-          this.patronymicClassHub = [];
-          this.patronymicClassHub.push("is-valid");
+          getArrayWithClass(this.patronymicClassHub, "is-valid");
           this.isPatronymicValidSigns = true;
         }
-        if (input.match(regex) === null) {
+
+        if (isInputNotValid) {
           this.isPatronymic = true;
           this.isPatronymicTouch = true;
           this.isPatronymicValidSigns = false;
-          this.patronymicClassHub = [];
-          this.patronymicClassHub.push("is-invalid");
+          getArrayWithClass(this.patronymicClassHub, "is-invalid");
         }
       }
 
@@ -458,9 +458,11 @@ export default {
 
       params.gender = this.gender;
 
-      const isInputValid = isFieldFIOValid(input, regex);
+      if (isInputNotValid) {
+        params.query = null;
+      }
 
-      if (isInputValid) {
+      if (this.patronymic === "") {
         params.query = null;
       }
 
@@ -473,28 +475,29 @@ export default {
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
       const regex = /^[а-яА-Я- ]*$/;
+      const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
-        if (input.match(regex) !== null) {
+        if (!isInputNotValid) {
           this.isSurnameTouch = true;
           this.isSurname = true;
           this.isSurnameValidSigns = true;
-          this.surnameClassHub = [];
-          this.surnameClassHub.push("is-valid");
+
+          getArrayWithClass(this.surnameClassHub, "is-valid");
         }
-        if (input.match(regex) === null) {
+        if (isInputNotValid) {
           this.isSurname = true;
           this.isSurnameTouch = true;
           this.isSurnameValidSigns = false;
-          this.surnameClassHub = [];
-          this.surnameClassHub.push("is-invalid");
+
+          getArrayWithClass(this.surnameClassHub, "is-invalid");
         }
       }
 
       if (this.isSurnameTouch && input === "") {
         this.isSurname = false;
         this.isSurnameValidSigns = true;
-        this.surnameClassHub = [];
-        this.surnameClassHub.push("is-invalid");
+
+        getArrayWithClass(this.surnameClassHub, "is-invalid");
       }
 
       const suggestionType = "fio";
@@ -529,12 +532,12 @@ export default {
 
       params.gender = this.gender;
 
-      const isInputValid = isFieldFIOValid(input, regex);
-
-      if (isInputValid) {
+      if (isInputNotValid) {
         params.query = null;
       }
-
+      if (this.family === "") {
+        params.query = null;
+      }
       const result = await fetchSuggestions(params);
 
       const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
@@ -546,28 +549,29 @@ export default {
       this.suggestionsHub = [];
 
       const regex = /^[а-яА-Я- ]*$/;
+      const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
-        if (input.match(regex) !== null) {
+        if (!isInputNotValid) {
           this.isNameTouch = true;
           this.isName = true;
           this.isNameValidSigns = true;
-          this.nameClassHub = [];
-          this.nameClassHub.push("is-valid");
+
+          getArrayWithClass(this.nameClassHub, "is-valid");
         }
-        if (input.match(regex) === null) {
+        if (isInputNotValid) {
           this.isName = true;
           this.isNameTouch = true;
           this.isNameValidSigns = false;
-          this.nameClassHub = [];
-          this.nameClassHub.push("is-invalid");
+
+          getArrayWithClass(this.nameClassHub, "is-invalid");
         }
       }
 
       if (this.isNameTouch && input === "") {
         this.isName = false;
         this.isNameValidSigns = true;
-        this.nameClassHub = [];
-        this.nameClassHub.push("is-invalid");
+
+        getArrayWithClass(this.nameClassHub, "is-invalid");
       }
 
       const suggestionType = "fio";
@@ -602,9 +606,11 @@ export default {
 
       params.gender = this.gender;
 
-      const isInputValid = isFieldFIOValid(input, regex);
+      if (isInputNotValid) {
+        params.query = null;
+      }
 
-      if (isInputValid) {
+      if (this.name === "") {
         params.query = null;
       }
       const result = await fetchSuggestions(params);
@@ -683,15 +689,6 @@ export default {
 
     async onSubmit(event) {
       try {
-        // console.log("submit");
-        // console.log("isPatronymicTouch:", this.isPatronymicTouch);
-        // console.log("isNameTouch:", this.isNameTouch);
-        // console.log("isSurnameTouch:", this.isSurnameTouch);
-        // console.log("patronymicClassHub:", this.patronymicClassHub);
-        // console.log("surnameClassHub", this.surnameClassHub);
-        // console.log("nameClassHub", this.nameClassHub);
-        //
-
         this.$refs.verifyUser.loginTouchesCount = 3;
         this.$v.form.$touch();
         this.isErrorMessage = false;
@@ -710,10 +707,6 @@ export default {
           this.nameClassHub.push("is-invalid");
           this.isName = false;
         }
-
-        // console.log("family:", this.family);
-        // console.log("name:", this.name);
-        // console.log("patronymic:", this.patronymic);
 
         if (this.$v.form.$anyError) {
           if (this.$refs.verifyUser.isSendCode === false) {

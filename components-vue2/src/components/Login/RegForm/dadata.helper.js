@@ -52,9 +52,15 @@ export function isEnoughDataForGenderDefine(
   return false;
 }
 
-export function isFieldFIOValid(inputValue, regex) {
-  if (inputValue.match(regex)) {
-    return false;
+export function isFieldFIONotValid(inputValue, regex) {
+  if (!inputValue.match(regex)) {
+    return true;
   }
-  return true;
+  return false;
+}
+
+export function getArrayWithClass(array, classText) {
+  array.splice(0, array.length);
+  array.push(classText);
+  return array;
 }

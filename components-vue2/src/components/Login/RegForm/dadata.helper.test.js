@@ -13,7 +13,11 @@ import { suggestionsPatronymic } from "./dadata.helper.fixtures";
 import { paramsPatronymic } from "./dadata.helper.fixtures";
 import { getSuggestionsFIO } from "./dadata.helper";
 import { getSuggestions } from "./dadata.helper";
-import { isEnoughDataForGenderDefine, isFieldFIOValid } from "./dadata.helper";
+import {
+  isEnoughDataForGenderDefine,
+  isFieldFIONotValid,
+  getArrayWithClass,
+} from "./dadata.helper";
 import { fetch, Response } from "node-fetch";
 import { jest } from "@jest/globals";
 
@@ -28,14 +32,29 @@ describe("Модуль тестирования подсказок по ФИО d
     expect(checkGender).toBe("MALE");
   });
 
+  it("Выявляем пол по фамилии пользователя", () => {
+    const checkGender = userGender(suggestionsSurnames, "Антонова");
+    expect(checkGender).toBe("FEMALE");
+  });
+
   it("Выявляем пол по имени пользователя", () => {
     const checkGender = userGender(suggestionsNames, "Александр");
     expect(checkGender).toBe("MALE");
   });
 
+  it("Выявляем пол по имени пользователя", () => {
+    const checkGender = userGender(suggestionsNames, "Александра");
+    expect(checkGender).toBe("FEMALE");
+  });
+
   it("Выявляем пол по отчеству пользователя", () => {
     const checkGender = userGender(suggestionsPatronymic, "Константинович");
     expect(checkGender).toBe("MALE");
+  });
+
+  it("Выявляем пол по отчеству пользователя", () => {
+    const checkGender = userGender(suggestionsPatronymic, "Константиновна");
+    expect(checkGender).toBe("FEMALE");
   });
 
   it("собирем подсказки в массив", () => {});
@@ -53,15 +72,20 @@ describe("Модуль тестирования подсказок по ФИО d
   });
 
   it("Валидируем водимый текст в поля ФИО", () => {
-    const fieldFIOValue = isFieldFIOValid("ан", /^[а-яА-Я- ]*$/);
+    const fieldFIOValue = isFieldFIONotValid("ан", /^[а-яА-Я- ]*$/);
     expect(fieldFIOValue).toBe(false);
   });
   it("Валидируем водимый текст в поля ФИО", () => {
-    const fieldFIOValue = isFieldFIOValid("test", /^[а-яА-Я- ]*$/);
+    const fieldFIOValue = isFieldFIONotValid("test", /^[а-яА-Я- ]*$/);
     expect(fieldFIOValue).toBe(true);
   });
   it("Валидируем водимый текст в поля ФИО", () => {
-    const fieldFIOValue = isFieldFIOValid("!!!1111 --", /^[а-яА-Я- ]*$/);
+    const fieldFIOValue = isFieldFIONotValid("!!!1111 --", /^[а-яА-Я- ]*$/);
     expect(fieldFIOValue).toBe(true);
+  });
+
+  it("Очищаем массив и добавляем новый класс", () => {
+    const arrayWithClasses = getArrayWithClass([], "is-invalid");
+    expect(arrayWithClasses.length > 0).toBe(true);
   });
 });
