@@ -41,3 +41,20 @@ export function getSuggestions(fetchedSuggestions, suggestions) {
   const result = suggestions;
   return result;
 }
+
+export function isEnoughDataForGenderDefine(
+  firstGenderField,
+  secondGenderField
+) {
+  if (firstGenderField === "" && secondGenderField === "") {
+    return true;
+  }
+  return false;
+}
+
+export function isFieldFIOValid(inputValue, regex) {
+  if (inputValue.match(regex)) {
+    return false;
+  }
+  return true;
+}

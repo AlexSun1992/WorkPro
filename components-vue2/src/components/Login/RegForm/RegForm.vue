@@ -85,7 +85,6 @@
               :disabled="registrationInProcess"
               :class="patronymicClass"
               @blur="handleBlur('patronymic')"
-              @update="updateSuggestions"
             />
 
             <b-form-invalid-feedback :state="isPatronymic"
@@ -174,6 +173,8 @@ import {
   revealGender,
   userGender,
   getSuggestions,
+  isEnoughDataForGenderDefine,
+  isFieldFIOValid,
 } from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
@@ -342,9 +343,6 @@ export default {
   },
 
   methods: {
-    updateSuggestions(result) {
-      console.log("result:", result);
-    },
     handleBlur(field) {
       // Валидация
       if (field === "patronymic") {
@@ -449,33 +447,27 @@ export default {
         this.gender = "UNKNOWN";
       }
 
+      const isGenderDefine = isEnoughDataForGenderDefine(
+        this.family,
+        this.name
+      );
+
+      if (isGenderDefine) {
+        this.gender = "UNKNOWN";
+      }
+
       params.gender = this.gender;
 
-      const isValid = this.patronymicClassHub.find(
-        (item) => item === "is-valid"
-      );
-      const isInvalid = this.patronymicClassHub.find(
-        (item) => item === "is-invalid"
-      );
+      const isInputValid = isFieldFIOValid(input, regex);
 
-      if (isValid) {
-        const result = await fetchSuggestions(params);
-
-        const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
-
-        console.log(this.suggestionsHub);
-
-        console.log(fetchedSuggestions);
-
-        return fetchedSuggestions;
+      if (isInputValid) {
+        params.query = null;
       }
 
-      if (isInvalid) {
-        this.suggestionsHub.splice(0, this.suggestionsHub.length);
-        console.log(this.suggestionsHub);
-      }
+      const result = await fetchSuggestions(params);
 
-      return null;
+      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+      return fetchedSuggestions;
     },
 
     async getSuggestionsSurname(input) {
@@ -526,18 +518,28 @@ export default {
         this.gender = "UNKNOWN";
       }
 
+      const isGenderDefine = isEnoughDataForGenderDefine(
+        this.name,
+        this.patronymic
+      );
+
+      if (isGenderDefine) {
+        this.gender = "UNKNOWN";
+      }
+
       params.gender = this.gender;
 
-      const isValid = this.surnameClassHub.find((item) => item === "is-valid");
+      const isInputValid = isFieldFIOValid(input, regex);
 
-      if (isValid) {
-        const result = await fetchSuggestions(params);
-
-        const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
-
-        return fetchedSuggestions;
+      if (isInputValid) {
+        params.query = null;
       }
-      return null;
+
+      const result = await fetchSuggestions(params);
+
+      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+
+      return fetchedSuggestions;
     },
 
     async getSuggestionsName(input) {
@@ -589,17 +591,26 @@ export default {
         this.gender = "UNKNOWN";
       }
 
-      params.gender = this.gender;
+      const isGenderDefine = isEnoughDataForGenderDefine(
+        this.family,
+        this.patronymic
+      );
 
-      const isValid = this.nameClassHub.find((item) => item === "is-valid");
-
-      if (isValid) {
-        const result = await fetchSuggestions(params);
-        const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
-        return fetchedSuggestions;
+      if (isGenderDefine) {
+        this.gender = "UNKNOWN";
       }
 
-      return null;
+      params.gender = this.gender;
+
+      const isInputValid = isFieldFIOValid(input, regex);
+
+      if (isInputValid) {
+        params.query = null;
+      }
+      const result = await fetchSuggestions(params);
+      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+
+      return fetchedSuggestions;
     },
 
     validateState(name) {
@@ -614,9 +625,9 @@ export default {
         this.errorMessage = null;
         this.registrationInProcess = true;
         const params = {
-          SECONDNAME: this.$v.form.family.$model,
-          FIRSTNAME: this.$v.form.name.$model,
-          THIRDNAME: this.$v.form.patronymic.$model,
+          SECONDNAME: this.family,
+          FIRSTNAME: this.name,
+          THIRDNAME: this.patronymic,
           BIRTHDATE: this.$v.form.birthdate.$model,
           PHONE: this.$v.form.phone.$model,
           CODE: this.$v.form.code.$model,
@@ -672,9 +683,38 @@ export default {
 
     async onSubmit(event) {
       try {
+        // console.log("submit");
+        // console.log("isPatronymicTouch:", this.isPatronymicTouch);
+        // console.log("isNameTouch:", this.isNameTouch);
+        // console.log("isSurnameTouch:", this.isSurnameTouch);
+        // console.log("patronymicClassHub:", this.patronymicClassHub);
+        // console.log("surnameClassHub", this.surnameClassHub);
+        // console.log("nameClassHub", this.nameClassHub);
+        //
+
         this.$refs.verifyUser.loginTouchesCount = 3;
         this.$v.form.$touch();
         this.isErrorMessage = false;
+
+        if (this.patronymicClassHub.length === 0) {
+          this.patronymicClassHub.push("is-invalid");
+          this.isPatronymic = false;
+        }
+
+        if (this.surnameClassHub.length === 0) {
+          this.surnameClassHub.push("is-invalid");
+          this.isSurname = false;
+        }
+
+        if (this.nameClassHub.length === 0) {
+          this.nameClassHub.push("is-invalid");
+          this.isName = false;
+        }
+
+        // console.log("family:", this.family);
+        // console.log("name:", this.name);
+        // console.log("patronymic:", this.patronymic);
+
         if (this.$v.form.$anyError) {
           if (this.$refs.verifyUser.isSendCode === false) {
             this.$refs.verifyUser.getCode();
@@ -682,7 +722,8 @@ export default {
           }
           return;
         }
-        this.register(this);
+        // this.register(this);
+        console.log("register");
       } catch (e) {
         console.log(e);
       }
