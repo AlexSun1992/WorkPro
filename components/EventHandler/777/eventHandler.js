@@ -369,6 +369,14 @@ async function eventHandler(fields, action, func) {
     hideErrorFunc(errRegNumNotFoundMob);
   }
 
+  if (action.name === "SREGNUMBER" && errRegNumNotFoundMob.visible === false) {
+    if (action.state === null || action.state === false) {
+      findField("SCALCULATEPOLIS").readonly = true;
+    } else {
+      findField("SCALCULATEPOLIS").readonly = false;
+    }
+  }
+
   // Скрытие сообщения о госномере и сброс до исходного состояния
   if (action.name === "SREGNUMBER" && errRegNumNotFoundMob.visible === true) {
     hideErrorFunc(errRegNumNotFoundMob);
