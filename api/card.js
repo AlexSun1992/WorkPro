@@ -25,6 +25,8 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       }
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] =
+      req.headers?.cookie;
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
@@ -363,6 +365,8 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
         }
       }
     }
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] =
+      req.headers?.cookie;
     const typeReq = req.params.id === 0 ? "post" : "put";
     mobile2ServiceInstance[typeReq](
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
