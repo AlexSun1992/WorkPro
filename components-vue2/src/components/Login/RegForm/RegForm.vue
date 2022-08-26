@@ -217,6 +217,12 @@ export default {
 
   data() {
     return {
+      isSurnameValid: false,
+      isNameValid: false,
+      isPatronymicValid: false,
+      isDateOfBirthValid: false,
+      isEmailValid: false,
+
       array: [],
       codeFieldValid: false,
       form: {
