@@ -200,6 +200,16 @@ export default {
 
   data() {
     return {
+      // <<<<<<< HEAD
+      // =======
+      //       isSurnameValid: false,
+      //       isNameValid: false,
+      //       isPatronymicValid: false,
+      //       isDateOfBirthValid: false,
+      //       isEmailValid: false,
+
+      //       array: [],
+      // >>>>>>> master
       codeFieldValid: false,
       form: {
         phone: "",
@@ -284,10 +294,6 @@ export default {
       phone: {
         required,
         minLength: minLength(17),
-      },
-
-      policyNumber: {
-        required,
       },
     },
   },

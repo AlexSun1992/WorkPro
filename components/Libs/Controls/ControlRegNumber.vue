@@ -19,6 +19,7 @@
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
           placeholder="А 000 АА"
+          autocomplete="off"
           ref="number"
         />
         <b-form-input
@@ -27,6 +28,7 @@
           :formatter="codeFormatter"
           @blur="codeBlur"
           placeholder="000"
+          autocomplete="off"
           ref="code"
         />
       </b-input-group>
@@ -118,6 +120,7 @@ export default {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.numberAndCodeValue,
+        state: this.isValid,
       });
 
       if (isNumberValid(this.numberValue.replace(/ /g, ""))) {
@@ -132,6 +135,7 @@ export default {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: setValue,
+          state: this.isValid,
         });
       }
     },
@@ -142,6 +146,7 @@ export default {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.numberAndCodeValue,
+        state: this.isValid,
       });
       if (isCodeValid(value)) {
         if (this.stateNumber && this.stateCode) {
@@ -154,6 +159,7 @@ export default {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: setValue,
+          state: this.isValid,
         });
       }
     },
