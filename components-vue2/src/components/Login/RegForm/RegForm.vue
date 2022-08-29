@@ -45,7 +45,7 @@
               @blur="handleBlur('surname')"
             />
 
-            <b-form-invalid-feedback :state="isSurname"
+            <b-form-invalid-feedback :state="isSurnameErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isSurnameValidSigns"
@@ -65,7 +65,7 @@
               :class="nameClass"
               @blur="handleBlur('name')"
             />
-            <b-form-invalid-feedback :state="isName"
+            <b-form-invalid-feedback :state="isNameErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isNameValidSigns"
@@ -87,7 +87,7 @@
               @blur="handleBlur('patronymic')"
             />
 
-            <b-form-invalid-feedback :state="isPatronymic"
+            <b-form-invalid-feedback :state="isPatronymicErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isPatronymicValidSigns"
@@ -200,7 +200,6 @@ export default {
 
   data() {
     return {
-      suggestionsHub: [],
       codeFieldValid: false,
       form: {
         phone: "",
@@ -227,18 +226,20 @@ export default {
       errorMessage: null,
       isErrorMessage: false,
       myclass: ["cabinet"],
+      //
+      suggestionsHub: [],
       gender: "",
       isFieldsFIOEXist: false,
       //
-      isPatronymic: true,
+      isPatronymicErrorMessage: true,
       isPatronymicTouch: false,
       isPatronymicValidSigns: true,
       //
-      isName: true,
+      isNameErrorMessage: true,
       isNameTouch: false,
       isNameValidSigns: true,
       //
-      isSurname: true,
+      isSurnameErrorMessage: true,
       isSurnameTouch: false,
       isSurnameValidSigns: true,
       //
@@ -398,21 +399,25 @@ export default {
       this.codeFieldValid = data;
     },
 
+    // запрос на подсказки по отчеству
+
     async getSuggestionsPatronymic(input) {
       this.suggestionsHub = [];
-
+      if (this.patronymic === "") {
+        this.suggestionsHub = [];
+      }
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (!isInputNotValid) {
           this.isPatronymicTouch = true;
-          this.isPatronymic = true;
+          this.isPatronymicErrorMessage = true;
           getArrayWithClass(this.patronymicClassHub, "is-valid");
           this.isPatronymicValidSigns = true;
         }
 
         if (isInputNotValid) {
-          this.isPatronymic = true;
+          this.isPatronymicErrorMessage = true;
           this.isPatronymicTouch = true;
           this.isPatronymicValidSigns = false;
           getArrayWithClass(this.patronymicClassHub, "is-invalid");
@@ -420,7 +425,7 @@ export default {
       }
 
       if (this.isPatronymicTouch && input === "") {
-        this.isPatronymic = false;
+        this.isPatronymicErrorMessage = false;
         this.isPatronymicValidSigns = true;
         this.patronymicClassHub = [];
         this.patronymicClassHub.push("is-invalid");
@@ -436,6 +441,11 @@ export default {
         key: API_KEY,
         parts: ["PATRONYMIC"],
       };
+
+      if (this.patronymic === "") {
+        this.suggestionsHub = [];
+        params.query = null;
+      }
 
       const isGenderRevealed = revealGender(
         this.family,
@@ -462,30 +472,31 @@ export default {
         params.query = null;
       }
 
-      if (this.patronymic === "") {
-        params.query = null;
-      }
-
       const result = await fetchSuggestions(params);
 
       const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
       return fetchedSuggestions;
     },
+    //
 
+    // Запрос на подсказки по фамилии
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
+      if (this.family === "") {
+        this.suggestionsHub = [];
+      }
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (!isInputNotValid) {
+          this.isSurnameErrorMessage = true;
           this.isSurnameTouch = true;
-          this.isSurname = true;
           this.isSurnameValidSigns = true;
 
           getArrayWithClass(this.surnameClassHub, "is-valid");
         }
         if (isInputNotValid) {
-          this.isSurname = true;
+          this.isSurnameErrorMessage = true;
           this.isSurnameTouch = true;
           this.isSurnameValidSigns = false;
 
@@ -494,7 +505,7 @@ export default {
       }
 
       if (this.isSurnameTouch && input === "") {
-        this.isSurname = false;
+        this.isSurnameErrorMessage = false;
         this.isSurnameValidSigns = true;
 
         getArrayWithClass(this.surnameClassHub, "is-invalid");
@@ -511,6 +522,11 @@ export default {
         parts: ["SURNAME"],
       };
 
+      if (this.family === "") {
+        params.query = null;
+        this.suggestionsHub = [];
+      }
+
       const isGenderRevealed = revealGender(
         this.family,
         this.name,
@@ -535,31 +551,34 @@ export default {
       if (isInputNotValid) {
         params.query = null;
       }
-      if (this.family === "") {
-        params.query = null;
-      }
+
       const result = await fetchSuggestions(params);
 
       const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
 
       return fetchedSuggestions;
     },
+    //
 
+    // Запрос на подсказки по именам
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
 
+      if (this.name === "") {
+        this.suggestionsHub = [];
+      }
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (!isInputNotValid) {
           this.isNameTouch = true;
-          this.isName = true;
+          this.isNameErrorMessage = true;
           this.isNameValidSigns = true;
 
           getArrayWithClass(this.nameClassHub, "is-valid");
         }
         if (isInputNotValid) {
-          this.isName = true;
+          this.isNameErrorMessage = true;
           this.isNameTouch = true;
           this.isNameValidSigns = false;
 
@@ -568,7 +587,7 @@ export default {
       }
 
       if (this.isNameTouch && input === "") {
-        this.isName = false;
+        this.isNameErrorMessage = false;
         this.isNameValidSigns = true;
 
         getArrayWithClass(this.nameClassHub, "is-invalid");
@@ -584,7 +603,10 @@ export default {
         key: API_KEY,
         parts: ["NAME"],
       };
-
+      if (this.name === "") {
+        this.suggestionsHub = [];
+        params.query = null;
+      }
       const isGenderRevealed = revealGender(
         this.family,
         this.name,
@@ -610,15 +632,12 @@ export default {
         params.query = null;
       }
 
-      if (this.name === "") {
-        params.query = null;
-      }
       const result = await fetchSuggestions(params);
       const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
 
       return fetchedSuggestions;
     },
-
+    //
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
 
