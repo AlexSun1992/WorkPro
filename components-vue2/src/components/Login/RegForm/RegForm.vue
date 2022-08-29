@@ -200,16 +200,6 @@ export default {
 
   data() {
     return {
-      // <<<<<<< HEAD
-      // =======
-      //       isSurnameValid: false,
-      //       isNameValid: false,
-      //       isPatronymicValid: false,
-      //       isDateOfBirthValid: false,
-      //       isEmailValid: false,
-
-      //       array: [],
-      // >>>>>>> master
       codeFieldValid: false,
       form: {
         phone: "",
@@ -408,6 +398,17 @@ export default {
     // запрос на подсказки по отчеству
 
     async getSuggestionsPatronymic(input) {
+      const suggestionType = "fio";
+
+      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
+
+      const params = {
+        query: input,
+        suggestionType,
+        key: API_KEY,
+        parts: ["PATRONYMIC"],
+      };
+
       this.suggestionsHub = [];
 
       // инвалидация массива с подсказками при очищении поля
@@ -439,22 +440,6 @@ export default {
         this.patronymicClassHub.push("is-invalid");
       }
 
-      const suggestionType = "fio";
-
-      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-
-      const params = {
-        query: input,
-        suggestionType,
-        key: API_KEY,
-        parts: ["PATRONYMIC"],
-      };
-
-      if (this.patronymic === "") {
-        this.suggestionsHub = [];
-        params.query = null;
-      }
-
       const isGenderRevealed = revealGender(
         this.family,
         this.name,
@@ -482,7 +467,12 @@ export default {
 
       const result = await fetchSuggestions(params);
 
-      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+      const fetchedSuggestions = getSuggestions(
+        result,
+        this.suggestionsHub,
+        this.patronymic
+      );
+
       return fetchedSuggestions;
     },
     //
@@ -516,7 +506,7 @@ export default {
       if (this.isSurnameTouch && input === "") {
         this.isSurnameErrorMessage = false;
         this.isSurnameValidSignsErrorMessage = true;
-
+        this.suggestionsHub = [];
         getArrayWithClass(this.surnameClassHub, "is-invalid");
       }
 
@@ -530,11 +520,6 @@ export default {
         key: API_KEY,
         parts: ["SURNAME"],
       };
-
-      if (this.family === "") {
-        params.query = null;
-        this.suggestionsHub = [];
-      }
 
       const isGenderRevealed = revealGender(
         this.family,
@@ -563,7 +548,11 @@ export default {
 
       const result = await fetchSuggestions(params);
 
-      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+      const fetchedSuggestions = getSuggestions(
+        result,
+        this.suggestionsHub,
+        this.family
+      );
 
       return fetchedSuggestions;
     },
@@ -573,9 +562,7 @@ export default {
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
       // инвалидация массива с подсказками при очищении поля
-      if (this.name === "") {
-        this.suggestionsHub = [];
-      }
+
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
@@ -598,7 +585,7 @@ export default {
       if (this.isNameTouch && input === "") {
         this.isNameErrorMessage = false;
         this.isNameValidSignsErrorMessage = true;
-
+        this.suggestionsHub = [];
         getArrayWithClass(this.nameClassHub, "is-invalid");
       }
 
@@ -612,10 +599,7 @@ export default {
         key: API_KEY,
         parts: ["NAME"],
       };
-      if (this.name === "") {
-        this.suggestionsHub = [];
-        params.query = null;
-      }
+
       const isGenderRevealed = revealGender(
         this.family,
         this.name,
@@ -642,7 +626,11 @@ export default {
       }
 
       const result = await fetchSuggestions(params);
-      const fetchedSuggestions = getSuggestions(result, this.suggestionsHub);
+      const fetchedSuggestions = getSuggestions(
+        result,
+        this.suggestionsHub,
+        this.name
+      );
 
       return fetchedSuggestions;
     },
@@ -723,17 +711,17 @@ export default {
 
         if (this.patronymicClassHub.length === 0) {
           this.patronymicClassHub.push("is-invalid");
-          this.isPatronymic = false;
+          this.isPatronymicErrorMessage = false;
         }
 
         if (this.surnameClassHub.length === 0) {
           this.surnameClassHub.push("is-invalid");
-          this.isSurname = false;
+          this.isSurnameErrorMessage = false;
         }
 
         if (this.nameClassHub.length === 0) {
           this.nameClassHub.push("is-invalid");
-          this.isName = false;
+          this.isNameErrorMessage = false;
         }
 
         if (this.$v.form.$anyError) {

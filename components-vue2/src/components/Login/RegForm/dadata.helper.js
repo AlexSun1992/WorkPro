@@ -33,13 +33,18 @@ export function userGender(suggestionsFetched, userSurname) {
   return getGenderFromSurname?.data.gender;
 }
 
-export function getSuggestions(fetchedSuggestions, suggestions) {
-  fetchedSuggestions.forEach((item) => {
-    suggestions.push(item);
-  });
+export function getSuggestions(fetchedSuggestions, suggestions, fieldContent) {
+  if (fieldContent !== "") {
+    fetchedSuggestions.forEach((item) => {
+      suggestions.push(item);
+    });
 
-  const result = suggestions;
-  return result;
+    // suggestions = fetchedSuggestions.map((item) => ({ ...item }));
+
+    const result = suggestions;
+    return result;
+  }
+  return [];
 }
 
 export function isEnoughDataForGenderDefine(
