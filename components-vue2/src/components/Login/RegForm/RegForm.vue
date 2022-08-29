@@ -48,7 +48,7 @@
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
-            <b-form-invalid-feedback :state="isSurnameValidSigns"
+            <b-form-invalid-feedback :state="isSurnameValidSignsErrorMessage"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
             >
@@ -68,7 +68,7 @@
             <b-form-invalid-feedback :state="isNameErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
-            <b-form-invalid-feedback :state="isNameValidSigns"
+            <b-form-invalid-feedback :state="isNameValidSignsErrorMessage"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
             >
@@ -90,7 +90,7 @@
             <b-form-invalid-feedback :state="isPatronymicErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
-            <b-form-invalid-feedback :state="isPatronymicValidSigns"
+            <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
             >
@@ -233,15 +233,15 @@ export default {
       //
       isPatronymicErrorMessage: true,
       isPatronymicTouch: false,
-      isPatronymicValidSigns: true,
+      isPatronymicValidSignsErrorMessage: true,
       //
       isNameErrorMessage: true,
       isNameTouch: false,
-      isNameValidSigns: true,
+      isNameValidSignsErrorMessage: true,
       //
       isSurnameErrorMessage: true,
       isSurnameTouch: false,
-      isSurnameValidSigns: true,
+      isSurnameValidSignsErrorMessage: true,
       //
       // classes
       patronymicClassHub: [],
@@ -349,21 +349,21 @@ export default {
       // Валидация
       if (field === "patronymic") {
         if (this.patronymic === "") {
-          this.isPatronymic = false;
+          this.isPatronymicErrorMessage = false;
           this.patronymicClassHub.push("is-invalid");
         }
       }
 
       if (field === "surname") {
         if (this.family === "") {
-          this.isSurname = false;
+          this.isSurnameErrorMessage = false;
           this.surnameClassHub.push("is-invalid");
         }
       }
 
       if (field === "name") {
         if (this.name === "") {
-          this.isName = false;
+          this.isNameErrorMessage = false;
           this.nameClassHub.push("is-invalid");
         }
       }
@@ -403,6 +403,8 @@ export default {
 
     async getSuggestionsPatronymic(input) {
       this.suggestionsHub = [];
+
+      // инвалидация массива с подсказками при очищении поля
       if (this.patronymic === "") {
         this.suggestionsHub = [];
       }
@@ -413,20 +415,20 @@ export default {
           this.isPatronymicTouch = true;
           this.isPatronymicErrorMessage = true;
           getArrayWithClass(this.patronymicClassHub, "is-valid");
-          this.isPatronymicValidSigns = true;
+          this.isPatronymicValidSignsErrorMessage = true;
         }
 
         if (isInputNotValid) {
           this.isPatronymicErrorMessage = true;
           this.isPatronymicTouch = true;
-          this.isPatronymicValidSigns = false;
+          this.isPatronymicValidSignsErrorMessage = false;
           getArrayWithClass(this.patronymicClassHub, "is-invalid");
         }
       }
 
       if (this.isPatronymicTouch && input === "") {
         this.isPatronymicErrorMessage = false;
-        this.isPatronymicValidSigns = true;
+        this.isPatronymicValidSignsErrorMessage = true;
         this.patronymicClassHub = [];
         this.patronymicClassHub.push("is-invalid");
       }
@@ -482,6 +484,7 @@ export default {
     // Запрос на подсказки по фамилии
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
+      // инвалидация массива с подсказками при очищении поля
       if (this.family === "") {
         this.suggestionsHub = [];
       }
@@ -491,14 +494,14 @@ export default {
         if (!isInputNotValid) {
           this.isSurnameErrorMessage = true;
           this.isSurnameTouch = true;
-          this.isSurnameValidSigns = true;
+          this.isSurnameValidSignsErrorMessage = true;
 
           getArrayWithClass(this.surnameClassHub, "is-valid");
         }
         if (isInputNotValid) {
           this.isSurnameErrorMessage = true;
           this.isSurnameTouch = true;
-          this.isSurnameValidSigns = false;
+          this.isSurnameValidSignsErrorMessage = false;
 
           getArrayWithClass(this.surnameClassHub, "is-invalid");
         }
@@ -506,7 +509,7 @@ export default {
 
       if (this.isSurnameTouch && input === "") {
         this.isSurnameErrorMessage = false;
-        this.isSurnameValidSigns = true;
+        this.isSurnameValidSignsErrorMessage = true;
 
         getArrayWithClass(this.surnameClassHub, "is-invalid");
       }
@@ -563,7 +566,7 @@ export default {
     // Запрос на подсказки по именам
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
-
+      // инвалидация массива с подсказками при очищении поля
       if (this.name === "") {
         this.suggestionsHub = [];
       }
@@ -573,14 +576,14 @@ export default {
         if (!isInputNotValid) {
           this.isNameTouch = true;
           this.isNameErrorMessage = true;
-          this.isNameValidSigns = true;
+          this.isNameValidSignsErrorMessage = true;
 
           getArrayWithClass(this.nameClassHub, "is-valid");
         }
         if (isInputNotValid) {
           this.isNameErrorMessage = true;
           this.isNameTouch = true;
-          this.isNameValidSigns = false;
+          this.isNameValidSignsErrorMessage = false;
 
           getArrayWithClass(this.nameClassHub, "is-invalid");
         }
@@ -588,7 +591,7 @@ export default {
 
       if (this.isNameTouch && input === "") {
         this.isNameErrorMessage = false;
-        this.isNameValidSigns = true;
+        this.isNameValidSignsErrorMessage = true;
 
         getArrayWithClass(this.nameClassHub, "is-invalid");
       }
