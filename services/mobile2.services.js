@@ -7,6 +7,5 @@ export const mobile2Service = (url) => {
   instance.defaults.baseURL =
     url || process.env.MOBILE2_URL || "https://mobile2.reso.ru";
   instance.defaults.headers.common["X-Application"] = "VueJS";
-  instance.defaults.headers.common["X-Real-Ip"] = "";
   return instance;
 };
