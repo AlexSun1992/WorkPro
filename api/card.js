@@ -50,6 +50,7 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
+        console.log(resp);
         const data = await formConverter.form(
           resp.data,
           {
