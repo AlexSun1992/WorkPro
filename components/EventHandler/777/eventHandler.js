@@ -227,6 +227,9 @@ async function eventHandler(fields, action, func) {
       regNumber.error = null;
       errRegNumNotFoundMob.visible = false;
     }
+    if (!regNumber.value) {
+      findField("SCALCULATEPOLIS").readonly = true;
+    }
     if (!regNumber.value || !action.value) {
       invertPropertyElements(checkNotRegNumberForm, "visible");
     }
@@ -369,7 +372,7 @@ async function eventHandler(fields, action, func) {
     hideErrorFunc(errRegNumNotFoundMob);
   }
 
-  if (action.name === "SREGNUMBER" && errRegNumNotFoundMob.visible === false) {
+  if (action.name === "SREGNUMBER") {
     if (action.state === null || action.state === false) {
       findField("SCALCULATEPOLIS").readonly = true;
     } else {
