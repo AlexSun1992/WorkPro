@@ -28,8 +28,8 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
     mobile2ServiceInstance.defaults.headers.common["Cookie"] =
       req.headers?.cookie;
     const ipAddress = req.headers["x-real-ip"];
-    mobile2ServiceInstance.defaults.headers.common["X-Forwarded-For"] =
-      ipAddress;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || "";
     console.log(req.headers);
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
@@ -54,6 +54,9 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
+        console.log(resp.headers);
+        // req.headers["x-forwarded-for"] = resp["x-real-ip"];
+        // console.log(req.headers);
         const data = await formConverter.form(
           resp.data,
           {
