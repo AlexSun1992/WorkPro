@@ -24,7 +24,7 @@ import { jest } from "@jest/globals";
 describe("Модуль тестирования подсказок по ФИО dadata", () => {
   it("Выявляем очищены ли поля с запросом к dadata на ФИО", () => {
     const checkFIOFields = revealGender("", "", "");
-    expect(checkFIOFields).toBe(true);
+    expect(checkFIOFields).toBe(false);
   });
 
   it("Выявляем пол по фамилии пользователя", () => {
@@ -64,11 +64,11 @@ describe("Модуль тестирования подсказок по ФИО d
 
   it("Определить достаточно ли данных для определения гендера", () => {
     const isGenderDefine = isEnoughDataForGenderDefine("", "");
-    expect(isGenderDefine).toBe(true);
+    expect(isGenderDefine).toBe(false);
   });
   it("Определить достаточно ли данных для определения гендера", () => {
     const isGenderDefine = isEnoughDataForGenderDefine("", "Петровна");
-    expect(isGenderDefine).toBe(false);
+    expect(isGenderDefine).toBe(true);
   });
 
   it("Валидируем водимый текст в поля ФИО", () => {
