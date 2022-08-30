@@ -76,7 +76,11 @@
         </div>
 
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
-          <b-form-group label="Отчество" label-cols="12" class="required">
+          <b-form-group
+            label="Отчество (при наличии)"
+            label-cols="12"
+            class="required"
+          >
             <autocomplete
               ref="autocompletePatronymic"
               placeholder="Отчество"
@@ -87,9 +91,9 @@
               @blur="handleBlur('patronymic')"
             />
 
-            <b-form-invalid-feedback :state="isPatronymicErrorMessage"
+            <!-- <b-form-invalid-feedback :state="isPatronymicErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            >
+            > -->
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
@@ -335,12 +339,12 @@ export default {
   methods: {
     handleBlur(field) {
       // Валидация
-      if (field === "patronymic") {
-        if (this.patronymic === "") {
-          this.isPatronymicErrorMessage = false;
-          this.patronymicClassHub.push("is-invalid");
-        }
-      }
+      // if (field === "patronymic") {
+      //   if (this.patronymic === "") {
+      //     this.isPatronymicErrorMessage = false;
+      //     this.patronymicClassHub.push("is-invalid");
+      //   }
+      // }
 
       if (field === "surname") {
         if (this.family === "") {
@@ -402,7 +406,7 @@ export default {
         if (!isInputNotValid) {
           this.isPatronymicTouch = true;
           this.isPatronymicErrorMessage = true;
-          getArrayWithClass(this.patronymicClassHub, "is-valid");
+          // getArrayWithClass(this.patronymicClassHub, "is-valid");
           this.isPatronymicValidSignsErrorMessage = true;
         }
 
@@ -418,7 +422,7 @@ export default {
         this.isPatronymicErrorMessage = false;
         this.isPatronymicValidSignsErrorMessage = true;
         this.patronymicClassHub = [];
-        this.patronymicClassHub.push("is-invalid");
+        // this.patronymicClassHub.push("is-invalid");
       }
 
       const isGenderRevealed = isGenderReveal(
@@ -646,10 +650,10 @@ export default {
         this.$v.form.$touch();
         this.isErrorMessage = false;
 
-        if (this.patronymicClassHub.length === 0) {
-          this.patronymicClassHub.push("is-invalid");
-          this.isPatronymicErrorMessage = false;
-        }
+        // if (this.patronymicClassHub.length === 0) {
+        //   this.patronymicClassHub.push("is-invalid");
+        //   this.isPatronymicErrorMessage = false;
+        // }
 
         if (this.surnameClassHub.length === 0) {
           this.surnameClassHub.push("is-invalid");
@@ -663,8 +667,7 @@ export default {
 
         if (
           this.nameClassHub.length === 0 ||
-          this.surnameClassHub.length === 0 ||
-          this.patronymicClassHub.length === 0
+          this.surnameClassHub.length === 0
         ) {
           return;
         }
