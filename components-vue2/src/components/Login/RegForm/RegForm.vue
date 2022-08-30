@@ -259,19 +259,6 @@ export default {
 
   validations: {
     form: {
-      name: {
-        required,
-        alpha,
-      },
-
-      family: {
-        required,
-        alpha,
-      },
-      patronymic: {
-        required,
-        alpha,
-      },
       birthdate: {
         required,
       },
@@ -674,6 +661,14 @@ export default {
           this.isNameErrorMessage = false;
         }
 
+        if (
+          this.nameClassHub.length === 0 ||
+          this.surnameClassHub.length === 0 ||
+          this.patronymicClassHub.length === 0
+        ) {
+          return;
+        }
+
         if (this.$v.form.$anyError) {
           if (this.$refs.verifyUser.isSendCode === false) {
             this.$refs.verifyUser.getCode();
@@ -681,6 +676,7 @@ export default {
           }
           return;
         }
+
         this.register(this);
       } catch (e) {
         console.log(e);
