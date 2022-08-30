@@ -57,10 +57,34 @@ describe("Модуль тестирования подсказок по ФИО d
     expect(checkGender).toBe("FEMALE");
   });
 
-  it("собирем подсказки в массив", () => {});
-  const emptyArr = [];
-  const testResult = getSuggestions(suggestionsSurnames, emptyArr);
-  expect(Array.isArray(testResult)).toBe(true);
+  it("собирем подсказки в массив", () => {
+    const emptyArr = [];
+    const testResult = getSuggestions(suggestionsSurnames, emptyArr);
+    expect(Array.isArray(testResult)).toBe(true);
+  });
+
+  it("собираем подсказки в массив при очищенном поле поиска", () => {
+    const emptyArr = [];
+    const fieldContent = "";
+    const suggestions = getSuggestions(
+      suggestionsSurnames,
+      emptyArr,
+      fieldContent
+    );
+    expect(suggestions.length === 0).toBe(true);
+  });
+
+  it("Собираем подсказки в массив при абортированном запросе", () => {
+    const fieldContent = "test";
+    const emptyArr = [];
+    const fetchedSuggestions = null;
+    const getSuggestionsData = getSuggestions(
+      fetchedSuggestions,
+      emptyArr,
+      fieldContent
+    );
+    expect(getSuggestionsData === null).toBe(true);
+  });
 
   it("Определить достаточно ли данных для определения гендера", () => {
     const isGenderDefine = isEnoughDataForGenderDefine("", "");

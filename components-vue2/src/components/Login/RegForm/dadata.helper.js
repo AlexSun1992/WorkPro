@@ -3,36 +3,42 @@ const abortControllers = new Map();
 ///
 export async function fetchPatronymic(input, gender, isFieldContentNotValid) {
   if (isFieldContentNotValid === false) {
-    const params = {
-      gender: `${gender}`,
-      query: `${input}`,
-      suggestionType: "fio",
-      parts: ["PATRONYMIC"],
-    };
+    try {
+      const params = {
+        gender: `${gender}`,
+        query: `${input}`,
+        suggestionType: "fio",
+        parts: ["PATRONYMIC"],
+      };
 
-    const type = params.suggestionType;
+      const type = params.suggestionType;
 
-    const controller = new AbortController();
+      const controller = new AbortController();
 
-    if (abortControllers.get(params.parts[0]) !== undefined) {
-      abortControllers.get(params.parts[0]).abort();
+      if (abortControllers.get(params.parts[0]) !== undefined) {
+        abortControllers.get(params.parts[0]).abort();
+      }
+
+      abortControllers.set(params.parts[0], controller);
+
+      const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(params),
+      });
+
+      const result = await response.json();
+
+      return result.suggestions;
+    } catch (e) {
+      if (e) {
+        return null;
+      }
     }
-
-    abortControllers.set(params.parts[0], controller);
-
-    const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
-      method: "POST",
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(params),
-    });
-
-    const result = await response.json();
-
-    return result.suggestions;
   }
   return [];
 }
@@ -40,36 +46,42 @@ export async function fetchPatronymic(input, gender, isFieldContentNotValid) {
 
 export async function fetchSurname(input, gender, isFieldContentNotValid) {
   if (isFieldContentNotValid === false) {
-    const params = {
-      gender: `${gender}`,
-      query: `${input}`,
-      suggestionType: "fio",
-      parts: ["SURNAME"],
-    };
+    try {
+      const params = {
+        gender: `${gender}`,
+        query: `${input}`,
+        suggestionType: "fio",
+        parts: ["SURNAME"],
+      };
 
-    const type = params.suggestionType;
+      const type = params.suggestionType;
 
-    const controller = new AbortController();
+      const controller = new AbortController();
 
-    if (abortControllers.get(params.parts[0]) !== undefined) {
-      abortControllers.get(params.parts[0]).abort();
+      if (abortControllers.get(params.parts[0]) !== undefined) {
+        abortControllers.get(params.parts[0]).abort();
+      }
+
+      abortControllers.set(params.parts[0], controller);
+
+      const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(params),
+      });
+
+      const result = await response.json();
+
+      return result.suggestions;
+    } catch (e) {
+      if (e) {
+        return null;
+      }
     }
-
-    abortControllers.set(params.parts[0], controller);
-
-    const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
-      method: "POST",
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(params),
-    });
-
-    const result = await response.json();
-
-    return result.suggestions;
   }
   return [];
 }
@@ -77,36 +89,42 @@ export async function fetchSurname(input, gender, isFieldContentNotValid) {
 
 export async function fetchName(input, gender, isFieldContentNotValid) {
   if (isFieldContentNotValid === false) {
-    const params = {
-      gender: `${gender}`,
-      query: `${input}`,
-      suggestionType: "fio",
-      parts: ["NAME"],
-    };
+    try {
+      const params = {
+        gender: `${gender}`,
+        query: `${input}`,
+        suggestionType: "fio",
+        parts: ["NAME"],
+      };
 
-    const type = params.suggestionType;
+      const type = params.suggestionType;
 
-    const controller = new AbortController();
+      const controller = new AbortController();
 
-    if (abortControllers.get(params.parts[0]) !== undefined) {
-      abortControllers.get(params.parts[0]).abort();
+      if (abortControllers.get(params.parts[0]) !== undefined) {
+        abortControllers.get(params.parts[0]).abort();
+      }
+
+      abortControllers.set(params.parts[0], controller);
+
+      const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(params),
+      });
+
+      const result = await response.json();
+
+      return result.suggestions;
+    } catch (e) {
+      if (e) {
+        return null;
+      }
     }
-
-    abortControllers.set(params.parts[0], controller);
-
-    const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
-      method: "POST",
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(params),
-    });
-
-    const result = await response.json();
-
-    return result.suggestions;
   }
   return [];
 }
@@ -127,6 +145,10 @@ export function userGender(suggestionsFetched, userSurname) {
 }
 
 export function getSuggestions(fetchedSuggestions, suggestions, fieldContent) {
+  if (fetchedSuggestions === null) {
+    return null;
+  }
+
   if (fieldContent !== "") {
     fetchedSuggestions.forEach((item) => {
       suggestions.push(item);
