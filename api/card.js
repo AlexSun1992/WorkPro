@@ -27,7 +27,7 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     mobile2ServiceInstance.defaults.headers.common["Cookie"] =
       req.headers?.cookie;
-    const ipAddress = req.headers["x-real-ip"];
+    const ipAddress = req.headers["x-forwarded-for"];
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
       ipAddress || "";
     console.log(req.headers);
