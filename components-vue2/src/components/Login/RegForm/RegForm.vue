@@ -176,6 +176,7 @@ import {
   isEnoughDataForGenderDefine,
   isFieldFIONotValid,
   getArrayWithClass,
+  fetchPatronymic,
 } from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
@@ -464,14 +465,19 @@ export default {
         params.query = null;
       }
 
-      const result = await fetchSuggestions(params, params.parts[0]);
+      const test = await fetchPatronymic(input);
 
-      const fetchedSuggestions = getSuggestions(
-        result,
-        this.suggestionsHub,
-        this.patronymic
-      );
-      return fetchedSuggestions;
+      console.log("test:", test);
+
+      // const result = await fetchSuggestions(params, params.parts[0]);
+
+      // const fetchedSuggestions = getSuggestions(
+      //   result,
+      //   this.suggestionsHub,
+      //   this.patronymic
+      // );
+      // return fetchedSuggestions;
+      return null;
     },
     //
 
