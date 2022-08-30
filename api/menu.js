@@ -14,6 +14,9 @@ router.use(cookieParser());
 router.get("/menu/:idModule/?:idItem", (req, res) => {
   try {
     let mobile2ServiceInstance = mobile2Service();
+    const ipAddress = req.headers["x-forwarded-for"];
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || "";
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");
