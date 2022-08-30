@@ -1,33 +1,122 @@
 const abortControllers = new Map();
 
-export async function fetchSuggestions(params, id) {
-  const controller = new AbortController();
+///
+export async function fetchPatronymic(input, gender, isFieldContentNotValid) {
+  if (isFieldContentNotValid === false) {
+    const params = {
+      gender: `${gender}`,
+      query: `${input}`,
+      suggestionType: "fio",
+      parts: ["PATRONYMIC"],
+    };
 
-  if (abortControllers.get(id) !== undefined) {
-    abortControllers.get(id).abort();
+    const type = params.suggestionType;
+
+    const controller = new AbortController();
+
+    if (abortControllers.get(params.parts[0]) !== undefined) {
+      abortControllers.get(params.parts[0]).abort();
+    }
+
+    abortControllers.set(params.parts[0], controller);
+
+    const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+
+    const result = await response.json();
+
+    return result.suggestions;
   }
-
-  abortControllers.set(id, controller);
-  const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
-    method: "POST",
-    signal: controller.signal,
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify(params),
-  });
-
-  const result = await response.json();
-
-  return result.suggestions;
+  return [];
 }
+///
+
+export async function fetchSurname(input, gender, isFieldContentNotValid) {
+  if (isFieldContentNotValid === false) {
+    const params = {
+      gender: `${gender}`,
+      query: `${input}`,
+      suggestionType: "fio",
+      parts: ["SURNAME"],
+    };
+
+    const type = params.suggestionType;
+
+    const controller = new AbortController();
+
+    if (abortControllers.get(params.parts[0]) !== undefined) {
+      abortControllers.get(params.parts[0]).abort();
+    }
+
+    abortControllers.set(params.parts[0], controller);
+
+    const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+
+    const result = await response.json();
+
+    return result.suggestions;
+  }
+  return [];
+}
+//
+
+export async function fetchName(input, gender, isFieldContentNotValid) {
+  if (isFieldContentNotValid === false) {
+    const params = {
+      gender: `${gender}`,
+      query: `${input}`,
+      suggestionType: "fio",
+      parts: ["NAME"],
+    };
+
+    const type = params.suggestionType;
+
+    const controller = new AbortController();
+
+    if (abortControllers.get(params.parts[0]) !== undefined) {
+      abortControllers.get(params.parts[0]).abort();
+    }
+
+    abortControllers.set(params.parts[0], controller);
+
+    const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+
+    const result = await response.json();
+
+    return result.suggestions;
+  }
+  return [];
+}
+//
 
 export function revealGender(name, surname, patronymic) {
   if (name === "" && surname === "" && patronymic === "") {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }
 
 export function userGender(suggestionsFetched, userSurname) {
@@ -44,6 +133,7 @@ export function getSuggestions(fetchedSuggestions, suggestions, fieldContent) {
     });
 
     const result = suggestions;
+
     return result;
   }
   return [];
@@ -54,9 +144,9 @@ export function isEnoughDataForGenderDefine(
   secondGenderField
 ) {
   if (firstGenderField === "" && secondGenderField === "") {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }
 
 export function isFieldFIONotValid(inputValue, regex) {
@@ -70,16 +160,4 @@ export function getArrayWithClass(array, classText) {
   array.splice(0, array.length);
   array.push(classText);
   return array;
-}
-
-export function fetchPatronymic(input) {
-  const suggestionType = "fio";
-
-  const params = {
-    query: input,
-    suggestionType,
-    parts: ["PATRONYMIC"],
-  };
-
-  return input;
 }

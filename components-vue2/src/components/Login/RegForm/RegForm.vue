@@ -177,6 +177,8 @@ import {
   isFieldFIONotValid,
   getArrayWithClass,
   fetchPatronymic,
+  fetchSurname,
+  fetchName,
 } from "./dadata.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
@@ -401,14 +403,6 @@ export default {
     // запрос на подсказки по отчеству
 
     async getSuggestionsPatronymic(input) {
-      const suggestionType = "fio";
-
-      const params = {
-        query: input,
-        suggestionType,
-        parts: ["PATRONYMIC"],
-      };
-
       this.suggestionsHub = [];
 
       // инвалидация массива с подсказками при очищении поля
@@ -446,38 +440,28 @@ export default {
         this.patronymic
       );
 
-      if (isGenderRevealed === true) {
-        this.gender = "UNKNOWN";
-      }
-
       const isGenderDefine = isEnoughDataForGenderDefine(
         this.family,
         this.name
       );
 
-      if (isGenderDefine) {
+      if (isGenderRevealed === false || isGenderDefine === false) {
         this.gender = "UNKNOWN";
       }
 
-      params.gender = this.gender;
+      const getPatronymicSuggestions = await fetchPatronymic(
+        input,
+        this.gender,
+        isInputNotValid
+      );
 
-      if (isInputNotValid) {
-        params.query = null;
-      }
+      const fetchedSuggestions = getSuggestions(
+        getPatronymicSuggestions,
+        this.suggestionsHub,
+        this.patronymic
+      );
 
-      const test = await fetchPatronymic(input);
-
-      console.log("test:", test);
-
-      // const result = await fetchSuggestions(params, params.parts[0]);
-
-      // const fetchedSuggestions = getSuggestions(
-      //   result,
-      //   this.suggestionsHub,
-      //   this.patronymic
-      // );
-      // return fetchedSuggestions;
-      return null;
+      return fetchedSuggestions;
     },
     //
 
@@ -512,43 +496,29 @@ export default {
         getArrayWithClass(this.surnameClassHub, "is-invalid");
       }
 
-      const suggestionType = "fio";
-
-      const params = {
-        query: input,
-        suggestionType,
-        parts: ["SURNAME"],
-      };
-
       const isGenderRevealed = revealGender(
         this.family,
         this.name,
         this.patronymic
       );
 
-      if (isGenderRevealed === true) {
-        this.gender = "UNKNOWN";
-      }
-
       const isGenderDefine = isEnoughDataForGenderDefine(
         this.name,
         this.patronymic
       );
 
-      if (isGenderDefine) {
+      if (isGenderRevealed === false || isGenderDefine === false) {
         this.gender = "UNKNOWN";
       }
 
-      params.gender = this.gender;
-
-      if (isInputNotValid) {
-        params.query = null;
-      }
-
-      const result = await fetchSuggestions(params, params.parts[0]);
+      const getSurnameSuggestions = await fetchSurname(
+        input,
+        this.gender,
+        isInputNotValid
+      );
 
       const fetchedSuggestions = getSuggestions(
-        result,
+        getSurnameSuggestions,
         this.suggestionsHub,
         this.family
       );
@@ -588,43 +558,28 @@ export default {
         getArrayWithClass(this.nameClassHub, "is-invalid");
       }
 
-      const suggestionType = "fio";
-
-      const params = {
-        query: input,
-        suggestionType,
-        parts: ["NAME"],
-      };
-
       const isGenderRevealed = revealGender(
         this.family,
         this.name,
         this.patronymic
       );
 
-      if (isGenderRevealed === true) {
-        this.gender = "UNKNOWN";
-      }
-
       const isGenderDefine = isEnoughDataForGenderDefine(
         this.family,
         this.patronymic
       );
 
-      if (isGenderDefine) {
+      if (isGenderRevealed === false || isGenderDefine === false) {
         this.gender = "UNKNOWN";
       }
 
-      params.gender = this.gender;
-
-      if (isInputNotValid) {
-        params.query = null;
-      }
-
-      const result = await fetchSuggestions(params, params.parts[0]);
-
+      const getNameSuggestions = await fetchName(
+        input,
+        this.gender,
+        isInputNotValid
+      );
       const fetchedSuggestions = getSuggestions(
-        result,
+        getNameSuggestions,
         this.suggestionsHub,
         this.name
       );
