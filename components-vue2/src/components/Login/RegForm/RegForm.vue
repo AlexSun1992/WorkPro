@@ -249,6 +249,8 @@ export default {
       surnameClassHub: [],
       //
       nameClassHub: [],
+      //
+      requestToDadataParamsPartsHub: [],
     };
   },
 
@@ -400,12 +402,9 @@ export default {
     async getSuggestionsPatronymic(input) {
       const suggestionType = "fio";
 
-      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-
       const params = {
         query: input,
         suggestionType,
-        key: API_KEY,
         parts: ["PATRONYMIC"],
       };
 
@@ -465,14 +464,13 @@ export default {
         params.query = null;
       }
 
-      const result = await fetchSuggestions(params);
+      const result = await fetchSuggestions(params, params.parts[0]);
 
       const fetchedSuggestions = getSuggestions(
         result,
         this.suggestionsHub,
         this.patronymic
       );
-
       return fetchedSuggestions;
     },
     //
@@ -481,9 +479,7 @@ export default {
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
       // инвалидация массива с подсказками при очищении поля
-      if (this.family === "") {
-        this.suggestionsHub = [];
-      }
+
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
@@ -512,12 +508,9 @@ export default {
 
       const suggestionType = "fio";
 
-      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-
       const params = {
         query: input,
         suggestionType,
-        key: API_KEY,
         parts: ["SURNAME"],
       };
 
@@ -546,7 +539,7 @@ export default {
         params.query = null;
       }
 
-      const result = await fetchSuggestions(params);
+      const result = await fetchSuggestions(params, params.parts[0]);
 
       const fetchedSuggestions = getSuggestions(
         result,
@@ -591,12 +584,9 @@ export default {
 
       const suggestionType = "fio";
 
-      const API_KEY = "7a6080c3383b4dc69e786e1cd5c88366ab58a14c";
-
       const params = {
         query: input,
         suggestionType,
-        key: API_KEY,
         parts: ["NAME"],
       };
 
@@ -625,7 +615,8 @@ export default {
         params.query = null;
       }
 
-      const result = await fetchSuggestions(params);
+      const result = await fetchSuggestions(params, params.parts[0]);
+
       const fetchedSuggestions = getSuggestions(
         result,
         this.suggestionsHub,
