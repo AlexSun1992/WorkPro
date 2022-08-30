@@ -1,30 +1,46 @@
-import { fetchSuggestions } from "./dadata.helper";
+import {
+  suggestionsSurnames,
+  paramsPatronymic,
+  suggestionsPatronymic,
+  paramsName,
+  suggestionsNames,
+  paramsSurname,
+} from "./dadata.helper.fixtures";
 
-import { suggestionsSurnames } from "./dadata.helper.fixtures";
-import { createParamsForRequest } from "./dadata.helper";
-import { revealGender } from "./dadata.helper";
-import { userSurnameGender } from "./dadata.helper";
-import { userGender } from "./dadata.helper";
-import { userPatronymicGender } from "./dadata.helper";
-import { paramsSurname } from "./dadata.helper.fixtures";
-import { suggestionsNames } from "./dadata.helper.fixtures";
-import { paramsName } from "./dadata.helper.fixtures";
-import { suggestionsPatronymic } from "./dadata.helper.fixtures";
-import { paramsPatronymic } from "./dadata.helper.fixtures";
-import { getSuggestionsFIO } from "./dadata.helper";
-import { getSuggestions } from "./dadata.helper";
 import {
   isEnoughDataForGenderDefine,
   isFieldFIONotValid,
   getArrayWithClass,
+  fetchSuggestions,
+  createParamsForRequest,
+  isGenderReveal,
+  userSurnameGender,
+  userGender,
+  userPatronymicGender,
+  getSuggestionsFIO,
+  getSuggestions,
 } from "./dadata.helper";
 import { fetch, Response } from "node-fetch";
 import { jest } from "@jest/globals";
 
 describe("Модуль тестирования подсказок по ФИО dadata", () => {
   it("Выявляем очищены ли поля с запросом к dadata на ФИО", () => {
-    const checkFIOFields = revealGender("", "", "");
+    const checkFIOFields = isGenderReveal("", "", "");
     expect(checkFIOFields).toBe(false);
+  });
+
+  it("Выявляем очищены ли поля с запросом к dadata на ФИО,при заполненных", () => {
+    const checkFIOFields = isGenderReveal("", "", "test");
+    expect(checkFIOFields).toBe(true);
+  });
+
+  it("Выявляем очищены ли поля с запросом к dadata на ФИО,при заполненных", () => {
+    const checkFIOFields = isGenderReveal("test", "", "");
+    expect(checkFIOFields).toBe(true);
+  });
+  it("Выявляем очищены ли поля с запросом к dadata на ФИО,при заполненных", () => {
+    const checkFIOFields = isGenderReveal("", "test", "");
+    expect(checkFIOFields).toBe(true);
   });
 
   it("Выявляем пол по фамилии пользователя", () => {

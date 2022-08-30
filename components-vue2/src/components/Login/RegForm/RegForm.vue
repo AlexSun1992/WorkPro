@@ -170,7 +170,7 @@ import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.hel
 
 import {
   fetchSuggestions,
-  revealGender,
+  isGenderReveal,
   userGender,
   getSuggestions,
   isEnoughDataForGenderDefine,
@@ -434,7 +434,7 @@ export default {
         this.patronymicClassHub.push("is-invalid");
       }
 
-      const isGenderRevealed = revealGender(
+      const isGenderRevealed = isGenderReveal(
         this.family,
         this.name,
         this.patronymic
@@ -496,7 +496,7 @@ export default {
         getArrayWithClass(this.surnameClassHub, "is-invalid");
       }
 
-      const isGenderRevealed = revealGender(
+      const isGenderRevealed = isGenderReveal(
         this.family,
         this.name,
         this.patronymic
@@ -539,14 +539,12 @@ export default {
           this.isNameTouch = true;
           this.isNameErrorMessage = true;
           this.isNameValidSignsErrorMessage = true;
-
           getArrayWithClass(this.nameClassHub, "is-valid");
         }
         if (isInputNotValid) {
           this.isNameErrorMessage = true;
           this.isNameTouch = true;
           this.isNameValidSignsErrorMessage = false;
-
           getArrayWithClass(this.nameClassHub, "is-invalid");
         }
       }
@@ -558,7 +556,7 @@ export default {
         getArrayWithClass(this.nameClassHub, "is-invalid");
       }
 
-      const isGenderRevealed = revealGender(
+      const isGenderRevealed = isGenderReveal(
         this.family,
         this.name,
         this.patronymic

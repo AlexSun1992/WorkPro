@@ -130,7 +130,7 @@ export async function fetchName(input, gender, isFieldContentNotValid) {
 }
 //
 
-export function revealGender(name, surname, patronymic) {
+export function isGenderReveal(name, surname, patronymic) {
   if (name === "" && surname === "" && patronymic === "") {
     return false;
   }
@@ -153,7 +153,6 @@ export function getSuggestions(fetchedSuggestions, suggestions, fieldContent) {
     fetchedSuggestions.forEach((item) => {
       suggestions.push(item);
     });
-
     const result = suggestions;
 
     return result;
