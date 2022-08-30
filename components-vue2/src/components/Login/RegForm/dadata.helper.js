@@ -1,6 +1,27 @@
 const abortControllers = new Map();
 
-///
+export async function getSuggestionsData(params, type) {
+  const controller = new AbortController();
+
+  if (abortControllers.get(params.parts[0]) !== undefined) {
+    abortControllers.get(params.parts[0]).abort();
+  }
+
+  abortControllers.set(params.parts[0], controller);
+  const testResult = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
+    method: "POST",
+    signal: controller.signal,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(params),
+  });
+
+  const dataSuggestions = await testResult.json();
+  return dataSuggestions.suggestions;
+}
+
 export async function fetchPatronymic(input, gender, isFieldContentNotValid) {
   if (isFieldContentNotValid === false) {
     try {
@@ -13,29 +34,10 @@ export async function fetchPatronymic(input, gender, isFieldContentNotValid) {
 
       const type = params.suggestionType;
 
-      const controller = new AbortController();
-
-      if (abortControllers.get(params.parts[0]) !== undefined) {
-        abortControllers.get(params.parts[0]).abort();
-      }
-
-      abortControllers.set(params.parts[0], controller);
-
-      const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
-        method: "POST",
-        signal: controller.signal,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(params),
-      });
-
-      const result = await response.json();
-
-      return result.suggestions;
+      const getData = await getSuggestionsData(params, type);
+      return getData;
     } catch (e) {
-      if (e) {
+      if (e === "DOMException: The user aborted a request.") {
         return null;
       }
     }
@@ -56,29 +58,10 @@ export async function fetchSurname(input, gender, isFieldContentNotValid) {
 
       const type = params.suggestionType;
 
-      const controller = new AbortController();
-
-      if (abortControllers.get(params.parts[0]) !== undefined) {
-        abortControllers.get(params.parts[0]).abort();
-      }
-
-      abortControllers.set(params.parts[0], controller);
-
-      const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
-        method: "POST",
-        signal: controller.signal,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(params),
-      });
-
-      const result = await response.json();
-
-      return result.suggestions;
+      const getData = await getSuggestionsData(params, type);
+      return getData;
     } catch (e) {
-      if (e) {
+      if (e === "DOMException: The user aborted a request.") {
         return null;
       }
     }
@@ -99,29 +82,10 @@ export async function fetchName(input, gender, isFieldContentNotValid) {
 
       const type = params.suggestionType;
 
-      const controller = new AbortController();
-
-      if (abortControllers.get(params.parts[0]) !== undefined) {
-        abortControllers.get(params.parts[0]).abort();
-      }
-
-      abortControllers.set(params.parts[0], controller);
-
-      const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
-        method: "POST",
-        signal: controller.signal,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(params),
-      });
-
-      const result = await response.json();
-
-      return result.suggestions;
+      const getData = await getSuggestionsData(params, type);
+      return getData;
     } catch (e) {
-      if (e) {
+      if (e === "DOMException: The user aborted a request.") {
         return null;
       }
     }

@@ -681,8 +681,7 @@ export default {
           }
           return;
         }
-        // this.register(this);
-        console.log("register");
+        this.register(this);
       } catch (e) {
         console.log(e);
       }
