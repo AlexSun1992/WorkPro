@@ -8,18 +8,15 @@ export async function getSuggestionsData(params, type) {
   }
 
   abortControllers.set(params.parts[0], controller);
-  const testResult = await fetch(
-    `/api/suggestions/api/4_1/rs/suggest/${type}`,
-    {
-      method: "POST",
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(params),
-    }
-  );
+  const testResult = await fetch(`/api/suggestions/${type}`, {
+    method: "POST",
+    signal: controller.signal,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(params),
+  });
 
   const dataSuggestions = await testResult.json();
   return dataSuggestions.suggestions;
