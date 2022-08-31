@@ -224,9 +224,6 @@ export default {
       codeFieldValid: false,
       form: {
         phone: "",
-        family: "",
-        name: "",
-        patronymic: "",
         birthdate: "",
         policyNumber: "",
         code: "",
@@ -605,6 +602,7 @@ export default {
           SECONDNAME: this.family,
           FIRSTNAME: this.name,
           THIRDNAME: this.patronymic,
+          THIRDNAMENOTEXISTS: this.isPatronymicNotExist ? "Y" : "N",
           BIRTHDATE: this.$v.form.birthdate.$model,
           PHONE: this.$v.form.phone.$model,
           CODE: this.$v.form.code.$model,
