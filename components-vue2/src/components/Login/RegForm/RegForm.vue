@@ -86,14 +86,15 @@
               placeholder="Отчество"
               :search="getSuggestionsPatronymic"
               :get-result-value="getResultValue"
-              :disabled="registrationInProcess"
+              :disabled="isUserPatronymicNotExist === true"
               :class="patronymicClass"
               @blur="handleBlur('patronymic')"
             />
-
+            <!-- registrationInProcess || -->
             <!-- <b-form-invalid-feedback :state="isPatronymicErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             > -->
+
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
@@ -101,9 +102,16 @@
           </b-form-group>
         </div>
         <div class="col-12 col-md-6 mt-md-3 pt-md-4" v-if="codeFieldValid">
-          <b-form-checkbox class="checkbox-hide mt-3 pt-1">
+          <b-form-checkbox
+            class="checkbox-hide mt-3 pt-1"
+            v-model="isPatronymicNotExist"
+            :value="!isPatronymicNotExist"
+          >
             Нет отчества
           </b-form-checkbox>
+          <!-- class="checkbox-hide mt-3 pt-1"
+            v-model="isPatronymicNotExist"
+            :value="false" -->
         </div>
 
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
@@ -225,7 +233,7 @@ export default {
         password: "",
         password2: "",
       },
-
+      isPatronymicNotExist: false,
       conformation: false,
       show: true,
       password2: "",
@@ -302,6 +310,13 @@ export default {
       }
     },
 
+    isUserPatronymicNotExist() {
+      if (this.isPatronymicNotExist === true) {
+        return true;
+      }
+      return false;
+    },
+
     family() {
       if (this.codeFieldValid) {
         if (this.isFieldsFIOEXist) {
@@ -342,15 +357,17 @@ export default {
     },
   },
 
+  watch: {
+    isPatronymicNotExist(value) {
+      if (value) {
+        this.$refs.autocompletePatronymic.value = "";
+      }
+    },
+  },
+
   methods: {
     handleBlur(field) {
       // Валидация
-      // if (field === "patronymic") {
-      //   if (this.patronymic === "") {
-      //     this.isPatronymicErrorMessage = false;
-      //     this.patronymicClassHub.push("is-invalid");
-      //   }
-      // }
 
       if (field === "surname") {
         if (this.family === "") {
@@ -412,7 +429,6 @@ export default {
         if (!isInputNotValid) {
           this.isPatronymicTouch = true;
           this.isPatronymicErrorMessage = true;
-          // getArrayWithClass(this.patronymicClassHub, "is-valid");
           this.isPatronymicValidSignsErrorMessage = true;
         }
 
@@ -428,7 +444,6 @@ export default {
         this.isPatronymicErrorMessage = false;
         this.isPatronymicValidSignsErrorMessage = true;
         this.patronymicClassHub = [];
-        // this.patronymicClassHub.push("is-invalid");
       }
 
       const isGenderRevealed = isGenderReveal(
@@ -655,11 +670,6 @@ export default {
         this.$refs.verifyUser.loginTouchesCount = 3;
         this.$v.form.$touch();
         this.isErrorMessage = false;
-
-        // if (this.patronymicClassHub.length === 0) {
-        //   this.patronymicClassHub.push("is-invalid");
-        //   this.isPatronymicErrorMessage = false;
-        // }
 
         if (this.surnameClassHub.length === 0) {
           this.surnameClassHub.push("is-invalid");
