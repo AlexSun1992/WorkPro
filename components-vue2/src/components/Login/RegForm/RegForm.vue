@@ -669,6 +669,14 @@ export default {
           return;
         }
 
+        if (
+          this.nameClassHub.includes("is-invalid") ||
+          this.surnameClassHub.includes("is-invalid") ||
+          this.patronymicClassHub.includes("is-invalid")
+        ) {
+          return;
+        }
+
         if (this.$v.form.$anyError) {
           if (this.$refs.verifyUser.isSendCode === false) {
             this.$refs.verifyUser.getCode();
