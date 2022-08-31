@@ -86,7 +86,7 @@
               placeholder="Отчество"
               :search="getSuggestionsPatronymic"
               :get-result-value="getResultValue"
-              :disabled="isUserPatronymicNotExist === true"
+              :disabled="isPatronymicNotExist === true"
               :class="patronymicClass"
               @blur="handleBlur('patronymic')"
             />
@@ -308,13 +308,6 @@ export default {
       if (!this.$v.form.name.$model) {
         console.log(this.$v.form.name.$model);
       }
-    },
-
-    isUserPatronymicNotExist() {
-      if (this.isPatronymicNotExist === true) {
-        return true;
-      }
-      return false;
     },
 
     family() {
