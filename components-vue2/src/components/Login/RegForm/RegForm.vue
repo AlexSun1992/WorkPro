@@ -33,7 +33,7 @@
         />
       </b-form-group>
       <div class="row">
-        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+        <div class="col-12 col-md-6 mt-2" v-if="codeFieldValid">
           <b-form-group class="required" label="Фамилия" label-cols="12">
             <autocomplete
               ref="autocompleteSurname"
@@ -54,7 +54,7 @@
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
+        <div class="col-12 col-md-6 mt-2" v-if="codeFieldValid">
           <b-form-group label="Имя" label-cols="12" class="required">
             <autocomplete
               ref="autocompleteName"
@@ -76,26 +76,44 @@
         </div>
 
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
-          <b-form-group label="Отчество" label-cols="12" class="required">
+          <b-form-group
+            label="Отчество (при наличии)"
+            label-cols="12"
+            class="required"
+          >
             <autocomplete
               ref="autocompletePatronymic"
               placeholder="Отчество"
               :search="getSuggestionsPatronymic"
               :get-result-value="getResultValue"
-              :disabled="registrationInProcess"
+              :disabled="isPatronymicNotExist === true"
               :class="patronymicClass"
               @blur="handleBlur('patronymic')"
             />
-
-            <b-form-invalid-feedback :state="isPatronymicErrorMessage"
+            <!-- registrationInProcess || -->
+            <!-- <b-form-invalid-feedback :state="isPatronymicErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            >
+            > -->
+
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
             >
           </b-form-group>
         </div>
+        <div class="col-12 col-md-6 mt-md-3 pt-md-4" v-if="codeFieldValid">
+          <b-form-checkbox
+            class="checkbox-hide mt-3 pt-1"
+            v-model="isPatronymicNotExist"
+            :value="!isPatronymicNotExist"
+          >
+            Нет отчества
+          </b-form-checkbox>
+          <!-- class="checkbox-hide mt-3 pt-1"
+            v-model="isPatronymicNotExist"
+            :value="false" -->
+        </div>
+
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker
@@ -206,16 +224,13 @@ export default {
       codeFieldValid: false,
       form: {
         phone: "",
-        family: "",
-        name: "",
-        patronymic: "",
         birthdate: "",
         policyNumber: "",
         code: "",
         password: "",
         password2: "",
       },
-
+      isPatronymicNotExist: false,
       conformation: false,
       show: true,
       password2: "",
@@ -332,15 +347,17 @@ export default {
     },
   },
 
+  watch: {
+    isPatronymicNotExist(value) {
+      if (value) {
+        this.$refs.autocompletePatronymic.value = "";
+      }
+    },
+  },
+
   methods: {
     handleBlur(field) {
       // Валидация
-      if (field === "patronymic") {
-        if (this.patronymic === "") {
-          this.isPatronymicErrorMessage = false;
-          this.patronymicClassHub.push("is-invalid");
-        }
-      }
 
       if (field === "surname") {
         if (this.family === "") {
@@ -402,7 +419,6 @@ export default {
         if (!isInputNotValid) {
           this.isPatronymicTouch = true;
           this.isPatronymicErrorMessage = true;
-          getArrayWithClass(this.patronymicClassHub, "is-valid");
           this.isPatronymicValidSignsErrorMessage = true;
         }
 
@@ -418,7 +434,6 @@ export default {
         this.isPatronymicErrorMessage = false;
         this.isPatronymicValidSignsErrorMessage = true;
         this.patronymicClassHub = [];
-        this.patronymicClassHub.push("is-invalid");
       }
 
       const isGenderRevealed = isGenderReveal(
@@ -587,6 +602,7 @@ export default {
           SECONDNAME: this.family,
           FIRSTNAME: this.name,
           THIRDNAME: this.patronymic,
+          THIRDNAMENOTEXISTS: this.isPatronymicNotExist ? "Y" : "N",
           BIRTHDATE: this.$v.form.birthdate.$model,
           PHONE: this.$v.form.phone.$model,
           CODE: this.$v.form.code.$model,
@@ -646,11 +662,6 @@ export default {
         this.$v.form.$touch();
         this.isErrorMessage = false;
 
-        if (this.patronymicClassHub.length === 0) {
-          this.patronymicClassHub.push("is-invalid");
-          this.isPatronymicErrorMessage = false;
-        }
-
         if (this.surnameClassHub.length === 0) {
           this.surnameClassHub.push("is-invalid");
           this.isSurnameErrorMessage = false;
@@ -663,8 +674,14 @@ export default {
 
         if (
           this.nameClassHub.length === 0 ||
-          this.surnameClassHub.length === 0 ||
-          this.patronymicClassHub.length === 0
+          this.surnameClassHub.length === 0
+        ) {
+          return;
+        }
+
+        if (
+          this.nameClassHub.includes("is-invalid") ||
+          this.surnameClassHub.includes("is-invalid")
         ) {
           return;
         }

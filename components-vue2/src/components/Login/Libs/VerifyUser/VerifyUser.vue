@@ -64,41 +64,38 @@
       </button>
     </div>
 
-    <div v-if="isShowCodeEnter">
-      <div class="row">
-        <p class="col-12 col-md-12">
-          {{ textMessage }}
-          <template v-if="isSendCode"
-            >Отправить повторно можно через
-            <verify-timer @onFinish="stopTimer" :duration="duration" />
-            сек.</template
-          >
-        </p>
-      </div>
+    <div v-if="isShowCodeEnter" class="col-12">
+      {{ textMessage }}
+      <template v-if="isSendCode"
+        >Отправить повторно можно через
+        <verify-timer @onFinish="stopTimer" :duration="duration" />
+        сек.</template
+      >
     </div>
-
-    <b-form-group v-if="codeFieldShown" label="Код подтверждения">
-      <b-form-input
-        autofocus
-        ref="codeInput"
-        v-model="v.code.$model"
-        class="mb-2"
-        v-mask="codeMask"
-        :state="validateInput('code', isCodeBlured)"
-        @blur="blurField('code', isCodeBlured)"
-        @input="inputTouch(loginType)"
-        :disabled="disabled"
-        autocomplete="off"
-        placeholder="Код подтверждения"
-      ></b-form-input>
-      <!-- :tabindex="tabIndex[1]" -->
-      <b-form-invalid-feedback v-if="!v.code.$model"
-        >Пожалуйста, заполните это поле</b-form-invalid-feedback
-      >
-      <b-form-invalid-feedback v-else
-        >Неверный код подтверждения</b-form-invalid-feedback
-      >
-    </b-form-group>
+    <div class="col-12 mt-3" v-if="codeFieldShown">
+      <b-form-group label="Код подтверждения">
+        <b-form-input
+          autofocus
+          ref="codeInput"
+          v-model="v.code.$model"
+          class="mb-2"
+          v-mask="codeMask"
+          :state="validateInput('code', isCodeBlured)"
+          @blur="blurField('code', isCodeBlured)"
+          @input="inputTouch(loginType)"
+          :disabled="disabled"
+          autocomplete="off"
+          placeholder="Код подтверждения"
+        ></b-form-input>
+        <!-- :tabindex="tabIndex[1]" -->
+        <b-form-invalid-feedback v-if="!v.code.$model"
+          >Пожалуйста, заполните это поле</b-form-invalid-feedback
+        >
+        <b-form-invalid-feedback v-else
+          >Неверный код подтверждения</b-form-invalid-feedback
+        >
+      </b-form-group>
+    </div>
 
     <vue-recaptcha
       ref="recaptcha"
