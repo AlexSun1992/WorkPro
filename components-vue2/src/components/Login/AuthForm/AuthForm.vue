@@ -51,21 +51,9 @@ export default {
       visibleForm: null,
     };
   },
-  // watch: {
-  //   visibleForm(value) {
-  //     console.log("value:", value);
-  //   },
-  // },
+
   methods: {
     toggleForm(address) {
-      console.log("address:", address);
-      // if (this.visibleForm === "registration") {
-      //   this.visibleForm = "login";
-      //   window.history.pushState(null, "", "/login");
-      // } else {
-      //   this.visibleForm = "registration";
-      //   window.history.pushState(null, "", "/login/registration");
-      // }
       if (address === "registration") {
         this.visibleForm = "registration";
         window.history.pushState(null, "", "/login/registration");
