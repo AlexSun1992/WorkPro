@@ -90,10 +90,6 @@
               :class="patronymicClass"
               @blur="handleBlur('patronymic')"
             />
-            <!-- registrationInProcess || -->
-            <!-- <b-form-invalid-feedback :state="isPatronymicErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            > -->
 
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
@@ -109,9 +105,6 @@
           >
             Нет отчества
           </b-form-checkbox>
-          <!-- class="checkbox-hide mt-3 pt-1"
-            v-model="isPatronymicNotExist"
-            :value="false" -->
         </div>
 
         <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
@@ -405,11 +398,9 @@ export default {
     },
 
     // запрос на подсказки по отчеству
-
     async getSuggestionsPatronymic(input) {
       this.suggestionsHub = [];
 
-      // инвалидация массива с подсказками при очищении поля
       if (this.patronymic === "") {
         this.suggestionsHub = [];
       }
@@ -470,7 +461,6 @@ export default {
     // Запрос на подсказки по фамилии
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
-      // инвалидация массива с подсказками при очищении поля
 
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
@@ -532,7 +522,6 @@ export default {
     // Запрос на подсказки по именам
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
-      // инвалидация массива с подсказками при очищении поля
 
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
