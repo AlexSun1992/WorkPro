@@ -17,6 +17,14 @@
     <login-form v-if="visibleForm === 'login'"></login-form>
     <reg-form v-else></reg-form>
 
+    <div class="mt-3">
+      <a
+        href="https://client.reso.ru/loginesia/loginesia/prod"
+        id="btn_recovery-password_lk"
+        >Войти через Госуслуги</a
+      >
+    </div>
+
     <button
       v-if="visibleForm === 'login'"
       @click="toggleForm('registration')"
