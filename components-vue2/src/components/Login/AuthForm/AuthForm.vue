@@ -30,7 +30,6 @@
     >
       ВХОД
     </button>
-    {{ visibleForm }}
   </div>
 </template>
 <script>
