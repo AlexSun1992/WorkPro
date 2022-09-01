@@ -16,6 +16,7 @@
     </div>
     <login-form v-if="visibleForm === 'login'"></login-form>
     <reg-form v-else></reg-form>
+
     <button
       v-if="visibleForm === 'login'"
       @click="toggleForm('registration')"
@@ -49,6 +50,12 @@ export default {
     return {
       visibleForm: null,
     };
+  },
+
+  watch: {
+    visibleForm(value) {
+      console.log("value:", value);
+    },
   },
 
   methods: {

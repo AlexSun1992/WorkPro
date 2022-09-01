@@ -78,7 +78,7 @@
         >
       </b-form-group>
 
-      <b-form-group label="Пароль" label-cols="12" class="mt-3">
+      <!-- <b-form-group label="Пароль" label-cols="12" class="mt-3">
         <b-form-input
           v-model="$v.user.password.$model"
           placeholder="Пароль"
@@ -92,7 +92,7 @@
         <b-form-invalid-feedback
           >Пожалуйста, введите пароль
         </b-form-invalid-feedback>
-      </b-form-group>
+      </b-form-group> -->
 
       <b-button
         v-on:enter="fetchToken()"
