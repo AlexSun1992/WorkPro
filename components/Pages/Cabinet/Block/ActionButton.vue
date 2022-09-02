@@ -111,7 +111,10 @@ export default {
       } else if (this.action.LHIDEDLG) {
         await this.executeAction();
         if (this.getUrlAddress) {
-          window.open(this.getUrlAddress, "_self");
+          window.open(
+            this.getUrlAddress,
+            this.action.LCURWINDOW ? "_self" : "_blank"
+          );
         }
       } else {
         this.$bvModal.show(String(this.rowId));
