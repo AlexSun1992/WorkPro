@@ -87,7 +87,6 @@
           autocomplete="off"
           placeholder="Код подтверждения"
         ></b-form-input>
-        <!-- :tabindex="tabIndex[1]" -->
         <b-form-invalid-feedback v-if="!v.code.$model"
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
