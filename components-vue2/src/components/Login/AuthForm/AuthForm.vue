@@ -18,10 +18,12 @@
     <reg-form v-else></reg-form>
 
     <div class="mt-3">
+      Войти через
       <a
         href="https://client.reso.ru/loginesia/loginesia/prod"
         id="btn_recovery-password_lk"
-        >Войти через Госуслуги</a
+      >
+        Госуслуги</a
       >
     </div>
 
@@ -58,12 +60,6 @@ export default {
     return {
       visibleForm: null,
     };
-  },
-
-  watch: {
-    visibleForm(value) {
-      console.log("value:", value);
-    },
   },
 
   methods: {
