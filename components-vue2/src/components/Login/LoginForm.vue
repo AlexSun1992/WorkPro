@@ -95,7 +95,6 @@
       </b-form-group>
 
       <div class="mt-3 text-center">
-        <!-- <span class="forgot-password">Забыли пароль?&nbsp;&nbsp;</span> -->
         <a href="/login/password-recovery" id="btn_recovery-password_lk"
           >Не помните пароль?</a
         >
@@ -112,21 +111,7 @@
         Авторизоваться
         <b-spinner v-if="authInProcess" variant="light"></b-spinner>
       </b-button>
-      <!-- <div class="mt-3 text-center">
-        <a
-          href="https://client.reso.ru/loginesia/loginesia/prod"
-          id="btn_recovery-password_lk"
-          >Войти через Госуслуги</a
-        >
-      </div> -->
     </b-form>
-
-    <!-- <div class="mt-3 text-center">
-      <span class="forgot-password">Забыли пароль?&nbsp;&nbsp;</span>
-      <a href="/login/password-recovery" id="btn_recovery-password_lk"
-        >Восстановить</a
-      >
-    </div> -->
   </div>
 </template>
 
