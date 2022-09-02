@@ -14,10 +14,7 @@ const isDigitValid = (value) => {
 
 const isValid = (value) => {
   const formatValue = value.toUpperCase();
-  if (isLetterValid(formatValue) || isDigitValid(formatValue)) {
-    return true;
-  }
-  return false;
+  return isLetterValid(formatValue) || isDigitValid(formatValue);
 };
 
 const isCodeValid = (value) => {
