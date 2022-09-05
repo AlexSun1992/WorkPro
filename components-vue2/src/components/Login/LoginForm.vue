@@ -109,7 +109,8 @@
         <a
           href="https://client.reso.ru/loginesia/loginesia/prod"
           id="btn_recovery-password_lk"
-          >Войти через Госуслуги</a
+          class="authgos"
+          >Войти через Госуслуги&#8599;</a
         >
       </div>
     </b-form>
