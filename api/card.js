@@ -53,9 +53,6 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
-        console.log(resp.headers);
-        // req.headers["x-forwarded-for"] = resp["x-real-ip"];
-        // console.log(req.headers);
         const data = await formConverter.form(
           resp.data,
           {
