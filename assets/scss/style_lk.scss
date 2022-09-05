@@ -788,6 +788,27 @@ li.breadcrumb-item:not(:last-of-type):after {
     background-color: #fff8e6;
 }
 
+.insured-events[data-id="1"] .settlement,
+.insured-events[data-id="10"] .settlement,
+.insured-events[data-id="8"] .settlement {
+    color: #3b86c8;
+}
+
+.insured-events[data-id="2"] .settlement,
+.insured-events[data-id="3"] .settlement,
+.insured-events[data-id="4"] .settlement {
+    color: #009639;
+}
+
+.insured-events[data-id="4"] .settlement {
+    color: #3d348b;
+}
+
+.insured-events[data-id="6"] .settlement,
+.insured-events[data-id="7"] .settlement {
+    color: #fe7333;
+}
+
 .insured-events[data-id]:after {
     width: 70px;
     height: 70px;
@@ -2578,8 +2599,8 @@ a.action:hover {
 .insurance-case[data-id="1"] .settlement,
 .insurance-case[data-id="10"] .settlement,
 .insurance-case[data-id="8"] .settlement {
-    background-color: #d8e7f4;
-    color: #3b86c8;
+    background-color: #3b86c8;
+    color: #fff;
 }
 
 .block-policy[data-id="2"] .policy-payment:hover,
@@ -2591,15 +2612,15 @@ a.action:hover {
 .insurance-case[data-id="2"] .settlement,
 .insurance-case[data-id="3"] .settlement,
 .insurance-case[data-id="5"] .settlement {
-    background-color: #d9efd4;
-    color: #009639;
+    background-color: #43b02a;
+    color: #fff;
 }
 
 .block-policy[data-id="4"] .policy-payment:hover,
 .block-policy[data-id="4"] .settlement,
 .insurance-case[data-id="4"] .settlement {
-    background-color: #d8d6e8;
-    color: #3d348b;
+    background-color: #645da2;
+    color: #fff;
 }
 
 .block-policy[data-id="6"] .policy-payment:hover,
@@ -2608,8 +2629,8 @@ a.action:hover {
 .block-policy[data-id="7"] .settlement,
 .insurance-case[data-id="6"] .settlement,
 .insurance-case[data-id="7"] .settlement {
-    background-color: #fdf1cc;
-    color: #f7b801;
+    background-color: #f7b801;
+    color: #fff;
 }
 
 .insurance-case[data-id="1"] .label,
@@ -3363,10 +3384,24 @@ a[data-newcount][data-newcolor="RED"]:after {
     color: #eb5757;
 }
 
-.insured-events .settlement[data-color="0"] {
-    color: red;
+.btn-prolong {
+    background: #43b02a !important;
+    color: #fff !important;
+    border-color: #43b02a !important;
 }
 
-.insured-events .settlement[data-color="1"] {
-    color: green;
+.btn-prolong:hover {
+    background: #009639 !important;
+    color: #fff !important;
+    border-color: #009639 !important;
+}
+
+.to-old-lk {
+    font-weight: 700;
+    color: #43b02a;
+    text-decoration: none;
+}
+
+.to-old-lk:hover {
+    text-decoration: underline;
 }
