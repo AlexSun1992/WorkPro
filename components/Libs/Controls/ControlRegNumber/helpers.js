@@ -1,5 +1,5 @@
 const isLetterValid = (value) => {
-  const availableLetters = "АВЕКМНОРСТУХ";
+  const availableLetters = "АВЕКМНОРСТУХABEHKMNOPCTYX";
   return (
     (value.length === 1 || value.length === 5 || value.length === 6) &&
     availableLetters.includes(value[value.length - 1])
