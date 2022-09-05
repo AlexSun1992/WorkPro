@@ -25,6 +25,11 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       }
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] =
+      req.headers?.cookie;
+    const ipAddress = req.headers["x-forwarded-for"];
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || "";
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
@@ -48,6 +53,9 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       method: "GET",
     })
       .then(async (resp) => {
+        console.log(resp.headers);
+        // req.headers["x-forwarded-for"] = resp["x-real-ip"];
+        // console.log(req.headers);
         const data = await formConverter.form(
           resp.data,
           {
@@ -363,6 +371,8 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
         }
       }
     }
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] =
+      req.headers?.cookie;
     const typeReq = req.params.id === 0 ? "post" : "put";
     mobile2ServiceInstance[typeReq](
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${

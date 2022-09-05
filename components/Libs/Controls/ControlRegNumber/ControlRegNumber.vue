@@ -18,7 +18,8 @@
           :formatter="numberFormatter"
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
-          placeholder="А 000 АА"
+          placeholder="А000АА"
+          autocomplete="off"
           ref="number"
         />
         <b-form-input
@@ -27,6 +28,7 @@
           :formatter="codeFormatter"
           @blur="codeBlur"
           placeholder="000"
+          autocomplete="off"
           ref="code"
         />
       </b-input-group>
@@ -50,41 +52,7 @@
   </div>
 </template>
 <script>
-const isNumberValid = function (value) {
-  if (
-    /^[АВЕКМНОРСТУХABEHKMNOPCTYX]\d{3}[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}$/iu.test(
-      value
-    )
-  ) {
-    return true;
-  }
-  if (/^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}$/iu.test(value)) {
-    return true;
-  }
-  if (/^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{4}$/iu.test(value)) {
-    return true;
-  }
-  if (/^\d{4}[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}$/iu.test(value)) {
-    return true;
-  }
-  if (
-    /^[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}[АВЕКМНОРСТУХABEHKMNOPCTYX]$/iu.test(
-      value
-    )
-  ) {
-    return true;
-  }
-  if (/^Т[АВЕКМНОРСТУХABEHKMNOPCTYX]{2}\d{3}$/iu.test(value)) {
-    return true;
-  }
-  return false;
-};
-const isCodeValid = function (value) {
-  if (/^\d+$/iu.test(value) && value.length > 1) {
-    return true;
-  }
-  return false;
-};
+import { isLetterValid, isDigitValid, isValid, isCodeValid } from "./helpers";
 export default {
   name: "ControlRegNumber",
   data() {
@@ -94,6 +62,8 @@ export default {
       isVisitedNumber: false,
       isVisitedCode: false,
       state: null,
+      isLetterValid,
+      isDigitValid,
     };
   },
   props: {
@@ -118,9 +88,10 @@ export default {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.numberAndCodeValue,
+        state: this.isValid,
       });
 
-      if (isNumberValid(this.numberValue.replace(/ /g, ""))) {
+      if (this.numberValue.length === 6) {
         this.$refs.code.$el.focus();
         if (this.stateNumber && this.stateCode) {
           setValue = this.numberAndCodeValue;
@@ -132,6 +103,7 @@ export default {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: setValue,
+          state: this.isValid,
         });
       }
     },
@@ -142,6 +114,7 @@ export default {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.numberAndCodeValue,
+        state: this.isValid,
       });
       if (isCodeValid(value)) {
         if (this.stateNumber && this.stateCode) {
@@ -154,20 +127,16 @@ export default {
           fieldId: this.data.fieldId,
           name: this.data.name,
           value: setValue,
+          state: this.isValid,
         });
       }
     },
     numberFormatter(value) {
-      let formatValue = value.toUpperCase();
-      if (isNumberValid(value)) {
-        formatValue = formatValue.replace(
-          /[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi,
-          "$& "
-        );
-      } else if (formatValue.replace(/ /g, "").length > 6) {
-        return formatValue.substring(0, formatValue.length - 1);
+      const formatValue = value.toUpperCase();
+      if (isValid(value)) {
+        return formatValue;
       }
-      return formatValue;
+      return formatValue.slice(0, -1);
     },
     codeFormatter(value) {
       if (/^\d+$/iu.test(value)) {
@@ -200,7 +169,7 @@ export default {
   },
   computed: {
     stateNumber() {
-      return isNumberValid(this.numberValue.replace(/ /g, ""));
+      return isValid(this.numberValue.replace(/ /g, ""));
     },
     stateCode() {
       return isCodeValid(this.codeValue);

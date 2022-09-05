@@ -9,7 +9,10 @@
     />
 
     <div v-if="!appointment && options.length">
-      <p>К сожалению, на выбранную дату свободных врачей не найдено <span>&#128532</span></p>
+      <p>
+        К сожалению, на выбранную дату свободных врачей не найдено
+        <span>😔</span>
+      </p>
       <p>Ниже список ближайших доступных дат</p>
     </div>
 
@@ -37,12 +40,14 @@
         </div>
         <div class="doc-adress">
           <i class="my-location" />{{ item.SADDRESS }}
-        </div><div class="recording time">
-        <div v-for="elem in item.STIMELIST" :key="elem.id" class="doc-time">
-          <button class="btn-doc-time" @click="chooseTimeToVisit(elem, item)">
-            {{ elem.DFROM }}
-          </button>
-        </div></div>
+        </div>
+        <div class="recording time">
+          <div v-for="elem in item.STIMELIST" :key="elem.id" class="doc-time">
+            <button class="btn-doc-time" @click="chooseTimeToVisit(elem, item)">
+              {{ elem.DFROM }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <div v-else-if="isRequestFinish" class="docs-searching-results mb-4">
@@ -89,23 +94,27 @@ export default {
     appointment: {
       get() {
         if (this.$store.getters["data_card/getForm"]) {
-          const appointmentObject = this.$store.getters["data_card/getForm"].find((item) => item.name === "DDATE")
-          if (!appointmentObject.value && this.options.length) return true
+          const appointmentObject = this.$store.getters[
+            "data_card/getForm"
+          ].find((item) => item.name === "DDATE");
+          if (!appointmentObject.value && this.options.length) return true;
           if (appointmentObject.value) {
-            const [dd, mm, yyyy] = appointmentObject.value.split(".")
-          if (appointmentObject.value && this.options.length) {
-            return this.options.find((item) => {
-              const appointmentDate = new Date(item.DDATE);
-              appointmentDate.setHours(appointmentDate.getHours() - 3);
-              const chosenDate = new Date(yyyy, mm, dd);
-              chosenDate.setMonth(chosenDate.getMonth() - 1);
-              return +appointmentDate === +chosenDate;
-            });
-          } 
+            if (appointmentObject.value && this.options.length) {
+              const choosenRussianDate = appointmentObject.value;
+
+              const choosenIsoDate = choosenRussianDate
+                .split(".")
+                .reverse()
+                .join("-");
+
+              const [appointment] = this.options;
+
+              return choosenIsoDate === appointment.DDATE;
+            }
           }
         }
-        return false
-      }
+        return false;
+      },
     },
 
     isRequestFinish: {
@@ -149,15 +158,14 @@ export default {
   border: 1px solid #eff1f3;
   border-radius: 16px;
   padding: 24px 54px 24px 20px;
-  display:grid;
+  display: grid;
   grid-template-areas:
-        "doc date"
-        "name name"
-        "lpu lpu"
-        "adress adress"
-        "time time";
-    grid-template-columns: auto 116px;
-  
+    "doc date"
+    "name name"
+    "lpu lpu"
+    "adress adress"
+    "time time";
+  grid-template-columns: auto 116px;
 }
 .doc-expert {
   grid-area: doc;
@@ -176,7 +184,7 @@ export default {
   margin-top: 10px;
 }
 .doc-date {
-  text-align:right;
+  text-align: right;
   font-family: "Raleway";
   grid-area: date;
   font-style: normal;
@@ -203,7 +211,9 @@ export default {
   line-height: 32px;
   color: #292929;
 }
-.recording.time{ grid-area: time;}
+.recording.time {
+  grid-area: time;
+}
 .doc-time {
   display: inline-block;
   margin-right: 20px;
@@ -223,65 +233,69 @@ export default {
   min-width: 84px;
   text-align: center;
 }
-.recording.time {margin-right:-30px;}
-@media (max-width: 992px){
-  .docs-searching-results{
-    padding:16px;
+.recording.time {
+  margin-right: -30px;
+}
+@media (max-width: 992px) {
+  .docs-searching-results {
+    padding: 16px;
     grid-template-areas:
-        "doc" "date"
-        "name"
-        "lpu"
-        "adress"
-        "time";
+      "doc" "date"
+      "name"
+      "lpu"
+      "adress"
+      "time";
     grid-template-columns: 100%;
   }
-.doc-expert {
-  font-weight:600;
-  font-size: 1rem;
-}
-.doc-name {
-  font-weight: 400;
-  font-size: 0.875rem;
-  color:#686868;
-  line-height:1.2;
-}
-.doc-date {
-  text-align:left;
-  font-weight: 700;
-  font-size: 0.875rem;
-  color: #292929;
-}
-.doc-location {
-  font-weight: 700;
-  font-size: 0.875rem;
-  margin-top: 20px;line-height:1.2;
-  
-}
-.doc-adress .my-location{
-  position: absolute;
-  top: 16px;
-  left: -4px;}
+  .doc-expert {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .doc-name {
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: #686868;
+    line-height: 1.2;
+  }
+  .doc-date {
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: #292929;
+  }
+  .doc-location {
+    font-weight: 700;
+    font-size: 0.875rem;
+    margin-top: 20px;
+    line-height: 1.2;
+  }
+  .doc-adress .my-location {
+    position: absolute;
+    top: 16px;
+    left: -4px;
+  }
 
-.doc-adress {
-  font-size: 1rem;
-  position:relative;
-  padding-left:20px;
-  line-height:1.2;margin-top:10px;
+  .doc-adress {
+    font-size: 1rem;
+    position: relative;
+    padding-left: 20px;
+    line-height: 1.2;
+    margin-top: 10px;
+  }
+  .recording.time {
+    grid-area: time;
+  }
+  .doc-time {
+    display: inline-block;
+    margin-right: 16px;
+    margin-top: 16px;
+  }
+  .btn-doc-time {
+    background: #edf8ea;
+    border-radius: 15px;
+    padding: 15px 12px;
+    font-size: 0.875rem;
+    min-width: 62px;
+  }
 }
-.recording.time{ grid-area: time;}
-.doc-time {
-  display: inline-block;
-  margin-right: 16px;
-  margin-top: 16px;
-}
-.btn-doc-time {
-  background: #edf8ea;
-  border-radius: 15px;
-  padding: 15px 12px;
-  font-size: 0.875rem;
-  min-width: 62px;
-}
-
-}
-
 </style>

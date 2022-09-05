@@ -212,7 +212,7 @@ export default {
         for (let i = 0; i < items.length; i++) {
           if (!items[i][this.queryParamName]) {
             console.log(
-              `В элементе словаря c ID ${this.menuDic} отсутствует поле ${this.queryParamName}`
+              `При выборе из списка в компоненте ServerFilterBlock произошла ошибка, т.к. в полученных данных (/am/main/v2/data/55/${this.menuDic}) отсутствует поле ${this.queryParamName}, заданное как атрибут компонента в конфигураторе (queryParamName="${this.queryParamName}") `
             );
           }
           this.list.push({

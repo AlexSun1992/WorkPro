@@ -2,24 +2,43 @@
   <div class="login-form-content">
     <div class="block-registration">
       <b-nav card-header tabs>
-        <b-nav-item @click="toggleForm" :active="visibleForm === 'login'"
+        <b-nav-item
+          @click="toggleForm('login')"
+          :active="visibleForm === 'login'"
           >Вход</b-nav-item
         >
-        <b-nav-item @click="toggleForm" :active="visibleForm === 'registration'"
+        <b-nav-item
+          @click="toggleForm('registration')"
+          :active="visibleForm === 'registration'"
           >Регистрация</b-nav-item
         >
       </b-nav>
     </div>
     <login-form v-if="visibleForm === 'login'"></login-form>
     <reg-form v-else></reg-form>
+
+    <div class="mt-4">
+      Войти через
+      <a
+        href="https://client.reso.ru/loginesia/loginesia/prod"
+        id="btn_recovery-password_lk"
+      >
+        Госуслуги&#8599;</a
+      >
+    </div>
+
     <button
       v-if="visibleForm === 'login'"
-      @click="toggleForm"
+      @click="toggleForm('registration')"
       class="login-btn-mobile d-lg-none mt-3"
     >
       РЕГИСТРАЦИЯ
     </button>
-    <button v-else @click="toggleForm" class="login-btn-mobile d-lg-none">
+    <button
+      v-else
+      @click="toggleForm('login')"
+      class="login-btn-mobile d-lg-none"
+    >
       ВХОД
     </button>
   </div>
@@ -42,14 +61,16 @@ export default {
       visibleForm: null,
     };
   },
+
   methods: {
-    toggleForm() {
-      if (this.visibleForm === "registration") {
-        this.visibleForm = "login";
-        window.history.pushState(null, "", "/login");
-      } else {
+    toggleForm(address) {
+      if (address === "registration") {
         this.visibleForm = "registration";
         window.history.pushState(null, "", "/login/registration");
+      }
+      if (address === "login") {
+        this.visibleForm = "login";
+        window.history.pushState(null, "", "/login");
       }
     },
   },

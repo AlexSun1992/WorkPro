@@ -1,9 +1,10 @@
-import consts from "../api/urls";
+import consts from "./urls";
 
-import { mobile2Service } from "./../services/mobile2.services";
+import { mobile2Service } from "../services/mobile2.services";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
+
 const app = express();
 const router = express.Router();
 
@@ -13,6 +14,9 @@ router.use(cookieParser());
 router.get("/menu/:idModule/?:idItem", (req, res) => {
   try {
     let mobile2ServiceInstance = mobile2Service();
+    const ipAddress = req.headers["x-forwarded-for"];
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || "";
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");
@@ -23,13 +27,12 @@ router.get("/menu/:idModule/?:idItem", (req, res) => {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
           req.headers.authorization;
-      } else {
-        if (req?.cookies["auth._token.local"]) {
-          mobile2ServiceInstance.defaults.headers.common.Authorization =
-            req?.cookies["auth._token.local"];
-        }
+      } else if (req?.cookies["auth._token.local"]) {
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
+          req?.cookies["auth._token.local"];
       }
     }
+    mobile2ServiceInstance.defaults.headers.common.Cookie = req.headers?.cookie;
     let URL_ADDRESSS;
     if (req.query.zone === "free") {
       URL_ADDRESSS = encodeURI(

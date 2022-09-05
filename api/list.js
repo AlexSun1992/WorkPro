@@ -30,6 +30,9 @@ router.use(cookieParser());
 router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
   try {
     let mobile2ServiceInstance = mobile2Service();
+    const ipAddress = req.headers["x-forwarded-for"];
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || "";
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");
@@ -40,6 +43,8 @@ router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
       formConverter.save(JSON.parse(req.params.filters))
     );
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] =
+      req.headers?.cookie;
     if (req?.query.zone !== "free") {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
