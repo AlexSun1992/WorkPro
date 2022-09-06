@@ -26,7 +26,7 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     mobile2ServiceInstance.defaults.headers.common["Cookie"] =
-      req.headers?.cookie;
+      req.headers?.cookie || "";
     const ipAddress = req.headers["x-forwarded-for"];
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
       ipAddress || "";
@@ -369,7 +369,7 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       }
     }
     mobile2ServiceInstance.defaults.headers.common["Cookie"] =
-      req.headers?.cookie;
+      req.headers?.cookie || "";
     const typeReq = req.params.id === 0 ? "post" : "put";
     mobile2ServiceInstance[typeReq](
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
