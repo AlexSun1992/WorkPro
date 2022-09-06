@@ -54,46 +54,88 @@
       </div>
     </b-modal>
     <b-form @submit.prevent="onSubmit">
-      <div>{{ errorMessage }}</div>
-      <b-form-group label="Телефон" label-cols="12">
-        <b-form-input
-          ref="phoneInput"
-          v-model="$v.user.username.$model"
-          v-mask="usernameMask"
-          :placeholder="placeholder"
-          autofocus
-          type="tel"
-          :state="validateInput('username', isUsernameBlured)"
-          @blur="debouncedUpdate('username', isUsernameBlured)"
-          @input="isUsernameBlured = false"
-          @click="loginTouchesCount = 2"
-          :disabled="authInProcess"
-          class="form-control"
-        >
-        </b-form-input>
-
-        <b-form-invalid-feedback
-          >Пожалуйста, введите корректный номер
-          телефона</b-form-invalid-feedback
-        >
+      <b-form-group label="Авторизация с помощью">
+        <autocomplete
+          ref="authChoosenType"
+          :search="getDataForAuth"
+          @click="getDataForAuth"
+          :get-result-value="getResultValue"
+          :default-value="dataNeededForAuth[0]"
+        />
       </b-form-group>
+      <div>
+        <b-form-group
+          label="Телефон или email"
+          label-cols="12"
+          v-if="this.revealAuthType === 'Номер телефона'"
+        >
+          <b-form-input
+            id="phone"
+            ref="phoneInput"
+            v-model="$v.user.username.$model"
+            v-mask="usernameMask"
+            :placeholder="placeholder"
+            autofocus
+            type="tel"
+            :state="validateInput('username', isUsernameBlured)"
+            @blur="debouncedUpdate('username', isUsernameBlured)"
+            @input="isUsernameBlured = false"
+            @click="loginTouchesCount = 2"
+            :disabled="authInProcess"
+            class="form-control"
+          >
+          </b-form-input>
 
-      <b-form-group label="Пароль" label-cols="12" class="mt-3">
-        <b-form-input
-          v-model="$v.user.password.$model"
-          placeholder="Пароль"
-          type="password"
-          :state="validateInput('password', isPasswordBlured)"
-          @blur="blurField('password', isPasswordBlured)"
-          @input="isPasswordBlured = false"
-          class="form-control"
-          :disabled="authInProcess"
-        ></b-form-input>
-        <b-form-invalid-feedback
-          >Пожалуйста, введите пароль
-        </b-form-invalid-feedback>
-      </b-form-group>
+          <b-form-invalid-feedback
+            >Пожалуйста, введите корректный номер
+            телефона</b-form-invalid-feedback
+          >
+        </b-form-group>
+      </div>
 
+      <div>
+        <b-form-group
+          class="required"
+          label="Телефон или email"
+          label-cols="12"
+          v-if="this.revealAuthType === 'Email'"
+        >
+          <autocomplete
+            ref="email"
+            :search="getSuggestionsEmail"
+            :get-result-value="getResultValueEmail"
+            :disabled="authInProcess"
+            :class="emailClassHub"
+            @blur="handleBlur('email')"
+            @submit="checkInputValue"
+          />
+
+          <b-form-invalid-feedback :state="isEmailErrorMessage"
+            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          >
+          <b-form-invalid-feedback :state="isEmailValidSignsErrorMessage"
+            >Просьба корректно указать email</b-form-invalid-feedback
+          >
+        </b-form-group>
+      </div>
+
+      <div>
+        <b-form-group label="Пароль" label-cols="12" class="mt-3">
+          <b-form-input
+            v-model="$v.user.password.$model"
+            placeholder="Пароль"
+            type="password"
+            :state="validateInput('password', isPasswordBlured)"
+            @blur="blurField('password', isPasswordBlured)"
+            @input="isPasswordBlured = false"
+            class="form-control"
+            :disabled="authInProcess"
+          ></b-form-input>
+          <b-form-invalid-feedback
+            >Пожалуйста, введите пароль
+          </b-form-invalid-feedback>
+        </b-form-group>
+      </div>
       <div class="mt-3 text-center">
         <a href="/login/password-recovery" id="btn_recovery-password_lk"
           >Не помните пароль?</a
@@ -127,15 +169,31 @@ import {
   BButton,
   BModal,
 } from "bootstrap-vue";
+import {
+  fetchEmail,
+  getSuggestions,
+  getArrayWithClass,
+  isEmailRight,
+} from "./RegForm/dadata.helper";
+import Autocomplete from "@trevoreyre/autocomplete-vue";
 import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, minLength, helpers, email } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
 import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
 
+const alpha = helpers.regex(
+  "alpha",
+  /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/
+);
+
+const regex =
+  /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+
 export default {
   name: "LoginForm",
   components: {
+    Autocomplete,
     BForm,
     BFormGroup,
     BFormInput,
@@ -151,12 +209,14 @@ export default {
     return {
       user: {
         username: "",
+        useremail: "",
         password: "",
         code: "",
       },
       duration: 60,
       isUsernameBlured: true,
       isPasswordBlured: true,
+      isEmailBlured: true,
       isValidStateCodeSMS: null,
       isRetrySendCodeSMS: false,
       isSendingCodeSMS: false,
@@ -167,6 +227,17 @@ export default {
       authInProcess: false,
       captchaToken: null,
       loginTouchesCount: 0,
+      dataNeededForAuth: ["Номер телефона", "Email"],
+      isRefsAvailable: false,
+      choosenTypeOfAuth: "",
+      emailHub: [],
+      //
+      isEmailTouch: false,
+      // classes
+      emailClassHub: [],
+      // error
+      isEmailErrorMessage: true,
+      isEmailValidSignsErrorMessage: true,
     };
   },
 
@@ -180,14 +251,132 @@ export default {
       this.errorMessage = params?.error;
     }
   },
+
+  mounted() {
+    if (this.$refs.authChoosenType.value) {
+      this.isRefsAvailable = true;
+    }
+  },
+
+  computed: {
+    revealAuthType() {
+      if (this.isRefsAvailable === true) {
+        return this.$refs.authChoosenType.value;
+      }
+      return null;
+    },
+    email() {
+      return this.$refs.email.value;
+    },
+    emailClass() {
+      return this.emailClass;
+    },
+  },
+
+  watch: {
+    revealAuthType(value) {
+      if (value === "Email") {
+        this.choosenTypeOfAuth = "email";
+      }
+
+      if (value === "Номер телефона") {
+        this.choosenTypeOfAuth = "телефон";
+      }
+      if (value === "") {
+        this.choosenTypeOfAuth = "телефон";
+      }
+    },
+  },
+
   methods: {
+    checkInputValue(input) {
+      const checkInputValue = isEmailRight(regex, input.value);
+      if (checkInputValue === true) {
+        getArrayWithClass(this.emailClassHub, "is-valid");
+      }
+    },
+    handleBlur(field) {
+      if (field === "email" && this.email === "") {
+        this.isEmailErrorMessage = false;
+        this.emailClassHub.push("is-invalid");
+      }
+
+      const isInputValid = isEmailRight(regex, this.email);
+
+      if (isInputValid === false && this.email !== "") {
+        this.isEmailValidSignsErrorMessage = false;
+        this.isEmailErrorMessage = true;
+        getArrayWithClass(this.emailClassHub, "is-invalid");
+      }
+
+      if (isInputValid === false && this.email === "") {
+        this.isEmailValidSignsErrorMessage = true;
+        this.isEmailErrorMessage = false;
+        getArrayWithClass(this.emailClassHub, "is-invalid");
+      }
+
+      if (isInputValid) {
+        this.isEmailValidSignsErrorMessage = true;
+        this.isEmailErrorMessage = true;
+        getArrayWithClass(this.emailClassHub, "is-valid");
+      }
+    },
+
+    getDataForAuth() {
+      return this.dataNeededForAuth;
+    },
+
+    getResultValueEmail(item) {
+      return item.value;
+    },
+
+    async getSuggestionsEmail(input) {
+      this.emailHub = [];
+      const isInputValid = isEmailRight(regex, this.email);
+
+      if (input.length > 0) {
+        this.isEmailTouch = true;
+        this.isEmailErrorMessage = true;
+        this.isEmailValidSignsErrorMessage = true;
+        if (isInputValid === false) {
+          this.emailClassHub = [];
+        }
+
+        if (isInputValid === true) {
+          this.isEmailErrorMessage = true;
+          getArrayWithClass(this.emailClassHub, "is-valid");
+        }
+      }
+
+      if (this.isEmailTouch && input === "") {
+        this.isEmailErrorMessage = false;
+        this.isEmailValidSignsErrorMessage = true;
+        getArrayWithClass(this.emailClassHub, "is-invalid");
+      }
+
+      const getDataEmail = await fetchEmail(input);
+      const fetchedEmail = getSuggestions(
+        getDataEmail,
+        this.emailHub,
+        this.email
+      );
+
+      return fetchedEmail;
+    },
+
+    getResultValue(item) {
+      return item;
+    },
     async fetchToken() {
       try {
         this.authInProcess = true;
         let body = {
           mode: 2,
           password: this.$v.user.password.$model,
-          username: this.$v.user.username.$model,
+          username:
+            this.revealAuthTyp === "Номер телефона"
+              ? this.$v.user.username.$model
+              : this.$v.user.useremail.$model,
         };
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
           body = { ...body, code: this.$v.user.code.$model };
@@ -221,7 +410,7 @@ export default {
           this.$bvModal.show("sms-confirm");
           return;
         }
-        this.errorMessage = "Неверный телефон или пароль";
+        this.errorMessage = `Неверный ${this.choosenTypeOfAuth} или пароль`;
       }
     },
     setFocusSMSCode() {
@@ -267,6 +456,8 @@ export default {
         this.isUsernameBlured = true;
       } else if (field === "password") {
         this.isPasswordBlured = true;
+      } else if (field === "useremail") {
+        this.isEmailBlured = true;
       }
       this.$v.user[field].$touch();
     },
@@ -290,6 +481,11 @@ export default {
       username: {
         required,
         minLength: minLength(17),
+      },
+      useremail: {
+        required,
+        alpha,
+        email,
       },
       password: {
         required,

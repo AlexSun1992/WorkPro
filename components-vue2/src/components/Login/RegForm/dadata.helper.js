@@ -3,11 +3,13 @@ const abortControllers = new Map();
 export async function getSuggestionsData(params, type) {
   const controller = new AbortController();
 
-  if (abortControllers.get(params.parts[0]) !== undefined) {
-    abortControllers.get(params.parts[0]).abort();
-  }
+  if (params.parts) {
+    if (abortControllers.get(params.parts[0]) !== undefined) {
+      abortControllers.get(params.parts[0]).abort();
+    }
 
-  abortControllers.set(params.parts[0], controller);
+    abortControllers.set(params.parts[0], controller);
+  }
   const testResult = await fetch(`/api/suggestions/${type}`, {
     method: "POST",
     signal: controller.signal,
@@ -19,7 +21,23 @@ export async function getSuggestionsData(params, type) {
   });
 
   const dataSuggestions = await testResult.json();
+
   return dataSuggestions.suggestions;
+}
+
+export async function fetchEmail(input) {
+  try {
+    const params = {
+      query: `${input}`,
+      suggestionType: "email",
+    };
+    const type = params.suggestionType;
+    const getData = await getSuggestionsData(params, type);
+    return getData;
+  } catch (e) {
+    console.log("e:", e);
+  }
+  return [];
 }
 
 export async function fetchPatronymic(input, gender, isFieldContentNotValid) {
@@ -112,13 +130,11 @@ export function getSuggestions(fetchedSuggestions, suggestions, fieldContent) {
   if (fetchedSuggestions === null) {
     return null;
   }
-
   if (fieldContent !== "") {
     fetchedSuggestions.forEach((item) => {
       suggestions.push(item);
     });
     const result = suggestions;
-
     return result;
   }
   return [];
@@ -145,4 +161,8 @@ export function getArrayWithClass(array, classText) {
   array.splice(0, array.length);
   array.push(classText);
   return array;
+}
+
+export function isEmailRight(regex, input) {
+  return regex.test(input);
 }
