@@ -52,7 +52,7 @@
   </div>
 </template>
 <script>
-import { isValid, isCodeValid, disablePaste } from "./helpers";
+import { isValid, isCodeValid } from "./helpers";
 export default {
   name: "ControlRegNumber",
   data() {
@@ -61,7 +61,6 @@ export default {
       codeValue: "",
       isVisitedNumber: false,
       isVisitedCode: false,
-      disablePaste,
       state: null,
     };
   },
