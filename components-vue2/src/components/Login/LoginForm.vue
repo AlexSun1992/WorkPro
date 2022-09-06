@@ -98,10 +98,11 @@
           class="required"
           label="Телефон или email"
           label-cols="12"
-          v-if="this.revealAuthType === 'Email'"
+          v-if="this.revealAuthType === 'email'"
         >
           <autocomplete
             ref="email"
+            placeholder="email"
             :search="getSuggestionsEmail"
             :get-result-value="getResultValueEmail"
             :disabled="authInProcess"
@@ -227,7 +228,7 @@ export default {
       authInProcess: false,
       captchaToken: null,
       loginTouchesCount: 0,
-      dataNeededForAuth: ["Номер телефона", "Email"],
+      dataNeededForAuth: ["Номер телефона", "email"],
       isRefsAvailable: false,
       choosenTypeOfAuth: "",
       emailHub: [],
@@ -275,7 +276,7 @@ export default {
 
   watch: {
     revealAuthType(value) {
-      if (value === "Email") {
+      if (value === "email") {
         this.choosenTypeOfAuth = "email";
       }
 
@@ -410,7 +411,19 @@ export default {
           this.$bvModal.show("sms-confirm");
           return;
         }
+
         this.errorMessage = `Неверный ${this.choosenTypeOfAuth} или пароль`;
+        if (this.email === "") {
+          this.isEmailErrorMessage = false;
+          getArrayWithClass(this.emailClassHub, "is-invalid");
+          return;
+        }
+        const isInputValid = isEmailRight(regex, this.email);
+        if (isInputValid === false && this.choosenTypeOfAuth === "email") {
+          this.isEmailValidSignsErrorMessage = false;
+          getArrayWithClass(this.emailClassHub, "is-invalid");
+          return;
+        }
       }
     },
     setFocusSMSCode() {

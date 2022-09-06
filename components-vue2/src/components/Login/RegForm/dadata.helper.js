@@ -3,6 +3,13 @@ const abortControllers = new Map();
 export async function getSuggestionsData(params, type) {
   const controller = new AbortController();
 
+  if (params.parts === undefined) {
+    if (abortControllers.get(params.suggestionType) !== undefined) {
+      abortControllers.get(params.suggestionType).abort();
+    }
+    abortControllers.set(params.suggestionType, controller);
+  }
+
   if (params.parts) {
     if (abortControllers.get(params.parts[0]) !== undefined) {
       abortControllers.get(params.parts[0]).abort();
