@@ -58,11 +58,7 @@
             <div class="card-office-adress row">
               <div v-if="office.SPATH1" class="col-4 pe-0">
                 <div class="position-relative">
-                  <img
-                    :src="
-                      'https://www.reso.ru/export/sites_reso/' + office.SPATH1
-                    "
-                  />
+                  <img :src="'' + office.SPATH1" />
                   <button class="office-image-zoom" type="button"></button>
                 </div>
               </div>
