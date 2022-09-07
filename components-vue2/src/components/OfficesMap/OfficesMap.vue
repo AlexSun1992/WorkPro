@@ -816,7 +816,7 @@ export default {
         const target = e.get("target");
         target.options.set(
           "iconImageHref",
-          "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
+          "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
         );
       });
 
@@ -825,7 +825,7 @@ export default {
         const target = e.get("target");
         target?.options.set(
           "iconImageHref",
-          "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
+          "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
         );
       });
       this.setPlaceholder();
@@ -879,7 +879,7 @@ export default {
             hideIconOnBalloonOpen: false,
             iconLayout: "default#image",
             iconImageHref:
-              "https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
+              "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
             iconImageSize: [56, 56],
             iconImageOffset: [0, 0],
           }
