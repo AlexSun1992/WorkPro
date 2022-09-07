@@ -1,3 +1,9 @@
+stages:
+  - "build"
+  - "deploy_actuary"
+  - "deploy_test"
+  - "deploy_production"
+
 docker-build-master:
   image: docker:latest
   stage: build
@@ -13,19 +19,17 @@ docker-build-master:
   tags:
     - docker
 
-deploy_production:
+deploy_actuary:
   image: curlimages/curl:7.78.0
-  stage: deploy
+  stage: deploy_actuary
   script:
-    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_PRODUCTION_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
-  rules:
-    - if: $CI_COMMIT_TAG == "production"
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_ACTUARY_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   tags:
     - docker
 
 deploy_test:
   image: curlimages/curl:7.78.0
-  stage: deploy
+  stage: deploy_test
   script:
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_TEST_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   rules:
@@ -33,10 +37,12 @@ deploy_test:
   tags:
     - docker
 
-deploy_actuary:
+deploy_production:
   image: curlimages/curl:7.78.0
-  stage: deploy
+  stage: deploy_production
   script:
-    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_ACTUARY_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_PRODUCTION_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+  rules:
+    - if: $CI_COMMIT_TAG == "production"
   tags:
     - docker
