@@ -71,6 +71,11 @@ export function createRouter() {
               },
             ],
           },
+          {
+            meta: "Esia",
+            path: "/loginesia",
+            component: LoginEsia,
+          },
         ],
       },
     ],
