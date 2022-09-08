@@ -81,6 +81,7 @@
             @blur="debouncedUpdate('username', isUsernameBlured)"
             @input="isUsernameBlured = false"
             @click="loginTouchesCount = 2"
+            @paste="checkPastedValue"
             :disabled="authInProcess"
             class="form-control"
           >
@@ -170,6 +171,7 @@ import {
   BButton,
   BModal,
 } from "bootstrap-vue";
+import { isWrongNumber } from "./loginForm.helper";
 import {
   fetchEmail,
   getSuggestions,
@@ -267,7 +269,10 @@ export default {
       return null;
     },
     email() {
-      return this.$refs.email.value;
+      if (this.choosenTypeOfAuth === "email") {
+        return this.$refs.email.value;
+      }
+      return null;
     },
     emailClass() {
       return this.emailClass;
@@ -279,7 +284,6 @@ export default {
       if (value === "email") {
         this.choosenTypeOfAuth = "email";
       }
-
       if (value === "Номер телефона") {
         this.choosenTypeOfAuth = "телефон";
       }
@@ -290,6 +294,27 @@ export default {
   },
 
   methods: {
+    checkPastedValue(value) {
+      console.log("value:", value);
+      const test = [[value.clipboardData.getData("text")]];
+
+      const result = isWrongNumber(test);
+
+      console.log("result:", result);
+
+      const getPastedValue = value.clipboardData
+        .getData("text")
+        .replace(/\D/g, "");
+      const getArrayFromPastedValue = getPastedValue.split("");
+      if (getArrayFromPastedValue.length === 11) {
+        if (getArrayFromPastedValue[0] === "8") {
+          getArrayFromPastedValue.splice(0, 1);
+          const rebuildData = getArrayFromPastedValue.join("");
+          this.$v.user.username.$model = rebuildData;
+        }
+      }
+    },
+
     checkInputValue(input) {
       const checkInputValue = isEmailRight(regex, input.value);
       if (checkInputValue === true) {
@@ -375,10 +400,11 @@ export default {
           mode: 2,
           password: this.$v.user.password.$model,
           username:
-            this.revealAuthTyp === "Номер телефона"
+            this.revealAuthType === "Номер телефона"
               ? this.$v.user.username.$model
-              : this.$v.user.useremail.$model,
+              : this.email,
         };
+
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
           body = { ...body, code: this.$v.user.code.$model };
         }
