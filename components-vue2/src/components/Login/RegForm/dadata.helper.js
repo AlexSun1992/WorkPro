@@ -3,19 +3,33 @@ const abortControllers = new Map();
 export async function getSuggestionsData(params, type) {
   const controller = new AbortController();
 
+  // let key;
+
+  // if (params.parts) {
+  //   [key] = params.parts;
+  // }
+
+  // if (!params.parts) {
+  //   key = params.suggestionType;
+  // }
+
+  const key = params.parts ? params.parts[0] : params.suggestionType;
+
+  console.log("key:", key);
+
   if (params.parts === undefined) {
-    if (abortControllers.get(params.suggestionType) !== undefined) {
-      abortControllers.get(params.suggestionType).abort();
+    if (abortControllers.get(key) !== undefined) {
+      abortControllers.get(key).abort();
     }
-    abortControllers.set(params.suggestionType, controller);
+    abortControllers.set(key, controller);
   }
 
   if (params.parts) {
-    if (abortControllers.get(params.parts[0]) !== undefined) {
-      abortControllers.get(params.parts[0]).abort();
+    if (abortControllers.get(key) !== undefined) {
+      abortControllers.get(key).abort();
     }
 
-    abortControllers.set(params.parts[0], controller);
+    abortControllers.set(key, controller);
   }
   const testResult = await fetch(`/api/suggestions/${type}`, {
     method: "POST",
