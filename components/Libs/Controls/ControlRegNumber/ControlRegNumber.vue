@@ -52,7 +52,7 @@
   </div>
 </template>
 <script>
-import { isLetterValid, isDigitValid, isValid, isCodeValid } from "./helpers";
+import { isValid, isCodeValid } from "./helpers";
 export default {
   name: "ControlRegNumber",
   data() {
@@ -62,8 +62,6 @@ export default {
       isVisitedNumber: false,
       isVisitedCode: false,
       state: null,
-      isLetterValid,
-      isDigitValid,
     };
   },
   props: {
@@ -78,6 +76,11 @@ export default {
       required: true,
       default: () => false,
     },
+  },
+
+  mounted() {
+    this.$refs.number.$refs.input.onpaste = (e) => e.preventDefault();
+    this.$refs.code.$refs.input.onpaste = (e) => e.preventDefault();
   },
 
   methods: {
@@ -169,7 +172,7 @@ export default {
   },
   computed: {
     stateNumber() {
-      return isValid(this.numberValue.replace(/ /g, ""));
+      return isValid(this.numberValue);
     },
     stateCode() {
       return isCodeValid(this.codeValue);
@@ -179,7 +182,7 @@ export default {
     },
     isValid() {
       if (this.isVisitedNumber === true && this.isVisitedCode === true) {
-        return this.stateNumber && this.stateCode;
+        return this.numberValue.length === 6 && this.stateCode;
       }
       return null;
     },

@@ -32,7 +32,8 @@ router.get("/menu/:idModule/?:idItem", (req, res) => {
           req?.cookies["auth._token.local"];
       }
     }
-    mobile2ServiceInstance.defaults.headers.common.Cookie = req.headers?.cookie;
+    mobile2ServiceInstance.defaults.headers.common.Cookie =
+      req.headers?.cookie || "";
     let URL_ADDRESSS;
     if (req.query.zone === "free") {
       URL_ADDRESSS = encodeURI(

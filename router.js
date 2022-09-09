@@ -7,6 +7,7 @@ import Fluid from "~/components/Pages/Cabinet/Fluid";
 import CardPage from "~/components/Pages/Cabinet/CardPage";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
 import LoginEsia from "@/components/Pages/Esia/LoginEsia";
+import AuthFormWrapper from "~/components-vue2/src/components/Login/AuthForm/AuthFormWrapper";
 
 Vue.use(Router);
 
@@ -17,6 +18,11 @@ export function createRouter() {
       return { x: 0, y: 0 };
     },
     routes: [
+      {
+        meta: "AuthFormWrapper",
+        path: "/login",
+        component: AuthFormWrapper,
+      },
       {
         meta: "Cabinet",
         path: "/cabinet",
@@ -65,12 +71,12 @@ export function createRouter() {
               },
             ],
           },
+          {
+            meta: "Esia",
+            path: "/loginesia",
+            component: LoginEsia,
+          },
         ],
-      },
-      {
-        meta: "Esia",
-        path: "/loginesia",
-        component: LoginEsia,
       },
     ],
   });

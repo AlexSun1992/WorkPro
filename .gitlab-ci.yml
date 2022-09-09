@@ -1,3 +1,9 @@
+stages:
+  - "build"
+  - "deploy_actuary"
+  - "deploy_test"
+  - "deploy_production"
+
 docker-build-master:
   image: docker:latest
   stage: build
@@ -8,25 +14,55 @@ docker-build-master:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - export VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+    - docker pull "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA" || true
     - docker build --pull --build-arg APP_VERSION=$VERSION --tag "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA" .
     - docker push "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA"
   tags:
     - docker
 
-deploy_production:
+deploy_actuary:
   image: curlimages/curl:7.78.0
-  stage: deploy
+  stage: deploy_actuary
   script:
-    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_PRODUCTION_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
-  only:
-    - master
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_ACTUARY_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   tags:
     - docker
 
 deploy_test:
   image: curlimages/curl:7.78.0
-  stage: deploy
+  stage: deploy_test
   script:
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_TEST_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME == "production"
+  tags:
+    - docker
+
+tag_production:
+  image: docker:latest
+  stage: deploy_production
+  services:
+    - name: docker:dind
+      command: ["--registry-mirror", "https://docker.reso.ru"]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA"
+    - docker tag "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/nuxt-server:production"
+    - docker push "$CI_REGISTRY_IMAGE/nuxt-server:production"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "production"
+  tags:
+    - docker
+
+deploy_production:
+  image: curlimages/curl:7.78.0
+  stage: deploy_production
+  needs: ["tag_production"]
+  script:
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_PRODUCTION_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "production"
   tags:
     - docker
