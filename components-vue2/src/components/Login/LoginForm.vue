@@ -184,14 +184,10 @@ import { required, minLength, helpers, email } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
 import {
-  isWrongNumber,
   isPhoneNumberLengthLarger,
-  turnInputValueToArray,
-  arrayStartWithEigthNumber,
   bringToUniverseType,
 } from "./loginForm.helper";
 import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
-// import {isPhoneNumberLengthLarger} from "./loginForm.helper"
 
 const alpha = helpers.regex(
   "alpha",
