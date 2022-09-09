@@ -1,4 +1,12 @@
+export const pastedInputValue = "8-911-455-11-11";
+export const pastetValueLargerLength = "375 (029) 111-11-11";
+export const pastedValuePlusSeven = "+7 905 111 11 11";
+export const pastedValueBeginWithNine = "9271111111";
+export const pastedValueBeginWithPlus = "+7 905 111 11 11";
+
 export const invalidPhoneNumbers = [
+  ["375 (029) 111-11-11", false],
+  ["84951111111", false],
   ["89101111111", true],
   ["8 (925) 111-11-11", true],
   ["89991111111", true],

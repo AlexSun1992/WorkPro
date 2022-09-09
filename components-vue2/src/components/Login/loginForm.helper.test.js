@@ -1,93 +1,134 @@
 import {
-  checkPastedValue,
-  arrayWithoutBoolean,
-  getfilteredArrayStringsOnly,
-  removeSuitableSigns,
-  isForbiddenSignsInPhoneNumberExist,
-  compareArr,
-  phoneNumberSplit,
-  deleteNotNumber,
-  checkPhoneNumberLength,
-  addToPhoneNumber,
-  rebuildStringToArr,
-  arrayStartWithEigth,
-  arrayStartWithSeven,
-  arrayStartWithRandomNumber,
-  addPlusToPhoneNumber,
-  test,
-  addPlus,
-  addSevenPlus,
-  addSevenPlusToNumberStartingWithEigth,
-  addAllNumbersToArr,
-  isWrongNumber,
+  isPhoneNumberLengthLarger,
+  removeSuitableSymbols,
+  transformValueToArray,
+  getFirstSymbol,
+  bringToUniverseType,
 } from "./loginForm.helper";
-import { invalidPhoneNumbers } from "./loginForm.helper.fixtures";
+import {
+  invalidPhoneNumbers,
+  pastedInputValue,
+  pastedValuePlusSeven,
+  pastetValueLargerLength,
+  pastedValueBeginWithNine,
+  pastedValueBeginWithPlus,
+} from "./loginForm.helper.fixtures";
 
 describe("Модуль тестирования телефонных номеров", () => {
-  it("Фильтруем массив с массивами номеров", () => {
-    const filteredArray = checkPastedValue(invalidPhoneNumbers);
-    console.log("filteredArray:", filteredArray);
-    expect(Array.isArray(filteredArray)).toBe(true);
+  //
+  it("Убираем символы (+-.'')", () => {
+    const purePhone = removeSuitableSymbols(pastedValuePlusSeven);
+
+    expect(purePhone === "79051111111").toBe(true);
   });
 
-  it("Оставляем только строки в массивах", () => {
-    const onlyStringsInArray = arrayWithoutBoolean(invalidPhoneNumbers);
-    console.log("onlyStringsInArray:", onlyStringsInArray);
-    expect(Array.isArray(onlyStringsInArray)).toBe(true);
+  it("Убираем символы (+-.'')", () => {
+    const purePhone = removeSuitableSymbols(pastedInputValue);
+
+    expect(purePhone === "89114551111").toBe(true);
   });
 
-  it("Оставляем только строки в массиве", () => {
-    const getFilteredArr = getfilteredArrayStringsOnly(invalidPhoneNumbers);
-    console.log("getFilteredArr", getFilteredArr);
-    expect(Array.isArray(getFilteredArr)).toBe(true);
+  it("Убираем символы (+-.'')", () => {
+    const purePhone = removeSuitableSymbols(pastetValueLargerLength);
+
+    expect(purePhone === "3750291111111").toBe(true);
   });
 
-  it("Убираем символы, допустимые в номере телефона", () => {
-    const suitableSymbolsRemoved = removeSuitableSigns(invalidPhoneNumbers);
-    console.log("suitableSymbolsRemoved:", suitableSymbolsRemoved);
-    expect(Array.isArray(suitableSymbolsRemoved)).toBe(true);
+  it("Убираем символы (+-.'')", () => {
+    const purePhone = removeSuitableSymbols(pastedValueBeginWithNine);
+    expect(purePhone === "9271111111").toBe(true);
   });
 
-  it("Проверяем номера телефона на наличие недопустимых нецифровых значений", () => {
-    const isForbiddenSigns =
-      isForbiddenSignsInPhoneNumberExist(invalidPhoneNumbers);
-    console.log("isForbiddenSigns:", isForbiddenSigns);
-    expect(Array.isArray(isForbiddenSigns)).toBe(true);
+  it("Убираем символы (+-.'')", () => {
+    const purePhone = removeSuitableSymbols(pastedValueBeginWithPlus);
+    expect(purePhone === "79051111111").toBe(true);
   });
 
-  it("превращаем номер телефона в массив", () => {
-    const rebuildToArr = rebuildStringToArr(invalidPhoneNumbers);
-    console.log("rebuildToArr:", rebuildToArr);
-    expect(Array.isArray(rebuildToArr)).toBe(true);
+  //
+
+  //
+  it("Проверяем длину очищенного вставленного значения", () => {
+    const purePhoneLength = isPhoneNumberLengthLarger(pastedValuePlusSeven);
+    expect(purePhoneLength).toBe(false);
   });
 
-  it("Собираем массив телефонов, начинающихся с 8", () => {
-    const result = addSevenPlusToNumberStartingWithEigth(invalidPhoneNumbers);
-    console.log("result:", result);
-    expect(Array.isArray(result)).toBe(true);
+  it("Проверяем длину очищенного вставленного значения", () => {
+    const purePhoneLength = isPhoneNumberLengthLarger(pastedInputValue);
+    expect(purePhoneLength).toBe(false);
   });
 
-  it("Собираем массив телефонов, начинающихся с 7", () => {
-    const addPlustoPhoneNumber = addPlus(invalidPhoneNumbers);
-    console.log("addPlustoPhoneNumber:", addPlustoPhoneNumber);
-    expect(Array.isArray(addPlustoPhoneNumber)).toBe(true);
+  it("Проверяем длину очищенного вставленного значения", () => {
+    const purePhoneLength = isPhoneNumberLengthLarger(pastetValueLargerLength);
+    expect(purePhoneLength).toBe(true);
   });
 
-  it("Собираем массив телефонов, начинающихся не с 7 и не с 8", () => {
-    const addSevenPlusToPhoneNumber = addSevenPlus(invalidPhoneNumbers);
-    console.log("addSevenPlusToPhoneNumber:", addSevenPlusToPhoneNumber);
-    expect(Array.isArray(addSevenPlusToPhoneNumber)).toBe(true);
+  it("Проверяем длину очищенного вставленного значения", () => {
+    const purePhoneLength = isPhoneNumberLengthLarger(pastedValueBeginWithNine);
+    expect(purePhoneLength).toBe(false);
   });
 
-  it("Собираем массив телефонов после преобразования", () => {
-    const getToOneArray = addAllNumbersToArr(invalidPhoneNumbers);
-    console.log("getToOneArray:", getToOneArray);
-    expect(Array.isArray(getToOneArray)).toBe(true);
+  it("Проверяем длину очищенного вставленного значения", () => {
+    const purePhoneLength = isPhoneNumberLengthLarger(pastedValueBeginWithPlus);
+    expect(purePhoneLength).toBe(false);
   });
 
-  it("Проверяем получившийся массив на наличие неправильного номера", () => {
-    const isWrongItem = isWrongNumber(invalidPhoneNumbers);
-    console.log("isWrongItem:", isWrongItem);
-    expect(isWrongItem).toBe(true);
+  //
+
+  //
+  it("Трансформируем вставленное значение в массив", () => {
+    const getArrayFromInput = transformValueToArray(pastedValuePlusSeven);
+    expect(Array.isArray(getArrayFromInput)).toBe(true);
   });
+
+  it("Трансформируем вставленное значение в массив", () => {
+    const getArrayFromInput = transformValueToArray(pastedInputValue);
+    expect(Array.isArray(getArrayFromInput)).toBe(true);
+  });
+
+  it("Трансформируем вставленное значение в массив", () => {
+    const getArrayFromInput = transformValueToArray(pastedValueBeginWithNine);
+    expect(Array.isArray(getArrayFromInput)).toBe(true);
+  });
+  //
+
+  //
+  it("Получаем первый символ из массива", () => {
+    const getFirstSign = getFirstSymbol(pastedValuePlusSeven);
+    expect(getFirstSign === "7").toBe(true);
+  });
+
+  it("Получаем первый символ из массива", () => {
+    const getFirstSign = getFirstSymbol(pastedInputValue);
+    expect(getFirstSign === "8").toBe(true);
+  });
+
+  it("Получаем первый символ из массива", () => {
+    const getFirstSign = getFirstSymbol(pastedValueBeginWithNine);
+    expect(getFirstSign === "9").toBe(true);
+  });
+  //
+
+  //
+  it("Преобразуем номер телефона к типовому виду", () => {
+    const tipicalPhoneNumber = bringToUniverseType(pastedValuePlusSeven);
+    expect(tipicalPhoneNumber === "+79051111111").toBe(true);
+  });
+
+  it("Преобразуем номер телефона к типовому виду", () => {
+    const tipicalPhoneNumber = bringToUniverseType(pastedInputValue);
+    expect(tipicalPhoneNumber === "+79114551111").toBe(true);
+  });
+
+  it("Преобразуем номер телефона к типовому виду", () => {
+    const tipicalPhoneNumber = bringToUniverseType(pastedValueBeginWithNine);
+
+    expect(tipicalPhoneNumber === "+79271111111").toBe(true);
+  });
+
+  it("Преобразуем номер телефона к типовому виду", () => {
+    const tipicalPhoneNumber = bringToUniverseType(pastedValueBeginWithPlus);
+    expect(tipicalPhoneNumber === "+79051111111").toBe(true);
+  });
+
+  //
 });

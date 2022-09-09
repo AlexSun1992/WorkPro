@@ -171,7 +171,7 @@ import {
   BButton,
   BModal,
 } from "bootstrap-vue";
-import { isWrongNumber } from "./loginForm.helper";
+
 import {
   fetchEmail,
   getSuggestions,
@@ -183,7 +183,15 @@ import { validationMixin } from "vuelidate";
 import { required, minLength, helpers, email } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
+import {
+  isWrongNumber,
+  isPhoneNumberLengthLarger,
+  turnInputValueToArray,
+  arrayStartWithEigthNumber,
+  bringToUniverseType,
+} from "./loginForm.helper";
 import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
+// import {isPhoneNumberLengthLarger} from "./loginForm.helper"
 
 const alpha = helpers.regex(
   "alpha",
@@ -295,23 +303,13 @@ export default {
 
   methods: {
     checkPastedValue(value) {
-      console.log("value:", value);
-      const test = [[value.clipboardData.getData("text")]];
+      const checkLength = value.clipboardData.getData("text");
+      const isPhoneNumberLengthLargerThenPossible =
+        isPhoneNumberLengthLarger(checkLength);
 
-      const result = isWrongNumber(test);
-
-      console.log("result:", result);
-
-      const getPastedValue = value.clipboardData
-        .getData("text")
-        .replace(/\D/g, "");
-      const getArrayFromPastedValue = getPastedValue.split("");
-      if (getArrayFromPastedValue.length === 11) {
-        if (getArrayFromPastedValue[0] === "8") {
-          getArrayFromPastedValue.splice(0, 1);
-          const rebuildData = getArrayFromPastedValue.join("");
-          this.$v.user.username.$model = rebuildData;
-        }
+      if (isPhoneNumberLengthLargerThenPossible === false) {
+        const getUnverseNumberType = bringToUniverseType(checkLength);
+        this.$v.user.username.$model = getUnverseNumberType;
       }
     },
 
