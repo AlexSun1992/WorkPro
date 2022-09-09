@@ -49,3 +49,34 @@ export function bringToUniverseType(pastedValue) {
   }
   return pureNunber;
 }
+///
+// /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+
+export function removeNotNumberElements(phoneNumber) {
+  const getOnlyNumbers = phoneNumber.replace(/\D/g, "");
+  return getOnlyNumbers;
+}
+
+export function isValid(phoneNumber) {
+  const testPhone =
+    /^(\+7|7|8)?[\s\-]?\(?[9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+  const isValidPhoneNumber = testPhone.test(phoneNumber);
+
+  return isValidPhoneNumber;
+}
+
+///
+export function isMobilePhoneValid(inputPastedValue) {
+  const testPhoneRegex =
+    /^(\+7|7|8)?[\s\-]?\(?[9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+
+  const getOnlyNumbers = removeNotNumberElements(inputPastedValue);
+  const isValidPhoneNumber = testPhoneRegex.test(getOnlyNumbers);
+
+  if (isValidPhoneNumber) {
+    const universeType = bringToUniverseType(getOnlyNumbers);
+    return universeType;
+  }
+
+  return isValidPhoneNumber;
+}

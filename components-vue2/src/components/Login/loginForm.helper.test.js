@@ -4,6 +4,9 @@ import {
   transformValueToArray,
   getFirstSymbol,
   bringToUniverseType,
+  isValid,
+  removeNotNumberElements,
+  isMobilePhoneValid,
 } from "./loginForm.helper";
 import {
   invalidPhoneNumbers,
@@ -130,5 +133,22 @@ describe("Модуль тестирования телефонных номер�
     expect(tipicalPhoneNumber === "+79051111111").toBe(true);
   });
 
-  //
+  // Проверка регулярным выражением
+  // pastedInputValue
+
+  it("Оставляем толкьо цифры", () => {
+    const result = removeNotNumberElements(pastedInputValue);
+    expect(result === "89114551111").toBe(true);
+  });
+
+  test.each(invalidPhoneNumbers)("check phone '%s'", (phoneNumber, isRigth) => {
+    const onlyNumbers = removeNotNumberElements(phoneNumber);
+    const isRightNumberType = isValid(onlyNumbers);
+    expect(isRightNumberType).toBe(isRigth);
+  });
+
+  it("Проверка единичной записи", () => {
+    const isValidPhone = isMobilePhoneValid(pastetValueLargerLength);
+    expect(isValidPhone).toBe(false);
+  });
 });

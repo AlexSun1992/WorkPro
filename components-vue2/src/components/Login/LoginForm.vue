@@ -186,6 +186,8 @@ import Cookies from "js-cookie";
 import {
   isPhoneNumberLengthLarger,
   bringToUniverseType,
+  isValid,
+  isMobilePhoneValid,
 } from "./loginForm.helper";
 import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
 
@@ -300,12 +302,12 @@ export default {
   methods: {
     checkPastedValue(value) {
       const checkLength = value.clipboardData.getData("text");
-      const isPhoneNumberLengthLargerThenPossible =
-        isPhoneNumberLengthLarger(checkLength);
 
-      if (isPhoneNumberLengthLargerThenPossible === false) {
-        const getUnverseNumberType = bringToUniverseType(checkLength);
-        this.$v.user.username.$model = getUnverseNumberType;
+      const isPhoneValid = isValid(checkLength);
+
+      if (isPhoneValid) {
+        const reStructureNumber = isMobilePhoneValid(checkLength);
+        this.$v.user.username.$model = reStructureNumber;
       }
     },
 
