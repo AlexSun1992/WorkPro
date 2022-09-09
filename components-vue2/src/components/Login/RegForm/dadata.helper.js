@@ -69,7 +69,6 @@ export async function fetchPatronymic(input, gender, isFieldContentNotValid) {
   }
   return [];
 }
-///
 
 export async function fetchSurname(input, gender, isFieldContentNotValid) {
   if (isFieldContentNotValid === false) {
@@ -117,7 +116,6 @@ export async function fetchName(input, gender, isFieldContentNotValid) {
   }
   return [];
 }
-//
 
 export function isGenderReveal(name, surname, patronymic) {
   if (name === "" && surname === "" && patronymic === "") {

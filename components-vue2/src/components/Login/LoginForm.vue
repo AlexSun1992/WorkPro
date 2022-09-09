@@ -240,11 +240,8 @@ export default {
       isRefsAvailable: false,
       choosenTypeOfAuth: "",
       emailHub: [],
-      //
       isEmailTouch: false,
-      // classes
       emailClassHub: [],
-      // error
       isEmailErrorMessage: true,
       isEmailValidSignsErrorMessage: true,
     };
