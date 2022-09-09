@@ -18,22 +18,18 @@ import {
 } from "./loginForm.helper.fixtures";
 
 describe("Модуль тестирования телефонных номеров", () => {
-  //
   it("Убираем символы (+-.'')", () => {
     const purePhone = removeSuitableSymbols(pastedValuePlusSeven);
-
     expect(purePhone === "79051111111").toBe(true);
   });
 
   it("Убираем символы (+-.'')", () => {
     const purePhone = removeSuitableSymbols(pastedInputValue);
-
     expect(purePhone === "89114551111").toBe(true);
   });
 
   it("Убираем символы (+-.'')", () => {
     const purePhone = removeSuitableSymbols(pastetValueLargerLength);
-
     expect(purePhone === "3750291111111").toBe(true);
   });
 
@@ -47,9 +43,6 @@ describe("Модуль тестирования телефонных номер�
     expect(purePhone === "79051111111").toBe(true);
   });
 
-  //
-
-  //
   it("Проверяем длину очищенного вставленного значения", () => {
     const purePhoneLength = isPhoneNumberLengthLarger(pastedValuePlusSeven);
     expect(purePhoneLength).toBe(false);
@@ -75,9 +68,6 @@ describe("Модуль тестирования телефонных номер�
     expect(purePhoneLength).toBe(false);
   });
 
-  //
-
-  //
   it("Трансформируем вставленное значение в массив", () => {
     const getArrayFromInput = transformValueToArray(pastedValuePlusSeven);
     expect(Array.isArray(getArrayFromInput)).toBe(true);
@@ -92,9 +82,7 @@ describe("Модуль тестирования телефонных номер�
     const getArrayFromInput = transformValueToArray(pastedValueBeginWithNine);
     expect(Array.isArray(getArrayFromInput)).toBe(true);
   });
-  //
 
-  //
   it("Получаем первый символ из массива", () => {
     const getFirstSign = getFirstSymbol(pastedValuePlusSeven);
     expect(getFirstSign === "7").toBe(true);
@@ -109,9 +97,7 @@ describe("Модуль тестирования телефонных номер�
     const getFirstSign = getFirstSymbol(pastedValueBeginWithNine);
     expect(getFirstSign === "9").toBe(true);
   });
-  //
 
-  //
   it("Преобразуем номер телефона к типовому виду", () => {
     const tipicalPhoneNumber = bringToUniverseType(pastedValuePlusSeven);
     expect(tipicalPhoneNumber === "+79051111111").toBe(true);
