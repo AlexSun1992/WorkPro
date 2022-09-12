@@ -63,36 +63,36 @@
           :default-value="dataNeededForAuth[0]"
         />
       </b-form-group>
-      <div>
-        <b-form-group
-          label="Телефон или email"
-          label-cols="12"
-          v-if="this.revealAuthType === 'Номер телефона'"
-        >
-          <b-form-input
-            id="phone"
-            ref="phoneInput"
-            v-model="$v.user.username.$model"
-            v-mask="usernameMask"
-            :placeholder="placeholder"
-            autofocus
-            type="tel"
-            :state="validateInput('username', isUsernameBlured)"
-            @blur="debouncedUpdate('username', isUsernameBlured)"
-            @input="isUsernameBlured = false"
-            @click="loginTouchesCount = 2"
-            @paste="checkPastedValue"
-            :disabled="authInProcess"
-            class="form-control"
-          >
-          </b-form-input>
 
-          <b-form-invalid-feedback
-            >Пожалуйста, введите корректный номер
-            телефона</b-form-invalid-feedback
-          >
-        </b-form-group>
-      </div>
+      <b-form-group
+        label="Телефон или email"
+        label-cols="12"
+        v-if="this.revealAuthType === 'Номер телефона'"
+      >
+        <b-form-input
+          id="phone"
+          ref="phoneInput"
+          v-model="$v.user.username.$model"
+          v-mask="usernameMask"
+          :placeholder="placeholder"
+          autofocus
+          type="tel"
+          :state="validateInput('username', isUsernameBlured)"
+          @blur="debouncedUpdate('username', isUsernameBlured)"
+          @input="isUsernameBlured = false"
+          @click="loginTouchesCount = 2"
+          @paste="checkPastedValue"
+          @change="checkPastedValue"
+          :disabled="authInProcess"
+          class="form-control"
+        >
+        </b-form-input>
+
+        <b-form-invalid-feedback
+          >Пожалуйста, введите корректный номер
+          телефона</b-form-invalid-feedback
+        >
+      </b-form-group>
 
       <div>
         <b-form-group
