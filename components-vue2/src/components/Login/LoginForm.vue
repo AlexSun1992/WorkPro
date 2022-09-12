@@ -53,21 +53,25 @@
         </b-form>
       </div>
     </b-modal>
+
     <b-form @submit.prevent="onSubmit">
-      <b-form-group label="Авторизация с помощью">
-        <autocomplete
-          ref="authChoosenType"
-          :search="getDataForAuth"
-          @click="getDataForAuth"
-          :get-result-value="getResultValue"
-          :default-value="dataNeededForAuth[0]"
-        />
-      </b-form-group>
+      <div>
+        <b-dropdown id="dropdown-1" text="Dropdown Button" class="m-md-2">
+          <b-dropdown-item
+            v-for="item in dropDownData"
+            :key="item.id"
+            @click="chooseAuthType(item)"
+          >
+            {{ item }}
+          </b-dropdown-item>
+        </b-dropdown>
+      </div>
+
       <div>
         <b-form-group
           label="Телефон или email"
           label-cols="12"
-          v-if="this.revealAuthType === 'Номер телефона'"
+          v-if="isEmailTypeRegistrationChoosen === false"
         >
           <b-form-input
             id="phone"
@@ -99,7 +103,7 @@
           class="required"
           label="Телефон или email"
           label-cols="12"
-          v-if="this.revealAuthType === 'Email'"
+          v-if="isEmailTypeRegistrationChoosen"
         >
           <autocomplete
             ref="Email"
@@ -170,6 +174,7 @@ import {
   BSpinner,
   BButton,
   BModal,
+  BDropdown,
 } from "bootstrap-vue";
 
 import {
@@ -197,6 +202,7 @@ const alpha = helpers.regex(
 export default {
   name: "LoginForm",
   components: {
+    BDropdown,
     Autocomplete,
     BForm,
     BFormGroup,
@@ -231,14 +237,14 @@ export default {
       authInProcess: false,
       captchaToken: null,
       loginTouchesCount: 0,
-      dataNeededForAuth: ["Номер телефона", "Email"],
-      isRefsAvailable: false,
-      choosenTypeOfAuth: "",
       emailHub: [],
       isEmailTouch: false,
       emailClassHub: [],
       isEmailErrorMessage: true,
       isEmailValidSignsErrorMessage: true,
+      isDropDownShown: false,
+      dropDownData: ["Номер телефона", "Email"],
+      isEmailTypeRegistrationChoosen: false,
     };
   },
 
@@ -253,45 +259,26 @@ export default {
     }
   },
 
-  mounted() {
-    if (this.$refs.authChoosenType.value) {
-      this.isRefsAvailable = true;
-    }
-  },
-
   computed: {
-    revealAuthType() {
-      if (this.isRefsAvailable === true) {
-        return this.$refs.authChoosenType.value;
-      }
-      return null;
-    },
     email() {
-      if (this.choosenTypeOfAuth === "Email") {
+      if (this.isEmailTypeRegistrationChoosen === true) {
         return this.$refs.Email.value;
       }
       return null;
     },
-    emailClass() {
-      return this.emailClass;
-    },
-  },
-
-  watch: {
-    revealAuthType(value) {
-      if (value === "Email") {
-        this.choosenTypeOfAuth = "Email";
-      }
-      if (value === "Номер телефона") {
-        this.choosenTypeOfAuth = "телефон";
-      }
-      if (value === "") {
-        this.choosenTypeOfAuth = "телефон";
-      }
-    },
   },
 
   methods: {
+    chooseAuthType(item) {
+      if (item === "Номер телефона") {
+        this.isEmailTypeRegistrationChoosen = false;
+      }
+
+      if (item === "Email") {
+        this.isEmailTypeRegistrationChoosen = true;
+      }
+    },
+
     checkPastedValue(event) {
       const pastedValue = event.clipboardData.getData("text");
 
@@ -336,10 +323,6 @@ export default {
       }
     },
 
-    getDataForAuth() {
-      return this.dataNeededForAuth;
-    },
-
     getResultValueEmail(item) {
       return item.value;
     },
@@ -378,9 +361,6 @@ export default {
       return fetchedEmail;
     },
 
-    getResultValue(item) {
-      return item;
-    },
     async fetchToken() {
       try {
         this.authInProcess = true;
@@ -388,9 +368,9 @@ export default {
           mode: 2,
           password: this.$v.user.password.$model,
           username:
-            this.revealAuthType === "Номер телефона"
-              ? this.$v.user.username.$model
-              : this.email,
+            this.isEmailTypeRegistrationChoosen === true
+              ? this.email
+              : this.$v.user.username.$model,
         };
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
