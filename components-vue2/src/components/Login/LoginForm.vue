@@ -293,15 +293,15 @@ export default {
 
   methods: {
     checkPastedValue(value) {
-      const checkLength =
+      const pastedValue =
         typeof value !== "string"
           ? value.clipboardData.getData("text")
           : value.value;
 
-      const isPhoneValid = isPhoneNumberValid(checkLength);
+      const isPhoneValid = isPhoneNumberValid(pastedValue);
 
       if (isPhoneValid) {
-        const reStructureNumber = getRestructuredPhoneNumber(checkLength);
+        const reStructureNumber = getRestructuredPhoneNumber(pastedValue);
         this.$v.user.username.$model = reStructureNumber;
       }
     },
