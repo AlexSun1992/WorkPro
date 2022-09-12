@@ -170,6 +170,8 @@ export function getArrayWithClass(array, classText) {
   return array;
 }
 
-export function isEmailRight(regex, input) {
+export function isEmailRight(input) {
+  const regex =
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
   return regex.test(input);
 }

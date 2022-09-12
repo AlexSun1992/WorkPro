@@ -307,7 +307,7 @@ export default {
     },
 
     checkInputValue(input) {
-      const checkInputValue = isEmailRight(regex, input.value);
+      const checkInputValue = isEmailRight(input.value);
       if (checkInputValue === true) {
         getArrayWithClass(this.emailClassHub, "is-valid");
       }
@@ -318,7 +318,7 @@ export default {
         this.emailClassHub.push("is-invalid");
       }
 
-      const isInputValid = isEmailRight(regex, this.email);
+      const isInputValid = isEmailRight(this.email);
 
       if (isInputValid === false && this.email !== "") {
         this.isEmailValidSignsErrorMessage = false;
@@ -349,7 +349,7 @@ export default {
 
     async getSuggestionsEmail(input) {
       this.emailHub = [];
-      const isInputValid = isEmailRight(regex, this.email);
+      const isInputValid = isEmailRight(this.email);
 
       if (input.length > 0) {
         this.isEmailTouch = true;
@@ -435,7 +435,7 @@ export default {
           getArrayWithClass(this.emailClassHub, "is-invalid");
           return;
         }
-        const isInputValid = isEmailRight(regex, this.email);
+        const isInputValid = isEmailRight(this.email);
         if (isInputValid === false && this.choosenTypeOfAuth === "email") {
           this.isEmailValidSignsErrorMessage = false;
           getArrayWithClass(this.emailClassHub, "is-invalid");
