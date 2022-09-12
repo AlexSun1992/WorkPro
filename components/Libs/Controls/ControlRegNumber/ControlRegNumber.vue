@@ -18,7 +18,7 @@
           :formatter="numberFormatter"
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
-          placeholder="А000АА"
+          placeholder="А 000 АА"
           autocomplete="off"
           ref="number"
         />
@@ -52,7 +52,14 @@
   </div>
 </template>
 <script>
-import { isValid, isCodeValid } from "./helpers";
+import { isValid, isNumberValid } from "./helpers";
+
+const isCodeValid = function (value) {
+  if (/^\d+$/iu.test(value) && value.length > 1) {
+    return true;
+  }
+  return false;
+};
 export default {
   name: "ControlRegNumber",
   data() {
@@ -78,11 +85,6 @@ export default {
     },
   },
 
-  mounted() {
-    this.$refs.number.$refs.input.onpaste = (e) => e.preventDefault();
-    this.$refs.code.$refs.input.onpaste = (e) => e.preventDefault();
-  },
-
   methods: {
     numberUpdateValue() {
       let setValue = null;
@@ -94,7 +96,7 @@ export default {
         state: this.isValid,
       });
 
-      if (this.numberValue.length === 6) {
+      if (isNumberValid(this.numberValue.replace(/ /g, ""))) {
         this.$refs.code.$el.focus();
         if (this.stateNumber && this.stateCode) {
           setValue = this.numberAndCodeValue;
@@ -136,10 +138,17 @@ export default {
     },
     numberFormatter(value) {
       const formatValue = value.toUpperCase();
-      if (isValid(value)) {
-        return formatValue;
+      const withOutSpacesValue = formatValue.replace(/ /g, "");
+      if (isValid(withOutSpacesValue) === true) {
+        return formatValue.replace(
+          /[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi,
+          "$& "
+        );
       }
-      return formatValue.slice(0, -1);
+      if (isValid(withOutSpacesValue) === false) {
+        return formatValue.slice(0, -1);
+      }
+      return formatValue;
     },
     codeFormatter(value) {
       if (/^\d+$/iu.test(value)) {
@@ -172,7 +181,7 @@ export default {
   },
   computed: {
     stateNumber() {
-      return isValid(this.numberValue);
+      return isNumberValid(this.numberValue.replace(/ /g, ""));
     },
     stateCode() {
       return isCodeValid(this.codeValue);
@@ -182,7 +191,7 @@ export default {
     },
     isValid() {
       if (this.isVisitedNumber === true && this.isVisitedCode === true) {
-        return this.numberValue.length === 6 && this.stateCode;
+        return this.stateNumber && this.stateCode;
       }
       return null;
     },
