@@ -231,7 +231,7 @@ export default {
       authInProcess: false,
       captchaToken: null,
       loginTouchesCount: 0,
-      dataNeededForAuth: ["Номер телефона", "email"],
+      dataNeededForAuth: ["Номер телефона", "Email"],
       isRefsAvailable: false,
       choosenTypeOfAuth: "",
       emailHub: [],
@@ -294,9 +294,7 @@ export default {
   methods: {
     checkPastedValue(value) {
       const pastedValue =
-        typeof value !== "string"
-          ? value.clipboardData.getData("text")
-          : value.value;
+        typeof value === "string" ? value : value.clipboardData.getData("text");
 
       const isPhoneValid = isPhoneNumberValid(pastedValue);
 
