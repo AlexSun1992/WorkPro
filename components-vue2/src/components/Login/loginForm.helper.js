@@ -53,25 +53,21 @@ export function removeNotNumberElements(phoneNumber) {
   return getOnlyNumbers;
 }
 
-export function isValid(phoneNumber) {
+export function isPhoneNumberValid(phoneNumber) {
+  const onlyNumbersInPhoneNumber = removeNotNumberElements(phoneNumber);
   const testPhone =
     /^(\+7|7|8)?[\s\-]?\(?[9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
-  const isValidPhoneNumber = testPhone.test(phoneNumber);
-
+  const isValidPhoneNumber = testPhone.test(onlyNumbersInPhoneNumber);
   return isValidPhoneNumber;
 }
 
-export function isMobilePhoneValid(inputPastedValue) {
-  const testPhoneRegex =
-    /^(\+7|7|8)?[\s\-]?\(?[9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
-
+export function getRestructuredPhoneNumber(inputPastedValue) {
   const getOnlyNumbers = removeNotNumberElements(inputPastedValue);
-  const isValidPhoneNumber = testPhoneRegex.test(getOnlyNumbers);
-
-  if (isValidPhoneNumber) {
+  const isPastedNumber = isPhoneNumberValid(inputPastedValue);
+  if (isPastedNumber) {
     const universeType = bringToUniverseType(getOnlyNumbers);
     return universeType;
   }
 
-  return isValidPhoneNumber;
+  return isPastedNumber;
 }

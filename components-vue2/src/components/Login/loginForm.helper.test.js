@@ -4,9 +4,9 @@ import {
   transformValueToArray,
   getFirstSymbol,
   bringToUniverseType,
-  isValid,
+  isPhoneNumberValid,
   removeNotNumberElements,
-  isMobilePhoneValid,
+  getRestructuredPhoneNumber,
 } from "./loginForm.helper";
 import {
   invalidPhoneNumbers,
@@ -125,13 +125,12 @@ describe("Модуль тестирования телефонных номер�
   });
 
   test.each(invalidPhoneNumbers)("check phone '%s'", (phoneNumber, isRigth) => {
-    const onlyNumbers = removeNotNumberElements(phoneNumber);
-    const isRightNumberType = isValid(onlyNumbers);
+    const isRightNumberType = isPhoneNumberValid(phoneNumber);
     expect(isRightNumberType).toBe(isRigth);
   });
 
   it("Проверка единичной записи", () => {
-    const isValidPhone = isMobilePhoneValid(pastetValueLargerLength);
+    const isValidPhone = getRestructuredPhoneNumber(pastetValueLargerLength);
     expect(isValidPhone).toBe(false);
   });
 });

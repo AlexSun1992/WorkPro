@@ -184,10 +184,8 @@ import { required, minLength, helpers, email } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Cookies from "js-cookie";
 import {
-  isPhoneNumberLengthLarger,
-  bringToUniverseType,
-  isValid,
-  isMobilePhoneValid,
+  isPhoneNumberValid,
+  getRestructuredPhoneNumber,
 } from "./loginForm.helper";
 import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
 
@@ -300,10 +298,10 @@ export default {
     checkPastedValue(value) {
       const checkLength = value.clipboardData.getData("text");
 
-      const isPhoneValid = isValid(checkLength);
+      const isPhoneValid = isPhoneNumberValid(checkLength);
 
       if (isPhoneValid) {
-        const reStructureNumber = isMobilePhoneValid(checkLength);
+        const reStructureNumber = getRestructuredPhoneNumber(checkLength);
         this.$v.user.username.$model = reStructureNumber;
       }
     },
