@@ -293,7 +293,10 @@ export default {
 
   methods: {
     checkPastedValue(value) {
-      const checkLength = value.clipboardData.getData("text");
+      const checkLength =
+        typeof value !== "string"
+          ? value.clipboardData.getData("text")
+          : value.value;
 
       const isPhoneValid = isPhoneNumberValid(checkLength);
 
