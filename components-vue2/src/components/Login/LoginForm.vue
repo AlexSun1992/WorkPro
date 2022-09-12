@@ -63,51 +63,52 @@
           :default-value="dataNeededForAuth[0]"
         />
       </b-form-group>
-
-      <b-form-group
-        label="Телефон или email"
-        label-cols="12"
-        v-if="this.revealAuthType === 'Номер телефона'"
-      >
-        <b-form-input
-          id="phone"
-          ref="phoneInput"
-          v-model="$v.user.username.$model"
-          v-mask="usernameMask"
-          :placeholder="placeholder"
-          autofocus
-          type="tel"
-          :state="validateInput('username', isUsernameBlured)"
-          @blur="debouncedUpdate('username', isUsernameBlured)"
-          @input="isUsernameBlured = false"
-          @click="loginTouchesCount = 2"
-          @paste="checkPastedValue"
-          :disabled="authInProcess"
-          class="form-control"
+      <div>
+        <b-form-group
+          label="Телефон или email"
+          label-cols="12"
+          v-if="this.revealAuthType === 'Номер телефона'"
         >
-        </b-form-input>
+          <b-form-input
+            id="phone"
+            ref="phoneInput"
+            v-model="$v.user.username.$model"
+            v-mask="usernameMask"
+            :placeholder="placeholder"
+            autofocus
+            type="tel"
+            :state="validateInput('username', isUsernameBlured)"
+            @blur="debouncedUpdate('username', isUsernameBlured)"
+            @input="isUsernameBlured = false"
+            @click="loginTouchesCount = 2"
+            @paste="checkPastedValue"
+            :disabled="authInProcess"
+            class="form-control"
+          >
+          </b-form-input>
 
-        <b-form-invalid-feedback
-          >Пожалуйста, введите корректный номер
-          телефона</b-form-invalid-feedback
-        >
-      </b-form-group>
+          <b-form-invalid-feedback
+            >Пожалуйста, введите корректный номер
+            телефона</b-form-invalid-feedback
+          >
+        </b-form-group>
+      </div>
 
       <div>
         <b-form-group
           class="required"
           label="Телефон или email"
           label-cols="12"
-          v-if="this.revealAuthType === 'email'"
+          v-if="this.revealAuthType === 'Email'"
         >
           <autocomplete
-            ref="email"
-            placeholder="email"
+            ref="Email"
+            placeholder="Email"
             :search="getSuggestionsEmail"
             :get-result-value="getResultValueEmail"
             :disabled="authInProcess"
             :class="emailClassHub"
-            @blur="handleBlur('email')"
+            @blur="handleBlur('Email')"
             @submit="checkInputValue"
           />
 
@@ -266,8 +267,8 @@ export default {
       return null;
     },
     email() {
-      if (this.choosenTypeOfAuth === "email") {
-        return this.$refs.email.value;
+      if (this.choosenTypeOfAuth === "Email") {
+        return this.$refs.Email.value;
       }
       return null;
     },
@@ -278,8 +279,8 @@ export default {
 
   watch: {
     revealAuthType(value) {
-      if (value === "email") {
-        this.choosenTypeOfAuth = "email";
+      if (value === "Email") {
+        this.choosenTypeOfAuth = "Email";
       }
       if (value === "Номер телефона") {
         this.choosenTypeOfAuth = "телефон";
@@ -432,7 +433,7 @@ export default {
           return;
         }
         const isInputValid = isEmailRight(this.email);
-        if (isInputValid === false && this.choosenTypeOfAuth === "email") {
+        if (isInputValid === false && this.choosenTypeOfAuth === "Email") {
           this.isEmailValidSignsErrorMessage = false;
           getArrayWithClass(this.emailClassHub, "is-invalid");
           return;
