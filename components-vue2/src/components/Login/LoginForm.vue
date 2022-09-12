@@ -82,7 +82,6 @@
           @input="isUsernameBlured = false"
           @click="loginTouchesCount = 2"
           @paste="checkPastedValue"
-          @change="checkPastedValue"
           :disabled="authInProcess"
           class="form-control"
         >
@@ -292,9 +291,8 @@ export default {
   },
 
   methods: {
-    checkPastedValue(value) {
-      const pastedValue =
-        typeof value === "string" ? value : value.clipboardData.getData("text");
+    checkPastedValue(event) {
+      const pastedValue = event.clipboardData.getData("text");
 
       const isPhoneValid = isPhoneNumberValid(pastedValue);
 
