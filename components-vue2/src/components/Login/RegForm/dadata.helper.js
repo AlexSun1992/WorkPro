@@ -3,11 +3,22 @@ const abortControllers = new Map();
 export async function getSuggestionsData(params, type) {
   const controller = new AbortController();
 
-  if (abortControllers.get(params.parts[0]) !== undefined) {
-    abortControllers.get(params.parts[0]).abort();
+  const key = params.parts ? params.parts[0] : params.suggestionType;
+
+  if (params.parts === undefined) {
+    if (abortControllers.get(key) !== undefined) {
+      abortControllers.get(key).abort();
+    }
+    abortControllers.set(key, controller);
   }
 
-  abortControllers.set(params.parts[0], controller);
+  if (params.parts) {
+    if (abortControllers.get(key) !== undefined) {
+      abortControllers.get(key).abort();
+    }
+
+    abortControllers.set(key, controller);
+  }
   const testResult = await fetch(`/api/suggestions/${type}`, {
     method: "POST",
     signal: controller.signal,
@@ -19,7 +30,23 @@ export async function getSuggestionsData(params, type) {
   });
 
   const dataSuggestions = await testResult.json();
+
   return dataSuggestions.suggestions;
+}
+
+export async function fetchEmail(input) {
+  try {
+    const params = {
+      query: `${input}`,
+      suggestionType: "email",
+    };
+    const type = params.suggestionType;
+    const getData = await getSuggestionsData(params, type);
+    return getData;
+  } catch (e) {
+    console.log("e:", e);
+  }
+  return [];
 }
 
 export async function fetchPatronymic(input, gender, isFieldContentNotValid) {
@@ -44,7 +71,6 @@ export async function fetchPatronymic(input, gender, isFieldContentNotValid) {
   }
   return [];
 }
-///
 
 export async function fetchSurname(input, gender, isFieldContentNotValid) {
   if (isFieldContentNotValid === false) {
@@ -92,7 +118,6 @@ export async function fetchName(input, gender, isFieldContentNotValid) {
   }
   return [];
 }
-//
 
 export function isGenderReveal(name, surname, patronymic) {
   if (name === "" && surname === "" && patronymic === "") {
@@ -112,13 +137,11 @@ export function getSuggestions(fetchedSuggestions, suggestions, fieldContent) {
   if (fetchedSuggestions === null) {
     return null;
   }
-
   if (fieldContent !== "") {
     fetchedSuggestions.forEach((item) => {
       suggestions.push(item);
     });
     const result = suggestions;
-
     return result;
   }
   return [];
@@ -145,4 +168,10 @@ export function getArrayWithClass(array, classText) {
   array.splice(0, array.length);
   array.push(classText);
   return array;
+}
+
+export function isEmailRight(input) {
+  const regex =
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+  return regex.test(input);
 }

@@ -1,23 +1,15 @@
 import {
   suggestionsSurnames,
-  paramsPatronymic,
   suggestionsPatronymic,
-  paramsName,
   suggestionsNames,
-  paramsSurname,
 } from "./dadata.helper.fixtures";
 
 import {
   isEnoughDataForGenderDefine,
   isFieldFIONotValid,
   getArrayWithClass,
-  fetchSuggestions,
-  createParamsForRequest,
   isGenderReveal,
-  userSurnameGender,
   userGender,
-  userPatronymicGender,
-  getSuggestionsFIO,
   getSuggestions,
 } from "./dadata.helper";
 import { fetch, Response } from "node-fetch";
