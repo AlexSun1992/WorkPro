@@ -65,6 +65,8 @@ export const actions = {
               `Неверно заданы параметры счетчика для пункта меню ${item.idItem}`
             );
           }
+        } else {
+          commit("setCounter", { IDITEM: item.idItem });
         }
       });
     });
@@ -93,7 +95,7 @@ export const mutations = {
   setCounter(state, data) {
     const menuItems = state.menu[0].children;
     const item = menuItems.find((i) => i.idItem === data.IDITEM);
-    item.newCount = data.NCOUNT;
-    item.newCountColor = data.SCOLOR;
+    item.newCount = data?.NCOUNT ? data.NCOUNT : null;
+    item.newCountColor = data?.SCOLOR ? data.SCOLOR : null;
   },
 };

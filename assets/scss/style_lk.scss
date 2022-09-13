@@ -604,7 +604,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .block-policy {
     border: 1px solid #eff1f3;
-    border-radius: 30px;
+    border-radius: 24px;
     overflow: hidden;
     height: 100%;
     position: relative;
@@ -3404,4 +3404,20 @@ a[data-newcount][data-newcolor="RED"]:after {
 
 .to-old-lk:hover {
     text-decoration: underline;
+}
+
+.block-policy_small .block-pay-btn {
+    min-height: 50px;
+}
+
+.block-policy_small .block-pay-btn>button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top-right-radius: 0;
+    width: 100%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    padding: 21px 0;
 }
