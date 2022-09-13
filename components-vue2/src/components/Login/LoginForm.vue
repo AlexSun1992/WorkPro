@@ -582,6 +582,10 @@ ul.dropdown-menu.show {
   border: 0;
   text-align: left;
 }
+.dropdown-item:hover,
+.dropdown-item:hover > button {
+  background: #f4f7f5 !important;
+}
 
 .dropdown-menu.show li:hover {
   background: #f4f7f5;
