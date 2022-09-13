@@ -43,8 +43,10 @@ router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
       formConverter.save(JSON.parse(req.params.filters))
     );
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
-    mobile2ServiceInstance.defaults.headers.common["Cookie"] =
-      req.headers?.cookie || "";
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
+      ?.cookie
+      ? req.headers.cookie
+      : null;
     if (req?.query.zone !== "free") {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
