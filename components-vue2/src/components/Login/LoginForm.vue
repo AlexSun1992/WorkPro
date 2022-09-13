@@ -55,99 +55,120 @@
     </b-modal>
 
     <b-form @submit.prevent="onSubmit">
-      <div>
-        <b-dropdown id="dropdown-1" text="Dropdown Button" class="m-md-2">
-          <b-dropdown-item
-            v-for="item in dropDownData"
-            :key="item.id"
-            @click="chooseAuthType(item)"
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <legend>Авторизация с помощью</legend>
+          <b-dropdown
+            id="dropdown-1"
+            :text="!isEmailTypeRegistrationChoosen ? 'Номер телефона' : 'Email'"
+            variant="dropdown-select"
+            class="dropdown-select"
           >
-            {{ item }}
-          </b-dropdown-item>
-        </b-dropdown>
-      </div>
+            <!--<b-dropdown-item
+              v-for="item in dropDownData"
+              :key="item.id"
+              @click="toggleAuthType()"
+            >
+              {{ item }}
+            </b-dropdown-item>-->
+            <b-dropdown-item-button
+              @click="toggleAuthType()"
+              v-if="isEmailTypeRegistrationChoosen"
+              >Номер телефона</b-dropdown-item-button
+            >
+            <b-dropdown-item-button
+              @click="toggleAuthType()"
+              v-if="!isEmailTypeRegistrationChoosen"
+              >Email</b-dropdown-item-button
+            >
+          </b-dropdown>
+        </div>
 
-      <div>
-        <b-form-group
-          label="Телефон или email"
-          label-cols="12"
+        <div
+          class="col-12 col-lg-6 mt-3 mt-lg-0"
           v-if="isEmailTypeRegistrationChoosen === false"
         >
-          <b-form-input
-            id="phone"
-            ref="phoneInput"
-            v-model="$v.user.username.$model"
-            v-mask="usernameMask"
-            :placeholder="placeholder"
-            autofocus
-            type="tel"
-            :state="validateInput('username', isUsernameBlured)"
-            @blur="debouncedUpdate('username', isUsernameBlured)"
-            @input="isUsernameBlured = false"
-            @click="loginTouchesCount = 2"
-            @paste="checkPastedValue"
-            :disabled="authInProcess"
-            class="form-control"
-          >
-          </b-form-input>
+          <b-form-group label="Телефон или email" label-cols="12">
+            <b-form-input
+              id="phone"
+              ref="phoneInput"
+              v-model="$v.user.username.$model"
+              v-mask="usernameMask"
+              :placeholder="placeholder"
+              autofocus
+              type="tel"
+              :state="validateInput('username', isUsernameBlured)"
+              @blur="debouncedUpdate('username', isUsernameBlured)"
+              @input="isUsernameBlured = false"
+              @click="loginTouchesCount = 2"
+              @paste="checkPastedValue"
+              :disabled="authInProcess"
+              class="form-control"
+            >
+            </b-form-input>
 
-          <b-form-invalid-feedback
-            >Пожалуйста, введите корректный номер
-            телефона</b-form-invalid-feedback
-          >
-        </b-form-group>
-      </div>
+            <b-form-invalid-feedback
+              >Пожалуйста, введите корректный номер
+              телефона</b-form-invalid-feedback
+            >
+          </b-form-group>
+        </div>
 
-      <div>
-        <b-form-group
-          class="required"
-          label="Телефон или email"
-          label-cols="12"
+        <div
+          class="col-12 col-lg-6 mt-3 mt-lg-0"
           v-if="isEmailTypeRegistrationChoosen"
         >
-          <autocomplete
-            ref="Email"
-            placeholder="Email"
-            :search="getSuggestionsEmail"
-            :get-result-value="getResultValueEmail"
-            :disabled="authInProcess"
-            :class="emailClassHub"
-            @blur="handleBlur('Email')"
-            @submit="checkInputValue"
-          />
-
-          <b-form-invalid-feedback :state="isEmailErrorMessage"
-            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          <b-form-group
+            class="required"
+            label="Телефон или email"
+            label-cols="12"
           >
-          <b-form-invalid-feedback :state="isEmailValidSignsErrorMessage"
-            >Просьба корректно указать email</b-form-invalid-feedback
+            <autocomplete
+              ref="Email"
+              placeholder="Email"
+              :search="getSuggestionsEmail"
+              :get-result-value="getResultValueEmail"
+              :disabled="authInProcess"
+              :class="emailClassHub"
+              @blur="handleBlur('Email')"
+              @submit="checkInputValue"
+            />
+
+            <b-form-invalid-feedback :state="isEmailErrorMessage"
+              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            >
+            <b-form-invalid-feedback :state="isEmailValidSignsErrorMessage"
+              >Просьба корректно указать email</b-form-invalid-feedback
+            >
+          </b-form-group>
+        </div>
+
+        <div class="col-12 col-lg-6 mt-3">
+          <b-form-group label="Пароль" label-cols="12">
+            <b-form-input
+              v-model="$v.user.password.$model"
+              placeholder="Пароль"
+              type="password"
+              :state="validateInput('password', isPasswordBlured)"
+              @blur="blurField('password', isPasswordBlured)"
+              @input="isPasswordBlured = false"
+              class="form-control"
+              :disabled="authInProcess"
+            ></b-form-input>
+            <b-form-invalid-feedback
+              >Пожалуйста, введите пароль
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </div>
+        <div class="col-12 col-lg-6 mt-3 mt-lg-4 pt-lg-2">
+          <a
+            href="/login/password-recovery"
+            id="btn_recovery-password_lk"
+            class="mt-lg-4 d-table"
+            >Не помните пароль?</a
           >
-        </b-form-group>
+        </div>
       </div>
-
-      <div>
-        <b-form-group label="Пароль" label-cols="12" class="mt-3">
-          <b-form-input
-            v-model="$v.user.password.$model"
-            placeholder="Пароль"
-            type="password"
-            :state="validateInput('password', isPasswordBlured)"
-            @blur="blurField('password', isPasswordBlured)"
-            @input="isPasswordBlured = false"
-            class="form-control"
-            :disabled="authInProcess"
-          ></b-form-input>
-          <b-form-invalid-feedback
-            >Пожалуйста, введите пароль
-          </b-form-invalid-feedback>
-        </b-form-group>
-      </div>
-      <div class="mt-3 text-center">
-        <a href="/login/password-recovery" id="btn_recovery-password_lk"
-          >Не помните пароль?</a
-        >
-      </div>
-
       <b-button
         v-on:enter="fetchToken()"
         variant="primary"
@@ -269,14 +290,9 @@ export default {
   },
 
   methods: {
-    chooseAuthType(item) {
-      if (item === "Номер телефона") {
-        this.isEmailTypeRegistrationChoosen = false;
-      }
-
-      if (item === "Email") {
-        this.isEmailTypeRegistrationChoosen = true;
-      }
+    toggleAuthType() {
+      this.isEmailTypeRegistrationChoosen =
+        !this.isEmailTypeRegistrationChoosen;
     },
 
     checkPastedValue(event) {
@@ -506,4 +522,73 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.dropdown-select {
+  position: relative;
+  z-index: 1;
+}
+.btn-dropdown-select {
+  background-color: #fff;
+  border: 1px solid #c3c3c3;
+  box-sizing: border-box;
+  border-radius: 15px !important;
+  width: 100%;
+  padding: 13px 20px;
+  font-size: 1rem;
+  height: 54px;
+  outline: 0 !important;
+  color: #000;
+  cursor: pointer;
+  text-align: left;
+}
+.dropdown-menu {
+  display: none;
+}
+.dropdown-menu.show {
+  display: block;
+}
+
+ul.dropdown-menu.show {
+  margin: 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 0;
+  box-sizing: border-box;
+  max-height: 296px;
+  overflow-y: auto;
+  background: #fff;
+  list-style: none;
+  box-shadow: 0 2px 2px rgb(0, 0, 0, 0.16);
+  width: 100%;
+  margin-top: 4px !important;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  outline: none !important;
+}
+.dropdown-menu.show li {
+  transition: 0.2s;
+  cursor: pointer;
+  cursor: default;
+  overflow: hidden;
+  background: #fff;
+  white-space: initial;
+  font-size: 1rem;
+  cursor: default;
+  padding: 12px 20px 12px 15px !important;
+}
+.dropdown-item {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  text-align: left;
+}
+
+.dropdown-menu.show li:hover {
+  background: #f4f7f5;
+}
+@media (max-width: 992px) {
+  .btn-dropdown-select {
+    height: 50px;
+  }
+}
+</style>
