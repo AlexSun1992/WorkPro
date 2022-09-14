@@ -165,10 +165,16 @@ export default {
           `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
             this.zone
           }&time=${Date.now()}`
-        );
-        this.eventHandler =
-          typeof eventHandler === "function" ? eventHandler : null;
-
+        )
+          .then(() => {
+            this.eventHandler =
+              typeof eventHandler === "function" ? eventHandler : null;
+          })
+          .catch(async (e) => {
+            console.error(e);
+            Sentry.captureException(e);
+            this.eventHandler = await this.loadScript();
+          });
       }
       if (process?.env?.NODE_ENV === "development") {
         this.eventHandler = await this.loadScript();
