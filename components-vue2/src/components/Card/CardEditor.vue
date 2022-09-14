@@ -172,7 +172,7 @@ export default {
           })
           .catch(async (e) => {
             console.error(e);
-            Sentry.captureException(e);
+            Sentry.captureException(`Ошибка загрузки скрипта JS.Текст ошибки ${e}`);
             this.eventHandler = await this.loadScript();
           });
       }
