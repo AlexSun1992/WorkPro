@@ -162,7 +162,7 @@ export default {
           }?zone=${this.zone}&time=${Date.now()}`
         );
         await this.$loadScript(
-          `/api/card/jss/${this.moduleId}/${this.menuId}?zone=${
+          `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
             this.zone
           }&time=${Date.now()}`
         );
