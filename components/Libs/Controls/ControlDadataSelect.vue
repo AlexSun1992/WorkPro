@@ -1,13 +1,13 @@
 <template>
   <div>
     <b-form-group :class="{ required: data.required }">
-      <label v-html="data.label" /><span
-        v-if="data.helpText"
-        class="tooltipster"
-      >
-        (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-          <span v-html="data.helpText" /></vue-easy-tooltip
-      ></span>
+      <label>
+        {{ data.label }}
+        <span v-if="data.helpText" class="tooltipster">
+          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+            <span v-html="data.helpText" /></vue-easy-tooltip
+        ></span>
+      </label>
 
       <autocomplete
         ref="autocomplete"
