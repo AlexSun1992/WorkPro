@@ -77,6 +77,13 @@ export const mutations = {
   setMenu(state, data) {
     state.menu = data;
   },
+  setMenuById(state, data) {
+    const itemsMenu = state.menu[0]?.children;
+    const menu = itemsMenu.find((i) => i.idItem === data.idItem);
+    Object.entries(data).forEach(([key, value]) => {
+      menu[key] = value;
+    });
+  },
   setQueriesUrlByIdMenu(state, { idItem, url }) {
     const itemsMenu = state.menu[0]?.children;
     if (Array.isArray(itemsMenu)) {
