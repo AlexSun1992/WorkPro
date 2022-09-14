@@ -163,6 +163,8 @@ export default {
         );
         this.eventHandler =
           typeof eventHandler === "function" ? eventHandler : null;
+
+        Sentry.captureMessage(`"${this.menuId}" : JS загружен успешно`);
       }
       if (process?.env?.NODE_ENV === "development") {
         this.eventHandler = await this.loadScript();
@@ -171,6 +173,9 @@ export default {
         this.$store.dispatch("menu/fetchMenu", this.params),
         this.fetchCard(),
       ]);
+      Sentry.captureMessage(
+        `"${this.menuId}" : Выполнены запросы получения меню и карточки`
+      );
       this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
       this.isShowButtonSave = true;
     } catch (e) {
@@ -184,7 +189,7 @@ export default {
       );
       Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
         scope.setTransactionName(
-          `Ошибка отображения компонента "${this.menuId}"`
+          `Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`
         );
         return scope;
       });
