@@ -68,6 +68,7 @@ Vue.use(IconsPlugin);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
 const startTime = Date.now();
+const limitTime = 4000;
 export default {
   name: "CardEditor",
   components: { FormBlock, Form },
@@ -160,9 +161,18 @@ export default {
           `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
             this.zone
           }&time=${Date.now()}`
-        );
-        this.eventHandler =
-          typeof eventHandler === "function" ? eventHandler : null;
+        )
+          .then(() => {
+            this.eventHandler =
+              typeof eventHandler === "function" ? eventHandler : null;
+          })
+          .catch(async (e) => {
+            console.error(e);
+            Sentry.captureException(
+              `Ошибка загрузки скрипта JS.Текст ошибки: ${e}`
+            );
+            this.eventHandler = await this.loadScript();
+          });
       }
       if (process?.env?.NODE_ENV === "development") {
         this.eventHandler = await this.loadScript();
@@ -170,32 +180,49 @@ export default {
       await Promise.all([
         this.$store.dispatch("menu/fetchMenu", this.params),
         this.fetchCard(),
-      ]);
+      ]).catch((e) => {
+        console.error(e?.response?.data || e);
+        Sentry.captureException(
+          new Error("Ошибка выполнения запроса."),
+          (scope) => {
+            scope.setTransactionName(e?.response?.data?.MESSAGE || e);
+            return scope;
+          }
+        );
+      });
       this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
       this.isShowButtonSave = true;
+      const loadedTime = Date.now() - startTime;
+      const sentryMessage = `Компонент  "${this.menuId}" грузился  ${loadedTime} миллисекунд(ы)`;
+      if (loadedTime > limitTime) {
+        Sentry.captureException(
+          new Error("Компонент долго грузится."),
+          (scope) => {
+            scope.setTransactionName(sentryMessage);
+            return scope;
+          }
+        );
+      } else {
+        Sentry.captureMessage(sentryMessage);
+      }
     } catch (e) {
       console.error(e);
       this.$store.commit("data_card/setSavedError", true);
       this.$store.commit(
         "data_card/setErrorMessage",
         e?.response?.data || {
-          MESSAGE: `Ошибка отображения компонента ${this.menuId}`,
+          MESSAGE: `Ошибка отображения компонента`,
         }
       );
       Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
         scope.setTransactionName(
-          `Ошибка отображения компонента "${this.menuId}"`
+          `Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`
         );
         return scope;
       });
     } finally {
       this.$store.commit("data_card/setLoading", false);
       this.$store.commit("data_card/setDisabled", false);
-      Sentry.captureMessage(
-        `Компонент  "${this.menuId}" грузился  ${
-          Date.now() - startTime
-        } миллисекунд(ы)`
-      );
     }
   },
   methods: {
@@ -278,6 +305,16 @@ export default {
             return;
           }
           await this.callScript(e, "afterSave");
+          Sentry.captureMessage(`Действие компонента "${this.menuId}" успешно выполнено.`);
+        }
+        if (resp.status === 500) {
+          console.error(resp);
+          Sentry.captureException(new Error('Ошибка выполнения действия'), (scope) => {
+            scope.setTransactionName(
+              `Ошибка выполнения действия компонента "${this.menuId} Текст ошибки: ${resp?.data}"`
+            );
+            return scope;
+          });
         }
       }
     },
@@ -297,11 +334,11 @@ export default {
           "data_card/fetchList",
           this.params
         );
-        this.params.idCard = this.cardId || items[0].ID;
+        this.params.idCard = this.cardId || items ? items[0].ID : 0;
         if (this.rel !== null && this.rel !== "0") {
           this.params.idRel = this.rel;
         } else {
-          this.params.idRel = items[0].REL;
+          this.params.idRel = items ? items[0].REL : undefined;
         }
       } else {
         this.params.idCard = 0;

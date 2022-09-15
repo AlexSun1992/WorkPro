@@ -754,8 +754,17 @@ li.breadcrumb-item:not(:last-of-type):after {
     color: #686868;
 }
 
+.insured-events .description .cause {
+    font-weight: 600;
+}
+
 .insured-events .description .date {
-    font-weight: 700;
+    font-weight: 400;
+    color: #292929;
+}
+
+.insured-events .description .number {
+    color: #888;
 }
 
 .insured-events .settlement {
@@ -1736,8 +1745,8 @@ a.btn-warning {
 }
 
 .conf-block {
-    border: 1px solid #eff1f3;
-    border-radius: 16px;
+    border: 1px solid #a6aeb6;
+    border-radius: 9px;
     padding: 24px 20px;
 }
 
@@ -3384,18 +3393,6 @@ a[data-newcount][data-newcolor="RED"]:after {
     color: #eb5757;
 }
 
-.btn-prolong {
-    background: #43b02a !important;
-    color: #fff !important;
-    border-color: #43b02a !important;
-}
-
-.btn-prolong:hover {
-    background: #009639 !important;
-    color: #fff !important;
-    border-color: #009639 !important;
-}
-
 .to-old-lk {
     font-weight: 700;
     color: #43b02a;
@@ -3420,4 +3417,110 @@ a[data-newcount][data-newcolor="RED"]:after {
     border-bottom-left-radius: 24px;
     border-bottom-right-radius: 24px;
     padding: 21px 0;
+}
+
+.my-policy[data-id="2"] .btn-prolong,
+.my-policy[data-id="3"] .btn-prolong,
+.my-policy[data-id="5"] .btn-prolong {
+    background: #43b02a !important;
+    color: #fff !important;
+    border-color: #43b02a !important;
+    &:hover {
+        background: #69c055 !important;
+        color: #fff !important;
+        border-color: #69c055 !important;
+    }
+}
+
+.my-policy[data-id="1"] .btn-prolong,
+.my-policy[data-id="10"] .btn-prolong,
+.my-policy[data-id="8"] .btn-prolong {
+    color: #ffffff;
+    background: #3b86c8 !important;
+    border-color: #3b86c8 !important;
+    &:hover {
+        background: #629ed3 !important;
+        color: #fff !important;
+        border-color: #629ed3 !important;
+    }
+}
+
+.my-policy[data-id="4"] .btn-prolong {
+    color: #ffffff;
+    background: #645da2 !important;
+    border-color: #645da2 !important;
+    &:hover {
+        background: #645da2 !important;
+        color: #fff !important;
+        border-color: #645da2 !important;
+    }
+}
+
+.my-policy[data-id="6"] .btn-prolong,
+.my-policy[data-id="7"] .btn-prolong {
+    color: #ffffff;
+    background: #f7b801 !important;
+    border-color: #f7b801 !important;
+    &:hover {
+        color: #ffffff;
+        background: #f8c634 !important;
+        border-color: #f8c634 !important;
+    }
+}
+
+.my-policy[data-id="2"] .btn-file,
+.my-policy[data-id="3"] .btn-file,
+.my-policy[data-id="5"] .btn-file {
+    border: 2px solid #43b02a;
+    color: #43b02a;
+    padding-left: 76px;
+    padding-right: 40px;
+    background: #fff url(/img/Icon-file-auto.svg) 40px center no-repeat;
+    &:hover {
+        background: #edf8ea url(/img/Icon-file-auto.svg) 40px center no-repeat;
+        border: 2px solid #43b02a;
+        color: #43b02a;
+    }
+}
+
+.my-policy[data-id="1"] .btn-file,
+.my-policy[data-id="10"] .btn-file,
+.my-policy[data-id="8"] .btn-file {
+    border: 2px solid #3b86c8;
+    color: #3b86c8;
+    padding-left: 76px;
+    padding-right: 40px;
+    background: #fff url(/img/Icon-file-med.svg) 40px center no-repeat;
+    &:hover {
+        background: #ecf3fa url(/img/Icon-file-med.svg) 40px center no-repeat;
+        border: 2px solid #3b86c8;
+        color: #3b86c8;
+    }
+}
+
+.my-policy[data-id="4"] .btn-file {
+    border: 2px solid #645da2;
+    color: #645da2;
+    padding-left: 76px;
+    padding-right: 40px;
+    background: #fff url(/img/Icon-file-ins.svg) 40px center no-repeat;
+    &:hover {
+        background: #ecebf4 url(/img/Icon-file-ins.svg) 40px center no-repeat;
+        border: 2px solid #645da2;
+        color: #645da2;
+    }
+}
+
+.my-policy[data-id="6"] .btn-file,
+.my-policy[data-id="7"] .btn-file {
+    border: 2px solid #f7b801;
+    color: #f7b801;
+    padding-left: 76px;
+    padding-right: 40px;
+    background: #fff url(/img/Icon-file-travel.svg) 40px center no-repeat;
+    &:hover {
+        background: #fff8e6 url(/img/Icon-file-travel.svg) 40px center no-repeat;
+        border: 2px solid #f7b801;
+        color: #f7b801;
+    }
 }

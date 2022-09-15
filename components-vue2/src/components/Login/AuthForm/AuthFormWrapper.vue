@@ -1,5 +1,11 @@
 <template>
-  <AuthForm />
+  <div class="container">
+    <div class="row mt-4">
+      <div class="col-9">
+        <AuthForm />
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import AuthForm from "./AuthForm.vue";
