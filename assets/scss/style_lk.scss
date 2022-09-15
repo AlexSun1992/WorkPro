@@ -1746,7 +1746,7 @@ a.btn-warning {
 
 .conf-block {
     border: 1px solid #a6aeb6;
-    border-radius: 9px;
+    border-radius: 16px;
     padding: 24px 20px;
 }
 
@@ -3475,7 +3475,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     color: #43b02a;
     padding-left: 76px;
     padding-right: 40px;
-    background: #fff url(/img/Icon-file-auto.svg) 40px center no-repeat;
+    background: transparent url(/img/Icon-file-auto.svg) 40px center no-repeat;
     &:hover {
         background: #edf8ea url(/img/Icon-file-auto.svg) 40px center no-repeat;
         border: 2px solid #43b02a;
@@ -3490,7 +3490,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     color: #3b86c8;
     padding-left: 76px;
     padding-right: 40px;
-    background: #fff url(/img/Icon-file-med.svg) 40px center no-repeat;
+    background: transparent url(/img/Icon-file-med.svg) 40px center no-repeat;
     &:hover {
         background: #ecf3fa url(/img/Icon-file-med.svg) 40px center no-repeat;
         border: 2px solid #3b86c8;
@@ -3503,7 +3503,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     color: #645da2;
     padding-left: 76px;
     padding-right: 40px;
-    background: #fff url(/img/Icon-file-ins.svg) 40px center no-repeat;
+    background: transparent url(/img/Icon-file-ins.svg) 40px center no-repeat;
     &:hover {
         background: #ecebf4 url(/img/Icon-file-ins.svg) 40px center no-repeat;
         border: 2px solid #645da2;
@@ -3517,7 +3517,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     color: #f7b801;
     padding-left: 76px;
     padding-right: 40px;
-    background: #fff url(/img/Icon-file-travel.svg) 40px center no-repeat;
+    background: transparent url(/img/Icon-file-travel.svg) 40px center no-repeat;
     &:hover {
         background: #fff8e6 url(/img/Icon-file-travel.svg) 40px center no-repeat;
         border: 2px solid #f7b801;
