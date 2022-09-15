@@ -305,6 +305,16 @@ export default {
             return;
           }
           await this.callScript(e, "afterSave");
+          Sentry.captureMessage(`Действие компонента "${this.menuId}" успешно выполнено.`);
+        }
+        if (resp.status === 500) {
+          console.error(resp);
+          Sentry.captureException(new Error('Ошибка выполнения действия'), (scope) => {
+            scope.setTransactionName(
+              `Ошибка выполнения действия компонента "${this.menuId} Текст ошибки: ${resp?.data}"`
+            );
+            return scope;
+          });
         }
       }
     },
