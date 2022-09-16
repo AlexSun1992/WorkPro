@@ -12,11 +12,11 @@
 </template>
 
 <script>
+import VRuntimeTemplate from "v-runtime-template";
 import ContentBlock from "./ContentBlock";
 import ActionButton from "./ActionButton";
 import OpenCardButton from "../Block/OpenCardButton";
 import DeleteCardButton from "../Block/DeleteCardButton";
-import VRuntimeTemplate from "v-runtime-template";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 
 export default {
@@ -48,27 +48,26 @@ export default {
   },
   computed: {
     templateData: {
-      get: function () {
+      get() {
         return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
       },
     },
     actions: {
-      get: function () {
+      get() {
         return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
       },
     },
     isEmptyContent: {
-      get: function () {
+      get() {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
           return !block?.data?.items.length;
-        } else {
-          return false;
         }
+        return false;
       },
     },
     isShowBlock: {
-      get: function () {
+      get() {
         return Boolean(this.$store.getters["blocks/getBlockById"](this.itemId));
       },
     },
