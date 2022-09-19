@@ -114,7 +114,7 @@ converter.menuObject = (data) => {
     obj.isModal = data.LMODALFORMSTYLE;
     obj.closeAfterSave = data.LCLOSEAFTERSAVE;
     obj.groupmenu = data.SGROUPMENU;
-    obj.isVisible = data.LVISIBLE;
+    obj.isVisible = data.LSHOWVUE;
     obj.newCount = data.NNEWCOUNT || null;
   }
   return obj;

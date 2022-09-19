@@ -13,7 +13,7 @@
             }"
           >
             <Sidebar
-              :nav-items="menuWithOutIcon"
+              :nav-items="menuVisible"
               @mini-sidebar="changeSidebar"
               @mini-mobile-sidebar="changeMobileSidebar"
             />
@@ -73,6 +73,9 @@ export default {
   computed: {
     menuWithOutIcon() {
       return this.$store.getters["menu/getMenuWithOutIcon"];
+    },
+    menuVisible() {
+      return this.$store.getters["menu/getVisibleShowMenu"];
     },
     nav() {
       return this.$store.getters["menu/menu"][0].children;

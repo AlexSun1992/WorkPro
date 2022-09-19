@@ -28,6 +28,9 @@ export const getters = {
         m.iconFileName !== undefined && m.iconFileName !== "" && m.isVisible
     );
   },
+  getVisibleShowMenu: (state) => {
+    return state.menu[0].children.filter((m) => m.isVisible == true);
+  },
 };
 
 export const actions = {
