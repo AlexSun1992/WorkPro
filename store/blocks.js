@@ -130,7 +130,16 @@ export const actions = {
 
     try {
       const response = await this.$axios.get(url);
-      const responseData = await response.data;
+      const responseData = response.data;
+
+      commit(
+        "menu/setMenuById",
+        {
+          settings: responseData.settings,
+          subSettings: responseData.subSettings,
+        },
+        { root: true }
+      );
 
       await commit("addBlock", {
         blockId: parseInt(params.id),

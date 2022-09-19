@@ -42,6 +42,11 @@ router.get("/menu/:idModule/?:idItem", (req, res) => {
       );
     } else {
       URL_ADDRESSS = encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`);
+      if (req.params.idItem !== "null") {
+        URL_ADDRESSS = encodeURI(
+          `${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idItem}`
+        );
+      }
     }
     mobile2ServiceInstance({
       url: URL_ADDRESSS,

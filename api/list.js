@@ -1,6 +1,7 @@
 /* eslint-disable */
 import listConverter from "../converters/list";
 import formConverter from "../converters/dataform";
+import menuConverter from "../converters/menu";
 import consts from "../api/urls";
 
 import { mobile2Service } from "./../services/mobile2.services";
@@ -27,7 +28,7 @@ router.use(express.json({ limit: "50mb" }));
 
 router.use(cookieParser());
 
-router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
+router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
   try {
     let mobile2ServiceInstance = mobile2Service();
     const ipAddress = req.headers["x-forwarded-for"];
@@ -39,6 +40,7 @@ router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
       }
     }
     let URL_ADDRESS;
+    let settings = null;
     const filters = listConverter.getFilterParams(
       formConverter.save(JSON.parse(req.params.filters))
     );
@@ -60,6 +62,9 @@ router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
       URL_ADDRESS = `${consts.DATA}/${req.params.idModule}/${
         req.params.idItem
       }?json=${encodeURIComponent(req.params.filters)}`;
+      settings = await mobile2ServiceInstance.get(
+        `${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idItem}`
+      );
     } else {
       URL_ADDRESS = `${consts.FREEDATA}/${req.params.idModule}/${req.params.idItem}/0/0`;
     }
@@ -68,7 +73,11 @@ router.get("/list/:idModule/:idItem/:filters", (req, res, next) => {
       method: "GET",
     })
       .then((resp) => {
-        res.send(listConverter.list(resp.data));
+        res.send({
+          ...listConverter.list(resp.data),
+          settings: settings?.data[0]._data[0],
+          subSettings: menuConverter.menuObject(settings?.data[0]._data[0]),
+        });
       })
       .catch((err) => {
         console.log(err);

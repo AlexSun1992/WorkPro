@@ -62,17 +62,19 @@ export default {
 
   async fetch() {
     try {
-      // if (this.params.settings.recordLoad) {
-      (await this.cardId)
-        ? this.$store.dispatch("blocks/fetchWizardBlock", {
-            itemId: this.itemId,
-            cardId: this.cardId,
-          })
-        : this.$store.dispatch("blocks/fetchBlock", {
-            id: this.itemId,
-            query: { ...this.$route.query },
-          });
-      // }
+      if (this.cardId) {
+        this.$store.dispatch("blocks/fetchWizardBlock", {
+          itemId: this.itemId,
+          cardId: this.cardId,
+        });
+      } else if (
+        this.$store.getters["blocks/getBlockById"](this.itemId) === undefined
+      ) {
+        this.$store.dispatch("blocks/fetchBlock", {
+          id: this.itemId,
+          query: { ...this.$route.query },
+        });
+      }
     } catch (err) {
       this.$bvToast.toast(err.response.data.MESSAGE, {
         title: "Ошибка",

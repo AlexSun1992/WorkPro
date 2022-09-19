@@ -48,6 +48,24 @@ export const actions = {
       commit("setFlatMenu", res.data[0]._data);
     });
   },
+  async fetchMenuById({ commit, dispatch }, params) {
+    const URL =
+      params?.zone === "free"
+        ? `/api/menu/55/${params.idItem}?zone=free`
+        : "/api/menu/55/null";
+    if (params?.zone !== "free") {
+      await this.$axios.get(`/api/module/55/${params.idItem}`).then((res) => {
+        commit("setMenuById", res.data);
+      });
+      if (params.idWizard) {
+        await this.$axios
+          .get(`/api/module/55/${params.idWizard}`)
+          .then((res) => {
+            commit("setMenuById", res.data);
+          });
+      }
+    }
+  },
   async fetchCounters({ commit, state }, params) {
     await this.$axios.get("/am/main/v2/data/55/802").then((res) => {
       const menuItems = state.menu[0].children;
@@ -76,6 +94,31 @@ export const actions = {
 export const mutations = {
   setMenu(state, data) {
     state.menu = data;
+  },
+  setMenuById(state, data) {
+    const itemsMenu = state.menu[0]?.children;
+    const itemsFlatMenu = state.flatmenu;
+    const { settings, subSettings } = data;
+    if (itemsMenu && itemsFlatMenu) {
+      const itemMenu = itemsMenu.find((i) => i.idItem === subSettings.idItem);
+      const itemFlatMenu = itemsFlatMenu.find(
+        (i) => i.IDITEM === settings.IDITEM
+      );
+      if (itemMenu) {
+        Object.entries(subSettings).forEach(([key, value]) => {
+          itemMenu[key] = value;
+        });
+      } else {
+        itemsMenu.push(subSettings);
+      }
+      if (itemFlatMenu) {
+        Object.entries(settings).forEach(([key, value]) => {
+          itemFlatMenu[key] = value;
+        });
+      } else {
+        itemsFlatMenu.push(settings);
+      }
+    }
   },
   setQueriesUrlByIdMenu(state, { idItem, url }) {
     const itemsMenu = state.menu[0]?.children;

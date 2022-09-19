@@ -75,13 +75,13 @@ converter.menuObject = (data) => {
   const obj = {};
   obj.name = data.SNAME;
   if (data.IDITEM === -1) {
-    obj.url = `/cabinet/${data.idModule}/${data.ID}`;
+    obj.url = `/cabinet/55/${data.ID}`;
   } else {
     obj.url = data.IDITEM
-      ? `/cabinet/${data.idModule}/${data.IDPARENT}/${data.IDITEM}`
+      ? `/cabinet/55/${data.IDPARENT}/${data.IDITEM}`
       : `/${data.ID}`;
     if (data.IDADMMENUTYPE === 10) {
-      obj.url = `/cabinet/${data.idModule}/${data.IDPARENT}/${data.IDITEM}/0`;
+      obj.url = `/cabinet/55/${data.IDPARENT}/${data.IDITEM}/0`;
     }
   }
   obj.id = data.ID;

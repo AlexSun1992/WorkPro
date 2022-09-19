@@ -87,11 +87,6 @@ export default {
     templateData() {
       return this.params.settings.portalgrid || this.params.settings.cardgrid;
     },
-    templateCardData() {
-      return this.$store.getters["menu/getMenuById"](
-        this.$store.getters["blocks/blockId"]
-      )?.SVJCARDTEMPLATE;
-    },
     filters() {
       return this.$store.getters["blocks/getFilters"];
     },
