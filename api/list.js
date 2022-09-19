@@ -76,7 +76,9 @@ router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
         res.send({
           ...listConverter.list(resp.data),
           settings: settings?.data[0]._data[0],
-          subSettings: menuConverter.menuObject(settings?.data[0]._data[0]),
+          subSettings: settings
+            ? menuConverter.menuObject(settings?.data[0]._data[0])
+            : undefined,
         });
       })
       .catch((err) => {
