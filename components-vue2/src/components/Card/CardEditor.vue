@@ -9,7 +9,7 @@
     />
 
     <Form
-      v-if="!isBlock"
+      v-if="!isBlock && !getError"
       :data="getForm"
       :edit="!isReadOnly"
       @update="updateValue($event)"
@@ -68,7 +68,7 @@ Vue.use(IconsPlugin);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
 const startTime = Date.now();
-const limitTime = 4000;
+const limitTime = 10000;
 export default {
   name: "CardEditor",
   components: { FormBlock, Form },
@@ -181,13 +181,15 @@ export default {
         this.$store.dispatch("menu/fetchMenu", this.params),
         this.fetchCard(),
       ]).catch((e) => {
-        console.error(e?.response?.data || e);
         Sentry.captureException(
           new Error("Ошибка выполнения запроса."),
           (scope) => {
             scope.setTransactionName(e?.response?.data?.MESSAGE || e);
             return scope;
           }
+        );
+        throw new Error(
+          e?.response?.data?.MESSAGE || "Ошибка отображения компонента"
         );
       });
       this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
@@ -207,7 +209,7 @@ export default {
       }
     } catch (e) {
       console.error(e);
-      this.$store.commit("data_card/setSavedError", true);
+      this.$store.commit("data_card/setError", true);
       this.$store.commit(
         "data_card/setErrorMessage",
         e?.response?.data || {
@@ -305,16 +307,21 @@ export default {
             return;
           }
           await this.callScript(e, "afterSave");
-          Sentry.captureMessage(`Действие компонента "${this.menuId}" успешно выполнено.`);
+          Sentry.captureMessage(
+            `Действие компонента "${this.menuId}" успешно выполнено.`
+          );
         }
         if (resp.status === 500) {
           console.error(resp);
-          Sentry.captureException(new Error('Ошибка выполнения действия'), (scope) => {
-            scope.setTransactionName(
-              `Ошибка выполнения действия компонента "${this.menuId} Текст ошибки: ${resp?.data}"`
-            );
-            return scope;
-          });
+          Sentry.captureException(
+            new Error("Ошибка выполнения действия"),
+            (scope) => {
+              scope.setTransactionName(
+                `Ошибка выполнения действия компонента "${this.menuId} Текст ошибки: ${resp?.data}"`
+              );
+              return scope;
+            }
+          );
         }
       }
     },
