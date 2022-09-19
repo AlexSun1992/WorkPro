@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-show="isShowBlock">
+    <div v-if="isShowBlock">
       <v-runtime-template :template="templateData"></v-runtime-template>
     </div>
     <div v-if="!isShowBlock">
@@ -46,15 +46,31 @@ export default {
       default: () => null,
     },
   },
+  async fetch() {
+    try {
+      await this.$store.dispatch("blocks/fetchBlock", {
+        id: this.itemId,
+        query: { ...this.$route.query },
+      });
+    } catch (err) {
+      this.$bvToast.toast(err.response.data.MESSAGE, {
+        title: "Ошибка",
+        variant: "danger",
+        noAutoHide: true,
+        solid: true,
+      });
+    }
+  },
   computed: {
     templateData: {
       get() {
-        return this.$store.getters["menu/getMenuById"](this.itemId).SVJCARDGRID;
+        return this.$store.getters["menu/getMenuById"](this.itemId)
+          ?.SVJCARDGRID;
       },
     },
     actions: {
       get() {
-        return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
+        return this.$store.getters["menu/getMenuById"](this.itemId)?.ACTIONSCUR;
       },
     },
     isEmptyContent: {

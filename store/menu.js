@@ -55,9 +55,15 @@ export const actions = {
         : "/api/menu/55/null";
     if (params?.zone !== "free") {
       await this.$axios.get(`/api/module/55/${params.idItem}`).then((res) => {
-        //console.log(res.data);
         commit("setMenuById", res.data);
       });
+      if (params.idWizard) {
+        await this.$axios
+          .get(`/api/module/55/${params.idWizard}`)
+          .then((res) => {
+            commit("setMenuById", res.data);
+          });
+      }
     }
   },
   async fetchCounters({ commit, state }, params) {
@@ -96,7 +102,7 @@ export const mutations = {
     if (itemsMenu && itemsFlatMenu) {
       const itemMenu = itemsMenu.find((i) => i.idItem === subSettings.idItem);
       const itemFlatMenu = itemsFlatMenu.find(
-        (i) => i.idItem === settings.idItem
+        (i) => i.IDITEM === settings.IDITEM
       );
       if (itemMenu) {
         Object.entries(subSettings).forEach(([key, value]) => {
