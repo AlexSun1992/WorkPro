@@ -126,7 +126,7 @@ export default {
       get() {
         const data = this.$store.getters["menu/getMenuById"](
           this.data.menudic
-        ).SVJCARDGRID;
+        )?.SVJCARDGRID;
         if (data) {
           return data;
         }
