@@ -96,8 +96,8 @@ router.get("/module/:moduleId/:itemId", (req, res) => {
       .then((resp) => {
         const { data } = resp;
         res.send({
-          settings: data[0]._data[0],
-          subSettings: menuConverter.menuObject(data[0]._data[0]),
+          settings: data[0],
+          subSettings: menuConverter.menuObject(data[0]),
         });
       })
       .catch((err) => {

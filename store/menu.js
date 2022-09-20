@@ -4,7 +4,7 @@ const BFF_URL_GET_MENU = "/api/module";
 const BFF_URL_GET_FREE_MENU = "/api/module?zone=free";
 const URL_GET_FREE_MENU = "/api/module?zone=free";
 export const state = () => ({
-  menu: [],
+  menu: [{ children: [] }],
   flatmenu: [],
   breadcrumbs: [],
 });
@@ -97,10 +97,13 @@ export const actions = {
 export const mutations = {
   setMenu(state, data) {
     state.menu = data;
+    console.log(state.menu);
   },
   setMenuById(state, data) {
     const itemsMenu = state.menu[0]?.children;
     const itemsFlatMenu = state.flatmenu;
+    console.log(itemsMenu);
+    console.log(itemsFlatMenu);
     const { settings, subSettings } = data;
     if (itemsMenu && itemsFlatMenu) {
       const itemMenu = itemsMenu.find((i) => i.idItem === subSettings.idItem);
@@ -112,6 +115,7 @@ export const mutations = {
           itemMenu[key] = value;
         });
       } else {
+        console.log(subSettings);
         itemsMenu.push(subSettings);
       }
       if (itemFlatMenu) {
@@ -119,7 +123,9 @@ export const mutations = {
           itemFlatMenu[key] = value;
         });
       } else {
+        console.log(settings);
         itemsFlatMenu.push(settings);
+        console.log(state.flatmenu);
       }
     }
   },
@@ -133,7 +139,7 @@ export const mutations = {
     }
   },
   setFlatMenu(state, data) {
-    state.flatmenu = data;
+    // state.flatmenu = data;
   },
   setBreadcrumbs(state, data) {
     state.breadcrumbs = data;
