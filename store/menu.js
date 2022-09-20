@@ -48,7 +48,10 @@ export const actions = {
       });
     }
     await this.$axios.get(URL).then((res) => {
-      commit("setFlatMenu", res.data);
+      commit(
+        "setFlatMenu",
+        params?.zone === "free" ? res.data[0]._data : res.data
+      );
     });
   },
   async fetchMenuById({ commit, dispatch, state }, params) {
