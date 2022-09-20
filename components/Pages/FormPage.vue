@@ -104,18 +104,6 @@ export default {
       );
     },
   },
-
-  // watch: {
-  //   errorMessage() {
-  //     if (this.errorMessage === null) {
-  //       this.isErrorExist = false;
-  //     }
-  //     if (this.errorMessage != null) {
-  //       this.isErrorExist = true;
-  //     }
-  //   },
-  // },
-
   async created() {
     try {
       this.$store.commit("data_card/clearFormData");

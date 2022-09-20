@@ -12,7 +12,9 @@ export default async function ({
   store.commit("blocks/clearBlock");
   store.commit("blocks/clearFilters");
   store.commit("data_card/setError", false);
-  await store.dispatch("menu/fetchMenuById", route.params);
+  if (app.$cookiz.get("auth._token.local")) {
+    await store.dispatch("menu/fetchMenuById", route.params);
+  }
   if (process.server) {
     return app.$auth
       .setUserToken(

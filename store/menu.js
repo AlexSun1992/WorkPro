@@ -34,7 +34,7 @@ export const getters = {
 };
 
 export const actions = {
-  async fetchMenu({ commit, dispatch }, params) {
+  async fetchMenu({ commit, dispatch, state }, params) {
     const URL =
       params?.zone === "free"
         ? `/api/menu/55/${params.idItem}?zone=free`
@@ -48,10 +48,10 @@ export const actions = {
       });
     }
     await this.$axios.get(URL).then((res) => {
-      commit("setFlatMenu", res.data[0]._data);
+      commit("setFlatMenu", res.data);
     });
   },
-  async fetchMenuById({ commit, dispatch }, params) {
+  async fetchMenuById({ commit, dispatch, state }, params) {
     const URL =
       params?.zone === "free"
         ? `/api/menu/55/${params.idItem}?zone=free`
@@ -59,6 +59,9 @@ export const actions = {
     if (params?.zone !== "free") {
       await this.$axios.get(`/api/module/55/${params.idItem}`).then((res) => {
         commit("setMenuById", res.data);
+        if (process.server) {
+          commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
+        }
       });
       if (params.idWizard) {
         await this.$axios
@@ -97,13 +100,10 @@ export const actions = {
 export const mutations = {
   setMenu(state, data) {
     state.menu = data;
-    console.log(state.menu);
   },
   setMenuById(state, data) {
     const itemsMenu = state.menu[0]?.children;
     const itemsFlatMenu = state.flatmenu;
-    console.log(itemsMenu);
-    console.log(itemsFlatMenu);
     const { settings, subSettings } = data;
     if (itemsMenu && itemsFlatMenu) {
       const itemMenu = itemsMenu.find((i) => i.idItem === subSettings.idItem);
@@ -115,7 +115,6 @@ export const mutations = {
           itemMenu[key] = value;
         });
       } else {
-        console.log(subSettings);
         itemsMenu.push(subSettings);
       }
       if (itemFlatMenu) {
@@ -123,9 +122,7 @@ export const mutations = {
           itemFlatMenu[key] = value;
         });
       } else {
-        console.log(settings);
         itemsFlatMenu.push(settings);
-        console.log(state.flatmenu);
       }
     }
   },
@@ -139,7 +136,7 @@ export const mutations = {
     }
   },
   setFlatMenu(state, data) {
-    // state.flatmenu = data;
+    state.flatmenu = data;
   },
   setBreadcrumbs(state, data) {
     state.breadcrumbs = data;
