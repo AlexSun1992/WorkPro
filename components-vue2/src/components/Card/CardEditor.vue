@@ -178,7 +178,7 @@ export default {
         this.eventHandler = await this.loadScript();
       }
       await Promise.all([
-        this.$store.dispatch("menu/fetchMenu", this.params),
+        this.$store.dispatch("menu/fetchMenuById", this.params),
         this.fetchCard(),
       ]).catch((e) => {
         Sentry.captureException(
@@ -192,7 +192,9 @@ export default {
           e?.response?.data?.MESSAGE || "Ошибка отображения компонента"
         );
       });
-      this.setting = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
+      this.setting = this.$store.getters["menu/getSettingsByIdItem"](
+        this.params.idItem
+      );
       this.isShowButtonSave = true;
       const loadedTime = Date.now() - startTime;
       const sentryMessage = `Компонент  "${this.menuId}" грузился  ${loadedTime} миллисекунд(ы)`;

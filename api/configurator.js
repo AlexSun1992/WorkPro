@@ -82,22 +82,35 @@ router.get("/module", (req, res) => {
 router.get("/module/:moduleId/:itemId", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
-    if (req.headers.authorization) {
-      mobile2ServiceInstance.defaults.headers.common.Authorization =
-        req.headers.authorization;
-    } else if (req.cookies) {
-      mobile2ServiceInstance.defaults.headers.common.Authorization =
-        req.cookies["auth._token.local"];
+    const ipAddress = req.headers["x-forwarded-for"];
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || "";
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    if (req.query.zone !== "free") {
+      if (req?.headers?.authorization) {
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
+          req.headers.authorization;
+      } else if (req?.cookies["auth._token.local"]) {
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
+          req?.cookies["auth._token.local"];
+      }
     }
+    mobile2ServiceInstance.defaults.headers.common.Cookie = req.headers?.cookie
+      ? req.headers.cookie
+      : null;
     mobile2ServiceInstance({
-      url: `${consts.CLIENTMENU}/${req.params.moduleId}/${req.params.itemId}`,
+      url: `${
+        req.query.zone === "free" ? consts.CLIENTFREEMENU : consts.CLIENTMENU
+      }/${req.params.moduleId}/${req.params.itemId}`,
       method: "GET",
     })
       .then((resp) => {
         const { data } = resp;
         res.send({
-          settings: data[0],
-          subSettings: menuConverter.menuObject(data[0]),
+          settings: req.query.zone === "free" ? data[0]._data[0] : data[0],
+          subSettings: menuConverter.menuObject(
+            req.query.zone === "free" ? data[0]._data[0] : data[0]
+          ),
         });
       })
       .catch((err) => {

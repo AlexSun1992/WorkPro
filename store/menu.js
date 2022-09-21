@@ -57,22 +57,18 @@ export const actions = {
   async fetchMenuById({ commit, dispatch, state }, params) {
     const URL =
       params?.zone === "free"
-        ? `/api/menu/55/${params.idItem}?zone=free`
-        : "/api/menu/55/null";
-    if (params?.zone !== "free") {
-      await this.$axios.get(`/api/module/55/${params.idItem}`).then((res) => {
-        commit("setMenuById", res.data);
-        if (process.server) {
-          commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
-        }
-      });
-      if (params.idWizard) {
-        await this.$axios
-          .get(`/api/module/55/${params.idWizard}`)
-          .then((res) => {
-            commit("setMenuById", res.data);
-          });
+        ? `/api/module/55/${params.idItem}?zone=free`
+        : `/api/module/55/${params.idItem}`;
+    await this.$axios.get(URL).then((res) => {
+      commit("setMenuById", res.data);
+      if (process.server) {
+        commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
       }
+    });
+    if (params.idWizard) {
+      await this.$axios.get(`/api/module/55/${params.idWizard}`).then((res) => {
+        commit("setMenuById", res.data);
+      });
     }
   },
   async fetchCounters({ commit, state }, params) {
