@@ -179,15 +179,17 @@ export const actions = {
     { commit, dispatch, getters },
     { relId, relActionId, rowId, itemId, actionId, body }
   ) {
-    await this.$axios
+    return await this.$axios
       .post(
         `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
         body || {}
       )
       .then(async (resp) => {
-        commit("setPoutValue", resp.data.POUTVALUE);
-        dispatch("updateBlock", itemId);
+        if (getters.getBlockById(itemId)) {
+          dispatch("updateBlock", itemId);
+        }
         dispatch("menu/fetchCounters", null, { root: true });
+        return resp.data;
       });
   },
 };
