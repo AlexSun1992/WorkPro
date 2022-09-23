@@ -7,9 +7,11 @@ export const state = () => ({
   menu: [{ children: [] }],
   flatmenu: [],
   breadcrumbs: [],
+  counters: [],
 });
 
 export const getters = {
+  counters: (state) => state.counters,
   breadcrumbs: (state) => state.breadcrumbs,
   menu: (state) => state.menu,
   flatmenu: (state) => state.flatmenu,
@@ -64,6 +66,8 @@ export const actions = {
       if (process.server) {
         commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
       }
+      if (state.counters.length) {
+      }
     });
     if (params.idWizard) {
       await this.$axios.get(`/api/module/55/${params.idWizard}`).then((res) => {
@@ -75,6 +79,7 @@ export const actions = {
     await this.$axios.get("/am/main/v2/data/55/802").then((res) => {
       const menuItems = state.menu[0].children;
       const counters = res.data[0]._data;
+      commit("setCounters", counters);
       menuItems.forEach((item) => {
         const counter = counters.find((c) => c.IDITEM === item.idItem);
         if (counter) {
@@ -106,6 +111,7 @@ export const mutations = {
     const { settings, subSettings } = data;
     if (itemsMenu && itemsFlatMenu) {
       const itemMenu = itemsMenu.find((i) => i.idItem === subSettings.idItem);
+      const counter = state.counters.find((i) => i.IDITEM === settings.IDITEM);
       const itemFlatMenu = itemsFlatMenu.find(
         (i) => i.IDITEM === settings.IDITEM
       );
@@ -113,6 +119,10 @@ export const mutations = {
         Object.entries(subSettings).forEach(([key, value]) => {
           itemMenu[key] = value;
         });
+        if (counter) {
+          itemMenu.newCount = counter?.NCOUNT ? counter.NCOUNT : null;
+          itemMenu.newCountColor = counter?.SCOLOR ? counter.SCOLOR : null;
+        }
       } else {
         itemsMenu.push(subSettings);
       }
@@ -145,5 +155,8 @@ export const mutations = {
     const item = menuItems.find((i) => i.idItem === data.IDITEM);
     item.newCount = data?.NCOUNT ? data.NCOUNT : null;
     item.newCountColor = data?.SCOLOR ? data.SCOLOR : null;
+  },
+  setCounters(state, data) {
+    state.counters = data;
   },
 };

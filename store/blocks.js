@@ -140,8 +140,7 @@ export const actions = {
         },
         { root: true }
       );
-
-      await commit("addBlock", {
+      commit("addBlock", {
         blockId: parseInt(params.id),
         data: responseData,
       });
