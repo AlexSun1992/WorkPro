@@ -237,6 +237,13 @@ export default {
         ) {
           const method = params.error ? "sendsmscode2" : "sendsmscode";
 
+          // const getTextMessage = await axios.post(
+          //   "/am/auth/v2/authorize",
+          //   params,
+          //   headers
+          // );
+          // console.log("getTextMessage:", getTextMessage);
+
           const response = await axios.post(
             `/free/v2/${method}` +
               `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,
