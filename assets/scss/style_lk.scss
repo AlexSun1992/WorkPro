@@ -3557,3 +3557,11 @@ a[data-newcount][data-newcolor="RED"]:after {
     transform: translateY(-50%);
     position: absolute;
 }
+
+.autocomplete-result-list {
+    background: #fff;
+    padding-left: 0;
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
