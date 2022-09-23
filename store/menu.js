@@ -66,8 +66,6 @@ export const actions = {
       if (process.server) {
         commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
       }
-      if (state.counters.length) {
-      }
     });
     if (params.idWizard) {
       await this.$axios.get(`/api/module/55/${params.idWizard}`).then((res) => {
