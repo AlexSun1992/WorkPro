@@ -1,34 +1,9 @@
 <template>
   <b-button
     v-if="action"
-    @click.stop="
-      action.LREQUESTCODE === true
-        ? $bvModal.show(String(rowId))
-        : startAction()
-    "
+    @click.stop="action.LREQUESTCODE === true ? confirmAction() : startAction()"
   >
     <slot><div v-text="action.SNAME"></div></slot>
-    <b-modal
-      v-if="!action.LHIDEDLG"
-      @close="$bvModal.hide(String(rowId))"
-      :data-action-id="this.actionId"
-      modal-class="cabinet"
-      :id="String(rowId)"
-      @ok="executeAction"
-      cancel-title="Нет"
-      ok-title="Да"
-      no-close-on-backdrop
-      ok-only
-    >
-      {{
-        insideContent !== ""
-          ? insideContent
-          : `Вы действительно хотите выполнить действие "${action.SNAME}"?`
-      }}
-      <b-button class="mt-3 cancel" block @click="$bvModal.hide(String(rowId))"
-        >Нет</b-button
-      >
-    </b-modal>
   </b-button>
 </template>
 
@@ -72,9 +47,35 @@ export default {
   },
 
   methods: {
+    confirmAction() {
+      this.$bvModal
+        .msgBoxConfirm(
+          `Вы действительно хотите выполнить действие" ${this.action.SNAME}"?`,
+          {
+            title: "Подтверждение выполнения действия",
+            size: "md",
+            buttonSize: "md",
+            okVariant: "success",
+            okTitle: "Да",
+            cancelTitle: "Нет",
+            footerClass: "p-2",
+            hideHeaderClose: false,
+            modalClass: ["cabinet"],
+            centered: true,
+          }
+        )
+        .then((value) => {
+          if (value) {
+            this.executeAction();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
     async executeAction() {
       try {
-        await this.$store.dispatch("blocks/executeAction", {
+        const result = await this.$store.dispatch("blocks/executeAction", {
           relId: this.relId,
           relActionId: this.action.REL,
           actionId: this.actionId,
@@ -82,26 +83,17 @@ export default {
           itemId: this.action.NITEM,
           body: this.body,
         });
-
-        if (!this.getUrlAddress) {
-          await this.$store.dispatch("blocks/fetchBlock", {
-            id: this.$route.params.idItem,
-            query: {
-              filters: JSON.stringify(
-                this.$store.getters["blocks/getServerFilters"]
-              ),
-            },
-          });
-          this.$bvToast.toast("Успешно выполнено", {
-            title: "",
-            variant: "success",
-            solid: true,
-          });
-        }
+        this.$emit("update");
+        this.$bvToast.toast("Успешно выполнено", {
+          title: "",
+          variant: "success",
+          solid: true,
+        });
+        return result;
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
-      this.$emit("update");
+      return null;
     },
     async startAction() {
       if (this.action.NTYPE === 2) {
@@ -109,19 +101,18 @@ export default {
           this.$router.push(`/cabinet/55/0/${this.action.SCONST}`);
         }
       } else if (this.action.LHIDEDLG) {
-        await this.executeAction();
-        if (this.getUrlAddress) {
+        const result = await this.executeAction();
+        if (result?.POUTVALUE) {
           window.open(
-            this.getUrlAddress,
+            result.POUTVALUE,
             this.action.LCURWINDOW ? "_self" : "_blank"
           );
         }
       } else {
-        this.$bvModal.show(String(this.rowId));
+        this.confirmAction();
       }
     },
   },
-
   computed: {
     action: {
       get() {
@@ -130,10 +121,6 @@ export default {
         );
         return action || null;
       },
-    },
-    getUrlAddress() {
-      const resultUrl = this.$store.getters["blocks/getUrl"];
-      return resultUrl;
     },
   },
   watch: {
