@@ -330,20 +330,17 @@ export default {
     },
 
     openCard(e) {
-      const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find((item) => {
-        return item.SNAME == e.label;
-      });
-
-      if (menuItem === undefined) {
+      const arrName = e.name.split("Card");
+      const idItem = arrName[1];
+      if (idItem) {
+        this.$router.push(
+          `/cabinet/${this.params.page.idModule}/0/${idItem}/0?ref=${this.$route.fullPath}`
+        );
+      } else {
         throw new Error(
-          `В списке меню не найден пункт меню с названием SNAME === "${e.label}"`
+          `В опции кнопки не указан идентификатор меню. Пример наимменования кнопки: "Card178"`
         );
       }
-
-      this.$router.push(
-        `/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0?ref=${this.$route.fullPath}`
-      );
     },
     validateData(data) {
       let valid = true;
