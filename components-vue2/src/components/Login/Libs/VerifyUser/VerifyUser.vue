@@ -236,29 +236,6 @@ export default {
         ) {
           const method = params.error ? "sendsmscode2" : "sendsmscode";
 
-          // Проблемы с обращением к API
-          // При таких параметрах body приходит нужный ответ
-          const testParam = {
-            PHONE: "+7(909)-000-00-00",
-            loginType: "phone",
-            token: 1,
-            modeType: "REG",
-            mode: 2,
-            password: "carter911",
-            username: "9032374418",
-            ACCESS_TOKEN: `${this.token}`,
-            headers: {
-              recaptcha: `${this.token}`,
-            },
-          };
-
-          const getTextMessage = await axios.post(
-            "/am/authw/v2/authorize",
-            testParam
-          );
-          console.log("getTextMessage:", getTextMessage);
-          // Проблемы с обращением к API
-
           const response = await axios.post(
             `/free/v2/${method}` +
               `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,

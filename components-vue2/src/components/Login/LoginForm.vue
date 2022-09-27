@@ -9,7 +9,8 @@
     >
       <div class="d-block text-center">
         <h4>Введите код</h4>
-        На номер телефона {{ user.username }} был отправлен код подверждения
+        На номер телефона {{ hideTelephoneMessage }} был отправлен код
+        подверждения
         <b-form @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
             ref="focusCodeSMS"
@@ -244,6 +245,7 @@ export default {
         password: "",
         code: "",
       },
+      hideTelephoneMessage: null,
       duration: 60,
       isUsernameBlured: true,
       isPasswordBlured: true,
@@ -378,6 +380,25 @@ export default {
     },
 
     async fetchToken() {
+      // const body = {
+      //   mode: 2,
+      //   password: this.$v.user.password.$model,
+      //   username:
+      //     this.isEmailTypeRegistrationChoosen === true
+      //       ? this.email
+      //       : this.$v.user.username.$model,
+      // };
+
+      // // const { SMSPHONE } = await axios.post("/am/authw/v2/authorize", body);
+      // // console.log("result:", SMSPHONE);
+      // const {
+      //   data: { ACCESS_TOKEN, REFRESH_TOKEN },
+      // } = await axios.post("/am/authw/v2/authorize", body);
+
+      // console.log("ACCESS_TOKEN:", ACCESS_TOKEN);
+      // console.log("REFRESH_TOKEN:", REFRESH_TOKEN);
+
+      // return;
       try {
         this.authInProcess = true;
         let body = {
@@ -388,10 +409,13 @@ export default {
               ? this.email
               : this.$v.user.username.$model,
         };
+        // const response = await axios.post("/am/authw/v2/authorize", body);
+        // console.log("response:", response);
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
           body = { ...body, code: this.$v.user.code.$model };
         }
+        console.log("body:", body);
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
         } = await axios.post("/am/authw/v2/authorize", body);
@@ -408,6 +432,9 @@ export default {
           window.location.href = `${attempt.searchParams.get("ref")}`;
         }
       } catch (e) {
+        if (e?.response?.data.STATUS === 401) {
+          this.hideTelephoneMessage = e.response.data.SMSPHONE;
+        }
         this.authInProcess = false;
         if (e?.response?.data.CODE === 105 || e?.response?.data.CODE === 106) {
           this.isValidStateCodeSMS = false;
