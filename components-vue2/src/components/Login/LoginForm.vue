@@ -380,25 +380,6 @@ export default {
     },
 
     async fetchToken() {
-      // const body = {
-      //   mode: 2,
-      //   password: this.$v.user.password.$model,
-      //   username:
-      //     this.isEmailTypeRegistrationChoosen === true
-      //       ? this.email
-      //       : this.$v.user.username.$model,
-      // };
-
-      // // const { SMSPHONE } = await axios.post("/am/authw/v2/authorize", body);
-      // // console.log("result:", SMSPHONE);
-      // const {
-      //   data: { ACCESS_TOKEN, REFRESH_TOKEN },
-      // } = await axios.post("/am/authw/v2/authorize", body);
-
-      // console.log("ACCESS_TOKEN:", ACCESS_TOKEN);
-      // console.log("REFRESH_TOKEN:", REFRESH_TOKEN);
-
-      // return;
       try {
         this.authInProcess = true;
         let body = {
@@ -409,13 +390,11 @@ export default {
               ? this.email
               : this.$v.user.username.$model,
         };
-        // const response = await axios.post("/am/authw/v2/authorize", body);
-        // console.log("response:", response);
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
           body = { ...body, code: this.$v.user.code.$model };
         }
-        console.log("body:", body);
+
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
         } = await axios.post("/am/authw/v2/authorize", body);
