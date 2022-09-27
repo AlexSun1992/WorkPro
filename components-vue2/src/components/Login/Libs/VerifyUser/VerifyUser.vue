@@ -198,7 +198,6 @@ export default {
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
-
       await isCaptchaBecomesHide();
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
@@ -237,12 +236,28 @@ export default {
         ) {
           const method = params.error ? "sendsmscode2" : "sendsmscode";
 
-          // const getTextMessage = await axios.post(
-          //   "/am/auth/v2/authorize",
-          //   params,
-          //   headers
-          // );
-          // console.log("getTextMessage:", getTextMessage);
+          // Проблемы с обращением к API
+          // При таких параметрах body приходит нужный ответ
+          const testParam = {
+            PHONE: "+7(909)-000-00-00",
+            loginType: "phone",
+            token: 1,
+            modeType: "REG",
+            mode: 2,
+            password: "carter911",
+            username: "9032374418",
+            ACCESS_TOKEN: `${this.token}`,
+            headers: {
+              recaptcha: `${this.token}`,
+            },
+          };
+
+          const getTextMessage = await axios.post(
+            "/am/authw/v2/authorize",
+            testParam
+          );
+          console.log("getTextMessage:", getTextMessage);
+          // Проблемы с обращением к API
 
           const response = await axios.post(
             `/free/v2/${method}` +
@@ -253,6 +268,7 @@ export default {
 
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
+          // Получение сообщения об отправке на номер телефона
 
           if (getSuccessSendMessageText !== undefined) {
             this.$emit("messageText", getSuccessSendMessageText);
