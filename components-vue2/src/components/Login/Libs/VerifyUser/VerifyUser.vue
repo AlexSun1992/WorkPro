@@ -198,7 +198,6 @@ export default {
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
-
       await isCaptchaBecomesHide();
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
@@ -246,6 +245,7 @@ export default {
 
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
+          // Получение сообщения об отправке на номер телефона
 
           if (getSuccessSendMessageText !== undefined) {
             this.$emit("messageText", getSuccessSendMessageText);
