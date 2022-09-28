@@ -411,10 +411,11 @@ export default {
           window.location.href = `${attempt.searchParams.get("ref")}`;
         }
       } catch (e) {
+        this.authInProcess = false;
         if (e?.response?.data.STATUS === 401) {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
         }
-        this.authInProcess = false;
+
         if (e?.response?.data.CODE === 105 || e?.response?.data.CODE === 106) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
