@@ -612,6 +612,12 @@ export const mutations = {
   setVisible(state, params) {
     state.visible = params;
   },
+  setVisibleByName(state, data) {
+    const field = state.form.find((item) => item.name === data.name);
+    if (field) {
+      field.visible = data.visible;
+    }
+  },
   setAddFields(state, params) {
     state.addFields = params;
   },
@@ -628,6 +634,12 @@ export const mutations = {
         }
         return item;
       });
+    }
+  },
+  setDisabledByName(state, data) {
+    const field = state.form.find((item) => item.name === data.name);
+    if (field) {
+      field.readonly = data.disable;
     }
   },
   setCaptcha(state, data) {

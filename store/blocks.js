@@ -146,6 +146,7 @@ export const actions = {
       });
     } catch (err) {
       console.error(new Error("error:", err));
+      return err.response;
     }
   },
   async fetchWizardBlock({ commit, dispatch }, { itemId, cardId }) {
