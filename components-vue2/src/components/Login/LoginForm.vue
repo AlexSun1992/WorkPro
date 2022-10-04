@@ -65,13 +65,6 @@
             variant="dropdown-select"
             class="dropdown-select"
           >
-            <!--<b-dropdown-item
-              v-for="item in dropDownData"
-              :key="item.id"
-              @click="toggleAuthType()"
-            >
-              {{ item }}
-            </b-dropdown-item>-->
             <b-dropdown-item-button
               @click="toggleAuthType()"
               v-if="isEmailTypeRegistrationChoosen"
@@ -169,6 +162,23 @@
             >Не помните пароль?</a
           >
         </div>
+        <!--        <div class="col-12 col-lg-6 mt-3">-->
+        <!--          <b-form-group label="Введите код с картинки" label-cols="12">-->
+        <!--            <b-form-input-->
+        <!--              v-model="user.cap"-->
+        <!--              placeholder="Введите код с картинки"-->
+        <!--              type="text"-->
+        <!--              :state="isValidStateCodeCaptcha"-->
+        <!--              @input="isPasswordBlured = false"-->
+        <!--              class="form-control"-->
+        <!--              :disabled="authInProcess"-->
+        <!--            ></b-form-input>-->
+        <!--            <b-form-invalid-feedback-->
+        <!--              >Пожалуйста, введите код с картинки-->
+        <!--            </b-form-invalid-feedback>-->
+        <!--          </b-form-group>-->
+        <!--        </div>-->
+        <!--        <div class="col-12 col-lg-6 mt-3 mt-lg-4 pt-lg-2">Картинка</div>-->
       </div>
       <b-button
         v-on:enter="fetchToken()"
@@ -199,17 +209,17 @@ import {
   BDropdown,
 } from "bootstrap-vue";
 
+import Autocomplete from "@trevoreyre/autocomplete-vue";
+import { validationMixin } from "vuelidate";
+import { required, minLength, helpers, email } from "vuelidate/lib/validators";
+import _ from "lodash";
+import Cookies from "js-cookie";
 import {
   fetchEmail,
   getSuggestions,
   getArrayWithClass,
   isEmailRight,
 } from "./RegForm/dadata.helper";
-import Autocomplete from "@trevoreyre/autocomplete-vue";
-import { validationMixin } from "vuelidate";
-import { required, minLength, helpers, email } from "vuelidate/lib/validators";
-import _ from "lodash";
-import Cookies from "js-cookie";
 import {
   isPhoneNumberValid,
   getRestructuredPhoneNumber,
@@ -244,6 +254,7 @@ export default {
         useremail: "",
         password: "",
         code: "",
+        codeCaptcha: "",
       },
       hideTelephoneMessage: null,
       duration: 60,
@@ -251,6 +262,7 @@ export default {
       isPasswordBlured: true,
       isEmailBlured: true,
       isValidStateCodeSMS: null,
+      isValidStateCodeCaptcha: null,
       isRetrySendCodeSMS: false,
       isSendingCodeSMS: false,
       autofocus: true,
@@ -439,7 +451,6 @@ export default {
         if (isInputValid === false && this.choosenTypeOfAuth === "Email") {
           this.isEmailValidSignsErrorMessage = false;
           getArrayWithClass(this.emailClassHub, "is-invalid");
-          return;
         }
       }
     },

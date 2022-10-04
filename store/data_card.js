@@ -350,7 +350,7 @@ export const actions = {
       commit("setSavedError", true);
       commit("setErrorMessage", e.response.data);
       commit("setFieldJsonError", getErrorMessage(e.response?.data));
-      dispatch("menu/fetchMenu", null, { root: true });
+      dispatch("menu/fetchMenuById", null, { root: true });
       return e.response;
     }
   },
