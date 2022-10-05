@@ -10,7 +10,7 @@
       <div class="d-block text-center">
         <h4>Введите код</h4>
         На номер телефона {{ hideTelephoneMessage }} был отправлен код
-        подверждения
+        подверждения.
         <b-form @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
             ref="focusCodeSMS"
