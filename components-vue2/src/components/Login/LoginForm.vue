@@ -41,8 +41,21 @@
             сек.
           </div>
           <b-row>
+            <div
+              v-if="isCaptchaNeeded && !authInProcess"
+              class="col-12 col-lg-12"
+            >
+              <captcha
+                @update="setIdCaptcha($event)"
+                @updateCode="setCodeCaptcha($event)"
+              />
+            </div>
             <b-button
-              :disabled="authInProcess || user.code === ''"
+              :disabled="
+                authInProcess ||
+                user.code === '' ||
+                (isCaptchaNeeded && !user.cap)
+              "
               variant="primary"
               class="mt-3"
               block
@@ -162,23 +175,12 @@
             >Не помните пароль?</a
           >
         </div>
-        <!--        <div class="col-12 col-lg-6 mt-3">-->
-        <!--          <b-form-group label="Введите код с картинки" label-cols="12">-->
-        <!--            <b-form-input-->
-        <!--              v-model="user.cap"-->
-        <!--              placeholder="Введите код с картинки"-->
-        <!--              type="text"-->
-        <!--              :state="isValidStateCodeCaptcha"-->
-        <!--              @input="isPasswordBlured = false"-->
-        <!--              class="form-control"-->
-        <!--              :disabled="authInProcess"-->
-        <!--            ></b-form-input>-->
-        <!--            <b-form-invalid-feedback-->
-        <!--              >Пожалуйста, введите код с картинки-->
-        <!--            </b-form-invalid-feedback>-->
-        <!--          </b-form-group>-->
-        <!--        </div>-->
-        <!--        <div class="col-12 col-lg-6 mt-3 mt-lg-4 pt-lg-2">Картинка</div>-->
+        <div v-if="isCaptchaNeeded && !authInProcess" class="col-12 col-lg-12">
+          <captcha
+            @update="setIdCaptcha($event)"
+            @updateCode="setCodeCaptcha($event)"
+          />
+        </div>
       </div>
       <b-button
         v-on:enter="fetchToken()"
@@ -213,7 +215,7 @@ import Autocomplete from "@trevoreyre/autocomplete-vue";
 import { validationMixin } from "vuelidate";
 import { required, minLength, helpers, email } from "vuelidate/lib/validators";
 import _ from "lodash";
-import Cookies from "js-cookie";
+import Captcha from "./Captcha/Captcha";
 import {
   fetchEmail,
   getSuggestions,
@@ -244,6 +246,7 @@ export default {
     BButton,
     BModal,
     VerifyTimer,
+    Captcha,
   },
   mixins: [validationMixin],
   directives: { mask },
@@ -254,7 +257,8 @@ export default {
         useremail: "",
         password: "",
         code: "",
-        codeCaptcha: "",
+        cap: "",
+        capid: null,
       },
       hideTelephoneMessage: null,
       duration: 60,
@@ -265,6 +269,7 @@ export default {
       isValidStateCodeCaptcha: null,
       isRetrySendCodeSMS: false,
       isSendingCodeSMS: false,
+      isCaptchaNeeded: false,
       autofocus: true,
       usernameMask: "+7(###)-###-##-##",
       placeholder: "+7(___)-___-__-__",
@@ -304,6 +309,12 @@ export default {
   },
 
   methods: {
+    setIdCaptcha(id) {
+      this.user.capid = id;
+    },
+    setCodeCaptcha(code) {
+      this.user.cap = code;
+    },
     toggleAuthType() {
       this.isEmailTypeRegistrationChoosen =
         !this.isEmailTypeRegistrationChoosen;
@@ -401,6 +412,8 @@ export default {
             this.isEmailTypeRegistrationChoosen === true
               ? this.email
               : this.$v.user.username.$model,
+          cap: this.user.cap || null,
+          capid: this.user.capid || null,
         };
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
@@ -428,7 +441,7 @@ export default {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
         }
 
-        if (e?.response?.data.CODE === 105 || e?.response?.data.CODE === 106) {
+        if (e?.response?.data.CODE === 105) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
           return;
@@ -437,7 +450,16 @@ export default {
           e?.response?.data.STATUS === 500 ||
           e?.response?.data.CODE === 104
         ) {
+          this.user.cap = null;
+          this.user.capid = null;
           this.$bvModal.show("sms-confirm");
+          return;
+        }
+        if (
+          e?.response?.data.STATUS === 403 ||
+          e?.response?.data.CODE === 106
+        ) {
+          this.isCaptchaNeeded = true;
           return;
         }
 
