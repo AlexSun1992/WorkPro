@@ -217,23 +217,9 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
       }
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
-    let URL_ADDRESS;
-    if (req.query.zone !== "free") {
-      if (req?.headers?.authorization) {
-        mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req.headers.authorization;
-      } else {
-        if (req?.cookies["auth._token.local"]) {
-          mobile2ServiceInstance.defaults.headers.common.Authorization =
-            req?.cookies["auth._token.local"];
-        }
-      }
-      URL_ADDRESS = encodeURI(`${consts.CLIENTMENU}/${req.params.idModule}`);
-    } else {
-      URL_ADDRESS = encodeURI(
-        `${consts.CLIENTFREEMENU}/${req.params.idModule}/${req.params.idItem}`
-      );
-    }
+    const URL_ADDRESS = encodeURI(
+      `/am/free/v2/vuetemplate/${req.params.idItem}`
+    );
     if (controller) {
       controller.abort();
     }
@@ -246,9 +232,7 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
       .then(async (resp) => {
         res.set("Content-Type", "text/javascript");
         res.send(
-          resp.data[0]._data.find(
-            (item) => item.IDITEM === parseInt(req.params.idItem)
-          ).SVJMETHOD ||
+          resp.data[0].SVJMETHOD ||
             "function eventHandler(data, item) {\n" + "  return null\n" + "}"
         );
       })

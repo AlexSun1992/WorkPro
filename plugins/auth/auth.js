@@ -57,7 +57,9 @@ export default function ({ app, redirect, $auth, $sentry }) {
               error.response.data?.MESSAGE.includes(
                 "ограничение уникальности"
               ) ||
-              error.response.data?.MESSAGE.includes("количество открытых курсоров превысило допустимый максимум")
+              error.response.data?.MESSAGE.includes(
+                "количество открытых курсоров превысило допустимый максимум"
+              )
             ) {
               originalRequest.__isRetryRequest = true;
               return app.$axios(originalRequest);

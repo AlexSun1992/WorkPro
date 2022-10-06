@@ -19,8 +19,6 @@ export default {
         app.$auth.setUser(user);
         $sentry.setUser(user);
       }
-      await store.dispatch("menu/fetchMenu", route.params);
-      await store.dispatch("menu/fetchCounters", null);
       const setting = store.getters["menu/breadcrumbs"].slice(-1).pop();
       if (setting.isCard || setting.isWizard) {
         await store.dispatch("card/setCard", {

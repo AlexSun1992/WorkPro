@@ -2,6 +2,9 @@ import axios from "axios";
 import converter from "../converters/menu";
 import consts from "./urls";
 import { mobile2Service } from "../services/mobile2.services";
+import selectConverter from "../converters/select";
+import listConverter from "../converters/list";
+import menuConverter from "../converters/menu";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -72,6 +75,53 @@ router.get("/module", (req, res) => {
           res.status(err.response.data.STATUS).send(err.response.data);
         });
     });
+  } catch (e) {
+    res.send(e);
+  }
+});
+router.get("/module/:moduleId/:itemId", (req, res) => {
+  try {
+    const mobile2ServiceInstance = mobile2Service();
+    const ipAddress = req.headers["x-forwarded-for"];
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || "";
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    if (req.query.zone !== "free") {
+      if (req?.headers?.authorization) {
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
+          req.headers.authorization;
+      } else if (req?.cookies["auth._token.local"]) {
+        mobile2ServiceInstance.defaults.headers.common.Authorization =
+          req?.cookies["auth._token.local"];
+      }
+    }
+    mobile2ServiceInstance.defaults.headers.common.Cookie = req.headers?.cookie
+      ? req.headers.cookie
+      : null;
+    mobile2ServiceInstance({
+      url: `${
+        req.query.zone === "free" ? consts.CLIENTFREEMENU : consts.CLIENTMENU
+      }/${req.params.moduleId}/${req.params.itemId}`,
+      method: "GET",
+    })
+      .then((resp) => {
+        const { data } = resp;
+        res.send({
+          settings: req.query.zone === "free" ? data[0]._data[0] : data[0],
+          subSettings: menuConverter.menuObject(
+            req.query.zone === "free" ? data[0]._data[0] : data[0]
+          ),
+        });
+      })
+      .catch((err) => {
+        if (err?.response?.data.STATUS == 401) {
+          res.status(err.response.data.STATUS).send(err.response.data);
+        } else {
+          res
+            .status(err?.response?.data.STATUS || 500)
+            .send(err?.response?.data || err);
+        }
+      });
   } catch (e) {
     res.send(e);
   }

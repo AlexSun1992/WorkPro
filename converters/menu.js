@@ -73,46 +73,50 @@ converter.sidebar = (modules, menu) => {
 
 converter.menuObject = (data) => {
   const obj = {};
-  obj.name = data.SNAME;
-  if (data.IDITEM === -1) {
-    obj.url = `/cabinet/${data.idModule}/${data.ID}`;
-  } else {
-    obj.url = data.IDITEM
-      ? `/cabinet/${data.idModule}/${data.IDPARENT}/${data.IDITEM}`
-      : `/${data.ID}`;
-    if (data.IDADMMENUTYPE === 10) {
-      obj.url = `/cabinet/${data.idModule}/${data.IDPARENT}/${data.IDITEM}/0`;
+  if (data) {
+    obj.name = data?.SNAME;
+    if (data.IDITEM === -1) {
+      obj.url = `/cabinet/55/${data.ID}`;
+    } else {
+      obj.url = data.IDITEM
+        ? `/cabinet/55/${data.IDPARENT}/${data.IDITEM}`
+        : `/${data.ID}`;
+      if (data.IDADMMENUTYPE === 10) {
+        obj.url = `/cabinet/55/${data.IDPARENT}/${data.IDITEM}/0`;
+      }
     }
+    obj.id = data.ID;
+    obj.icon = iconConverter.icon(data.SLOGO);
+    obj.iconFileName = data.SICONFILENAME;
+    obj.idItem = data.IDITEM;
+    obj.idParent = data.IDPARENT;
+    obj.parentMenu = data.NPARENTMENU || null;
+    obj.compType = data.IDADMMENUTYPE;
+    obj.recordLoad = data.LFIRSTLOADRECORD;
+    obj.newRecord = data.IDADMMENUTYPE === 10;
+    obj.filters = data.FILTERCUR ? filterConverter.filter(data.FILTERCUR) : [];
+    obj.actions = data.ACTIONSCUR
+      ? actionConverter.action(data.ACTIONSCUR)
+      : [];
+    obj.tabs = data.ONETOMANYCUR ? tabConverter.tab(data.ONETOMANYCUR) : [];
+    obj.add = data.LNEW;
+    obj.edit = data.LEDIT;
+    obj.delete = data.LDELETE;
+    obj.cols = data.NCOLCOUNT;
+    obj.isCard = data.IDADMMENUTYPE === 3;
+    obj.isWizard = data.IDADMMENUTYPE === 14;
+    obj.isForm = data.IDADMMENUTYPE === 9;
+    obj.isPortal = data.IDADMMENUTYPE === 16 || data.IDADMMENUTYPE === 17;
+    obj.wizard = wizardConverter.wizard(data.WIZARDCUR);
+    obj.portalgrid = data.SVJPORTALGRID || null;
+    obj.cardgrid = data.SVJCARDGRID || null;
+    obj.cardtemplate = data.SVJCARDTEMPLATE || null;
+    obj.isModal = data.LMODALFORMSTYLE;
+    obj.closeAfterSave = data.LCLOSEAFTERSAVE;
+    obj.groupmenu = data.SGROUPMENU;
+    obj.isVisible = data.LSHOWVUE;
+    obj.newCount = data.NNEWCOUNT || null;
   }
-  obj.id = data.ID;
-  obj.icon = iconConverter.icon(data.SLOGO);
-  obj.iconFileName = data.SICONFILENAME;
-  obj.idItem = data.IDITEM;
-  obj.idParent = data.IDPARENT;
-  obj.parentMenu = data.NPARENTMENU || null;
-  obj.compType = data.IDADMMENUTYPE;
-  obj.recordLoad = data.LFIRSTLOADRECORD;
-  obj.newRecord = data.IDADMMENUTYPE === 10;
-  obj.filters = data.FILTERCUR ? filterConverter.filter(data.FILTERCUR) : [];
-  obj.actions = data.ACTIONSCUR ? actionConverter.action(data.ACTIONSCUR) : [];
-  obj.tabs = data.ONETOMANYCUR ? tabConverter.tab(data.ONETOMANYCUR) : [];
-  obj.add = data.LNEW;
-  obj.edit = data.LEDIT;
-  obj.delete = data.LDELETE;
-  obj.cols = data.NCOLCOUNT;
-  obj.isCard = data.IDADMMENUTYPE === 3;
-  obj.isWizard = data.IDADMMENUTYPE === 14;
-  obj.isForm = data.IDADMMENUTYPE === 9;
-  obj.isPortal = data.IDADMMENUTYPE === 16 || data.IDADMMENUTYPE === 17;
-  obj.wizard = wizardConverter.wizard(data.WIZARDCUR);
-  obj.portalgrid = data.SVJPORTALGRID || null;
-  obj.cardgrid = data.SVJCARDGRID || null;
-  obj.cardtemplate = data.SVJCARDTEMPLATE || null;
-  obj.isModal = data.LMODALFORMSTYLE;
-  obj.closeAfterSave = data.LCLOSEAFTERSAVE;
-  obj.groupmenu = data.SGROUPMENU;
-  obj.isVisible = data.LVISIBLE;
-  obj.newCount = data.NNEWCOUNT || null;
   return obj;
 };
 

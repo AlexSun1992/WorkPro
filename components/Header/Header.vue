@@ -119,8 +119,8 @@
 </template>
 
 <script>
-import HeaderUserName from "../Header/HeaderUserName";
 import { mapGetters } from "vuex";
+import HeaderUserName from "../Header/HeaderUserName";
 
 export default {
   name: "c-header",
@@ -141,10 +141,9 @@ export default {
       }
     },
     goInCabinet() {
-      console.log("here");
       this.$router.push("/cabinet");
     },
-    openSection: function (title, e) {
+    openSection(title, e) {
       e.preventDefault();
       this.$store.commit("pages/changeHeaderActiveSection", title);
     },

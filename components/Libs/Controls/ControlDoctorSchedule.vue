@@ -133,11 +133,29 @@ export default {
         id: this.data.menudic,
         query: this.$store.getters["data_card/getFiltersAllFields"],
       })
-      .then(() => {
+      .then((data) => {
         this.$store.commit("blocks/isRequestFinish", true);
+        if (data?.status === 500) {
+          this.$store.commit("data_card/setVisibleByName", {
+            name: "GET_TIMETABLE",
+            visible: true,
+          });
+          this.$store.commit("data_card/setVisibleByName", {
+            name: "FKSSCHEDULE",
+            visible: false,
+          });
+          this.$store.commit("data_card/setVisibleByName", {
+            name: "SEARCH_RESULT_TITLE",
+            visible: false,
+          });
+        }
       })
       .finally(() => {
         this.$store.commit("data_card/setDisabled", false);
+        this.$store.commit("data_card/setDisabledByName", {
+          name: "GET_TIMETABLE",
+          disable: false,
+        });
       });
   },
 

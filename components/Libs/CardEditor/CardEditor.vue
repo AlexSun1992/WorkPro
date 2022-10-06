@@ -6,13 +6,14 @@
       centered
       :title="actionParamsTitle"
       :ok-disabled="actionFormDisabled"
-      ok-title="Выполнить"
-      cancel-title="Отмена"
+      ok-title="Да"
+      cancel-title="Нет"
       auto-focus-button="ok"
       no-close-on-backdrop
       no-fade
       @ok="applyAction"
     >
+      Вы действительно хотите выполнить действие "{{ actionParamsTitle }}"?
       <b-alert :show="isActionApplyError" variant="danger">
         {{ actionApplyErrorMessage }}
       </b-alert>
@@ -288,9 +289,16 @@ export default {
           await this.$store.dispatch("data_card/fetchForm", params);
           return;
         }
-        // else {
-        //   throw new Error("Ошибка: Тип действия не задан");
-        // }
+        if (CUR.NTYPE == 2) {
+          if (CUR.SCONST) {
+            this.$router.push(
+              `/cabinet/${this.params.page.idModule}/0/${CUR.SCONST}/0?ref=${this.$route.fullPath}`
+            );
+          } else {
+            throw new Error(`В опции кнопки не указан идентификатор меню."`);
+            return;
+          }
+        }
         if (this.actionSettings.isDialog) {
           this.$store.commit("data_card/setLoading", false);
           this.$bvModal.show("confirmAction");
@@ -330,20 +338,17 @@ export default {
     },
 
     openCard(e) {
-      const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find((item) => {
-        return item.SNAME == e.label;
-      });
-
-      if (menuItem === undefined) {
+      const arrName = e.name.split("Card");
+      const idItem = arrName[1];
+      if (idItem) {
+        this.$router.push(
+          `/cabinet/${this.params.page.idModule}/0/${idItem}/0?ref=${this.$route.fullPath}`
+        );
+      } else {
         throw new Error(
-          `В списке меню не найден пункт меню с названием SNAME === "${e.label}"`
+          `В опции кнопки не указан идентификатор меню. Пример наимменования кнопки: "Card178"`
         );
       }
-
-      this.$router.push(
-        `/cabinet/${this.params.page.idModule}/0/${menuItem.IDITEM}/0?ref=${this.$route.fullPath}`
-      );
     },
     validateData(data) {
       let valid = true;
@@ -529,8 +534,13 @@ export default {
       const response = await this.$store.dispatch("data_card/executeAction", {
         actionId: this.actionParamsId,
         relActionId: this.actionSettings.relaction,
-        relId: this.$route.params.idRel || this.$route.query.rel,
-        rowId: this.$route.params.idCard,
+        relId:
+          this.$route.params.idRel ||
+          this.$route.query.rel ||
+          this.$store.getters["data_card/getFormParams"]?.idRel,
+        rowId:
+          this.$route.params.idCard ||
+          this.$store.getters["data_card/getFormParams"]?.idCard,
         body: this.actionParams,
       });
       this.actionFormDisabled = false;

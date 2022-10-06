@@ -9,7 +9,8 @@
     >
       <div class="d-block text-center">
         <h4>Введите код</h4>
-        На номер телефона {{ user.username }} был отправлен код подверждения
+        На номер телефона {{ hideTelephoneMessage }} был отправлен код
+        подверждения.
         <b-form @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
             ref="focusCodeSMS"
@@ -40,8 +41,21 @@
             сек.
           </div>
           <b-row>
+            <div
+              v-if="isCaptchaNeeded && !authInProcess"
+              class="col-12 col-lg-12"
+            >
+              <captcha
+                @update="setIdCaptcha($event)"
+                @updateCode="setCodeCaptcha($event)"
+              />
+            </div>
             <b-button
-              :disabled="authInProcess || user.code === ''"
+              :disabled="
+                authInProcess ||
+                user.code === '' ||
+                (isCaptchaNeeded && !user.cap)
+              "
               variant="primary"
               class="mt-3"
               block
@@ -64,13 +78,6 @@
             variant="dropdown-select"
             class="dropdown-select"
           >
-            <!--<b-dropdown-item
-              v-for="item in dropDownData"
-              :key="item.id"
-              @click="toggleAuthType()"
-            >
-              {{ item }}
-            </b-dropdown-item>-->
             <b-dropdown-item-button
               @click="toggleAuthType()"
               v-if="isEmailTypeRegistrationChoosen"
@@ -168,6 +175,12 @@
             >Не помните пароль?</a
           >
         </div>
+        <div v-if="isCaptchaNeeded && !authInProcess" class="col-12 col-lg-12">
+          <captcha
+            @update="setIdCaptcha($event)"
+            @updateCode="setCodeCaptcha($event)"
+          />
+        </div>
       </div>
       <b-button
         v-on:enter="fetchToken()"
@@ -198,17 +211,17 @@ import {
   BDropdown,
 } from "bootstrap-vue";
 
+import Autocomplete from "@trevoreyre/autocomplete-vue";
+import { validationMixin } from "vuelidate";
+import { required, minLength, helpers, email } from "vuelidate/lib/validators";
+import _ from "lodash";
+import Captcha from "./Captcha/Captcha";
 import {
   fetchEmail,
   getSuggestions,
   getArrayWithClass,
   isEmailRight,
 } from "./RegForm/dadata.helper";
-import Autocomplete from "@trevoreyre/autocomplete-vue";
-import { validationMixin } from "vuelidate";
-import { required, minLength, helpers, email } from "vuelidate/lib/validators";
-import _ from "lodash";
-import Cookies from "js-cookie";
 import {
   isPhoneNumberValid,
   getRestructuredPhoneNumber,
@@ -233,6 +246,7 @@ export default {
     BButton,
     BModal,
     VerifyTimer,
+    Captcha,
   },
   mixins: [validationMixin],
   directives: { mask },
@@ -243,14 +257,19 @@ export default {
         useremail: "",
         password: "",
         code: "",
+        cap: "",
+        capid: null,
       },
+      hideTelephoneMessage: null,
       duration: 60,
       isUsernameBlured: true,
       isPasswordBlured: true,
       isEmailBlured: true,
       isValidStateCodeSMS: null,
+      isValidStateCodeCaptcha: null,
       isRetrySendCodeSMS: false,
       isSendingCodeSMS: false,
+      isCaptchaNeeded: false,
       autofocus: true,
       usernameMask: "+7(###)-###-##-##",
       placeholder: "+7(___)-___-__-__",
@@ -290,6 +309,12 @@ export default {
   },
 
   methods: {
+    setIdCaptcha(id) {
+      this.user.capid = id;
+    },
+    setCodeCaptcha(code) {
+      this.user.cap = code;
+    },
     toggleAuthType() {
       this.isEmailTypeRegistrationChoosen =
         !this.isEmailTypeRegistrationChoosen;
@@ -387,11 +412,14 @@ export default {
             this.isEmailTypeRegistrationChoosen === true
               ? this.email
               : this.$v.user.username.$model,
+          cap: this.user.cap || null,
+          capid: this.user.capid || null,
         };
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
           body = { ...body, code: this.$v.user.code.$model };
         }
+
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
         } = await axios.post("/am/authw/v2/authorize", body);
@@ -409,7 +437,11 @@ export default {
         }
       } catch (e) {
         this.authInProcess = false;
-        if (e?.response?.data.CODE === 105 || e?.response?.data.CODE === 106) {
+        if (e?.response?.data.STATUS === 401) {
+          this.hideTelephoneMessage = e.response.data.SMSPHONE;
+        }
+
+        if (e?.response?.data.CODE === 105) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
           return;
@@ -418,7 +450,16 @@ export default {
           e?.response?.data.STATUS === 500 ||
           e?.response?.data.CODE === 104
         ) {
+          this.user.cap = null;
+          this.user.capid = null;
           this.$bvModal.show("sms-confirm");
+          return;
+        }
+        if (
+          e?.response?.data.STATUS === 403 ||
+          e?.response?.data.CODE === 106
+        ) {
+          this.isCaptchaNeeded = true;
           return;
         }
 
@@ -432,7 +473,6 @@ export default {
         if (isInputValid === false && this.choosenTypeOfAuth === "Email") {
           this.isEmailValidSignsErrorMessage = false;
           getArrayWithClass(this.emailClassHub, "is-invalid");
-          return;
         }
       }
     },

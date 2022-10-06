@@ -37,7 +37,7 @@ export default {
       if (settings.isWizard) {
         component = "CardPage";
       }
-      return { page, settings, component };
+      return { page, ...settings, settings, component };
     },
   },
 };

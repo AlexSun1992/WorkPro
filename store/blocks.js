@@ -130,14 +130,23 @@ export const actions = {
 
     try {
       const response = await this.$axios.get(url);
-      const responseData = await response.data;
+      const responseData = response.data;
 
-      await commit("addBlock", {
+      commit(
+        "menu/setMenuById",
+        {
+          settings: responseData.settings,
+          subSettings: responseData.subSettings,
+        },
+        { root: true }
+      );
+      commit("addBlock", {
         blockId: parseInt(params.id),
         data: responseData,
       });
     } catch (err) {
       console.error(new Error("error:", err));
+      return err.response;
     }
   },
   async fetchWizardBlock({ commit, dispatch }, { itemId, cardId }) {
@@ -170,15 +179,17 @@ export const actions = {
     { commit, dispatch, getters },
     { relId, relActionId, rowId, itemId, actionId, body }
   ) {
-    await this.$axios
+    return await this.$axios
       .post(
         `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
         body || {}
       )
       .then(async (resp) => {
-        commit("setPoutValue", resp.data.POUTVALUE);
-        dispatch("updateBlock", itemId);
+        if (getters.getBlockById(itemId)) {
+          dispatch("updateBlock", itemId);
+        }
         dispatch("menu/fetchCounters", null, { root: true });
+        return resp.data;
       });
   },
 };

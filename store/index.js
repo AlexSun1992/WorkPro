@@ -4,6 +4,16 @@ export const state = () => ({
 });
 
 export const actions = {
+  async nuxtServerInit({ dispatch, store }, { params, $cookiz }) {
+    try {
+      if ($cookiz.get("auth._token.local")) {
+        await dispatch("menu/fetchMenu", params);
+        await dispatch("menu/fetchCounters", null);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  },
   async registerUser({ commit }, params) {
     try {
       const headers = {
