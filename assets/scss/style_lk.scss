@@ -3565,3 +3565,40 @@ a[data-newcount][data-newcolor="RED"]:after {
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+.btn-insurance-case {
+    padding: 87px 24px 24px 24px !important;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px !important;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 8%);
+    font-family: "SF Pro Display";
+    font-style: normal;
+    color: #292929 !important;
+    background-color: #fff !important;
+    text-decoration: none;
+    transition: box-shadow 0.3s;
+    padding-top: 87px;
+    border: 0 !important;
+    position: relative;
+}
+
+.btn-insurance-case:hover {
+    box-shadow: 0 3px 8px rgb(0 0 0 / 35%);
+    transition: 0.3s;
+    color: #292929 !important;
+    background-color: #fff !important;
+}
+
+.btn-insurance-case:after {
+    width: 56px;
+    height: 56px;
+    background: url(/img/btn-insurance-case.svg) 50% 50% no-repeat;
+    content: "";
+    display: block;
+    left: 50%;
+    top: 24px;
+    transform: translateX(-50%);
+    position: absolute;
+    background-size: contain;
+}
