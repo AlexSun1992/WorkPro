@@ -3593,33 +3593,35 @@ a[data-newcount][data-newcolor="RED"]:after {
 .btn-insurance-case:after {
     width: 56px;
     height: 56px;
-    background: url(/img/btn-insurance-case.svg) 50% 50% no-repeat;
     content: "";
     display: block;
     left: 50%;
     top: 24px;
     transform: translateX(-50%);
     position: absolute;
-    background-size: contain;
 }
 
 .my-policy-actions[data-id="2"] .btn-insurance-case:after,
 .my-policy-actions[data-id="3"] .btn-insurance-case:after,
 .my-policy-actions[data-id="5"] .btn-insurance-case:after {
     background: url(/img/action-osago-5.svg) 50% 50% no-repeat;
+    background-size: contain;
 }
 
 .my-policy-actions[data-id="1"] .btn-insurance-case:after,
 .my-policy-actions[data-id="10"] .btn-insurance-case:after,
 .my-policy-actions[data-id="8"] .btn-insurance-case:after {
     background: url(/img/action-dms-5.svg) 50% 50% no-repeat;
+    background-size: contain;
 }
 
 .my-policy-actions[data-id="4"] .btn-insurance-case:after {
     background: url(/img/action-mortgage-5.svg) 50% 50% no-repeat;
+    background-size: contain;
 }
 
 .my-policy-actions[data-id="6"] .btn-insurance-case:after,
 .my-policy-actions[data-id="7"] .btn-insurance-case:after {
     background: url(/img/action-travel-5.svg) 50% 50% no-repeat;
+    background-size: contain;
 }
