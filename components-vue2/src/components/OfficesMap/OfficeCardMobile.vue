@@ -108,6 +108,7 @@ import {
   getTime,
   showWorkingHours,
 } from "../../../../utils/map/helpers/helpers";
+
 export default {
   name: "OfficeCardMobile",
   components: {

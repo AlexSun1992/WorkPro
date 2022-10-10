@@ -12,6 +12,7 @@ converter.action = (data) => {
     obj.relaction = items[i].REL;
     obj.isDialog = !items[i].LHIDEDLG;
     obj.isCurrentWindow = items[i].LCURWINDOW;
+    obj.field = items[i].SFIELD;
     arr.push(obj);
   }
   return arr;

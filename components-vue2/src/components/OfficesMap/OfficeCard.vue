@@ -38,31 +38,6 @@
           </span>
         </div>
       </div>
-
-      <div v-if="office.SGRAF" class="card-office-time">
-        <button type="button" @click="isGrafShown = !isGrafShown">
-          Режим работы:
-        </button>
-        <div class="card-office-times">
-          <div v-for="(graf, i) in getGrafs(office.SGRAF)" :key="i">
-            {{ graf }}
-          </div>
-        </div>
-      </div>
-      <div v-if="office.SGRAF" class="card-office-contacts">
-        <div v-for="(phone, i) in getPhones(office.SPHONE)" :key="i">
-          <div v-if="office.SPHONE" class="card-office-phone">
-            <a v-bind:href="'tel:' + office.SPHONE">{{ phone }}</a>
-          </div>
-        </div>
-        <div v-if="office.SEMAIL">
-          <a
-            v-bind:href="'mailto:' + office.SEMAIL"
-            class="card-office-e-mail"
-            >{{ office.SEMAIL }}</a
-          >
-        </div>
-      </div>
     </b-card-text>
   </b-card>
 </template>
@@ -75,6 +50,7 @@ import {
   getGrafs,
   showWorkingHours,
 } from "../../../../utils/map/helpers/helpers";
+
 export default {
   name: "OfficeCard",
   components: {

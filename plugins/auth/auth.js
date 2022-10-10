@@ -3,6 +3,7 @@ import { makeToast } from "./toast";
 
 export default function ({ app, redirect, $auth, $sentry }) {
   app.$axios.onResponseError((error) => {
+    console.log(error?.response?.data);
     if (!error?.response) {
       return;
     }

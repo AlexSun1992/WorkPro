@@ -15,19 +15,6 @@ export default async function ({
   if (app.$cookiz.get("auth._token.local")) {
     await store.dispatch("menu/fetchMenuById", route.params);
   }
-  if (process.server) {
-    return app.$auth
-      .setUserToken(
-        app.$cookiz.get("auth._token.local"),
-        app.$cookiz.get("auth._refresh_token.local")
-      )
-      .then((response) => {
-        return redirect(route.fullPath);
-      })
-      .catch(() => {
-        return redirect("/login");
-      });
-  }
   if (process.client) {
     if (!app.$cookiz.get("auth._token.local")) {
       if (window !== undefined) {
