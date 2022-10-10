@@ -2419,7 +2419,7 @@ a.free {
     font-weight: 700;
     font-size: 16px;
     line-height: 26px;
-    padding-left: 30px;
+    padding: 12px 40px 12px 76px;
     text-decoration: none;
 }
 
@@ -2427,25 +2427,29 @@ a.free {
 .my-policy[data-id="3"] .btn-download,
 .my-policy[data-id="5"] .btn-download {
     color: #43b02a;
-    background: url(/img/icon-download-auto.svg) left center no-repeat;
+    background: url(/img/icon-download-auto.svg) 40px 50% no-repeat;
+    border-color: #43b02a;
 }
 
 .my-policy[data-id="1"] .btn-download,
 .my-policy[data-id="10"] .btn-download,
 .my-policy[data-id="8"] .btn-download {
     color: #3b86c8;
-    background: url(/img/icon-download-dms.svg) left center no-repeat;
+    background: url(/img/icon-download-dms.svg) 40px 50% no-repeat;
+    border-color: #3b86c8;
 }
 
 .my-policy[data-id="4"] .btn-download {
     color: #645da2;
-    background: url(/img/icon-download-mortgage.svg) left center no-repeat;
+    background: url(/img/icon-download-mortgage.svg) 40px 50% no-repeat;
+    border-color: #645da2;
 }
 
 .my-policy[data-id="6"] .btn-download,
 .my-policy[data-id="7"] .btn-download {
-    color: #fe7333;
-    background: url(/img/icon-download-travel.svg) left center no-repeat;
+    color: #645da2;
+    background: url(/img/icon-download-travel.svg) 40px 50% no-repeat;
+    border-color: #645da2;
 }
 
 .my-policy .nav.nav-tabs {
