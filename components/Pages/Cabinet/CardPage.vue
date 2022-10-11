@@ -314,7 +314,7 @@ export default {
       if (visible[property] === "N") {
         return false;
       }
-      throw new Error(
+      console.warn(
         `В методе getVisible свойство ${property}  не сущесвует или задано неверно. Доступные свойства: ${JSON.stringify(
           visible
         )}`

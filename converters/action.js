@@ -13,6 +13,7 @@ converter.action = (data) => {
     obj.isDialog = !items[i].LHIDEDLG;
     obj.isCurrentWindow = items[i].LCURWINDOW;
     obj.field = items[i].SFIELD;
+    obj.refresh = items[i].LREFRESH;
     arr.push(obj);
   }
   return arr;

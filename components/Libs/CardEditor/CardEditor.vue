@@ -563,6 +563,9 @@ export default {
           autoHideDelay: 5000,
           toaster: "b-toaster-top-full",
         });
+        if (this.$route.query?.ref) {
+          this.$router.push(this.$route.query?.ref);
+        }
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
             if (response.data.POUTVALUE.includes("cabinet")) {
@@ -575,7 +578,9 @@ export default {
             }
           }
         }
-        await this.$store.dispatch("data_card/fetchForm", this.$route.params);
+        if (this.actionSettings?.refresh) {
+          await this.$store.dispatch("data_card/fetchForm", this.$route.params);
+        }
         if (this.wizardTabs) {
           await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
         }

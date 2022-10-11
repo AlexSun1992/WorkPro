@@ -103,10 +103,20 @@ export default {
       } else if (this.action.LHIDEDLG) {
         const result = await this.executeAction();
         if (result?.POUTVALUE) {
-          window.open(
-            result.POUTVALUE,
-            this.action.LCURWINDOW ? "_self" : "_blank"
-          );
+          if (result?.POUTVALUE.includes("/")) {
+            if (result?.POUTVALUE.includes("cabinet")) {
+              this.$router.push(
+                `${new URL(result?.POUTVALUE).pathname}?ref=${
+                  this.$route.fullPath
+                }`
+              );
+            } else {
+              window.open(
+                result.POUTVALUE,
+                this.action.LCURWINDOW ? "_self" : "_blank"
+              );
+            }
+          }
         }
       } else {
         this.confirmAction();
