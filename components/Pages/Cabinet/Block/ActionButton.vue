@@ -98,7 +98,9 @@ export default {
     async startAction() {
       if (this.action.NTYPE === 2) {
         if (this.action.SCONST) {
-          this.$router.push(`/cabinet/55/0/${this.action.SCONST}`);
+          this.$router.push(
+            `/cabinet/55/0/${this.action.SCONST}/0/${this.rowId}`
+          );
         }
       } else if (this.action.LHIDEDLG) {
         const result = await this.executeAction();
