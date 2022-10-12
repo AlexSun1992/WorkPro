@@ -124,6 +124,9 @@ export default {
     },
   },
   methods: {
+    updateBlock() {
+      this.$store.dispatch("blocks/updateBlock", this.itemId);
+    },
     refreshWizardList() {
       this.$store.dispatch("blocks/updateWizardBlock", {
         menuId: this.itemId,

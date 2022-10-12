@@ -163,8 +163,13 @@ export const actions = {
         commit("updateBlock", { blockId: parseInt(menuId), data: res.data });
       });
   },
-  async updateBlock({ commit, dispatch }, id) {
-    await this.$axios.get(`/api/list/55/${id}/{}`).then((res) => {
+  async updateBlock({ commit, dispatch, getters }, id) {
+    const filters = getters.getServerFilters.length
+      ? encodeURIComponent(
+          JSON.stringify({ filters: JSON.stringify(getters.getServerFilters) })
+        )
+      : `{}`;
+    await this.$axios.get(`/api/list/55/${id}/${filters}`).then((res) => {
       commit("updateBlock", { blockId: parseInt(id), data: res.data });
     });
   },

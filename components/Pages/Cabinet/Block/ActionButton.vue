@@ -83,7 +83,13 @@ export default {
           itemId: this.action.NITEM,
           body: this.body,
         });
-        this.$emit("update");
+        if (this.action?.LREFRESH) {
+          this.$emit("update");
+        } else {
+          console.warn(
+            `Для обновления данных необходимо поставить в пункте ${this.action.NITEM} опцию  "Обновлять после действия"`
+          );
+        }
         this.$bvToast.toast("Успешно выполнено", {
           title: "",
           variant: "success",
