@@ -1,7 +1,7 @@
 <template>
   <client-only placeholder="Загрузка...">
     <div>
-      <div v-show="isShowBlock">
+      <div v-if="isShowBlock">
         <v-runtime-template :template="templateData" :params="params" />
       </div>
       <div v-if="!isShowBlock">
@@ -62,11 +62,11 @@ export default {
       default: () => {},
     },
   },
-  data() {
-    return {
-      card: null,
-      list: null,
-    };
+  created() {
+    this.$store.dispatch("blocks/fetchBlock", {
+      id: this.itemId,
+      query: { ...this.$route.query },
+    });
   },
   computed: {
     name() {
@@ -100,6 +100,18 @@ export default {
         return this.params.settings.edit;
       },
     },
+    dataContent: {
+      get() {
+        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+        if (block) {
+          return block.data;
+        }
+        return {};
+      },
+    },
+    list() {
+      return this.dataContent;
+    },
     isEmptyContent: {
       get() {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
@@ -124,6 +136,25 @@ export default {
     },
   },
   methods: {
+    getVisible(property) {
+      if (this.list?.items && property) {
+        const visible = this.list?.items.find(
+          (item) => item[property] !== undefined
+        );
+        if (visible) {
+          if (visible[property] === true) {
+            return true;
+          }
+          if (visible[property] === false) {
+            return false;
+          }
+        }
+      }
+      console.warn(
+        `В методе getVisible свойство ${property}  не сущесвует или задано неверно.`
+      );
+      return null;
+    },
     updateBlock() {
       this.$store.dispatch("blocks/updateBlock", this.itemId);
     },
