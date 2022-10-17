@@ -3169,6 +3169,10 @@ textarea {
 }
 
 @media (max-width: 992px) {
+    .btn-download {
+        padding: 10px 20px 12px 56px;
+        background-position: 20px 50% !important;
+    }
     .title-conf-block,
     .title-page {
         font-size: 1rem;
@@ -3570,6 +3574,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     overflow-y: auto;
 }
 
+.btn-pay-case,
 .btn-insurance-case {
     padding: 87px 24px 24px 24px !important;
     width: 100%;
@@ -3587,6 +3592,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     position: relative;
 }
 
+.btn-pay-case:hover,
 .btn-insurance-case:hover {
     box-shadow: 0 3px 8px rgb(0 0 0 / 35%);
     transition: 0.3s;
@@ -3594,6 +3600,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     background-color: #fff !important;
 }
 
+.btn-pay-case:after,
 .btn-insurance-case:after {
     width: 56px;
     height: 56px;
@@ -3612,10 +3619,29 @@ a[data-newcount][data-newcolor="RED"]:after {
     background-size: contain;
 }
 
+.my-policy-actions[data-id="2"] .btn-pay-case:after,
+.my-policy-actions[data-id="3"] .btn-pay-case:after,
+.my-policy-actions[data-id="5"] .btn-pay-case:after {
+    background: url(/img/action-osago-3.svg) 50% 50% no-repeat;
+    background-size: contain;
+}
+
+.my-policy-actions[data-id="1"] .btn-pay-case:after,
+.my-policy-actions[data-id="10"] .btn-pay-case:after,
+.my-policy-actions[data-id="8"] .btn-pay-case:after {
+    background: url(/img/action-dms-6.svg) 50% 50% no-repeat;
+    background-size: contain;
+}
+
 .my-policy-actions[data-id="1"] .btn-insurance-case:after,
 .my-policy-actions[data-id="10"] .btn-insurance-case:after,
 .my-policy-actions[data-id="8"] .btn-insurance-case:after {
     background: url(/img/action-dms-5.svg) 50% 50% no-repeat;
+    background-size: contain;
+}
+
+.my-policy-actions[data-id="4"] .btn-pay-case:after {
+    background: url(/img/action-mortgage-6.svg) 50% 50% no-repeat;
     background-size: contain;
 }
 
@@ -3628,4 +3654,14 @@ a[data-newcount][data-newcolor="RED"]:after {
 .my-policy-actions[data-id="7"] .btn-insurance-case:after {
     background: url(/img/action-travel-5.svg) 50% 50% no-repeat;
     background-size: contain;
+}
+
+.my-policy-actions[data-id="6"] .btn-pay-case:after,
+.my-policy-actions[data-id="7"] .btn-pay-case:after {
+    background: url(/img/action-travel-6.svg) 50% 50% no-repeat;
+    background-size: contain;
+}
+
+.my-policy-actions button.btn-secondary {
+    white-space: normal;
 }
