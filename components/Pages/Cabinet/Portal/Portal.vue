@@ -63,10 +63,12 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch("blocks/fetchBlock", {
-      id: this.itemId,
-      query: { ...this.$route.query },
-    });
+    if (!this.$route.params.idCard) {
+      this.$store.dispatch("blocks/fetchBlock", {
+        id: this.itemId,
+        query: { ...this.$route.query },
+      });
+    }
   },
   computed: {
     name() {
@@ -123,10 +125,13 @@ export default {
     },
     isShowBlock: {
       get() {
-        return (
-          Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) ||
-          this.params.settings.compType === 16
-        );
+        if (!this.$route.params?.idCard) {
+          return (
+            Boolean(this.$store.getters["blocks/getBlockById"](this.itemId)) ||
+            this.params.settings.compType === 16
+          );
+        }
+        return true;
       },
     },
     actions: {
