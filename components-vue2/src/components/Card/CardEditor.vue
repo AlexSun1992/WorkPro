@@ -7,7 +7,6 @@
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
     />
-
     <Form
       v-if="!isBlock && !getError"
       :data="getForm"
@@ -106,6 +105,7 @@ export default {
         idCard: "0",
         idRel: "0",
         zone: this.zone,
+        hash: true,
       },
       isShowSavedError: false,
       eventHandler: null,
@@ -138,6 +138,10 @@ export default {
       return () =>
         import(`/../components/EventHandler/${this.menuId}/eventHandler`);
     },
+    hashDataLocal() {
+      return () =>
+        import(`./HashDataLocal/${this.menuId}/hash${this.menuId}.json`);
+    },
     isCaptchaNeededCheck() {
       return this.isCaptchaNeeded;
     },
@@ -152,6 +156,27 @@ export default {
 
   async created() {
     try {
+      this.hashDataLocal().then((json) => {
+        this.$store.commit(
+          "data_card/setForm",
+          Object.values(json.metaData.data)
+        );
+        this.$store.commit("setCaptions", json.metaData.captions);
+        this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
+        this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
+        this.$store.commit(
+          "data_card/setCardCaption",
+          json.metaData.cardCaption
+        );
+        this.$store.commit(
+          "data_card/setVisible",
+          Object.values(json.metaData.visible)
+        );
+        this.$store.commit(
+          "data_card/setAddFields",
+          Object.values(json.metaData.addFields)
+        );
+      });
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
         this.$axios.defaults.headers.common.Authorization = token;
@@ -181,6 +206,7 @@ export default {
         this.$store.dispatch("menu/fetchMenuById", this.params),
         this.fetchCard(),
       ]).catch((e) => {
+        console.log(e);
         Sentry.captureException(
           new Error("Ошибка выполнения запроса."),
           (scope) => {

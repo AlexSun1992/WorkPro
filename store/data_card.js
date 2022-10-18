@@ -150,8 +150,10 @@ export const actions = {
     commit("setCardRelId", params.idRel);
     commit("setModuleId", params.idModule);
     commit("setMenuId", params.idItem);
-    commit("setLoading", true);
-    commit("setDisabled", true);
+    if (!params.hash) {
+      commit("setLoading", true);
+      commit("setDisabled", true);
+    }
     if (state.cardId !== params.idCard || !params.idRel) {
       commit("clearFormData");
     }
@@ -627,7 +629,7 @@ export const mutations = {
         const copyField = state.copyForm.find(
           (field) => field.fieldId === item.fieldId
         );
-        if (copyField.readonly) {
+        if (copyField?.readonly) {
           item.readonly = true;
         } else {
           item.readonly = params;
