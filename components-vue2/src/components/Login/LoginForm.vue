@@ -70,38 +70,13 @@
 
     <b-form @submit.prevent="onSubmit">
       <div class="row">
-        <div class="col-12 col-lg-6">
-          <legend>Авторизация с помощью</legend>
-          <b-dropdown
-            id="dropdown-1"
-            :text="!isEmailTypeRegistrationChoosen ? 'Номер телефона' : 'Email'"
-            variant="dropdown-select"
-            class="dropdown-select"
-          >
-            <b-dropdown-item-button
-              @click="toggleAuthType()"
-              v-if="isEmailTypeRegistrationChoosen"
-              >Номер телефона</b-dropdown-item-button
-            >
-            <b-dropdown-item-button
-              @click="toggleAuthType()"
-              v-if="!isEmailTypeRegistrationChoosen"
-              >Email</b-dropdown-item-button
-            >
-          </b-dropdown>
-        </div>
-
-        <div
-          class="col-12 col-lg-6 mt-3 mt-lg-0"
-          v-if="isEmailTypeRegistrationChoosen === false"
-        >
+        <div class="col-12 col-lg-6 mt-3 mt-lg-0">
           <b-form-group label="Телефон или email" label-cols="12">
             <b-form-input
               id="phone"
               ref="phoneInput"
               v-model="$v.user.username.$model"
-              v-mask="usernameMask"
-              :placeholder="placeholder"
+              placeholder="Телефон или почта"
               autofocus
               type="tel"
               :state="validateInput('username', isUsernameBlured)"
@@ -114,38 +89,8 @@
             >
             </b-form-input>
 
-            <b-form-invalid-feedback
-              >Пожалуйста, введите корректный номер
-              телефона</b-form-invalid-feedback
-            >
-          </b-form-group>
-        </div>
-
-        <div
-          class="col-12 col-lg-6 mt-3 mt-lg-0"
-          v-if="isEmailTypeRegistrationChoosen"
-        >
-          <b-form-group
-            class="required"
-            label="Телефон или email"
-            label-cols="12"
-          >
-            <autocomplete
-              ref="Email"
-              placeholder="Email"
-              :search="getSuggestionsEmail"
-              :get-result-value="getResultValueEmail"
-              :disabled="authInProcess"
-              :class="emailClassHub"
-              @blur="handleBlur('Email')"
-              @submit="checkInputValue"
-            />
-
-            <b-form-invalid-feedback :state="isEmailErrorMessage"
+            <b-form-invalid-feedback v-if="this.$v.user.username.$model === ''"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            >
-            <b-form-invalid-feedback :state="isEmailValidSignsErrorMessage"
-              >Просьба корректно указать email</b-form-invalid-feedback
             >
           </b-form-group>
         </div>
@@ -277,14 +222,6 @@ export default {
       authInProcess: false,
       captchaToken: null,
       loginTouchesCount: 0,
-      emailHub: [],
-      isEmailTouch: false,
-      emailClassHub: [],
-      isEmailErrorMessage: true,
-      isEmailValidSignsErrorMessage: true,
-      isDropDownShown: false,
-      dropDownData: ["Номер телефона", "Email"],
-      isEmailTypeRegistrationChoosen: false,
     };
   },
 
@@ -299,25 +236,12 @@ export default {
     }
   },
 
-  computed: {
-    email() {
-      if (this.isEmailTypeRegistrationChoosen === true) {
-        return this.$refs.Email.value;
-      }
-      return null;
-    },
-  },
-
   methods: {
     setIdCaptcha(id) {
       this.user.capid = id;
     },
     setCodeCaptcha(code) {
       this.user.cap = code;
-    },
-    toggleAuthType() {
-      this.isEmailTypeRegistrationChoosen =
-        !this.isEmailTypeRegistrationChoosen;
     },
 
     checkPastedValue(event) {
@@ -331,87 +255,13 @@ export default {
       }
     },
 
-    checkInputValue(input) {
-      const checkInputValue = isEmailRight(input.value);
-      if (checkInputValue === true) {
-        getArrayWithClass(this.emailClassHub, "is-valid");
-      }
-    },
-    handleBlur(field) {
-      if (field === "email" && this.email === "") {
-        this.isEmailErrorMessage = false;
-        this.emailClassHub.push("is-invalid");
-      }
-
-      const isInputValid = isEmailRight(this.email);
-
-      if (isInputValid === false && this.email !== "") {
-        this.isEmailValidSignsErrorMessage = false;
-        this.isEmailErrorMessage = true;
-        getArrayWithClass(this.emailClassHub, "is-invalid");
-      }
-
-      if (isInputValid === false && this.email === "") {
-        this.isEmailValidSignsErrorMessage = true;
-        this.isEmailErrorMessage = false;
-        getArrayWithClass(this.emailClassHub, "is-invalid");
-      }
-
-      if (isInputValid) {
-        this.isEmailValidSignsErrorMessage = true;
-        this.isEmailErrorMessage = true;
-        getArrayWithClass(this.emailClassHub, "is-valid");
-      }
-    },
-
-    getResultValueEmail(item) {
-      return item.value;
-    },
-
-    async getSuggestionsEmail(input) {
-      this.emailHub = [];
-      const isInputValid = isEmailRight(this.email);
-
-      if (input.length > 0) {
-        this.isEmailTouch = true;
-        this.isEmailErrorMessage = true;
-        this.isEmailValidSignsErrorMessage = true;
-        if (isInputValid === false) {
-          this.emailClassHub = [];
-        }
-
-        if (isInputValid === true) {
-          this.isEmailErrorMessage = true;
-          getArrayWithClass(this.emailClassHub, "is-valid");
-        }
-      }
-
-      if (this.isEmailTouch && input === "") {
-        this.isEmailErrorMessage = false;
-        this.isEmailValidSignsErrorMessage = true;
-        getArrayWithClass(this.emailClassHub, "is-invalid");
-      }
-
-      const getDataEmail = await fetchEmail(input);
-      const fetchedEmail = getSuggestions(
-        getDataEmail,
-        this.emailHub,
-        this.email
-      );
-
-      return fetchedEmail;
-    },
-
     async fetchToken() {
       try {
         this.authInProcess = true;
         let body = {
           mode: 2,
           password: this.$v.user.password.$model,
-          username:
-            this.isEmailTypeRegistrationChoosen === true
-              ? this.email
-              : this.$v.user.username.$model,
+          username: this.$v.user.username.$model,
           cap: this.user.cap || null,
           capid: this.user.capid || null,
         };
@@ -463,17 +313,7 @@ export default {
           return;
         }
 
-        this.errorMessage = `Неверный ${this.choosenTypeOfAuth} или пароль`;
-        if (this.email === "") {
-          this.isEmailErrorMessage = false;
-          getArrayWithClass(this.emailClassHub, "is-invalid");
-          return;
-        }
-        const isInputValid = isEmailRight(this.email);
-        if (isInputValid === false && this.choosenTypeOfAuth === "Email") {
-          this.isEmailValidSignsErrorMessage = false;
-          getArrayWithClass(this.emailClassHub, "is-invalid");
-        }
+        this.errorMessage = `Неверный телефон или пароль`;
       }
     },
     setFocusSMSCode() {
@@ -543,13 +383,8 @@ export default {
     user: {
       username: {
         required,
-        minLength: minLength(17),
       },
-      useremail: {
-        required,
-        alpha,
-        email,
-      },
+
       password: {
         required,
       },
