@@ -97,7 +97,6 @@
               id="phone"
               ref="phoneInput"
               v-model="$v.user.username.$model"
-              v-mask="usernameMask"
               :placeholder="placeholder"
               autofocus
               type="tel"
@@ -111,9 +110,8 @@
             >
             </b-form-input>
 
-            <b-form-invalid-feedback
-              >Пожалуйста, введите корректный номер телефона или
-              email</b-form-invalid-feedback
+            <b-form-invalid-feedback v-if="$v.user.username.$model === ''"
+              >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
           </b-form-group>
         </div>
@@ -256,7 +254,7 @@ export default {
     return {
       user: {
         username: "",
-        useremail: "",
+        // useremail: "",
         password: "",
         code: "",
         cap: "",
@@ -266,7 +264,7 @@ export default {
       duration: 60,
       isUsernameBlured: true,
       isPasswordBlured: true,
-      isEmailBlured: true,
+      // isEmailBlured: true,
       isValidStateCodeSMS: null,
       isValidStateCodeCaptcha: null,
       isRetrySendCodeSMS: false,
@@ -279,14 +277,14 @@ export default {
       authInProcess: false,
       captchaToken: null,
       loginTouchesCount: 0,
-      emailHub: [],
-      isEmailTouch: false,
-      emailClassHub: [],
-      isEmailErrorMessage: true,
-      isEmailValidSignsErrorMessage: true,
+      // emailHub: [],
+      // isEmailTouch: false,
+      // emailClassHub: [],
+      // isEmailErrorMessage: true,
+      // isEmailValidSignsErrorMessage: true,
       isDropDownShown: false,
       dropDownData: ["Номер телефона", "Email"],
-      isEmailTypeRegistrationChoosen: false,
+      // isEmailTypeRegistrationChoosen: false,
     };
   },
 
@@ -302,12 +300,12 @@ export default {
   },
 
   computed: {
-    email() {
-      if (this.isEmailTypeRegistrationChoosen === true) {
-        return this.$refs.Email.value;
-      }
-      return null;
-    },
+    // email() {
+    //   if (this.isEmailTypeRegistrationChoosen === true) {
+    //     return this.$refs.Email.value;
+    //   }
+    //   return null;
+    // },
   },
 
   methods: {
@@ -333,76 +331,76 @@ export default {
       }
     },
 
-    checkInputValue(input) {
-      const checkInputValue = isEmailRight(input.value);
-      if (checkInputValue === true) {
-        getArrayWithClass(this.emailClassHub, "is-valid");
-      }
-    },
-    handleBlur(field) {
-      if (field === "email" && this.email === "") {
-        this.isEmailErrorMessage = false;
-        this.emailClassHub.push("is-invalid");
-      }
+    // checkInputValue(input) {
+    //   const checkInputValue = isEmailRight(input.value);
+    //   if (checkInputValue === true) {
+    //     getArrayWithClass(this.emailClassHub, "is-valid");
+    //   }
+    // },
+    // handleBlur(field) {
+    //   if (field === "email" && this.email === "") {
+    //     this.isEmailErrorMessage = false;
+    //     this.emailClassHub.push("is-invalid");
+    //   }
 
-      const isInputValid = isEmailRight(this.email);
+    //   const isInputValid = isEmailRight(this.email);
 
-      if (isInputValid === false && this.email !== "") {
-        this.isEmailValidSignsErrorMessage = false;
-        this.isEmailErrorMessage = true;
-        getArrayWithClass(this.emailClassHub, "is-invalid");
-      }
+    //   if (isInputValid === false && this.email !== "") {
+    //     this.isEmailValidSignsErrorMessage = false;
+    //     this.isEmailErrorMessage = true;
+    //     getArrayWithClass(this.emailClassHub, "is-invalid");
+    //   }
 
-      if (isInputValid === false && this.email === "") {
-        this.isEmailValidSignsErrorMessage = true;
-        this.isEmailErrorMessage = false;
-        getArrayWithClass(this.emailClassHub, "is-invalid");
-      }
+    //   if (isInputValid === false && this.email === "") {
+    //     this.isEmailValidSignsErrorMessage = true;
+    //     this.isEmailErrorMessage = false;
+    //     getArrayWithClass(this.emailClassHub, "is-invalid");
+    //   }
 
-      if (isInputValid) {
-        this.isEmailValidSignsErrorMessage = true;
-        this.isEmailErrorMessage = true;
-        getArrayWithClass(this.emailClassHub, "is-valid");
-      }
-    },
+    //   if (isInputValid) {
+    //     this.isEmailValidSignsErrorMessage = true;
+    //     this.isEmailErrorMessage = true;
+    //     getArrayWithClass(this.emailClassHub, "is-valid");
+    //   }
+    // },
 
-    getResultValueEmail(item) {
-      return item.value;
-    },
+    // getResultValueEmail(item) {
+    //   return item.value;
+    // },
 
-    async getSuggestionsEmail(input) {
-      this.emailHub = [];
-      const isInputValid = isEmailRight(this.email);
+    // async getSuggestionsEmail(input) {
+    //   this.emailHub = [];
+    //   const isInputValid = isEmailRight(this.email);
 
-      if (input.length > 0) {
-        this.isEmailTouch = true;
-        this.isEmailErrorMessage = true;
-        this.isEmailValidSignsErrorMessage = true;
-        if (isInputValid === false) {
-          this.emailClassHub = [];
-        }
+    //   if (input.length > 0) {
+    //     this.isEmailTouch = true;
+    //     this.isEmailErrorMessage = true;
+    //     this.isEmailValidSignsErrorMessage = true;
+    //     if (isInputValid === false) {
+    //       this.emailClassHub = [];
+    //     }
 
-        if (isInputValid === true) {
-          this.isEmailErrorMessage = true;
-          getArrayWithClass(this.emailClassHub, "is-valid");
-        }
-      }
+    //     if (isInputValid === true) {
+    //       this.isEmailErrorMessage = true;
+    //       getArrayWithClass(this.emailClassHub, "is-valid");
+    //     }
+    //   }
 
-      if (this.isEmailTouch && input === "") {
-        this.isEmailErrorMessage = false;
-        this.isEmailValidSignsErrorMessage = true;
-        getArrayWithClass(this.emailClassHub, "is-invalid");
-      }
+    //   if (this.isEmailTouch && input === "") {
+    //     this.isEmailErrorMessage = false;
+    //     this.isEmailValidSignsErrorMessage = true;
+    //     getArrayWithClass(this.emailClassHub, "is-invalid");
+    //   }
 
-      const getDataEmail = await fetchEmail(input);
-      const fetchedEmail = getSuggestions(
-        getDataEmail,
-        this.emailHub,
-        this.email
-      );
+    //   const getDataEmail = await fetchEmail(input);
+    //   const fetchedEmail = getSuggestions(
+    //     getDataEmail,
+    //     this.emailHub,
+    //     this.email
+    //   );
 
-      return fetchedEmail;
-    },
+    //   return fetchedEmail;
+    // },
 
     async fetchToken() {
       try {
@@ -410,10 +408,7 @@ export default {
         let body = {
           mode: 2,
           password: this.$v.user.password.$model,
-          username:
-            this.isEmailTypeRegistrationChoosen === true
-              ? this.email
-              : this.$v.user.username.$model,
+          username: this.$v.user.username.$model,
           cap: this.user.cap || null,
           capid: this.user.capid || null,
         };
@@ -448,6 +443,7 @@ export default {
           this.user.code = "";
           return;
         }
+
         if (
           e?.response?.data.STATUS === 500 ||
           e?.response?.data.CODE === 104
@@ -457,6 +453,7 @@ export default {
           this.$bvModal.show("sms-confirm");
           return;
         }
+
         if (
           e?.response?.data.STATUS === 403 ||
           e?.response?.data.CODE === 106
@@ -465,18 +462,26 @@ export default {
           return;
         }
 
-        this.errorMessage = `Неверный ${this.choosenTypeOfAuth} или пароль`;
-        if (this.email === "") {
-          this.isEmailErrorMessage = false;
-          getArrayWithClass(this.emailClassHub, "is-invalid");
-          return;
-        }
-        const isInputValid = isEmailRight(this.email);
-        if (isInputValid === false && this.choosenTypeOfAuth === "Email") {
-          this.isEmailValidSignsErrorMessage = false;
-          getArrayWithClass(this.emailClassHub, "is-invalid");
-        }
+        this.errorMessage = `Неверный номер или пароль`;
+        // if (this.email === "") {
+        //   this.isEmailErrorMessage = false;
+        //   getArrayWithClass(this.emailClassHub, "is-invalid");
+        //   return;
+        // }
+        // const isInputValid = isEmailRight(this.email);
+        // if (isInputValid === false && this.choosenTypeOfAuth === "Email") {
+        //   this.isEmailValidSignsErrorMessage = false;
+        //   getArrayWithClass(this.emailClassHub, "is-invalid");
+        // }
       }
+      this.$v.user.$anyDirty.$reset;
+      this.$v.user.$invalid.$reset;
+
+      console.log("anyDirty:", this.$v.user.$anyDirty);
+      console.log("invalid:", this.$v.user.$invalid);
+      console.log(this.$v.user.password.$invalid);
+      console.log(this.$v.user.username.$invalid);
+      // this.$v.user.password.$invalid = true;
     },
     setFocusSMSCode() {
       this.$refs.focusCodeSMS.focus();
@@ -521,9 +526,10 @@ export default {
         this.isUsernameBlured = true;
       } else if (field === "password") {
         this.isPasswordBlured = true;
-      } else if (field === "useremail") {
-        this.isEmailBlured = true;
       }
+      // else if (field === "useremail") {
+      //   this.isEmailBlured = true;
+      // }
       this.$v.user[field].$touch();
     },
 
@@ -545,19 +551,18 @@ export default {
     user: {
       username: {
         required,
-        minLength: minLength(17),
       },
-      useremail: {
-        required,
-        alpha,
-        email,
-      },
+      // useremail: {
+      //   required,
+      //   alpha,
+      //   email,
+      // },
       password: {
         required,
       },
       code: {
         required,
-        minLength: minLength(5),
+        // minLength: minLength(5),
       },
     },
   },
