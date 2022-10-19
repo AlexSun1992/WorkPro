@@ -85,6 +85,7 @@ export default {
           relId: this.relId,
           relActionId: this.action.REL,
           actionId: this.actionId,
+          actionRefresh: this.action?.LREFRESH,
           rowId: this.rowId,
           itemId: this.action.NITEM,
           body: this.body,
