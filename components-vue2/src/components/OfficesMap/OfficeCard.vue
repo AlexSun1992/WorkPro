@@ -38,6 +38,7 @@
           </span>
         </div>
       </div>
+
       <div v-if="office.SGRAF" class="card-office-time">
         <button type="button" @click="isGrafShown = !isGrafShown">
           Режим работы:
@@ -74,7 +75,6 @@ import {
   getGrafs,
   showWorkingHours,
 } from "../../../../utils/map/helpers/helpers";
-
 export default {
   name: "OfficeCard",
   components: {
