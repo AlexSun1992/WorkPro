@@ -70,12 +70,12 @@ describe("getTime from helpers module", () => {
 describe("getCorrectGrafs from helpers module", () => {
   it("should return the correct grafs (data includes wrong values)", () => {
     const testData =
-      "grafs: Пн.-Пт.: 9.30-20.00 Сб.: 10.00-18.0 Вс.: 10.00-16.00 *** Прием документов по страховым случаям: Пн.-Чт.: 9.30-18.00, Пт.: 9.30-17.00";
+      "Пн.-Пт.: 9.30-20.00\nСб.: 10.00-18.0\nВс.: 10.00-16.00 *** Прием документов по страховым случаям:\nПн.-Чт.: 9.30-18.00,\nПт.: 9.30-17.00";
     expect(getGrafs(testData).includes("***")).toBe(false);
   });
   it("should return the correct grafs (only correct data)", () => {
     const testData =
-      "grafs: Пн.-Пт.: 9.30-20.00 Сб.: 10.00-18.0 Вс.: 10.00-16.00 Прием документов по страховым случаям: Пн.-Чт.: 9.30-18.00, Пт.: 9.30-17.00";
+      "Пн.-Пт.: 9.30-20.00\nСб.: 10.00-18.00\nВс.: 10.00-16.00\n***";
     expect(getGrafs(testData).includes("***")).toBe(false);
   });
 });
