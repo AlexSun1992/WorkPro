@@ -70,7 +70,7 @@
 
     <b-form @submit.prevent="onSubmit">
       <div class="row">
-        <div class="col-12 col-lg-6">
+        <!--        <div class="col-12 col-lg-6">
           <legend>Авторизация с помощью</legend>
           <b-dropdown
             id="dropdown-1"
@@ -90,11 +90,8 @@
             >
           </b-dropdown>
         </div>
-
-        <div
-          class="col-12 col-lg-6 mt-3 mt-lg-0"
-          v-if="isEmailTypeRegistrationChoosen === false"
-        >
+-->
+        <div class="col-12 col-lg-4">
           <b-form-group label="Телефон или email" label-cols="12">
             <b-form-input
               id="phone"
@@ -115,13 +112,13 @@
             </b-form-input>
 
             <b-form-invalid-feedback
-              >Пожалуйста, введите корректный номер
-              телефона</b-form-invalid-feedback
+              >Пожалуйста, введите корректный номер телефона или
+              email</b-form-invalid-feedback
             >
           </b-form-group>
         </div>
 
-        <div
+        <!--       <div
           class="col-12 col-lg-6 mt-3 mt-lg-0"
           v-if="isEmailTypeRegistrationChoosen"
         >
@@ -149,8 +146,9 @@
             >
           </b-form-group>
         </div>
+-->
 
-        <div class="col-12 col-lg-6 mt-3">
+        <div class="col-12 col-lg-4 mt-3 mt-lg-0">
           <b-form-group label="Пароль" label-cols="12">
             <b-form-input
               v-model="$v.user.password.$model"
@@ -167,7 +165,8 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-6 mt-3 mt-lg-4 pt-lg-2">
+
+        <div class="col-12 col-lg-4 mt-3 mt-lg-3 pt-lg-1">
           <a
             href="/login/password-recovery"
             id="btn_recovery-password_lk"
@@ -175,7 +174,10 @@
             >Не помните пароль?</a
           >
         </div>
-        <div v-if="isCaptchaNeeded && !authInProcess" class="col-12 col-lg-12">
+        <div
+          v-if="isCaptchaNeeded && !authInProcess"
+          class="col-12 col-lg-12 mt-3"
+        >
           <captcha
             @update="setIdCaptcha($event)"
             @updateCode="setCodeCaptcha($event)"
@@ -187,7 +189,7 @@
         variant="primary"
         type="submit"
         :disabled="authInProcess"
-        class="w-100 mt-3"
+        class="mt-4"
         id="btn_entry_lk"
       >
         Авторизоваться
@@ -272,7 +274,7 @@ export default {
       isCaptchaNeeded: false,
       autofocus: true,
       usernameMask: "+7(###)-###-##-##",
-      placeholder: "+7(___)-___-__-__",
+      placeholder: "Телефон или почта",
       errorMessage: null,
       authInProcess: false,
       captchaToken: null,
