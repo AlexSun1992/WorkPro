@@ -2,6 +2,7 @@
   <b-button
     v-if="action"
     @click.stop="action.LREQUESTCODE === true ? confirmAction() : startAction()"
+    :variant="variant"
   >
     <slot><div v-text="action.SNAME"></div></slot>
   </b-button>
@@ -19,6 +20,11 @@ export default {
     actionId: {
       type: String,
       required: true,
+      default: () => null,
+    },
+    variant: {
+      type: String,
+      required: false,
       default: () => null,
     },
     rowId: {
