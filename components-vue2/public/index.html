@@ -138,17 +138,17 @@
       <!--        <div class="d-block">-->
       <!--            <component-card-editor module-id="55" menu-id="780" zone="token" card-id="1906432255" rel="19B4DC3FA9416AFD5B2094CD7BF7DD26"></component-card-editor>-->
       <!--        </div>-->
-      <!--      <div class="d-block">-->
-      <!--        <component-card-editor-->
-      <!--          id="osago"-->
-      <!--          module-id="55"-->
-      <!--          menu-id="777"-->
-      <!--        ></component-card-editor>-->
-      <!--      </div>-->
+      <div class="d-block">
+        <component-card-editor
+          id="osago"
+          module-id="55"
+          menu-id="777"
+        ></component-card-editor>
+      </div>
     </div>
-    <div class="d-block">
-      <component-offices-map></component-offices-map>
-    </div>
+    <!--    <div class="d-block">-->
+    <!--      <component-offices-map></component-offices-map>-->
+    <!--    </div>-->
 
     <div>
       <!-- <component-payment-map></component-payment-map> -->
@@ -169,7 +169,6 @@
 
       // Колбэк-функция при срабатывании мутации
       const callback = function (mutationsList, observer) {
-        console.log(mutationsList.length);
         if (mutationsList.length === 12 || mutationsList.length === 13) {
           const endTime = Date.now();
           const duration = endTime - startTime;

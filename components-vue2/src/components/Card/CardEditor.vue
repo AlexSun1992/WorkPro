@@ -222,6 +222,7 @@ export default {
         this.params.idItem
       );
       this.isShowButtonSave = true;
+      this.params.hash = false;
       const loadedTime = Date.now() - startTime;
       const sentryMessage = `Компонент  "${this.menuId}" грузился  ${loadedTime} миллисекунд(ы)`;
       if (loadedTime > limitTime) {
