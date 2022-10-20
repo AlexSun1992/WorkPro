@@ -181,7 +181,7 @@ export default {
       if (token) {
         this.$axios.defaults.headers.common.Authorization = token;
       }
-      if (process?.env?.NODE_ENV === "production") {
+      if (process?.env?.NODE_ENV === "production" && !this.params.hash) {
         await this.$loadScript(
           `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
             this.zone
