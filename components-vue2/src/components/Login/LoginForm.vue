@@ -89,6 +89,9 @@
             <b-form-invalid-feedback v-if="$v.user.username.$model === ''"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
+            <b-form-invalid-feedback v-if="wrongAuthData === true"
+              >Неверный логин или пароль. Проверьте корректность введенных даных
+            </b-form-invalid-feedback>
           </b-form-group>
         </div>
 
@@ -118,9 +121,6 @@
             >Не помните пароль?</a
           >
         </div>
-        <div class="col-12 invalid-feedback d-block" v-if="wrongAuthData">
-          Неверный логин или пароль. Проверьте корректность введенных даных
-        </div>
         <div
           v-if="isCaptchaNeeded && !authInProcess"
           class="col-12 col-lg-12 mt-3"
@@ -148,7 +148,7 @@
 
 <script>
 import axios from "axios";
-import { mask } from "vue-the-mask";
+
 import {
   BForm,
   BFormGroup,
@@ -157,36 +157,17 @@ import {
   BSpinner,
   BButton,
   BModal,
-  BDropdown,
 } from "bootstrap-vue";
 
-import Autocomplete from "@trevoreyre/autocomplete-vue";
 import { validationMixin } from "vuelidate";
-import { required, minLength, helpers, email } from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Captcha from "./Captcha/Captcha";
-import {
-  fetchEmail,
-  getSuggestions,
-  getArrayWithClass,
-  isEmailRight,
-} from "./RegForm/dadata.helper";
-import {
-  isPhoneNumberValid,
-  getRestructuredPhoneNumber,
-} from "./loginForm.helper";
 import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
-
-const alpha = helpers.regex(
-  "alpha",
-  /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/
-);
 
 export default {
   name: "LoginForm",
   components: {
-    BDropdown,
-    Autocomplete,
     BForm,
     BFormGroup,
     BFormInput,
@@ -198,7 +179,7 @@ export default {
     Captcha,
   },
   mixins: [validationMixin],
-  directives: { mask },
+
   data() {
     return {
       user: {
@@ -225,7 +206,6 @@ export default {
       captchaToken: null,
       loginTouchesCount: 0,
       isDropDownShown: false,
-      dropDownData: ["Номер телефона", "Email"],
     };
   },
 
@@ -246,21 +226,6 @@ export default {
     },
     setCodeCaptcha(code) {
       this.user.cap = code;
-    },
-    toggleAuthType() {
-      this.isEmailTypeRegistrationChoosen =
-        !this.isEmailTypeRegistrationChoosen;
-    },
-
-    checkPastedValue(event) {
-      const pastedValue = event.clipboardData.getData("text");
-
-      const isPhoneValid = isPhoneNumberValid(pastedValue);
-
-      if (isPhoneValid) {
-        const reStructureNumber = getRestructuredPhoneNumber(pastedValue);
-        this.$v.user.username.$model = reStructureNumber;
-      }
     },
 
     async fetchToken() {
@@ -350,13 +315,6 @@ export default {
     },
 
     blurField(field) {
-      if (field === "username") {
-        this.loginTouchesCount++;
-        this.isUsernameBlured = true;
-      } else if (field === "password") {
-        this.isPasswordBlured = true;
-      }
-
       this.$v.user[field].$touch();
     },
 
