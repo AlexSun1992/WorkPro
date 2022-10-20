@@ -12,21 +12,18 @@
           :active="visibleForm === 'registration'"
           >Регистрация</b-nav-item
         >
+
+        <b-nav-item
+          @click="goESIA()"
+          class="goesia"
+          id="btn_recovery-password_lk"
+        >
+          Войти через <span class="login_esia"></span>
+        </b-nav-item>
       </b-nav>
     </div>
     <login-form v-if="visibleForm === 'login'"></login-form>
     <reg-form v-else></reg-form>
-
-    <div class="mt-4">
-      Войти через
-      <a
-        href="https://client.reso.ru/loginesia/loginesia/prod"
-        id="btn_recovery-password_lk"
-      >
-        Госуслуги&#8599;</a
-      >
-    </div>
-
     <button
       v-if="visibleForm === 'login'"
       @click="toggleForm('registration')"
@@ -41,6 +38,14 @@
     >
       ВХОД
     </button>
+
+    <div
+      @click="goESIA()"
+      class="goesia m-auto d-lg-none mt-4"
+      id="btn_recovery-password_lk"
+    >
+      Войти через <span class="login_esia"></span>
+    </div>
   </div>
 </template>
 <script>
@@ -72,6 +77,10 @@ export default {
         this.visibleForm = "login";
         window.history.pushState(null, "", "/login");
       }
+    },
+    goESIA() {
+      document.location.href =
+        "https://client.reso.ru/loginesia/loginesia/prod";
     },
   },
   mounted() {

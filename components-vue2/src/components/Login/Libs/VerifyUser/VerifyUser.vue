@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-4">
       <b-form-group class="required">
         <b-form-input
           v-if="loginType === 'phone'"
@@ -39,40 +39,7 @@
         >
       </b-form-group>
     </div>
-    <div class="col-12 col-md-6 mt-2 mt-md-0">
-      <b-button
-        type="submit"
-        :disabled="
-          (loginType === 'phone' ? v.phone.$invalid : v.email.$invalid) ||
-          isSendCode ||
-          loading
-        "
-        @click="executeRecaptcha"
-        variant="primary"
-        class="w-100"
-        id="btn_code_verification_lk"
-        :tabindex="tabIndex[2]"
-        >Получить код
-      </b-button>
-      <button
-        v-if="isSendCode"
-        @click="changeNumber"
-        class="btn-link"
-        type="button"
-      >
-        {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
-      </button>
-    </div>
-
-    <div v-if="isShowCodeEnter" class="col-12">
-      {{ textMessage }}
-      <template v-if="isSendCode"
-        >Отправить повторно можно через
-        <verify-timer @onFinish="stopTimer" :duration="duration" />
-        сек.</template
-      >
-    </div>
-    <div class="col-12 mt-3" v-if="codeFieldShown">
+    <div class="col-12 col-md-4 mt-3 mt-lg-0" v-if="codeFieldShown">
       <b-form-group label="Код подтверждения">
         <b-form-input
           autofocus
@@ -95,6 +62,24 @@
         >
       </b-form-group>
     </div>
+    <div class="col-12 col-md-4 mt-3 mt-lg-0">
+      <button
+        v-if="isSendCode"
+        @click="changeNumber"
+        class="btn-link"
+        type="button"
+      >
+        {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
+      </button>
+    </div>
+    <div v-if="isShowCodeEnter" class="col-12">
+      {{ textMessage }}
+      <template v-if="isSendCode"
+        >Отправить повторно можно через
+        <verify-timer @onFinish="stopTimer" :duration="duration" />
+        сек.</template
+      >
+    </div>
 
     <vue-recaptcha
       ref="recaptcha"
@@ -104,6 +89,21 @@
       @verify="setToken"
       @expired="onCaptchaExpired"
     />
+    <div class="col-12 mt-4">
+      <b-button
+        type="submit"
+        :disabled="
+          (loginType === 'phone' ? v.phone.$invalid : v.email.$invalid) ||
+          isSendCode ||
+          loading
+        "
+        @click="executeRecaptcha"
+        variant="primary"
+        id="btn_code_verification_lk"
+        :tabindex="tabIndex[2]"
+        >Получить код
+      </b-button>
+    </div>
   </div>
 </template>
 
