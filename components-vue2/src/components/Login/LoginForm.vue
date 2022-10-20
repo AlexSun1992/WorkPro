@@ -121,6 +121,9 @@
             >Не помните пароль?</a
           >
         </div>
+        <div class="col-12 invalid-feedback d-block">
+          !!!тут сообщение об ошибке, прятать вместе с дивом!!!!
+        </div>
         <div
           v-if="isCaptchaNeeded && !authInProcess"
           class="col-12 col-lg-12 mt-3"
