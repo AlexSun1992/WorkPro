@@ -1,109 +1,183 @@
 <!DOCTYPE html>
 <html lang="">
-
-
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"
+    />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title>
-        <%= htmlWebpackPlugin.options.title %>
-    </title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
     <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" ></script>  -->
     <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>  -->
-</head>
+  </head>
 
-<body class="app_body">
+  <body class="app_body">
     <noscript>
-        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
-                properly without JavaScript enabled. Please enable it to
-                continue..</strong>
+      <strong
+        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+        properly without JavaScript enabled. Please enable it to
+        continue..</strong
+      >
     </noscript>
 
-    <link rel="stylesheet" href="https://reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css" />
-    <link rel="stylesheet" href="https://reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css" />
-    <link rel="stylesheet" href="https://reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css" />
-    <link rel="stylesheet" href="https://reso.ru/system/modules/ru.reso.v2/resources/css/style_new.css" />
-    <link rel="stylesheet" href="https://reso.ru/system/modules/ru.reso.v2/resources/css/style_main.css" />
+    <link
+      rel="stylesheet"
+      href="https://reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://reso.ru/system/modules/ru.reso.v2/resources/css/style_new.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://reso.ru/system/modules/ru.reso.v2/resources/css/style_main.css"
+    />
 
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/util.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/popper.min.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/tooltip.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/migrate.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/library.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/script.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery.cookie.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery.inputmask.min.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery.inputmask.numeric.extensions.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/js/common-functions-forms.js"></script>
-    <script type="text/javascript" src="https://reso.ru/system/modules/ru.reso.v2/resources/js/region-location-user.js"></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/util.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/popper.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/tooltip.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/migrate.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/library.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/script.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery-ui.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery.cookie.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery.inputmask.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/scripts/jquery.inputmask.numeric.extensions.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/js/common-functions-forms.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/system/modules/ru.reso.v2/resources/js/region-location-user.js"
+    ></script>
     <div class="agent-block bg-slider-six d-none">
-        <div class="agent-block-dsp">
-            Ваш город: <strong class="color-green-one">Владивосток</strong>
-        </div>
-        <div class="agent-block-title">Агентов: 2</div>
-        <div class="agent-block-title"></div>
-        <div class="agent-block-btn">
-            <a class="btn-light" href="/about/contacts"> Найти на карте</a>
-        </div>
+      <div class="agent-block-dsp">
+        Ваш город: <strong class="color-green-one">Владивосток</strong>
+      </div>
+      <div class="agent-block-title">Агентов: 2</div>
+      <div class="agent-block-title"></div>
+      <div class="agent-block-btn">
+        <a class="btn-light" href="/about/contacts"> Найти на карте</a>
+      </div>
     </div>
 
     <div class="container">
+      <!--        <div class="d-none">-->
+      <!--            <component-header>/</component-header>-->
+      <!--        </div>-->
 
-<!--        <div class="d-none">-->
-<!--            <component-header>/</component-header>-->
-<!--        </div>-->
+      <!--        <div class="d-none">-->
+      <!--            <component-footer>/</component-footer>-->
+      <!--        </div>-->
 
-<!--        <div class="d-none">-->
-<!--            <component-footer>/</component-footer>-->
-<!--        </div>-->
+      <!--        <div class="d-none">-->
+      <!--            <component-password-recovery-form></component-password-recovery-form>-->
+      <!--        </div>-->
 
-<!--        <div class="d-none">-->
-<!--            <component-password-recovery-form></component-password-recovery-form>-->
-<!--        </div>-->
+      <!--        <div class="d-none">-->
+      <!--            <component-login-form></component-login-form>-->
+      <!--        </div>-->
 
-<!--        <div class="d-none">-->
-<!--            <component-login-form></component-login-form>-->
-<!--        </div>-->
+      <!--        <div class="d-none">-->
+      <!--            <component-reg-form></component-reg-form>-->
+      <!--        </div>-->
 
-<!--        <div class="d-none">-->
-<!--            <component-reg-form></component-reg-form>-->
-<!--        </div>-->
+      <div class="d-none">
+        <component-auth-form></component-auth-form>
+      </div>
 
-       <div class="d-block">
-           <component-auth-form></component-auth-form>
-       </div>
+      <!--        <div class="d-block">-->
+      <!--            <component-show-city class="mb-4" />-->
+      <!--        </div>-->
 
-<!--        <div class="d-block">-->
-<!--            <component-show-city class="mb-4" />-->
-<!--        </div>-->
-
-<!--        <div class="d-block">-->
-<!--            <component-card-editor module-id="55" menu-id="780" zone="token" card-id="1906432255" rel="19B4DC3FA9416AFD5B2094CD7BF7DD26"></component-card-editor>-->
-<!--        </div>-->
-      <!-- <div class="d-block">
-        <component-card-editor module-id="55" menu-id="777"></component-card-editor>
-      </div> -->
+      <!--        <div class="d-block">-->
+      <!--            <component-card-editor module-id="55" menu-id="780" zone="token" card-id="1906432255" rel="19B4DC3FA9416AFD5B2094CD7BF7DD26"></component-card-editor>-->
+      <!--        </div>-->
+      <div class="d-block">
+        <component-card-editor
+          module-id="55"
+          menu-id="777"
+        ></component-card-editor>
+      </div>
     </div>
-<!--    <div class="d-block">-->
-<!--        <component-offices-map></component-offices-map>-->
-<!--    </div>-->
 
     <div>
-        <!-- <component-payment-map></component-payment-map> -->
+      <!-- <component-payment-map></component-payment-map> -->
     </div>
 
-
     <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
+    <script>
+      const target = document.getElementById("osago");
+
+      const startTime = Date.now();
+
+      // Конфигурация observer (за какими изменениями наблюдать)
+      const config = {
+        attributes: true,
+        childList: true,
+        subtree: true,
+      };
+
+      // Колбэк-функция при срабатывании мутации
+      const callback = function (mutationsList, observer) {
+        console.log(mutationsList.length);
+        if (mutationsList.length === 12 || mutationsList.length === 13) {
+          const endTime = Date.now();
+          const duration = endTime - startTime;
+          console.log(duration);
+          alert(duration);
+        }
+      };
+      // Создаём экземпляр наблюдателя с указанной функцией колбэка
+      const observer = new MutationObserver(callback);
+
+      // Начинаем наблюдение за настроенными изменениями целевого элемента
+      observer.observe(target, config);
     </script>
-
-
-
-
-</body>
-
+  </body>
 </html>

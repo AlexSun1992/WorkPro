@@ -156,6 +156,9 @@ export default {
 
   async created() {
     try {
+      if (process?.env?.NODE_ENV === "development" || this.params.hash) {
+        this.eventHandler = await this.loadScript();
+      }
       this.hashDataLocal().then((json) => {
         this.$store.commit(
           "data_card/setForm",
@@ -199,9 +202,6 @@ export default {
             this.eventHandler = await this.loadScript();
           });
       }
-      if (process?.env?.NODE_ENV === "development") {
-        this.eventHandler = await this.loadScript();
-      }
       await Promise.all([
         this.$store.dispatch("menu/fetchMenuById", this.params),
         this.fetchCard(),
@@ -222,6 +222,7 @@ export default {
         this.params.idItem
       );
       this.isShowButtonSave = true;
+      this.params.hash = false;
       const loadedTime = Date.now() - startTime;
       const sentryMessage = `Компонент  "${this.menuId}" грузился  ${loadedTime} миллисекунд(ы)`;
       if (loadedTime > limitTime) {

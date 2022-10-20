@@ -1,4 +1,4 @@
-import { countOffices, getUnderlineId, getTime } from "./helpers";
+import { countOffices, getUnderlineId, getTime, getGrafs } from "./helpers";
 
 describe("countOffices from helpers module", () => {
   it("should return string '1 отделение' if offices countOffices is equal to 1", () => {
@@ -64,5 +64,18 @@ describe("getTime from helpers module", () => {
 
   it("should return empty string if nothing passed", () => {
     expect(getTime());
+  });
+});
+
+describe("getCorrectGrafs from helpers module", () => {
+  it("should return the correct grafs (data includes wrong values)", () => {
+    const testData =
+      "Пн.-Пт.: 9.30-20.00\nСб.: 10.00-18.0\nВс.: 10.00-16.00 *** Прием документов по страховым случаям:\nПн.-Чт.: 9.30-18.00,\nПт.: 9.30-17.00";
+    expect(getGrafs(testData).includes("***")).toBe(false);
+  });
+  it("should return the correct grafs (only correct data)", () => {
+    const testData =
+      "Пн.-Пт.: 9.30-20.00\nСб.: 10.00-18.00\nВс.: 10.00-16.00\n***";
+    expect(getGrafs(testData).includes("***")).toBe(false);
   });
 });
