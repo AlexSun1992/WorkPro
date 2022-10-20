@@ -72,8 +72,6 @@
         {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
       </button>
     </div>
-    <!-- {{ textMessage }} -->
-    <!-- <div v-if="isShowCodeEnter" class="col-12"></div> -->
 
     <vue-recaptcha
       ref="recaptcha"
