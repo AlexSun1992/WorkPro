@@ -156,6 +156,9 @@ export default {
 
   async created() {
     try {
+      if (process?.env?.NODE_ENV === "development" || this.params.hash) {
+        this.eventHandler = await this.loadScript();
+      }
       this.hashDataLocal().then((json) => {
         this.$store.commit(
           "data_card/setForm",
@@ -181,7 +184,7 @@ export default {
       if (token) {
         this.$axios.defaults.headers.common.Authorization = token;
       }
-      if (process?.env?.NODE_ENV === "production" && !this.params.hash) {
+      if (process?.env?.NODE_ENV === "production") {
         await this.$loadScript(
           `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
             this.zone
@@ -198,9 +201,6 @@ export default {
             );
             this.eventHandler = await this.loadScript();
           });
-      }
-      if (process?.env?.NODE_ENV === "development" || this.params.hash) {
-        this.eventHandler = await this.loadScript();
       }
       await Promise.all([
         this.$store.dispatch("menu/fetchMenuById", this.params),
