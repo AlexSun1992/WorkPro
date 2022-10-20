@@ -199,7 +199,7 @@ export default {
             this.eventHandler = await this.loadScript();
           });
       }
-      if (process?.env?.NODE_ENV === "development") {
+      if (process?.env?.NODE_ENV === "development" || this.params.hash) {
         this.eventHandler = await this.loadScript();
       }
       await Promise.all([
