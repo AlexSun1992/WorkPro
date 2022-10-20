@@ -212,7 +212,10 @@ const getPhones = (phones) => {
 
 const getGrafs = (grafs) => {
   const grafsArr = grafs.split("\n");
-  if (grafsArr.length > 1) grafsArr.pop();
+  if (grafsArr.length > 1) {
+    const nonExtraValuesGrafs = grafsArr.filter((item) => item !== "***");
+    return nonExtraValuesGrafs;
+  }
   return grafsArr;
 };
 
