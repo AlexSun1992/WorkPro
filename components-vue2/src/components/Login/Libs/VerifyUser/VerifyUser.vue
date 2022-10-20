@@ -72,14 +72,8 @@
         {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
       </button>
     </div>
-    <div v-if="isShowCodeEnter" class="col-12">
-      {{ textMessage }}
-      <template v-if="isSendCode"
-        >Отправить повторно можно через
-        <verify-timer @onFinish="stopTimer" :duration="duration" />
-        сек.</template
-      >
-    </div>
+    <!-- {{ textMessage }} -->
+    <!-- <div v-if="isShowCodeEnter" class="col-12"></div> -->
 
     <vue-recaptcha
       ref="recaptcha"
@@ -101,7 +95,14 @@
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        >Получить код
+        v-if="!isCodeFieldValid"
+      >
+        <span v-if="!isSendCode">Получить код</span>
+        <template v-if="isSendCode"
+          >Отправить повторно можно через
+          <verify-timer @onFinish="stopTimer" :duration="duration" />
+          сек.</template
+        >
       </b-button>
     </div>
   </div>
@@ -153,7 +154,7 @@ export default {
     "tabIndex",
     "error",
     "isError",
-    "isCodeFieldInValid",
+    "isCodeFieldValid",
   ],
 
   data() {

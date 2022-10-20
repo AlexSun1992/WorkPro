@@ -30,6 +30,7 @@
           :error="errorMessage"
           @checkCodeFieldValid="isCodeFieldValid"
           @messageText="getTextMessage"
+          :isCodeFieldValid="codeFieldValid"
         />
       </b-form-group>
       <div class="row">
