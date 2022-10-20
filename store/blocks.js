@@ -118,7 +118,6 @@ export const actions = {
   },
   async fetchBlock({ commit, dispatch, state }, params) {
     let url;
-
     const urlJsonFilters = JSON.stringify(params.query);
     if (!params.zone) {
       url = `/api/list/55/${params.id}/${encodeURIComponent(urlJsonFilters)}`;
@@ -182,7 +181,7 @@ export const actions = {
   },
   async executeAction(
     { commit, dispatch, getters },
-    { relId, relActionId, rowId, itemId, actionId, body }
+    { relId, relActionId, rowId, itemId, actionId, actionRefresh, body }
   ) {
     return await this.$axios
       .post(
@@ -190,7 +189,7 @@ export const actions = {
         body || {}
       )
       .then(async (resp) => {
-        if (getters.getBlockById(itemId)) {
+        if (getters.getBlockById(itemId) && actionRefresh) {
           dispatch("updateBlock", itemId);
         }
         dispatch("menu/fetchCounters", null, { root: true });
