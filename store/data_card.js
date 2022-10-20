@@ -184,12 +184,10 @@ export const actions = {
           commit("setLoading", false);
           commit("setDisabled", false);
           commit("setSavedError", false);
-          if (!params.hash) {
-            commit(
-              "setForm",
-              res.data.metaData.data.length ? res.data.metaData.data : res.data
-            );
-          }
+          commit(
+            "setForm",
+            res.data.metaData.data.length ? res.data.metaData.data : res.data
+          );
           if (params.idCard === "0") {
             getters.getForm.forEach((item) => {
               if (params.query[item.name]) {
