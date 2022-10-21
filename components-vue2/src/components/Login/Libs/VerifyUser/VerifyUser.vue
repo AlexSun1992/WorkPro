@@ -401,6 +401,7 @@ export default {
       this.v.code.$model = null;
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
+      this.$emit("isPhoneChangedButtonClicked", this.isPhoneChanged);
       this.isSendCode = false;
     },
 

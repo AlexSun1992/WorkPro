@@ -31,6 +31,8 @@
           @checkCodeFieldValid="isCodeFieldValid"
           @messageText="getTextMessage"
           :isCodeFieldValid="codeFieldValid"
+          @isPhoneChangedButtonClicked="checkIfButtonClicked"
+          @input="refuseButtonClicked"
         />
       </b-form-group>
       <div class="row">
@@ -117,7 +119,10 @@
             />
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+        <div
+          class="col-12 col-md-6 mt-3"
+          v-if="codeFieldValid && changePhoneButtonClicked === false"
+        >
           <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
@@ -224,6 +229,7 @@ export default {
         password: "",
         password2: "",
       },
+      changePhoneButtonClicked: false,
       isPatronymicNotExist: false,
       conformation: false,
       show: true,
@@ -350,6 +356,13 @@ export default {
   },
 
   methods: {
+    refuseButtonClicked() {
+      console.log("refuseButtonClicked");
+      this.changePhoneButtonClicked = false;
+    },
+    checkIfButtonClicked(data) {
+      this.changePhoneButtonClicked = data;
+    },
     handleBlur(field) {
       // Валидация
 
