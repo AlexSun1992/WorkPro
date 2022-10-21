@@ -2,6 +2,7 @@
   <div class="row">
     <div class="col-12 col-md-4">
       <b-form-group class="required">
+        <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
           v-if="loginType === 'phone'"
           ref="userInput"
@@ -17,7 +18,7 @@
           autocomplete="off"
           :tabindex="tabIndex[1]"
         ></b-form-input>
-
+        <legend v-if="loginType === 'email'">Почта</legend>
         <b-form-input
           v-else-if="loginType === 'email'"
           ref="userInput"
@@ -62,23 +63,14 @@
         >
       </b-form-group>
     </div>
-    <div class="col-12 col-md-4 mt-3 mt-lg-0">
+    <div class="col-12 col-lg-4 mt-3 mt-lg-3 pt-lg-1">
       <button
-        v-if="isSendCode"
         @click="changeNumber"
-        class="btn-link"
+        class="btn-link mt-lg-4 d-table"
         type="button"
       >
         {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
       </button>
-    </div>
-    <div v-if="isShowCodeEnter" class="col-12">
-      {{ textMessage }}
-      <template v-if="isSendCode"
-        >Отправить повторно можно через
-        <verify-timer @onFinish="stopTimer" :duration="duration" />
-        сек.</template
-      >
     </div>
 
     <vue-recaptcha
@@ -101,7 +93,14 @@
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        >Получить код
+        v-if="!isCodeFieldValid"
+      >
+        <span v-if="!isSendCode">Получить код</span>
+        <template v-if="isSendCode"
+          >Отправить повторно можно через
+          <verify-timer @onFinish="stopTimer" :duration="duration" />
+          сек.</template
+        >
       </b-button>
     </div>
   </div>
@@ -153,7 +152,7 @@ export default {
     "tabIndex",
     "error",
     "isError",
-    "isCodeFieldInValid",
+    "isCodeFieldValid",
   ],
 
   data() {
