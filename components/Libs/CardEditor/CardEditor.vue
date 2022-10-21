@@ -563,7 +563,7 @@ export default {
           autoHideDelay: 5000,
           toaster: "b-toaster-top-full",
         });
-        if (this.$route.query?.ref) {
+        if (this.$route.query?.ref && this.actionSettings?.closeAfter) {
           this.$router.push(this.$route.query?.ref);
         }
         if (response.data.POUTVALUE) {

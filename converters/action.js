@@ -14,6 +14,7 @@ converter.action = (data) => {
     obj.isCurrentWindow = items[i].LCURWINDOW;
     obj.field = items[i].SFIELD;
     obj.refresh = items[i].LREFRESH;
+    obj.closeAfter = items[i].LCLOSEAFTER;
     arr.push(obj);
   }
   return arr;
