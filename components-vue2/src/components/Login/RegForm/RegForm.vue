@@ -14,7 +14,7 @@
       inline
       class="align-items-start"
     >
-      <b-form-group label="Телефон" class="w-100 required">
+      <b-form-group class="w-100 required">
         <verify-user
           ref="verifyUser"
           @error="showError"
@@ -30,6 +30,7 @@
           :error="errorMessage"
           @checkCodeFieldValid="isCodeFieldValid"
           @messageText="getTextMessage"
+          :isCodeFieldValid="codeFieldValid"
         />
       </b-form-group>
       <div class="row">
