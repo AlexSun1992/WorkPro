@@ -156,6 +156,9 @@ export default {
 
   async created() {
     try {
+      if (this.menuId !== 777) {
+        this.params.hash = false;
+      }
       if (process?.env?.NODE_ENV === "development" || this.params.hash) {
         this.eventHandler = await this.loadScript();
       }
@@ -223,19 +226,6 @@ export default {
       );
       this.isShowButtonSave = true;
       this.params.hash = false;
-      const loadedTime = Date.now() - startTime;
-      const sentryMessage = `Компонент  "${this.menuId}" грузился  ${loadedTime} миллисекунд(ы)`;
-      if (loadedTime > limitTime) {
-        Sentry.captureException(
-          new Error("Компонент долго грузится."),
-          (scope) => {
-            scope.setTransactionName(sentryMessage);
-            return scope;
-          }
-        );
-      } else {
-        Sentry.captureMessage(sentryMessage);
-      }
     } catch (e) {
       console.error(e);
       this.$store.commit("data_card/setError", true);
