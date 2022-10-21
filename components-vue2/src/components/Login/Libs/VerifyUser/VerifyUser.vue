@@ -63,8 +63,9 @@
         >
       </b-form-group>
     </div>
-    <div class="col-12 col-lg-4 mt-3 mt-lg-3 pt-lg-1">
+    <div class="col-12 col-md-4 mt-3 pt-lg-1">
       <button
+        v-if="isSendCode"
         @click="changeNumber"
         class="btn-link mt-lg-4 d-table"
         type="button"
