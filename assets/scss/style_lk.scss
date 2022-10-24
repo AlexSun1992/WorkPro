@@ -3728,3 +3728,23 @@ a[data-newcount][data-newcolor="RED"]:after {
     font-feature-settings: "pnum" on, "lnum" on;
     display: table;
 }
+
+.send-to-email {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #43b02a;
+    padding-right: 30px;
+    background: url(/img/icon-email.svg) center right no-repeat;
+    background-size: contain;
+    text-decoration: none;
+}
+
+h5 {
+    font-family: "Raleway";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 24px;
+    font-feature-settings: "pnum" on, "lnum" on;
+    color: #292929;
+}
