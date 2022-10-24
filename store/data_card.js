@@ -189,6 +189,21 @@ export const actions = {
               "setForm",
               res.data.metaData.data.length ? res.data.metaData.data : res.data
             );
+          } else {
+            const dataForm = res.data.metaData.data.length
+              ? res.data.metaData.data
+              : res.data;
+            const googleCaptcha = dataForm.find(
+              (item) => item.type === "GoogleCaptcha"
+            );
+            commit("setVisibleByName", {
+              name: googleCaptcha.name,
+              visible: googleCaptcha?.visible,
+            });
+            commit("setValueByName", {
+              name: googleCaptcha.name,
+              value: googleCaptcha?.value,
+            });
           }
           if (params.idCard === "0") {
             getters.getForm.forEach((item) => {
@@ -620,6 +635,12 @@ export const mutations = {
     const field = state.form.find((item) => item.name === data.name);
     if (field) {
       field.visible = data.visible;
+    }
+  },
+  setValueByName(state, data) {
+    const field = state.form.find((item) => item.name === data.name);
+    if (field) {
+      field.value = data.value;
     }
   },
   setAddFields(state, params) {

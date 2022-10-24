@@ -160,6 +160,20 @@ export default {
       );
       return null;
     },
+    getAddField(property) {
+      const addFields = this.dataContent?.addFields;
+      if (addFields) {
+        if (addFields[property]) {
+          return addFields[property];
+        }
+        throw new Error(
+          `В методе getAddField свойство ${property}  не сущесвует или задано неверно. Доступные свойства: ${JSON.stringify(
+            addFields
+          )}`
+        );
+      }
+      return null;
+    },
     updateBlock() {
       this.$store.dispatch("blocks/updateBlock", this.itemId);
     },
