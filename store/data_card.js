@@ -150,7 +150,7 @@ export const actions = {
     commit("setCardRelId", params.idRel);
     commit("setModuleId", params.idModule);
     commit("setMenuId", params.idItem);
-    if (!params.hash) {
+    if (!params.cache) {
       commit("setLoading", true);
       commit("setDisabled", true);
     }
@@ -184,7 +184,7 @@ export const actions = {
           commit("setLoading", false);
           commit("setDisabled", false);
           commit("setSavedError", false);
-          if (!params.hash) {
+          if (!params.cache) {
             commit(
               "setForm",
               res.data.metaData.data.length ? res.data.metaData.data : res.data
