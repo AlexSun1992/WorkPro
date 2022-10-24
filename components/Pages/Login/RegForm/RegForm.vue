@@ -397,7 +397,7 @@ export default {
         if (response?.status === 200) {
           this.$bvModal
             .msgBoxOk("Вы успешно зарегистрированы в системе!", {
-              title: "Подтверждение",
+              title: "Подтверждение!!",
               size: "md",
               buttonSize: "md",
               okVariant: "success",

@@ -120,17 +120,22 @@
           >
         </div>
         <div class="col-12 invalid-feedback d-block" v-if="wrongAuthData">
-          Неверный логин или пароль. Проверьте корректность введенных даных
+          Неверный логин или пароль. Проверьте корректность введенных даных.
         </div>
 
         <div
-          v-if="isCaptchaNeeded && !authInProcess"
+          v-if="isCaptchaNeeded && !authInProcess && wrongAuthData === true"
           class="col-12 col-lg-12 mt-3"
         >
           <captcha
             @update="setIdCaptcha($event)"
             @updateCode="setCodeCaptcha($event)"
+            :isCaptchaValid="this.captchaMessage"
           />
+
+          <!-- <div class="col-12 invalid-feedback d-block" v-if="wrongAuthData">
+            {{ this.captchaMessage }}
+          </div> -->
         </div>
       </div>
       <b-button
@@ -166,6 +171,10 @@ import { required } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Captcha from "./Captcha/Captcha";
 import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
+import {
+  getRestructuredPhoneNumber,
+  removeNotNumberElements,
+} from "./loginForm.helper";
 
 export default {
   name: "LoginForm",
@@ -192,6 +201,7 @@ export default {
         capid: null,
       },
       wrongAuthData: null,
+      captchaMessage: null,
       hideTelephoneMessage: null,
       duration: 60,
       isUsernameBlured: true,
@@ -233,12 +243,24 @@ export default {
     async fetchToken() {
       this.$v.user.username.$touch();
       this.$v.user.password.$touch();
+      if (
+        this.$v.user.username.$model === "" ||
+        this.$v.user.password.$model === ""
+      ) {
+        return;
+      }
+
       try {
         this.authInProcess = true;
+
+        const getValidPhoneNumber = getRestructuredPhoneNumber(
+          this.$v.user.username.$model
+        );
+
         let body = {
           mode: 2,
           password: this.$v.user.password.$model,
-          username: this.$v.user.username.$model,
+          username: getValidPhoneNumber,
           cap: this.user.cap || null,
           capid: this.user.capid || null,
         };
@@ -264,18 +286,23 @@ export default {
         }
       } catch (e) {
         this.authInProcess = false;
-
         if (e?.response?.data.STATUS === 401) {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
           this.wrongAuthData = true;
         }
-
+        // Выведение сообщения при наличии капчи
+        if (e?.response?.data.NEEDCAPTCHA) {
+          this.captchaMessage = e.response.data.MESSAGE;
+        }
+        if (e?.response?.data.NEEDCAPTCHA === false) {
+          this.captchaMessage = null;
+        }
+        //
         if (e?.response?.data.CODE === 105) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
           return;
         }
-
         if (
           e?.response?.data.STATUS === 500 ||
           e?.response?.data.CODE === 104
@@ -330,13 +357,21 @@ export default {
       }
     },
   },
-
+  // computed: {
+  //   test() {
+  //     console.log("test:", this.user.cap);
+  //     return this.user.cap;
+  //     // if (this.user.cap !== "" && this.captchaMessage !== null) {
+  //     //   return true;
+  //     // }
+  //     // return false;
+  //   },
+  // },
   validations: {
     user: {
       username: {
         required,
       },
-
       password: {
         required,
       },
