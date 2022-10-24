@@ -252,7 +252,6 @@ export default {
 
       try {
         this.authInProcess = true;
-
         const getValidPhoneNumber = getRestructuredPhoneNumber(
           this.$v.user.username.$model
         );
@@ -357,16 +356,7 @@ export default {
       }
     },
   },
-  // computed: {
-  //   test() {
-  //     console.log("test:", this.user.cap);
-  //     return this.user.cap;
-  //     // if (this.user.cap !== "" && this.captchaMessage !== null) {
-  //     //   return true;
-  //     // }
-  //     // return false;
-  //   },
-  // },
+
   validations: {
     user: {
       username: {
