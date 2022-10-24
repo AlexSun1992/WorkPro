@@ -89,9 +89,6 @@
             <b-form-invalid-feedback v-if="$v.user.username.$model === ''"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
-            <b-form-invalid-feedback v-if="wrongAuthData === true"
-              >Неверный логин или пароль. Проверьте корректность введенных даных
-            </b-form-invalid-feedback>
           </b-form-group>
         </div>
 
@@ -117,10 +114,14 @@
           <a
             href="/login/password-recovery"
             id="btn_recovery-password_lk"
-            class="mt-lg-4 d-table"
+            class="mt-lg-4 d-table btn-link"
             >Не помните пароль?</a
           >
         </div>
+        <div class="col-12 invalid-feedback d-block" v-if="wrongAuthData">
+          Неверный логин или пароль. Проверьте корректность введенных даных
+        </div>
+
         <div
           v-if="isCaptchaNeeded && !authInProcess"
           class="col-12 col-lg-12 mt-3"
