@@ -73,6 +73,7 @@
         <div class="col-12 col-lg-4">
           <b-form-group label="Телефон или email" label-cols="12">
             <b-form-input
+              autofocus
               id="phone"
               ref="phoneInput"
               v-model="$v.user.username.$model"
@@ -263,8 +264,10 @@ export default {
         }
       } catch (e) {
         this.authInProcess = false;
+
         if (e?.response?.data.STATUS === 401) {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
+          this.wrongAuthData = true;
         }
 
         if (e?.response?.data.CODE === 105) {
@@ -287,7 +290,6 @@ export default {
           e?.response?.data.STATUS === 403 ||
           e?.response?.data.CODE === 106
         ) {
-          this.wrongAuthData = true;
           this.isCaptchaNeeded = true;
           return;
         }
