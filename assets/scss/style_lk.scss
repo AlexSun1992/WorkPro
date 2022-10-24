@@ -3748,3 +3748,34 @@ h5 {
     font-feature-settings: "pnum" on, "lnum" on;
     color: #292929;
 }
+
+h6 {
+    font-family: "Raleway";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 24px;
+    font-feature-settings: "pnum" on, "lnum" on;
+    color: #434343;
+}
+
+.phb2 {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.875rem;
+}
+
+.blk-shadow {
+    box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
+}
+
+.border-none {
+    border: 0;
+}
+
+@media (max-width: 992px) {
+    .phb2 {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+}
