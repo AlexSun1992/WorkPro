@@ -17,7 +17,7 @@
     </b-col>
     <b-col sm="12" md="6" v-if="recovery"></b-col>
     <b-col
-      class="password-repeat mt-3 mt-md-0"
+      class="password-repeat mt-3 mt-lg-0"
       :class="{ 'mt-0': recovery }"
       sm="12"
       md="6"
