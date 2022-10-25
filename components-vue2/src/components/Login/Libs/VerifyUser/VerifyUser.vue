@@ -315,14 +315,14 @@ export default {
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "Введенный Вами мобильный телефон уже есть в системе!",
+                  "Введенный Вами мобильный номер уже есть в системе.",
                   {
-                    title: "Подтверждение",
+                    title: "Номер уже зарегистрирован",
                     size: "md",
                     buttonSize: "md",
                     okVariant: "success",
                     okTitle: isInSystemLogin
-                      ? "Изменить номер телефона"
+                      ? "Восстановить пароль"
                       : "Продолжить регистрацию",
                     cancelTitle: "Войти в систему",
                     footerClass: "p-2",
