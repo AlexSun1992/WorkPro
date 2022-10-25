@@ -394,6 +394,7 @@ export default {
 
     changeNumber() {
       this.codeFieldShown = false;
+      this.$emit("checkCodeFieldValid", false);
       this.$emit("error", null);
       this.isUserBlured = false;
       this.v.phone.$model = "";
@@ -423,6 +424,10 @@ export default {
         ) {
           if (this.validateState("code") === true && field === "code") {
             this.$emit("checkCodeFieldValid", true);
+          }
+
+          if (this.validateState("code") === false && field === "code") {
+            this.$emit("checkCodeFieldValid", false);
           }
 
           return this.validateState(field);

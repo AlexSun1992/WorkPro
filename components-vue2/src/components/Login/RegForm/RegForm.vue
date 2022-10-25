@@ -357,7 +357,6 @@ export default {
 
   methods: {
     refuseButtonClicked() {
-      console.log("refuseButtonClicked");
       this.changePhoneButtonClicked = false;
     },
     checkIfButtonClicked(data) {
@@ -408,6 +407,7 @@ export default {
     },
 
     isCodeFieldValid(data) {
+      // console.log("data:", data);
       this.codeFieldValid = data;
     },
 
