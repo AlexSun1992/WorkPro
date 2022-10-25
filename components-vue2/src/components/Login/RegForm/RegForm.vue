@@ -265,7 +265,11 @@ export default {
       requestToDadataParamsPartsHub: [],
     };
   },
-
+  created() {
+    if (typeof logEvent === "function") {
+      console.log("function logEvent is done!");
+    }
+  },
   validations: {
     form: {
       birthdate: {
