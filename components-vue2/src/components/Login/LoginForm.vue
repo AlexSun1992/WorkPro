@@ -121,13 +121,14 @@
           >
         </div>
 
-        <div class="col-12 invalid-feedback d-block" v-if="wrongAuthData">
-          Неверный логин или пароль. Проверьте корректность введенных даных.
+        <div class="col-12 invalid-feedback d-block mt-3" v-if="wrongAuthData">
+          Неверный логин или пароль.<br />Проверьте корректность введенных
+          даных.
         </div>
 
         <div
           v-if="isCaptchaNeeded && !authInProcess && wrongAuthData === true"
-          class="col-12 col-lg-12 mt-3"
+          class="col-12 mt-3 mt-lg-0"
         >
           <captcha
             @update="setIdCaptcha($event)"
