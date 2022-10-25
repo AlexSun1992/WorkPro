@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-lg-4">
       <b-form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
@@ -40,7 +40,7 @@
         >
       </b-form-group>
     </div>
-    <div class="col-12 col-md-4 mt-3 mt-lg-0" v-if="codeFieldShown">
+    <div class="col-12 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
       <b-form-group label="Код подтверждения">
         <b-form-input
           autofocus
@@ -63,7 +63,7 @@
         >
       </b-form-group>
     </div>
-    <div class="col-12 col-md-4 mt-3 pt-lg-1">
+    <div class="col-12 col-lg-4 mt-3 pt-lg-1">
       <button
         v-if="isSendCode"
         @click="changeNumber"

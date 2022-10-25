@@ -105,7 +105,7 @@ export default {
         idCard: "0",
         idRel: "0",
         zone: this.zone,
-        hash: true,
+        cache: true,
       },
       isShowSavedError: false,
       eventHandler: null,
@@ -138,9 +138,9 @@ export default {
       return () =>
         import(`/../components/EventHandler/${this.menuId}/eventHandler`);
     },
-    hashDataLocal() {
+    cacheDataLocal() {
       return () =>
-        import(`./HashDataLocal/${this.menuId}/hash${this.menuId}.json`);
+        import(`./CacheDataLocal/${this.menuId}/cache${this.menuId}.json`);
     },
     isCaptchaNeededCheck() {
       return this.isCaptchaNeeded;
@@ -157,12 +157,12 @@ export default {
   async created() {
     try {
       if (this.menuId !== 777) {
-        this.params.hash = false;
+        this.params.cache = false;
       }
-      if (process?.env?.NODE_ENV === "development" || this.params.hash) {
+      if (process?.env?.NODE_ENV === "development" || this.params.cache) {
         this.eventHandler = await this.loadScript();
       }
-      this.hashDataLocal().then((json) => {
+      this.cacheDataLocal().then((json) => {
         this.$store.commit(
           "data_card/setForm",
           Object.values(json.metaData.data)
@@ -225,7 +225,7 @@ export default {
         this.params.idItem
       );
       this.isShowButtonSave = true;
-      this.params.hash = false;
+      this.params.cache = false;
     } catch (e) {
       console.error(e);
       this.$store.commit("data_card/setError", true);

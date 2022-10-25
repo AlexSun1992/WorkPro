@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row mt-4">
-      <div class="col-9">
+      <div class="col-12 col-lg-9">
         <AuthForm />
       </div>
     </div>

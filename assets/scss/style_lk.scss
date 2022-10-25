@@ -3688,6 +3688,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     font-size: 0.875rem;
     color: #292929;
     grid-area: ppl;
+    align-self: end;
 }
 
 .los-pay {
@@ -3737,6 +3738,21 @@ a[data-newcount][data-newcolor="RED"]:after {
     background: url(/img/icon-email.svg) center right no-repeat;
     background-size: contain;
     text-decoration: none;
+    line-height: 1;
+}
+
+.btn.icon-wppl {
+    background-image: url(/img/icon-wppl.svg);
+    background-position: 40px 50%;
+    background-repeat: no-repeat;
+    padding: 17px 40px 17px 76px;
+}
+
+.btn.icon-esearch {
+    background-image: url(/img/icon-esearch.svg);
+    background-position: 40px 50%;
+    background-repeat: no-repeat;
+    padding: 17px 40px 17px 76px;
 }
 
 h5 {

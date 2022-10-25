@@ -69,6 +69,7 @@
     </b-modal>
 
     <b-form @submit.prevent="onSubmit">
+      <div class="tab-mobile-block">Вход</div>
       <div class="row">
         <div class="col-12 col-lg-4">
           <b-form-group label="Телефон или email" label-cols="12">
@@ -115,10 +116,11 @@
           <a
             href="/login/password-recovery"
             id="btn_recovery-password_lk"
-            class="mt-lg-4 d-table"
+            class="mt-lg-4 d-table btn-link"
             >Не помните пароль?</a
           >
         </div>
+
         <div class="col-12 invalid-feedback d-block" v-if="wrongAuthData">
           Неверный логин или пароль. Проверьте корректность введенных даных.
         </div>
