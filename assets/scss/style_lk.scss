@@ -3741,6 +3741,16 @@ a[data-newcount][data-newcolor="RED"]:after {
     line-height: 1;
 }
 
+.btn.icon-wppl {
+    background: url(/img/icon-wppl.svg) 40px 50% no-repeat;
+    padding: 17px 40px 17px 76px;
+}
+
+.btn.icon-esearch {
+    background: url(/img/icon-esearch.svg) 40px 50% no-repeat;
+    padding: 17px 40px 17px 76px;
+}
+
 h5 {
     font-family: "Raleway";
     font-style: normal;
