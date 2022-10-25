@@ -3742,12 +3742,16 @@ a[data-newcount][data-newcolor="RED"]:after {
 }
 
 .btn.icon-wppl {
-    background: url(/img/icon-wppl.svg) 40px 50% no-repeat;
+    background-image: url(/img/icon-wppl.svg);
+    background-position: 40px 50%;
+    background-repeat: no-repeat;
     padding: 17px 40px 17px 76px;
 }
 
 .btn.icon-esearch {
-    background: url(/img/icon-esearch.svg) 40px 50% no-repeat;
+    background-image: url(/img/icon-esearch.svg);
+    background-position: 40px 50%;
+    background-repeat: no-repeat;
     padding: 17px 40px 17px 76px;
 }
 
