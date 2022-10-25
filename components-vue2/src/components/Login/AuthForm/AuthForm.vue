@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-content">
     <div class="block-registration">
-      <b-nav card-header tabs>
+      <b-nav card-header tabs class="d-none d-lg-block">
         <b-nav-item
           @click="toggleForm('login')"
           :active="visibleForm === 'login'"
@@ -29,14 +29,14 @@
       @click="toggleForm('registration')"
       class="login-btn-mobile d-lg-none mt-3"
     >
-      РЕГИСТРАЦИЯ
+      Регистрация
     </button>
     <button
       v-else
       @click="toggleForm('login')"
       class="login-btn-mobile d-lg-none"
     >
-      ВХОД
+      Вход
     </button>
 
     <div
