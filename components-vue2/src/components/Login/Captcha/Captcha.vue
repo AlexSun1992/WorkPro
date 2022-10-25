@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-lg-6 pt-lg-3 text-nowrap">
+    <div class="col-lg-4 pt-lg-3 text-nowrap">
       <b-form-group label="Введите код с картинки" label-cols="12">
         <b-form-input
           v-model="code"
@@ -16,16 +16,28 @@
         </b-form-invalid-feedback>
       </b-form-group>
     </div>
-    <div class="col-lg-6 pt-lg-3 mt-4 text-nowrap">
-      <span v-if="isLoading">Загрузка...</span>
-      <img v-else class="captcha" alt="Капча" :src="captcha" title="Обновить" />
-      <b-button
-        @click="refreshDisplayCaptcha"
-        :disabled="isLoading"
-        class="reload-captcha"
-        variant="primary"
-        >Обновить</b-button
-      >
+    <div class="col-lg-8 pt-lg-3 mt-4 text-nowrap">
+      <div class="row">
+        <div class="col-6">
+          <span v-if="isLoading">Загрузка...</span>
+          <img
+            v-else
+            class="captcha"
+            alt="Капча"
+            :src="captcha"
+            title="Обновить"
+          />
+        </div>
+        <div class="col-6">
+          <b-button
+            @click="refreshDisplayCaptcha"
+            :disabled="isLoading"
+            class="reload-captcha"
+            variant="primary"
+            >Обновить</b-button
+          >
+        </div>
+      </div>
     </div>
   </div>
 </template>

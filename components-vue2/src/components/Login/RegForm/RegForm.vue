@@ -14,6 +14,7 @@
       inline
       class="align-items-start"
     >
+      <div class="tab-mobile-block">Регистрация</div>
       <b-form-group class="w-100 required">
         <verify-user
           ref="verifyUser"
@@ -34,7 +35,7 @@
         />
       </b-form-group>
       <div class="row">
-        <div class="col-12 col-md-6 mt-2" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-2" v-if="codeFieldValid">
           <b-form-group class="required" label="Фамилия" label-cols="12">
             <autocomplete
               ref="autocompleteSurname"
@@ -55,7 +56,7 @@
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-2" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-2" v-if="codeFieldValid">
           <b-form-group label="Имя" label-cols="12" class="required">
             <autocomplete
               ref="autocompleteName"
@@ -76,7 +77,7 @@
           </b-form-group>
         </div>
 
-        <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
           <b-form-group
             label="Отчество (при наличии)"
             label-cols="12"
@@ -98,7 +99,7 @@
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-md-3 pt-md-4" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4" v-if="codeFieldValid">
           <b-form-checkbox
             class="checkbox-hide mt-3 pt-1"
             v-model="isPatronymicNotExist"
@@ -108,7 +109,7 @@
           </b-form-checkbox>
         </div>
 
-        <div class="col-12 col-md-6 mt-2 mt-md-3" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker
               v-model="$v.form.birthdate.$model"
@@ -117,7 +118,7 @@
             />
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-3" v-if="codeFieldValid">
           <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
@@ -128,7 +129,7 @@
             ></b-form-input>
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6"></div>
+        <div class="col-12 col-lg-6"></div>
         <div class="col-12" v-if="codeFieldValid">
           <verify-password
             :v="$v.form"
