@@ -74,6 +74,7 @@
         <div class="col-12 col-lg-4">
           <b-form-group label="Телефон или email" label-cols="12">
             <b-form-input
+              autofocus
               id="phone"
               ref="phoneInput"
               v-model="$v.user.username.$model"
@@ -119,18 +120,25 @@
             >Не помните пароль?</a
           >
         </div>
+
         <div class="col-12 invalid-feedback d-block mt-3" v-if="wrongAuthData">
-          Неверный логин или пароль.<br />Проверьте корректность введенных даных
+          Неверный логин или пароль.<br />Проверьте корректность введенных
+          даных.
         </div>
 
         <div
-          v-if="isCaptchaNeeded && !authInProcess"
+          v-if="isCaptchaNeeded && !authInProcess && wrongAuthData === true"
           class="col-12 mt-3 mt-lg-0"
         >
           <captcha
             @update="setIdCaptcha($event)"
             @updateCode="setCodeCaptcha($event)"
+            :isCaptchaValid="this.captchaMessage"
           />
+
+          <!-- <div class="col-12 invalid-feedback d-block" v-if="wrongAuthData">
+            {{ this.captchaMessage }}
+          </div> -->
         </div>
       </div>
       <b-button
@@ -166,6 +174,10 @@ import { required } from "vuelidate/lib/validators";
 import _ from "lodash";
 import Captcha from "./Captcha/Captcha";
 import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
+import {
+  getRestructuredPhoneNumber,
+  removeNotNumberElements,
+} from "./loginForm.helper";
 
 export default {
   name: "LoginForm",
@@ -192,6 +204,7 @@ export default {
         capid: null,
       },
       wrongAuthData: null,
+      captchaMessage: null,
       hideTelephoneMessage: null,
       duration: 60,
       isUsernameBlured: true,
@@ -233,12 +246,23 @@ export default {
     async fetchToken() {
       this.$v.user.username.$touch();
       this.$v.user.password.$touch();
+      if (
+        this.$v.user.username.$model === "" ||
+        this.$v.user.password.$model === ""
+      ) {
+        return;
+      }
+
       try {
         this.authInProcess = true;
+        const getValidPhoneNumber = getRestructuredPhoneNumber(
+          this.$v.user.username.$model
+        );
+
         let body = {
           mode: 2,
           password: this.$v.user.password.$model,
-          username: this.$v.user.username.$model,
+          username: getValidPhoneNumber,
           cap: this.user.cap || null,
           capid: this.user.capid || null,
         };
@@ -266,14 +290,21 @@ export default {
         this.authInProcess = false;
         if (e?.response?.data.STATUS === 401) {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
+          this.wrongAuthData = true;
         }
-
+        // Выведение сообщения при наличии капчи
+        if (e?.response?.data.NEEDCAPTCHA) {
+          this.captchaMessage = e.response.data.MESSAGE;
+        }
+        if (e?.response?.data.NEEDCAPTCHA === false) {
+          this.captchaMessage = null;
+        }
+        //
         if (e?.response?.data.CODE === 105) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
           return;
         }
-
         if (
           e?.response?.data.STATUS === 500 ||
           e?.response?.data.CODE === 104
@@ -288,7 +319,6 @@ export default {
           e?.response?.data.STATUS === 403 ||
           e?.response?.data.CODE === 106
         ) {
-          this.wrongAuthData = true;
           this.isCaptchaNeeded = true;
           return;
         }
@@ -335,7 +365,6 @@ export default {
       username: {
         required,
       },
-
       password: {
         required,
       },
