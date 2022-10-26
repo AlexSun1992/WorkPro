@@ -11,8 +11,9 @@
           class="form-control"
           :disabled="isLoading"
         ></b-form-input>
-        <b-form-invalid-feedback
-          >Пожалуйста, введите код с картинки
+        <b-form-invalid-feedback>
+          {{ isCaptchaValid }}
+          <!-- Пожалуйста, заполните это поле -->
         </b-form-invalid-feedback>
       </b-form-group>
     </div>
@@ -47,6 +48,13 @@ import axios from "axios";
 
 export default {
   name: "Captcha",
+  props: {
+    isCaptchaValid: {
+      type: String,
+      required: false,
+      default: () => null,
+    },
+  },
   data() {
     return {
       code: null,
@@ -74,6 +82,9 @@ export default {
   },
   computed: {
     isValidStateCodeCaptcha() {
+      if (this.isCaptchaValid && this.code === null) {
+        return false;
+      }
       if (this.code != null && this.code !== "") {
         return true;
       }

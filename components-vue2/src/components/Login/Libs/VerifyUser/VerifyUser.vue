@@ -315,14 +315,14 @@ export default {
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "Введенный Вами мобильный телефон уже есть в системе!",
+                  "Введенный Вами мобильный номер уже есть в системе.",
                   {
-                    title: "Подтверждение",
+                    title: "Номер уже зарегистрирован",
                     size: "md",
                     buttonSize: "md",
                     okVariant: "success",
                     okTitle: isInSystemLogin
-                      ? "Изменить номер телефона"
+                      ? "Восстановить пароль"
                       : "Продолжить регистрацию",
                     cancelTitle: "Войти в систему",
                     footerClass: "p-2",
@@ -394,6 +394,7 @@ export default {
 
     changeNumber() {
       this.codeFieldShown = false;
+      this.$emit("checkCodeFieldValid", false);
       this.$emit("error", null);
       this.isUserBlured = false;
       this.v.phone.$model = "";
@@ -402,6 +403,7 @@ export default {
       this.v.code.$model = null;
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
+      this.$emit("isPhoneChangedButtonClicked", this.isPhoneChanged);
       this.isSendCode = false;
     },
 
@@ -422,6 +424,10 @@ export default {
         ) {
           if (this.validateState("code") === true && field === "code") {
             this.$emit("checkCodeFieldValid", true);
+          }
+
+          if (this.validateState("code") === false && field === "code") {
+            this.$emit("checkCodeFieldValid", false);
           }
 
           return this.validateState(field);
