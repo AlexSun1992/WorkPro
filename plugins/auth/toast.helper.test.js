@@ -1,5 +1,4 @@
 import { getErrorMessage } from "./toast.helper";
-import { convertErrorMessageToArray } from "./toast.helper";
 
 describe("Модуль вывода сообщения об ошибке", () => {
   it("Должен обрабатывать сообщения с ORA в тексте без скобок", () => {
@@ -16,22 +15,6 @@ describe("Модуль вывода сообщения об ошибке", () =>
     expect(errorMessageWithoutORA).toBe(
       "SDOCSERIES=Некорректная серия паспорта: 5345345345345"
     );
-  });
-
-  it("Должен обрабатывать сообщения с ORA в тексте с квадратными скобками", () => {
-    // const ecpectMessage ="Внимание! Пункт меню 55/949 настроен не правильно. Получен не корректный REL: rel. Сообщите в службу поддержки! ";
-    const errorMessageText =
-      'ORA-20105: [Данный номер уже использован в другом личном кабинете]\nORA-06512: на  "MOBILE.CLIENTUTILS", line 954\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
-    const errorMessageBrackets = getErrorMessage(errorMessageText);
-    expect(errorMessageBrackets).toBe(
-      "Данный номер уже использован в другом личном кабинете"
-    );
-    // const newErrText =
-    //   'ORA-20105: [Внимание! Пункт меню 55/949 настроен не правильно. Получен не корректный REL: rel. Сообщите в службу поддержки!][REL=BD4372894085E8036D182D426035B0FE, X-Real-IP=172.17.4.65, X-OS=VueJS]    Rel: BD4372894085E8036D182D426035B0FE  NewRel: 4991FD91B59B6E4C4B4F139F245F8778   55   949   13554258     RMUSER       1094693\nORA-06512: на  "MOBILE.AMUTILS3", line 643\nORA-06512: на  "MOBILE.AMUTILSREST", line 1072\nORA-06512: на  line 1\n';
-    // //
-    // const errorText = getErrorMessage(newErrText);
-    // // console.log("errorText:", errorText);
-    // expect(errorText).not.toBe(null);
   });
 
   it("Должен обрабатывать сообщения об ошибке без ORA в тексте", () => {
@@ -81,6 +64,23 @@ describe("Модуль вывода сообщения об ошибке", () =>
     expect(errorMessage).toBe(
       "Внимание, текст заключенный в [скобки] должен корректно обрабатываться, независимо от расположения ] закрывающие и [ открывающей скобок"
     );
+  });
+
+  it("Должен обрабатывать сообщения с ORA в тексте с квадратными скобками", () => {
+    const errorMessageText =
+      'ORA-20105: [Данный номер уже использован в другом личном кабинете]\nORA-06512: на  "MOBILE.CLIENTUTILS", line 954\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
+    const errorMessageBrackets = getErrorMessage(errorMessageText);
+    expect(errorMessageBrackets).toBe(
+      "Данный номер уже использован в другом личном кабинете"
+    );
+    // новое сообщение об ошибке
+    const ecpectMessage =
+      "Внимание! Пункт меню 55/949 настроен не правильно. Получен не корректный REL: rel. Сообщите в службу поддержки!";
+    const newErrText =
+      'ORA-20105: [Внимание! Пункт меню 55/949 настроен не правильно. Получен не корректный REL: rel. Сообщите в службу поддержки!][REL=BD4372894085E8036D182D426035B0FE, X-Real-IP=172.17.4.65, X-OS=VueJS]    Rel: BD4372894085E8036D182D426035B0FE  NewRel: 4991FD91B59B6E4C4B4F139F245F8778   55   949   13554258     RMUSER       1094693\nORA-06512: на  "MOBILE.AMUTILS3", line 643\nORA-06512: на  "MOBILE.AMUTILSREST", line 1072\nORA-06512: на  line 1\n';
+    const errorText = getErrorMessage(newErrText);
+    expect(errorText).toBe(ecpectMessage);
+    //
   });
 
   it("Должен обрабатывать сообщения с одной скобкой", () => {
