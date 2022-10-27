@@ -17,13 +17,28 @@ export function convertErrorMessageToArray(errorMessage) {
  * @param {string} errorMessage Строка с ошибкой, содержащая ORA и квадратные скобки, или не содержащая таковых.
  * @returns {string}
  */
+
 export function getErrorMessage(errorMessage) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
-
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
+
   if (stringWithBrackets) {
+    const getErrorTextWithBrackets = stringWithBrackets[0];
+    const transformErrorTextToArray =
+      getErrorTextWithBrackets.match(/\[.+?\]/g);
+
+    const getStringFromErrorText = transformErrorTextToArray.join("");
+    // проверяем нужно использовать ленивый квантификатор
+    if (getErrorTextWithBrackets === getStringFromErrorText) {
+      const getStringMessageWithErrBrackets = stringWithBrackets[0];
+      const getArrWithErrBrackets =
+        getStringMessageWithErrBrackets.match(/\[.+?\]/);
+      const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
+
+      return pureMessageText[1];
+    }
+
     return stringWithBrackets[1];
   }
-
   return errMessageString;
 }

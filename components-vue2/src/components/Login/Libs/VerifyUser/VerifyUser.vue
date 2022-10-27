@@ -91,7 +91,7 @@
           isSendCode ||
           loading
         "
-        @click="getCode"
+        @click="executeRecaptcha"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
@@ -111,6 +111,7 @@
 <script>
 import axios from "axios";
 import _ from "lodash";
+import VerifyTimer from "./VerifyTimer.vue";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
 import {
@@ -122,7 +123,6 @@ import {
   BLink,
   BSpinner,
 } from "bootstrap-vue";
-import VerifyTimer from "./VerifyTimer.vue";
 
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import { getMessageFromSuccessResponse } from "./verifyUser.helper";
@@ -194,6 +194,7 @@ export default {
       ).filter((item) => item.style.visibility === "hidden");
     }
   },
+
   methods: {
     changeField(field) {
       console.log(field);
@@ -325,14 +326,14 @@ export default {
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "Введенный Вами мобильный телефон уже есть в системе!",
+                  "Введенный Вами мобильный номер уже есть в системе.",
                   {
-                    title: "Подтверждение",
+                    title: "Номер уже зарегистрирован",
                     size: "md",
                     buttonSize: "md",
                     okVariant: "success",
                     okTitle: isInSystemLogin
-                      ? "Изменить номер телефона"
+                      ? "Восстановить пароль"
                       : "Продолжить регистрацию",
                     cancelTitle: "Войти в систему",
                     footerClass: "p-2",
@@ -404,6 +405,7 @@ export default {
 
     changeNumber() {
       this.codeFieldShown = false;
+      this.$emit("checkCodeFieldValid", false);
       this.$emit("error", null);
       this.isUserBlured = false;
       this.v.phone.$model = "";
@@ -412,6 +414,7 @@ export default {
       this.v.code.$model = null;
       this.isUserDisabled = false;
       this.isPhoneChanged = true;
+      this.$emit("isPhoneChangedButtonClicked", this.isPhoneChanged);
       this.isSendCode = false;
     },
 
@@ -433,6 +436,7 @@ export default {
           if (this.validateState("code") === true && field === "code") {
             this.$emit("checkCodeFieldValid", true);
           }
+
           return this.validateState(field);
         }
       }

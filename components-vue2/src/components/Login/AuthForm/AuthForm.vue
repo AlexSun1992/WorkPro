@@ -41,7 +41,7 @@
 
     <div
       @click="goESIA()"
-      class="goesia m-auto d-lg-none mt-4"
+      class="goesia m-auto d-lg-none mt-4 d-table"
       id="btn_recovery-password_lk"
     >
       Войти через <span class="login_esia"></span>
