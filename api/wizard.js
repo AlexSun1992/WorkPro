@@ -24,21 +24,23 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
           req.cookies["auth._token.local"];
       }
     }
-    const ID = parseInt(req.params.idCard);
-    const list = await mobile2ServiceInstance.get(
-      `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json={"pID":${ID}}`
-    );
-    const list_data = listConverter.list(list.data);
     let card = null;
     let result = { data: null, meta: null };
     let rel;
-    const itemWithRel = list_data.items.find((item) => item.ID === ID);
-    if (!itemWithRel) {
-      throw new Error(
-        `В списке IDITEM=${req.params.idItem} не найден REL с ID=${ID}`
+    const ID = parseInt(req.params.idCard);
+    if (ID > 0) {
+      const list = await mobile2ServiceInstance.get(
+        `${consts.DATA}/${req.params.idModule}/${req.params.idItem}?json={"pID":${ID}}`
       );
+      const list_data = listConverter.list(list.data);
+      const itemWithRel = list_data.items.find((item) => item.ID === ID);
+      if (!itemWithRel) {
+        throw new Error(
+          `В списке IDITEM=${req.params.idItem} не найден REL с ID=${ID}`
+        );
+      }
+      rel = itemWithRel.REL;
     }
-    rel = itemWithRel.REL;
     card = await mobile2ServiceInstance.get(
       `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${ID}` +
         (rel ? `?REL=${rel}` : "")
