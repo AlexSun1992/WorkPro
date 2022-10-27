@@ -32,9 +32,13 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     let card = null;
     let result = { data: null, meta: null };
     let rel;
-    if (list_data.items.length !== 0) {
-      rel = list_data.items[0].REL;
+    const itemWithRel = list_data.items.find((item) => item.ID === ID);
+    if (!itemWithRel) {
+      throw new Error(
+        `В списке IDITEM=${req.params.idItem} не найден REL с ID=${ID}`
+      );
     }
+    rel = itemWithRel.REL;
     card = await mobile2ServiceInstance.get(
       `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${ID}` +
         (rel ? `?REL=${rel}` : "")
@@ -47,6 +51,12 @@ router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
     }
     res.send(result);
   } catch (err) {
+    if (!err.response) {
+      return res.status(400).send({
+        MESSAGE: err.message,
+        STATUS: 400,
+      });
+    }
     if (err.response.data.STATUS == 401) {
       res.status(err.response.data.STATUS).send(err.response.data);
     } else {
