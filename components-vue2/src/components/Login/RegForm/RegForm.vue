@@ -20,6 +20,7 @@
           ref="verifyUser"
           @error="showError"
           :v="$v.form"
+          :log-params="logParams"
           :count="60"
           :context="'registration'"
           :loginType="'phone'"
@@ -216,6 +217,12 @@ export default {
 
   data() {
     return {
+      logEvent: null,
+      logParams: {
+        formName: "vue",
+        controlName: "component-auth-form",
+        idEventType: 9999,
+      },
       codeFieldValid: false,
       form: {
         phone: "",
@@ -266,10 +273,14 @@ export default {
       requestToDadataParamsPartsHub: [],
     };
   },
-  created() {
-    if (typeof logEvent === "function") {
-      console.log("function logEvent is done!");
-    }
+  mounted() {
+    this.$nextTick(() => {
+      this.$LogEvent({
+        ...this.logParams,
+        message: "Форма загрузилась",
+        timeUser: new Date(),
+      });
+    });
   },
   validations: {
     form: {

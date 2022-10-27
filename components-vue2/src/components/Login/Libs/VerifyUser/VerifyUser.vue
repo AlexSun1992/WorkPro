@@ -8,12 +8,12 @@
           ref="userInput"
           v-model="v[loginType].$model"
           v-mask="changeMask"
+          @change="changeField('phone')"
           autofocus
           :placeholder="placeholder"
           :state="validateInput(loginType, isUserBlured)"
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
-          @input="isUserBlured = false"
           @click="loginTouchesCount = 2"
           autocomplete="off"
           :tabindex="tabIndex[1]"
@@ -27,7 +27,7 @@
           :state="validateInput(loginType, isUserBlured)"
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
-          @input="isUserBlured = false"
+          @change="changeField('email')"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
           placeholder="E-mail"
@@ -50,6 +50,7 @@
           v-mask="codeMask"
           :state="validateInput('code', isCodeBlured)"
           @blur="blurField('code', isCodeBlured)"
+          @change="changeField('code')"
           @input="inputTouch(loginType)"
           :disabled="disabled"
           autocomplete="off"
@@ -90,7 +91,7 @@
           isSendCode ||
           loading
         "
-        @click="executeRecaptcha"
+        @click="getCode"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
@@ -110,7 +111,6 @@
 <script>
 import axios from "axios";
 import _ from "lodash";
-import VerifyTimer from "./VerifyTimer.vue";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
 import {
@@ -122,6 +122,7 @@ import {
   BLink,
   BSpinner,
 } from "bootstrap-vue";
+import VerifyTimer from "./VerifyTimer.vue";
 
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import { getMessageFromSuccessResponse } from "./verifyUser.helper";
@@ -154,6 +155,7 @@ export default {
     "error",
     "isError",
     "isCodeFieldValid",
+    "logParams",
   ],
 
   data() {
@@ -192,8 +194,16 @@ export default {
       ).filter((item) => item.style.visibility === "hidden");
     }
   },
-
   methods: {
+    changeField(field) {
+      console.log(field);
+      this.isUserBlured = false;
+      this.$LogEvent({
+        ...this.logParams,
+        message: `Поле ${field} заполнено`,
+        timeUser: new Date(),
+      });
+    },
     async executeRecaptcha() {
       this.loading = true;
       await this.$refs.recaptcha.reset();
@@ -210,7 +220,7 @@ export default {
 
     inputTouch() {
       this.isUserBlured = false;
-      if (this.v["code"].$invalid === false) {
+      if (this.v.code.$invalid === false) {
         this.$emit("getLoginType", this.loginType);
       } else {
         this.$emit("getLoginType", null);
@@ -303,10 +313,10 @@ export default {
               this.isSendCode = true;
             }
           }
-          let isError = Boolean(response?.data[0]?.ERRORCODE);
-          let isErrorList = Boolean(response?.data[0]?.ERRORLIST);
-          let isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
-          let isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+          const isError = Boolean(response?.data[0]?.ERRORCODE);
+          const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+          const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
+          const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           if (isError === false) {
             if (
               this.modeType === "REG" &&
@@ -423,7 +433,6 @@ export default {
           if (this.validateState("code") === true && field === "code") {
             this.$emit("checkCodeFieldValid", true);
           }
-
           return this.validateState(field);
         }
       }
@@ -449,33 +458,31 @@ export default {
       if (this.loginType === "phone") {
         this.placeholder = "+7(___)-___-__-__";
         return (this.mask = "+7(###)-###-##-##");
-      } else {
-        this.placeholder = "";
-        return (this.mask = "X".repeat(50));
       }
+      this.placeholder = "";
+      return (this.mask = "X".repeat(50));
     },
     isShowCodeEnter() {
       if (this.loginType === "phone") {
         return !this.v.phone.$invalid && this.isSendCode;
-      } else {
-        return !this.v.email.$invalid && this.isSendCode;
       }
+      return !this.v.email.$invalid && this.isSendCode;
     },
   },
   watch: {
-    token: function () {
+    token() {
       if (this.token) {
         this.getCode();
       }
     },
 
-    isError: function (value) {
+    isError(value) {
       if (typeof value === "string") {
         this.loading = false;
       }
     },
 
-    error: function () {
+    error() {
       this.loading = false;
     },
   },

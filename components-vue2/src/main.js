@@ -6,8 +6,11 @@ import * as Sentry from "@sentry/vue";
 import { BrowserTracing } from "@sentry/tracing";
 import { store } from "./store/index";
 
+import LogEvent from "../../components/LogScript/LogScript";
+
 store.$axios = axios;
 Vue.prototype.$axios = axios;
+Vue.prototype.$LogEvent = LogEvent;
 Vue.use(ModalPlugin);
 Vue.use(DropdownPlugin);
 Vue.use(vueCustomElement);
