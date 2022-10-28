@@ -71,14 +71,15 @@
     <b-form @submit.prevent="onSubmit">
       <div class="tab-mobile-block">Вход</div>
       <div class="row">
-        <div class="col-12 col-lg-4">
+        <div class="col-12 col-lg-6 mt-3 mt-lg-0">
           <b-form-group label="Телефон или email" label-cols="12">
             <b-form-input
               autofocus
               id="phone"
               ref="phoneInput"
               v-model="$v.user.username.$model"
-              :placeholder="placeholder"
+              placeholder="Телефон или почта"
+              autofocus
               type="tel"
               :state="wrongAuthData ? false : validateState('username')"
               @blur="$v.user.username.$touch()"
@@ -88,7 +89,7 @@
             >
             </b-form-input>
 
-            <b-form-invalid-feedback v-if="$v.user.username.$model === ''"
+            <b-form-invalid-feedback v-if="this.$v.user.username.$model === ''"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >
           </b-form-group>
@@ -220,7 +221,6 @@ export default {
       authInProcess: false,
       captchaToken: null,
       loginTouchesCount: 0,
-      isDropDownShown: false,
     };
   },
 
@@ -252,7 +252,6 @@ export default {
       ) {
         return;
       }
-
       try {
         this.authInProcess = true;
         const getValidPhoneNumber = getRestructuredPhoneNumber(
@@ -262,9 +261,11 @@ export default {
         let body = {
           mode: 2,
           password: this.$v.user.password.$model,
+
           username: this.$v.user.username.$model.includes("@")
             ? this.$v.user.username.$model
             : getValidPhoneNumber,
+
           cap: this.user.cap || null,
           capid: this.user.capid || null,
         };
@@ -325,7 +326,7 @@ export default {
           return;
         }
 
-        this.errorMessage = `Неверный номер или пароль`;
+        this.errorMessage = `Неверный телефон или пароль`;
       }
     },
     validateState(name) {
@@ -367,6 +368,7 @@ export default {
       username: {
         required,
       },
+
       password: {
         required,
       },
