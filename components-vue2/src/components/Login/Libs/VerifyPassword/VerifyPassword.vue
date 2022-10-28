@@ -73,6 +73,11 @@ export default {
   },
   methods: {
     changeField(field) {
+      this.$LogEvent({
+        ...this.logParams,
+        message: `Поле ${field} заполнено`,
+        timeUser: new Date(),
+      });
       console.log(field, this.v[field].$model);
     },
   },

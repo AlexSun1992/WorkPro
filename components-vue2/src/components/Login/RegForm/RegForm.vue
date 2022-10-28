@@ -109,6 +109,7 @@
             class="checkbox-hide mt-3 pt-1"
             v-model="isPatronymicNotExist"
             :value="!isPatronymicNotExist"
+            @change="changeField('isPatronymicNotExist')"
           >
             Нет отчества
           </b-form-checkbox>
@@ -379,6 +380,11 @@ export default {
   methods: {
     changeField(field) {
       if (this.form[field] || this[field]) {
+        this.$LogEvent({
+          ...this.logParams,
+          message: `Поле ${field} заполнено`,
+          timeUser: new Date(),
+        });
         console.log(field, this.form[field] || this[field]);
       }
     },
