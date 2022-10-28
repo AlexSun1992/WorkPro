@@ -60,6 +60,7 @@ module.exports = {
     "~/plugins/selectValue.js",
     "~/plugins/slick-carousel.js",
     "~/plugins/tooltip.js",
+    "~/plugins/vueLog.js",
   ],
   /*
    ** Nuxt.js dev-modules
