@@ -290,9 +290,12 @@ export default {
         }
       } catch (e) {
         this.authInProcess = false;
+
+        if (e?.response?.data.STATUS !== 401) {
+          this.wrongAuthData = true;
+        }
         if (e?.response?.data.STATUS === 401) {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
-          this.wrongAuthData = true;
         }
         // Выведение сообщения при наличии капчи
         if (e?.response?.data.NEEDCAPTCHA) {
