@@ -79,7 +79,6 @@
               ref="phoneInput"
               v-model="$v.user.username.$model"
               placeholder="Телефон или почта"
-              autofocus
               type="tel"
               :state="wrongAuthData ? false : validateState('username')"
               @blur="$v.user.username.$touch()"
@@ -292,6 +291,7 @@ export default {
       } catch (e) {
         this.authInProcess = false;
         if (e?.response?.data.STATUS === 401) {
+          console.log("401");
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
           this.wrongAuthData = true;
         }
@@ -308,15 +308,17 @@ export default {
           this.user.code = "";
           return;
         }
-        if (
-          e?.response?.data.STATUS === 500 ||
-          e?.response?.data.CODE === 104
-        ) {
-          this.user.cap = null;
-          this.user.capid = null;
-          this.$bvModal.show("sms-confirm");
-          return;
-        }
+
+        // if (
+        //   e?.response?.data.STATUS === 500 ||
+        //   e?.response?.data.CODE === 104
+        // ) {
+        //   console.log("i am here");
+        //   this.user.cap = null;
+        //   this.user.capid = null;
+        //   this.$bvModal.show("sms-confirm");
+        //   return;
+        // }
 
         if (
           e?.response?.data.STATUS === 403 ||
