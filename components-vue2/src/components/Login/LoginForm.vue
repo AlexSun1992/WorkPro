@@ -262,7 +262,9 @@ export default {
         let body = {
           mode: 2,
           password: this.$v.user.password.$model,
-          username: getValidPhoneNumber,
+          username: this.$v.user.username.$model.includes("@")
+            ? this.$v.user.username.$model
+            : getValidPhoneNumber,
           cap: this.user.cap || null,
           capid: this.user.capid || null,
         };
