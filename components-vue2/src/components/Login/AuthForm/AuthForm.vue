@@ -21,9 +21,19 @@
           Войти через <span class="login_esia"></span>
         </b-nav-item>
       </b-nav>
+      <div class="mt-4">
+        Войти через
+        <a
+          href="https://client.reso.ru/loginesia/loginesia/prod"
+          id="btn_recovery-password_lk"
+        >
+          Госуслуги&#8599;</a
+        >
+      </div>
     </div>
     <login-form v-if="visibleForm === 'login'"></login-form>
     <reg-form v-else></reg-form>
+
     <button
       v-if="visibleForm === 'login'"
       @click="toggleForm('registration')"

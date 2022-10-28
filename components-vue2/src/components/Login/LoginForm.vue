@@ -267,7 +267,6 @@ export default {
           cap: this.user.cap || null,
           capid: this.user.capid || null,
         };
-        debugger;
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
           body = { ...body, code: this.$v.user.code.$model };
