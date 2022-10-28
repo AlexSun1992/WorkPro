@@ -24,6 +24,7 @@
     </div>
     <login-form v-if="visibleForm === 'login'"></login-form>
     <reg-form v-else></reg-form>
+
     <button
       v-if="visibleForm === 'login'"
       @click="toggleForm('registration')"
