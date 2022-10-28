@@ -260,7 +260,6 @@ export default {
         let body = {
           mode: 2,
           password: this.$v.user.password.$model,
-
           username: this.$v.user.username.$model.includes("@")
             ? this.$v.user.username.$model
             : getValidPhoneNumber,
@@ -268,6 +267,7 @@ export default {
           cap: this.user.cap || null,
           capid: this.user.capid || null,
         };
+        debugger;
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
           body = { ...body, code: this.$v.user.code.$model };
@@ -291,7 +291,6 @@ export default {
       } catch (e) {
         this.authInProcess = false;
         if (e?.response?.data.STATUS === 401) {
-          console.log("401");
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
           this.wrongAuthData = true;
         }
@@ -309,16 +308,15 @@ export default {
           return;
         }
 
-        // if (
-        //   e?.response?.data.STATUS === 500 ||
-        //   e?.response?.data.CODE === 104
-        // ) {
-        //   console.log("i am here");
-        //   this.user.cap = null;
-        //   this.user.capid = null;
-        //   this.$bvModal.show("sms-confirm");
-        //   return;
-        // }
+        if (
+          e?.response?.data.STATUS === 500 ||
+          e?.response?.data.CODE === 104
+        ) {
+          this.user.cap = null;
+          this.user.capid = null;
+          this.$bvModal.show("sms-confirm");
+          return;
+        }
 
         if (
           e?.response?.data.STATUS === 403 ||
