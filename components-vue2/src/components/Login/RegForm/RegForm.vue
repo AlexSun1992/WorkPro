@@ -48,6 +48,7 @@
               placeholder="Фамилия"
               :class="surnameClass"
               @blur="handleBlur('surname')"
+              @submit="changeField('family')"
             />
 
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
@@ -69,6 +70,7 @@
               :disabled="registrationInProcess"
               :class="nameClass"
               @blur="handleBlur('name')"
+              @submit="changeField('name')"
             />
             <b-form-invalid-feedback :state="isNameErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
@@ -94,6 +96,7 @@
               :disabled="isPatronymicNotExist === true"
               :class="patronymicClass"
               @blur="handleBlur('patronymic')"
+              @submit="changeField('patronymic')"
             />
 
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
@@ -118,6 +121,7 @@
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
               :disabled="registrationInProcess"
+              @input="changeField('birthdate')"
             />
           </b-form-group>
         </div>
@@ -132,6 +136,7 @@
               placeholder="Номер полиса"
               :disabled="registrationInProcess"
               autocomplete="new-password"
+              @change="changeField('policyNumber')"
             ></b-form-input>
           </b-form-group>
         </div>
@@ -142,6 +147,7 @@
             :validateState="validateState"
             :disabled="registrationInProcess"
             :tab-index="[50, 60]"
+            :log-params="logParams"
           />
         </div>
         <div class="col-12 pt-3">
@@ -372,6 +378,11 @@ export default {
   },
 
   methods: {
+    changeField(field) {
+      if (this.form[field] || this[field]) {
+        console.log(field, this.form[field] || this[field]);
+      }
+    },
     refuseButtonClicked() {
       this.changePhoneButtonClicked = false;
     },

@@ -104,7 +104,7 @@ export default {
       buttonFocus: false,
     };
   },
-  created: function () {
+  created() {
     this.debouncedUpdate = _.debounce(this.hideDataPicker, 100);
   },
   methods: {

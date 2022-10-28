@@ -11,6 +11,7 @@
           @blur="v.password.$touch()"
           autocomplete="new-password"
           :disabled="disabled"
+          @change="changeField('password')"
         ></b-form-input>
         <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
       </b-form-group>
@@ -36,6 +37,7 @@
           placeholder="Повторите пароль"
           @blur="v.password2.$touch()"
           :disabled="disabled"
+          @change="changeField('password2')"
         ></b-form-input>
         <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>
@@ -52,13 +54,27 @@ import {
   BCol,
   BRow,
 } from "bootstrap-vue";
+
 export default {
-  props: ["v", "validateState", "disabled", "recovery", "tabIndex", "isValid"],
+  props: [
+    "v",
+    "validateState",
+    "disabled",
+    "recovery",
+    "tabIndex",
+    "isValid",
+    "logParams",
+  ],
   data() {
     return {
       password: "",
       password2: "",
     };
+  },
+  methods: {
+    changeField(field) {
+      console.log(field, this.v[field].$model);
+    },
   },
   components: {
     BFormInvalidFeedback,

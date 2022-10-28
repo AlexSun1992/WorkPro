@@ -91,7 +91,7 @@
           isSendCode ||
           loading
         "
-        @click="executeRecaptcha"
+        @click="getCode"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
@@ -111,7 +111,6 @@
 <script>
 import axios from "axios";
 import _ from "lodash";
-import VerifyTimer from "./VerifyTimer.vue";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
 import {
@@ -123,6 +122,7 @@ import {
   BLink,
   BSpinner,
 } from "bootstrap-vue";
+import VerifyTimer from "./VerifyTimer.vue";
 
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import { getMessageFromSuccessResponse } from "./verifyUser.helper";
@@ -197,13 +197,15 @@ export default {
 
   methods: {
     changeField(field) {
-      console.log(field);
+      console.log(field, this.validateState(field));
       this.isUserBlured = false;
-      this.$LogEvent({
-        ...this.logParams,
-        message: `Поле ${field} заполнено`,
-        timeUser: new Date(),
-      });
+      if (this.validateState(field)) {
+        this.$LogEvent({
+          ...this.logParams,
+          message: `Поле ${field} заполнено`,
+          timeUser: new Date(),
+        });
+      }
     },
     async executeRecaptcha() {
       this.loading = true;
