@@ -50,7 +50,6 @@
               @blur="handleBlur('surname')"
               @submit="changeField('family')"
             />
-
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
             >

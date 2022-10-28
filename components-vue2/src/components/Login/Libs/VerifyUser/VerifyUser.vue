@@ -20,7 +20,7 @@
         ></b-form-input>
         <legend v-if="loginType === 'email'">Почта</legend>
         <b-form-input
-          v-else-if="loginType === 'email'"
+          v-if="loginType === 'email'"
           ref="userInput"
           v-model="v[loginType].$model"
           autofocus
@@ -34,7 +34,6 @@
           autocomplete="off"
           :tabindex="tabIndex[0]"
         ></b-form-input>
-
         <b-form-invalid-feedback
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
