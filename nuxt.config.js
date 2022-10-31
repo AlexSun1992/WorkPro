@@ -43,7 +43,6 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    // '~plugins/devextreme',
     "~/plugins/captcha.js",
     "~/plugins/mask.js",
     "~/plugins/validate",

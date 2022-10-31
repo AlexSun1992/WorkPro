@@ -1,4 +1,4 @@
-FROM node:16.13 AS preparation
+FROM node:18.12 AS preparation
 WORKDIR /home/node/app
 COPY package*.json ./
 RUN npm config set registry https://nexus.reso.ru/repository/npm/ && npm ci
@@ -7,7 +7,7 @@ RUN (cd components-vue2 && npm ci)
 COPY . ./
 RUN npm test && cd components-vue2 && npm run component
 
-FROM node:16.13
+FROM node:18.12
 WORKDIR /home/node/app
 COPY package*.json ./
 RUN npm config set registry https://nexus.reso.ru/repository/npm/ && npm ci
