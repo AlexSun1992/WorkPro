@@ -17,6 +17,7 @@ converter.list = (data) => {
   const obj = {};
   const fields = data[0]._struct;
   const metaAddFields = converter.meta(data[0]?._meta.SADDFIELDS) || {};
+  const metaBreadCrumbs = converter.breadcrumbs(data[0]?._meta.SNAVIG) || null;
   fields.sort(converter.compare);
   for (let i = 0; i < fields.length; i++) {
     if (fields[i].VISIBLE) {
@@ -35,6 +36,7 @@ converter.list = (data) => {
   obj.items = data[0]._data;
   obj.total = obj.items.length;
   obj.addFields = metaAddFields;
+  obj.breadCrumbs = metaBreadCrumbs;
   return obj;
 };
 
@@ -77,6 +79,14 @@ converter.meta = (meta) => {
     }
     return convert_meta;
   }
+};
+converter.breadcrumbs = (meta) => {
+  if (Array.isArray(meta)) {
+    return meta.map((item) => {
+      return { text: item?.SNAME, to: item?.SURL };
+    });
+  }
+  return null;
 };
 
 export default converter;

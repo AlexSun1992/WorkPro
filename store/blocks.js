@@ -143,6 +143,9 @@ export const actions = {
         blockId: parseInt(params.id),
         data: responseData,
       });
+      commit("menu/setBreadCrumbs", responseData?.breadCrumbs, {
+        root: true,
+      });
     } catch (err) {
       console.error(new Error("error:", err));
       return err.response;
@@ -153,6 +156,9 @@ export const actions = {
       .get(`/api/wizardlist/55/${itemId}/${cardId}`)
       .then((res) => {
         commit("addBlock", { blockId: parseInt(itemId), data: res.data });
+        commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
+          root: true,
+        });
       });
   },
   async updateWizardBlock({ commit, dispatch }, { menuId, cardId }) {
@@ -160,6 +166,9 @@ export const actions = {
       .get(`/api/wizardlist/55/${menuId}/${cardId}`)
       .then((res) => {
         commit("updateBlock", { blockId: parseInt(menuId), data: res.data });
+        commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
+          root: true,
+        });
       });
   },
   async updateBlock({ commit, dispatch, getters }, id) {
@@ -170,6 +179,9 @@ export const actions = {
       : `{}`;
     await this.$axios.get(`/api/list/55/${id}/${filters}`).then((res) => {
       commit("updateBlock", { blockId: parseInt(id), data: res.data });
+      commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
+        root: true,
+      });
     });
   },
   async destroyForm({ commit }) {

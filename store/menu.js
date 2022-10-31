@@ -3,16 +3,28 @@ import breadcrumbs from "../converters/breadcrumbs";
 const BFF_URL_GET_MENU = "/api/module";
 const BFF_URL_GET_FREE_MENU = "/api/module?zone=free";
 const URL_GET_FREE_MENU = "/api/module?zone=free";
+const DEFAULT_BREADCRUMBS = [
+  {
+    text: "РЕСО",
+    to: "/",
+  },
+  {
+    text: "Личный кабинет",
+    to: "/cabinet/55/0/701",
+  },
+];
 export const state = () => ({
   menu: [{ children: [] }],
   flatmenu: [],
   breadcrumbs: [],
+  breadCrumbs: [],
   counters: [],
 });
 
 export const getters = {
   counters: (state) => state.counters,
   breadcrumbs: (state) => state.breadcrumbs,
+  breadCrumbs: (state) => state.breadCrumbs,
   menu: (state) => state.menu,
   flatmenu: (state) => state.flatmenu,
   getSettingsByIdItem: (state) => (id) => {
@@ -147,6 +159,9 @@ export const mutations = {
   },
   setBreadcrumbs(state, data) {
     state.breadcrumbs = data;
+  },
+  setBreadCrumbs(state, data) {
+    state.breadCrumbs = data || DEFAULT_BREADCRUMBS;
   },
   setCounter(state, data) {
     const menuItems = state.menu[0].children;

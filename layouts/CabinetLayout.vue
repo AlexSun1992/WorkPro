@@ -87,20 +87,7 @@ export default {
       return this.$store.getters["menu/breadcrumbs"];
     },
     breadcrumbs() {
-      const firstCrumb = { text: "Главная", href: "/" };
-      const settings = this.$store.getters["menu/getSettingsByIdItem"](
-        this.$route.params.idWizard || this.$route.params.idItem
-      );
-      const nextCrumb = {
-        text: settings?.name || "Список",
-        to: settings?.url || "/",
-      };
-      if (this.$route.params.idCard) {
-        const cardCaption = this.$store.getters["data_card/cardCaption"];
-        const lastCrumb = { text: cardCaption || "Карточка" };
-        return [firstCrumb, nextCrumb, lastCrumb];
-      }
-      return [firstCrumb, nextCrumb];
+      return this.$store.getters["menu/breadCrumbs"];
     },
   },
   watch: {
