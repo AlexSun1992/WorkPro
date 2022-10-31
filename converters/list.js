@@ -82,7 +82,10 @@ converter.meta = (meta) => {
 };
 converter.breadcrumbs = (meta) => {
   if (Array.isArray(meta)) {
-    return meta.map((item) => {
+    return meta.map((item, index) => {
+      if (index === 0) {
+        return { text: item?.SNAME, href: item?.SURL };
+      }
       return { text: item?.SNAME, to: item?.SURL };
     });
   }

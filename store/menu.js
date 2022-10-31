@@ -6,7 +6,7 @@ const URL_GET_FREE_MENU = "/api/module?zone=free";
 const DEFAULT_BREADCRUMBS = [
   {
     text: "РЕСО",
-    to: "/",
+    href: "/",
   },
   {
     text: "Личный кабинет",
