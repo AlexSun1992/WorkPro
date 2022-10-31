@@ -71,7 +71,7 @@
     <b-form @submit.prevent="onSubmit">
       <div class="tab-mobile-block">Вход</div>
       <div class="row">
-        <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+        <div class="col-12 col-lg-4">
           <b-form-group label="Телефон или email" label-cols="12">
             <b-form-input
               autofocus
