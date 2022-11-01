@@ -114,11 +114,11 @@
         </div>
 
         <div class="col-12 col-lg-4 mt-3 mt-lg-3 pt-lg-1">
-          <a
-            href="/login/password-recovery"
+          <nuxt-link
+            to="/login/password-recovery"
             id="btn_recovery-password_lk"
             class="mt-lg-4 d-table btn-link"
-            >Не помните пароль?</a
+            >Не помните пароль?</nuxt-link
           >
         </div>
 
