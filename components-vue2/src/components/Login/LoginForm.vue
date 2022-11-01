@@ -97,8 +97,8 @@
         <div class="col-12 col-lg-4 mt-3 mt-lg-0">
           <b-form-group label="Пароль" label-cols="12">
             <b-form-input
-              id="password"
               v-model="$v.user.password.$model"
+              id="password"
               placeholder="Пароль"
               type="password"
               :state="wrongAuthData ? false : validateState('password')"
@@ -291,9 +291,6 @@ export default {
       } catch (e) {
         this.authInProcess = false;
 
-        // if (e?.response?.data.STATUS !== 401) {
-        //   this.wrongAuthData = true;
-        // }
         if (e?.response?.data.STATUS === 401) {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
           this.wrongAuthData = true;
