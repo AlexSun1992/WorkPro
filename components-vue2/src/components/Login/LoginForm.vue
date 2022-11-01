@@ -97,6 +97,7 @@
         <div class="col-12 col-lg-4 mt-3 mt-lg-0">
           <b-form-group label="Пароль" label-cols="12">
             <b-form-input
+              id="password"
               v-model="$v.user.password.$model"
               placeholder="Пароль"
               type="password"

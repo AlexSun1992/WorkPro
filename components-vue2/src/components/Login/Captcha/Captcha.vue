@@ -44,10 +44,23 @@
 </template>
 
 <script>
+import {
+  BFormGroup,
+  BFormInput,
+  BFormInvalidFeedback,
+  BButton,
+} from "bootstrap-vue";
+
 import axios from "axios";
 
 export default {
   name: "Captcha",
+  components: {
+    BFormGroup,
+    BFormInput,
+    BFormInvalidFeedback,
+    BButton,
+  },
   props: {
     isCaptchaValid: {
       type: String,
