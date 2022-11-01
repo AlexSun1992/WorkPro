@@ -157,7 +157,7 @@ module.exports = {
     plugins: ["~/plugins/auth/auth.js"],
   },
   server: {
-    port: 8000, // default: 3000
-    host: "0.0.0.0", // default: localhost
+    port: 8000,
+    host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
   },
 };
