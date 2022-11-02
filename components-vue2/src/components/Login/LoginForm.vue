@@ -7,6 +7,7 @@
       @hidden="closeModalConfirmSMSCode"
       :centered="true"
     >
+      <!-- :static="true" -->
       <div class="d-block text-center">
         <h4>Введите код</h4>
         На номер телефона {{ hideTelephoneMessage }} был отправлен код
@@ -97,8 +98,8 @@
         <div class="col-12 col-lg-4 mt-3 mt-lg-0">
           <b-form-group label="Пароль" label-cols="12">
             <b-form-input
-              id="password"
               v-model="$v.user.password.$model"
+              id="password"
               placeholder="Пароль"
               type="password"
               :state="wrongAuthData ? false : validateState('password')"
@@ -136,10 +137,6 @@
             @updateCode="setCodeCaptcha($event)"
             :isCaptchaValid="this.captchaMessage"
           />
-
-          <!-- <div class="col-12 invalid-feedback d-block" v-if="wrongAuthData">
-            {{ this.captchaMessage }}
-          </div> -->
         </div>
       </div>
       <b-button
@@ -290,10 +287,6 @@ export default {
         }
       } catch (e) {
         this.authInProcess = false;
-
-        // if (e?.response?.data.STATUS !== 401) {
-        //   this.wrongAuthData = true;
-        // }
         if (e?.response?.data.STATUS === 401) {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
           this.wrongAuthData = true;
@@ -318,6 +311,8 @@ export default {
         ) {
           this.user.cap = null;
           this.user.capid = null;
+          // убираем сообщение об ошибке при правильных учетных данных
+          this.wrongAuthData = null;
           this.$bvModal.show("sms-confirm");
           return;
         }
