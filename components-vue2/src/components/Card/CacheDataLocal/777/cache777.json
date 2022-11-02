@@ -610,7 +610,7 @@
         "isTab": true
       },
       {
-        "label": "<span style=\"color:red\">Госномер не найден, укажите данные ТС самостоятельно</span>",
+        "label": "<span style=\"color:red\" id=\"gosnumb_not_found\">Госномер не найден, укажите данные ТС самостоятельно</span>",
         "type": "empty",
         "id": "777",
         "fieldId": 38489,
@@ -786,7 +786,7 @@
         "isTab": true
       },
       {
-        "label": "<span style=\"color:red\">Госномер не найден, укажите данные ТС самостоятельно</span>",
+        "label": "<span style=\"color:red\" id=\"gosnumb_not_found\">Госномер не найден, укажите данные ТС самостоятельно</span>",
         "type": "empty",
         "id": "777",
         "fieldId": 38491,
