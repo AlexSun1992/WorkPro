@@ -3577,6 +3577,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     overflow-y: auto;
 }
 
+.btn-insurance-rules,
 .btn-pay-case,
 .btn-insurance-case {
     padding: 87px 24px 24px 24px !important;
@@ -3595,6 +3596,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     position: relative;
 }
 
+.btn-insurance-rules:hover,
 .btn-pay-case:hover,
 .btn-insurance-case:hover {
     box-shadow: 0 3px 8px rgb(0 0 0 / 35%);
@@ -3603,6 +3605,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     background-color: #fff !important;
 }
 
+.btn-insurance-rules:after,
 .btn-pay-case:after,
 .btn-insurance-case:after {
     width: 56px;
