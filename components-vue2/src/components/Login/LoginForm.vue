@@ -114,11 +114,11 @@
         </div>
 
         <div class="col-12 col-lg-4 mt-3 mt-lg-3 pt-lg-1">
-          <nuxt-link
-            to="/login/password-recovery"
+          <a
+            href="/login/password-recovery"
             id="btn_recovery-password_lk"
             class="mt-lg-4 d-table btn-link"
-            >Не помните пароль?</nuxt-link
+            >Не помните пароль?</a
           >
         </div>
 
@@ -290,7 +290,6 @@ export default {
         }
       } catch (e) {
         this.authInProcess = false;
-
         if (e?.response?.data.STATUS === 401) {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
           this.wrongAuthData = true;
@@ -315,6 +314,8 @@ export default {
         ) {
           this.user.cap = null;
           this.user.capid = null;
+          // убираем сообщение об ошибке при правильных учетных данных
+          this.wrongAuthData = null;
           this.$bvModal.show("sms-confirm");
           return;
         }
