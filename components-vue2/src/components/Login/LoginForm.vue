@@ -7,6 +7,7 @@
       @hidden="closeModalConfirmSMSCode"
       :centered="true"
     >
+      <!-- :static="true" -->
       <div class="d-block text-center">
         <h4>Введите код</h4>
         На номер телефона {{ hideTelephoneMessage }} был отправлен код
@@ -136,10 +137,6 @@
             @updateCode="setCodeCaptcha($event)"
             :isCaptchaValid="this.captchaMessage"
           />
-
-          <!-- <div class="col-12 invalid-feedback d-block" v-if="wrongAuthData">
-            {{ this.captchaMessage }}
-          </div> -->
         </div>
       </div>
       <b-button

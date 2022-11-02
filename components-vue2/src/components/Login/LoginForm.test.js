@@ -1,10 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { createLocalVue, mount } from "@vue/test-utils";
+import { ModalPlugin } from "bootstrap-vue";
 import axios from "axios";
-
 import LoginForm from "./LoginForm.vue";
 
 jest.mock("axios");
-jest.mock("this.$bvModal");
+// jest.mock("this.$bvModal");
 
 describe("LoginForm", () => {
   it("должен показать кнопку авторизоваться", () => {
@@ -60,9 +60,15 @@ describe("LoginForm", () => {
 
     expect(wrapper.text()).toContain("Заполните капчу");
   });
+
   //
   it("не должен выводить ошибку логина + пароля", async () => {
-    const wrapper = mount(LoginForm);
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
+    const wrapper = mount(LoginForm, { localVue });
+    await wrapper.find("#phone").setValue("ege@mmd.ru");
+    await wrapper.find("#password").setValue("182821");
+
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
       wrongAuthError.response = {
@@ -71,18 +77,17 @@ describe("LoginForm", () => {
           STATUS: 401,
           CODE: 104,
           NEEDCODE: true,
-          SMSPHONE: "+7 (ХХХ) ХХХ-44-18",
+          SMSPHONE: "+7 (ХХХ) ХХХ-94-91",
           CODENAME: "PhoneCodeRequest",
           AUTHCODE: 2,
         },
       };
       throw wrongAuthError;
     });
-
-    await wrapper.find("#phone").setValue("ege@mmd.ru");
-    await wrapper.find("#password").setValue("182821");
     await wrapper.find("form").trigger("submit.prevent");
 
-    expect(wrapper.text()).toContain("Неверный логин или пароль");
+    expect(wrapper.find("#phone").classes()).not.toContain("is-invalid");
+    expect(wrapper.text()).not.toContain("Неверный логин или пароль");
   });
+  //
 });
