@@ -11,6 +11,13 @@
           <div class="col-12 col-lg-5">
             <div class="position-relative">
               <address-suggest-view @update="showFoundOfficesOnMap" />
+              <input
+                class="d-none"
+                type="text"
+                @input="clearStation"
+                id="suggest"
+                ref="search"
+              />
               <button
                 v-show="!isInputEmpty"
                 @click="clear"
