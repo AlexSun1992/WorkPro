@@ -174,7 +174,6 @@ export default {
       const find = this.group.find((i) =>
         this.$refs.autocomplete?.value.includes(i.value)
       );
-
       if (find !== undefined) {
         this.handleSubmit(find);
         return;
