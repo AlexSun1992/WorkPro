@@ -6,14 +6,16 @@
       @shown="setFocusSMSCode()"
       @hidden="closeModalConfirmSMSCode"
       :centered="true"
+      :static="true"
     >
       <!-- :static="true" -->
       <div class="d-block text-center">
         <h4>Введите код</h4>
         На номер телефона {{ hideTelephoneMessage }} был отправлен код
         подверждения.
-        <b-form @submit.prevent="onSubmitWithCodeSMS">
+        <b-form id="sms-form" @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
+            id="sms-code"
             ref="focusCodeSMS"
             autocomplete="off"
             placeholder="12345"
@@ -52,6 +54,7 @@
               />
             </div>
             <b-button
+              id="submit-sms-code"
               :disabled="
                 authInProcess ||
                 user.code === '' ||
@@ -69,7 +72,7 @@
       </div>
     </b-modal>
 
-    <b-form @submit.prevent="onSubmit">
+    <b-form id="auth-form" @submit.prevent="onSubmit">
       <div class="tab-mobile-block">Вход</div>
       <div class="row">
         <div class="col-12 col-lg-4">
@@ -165,6 +168,7 @@ import {
   BSpinner,
   BButton,
   BModal,
+  BRow,
 } from "bootstrap-vue";
 
 import { validationMixin } from "vuelidate";
@@ -187,6 +191,7 @@ export default {
     BSpinner,
     BButton,
     BModal,
+    BRow,
     VerifyTimer,
     Captcha,
   },

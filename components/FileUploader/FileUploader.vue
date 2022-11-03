@@ -29,7 +29,14 @@
 <script>
 export default {
   name: "FileUploader",
-  props: ["id", "rel"],
+  props: {
+    id: Number,
+    rel: String,
+    product: {
+      type: String,
+      default: "osago",
+    },
+  },
   data() {
     return {
       uploadPercentage: 0,
@@ -46,8 +53,7 @@ export default {
       let fileName = this.id + "." + this.file.name?.split(".")[1];
       this.$axios
         .$post(
-          `/am/main/v2/file/${this.id}
-?rel=${this.rel}&product=osago`,
+          `/am/main/v2/file/${this.id}?rel=${this.rel}&product=${this.product}`,
           this.file,
           {
             headers: {
