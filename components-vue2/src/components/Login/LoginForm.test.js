@@ -1,12 +1,16 @@
 import { createLocalVue, mount } from "@vue/test-utils";
 import { ModalPlugin } from "bootstrap-vue";
 import axios from "axios";
+
 import LoginForm from "./LoginForm.vue";
 
 jest.mock("axios");
-// jest.mock("this.$bvModal");
 
 describe("LoginForm", () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it("должен показать кнопку авторизоваться", () => {
     const wrapper = mount(LoginForm);
     expect(wrapper.text()).toContain("Авторизоваться");
@@ -29,7 +33,7 @@ describe("LoginForm", () => {
 
     await wrapper.find("#phone").setValue("ege@mmd.ru");
     await wrapper.find("#password").setValue("182821");
-    await wrapper.find("form").trigger("submit.prevent");
+    await wrapper.find("#auth-form").trigger("submit.prevent");
 
     expect(wrapper.text()).toContain("Неверный логин или пароль");
   });
@@ -49,14 +53,16 @@ describe("LoginForm", () => {
       };
       throw wrongAuthError;
     });
-    axios.get.mockImplementationOnce(() => ({
-      CAPTCHA: "data:image/png;base64",
-      ID: 943824,
+    axios.get.mockReturnValue(() => ({
+      data: {
+        CAPTCHA: "data:image/png;base64",
+        ID: 943824,
+      },
     }));
 
     await wrapper.find("#phone").setValue("ege@mmd.ru");
     await wrapper.find("#password").setValue("182821");
-    await wrapper.find("form").trigger("submit.prevent");
+    await wrapper.find("#auth-form").trigger("submit.prevent");
 
     expect(wrapper.text()).toContain("Заполните капчу");
   });
