@@ -3813,12 +3813,27 @@ h6 {
     font-size: 0.875rem;
 }
 
+.ph2m {
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 30px;
+}
+
 .blk-shadow {
     box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
 }
 
 .border-none {
     border: 0;
+}
+
+.file-download {
+    font-family: "SF Pro Display";
+    font-size: 1rem;
+    text-decoration-line: underline;
+    color: #43b02a;
+    padding-right: 26px;
+    background: url(/img/icon-file-download.svg) center right no-repeat;
 }
 
 @media (max-width: 992px) {
