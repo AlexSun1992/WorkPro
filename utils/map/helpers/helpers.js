@@ -63,6 +63,16 @@ const showWorkingHours = (agency) => {
 const getTemplate = (agency) => {
   const phonesArr = agency.SPHONE?.split(";");
   const grafArr = agency.SGRAF?.split("\n");
+  if (phonesArr) {
+    if (phonesArr[phonesArr.length - 1] === "") {
+      phonesArr.pop();
+    }
+  }
+  if (grafArr) {
+    if (grafArr[grafArr.length - 1] === "***") {
+      grafArr.pop();
+    }
+  }
   let template = `
       <div class="card-body">
         <h4 class="card-title">${agency.SSHORTNAME}</h4>
