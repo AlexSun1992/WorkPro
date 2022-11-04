@@ -10,9 +10,9 @@ const isOpened = (office) => {
   let opened = true;
   const dateNow = new Date();
   let day = dateNow.getDay();
-  let dateEnd = new Date();
+  const dateEnd = new Date();
   day = day === 0 ? 7 : day;
-  let dayObj = office.GRAF?.find((item) => item.NDAY === day);
+  const dayObj = office.GRAF?.find((item) => item.NDAY === day);
   if (office.GRAF && dayObj) {
     const [endHour, endMinute] = dayObj?.SEND.split(".");
     dateEnd.setHours(endHour);
@@ -33,15 +33,11 @@ const showWorkingHours = (agency) => {
 
   if (!agency.GRAF) return "";
 
-  let dayObj = agency.GRAF?.find((item) => item.NDAY == day);
-  let nexDayObj = agency.GRAF?.find((item) => item.NDAY == day + 1);
-  let closedString =
-    "Закрыт до " +
-    ("0" + (dateNow.getDate() + 1)).slice(-2) +
-    "." +
-    ("0" + (dateNow.getMonth() + 1)).slice(-2) +
-    "." +
-    dateNow.getFullYear();
+  const dayObj = agency.GRAF?.find((item) => item.NDAY == day);
+  const nexDayObj = agency.GRAF?.find((item) => item.NDAY == day + 1);
+  const closedString = `Закрыт до ${`0${dateNow.getDate() + 1}`.slice(
+    -2
+  )}.${`0${dateNow.getMonth() + 1}`.slice(-2)}.${dateNow.getFullYear()}`;
 
   if (dayObj) {
     const [endHour, endMinute] = dayObj?.SEND.split(".");
@@ -51,7 +47,7 @@ const showWorkingHours = (agency) => {
     if (dateNow < dateEnd) {
       str = `Открыт до ${dateEnd.getHours()}:${
         dateEnd.getMinutes() == 0
-          ? dateEnd.getMinutes() + "0"
+          ? `${dateEnd.getMinutes()}0`
           : dateEnd.getMinutes()
       }`;
     } else if (dateNow > dateEnd && nexDayObj) {
@@ -67,8 +63,6 @@ const showWorkingHours = (agency) => {
 const getTemplate = (agency) => {
   const phonesArr = agency.SPHONE?.split(";");
   const grafArr = agency.SGRAF?.split("\n");
-  phonesArr?.pop();
-  grafArr?.pop();
   let template = `
       <div class="card-body">
         <h4 class="card-title">${agency.SSHORTNAME}</h4>
@@ -119,17 +113,16 @@ const getTemplate = (agency) => {
   });
   template = template.replace(
     /<a href="mailto:[^"].+? class="card-office-e-mail">(.*?)<\/a[^>]*?>/g,
-    () => {
-      return agency.SEMAIL
+    () =>
+      agency.SEMAIL
         ? `<div><a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a></div>`
-        : "";
-    }
+        : ""
   );
 
   template = template.replace(
     /<div class="col-4 pe-0">[\n\s]*?<div class="position-relative">[\n\s]*?<img src="" \/>[\n\s]*?<button class="office-image-zoom" type="button"><\/button>[\n\s]*?<\/div>[\n\s]*?<\/div[^>]*>/g,
     () => {
-      let url = "/export/sites/reso" + `${agency.SPATH1}`;
+      const url = "/export/sites/reso" + `${agency.SPATH1}`;
       return agency.SPATH1
         ? `<div class="col-4 pe-0"><div class="position-relative"><img src=${url} /><button class="office-image-zoom" type="button"></button></div></div>`
         : "";
@@ -149,7 +142,7 @@ const getTemplate = (agency) => {
               item.LINE
             }></span>
                     <span>${item.SNAME}</span>
-                    <span class="card-office-distance"> 
+                    <span class="card-office-distance">
                     ${getTime(item.DISTANCE)} </span>
                     </div>
                   `;
@@ -166,8 +159,8 @@ const getTemplate = (agency) => {
 
   template = template.replace(
     /<div class="col-8">[\n\s]*?<div>[\n\s]*?(.*?)[\n\s]*?<\/div>[\n\s]*?<div class="card-office-opened">[\n\s]*?Открыт до[\n\s]*?<\/div>[\n\s]*?<\/div>/,
-    () => {
-      return agency.SPATH1
+    () =>
+      agency.SPATH1
         ? `<div class="col-8">
                 <div>${agency.SADDRESS}</div>
                 <div class="card-office-${
@@ -179,8 +172,7 @@ const getTemplate = (agency) => {
               <div class="card-office-${
                 isOpened(agency) ? "opened" : "closed"
               }">${showWorkingHours(agency)}</div>
-          </div>`;
-    }
+          </div>`
   );
   return template;
 };
@@ -198,9 +190,9 @@ const countOffices = (office) => {
 };
 
 const getUnderlineId = (station, item) => {
-  const obj = item.IDUNDERGROUND.find((element) => {
-    return element.SNAME.toLowerCase().includes(station.toLowerCase());
-  });
+  const obj = item.IDUNDERGROUND.find((element) =>
+    element.SNAME.toLowerCase().includes(station.toLowerCase())
+  );
   return obj?.IDUNDERLINE;
 };
 
