@@ -8,6 +8,7 @@ import CardPage from "~/components/Pages/Cabinet/CardPage";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
 import LoginEsia from "@/components/Pages/Esia/LoginEsia";
 import AuthFormWrapper from "~/components-vue2/src/components/Login/AuthForm/AuthFormWrapper";
+import PasswordRecoveryFormWrapper from "~/components-vue2/src/components/Login/RecoveryForm/PasswordRecoveryFormWrapper";
 
 Vue.use(Router);
 
@@ -22,6 +23,16 @@ export function createRouter() {
         meta: "AuthFormWrapper",
         path: "/login",
         component: AuthFormWrapper,
+      },
+      {
+        meta: "AuthFormWrapper",
+        path: "/login/registration",
+        component: AuthFormWrapper,
+      },
+      {
+        meta: "PasswordRecoveryFormWrapper",
+        path: "/login/password-recovery",
+        component: PasswordRecoveryFormWrapper,
       },
       {
         meta: "Cabinet",
