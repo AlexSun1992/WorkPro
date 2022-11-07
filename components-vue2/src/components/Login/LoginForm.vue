@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-modal
-      id="sms-confirm"
+      id="sms-confirm-modal"
       hide-footer
       @shown="setFocusSMSCode()"
       @hidden="closeModalConfirmSMSCode"
@@ -11,8 +11,7 @@
       <!-- :static="true" -->
       <div class="d-block text-center">
         <h4>Введите код</h4>
-        На номер телефона {{ hideTelephoneMessage }} был отправлен код
-        подверждения.
+        {{ modalTextRequest }}
         <b-form id="sms-form" @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
             id="sms-code"
@@ -208,7 +207,7 @@ export default {
       },
       wrongAuthData: null,
       captchaMessage: null,
-      hideTelephoneMessage: null,
+      modalTextRequest: "",
       duration: 60,
       isUsernameBlured: true,
       isPasswordBlured: true,
@@ -292,9 +291,24 @@ export default {
         }
       } catch (e) {
         this.authInProcess = false;
-        if (e?.response?.data.STATUS === 401) {
-          this.hideTelephoneMessage = e.response.data.SMSPHONE;
-          this.wrongAuthData = true;
+        const data = e.response?.data;
+        if (data) {
+          if (data.CODENAME === "PhoneCodeRequest") {
+            this.user.cap = null;
+            this.user.capid = null;
+            this.modalTextRequest = `${data.MESSAGE} ${data.SMSPHONE}`;
+            this.wrongAuthData = null;
+            this.$bvModal.show("sms-confirm-modal");
+            return;
+          }
+          if (data.CODENAME === "InvalidPhoneCode") {
+            this.isValidStateCodeSMS = false;
+            return;
+          }
+
+          if (data.STATUS === 401) {
+            this.wrongAuthData = true;
+          }
         }
         // Выведение сообщения при наличии капчи
         if (e?.response?.data.NEEDCAPTCHA) {
@@ -307,18 +321,6 @@ export default {
         if (e?.response?.data.CODE === 105) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
-          return;
-        }
-
-        if (
-          e?.response?.data.STATUS === 500 ||
-          e?.response?.data.CODE === 104
-        ) {
-          this.user.cap = null;
-          this.user.capid = null;
-          // убираем сообщение об ошибке при правильных учетных данных
-          this.wrongAuthData = null;
-          this.$bvModal.show("sms-confirm");
           return;
         }
 
