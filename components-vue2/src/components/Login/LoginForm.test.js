@@ -38,7 +38,7 @@ describe("LoginForm", () => {
     expect(wrapper.text()).toContain("Неверный логин или пароль");
   });
 
-  it("должен показать капчу", async () => {
+  it("должен показать только одну капчу", async () => {
     const wrapper = mount(LoginForm);
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -63,8 +63,12 @@ describe("LoginForm", () => {
     await wrapper.find("#phone").setValue("ege@mmd.ru");
     await wrapper.find("#password").setValue("182821");
     await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
 
-    expect(wrapper.text()).toContain("Заполните капчу");
+    expect(wrapper.findComponent("#auth-form img.captcha").exists()).toBe(true);
+    expect(
+      wrapper.findComponent("#sms-confirm-modal img.captcha").exists()
+    ).toBe(false);
   });
 
   it("не должен выводить ошибку логина + пароля", async () => {
@@ -123,6 +127,7 @@ describe("LoginForm", () => {
     expect(wrapper.find("#phone").classes()).toContain("is-valid");
 
     await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
 
     expect(modal.isVisible()).toBe(true);
     expect(wrapper.find("#phone").classes()).toContain("is-valid");
@@ -177,5 +182,105 @@ describe("LoginForm", () => {
     await wrapper.find("#auth-form").trigger("submit.prevent");
 
     expect(modal.text()).toContain("Введите код подтверждения из SMS");
+  });
+
+  it("не должен инвалидировать поля формы при запросе капчи", async () => {
+    const wrapper = mount(LoginForm);
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE: "Заполните капчу",
+          STATUS: 401,
+          NEEDCAPTCHA: true,
+          CODE: 106,
+          CODENAME: "CaptchaRequest",
+        },
+      };
+      throw wrongAuthError;
+    });
+    axios.get.mockReturnValue(() => ({
+      data: {
+        CAPTCHA: "data:image/png;base64",
+        ID: 943824,
+      },
+    }));
+
+    await wrapper.find("#phone").setValue("ege@mmd.ru");
+    await wrapper.find("#password").setValue("182821");
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#phone").classes()).not.toContain("is-invalid");
+  });
+
+  it("не должен кэшировать ошибку капчи после успешного ввода", async () => {
+    const wrapper = mount(LoginForm);
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE: "Заполните капчу",
+          STATUS: 401,
+          NEEDCAPTCHA: true,
+          CODE: 106,
+          CODENAME: "CaptchaRequest",
+        },
+      };
+      throw wrongAuthError;
+    });
+    axios.get.mockReturnValue(() => ({
+      data: {
+        CAPTCHA: "data:image/png;base64",
+        ID: 943824,
+      },
+    }));
+
+    await wrapper.find("#phone").setValue("ege@mmd.ru");
+    await wrapper.find("#password").setValue("182821");
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#captcha-form").text()).toContain("Заполните капчу");
+
+    await wrapper.find("#captcha-code").setValue("12345");
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE: "Неправильная капча",
+          STATUS: 401,
+          NEEDCAPTCHA: true,
+          CODE: 107,
+          CODENAME: "CaptchaInvalid",
+        },
+      };
+      throw wrongAuthError;
+    });
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#captcha-form").text()).toContain(
+      "Неправильная капча"
+    );
+
+    await wrapper.find("#captcha-code").setValue("123");
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE: "Неверные учетные данные пользователя",
+          STATUS: 401,
+          CODE: 101,
+          CODENAME: "Invalid",
+        },
+      };
+      throw wrongAuthError;
+    });
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("#captcha-form").text()).not.toContain(
+      "Неправильная капча"
+    );
   });
 });
