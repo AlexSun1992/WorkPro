@@ -2,6 +2,7 @@
   <div>
     <b-modal
       id="sms-confirm-modal"
+      v-model="isModalVisible"
       hide-footer
       @shown="setFocusSMSCode()"
       @hidden="closeModalConfirmSMSCode"
@@ -216,6 +217,7 @@ export default {
       isRetrySendCodeSMS: false,
       isSendingCodeSMS: false,
       isCaptchaNeeded: false,
+      isModalVisible: false,
       autofocus: true,
       placeholder: "Телефон или почта",
       errorMessage: null,
@@ -278,7 +280,7 @@ export default {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
         } = await axios.post("/am/authw/v2/authorize", body);
 
-        this.$bvModal.hide("sms-confirm");
+        this.isModalVisible = false;
         document.cookie = `auth.strategy=local;`;
         document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN};`;
         document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
@@ -298,7 +300,7 @@ export default {
             this.user.capid = null;
             this.modalTextRequest = `${data.MESSAGE} ${data.SMSPHONE}`;
             this.wrongAuthData = null;
-            this.$bvModal.show("sms-confirm-modal");
+            this.isModalVisible = true;
             return;
           }
           if (data.CODENAME === "InvalidPhoneCode") {

@@ -123,6 +123,7 @@ describe("LoginForm", () => {
     expect(wrapper.find("#phone").classes()).toContain("is-valid");
 
     await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
 
     expect(modal.isVisible()).toBe(true);
     expect(wrapper.find("#phone").classes()).toContain("is-valid");
