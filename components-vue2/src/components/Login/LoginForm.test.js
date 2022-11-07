@@ -150,4 +150,32 @@ describe("LoginForm", () => {
     expect(wrapper.find("#phone").classes()).not.toContain("is-invalid");
     expect(wrapper.text()).not.toContain("Неверный логин или пароль");
   });
+
+  it("должен показывать текст из API в модалке", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
+    const wrapper = mount(LoginForm, { localVue, attachTo: document.body });
+    const modal = wrapper.findComponent("#sms-confirm-modal");
+    await wrapper.find("#phone").setValue("ege@mmd.ru");
+    await wrapper.find("#password").setValue("182821");
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE: "Введите код подтверждения из SMS.",
+          STATUS: 401,
+          CODE: 104,
+          NEEDCODE: true,
+          SMSPHONE: "+7 (ХХХ) ХХХ-94-91",
+          CODENAME: "PhoneCodeRequest",
+          AUTHCODE: 2,
+        },
+      };
+      throw wrongAuthError;
+    });
+
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+
+    expect(modal.text()).toContain("Введите код подтверждения из SMS");
+  });
 });
