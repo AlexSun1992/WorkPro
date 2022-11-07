@@ -213,4 +213,74 @@ describe("LoginForm", () => {
 
     expect(wrapper.find("#phone").classes()).not.toContain("is-invalid");
   });
+
+  it("не должен кэшировать ошибку капчи после успешного ввода", async () => {
+    const wrapper = mount(LoginForm);
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE: "Заполните капчу",
+          STATUS: 401,
+          NEEDCAPTCHA: true,
+          CODE: 106,
+          CODENAME: "CaptchaRequest",
+        },
+      };
+      throw wrongAuthError;
+    });
+    axios.get.mockReturnValue(() => ({
+      data: {
+        CAPTCHA: "data:image/png;base64",
+        ID: 943824,
+      },
+    }));
+
+    await wrapper.find("#phone").setValue("ege@mmd.ru");
+    await wrapper.find("#password").setValue("182821");
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#captcha-form").text()).toContain("Заполните капчу");
+
+    await wrapper.find("#captcha-code").setValue("12345");
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE: "Неправильная капча",
+          STATUS: 401,
+          NEEDCAPTCHA: true,
+          CODE: 107,
+          CODENAME: "CaptchaInvalid",
+        },
+      };
+      throw wrongAuthError;
+    });
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#captcha-form").text()).toContain(
+      "Неправильная капча"
+    );
+
+    await wrapper.find("#captcha-code").setValue("123");
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE: "Неверные учетные данные пользователя",
+          STATUS: 401,
+          CODE: 101,
+          CODENAME: "Invalid",
+        },
+      };
+      throw wrongAuthError;
+    });
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("#captcha-form").text()).not.toContain(
+      "Неправильная капча"
+    );
+  });
 });

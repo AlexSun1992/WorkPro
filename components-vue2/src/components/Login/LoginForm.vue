@@ -51,6 +51,7 @@
               <captcha
                 @update="setIdCaptcha($event)"
                 @updateCode="setCodeCaptcha($event)"
+                :isCaptchaValid="this.captchaMessage"
               />
             </div>
             <b-button
@@ -295,6 +296,11 @@ export default {
         this.authInProcess = false;
         const data = e.response?.data;
         if (data) {
+          this.captchaMessage =
+            data.CODENAME === "CaptchaInvalid" ||
+            data.CODENAME === "CaptchaRequest"
+              ? data.MESSAGE
+              : null;
           if (data.CODENAME === "PhoneCodeRequest") {
             this.user.cap = null;
             this.user.capid = null;
@@ -312,14 +318,7 @@ export default {
             return;
           }
         }
-        // Выведение сообщения при наличии капчи
-        if (e?.response?.data.NEEDCAPTCHA) {
-          this.captchaMessage = e.response.data.MESSAGE;
-        }
-        if (e?.response?.data.NEEDCAPTCHA === false) {
-          this.captchaMessage = null;
-        }
-        //
+
         if (e?.response?.data.CODE === 105) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
