@@ -5,7 +5,7 @@ const BFF_URL_GET_FREE_MENU = "/api/module?zone=free";
 const URL_GET_FREE_MENU = "/api/module?zone=free";
 const DEFAULT_BREADCRUMBS = [
   {
-    text: "РЕСО",
+    text: "Главная",
     href: "/",
   },
   {

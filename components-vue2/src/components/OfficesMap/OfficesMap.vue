@@ -839,7 +839,7 @@ export default {
                 uniqueItemsCount[agencies[i].NLAT]
               ).join(""),
 
-              hintContent: `${agencies[i].SSHORTNAME}`,
+              hintContent: `${agencies[i].SSHORTNAME ?? "Офис продаж"}`,
               balloonShadowPane: "outerBalloon",
             },
           },
