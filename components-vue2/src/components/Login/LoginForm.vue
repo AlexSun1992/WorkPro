@@ -132,12 +132,7 @@
         </div>
 
         <div
-          v-if="
-            isCaptchaNeeded &&
-            !authInProcess &&
-            wrongAuthData === true &&
-            !isModalVisible
-          "
+          v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
           class="col-12 mt-3 mt-lg-0"
         >
           <captcha
@@ -312,9 +307,9 @@ export default {
             this.isValidStateCodeSMS = false;
             return;
           }
-
-          if (data.STATUS === 401) {
+          if (data.CODENAME === "Invalid") {
             this.wrongAuthData = true;
+            return;
           }
         }
         // Выведение сообщения при наличии капчи

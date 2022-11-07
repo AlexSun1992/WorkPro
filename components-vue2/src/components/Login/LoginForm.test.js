@@ -183,4 +183,34 @@ describe("LoginForm", () => {
 
     expect(modal.text()).toContain("Введите код подтверждения из SMS");
   });
+
+  it("не должен инвалидировать поля формы при запросе капчи", async () => {
+    const wrapper = mount(LoginForm);
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE: "Заполните капчу",
+          STATUS: 401,
+          NEEDCAPTCHA: true,
+          CODE: 106,
+          CODENAME: "CaptchaRequest",
+        },
+      };
+      throw wrongAuthError;
+    });
+    axios.get.mockReturnValue(() => ({
+      data: {
+        CAPTCHA: "data:image/png;base64",
+        ID: 943824,
+      },
+    }));
+
+    await wrapper.find("#phone").setValue("ege@mmd.ru");
+    await wrapper.find("#password").setValue("182821");
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#phone").classes()).not.toContain("is-invalid");
+  });
 });
