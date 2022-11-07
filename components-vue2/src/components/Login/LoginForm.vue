@@ -45,7 +45,7 @@
           </div>
           <b-row>
             <div
-              v-if="isCaptchaNeeded && !authInProcess"
+              v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
               class="col-12 col-lg-12"
             >
               <captcha
@@ -132,7 +132,12 @@
         </div>
 
         <div
-          v-if="isCaptchaNeeded && !authInProcess && wrongAuthData === true"
+          v-if="
+            isCaptchaNeeded &&
+            !authInProcess &&
+            wrongAuthData === true &&
+            !isModalVisible
+          "
           class="col-12 mt-3 mt-lg-0"
         >
           <captcha

@@ -38,7 +38,7 @@ describe("LoginForm", () => {
     expect(wrapper.text()).toContain("Неверный логин или пароль");
   });
 
-  it("должен показать капчу", async () => {
+  it("должен показать только одну капчу", async () => {
     const wrapper = mount(LoginForm);
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -63,8 +63,12 @@ describe("LoginForm", () => {
     await wrapper.find("#phone").setValue("ege@mmd.ru");
     await wrapper.find("#password").setValue("182821");
     await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
 
-    expect(wrapper.text()).toContain("Заполните капчу");
+    expect(wrapper.findComponent("#auth-form img.captcha").exists()).toBe(true);
+    expect(
+      wrapper.findComponent("#sms-confirm-modal img.captcha").exists()
+    ).toBe(false);
   });
 
   it("не должен выводить ошибку логина + пароля", async () => {
