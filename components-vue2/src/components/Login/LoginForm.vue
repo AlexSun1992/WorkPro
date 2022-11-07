@@ -239,6 +239,15 @@ export default {
     }
   },
 
+  watch: {
+    isCaptchaNeeded(newValue) {
+      if (newValue === false) {
+        this.user.capid = null;
+        this.user.cap = null;
+      }
+    },
+  },
+
   methods: {
     setIdCaptcha(id) {
       this.user.capid = id;
@@ -301,9 +310,11 @@ export default {
             data.CODENAME === "CaptchaRequest"
               ? data.MESSAGE
               : null;
+
+          if (data.CODENAME === "CaptchaRequest") {
+            this.isCaptchaNeeded = true;
+          }
           if (data.CODENAME === "PhoneCodeRequest") {
-            this.user.cap = null;
-            this.user.capid = null;
             this.modalTextRequest = `${data.MESSAGE} ${data.SMSPHONE}`;
             this.wrongAuthData = null;
             this.isModalVisible = true;
@@ -322,14 +333,6 @@ export default {
         if (e?.response?.data.CODE === 105) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
-          return;
-        }
-
-        if (
-          e?.response?.data.STATUS === 403 ||
-          e?.response?.data.CODE === 106
-        ) {
-          this.isCaptchaNeeded = true;
           return;
         }
 
