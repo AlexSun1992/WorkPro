@@ -192,7 +192,6 @@ export default {
 
     changeEmail() {
       this.isUserBlured = false;
-      this.$v.newEmail.$model = "";
       this.$refs.userInput.$el.disabled = false;
       this.$refs.userInput.$el.focus();
       this.isUserDisabled = false;
