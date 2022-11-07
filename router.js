@@ -25,6 +25,11 @@ export function createRouter() {
         component: AuthFormWrapper,
       },
       {
+        meta: "AuthFormWrapper",
+        path: "/login/registration",
+        component: AuthFormWrapper,
+      },
+      {
         meta: "PasswordRecoveryFormWrapper",
         path: "/login/password-recovery",
         component: PasswordRecoveryFormWrapper,
