@@ -1008,6 +1008,12 @@ export default {
       });
     },
     async filterOffices(filters) {
+      const mapsCheckOffice = filters.find(
+        (item) => item.id === "maps-check-office"
+      );
+      if (mapsCheckOffice) {
+        return;
+      }
       await this.$store.dispatch("map/fetchRegion", {
         id: this.regionId,
         coords: this.centerCoords,

@@ -39,6 +39,7 @@
 
 <script>
 import { BButton } from "bootstrap-vue";
+/* eslint-disable */
 import { getFilters } from "../../../../utils/map/filters";
 export default {
   name: "FilterComponent",

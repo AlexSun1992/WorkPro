@@ -75,7 +75,7 @@ const getTemplate = (agency) => {
   }
   let template = `
       <div class="card-body">
-        <h4 class="card-title">${agency.SSHORTNAME}</h4>
+        <h4 class="card-title">${agency.SSHORTNAME ?? "Офис продаж"}</h4>
         <div class="card-office-adress row">
           <div class="col-4 pe-0">
             <div class="position-relative">
@@ -100,7 +100,9 @@ const getTemplate = (agency) => {
         <div class="card-office-contacts">
           <a href="tel:${agency.SPHONE}">${agency.SPHONE}</a>
           <div>
-            <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${agency.SEMAIL}</a>
+            <a href="mailto:${agency.SEMAIL}" class="card-office-e-mail">${
+    agency.SEMAIL
+  }</a>
           </div>
         </div>
       </div>`;
