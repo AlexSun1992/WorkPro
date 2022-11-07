@@ -2,6 +2,7 @@
   <div>
     <b-modal
       id="sms-confirm-modal"
+      v-model="isModalVisible"
       hide-footer
       @shown="setFocusSMSCode()"
       @hidden="closeModalConfirmSMSCode"
@@ -44,12 +45,13 @@
           </div>
           <b-row>
             <div
-              v-if="isCaptchaNeeded && !authInProcess"
+              v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
               class="col-12 col-lg-12"
             >
               <captcha
                 @update="setIdCaptcha($event)"
                 @updateCode="setCodeCaptcha($event)"
+                :isCaptchaValid="this.captchaMessage"
               />
             </div>
             <b-button
@@ -131,7 +133,7 @@
         </div>
 
         <div
-          v-if="isCaptchaNeeded && !authInProcess && wrongAuthData === true"
+          v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
           class="col-12 mt-3 mt-lg-0"
         >
           <captcha
@@ -216,6 +218,7 @@ export default {
       isRetrySendCodeSMS: false,
       isSendingCodeSMS: false,
       isCaptchaNeeded: false,
+      isModalVisible: false,
       autofocus: true,
       placeholder: "Телефон или почта",
       errorMessage: null,
@@ -234,6 +237,15 @@ export default {
     if (params?.error) {
       this.errorMessage = params?.error;
     }
+  },
+
+  watch: {
+    isCaptchaNeeded(newValue) {
+      if (newValue === false) {
+        this.user.capid = null;
+        this.user.cap = null;
+      }
+    },
   },
 
   methods: {
@@ -278,7 +290,7 @@ export default {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
         } = await axios.post("/am/authw/v2/authorize", body);
 
-        this.$bvModal.hide("sms-confirm");
+        this.isModalVisible = false;
         document.cookie = `auth.strategy=local;`;
         document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN};`;
         document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
@@ -293,42 +305,34 @@ export default {
         this.authInProcess = false;
         const data = e.response?.data;
         if (data) {
+          this.captchaMessage =
+            data.CODENAME === "CaptchaInvalid" ||
+            data.CODENAME === "CaptchaRequest"
+              ? data.MESSAGE
+              : null;
+
+          if (data.CODENAME === "CaptchaRequest") {
+            this.isCaptchaNeeded = true;
+          }
           if (data.CODENAME === "PhoneCodeRequest") {
-            this.user.cap = null;
-            this.user.capid = null;
             this.modalTextRequest = `${data.MESSAGE} ${data.SMSPHONE}`;
             this.wrongAuthData = null;
-            this.$bvModal.show("sms-confirm-modal");
+            this.isModalVisible = true;
             return;
           }
           if (data.CODENAME === "InvalidPhoneCode") {
             this.isValidStateCodeSMS = false;
             return;
           }
-
-          if (data.STATUS === 401) {
+          if (data.CODENAME === "Invalid") {
             this.wrongAuthData = true;
+            return;
           }
         }
-        // Выведение сообщения при наличии капчи
-        if (e?.response?.data.NEEDCAPTCHA) {
-          this.captchaMessage = e.response.data.MESSAGE;
-        }
-        if (e?.response?.data.NEEDCAPTCHA === false) {
-          this.captchaMessage = null;
-        }
-        //
+
         if (e?.response?.data.CODE === 105) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
-          return;
-        }
-
-        if (
-          e?.response?.data.STATUS === 403 ||
-          e?.response?.data.CODE === 106
-        ) {
-          this.isCaptchaNeeded = true;
           return;
         }
 
