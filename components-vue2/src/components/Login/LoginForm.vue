@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-modal
-      id="sms-confirm"
+      id="sms-confirm-modal"
       hide-footer
       @shown="setFocusSMSCode()"
       @hidden="closeModalConfirmSMSCode"
@@ -292,6 +292,13 @@ export default {
         }
       } catch (e) {
         this.authInProcess = false;
+        const data = e.response?.data;
+        if (data) {
+          if (data.CODENAME === "InvalidPhoneCode") {
+            this.isValidStateCodeSMS = false;
+            return;
+          }
+        }
         if (e?.response?.data.STATUS === 401) {
           this.hideTelephoneMessage = e.response.data.SMSPHONE;
           this.wrongAuthData = true;
@@ -318,7 +325,7 @@ export default {
           this.user.capid = null;
           // убираем сообщение об ошибке при правильных учетных данных
           this.wrongAuthData = null;
-          this.$bvModal.show("sms-confirm");
+          this.$bvModal.show("sms-confirm-modal");
           return;
         }
 
