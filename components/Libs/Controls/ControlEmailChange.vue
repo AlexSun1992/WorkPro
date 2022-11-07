@@ -112,6 +112,9 @@ export default {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
+  mounted() {
+    this.newEmail = this.data.value;
+  },
   methods: {
     update() {
       // this.$v.newEmail.$touch();
