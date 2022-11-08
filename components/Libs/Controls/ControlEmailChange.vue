@@ -102,13 +102,6 @@ export default {
   },
   created() {
     this.$store.commit("data_card/saveButtonClicked", false);
-    if (process.client) {
-      if (
-        this.$store.getters["data_card/getErrorMessage"] &&
-        localStorage.newEmail
-      )
-        this.newEmail = localStorage.newEmail;
-    }
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
@@ -227,7 +220,6 @@ export default {
   },
   destroyed() {
     this.isSendCode = false;
-    localStorage.setItem("newEmail", this.newEmail);
   },
 };
 </script>
