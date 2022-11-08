@@ -10,9 +10,12 @@
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
             <div class="position-relative">
-              <address-suggest-view @update="showFoundOfficesOnMap" />
+              <address-suggest-view
+                v-if="currentTab !== 1 || !tabVisible"
+                @update="showFoundOfficesOnMap"
+              />
               <input
-                class="d-none"
+                :class="[currentTab === 1 && tabVisible ? 'd-block' : 'd-none']"
                 type="text"
                 @input="clearStation"
                 id="suggest"
