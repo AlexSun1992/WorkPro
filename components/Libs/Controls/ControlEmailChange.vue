@@ -5,7 +5,7 @@
         <b-form-group
           :label="data.label"
           :class="[{ required: data.required }]"
-          class="col-12 col-md-6 col-lg-4"
+          class="col-12 col-lg-4"
         >
           <b-form-input
             ref="userInput"
@@ -27,7 +27,7 @@
             type="submit"
             @click="verifyUser"
             variant="success"
-            class="mt-btn-form"
+            class="mt-btn-form-3"
             :disabled="$v.newEmail.$invalid || loading || isSendCode"
             >Получить код
             <b-spinner
@@ -102,13 +102,6 @@ export default {
   },
   created() {
     this.$store.commit("data_card/saveButtonClicked", false);
-    if (process.client) {
-      if (
-        this.$store.getters["data_card/getErrorMessage"] &&
-        localStorage.newEmail
-      )
-        this.newEmail = localStorage.newEmail;
-    }
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     this.debouncedGetCode = _.debounce(this.getCode, 100);
   },
@@ -192,7 +185,6 @@ export default {
 
     changeEmail() {
       this.isUserBlured = false;
-      this.$v.newEmail.$model = "";
       this.$refs.userInput.$el.disabled = false;
       this.$refs.userInput.$el.focus();
       this.isUserDisabled = false;
@@ -228,7 +220,6 @@ export default {
   },
   destroyed() {
     this.isSendCode = false;
-    localStorage.setItem("newEmail", this.newEmail);
   },
 };
 </script>

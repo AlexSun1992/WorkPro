@@ -1,94 +1,89 @@
 <template>
   <div class="recovery-form-content">
     <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-7">
-        <div class="px-2 px-md-4 pb-3 mt-3">
-          <b-tabs @activate-tab="initData" ref="tabs">
-            <b-tab title="Телефон" button-id="tab_tel_lk">
-              <b-alert :show="isErrorMessage" variant="danger">{{
-                errorMessage
-              }}</b-alert>
-              <div class="mb-3">
-                Введите номер телефона указанный при регистрации
-              </div>
+      <div class="col-12 col-lg-8">
+        <b-tabs @activate-tab="initData" ref="tabs">
+          <b-tab title="Телефон" button-id="tab_tel_lk">
+            <b-alert :show="isErrorMessage" variant="danger">{{
+              errorMessage
+            }}</b-alert>
+            <div class="mb-3">
+              Введите номер телефона указанный при регистрации
+            </div>
 
-              <verify-user
-                ref="verifyUser"
-                @error="showError"
-                @getLoginType="loginType"
-                :loginType="'phone'"
-                :mode-type="'RECOVERY'"
-                :v="$v.form"
-                :count="60"
-                :validateState="validateState"
-                :text-message="textMessage"
-                :tab-index="[10, 15]"
-                :isError="errorMessage"
-                :isCodeFieldInValid="isCodeFieldInValid"
-              />
-
-              <b-row class="mt-3" v-if="!isCodeFieldInValid">
-                <b-form-group label="Дата рождения" class="col-md-6 col-12">
-                  <birthday-picker
-                    ref="dataPicker"
-                    v-model="$v.form.birthdate.$model"
-                    :state="validateState('birthdate')"
-                    :tabindex="20"
-                  />
-                </b-form-group>
-              </b-row>
-            </b-tab>
-            <b-tab title="Email" button-id="tab_mail_lk">
-              <b-alert :show="isErrorMessage" variant="danger">{{
-                errorMessage
-              }}</b-alert>
-              <div class="mb-3">Введите e-mail указанный при регистрации</div>
-              <verify-user
-                @error="showError"
-                @getLoginType="loginType"
-                :loginType="'email'"
-                :v="$v.form"
-                :count="60"
-                :validateState="validateState"
-                :tab-index="[10, 15]"
-              />
-            </b-tab>
-          </b-tabs>
-          <div class="recovery">
-            <verify-password
-              v-if="
-                (!isBirthdateInValid && !isCodeFieldInValid) ||
-                (!isCodeFieldInValid && loginFieldType === 'email')
-              "
-              :tab-index="[20, 30]"
+            <verify-user
+              ref="verifyUser"
+              @error="showError"
+              @getLoginType="loginType"
+              :loginType="'phone'"
+              :mode-type="'RECOVERY'"
               :v="$v.form"
+              :count="60"
               :validateState="validateState"
-              :isValid="isSamePassword"
+              :text-message="textMessage"
+              :tab-index="[10, 15]"
+              :isError="errorMessage"
+              :isCodeFieldInValid="isCodeFieldInValid"
             />
 
-            <div class="row buttons mt-3" v-if="isSamePassword">
-              <div class="col-12 col-md-6">
-                <b-button
-                  href="/login"
-                  variant="secondary"
-                  class="w-100 d-block"
-                  >Отмена</b-button
-                >
-              </div>
-              <div class="col-12 col-md-6 mt-3 mt-md-0">
-                <b-button
-                  variant="primary"
-                  @click="resetPassword"
-                  :disabled="disabled"
-                  class="w-100"
-                  :id="
-                    this.currentTab === 0
-                      ? 'btn_change-password_tel_lk'
-                      : 'btn_change-password_mail_lk'
-                  "
-                  >Изменить пароль</b-button
-                >
-              </div>
+            <b-row class="mt-3" v-if="!isCodeFieldInValid">
+              <b-form-group label="Дата рождения" class="col-md-6 col-12">
+                <birthday-picker
+                  ref="dataPicker"
+                  v-model="$v.form.birthdate.$model"
+                  :state="validateState('birthdate')"
+                  :tabindex="20"
+                />
+              </b-form-group>
+            </b-row>
+          </b-tab>
+          <b-tab title="Email" button-id="tab_mail_lk">
+            <b-alert :show="isErrorMessage" variant="danger">{{
+              errorMessage
+            }}</b-alert>
+            <div class="mb-3">Введите e-mail указанный при регистрации</div>
+            <verify-user
+              @error="showError"
+              @getLoginType="loginType"
+              :loginType="'email'"
+              :v="$v.form"
+              :count="60"
+              :validateState="validateState"
+              :tab-index="[10, 15]"
+            />
+          </b-tab>
+        </b-tabs>
+        <div class="recovery">
+          <verify-password
+            v-if="
+              (!isBirthdateInValid && !isCodeFieldInValid) ||
+              (!isCodeFieldInValid && loginFieldType === 'email')
+            "
+            :tab-index="[20, 30]"
+            :v="$v.form"
+            :validateState="validateState"
+            :isValid="isSamePassword"
+          />
+
+          <div class="row buttons mt-3" v-if="isSamePassword">
+            <div class="col-12 col-md-6">
+              <b-button href="/login" variant="secondary" class="w-100 d-block"
+                >Отмена</b-button
+              >
+            </div>
+            <div class="col-12 col-md-6 mt-3 mt-md-0">
+              <b-button
+                variant="primary"
+                @click="resetPassword"
+                :disabled="disabled"
+                class="w-100"
+                :id="
+                  this.currentTab === 0
+                    ? 'btn_change-password_tel_lk'
+                    : 'btn_change-password_mail_lk'
+                "
+                >Изменить пароль</b-button
+              >
             </div>
           </div>
         </div>
