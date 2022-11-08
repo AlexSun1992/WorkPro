@@ -10,7 +10,9 @@
         <div class="row align-items-center mh-1">
           <div class="col-12 col-lg-5">
             <div class="position-relative">
+              <address-suggest-view @update="showFoundOfficesOnMap" />
               <input
+                class="d-none"
                 type="text"
                 @input="clearStation"
                 id="suggest"
@@ -100,27 +102,32 @@
 </template>
 
 <script>
-import Mosmetro from "./mosmetro.svg";
-import FilterComponent from "./FilterComponent.vue";
-import ZoomComponent from "./ZoomComponent.vue";
-import OfficesList from "./OfficesList.vue";
-import MetroOfficeCard from "./MetroOfficeCard.vue";
-import { filters, filterData } from "../../../../utils/map/filters";
-import { BTabs, BTab } from "bootstrap-vue";
+import { BTabs, BTab, BPagination } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
-import { BPagination } from "bootstrap-vue";
 import Cookies from "js-cookie";
+/* eslint-disable */
 import {
   isOpened,
   getTemplate,
   checkClusterStatus,
 } from "../../../../utils/map/helpers/helpers";
+/* eslint-disable */
 import getCurrentCity from "../../../../utils/map/currentCity";
+/* eslint-disable */
+import { filters, filterData } from "../../../../utils/map/filters";
+import Mosmetro from "./mosmetro.svg";
+import FilterComponent from "./FilterComponent.vue";
+import ZoomComponent from "./ZoomComponent.vue";
+import OfficesList from "./OfficesList.vue";
+import MetroOfficeCard from "./MetroOfficeCard.vue";
+import AddressSuggestView from "./AddressSuggestView/AddressSuggestView";
+
 Vue.use(LoadScript);
 export default {
   name: "OfficesMap",
   components: {
+    AddressSuggestView,
     OfficesList,
     FilterComponent,
     BTabs,
@@ -249,10 +256,10 @@ export default {
         this.centerX != null
       ) {
         if (this.$refs.metro.clientHeight - 1295 * this.svgScale < 0) {
-          let XX = this.$refs.metro.clientHeight;
-          let XXX = 1295 * this.svgScale;
-          let XXXX = Math.abs(XX - XXX) / 2;
-          let XXXXX = gsvg.getAttribute("y") * this.svgScale;
+          const XX = this.$refs.metro.clientHeight;
+          const XXX = 1295 * this.svgScale;
+          const XXXX = Math.abs(XX - XXX) / 2;
+          const XXXXX = gsvg.getAttribute("y") * this.svgScale;
           if (XXXXX < XXXX - this.centerY - (137 * this.svgScale) / 2) {
             this.centerY = Math.abs(XXXXX - XXXX + 137 * this.svgScale);
           }
@@ -264,15 +271,7 @@ export default {
             .querySelector(".g-svg-metromap")
             .setAttribute(
               "transform",
-              "matrix(" +
-                this.svgScale +
-                ",0,0," +
-                this.svgScale +
-                "," +
-                this.centerX +
-                "," +
-                this.centerY +
-                ")"
+              `matrix(${this.svgScale},0,0,${this.svgScale},${this.centerX},${this.centerY})`
             );
         }
 
@@ -284,23 +283,23 @@ export default {
       }
       if (gsvg != null) {
         this.chooseStation({ target: gsvg });
-        let sla =
+        const sla =
           document
             .querySelector('use[href="#balloon-select"]')
             .getBoundingClientRect().top -
           document.querySelector(".svg-metromap").getBoundingClientRect().top +
           21;
 
-        let slaa =
+        const slaa =
           document
             .querySelector('use[href="#balloon-select"]')
             .getBoundingClientRect().left -
           document.querySelector(".svg-metromap").getBoundingClientRect().left +
           21;
-        this.$refs.card.style.top = sla + "px";
-        this.$refs.card.style.left = slaa + "px";
+        this.$refs.card.style.top = `${sla}px`;
+        this.$refs.card.style.left = `${slaa}px`;
         if (slaa + 400 > this.width) {
-          this.$refs.card.style.left = slaa - 375 + "px";
+          this.$refs.card.style.left = `${slaa - 375}px`;
         }
         if (sla > 500) {
           this.$refs.card.style.transform = "translateY(-100%)";
@@ -347,30 +346,16 @@ export default {
             .querySelector(".g-svg-metromap")
             .setAttribute(
               "transform",
-              "matrix(" +
-                this.svgScale +
-                ",0,0," +
-                this.svgScale +
-                "," +
-                this.centerX +
-                "," +
-                this.centerY +
-                ")"
+              `matrix(${this.svgScale},0,0,${this.svgScale},${this.centerX},${this.centerY})`
             );
         } else {
           document
             .querySelector(".g-svg-metromap")
             .setAttribute(
               "transform",
-              "matrix(" +
-                this.svgScale +
-                ",0,0," +
-                this.svgScale +
-                "," +
-                (this.centerX + this.translateX + this.gScaleTransformX) +
-                "," +
-                (this.centerY + this.translateY + this.gScaleTransformY) +
-                ")"
+              `matrix(${this.svgScale},0,0,${this.svgScale},${
+                this.centerX + this.translateX + this.gScaleTransformX
+              },${this.centerY + this.translateY + this.gScaleTransformY})`
             );
         }
 
@@ -392,7 +377,7 @@ export default {
       // this.setStatus();
 
       // }
-      let gsvg = document.querySelector('use[href="#balloon-select"]');
+      const gsvg = document.querySelector('use[href="#balloon-select"]');
       if (gsvg) {
         gsvg.setAttribute("href", "#balloon-open");
       }
@@ -404,14 +389,14 @@ export default {
       document.body.classList.remove("overflow-hidden");
     },
     setStatus() {
-      let g = document.getElementsByTagName("g");
+      const g = document.getElementsByTagName("g");
       if (g && g[0]) {
-        let offices = this.$store.getters["map/getRegionOffices"];
+        const offices = this.$store.getters["map/getRegionOffices"];
         for (let i = 0; i < g[0].children.length; i++) {
           if (g[0].children[i].tagName === "use") {
             let name = g[0].children[i].dataset.station;
             offices.forEach((office) => {
-              let candidate = office.IDUNDERGROUND.find((item) => {
+              const candidate = office.IDUNDERGROUND.find((item) => {
                 name = name.toLowerCase().replace("ё", "е");
                 item.SNAME = item.SNAME.toLowerCase().replace("ё", "е");
                 return item.SNAME === name;
@@ -467,14 +452,14 @@ export default {
     },
 
     setMouseCoords(e) {
-      this.cardposX = parseInt(this.$refs["card"]?.style.marginLeft);
-      this.cardposY = parseInt(this.$refs["card"]?.style.marginTop);
+      this.cardposX = parseInt(this.$refs.card?.style.marginLeft);
+      this.cardposY = parseInt(this.$refs.card?.style.marginTop);
       document.addEventListener("mousemove", this.onMouseMove);
       document.addEventListener("mouseout", this.onMouseOute);
       window.addEventListener("mouseup", this.removeListener);
     },
     setTouchCoords(e) {
-      this.touchnumber = this.touchnumber + 1;
+      this.touchnumber += 1;
       if (this.touchnumber == 1) {
         this.touchX = e.changedTouches[0].clientX;
         this.touchY = e.changedTouches[0].clientY;
@@ -502,8 +487,8 @@ export default {
         this.touchstart2Y = 0;
         this.zoomtouch_twoo = Math.round(
           Math.sqrt(
-            Math.pow(e.touches[1].clientX - e.touches[0].clientX, 2) +
-              Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
+            (e.touches[1].clientX - e.touches[0].clientX) ** 2 +
+              (e.touches[1].clientY - e.touches[0].clientY) ** 2
           )
         );
         this.centerX = (e.touches[1].clientX + e.touches[0].clientX) / 2;
@@ -529,8 +514,8 @@ export default {
           e.stopPropagation();
           e.stopImmediatePropagation();
           var summxy = Math.sqrt(
-            Math.pow(e.touches[1].clientX - e.touches[0].clientX, 2) +
-              Math.pow(e.touches[1].clientY - e.touches[0].clientY, 2)
+            (e.touches[1].clientX - e.touches[0].clientX) ** 2 +
+              (e.touches[1].clientY - e.touches[0].clientY) ** 2
           );
           var offset_touch = this.zoomtouch_twoo - summxy;
           if (this.zoomtouch > summxy) {
@@ -549,7 +534,7 @@ export default {
               var height_prev = document
                 .querySelector(".g-svg-metromap")
                 .getBoundingClientRect().height;
-              this.svgScale = this.svgScale - 0.1;
+              this.svgScale -= 0.1;
               this.zoomtouch_twoo = summxy;
               this.gScaleTransformX =
                 (width_prev - this.gWidth * this.svgScale) / 2;
@@ -559,19 +544,13 @@ export default {
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
                   "transform",
-                  "matrix(" +
-                    this.svgScale +
-                    ",0,0," +
-                    this.svgScale +
-                    "," +
-                    (this.oldPosX + this.gScaleTransformX) +
-                    "," +
-                    (this.oldPosY + this.gScaleTransformY) +
-                    ")"
+                  `matrix(${this.svgScale},0,0,${this.svgScale},${
+                    this.oldPosX + this.gScaleTransformX
+                  },${this.oldPosY + this.gScaleTransformY})`
                 );
             }
-            //Math.round(this.zoomtouch_twoo) - summxy
-            /*this.svgScale = this.svgScale - 0.05;
+            // Math.round(this.zoomtouch_twoo) - summxy
+            /* this.svgScale = this.svgScale - 0.05;
             document
               .querySelector(".g-svg-metromap")
               .setAttribute(
@@ -585,7 +564,7 @@ export default {
                   "," +
                   this.centerY +
                   ")"
-              );*/
+              ); */
           }
           if (this.zoomtouch < summxy) {
             if (offset_touch <= -50 && this.svgScale <= 1.9) {
@@ -603,7 +582,7 @@ export default {
               var height_prev = document
                 .querySelector(".g-svg-metromap")
                 .getBoundingClientRect().height;
-              this.svgScale = this.svgScale + 0.1;
+              this.svgScale += 0.1;
               this.zoomtouch_twoo = summxy;
               this.gScaleTransformX =
                 (width_prev - this.gWidth * this.svgScale) / 2;
@@ -613,15 +592,9 @@ export default {
                 .querySelector(".g-svg-metromap")
                 .setAttribute(
                   "transform",
-                  "matrix(" +
-                    this.svgScale +
-                    ",0,0," +
-                    this.svgScale +
-                    "," +
-                    (this.oldPosX + this.gScaleTransformX) +
-                    "," +
-                    (this.oldPosY + this.gScaleTransformY) +
-                    ")"
+                  `matrix(${this.svgScale},0,0,${this.svgScale},${
+                    this.oldPosX + this.gScaleTransformX
+                  },${this.oldPosY + this.gScaleTransformY})`
                 );
             }
             /*
@@ -639,7 +612,7 @@ export default {
                   "," +
                   this.centerY +
                   ")"
-              );*/
+              ); */
           }
           this.zoomtouch = summxy;
           break;
@@ -664,38 +637,36 @@ export default {
     },
     onMouseMove(e) {
       e.preventDefault();
-      let svg = document.querySelector(".g-svg-metromap");
-      this.translateX = this.translateX + e.movementX / e.view.devicePixelRatio;
-      this.translateY = this.translateY + e.movementY / e.view.devicePixelRatio;
-      this.cardposX = this.cardposX + e.movementX / e.view.devicePixelRatio;
-      this.cardposY = this.cardposY + e.movementY / e.view.devicePixelRatio;
+      const svg = document.querySelector(".g-svg-metromap");
+      this.translateX += e.movementX / e.view.devicePixelRatio;
+      this.translateY += e.movementY / e.view.devicePixelRatio;
+      this.cardposX += e.movementX / e.view.devicePixelRatio;
+      this.cardposY += e.movementY / e.view.devicePixelRatio;
 
       if (
         Math.abs(this.translateX) * this.svgScale >=
         (1285 * this.svgScale) / 2
       ) {
-        this.cardposX = this.cardposX - e.movementX / e.view.devicePixelRatio;
-        this.translateX =
-          this.translateX - e.movementX / e.view.devicePixelRatio;
+        this.cardposX -= e.movementX / e.view.devicePixelRatio;
+        this.translateX -= e.movementX / e.view.devicePixelRatio;
       }
       if (
         Math.abs(this.translateY) * this.svgScale >=
         (1295 * this.svgScale) / 2
       ) {
-        this.translateY =
-          this.translateY - e.movementY / e.view.devicePixelRatio;
-        this.cardposY = this.cardposY - e.movementY / e.view.devicePixelRatio;
+        this.translateY -= e.movementY / e.view.devicePixelRatio;
+        this.cardposY -= e.movementY / e.view.devicePixelRatio;
       }
       this.fitToViewportMetro();
-      this.$refs["card"].style.marginLeft = this.cardposX + "px";
-      this.$refs["card"].style.marginTop = this.cardposY + "px";
+      this.$refs.card.style.marginLeft = `${this.cardposX}px`;
+      this.$refs.card.style.marginTop = `${this.cardposY}px`;
     },
     zoom(param) {
-      let step = 0.2;
+      const step = 0.2;
       if (param == "+") {
         if (this.svgScale < 1.9) {
           this.closeCard();
-          this.svgScale = this.svgScale + step;
+          this.svgScale += step;
           this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
           this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
         }
@@ -704,7 +675,7 @@ export default {
       } else if (param == "-") {
         if (this.svgScale > 0.3) {
           this.closeCard();
-          this.svgScale = this.svgScale - step;
+          this.svgScale -= step;
           this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
           this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
         }
@@ -712,7 +683,7 @@ export default {
       }
     },
     chooseStation(e) {
-      let gsvg = document.querySelector('use[href="#balloon-select"]');
+      const gsvg = document.querySelector('use[href="#balloon-select"]');
       if (gsvg) {
         gsvg.setAttribute("href", "#balloon-open");
       }
@@ -722,43 +693,40 @@ export default {
         this.stationOffices = [];
         this.circleClicked = true;
         let stationName = e.target.dataset.station;
-        let offices = this.$store.getters["map/getRegionOffices"];
+        const offices = this.$store.getters["map/getRegionOffices"];
         offices.forEach((office) => {
           if (!office.NORDER) office.NORDER = 0;
-          let candidate = office.IDUNDERGROUND.find((item) => {
+          const candidate = office.IDUNDERGROUND.find((item) => {
             stationName = stationName.toLowerCase().replace("ё", "е");
             item.SNAME = item.SNAME.toLowerCase().replace("ё", "е");
             if (item.SNAME.includes(", ")) {
               return item.SNAME.split(", ").includes(stationName);
-            } else {
-              return item.SNAME === stationName;
             }
+            return item.SNAME === stationName;
           });
           if (candidate) {
             this.stationOffices.push(office);
           }
         });
-        this.stationOffices.sort((a, b) => {
-          return a.NORDER - b.NORDER;
-        });
+        this.stationOffices.sort((a, b) => a.NORDER - b.NORDER);
 
         let body_size = (document.querySelector("body").clientWidth - 1200) / 2;
         if (body_size < 0) {
           body_size = 0;
         }
         document.querySelector(".metrowrapper").classList.add("modal_opened");
-        this.$refs["card"].style.marginLeft = 0;
-        this.$refs["card"].style.marginTop = 0;
-        this.$refs["card"].style.top = e.layerY + "px";
-        this.$refs["card"].style.left = e.layerX + "px";
+        this.$refs.card.style.marginLeft = 0;
+        this.$refs.card.style.marginTop = 0;
+        this.$refs.card.style.top = `${e.layerY}px`;
+        this.$refs.card.style.left = `${e.layerX}px`;
         if (e.clientX + 400 > this.width) {
-          this.$refs["card"].style.left = e.layerX - 375 + "px";
+          this.$refs.card.style.left = `${e.layerX - 375}px`;
         }
         if (e.layerY > 500) {
-          this.$refs["card"].style.transform = "translateY(-100%)";
+          this.$refs.card.style.transform = "translateY(-100%)";
         }
         if (e.layerY < 500) {
-          this.$refs["card"].style.transform = "translateY(0)";
+          this.$refs.card.style.transform = "translateY(0)";
         }
         if (document.querySelector("body").clientWidth <= 992) {
           document.body.classList.add("overflow-hidden");
@@ -853,7 +821,7 @@ export default {
       const myGeoObjects = [];
 
       const uniqueItemsCount = agencies.reduce((acc, item) => {
-        acc[item["NLAT"]] = (acc[item["NLAT"]] || 0) + 1;
+        acc[item.NLAT] = (acc[item.NLAT] || 0) + 1;
         return acc;
       }, {});
 
@@ -871,7 +839,7 @@ export default {
                 uniqueItemsCount[agencies[i].NLAT]
               ).join(""),
 
-              hintContent: `${agencies[i].SSHORTNAME}`,
+              hintContent: `${agencies[i].SSHORTNAME ?? "Офис продаж"}`,
               balloonShadowPane: "outerBalloon",
             },
           },
@@ -922,7 +890,7 @@ export default {
           addressArr.splice(2, 1);
           addressArr = addressArr.join();
         }
-        showOnMap(addressArr ? addressArr : e.get("item").value);
+        showOnMap(addressArr || e.get("item").value);
       }
       this.suggestView.events.add("select", func);
     },
@@ -985,6 +953,9 @@ export default {
       ].join(" ");
       this.updateMap(this.mapState, shortAddress);
     },
+    async showFoundOfficesOnMap(data) {
+      await this.showOnMap(data?.value || Cookies.get("location_user"));
+    },
     async showOnMap(suggest, coords) {
       this.suggest = suggest;
       try {
@@ -1004,7 +975,7 @@ export default {
             this.address.data.suggestions[0].data.kladr_id?.substr(0, 2);
           await this.$store.dispatch("map/fetchRegion", {
             id: this.regionId,
-            coords: coords ? coords : this.centerCoords,
+            coords: coords || this.centerCoords,
           });
         } else {
           this.regionId = null;
@@ -1029,7 +1000,7 @@ export default {
         );
       }
       const showResult = this.showResult.bind(this);
-      ymaps.geocode(suggest).then(function (res, context) {
+      ymaps.geocode(suggest).then((res, context) => {
         const obj = res.geoObjects.get(0);
         if (obj) {
           showResult(obj);
@@ -1037,6 +1008,12 @@ export default {
       });
     },
     async filterOffices(filters) {
+      const mapsCheckOffice = filters.find(
+        (item) => item.id === "maps-check-office"
+      );
+      if (mapsCheckOffice) {
+        return;
+      }
       await this.$store.dispatch("map/fetchRegion", {
         id: this.regionId,
         coords: this.centerCoords,
@@ -1079,19 +1056,17 @@ export default {
               acc[station] = [office];
             }
           });
+        } else if (acc[metroObj.SNAME]) {
+          acc[metroObj.SNAME].push(office);
         } else {
-          if (acc[metroObj.SNAME]) {
-            acc[metroObj.SNAME].push(office);
-          } else {
-            acc[metroObj.SNAME] = [office];
-          }
+          acc[metroObj.SNAME] = [office];
         }
       });
     },
 
     changeStationAttribute(offices) {
       const useNodes = document.getElementsByTagName("use");
-      for (let use of useNodes) {
+      for (const use of useNodes) {
         const station = use.getAttribute("data-station");
         if (offices[station]) {
           use.setAttribute("href", "#balloon-open");
@@ -1111,9 +1086,7 @@ export default {
     getOfficesByCity() {
       const filteredOffices = this.$store.getters[
         "map/getRegionOffices"
-      ]?.filter((office) => {
-        return office.SADDRESS.includes(`${this.city}`);
-      });
+      ]?.filter((office) => office.SADDRESS.includes(`${this.city}`));
 
       if (filteredOffices?.length) {
         return filteredOffices;
@@ -1136,16 +1109,14 @@ export default {
         data = null;
       }
       this.componentKey += 1;
-      data = data?.sort((a, b) => {
-        return a.NDISTANSE - b.NDISTANSE;
-      });
+      data = data?.sort((a, b) => a.NDISTANSE - b.NDISTANSE);
       return data;
     },
 
     offices() {
       if (this.width < 900) {
         let officesArr = [];
-        let countedOffices = this.getOffices?.reduce((acc, office) => {
+        const countedOffices = this.getOffices?.reduce((acc, office) => {
           if (office.IDUNDERGROUND.length > 0) {
             this.getOfficesByStations(acc, office);
           } else {
@@ -1157,51 +1128,49 @@ export default {
           return acc;
         }, {});
 
-        for (let key in countedOffices) {
+        for (const key in countedOffices) {
           officesArr.push({
             station: key,
             info: countedOffices[key],
           });
         }
 
-        officesArr = officesArr?.sort((a, b) => {
-          return a.info[0].NDISTANSE - b.info[0].NDISTANSE;
-        });
+        officesArr = officesArr?.sort(
+          (a, b) => a.info[0].NDISTANSE - b.info[0].NDISTANSE
+        );
 
         if (this.currentStation) {
-          officesArr = officesArr.filter((item) => {
-            return item.station == this.currentStation;
-          });
+          officesArr = officesArr.filter(
+            (item) => item.station == this.currentStation
+          );
         }
         if (!this.isShownMore) {
           return officesArr.slice(0, 6);
-        } else {
-          return officesArr;
         }
-      } else {
-        if (this.getOffices) {
-          let start = (this.page - 1) * this.pagesCount;
-          let end = start + this.pagesCount;
-          if (this.currentStation) {
-            let filteredByStation = [];
-            this.getOffices.forEach((item) => {
-              item.IDUNDERGROUND.forEach((s) => {
-                let station = s.SNAME.toLowerCase().replace("ё", "е");
-                let currentStation = this.currentStation
-                  .toLowerCase()
-                  .replace("ё", "е");
-                if (
-                  station === currentStation &&
-                  station.length === currentStation.length
-                ) {
-                  filteredByStation.push(item);
-                }
-              });
+        return officesArr;
+      }
+      if (this.getOffices) {
+        const start = (this.page - 1) * this.pagesCount;
+        const end = start + this.pagesCount;
+        if (this.currentStation) {
+          const filteredByStation = [];
+          this.getOffices.forEach((item) => {
+            item.IDUNDERGROUND.forEach((s) => {
+              const station = s.SNAME.toLowerCase().replace("ё", "е");
+              const currentStation = this.currentStation
+                .toLowerCase()
+                .replace("ё", "е");
+              if (
+                station === currentStation &&
+                station.length === currentStation.length
+              ) {
+                filteredByStation.push(item);
+              }
             });
-            return filteredByStation;
-          }
-          return this.getOffices.slice(start, end);
+          });
+          return filteredByStation;
         }
+        return this.getOffices.slice(start, end);
       }
     },
 
@@ -1223,9 +1192,9 @@ export default {
       );
     },
     getOfficesByCity(offices) {
-      const filteredOffices = offices.filter((office) => {
-        return office.SADDRESS.includes(`${this.city}`);
-      });
+      const filteredOffices = offices.filter((office) =>
+        office.SADDRESS.includes(`${this.city}`)
+      );
       if (filteredOffices.length == 0) {
         this.cityHasOffices = false;
       } else {

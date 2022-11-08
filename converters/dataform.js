@@ -74,6 +74,7 @@ converter.form = async (data, params, instance) => {
   const meta_visible = converter.meta(data[0]?._meta.SVISIBLE) || {};
   const meta_readonly = converter.meta(data[0]?._meta.SREADONLY) || {};
   const meta_addfields = converter.meta(data[0]?._meta.SADDFIELDS) || {};
+  const meta_breadcrumbs = converter.breadcrumbs(data[0]?._meta.SNAVIG) || null;
   const arr = converter.setFieldsParams(itemId, item, fields);
 
   let webFields = data[0]._meta.JSONWEBFIELDS;
@@ -294,6 +295,7 @@ converter.form = async (data, params, instance) => {
       readonly: meta_readonly?.ALL_FIELDS === "Y",
       visible: meta_visible,
       addFields: meta_addfields,
+      breadCrumbs: meta_breadcrumbs,
     },
   };
 };
@@ -386,6 +388,18 @@ converter.meta = (meta) => {
     }
     return convert_meta;
   }
+};
+
+converter.breadcrumbs = (meta) => {
+  if (Array.isArray(meta)) {
+    return meta.map((item, index) => {
+      if (index === 0) {
+        return { text: item?.SNAME, href: item?.SURL };
+      }
+      return { text: item?.SNAME, to: item?.SURL };
+    });
+  }
+  return null;
 };
 
 converter.save = (data) => {
