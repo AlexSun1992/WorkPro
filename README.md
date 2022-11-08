@@ -16,6 +16,6 @@
 - Прописанные в файле components-vue2\public\index.html компоненты будут доступны по адресу http://localhost:8080/
 
 # Переключение между базами данных
-Окружение разработчика ЛК2 можно подключить к разным базам данных (nuxt.config.js:111)
+Окружение разработчика ЛК2 можно подключить к разным базам данных [nuxt.config.js](nuxt.config.js#L112)
 - `npm run dev` - сервисы подключаются к БД RESO-M, API https://mobile.reso.ru и https://mobile2.reso.ru
 - `npm run dev-actuary` сервисы подключаются к БД Actuary, API https://mobiletest.reso.ru
