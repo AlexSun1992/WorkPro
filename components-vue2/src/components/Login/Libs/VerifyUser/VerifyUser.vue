@@ -171,7 +171,7 @@ export default {
       placeholder: "+7(___)-___-__-__",
       loginTouchesCount: 0,
       token: 1,
-      myclass: ["cabinet"],
+      myclass: ["cabinet verifyuser"],
       duration: 60,
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
       loading: false,
@@ -333,8 +333,7 @@ export default {
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
-                    buttonSize: "md",
-                    okVariant: "success",
+                    okVariant: "primary",
                     okTitle: isInSystemLogin
                       ? "Восстановить пароль"
                       : "Продолжить регистрацию",

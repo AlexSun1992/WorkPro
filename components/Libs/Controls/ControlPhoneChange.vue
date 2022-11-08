@@ -27,7 +27,7 @@
           <b-button
             type="submit"
             variant="success"
-            class="mt-btn-form"
+            class="mt-btn-form-3"
             :disabled="$v.newPhone.$invalid || loading || isSendCode"
             @click="verifyUser"
           >

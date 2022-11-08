@@ -27,7 +27,7 @@
             type="submit"
             @click="verifyUser"
             variant="success"
-            class="mt-btn-form"
+            class="mt-btn-form-3"
             :disabled="$v.newEmail.$invalid || loading || isSendCode"
             >Получить код
             <b-spinner

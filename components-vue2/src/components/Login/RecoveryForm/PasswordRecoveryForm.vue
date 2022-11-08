@@ -1,7 +1,7 @@
 <template>
   <div class="recovery-form-content">
     <div class="row justify-content-center">
-      <div class="mb-5 col-md-10 col-lg-7">
+      <div class="mb-5 col-12 col-lg-8">
         <div class="px-2 px-md-4 pb-3 mt-3">
           <b-tabs @activate-tab="initData" ref="tabs">
             <b-tab title="Телефон" button-id="tab_tel_lk">
