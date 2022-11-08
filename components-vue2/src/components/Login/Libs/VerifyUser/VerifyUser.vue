@@ -333,7 +333,8 @@ export default {
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
-                    okVariant: "primary",
+                    okVariant: "secondary",
+                    cancelVariant: "primary",
                     okTitle: isInSystemLogin
                       ? "Восстановить пароль"
                       : "Продолжить регистрацию",
