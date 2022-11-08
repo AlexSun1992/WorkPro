@@ -38,6 +38,7 @@
       >
         {{ item.name }}
       </button>
+      <slot></slot>
     </div>
 
     <div v-else-if="filterType === 'combobox'" class="search">
