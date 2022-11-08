@@ -209,16 +209,13 @@ export default {
         this.$store.dispatch("menu/fetchMenuById", this.params),
         this.fetchCard(),
       ]).catch((e) => {
-        console.log(e);
+        console.error(e);
         Sentry.captureException(
           new Error("Ошибка выполнения запроса."),
           (scope) => {
             scope.setTransactionName(e?.response?.data?.MESSAGE || e);
             return scope;
           }
-        );
-        throw new Error(
-          e?.response?.data?.MESSAGE || "Ошибка отображения компонента"
         );
       });
       this.setting = this.$store.getters["menu/getSettingsByIdItem"](
@@ -228,13 +225,15 @@ export default {
       this.params.cache = false;
     } catch (e) {
       console.error(e);
-      this.$store.commit("data_card/setError", true);
-      this.$store.commit(
-        "data_card/setErrorMessage",
-        e?.response?.data || {
-          MESSAGE: `Ошибка отображения компонента`,
-        }
-      );
+      if (this.menuId !== 777) {
+        this.$store.commit("data_card/setError", true);
+        this.$store.commit(
+          "data_card/setErrorMessage",
+          e?.response?.data || {
+            MESSAGE: `Ошибка отображения компонента`,
+          }
+        );
+      }
       Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
         scope.setTransactionName(
           `Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`
@@ -256,9 +255,7 @@ export default {
       }
     },
     async loadScript() {
-      return this.eventLocalHandler().then((script) => {
-        return script.eventHandler;
-      });
+      return this.eventLocalHandler().then((script) => script.eventHandler);
     },
     async callbackAction(url) {
       try {
@@ -384,15 +381,15 @@ export default {
       await this.callScript(e, this.callbackAction);
       if (field.type === "button" && e.action) {
         const actionId = parseInt(e.value.replace("Item", ""));
-        const actionRefreshCard = menu.ACTIONSCUR.find((item) => {
-          return item.NTYPE === 39 && item.ID === actionId;
-        });
-        const actionSaveCard = menu.ACTIONSCUR.find((item) => {
-          return item.NTYPE === 38 && item.ID === actionId;
-        });
-        const actionExecute = menu.ACTIONSCUR.find((item) => {
-          return item.NTYPE === 4 && item.ID === actionId;
-        });
+        const actionRefreshCard = menu.ACTIONSCUR.find(
+          (item) => item.NTYPE === 39 && item.ID === actionId
+        );
+        const actionSaveCard = menu.ACTIONSCUR.find(
+          (item) => item.NTYPE === 38 && item.ID === actionId
+        );
+        const actionExecute = menu.ACTIONSCUR.find(
+          (item) => item.NTYPE === 4 && item.ID === actionId
+        );
         if (actionSaveCard?.ID === actionId) {
           this.$store.commit("data_card/saveButtonClicked", true);
           await this.saveCard(e);
