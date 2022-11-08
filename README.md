@@ -14,3 +14,8 @@
 - Перейти в директорию components-vue2 `cd components-vue2`
 - Запустить локальный сервер разработки компонентов `npm run serve`
 - Прописанные в файле components-vue2\public\index.html компоненты будут доступны по адресу http://localhost:8080/
+
+# Переключение между базами данных
+Окружение разработчика ЛК2 можно подключить к разным базам данных [nuxt.config.js](nuxt.config.js#L112)
+- `npm run dev` - сервисы подключаются к БД RESO-M, API https://mobile.reso.ru и https://mobile2.reso.ru
+- `npm run dev-actuary` сервисы подключаются к БД Actuary, API https://mobiletest.reso.ru
