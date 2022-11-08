@@ -13,7 +13,7 @@
 - Выполнить все действия для "Окружения разработчика ЛК2" в том числе запуск сервера
 - Перейти в директорию components-vue2 `cd components-vue2`
 - Запустить локальный сервер разработки компонентов `npm run serve`
-- Прописанные в файле components-vue2\public\index.html компоненты будут доступны по адресу http://localhost:8080/
+- Прописанные в файле [index.html](components-vue2/public/index.html#L113) компоненты (в виде `<component-header></component-header>` и другие) будут доступны по адресу http://localhost:8080/
 
 # Переключение между базами данных
 Окружение разработчика ЛК2 можно подключить к разным базам данных [nuxt.config.js](nuxt.config.js#L112)
