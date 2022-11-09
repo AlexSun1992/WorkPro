@@ -51,6 +51,7 @@ export default {
       await this.$store.dispatch("blocks/fetchBlock", {
         id: this.itemId,
         query: { ...this.$route.query },
+        ...this.$route.params,
       });
     } catch (err) {
       this.$bvToast.toast(err.response.data.MESSAGE, {

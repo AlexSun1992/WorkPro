@@ -73,6 +73,7 @@ export default {
         this.$store.dispatch("blocks/fetchBlock", {
           id: this.itemId,
           query: { ...this.$route.query },
+          ...this.$route.params,
         });
       }
     } catch (err) {

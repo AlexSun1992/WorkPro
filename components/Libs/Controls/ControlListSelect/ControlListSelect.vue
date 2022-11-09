@@ -202,6 +202,7 @@ export default {
           await this.$store.dispatch("blocks/fetchBlock", {
             id: this.data.menudic,
             query: this.$store.getters["data_card/getFilters"],
+            ...this.$route.params,
           });
           this.isLoad = false;
         } catch (err) {

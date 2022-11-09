@@ -19,9 +19,8 @@ export const getters = {
 
   getRequestStatus: (state) => state.requestFinish,
 
-  getUnfilteredBlockById: (state) => (id) => {
-    return state.blocks.find((b) => b.blockId === parseInt(id));
-  },
+  getUnfilteredBlockById: (state) => (id) =>
+    state.blocks.find((b) => b.blockId === parseInt(id)),
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
     if (currentBlock) {
@@ -46,11 +45,11 @@ export const getters = {
             state.searchParams &&
             state.searchParams.id == currentBlock.blockId
           ) {
-            return state.searchParams.searchProperty.some((param) => {
-              return String(item[param])
+            return state.searchParams.searchProperty.some((param) =>
+              String(item[param])
                 .toLowerCase()
-                .includes(state.searchParams.searchString.toLowerCase());
-            });
+                .includes(state.searchParams.searchString.toLowerCase())
+            );
           }
           return true;
         });
@@ -143,9 +142,11 @@ export const actions = {
         blockId: parseInt(params.id),
         data: responseData,
       });
-      commit("menu/setBreadCrumbs", responseData?.breadCrumbs, {
-        root: true,
-      });
+      if (params.id === params.idItem) {
+        commit("menu/setBreadCrumbs", responseData?.breadCrumbs, {
+          root: true,
+        });
+      }
     } catch (err) {
       console.error(new Error("error:", err));
       return err.response;
@@ -286,9 +287,9 @@ export const mutations = {
   },
 
   replaceFilter: (state, { propertyName, filter, id }) => {
-    const currentFilter = state.filters.find((item) => {
-      return item.propertyName === propertyName && item.id === id;
-    });
+    const currentFilter = state.filters.find(
+      (item) => item.propertyName === propertyName && item.id === id
+    );
     if (currentFilter) {
       currentFilter.filter = filter;
     } else {
@@ -301,9 +302,9 @@ export const mutations = {
   },
 
   toggleFilter: (state, { propertyName, filterItem, filterType, id }) => {
-    let currentFilter = state.filters.find((filter) => {
-      return filter.propertyName === propertyName;
-    });
+    let currentFilter = state.filters.find(
+      (filter) => filter.propertyName === propertyName
+    );
     if (currentFilter === undefined) {
       currentFilter = {
         propertyName,
