@@ -166,9 +166,9 @@ export default {
   computed: {
     editable() {
       const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find((item) => {
-        return item.IDITEM == this.$route.params.idItem;
-      });
+      const menuItem = flatmenu.find(
+        (item) => item.IDITEM == this.$route.params.idItem
+      );
       return menuItem?.LEDIT && !this.isReadOnly;
     },
     buttonTitle() {

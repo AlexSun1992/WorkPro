@@ -79,7 +79,7 @@ export const actions = {
         commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
       }
     });
-    if (params.idWizard) {
+    if (params.idWizard && params.idCard !== "0") {
       await this.$axios.get(`/api/module/55/${params.idWizard}`).then((res) => {
         commit("setMenuById", res.data);
       });
