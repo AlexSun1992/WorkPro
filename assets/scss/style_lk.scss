@@ -1,10 +1,13 @@
+$green: #009639;
+$lgreen: #43b02a;
+$black: #292929;
 html {
     font-size: 16px;
 }
 
 body {
     font-family: "SF Pro Display", sans-serif;
-    color: #292929;
+    color: $black;
 }
 
 header {
@@ -65,7 +68,7 @@ header {
 }
 
 .slogan-reso {
-    color: #009639;
+    color: $green;
     font-size: 1.125rem;
     line-height: 1.3125rem;
     letter-spacing: 0.01em;
@@ -81,7 +84,7 @@ header {
     top: 0;
     width: 1px;
     height: 100%;
-    background: #009639;
+    background: $green;
     content: "";
 }
 
@@ -89,7 +92,7 @@ header {
     font-weight: 700;
     font-size: 1.125rem;
     line-height: 1.3125rem;
-    color: #292929;
+    color: $black;
     text-decoration: none;
 }
 
@@ -103,7 +106,7 @@ header .menu-link>div {
 }
 
 header .menu-link a:hover {
-    border-bottom: 2px solid #292929;
+    border-bottom: 2px solid $black;
     transition: 0.3s;
 }
 
@@ -119,7 +122,7 @@ header .menu-link a:hover {
 .select-sity {
     border: 0;
     background: transparent url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg) right 7px no-repeat;
-    color: #292929;
+    color: $black;
     padding: 0 1rem 0 0;
     line-height: 1.5;
     text-decoration: none;
@@ -147,7 +150,7 @@ header .menu-link a:hover {
     font-weight: 700;
     font-size: 1rem;
     line-height: 1.125rem;
-    color: #292929;
+    color: $black;
     border: 0;
     border: 2px solid #f2f4f5;
 }
@@ -195,7 +198,7 @@ header .anonsed-block {
 .btn-login-link {
     font-size: 1rem;
     line-height: 1.125rem;
-    color: #292929;
+    color: $black;
     border: 0;
     background: transparent url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg) right center no-repeat;
     padding: 0 20px 0 0;
@@ -239,7 +242,7 @@ li.breadcrumb-item {
 }
 
 .breadcrumb a {
-    color: #292929;
+    color: $black;
     text-decoration: none;
     font-weight: 400;
 }
@@ -334,7 +337,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .sidebar_client ul>li.active a,
 .sidebar_client ul>li:hover a {
-    color: #292929;
+    color: $black;
     transition: 0.3s;
 }
 
@@ -565,7 +568,13 @@ li.breadcrumb-item:not(:last-of-type):after {
     font-size: 1.25rem;
     line-height: 1.5rem;
     font-feature-settings: "pnum" on, "lnum" on;
-    color: #292929;
+    color: $black;
+}
+
+a.lgreen:hover,
+a.lgreen:visited,
+a.lgreen {
+    color: $lgreen;
 }
 
 .border-block>.nav .link,
@@ -575,7 +584,7 @@ li.breadcrumb-item:not(:last-of-type):after {
     font-weight: 700;
     font-size: 1rem;
     line-height: 1.25rem;
-    color: #43b02a;
+    color: $lgreen;
     padding-right: 24px;
     position: relative;
     cursor: pointer;
@@ -736,7 +745,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 }
 
 .insured-events .title {
-    color: #292929;
+    color: $black;
     grid-area: title;
     z-index: 2;
 }
@@ -760,7 +769,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .insured-events .description .date {
     font-weight: 400;
-    color: #292929;
+    color: $black;
 }
 
 .insured-events .description .number {
@@ -806,7 +815,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 .insured-events[data-id="2"] .settlement,
 .insured-events[data-id="3"] .settlement,
 .insured-events[data-id="4"] .settlement {
-    color: #009639;
+    color: $green;
 }
 
 .insured-events[data-id="4"] .settlement {
@@ -933,7 +942,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 }
 
 .planned {
-    color: #43b02a;
+    color: $lgreen;
 }
 
 .past {
@@ -1007,7 +1016,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .priduct_link a {
     text-decoration: none;
-    color: #292929;
+    color: $black;
     padding: 0;
     display: table;
     font-size: 1rem;
@@ -1032,7 +1041,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 }
 
 footer a {
-    color: #292929;
+    color: $black;
 }
 
 .footer-tel-ph {
@@ -1043,7 +1052,7 @@ footer a {
 }
 
 a.btn-light {
-    color: #292929;
+    color: $black;
 }
 
 .icon-android,
@@ -1055,7 +1064,7 @@ a.btn-light {
     position: relative;
     background-color: #fff;
     border-radius: 15px;
-    color: #292929;
+    color: $black;
     height: 48px;
     display: inline-block;
     line-height: 44px;
@@ -1081,7 +1090,7 @@ a.btn-light {
 }
 
 footer .menu-link a:hover {
-    color: #292929;
+    color: $black;
     text-decoration: underline;
 }
 
@@ -1151,7 +1160,7 @@ footer .info {
 
 .footer-info a,
 footer .copyright a:hover {
-    color: #292929;
+    color: $black;
 }
 
 .mt-btn-form {
@@ -1225,7 +1234,7 @@ footer .copyright a:hover {
     footer .product>a:after,
     footer .product>a:before {
         content: "";
-        background-color: #292929;
+        background-color: $black;
         position: absolute;
         right: 0;
         top: 50%;
@@ -1257,7 +1266,7 @@ footer .copyright a:hover {
     }
     footer .product.active>a:before {
         content: "";
-        background-color: #292929;
+        background-color: $black;
         position: absolute;
         right: 0;
         top: 50%;
@@ -1266,7 +1275,7 @@ footer .copyright a:hover {
         width: 12px;
     }
     footer .menu-link a:hover {
-        color: #292929;
+        color: $black;
         text-decoration: none;
     }
     .open-info {
@@ -1276,7 +1285,7 @@ footer .copyright a:hover {
         font-size: 0.875rem;
         line-height: 1.25rem;
         text-align: center;
-        color: #292929;
+        color: $black;
         border: 0;
         position: relative;
         margin-bottom: 2em;
@@ -1290,8 +1299,8 @@ footer .copyright a:hover {
         top: 6px;
         left: 100%;
         transform: rotate(-45deg);
-        border-left: 2px solid #292929;
-        border-bottom: 2px solid #292929;
+        border-left: 2px solid $black;
+        border-bottom: 2px solid $black;
         content: "";
         margin-left: -11px;
         transition: 0.3s;
@@ -1364,7 +1373,7 @@ a.link:hover span {
     border: 0;
     background: #ecf3fa;
     border-radius: 15px;
-    color: #292929;
+    color: $black;
     text-decoration: none;
 }
 
@@ -1406,7 +1415,7 @@ a.link:hover span {
     font-size: 1rem;
     line-height: 1.5rem;
     font-feature-settings: "pnum" on, "lnum" on;
-    color: #292929;
+    color: $black;
 }
 
 .block-advertising .description {
@@ -1439,7 +1448,7 @@ a.link:hover span {
 }
 
 .block-advertising .description {
-    color: #292929;
+    color: $black;
 }
 
 .block-advertising {
@@ -1501,7 +1510,7 @@ select:active,
 select:focus,
 textarea:active,
 textarea:focus {
-    color: #292929;
+    color: $black;
     outline: 0;
 }
 
@@ -1588,7 +1597,7 @@ input.checkbox-hide+label {
     font-weight: 400;
     font-size: 1rem;
     line-height: 1;
-    color: #292929;
+    color: $black;
     padding-left: 50px;
     position: relative;
     cursor: pointer;
@@ -1616,8 +1625,8 @@ input.checkbox-hide+label:after {
 
 .checkbox-hide input:checked+label:after,
 .checkbox-hide:checked+label:after {
-    border-color: #43b02a;
-    background: #43b02a;
+    border-color: $lgreen;
+    background: $lgreen;
 }
 
 .checkbox-hide input:checked+label:before,
@@ -1759,7 +1768,7 @@ a.btn-warning {
     font-size: 1.25rem;
     line-height: 1;
     font-feature-settings: "pnum" on, "lnum" on;
-    color: #292929;
+    color: $black;
     margin-bottom: 1.5rem;
 }
 
@@ -1896,7 +1905,7 @@ input:disabled+.mx-icon-calendar {
     line-height: 32px;
     display: flex;
     align-items: center;
-    color: #292929;
+    color: $black;
 }
 
 .make-anonsed {
@@ -2429,9 +2438,9 @@ a.free {
 .my-policy[data-id="2"] .btn-download,
 .my-policy[data-id="3"] .btn-download,
 .my-policy[data-id="5"] .btn-download {
-    color: #43b02a;
+    color: $lgreen;
     background: url(/img/icon-download-auto.svg) 40px 50% no-repeat;
-    border-color: #43b02a;
+    border-color: $lgreen;
 }
 
 .my-policy[data-id="1"] .btn-download,
@@ -2468,7 +2477,7 @@ a.free {
 }
 
 .my-policy .nav-item a {
-    color: #292929;
+    color: $black;
     text-decoration: none;
     position: relative;
 }
@@ -2484,7 +2493,7 @@ a.free {
 }
 
 .my-policy .nav-item a.active:hover:after {
-    background-color: #009639;
+    background-color: $green;
 }
 
 .my-policy .nav-item a:hover:after {
@@ -2515,7 +2524,7 @@ a.action {
     font-size: 16px;
     line-height: 26px;
     text-align: center;
-    color: #292929;
+    color: $black;
     text-decoration: none;
     transition: box-shadow 0.3s;
 }
@@ -2536,7 +2545,7 @@ a.action:hover {
     font-weight: 700;
     font-size: 14px;
     line-height: 23px;
-    color: #292929;
+    color: $black;
     text-decoration: none;
 }
 
@@ -2578,7 +2587,7 @@ a.action:hover {
     font-weight: 400;
     font-size: 16px;
     line-height: 26px;
-    color: #292929;
+    color: $black;
 }
 
 .insurance-case[data-id="1"],
@@ -2628,7 +2637,7 @@ a.action:hover {
 .insurance-case[data-id="2"] .settlement,
 .insurance-case[data-id="3"] .settlement,
 .insurance-case[data-id="5"] .settlement {
-    background-color: #43b02a;
+    background-color: $lgreen;
     color: #fff;
 }
 
@@ -2718,8 +2727,8 @@ a.action:hover {
 .block-policy[data-id="2"] .policy-payment,
 .block-policy[data-id="3"] .policy-payment,
 .block-policy[data-id="5"] .policy-payment {
-    border-color: #009639;
-    color: #009639;
+    border-color: $green;
+    color: $green;
 }
 
 .block-policy[data-id="4"] .policy-payment {
@@ -2771,7 +2780,7 @@ a.action:hover {
 .my-policy[data-id="2"] .nav-item a.active:after,
 .my-policy[data-id="3"] .nav-item a.active:after,
 .my-policy[data-id="5"] .nav-item a.active:after {
-    background-color: #43b02a;
+    background-color: $lgreen;
 }
 
 .my-policy[data-id="4"] .nav-item a.active:after {
@@ -2786,7 +2795,7 @@ a.action:hover {
 .LoginButton .btn-login-link {
     font-size: 1rem;
     line-height: 1.125rem;
-    color: #292929;
+    color: $black;
     border: 0;
     background: transparent url(/img/chevron-down.svg) right center no-repeat;
     padding: 0 20px 0 0;
@@ -2829,7 +2838,7 @@ a.action:hover {
     display: block;
     font-size: 1rem;
     white-space: nowrap;
-    color: #292929;
+    color: $black;
     text-decoration: none;
     font-weight: 700;
     padding-left: 35px;
@@ -2878,7 +2887,7 @@ input.is-invalid {
     font-weight: 600;
     font-size: 20px;
     line-height: 32px;
-    color: #292929;
+    color: $black;
 }
 
 @media (max-width: 450px) {
@@ -2896,7 +2905,7 @@ input.is-invalid {
     .block-policy[data-id="2"] .date,
     .block-policy[data-id="3"] .date,
     .block-policy[data-id="5"] .date {
-        color: #009639;
+        color: $green;
     }
     .block-policy[data-id="4"] .date {
         color: #645da2;
@@ -2921,7 +2930,7 @@ input.is-invalid {
         height: 80px;
     }
     .block-policy .policy-date {
-        color: #43b02a;
+        color: $lgreen;
         position: absolute;
         z-index: 1;
         font-weight: 700;
@@ -2943,7 +2952,7 @@ input.is-invalid {
     }
     .insured-events .settlement {
         font-size: 1rem;
-        color: #292929;
+        color: $black;
     }
     .block-policy .title {
         margin: 0;
@@ -3015,7 +3024,7 @@ input.is-invalid {
 .select-sity {
     border: 0;
     background: transparent url(/img/chevron-down.svg) right 7px no-repeat;
-    color: #292929;
+    color: $black;
     padding: 0 1rem 0 0;
     line-height: 1.5;
 }
@@ -3134,7 +3143,7 @@ textarea {
 
 .autocomplete-result-list::-webkit-scrollbar-thumb,
 .menu.visible::-webkit-scrollbar-thumb {
-    background: #43b02a;
+    background: $lgreen;
     width: 2px;
     border: 3px solid #ffff;
     border-radius: 10px;
@@ -3295,7 +3304,7 @@ textarea {
     .block-policy[data-id="3"] .policy-payment,
     .block-policy[data-id="5"] .policy-payment {
         background-color: #d9efd4;
-        color: #009639;
+        color: $green;
     }
     .block-policy[data-id="4"] .policy-payment {
         background-color: #d8d6e8;
@@ -3361,14 +3370,14 @@ textarea {
 .price-block .price {
     font-weight: 700;
     font-size: 2.5rem;
-    color: #292929;
+    color: $black;
     display: inline-block;
 }
 
 .price-block .price>span {
     font-weight: 500;
     font-size: 1.5rem;
-    color: #292929;
+    color: $black;
 }
 
 .price .rub {
@@ -3381,7 +3390,7 @@ textarea {
 
 a.color-black,
 .color-black {
-    color: #292929;
+    color: $black;
 }
 
 a[data-newcount]:after {
@@ -3391,7 +3400,7 @@ a[data-newcount]:after {
     height: 30px;
     border-radius: 30px;
     background: #f0f9ee;
-    color: #43b02a;
+    color: $lgreen;
     display: inline-table;
     padding: 3px 7px;
     font-weight: 400;
@@ -3406,7 +3415,7 @@ a[data-newcount][data-newcolor="RED"]:after {
 
 .to-old-lk {
     font-weight: 700;
-    color: #43b02a;
+    color: $lgreen;
     text-decoration: none;
 }
 
@@ -3433,9 +3442,9 @@ a[data-newcount][data-newcolor="RED"]:after {
 .my-policy[data-id="2"] .btn-prolong,
 .my-policy[data-id="3"] .btn-prolong,
 .my-policy[data-id="5"] .btn-prolong {
-    background: #43b02a !important;
+    background: $lgreen !important;
     color: #fff !important;
-    border-color: #43b02a !important;
+    border-color: $lgreen !important;
     &:hover {
         background: #69c055 !important;
         color: #fff !important;
@@ -3482,15 +3491,15 @@ a[data-newcount][data-newcolor="RED"]:after {
 .my-policy[data-id="2"] .btn-file,
 .my-policy[data-id="3"] .btn-file,
 .my-policy[data-id="5"] .btn-file {
-    border: 2px solid #43b02a;
-    color: #43b02a;
+    border: 2px solid $lgreen;
+    color: $lgreen;
     padding-left: 76px;
     padding-right: 40px;
     background: transparent url(/img/Icon-file-auto.svg) 40px center no-repeat;
     &:hover {
         background: #edf8ea url(/img/Icon-file-auto.svg) 40px center no-repeat;
-        border: 2px solid #43b02a;
-        color: #43b02a;
+        border: 2px solid $lgreen;
+        color: $lgreen;
     }
 }
 
@@ -3587,7 +3596,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     box-shadow: 0 3px 8px rgb(0 0 0 / 8%);
     font-family: "SF Pro Display";
     font-style: normal;
-    color: #292929 !important;
+    color: $black !important;
     background-color: #fff !important;
     text-decoration: none;
     transition: box-shadow 0.3s;
@@ -3601,7 +3610,7 @@ a[data-newcount][data-newcolor="RED"]:after {
 .btn-insurance-case:hover {
     box-shadow: 0 3px 8px rgb(0 0 0 / 35%);
     transition: 0.3s;
-    color: #292929 !important;
+    color: $black !important;
     background-color: #fff !important;
 }
 
@@ -3714,14 +3723,14 @@ a[data-newcount][data-newcolor="RED"]:after {
 
 .list-of-services .los-ppl {
     font-size: 0.875rem;
-    color: #292929;
+    color: $black;
     grid-area: ppl;
     align-self: end;
 }
 
 .los-pay {
     padding-right: 11px;
-    color: #43b02a;
+    color: $lgreen;
     background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSIxMCIgdmlld0JveD0iMCAwIDggMTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yLjY4ODQ4IDEuMjI5NDlWNS4xMTIzSDQuMjYwNzRDNC45NDg4OSA1LjExMjMgNS40NzA3IDQuOTQxNDEgNS44MjYxNyA0LjU5OTYxQzYuMTgxNjQgNC4yNTMyNiA2LjM1OTM4IDMuNzc0NzQgNi4zNTkzOCAzLjE2NDA2QzYuMzU5MzggMi41NTc5NCA2LjE4MTY0IDIuMDgzOTggNS44MjYxNyAxLjc0MjE5QzUuNDc1MjYgMS40MDAzOSA0Ljk1MzQ1IDEuMjI5NDkgNC4yNjA3NCAxLjIyOTQ5SDIuNjg4NDhaTTUuNTI1MzkgOC40Mjc3M0gyLjY4ODQ4VjEwSDEuNDU4MDFWOC40Mjc3M0gwLjA5MDgyMDNWNy40OTgwNUgxLjQ1ODAxVjYuMTc4NzFIMC4wOTA4MjAzVjUuMTEyM0gxLjQ1ODAxVjAuMTM1NzQySDQuNTgyMDNDNS40OTM0OSAwLjEzNTc0MiA2LjIyNzIxIDAuNDIwNTczIDYuNzgzMiAwLjk5MDIzNEM3LjM0Mzc1IDEuNTU5OSA3LjYyNDAyIDIuMjg0NTEgNy42MjQwMiAzLjE2NDA2QzcuNjI0MDIgNC4wNDM2MiA3LjM0Mzc1IDQuNzY1OTUgNi43ODMyIDUuMzMxMDVDNi4yMjI2NiA1Ljg5NjE2IDUuNDg0MzggNi4xNzg3MSA0LjU2ODM2IDYuMTc4NzFIMi42ODg0OFY3LjQ5ODA1SDUuNTI1MzlWOC40Mjc3M1oiIGZpbGw9IiM0M0IwMkEiLz4KPC9zdmc+Cg==") center right no-repeat;
 }
 
@@ -3761,7 +3770,7 @@ a[data-newcount][data-newcolor="RED"]:after {
 .send-to-email {
     font-weight: 700;
     font-size: 1rem;
-    color: #43b02a;
+    color: $lgreen;
     padding-right: 30px;
     background: url(/img/icon-email.svg) center right no-repeat;
     background-size: contain;
@@ -3790,7 +3799,7 @@ h5 {
     font-size: 1.25rem;
     line-height: 24px;
     font-feature-settings: "pnum" on, "lnum" on;
-    color: #292929;
+    color: $black;
 }
 
 h6 {
@@ -3831,9 +3840,32 @@ h6 {
     font-family: "SF Pro Display";
     font-size: 1rem;
     text-decoration-line: underline;
-    color: #43b02a;
+    color: $lgreen;
     padding-right: 26px;
     background: url(/img/icon-file-download.svg) center right no-repeat;
+}
+
+.disabled-card:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #99999970;
+    position: absolute;
+    border-radius: 24px;
+    z-index: 1;
+}
+
+.disabled-card {
+    position: relative;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.disabled-card .block-policy[data-id]:before {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
 }
 
 @media (max-width: 992px) {
@@ -3841,4 +3873,16 @@ h6 {
         font-size: 1rem;
         line-height: 1.5rem;
     }
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.nounderline {
+    text-decoration: none;
+}
+
+.small {
+    font-size: 0.875rem;
 }
