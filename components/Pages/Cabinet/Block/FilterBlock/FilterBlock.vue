@@ -276,18 +276,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.filterblock > .button:hover,
+.filterblock > button:hover,
+.filterblock > .button,
 .filterblock > button {
   margin-bottom: 1rem;
   background: #edf8ea;
   border-radius: 100px;
   position: relative;
   font-style: normal;
+  font-weight: 400;
   font-size: 18px;
   line-height: 30px;
   color: #292929;
   border: 0;
   padding: 3px 12px;
   margin-right: 8px;
+  text-decoration: none;
   &:disabled {
     background: #eff1f3;
     color: #c3c3c3;
@@ -295,7 +300,7 @@ export default {
       display: none;
     }
   }
-  &:after {
+  &[data-activeitems]:after {
     content: attr(data-activeitems);
     min-width: 25px;
     text-align: center;
@@ -315,6 +320,9 @@ export default {
     &:after {
       color: #292929;
     }
+  }
+  &.y-btn {
+    background-color: #f7b801;
   }
 }
 </style>
