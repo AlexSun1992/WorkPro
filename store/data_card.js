@@ -38,14 +38,12 @@ export const getters = {
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
   getForm: (state) => state.form,
-  getFormParams: (state) => {
-    return {
-      idModule: state.moduleId,
-      idItem: state.menuId,
-      idCard: state.cardId,
-      idRel: state.cardRelId,
-    };
-  },
+  getFormParams: (state) => ({
+    idModule: state.moduleId,
+    idItem: state.menuId,
+    idCard: state.cardId,
+    idRel: state.cardRelId,
+  }),
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
   saveButtonClickedAmount: (state) => state.saveButtonClickedAmount,
@@ -76,24 +74,20 @@ export const getters = {
       : [],
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
-  getDataFieldByName: (state) => (name) => {
-    return state.form.find((b) => b.name === name);
-  },
-  getDataByFieldRelation: (state) => (name) => {
-    return state.form.find((b) => b.fieldRelation === name);
-  },
-  getDataFieldByType: (state) => (name) => {
-    return state.form.find((b) => b.type === name);
-  },
-  getDataFieldByFieldId: (state) => (id) => {
-    return state.form.find((b) => b.fieldId == id);
-  },
+  getDataFieldByName: (state) => (name) =>
+    state.form.find((b) => b.name === name),
+  getDataByFieldRelation: (state) => (name) =>
+    state.form.find((b) => b.fieldRelation === name),
+  getDataFieldByType: (state) => (name) =>
+    state.form.find((b) => b.type === name),
+  getDataFieldByFieldId: (state) => (id) =>
+    state.form.find((b) => b.fieldId == id),
   getLoading: (state) => state.loading,
   getFilters: (state) => state.filters,
   getVisible: (state) => state.visible,
   getAddFields: (state) => state.addFields,
-  getFiltersAllFields: (state) => {
-    return state.form.reduce((accumulator, currentValue) => {
+  getFiltersAllFields: (state) =>
+    state.form.reduce((accumulator, currentValue) => {
       if (
         currentValue.type === "enum" &&
         currentValue.name.substring(0, 2) === `FK`
@@ -124,8 +118,7 @@ export const getters = {
         ...accumulator,
         [currentValue.name]: currentValue.value,
       };
-    }, {});
-  },
+    }, {}),
 };
 
 export const actions = {
@@ -595,7 +588,9 @@ export const mutations = {
     try {
       const [fieldName, fieldValue] = data.split("=");
       const field = state.form.find((item) => item.name === fieldName);
-      field.error = fieldValue || data;
+      if (field) {
+        field.error = fieldValue || data;
+      }
     } catch (error) {
       console.error(error);
     }
