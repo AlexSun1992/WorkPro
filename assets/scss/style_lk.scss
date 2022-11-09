@@ -568,6 +568,12 @@ li.breadcrumb-item:not(:last-of-type):after {
     color: #292929;
 }
 
+a:hover,
+a:visited,
+a {
+    color: #43b02a;
+}
+
 .border-block>.nav .link,
 .nb-block>.nav .link {
     font-family: "SF Pro Display";
@@ -3864,4 +3870,16 @@ h6 {
         font-size: 1rem;
         line-height: 1.5rem;
     }
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.nounderline {
+    text-decoration: none;
+}
+
+.small {
+    font-size: 0.875rem;
 }
