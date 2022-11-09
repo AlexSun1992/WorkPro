@@ -81,7 +81,9 @@ export const actions = {
     });
     if (params.idWizard) {
       await this.$axios.get(`/api/module/55/${params.idWizard}`).then((res) => {
-        commit("setMenuById", res.data);
+        if (res.data?.settings && res.data?.subSettings) {
+          commit("setMenuById", res.data);
+        }
       });
     }
   },
