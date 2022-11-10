@@ -90,7 +90,7 @@
           isSendCode ||
           loading
         "
-        @click="getCode"
+        @click="executeRecaptcha"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
