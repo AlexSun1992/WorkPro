@@ -173,6 +173,7 @@ export default {
           TYPE: 2,
           EMAIL: this.$v.form.email.$model,
           EMAILCODE: this.$v.form.code.$model,
+          BIRTHDATE: this.$v.form.birthdate.$model,
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };
