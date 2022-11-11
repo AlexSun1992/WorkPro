@@ -51,10 +51,9 @@
               :count="60"
               :validateState="validateState"
               :tab-index="[10, 15]"
-              :isCodeFieldInValid="isCodeFieldInValid"
             />
 
-            <b-row class="mt-3" v-if="!isCodeFieldInValid">
+            <b-row class="mt-3">
               <b-form-group label="Дата рождения" class="col-md-6 col-12">
                 <birthday-picker
                   ref="dataPicker"
