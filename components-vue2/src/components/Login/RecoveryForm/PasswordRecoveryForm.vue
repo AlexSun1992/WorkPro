@@ -42,6 +42,7 @@
               errorMessage
             }}</b-alert>
             <div class="mb-3">Введите e-mail указанный при регистрации</div>
+
             <verify-user
               @error="showError"
               @getLoginType="loginType"
@@ -50,7 +51,19 @@
               :count="60"
               :validateState="validateState"
               :tab-index="[10, 15]"
+              :isCodeFieldInValid="isCodeFieldInValid"
             />
+
+            <b-row class="mt-3" v-if="!isCodeFieldInValid">
+              <b-form-group label="Дата рождения" class="col-md-6 col-12">
+                <birthday-picker
+                  ref="dataPicker"
+                  v-model="$v.form.birthdate.$model"
+                  :state="validateState('birthdate')"
+                  :tabindex="20"
+                />
+              </b-form-group>
+            </b-row>
           </b-tab>
         </b-tabs>
         <div class="recovery">
