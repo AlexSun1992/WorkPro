@@ -150,7 +150,7 @@ export default {
         if (addFields[property]) {
           return addFields[property];
         }
-        throw new Error(
+        console.warn(
           `В методе getAddField свойство ${property}  не сущесвует или задано неверно. Доступные свойства: ${JSON.stringify(
             addFields
           )}`
