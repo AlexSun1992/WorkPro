@@ -42,6 +42,7 @@
               errorMessage
             }}</b-alert>
             <div class="mb-3">Введите e-mail указанный при регистрации</div>
+
             <verify-user
               @error="showError"
               @getLoginType="loginType"
@@ -51,14 +52,22 @@
               :validateState="validateState"
               :tab-index="[10, 15]"
             />
+
+            <b-row class="mt-3" v-if="!isCodeFieldInValid">
+              <b-form-group label="Дата рождения" class="col-md-6 col-12">
+                <birthday-picker
+                  ref="dataPicker"
+                  v-model="$v.form.birthdate.$model"
+                  :state="validateState('birthdate')"
+                  :tabindex="20"
+                />
+              </b-form-group>
+            </b-row>
           </b-tab>
         </b-tabs>
         <div class="recovery">
           <verify-password
-            v-if="
-              (!isBirthdateInValid && !isCodeFieldInValid) ||
-              (!isCodeFieldInValid && loginFieldType === 'email')
-            "
+            v-if="!isBirthdateInValid && !isCodeFieldInValid"
             :tab-index="[20, 30]"
             :v="$v.form"
             :validateState="validateState"
@@ -164,6 +173,7 @@ export default {
           TYPE: 2,
           EMAIL: this.$v.form.email.$model,
           EMAILCODE: this.$v.form.code.$model,
+          BIRTHDATE: this.$v.form.birthdate.$model,
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };
