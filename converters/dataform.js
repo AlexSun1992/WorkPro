@@ -176,6 +176,17 @@ converter.form = async (data, params, instance) => {
       );
     } else if (webFields[i].IDCONTROL == 46) {
       obj.type = "DoctorSchedule";
+    } else if (webFields[i].IDCONTROL == 47) {
+      if (webFields[i].NITEMDIC) {
+        promises.push(
+          instance.get(
+            `/am/${zone === "free" ? "free" : "main"}/v2/datacard/55/${
+              webFields[i].NITEMDIC
+            }/0`
+          )
+        );
+      }
+      obj.type = "OneToMany";
     } else {
       obj.type = "string";
     }
@@ -228,7 +239,7 @@ converter.form = async (data, params, instance) => {
   }
   try {
     await Promise.allSettled(promises).then((values) => {
-      values.forEach((item, i) => {
+      values.forEach(async (item, i) => {
         if (item.status === "rejected") {
           errors.push({
             url: item.reason.response.config,
@@ -236,9 +247,37 @@ converter.form = async (data, params, instance) => {
           });
         }
         if (item.status == "fulfilled" && item.value.data) {
-          const options = selectConverter.select(item.value.data);
           const { url } = item.value.config;
+          const isCardWebFields = url.includes("datacard");
           const isDicwf = url.includes("dicwf");
+          if (isCardWebFields) {
+            const dataCardWebFields = await converter.form(
+              item.value.data,
+              {},
+              instance
+            );
+            const dataCardSettings = webFields.find((item) => {
+              if (item.NITEMDIC) {
+                return url.includes(item.NITEMDIC.toString());
+              }
+              return false;
+            });
+            const dataCardValues = values.find(
+              (item) => item.value.name === dataCardSettings.SNAME
+            );
+            console.log(dataCardValues.value.value);
+            console.log(dataCardWebFields.metaData.data);
+            const dataCardValuesArray = dataCardValues.value.value;
+            const dataCardWebFieldsArray = dataCardWebFields.metaData.data;
+            const resltValueOneToMany = [];
+            dataCardValuesArray.forEach((itemValue) => {
+              dataCardWebFieldsArray.forEach((webField) => {
+                webField.value = itemValue[webField.name];
+                resltValueOneToMany.push(webField[itemValue]);
+              });
+            });
+          }
+          const options = selectConverter.select(item.value.data);
           const fieldId = null;
           let fieldName = null;
           let field1 = null;
@@ -296,6 +335,7 @@ converter.form = async (data, params, instance) => {
       visible: meta_visible,
       addFields: meta_addfields,
       breadCrumbs: meta_breadcrumbs,
+      itemId: params.idItem,
     },
   };
 };
