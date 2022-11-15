@@ -63,6 +63,7 @@ converter.subcompare = (a, b) => {
 
 converter.form = async (data, params, instance) => {
   const promises = [];
+  const promisesOfOneToMany = [];
   const webFieldsArr = [];
   const errors = [];
 
@@ -251,64 +252,97 @@ converter.form = async (data, params, instance) => {
           const isCardWebFields = url.includes("datacard");
           const isDicwf = url.includes("dicwf");
           if (isCardWebFields) {
-            const dataCardWebFields = await converter.form(
-              item.value.data,
-              {},
-              instance
-            );
             const dataCardSettings = webFields.find((item) => {
               if (item.NITEMDIC) {
                 return url.includes(item.NITEMDIC.toString());
               }
               return false;
             });
-            const dataCardValues = values.find(
-              (item) => item.value.name === dataCardSettings.SNAME
-            );
-            console.log(dataCardValues.value.value);
-            console.log(dataCardWebFields.metaData.data);
-            const dataCardValuesArray = dataCardValues.value.value;
-            const dataCardWebFieldsArray = dataCardWebFields.metaData.data;
-            const resltValueOneToMany = [];
-            dataCardValuesArray.forEach((itemValue) => {
-              dataCardWebFieldsArray.forEach((webField) => {
-                webField.value = itemValue[webField.name];
-                resltValueOneToMany.push(webField[itemValue]);
-              });
-            });
-          }
-          const options = selectConverter.select(item.value.data);
-          const fieldId = null;
-          let fieldName = null;
-          let field1 = null;
-          if (isDicwf) {
-            const fieldId = parseInt(
-              item.value.config.url.replace(
-                `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/`,
-                ""
+            promisesOfOneToMany.push(
+              converter.form(
+                item.value.data,
+                { idItem: dataCardSettings.NITEMDIC },
+                instance
               )
             );
-            if (fieldId) {
-              field1 = values.find((b) =>
-                b.value ? b.value.fieldId === fieldId : null
-              );
-            }
+            // const dataCardWebFields = await converter.form(
+            //   item.value.data,
+            //   {},
+            //   instance
+            // );
+            // const dataCardValues = values.find(
+            //   (item) => item.value.name === dataCardSettings.SNAME
+            // );
+            // const dataCardValuesArray = dataCardValues.value.value;
+            // const dataCardWebFieldsArray = dataCardWebFields.metaData.data;
+            // const resltOneToMany = [];
+            // dataCardValuesArray.forEach((itemValue) => {
+            //   const data = dataCardWebFieldsArray.map((itemWebField) => ({
+            //     ...itemWebField,
+            //     value: itemValue[itemWebField.name],
+            //   }));
+            //   resltOneToMany.push(data);
+            // });
+            // dataCardValues.value.value = resltOneToMany;
+            // dataCardValues.value.schema = dataCardWebFieldsArray;
+            // // console.log(dataCardValues.value);
+            // webFieldsArr.push(dataCardValues.value);
           } else {
-            fieldName = item.value.config.url.replace(
-              `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${itemId}/`,
-              ""
-            );
-            if (fieldName) {
-              field1 = values.find((b) =>
-                b.value ? b.value.name === fieldName : null
+            const options = selectConverter.select(item.value.data);
+            let fieldName = null;
+            let field1 = null;
+            if (isDicwf) {
+              const fieldId = parseInt(
+                item.value.config.url.replace(
+                  `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/`,
+                  ""
+                )
               );
+              if (fieldId) {
+                field1 = values.find((b) =>
+                  b.value ? b.value.fieldId === fieldId : null
+                );
+              }
+            } else {
+              fieldName = item.value.config.url.replace(
+                `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${itemId}/`,
+                ""
+              );
+              if (fieldName) {
+                field1 = values.find((b) =>
+                  b.value ? b.value.name === fieldName : null
+                );
+              }
             }
-          }
-          if (field1) {
-            field1.value.options = options;
+            if (field1) {
+              field1.value.options = options;
+            }
           }
         } else if (item.status == "fulfilled" && !item.value.data) {
           webFieldsArr.push(item.value);
+        }
+      });
+    });
+    await Promise.allSettled(promisesOfOneToMany).then((values) => {
+      values.forEach((item) => {
+        if (item.status == "fulfilled" && item.value.data) {
+          console.log(item.value);
+          const oneToManyData = webFieldsArr.find(
+            (webField) => webField.menudic === item.value.metaData.itemId
+          );
+          console.log(oneToManyData);
+          const dataCardValuesArray = oneToManyData.value;
+          const dataCardWebFieldsArray = item.value.metaData.data;
+          const resultOneToMany = [];
+          dataCardValuesArray.forEach((itemValue) => {
+            const data = dataCardWebFieldsArray.map((itemWebField) => ({
+              ...itemWebField,
+              value: itemValue[itemWebField.name],
+            }));
+            resultOneToMany.push(data);
+          });
+          oneToManyData.value = resultOneToMany;
+          oneToManyData.schema = dataCardWebFieldsArray;
         }
       });
     });
