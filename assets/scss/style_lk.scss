@@ -2425,6 +2425,7 @@ a.free {
     background: url(/img/mypolicy-id10.svg) top right no-repeat;
 }
 
+.btn-primary.btn-download,
 .btn-download {
     font-family: "SF Pro Display";
     font-style: normal;
@@ -3181,6 +3182,7 @@ textarea {
 }
 
 @media (max-width: 992px) {
+    .btn-primary.btn-download,
     .btn-download {
         padding: 10px 20px 12px 56px;
         background-position: 20px 50% !important;
