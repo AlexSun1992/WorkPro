@@ -3872,23 +3872,31 @@ h6 {
         font-size: 1rem;
         line-height: 1.5rem;
     }
-    .block-policy .pay-notification {
+    .block-policy_small .pay-notification {
         line-height: 32px;
     }
-    .block-policy .pay-notification+.title+.description .date {
+    .block-policy_small .pay-notification+.title+.description .date {
         top: 90px;
         color: #292929 !important;
         font-weight: 400;
         font-size: 0.875rem;
     }
-    .block-policy .pay-notification+.title+.description {
+    .block-policy_small .pay-notification+.title+.description {
         margin-top: 95px;
     }
-    .block-policy .pay-notification+.title+.description .policy-number {
+    .block-policy_small .pay-notification+.title+.description .policy-number {
         display: none;
     }
-    .block-policy .policy-number {
+    .block-policy_small .policy-number {
         text-align: left;
+    }
+    .block-policy_small .policy-object,
+    .block-policy_small .policy-number,
+    .block-policy_small .date {
+        width: calc(100% - 85px);
+    }
+    .block-policy_small .pay-notification.title {
+        top: 50px;
     }
 }
 
