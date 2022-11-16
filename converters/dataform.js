@@ -265,28 +265,6 @@ converter.form = async (data, params, instance) => {
                 instance
               )
             );
-            // const dataCardWebFields = await converter.form(
-            //   item.value.data,
-            //   {},
-            //   instance
-            // );
-            // const dataCardValues = values.find(
-            //   (item) => item.value.name === dataCardSettings.SNAME
-            // );
-            // const dataCardValuesArray = dataCardValues.value.value;
-            // const dataCardWebFieldsArray = dataCardWebFields.metaData.data;
-            // const resltOneToMany = [];
-            // dataCardValuesArray.forEach((itemValue) => {
-            //   const data = dataCardWebFieldsArray.map((itemWebField) => ({
-            //     ...itemWebField,
-            //     value: itemValue[itemWebField.name],
-            //   }));
-            //   resltOneToMany.push(data);
-            // });
-            // dataCardValues.value.value = resltOneToMany;
-            // dataCardValues.value.schema = dataCardWebFieldsArray;
-            // // console.log(dataCardValues.value);
-            // webFieldsArr.push(dataCardValues.value);
           } else {
             const options = selectConverter.select(item.value.data);
             let fieldName = null;
@@ -326,21 +304,22 @@ converter.form = async (data, params, instance) => {
     await Promise.allSettled(promisesOfOneToMany).then((values) => {
       values.forEach((item) => {
         if (item.status == "fulfilled" && item.value.data) {
-          console.log(item.value);
           const oneToManyData = webFieldsArr.find(
             (webField) => webField.menudic === item.value.metaData.itemId
           );
-          console.log(oneToManyData);
           const dataCardValuesArray = oneToManyData.value;
           const dataCardWebFieldsArray = item.value.metaData.data;
           const resultOneToMany = [];
-          dataCardValuesArray.forEach((itemValue) => {
-            const data = dataCardWebFieldsArray.map((itemWebField) => ({
-              ...itemWebField,
-              value: itemValue[itemWebField.name],
-            }));
-            resultOneToMany.push(data);
-          });
+          if (dataCardValuesArray.length) {
+            dataCardValuesArray.forEach((itemValue) => {
+              resultOneToMany.push(
+                dataCardWebFieldsArray.map((itemWebField) => ({
+                  ...itemWebField,
+                  value: itemValue[itemWebField.name],
+                }))
+              );
+            });
+          }
           oneToManyData.value = resultOneToMany;
           oneToManyData.schema = dataCardWebFieldsArray;
         }
