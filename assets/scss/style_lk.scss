@@ -2975,10 +2975,7 @@ input.is-invalid {
         border-radius: 24px;
     }
     .block-policy .description {
-        margin-top: 88px;
-    }
-    .block-policy .policy-number {
-        display: none;
+        margin-top: 75px;
     }
     .block-policy .policy-object {
         font-weight: 400;
@@ -3875,14 +3872,23 @@ h6 {
         font-size: 1rem;
         line-height: 1.5rem;
     }
-    .pay-notification {
+    .block-policy .pay-notification {
         line-height: 32px;
     }
-    .pay-notification+.title+.description .date {
-        top: 85px;
+    .block-policy .pay-notification+.title+.description .date {
+        top: 90px;
         color: #292929 !important;
         font-weight: 400;
         font-size: 0.875rem;
+    }
+    .block-policy .pay-notification+.title+.description {
+        margin-top: 95px;
+    }
+    .block-policy .pay-notification+.title+.description .policy-number {
+        display: none;
+    }
+    .block-policy .policy-number {
+        text-align: left;
     }
 }
 
