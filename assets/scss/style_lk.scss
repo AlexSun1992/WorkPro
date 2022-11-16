@@ -2925,7 +2925,7 @@ input.is-invalid {
         background-size: contain !important;
         right: 16px;
         left: auto;
-        top: 31px;
+        top: 40px;
     }
     .block-policy:after {
         height: 80px;
@@ -3558,7 +3558,6 @@ a[data-newcount][data-newcolor="RED"]:after {
     border-radius: 100px;
     top: 12px;
     z-index: 1;
-    width: calc(100% - 32px);
     right: 12px;
     color: #eb5757;
     font-size: 1.125rem;
@@ -3566,6 +3565,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     line-height: 38px;
     text-align: left;
     padding-left: 12px;
+    padding-right: 43px;
 }
 
 .block-policy_small .pay-notification:after {
@@ -3574,7 +3574,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     background: url(/img/watch.svg) 50% 50% no-repeat;
     content: "";
     display: block;
-    right: 11px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
     position: absolute;
@@ -3874,6 +3874,15 @@ h6 {
     .phb2 {
         font-size: 1rem;
         line-height: 1.5rem;
+    }
+    .pay-notification {
+        line-height: 32px;
+    }
+    .pay-notification+.title+.description .date {
+        top: 85px;
+        color: #292929 !important;
+        font-weight: 400;
+        font-size: 0.875rem;
     }
 }
 
