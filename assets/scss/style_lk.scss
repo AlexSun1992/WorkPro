@@ -3894,9 +3894,18 @@ h6 {
     .block-policy_small .policy-number,
     .block-policy_small .date {
         width: calc(100% - 85px);
+        text-align: left;
     }
-    .block-policy_small .pay-notification.title {
+    .block-policy_small .pay-notification+.title {
         top: 50px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1220px) {
+    .block-policy_small .pay-notification {
+        right: 5px;
+        max-width: calc(100% - 10px);
+        font-size: 0.875rem;
     }
 }
 
