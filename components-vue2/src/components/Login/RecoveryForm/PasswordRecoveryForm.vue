@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class="col-12 col-lg-8">
         <b-tabs @activate-tab="initData" ref="tabs">
-          <b-tab title="Телефон" button-id="tab_tel_lk">
+          <b-tab title="Телефон" button-id="tab_tel_lk" id="tab_tel">
             <b-alert :show="isErrorMessage" variant="danger">{{
               errorMessage
             }}</b-alert>
@@ -37,12 +37,11 @@
               </b-form-group>
             </b-row>
           </b-tab>
-          <b-tab title="Email" button-id="tab_mail_lk">
+          <b-tab title="Email" button-id="tab_mail_lk" id="tab_mail">
             <b-alert :show="isErrorMessage" variant="danger">{{
               errorMessage
             }}</b-alert>
             <div class="mb-3">Введите e-mail указанный при регистрации</div>
-
             <verify-user
               @error="showError"
               @getLoginType="loginType"
@@ -104,12 +103,25 @@
 <script>
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import UserRecoveryForm from "../RecoveryForm/UserRecoveryForm.vue";
-import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
+import {
+  required,
+  email,
+  minLength,
+  sameAs,
+  helpers,
+} from "vuelidate/lib/validators";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import { validationMixin } from "vuelidate";
 import { BTabs, BTab, BAlert, BRow, BFormGroup, BButton } from "bootstrap-vue";
 import axios from "axios";
+
+const forbiddenRussianSign = helpers.regex(
+  "forbiddenRussian",
+  /^[^а-яА-ЯёЁ]*$/i
+);
+
+const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
 
 export default {
   layout: "MainLayout",
@@ -290,6 +302,8 @@ export default {
       email: {
         required,
         email,
+        forbiddenRussianSign,
+        forbiddenPlusSign,
       },
       name: {
         required,
