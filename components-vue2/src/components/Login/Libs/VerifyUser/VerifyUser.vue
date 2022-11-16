@@ -10,8 +10,8 @@
           v-mask="changeMask"
           @change="changeField('phone')"
           autofocus
-          :placeholder="placeholder"
           :state="validateInput(loginType, isUserBlured)"
+          :placeholder="placeholder"
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @click="loginTouchesCount = 2"
@@ -25,18 +25,38 @@
           v-model="v[loginType].$model"
           autofocus
           :state="validateInput(loginType, isUserBlured)"
+          placeholder="E-mail"
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @change="changeField('email')"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
-          placeholder="E-mail"
           autocomplete="off"
           :tabindex="tabIndex[0]"
+          id="email"
         ></b-form-input>
-        <b-form-invalid-feedback
+
+        <b-form-invalid-feedback v-if="!v.email"
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
+        <b-form-invalid-feedback v-if="v.email && v.email.$model === ''"
+          >Пожалуйста, заполните это поле</b-form-invalid-feedback
+        >
+
+        <b-form-invalid-feedback
+          v-if="v.email && v.email.forbiddenRussianSign === false"
+          >Русские символы запрещены
+        </b-form-invalid-feedback>
+
+        <b-form-invalid-feedback v-if="v.email && v.email.email === false"
+          >Пожалуйста, введите корректный email</b-form-invalid-feedback
+        >
+
+        <b-form-invalid-feedback
+          v-if="v.email && v.email.forbiddenPlusSign === false"
+        >
+          Знак '+' запрещен
+        </b-form-invalid-feedback>
       </b-form-group>
     </div>
     <div class="col-12 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
@@ -122,7 +142,6 @@ import {
   BSpinner,
 } from "bootstrap-vue";
 import VerifyTimer from "./VerifyTimer.vue";
-
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import { getMessageFromSuccessResponse } from "./verifyUser.helper";
 
@@ -198,7 +217,6 @@ export default {
 
   methods: {
     changeField(field) {
-      console.log(field, this.validateState(field));
       this.isUserBlured = false;
       if (this.validateState(field)) {
         this.$LogEvent({
@@ -421,37 +439,11 @@ export default {
       this.isSendCode = false;
     },
 
-    validateInput(field, bluredField) {
-      if (
-        field === "phone" &&
-        this.loginTouchesCount <= 2 &&
-        bluredField &&
-        !this.v[field].$model
-      )
-        return;
-      if (this.v[field].$params.minLength) {
-        if (
-          (this.v[field].$model &&
-            this.v[field].$model.length ===
-              this.v[field].$params.minLength.min) ||
-          bluredField
-        ) {
-          if (this.validateState("code") === true && field === "code") {
-            this.$emit("checkCodeFieldValid", true);
-          }
-
-          return this.validateState(field);
-        }
-      }
+    validateInput(field) {
+      return this.validateState(field);
     },
 
-    blurField(field, bluredField) {
-      if (field === "phone") {
-        this.loginTouchesCount++;
-        this.isUserBlured = true;
-      } else if (field === "code") {
-        this.isCodeBlured = true;
-      }
+    blurField(field) {
       this.v[field].$touch();
     },
 
