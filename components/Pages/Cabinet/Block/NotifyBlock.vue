@@ -48,12 +48,20 @@ export default {
   },
   async fetch() {
     try {
-      await this.$store.dispatch("blocks/fetchBlock", {
-        id: this.itemId,
-        query: { ...this.$route.query },
-        ...this.$route.params,
-      });
+      if (this.cardId) {
+        await this.$store.dispatch("blocks/fetchWizardBlock", {
+          itemId: this.itemId,
+          cardId: this.cardId,
+        });
+      } else {
+        await this.$store.dispatch("blocks/fetchBlock", {
+          id: this.itemId,
+          query: { ...this.$route.query },
+          ...this.$route.params,
+        });
+      }
     } catch (err) {
+      console.error(err);
       this.$bvToast.toast(err.response.data.MESSAGE, {
         title: "Ошибка",
         variant: "danger",
@@ -87,6 +95,65 @@ export default {
       get() {
         return Boolean(this.$store.getters["blocks/getBlockById"](this.itemId));
       },
+    },
+    dataContent: {
+      get() {
+        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+        if (block) {
+          return block.data;
+        }
+        return {};
+      },
+    },
+    list() {
+      return this.dataContent;
+    },
+    cardId() {
+      return this.$route.params.idCard;
+    },
+  },
+  methods: {
+    getVisible(property) {
+      if (this.list?.items && property) {
+        const visible = this.list?.items.find(
+          (item) => item[property] !== undefined
+        );
+        if (visible) {
+          if (visible[property] === true) {
+            return true;
+          }
+          if (visible[property] === false) {
+            return false;
+          }
+        }
+      }
+      console.warn(
+        `В методе getVisible свойство ${property}  не сущесвует или задано неверно.`
+      );
+      return null;
+    },
+    getAddField(property) {
+      const addFields = this.dataContent?.addFields;
+      if (addFields) {
+        if (addFields[property]) {
+          return addFields[property];
+        }
+        console.warn(
+          `В методе getAddField свойство ${property}  не сущесвует или задано неверно. Доступные свойства: ${JSON.stringify(
+            addFields
+          )}`
+        );
+      }
+      return null;
+    },
+    updateBlock() {
+      this.$store.dispatch("blocks/updateBlock", this.itemId);
+    },
+    refreshWizardList() {
+      this.$store.dispatch("blocks/updateWizardBlock", {
+        menuId: this.itemId,
+        cardId: this.cardId,
+      });
     },
   },
 };

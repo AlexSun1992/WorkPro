@@ -156,6 +156,14 @@ export const actions = {
     await this.$axios
       .get(`/api/wizardlist/55/${itemId}/${cardId}`)
       .then((res) => {
+        commit(
+          "menu/setMenuById",
+          {
+            settings: res.data.settings,
+            subSettings: res.data.subSettings,
+          },
+          { root: true }
+        );
         commit("addBlock", { blockId: parseInt(itemId), data: res.data });
         commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
           root: true,

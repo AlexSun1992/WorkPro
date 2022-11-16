@@ -128,7 +128,7 @@ router.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
   }
 });
 
-router.get("/wizardlist/:idModule/:idWizard/:idItem", (req, res) => {
+router.get("/wizardlist/:idModule/:idWizard/:idItem", async (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
     if (req.headers.authorization) {
@@ -140,12 +140,25 @@ router.get("/wizardlist/:idModule/:idWizard/:idItem", (req, res) => {
           req.cookies["auth._token.local"];
       }
     }
+    const settings = await mobile2ServiceInstance.get(
+      `${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idWizard}`
+    );
+    console.log(
+      `${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idWizard}`,
+      settings
+    );
     mobile2ServiceInstance({
       url: `${consts.DATA}/${req.params.idModule}/${req.params.idWizard}/0/${req.params.idItem}?json={}`,
       method: "GET",
     })
       .then((resp) => {
-        res.send(listConverter.list(resp.data));
+        res.send({
+          ...listConverter.list(resp.data),
+          settings: settings?.data[0],
+          subSettings: settings
+            ? menuConverter.menuObject(settings?.data[0])
+            : undefined,
+        });
       })
       .catch((err) => {
         res.status(err.response.data.STATUS).send(err.response.data);
