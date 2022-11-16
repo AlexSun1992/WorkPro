@@ -21,6 +21,7 @@
           placeholder="А 000 АА"
           autocomplete="off"
           ref="number"
+          id="field_regnumb_osago"
         />
         <b-form-input
           v-model="codeValue"
@@ -30,6 +31,7 @@
           placeholder="000"
           autocomplete="off"
           ref="code"
+          id="field_region_osago"
         />
       </b-input-group>
       <b-form-invalid-feedback
