@@ -4,6 +4,7 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/$1",
     "^~/(.*)$": "<rootDir>/$1",
     "^vue$": "vue/dist/vue.common.js",
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
   moduleFileExtensions: ["js", "vue", "json"],
   transform: {

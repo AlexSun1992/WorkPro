@@ -2425,6 +2425,7 @@ a.free {
     background: url(/img/mypolicy-id10.svg) top right no-repeat;
 }
 
+.btn-primary.btn-download,
 .btn-download {
     font-family: "SF Pro Display";
     font-style: normal;
@@ -2924,7 +2925,7 @@ input.is-invalid {
         background-size: contain !important;
         right: 16px;
         left: auto;
-        top: 31px;
+        top: 40px;
     }
     .block-policy:after {
         height: 80px;
@@ -2974,10 +2975,7 @@ input.is-invalid {
         border-radius: 24px;
     }
     .block-policy .description {
-        margin-top: 88px;
-    }
-    .block-policy .policy-number {
-        display: none;
+        margin-top: 75px;
     }
     .block-policy .policy-object {
         font-weight: 400;
@@ -3181,6 +3179,7 @@ textarea {
 }
 
 @media (max-width: 992px) {
+    .btn-primary.btn-download,
     .btn-download {
         padding: 10px 20px 12px 56px;
         background-position: 20px 50% !important;
@@ -3556,7 +3555,6 @@ a[data-newcount][data-newcolor="RED"]:after {
     border-radius: 100px;
     top: 12px;
     z-index: 1;
-    width: calc(100% - 32px);
     right: 12px;
     color: #eb5757;
     font-size: 1.125rem;
@@ -3564,6 +3562,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     line-height: 38px;
     text-align: left;
     padding-left: 12px;
+    padding-right: 43px;
 }
 
 .block-policy_small .pay-notification:after {
@@ -3572,7 +3571,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     background: url(/img/watch.svg) 50% 50% no-repeat;
     content: "";
     display: block;
-    right: 11px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
     position: absolute;
@@ -3873,6 +3872,41 @@ h6 {
         font-size: 1rem;
         line-height: 1.5rem;
     }
+    .block-policy_small .pay-notification {
+        line-height: 32px;
+    }
+    .block-policy_small .pay-notification+.title+.description .date {
+        top: 90px;
+        color: #292929 !important;
+        font-weight: 400;
+        font-size: 0.875rem;
+    }
+    .block-policy_small .pay-notification+.title+.description {
+        margin-top: 95px;
+    }
+    .block-policy_small .pay-notification+.title+.description .policy-number {
+        display: none;
+    }
+    .block-policy_small .policy-number {
+        text-align: left;
+    }
+    .block-policy_small .policy-object,
+    .block-policy_small .policy-number,
+    .block-policy_small .date {
+        width: calc(100% - 85px);
+        text-align: left;
+    }
+    .block-policy_small .pay-notification+.title {
+        top: 50px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1220px) {
+    .block-policy_small .pay-notification {
+        right: 5px;
+        max-width: calc(100% - 10px);
+        font-size: 0.875rem;
+    }
 }
 
 .underline {
@@ -3914,4 +3948,9 @@ h6 {
     color: #ff0000;
     background: #fff url(/img/icon-del.svg) center left no-repeat;
     line-height: 24px;
+}
+
+.my-policy-actions>.col-6.col-lg-4,
+.my-policy-actions>.col-6.col-lg-3 {
+    margin-bottom: 1rem;
 }
