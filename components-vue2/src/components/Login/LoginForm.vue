@@ -9,7 +9,6 @@
       :centered="true"
       :static="true"
     >
-      <!-- :static="true" -->
       <div class="d-block text-center">
         <h4>Введите код</h4>
         {{ modalTextRequest }}

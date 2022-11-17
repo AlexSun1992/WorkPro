@@ -1,0 +1,35 @@
+import { mount } from "@vue/test-utils";
+import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
+
+describe("PasswordRecoveryForm", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it("Должен показывать сообщение об ошибке при наличии русского символа", async () => {
+    const wrapper = mount(PasswordRecoveryForm);
+    await wrapper.find("#tab_mail").trigger("click");
+    await wrapper.find("#email").setValue("русскийсимвол@mail.ru");
+    const emailInput = await wrapper.find("#email");
+    expect(emailInput.classes()).toContain("is-invalid");
+    expect(wrapper.text()).toContain("Русские символы запрещены");
+  });
+
+  it("Должен показывать сообщение об ошибке при наличии знака +", async () => {
+    const wrapper = mount(PasswordRecoveryForm);
+    await wrapper.find("#tab_mail").trigger("click");
+    const emailInput = await wrapper.find("#email");
+    await wrapper.find("#email").setValue("Vasya+Katya@mail.ru");
+    expect(emailInput.classes()).toContain("is-invalid");
+    expect(wrapper.text()).toContain("Знак '+' запрещен");
+  });
+
+  it("Не должен показывать сообщение об ошибке при корректном email", async () => {
+    const wrapper = mount(PasswordRecoveryForm);
+    await wrapper.find("#tab_mail").trigger("click");
+    await wrapper.find("#email").setValue("test@mail.ru");
+    const emailInput = await wrapper.find("#email");
+    expect(emailInput.classes()).toContain("is-valid");
+    expect(wrapper.text()).not.toContain("Некорректный символ");
+  });
+});
