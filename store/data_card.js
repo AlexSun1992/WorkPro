@@ -540,7 +540,9 @@ export const mutations = {
       }
     }
   },
-
+  setFormOneToManyField(state, data) {
+    console.log(data);
+  },
   setActionParamsField(state, data) {
     const item = state.actionParams.find((d) => d.name === data.name);
     item.value = data.value;

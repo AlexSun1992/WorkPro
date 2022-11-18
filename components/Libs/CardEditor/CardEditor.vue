@@ -227,12 +227,10 @@ export default {
         };
         this.$store.commit("data_card/setLoading", true);
         const flatmenu = this.$store.getters["menu/flatmenu"];
-        const menuItem = flatmenu.find((item) => {
-          return item.IDITEM == this.$route.params.idItem;
-        });
-        const CUR = menuItem.ACTIONSCUR.find((item) => {
-          return item.ID == actionId;
-        });
+        const menuItem = flatmenu.find(
+          (item) => item.IDITEM == this.$route.params.idItem
+        );
+        const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
         await this.$store.dispatch("data_card/fetchActionParams", {
           moduleId,
           actionId,
@@ -314,10 +312,18 @@ export default {
           this.$store.commit("data_card/setForm", data || this.data);
         }
       }
-      this.$store.commit("data_card/setFormField", {
-        fieldId: e.fieldId,
-        value: e.value,
-      });
+      if (field.type === "OneToMany") {
+        this.$store.commit("data_card/setFormOneToManyField", {
+          fieldId: e.fieldId,
+          value: e.value,
+          action: e.action,
+        });
+      } else {
+        this.$store.commit("data_card/setFormField", {
+          fieldId: e.fieldId,
+          value: e.value,
+        });
+      }
       if (typeof eventHandler === "function" && field.type != "button") {
         // debugger;
         const data = await eventHandler(

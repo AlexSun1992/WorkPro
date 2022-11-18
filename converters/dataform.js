@@ -313,10 +313,13 @@ converter.form = async (data, params, instance) => {
           if (dataCardValuesArray.length) {
             dataCardValuesArray.forEach((itemValue) => {
               resultOneToMany.push(
-                dataCardWebFieldsArray.map((itemWebField) => ({
-                  ...itemWebField,
-                  value: itemValue[itemWebField.name],
-                }))
+                converter.type(
+                  dataCardWebFieldsArray.map((itemWebField) => ({
+                    ...itemWebField,
+                    value: itemValue[itemWebField.name],
+                  })),
+                  {}
+                )
               );
             });
           }
