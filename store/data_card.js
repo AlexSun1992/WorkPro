@@ -545,7 +545,7 @@ export const mutations = {
     const item = state.form.find((d) => d.fieldId === data.fieldId);
     const { schema, value } = item;
     if (data.action === "add") {
-      value.push(schema);
+      value.push(schema.map((a) => ({ ...a })));
     }
     if (data.action === "delete") {
       value.splice(data.value.index, 1);
