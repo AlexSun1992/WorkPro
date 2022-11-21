@@ -69,6 +69,12 @@ export default {
         query: { ...this.$route.query },
         ...this.$route.params,
       });
+    } else {
+      this.$store.dispatch("blocks/fetchWizardBlock", {
+        itemId: this.itemId,
+        cardId: this.cardId,
+        ...this.$route.params,
+      });
     }
   },
   computed: {
