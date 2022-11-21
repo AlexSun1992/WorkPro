@@ -152,7 +152,7 @@ export const actions = {
       return err.response;
     }
   },
-  async fetchWizardBlock({ commit, dispatch }, { itemId, cardId }) {
+  async fetchWizardBlock({ commit, dispatch }, { itemId, cardId, ...params }) {
     await this.$axios
       .get(`/api/wizardlist/55/${itemId}/${cardId}`)
       .then((res) => {
@@ -165,9 +165,11 @@ export const actions = {
           { root: true }
         );
         commit("addBlock", { blockId: parseInt(itemId), data: res.data });
-        commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
-          root: true,
-        });
+        if (itemId === params.idItem) {
+          commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
+            root: true,
+          });
+        }
       });
   },
   async updateWizardBlock({ commit, dispatch }, { menuId, cardId }) {

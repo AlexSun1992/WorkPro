@@ -52,6 +52,7 @@ export default {
         await this.$store.dispatch("blocks/fetchWizardBlock", {
           itemId: this.itemId,
           cardId: this.cardId,
+          ...this.$route.params,
         });
       } else {
         await this.$store.dispatch("blocks/fetchBlock", {
