@@ -3,7 +3,7 @@ import axios from "axios";
 import Vuex, { Store } from "vuex";
 import FilterBlock from "./FilterBlock.vue";
 import { allBlocksMocks } from "./FilterBlock.fixtures.js";
-import { state, actions, mutations } from "../../../../../store/blocks";
+// import { state, actions, mutations } from "../../../../../store/blocks";
 
 import { getters as getter } from "../../../../../store/blocks";
 import { mutations as mutation } from "../../../../../store/blocks";
