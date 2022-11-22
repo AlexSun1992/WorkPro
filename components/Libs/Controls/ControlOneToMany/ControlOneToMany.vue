@@ -7,8 +7,14 @@
       class="conf-block mt-4"
     >
       <div :key="i + 'title'" class="title-conf-block">
-        Элемент {{ i + 1 }}
-        <button @click="deleteItem(i)" class="btn btn-primary">Удалить</button>
+        <div class="row align-items-center justify-content-between mh-1">
+          <div class="col-12 col-lg-6">Элемент {{ i + 1 }}</div>
+          <div class="col-12 text-lg-end col-lg-6 mt-lg-0 mt-3">
+            <button @click="deleteItem(i)" class="btn btn-primary">
+              Удалить
+            </button>
+          </div>
+        </div>
       </div>
       <form-block
         class="mt-4"
