@@ -314,7 +314,7 @@ export default {
             this.isCaptchaNeeded = true;
           }
           if (data.CODENAME === "PhoneCodeRequest") {
-            this.modalTextRequest = `${data.MESSAGE} ${data.SMSPHONE}`;
+            this.modalTextRequest = `${data.MESSAGE}`;
             this.wrongAuthData = null;
             this.isModalVisible = true;
             return;
