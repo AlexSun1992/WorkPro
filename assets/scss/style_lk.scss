@@ -2465,11 +2465,13 @@ a.free {
     border-color: #645da2;
 }
 
+.my-tabs .nav.nav-tabs,
 .my-policy .nav.nav-tabs {
     margin: 0;
     padding: 0;
 }
 
+.my-tabs .nav-item,
 .my-policy .nav-item {
     margin: 0;
     padding: 0;
@@ -2477,12 +2479,14 @@ a.free {
     display: inline-block;
 }
 
+.my-tabs .nav-item a,
 .my-policy .nav-item a {
     color: $black;
     text-decoration: none;
     position: relative;
 }
 
+.my-tabs .nav-item a:after,
 .my-policy .nav-item a:after {
     content: "";
     width: 100%;
@@ -2493,15 +2497,17 @@ a.free {
     transition: 0.3s;
 }
 
-.my-policy .nav-item a.active:after,
+.my-tabs .nav-item a.active:after,
 .my-policy .nav-item a.active:hover:after {
     background-color: $green;
 }
 
+.my-tabs .nav-item a:hover:after,
 .my-policy .nav-item a:hover:after {
     background-color: #dfe3e5;
 }
 
+.my-tabs .nav-item+.nav-item,
 .my-policy .nav-item+.nav-item {
     margin-left: 30px;
 }
