@@ -487,7 +487,20 @@ converter.save = (data) => {
                   : "NULL";
             }
           }
-
+          if (data[i].type === "OneToMany") {
+            const resultOneToMany = data[i].value;
+            if (resultOneToMany.length) {
+              res[data[i].name] = resultOneToMany.map((item) =>
+                item.reduce(
+                  (obj, subItem) =>
+                    Object.assign(obj, {
+                      [subItem.name]: subItem.value ?? null,
+                    }),
+                  {}
+                )
+              );
+            }
+          }
           if (data[i].structType === "boolrus") {
             res[data[i].name] =
               data[i].value === "true" || data[i].value === true ? "Д" : "Н";
