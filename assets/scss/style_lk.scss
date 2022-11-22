@@ -2493,6 +2493,7 @@ a.free {
     transition: 0.3s;
 }
 
+.my-policy .nav-item a.active:after,
 .my-policy .nav-item a.active:hover:after {
     background-color: $green;
 }
