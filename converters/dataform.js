@@ -458,6 +458,49 @@ converter.breadcrumbs = (meta) => {
   return null;
 };
 
+converter.getValue = (data) => {
+  if (typeof data === "object") {
+    if (data.type === "boolean") {
+      if (data.name.substring(0, 1) === "B") {
+        return data.value ? "Д" : "Н";
+      }
+      return data.value ? "Y" : "N";
+    }
+    if (data.type === "timestamp") {
+      return data.value
+        ? moment(data.value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
+            "YYYY-MM-DD HH:mm:ss"
+          )
+        : "NULL";
+    }
+    if (data.type === "enum") {
+      if (typeof data.value?.value === "object") {
+        return JSON.stringify(data.value.value);
+      }
+      return data.value?.value;
+    }
+    if (data.structType === "boolrus") {
+      return data.value === true ? "Д" : "Н";
+    }
+    if (data.structType === "long") {
+      if (data.value !== null) {
+        return Number.isNaN(parseInt(data.value, 10))
+          ? null
+          : parseInt(data.value, 10);
+      }
+    }
+    if (data.structType === "double") {
+      if (data.value !== null) {
+        return Number.isNaN(parseFloat(data.value))
+          ? null
+          : parseFloat(data.value);
+      }
+    }
+    return data?.value;
+  }
+  return null;
+};
+
 converter.save = (data) => {
   const res = {};
   let name = ``;
@@ -494,7 +537,7 @@ converter.save = (data) => {
                 item.reduce(
                   (obj, subItem) =>
                     Object.assign(obj, {
-                      [subItem.name]: subItem.value ?? null,
+                      [subItem.name]: converter.getValue(subItem) ?? null,
                     }),
                   {}
                 )
