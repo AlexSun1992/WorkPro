@@ -2512,6 +2512,7 @@ a.free {
     margin-left: 30px;
 }
 
+button.action img,
 a.action img {
     width: 56px;
     height: 56px;
@@ -2519,6 +2520,7 @@ a.action img {
     margin: 0 auto 8px;
 }
 
+button.action,
 a.action {
     padding: 24px;
     width: 100%;
@@ -2535,11 +2537,16 @@ a.action {
     color: $black;
     text-decoration: none;
     transition: box-shadow 0.3s;
+    background: transparent;
+    border: 0;
 }
 
+button.action:hover,
 a.action:hover {
     box-shadow: 0 3px 8px rgb(0 0 0 / 35%);
     transition: 0.3s;
+    border: 0;
+    background: transparent;
 }
 
 .my-policy[data-id="1"] .description .tab-content a {
