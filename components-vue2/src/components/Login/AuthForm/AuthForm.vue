@@ -1,6 +1,16 @@
 <template>
   <div class="login-form-content">
     <div class="block-registration">
+      <div @click="goESIA()" class="goesia d-lg-none my-2">
+        Войти через <span class="login_esia"></span>
+      </div>
+      <button
+        v-if="visibleForm === 'registration'"
+        @click="toggleForm('login')"
+        class="login-btn-mobile d-lg-none mb-2"
+      >
+        Вход по логину
+      </button>
       <b-nav card-header tabs class="d-none d-lg-block">
         <b-nav-item
           @click="toggleForm('login')"
@@ -32,21 +42,6 @@
     >
       Регистрация
     </button>
-    <button
-      v-else
-      @click="toggleForm('login')"
-      class="login-btn-mobile d-lg-none"
-    >
-      Вход
-    </button>
-
-    <div
-      @click="goESIA()"
-      class="goesia m-auto d-lg-none mt-4 d-table"
-      id="btn_recovery-password_lk"
-    >
-      Войти через <span class="login_esia"></span>
-    </div>
   </div>
 </template>
 <script>
