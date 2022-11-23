@@ -147,7 +147,7 @@
         variant="primary"
         type="submit"
         :disabled="authInProcess"
-        class="mt-4"
+        class="mt-3 mt-lg-4"
         id="btn_entry_lk"
       >
         Авторизоваться
