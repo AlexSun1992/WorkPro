@@ -373,6 +373,46 @@ export default {
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
         }
+        if (data[i].type === "OneToMany") {
+          const valueOneToMany = data[i].value;
+          if (Array.isArray(valueOneToMany)) {
+            valueOneToMany.forEach((webFields, indexWebFields) => {
+              const isValidValue = (value) => {
+                if (
+                  (value === null || value === undefined || value === "") &&
+                  value !== 0
+                ) {
+                  return false;
+                }
+                return true;
+              };
+              const webFieldsErrors = webFields.filter(
+                (item) =>
+                  item.visible === true &&
+                  item.required === true &&
+                  isValidValue(item.value) === false
+              );
+              if (webFieldsErrors) {
+                webFieldsErrors.forEach((errorField, indexField) => {
+                  valid = false;
+                  this.$store.commit("data_card/setFormOneToManyField", {
+                    fieldId: data[i].fieldId,
+                    value: {
+                      name: errorField.name,
+                      index: indexWebFields,
+                      value: {
+                        fieldId: errorField.fieldId,
+                        name: errorField.name,
+                        value: errorField.value,
+                      },
+                    },
+                    action: "update",
+                  });
+                });
+              }
+            });
+          }
+        }
       }
       return valid;
     },

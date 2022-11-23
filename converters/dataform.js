@@ -310,7 +310,7 @@ converter.form = async (data, params, instance) => {
           const dataCardValuesArray = oneToManyData.value;
           const dataCardWebFieldsArray = item.value.metaData.data;
           const resultOneToMany = [];
-          if (dataCardValuesArray.length) {
+          if (Array.isArray(dataCardValuesArray)) {
             dataCardValuesArray.forEach((itemValue) => {
               resultOneToMany.push(
                 converter.type(
