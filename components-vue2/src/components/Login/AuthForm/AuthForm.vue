@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-content">
     <div class="block-registration">
-      <div @click="goESIA()" class="goesia d-lg-none my-2">
+      <div @click="goESIA()" class="goesia d-lg-none my-2" id="esia-login">
         Войти через <span class="login_esia"></span>
       </div>
       <button
@@ -9,7 +9,7 @@
         @click="toggleForm('login')"
         class="login-btn-mobile d-lg-none mb-2"
       >
-        Вход по логину
+        Вход
       </button>
       <b-nav card-header tabs class="d-none d-lg-block">
         <b-nav-item
@@ -23,11 +23,7 @@
           >Регистрация</b-nav-item
         >
 
-        <b-nav-item
-          @click="goESIA()"
-          class="goesia"
-          id="btn_recovery-password_lk"
-        >
+        <b-nav-item @click="goESIA()" class="goesia" id="esia-login">
           Войти через <span class="login_esia"></span>
         </b-nav-item>
       </b-nav>
