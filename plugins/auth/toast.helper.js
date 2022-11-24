@@ -24,7 +24,17 @@ export function convertErrorMessageToArray(errorMessage) {
 
 export function getErrorMessage(errorMessage) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
+
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
+
+  const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
+
+  if (getORAnumber) {
+    const getORAtext = errorMessage.match(/\s?ORA-\d{5}/)[0];
+    if (MAX_ORA_ERROR > getORAtext) {
+      return SYSTEM_ERROR_TEXT;
+    }
+  }
 
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
@@ -38,11 +48,12 @@ export function getErrorMessage(errorMessage) {
       const getArrWithErrBrackets =
         getStringMessageWithErrBrackets.match(/\[.+?\]/);
       const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
-
+      console.log("pureMessageText:", pureMessageText[1]);
       return pureMessageText[1];
     }
-
+    console.log("stringWithBrackets", stringWithBrackets[1]);
     return stringWithBrackets[1];
   }
+  console.log("errMessageString:", errMessageString);
   return errMessageString;
 }

@@ -12,8 +12,19 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageText =
       'ORA-02055: сбой распределенной операции обновления; требуется откат\nORA-20105: SDOCSERIES=Некорректная серия паспорта: 5345345345345\nORA-06512: на  "MOBILE.CLIENTUTILS", line 763\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
     const errorMessageWithoutORA = getErrorMessage(errorMessageText);
-    expect(errorMessageWithoutORA).toBe(
-      "SDOCSERIES=Некорректная серия паспорта: 5345345345345"
+
+    const SYSTEM_ERROR_TEXT = `Приносим извинения, в Личном Кабинете что-то пошло не так.\nПросим обновить страницу или перейти на ${(
+      <a href="#">Главную Личного кабинета.</a>
+    )}`;
+    expect(errorMessageWithoutORA).toBe(SYSTEM_ERROR_TEXT);
+  });
+
+  it("Должен обрабатывать сообщение об ошибке, Приносим извинения, в Личном Кабинете что-то пошло не так", () => {
+    const errorMessageText =
+      'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
+    const errorMessageWithoutORA = getErrorMessage(errorMessageText);
+    expect(errorMessageWithoutORA).toContain(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так"
     );
   });
 
