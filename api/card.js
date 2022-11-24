@@ -359,6 +359,7 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       ? req.headers.cookie
       : null;
     const typeReq = req.params.id === 0 ? "post" : "put";
+    console.log(formConverter.save(req.body));
     mobile2ServiceInstance[typeReq](
       `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
         req.params.idModule
@@ -372,7 +373,7 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       })
       .catch((err) => {
         if (err?.response?.data) {
-          res.status(err.response.data.STATUS).send(err.response.data);
+          res.status(500).send(err.response.data);
         } else {
           res.status(500).send(err);
         }

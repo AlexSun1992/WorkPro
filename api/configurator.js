@@ -34,27 +34,27 @@ router.get("/module", (req, res) => {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req?.cookies["auth._token.local"];
     }
-    modules.getItems = () => {
-      return new Promise((resolve, reject) => {
+    modules.getItems = () =>
+      new Promise((resolve, reject) => {
         mobile2ServiceInstance({ url: `${consts.MODULE}`, method: "GET" })
           .then((resp) => {
             const modules = converter.modules(resp.data);
             resolve(modules);
           })
           .catch((err) => {
+            console.error(err);
             res.status(err.response.data.STATUS).send(err.response.data);
           });
       });
-    };
-    menu.getItems = (modules) => {
-      return new Promise((resolve, reject) => {
+    menu.getItems = (modules) =>
+      new Promise((resolve, reject) => {
         Promise.all(
           modules.map((l) =>
             mobile2ServiceInstance.get(`${consts.CLIENTMENU}/${l.id}`)
           )
         )
           .then(
-            axios.spread(function (...res) {
+            axios.spread((...res) => {
               resolve(res);
             })
           )
@@ -62,7 +62,6 @@ router.get("/module", (req, res) => {
             res.status(err?.response?.data?.STATUS).send(err?.response?.data);
           });
       });
-    };
     modules.getItems().then((modules) => {
       menu
         .getItems(modules)

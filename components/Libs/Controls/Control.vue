@@ -54,6 +54,7 @@ import ControlListSelect from "./ControlListSelect/ControlListSelect.vue";
 import ControlRegNumber from "./ControlRegNumber/ControlRegNumber.vue";
 import ControlRadioButton from "./ControlRadioButton.vue";
 import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
+import ControlOneToMany from "./ControlOneToMany/ControlOneToMany";
 
 export default {
   name: "Control",
@@ -89,6 +90,7 @@ export default {
     ControlRegNumber,
     ControlRadioButton,
     ControlDoctorSchedule,
+    ControlOneToMany,
   },
   props: {
     data: {

@@ -50,7 +50,6 @@ export default {
     showBtnNameSave() {
       const formData = this.$store.getters["data_card/getForm"];
       const fields = formData.length ? formData : formData.data || [];
-      console.log(fields);
       const wizardButtonSave = fields.find((item) => {
         if (item.type === "WizardButton" && item.name === "Save") {
           return true;
