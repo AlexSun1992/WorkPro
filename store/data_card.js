@@ -531,6 +531,7 @@ export const mutations = {
             item.state = null;
             item.checked = false;
             if (item.options.length === 1) {
+              // eslint-disable-next-line prefer-destructuring
               item.value = item.options[0];
             }
           } else {
@@ -540,7 +541,50 @@ export const mutations = {
       }
     }
   },
-
+  setFormOneToManyField(state, data) {
+    const item = state.form.find((d) => d.fieldId === data.fieldId);
+    const { schema, value } = item;
+    if (data.action === "add") {
+      value.push(schema.map((a) => ({ ...a })));
+    }
+    if (data.action === "delete") {
+      value.splice(data.value.index, 1);
+    }
+    if (data.action === "update") {
+      const dataValue = data.value;
+      const valueChanged = dataValue.value;
+      const update = value
+        .find((_, index) => index === dataValue.index)
+        .find((i) => i.fieldId === valueChanged.fieldId);
+      if (update !== undefined) {
+        update.value = valueChanged.value;
+        if (update.required) {
+          update.state = false;
+          if (
+            update.value !== null &&
+            update.value !== "" &&
+            update.value !== undefined &&
+            (update.error === null || update.error === undefined)
+          ) {
+            update.state = true;
+            update.checked = true;
+          }
+          if (update.value && update.type === "enum") {
+            if (update.value.value === undefined && update.options) {
+              update.state = null;
+              update.checked = false;
+              if (update.options.length === 1) {
+                // eslint-disable-next-line prefer-destructuring
+                update.value = update.options[0];
+              }
+            } else {
+              update.state = !!(update.value.value || update.value.value == 0);
+            }
+          }
+        }
+      }
+    }
+  },
   setActionParamsField(state, data) {
     const item = state.actionParams.find((d) => d.name === data.name);
     item.value = data.value;

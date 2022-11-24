@@ -63,6 +63,7 @@ converter.subcompare = (a, b) => {
 
 converter.form = async (data, params, instance) => {
   const promises = [];
+  const promisesOfOneToMany = [];
   const webFieldsArr = [];
   const errors = [];
 
@@ -176,6 +177,17 @@ converter.form = async (data, params, instance) => {
       );
     } else if (webFields[i].IDCONTROL == 46) {
       obj.type = "DoctorSchedule";
+    } else if (webFields[i].IDCONTROL == 47) {
+      if (webFields[i].NITEMDIC) {
+        promises.push(
+          instance.get(
+            `/am/${zone === "free" ? "free" : "main"}/v2/datacard/55/${
+              webFields[i].NITEMDIC
+            }/0`
+          )
+        );
+      }
+      obj.type = "OneToMany";
     } else {
       obj.type = "string";
     }
@@ -228,7 +240,7 @@ converter.form = async (data, params, instance) => {
   }
   try {
     await Promise.allSettled(promises).then((values) => {
-      values.forEach((item, i) => {
+      values.forEach(async (item, i) => {
         if (item.status === "rejected") {
           errors.push({
             url: item.reason.response.config,
@@ -236,40 +248,83 @@ converter.form = async (data, params, instance) => {
           });
         }
         if (item.status == "fulfilled" && item.value.data) {
-          const options = selectConverter.select(item.value.data);
           const { url } = item.value.config;
+          const isCardWebFields = url.includes("datacard");
           const isDicwf = url.includes("dicwf");
-          const fieldId = null;
-          let fieldName = null;
-          let field1 = null;
-          if (isDicwf) {
-            const fieldId = parseInt(
-              item.value.config.url.replace(
-                `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/`,
-                ""
+          if (isCardWebFields) {
+            const dataCardSettings = webFields.find((item) => {
+              if (item.NITEMDIC) {
+                return url.includes(item.NITEMDIC.toString());
+              }
+              return false;
+            });
+            promisesOfOneToMany.push(
+              converter.form(
+                item.value.data,
+                { idItem: dataCardSettings.NITEMDIC },
+                instance
               )
             );
-            if (fieldId) {
-              field1 = values.find((b) =>
-                b.value ? b.value.fieldId === fieldId : null
-              );
-            }
           } else {
-            fieldName = item.value.config.url.replace(
-              `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${itemId}/`,
-              ""
-            );
-            if (fieldName) {
-              field1 = values.find((b) =>
-                b.value ? b.value.name === fieldName : null
+            const options = selectConverter.select(item.value.data);
+            let fieldName = null;
+            let field1 = null;
+            if (isDicwf) {
+              const fieldId = parseInt(
+                item.value.config.url.replace(
+                  `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/`,
+                  ""
+                )
               );
+              if (fieldId) {
+                field1 = values.find((b) =>
+                  b.value ? b.value.fieldId === fieldId : null
+                );
+              }
+            } else {
+              fieldName = item.value.config.url.replace(
+                `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${itemId}/`,
+                ""
+              );
+              if (fieldName) {
+                field1 = values.find((b) =>
+                  b.value ? b.value.name === fieldName : null
+                );
+              }
             }
-          }
-          if (field1) {
-            field1.value.options = options;
+            if (field1) {
+              field1.value.options = options;
+            }
           }
         } else if (item.status == "fulfilled" && !item.value.data) {
           webFieldsArr.push(item.value);
+        }
+      });
+    });
+    await Promise.allSettled(promisesOfOneToMany).then((values) => {
+      values.forEach((item) => {
+        if (item.status == "fulfilled" && item.value.data) {
+          const oneToManyData = webFieldsArr.find(
+            (webField) => webField.menudic === item.value.metaData.itemId
+          );
+          const dataCardValuesArray = oneToManyData.value;
+          const dataCardWebFieldsArray = item.value.metaData.data;
+          const resultOneToMany = [];
+          if (Array.isArray(dataCardValuesArray)) {
+            dataCardValuesArray.forEach((itemValue) => {
+              resultOneToMany.push(
+                converter.type(
+                  dataCardWebFieldsArray.map((itemWebField) => ({
+                    ...itemWebField,
+                    value: itemValue[itemWebField.name],
+                  })),
+                  {}
+                )
+              );
+            });
+          }
+          oneToManyData.value = resultOneToMany;
+          oneToManyData.schema = dataCardWebFieldsArray;
         }
       });
     });
@@ -296,6 +351,7 @@ converter.form = async (data, params, instance) => {
       visible: meta_visible,
       addFields: meta_addfields,
       breadCrumbs: meta_breadcrumbs,
+      itemId: params.idItem,
     },
   };
 };
@@ -402,6 +458,49 @@ converter.breadcrumbs = (meta) => {
   return null;
 };
 
+converter.getValue = (data) => {
+  if (typeof data === "object") {
+    if (data.type === "boolean") {
+      if (data.name.substring(0, 1) === "B") {
+        return data.value ? "Д" : "Н";
+      }
+      return data.value ? "Y" : "N";
+    }
+    if (data.type === "timestamp") {
+      return data.value
+        ? moment(data.value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
+            "YYYY-MM-DD HH:mm:ss"
+          )
+        : "NULL";
+    }
+    if (data.type === "enum") {
+      if (typeof data.value?.value === "object") {
+        return JSON.stringify(data.value.value);
+      }
+      return data.value?.value;
+    }
+    if (data.structType === "boolrus") {
+      return data.value === true ? "Д" : "Н";
+    }
+    if (data.structType === "long") {
+      if (data.value !== null) {
+        return Number.isNaN(parseInt(data.value, 10))
+          ? null
+          : parseInt(data.value, 10);
+      }
+    }
+    if (data.structType === "double") {
+      if (data.value !== null) {
+        return Number.isNaN(parseFloat(data.value))
+          ? null
+          : parseFloat(data.value);
+      }
+    }
+    return data?.value;
+  }
+  return null;
+};
+
 converter.save = (data) => {
   const res = {};
   let name = ``;
@@ -431,7 +530,20 @@ converter.save = (data) => {
                   : "NULL";
             }
           }
-
+          if (data[i].type === "OneToMany") {
+            const resultOneToMany = data[i].value;
+            if (resultOneToMany.length) {
+              res[data[i].name] = resultOneToMany.map((item) =>
+                item.reduce(
+                  (obj, subItem) =>
+                    Object.assign(obj, {
+                      [subItem.name]: converter.getValue(subItem) ?? "NULL",
+                    }),
+                  {}
+                )
+              );
+            }
+          }
           if (data[i].structType === "boolrus") {
             res[data[i].name] =
               data[i].value === "true" || data[i].value === true ? "Д" : "Н";
