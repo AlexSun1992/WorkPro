@@ -8,7 +8,9 @@
     >
       <div :key="i + 'title'" class="title-conf-block">
         <div class="row align-items-center justify-content-between mh-1">
-          <div class="col-12 col-lg-6">Элемент {{ i + 1 }}</div>
+          <div class="col-12 col-lg-6">
+            {{ data.helpText || "Элемент" }} {{ i + 1 }}
+          </div>
           <div class="col-12 text-lg-end col-lg-6 mt-lg-0 mt-3">
             <button @click="deleteItem(i)" class="btn btn-primary">
               Удалить

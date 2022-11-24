@@ -537,7 +537,7 @@ converter.save = (data) => {
                 item.reduce(
                   (obj, subItem) =>
                     Object.assign(obj, {
-                      [subItem.name]: converter.getValue(subItem) ?? null,
+                      [subItem.name]: converter.getValue(subItem) ?? "NULL",
                     }),
                   {}
                 )
