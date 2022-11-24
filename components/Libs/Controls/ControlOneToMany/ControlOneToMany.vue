@@ -12,7 +12,11 @@
             {{ data.helpText || "Элемент" }} {{ i + 1 }}
           </div>
           <div class="col-12 text-lg-end col-lg-6 mt-lg-0 mt-3">
-            <button @click="deleteItem(i)" class="btn btn-primary">
+            <button
+              @click="deleteItem(i)"
+              :disabled="!editable"
+              class="btn btn-primary"
+            >
               Удалить
             </button>
           </div>
@@ -22,11 +26,13 @@
         class="mt-4"
         :key="i"
         :data="item"
-        :edit="edit"
+        :edit="editable"
         @update="updateItem($event, i)"
       />
     </div>
-    <button @click="addItem" class="btn btn-primary mt-4">Добавить</button>
+    <button @click="addItem" :disabled="!editable" class="btn btn-primary mt-4">
+      Добавить
+    </button>
   </div>
 </template>
 
@@ -73,7 +79,7 @@ export default {
     loading() {
       return this.$store.getters["data_card/getLoading"];
     },
-    disabled() {
+    editable() {
       return this.data.readonly === false;
     },
   },
