@@ -3973,3 +3973,15 @@ h6 {
 .my-policy-actions>div {
     margin-bottom: 1.5rem;
 }
+
+.btn-link {
+    background: transparent;
+    border: 0;
+    font-weight: 700;
+    color: #43b02a;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
