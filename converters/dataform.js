@@ -532,14 +532,16 @@ converter.save = (data) => {
           }
           if (data[i].type === "OneToMany") {
             const resultOneToMany = data[i].value;
-            if (resultOneToMany.length) {
-              res[data[i].name] = resultOneToMany.map((item) =>
-                item.reduce(
-                  (obj, subItem) =>
-                    Object.assign(obj, {
-                      [subItem.name]: converter.getValue(subItem) ?? "NULL",
-                    }),
-                  {}
+            if (Array.isArray(resultOneToMany)) {
+              res[data[i].name] = JSON.stringify(
+                resultOneToMany.map((item) =>
+                  item.reduce(
+                    (obj, subItem) =>
+                      Object.assign(obj, {
+                        [subItem.name]: converter.getValue(subItem) ?? "NULL",
+                      }),
+                    {}
+                  )
                 )
               );
             }
