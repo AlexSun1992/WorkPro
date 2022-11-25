@@ -3,7 +3,9 @@ import { getErrorMessage } from "../plugins/auth/toast.helper";
 export default function ({ route, redirect, $axios, $cookiz }) {
   const url = `/am/free/v2/datacard/55/801`;
   if (route.query?.code === undefined) {
-    return redirect(`/login?error="Не задан параметр код!"`);
+    return redirect(
+      `/login?error=Произошла неизвестная ошибка входа через Госуслуги.`
+    );
   }
   return $axios
     .post(url, { code: route.query?.code })
@@ -14,7 +16,6 @@ export default function ({ route, redirect, $axios, $cookiz }) {
       return redirect("/cabinet");
     })
     .catch((error) => {
-      console.error(error?.response?.data);
       return redirect(
         `/login?error=${
           error?.response?.data?.MESSAGE
