@@ -3,6 +3,8 @@ import { getErrorMessage } from "../../utils/transform";
 let toastCount = 0;
 
 export function makeToast(error) {
+  const htmlElement = this.$createElement;
+
   toastCount += 1;
 
   if (!error) {
@@ -13,12 +15,32 @@ export function makeToast(error) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
 
-  $nuxt.$bvToast.toast(getErrorMessage(error), {
-    id: toastCount !== 0 ? toastCount.toString() : toastCount,
-    title: "Ошибка",
-    variant: "danger",
-    autoHideDelay: 20000,
-    appendToast: false,
-    toaster: "b-toaster-top-full",
-  });
+  const revealErrorType = typeof getErrorMessage(error);
+
+  const getErrObj = getErrorMessage(error);
+
+  if (revealErrorType === "object") {
+    const vNodesMSG = htmlElement("p", getErrObj.errorText, [
+      htmlElement("b-link", { props: { href: "/" } }, getErrObj.errorLink),
+    ]);
+    $nuxt.$bvToast.toast(vNodesMSG, {
+      id: toastCount.toString(),
+      title: "Ошибка",
+      variant: "danger",
+      autoHideDelay: 20000,
+      appendToast: false,
+      toaster: "b-toaster-top-full",
+    });
+  }
+
+  if (revealErrorType === "string") {
+    $nuxt.$bvToast.toast(getErrorMessage(error), {
+      id: toastCount.toString(),
+      title: "Ошибка",
+      variant: "danger",
+      autoHideDelay: 20000,
+      appendToast: false,
+      toaster: "b-toaster-top-full",
+    });
+  }
 }

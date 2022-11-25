@@ -8,7 +8,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
     expect(errorMessageWithoutORA).toBe("Некорректный номер телефона");
   });
 
-  it("Должен обрабатывать сообщение об ошибке, содержащее 'сбой распределенной операции обновления; требуется откат'", () => {
+  it.only("Должен обрабатывать сообщение об ошибке, содержащее 'сбой распределенной операции обновления; требуется откат'", () => {
     const errorMessageText =
       'ORA-02055: сбой распределенной операции обновления; требуется откат\nORA-20105: SDOCSERIES=Некорректная серия паспорта: 5345345345345\nORA-06512: на  "MOBILE.CLIENTUTILS", line 763\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
     const errorMessageWithoutORA = getErrorMessage(errorMessageText);

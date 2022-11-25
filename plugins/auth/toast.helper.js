@@ -32,6 +32,19 @@ export function getErrorMessage(errorMessage) {
   if (getORAnumber) {
     const getORAtext = errorMessage.match(/\s?ORA-\d{5}/)[0];
     if (MAX_ORA_ERROR > getORAtext) {
+      const getLinkToMainPage = SYSTEM_ERROR_TEXT.match(
+        /Главную Личного кабинета./
+      );
+
+      const removeLinkFromErrMsgText = SYSTEM_ERROR_TEXT.replace(
+        /Главную Личного кабинета./,
+        ""
+      );
+
+      const errorTextAndLink = {};
+      errorTextAndLink.errorText = removeLinkFromErrMsgText;
+      errorTextAndLink.errorLink = getLinkToMainPage[0];
+
       return SYSTEM_ERROR_TEXT;
     }
   }
@@ -48,10 +61,12 @@ export function getErrorMessage(errorMessage) {
       const getArrWithErrBrackets =
         getStringMessageWithErrBrackets.match(/\[.+?\]/);
       const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
+      //  console.log("pureMessageText[1]:", pureMessageText[1]);
       return pureMessageText[1];
     }
+    // console.log("stringWithBrackets[1]:", stringWithBrackets[1]);
     return stringWithBrackets[1];
   }
-
+  // console.log("errMessageString:", typeof errMessageString);
   return errMessageString;
 }
