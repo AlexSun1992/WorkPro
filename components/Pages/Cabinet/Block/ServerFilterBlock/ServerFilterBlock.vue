@@ -281,6 +281,7 @@ export default {
             filter: this.queryParamValue,
             id: this?.id,
             filterIdNumber: e?.data[this.id],
+            filterOptions: e.data,
           });
         }
         if (foundedFilter && !e.data) {
@@ -291,11 +292,11 @@ export default {
         }
       } else {
         this.$store.commit("blocks/setServerFilters", filterObj);
-
         if (this.id && e.data[this.id]) {
           this.$store.commit("blocks/setServerFilters", {
             propertyName: this.id,
             filter: e.data[this.id].toString(),
+            filterOptions: e.data,
           });
         }
       }
