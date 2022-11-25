@@ -379,8 +379,8 @@ export default {
   },
   computed: {
     queryError() {
-      if (this.$route.query?.error) {
-        return this.$route.query?.error;
+      if (this.$route?.query?.error) {
+        return this.$route?.query?.error;
       }
       return false;
     },
