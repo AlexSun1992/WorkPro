@@ -130,6 +130,12 @@
           Неверный логин или пароль.<br />Проверьте корректность введенных
           даных.
         </div>
+        <div
+          class="col-12 invalid-feedback d-block mt-3"
+          v-if="queryError && !wrongAuthData"
+        >
+          {{ queryError }}
+        </div>
 
         <div
           v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
@@ -369,6 +375,14 @@ export default {
       if (this.user.code !== "") {
         this.fetchToken();
       }
+    },
+  },
+  computed: {
+    queryError() {
+      if (this.$route?.query?.error) {
+        return this.$route?.query?.error;
+      }
+      return false;
     },
   },
 

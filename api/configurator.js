@@ -38,12 +38,14 @@ router.get("/module", (req, res) => {
       new Promise((resolve, reject) => {
         mobile2ServiceInstance({ url: `${consts.MODULE}`, method: "GET" })
           .then((resp) => {
-            const modules = converter.modules(resp.data);
-            resolve(modules);
+            resolve(converter.modules(resp.data));
           })
           .catch((err) => {
-            console.error(err);
-            res.status(err.response.data.STATUS).send(err.response.data);
+            if (err?.response?.data) {
+              res.status(500).send(err.response.data);
+            } else {
+              res.status(500).send(err);
+            }
           });
       });
     menu.getItems = (modules) =>
@@ -59,7 +61,11 @@ router.get("/module", (req, res) => {
             })
           )
           .catch((err) => {
-            res.status(err?.response?.data?.STATUS).send(err?.response?.data);
+            if (err?.response?.data) {
+              res.status(500).send(err.response.data);
+            } else {
+              res.status(500).send(err);
+            }
           });
       });
     modules.getItems().then((modules) => {
@@ -70,8 +76,11 @@ router.get("/module", (req, res) => {
           res.send(modules);
         })
         .catch((err) => {
-          console.log(err);
-          res.status(err.response.data.STATUS).send(err.response.data);
+          if (err?.response?.data) {
+            res.status(500).send(err.response.data);
+          } else {
+            res.status(500).send(err);
+          }
         });
     });
   } catch (e) {
