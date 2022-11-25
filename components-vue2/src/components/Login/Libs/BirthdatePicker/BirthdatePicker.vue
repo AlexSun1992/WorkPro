@@ -52,7 +52,6 @@ import _ from "lodash";
 import DatePicker from "vue2-datepicker";
 import BirthDateInput from "./BirthdateInput.vue";
 import ClickOutside from "vue-click-outside";
-import "vue2-datepicker/index.css";
 import "vue2-datepicker/locale/ru";
 import moment from "moment/moment";
 import {
