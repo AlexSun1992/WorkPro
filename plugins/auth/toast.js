@@ -3,8 +3,6 @@ import { getErrorMessage } from "../../utils/transform";
 let toastCount = 0;
 
 export function makeToast(error) {
-  const htmlElement = this.$createElement;
-
   toastCount += 1;
 
   if (!error) {
@@ -20,6 +18,7 @@ export function makeToast(error) {
   const getErrObj = getErrorMessage(error);
 
   if (revealErrorType === "object") {
+    const htmlElement = this.$createElement;
     const vNodesMSG = htmlElement("p", getErrObj.errorText, [
       htmlElement("b-link", { props: { href: "/" } }, getErrObj.errorLink),
     ]);
