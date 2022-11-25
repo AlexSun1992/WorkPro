@@ -379,8 +379,11 @@ export default {
   },
   computed: {
     queryError() {
-      if (this.$route?.query?.error) {
-        return this.$route?.query?.error;
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop.toString()),
+      });
+      if (params?.error) {
+        return params.error;
       }
       return false;
     },
