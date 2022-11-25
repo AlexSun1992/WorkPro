@@ -6,8 +6,10 @@ const converter = {};
 
 converter.setArrayOfObjectFields = (itemId, items, fields) => {
   const arr = [];
-  for (let i = 0; i < items.length; i++) {
-    arr.push(converter.setFieldsParams(itemId, items[i], fields));
+  if (Array.isArray(items)) {
+    for (let i = 0; i < items.length; i++) {
+      arr.push(converter.setFieldsParams(itemId, items[i], fields));
+    }
   }
   return arr;
 };
