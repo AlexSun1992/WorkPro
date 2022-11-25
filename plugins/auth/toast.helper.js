@@ -1,5 +1,5 @@
 const MAX_ORA_ERROR = "ORA-10000";
-const SYSTEM_ERROR_TEXT =
+export const SYSTEM_ERROR_TEXT =
   "Приносим извинения, в Личном Кабинете что-то пошло не так.\nПросим обновить страницу или перейти на Главную Личного кабинета.";
 
 /**
@@ -48,12 +48,10 @@ export function getErrorMessage(errorMessage) {
       const getArrWithErrBrackets =
         getStringMessageWithErrBrackets.match(/\[.+?\]/);
       const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
-      console.log("pureMessageText:", pureMessageText[1]);
       return pureMessageText[1];
     }
-    console.log("stringWithBrackets", stringWithBrackets[1]);
     return stringWithBrackets[1];
   }
-  console.log("errMessageString:", errMessageString);
+
   return errMessageString;
 }

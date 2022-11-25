@@ -12,8 +12,9 @@ export function makeToast(error) {
   if (toastCount > 2) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
+
   $nuxt.$bvToast.toast(getErrorMessage(error), {
-    id: toastCount.toString(),
+    id: toastCount !== 0 ? toastCount.toString() : toastCount,
     title: "Ошибка",
     variant: "danger",
     autoHideDelay: 20000,
