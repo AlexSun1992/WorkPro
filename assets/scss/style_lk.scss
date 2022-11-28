@@ -2465,10 +2465,19 @@ a.free {
     border-color: #645da2;
 }
 
+.my-tabs,
 .my-tabs .nav.nav-tabs,
 .my-policy .nav.nav-tabs {
     margin: 0;
     padding: 0;
+}
+
+.my-tabs .nav-link {
+    font-weight: 400;
+}
+
+.my-tabs .nav-link.active {
+    font-weight: 700;
 }
 
 .my-tabs .nav-item,
