@@ -71,6 +71,7 @@
           v-mask="codeMask"
           :state="validateInput('code', isCodeBlured)"
           @blur="blurField('code', isCodeBlured)"
+          @update="updateField('code')"
           @change="changeField('code')"
           @input="inputTouch(loginType)"
           :disabled="disabled"
@@ -112,7 +113,7 @@
           isSendCode ||
           loading
         "
-        @click="executeRecaptcha"
+        @click="getCode"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
@@ -218,14 +219,17 @@ export default {
   },
 
   methods: {
+    updateField(field) {
+      this.$emit("checkCodeFieldValid", this.validateState(field));
+    },
     changeField(field) {
       this.isUserBlured = false;
       if (this.validateState(field)) {
-        this.$LogEvent({
-          ...this.logParams,
-          message: `Поле ${field} заполнено`,
-          timeUser: new Date(),
-        });
+        // this.$LogEvent({
+        //   ...this.logParams,
+        //   message: `Поле ${field} заполнено`,
+        //   timeUser: new Date(),
+        // });
       }
     },
     async executeRecaptcha() {
