@@ -15,13 +15,13 @@ export default function ({ route, redirect, $axios, $cookiz }) {
       $cookiz.set("auth._refresh_token.local", data.REFRESH_TOKEN);
       return redirect("/cabinet");
     })
-    .catch((error) => {
-      return redirect(
+    .catch((error) =>
+      redirect(
         `/login?error=${
           error?.response?.data?.MESSAGE
             ? getErrorMessage(error.response?.data?.MESSAGE)
             : error
         }`
-      );
-    });
+      )
+    );
 }
