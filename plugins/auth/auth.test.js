@@ -4,6 +4,7 @@ global.$nuxt = {
     toast: () => {},
   },
 };
+
 describe("makeToast()", () => {
   const error = {
     MESSAGE: "Ошибка",
@@ -19,9 +20,11 @@ describe("makeToast()", () => {
     makeToast(error);
     expect(toast).toHaveBeenCalled();
   });
+
   it("should throw error if error object is not passed", () => {
     expect(() => makeToast()).toThrow("Ошибка");
   });
+
   it("should hide toasts if count of calls is greater than 2", () => {
     const hide = jest.spyOn(global.$nuxt.$bvToast, "hide");
     makeToast(error);

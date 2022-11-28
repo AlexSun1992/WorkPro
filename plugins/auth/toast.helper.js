@@ -61,12 +61,9 @@ export function getErrorMessage(errorMessage) {
       const getArrWithErrBrackets =
         getStringMessageWithErrBrackets.match(/\[.+?\]/);
       const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
-      //  console.log("pureMessageText[1]:", pureMessageText[1]);
       return pureMessageText[1];
     }
-    // console.log("stringWithBrackets[1]:", stringWithBrackets[1]);
     return stringWithBrackets[1];
   }
-  // console.log("errMessageString:", typeof errMessageString);
   return errMessageString;
 }
