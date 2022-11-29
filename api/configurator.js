@@ -20,7 +20,7 @@ router.get("/module", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
     mobile2ServiceInstance.defaults.baseURL =
-      process.env.MOBILE2_URL ?? "https://mobile2.reso.ru";
+      process.env.MOBILE2_URL ?? "https://lk.reso.ru";
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance.defaults.baseURL = "https://mobiletest.reso.ru";
