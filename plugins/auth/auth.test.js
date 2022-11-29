@@ -1,3 +1,11 @@
+import Vue from "vue";
+import { ToastPlugin } from "bootstrap-vue";
+import { mount } from "@vue/test-utils";
+
+import AuthTest from "./AuthTest.vue";
+
+Vue.use(ToastPlugin);
+
 global.$nuxt = {
   $bvToast: {
     hide: () => {},
@@ -15,6 +23,13 @@ describe("makeToast()", () => {
     jest.resetAllMocks();
     jest.resetModules();
   });
+
+  it("testAttempt", () => {
+    const getComponent = mount(AuthTest);
+    console.log("getComponent:", getComponent.html());
+    expect(getComponent).not.toBe(null);
+  });
+
   it("should show always show toast if error passed", () => {
     const toast = jest.spyOn(global.$nuxt.$bvToast, "toast");
     makeToast(error);
@@ -32,6 +47,9 @@ describe("makeToast()", () => {
     makeToast(error);
     expect(hide).toHaveBeenCalledTimes(1);
   });
+  // it("test", () => {
+  //   this.$bvToast.toast("hello");
+  // });
   it("shouldn't hide toasts if count of calls is less or equal than 2", () => {
     const hide = jest.spyOn(global.$nuxt.$bvToast, "hide");
     makeToast(error);
