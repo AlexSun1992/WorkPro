@@ -12,16 +12,17 @@ export function makeToast(error) {
   if (toastCount > 2) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
-
   const revealErrorType = typeof getErrorMessage(error);
-
   const getErrObj = getErrorMessage(error);
-
   if (revealErrorType === "object") {
     const htmlElement = this.$createElement;
-    const vNodesMSG = htmlElement("p", getErrObj.errorText, [
-      htmlElement("b-link", { props: { href: "/" } }, getErrObj.errorLink),
+
+    const vNodesMSG = htmlElement("p", [
+      htmlElement("p", { props: { type: "grow", small: true } }),
+      `${getErrObj.errorText}`,
+      htmlElement("b-link", { props: { href: "/" } }, `${getErrObj.errorLink}`),
     ]);
+
     $nuxt.$bvToast.toast(vNodesMSG, {
       id: toastCount.toString(),
       title: "Ошибка",

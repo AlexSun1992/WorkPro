@@ -24,10 +24,11 @@ describe("makeToast()", () => {
     jest.resetModules();
   });
 
-  it("testAttempt", () => {
-    const getComponent = mount(AuthTest);
-    console.log("getComponent:", getComponent.html());
-    expect(getComponent).not.toBe(null);
+  it("testAttempt", async () => {
+    const wrapper = mount(AuthTest);
+    await wrapper.find("#btn").trigger("click");
+    await wrapper.vm.$nextTick();
+    expect(wrapper).not.toBe(null);
   });
 
   it("should show always show toast if error passed", () => {

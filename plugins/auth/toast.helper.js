@@ -45,7 +45,7 @@ export function getErrorMessage(errorMessage) {
       errorTextAndLink.errorText = removeLinkFromErrMsgText;
       errorTextAndLink.errorLink = getLinkToMainPage[0];
 
-      return SYSTEM_ERROR_TEXT;
+      return errorTextAndLink;
     }
   }
 
