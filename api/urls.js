@@ -1,8 +1,8 @@
 /* eslint-disable */
 const VER = "v2";
-const AUTH = `/am/auth/${VER}/authorize`;
-const REFRESH_TOKEN = `/am/auth/${VER}/token_refresh`;
-const SOCKET = "wss://mobile2.reso.ru/chat";
+const AUTH = `/am/authw/${VER}/authorize`;
+const REFRESH_TOKEN = `/am/authw/${VER}/token_refresh`;
+const SOCKET = "wss://lk.reso.ru/chat";
 const MODULE = `/am/main/${VER}/module`;
 const MENU = `/am/main/${VER}/menu`;
 const CLIENTMENU = `/am/main/${VER}/clientmenu`;

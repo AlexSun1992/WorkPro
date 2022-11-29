@@ -3,8 +3,7 @@ import Cookies from "js-cookie";
 
 const instance = axios.create({});
 if (typeof window === "undefined") {
-  instance.defaults.baseURL =
-    process.env.MOBILE_URL ?? "https://mobile2.reso.ru";
+  instance.defaults.baseURL = process.env.MOBILE_URL ?? "https://lk.reso.ru";
 }
 instance.defaults.headers.common["X-Application"] = "VueJS";
 
