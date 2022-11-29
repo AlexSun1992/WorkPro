@@ -5,7 +5,7 @@ export const mobile2Service = (url) => {
   instance.defaults.timeout = 300000;
   instance.defaults.timeoutErrorMessage = "Запрос выполняется больше 30 секунд";
   instance.defaults.baseURL =
-    url || process.env.MOBILE2_URL || "https://mobile2.reso.ru";
+    url || process.env.MOBILE2_URL || "https://lk.reso.ru";
   instance.defaults.headers.common["X-Application"] = "VueJS";
   return instance;
 };

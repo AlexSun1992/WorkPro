@@ -159,7 +159,13 @@ export default {
         this.$route.params.idItem
       }?time=${Date.now()}`;
       if (process.client) {
-        await this.$loadScript(this.urlScript);
+        await this.$loadScript(this.urlScript)
+          .then(() => {
+            console.log("load", this.urlScript);
+          })
+          .catch(() => {
+            console.error("load", this.urlScript);
+          });
         this.isLoadedScript = true;
       }
       this.$root.eventHandler =
@@ -171,7 +177,13 @@ export default {
   },
   async beforeDestroy() {
     try {
-      await this.$unloadScript(this.urlScript);
+      await this.$unloadScript(this.urlScript)
+        .then(() => {
+          console.log("unload", this.urlScript);
+        })
+        .catch(() => {
+          console.error("unload", this.urlScript);
+        });
     } catch (e) {
       console.error(e);
     }

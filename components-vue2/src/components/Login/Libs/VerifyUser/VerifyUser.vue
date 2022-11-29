@@ -4,6 +4,7 @@
       <b-form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
+          id="phone"
           v-if="loginType === 'phone'"
           ref="userInput"
           v-model="v[loginType].$model"
@@ -62,6 +63,7 @@
     <div class="col-12 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
       <b-form-group label="Код подтверждения">
         <b-form-input
+          id="sms-confirm"
           autofocus
           ref="codeInput"
           v-model="v.code.$model"
@@ -69,6 +71,7 @@
           v-mask="codeMask"
           :state="validateInput('code', isCodeBlured)"
           @blur="blurField('code', isCodeBlured)"
+          @update="updateField('code')"
           @change="changeField('code')"
           @input="inputTouch(loginType)"
           :disabled="disabled"
@@ -216,14 +219,17 @@ export default {
   },
 
   methods: {
+    updateField(field) {
+      this.$emit("checkCodeFieldValid", this.validateState(field));
+    },
     changeField(field) {
       this.isUserBlured = false;
       if (this.validateState(field)) {
-        this.$LogEvent({
-          ...this.logParams,
-          message: `Поле ${field} заполнено`,
-          timeUser: new Date(),
-        });
+        // this.$LogEvent({
+        //   ...this.logParams,
+        //   message: `Поле ${field} заполнено`,
+        //   timeUser: new Date(),
+        // });
       }
     },
     async executeRecaptcha() {
