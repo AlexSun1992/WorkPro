@@ -286,6 +286,7 @@ export const mutations = {
     state.serverFilters.forEach((item) => {
       if (item.propertyName === data.id) {
         item.filter = data.filterIdNumber.toString();
+        item.filterOptions = data.filterOptions;
       }
     });
 
