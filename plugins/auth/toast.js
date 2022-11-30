@@ -16,7 +16,6 @@ export function makeToast(error) {
   const getErrObj = getErrorMessage(error);
   if (revealErrorType === "object") {
     const htmlElement = this.$createElement;
-
     const vNodesMSG = htmlElement("p", [
       htmlElement("p", { props: { type: "grow", small: true } }),
       `${getErrObj.errorText}`,
@@ -31,6 +30,7 @@ export function makeToast(error) {
       appendToast: false,
       toaster: "b-toaster-top-full",
     });
+    return;
   }
 
   if (revealErrorType === "string") {

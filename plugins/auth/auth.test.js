@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { ToastPlugin } from "bootstrap-vue";
-import { mount } from "@vue/test-utils";
 
-import AuthTest from "./AuthTest.vue";
+// import { mount } from "@vue/test-utils";
+// import AuthTest from "./AuthTest.vue";
 
 Vue.use(ToastPlugin);
 
@@ -24,12 +24,12 @@ describe("makeToast()", () => {
     jest.resetModules();
   });
 
-  it("testAttempt", async () => {
-    const wrapper = mount(AuthTest);
-    await wrapper.find("#btn").trigger("click");
-    await wrapper.vm.$nextTick();
-    expect(wrapper).not.toBe(null);
-  });
+  // it("testAttempt", async () => {
+  //   const wrapper = mount(AuthTest);
+  //   await wrapper.find("#btn").trigger("click");
+  //   await wrapper.vm.$nextTick();
+  //   expect(wrapper).not.toBe(null);
+  // });
 
   it("should show always show toast if error passed", () => {
     const toast = jest.spyOn(global.$nuxt.$bvToast, "toast");
