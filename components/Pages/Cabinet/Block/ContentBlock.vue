@@ -108,9 +108,8 @@ export default {
     },
     filters() {
       const servers = this.$store.getters["blocks/getServerFilters"];
-      const actionButtonData = servers.find((item) => item.filterOptions);
 
-      return actionButtonData;
+      return servers;
     },
 
     parentMenu: {
