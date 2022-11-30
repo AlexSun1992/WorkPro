@@ -15,12 +15,12 @@ describe("Модуль вывода сообщения об ошибке", () =>
     expect(typeof errorMessageWithoutORA === "string").toBe(true);
   });
 
-  it("Проверяем тип данных,возвращаемых функцией(должен возвращать объект)", () => {
-    const errorMessageText =
-      'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
-    const errorMessageWithOutORA = getErrorMessage(errorMessageText);
-    expect(typeof errorMessageWithOutORA === "object").toBe(true);
-  });
+  // it("Проверяем тип данных,возвращаемых функцией(должен возвращать объект)", () => {
+  //   const errorMessageText =
+  //     'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
+  //   const errorMessageWithOutORA = getErrorMessage(errorMessageText);
+  //   expect(typeof errorMessageWithOutORA === "object").toBe(true);
+  // });
 
   it("Должен обрабатывать сообщение об ошибке, содержащее 'сбой распределенной операции обновления; требуется откат'", () => {
     const errorMessageText =
