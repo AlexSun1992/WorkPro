@@ -2322,6 +2322,7 @@ a.free {
     background-image: url(/img/osagostap3.svg);
 }
 
+.step[data-step].docs,
 .osago .step[data-step="4"] {
     background-image: url(/img/osagostap4.svg);
 }
@@ -3853,6 +3854,17 @@ h6 {
     font-weight: 500;
     font-size: 1.125rem;
     line-height: 30px;
+}
+
+.ph1 {
+    font-size: 1.25rem;
+    line-height: 2rem;
+}
+
+.ph1b {
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 2rem;
 }
 
 .blk-shadow {
