@@ -65,7 +65,10 @@ export default {
       return pages
         .map((page) => [
           ...this.data.filter(
-            (item) => item.page === page && item.visible === true
+            (item) =>
+              item.page === page &&
+              item.visible === true &&
+              item.type !== "WizardButton"
           ),
         ])
         .filter((form) => form.length > 0);
