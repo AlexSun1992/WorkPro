@@ -3944,8 +3944,12 @@ h6 {
 @media (min-width: 992px) and (max-width: 1220px) {
     .block-policy_small .pay-notification {
         right: 5px;
-        max-width: calc(100% - 10px);
+        width: calc(100% - 10px);
         font-size: 0.875rem;
+        text-align: center;
+    }
+    .block-policy_small .pay-notification:after {
+        display: none;
     }
 }
 
