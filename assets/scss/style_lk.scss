@@ -3941,12 +3941,17 @@ h6 {
     }
 }
 
+.border-block .block-policy_small .pay-notification {
+    font-size: 1rem;
+}
+
 @media (min-width: 992px) and (max-width: 1220px) {
     .block-policy_small .pay-notification {
         right: 5px;
         width: calc(100% - 10px);
         font-size: 0.875rem;
         text-align: center;
+        padding-right: 12px;
     }
     .block-policy_small .pay-notification:after {
         display: none;
