@@ -13,11 +13,11 @@ export function makeToast(error) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
 
-  const htmlElement = this.$createElement;
-
-  getErrorMessage(error, htmlElement, toastCount);
+  getErrorMessage(error);
   const revealErrorType = typeof getErrorMessage(error);
+
   if (revealErrorType === "object") {
+    const htmlElement = this.$createElement;
     const getErrObj = getErrorMessage(error);
     const vNodesMSG = htmlElement("p", [
       htmlElement("p", { props: { type: "grow", small: true } }),
