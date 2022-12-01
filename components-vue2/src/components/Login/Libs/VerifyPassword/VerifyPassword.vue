@@ -75,7 +75,8 @@ export default {
     changeField(field) {
       this.$LogEvent({
         ...this.logParams,
-        message: `Поле ${field} заполнено`,
+        controlName: field,
+        message: `Поле ${field} посещено`,
         timeUser: new Date(),
       });
       console.log(field, this.v[field].$model);

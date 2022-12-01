@@ -194,7 +194,7 @@ async function logEvent(object) {
       else objectData.idDevice = 9;
 
       objectData.referer = document.referrer.split("?")[0];
-      objectData.userAgent = window.navigator.userAgent;
+      // objectData.userAgent = window.navigator.userAgent;
 
       const utm = getUtm();
       objectData.utm_source = utm.utm_source;
@@ -219,8 +219,8 @@ async function logEvent(object) {
 
     if (objectDataArray.length > 0) {
       generalObject.formName = formName;
-      generalObject.resending = 0;
-      generalObject.events = objectDataArray;
+      // generalObject.resending = 0;
+      // generalObject.events = objectDataArray;
 
       const urlApiLog = "/am/free/v2/lk/log";
       fetch(urlApiLog, {
@@ -228,7 +228,7 @@ async function logEvent(object) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(generalObject),
+        body: JSON.stringify({ ...generalObject, ...object }),
       });
     }
   } catch (error) {
