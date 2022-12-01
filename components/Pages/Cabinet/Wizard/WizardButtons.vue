@@ -7,7 +7,13 @@
       class="col-auto"
       v-if="currentTab.order != qty && $route.params.idCard != 0"
     >
-      <b-button :disabled="loading" variant="success" @click="saveCard">
+      <b-button
+        v-if="showBtnVisibleSave"
+        :class="showBtnStyleSave"
+        :disabled="loading"
+        variant="success"
+        @click="saveCard"
+      >
         {{ showBtnNameSave }}
         <b-spinner v-if="loading" variant="danger" label="Spinning" />
       </b-button>
@@ -16,7 +22,13 @@
       class="col-auto"
       v-if="currentTab.order != qty && $route.params.idCard != 0"
     >
-      <b-button :disabled="loading" variant="success" @click="goNext">
+      <b-button
+        v-if="showBtnVisibleContinue"
+        :class="showBtnStyleContinue"
+        :disabled="loading"
+        variant="success"
+        @click="goNext"
+      >
         {{ showBtnNameContinue }}
         <b-spinner v-if="loading" variant="danger" label="Spinning" />
       </b-button>
@@ -29,10 +41,7 @@ export default {
   name: "WizardButtons",
   props: ["currentTab", "tabs", "qty", "loading"],
   computed: {
-    showBtnNameContinue() {
-      const menu = this.$store.getters["menu/flatmenu"]?.find(
-        (item) => item.IDITEM == this.currentTab.idItem
-      );
+    btnContinue() {
       const formData = this.$store.getters["data_card/getForm"];
       const fields = formData.length ? formData : formData.data || [];
       const wizardButtonContinue = fields.find((item) => {
@@ -40,14 +49,27 @@ export default {
           return true;
         }
       });
+      return wizardButtonContinue;
+    },
+    showBtnNameContinue() {
+      const menu = this.$store.getters["menu/flatmenu"]?.find(
+        (item) => item.IDITEM == this.currentTab.idItem
+      );
       if (menu.ACTIONSCUR[0]?.NTYPE == 35) {
         return menu.ACTIONSCUR[0].SNAME;
       }
-      return wizardButtonContinue?.label
-        ? wizardButtonContinue.label
-        : "Продолжить";
+      return this.btnContinue?.label ?? "Продолжить";
     },
-    showBtnNameSave() {
+    showBtnStyleContinue() {
+      return this.btnContinue?.labelCols ?? "";
+    },
+    showBtnVisibleContinue() {
+      if (this.btnContinue) {
+        return this.btnContinue.visible;
+      }
+      return true;
+    },
+    btnSave() {
       const formData = this.$store.getters["data_card/getForm"];
       const fields = formData.length ? formData : formData.data || [];
       const wizardButtonSave = fields.find((item) => {
@@ -55,7 +77,19 @@ export default {
           return true;
         }
       });
-      return wizardButtonSave?.label ? wizardButtonSave.label : "Сохранить";
+      return wizardButtonSave;
+    },
+    showBtnNameSave() {
+      return this.btnSave?.label ?? "Сохранить";
+    },
+    showBtnStyleSave() {
+      return this.btnSave?.labelCols ?? "";
+    },
+    showBtnVisibleSave() {
+      if (this.btnSave) {
+        return this.btnSave.visible;
+      }
+      return true;
     },
     isError() {
       return this.$store.getters["data_card/getError"];

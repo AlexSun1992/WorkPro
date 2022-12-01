@@ -60,7 +60,7 @@ async function logEvent(object) {
       }
 
       function getParams(w_data) {
-        const params = w_data.split("&").reduce(function (p, e) {
+        const params = w_data.split("&").reduce((p, e) => {
           const a = e.split("=");
           p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
           return p;
@@ -222,7 +222,7 @@ async function logEvent(object) {
       generalObject.resending = 0;
       generalObject.events = objectDataArray;
 
-      const urlApiLog = "/am/free/v2/siteapi/log/events";
+      const urlApiLog = "/am/free/v2/lk/log";
       fetch(urlApiLog, {
         method: "POST",
         headers: {

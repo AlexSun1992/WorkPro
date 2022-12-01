@@ -1,28 +1,18 @@
 <template>
   <div class="text-right">
-    <b-button
+    <button
       v-if="!percentsVisible"
       @click="$refs.file.click()"
-      class="btn-doc-add"
+      class="btn btn-doc-add"
     >
-      Прикрепить файл
-    </b-button>
+      Загрузить файл
+    </button>
     <input
       ref="file"
       type="file"
       style="display: none"
       v-on:change="handleFileUpload()"
     />
-    <div class="progress">
-      <b-progress
-        v-if="percentsVisible"
-        class="mb-2"
-        variant="success"
-        :value="uploadPercentage"
-        show-progress
-        animated
-      ></b-progress>
-    </div>
   </div>
 </template>
 
@@ -115,5 +105,31 @@ export default {
   font-style: italic;
   font-weight: 300;
   font-size: 15px;
+}
+.btn-doc-add {
+  text-align: center;
+  padding: 17px 40px 17px 76px;
+  border-radius: 15px;
+  font-size: 1rem;
+  line-height: 1rem;
+  box-sizing: border-box;
+  border: 2px solid #fe7333;
+  font-weight: 700;
+  white-space: nowrap;
+  display: inline-block;
+  position: relative;
+  background: #fe7333 url(/img/icon-fileuploader.svg) 40px 50% no-repeat;
+  color: #fff;
+}
+.btn-doc-add:hover {
+  background-color: #fe8f5c;
+  color: #fff;
+  border: 2px solid #fe8f5c;
+}
+@media (max-width: 992px) {
+  .btn-doc-add {
+    padding: 15px 24px 15px 60px;
+    background: #fe7333 url(/img/icon-fileuploader.svg) 24px 50% no-repeat;
+  }
 }
 </style>

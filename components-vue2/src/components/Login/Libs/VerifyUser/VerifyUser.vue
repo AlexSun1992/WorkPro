@@ -275,7 +275,7 @@ export default {
           const method = params.error ? "sendsmscode2" : "sendsmscode";
 
           const response = await axios.post(
-            `/free/v2/${method}` +
+            `/am/free/v2/${method}` +
               `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,
             params,
             headers
@@ -290,7 +290,7 @@ export default {
           }
           return response;
         }
-        return await axios.post("/free/v2/sendemailcode", params, headers);
+        return await axios.post("/am/free/v2/sendemailcode", params, headers);
       } catch (e) {
         this.loading = false;
         this.$emit("error", e.response.data.INFO);

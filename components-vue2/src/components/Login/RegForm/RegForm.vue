@@ -287,11 +287,11 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      // this.$LogEvent({
-      //   ...this.logParams,
-      //   message: "Форма загрузилась",
-      //   timeUser: new Date(),
-      // });
+      this.$LogEvent({
+        ...this.logParams,
+        message: "Форма загрузилась",
+        timeUser: new Date(),
+      });
     });
   },
   validations: {
@@ -650,7 +650,7 @@ export default {
           headers: { recaptcha: params.token },
         };
         const response = await axios.post(
-          "/free/v2/registration",
+          "/am/free/v2/registration",
           params,
           headers
         );
