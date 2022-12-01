@@ -650,7 +650,7 @@ export default {
           headers: { recaptcha: params.token },
         };
         const response = await axios.post(
-          "/free/v2/registration",
+          "/am/free/v2/registration",
           params,
           headers
         );

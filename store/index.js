@@ -23,7 +23,7 @@ export const actions = {
       };
       delete params.token;
       const regResponse = await this.$axios.post(
-        "/free/v2/registration",
+        "/am/free/v2/registration",
         params,
         headers
       );
@@ -64,14 +64,14 @@ export const actions = {
       ) {
         let method = error ? "sendsmscode2" : "sendsmscode";
         return await this.$axios.post(
-          `/free/v2/${method}` +
+          `/am/free/v2/${method}` +
             `${modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,
           params,
           headers
         );
       } else {
         return await this.$axios.post(
-          "/free/v2/sendemailcode",
+          "/am/free/v2/sendemailcode",
           params,
           headers
         );
@@ -84,7 +84,7 @@ export const actions = {
   async resetPassword({ commit }, params) {
     try {
       const response = await this.$axios.post(
-        "/free/v2/restorepassword",
+        "/am/free/v2/restorepassword",
         params
       );
       return response;

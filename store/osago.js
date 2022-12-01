@@ -59,7 +59,7 @@ export const actions = {
         await this.$axios
           .get(
             encodeURI(
-              `/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}&${Math.random()}`
+              `/am/free/v2/osago/findAuto?REG_NUMBER=${REG_NUMBER}&${Math.random()}`
             )
           )
           .then((res) => {

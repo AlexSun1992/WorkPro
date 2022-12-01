@@ -193,7 +193,10 @@ export default {
       try {
         this.isErrorMessage = false;
         this.errorMessage = null;
-        const response = await axios.post("/free/v2/restorepassword", params);
+        const response = await axios.post(
+          "/am/free/v2/restorepassword",
+          params
+        );
         if (response.data[0].MESSAGE_CODE === "200") {
           this.$bvModal
             .msgBoxOk("Пароль успешно изменён", {
