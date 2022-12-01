@@ -129,6 +129,7 @@ export default {
 @media (max-width: 992px) {
   .btn-doc-add {
     padding: 15px 24px 15px 60px;
+    background: #fe7333 url(/img/icon-fileuploader.svg) 24px 50% no-repeat;
   }
 }
 </style>
