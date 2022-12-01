@@ -22,7 +22,7 @@ export function convertErrorMessageToArray(errorMessage) {
  * @returns {string}
  */
 
-export function getErrorMessage(errorMessage, id, createEl) {
+export function getErrorMessage(errorMessage) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
 
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
@@ -45,26 +45,7 @@ export function getErrorMessage(errorMessage, id, createEl) {
       errorTextAndLink.errorText = removeLinkFromErrMsgText;
       errorTextAndLink.errorLink = getLinkToMainPage[0];
 
-      // return errorTextAndLink;
-      const htmlElement = this.$createElement;
-      const vNodesMSG = createEl("p", [
-        createEl("p", { props: { type: "grow", small: true } }),
-        `${errorTextAndLink.errorText}`,
-        createEl(
-          "b-link",
-          { props: { href: "/" } },
-          `${errorTextAndLink.errorLink}`
-        ),
-      ]);
-
-      $nuxt.$bvToast.toast(vNodesMSG, {
-        id: id,
-        title: "Ошибка",
-        variant: "danger",
-        autoHideDelay: 20000,
-        appendToast: false,
-        toaster: "b-toaster-top-full",
-      });
+      return errorTextAndLink;
     }
   }
 
