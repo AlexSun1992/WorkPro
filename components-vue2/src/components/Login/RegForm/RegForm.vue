@@ -287,11 +287,11 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      // this.$LogEvent({
-      //   ...this.logParams,
-      //   message: "Форма загрузилась",
-      //   timeUser: new Date(),
-      // });
+      this.$LogEvent({
+        ...this.logParams,
+        message: "Форма загрузилась",
+        timeUser: new Date(),
+      });
     });
   },
   validations: {
