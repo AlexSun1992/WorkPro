@@ -12,11 +12,11 @@ export function makeToast(error) {
   if (toastCount > 2) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
-  const revealErrorType = typeof getErrorMessage(error);
-  console.log("revealErrorType:", revealErrorType);
-  if (revealErrorType === "object") {
+
+  const getErrObj = getErrorMessage(error);
+
+  if (typeof getErrObj === "object") {
     const htmlElement = this.$createElement;
-    const getErrObj = getErrorMessage(error);
     const vNodesMSG = htmlElement("p", [
       htmlElement("p", { props: { type: "grow", small: true } }),
       `${getErrObj.errorText}`,
@@ -34,8 +34,8 @@ export function makeToast(error) {
     return;
   }
 
-  if (revealErrorType === "string") {
-    $nuxt.$bvToast.toast(getErrorMessage(error), {
+  if (typeof getErrObj === "string") {
+    $nuxt.$bvToast.toast(getErrObj, {
       id: toastCount.toString(),
       title: "Ошибка",
       variant: "danger",

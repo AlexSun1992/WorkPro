@@ -44,7 +44,6 @@ export function getErrorMessage(errorMessage) {
       const errorTextAndLink = {};
       errorTextAndLink.errorText = removeLinkFromErrMsgText;
       errorTextAndLink.errorLink = getLinkToMainPage[0];
-
       return errorTextAndLink;
     }
   }
