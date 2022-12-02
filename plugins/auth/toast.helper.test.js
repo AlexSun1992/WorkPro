@@ -8,43 +8,19 @@ describe("Модуль вывода сообщения об ошибке", () =>
     expect(errorMessageWithoutORA).toBe("Некорректный номер телефона");
   });
 
-  it("Должен возвращать ошибку в типе данных строка", () => {
-    const errorMessageText =
-      'ORA-20105: Некорректный номер телефона\nORA-06512: на  "MOBILE.CLIENTUTILS", line 934\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
-    const errorMessageWithoutORA = getErrorMessage(errorMessageText);
-    expect(errorMessageWithoutORA).toBe("Некорректный номер телефона");
-  });
-
   it("Проверяем тип данных,возвращаемых функцией(должен возвращать объект)", () => {
     const errorMessageText =
       'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
     const errorMessageWithOutORA = getErrorMessage(errorMessageText);
 
-    expect(errorMessageWithOutORA.errorLink).toBe("Главную Личного кабинета.");
-    expect(errorMessageWithOutORA.errorText).toBe(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
-        "Просим обновить страницу или перейти на "
-    );
-  });
-
-  it("Должен обрабатывать сообщение об ошибке, содержащее 'сбой распределенной операции обновления; требуется откат'", () => {
-    const errorMessageText =
-      'ORA-02055: сбой распределенной операции обновления; требуется откат\nORA-20105: SDOCSERIES=Некорректная серия паспорта: 5345345345345\nORA-06512: на  "MOBILE.CLIENTUTILS", line 763\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
-    const errorMessageWithoutORA = getErrorMessage(errorMessageText);
-
-    expect(errorMessageWithoutORA.errorText).toContain(
-      "Просим обновить страницу или перейти на "
-    );
-    expect(errorMessageWithoutORA.errorLink).toBe("Главную Личного кабинета.");
-  });
-
-  it("Должен обрабатывать сообщение об ошибке, Приносим извинения, в Личном Кабинете что-то пошло не так", () => {
-    const errorMessageText =
-      'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
-    const errorMessageWithoutORA = getErrorMessage(errorMessageText);
-    expect(errorMessageWithoutORA.errorText).toContain(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так"
-    );
+    expect(errorMessageWithOutORA).toMatchInlineSnapshot(`
+      Object {
+        "errorHref": "/cabinet",
+        "errorLink": "Главную Личного кабинета.",
+        "errorText": "Приносим извинения, в Личном Кабинете что-то пошло не так.
+      Просим обновить страницу или перейти на ",
+      }
+    `);
   });
 
   it("Должен обрабатывать сообщения об ошибке без ORA в тексте", () => {
