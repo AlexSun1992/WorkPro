@@ -225,11 +225,12 @@ export default {
     changeField(field) {
       this.isUserBlured = false;
       if (this.validateState(field)) {
-        // this.$LogEvent({
-        //   ...this.logParams,
-        //   message: `Поле ${field} заполнено`,
-        //   timeUser: new Date(),
-        // });
+        this.$LogEvent({
+          ...this.logParams,
+          controlName: field,
+          message: `Поле ${field} посещено`,
+          timeUser: new Date(),
+        });
       }
     },
     async executeRecaptcha() {

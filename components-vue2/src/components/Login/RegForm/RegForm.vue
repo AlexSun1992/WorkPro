@@ -230,9 +230,8 @@ export default {
     return {
       logEvent: null,
       logParams: {
-        formName: "vue",
-        controlName: "component-auth-form",
-        idEventType: 9999,
+        formName: "Registration",
+        idEventType: 15,
       },
       codeFieldValid: false,
       form: {
@@ -289,6 +288,7 @@ export default {
     this.$nextTick(() => {
       this.$LogEvent({
         ...this.logParams,
+        controlName: "RegForm.vue",
         message: "Форма загрузилась",
         timeUser: new Date(),
       });
@@ -382,7 +382,8 @@ export default {
       if (this.form[field] || this[field]) {
         this.$LogEvent({
           ...this.logParams,
-          message: `Поле ${field} заполнено`,
+          controlName: field,
+          message: `Поле ${field} посещено`,
           timeUser: new Date(),
         });
         console.log(field, this.form[field] || this[field]);
