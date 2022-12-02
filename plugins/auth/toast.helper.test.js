@@ -12,14 +12,19 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageText =
       'ORA-20105: Некорректный номер телефона\nORA-06512: на  "MOBILE.CLIENTUTILS", line 934\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
     const errorMessageWithoutORA = getErrorMessage(errorMessageText);
-    expect(typeof errorMessageWithoutORA === "string").toBe(true);
+    expect(errorMessageWithoutORA).toBe("Некорректный номер телефона");
   });
 
   it("Проверяем тип данных,возвращаемых функцией(должен возвращать объект)", () => {
     const errorMessageText =
       'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
     const errorMessageWithOutORA = getErrorMessage(errorMessageText);
-    expect(typeof errorMessageWithOutORA === "object").toBe(true);
+
+    expect(errorMessageWithOutORA.errorLink).toBe("Главную Личного кабинета.");
+    expect(errorMessageWithOutORA.errorText).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
+        "Просим обновить страницу или перейти на "
+    );
   });
 
   it("Должен обрабатывать сообщение об ошибке, содержащее 'сбой распределенной операции обновления; требуется откат'", () => {
