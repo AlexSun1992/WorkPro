@@ -12,10 +12,8 @@ export function makeToast(error) {
   if (toastCount > 2) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
-
-  getErrorMessage(error);
   const revealErrorType = typeof getErrorMessage(error);
-
+  console.log("revealErrorType:", revealErrorType);
   if (revealErrorType === "object") {
     const htmlElement = this.$createElement;
     const getErrObj = getErrorMessage(error);

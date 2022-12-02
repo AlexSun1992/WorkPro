@@ -51,6 +51,7 @@ export function getErrorMessage(errorMessage) {
 
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
+
     const transformErrorTextToArray =
       getErrorTextWithBrackets.match(/\[.+?\]/g);
 
@@ -61,9 +62,12 @@ export function getErrorMessage(errorMessage) {
       const getArrWithErrBrackets =
         getStringMessageWithErrBrackets.match(/\[.+?\]/);
       const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
+
       return pureMessageText[1];
     }
+
     return stringWithBrackets[1];
   }
+
   return errMessageString;
 }
