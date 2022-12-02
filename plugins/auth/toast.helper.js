@@ -32,19 +32,13 @@ export function getErrorMessage(errorMessage) {
   if (getORAnumber) {
     const getORAtext = errorMessage.match(/\s?ORA-\d{5}/)[0];
     if (MAX_ORA_ERROR > getORAtext) {
-      const getLinkToMainPage = SYSTEM_ERROR_TEXT.match(
-        /Главную Личного кабинета./
-      );
-
-      const removeLinkFromErrMsgText = SYSTEM_ERROR_TEXT.replace(
-        /Главную Личного кабинета./,
-        ""
-      );
-
-      const errorTextAndLink = {};
-      errorTextAndLink.errorText = removeLinkFromErrMsgText;
-      errorTextAndLink.errorLink = getLinkToMainPage[0];
-      return errorTextAndLink;
+      return {
+        errorText:
+          "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
+          "Просим обновить страницу или перейти на ",
+        errorLink: "Главную Личного кабинета.",
+        errorHref: "/cabinet",
+      };
     }
   }
 
