@@ -22,7 +22,8 @@ router.use(cookieParser());
 
 router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
-    const clientIp = requestIp.getClientIp(req);
+    const ipAddress = requestIp.getClientIp(req);
+    console.log(ipAddress);
     let mobile2ServiceInstance = mobile2Service();
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
@@ -35,7 +36,7 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       ? req.headers.cookie
       : null;
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
-      clientIp || IP.address();
+      ipAddress || null;
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
@@ -144,6 +145,10 @@ router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
       }
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
+      ?.cookie
+      ? req.headers.cookie
+      : null;
     if (req?.headers?.authorization) {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.headers.authorization;
