@@ -9,7 +9,7 @@ import { $axios } from "@/plugins/axios";
 export async function getBrandmodelSuggestions(query, filters) {
   const group = [];
 
-  const response = await $axios.post({
+  const response = await this.$axios.post({
     url: "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/brandmodel",
 
     data: { query, filters },
