@@ -262,15 +262,17 @@ export default {
     },
 
     async fetchToken() {
-      this.$LogEvent({
-        formName: "Authorization",
-        idEventType: this.$v.user.code.$model ? 45 : 4,
-        controlName: "Button",
-        message: `Нажал на кнопку "${
-          this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"
-        }"`,
-        timeUser: new Date(),
-      });
+      if (typeof this.$LogEvent === "function") {
+        this.$LogEvent({
+          formName: "Authorization",
+          idEventType: this.$v.user.code.$model ? 45 : 4,
+          controlName: "Button",
+          message: `Нажал на кнопку "${
+            this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"
+          }"`,
+          timeUser: new Date(),
+        });
+      }
       this.$v.user.username.$touch();
       this.$v.user.password.$touch();
       if (
