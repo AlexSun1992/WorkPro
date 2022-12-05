@@ -132,7 +132,7 @@
 
 <script>
 import axios from "axios";
-// import { mobile2Service } from "@/services/mobile2.services";
+
 import _ from "lodash";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
