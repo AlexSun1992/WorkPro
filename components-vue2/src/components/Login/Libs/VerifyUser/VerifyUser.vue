@@ -301,7 +301,7 @@ export default {
             }
             return null;
           };
-          const response = await mobile2Service.post(getURL(), params, headers);
+          const response = await axios.post(getURL(), params, headers);
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
           if (getSuccessSendMessageText !== undefined) {
