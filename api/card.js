@@ -226,6 +226,10 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
       }
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
+      ?.cookie
+      ? req.headers.cookie
+      : null;
     const URL_ADDRESS = encodeURI(
       `/am/free/v2/vuetemplate/${req.params.idItem}`
     );
