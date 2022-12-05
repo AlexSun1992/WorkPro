@@ -132,6 +132,7 @@
 
 <script>
 import axios from "axios";
+import { mobile2Service } from "@/services/mobile2.services";
 import _ from "lodash";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
@@ -300,7 +301,11 @@ export default {
             }
             return null;
           };
-          const response = await axios.post(getURL(), params, headers);
+          const response = await mobile2Service().post(
+            getURL(),
+            params,
+            headers
+          );
 
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
