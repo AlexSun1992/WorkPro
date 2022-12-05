@@ -75,15 +75,6 @@ export default {
     },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.$LogEvent({
-        formName: "Authorization",
-        idEventType: 2,
-        controlName: "RegForm.vue",
-        message: "Просмотр страницы Авторизации",
-        timeUser: new Date(),
-      });
-    });
     const currentURL = window.location.pathname;
     this.visibleForm = currentURL.includes("registration")
       ? "registration"

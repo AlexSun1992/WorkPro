@@ -235,13 +235,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       if (typeof this.$LogEvent === "function") {
-        this.$LogEvent({
-          formName: "Authorization",
-          idEventType: 2,
-          controlName: "LoginForm.vue",
-          message: "Просмотр страницы Авторизации",
-          timeUser: new Date(),
-        });
+        const currentURL = window.location.pathname;
+        if (!currentURL.includes("registration")) {
+          this.$LogEvent({
+            formName: "Authorization",
+            idEventType: 2,
+            controlName: "LoginForm.vue",
+            message: "Просмотр страницы Авторизации",
+            timeUser: new Date(),
+          });
+        }
       }
     });
   },

@@ -284,14 +284,17 @@ export default {
     };
   },
   mounted() {
+    const currentURL = window.location.pathname;
     this.$nextTick(() => {
-      this.$LogEvent({
-        ...this.logParams,
-        idEventType: 1,
-        controlName: "RegForm.vue",
-        message: "Открыли форму регистрации",
-        timeUser: new Date(),
-      });
+      if (currentURL.includes("registration")) {
+        this.$LogEvent({
+          ...this.logParams,
+          idEventType: 1,
+          controlName: "RegForm.vue",
+          message: "Открыли форму регистрации",
+          timeUser: new Date(),
+        });
+      }
     });
   },
   validations: {
