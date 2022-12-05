@@ -232,7 +232,19 @@ export default {
       loginTouchesCount: 0,
     };
   },
-
+  mounted() {
+    this.$nextTick(() => {
+      if (typeof this.$LogEvent === "function") {
+        this.$LogEvent({
+          formName: "Authorization",
+          idEventType: 2,
+          controlName: "LoginForm.vue",
+          message: "Просмотр страницы Авторизации",
+          timeUser: new Date(),
+        });
+      }
+    });
+  },
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     // eslint-disable-next-line nuxt/no-globals-in-created
