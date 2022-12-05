@@ -231,7 +231,6 @@ export default {
       logEvent: null,
       logParams: {
         formName: "Registration",
-        idEventType: 15,
       },
       codeFieldValid: false,
       form: {
@@ -288,8 +287,9 @@ export default {
     this.$nextTick(() => {
       this.$LogEvent({
         ...this.logParams,
+        idEventType: 1,
         controlName: "RegForm.vue",
-        message: "Форма загрузилась",
+        message: "Открыли форму регистрации",
         timeUser: new Date(),
       });
     });
