@@ -1,3 +1,5 @@
+const MAX_ORA_ERROR = "ORA-10000";
+
 /**
  * Разбивает строку в массив по регулярному выражению, содержащему ORA-\d{5}
  * @param {string} errorMessage Строка с ошибкой, содержащая ORA и квадратные скобки, или не содержащая таковых.
@@ -20,10 +22,27 @@ export function convertErrorMessageToArray(errorMessage) {
 
 export function getErrorMessage(errorMessage) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
+
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
+
+  const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
+
+  if (getORAnumber) {
+    const getORAtext = errorMessage.match(/\s?ORA-\d{5}/)[0];
+    if (MAX_ORA_ERROR > getORAtext) {
+      return {
+        errorText:
+          "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
+          "Просим обновить страницу или перейти на ",
+        errorLink: "Главную Личного кабинета.",
+        errorHref: "/cabinet",
+      };
+    }
+  }
 
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
+
     const transformErrorTextToArray =
       getErrorTextWithBrackets.match(/\[.+?\]/g);
 
@@ -40,5 +59,6 @@ export function getErrorMessage(errorMessage) {
 
     return stringWithBrackets[1];
   }
+
   return errMessageString;
 }
