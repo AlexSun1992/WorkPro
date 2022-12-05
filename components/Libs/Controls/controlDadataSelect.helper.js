@@ -1,5 +1,5 @@
 // import axios from "axios";
-
+import { $axios } from "@/plugins/axios";
 /**
  * Подсказки Dadata по справочнику brandmodel
  * @param {String} query   Строка для поиска
@@ -9,7 +9,7 @@
 export async function getBrandmodelSuggestions(query, filters) {
   const group = [];
 
-  const response = await this.$axios.post({
+  const response = await $axios.post({
     url: "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/brandmodel",
 
     data: { query, filters },
