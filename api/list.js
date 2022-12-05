@@ -132,6 +132,11 @@ router.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
 router.get("/wizardlist/:idModule/:idWizard/:idItem", async (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
+      ?.cookie
+      ? req.headers.cookie
+      : null;
     if (req.headers.authorization) {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.headers.authorization;
