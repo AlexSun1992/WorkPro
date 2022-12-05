@@ -46,6 +46,7 @@
               @error="showError"
               @getLoginType="loginType"
               :loginType="'email'"
+              :mode-type="'RECOVERY'"
               :v="$v.form"
               :count="60"
               :validateState="validateState"
@@ -101,8 +102,6 @@
 </template>
 
 <script>
-import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
-import UserRecoveryForm from "../RecoveryForm/UserRecoveryForm.vue";
 import {
   required,
   email,
@@ -110,11 +109,13 @@ import {
   sameAs,
   helpers,
 } from "vuelidate/lib/validators";
-import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
-import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import { validationMixin } from "vuelidate";
 import { BTabs, BTab, BAlert, BRow, BFormGroup, BButton } from "bootstrap-vue";
 import axios from "axios";
+import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
+import UserRecoveryForm from "./UserRecoveryForm.vue";
+import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
+import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
@@ -275,7 +276,7 @@ export default {
       return this.currentTab == 0 ? [30, 40] : [20, 30];
     },
     disabled() {
-      let loginFieldInvalid =
+      const loginFieldInvalid =
         this.currentTab == 0
           ? this.$v.form.phone.$invalid
           : this.$v.form.email.$invalid;
