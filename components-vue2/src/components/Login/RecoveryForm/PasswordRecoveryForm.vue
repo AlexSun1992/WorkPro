@@ -45,6 +45,15 @@
                 />
               </div>
             </b-row>
+            <b-button
+              v-if="isSamePassword"
+              variant="primary"
+              @click="resetPassword"
+              :disabled="disabled"
+              id="btn_change-password_tel_lk"
+              class="mt-3"
+              >Изменить пароль</b-button
+            >
           </b-tab>
           <b-tab title="Email" button-id="tab_mail_lk" id="tab_mail">
             <b-alert :show="isErrorMessage" variant="danger">{{
@@ -81,22 +90,19 @@
                 />
               </div>
             </b-row>
+            <b-button
+              v-if="isSamePassword"
+              variant="primary"
+              @click="resetPassword"
+              :disabled="disabled"
+              id="btn_change-password_mail_lk"
+              class="mt-3"
+              >Изменить пароль</b-button
+            >
           </b-tab>
         </b-tabs>
       </div>
     </div>
-    <b-button
-      v-if="isSamePassword"
-      variant="primary"
-      @click="resetPassword"
-      :disabled="disabled"
-      :id="
-        this.currentTab === 0
-          ? 'btn_change-password_tel_lk'
-          : 'btn_change-password_mail_lk'
-      "
-      >Изменить пароль</b-button
-    >
   </div>
 </template>
 
