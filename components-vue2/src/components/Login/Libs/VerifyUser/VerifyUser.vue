@@ -132,7 +132,6 @@
 
 <script>
 import axios from "axios";
-
 import _ from "lodash";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";

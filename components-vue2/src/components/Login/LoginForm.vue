@@ -314,12 +314,15 @@ export default {
         };
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
-          body = { ...body, code: this.$v.user.code.$model };
+          body = {
+            ...body,
+            code: this.$v.user.code.$model,
+          };
         }
 
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
-        } = await axios.post("/am/authw/v2/authorize", body);
+        } = await this.$axios.post("/am/authw/v2/authorize", body);
 
         this.isModalVisible = false;
         document.cookie = `auth.strategy=local;`;
