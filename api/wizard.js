@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.use(express.json());
 router.use(cookieParser());
+const requestIp = require("request-ip");
 
 router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
   try {
