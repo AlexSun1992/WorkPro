@@ -138,6 +138,7 @@ router.get("/card/:idModule/:idItem", (req, res) => {
 router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
+    const ipAddress = requestIp.getClientIp(req);
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance.defaults.baseURL = "https://mobiletest.reso.ru";
@@ -148,6 +149,8 @@ router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
       ?.cookie
       ? req.headers.cookie
       : null;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || null;
     if (req?.headers?.authorization) {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.headers.authorization;
