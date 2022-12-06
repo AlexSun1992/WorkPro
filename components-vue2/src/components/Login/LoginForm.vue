@@ -165,7 +165,6 @@
 
 <script>
 import axios from "axios";
-import { mobile2Service } from "@/services/mobile2.services";
 import {
   BForm,
   BFormGroup,
