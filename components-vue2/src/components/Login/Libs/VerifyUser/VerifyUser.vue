@@ -266,7 +266,7 @@ export default {
     async getCodeHelper(params) {
       try {
         const headers = {
-          headers: { recaptcha: this.token },
+          headers: { recaptcha: this.token, "X-Application": "VueJS" },
         };
         if (
           this.loginType !== undefined &&
@@ -300,7 +300,9 @@ export default {
             }
             return null;
           };
-          const response = await this.$axios.post(getURL(), params, headers);
+
+          const response = await axios.post(getURL(), params, headers);
+
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
           if (getSuccessSendMessageText !== undefined) {
