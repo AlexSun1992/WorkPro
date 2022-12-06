@@ -15,11 +15,14 @@ router.use(cookieParser());
 router.get("/wizard/:idModule/:idItem/:idCard", async (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
+    const ipAddress = requestIp.getClientIp(req);
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
       ?.cookie
       ? req.headers.cookie
       : null;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || null;
     if (req.headers.authorization) {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.headers.authorization;

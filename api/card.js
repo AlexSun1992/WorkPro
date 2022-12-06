@@ -23,7 +23,6 @@ router.use(cookieParser());
 router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     const ipAddress = requestIp.getClientIp(req);
-    console.log(ipAddress);
     let mobile2ServiceInstance = mobile2Service();
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
@@ -220,6 +219,7 @@ router.get("/osago", (req, res) => {
 router.get("/card/js/:idModule/:idItem", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
+    const ipAddress = requestIp.getClientIp(req);
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance.defaults.baseURL = "https://mobiletest.reso.ru";
@@ -230,6 +230,8 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
       ?.cookie
       ? req.headers.cookie
       : null;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || null;
     const URL_ADDRESS = encodeURI(
       `/am/free/v2/vuetemplate/${req.params.idItem}`
     );
