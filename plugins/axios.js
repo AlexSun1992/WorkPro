@@ -1,5 +1,5 @@
 export default function ({ $axios, reg }) {
   $axios.onRequest((config) => {
-    // code
+    config.headers.common["X-Application"] = "VueJS";
   });
 }

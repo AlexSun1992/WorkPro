@@ -651,7 +651,7 @@ export default {
         };
 
         const headers = {
-          headers: { recaptcha: params.token },
+          headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         const response = await axios.post(
           "/am/free/v2/registration",
