@@ -27,7 +27,7 @@
             />
 
             <b-row class="mt-3" v-if="!isCodeFieldInValid">
-              <b-form-group label="Дата рождения" class="col-md-4 col-12">
+              <b-form-group label="Дата рождения" class="col-lg-4 col-12">
                 <birthday-picker
                   ref="dataPicker"
                   v-model="$v.form.birthdate.$model"
@@ -63,7 +63,7 @@
             />
 
             <b-row class="mt-3" v-if="!isCodeFieldInValid">
-              <b-form-group label="Дата рождения" class="col-md-4 col-12">
+              <b-form-group label="Дата рождения" class="col-lg-4 col-12">
                 <birthday-picker
                   ref="dataPicker"
                   v-model="$v.form.birthdate.$model"
@@ -71,7 +71,7 @@
                   :tabindex="20"
                 />
               </b-form-group>
-              <div class="recovery col-md-8 col-12">
+              <div class="recovery col-lg-8 col-12">
                 <verify-password
                   v-if="!isBirthdateInValid && !isCodeFieldInValid"
                   :tab-index="[20, 30]"
