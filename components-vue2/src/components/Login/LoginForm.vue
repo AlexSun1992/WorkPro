@@ -322,7 +322,7 @@ export default {
 
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
-        } = await this.$axios.post("/am/authw/v2/authorize", body);
+        } = await axios.post("/am/authw/v2/authorize", body);
 
         this.isModalVisible = false;
         document.cookie = `auth.strategy=local;`;
