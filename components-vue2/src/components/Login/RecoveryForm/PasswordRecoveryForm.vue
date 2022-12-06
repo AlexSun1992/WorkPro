@@ -90,7 +90,11 @@
       variant="primary"
       @click="resetPassword"
       :disabled="disabled"
-      id="btn_change-password_mail_lk"
+      :id="
+        this.currentTab === 0
+          ? 'btn_change-password_tel_lk'
+          : 'btn_change-password_mail_lk'
+      "
       >Изменить пароль</b-button
     >
   </div>
@@ -331,5 +335,4 @@ export default {
   },
 };
 </script>
-
 <style scoped></style>
