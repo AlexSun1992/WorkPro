@@ -165,7 +165,7 @@
 
 <script>
 import axios from "axios";
-
+import { mobile2Service } from "@/services/mobile2.services";
 import {
   BForm,
   BFormGroup,
@@ -320,9 +320,13 @@ export default {
           };
         }
 
+        const headers = {
+          headers: { "X-Application": "VueJS" },
+        };
+
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
-        } = await axios.post("/am/authw/v2/authorize", body);
+        } = await axios.post("/am/authw/v2/authorize", body, headers);
 
         this.isModalVisible = false;
         document.cookie = `auth.strategy=local;`;
