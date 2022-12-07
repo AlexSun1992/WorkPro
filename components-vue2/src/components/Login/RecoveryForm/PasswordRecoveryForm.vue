@@ -225,8 +225,6 @@ export default {
               buttonSize: "sm",
               okVariant: "primary",
               okTitle: "Отлично",
-              headerClass: "p-2 border-bottom-0",
-              footerClass: "p-2 border-top-0",
               centered: true,
               hideHeaderClose: false,
               modalClass: this.myclass,
