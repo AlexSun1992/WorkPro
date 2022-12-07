@@ -63,10 +63,12 @@ export default {
       if (address === "registration") {
         this.visibleForm = "registration";
         window.history.pushState(null, "", "/login/registration");
+        // window.location.href = "/login/registration";
       }
       if (address === "login") {
         this.visibleForm = "login";
         window.history.pushState(null, "", "/login");
+        // window.location.href = "/login";
       }
     },
     goESIA() {
