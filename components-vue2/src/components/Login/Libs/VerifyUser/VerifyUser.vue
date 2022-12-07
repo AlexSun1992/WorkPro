@@ -67,7 +67,6 @@
           autofocus
           ref="codeInput"
           v-model="v.code.$model"
-          class="mb-2"
           v-mask="codeMask"
           :state="validateInput('code', isCodeBlured)"
           @blur="blurField('code', isCodeBlured)"
@@ -88,7 +87,7 @@
     </div>
     <div class="col-12 col-lg-4 mt-3 pt-lg-1">
       <button
-        v-if="isSendCode"
+        v-if="codeFieldShown"
         @click="changeNumber"
         class="btn-link mt-lg-4 d-table"
         type="button"
