@@ -266,35 +266,55 @@ export default {
     async getCodeHelper(params) {
       try {
         const headers = {
-          headers: { recaptcha: this.token },
+          headers: { recaptcha: this.token, "X-Application": "VueJS" },
         };
         if (
-          this.loginType === "phone" ||
-          this.modeType === "REG" ||
-          this.modeType === "RECOVERY"
+          this.loginType !== undefined &&
+          (this.modeType === "REG" || this.modeType === "RECOVERY")
         ) {
-          const method = params.error ? "sendsmscode2" : "sendsmscode";
+          const getMethod = () => {
+            if (params.error === true && this.loginType === "phone") {
+              return "sendsmscode2";
+            }
+            if (params.error === false && this.loginType === "phone") {
+              return "sendsmscode";
+            }
+            if (params.error === true && this.loginType === "email") {
+              return "sendemailcode2";
+            }
+            if (params.error === false && this.loginType === "email") {
+              return "sendemailcode";
+            }
+            return null;
+          };
+          const method = getMethod();
+          const getURL = () => {
+            if (this.loginType === "phone") {
+              return (
+                `/am/free/v2/${method}` +
+                `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`
+              );
+            }
+            if (this.loginType === "email") {
+              return `/am/free/v2/${method}`;
+            }
+            return null;
+          };
 
-          const response = await axios.post(
-            `/am/free/v2/${method}` +
-              `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,
-            params,
-            headers
-          );
+          const response = await axios.post(getURL(), params, headers);
 
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
-          // Получение сообщения об отправке на номер телефона
-
           if (getSuccessSendMessageText !== undefined) {
             this.$emit("messageText", getSuccessSendMessageText);
           }
           return response;
         }
-        return await axios.post("/am/free/v2/sendemailcode", params, headers);
+        return null;
       } catch (e) {
         this.loading = false;
         this.$emit("error", e.response.data.INFO);
+        return e?.response;
       }
     },
 
@@ -304,48 +324,67 @@ export default {
       this.isPhoneChanged = false;
       this.$emit("error", null);
       try {
+        let response;
+        const request = async (p) => {
+          const data = await this.getCodeHelper(p);
+          return data;
+        };
         if (
           this.loginType === "phone"
             ? !this.v.phone.$invalid
             : !this.v.email.$invalid
         ) {
           let params = this.getCodeParams(this.loginType);
-          params = { ...params, token: 1, modeType: this.modeType };
-          const response = await this.getCodeHelper(params);
-          if (response.data[0].MESSAGE_CODE === 200) {
+          params = {
+            ...params,
+            token: 1,
+            modeType: this.modeType,
+            error: false,
+          };
+
+          const response1 = await request(params);
+          response = response1;
+
+          if (response1.data[0].MESSAGE_CODE === 200) {
             this.codeFieldShown = true;
             this.loading = false;
             this.isSendCode = true;
           }
-          if (response.data.STATUS === 500) {
+
+          if (response1.data.STATUS === 500) {
             this.loading = false;
             this.isSendCode = false;
-            this.$emit("error", response.data.INFO);
+            this.$emit("error", response1.data.INFO);
             return;
           }
 
-          if (response?.data[0]?.ERRORCODE === 106) {
+          if (response1?.data[0]?.ERRORCODE === 106) {
             params = {
               ...params,
               token: this.token,
               modeType: this.modeType,
               error: true,
             };
-            const response = await this.getCodeHelper(params);
-            if (response?.data[0]?.ERRORLIST) {
+            const response2 = await request(params);
+            response = response2;
+            if (response2.data.STATUS === 500) {
               this.loading = false;
               this.isSendCode = false;
-              this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT);
+              this.$emit("error", response2?.data?.MESSAGE);
             } else {
               this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
             }
           }
-          const isError = Boolean(response?.data[0]?.ERRORCODE);
+
+          const isError = Boolean(
+            response?.data[0]?.ERRORCODE || response.data.STATUS === 500
+          );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+
           if (isError === false) {
             if (
               this.modeType === "REG" &&
@@ -409,7 +448,7 @@ export default {
       }
     },
 
-    getCodeParams(loginType) {
+    getCodeParams() {
       let params;
       if (this.loginType === "phone") {
         params = {

@@ -231,7 +231,6 @@ export default {
       logEvent: null,
       logParams: {
         formName: "Registration",
-        idEventType: 15,
       },
       codeFieldValid: false,
       form: {
@@ -285,13 +284,17 @@ export default {
     };
   },
   mounted() {
+    const currentURL = window.location.pathname;
     this.$nextTick(() => {
-      this.$LogEvent({
-        ...this.logParams,
-        controlName: "RegForm.vue",
-        message: "Форма загрузилась",
-        timeUser: new Date(),
-      });
+      if (currentURL.includes("registration")) {
+        this.$LogEvent({
+          ...this.logParams,
+          idEventType: 1,
+          controlName: "RegForm.vue",
+          message: "Открыли форму регистрации",
+          timeUser: new Date(),
+        });
+      }
     });
   },
   validations: {
@@ -648,7 +651,7 @@ export default {
         };
 
         const headers = {
-          headers: { recaptcha: params.token },
+          headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         const response = await axios.post(
           "/am/free/v2/registration",

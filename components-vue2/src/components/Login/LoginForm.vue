@@ -165,7 +165,6 @@
 
 <script>
 import axios from "axios";
-
 import {
   BForm,
   BFormGroup,
@@ -232,7 +231,22 @@ export default {
       loginTouchesCount: 0,
     };
   },
-
+  mounted() {
+    this.$nextTick(() => {
+      if (typeof this.$LogEvent === "function") {
+        const currentURL = window.location.pathname;
+        if (!currentURL.includes("registration")) {
+          this.$LogEvent({
+            formName: "Authorization",
+            idEventType: 2,
+            controlName: "LoginForm.vue",
+            message: "Просмотр страницы Авторизации",
+            timeUser: new Date(),
+          });
+        }
+      }
+    });
+  },
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     // eslint-disable-next-line nuxt/no-globals-in-created
@@ -262,6 +276,17 @@ export default {
     },
 
     async fetchToken() {
+      if (typeof this.$LogEvent === "function") {
+        this.$LogEvent({
+          formName: "Authorization",
+          idEventType: this.$v.user.code.$model ? 45 : 4,
+          controlName: "Button",
+          message: `Нажал на кнопку "${
+            this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"
+          }"`,
+          timeUser: new Date(),
+        });
+      }
       this.$v.user.username.$touch();
       this.$v.user.password.$touch();
       if (
@@ -288,12 +313,19 @@ export default {
         };
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
-          body = { ...body, code: this.$v.user.code.$model };
+          body = {
+            ...body,
+            code: this.$v.user.code.$model,
+          };
         }
+
+        const headers = {
+          headers: { "X-Application": "VueJS" },
+        };
 
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
-        } = await axios.post("/am/authw/v2/authorize", body);
+        } = await axios.post("/am/authw/v2/authorize", body, headers);
 
         this.isModalVisible = false;
         document.cookie = `auth.strategy=local;`;

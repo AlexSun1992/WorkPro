@@ -227,6 +227,7 @@ async function logEvent(object) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Application": "VueJS",
         },
         body: JSON.stringify({ ...generalObject, ...object }),
       });

@@ -27,7 +27,7 @@
             />
 
             <b-row class="mt-3" v-if="!isCodeFieldInValid">
-              <b-form-group label="Дата рождения" class="col-md-6 col-12">
+              <b-form-group label="Дата рождения" class="col-lg-4 col-12">
                 <birthday-picker
                   ref="dataPicker"
                   v-model="$v.form.birthdate.$model"
@@ -35,7 +35,25 @@
                   :tabindex="20"
                 />
               </b-form-group>
+              <div class="recovery col-md-8 col-12">
+                <verify-password
+                  v-if="!isBirthdateInValid && !isCodeFieldInValid"
+                  :tab-index="[20, 30]"
+                  :v="$v.form"
+                  :validateState="validateState"
+                  :isValid="isSamePassword"
+                />
+              </div>
             </b-row>
+            <b-button
+              v-if="isSamePassword"
+              variant="primary"
+              @click="resetPassword"
+              :disabled="disabled"
+              id="btn_change-password_tel_lk"
+              class="mt-3"
+              >Изменить пароль</b-button
+            >
           </b-tab>
           <b-tab title="Email" button-id="tab_mail_lk" id="tab_mail">
             <b-alert :show="isErrorMessage" variant="danger">{{
@@ -46,6 +64,7 @@
               @error="showError"
               @getLoginType="loginType"
               :loginType="'email'"
+              :mode-type="'RECOVERY'"
               :v="$v.form"
               :count="60"
               :validateState="validateState"
@@ -53,7 +72,7 @@
             />
 
             <b-row class="mt-3" v-if="!isCodeFieldInValid">
-              <b-form-group label="Дата рождения" class="col-md-6 col-12">
+              <b-form-group label="Дата рождения" class="col-lg-4 col-12">
                 <birthday-picker
                   ref="dataPicker"
                   v-model="$v.form.birthdate.$model"
@@ -61,48 +80,33 @@
                   :tabindex="20"
                 />
               </b-form-group>
+              <div class="recovery col-lg-8 col-12">
+                <verify-password
+                  v-if="!isBirthdateInValid && !isCodeFieldInValid"
+                  :tab-index="[20, 30]"
+                  :v="$v.form"
+                  :validateState="validateState"
+                  :isValid="isSamePassword"
+                />
+              </div>
             </b-row>
+            <b-button
+              v-if="isSamePassword"
+              variant="primary"
+              @click="resetPassword"
+              :disabled="disabled"
+              id="btn_change-password_mail_lk"
+              class="mt-3"
+              >Изменить пароль</b-button
+            >
           </b-tab>
         </b-tabs>
-        <div class="recovery">
-          <verify-password
-            v-if="!isBirthdateInValid && !isCodeFieldInValid"
-            :tab-index="[20, 30]"
-            :v="$v.form"
-            :validateState="validateState"
-            :isValid="isSamePassword"
-          />
-
-          <div class="row buttons mt-3" v-if="isSamePassword">
-            <div class="col-12 col-md-6">
-              <b-button href="/login" variant="secondary" class="w-100 d-block"
-                >Отмена</b-button
-              >
-            </div>
-            <div class="col-12 col-md-6 mt-3 mt-md-0">
-              <b-button
-                variant="primary"
-                @click="resetPassword"
-                :disabled="disabled"
-                class="w-100"
-                :id="
-                  this.currentTab === 0
-                    ? 'btn_change-password_tel_lk'
-                    : 'btn_change-password_mail_lk'
-                "
-                >Изменить пароль</b-button
-              >
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
-import UserRecoveryForm from "../RecoveryForm/UserRecoveryForm.vue";
 import {
   required,
   email,
@@ -110,11 +114,13 @@ import {
   sameAs,
   helpers,
 } from "vuelidate/lib/validators";
-import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
-import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import { validationMixin } from "vuelidate";
 import { BTabs, BTab, BAlert, BRow, BFormGroup, BButton } from "bootstrap-vue";
 import axios from "axios";
+import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
+import UserRecoveryForm from "./UserRecoveryForm.vue";
+import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
+import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
@@ -275,7 +281,7 @@ export default {
       return this.currentTab == 0 ? [30, 40] : [20, 30];
     },
     disabled() {
-      let loginFieldInvalid =
+      const loginFieldInvalid =
         this.currentTab == 0
           ? this.$v.form.phone.$invalid
           : this.$v.form.email.$invalid;
@@ -335,5 +341,4 @@ export default {
   },
 };
 </script>
-
 <style scoped></style>

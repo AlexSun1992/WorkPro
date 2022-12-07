@@ -58,7 +58,6 @@ export default {
       visibleForm: null,
     };
   },
-
   methods: {
     toggleForm(address) {
       if (address === "registration") {

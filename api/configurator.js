@@ -10,6 +10,8 @@ const cookieParser = require("cookie-parser");
 const express = require("express");
 
 const router = express.Router();
+const requestIp = require("request-ip");
+
 router.use(express.json());
 router.use(cookieParser());
 
@@ -90,7 +92,7 @@ router.get("/module", (req, res) => {
 router.get("/module/:moduleId/:itemId", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
-    const ipAddress = req.headers["x-forwarded-for"];
+    const ipAddress = requestIp.getClientIp(req);
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
       ipAddress || "";
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
