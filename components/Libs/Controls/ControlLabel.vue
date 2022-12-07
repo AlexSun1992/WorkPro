@@ -1,7 +1,13 @@
 <template>
   <b-form-group :label="data.label" :label-for="data.name" class="mb-3">
     <template #label>
-      <span v-html="data.label" />
+      <span v-html="data.label" /><span
+        v-if="data.helpText"
+        class="tooltipster"
+      >
+        (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+          <span v-html="data.helpText" /></vue-easy-tooltip
+      ></span>
     </template>
     <div v-html="data.value" />
   </b-form-group>
