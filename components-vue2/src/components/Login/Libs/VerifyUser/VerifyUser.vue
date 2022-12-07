@@ -104,7 +104,7 @@
       @verify="getCode"
       @expired="onCaptchaExpired"
     />
-    <div class="col-12 mt-4" v-if="isCodeFieldInValid">
+    <div class="col-12 mt-4" v-if="v.code.$model">
       <b-button
         type="submit"
         :disabled="
