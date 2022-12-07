@@ -67,7 +67,6 @@
           autofocus
           ref="codeInput"
           v-model="v.code.$model"
-          class="mb-2"
           v-mask="codeMask"
           :state="validateInput('code', isCodeBlured)"
           @blur="blurField('code', isCodeBlured)"
@@ -88,7 +87,7 @@
     </div>
     <div class="col-12 col-lg-4 mt-3 pt-lg-1">
       <button
-        v-if="isSendCode"
+        v-if="codeFieldShown"
         @click="changeNumber"
         class="btn-link mt-lg-4 d-table"
         type="button"
@@ -102,7 +101,7 @@
       size="invisible"
       :load-recaptcha-script="true"
       :sitekey="siteKey"
-      @verify="setToken"
+      @verify="getCode"
       @expired="onCaptchaExpired"
     />
     <div class="col-12 mt-4">
@@ -113,7 +112,7 @@
           isSendCode ||
           loading
         "
-        @click="executeRecaptcha"
+        @click="getCode()"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
@@ -266,7 +265,7 @@ export default {
     async getCodeHelper(params) {
       try {
         const headers = {
-          headers: { recaptcha: this.token, "X-Application": "VueJS" },
+          headers: { recaptcha: params.token },
         };
         if (
           this.loginType !== undefined &&
@@ -300,7 +299,6 @@ export default {
             }
             return null;
           };
-
           const response = await axios.post(getURL(), params, headers);
 
           const getSuccessSendMessageText =
@@ -317,14 +315,14 @@ export default {
         return e?.response;
       }
     },
-
-    async getCode() {
+    async getCode(token = null) {
       this.v.code.$model = null;
       this.codeFieldShown = false;
       this.isPhoneChanged = false;
       this.$emit("error", null);
       try {
         let response;
+        const isCaptcha = Boolean(token);
         const request = async (p) => {
           const data = await this.getCodeHelper(p);
           return data;
@@ -335,49 +333,53 @@ export default {
             : !this.v.email.$invalid
         ) {
           let params = this.getCodeParams(this.loginType);
-          params = {
-            ...params,
-            token: 1,
-            modeType: this.modeType,
-            error: false,
-          };
 
-          const response1 = await request(params);
-          response = response1;
-
-          if (response1.data[0].MESSAGE_CODE === 200) {
-            this.codeFieldShown = true;
-            this.loading = false;
-            this.isSendCode = true;
-          }
-
-          if (response1.data.STATUS === 500) {
-            this.loading = false;
-            this.isSendCode = false;
-            this.$emit("error", response1.data.INFO);
-            return;
-          }
-
-          if (response1?.data[0]?.ERRORCODE === 106) {
+          if (isCaptcha === false) {
             params = {
               ...params,
-              token: this.token,
+              token: 1,
+              modeType: this.modeType,
+              error: false,
+            };
+
+            const response1 = await request(params);
+            response = response1;
+
+            if (response1.data[0].MESSAGE_CODE === 200) {
+              this.codeFieldShown = true;
+              this.loading = false;
+              this.isSendCode = true;
+            }
+
+            if (response1.data.STATUS === 500) {
+              this.loading = false;
+              this.isSendCode = false;
+              this.$emit("error", response1.data.INFO);
+              return;
+            }
+
+            if (response1?.data[0]?.ERRORCODE === 106) {
+              await this.executeRecaptcha();
+              return;
+            }
+          } else {
+            params = {
+              ...params,
+              token,
               modeType: this.modeType,
               error: true,
             };
             const response2 = await request(params);
             response = response2;
-            if (response2.data.STATUS === 500) {
+            if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
               this.loading = false;
               this.isSendCode = false;
-              this.$emit("error", response2?.data?.MESSAGE);
             } else {
               this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
             }
           }
-
           const isError = Boolean(
             response?.data[0]?.ERRORCODE || response.data.STATUS === 500
           );
