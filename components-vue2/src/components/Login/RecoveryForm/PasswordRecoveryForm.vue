@@ -27,7 +27,7 @@
             />
 
             <b-row class="mt-3" v-if="!isCodeFieldInValid">
-              <b-form-group label="Дата рождения" class="col-md-6 col-12">
+              <b-form-group label="Дата рождения" class="col-lg-4 col-12">
                 <birthday-picker
                   ref="dataPicker"
                   v-model="$v.form.birthdate.$model"
@@ -35,7 +35,25 @@
                   :tabindex="20"
                 />
               </b-form-group>
+              <div class="recovery col-md-8 col-12">
+                <verify-password
+                  v-if="!isBirthdateInValid && !isCodeFieldInValid"
+                  :tab-index="[20, 30]"
+                  :v="$v.form"
+                  :validateState="validateState"
+                  :isValid="isSamePassword"
+                />
+              </div>
             </b-row>
+            <b-button
+              v-if="isSamePassword"
+              variant="primary"
+              @click="resetPassword"
+              :disabled="disabled"
+              id="btn_change-password_tel_lk"
+              class="mt-3"
+              >Изменить пароль</b-button
+            >
           </b-tab>
           <b-tab title="Email" button-id="tab_mail_lk" id="tab_mail">
             <b-alert :show="isErrorMessage" variant="danger">{{
@@ -54,7 +72,7 @@
             />
 
             <b-row class="mt-3" v-if="!isCodeFieldInValid">
-              <b-form-group label="Дата рождения" class="col-md-6 col-12">
+              <b-form-group label="Дата рождения" class="col-lg-4 col-12">
                 <birthday-picker
                   ref="dataPicker"
                   v-model="$v.form.birthdate.$model"
@@ -62,40 +80,27 @@
                   :tabindex="20"
                 />
               </b-form-group>
+              <div class="recovery col-lg-8 col-12">
+                <verify-password
+                  v-if="!isBirthdateInValid && !isCodeFieldInValid"
+                  :tab-index="[20, 30]"
+                  :v="$v.form"
+                  :validateState="validateState"
+                  :isValid="isSamePassword"
+                />
+              </div>
             </b-row>
+            <b-button
+              v-if="isSamePassword"
+              variant="primary"
+              @click="resetPassword"
+              :disabled="disabled"
+              id="btn_change-password_mail_lk"
+              class="mt-3"
+              >Изменить пароль</b-button
+            >
           </b-tab>
         </b-tabs>
-        <div class="recovery">
-          <verify-password
-            v-if="!isBirthdateInValid && !isCodeFieldInValid"
-            :tab-index="[20, 30]"
-            :v="$v.form"
-            :validateState="validateState"
-            :isValid="isSamePassword"
-          />
-
-          <div class="row buttons mt-3" v-if="isSamePassword">
-            <div class="col-12 col-md-6">
-              <b-button href="/login" variant="secondary" class="w-100 d-block"
-                >Отмена</b-button
-              >
-            </div>
-            <div class="col-12 col-md-6 mt-3 mt-md-0">
-              <b-button
-                variant="primary"
-                @click="resetPassword"
-                :disabled="disabled"
-                class="w-100"
-                :id="
-                  this.currentTab === 0
-                    ? 'btn_change-password_tel_lk'
-                    : 'btn_change-password_mail_lk'
-                "
-                >Изменить пароль</b-button
-              >
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -153,6 +158,7 @@ export default {
       formLoaded: false,
       dateOfBirth: false,
       loginFieldType: null,
+      myclass: ["cabinet okrecovery"],
     };
   },
   mounted() {
@@ -199,15 +205,30 @@ export default {
           params
         );
         if (response.data[0].MESSAGE_CODE === "200") {
+          const h = this.$createElement;
+          const titleVNode = h("div", {
+            domProps: {
+              innerHTML:
+                '<img src="/export/system/modules/ru.reso.v2/resources/img/icons/icon-ok.svg"><div class="mt-3">Все получилось!</div>',
+            },
+          });
+          const messageVNode = h("div", {
+            domProps: {
+              innerHTML:
+                "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
+            },
+          });
           this.$bvModal
-            .msgBoxOk("Пароль успешно изменён", {
-              title: "Уведомление",
+            .msgBoxOk([messageVNode], {
+              title: [titleVNode],
               size: "sm",
               buttonSize: "sm",
-              okVariant: "success",
-              headerClass: "p-2 border-bottom-0",
-              footerClass: "p-2 border-top-0",
+              okVariant: "primary",
+              okTitle: "Отлично",
               centered: true,
+              hideHeaderClose: false,
+              modalClass: this.myclass,
+              autoFocusButton: "ok",
             })
             .then((value) => {
               window.location.href = "/login";
@@ -336,5 +357,4 @@ export default {
   },
 };
 </script>
-
 <style scoped></style>

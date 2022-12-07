@@ -165,7 +165,6 @@
 
 <script>
 import axios from "axios";
-
 import {
   BForm,
   BFormGroup,
@@ -314,12 +313,19 @@ export default {
         };
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
-          body = { ...body, code: this.$v.user.code.$model };
+          body = {
+            ...body,
+            code: this.$v.user.code.$model,
+          };
         }
+
+        const headers = {
+          headers: { "X-Application": "VueJS" },
+        };
 
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
-        } = await axios.post("/am/authw/v2/authorize", body);
+        } = await axios.post("/am/authw/v2/authorize", body, headers);
 
         this.isModalVisible = false;
         document.cookie = `auth.strategy=local;`;
