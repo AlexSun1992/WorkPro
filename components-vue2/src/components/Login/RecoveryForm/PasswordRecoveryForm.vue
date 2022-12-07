@@ -211,20 +211,23 @@ export default {
                 '<img src="/export/system/modules/ru.reso.v2/resources/img/icons/icon-ok.svg"><div class="mt-3">Все получилось!</div>',
             },
           });
+          const messageVNode = h("div", {
+            domProps: {
+              innerHTML:
+                "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
+            },
+          });
           this.$bvModal
-            .msgBoxOk(
-              "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
-              {
-                title: [titleVNode],
-                size: "sm",
-                buttonSize: "sm",
-                okVariant: "primary",
-                okTitle: "Отлично",
-                headerClass: "p-2 border-bottom-0",
-                footerClass: "p-2 border-top-0",
-                centered: true,
-              }
-            )
+            .msgBoxOk([messageVNode], {
+              title: [titleVNode],
+              size: "sm",
+              buttonSize: "sm",
+              okVariant: "primary",
+              okTitle: "Отлично",
+              headerClass: "p-2 border-bottom-0",
+              footerClass: "p-2 border-top-0",
+              centered: true,
+            })
             .then((value) => {
               window.location.href = "/login";
             })
