@@ -76,13 +76,13 @@
       <div class="tab-mobile-block">Вход</div>
       <div class="row">
         <div class="col-12 col-lg-4">
-          <b-form-group label="Телефон или email" label-cols="12">
+          <b-form-group label="Телефон или e-mail" label-cols="12">
             <b-form-input
               autofocus
               id="phone"
               ref="phoneInput"
               v-model="$v.user.username.$model"
-              placeholder="Телефон или email"
+              placeholder="Телефон или e-mail"
               type="tel"
               :state="wrongAuthData ? false : validateState('username')"
               @blur="$v.user.username.$touch()"
