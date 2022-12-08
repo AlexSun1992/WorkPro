@@ -82,7 +82,7 @@
               id="phone"
               ref="phoneInput"
               v-model="$v.user.username.$model"
-              placeholder="Телефон или почта"
+              placeholder="Телефон или email"
               type="tel"
               :state="wrongAuthData ? false : validateState('username')"
               @blur="$v.user.username.$touch()"
