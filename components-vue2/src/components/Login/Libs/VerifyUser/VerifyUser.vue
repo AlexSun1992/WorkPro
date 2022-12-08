@@ -416,7 +416,7 @@ export default {
                 .then((value) => {
                   if (value === true) {
                     if (isInSystemLogin) {
-                      this.changeNumber();
+                      window.location.href = "/login/password-recovery";
                     }
                     if (isExpiredLogin) {
                       this.isSendCode = true;
