@@ -425,6 +425,9 @@ export default {
                   if (value === false) {
                     window.location.href = "/login";
                   }
+                  if (value === null) {
+                    this.changeNumber();
+                  }
                   this.loading = false;
                 })
                 .catch((err) => {
