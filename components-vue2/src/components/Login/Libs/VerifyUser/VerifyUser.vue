@@ -105,6 +105,9 @@
       @verify="getCode"
       @expired="onCaptchaExpired"
     />
+    <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+      {{ errorMessage }}
+    </div>
     <div class="col-12 mt-4">
       <b-button
         type="submit"
@@ -200,6 +203,7 @@ export default {
       codeFieldShown: false,
       allHiddenCaptchas: null,
       meassageWasSend: null,
+      errorMessage: null,
     };
   },
 
@@ -259,10 +263,6 @@ export default {
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
     },
-
-    setToken(recaptcha) {
-      this.token = recaptcha;
-    },
     async getCodeHelper(params) {
       try {
         const headers = {
@@ -321,6 +321,7 @@ export default {
       this.codeFieldShown = false;
       this.isPhoneChanged = false;
       this.$emit("error", null);
+      this.errorMessage = null;
       try {
         let response;
         const isCaptcha = Boolean(token);
@@ -355,7 +356,7 @@ export default {
             if (response1.data.STATUS === 500) {
               this.loading = false;
               this.isSendCode = false;
-              this.$emit("error", response1.data.INFO);
+              this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
               return;
             }
 
@@ -437,10 +438,11 @@ export default {
             }
           } else if (isErrorList === true) {
             if (response?.data[0]?.ERRORCODE === 106) return;
-            this.$emit(
-              "error",
-              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "")
-            );
+            this.errorMessage =
+              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
+                /^\[|\]$/g,
+                ""
+              ) ?? "Неизвестная ошибка";
           }
         } else {
           this.isUserDisabled = false;
@@ -477,6 +479,7 @@ export default {
       this.codeFieldShown = false;
       this.$emit("checkCodeFieldValid", false);
       this.$emit("error", null);
+      this.errorMessage = null;
       this.isUserBlured = false;
       this.v.phone.$model = "";
       this.$refs.userInput.$el.disabled = false;
@@ -518,12 +521,6 @@ export default {
     },
   },
   watch: {
-    token() {
-      if (this.token) {
-        this.getCode();
-      }
-    },
-
     isError(value) {
       if (typeof value === "string") {
         this.loading = false;
