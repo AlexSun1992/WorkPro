@@ -119,7 +119,7 @@
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        v-if="!isCodeFieldValid"
+        v-show="!validateInput('code', isCodeBlured)"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"

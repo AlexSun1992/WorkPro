@@ -49,7 +49,7 @@
               {{ errorMessage }}
             </div>
             <b-button
-              v-if="isSamePassword"
+              v-if="isSamePassword && !isCodeFieldInValid"
               variant="primary"
               @click="resetPassword"
               :disabled="disabled"
@@ -97,7 +97,7 @@
               {{ errorMessage }}
             </div>
             <b-button
-              v-if="isSamePassword"
+              v-if="isSamePassword && !isCodeFieldInValid"
               variant="primary"
               @click="resetPassword"
               :disabled="disabled"
