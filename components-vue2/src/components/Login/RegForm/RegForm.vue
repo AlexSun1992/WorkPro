@@ -4,10 +4,6 @@
       :conformation="conformation"
       @agree="isRegConfirmed = $event"
     />
-    <b-alert :show="!!errorMessage" variant="danger">{{
-      errorMessage
-    }}</b-alert>
-
     <b-form
       @submit.stop.prevent
       @keydown.enter.prevent="onSubmit"
@@ -149,6 +145,9 @@
             :tab-index="[50, 60]"
             :log-params="logParams"
           />
+        </div>
+        <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+          {{ errorMessage }}
         </div>
         <div class="col-12 pt-3">
           <b-button

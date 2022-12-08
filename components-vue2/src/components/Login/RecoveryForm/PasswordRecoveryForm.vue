@@ -4,9 +4,6 @@
       <div class="col-12 col-lg-8">
         <b-tabs @activate-tab="initData" ref="tabs">
           <b-tab title="Телефон" button-id="tab_tel_lk" id="tab_tel">
-            <b-alert :show="isErrorMessage" variant="danger">{{
-              errorMessage
-            }}</b-alert>
             <div class="mb-3">
               Введите номер телефона указанный при регистрации
             </div>
@@ -45,6 +42,12 @@
                 />
               </div>
             </b-row>
+            <div
+              class="col-12 invalid-feedback d-block mt-3"
+              v-if="isErrorMessage"
+            >
+              {{ errorMessage }}
+            </div>
             <b-button
               v-if="isSamePassword"
               variant="primary"
@@ -56,9 +59,6 @@
             >
           </b-tab>
           <b-tab title="Email" button-id="tab_mail_lk" id="tab_mail">
-            <b-alert :show="isErrorMessage" variant="danger">{{
-              errorMessage
-            }}</b-alert>
             <div class="mb-3">Введите e-mail указанный при регистрации</div>
             <verify-user
               @error="showError"
@@ -90,6 +90,12 @@
                 />
               </div>
             </b-row>
+            <div
+              class="col-12 invalid-feedback d-block mt-3"
+              v-if="isErrorMessage"
+            >
+              {{ errorMessage }}
+            </div>
             <b-button
               v-if="isSamePassword"
               variant="primary"
