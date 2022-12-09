@@ -8,9 +8,10 @@
       @hidden="closeModalConfirmSMSCode"
       :centered="true"
       :static="true"
+      content-class="sms-confirm-modal"
+      title="Введите код"
     >
-      <div class="d-block text-center">
-        <h4>Введите код</h4>
+      <div>
         {{ modalTextRequest }}
         <b-form id="sms-form" @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
@@ -29,23 +30,28 @@
             >Неверный код. Попробуйте еще раз.
           </b-form-invalid-feedback>
           <b-row v-if="isRetrySendCodeSMS">
-            <b-button @click="retrySendCodeSMS()" class="mt-3" block
+            <b-button @click="retrySendCodeSMS()" class="mt-4" block
               >Отправить повторно</b-button
             >
           </b-row>
-          <div v-else class="mt-3">
-            Отправить повторно можно через
-            <verify-timer
-              @onFinish="isRetrySendCodeSMS = true"
-              :duration="duration"
-              class="mt-3"
-            />
-            сек.
+          <div v-else class="mt-4">
+            <button
+              type="button"
+              disabled="disabled"
+              class="btn btn-primary d-block d-lg-table"
+            >
+              Отправить повторно(можно через
+              <verify-timer
+                @onFinish="isRetrySendCodeSMS = true"
+                :duration="duration"
+              />
+              секунд)
+            </button>
           </div>
           <b-row>
             <div
               v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
-              class="col-12 col-lg-12"
+              class="col-12 col-lg-12 mt-3"
             >
               <captcha
                 @update="setIdCaptcha($event)"
