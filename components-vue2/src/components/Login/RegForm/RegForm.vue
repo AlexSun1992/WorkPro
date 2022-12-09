@@ -121,10 +121,7 @@
             />
           </b-form-group>
         </div>
-        <div
-          class="col-12 col-md-6 mt-3"
-          v-if="codeFieldValid && changePhoneButtonClicked === false"
-        >
+        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
           <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
@@ -394,8 +391,14 @@ export default {
     refuseButtonClicked() {
       this.changePhoneButtonClicked = false;
     },
-    checkIfButtonClicked(data) {
+    async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
+      this.$nextTick(() => {
+        this.$v.$reset();
+        this.form.password = "";
+        this.form.password2 = "";
+        this.form.policyNumber = "";
+      });
     },
     handleBlur(field) {
       // Валидация
