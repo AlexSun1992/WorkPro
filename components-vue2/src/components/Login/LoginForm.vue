@@ -147,6 +147,10 @@
           v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
           class="col-12 mt-3"
         >
+          <div class="ph4b mb-3">
+            Слишком много попыток с вашего компьютера. Подтвердите, что вы не
+            бот
+          </div>
           <captcha
             @update="setIdCaptcha($event)"
             @updateCode="setCodeCaptcha($event)"
