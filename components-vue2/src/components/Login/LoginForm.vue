@@ -139,7 +139,7 @@
 
         <div
           v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
-          class="col-12 mt-3 mt-lg-0"
+          class="col-12 mt-3"
         >
           <captcha
             @update="setIdCaptcha($event)"

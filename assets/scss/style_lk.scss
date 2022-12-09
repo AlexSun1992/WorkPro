@@ -4054,3 +4054,39 @@ h6 {
     border-radius: 0;
     z-index: 1;
 }
+
+.btn-gray {
+    background: #eff1f3;
+    border-radius: 15px;
+    border: 2px solid #eff1f3;
+    padding: 0 24px;
+    line-height: 37px;
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 0.3s;
+}
+
+.btn-gray:hover {
+    background: #dfe3e5;
+    border: 2px solid #dfe3e5;
+}
+
+.btn-gray:active {
+    background: #bec7cb;
+    border: 2px solid #bec7cb;
+}
+
+.btn-gray:focus {
+    background: #bec7cb;
+    border: 2px solid #868686;
+}
+
+.btn-gray:disabled {
+    background: #eff1f3;
+    border: 2px solid #eff1f3;
+    color: #bec7cb;
+    pointer-events: none;
+}
