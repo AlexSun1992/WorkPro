@@ -30,7 +30,7 @@
             >Неверный код. Попробуйте еще раз.
           </b-form-invalid-feedback>
           <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
-            <b-button @click="retrySendCodeSMS()" class="mt-4 w-100"
+            <b-button @click="retrySendCodeSMS()" class="w-100"
               >Отправить повторно</b-button
             >
           </div>
