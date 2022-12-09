@@ -82,6 +82,8 @@
             class="col-12 col-md-auto"
           >
             <b-button
+              v-if="wizardButtonVisibleSave"
+              :class="wizardButtonStyleSave"
               pill
               :disabled="loading"
               type="button"
@@ -89,7 +91,7 @@
               :style="isButtonDisabled"
               @click="saveDataCard(0)"
             >
-              {{ wizardButtonTitleSave }}
+              {{ wizardButtonNameSave }}
               <b-spinner
                 v-if="loading"
                 style="width: 1rem; height: 1rem"
@@ -101,6 +103,8 @@
           </div>
           <div v-if="isButtonSave" class="col-12 col-md-auto mt-3 mt-md-0">
             <b-button
+              v-if="wizardButtonVisibleContinue"
+              :class="wizardButtonStyleContinue"
               pill
               :disabled="loading"
               type="button"
@@ -108,7 +112,7 @@
               :style="isButtonDisabled"
               @click="saveDataCard(1)"
             >
-              {{ buttonTitle }}
+              {{ wizardButtonNameContinue }}
               <b-spinner
                 v-if="loading"
                 style="width: 1rem; height: 1rem"
@@ -175,31 +179,48 @@ export default {
       if (this.isWizard && this.$route.params.idCard === "0") {
         const wizardButtonContinue = this.$store.getters[
           "data_card/getForm"
-        ].find((item) => {
-          if (item.type === "WizardButton" && item.name === "Continue") {
-            return true;
-          }
-        });
-        return wizardButtonContinue?.label
-          ? wizardButtonContinue.label
-          : "Продолжить";
+        ].find(
+          (item) => item.type === "WizardButton" && item.name === "Continue"
+        );
+        return wizardButtonContinue;
       }
-      return "Сохранить";
+      return null;
     },
     wizardButtonTitleSave() {
       const wizardButtonSave = this.$store.getters["data_card/getForm"].find(
-        (item) => {
-          if (item.type === "WizardButton" && item.name === "Save") {
-            return true;
-          }
-        }
+        (item) => item.type === "WizardButton" && item.name === "Save"
       );
-      return wizardButtonSave?.label ? wizardButtonSave.label : "Сохранить";
+      return wizardButtonSave;
+    },
+    wizardButtonNameContinue() {
+      return this.buttonTitle?.label ?? "Продолжить";
+    },
+    wizardButtonNameSave() {
+      return this.wizardButtonTitleSave?.label ?? "Сохранить";
+    },
+    wizardButtonStyleContinue() {
+      return this.buttonTitle?.labelCols ?? "";
+    },
+    wizardButtonStyleSave() {
+      return this.wizardButtonTitleSave?.labelCols ?? "";
+    },
+    wizardButtonVisibleContinue() {
+      if (this.buttonTitle) {
+        return this.buttonTitle.visible;
+      }
+      return true;
+    },
+    wizardButtonVisibleSave() {
+      if (this.wizardButtonTitleSave) {
+        return this.wizardButtonTitleSave.visible;
+      }
+      return true;
     },
     isButtonDisabled() {
       if (this.$refs.CardEditor) {
         return this.$refs.cardEditor.isButtonDisabled;
       }
+      return false;
     },
     getFormData() {
       const formData = JSON.parse(

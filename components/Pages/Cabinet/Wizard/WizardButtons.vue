@@ -44,11 +44,9 @@ export default {
     btnContinue() {
       const formData = this.$store.getters["data_card/getForm"];
       const fields = formData.length ? formData : formData.data || [];
-      const wizardButtonContinue = fields.find((item) => {
-        if (item.type === "WizardButton" && item.name === "Continue") {
-          return true;
-        }
-      });
+      const wizardButtonContinue = fields.find(
+        (item) => item.type === "WizardButton" && item.name === "Continue"
+      );
       return wizardButtonContinue;
     },
     showBtnNameContinue() {
