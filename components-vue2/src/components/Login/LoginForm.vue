@@ -30,9 +30,10 @@
             >Неверный код. Попробуйте еще раз.
           </b-form-invalid-feedback>
           <b-row v-if="isRetrySendCodeSMS">
-            <b-button @click="retrySendCodeSMS()" class="mt-4" block
+            <div class="mt-4 d-block d-lg-table">
+            <b-button @click="retrySendCodeSMS()" class="mt-4 w-100" block
               >Отправить повторно</b-button
-            >
+            ></div>
           </b-row>
           <div v-else class="mt-4 d-block d-lg-table">
             <button
@@ -59,6 +60,7 @@
                 :isCaptchaValid="this.captchaMessage"
               />
             </div>
+            <div class="d-block d-lg-table">
             <b-button
               id="submit-sms-code"
               :disabled="
@@ -67,7 +69,7 @@
                 (isCaptchaNeeded && !user.cap)
               "
               variant="primary"
-              class="mt-3"
+              class="mt-4 w-100"
               block
               @click="fetchToken()"
               >Продолжить
