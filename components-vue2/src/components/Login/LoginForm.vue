@@ -8,9 +8,10 @@
       @hidden="closeModalConfirmSMSCode"
       :centered="true"
       :static="true"
+      content-class="sms-confirm-modal"
+      title="Введите код"
     >
-      <div class="d-block text-center">
-        <h4>Введите код</h4>
+      <div>
         {{ modalTextRequest }}
         <b-form id="sms-form" @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
@@ -28,31 +29,36 @@
           <b-form-invalid-feedback
             >Неверный код. Попробуйте еще раз.
           </b-form-invalid-feedback>
-          <b-row v-if="isRetrySendCodeSMS">
-            <b-button @click="retrySendCodeSMS()" class="mt-3" block
+          <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
+            <b-button @click="retrySendCodeSMS()" class="w-100"
               >Отправить повторно</b-button
             >
-          </b-row>
-          <div v-else class="mt-3">
-            Отправить повторно можно через
-            <verify-timer
-              @onFinish="isRetrySendCodeSMS = true"
-              :duration="duration"
-              class="mt-3"
-            />
-            сек.
           </div>
-          <b-row>
-            <div
-              v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
-              class="col-12 col-lg-12"
+          <div v-else class="mt-4 d-block d-lg-table">
+            <button
+              type="button"
+              disabled="disabled"
+              class="btn btn-primary w-100"
             >
-              <captcha
-                @update="setIdCaptcha($event)"
-                @updateCode="setCodeCaptcha($event)"
-                :isCaptchaValid="this.captchaMessage"
+              Отправить повторно(можно через
+              <verify-timer
+                @onFinish="isRetrySendCodeSMS = true"
+                :duration="duration"
               />
-            </div>
+              секунд)
+            </button>
+          </div>
+          <div
+            v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
+            class="mt-3 text-start"
+          >
+            <captcha
+              @update="setIdCaptcha($event)"
+              @updateCode="setCodeCaptcha($event)"
+              :isCaptchaValid="this.captchaMessage"
+            />
+          </div>
+          <div class="d-block d-lg-table">
             <b-button
               id="submit-sms-code"
               :disabled="
@@ -61,13 +67,13 @@
                 (isCaptchaNeeded && !user.cap)
               "
               variant="primary"
-              class="mt-3"
+              class="mt-4 w-100"
               block
               @click="fetchToken()"
               >Продолжить
               <b-spinner v-if="authInProcess" variant="light"></b-spinner
             ></b-button>
-          </b-row>
+          </div>
         </b-form>
       </div>
     </b-modal>
@@ -76,13 +82,13 @@
       <div class="tab-mobile-block">Вход</div>
       <div class="row">
         <div class="col-12 col-lg-4">
-          <b-form-group label="Телефон или email" label-cols="12">
+          <b-form-group label="Телефон или e-mail" label-cols="12">
             <b-form-input
               autofocus
               id="phone"
               ref="phoneInput"
               v-model="$v.user.username.$model"
-              placeholder="Телефон или почта"
+              placeholder="Телефон или e-mail"
               type="tel"
               :state="wrongAuthData ? false : validateState('username')"
               @blur="$v.user.username.$touch()"
@@ -139,7 +145,7 @@
 
         <div
           v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
-          class="col-12 mt-3 mt-lg-0"
+          class="col-12 mt-3"
         >
           <captcha
             @update="setIdCaptcha($event)"
