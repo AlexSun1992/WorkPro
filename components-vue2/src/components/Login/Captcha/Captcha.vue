@@ -35,7 +35,7 @@
             @click="refreshDisplayCaptcha"
             :disabled="isLoading"
             class="reload-captcha"
-            variant="light"
+            variant="gray"
             >Обновить</b-button
           >
         </div>
