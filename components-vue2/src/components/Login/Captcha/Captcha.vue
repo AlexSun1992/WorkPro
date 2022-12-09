@@ -1,5 +1,5 @@
 <template>
-  <div id="captcha-form" class="row mt-3">
+  <div id="captcha-form" class="row">
     <div class="col-lg-4 text-nowrap">
       <b-form-group label="Введите код с картинки" label-cols="12">
         <b-form-input
