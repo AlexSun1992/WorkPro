@@ -398,6 +398,8 @@ export default {
         this.form.password = "";
         this.form.password2 = "";
         this.form.policyNumber = "";
+        this.surnameClassHub = [];
+        this.nameClassHub = [];
       });
     },
     handleBlur(field) {
