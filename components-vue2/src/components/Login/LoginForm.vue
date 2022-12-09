@@ -31,9 +31,10 @@
           </b-form-invalid-feedback>
           <b-row v-if="isRetrySendCodeSMS">
             <div class="mt-4 d-block d-lg-table">
-            <b-button @click="retrySendCodeSMS()" class="mt-4 w-100" block
-              >Отправить повторно</b-button
-            ></div>
+              <b-button @click="retrySendCodeSMS()" class="mt-4 w-100"
+                >Отправить повторно</b-button
+              >
+            </div>
           </b-row>
           <div v-else class="mt-4 d-block d-lg-table">
             <button
@@ -61,20 +62,21 @@
               />
             </div>
             <div class="d-block d-lg-table">
-            <b-button
-              id="submit-sms-code"
-              :disabled="
-                authInProcess ||
-                user.code === '' ||
-                (isCaptchaNeeded && !user.cap)
-              "
-              variant="primary"
-              class="mt-4 w-100"
-              block
-              @click="fetchToken()"
-              >Продолжить
-              <b-spinner v-if="authInProcess" variant="light"></b-spinner
-            ></b-button>
+              <b-button
+                id="submit-sms-code"
+                :disabled="
+                  authInProcess ||
+                  user.code === '' ||
+                  (isCaptchaNeeded && !user.cap)
+                "
+                variant="primary"
+                class="mt-4 w-100"
+                block
+                @click="fetchToken()"
+                >Продолжить
+                <b-spinner v-if="authInProcess" variant="light"></b-spinner
+              ></b-button>
+            </div>
           </b-row>
         </b-form>
       </div>
