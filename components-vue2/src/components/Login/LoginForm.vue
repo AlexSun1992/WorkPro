@@ -147,7 +147,7 @@
           v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
           class="col-12 mt-3"
         >
-          <div class="ph4b mb-3">
+          <div class="ph4b mb-2">
             Слишком много попыток с вашего компьютера. Подтвердите, что вы не
             бот
           </div>
