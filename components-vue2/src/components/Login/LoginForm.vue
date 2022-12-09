@@ -29,13 +29,11 @@
           <b-form-invalid-feedback
             >Неверный код. Попробуйте еще раз.
           </b-form-invalid-feedback>
-          <b-row v-if="isRetrySendCodeSMS">
-            <div class="mt-4 d-block d-lg-table">
-              <b-button @click="retrySendCodeSMS()" class="mt-4 w-100"
-                >Отправить повторно</b-button
-              >
-            </div>
-          </b-row>
+          <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
+            <b-button @click="retrySendCodeSMS()" class="mt-4 w-100"
+              >Отправить повторно</b-button
+            >
+          </div>
           <div v-else class="mt-4 d-block d-lg-table">
             <button
               type="button"
@@ -50,34 +48,32 @@
               секунд)
             </button>
           </div>
-          <b-row>
-            <div
-              v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
-              class="col-12 col-lg-12 mt-3 p-0 text-start"
-            >
-              <captcha
-                @update="setIdCaptcha($event)"
-                @updateCode="setCodeCaptcha($event)"
-                :isCaptchaValid="this.captchaMessage"
-              />
-            </div>
-            <div class="d-block d-lg-table">
-              <b-button
-                id="submit-sms-code"
-                :disabled="
-                  authInProcess ||
-                  user.code === '' ||
-                  (isCaptchaNeeded && !user.cap)
-                "
-                variant="primary"
-                class="mt-4 w-100"
-                block
-                @click="fetchToken()"
-                >Продолжить
-                <b-spinner v-if="authInProcess" variant="light"></b-spinner
-              ></b-button>
-            </div>
-          </b-row>
+          <div
+            v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
+            class="mt-3 text-start"
+          >
+            <captcha
+              @update="setIdCaptcha($event)"
+              @updateCode="setCodeCaptcha($event)"
+              :isCaptchaValid="this.captchaMessage"
+            />
+          </div>
+          <div class="d-block d-lg-table">
+            <b-button
+              id="submit-sms-code"
+              :disabled="
+                authInProcess ||
+                user.code === '' ||
+                (isCaptchaNeeded && !user.cap)
+              "
+              variant="primary"
+              class="mt-4 w-100"
+              block
+              @click="fetchToken()"
+              >Продолжить
+              <b-spinner v-if="authInProcess" variant="light"></b-spinner
+            ></b-button>
+          </div>
         </b-form>
       </div>
     </b-modal>
