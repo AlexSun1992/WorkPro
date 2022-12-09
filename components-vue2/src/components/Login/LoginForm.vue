@@ -34,11 +34,11 @@
               >Отправить повторно</b-button
             >
           </b-row>
-          <div v-else class="mt-4">
+          <div v-else class="mt-4 d-block d-lg-table">
             <button
               type="button"
               disabled="disabled"
-              class="btn btn-primary d-block d-lg-table"
+              class="btn btn-primary w-100"
             >
               Отправить повторно(можно через
               <verify-timer
@@ -51,7 +51,7 @@
           <b-row>
             <div
               v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
-              class="col-12 col-lg-12 mt-3"
+              class="col-12 col-lg-12 mt-3 p-0 text-start"
             >
               <captcha
                 @update="setIdCaptcha($event)"
