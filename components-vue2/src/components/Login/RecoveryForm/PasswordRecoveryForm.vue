@@ -21,6 +21,7 @@
               :tab-index="[10, 15]"
               :isError="errorMessage"
               :isCodeFieldInValid="isCodeFieldInValid"
+              @isPhoneChangedButtonClicked="checkIfButtonClicked"
             />
 
             <b-row class="mt-3" v-if="!isCodeFieldInValid">
@@ -69,6 +70,7 @@
               :count="60"
               :validateState="validateState"
               :tab-index="[10, 15]"
+              @isPhoneChangedButtonClicked="checkIfButtonClicked"
             />
 
             <b-row class="mt-3" v-if="!isCodeFieldInValid">
@@ -82,7 +84,9 @@
               </b-form-group>
               <div class="recovery col-lg-8 col-12">
                 <verify-password
-                  v-if="!isBirthdateInValid && !isCodeFieldInValid"
+                  v-if="
+                    !isBirthdateInValid && !isCodeFieldInValid && form.birthdate
+                  "
                   :tab-index="[20, 30]"
                   :v="$v.form"
                   :validateState="validateState"
@@ -283,6 +287,15 @@ export default {
         this.isErrorMessage = false;
         this.errorMessage = null;
       }
+    },
+    async checkIfButtonClicked(data) {
+      this.changePhoneButtonClicked = data;
+      this.$nextTick(() => {
+        this.$v.$reset();
+        this.form.password = "";
+        this.form.password2 = "";
+        this.form.birthdate = "";
+      });
     },
   },
 
