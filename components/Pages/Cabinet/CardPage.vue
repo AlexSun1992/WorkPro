@@ -371,9 +371,17 @@ export default {
       const path = this.$store.state.data_card.listPath;
       return path && !path.includes("/55/0/19") && !path.includes("/55/0/738");
     },
-    saveDataCard(step) {
+    async saveDataCard(step) {
       if (this.$refs.cardEditor) {
-        this.$refs.cardEditor.saveDataCard(step);
+        this.$store.commit("data_card/setValueByName", {
+          name: step ? "Continue" : "Save",
+          value: "CLICKED",
+        });
+        await this.$refs.cardEditor.saveDataCard(step);
+        this.$store.commit("data_card/setValueByName", {
+          name: step ? "Continue" : "Save",
+          value: "NULL",
+        });
       }
     },
     cancelDataCard() {

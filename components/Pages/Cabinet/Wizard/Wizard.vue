@@ -179,7 +179,15 @@ export default {
       if (!this.currentTab.list) {
         if (this.$store.getters["data_card/getBtnSave"]) {
           if (this.$refs.child.$refs.cardEditor !== undefined) {
+            this.$store.commit("data_card/setValueByName", {
+              name: "Continue",
+              value: "CLICKED",
+            });
             await this.$refs.child.$refs.cardEditor.saveDataCard();
+            this.$store.commit("data_card/setValueByName", {
+              name: "Continue",
+              value: null,
+            });
             if (this.isSavedError === true) {
               this.loading = false;
               return;
@@ -190,7 +198,7 @@ export default {
             const cardId = this.$route.params.idCard;
             const relId = this.$route.params.idRel;
             const formData = this.$store.getters["data_card/getForm"];
-            const resp = await this.$store.dispatch("data_card/saveDataCard", {
+            await this.$store.dispatch("data_card/saveDataCard", {
               moduleId,
               itemId,
               cardId,
@@ -209,10 +217,18 @@ export default {
     async goBack(e) {
       this.$router.push(this.getURL(e));
     },
-    async saveCard(e) {
+    async saveCard() {
       this.loading = true;
       if (this.$refs.child.$refs.cardEditor !== undefined) {
+        this.$store.commit("data_card/setValueByName", {
+          name: "Save",
+          value: "CLICKED",
+        });
         await this.$refs.child.$refs.cardEditor.saveDataCard();
+        this.$store.commit("data_card/setValueByName", {
+          name: "Save",
+          value: null,
+        });
         if (this.isSavedError === true) {
           this.loading = false;
           return;
