@@ -311,12 +311,15 @@ router.post(
   (req, res) => {
     try {
       const mobile2ServiceInstance = mobile2Service();
+      const ipAddress = requestIp.getClientIp(req);
       if (req.headers.referer) {
         if (req.headers.referer.includes("testdms")) {
           mobile2ServiceInstance.defaults.baseURL =
             "https://mobiletest.reso.ru";
         }
       }
+      mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+        ipAddress || null;
       if (req.headers.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
           req.headers.authorization;
@@ -351,6 +354,9 @@ router.post(
 router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
+    const ipAddress = requestIp.getClientIp(req);
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || null;
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance.defaults.baseURL = "https://mobiletest.reso.ru";
