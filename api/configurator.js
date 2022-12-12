@@ -96,6 +96,10 @@ router.get("/module/:moduleId/:itemId", (req, res) => {
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
       ipAddress || "";
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
