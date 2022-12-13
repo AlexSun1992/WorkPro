@@ -2,111 +2,138 @@
   <div class="recovery-form-content">
     <div class="row justify-content-center">
       <div class="col-12 col-lg-8">
-        <b-tabs @activate-tab="initData" ref="tabs">
-          <b-tab title="Телефон" button-id="tab_tel_lk" id="tab_tel">
-            <div class="mb-3">
-              Введите номер телефона указанный при регистрации
-            </div>
+        <button
+          v-if="visibleForm === 'email'"
+          @click="toggleForm('email')"
+          class="login-btn-mobile d-lg-none mb-3"
+        >
+          Телефон
+        </button>
 
-            <verify-user
-              ref="verifyUser"
-              @error="showError"
-              @getLoginType="loginType"
-              :loginType="'phone'"
-              :mode-type="'RECOVERY'"
-              :v="$v.form"
-              :count="60"
-              :validateState="validateState"
-              :text-message="textMessage"
-              :tab-index="[10, 15]"
-              :isError="errorMessage"
-              :isCodeFieldInValid="isCodeFieldInValid"
-            />
+        <b-nav card-header tabs class="d-none d-lg-block">
+          <b-nav-item
+            :link-attrs="{ id: 'tab_tel_lk' }"
+            @click="toggleForm('email')"
+            :active="visibleForm === 'phone'"
+            >Телефон</b-nav-item
+          >
+          <b-nav-item
+            @click="toggleForm('phone')"
+            :active="visibleForm === 'email'"
+            :link-attrs="{ id: 'tab_mail_lk' }"
+            >E-mail</b-nav-item
+          >
+        </b-nav>
 
-            <b-row class="mt-3" v-if="!isCodeFieldInValid">
-              <b-form-group label="Дата рождения" class="col-lg-4 col-12">
-                <birthday-picker
-                  ref="dataPicker"
-                  v-model="$v.form.birthdate.$model"
-                  :state="validateState('birthdate')"
-                  :tabindex="20"
-                />
-              </b-form-group>
-              <div class="recovery col-md-8 col-12">
-                <verify-password
-                  v-if="!isBirthdateInValid && !isCodeFieldInValid"
-                  :tab-index="[20, 30]"
-                  :v="$v.form"
-                  :validateState="validateState"
-                  :isValid="isSamePassword"
-                />
-              </div>
-            </b-row>
-            <div
-              class="col-12 invalid-feedback d-block mt-3"
-              v-if="isErrorMessage"
-            >
-              {{ errorMessage }}
-            </div>
-            <b-button
-              v-if="isSamePassword && !isCodeFieldInValid"
-              variant="primary"
-              @click="resetPassword"
-              :disabled="disabled"
-              id="btn_change-password_tel_lk"
-              class="mt-3"
-              >Изменить пароль</b-button
-            >
-          </b-tab>
-          <b-tab title="Email" button-id="tab_mail_lk" id="tab_mail">
-            <div class="mb-3">Введите e-mail указанный при регистрации</div>
-            <verify-user
-              @error="showError"
-              @getLoginType="loginType"
-              :loginType="'email'"
-              :mode-type="'RECOVERY'"
-              :v="$v.form"
-              :count="60"
-              :validateState="validateState"
-              :tab-index="[10, 15]"
-            />
+        <div v-if="visibleForm === 'phone'" class="tab-text active">
+          <verify-user
+            key="phone"
+            ref="verifyUser"
+            @error="showError"
+            @getLoginType="loginType"
+            :loginType="'phone'"
+            :mode-type="'RECOVERY'"
+            :v="$v.form"
+            :count="60"
+            :validateState="validateState"
+            :text-message="textMessage"
+            :tab-index="[10, 15]"
+            :isError="errorMessage"
+            :isCodeFieldInValid="isCodeFieldInValid"
+          />
 
-            <b-row class="mt-3" v-if="!isCodeFieldInValid">
-              <b-form-group label="Дата рождения" class="col-lg-4 col-12">
-                <birthday-picker
-                  ref="dataPicker"
-                  v-model="$v.form.birthdate.$model"
-                  :state="validateState('birthdate')"
-                  :tabindex="20"
-                />
-              </b-form-group>
-              <div class="recovery col-lg-8 col-12">
-                <verify-password
-                  v-if="!isBirthdateInValid && !isCodeFieldInValid"
-                  :tab-index="[20, 30]"
-                  :v="$v.form"
-                  :validateState="validateState"
-                  :isValid="isSamePassword"
-                />
-              </div>
-            </b-row>
-            <div
-              class="col-12 invalid-feedback d-block mt-3"
-              v-if="isErrorMessage"
-            >
-              {{ errorMessage }}
+          <b-row class="mt-3" v-if="!isCodeFieldInValid">
+            <b-form-group label="Дата рождения" class="col-lg-4 col-12">
+              <birthday-picker
+                ref="dataPicker"
+                v-model="$v.form.birthdate.$model"
+                :state="validateState('birthdate')"
+                :tabindex="20"
+              />
+            </b-form-group>
+            <div class="recovery col-md-8 col-12">
+              <verify-password
+                v-if="!isBirthdateInValid && !isCodeFieldInValid"
+                :tab-index="[20, 30]"
+                :v="$v.form"
+                :validateState="validateState"
+                :isValid="isSamePassword"
+              />
             </div>
-            <b-button
-              v-if="isSamePassword && !isCodeFieldInValid"
-              variant="primary"
-              @click="resetPassword"
-              :disabled="disabled"
-              id="btn_change-password_mail_lk"
-              class="mt-3"
-              >Изменить пароль</b-button
-            >
-          </b-tab>
-        </b-tabs>
+          </b-row>
+          <div
+            class="col-12 invalid-feedback d-block mt-3"
+            v-if="isErrorMessage"
+          >
+            {{ errorMessage }}
+          </div>
+          <b-button
+            v-if="isSamePassword && !isCodeFieldInValid"
+            variant="primary"
+            @click="resetPassword"
+            :disabled="disabled"
+            id="btn_change-password_tel_lk"
+            class="mt-3"
+            >Изменить пароль</b-button
+          >
+        </div>
+
+        <div v-else class="tab-text active">
+          <verify-user
+            key="email"
+            @error="showError"
+            @getLoginType="loginType"
+            :loginType="'email'"
+            :mode-type="'RECOVERY'"
+            :v="$v.form"
+            :count="60"
+            :validateState="validateState"
+            :tab-index="[10, 15]"
+          />
+
+          <b-row class="mt-3" v-if="!isCodeFieldInValid">
+            <b-form-group label="Дата рождения" class="col-lg-4 col-12">
+              <birthday-picker
+                ref="dataPicker"
+                v-model="$v.form.birthdate.$model"
+                :state="validateState('birthdate')"
+                :tabindex="20"
+              />
+            </b-form-group>
+            <div class="recovery col-lg-8 col-12">
+              <verify-password
+                v-if="!isBirthdateInValid && !isCodeFieldInValid"
+                :tab-index="[20, 30]"
+                :v="$v.form"
+                :validateState="validateState"
+                :isValid="isSamePassword"
+              />
+            </div>
+          </b-row>
+          <div
+            class="col-12 invalid-feedback d-block mt-3"
+            v-if="isErrorMessage"
+          >
+            {{ errorMessage }}
+          </div>
+          <b-button
+            v-if="isSamePassword && !isCodeFieldInValid"
+            variant="primary"
+            @click="resetPassword"
+            :disabled="disabled"
+            id="btn_change-password_mail_lk"
+            class="mt-3"
+            >Изменить пароль</b-button
+          >
+        </div>
+
+        <button
+          v-if="visibleForm === 'phone'"
+          @click="toggleForm('phone')"
+          class="login-btn-mobile d-lg-none mt-3"
+        >
+          E-mail
+        </button>
       </div>
     </div>
   </div>
@@ -165,6 +192,7 @@ export default {
       dateOfBirth: false,
       loginFieldType: null,
       myclass: ["cabinet okrecovery"],
+      visibleForm: "phone",
     };
   },
   mounted() {
@@ -173,6 +201,13 @@ export default {
   },
 
   methods: {
+    toggleForm(tabs) {
+      if (this.visibleForm === tabs) {
+        this.clearForm();
+        this.visibleForm = tabs === "phone" ? "email" : "phone";
+      }
+    },
+
     loginType(value) {
       this.loginFieldType = value;
     },
@@ -257,10 +292,7 @@ export default {
         console.log(e);
       }
     },
-    initData(value) {
-      if (value === 0 || value === 1) {
-        this.currentTab = value;
-      }
+    clearForm() {
       this.form = {
         phone: "",
         code: "",
