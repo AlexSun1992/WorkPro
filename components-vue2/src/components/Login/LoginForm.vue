@@ -110,13 +110,18 @@
               v-model="$v.user.password.$model"
               id="password"
               placeholder="Пароль"
-              type="password"
+              :type="pswVisible ? 'text' : 'password'"
               :state="wrongAuthData ? false : validateState('password')"
               @blur="$v.user.password.$touch()"
               @input="wrongAuthData = null"
               class="form-control"
               :disabled="authInProcess"
             ></b-form-input>
+            <button
+              type="button"
+              class="btn-psw-visible"
+              @click="visiblePSW()"
+            ></button>
             <b-form-invalid-feedback v-if="this.$v.user.password.$model === ''"
               >Пожалуйста, введите пароль
             </b-form-invalid-feedback>
@@ -147,7 +152,7 @@
           v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
           class="col-12 mt-3"
         >
-          <div class="ph4b mb-3">
+          <div class="ph4b mb-2">
             Слишком много попыток с вашего компьютера. Подтвердите, что вы не
             бот
           </div>
@@ -237,6 +242,7 @@ export default {
       placeholder: "Телефон или почта",
       errorMessage: null,
       authInProcess: false,
+      pswVisible: false,
       captchaToken: null,
       loginTouchesCount: 0,
     };
@@ -278,6 +284,13 @@ export default {
   },
 
   methods: {
+    visiblePSW() {
+      if (this.pswVisible === false) {
+        this.pswVisible = true;
+      } else {
+        this.pswVisible = false;
+      }
+    },
     setIdCaptcha(id) {
       this.user.capid = id;
     },
