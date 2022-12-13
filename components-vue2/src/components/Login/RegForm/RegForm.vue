@@ -447,7 +447,9 @@ export default {
     },
 
     isCodeFieldValid(data) {
-      this.codeFieldValid = data;
+      if (data) {
+        this.codeFieldValid = data;
+      }
     },
 
     // запрос на подсказки по отчеству

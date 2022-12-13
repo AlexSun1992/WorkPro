@@ -1,0 +1,102 @@
+<template>
+  <div>
+    <b-form-group
+      :label="data.label"
+      :class="{ required: data.required }"
+      :label-for="data.name"
+    >
+      <template #label>
+        <span v-html="data.label" /><span
+          v-if="data.helpText"
+          class="tooltipster"
+        >
+          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+            <span v-html="data.helpText" /></vue-easy-tooltip
+        ></span>
+      </template>
+      <date-picker
+        v-model="fieldValue"
+        v-mask="maskTemplate"
+        :disabled="!edit ? !edit : data.readonly"
+        type="date"
+        value-type="DD.MM.YYYY"
+        :placeholder="data.placeholder"
+        format="DD.MM.YYYY"
+        :first-day-of-week="1"
+        :lang="lang"
+        :input-class="data.state === false ? `${state} is-invalid` : state"
+        :clearable="!data.required"
+      />
+      <p v-if="data.dangerText" class="danger-text">
+        {{ data.dangerText }}
+      </p>
+      <b-form-invalid-feedback :state="data.state">
+        {{ data.error ? data.error : "Обязательное поле" }}
+      </b-form-invalid-feedback>
+    </b-form-group>
+  </div>
+</template>
+
+<script>
+import DatePicker from "vue2-datepicker";
+import "../../../assets/scss/vue2-datepicker.css";
+import "vue2-datepicker/locale/ru";
+import { applyMask as _mask } from "../../../utils/utils";
+
+export default {
+  name: "ControlTimestamp",
+  components: { DatePicker },
+  directives: {
+    mask: _mask,
+  },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false,
+    },
+  },
+  data() {
+    return {
+      lang: "ru",
+      state: "timestamp form-control",
+      maskTemplate: "##.##.####",
+    };
+  },
+
+  computed: {
+    fieldValue: {
+      get() {
+        return this.data.value;
+      },
+      set(value) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value,
+        });
+      },
+    },
+  },
+};
+</script>
+
+<style>
+.timestamp.form-control:disabled,
+.form-control.disabled {
+  opacity: 1;
+  color: #000;
+}
+.timestamp.error {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #f86c6b;
+  margin-top: 9px;
+}
+</style>

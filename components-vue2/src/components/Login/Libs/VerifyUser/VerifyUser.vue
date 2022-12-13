@@ -68,7 +68,6 @@
           ref="codeInput"
           v-model="v.code.$model"
           v-mask="codeMask"
-          :state="validateInput('code', isCodeBlured)"
           @blur="blurField('code', isCodeBlured)"
           @update="updateField('code')"
           @change="changeField('code')"
