@@ -148,7 +148,10 @@ import {
 } from "bootstrap-vue";
 import VerifyTimer from "./VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "./captcha.helper";
-import { getMessageFromSuccessResponse } from "./verifyUser.helper";
+import {
+  getMessageFromSuccessResponse,
+  getMessageFromMessageCode,
+} from "./verifyUser.helper";
 
 export default {
   components: {
@@ -385,18 +388,20 @@ export default {
             response?.data[0]?.ERRORCODE || response.data.STATUS === 500
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+          //
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+          const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;
 
           if (isError === false) {
             if (
               this.modeType === "REG" &&
               this.loginType === "phone" &&
-              (isInSystemLogin || isExpiredLogin)
+              (getResponseMessageCode === 201 || getResponseMessageCode === 204)
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "Введенный Вами мобильный номер уже есть в системе.",
+                  "В Личном кабинете уже есть профиль с данным номером телефона",
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
@@ -507,6 +512,9 @@ export default {
   },
 
   computed: {
+    getMessageErrorText() {
+      return null;
+    },
     changeMask() {
       if (this.loginType === "phone") {
         this.placeholder = "+7(___)-___-__-__";
