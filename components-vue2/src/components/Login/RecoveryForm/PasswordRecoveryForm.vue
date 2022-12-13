@@ -148,7 +148,16 @@ import {
   helpers,
 } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
-import { BTabs, BTab, BAlert, BRow, BFormGroup, BButton } from "bootstrap-vue";
+import {
+  BTabs,
+  BTab,
+  BAlert,
+  BRow,
+  BFormGroup,
+  BButton,
+  BNav,
+  BNavItem,
+} from "bootstrap-vue";
 import axios from "axios";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import UserRecoveryForm from "./UserRecoveryForm.vue";
@@ -175,6 +184,8 @@ export default {
     BRow,
     BFormGroup,
     BButton,
+    BNav,
+    BNavItem,
   },
   mixins: [validationMixin],
   data() {
@@ -196,7 +207,7 @@ export default {
     };
   },
   mounted() {
-    this.initData();
+    this.clearForm();
     this.formLoaded = true;
   },
 
