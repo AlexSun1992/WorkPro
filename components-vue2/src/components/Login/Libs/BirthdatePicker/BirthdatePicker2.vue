@@ -1,61 +1,47 @@
 <template>
   <div>
-    <b-form-group
-      :label="data.label"
-      :class="{ required: data.required }"
-      :label-for="data.name"
-    >
-      <template #label>
-        <span v-html="data.label" /><span
-          v-if="data.helpText"
-          class="tooltipster"
-        >
-          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-            <span v-html="data.helpText" /></vue-easy-tooltip
-        ></span>
-      </template>
-      <date-picker
-        v-model="fieldValue"
-        v-mask="maskTemplate"
-        :disabled="!edit ? !edit : data.readonly"
-        type="date"
-        value-type="DD.MM.YYYY"
-        :placeholder="data.placeholder"
-        format="DD.MM.YYYY"
-        :first-day-of-week="1"
-        :lang="lang"
-        :input-class="data.state === false ? `${state} is-invalid` : state"
-        :clearable="!data.required"
-      />
-      <p v-if="data.dangerText" class="danger-text">
-        {{ data.dangerText }}
-      </p>
-      <b-form-invalid-feedback :state="data.state">
-        {{ data.error ? data.error : "Обязательное поле" }}
-      </b-form-invalid-feedback>
-    </b-form-group>
+    <date-picker
+      v-model="birthdate"
+      @input="setDateValue"
+      v-mask="maskTemplate"
+      :disabled-date="notBeforeDate"
+      :default-value="defaultDate"
+      :disabled="disabled"
+      type="date"
+      value-type="DD.MM.YYYY"
+      placeholder="__.__.__"
+      format="DD.MM.YYYY"
+      :first-day-of-week="1"
+      :lang="lang"
+      :input-class="state === false ? `${state} is-invalid` : state"
+      :clearable="true"
+    />
+    <b-form-invalid-feedback :state="state">
+      Обязательное поле
+    </b-form-invalid-feedback>
   </div>
 </template>
 
 <script>
 import DatePicker from "vue2-datepicker";
-import "../../../assets/scss/vue2-datepicker.css";
 import "vue2-datepicker/locale/ru";
-import { applyMask as _mask } from "../../../utils/utils";
+import { mask } from "vue-the-mask";
 
+function getDate(value) {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - value);
+  return date;
+}
 export default {
   name: "ControlTimestamp",
   components: { DatePicker },
-  directives: {
-    mask: _mask,
-  },
+  directives: { mask },
   props: {
-    data: {
-      type: Object,
+    state: {
       required: true,
-      default: () => {},
+      default: () => null,
     },
-    edit: {
+    disabled: {
       type: Boolean,
       required: true,
       default: () => false,
@@ -63,40 +49,21 @@ export default {
   },
   data() {
     return {
+      birthdate: null,
       lang: "ru",
-      state: "timestamp form-control",
       maskTemplate: "##.##.####",
+      defaultDate: getDate(18),
     };
   },
-
-  computed: {
-    fieldValue: {
-      get() {
-        return this.data.value;
-      },
-      set(value) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value,
-        });
-      },
+  methods: {
+    setDateValue(date) {
+      this.$emit("input", date);
+    },
+    notBeforeDate(date) {
+      return date > getDate(18);
     },
   },
 };
 </script>
 
-<style>
-.timestamp.form-control:disabled,
-.form-control.disabled {
-  opacity: 1;
-  color: #000;
-}
-.timestamp.error {
-  width: 100%;
-  margin-top: 0.25rem;
-  font-size: 80%;
-  color: #f86c6b;
-  margin-top: 9px;
-}
-</style>
+<style scoped></style>

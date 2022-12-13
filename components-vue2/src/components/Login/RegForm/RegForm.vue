@@ -113,7 +113,13 @@
 
         <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
-            <birthday-picker
+            <!--            <birthday-picker-->
+            <!--              v-model="$v.form.birthdate.$model"-->
+            <!--              :state="validateState('birthdate')"-->
+            <!--              :disabled="registrationInProcess"-->
+            <!--              @input="changeField('birthdate')"-->
+            <!--            />-->
+            <birthday-picker2
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
               :disabled="registrationInProcess"
@@ -184,6 +190,7 @@ import {
 } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
+import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import ConfirmModal from "./ConfirmModal.vue";
@@ -208,6 +215,7 @@ export default {
   components: {
     Autocomplete,
     birthdayPicker,
+    birthdayPicker2,
     VerifyUser,
     VerifyPassword,
     ConfirmModal,
