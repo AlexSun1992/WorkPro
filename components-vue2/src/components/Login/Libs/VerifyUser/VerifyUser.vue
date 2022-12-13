@@ -393,35 +393,31 @@ export default {
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;
 
-          const messageCodeErrText = getMessageFromMessageCode(
-            getResponseMessageCode
-          );
-
           if (isError === false) {
             if (
               this.modeType === "REG" &&
               this.loginType === "phone" &&
-              (getResponseMessageCode === 201 ||
-                getResponseMessageCode === 202 ||
-                getResponseMessageCode === 203 ||
-                getResponseMessageCode === 204)
+              (getResponseMessageCode === 201 || getResponseMessageCode === 204)
             ) {
               this.$bvModal
-                .msgBoxConfirm(messageCodeErrText, {
-                  title: "Номер уже зарегистрирован",
-                  size: "md",
-                  okVariant: "secondary",
-                  cancelVariant: "primary",
-                  okTitle: isInSystemLogin
-                    ? "Восстановить пароль"
-                    : "Продолжить регистрацию",
-                  cancelTitle: "Войти в систему",
-                  footerClass: "p-2",
-                  hideHeaderClose: false,
-                  centered: true,
-                  modalClass: this.myclass,
-                  autoFocusButton: "ok",
-                })
+                .msgBoxConfirm(
+                  "В Личном кабинете уже есть профиль с данным номером телефона",
+                  {
+                    title: "Номер уже зарегистрирован",
+                    size: "md",
+                    okVariant: "secondary",
+                    cancelVariant: "primary",
+                    okTitle: isInSystemLogin
+                      ? "Восстановить пароль"
+                      : "Продолжить регистрацию",
+                    cancelTitle: "Войти в систему",
+                    footerClass: "p-2",
+                    hideHeaderClose: false,
+                    centered: true,
+                    modalClass: this.myclass,
+                    autoFocusButton: "ok",
+                  }
+                )
                 .then((value) => {
                   if (value === true) {
                     if (isInSystemLogin) {
