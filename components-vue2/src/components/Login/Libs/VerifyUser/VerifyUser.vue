@@ -206,7 +206,6 @@ export default {
       allHiddenCaptchas: null,
       meassageWasSend: null,
       errorMessage: null,
-      messageCodeText: "",
     };
   },
 
@@ -393,33 +392,11 @@ export default {
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;
-          console.log("getResponseMessageCode:", getResponseMessageCode);
 
           const messageCodeErrText = getMessageFromMessageCode(
             getResponseMessageCode
           );
-          console.log("messageCodeErrText:", messageCodeErrText);
 
-          switch (getResponseMessageCode) {
-            case 201:
-              this.messageCodeText =
-                "В Личном кабинете уже есть профиль с данным номером телефона";
-              break;
-            case 202:
-              this.messageCodeText =
-                "В Личном кабинете уже есть профиль с данным номером телефона";
-              break;
-            case 203:
-              this.messageCodeText =
-                "В Личном кабинете отсутствует профиль с данным номером телефона";
-              break;
-            case 204:
-              this.messageCodeText =
-                "В Личном кабинете уже есть профиль с данным номером телефона";
-              break;
-            default:
-              this.messageCodeText = "";
-          }
           if (isError === false) {
             if (
               this.modeType === "REG" &&
