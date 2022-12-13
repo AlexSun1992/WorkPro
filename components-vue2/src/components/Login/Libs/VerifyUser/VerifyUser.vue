@@ -203,6 +203,7 @@ export default {
       allHiddenCaptchas: null,
       meassageWasSend: null,
       errorMessage: null,
+      messageCodeText: null,
     };
   },
 
@@ -385,9 +386,41 @@ export default {
             response?.data[0]?.ERRORCODE || response.data.STATUS === 500
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+          //
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+          const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;
+          console.log("getResponseMessage:", getResponseMessageCode);
+          // console.log("isInSystemLogin:", isInSystemLogin);
+          // console.log("isExpiredLogin:", isExpiredLogin);
+          // Добавить конструкцию switch сюда
+          // messageCodeText
+          switch (getResponseMessageCode) {
+            case 200:
+              console.log("Маловато");
+              break;
+            case 201:
+              console.log("В точку!");
+              break;
+            case 202:
+              console.log("Перебор");
+              break;
+            case 203:
+              console.log("test");
+              break;
+            case 204:
+              console.log("test");
+              break;
+            case 205:
+              console.log("test");
+              break;
+            case 206:
+              console.log("test");
+              break;
 
+            default:
+              console.log("Нет таких значений");
+          }
           if (isError === false) {
             if (
               this.modeType === "REG" &&
@@ -396,7 +429,7 @@ export default {
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "Введенный Вами мобильный номер уже есть в системе.",
+                  "В Личном кабинете уже есть профиль с данным номером телефона",
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
@@ -507,6 +540,9 @@ export default {
   },
 
   computed: {
+    getMessageErrorText() {
+      return null;
+    },
     changeMask() {
       if (this.loginType === "phone") {
         this.placeholder = "+7(___)-___-__-__";
