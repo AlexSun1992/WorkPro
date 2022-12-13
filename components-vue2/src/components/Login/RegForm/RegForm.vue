@@ -393,14 +393,14 @@ export default {
     },
     async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
-      this.$nextTick(() => {
-        this.$v.$reset();
-        this.form.password = "";
-        this.form.password2 = "";
-        this.form.policyNumber = "";
-        this.surnameClassHub = [];
-        this.nameClassHub = [];
-      });
+      // this.$nextTick(() => {
+      //   this.$v.$reset();
+      //   this.form.password = "";
+      //   this.form.password2 = "";
+      //   this.form.policyNumber = "";
+      //   this.surnameClassHub = [];
+      //   this.nameClassHub = [];
+      // });
     },
     handleBlur(field) {
       // Валидация
