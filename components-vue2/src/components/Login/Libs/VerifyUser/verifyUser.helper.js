@@ -41,3 +41,20 @@ export function getMessageFromSuccessResponse(response) {
 
   throw new Error("Невозможно обработать axiosResponse");
 }
+
+export function getMessageFromMessageCode(errorCode) {
+  if (errorCode === 201) {
+    return "В Личном кабинете уже есть профиль с данным номером телефона";
+  }
+  if (errorCode === 202) {
+    return "В Личном кабинете уже есть профиль с данным номером телефона";
+  }
+  if (errorCode === 203) {
+    return "В Личном кабинете отсутствует профиль с данным номером телефона";
+  }
+  if (errorCode === 204) {
+    return "В Личном кабинете уже есть профиль с данным номером телефона";
+  }
+
+  return "";
+}

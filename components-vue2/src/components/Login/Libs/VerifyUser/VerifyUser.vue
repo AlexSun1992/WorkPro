@@ -148,7 +148,10 @@ import {
 } from "bootstrap-vue";
 import VerifyTimer from "./VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "./captcha.helper";
-import { getMessageFromSuccessResponse } from "./verifyUser.helper";
+import {
+  getMessageFromSuccessResponse,
+  getMessageFromMessageCode,
+} from "./verifyUser.helper";
 
 export default {
   components: {
@@ -203,7 +206,7 @@ export default {
       allHiddenCaptchas: null,
       meassageWasSend: null,
       errorMessage: null,
-      messageCodeText: null,
+      messageCodeText: "",
     };
   },
 
@@ -390,62 +393,58 @@ export default {
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;
-          console.log("getResponseMessage:", getResponseMessageCode);
-          // console.log("isInSystemLogin:", isInSystemLogin);
-          // console.log("isExpiredLogin:", isExpiredLogin);
-          // Добавить конструкцию switch сюда
-          // messageCodeText
+          console.log("getResponseMessageCode:", getResponseMessageCode);
+
+          const messageCodeErrText = getMessageFromMessageCode(
+            getResponseMessageCode
+          );
+          console.log("messageCodeErrText:", messageCodeErrText);
+
           switch (getResponseMessageCode) {
-            case 200:
-              console.log("Маловато");
-              break;
             case 201:
-              console.log("В точку!");
+              this.messageCodeText =
+                "В Личном кабинете уже есть профиль с данным номером телефона";
               break;
             case 202:
-              console.log("Перебор");
+              this.messageCodeText =
+                "В Личном кабинете уже есть профиль с данным номером телефона";
               break;
             case 203:
-              console.log("test");
+              this.messageCodeText =
+                "В Личном кабинете отсутствует профиль с данным номером телефона";
               break;
             case 204:
-              console.log("test");
+              this.messageCodeText =
+                "В Личном кабинете уже есть профиль с данным номером телефона";
               break;
-            case 205:
-              console.log("test");
-              break;
-            case 206:
-              console.log("test");
-              break;
-
             default:
-              console.log("Нет таких значений");
+              this.messageCodeText = "";
           }
           if (isError === false) {
             if (
               this.modeType === "REG" &&
               this.loginType === "phone" &&
-              (isInSystemLogin || isExpiredLogin)
+              (getResponseMessageCode === 201 ||
+                getResponseMessageCode === 202 ||
+                getResponseMessageCode === 203 ||
+                getResponseMessageCode === 204)
             ) {
               this.$bvModal
-                .msgBoxConfirm(
-                  "В Личном кабинете уже есть профиль с данным номером телефона",
-                  {
-                    title: "Номер уже зарегистрирован",
-                    size: "md",
-                    okVariant: "secondary",
-                    cancelVariant: "primary",
-                    okTitle: isInSystemLogin
-                      ? "Восстановить пароль"
-                      : "Продолжить регистрацию",
-                    cancelTitle: "Войти в систему",
-                    footerClass: "p-2",
-                    hideHeaderClose: false,
-                    centered: true,
-                    modalClass: this.myclass,
-                    autoFocusButton: "ok",
-                  }
-                )
+                .msgBoxConfirm(messageCodeErrText, {
+                  title: "Номер уже зарегистрирован",
+                  size: "md",
+                  okVariant: "secondary",
+                  cancelVariant: "primary",
+                  okTitle: isInSystemLogin
+                    ? "Восстановить пароль"
+                    : "Продолжить регистрацию",
+                  cancelTitle: "Войти в систему",
+                  footerClass: "p-2",
+                  hideHeaderClose: false,
+                  centered: true,
+                  modalClass: this.myclass,
+                  autoFocusButton: "ok",
+                })
                 .then((value) => {
                   if (value === true) {
                     if (isInSystemLogin) {
