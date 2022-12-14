@@ -12,7 +12,7 @@
       title="Введите код"
     >
       <div>
-        {{ modalTextRequest }}
+        <div v-html="modalTextRequest" />
         <b-form id="sms-form" @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
             id="sms-code"
