@@ -3,6 +3,7 @@
     <date-picker
       v-model="birthdate"
       @input="setDateValue"
+      @change="setDateChange"
       v-mask="maskTemplate"
       :disabled-date="notBeforeDate"
       :default-value="defaultDate"
@@ -58,6 +59,10 @@ export default {
   methods: {
     setDateValue(date) {
       this.$emit("input", date);
+    },
+    setDateChange(date) {
+      console.log(date);
+      this.$emit("change", date);
     },
     notBeforeDate(date) {
       return date > getDate(18);

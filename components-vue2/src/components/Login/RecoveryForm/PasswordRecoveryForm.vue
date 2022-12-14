@@ -39,20 +39,20 @@
             :text-message="textMessage"
             :tab-index="[10, 15]"
             :isError="errorMessage"
-            :isCodeFieldInValid="isCodeFieldInValid"
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
+            @checkCodeFieldValid="setCodeFieldValid"
           />
-          <b-row class="mt-3" v-if="!isCodeFieldInValid">
+          <b-row class="mt-3" v-if="isCodeFieldValid">
             <b-form-group label="Дата рождения" class="col-lg-4 col-12">
-              <birthday-picker
-                <birthday-picker2
+              <birthday-picker2
                 v-model="$v.form.birthdate.$model"
+                @change="changeBirthday"
                 :state="validateState('birthdate')"
               />
             </b-form-group>
             <div class="recovery col-md-8 col-12">
               <verify-password
-                v-if="!isBirthdateInValid && !isCodeFieldInValid"
+                v-if="isBirthdateValid && isCodeFieldValid"
                 :tab-index="[20, 30]"
                 :v="$v.form"
                 :validateState="validateState"
@@ -67,10 +67,9 @@
             {{ errorMessage }}
           </div>
           <b-button
-            v-if="isSamePassword && !isCodeFieldInValid"
+            v-if="isSamePassword && isCodeFieldValid"
             variant="primary"
             @click="resetPassword"
-            :disabled="disabled"
             id="btn_change-password_tel_lk"
             class="mt-3"
             >Изменить пароль</b-button
@@ -90,21 +89,19 @@
             :validateState="validateState"
             :tab-index="[10, 15]"
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
+            @checkCodeFieldValid="setCodeFieldValid"
           />
-          <b-row class="mt-3" v-if="!isCodeFieldInValid">
+          <b-row class="mt-3" v-if="isCodeFieldValid">
             <b-form-group label="Дата рождения" class="col-lg-4 col-12">
-              <birthday-picker
-                ref="dataPicker"
+              <birthday-picker2
                 v-model="$v.form.birthdate.$model"
+                @change="changeBirthday"
                 :state="validateState('birthdate')"
-                :tabindex="20"
               />
             </b-form-group>
             <div class="recovery col-lg-8 col-12">
               <verify-password
-                v-if="
-                  !isBirthdateInValid && !isCodeFieldInValid && form.birthdate
-                "
+                v-if="isBirthdateValid && isCodeFieldValid"
                 :tab-index="[20, 30]"
                 :v="$v.form"
                 :validateState="validateState"
@@ -119,10 +116,10 @@
             {{ errorMessage }}
           </div>
           <b-button
-            v-if="isSamePassword && !isCodeFieldInValid"
+            v-if="isSamePassword && isCodeFieldValid"
+            :disabled="disabled"
             variant="primary"
             @click="resetPassword"
-            :disabled="disabled"
             id="btn_change-password_mail_lk"
             class="mt-3"
             >Изменить пароль</b-button
@@ -199,7 +196,6 @@ export default {
       phoneLabel: "Введите номер телефона указанный при регистрации",
       emailLabel: "Введите email указанный при регистрации",
       isEmailValid: false,
-      isBirthdateValid: false,
       errorMessage: null,
       isErrorMessage: false,
       isGreater180: false,
@@ -209,6 +205,8 @@ export default {
       loginFieldType: null,
       myclass: ["cabinet okrecovery"],
       visibleForm: "phone",
+      isCodeFieldValid: false,
+      isBirthdateValid: false,
     };
   },
   mounted() {
@@ -217,6 +215,16 @@ export default {
   },
 
   methods: {
+    changeBirthday(value) {
+      if (value) {
+        this.isBirthdateValid = value;
+      }
+    },
+    setCodeFieldValid(data) {
+      if (data) {
+        this.isCodeFieldValid = data;
+      }
+    },
     toggleForm(tabs) {
       if (this.visibleForm === tabs) {
         this.clearForm();
@@ -246,7 +254,6 @@ export default {
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };
-        console.log(params);
       }
       if (this.visibleForm === "email") {
         params = {
@@ -341,24 +348,10 @@ export default {
     },
     async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
-      this.$nextTick(() => {
-        this.$v.$reset();
-        this.form.password = "";
-        this.form.password2 = "";
-        this.form.birthdate = "";
-      });
     },
   },
 
   computed: {
-    isCodeFieldInValid() {
-      return this.$v.form.code.$invalid;
-    },
-
-    isBirthdateInValid() {
-      return this.$v.form.birthdate.$invalid;
-    },
-
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },
@@ -367,15 +360,14 @@ export default {
       return this.currentTab == 0 ? [30, 40] : [20, 30];
     },
     disabled() {
-      const loginFieldInvalid =
-        this.currentTab == 0
-          ? this.$v.form.phone.$invalid
-          : this.$v.form.email.$invalid;
       return (
-        loginFieldInvalid ||
-        this.$v.form.code.$invalid ||
-        this.$v.form.password.$invalid ||
-        this.$v.form.password2.$invalid
+        Boolean(
+          (this.$v.form.phone.$model || this.$v.form.email.$model) &&
+            !this.$v.form.code.$error &&
+            this.$v.form.password.$model &&
+            this.$v.form.birthdate.$model &&
+            this.$v.form.password2.$model
+        ) === false
       );
     },
     textMessage() {
