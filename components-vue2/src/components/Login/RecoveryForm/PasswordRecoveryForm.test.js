@@ -8,7 +8,7 @@ describe("PasswordRecoveryForm", () => {
 
   it("Должен показывать сообщение об ошибке при наличии русского символа", async () => {
     const wrapper = mount(PasswordRecoveryForm);
-    await wrapper.find("#tab_mail").trigger("click");
+    await wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.find("#email").setValue("русскийсимвол@mail.ru");
     const emailInput = await wrapper.find("#email");
     expect(emailInput.classes()).toContain("is-invalid");
@@ -17,7 +17,7 @@ describe("PasswordRecoveryForm", () => {
 
   it("Должен показывать сообщение об ошибке при наличии знака +", async () => {
     const wrapper = mount(PasswordRecoveryForm);
-    await wrapper.find("#tab_mail").trigger("click");
+    await wrapper.find("#tab_mail_lk").trigger("click");
     const emailInput = await wrapper.find("#email");
     await wrapper.find("#email").setValue("Vasya+Katya@mail.ru");
     expect(emailInput.classes()).toContain("is-invalid");
@@ -26,7 +26,7 @@ describe("PasswordRecoveryForm", () => {
 
   it("Не должен показывать сообщение об ошибке при корректном email", async () => {
     const wrapper = mount(PasswordRecoveryForm);
-    await wrapper.find("#tab_mail").trigger("click");
+    await wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.find("#email").setValue("test@mail.ru");
     const emailInput = await wrapper.find("#email");
     expect(emailInput.classes()).toContain("is-valid");
