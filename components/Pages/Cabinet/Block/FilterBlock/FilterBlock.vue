@@ -126,6 +126,7 @@ export default {
       const block = this.$store.getters["blocks/getUnfilteredBlockById"](
         this.itemId
       );
+      console.log("block:", block);
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
