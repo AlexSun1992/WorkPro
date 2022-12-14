@@ -30,6 +30,10 @@ router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       }
     }
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
       ?.cookie
       ? req.headers.cookie
@@ -151,6 +155,10 @@ router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
       : null;
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
       ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     if (req?.headers?.authorization) {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.headers.authorization;
@@ -235,6 +243,10 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
       : null;
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
       ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     const URL_ADDRESS = encodeURI(
       `/am/free/v2/vuetemplate/${req.params.idItem}`
     );
@@ -311,12 +323,19 @@ router.post(
   (req, res) => {
     try {
       const mobile2ServiceInstance = mobile2Service();
+      const ipAddress = requestIp.getClientIp(req);
       if (req.headers.referer) {
         if (req.headers.referer.includes("testdms")) {
           mobile2ServiceInstance.defaults.baseURL =
             "https://mobiletest.reso.ru";
         }
       }
+      mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+        ipAddress || null;
+      mobile2ServiceInstance.defaults.headers.common.Referer =
+        req.headers.referer;
+      mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+        req.headers["user-agent"];
       if (req.headers.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
           req.headers.authorization;
@@ -351,6 +370,13 @@ router.post(
 router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
+    const ipAddress = requestIp.getClientIp(req);
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance.defaults.baseURL = "https://mobiletest.reso.ru";

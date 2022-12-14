@@ -40,6 +40,10 @@ router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
         mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");
       }
     }
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     let URL_ADDRESS;
     let settings = null;
     const filters = listConverter.getFilterParams(
@@ -140,6 +144,10 @@ router.get("/wizardlist/:idModule/:idWizard/:idItem", async (req, res) => {
       : null;
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
       ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     if (req.headers.authorization) {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.headers.authorization;

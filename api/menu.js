@@ -19,6 +19,10 @@ router.get("/menu/:idModule/?:idItem", (req, res) => {
     const ipAddress = requestIp.getClientIp(req);
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
       ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");

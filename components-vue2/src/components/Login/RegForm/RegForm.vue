@@ -113,7 +113,13 @@
 
         <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
-            <birthday-picker
+            <!--            <birthday-picker-->
+            <!--              v-model="$v.form.birthdate.$model"-->
+            <!--              :state="validateState('birthdate')"-->
+            <!--              :disabled="registrationInProcess"-->
+            <!--              @input="changeField('birthdate')"-->
+            <!--            />-->
+            <birthday-picker2
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
               :disabled="registrationInProcess"
@@ -121,10 +127,7 @@
             />
           </b-form-group>
         </div>
-        <div
-          class="col-12 col-md-6 mt-3"
-          v-if="codeFieldValid && changePhoneButtonClicked === false"
-        >
+        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
           <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
@@ -187,6 +190,7 @@ import {
 } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
+import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import ConfirmModal from "./ConfirmModal.vue";
@@ -211,6 +215,7 @@ export default {
   components: {
     Autocomplete,
     birthdayPicker,
+    birthdayPicker2,
     VerifyUser,
     VerifyPassword,
     ConfirmModal,
@@ -394,8 +399,16 @@ export default {
     refuseButtonClicked() {
       this.changePhoneButtonClicked = false;
     },
-    checkIfButtonClicked(data) {
+    async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
+      // this.$nextTick(() => {
+      //   this.$v.$reset();
+      //   this.form.password = "";
+      //   this.form.password2 = "";
+      //   this.form.policyNumber = "";
+      //   this.surnameClassHub = [];
+      //   this.nameClassHub = [];
+      // });
     },
     handleBlur(field) {
       // Валидация
@@ -442,7 +455,9 @@ export default {
     },
 
     isCodeFieldValid(data) {
-      this.codeFieldValid = data;
+      if (data) {
+        this.codeFieldValid = data;
+      }
     },
 
     // запрос на подсказки по отчеству
