@@ -82,7 +82,6 @@ export default {
   },
   methods: {
     openSidebarnav(e) {
-      console.log(e);
       e.path[1].classList.toggle("show");
       e.path[0].classList.toggle("active");
     },
