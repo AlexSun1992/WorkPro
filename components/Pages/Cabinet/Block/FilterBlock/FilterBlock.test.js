@@ -20,11 +20,19 @@ describe("FilterBlock", () => {
       query: {},
     };
 
-    const $store = new Store({
-      getters: getter,
-      mutations: mutation,
-      state: states,
-    });
+    // const createComponent = () => {
+    //   wrapper = mount(LoginButton, {
+    //     mocks: {
+    //       $store: { commit: () => null },
+    //     },
+    //   });
+    // };
+
+    // const $store = new Store({
+    //   getters: getter,
+    //   mutations: mutation,
+    //   state: states,
+    // });
 
     const wrapper = mount(FilterBlock, {
       localVue,
@@ -35,7 +43,7 @@ describe("FilterBlock", () => {
       },
       mocks: {
         $route,
-        $store,
+        $store: { commit: () => null },
       },
     });
     expect(wrapper.text()).not.toBe(null);
