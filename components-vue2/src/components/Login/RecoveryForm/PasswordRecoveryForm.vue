@@ -25,6 +25,7 @@
           >
         </b-nav>
         <div v-if="visibleForm === 'phone'" class="tab-text active">
+          <div class="tab-mobile-block">Телефон</div>
           <verify-user
             key="phone"
             ref="verifyUser"
@@ -78,6 +79,7 @@
         </div>
 
         <div v-else class="tab-text active">
+          <div class="tab-mobile-block">E-mail</div>
           <verify-user
             key="email"
             @error="showError"
