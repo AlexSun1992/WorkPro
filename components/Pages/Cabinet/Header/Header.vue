@@ -60,8 +60,10 @@
               <template #button-content>
                   {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
               </template>
-              <b-dropdown-item href="https://new.reso.ru">На главную страницу РЕСО</b-dropdown-item>
+              <b-dropdown-item href="/cabinet/55/0/710">Профиль</b-dropdown-item>
+              <b-dropdown-item @click="redirect()">ОСАГО</b-dropdown-item>
               <b-dropdown-item href="#" @click="logout()">Выйти из аккаунта</b-dropdown-item>
+
             </b-dropdown>
           </div>
         </div>
@@ -71,9 +73,13 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import axios from "axios";
 import LoginButton from "../../../../components-vue2/src/components/Login/LoginButton.vue";
 import ShowCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
 import HeaderUserName from "./HeaderUserName.vue";
+const TOKEN_NAME = "auth._token.local";
+
 
 export default {
   name: "Header",
@@ -92,6 +98,20 @@ export default {
     this.userInfo = this.$auth.user;
   },
   methods: {
+  async redirect(){
+      const token = Cookies.get(TOKEN_NAME);
+      const getToken = await axios.get("/am/main/v2/redirect_lk1", {
+          headers: {
+            Authorization: token,
+            "X-Application": "VueJS",
+          },
+        });
+          const getUrl = getToken.data.find((item) => item.SURL);
+          getUrl
+            ? (window.location.href = getUrl.SURL)
+            : (window.location.href = "https://client.reso.ru/");     
+          },
+
     toggleClassActive() {
       document.querySelector("body").classList.toggle("menu-open");
       document.querySelector(".menu").classList.toggle("show");

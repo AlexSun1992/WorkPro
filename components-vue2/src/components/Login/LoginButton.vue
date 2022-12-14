@@ -1,26 +1,39 @@
 <template>
-  <div class="LoginButton">
-    <b-dropdown
-      variant="login-link"
-      v-if="isAuthentificated"
-      id="dropdown-1"
-      :text="userName"
-    >
-      <b-dropdown-item
-        v-for="(item, index) in navigationList"
-        :key="index"
-        @click="applyAction(index)"
+  <div>
+    <div class="LoginButton" v-if="isAuthentificated">
+      <b-dropdown
+        variant="login-link"
+        v-if="isAuthentificated"
+        id="dropdown-1"
+        :text="userName"
       >
-        {{ item }}
-      </b-dropdown-item>
-    </b-dropdown>
-    <b-button
-      variant="login-btn"
-      v-else
-      @click="redirectToLoginPage"
-      id="btn_lk_head_all"
-      >Личный кабинет</b-button
-    >
+        <b-dropdown-item
+          v-for="item in getNavigationList"
+          :key="item"
+          @click="applyAction(item)"
+        >
+          {{ item }}
+        </b-dropdown-item>
+      </b-dropdown>
+      <b-button
+        variant="login-btn"
+        v-else
+        @click="redirectToLoginPage"
+        id="btn_lk_head_all"
+        >Личный кабинет</b-button
+      >
+    </div>
+    <div class="LoginButton" v-if="!isAuthentificated">
+      <b-dropdown id="dropdown-2" variant="login-link" text="Личный кабинет">
+        <b-dropdown-item
+          v-for="item in getNavigationList"
+          :key="item"
+          @click="applyAction(item)"
+        >
+          {{ item }}
+        </b-dropdown-item>
+      </b-dropdown>
+    </div>
   </div>
 </template>
 
@@ -97,7 +110,7 @@ axios.interceptors.response.use(undefined, function (err) {
           processQueue(err, null);
           Cookies.set(TOKEN_NAME, "false");
           Cookies.set(REFRESH_TOKEN_NAME, "false");
-          localStorage.setItem("auth._token.local", "false");
+          window.localStorage.setItem("auth._token.local", "false");
           console.log(err);
         }
       )
@@ -119,30 +132,54 @@ export default {
     return {
       personsData:
         Cookies.get(TOKEN_NAME) !== "false"
-          ? JSON.parse(localStorage.getItem("USER_INFO"))
+          ? JSON.parse(window.localStorage.getItem("USER_INFO"))
           : null,
-      navigationList: ["Личный кабинет", "Выход"],
-      isLoadedUserInfo: Boolean(localStorage.getItem("USER_INFO")) || false,
+      isLoadedUserInfo:
+        Boolean(window.localStorage.getItem("USER_INFO")) || false,
     };
   },
 
   methods: {
-    applyAction(index) {
-      if (index === 0) {
-        window.location.href = "/cabinet/55/0/701";
-      } else {
-        this.personsData = null;
-        Cookies.set(TOKEN_NAME, "false");
-        Cookies.set(REFRESH_TOKEN_NAME, "false");
-        localStorage.setItem("auth._token.local", "false");
-        localStorage.removeItem("USER_INFO");
-        this.$store.commit("auth/setLogged", false);
-        this.$store.commit("auth/setUser", null);
-      }
-    },
     redirectToLoginPage() {
       window.location.href = "/login";
     },
+
+    async applyAction(item) {
+      if (this.isAuthentificated === false) {
+        item === "ОСАГО"
+          ? (window.location.href = "https://client.reso.ru/")
+          : (window.location.href = "/login");
+      }
+
+      if (this.isAuthentificated === true) {
+        if (item === "Профиль") {
+          window.location.href = "/cabinet/55/0/710";
+        }
+        if (item === "ОСАГО") {
+          const token = Cookies.get(TOKEN_NAME);
+          const getToken = await axios.get("/am/main/v2/redirect_lk1", {
+            headers: {
+              Authorization: token,
+              "X-Application": "VueJS",
+            },
+          });
+          const getUrl = getToken.data.find((el) => el.SURL);
+          getUrl
+            ? (window.location.href = getUrl.SURL)
+            : (window.location.href = "https://client.reso.ru/");
+        }
+        if (item === "Выйти") {
+          this.personsData = null;
+          Cookies.set(TOKEN_NAME, "false");
+          Cookies.set(REFRESH_TOKEN_NAME, "false");
+          window.localStorage.setItem("auth._token.local", "false");
+          window.localStorage.removeItem("USER_INFO");
+          this.$store.commit("auth/setLogged", false);
+          this.$store.commit("auth/setUser", null);
+        }
+      }
+    },
+
     getPersonsData() {
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
@@ -152,7 +189,7 @@ export default {
         .then((resp) => {
           this.personsData = resp.data[0]._data[0];
           this.isLoadedUserInfo = true;
-          localStorage.setItem(
+          window.localStorage.setItem(
             "USER_INFO",
             JSON.stringify(resp.data[0]._data[0])
           );
@@ -168,6 +205,20 @@ export default {
   },
 
   computed: {
+    getNavigationList() {
+      if (Cookies.get(TOKEN_NAME) === "false") {
+        return ["ОСАГО", "Другие полисы"];
+      }
+      if (Cookies.get(TOKEN_NAME) === undefined) {
+        return ["ОСАГО", "Другие полисы"];
+      }
+      return ["Профиль", "ОСАГО", "Выйти"];
+    },
+
+    getTokenFromCookie() {
+      return Cookies.get(TOKEN_NAME);
+    },
+
     isAuthentificated() {
       return Boolean(this.personsData);
     },
