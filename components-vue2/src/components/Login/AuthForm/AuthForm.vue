@@ -1,6 +1,16 @@
 <template>
   <div class="login-form-content">
     <div class="block-registration">
+      <div @click="goESIA()" class="goesia d-lg-none my-3" id="esia-login">
+        Войти через <span class="login_esia"></span>
+      </div>
+      <button
+        v-if="visibleForm === 'registration'"
+        @click="toggleForm('login')"
+        class="login-btn-mobile d-lg-none mb-3"
+      >
+        Вход
+      </button>
       <b-nav card-header tabs class="d-none d-lg-block">
         <b-nav-item
           @click="toggleForm('login')"
@@ -13,11 +23,7 @@
           >Регистрация</b-nav-item
         >
 
-        <b-nav-item
-          @click="goESIA()"
-          class="goesia"
-          id="btn_recovery-password_lk"
-        >
+        <b-nav-item @click="goESIA()" class="goesia" id="esia-login">
           Войти через <span class="login_esia"></span>
         </b-nav-item>
       </b-nav>
@@ -32,21 +38,6 @@
     >
       Регистрация
     </button>
-    <button
-      v-else
-      @click="toggleForm('login')"
-      class="login-btn-mobile d-lg-none"
-    >
-      Вход
-    </button>
-
-    <div
-      @click="goESIA()"
-      class="goesia m-auto d-lg-none mt-4 d-table"
-      id="btn_recovery-password_lk"
-    >
-      Войти через <span class="login_esia"></span>
-    </div>
   </div>
 </template>
 <script>
@@ -67,16 +58,13 @@ export default {
       visibleForm: null,
     };
   },
-
   methods: {
     toggleForm(address) {
       if (address === "registration") {
-        this.visibleForm = "registration";
-        window.history.pushState(null, "", "/login/registration");
+        window.location.href = "/login/registration";
       }
       if (address === "login") {
-        this.visibleForm = "login";
-        window.history.pushState(null, "", "/login");
+        window.location.href = "/login";
       }
     },
     goESIA() {

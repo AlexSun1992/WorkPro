@@ -17,7 +17,18 @@ module.exports = {
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { hid: "description", name: "description", content: "" },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    link: [
+      {
+        rel: "icon",
+        type: "image/svg+xml",
+        href: "/export/system/modules/ru.reso.v2/resources/img/favicon.svg",
+      },
+      {
+        rel: "shortcut icon",
+        type: "image/svg+xml",
+        href: "/export/system/modules/ru.reso.v2/resources/img/favicon.svg",
+      },
+    ],
     // script: [
     //   { src: 'https://www.google.com/recaptcha/api.js?render=6Le_5tkUAAAAAI4paHCeddGpgcZCJZ2aAHfZaCme' }
     // ]
@@ -109,9 +120,9 @@ module.exports = {
     transpile: ["vue-agile", "vue-plugin-load-script"],
   },
   proxy: {
-    "/free": process.env.MOBILE_URL ?? "https://mobile.reso.ru",
-    "/am": process.env.MOBILE2_URL ?? "https://mobile2.reso.ru",
-    "/main": process.env.MOBILE2_URL ?? "https://mobile2.reso.ru",
+    "/free": process.env.MOBILE_URL ?? "https://lk.reso.ru",
+    "/am": process.env.MOBILE2_URL ?? "https://lk.reso.ru",
+    "/main": process.env.MOBILE2_URL ?? "https://lk.reso.ru",
     "/suggestions": "https://dadata.reso.ru",
   },
   serverMiddleware: ["~/routes/routes.js"],

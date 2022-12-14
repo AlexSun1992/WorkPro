@@ -18,6 +18,7 @@
     <slot
       :update="update"
       :list="list"
+      :filters="filters"
       :getAddField="getAddField"
       :componentKey="componentKey"
       :content="dataContent.items"
@@ -105,6 +106,12 @@ export default {
     list() {
       return this.dataContent;
     },
+    filters() {
+      const servers = this.$store.getters["blocks/getServerFilters"];
+
+      return servers;
+    },
+
     parentMenu: {
       get() {
         return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;

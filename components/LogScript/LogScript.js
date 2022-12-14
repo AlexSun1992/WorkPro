@@ -60,7 +60,7 @@ async function logEvent(object) {
       }
 
       function getParams(w_data) {
-        const params = w_data.split("&").reduce(function (p, e) {
+        const params = w_data.split("&").reduce((p, e) => {
           const a = e.split("=");
           p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
           return p;
@@ -194,7 +194,7 @@ async function logEvent(object) {
       else objectData.idDevice = 9;
 
       objectData.referer = document.referrer.split("?")[0];
-      objectData.userAgent = window.navigator.userAgent;
+      // objectData.userAgent = window.navigator.userAgent;
 
       const utm = getUtm();
       objectData.utm_source = utm.utm_source;
@@ -219,16 +219,17 @@ async function logEvent(object) {
 
     if (objectDataArray.length > 0) {
       generalObject.formName = formName;
-      generalObject.resending = 0;
-      generalObject.events = objectDataArray;
+      // generalObject.resending = 0;
+      // generalObject.events = objectDataArray;
 
-      const urlApiLog = "/am/free/v2/siteapi/log/events";
+      const urlApiLog = "/am/free/v2/lk/log";
       fetch(urlApiLog, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Application": "VueJS",
         },
-        body: JSON.stringify(generalObject),
+        body: JSON.stringify({ ...generalObject, ...object }),
       });
     }
   } catch (error) {

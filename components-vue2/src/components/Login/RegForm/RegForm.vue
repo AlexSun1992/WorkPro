@@ -4,10 +4,6 @@
       :conformation="conformation"
       @agree="isRegConfirmed = $event"
     />
-    <b-alert :show="!!errorMessage" variant="danger">{{
-      errorMessage
-    }}</b-alert>
-
     <b-form
       @submit.stop.prevent
       @keydown.enter.prevent="onSubmit"
@@ -125,10 +121,7 @@
             />
           </b-form-group>
         </div>
-        <div
-          class="col-12 col-md-6 mt-3"
-          v-if="codeFieldValid && changePhoneButtonClicked === false"
-        >
+        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
           <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
             <b-form-input
               :id="Math.random().toString()"
@@ -149,6 +142,9 @@
             :tab-index="[50, 60]"
             :log-params="logParams"
           />
+        </div>
+        <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+          {{ errorMessage }}
         </div>
         <div class="col-12 pt-3">
           <b-button
@@ -230,9 +226,7 @@ export default {
     return {
       logEvent: null,
       logParams: {
-        formName: "vue",
-        controlName: "component-auth-form",
-        idEventType: 9999,
+        formName: "Registration",
       },
       codeFieldValid: false,
       form: {
@@ -286,12 +280,17 @@ export default {
     };
   },
   mounted() {
+    const currentURL = window.location.pathname;
     this.$nextTick(() => {
-      this.$LogEvent({
-        ...this.logParams,
-        message: "Форма загрузилась",
-        timeUser: new Date(),
-      });
+      if (currentURL.includes("registration")) {
+        this.$LogEvent({
+          ...this.logParams,
+          idEventType: 1,
+          controlName: "RegForm.vue",
+          message: "Открыли форму регистрации",
+          timeUser: new Date(),
+        });
+      }
     });
   },
   validations: {
@@ -382,7 +381,8 @@ export default {
       if (this.form[field] || this[field]) {
         this.$LogEvent({
           ...this.logParams,
-          message: `Поле ${field} заполнено`,
+          controlName: field,
+          message: `Поле ${field} посещено`,
           timeUser: new Date(),
         });
         console.log(field, this.form[field] || this[field]);
@@ -391,8 +391,16 @@ export default {
     refuseButtonClicked() {
       this.changePhoneButtonClicked = false;
     },
-    checkIfButtonClicked(data) {
+    async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
+      // this.$nextTick(() => {
+      //   this.$v.$reset();
+      //   this.form.password = "";
+      //   this.form.password2 = "";
+      //   this.form.policyNumber = "";
+      //   this.surnameClassHub = [];
+      //   this.nameClassHub = [];
+      // });
     },
     handleBlur(field) {
       // Валидация
@@ -439,7 +447,9 @@ export default {
     },
 
     isCodeFieldValid(data) {
-      this.codeFieldValid = data;
+      if (data) {
+        this.codeFieldValid = data;
+      }
     },
 
     // запрос на подсказки по отчеству
@@ -647,10 +657,10 @@ export default {
         };
 
         const headers = {
-          headers: { recaptcha: params.token },
+          headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         const response = await axios.post(
-          "/free/v2/registration",
+          "/am/free/v2/registration",
           params,
           headers
         );

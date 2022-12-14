@@ -1,5 +1,5 @@
-export default function ({ $axios }) {
+export default function ({ $axios, reg }) {
   $axios.onRequest((config) => {
-    config.headers.common["X-Forwarded-For"] = "test";
+    config.headers.common["X-Application"] = "VueJS";
   });
 }

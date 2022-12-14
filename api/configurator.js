@@ -10,6 +10,8 @@ const cookieParser = require("cookie-parser");
 const express = require("express");
 
 const router = express.Router();
+const requestIp = require("request-ip");
+
 router.use(express.json());
 router.use(cookieParser());
 
@@ -20,7 +22,7 @@ router.get("/module", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
     mobile2ServiceInstance.defaults.baseURL =
-      process.env.MOBILE2_URL ?? "https://mobile2.reso.ru";
+      process.env.MOBILE2_URL ?? "https://lk.reso.ru";
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance.defaults.baseURL = "https://mobiletest.reso.ru";
@@ -34,35 +36,40 @@ router.get("/module", (req, res) => {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req?.cookies["auth._token.local"];
     }
-    modules.getItems = () => {
-      return new Promise((resolve, reject) => {
+    modules.getItems = () =>
+      new Promise((resolve, reject) => {
         mobile2ServiceInstance({ url: `${consts.MODULE}`, method: "GET" })
           .then((resp) => {
-            const modules = converter.modules(resp.data);
-            resolve(modules);
+            resolve(converter.modules(resp.data));
           })
           .catch((err) => {
-            res.status(err.response.data.STATUS).send(err.response.data);
+            if (err?.response?.data) {
+              res.status(500).send(err.response.data);
+            } else {
+              res.status(500).send(err);
+            }
           });
       });
-    };
-    menu.getItems = (modules) => {
-      return new Promise((resolve, reject) => {
+    menu.getItems = (modules) =>
+      new Promise((resolve, reject) => {
         Promise.all(
           modules.map((l) =>
             mobile2ServiceInstance.get(`${consts.CLIENTMENU}/${l.id}`)
           )
         )
           .then(
-            axios.spread(function (...res) {
+            axios.spread((...res) => {
               resolve(res);
             })
           )
           .catch((err) => {
-            res.status(err?.response?.data?.STATUS).send(err?.response?.data);
+            if (err?.response?.data) {
+              res.status(500).send(err.response.data);
+            } else {
+              res.status(500).send(err);
+            }
           });
       });
-    };
     modules.getItems().then((modules) => {
       menu
         .getItems(modules)
@@ -71,8 +78,11 @@ router.get("/module", (req, res) => {
           res.send(modules);
         })
         .catch((err) => {
-          console.log(err);
-          res.status(err.response.data.STATUS).send(err.response.data);
+          if (err?.response?.data) {
+            res.status(500).send(err.response.data);
+          } else {
+            res.status(500).send(err);
+          }
         });
     });
   } catch (e) {
@@ -82,10 +92,14 @@ router.get("/module", (req, res) => {
 router.get("/module/:moduleId/:itemId", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
-    const ipAddress = req.headers["x-forwarded-for"];
+    const ipAddress = requestIp.getClientIp(req);
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
       ipAddress || "";
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     if (req.query.zone !== "free") {
       if (req?.headers?.authorization) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =

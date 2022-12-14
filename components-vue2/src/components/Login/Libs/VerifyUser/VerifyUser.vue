@@ -4,6 +4,7 @@
       <b-form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
+          id="phone"
           v-if="loginType === 'phone'"
           ref="userInput"
           v-model="v[loginType].$model"
@@ -62,13 +63,14 @@
     <div class="col-12 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
       <b-form-group label="Код подтверждения">
         <b-form-input
+          id="sms-confirm"
           autofocus
           ref="codeInput"
           v-model="v.code.$model"
-          class="mb-2"
           v-mask="codeMask"
           :state="validateInput('code', isCodeBlured)"
           @blur="blurField('code', isCodeBlured)"
+          @update="updateField('code')"
           @change="changeField('code')"
           @input="inputTouch(loginType)"
           :disabled="disabled"
@@ -85,7 +87,7 @@
     </div>
     <div class="col-12 col-lg-4 mt-3 pt-lg-1">
       <button
-        v-if="isSendCode"
+        v-if="codeFieldShown"
         @click="changeNumber"
         class="btn-link mt-lg-4 d-table"
         type="button"
@@ -99,9 +101,12 @@
       size="invisible"
       :load-recaptcha-script="true"
       :sitekey="siteKey"
-      @verify="setToken"
+      @verify="getCode"
       @expired="onCaptchaExpired"
     />
+    <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+      {{ errorMessage }}
+    </div>
     <div class="col-12 mt-4">
       <b-button
         type="submit"
@@ -110,11 +115,11 @@
           isSendCode ||
           loading
         "
-        @click="executeRecaptcha"
+        @click="getCode()"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        v-if="!isCodeFieldValid"
+        v-show="!validateInput('code', isCodeBlured)"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
@@ -143,7 +148,10 @@ import {
 } from "bootstrap-vue";
 import VerifyTimer from "./VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "./captcha.helper";
-import { getMessageFromSuccessResponse } from "./verifyUser.helper";
+import {
+  getMessageFromSuccessResponse,
+  getMessageFromMessageCode,
+} from "./verifyUser.helper";
 
 export default {
   components: {
@@ -197,6 +205,7 @@ export default {
       codeFieldShown: false,
       allHiddenCaptchas: null,
       meassageWasSend: null,
+      errorMessage: null,
     };
   },
 
@@ -216,12 +225,16 @@ export default {
   },
 
   methods: {
+    updateField(field) {
+      this.$emit("checkCodeFieldValid", this.validateState(field));
+    },
     changeField(field) {
       this.isUserBlured = false;
       if (this.validateState(field)) {
         this.$LogEvent({
           ...this.logParams,
-          message: `Поле ${field} заполнено`,
+          controlName: field,
+          message: `Поле ${field} посещено`,
           timeUser: new Date(),
         });
       }
@@ -252,102 +265,143 @@ export default {
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
     },
-
-    setToken(recaptcha) {
-      this.token = recaptcha;
-    },
     async getCodeHelper(params) {
       try {
         const headers = {
-          headers: { recaptcha: this.token },
+          headers: { recaptcha: params.token },
         };
         if (
-          this.loginType === "phone" ||
-          this.modeType === "REG" ||
-          this.modeType === "RECOVERY"
+          this.loginType !== undefined &&
+          (this.modeType === "REG" || this.modeType === "RECOVERY")
         ) {
-          const method = params.error ? "sendsmscode2" : "sendsmscode";
-
-          const response = await axios.post(
-            `/free/v2/${method}` +
-              `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`,
-            params,
-            headers
-          );
+          const getMethod = () => {
+            if (params.error === true && this.loginType === "phone") {
+              return "sendsmscode2";
+            }
+            if (params.error === false && this.loginType === "phone") {
+              return "sendsmscode";
+            }
+            if (params.error === true && this.loginType === "email") {
+              return "sendemailcode2";
+            }
+            if (params.error === false && this.loginType === "email") {
+              return "sendemailcode";
+            }
+            return null;
+          };
+          const method = getMethod();
+          const getURL = () => {
+            if (this.loginType === "phone") {
+              return (
+                `/am/free/v2/${method}` +
+                `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`
+              );
+            }
+            if (this.loginType === "email") {
+              return `/am/free/v2/${method}`;
+            }
+            return null;
+          };
+          const response = await axios.post(getURL(), params, headers);
 
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
-          // Получение сообщения об отправке на номер телефона
-
           if (getSuccessSendMessageText !== undefined) {
             this.$emit("messageText", getSuccessSendMessageText);
           }
           return response;
         }
-        return await axios.post("/free/v2/sendemailcode", params, headers);
+        return null;
       } catch (e) {
         this.loading = false;
         this.$emit("error", e.response.data.INFO);
+        return e?.response;
       }
     },
-
-    async getCode() {
+    async getCode(token = null) {
       this.v.code.$model = null;
       this.codeFieldShown = false;
       this.isPhoneChanged = false;
       this.$emit("error", null);
+      this.errorMessage = null;
       try {
+        let response;
+        const isCaptcha = Boolean(token);
+        const request = async (p) => {
+          const data = await this.getCodeHelper(p);
+          return data;
+        };
         if (
           this.loginType === "phone"
             ? !this.v.phone.$invalid
             : !this.v.email.$invalid
         ) {
           let params = this.getCodeParams(this.loginType);
-          params = { ...params, token: 1, modeType: this.modeType };
-          const response = await this.getCodeHelper(params);
-          if (response.data[0].MESSAGE_CODE === 200) {
-            this.codeFieldShown = true;
-            this.loading = false;
-            this.isSendCode = true;
-          }
-          if (response.data.STATUS === 500) {
-            this.loading = false;
-            this.isSendCode = false;
-            this.$emit("error", response.data.INFO);
-            return;
-          }
 
-          if (response?.data[0]?.ERRORCODE === 106) {
+          if (isCaptcha === false) {
             params = {
               ...params,
-              token: this.token,
+              token: 1,
+              modeType: this.modeType,
+              error: false,
+            };
+
+            const response1 = await request(params);
+            response = response1;
+
+            if (response1.data[0].MESSAGE_CODE === 200) {
+              this.codeFieldShown = true;
+              this.loading = false;
+              this.isSendCode = true;
+            }
+
+            if (response1.data.STATUS === 500) {
+              this.loading = false;
+              this.isSendCode = false;
+              this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
+              return;
+            }
+
+            if (response1?.data[0]?.ERRORCODE === 106) {
+              await this.executeRecaptcha();
+              return;
+            }
+          } else {
+            params = {
+              ...params,
+              token,
               modeType: this.modeType,
               error: true,
             };
-            const response = await this.getCodeHelper(params);
-            if (response?.data[0]?.ERRORLIST) {
+            const response2 = await request(params);
+            response = response2;
+            if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
               this.loading = false;
               this.isSendCode = false;
-              this.$emit("error", response?.data[0]?.ERRORLIST[0].ERRORTEXT);
             } else {
               this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
             }
           }
-          const isError = Boolean(response?.data[0]?.ERRORCODE);
+          const isError = Boolean(
+            response?.data[0]?.ERRORCODE || response.data.STATUS === 500
+          );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+          //
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+          const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;
+
           if (isError === false) {
             if (
               this.modeType === "REG" &&
               this.loginType === "phone" &&
-              (isInSystemLogin || isExpiredLogin)
+              (getResponseMessageCode === 201 || getResponseMessageCode === 204)
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "Введенный Вами мобильный номер уже есть в системе.",
+                  "В Личном кабинете уже есть профиль с данным номером телефона",
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
@@ -367,7 +421,7 @@ export default {
                 .then((value) => {
                   if (value === true) {
                     if (isInSystemLogin) {
-                      this.changeNumber();
+                      window.location.href = "/login/password-recovery";
                     }
                     if (isExpiredLogin) {
                       this.isSendCode = true;
@@ -375,6 +429,9 @@ export default {
                   }
                   if (value === false) {
                     window.location.href = "/login";
+                  }
+                  if (value === null) {
+                    this.changeNumber();
                   }
                   this.loading = false;
                 })
@@ -388,10 +445,11 @@ export default {
             }
           } else if (isErrorList === true) {
             if (response?.data[0]?.ERRORCODE === 106) return;
-            this.$emit(
-              "error",
-              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "")
-            );
+            this.errorMessage =
+              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
+                /^\[|\]$/g,
+                ""
+              ) ?? "Неизвестная ошибка";
           }
         } else {
           this.isUserDisabled = false;
@@ -402,7 +460,7 @@ export default {
       }
     },
 
-    getCodeParams(loginType) {
+    getCodeParams() {
       let params;
       if (this.loginType === "phone") {
         params = {
@@ -428,6 +486,7 @@ export default {
       this.codeFieldShown = false;
       this.$emit("checkCodeFieldValid", false);
       this.$emit("error", null);
+      this.errorMessage = null;
       this.isUserBlured = false;
       this.v.phone.$model = "";
       this.$refs.userInput.$el.disabled = false;
@@ -453,6 +512,9 @@ export default {
   },
 
   computed: {
+    getMessageErrorText() {
+      return null;
+    },
     changeMask() {
       if (this.loginType === "phone") {
         this.placeholder = "+7(___)-___-__-__";
@@ -469,12 +531,6 @@ export default {
     },
   },
   watch: {
-    token() {
-      if (this.token) {
-        this.getCode();
-      }
-    },
-
     isError(value) {
       if (typeof value === "string") {
         this.loading = false;

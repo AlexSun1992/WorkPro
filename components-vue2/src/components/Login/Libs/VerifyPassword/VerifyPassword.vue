@@ -1,6 +1,6 @@
 <template>
   <div class="row mt-3">
-    <b-col sm="12" md="6">
+    <b-col sm="12" lg="6">
       <b-form-group :label="showLabel" label-cols="12" class="required">
         <b-form-input
           :id="Math.random().toString()"
@@ -16,12 +16,12 @@
         <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
       </b-form-group>
     </b-col>
-    <b-col sm="12" md="6" v-if="recovery"></b-col>
+    <b-col sm="12" lg="6" v-if="recovery"></b-col>
     <b-col
       class="password-repeat mt-3 mt-lg-0"
       :class="{ 'mt-0': recovery }"
       sm="12"
-      md="6"
+      lg="6"
     >
       <b-form-group
         :label="'Повторите пароль'"
@@ -75,7 +75,8 @@ export default {
     changeField(field) {
       this.$LogEvent({
         ...this.logParams,
-        message: `Поле ${field} заполнено`,
+        controlName: field,
+        message: `Поле ${field} посещено`,
         timeUser: new Date(),
       });
       console.log(field, this.v[field].$model);

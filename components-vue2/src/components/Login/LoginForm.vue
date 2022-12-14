@@ -8,9 +8,10 @@
       @hidden="closeModalConfirmSMSCode"
       :centered="true"
       :static="true"
+      content-class="sms-confirm-modal"
+      title="Введите код"
     >
-      <div class="d-block text-center">
-        <h4>Введите код</h4>
+      <div>
         {{ modalTextRequest }}
         <b-form id="sms-form" @submit.prevent="onSubmitWithCodeSMS">
           <b-form-input
@@ -28,31 +29,36 @@
           <b-form-invalid-feedback
             >Неверный код. Попробуйте еще раз.
           </b-form-invalid-feedback>
-          <b-row v-if="isRetrySendCodeSMS">
-            <b-button @click="retrySendCodeSMS()" class="mt-3" block
+          <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
+            <b-button @click="retrySendCodeSMS()" class="w-100"
               >Отправить повторно</b-button
             >
-          </b-row>
-          <div v-else class="mt-3">
-            Отправить повторно можно через
-            <verify-timer
-              @onFinish="isRetrySendCodeSMS = true"
-              :duration="duration"
-              class="mt-3"
-            />
-            сек.
           </div>
-          <b-row>
-            <div
-              v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
-              class="col-12 col-lg-12"
+          <div v-else class="mt-4 d-block d-lg-table">
+            <button
+              type="button"
+              disabled="disabled"
+              class="btn btn-primary w-100"
             >
-              <captcha
-                @update="setIdCaptcha($event)"
-                @updateCode="setCodeCaptcha($event)"
-                :isCaptchaValid="this.captchaMessage"
+              Отправить повторно(можно через
+              <verify-timer
+                @onFinish="isRetrySendCodeSMS = true"
+                :duration="duration"
               />
-            </div>
+              секунд)
+            </button>
+          </div>
+          <div
+            v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
+            class="mt-3 text-start"
+          >
+            <captcha
+              @update="setIdCaptcha($event)"
+              @updateCode="setCodeCaptcha($event)"
+              :isCaptchaValid="this.captchaMessage"
+            />
+          </div>
+          <div class="d-block d-lg-table">
             <b-button
               id="submit-sms-code"
               :disabled="
@@ -61,13 +67,13 @@
                 (isCaptchaNeeded && !user.cap)
               "
               variant="primary"
-              class="mt-3"
+              class="mt-4 w-100"
               block
               @click="fetchToken()"
               >Продолжить
               <b-spinner v-if="authInProcess" variant="light"></b-spinner
             ></b-button>
-          </b-row>
+          </div>
         </b-form>
       </div>
     </b-modal>
@@ -76,13 +82,13 @@
       <div class="tab-mobile-block">Вход</div>
       <div class="row">
         <div class="col-12 col-lg-4">
-          <b-form-group label="Телефон или email" label-cols="12">
+          <b-form-group label="Телефон или e-mail" label-cols="12">
             <b-form-input
               autofocus
               id="phone"
               ref="phoneInput"
               v-model="$v.user.username.$model"
-              placeholder="Телефон или почта"
+              placeholder="Телефон или e-mail"
               type="tel"
               :state="wrongAuthData ? false : validateState('username')"
               @blur="$v.user.username.$touch()"
@@ -104,13 +110,18 @@
               v-model="$v.user.password.$model"
               id="password"
               placeholder="Пароль"
-              type="password"
+              :type="pswVisible ? 'text' : 'password'"
               :state="wrongAuthData ? false : validateState('password')"
               @blur="$v.user.password.$touch()"
               @input="wrongAuthData = null"
               class="form-control"
               :disabled="authInProcess"
             ></b-form-input>
+            <button
+              type="button"
+              class="btn-psw-visible"
+              @click="visiblePSW()"
+            ></button>
             <b-form-invalid-feedback v-if="this.$v.user.password.$model === ''"
               >Пожалуйста, введите пароль
             </b-form-invalid-feedback>
@@ -130,11 +141,21 @@
           Неверный логин или пароль.<br />Проверьте корректность введенных
           даных.
         </div>
+        <div
+          class="col-12 invalid-feedback d-block mt-3"
+          v-if="queryError && !wrongAuthData"
+        >
+          {{ queryError }}
+        </div>
 
         <div
           v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
-          class="col-12 mt-3 mt-lg-0"
+          class="col-12 mt-3"
         >
+          <div class="ph4b mb-2">
+            Слишком много попыток с вашего компьютера. Подтвердите, что вы не
+            бот
+          </div>
           <captcha
             @update="setIdCaptcha($event)"
             @updateCode="setCodeCaptcha($event)"
@@ -147,7 +168,7 @@
         variant="primary"
         type="submit"
         :disabled="authInProcess"
-        class="mt-4"
+        class="mt-3 mt-lg-4"
         id="btn_entry_lk"
       >
         Авторизоваться
@@ -159,7 +180,6 @@
 
 <script>
 import axios from "axios";
-
 import {
   BForm,
   BFormGroup,
@@ -222,11 +242,27 @@ export default {
       placeholder: "Телефон или почта",
       errorMessage: null,
       authInProcess: false,
+      pswVisible: false,
       captchaToken: null,
       loginTouchesCount: 0,
     };
   },
-
+  mounted() {
+    this.$nextTick(() => {
+      if (typeof this.$LogEvent === "function") {
+        const currentURL = window.location.pathname;
+        if (!currentURL.includes("registration")) {
+          this.$LogEvent({
+            formName: "Authorization",
+            idEventType: 2,
+            controlName: "LoginForm.vue",
+            message: "Просмотр страницы Авторизации",
+            timeUser: new Date(),
+          });
+        }
+      }
+    });
+  },
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     // eslint-disable-next-line nuxt/no-globals-in-created
@@ -248,6 +284,13 @@ export default {
   },
 
   methods: {
+    visiblePSW() {
+      if (this.pswVisible === false) {
+        this.pswVisible = true;
+      } else {
+        this.pswVisible = false;
+      }
+    },
     setIdCaptcha(id) {
       this.user.capid = id;
     },
@@ -256,6 +299,17 @@ export default {
     },
 
     async fetchToken() {
+      if (typeof this.$LogEvent === "function") {
+        this.$LogEvent({
+          formName: "Authorization",
+          idEventType: this.$v.user.code.$model ? 45 : 4,
+          controlName: "Button",
+          message: `Нажал на кнопку "${
+            this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"
+          }"`,
+          timeUser: new Date(),
+        });
+      }
       this.$v.user.username.$touch();
       this.$v.user.password.$touch();
       if (
@@ -282,12 +336,19 @@ export default {
         };
 
         if (this.user.code !== "" && this.isSendingCodeSMS === false) {
-          body = { ...body, code: this.$v.user.code.$model };
+          body = {
+            ...body,
+            code: this.$v.user.code.$model,
+          };
         }
+
+        const headers = {
+          headers: { "X-Application": "VueJS" },
+        };
 
         const {
           data: { ACCESS_TOKEN, REFRESH_TOKEN },
-        } = await axios.post("/am/authw/v2/authorize", body);
+        } = await axios.post("/am/authw/v2/authorize", body, headers);
 
         this.isModalVisible = false;
         document.cookie = `auth.strategy=local;`;
@@ -314,7 +375,7 @@ export default {
             this.isCaptchaNeeded = true;
           }
           if (data.CODENAME === "PhoneCodeRequest") {
-            this.modalTextRequest = `${data.MESSAGE} ${data.SMSPHONE}`;
+            this.modalTextRequest = `${data.MESSAGE}`;
             this.wrongAuthData = null;
             this.isModalVisible = true;
             return;
@@ -369,6 +430,17 @@ export default {
       if (this.user.code !== "") {
         this.fetchToken();
       }
+    },
+  },
+  computed: {
+    queryError() {
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop.toString()),
+      });
+      if (params?.error) {
+        return params.error;
+      }
+      return false;
     },
   },
 

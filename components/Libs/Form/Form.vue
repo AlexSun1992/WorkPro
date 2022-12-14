@@ -83,10 +83,10 @@ export default {
     },
   },
   computed: {
-    captions: function () {
+    captions() {
       return this.$store.getters["data_card/getCaptions"];
     },
-    cardId: function () {
+    cardId() {
       return this.$store.getters["data_card/getCardId"];
     },
   },
@@ -104,10 +104,10 @@ export default {
       }
     },
     highlightTab(i) {
-      let invalidFields = this.$store.getters["data_card/getForm"].filter(
+      const invalidFields = this.$store.getters["data_card/getForm"].filter(
         (item) => item.state == false
       );
-      let invalidField = invalidFields.find((item) => item.page == i);
+      const invalidField = invalidFields.find((item) => item.page == i);
       if (invalidField) return true;
     },
   },

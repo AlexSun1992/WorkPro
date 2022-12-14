@@ -8,15 +8,21 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 
+const requestIp = require("request-ip");
+
 router.use(express.json());
 router.use(cookieParser());
 
 router.get("/menu/:idModule/?:idItem", (req, res) => {
   try {
     let mobile2ServiceInstance = mobile2Service();
-    const ipAddress = req.headers["x-forwarded-for"];
+    const ipAddress = requestIp.getClientIp(req);
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
-      ipAddress || "";
+      ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");

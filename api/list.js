@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 const router = express.Router();
 
 const bodyParser = require("body-parser");
+const requestIp = require("request-ip");
 router.use(
   bodyParser.json({
     limit: "50mb",
@@ -31,14 +32,18 @@ router.use(cookieParser());
 router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
   try {
     let mobile2ServiceInstance = mobile2Service();
-    const ipAddress = req.headers["x-forwarded-for"];
+    const ipAddress = requestIp.getClientIp(req);
     mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
-      ipAddress || "";
+      ipAddress || null;
     if (req.headers.referer) {
       if (req.headers.referer.includes("testdms")) {
         mobile2ServiceInstance = mobile2Service("https://mobiletest.reso.ru");
       }
     }
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     let URL_ADDRESS;
     let settings = null;
     const filters = listConverter.getFilterParams(
@@ -131,6 +136,18 @@ router.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
 router.get("/wizardlist/:idModule/:idWizard/:idItem", async (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    const ipAddress = requestIp.getClientIp(req);
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
+      ?.cookie
+      ? req.headers.cookie
+      : null;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common.Referer =
+      req.headers.referer;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
     if (req.headers.authorization) {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.headers.authorization;

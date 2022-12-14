@@ -949,6 +949,10 @@ a.lgreen {
     color: #868686;
 }
 
+.unplanned {
+    color: #eb5757;
+}
+
 .color-footer {
     background: #f2f4f5;
     position: relative;
@@ -2318,6 +2322,7 @@ a.free {
     background-image: url(/img/osagostap3.svg);
 }
 
+.step[data-step].docs,
 .osago .step[data-step="4"] {
     background-image: url(/img/osagostap4.svg);
 }
@@ -2465,11 +2470,22 @@ a.free {
     border-color: #645da2;
 }
 
+.my-tabs,
+.my-tabs .nav.nav-tabs,
 .my-policy .nav.nav-tabs {
     margin: 0;
     padding: 0;
 }
 
+.my-tabs .nav-link {
+    font-weight: 400;
+}
+
+.my-tabs .nav-link.active {
+    font-weight: 700;
+}
+
+.my-tabs .nav-item,
 .my-policy .nav-item {
     margin: 0;
     padding: 0;
@@ -2477,12 +2493,14 @@ a.free {
     display: inline-block;
 }
 
+.my-tabs .nav-item a,
 .my-policy .nav-item a {
     color: $black;
     text-decoration: none;
     position: relative;
 }
 
+.my-tabs .nav-item a:after,
 .my-policy .nav-item a:after {
     content: "";
     width: 100%;
@@ -2493,18 +2511,22 @@ a.free {
     transition: 0.3s;
 }
 
+.my-tabs .nav-item a.active:after,
 .my-policy .nav-item a.active:hover:after {
     background-color: $green;
 }
 
+.my-tabs .nav-item a:hover:after,
 .my-policy .nav-item a:hover:after {
     background-color: #dfe3e5;
 }
 
+.my-tabs .nav-item+.nav-item,
 .my-policy .nav-item+.nav-item {
     margin-left: 30px;
 }
 
+button.action img,
 a.action img {
     width: 56px;
     height: 56px;
@@ -2512,6 +2534,7 @@ a.action img {
     margin: 0 auto 8px;
 }
 
+button.action,
 a.action {
     padding: 24px;
     width: 100%;
@@ -2528,11 +2551,17 @@ a.action {
     color: $black;
     text-decoration: none;
     transition: box-shadow 0.3s;
+    background: transparent;
+    border: 0;
 }
 
+button.action:hover,
 a.action:hover {
     box-shadow: 0 3px 8px rgb(0 0 0 / 35%);
     transition: 0.3s;
+    border: 0;
+    background: transparent;
+    color: #292929;
 }
 
 .my-policy[data-id="1"] .description .tab-content a {
@@ -3827,6 +3856,17 @@ h6 {
     line-height: 30px;
 }
 
+.ph1 {
+    font-size: 1.25rem;
+    line-height: 2rem;
+}
+
+.ph1b {
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 2rem;
+}
+
 .blk-shadow {
     box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
 }
@@ -3901,11 +3941,20 @@ h6 {
     }
 }
 
+.border-block .block-policy_small .pay-notification {
+    font-size: 1rem;
+}
+
 @media (min-width: 992px) and (max-width: 1220px) {
     .block-policy_small .pay-notification {
         right: 5px;
-        max-width: calc(100% - 10px);
+        width: calc(100% - 10px);
         font-size: 0.875rem;
+        text-align: center;
+        padding-right: 12px;
+    }
+    .block-policy_small .pay-notification:after {
+        display: none;
     }
 }
 
@@ -3953,4 +4002,91 @@ h6 {
 .my-policy-actions>.col-6.col-lg-4,
 .my-policy-actions>.col-6.col-lg-3 {
     margin-bottom: 1rem;
+}
+
+.my-policy-actions>div {
+    margin-bottom: 1.5rem;
+}
+
+.btn-link {
+    background: transparent;
+    border: 0;
+    font-weight: 700;
+    color: #43b02a;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+.btn-collapse {
+    position: relative;
+    padding-right: 18px;
+}
+
+.btn-collapse:after {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: rotate(90deg) translateX(-7px);
+    content: "";
+    width: 8px;
+    height: 14px;
+    background: url(/img/icon-chevron-r.svg) right center no-repeat;
+    background-size: contain;
+}
+
+.btn-collapse.collapsed:after {
+    transform: rotate(-90deg) translateX(7px);
+}
+
+.block-visit .collapse.show {
+    position: relative;
+    display: block;
+    list-style: none;
+    padding: 0;
+    margin-top: 0;
+    background: transparent;
+    border: 0;
+    box-sizing: border-box;
+    box-shadow: none;
+    border-radius: 0;
+    z-index: 1;
+}
+
+.btn-gray {
+    background: #eff1f3;
+    border-radius: 15px;
+    border: 2px solid #eff1f3;
+    padding: 0 24px;
+    line-height: 37px;
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 0.3s;
+}
+
+.btn-gray:hover {
+    background: #dfe3e5;
+    border: 2px solid #dfe3e5;
+}
+
+.btn-gray:active {
+    background: #bec7cb;
+    border: 2px solid #bec7cb;
+}
+
+.btn-gray:focus {
+    background: #bec7cb;
+    border: 2px solid #868686;
+}
+
+.btn-gray:disabled {
+    background: #eff1f3;
+    border: 2px solid #eff1f3;
+    color: #bec7cb;
+    pointer-events: none;
 }

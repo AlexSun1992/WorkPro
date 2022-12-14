@@ -1,6 +1,6 @@
 <template>
   <div id="captcha-form" class="row">
-    <div class="col-lg-4 pt-lg-3 text-nowrap">
+    <div class="col-lg-4 text-nowrap">
       <b-form-group label="Введите код с картинки" label-cols="12">
         <b-form-input
           id="captcha-code"
@@ -18,8 +18,8 @@
         </b-form-invalid-feedback>
       </b-form-group>
     </div>
-    <div class="col-lg-8 pt-lg-3 mt-4 text-nowrap">
-      <div class="row">
+    <div class="col-lg-8 text-nowrap blk-img-captcha">
+      <div class="row align-items-end">
         <div class="col-6">
           <span v-if="isLoading">Загрузка...</span>
           <img
@@ -35,7 +35,7 @@
             @click="refreshDisplayCaptcha"
             :disabled="isLoading"
             class="reload-captcha"
-            variant="primary"
+            variant="gray"
             >Обновить</b-button
           >
         </div>
