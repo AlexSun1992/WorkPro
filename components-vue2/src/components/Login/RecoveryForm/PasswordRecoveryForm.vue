@@ -127,6 +127,7 @@ import {
 import { validationMixin } from "vuelidate";
 import { BTabs, BTab, BAlert, BRow, BFormGroup, BButton } from "bootstrap-vue";
 import axios from "axios";
+import moment from "moment/moment";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import UserRecoveryForm from "./UserRecoveryForm.vue";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
@@ -192,7 +193,10 @@ export default {
           TYPE: 1,
           PHONE: this.$v.form.phone.$model,
           SMSCODE: this.$v.form.code.$model,
-          BIRTHDATE: this.$v.form.birthdate.$model,
+          BIRTHDATE: moment(this.$v.form.birthdate.$model, [
+            "DD.MM.YYYY",
+            "YYYY-MM-DD",
+          ]).format("YYYY-MM-DD"),
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };

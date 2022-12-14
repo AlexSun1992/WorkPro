@@ -189,6 +189,7 @@ import {
   BSpinner,
 } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
+import moment from "moment";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
@@ -655,7 +656,10 @@ export default {
           FIRSTNAME: this.name,
           THIRDNAME: this.patronymic,
           THIRDNAMENOTEXISTS: this.isPatronymicNotExist ? "Y" : "N",
-          BIRTHDATE: this.$v.form.birthdate.$model,
+          BIRTHDATE: moment(this.$v.form.birthdate.$model, [
+            "DD.MM.YYYY",
+            "YYYY-MM-DD",
+          ]).format("YYYY-MM-DD"),
           PHONE: this.$v.form.phone.$model,
           CODE: this.$v.form.code.$model,
           POLICY_NUMBER: this.form.policyNumber,
