@@ -45,10 +45,9 @@
           <b-row class="mt-3" v-if="!isCodeFieldInValid">
             <b-form-group label="Дата рождения" class="col-lg-4 col-12">
               <birthday-picker
-                ref="dataPicker"
+                <birthday-picker2
                 v-model="$v.form.birthdate.$model"
                 :state="validateState('birthdate')"
-                :tabindex="20"
               />
             </b-form-group>
             <div class="recovery col-md-8 col-12">
@@ -166,6 +165,7 @@ import moment from "moment/moment";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import UserRecoveryForm from "./UserRecoveryForm.vue";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
+import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 
 const forbiddenRussianSign = helpers.regex(
@@ -181,6 +181,7 @@ export default {
     VerifyUser,
     UserRecoveryForm,
     birthdayPicker,
+    birthdayPicker2,
     VerifyPassword,
     BTabs,
     BTab,
@@ -245,13 +246,17 @@ export default {
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };
+        console.log(params);
       }
       if (this.$refs.tabs.currentTab == 1) {
         params = {
           TYPE: 2,
           EMAIL: this.$v.form.email.$model,
           EMAILCODE: this.$v.form.code.$model,
-          BIRTHDATE: this.$v.form.birthdate.$model,
+          BIRTHDATE: moment(this.$v.form.birthdate.$model, [
+            "DD.MM.YYYY",
+            "YYYY-MM-DD",
+          ]).format("YYYY-MM-DD"),
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
         };

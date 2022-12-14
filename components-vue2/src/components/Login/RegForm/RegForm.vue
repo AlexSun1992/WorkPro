@@ -113,12 +113,6 @@
 
         <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
-            <!--            <birthday-picker-->
-            <!--              v-model="$v.form.birthdate.$model"-->
-            <!--              :state="validateState('birthdate')"-->
-            <!--              :disabled="registrationInProcess"-->
-            <!--              @input="changeField('birthdate')"-->
-            <!--            />-->
             <birthday-picker2
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
@@ -402,14 +396,6 @@ export default {
     },
     async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
-      // this.$nextTick(() => {
-      //   this.$v.$reset();
-      //   this.form.password = "";
-      //   this.form.password2 = "";
-      //   this.form.policyNumber = "";
-      //   this.surnameClassHub = [];
-      //   this.nameClassHub = [];
-      // });
     },
     handleBlur(field) {
       // Валидация

@@ -26,7 +26,6 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/locale/ru";
 import { mask } from "vue-the-mask";
-import moment from "moment";
 
 function getDate(value) {
   const date = new Date();
