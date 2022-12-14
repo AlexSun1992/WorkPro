@@ -234,7 +234,7 @@ export default {
 
     async resetPassword() {
       let params;
-      if (this.$refs.tabs.currentTab == 0) {
+      if (this.visibleForm === "phone") {
         params = {
           TYPE: 1,
           PHONE: this.$v.form.phone.$model,
@@ -248,7 +248,7 @@ export default {
         };
         console.log(params);
       }
-      if (this.$refs.tabs.currentTab == 1) {
+      if (this.visibleForm === "email") {
         params = {
           TYPE: 2,
           EMAIL: this.$v.form.email.$model,
