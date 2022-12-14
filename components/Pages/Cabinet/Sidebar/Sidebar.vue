@@ -78,6 +78,7 @@ export default {
       "Bearer ",
       ""
     );
+    console.log("token:", token);
     this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
   },
   methods: {
