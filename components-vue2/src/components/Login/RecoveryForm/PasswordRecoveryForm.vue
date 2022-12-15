@@ -236,6 +236,9 @@ export default {
     toggleForm(tabs) {
       if (this.visibleForm === tabs) {
         this.clearForm();
+        this.isCodeFieldValid = false;
+        this.isBirthdateValid = false;
+        this.isPasswordValid = false;
         this.visibleForm = tabs === "phone" ? "email" : "phone";
       }
     },
@@ -371,6 +374,7 @@ export default {
       return (
         Boolean(
           (this.$v.form.phone.$model || this.$v.form.email.$model) &&
+            (!this.$v.form.phone.$error || !this.$v.form.email.$error) &&
             !this.$v.form.code.$error &&
             !this.$v.form.password2.$invalid &&
             this.$v.form.password.$model &&
