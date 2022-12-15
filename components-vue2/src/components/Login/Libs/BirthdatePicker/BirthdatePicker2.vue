@@ -44,7 +44,7 @@ export default {
     },
     disabled: {
       type: Boolean,
-      required: true,
+      required: false,
       default: () => false,
     },
   },
@@ -61,10 +61,11 @@ export default {
       this.$emit("input", date);
     },
     setDateChange(date) {
-      console.log(date);
       this.$emit("change", date);
     },
     notBeforeDate(date) {
+      console.log(18, date > getDate(18));
+      console.log(120, date < getDate(120));
       return date > getDate(18);
     },
   },

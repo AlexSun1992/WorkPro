@@ -53,6 +53,7 @@
             <div class="recovery col-md-8 col-12">
               <verify-password
                 v-if="isBirthdateValid && isCodeFieldValid"
+                @change="changePassword"
                 :tab-index="[20, 30]"
                 :v="$v.form"
                 :validateState="validateState"
@@ -67,7 +68,8 @@
             {{ errorMessage }}
           </div>
           <b-button
-            v-if="isSamePassword && isCodeFieldValid"
+            v-if="isPasswordValid && isCodeFieldValid"
+            :disabled="disabled"
             variant="primary"
             @click="resetPassword"
             id="btn_change-password_tel_lk"
@@ -102,6 +104,7 @@
             <div class="recovery col-lg-8 col-12">
               <verify-password
                 v-if="isBirthdateValid && isCodeFieldValid"
+                @change="changePassword"
                 :tab-index="[20, 30]"
                 :v="$v.form"
                 :validateState="validateState"
@@ -116,7 +119,7 @@
             {{ errorMessage }}
           </div>
           <b-button
-            v-if="isSamePassword && isCodeFieldValid"
+            v-if="isPasswordValid && isCodeFieldValid"
             :disabled="disabled"
             variant="primary"
             @click="resetPassword"
@@ -207,6 +210,7 @@ export default {
       visibleForm: "phone",
       isCodeFieldValid: false,
       isBirthdateValid: false,
+      isPasswordValid: false,
     };
   },
   mounted() {
@@ -218,6 +222,11 @@ export default {
     changeBirthday(value) {
       if (value) {
         this.isBirthdateValid = value;
+      }
+    },
+    changePassword() {
+      if (this.isSamePassword) {
+        this.isPasswordValid = true;
       }
     },
     setCodeFieldValid(data) {
@@ -364,6 +373,7 @@ export default {
         Boolean(
           (this.$v.form.phone.$model || this.$v.form.email.$model) &&
             !this.$v.form.code.$error &&
+            !this.$v.form.password2.$invalid &&
             this.$v.form.password.$model &&
             this.$v.form.birthdate.$model &&
             this.$v.form.password2.$model

@@ -11,7 +11,7 @@
           @blur="v.password.$touch()"
           autocomplete="new-password"
           :disabled="disabled"
-          @change="changeField('password')"
+          @update="updateField('password')"
         ></b-form-input>
         <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
       </b-form-group>
@@ -37,7 +37,7 @@
           placeholder="Повторите пароль"
           @blur="v.password2.$touch()"
           :disabled="disabled"
-          @change="changeField('password2')"
+          @update="updateField('password2')"
         ></b-form-input>
         <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>
@@ -79,7 +79,9 @@ export default {
         message: `Поле ${field} посещено`,
         timeUser: new Date(),
       });
-      console.log(field, this.v[field].$model);
+    },
+    updateField(field) {
+      this.$emit("change", this.v[field].$model);
     },
   },
   components: {
