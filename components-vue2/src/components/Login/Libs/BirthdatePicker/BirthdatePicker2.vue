@@ -67,7 +67,7 @@ export default {
       if (date < getDate(120) === true) {
         return true;
       }
-      return date > getDate(18);
+      return date > getDate(0);
     },
   },
 };
