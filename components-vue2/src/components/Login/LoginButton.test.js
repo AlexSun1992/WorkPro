@@ -100,6 +100,5 @@ describe("LoginButton", () => {
         createComponent();
         await wrapper.find(".btn").trigger("click");
         const getPopup = await wrapper.find(".dropdown-menu");
-        console.log("getPopup:", getPopup.html());
     });
 });
