@@ -64,8 +64,9 @@ export default {
       this.$emit("change", date);
     },
     notBeforeDate(date) {
-      console.log(18, date > getDate(18));
-      console.log(120, date < getDate(120));
+      if (date < getDate(120) === true) {
+        return true;
+      }
       return date > getDate(18);
     },
   },
