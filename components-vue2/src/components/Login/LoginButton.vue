@@ -24,7 +24,7 @@
       >
     </div>
     <div class="LoginButton" v-if="!isAuthentificated">
-      <b-dropdown id="dropdown-2" variant="login-link" text="Личный кабинет">
+      <b-dropdown id="dropdown-2" variant="login-btn" text="Личный кабинет">
         <b-dropdown-item
           v-for="item in getNavigationList"
           :key="item"
