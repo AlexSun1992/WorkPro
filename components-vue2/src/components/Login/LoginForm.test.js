@@ -40,6 +40,7 @@ describe("LoginForm", () => {
 
   it("должен показать только одну капчу", async () => {
     const wrapper = mount(LoginForm);
+
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
       wrongAuthError.response = {
