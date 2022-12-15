@@ -30,6 +30,7 @@
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @change="changeField('email')"
+          @input="removeErrorTextMessage"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
           autocomplete="off"
@@ -225,6 +226,9 @@ export default {
   },
 
   methods: {
+    removeErrorTextMessage() {
+      this.errorMessage = null;
+    },
     updateField(field) {
       this.$emit("checkCodeFieldValid", this.validateState(field));
     },
