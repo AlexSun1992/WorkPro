@@ -9,7 +9,6 @@
         >
           Телефон
         </button>
-
         <b-nav card-header tabs class="d-none d-lg-block">
           <b-nav-item
             :link-attrs="{ id: 'tab_tel_lk' }"
