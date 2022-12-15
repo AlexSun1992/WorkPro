@@ -1,37 +1,38 @@
 <template>
   <div>
-    <div class="LoginButton" v-if="isAuthentificated">
+    <div class="LoginButton">
       <b-dropdown
         variant="login-link"
         v-if="isAuthentificated"
-        id="dropdown-1"
+        id="authentificated-btn"
         :text="userName"
       >
-        <b-dropdown-item
-          v-for="item in getNavigationList"
-          :key="item"
-          @click="applyAction(item)"
-        >
-          {{ item }}
+        <b-dropdown-item class="d-lg-none loginusername">
+          Здравствуйте,<br /><b>{{ userName }}</b>
         </b-dropdown-item>
+        <b-dropdown-item @click="profileBtn()" class="login-profile"
+          >Профиль</b-dropdown-item
+        >
+        <b-dropdown-item @click="osagoBtn()" class="login-osago"
+          >ОСАГО</b-dropdown-item
+        >
+        <b-dropdown-item @click="exitBtn()" class="login-exit"
+          >Выйти</b-dropdown-item
+        >
       </b-dropdown>
-      <b-button
-        variant="login-btn"
+
+      <b-dropdown
         v-else
-        @click="redirectToLoginPage"
-        id="btn_lk_head_all"
-        >Личный кабинет</b-button
+        id="unauthentificated-btn"
+        variant="login-btn"
+        text="Личный кабинет"
       >
-    </div>
-    <div class="LoginButton" v-if="!isAuthentificated">
-      <b-dropdown id="dropdown-2" variant="login-btn" text="Личный кабинет">
-        <b-dropdown-item
-          v-for="item in getNavigationList"
-          :key="item"
-          @click="applyAction(item)"
+        <b-dropdown-item @click="osagoBtn()" class="login-osago"
+          >ОСАГО</b-dropdown-item
         >
-          {{ item }}
-        </b-dropdown-item>
+        <b-dropdown-item @click="polisesBtn()" class="login-polises"
+          >Другие полисы</b-dropdown-item
+        >
       </b-dropdown>
     </div>
   </div>
@@ -143,41 +144,38 @@ export default {
     redirectToLoginPage() {
       window.location.href = "/login";
     },
-
-    async applyAction(item) {
+    async exitBtn() {
+      this.personsData = null;
+      Cookies.set(TOKEN_NAME, "false");
+      Cookies.set(REFRESH_TOKEN_NAME, "false");
+      window.localStorage.setItem("auth._token.local", "false");
+      window.localStorage.removeItem("USER_INFO");
+      this.$store.commit("auth/setLogged", false);
+      this.$store.commit("auth/setUser", null);
+    },
+    async osagoBtn() {
       if (this.isAuthentificated === false) {
-        item === "ОСАГО"
-          ? (window.location.href = "https://client.reso.ru/")
-          : (window.location.href = "/login");
+        window.location.href = "https://client.reso.ru/";
+      } else {
+        const token = Cookies.get(TOKEN_NAME);
+        const getToken = await axios.get("/am/main/v2/redirect_lk1", {
+          headers: {
+            Authorization: token,
+            "X-Application": "VueJS",
+          },
+        });
+        const getUrl = getToken.data.find((el) => el.SURL);
+        getUrl
+          ? (window.location.href = getUrl.SURL)
+          : (window.location.href = "https://client.reso.ru/");
       }
+    },
+    async profileBtn() {
+      window.location.href = "/cabinet/55/0/710";
+    },
 
-      if (this.isAuthentificated === true) {
-        if (item === "Профиль") {
-          window.location.href = "/cabinet/55/0/710";
-        }
-        if (item === "ОСАГО") {
-          const token = Cookies.get(TOKEN_NAME);
-          const getToken = await axios.get("/am/main/v2/redirect_lk1", {
-            headers: {
-              Authorization: token,
-              "X-Application": "VueJS",
-            },
-          });
-          const getUrl = getToken.data.find((el) => el.SURL);
-          getUrl
-            ? (window.location.href = getUrl.SURL)
-            : (window.location.href = "https://client.reso.ru/");
-        }
-        if (item === "Выйти") {
-          this.personsData = null;
-          Cookies.set(TOKEN_NAME, "false");
-          Cookies.set(REFRESH_TOKEN_NAME, "false");
-          window.localStorage.setItem("auth._token.local", "false");
-          window.localStorage.removeItem("USER_INFO");
-          this.$store.commit("auth/setLogged", false);
-          this.$store.commit("auth/setUser", null);
-        }
-      }
+    async polisesBtn() {
+      window.location.href = "/login";
     },
 
     getPersonsData() {
