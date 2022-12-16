@@ -2819,6 +2819,9 @@ a.action:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    background: transparent;
+    z-index: 1;
+    position: relative;
 }
 
 .LoginButton .dropdown-menu {
