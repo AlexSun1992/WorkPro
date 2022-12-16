@@ -517,7 +517,6 @@ export default {
 
   computed: {
     isCodeError() {
-      console.log(this.error);
       if (this.error) {
         return this.error.includes("код подтверждения");
       }
