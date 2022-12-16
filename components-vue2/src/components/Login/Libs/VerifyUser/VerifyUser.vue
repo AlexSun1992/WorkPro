@@ -120,7 +120,7 @@
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        v-show="!validateInput('code', isCodeBlured)"
+        v-show="!validateInput('code', isCodeBlured) || isCodeError"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
@@ -516,8 +516,12 @@ export default {
   },
 
   computed: {
-    getMessageErrorText() {
-      return null;
+    isCodeError() {
+      console.log(this.error);
+      if (this.error) {
+        return this.error.includes("код подтверждения");
+      }
+      return false;
     },
     changeMask() {
       if (this.loginType === "phone") {

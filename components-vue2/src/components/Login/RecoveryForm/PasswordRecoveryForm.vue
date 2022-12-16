@@ -29,6 +29,7 @@
             key="phone"
             ref="verifyUser"
             @error="showError"
+            :error="errorMessage"
             @getLoginType="loginType"
             :loginType="'phone'"
             :mode-type="'RECOVERY'"
@@ -82,6 +83,7 @@
           <verify-user
             key="email"
             @error="showError"
+            :error="errorMessage"
             @getLoginType="loginType"
             :loginType="'email'"
             :mode-type="'RECOVERY'"
