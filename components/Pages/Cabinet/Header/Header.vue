@@ -60,9 +60,9 @@
               <template #button-content>
                   {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
               </template>
-              <b-dropdown-item href="/cabinet/55/0/710">Профиль</b-dropdown-item>
-              <b-dropdown-item @click="redirect()">ОСАГО</b-dropdown-item>
-              <b-dropdown-item href="#" @click="logout()">Выйти из аккаунта</b-dropdown-item>
+              <b-dropdown-item href="/cabinet/55/0/710" class="login-profile">Профиль</b-dropdown-item>
+              <b-dropdown-item @click="redirect()" class="login-osago">ОСАГО</b-dropdown-item>
+              <b-dropdown-item href="#" @click="logout()" class="login-exit">Выйти из аккаунта</b-dropdown-item>
 
             </b-dropdown>
           </div>
