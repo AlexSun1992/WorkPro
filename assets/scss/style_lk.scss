@@ -2844,7 +2844,8 @@ a.action:hover {
     display: block;
 }
 
-.LoginButton .dropdown.show .dropdown-menu {
+
+/*.LoginButton .dropdown.show .dropdown-menu {
     display: block;
     list-style: none;
     line-height: 1.5rem;
@@ -2888,6 +2889,100 @@ a.action:hover {
 
 .LoginButton .dropdown.show .dropdown-menu li:nth-child(2) a {
     background: transparent url(/img/exit.svg) left center no-repeat !important;
+}*/
+
+@at-root .LoginButton .dropdown.show .dropdown-menu {
+    display: block;
+    list-style: none;
+    line-height: 1.5rem;
+    padding: 0;
+    background: #fff;
+    box-sizing: border-box;
+    border-radius: 14px;
+    margin-top: 11px !important;
+    right: 16px !important;
+    left: auto !important;
+    border: 1px solid #dfe3e5;
+    box-sizing: border-box;
+    box-shadow: 0 4px 26px rgba(0, 0, 0, 0.08);
+    border-radius: 30px;
+    outline: 0;
+    overflow: hidden;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li a {
+    line-height: 72px;
+    display: block;
+    font-size: 1rem;
+    white-space: nowrap;
+    color: #292929;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 0 30px 0 60px;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li {
+    position: relative;
+    margin-bottom: 1px;
+    overflow: visible;
+    padding: 0 !important;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li:after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    height: 1px;
+    width: calc(100% - 60px);
+    left: 50%;
+    background: #dadada;
+    transform: translateX(-50%);
+}
+
+.LoginButton .dropdown.show .dropdown-menu li:last-of-type {
+    margin-bottom: 0;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li:last-of-type:after {
+    display: none;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li.login-profile a {
+    background-color: #ffffff;
+    background-image: url(/img/login-profile.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
+    transition: 0.2s;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li.login-osago a {
+    background-color: #ffffff;
+    background-image: url(/img/login-osago.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
+    transition: 0.2s;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li.login-exit a {
+    background-color: #ffffff;
+    background-image: url(/img/login-exit.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
+    transition: 0.2s;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li.login-polises a {
+    background-color: #ffffff;
+    background-image: url(/img/login-polises.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
+    transition: 0.2s;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li:hover a,
+.LoginButton .dropdown.show .dropdown-menu li:hover {
+    background-color: #f2f4f5 !important;
+    transition: 0.2s;
 }
 
 input.is-invalid {
