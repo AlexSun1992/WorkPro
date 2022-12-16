@@ -1,8 +1,25 @@
 const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const childProcess = require("child_process");
+
+const startDate = new Date();
 
 const router = express.Router();
 router.get("/version", async (req, res) => {
-  res.status(200).send(process.env);
+  const appVersion =
+    process.env.APP_VERSION ||
+    childProcess.execSync("git rev-parse --short HEAD").toString().trim();
+  if ("hash" in req.query) {
+    return res.send(appVersion);
+  }
+  const buildFileName = path.join(__dirname, "..", ".nuxt", "server.js");
+  const fileStat = fs.statSync(buildFileName);
+  res.status(200).send({
+    hash: appVersion,
+    start: startDate,
+    build: fileStat.ctime,
+  });
 });
 
 module.exports = {
