@@ -172,7 +172,13 @@
 <script>
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import { required, minLength, sameAs, helpers } from "vuelidate/lib/validators";
+import {
+  required,
+  minLength,
+  sameAs,
+  helpers,
+  maxLength,
+} from "vuelidate/lib/validators";
 import {
   BForm,
   BFormGroup,
@@ -203,6 +209,11 @@ import {
   fetchSurname,
   fetchName,
 } from "./dadata.helper";
+
+import {
+  minLengthPassword,
+  maxLengthPassword,
+} from "./regform.helper.fixtures";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -307,10 +318,14 @@ export default {
       },
       password: {
         required,
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       phone: {
         required,
