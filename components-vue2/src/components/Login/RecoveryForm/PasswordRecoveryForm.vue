@@ -51,8 +51,9 @@
               />
             </b-form-group>
             <div class="recovery col-md-8 col-12">
+              <!-- isBirthdateValid && -->
               <verify-password
-                v-if="isBirthdateValid && isCodeFieldValid"
+                v-if="isCodeFieldValid"
                 @change="changePassword"
                 :tab-index="[20, 30]"
                 :v="$v.form"
@@ -67,8 +68,9 @@
           >
             {{ errorMessage }}
           </div>
+          <!-- isPasswordValid && -->
           <b-button
-            v-if="isPasswordValid && isCodeFieldValid"
+            v-if="isCodeFieldValid"
             :disabled="disabled"
             variant="primary"
             @click="resetPassword"
@@ -103,8 +105,9 @@
               />
             </b-form-group>
             <div class="recovery col-lg-8 col-12">
+              <!-- isBirthdateValid && -->
               <verify-password
-                v-if="isBirthdateValid && isCodeFieldValid"
+                v-if="isCodeFieldValid"
                 @change="changePassword"
                 :tab-index="[20, 30]"
                 :v="$v.form"
@@ -119,8 +122,9 @@
           >
             {{ errorMessage }}
           </div>
+          <!-- isPasswordValid &&  -->
           <b-button
-            v-if="isPasswordValid && isCodeFieldValid"
+            v-if="isCodeFieldValid"
             :disabled="disabled"
             variant="primary"
             @click="resetPassword"
@@ -221,6 +225,7 @@ export default {
 
   methods: {
     changeBirthday(value) {
+      console.log("value:", value);
       if (value) {
         this.isBirthdateValid = value;
       }
