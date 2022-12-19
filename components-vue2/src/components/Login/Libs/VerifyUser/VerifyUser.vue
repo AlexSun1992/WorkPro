@@ -307,7 +307,6 @@ export default {
             return null;
           };
           const response = await axios.post(getURL(), params, headers);
-
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
           if (getSuccessSendMessageText !== undefined) {
