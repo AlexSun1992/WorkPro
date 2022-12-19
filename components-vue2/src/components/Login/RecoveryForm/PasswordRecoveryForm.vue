@@ -144,6 +144,7 @@ import {
   required,
   email,
   minLength,
+  maxLength,
   sameAs,
   helpers,
 } from "vuelidate/lib/validators";
@@ -165,6 +166,10 @@ import UserRecoveryForm from "./UserRecoveryForm.vue";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
+import {
+  minLengthPassword,
+  maxLengthPassword,
+} from "../RegForm/regform.helper.fixtures";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
@@ -405,10 +410,14 @@ export default {
       },
       password: {
         required,
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       birthdate: {
         required,
