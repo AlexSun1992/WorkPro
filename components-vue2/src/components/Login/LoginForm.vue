@@ -354,8 +354,9 @@ export default {
         document.cookie = `auth.strategy=local;`;
         document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN};`;
         document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
-        window.location.href = "/cabinet/55/0/701";
+        this.authInProcess = false;
 
+        window.location.href = "/cabinet/55/0/701";
         const attempt = new URL(window.location.href);
 
         if (attempt.searchParams.has("ref")) {
