@@ -1,14 +1,16 @@
 <template>
   <div>
-    <div class="LoginButton" :class="{ show: showDropdown }">
+    <div class="LoginButton">
       <b-dropdown
         variant="login-link"
         v-if="isAuthentificated"
         id="authentificated-btn"
         :text="userName"
-        @show="toggleClassLoginButton()"
-        @hide="toggleClassLoginButton()"
       >
+        <b-dropdown-item
+          class="d-lg-none loginclose"
+          @click="dropdownClose('authentificated-btn')"
+        ></b-dropdown-item>
         <b-dropdown-item class="d-lg-none loginusername">
           Здравствуйте,<br /><b>{{ userName }}</b>
         </b-dropdown-item>
@@ -29,6 +31,10 @@
         variant="login-btn"
         text="Личный кабинет"
       >
+        <b-dropdown-item
+          class="d-lg-none loginclose"
+          @click="dropdownClose('unauthentificated-btn')"
+        ></b-dropdown-item>
         <b-dropdown-item @click="osagoBtn()" class="login-osago"
           >ОСАГО</b-dropdown-item
         >
@@ -139,13 +145,12 @@ export default {
           : null,
       isLoadedUserInfo:
         Boolean(window.localStorage.getItem("USER_INFO")) || false,
-      showDropdown: false,
     };
   },
 
   methods: {
-    toggleClassLoginButton() {
-      this.showDropdown = !this.showDropdown;
+    dropdownClose(nameform) {
+      document.getElementById("#" + nameform).click();
     },
     redirectToLoginPage() {
       window.location.href = "/login";
