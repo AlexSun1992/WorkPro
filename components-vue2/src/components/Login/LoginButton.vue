@@ -1,11 +1,13 @@
 <template>
   <div>
-    <div class="LoginButton">
+    <div class="LoginButton" :class="{ show: showDropdown }">
       <b-dropdown
         variant="login-link"
         v-if="isAuthentificated"
         id="authentificated-btn"
         :text="userName"
+        @show="toggleClassLoginButton()"
+        @hide="toggleClassLoginButton()"
       >
         <b-dropdown-item class="d-lg-none loginusername">
           Здравствуйте,<br /><b>{{ userName }}</b>
@@ -137,10 +139,14 @@ export default {
           : null,
       isLoadedUserInfo:
         Boolean(window.localStorage.getItem("USER_INFO")) || false,
+      showDropdown: false,
     };
   },
 
   methods: {
+    toggleClassLoginButton() {
+      this.showDropdown = !this.showDropdown;
+    },
     redirectToLoginPage() {
       window.location.href = "/login";
     },
