@@ -5,6 +5,7 @@
         variant="login-link"
         v-if="isAuthentificated"
         id="authentificated-btn"
+        ref="authentificated-btn"
         :text="userName"
       >
         <b-dropdown-item
@@ -28,6 +29,7 @@
       <b-dropdown
         v-else
         id="unauthentificated-btn"
+        ref="unauthentificated-btn"
         variant="login-btn"
         text="Личный кабинет"
       >
@@ -150,7 +152,7 @@ export default {
 
   methods: {
     dropdownClose(nameform) {
-      document.getElementById("#" + nameform).click();
+      this.$refs.nameform.hide();
     },
     redirectToLoginPage() {
       window.location.href = "/login";
