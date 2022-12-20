@@ -13,7 +13,10 @@
           :disabled="disabled"
           @update="updateField('password')"
         ></b-form-input>
-        <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          >Пароль должен содержать от {{ minLength }} до
+          {{ maxLength }} символов</b-form-invalid-feedback
+        >
       </b-form-group>
     </b-col>
     <b-col sm="12" lg="6" v-if="recovery"></b-col>
@@ -48,6 +51,11 @@
 
 <script>
 import {
+  minLengthPassword,
+  maxLengthPassword,
+} from "../../RegForm/regform.helper.fixtures";
+
+import {
   BFormInvalidFeedback,
   BFormInput,
   BFormGroup,
@@ -67,10 +75,13 @@ export default {
   ],
   data() {
     return {
+      minLength: minLengthPassword,
+      maxLength: maxLengthPassword,
       password: "",
       password2: "",
     };
   },
+
   methods: {
     changeField(field) {
       this.$LogEvent({

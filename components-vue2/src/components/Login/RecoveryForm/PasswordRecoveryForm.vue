@@ -46,14 +46,12 @@
             <b-form-group label="Дата рождения" class="col-lg-4 col-12">
               <birthday-picker2
                 v-model="$v.form.birthdate.$model"
-                @change="changeBirthday"
                 :state="validateState('birthdate')"
               />
             </b-form-group>
             <div class="recovery col-md-8 col-12">
               <verify-password
-                v-if="isBirthdateValid && isCodeFieldValid"
-                @change="changePassword"
+                v-if="isCodeFieldValid"
                 :tab-index="[20, 30]"
                 :v="$v.form"
                 :validateState="validateState"
@@ -68,7 +66,7 @@
             {{ errorMessage }}
           </div>
           <b-button
-            v-if="isPasswordValid && isCodeFieldValid"
+            v-if="isCodeFieldValid"
             :disabled="disabled"
             variant="primary"
             @click="resetPassword"
@@ -98,14 +96,12 @@
             <b-form-group label="Дата рождения" class="col-lg-4 col-12">
               <birthday-picker2
                 v-model="$v.form.birthdate.$model"
-                @change="changeBirthday"
                 :state="validateState('birthdate')"
               />
             </b-form-group>
             <div class="recovery col-lg-8 col-12">
               <verify-password
-                v-if="isBirthdateValid && isCodeFieldValid"
-                @change="changePassword"
+                v-if="isCodeFieldValid"
                 :tab-index="[20, 30]"
                 :v="$v.form"
                 :validateState="validateState"
@@ -119,8 +115,9 @@
           >
             {{ errorMessage }}
           </div>
+
           <b-button
-            v-if="isPasswordValid && isCodeFieldValid"
+            v-if="isCodeFieldValid"
             :disabled="disabled"
             variant="primary"
             @click="resetPassword"
@@ -147,6 +144,7 @@ import {
   required,
   email,
   minLength,
+  maxLength,
   sameAs,
   helpers,
 } from "vuelidate/lib/validators";
@@ -168,6 +166,10 @@ import UserRecoveryForm from "./UserRecoveryForm.vue";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
+import {
+  minLengthPassword,
+  maxLengthPassword,
+} from "../RegForm/regform.helper.fixtures";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
@@ -210,8 +212,6 @@ export default {
       myclass: ["cabinet okrecovery"],
       visibleForm: "phone",
       isCodeFieldValid: false,
-      isBirthdateValid: false,
-      isPasswordValid: false,
     };
   },
   mounted() {
@@ -220,16 +220,6 @@ export default {
   },
 
   methods: {
-    changeBirthday(value) {
-      if (value) {
-        this.isBirthdateValid = value;
-      }
-    },
-    changePassword() {
-      if (this.isSamePassword) {
-        this.isPasswordValid = true;
-      }
-    },
     setCodeFieldValid(data) {
       if (data) {
         this.isCodeFieldValid = data;
@@ -239,8 +229,6 @@ export default {
       if (this.visibleForm === tabs) {
         this.clearForm();
         this.isCodeFieldValid = false;
-        this.isBirthdateValid = false;
-        this.isPasswordValid = false;
         this.visibleForm = tabs === "phone" ? "email" : "phone";
       }
     },
@@ -422,10 +410,14 @@ export default {
       },
       password: {
         required,
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       birthdate: {
         required,
