@@ -265,7 +265,7 @@ export default {
         "На Ваш номер телефона был отправлен код, который необходимо ввести.",
       errorMessage: null,
       isErrorMessage: false,
-      myclass: ["cabinet"],
+      myclass: ["cabinet regpopup"],
       //
       suggestionsHub: [],
       gender: "",
@@ -393,7 +393,6 @@ export default {
       }
     },
   },
-
   methods: {
     changeField(field) {
       if (this.form[field] || this[field]) {
@@ -686,8 +685,7 @@ export default {
             .msgBoxOk(`${messageAfterSuccessRegistration}`, {
               title: "Подтверждение",
               size: "md",
-              buttonSize: "md",
-              okVariant: "success",
+              okVariant: "primary",
               okTitle: "Войти в систему",
               footerClass: "p-2",
               hideHeaderClose: false,
