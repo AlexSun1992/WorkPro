@@ -3,6 +3,7 @@
     <date-picker
       v-model="birthdate"
       @input="setDateValue"
+      @change="setDateChange"
       v-mask="maskTemplate"
       :disabled-date="notBeforeDate"
       :default-value="defaultDate"
@@ -26,7 +27,6 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/locale/ru";
 import { mask } from "vue-the-mask";
-import moment from "moment";
 
 function getDate(value) {
   const date = new Date();
@@ -44,7 +44,7 @@ export default {
     },
     disabled: {
       type: Boolean,
-      required: true,
+      required: false,
       default: () => false,
     },
   },
@@ -60,8 +60,14 @@ export default {
     setDateValue(date) {
       this.$emit("input", date);
     },
+    setDateChange(date) {
+      this.$emit("change", date);
+    },
     notBeforeDate(date) {
-      return date > getDate(18);
+      if (date < getDate(120) === true) {
+        return true;
+      }
+      return date > getDate(0);
     },
   },
 };

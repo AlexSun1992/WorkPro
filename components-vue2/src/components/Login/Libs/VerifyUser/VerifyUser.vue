@@ -30,6 +30,7 @@
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @change="changeField('email')"
+          @input="removeErrorTextMessage"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
           autocomplete="off"
@@ -119,7 +120,7 @@
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        v-show="!validateInput('code', isCodeBlured)"
+        v-show="!validateInput('code', isCodeBlured) || isCodeError"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
@@ -225,6 +226,9 @@ export default {
   },
 
   methods: {
+    removeErrorTextMessage() {
+      this.errorMessage = null;
+    },
     updateField(field) {
       this.$emit("checkCodeFieldValid", this.validateState(field));
     },
@@ -512,8 +516,11 @@ export default {
   },
 
   computed: {
-    getMessageErrorText() {
-      return null;
+    isCodeError() {
+      if (this.error) {
+        return this.error.includes("код подтверждения");
+      }
+      return false;
     },
     changeMask() {
       if (this.loginType === "phone") {

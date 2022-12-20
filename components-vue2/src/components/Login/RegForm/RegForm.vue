@@ -113,12 +113,6 @@
 
         <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
-            <!--            <birthday-picker-->
-            <!--              v-model="$v.form.birthdate.$model"-->
-            <!--              :state="validateState('birthdate')"-->
-            <!--              :disabled="registrationInProcess"-->
-            <!--              @input="changeField('birthdate')"-->
-            <!--            />-->
             <birthday-picker2
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
@@ -178,7 +172,13 @@
 <script>
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import { required, minLength, sameAs, helpers } from "vuelidate/lib/validators";
+import {
+  required,
+  minLength,
+  sameAs,
+  helpers,
+  maxLength,
+} from "vuelidate/lib/validators";
 import {
   BForm,
   BFormGroup,
@@ -209,6 +209,11 @@ import {
   fetchSurname,
   fetchName,
 } from "./dadata.helper";
+
+import {
+  minLengthPassword,
+  maxLengthPassword,
+} from "./regform.helper.fixtures";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -313,10 +318,14 @@ export default {
       },
       password: {
         required,
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       phone: {
         required,
@@ -402,14 +411,6 @@ export default {
     },
     async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
-      // this.$nextTick(() => {
-      //   this.$v.$reset();
-      //   this.form.password = "";
-      //   this.form.password2 = "";
-      //   this.form.policyNumber = "";
-      //   this.surnameClassHub = [];
-      //   this.nameClassHub = [];
-      // });
     },
     handleBlur(field) {
       // Валидация
