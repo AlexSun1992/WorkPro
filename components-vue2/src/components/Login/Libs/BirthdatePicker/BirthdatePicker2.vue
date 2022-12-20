@@ -14,7 +14,7 @@
       format="DD.MM.YYYY"
       :first-day-of-week="1"
       :lang="lang"
-      :input-class="state === false ? `is-invalid` : `is-valid`"
+      :input-class="classValid"
       :clearable="true"
     />
     <b-form-invalid-feedback :state="state">
@@ -68,6 +68,20 @@ export default {
         return true;
       }
       return date > getDate(0);
+    },
+  },
+  computed: {
+    classValid() {
+      if (this.state === null) {
+        return null;
+      }
+      if (this.state === false) {
+        return "is-invalid";
+      }
+      if (this.state === true) {
+        return "is-valid";
+      }
+      return null;
     },
   },
 };
