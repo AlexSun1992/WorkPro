@@ -14,7 +14,7 @@
       format="DD.MM.YYYY"
       :first-day-of-week="1"
       :lang="lang"
-      :input-class="state === false ? `${state} is-invalid` : state"
+      :input-class="state === false ? `is-invalid` : `is-valid`"
       :clearable="true"
     />
     <b-form-invalid-feedback :state="state">
