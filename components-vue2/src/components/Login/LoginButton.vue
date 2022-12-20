@@ -8,10 +8,7 @@
         ref="authentificated-btn"
         :text="userName"
       >
-        <b-dropdown-item
-          class="d-lg-none loginclose"
-          @click="dropdownClose('authentificated-btn')"
-        ></b-dropdown-item>
+        <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
         <b-dropdown-item class="d-lg-none loginusername">
           Здравствуйте,<br /><b>{{ userName }}</b>
         </b-dropdown-item>
@@ -33,10 +30,7 @@
         variant="login-btn"
         text="Личный кабинет"
       >
-        <b-dropdown-item
-          class="d-lg-none loginclose"
-          @click="dropdownClose('unauthentificated-btn')"
-        ></b-dropdown-item>
+        <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
         <b-dropdown-item @click="osagoBtn()" class="login-osago"
           >ОСАГО</b-dropdown-item
         >
@@ -151,9 +145,6 @@ export default {
   },
 
   methods: {
-    dropdownClose(nameform) {
-      this.$refs.nameform.hide();
-    },
     redirectToLoginPage() {
       window.location.href = "/login";
     },
