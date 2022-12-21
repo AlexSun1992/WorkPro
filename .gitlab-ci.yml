@@ -1,7 +1,7 @@
 stages:
   - "build"
-  - "deploy_actuary"
   - "deploy_test"
+  - "deploy_actuary"
   - "deploy_production"
 
 docker-build-master:
