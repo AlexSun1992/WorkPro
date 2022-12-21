@@ -98,4 +98,19 @@ describe("Модуль вывода сообщения об ошибке", () =>
       "[Внимание! Пункт меню 55/712 настроен не правильно"
     );
   });
+
+  it("Возвращаем текст из квадратных скобок", () => {
+    const errorMessageText =
+      'ORA-20105: Ошибка [Текст ошибки]\nORA-06512: на "MOBILE.CLIENTUTILS", line 7\nORA-06512: на line 1\nORA-06512: на "SYS.DBMS_SQL", line 1721\nORA-06512: на "MOBILE.AMUTILSREST", line 1692\nORA-06512: на "MOBILE.AMUTILSREST", line 1321\nORA-06512: на line 1\n';
+    const errorMessage = getErrorMessage(errorMessageText);
+    expect(errorMessage).toBe("Текст ошибки");
+  });
+
+  it("Строка, содержащая два ORA", () => {
+    const errorMessageText =
+      'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
+    const errorMessage = getErrorMessage(errorMessageText);
+    const result = `Метод: "select '742;740' as result from dual1"`;
+    expect(errorMessage).toBe(result);
+  });
 });
