@@ -91,7 +91,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
     expect(errorMessage).toBe("Текст ошибки");
   });
 
-  it.only("Проверяем тип данных,возвращаемых функцией(должен возвращать объект)", () => {
+  it("Проверяем тип данных,возвращаемых функцией(должен возвращать объект)", () => {
     const errorMessageText =
       'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
     const errorMessageWithOutORA = getErrorMessage(errorMessageText);
@@ -106,7 +106,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
     `);
   });
 
-  it.only("Строка, содержащая два ORA", () => {
+  it("Строка, содержащая два ORA", () => {
     const errorMessageText =
       'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
     const errorMessage = getErrorMessage(errorMessageText);
