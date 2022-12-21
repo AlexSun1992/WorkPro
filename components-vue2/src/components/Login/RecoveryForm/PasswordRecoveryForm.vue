@@ -286,8 +286,7 @@ export default {
           });
           const messageVNode = h("div", {
             domProps: {
-              innerHTML:
-                "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
+              innerHTML: "Вы успешно зарегистрированы в Личном кабинете",
             },
           });
           this.$bvModal
