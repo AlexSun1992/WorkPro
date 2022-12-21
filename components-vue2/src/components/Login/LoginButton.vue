@@ -7,6 +7,8 @@
         id="authentificated-btn"
         ref="authentificated-btn"
         :text="userName"
+        :show="bodySize('blocksize')"
+        :hide="bodySize('unblocksize')"
       >
         <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
         <b-dropdown-item class="d-lg-none loginusername">
@@ -145,6 +147,13 @@ export default {
   },
 
   methods: {
+    bodySize(bodystatus) {
+      if (bodystatus === "blocksize") {
+        document.body.classList.add("overflow-hidden");
+      } else {
+        document.body.classList.remove("overflow-hidden");
+      }
+    },
     redirectToLoginPage() {
       window.location.href = "/login";
     },

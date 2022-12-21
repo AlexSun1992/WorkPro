@@ -56,10 +56,14 @@
         </nuxt-link>
 
         <div class="LoginButton">
-            <b-dropdown variant="login-link" toggle-class="text-decoration-none" no-caret>
+            <b-dropdown variant="login-link" toggle-class="text-decoration-none" no-caret
+            :show="bodySize('blocksize')"
+            :hide="bodySize('unblocksize')"
+           >
               <template #button-content>
                   {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
               </template>
+              <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
               <b-dropdown-item href="/cabinet/55/0/710" class="login-profile">Профиль</b-dropdown-item>
               <b-dropdown-item @click="redirect()" class="login-osago">ОСАГО</b-dropdown-item>
               <b-dropdown-item href="#" @click="logout()" class="login-exit">Выйти из аккаунта</b-dropdown-item>
@@ -98,6 +102,15 @@ export default {
     this.userInfo = this.$auth.user;
   },
   methods: {
+    bodySize(bodystatus) {
+      if (bodystatus === "blocksize") {
+       document.querySelector("body").classList.add("overflow-hidden");
+      } 
+      if  (bodystatus === "unblocksize") {
+       document.querySelector("body").classList.remove("overflow-hidden");
+      }
+    },
+
   async redirect(){
       const token = Cookies.get(TOKEN_NAME);
       const getToken = await axios.get("/am/main/v2/redirect_lk1", {
