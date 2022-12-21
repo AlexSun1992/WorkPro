@@ -1,5 +1,7 @@
 describe("VerifyUser", () => {
   let wrapper;
 
-  const createComponent = () => {};
+  const createComponent = () => {
+    wrapper = mount();
+  };
 });
