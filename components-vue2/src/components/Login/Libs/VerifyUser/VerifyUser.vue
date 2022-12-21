@@ -142,10 +142,7 @@ import {
   BFormGroup,
   BFormInput,
   BFormInvalidFeedback,
-  BRow,
   BButton,
-  BLink,
-  BSpinner,
 } from "bootstrap-vue";
 import VerifyTimer from "./VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "./captcha.helper";
@@ -160,11 +157,8 @@ export default {
     BFormGroup,
     BFormInput,
     BFormInvalidFeedback,
-    BRow,
     VueRecaptcha,
-    BLink,
     BButton,
-    BSpinner,
   },
 
   directives: { mask },
@@ -307,6 +301,7 @@ export default {
             return null;
           };
           const response = await axios.post(getURL(), params, headers);
+
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
           if (getSuccessSendMessageText !== undefined) {
