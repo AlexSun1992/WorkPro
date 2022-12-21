@@ -681,13 +681,25 @@ export default {
         if (response?.status === 200) {
           const messageAfterSuccessRegistration =
             getMessageFromSuccessResponse(response);
+
+          const h = this.$createElement;
+          const titleVNode = h("div", {
+            domProps: {
+              innerHTML:
+                '<img src="/export/system/modules/ru.reso.v2/resources/img/icons/icon-ok.svg"><div class="mt-3">Все получилось!</div>',
+            },
+          });
+          const messageVNode = h("div", {
+            domProps: {
+              innerHTML: "Вы успешно зарегистрированы в Личном кабинете",
+            },
+          });
           this.$bvModal
-            .msgBoxOk(`${messageAfterSuccessRegistration}`, {
-              title: "Подтверждение",
+            .msgBoxOk([messageVNode], {
+              title: [titleVNode],
               size: "md",
               okVariant: "primary",
-              okTitle: "Войти в систему",
-              footerClass: "p-2",
+              okTitle: "Отлично",
               hideHeaderClose: false,
               centered: true,
               modalClass: this.myclass,
