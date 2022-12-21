@@ -16,7 +16,7 @@ module.exports = {
       "^/suggestions": {
         target: "http://localhost:8000",
       },
-      "^/loginesia": {
+      "^/idesia": {
         target: "http://localhost:8000",
       },
       "^/Branches": {
