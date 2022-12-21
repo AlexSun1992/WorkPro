@@ -20,22 +20,22 @@ docker-build-master:
   tags:
     - docker
 
-deploy_actuary:
+deploy_new.reso.ru:
   image: curlimages/curl:7.78.0
-  stage: deploy_actuary
+  stage: deploy_test
   script:
-    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_ACTUARY_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_TEST_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   rules:
     - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CI_COMMIT_REF_NAME == "production"
   tags:
     - docker
 
-deploy_test:
+deploy_test-new.reso.ru:
   image: curlimages/curl:7.78.0
-  stage: deploy_test
+  stage: deploy_actuary
   script:
-    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_TEST_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_ACTUARY_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   rules:
     - if: $CI_COMMIT_REF_NAME == "master"
       when: manual
