@@ -30,6 +30,7 @@
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @change="changeField('email')"
+          @input="removeErrorTextMessage"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
           autocomplete="off"
@@ -67,7 +68,6 @@
           autofocus
           ref="codeInput"
           v-model="v.code.$model"
-          class="mb-2"
           v-mask="codeMask"
           :state="validateInput('code', isCodeBlured)"
           @blur="blurField('code', isCodeBlured)"
@@ -88,7 +88,7 @@
     </div>
     <div class="col-12 col-lg-4 mt-3 pt-lg-1">
       <button
-        v-if="isSendCode"
+        v-if="codeFieldShown"
         @click="changeNumber"
         class="btn-link mt-lg-4 d-table"
         type="button"
@@ -102,9 +102,12 @@
       size="invisible"
       :load-recaptcha-script="true"
       :sitekey="siteKey"
-      @verify="setToken"
+      @verify="getCode"
       @expired="onCaptchaExpired"
     />
+    <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+      {{ errorMessage }}
+    </div>
     <div class="col-12 mt-4">
       <b-button
         type="submit"
@@ -113,11 +116,11 @@
           isSendCode ||
           loading
         "
-        @click="executeRecaptcha"
+        @click="getCode()"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        v-if="!isCodeFieldValid"
+        v-show="!validateInput('code', isCodeBlured) || isCodeError"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
@@ -146,7 +149,10 @@ import {
 } from "bootstrap-vue";
 import VerifyTimer from "./VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "./captcha.helper";
-import { getMessageFromSuccessResponse } from "./verifyUser.helper";
+import {
+  getMessageFromSuccessResponse,
+  getMessageFromMessageCode,
+} from "./verifyUser.helper";
 
 export default {
   components: {
@@ -200,6 +206,7 @@ export default {
       codeFieldShown: false,
       allHiddenCaptchas: null,
       meassageWasSend: null,
+      errorMessage: null,
     };
   },
 
@@ -219,6 +226,9 @@ export default {
   },
 
   methods: {
+    removeErrorTextMessage() {
+      this.errorMessage = null;
+    },
     updateField(field) {
       this.$emit("checkCodeFieldValid", this.validateState(field));
     },
@@ -259,14 +269,10 @@ export default {
     onCaptchaExpired() {
       this.$refs.recaptcha.reset();
     },
-
-    setToken(recaptcha) {
-      this.token = recaptcha;
-    },
     async getCodeHelper(params) {
       try {
         const headers = {
-          headers: { recaptcha: this.token, "X-Application": "VueJS" },
+          headers: { recaptcha: params.token },
         };
         if (
           this.loginType !== undefined &&
@@ -300,9 +306,7 @@ export default {
             }
             return null;
           };
-
           const response = await axios.post(getURL(), params, headers);
-
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
           if (getSuccessSendMessageText !== undefined) {
@@ -317,14 +321,15 @@ export default {
         return e?.response;
       }
     },
-
-    async getCode() {
+    async getCode(token = null) {
       this.v.code.$model = null;
       this.codeFieldShown = false;
       this.isPhoneChanged = false;
       this.$emit("error", null);
+      this.errorMessage = null;
       try {
         let response;
+        const isCaptcha = Boolean(token);
         const request = async (p) => {
           const data = await this.getCodeHelper(p);
           return data;
@@ -335,65 +340,71 @@ export default {
             : !this.v.email.$invalid
         ) {
           let params = this.getCodeParams(this.loginType);
-          params = {
-            ...params,
-            token: 1,
-            modeType: this.modeType,
-            error: false,
-          };
 
-          const response1 = await request(params);
-          response = response1;
-
-          if (response1.data[0].MESSAGE_CODE === 200) {
-            this.codeFieldShown = true;
-            this.loading = false;
-            this.isSendCode = true;
-          }
-
-          if (response1.data.STATUS === 500) {
-            this.loading = false;
-            this.isSendCode = false;
-            this.$emit("error", response1.data.INFO);
-            return;
-          }
-
-          if (response1?.data[0]?.ERRORCODE === 106) {
+          if (isCaptcha === false) {
             params = {
               ...params,
-              token: this.token,
+              token: 1,
+              modeType: this.modeType,
+              error: false,
+            };
+
+            const response1 = await request(params);
+            response = response1;
+
+            if (response1.data[0].MESSAGE_CODE === 200) {
+              this.codeFieldShown = true;
+              this.loading = false;
+              this.isSendCode = true;
+            }
+
+            if (response1.data.STATUS === 500) {
+              this.loading = false;
+              this.isSendCode = false;
+              this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
+              return;
+            }
+
+            if (response1?.data[0]?.ERRORCODE === 106) {
+              await this.executeRecaptcha();
+              return;
+            }
+          } else {
+            params = {
+              ...params,
+              token,
               modeType: this.modeType,
               error: true,
             };
             const response2 = await request(params);
             response = response2;
-            if (response2.data.STATUS === 500) {
+            if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
               this.loading = false;
               this.isSendCode = false;
-              this.$emit("error", response2?.data?.MESSAGE);
             } else {
               this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
             }
           }
-
           const isError = Boolean(
             response?.data[0]?.ERRORCODE || response.data.STATUS === 500
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+          //
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+          const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;
 
           if (isError === false) {
             if (
               this.modeType === "REG" &&
               this.loginType === "phone" &&
-              (isInSystemLogin || isExpiredLogin)
+              (getResponseMessageCode === 201 || getResponseMessageCode === 204)
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "Введенный Вами мобильный номер уже есть в системе.",
+                  "В Личном кабинете уже есть профиль с данным номером телефона",
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
@@ -413,7 +424,7 @@ export default {
                 .then((value) => {
                   if (value === true) {
                     if (isInSystemLogin) {
-                      this.changeNumber();
+                      window.location.href = "/login/password-recovery";
                     }
                     if (isExpiredLogin) {
                       this.isSendCode = true;
@@ -421,6 +432,9 @@ export default {
                   }
                   if (value === false) {
                     window.location.href = "/login";
+                  }
+                  if (value === null) {
+                    this.changeNumber();
                   }
                   this.loading = false;
                 })
@@ -434,10 +448,11 @@ export default {
             }
           } else if (isErrorList === true) {
             if (response?.data[0]?.ERRORCODE === 106) return;
-            this.$emit(
-              "error",
-              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "")
-            );
+            this.errorMessage =
+              response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
+                /^\[|\]$/g,
+                ""
+              ) ?? "Неизвестная ошибка";
           }
         } else {
           this.isUserDisabled = false;
@@ -474,6 +489,7 @@ export default {
       this.codeFieldShown = false;
       this.$emit("checkCodeFieldValid", false);
       this.$emit("error", null);
+      this.errorMessage = null;
       this.isUserBlured = false;
       this.v.phone.$model = "";
       this.$refs.userInput.$el.disabled = false;
@@ -499,6 +515,12 @@ export default {
   },
 
   computed: {
+    isCodeError() {
+      if (this.error) {
+        return this.error.includes("код подтверждения");
+      }
+      return false;
+    },
     changeMask() {
       if (this.loginType === "phone") {
         this.placeholder = "+7(___)-___-__-__";
@@ -515,12 +537,6 @@ export default {
     },
   },
   watch: {
-    token() {
-      if (this.token) {
-        this.getCode();
-      }
-    },
-
     isError(value) {
       if (typeof value === "string") {
         this.loading = false;
