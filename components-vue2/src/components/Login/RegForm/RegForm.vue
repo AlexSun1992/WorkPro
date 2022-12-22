@@ -37,6 +37,7 @@
         <div class="col-12 col-lg-6 mt-2" v-if="codeFieldValid">
           <b-form-group class="required" label="Фамилия" label-cols="12">
             <autocomplete
+              id="autocomplete-surname"
               ref="autocompleteSurname"
               :search="getSuggestionsSurname"
               :get-result-value="getResultValue"
@@ -102,6 +103,7 @@
         </div>
         <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4" v-if="codeFieldValid">
           <b-form-checkbox
+            id="check-box"
             class="checkbox-hide mt-3 pt-1"
             v-model="isPatronymicNotExist"
             :value="!isPatronymicNotExist"
@@ -114,6 +116,7 @@
         <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker2
+              id="birthday-picker"
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
               :disabled="registrationInProcess"
@@ -124,6 +127,7 @@
         <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
           <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
             <b-form-input
+              ref="policyNumber"
               :id="Math.random().toString()"
               v-model="form.policyNumber"
               placeholder="Номер полиса"
@@ -143,7 +147,11 @@
             :log-params="logParams"
           />
         </div>
-        <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+        <div
+          id="error-message"
+          class="col-12 invalid-feedback d-block mt-3"
+          v-if="errorMessage"
+        >
           {{ errorMessage }}
         </div>
         <div class="col-12 pt-3">
@@ -179,18 +187,9 @@ import {
   helpers,
   maxLength,
 } from "vuelidate/lib/validators";
-import {
-  BForm,
-  BFormGroup,
-  BFormInput,
-  BFormInvalidFeedback,
-  BAlert,
-  BButton,
-  BSpinner,
-} from "bootstrap-vue";
+
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
-import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
@@ -198,7 +197,6 @@ import ConfirmModal from "./ConfirmModal.vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
 
 import {
-  fetchSuggestions,
   isGenderReveal,
   userGender,
   getSuggestions,
@@ -220,18 +218,10 @@ const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 export default {
   components: {
     Autocomplete,
-    birthdayPicker,
     birthdayPicker2,
     VerifyUser,
     VerifyPassword,
     ConfirmModal,
-    BForm,
-    BFormGroup,
-    BFormInput,
-    BFormInvalidFeedback,
-    BAlert,
-    BButton,
-    BSpinner,
   },
 
   mixins: [validationMixin],
@@ -396,12 +386,12 @@ export default {
   methods: {
     changeField(field) {
       if (this.form[field] || this[field]) {
-        this.$LogEvent({
-          ...this.logParams,
-          controlName: field,
-          message: `Поле ${field} посещено`,
-          timeUser: new Date(),
-        });
+        // this.$LogEvent({
+        //   ...this.logParams,
+        //   controlName: field,
+        //   message: `Поле ${field} посещено`,
+        //   timeUser: new Date(),
+        // });
         console.log(field, this.form[field] || this[field]);
       }
     },
@@ -719,7 +709,6 @@ export default {
         this.isErrorMessage = true;
         this.errorMessage = e.response.data.INFO;
         this.registrationInProcess = false;
-        console.log(e);
       }
     },
 

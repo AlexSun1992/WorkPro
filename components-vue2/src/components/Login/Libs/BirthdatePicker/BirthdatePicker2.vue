@@ -1,6 +1,7 @@
 <template>
   <div>
     <date-picker
+      id="birth-date"
       v-model="birthdate"
       @input="setDateValue"
       @change="setDateChange"
