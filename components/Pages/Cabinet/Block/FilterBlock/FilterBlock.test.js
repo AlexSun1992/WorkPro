@@ -5,50 +5,39 @@ import FilterBlock from "./FilterBlock.vue";
 import { allBlocksMocks } from "./FilterBlock.fixtures.js";
 // import { state, actions, mutations } from "../../../../../store/blocks";
 
-import { getters as getter } from "../../../../../store/blocks";
-import { mutations as mutation } from "../../../../../store/blocks";
-import { state as states } from "../../../../../store/blocks";
+// import { getters as getter } from "../../../../../store/blocks";
+// import { mutations as mutation } from "../../../../../store/blocks";
+// import { state as states } from "../../../../../store/blocks";
+import blocks from "../../../../../store/blocks";
 // jest.mock("axios");
 
 describe("FilterBlock", () => {
-  const localVue = createLocalVue();
-  localVue.use(Vuex);
+  let wrapper;
 
-  it("first test for filterBlock", () => {
-    const $route = {
-      fullPath: "/cabinet/55/0/712",
-      query: {},
-    };
-
-    // const createComponent = () => {
-    //   wrapper = mount(LoginButton, {
-    //     mocks: {
-    //       $store: { commit: () => null },
-    //     },
-    //   });
-    // };
-
-    // const $store = new Store({
-    //   getters: getter,
-    //   mutations: mutation,
-    //   state: states,
-    // });
-
-    const wrapper = mount(FilterBlock, {
-      localVue,
-      propsData: {
-        propertyName: "SSTATUS",
-        itemId: "712",
-        showFilteredItemsCount: true,
-      },
+  const createComponent = () => {
+    wrapper = mount(FilterBlock, {
       mocks: {
-        $route,
-        $store: { commit: () => null },
+        $store: blocks,
       },
     });
+  };
+
+  it("first test for filterBlock", () => {
+    createComponent();
+
     expect(wrapper.text()).not.toBe(null);
   });
 });
+
+///
+
+// localVue,
+// propsData: {
+//   propertyName: "SSTATUS",
+//   itemId: "712",
+//   showFilteredItemsCount: true,
+// },
+///
 
 // const mockRoute = {
 //   params: {
