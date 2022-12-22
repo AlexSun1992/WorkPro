@@ -7,8 +7,8 @@
         id="authentificated-btn"
         ref="authentificated-btn"
         :text="userName"
-        :show="bodySize('blocksize')"
-        :hide="bodySize('unblocksize')"
+        @show="bodySize('blocksize')"
+        @hide="bodySize('unblocksize')"
       >
         <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
         <b-dropdown-item class="d-lg-none loginusername">

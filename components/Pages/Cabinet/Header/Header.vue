@@ -56,20 +56,27 @@
         </nuxt-link>
 
         <div class="LoginButton">
-            <b-dropdown variant="login-link" toggle-class="text-decoration-none" no-caret
-            :show="bodySize('blocksize')"
-            :hide="bodySize('unblocksize')"
-           >
-              <template #button-content>
-                  {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
-              </template>
-              <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
-              <b-dropdown-item href="/cabinet/55/0/710" class="login-profile">Профиль</b-dropdown-item>
-              <b-dropdown-item @click="redirect()" class="login-osago">ОСАГО</b-dropdown-item>
-              <b-dropdown-item href="#" @click="logout()" class="login-exit">Выйти из аккаунта</b-dropdown-item>
-
-            </b-dropdown>
-          </div>
+          <b-dropdown
+            variant="login-link"
+            toggle-class="text-decoration-none"
+            no-caret
+            @show="bodySize('blocksize')"
+            @hide="bodySize('unblocksize')"
+          >
+            <template #button-content>
+              {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
+            </template>
+            <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
+            <b-dropdown-item href="/cabinet/55/0/710" class="login-profile"
+              >Профиль</b-dropdown-item
+            >
+            <b-dropdown-item @click="redirect()" class="login-osago"
+              >ОСАГО</b-dropdown-item
+            >
+            <b-dropdown-item href="#" @click="logout()" class="login-exit"
+              >Выйти из аккаунта</b-dropdown-item
+            >
+          </b-dropdown>
         </div>
       </div>
     </div>
@@ -83,7 +90,6 @@ import LoginButton from "../../../../components-vue2/src/components/Login/LoginB
 import ShowCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
 import HeaderUserName from "./HeaderUserName.vue";
 const TOKEN_NAME = "auth._token.local";
-
 
 export default {
   name: "Header",
@@ -104,26 +110,26 @@ export default {
   methods: {
     bodySize(bodystatus) {
       if (bodystatus === "blocksize") {
-       document.querySelector("body").classList.add("overflow-hidden");
-      } 
-      if  (bodystatus === "unblocksize") {
-       document.querySelector("body").classList.remove("overflow-hidden");
+        document.body.classList.add("overflow-hidden");
+      }
+      if (bodystatus === "unblocksize") {
+        document.body.classList.remove("overflow-hidden");
       }
     },
 
-  async redirect(){
+    async redirect() {
       const token = Cookies.get(TOKEN_NAME);
       const getToken = await axios.get("/am/main/v2/redirect_lk1", {
-          headers: {
-            Authorization: token,
-            "X-Application": "VueJS",
-          },
-        });
-          const getUrl = getToken.data.find((item) => item.SURL);
-          getUrl
-            ? (window.location.href = getUrl.SURL)
-            : (window.location.href = "https://client.reso.ru/");     
-          },
+        headers: {
+          Authorization: token,
+          "X-Application": "VueJS",
+        },
+      });
+      const getUrl = getToken.data.find((item) => item.SURL);
+      getUrl
+        ? (window.location.href = getUrl.SURL)
+        : (window.location.href = "https://client.reso.ru/");
+    },
 
     toggleClassActive() {
       document.querySelector("body").classList.toggle("menu-open");
