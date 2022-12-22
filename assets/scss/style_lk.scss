@@ -195,20 +195,6 @@ header .anonsed-block {
     line-height: 24px;
 }
 
-.btn-login-link {
-    font-size: 1rem;
-    line-height: 1.125rem;
-    color: $black;
-    border: 0;
-    background: transparent url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg) right center no-repeat;
-    padding: 0 20px 0 0;
-    outline: 0;
-    max-width: 251px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 header .anonsed {
     background: url(/img/icon-anonsed.svg) 0 0 no-repeat;
     height: 24px;
@@ -2827,13 +2813,15 @@ a.action:hover {
     line-height: 1.125rem;
     color: $black;
     border: 0;
-    background: transparent url(/img/chevron-down.svg) right center no-repeat;
-    padding: 0 20px 0 0;
+    padding: 0 24px 0 0;
     outline: 0;
     max-width: 251px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    background: transparent;
+    z-index: 1;
+    position: relative;
 }
 
 .LoginButton .dropdown-menu {
@@ -2844,7 +2832,25 @@ a.action:hover {
     display: block;
 }
 
-.LoginButton .dropdown.show .dropdown-menu {
+.LoginButton>.dropdown:after {
+    content: "";
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -12px;
+    background: transparent url(/img/chevron-down.svg) 50% 50% no-repeat;
+    transition: rotate 0.2s;
+}
+
+.LoginButton>.dropdown.show:after {
+    transform: rotate(180deg);
+    transition: rotate 0.2s;
+}
+
+
+/*.LoginButton .dropdown.show .dropdown-menu {
     display: block;
     list-style: none;
     line-height: 1.5rem;
@@ -2888,6 +2894,100 @@ a.action:hover {
 
 .LoginButton .dropdown.show .dropdown-menu li:nth-child(2) a {
     background: transparent url(/img/exit.svg) left center no-repeat !important;
+}*/
+
+@at-root .LoginButton .dropdown.show .dropdown-menu {
+    display: block;
+    list-style: none;
+    line-height: 1.5rem;
+    padding: 0;
+    background: #fff;
+    box-sizing: border-box;
+    border-radius: 14px;
+    margin-top: 11px !important;
+    right: 16px !important;
+    left: auto !important;
+    border: 1px solid #dfe3e5;
+    box-sizing: border-box;
+    box-shadow: 0 4px 26px rgba(0, 0, 0, 0.08);
+    border-radius: 30px;
+    outline: 0;
+    overflow: hidden;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li a {
+    line-height: 72px;
+    display: block;
+    font-size: 1rem;
+    white-space: nowrap;
+    color: #292929;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 0 30px 0 60px;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li {
+    position: relative;
+    margin-bottom: 1px;
+    overflow: visible;
+    padding: 0 !important;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li:after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    height: 1px;
+    width: calc(100% - 60px);
+    left: 50%;
+    background: #dadada;
+    transform: translateX(-50%);
+}
+
+.LoginButton .dropdown.show .dropdown-menu li:last-of-type {
+    margin-bottom: 0;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li:last-of-type:after {
+    display: none;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li.login-profile a {
+    background-color: #ffffff;
+    background-image: url(/img/login-profile.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
+    transition: 0.2s;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li.login-osago a {
+    background-color: #ffffff;
+    background-image: url(/img/login-osago.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
+    transition: 0.2s;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li.login-exit a {
+    background-color: #ffffff;
+    background-image: url(/img/login-exit.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
+    transition: 0.2s;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li.login-polises a {
+    background-color: #ffffff;
+    background-image: url(/img/login-polises.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
+    transition: 0.2s;
+}
+
+.LoginButton .dropdown.show .dropdown-menu li:hover a,
+.LoginButton .dropdown.show .dropdown-menu li:hover {
+    background-color: #f2f4f5 !important;
+    transition: 0.2s;
 }
 
 input.is-invalid {
@@ -4089,4 +4189,87 @@ h6 {
     border: 2px solid #eff1f3;
     color: #bec7cb;
     pointer-events: none;
+}
+
+@media (max-width: 992px) {
+    .login-form {
+        z-index: 1;
+        position: relative;
+        display: inline-block;
+        float: right;
+        margin-top: 20px;
+        top: 0;
+        transform: none;
+    }
+    .btn-login-link {
+        margin-top: 7px;
+        max-width: 162px;
+        box-sizing: border-box;
+        z-index: 2;
+        position: relative;
+        background: transparent;
+    }
+    .LoginButton>#authentificated-btn.dropdown:after {
+        margin-top: -7px;
+    }
+    .LoginButton>.dropdown.show:before,
+    #unauthentificated-btn.show:after {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background: #00000090;
+        z-index: 1;
+    }
+    .LoginButton .dropdown.show .dropdown-menu {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0;
+        left: 0 !important;
+        width: 100%;
+        transform: none !important;
+        border-radius: 30px 30px 0 0;
+        margin: 0 !important;
+        z-index: 2;
+    }
+    .LoginButton .loginclose a:hover,
+    .LoginButton .loginclose a {
+        height: 5px;
+        margin: 10px auto 16px;
+        width: 69px;
+        background: #c3c3c3 !important;
+        border-radius: 5px;
+    }
+    .LoginButton .dropdown.show .dropdown-menu li.loginclose:after {
+        display: none;
+    }
+    .LoginButton .dropdown.show .dropdown-menu li.loginclose:hover {
+        background-color: #fff !important;
+    }
+    .btn-login-btn:focus {
+        background-color: transparent;
+        border: 0;
+    }
+    .LoginButton .dropdown.show .dropdown-menu li.loginusername a {
+        font-size: 1.125rem;
+        color: #686868;
+        line-height: 1.2;
+        font-weight: 400;
+        padding: 0 30px 32px;
+    }
+    .loginusername {
+        pointer-events: none;
+    }
+    .LoginButton .dropdown.show .dropdown-menu li.loginusername a b {
+        color: #292929;
+    }
+    .app-block .link-app,
+    .app-block .qr-code {
+        z-index: 0;
+    }
+    .sidebar-nav-container>a {
+        cursor: pointer;
+    }
 }

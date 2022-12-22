@@ -113,7 +113,7 @@
 
         <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
-            <birthday-picker
+            <birthday-picker2
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
               :disabled="registrationInProcess"
@@ -172,7 +172,13 @@
 <script>
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import { required, minLength, sameAs, helpers } from "vuelidate/lib/validators";
+import {
+  required,
+  minLength,
+  sameAs,
+  helpers,
+  maxLength,
+} from "vuelidate/lib/validators";
 import {
   BForm,
   BFormGroup,
@@ -183,7 +189,9 @@ import {
   BSpinner,
 } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
+import moment from "moment";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
+import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import ConfirmModal from "./ConfirmModal.vue";
@@ -202,12 +210,18 @@ import {
   fetchName,
 } from "./dadata.helper";
 
+import {
+  minLengthPassword,
+  maxLengthPassword,
+} from "./regform.helper.fixtures";
+
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
 export default {
   components: {
     Autocomplete,
     birthdayPicker,
+    birthdayPicker2,
     VerifyUser,
     VerifyPassword,
     ConfirmModal,
@@ -251,7 +265,7 @@ export default {
         "На Ваш номер телефона был отправлен код, который необходимо ввести.",
       errorMessage: null,
       isErrorMessage: false,
-      myclass: ["cabinet"],
+      myclass: ["cabinet regpopup"],
       //
       suggestionsHub: [],
       gender: "",
@@ -304,10 +318,14 @@ export default {
       },
       password: {
         required,
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
+        minLength: minLength(minLengthPassword),
+        maxLength: maxLength(maxLengthPassword),
       },
       phone: {
         required,
@@ -375,7 +393,6 @@ export default {
       }
     },
   },
-
   methods: {
     changeField(field) {
       if (this.form[field] || this[field]) {
@@ -393,14 +410,6 @@ export default {
     },
     async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
-      // this.$nextTick(() => {
-      //   this.$v.$reset();
-      //   this.form.password = "";
-      //   this.form.password2 = "";
-      //   this.form.policyNumber = "";
-      //   this.surnameClassHub = [];
-      //   this.nameClassHub = [];
-      // });
     },
     handleBlur(field) {
       // Валидация
@@ -647,7 +656,10 @@ export default {
           FIRSTNAME: this.name,
           THIRDNAME: this.patronymic,
           THIRDNAMENOTEXISTS: this.isPatronymicNotExist ? "Y" : "N",
-          BIRTHDATE: this.$v.form.birthdate.$model,
+          BIRTHDATE: moment(this.$v.form.birthdate.$model, [
+            "DD.MM.YYYY",
+            "YYYY-MM-DD",
+          ]).format("YYYY-MM-DD"),
           PHONE: this.$v.form.phone.$model,
           CODE: this.$v.form.code.$model,
           POLICY_NUMBER: this.form.policyNumber,
@@ -669,14 +681,25 @@ export default {
         if (response?.status === 200) {
           const messageAfterSuccessRegistration =
             getMessageFromSuccessResponse(response);
+
+          const h = this.$createElement;
+          const titleVNode = h("div", {
+            domProps: {
+              innerHTML:
+                '<img src="/export/system/modules/ru.reso.v2/resources/img/icons/icon-ok.svg"><div class="mt-3">Все получилось!</div>',
+            },
+          });
+          const messageVNode = h("div", {
+            domProps: {
+              innerHTML: "Вы успешно зарегистрированы в Личном кабинете",
+            },
+          });
           this.$bvModal
-            .msgBoxOk(`${messageAfterSuccessRegistration}`, {
-              title: "Подтверждение",
+            .msgBoxOk([messageVNode], {
+              title: [titleVNode],
               size: "md",
-              buttonSize: "md",
-              okVariant: "success",
-              okTitle: "Войти в систему",
-              footerClass: "p-2",
+              okVariant: "primary",
+              okTitle: "Отлично",
               hideHeaderClose: false,
               centered: true,
               modalClass: this.myclass,

@@ -1,16 +1,18 @@
 const express = require("express");
+
 const app = express();
 
-const { routerList } = require("./../api/list");
-const { routerCard } = require("./../api/card");
-const { routerConfigurator } = require("./../api/configurator");
-const { routerDic } = require("./../api/dic");
-const { routerWizard } = require("./../api/wizard");
-const { routerUser } = require("./../api/user");
-const { routerRefresh } = require("./../api/refresh");
-const { routerDadata } = require("./../api/dadata");
-const { routerMenu } = require("./../api/menu");
-const { routerHealthcheck } = require("./../api/healthcheck");
+const { routerList } = require("../api/list");
+const { routerCard } = require("../api/card");
+const { routerConfigurator } = require("../api/configurator");
+const { routerDic } = require("../api/dic");
+const { routerWizard } = require("../api/wizard");
+const { routerUser } = require("../api/user");
+const { routerRefresh } = require("../api/refresh");
+const { routerDadata } = require("../api/dadata");
+const { routerMenu } = require("../api/menu");
+const { routerHealthcheck } = require("../api/healthcheck");
+const { routerVersion } = require("../api/version");
 
 app.use(routerList);
 app.use(routerCard);
@@ -22,6 +24,7 @@ app.use(routerRefresh);
 app.use(routerDadata);
 app.use(routerMenu);
 app.use(routerHealthcheck);
+app.use(routerVersion);
 
 module.exports = {
   path: "/api",
