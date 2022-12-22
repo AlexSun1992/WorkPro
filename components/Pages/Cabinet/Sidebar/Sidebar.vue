@@ -3,8 +3,16 @@
     <a href="/" aria-current="page" class="logo"></a>
     <button class="menu-burger" @click="toggleClassActive"></button>
     <template v-for="(value, key) in groupMenuItems">
-      <div class="sidebar-nav-container">
-        <a v-if="key != 'undefined'" href="#" @click="openSidebarnav">
+      <div
+        class="sidebar-nav-container"
+        :class="{ show: openMenuLink.includes(key) }"
+      >
+        <a
+          v-if="key != 'undefined'"
+          href="#"
+          @click="openSidebarnav(key)"
+          :class="{ active: openMenuLink.includes(key) }"
+        >
           {{ key }}
         </a>
         <ul class="sidebar-nav justify-content-center">
@@ -70,6 +78,7 @@ export default {
       sideBarMini: false,
       url: null,
       userInfo: null,
+      openMenuLink: [],
     };
   },
   created() {
@@ -81,10 +90,14 @@ export default {
     this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
   },
   methods: {
-    openSidebarnav(e) {
-      console.log(e);
-      e.path[1].classList.toggle("show");
-      e.path[0].classList.toggle("active");
+    openSidebarnav(activeLink) {
+      if (this.openMenuLink.includes(activeLink)) {
+        this.openMenuLink = this.openMenuLink.filter(
+          (key) => key !== activeLink
+        );
+      } else {
+        this.openMenuLink.push(activeLink);
+      }
     },
     toggleClassActive(e) {
       if (window.innerWidth <= 992) {
