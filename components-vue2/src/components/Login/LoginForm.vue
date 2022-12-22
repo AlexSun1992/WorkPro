@@ -89,7 +89,7 @@
               ref="phoneInput"
               v-model="$v.user.username.$model"
               placeholder="Телефон или e-mail"
-              type="tel"
+              type="text"
               :state="wrongAuthData ? false : validateState('username')"
               @blur="$v.user.username.$touch()"
               @input="wrongAuthData = false"
