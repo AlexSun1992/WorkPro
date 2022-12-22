@@ -21,7 +21,9 @@ export function convertErrorMessageToArray(errorMessage) {
  */
 
 export function getErrorNumber(errorMessage) {
-  const getDoubleCloseMistake = errorMessage.match(/\s?ORA-\d{5}:\s?ORA-\d{5}/);
+  const getDoubleCloseMistake = errorMessage.match(
+    /^\s?ORA-\d{5}:\s?ORA-\d{5}/
+  );
   if (getDoubleCloseMistake) {
     const getArrWithMistakes = errorMessage.match(/\s?ORA-\d{5}/g);
     const onlyPureMistakesName = getArrWithMistakes.filter(
@@ -33,9 +35,6 @@ export function getErrorNumber(errorMessage) {
       [, compareNumber] = onlyPureMistakesName;
     }
 
-    if (onlyPureMistakesName.length <= 1) {
-      [compareNumber] = onlyPureMistakesName;
-    }
     return compareNumber;
   }
   const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
@@ -78,7 +77,6 @@ export function getErrorMessage(errorMessage) {
 
       return pureMessageText[1];
     }
-
     return stringWithBrackets[1];
   }
 
