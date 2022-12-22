@@ -17,13 +17,11 @@
         </a>
         <ul class="sidebar-nav justify-content-center">
           <li
-            v-if="
-              key === 'страховой случай по ДМС' && loggedInUser.IDMEDPARTNER > 0
-            "
+            v-if="key === 'ДМС' && loggedInUser.IDMEDPARTNER > 0"
             class="sidebar-nav-item"
           >
             <a :href="url" target="blank" :class="'menu-icon-telemed'">
-              Видео-консультация
+              Телемедицина
             </a>
           </li>
           <n-link
