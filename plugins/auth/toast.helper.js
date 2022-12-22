@@ -20,14 +20,11 @@ export function convertErrorMessageToArray(errorMessage) {
  * @returns {string}
  */
 
-export function getErrorMessage(errorMessage) {
-  const [errMessageString] = convertErrorMessageToArray(errorMessage);
-
-  const stringWithBrackets = errMessageString.match(/\[(.+)]/);
-
-  const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
-
-  if (getORAnumber) {
+export function getErrorNumber(errorMessage) {
+  const getDoubleCloseMistake = errorMessage.match(
+    /^\s?ORA-\d{5}:\s?ORA-\d{5}/
+  );
+  if (getDoubleCloseMistake) {
     const getArrWithMistakes = errorMessage.match(/\s?ORA-\d{5}/g);
     const onlyPureMistakesName = getArrWithMistakes.filter(
       (item) => !item.includes("\n")
@@ -38,11 +35,23 @@ export function getErrorMessage(errorMessage) {
       [, compareNumber] = onlyPureMistakesName;
     }
 
-    if (onlyPureMistakesName.length <= 1) {
-      [compareNumber] = onlyPureMistakesName;
-    }
+    return compareNumber;
+  }
+  const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
+  return getORAnumber;
+}
 
-    if (MAX_ORA_ERROR > compareNumber) {
+export function getErrorMessage(errorMessage) {
+  const [errMessageString] = convertErrorMessageToArray(errorMessage);
+
+  const stringWithBrackets = errMessageString.match(/\[(.+)]/);
+
+  const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
+
+  if (getORAnumber) {
+    const errNumber = getErrorNumber(errorMessage);
+
+    if (MAX_ORA_ERROR > errNumber) {
       return {
         errorText:
           "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
@@ -68,7 +77,6 @@ export function getErrorMessage(errorMessage) {
 
       return pureMessageText[1];
     }
-
     return stringWithBrackets[1];
   }
 
