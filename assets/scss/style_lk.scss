@@ -1335,6 +1335,10 @@ footer .copyright a:hover {
     transition: 0.3s;
 }
 
+button.freecard:hover .block-policy:hover {
+    box-shadow: none;
+}
+
 body.menu-open {
     width: 100vw;
     height: 100vh;
