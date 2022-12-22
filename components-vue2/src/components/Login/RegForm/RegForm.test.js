@@ -87,13 +87,23 @@ describe("RegForm", () => {
         },
       ],
     });
-
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
+    expect(axios.post).toHaveBeenCalledWith(
+      "/am/free/v2/sendsmscode",
+      {
+        PHONE: "+7(910)-123-22-33",
+        error: false,
+        loginType: "phone",
+        modeType: "REG",
+        token: 1,
+      },
+      { headers: { recaptcha: 1 } }
+    );
 
     await wrapper.find("#sms-confirm").setValue("12345");
 
@@ -133,5 +143,67 @@ describe("RegForm", () => {
     await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
 
     expect(dataPickerInput.classes()).toContain("is-valid");
+
+    await wrapper.find("#password1").setValue("12345");
+    expect(wrapper.find("#password1").classes()).toContain("is-invalid");
+
+    await wrapper.find("#password1").setValue("123456");
+    expect(wrapper.find("#password1").classes()).toContain("is-valid");
+
+    await wrapper.find("#password2").setValue("12345");
+    expect(wrapper.find("#password2").classes()).toContain("is-invalid");
+
+    await wrapper.find("#password2").setValue("123456");
+    expect(wrapper.find("#password2").classes()).toContain("is-valid");
+
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE:
+            'ORA-20105: Неправильно введен код подтверждения или истек срок действия.\nORA-06512: на  "MOBILE.AMAUTH3", line 74\nORA-06512: на  "MOBILE.AMAUTH3", line 558\nORA-06512: на  line 1\n',
+          STATUS: 500,
+          REASON: "Internal Server Error",
+          INFO: "Неправильно введен код подтверждения или истек срок действия.",
+        },
+      };
+      throw wrongAuthError;
+    });
+
+    axios.post.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [{ MESSAGE: "Вы успешно зарегистрированы", MESSAGE_CODE: "200" }],
+      })
+    );
+
+    await wrapper.find("#btn_chek_registration_lk").trigger("click");
+
+    expect(wrapper.find("#error-message").exists()).toBe(true);
+
+    expect(wrapper.find("#error-message").text()).toContain(
+      "Неправильно введен код подтверждения или истек срок действия."
+    );
+
+    await wrapper.find("#btn_chek_registration_lk").trigger("click");
+
+    expect(wrapper.find("#error-message").exists()).toBe(false);
+
+    expect(axios.post).toHaveBeenLastCalledWith(
+      "/am/free/v2/registration",
+      {
+        BIRTHDATE: "2022-12-21",
+        CODE: "12345",
+        FIRSTNAME: "П",
+        PASSWORD: "123456",
+        PASSWORD_CONFIRM: "123456",
+        PHONE: "+7(910)-123-22-33",
+        POLICY_NUMBER: "",
+        SECONDNAME: "П",
+        THIRDNAME: "",
+        THIRDNAMENOTEXISTS: "Y",
+        USER_CONFIRM: "Y",
+      },
+      { headers: { "X-Application": "VueJS", recaptcha: undefined } }
+    );
   });
 });

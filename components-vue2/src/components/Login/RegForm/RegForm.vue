@@ -147,7 +147,11 @@
             :log-params="logParams"
           />
         </div>
-        <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+        <div
+          id="error-message"
+          class="col-12 invalid-feedback d-block mt-3"
+          v-if="errorMessage"
+        >
           {{ errorMessage }}
         </div>
         <div class="col-12 pt-3">
@@ -705,7 +709,6 @@ export default {
         this.isErrorMessage = true;
         this.errorMessage = e.response.data.INFO;
         this.registrationInProcess = false;
-        console.log(e);
       }
     },
 
