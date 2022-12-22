@@ -28,8 +28,21 @@ export function getErrorMessage(errorMessage) {
   const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
 
   if (getORAnumber) {
-    const getORAtext = errorMessage.match(/\s?ORA-\d{5}/)[0];
-    if (MAX_ORA_ERROR > getORAtext) {
+    const getArrWithMistakes = errorMessage.match(/\s?ORA-\d{5}/g);
+    const onlyPureMistakesName = getArrWithMistakes.filter(
+      (item) => !item.includes("\n")
+    );
+
+    let compareNumber;
+    if (onlyPureMistakesName.length >= 2) {
+      [, compareNumber] = onlyPureMistakesName;
+    }
+
+    if (onlyPureMistakesName.length <= 1) {
+      [compareNumber] = onlyPureMistakesName;
+    }
+
+    if (MAX_ORA_ERROR > compareNumber) {
       return {
         errorText:
           "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
@@ -42,7 +55,6 @@ export function getErrorMessage(errorMessage) {
 
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
-
     const transformErrorTextToArray =
       getErrorTextWithBrackets.match(/\[.+?\]/g);
 
