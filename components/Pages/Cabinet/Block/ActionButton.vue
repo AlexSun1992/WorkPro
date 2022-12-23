@@ -126,10 +126,12 @@ export default {
                 }`
               );
             } else {
-              window.open(
-                result.POUTVALUE,
-                this.action.LCURWINDOW ? "_self" : "_blank"
-              );
+              setTimeout(() => {
+                window.open(
+                  result.POUTVALUE,
+                  this.action.LCURWINDOW ? "_self" : "_blank"
+                );
+              });
             }
           }
         }
