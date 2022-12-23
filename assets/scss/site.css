@@ -1,4 +1,4 @@
-Сканирование@font-face {
+@font-face {
     font-family: Raleway;
     src: ("/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.eot");
     src: local("Raleway SemiBold"), local("Raleway-SemiBold"), url(/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.eot?#iefix) format("embedded-opentype"), url(/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.woff) format("woff"), url(/system/modules/ru.reso.v2/resources/fonts/Raleway-SemiBold.ttf) format("truetype");
@@ -510,7 +510,7 @@ component-show-city .collapse {
 
 .main_page>header {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     padding-top: 50px
 }
 
@@ -980,38 +980,41 @@ header .search-block input[type=text]:focus {
 }
 
 .LoginButton .dropdown.show .dropdown-menu li.login-profile a {
-    background-color: #ffffff;
-    background-image: url(../img/icons/login-profile.svg);
-    background-position: 30px center;
-    background-repeat: no-repeat;
+    background-color: #ffffff !important;
+    background-image: url(../img/icons/login-profile.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
 }
 
 .LoginButton .dropdown.show .dropdown-menu li.login-osago a {
-    background-color: #ffffff;
-    background-image: url(../img/icons/login-osago.svg);
-    background-position: 30px center;
-    background-repeat: no-repeat;
+    background-color: #ffffff !important;
+    background-image: url(../img/icons/login-osago.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
 }
 
 .LoginButton .dropdown.show .dropdown-menu li.login-exit a {
-    background-color: #ffffff;
-    background-image: url(../img/icons/login-exit.svg);
-    background-position: 30px center;
-    background-repeat: no-repeat;
+    background-color: #ffffff !important;
+    background-image: url(../img/icons/login-exit.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
 }
 
 .LoginButton .dropdown.show .dropdown-menu li.login-polises a {
-    background-color: #ffffff;
-    background-image: url(../img/icons/login-polises.svg);
-    background-position: 30px center;
-    background-repeat: no-repeat;
+    background-color: #ffffff !important;
+    background-image: url(../img/icons/login-polises.svg) !important;
+    background-position: 30px center !important;
+    background-repeat: no-repeat !important;
 }
 
+.LoginButton .dropdown.show .dropdown-menu li:hover a,
+.LoginButton .dropdown.show .dropdown-menu li a:hover,
 .LoginButton .dropdown.show .dropdown-menu li:hover {
     background-color: #F2F4F5 !important;
+    transition: 0.2s;
 }
 
-.LoginButton>.dropdown:after {
+.LoginButton>#authentificated-btn.dropdown:after {
     content: "";
     width: 24px;
     height: 24px;
@@ -1021,10 +1024,10 @@ header .search-block input[type=text]:focus {
     margin-top: -12px;
     background: transparent url(../img/icons/chevron-lk.svg) 50% 50% no-repeat;
     transition: rotate .2s;
-    transform: rotate(180deg);
+    transform: rotate(180deg)
 }
 
-.LoginButton>.dropdown.show:after {
+.LoginButton>#authentificated-btn.dropdown.show:after {
     transform: rotate(0deg);
     transition: rotate .2s;
 }
@@ -2121,11 +2124,6 @@ footer a {
         border-color: transparent;
         box-shadow: none
     }
-    .btn-light.icon-arrow-right-mob {
-        /*
-        padding: 0 15px 0 0 !important
-		*/
-    }
     .LoginButton {
         line-height: 0
     }
@@ -2136,7 +2134,8 @@ footer a {
         background: url(../img/icons/Union.svg) center center no-repeat;
         font-size: 0;
         width: 20px;
-        height: 20px
+        height: 20px;
+        margin-top: 6px;
     }
     .btn-login-btn:hover {
         background: url(../img/icons/Union.svg) center center no-repeat;
@@ -6734,6 +6733,7 @@ input[placeholder="Код подтверждения"].is-valid {
 }
 
 .sms-confirm-modal h5.modal-title,
+.regpopup h5.modal-title,
 .okrecovery h5.modal-title,
 .verifyuser h5.modal-title {
     font-family: 'Raleway';
@@ -6746,6 +6746,7 @@ input[placeholder="Код подтверждения"].is-valid {
 }
 
 .sms-confirm-modal .modal-body,
+.regpopup .modal-body,
 .okrecovery .modal-body,
 .verifyuser .modal-body {
     font-size: 1.125rem;
@@ -6754,24 +6755,28 @@ input[placeholder="Код подтверждения"].is-valid {
 }
 
 .sms-confirm-modal.modal-content,
+.regpopup .modal-content,
 .okrecovery .modal-content,
 .verifyuser .modal-content {
     padding: 120px 50px 50px;
 }
 
 .sms-confirm-modal .modal-header,
+.regpopup .modal-header,
 .okrecovery .modal-header,
 .verifyuser .modal-header {
     padding-bottom: 12px;
 }
 
 .sms-confirm-modal .modal-body,
+.regpopup .modal-body,
 .okrecovery .modal-body,
 .verifyuser .modal-body {
     margin-top: 0;
 }
 
 .sms-confirm-modal footer,
+.regpopup footer,
 .okrecovery footer,
 .verifyuser footer {
     margin-top: 20px;
@@ -6780,6 +6785,7 @@ input[placeholder="Код подтверждения"].is-valid {
 
 .sms-confirm-modal footer,
 .sms-confirm-modal footer button,
+.regpopup footer,
 .okrecovery footer,
 .verifyuser footer,
 .verifyuser footer button {
@@ -6791,6 +6797,7 @@ input[placeholder="Код подтверждения"].is-valid {
 }
 
 .sms-confirm-modal .modal-header .close,
+.regpopup .modal-header .close,
 .okrecovery .modal-header .close,
 .verifyuser .modal-header .close {
     right: 50px;
@@ -6798,6 +6805,7 @@ input[placeholder="Код подтверждения"].is-valid {
 }
 
 #sms-confirm-modal.modal.show .modal-dialog,
+.regpopup.modal.show .modal-dialog,
 .okrecovery.modal.show .modal-dialog,
 .verifyuser.modal.show .modal-dialog {
     max-width: 568px;
@@ -6805,6 +6813,7 @@ input[placeholder="Код подтверждения"].is-valid {
 
 @media (max-width:992px) {
     .sms-confirm-modal.modal-content,
+    .regpopup .modal-content,
     .okrecovery .modal-content,
     .verifyuser .modal-content {
         position: absolute;
@@ -6822,6 +6831,7 @@ input[placeholder="Код подтверждения"].is-valid {
         left: 0;
     }
     #sms-confirm-modal.modal.show .modal-dialog,
+    .regpopup.modal.show .modal-dialog,
     .okrecovery.modal.show .modal-dialog,
     .verifyuser.modal.show .modal-dialog {
         max-width: 100%;
@@ -6829,11 +6839,13 @@ input[placeholder="Код подтверждения"].is-valid {
         margin: 0;
     }
     .sms-confirm-modal footer button,
+    .regpopup footer button,
     .okrecovery footer button,
     .verifyuser footer button {
         width: 100%;
     }
     .sms-confirm-modal h5.modal-title,
+    .regpopup h5.modal-title,
     .okrecovery h5.modal-title,
     .verifyuser h5.modal-title {
         text-align: center;
@@ -6843,6 +6855,7 @@ input[placeholder="Код подтверждения"].is-valid {
         line-height: 1;
     }
     .sms-confirm-modal .modal-body,
+    .regpopup .modal-body,
     .okrecovery .modal-body,
     .verifyuser .modal-body {
         text-align: center;
@@ -6850,6 +6863,7 @@ input[placeholder="Код подтверждения"].is-valid {
         line-height: 1.2;
     }
     .sms-confirm-modal .modal-header .close,
+    .regpopup .modal-header .close,
     .okrecovery .modal-header .close,
     .verifyuser .modal-header .close {
         position: absolute;
@@ -7033,4 +7047,85 @@ button {
     background: transparent;
     border: 0;
     position: relative;
+}
+
+@media (max-width:992px) {
+    .login-form {
+        z-index: 1;
+        position: relative;
+        display: inline-block;
+        float: right;
+        margin-top: 20px;
+        top: 0;
+        transform: none;
+    }
+    .btn-login-link {
+        margin-top: 7px;
+        max-width: 162px;
+        box-sizing: border-box;
+        z-index: 2;
+        position: relative;
+        background: transparent;
+    }
+    .LoginButton>#authentificated-btn.dropdown:after {
+        margin-top: -7px;
+    }
+    #authentificated-btn.show:before,
+    #unauthentificated-btn.show:after {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background: #00000090;
+        z-index: 1;
+    }
+    .LoginButton .dropdown.show .dropdown-menu {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0;
+        left: 0 !important;
+        width: 100%;
+        transform: none !important;
+        border-radius: 30px 30px 0 0;
+        margin: 0 !important;
+        z-index: 2;
+    }
+    .LoginButton .dropdown.show .dropdown-menu li.loginclose:hover a,
+    .LoginButton .loginclose a:hover,
+    .LoginButton .loginclose a {
+        height: 5px;
+        margin: 10px auto 16px;
+        width: 69px;
+        background: #C3C3C3 !important;
+        border-radius: 5px;
+    }
+    .LoginButton .dropdown.show .dropdown-menu li.loginclose:after {
+        display: none;
+    }
+    .LoginButton .dropdown.show .dropdown-menu li.loginclose:hover {
+        background-color: #Fff !important;
+    }
+    .btn-login-btn:focus {
+        background-color: transparent;
+        border: 0;
+    }
+    .LoginButton .dropdown.show .dropdown-menu li.loginusername a {
+        font-size: 1.125rem;
+        color: #686868;
+        line-height: 1.2;
+        font-weight: 400;
+        padding: 0 30px 32px;
+    }
+    .loginusername {
+        pointer-events: none;
+    }
+    .LoginButton .dropdown.show .dropdown-menu li.loginusername a b {
+        color: #292929;
+    }
+    .app-block .link-app,
+    .app-block .qr-code {
+        z-index: 0;
+    }
 }
