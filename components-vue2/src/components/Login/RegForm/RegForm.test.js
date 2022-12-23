@@ -36,6 +36,36 @@ describe("RegForm", () => {
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
   });
+  it("Регистрация существующего номера телефона", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue });
+    axios.post.mockReturnValue({
+      data: [{ MESSAGE_CODE: 201 }],
+    });
+
+    const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
+    const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
+    spy.mockImplementation(() => Promise.resolve(true));
+
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/",
+        pathname: "/",
+      },
+    });
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(spy).toHaveBeenCalled();
+    expect(window.location.href).toEqual("/login/password-recovery");
+  });
   it("должен отображать поля после ввода кода подверждения", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
@@ -137,12 +167,19 @@ describe("RegForm", () => {
       .findComponent("#birthday-picker")
       .find("input");
 
-    dataPickerInput.setValue("21.12.2022");
-
+    dataPickerInput.setValue("21.12.2052");
     dataPickerInput.trigger("change");
-
     await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
+    expect(dataPickerInput.classes()).not.toContain("is-valid");
 
+    dataPickerInput.setValue("21.12.1852");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
+    expect(dataPickerInput.classes()).not.toContain("is-valid");
+
+    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
     expect(dataPickerInput.classes()).toContain("is-valid");
 
     await wrapper.find("#password1").setValue("12345");
