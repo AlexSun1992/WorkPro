@@ -676,7 +676,7 @@ export default {
           const titleVNode = h("div", {
             domProps: {
               innerHTML:
-                '<img src="/export/system/modules/ru.reso.v2/resources/img/icons/icon-ok.svg"><div class="mt-3">Все получилось!</div>',
+                '<img src="/export/system/modules/ru.reso.v2/resources/img/icons/icon-ok.svg"><div id="success" class="mt-3">Все получилось!</div>',
             },
           });
           const messageVNode = h("div", {
@@ -686,6 +686,7 @@ export default {
           });
           this.$bvModal
             .msgBoxOk([messageVNode], {
+              id: "modal-reg-success",
               title: [titleVNode],
               size: "md",
               okVariant: "primary",
@@ -693,6 +694,7 @@ export default {
               hideHeaderClose: false,
               centered: true,
               modalClass: this.myclass,
+              static: true,
               autoFocusButton: "ok",
             })
             .then((value) => {

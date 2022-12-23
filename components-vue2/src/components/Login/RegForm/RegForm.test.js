@@ -1,6 +1,6 @@
 import { createLocalVue, mount } from "@vue/test-utils";
 
-import { BootstrapVue } from "bootstrap-vue";
+import { BootstrapVue, ModalPlugin } from "bootstrap-vue";
 
 import axios from "axios";
 
@@ -77,7 +77,8 @@ describe("RegForm", () => {
   it("должен корректно заполнять форму", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, { localVue });
+    // localVue.use(ModalPlugin);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
     axios.post.mockReturnValue({
       data: [
         {
@@ -173,6 +174,7 @@ describe("RegForm", () => {
     axios.post.mockImplementationOnce(() =>
       Promise.resolve({
         data: [{ MESSAGE: "Вы успешно зарегистрированы", MESSAGE_CODE: "200" }],
+        status: 200,
       })
     );
 
@@ -183,6 +185,12 @@ describe("RegForm", () => {
     expect(wrapper.find("#error-message").text()).toContain(
       "Неправильно введен код подтверждения или истек срок действия."
     );
+
+    const spy = jest.spyOn(wrapper.vm.$bvModal, "msgBoxOk");
+    spy.mockImplementation(() => Promise.resolve());
+
+    const location = jest.spyOn(global, "window", "get");
+    Object.defineProperty(window, "location", location);
 
     await wrapper.find("#btn_chek_registration_lk").trigger("click");
 
@@ -205,5 +213,8 @@ describe("RegForm", () => {
       },
       { headers: { "X-Application": "VueJS", recaptcha: undefined } }
     );
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(spy).toHaveBeenCalled();
   });
 });
