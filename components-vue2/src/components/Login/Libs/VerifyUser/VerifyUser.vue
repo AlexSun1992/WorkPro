@@ -51,7 +51,7 @@
         </b-form-invalid-feedback>
 
         <b-form-invalid-feedback v-if="v.email && v.email.email === false"
-          >Пожалуйста, введите корректный email</b-form-invalid-feedback
+          >Пожалуйста, введите корректный e-mail</b-form-invalid-feedback
         >
 
         <b-form-invalid-feedback
