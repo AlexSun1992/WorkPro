@@ -276,6 +276,7 @@ export default {
           "/am/free/v2/restorepassword",
           params
         );
+
         if (response.data[0].MESSAGE_CODE === "200") {
           const h = this.$createElement;
           const titleVNode = h("div", {

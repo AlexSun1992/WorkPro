@@ -1,9 +1,36 @@
-import { mount } from "@vue/test-utils";
+import { createLocalVue, mount } from "@vue/test-utils";
+import { BootstrapVue } from "bootstrap-vue";
+import axios from "axios";
 import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
+
+jest.mock("axios");
 
 describe("PasswordRecoveryForm", () => {
   afterEach(() => {
     jest.restoreAllMocks();
+  });
+
+  it("Должен показать сообщение об отсутствии профиля с указанным номером телефона", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(PasswordRecoveryForm, { localVue });
+
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 203,
+        },
+      ],
+    });
+
+    await wrapper.find("#phone").setValue("+7(902)-000-10-00");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.text()).toContain(
+      "В Личном кабинете отсутствует профиль с данным номером телефона"
+    );
   });
 
   it("Должен показывать сообщение об ошибке при наличии русского символа", async () => {
@@ -39,13 +66,5 @@ describe("PasswordRecoveryForm", () => {
     expect(verificationButton.attributes("disabled")).toBe("disabled");
     await wrapper.find("#phone").setValue("+7(499)-000-00-02");
     expect(verificationButton.attributes("disabled")).toBe(undefined);
-  });
-
-  it.only("проверяем программу", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
-    console.log("wrapper:before", wrapper.html());
-    await wrapper.find("#phone").setValue("+7(902)-000-10-00");
-    await wrapper.find("#btn_code_verification_lk").trigger("click");
-    console.log("wrapper:after", wrapper.html());
   });
 });
