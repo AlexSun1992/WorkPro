@@ -149,6 +149,7 @@ import { isCaptchaBecomesHide } from "./captcha.helper";
 import {
   getMessageFromSuccessResponse,
   getMessageFromMessageCode,
+  isAlertShouldBeShown,
 } from "./verifyUser.helper";
 
 export default {
@@ -322,6 +323,7 @@ export default {
       this.isPhoneChanged = false;
       this.$emit("error", null);
       this.errorMessage = null;
+
       try {
         let response;
         const isCaptcha = Boolean(token);
@@ -346,6 +348,20 @@ export default {
 
             const response1 = await request(params);
             response = response1;
+            const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
+
+            const isAlertShown = isAlertShouldBeShown(
+              this.modeType,
+              this.loginType,
+              getResponseMessageCodeErr
+            );
+            if (isAlertShown) {
+              this.codeFieldShown = false;
+              this.errorMessage =
+                "В Личном кабинете отсутствует профиль с данным номером телефона";
+              this.isSendCode = false;
+              return;
+            }
 
             if (response1.data[0].MESSAGE_CODE === 200) {
               this.codeFieldShown = true;
@@ -357,11 +373,13 @@ export default {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
+
               return;
             }
 
             if (response1?.data[0]?.ERRORCODE === 106) {
               await this.executeRecaptcha();
+
               return;
             }
           } else {
@@ -373,6 +391,21 @@ export default {
             };
             const response2 = await request(params);
             response = response2;
+
+            const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
+
+            const isAlertShown = isAlertShouldBeShown(
+              this.modeType,
+              this.loginType,
+              getResponseMessageCodeErr
+            );
+            if (isAlertShown) {
+              this.codeFieldShown = false;
+              this.errorMessage =
+                "В Личном кабинете отсутствует профиль с данным номером телефона";
+              this.isSendCode = false;
+              return;
+            }
             if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
               this.loading = false;
               this.isSendCode = false;
@@ -386,7 +419,7 @@ export default {
             response?.data[0]?.ERRORCODE || response.data.STATUS === 500
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
-          //
+
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;

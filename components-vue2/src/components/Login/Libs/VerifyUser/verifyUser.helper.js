@@ -58,3 +58,10 @@ export function getMessageFromMessageCode(errorCode) {
 
   return "";
 }
+
+export function isAlertShouldBeShown(modeType, loginType, errCode) {
+  if (errCode === 203 && modeType === "RECOVERY" && loginType === "phone") {
+    return true;
+  }
+  return false;
+}
