@@ -267,7 +267,7 @@ export default {
     async getCodeHelper(params) {
       try {
         const headers = {
-          headers: { recaptcha: params.token },
+          headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         if (
           this.loginType !== undefined &&
@@ -346,7 +346,12 @@ export default {
               error: false,
             };
 
-            const response1 = await request(params);
+            const headers = {
+              headers: { recaptcha: params.token, "X-Application": "VueJS" },
+            };
+
+            const response1 = await request(params, headers);
+
             response = response1;
             const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
 
@@ -389,7 +394,10 @@ export default {
               modeType: this.modeType,
               error: true,
             };
-            const response2 = await request(params);
+            const headers = {
+              headers: { recaptcha: params.token, "X-Application": "VueJS" },
+            };
+            const response2 = await request(params, headers);
             response = response2;
 
             const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
