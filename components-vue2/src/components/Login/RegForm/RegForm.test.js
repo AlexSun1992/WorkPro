@@ -189,8 +189,11 @@ describe("RegForm", () => {
     const spy = jest.spyOn(wrapper.vm.$bvModal, "msgBoxOk");
     spy.mockImplementation(() => Promise.resolve());
 
-    const location = jest.spyOn(global, "window", "get");
-    Object.defineProperty(window, "location", location);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/",
+      },
+    });
 
     await wrapper.find("#btn_chek_registration_lk").trigger("click");
 
@@ -216,5 +219,6 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(spy).toHaveBeenCalled();
+    expect(window.location.href).toEqual("/login");
   });
 });
