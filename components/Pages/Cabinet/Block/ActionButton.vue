@@ -126,6 +126,7 @@ export default {
                 }`
               );
             } else {
+              // Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
               setTimeout(() => {
                 window.open(
                   result.POUTVALUE,
