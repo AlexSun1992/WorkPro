@@ -103,7 +103,7 @@ describe("RegForm", () => {
         modeType: "REG",
         token: 1,
       },
-      { headers: { recaptcha: 1 } }
+      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
     );
 
     await wrapper.find("#sms-confirm").setValue("12345");
