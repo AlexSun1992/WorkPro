@@ -700,10 +700,12 @@ a.lgreen {
 .block-policy .title {
     margin-top: 140px;
     margin-bottom: 12px;
+    color: #292929;
 }
 
 .block-policy .description * {
     font-size: 0.875rem;
+    color: #292929;
 }
 
 .insured-events {
@@ -3087,6 +3089,12 @@ input.is-invalid {
     .insured-events .settlement {
         font-size: 1rem;
         color: $black;
+    }
+    .block-policy .description {
+        text-align: left;
+    }
+    .block-policy .description>div {
+        padding-top: 1rem;
     }
     .block-policy .title {
         margin: 0;
