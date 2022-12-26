@@ -171,7 +171,6 @@ describe("RegForm", () => {
   it("должен корректно заполнять форму", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    // localVue.use(ModalPlugin);
     const wrapper = mount(RegForm, { localVue, attachTo: document.body });
     axios.post.mockReturnValue({
       data: [
@@ -321,5 +320,91 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login");
+  });
+  it.only("Необходимо валидировать отчество при 'загрязнении' поля", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE:
+            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(axios.post).toHaveBeenCalledWith(
+      "/am/free/v2/sendsmscode",
+      {
+        PHONE: "+7(910)-123-22-33",
+        error: false,
+        loginType: "phone",
+        modeType: "REG",
+        token: 1,
+      },
+      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
+    );
+
+    await wrapper.find("#sms-confirm").setValue("12345");
+
+    const patronymicComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const patronymicInput = patronymicComponent.find("input");
+    await patronymicInput.setValue("П");
+    await patronymicInput.setValue("");
+    expect(patronymicComponent.classes()).toContain("is-invalid");
+  });
+
+  it.only("При нажатии чекбокса 'нет отчества' убирает ошибку у поля отчества при неверной валидации", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE:
+            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(axios.post).toHaveBeenCalledWith(
+      "/am/free/v2/sendsmscode",
+      {
+        PHONE: "+7(910)-123-22-33",
+        error: false,
+        loginType: "phone",
+        modeType: "REG",
+        token: 1,
+      },
+      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
+    );
+
+    await wrapper.find("#sms-confirm").setValue("12345");
+
+    const patronymicComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const patronymicInput = patronymicComponent.find("input");
+
+    await patronymicInput.setValue("П");
+    await patronymicInput.setValue("");
+
+    await wrapper.find("#check-box").setChecked();
+
+    expect(patronymicInput.attributes().disabled).toBe("disabled");
+    expect(patronymicComponent.classes()).not.toContain("is-invalid");
   });
 });

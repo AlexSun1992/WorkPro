@@ -78,7 +78,11 @@
           </b-form-group>
         </div>
 
-        <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
+        <div
+          class="col-12 col-lg-6 mt-2 mt-lg-3"
+          v-if="codeFieldValid"
+          id="patronymic"
+        >
           <b-form-group
             label="Отчество (при наличии)"
             label-cols="12"
@@ -94,7 +98,9 @@
               @blur="handleBlur('patronymic')"
               @submit="changeField('patronymic')"
             />
-
+            <b-form-invalid-feedback :state="isPatronymicErrorMessage"
+              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            >
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
@@ -386,6 +392,14 @@ export default {
   },
   methods: {
     changeField(field) {
+      if (
+        field === "isPatronymicNotExist" &&
+        this.isPatronymicNotExist === true
+      ) {
+        this.patronymicClassHub = [];
+        this.isPatronymicValidSignsErrorMessage = null;
+        this.isPatronymicErrorMessage = null;
+      }
       if (this.form[field] || this[field]) {
         // this.$LogEvent({
         //   ...this.logParams,
@@ -416,6 +430,13 @@ export default {
         if (this.name === "") {
           this.isNameErrorMessage = false;
           this.nameClassHub.push("is-invalid");
+        }
+      }
+
+      if (field === "patronymic") {
+        if (this.patronymic === "") {
+          this.isPatronymicErrorMessage = false;
+          this.patronymicClassHub.push("is-invalid");
         }
       }
 
@@ -466,6 +487,7 @@ export default {
           this.isPatronymicTouch = true;
           this.isPatronymicErrorMessage = true;
           this.isPatronymicValidSignsErrorMessage = true;
+          getArrayWithClass(this.patronymicClassHub, "is-valid");
         }
 
         if (isInputNotValid) {
@@ -480,6 +502,7 @@ export default {
         this.isPatronymicErrorMessage = false;
         this.isPatronymicValidSignsErrorMessage = true;
         this.patronymicClassHub = [];
+        getArrayWithClass(this.patronymicClassHub, "is-invalid");
       }
 
       const isGenderRevealed = isGenderReveal(
@@ -524,7 +547,6 @@ export default {
           this.isSurnameErrorMessage = true;
           this.isSurnameTouch = true;
           this.isSurnameValidSignsErrorMessage = true;
-
           getArrayWithClass(this.surnameClassHub, "is-valid");
         }
         if (isInputNotValid) {
@@ -729,6 +751,11 @@ export default {
         if (this.nameClassHub.length === 0) {
           this.nameClassHub.push("is-invalid");
           this.isNameErrorMessage = false;
+        }
+
+        if (this.patronymicClassHub.length === 0) {
+          this.patronymicClassHub.push("is-invalid");
+          this.isPatronymicErrorMessage = false;
         }
 
         if (
