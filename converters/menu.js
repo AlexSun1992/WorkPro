@@ -107,6 +107,7 @@ converter.menuObject = (data) => {
     obj.isWizard = data.IDADMMENUTYPE === 14;
     obj.isForm = data.IDADMMENUTYPE === 9;
     obj.isPortal = data.IDADMMENUTYPE === 16 || data.IDADMMENUTYPE === 17;
+    obj.isTelemed = data.IDADMMENUTYPE === 501;
     obj.wizard = wizardConverter.wizard(data.WIZARDCUR);
     obj.portalgrid = data.SVJPORTALGRID || null;
     obj.cardgrid = data.SVJCARDGRID || null;

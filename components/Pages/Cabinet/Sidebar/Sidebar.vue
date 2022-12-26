@@ -16,16 +16,13 @@
           {{ key }}
         </a>
         <ul class="sidebar-nav justify-content-center">
-          <li
-            v-if="key === 'ДМС' && loggedInUser.IDMEDPARTNER > 0"
-            class="sidebar-nav-item"
-          >
+          <li v-if="value.find((i) => i.isTelemed)" class="sidebar-nav-item">
             <a :href="url" target="blank" :class="'menu-icon-telemed'">
-              Телемедицина
+              {{ value.find((i) => i.isTelemed).name }}
             </a>
           </li>
           <n-link
-            v-for="item in value"
+            v-for="item in value.filter((i) => !i.isTelemed)"
             :key="item.id"
             v-slot="{ href, navigate, isActive }"
             :to="item.url"
