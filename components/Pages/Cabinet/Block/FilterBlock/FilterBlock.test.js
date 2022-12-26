@@ -3,12 +3,13 @@ import axios from "axios";
 import Vuex, { Store } from "vuex";
 import FilterBlock from "./FilterBlock.vue";
 import { allBlocksMocks } from "./FilterBlock.fixtures.js";
+import blocks from "../../../../../store/blocks";
 // import { state, actions, mutations } from "../../../../../store/blocks";
 
 // import { getters as getter } from "../../../../../store/blocks";
 // import { mutations as mutation } from "../../../../../store/blocks";
 // import { state as states } from "../../../../../store/blocks";
-import blocks from "../../../../../store/blocks";
+import menu from "../../../../../store/menu";
 // jest.mock("axios");
 
 describe("FilterBlock", () => {
@@ -17,15 +18,15 @@ describe("FilterBlock", () => {
   const createComponent = () => {
     wrapper = mount(FilterBlock, {
       mocks: {
-        $store: blocks,
+        $store: [blocks, menu],
       },
     });
   };
 
   it("first test for filterBlock", () => {
     createComponent();
-
-    expect(wrapper.text()).not.toBe(null);
+    console.log(wrapper.html());
+    // expect(wrapper.text()).not.toBe(null);
   });
 });
 
