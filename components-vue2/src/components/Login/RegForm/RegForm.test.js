@@ -36,17 +36,18 @@ describe("RegForm", () => {
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
   });
-  it("Регистрация существующего номера телефона", async () => {
+  it("должен предупреждать если номер существует", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, { localVue });
+
     axios.post.mockReturnValue({
       data: [{ MESSAGE_CODE: 201 }],
     });
 
     const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
     const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
-    spy.mockImplementation(() => Promise.resolve(true));
+    spy.mockImplementationOnce(() => Promise.resolve(true));
 
     Object.defineProperty(window, "location", {
       value: {
@@ -59,12 +60,36 @@ describe("RegForm", () => {
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
+
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login/password-recovery");
+
+    spy.mockImplementationOnce(() => Promise.resolve(false));
+
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+
+    expect(spy).toHaveBeenCalled();
+    expect(window.location.href).toEqual("/login");
+
+    spy.mockImplementationOnce(() => Promise.resolve(null));
+
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(spy).toHaveBeenCalled();
+    expect(wrapper.find("#phone").element.value).toBe("");
   });
   it("должен отображать поля после ввода кода подверждения", async () => {
     const localVue = createLocalVue();
