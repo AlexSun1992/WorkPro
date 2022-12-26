@@ -13,6 +13,45 @@ describe("RegForm", () => {
     jest.resetAllMocks();
   });
 
+  it("должен показывать ошибку", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue });
+
+    axios.post.mockReturnValue({
+      data: [
+        {
+          ERRORLIST: [
+            {
+              ERRORTEXT:
+                "Что-то пошло не так. Наши разработчики уже разбираются с проблемой.",
+            },
+          ],
+          ERRORCODE: 105,
+          ERROR: "[Смотрите список ошибок.]",
+        },
+      ],
+    });
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+
+    expect(
+      wrapper.find("#btn_code_verification_lk").attributes().disabled
+    ).toBeDefined();
+
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.find("#verify-error-message").exists()).toBe(true);
+    expect(
+      wrapper.find("#btn_code_verification_lk").attributes().disabled
+    ).not.toBeDefined();
+  });
+
   it("должен показать поле код подверждения", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);

@@ -105,7 +105,11 @@
       @verify="getCode"
       @expired="onCaptchaExpired"
     />
-    <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+    <div
+      id="verify-error-message"
+      class="col-12 invalid-feedback d-block mt-3"
+      v-if="errorMessage"
+    >
       {{ errorMessage }}
     </div>
     <div class="col-12 mt-4">
