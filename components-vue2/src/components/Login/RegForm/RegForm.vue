@@ -283,6 +283,7 @@ export default {
       requestToDadataParamsPartsHub: [],
     };
   },
+
   mounted() {
     const currentURL = window.location.pathname;
     this.$nextTick(() => {
