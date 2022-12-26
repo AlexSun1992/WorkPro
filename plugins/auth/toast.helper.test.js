@@ -95,28 +95,24 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageText =
       'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
     const errorMessageWithOutORA = getErrorMessage(errorMessageText);
-
-    expect(errorMessageWithOutORA).toMatchInlineSnapshot(`
-      Object {
-        "errorHref": "/cabinet",
-        "errorLink": "Главную Личного кабинета.",
-        "errorText": "Приносим извинения, в Личном Кабинете что-то пошло не так.
-      Просим обновить страницу или перейти на ",
-      }
-    `);
+    expect(errorMessageWithOutORA).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
   });
 
   it("Строка, содержащая два ORA", () => {
     const errorMessageText =
       'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
-    const errorMessage = getErrorMessage(errorMessageText);
-    expect(errorMessage).toMatchInlineSnapshot(`
-      Object {
-        "errorHref": "/cabinet",
-        "errorLink": "Главную Личного кабинета.",
-        "errorText": "Приносим извинения, в Личном Кабинете что-то пошло не так.
-      Просим обновить страницу или перейти на ",
-      }
-    `);
+    const errorMessage = getErrorMessage(errorMessageText, true);
+    expect(typeof errorMessage).toBe("function");
+  });
+
+  it("Строка, содержащая два ORA", () => {
+    const errorMessageText =
+      'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
+    const errorMessage = getErrorMessage(errorMessageText, false);
+    expect(errorMessage).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
   });
 });

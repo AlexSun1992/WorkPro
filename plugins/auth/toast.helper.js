@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 const MAX_ORA_ERROR = "ORA-10000";
 
 /**
@@ -41,27 +43,30 @@ export function getErrorNumber(errorMessage) {
   return getORAnumber;
 }
 
-export function getErrorMessage(errorMessage) {
+export function getErrorMessage(errorMessage, isVueComponentRender) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
-
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
 
   const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
-
   if (getORAnumber) {
     const errNumber = getErrorNumber(errorMessage);
 
     if (MAX_ORA_ERROR > errNumber) {
-      return {
-        errorText:
-          "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
-          "Просим обновить страницу или перейти на ",
-        errorLink: "Главную Личного кабинета.",
-        errorHref: "/cabinet",
-      };
+      const errorText =
+        "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
+        "Просим обновить страницу или перейти на ";
+      const errorLink = "Главную Личного кабинета.";
+      const errorHref = "/cabinet";
+
+      if (isVueComponentRender) {
+        const $el = Vue.component("alert-message", {
+          template: `<p>${errorText}<a href="${errorHref}">${errorLink}</a></p>`,
+        });
+        return $el;
+      }
+      return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
     }
   }
-
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
     const transformErrorTextToArray =
