@@ -1,4 +1,7 @@
 import { getErrorMessage } from "./toast.helper";
+import { mount } from "@vue/test-utils";
+
+import Vue from "vue";
 
 describe("Модуль вывода сообщения об ошибке", () => {
   it("Должен обрабатывать сообщения с ORA в тексте без скобок", () => {
@@ -101,10 +104,17 @@ describe("Модуль вывода сообщения об ошибке", () =>
   });
 
   it("Строка, содержащая два ORA", () => {
+    const wrapper = mount(Vue.component("test-component", {}));
+
     const errorMessageText =
       'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
-    const errorMessage = getErrorMessage(errorMessageText, true);
-    expect(typeof errorMessage).toBe("function");
+
+    const errorMessage = getErrorMessage(
+      errorMessageText,
+      wrapper.vm.$createElement
+    );
+
+    expect(typeof errorMessage[0]).toBe("object");
   });
 
   it("Строка, содержащая два ORA", () => {
