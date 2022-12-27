@@ -575,10 +575,13 @@ export default {
   },
   watch: {
     errorMessage(value) {
-      if (
-        value ===
+      const isPhoneExist = value.includes(
         "В Личном кабинете отсутствует профиль с данным номером телефона"
-      ) {
+      );
+      const isMailExist = value.includes(
+        "На указанный email отсутствует зарегистрированная уч.запись"
+      );
+      if (isPhoneExist || isMailExist) {
         this.loading = false;
       }
     },
