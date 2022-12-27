@@ -250,7 +250,6 @@ export default {
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
-
       if (visibleCaptchas.length === 0) {
         this.loading = false;
       }
@@ -382,13 +381,11 @@ export default {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
-
               return;
             }
 
             if (response1?.data[0]?.ERRORCODE === 106) {
               await this.executeRecaptcha();
-
               return;
             }
           } else {
@@ -577,6 +574,15 @@ export default {
     },
   },
   watch: {
+    errorMessage(value) {
+      if (
+        value ===
+        "В Личном кабинете отсутствует профиль с данным номером телефона"
+      ) {
+        this.loading = false;
+      }
+    },
+
     isError(value) {
       if (typeof value === "string") {
         this.loading = false;
