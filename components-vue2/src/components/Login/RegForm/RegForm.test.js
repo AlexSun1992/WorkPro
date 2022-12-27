@@ -168,6 +168,7 @@ describe("RegForm", () => {
       true
     );
   });
+
   it("должен корректно заполнять форму", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
@@ -181,8 +182,8 @@ describe("RegForm", () => {
         },
       ],
     });
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
@@ -279,9 +280,7 @@ describe("RegForm", () => {
     );
 
     await wrapper.find("#btn_chek_registration_lk").trigger("click");
-
     expect(wrapper.find("#error-message").exists()).toBe(true);
-
     expect(wrapper.find("#error-message").text()).toContain(
       "Неправильно введен код подтверждения или истек срок действия."
     );
@@ -296,9 +295,7 @@ describe("RegForm", () => {
     });
 
     await wrapper.find("#btn_chek_registration_lk").trigger("click");
-
     expect(wrapper.find("#error-message").exists()).toBe(false);
-
     expect(axios.post).toHaveBeenLastCalledWith(
       "/am/free/v2/registration",
       {
@@ -321,7 +318,8 @@ describe("RegForm", () => {
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login");
   });
-  it.only("Необходимо валидировать отчество при 'загрязнении' поля", async () => {
+
+  it("Необходимо валидировать отчество при 'загрязнении' поля", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, { localVue, attachTo: document.body });
@@ -362,7 +360,7 @@ describe("RegForm", () => {
     expect(patronymicComponent.classes()).toContain("is-invalid");
   });
 
-  it.only("При нажатии чекбокса 'нет отчества' убирает ошибку у поля отчества при неверной валидации", async () => {
+  it("При нажатии чекбокса 'нет отчества' убирает ошибку у поля отчества при неверной валидации", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, { localVue, attachTo: document.body });

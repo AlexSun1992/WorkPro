@@ -753,7 +753,10 @@ export default {
           this.isNameErrorMessage = false;
         }
 
-        if (this.patronymicClassHub.length === 0) {
+        if (
+          this.patronymicClassHub.length === 0 &&
+          this.isPatronymicNotExist === false
+        ) {
           this.patronymicClassHub.push("is-invalid");
           this.isPatronymicErrorMessage = false;
         }
