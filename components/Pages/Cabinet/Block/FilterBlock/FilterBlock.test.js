@@ -12,13 +12,33 @@ import blocks from "../../../../../store/blocks";
 import menu from "../../../../../store/menu";
 // jest.mock("axios");
 
+jest.mock("this.$route.query");
+
 describe("FilterBlock", () => {
   let wrapper;
+  const route = {
+    fullPath: "/cabinet/55/0/712",
+    query: {
+      filters: '[{"propertyName":"SSTATUS","filter":["Архивные"],"id":"712"}]',
+    },
+  };
+  // const test = JSON.stringify([object Object])
 
   const createComponent = () => {
     wrapper = mount(FilterBlock, {
       mocks: {
         $store: [blocks, menu],
+        // $route: route,
+      },
+      propsData: {
+        itemId: 712,
+        propertyName: "SSTATUS",
+        showFilteredItemsCount: true,
+        query: {
+          filters:
+            '[{"propertyName":"SSTATUS","filter":["Архивные"],"id":"712"}]',
+        },
+        $route: route,
       },
     });
   };

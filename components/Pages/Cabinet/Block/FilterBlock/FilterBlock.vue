@@ -4,6 +4,11 @@
       v-if="filterType !== 'query' && filterType !== 'combobox'"
       class="filterblock"
     >
+      <p>itemId:{{ this.itemId }}</p>
+      <p>propertyName:{{ this.propertyName }}</p>
+      <p>showFilteredItemsCount:{{ showFilteredItemsCount }}</p>
+      <p>query:{{ this.$route.query }}</p>
+
       <button
         v-if="showButtonAll"
         :data-activeitems="
@@ -222,6 +227,7 @@ export default {
   methods: {
     getSameTypeUnitsCount,
     toggleFilter(propertyName, item) {
+      console.log("this:", this.$route);
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
         propertyName,
