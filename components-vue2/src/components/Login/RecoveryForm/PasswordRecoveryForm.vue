@@ -276,6 +276,7 @@ export default {
           "/am/free/v2/restorepassword",
           params
         );
+
         if (response.data[0].MESSAGE_CODE === "200") {
           const h = this.$createElement;
           const titleVNode = h("div", {
@@ -286,7 +287,8 @@ export default {
           });
           const messageVNode = h("div", {
             domProps: {
-              innerHTML: "Вы успешно зарегистрированы в Личном кабинете",
+              innerHTML:
+                "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
             },
           });
           this.$bvModal

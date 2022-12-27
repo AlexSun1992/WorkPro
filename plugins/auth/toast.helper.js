@@ -1,3 +1,5 @@
+// import { h } from "vue";
+
 const MAX_ORA_ERROR = "ORA-10000";
 
 /**
@@ -41,27 +43,28 @@ export function getErrorNumber(errorMessage) {
   return getORAnumber;
 }
 
-export function getErrorMessage(errorMessage) {
+export function getErrorMessage(errorMessage, h) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
-
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
 
   const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
-
   if (getORAnumber) {
     const errNumber = getErrorNumber(errorMessage);
 
     if (MAX_ORA_ERROR > errNumber) {
-      return {
-        errorText:
-          "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
-          "Просим обновить страницу или перейти на ",
-        errorLink: "Главную Личного кабинета.",
-        errorHref: "/cabinet",
-      };
+      if (h) {
+        const vnode = h("div", {
+          domProps: {
+            innerHTML:
+              "<p>Приносим извинения, в личном кабинете что-то пошло не так.\n" +
+              "Просим обновить страницу или перейти на <a href='/cabinet'>главную личного кабинета.</a></p>",
+          },
+        });
+        return [vnode];
+      }
+      return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
     }
   }
-
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
     const transformErrorTextToArray =

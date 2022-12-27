@@ -3,7 +3,7 @@
     <b-col sm="12" lg="6">
       <b-form-group :label="showLabel" label-cols="12" class="required">
         <b-form-input
-          :id="Math.random().toString()"
+          id="password1"
           type="password"
           v-model="v.password.$model"
           :state="validateState('password')"
@@ -32,7 +32,7 @@
         class="required"
       >
         <b-form-input
-          :id="Math.random().toString()"
+          id="password2"
           type="password"
           autocomplete="new-password"
           v-model="v.password2.$model"
@@ -51,17 +51,16 @@
 
 <script>
 import {
-  minLengthPassword,
-  maxLengthPassword,
-} from "../../RegForm/regform.helper.fixtures";
-
-import {
   BFormInvalidFeedback,
   BFormInput,
   BFormGroup,
   BCol,
   BRow,
 } from "bootstrap-vue";
+import {
+  minLengthPassword,
+  maxLengthPassword,
+} from "../../RegForm/regform.helper.fixtures";
 
 export default {
   props: [

@@ -1,4 +1,7 @@
 import { getErrorMessage } from "./toast.helper";
+import { mount } from "@vue/test-utils";
+
+import Vue from "vue";
 
 describe("Модуль вывода сообщения об ошибке", () => {
   it("Должен обрабатывать сообщения с ORA в тексте без скобок", () => {
@@ -95,28 +98,31 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageText =
       'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
     const errorMessageWithOutORA = getErrorMessage(errorMessageText);
+    expect(errorMessageWithOutORA).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
+  });
 
-    expect(errorMessageWithOutORA).toMatchInlineSnapshot(`
-      Object {
-        "errorHref": "/cabinet",
-        "errorLink": "Главную Личного кабинета.",
-        "errorText": "Приносим извинения, в Личном Кабинете что-то пошло не так.
-      Просим обновить страницу или перейти на ",
-      }
-    `);
+  it("Строка, содержащая два ORA", () => {
+    const wrapper = mount(Vue.component("test-component", {}));
+
+    const errorMessageText =
+      'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
+
+    const errorMessage = getErrorMessage(
+      errorMessageText,
+      wrapper.vm.$createElement
+    );
+
+    expect(typeof errorMessage[0]).toBe("object");
   });
 
   it("Строка, содержащая два ORA", () => {
     const errorMessageText =
       'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
-    const errorMessage = getErrorMessage(errorMessageText);
-    expect(errorMessage).toMatchInlineSnapshot(`
-      Object {
-        "errorHref": "/cabinet",
-        "errorLink": "Главную Личного кабинета.",
-        "errorText": "Приносим извинения, в Личном Кабинете что-то пошло не так.
-      Просим обновить страницу или перейти на ",
-      }
-    `);
+    const errorMessage = getErrorMessage(errorMessageText, false);
+    expect(errorMessage).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
   });
 });

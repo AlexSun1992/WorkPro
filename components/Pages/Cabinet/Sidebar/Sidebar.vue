@@ -16,18 +16,10 @@
           {{ key }}
         </a>
         <ul class="sidebar-nav justify-content-center">
-          <li
-            v-if="key === 'ДМС' && loggedInUser.IDMEDPARTNER > 0"
-            class="sidebar-nav-item"
-          >
-            <a :href="url" target="blank" :class="'menu-icon-telemed'">
-              Телемедицина
-            </a>
-          </li>
           <n-link
             v-for="item in value"
             :key="item.id"
-            v-slot="{ href, navigate, isActive }"
+            v-slot="{ navigate, isActive }"
             :to="item.url"
             @click="toggleClassActive"
           >
@@ -35,7 +27,8 @@
               :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'"
             >
               <a
-                :href="href"
+                :target="item.target"
+                :href="item.url"
                 @click="
                   (e) => {
                     navigate(e);
@@ -130,7 +123,13 @@ export default {
     groupMenuItems() {
       const groups = this.navItems.reduce((acc, item) => {
         const group = acc[item.groupmenu] || [];
-        group.push(item);
+        const itemMenu = { ...item };
+        itemMenu.target = "_self";
+        if (itemMenu.isTelemed) {
+          itemMenu.url = this.url;
+          itemMenu.target = "_blank";
+        }
+        group.push(itemMenu);
         acc[item.groupmenu] = group;
         return acc;
       }, {});

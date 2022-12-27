@@ -51,7 +51,7 @@
         </b-form-invalid-feedback>
 
         <b-form-invalid-feedback v-if="v.email && v.email.email === false"
-          >Пожалуйста, введите корректный email</b-form-invalid-feedback
+          >Пожалуйста, введите корректный e-mail</b-form-invalid-feedback
         >
 
         <b-form-invalid-feedback
@@ -105,7 +105,11 @@
       @verify="getCode"
       @expired="onCaptchaExpired"
     />
-    <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+    <div
+      id="verify-error-message"
+      class="col-12 invalid-feedback d-block mt-3"
+      v-if="errorMessage"
+    >
       {{ errorMessage }}
     </div>
     <div class="col-12 mt-4">
@@ -142,16 +146,14 @@ import {
   BFormGroup,
   BFormInput,
   BFormInvalidFeedback,
-  BRow,
   BButton,
-  BLink,
-  BSpinner,
 } from "bootstrap-vue";
 import VerifyTimer from "./VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import {
   getMessageFromSuccessResponse,
   getMessageFromMessageCode,
+  isAlertShouldBeShown,
 } from "./verifyUser.helper";
 
 export default {
@@ -160,11 +162,8 @@ export default {
     BFormGroup,
     BFormInput,
     BFormInvalidFeedback,
-    BRow,
     VueRecaptcha,
-    BLink,
     BButton,
-    BSpinner,
   },
 
   directives: { mask },
@@ -272,7 +271,7 @@ export default {
     async getCodeHelper(params) {
       try {
         const headers = {
-          headers: { recaptcha: params.token },
+          headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         if (
           this.loginType !== undefined &&
@@ -307,6 +306,7 @@ export default {
             return null;
           };
           const response = await axios.post(getURL(), params, headers);
+
           const getSuccessSendMessageText =
             getMessageFromSuccessResponse(response);
           if (getSuccessSendMessageText !== undefined) {
@@ -327,6 +327,7 @@ export default {
       this.isPhoneChanged = false;
       this.$emit("error", null);
       this.errorMessage = null;
+
       try {
         let response;
         const isCaptcha = Boolean(token);
@@ -349,8 +350,27 @@ export default {
               error: false,
             };
 
-            const response1 = await request(params);
+            const headers = {
+              headers: { recaptcha: params.token, "X-Application": "VueJS" },
+            };
+
+            const response1 = await request(params, headers);
+
             response = response1;
+            const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
+
+            const isAlertShown = isAlertShouldBeShown(
+              this.modeType,
+              this.loginType,
+              getResponseMessageCodeErr
+            );
+            if (isAlertShown) {
+              this.codeFieldShown = false;
+              this.errorMessage =
+                "В Личном кабинете отсутствует профиль с данным номером телефона";
+              this.isSendCode = false;
+              return;
+            }
 
             if (response1.data[0].MESSAGE_CODE === 200) {
               this.codeFieldShown = true;
@@ -362,11 +382,13 @@ export default {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
+
               return;
             }
 
             if (response1?.data[0]?.ERRORCODE === 106) {
               await this.executeRecaptcha();
+
               return;
             }
           } else {
@@ -376,8 +398,26 @@ export default {
               modeType: this.modeType,
               error: true,
             };
-            const response2 = await request(params);
+            const headers = {
+              headers: { recaptcha: params.token, "X-Application": "VueJS" },
+            };
+            const response2 = await request(params, headers);
             response = response2;
+
+            const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
+
+            const isAlertShown = isAlertShouldBeShown(
+              this.modeType,
+              this.loginType,
+              getResponseMessageCodeErr
+            );
+            if (isAlertShown) {
+              this.codeFieldShown = false;
+              this.errorMessage =
+                "В Личном кабинете отсутствует профиль с данным номером телефона";
+              this.isSendCode = false;
+              return;
+            }
             if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
               this.loading = false;
               this.isSendCode = false;
@@ -391,7 +431,7 @@ export default {
             response?.data[0]?.ERRORCODE || response.data.STATUS === 500
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
-          //
+
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;

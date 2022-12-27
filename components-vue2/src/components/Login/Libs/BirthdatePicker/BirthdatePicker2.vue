@@ -1,6 +1,7 @@
 <template>
   <div>
     <date-picker
+      id="birth-date"
       v-model="birthdate"
       @input="setDateValue"
       @change="setDateChange"
@@ -26,6 +27,7 @@
 <script>
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/locale/ru";
+import "vue2-datepicker/index.css";
 import { mask } from "vue-the-mask";
 
 function getDate(value) {

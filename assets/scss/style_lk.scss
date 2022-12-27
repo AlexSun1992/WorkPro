@@ -700,10 +700,12 @@ a.lgreen {
 .block-policy .title {
     margin-top: 140px;
     margin-bottom: 12px;
+    color: #292929;
 }
 
 .block-policy .description * {
     font-size: 0.875rem;
+    color: #292929;
 }
 
 .insured-events {
@@ -1333,6 +1335,10 @@ footer .copyright a:hover {
 .freecard:hover {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     transition: 0.3s;
+}
+
+button.freecard:hover .block-policy:hover {
+    box-shadow: none;
 }
 
 body.menu-open {
@@ -2839,7 +2845,7 @@ a.action:hover {
     position: absolute;
     right: 0;
     top: 50%;
-    margin-top: -12px;
+    margin-top: -9px;
     background: transparent url(/img/chevron-down.svg) 50% 50% no-repeat;
     transition: rotate 0.2s;
 }
@@ -3022,7 +3028,7 @@ input.is-invalid {
 
 @media (max-width: 450px) {
     .LoginButton .btn-login-link {
-        max-width: 175px;
+        max-width: 160px;
     }
 }
 
@@ -3084,6 +3090,12 @@ input.is-invalid {
         font-size: 1rem;
         color: $black;
     }
+    .block-policy .description {
+        text-align: left;
+    }
+    .block-policy .description>div {
+        padding-top: 0.5rem;
+    }
     .block-policy .title {
         margin: 0;
         top: 40px;
@@ -3095,7 +3107,7 @@ input.is-invalid {
     }
     .block-policy .date {
         position: absolute;
-        top: 16px;
+        top: 0.5rem;
         z-index: 1;
     }
     .block-policy {
@@ -4271,5 +4283,23 @@ h6 {
     }
     .sidebar-nav-container>a {
         cursor: pointer;
+    }
+    .step-text {
+        left: 50%;
+        top: 55px;
+    }
+    .harvestmite>div {
+        min-height: 55px;
+    }
+    .harvestmite .step {
+        position: absolute;
+        left: 50%;
+        margin-left: -24px;
+    }
+    .step-text {
+        position: absolute;
+        transform: translateX(-50%);
+        left: 50%;
+        top: 55px;
     }
 }

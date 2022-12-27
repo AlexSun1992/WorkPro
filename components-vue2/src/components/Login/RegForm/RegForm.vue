@@ -37,6 +37,7 @@
         <div class="col-12 col-lg-6 mt-2" v-if="codeFieldValid">
           <b-form-group class="required" label="Фамилия" label-cols="12">
             <autocomplete
+              id="autocomplete-surname"
               ref="autocompleteSurname"
               :search="getSuggestionsSurname"
               :get-result-value="getResultValue"
@@ -77,7 +78,11 @@
           </b-form-group>
         </div>
 
-        <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
+        <div
+          class="col-12 col-lg-6 mt-2 mt-lg-3"
+          v-if="codeFieldValid"
+          id="patronymic"
+        >
           <b-form-group
             label="Отчество (при наличии)"
             label-cols="12"
@@ -93,7 +98,9 @@
               @blur="handleBlur('patronymic')"
               @submit="changeField('patronymic')"
             />
-
+            <b-form-invalid-feedback :state="isPatronymicErrorMessage"
+              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            >
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
@@ -102,6 +109,7 @@
         </div>
         <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4" v-if="codeFieldValid">
           <b-form-checkbox
+            id="check-box"
             class="checkbox-hide mt-3 pt-1"
             v-model="isPatronymicNotExist"
             :value="!isPatronymicNotExist"
@@ -114,6 +122,7 @@
         <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker2
+              id="birthday-picker"
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
               :disabled="registrationInProcess"
@@ -124,6 +133,7 @@
         <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
           <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
             <b-form-input
+              ref="policyNumber"
               :id="Math.random().toString()"
               v-model="form.policyNumber"
               placeholder="Номер полиса"
@@ -143,7 +153,11 @@
             :log-params="logParams"
           />
         </div>
-        <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+        <div
+          id="error-message"
+          class="col-12 invalid-feedback d-block mt-3"
+          v-if="errorMessage"
+        >
           {{ errorMessage }}
         </div>
         <div class="col-12 pt-3">
@@ -179,18 +193,9 @@ import {
   helpers,
   maxLength,
 } from "vuelidate/lib/validators";
-import {
-  BForm,
-  BFormGroup,
-  BFormInput,
-  BFormInvalidFeedback,
-  BAlert,
-  BButton,
-  BSpinner,
-} from "bootstrap-vue";
+
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
-import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
@@ -198,7 +203,6 @@ import ConfirmModal from "./ConfirmModal.vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
 
 import {
-  fetchSuggestions,
   isGenderReveal,
   userGender,
   getSuggestions,
@@ -220,18 +224,10 @@ const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 export default {
   components: {
     Autocomplete,
-    birthdayPicker,
     birthdayPicker2,
     VerifyUser,
     VerifyPassword,
     ConfirmModal,
-    BForm,
-    BFormGroup,
-    BFormInput,
-    BFormInvalidFeedback,
-    BAlert,
-    BButton,
-    BSpinner,
   },
 
   mixins: [validationMixin],
@@ -293,6 +289,7 @@ export default {
       requestToDadataParamsPartsHub: [],
     };
   },
+
   mounted() {
     const currentURL = window.location.pathname;
     this.$nextTick(() => {
@@ -395,13 +392,21 @@ export default {
   },
   methods: {
     changeField(field) {
+      if (
+        field === "isPatronymicNotExist" &&
+        this.isPatronymicNotExist === true
+      ) {
+        this.patronymicClassHub = [];
+        this.isPatronymicValidSignsErrorMessage = null;
+        this.isPatronymicErrorMessage = null;
+      }
       if (this.form[field] || this[field]) {
-        this.$LogEvent({
-          ...this.logParams,
-          controlName: field,
-          message: `Поле ${field} посещено`,
-          timeUser: new Date(),
-        });
+        // this.$LogEvent({
+        //   ...this.logParams,
+        //   controlName: field,
+        //   message: `Поле ${field} посещено`,
+        //   timeUser: new Date(),
+        // });
         console.log(field, this.form[field] || this[field]);
       }
     },
@@ -425,6 +430,13 @@ export default {
         if (this.name === "") {
           this.isNameErrorMessage = false;
           this.nameClassHub.push("is-invalid");
+        }
+      }
+
+      if (field === "patronymic") {
+        if (this.patronymic === "") {
+          this.isPatronymicErrorMessage = false;
+          this.patronymicClassHub.push("is-invalid");
         }
       }
 
@@ -475,6 +487,7 @@ export default {
           this.isPatronymicTouch = true;
           this.isPatronymicErrorMessage = true;
           this.isPatronymicValidSignsErrorMessage = true;
+          getArrayWithClass(this.patronymicClassHub, "is-valid");
         }
 
         if (isInputNotValid) {
@@ -489,6 +502,7 @@ export default {
         this.isPatronymicErrorMessage = false;
         this.isPatronymicValidSignsErrorMessage = true;
         this.patronymicClassHub = [];
+        getArrayWithClass(this.patronymicClassHub, "is-invalid");
       }
 
       const isGenderRevealed = isGenderReveal(
@@ -533,7 +547,6 @@ export default {
           this.isSurnameErrorMessage = true;
           this.isSurnameTouch = true;
           this.isSurnameValidSignsErrorMessage = true;
-
           getArrayWithClass(this.surnameClassHub, "is-valid");
         }
         if (isInputNotValid) {
@@ -686,7 +699,7 @@ export default {
           const titleVNode = h("div", {
             domProps: {
               innerHTML:
-                '<img src="/export/system/modules/ru.reso.v2/resources/img/icons/icon-ok.svg"><div class="mt-3">Все получилось!</div>',
+                '<img src="/export/system/modules/ru.reso.v2/resources/img/icons/icon-ok.svg"><div id="success" class="mt-3">Все получилось!</div>',
             },
           });
           const messageVNode = h("div", {
@@ -696,6 +709,7 @@ export default {
           });
           this.$bvModal
             .msgBoxOk([messageVNode], {
+              id: "modal-reg-success",
               title: [titleVNode],
               size: "md",
               okVariant: "primary",
@@ -703,6 +717,7 @@ export default {
               hideHeaderClose: false,
               centered: true,
               modalClass: this.myclass,
+              static: true,
               autoFocusButton: "ok",
             })
             .then((value) => {
@@ -719,7 +734,6 @@ export default {
         this.isErrorMessage = true;
         this.errorMessage = e.response.data.INFO;
         this.registrationInProcess = false;
-        console.log(e);
       }
     },
 
@@ -737,6 +751,14 @@ export default {
         if (this.nameClassHub.length === 0) {
           this.nameClassHub.push("is-invalid");
           this.isNameErrorMessage = false;
+        }
+
+        if (
+          this.patronymicClassHub.length === 0 &&
+          this.isPatronymicNotExist === false
+        ) {
+          this.patronymicClassHub.push("is-invalid");
+          this.isPatronymicErrorMessage = false;
         }
 
         if (

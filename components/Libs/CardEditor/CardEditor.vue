@@ -629,10 +629,13 @@ export default {
             if (response.data.POUTVALUE.includes("cabinet")) {
               this.$router.push(response.data.POUTVALUE);
             } else {
-              window.open(
-                response.data.POUTVALUE,
-                this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
-              );
+              // Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
+              setTimeout(() => {
+                window.open(
+                  response.data.POUTVALUE,
+                  this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
+                );
+              });
             }
           }
         }
