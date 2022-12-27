@@ -4284,4 +4284,22 @@ h6 {
     .sidebar-nav-container>a {
         cursor: pointer;
     }
+    .step-text {
+        left: 50%;
+        top: 55px;
+    }
+    .harvestmite>div {
+        min-height: 55px;
+    }
+    .harvestmite .step {
+        position: absolute;
+        left: 50%;
+        margin-left: -24px;
+    }
+    .step-text {
+        position: absolute;
+        transform: translateX(-50%);
+        left: 50%;
+        top: 55px;
+    }
 }
