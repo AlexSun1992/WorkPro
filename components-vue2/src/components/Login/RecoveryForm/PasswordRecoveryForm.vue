@@ -131,7 +131,7 @@
           v-if="visibleForm === 'phone'"
           @click="toggleForm('phone')"
           class="login-btn-mobile d-lg-none mt-3"
-          id="btn_email"
+          data-testid="btn_email"
         >
           E-mail
         </button>

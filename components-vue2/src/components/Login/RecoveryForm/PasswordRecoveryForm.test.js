@@ -59,9 +59,11 @@ describe("PasswordRecoveryForm", () => {
   it("Необходимо раздизабливать поле 'Получить код' при отсутствии email в базе", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-
     const wrapper = mount(PasswordRecoveryForm, { localVue });
-    await wrapper.find("#btn_email").trigger("click");
+
+    //
+    const buttonSelector = "[data-testid=btn_email]";
+    await wrapper.find(buttonSelector).trigger("click");
     axios.post.mockReturnValue({
       data: [
         {
@@ -74,7 +76,6 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-
     expect(
       wrapper.find("#btn_code_verification_lk").attributes()
     ).not.toContain("disabled");
