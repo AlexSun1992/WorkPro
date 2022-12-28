@@ -30,6 +30,7 @@
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @change="changeField('email')"
+          @input="removeErrorTextMessage"
           @click="loginTouchesCount = 2"
           @keyup.enter="verifyUser"
           autocomplete="off"
@@ -50,7 +51,7 @@
         </b-form-invalid-feedback>
 
         <b-form-invalid-feedback v-if="v.email && v.email.email === false"
-          >Пожалуйста, введите корректный email</b-form-invalid-feedback
+          >Пожалуйста, введите корректный e-mail</b-form-invalid-feedback
         >
 
         <b-form-invalid-feedback
@@ -104,7 +105,11 @@
       @verify="getCode"
       @expired="onCaptchaExpired"
     />
-    <div class="col-12 invalid-feedback d-block mt-3" v-if="errorMessage">
+    <div
+      id="verify-error-message"
+      class="col-12 invalid-feedback d-block mt-3"
+      v-if="errorMessage"
+    >
       {{ errorMessage }}
     </div>
     <div class="col-12 mt-4">
@@ -119,7 +124,7 @@
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        v-show="!validateInput('code', isCodeBlured)"
+        v-show="!validateInput('code', isCodeBlured) || isCodeError"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
@@ -141,16 +146,14 @@ import {
   BFormGroup,
   BFormInput,
   BFormInvalidFeedback,
-  BRow,
   BButton,
-  BLink,
-  BSpinner,
 } from "bootstrap-vue";
 import VerifyTimer from "./VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import {
   getMessageFromSuccessResponse,
   getMessageFromMessageCode,
+  isAlertShouldBeShown,
 } from "./verifyUser.helper";
 
 export default {
@@ -159,11 +162,8 @@ export default {
     BFormGroup,
     BFormInput,
     BFormInvalidFeedback,
-    BRow,
     VueRecaptcha,
-    BLink,
     BButton,
-    BSpinner,
   },
 
   directives: { mask },
@@ -225,6 +225,9 @@ export default {
   },
 
   methods: {
+    removeErrorTextMessage() {
+      this.errorMessage = null;
+    },
     updateField(field) {
       this.$emit("checkCodeFieldValid", this.validateState(field));
     },
@@ -247,7 +250,6 @@ export default {
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
-
       if (visibleCaptchas.length === 0) {
         this.loading = false;
       }
@@ -268,7 +270,7 @@ export default {
     async getCodeHelper(params) {
       try {
         const headers = {
-          headers: { recaptcha: params.token },
+          headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         if (
           this.loginType !== undefined &&
@@ -324,6 +326,7 @@ export default {
       this.isPhoneChanged = false;
       this.$emit("error", null);
       this.errorMessage = null;
+
       try {
         let response;
         const isCaptcha = Boolean(token);
@@ -346,8 +349,27 @@ export default {
               error: false,
             };
 
-            const response1 = await request(params);
+            const headers = {
+              headers: { recaptcha: params.token, "X-Application": "VueJS" },
+            };
+
+            const response1 = await request(params, headers);
+
             response = response1;
+            const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
+
+            const isAlertShown = isAlertShouldBeShown(
+              this.modeType,
+              this.loginType,
+              getResponseMessageCodeErr
+            );
+            if (isAlertShown) {
+              this.codeFieldShown = false;
+              this.errorMessage =
+                "В Личном кабинете отсутствует профиль с данным номером телефона";
+              this.isSendCode = false;
+              return;
+            }
 
             if (response1.data[0].MESSAGE_CODE === 200) {
               this.codeFieldShown = true;
@@ -373,8 +395,26 @@ export default {
               modeType: this.modeType,
               error: true,
             };
-            const response2 = await request(params);
+            const headers = {
+              headers: { recaptcha: params.token, "X-Application": "VueJS" },
+            };
+            const response2 = await request(params, headers);
             response = response2;
+
+            const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
+
+            const isAlertShown = isAlertShouldBeShown(
+              this.modeType,
+              this.loginType,
+              getResponseMessageCodeErr
+            );
+            if (isAlertShown) {
+              this.codeFieldShown = false;
+              this.errorMessage =
+                "В Личном кабинете отсутствует профиль с данным номером телефона";
+              this.isSendCode = false;
+              return;
+            }
             if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
               this.loading = false;
               this.isSendCode = false;
@@ -388,7 +428,7 @@ export default {
             response?.data[0]?.ERRORCODE || response.data.STATUS === 500
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
-          //
+
           const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
           const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           const getResponseMessageCode = response?.data[0]?.MESSAGE_CODE;
@@ -512,8 +552,11 @@ export default {
   },
 
   computed: {
-    getMessageErrorText() {
-      return null;
+    isCodeError() {
+      if (this.error) {
+        return this.error.includes("код подтверждения");
+      }
+      return false;
     },
     changeMask() {
       if (this.loginType === "phone") {
@@ -531,6 +574,18 @@ export default {
     },
   },
   watch: {
+    errorMessage(value) {
+      const isPhoneExist = value.includes(
+        "В Личном кабинете отсутствует профиль с данным номером телефона"
+      );
+      const isMailExist = value.includes(
+        "На указанный email отсутствует зарегистрированная уч.запись"
+      );
+      if (isPhoneExist || isMailExist) {
+        this.loading = false;
+      }
+    },
+
     isError(value) {
       if (typeof value === "string") {
         this.loading = false;

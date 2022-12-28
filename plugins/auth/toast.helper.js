@@ -1,3 +1,5 @@
+// import { h } from "vue";
+
 const MAX_ORA_ERROR = "ORA-10000";
 
 /**
@@ -20,29 +22,51 @@ export function convertErrorMessageToArray(errorMessage) {
  * @returns {string}
  */
 
-export function getErrorMessage(errorMessage) {
-  const [errMessageString] = convertErrorMessageToArray(errorMessage);
+export function getErrorNumber(errorMessage) {
+  const getDoubleCloseMistake = errorMessage.match(
+    /^\s?ORA-\d{5}:\s?ORA-\d{5}/
+  );
+  if (getDoubleCloseMistake) {
+    const getArrWithMistakes = errorMessage.match(/\s?ORA-\d{5}/g);
+    const onlyPureMistakesName = getArrWithMistakes.filter(
+      (item) => !item.includes("\n")
+    );
 
+    let compareNumber;
+    if (onlyPureMistakesName.length >= 2) {
+      [, compareNumber] = onlyPureMistakesName;
+    }
+
+    return compareNumber;
+  }
+  const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
+  return getORAnumber;
+}
+
+export function getErrorMessage(errorMessage, h) {
+  const [errMessageString] = convertErrorMessageToArray(errorMessage);
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
 
   const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
-
   if (getORAnumber) {
-    const getORAtext = errorMessage.match(/\s?ORA-\d{5}/)[0];
-    if (MAX_ORA_ERROR > getORAtext) {
-      return {
-        errorText:
-          "Приносим извинения, в Личном Кабинете что-то пошло не так.\n" +
-          "Просим обновить страницу или перейти на ",
-        errorLink: "Главную Личного кабинета.",
-        errorHref: "/cabinet",
-      };
+    const errNumber = getErrorNumber(errorMessage);
+
+    if (MAX_ORA_ERROR > errNumber) {
+      if (h) {
+        const vnode = h("div", {
+          domProps: {
+            innerHTML:
+              "<p>Приносим извинения, в личном кабинете что-то пошло не так.\n" +
+              "Просим обновить страницу или перейти на <a href='/cabinet'>главную личного кабинета.</a></p>",
+          },
+        });
+        return [vnode];
+      }
+      return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
     }
   }
-
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
-
     const transformErrorTextToArray =
       getErrorTextWithBrackets.match(/\[.+?\]/g);
 
@@ -56,7 +80,6 @@ export function getErrorMessage(errorMessage) {
 
       return pureMessageText[1];
     }
-
     return stringWithBrackets[1];
   }
 

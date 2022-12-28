@@ -23,9 +23,7 @@
             <div class="description">
               Напишите нам и мы оперативно<br />свяжемся с вами
             </div>
-            <a href="/feedback/" type="button" class="btn_one icon-feedback">
-              Написать
-            </a>
+            <a href="/feedback/" class="btn_one icon-feedback"> Написать </a>
           </div>
         </div>
         <div class="col-12 col-lg-9">

@@ -3,7 +3,7 @@
     <b-col sm="12" lg="6">
       <b-form-group :label="showLabel" label-cols="12" class="required">
         <b-form-input
-          :id="Math.random().toString()"
+          id="password1"
           type="password"
           v-model="v.password.$model"
           :state="validateState('password')"
@@ -11,9 +11,12 @@
           @blur="v.password.$touch()"
           autocomplete="new-password"
           :disabled="disabled"
-          @change="changeField('password')"
+          @update="updateField('password')"
         ></b-form-input>
-        <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          >Пароль должен содержать от {{ minLength }} до
+          {{ maxLength }} символов</b-form-invalid-feedback
+        >
       </b-form-group>
     </b-col>
     <b-col sm="12" lg="6" v-if="recovery"></b-col>
@@ -29,7 +32,7 @@
         class="required"
       >
         <b-form-input
-          :id="Math.random().toString()"
+          id="password2"
           type="password"
           autocomplete="new-password"
           v-model="v.password2.$model"
@@ -37,7 +40,7 @@
           placeholder="Повторите пароль"
           @blur="v.password2.$touch()"
           :disabled="disabled"
-          @change="changeField('password2')"
+          @update="updateField('password2')"
         ></b-form-input>
         <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>
@@ -54,6 +57,10 @@ import {
   BCol,
   BRow,
 } from "bootstrap-vue";
+import {
+  minLengthPassword,
+  maxLengthPassword,
+} from "../../RegForm/regform.helper.fixtures";
 
 export default {
   props: [
@@ -67,10 +74,13 @@ export default {
   ],
   data() {
     return {
+      minLength: minLengthPassword,
+      maxLength: maxLengthPassword,
       password: "",
       password2: "",
     };
   },
+
   methods: {
     changeField(field) {
       this.$LogEvent({
@@ -79,7 +89,9 @@ export default {
         message: `Поле ${field} посещено`,
         timeUser: new Date(),
       });
-      console.log(field, this.v[field].$model);
+    },
+    updateField(field) {
+      this.$emit("change", this.v[field].$model);
     },
   },
   components: {

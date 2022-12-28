@@ -3,25 +3,23 @@
     <a href="/" aria-current="page" class="logo"></a>
     <button class="menu-burger" @click="toggleClassActive"></button>
     <template v-for="(value, key) in groupMenuItems">
-      <div class="sidebar-nav-container">
-        <a v-if="key != 'undefined'" href="#" @click="openSidebarnav">
+      <div
+        class="sidebar-nav-container"
+        :class="{ show: openMenuLink.includes(key) }"
+      >
+        <a
+          v-if="key != 'undefined'"
+          href="#"
+          @click="openSidebarnav(key)"
+          :class="{ active: openMenuLink.includes(key) }"
+        >
           {{ key }}
         </a>
         <ul class="sidebar-nav justify-content-center">
-          <li
-            v-if="
-              key === 'страховой случай по ДМС' && loggedInUser.IDMEDPARTNER > 0
-            "
-            class="sidebar-nav-item"
-          >
-            <a :href="url" target="blank" :class="'menu-icon-telemed'">
-              Видео-консультация
-            </a>
-          </li>
           <n-link
             v-for="item in value"
             :key="item.id"
-            v-slot="{ href, navigate, isActive }"
+            v-slot="{ navigate, isActive }"
             :to="item.url"
             @click="toggleClassActive"
           >
@@ -29,7 +27,8 @@
               :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'"
             >
               <a
-                :href="href"
+                :target="item.target"
+                :href="item.url"
                 @click="
                   (e) => {
                     navigate(e);
@@ -70,6 +69,7 @@ export default {
       sideBarMini: false,
       url: null,
       userInfo: null,
+      openMenuLink: [],
     };
   },
   created() {
@@ -78,13 +78,18 @@ export default {
       "Bearer ",
       ""
     );
-    console.log("token:", token);
+
     this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
   },
   methods: {
-    openSidebarnav(e) {
-      e.path[1].classList.toggle("show");
-      e.path[0].classList.toggle("active");
+    openSidebarnav(activeLink) {
+      if (this.openMenuLink.includes(activeLink)) {
+        this.openMenuLink = this.openMenuLink.filter(
+          (key) => key !== activeLink
+        );
+      } else {
+        this.openMenuLink.push(activeLink);
+      }
     },
     toggleClassActive(e) {
       if (window.innerWidth <= 992) {
@@ -119,7 +124,13 @@ export default {
     groupMenuItems() {
       const groups = this.navItems.reduce((acc, item) => {
         const group = acc[item.groupmenu] || [];
-        group.push(item);
+        const itemMenu = { ...item };
+        itemMenu.target = "_self";
+        if (itemMenu.isTelemed) {
+          itemMenu.url = this.url;
+          itemMenu.target = "_blank";
+        }
+        group.push(itemMenu);
         acc[item.groupmenu] = group;
         return acc;
       }, {});

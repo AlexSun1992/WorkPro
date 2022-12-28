@@ -1,4 +1,7 @@
 import { getErrorMessage } from "./toast.helper";
+import { mount } from "@vue/test-utils";
+
+import Vue from "vue";
 
 describe("Модуль вывода сообщения об ошибке", () => {
   it("Должен обрабатывать сообщения с ORA в тексте без скобок", () => {
@@ -6,21 +9,6 @@ describe("Модуль вывода сообщения об ошибке", () =>
       'ORA-20105: Некорректный номер телефона\nORA-06512: на  "MOBILE.CLIENTUTILS", line 934\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
     const errorMessageWithoutORA = getErrorMessage(errorMessageText);
     expect(errorMessageWithoutORA).toBe("Некорректный номер телефона");
-  });
-
-  it("Проверяем тип данных,возвращаемых функцией(должен возвращать объект)", () => {
-    const errorMessageText =
-      'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
-    const errorMessageWithOutORA = getErrorMessage(errorMessageText);
-
-    expect(errorMessageWithOutORA).toMatchInlineSnapshot(`
-      Object {
-        "errorHref": "/cabinet",
-        "errorLink": "Главную Личного кабинета.",
-        "errorText": "Приносим извинения, в Личном Кабинете что-то пошло не так.
-      Просим обновить страницу или перейти на ",
-      }
-    `);
   });
 
   it("Должен обрабатывать сообщения об ошибке без ORA в тексте", () => {
@@ -96,6 +84,45 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessage = getErrorMessage(errorMessageText);
     expect(errorMessage).toBe(
       "[Внимание! Пункт меню 55/712 настроен не правильно"
+    );
+  });
+
+  it("Возвращаем текст из квадратных скобок", () => {
+    const errorMessageText =
+      'ORA-20105: Ошибка [Текст ошибки]\nORA-06512: на "MOBILE.CLIENTUTILS", line 7\nORA-06512: на line 1\nORA-06512: на "SYS.DBMS_SQL", line 1721\nORA-06512: на "MOBILE.AMUTILSREST", line 1692\nORA-06512: на "MOBILE.AMUTILSREST", line 1321\nORA-06512: на line 1\n';
+    const errorMessage = getErrorMessage(errorMessageText);
+    expect(errorMessage).toBe("Текст ошибки");
+  });
+
+  it("Проверяем тип данных,возвращаемых функцией(должен возвращать объект)", () => {
+    const errorMessageText =
+      'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
+    const errorMessageWithOutORA = getErrorMessage(errorMessageText);
+    expect(errorMessageWithOutORA).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
+  });
+
+  it("Строка, содержащая два ORA", () => {
+    const wrapper = mount(Vue.component("test-component", {}));
+
+    const errorMessageText =
+      'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
+
+    const errorMessage = getErrorMessage(
+      errorMessageText,
+      wrapper.vm.$createElement
+    );
+
+    expect(typeof errorMessage[0]).toBe("object");
+  });
+
+  it("Строка, содержащая два ORA", () => {
+    const errorMessageText =
+      'ORA-20105: ORA-00942: таблица или представление пользователя не существует \n[Метод: "select \'742;740\' as result from dual1"]\nORA-06512: на  "MOBILE.AMUTILS2", line 284\nORA-06512: на  "MOBILE.AMUTILS2", line 471\nORA-06512: на  line 1\n';
+    const errorMessage = getErrorMessage(errorMessageText, false);
+    expect(errorMessage).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
     );
   });
 });
