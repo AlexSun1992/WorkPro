@@ -20,6 +20,7 @@
         <b-nav-item
           @click="toggleForm('registration')"
           :active="visibleForm === 'registration'"
+          data-testid="registrationBtn"
           >Регистрация</b-nav-item
         >
 

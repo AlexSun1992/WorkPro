@@ -12,6 +12,7 @@
           autocomplete="new-password"
           :disabled="disabled"
           @update="updateField('password')"
+          data-testid="firstPass"
         ></b-form-input>
         <b-form-invalid-feedback
           >Пароль должен содержать от {{ minLength }} до
@@ -41,6 +42,7 @@
           @blur="v.password2.$touch()"
           :disabled="disabled"
           @update="updateField('password2')"
+          data-testid="secondPass"
         ></b-form-input>
         <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>

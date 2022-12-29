@@ -17,6 +17,7 @@
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @click="loginTouchesCount = 2"
           autocomplete="off"
+          data-testid="verifyPhone"
           :tabindex="tabIndex[1]"
         ></b-form-input>
         <legend v-if="loginType === 'email'">Почта</legend>
@@ -76,6 +77,7 @@
           @input="inputTouch(loginType)"
           :disabled="disabled"
           autocomplete="off"
+          data-testid="phoneConfirmCode"
           placeholder="Код подтверждения"
         ></b-form-input>
         <b-form-invalid-feedback v-if="!v.code.$model"
