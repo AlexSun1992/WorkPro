@@ -62,6 +62,7 @@
             no-caret
             @show="bodySize('blocksize')"
             @hide="bodySize('unblocksize')"
+            data-testid="cabinetLoginDropDawn"
           >
             <template #button-content>
               {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
