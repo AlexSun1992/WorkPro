@@ -25,6 +25,7 @@
             :state="isValidStateCodeSMS"
             @focus="isValidStateCodeSMS = null"
             class="form-control mt-3"
+            data-testid="authSMSCode"
           ></b-form-input>
           <b-form-invalid-feedback
             >Неверный код. Попробуйте еще раз.
@@ -95,6 +96,7 @@
               @input="wrongAuthData = false"
               :disabled="authInProcess"
               class="form-control"
+              data-testid="authPhoneEmail"
             >
             </b-form-input>
 
@@ -116,6 +118,7 @@
               @input="wrongAuthData = null"
               class="form-control"
               :disabled="authInProcess"
+              data-testid="authPassword"
             ></b-form-input>
             <button
               type="button"

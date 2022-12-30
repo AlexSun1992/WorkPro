@@ -2,6 +2,7 @@ import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
+import { not } from "ip";
 
 jest.mock("axios");
 
@@ -31,6 +32,53 @@ describe("PasswordRecoveryForm", () => {
     expect(wrapper.text()).toContain(
       "В Личном кабинете отсутствует профиль с данным номером телефона"
     );
+  });
+
+  it("Необходимо раздизабливать поле 'Получить код' при отсутствии номера телефона в базе", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(PasswordRecoveryForm, { localVue });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 203,
+        },
+      ],
+    });
+
+    await wrapper.find("#phone").setValue("+7(902)-000-10-00");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(
+      wrapper.find("#btn_code_verification_lk").attributes()
+    ).not.toContain("disabled");
+  });
+
+  it("Необходимо раздизабливать поле 'Получить код' при отсутствии email в базе", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(PasswordRecoveryForm, { localVue });
+
+    //
+    const buttonSelector = "[data-testid=btn_email]";
+    await wrapper.find(buttonSelector).trigger("click");
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 203,
+        },
+      ],
+    });
+
+    await wrapper.find("#email").setValue("kjdsflslkjgdvdlkmk@mail.ru");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(
+      wrapper.find("#btn_code_verification_lk").attributes()
+    ).not.toContain("disabled");
   });
 
   it("Должен показывать сообщение об ошибке при наличии русского символа", async () => {
