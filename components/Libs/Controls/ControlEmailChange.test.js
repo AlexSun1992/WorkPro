@@ -1,14 +1,19 @@
-import { createLocalVue, mount } from "@vue/test-utils";
-import ControlEmailChange from "./ControlEmailChange.vue";
+import Vue from "vue";
+import Vuex from "vuex";
+import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
-import { data_card as dataCard } from "../../../store/data_card";
+import ControlEmailChange from "./ControlEmailChange.vue";
+// import { data_card as dataCard } from "../../../store/data_card";
+import { state as stateStore } from "../../../store/data_card";
+import { getters as gettersStore } from "../../../store/data_card";
+import { actions as actionsStore } from "../../../store/data_card";
+import { mutations as mutationsStore } from "../../../store/data_card";
+
+// const localVue = createLocalVue();
+// localVue.use(Vuex);
 
 describe("ControlemailChange", () => {
   let wrapper;
-
-  const localVue = createLocalVue();
-  localVue.use(BootstrapVue);
-
   const dataProps = {
     label: "E-mail",
     type: "emailChange",
@@ -78,23 +83,37 @@ describe("ControlemailChange", () => {
     newCount: null,
   };
 
-  const createComponent = () => {
-    wrapper = mount(ControlEmailChange, {
-      localVue,
-      mocks: {
-        $store: dataCard,
-      },
-      propsData: { data: dataProps, params: paramsProps },
-    });
-  };
+  let store;
+  let state;
+  let getters;
+  let actions;
+  let mutations;
 
-  afterEach(() => {
-    wrapper.destroy();
+  beforeEach(() => {
+    state = stateStore;
+    getters = gettersStore;
+    actions = actionsStore;
+    mutations = mutationsStore;
+    Vue.use(Vuex, BootstrapVue);
+    store = new Vuex.Store({
+      state,
+      getters,
+      actions,
+      mutations,
+    });
   });
 
-  it("необходимо отобразить компонент ControlEmailChange ", () => {
-    createComponent();
+  it("необходимо отобразить компонент ControlEmailChange ", async () => {
+    wrapper = mount(ControlEmailChange, {
+      propsData: {
+        data: dataProps,
+        params: paramsProps,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
     console.log("wrapper:", wrapper.html());
-    expect(wrapper.text()).not.toBe(null);
+    expect(wrapper).not.toBe(null);
   });
 });
