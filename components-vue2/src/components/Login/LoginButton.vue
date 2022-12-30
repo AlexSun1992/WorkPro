@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="LoginButton">
+    <div v-touch:swipe.bottom="swipeBottomHandler" class="LoginButton">
       <b-dropdown
         variant="login-link"
         v-if="isAuthentificated"
         id="authentificated-btn"
-        ref="authentificated-btn"
+        ref="authentificatedBtn"
         :text="userName"
         @show="bodySize('blocksize')"
         @hide="bodySize('unblocksize')"
@@ -28,7 +28,7 @@
       <b-dropdown
         v-else
         id="unauthentificated-btn"
-        ref="unauthentificated-btn"
+        ref="unauthentificatedBtn"
         variant="login-btn"
         text="Личный кабинет"
       >
@@ -69,7 +69,7 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 let isRefreshing = false;
-axios.interceptors.response.use(undefined, function (err) {
+axios.interceptors.response.use(undefined, (err) => {
   const {
     config,
     response: { status },
@@ -82,7 +82,7 @@ axios.interceptors.response.use(undefined, function (err) {
     originalRequest.url !== URL_AUTHORIZE
   ) {
     if (isRefreshing) {
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
       })
         .then((token) => {
@@ -147,6 +147,13 @@ export default {
   },
 
   methods: {
+    swipeBottomHandler() {
+      if (this.isAuthentificated) {
+        this.$refs.authentificatedBtn.hide();
+      } else {
+        this.$refs.unauthentificatedBtn.hide();
+      }
+    },
     bodySize(bodystatus) {
       if (bodystatus === "blocksize") {
         document.body.classList.add("overflow-hidden");
