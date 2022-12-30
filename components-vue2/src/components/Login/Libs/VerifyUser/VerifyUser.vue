@@ -93,7 +93,7 @@
         class="btn-link mt-lg-4 d-table"
         type="button"
       >
-        {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
+        {{ loginType === "phone" ? "Изменить номер" : "Изменить E-mail" }}
       </button>
     </div>
 
