@@ -14,6 +14,7 @@
           @update="updateField('password')"
         ></b-form-input>
         <button
+              id="btn_password_visible"
               type="button"
               class="btn-psw-visible"
               @click="visiblePSW()"
@@ -49,6 +50,7 @@
           @update="updateField('password2')"
         ></b-form-input>
         <button
+        id="btn_password_visible2"
               type="button"
               class="btn-psw-visible"
               @click="visiblePSW2()"

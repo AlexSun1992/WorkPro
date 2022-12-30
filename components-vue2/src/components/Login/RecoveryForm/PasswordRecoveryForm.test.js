@@ -115,4 +115,25 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.find("#phone").setValue("+7(499)-000-00-02");
     expect(verificationButton.attributes("disabled")).toBe(undefined);
   });
+
+  it.only("При клике первый раз на перваую кнопку показывать пароль", async () => {
+    const wrapper = mount(PasswordRecoveryForm);
+    const pswVisible = false;
+    const pswVisible2 = false;
+    const verificationButton = await wrapper.find("#btn_password_visible");
+    const verificationButton2 = await wrapper.find("#btn_password_visible2");
+    //verificationButton.trigger("click");
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+    // expect(verificationButton.trigger('click')).toBe("disabled");
+    // expect(verificationButton2.trigger('click')).toBe("disabled");
+    // await wrapper.find("#phone").setValue("+7(499)-000-00-02");
+    // expect(verificationButton.attributes("disabled")).toBe(undefined);
+    console.log(wrapper.html(verificationButton));
+  });
 });
