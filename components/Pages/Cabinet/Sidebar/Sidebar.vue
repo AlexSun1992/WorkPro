@@ -69,7 +69,7 @@ export default {
       sideBarMini: false,
       url: null,
       userInfo: null,
-      openMenuLink: [],
+      openMenuLink: ["личные данные", "полисы", "ДМС"],
     };
   },
   created() {
