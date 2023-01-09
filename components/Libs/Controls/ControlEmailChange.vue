@@ -13,14 +13,26 @@
             :placeholder="placeholder"
             :state="validateState('newEmail')"
             @blur="update"
+            @input="changeField('newEmail')"
             autocomplete="off"
+            df
             autofocus
             :disabled="isShowCodeEnter"
             type="email"
+            data-testid="getCodeButton"
           ></b-form-input>
-          <b-form-invalid-feedback
+
+          <!-- <b-form-invalid-feedback v-if="$v.newEmail.$model === ''"
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
-          >
+          > -->
+          <!-- <b-form-invalid-feedback v-if="$v.newEmail.email === false"
+            >invalid-feedback</b-form-invalid-feedback
+          > -->
+          <!-- <p v-if="$v.newEmail.email === false">тестовое сообщение</p> -->
+          <!-- <b-form-invalid-feedback v-if="$v.newEmail.email === false"
+            >Пожалуйста, введите корректный email</b-form-invalid-feedback
+          > -->
+          <!-- {{ $v.newEmail.$dirty }} -->
         </b-form-group>
         <div class="col-auto">
           <b-button
@@ -29,6 +41,7 @@
             variant="success"
             class="mt-btn-form-3"
             :disabled="$v.newEmail.$invalid || loading || isSendCode"
+            data-testid="getCodeButton"
             >Получить код
             <b-spinner
               v-if="loading"
@@ -58,15 +71,22 @@
     </div>
   </div>
 </template>
-
 <script>
 import { validationMixin } from "vuelidate";
-import { required, email } from "vuelidate/lib/validators";
+import { required, email, helpers } from "vuelidate/lib/validators";
+import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import _ from "lodash";
 import VerifyTimer from "../VerifyUser/VerifyTimer";
 
+const forbiddenRussianSign = helpers.regex(
+  "forbiddenRussian",
+  /^[^а-яА-ЯёЁ]*$/i
+);
+
+const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
+
 export default {
-  components: { VerifyTimer },
+  components: { VerifyTimer, BFormGroup, BFormInput, BFormInvalidFeedback },
   mixins: [validationMixin],
   name: "ControlEmailChange",
   data() {
@@ -98,6 +118,8 @@ export default {
     newEmail: {
       required,
       email,
+      forbiddenRussianSign,
+      forbiddenPlusSign,
     },
   },
   created() {
@@ -110,7 +132,7 @@ export default {
   },
   methods: {
     update() {
-      // this.$v.newEmail.$touch();
+      this.$v.newEmail.$touch();
       if (this.newEmail != "") {
         this.$emit("update", {
           fieldId: this.data.fieldId,
@@ -123,6 +145,12 @@ export default {
       const { $dirty, $error } = this.$v[name];
       return $dirty ? !$error : null;
     },
+
+    changeField(name) {
+      this.$v.newEmail.$touch();
+      this.validateState(name);
+    },
+
     async getCaptcha() {
       try {
         await this.$recaptcha.getResponse();

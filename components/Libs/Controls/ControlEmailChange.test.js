@@ -103,7 +103,7 @@ describe("ControlemailChange", () => {
     });
   });
 
-  it("необходимо отобразить компонент ControlEmailChange ", async () => {
+  it("необходимо наличие класса is-invalid в input при введении ff@fff", async () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
@@ -113,7 +113,65 @@ describe("ControlemailChange", () => {
         $store: store,
       },
     });
-    console.log("wrapper:", wrapper.html());
-    expect(wrapper).not.toBe(null);
+
+    const getCodeButtonSelector = "[data-testid=getCodeButton]";
+    const getCodeButton = await wrapper.find(getCodeButtonSelector);
+    await getCodeButton.setValue("ff@fff");
+    await wrapper.vm.$nextTick();
+    expect(getCodeButton.classes()).toContain("is-invalid");
+  });
+
+  it("необходимо наличие класса is-valid в input при введении fda@mail.ru", async () => {
+    wrapper = mount(ControlEmailChange, {
+      propsData: {
+        data: dataProps,
+        params: paramsProps,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+
+    const getCodeButtonSelector = "[data-testid=getCodeButton]";
+    const getCodeButton = await wrapper.find(getCodeButtonSelector);
+    await getCodeButton.setValue("fda@mail.ru");
+    await wrapper.vm.$nextTick();
+    expect(getCodeButton.classes()).toContain("is-valid");
+  });
+
+  it("необходимо наличие класса is-invalid в input при введении русских символов", async () => {
+    wrapper = mount(ControlEmailChange, {
+      propsData: {
+        data: dataProps,
+        params: paramsProps,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+
+    const getCodeButtonSelector = "[data-testid=getCodeButton]";
+    const getCodeButton = await wrapper.find(getCodeButtonSelector);
+    await getCodeButton.setValue("fdприветa@mail.ru");
+    await wrapper.vm.$nextTick();
+    expect(getCodeButton.classes()).toContain("is-invalid");
+  });
+
+  it("необходимо наличие класса is-invalid в input при введении '+'", async () => {
+    wrapper = mount(ControlEmailChange, {
+      propsData: {
+        data: dataProps,
+        params: paramsProps,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+
+    const getCodeButtonSelector = "[data-testid=getCodeButton]";
+    const getCodeButton = await wrapper.find(getCodeButtonSelector);
+    await getCodeButton.setValue("fds+@mail.ru");
+    await wrapper.vm.$nextTick();
+    expect(getCodeButton.classes()).toContain("is-invalid");
   });
 });
