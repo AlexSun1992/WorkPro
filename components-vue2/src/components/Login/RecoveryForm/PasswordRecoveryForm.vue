@@ -218,6 +218,17 @@ export default {
   mounted() {
     this.clearForm();
     this.formLoaded = true;
+    this.$nextTick(() => {
+      this.$LogEvent({
+        formName: "Recovery",
+        idEventType: this.visibleForm === "phone" ? 149 : 157,
+        controlName: "PasswordRecoveryForm.vue",
+        message: `Открыли форму восстановления пароля по ${
+          this.visibleForm === "phone" ? "телефону" : "EMAIL"
+        }`,
+        timeUser: new Date(),
+      });
+    });
   },
 
   methods: {
@@ -231,6 +242,15 @@ export default {
         this.clearForm();
         this.isCodeFieldValid = false;
         this.visibleForm = tabs === "phone" ? "email" : "phone";
+        this.$LogEvent({
+          formName: "Recovery",
+          idEventType: this.visibleForm === "phone" ? 149 : 157,
+          controlName: "PasswordRecoveryForm.vue",
+          message: `Открыли форму восстановления пароля по ${
+            this.visibleForm === "phone" ? "телефону" : "EMAIL"
+          }`,
+          timeUser: new Date(),
+        });
       }
     },
 
