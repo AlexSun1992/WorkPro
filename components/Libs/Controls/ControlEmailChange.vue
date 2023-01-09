@@ -21,10 +21,11 @@
             type="email"
             data-testid="getCodeButton"
           ></b-form-input>
-
-          <!-- <b-form-invalid-feedback v-if="$v.newEmail.$model === ''"
+          {{ $v.newEmail.$model }}
+          <p v-if="$v.newEmail.$model === ''">Пожалуйста, заполните это поле</p>
+          <b-form-invalid-feedback v-if="$v.newEmail.$model === ''"
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
-          > -->
+          >
           <!-- <b-form-invalid-feedback v-if="$v.newEmail.email === false"
             >invalid-feedback</b-form-invalid-feedback
           > -->
