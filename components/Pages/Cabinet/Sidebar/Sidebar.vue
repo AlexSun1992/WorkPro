@@ -69,7 +69,7 @@ export default {
       sideBarMini: false,
       url: null,
       userInfo: null,
-      openMenuLink: ["личные данные", "полисы", "ДМС"],
+      openMenuLink: [],
     };
   },
   created() {
@@ -79,6 +79,7 @@ export default {
       ""
     );
     this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
+    this.openMenuLink = Object.keys(this.groupMenuItems);
   },
   methods: {
     openSidebarnav(activeLink) {
