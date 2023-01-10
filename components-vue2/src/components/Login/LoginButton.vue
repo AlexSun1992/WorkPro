@@ -230,7 +230,7 @@ export default {
       if (Cookies.get(TOKEN_NAME) === undefined) {
         return ["ОСАГО", "Другие полисы"];
       }
-      return ["Профиль", "ОСАГО", "Выйти"];
+      return ["Главная", "ОСАГО", "Выйти"];
     },
 
     getTokenFromCookie() {
