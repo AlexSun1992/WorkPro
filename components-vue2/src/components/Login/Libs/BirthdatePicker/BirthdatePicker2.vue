@@ -5,6 +5,7 @@
       v-model="birthdate"
       @input="setDateValue"
       @change="setDateChange"
+      @blur="setBlurChange"
       v-mask="maskTemplate"
       :disabled-date="notBeforeDate"
       :default-value="defaultDate"
@@ -17,7 +18,7 @@
       :lang="lang"
       :input-class="classValid"
       :clearable="true"
-      :input-attr="{'data-testid': 'regBornDate'}"
+      :input-attr="{ 'data-testid': 'regBornDate' }"
     />
     <b-form-invalid-feedback :state="state">
       Обязательное поле
@@ -65,6 +66,11 @@ export default {
     },
     setDateChange(date) {
       this.$emit("change", date);
+    },
+    setBlurChange(e) {
+      if (!e.target.value) {
+        this.$emit("input", null);
+      }
     },
     notBeforeDate(date) {
       if (date < getDate(120) === true) {
