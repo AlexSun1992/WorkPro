@@ -3,14 +3,11 @@ import Vuex from "vuex";
 import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import ControlEmailChange from "./ControlEmailChange.vue";
-// import { data_card as dataCard } from "../../../store/data_card";
+
 import { state as stateStore } from "../../../store/data_card";
 import { getters as gettersStore } from "../../../store/data_card";
 import { actions as actionsStore } from "../../../store/data_card";
 import { mutations as mutationsStore } from "../../../store/data_card";
-
-// const localVue = createLocalVue();
-// localVue.use(Vuex);
 
 describe("ControlemailChange", () => {
   let wrapper;
@@ -118,6 +115,7 @@ describe("ControlemailChange", () => {
     const getCodeButton = await wrapper.find(getCodeButtonSelector);
     await getCodeButton.setValue("ff@fff");
     await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain("Пожалуйста, введите корректный e-mail");
     expect(getCodeButton.classes()).toContain("is-invalid");
   });
 
@@ -154,6 +152,7 @@ describe("ControlemailChange", () => {
     const getCodeButton = await wrapper.find(getCodeButtonSelector);
     await getCodeButton.setValue("fdприветa@mail.ru");
     await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain("Русские символы запрещены");
     expect(getCodeButton.classes()).toContain("is-invalid");
   });
 
@@ -172,6 +171,8 @@ describe("ControlemailChange", () => {
     const getCodeButton = await wrapper.find(getCodeButtonSelector);
     await getCodeButton.setValue("fds+@mail.ru");
     await wrapper.vm.$nextTick();
+
+    expect(wrapper.text()).toContain("Пожалуйста, введите корректный e-mail");
     expect(getCodeButton.classes()).toContain("is-invalid");
   });
 });
