@@ -82,7 +82,7 @@ describe("LoginButton", () => {
             configurable: true,
         });
         await wrapper.find(".dropdown-item").trigger("click");
-        expect(wrapper.text()).toContain("Личный кабинет");
+        expect(wrapper.text()).toContain("Главная");
     });
 
     it("Должен отображаться список из 3 элементов", () => {
