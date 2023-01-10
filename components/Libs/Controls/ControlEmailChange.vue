@@ -21,26 +21,31 @@
             type="email"
             data-testid="getCodeButton"
           ></b-form-input>
-          <!-- {{ $v.newEmail.$model }} -->
-          <!-- {{ $v.newEmail }} -->
-          <!-- <p v-if="$v.newEmail.$model === ''">Пожалуйста, заполните это поле</p> -->
-          <!-- <b-form-invalid-feedback
+
+          <b-form-invalid-feedback v-if="!$v.newEmail.$model"
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
-          > -->
-          <!-- <b-form-invlalid-feedback
-            v-if="$v.newEmail.forbiddenPlusSign === false"
+          >
+          <b-form-invalid-feedback
+            v-if="
+              $v.newEmail.email === false &&
+              $v.newEmail.forbiddenRussianSign === true
+            "
+            >Пожалуйста, введите корректный e-mail</b-form-invalid-feedback
+          >
+
+          <b-form-invalid-feedback
+            v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign === false"
+          >
+            Пожалуйста, введите корректный e-mail
+          </b-form-invalid-feedback>
+
+          <b-form-invalid-feedback
+            v-if="
+              $v.newEmail.$model && $v.newEmail.forbiddenRussianSign === false
+            "
           >
             Русские символы запрещены
-          </b-form-invlalid-feedback> -->
-          <!-- {{ $v.newEmail }} -->
-          <!-- <b-form-invalid-feedback v-if="$v.newEmail.email === false"
-            >invalid-feedback</b-form-invalid-feedback
-          > -->
-          <!-- <p v-if="$v.newEmail.email === false">тестовое сообщение</p> -->
-          <!-- <b-form-invalid-feedback v-if="$v.newEmail.email === false"
-            >Пожалуйста, введите корректный email</b-form-invalid-feedback
-          > -->
-          <!-- {{ $v.newEmail.$dirty }} -->
+          </b-form-invalid-feedback>
         </b-form-group>
         <div class="col-auto">
           <b-button
@@ -82,7 +87,12 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, email, helpers } from "vuelidate/lib/validators";
-import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
+import {
+  BFormGroup,
+  BFormInput,
+  BFormInvalidFeedback,
+  BButton,
+} from "bootstrap-vue";
 import _ from "lodash";
 import VerifyTimer from "../VerifyUser/VerifyTimer";
 
@@ -94,7 +104,13 @@ const forbiddenRussianSign = helpers.regex(
 const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
 
 export default {
-  components: { VerifyTimer, BFormGroup, BFormInput, BFormInvalidFeedback },
+  components: {
+    VerifyTimer,
+    BFormGroup,
+    BFormInput,
+    BFormInvalidFeedback,
+    BButton,
+  },
   mixins: [validationMixin],
   name: "ControlEmailChange",
   data() {
@@ -142,6 +158,7 @@ export default {
     update() {
       this.$v.newEmail.$touch();
       if (this.newEmail != "") {
+        console.log("this.newEmail:", this.newEmail);
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
