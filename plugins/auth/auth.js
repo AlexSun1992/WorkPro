@@ -18,6 +18,11 @@ export default function ({ app, redirect, $auth, $sentry }) {
       response: { status },
     } = error;
     const originalRequest = config;
+    if (process.client) {
+      if (window.reload) {
+        return;
+      }
+    }
     if (error.response.status === 401 && !originalRequest.__isRetryRequest) {
       originalRequest.__isRetryRequest = true;
       return app.$auth

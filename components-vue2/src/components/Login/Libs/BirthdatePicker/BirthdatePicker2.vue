@@ -17,6 +17,7 @@
       :lang="lang"
       :input-class="classValid"
       :clearable="true"
+      :input-attr="{'data-testid': 'regBornDate'}"
     />
     <b-form-invalid-feedback :state="state">
       Обязательное поле

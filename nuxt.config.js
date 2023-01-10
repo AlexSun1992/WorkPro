@@ -71,6 +71,7 @@ module.exports = {
     "~/plugins/slick-carousel.js",
     "~/plugins/tooltip.js",
     "~/plugins/vueLog.js",
+    "~/plugins/Vue2TouchEvents.js",
   ],
   /*
    ** Nuxt.js dev-modules
@@ -142,6 +143,7 @@ module.exports = {
         refreshToken: {
           property: "REFRESH_TOKEN",
           data: "REFRESH_TOKEN",
+          maxAge: 360000,
         },
         user: {
           property: false,

@@ -1548,6 +1548,19 @@ textarea:disabled:hover {
     display: none;
 }
 
+.is-invalid+.invalid-feedback {
+    display: block;
+}
+
+input.is-valid {
+    padding-right: 40px;
+    border: 1px solid #43b02a !important;
+}
+
+input.is-valid {
+    background: #fff url(/img/input-valid.svg) right center no-repeat !important;
+}
+
 p.error {
     margin: 0;
     padding: 0;
@@ -1988,7 +2001,7 @@ a.free {
         top: 16px;
         transform: none;
     }
-    header {
+    >header {
         background: #ecf3fa;
         height: 72px;
         padding: 0;
@@ -4302,4 +4315,12 @@ h6 {
         left: 50%;
         top: 55px;
     }
+}
+
+.mx-icon-clear {
+    display: none !important;
+}
+
+.mx-input-wrapper:hover .mx-icon-clear+.mx-icon-calendar {
+    display: block !important;
 }
