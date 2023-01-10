@@ -1548,6 +1548,19 @@ textarea:disabled:hover {
     display: none;
 }
 
+.is-invalid+.invalid-feedback {
+    display: block;
+}
+
+input.is-valid {
+    padding-right: 40px;
+    border: 1px solid #43b02a !important;
+}
+
+input.is-valid {
+    background: #fff url(/img/input-valid.svg) right center no-repeat !important;
+}
+
 p.error {
     margin: 0;
     padding: 0;
