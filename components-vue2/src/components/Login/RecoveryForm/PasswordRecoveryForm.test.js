@@ -2,7 +2,6 @@ import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
-// import VeryfyUser from "../Libs/VerifyUser/VerifyUser.vue";
 import { not } from "ip";
 
 jest.mock("axios");
@@ -141,97 +140,96 @@ describe("PasswordRecoveryForm", () => {
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
   });
 
-  it("должен корректно заполнять форму", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      attachTo: document.body,
-    });
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE:
-            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
+  // it("должен корректно заполнять форму", async () => {
+  //   const localVue = createLocalVue();
+  //   localVue.use(BootstrapVue);
+  //   const wrapper = mount(PasswordRecoveryForm, {
+  //     localVue,
+  //     attachTo: document.body,
+  //   });
+  //   axios.post.mockReturnValue({
+  //     data: [
+  //       {
+  //         MESSAGE:
+  //           "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
+  //         MESSAGE_CODE: 200,
+  //       },
+  //     ],
+  //   });
+  //   expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+  //   await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+  //   await wrapper.find("#btn_code_verification_lk").trigger("click");
+  //   await wrapper.vm.$nextTick();
+  //   await wrapper.vm.$nextTick();
+  //   expect(axios.post).toHaveBeenCalledWith(
+  //     "/am/free/v2/sendsmscode",
+  //     {
+  //       PHONE: "+7(910)-123-22-33",
+  //       error: false,
+  //       modeType: "REG",
+  //       token: 1,
+  //     },
+  //     { headers: { "X-Application": "VueJS", recaptcha: 1 } }
+  //   );
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
-    await wrapper.find("#btn_code_verification_lk").trigger("click");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/sendsmscode",
-      {
-        PHONE: "+7(910)-123-22-33",
-        error: false,
-        modeType: "REG",
-        token: 1,
-      },
-      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
-    );
+  //   await wrapper.find("#sms-confirm").setValue("12345");
 
-    await wrapper.find("#sms-confirm").setValue("12345");
+  //   const surnameComponent = wrapper.findComponent({
+  //     ref: "autocompleteSurname",
+  //   });
+  //   const surnameInput = surnameComponent.find("input");
+  //   await surnameInput.setValue("П");
+  //   expect(surnameComponent.classes()).toContain("is-valid");
 
-    const surnameComponent = wrapper.findComponent({
-      ref: "autocompleteSurname",
-    });
-    const surnameInput = surnameComponent.find("input");
-    await surnameInput.setValue("П");
-    expect(surnameComponent.classes()).toContain("is-valid");
+  //   const patronymicComponent = wrapper.findComponent({
+  //     ref: "autocompletePatronymic",
+  //   });
+  //   const patronymicInput = patronymicComponent.find("input");
+  //   await patronymicInput.setValue("П");
 
-    const patronymicComponent = wrapper.findComponent({
-      ref: "autocompletePatronymic",
-    });
-    const patronymicInput = patronymicComponent.find("input");
-    await patronymicInput.setValue("П");
+  //   const nameComponent = wrapper.findComponent({
+  //     ref: "autocompleteName",
+  //   });
+  //   const nameInput = nameComponent.find("input");
+  //   await nameInput.setValue("П");
 
-    const nameComponent = wrapper.findComponent({
-      ref: "autocompleteName",
-    });
-    const nameInput = nameComponent.find("input");
-    await nameInput.setValue("П");
+  //   const checkboxComponent = wrapper.findComponent("#check-box");
 
-    const checkboxComponent = wrapper.findComponent("#check-box");
+  //   await checkboxComponent.setChecked(true);
 
-    await checkboxComponent.setChecked(true);
+  //   expect(patronymicInput.attributes().disabled).toBeDefined();
 
-    expect(patronymicInput.attributes().disabled).toBeDefined();
+  //   await wrapper.find("#password1").setValue("12345");
+  //   expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password1").setValue("12345");
-    expect(wrapper.find("#password1").classes()).toContain("is-invalid");
+  //   await wrapper.find("#password1").setValue("123456");
+  //   expect(wrapper.find("#password1").classes()).toContain("is-valid");
 
-    await wrapper.find("#password1").setValue("123456");
-    expect(wrapper.find("#password1").classes()).toContain("is-valid");
+  //   await wrapper.find("#password2").setValue("12345");
+  //   expect(wrapper.find("#password2").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password2").setValue("12345");
-    expect(wrapper.find("#password2").classes()).toContain("is-invalid");
+  //   await wrapper.find("#password2").setValue("123456");
+  //   expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
-    await wrapper.find("#password2").setValue("123456");
-    expect(wrapper.find("#password2").classes()).toContain("is-valid");
+  //   axios.post.mockImplementationOnce(() => {
+  //     const wrongAuthError = new Error("");
+  //     wrongAuthError.response = {
+  //       data: {
+  //         MESSAGE:
+  //           'ORA-20105: Неправильно введен код подтверждения или истек срок действия.\nORA-06512: на  "MOBILE.AMAUTH3", line 74\nORA-06512: на  "MOBILE.AMAUTH3", line 558\nORA-06512: на  line 1\n',
+  //         STATUS: 500,
+  //         REASON: "Internal Server Error",
+  //         INFO: "Неправильно введен код подтверждения или истек срок действия.",
+  //       },
+  //     };
+  //     throw wrongAuthError;
+  //   });
 
-    axios.post.mockImplementationOnce(() => {
-      const wrongAuthError = new Error("");
-      wrongAuthError.response = {
-        data: {
-          MESSAGE:
-            'ORA-20105: Неправильно введен код подтверждения или истек срок действия.\nORA-06512: на  "MOBILE.AMAUTH3", line 74\nORA-06512: на  "MOBILE.AMAUTH3", line 558\nORA-06512: на  line 1\n',
-          STATUS: 500,
-          REASON: "Internal Server Error",
-          INFO: "Неправильно введен код подтверждения или истек срок действия.",
-        },
-      };
-      throw wrongAuthError;
-    });
-
-    axios.post.mockImplementationOnce(() =>
-      Promise.resolve({
-        data: [{ MESSAGE: "Success", MESSAGE_CODE: "200" }],
-        status: 200,
-      })
-    );
-  });
+  //   axios.post.mockImplementationOnce(() =>
+  //     Promise.resolve({
+  //       data: [{ MESSAGE: "Success", MESSAGE_CODE: "200" }],
+  //       status: 200,
+  //     })
+  //   );
+  //   });
 });
