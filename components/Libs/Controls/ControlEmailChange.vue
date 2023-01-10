@@ -22,10 +22,17 @@
             data-testid="getCodeButton"
           ></b-form-input>
           <!-- {{ $v.newEmail.$model }} -->
+          <!-- {{ $v.newEmail }} -->
           <!-- <p v-if="$v.newEmail.$model === ''">Пожалуйста, заполните это поле</p> -->
-          <b-form-invalid-feedback
+          <!-- <b-form-invalid-feedback
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          > -->
+          <!-- <b-form-invlalid-feedback
+            v-if="$v.newEmail.forbiddenPlusSign === false"
           >
+            Русские символы запрещены
+          </b-form-invlalid-feedback> -->
+          <!-- {{ $v.newEmail }} -->
           <!-- <b-form-invalid-feedback v-if="$v.newEmail.email === false"
             >invalid-feedback</b-form-invalid-feedback
           > -->
