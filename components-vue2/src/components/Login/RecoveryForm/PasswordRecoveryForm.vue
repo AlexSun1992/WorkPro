@@ -236,6 +236,13 @@ export default {
       if (data) {
         this.isCodeFieldValid = data;
       }
+       this.$LogEvent({
+          formName: "Recovery",
+          idEventType: this.isCodeFieldValid === true  ? 149 : null,
+          controlName: "PasswordRecoveryForm.vue",
+          message: 'Отобразили форму восстановления по Телефону',
+          timeUser: new Date(),
+        });
     },
     toggleForm(tabs) {
       if (this.visibleForm === tabs) {
