@@ -20,21 +20,21 @@
             v-for="item in value"
             :key="item.id"
             v-slot="{ navigate, isActive }"
-            :to="item.url"
             @click="toggleClassActive"
+            :to="item.url"
           >
             <li
               :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'"
             >
               <a
                 :target="item.target"
-                :href="item.url"
                 @click="
                   (e) => {
                     navigate(e);
                     toggleClassActive(e);
                   }
                 "
+                :href="item.url"
                 :class="'menu-icon-' + item.iconFileName"
                 :data-newcount="item.newCount"
                 :data-newcolor="item.newCountColor"
@@ -52,8 +52,24 @@
 <script>
 import { mapGetters } from "vuex";
 import HeaderUserName from "../Header/HeaderUserName";
+import { router } from "./router";
+
+// router.beforeEach((to, from, next) => {
+//   console.log("!!!");
+// });
+
+// function stop() {
+//   window.addEventListener(
+//     "beforeunload",
+//     function () {
+//       debugger;
+//     },
+//     false
+//   );
+// }
 
 export default {
+  middleware: "sidebar",
   name: "Sidebar",
   components: { HeaderUserName },
   props: {
@@ -63,6 +79,9 @@ export default {
       default: () => [],
     },
   },
+  beforeEach() {
+    console.log("beforeRouteEnter");
+  },
   data() {
     return {
       endScrollMenu: false,
@@ -70,6 +89,8 @@ export default {
       url: null,
       userInfo: null,
       openMenuLink: [],
+      path: this.$route.path,
+      currentUrl: null,
     };
   },
   created() {
@@ -93,6 +114,16 @@ export default {
       }
     },
     toggleClassActive(e) {
+      // stop();
+      // window.addEventListener("beforeunload", () => console.log("!!!!!!!"));
+      // console.log("e:", e.path[0].href);
+      // console.log(window);
+      window.addEventListener("beforeunload", function () {
+        console.log("!!!!!!!");
+      });
+      // if(e.path[0].href){
+
+      // }
       if (window.innerWidth <= 992) {
         document.querySelector(".menu").classList.toggle("show");
         document.querySelector("body").classList.toggle("menu-open");
@@ -119,6 +150,19 @@ export default {
       }
     },
   },
+
+  // watch: {
+  //   "$route.path"() {
+  //     console.log("Совершён переход по ссылке");
+  //     const token = this.$auth.$storage._state["_token.local"].replace(
+  //       "Bearer ",
+  //       ""
+  //     );
+  //     const url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
+  //     console.log("url:", url);
+  //     this.currentUrl = url;
+  //   },
+  // },
 
   computed: {
     ...mapGetters(["isAuthenticated", "loggedInUser"]),
