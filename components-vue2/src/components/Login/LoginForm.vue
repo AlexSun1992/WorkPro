@@ -34,24 +34,20 @@
               <button
                 type="button"
                 @click="retrySendCodeSMS()"
-                class="btn btn-link pt-2 pt-lg-0 mt-btn-form"
+                class="btn btn-link pt-2 pt-lg-1 mt-btn-form"
               >
                 Отправить повторно
               </button>
             </div>
             <div v-else class="col-8">
-              <button
-                type="button"
-                disabled="disabled"
-                class="btn btn-link w-100"
-              >
+              <div class="pt-2 pt-lg-1 mt-btn-form">
                 Отправить повторно(
                 <verify-timer
                   @onFinish="isRetrySendCodeSMS = true"
                   :duration="duration"
                 />
                 с.)
-              </button>
+              </div>
             </div>
             <div class="col-12 mt-2">
               <b-form-invalid-feedback
