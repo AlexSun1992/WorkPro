@@ -15,7 +15,7 @@
           Здравствуйте,<br /><b>{{ userName }}</b>
         </b-dropdown-item>
         <b-dropdown-item @click="profileBtn()" class="login-profile"
-          >Профиль</b-dropdown-item
+          >Личный кабинет</b-dropdown-item
         >
         <b-dropdown-item @click="osagoBtn()" class="login-osago"
           >ОСАГО</b-dropdown-item
@@ -191,7 +191,7 @@ export default {
       }
     },
     async profileBtn() {
-      window.location.href = "/cabinet/55/0/710";
+      window.location.href = "/cabinet/55/0/701";
     },
 
     async polisesBtn() {
@@ -230,7 +230,7 @@ export default {
       if (Cookies.get(TOKEN_NAME) === undefined) {
         return ["ОСАГО", "Другие полисы"];
       }
-      return ["Профиль", "ОСАГО", "Выйти"];
+      return ["Личный кабинет", "ОСАГО", "Выйти"];
     },
 
     getTokenFromCookie() {

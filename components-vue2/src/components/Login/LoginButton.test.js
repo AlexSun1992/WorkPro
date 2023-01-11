@@ -69,7 +69,7 @@ describe("LoginButton", () => {
         expect(getBtnText).toEqual(getFullName);
     });
 
-    it("Должна отображаться ссылка на 'Профиль'", async() => {
+    it("Должна отображаться ссылка на 'Главная'", async() => {
         Cookies.get.mockImplementation(() => "token");
         const result =
             '{"STHIRDNAME":"Николаевич","DBIRTHDATE":"1992-01-09 00:00:00.0","SPHONE":"9032374418","SUSERNAME":"9032374418","SFIRSTNAME":"Алексей","ID":968441,"BSEX":1,"SEMAIL":"mgafk1992@mail.ru","NPROFILEFULLNESS":90,"SSECONDNAME":"Гаврилов","IDAUTHTYPE":2,"IDMEDPARTNER":6046398}';
@@ -82,7 +82,7 @@ describe("LoginButton", () => {
             configurable: true,
         });
         await wrapper.find(".dropdown-item").trigger("click");
-        expect(wrapper.text()).toContain("Профиль");
+        expect(wrapper.text()).toContain("Личный кабинет");
     });
 
     it("Должен отображаться список из 3 элементов", () => {
@@ -93,7 +93,7 @@ describe("LoginButton", () => {
         window.localStorage.setItem("USER_INFO", result);
         const getLinksList = LoginButton.computed.getNavigationList.call();
 
-        expect(getLinksList).toEqual(["Профиль", "ОСАГО", "Выйти"]);
+        expect(getLinksList).toEqual(["Личный кабинет", "ОСАГО", "Выйти"]);
     });
 
     it("Пытаемся найти кнопку (Никак не получается отловить событие нажатия на кнопку)", async() => {
