@@ -715,7 +715,7 @@ a.lgreen {
     min-height: 246px;
     grid-template-areas: "title ." "description ." "settlement settlement";
     grid-template-columns: auto 70px;
-    grid-template-rows: minmax(25px, -webkit-max-content) minmax( 40px, -webkit-max-content) auto;
+    grid-template-rows: minmax(25px, -webkit-max-content) minmax(40px, -webkit-max-content) auto;
     grid-template-rows: minmax(25px, max-content) minmax(40px, max-content) auto;
     display: grid;
     overflow: hidden;
@@ -877,7 +877,7 @@ a.lgreen {
     height: 100%;
     grid-template-areas: "title planned" "clinic date" "name name";
     grid-template-columns: minmax(30px, auto) 120px;
-    grid-template-rows: minmax(30px, -webkit-max-content) minmax( 30px, -webkit-max-content) auto;
+    grid-template-rows: minmax(30px, -webkit-max-content) minmax(30px, -webkit-max-content) auto;
     grid-template-rows: minmax(30px, max-content) minmax(30px, max-content) auto;
     display: grid;
     overflow: hidden;
@@ -886,7 +886,7 @@ a.lgreen {
 
 .pay-page .block-visit {
     grid-template-columns: minmax(30px, auto) 160px;
-    grid-template-rows: minmax(24px, -webkit-max-content) minmax( 24px, -webkit-max-content) auto;
+    grid-template-rows: minmax(24px, -webkit-max-content) minmax(24px, -webkit-max-content) auto;
     grid-template-rows: minmax(24px, max-content) minmax(24px, max-content) auto;
 }
 
@@ -2973,10 +2973,11 @@ a.action:hover {
 
 .LoginButton .dropdown.show .dropdown-menu li.login-profile a {
     background-color: #ffffff;
-    background-image: url(/img/login-profile.svg) !important;
-    background-position: 30px center !important;
+    background-image: url(/img/icon-menu-1-black.svg) !important;
+    background-position: 30px !important;
     background-repeat: no-repeat !important;
     transition: 0.2s;
+    background-size: 20px !important;
 }
 
 .LoginButton .dropdown.show .dropdown-menu li.login-osago a {
@@ -3280,7 +3281,7 @@ textarea {
 .block-advertising {
     display: grid;
     grid-template-areas: "title" "description" "button";
-    grid-template-rows: minmax(25px, -webkit-max-content) minmax( 40px, -webkit-max-content) auto;
+    grid-template-rows: minmax(25px, -webkit-max-content) minmax(40px, -webkit-max-content) auto;
     grid-template-rows: minmax(25px, max-content) minmax(40px, max-content) auto;
 }
 
@@ -3865,7 +3866,7 @@ a[data-newcount][data-newcolor="RED"]:after {
     height: 100%;
     grid-template-areas: "title date" "clinic date" "ppl ppl";
     grid-template-columns: auto 70px;
-    grid-template-rows: minmax(25px, -webkit-max-content) minmax( 40px, -webkit-max-content) auto;
+    grid-template-rows: minmax(25px, -webkit-max-content) minmax(40px, -webkit-max-content) auto;
     grid-template-rows: minmax(25px, max-content) minmax(40px, max-content) auto;
     display: grid;
     overflow: hidden;
