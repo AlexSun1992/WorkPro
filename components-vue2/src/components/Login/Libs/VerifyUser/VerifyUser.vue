@@ -5,7 +5,6 @@
         <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
           id="phone"
-          data-testid="phone"
           v-if="loginType === 'phone'"
           ref="userInput"
           v-model="v[loginType].$model"
