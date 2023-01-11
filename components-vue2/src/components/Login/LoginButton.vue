@@ -15,7 +15,7 @@
           Здравствуйте,<br /><b>{{ userName }}</b>
         </b-dropdown-item>
         <b-dropdown-item @click="profileBtn()" class="login-profile"
-          >Главная</b-dropdown-item
+          >Личный кабинет</b-dropdown-item
         >
         <b-dropdown-item @click="osagoBtn()" class="login-osago"
           >ОСАГО</b-dropdown-item
@@ -230,7 +230,7 @@ export default {
       if (Cookies.get(TOKEN_NAME) === undefined) {
         return ["ОСАГО", "Другие полисы"];
       }
-      return ["Главная", "ОСАГО", "Выйти"];
+      return ["Личный кабинет", "ОСАГО", "Выйти"];
     },
 
     getTokenFromCookie() {

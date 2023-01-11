@@ -82,7 +82,7 @@ describe("LoginButton", () => {
             configurable: true,
         });
         await wrapper.find(".dropdown-item").trigger("click");
-        expect(wrapper.text()).toContain("Главная");
+        expect(wrapper.text()).toContain("Личный кабинет");
     });
 
     it("Должен отображаться список из 3 элементов", () => {
@@ -93,7 +93,7 @@ describe("LoginButton", () => {
         window.localStorage.setItem("USER_INFO", result);
         const getLinksList = LoginButton.computed.getNavigationList.call();
 
-        expect(getLinksList).toEqual(["Главная", "ОСАГО", "Выйти"]);
+        expect(getLinksList).toEqual(["Личный кабинет", "ОСАГО", "Выйти"]);
     });
 
     it("Пытаемся найти кнопку (Никак не получается отловить событие нажатия на кнопку)", async() => {

@@ -70,7 +70,7 @@
             </template>
             <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
             <b-dropdown-item href="/cabinet/55/0/701" class="login-profile"
-              >Личный кабинет</b-dropdown-item
+              >Главная</b-dropdown-item
             >
             <b-dropdown-item @click="redirect()" class="login-osago"
               >ОСАГО</b-dropdown-item
