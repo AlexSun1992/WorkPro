@@ -49,67 +49,83 @@ export const getters = {
 
 export const actions = {
   async fetchMenu({ commit, dispatch, state }, params) {
-    const URL =
-      params?.zone === "free"
-        ? `/api/menu/55/${params.idItem}?zone=free`
-        : "/api/menu/55/null";
-    if (params?.zone !== "free") {
-      await this.$axios.get("/api/module").then((res) => {
-        commit("setMenu", res.data);
-        if (params) {
-          commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
-        }
+    try {
+      const URL =
+        params?.zone === "free"
+          ? `/api/menu/55/${params.idItem}?zone=free`
+          : "/api/menu/55/null";
+      if (params?.zone !== "free") {
+        await this.$axios.get("/api/module").then((res) => {
+          commit("setMenu", res.data);
+          if (params) {
+            commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
+          }
+        });
+      }
+      await this.$axios.get(URL).then((res) => {
+        commit(
+          "setFlatMenu",
+          params?.zone === "free" ? res.data[0]._data : res.data
+        );
       });
+    } catch (e) {
+      return e?.response?.data;
     }
-    await this.$axios.get(URL).then((res) => {
-      commit(
-        "setFlatMenu",
-        params?.zone === "free" ? res.data[0]._data : res.data
-      );
-    });
   },
   async fetchMenuById({ commit, dispatch, state }, params) {
-    const URL =
-      params?.zone === "free"
-        ? `/api/module/55/${params.idItem}?zone=free`
-        : `/api/module/55/${params.idItem}`;
-    await this.$axios.get(URL).then((res) => {
-      commit("setMenuById", res.data);
-      if (process.server) {
-        commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
-      }
-    });
-    if (params.idWizard) {
-      await this.$axios.get(`/api/module/55/${params.idWizard}`).then((res) => {
-        if (res.data?.settings && res.data?.subSettings) {
-          commit("setMenuById", res.data);
+    try {
+      const URL =
+        params?.zone === "free"
+          ? `/api/module/55/${params.idItem}?zone=free`
+          : `/api/module/55/${params.idItem}`;
+      await this.$axios.get(URL).then((res) => {
+        commit("setMenuById", res.data);
+        if (process.server) {
+          commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
         }
       });
+      if (params.idWizard) {
+        await this.$axios
+          .get(`/api/module/55/${params.idWizard}`)
+          .then((res) => {
+            if (res.data?.settings && res.data?.subSettings) {
+              commit("setMenuById", res.data);
+            }
+          });
+      }
+    } catch (e) {
+      console.error(e);
     }
   },
   async fetchCounters({ commit, state }, params) {
-    await this.$axios.get("/am/main/v2/data/55/802").then((res) => {
-      const menuItems = state.menu[0].children;
-      const counters = res.data[0]._data;
-      commit("setCounters", counters);
-      menuItems.forEach((item) => {
-        const counter = counters.find((c) => c.IDITEM === item.idItem);
-        if (counter) {
-          if (
-            ["RED", "GREEN"].includes(counter.SCOLOR) &&
-            counter.NCOUNT !== null
-          ) {
-            commit("setCounter", counter);
+    try {
+      return await this.$axios.get("/am/main/v2/data/55/802").then((res) => {
+        const menuItems = state.menu[0].children;
+        const counters = res.data[0]._data;
+        commit("setCounters", counters);
+        menuItems.forEach((item) => {
+          const counter = counters.find((c) => c.IDITEM === item.idItem);
+          if (counter) {
+            if (
+              ["RED", "GREEN"].includes(counter.SCOLOR) &&
+              counter.NCOUNT !== null
+            ) {
+              commit("setCounter", counter);
+            } else {
+              console.warn(
+                `Неверно заданы параметры счетчика для пункта меню ${item.idItem}`
+              );
+            }
           } else {
-            console.warn(
-              `Неверно заданы параметры счетчика для пункта меню ${item.idItem}`
-            );
+            commit("setCounter", { IDITEM: item.idItem });
           }
-        } else {
-          commit("setCounter", { IDITEM: item.idItem });
-        }
+        });
+        return counters;
       });
-    });
+    } catch (e) {
+      console.error(e);
+      return e?.response?.data;
+    }
   },
 };
 

@@ -79,6 +79,7 @@ export default {
       ""
     );
     this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
+    this.openMenuLink = Object.keys(this.groupMenuItems);
   },
   methods: {
     openSidebarnav(activeLink) {

@@ -55,20 +55,22 @@
           <button type="button" class="anonsed" />
         </nuxt-link>
 
-        <div class="LoginButton">
+        <div v-touch:swipe.bottom="swipeBottomHandler" class="LoginButton">
           <b-dropdown
+            ref="authentificatedBtn"
             variant="login-link"
             toggle-class="text-decoration-none"
             no-caret
             @show="bodySize('blocksize')"
             @hide="bodySize('unblocksize')"
+            data-testid="cabinetLoginDropDown"
           >
             <template #button-content>
               {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
             </template>
             <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
-            <b-dropdown-item href="/cabinet/55/0/710" class="login-profile"
-              >Профиль</b-dropdown-item
+            <b-dropdown-item href="/cabinet/55/0/701" class="login-profile"
+              >Главная</b-dropdown-item
             >
             <b-dropdown-item @click="redirect()" class="login-osago"
               >ОСАГО</b-dropdown-item
@@ -86,9 +88,10 @@
 <script>
 import Cookies from "js-cookie";
 import axios from "axios";
-import LoginButton from "../../../../components-vue2/src/components/Login/LoginButton.vue";
-import ShowCity from "../../../../components-vue2/src/components/ShowCity/ShowCity.vue";
+import LoginButton from "~/components-vue2/src/components/Login/LoginButton.vue";
+import ShowCity from "~/components-vue2/src/components/ShowCity/ShowCity.vue";
 import HeaderUserName from "./HeaderUserName.vue";
+
 const TOKEN_NAME = "auth._token.local";
 
 export default {
@@ -108,6 +111,9 @@ export default {
     this.userInfo = this.$auth.user;
   },
   methods: {
+    swipeBottomHandler() {
+      this.$refs.authentificatedBtn.hide();
+    },
     bodySize(bodystatus) {
       if (bodystatus === "blocksize") {
         document.body.classList.add("overflow-hidden");

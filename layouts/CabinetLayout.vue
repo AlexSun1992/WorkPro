@@ -29,7 +29,7 @@
         <div class="col-12 col-lg-9">
           <div class="body">
             <main class="main">
-              <nuxt />
+              <nuxt v-if="isContentVisible" />
             </main>
           </div>
         </div>
@@ -59,6 +59,7 @@ export default {
     return {
       sideBarMini: false,
       sideBarMobileMini: false,
+      isContentVisible: true,
     };
   },
   head() {
@@ -66,6 +67,12 @@ export default {
       title: this.$store.getters["menu/breadcrumbs"][2]?.text
         ? this.$store.getters["menu/breadcrumbs"][2]?.text
         : "РЕСО-Гарантия",
+    };
+  },
+  mounted() {
+    window.onbeforeunload = () => {
+      window.reload = true;
+      this.isContentVisible = false;
     };
   },
   computed: {

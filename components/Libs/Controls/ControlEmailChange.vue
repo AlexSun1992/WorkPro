@@ -42,7 +42,7 @@
         <div v-if="isShowCodeEnter" class="col-auto">
           <label class="d-none d-md-block">&nbsp;</label>
           <b-link @click="changeEmail" class="link-button d-block l-b-m-t">
-            Изменить email
+            Изменить e-mail
           </b-link>
         </div>
       </div>
@@ -50,7 +50,7 @@
     <div class="resend-block" v-if="isShowCodeEnter">
       <p>
         <template v-if="disabledResend">
-          Проверочный код выслан на указанный емейл.<br />Повторно код можно
+          Проверочный код выслан на указанный e-mail.<br />Повторно код можно
           запросить через
           <verify-timer @onFinish="stopTimer" :duration="duration" /> сек.
         </template>

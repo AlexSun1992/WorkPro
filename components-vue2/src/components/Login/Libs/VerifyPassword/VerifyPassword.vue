@@ -12,6 +12,7 @@
           autocomplete="new-password"
           :disabled="disabled"
           @update="updateField('password')"
+          data-testid="firstPass"
         ></b-form-input>
         <button
               id="btn_password_visible"
@@ -48,6 +49,7 @@
           @blur="v.password2.$touch()"
           :disabled="disabled"
           @update="updateField('password2')"
+          data-testid="secondPass"
         ></b-form-input>
         <button
         id="btn_password_visible2"
