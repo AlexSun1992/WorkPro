@@ -19,7 +19,7 @@
             autofocus
             :disabled="isShowCodeEnter"
             type="email"
-            data-testid="getCodeButton"
+            data-testid="getCodeInput"
           ></b-form-input>
 
           <b-form-invalid-feedback v-if="!$v.newEmail.$model"
@@ -158,7 +158,6 @@ export default {
     update() {
       this.$v.newEmail.$touch();
       if (this.newEmail != "") {
-        console.log("this.newEmail:", this.newEmail);
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,

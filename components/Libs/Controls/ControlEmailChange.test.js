@@ -111,12 +111,12 @@ describe("ControlemailChange", () => {
       },
     });
 
-    const getCodeButtonSelector = "[data-testid=getCodeButton]";
-    const getCodeButton = await wrapper.find(getCodeButtonSelector);
-    await getCodeButton.setValue("ff@fff");
+    const getCodeInputSelector = "[data-testid=getCodeInput]";
+    const getCodeInput = await wrapper.find(getCodeInputSelector);
+    await getCodeInput.setValue("ff@fff");
     await wrapper.vm.$nextTick();
     expect(wrapper.text()).toContain("Пожалуйста, введите корректный e-mail");
-    expect(getCodeButton.classes()).toContain("is-invalid");
+    expect(getCodeInput.classes()).toContain("is-invalid");
   });
 
   it("необходимо наличие класса is-valid в input при введении fda@mail.ru", async () => {
@@ -130,11 +130,11 @@ describe("ControlemailChange", () => {
       },
     });
 
-    const getCodeButtonSelector = "[data-testid=getCodeButton]";
-    const getCodeButton = await wrapper.find(getCodeButtonSelector);
-    await getCodeButton.setValue("fda@mail.ru");
+    const getCodeInputSelector = "[data-testid=getCodeInput]";
+    const getCodeInput = await wrapper.find(getCodeInputSelector);
+    await getCodeInput.setValue("fda@mail.ru");
     await wrapper.vm.$nextTick();
-    expect(getCodeButton.classes()).toContain("is-valid");
+    expect(getCodeInput.classes()).toContain("is-valid");
   });
 
   it("необходимо наличие класса is-invalid в input при введении русских символов", async () => {
@@ -148,12 +148,12 @@ describe("ControlemailChange", () => {
       },
     });
 
-    const getCodeButtonSelector = "[data-testid=getCodeButton]";
-    const getCodeButton = await wrapper.find(getCodeButtonSelector);
-    await getCodeButton.setValue("fdприветa@mail.ru");
+    const getCodeInputSelector = "[data-testid=getCodeInput]";
+    const getCodeInput = await wrapper.find(getCodeInputSelector);
+    await getCodeInput.setValue("fdприветa@mail.ru");
     await wrapper.vm.$nextTick();
     expect(wrapper.text()).toContain("Русские символы запрещены");
-    expect(getCodeButton.classes()).toContain("is-invalid");
+    expect(getCodeInput.classes()).toContain("is-invalid");
   });
 
   it("необходимо наличие класса is-invalid в input при введении '+'", async () => {
@@ -167,12 +167,57 @@ describe("ControlemailChange", () => {
       },
     });
 
-    const getCodeButtonSelector = "[data-testid=getCodeButton]";
-    const getCodeButton = await wrapper.find(getCodeButtonSelector);
-    await getCodeButton.setValue("fds+@mail.ru");
+    const getCodeInputSelector = "[data-testid=getCodeInput]";
+    const getCodeInput = await wrapper.find(getCodeInputSelector);
+    await getCodeInput.setValue("fds+@mail.ru");
     await wrapper.vm.$nextTick();
 
     expect(wrapper.text()).toContain("Пожалуйста, введите корректный e-mail");
-    expect(getCodeButton.classes()).toContain("is-invalid");
+    expect(getCodeInput.classes()).toContain("is-invalid");
+  });
+  it("проверяем emit компонента", async () => {
+    wrapper = mount(ControlEmailChange, {
+      propsData: {
+        data: dataProps,
+        params: paramsProps,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+    const getCodeInputSelector = "[data-testid=getCodeInput]";
+    const getCodeButtonSelector = "[data-testid=getCodeButton]";
+    const getCodeInput = await wrapper.find(getCodeInputSelector);
+    const getCodeButton = await wrapper.find(getCodeButtonSelector);
+
+    await getCodeInput.setValue("ma@mail.ru");
+    getCodeButton.trigger("click");
+    await wrapper.vm.$nextTick();
+
+    wrapper.vm.$emit("update", "ma@mail.ru");
+    expect(wrapper.emitted().update[0]).toEqual(["ma@mail.ru"]);
+  });
+  it("проверяем наличие атрибута disable у кнопки после отправки запроса", async () => {
+    wrapper = mount(ControlEmailChange, {
+      propsData: {
+        data: dataProps,
+        params: paramsProps,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+    const getCodeInputSelector = "[data-testid=getCodeInput]";
+    const getCodeButtonSelector = "[data-testid=getCodeButton]";
+    const getCodeInput = await wrapper.find(getCodeInputSelector);
+    const getCodeButton = await wrapper.find(getCodeButtonSelector);
+
+    await getCodeInput.setValue("ma@mail.ru");
+    getCodeButton.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    wrapper.vm.$emit("update", "ma@mail.ru");
+    expect(getCodeButton.attributes("disabled")).toBe("disabled");
   });
 });
