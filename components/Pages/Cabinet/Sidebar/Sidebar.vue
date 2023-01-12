@@ -34,10 +34,10 @@
                     toggleClassActive(e);
                   }
                 "
-                :href="item.url"
                 :class="'menu-icon-' + item.iconFileName"
                 :data-newcount="item.newCount"
                 :data-newcolor="item.newCountColor"
+                :href="item.url"
               >
                 {{ item.name }}
               </a>
@@ -52,24 +52,12 @@
 <script>
 import { mapGetters } from "vuex";
 import HeaderUserName from "../Header/HeaderUserName";
-import { router } from "./router";
-
-// router.beforeEach((to, from, next) => {
-//   console.log("!!!");
-// });
-
-// function stop() {
-//   window.addEventListener(
-//     "beforeunload",
-//     function () {
-//       debugger;
-//     },
-//     false
-//   );
-// }
-
+import axios from "axios";
+import Cookies from "js-cookie";
+const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
+const URL_REFRESH_TOKEN = "/am/auth/v2/token_refresh";
 export default {
-  middleware: "sidebar",
+  middleware: "telemed",
   name: "Sidebar",
   components: { HeaderUserName },
   props: {
@@ -79,9 +67,7 @@ export default {
       default: () => [],
     },
   },
-  beforeEach() {
-    console.log("beforeRouteEnter");
-  },
+
   data() {
     return {
       endScrollMenu: false,
@@ -93,13 +79,13 @@ export default {
       currentUrl: null,
     };
   },
+
   created() {
     this.userInfo = this.$auth.user;
     const token = this.$auth.$storage._state["_token.local"].replace(
       "Bearer ",
       ""
     );
-
     this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
     this.openMenuLink = Object.keys(this.groupMenuItems);
   },
@@ -113,17 +99,18 @@ export default {
         this.openMenuLink.push(activeLink);
       }
     },
-    toggleClassActive(e) {
-      // stop();
-      // window.addEventListener("beforeunload", () => console.log("!!!!!!!"));
-      // console.log("e:", e.path[0].href);
-      // console.log(window);
-      window.addEventListener("beforeunload", function () {
-        console.log("!!!!!!!");
-      });
-      // if(e.path[0].href){
-
+    async toggleClassActive(e) {
+      // if (e.path[0].href.includes("dms")) {
+      //   window.open(this.url, "_blank");
+      // const result = await axios({
+      //   url: URL_REFRESH_TOKEN,
+      //   headers: {
+      //     Authorization: `Bearer ${Cookies.get(REFRESH_TOKEN_NAME)}`,
+      //   },
+      //   method: "GET",
+      // });
       // }
+
       if (window.innerWidth <= 992) {
         document.querySelector(".menu").classList.toggle("show");
         document.querySelector("body").classList.toggle("menu-open");
@@ -151,19 +138,6 @@ export default {
     },
   },
 
-  // watch: {
-  //   "$route.path"() {
-  //     console.log("Совершён переход по ссылке");
-  //     const token = this.$auth.$storage._state["_token.local"].replace(
-  //       "Bearer ",
-  //       ""
-  //     );
-  //     const url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
-  //     console.log("url:", url);
-  //     this.currentUrl = url;
-  //   },
-  // },
-
   computed: {
     ...mapGetters(["isAuthenticated", "loggedInUser"]),
     groupMenuItems() {
@@ -179,6 +153,7 @@ export default {
         acc[item.groupmenu] = group;
         return acc;
       }, {});
+      console.log("groups:", groups);
       return groups;
     },
   },
