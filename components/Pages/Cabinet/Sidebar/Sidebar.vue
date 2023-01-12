@@ -52,10 +52,7 @@
 <script>
 import { mapGetters } from "vuex";
 import HeaderUserName from "../Header/HeaderUserName";
-import axios from "axios";
-import Cookies from "js-cookie";
-const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
-const URL_REFRESH_TOKEN = "/am/auth/v2/token_refresh";
+
 export default {
   middleware: "telemed",
   name: "Sidebar",
@@ -100,17 +97,6 @@ export default {
       }
     },
     async toggleClassActive(e) {
-      // if (e.path[0].href.includes("dms")) {
-      //   window.open(this.url, "_blank");
-      // const result = await axios({
-      //   url: URL_REFRESH_TOKEN,
-      //   headers: {
-      //     Authorization: `Bearer ${Cookies.get(REFRESH_TOKEN_NAME)}`,
-      //   },
-      //   method: "GET",
-      // });
-      // }
-
       if (window.innerWidth <= 992) {
         document.querySelector(".menu").classList.toggle("show");
         document.querySelector("body").classList.toggle("menu-open");
@@ -146,14 +132,14 @@ export default {
         const itemMenu = { ...item };
         itemMenu.target = "_self";
         if (itemMenu.isTelemed) {
-          itemMenu.url = this.url;
+          itemMenu.url = "/telemed";
           itemMenu.target = "_blank";
         }
         group.push(itemMenu);
         acc[item.groupmenu] = group;
         return acc;
       }, {});
-      console.log("groups:", groups);
+
       return groups;
     },
   },
