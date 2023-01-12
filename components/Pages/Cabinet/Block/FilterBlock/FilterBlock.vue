@@ -4,10 +4,10 @@
       v-if="filterType !== 'query' && filterType !== 'combobox'"
       class="filterblock"
     >
-      <p>itemId:{{ this.itemId }}</p>
+      <!-- <p>itemId:{{ this.itemId }}</p>
       <p>propertyName:{{ this.propertyName }}</p>
       <p>showFilteredItemsCount:{{ showFilteredItemsCount }}</p>
-      <p>query:{{ this.$route.query }}</p>
+      <p>query:{{ this.$route.query }}</p> -->
 
       <button
         v-if="showButtonAll"

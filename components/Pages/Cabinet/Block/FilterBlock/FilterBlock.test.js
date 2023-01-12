@@ -12,7 +12,7 @@ import blocks from "../../../../../store/blocks";
 import menu from "../../../../../store/menu";
 // jest.mock("axios");
 
-jest.mock("this.$route.query");
+// jest.mock("this.$route.query");
 
 describe("FilterBlock", () => {
   let wrapper;
@@ -22,13 +22,13 @@ describe("FilterBlock", () => {
       filters: '[{"propertyName":"SSTATUS","filter":["Архивные"],"id":"712"}]',
     },
   };
-  // const test = JSON.stringify([object Object])
 
   const createComponent = () => {
     wrapper = mount(FilterBlock, {
       mocks: {
+        // $store: blocks,
         $store: [blocks, menu],
-        // $route: route,
+        $route: route,
       },
       propsData: {
         itemId: 712,
