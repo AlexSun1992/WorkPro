@@ -352,6 +352,13 @@ export default {
         }
         console.log(e);
       }
+      this.$LogEvent({
+              formName: "Recovery",
+              idEventType: this.loginFieldType === "phone" ? 151 : 159,
+              controlName: "PasswordRecoveryForm.vue",
+              message: `Нажал "Изменить пароль через ${ this.loginFieldType === "phone" ? "номер" : "EMAIL"}"`,
+              timeUser: new Date(),
+            });
     },
     clearForm() {
       this.form = {
