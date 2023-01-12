@@ -500,6 +500,15 @@ export default {
         this.loading = false;
         console.log(e);
       }
+      this.$LogEvent({
+          formName: "VerifyUser",
+          idEventType: this.loginType === "phone" ? 156 : 161,
+          controlName: "VerifyUser.vue",
+          message: `Нажал "Изменить ${
+            this.visibleForm === "phone" ? "номер" : "EMAIL"
+          }"`,
+          timeUser: new Date(),
+        });
     },
 
     getCodeParams() {
