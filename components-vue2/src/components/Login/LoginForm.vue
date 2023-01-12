@@ -14,47 +14,22 @@
       <div>
         <div v-html="modalTextRequest" />
         <b-form id="sms-form" @submit.prevent="onSubmitWithCodeSMS">
-          <div class="row">
-            <div class="col-4">
-              <b-form-input
-                id="sms-code"
-                ref="focusCodeSMS"
-                autocomplete="off"
-                placeholder="12345"
-                type="number"
-                :disabled="authInProcess"
-                v-model="$v.user.code.$model"
-                :state="isValidStateCodeSMS"
-                @focus="isValidStateCodeSMS = null"
-                class="form-control mt-3"
-                data-testid="authSMSCode"
-              ></b-form-input>
-            </div>
-            <div v-if="isRetrySendCodeSMS" class="col-8 text-start">
-              <button
-                type="button"
-                @click="retrySendCodeSMS()"
-                class="btn btn-link pt-2 pt-lg-1 mt-btn-form"
-              >
-                Отправить повторно
-              </button>
-            </div>
-            <div v-else class="col-8">
-              <div class="pt-2 pt-lg-1 mt-btn-form">
-                Отправить повторно(
-                <verify-timer
-                  @onFinish="isRetrySendCodeSMS = true"
-                  :duration="duration"
-                />
-                с.)
-              </div>
-            </div>
-            <div class="col-12 mt-2">
-              <b-form-invalid-feedback
-                >Неверный код. Попробуйте еще раз.
-              </b-form-invalid-feedback>
-            </div>
-          </div>
+          <b-form-input
+            id="sms-code"
+            ref="focusCodeSMS"
+            autocomplete="off"
+            placeholder="12345"
+            type="number"
+            :disabled="authInProcess"
+            v-model="$v.user.code.$model"
+            :state="isValidStateCodeSMS"
+            @focus="isValidStateCodeSMS = null"
+            class="form-control mt-3"
+            data-testid="authSMSCode"
+          ></b-form-input>
+          <b-form-invalid-feedback
+            >Неверный код. Попробуйте еще раз.
+          </b-form-invalid-feedback>
           <div
             v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
             class="mt-3 text-start"
@@ -80,6 +55,25 @@
               >Продолжить
               <b-spinner v-if="authInProcess" variant="light"></b-spinner
             ></b-button>
+          </div>
+          <div v-if="!isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
+            <button
+              type="button"
+              disabled="disabled"
+              class="btn btn-primary w-100"
+            >
+              Отправить повторно(можно через
+              <verify-timer
+                @onFinish="isRetrySendCodeSMS = true"
+                :duration="duration"
+              />
+              секунд)
+            </button>
+          </div>
+          <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
+            <b-button @click="retrySendCodeSMS()" class="w-100"
+              >Отправить повторно</b-button
+            >
           </div>
         </b-form>
       </div>
