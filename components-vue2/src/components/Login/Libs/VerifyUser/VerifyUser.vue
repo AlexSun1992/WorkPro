@@ -500,6 +500,13 @@ export default {
         this.loading = false;
         console.log(e);
       }
+      this.$LogEvent({
+              formName: "VerifyUser",
+              idEventType: this.loginType === "phone" ? 155 : 162,
+              controlName: "PasswordRecoveryForm.vue",
+              message: `Нажал на кнопку "Получить код через ${ this.loginType === "phone" ? "номер" : "EMAIL"}"`,
+              timeUser: new Date(),
+            });
     },
 
     getCodeParams() {
