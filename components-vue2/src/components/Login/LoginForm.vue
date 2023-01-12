@@ -30,25 +30,6 @@
           <b-form-invalid-feedback
             >Неверный код. Попробуйте еще раз.
           </b-form-invalid-feedback>
-          <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
-            <b-button @click="retrySendCodeSMS()" class="w-100"
-              >Отправить повторно</b-button
-            >
-          </div>
-          <div v-else class="mt-4 d-block d-lg-table">
-            <button
-              type="button"
-              disabled="disabled"
-              class="btn btn-primary w-100"
-            >
-              Отправить повторно(можно через
-              <verify-timer
-                @onFinish="isRetrySendCodeSMS = true"
-                :duration="duration"
-              />
-              секунд)
-            </button>
-          </div>
           <div
             v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
             class="mt-3 text-start"
@@ -74,6 +55,25 @@
               >Продолжить
               <b-spinner v-if="authInProcess" variant="light"></b-spinner
             ></b-button>
+          </div>
+          <div v-if="!isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
+            <button
+              type="button"
+              disabled="disabled"
+              class="btn btn-primary w-100"
+            >
+              Отправить повторно(можно через
+              <verify-timer
+                @onFinish="isRetrySendCodeSMS = true"
+                :duration="duration"
+              />
+              секунд)
+            </button>
+          </div>
+          <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
+            <b-button @click="retrySendCodeSMS()" class="w-100"
+              >Отправить повторно</b-button
+            >
           </div>
         </b-form>
       </div>

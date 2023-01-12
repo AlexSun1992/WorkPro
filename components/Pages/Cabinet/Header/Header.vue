@@ -69,8 +69,8 @@
               {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
             </template>
             <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
-            <b-dropdown-item href="/cabinet/55/0/710" class="login-profile"
-              >Профиль</b-dropdown-item
+            <b-dropdown-item href="/cabinet/55/0/701" class="login-profile"
+              >Главная</b-dropdown-item
             >
             <b-dropdown-item @click="redirect()" class="login-osago"
               >ОСАГО</b-dropdown-item
@@ -116,7 +116,9 @@ export default {
     },
     bodySize(bodystatus) {
       if (bodystatus === "blocksize") {
-        document.body.classList.add("overflow-hidden");
+        if (window.innerWidth <= 992) {
+          document.body.classList.add("overflow-hidden");
+        }
       }
       if (bodystatus === "unblocksize") {
         document.body.classList.remove("overflow-hidden");
