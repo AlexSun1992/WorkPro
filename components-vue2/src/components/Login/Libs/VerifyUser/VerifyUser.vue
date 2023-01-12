@@ -500,15 +500,6 @@ export default {
         this.loading = false;
         console.log(e);
       }
-      this.$LogEvent({
-          formName: "VerifyUser",
-          idEventType: this.loginType === "phone" ? 156 : 161,
-          controlName: "VerifyUser.vue",
-          message: `Нажал "Изменить ${
-            this.visibleForm === "phone" ? "номер" : "EMAIL"
-          }"`,
-          timeUser: new Date(),
-        });
     },
 
     getCodeParams() {
@@ -547,6 +538,15 @@ export default {
       this.isPhoneChanged = true;
       this.$emit("isPhoneChangedButtonClicked", this.isPhoneChanged);
       this.isSendCode = false;
+      this.$LogEvent({
+          formName: "VerifyUser",
+          idEventType: this.loginType === "phone" ? 156 : 161,
+          controlName: "VerifyUser.vue",
+          message: `Нажал на кнопку "Изменить ${
+            this.loginType === "phone" ? "номер" : "EMAIL"
+          }"`,
+          timeUser: new Date(),
+        });
     },
 
     validateInput(field) {
