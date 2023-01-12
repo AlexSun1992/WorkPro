@@ -20,15 +20,14 @@
             v-for="item in value"
             :key="item.id"
             v-slot="{ navigate, isActive }"
-            :to="item.url"
             @click="toggleClassActive"
+            :to="item.url"
           >
             <li
               :class="isActive ? 'sidebar-nav-item active' : 'sidebar-nav-item'"
             >
               <a
                 :target="item.target"
-                :href="item.url"
                 @click="
                   (e) => {
                     navigate(e);
@@ -38,6 +37,7 @@
                 :class="'menu-icon-' + item.iconFileName"
                 :data-newcount="item.newCount"
                 :data-newcolor="item.newCountColor"
+                :href="item.url"
               >
                 {{ item.name }}
               </a>
@@ -54,6 +54,7 @@ import { mapGetters } from "vuex";
 import HeaderUserName from "../Header/HeaderUserName";
 
 export default {
+  middleware: "telemed",
   name: "Sidebar",
   components: { HeaderUserName },
   props: {
@@ -63,6 +64,7 @@ export default {
       default: () => [],
     },
   },
+
   data() {
     return {
       endScrollMenu: false,
@@ -70,8 +72,11 @@ export default {
       url: null,
       userInfo: null,
       openMenuLink: [],
+      path: this.$route.path,
+      currentUrl: null,
     };
   },
+
   created() {
     this.userInfo = this.$auth.user;
     const token = this.$auth.$storage._state["_token.local"].replace(
@@ -91,7 +96,7 @@ export default {
         this.openMenuLink.push(activeLink);
       }
     },
-    toggleClassActive(e) {
+    async toggleClassActive(e) {
       if (window.innerWidth <= 992) {
         document.querySelector(".menu").classList.toggle("show");
         document.querySelector("body").classList.toggle("menu-open");
@@ -127,13 +132,14 @@ export default {
         const itemMenu = { ...item };
         itemMenu.target = "_self";
         if (itemMenu.isTelemed) {
-          itemMenu.url = this.url;
+          itemMenu.url = "/telemed";
           itemMenu.target = "_blank";
         }
         group.push(itemMenu);
         acc[item.groupmenu] = group;
         return acc;
       }, {});
+
       return groups;
     },
   },

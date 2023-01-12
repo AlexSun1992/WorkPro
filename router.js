@@ -7,6 +7,7 @@ import Fluid from "~/components/Pages/Cabinet/Fluid";
 import CardPage from "~/components/Pages/Cabinet/CardPage";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
 import LoginEsia from "@/components/Pages/Esia/LoginEsia";
+import Telemed from "@/components/Pages/Telemed/Telemed";
 import AuthFormWrapper from "~/components-vue2/src/components/Login/AuthForm/AuthFormWrapper";
 import PasswordRecoveryFormWrapper from "~/components-vue2/src/components/Login/RecoveryForm/PasswordRecoveryFormWrapper";
 
@@ -93,6 +94,11 @@ export function createRouter() {
         meta: "Esia",
         path: "/idesia",
         component: LoginEsia,
+      },
+      {
+        meta: "Telemed",
+        path: "/telemed",
+        component: Telemed,
       },
     ],
   });
