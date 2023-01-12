@@ -97,7 +97,7 @@ export function createRouter() {
       },
       {
         meta: "Telemed",
-        path: "/telemed",
+        path: "/cabinet/telemed",
         component: Telemed,
       },
     ],
