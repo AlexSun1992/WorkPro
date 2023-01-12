@@ -71,6 +71,7 @@ export function createRouter() {
             path: ":idModule/:idParent/:idItem/:idWizard/:idCard/:idRel",
             component: CardPage,
           },
+
           {
             meta: "Cabinet",
             path: "wizard/:idWizard",
@@ -88,17 +89,17 @@ export function createRouter() {
               },
             ],
           },
+          {
+            meta: "Telemed",
+            path: "/cabinet/telemed",
+            component: Telemed,
+          },
         ],
       },
       {
         meta: "Esia",
         path: "/idesia",
         component: LoginEsia,
-      },
-      {
-        meta: "Telemed",
-        path: "/cabinet/telemed",
-        component: Telemed,
       },
     ],
   });

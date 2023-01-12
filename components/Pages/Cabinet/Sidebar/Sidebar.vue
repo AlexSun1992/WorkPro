@@ -132,7 +132,7 @@ export default {
         const itemMenu = { ...item };
         itemMenu.target = "_self";
         if (itemMenu.isTelemed) {
-          itemMenu.url = "/telemed";
+          itemMenu.url = "/cabinet/telemed";
           itemMenu.target = "_blank";
         }
         group.push(itemMenu);
