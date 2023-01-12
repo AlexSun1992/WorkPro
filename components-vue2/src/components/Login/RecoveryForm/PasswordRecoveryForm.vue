@@ -310,7 +310,7 @@ export default {
             domProps: {
               innerHTML:
                 "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
-            },
+              },
           });
           this.$bvModal
             .msgBoxOk([messageVNode], {
@@ -324,11 +324,18 @@ export default {
               modalClass: this.myclass,
               autoFocusButton: "ok",
             })
+            
             .then((value) => {
               window.location.href = "/login";
             })
             .catch((err) => {
               console.log(err);
+            });
+            this.$LogEvent({
+              formName: "Recovery",
+              controlName: "PasswordRecoveryForm.vue",
+              message: 'Новый пароль успешно установлен',
+              timeUser: new Date(),
             });
         } else if (response.data[0].MESSAGE_CODE === "502") {
           this.isErrorMessage = true;
@@ -380,7 +387,7 @@ export default {
     },
 
     tabIndex() {
-      return this.currentTab == 0 ? [30, 40] : [20, 30];
+      return this.currentTab === 0 ? [30, 40] : [20, 30];
     },
     disabled() {
       return (
