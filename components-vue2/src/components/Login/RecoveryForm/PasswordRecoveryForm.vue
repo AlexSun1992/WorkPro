@@ -333,8 +333,9 @@ export default {
             });
             this.$LogEvent({
               formName: "Recovery",
+              idEventType: this.loginFieldType === "phone" ? 152 : 160,
               controlName: "PasswordRecoveryForm.vue",
-              message: 'Новый пароль успешно установлен',
+              message: `Новый пароль успешно установлен через ${ this.loginFieldType === "phone" ? "номер" : "EMAIL"}`,
               timeUser: new Date(),
             });
         } else if (response.data[0].MESSAGE_CODE === "502") {
