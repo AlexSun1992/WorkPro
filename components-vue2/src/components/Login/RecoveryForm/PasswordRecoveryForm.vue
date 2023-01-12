@@ -344,11 +344,25 @@ export default {
         } else if (response.data[0].MESSAGE_CODE === "501") {
           this.isErrorMessage = true;
           this.errorMessage = "Необходимо ввести дополнительные данные";
+          this.$LogEvent({
+                formName: "PasswordRecoveryForm errorMessage",
+                idEventType: this.loginFieldType ? 155 : 162,
+                controlName: "PasswordRecoveryForm.vue",
+                message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
+                timeUser: new Date(),
+            });
         }
       } catch (e) {
         if (e.response.data.STATUS === 500) {
           this.isErrorMessage = true;
           this.errorMessage = e.response.data.INFO;
+          this.$LogEvent({
+                formName: "PasswordRecoveryForm errorMessage",
+                idEventType: this.loginFieldType ? 155 : 162,
+                controlName: "PasswordRecoveryForm.vue",
+                message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
+                timeUser: new Date(),
+            });
         }
         console.log(e);
       }
@@ -379,6 +393,13 @@ export default {
       if (msg) {
         this.isErrorMessage = true;
         this.errorMessage = msg;
+        this.$LogEvent({
+                formName: "PasswordRecoveryForm errorMessage",
+                idEventType: this.loginFieldType ? 155 : 162,
+                controlName: "PasswordRecoveryForm.vue",
+                message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
+                timeUser: new Date(),
+            });
       } else {
         this.isErrorMessage = false;
         this.errorMessage = null;
