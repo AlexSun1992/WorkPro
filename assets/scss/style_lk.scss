@@ -4327,3 +4327,9 @@ h6 {
 .mx-input-wrapper:hover .mx-icon-clear+.mx-icon-calendar {
     display: block !important;
 }
+
+input.is-valid:disabled {
+    background: #f2f2f2 !important;
+    color: #c3c3c3;
+    border-color: #c3c3c3 !important;
+}
