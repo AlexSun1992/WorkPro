@@ -17,6 +17,7 @@
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @click="loginTouchesCount = 2"
           autocomplete="off"
+          data-testid="verifyPhone"
           :tabindex="tabIndex[1]"
         ></b-form-input>
         <legend v-if="loginType === 'email'">Почта</legend>
@@ -76,6 +77,7 @@
           @input="inputTouch(loginType)"
           :disabled="disabled"
           autocomplete="off"
+          data-testid="phoneConfirmCode"
           placeholder="Код подтверждения"
         ></b-form-input>
         <b-form-invalid-feedback v-if="!v.code.$model"
@@ -93,7 +95,7 @@
         class="btn-link mt-lg-4 d-table"
         type="button"
       >
-        {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
+        {{ loginType === "phone" ? "Изменить номер" : "Изменить E-mail" }}
       </button>
     </div>
 
@@ -250,7 +252,6 @@ export default {
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
-
       if (visibleCaptchas.length === 0) {
         this.loading = false;
       }
@@ -382,13 +383,11 @@ export default {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
-
               return;
             }
 
             if (response1?.data[0]?.ERRORCODE === 106) {
               await this.executeRecaptcha();
-
               return;
             }
           } else {
@@ -577,6 +576,18 @@ export default {
     },
   },
   watch: {
+    errorMessage(value) {
+      const isPhoneExist = value.includes(
+        "В Личном кабинете отсутствует профиль с данным номером телефона"
+      );
+      const isMailExist = value.includes(
+        "На указанный email отсутствует зарегистрированная уч.запись"
+      );
+      if (isPhoneExist || isMailExist) {
+        this.loading = false;
+      }
+    },
+
     isError(value) {
       if (typeof value === "string") {
         this.loading = false;

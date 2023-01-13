@@ -46,6 +46,7 @@
               :class="surnameClass"
               @blur="handleBlur('surname')"
               @submit="changeField('family')"
+              data-testid="regFamily"
             />
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
@@ -67,6 +68,7 @@
               :class="nameClass"
               @blur="handleBlur('name')"
               @submit="changeField('name')"
+              data-testid="regName"
             />
             <b-form-invalid-feedback :state="isNameErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback
@@ -97,6 +99,7 @@
               :class="patronymicClass"
               @blur="handleBlur('patronymic')"
               @submit="changeField('patronymic')"
+              data-testid="regPatronymic"
             />
             <b-form-invalid-feedback :state="isPatronymicErrorMessage"
               >Пожалуйста, заполните это поле</b-form-invalid-feedback

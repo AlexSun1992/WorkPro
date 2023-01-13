@@ -13,14 +13,39 @@
             :placeholder="placeholder"
             :state="validateState('newEmail')"
             @blur="update"
+            @input="changeField('newEmail')"
             autocomplete="off"
+            df
             autofocus
             :disabled="isShowCodeEnter"
             type="email"
+            data-testid="getCodeInput"
           ></b-form-input>
-          <b-form-invalid-feedback
+
+          <b-form-invalid-feedback v-if="!$v.newEmail.$model"
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
           >
+          <b-form-invalid-feedback
+            v-if="
+              $v.newEmail.email === false &&
+              $v.newEmail.forbiddenRussianSign === true
+            "
+            >Пожалуйста, введите корректный e-mail</b-form-invalid-feedback
+          >
+
+          <b-form-invalid-feedback
+            v-if="$v.newEmail.$model && $v.newEmail.forbiddenPlusSign === false"
+          >
+            Пожалуйста, введите корректный e-mail
+          </b-form-invalid-feedback>
+
+          <b-form-invalid-feedback
+            v-if="
+              $v.newEmail.$model && $v.newEmail.forbiddenRussianSign === false
+            "
+          >
+            Русские символы запрещены
+          </b-form-invalid-feedback>
         </b-form-group>
         <div class="col-auto">
           <b-button
@@ -29,6 +54,7 @@
             variant="success"
             class="mt-btn-form-3"
             :disabled="$v.newEmail.$invalid || loading || isSendCode"
+            data-testid="getCodeButton"
             >Получить код
             <b-spinner
               v-if="loading"
@@ -42,7 +68,7 @@
         <div v-if="isShowCodeEnter" class="col-auto">
           <label class="d-none d-md-block">&nbsp;</label>
           <b-link @click="changeEmail" class="link-button d-block l-b-m-t">
-            Изменить email
+            Изменить e-mail
           </b-link>
         </div>
       </div>
@@ -50,7 +76,7 @@
     <div class="resend-block" v-if="isShowCodeEnter">
       <p>
         <template v-if="disabledResend">
-          Проверочный код выслан на указанный емейл.<br />Повторно код можно
+          Проверочный код выслан на указанный e-mail.<br />Повторно код можно
           запросить через
           <verify-timer @onFinish="stopTimer" :duration="duration" /> сек.
         </template>
@@ -58,15 +84,33 @@
     </div>
   </div>
 </template>
-
 <script>
 import { validationMixin } from "vuelidate";
-import { required, email } from "vuelidate/lib/validators";
+import { required, email, helpers } from "vuelidate/lib/validators";
+import {
+  BFormGroup,
+  BFormInput,
+  BFormInvalidFeedback,
+  BButton,
+} from "bootstrap-vue";
 import _ from "lodash";
 import VerifyTimer from "../VerifyUser/VerifyTimer";
 
+const forbiddenRussianSign = helpers.regex(
+  "forbiddenRussian",
+  /^[^а-яА-ЯёЁ]*$/i
+);
+
+const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
+
 export default {
-  components: { VerifyTimer },
+  components: {
+    VerifyTimer,
+    BFormGroup,
+    BFormInput,
+    BFormInvalidFeedback,
+    BButton,
+  },
   mixins: [validationMixin],
   name: "ControlEmailChange",
   data() {
@@ -98,6 +142,8 @@ export default {
     newEmail: {
       required,
       email,
+      forbiddenRussianSign,
+      forbiddenPlusSign,
     },
   },
   created() {
@@ -110,7 +156,7 @@ export default {
   },
   methods: {
     update() {
-      // this.$v.newEmail.$touch();
+      this.$v.newEmail.$touch();
       if (this.newEmail != "") {
         this.$emit("update", {
           fieldId: this.data.fieldId,
@@ -123,6 +169,12 @@ export default {
       const { $dirty, $error } = this.$v[name];
       return $dirty ? !$error : null;
     },
+
+    changeField(name) {
+      this.$v.newEmail.$touch();
+      this.validateState(name);
+    },
+
     async getCaptcha() {
       try {
         await this.$recaptcha.getResponse();

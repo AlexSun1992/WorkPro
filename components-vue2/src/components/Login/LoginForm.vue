@@ -25,29 +25,11 @@
             :state="isValidStateCodeSMS"
             @focus="isValidStateCodeSMS = null"
             class="form-control mt-3"
+            data-testid="authSMSCode"
           ></b-form-input>
           <b-form-invalid-feedback
             >Неверный код. Попробуйте еще раз.
           </b-form-invalid-feedback>
-          <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
-            <b-button @click="retrySendCodeSMS()" class="w-100"
-              >Отправить повторно</b-button
-            >
-          </div>
-          <div v-else class="mt-4 d-block d-lg-table">
-            <button
-              type="button"
-              disabled="disabled"
-              class="btn btn-primary w-100"
-            >
-              Отправить повторно(можно через
-              <verify-timer
-                @onFinish="isRetrySendCodeSMS = true"
-                :duration="duration"
-              />
-              секунд)
-            </button>
-          </div>
           <div
             v-if="isCaptchaNeeded && !authInProcess && isModalVisible"
             class="mt-3 text-start"
@@ -74,6 +56,25 @@
               <b-spinner v-if="authInProcess" variant="light"></b-spinner
             ></b-button>
           </div>
+          <div v-if="!isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
+            <button
+              type="button"
+              disabled="disabled"
+              class="btn btn-primary w-100"
+            >
+              Отправить повторно(можно через
+              <verify-timer
+                @onFinish="isRetrySendCodeSMS = true"
+                :duration="duration"
+              />
+              секунд)
+            </button>
+          </div>
+          <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
+            <b-button @click="retrySendCodeSMS()" class="w-100"
+              >Отправить повторно</b-button
+            >
+          </div>
         </b-form>
       </div>
     </b-modal>
@@ -95,6 +96,7 @@
               @input="wrongAuthData = false"
               :disabled="authInProcess"
               class="form-control"
+              data-testid="authPhoneEmail"
             >
             </b-form-input>
 
@@ -116,6 +118,7 @@
               @input="wrongAuthData = null"
               class="form-control"
               :disabled="authInProcess"
+              data-testid="authPassword"
             ></b-form-input>
             <button
               type="button"

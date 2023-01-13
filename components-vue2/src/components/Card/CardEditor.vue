@@ -357,7 +357,7 @@ export default {
           "data_card/fetchList",
           this.params
         );
-        this.params.idCard = this.cardId || items ? items[0].ID : 0;
+        this.params.idCard = this.cardId || (items ? items[0].ID : 0);
         if (this.rel !== null && this.rel !== "0") {
           this.params.idRel = this.rel;
         } else {
