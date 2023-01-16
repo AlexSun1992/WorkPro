@@ -15,14 +15,14 @@
           data-testid="firstPass"
         ></b-form-input>
         <button
-              id="btn_password_visible"
-              type="button"
-              class="btn-psw-visible"
-              @click="visiblePSW()"
+          id="btn_password_visible"
+          type="button"
+          class="btn-psw-visible"
+          @click="visiblePSW()"
         ></button>
-        <b-form-invalid-feedback
-          >Пароль должен содержать от {{ minLength }} до
-          {{ maxLength }} символов</b-form-invalid-feedback
+        <b-form-invalid-feedback :state="validateState('password')">
+          Пароль должен содержать от
+          {{ minLength }} до {{ maxLength }} символов</b-form-invalid-feedback
         >
       </b-form-group>
     </b-col>
@@ -40,7 +40,6 @@
       >
         <b-form-input
           id="password2"
-          type="password"
           :type="pswVisible2 ? 'text' : 'password'"
           autocomplete="new-password"
           v-model="v.password2.$model"
@@ -52,12 +51,14 @@
           data-testid="secondPass"
         ></b-form-input>
         <button
-        id="btn_password_visible2"
-              type="button"
-              class="btn-psw-visible"
-              @click="visiblePSW2()"
+          id="btn_password_visible2"
+          type="button"
+          class="btn-psw-visible"
+          @click="visiblePSW2()"
         ></button>
-        <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
+        <b-form-invalid-feedback :state="validateState('password2')"
+          >Пароли не совпадают</b-form-invalid-feedback
+        >
       </b-form-group>
     </b-col>
     <b-col sm="12" v-if="recovery"></b-col>
@@ -122,7 +123,9 @@ export default {
       });
     },
     updateField(field) {
-      this.$emit("change", this.v[field].$model);
+      if (this.validateState("password2")) {
+        this.$emit("change", this.v[field].$model);
+      }
     },
   },
   components: {
