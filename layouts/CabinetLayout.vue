@@ -71,8 +71,10 @@ export default {
   },
   mounted() {
     window.onbeforeunload = () => {
-      window.reload = true;
-      this.isContentVisible = false;
+      if (!document.activeElement) {
+        window.reload = true;
+        this.isContentVisible = false;
+      }
     };
   },
   computed: {
