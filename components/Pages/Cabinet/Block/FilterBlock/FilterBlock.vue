@@ -4,10 +4,14 @@
       v-if="filterType !== 'query' && filterType !== 'combobox'"
       class="filterblock"
     >
-      <!-- <p>itemId:{{ this.itemId }}</p>
+      <p>itemId:{{ this.itemId }}</p>
       <p>propertyName:{{ this.propertyName }}</p>
       <p>showFilteredItemsCount:{{ showFilteredItemsCount }}</p>
-      <p>query:{{ this.$route.query }}</p> -->
+      <p>query:{{ this.$route.query }}</p>
+      <p>uniqueItems:{{ this.uniqueItems }}</p>
+      <p>defaultValue:{{ this.defaultValue }}</p>
+      <p>filterType:{{ this.filterType }}</p>
+      <p>showButtonAll:{{ this.showButtonAll }}</p>
 
       <button
         v-if="showButtonAll"
@@ -214,6 +218,7 @@ export default {
       this.$store.commit("blocks/setFilter", filters);
     } else if (this.defaultValue) {
       this.isAllFilters = false;
+      // console.log("setFilter");
       this.$store.commit("blocks/setFilter", {
         propertyName: this.propertyName,
         filter: this.defaultValue,
@@ -227,7 +232,7 @@ export default {
   methods: {
     getSameTypeUnitsCount,
     toggleFilter(propertyName, item) {
-      console.log("this:", this.$route);
+      // console.log("this:", this.$route);
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
         propertyName,
