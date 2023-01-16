@@ -156,7 +156,9 @@ export default {
     },
     bodySize(bodystatus) {
       if (bodystatus === "blocksize") {
-        document.body.classList.add("overflow-hidden");
+        if (window.innerWidth <= 992) {
+          document.body.classList.add("overflow-hidden");
+        }
       } else {
         document.body.classList.remove("overflow-hidden");
       }
