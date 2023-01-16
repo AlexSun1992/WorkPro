@@ -223,16 +223,6 @@ export default {
   },
 
   computed: {
-    getNavigationList() {
-      if (Cookies.get(TOKEN_NAME) === "false") {
-        return ["ОСАГО", "Другие полисы"];
-      }
-      if (Cookies.get(TOKEN_NAME) === undefined) {
-        return ["ОСАГО", "Другие полисы"];
-      }
-      return ["Личный кабинет", "ОСАГО", "Выйти"];
-    },
-
     getTokenFromCookie() {
       return Cookies.get(TOKEN_NAME);
     },
