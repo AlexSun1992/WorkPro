@@ -10,7 +10,7 @@
           v-model="v[loginType].$model"
           v-mask="changeMask"
           @change="changeField('phone')"
-          autofocus
+          :autofocus="!formData"
           :state="validateInput(loginType, isUserBlured)"
           :placeholder="placeholder"
           :disabled="isSendCode || loading"
