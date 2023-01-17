@@ -4,6 +4,7 @@
       <b-col sm="12" md="6">
         <b-form-group :label="showLabel" label-cols="12">
           <b-form-input
+            @input="delayTouch($v.password)"
             :id="Math.random().toString()"
             type="password"
             v-model="v.password.$model"
@@ -14,7 +15,7 @@
             :disabled="disabled"
             :tabindex="tabIndex[0]"
           ></b-form-input>
-          <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
+          <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>         
         </b-form-group>
       </b-col>
       <b-col sm="12" md="6" v-if="recovery"></b-col>
@@ -26,6 +27,7 @@
       >
         <b-form-group :label="'Повторите пароль'" label-cols="12">
           <b-form-input
+            @input="delayTouch($v.password)"
             :id="Math.random().toString()"
             type="password"
             autocomplete="new-password"
@@ -45,6 +47,24 @@
 </template>
 
 <script>
+// import { required, minLength, maxLength, helpers} from 'vuelidate/lib/validators';
+// const alpha = helpers.regex(
+//   "alpha",
+//   /^[a-z]*$/i
+// );
+// const numeric = helpers.regex(
+//   "numeric",
+//   /^[1-9]*$/i
+// );
+// const forbiddeCharacters = helpers.regex(
+//   "forbiddeCharacters",
+//   /^[^!@#$%^&*]*$/i
+// );
+// const forbiddenRussianSign = helpers.regex(
+//   "forbiddeCharacters",
+//   /^[^а-яА-ЯёЁ]*$/i
+// );
+
 export default {
   props: ["v", "validateState", "disabled", "recovery", "tabIndex"],
   data() {
@@ -53,10 +73,48 @@ export default {
       password2: "",
     };
   },
+  // validations: {
+  //   password: {
+  //     required,
+  //     minLength: minLength(6),
+  //     maxLength: maxLength(20),
+  //     alpha,
+  //     numeric,
+  //     forbiddeCharacters,
+  //     forbiddenRussianSign,
+  //   },
+    // password2: {
+    //   required,
+    //   minLength: minLength(6),
+    //   maxLength: maxLength(20),
+    //   alpha,
+    //   numeric,
+    //   forbiddeCharacters,
+    //   forbiddenRussianSign,
+    // }
+  //},
   computed: {
     showLabel() {
       return this.recovery ? "Придумайте новый пароль" : "Пароль";
     },
+    // validation(){
+    //     return{
+    //       password: {
+    //         required,
+    //         minLength: minLength(6),
+    //         maxLength: maxLength(20),
+    //         alpha,
+    //         numeric,
+    //         forbiddeCharacters,
+    //         forbiddenRussianSign,
+    // },
+    //     }
+    // },
+  //   methods: {
+  //   delayTouch($v) {
+  //     $v.$reset()
+  //   }
+  // }
   },
 };
 </script>

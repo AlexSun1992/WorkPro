@@ -6,7 +6,7 @@
           id="password1"
           v-model="v.password.$model"
           :type="pswVisible ? 'text' : 'password'"
-          :state="validateState('password')"
+          :state="validateInput('password', isUserBlured)"
           placeholder="Пароль"
           @blur="v.password.$touch()"
           autocomplete="new-password"
@@ -20,11 +20,25 @@
               class="btn-psw-visible"
               @click="visiblePSW()"
         ></button>
-        <b-form-invalid-feedback
-          >Пароль должен содержать от {{ minLength }} до
-          {{ maxLength }} символов</b-form-invalid-feedback
-        >
-      </b-form-group>
+        <div class="invalid-feedback">
+          <!-- <b-form-invalid-feedback>
+            Новый пароль должен содержать, как минимум, одну цифру и одну букву. 
+          </b-form-invalid-feedback> -->
+          
+          <b-form-invalid-feedback class="d-block" v-if="v.password.numeric === true || v.password.alpha === true">
+            Новый пароль должен содержать, как минимум, одну цифру и одну букву. 
+          </b-form-invalid-feedback> 
+          
+          <b-form-invalid-feedback class="d-block" v-if="v.password.forbiddenRussianSign === false || v.password.forbiddeCharacters === false">
+            Пароль не должен содержать русских букв в специальных символов.
+          </b-form-invalid-feedback>
+          
+          <b-form-invalid-feedback class="d-block" v-if="v.password.minLength === false || v.password.maxLength === false">
+            Пароль должен содержать от {{ minLength }} до
+            {{ maxLength }} символов
+          </b-form-invalid-feedback>
+        </div>
+        </b-form-group>
     </b-col>
     <b-col sm="12" lg="6" v-if="recovery"></b-col>
     <b-col
@@ -95,9 +109,9 @@ export default {
       password2: "",
       pswVisible2: false,
       pswVisible: false,
+      isUserBlured: true,
     };
   },
-
   methods: {
     visiblePSW() {
       if (this.pswVisible === false) {
@@ -113,13 +127,22 @@ export default {
         this.pswVisible2 = false;
       }
     },
+    updateField(field) {
+      this.$emit("checkCodeFieldValid", this.validateState(field));
+    },
     changeField(field) {
-      this.$LogEvent({
-        ...this.logParams,
-        controlName: field,
-        message: `Поле ${field} посещено`,
-        timeUser: new Date(),
-      });
+      this.isUserBlured = false;
+      if (this.validateState(field)) {
+        this.$LogEvent({
+          ...this.logParams,
+          controlName: field,
+          message: `Поле ${field} посещено`,
+          timeUser: new Date(),
+        });
+      }
+    },
+    validateInput(field) {
+      return this.validateState(field);
     },
     updateField(field) {
       this.$emit("change", this.v[field].$model);

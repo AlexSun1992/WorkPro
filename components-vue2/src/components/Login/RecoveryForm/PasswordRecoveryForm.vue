@@ -106,6 +106,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
+                @checkCodeFieldValid="setCodeFieldValid"
               />
             </div>
           </b-row>
@@ -175,6 +176,18 @@ import {
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
   /^[^а-яА-ЯёЁ]*$/i
+);
+const alpha = helpers.regex(
+  "alpha",
+  /^[a-z]*$/i
+);
+const numeric = helpers.regex(
+  "numeric",
+  /^[1-9]*$/i
+);
+const forbiddeCharacters = helpers.regex(
+  "forbiddeCharacters",
+  /^[^!"#$%&'()*+,-./:;|<=>?@[_`{}~]*$/i
 );
 
 const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
@@ -414,6 +427,10 @@ export default {
         required,
         minLength: minLength(minLengthPassword),
         maxLength: maxLength(maxLengthPassword),
+        alpha,
+        numeric,
+        forbiddeCharacters,
+        forbiddenRussianSign
       },
       password2: {
         required,
