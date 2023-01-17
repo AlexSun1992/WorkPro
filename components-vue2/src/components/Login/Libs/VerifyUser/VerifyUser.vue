@@ -117,16 +117,12 @@
     <div class="col-12 mt-4">
       <b-button
         type="submit"
-        :disabled="
-          (loginType === 'phone' ? v.phone.$invalid : v.email.$invalid) ||
-          isSendCode ||
-          loading
-        "
+        :disabled="isDisabledButtonGetCode"
         @click="getCode()"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        v-show="!validateInput('code', isCodeBlured) || isCodeError"
+        v-show="!validateInput('code', isCodeBlured)"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
@@ -184,6 +180,8 @@ export default {
     "isError",
     "isCodeFieldValid",
     "logParams",
+    "formData",
+    "isValidForm",
   ],
 
   data() {
@@ -328,6 +326,7 @@ export default {
       this.isPhoneChanged = false;
       this.$emit("error", null);
       this.errorMessage = null;
+      this.$emit("sendingCode", true);
 
       try {
         let response;
@@ -484,6 +483,7 @@ export default {
               this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
+              this.$emit("sendCode", true);
             }
           } else if (isErrorList === true) {
             if (response?.data[0]?.ERRORCODE === 106) return;
@@ -499,6 +499,8 @@ export default {
       } catch (e) {
         this.loading = false;
         console.log(e);
+      } finally {
+        this.$emit("sendingCode", false);
       }
     },
 
@@ -527,6 +529,7 @@ export default {
     changeNumber() {
       this.codeFieldShown = false;
       this.$emit("checkCodeFieldValid", false);
+      this.$emit("sendCode", false);
       this.$emit("error", null);
       this.errorMessage = null;
       this.isUserBlured = false;
@@ -541,6 +544,9 @@ export default {
     },
 
     validateInput(field) {
+      if (field === "code" && this.isCodeError) {
+        return false;
+      }
       return this.validateState(field);
     },
 
@@ -573,6 +579,25 @@ export default {
         return !this.v.phone.$invalid && this.isSendCode;
       }
       return !this.v.email.$invalid && this.isSendCode;
+    },
+    isDisabledButtonGetCode() {
+      if (this.loginType === "phone") {
+        if (this.v.phone.$invalid) {
+          return true;
+        }
+        if (this.isValidForm === false) {
+          return true;
+        }
+        if (this.isSendCode) {
+          return true;
+        }
+        if (this.loading) {
+          return true;
+        }
+      } else {
+        return this.v.email.$invalid || this.isSendCode || this.loading;
+      }
+      return false;
     },
   },
   watch: {
