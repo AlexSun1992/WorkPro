@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import PasswordConfirm from "./PasswordConfirm.vue";
+import PasswordConfirm from "./ControlPasswordConfirm.vue";
 
 describe("PasswordConfirm", () => {
   let wrapper;
