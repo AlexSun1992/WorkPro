@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h6>Компонент замены пароля</h6>
     <div>
       <b-form-group>
         <b-form-input
