@@ -29,12 +29,12 @@ Sentry.init({
 });
 
 Vue.customElement(
-  "component-password-replacement",
+  "component-password-confirm",
   () =>
     new Promise((resolve) => {
-      require(["./components/PasswordReplacement/PasswordReplacement.vue"], (
-        lazyComponent
-      ) => {
+      require([
+        "../../components/Libs/Controls/ControlPasswordConfirm/ControlPasswordConfirm.vue",
+      ], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

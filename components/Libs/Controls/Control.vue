@@ -55,6 +55,7 @@ import ControlRegNumber from "./ControlRegNumber/ControlRegNumber.vue";
 import ControlRadioButton from "./ControlRadioButton.vue";
 import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
 import ControlOneToMany from "./ControlOneToMany/ControlOneToMany";
+import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConfirm.vue";
 
 export default {
   name: "Control",
@@ -91,6 +92,7 @@ export default {
     ControlRadioButton,
     ControlDoctorSchedule,
     ControlOneToMany,
+    ControlPasswordConfirm,
   },
   props: {
     data: {
