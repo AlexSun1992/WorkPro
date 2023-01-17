@@ -6,7 +6,7 @@
           id="password1"
           v-model="v.password.$model"
           :type="pswVisible ? 'text' : 'password'"
-          :state="validateInput('password', isUserBlured)"
+          :state="validateState('password')"
           placeholder="Пароль"
           @blur="v.password.$touch()"
           autocomplete="new-password"
@@ -131,7 +131,6 @@ export default {
       this.$emit("checkCodeFieldValid", this.validateState(field));
     },
     changeField(field) {
-      this.isUserBlured = false;
       if (this.validateState(field)) {
         this.$LogEvent({
           ...this.logParams,
@@ -140,12 +139,6 @@ export default {
           timeUser: new Date(),
         });
       }
-    },
-    validateInput(field) {
-      return this.validateState(field);
-    },
-    updateField(field) {
-      this.$emit("change", this.v[field].$model);
     },
   },
   components: {

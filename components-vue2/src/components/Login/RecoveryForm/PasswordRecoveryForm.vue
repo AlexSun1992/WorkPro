@@ -106,7 +106,6 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
-                @checkCodeFieldValid="setCodeFieldValid"
               />
             </div>
           </b-row>
