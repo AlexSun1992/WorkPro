@@ -34,7 +34,11 @@
         <b-form-invalid-feedback> пароли не совпадают </b-form-invalid-feedback>
       </b-form-group>
     </div>
-    <b-button :disabled="disabled" data-testid="passwordBtn"
+
+    <b-button
+      :disabled="disabled"
+      @click="changePassword"
+      data-testid="passwordBtn"
       >Изменить пароль</b-button
     >
   </div>
@@ -62,6 +66,18 @@ export default {
   name: "PasswordReplacement",
   components: { BFormGroup, BFormInput, BFormInvalidFeedback, BButton },
   mixins: [validationMixin],
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false,
+    },
+  },
   data() {
     return {
       form: {
@@ -74,6 +90,13 @@ export default {
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;
+    },
+    changePassword() {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.form.password1,
+      });
     },
   },
 
