@@ -1,10 +1,10 @@
 import { mount } from "@vue/test-utils";
-import PasswordReplacement from "./PasswordReplacement.vue";
+import PasswordConfirm from "./PasswordConfirm.vue";
 
-describe("PasswordReplacement", () => {
+describe("PasswordConfirm", () => {
   let wrapper;
   const createComponent = () => {
-    wrapper = mount(PasswordReplacement);
+    wrapper = mount(PasswordConfirm);
   };
   afterEach(() => {
     wrapper.destroy();

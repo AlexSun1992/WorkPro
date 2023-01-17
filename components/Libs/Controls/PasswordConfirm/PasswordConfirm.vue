@@ -62,7 +62,7 @@ import {
 } from "./regform.helper.fixtures";
 
 export default {
-  name: "PasswordReplacement",
+  name: "PasswordConfirm",
   components: { BFormGroup, BFormInput, BFormInvalidFeedback, BButton },
   mixins: [validationMixin],
   props: {
