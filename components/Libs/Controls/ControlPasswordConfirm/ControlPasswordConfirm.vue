@@ -1,9 +1,9 @@
 <template>
   <div>
-    <span v-if="data.helpText" class="tooltipster">
+    <!-- <span v-if="data.helpText" class="tooltipster">
       (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
         <span v-html="data.helpText"></span></vue-easy-tooltip
-    ></span>
+    ></span> -->
     <div>
       <b-form-group>
         <b-form-input
@@ -40,12 +40,7 @@
   </div>
 </template>
 <script>
-import {
-  BFormGroup,
-  BFormInput,
-  BFormInvalidFeedback,
-  BButton,
-} from "bootstrap-vue";
+import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import {
   required,
   sameAs,
@@ -62,13 +57,13 @@ export default {
   name: "PasswordConfirm",
   components: { BFormGroup, BFormInput, BFormInvalidFeedback },
   mixins: [validationMixin],
-  props: {
-    data: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
-  },
+  // props: {
+  //   data: {
+  //     type: Object,
+  //     required: true,
+  //     default: () => {},
+  //   },
+  // },
   data() {
     return {
       form: {
