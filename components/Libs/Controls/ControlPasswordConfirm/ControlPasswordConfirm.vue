@@ -1,5 +1,9 @@
 <template>
   <div>
+    <span v-if="data.helpText" class="tooltipster">
+      (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+        <span v-html="data.helpText"></span></vue-easy-tooltip
+    ></span>
     <div>
       <b-form-group>
         <b-form-input
@@ -33,13 +37,6 @@
         <b-form-invalid-feedback> пароли не совпадают </b-form-invalid-feedback>
       </b-form-group>
     </div>
-
-    <b-button
-      :disabled="disabled"
-      @click="changePassword"
-      data-testid="passwordBtn"
-      >Изменить пароль</b-button
-    >
   </div>
 </template>
 <script>
@@ -63,18 +60,13 @@ import {
 
 export default {
   name: "PasswordConfirm",
-  components: { BFormGroup, BFormInput, BFormInvalidFeedback, BButton },
+  components: { BFormGroup, BFormInput, BFormInvalidFeedback },
   mixins: [validationMixin],
   props: {
     data: {
       type: Object,
       required: true,
       default: () => {},
-    },
-    edit: {
-      type: Boolean,
-      required: true,
-      default: () => false,
     },
   },
   data() {
@@ -89,13 +81,6 @@ export default {
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;
-    },
-    changePassword() {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.form.password1,
-      });
     },
   },
 
