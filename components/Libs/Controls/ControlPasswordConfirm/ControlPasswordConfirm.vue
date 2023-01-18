@@ -1,9 +1,9 @@
 <template>
   <div>
-    <!-- <span v-if="data.helpText" class="tooltipster">
+    <span v-if="data.helpText" class="tooltipster">
       (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
         <span v-html="data.helpText"></span></vue-easy-tooltip
-    ></span> -->
+    ></span>
     <div>
       <b-form-group>
         <b-form-input
@@ -17,8 +17,44 @@
           data-testid="password1"
         >
         </b-form-input>
-        <b-form-invalid-feedback>
-          пароль должен содержать не менее 6 символов
+
+        <b-form-invalid-feedback
+          v-if="this.$v.form.password1.englishOnly === false"
+        >
+          Русские символы запрещены
+        </b-form-invalid-feedback>
+
+        <b-form-invalid-feedback
+          v-if="
+            (this.$v.form.password1.$model.length <= 6 ||
+              this.$v.form.password1.$model.length >= 20) &&
+            this.$v.form.password1.englishOnly === true
+          "
+        >
+          Пароль должен содержать от 6 до 20 символов
+        </b-form-invalid-feedback>
+
+        <b-form-invalid-feedback
+          v-if="
+            this.$v.form.password1.$model.length >= 6 &&
+            this.$v.form.password1.$model.length <= 20 &&
+            this.$v.form.password1.englishOnly === true &&
+            this.$v.form.password1.test === false
+          "
+        >
+          Пароль должен содержать хотя бы одну латинскую букву
+        </b-form-invalid-feedback>
+
+        <b-form-invalid-feedback
+          v-if="
+            this.$v.form.password1.$model.length >= 6 &&
+            this.$v.form.password1.$model.length <= 20 &&
+            this.$v.form.password1.englishOnly === true &&
+            this.$v.form.password1.test === true &&
+            this.$v.form.password1.sign === false
+          "
+        >
+          Пароль должен содержать хотя бы одну цифру
         </b-form-invalid-feedback>
       </b-form-group>
     </div>
@@ -46,6 +82,7 @@ import {
   sameAs,
   minLength,
   maxLength,
+  helpers,
 } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
 import {
@@ -53,17 +90,21 @@ import {
   maxLengthPassword,
 } from "./regform.helper.fixtures";
 
+const englishOnly = helpers.regex("englishOnly", /^[a-zA-Z!?@#$%^&*()0-9 ]*$/);
+const test = helpers.regex("test", /[a-zA-Z]/);
+const sign = helpers.regex("sign", /[0-9]/);
+
 export default {
   name: "PasswordConfirm",
   components: { BFormGroup, BFormInput, BFormInvalidFeedback },
   mixins: [validationMixin],
-  // props: {
-  //   data: {
-  //     type: Object,
-  //     required: true,
-  //     default: () => {},
-  //   },
-  // },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+  },
   data() {
     return {
       form: {
@@ -97,8 +138,11 @@ export default {
     form: {
       password1: {
         required,
+        englishOnly,
         minLength: minLength(minLengthPassword),
         maxLength: maxLength(maxLengthPassword),
+        test,
+        sign,
       },
       password2: {
         required,
