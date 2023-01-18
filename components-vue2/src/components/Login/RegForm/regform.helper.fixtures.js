@@ -20,15 +20,11 @@ export function passwordValidation(password) {
     password.length < minLengthPassword ||
     password.length > maxLengthPassword
   ) {
-    console.log("Пароль должен содержать от 6 до 20 символов.");
     errorMessagepasswordValidation.push(
       createErrorMessage("Пароль должен содержать от 6 до 20 символов.")
     );
   }
-  if (alpha.test(password) === false || numeric.test(password) === false) {
-    console.log(
-      "Новый пароль должен содержать, как минимум, одну цифру и одну букву."
-    );
+  if (alpha.test(password) === true || numeric.test(password) === true) {
     errorMessagepasswordValidation.push(
       createErrorMessage(
         "Новый пароль должен содержать, как минимум, одну цифру и одну букву."
@@ -39,14 +35,13 @@ export function passwordValidation(password) {
     forbiddeCharacters.test(password) === false ||
     forbiddenRussianSign.test(password) === false
   ) {
-    console.log(
-      "Пароль не должен содержать русских букв в специальных символов."
-    );
     errorMessagepasswordValidation.push(
       createErrorMessage(
         "Пароль не должен содержать русских букв в специальных символов."
       )
     );
   }
+  console.log(alpha.test(password), "alpha.test(password)");
+  console.log(numeric.test(password), "numeric.test(password)");
   return errorMessagepasswordValidation;
 }
