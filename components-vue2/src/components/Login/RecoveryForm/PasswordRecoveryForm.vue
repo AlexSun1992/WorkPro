@@ -56,6 +56,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
+                :errorMessageValidation="isFirstPassword"
               />
             </div>
           </b-row>
@@ -106,6 +107,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
+                :errorMessageValidation="isFirstPassword"
               />
             </div>
           </b-row>
@@ -170,6 +172,7 @@ import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import {
   minLengthPassword,
   maxLengthPassword,
+  passwordValidation,
 } from "../RegForm/regform.helper.fixtures";
 
 const forbiddenRussianSign = helpers.regex(
@@ -231,6 +234,11 @@ export default {
     this.clearForm();
     this.formLoaded = true;
   },
+  updated(){
+    //первый пароль
+    // console.log(this.variablePassVal(),' this.variablePassVal');
+     console.log(passwordValidation(this.$v.form.password.$model), 'uptadet');
+  },
 
   methods: {
     setCodeFieldValid(data) {
@@ -245,7 +253,6 @@ export default {
         this.visibleForm = tabs === "phone" ? "email" : "phone";
       }
     },
-
     loginType(value) {
       this.loginFieldType = value;
     },
@@ -370,7 +377,9 @@ export default {
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },
-
+    isFirstPassword(){
+      return passwordValidation(this.$v.form.password.$model)
+    },
     tabIndex() {
       return this.currentTab == 0 ? [30, 40] : [20, 30];
     },

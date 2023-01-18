@@ -21,22 +21,19 @@
               @click="visiblePSW()"
         ></button>
         <div class="invalid-feedback">
-          <!-- <b-form-invalid-feedback>
-            Новый пароль должен содержать, как минимум, одну цифру и одну букву. 
-          </b-form-invalid-feedback> -->
+          <b-form-invalid-feedback class="d-block" v-for="(errMess, index) in errorMessageValidation" :key="index">
+            {{ errMess.errorText }}
+          </b-form-invalid-feedback>
           
-          <b-form-invalid-feedback class="d-block" v-if="v.password.numeric === true || v.password.alpha === true">
-            Новый пароль должен содержать, как минимум, одну цифру и одну букву. 
-          </b-form-invalid-feedback> 
           
-          <b-form-invalid-feedback class="d-block" v-if="v.password.forbiddenRussianSign === false || v.password.forbiddeCharacters === false">
+          <!-- <b-form-invalid-feedback class="d-block" v-if="v.password.forbiddenRussianSign === false || v.password.forbiddeCharacters === false">
             Пароль не должен содержать русских букв в специальных символов.
           </b-form-invalid-feedback>
           
           <b-form-invalid-feedback class="d-block" v-if="v.password.minLength === false || v.password.maxLength === false">
             Пароль должен содержать от {{ minLength }} до
             {{ maxLength }} символов
-          </b-form-invalid-feedback>
+          </b-form-invalid-feedback> -->
         </div>
         </b-form-group>
     </b-col>
@@ -89,6 +86,7 @@ import {
 import {
   minLengthPassword,
   maxLengthPassword,
+  
 } from "../../RegForm/regform.helper.fixtures";
 
 export default {
@@ -100,6 +98,7 @@ export default {
     "tabIndex",
     "isValid",
     "logParams",
+    "errorMessageValidation"
   ],
   data() {
     return {
@@ -110,8 +109,10 @@ export default {
       pswVisible2: false,
       pswVisible: false,
       isUserBlured: true,
+      errorMessageValidationPassword: null
     };
   },
+ 
   methods: {
     visiblePSW() {
       if (this.pswVisible === false) {
@@ -139,6 +140,9 @@ export default {
           timeUser: new Date(),
         });
       }
+    },
+    errorMessageValidationFun(){
+      this.errorMessageValidationPassword = this.errorMessageValidation
     },
   },
   components: {
