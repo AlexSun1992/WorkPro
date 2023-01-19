@@ -173,25 +173,12 @@ import {
   minLengthPassword,
   maxLengthPassword,
   passwordValidation,
-} from "../RegForm/regform.helper.fixtures";
+} from "../RegForm/regform.helper";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
   /^[^а-яА-ЯёЁ]*$/i
 );
-const alpha = helpers.regex(
-  "alpha",
-  /^[a-z]*$/i
-);
-const numeric = helpers.regex(
-  "numeric",
-  /^[1-9]*$/i
-);
-const forbiddeCharacters = helpers.regex(
-  "forbiddeCharacters",
-  /^[^!"#$%&'()*+,-./:;|<=>?@[_`{}~]*$/i
-);
-
 const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
 
 export default {
@@ -427,11 +414,6 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
-        alpha,
-        numeric,
-        forbiddeCharacters,
         forbiddenRussianSign
       },
       password2: {

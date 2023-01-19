@@ -1,7 +1,6 @@
 <template>
   <div class="row mt-3">
     <b-col sm="12" lg="6">
-      <!-- <b-form-group :label="showLabel" label-cols="12" class="required"> -->
         <label>
           {{ showLabel }}
           <span class="tooltipster" @click="tooltip = !tooltip">
@@ -81,10 +80,8 @@ import {
   BRow,
 } from "bootstrap-vue";
 import {
-  minLengthPassword,
-  maxLengthPassword,
   tooltipText,
-} from "../../RegForm/regform.helper.fixtures";
+} from "../../RegForm/regform.helper";
 
 export default {
   props: [
@@ -99,8 +96,6 @@ export default {
   ],
   data() {
     return {
-      minLength: minLengthPassword,
-      maxLength: maxLengthPassword,
       password: "",
       password2: "",
       pswVisible2: false,

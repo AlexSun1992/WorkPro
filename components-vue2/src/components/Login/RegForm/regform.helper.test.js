@@ -1,6 +1,6 @@
-import { passwordValidation } from "./regform.helper.fixtures";
+import { passwordValidation } from "./regform.helper";
 
-describe("regform.helper.fixtures.js", () => {
+describe("Валидация компонента PasswordRecoveryForm", () => {
   it("Успешный пароль", () => {
     const passwordValidationMessage = passwordValidation("reso1991");
     expect(passwordValidationMessage).toEqual([]);
