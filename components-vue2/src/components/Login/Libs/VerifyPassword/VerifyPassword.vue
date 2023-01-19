@@ -24,16 +24,6 @@
           <b-form-invalid-feedback class="d-block" v-for="(errMess, index) in errorMessageValidation" :key="index">
             {{ errMess.errorText }}
           </b-form-invalid-feedback>
-          
-          
-          <!-- <b-form-invalid-feedback class="d-block" v-if="v.password.forbiddenRussianSign === false || v.password.forbiddeCharacters === false">
-            Пароль не должен содержать русских букв в специальных символов.
-          </b-form-invalid-feedback>
-          
-          <b-form-invalid-feedback class="d-block" v-if="v.password.minLength === false || v.password.maxLength === false">
-            Пароль должен содержать от {{ minLength }} до
-            {{ maxLength }} символов
-          </b-form-invalid-feedback> -->
         </div>
         </b-form-group>
     </b-col>

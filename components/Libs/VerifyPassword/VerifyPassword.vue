@@ -47,24 +47,6 @@
 </template>
 
 <script>
-// import { required, minLength, maxLength, helpers} from 'vuelidate/lib/validators';
-// const alpha = helpers.regex(
-//   "alpha",
-//   /^[a-z]*$/i
-// );
-// const numeric = helpers.regex(
-//   "numeric",
-//   /^[1-9]*$/i
-// );
-// const forbiddeCharacters = helpers.regex(
-//   "forbiddeCharacters",
-//   /^[^!@#$%^&*]*$/i
-// );
-// const forbiddenRussianSign = helpers.regex(
-//   "forbiddeCharacters",
-//   /^[^а-яА-ЯёЁ]*$/i
-// );
-
 export default {
   props: ["v", "validateState", "disabled", "recovery", "tabIndex"],
   data() {
@@ -73,48 +55,10 @@ export default {
       password2: "",
     };
   },
-  // validations: {
-  //   password: {
-  //     required,
-  //     minLength: minLength(6),
-  //     maxLength: maxLength(20),
-  //     alpha,
-  //     numeric,
-  //     forbiddeCharacters,
-  //     forbiddenRussianSign,
-  //   },
-    // password2: {
-    //   required,
-    //   minLength: minLength(6),
-    //   maxLength: maxLength(20),
-    //   alpha,
-    //   numeric,
-    //   forbiddeCharacters,
-    //   forbiddenRussianSign,
-    // }
-  //},
   computed: {
     showLabel() {
       return this.recovery ? "Придумайте новый пароль" : "Пароль";
     },
-    // validation(){
-    //     return{
-    //       password: {
-    //         required,
-    //         minLength: minLength(6),
-    //         maxLength: maxLength(20),
-    //         alpha,
-    //         numeric,
-    //         forbiddeCharacters,
-    //         forbiddenRussianSign,
-    // },
-    //     }
-    // },
-  //   methods: {
-  //   delayTouch($v) {
-  //     $v.$reset()
-  //   }
-  // }
   },
 };
 </script>

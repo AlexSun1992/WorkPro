@@ -234,12 +234,6 @@ export default {
     this.clearForm();
     this.formLoaded = true;
   },
-  updated(){
-    //первый пароль
-    // console.log(this.variablePassVal(),' this.variablePassVal');
-     console.log(passwordValidation(this.$v.form.password.$model), 'uptadet');
-  },
-
   methods: {
     setCodeFieldValid(data) {
       if (data) {

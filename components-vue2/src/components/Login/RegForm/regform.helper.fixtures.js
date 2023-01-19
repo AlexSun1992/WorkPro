@@ -4,8 +4,8 @@ export const minLengthPassword = 6;
 export const maxLengthPassword = 20;
 
 const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
-const alpha = /^[a-z]*$/i;
-const numeric = /^[0-9]*$/i;
+const alpha = /[a-z]/i;
+const numeric = /[0-9]/i;
 const forbiddeCharacters = /^[^!"#$%&'()*+,-./:;|<=>?@[_`{}~]*$/i;
 /** Функция создания ошибок валидации пароля */
 function createErrorMessage(errorValue) {
@@ -24,12 +24,14 @@ export function passwordValidation(password) {
       createErrorMessage("Пароль должен содержать от 6 до 20 символов.")
     );
   }
-  if (alpha.test(password) === true || numeric.test(password) === true) {
-    errorMessagepasswordValidation.push(
-      createErrorMessage(
-        "Новый пароль должен содержать, как минимум, одну цифру и одну букву."
-      )
-    );
+  if (alpha.test(password) === false || numeric.test(password) === false) {
+    if (password !== "") {
+      errorMessagepasswordValidation.push(
+        createErrorMessage(
+          "Новый пароль должен содержать, как минимум, одну цифру и одну букву."
+        )
+      );
+    }
   }
   if (
     forbiddeCharacters.test(password) === false ||
