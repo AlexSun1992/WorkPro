@@ -21,6 +21,7 @@
           id="btn_password_visible"
           type="button"
           class="btn-psw-visible"
+          @click="visiblePSW()"
         ></button>
 
         <b-form-invalid-feedback
@@ -79,6 +80,7 @@
           id="btn_password_visible2"
           type="button"
           class="btn-psw-visible"
+          @click="visiblePSW2()"
         ></button>
         <b-form-invalid-feedback> пароли не совпадают </b-form-invalid-feedback>
       </b-form-group>
