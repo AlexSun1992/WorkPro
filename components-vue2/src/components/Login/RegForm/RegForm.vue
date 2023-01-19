@@ -220,7 +220,7 @@ import {
 import {
   minLengthPassword,
   maxLengthPassword,
-} from "./regform.helper.fixtures";
+} from "./regform.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
