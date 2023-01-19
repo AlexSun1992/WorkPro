@@ -1,7 +1,13 @@
 <template>
   <div class="row mt-3">
     <b-col sm="12" lg="6">
-      <b-form-group :label="showLabel" label-cols="12" class="required">
+      <!-- <b-form-group :label="showLabel" label-cols="12" class="required"> -->
+        <label>
+          {{ showLabel }}
+          <span class="tooltipster" @click="tooltip = !tooltip">
+            (?)<vue-easy-tooltip v-model="tooltip" :with-arrow="true" position="top" :offset="4">
+            <span>{{ tooltipValidation }}</span></vue-easy-tooltip></span>
+        </label>
         <b-form-input
           id="password1"
           v-model="v.password.$model"
@@ -66,6 +72,7 @@
 </template>
 
 <script>
+import VueEasyTooltip from "vue-easy-tooltip"
 import {
   BFormInvalidFeedback,
   BFormInput,
@@ -76,7 +83,7 @@ import {
 import {
   minLengthPassword,
   maxLengthPassword,
-  
+  tooltipText,
 } from "../../RegForm/regform.helper.fixtures";
 
 export default {
@@ -99,10 +106,10 @@ export default {
       pswVisible2: false,
       pswVisible: false,
       isUserBlured: true,
-      errorMessageValidationPassword: null
+      errorMessageValidationPassword: null,
+      tooltip: false
     };
   },
- 
   methods: {
     visiblePSW() {
       if (this.pswVisible === false) {
@@ -141,11 +148,15 @@ export default {
     BFormGroup,
     BCol,
     BRow,
+    VueEasyTooltip,
   },
   computed: {
     showLabel() {
       return this.recovery ? "Придумайте новый пароль" : "Пароль";
     },
+    tooltipValidation(){
+      return tooltipText
+    }
   },
 };
 </script>
