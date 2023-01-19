@@ -15,6 +15,7 @@ function createErrorMessage(errorValue) {
 }
 /** Функция валидации пароля */
 export function passwordValidation(password) {
+  /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
   if (
     password.length < minLengthPassword ||
@@ -43,7 +44,5 @@ export function passwordValidation(password) {
       )
     );
   }
-  console.log(alpha.test(password), "alpha.test(password)");
-  console.log(numeric.test(password), "numeric.test(password)");
   return errorMessagepasswordValidation;
 }
