@@ -80,7 +80,7 @@ import {
   BRow,
 } from "bootstrap-vue";
 import {
-  tooltipText,
+  tooltipText
 } from "../../RegForm/regform.helper";
 
 export default {
@@ -101,7 +101,6 @@ export default {
       pswVisible2: false,
       pswVisible: false,
       isUserBlured: true,
-      errorMessageValidationPassword: null,
       tooltip: false
     };
   },
@@ -133,9 +132,7 @@ export default {
         });
       }
     },
-    errorMessageValidationFun(){
-      this.errorMessageValidationPassword = this.errorMessageValidation
-    },
+   
   },
   components: {
     BFormInvalidFeedback,

@@ -15,9 +15,14 @@ function createErrorMessage(errorValue) {
     errorText: errorValue,
   };
 }
-/** Функция валидации пароля */
+/** Функция валидации пароля
+ * @param {string} password
+ * @returns {array} errorMessagepasswordValidation
+ */
 export function passwordValidation(password) {
-  /** Массив ошибок для пароля */
+  /** Массив ошибок для пароля
+   * @param {Array} errorMessagepasswordValidation
+   */
   const errorMessagepasswordValidation = [];
   if (
     password.length < minLengthPassword ||

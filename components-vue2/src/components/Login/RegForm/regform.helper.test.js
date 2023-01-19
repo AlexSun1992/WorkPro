@@ -114,4 +114,17 @@ describe("Валидация компонента PasswordRecoveryForm", () => {
       },
     ]);
   });
+
+  it.only("Если поле содержит русские буквы, специальный символ и нет латинских букв, то выводит ошибку", () => {
+    const passwordValidationMessage = passwordValidation("g");
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "Пароль должен содержать от 6 до 20 символов.",
+      },
+      {
+        errorText:
+          "Новый пароль должен содержать, как минимум, одну цифру и одну букву.",
+      },
+    ]);
+  });
 });
