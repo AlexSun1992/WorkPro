@@ -1,6 +1,11 @@
 import { passwordValidation } from "./regform.helper.fixtures";
 
 describe("regform.helper.fixtures.js", () => {
+  it("Успешный пароль", () => {
+    const passwordValidationMessage = passwordValidation("reso1991");
+    expect(passwordValidationMessage).toEqual([]);
+  });
+
   it("Если поле пустое выводит ошибку", () => {
     const passwordValidationMessage = passwordValidation("");
     expect(passwordValidationMessage).toEqual([
