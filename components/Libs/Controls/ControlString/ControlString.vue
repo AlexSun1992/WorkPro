@@ -59,9 +59,10 @@ export default {
   data() {
     return {
       fieldsNameHub: [
-        "SFIRSTNAME",
-        "SSECONDNAME",
-        "STHIRDNAME",
+        // @TODO перенести поддержку полей в ControlDadataSelect
+        // "SFIRSTNAME",
+        // "SSECONDNAME",
+        // "STHIRDNAME",
         "ADDRESS",
         "SISSUED_WHERE",
         "SDOCDEP",
