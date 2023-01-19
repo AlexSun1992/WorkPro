@@ -15,10 +15,10 @@
           data-testid="firstPass"
         ></b-form-input>
         <button
-              id="btn_password_visible"
-              type="button"
-              class="btn-psw-visible"
-              @click="visiblePSW()"
+          id="btn_password_visible"
+          type="button"
+          class="btn-psw-visible"
+          @click="visiblePSW()"
         ></button>
         <b-form-invalid-feedback
           >Пароль должен содержать от {{ minLength }} до
@@ -52,10 +52,10 @@
           data-testid="secondPass"
         ></b-form-input>
         <button
-        id="btn_password_visible2"
-              type="button"
-              class="btn-psw-visible"
-              @click="visiblePSW2()"
+          id="btn_password_visible2"
+          type="button"
+          class="btn-psw-visible"
+          @click="visiblePSW2()"
         ></button>
         <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>

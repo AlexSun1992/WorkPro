@@ -8,7 +8,7 @@
       <b-form-group>
         <b-form-input
           id="password1"
-          type="password"
+          :type="pswVisible ? 'text' : 'password'"
           placeholder="Пароль"
           v-model="$v.form.password1.$model"
           @blur="$v.form.password1.$touch()"
@@ -17,6 +17,11 @@
           data-testid="password1"
         >
         </b-form-input>
+        <button
+          id="btn_password_visible"
+          type="button"
+          class="btn-psw-visible"
+        ></button>
 
         <b-form-invalid-feedback
           v-if="this.$v.form.password1.englishOnly === false"
@@ -62,7 +67,7 @@
       <b-form-group>
         <b-form-input
           id="password2"
-          type="password"
+          :type="pswVisible2 ? 'text' : 'password'"
           placeholder="Повторите пароль"
           v-model="$v.form.password2.$model"
           @blur="$v.form.password2.$touch()"
@@ -70,6 +75,11 @@
           class="form-control"
           data-testid="password2"
         ></b-form-input>
+        <button
+          id="btn_password_visible2"
+          type="button"
+          class="btn-psw-visible"
+        ></button>
         <b-form-invalid-feedback> пароли не совпадают </b-form-invalid-feedback>
       </b-form-group>
     </div>
@@ -107,6 +117,8 @@ export default {
   },
   data() {
     return {
+      pswVisible2: false,
+      pswVisible: false,
       form: {
         password1: "",
         password2: "",
@@ -117,6 +129,20 @@ export default {
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;
+    },
+    visiblePSW() {
+      if (this.pswVisible === false) {
+        this.pswVisible = true;
+      } else {
+        this.pswVisible = false;
+      }
+    },
+    visiblePSW2() {
+      if (this.pswVisible2 === false) {
+        this.pswVisible2 = true;
+      } else {
+        this.pswVisible2 = false;
+      }
     },
   },
 
