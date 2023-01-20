@@ -17,14 +17,21 @@
           data-testid="password1"
         >
         </b-form-input>
+
         <button
           id="btn_password_visible"
           type="button"
           class="btn-psw-visible"
           @click="visiblePSW()"
         ></button>
-
+        <!-- <p>execute:{{ executeValidation }}</p> -->
         <b-form-invalid-feedback
+          v-for="(errMess, index) in executeValidation"
+          :key="index"
+        >
+          {{ errMess.errorText }}
+        </b-form-invalid-feedback>
+        <!-- <b-form-invalid-feedback
           v-if="this.$v.form.password1.englishOnly === false"
         >
           Русские символы запрещены
@@ -61,7 +68,7 @@
           "
         >
           Пароль должен содержать хотя бы одну цифру
-        </b-form-invalid-feedback>
+        </b-form-invalid-feedback> -->
       </b-form-group>
     </div>
     <div>
@@ -101,6 +108,7 @@ import {
   minLengthPassword,
   maxLengthPassword,
 } from "./regform.helper.fixtures";
+import { passwordValidation } from "../../../../components-vue2/src/components/Login/RegForm/regform.helper";
 
 const englishOnly = helpers.regex("englishOnly", /^[a-zA-Z!?@#$%^&*()0-9 ]*$/);
 const test = helpers.regex("test", /[a-zA-Z]/);
@@ -149,6 +157,9 @@ export default {
   },
 
   computed: {
+    executeValidation() {
+      return passwordValidation(this.$v.form.password1);
+    },
     disabled() {
       if (
         this.$v.form.password1.$anyError === false &&
