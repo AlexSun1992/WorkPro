@@ -58,18 +58,7 @@ export default {
 
   data() {
     return {
-      fieldsNameHub: [
-        // @TODO перенести поддержку полей в ControlDadataSelect
-        // "SFIRSTNAME",
-        // "SSECONDNAME",
-        // "STHIRDNAME",
-        "ADDRESS",
-        "SISSUED_WHERE",
-        "SDOCDEP",
-        "SNEWPHONE",
-        "SCODEFIELD",
-        "SNEWEMAIL",
-      ],
+      fieldsNameHub: [],
     };
   },
 

@@ -4,6 +4,7 @@
       <b-col sm="12" md="6">
         <b-form-group :label="showLabel" label-cols="12">
           <b-form-input
+            @input="delayTouch($v.password)"
             :id="Math.random().toString()"
             type="password"
             v-model="v.password.$model"
@@ -14,7 +15,7 @@
             :disabled="disabled"
             :tabindex="tabIndex[0]"
           ></b-form-input>
-          <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
+          <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>         
         </b-form-group>
       </b-col>
       <b-col sm="12" md="6" v-if="recovery"></b-col>
@@ -26,6 +27,7 @@
       >
         <b-form-group :label="'Повторите пароль'" label-cols="12">
           <b-form-input
+            @input="delayTouch($v.password)"
             :id="Math.random().toString()"
             type="password"
             autocomplete="new-password"
