@@ -234,13 +234,6 @@ export default {
     setCodeFieldValid(data) {
       if (data) {
         this.isCodeFieldValid = data;
-      }
-    },
-    toggleForm(tabs) {
-      if (this.visibleForm === tabs) {
-        this.clearForm();
-        this.isCodeFieldValid = false;
-        this.visibleForm = tabs === "phone" ? "email" : "phone";
         this.$LogEvent({
           formName: "Recovery",
           idEventType: this.visibleForm === "phone" ? 149 : 157,
@@ -252,6 +245,14 @@ export default {
         });
       }
     },
+    toggleForm(tabs) {
+      if (this.visibleForm === tabs) {
+        this.clearForm();
+        this.isCodeFieldValid = false;
+        this.visibleForm = tabs === "phone" ? "email" : "phone";
+      }
+    },
+
     loginType(value) {
       this.loginFieldType = value;
     },
