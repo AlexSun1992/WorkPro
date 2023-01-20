@@ -1,9 +1,13 @@
 <template>
   <div>
-    <span v-if="data.helpText" class="tooltipster">
-      (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-        <span v-html="data.helpText"></span></vue-easy-tooltip
-    ></span>
+    <legend>
+      Новый пароль
+      <span class="tooltipster">
+        (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+          <span>{{ tooltipValidation }}</span></vue-easy-tooltip
+        ></span
+      >
+    </legend>
     <div>
       <b-form-group>
         <b-form-input
@@ -24,7 +28,6 @@
           class="btn-psw-visible"
           @click="visiblePSW()"
         ></button>
-
         <b-form-invalid-feedback
           v-for="(errMess, index) in executeValidation"
           :key="index"
@@ -69,9 +72,17 @@ import {
   minLengthPassword,
   maxLengthPassword,
 } from "./regform.helper.fixtures";
-import { passwordValidation } from "../../../../components-vue2/src/components/Login/RegForm/regform.helper";
+import {
+  passwordValidation,
+  tooltipText,
+} from "../../../../components-vue2/src/components/Login/RegForm/regform.helper";
 
-const vi = (value) => passwordValidation(value).length === 0;
+const errorMessageText = function getErrMessage(value) {
+  if (passwordValidation(value).length === 0) {
+    return true;
+  }
+  return false;
+};
 
 export default {
   name: "PasswordConfirm",
@@ -130,13 +141,16 @@ export default {
       }
       return true;
     },
+    tooltipValidation() {
+      return tooltipText;
+    },
   },
 
   validations: {
     form: {
       password1: {
         required,
-        vi,
+        errorMessageText,
       },
       password2: {
         required,
