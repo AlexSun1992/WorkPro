@@ -1,15 +1,15 @@
 <template>
   <div>
-    <legend>
-      Новый пароль
-      <span class="tooltipster">
-        (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-          <span>{{ tooltipValidation }}</span></vue-easy-tooltip
-        ></span
-      >
-    </legend>
     <div>
       <b-form-group>
+        <legend>
+          Новый пароль
+          <span class="tooltipster">
+            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+              <span>{{ tooltipValidation }}</span></vue-easy-tooltip
+            ></span
+          >
+        </legend>
         <b-form-input
           id="password1"
           :type="pswVisible ? 'text' : 'password'"
@@ -29,8 +29,8 @@
           @click="visiblePSW()"
         ></button>
         <b-form-invalid-feedback
-          v-for="(errMess, index) in executeValidation"
-          :key="index"
+          v-for="errMess in executeValidation"
+          :key="errMess.errorText"
         >
           {{ errMess.errorText }}
         </b-form-invalid-feedback>
@@ -78,7 +78,7 @@ import {
 } from "../../../../components-vue2/src/components/Login/RegForm/regform.helper";
 
 export default {
-  name: "PasswordConfirm",
+  name: "ControlPasswordConfirm",
   components: { BFormGroup, BFormInput, BFormInvalidFeedback },
   mixins: [validationMixin],
   props: {
@@ -121,7 +121,7 @@ export default {
 
   computed: {
     executeValidation() {
-      return passwordValidation(this.$v.form.password1);
+      return passwordValidation(this.$v.form.password1.$model);
     },
     disabled() {
       if (
