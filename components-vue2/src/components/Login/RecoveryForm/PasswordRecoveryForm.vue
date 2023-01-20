@@ -56,6 +56,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
+                :errorMessageValidation ="validationForFirstPassword"
               />
             </div>
           </b-row>
@@ -168,15 +169,13 @@ import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import {
-  minLengthPassword,
-  maxLengthPassword,
-} from "../RegForm/regform.helper.fixtures";
+  passwordValidation,
+} from "../RegForm/regform.helper";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
   /^[^а-яА-ЯёЁ]*$/i
 );
-
 const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
 
 export default {
@@ -213,6 +212,7 @@ export default {
       myclass: ["cabinet okrecovery"],
       visibleForm: "phone",
       isCodeFieldValid: false,
+      
     };
   },
   mounted() {
@@ -230,18 +230,10 @@ export default {
       });
     });
   },
-
   methods: {
     setCodeFieldValid(data) {
       if (data) {
         this.isCodeFieldValid = data;
-      }
-    },
-    toggleForm(tabs) {
-      if (this.visibleForm === tabs) {
-        this.clearForm();
-        this.isCodeFieldValid = false;
-        this.visibleForm = tabs === "phone" ? "email" : "phone";
         this.$LogEvent({
           formName: "Recovery",
           idEventType: this.visibleForm === "phone" ? 149 : 157,
@@ -251,6 +243,13 @@ export default {
           }`,
           timeUser: new Date(),
         });
+      }
+    },
+    toggleForm(tabs) {
+      if (this.visibleForm === tabs) {
+        this.clearForm();
+        this.isCodeFieldValid = false;
+        this.visibleForm = tabs === "phone" ? "email" : "phone";
       }
     },
 
@@ -409,12 +408,13 @@ export default {
       this.changePhoneButtonClicked = data;
     },
   },
-
   computed: {
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },
-
+    validationForFirstPassword(){
+      return passwordValidation(this.$v.form.password.$model)
+    },
     tabIndex() {
       return this.currentTab === 0 ? [30, 40] : [20, 30];
     },
@@ -468,14 +468,11 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
+        errorMessageValidation: (value) => passwordValidation(value).length === 0,
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
       },
       birthdate: {
         required,
