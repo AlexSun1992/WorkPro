@@ -56,6 +56,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
+                :errorMessageValidation="isFirstPassword"
               />
             </div>
           </b-row>
@@ -106,6 +107,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
+                :errorMessageValidation="isFirstPassword"
               />
             </div>
           </b-row>
@@ -170,13 +172,13 @@ import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import {
   minLengthPassword,
   maxLengthPassword,
-} from "../RegForm/regform.helper.fixtures";
+  passwordValidation,
+} from "../RegForm/regform.helper";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
   /^[^а-яА-ЯёЁ]*$/i
 );
-
 const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
 
 export default {
@@ -230,7 +232,6 @@ export default {
       });
     });
   },
-
   methods: {
     setCodeFieldValid(data) {
       if (data) {
@@ -253,7 +254,6 @@ export default {
         });
       }
     },
-
     loginType(value) {
       this.loginFieldType = value;
     },
@@ -414,7 +414,9 @@ export default {
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },
-
+    isFirstPassword(){
+      return passwordValidation(this.$v.form.password.$model)
+    },
     tabIndex() {
       return this.currentTab === 0 ? [30, 40] : [20, 30];
     },
@@ -468,8 +470,7 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
+        forbiddenRussianSign
       },
       password2: {
         required,
