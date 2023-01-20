@@ -4,7 +4,7 @@
       Новый пароль
       <span class="tooltipster">
         (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-          <span>{{ tooltipValidation }}</span></vue-easy-tooltip
+          <span>{{ tooltipText }}</span></vue-easy-tooltip
         ></span
       >
     </legend>
@@ -140,9 +140,6 @@ export default {
         return false;
       }
       return true;
-    },
-    tooltipValidation() {
-      return tooltipText;
     },
   },
 
