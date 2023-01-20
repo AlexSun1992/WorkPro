@@ -29,6 +29,19 @@ Sentry.init({
 });
 
 Vue.customElement(
+  "component-password-confirm",
+  () =>
+    new Promise((resolve) => {
+      require([
+        "../../components/Libs/Controls/ControlPasswordConfirm/ControlPasswordConfirm.vue",
+      ], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
   "component-login-button",
   () =>
     new Promise((resolve) => {
