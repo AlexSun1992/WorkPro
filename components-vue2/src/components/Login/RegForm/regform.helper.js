@@ -6,25 +6,24 @@ export const maxLengthPassword = 20;
 export const tooltipText = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен содержать, как минимум, одну цифру и одну букву. Пароль не должен содержать русских букв и специальных символов.`;
 
 const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
-const alpha = /[a-z]/i;
+const uppercaseLetter = /[A-Z]/;
 const numeric = /[0-9]/i;
 const forbiddeCharacters = /^[^!"#$%&'()*+,-./:;|<=>?@[_`{}~]*$/i;
+
 /** Функция создания ошибок валидации пароля */
 function createErrorMessage(errorValue) {
   return {
     errorText: errorValue,
   };
 }
-/** Функция валидации пароля
- * @param {string} password
- *@return {[{errorText: string}]}
+
+/**
+ * Функция валидации пароля
+ * @param {string} password входящая переменная
+ * @return {[{errorText: string}]}
  */
 export function passwordValidation(password) {
-  /** Массив ошибок для пароля
-   * @typedef {array} errorMessagepasswordValidation
-   * @property {Object[]} errorMessagepasswordValidation
-   * @property {string} errorMessagepasswordValidation[].errorText
-   */
+  /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
   if (
     password.length < minLengthPassword ||
@@ -34,11 +33,14 @@ export function passwordValidation(password) {
       createErrorMessage("Пароль должен содержать от 6 до 20 символов.")
     );
   }
-  if (alpha.test(password) === false || numeric.test(password) === false) {
+  if (
+    uppercaseLetter.test(password) === false ||
+    numeric.test(password) === false
+  ) {
     if (password !== "") {
       errorMessagepasswordValidation.push(
         createErrorMessage(
-          "Новый пароль должен содержать, как минимум, одну цифру и одну букву."
+          "Новый пароль должен содержать, как минимум, одну цифру и одну заглавную букву."
         )
       );
     }
