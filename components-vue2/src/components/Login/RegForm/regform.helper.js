@@ -7,6 +7,7 @@ export const tooltipText = `Пароль должен содержать от ${
 
 const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
 const uppercaseLetter = /[A-Z]/;
+const lowercaseLetter = /[a-z]/;
 const numeric = /[0-9]/i;
 const forbiddeCharacters = /^[^!"#$%&'()*+,-./:;|<=>?@[_`{}~]*$/i;
 
@@ -20,7 +21,7 @@ function createErrorMessage(errorValue) {
 /**
  * Функция валидации пароля
  * @param {string} password входящая переменная
- * @return {[{errorText: string}]}
+ * @return {{errorText: string}[]}
  */
 export function passwordValidation(password) {
   /** Массив ошибок для пароля */
@@ -35,12 +36,13 @@ export function passwordValidation(password) {
   }
   if (
     uppercaseLetter.test(password) === false ||
-    numeric.test(password) === false
+    numeric.test(password) === false ||
+    lowercaseLetter.test(password) === false
   ) {
     if (password !== "") {
       errorMessagepasswordValidation.push(
         createErrorMessage(
-          "Новый пароль должен содержать, как минимум, одну цифру и одну заглавную букву."
+          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву."
         )
       );
     }
