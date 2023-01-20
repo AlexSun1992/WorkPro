@@ -130,6 +130,7 @@
             :disabled="isDisabledForm"
             :tab-index="[50, 60]"
             :log-params="logParams"
+            :errorMessageValidation ="validationForFirstPassword"
           />
         </div>
       </div>
@@ -222,8 +223,7 @@ import {
 } from "./dadata.helper";
 
 import {
-  minLengthPassword,
-  maxLengthPassword,
+  passwordValidation,
 } from "./regform.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
@@ -327,14 +327,11 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
+        errorMessageValidation: (value) => passwordValidation(value).length === 0,
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
       },
       phone: {
         required,
@@ -349,6 +346,10 @@ export default {
     }
   },
   computed: {
+    validationForFirstPassword(){
+      return passwordValidation(this.$v.form.password.$model)
+    },
+
     formData() {
       const params = {
         SECONDNAME: this.family,
