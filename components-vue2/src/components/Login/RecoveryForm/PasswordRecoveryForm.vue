@@ -56,7 +56,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
-                :errorMessageValidation="isFirstPassword"
+                :errorMessageValidation ="validationForFirstPassword"
               />
             </div>
           </b-row>
@@ -107,7 +107,6 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
-                :errorMessageValidation="isFirstPassword"
               />
             </div>
           </b-row>
@@ -170,8 +169,6 @@ import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import {
-  minLengthPassword,
-  maxLengthPassword,
   passwordValidation,
 } from "../RegForm/regform.helper";
 
@@ -215,6 +212,7 @@ export default {
       myclass: ["cabinet okrecovery"],
       visibleForm: "phone",
       isCodeFieldValid: false,
+      
     };
   },
   mounted() {
@@ -409,12 +407,11 @@ export default {
       this.changePhoneButtonClicked = data;
     },
   },
-
   computed: {
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },
-    isFirstPassword(){
+    validationForFirstPassword(){
       return passwordValidation(this.$v.form.password.$model)
     },
     tabIndex() {
@@ -470,13 +467,11 @@ export default {
       },
       password: {
         required,
-        forbiddenRussianSign
+        errorMessageValidation: (value) => passwordValidation(value).length === 0,
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
       },
       birthdate: {
         required,
