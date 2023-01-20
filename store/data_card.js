@@ -474,10 +474,21 @@ export const mutations = {
 
   cardChanged(state, data) {
     state.cardChanged = data;
+    console.log("state.cardChange:", state.cardChanged);
+    console.log("cardChanged:data:", data);
   },
   saveButtonClicked(state, data) {
     state.saveButtonClickedAmount += 1;
     state.saveButtonClicked = data;
+    console.log(
+      "saveButtonClicked:saveButtonClickedAmount:",
+      state.saveButtonClickedAmount
+    );
+    console.log(
+      "saveButtonClicked:saveButtonClicked:",
+      state.saveButtonClicked
+    );
+    console.log("saveButtonClicked:data:", data);
   },
   filterFields(state, data) {
     state.form = state.form.filter((item) => {
@@ -499,9 +510,13 @@ export const mutations = {
   },
   setSavedError(state, data) {
     state.isSavedError = data;
+    console.log("setSavedError:", state.setSavedError);
+    console.log("setSavedError state.data:", state.isSavedError);
   },
   setErrorMessage(state, data) {
     state.errorMessage = data;
+    console.log("setErrorMessage:", state.errorMessage);
+    console.log("setErrorMessage state.data:", state.errorMessage);
   },
   setCopyForm(state, data) {
     state.copyForm = data;

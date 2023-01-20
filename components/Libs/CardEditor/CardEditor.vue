@@ -434,7 +434,7 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
-
+      console.log("saveDataCard:fields", fields);
       if (this.validateData(fields)) {
         try {
           let itemId;
@@ -469,6 +469,7 @@ export default {
             relId,
             form: fields,
           });
+          console.log("resp:CardEditor:", resp);
           if (resp?.status !== 500) {
             this.$root.$bvToast.toast(resp?.data?.MESSAGE, {
               title: "",
@@ -479,6 +480,7 @@ export default {
             });
           }
           if (this.$route.params.idItem === "710") {
+            console.log("Вызываем UpdateState index");
             await this.$store.dispatch("updateUser");
           }
           if (
@@ -512,6 +514,7 @@ export default {
               return;
             }
             if (this.closeAfterSave) {
+              console.log("closeAfterSave:", this.closeAfterSave);
               this.$router.push(`/cabinet/${moduleId}/0/${itemId}`);
             } else if (resp?.data?.RESULT?.POUTVALUE) {
               if (resp?.data?.RESULT?.POUTVALUE.includes("/")) {
