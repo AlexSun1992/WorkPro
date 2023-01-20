@@ -17,11 +17,13 @@ function createErrorMessage(errorValue) {
 }
 /** Функция валидации пароля
  * @param {string} password
- * @returns {array} errorMessagepasswordValidation
+ *@return {[{errorText: string}]}
  */
 export function passwordValidation(password) {
   /** Массив ошибок для пароля
-   * @param {Array} errorMessagepasswordValidation
+   * @typedef {array} errorMessagepasswordValidation
+   * @property {Object[]} errorMessagepasswordValidation
+   * @property {string} errorMessagepasswordValidation[].errorText
    */
   const errorMessagepasswordValidation = [];
   if (

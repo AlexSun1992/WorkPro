@@ -171,7 +171,6 @@ import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import {
   passwordValidation,
 } from "../RegForm/regform.helper";
-import { runInContext } from "lodash";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
