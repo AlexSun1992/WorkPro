@@ -4,7 +4,7 @@
       Новый пароль
       <span class="tooltipster">
         (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-          <span>{{ tooltipText }}</span></vue-easy-tooltip
+          <span>{{ tooltipValidation }}</span></vue-easy-tooltip
         ></span
       >
     </legend>
@@ -77,13 +77,6 @@ import {
   tooltipText,
 } from "../../../../components-vue2/src/components/Login/RegForm/regform.helper";
 
-const errorMessageText = function getErrMessage(value) {
-  if (passwordValidation(value).length === 0) {
-    return true;
-  }
-  return false;
-};
-
 export default {
   name: "PasswordConfirm",
   components: { BFormGroup, BFormInput, BFormInvalidFeedback },
@@ -141,13 +134,16 @@ export default {
       }
       return true;
     },
+    tooltipValidation() {
+      return tooltipText;
+    },
   },
 
   validations: {
     form: {
       password1: {
         required,
-        errorMessageText,
+        isPasswordValid: (value) => passwordValidation(value).length === 0,
       },
       password2: {
         required,
