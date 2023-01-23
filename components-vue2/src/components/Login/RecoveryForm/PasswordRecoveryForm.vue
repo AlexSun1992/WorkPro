@@ -352,7 +352,7 @@ export default {
           this.errorMessage = "Необходимо ввести дополнительные данные";
           this.$LogEvent({
                 formName: "PasswordRecoveryForm errorMessage",
-                idEventType: this.loginFieldType ? 153 : 162,
+                idEventType: this.loginFieldType === "phone" ? 153 : 164,
                 controlName: "PasswordRecoveryForm.vue",
                 message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
                 timeUser: new Date(),
@@ -364,7 +364,7 @@ export default {
           this.errorMessage = e.response.data.INFO;
           this.$LogEvent({
                 formName: "PasswordRecoveryForm errorMessage",
-                idEventType: this.loginFieldType ? 153 : 162,
+                idEventType: this.loginFieldType === "phone" ? 153 : 164,
                 controlName: "PasswordRecoveryForm.vue",
                 message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
                 timeUser: new Date(),
@@ -394,7 +394,7 @@ export default {
         this.errorMessage = msg;
         this.$LogEvent({
                 formName: "PasswordRecoveryForm errorMessage",
-                idEventType: this.loginFieldType ? 153 : 162,
+                idEventType: this.loginFieldType ? 153 : 164,
                 controlName: "PasswordRecoveryForm.vue",
                 message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
                 timeUser: new Date(),
