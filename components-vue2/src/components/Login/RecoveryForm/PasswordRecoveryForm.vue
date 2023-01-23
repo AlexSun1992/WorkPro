@@ -56,6 +56,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
+                :errorMessageValidation ="validationForFirstPassword"
               />
             </div>
           </b-row>
@@ -168,15 +169,13 @@ import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import {
-  minLengthPassword,
-  maxLengthPassword,
-} from "../RegForm/regform.helper.fixtures";
+  passwordValidation,
+} from "../RegForm/regform.helper";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
   /^[^а-яА-ЯёЁ]*$/i
 );
-
 const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
 
 export default {
@@ -213,17 +212,37 @@ export default {
       myclass: ["cabinet okrecovery"],
       visibleForm: "phone",
       isCodeFieldValid: false,
+      
     };
   },
   mounted() {
     this.clearForm();
     this.formLoaded = true;
+    this.$nextTick(() => {
+      this.$LogEvent({
+        formName: "Recovery",
+        idEventType: this.visibleForm === "phone" ? 149 : 157,
+        controlName: "PasswordRecoveryForm.vue",
+        message: `Открыли форму восстановления пароля по ${
+          this.visibleForm === "phone" ? "телефону" : "EMAIL"
+        }`,
+        timeUser: new Date(),
+      });
+    });
   },
-
   methods: {
     setCodeFieldValid(data) {
       if (data) {
         this.isCodeFieldValid = data;
+        this.$LogEvent({
+          formName: "Recovery",
+          idEventType: this.visibleForm === "phone" ? 149 : 157,
+          controlName: "PasswordRecoveryForm.vue",
+          message: `Открыли форму восстановления пароля по ${
+            this.visibleForm === "phone" ? "телефону" : "EMAIL"
+          }`,
+          timeUser: new Date(),
+        });
       }
     },
     toggleForm(tabs) {
@@ -243,6 +262,13 @@ export default {
     },
 
     async resetPassword() {
+      this.$LogEvent({
+              formName: "Recovery",
+              idEventType: this.loginFieldType === "phone" ? 151 : 159,
+              controlName: "PasswordRecoveryForm.vue",
+              message: `Нажал "Изменить пароль через ${ this.loginFieldType === "phone" ? "номер" : "EMAIL"}"`,
+              timeUser: new Date(),
+            });
       let params;
       if (this.visibleForm === "phone") {
         params = {
@@ -290,7 +316,7 @@ export default {
             domProps: {
               innerHTML:
                 "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
-            },
+              },
           });
           this.$bvModal
             .msgBoxOk([messageVNode], {
@@ -304,11 +330,19 @@ export default {
               modalClass: this.myclass,
               autoFocusButton: "ok",
             })
+            
             .then((value) => {
               window.location.href = "/login";
             })
             .catch((err) => {
               console.log(err);
+            });
+            this.$LogEvent({
+              formName: "Recovery",
+              idEventType: this.loginFieldType === "phone" ? 152 : 160,
+              controlName: "PasswordRecoveryForm.vue",
+              message: `Новый пароль успешно установлен через ${ this.loginFieldType === "phone" ? "номер" : "EMAIL"}`,
+              timeUser: new Date(),
             });
         } else if (response.data[0].MESSAGE_CODE === "502") {
           this.isErrorMessage = true;
@@ -316,14 +350,28 @@ export default {
         } else if (response.data[0].MESSAGE_CODE === "501") {
           this.isErrorMessage = true;
           this.errorMessage = "Необходимо ввести дополнительные данные";
+          this.$LogEvent({
+                formName: "PasswordRecoveryForm errorMessage",
+                idEventType: this.loginFieldType === "phone" ? 153 : 164,
+                controlName: "PasswordRecoveryForm.vue",
+                message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
+                timeUser: new Date(),
+            });
         }
       } catch (e) {
         if (e.response.data.STATUS === 500) {
           this.isErrorMessage = true;
           this.errorMessage = e.response.data.INFO;
+          this.$LogEvent({
+                formName: "PasswordRecoveryForm errorMessage",
+                idEventType: this.loginFieldType === "phone" ? 153 : 164,
+                controlName: "PasswordRecoveryForm.vue",
+                message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
+                timeUser: new Date(),
+            });
         }
         console.log(e);
-      }
+      } 
     },
     clearForm() {
       this.form = {
@@ -344,6 +392,13 @@ export default {
       if (msg) {
         this.isErrorMessage = true;
         this.errorMessage = msg;
+        this.$LogEvent({
+                formName: "PasswordRecoveryForm errorMessage",
+                idEventType: this.loginFieldType ? 153 : 164,
+                controlName: "PasswordRecoveryForm.vue",
+                message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
+                timeUser: new Date(),
+            });
       } else {
         this.isErrorMessage = false;
         this.errorMessage = null;
@@ -353,14 +408,15 @@ export default {
       this.changePhoneButtonClicked = data;
     },
   },
-
   computed: {
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },
-
+    validationForFirstPassword(){
+      return passwordValidation(this.$v.form.password.$model)
+    },
     tabIndex() {
-      return this.currentTab == 0 ? [30, 40] : [20, 30];
+      return this.currentTab === 0 ? [30, 40] : [20, 30];
     },
     disabled() {
       return (
@@ -412,14 +468,11 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
+        errorMessageValidation: (value) => passwordValidation(value).length === 0,
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
       },
       birthdate: {
         required,

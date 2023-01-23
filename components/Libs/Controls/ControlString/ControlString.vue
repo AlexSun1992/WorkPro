@@ -58,17 +58,7 @@ export default {
 
   data() {
     return {
-      fieldsNameHub: [
-        "SFIRSTNAME",
-        "SSECONDNAME",
-        "STHIRDNAME",
-        "ADDRESS",
-        "SISSUED_WHERE",
-        "SDOCDEP",
-        "SNEWPHONE",
-        "SCODEFIELD",
-        "SNEWEMAIL",
-      ],
+      fieldsNameHub: [],
     };
   },
 
