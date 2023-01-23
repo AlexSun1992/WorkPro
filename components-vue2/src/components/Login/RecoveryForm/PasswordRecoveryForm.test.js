@@ -1,9 +1,9 @@
 import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
+import { not } from "ip";
 import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
 // import VeryfyUser from "../Libs/VerifyUser/VerifyUser.vue";
-import { not } from "ip";
 
 jest.mock("axios");
 
@@ -15,7 +15,12 @@ describe("PasswordRecoveryForm", () => {
   it("Должен показать сообщение об отсутствии профиля с указанным номером телефона", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, { localVue });
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -38,7 +43,12 @@ describe("PasswordRecoveryForm", () => {
   it("Необходимо раздизабливать поле 'Получить код' при отсутствии номера телефона в базе", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, { localVue });
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     axios.post.mockReturnValue({
       data: [
         {
@@ -60,7 +70,12 @@ describe("PasswordRecoveryForm", () => {
   it("Необходимо раздизабливать поле 'Получить код' при отсутствии email в базе", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, { localVue });
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     //
     const buttonSelector = "[data-testid=btn_email]";
@@ -83,7 +98,11 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показывать сообщение об ошибке при наличии русского символа", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     await wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.find("#email").setValue("русскийсимвол@mail.ru");
     const emailInput = await wrapper.find("#email");
@@ -92,7 +111,11 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показывать сообщение об ошибке при наличии знака +", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     await wrapper.find("#tab_mail_lk").trigger("click");
     const emailInput = await wrapper.find("#email");
     await wrapper.find("#email").setValue("Vasya+Katya@mail.ru");
@@ -101,7 +124,11 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Не должен показывать сообщение об ошибке при корректном email", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     await wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.find("#email").setValue("test@mail.ru");
     const emailInput = await wrapper.find("#email");
@@ -110,7 +137,11 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Валидация правильности ввода телефона", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     const verificationButton = await wrapper.find("#btn_code_verification_lk");
     expect(verificationButton.attributes("disabled")).toBe("disabled");
     await wrapper.find("#phone").setValue("+7(499)-000-00-02");
@@ -120,7 +151,12 @@ describe("PasswordRecoveryForm", () => {
   it("должен показать поле код подверждения", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, { localVue });
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     axios.post.mockReturnValue({
       data: [
         {
