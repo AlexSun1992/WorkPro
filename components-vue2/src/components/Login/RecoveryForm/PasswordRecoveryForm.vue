@@ -61,6 +61,7 @@
             </div>
           </b-row>
           <div
+            data-testid="errorMessage"
             class="col-12 invalid-feedback d-block mt-3"
             v-if="isErrorMessage"
           >

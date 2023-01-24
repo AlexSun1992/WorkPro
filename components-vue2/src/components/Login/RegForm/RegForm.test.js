@@ -169,7 +169,7 @@ describe("RegForm", () => {
     );
   });
 
-  it("должен корректно заполнять форму", async () => {
+  it.only("должен корректно заполнять форму", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, { localVue, attachTo: document.body });
@@ -317,6 +317,7 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login");
+    console.log(wrapper.html());
   });
 
   it("Необходимо валидировать отчество при 'загрязнении' поля", async () => {
