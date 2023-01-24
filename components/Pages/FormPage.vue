@@ -71,6 +71,7 @@ export default {
     return {
       myclass: ["cabinet"],
       isErrorExist: false,
+      pageParams: null,
     };
   },
   computed: {
@@ -118,6 +119,7 @@ export default {
         idCard: list.data.items[0].ID,
         idRel: list.data.items[0].REL,
       };
+      this.pageParams = params;
       await this.$store.dispatch("data_card/fetchForm", params);
       // this.$router.push(`/cabinet/${params.idModule}/0/${params.idItem}/${params.idCard}`)
     } catch (e) {
@@ -129,10 +131,11 @@ export default {
     closeModal() {
       this.$router.back();
     },
-    saveDataCard() {
+    async saveDataCard() {
       if (this.$refs.cardEditor) {
-        this.$refs.cardEditor.saveDataCard();
+        await this.$refs.cardEditor.saveDataCard();
       }
+      await this.$store.dispatch("data_card/fetchForm", this.pageParams);
     },
     cancelDataCard() {
       if (this.$refs.cardEditor) {
