@@ -130,7 +130,6 @@ export default {
       this.$router.back();
     },
     saveDataCard() {
-      console.log("saveDataCard начало выполнения кода");
       if (this.$refs.cardEditor) {
         this.$refs.cardEditor.saveDataCard();
       }

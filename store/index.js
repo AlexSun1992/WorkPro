@@ -124,8 +124,6 @@ export const mutations = {
 
   updateUser(state, params) {
     state.auth.user = params;
-    console.log("updateUser:index:", state.auth.user);
-    console.log("updateUser:params:", params);
   },
 
   clearAxiosError(state) {
