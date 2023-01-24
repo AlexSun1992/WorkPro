@@ -4,7 +4,6 @@ import axios from "axios";
 import { not } from "ip";
 import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
 
-
 jest.mock("axios");
 
 describe("PasswordRecoveryForm", () => {
@@ -292,7 +291,13 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать, что пароли одинаковые", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const localVue = createLocalVue();
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -323,7 +328,13 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it.only("Должен показать, что форма заполнена верно", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const localVue = createLocalVue();
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -334,6 +345,7 @@ describe("PasswordRecoveryForm", () => {
     });
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
+
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
@@ -350,6 +362,10 @@ describe("PasswordRecoveryForm", () => {
     );
 
     await wrapper.find("#sms-confirm").setValue("11111");
+
+    expect(
+      wrapper.find("#btn_change-password_tel_lk").attributes().disabled
+    ).toBeDefined();
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue("21.12.2022");
@@ -380,13 +396,20 @@ describe("PasswordRecoveryForm", () => {
       })
     );
 
+    expect(
+      wrapper.find("#btn_change-password_tel_lk").attributes().disabled
+    ).not.toBeDefined();
+
     await wrapper.find("#btn_change-password_tel_lk").trigger("click");
-    // expect(wrapper.find("[data-testid=errorMessage]").exists()).toBe(true);
-    // expect(wrapper.find("[data-testid=errorMessage]").text()).toContain(
-    //   "Неправильно введен код подтверждения или истек срок действия."
-    // );
+
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("[data-testid=errorMessage]").exists()).toBe(true);
+    expect(wrapper.find("[data-testid=errorMessage]").text()).toContain(
+      "Неправильно введен код подтверждения или истек срок действия."
+    );
+
     console.log(wrapper.find("[data-testid=errorMessage]").text());
   });
 

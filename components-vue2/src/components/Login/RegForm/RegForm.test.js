@@ -580,7 +580,6 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login");
-    console.log(wrapper.html());
   });
 
   it("Необходимо валидировать отчество при 'загрязнении' поля", async () => {
