@@ -4,9 +4,8 @@
       <b-form-group>
         <legend>
           {{ showLabel }}
-          <span class="tooltipster" @click="tooltip = !tooltip">
+          <span class="tooltipster">
             (?)<vue-easy-tooltip
-              v-model="tooltip"
               :with-arrow="true"
               position="top"
               :offset="4"
@@ -109,7 +108,6 @@ export default {
       pswVisible2: false,
       pswVisible: false,
       isUserBlured: true,
-      tooltip: false,
     };
   },
   methods: {
@@ -153,9 +151,9 @@ export default {
     showLabel() {
       return this.recovery ? "Придумайте новый пароль" : "Пароль";
     },
-    tooltipValidation() {
-      return tooltipText;
-    },
+    tooltipValidation(){
+      return tooltipText
+    }
   },
 };
 </script>

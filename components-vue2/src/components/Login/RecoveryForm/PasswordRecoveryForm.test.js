@@ -1,8 +1,8 @@
 import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
-import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
 import { not } from "ip";
+import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
 
 jest.mock("axios");
 
@@ -14,7 +14,12 @@ describe("PasswordRecoveryForm", () => {
   it("Должен показать сообщение об отсутствии профиля с указанным номером телефона", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, { localVue });
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -37,7 +42,12 @@ describe("PasswordRecoveryForm", () => {
   it("Необходимо раздизабливать поле 'Получить код' при отсутствии номера телефона в базе", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, { localVue });
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     axios.post.mockReturnValue({
       data: [
         {
@@ -59,7 +69,12 @@ describe("PasswordRecoveryForm", () => {
   it("Необходимо раздизабливать поле 'Получить код' при отсутствии email в базе", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, { localVue });
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     //
     const buttonSelector = "[data-testid=btn_email]";
@@ -82,7 +97,11 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показывать сообщение об ошибке при наличии русского символа", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     await wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.find("#email").setValue("русскийсимвол@mail.ru");
     const emailInput = await wrapper.find("#email");
@@ -91,7 +110,11 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показывать сообщение об ошибке при наличии знака +", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     await wrapper.find("#tab_mail_lk").trigger("click");
     const emailInput = await wrapper.find("#email");
     await wrapper.find("#email").setValue("Vasya+Katya@mail.ru");
@@ -100,7 +123,11 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Не должен показывать сообщение об ошибке при корректном email", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     await wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.find("#email").setValue("test@mail.ru");
     const emailInput = await wrapper.find("#email");
@@ -109,7 +136,11 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Валидация правильности ввода телефона", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
     const verificationButton = await wrapper.find("#btn_code_verification_lk");
     expect(verificationButton.attributes("disabled")).toBe("disabled");
     await wrapper.find("#phone").setValue("+7(499)-000-00-02");
@@ -260,7 +291,13 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать, что пароли одинаковые", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const localVue = createLocalVue();
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -291,7 +328,13 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it.only("Должен показать, что форма заполнена верно", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const localVue = createLocalVue();
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -302,6 +345,7 @@ describe("PasswordRecoveryForm", () => {
     });
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
+
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
@@ -318,6 +362,10 @@ describe("PasswordRecoveryForm", () => {
     );
 
     await wrapper.find("#sms-confirm").setValue("11111");
+
+    expect(
+      wrapper.find("#btn_change-password_tel_lk").attributes().disabled
+    ).toBeDefined();
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue("21.12.2022");
@@ -348,12 +396,20 @@ describe("PasswordRecoveryForm", () => {
       })
     );
 
+    expect(
+      wrapper.find("#btn_change-password_tel_lk").attributes().disabled
+    ).not.toBeDefined();
+
     await wrapper.find("#btn_change-password_tel_lk").trigger("click");
-    // expect(wrapper.find("[data-testid=errorMessage]").exists()).toBe(true);
-    // expect(wrapper.find("[data-testid=errorMessage]").text()).toContain(
-    //   "Неправильно введен код подтверждения или истек срок действия."
-    // );
+
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("[data-testid=errorMessage]").exists()).toBe(true);
+    expect(wrapper.find("[data-testid=errorMessage]").text()).toContain(
+      "Неправильно введен код подтверждения или истек срок действия."
+    );
+
+    console.log(wrapper.find("[data-testid=errorMessage]").text());
   });
 });
