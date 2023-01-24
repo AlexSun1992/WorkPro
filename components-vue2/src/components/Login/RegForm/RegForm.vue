@@ -11,41 +11,20 @@
       class="align-items-start"
     >
       <div class="tab-mobile-block">Регистрация</div>
-      <b-form-group class="w-100 required">
-        <verify-user
-          ref="verifyUser"
-          @error="showError"
-          :v="$v.form"
-          :log-params="logParams"
-          :count="60"
-          :context="'registration'"
-          :loginType="'phone'"
-          :mode-type="'REG'"
-          :validateState="validateState"
-          :disabled="registrationInProcess"
-          :text-message="successSendMessageText"
-          :tab-index="[10, 14, 16]"
-          :error="errorMessage"
-          @checkCodeFieldValid="isCodeFieldValid"
-          @messageText="getTextMessage"
-          :isCodeFieldValid="codeFieldValid"
-          @isPhoneChangedButtonClicked="checkIfButtonClicked"
-          @input="refuseButtonClicked"
-        />
-      </b-form-group>
       <div class="row">
-        <div class="col-12 col-lg-6 mt-2" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-2">
           <b-form-group class="required" label="Фамилия" label-cols="12">
             <autocomplete
               id="autocomplete-surname"
+              autofocus
               ref="autocompleteSurname"
               :search="getSuggestionsSurname"
               :get-result-value="getResultValue"
-              :disabled="registrationInProcess"
+              :disabled="isDisabledForm"
               placeholder="Фамилия"
               :class="surnameClass"
               @blur="handleBlur('surname')"
-              @submit="changeField('family')"
+              @submit="changeField('family', $event)"
               data-testid="regFamily"
             />
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
@@ -57,17 +36,17 @@
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-6 mt-2" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-2">
           <b-form-group label="Имя" label-cols="12" class="required">
             <autocomplete
               ref="autocompleteName"
               placeholder="Имя"
               :search="getSuggestionsName"
               :get-result-value="getResultValue"
-              :disabled="registrationInProcess"
+              :disabled="isDisabledForm"
               :class="nameClass"
               @blur="handleBlur('name')"
-              @submit="changeField('name')"
+              @submit="changeField('name', $event)"
               data-testid="regName"
             />
             <b-form-invalid-feedback :state="isNameErrorMessage"
@@ -80,11 +59,7 @@
           </b-form-group>
         </div>
 
-        <div
-          class="col-12 col-lg-6 mt-2 mt-lg-3"
-          v-if="codeFieldValid"
-          id="patronymic"
-        >
+        <div class="col-12 col-lg-6 mt-2 mt-lg-3" id="patronymic">
           <b-form-group
             label="Отчество (при наличии)"
             label-cols="12"
@@ -95,10 +70,10 @@
               placeholder="Отчество"
               :search="getSuggestionsPatronymic"
               :get-result-value="getResultValue"
-              :disabled="isPatronymicNotExist === true"
+              :disabled="isPatronymicNotExist || isDisabledForm"
               :class="patronymicClass"
               @blur="handleBlur('patronymic')"
-              @submit="changeField('patronymic')"
+              @submit="changeField('patronymic', $event)"
               data-testid="regPatronymic"
             />
             <b-form-invalid-feedback :state="isPatronymicErrorMessage"
@@ -110,77 +85,107 @@
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4">
           <b-form-checkbox
             id="check-box"
             class="checkbox-hide mt-3 pt-1"
+            :disabled="isDisabledForm"
             v-model="isPatronymicNotExist"
             :value="!isPatronymicNotExist"
-            @change="changeField('isPatronymicNotExist')"
+            @change="changeField('isPatronymicNotExist', $event)"
           >
             Нет отчества
           </b-form-checkbox>
         </div>
 
-        <div class="col-12 col-lg-6 mt-2 mt-lg-3" v-if="codeFieldValid">
+        <div class="col-12 col-lg-6 mt-2 mt-lg-3">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker2
               id="birthday-picker"
               v-model="$v.form.birthdate.$model"
               :state="validateState('birthdate')"
-              :disabled="registrationInProcess"
+              :disabled="isDisabledForm"
               @input="changeField('birthdate')"
             />
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-3" v-if="codeFieldValid">
+        <div class="col-12 col-md-6 mt-3">
           <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
             <b-form-input
               ref="policyNumber"
               :id="Math.random().toString()"
               v-model="form.policyNumber"
               placeholder="Номер полиса"
-              :disabled="registrationInProcess"
+              :disabled="isDisabledForm"
               autocomplete="new-password"
               @change="changeField('policyNumber')"
             ></b-form-input>
           </b-form-group>
         </div>
         <div class="col-12 col-lg-6"></div>
-        <div class="col-12" v-if="codeFieldValid">
+        <div class="col-12">
           <verify-password
             :v="$v.form"
             :validateState="validateState"
-            :disabled="registrationInProcess"
+            :disabled="isDisabledForm"
             :tab-index="[50, 60]"
             :log-params="logParams"
+            :errorMessageValidation ="validationForFirstPassword"
           />
         </div>
-        <div
-          id="error-message"
-          class="col-12 invalid-feedback d-block mt-3"
-          v-if="errorMessage"
-        >
-          {{ errorMessage }}
-        </div>
-        <div class="col-12 pt-3">
-          <b-button
-            v-if="codeFieldValid"
-            @click.stop.prevent="onSubmit"
-            class="w-100"
-            type="submit"
-            variant="primary"
+      </div>
+      <div class="mt-3">
+        <b-form-group class="mt-50 w-100 required">
+          <verify-user
+            ref="verifyUser"
+            @error="showError"
+            :v="$v.form"
+            :log-params="logParams"
+            :count="60"
+            :context="'registration'"
+            :loginType="'phone'"
+            :mode-type="'REG'"
+            :validateState="validateState"
             :disabled="registrationInProcess"
-            id="btn_chek_registration_lk"
-          >
-            Зарегистрироваться
-            <b-spinner
-              v-if="registrationInProcess"
-              style="width: 1.2rem; height: 1.2rem"
-              variant="light"
-            ></b-spinner>
-          </b-button>
-        </div>
+            :text-message="successSendMessageText"
+            :tab-index="[10, 14, 16]"
+            :error="errorMessage"
+            @checkCodeFieldValid="isCodeFieldValid"
+            @messageText="getTextMessage"
+            @sendingCode="sendingCode"
+            @sendCode="sendCode"
+            :isCodeFieldValid="codeFieldValid"
+            @isPhoneChangedButtonClicked="checkIfButtonClicked"
+            @input="refuseButtonClicked"
+            :form-data="formData"
+            :is-valid-form="isValidForm"
+          />
+        </b-form-group>
+      </div>
+      <div
+        id="error-message"
+        class="col-12 invalid-feedback d-block mt-3"
+        v-if="errorMessage"
+      >
+        {{ errorMessage }}
+      </div>
+      <div class="col-12 pt-3">
+        <b-button
+          v-if="codeFieldValid"
+          @click.stop.prevent="onSubmit"
+          class="w-100"
+          type="submit"
+          variant="primary"
+          :disabled="registrationInProcess"
+          id="btn_chek_registration_lk"
+        >
+          Зарегистрироваться
+          <b-spinner
+            v-if="registrationInProcess"
+            style="width: 1.2rem; height: 1.2rem"
+            variant="light"
+          ></b-spinner>
+        </b-button>
       </div>
     </b-form>
   </div>
@@ -218,9 +223,8 @@ import {
 } from "./dadata.helper";
 
 import {
-  minLengthPassword,
-  maxLengthPassword,
-} from "./regform.helper.fixtures";
+  passwordValidation,
+} from "./regform.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -242,6 +246,9 @@ export default {
         formName: "Registration",
       },
       codeFieldValid: false,
+      name: "",
+      family: "",
+      patronymic: "",
       form: {
         phone: "",
         birthdate: "",
@@ -281,6 +288,8 @@ export default {
       isSurnameErrorMessage: true,
       isSurnameTouch: false,
       isSurnameValidSignsErrorMessage: true,
+      isSendCode: false,
+      isSendingCode: false,
       //
       // classes
       patronymicClassHub: [],
@@ -318,14 +327,11 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
+        errorMessageValidation: (value) => passwordValidation(value).length === 0,
       },
       password2: {
         required,
         sameAsPassword: sameAs("password"),
-        minLength: minLength(minLengthPassword),
-        maxLength: maxLength(maxLengthPassword),
       },
       phone: {
         required,
@@ -340,39 +346,70 @@ export default {
     }
   },
   computed: {
+    validationForFirstPassword(){
+      return passwordValidation(this.$v.form.password.$model)
+    },
+
+    formData() {
+      const params = {
+        SECONDNAME: this.family,
+        FIRSTNAME: this.name,
+        THIRDNAME: this.patronymic,
+        THIRDNAMENOTEXISTS: this.isPatronymicNotExist ? "Y" : "N",
+        BIRTHDATE: this.$v.form.birthdate.$model
+          ? moment(this.$v.form.birthdate.$model, [
+              "DD.MM.YYYY",
+              "YYYY-MM-DD",
+            ]).format("YYYY-MM-DD")
+          : "",
+        PHONE: this.$v.form.phone.$model,
+        POLICY_NUMBER: this.form.policyNumber,
+        PASSWORD: this.$v.form.password.$model,
+        PASSWORD_CONFIRM: this.$v.form.password2.$model,
+        USER_CONFIRM: "Y",
+      };
+      return params;
+    },
+    isValidForm() {
+      if (
+        this.patronymicClassHub.length === 0 &&
+        this.isPatronymicNotExist === false
+      ) {
+        return false;
+      }
+
+      if (this.nameClassHub.length === 0 || this.surnameClassHub.length === 0) {
+        return false;
+      }
+      if (
+        this.nameClassHub.includes("is-invalid") ||
+        this.surnameClassHub.includes("is-invalid") ||
+        this.patronymicClassHub.includes("is-invalid")
+      ) {
+        return false;
+      }
+      if (!this.validateState("birthdate")) {
+        return false;
+      }
+      if (this.form.password === "" || this.form.password2 === "") {
+        return false;
+      }
+      if (this.$v.form.password.$error || this.$v.form.password2.$error) {
+        return false;
+      }
+      return true;
+    },
+    isDisabledForm() {
+      if (this.registrationInProcess || this.isSendingCode || this.isSendCode) {
+        return true;
+      }
+      return false;
+    },
     errorReset() {
       if (!this.$v.form.name.$model) {
         console.log(this.$v.form.name.$model);
       }
     },
-
-    family() {
-      if (this.codeFieldValid) {
-        if (this.isFieldsFIOEXist) {
-          return this.$refs.autocompleteSurname.value;
-        }
-      }
-      return false;
-    },
-
-    name() {
-      if (this.codeFieldValid) {
-        if (this.isFieldsFIOEXist) {
-          return this.$refs.autocompleteName.value;
-        }
-      }
-      return false;
-    },
-
-    patronymic() {
-      if (this.codeFieldValid) {
-        if (this.isFieldsFIOEXist) {
-          return this.$refs.autocompletePatronymic.value;
-        }
-      }
-      return false;
-    },
-
     patronymicClass() {
       return this.patronymicClassHub;
     },
@@ -385,32 +422,27 @@ export default {
       return this.nameClassHub;
     },
   },
-
-  watch: {
-    isPatronymicNotExist(value) {
-      if (value) {
-        this.$refs.autocompletePatronymic.value = "";
-      }
-    },
-  },
   methods: {
-    changeField(field) {
-      if (
-        field === "isPatronymicNotExist" &&
-        this.isPatronymicNotExist === true
-      ) {
-        this.patronymicClassHub = [];
-        this.isPatronymicValidSignsErrorMessage = null;
-        this.isPatronymicErrorMessage = null;
+    sendingCode(value) {
+      this.isSendingCode = value;
+    },
+    sendCode(value) {
+      this.isSendCode = value;
+    },
+    changeField(field, e) {
+      if (field === "isPatronymicNotExist") {
+        this.isPatronymicNotExist = e;
+        if (this.isPatronymicNotExist === true) {
+          this.patronymic = "";
+          this.$refs.autocompletePatronymic.value = null;
+          this.patronymicClassHub = [];
+          this.isPatronymicValidSignsErrorMessage = null;
+          this.isPatronymicErrorMessage = null;
+        }
+        return;
       }
       if (this.form[field] || this[field]) {
-        // this.$LogEvent({
-        //   ...this.logParams,
-        //   controlName: field,
-        //   message: `Поле ${field} посещено`,
-        //   timeUser: new Date(),
-        // });
-        console.log(field, this.form[field] || this[field]);
+        this[field] = e?.value;
       }
     },
     refuseButtonClicked() {
@@ -421,7 +453,6 @@ export default {
     },
     handleBlur(field) {
       // Валидация
-
       if (field === "surname") {
         if (this.family === "") {
           this.isSurnameErrorMessage = false;
@@ -470,10 +501,8 @@ export default {
       this.successSendMessageText = value;
     },
 
-    isCodeFieldValid(data) {
-      if (data) {
-        this.codeFieldValid = data;
-      }
+    isCodeFieldValid(value) {
+      this.codeFieldValid = value;
     },
 
     // запрос на подсказки по отчеству
@@ -487,6 +516,7 @@ export default {
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (!isInputNotValid) {
+          this.patronymic = input;
           this.isPatronymicTouch = true;
           this.isPatronymicErrorMessage = true;
           this.isPatronymicValidSignsErrorMessage = true;
@@ -502,6 +532,7 @@ export default {
       }
 
       if (this.isPatronymicTouch && input === "") {
+        this.patronymic = input;
         this.isPatronymicErrorMessage = false;
         this.isPatronymicValidSignsErrorMessage = true;
         this.patronymicClassHub = [];
@@ -547,6 +578,7 @@ export default {
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (!isInputNotValid) {
+          this.family = input;
           this.isSurnameErrorMessage = true;
           this.isSurnameTouch = true;
           this.isSurnameValidSignsErrorMessage = true;
@@ -562,6 +594,7 @@ export default {
       }
 
       if (this.isSurnameTouch && input === "") {
+        this.family = input;
         this.isSurnameErrorMessage = false;
         this.isSurnameValidSignsErrorMessage = true;
         this.suggestionsHub = [];
@@ -607,6 +640,7 @@ export default {
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (!isInputNotValid) {
+          this.name = input;
           this.isNameTouch = true;
           this.isNameErrorMessage = true;
           this.isNameValidSignsErrorMessage = true;
@@ -621,6 +655,7 @@ export default {
       }
 
       if (this.isNameTouch && input === "") {
+        this.name = input;
         this.isNameErrorMessage = false;
         this.isNameValidSignsErrorMessage = true;
         this.suggestionsHub = [];

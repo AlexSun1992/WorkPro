@@ -138,12 +138,12 @@ module.exports = {
         grantType: false,
         token: {
           property: "ACCESS_TOKEN",
-          maxAge: 360000,
+          maxAge: 60 * 60 * 24 * 400,
         },
         refreshToken: {
           property: "REFRESH_TOKEN",
           data: "REFRESH_TOKEN",
-          maxAge: 360000,
+          maxAge: false,
         },
         user: {
           property: false,
