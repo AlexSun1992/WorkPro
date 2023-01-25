@@ -43,7 +43,7 @@
           :type="pswVisible2 ? 'text' : 'password'"
           placeholder="Повторите пароль"
           v-model="$v.form.password2.$model"
-          @blur="updateField($event)"
+          @blur="updateField()"
           :state="validateState('password2')"
           class="form-control"
           data-testid="password2"
@@ -99,9 +99,8 @@ export default {
     };
   },
   methods: {
-    updateField(e) {
+    updateField() {
       this.$v.form.password2.$touch();
-      console.log("e:", e);
       if (this.$v.form.$anyError === false) {
         this.$emit("update", {
           fieldId: this.data.fieldId,

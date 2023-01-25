@@ -209,7 +209,6 @@ export default {
     },
 
     async updateValue(e) {
-      // console.log("carEditor:updateValue:", e);
       const field = this.data.find((f) => f.fieldId === e.fieldId);
       if (field.type === "button") {
         this.$store.commit("data_card/setError", false);
