@@ -134,13 +134,13 @@ export default {
     async saveDataCard() {
       if (this.$refs.cardEditor) {
         await this.$refs.cardEditor.saveDataCard();
-      }
-      const isErr = await this.$store.getters["data_card/getSavedError"];
-
-      if (isErr === false) {
-        await this.$store.dispatch("data_card/fetchForm", this.pageParams);
+        const isErr = this.$store.getters["data_card/getSavedError"];
+        if (isErr === false) {
+          await this.$store.dispatch("data_card/fetchForm", this.pageParams);
+        }
       }
     },
+
     cancelDataCard() {
       if (this.$refs.cardEditor) {
         this.$refs.cardEditor.cancelDataCard();

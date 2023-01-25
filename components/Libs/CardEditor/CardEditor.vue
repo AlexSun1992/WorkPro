@@ -337,7 +337,6 @@ export default {
         });
       }
       if (typeof eventHandler === "function" && field.type != "button") {
-        // debugger;
         const data = await eventHandler(
           this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
           e,
