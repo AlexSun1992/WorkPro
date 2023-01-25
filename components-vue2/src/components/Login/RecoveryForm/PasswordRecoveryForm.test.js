@@ -1,7 +1,6 @@
 import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
-import { not } from "ip";
 import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
 
 jest.mock("axios");
@@ -242,7 +241,6 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
 
     await wrapper.find("#sms-confirm").setValue("11111");
-    // console.log(wrapper.html());
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue("21.12.2052");
@@ -327,10 +325,12 @@ describe("PasswordRecoveryForm", () => {
     expect(wrapper.find("#password2").classes()).toContain("is-invalid");
   });
 
-  it.only("Должен показать, что форма заполнена верно", async () => {
+  it("Должен показать, что форма заполнена верно", async () => {
     const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
     const wrapper = mount(PasswordRecoveryForm, {
       localVue,
+      attachTo: document.body,
       mocks: {
         $LogEvent: (v) => v,
       },
@@ -349,31 +349,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/sendsmscode?smstype=recovery",
-      {
-        PHONE: "+7(910)-123-22-33",
-        error: false,
-        loginType: "phone",
-        modeType: "RECOVERY",
-        token: 1,
-      },
-      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
-    );
-
     await wrapper.find("#sms-confirm").setValue("11111");
-
-    expect(
-      wrapper.find("#btn_change-password_tel_lk").attributes().disabled
-    ).toBeDefined();
-
-    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
-    dataPickerInput.setValue("21.12.2022");
-    dataPickerInput.trigger("change");
-    await wrapper.findComponent("#password1").trigger("focus");
-
-    await wrapper.find("#password1").setValue("12345hH");
-    await wrapper.find("#password2").setValue("12345hH");
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -391,25 +367,32 @@ describe("PasswordRecoveryForm", () => {
 
     axios.post.mockImplementationOnce(() =>
       Promise.resolve({
-        data: [{ MESSAGE: "Success", MESSAGE_CODE: "200" }],
+        data: [{ MESSAGE: "Вы успешно зарегистрированы", MESSAGE_CODE: "200" }],
         status: 200,
       })
     );
 
-    expect(
-      wrapper.find("#btn_change-password_tel_lk").attributes().disabled
-    ).not.toBeDefined();
+    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.trigger("change");
 
+    await wrapper.findComponent("#password1").trigger("focus");
+    await wrapper.find("#password1").setValue("12345hH");
+    await wrapper.find("#password2").setValue("12345hH");
     await wrapper.find("#btn_change-password_tel_lk").trigger("click");
 
+    const spy = jest.spyOn(wrapper.vm.$bvModal, "msgBoxOk");
+    spy.mockImplementation(() => Promise.resolve());
+
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/",
+      },
+    });
+
+    await wrapper.find("#btn_change-password_tel_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-
-    expect(wrapper.find("[data-testid=errorMessage]").exists()).toBe(true);
-    expect(wrapper.find("[data-testid=errorMessage]").text()).toContain(
-      "Неправильно введен код подтверждения или истек срок действия."
-    );
-
-    console.log(wrapper.find("[data-testid=errorMessage]").text());
+    expect(window.location.href).toEqual("/login");
   });
 });

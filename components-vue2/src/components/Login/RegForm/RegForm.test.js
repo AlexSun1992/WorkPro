@@ -1,6 +1,6 @@
 import { createLocalVue, mount } from "@vue/test-utils";
 
-import { BootstrapVue, ModalPlugin } from "bootstrap-vue";
+import { BootstrapVue } from "bootstrap-vue";
 
 import axios from "axios";
 
@@ -423,7 +423,7 @@ describe("RegForm", () => {
     );
   });
 
-  it.only("должен корректно заполнять форму", async () => {
+  it("должен корректно заполнять форму", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, {
