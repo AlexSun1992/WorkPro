@@ -1,6 +1,6 @@
 import { createLocalVue, mount } from "@vue/test-utils";
 
-import { BootstrapVue, ModalPlugin } from "bootstrap-vue";
+import { BootstrapVue } from "bootstrap-vue";
 
 import axios from "axios";
 

@@ -1,9 +1,7 @@
 import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
-import { not } from "ip";
 import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
-// import VeryfyUser from "../Libs/VerifyUser/VerifyUser.vue";
 
 jest.mock("axios");
 
@@ -148,26 +146,57 @@ describe("PasswordRecoveryForm", () => {
     expect(verificationButton.attributes("disabled")).toBe(undefined);
   });
 
-  it("должен показать поле код подверждения", async () => {
+  it("должен показывать ошибку", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = mount(PasswordRecoveryForm, { localVue });
+
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE:
-            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
-          MESSAGE_CODE: 200,
+          ERRORLIST: [
+            {
+              ERRORTEXT:
+                "Что-то пошло не так. Наши разработчики уже разбираются с проблемой.",
+            },
+          ],
+          ERRORCODE: 105,
+          ERROR: "[Смотрите список ошибок.]",
         },
       ],
     });
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+
+    expect(
+      wrapper.find("#btn_code_verification_lk").attributes().disabled
+    ).toBeDefined();
+
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.find("#verify-error-message").exists()).toBe(true);
+    expect(
+      wrapper.find("#btn_code_verification_lk").attributes().disabled
+    ).not.toBeDefined();
+  });
+
+  it("Должен показать поле код подверждения", async () => {
+    const wrapper = mount(PasswordRecoveryForm);
+
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+
+    expect(wrapper.find("#sms-confirm").exists()).toBe(false);
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
@@ -175,5 +204,195 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
+  });
+
+  it("Должен показать поля 'Дата рождения', 'Пароль','Повторите пароль' и кнопку 'Изменить пароль'", async () => {
+    const wrapper = mount(PasswordRecoveryForm);
+
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#sms-confirm").setValue("11111");
+    expect(wrapper.find("#birth-date").exists()).toBe(true);
+  });
+
+  it("Должен показать валидное поле 'Дата рождения'", async () => {
+    const wrapper = mount(PasswordRecoveryForm);
+
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#sms-confirm").setValue("11111");
+
+    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+    dataPickerInput.setValue("21.12.2052");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent("#password1").trigger("focus");
+    expect(dataPickerInput.classes()).not.toContain("is-valid");
+
+    dataPickerInput.setValue("21.12.1852");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent("#password1").trigger("focus");
+    expect(dataPickerInput.classes()).not.toContain("is-valid");
+
+    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent("#password1").trigger("focus");
+    expect(dataPickerInput.classes()).toContain("is-valid");
+  });
+
+  it("Должен показать валидный пароль", async () => {
+    const wrapper = mount(PasswordRecoveryForm);
+
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#sms-confirm").setValue("11111");
+
+    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent("#password1").trigger("focus");
+
+    await wrapper.find("#password1").setValue("12345");
+    expect(wrapper.find("#password1").classes()).toContain("is-invalid");
+
+    await wrapper.find("#password1").setValue("12345hH");
+    expect(wrapper.find("#password1").classes()).not.toContain("is-invalid");
+  });
+
+  it("Должен показать, что пароли одинаковые", async () => {
+    const localVue = createLocalVue();
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#sms-confirm").setValue("11111");
+
+    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent("#password1").trigger("focus");
+
+    await wrapper.find("#password1").setValue("12345hH");
+
+    await wrapper.find("#password2").setValue("12345hH");
+    expect(wrapper.find("#password2").classes()).not.toContain("is-invalid");
+
+    await wrapper.find("#password2").setValue("12345hP");
+    expect(wrapper.find("#password2").classes()).toContain("is-invalid");
+  });
+
+  it("Должен показать, что форма заполнена верно", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#sms-confirm").setValue("11111");
+
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE:
+            'ORA-20105: Неправильно введен код подтверждения или истек срок действия.\nORA-06512: на  "MOBILE.AMAUTH3", line 74\nORA-06512: на  "MOBILE.AMAUTH3", line 558\nORA-06512: на  line 1\n',
+          STATUS: 500,
+          REASON: "Internal Server Error",
+          INFO: "Неправильно введен код подтверждения или истек срок действия.",
+        },
+      };
+      throw wrongAuthError;
+    });
+
+    axios.post.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [{ MESSAGE: "Вы успешно зарегистрированы", MESSAGE_CODE: "200" }],
+        status: 200,
+      })
+    );
+
+    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.trigger("change");
+
+    await wrapper.findComponent("#password1").trigger("focus");
+    await wrapper.find("#password1").setValue("12345hH");
+    await wrapper.find("#password2").setValue("12345hH");
+    await wrapper.find("#btn_change-password_tel_lk").trigger("click");
+
+    const spy = jest.spyOn(wrapper.vm.$bvModal, "msgBoxOk");
+    spy.mockImplementation(() => Promise.resolve());
+
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/",
+      },
+    });
+
+    await wrapper.find("#btn_change-password_tel_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(window.location.href).toEqual("/login");
   });
 });
