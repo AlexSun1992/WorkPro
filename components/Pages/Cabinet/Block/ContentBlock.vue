@@ -67,6 +67,7 @@ export default {
         this.$store.dispatch("blocks/fetchWizardBlock", {
           itemId: this.itemId,
           cardId: this.cardId,
+          ...this.$route.params,
         });
       } else if (
         this.$store.getters["blocks/getBlockById"](this.itemId) === undefined
