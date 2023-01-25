@@ -4,14 +4,16 @@
       v-if="filterType !== 'query' && filterType !== 'combobox'"
       class="filterblock"
     >
-      <p>itemId:{{ this.itemId }}</p>
-      <p>propertyName:{{ this.propertyName }}</p>
-      <p>showFilteredItemsCount:{{ showFilteredItemsCount }}</p>
-      <p>query:{{ this.$route.query }}</p>
       <p>uniqueItems:{{ this.uniqueItems }}</p>
       <p>defaultValue:{{ this.defaultValue }}</p>
+      <p>propertyName:{{ this.propertyName }}</p>
       <p>filterType:{{ this.filterType }}</p>
+      <p>itemId:{{ this.itemId }}</p>
       <p>showButtonAll:{{ this.showButtonAll }}</p>
+      <p>allItemsButtonName:{{ this.allItemsButtonName }}</p>
+      <p>showFilteredItemsCount:{{ showFilteredItemsCount }}</p>
+      <p>this$.route.query:{{ this.$route.query }}</p>
+      {{ this.filterItems }}
 
       <button
         v-if="showButtonAll"
@@ -132,6 +134,7 @@ export default {
 
   computed: {
     filterItems() {
+      console.log(this.$store);
       const block = this.$store.getters["blocks/getUnfilteredBlockById"](
         this.itemId
       );
@@ -189,6 +192,8 @@ export default {
   },
 
   created() {
+    console.log("test:", this.filterItems);
+    console.log("this.$route.query.filters:", this.$route);
     if (this.$route.query.filters) {
       const filters = JSON.parse(this.$route.query.filters.toString());
       if (this.filterType === "radiobutton" && this.defaultValue === null) {
