@@ -38,7 +38,7 @@
     </div>
     <div class="col-12 col-lg-6 mt-3 mt-lg-0">
       <b-form-group>
-        <legend class="d-none d-lg-block">&nbsp;</legend>
+        <legend>Повторите пароль</legend>
         <b-form-input
           id="password2"
           :type="pswVisible2 ? 'text' : 'password'"
