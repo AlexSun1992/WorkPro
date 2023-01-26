@@ -134,9 +134,9 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE:
-            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
-          MESSAGE_CODE: 200,
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: "211",
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
       ],
     });
@@ -345,9 +345,9 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE:
-            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
-          MESSAGE_CODE: 200,
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: "211",
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
       ],
     });
@@ -436,9 +436,9 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE:
-            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
-          MESSAGE_CODE: 200,
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: "211",
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
       ],
     });
@@ -508,9 +508,19 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/sendsmscode",
+      "/am/free/v2/registerUser1",
       {
+        BIRTHDATE: "2022-12-21",
+        FIRSTNAME: "П",
+        GUID: null,
+        PASSWORD: "Aa1234",
+        PASSWORD_CONFIRM: "Aa1234",
         PHONE: "+7(910)-123-22-33",
+        POLICY_NUMBER: "",
+        SECONDNAME: "П",
+        THIRDNAME: "",
+        THIRDNAMENOTEXISTS: "Y",
+        USER_CONFIRM: "Y",
         error: false,
         loginType: "phone",
         modeType: "REG",
@@ -560,7 +570,7 @@ describe("RegForm", () => {
     await wrapper.find("#btn_chek_registration_lk").trigger("click");
     expect(wrapper.find("#error-message").exists()).toBe(false);
     expect(axios.post).toHaveBeenLastCalledWith(
-      "/am/free/v2/registration",
+      "/am/free/v2/registerUser2",
       {
         BIRTHDATE: "2022-12-21",
         CODE: "12345",
@@ -573,6 +583,7 @@ describe("RegForm", () => {
         THIRDNAME: "",
         THIRDNAMENOTEXISTS: "Y",
         USER_CONFIRM: "Y",
+        GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
       },
       { headers: { "X-Application": "VueJS", recaptcha: undefined } }
     );
