@@ -50,6 +50,7 @@
           class="form-control"
           data-testid="password2"
           @input="updateValue($event)"
+          @focus="checkSamePassword"
         ></b-form-input>
         <button
           id="btn_password_visible2"
@@ -102,6 +103,14 @@ export default {
     };
   },
   methods: {
+    checkSamePassword() {
+      if (
+        this.$v.form.password2.sameAsPassword === false &&
+        this.$v.form.password1.$model !== ""
+      ) {
+        this.$v.form.password2.$touch();
+      }
+    },
     updateValue(val) {
       this.$emit("update", {
         fieldId: this.data.fieldId,
