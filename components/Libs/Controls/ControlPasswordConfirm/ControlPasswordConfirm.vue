@@ -19,6 +19,7 @@
           :state="validateState('password1')"
           class="form-control"
           data-testid="password1"
+          @input="updateValue($event)"
         >
         </b-form-input>
 
@@ -43,10 +44,11 @@
           :type="pswVisible2 ? 'text' : 'password'"
           placeholder="Повторите пароль"
           v-model="$v.form.password2.$model"
-          @blur="updateField()"
+          @blur="$v.form.password2.$touch()"
           :state="validateState('password2')"
           class="form-control"
           data-testid="password2"
+          @input="updateValue($event)"
         ></b-form-input>
         <button
           id="btn_password_visible2"
@@ -99,16 +101,14 @@ export default {
     };
   },
   methods: {
-    updateField() {
-      this.$v.form.password2.$touch();
-      if (this.$v.form.$anyError === false) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.form.password2,
-        });
-      }
+    updateValue(val) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: val,
+      });
     },
+
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;
