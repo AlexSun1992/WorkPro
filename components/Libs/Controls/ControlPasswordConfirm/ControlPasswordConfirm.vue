@@ -22,19 +22,20 @@
           @input="updateValue($event)"
         >
         </b-form-input>
-
         <button
           id="btn_password_visible"
           type="button"
           class="btn-psw-visible"
           @click="visiblePSW()"
         ></button>
-        <b-form-invalid-feedback
+        <div class="invalid-feedback">
+          <b-form-invalid-feedback class="d-block"
           v-for="errMess in executeValidation"
           :key="errMess.errorText"
         >
           {{ errMess.errorText }}
         </b-form-invalid-feedback>
+        </div>
       </b-form-group>
     </div>
     <div class="col-12 col-lg-6 mt-3 mt-lg-0">
@@ -164,6 +165,7 @@ export default {
       password1: {
         required,
         isPasswordValid: (value) => passwordValidation(value).length === 0,
+
       },
       password2: {
         required,
