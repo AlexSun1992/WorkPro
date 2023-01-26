@@ -337,7 +337,6 @@ export default {
         });
       }
       if (typeof eventHandler === "function" && field.type != "button") {
-        // debugger;
         const data = await eventHandler(
           this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
           e,
@@ -434,7 +433,6 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
-
       if (this.validateData(fields)) {
         try {
           let itemId;
@@ -469,6 +467,7 @@ export default {
             relId,
             form: fields,
           });
+
           if (resp?.status !== 500) {
             this.$root.$bvToast.toast(resp?.data?.MESSAGE, {
               title: "",
