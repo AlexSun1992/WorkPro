@@ -17,8 +17,8 @@ describe("VerifyPassword", () => {
     name: "",
     patronymic: "",
     birthdate: "",
-    password: "1Jonm!ppM",
-    password2: "1Jonm!ppM",
+    password: "",
+    password2: "",
   };
 
   it("Должен показать пароль только первого инпута при клике на первый глазик, при повторном клике по кнопке - пароль первого инпута скрывается", async () => {
