@@ -107,6 +107,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
+                :errorMessageValidation ="validationForFirstPassword"
               />
             </div>
           </b-row>
