@@ -130,7 +130,7 @@
             :disabled="isDisabledForm"
             :tab-index="[50, 60]"
             :log-params="logParams"
-            :errorMessageValidation ="validationForFirstPassword"
+            :errorMessageValidation="validationForFirstPassword"
           />
         </div>
       </div>
@@ -205,7 +205,7 @@ import {
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
-import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
+import VerifyUser from "../Libs/VerifyUser2/VerifyUser2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import ConfirmModal from "./ConfirmModal.vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
@@ -222,9 +222,7 @@ import {
   fetchName,
 } from "./dadata.helper";
 
-import {
-  passwordValidation,
-} from "./regform.helper";
+import { passwordValidation } from "./regform.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -264,6 +262,7 @@ export default {
       password2: "",
       registrationInProcess: false,
       captchaToken: null,
+      codeToken: null,
       isRegConfirmed: null,
       token: 1,
       successSendMessageText: null,
@@ -327,7 +326,8 @@ export default {
       },
       password: {
         required,
-        errorMessageValidation: (value) => passwordValidation(value).length === 0,
+        errorMessageValidation: (value) =>
+          passwordValidation(value).length === 0,
       },
       password2: {
         required,
@@ -346,8 +346,8 @@ export default {
     }
   },
   computed: {
-    validationForFirstPassword(){
-      return passwordValidation(this.$v.form.password.$model)
+    validationForFirstPassword() {
+      return passwordValidation(this.$v.form.password.$model);
     },
 
     formData() {
@@ -367,6 +367,7 @@ export default {
         PASSWORD: this.$v.form.password.$model,
         PASSWORD_CONFIRM: this.$v.form.password2.$model,
         USER_CONFIRM: "Y",
+        GUID: this.codeToken,
       };
       return params;
     },
@@ -427,7 +428,10 @@ export default {
       this.isSendingCode = value;
     },
     sendCode(value) {
-      this.isSendCode = value;
+      this.isSendCode = Boolean(value);
+      if (this.isSendCode) {
+        this.codeToken = value;
+      }
     },
     changeField(field, e) {
       if (field === "isPatronymicNotExist") {
@@ -697,7 +701,7 @@ export default {
       return $dirty ? !$error : null;
     },
 
-    async register(context) {
+    async register() {
       try {
         this.isErrorMessage = false;
         this.errorMessage = null;
@@ -717,22 +721,21 @@ export default {
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
+          GUID: this.codeToken,
         };
 
         const headers = {
           headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         const response = await axios.post(
-          "/am/free/v2/registration",
+          "/am/free/v2/registerUser2",
           params,
           headers
         );
 
         this.registrationInProcess = false;
-        if (response?.status === 200) {
-          const messageAfterSuccessRegistration =
-            getMessageFromSuccessResponse(response);
-
+        const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+        if (isErrorList === false) {
           const h = this.$createElement;
           const titleVNode = h("div", {
             domProps: {
@@ -758,19 +761,21 @@ export default {
               static: true,
               autoFocusButton: "ok",
             })
-            .then((value) => {
+            .then(() => {
               window.location.href = "/login";
             })
             .catch((err) => {
               console.log(err);
             });
-        } else if (response?.status !== 200) {
+        } else {
           this.isErrorMessage = true;
-          this.errorMessage = response.data.INFO;
+          this.errorMessage =
+            response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ??
+            "Неизвестная ошибка";
         }
       } catch (e) {
         this.isErrorMessage = true;
-        this.errorMessage = e.response.data.INFO;
+        this.errorMessage = e?.response?.data?.INFO ?? "Неизвестная ошибка";
         this.registrationInProcess = false;
       }
     },
@@ -829,7 +834,7 @@ export default {
           return;
         }
 
-        this.register(this);
+        await this.register();
       } catch (e) {
         console.log(e);
       }
