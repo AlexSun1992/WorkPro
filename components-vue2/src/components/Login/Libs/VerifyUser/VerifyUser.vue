@@ -109,7 +109,7 @@
     <div
       id="verify-error-message"
       class="col-12 invalid-feedback d-block mt-3"
-      v-if="errorMessage"
+      v-if="errorMessage && !v.phone.$invalid"
     >
       {{ errorMessage }}
     </div>
