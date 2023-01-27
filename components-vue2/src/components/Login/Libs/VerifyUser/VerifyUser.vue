@@ -10,7 +10,7 @@
           v-model="v[loginType].$model"
           v-mask="changeMask"
           @change="changeField('phone')"
-          :autofocus="!formData"
+          autofocus
           :state="validateInput(loginType, isUserBlured)"
           :placeholder="placeholder"
           :disabled="isSendCode || loading"
@@ -94,7 +94,7 @@
         type="button"
         id="change_phone"
       >
-        {{ labelChangeButton }}
+        {{ loginType === "phone" ? "Изменить номер" : "Изменить email" }}
       </button>
     </div>
 
@@ -109,19 +109,23 @@
     <div
       id="verify-error-message"
       class="col-12 invalid-feedback d-block mt-3"
-      v-if="errorMessage"
+      v-if="errorMessage && !v.phone.$invalid"
     >
       {{ errorMessage }}
     </div>
     <div class="col-12 mt-4">
       <b-button
         type="submit"
-        :disabled="isDisabledButtonGetCode"
+        :disabled="
+          (loginType === 'phone' ? v.phone.$invalid : v.email.$invalid) ||
+          isSendCode ||
+          loading
+        "
         @click="getCode()"
         variant="primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
-        v-show="!validateInput('code', isCodeBlured)"
+        v-show="!validateInput('code', isCodeBlured) || isCodeError"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
@@ -179,8 +183,6 @@ export default {
     "isError",
     "isCodeFieldValid",
     "logParams",
-    "formData",
-    "isValidForm",
   ],
 
   data() {
@@ -325,7 +327,6 @@ export default {
       this.isPhoneChanged = false;
       this.$emit("error", null);
       this.errorMessage = null;
-      this.$emit("sendingCode", true);
 
       try {
         let response;
@@ -368,15 +369,6 @@ export default {
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
               this.isSendCode = false;
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
-                controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
-                timeUser: new Date(),
-              });
               return;
             }
 
@@ -390,15 +382,6 @@ export default {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
-                controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
-                timeUser: new Date(),
-              });
               return;
             }
 
@@ -431,15 +414,6 @@ export default {
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
               this.isSendCode = false;
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
-                controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
-                timeUser: new Date(),
-              });
               return;
             }
             if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
@@ -509,7 +483,6 @@ export default {
               this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
-              this.$emit("sendCode", true);
             }
           } else if (isErrorList === true) {
             if (response?.data[0]?.ERRORCODE === 106) return;
@@ -518,15 +491,6 @@ export default {
                 /^\[|\]$/g,
                 ""
               ) ?? "Неизвестная ошибка";
-            this.$LogEvent({
-              formName: "VerifyUser errorMessage",
-              idEventType: this.loginType ? 155 : 162,
-              controlName: "VerifyUser.vue",
-              message: `Показало сообщение об ошибке на ${
-                this.loginType === "phone" ? "номере" : "EMAIL"
-              }"`,
-              timeUser: new Date(),
-            });
           }
         } else {
           this.isUserDisabled = false;
@@ -534,18 +498,7 @@ export default {
       } catch (e) {
         this.loading = false;
         console.log(e);
-      } finally {
-        this.$emit("sendingCode", false);
       }
-      this.$LogEvent({
-        formName: "VerifyUser",
-        idEventType: this.loginType === "phone" ? 155 : 162,
-        controlName: "PasswordRecoveryForm.vue",
-        message: `Нажал на кнопку "Получить код через ${
-          this.loginType === "phone" ? "номер" : "EMAIL"
-        }"`,
-        timeUser: new Date(),
-      });
     },
 
     getCodeParams() {
@@ -573,7 +526,6 @@ export default {
     changeNumber() {
       this.codeFieldShown = false;
       this.$emit("checkCodeFieldValid", false);
-      this.$emit("sendCode", false);
       this.$emit("error", null);
       this.errorMessage = null;
       this.isUserBlured = false;
@@ -585,21 +537,9 @@ export default {
       this.isPhoneChanged = true;
       this.$emit("isPhoneChangedButtonClicked", this.isPhoneChanged);
       this.isSendCode = false;
-      this.$LogEvent({
-        formName: "VerifyUser",
-        idEventType: this.loginType === "phone" ? 156 : 161,
-        controlName: "VerifyUser.vue",
-        message: `Нажал на кнопку "Изменить ${
-          this.loginType === "phone" ? "номер" : "EMAIL"
-        }"`,
-        timeUser: new Date(),
-      });
     },
 
     validateInput(field) {
-      if (field === "code" && this.isCodeError) {
-        return false;
-      }
       return this.validateState(field);
     },
 
@@ -610,6 +550,9 @@ export default {
     stopTimer() {
       this.isSendCode = false;
     },
+  },
+  update() {
+    this.getCode();
   },
 
   computed: {
@@ -633,46 +576,12 @@ export default {
       }
       return !this.v.email.$invalid && this.isSendCode;
     },
-    isDisabledButtonGetCode() {
-      if (this.loginType === "phone") {
-        if (this.v.phone.$invalid) {
-          return true;
-        }
-        if (this.isValidForm === false) {
-          return true;
-        }
-        if (this.isSendCode) {
-          return true;
-        }
-        if (this.loading) {
-          return true;
-        }
-      } else {
-        return this.v.email.$invalid || this.isSendCode || this.loading;
-      }
-      return false;
-    },
-    labelChangeButton() {
-      if (this.formData) {
-        return "Изменить данные";
-      }
-      return this.loginType === "phone" ? "Изменить номер" : "Изменить E-mail";
-    },
   },
   watch: {
     errorMessage(value) {
       const isPhoneExist = value.includes(
         "В Личном кабинете отсутствует профиль с данным номером телефона"
       );
-      this.$LogEvent({
-        formName: "VerifyUser errorMessage",
-        idEventType: this.loginType ? 155 : 162,
-        controlName: "VerifyUser.vue",
-        message: `Показало сообщение об ошибке на ${
-          this.loginType === "phone" ? "номере" : "EMAIL"
-        }"`,
-        timeUser: new Date(),
-      });
       const isMailExist = value.includes(
         "На указанный email отсутствует зарегистрированная уч.запись"
       );
