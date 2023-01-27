@@ -548,7 +548,6 @@ export default {
             this.$store.commit("data_card/setDisabled", false);
             this.$store.commit("data_card/setSavedError", true);
             this.$store.commit("data_card/setErrorMessage", resp.data);
-            //
           }
           this.$emit("error", null);
         } catch (err) {
@@ -603,7 +602,6 @@ export default {
       });
       this.actionFormDisabled = false;
       if (response?.status === 500) {
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         this.$store.commit("data_card/setLoading", false);
         if (this.actionSettings.isDialog) {
           this.isActionApplyError = true;
