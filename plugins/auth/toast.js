@@ -13,7 +13,7 @@ export function makeToast(error) {
     $nuxt.$bvToast.hide(toastCount - 2);
   }
 
-  const getErrObj = getErrorMessage(error);
+  const getErrObj = getErrorMessage(error, this.$createElement);
 
   $nuxt.$bvToast.toast(getErrObj, {
     id: toastCount.toString(),
