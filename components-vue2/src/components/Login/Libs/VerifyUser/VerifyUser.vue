@@ -551,9 +551,6 @@ export default {
       this.isSendCode = false;
     },
   },
-  update() {
-    this.getCode();
-  },
 
   computed: {
     isCodeError() {
