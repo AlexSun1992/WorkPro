@@ -150,7 +150,7 @@
             :loginType="'phone'"
             :mode-type="'REG'"
             :validateState="validateState"
-            :disabled="registrationInProcess"
+            :disabled="isDisabledForm"
             :text-message="successSendMessageText"
             :tab-index="[10, 14, 16]"
             :error="errorMessage"
@@ -173,23 +173,42 @@
       >
         {{ errorMessage }}
       </div>
-      <div class="col-12 pt-3">
-        <b-button
-          v-if="codeFieldValid"
-          @click.stop.prevent="onSubmit"
-          class="w-100"
-          type="submit"
-          variant="primary"
-          :disabled="registrationInProcess"
-          id="btn_chek_registration_lk"
-        >
-          Зарегистрироваться
-          <b-spinner
-            v-if="registrationInProcess"
-            style="width: 1.2rem; height: 1.2rem"
-            variant="light"
-          ></b-spinner>
-        </b-button>
+      <div class="col-lg-12 mt-4">
+        <div class="row">
+          <div class="col-6">
+            <b-button
+              @click.stop.prevent="onSubmit"
+              class="w-100"
+              type="submit"
+              variant="primary"
+              :disabled="!codeFieldValid || registrationInProcess"
+              id="btn_chek_registration_lk"
+            >
+              Зарегистрироваться
+              <b-spinner
+                v-if="registrationInProcess"
+                style="width: 1.2rem; height: 1.2rem"
+                variant="light"
+              ></b-spinner>
+            </b-button>
+          </div>
+          <div class="col-6">
+            <b-button
+              class="w-100"
+              type="submit"
+              variant="primary"
+              :disabled="!codeFieldValid || registrationInProcess"
+              id="btn_chek_registration_lk"
+            >
+              Изменить данные
+              <b-spinner
+                v-if="registrationInProcess"
+                style="width: 1.2rem; height: 1.2rem"
+                variant="light"
+              ></b-spinner>
+            </b-button>
+          </div>
+        </div>
       </div>
     </b-form>
   </div>

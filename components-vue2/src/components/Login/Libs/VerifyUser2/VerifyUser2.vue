@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-12 col-lg-4">
+    <div class="col-4 col-lg-4">
       <b-form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
@@ -13,53 +13,14 @@
           :autofocus="!formData"
           :state="validateInput(loginType, isUserBlured)"
           :placeholder="placeholder"
-          :disabled="isSendCode || loading"
+          :disabled="disabled"
           @click="loginTouchesCount = 2"
           autocomplete="off"
           :tabindex="tabIndex[1]"
         ></b-form-input>
-        <legend v-if="loginType === 'email'">Почта</legend>
-        <b-form-input
-          v-if="loginType === 'email'"
-          ref="userInput"
-          v-model="v[loginType].$model"
-          autofocus
-          :state="validateInput(loginType, isUserBlured)"
-          placeholder="E-mail"
-          :disabled="isSendCode || loading"
-          @change="changeField('email')"
-          @input="removeErrorTextMessage"
-          @click="loginTouchesCount = 2"
-          @keyup.enter="verifyUser"
-          autocomplete="off"
-          :tabindex="tabIndex[0]"
-          id="email"
-        ></b-form-input>
-
-        <b-form-invalid-feedback v-if="!v.email"
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
-        <b-form-invalid-feedback v-if="v.email && v.email.$model === ''"
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
-
-        <b-form-invalid-feedback
-          v-if="v.email && v.email.forbiddenRussianSign === false"
-          >Русские символы запрещены
-        </b-form-invalid-feedback>
-
-        <b-form-invalid-feedback v-if="v.email && v.email.email === false"
-          >Пожалуйста, введите корректный e-mail</b-form-invalid-feedback
-        >
-
-        <b-form-invalid-feedback
-          v-if="v.email && v.email.forbiddenPlusSign === false"
-        >
-          Знак '+' запрещен
-        </b-form-invalid-feedback>
       </b-form-group>
     </div>
-    <div class="col-12 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
+    <div class="col-4 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
       <b-form-group label="Код подтверждения">
         <b-form-input
           id="sms-confirm"
@@ -72,7 +33,7 @@
           @update="updateField('code')"
           @change="changeField('code')"
           @input="inputTouch(loginType)"
-          :disabled="disabled"
+          :disabled="!isDisabledButtonGetCode"
           autocomplete="off"
           placeholder="Код подтверждения"
         ></b-form-input>
@@ -84,18 +45,25 @@
         >
       </b-form-group>
     </div>
-    <div class="col-12 col-lg-4 mt-3 pt-lg-1">
-      <button
-        v-if="codeFieldShown"
-        @click="changeNumber"
-        class="btn-link mt-lg-4 d-table"
-        type="button"
-        id="change_phone"
+    <div class="col-4 mt-4">
+      <b-button
+        type="submit"
+        :disabled="isDisabledButtonGetCode"
+        @click="getCode()"
+        variant="primary"
+        id="btn_code_verification_lk"
+        :tabindex="tabIndex[2]"
       >
-        {{ labelChangeButton }}
-      </button>
+        <span v-if="!isSendCode">Получить код</span>
+        <template v-if="isSendCode"
+          >Получить код (<verify-timer
+            @onFinish="stopTimer"
+            :duration="duration"
+          />
+          с)</template
+        >
+      </b-button>
     </div>
-
     <vue-recaptcha
       ref="recaptcha"
       size="invisible"
@@ -110,24 +78,6 @@
       v-if="errorMessage"
     >
       {{ errorMessage }}
-    </div>
-    <div class="col-12 mt-4">
-      <b-button
-        type="submit"
-        :disabled="isDisabledButtonGetCode"
-        @click="getCode()"
-        variant="primary"
-        id="btn_code_verification_lk"
-        :tabindex="tabIndex[2]"
-        v-show="!validateInput('code', isCodeBlured)"
-      >
-        <span v-if="!isSendCode">Получить код</span>
-        <template v-if="isSendCode"
-          >Отправить повторно можно через
-          <verify-timer @onFinish="stopTimer" :duration="duration" />
-          сек.</template
-        >
-      </b-button>
     </div>
   </div>
 </template>
@@ -279,12 +229,6 @@ export default {
             if (params.error === false && this.loginType === "phone") {
               return "registerUser1";
             }
-            if (params.error === true && this.loginType === "email") {
-              return "sendemailcode2";
-            }
-            if (params.error === false && this.loginType === "email") {
-              return "sendemailcode";
-            }
             return null;
           };
           const method = getMethod();
@@ -294,9 +238,6 @@ export default {
                 `/am/free/v2/${method}` +
                 `${this.modeType === "RECOVERY" ? `?smstype=recovery` : ``}`
               );
-            }
-            if (this.loginType === "email") {
-              return `/am/free/v2/${method}`;
             }
             return null;
           };
