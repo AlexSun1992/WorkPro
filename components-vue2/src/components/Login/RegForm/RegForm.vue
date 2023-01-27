@@ -85,19 +85,6 @@
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4">
-          <b-form-checkbox
-            id="check-box"
-            class="checkbox-hide mt-3 pt-1"
-            :disabled="isDisabledForm"
-            v-model="isPatronymicNotExist"
-            :value="!isPatronymicNotExist"
-            @change="changeField('isPatronymicNotExist', $event)"
-          >
-            Нет отчества
-          </b-form-checkbox>
-        </div>
-
         <div class="col-12 col-lg-6 mt-2 mt-lg-3">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker2
@@ -109,18 +96,35 @@
             />
           </b-form-group>
         </div>
+        <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4">
+          <b-form-checkbox
+            id="check-box"
+            class="checkbox-hide mt-3 pt-1"
+            :disabled="isDisabledForm"
+            v-model="isPolicyExist"
+            :value="!isPolicyExist"
+            @change="changeField('isPolicyExist', $event)"
+          >
+            У меня есть полис РЕСО
+          </b-form-checkbox>
+        </div>
         <div class="col-12 col-md-6 mt-3">
-          <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
+          <b-form-group label="Номер полиса" label-cols="12">
             <b-form-input
               ref="policyNumber"
               :id="Math.random().toString()"
+              :class="policyClass"
               v-model="form.policyNumber"
               placeholder="Номер полиса"
-              :disabled="isDisabledForm"
+              :disabled="!isPolicyExist || isDisabledForm"
               autocomplete="new-password"
-              @change="changeField('policyNumber')"
+              @update="changeField('policyNumber', $event)"
+              @blur="handleBlur('policyNumber')"
             ></b-form-input>
           </b-form-group>
+          <b-form-invalid-feedback :state="isStatePolicyErrorMessage"
+            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          >
         </div>
         <div class="col-12 col-lg-6"></div>
         <div class="col-12">
@@ -257,6 +261,7 @@ export default {
       },
       changePhoneButtonClicked: false,
       isPatronymicNotExist: false,
+      isPolicyExist: false,
       conformation: false,
       show: true,
       password2: "",
@@ -280,6 +285,7 @@ export default {
       isPatronymicTouch: false,
       isPatronymicValidSignsErrorMessage: true,
       //
+      isStatePolicyErrorMessage: null,
       isNameErrorMessage: true,
       isNameTouch: false,
       isNameValidSignsErrorMessage: true,
@@ -292,6 +298,7 @@ export default {
       //
       // classes
       patronymicClassHub: [],
+      policyClassHub: [],
       //
       surnameClassHub: [],
       //
@@ -374,7 +381,7 @@ export default {
     isValidForm() {
       if (
         this.patronymicClassHub.length === 0 &&
-        this.isPatronymicNotExist === false
+        this.isPolicyNotExist === false
       ) {
         return false;
       }
@@ -422,6 +429,9 @@ export default {
     nameClass() {
       return this.nameClassHub;
     },
+    policyClass() {
+      return this.policyClassHub;
+    },
   },
   methods: {
     sendingCode(value) {
@@ -444,6 +454,24 @@ export default {
           this.isPatronymicErrorMessage = null;
         }
         return;
+      }
+      if (field === "isPolicyExist") {
+        this.isPolicyNotExist = e;
+        if (this.isPolicyExist === false) {
+          this.form.policyNumber = "";
+          this.policyClassHub = [];
+          this.isStatePolicyErrorMessage = null;
+        }
+        return;
+      }
+      if (field === "policyNumber") {
+        if (e === "") {
+          this.isStatePolicyErrorMessage = false;
+          this.policyClassHub.push("is-invalid");
+          return;
+        }
+        this.policyClassHub = [];
+        this.isStatePolicyErrorMessage = true;
       }
       if (this.form[field] || this[field]) {
         this[field] = e?.value;
@@ -475,6 +503,13 @@ export default {
         if (this.patronymic === "") {
           this.isPatronymicErrorMessage = false;
           this.patronymicClassHub.push("is-invalid");
+        }
+      }
+
+      if (field === "policyNumber") {
+        if (this.form.policyNumber === "") {
+          this.isStatePolicyErrorMessage = false;
+          this.policyClassHub.push("is-invalid");
         }
       }
 
