@@ -29,12 +29,13 @@
           @click="visiblePSW()"
         ></button>
         <div class="invalid-feedback">
-          <b-form-invalid-feedback class="d-block"
-          v-for="errMess in executeValidation"
-          :key="errMess.errorText"
-        >
-          {{ errMess.errorText }}
-        </b-form-invalid-feedback>
+          <b-form-invalid-feedback
+            class="d-block"
+            v-for="errMess in executeValidation"
+            :key="errMess.errorText"
+          >
+            {{ errMess.errorText }}
+          </b-form-invalid-feedback>
         </div>
       </b-form-group>
     </div>
@@ -113,11 +114,24 @@ export default {
       }
     },
     updateValue(val) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: val,
-      });
+      if (passwordValidation(val).length === 0) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: val,
+          errorMessageValidate: () =>
+            this.executeValidation.map((text) => text.errorText),
+        });
+      }
+      if (passwordValidation(val).length !== 0) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: "",
+          errorMessageValidate: () =>
+            this.executeValidation.map((text) => text.errorText),
+        });
+      }
     },
 
     validateState(name) {
@@ -165,7 +179,6 @@ export default {
       password1: {
         required,
         isPasswordValid: (value) => passwordValidation(value).length === 0,
-
       },
       password2: {
         required,

@@ -46,11 +46,11 @@ export function getErrorNumber(errorMessage) {
 export function getErrorMessage(errorMessage, h) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
+
   const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
 
   if (getORAnumber) {
     const errNumber = getErrorNumber(errorMessage);
-
     if (MAX_ORA_ERROR > errNumber) {
       if (h) {
         const vnode = h("div", {

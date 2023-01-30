@@ -250,7 +250,6 @@ export const actions = {
           });
         })
         .catch((error) => {
-          console.log(error.response.data);
           commit("setError", true);
           commit("setErrorMessage", error.response.data);
         });
