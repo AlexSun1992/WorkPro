@@ -33,7 +33,7 @@
           @update="updateField('code')"
           @change="changeField('code')"
           @input="inputTouch(loginType)"
-          :disabled="!isDisabledButtonGetCode"
+          :disabled="loading"
           autocomplete="off"
           placeholder="Код подтверждения"
         ></b-form-input>
@@ -75,7 +75,7 @@
     <div
       id="verify-error-message"
       class="col-12 invalid-feedback d-block mt-3"
-      v-if="errorMessage"
+      v-if="codeFieldShown"
     >
       {{ errorMessage }}
     </div>
@@ -145,10 +145,9 @@ export default {
       loginTouchesCount: 0,
       token: 1,
       myclass: ["cabinet verifyuser"],
-      duration: 60,
+      duration: 1,
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
       loading: false,
-      codeFieldShown: false,
       allHiddenCaptchas: null,
       meassageWasSend: null,
       errorMessage: null,
@@ -258,7 +257,7 @@ export default {
       }
     },
     async getCode(token = null) {
-      this.codeFieldShown = false;
+      this.errorMessage = false;
       this.isPhoneChanged = false;
       this.loading = true;
       this.$emit("error", null);
@@ -599,6 +598,9 @@ export default {
         return "Изменить данные";
       }
       return this.loginType === "phone" ? "Изменить номер" : "Изменить E-mail";
+    },
+    codeFieldShown() {
+      return Boolean(this.formData?.GUID);
     },
   },
   watch: {

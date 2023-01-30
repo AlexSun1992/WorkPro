@@ -181,7 +181,7 @@
               class="w-100"
               type="submit"
               variant="primary"
-              :disabled="!codeFieldValid || registrationInProcess"
+              :disabled="isRegDisableButton || registrationInProcess"
               id="btn_chek_registration_lk"
             >
               Зарегистрироваться
@@ -194,10 +194,11 @@
           </div>
           <div class="col-6">
             <b-button
+              @click="changeFormData"
               class="w-100"
               type="submit"
               variant="primary"
-              :disabled="!codeFieldValid || registrationInProcess"
+              :disabled="isChangeDataDisableButton || registrationInProcess"
               id="btn_chek_registration_lk"
             >
               Изменить данные
@@ -375,7 +376,6 @@ export default {
     validationForFirstPassword() {
       return passwordValidation(this.$v.form.password.$model);
     },
-
     formData() {
       const params = {
         SECONDNAME: this.family,
@@ -397,10 +397,26 @@ export default {
       };
       return params;
     },
+    isRegDisableButton() {
+      if (
+        this.isValidForm === true &&
+        this.codeToken !== null &&
+        this.codeFieldValid === true
+      ) {
+        return false;
+      }
+      return true;
+    },
+    isChangeDataDisableButton() {
+      if (this.isValidForm === true && this.codeToken !== null) {
+        return false;
+      }
+      return true;
+    },
     isValidForm() {
       if (
-        this.patronymicClassHub.length === 0 &&
-        this.isPolicyNotExist === false
+        this.isPolicyExist === true &&
+        this.isStatePolicyErrorMessage !== true
       ) {
         return false;
       }
@@ -454,6 +470,8 @@ export default {
   },
   methods: {
     sendingCode(value) {
+      this.form.code = null;
+      this.codeFieldValid = false;
       this.isSendingCode = value;
     },
     sendCode(value) {
@@ -461,6 +479,11 @@ export default {
       if (this.isSendCode) {
         this.codeToken = value;
       }
+    },
+    changeFormData() {
+      this.isSendCode = null;
+      this.codeToken = null;
+      this.codeFieldValid = false;
     },
     changeField(field, e) {
       if (field === "isPatronymicNotExist") {
@@ -475,7 +498,7 @@ export default {
         return;
       }
       if (field === "isPolicyExist") {
-        this.isPolicyNotExist = e;
+        this.isPolicyExist = e;
         if (this.isPolicyExist === false) {
           this.form.policyNumber = "";
           this.policyClassHub = [];
@@ -560,7 +583,7 @@ export default {
     },
 
     isCodeFieldValid(value) {
-      this.codeFieldValid = value;
+      this.codeFieldValid = Boolean(value);
     },
 
     // запрос на подсказки по отчеству
