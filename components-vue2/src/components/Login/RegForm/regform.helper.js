@@ -4,7 +4,7 @@ export const minLengthPassword = 6;
 export const maxLengthPassword = 20;
 /** Текст подсказки для валидации пароля */
 export const tooltipTextForDetailFunc = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву. Пароль не должен содержать русских букв и специальных символов.`;
-export const tooltipText = `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, оду прописную и строчную буквы.`;
+export const tooltipText = `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`;
 
 const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
 const uppercaseLetter = /[A-Z]/;
@@ -31,7 +31,7 @@ export function passwordValidation(password) {
   if (passwordValidationDetail(password).length > 0) {
     errorMessagepasswordValidation.push(
       createErrorMessage(
-        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, оду прописную и строчную буквы.`
+        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`
       )
     );
   }
