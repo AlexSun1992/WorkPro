@@ -70,8 +70,8 @@
               placeholder="Отчество"
               :search="getSuggestionsPatronymic"
               :get-result-value="getResultValue"
+              :class="patronymicClassHub"
               :disabled="isPatronymicNotExist || isDisabledForm"
-              :class="patronymicClass"
               @blur="handleBlur('patronymic')"
               @submit="changeField('patronymic', $event)"
               data-testid="regPatronymic"
@@ -98,7 +98,7 @@
         </div>
         <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4">
           <b-form-checkbox
-            id="check-box"
+            id="policy-exist-check-box"
             class="checkbox-hide mt-3 pt-1"
             :disabled="isDisabledForm"
             v-model="isPolicyExist"
@@ -172,6 +172,17 @@
         v-if="errorMessage"
       >
         {{ errorMessage }}
+      </div>
+      <div class="col-12 col-lg-12 mt-lg-12 pt-lg-12">
+        <b-form-checkbox
+          id="agreement-check-box"
+          class="checkbox-hide mt-3 pt-1"
+          :disabled="isDisabledForm"
+          v-model="isAgreement"
+          :value="!isAgreement"
+        >
+          Я даю согласие на обработку персональных данных.
+        </b-form-checkbox>
       </div>
       <div class="col-lg-12 mt-4">
         <div class="row">
@@ -282,6 +293,7 @@ export default {
       changePhoneButtonClicked: false,
       isPatronymicNotExist: false,
       isPolicyExist: false,
+      isAgreement: false,
       conformation: false,
       show: true,
       password2: "",
@@ -392,7 +404,7 @@ export default {
         POLICY_NUMBER: this.form.policyNumber,
         PASSWORD: this.$v.form.password.$model,
         PASSWORD_CONFIRM: this.$v.form.password2.$model,
-        USER_CONFIRM: "Y",
+        USER_CONFIRM: this.isAgreement ? "Y" : "N",
         GUID: this.codeToken,
       };
       return params;
@@ -416,7 +428,8 @@ export default {
     isValidForm() {
       if (
         this.isPolicyExist === true &&
-        this.isStatePolicyErrorMessage !== true
+        (this.isStatePolicyErrorMessage === false ||
+          this.isStatePolicyErrorMessage === null)
       ) {
         return false;
       }
@@ -438,6 +451,9 @@ export default {
         return false;
       }
       if (this.$v.form.password.$error || this.$v.form.password2.$error) {
+        return false;
+      }
+      if (this.isAgreement === false) {
         return false;
       }
       return true;
@@ -507,13 +523,15 @@ export default {
         return;
       }
       if (field === "policyNumber") {
+        this.policyClassHub = [];
+        this.isStatePolicyErrorMessage = null;
         if (e === "") {
           this.isStatePolicyErrorMessage = false;
           this.policyClassHub.push("is-invalid");
           return;
         }
-        this.policyClassHub = [];
         this.isStatePolicyErrorMessage = true;
+        this.policyClassHub = ["is-valid"];
       }
       if (this.form[field] || this[field]) {
         this[field] = e?.value;
@@ -542,10 +560,7 @@ export default {
       }
 
       if (field === "patronymic") {
-        if (this.patronymic === "") {
-          this.isPatronymicErrorMessage = false;
-          this.patronymicClassHub.push("is-invalid");
-        }
+        return;
       }
 
       if (field === "policyNumber") {
@@ -592,6 +607,12 @@ export default {
 
       if (this.patronymic === "") {
         this.suggestionsHub = [];
+      }
+      if (input === "") {
+        this.patronymicClassHub = [];
+        this.isPatronymicErrorMessage = null;
+        this.isPatronymicValidSignsErrorMessage = null;
+        return;
       }
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);

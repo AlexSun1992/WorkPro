@@ -63,5 +63,8 @@ export function isAlertShouldBeShown(modeType, loginType, errCode) {
   if (errCode === 203 && modeType === "RECOVERY" && loginType === "phone") {
     return true;
   }
+  if (errCode === 105 && modeType === "REG" && loginType === "phone") {
+    return true;
+  }
   return false;
 }

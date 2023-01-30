@@ -18,6 +18,9 @@
           autocomplete="off"
           :tabindex="tabIndex[1]"
         ></b-form-input>
+        <b-form-invalid-feedback :state="validateInput(loginType, isUserBlured)"
+          >Обязательное поле</b-form-invalid-feedback
+        >
       </b-form-group>
     </div>
     <div class="col-4 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
@@ -73,9 +76,16 @@
       @expired="onCaptchaExpired"
     />
     <div
+      v-if="successMessage && codeFieldShown"
+      id="verify-success-message"
+      class="col-12 success-feedback d-block mt-3"
+    >
+      {{ successMessage }}
+    </div>
+    <div
       id="verify-error-message"
       class="col-12 invalid-feedback d-block mt-3"
-      v-if="codeFieldShown"
+      v-if="errorMessage"
     >
       {{ errorMessage }}
     </div>
@@ -145,12 +155,13 @@ export default {
       loginTouchesCount: 0,
       token: 1,
       myclass: ["cabinet verifyuser"],
-      duration: 1,
+      duration: 60,
       siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
       loading: false,
       allHiddenCaptchas: null,
       meassageWasSend: null,
       errorMessage: null,
+      successMessage: null,
     };
   },
 
@@ -257,7 +268,8 @@ export default {
       }
     },
     async getCode(token = null) {
-      this.errorMessage = false;
+      this.successMessage = null;
+      this.errorMessage = null;
       this.isPhoneChanged = false;
       this.loading = true;
       this.$emit("error", null);
@@ -293,17 +305,18 @@ export default {
             const response1 = await request(params, headers);
 
             response = response1;
-            const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
-
+            const getResponseMessageCodeErr = response?.data[0]?.ERRORCODE;
             const isAlertShown = isAlertShouldBeShown(
               this.modeType,
               this.loginType,
               getResponseMessageCodeErr
             );
             if (isAlertShown) {
-              this.codeFieldShown = false;
               this.errorMessage =
-                "В Личном кабинете отсутствует профиль с данным номером телефона";
+                response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
+                  /^\[|\]$/g,
+                  ""
+                ) ?? "Неизвестная ошибка";
               this.isSendCode = false;
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
@@ -318,9 +331,9 @@ export default {
             }
 
             if (response1.data[0].MESSAGE_CODE === 200) {
-              this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
+              this.successMessage = response?.data[0]?.MESSAGE;
             }
 
             if (response1.data.STATUS === 500) {
@@ -356,7 +369,7 @@ export default {
             const response2 = await request(params, headers);
             response = response2;
 
-            const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
+            const getResponseMessageCodeErr = response?.data[0]?.ERRORCODE;
 
             const isAlertShown = isAlertShouldBeShown(
               this.modeType,
@@ -364,9 +377,11 @@ export default {
               getResponseMessageCodeErr
             );
             if (isAlertShown) {
-              this.codeFieldShown = false;
               this.errorMessage =
-                "В Личном кабинете отсутствует профиль с данным номером телефона";
+                response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
+                  /^\[|\]$/g,
+                  ""
+                ) ?? "Неизвестная ошибка";
               this.isSendCode = false;
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
@@ -383,9 +398,9 @@ export default {
               this.loading = false;
               this.isSendCode = false;
             } else {
-              this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
+              this.successMessage = response?.data[0]?.MESSAGE;
             }
           }
           const isError = Boolean(
@@ -444,7 +459,6 @@ export default {
                   console.log(err);
                 });
             } else {
-              this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
               if (codeToken) {
@@ -512,7 +526,6 @@ export default {
     },
 
     changeNumber() {
-      this.codeFieldShown = false;
       this.$emit("checkCodeFieldValid", false);
       this.$emit("sendCode", false);
       this.$emit("error", null);
