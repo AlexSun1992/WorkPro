@@ -1,124 +1,183 @@
-import { passwordValidation } from "./regform.helper";
+import {
+  passwordValidation,
+  passwordValidationDetail,
+  minLengthPassword,
+  maxLengthPassword,
+} from "./regform.helper";
 
 describe("Валидация компонента PasswordRecoveryForm", () => {
-  const passwordValidationErrorText =
-    "Требования к паролю: от 6 до 20 символов, без кириллицы и специальных символов, содержит цифру, оду прописную и строчную буквы.";
+  it("Максимальное число символов = 20, а минимальное = 6", () => {
+    expect(minLengthPassword).toBe(6);
+    expect(maxLengthPassword).toBe(20);
+  });
+  it("Максимальное число символов != 20, а минимальное != 6", () => {
+    expect(minLengthPassword).not.toBe(11);
+    expect(maxLengthPassword).not.toBe(25);
+  });
   it("Успешный пароль", () => {
     const passwordValidationMessage = passwordValidation("Reso1991");
     expect(passwordValidationMessage).toEqual([]);
   });
+  it("Не успешный пароль", () => {
+    const passwordValidationMessage = passwordValidation("Reso");
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, оду прописную и строчную буквы.`,
+      },
+    ]);
+  });
+  it("Успешный пароль", () => {
+    const passwordValidationMessage = passwordValidationDetail("Reso1991");
+    expect(passwordValidationMessage).toEqual([]);
+  });
 
   it("Если поле пустое выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("");
+    const passwordValidationMessage = passwordValidationDetail("");
     expect(passwordValidationMessage).toEqual([
-      { errorText: passwordValidationErrorText },
+      {
+        errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+      },
     ]);
   });
 
   it("Если поле содержит меньше 6 символов , то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("1pR");
+    const passwordValidationMessage = passwordValidationDetail("1pR");
     expect(passwordValidationMessage).toEqual([
-      { errorText: passwordValidationErrorText },
+      {
+        errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+      },
     ]);
   });
 
   it("Если поле содержит больше 20 символов , то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation(
+    const passwordValidationMessage = passwordValidationDetail(
       "1kkkkkkkkkkkkkRkkkkkk"
     );
     expect(passwordValidationMessage).toEqual([
-      { errorText: passwordValidationErrorText },
+      {
+        errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+      },
     ]);
   });
 
   it("Если поле содержит русский символ , то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("1kkkkkRkkkkkkkkз");
+    const passwordValidationMessage =
+      passwordValidationDetail("1kkkkkRkkkkkkkkз");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText:
+          "Пароль не должен содержать русских букв в специальных символов.",
       },
     ]);
   });
 
   it("Если поле содержит специальный символ , то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("1kkkkkRkkkkkkkk!");
+    const passwordValidationMessage =
+      passwordValidationDetail("1kkkkkRkkkkkkkk!");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText:
+          "Пароль не должен содержать русских букв в специальных символов.",
       },
     ]);
   });
 
   it("Если поле содержит русские буквы и специальный символ , то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("1kkkkRkkkkkkkзk!");
+    const passwordValidationMessage =
+      passwordValidationDetail("1kkkkRkkkkkkkзk!");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText:
+          "Пароль не должен содержать русских букв в специальных символов.",
       },
     ]);
   });
 
   it("Если поле содержит русские буквы, специальный символ и содержит меньше 6 символов, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("1Rkз!");
+    const passwordValidationMessage = passwordValidationDetail("1Rkз!");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+      },
+      {
+        errorText:
+          "Пароль не должен содержать русских букв в специальных символов.",
       },
     ]);
   });
 
   it("Если поле содержит русские буквы, специальный символ и содержит больше 20 символов, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation(
+    const passwordValidationMessage = passwordValidationDetail(
       "1kппппhhhhhhhhRhhhhhhhhhз!"
     );
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+      },
+      {
+        errorText:
+          "Пароль не должен содержать русских букв в специальных символов.",
       },
     ]);
   });
 
   it("Если поле содержит русские буквы, специальный символ и нет цифр, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("kппппhhhRhhз!");
+    const passwordValidationMessage = passwordValidationDetail("kппппhhhRhhз!");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText:
+          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+      },
+      {
+        errorText:
+          "Пароль не должен содержать русских букв в специальных символов.",
       },
     ]);
   });
 
   it("Если поле содержит русские буквы, специальный символ и нет латинских букв, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("1111111пfппз!");
+    const passwordValidationMessage = passwordValidationDetail("1111111пfппз!");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText:
+          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+      },
+      {
+        errorText:
+          "Пароль не должен содержать русских букв в специальных символов.",
       },
     ]);
   });
 
   it("Если поле содержит русские буквы, специальный символ и нет латинских букв, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("gR");
+    const passwordValidationMessage = passwordValidationDetail("gR");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+      },
+      {
+        errorText:
+          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
       },
     ]);
   });
 
   it("Если поле не содержит заглавную латинскую букву, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("reso1991");
+    const passwordValidationMessage = passwordValidationDetail("reso1991");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText:
+          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
       },
     ]);
   });
 
   it("Если поле содержит только заглавные латинские буквы, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidation("RRRRRRRR1");
+    const passwordValidationMessage = passwordValidationDetail("RRRRRRRR1");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: passwordValidationErrorText,
+        errorText:
+          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
       },
     ]);
   });

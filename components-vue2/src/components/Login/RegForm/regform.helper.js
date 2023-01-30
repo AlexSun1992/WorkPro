@@ -3,7 +3,8 @@ export const minLengthPassword = 6;
 /** Максимальная длина пароля */
 export const maxLengthPassword = 20;
 /** Текст подсказки для валидации пароля */
-export const tooltipText = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву. Пароль не должен содержать русских букв и специальных символов.`;
+export const tooltipTextForDetailFunc = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву. Пароль не должен содержать русских букв и специальных символов.`;
+export const tooltipText = `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, оду прописную и строчную буквы.`;
 
 const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
 const uppercaseLetter = /[A-Z]/;
@@ -26,18 +27,11 @@ function createErrorMessage(errorValue) {
 export function passwordValidation(password) {
   /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
-  if (
-    password.length < minLengthPassword ||
-    password.length > maxLengthPassword ||
-    uppercaseLetter.test(password) === false ||
-    numeric.test(password) === false ||
-    lowercaseLetter.test(password) === false ||
-    forbiddeCharacters.test(password) === false ||
-    forbiddenRussianSign.test(password) === false
-  ) {
+  // eslint-disable-next-line no-use-before-define
+  if (passwordValidationDetail(password).length > 0) {
     errorMessagepasswordValidation.push(
       createErrorMessage(
-        "Требования к паролю: от 6 до 20 символов, без кириллицы и специальных символов, содержит цифру, оду прописную и строчную буквы."
+        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, оду прописную и строчную буквы.`
       )
     );
   }
@@ -45,7 +39,7 @@ export function passwordValidation(password) {
   return errorMessagepasswordValidation;
 }
 
-export function passwordValidationAllRegex(password) {
+export function passwordValidationDetail(password) {
   /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
   if (
@@ -53,7 +47,9 @@ export function passwordValidationAllRegex(password) {
     password.length > maxLengthPassword
   ) {
     errorMessagepasswordValidation.push(
-      createErrorMessage("Пароль должен содержать от 6 до 20 символов.")
+      createErrorMessage(
+        `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`
+      )
     );
   }
   if (
