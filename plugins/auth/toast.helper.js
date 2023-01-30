@@ -45,7 +45,6 @@ export function getErrorNumber(errorMessage) {
 
 export function getErrorMessage(errorMessage, h) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
-
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
 
   const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
@@ -72,7 +71,6 @@ export function getErrorMessage(errorMessage, h) {
       getErrorTextWithBrackets.match(/\[.+?\]/g);
 
     const getStringFromErrorText = transformErrorTextToArray.join("");
-    // проверяем нужно использовать ленивый квантификатор
     if (getErrorTextWithBrackets === getStringFromErrorText) {
       const getStringMessageWithErrBrackets = stringWithBrackets[0];
       const getArrWithErrBrackets =
@@ -84,13 +82,13 @@ export function getErrorMessage(errorMessage, h) {
     return stringWithBrackets[1];
   }
 
-  if (
-    errMessageString === null ||
-    errMessageString === undefined ||
-    typeof errMessageString === "object"
-  ) {
-    return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
-  }
+  // if (
+  //   errMessageString === null ||
+  //   errMessageString === undefined ||
+  //   typeof errMessageString === "object"
+  // ) {
+  //   return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
+  // }
 
   return errMessageString;
 }
