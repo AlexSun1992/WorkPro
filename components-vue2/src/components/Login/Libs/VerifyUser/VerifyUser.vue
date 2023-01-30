@@ -109,7 +109,7 @@
     <div
       id="verify-error-message"
       class="col-12 invalid-feedback d-block mt-3"
-      v-if="errorMessage"
+      v-if="errorMessage && !v.phone.$invalid"
     >
       {{ errorMessage }}
     </div>
@@ -674,7 +674,7 @@ export default {
         timeUser: new Date(),
       });
       const isMailExist = value.includes(
-        "На указанный email отсутствует зарегистрированная уч.запись"
+        "На указанный e-mail отсутствует зарегистрированная уч.запись"
       );
       if (isPhoneExist || isMailExist) {
         this.loading = false;
