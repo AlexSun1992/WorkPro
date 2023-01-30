@@ -370,8 +370,8 @@ export default {
     },
     async updateValue(e) {
       this.$store.commit("data_card/setFormField", {
-        fieldId: null,
-        value: null,
+        fieldId: e.fieldId,
+        value: e.value,
       });
       const field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(

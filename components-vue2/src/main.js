@@ -42,19 +42,6 @@ Vue.customElement(
 );
 
 Vue.customElement(
-  "control-button",
-  () =>
-    new Promise((resolve) => {
-      require(["../../components/Libs/Controls/ControlButton.vue"], (
-        lazyComponent
-      ) => {
-        lazyComponent.default.store = store;
-        resolve(lazyComponent.default);
-      });
-    })
-);
-
-Vue.customElement(
   "component-login-button",
   () =>
     new Promise((resolve) => {
