@@ -19,26 +19,6 @@ function createErrorMessage(errorValue) {
   };
 }
 
-/**
- * Функция валидации пароля
- * @param {string} password входящая переменная
- * @return {{errorText: string}[]}
- */
-export function passwordValidation(password) {
-  /** Массив ошибок для пароля */
-  const errorMessagepasswordValidation = [];
-  // eslint-disable-next-line no-use-before-define
-  if (passwordValidationDetail(password).length > 0) {
-    errorMessagepasswordValidation.push(
-      createErrorMessage(
-        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`
-      )
-    );
-  }
-
-  return errorMessagepasswordValidation;
-}
-
 export function passwordValidationDetail(password) {
   /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
@@ -72,6 +52,26 @@ export function passwordValidationDetail(password) {
     errorMessagepasswordValidation.push(
       createErrorMessage(
         "Пароль не должен содержать русских букв в специальных символов."
+      )
+    );
+  }
+
+  return errorMessagepasswordValidation;
+}
+
+/**
+ * Функция валидации пароля
+ * @param {string} password входящая переменная
+ * @return {{errorText: string}[]}
+ */
+export function passwordValidation(password) {
+  /** Массив ошибок для пароля */
+  const errorMessagepasswordValidation = [];
+
+  if (passwordValidationDetail(password).length > 0) {
+    errorMessagepasswordValidation.push(
+      createErrorMessage(
+        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`
       )
     );
   }
