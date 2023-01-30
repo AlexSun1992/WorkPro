@@ -284,7 +284,6 @@ export default {
             value !== 0) ||
           (error && data[i].visible)
         ) {
-          console.log("error", data[i]);
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
           this.$store.commit("data_card/saveButtonClicked", false);
@@ -371,8 +370,8 @@ export default {
     },
     async updateValue(e) {
       this.$store.commit("data_card/setFormField", {
-        fieldId: e.fieldId,
-        value: e.value,
+        fieldId: null,
+        value: null,
       });
       const field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(

@@ -28,6 +28,28 @@ export function passwordValidation(password) {
   const errorMessagepasswordValidation = [];
   if (
     password.length < minLengthPassword ||
+    password.length > maxLengthPassword ||
+    uppercaseLetter.test(password) === false ||
+    numeric.test(password) === false ||
+    lowercaseLetter.test(password) === false ||
+    forbiddeCharacters.test(password) === false ||
+    forbiddenRussianSign.test(password) === false
+  ) {
+    errorMessagepasswordValidation.push(
+      createErrorMessage(
+        "Требования к паролю: от 6 до 20 символов, без кириллицы и специальных символов, содержит цифру, оду прописную и строчную буквы."
+      )
+    );
+  }
+
+  return errorMessagepasswordValidation;
+}
+
+export function passwordValidationAllRegex(password) {
+  /** Массив ошибок для пароля */
+  const errorMessagepasswordValidation = [];
+  if (
+    password.length < minLengthPassword ||
     password.length > maxLengthPassword
   ) {
     errorMessagepasswordValidation.push(
@@ -57,5 +79,6 @@ export function passwordValidation(password) {
       )
     );
   }
+
   return errorMessagepasswordValidation;
 }
