@@ -76,12 +76,10 @@
       @verify="getCode"
       @expired="onCaptchaExpired"
     />
-    <div
-      v-if="successMessage && codeFieldShown"
-      id="verify-success-message"
-      class="col-12 success-feedback d-block mt-3"
-    >
-      {{ successMessage }}
+    <div v-if="successMessage && codeFieldShown">
+      <div id="verify-success-message" class="success-feedback mt-3">
+        {{ successMessage }}
+      </div>
     </div>
     <div
       id="verify-error-message"
@@ -721,5 +719,10 @@ export default {
 }
 </style>
 <style scoped lang="scss">
+.success-feedback {
+  background: #edf8ea;
+  border-radius: 15px;
+  padding: 24px;
+}
 // @import "~/assets/scss/reg.scss";
 </style>
