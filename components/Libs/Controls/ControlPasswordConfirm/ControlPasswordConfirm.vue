@@ -19,26 +19,29 @@
           :state="validateState('password1')"
           class="form-control"
           data-testid="password1"
+          @input="updateValue($event)"
         >
         </b-form-input>
-
         <button
           id="btn_password_visible"
           type="button"
           class="btn-psw-visible"
           @click="visiblePSW()"
         ></button>
-        <b-form-invalid-feedback
-          v-for="errMess in executeValidation"
-          :key="errMess.errorText"
-        >
-          {{ errMess.errorText }}
-        </b-form-invalid-feedback>
+        <div class="invalid-feedback">
+          <b-form-invalid-feedback
+            class="d-block"
+            v-for="errMess in executeValidation"
+            :key="errMess.errorText"
+          >
+            {{ errMess.errorText }}
+          </b-form-invalid-feedback>
+        </div>
       </b-form-group>
     </div>
     <div class="col-12 col-lg-6 mt-3 mt-lg-0">
       <b-form-group>
-        <legend class="d-none d-lg-block">&nbsp;</legend>
+        <legend>Повторите пароль</legend>
         <b-form-input
           id="password2"
           :type="pswVisible2 ? 'text' : 'password'"
@@ -48,6 +51,8 @@
           :state="validateState('password2')"
           class="form-control"
           data-testid="password2"
+          @input="updateValue($event)"
+          @focus="checkSamePassword"
         ></b-form-input>
         <button
           id="btn_password_visible2"
@@ -100,6 +105,35 @@ export default {
     };
   },
   methods: {
+    checkSamePassword() {
+      if (
+        this.$v.form.password2.sameAsPassword === false &&
+        this.$v.form.password1.$model !== ""
+      ) {
+        this.$v.form.password2.$touch();
+      }
+    },
+    updateValue(val) {
+      if (passwordValidation(val).length === 0) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: val,
+          errorMessageValidate: () =>
+            this.executeValidation.map((text) => text.errorText),
+        });
+      }
+      if (passwordValidation(val).length !== 0) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: "",
+          errorMessageValidate: () =>
+            this.executeValidation.map((text) => text.errorText),
+        });
+      }
+    },
+
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;

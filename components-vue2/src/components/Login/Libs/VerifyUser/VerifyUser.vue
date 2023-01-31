@@ -16,6 +16,7 @@
           :disabled="isSendCode || loading"
           @blur="debouncedUpdate(loginType, isUserBlured)"
           @click="loginTouchesCount = 2"
+          @input="removeErrorTextMessage"
           autocomplete="off"
           :tabindex="tabIndex[1]"
         ></b-form-input>
@@ -674,7 +675,7 @@ export default {
         timeUser: new Date(),
       });
       const isMailExist = value.includes(
-        "На указанный email отсутствует зарегистрированная уч.запись"
+        "На указанный e-mail отсутствует зарегистрированная уч.запись"
       );
       if (isPhoneExist || isMailExist) {
         this.loading = false;
