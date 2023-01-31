@@ -12,7 +12,8 @@
     >
       <div class="tab-mobile-block">Регистрация</div>
       <div class="row">
-        <div class="col-12 col-lg-6 mt-2">
+        <div class="col-12 ph4b">1. ПЕРСОНАЛЬНЫЕ ДАННЫЕ</div>
+        <div class="col-12 col-lg-4 mt-3">
           <b-form-group class="required" label="Фамилия" label-cols="12">
             <autocomplete
               id="autocomplete-surname"
@@ -36,7 +37,7 @@
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-6 mt-2">
+        <div class="col-12 col-lg-4 mt-3">
           <b-form-group label="Имя" label-cols="12" class="required">
             <autocomplete
               ref="autocompleteName"
@@ -58,8 +59,7 @@
             >
           </b-form-group>
         </div>
-
-        <div class="col-12 col-lg-6 mt-2 mt-lg-3" id="patronymic">
+        <div class="col-12 col-lg-4 mt-3" id="patronymic">
           <b-form-group
             label="Отчество (при наличии)"
             label-cols="12"
@@ -85,7 +85,7 @@
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-6 mt-2 mt-lg-3">
+        <div class="col-12 col-lg-4 mt-3">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker2
               id="birthday-picker"
@@ -96,10 +96,10 @@
             />
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4">
+        <div class="col-12 col-lg-4 mt-lg-3 pt-lg-4">
           <b-form-checkbox
             id="policy-exist-check-box"
-            class="checkbox-hide mt-3 pt-1"
+            class="checkbox-switcher mt-3 pt-1"
             :disabled="isDisabledForm"
             v-model="isPolicyExist"
             :value="!isPolicyExist"
@@ -108,7 +108,7 @@
             У меня есть полис РЕСО
           </b-form-checkbox>
         </div>
-        <div class="col-12 col-md-6 mt-3">
+        <div class="col-12 col-lg-4 mt-3">
           <b-form-group label="Номер полиса" label-cols="12">
             <b-form-input
               ref="policyNumber"
@@ -126,7 +126,10 @@
             >Пожалуйста, заполните это поле</b-form-invalid-feedback
           >
         </div>
-        <div class="col-12 col-lg-6"></div>
+        <div class="col-12 mt-4 mt-lg-0">
+          <div class="h-line d-none d-lg-block"></div>
+        </div>
+        <div class="col-12 ph4b">2. ЗАДАЙТЕ ПАРОЛЬ</div>
         <div class="col-12">
           <verify-password
             :v="$v.form"
@@ -137,89 +140,102 @@
             :errorMessageValidation="validationForFirstPassword"
           />
         </div>
-      </div>
-      <div class="mt-3">
-        <b-form-group class="mt-50 w-100 required">
-          <verify-user
-            ref="verifyUser"
-            @error="showError"
-            :v="$v.form"
-            :log-params="logParams"
-            :count="60"
-            :context="'registration'"
-            :loginType="'phone'"
-            :mode-type="'REG'"
-            :validateState="validateState"
-            :disabled="isDisabledForm"
-            :text-message="successSendMessageText"
-            :tab-index="[10, 14, 16]"
-            :error="errorMessage"
-            @checkCodeFieldValid="isCodeFieldValid"
-            @messageText="getTextMessage"
-            @sendingCode="sendingCode"
-            @sendCode="sendCode"
-            :isCodeFieldValid="codeFieldValid"
-            @isPhoneChangedButtonClicked="checkIfButtonClicked"
-            @input="refuseButtonClicked"
-            :form-data="formData"
-            :is-valid-form="isValidForm"
-          />
-        </b-form-group>
-      </div>
-      <div
-        id="error-message"
-        class="col-12 invalid-feedback d-block mt-3"
-        v-if="errorMessage"
-      >
-        {{ errorMessage }}
-      </div>
-      <div class="col-12 col-lg-12 mt-lg-12 pt-lg-12">
-        <b-form-checkbox
-          id="agreement-check-box"
-          class="checkbox-hide mt-3 pt-1"
-          :disabled="isDisabledForm"
-          v-model="isAgreement"
-          :value="!isAgreement"
+        <div class="col-12 mt-4 mt-lg-0">
+          <div class="h-line d-none d-lg-block"></div>
+        </div>
+        <div class="col-12 ph4b">3. ТЕЛЕФОН</div>
+        <div class="col-12 mt-3">
+          <b-form-group class="mt-50 w-100 required">
+            <verify-user
+              ref="verifyUser"
+              @error="showError"
+              :v="$v.form"
+              :log-params="logParams"
+              :count="60"
+              :context="'registration'"
+              :loginType="'phone'"
+              :mode-type="'REG'"
+              :validateState="validateState"
+              :disabled="isDisabledForm"
+              :text-message="successSendMessageText"
+              :tab-index="[10, 14, 16]"
+              :error="errorMessage"
+              @checkCodeFieldValid="isCodeFieldValid"
+              @messageText="getTextMessage"
+              @sendingCode="sendingCode"
+              @sendCode="sendCode"
+              :isCodeFieldValid="codeFieldValid"
+              @isPhoneChangedButtonClicked="checkIfButtonClicked"
+              @input="refuseButtonClicked"
+              :form-data="formData"
+              :is-valid-form="isValidForm"
+            />
+          </b-form-group>
+        </div>
+        <div
+          id="error-message"
+          class="col-12 invalid-feedback d-block mt-3"
+          v-if="errorMessage"
         >
-          Я даю согласие на обработку персональных данных.
-        </b-form-checkbox>
+          {{ errorMessage }}
+        </div>
+        <div class="col-12 my-4 my-lg-5">
+          <b-form-checkbox
+            id="agreement-check-box"
+            class="checkbox-hide"
+            :disabled="isDisabledForm"
+            v-model="isAgreement"
+            :value="!isAgreement"
+          >
+            Я даю
+            <a
+              href="/regulations/personal-agreement-2.html"
+              class="reg_agreement"
+              >согласие</a
+            >
+            на обработку своих персональных данных. С
+            <a href="/regulations/safety-of-personal.html" class="reg_agreement"
+              >политикой обеспечения безопасности персональных данных</a
+            >
+            САО “РЕСО-Гарантия” ознакомлен. <br />Даю
+            <a
+              href="https://client.reso.ru/wp-reso-ru/products/auto/osago/addition/act.xhtml"
+              class="reg_agreement"
+              >согласие</a
+            >
+            на email и СМС рассылку.
+          </b-form-checkbox>
+        </div>
       </div>
-      <div class="col-lg-12 mt-4">
-        <div class="row">
-          <div class="col-6">
-            <b-button
-              @click.stop.prevent="onSubmit"
-              class="w-100"
-              type="submit"
-              variant="primary"
-              :disabled="isRegDisableButton || registrationInProcess"
-              id="btn_chek_registration_lk"
-            >
-              Зарегистрироваться
-              <b-spinner
-                v-if="registrationInProcess"
-                style="width: 1.2rem; height: 1.2rem"
-                variant="light"
-              ></b-spinner>
-            </b-button>
-          </div>
-          <div class="col-6">
-            <b-button
-              @click="changeFormData"
-              class="w-100"
-              type="submit"
-              variant="primary"
-              :disabled="isChangeDataDisableButton || registrationInProcess"
-              id="btn_chek_registration_lk"
-            >
-              Изменить данные
-              <b-spinner
-                v-if="registrationInProcess"
-                style="width: 1.2rem; height: 1.2rem"
-                variant="light"
-              ></b-spinner>
-            </b-button>
-          </div>
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-auto">
+          <b-button
+            @click.stop.prevent="onSubmit"
+            class="w-100 w-lg-auto"
+            type="submit"
+            variant="primary"
+            :disabled="isRegDisableButton || registrationInProcess"
+            id="btn_chek_registration_lk"
+          >
+            Зарегистрироваться
+            <b-spinner
+              v-if="registrationInProcess"
+              style="width: 1.2rem; height: 1.2rem"
+              variant="light"
+            ></b-spinner>
+          </b-button>
+        </div>
+        <div class="col-auto mt-3 mt-lg-0">
+          <b-button
+            @click="changeFormData"
+            class="w-100"
+            type="submit"
+            variant="change-link"
+            :disabled="isChangeDataDisableButton || registrationInProcess"
+            id="btn_chek_registration_lk"
+          >
+            Изменить данные
+          </b-button>
         </div>
       </div>
     </b-form>

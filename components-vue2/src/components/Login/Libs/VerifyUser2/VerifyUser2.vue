@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-4 col-lg-4">
+    <div class="col-12 col-lg-4">
       <b-form-group class="required">
         <legend v-if="loginType === 'phone'">Телефон</legend>
         <b-form-input
@@ -23,7 +23,7 @@
         >
       </b-form-group>
     </div>
-    <div class="col-4 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
+    <div class="col-12 col-lg-4 mt-3 mt-lg-0" v-if="codeFieldShown">
       <b-form-group label="Код подтверждения">
         <b-form-input
           id="sms-confirm"
@@ -48,12 +48,13 @@
         >
       </b-form-group>
     </div>
-    <div class="col-4 mt-4">
+    <div class="col-12 col-lg-4 mt-3 mt-lg-btn-small_hl">
       <b-button
         type="submit"
         :disabled="isDisabledButtonGetCode"
         @click="getCode()"
-        variant="primary"
+        variant="secondary"
+        class="btn-small w-100 w-lg-auto"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
       >
