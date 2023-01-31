@@ -329,7 +329,7 @@ export default {
               return;
             }
 
-            if (response1.data[0].MESSAGE_CODE === 211) {
+            if (response1.data[0].MESSAGE_CODE === 200) {
               this.loading = false;
               this.isSendCode = true;
               this.successMessage = response?.data[0]?.MESSAGE;

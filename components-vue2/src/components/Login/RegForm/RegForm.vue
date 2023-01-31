@@ -625,6 +625,7 @@ export default {
         this.suggestionsHub = [];
       }
       if (input === "") {
+        this.patronymic = null;
         this.patronymicClassHub = [];
         this.isPatronymicErrorMessage = null;
         this.isPatronymicValidSignsErrorMessage = null;
