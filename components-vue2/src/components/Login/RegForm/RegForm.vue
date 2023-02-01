@@ -232,7 +232,7 @@
             type="submit"
             variant="change-link"
             :disabled="isChangeDataDisableButton || registrationInProcess"
-            id="btn_chek_registration_lk"
+            id="btn_change_data_registration_lk"
           >
             Изменить данные
           </b-button>
@@ -409,7 +409,6 @@ export default {
         SECONDNAME: this.family,
         FIRSTNAME: this.name,
         THIRDNAME: this.patronymic,
-        THIRDNAMENOTEXISTS: this.isPatronymicNotExist ? "Y" : "N",
         BIRTHDATE: this.$v.form.birthdate.$model
           ? moment(this.$v.form.birthdate.$model, [
               "DD.MM.YYYY",
@@ -825,7 +824,6 @@ export default {
           SECONDNAME: this.family,
           FIRSTNAME: this.name,
           THIRDNAME: this.patronymic,
-          THIRDNAMENOTEXISTS: this.isPatronymicNotExist ? "Y" : "N",
           BIRTHDATE: moment(this.$v.form.birthdate.$model, [
             "DD.MM.YYYY",
             "YYYY-MM-DD",
