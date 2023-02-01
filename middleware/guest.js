@@ -14,7 +14,10 @@ export default async function ({
   store.commit("data_card/setError", false);
   if (app.$cookiz.get("auth._token.local")) {
     await store.dispatch("menu/fetchMenuById", route.params);
-    if (route.params.idModule !== "55" && route.path !== "/cabinet/telemed") {
+    if (
+      typeof route.params.idModule === Number &&
+      route.params.idModule !== "55"
+    ) {
       redirect(`/error`);
     }
   }
