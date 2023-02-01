@@ -15,8 +15,8 @@ export default async function ({
   if (app.$cookiz.get("auth._token.local")) {
     await store.dispatch("menu/fetchMenuById", route.params);
     if (
-      typeof route.params.idModule === Number &&
-      route.params.idModule !== "55"
+      Number.parseInt(route.params.idModule) === Number() &&
+      Number(route.params.idModule) !== 55
     ) {
       redirect(`/error`);
     }
