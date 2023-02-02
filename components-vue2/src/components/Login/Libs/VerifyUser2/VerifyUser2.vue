@@ -53,7 +53,7 @@
         :disabled="isDisabledButtonGetCode"
         @click="getCode()"
         variant="secondary"
-        class="btn-small w-100 w-lg-auto"
+        class="btn-small w-100"
         id="btn_code_verification_lk"
       >
         <span v-if="!isSendCode">Получить код</span>
