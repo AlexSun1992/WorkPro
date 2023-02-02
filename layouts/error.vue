@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <h1 v-if="error.statusCode === 404">Страница не найдена</h1>
-    <b-alert show variant="danger">{{ errorMessage }}</b-alert>
+    <h1>Страница не найдена</h1>
+    <b-alert :show="errorMessage" variant="danger">{{ errorMessage }}</b-alert>
     <b-button variant="link" href="/">Главная страница</b-button>
   </div>
 </template>
@@ -15,6 +15,9 @@ export default {
   layout: "ErrorLayout",
   computed: {
     errorMessage() {
+      if (this.error === undefined) {
+        return false;
+      }
       return this.error.message;
     },
   },

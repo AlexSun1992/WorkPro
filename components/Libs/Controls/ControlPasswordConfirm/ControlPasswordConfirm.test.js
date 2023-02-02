@@ -48,7 +48,7 @@ describe("ControlPasswordConfirm", () => {
     createComponent();
     const getPasswordSelector = "[data-testid=password1]";
     const getCodeInput = await wrapper.find(getPasswordSelector);
-    getCodeInput.setValue("11111111F");
+    getCodeInput.setValue("11111111Ff");
     await wrapper.vm.$nextTick();
     expect(getCodeInput.classes()).toContain("is-valid");
   });
@@ -76,10 +76,10 @@ describe("ControlPasswordConfirm", () => {
     const getPasswordSelector = "[data-testid=password1]";
     const getRepeatPasswordSelector = "[data-testid=password2]";
     const getCodeInput = await wrapper.find(getPasswordSelector);
-    getCodeInput.setValue("111111FFFF");
+    getCodeInput.setValue("111111FFFFa");
     await wrapper.vm.$nextTick();
     const getRepeatCode = await wrapper.find(getRepeatPasswordSelector);
-    await getRepeatCode.setValue("111111FFFF");
+    await getRepeatCode.setValue("111111FFFFa");
     expect(getCodeInput.classes()).toContain("is-valid");
     expect(getCodeInput.classes()).not.toContain("is-invalid");
     expect(getRepeatCode.classes()).toContain("is-valid");

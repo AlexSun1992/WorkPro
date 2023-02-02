@@ -312,9 +312,6 @@ export default {
     this.$store.commit("data_card/setErrorMessage", null);
   },
   methods: {
-    // isFieldExists,
-    // getField,
-    // getFieldValue,
     closeModal() {
       this.$router.back();
     },
