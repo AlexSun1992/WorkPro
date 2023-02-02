@@ -1739,7 +1739,6 @@ a.btn-outline-success,
 a.btn-secondary {
   border: 2px solid #fe7333;
   color: #fe7333;
-  line-height: 1;
   background: #fff;
 }
 
@@ -3784,6 +3783,7 @@ a[data-newcount][data-newcolor="RED"]:after {
   padding-top: 87px;
   border: 0 !important;
   position: relative;
+  line-height: 1;
 }
 
 .btn-insurance-rules:hover,
