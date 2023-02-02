@@ -209,6 +209,11 @@
               >согласие</a
             >
             на email и СМС рассылку.
+            <b-form-invalid-feedback
+              :state="!isErrorMessageAgreement || isAgreement"
+              >Необходимо согласие с обработкой персональных
+              данных</b-form-invalid-feedback
+            >
           </b-form-checkbox>
         </div>
       </div>
@@ -315,6 +320,7 @@ export default {
       isPatronymicNotExist: false,
       isPolicyExist: false,
       isAgreement: false,
+      isErrorMessageAgreement: false,
       conformation: false,
       show: true,
       password2: "",
@@ -900,6 +906,10 @@ export default {
 
     async onSubmit(event) {
       try {
+        if (this.isAgreement === false) {
+          this.isErrorMessageAgreement = true;
+        }
+
         this.$refs.verifyUser.loginTouchesCount = 3;
         this.$v.form.$touch();
         this.isErrorMessage = false;
