@@ -24,7 +24,7 @@
         format="DD.MM.YYYY"
         :first-day-of-week="1"
         :lang="lang"
-        :input-class="data.state === false ? `${state} is-invalid` : state"
+        :input-class="isValid"
         :clearable="!data.required"
       />
       <p v-if="data.dangerText" class="danger-text">
@@ -80,6 +80,17 @@ export default {
           name: this.data.name,
           value,
         });
+      },
+    },
+    isValid: {
+      get() {
+        if (this.data.state === false) {
+          return "is-invalid";
+        }
+        if (this.data.state === true) {
+          return "is-valid";
+        }
+        return null;
       },
     },
   },
