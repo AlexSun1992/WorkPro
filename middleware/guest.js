@@ -1,4 +1,4 @@
-/* eslint-disable */
+import { isBlackListOfRoute } from "./router.helper";
 export default async function ({
   app,
   store,
@@ -15,10 +15,9 @@ export default async function ({
   if (app.$cookiz.get("auth._token.local")) {
     await store.dispatch("menu/fetchMenuById", route.params);
     if (
-      Number.parseInt(route.params.idModule) === Number() &&
-      Number(route.params.idModule) !== 55
+      isBlackListOfRoute(route.params.idModule, route.params.idParent) === true
     ) {
-      redirect(`/error`);
+      redirect("/error");
     }
   }
   if (process.client) {
