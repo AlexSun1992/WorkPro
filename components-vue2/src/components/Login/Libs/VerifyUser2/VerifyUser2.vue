@@ -16,7 +16,6 @@
           :disabled="disabled"
           @click="loginTouchesCount = 2"
           autocomplete="off"
-          :tabindex="tabIndex[1]"
         ></b-form-input>
         <b-form-invalid-feedback :state="validateInput(loginType, isUserBlured)"
           >Обязательное поле</b-form-invalid-feedback
@@ -56,7 +55,6 @@
         variant="secondary"
         class="btn-small w-100 w-lg-auto"
         id="btn_code_verification_lk"
-        :tabindex="tabIndex[2]"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
@@ -130,7 +128,6 @@ export default {
     "label",
     "context",
     "textMessage",
-    "tabIndex",
     "error",
     "isError",
     "isCodeFieldValid",
