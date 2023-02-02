@@ -3617,6 +3617,8 @@ a[data-newcount][data-newcolor="RED"]:after {
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   padding: 21px 0;
+  line-height: 1;
+  height: auto;
 }
 
 .my-policy[data-id="2"] .btn-prolong,
