@@ -8,6 +8,8 @@ import RegForm from "./RegForm.vue";
 
 jest.mock("axios");
 
+jest.useFakeTimers();
+
 describe("RegForm", () => {
   afterEach(() => {
     jest.resetAllMocks();
@@ -69,11 +71,19 @@ describe("RegForm", () => {
     const nameInput = nameComponent.find("input");
     await nameInput.setValue("П");
 
-    const checkboxComponent = wrapper.findComponent("#check-box");
+    const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
+
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(patronymicInput.attributes().disabled).toBeDefined();
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).not.toBeDefined();
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
 
     const dataPickerInput = wrapper
       .findComponent("#birthday-picker")
@@ -106,6 +116,8 @@ describe("RegForm", () => {
     await wrapper.find("#password2").setValue("Aa1234");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
+    await wrapper.find("#agreement-check-box").setChecked(true);
+
     expect(
       wrapper.find("#btn_code_verification_lk").attributes().disabled
     ).not.toBeDefined();
@@ -134,9 +146,9 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE:
-            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
+          MESSAGE: "Введите код подтверждения из SMS",
           MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
       ],
     });
@@ -168,11 +180,19 @@ describe("RegForm", () => {
     const nameInput = nameComponent.find("input");
     await nameInput.setValue("П");
 
-    const checkboxComponent = wrapper.findComponent("#check-box");
+    const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
+
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(patronymicInput.attributes().disabled).toBeDefined();
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).not.toBeDefined();
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
 
     const dataPickerInput = wrapper
       .findComponent("#birthday-picker")
@@ -204,6 +224,8 @@ describe("RegForm", () => {
 
     await wrapper.find("#password2").setValue("Aa1234");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
+
+    await wrapper.find("#agreement-check-box").setChecked(true);
 
     expect(
       wrapper.find("#btn_code_verification_lk").attributes().disabled
@@ -264,11 +286,19 @@ describe("RegForm", () => {
     const nameInput = nameComponent.find("input");
     await nameInput.setValue("П");
 
-    const checkboxComponent = wrapper.findComponent("#check-box");
+    const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
+
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(patronymicInput.attributes().disabled).toBeDefined();
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).not.toBeDefined();
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
 
     const dataPickerInput = wrapper
       .findComponent("#birthday-picker")
@@ -300,6 +330,8 @@ describe("RegForm", () => {
 
     await wrapper.find("#password2").setValue("Aa1234");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
+
+    await wrapper.find("#agreement-check-box").setChecked(true);
 
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
@@ -333,7 +365,7 @@ describe("RegForm", () => {
     expect(spy).toHaveBeenCalled();
     expect(wrapper.find("#phone").element.value).toBe("");
   });
-  it("должен отображать кнопку зарегистрироваться после ввода кода подверждения", async () => {
+  it("доступность кнопок", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, {
@@ -345,9 +377,9 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE:
-            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
+          MESSAGE: "Введите код подтверждения из SMS",
           MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
       ],
     });
@@ -375,11 +407,19 @@ describe("RegForm", () => {
     const nameInput = nameComponent.find("input");
     await nameInput.setValue("П");
 
-    const checkboxComponent = wrapper.findComponent("#check-box");
+    const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
+
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(patronymicInput.attributes().disabled).toBeDefined();
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).not.toBeDefined();
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("");
 
     const dataPickerInput = wrapper
       .findComponent("#birthday-picker")
@@ -412,15 +452,118 @@ describe("RegForm", () => {
     await wrapper.find("#password2").setValue("Aa1234");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
+    expect(
+      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
+    ).toBeDefined();
+
+    await wrapper.find("#agreement-check-box").setChecked(true);
+
+    expect(
+      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
+    ).toBeDefined();
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(
+      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
+    ).not.toBeDefined();
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(
+      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
+    ).toBeDefined();
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+
+    await checkboxComponent.setChecked(false);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(
+      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
+    ).not.toBeDefined();
+
+    expect(
+      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
+        .disabled
+    ).toBeDefined();
+
+    expect(wrapper.find("#verify-success-message").exists()).toBe(false);
+
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
+    expect(wrapper.find("#verify-success-message").exists()).toBe(true);
+
+    expect(
+      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
+        .disabled
+    ).not.toBeDefined();
+
+    expect(
+      wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled
+    ).toBeDefined();
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
+
     await wrapper.find("#sms-confirm").setValue("12345");
-    expect(wrapper.findComponent("#btn_chek_registration_lk").exists()).toBe(
-      true
-    );
+
+    expect(
+      wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled
+    ).not.toBeDefined();
+
+    expect(
+      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
+    ).toBeDefined();
+
+    jest.advanceTimersByTime(61000);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(
+      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
+        .disabled
+    ).not.toBeDefined();
+
+    expect(
+      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
+    ).not.toBeDefined();
+
+    expect(
+      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
+        .disabled
+    ).not.toBeDefined();
+
+    await wrapper.find("#btn_change_data_registration_lk").trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#verify-success-message").exists()).toBe(false);
+
+    expect(
+      wrapper.findComponent("#btn_change_data_registration_lk").attributes()
+        .disabled
+    ).toBeDefined();
+
+    expect(
+      wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled
+    ).toBeDefined();
+
+    expect(
+      wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
+    ).not.toBeDefined();
   });
 
   it("должен корректно заполнять форму", async () => {
@@ -436,9 +579,9 @@ describe("RegForm", () => {
     axios.post.mockReturnValue({
       data: [
         {
-          MESSAGE:
-            "На Ваш номер телефона был отправлен код, который необходимо ввести ниже.",
+          MESSAGE: "Введите код подтверждения из SMS",
           MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
         },
       ],
     });
@@ -464,11 +607,19 @@ describe("RegForm", () => {
     const nameInput = nameComponent.find("input");
     await nameInput.setValue("П");
 
-    const checkboxComponent = wrapper.findComponent("#check-box");
+    const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
+
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).toBeDefined();
 
     await checkboxComponent.setChecked(true);
 
-    expect(patronymicInput.attributes().disabled).toBeDefined();
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).not.toBeDefined();
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("123");
 
     const dataPickerInput = wrapper
       .findComponent("#birthday-picker")
@@ -501,6 +652,8 @@ describe("RegForm", () => {
     await wrapper.find("#password2").setValue("Aa1234");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
+    await wrapper.find("#agreement-check-box").setChecked(true);
+
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
@@ -508,9 +661,18 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/sendsmscode",
+      "/am/free/v2/registerUser1",
       {
+        BIRTHDATE: "2022-12-21",
+        FIRSTNAME: "П",
+        GUID: null,
+        PASSWORD: "Aa1234",
+        PASSWORD_CONFIRM: "Aa1234",
         PHONE: "+7(910)-123-22-33",
+        POLICY_NUMBER: "123",
+        SECONDNAME: "П",
+        THIRDNAME: "П",
+        USER_CONFIRM: "Y",
         error: false,
         loginType: "phone",
         modeType: "REG",
@@ -537,7 +699,7 @@ describe("RegForm", () => {
 
     axios.post.mockImplementationOnce(() =>
       Promise.resolve({
-        data: [{ MESSAGE: "Вы успешно зарегистрированы", MESSAGE_CODE: "200" }],
+        data: [{ MESSAGE: "Вы успешно зарегистрированы", MESSAGE_CODE: 200 }],
         status: 200,
       })
     );
@@ -560,7 +722,7 @@ describe("RegForm", () => {
     await wrapper.find("#btn_chek_registration_lk").trigger("click");
     expect(wrapper.find("#error-message").exists()).toBe(false);
     expect(axios.post).toHaveBeenLastCalledWith(
-      "/am/free/v2/registration",
+      "/am/free/v2/registerUser2",
       {
         BIRTHDATE: "2022-12-21",
         CODE: "12345",
@@ -568,11 +730,11 @@ describe("RegForm", () => {
         PASSWORD: "Aa1234",
         PASSWORD_CONFIRM: "Aa1234",
         PHONE: "+7(910)-123-22-33",
-        POLICY_NUMBER: "",
+        POLICY_NUMBER: "123",
         SECONDNAME: "П",
-        THIRDNAME: "",
-        THIRDNAMENOTEXISTS: "Y",
+        THIRDNAME: "П",
         USER_CONFIRM: "Y",
+        GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
       },
       { headers: { "X-Application": "VueJS", recaptcha: undefined } }
     );
@@ -582,42 +744,48 @@ describe("RegForm", () => {
     expect(window.location.href).toEqual("/login");
   });
 
-  it("Необходимо валидировать отчество при 'загрязнении' поля", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(RegForm, {
-      localVue,
-      attachTo: document.body,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
-
-    const patronymicComponent = wrapper.findComponent({
-      ref: "autocompletePatronymic",
-    });
-    const patronymicInput = patronymicComponent.find("input");
-    await patronymicInput.setValue("П");
-    await patronymicInput.setValue("");
-    expect(patronymicComponent.classes()).toContain("is-invalid");
-  });
-
-  it("При нажатии чекбокса 'нет отчества' убирает ошибку у поля отчества при неверной валидации", async () => {
+  it("При нажатии чекбокса 'У меня есть полис РЕСО' убирает ошибку у поля номер полиса при неверной валидации", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, { localVue, attachTo: document.body });
 
-    const patronymicComponent = wrapper.findComponent({
-      ref: "autocompletePatronymic",
-    });
-    const patronymicInput = patronymicComponent.find("input");
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).toBeDefined();
 
-    await patronymicInput.setValue("П");
-    await patronymicInput.setValue("");
+    const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
 
-    await wrapper.find("#check-box").setChecked();
+    await checkboxComponent.setChecked(true);
 
-    expect(patronymicInput.attributes().disabled).toBe("disabled");
-    expect(patronymicComponent.classes()).not.toContain("is-invalid");
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).not.toBeDefined();
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("123");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findComponent({ ref: "policyNumber" }).classes()).toContain(
+      "is-valid"
+    );
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findComponent({ ref: "policyNumber" }).classes()).toContain(
+      "is-invalid"
+    );
+
+    await checkboxComponent.setChecked(false);
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).classes()
+    ).not.toContain("is-invalid");
   });
 });
