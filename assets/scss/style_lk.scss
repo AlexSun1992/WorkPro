@@ -1686,7 +1686,7 @@ input.checkbox-btn {
   padding: 0 40px;
   border-radius: 15px;
   font-size: 1rem;
-  line-height: 1rem;
+  line-height: 50px;
   box-sizing: border-box;
   border: 2px solid #fe7333;
   font-weight: 700;
@@ -3450,6 +3450,7 @@ textarea {
   .btn-success,
   .btn-warning {
     height: 50px;
+    line-height: 46px;
   }
   .have_btn {
     padding: 16px 16px 85px 16px;
@@ -4413,10 +4414,11 @@ input {
 }
 
 input.is-valid:disabled,
+input:disabled:hover,
 input:disabled,
 .is-valid input:disabled {
-  border: 1px solid #c3c3c3;
-  background-color: #f2f2f2;
-  color: #c3c3c3;
+  border: 1px solid #c3c3c3 !important;
+  background: #f2f2f2 !important;
+  color: #c3c3c3 !important;
   pointer-events: none;
 }
