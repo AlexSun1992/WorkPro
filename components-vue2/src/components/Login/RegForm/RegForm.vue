@@ -29,7 +29,7 @@
               data-testid="regFamily"
             />
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isSurnameValidSignsErrorMessage"
               >Просьба указать ФИО в русской
@@ -51,7 +51,7 @@
               data-testid="regName"
             />
             <b-form-invalid-feedback :state="isNameErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isNameValidSignsErrorMessage"
               >Просьба указать ФИО в русской
@@ -77,7 +77,7 @@
               data-testid="regPatronymic"
             />
             <b-form-invalid-feedback :state="isPatronymicErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
@@ -123,7 +123,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-invalid-feedback :state="isStatePolicyErrorMessage"
-            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            >Обязательное поле</b-form-invalid-feedback
           >
         </div>
         <div class="col-12 mt-4 mt-lg-0">
@@ -191,16 +191,21 @@
             <a
               href="/regulations/personal-agreement-2.html"
               class="reg_agreement"
+              target="_blank"
               >согласие</a
             >
             на обработку своих персональных данных. С
-            <a href="/regulations/safety-of-personal.html" class="reg_agreement"
+            <a
+              href="/regulations/safety-of-personal.html"
+              class="reg_agreement"
+              target="_blank"
               >политикой обеспечения безопасности персональных данных</a
             >
             САО “РЕСО-Гарантия” ознакомлен. <br />Даю
             <a
               href="https://client.reso.ru/wp-reso-ru/products/auto/osago/addition/act.xhtml"
               class="reg_agreement"
+              target="_blank"
               >согласие</a
             >
             на email и СМС рассылку.
