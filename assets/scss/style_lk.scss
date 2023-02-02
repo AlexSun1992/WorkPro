@@ -1834,8 +1834,11 @@ a.btn-warning {
   width: 24px;
   height: 24px;
   right: 10px;
+  cursor: pointer;
 }
-
+input + .mx-icon-calendar {
+  pointer-events: none;
+}
 .ldp1 > div {
   font-size: 1.25rem;
 }
