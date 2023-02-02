@@ -1566,12 +1566,12 @@ textarea:disabled:hover {
   display: block;
 }
 
+.is-valid input:hover,
+.is-valid input,
+input.is-valid:hover,
 input.is-valid {
   padding-right: 40px;
-  border: 1px solid #43b02a !important;
-}
-
-input.is-valid {
+  border: 2px solid #43b02a !important;
   background: #fff url(/img/input-valid.svg) right center no-repeat !important;
 }
 
@@ -1683,10 +1683,10 @@ input.checkbox-btn {
 .btn-success,
 .btn-warning {
   text-align: center;
-  padding: 17px 40px;
+  padding: 0 40px;
   border-radius: 15px;
   font-size: 1rem;
-  line-height: 1rem;
+  line-height: 50px;
   box-sizing: border-box;
   border: 2px solid #fe7333;
   font-weight: 700;
@@ -1695,6 +1695,7 @@ input.checkbox-btn {
   position: relative;
   text-overflow: ellipsis;
   overflow: hidden;
+  height: 54px;
 }
 
 a.btn-outline-success,
@@ -3028,8 +3029,11 @@ a.action:hover {
   transition: 0.2s;
 }
 
+.is-invalid input:hover,
+.is-invalid input,
+input.is-invalid:hover,
 input.is-invalid {
-  border-color: #eb5757;
+  border: 2px solid #eb5757;
 }
 
 [data-card-id="705"] {
@@ -3445,7 +3449,8 @@ textarea {
   .btn-secondary,
   .btn-success,
   .btn-warning {
-    padding: 15px 24px;
+    height: 50px;
+    line-height: 46px;
   }
   .have_btn {
     padding: 16px 16px 85px 16px;
@@ -4395,4 +4400,25 @@ input + .btn-psw-visible + .invalid-feedback {
 
 input.is-invalid + .btn-psw-visible + .invalid-feedback {
   display: block;
+}
+input {
+  height: 54px;
+}
+
+[data-position="below"] .autocomplete-result-list {
+  border-radius: 8px;
+  margin-top: 4px;
+}
+[data-position="below"] .autocomplete-input[aria-expanded="true"] {
+  border-radius: 15px;
+}
+
+input.is-valid:disabled,
+input:disabled:hover,
+input:disabled,
+.is-valid input:disabled {
+  border: 1px solid #c3c3c3 !important;
+  background: #f2f2f2 !important;
+  color: #c3c3c3 !important;
+  pointer-events: none;
 }
