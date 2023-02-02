@@ -96,10 +96,10 @@
             />
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-4 mt-lg-3 pt-lg-4">
+        <div class="col-12 col-lg-4 mt-3">
           <b-form-checkbox
             id="policy-exist-check-box"
-            class="checkbox-switcher mt-3 pt-1"
+            class="checkbox-switcher cs-near-l_input-lg"
             :disabled="isDisabledForm"
             v-model="isPolicyExist"
             :value="!isPolicyExist"
@@ -914,12 +914,9 @@ export default {
           this.isNameErrorMessage = false;
         }
 
-        if (
-          this.patronymicClassHub.length === 0 &&
-          this.isPatronymicNotExist === false
-        ) {
-          this.patronymicClassHub.push("is-invalid");
-          this.isPatronymicErrorMessage = false;
+        if (this.policyClassHub.length === 0 && this.isPolicyExist === true) {
+          this.isStatePolicyErrorMessage = false;
+          this.policyClassHub.push("is-invalid");
         }
 
         if (

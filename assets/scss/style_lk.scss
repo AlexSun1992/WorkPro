@@ -1834,8 +1834,11 @@ a.btn-warning {
   width: 24px;
   height: 24px;
   right: 10px;
+  cursor: pointer;
 }
-
+input + .mx-icon-calendar {
+  pointer-events: none;
+}
 .ldp1 > div {
   font-size: 1.25rem;
 }
@@ -4423,4 +4426,9 @@ input:disabled,
   background: #f2f2f2 !important;
   color: #c3c3c3 !important;
   pointer-events: none;
+}
+
+.mx-input-wrapper input.is-valid {
+  padding-right: 56px;
+  background: #fff url(/img/input-valid.svg) right 16px center no-repeat !important;
 }
