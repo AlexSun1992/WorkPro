@@ -909,12 +909,9 @@ export default {
           this.isNameErrorMessage = false;
         }
 
-        if (
-          this.patronymicClassHub.length === 0 &&
-          this.isPatronymicNotExist === false
-        ) {
-          this.patronymicClassHub.push("is-invalid");
-          this.isPatronymicErrorMessage = false;
+        if (this.policyClassHub.length === 0 && this.isPolicyExist === true) {
+          this.isStatePolicyErrorMessage = false;
+          this.policyClassHub.push("is-invalid");
         }
 
         if (
