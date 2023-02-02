@@ -204,6 +204,7 @@ export default {
         .filter((item) => item.style.visibility === "visible");
       if (visibleCaptchas.length === 0) {
         this.loading = false;
+        this.$emit("sendingCode", false);
       }
     },
 
