@@ -1683,7 +1683,7 @@ input.checkbox-btn {
 .btn-success,
 .btn-warning {
   text-align: center;
-  padding: 17px 40px;
+  padding: 0 40px;
   border-radius: 15px;
   font-size: 1rem;
   line-height: 1rem;
@@ -1695,6 +1695,7 @@ input.checkbox-btn {
   position: relative;
   text-overflow: ellipsis;
   overflow: hidden;
+  height: 54px;
 }
 
 a.btn-outline-success,
@@ -3448,7 +3449,7 @@ textarea {
   .btn-secondary,
   .btn-success,
   .btn-warning {
-    padding: 15px 24px;
+    height: 50px;
   }
   .have_btn {
     padding: 16px 16px 85px 16px;
