@@ -1,7 +1,19 @@
 <template>
   <div class="row mt-3">
-    <b-col sm="12" lg="6">
-      <b-form-group :label="showLabel" label-cols="12" class="required">
+    <div class="col-12 col-lg-6">
+      <b-form-group>
+        <legend>
+          {{ showLabel }}
+          <span class="tooltipster">
+            (?)<vue-easy-tooltip
+              :with-arrow="true"
+              position="top"
+              :offset="4"
+            >
+              <span>{{ tooltipValidation }}</span></vue-easy-tooltip
+            ></span
+          >
+        </legend>
         <b-form-input
           id="password1"
           v-model="v.password.$model"
@@ -15,23 +27,26 @@
           data-testid="firstPass"
         ></b-form-input>
         <button
-              id="btn_password_visible"
-              type="button"
-              class="btn-psw-visible"
-              @click="visiblePSW()"
+          id="btn_password_visible"
+          type="button"
+          class="btn-psw-visible"
+          @click="visiblePSW()"
         ></button>
-        <b-form-invalid-feedback
-          >Пароль должен содержать от {{ minLength }} до
-          {{ maxLength }} символов</b-form-invalid-feedback
-        >
+        <div class="invalid-feedback">
+          <b-form-invalid-feedback
+            class="d-block"
+            v-for="(errMess, index) in errorMessageValidation"
+            :key="index"
+          >
+            {{ errMess.errorText }}
+          </b-form-invalid-feedback>
+        </div>
       </b-form-group>
-    </b-col>
-    <b-col sm="12" lg="6" v-if="recovery"></b-col>
-    <b-col
-      class="password-repeat mt-3 mt-lg-0"
+    </div>
+    <div class="col-12 col-lg-6" v-if="recovery"></div>
+    <div
+      class="col-12 col-lg-6 password-repeat mt-3 mt-lg-0"
       :class="{ 'mt-0': recovery }"
-      sm="12"
-      lg="6"
     >
       <b-form-group
         :label="'Повторите пароль'"
@@ -52,19 +67,20 @@
           data-testid="secondPass"
         ></b-form-input>
         <button
-        id="btn_password_visible2"
-              type="button"
-              class="btn-psw-visible"
-              @click="visiblePSW2()"
+          id="btn_password_visible2"
+          type="button"
+          class="btn-psw-visible"
+          @click="visiblePSW2()"
         ></button>
         <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>
-    </b-col>
-    <b-col sm="12" v-if="recovery"></b-col>
+    </div>
+    <div class="col-12 col-lg-6" v-if="recovery"></div>
   </div>
 </template>
 
 <script>
+import VueEasyTooltip from "vue-easy-tooltip";
 import {
   BFormInvalidFeedback,
   BFormInput,
@@ -72,10 +88,7 @@ import {
   BCol,
   BRow,
 } from "bootstrap-vue";
-import {
-  minLengthPassword,
-  maxLengthPassword,
-} from "../../RegForm/regform.helper.fixtures";
+import { tooltipText } from "../../RegForm/regform.helper";
 
 export default {
   props: [
@@ -86,18 +99,17 @@ export default {
     "tabIndex",
     "isValid",
     "logParams",
+    "errorMessageValidation",
   ],
   data() {
     return {
-      minLength: minLengthPassword,
-      maxLength: maxLengthPassword,
       password: "",
       password2: "",
       pswVisible2: false,
       pswVisible: false,
+      isUserBlured: true,
     };
   },
-
   methods: {
     visiblePSW() {
       if (this.pswVisible === false) {
@@ -113,16 +125,18 @@ export default {
         this.pswVisible2 = false;
       }
     },
-    changeField(field) {
-      this.$LogEvent({
-        ...this.logParams,
-        controlName: field,
-        message: `Поле ${field} посещено`,
-        timeUser: new Date(),
-      });
-    },
     updateField(field) {
-      this.$emit("change", this.v[field].$model);
+      this.$emit("checkCodeFieldValid", this.validateState(field));
+    },
+    changeField(field) {
+      if (this.validateState(field)) {
+        this.$LogEvent({
+          ...this.logParams,
+          controlName: field,
+          message: `Поле ${field} посещено`,
+          timeUser: new Date(),
+        });
+      }
     },
   },
   components: {
@@ -131,11 +145,15 @@ export default {
     BFormGroup,
     BCol,
     BRow,
+    VueEasyTooltip,
   },
   computed: {
     showLabel() {
       return this.recovery ? "Придумайте новый пароль" : "Пароль";
     },
+    tooltipValidation(){
+      return tooltipText
+    }
   },
 };
 </script>

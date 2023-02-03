@@ -284,7 +284,6 @@ export default {
             value !== 0) ||
           (error && data[i].visible)
         ) {
-          console.log("error", data[i]);
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
           this.$store.commit("data_card/saveButtonClicked", false);
@@ -357,7 +356,7 @@ export default {
           "data_card/fetchList",
           this.params
         );
-        this.params.idCard = this.cardId || items ? items[0].ID : 0;
+        this.params.idCard = this.cardId || (items ? items[0].ID : 0);
         if (this.rel !== null && this.rel !== "0") {
           this.params.idRel = this.rel;
         } else {

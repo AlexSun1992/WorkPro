@@ -26,35 +26,37 @@
         />
       </div>
     </component>
-    <div v-if="isButtonSave" class="mt-3 row button-container">
-      <div v-if="params.settings.edit" class="col-12">
-        <b-button
-          pill
-          type="button"
-          variant="success"
-          class="col-12 col-md-auto mr-4"
-          :style="isButtonDisabled"
-          @click="saveDataCard"
-        >
-          Сохранить
-        </b-button>
-        <b-button
-          pill
-          type="button"
-          variant="outline-success"
-          class="col-12 col-md-auto mt-2 mt-md-0"
-          :style="isButtonDisabled"
-          @click="cancelDataCard"
-        >
-          Отменить
-        </b-button>
-      </div>
-    </div>
-
-    <div class="row">
-      <b-alert v-if="isErrorExist" class="mt-3" show variant="danger">
+    <div>
+      <b-alert :show="getSavedError" class="mt-3" variant="danger">
         {{ errorMessage }}
       </b-alert>
+    </div>
+    <div v-if="isButtonSave && params.settings.edit" class="mt-3 row button-container">
+        <div class="col-auto">
+          <b-button
+            pill
+            type="button"
+            variant="success"
+            class="col-12 col-md-auto mr-4"
+            :style="isButtonDisabled"
+            @click="saveDataCard"
+          >
+            Сохранить
+          </b-button>
+        </div>
+        <div class="col-auto">
+          <b-button
+            pill
+            type="button"
+            variant="outline-success"
+            class="col-12 col-md-auto mt-2 mt-md-0"
+            :style="isButtonDisabled"
+            @click="cancelDataCard"
+          >
+            Отменить
+          </b-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -71,6 +73,7 @@ export default {
     return {
       myclass: ["cabinet"],
       isErrorExist: false,
+      pageParams: null,
     };
   },
   computed: {
@@ -78,6 +81,10 @@ export default {
       if (this.$refs.CardEditor) {
         return this.$refs.cardEditor.isButtonDisabled;
       }
+    },
+
+    getSavedError() {
+      return this.$store.getters["data_card/getSavedError"];
     },
 
     // Получение массива с полями
@@ -118,6 +125,7 @@ export default {
         idCard: list.data.items[0].ID,
         idRel: list.data.items[0].REL,
       };
+      this.pageParams = params;
       await this.$store.dispatch("data_card/fetchForm", params);
       // this.$router.push(`/cabinet/${params.idModule}/0/${params.idItem}/${params.idCard}`)
     } catch (e) {
@@ -129,11 +137,17 @@ export default {
     closeModal() {
       this.$router.back();
     },
-    saveDataCard() {
+    async saveDataCard() {
       if (this.$refs.cardEditor) {
-        this.$refs.cardEditor.saveDataCard();
+        await this.$refs.cardEditor.saveDataCard();
+        const isErr = this.$store.getters["data_card/getSavedError"];
+        this.isErrorExist = isErr;
+        if (isErr === false) {
+          await this.$store.dispatch("data_card/fetchForm", this.pageParams);
+        }
       }
     },
+
     cancelDataCard() {
       if (this.$refs.cardEditor) {
         this.$refs.cardEditor.cancelDataCard();
