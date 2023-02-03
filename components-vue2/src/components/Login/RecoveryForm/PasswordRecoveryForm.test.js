@@ -5,6 +5,8 @@ import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
 
 jest.mock("axios");
 
+jest.useFakeTimers();
+
 describe("PasswordRecoveryForm", () => {
   afterEach(() => {
     jest.restoreAllMocks();
@@ -149,7 +151,12 @@ describe("PasswordRecoveryForm", () => {
   it("должен показывать ошибку", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, { localVue });
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        localVue,
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -165,14 +172,13 @@ describe("PasswordRecoveryForm", () => {
         },
       ],
     });
-
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
     expect(
       wrapper.find("#btn_code_verification_lk").attributes().disabled
     ).toBeDefined();
 
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#phone").setValue("+7(919)-777-00-02");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
     await wrapper.vm.$nextTick();
@@ -186,7 +192,14 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать поле код подверждения", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(PasswordRecoveryForm, {
+      mocks: {
+        localVue,
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -207,7 +220,13 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать поля 'Дата рождения', 'Пароль','Повторите пароль' и кнопку 'Изменить пароль'", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const localVue = createLocalVue();
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -226,7 +245,13 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать валидное поле 'Дата рождения'", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    const localVue = createLocalVue();
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -260,7 +285,14 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать валидный пароль", async () => {
-    const wrapper = mount(PasswordRecoveryForm);
+    let wrapper = null;
+    const localVue = createLocalVue();
+    wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
 
     axios.post.mockReturnValue({
       data: [
@@ -269,12 +301,12 @@ describe("PasswordRecoveryForm", () => {
         },
       ],
     });
+
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-
-    await wrapper.find("#sms-confirm").setValue("11111");
+    await wrapper.findComponent("#sms-confirm").setValue("11111");
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue("21.12.2022");

@@ -15,7 +15,7 @@
             :disabled="disabled"
             :tabindex="tabIndex[0]"
           ></b-form-input>
-          <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>         
+          <b-form-invalid-feedback>Введите пароль.</b-form-invalid-feedback>
         </b-form-group>
       </b-col>
       <b-col sm="12" md="6" v-if="recovery"></b-col>
