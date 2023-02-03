@@ -644,6 +644,18 @@ export default {
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompletePatronymic.value = "";
+          this.patronymicClassHub = [];
+          this.isPatronymicErrorMessage = true;
+          return;
+        }
+
+        if (input.charAt(input.length - 1) === " ") {
+          input = input.trim();
+        }
+
         if (!isInputNotValid) {
           this.patronymic = input;
           this.isPatronymicTouch = true;
@@ -697,15 +709,25 @@ export default {
 
       return fetchedSuggestions;
     },
-    //
 
     // Запрос на подсказки по фамилии
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
-
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompleteSurname.value = "";
+          this.surnameClassHub = [];
+          this.isSurnameErrorMessage = true;
+          return;
+        }
+
+        if (input.charAt(input.length - 1) === " ") {
+          input = input.trim();
+        }
+
         if (!isInputNotValid) {
           this.family = input;
           this.isSurnameErrorMessage = true;
@@ -764,10 +786,21 @@ export default {
     // Запрос на подсказки по именам
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
-
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompleteName.value = "";
+          this.nameClassHub = [];
+          this.isNameErrorMessage = true;
+          return;
+        }
+
+        if (input.charAt(input.length - 1) === " ") {
+          input = input.trim();
+        }
+
         if (!isInputNotValid) {
           this.name = input;
           this.isNameTouch = true;
