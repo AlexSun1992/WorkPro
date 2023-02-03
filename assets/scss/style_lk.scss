@@ -4418,6 +4418,13 @@ input {
   border-radius: 15px;
 }
 
+.mx-input-wrapper input.is-valid {
+  padding-right: 56px;
+  background: #fff url(/img/input-valid.svg) right 16px center no-repeat !important;
+}
+
+.mx-input-wrapper input.is-valid:disabled,
+.mx-input-wrapper input.is-valid:hover:disabled,
 input.is-valid:disabled,
 input:disabled:hover,
 input:disabled,
@@ -4426,9 +4433,4 @@ input:disabled,
   background: #f2f2f2 !important;
   color: #c3c3c3 !important;
   pointer-events: none;
-}
-
-.mx-input-wrapper input.is-valid {
-  padding-right: 56px;
-  background: #fff url(/img/input-valid.svg) right 16px center no-repeat !important;
 }
