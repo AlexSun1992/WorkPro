@@ -31,7 +31,9 @@
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
               >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
-            <b-form-invalid-feedback :state="isSurnameValidSignsErrorMessage"
+            <b-form-invalid-feedback
+              :state="isSurnameValidSignsErrorMessage"
+              data-testid="regSurnameFeedback"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
             >

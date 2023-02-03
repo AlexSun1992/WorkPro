@@ -788,4 +788,26 @@ describe("RegForm", () => {
       wrapper.findComponent({ ref: "policyNumber" }).classes()
     ).not.toContain("is-invalid");
   });
+  ///
+  it.only("При нажатии чекбокса 'У меня есть полис РЕСО' убирает ошибку у поля номер полиса при неверной валидации", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const getRegFamilySelector = "[data-testid=regFamily]";
+    // const invalidFeedbackSelector = "[data-testid=regSurnameFeedback]";
+    const surenameInput = wrapper.findComponent(getRegFamilySelector);
+    // console.log("surenameInput:", surenameInput);
+    surenameInput.setValue(" GGGGg");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    console.log("surenameInput:", surenameInput.element.value);
+
+    // expect(surenameInput.element.value).toBe("");
+
+    // const selector = "div.form-row>div>div:has(div>input[placeholder=Фамилия])";
+    // const invalidFeedBack = wrapper.findComponent(selector);
+    // const getFeedBack = wrapper.findComponent(invalidFeedbackSelector).html();
+    // console.log("getFeedBack:", getFeedBack);
+  });
+  ///
 });
