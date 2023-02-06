@@ -352,7 +352,7 @@ describe("RegForm", () => {
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
     expect(spy).toHaveBeenCalled();
-    expect(window.location.href).toEqual("/login");
+    expect(window.location.href).toEqual("/feedback");
 
     spy.mockImplementationOnce(() => Promise.resolve(null));
 
