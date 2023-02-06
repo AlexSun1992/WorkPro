@@ -31,7 +31,9 @@
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
               >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
-            <b-form-invalid-feedback :state="isSurnameValidSignsErrorMessage"
+            <b-form-invalid-feedback
+              :state="isSurnameValidSignsErrorMessage"
+              data-testid="regSurnameFeedback"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
             >
@@ -417,9 +419,9 @@ export default {
     },
     formData() {
       const params = {
-        SECONDNAME: this.family,
-        FIRSTNAME: this.name,
-        THIRDNAME: this.patronymic,
+        SECONDNAME: this.family.trim(),
+        FIRSTNAME: this.name.trim(),
+        THIRDNAME: this.patronymic.trim(),
         BIRTHDATE: this.$v.form.birthdate.$model
           ? moment(this.$v.form.birthdate.$model, [
               "DD.MM.YYYY",
@@ -644,6 +646,14 @@ export default {
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompletePatronymic.value = "";
+          this.patronymicClassHub = [];
+          this.isPatronymicErrorMessage = true;
+          return;
+        }
+
         if (!isInputNotValid) {
           this.patronymic = input;
           this.isPatronymicTouch = true;
@@ -697,15 +707,21 @@ export default {
 
       return fetchedSuggestions;
     },
-    //
 
     // Запрос на подсказки по фамилии
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
-
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompleteSurname.value = "";
+          this.surnameClassHub = [];
+          this.isSurnameErrorMessage = true;
+          return;
+        }
+
         if (!isInputNotValid) {
           this.family = input;
           this.isSurnameErrorMessage = true;
@@ -764,10 +780,17 @@ export default {
     // Запрос на подсказки по именам
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
-
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompleteName.value = "";
+          this.nameClassHub = [];
+          this.isNameErrorMessage = true;
+          return;
+        }
+
         if (!isInputNotValid) {
           this.name = input;
           this.isNameTouch = true;
@@ -832,9 +855,9 @@ export default {
         this.errorMessage = null;
         this.registrationInProcess = true;
         const params = {
-          SECONDNAME: this.family,
-          FIRSTNAME: this.name,
-          THIRDNAME: this.patronymic,
+          SECONDNAME: this.family.trim(),
+          FIRSTNAME: this.name.trim(),
+          THIRDNAME: this.patronymic.trim(),
           BIRTHDATE: moment(this.$v.form.birthdate.$model, [
             "DD.MM.YYYY",
             "YYYY-MM-DD",
