@@ -1013,6 +1013,137 @@ describe("RegForm", () => {
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login");
   });
-
   ///
+
+  it.only("Должен предупредить на случай наличия теста", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+
+    axios.post.mockReturnValue({
+      data: [{ MESSAGE_CODE: 201 }],
+    });
+
+    const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
+    const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
+    spy.mockImplementationOnce(() => Promise.resolve(true));
+
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/",
+        pathname: "/",
+      },
+    });
+
+    console.log("spy:", spy);
+
+    ///
+
+    // expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+
+    // await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+
+    // const surnameComponent = wrapper.findComponent({
+    //   ref: "autocompleteSurname",
+    // });
+    // const surnameInput = surnameComponent.find("input");
+    // await surnameInput.setValue("П");
+    // expect(surnameComponent.classes()).toContain("is-valid");
+
+    // const patronymicComponent = wrapper.findComponent({
+    //   ref: "autocompletePatronymic",
+    // });
+    // const patronymicInput = patronymicComponent.find("input");
+    // await patronymicInput.setValue("П");
+
+    // const nameComponent = wrapper.findComponent({
+    //   ref: "autocompleteName",
+    // });
+    // const nameInput = nameComponent.find("input");
+    // await nameInput.setValue("П");
+
+    // const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
+
+    // expect(
+    //   wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    // ).toBeDefined();
+
+    // await checkboxComponent.setChecked(true);
+
+    // expect(
+    //   wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    // ).not.toBeDefined();
+
+    // wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
+
+    // const dataPickerInput = wrapper
+    //   .findComponent("#birthday-picker")
+    //   .find("input");
+
+    // dataPickerInput.setValue("21.12.2052");
+    // dataPickerInput.trigger("change");
+    // await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
+    // expect(dataPickerInput.classes()).not.toContain("is-valid");
+
+    // dataPickerInput.setValue("21.12.1852");
+    // dataPickerInput.trigger("change");
+    // await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
+    // expect(dataPickerInput.classes()).not.toContain("is-valid");
+
+    // dataPickerInput.setValue("21.12.2022");
+    // dataPickerInput.trigger("change");
+    // await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
+    // expect(dataPickerInput.classes()).toContain("is-valid");
+
+    // await wrapper.find("#password1").setValue("12345");
+    // expect(wrapper.find("#password1").classes()).toContain("is-invalid");
+
+    // await wrapper.find("#password1").setValue("Aa1234");
+    // expect(wrapper.find("#password1").classes()).toContain("is-valid");
+
+    // await wrapper.find("#password2").setValue("12345");
+    // expect(wrapper.find("#password2").classes()).toContain("is-invalid");
+
+    // await wrapper.find("#password2").setValue("Aa1234");
+    // expect(wrapper.find("#password2").classes()).toContain("is-valid");
+
+    // await wrapper.find("#agreement-check-box").setChecked(true);
+
+    // await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    // await wrapper.vm.$nextTick();
+    // await wrapper.vm.$nextTick();
+
+    // expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    // expect(spy).toHaveBeenCalled();
+    // expect(window.location.href).toEqual("/login/password-recovery");
+
+    // spy.mockImplementationOnce(() => Promise.resolve(false));
+
+    // await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    // await wrapper.vm.$nextTick();
+    // await wrapper.vm.$nextTick();
+
+    // expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+
+    // expect(spy).toHaveBeenCalled();
+    // expect(window.location.href).toEqual("/login");
+
+    // spy.mockImplementationOnce(() => Promise.resolve(null));
+
+    // await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    // await wrapper.vm.$nextTick();
+    // await wrapper.vm.$nextTick();
+
+    // expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    // expect(spy).toHaveBeenCalled();
+    // expect(wrapper.find("#phone").element.value).toBe("");
+  });
 });
