@@ -789,18 +789,24 @@ describe("RegForm", () => {
     ).not.toContain("is-invalid");
   });
   ///
-  it.only("При нажатии чекбокса 'У меня есть полис РЕСО' убирает ошибку у поля номер полиса при неверной валидации", async () => {
+  it.only("Мой тест", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, { localVue, attachTo: document.body });
     const getRegFamilySelector = "[data-testid=regFamily]";
     // const invalidFeedbackSelector = "[data-testid=regSurnameFeedback]";
-    const surenameInput = wrapper.findComponent(getRegFamilySelector);
-    // console.log("surenameInput:", surenameInput);
-    surenameInput.setValue(" GGGGg");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    console.log("surenameInput:", surenameInput.element.value);
+    const surenameInput = wrapper.find(getRegFamilySelector);
+
+    surenameInput.setValue("G   ");
+
+    console.log("surenameInput:", surenameInput.element.value.length);
+    // surenameInput.setValue(" GGGGg");
+    // console.log("surenameInput:", surenameInput.element.value);
+
+    // await wrapper.findComponent("[data-testid=regFamily]").setValue(" GGGGg");
+    // await wrapper.vm.$nextTick();
+    // await wrapper.vm.$nextTick();
+    //
 
     // expect(surenameInput.element.value).toBe("");
 

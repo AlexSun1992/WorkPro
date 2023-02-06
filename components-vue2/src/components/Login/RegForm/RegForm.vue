@@ -658,6 +658,8 @@ export default {
           input = input.trim();
         }
 
+        console.log(input);
+
         if (!isInputNotValid) {
           this.patronymic = input;
           this.isPatronymicTouch = true;
@@ -718,6 +720,8 @@ export default {
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        console.log("input:", input);
+
         if (input.charAt(0) === " ") {
           input = "";
           this.$refs.autocompleteSurname.value = "";
@@ -728,8 +732,9 @@ export default {
 
         if (input.charAt(input.length - 1) === " ") {
           input = input.trim();
+          console.log("input:!!!", input.length);
         }
-
+        console.log("input:", input);
         if (!isInputNotValid) {
           this.family = input;
           this.isSurnameErrorMessage = true;
