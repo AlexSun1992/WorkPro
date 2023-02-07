@@ -81,14 +81,5 @@ export function getErrorMessage(errorMessage, h) {
     }
     return stringWithBrackets[1];
   }
-
-  // if (
-  //   errMessageString === null ||
-  //   errMessageString === undefined ||
-  //   typeof errMessageString === "object"
-  // ) {
-  //   return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
-  // }
-
   return errMessageString;
 }
