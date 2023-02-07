@@ -390,7 +390,7 @@ export default {
       },
       code: {
         required,
-        minLength: minLength(5),
+        minLength: minLength(4),
       },
       password: {
         required,
