@@ -22,9 +22,6 @@
           />
         </div>
       </b-tab>
-      <!--      <b-tab :title="tab.label" v-for="tab in tabs" :key="tab.id">-->
-      <!--        <TableEditor v-if="cardId != 0" :id="tab.id" :name="tab.label" />-->
-      <!--      </b-tab>-->
     </b-tabs>
     <div v-else class="row">
       <Control
@@ -44,8 +41,6 @@
 </template>
 <script>
 import Control from "../Controls/Control";
-// import TableEditor from "../TableEditor/TableEditor";
-// import SelectItemFromTemplate from "../Controls/ControlListSelect/SelectItemFromTemplate.vue";
 
 export default {
   name: "Form",

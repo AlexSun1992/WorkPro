@@ -1,7 +1,6 @@
-import { getErrorMessage } from "./toast.helper";
 import { mount } from "@vue/test-utils";
-
 import Vue from "vue";
+import { getErrorMessage } from "./toast.helper";
 
 describe("Модуль вывода сообщения об ошибке", () => {
   it("Должен обрабатывать сообщения с ORA в тексте без скобок", () => {
@@ -48,6 +47,23 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessage = getErrorMessage(errorMessageText);
     expect(errorMessage).toBe(
       "Внимание! Пункт меню 55/712 настроен не правильно. Получен не корректный REL: rel. Сообщите в службу поддержки!"
+    );
+  });
+
+  it("Должен обрабатывать сообщения с скобкой", () => {
+    const errorMessageText = `ORA-20105: [Запрещено вводить полисы с датой начала действия превышающей дату полиса более чем на 45 дней.]
+      ORA-06512: на  "I3.PKG_LK_UTILS", line 13655
+      ORA-06512: на  "V4.TM_UTILS", line 369
+      ORA-06512: на  "V4.TM_UTILS_WEB", line 1900
+      ORA-06512: на  "I3.PKG_LK_UTILS", line 13635
+      ORA-06512: на  line 1
+      ORA-06512: на  "SYS.DBMS_SQL", line 1721
+      ORA-06512: на  "MOBILE.AMUTILSREST", line 3132
+      ORA-06512: на  line 1
+      `;
+    const errorMessage = getErrorMessage(errorMessageText);
+    expect(errorMessage).toBe(
+      "Запрещено вводить полисы с датой начала действия превышающей дату полиса более чем на 45 дней."
     );
   });
 
@@ -123,6 +139,14 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessage = getErrorMessage(errorMessageText, false);
     expect(errorMessage).toBe(
       "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
+  });
+  it("Вернуть сообщение в скобках", () => {
+    const errorMessageText =
+      'ORA-20105: [Сохранение профиля невозможно, обратитесь в офис]\nORA-06512: на  "MOBILE.CLIENTUTILS", line 1409\nORA-06512: на  "MOBILE.CLIENTUTILS", line 921\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1692\nORA-06512: на  "MOBILE.AMUTILSREST", line 1321\nORA-06512: на  line 1\n';
+    const errorMessage = getErrorMessage(errorMessageText, false);
+    expect(errorMessage).toBe(
+      "Сохранение профиля невозможно, обратитесь в офис"
     );
   });
 });

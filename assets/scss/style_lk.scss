@@ -1566,12 +1566,12 @@ textarea:disabled:hover {
   display: block;
 }
 
+.is-valid input:hover,
+.is-valid input,
+input.is-valid:hover,
 input.is-valid {
   padding-right: 40px;
-  border: 1px solid #43b02a !important;
-}
-
-input.is-valid {
+  border: 2px solid #43b02a !important;
   background: #fff url(/img/input-valid.svg) right center no-repeat !important;
 }
 
@@ -1683,10 +1683,10 @@ input.checkbox-btn {
 .btn-success,
 .btn-warning {
   text-align: center;
-  padding: 17px 40px;
+  padding: 0 40px;
   border-radius: 15px;
   font-size: 1rem;
-  line-height: 1rem;
+  line-height: 50px;
   box-sizing: border-box;
   border: 2px solid #fe7333;
   font-weight: 700;
@@ -1695,6 +1695,7 @@ input.checkbox-btn {
   position: relative;
   text-overflow: ellipsis;
   overflow: hidden;
+  height: 54px;
 }
 
 a.btn-outline-success,
@@ -1738,7 +1739,6 @@ a.btn-outline-success,
 a.btn-secondary {
   border: 2px solid #fe7333;
   color: #fe7333;
-  line-height: 1;
   background: #fff;
 }
 
@@ -1834,8 +1834,11 @@ a.btn-warning {
   width: 24px;
   height: 24px;
   right: 10px;
+  cursor: pointer;
 }
-
+input + .mx-icon-calendar {
+  pointer-events: none;
+}
 .ldp1 > div {
   font-size: 1.25rem;
 }
@@ -1998,7 +2001,9 @@ a.free {
 }
 
 .btn-secondary.h48 {
-  padding: 14px 24px;
+  padding: 0 24px;
+  height: 48px;
+  line-height: 44px;
 }
 
 @media (max-width: 992px) {
@@ -3028,8 +3033,11 @@ a.action:hover {
   transition: 0.2s;
 }
 
+.is-invalid input:hover,
+.is-invalid input,
+input.is-invalid:hover,
 input.is-invalid {
-  border-color: #eb5757;
+  border: 2px solid #eb5757;
 }
 
 [data-card-id="705"] {
@@ -3445,7 +3453,8 @@ textarea {
   .btn-secondary,
   .btn-success,
   .btn-warning {
-    padding: 15px 24px;
+    height: 50px;
+    line-height: 46px;
   }
   .have_btn {
     padding: 16px 16px 85px 16px;
@@ -3613,6 +3622,8 @@ a[data-newcount][data-newcolor="RED"]:after {
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   padding: 21px 0;
+  line-height: 1;
+  height: auto;
 }
 
 .my-policy[data-id="2"] .btn-prolong,
@@ -3779,6 +3790,7 @@ a[data-newcount][data-newcolor="RED"]:after {
   padding-top: 87px;
   border: 0 !important;
   position: relative;
+  line-height: 1;
 }
 
 .btn-insurance-rules:hover,
@@ -3962,14 +3974,14 @@ a[data-newcount][data-newcolor="RED"]:after {
   background-image: url(/img/icon-wppl.svg);
   background-position: 40px 50%;
   background-repeat: no-repeat;
-  padding: 17px 40px 17px 76px;
+  padding: 0 40px 0 76px;
 }
 
 .btn.icon-esearch {
   background-image: url(/img/icon-esearch.svg);
   background-position: 40px 50%;
   background-repeat: no-repeat;
-  padding: 17px 40px 17px 76px;
+  padding: 0 40px 0 76px;
 }
 
 h5 {
@@ -4395,4 +4407,32 @@ input + .btn-psw-visible + .invalid-feedback {
 
 input.is-invalid + .btn-psw-visible + .invalid-feedback {
   display: block;
+}
+input {
+  height: 54px;
+}
+
+[data-position="below"] .autocomplete-result-list {
+  border-radius: 8px;
+  margin-top: 4px;
+}
+[data-position="below"] .autocomplete-input[aria-expanded="true"] {
+  border-radius: 15px;
+}
+
+.mx-input-wrapper input.is-valid {
+  padding-right: 56px;
+  background: #fff url(/img/input-valid.svg) right 16px center no-repeat !important;
+}
+
+.mx-input-wrapper input.is-valid:disabled,
+.mx-input-wrapper input.is-valid:hover:disabled,
+input.is-valid:disabled,
+input:disabled:hover,
+input:disabled,
+.is-valid input:disabled {
+  border: 1px solid #c3c3c3 !important;
+  background: #f2f2f2 !important;
+  color: #c3c3c3 !important;
+  pointer-events: none;
 }

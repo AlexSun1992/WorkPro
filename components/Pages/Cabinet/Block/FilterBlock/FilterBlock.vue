@@ -290,9 +290,11 @@ export default {
   line-height: 30px;
   color: #292929;
   border: 0;
-  padding: 3px 12px;
+  padding: 0px 12px;
   margin-right: 8px;
   text-decoration: none;
+  line-height: 36px;
+  height: 36px;
   &:disabled {
     background: #eff1f3;
     color: #c3c3c3;

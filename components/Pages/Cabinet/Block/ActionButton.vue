@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
 export default {
   name: "ActionButton",
   props: {
@@ -104,7 +105,11 @@ export default {
         });
         return result;
       } catch (err) {
-        console.error(err);
+        this.$bvToast.toast(getErrorMessage(err.response.data.MESSAGE), {
+          title: "",
+          variant: "danger",
+          solid: true,
+        });
       }
       return null;
     },
@@ -145,7 +150,7 @@ export default {
     action: {
       get() {
         const action = this.actions.find(
-          (a) => a.ID === parseInt(this.actionId)
+          (a) => a.ID === parseInt(this.actionId, 10)
         );
         return action || null;
       },

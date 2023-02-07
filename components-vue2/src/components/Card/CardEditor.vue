@@ -284,7 +284,6 @@ export default {
             value !== 0) ||
           (error && data[i].visible)
         ) {
-          console.log("error", data[i]);
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
           this.$store.commit("data_card/saveButtonClicked", false);

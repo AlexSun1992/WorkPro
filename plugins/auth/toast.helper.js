@@ -45,16 +45,12 @@ export function getErrorNumber(errorMessage) {
 
 export function getErrorMessage(errorMessage, h) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
-
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
-  // console.log("stringWithBrackets:", stringWithBrackets);
 
   const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
-  // console.log("getORAnumber:", getORAnumber);
 
   if (getORAnumber) {
     const errNumber = getErrorNumber(errorMessage);
-    // console.log("errNumber:", errNumber);
     if (MAX_ORA_ERROR > errNumber) {
       if (h) {
         const vnode = h("div", {
@@ -75,7 +71,6 @@ export function getErrorMessage(errorMessage, h) {
       getErrorTextWithBrackets.match(/\[.+?\]/g);
 
     const getStringFromErrorText = transformErrorTextToArray.join("");
-    // проверяем нужно использовать ленивый квантификатор
     if (getErrorTextWithBrackets === getStringFromErrorText) {
       const getStringMessageWithErrBrackets = stringWithBrackets[0];
       const getArrWithErrBrackets =
@@ -86,14 +81,5 @@ export function getErrorMessage(errorMessage, h) {
     }
     return stringWithBrackets[1];
   }
-
-  if (
-    errMessageString === null ||
-    errMessageString === undefined ||
-    typeof errMessageString === "object"
-  ) {
-    return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
-  }
-
   return errMessageString;
 }
