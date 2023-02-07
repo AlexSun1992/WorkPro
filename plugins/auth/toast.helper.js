@@ -77,29 +77,9 @@ export function getErrorMessage(errorMessage, h) {
         getStringMessageWithErrBrackets.match(/\[.+?\]/);
       const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
 
-      // if (Array.isArray(pureMessageText[1])) {
-      //   return pureMessageText[0];
-      // }
       return pureMessageText[1];
-    }
-    if (Array.isArray(getStringFromErrorText)) {
-      return pureMessageText[0];
     }
     return stringWithBrackets[1];
   }
-  // if (errMessageString.match(/\[(.+)]/)) {
-  //   console.log(errMessageString, "errMessageString");
-  //   const pureMessage = errMessageString.match(/\[(.+)]/g);
-  //   return pureMessage[1];
-  // }
-
-  // if (
-  //   errMessageString === null ||
-  //   errMessageString === undefined ||
-  //   typeof errMessageString === "object"
-  // ) {
-  //   return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
-  // }
-  console.log(errMessageString, "errMessageString");
   return errMessageString;
 }

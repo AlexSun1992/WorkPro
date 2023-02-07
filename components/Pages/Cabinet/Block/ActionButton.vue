@@ -1,10 +1,9 @@
 <template>
-  <!-- <b-button
+  <b-button
     v-if="action"
     @click.stop="action.LREQUESTCODE === true ? confirmAction() : startAction()"
     :variant="variant"
-  > -->
-  <b-button @click.stop="confirmAction()" :variant="variant">
+  >
     <slot><div v-text="action.SNAME"></div></slot>
   </b-button>
 </template>
@@ -88,25 +87,24 @@ export default {
           relActionId: this.action.REL,
           actionId: this.actionId,
           actionRefresh: this.action?.LREFRESH,
-          // rowId: this.rowId,
-          // itemId: this.action.NITEM,
+          rowId: this.rowId,
+          itemId: this.action.NITEM,
           body: this.body,
         });
-        // if (this.action?.LREFRESH) {
-        //   this.$emit("update");
-        // } else {
-        //   console.warn(
-        //     `Для обновления данных необходимо поставить в пункте ${this.action.NITEM} опцию  "Обновлять после действия"`
-        //   );
-        // }
-        // this.$bvToast.toast("Успешно выполнено", {
-        //   title: "",
-        //   variant: "success",
-        //   solid: true,
-        // });
+        if (this.action?.LREFRESH) {
+          this.$emit("update");
+        } else {
+          console.warn(
+            `Для обновления данных необходимо поставить в пункте ${this.action.NITEM} опцию  "Обновлять после действия"`
+          );
+        }
+        this.$bvToast.toast("Успешно выполнено", {
+          title: "",
+          variant: "success",
+          solid: true,
+        });
         return result;
       } catch (err) {
-        console.log(err.response, "err.response");
         getErrorMessage(err.response.data.MESSAGE);
         this.$bvToast.toast(getErrorMessage(err.response.data.MESSAGE), {
           title: "",
