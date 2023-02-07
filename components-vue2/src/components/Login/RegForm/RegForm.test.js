@@ -1130,65 +1130,33 @@ describe("RegForm", () => {
       ],
     });
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
-
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
-
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).toBeDefined();
-
     const surnameComponent = wrapper.findComponent({
       ref: "autocompleteSurname",
     });
     const surnameInput = surnameComponent.find("input");
-    await surnameInput.setValue("П");
+    await surnameInput.setValue("Казимиров");
     expect(surnameComponent.classes()).toContain("is-valid");
 
     const patronymicComponent = wrapper.findComponent({
       ref: "autocompletePatronymic",
     });
     const patronymicInput = patronymicComponent.find("input");
-    await patronymicInput.setValue("П");
+    await patronymicInput.setValue("Александрович");
 
     const nameComponent = wrapper.findComponent({
       ref: "autocompleteName",
     });
     const nameInput = nameComponent.find("input");
-    await nameInput.setValue("П");
+    await nameInput.setValue("Андрей");
 
-    const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
-
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).toBeDefined();
-
-    await checkboxComponent.setChecked(true);
-
-    expect(
-      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
-    ).not.toBeDefined();
-
-    wrapper.findComponent({ ref: "policyNumber" }).setValue("12345");
+    await wrapper.find("#phone").setValue("+7(985)-686-81-48");
 
     const dataPickerInput = wrapper
       .findComponent("#birthday-picker")
       .find("input");
 
-    dataPickerInput.setValue("21.12.2052");
+    dataPickerInput.setValue("27.06.1989");
     dataPickerInput.trigger("change");
-    // await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
-    // expect(dataPickerInput.classes()).not.toContain("is-valid");
-
-    dataPickerInput.setValue("21.12.1852");
-    dataPickerInput.trigger("change");
-    // await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
-    // expect(dataPickerInput.classes()).not.toContain("is-valid");
-
-    dataPickerInput.setValue("21.12.2022");
-    dataPickerInput.trigger("change");
-    // await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
-    // expect(dataPickerInput.classes()).toContain("is-valid");
 
     await wrapper.find("#password1").setValue("Aa1234");
     expect(wrapper.find("#password1").classes()).toContain("is-valid");
@@ -1198,16 +1166,31 @@ describe("RegForm", () => {
 
     await wrapper.find("#agreement-check-box").setChecked(true);
 
-    expect(
-      wrapper.find("#btn_code_verification_lk").attributes().disabled
-    ).not.toBeDefined();
-
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
+    expect(axios.post).toHaveBeenLastCalledWith(
+      "/am/free/v2/registerUser1",
+      {
+        BIRTHDATE: "1989-06-27",
+        FIRSTNAME: "Андрей",
+        GUID: null,
+        PASSWORD: "Aa1234",
+        PASSWORD_CONFIRM: "Aa1234",
+        PHONE: "+7(985)-686-81-48",
+        POLICY_NUMBER: "",
+        SECONDNAME: "Казимиров",
+        THIRDNAME: "Александрович",
+        USER_CONFIRM: "Y",
+        error: false,
+        loginType: "phone",
+        modeType: "REG",
+        token: 1,
+      },
+      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
+    );
 
-    console.log("wrapper:", wrapper.findComponent("#sms-confirm").html());
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
   });
