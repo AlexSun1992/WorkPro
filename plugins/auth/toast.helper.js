@@ -64,6 +64,14 @@ export function getErrorMessage(errorMessage, h) {
       }
       return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
     }
+    if (
+      errMessageString.includes("\n") &&
+      errMessageString.match(/^\s?ORA-\d{5}:\s?ORA-\d{5}/) === null
+    ) {
+      const remoteLineBreake = errMessageString.replace(/[\n]/g, "");
+      const errorMessageText = remoteLineBreake.match(/\[(.+)]/);
+      return errorMessageText[1];
+    }
   }
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
