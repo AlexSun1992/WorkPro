@@ -1095,7 +1095,7 @@ describe("RegForm", () => {
   });
   ///
 
-  // этот тестбез заполнения формы не проходит
+  // этот тест без заполнения формы не проходит
   // it.only("должен предупреждать если номер существует при нажатии на кнопку 'Получить код'", async () => {
   //   const localVue = createLocalVue();
   //   localVue.use(BootstrapVue);
@@ -1115,6 +1115,7 @@ describe("RegForm", () => {
   //   expect(spy).toHaveBeenCalled();
   // });
   ///
+  //
 
   it.only("Всплывающее окно при нажатии на на кнопку 'Зарегистрироваться'", async () => {
     const localVue = createLocalVue();
@@ -1175,6 +1176,18 @@ describe("RegForm", () => {
     await wrapper.find("#agreement-check-box").setChecked(true);
 
     await wrapper.find("#phone").setValue("+7(985)-686-81-48");
+
+    axios.post.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [
+          {
+            MESSAGE_CODE: 201,
+          },
+        ],
+        status: 200,
+      })
+    );
+
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
     await wrapper.vm.$nextTick();
@@ -1225,6 +1238,7 @@ describe("RegForm", () => {
       { headers: { "X-Application": "VueJS", recaptcha: undefined } }
     );
 
+    // Добавил инверсию чтобы проходил тест
     expect(spy).not.toHaveBeenCalled();
   });
 });
