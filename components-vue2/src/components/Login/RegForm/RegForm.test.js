@@ -1014,9 +1014,9 @@ describe("RegForm", () => {
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login");
   });
-
-  ///
-  it.only("находим код подтверждения", async () => {
+  /// тесты для проверки всплывающего окна при MESSAGE_CODE === 201
+  // "Этот тест проходит"
+  it("должен предупреждать если номер существует при нажатии на кнопку 'Получить код'", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, {
@@ -1025,15 +1025,13 @@ describe("RegForm", () => {
         $LogEvent: (v) => v,
       },
     });
+
     axios.post.mockReturnValue({
-      data: [
-        {
-          // MESSAGE: "Введите код подтверждения из SMS",
-          MESSAGE_CODE: 201,
-          //  GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
-        },
-      ],
+      data: [{ MESSAGE_CODE: 201 }],
     });
+
+    const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
+    const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
 
     const surnameComponent = wrapper.findComponent({
       ref: "autocompleteSurname",
@@ -1060,20 +1058,129 @@ describe("RegForm", () => {
     dataPickerInput.setValue("27.06.1989");
     dataPickerInput.trigger("change");
 
+    await wrapper.find("#password1").setValue("Carter911");
+    expect(wrapper.find("#password1").classes()).toContain("is-valid");
+
+    await wrapper.find("#password2").setValue("Carter911");
+    expect(wrapper.find("#password2").classes()).toContain("is-valid");
+    await wrapper.find("#phone").setValue("+7(901)-000-10-00");
+    await wrapper.find("#agreement-check-box").setChecked(true);
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(axios.post).toHaveBeenLastCalledWith(
+      "/am/free/v2/registerUser1",
+      {
+        BIRTHDATE: "1989-06-27",
+        FIRSTNAME: "Андрей",
+        GUID: null,
+        PASSWORD: "Carter911",
+        PASSWORD_CONFIRM: "Carter911",
+        PHONE: "+7(901)-000-10-00",
+        POLICY_NUMBER: "",
+        SECONDNAME: "Казимиров",
+        THIRDNAME: "Александрович",
+        USER_CONFIRM: "Y",
+        error: false,
+        loginType: "phone",
+        modeType: "REG",
+        token: 1,
+      },
+      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
+    );
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(spy).toHaveBeenCalled();
+  });
+  ///
+
+  // этот тестбез заполнения формы не проходит
+  // it.only("должен предупреждать если номер существует при нажатии на кнопку 'Получить код'", async () => {
+  //   const localVue = createLocalVue();
+  //   localVue.use(BootstrapVue);
+  //   const wrapper = mount(RegForm, {
+  //     localVue,
+  //     mocks: {
+  //       $LogEvent: (v) => v,
+  //     },
+  //   });
+  //   axios.post.mockReturnValue({
+  //     data: [{ MESSAGE_CODE: 201 }],
+  //   });
+  //   const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
+  //   const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
+  //   await wrapper.vm.$nextTick();
+  //   await wrapper.vm.$nextTick();
+  //   expect(spy).toHaveBeenCalled();
+  // });
+  ///
+
+  it.only("Всплывающее окно при нажатии на на кнопку 'Зарегистрироваться'", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+
+    axios.post.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [
+          {
+            MESSAGE: "Введите код подтверждения из SMS",
+            MESSAGE_CODE: 200,
+            GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+          },
+        ],
+        status: 200,
+      })
+    );
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Казимиров");
+    expect(surnameComponent.classes()).toContain("is-valid");
+
+    const patronymicComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const patronymicInput = patronymicComponent.find("input");
+    await patronymicInput.setValue("Александрович");
+
+    const nameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const nameInput = nameComponent.find("input");
+    await nameInput.setValue("Андрей");
+
+    const dataPickerInput = wrapper
+      .findComponent("#birthday-picker")
+      .find("input");
+
+    dataPickerInput.setValue("27.06.1989");
+    dataPickerInput.trigger("change");
+
     await wrapper.find("#password1").setValue("Aa1234");
+    expect(wrapper.find("#password1").classes()).toContain("is-valid");
 
     await wrapper.find("#password2").setValue("Aa1234");
-
-    await wrapper.find("#phone").setValue("+7(985)-686-81-48");
+    expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
 
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-
+    await wrapper.find("#phone").setValue("+7(985)-686-81-48");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
-    expect(axios.post).toHaveBeenLastCalledWith(
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(axios.post).toHaveBeenCalledWith(
       "/am/free/v2/registerUser1",
       {
         BIRTHDATE: "1989-06-27",
@@ -1094,23 +1201,30 @@ describe("RegForm", () => {
       { headers: { "X-Application": "VueJS", recaptcha: 1 } }
     );
 
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
+    await wrapper.find("#sms-confirm").setValue("1111");
+    await wrapper.find("#btn_chek_registration_lk").trigger("click");
 
-    // const verifyUs = wrapper.findComponent({ ref: "verifyUser" });
-    // const spy = jest.spyOn(verifyUs.vm.$bvModal, "msgBoxConfirm");
-    // spy.mockImplementation(() => Promise.resolve());
-    // expect(spy).toHaveBeenCalled();
+    const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
+    const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
 
-    // expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
+    expect(axios.post).toHaveBeenCalledWith(
+      "/am/free/v2/registerUser2",
+      {
+        BIRTHDATE: "1989-06-27",
+        CODE: "1111",
+        FIRSTNAME: "Андрей",
+        GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+        PASSWORD: "Aa1234",
+        PASSWORD_CONFIRM: "Aa1234",
+        PHONE: "+7(985)-686-81-48",
+        POLICY_NUMBER: "",
+        SECONDNAME: "Казимиров",
+        THIRDNAME: "Александрович",
+        USER_CONFIRM: "Y",
+      },
+      { headers: { "X-Application": "VueJS", recaptcha: undefined } }
+    );
 
-    // const getCodeBtn = wrapper.findComponent("#btn_code_verification_lk");
-
-    // // console.log("getCodeBtn:", getCodeBtn.attributes().disabled);
-
-    // getCodeBtn.trigger("click");
-
-    // const spy = jest.spyOn(wrapper.vm.$bvModal, "msgBoxConfirm");
-    // expect(spy).toHaveBeenCalled();
+    expect(spy).not.toHaveBeenCalled();
   });
 });
