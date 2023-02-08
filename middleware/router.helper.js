@@ -5,6 +5,14 @@ const BLACK_LIST_ROUTES = [
   { idModule: 55, idItem: 916 },
   { idModule: 55, idItem: 917 },
   { idModule: 55, idItem: 918 },
+  { idModule: 55, idItem: 723 },
+  { idModule: 55, idItem: 733 },
+  { idModule: 55, idItem: 734 },
+  { idModule: 55, idItem: 735 },
+  { idModule: 55, idItem: 736 },
+  { idModule: 55, idItem: 737 },
+  { idModule: 55, idItem: 757 },
+  { idModule: 55, idItem: 739 },
 ];
 
 const WHITE_LIST_MODULES = [55];
