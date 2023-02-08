@@ -70,7 +70,7 @@ export function getErrorMessage(errorMessage, h) {
     ) {
       const remoteLineBreake = errMessageString.replace(/[\n]/g, "");
       const errorMessageText = remoteLineBreake.match(/\[(.+)]/);
-      return errorMessageText[1];
+      return errorMessageText[1].trim();
     }
   }
   if (stringWithBrackets) {
