@@ -352,7 +352,7 @@ describe("RegForm", () => {
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
     expect(spy).toHaveBeenCalled();
-    expect(window.location.href).toEqual("/login");
+    expect(window.location.href).toEqual("/feedback");
 
     spy.mockImplementationOnce(() => Promise.resolve(null));
 
@@ -788,4 +788,231 @@ describe("RegForm", () => {
       wrapper.findComponent({ ref: "policyNumber" }).classes()
     ).not.toContain("is-invalid");
   });
+  ///
+
+  it("Проверяем возможность введения пробела в поле Фамилии в качестве непервого символа", () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const getRegFamilySelector = "[data-testid=regFamily]";
+    const surenameInput = wrapper.find(getRegFamilySelector);
+    surenameInput.setValue("Гаврило   в");
+    expect(surenameInput.element.value.length).toBe(11);
+  });
+
+  ///
+  it("Проверяем возможность введения пробела в поле Имя в качестве непервого символа", () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const getRegFamilySelector = "[data-testid=regName]";
+    const surenameInput = wrapper.find(getRegFamilySelector);
+    surenameInput.setValue("Алекс   ей");
+    expect(surenameInput.element.value.length).toBe(10);
+  });
+
+  ///
+  it("Проверяем возможность введения пробела в поле Отчество в качестве непервого символа", () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const getRegFamilySelector = "[data-testid=regPatronymic]";
+    const surenameInput = wrapper.find(getRegFamilySelector);
+    surenameInput.setValue("Никола   евич");
+    expect(surenameInput.element.value.length).toBe(13);
+  });
+  ///
+
+  it("Проверяем возможность введения пробела в поле Отчество в качестве непервого символа", () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const getRegFamilySelector = "[data-testid=regFamily]";
+    const surenameInput = wrapper.find(getRegFamilySelector);
+    surenameInput.trigger("keydown", {
+      key: "space",
+    });
+    expect(surenameInput.element.value.length).toBe(0);
+  });
+
+  ///
+  it("должен корректно заполнять форму", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+        },
+      ],
+    });
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("П   ");
+    expect(surnameComponent.classes()).toContain("is-valid");
+
+    const patronymicComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const patronymicInput = patronymicComponent.find("input");
+    await patronymicInput.setValue("П   ");
+
+    const nameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const nameInput = nameComponent.find("input");
+    await nameInput.setValue("П   ");
+
+    const checkboxComponent = wrapper.findComponent("#policy-exist-check-box");
+
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).toBeDefined();
+
+    await checkboxComponent.setChecked(true);
+
+    expect(
+      wrapper.findComponent({ ref: "policyNumber" }).attributes().disabled
+    ).not.toBeDefined();
+
+    wrapper.findComponent({ ref: "policyNumber" }).setValue("123");
+
+    const dataPickerInput = wrapper
+      .findComponent("#birthday-picker")
+      .find("input");
+
+    dataPickerInput.setValue("21.12.2052");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
+    expect(dataPickerInput.classes()).not.toContain("is-valid");
+
+    dataPickerInput.setValue("21.12.1852");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
+    expect(dataPickerInput.classes()).not.toContain("is-valid");
+
+    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent({ ref: "policyNumber" }).trigger("focus");
+    expect(dataPickerInput.classes()).toContain("is-valid");
+
+    await wrapper.find("#password1").setValue("12345");
+    expect(wrapper.find("#password1").classes()).toContain("is-invalid");
+
+    await wrapper.find("#password1").setValue("Aa1234");
+    expect(wrapper.find("#password1").classes()).toContain("is-valid");
+
+    await wrapper.find("#password2").setValue("12345");
+    expect(wrapper.find("#password2").classes()).toContain("is-invalid");
+
+    await wrapper.find("#password2").setValue("Aa1234");
+    expect(wrapper.find("#password2").classes()).toContain("is-valid");
+
+    await wrapper.find("#agreement-check-box").setChecked(true);
+
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(axios.post).toHaveBeenCalledWith(
+      "/am/free/v2/registerUser1",
+      {
+        BIRTHDATE: "2022-12-21",
+        FIRSTNAME: "П",
+        GUID: null,
+        PASSWORD: "Aa1234",
+        PASSWORD_CONFIRM: "Aa1234",
+        PHONE: "+7(910)-123-22-33",
+        POLICY_NUMBER: "123",
+        SECONDNAME: "П",
+        THIRDNAME: "П",
+        USER_CONFIRM: "Y",
+        error: false,
+        loginType: "phone",
+        modeType: "REG",
+        token: 1,
+      },
+      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
+    );
+
+    await wrapper.find("#sms-confirm").setValue("12345");
+
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE:
+            'ORA-20105: Неправильно введен код подтверждения или истек срок действия.\nORA-06512: на  "MOBILE.AMAUTH3", line 74\nORA-06512: на  "MOBILE.AMAUTH3", line 558\nORA-06512: на  line 1\n',
+          STATUS: 500,
+          REASON: "Internal Server Error",
+          INFO: "Неправильно введен код подтверждения или истек срок действия.",
+        },
+      };
+      throw wrongAuthError;
+    });
+
+    axios.post.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [{ MESSAGE: "Вы успешно зарегистрированы", MESSAGE_CODE: 200 }],
+        status: 200,
+      })
+    );
+
+    await wrapper.find("#btn_chek_registration_lk").trigger("click");
+    expect(wrapper.find("#error-message").exists()).toBe(true);
+    expect(wrapper.find("#error-message").text()).toContain(
+      "Неправильно введен код подтверждения или истек срок действия."
+    );
+
+    const spy = jest.spyOn(wrapper.vm.$bvModal, "msgBoxOk");
+    spy.mockImplementation(() => Promise.resolve());
+
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/",
+      },
+    });
+
+    await wrapper.find("#btn_chek_registration_lk").trigger("click");
+    expect(wrapper.find("#error-message").exists()).toBe(false);
+    expect(axios.post).toHaveBeenLastCalledWith(
+      "/am/free/v2/registerUser2",
+      {
+        BIRTHDATE: "2022-12-21",
+        CODE: "12345",
+        FIRSTNAME: "П",
+        PASSWORD: "Aa1234",
+        PASSWORD_CONFIRM: "Aa1234",
+        PHONE: "+7(910)-123-22-33",
+        POLICY_NUMBER: "123",
+        SECONDNAME: "П",
+        THIRDNAME: "П",
+        USER_CONFIRM: "Y",
+        GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+      },
+      { headers: { "X-Application": "VueJS", recaptcha: undefined } }
+    );
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(spy).toHaveBeenCalled();
+    expect(window.location.href).toEqual("/login");
+  });
+
+  ///
 });

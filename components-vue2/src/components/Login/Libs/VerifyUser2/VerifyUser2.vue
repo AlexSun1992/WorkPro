@@ -204,6 +204,7 @@ export default {
         .filter((item) => item.style.visibility === "visible");
       if (visibleCaptchas.length === 0) {
         this.loading = false;
+        this.$emit("sendingCode", false);
       }
     },
 
@@ -417,7 +418,7 @@ export default {
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "В Личном кабинете уже есть профиль с данным номером телефона",
+                  "Личный кабинет с указанным номером телефона уже существует.",
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
@@ -425,8 +426,8 @@ export default {
                     cancelVariant: "primary",
                     okTitle: isInSystemLogin
                       ? "Восстановить пароль"
-                      : "Продолжить регистрацию",
-                    cancelTitle: "Войти в систему",
+                      : "Обратитесь в техподдержку",
+                    cancelTitle: "Обратитесь в техподдержку",
                     footerClass: "p-2",
                     hideHeaderClose: false,
                     centered: true,
@@ -444,7 +445,7 @@ export default {
                     }
                   }
                   if (value === false) {
-                    window.location.href = "/login";
+                    window.location.href = "/feedback";
                   }
                   if (value === null) {
                     this.changeNumber();
