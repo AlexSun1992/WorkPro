@@ -367,7 +367,63 @@ export default {
         this.params.idRel = undefined;
       }
       await this.$store.dispatch("data_card/fetchForm", this.params);
+    },    
+    isLikeSQL(s) {
+      return /const|select/i.test(s);
     },
+    getConfirmOptionsForAction(action) {
+      const opts = {
+          needsConfirm: false,
+          question: `Вы действительно хотите выполнить действие" ${action.SNAME}"?`,
+          title: "Подтверждение выполнения действия",
+          okTitle: "Да",
+          cancelTitle: "Нет"
+      }
+      if (action.LHIDEDLG === false) {
+        opts.needsConfirm = true;
+      }
+      if (action.SCAPTIONSQL && !this.isLikeSQL(action.SCAPTIONSQL)) {
+        opts.question = action.SCAPTIONSQL;
+      }
+      if (action.ID === 39692) { 
+        opts.title = "Вы уверены?";
+        opts.okTitle = "Да, вернуться на Госуслуги";
+        opts.cancelTitle = "Нет, продолжить";
+      }
+      return opts;
+    },
+    async showConfirmActionDlg(opts) {
+      return this.$bvModal
+        .msgBoxConfirm(
+          opts.question,
+          {
+            title: opts.title,
+            size: "md",
+            buttonSize: "md",
+            okVariant: "success",
+            okTitle: opts.okTitle,
+            cancelTitle: opts.cancelTitle,
+            footerClass: "p-2",
+            hideHeaderClose: false,
+            modalClass: ["cabinet"],
+            centered: true,
+          }
+        ).then((res) => {
+          console.log("confirm result is ", res);
+          return res;
+        }).catch((err) => {
+          console.error(err);
+          return false;
+        });
+    },
+    async goThroughConfirmStep(action) {
+        const confStepOpts = this.getConfirmOptionsForAction(action);
+        if (confStepOpts.needsConfirm) {
+          return this.showConfirmActionDlg(confStepOpts);
+        } 
+        return true;
+    },
+    
     async updateValue(e) {
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
@@ -377,7 +433,7 @@ export default {
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM === this.menuId
       );
-      await this.callScript(e, this.callbackAction);
+      await this.callScript(e, this.callbackAction); 
       if (field.type === "button" && e.action) {
         const actionId = parseInt(e.value.replace("Item", ""));
         const actionRefreshCard = menu.ACTIONSCUR.find(
@@ -389,6 +445,11 @@ export default {
         const actionExecute = menu.ACTIONSCUR.find(
           (item) => item.NTYPE === 4 && item.ID === actionId
         );
+        if (actionExecute?.ID === actionId) {
+          if (!(await this.goThroughConfirmStep(actionExecute))) {
+            return;
+          }
+        }
         if (actionSaveCard?.ID === actionId) {
           this.$store.commit("data_card/saveButtonClicked", true);
           await this.saveCard(e);
