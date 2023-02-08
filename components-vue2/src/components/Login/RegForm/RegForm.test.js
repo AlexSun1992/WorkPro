@@ -1177,17 +1177,6 @@ describe("RegForm", () => {
 
     await wrapper.find("#phone").setValue("+7(985)-686-81-48");
 
-    axios.post.mockImplementationOnce(() =>
-      Promise.resolve({
-        data: [
-          {
-            MESSAGE_CODE: 201,
-          },
-        ],
-        status: 200,
-      })
-    );
-
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
     await wrapper.vm.$nextTick();
@@ -1215,10 +1204,22 @@ describe("RegForm", () => {
     );
 
     await wrapper.find("#sms-confirm").setValue("1111");
-    await wrapper.find("#btn_chek_registration_lk").trigger("click");
+
+    axios.post.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [
+          {
+            MESSAGE_CODE: 201,
+          },
+        ],
+        status: 200,
+      })
+    );
 
     const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
     const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
+
+    await wrapper.find("#btn_chek_registration_lk").trigger("click");
 
     expect(axios.post).toHaveBeenCalledWith(
       "/am/free/v2/registerUser2",
