@@ -323,7 +323,7 @@ export default {
     async getCode(token = null) {
       this.$LogEvent({
         formName: "VerifyUser errorMessage",
-        idEventType: this.loginType ? 155 : 162,
+        idEventType: this.loginType === "phone" ? 155 : 162,
         controlName: "VerifyUser.vue",
         message: `Нажал на кнопку Получить код на ${
           this.loginType === "phone" ? "номере" : "EMAIL"
@@ -374,7 +374,7 @@ export default {
               getResponseMessageCodeErr,
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 153 : 164,
+                idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "EMAIL"
@@ -498,7 +498,7 @@ export default {
                   console.log(err);
                   this.$LogEvent({
                     formName: "VerifyUser errorMessage",
-                    idEventType: this.loginType ? 153 : 164,
+                    idEventType: this.loginType === "phone" ? 153 : 164,
                     controlName: "VerifyUser.vue",
                     message: `Показало сообщение об ошибке на ${
                       this.loginType === "phone" ? "номере" : "EMAIL"
@@ -527,7 +527,7 @@ export default {
         this.loading = false;
         this.$LogEvent({
           formName: "VerifyUser errorMessage",
-          idEventType: this.loginType ? 153 : 164,
+          idEventType: this.loginType === "phone" ? 153 : 164,
           controlName: "VerifyUser.vue",
           message: `Показало сообщение об ошибке на ${
             this.loginType === "phone" ? "номере" : "EMAIL"
