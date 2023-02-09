@@ -232,6 +232,22 @@ export default {
     setCodeFieldValid(data) {
       if (data) {
         this.isCodeFieldValid = data;
+        // this.$LogEvent({
+        //   formName: "Recovery",
+        //   idEventType: this.visibleForm === "phone" ? 149 : 157,
+        //   controlName: "PasswordRecoveryForm.vue",
+        //   message: `Открыли форму восстановления пароля по ${
+        //     this.visibleForm === "phone" ? "телефону" : "EMAIL"
+        //   }`,
+        //   timeUser: new Date(),
+        // });
+      }
+    },
+    toggleForm(tabs) {
+      if (this.visibleForm === tabs) {
+        this.clearForm();
+        this.isCodeFieldValid = false;
+        this.visibleForm = tabs === "phone" ? "email" : "phone";
         this.$LogEvent({
           formName: "Recovery",
           idEventType: this.visibleForm === "phone" ? 149 : 157,
@@ -241,13 +257,6 @@ export default {
           }`,
           timeUser: new Date(),
         });
-      }
-    },
-    toggleForm(tabs) {
-      if (this.visibleForm === tabs) {
-        this.clearForm();
-        this.isCodeFieldValid = false;
-        this.visibleForm = tabs === "phone" ? "email" : "phone";
       }
     },
 
