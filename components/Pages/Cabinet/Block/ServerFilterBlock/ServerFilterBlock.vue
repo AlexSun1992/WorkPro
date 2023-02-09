@@ -239,22 +239,14 @@ export default {
       }
 
       if (this.list.length > 1 && this.isShowAsTemplate === false) {
-        const getItemDefault = this.list.find(
+        const getDefaultItem = this.list.find(
           (item) => item.data?.LDEFAULT === true
         );
 
-        if (getItemDefault) {
-          this.firstValueFromList = getItemDefault;
+        if (getDefaultItem) {
+          this.firstValueFromList = getDefaultItem;
         }
       }
-      // Раскрывает мультиселект
-      // if (
-      //   this.list.length > 1 &&
-      //   this.isShowAsTemplate === true &&
-      //   this.isAutoOpen
-      // ) {
-      //   this.openList();
-      // }
 
       if (this.list.length === 1 && this.isShowAsTemplate === true) {
         if (this.list[0]?.data) {
