@@ -239,16 +239,22 @@ export default {
       }
 
       if (this.list.length > 1 && this.isShowAsTemplate === false) {
-        this.InsuredPersonsList = this.list;
-      }
+        const getItemDefault = this.list.find(
+          (item) => item.data?.LDEFAULT === true
+        );
 
-      if (
-        this.list.length > 1 &&
-        this.isShowAsTemplate === true &&
-        this.isAutoOpen
-      ) {
-        this.openList();
+        if (getItemDefault) {
+          this.firstValueFromList = getItemDefault;
+        }
       }
+      // Раскрывает мультиселект
+      // if (
+      //   this.list.length > 1 &&
+      //   this.isShowAsTemplate === true &&
+      //   this.isAutoOpen
+      // ) {
+      //   this.openList();
+      // }
 
       if (this.list.length === 1 && this.isShowAsTemplate === true) {
         if (this.list[0]?.data) {
