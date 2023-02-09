@@ -447,9 +447,6 @@ export default {
                   if (value === false) {
                     window.location.href = "/feedback";
                   }
-                  if (value === null) {
-                    this.changeNumber();
-                  }
                   this.loading = false;
                 })
                 .catch((err) => {
