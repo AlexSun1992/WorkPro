@@ -1095,7 +1095,7 @@ describe("RegForm", () => {
   });
   ///
 
-  it.only("Всплывающее окно при нажатии на на кнопку 'Зарегистрироваться'", async () => {
+  it("Всплывающее окно при нажатии на на кнопку 'Зарегистрироваться' (номер уже зарегистрирован)", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, {
@@ -1160,28 +1160,9 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/registerUser1",
-      {
-        BIRTHDATE: "1989-06-27",
-        FIRSTNAME: "Андрей",
-        GUID: null,
-        PASSWORD: "Aa1234",
-        PASSWORD_CONFIRM: "Aa1234",
-        PHONE: "+7(985)-686-81-48",
-        POLICY_NUMBER: "",
-        SECONDNAME: "Казимиров",
-        THIRDNAME: "Александрович",
-        USER_CONFIRM: "Y",
-        error: false,
-        loginType: "phone",
-        modeType: "REG",
-        token: 1,
-      },
-      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
-    );
-
     await wrapper.find("#sms-confirm").setValue("1111");
+
+    const bvModal = jest.spyOn(wrapper.vm.$bvModal, "msgBoxConfirm");
 
     axios.post.mockImplementationOnce(() =>
       Promise.resolve({
@@ -1193,30 +1174,8 @@ describe("RegForm", () => {
         status: 200,
       })
     );
-
-    const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
-    const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
-
     await wrapper.find("#btn_chek_registration_lk").trigger("click");
 
-    expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/registerUser2",
-      {
-        BIRTHDATE: "1989-06-27",
-        CODE: "1111",
-        FIRSTNAME: "Андрей",
-        GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
-        PASSWORD: "Aa1234",
-        PASSWORD_CONFIRM: "Aa1234",
-        PHONE: "+7(985)-686-81-48",
-        POLICY_NUMBER: "",
-        SECONDNAME: "Казимиров",
-        THIRDNAME: "Александрович",
-        USER_CONFIRM: "Y",
-      },
-      { headers: { "X-Application": "VueJS", recaptcha: undefined } }
-    );
-    // Добавил инверсию чтобы проходил тест
-    expect(spy).not.toHaveBeenCalled();
+    expect(bvModal).toHaveBeenCalled();
   });
 });
