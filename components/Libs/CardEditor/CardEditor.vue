@@ -302,7 +302,7 @@ export default {
         if (CUR.NTYPE == 2) {
           if (CUR.SCONST) {
             this.$router.push(
-              `/cabinet/${this.params.page.idModule}/0/${CUR.SCONST}/0`
+              `/cabinet/${this.params.page.idModule}/0/${CUR.SCONST}/0?ref=${this.$route.fullPath}`
             );
           } else {
             throw new Error(`В опции кнопки не указан идентификатор меню."`);
