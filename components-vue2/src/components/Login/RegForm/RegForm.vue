@@ -882,6 +882,42 @@ export default {
 
         this.registrationInProcess = false;
         const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+        const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
+        const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+
+        if (isInSystemLogin) {
+          this.$bvModal
+            .msgBoxConfirm(
+              "Личный кабинет с указанным номером телефона уже существует.",
+              {
+                title: "Номер уже зарегистрирован",
+                size: "md",
+                okVariant: "secondary",
+                cancelVariant: "primary",
+                okTitle: "Войти в систему",
+                cancelTitle: "Восстановить пароль",
+                footerClass: "p-2",
+                hideHeaderClose: false,
+                centered: true,
+                modalClass: this.myclass,
+                autoFocusButton: "ok",
+              }
+            )
+            .then((value) => {
+              if (value === true) {
+                if (isInSystemLogin) {
+                  window.location.href = "/login/password-recovery";
+                }
+                if (isExpiredLogin) {
+                  this.isSendCode = true;
+                }
+              }
+              if (value === false) {
+                window.location.href = "/feedback";
+              }
+              this.loading = false;
+            });
+        }
         if (isErrorList === false) {
           const h = this.$createElement;
           const titleVNode = h("div", {

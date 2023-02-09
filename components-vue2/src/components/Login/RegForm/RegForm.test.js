@@ -1014,5 +1014,139 @@ describe("RegForm", () => {
     expect(window.location.href).toEqual("/login");
   });
 
-  ///
+  it("должен предупреждать если номер существует при нажатии на кнопку 'Получить код'", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Казимиров");
+
+    const patronymicComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const patronymicInput = patronymicComponent.find("input");
+    await patronymicInput.setValue("Александрович");
+
+    const nameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const nameInput = nameComponent.find("input");
+    await nameInput.setValue("Андрей");
+
+    const dataPickerInput = wrapper
+      .findComponent("#birthday-picker")
+      .find("input");
+
+    dataPickerInput.setValue("27.06.1989");
+    dataPickerInput.trigger("change");
+
+    await wrapper.find("#password1").setValue("Carter911");
+    await wrapper.find("#password2").setValue("Carter911");
+    await wrapper.find("#phone").setValue("+7(901)-000-10-00");
+    await wrapper.find("#agreement-check-box").setChecked(true);
+
+    const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
+    const spyBvModal = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
+
+    axios.post.mockReturnValue({
+      data: [{ MESSAGE_CODE: 201 }],
+    });
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+
+    expect(spyBvModal).toHaveBeenCalled();
+  });
+
+  it("Всплывающее окно при нажатии на на кнопку 'Зарегистрироваться' (номер уже зарегистрирован)", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+
+    axios.post.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [
+          {
+            MESSAGE: "Введите код подтверждения из SMS",
+            MESSAGE_CODE: 200,
+            GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+          },
+        ],
+        status: 200,
+      })
+    );
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Казимиров");
+    expect(surnameComponent.classes()).toContain("is-valid");
+
+    const patronymicComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const patronymicInput = patronymicComponent.find("input");
+    await patronymicInput.setValue("Александрович");
+
+    const nameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const nameInput = nameComponent.find("input");
+    await nameInput.setValue("Андрей");
+
+    const dataPickerInput = wrapper
+      .findComponent("#birthday-picker")
+      .find("input");
+
+    dataPickerInput.setValue("27.06.1989");
+    dataPickerInput.trigger("change");
+
+    await wrapper.find("#password1").setValue("Aa1234");
+    expect(wrapper.find("#password1").classes()).toContain("is-valid");
+
+    await wrapper.find("#password2").setValue("Aa1234");
+    expect(wrapper.find("#password2").classes()).toContain("is-valid");
+
+    await wrapper.find("#agreement-check-box").setChecked(true);
+
+    await wrapper.find("#phone").setValue("+7(985)-686-81-48");
+
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#sms-confirm").setValue("1111");
+
+    const bvModal = jest.spyOn(wrapper.vm.$bvModal, "msgBoxConfirm");
+
+    axios.post.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [
+          {
+            MESSAGE_CODE: 201,
+          },
+        ],
+        status: 200,
+      })
+    );
+    await wrapper.find("#btn_chek_registration_lk").trigger("click");
+
+    expect(bvModal).toHaveBeenCalled();
+  });
 });
