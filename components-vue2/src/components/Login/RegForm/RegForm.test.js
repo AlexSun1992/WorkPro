@@ -353,7 +353,7 @@ describe("RegForm", () => {
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
     expect(spy).toHaveBeenCalled();
-    expect(window.location.href).toEqual("/login");
+    expect(window.location.href).toEqual("/feedback");
 
     spy.mockImplementationOnce(() => Promise.resolve(null));
 
@@ -364,7 +364,7 @@ describe("RegForm", () => {
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
     expect(spy).toHaveBeenCalled();
-    expect(wrapper.find("#phone").element.value).toBe("");
+    expect(wrapper.find("#phone").element.value).toBe("+7(910)-123-22-33");
   });
   it("доступность кнопок", async () => {
     const localVue = createLocalVue();

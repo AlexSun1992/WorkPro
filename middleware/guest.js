@@ -15,7 +15,11 @@ export default async function ({
   if (app.$cookiz.get("auth._token.local")) {
     await store.dispatch("menu/fetchMenuById", route.params);
     if (
-      isBlackListOfRoute(route.params.idModule, route.params.idParent) === true
+      isBlackListOfRoute(
+        route.params.idModule,
+        route.params.idParent,
+        route.params.idItem
+      ) === true
     ) {
       redirect("/error");
     }

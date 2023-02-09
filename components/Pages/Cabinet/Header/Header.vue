@@ -135,8 +135,8 @@ export default {
       });
       const getUrl = getToken.data.find((item) => item.SURL);
       getUrl
-        ? (window.location.href = getUrl.SURL)
-        : (window.location.href = "https://client.reso.ru/");
+        ? window.open(getUrl.SURL, "_blank")
+        : window.open("https://client.reso.ru/", "_blank");
     },
 
     toggleClassActive() {
