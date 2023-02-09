@@ -1095,28 +1095,6 @@ describe("RegForm", () => {
   });
   ///
 
-  // этот тест без заполнения формы не проходит
-  // it.only("должен предупреждать если номер существует при нажатии на кнопку 'Получить код'", async () => {
-  //   const localVue = createLocalVue();
-  //   localVue.use(BootstrapVue);
-  //   const wrapper = mount(RegForm, {
-  //     localVue,
-  //     mocks: {
-  //       $LogEvent: (v) => v,
-  //     },
-  //   });
-  //   axios.post.mockReturnValue({
-  //     data: [{ MESSAGE_CODE: 201 }],
-  //   });
-  //   const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
-  //   const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
-  //   await wrapper.vm.$nextTick();
-  //   await wrapper.vm.$nextTick();
-  //   expect(spy).toHaveBeenCalled();
-  // });
-  ///
-  //
-
   it.only("Всплывающее окно при нажатии на на кнопку 'Зарегистрироваться'", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
@@ -1238,7 +1216,6 @@ describe("RegForm", () => {
       },
       { headers: { "X-Application": "VueJS", recaptcha: undefined } }
     );
-
     // Добавил инверсию чтобы проходил тест
     expect(spy).not.toHaveBeenCalled();
   });

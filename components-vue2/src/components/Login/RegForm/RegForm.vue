@@ -882,6 +882,11 @@ export default {
 
         this.registrationInProcess = false;
         const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+
+        if (isErrorList) {
+          console.log("!!!");
+        }
+
         if (isErrorList === false) {
           const h = this.$createElement;
           const titleVNode = h("div", {
