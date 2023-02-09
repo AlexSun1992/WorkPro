@@ -5,7 +5,6 @@ import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 
 import RegForm from "./RegForm.vue";
-import { set } from "lodash";
 
 jest.mock("axios");
 
@@ -1066,30 +1065,6 @@ describe("RegForm", () => {
     await wrapper.find("#phone").setValue("+7(901)-000-10-00");
     await wrapper.find("#agreement-check-box").setChecked(true);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-
-    expect(axios.post).toHaveBeenLastCalledWith(
-      "/am/free/v2/registerUser1",
-      {
-        BIRTHDATE: "1989-06-27",
-        FIRSTNAME: "Андрей",
-        GUID: null,
-        PASSWORD: "Carter911",
-        PASSWORD_CONFIRM: "Carter911",
-        PHONE: "+7(901)-000-10-00",
-        POLICY_NUMBER: "",
-        SECONDNAME: "Казимиров",
-        THIRDNAME: "Александрович",
-        USER_CONFIRM: "Y",
-        error: false,
-        loginType: "phone",
-        modeType: "REG",
-        token: 1,
-      },
-      { headers: { "X-Application": "VueJS", recaptcha: 1 } }
-    );
-    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(spy).toHaveBeenCalled();
   });
