@@ -91,6 +91,7 @@ export default {
           itemId: this.action.NITEM,
           body: this.body,
         });
+
         if (this.action?.LREFRESH) {
           this.$emit("update");
         } else {
