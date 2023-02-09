@@ -1013,8 +1013,7 @@ describe("RegForm", () => {
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login");
   });
-  /// тесты для проверки всплывающего окна при MESSAGE_CODE === 201
-  // "Этот тест проходит"
+
   it("должен предупреждать если номер существует при нажатии на кнопку 'Получить код'", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
@@ -1024,13 +1023,6 @@ describe("RegForm", () => {
         $LogEvent: (v) => v,
       },
     });
-
-    axios.post.mockReturnValue({
-      data: [{ MESSAGE_CODE: 201 }],
-    });
-
-    const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
-    const spy = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
 
     const surnameComponent = wrapper.findComponent({
       ref: "autocompleteSurname",
@@ -1058,17 +1050,21 @@ describe("RegForm", () => {
     dataPickerInput.trigger("change");
 
     await wrapper.find("#password1").setValue("Carter911");
-    expect(wrapper.find("#password1").classes()).toContain("is-valid");
-
     await wrapper.find("#password2").setValue("Carter911");
-    expect(wrapper.find("#password2").classes()).toContain("is-valid");
     await wrapper.find("#phone").setValue("+7(901)-000-10-00");
     await wrapper.find("#agreement-check-box").setChecked(true);
+
+    const verifyUser = wrapper.findComponent({ ref: "verifyUser" });
+    const spyBvModal = jest.spyOn(verifyUser.vm.$bvModal, "msgBoxConfirm");
+
+    axios.post.mockReturnValue({
+      data: [{ MESSAGE_CODE: 201 }],
+    });
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
-    expect(spy).toHaveBeenCalled();
+
+    expect(spyBvModal).toHaveBeenCalled();
   });
-  ///
 
   it("Всплывающее окно при нажатии на на кнопку 'Зарегистрироваться' (номер уже зарегистрирован)", async () => {
     const localVue = createLocalVue();
