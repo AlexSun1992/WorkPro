@@ -13,6 +13,18 @@ const BLACK_LIST_ROUTES = [
   { idModule: 55, idItem: 737 },
   { idModule: 55, idItem: 757 },
   { idModule: 55, idItem: 739 },
+  { idModule: 55, idItem: 960 },
+  { idModule: 55, idItem: 122 },
+  { idModule: 55, idItem: 123 },
+  { idModule: 55, idItem: 748 },
+  { idModule: 55, idItem: 666 },
+  { idModule: 55, idItem: 765 },
+  { idModule: 55, idItem: 777 },
+  { idModule: 55, idItem: 800 },
+  { idModule: 55, idItem: 801 },
+  { idModule: 55, idItem: 802 },
+  { idModule: 55, idItem: 1 },
+  { idModule: 55, idItem: 2 },
 ];
 
 const WHITE_LIST_MODULES = [55];
