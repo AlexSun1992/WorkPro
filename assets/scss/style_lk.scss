@@ -4436,3 +4436,11 @@ input:disabled,
   color: #c3c3c3 !important;
   pointer-events: none;
 }
+.mt-checkbox_hl {
+  margin-top: 43px;
+}
+@media (max-width: 992px) {
+  .mt-checkbox_hl {
+    margin-top: 1rem;
+  }
+}
