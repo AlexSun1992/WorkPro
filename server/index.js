@@ -23,6 +23,7 @@ async function start() {
 
   // Give nuxt middleware to express
   app.use(nuxt.render);
+  app.disable("x-powered-by");
 
   // Listen the server
   app.listen(port, host);
