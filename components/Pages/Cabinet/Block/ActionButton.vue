@@ -91,6 +91,7 @@ export default {
           itemId: this.action.NITEM,
           body: this.body,
         });
+
         if (this.action?.LREFRESH) {
           this.$emit("update");
         } else {
@@ -125,11 +126,7 @@ export default {
         if (result?.POUTVALUE) {
           if (result?.POUTVALUE.includes("/")) {
             if (result?.POUTVALUE.includes("cabinet")) {
-              this.$router.push(
-                `${new URL(result?.POUTVALUE).pathname}?ref=${
-                  this.$route.fullPath
-                }`
-              );
+              this.$router.push(`${new URL(result?.POUTVALUE).pathname}`);
             } else {
               // Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
               setTimeout(() => {

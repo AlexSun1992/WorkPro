@@ -317,7 +317,7 @@ export default {
               this.isSendCode = false;
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
+                idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "EMAIL"
@@ -339,7 +339,7 @@ export default {
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
+                idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "EMAIL"
@@ -382,7 +382,7 @@ export default {
               this.isSendCode = false;
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
+                idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "EMAIL"
@@ -468,7 +468,7 @@ export default {
               ) ?? "Неизвестная ошибка";
             this.$LogEvent({
               formName: "VerifyUser errorMessage",
-              idEventType: this.loginType ? 155 : 162,
+              iidEventType: this.loginType === "phone" ? 153 : 164,
               controlName: "VerifyUser.vue",
               message: `Показало сообщение об ошибке на ${
                 this.loginType === "phone" ? "номере" : "EMAIL"
@@ -617,7 +617,7 @@ export default {
       );
       this.$LogEvent({
         formName: "VerifyUser errorMessage",
-        idEventType: this.loginType ? 155 : 162,
+        idEventType: this.loginType === "phone" ? 153 : 164,
         controlName: "VerifyUser.vue",
         message: `Показало сообщение об ошибке на ${
           this.loginType === "phone" ? "номере" : "EMAIL"
