@@ -4457,7 +4457,20 @@ i.dropdown.icon {
 }
 .ui.fluid.search.dropdown .text {
   padding: 18px 35px 18px 20px;
+  border: 1px solid #c3c3c3;
+  border-radius: 15px !important;
+  height: 54px;
+  cursor: pointer;
+}
+
+.ui.fluid.search.dropdown:hover .text,
+.autocomplete-input:focus,
+.autocomplete-input[aria-expanded="true"] {
+  background-color: #fff;
+  outline: none;
+  box-shadow: none;
   border: 1px solid #686868;
+  border-radius: 15px !important;
 }
 .ui.fluid.search.dropdown.active .menu.visible {
   margin: 0;
@@ -4469,7 +4482,14 @@ i.dropdown.icon {
   list-style: none;
   box-shadow: 0 2px 2px rgb(0 0 0 / 16%);
   margin-top: 4px !important;
-  border-radius: 8px !important;
+  border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.12) !important;
   width: 100%;
+}
+
+.autocomplete[data-position="above"] .autocomplete-result-list {
+  margin-bottom: 7px;
+  border-bottom-color: transparent;
+  border-radius: 8px;
+  padding-top: 0px;
 }
