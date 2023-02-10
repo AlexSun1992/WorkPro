@@ -409,7 +409,6 @@ export default {
             centered: true,
           }
         ).then((res) => {
-          console.log("confirm result is ", res);
           return res;
         }).catch((err) => {
           console.error(err);
@@ -468,6 +467,7 @@ export default {
               relId: this.rel,
               rowId: this.cardId,
               body: this.$store.getters["data_card/getActionParams"],
+              zone: this.zone,
             }
           );
           if (response?.data) {

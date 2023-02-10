@@ -326,13 +326,16 @@ router.post(
         mobile2ServiceInstance.defaults.headers.common.Authorization =
           req.headers.authorization;
       } else {
-        if (req.cookies) {
-          mobile2ServiceInstance.defaults.headers.common.Authorization =
-            req.cookies["auth._token.local"];
+        if (req.cookies && req.cookies["auth._token.local"]) {
+            mobile2ServiceInstance.defaults.headers.common.Authorization =
+              req.cookies["auth._token.local"];
         }
       }
       const body = formConverter.save(req.body);
-      const url = `${consts.ACTIONEXEC}/${req.params.rowId}/${
+      
+      const url = `${
+        req.query.zone === "free" ? consts.FREEACTIONEXEC : consts.ACTIONEXEC
+      }/${req.params.rowId}/${
         req.params.actionId
       }${req.params.relId !== "undefined" ? `?rel=${req.params.relId}&` : "?"}${
         req.params.relActionId !== "undefined"

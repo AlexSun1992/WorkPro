@@ -14,6 +14,7 @@ const DATALIST = `/am/main/${VER}/datalist`;
 const FILTER = `/am/main/${VER}/filter`;
 const ACTIONPARAM = `/am/main/${VER}/actionparam`;
 const ACTIONEXEC = `/am/main/${VER}/actionexec`;
+const FREEACTIONEXEC = `/am/free/${VER}/actionexec`;
 const ONETOMANYDATA = `/am/main/${VER}/one2manydata`;
 const CHATS = `/am/main/${VER}/chat/data/chats`;
 const MESSAGESCHAT = `/am/main/${VER}/chat/data/messageschat`;
@@ -46,6 +47,7 @@ export default {
   FILTER: FILTER,
   ACTIONPARAM: ACTIONPARAM,
   ACTIONEXEC: ACTIONEXEC,
+  FREEACTIONEXEC: FREEACTIONEXEC, 
   ONETOMANYDATA: ONETOMANYDATA,
   CHATS: CHATS,
   MESSAGESCHAT: MESSAGESCHAT,
