@@ -4444,3 +4444,7 @@ input:disabled,
     margin-top: 1rem;
   }
 }
+
+input.autocomplete-input {
+  background: url(/img/chevron-down.svg) right 16px center no-repeat;
+}
