@@ -374,9 +374,9 @@ export default {
               getResponseMessageCodeErr,
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
-                idEventType: this.loginType === "phone" ? 153 : 164,
+                idEventType: this.loginType === "phone" ? 294 : 295,
                 controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
+                message: `Показ капчи через ${
                   this.loginType === "phone" ? "номере" : "EMAIL"
                 }"`,
                 timeUser: new Date(),
