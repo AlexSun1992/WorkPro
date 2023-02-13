@@ -473,7 +473,10 @@ export default {
           if (response?.data) {
             if (response.data.POUTVALUE) {
               if (response.data.POUTVALUE.includes("/")) {
-                window.open(response.data.POUTVALUE);
+                window.open(
+                  response.data.POUTVALUE,
+                  actionExecute?.LCURWINDOW ? "_self" : "_blank"
+                );
               }
             }
           }
