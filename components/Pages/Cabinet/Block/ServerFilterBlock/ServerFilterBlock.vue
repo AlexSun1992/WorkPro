@@ -239,15 +239,13 @@ export default {
       }
 
       if (this.list.length > 1 && this.isShowAsTemplate === false) {
-        this.InsuredPersonsList = this.list;
-      }
+        const getDefaultItem = this.list.find(
+          (item) => item.data?.LDEFAULT === true
+        );
 
-      if (
-        this.list.length > 1 &&
-        this.isShowAsTemplate === true &&
-        this.isAutoOpen
-      ) {
-        this.openList();
+        if (getDefaultItem) {
+          this.firstValueFromList = getDefaultItem;
+        }
       }
 
       if (this.list.length === 1 && this.isShowAsTemplate === true) {

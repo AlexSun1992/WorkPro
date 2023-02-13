@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
 export default {
   name: "ActionButton",
   props: {
@@ -90,6 +91,7 @@ export default {
           itemId: this.action.NITEM,
           body: this.body,
         });
+
         if (this.action?.LREFRESH) {
           this.$emit("update");
         } else {
@@ -104,7 +106,11 @@ export default {
         });
         return result;
       } catch (err) {
-        console.error(err);
+        this.$bvToast.toast(getErrorMessage(err.response.data.MESSAGE), {
+          title: "",
+          variant: "danger",
+          solid: true,
+        });
       }
       return null;
     },
@@ -120,11 +126,7 @@ export default {
         if (result?.POUTVALUE) {
           if (result?.POUTVALUE.includes("/")) {
             if (result?.POUTVALUE.includes("cabinet")) {
-              this.$router.push(
-                `${new URL(result?.POUTVALUE).pathname}?ref=${
-                  this.$route.fullPath
-                }`
-              );
+              this.$router.push(`${new URL(result?.POUTVALUE).pathname}`);
             } else {
               // Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
               setTimeout(() => {
@@ -145,7 +147,7 @@ export default {
     action: {
       get() {
         const action = this.actions.find(
-          (a) => a.ID === parseInt(this.actionId)
+          (a) => a.ID === parseInt(this.actionId, 10)
         );
         return action || null;
       },

@@ -16,7 +16,6 @@
           :disabled="disabled"
           @click="loginTouchesCount = 2"
           autocomplete="off"
-          :tabindex="tabIndex[1]"
         ></b-form-input>
         <b-form-invalid-feedback :state="validateInput(loginType, isUserBlured)"
           >Обязательное поле</b-form-invalid-feedback
@@ -54,9 +53,8 @@
         :disabled="isDisabledButtonGetCode"
         @click="getCode()"
         variant="secondary"
-        class="btn-small w-100 w-lg-auto"
+        class="btn-small w-100 p-0"
         id="btn_code_verification_lk"
-        :tabindex="tabIndex[2]"
       >
         <span v-if="!isSendCode">Получить код</span>
         <template v-if="isSendCode"
@@ -130,7 +128,6 @@ export default {
     "label",
     "context",
     "textMessage",
-    "tabIndex",
     "error",
     "isError",
     "isCodeFieldValid",
@@ -207,6 +204,7 @@ export default {
         .filter((item) => item.style.visibility === "visible");
       if (visibleCaptchas.length === 0) {
         this.loading = false;
+        this.$emit("sendingCode", false);
       }
     },
 
@@ -319,7 +317,7 @@ export default {
               this.isSendCode = false;
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
+                idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "EMAIL"
@@ -341,7 +339,7 @@ export default {
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
+                idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "EMAIL"
@@ -384,7 +382,7 @@ export default {
               this.isSendCode = false;
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
+                idEventType: this.loginType === "phone" ? 153 : 164,
                 controlName: "VerifyUser.vue",
                 message: `Показало сообщение об ошибке на ${
                   this.loginType === "phone" ? "номере" : "EMAIL"
@@ -420,7 +418,7 @@ export default {
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "В Личном кабинете уже есть профиль с данным номером телефона",
+                  "Личный кабинет с указанным номером телефона уже существует.",
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
@@ -428,8 +426,8 @@ export default {
                     cancelVariant: "primary",
                     okTitle: isInSystemLogin
                       ? "Восстановить пароль"
-                      : "Продолжить регистрацию",
-                    cancelTitle: "Войти в систему",
+                      : "Обратитесь в техподдержку",
+                    cancelTitle: "Обратитесь в техподдержку",
                     footerClass: "p-2",
                     hideHeaderClose: false,
                     centered: true,
@@ -447,10 +445,7 @@ export default {
                     }
                   }
                   if (value === false) {
-                    window.location.href = "/login";
-                  }
-                  if (value === null) {
-                    this.changeNumber();
+                    window.location.href = "/feedback";
                   }
                   this.loading = false;
                 })
@@ -473,7 +468,7 @@ export default {
               ) ?? "Неизвестная ошибка";
             this.$LogEvent({
               formName: "VerifyUser errorMessage",
-              idEventType: this.loginType ? 155 : 162,
+              iidEventType: this.loginType === "phone" ? 153 : 164,
               controlName: "VerifyUser.vue",
               message: `Показало сообщение об ошибке на ${
                 this.loginType === "phone" ? "номере" : "EMAIL"
@@ -622,7 +617,7 @@ export default {
       );
       this.$LogEvent({
         formName: "VerifyUser errorMessage",
-        idEventType: this.loginType ? 155 : 162,
+        idEventType: this.loginType === "phone" ? 153 : 164,
         controlName: "VerifyUser.vue",
         message: `Показало сообщение об ошибке на ${
           this.loginType === "phone" ? "номере" : "EMAIL"

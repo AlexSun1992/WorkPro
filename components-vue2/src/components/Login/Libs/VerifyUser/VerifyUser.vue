@@ -321,6 +321,15 @@ export default {
       }
     },
     async getCode(token = null) {
+      this.$LogEvent({
+        formName: "VerifyUser errorMessage",
+        idEventType: this.loginType === "phone" ? 155 : 162,
+        controlName: "VerifyUser.vue",
+        message: `Нажал на кнопку Получить код на ${
+          this.loginType === "phone" ? "номере" : "EMAIL"
+        }"`,
+        timeUser: new Date(),
+      });
       this.v.code.$model = null;
       this.codeFieldShown = false;
       this.isPhoneChanged = false;
@@ -362,22 +371,22 @@ export default {
             const isAlertShown = isAlertShouldBeShown(
               this.modeType,
               this.loginType,
-              getResponseMessageCodeErr
+              getResponseMessageCodeErr,
+              this.$LogEvent({
+                formName: "VerifyUser errorMessage",
+                idEventType: this.loginType === "phone" ? 294 : 295,
+                controlName: "VerifyUser.vue",
+                message: `Показ капчи через ${
+                  this.loginType === "phone" ? "номере" : "EMAIL"
+                }"`,
+                timeUser: new Date(),
+              })
             );
             if (isAlertShown) {
               this.codeFieldShown = false;
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
               this.isSendCode = false;
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
-                controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
-                timeUser: new Date(),
-              });
               return;
             }
 
@@ -391,15 +400,6 @@ export default {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
-                controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
-                timeUser: new Date(),
-              });
               return;
             }
 
@@ -432,15 +432,6 @@ export default {
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
               this.isSendCode = false;
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
-                idEventType: this.loginType ? 155 : 162,
-                controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
-                timeUser: new Date(),
-              });
               return;
             }
             if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
@@ -469,7 +460,7 @@ export default {
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "В Личном кабинете уже есть профиль с данным номером телефона",
+                  `Личный кабинет с указанным номером телефона уже существует.`,
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
@@ -477,8 +468,8 @@ export default {
                     cancelVariant: "primary",
                     okTitle: isInSystemLogin
                       ? "Восстановить пароль"
-                      : "Продолжить регистрацию",
-                    cancelTitle: "Войти в систему",
+                      : "Обратитесь в техподдержку",
+                    cancelTitle: "Обратитесь в техподдержку",
                     footerClass: "p-2",
                     hideHeaderClose: false,
                     centered: true,
@@ -496,7 +487,7 @@ export default {
                     }
                   }
                   if (value === false) {
-                    window.location.href = "/login";
+                    window.location.href = "/feedback";
                   }
                   if (value === null) {
                     this.changeNumber();
@@ -505,6 +496,15 @@ export default {
                 })
                 .catch((err) => {
                   console.log(err);
+                  this.$LogEvent({
+                    formName: "VerifyUser errorMessage",
+                    idEventType: this.loginType === "phone" ? 153 : 164,
+                    controlName: "VerifyUser.vue",
+                    message: `Показало сообщение об ошибке на ${
+                      this.loginType === "phone" ? "номере" : "EMAIL"
+                    }"`,
+                    timeUser: new Date(),
+                  });
                 });
             } else {
               this.codeFieldShown = true;
@@ -519,34 +519,22 @@ export default {
                 /^\[|\]$/g,
                 ""
               ) ?? "Неизвестная ошибка";
-            this.$LogEvent({
-              formName: "VerifyUser errorMessage",
-              idEventType: this.loginType ? 155 : 162,
-              controlName: "VerifyUser.vue",
-              message: `Показало сообщение об ошибке на ${
-                this.loginType === "phone" ? "номере" : "EMAIL"
-              }"`,
-              timeUser: new Date(),
-            });
           }
         } else {
           this.isUserDisabled = false;
         }
       } catch (e) {
         this.loading = false;
-        console.log(e);
-      } finally {
-        this.$emit("sendingCode", false);
+        this.$LogEvent({
+          formName: "VerifyUser errorMessage",
+          idEventType: this.loginType === "phone" ? 153 : 164,
+          controlName: "VerifyUser.vue",
+          message: `Показало сообщение об ошибке на ${
+            this.loginType === "phone" ? "номере" : "EMAIL"
+          }"`,
+          timeUser: new Date(),
+        });
       }
-      this.$LogEvent({
-        formName: "VerifyUser",
-        idEventType: this.loginType === "phone" ? 155 : 162,
-        controlName: "PasswordRecoveryForm.vue",
-        message: `Нажал на кнопку "Получить код через ${
-          this.loginType === "phone" ? "номер" : "EMAIL"
-        }"`,
-        timeUser: new Date(),
-      });
     },
 
     getCodeParams() {
@@ -665,15 +653,6 @@ export default {
       const isPhoneExist = value.includes(
         "В Личном кабинете отсутствует профиль с данным номером телефона"
       );
-      this.$LogEvent({
-        formName: "VerifyUser errorMessage",
-        idEventType: this.loginType ? 155 : 162,
-        controlName: "VerifyUser.vue",
-        message: `Показало сообщение об ошибке на ${
-          this.loginType === "phone" ? "номере" : "EMAIL"
-        }"`,
-        timeUser: new Date(),
-      });
       const isMailExist = value.includes(
         "На указанный e-mail отсутствует зарегистрированная уч.запись"
       );

@@ -29,9 +29,11 @@
               data-testid="regFamily"
             />
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
-            <b-form-invalid-feedback :state="isSurnameValidSignsErrorMessage"
+            <b-form-invalid-feedback
+              :state="isSurnameValidSignsErrorMessage"
+              data-testid="regSurnameFeedback"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
             >
@@ -51,7 +53,7 @@
               data-testid="regName"
             />
             <b-form-invalid-feedback :state="isNameErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isNameValidSignsErrorMessage"
               >Просьба указать ФИО в русской
@@ -77,7 +79,7 @@
               data-testid="regPatronymic"
             />
             <b-form-invalid-feedback :state="isPatronymicErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
@@ -96,10 +98,10 @@
             />
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-4 mt-lg-3 pt-lg-4">
+        <div class="col-12 col-lg-4 mt-3">
           <b-form-checkbox
             id="policy-exist-check-box"
-            class="checkbox-switcher mt-3 pt-1"
+            class="checkbox-switcher cs-near-l_input-lg"
             :disabled="isDisabledForm"
             v-model="isPolicyExist"
             :value="!isPolicyExist"
@@ -123,7 +125,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-invalid-feedback :state="isStatePolicyErrorMessage"
-            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+            >Обязательное поле</b-form-invalid-feedback
           >
         </div>
         <div class="col-12 mt-4 mt-lg-0">
@@ -191,19 +193,29 @@
             <a
               href="/regulations/personal-agreement-2.html"
               class="reg_agreement"
+              target="_blank"
               >согласие</a
             >
             на обработку своих персональных данных. С
-            <a href="/regulations/safety-of-personal.html" class="reg_agreement"
+            <a
+              href="/regulations/safety-of-personal.html"
+              class="reg_agreement"
+              target="_blank"
               >политикой обеспечения безопасности персональных данных</a
             >
             САО “РЕСО-Гарантия” ознакомлен. <br />Даю
             <a
               href="https://client.reso.ru/wp-reso-ru/products/auto/osago/addition/act.xhtml"
               class="reg_agreement"
+              target="_blank"
               >согласие</a
             >
             на email и СМС рассылку.
+            <b-form-invalid-feedback
+              :state="!isErrorMessageAgreement || isAgreement"
+              >Необходимо согласие с обработкой персональных
+              данных</b-form-invalid-feedback
+            >
           </b-form-checkbox>
         </div>
       </div>
@@ -310,6 +322,7 @@ export default {
       isPatronymicNotExist: false,
       isPolicyExist: false,
       isAgreement: false,
+      isErrorMessageAgreement: false,
       conformation: false,
       show: true,
       password2: "",
@@ -377,7 +390,7 @@ export default {
       },
       code: {
         required,
-        minLength: minLength(5),
+        minLength: minLength(4),
       },
       password: {
         required,
@@ -406,9 +419,9 @@ export default {
     },
     formData() {
       const params = {
-        SECONDNAME: this.family,
-        FIRSTNAME: this.name,
-        THIRDNAME: this.patronymic,
+        SECONDNAME: this.family.trim(),
+        FIRSTNAME: this.name.trim(),
+        THIRDNAME: this.patronymic.trim(),
         BIRTHDATE: this.$v.form.birthdate.$model
           ? moment(this.$v.form.birthdate.$model, [
               "DD.MM.YYYY",
@@ -624,7 +637,7 @@ export default {
         this.suggestionsHub = [];
       }
       if (input === "") {
-        this.patronymic = null;
+        this.patronymic = input;
         this.patronymicClassHub = [];
         this.isPatronymicErrorMessage = null;
         this.isPatronymicValidSignsErrorMessage = null;
@@ -633,6 +646,14 @@ export default {
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompletePatronymic.value = "";
+          this.patronymicClassHub = [];
+          this.isPatronymicErrorMessage = true;
+          return;
+        }
+
         if (!isInputNotValid) {
           this.patronymic = input;
           this.isPatronymicTouch = true;
@@ -686,15 +707,21 @@ export default {
 
       return fetchedSuggestions;
     },
-    //
 
     // Запрос на подсказки по фамилии
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
-
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompleteSurname.value = "";
+          this.surnameClassHub = [];
+          this.isSurnameErrorMessage = true;
+          return;
+        }
+
         if (!isInputNotValid) {
           this.family = input;
           this.isSurnameErrorMessage = true;
@@ -753,10 +780,17 @@ export default {
     // Запрос на подсказки по именам
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
-
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompleteName.value = "";
+          this.nameClassHub = [];
+          this.isNameErrorMessage = true;
+          return;
+        }
+
         if (!isInputNotValid) {
           this.name = input;
           this.isNameTouch = true;
@@ -821,9 +855,9 @@ export default {
         this.errorMessage = null;
         this.registrationInProcess = true;
         const params = {
-          SECONDNAME: this.family,
-          FIRSTNAME: this.name,
-          THIRDNAME: this.patronymic,
+          SECONDNAME: this.family.trim(),
+          FIRSTNAME: this.name.trim(),
+          THIRDNAME: this.patronymic.trim(),
           BIRTHDATE: moment(this.$v.form.birthdate.$model, [
             "DD.MM.YYYY",
             "YYYY-MM-DD",
@@ -848,6 +882,42 @@ export default {
 
         this.registrationInProcess = false;
         const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+        const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
+        const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+
+        if (isInSystemLogin) {
+          this.$bvModal
+            .msgBoxConfirm(
+              "Личный кабинет с указанным номером телефона уже существует.",
+              {
+                title: "Номер уже зарегистрирован",
+                size: "md",
+                okVariant: "secondary",
+                cancelVariant: "primary",
+                okTitle: "Войти в систему",
+                cancelTitle: "Восстановить пароль",
+                footerClass: "p-2",
+                hideHeaderClose: false,
+                centered: true,
+                modalClass: this.myclass,
+                autoFocusButton: "ok",
+              }
+            )
+            .then((value) => {
+              if (value === true) {
+                if (isInSystemLogin) {
+                  window.location.href = "/login/password-recovery";
+                }
+                if (isExpiredLogin) {
+                  this.isSendCode = true;
+                }
+              }
+              if (value === false) {
+                window.location.href = "/feedback";
+              }
+              this.loading = false;
+            });
+        }
         if (isErrorList === false) {
           const h = this.$createElement;
           const titleVNode = h("div", {
@@ -895,6 +965,10 @@ export default {
 
     async onSubmit(event) {
       try {
+        if (this.isAgreement === false) {
+          this.isErrorMessageAgreement = true;
+        }
+
         this.$refs.verifyUser.loginTouchesCount = 3;
         this.$v.form.$touch();
         this.isErrorMessage = false;
@@ -909,12 +983,9 @@ export default {
           this.isNameErrorMessage = false;
         }
 
-        if (
-          this.patronymicClassHub.length === 0 &&
-          this.isPatronymicNotExist === false
-        ) {
-          this.patronymicClassHub.push("is-invalid");
-          this.isPatronymicErrorMessage = false;
+        if (this.policyClassHub.length === 0 && this.isPolicyExist === true) {
+          this.isStatePolicyErrorMessage = false;
+          this.policyClassHub.push("is-invalid");
         }
 
         if (
