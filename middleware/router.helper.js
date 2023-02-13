@@ -23,6 +23,7 @@ const BLACK_LIST_ROUTES = [
   { idModule: 55, idItem: 800 },
   { idModule: 55, idItem: 801 },
   { idModule: 55, idItem: 802 },
+  { idModule: 55, idItem: 967 },
   { idModule: 55, idItem: 1 },
   { idModule: 55, idItem: 2 },
 ];
