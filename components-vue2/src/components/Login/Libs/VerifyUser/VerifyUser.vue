@@ -252,6 +252,15 @@ export default {
         .filter((item) => item.style.visibility === "visible");
       if (visibleCaptchas.length === 0) {
         this.loading = false;
+        // this.$LogEvent({
+        //   formName: "VerifyUser errorMessage",
+        //   idEventType: this.loginType === "phone" ? 153 : 164,
+        //   controlName: "VerifyUser.vue",
+        //   message: `Показало капчу через ${
+        //     this.loginType === "phone" ? "номере" : "EMAIL"
+        //   }"`,
+        //   timeUser: new Date(),
+        // });
       }
     },
 
@@ -371,21 +380,25 @@ export default {
             const isAlertShown = isAlertShouldBeShown(
               this.modeType,
               this.loginType,
-              getResponseMessageCodeErr,
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
-                idEventType: this.loginType === "phone" ? 294 : 295,
-                controlName: "VerifyUser.vue",
-                message: `Показ капчи через ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
-                timeUser: new Date(),
-              })
+              getResponseMessageCodeErr
             );
             if (isAlertShown) {
+              // console.log(
+              //   getResponseMessageCodeErr,
+              //   "getResponseMessageCodeErr"
+              // );
               this.codeFieldShown = false;
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
+              // this.$LogEvent({
+              //   formName: "VerifyUser errorMessage",
+              //   idEventType: this.loginType === "phone" ? 153 : 164,
+              //   controlName: "VerifyUser.vue",
+              //   message: `Показало сообщение об ошибке на ${
+              //     this.loginType === "phone" ? "номере" : "EMAIL"
+              //   }"`,
+              //   timeUser: new Date(),
+              // });
               this.isSendCode = false;
               return;
             }
@@ -394,6 +407,18 @@ export default {
               this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
+            }
+
+            if (response1.data[0].MESSAGE_CODE === 105) {
+              this.$LogEvent({
+                formName: "VerifyUser errorMessage",
+                idEventType: this.loginType === "phone" ? 153 : 164,
+                controlName: "VerifyUser.vue",
+                message: `Показало сообщение об ошибке на ${
+                  this.loginType === "phone" ? "номере" : "EMAIL"
+                }"`,
+                timeUser: new Date(),
+              });
             }
 
             if (response1.data.STATUS === 500) {
@@ -408,6 +433,15 @@ export default {
               return;
             }
           } else {
+            this.$LogEvent({
+              formName: "VerifyUser errorMessage",
+              idEventType: this.loginType === "phone" ? 153 : 164,
+              controlName: "VerifyUser.vue",
+              message: `Показало капчу через ${
+                this.loginType === "phone" ? "номере" : "EMAIL"
+              }"`,
+              timeUser: new Date(),
+            });
             params = {
               ...params,
               token,
@@ -428,9 +462,22 @@ export default {
               getResponseMessageCodeErr
             );
             if (isAlertShown) {
+              // console.log(
+              //   getResponseMessageCodeErr,
+              //   "getResponseMessageCodeErr2"
+              // );
               this.codeFieldShown = false;
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
+              this.$LogEvent({
+                formName: "VerifyUser errorMessage",
+                idEventType: this.loginType === "phone" ? 153 : 164,
+                controlName: "VerifyUser.vue",
+                message: `Показало сообщение об ошибке на ${
+                  this.loginType === "phone" ? "номере" : "EMAIL"
+                }"`,
+                timeUser: new Date(),
+              });
               this.isSendCode = false;
               return;
             }
@@ -513,6 +560,15 @@ export default {
               this.$emit("sendCode", true);
             }
           } else if (isErrorList === true) {
+            this.$LogEvent({
+              formName: "VerifyUser errorMessage",
+              idEventType: this.loginType === "phone" ? 153 : 164,
+              controlName: "VerifyUser.vue",
+              message: `Показало сообщение об ошибке на ${
+                this.loginType === "phone" ? "номере" : "EMAIL"
+              }"`,
+              timeUser: new Date(),
+            });
             if (response?.data[0]?.ERRORCODE === 106) return;
             this.errorMessage =
               response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
@@ -524,6 +580,7 @@ export default {
           this.isUserDisabled = false;
         }
       } catch (e) {
+        console.log(e);
         this.loading = false;
         this.$LogEvent({
           formName: "VerifyUser errorMessage",
