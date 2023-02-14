@@ -4079,7 +4079,7 @@ h6 {
   .block-policy_small .pay-notification {
     line-height: 32px;
   }
-  .block-policy_small .pay-notification + .title + .description .date {
+  /*.block-policy_small .pay-notification + .title + .description .date {
     top: 90px;
     color: #292929 !important;
     font-weight: 400;
@@ -4087,7 +4087,7 @@ h6 {
   }
   .block-policy_small .pay-notification + .title + .description {
     margin-top: 95px;
-  }
+  }*/
   .block-policy_small .pay-notification + .title + .description .policy-number {
     display: none;
   }
@@ -4099,10 +4099,10 @@ h6 {
   .block-policy_small .date {
     width: calc(100% - 85px);
     text-align: left;
-  }
+  } /*
   .block-policy_small .pay-notification + .title {
     top: 50px;
-  }
+  }*/
 }
 
 .border-block .block-policy_small .pay-notification {
@@ -4340,9 +4340,11 @@ h6 {
     left: 50%;
     top: 55px;
   }
+  .telemed > div,
   .harvestmite > div {
     min-height: 55px;
   }
+  .telemed .step,
   .harvestmite .step {
     position: absolute;
     left: 50%;
@@ -4445,6 +4447,74 @@ input:disabled,
   }
 }
 
-input.autocomplete-input {
-  background: url(/img/chevron-down.svg) right 16px center no-repeat;
+i.dropdown.icon {
+  display: none;
+}
+
+.ui.fluid.search.dropdown {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 15px;
+}
+.ui.fluid.search.dropdown .text {
+  padding: 18px 35px 18px 20px;
+  border: 1px solid #c3c3c3;
+  border-radius: 15px !important;
+  height: 54px;
+  cursor: pointer;
+}
+
+.ui.fluid.search.dropdown:hover .text,
+.autocomplete-input:focus,
+.autocomplete-input[aria-expanded="true"] {
+  background-color: #fff;
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #686868;
+  border-radius: 15px !important;
+}
+.ui.fluid.search.dropdown.active .menu.visible {
+  margin: 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background: #fff;
+  list-style: none;
+  box-shadow: 0 2px 2px rgb(0 0 0 / 16%);
+  margin-top: 4px !important;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  width: 100%;
+}
+
+.autocomplete[data-position="above"] .autocomplete-result-list {
+  margin-bottom: 7px;
+  border-bottom-color: transparent;
+  border-radius: 8px;
+  padding-top: 0px;
+}
+@media (max-width: 992px) {
+  .have-pay_notification:before {
+    top: 60px;
+  }
+  .have-pay_notification .title {
+    top: 70px;
+  }
+  .have-pay_notification .date {
+    top: 40px;
+  }
+  .have-pay_notification:after {
+    height: 100px;
+  }
+  .have-pay_notification .description {
+    margin-top: 95px;
+  }
+  .col-10 .block-policy:before {
+    top: 20px;
+  }
+  .col-10 .have-pay_notification:before {
+    top: 40px;
+  }
 }
