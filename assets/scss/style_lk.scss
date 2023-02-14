@@ -4340,9 +4340,11 @@ h6 {
     left: 50%;
     top: 55px;
   }
+  .telemed > div,
   .harvestmite > div {
     min-height: 55px;
   }
+  .telemed .step,
   .harvestmite .step {
     position: absolute;
     left: 50%;

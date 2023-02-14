@@ -418,16 +418,16 @@ export default {
             ) {
               this.$bvModal
                 .msgBoxConfirm(
-                  "Личный кабинет с указанным номером телефона уже существует.",
+                  "Введённый вами мобильный номер уже есть в системе.",
                   {
                     title: "Номер уже зарегистрирован",
                     size: "md",
                     okVariant: "secondary",
                     cancelVariant: "primary",
                     okTitle: isInSystemLogin
-                      ? "Восстановить пароль"
-                      : "Обратитесь в техподдержку",
-                    cancelTitle: "Обратитесь в техподдержку",
+                      ? "Войти в систему"
+                      : "Восстановить пароль",
+                    cancelTitle: "Восстановить пароль",
                     footerClass: "p-2",
                     hideHeaderClose: false,
                     centered: true,
@@ -438,14 +438,14 @@ export default {
                 .then((value) => {
                   if (value === true) {
                     if (isInSystemLogin) {
-                      window.location.href = "/login/password-recovery";
-                    }
+                      window.location.href = "/login";
+
                     if (isExpiredLogin) {
                       this.isSendCode = true;
                     }
                   }
                   if (value === false) {
-                    window.location.href = "/feedback";
+                    window.location.href = "/login/password-recovery";
                   }
                   this.loading = false;
                 })
