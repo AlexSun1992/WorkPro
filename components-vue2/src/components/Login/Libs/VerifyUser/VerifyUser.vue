@@ -243,6 +243,15 @@ export default {
       }
     },
     async executeRecaptcha() {
+      // this.$LogEvent({
+      //   formName: "VerifyUser errorMessage",
+      //   idEventType: this.loginType === "phone" ? 155 : 162,
+      //   controlName: "VerifyUser.vue",
+      //   message: `Нажал на кнопку Получить код на ${
+      //     this.loginType === "phone" ? "номере" : "EMAIL"
+      //   }"`,
+      //   timeUser: new Date(),
+      // });
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
@@ -250,17 +259,18 @@ export default {
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
+      console.log(visibleCaptchas, " visibleCaptchas");
       if (visibleCaptchas.length === 0) {
         this.loading = false;
-        // this.$LogEvent({
-        //   formName: "VerifyUser errorMessage",
-        //   idEventType: this.loginType === "phone" ? 153 : 164,
-        //   controlName: "VerifyUser.vue",
-        //   message: `Показало капчу через ${
-        //     this.loginType === "phone" ? "номере" : "EMAIL"
-        //   }"`,
-        //   timeUser: new Date(),
-        // });
+        this.$LogEvent({
+          formName: "VerifyUser errorMessage",
+          idEventType: this.loginType === "phone" ? 153 : 164,
+          controlName: "VerifyUser.vue",
+          message: `Показало капчу через ${
+            this.loginType === "phone" ? "номере" : "EMAIL"
+          }"`,
+          timeUser: new Date(),
+        });
       }
     },
 
@@ -329,7 +339,9 @@ export default {
         return e?.response;
       }
     },
+    verifyCaptcha() {},
     async getCode(token = null) {
+      console.log(token, "token");
       this.$LogEvent({
         formName: "VerifyUser errorMessage",
         idEventType: this.loginType === "phone" ? 155 : 162,
@@ -349,10 +361,12 @@ export default {
       try {
         let response;
         const isCaptcha = Boolean(token);
+        console.log(isCaptcha, "isCaptcha");
         const request = async (p) => {
           const data = await this.getCodeHelper(p);
           return data;
         };
+        console.log(request, "request");
         if (
           this.loginType === "phone"
             ? !this.v.phone.$invalid
@@ -390,15 +404,15 @@ export default {
               this.codeFieldShown = false;
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
-              // this.$LogEvent({
-              //   formName: "VerifyUser errorMessage",
-              //   idEventType: this.loginType === "phone" ? 153 : 164,
-              //   controlName: "VerifyUser.vue",
-              //   message: `Показало сообщение об ошибке на ${
-              //     this.loginType === "phone" ? "номере" : "EMAIL"
-              //   }"`,
-              //   timeUser: new Date(),
-              // });
+              this.$LogEvent({
+                formName: "VerifyUser errorMessage",
+                idEventType: this.loginType === "phone" ? 153 : 164,
+                controlName: "VerifyUser.vue",
+                message: `Показало сообщение об ошибке на ${
+                  this.loginType === "phone" ? "номере" : "EMAIL"
+                }"`,
+                timeUser: new Date(),
+              });
               this.isSendCode = false;
               return;
             }
@@ -428,20 +442,20 @@ export default {
               return;
             }
 
-            if (response1?.data[0]?.ERRORCODE === 106) {
+            if (response1?.data[0]?.ERRORCODE === 610) {
               await this.executeRecaptcha();
               return;
             }
           } else {
-            this.$LogEvent({
-              formName: "VerifyUser errorMessage",
-              idEventType: this.loginType === "phone" ? 153 : 164,
-              controlName: "VerifyUser.vue",
-              message: `Показало капчу через ${
-                this.loginType === "phone" ? "номере" : "EMAIL"
-              }"`,
-              timeUser: new Date(),
-            });
+            // this.$LogEvent({
+            //   formName: "VerifyUser errorMessage",
+            //   idEventType: this.loginType === "phone" ? 153 : 164,
+            //   controlName: "VerifyUser.vue",
+            //   message: `Показало капчу через ${
+            //     this.loginType === "phone" ? "номере" : "EMAIL"
+            //   }"`,
+            //   timeUser: new Date(),
+            // });
             params = {
               ...params,
               token,

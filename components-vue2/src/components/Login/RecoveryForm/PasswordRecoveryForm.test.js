@@ -428,3 +428,128 @@ describe("PasswordRecoveryForm", () => {
     expect(window.location.href).toEqual("/login");
   });
 });
+
+it("Должен показать log с текстом 'Показало сообщение об ошибке на номере'", async () => {
+  const localVue = createLocalVue();
+  let log = [];
+  localVue.use(BootstrapVue);
+  const wrapper = mount(PasswordRecoveryForm, {
+    localVue,
+    mocks: {
+      $LogEvent: (v) => {
+        log.push(v.message);
+        return v;
+      },
+    },
+  });
+  axios.post.mockReturnValue({
+    data: [
+      {
+        MESSAGE_CODE: 203,
+      },
+    ],
+  });
+
+  await wrapper.find("#phone").setValue("+7(902)-000-10-00");
+  await wrapper.find("#btn_code_verification_lk").trigger("click");
+  await wrapper.vm.$nextTick();
+  await wrapper.vm.$nextTick();
+
+  expect(log).toEqual([
+    "Открыли форму восстановления пароля по телефону",
+    'Нажал на кнопку Получить код на номере"',
+    'Показало сообщение об ошибке на номере"',
+  ]);
+});
+
+it("Должен показать log с текстом 'Открыли форму восстановления пароля по телефону'", async () => {
+  const localVue = createLocalVue();
+  let log = [];
+  localVue.use(BootstrapVue);
+  const wrapper = mount(PasswordRecoveryForm, {
+    localVue,
+    mocks: {
+      $LogEvent: (v) => {
+        log.push(v.message);
+        return v;
+      },
+    },
+  });
+  axios.post.mockReturnValue({
+    data: [
+      {
+        MESSAGE_CODE: 200,
+      },
+    ],
+  });
+
+  await wrapper.find("#phone").setValue("+7(999)-999-99-99");
+  await wrapper.find("#btn_code_verification_lk").trigger("click");
+  await wrapper.vm.$nextTick();
+  await wrapper.vm.$nextTick();
+
+  console.log("log", log);
+  expect(log).toEqual([
+    "Открыли форму восстановления пароля по телефону",
+    'Нажал на кнопку Получить код на номере"',
+  ]);
+});
+
+it("Должен показать log с текстом 'Открыли форму восстановления пароля по телефону'", async () => {
+  const localVue = createLocalVue();
+  let log = [];
+  localVue.use(BootstrapVue);
+  const wrapper = mount(PasswordRecoveryForm, {
+    localVue,
+    mocks: {
+      $LogEvent: (v) => {
+        log.push(v.message);
+        return v;
+      },
+    },
+  });
+  axios.post.mockReturnValue({
+    data: [
+      {
+        ERRORCODE: 106,
+      },
+    ],
+  });
+
+  await wrapper.find("#phone").setValue("+7(999)-999-99-99");
+  await wrapper.find("#btn_code_verification_lk").trigger("click");
+  await wrapper.vm.$nextTick();
+  await wrapper.vm.$nextTick();
+
+  // axios.post.mockReturnValue({
+  //   data: [
+  //     {
+  //       MESSAGE_CODE: 203,
+  //     },
+  //   ],
+  // });
+  // expect(axios.post).toHaveBeenCalledWith(
+  //   "/am/free/v2/lk/log",
+  //   {
+  //     controlName: "VerifyUser.vue",
+  //     etape: 0,
+  //     formName: "VerifyUser errorMessage",
+  //     idDevice: 1,
+  //     idEventType: 153,
+  //     message: 'Показало сообщение об ошибке на номере"',
+  //     referer: "http://localhost:8000/login/password-recovery",
+  //     timeUser: "2023-02-14T12:52:53.980Z",
+  //     PHONE: "+7(902)-000-10-00",
+  //     error: false,
+  //     loginType: "phone",
+  //     modeType: "RECOVERY",
+  //     token: 1,
+  //   },
+  //   { headers: { "X-Application": "VueJS", recaptcha: 1 } }
+  // );
+  console.log("log:", log);
+  // expect(log).toEqual([
+  //   "Открыли форму восстановления пароля по телефону",
+  //   'Нажал на кнопку Получить код на номере"',
+  // ]);
+});
