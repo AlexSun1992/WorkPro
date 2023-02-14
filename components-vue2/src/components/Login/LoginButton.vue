@@ -14,13 +14,22 @@
         <b-dropdown-item class="d-lg-none loginusername">
           Здравствуйте,<br /><b>{{ userName }}</b>
         </b-dropdown-item>
-        <b-dropdown-item @click="profileBtn()" class="login-profile"
+        <b-dropdown-item
+          @click="profileBtn()"
+          class="login-profile"
+          id="btn_lk_main_head_authorization"
           >Личный кабинет</b-dropdown-item
         >
-        <b-dropdown-item @click="osagoBtn()" class="login-osago"
+        <b-dropdown-item
+          @click="osagoBtn()"
+          class="login-osago"
+          id="btn_lk_osago_head_authorization"
           >ОСАГО</b-dropdown-item
         >
-        <b-dropdown-item @click="exitBtn()" class="login-exit"
+        <b-dropdown-item
+          @click="exitBtn()"
+          class="login-exit"
+          id="btn_lk_exit_head_authorization"
           >Выйти</b-dropdown-item
         >
       </b-dropdown>
@@ -33,10 +42,16 @@
         text="Личный кабинет"
       >
         <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
-        <b-dropdown-item @click="osagoBtn()" class="login-osago"
+        <b-dropdown-item
+          @click="osagoBtn()"
+          class="login-osago"
+          id="btn_lk_osago_head_not_authorization"
           >ОСАГО</b-dropdown-item
         >
-        <b-dropdown-item @click="polisesBtn()" class="login-polises"
+        <b-dropdown-item
+          @click="polisesBtn()"
+          class="login-polises"
+          id="btn_lk_other_head_not_authorization"
           >Другие полисы</b-dropdown-item
         >
       </b-dropdown>
@@ -177,7 +192,10 @@ export default {
     },
     async osagoBtn() {
       if (this.isAuthentificated === false) {
-        window.open("https://client.reso.ru/", "_blank");
+        window.open(
+          "https://client.reso.ru/?utm_source=reso&utm_medium=button&utm_campaign=lk_notauth",
+          "_blank"
+        );
       } else {
         const token = Cookies.get(TOKEN_NAME);
         const getToken = await axios.get("/am/main/v2/redirect_lk1", {
@@ -188,8 +206,15 @@ export default {
         });
         const getUrl = getToken.data.find((el) => el.SURL);
         getUrl
-          ? window.open(getUrl.SURL, "_blank")
-          : window.open("https://client.reso.ru/", "_blank");
+          ? window.open(
+              getUrl.SURL +
+                "?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
+              "_blank"
+            )
+          : window.open(
+              "https://client.reso.ru/?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
+              "_blank"
+            );
       }
     },
     async profileBtn() {
