@@ -177,7 +177,7 @@ export default {
     },
     async osagoBtn() {
       if (this.isAuthentificated === false) {
-        window.open = "https://client.reso.ru/";
+        window.open("https://client.reso.ru/", "_blank");
       } else {
         const token = Cookies.get(TOKEN_NAME);
         const getToken = await axios.get("/am/main/v2/redirect_lk1", {
@@ -188,8 +188,8 @@ export default {
         });
         const getUrl = getToken.data.find((el) => el.SURL);
         getUrl
-          ? (window.open = getUrl.SURL)
-          : (window.open = "https://client.reso.ru/");
+          ? window.open(getUrl.SURL, "_blank")
+          : window.open("https://client.reso.ru/", "_blank");
       }
     },
     async profileBtn() {
