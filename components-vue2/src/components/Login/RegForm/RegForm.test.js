@@ -340,7 +340,7 @@ describe("RegForm", () => {
 
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
     expect(spy).toHaveBeenCalled();
-    expect(window.location.href).toEqual("/login/password-recovery");
+    expect(window.location.href).toEqual("/login");
 
     spy.mockImplementationOnce(() => Promise.resolve(false));
 
@@ -352,7 +352,7 @@ describe("RegForm", () => {
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
     expect(spy).toHaveBeenCalled();
-    expect(window.location.href).toEqual("/feedback");
+    expect(window.location.href).toEqual("/login/password-recovery");
 
     spy.mockImplementationOnce(() => Promise.resolve(null));
 
