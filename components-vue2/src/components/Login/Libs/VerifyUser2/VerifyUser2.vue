@@ -439,7 +439,7 @@ export default {
                   if (value === true) {
                     if (isInSystemLogin) {
                       window.location.href = "/login";
-
+                    }
                     if (isExpiredLogin) {
                       this.isSendCode = true;
                     }
