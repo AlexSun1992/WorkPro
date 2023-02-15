@@ -5,11 +5,7 @@
         <legend>
           {{ showLabel }}
           <span class="tooltipster">
-            (?)<vue-easy-tooltip
-              :with-arrow="true"
-              position="top"
-              :offset="4"
-            >
+            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
               <span>{{ tooltipValidation }}</span></vue-easy-tooltip
             ></span
           >
@@ -31,6 +27,7 @@
           type="button"
           class="btn-psw-visible"
           @click="visiblePSW()"
+          tabindex="-1"
         ></button>
         <div class="invalid-feedback">
           <b-form-invalid-feedback
@@ -71,6 +68,7 @@
           type="button"
           class="btn-psw-visible"
           @click="visiblePSW2()"
+          tabindex="-1"
         ></button>
         <b-form-invalid-feedback>Пароли не совпадают</b-form-invalid-feedback>
       </b-form-group>
@@ -151,9 +149,9 @@ export default {
     showLabel() {
       return this.recovery ? "Придумайте новый пароль" : "Пароль";
     },
-    tooltipValidation(){
-      return tooltipText
-    }
+    tooltipValidation() {
+      return tooltipText;
+    },
   },
 };
 </script>
