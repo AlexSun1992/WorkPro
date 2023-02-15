@@ -193,7 +193,7 @@ export default {
     async osagoBtn() {
       if (this.isAuthentificated === false) {
         window.open(
-          "https://client.reso.ru/?utm_source=reso&utm_medium=button&utm_campaign=lk_notauth",
+          "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso&utm_medium=button&utm_campaign=lk_notauth",
           "_blank"
         );
       } else {
@@ -205,14 +205,18 @@ export default {
           },
         });
         const getUrl = getToken.data.find((el) => el.SURL);
+        const old_url = new URL(getUrl.SURL);
+        old_url.searchParams.delete("utm_source");
+        old_url.searchParams.delete("utm_medium");
+        old_url.searchParams.delete("utm_campaign");
         getUrl
           ? window.open(
-              getUrl.SURL +
-                "?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
+              old_url.href +
+                "&utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
               "_blank"
             )
           : window.open(
-              "https://client.reso.ru/?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
+              "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
               "_blank"
             );
       }
