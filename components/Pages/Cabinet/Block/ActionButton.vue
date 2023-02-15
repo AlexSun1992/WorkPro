@@ -10,6 +10,7 @@
 
 <script>
 import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
+
 export default {
   name: "ActionButton",
   props: {
@@ -126,7 +127,11 @@ export default {
         if (result?.POUTVALUE) {
           if (result?.POUTVALUE.includes("/")) {
             if (result?.POUTVALUE.includes("cabinet")) {
-              this.$router.push(`${new URL(result?.POUTVALUE).pathname}`);
+              this.$router.push(
+                `${new URL(result?.POUTVALUE).pathname}${
+                  new URL(result?.POUTVALUE).search
+                }`
+              );
             } else {
               // Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
               setTimeout(() => {
