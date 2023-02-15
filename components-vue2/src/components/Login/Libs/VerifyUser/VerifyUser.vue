@@ -243,23 +243,13 @@ export default {
       }
     },
     async executeRecaptcha() {
-      // this.$LogEvent({
-      //   formName: "VerifyUser errorMessage",
-      //   idEventType: this.loginType === "phone" ? 155 : 162,
-      //   controlName: "VerifyUser.vue",
-      //   message: `Нажал на кнопку Получить код на ${
-      //     this.loginType === "phone" ? "номере" : "EMAIL"
-      //   }"`,
-      //   timeUser: new Date(),
-      // });
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
-      await isCaptchaBecomesHide();
+
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
-      console.log(visibleCaptchas, " visibleCaptchas");
       if (visibleCaptchas.length === 0) {
         this.loading = false;
         this.$LogEvent({
@@ -272,6 +262,7 @@ export default {
           timeUser: new Date(),
         });
       }
+      await isCaptchaBecomesHide();
     },
 
     inputTouch() {
@@ -341,7 +332,6 @@ export default {
     },
     verifyCaptcha() {},
     async getCode(token = null) {
-      console.log(token, "token");
       this.$LogEvent({
         formName: "VerifyUser errorMessage",
         idEventType: this.loginType === "phone" ? 155 : 162,
@@ -361,12 +351,10 @@ export default {
       try {
         let response;
         const isCaptcha = Boolean(token);
-        console.log(isCaptcha, "isCaptcha");
         const request = async (p) => {
           const data = await this.getCodeHelper(p);
           return data;
         };
-        console.log(request, "request");
         if (
           this.loginType === "phone"
             ? !this.v.phone.$invalid
@@ -390,17 +378,12 @@ export default {
 
             response = response1;
             const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
-
             const isAlertShown = isAlertShouldBeShown(
               this.modeType,
               this.loginType,
               getResponseMessageCodeErr
             );
             if (isAlertShown) {
-              // console.log(
-              //   getResponseMessageCodeErr,
-              //   "getResponseMessageCodeErr"
-              // );
               this.codeFieldShown = false;
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
@@ -442,20 +425,11 @@ export default {
               return;
             }
 
-            if (response1?.data[0]?.ERRORCODE === 610) {
+            if (response1?.data[0]?.ERRORCODE === 106) {
               await this.executeRecaptcha();
               return;
             }
           } else {
-            // this.$LogEvent({
-            //   formName: "VerifyUser errorMessage",
-            //   idEventType: this.loginType === "phone" ? 153 : 164,
-            //   controlName: "VerifyUser.vue",
-            //   message: `Показало капчу через ${
-            //     this.loginType === "phone" ? "номере" : "EMAIL"
-            //   }"`,
-            //   timeUser: new Date(),
-            // });
             params = {
               ...params,
               token,
@@ -476,10 +450,6 @@ export default {
               getResponseMessageCodeErr
             );
             if (isAlertShown) {
-              // console.log(
-              //   getResponseMessageCodeErr,
-              //   "getResponseMessageCodeErr2"
-              // );
               this.codeFieldShown = false;
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
