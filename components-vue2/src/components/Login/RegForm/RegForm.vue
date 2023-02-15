@@ -12,7 +12,8 @@
     >
       <div class="tab-mobile-block">Регистрация</div>
       <div class="row">
-        <div class="col-12 col-lg-6 mt-2">
+        <div class="col-12 ph4b">1. ПЕРСОНАЛЬНЫЕ ДАННЫЕ</div>
+        <div class="col-12 col-lg-4 mt-3">
           <b-form-group class="required" label="Фамилия" label-cols="12">
             <autocomplete
               id="autocomplete-surname"
@@ -28,15 +29,17 @@
               data-testid="regFamily"
             />
             <b-form-invalid-feedback :state="isSurnameErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
-            <b-form-invalid-feedback :state="isSurnameValidSignsErrorMessage"
+            <b-form-invalid-feedback
+              :state="isSurnameValidSignsErrorMessage"
+              data-testid="regSurnameFeedback"
               >Просьба указать ФИО в русской
               транскрипции</b-form-invalid-feedback
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-6 mt-2">
+        <div class="col-12 col-lg-4 mt-3">
           <b-form-group label="Имя" label-cols="12" class="required">
             <autocomplete
               ref="autocompleteName"
@@ -50,7 +53,7 @@
               data-testid="regName"
             />
             <b-form-invalid-feedback :state="isNameErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isNameValidSignsErrorMessage"
               >Просьба указать ФИО в русской
@@ -58,8 +61,7 @@
             >
           </b-form-group>
         </div>
-
-        <div class="col-12 col-lg-6 mt-2 mt-lg-3" id="patronymic">
+        <div class="col-12 col-lg-4 mt-3" id="patronymic">
           <b-form-group
             label="Отчество (при наличии)"
             label-cols="12"
@@ -70,14 +72,14 @@
               placeholder="Отчество"
               :search="getSuggestionsPatronymic"
               :get-result-value="getResultValue"
+              :class="patronymicClassHub"
               :disabled="isPatronymicNotExist || isDisabledForm"
-              :class="patronymicClass"
               @blur="handleBlur('patronymic')"
               @submit="changeField('patronymic', $event)"
               data-testid="regPatronymic"
             />
             <b-form-invalid-feedback :state="isPatronymicErrorMessage"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
+              >Обязательное поле.Укажите ФИО кириллицей</b-form-invalid-feedback
             >
             <b-form-invalid-feedback :state="isPatronymicValidSignsErrorMessage"
               >Просьба указать ФИО в русской
@@ -85,20 +87,7 @@
             >
           </b-form-group>
         </div>
-        <div class="col-12 col-lg-6 mt-lg-3 pt-lg-4">
-          <b-form-checkbox
-            id="check-box"
-            class="checkbox-hide mt-3 pt-1"
-            :disabled="isDisabledForm"
-            v-model="isPatronymicNotExist"
-            :value="!isPatronymicNotExist"
-            @change="changeField('isPatronymicNotExist', $event)"
-          >
-            Нет отчества
-          </b-form-checkbox>
-        </div>
-
-        <div class="col-12 col-lg-6 mt-2 mt-lg-3">
+        <div class="col-12 col-lg-4 mt-3">
           <b-form-group label="Дата рождения" label-cols="12" class="required">
             <birthday-picker2
               id="birthday-picker"
@@ -109,20 +98,40 @@
             />
           </b-form-group>
         </div>
-        <div class="col-12 col-md-6 mt-3">
-          <b-form-group label="Номер полиса (Необязательное)" label-cols="12">
+        <div class="col-12 col-lg-4 mt-3">
+          <b-form-checkbox
+            id="policy-exist-check-box"
+            class="checkbox-switcher cs-near-l_input-lg"
+            :disabled="isDisabledForm"
+            v-model="isPolicyExist"
+            :value="!isPolicyExist"
+            @change="changeField('isPolicyExist', $event)"
+          >
+            У меня есть полис РЕСО
+          </b-form-checkbox>
+        </div>
+        <div class="col-12 col-lg-4 mt-3">
+          <b-form-group label="Номер полиса" label-cols="12">
             <b-form-input
               ref="policyNumber"
               :id="Math.random().toString()"
+              :class="policyClass"
               v-model="form.policyNumber"
               placeholder="Номер полиса"
-              :disabled="isDisabledForm"
+              :disabled="!isPolicyExist || isDisabledForm"
               autocomplete="new-password"
-              @change="changeField('policyNumber')"
+              @update="changeField('policyNumber', $event)"
+              @blur="handleBlur('policyNumber')"
             ></b-form-input>
           </b-form-group>
+          <b-form-invalid-feedback :state="isStatePolicyErrorMessage"
+            >Обязательное поле</b-form-invalid-feedback
+          >
         </div>
-        <div class="col-12 col-lg-6"></div>
+        <div class="col-12 mt-4 mt-lg-0">
+          <div class="h-line d-none d-lg-block"></div>
+        </div>
+        <div class="col-12 ph4b">2. ЗАДАЙТЕ ПАРОЛЬ</div>
         <div class="col-12">
           <verify-password
             :v="$v.form"
@@ -130,62 +139,116 @@
             :disabled="isDisabledForm"
             :tab-index="[50, 60]"
             :log-params="logParams"
-            :errorMessageValidation ="validationForFirstPassword"
+            :errorMessageValidation="validationForFirstPassword"
           />
         </div>
-      </div>
-      <div class="mt-3">
-        <b-form-group class="mt-50 w-100 required">
-          <verify-user
-            ref="verifyUser"
-            @error="showError"
-            :v="$v.form"
-            :log-params="logParams"
-            :count="60"
-            :context="'registration'"
-            :loginType="'phone'"
-            :mode-type="'REG'"
-            :validateState="validateState"
-            :disabled="registrationInProcess"
-            :text-message="successSendMessageText"
-            :tab-index="[10, 14, 16]"
-            :error="errorMessage"
-            @checkCodeFieldValid="isCodeFieldValid"
-            @messageText="getTextMessage"
-            @sendingCode="sendingCode"
-            @sendCode="sendCode"
-            :isCodeFieldValid="codeFieldValid"
-            @isPhoneChangedButtonClicked="checkIfButtonClicked"
-            @input="refuseButtonClicked"
-            :form-data="formData"
-            :is-valid-form="isValidForm"
-          />
-        </b-form-group>
-      </div>
-      <div
-        id="error-message"
-        class="col-12 invalid-feedback d-block mt-3"
-        v-if="errorMessage"
-      >
-        {{ errorMessage }}
-      </div>
-      <div class="col-12 pt-3">
-        <b-button
-          v-if="codeFieldValid"
-          @click.stop.prevent="onSubmit"
-          class="w-100"
-          type="submit"
-          variant="primary"
-          :disabled="registrationInProcess"
-          id="btn_chek_registration_lk"
+        <div class="col-12 mt-4 mt-lg-0">
+          <div class="h-line d-none d-lg-block"></div>
+        </div>
+        <div class="col-12 ph4b">3. ТЕЛЕФОН</div>
+        <div class="col-12 mt-3">
+          <b-form-group class="mt-50 w-100 required">
+            <verify-user
+              ref="verifyUser"
+              @error="showError"
+              :v="$v.form"
+              :log-params="logParams"
+              :count="60"
+              :context="'registration'"
+              :loginType="'phone'"
+              :mode-type="'REG'"
+              :validateState="validateState"
+              :disabled="isDisabledForm"
+              :text-message="successSendMessageText"
+              :tab-index="[10, 14, 16]"
+              :error="errorMessage"
+              @checkCodeFieldValid="isCodeFieldValid"
+              @messageText="getTextMessage"
+              @sendingCode="sendingCode"
+              @sendCode="sendCode"
+              :isCodeFieldValid="codeFieldValid"
+              @isPhoneChangedButtonClicked="checkIfButtonClicked"
+              @input="refuseButtonClicked"
+              :form-data="formData"
+              :is-valid-form="isValidForm"
+            />
+          </b-form-group>
+        </div>
+        <div
+          id="error-message"
+          class="col-12 invalid-feedback d-block mt-3"
+          v-if="errorMessage"
         >
-          Зарегистрироваться
-          <b-spinner
-            v-if="registrationInProcess"
-            style="width: 1.2rem; height: 1.2rem"
-            variant="light"
-          ></b-spinner>
-        </b-button>
+          {{ errorMessage }}
+        </div>
+        <div class="col-12 my-4 my-lg-5">
+          <b-form-checkbox
+            id="agreement-check-box"
+            class="checkbox-hide"
+            :disabled="isDisabledForm"
+            v-model="isAgreement"
+            :value="!isAgreement"
+          >
+            Я даю
+            <a
+              href="/regulations/personal-agreement-2.html"
+              class="reg_agreement"
+              target="_blank"
+              >согласие</a
+            >
+            на обработку своих персональных данных. С
+            <a
+              href="/regulations/safety-of-personal.html"
+              class="reg_agreement"
+              target="_blank"
+              >политикой обеспечения безопасности персональных данных</a
+            >
+            САО “РЕСО-Гарантия” ознакомлен. <br />Даю
+            <a
+              href="https://client.reso.ru/wp-reso-ru/products/auto/osago/addition/act.xhtml"
+              class="reg_agreement"
+              target="_blank"
+              >согласие</a
+            >
+            на email и СМС рассылку.
+            <b-form-invalid-feedback
+              :state="!isErrorMessageAgreement || isAgreement"
+              >Необходимо согласие с обработкой персональных
+              данных</b-form-invalid-feedback
+            >
+          </b-form-checkbox>
+        </div>
+      </div>
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-auto">
+          <b-button
+            @click.stop.prevent="onSubmit"
+            class="w-100 w-lg-auto"
+            type="submit"
+            variant="primary"
+            :disabled="isRegDisableButton || registrationInProcess"
+            id="btn_chek_registration_lk"
+          >
+            Зарегистрироваться
+            <b-spinner
+              v-if="registrationInProcess"
+              style="width: 1.2rem; height: 1.2rem"
+              variant="light"
+            ></b-spinner>
+          </b-button>
+        </div>
+        <div class="col-auto mt-3 mt-lg-0">
+          <b-button
+            @click="changeFormData"
+            class="w-100"
+            type="submit"
+            variant="change-link"
+            :disabled="isChangeDataDisableButton || registrationInProcess"
+            id="btn_change_data_registration_lk"
+          >
+            Изменить данные
+          </b-button>
+        </div>
       </div>
     </b-form>
   </div>
@@ -205,7 +268,7 @@ import {
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
-import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
+import VerifyUser from "../Libs/VerifyUser2/VerifyUser2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import ConfirmModal from "./ConfirmModal.vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
@@ -222,9 +285,7 @@ import {
   fetchName,
 } from "./dadata.helper";
 
-import {
-  passwordValidation,
-} from "./regform.helper";
+import { passwordValidation } from "./regform.helper";
 
 const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
@@ -259,11 +320,15 @@ export default {
       },
       changePhoneButtonClicked: false,
       isPatronymicNotExist: false,
+      isPolicyExist: false,
+      isAgreement: false,
+      isErrorMessageAgreement: false,
       conformation: false,
       show: true,
       password2: "",
       registrationInProcess: false,
       captchaToken: null,
+      codeToken: null,
       isRegConfirmed: null,
       token: 1,
       successSendMessageText: null,
@@ -281,6 +346,7 @@ export default {
       isPatronymicTouch: false,
       isPatronymicValidSignsErrorMessage: true,
       //
+      isStatePolicyErrorMessage: null,
       isNameErrorMessage: true,
       isNameTouch: false,
       isNameValidSignsErrorMessage: true,
@@ -293,6 +359,7 @@ export default {
       //
       // classes
       patronymicClassHub: [],
+      policyClassHub: [],
       //
       surnameClassHub: [],
       //
@@ -323,11 +390,12 @@ export default {
       },
       code: {
         required,
-        minLength: minLength(5),
+        minLength: minLength(4),
       },
       password: {
         required,
-        errorMessageValidation: (value) => passwordValidation(value).length === 0,
+        errorMessageValidation: (value) =>
+          passwordValidation(value).length === 0,
       },
       password2: {
         required,
@@ -346,16 +414,14 @@ export default {
     }
   },
   computed: {
-    validationForFirstPassword(){
-      return passwordValidation(this.$v.form.password.$model)
+    validationForFirstPassword() {
+      return passwordValidation(this.$v.form.password.$model);
     },
-
     formData() {
       const params = {
-        SECONDNAME: this.family,
-        FIRSTNAME: this.name,
-        THIRDNAME: this.patronymic,
-        THIRDNAMENOTEXISTS: this.isPatronymicNotExist ? "Y" : "N",
+        SECONDNAME: this.family.trim(),
+        FIRSTNAME: this.name.trim(),
+        THIRDNAME: this.patronymic.trim(),
         BIRTHDATE: this.$v.form.birthdate.$model
           ? moment(this.$v.form.birthdate.$model, [
               "DD.MM.YYYY",
@@ -366,14 +432,32 @@ export default {
         POLICY_NUMBER: this.form.policyNumber,
         PASSWORD: this.$v.form.password.$model,
         PASSWORD_CONFIRM: this.$v.form.password2.$model,
-        USER_CONFIRM: "Y",
+        USER_CONFIRM: this.isAgreement ? "Y" : "N",
+        GUID: this.codeToken,
       };
       return params;
     },
+    isRegDisableButton() {
+      if (
+        this.isValidForm === true &&
+        this.codeToken !== null &&
+        this.codeFieldValid === true
+      ) {
+        return false;
+      }
+      return true;
+    },
+    isChangeDataDisableButton() {
+      if (this.isValidForm === true && this.codeToken !== null) {
+        return false;
+      }
+      return true;
+    },
     isValidForm() {
       if (
-        this.patronymicClassHub.length === 0 &&
-        this.isPatronymicNotExist === false
+        this.isPolicyExist === true &&
+        (this.isStatePolicyErrorMessage === false ||
+          this.isStatePolicyErrorMessage === null)
       ) {
         return false;
       }
@@ -395,6 +479,9 @@ export default {
         return false;
       }
       if (this.$v.form.password.$error || this.$v.form.password2.$error) {
+        return false;
+      }
+      if (this.isAgreement === false) {
         return false;
       }
       return true;
@@ -421,13 +508,26 @@ export default {
     nameClass() {
       return this.nameClassHub;
     },
+    policyClass() {
+      return this.policyClassHub;
+    },
   },
   methods: {
     sendingCode(value) {
+      this.form.code = null;
+      this.codeFieldValid = false;
       this.isSendingCode = value;
     },
     sendCode(value) {
-      this.isSendCode = value;
+      this.isSendCode = Boolean(value);
+      if (this.isSendCode) {
+        this.codeToken = value;
+      }
+    },
+    changeFormData() {
+      this.isSendCode = null;
+      this.codeToken = null;
+      this.codeFieldValid = false;
     },
     changeField(field, e) {
       if (field === "isPatronymicNotExist") {
@@ -440,6 +540,26 @@ export default {
           this.isPatronymicErrorMessage = null;
         }
         return;
+      }
+      if (field === "isPolicyExist") {
+        this.isPolicyExist = e;
+        if (this.isPolicyExist === false) {
+          this.form.policyNumber = "";
+          this.policyClassHub = [];
+          this.isStatePolicyErrorMessage = null;
+        }
+        return;
+      }
+      if (field === "policyNumber") {
+        this.policyClassHub = [];
+        this.isStatePolicyErrorMessage = null;
+        if (e === "") {
+          this.isStatePolicyErrorMessage = false;
+          this.policyClassHub.push("is-invalid");
+          return;
+        }
+        this.isStatePolicyErrorMessage = true;
+        this.policyClassHub = ["is-valid"];
       }
       if (this.form[field] || this[field]) {
         this[field] = e?.value;
@@ -468,9 +588,13 @@ export default {
       }
 
       if (field === "patronymic") {
-        if (this.patronymic === "") {
-          this.isPatronymicErrorMessage = false;
-          this.patronymicClassHub.push("is-invalid");
+        return;
+      }
+
+      if (field === "policyNumber") {
+        if (this.form.policyNumber === "") {
+          this.isStatePolicyErrorMessage = false;
+          this.policyClassHub.push("is-invalid");
         }
       }
 
@@ -502,7 +626,7 @@ export default {
     },
 
     isCodeFieldValid(value) {
-      this.codeFieldValid = value;
+      this.codeFieldValid = Boolean(value);
     },
 
     // запрос на подсказки по отчеству
@@ -512,9 +636,24 @@ export default {
       if (this.patronymic === "") {
         this.suggestionsHub = [];
       }
+      if (input === "") {
+        this.patronymic = input;
+        this.patronymicClassHub = [];
+        this.isPatronymicErrorMessage = null;
+        this.isPatronymicValidSignsErrorMessage = null;
+        return;
+      }
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompletePatronymic.value = "";
+          this.patronymicClassHub = [];
+          this.isPatronymicErrorMessage = true;
+          return;
+        }
+
         if (!isInputNotValid) {
           this.patronymic = input;
           this.isPatronymicTouch = true;
@@ -568,15 +707,21 @@ export default {
 
       return fetchedSuggestions;
     },
-    //
 
     // Запрос на подсказки по фамилии
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
-
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompleteSurname.value = "";
+          this.surnameClassHub = [];
+          this.isSurnameErrorMessage = true;
+          return;
+        }
+
         if (!isInputNotValid) {
           this.family = input;
           this.isSurnameErrorMessage = true;
@@ -635,10 +780,17 @@ export default {
     // Запрос на подсказки по именам
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
-
       const regex = /^[а-яА-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
+        if (input.charAt(0) === " ") {
+          input = "";
+          this.$refs.autocompleteName.value = "";
+          this.nameClassHub = [];
+          this.isNameErrorMessage = true;
+          return;
+        }
+
         if (!isInputNotValid) {
           this.name = input;
           this.isNameTouch = true;
@@ -697,16 +849,15 @@ export default {
       return $dirty ? !$error : null;
     },
 
-    async register(context) {
+    async register() {
       try {
         this.isErrorMessage = false;
         this.errorMessage = null;
         this.registrationInProcess = true;
         const params = {
-          SECONDNAME: this.family,
-          FIRSTNAME: this.name,
-          THIRDNAME: this.patronymic,
-          THIRDNAMENOTEXISTS: this.isPatronymicNotExist ? "Y" : "N",
+          SECONDNAME: this.family.trim(),
+          FIRSTNAME: this.name.trim(),
+          THIRDNAME: this.patronymic.trim(),
           BIRTHDATE: moment(this.$v.form.birthdate.$model, [
             "DD.MM.YYYY",
             "YYYY-MM-DD",
@@ -717,22 +868,57 @@ export default {
           PASSWORD: this.$v.form.password.$model,
           PASSWORD_CONFIRM: this.$v.form.password2.$model,
           USER_CONFIRM: "Y",
+          GUID: this.codeToken,
         };
 
         const headers = {
           headers: { recaptcha: params.token, "X-Application": "VueJS" },
         };
         const response = await axios.post(
-          "/am/free/v2/registration",
+          "/am/free/v2/registerUser2",
           params,
           headers
         );
 
         this.registrationInProcess = false;
-        if (response?.status === 200) {
-          const messageAfterSuccessRegistration =
-            getMessageFromSuccessResponse(response);
+        const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+        const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
+        const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
 
+        if (isInSystemLogin) {
+          this.$bvModal
+            .msgBoxConfirm(
+              "Личный кабинет с указанным номером телефона уже существует.",
+              {
+                title: "Номер уже зарегистрирован",
+                size: "md",
+                okVariant: "secondary",
+                cancelVariant: "primary",
+                okTitle: "Войти в систему",
+                cancelTitle: "Восстановить пароль",
+                footerClass: "p-2",
+                hideHeaderClose: false,
+                centered: true,
+                modalClass: this.myclass,
+                autoFocusButton: "ok",
+              }
+            )
+            .then((value) => {
+              if (value === true) {
+                if (isInSystemLogin) {
+                  window.location.href = "/login/password-recovery";
+                }
+                if (isExpiredLogin) {
+                  this.isSendCode = true;
+                }
+              }
+              if (value === false) {
+                window.location.href = "/feedback";
+              }
+              this.loading = false;
+            });
+        }
+        if (isErrorList === false) {
           const h = this.$createElement;
           const titleVNode = h("div", {
             domProps: {
@@ -758,25 +944,31 @@ export default {
               static: true,
               autoFocusButton: "ok",
             })
-            .then((value) => {
+            .then(() => {
               window.location.href = "/login";
             })
             .catch((err) => {
               console.log(err);
             });
-        } else if (response?.status !== 200) {
+        } else {
           this.isErrorMessage = true;
-          this.errorMessage = response.data.INFO;
+          this.errorMessage =
+            response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(/^\[|\]$/g, "") ??
+            "Неизвестная ошибка";
         }
       } catch (e) {
         this.isErrorMessage = true;
-        this.errorMessage = e.response.data.INFO;
+        this.errorMessage = e?.response?.data?.INFO ?? "Неизвестная ошибка";
         this.registrationInProcess = false;
       }
     },
 
     async onSubmit(event) {
       try {
+        if (this.isAgreement === false) {
+          this.isErrorMessageAgreement = true;
+        }
+
         this.$refs.verifyUser.loginTouchesCount = 3;
         this.$v.form.$touch();
         this.isErrorMessage = false;
@@ -791,12 +983,9 @@ export default {
           this.isNameErrorMessage = false;
         }
 
-        if (
-          this.patronymicClassHub.length === 0 &&
-          this.isPatronymicNotExist === false
-        ) {
-          this.patronymicClassHub.push("is-invalid");
-          this.isPatronymicErrorMessage = false;
+        if (this.policyClassHub.length === 0 && this.isPolicyExist === true) {
+          this.isStatePolicyErrorMessage = false;
+          this.policyClassHub.push("is-invalid");
         }
 
         if (
@@ -829,7 +1018,7 @@ export default {
           return;
         }
 
-        this.register(this);
+        await this.register();
       } catch (e) {
         console.log(e);
       }

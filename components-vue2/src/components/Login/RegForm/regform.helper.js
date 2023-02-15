@@ -3,7 +3,8 @@ export const minLengthPassword = 6;
 /** Максимальная длина пароля */
 export const maxLengthPassword = 20;
 /** Текст подсказки для валидации пароля */
-export const tooltipText = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву. Пароль не должен содержать русских букв и специальных символов.`;
+export const tooltipTextForDetailFunc = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву. Пароль не должен содержать русских букв и специальных символов.`;
+export const tooltipText = `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`;
 
 const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
 const uppercaseLetter = /[A-Z]/;
@@ -18,12 +19,7 @@ function createErrorMessage(errorValue) {
   };
 }
 
-/**
- * Функция валидации пароля
- * @param {string} password входящая переменная
- * @return {{errorText: string}[]}
- */
-export function passwordValidation(password) {
+export function passwordValidationDetail(password) {
   /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
   if (
@@ -31,7 +27,9 @@ export function passwordValidation(password) {
     password.length > maxLengthPassword
   ) {
     errorMessagepasswordValidation.push(
-      createErrorMessage("Пароль должен содержать от 6 до 20 символов.")
+      createErrorMessage(
+        `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`
+      )
     );
   }
   if (
@@ -57,5 +55,26 @@ export function passwordValidation(password) {
       )
     );
   }
+
+  return errorMessagepasswordValidation;
+}
+
+/**
+ * Функция валидации пароля
+ * @param {string} password входящая переменная
+ * @return {{errorText: string}[]}
+ */
+export function passwordValidation(password) {
+  /** Массив ошибок для пароля */
+  const errorMessagepasswordValidation = [];
+
+  if (passwordValidationDetail(password).length > 0) {
+    errorMessagepasswordValidation.push(
+      createErrorMessage(
+        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`
+      )
+    );
+  }
+
   return errorMessagepasswordValidation;
 }

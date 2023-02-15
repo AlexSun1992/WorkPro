@@ -69,13 +69,23 @@
               {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
             </template>
             <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
-            <b-dropdown-item href="/cabinet/55/0/701" class="login-profile"
+            <b-dropdown-item
+              href="/cabinet/55/0/701"
+              class="login-profile"
+              id="btn_lk_main_head_authorization"
               >Главная</b-dropdown-item
             >
-            <b-dropdown-item @click="redirect()" class="login-osago"
+            <b-dropdown-item
+              @click="redirect()"
+              class="login-osago"
+              id="btn_lk_osago_head_authorization"
               >ОСАГО</b-dropdown-item
             >
-            <b-dropdown-item href="#" @click="logout()" class="login-exit"
+            <b-dropdown-item
+              href="#"
+              @click="logout()"
+              class="login-exit"
+              id="btn_lk_exit_head_authorization"
               >Выйти из аккаунта</b-dropdown-item
             >
           </b-dropdown>
@@ -134,9 +144,16 @@ export default {
         },
       });
       const getUrl = getToken.data.find((item) => item.SURL);
+      const oldUrl = new URL(getUrl.SURL);
+      oldUrl.searchParams.set("utm_source", "reso");
+      oldUrl.searchParams.set("utm_medium", "button");
+      oldUrl.searchParams.set("utm_campaign", "lk_auth");
       getUrl
-        ? (window.location.href = getUrl.SURL)
-        : (window.location.href = "https://client.reso.ru/");
+        ? window.open(oldUrl.href, "_blank")
+        : window.open(
+            "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
+            "_blank"
+          );
     },
 
     toggleClassActive() {

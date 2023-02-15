@@ -31,4 +31,5 @@ async function start() {
     badge: true,
   });
 }
+app.disable("x-powered-by");
 start();

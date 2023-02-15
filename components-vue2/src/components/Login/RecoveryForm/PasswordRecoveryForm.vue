@@ -56,7 +56,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
-                :errorMessageValidation ="validationForFirstPassword"
+                :errorMessageValidation="validationForFirstPassword"
               />
             </div>
           </b-row>
@@ -107,6 +107,7 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
+                :errorMessageValidation="validationForFirstPassword"
               />
             </div>
           </b-row>
@@ -168,9 +169,7 @@ import UserRecoveryForm from "./UserRecoveryForm.vue";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
-import {
-  passwordValidation,
-} from "../RegForm/regform.helper";
+import { passwordValidation } from "../RegForm/regform.helper";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
@@ -212,7 +211,6 @@ export default {
       myclass: ["cabinet okrecovery"],
       visibleForm: "phone",
       isCodeFieldValid: false,
-      
     };
   },
   mounted() {
@@ -234,6 +232,13 @@ export default {
     setCodeFieldValid(data) {
       if (data) {
         this.isCodeFieldValid = data;
+      }
+    },
+    toggleForm(tabs) {
+      if (this.visibleForm === tabs) {
+        this.clearForm();
+        this.isCodeFieldValid = false;
+        this.visibleForm = tabs === "phone" ? "email" : "phone";
         this.$LogEvent({
           formName: "Recovery",
           idEventType: this.visibleForm === "phone" ? 149 : 157,
@@ -243,13 +248,6 @@ export default {
           }`,
           timeUser: new Date(),
         });
-      }
-    },
-    toggleForm(tabs) {
-      if (this.visibleForm === tabs) {
-        this.clearForm();
-        this.isCodeFieldValid = false;
-        this.visibleForm = tabs === "phone" ? "email" : "phone";
       }
     },
 
@@ -263,12 +261,14 @@ export default {
 
     async resetPassword() {
       this.$LogEvent({
-              formName: "Recovery",
-              idEventType: this.loginFieldType === "phone" ? 151 : 159,
-              controlName: "PasswordRecoveryForm.vue",
-              message: `Нажал "Изменить пароль через ${ this.loginFieldType === "phone" ? "номер" : "EMAIL"}"`,
-              timeUser: new Date(),
-            });
+        formName: "Recovery",
+        idEventType: this.loginFieldType === "phone" ? 151 : 159,
+        controlName: "PasswordRecoveryForm.vue",
+        message: `Нажал "Изменить пароль через ${
+          this.loginFieldType === "phone" ? "номер" : "EMAIL"
+        }"`,
+        timeUser: new Date(),
+      });
       let params;
       if (this.visibleForm === "phone") {
         params = {
@@ -316,7 +316,7 @@ export default {
             domProps: {
               innerHTML:
                 "Пароль успешно изменён,<br>теперь можно зайти в личный кабинет с новым паролем",
-              },
+            },
           });
           this.$bvModal
             .msgBoxOk([messageVNode], {
@@ -330,20 +330,22 @@ export default {
               modalClass: this.myclass,
               autoFocusButton: "ok",
             })
-            
+
             .then((value) => {
               window.location.href = "/login";
             })
             .catch((err) => {
               console.log(err);
             });
-            this.$LogEvent({
-              formName: "Recovery",
-              idEventType: this.loginFieldType === "phone" ? 152 : 160,
-              controlName: "PasswordRecoveryForm.vue",
-              message: `Новый пароль успешно установлен через ${ this.loginFieldType === "phone" ? "номер" : "EMAIL"}`,
-              timeUser: new Date(),
-            });
+          this.$LogEvent({
+            formName: "Recovery",
+            idEventType: this.loginFieldType === "phone" ? 152 : 160,
+            controlName: "PasswordRecoveryForm.vue",
+            message: `Новый пароль успешно установлен через ${
+              this.loginFieldType === "phone" ? "номер" : "EMAIL"
+            }`,
+            timeUser: new Date(),
+          });
         } else if (response.data[0].MESSAGE_CODE === "502") {
           this.isErrorMessage = true;
           this.errorMessage = "Данные неверные";
@@ -351,27 +353,31 @@ export default {
           this.isErrorMessage = true;
           this.errorMessage = "Необходимо ввести дополнительные данные";
           this.$LogEvent({
-                formName: "PasswordRecoveryForm errorMessage",
-                idEventType: this.loginFieldType === "phone" ? 153 : 164,
-                controlName: "PasswordRecoveryForm.vue",
-                message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
-                timeUser: new Date(),
-            });
+            formName: "PasswordRecoveryForm errorMessage",
+            idEventType: this.loginFieldType === "phone" ? 153 : 164,
+            controlName: "PasswordRecoveryForm.vue",
+            message: `Показало сообщение об ошибке на ${
+              this.loginFieldType === "phone" ? "номере" : "EMAIL"
+            }"`,
+            timeUser: new Date(),
+          });
         }
       } catch (e) {
         if (e.response.data.STATUS === 500) {
           this.isErrorMessage = true;
           this.errorMessage = e.response.data.INFO;
           this.$LogEvent({
-                formName: "PasswordRecoveryForm errorMessage",
-                idEventType: this.loginFieldType === "phone" ? 153 : 164,
-                controlName: "PasswordRecoveryForm.vue",
-                message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
-                timeUser: new Date(),
-            });
+            formName: "PasswordRecoveryForm errorMessage",
+            idEventType: this.loginFieldType === "phone" ? 153 : 164,
+            controlName: "PasswordRecoveryForm.vue",
+            message: `Показало сообщение об ошибке на ${
+              this.loginFieldType === "phone" ? "номере" : "EMAIL"
+            }"`,
+            timeUser: new Date(),
+          });
         }
         console.log(e);
-      } 
+      }
     },
     clearForm() {
       this.form = {
@@ -393,12 +399,14 @@ export default {
         this.isErrorMessage = true;
         this.errorMessage = msg;
         this.$LogEvent({
-                formName: "PasswordRecoveryForm errorMessage",
-                idEventType: this.loginFieldType ? 153 : 164,
-                controlName: "PasswordRecoveryForm.vue",
-                message: `Показало сообщение об ошибке на ${ this.loginFieldType === "phone" ? "номере" : "EMAIL"}"`,
-                timeUser: new Date(),
-            });
+          formName: "PasswordRecoveryForm errorMessage",
+          idEventType: this.loginFieldType ? 153 : 164,
+          controlName: "PasswordRecoveryForm.vue",
+          message: `Показало сообщение об ошибке на ${
+            this.loginFieldType === "phone" ? "номере" : "EMAIL"
+          }"`,
+          timeUser: new Date(),
+        });
       } else {
         this.isErrorMessage = false;
         this.errorMessage = null;
@@ -412,8 +420,8 @@ export default {
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },
-    validationForFirstPassword(){
-      return passwordValidation(this.$v.form.password.$model)
+    validationForFirstPassword() {
+      return passwordValidation(this.$v.form.password.$model);
     },
     tabIndex() {
       return this.currentTab === 0 ? [30, 40] : [20, 30];
@@ -464,11 +472,12 @@ export default {
       },
       code: {
         required,
-        minLength: minLength(5),
+        minLength: minLength(4),
       },
       password: {
         required,
-        errorMessageValidation: (value) => passwordValidation(value).length === 0,
+        errorMessageValidation: (value) =>
+          passwordValidation(value).length === 0,
       },
       password2: {
         required,

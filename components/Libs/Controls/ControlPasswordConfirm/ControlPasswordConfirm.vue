@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12 col-lg-6">
-      <b-form-group>
+      <b-form-group class="position-relative">
         <legend>
           Новый пароль
           <span class="tooltipster">
@@ -22,23 +22,26 @@
           @input="updateValue($event)"
         >
         </b-form-input>
-
         <button
           id="btn_password_visible"
           type="button"
           class="btn-psw-visible"
           @click="visiblePSW()"
+          tabindex="-1"
         ></button>
-        <b-form-invalid-feedback
-          v-for="errMess in executeValidation"
-          :key="errMess.errorText"
-        >
-          {{ errMess.errorText }}
-        </b-form-invalid-feedback>
+        <div class="invalid-feedback">
+          <b-form-invalid-feedback
+            class="d-block"
+            v-for="errMess in executeValidation"
+            :key="errMess.errorText"
+          >
+            {{ errMess.errorText }}
+          </b-form-invalid-feedback>
+        </div>
       </b-form-group>
     </div>
     <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-      <b-form-group>
+      <b-form-group class="position-relative">
         <legend>Повторите пароль</legend>
         <b-form-input
           id="password2"
@@ -56,6 +59,7 @@
           id="btn_password_visible2"
           type="button"
           class="btn-psw-visible"
+          tabindex="-1"
           @click="visiblePSW2()"
         ></button>
         <b-form-invalid-feedback> пароли не совпадают </b-form-invalid-feedback>
@@ -112,11 +116,24 @@ export default {
       }
     },
     updateValue(val) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: val,
-      });
+      if (passwordValidation(val).length === 0) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: val,
+          errorMessageValidate: () =>
+            this.executeValidation.map((text) => text.errorText),
+        });
+      }
+      if (passwordValidation(val).length !== 0) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: "",
+          errorMessageValidate: () =>
+            this.executeValidation.map((text) => text.errorText),
+        });
+      }
     },
 
     validateState(name) {
