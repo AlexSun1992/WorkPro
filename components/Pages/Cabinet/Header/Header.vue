@@ -181,24 +181,9 @@ export default {
 </script>
 
 <style>
-body:after {
-  left: -100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  transition: left 0.3s;
-  content: "";
-  width: 100%;
-  height: 100%;
-  top: 0;
-  position: absolute;
-  z-index: 3;
-}
 body.menu-open {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-}
-body.menu-open:after {
-  left: 0;
-  transition: left 0.3s;
 }
 </style>
