@@ -144,14 +144,14 @@ export default {
         },
       });
       const getUrl = getToken.data.find((item) => item.SURL);
+      const oldUrl = new URL(getUrl.SURL);
+      oldUrl.searchParams.set("utm_source", "reso");
+      oldUrl.searchParams.set("utm_medium", "button");
+      oldUrl.searchParams.set("utm_campaign", "lk_auth");
       getUrl
-        ? window.open(
-            getUrl.SURL +
-              "?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
-            "_blank"
-          )
+        ? window.open(oldUrl.href, "_blank")
         : window.open(
-            "https://client.reso.ru/?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
+            "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
             "_blank"
           );
     },
@@ -181,24 +181,9 @@ export default {
 </script>
 
 <style>
-body:after {
-  left: -100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  transition: left 0.3s;
-  content: "";
-  width: 100%;
-  height: 100%;
-  top: 0;
-  position: absolute;
-  z-index: 3;
-}
 body.menu-open {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-}
-body.menu-open:after {
-  left: 0;
-  transition: left 0.3s;
 }
 </style>
