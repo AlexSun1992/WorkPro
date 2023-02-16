@@ -15,7 +15,7 @@
       @blur="updateBlurValue($event)"
     />
 
-    <div>
+    <div ref="errmsg_area">
       <b-alert
         :show="getSavedError || getError"
         variant="danger"
@@ -61,6 +61,7 @@ import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
+import { nextTick } from 'process';
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -479,6 +480,9 @@ export default {
                 );
               }
             }
+          }
+          if (this.getErrorMessage) {
+            nextTick(() => {this.$refs.errmsg_area.scrollIntoView();});
           }
         }
       }
