@@ -326,7 +326,7 @@ export default {
             `Действие компонента "${this.menuId}" успешно выполнено.`
           );
         }
-        if (resp.status === 500) {
+        if (resp.status === 500 || resp.status === 520) {
           console.error(resp);
           Sentry.captureException(
             new Error("Ошибка выполнения действия"),

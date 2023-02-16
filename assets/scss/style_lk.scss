@@ -2063,6 +2063,7 @@ a.free {
   }
   .menu.show {
     left: 0;
+    width: 100%;
   }
   .sidebar_client .logo {
     top: 22px;
@@ -2856,7 +2857,7 @@ a.action:hover {
   line-height: 1.125rem;
   color: $black;
   border: 0;
-  padding: 0 24px 0 0;
+  padding: 0 27px 0 0;
   outline: 0;
   max-width: 251px;
   overflow: hidden;
@@ -2882,13 +2883,14 @@ a.action:hover {
   position: absolute;
   right: 0;
   top: 50%;
-  margin-top: -9px;
-  background: transparent url(/img/chevron-down.svg) 50% 50% no-repeat;
+  margin-top: -11px;
+  background: transparent url(/img/chevron-lk.svg) 50% 50% no-repeat;
   transition: rotate 0.2s;
+  transform: rotate(180deg);
 }
 
 .LoginButton > .dropdown.show:after {
-  transform: rotate(180deg);
+  transform: rotate(0deg);
   transition: rotate 0.2s;
 }
 
@@ -4516,5 +4518,13 @@ i.dropdown.icon {
   }
   .col-10 .have-pay_notification:before {
     top: 40px;
+  }
+  .menu.show {
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .menu.show + div {
+    display: none;
   }
 }

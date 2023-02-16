@@ -181,18 +181,8 @@ export default {
 </script>
 
 <style>
-body:after {
-  left: -100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  transition: left 0.3s;
-  content: "";
-  width: 100%;
-  height: 100%;
-  top: 0;
-  position: absolute;
-  z-index: 3;
-}
-body.menu-open {
+body.menu-open,
+body.menu-open .app.cabinet {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -200,5 +190,12 @@ body.menu-open {
 body.menu-open:after {
   left: 0;
   transition: left 0.3s;
+}
+body.menu-open .color-footer {
+  display: none;
+}
+body.menu-open .app.cabinet > .container {
+  height: 100vh;
+  overflow: hidden;
 }
 </style>
