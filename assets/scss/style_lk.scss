@@ -4519,4 +4519,11 @@ i.dropdown.icon {
   .col-10 .have-pay_notification:before {
     top: 40px;
   }
+  .menu-open .color-footer {
+    display: none;
+  }
+  .menu-open .app.cabinet > .container {
+    height: calc(100vh - 72px);
+    overflow: hidden;
+  }
 }
