@@ -330,7 +330,6 @@ export default {
         return e?.response;
       }
     },
-    verifyCaptcha() {},
     async getCode(token = null) {
       this.$LogEvent({
         formName: "VerifyUser errorMessage",
@@ -429,7 +428,8 @@ export default {
               await this.executeRecaptcha();
               return;
             }
-          } else {
+          }
+          if (isCaptcha === true) {
             params = {
               ...params,
               token,
