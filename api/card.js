@@ -400,7 +400,7 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       })
       .catch((err) => {
         if (err?.response?.data) {
-          res.status(500).send(err.response.data);
+          res.status(err?.response?.data.STATUS || 500).send(err.response.data);
         } else {
           res.status(500).send(err);
         }
