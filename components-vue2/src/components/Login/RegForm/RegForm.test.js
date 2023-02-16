@@ -689,7 +689,7 @@ describe("RegForm", () => {
         data: {
           MESSAGE:
             'ORA-20105: Неправильно введен код подтверждения или истек срок действия.\nORA-06512: на  "MOBILE.AMAUTH3", line 74\nORA-06512: на  "MOBILE.AMAUTH3", line 558\nORA-06512: на  line 1\n',
-          STATUS: 500,
+          STATUS: 520,
           REASON: "Internal Server Error",
           INFO: "Неправильно введен код подтверждения или истек срок действия.",
         },
@@ -959,7 +959,7 @@ describe("RegForm", () => {
         data: {
           MESSAGE:
             'ORA-20105: Неправильно введен код подтверждения или истек срок действия.\nORA-06512: на  "MOBILE.AMAUTH3", line 74\nORA-06512: на  "MOBILE.AMAUTH3", line 558\nORA-06512: на  line 1\n',
-          STATUS: 500,
+          STATUS: 520,
           REASON: "Internal Server Error",
           INFO: "Неправильно введен код подтверждения или истек срок действия.",
         },
