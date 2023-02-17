@@ -4,17 +4,6 @@
       v-if="filterType !== 'query' && filterType !== 'combobox'"
       class="filterblock"
     >
-      <p>uniqueItems:{{ this.uniqueItems }}</p>
-      <p>defaultValue:{{ this.defaultValue }}</p>
-      <p>propertyName:{{ this.propertyName }}</p>
-      <p>filterType:{{ this.filterType }}</p>
-      <p>itemId:{{ this.itemId }}</p>
-      <p>showButtonAll:{{ this.showButtonAll }}</p>
-      <p>allItemsButtonName:{{ this.allItemsButtonName }}</p>
-      <p>showFilteredItemsCount:{{ showFilteredItemsCount }}</p>
-      <p>this$.route.query:{{ this.$route.query }}</p>
-      {{ this.filterItems }}
-
       <button
         v-if="showButtonAll"
         :data-activeitems="
@@ -134,11 +123,10 @@ export default {
 
   computed: {
     filterItems() {
-      console.log(this.$store);
       const block = this.$store.getters["blocks/getUnfilteredBlockById"](
         this.itemId
       );
-      console.log("block:", block);
+
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
@@ -146,7 +134,6 @@ export default {
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
-
         return uniqueItems.map((name) => ({
           name,
           isChecked: filter.includes(name),
@@ -172,7 +159,6 @@ export default {
       }));
 
       options.push(this.placeHolder);
-
       return options;
     },
   },
@@ -191,15 +177,17 @@ export default {
     this.$store.commit("blocks/setFilter", []);
   },
 
+  mounted() {
+    console.log("filterItems:", this.filterItems);
+  },
+
   created() {
-    console.log("test:", this.filterItems);
-    console.log("this.$route.query.filters:", this.$route);
     if (this.$route.query.filters) {
+      // console.log("this.$route.query.filters:", this.$route.query.filters);
       const filters = JSON.parse(this.$route.query.filters.toString());
       if (this.filterType === "radiobutton" && this.defaultValue === null) {
         this.isAllFilters = true;
       }
-
       if (this.filterType === "radiobutton" && this.defaultValue !== null) {
         this.$store.commit("blocks/setFilter", {
           propertyName: this.propertyName,
@@ -207,7 +195,6 @@ export default {
           id: this.itemId,
         });
       }
-
       if (
         this.filterType === "radiobutton" &&
         filters.find((filter) => filter.propertyName === this.propertyName)
@@ -223,21 +210,18 @@ export default {
       this.$store.commit("blocks/setFilter", filters);
     } else if (this.defaultValue) {
       this.isAllFilters = false;
-      // console.log("setFilter");
       this.$store.commit("blocks/setFilter", {
         propertyName: this.propertyName,
         filter: this.defaultValue,
         id: this.itemId,
       });
     }
-
     this.$store.commit("blocks/setSearchParams", null);
   },
 
   methods: {
     getSameTypeUnitsCount,
     toggleFilter(propertyName, item) {
-      // console.log("this:", this.$route);
       this.isAllFilters = false;
       this.$store.commit("blocks/toggleFilter", {
         propertyName,
