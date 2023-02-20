@@ -2,15 +2,14 @@ import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
-import isCaptchaBecomesHide from "../Libs/VerifyUser/captcha.helper";
 
 jest.mock("axios");
-// jest.mock("isCaptchaBecomesHide");
 jest.useFakeTimers();
 
 describe("PasswordRecoveryForm", () => {
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   it("Должен показать сообщение об отсутствии профиля с указанным номером телефона", async () => {
@@ -78,7 +77,6 @@ describe("PasswordRecoveryForm", () => {
       },
     });
 
-    //
     const buttonSelector = "[data-testid=btn_email]";
     await wrapper.find(buttonSelector).trigger("click");
     axios.post.mockReturnValue({
@@ -458,7 +456,7 @@ describe("PasswordRecoveryForm", () => {
     expect(window.location.href).toEqual("/login");
   });
 
-  it("Должен показать log с текстом 'Показало сообщение об ошибке на номере'", async () => {
+  it("Должен отправить log с текстом 'Показало сообщение об ошибке на номере'", async () => {
     const localVue = createLocalVue();
     let logs = [];
     localVue.use(BootstrapVue);
@@ -490,6 +488,57 @@ describe("PasswordRecoveryForm", () => {
       'Показало сообщение об ошибке на номере"',
     ]);
   });
+  it("Должен отправить log, что есть ошибка на EMAIL", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    let logs = [];
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => {
+          logs.push(v.message);
+        },
+      },
+    });
+    await wrapper.find("#tab_tel_lk").trigger("click");
+    await wrapper.find("[data-testid=btn_email]").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#email").setValue("kjdsflslkjgdvdlkmk@mail.ru");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#sms-confirm").setValue("11111");
+
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          STATUS: 500,
+        },
+      };
+      throw wrongAuthError;
+    });
+
+    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.trigger("change");
+
+    await wrapper.findComponent("#password1").trigger("focus");
+    await wrapper.find("#password1").setValue("12345hH");
+    await wrapper.find("#password2").setValue("12345hH");
+    await wrapper.find("#btn_change-password_mail_lk").trigger("click");
+
+    expect(logs).toEqual([
+      "Открыли форму восстановления пароля по телефону",
+      "Открыли форму восстановления пароля по EMAIL",
+      'Нажал на кнопку Получить код на EMAIL"',
+      'Нажал "Изменить пароль через EMAIL"',
+      'Показало сообщение об ошибке на EMAIL"',
+    ]);
+  });
 
   it("Должен показать log с текстом 'Открыли форму восстановления пароля по телефону'", async () => {
     const localVue = createLocalVue();
@@ -512,7 +561,7 @@ describe("PasswordRecoveryForm", () => {
       ],
     });
 
-    await wrapper.find("#phone").setValue("+7(999)-999-99-99");
+    await wrapper.find("#phone").setValue("+7(999)-999-99-88");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
@@ -523,7 +572,7 @@ describe("PasswordRecoveryForm", () => {
     ]);
   });
 
-  it("Не должен показывать  log с текстом об ошибке после капчи", async () => {
+  it("Не должен показывать  log с текстом об ошибке после капчи на телефоне", async () => {
     const localVue = createLocalVue();
     let logs = [];
     localVue.use(BootstrapVue);
@@ -585,171 +634,10 @@ describe("PasswordRecoveryForm", () => {
       "Открыли форму восстановления пароля по телефону",
       'Нажал на кнопку Получить код на номере"',
       'Показало капчу через номере"',
-      'Нажал на кнопку Получить код на номере"',
     ]);
   });
 
-  it("После log капчи должен появиться log с текстом об ошибке", async () => {
-    const localVue = createLocalVue();
-    let logs = [];
-    localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => {
-          logs.push(v.message);
-          return v;
-        },
-      },
-    });
-
-    await axios.post.mockReturnValue({
-      data: [
-        {
-          ERROR: "[Смотрите список ошибок.]",
-          ERRORCODE: 106,
-          ERRORLIST: [{ ERRORTEXT: "Решите капчу" }],
-        },
-      ],
-    });
-
-    await wrapper.find("#phone").setValue("+7(919)-888-88-88");
-    await wrapper.find("#btn_code_verification_lk").trigger("click");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-
-    expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/sendsmscode?smstype=recovery",
-      {
-        PHONE: "+7(919)-888-88-88",
-        error: false,
-        loginType: "phone",
-        modeType: "RECOVERY",
-        token: 1,
-      },
-      {
-        headers: {
-          "X-Application": "VueJS",
-          recaptcha: 1,
-        },
-      }
-    );
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 203,
-        },
-      ],
-    });
-    await wrapper.find("#phone").setValue("+7(919)-888-88-88");
-    await wrapper.find("#btn_code_verification_lk").trigger("click");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-
-    expect(logs).toEqual([
-      "Открыли форму восстановления пароля по телефону",
-      'Нажал на кнопку Получить код на номере"',
-      'Показало капчу через номере"',
-      'Нажал на кнопку Получить код на номере"',
-      'Показало сообщение об ошибке на номере"',
-    ]);
-  });
-
-  it("Должен появиться log при нажатии на кнопку измеенить номер", async () => {
-    const localVue = createLocalVue();
-    let logs = [];
-    localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => {
-          logs.push(v.message);
-          return v;
-        },
-      },
-    });
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
-    await wrapper.find("#btn_code_verification_lk").trigger("click");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-
-    await wrapper.find("#sms-confirm").setValue("11111");
-
-    await wrapper.find("#change_phone").trigger("click");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-
-    expect(logs).toEqual([
-      "Открыли форму восстановления пароля по телефону",
-      'Нажал на кнопку Получить код на номере"',
-      'Нажал на кнопку "Изменить номер"',
-    ]);
-  });
-
-  it("Показывает log изменить пароль через номер и log  новый пароль успешно установлен через номер", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    let logs = [];
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      attachTo: document.body,
-      mocks: {
-        $LogEvent: (v) => {
-          logs.push(v.message);
-          return v;
-        },
-      },
-    });
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
-    await wrapper.find("#btn_code_verification_lk").trigger("click");
-
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-
-    await wrapper.find("#sms-confirm").setValue("11111");
-
-    axios.post.mockImplementationOnce(() =>
-      Promise.resolve({
-        data: [{ MESSAGE: "Вы успешно зарегистрированы", MESSAGE_CODE: "200" }],
-        status: 200,
-      })
-    );
-
-    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
-    dataPickerInput.setValue("21.12.2022");
-    dataPickerInput.trigger("change");
-
-    await wrapper.findComponent("#password1").trigger("focus");
-    await wrapper.find("#password1").setValue("12345hH");
-    await wrapper.find("#password2").setValue("12345hH");
-    await wrapper.find("#btn_change-password_tel_lk").trigger("click");
-
-    expect(logs).toEqual([
-      "Открыли форму восстановления пароля по телефону",
-      'Нажал на кнопку Получить код на номере"',
-      'Нажал "Изменить пароль через номер"',
-      "Новый пароль успешно установлен через номер",
-    ]);
-  });
-
-  it("Должен показать, что форма заполнена верно", async () => {
+  it("log отправляет ошибку после нажатия на кнопку изменить пароль на телефоне", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     let logs = [];

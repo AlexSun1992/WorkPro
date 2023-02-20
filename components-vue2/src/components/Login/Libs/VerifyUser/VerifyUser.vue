@@ -246,7 +246,7 @@ export default {
       this.loading = true;
       await this.$refs.recaptcha.reset();
       await this.$refs.recaptcha.execute();
-
+      await isCaptchaBecomesHide();
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
@@ -262,7 +262,6 @@ export default {
           timeUser: new Date(),
         });
       }
-      await isCaptchaBecomesHide();
     },
 
     inputTouch() {
