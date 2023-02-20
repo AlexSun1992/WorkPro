@@ -4519,4 +4519,12 @@ i.dropdown.icon {
   .col-10 .have-pay_notification:before {
     top: 40px;
   }
+  .menu.show {
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .menu.show + div {
+    display: none;
+  }
 }

@@ -1,4 +1,5 @@
 import { isBlackListOfRoute } from "./router.helper";
+
 export default async function ({
   app,
   store,

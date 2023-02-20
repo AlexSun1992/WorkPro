@@ -181,8 +181,20 @@ export default {
 </script>
 
 <style>
-body.menu-open {
+body.menu-open,
+body.menu-open .app.cabinet {
   width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+body.menu-open:after {
+  left: 0;
+  transition: left 0.3s;
+}
+body.menu-open .color-footer {
+  display: none;
+}
+body.menu-open .app.cabinet > .container {
   height: 100vh;
   overflow: hidden;
 }

@@ -363,7 +363,7 @@ export default {
           });
         }
       } catch (e) {
-        if (e.response.data.STATUS === 500) {
+        if (e.response.data.STATUS === 500 || e.response.data.STATUS === 520) {
           this.isErrorMessage = true;
           this.errorMessage = e.response.data.INFO;
           this.$LogEvent({
