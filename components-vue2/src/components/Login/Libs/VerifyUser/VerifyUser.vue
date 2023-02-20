@@ -404,19 +404,10 @@ export default {
               this.isSendCode = true;
             }
 
-            if (response1.data[0].MESSAGE_CODE === 105) {
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
-                idEventType: this.loginType === "phone" ? 153 : 164,
-                controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
-                timeUser: new Date(),
-              });
-            }
-
-            if (response1.data.STATUS === 500) {
+            if (
+              response1.data.STATUS === 500 ||
+              response1.data.STATUS === 520
+            ) {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
@@ -464,7 +455,11 @@ export default {
               this.isSendCode = false;
               return;
             }
-            if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
+            if (
+              response2?.status === 500 ||
+              response2?.status === 520 ||
+              response2?.data[0]?.ERRORCODE
+            ) {
               this.loading = false;
               this.isSendCode = false;
             } else {
@@ -474,7 +469,9 @@ export default {
             }
           }
           const isError = Boolean(
-            response?.data[0]?.ERRORCODE || response.data.STATUS === 500
+            response?.data[0]?.ERRORCODE ||
+              response.data.STATUS === 500 ||
+              response.data.STATUS === 520
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
 

@@ -29,9 +29,8 @@ module.exports = {
         href: "/export/system/modules/ru.reso.v2/resources/img/favicon.svg",
       },
     ],
-    // script: [
-    //   { src: 'https://www.google.com/recaptcha/api.js?render=6Le_5tkUAAAAAI4paHCeddGpgcZCJZ2aAHfZaCme' }
-    // ]
+    //script: [
+    //],
   },
   /*
    ** Customize the progress-bar color
@@ -72,6 +71,7 @@ module.exports = {
     "~/plugins/tooltip.js",
     "~/plugins/vueLog.js",
     "~/plugins/Vue2TouchEvents.js",
+    { src: "~/plugins/YandexMetrika.js", ssr: false },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -87,7 +87,12 @@ module.exports = {
     "@nuxtjs/auth-next",
     ["cookie-universal-nuxt", { alias: "cookiz" }],
     "@nuxtjs/sentry",
+    "@nuxtjs/gtm",
   ],
+  gtm: {
+    id: "GTM-TVNGH3X",
+    enabled: true,
+  },
   sentry: {
     dsn: "https://fca88a91b8d24be68356c28c1c625893@sentry.reso.ru/2", // Enter your project's DSN here
     // Additional Module Options go here

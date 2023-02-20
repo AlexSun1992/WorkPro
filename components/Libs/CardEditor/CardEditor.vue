@@ -468,7 +468,7 @@ export default {
             form: fields,
           });
 
-          if (resp?.status !== 500) {
+          if (resp?.status !== 500 && resp?.status !== 520) {
             this.$root.$bvToast.toast(resp?.data?.MESSAGE, {
               title: "",
               variant: "success",
@@ -483,7 +483,8 @@ export default {
           if (
             this.$route.params.idCard === "0" &&
             !this.$route.query?.ref &&
-            resp?.status !== 500
+            resp?.status !== 500 &&
+            resp?.status !== 520
           ) {
             cardId = this.$store.getters["data_card/getCardId"];
             relId = this.$store.getters["data_card/getCardRelId"];
@@ -543,7 +544,7 @@ export default {
                 this.$route.params
               );
             }
-          } else if (resp?.status === 500) {
+          } else if (resp?.status === 500 || resp?.status === 520) {
             this.$store.commit("data_card/setLoading", false);
             this.$store.commit("data_card/setDisabled", false);
             this.$store.commit("data_card/setSavedError", true);
@@ -601,7 +602,7 @@ export default {
         body: this.actionParams,
       });
       this.actionFormDisabled = false;
-      if (response?.status === 500) {
+      if (response?.status === 500 || response?.status === 520) {
         this.$store.commit("data_card/setLoading", false);
         if (this.actionSettings.isDialog) {
           this.isActionApplyError = true;
