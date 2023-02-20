@@ -2,61 +2,20 @@ import { shallowMount } from "@vue/test-utils";
 import Vue from "vue";
 import Vuex from "vuex";
 import FilterBlock from "./FilterBlock.vue";
-import * as blocks from "../../../../../store/blocks";
-import { getUnfilteredItems } from "./FilterBlock.helper.fixtures";
 
-const test = [
-  {
-    name: "Проекты",
-    isChecked: false,
-  },
-  {
-    name: "Действующие",
-    isChecked: false,
-  },
-  {
-    name: "Архивные",
-    isChecked: false,
-  },
-];
+import {
+  storaNoFilters,
+  filter,
+  storaWithFilters,
+  activeFilterItem,
+  archiveFilterItem,
+} from "./FilterBlock.helper.fixtures";
 
-describe("FilterBlock", () => {
+describe("Пишем компонентные тесты на FilterBlock", () => {
   Vue.use(Vuex);
-
-  const route = {
-    query: {
-      filters: "[]",
-    },
-  };
-
   let wrapper;
-  let getters;
-  let store;
 
-  it("отображает FilterBlock", () => {
-    // getters = {
-    //   getUnfilteredBlockById() {
-    //     return test;
-    //   },
-    // };
-
-    store = new Vuex.Store({
-      modules: {
-        blocks: {
-          ...blocks,
-          state: {
-            ...blocks.state,
-            blocks: [
-              {
-                blockId: 712,
-                data: { items: getUnfilteredItems },
-              },
-            ],
-          },
-          namespaced: true,
-        },
-      },
-    });
+  const createComponent = (store, filter) => {
     wrapper = shallowMount(FilterBlock, {
       propsData: {
         uniqueItems: ["Проекты", "Действующие", "Архивные"],
@@ -69,10 +28,41 @@ describe("FilterBlock", () => {
       },
       store,
       mocks: {
-        $route: route,
+        $route: {
+          query: {
+            filters: filter,
+          },
+        },
       },
     });
-    console.log("wrapper:", wrapper.html());
-    expect(wrapper).not.toBe(null);
+  };
+
+  it("Проверяем отображение передаваемого property uniqueItems и наличие дефолтного класса у кнопки 'Все полисы'", () => {
+    createComponent(storaNoFilters, filter);
+    const getPasswordSelector = "[data-activeitems='11']";
+    const getAllpolicesButton = wrapper.find(getPasswordSelector);
+    expect(getAllpolicesButton.classes()).toContain("filter-checked");
+    expect(wrapper.text()).toContain(
+      "Все полисы",
+      "Архивные",
+      "Действующие",
+      "Проекты"
+    );
+  });
+  ///
+  it("проверяем механзм переключения классов у кнопки 'Действующие'", async () => {
+    createComponent(storaWithFilters, activeFilterItem);
+    const getActivePolices = wrapper.find("[data-activeitems='3']");
+    const getAllpolicesButton = wrapper.find("[data-activeitems='11']");
+    expect(getAllpolicesButton.classes()).not.toContain("filter-checked");
+    expect(getActivePolices.classes()).toContain("filter-checked");
+  });
+  //
+  it("проверяем механзм переключения классов у кнопки 'Архивные'", async () => {
+    createComponent(storaWithFilters, archiveFilterItem);
+    const getAllpolicesButton = wrapper.find("[data-activeitems='11']");
+    const getArchivePolices = wrapper.find("[data-activeitems='8']");
+    expect(getAllpolicesButton.classes()).not.toContain("filter-checked");
+    expect(getArchivePolices.classes()).toContain("filter-checked");
   });
 });

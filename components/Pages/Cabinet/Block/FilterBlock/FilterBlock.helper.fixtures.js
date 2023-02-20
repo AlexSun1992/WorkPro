@@ -1,34 +1,10 @@
 // eslint-disable-next-line import/prefer-default-export
+import Vue from "vue";
+import Vuex from "vuex";
+import * as blocks from "../../../../../store/blocks";
+import * as menu from "../../../../../store/menu";
 
-export const filterItemsType = [
-  {
-    name: "Корпоративный ДМС",
-    isChecked: false,
-  },
-  {
-    name: "ОСАГО",
-    isChecked: false,
-  },
-  {
-    name: "Домовой Коробочный",
-    isChecked: false,
-  },
-];
-
-export const filterItemsStatus = [
-  {
-    name: "Проекты",
-    isChecked: false,
-  },
-  {
-    name: "Действующие",
-    isChecked: true,
-  },
-  {
-    name: "Архивные",
-    isChecked: false,
-  },
-];
+Vue.use(Vuex);
 
 export const getUnfilteredItems = [
   {
@@ -244,7 +220,62 @@ export const getUnfilteredItems = [
     SPROLONGATION: "Нет данных",
   },
 ];
+//
+export const storaNoFilters = new Vuex.Store({
+  modules: {
+    blocks: {
+      ...blocks,
+      state: {
+        ...blocks.state,
+        blocks: [
+          {
+            blockId: 712,
+            data: { items: getUnfilteredItems },
+          },
+        ],
+      },
+      namespaced: true,
+    },
+  },
+});
 
+export const filter = "[]";
+
+export const activeFilterItem =
+  '[{ "propertyName": "SSTATUS", "filter": ["Действующие"], "id": "712" }]';
+
+export const archiveFilterItem =
+  '[{ "propertyName": "SSTATUS", "filter": ["Архивные"], "id": "712" }]';
+
+export const storaWithFilters = new Vuex.Store({
+  modules: {
+    blocks: {
+      ...blocks,
+      state: {
+        ...blocks.state,
+        filters: [
+          {
+            propertyName: "SSTATUS",
+            filter: ["Действующие"],
+            id: 712,
+          },
+        ],
+        blocks: [
+          {
+            blockId: 712,
+            data: { items: getUnfilteredItems },
+          },
+        ],
+      },
+      namespaced: true,
+    },
+    menu: {
+      ...menu,
+      namespaced: true,
+    },
+  },
+});
+//
 export const data = [
   {
     SSTATUS: "Архивные",

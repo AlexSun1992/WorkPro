@@ -177,13 +177,8 @@ export default {
     this.$store.commit("blocks/setFilter", []);
   },
 
-  mounted() {
-    console.log("filterItems:", this.filterItems);
-  },
-
   created() {
     if (this.$route.query.filters) {
-      // console.log("this.$route.query.filters:", this.$route.query.filters);
       const filters = JSON.parse(this.$route.query.filters.toString());
       if (this.filterType === "radiobutton" && this.defaultValue === null) {
         this.isAllFilters = true;
