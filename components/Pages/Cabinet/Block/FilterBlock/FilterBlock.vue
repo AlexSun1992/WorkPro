@@ -126,6 +126,7 @@ export default {
       const block = this.$store.getters["blocks/getUnfilteredBlockById"](
         this.itemId
       );
+
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
@@ -133,7 +134,6 @@ export default {
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
-
         return uniqueItems.map((name) => ({
           name,
           isChecked: filter.includes(name),
@@ -159,7 +159,6 @@ export default {
       }));
 
       options.push(this.placeHolder);
-
       return options;
     },
   },
@@ -184,7 +183,6 @@ export default {
       if (this.filterType === "radiobutton" && this.defaultValue === null) {
         this.isAllFilters = true;
       }
-
       if (this.filterType === "radiobutton" && this.defaultValue !== null) {
         this.$store.commit("blocks/setFilter", {
           propertyName: this.propertyName,
@@ -192,7 +190,6 @@ export default {
           id: this.itemId,
         });
       }
-
       if (
         this.filterType === "radiobutton" &&
         filters.find((filter) => filter.propertyName === this.propertyName)
@@ -214,7 +211,6 @@ export default {
         id: this.itemId,
       });
     }
-
     this.$store.commit("blocks/setSearchParams", null);
   },
 
