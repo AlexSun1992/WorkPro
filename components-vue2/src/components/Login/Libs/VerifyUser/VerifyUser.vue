@@ -250,17 +250,17 @@ export default {
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
+      this.$LogEvent({
+        formName: "VerifyUser errorMessage",
+        idEventType: this.loginType === "phone" ? 153 : 164,
+        controlName: "VerifyUser.vue",
+        message: `Показало капчу через ${
+          this.loginType === "phone" ? "номер" : "EMAIL"
+        }"`,
+        timeUser: new Date(),
+      });
       if (visibleCaptchas.length === 0) {
         this.loading = false;
-        this.$LogEvent({
-          formName: "VerifyUser errorMessage",
-          idEventType: this.loginType === "phone" ? 153 : 164,
-          controlName: "VerifyUser.vue",
-          message: `Показало капчу через ${
-            this.loginType === "phone" ? "номере" : "EMAIL"
-          }"`,
-          timeUser: new Date(),
-        });
       }
     },
 
@@ -402,18 +402,6 @@ export default {
               this.codeFieldShown = true;
               this.loading = false;
               this.isSendCode = true;
-            }
-
-            if (response1.data[0].MESSAGE_CODE === 105) {
-              this.$LogEvent({
-                formName: "VerifyUser errorMessage",
-                idEventType: this.loginType === "phone" ? 153 : 164,
-                controlName: "VerifyUser.vue",
-                message: `Показало сообщение об ошибке на ${
-                  this.loginType === "phone" ? "номере" : "EMAIL"
-                }"`,
-                timeUser: new Date(),
-              });
             }
 
             if (

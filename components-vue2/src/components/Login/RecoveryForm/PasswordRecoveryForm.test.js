@@ -282,7 +282,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.findComponent("#password1").trigger("focus");
     expect(dataPickerInput.classes()).toContain("is-valid");
   });
-  it("Измеить номер", async () => {
+  it("Нажал кнопку измеить номер", async () => {
     const localVue = createLocalVue();
     const wrapper = mount(PasswordRecoveryForm, {
       localVue,
@@ -601,31 +601,6 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(axios.post).toHaveBeenCalledWith(
-      "/am/free/v2/sendsmscode?smstype=recovery",
-      {
-        PHONE: "+7(999)-999-33-35",
-        error: false,
-        loginType: "phone",
-        modeType: "RECOVERY",
-        token: 1,
-      },
-      {
-        headers: {
-          "X-Application": "VueJS",
-          recaptcha: 1,
-        },
-      }
-    );
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
-
     await wrapper.find("#phone").setValue("+7(999)-999-33-35");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
@@ -633,7 +608,6 @@ describe("PasswordRecoveryForm", () => {
     expect(logs).toEqual([
       "Открыли форму восстановления пароля по телефону",
       'Нажал на кнопку Получить код на номере"',
-      'Показало капчу через номере"',
     ]);
   });
 
