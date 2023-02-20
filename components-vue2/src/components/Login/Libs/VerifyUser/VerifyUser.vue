@@ -252,7 +252,7 @@ export default {
         .filter((item) => item.style.visibility === "visible");
       this.$LogEvent({
         formName: "VerifyUser errorMessage",
-        idEventType: this.loginType === "phone" ? 153 : 164,
+        idEventType: this.loginType === "phone" ? 294 : 295,
         controlName: "VerifyUser.vue",
         message: `Показало капчу через ${
           this.loginType === "phone" ? "номер" : "EMAIL"

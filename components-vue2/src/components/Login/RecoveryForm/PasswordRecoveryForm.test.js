@@ -282,7 +282,8 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.findComponent("#password1").trigger("focus");
     expect(dataPickerInput.classes()).toContain("is-valid");
   });
-  it("Нажал кнопку измеить номер", async () => {
+
+  it("При клике на кнопку 'изменить номер' скрывается форма для ввода кода подтверждения", async () => {
     const localVue = createLocalVue();
     const wrapper = mount(PasswordRecoveryForm, {
       localVue,
@@ -488,6 +489,7 @@ describe("PasswordRecoveryForm", () => {
       'Показало сообщение об ошибке на номере"',
     ]);
   });
+
   it("Должен отправить log, что есть ошибка на EMAIL", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
