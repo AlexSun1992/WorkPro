@@ -71,6 +71,7 @@ module.exports = {
     "~/plugins/tooltip.js",
     "~/plugins/vueLog.js",
     "~/plugins/Vue2TouchEvents.js",
+    { src: "~/plugins/YandexMetrika.js", ssr: false },
   ],
   /*
    ** Nuxt.js dev-modules
