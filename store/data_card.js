@@ -346,12 +346,13 @@ export const actions = {
 
   async executeAction(
     { dispatch, commit, getters },
-    { relId, relActionId, rowId, actionId, body }
+    { relId, relActionId, rowId, actionId, body, zone }
   ) {
+    const params = zone === "free" ? "?zone=free" : "";
     try {
       return await this.$axios
         .post(
-          `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
+          `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}${params}`,
           body || {}
         )
         .then((resp) => {

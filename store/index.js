@@ -87,7 +87,8 @@ export const actions = {
     try {
       const response = await this.$axios.post(
         "/am/free/v2/restorepassword",
-        params
+        params,
+        config
       );
       return response;
     } catch (e) {

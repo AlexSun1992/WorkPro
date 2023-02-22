@@ -362,6 +362,58 @@ export default {
       }
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
+    isLikeSQL(s) {
+      return /const|select/i.test(s);
+    },
+    getConfirmOptionsForAction(action) {
+      const opts = {
+        needsConfirm: false,
+        question: `Вы действительно хотите выполнить действие" ${action.SNAME}"?`,
+        title: "Подтверждение выполнения действия",
+        okTitle: "Да",
+        cancelTitle: "Нет",
+      };
+      if (action.LHIDEDLG === false) {
+        opts.needsConfirm = true;
+      }
+      if (action.SCAPTIONSQL && !this.isLikeSQL(action.SCAPTIONSQL)) {
+        opts.question = action.SCAPTIONSQL;
+      }
+      if (action.ID === 39692) {
+        opts.title = "Вы уверены?";
+        opts.okTitle = "Да, вернуться на Госуслуги";
+        opts.cancelTitle = "Нет, продолжить";
+      }
+      return opts;
+    },
+    async showConfirmActionDlg(opts) {
+      return this.$bvModal
+        .msgBoxConfirm(opts.question, {
+          title: opts.title,
+          size: "md",
+          buttonSize: "md",
+          okVariant: "success",
+          okTitle: opts.okTitle,
+          cancelTitle: opts.cancelTitle,
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          modalClass: ["cabinet"],
+          centered: true,
+        })
+        .then((res) => res)
+        .catch((err) => {
+          console.error(err);
+          return false;
+        });
+    },
+    async goThroughConfirmStep(action) {
+      const confStepOpts = this.getConfirmOptionsForAction(action);
+      if (confStepOpts.needsConfirm) {
+        return this.showConfirmActionDlg(confStepOpts);
+      }
+      return true;
+    },
+
     async updateValue(e) {
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
@@ -393,6 +445,9 @@ export default {
           await this.fetchCard();
         }
         if (actionExecute?.ID === actionId) {
+          if (!(await this.goThroughConfirmStep(actionExecute))) {
+            return;
+          }
           const response = await this.$store.dispatch(
             "data_card/executeAction",
             {
@@ -401,12 +456,16 @@ export default {
               relId: this.rel,
               rowId: this.cardId,
               body: this.$store.getters["data_card/getActionParams"],
+              zone: this.zone,
             }
           );
           if (response?.data) {
             if (response.data.POUTVALUE) {
               if (response.data.POUTVALUE.includes("/")) {
-                window.open(response.data.POUTVALUE);
+                window.open(
+                  response.data.POUTVALUE,
+                  actionExecute?.LCURWINDOW ? "_self" : "_blank"
+                );
               }
             }
           }
