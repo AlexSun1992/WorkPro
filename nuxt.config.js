@@ -94,12 +94,15 @@ module.exports = {
     enabled: true,
   },
   sentry: {
-    dsn: "https://fca88a91b8d24be68356c28c1c625893@sentry.reso.ru/2", // Enter your project's DSN here
+    dsn: "https://a4361f5b792b485684f3c14070509b8f@sentry.reso.ru/8", // Enter your project's DSN here
     // Additional Module Options go here
     // https://sentry.nuxtjs.org/sentry/options
+    disabled: true,
     config: {
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
+
+      environment: process.env.NODE_ENV,
     },
   },
   recaptcha: {

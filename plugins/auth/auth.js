@@ -51,9 +51,37 @@ export default function ({ app, redirect, $auth, $sentry }) {
     }
     if (error.response.status !== 401) {
       try {
-        if ($nuxt) {
-          makeToast(error.response.data);
-          $sentry.captureException(error.response.data);
+        if (error.response.status === 520) {
+          if (error.response?.data?.MESSAGE && error.response?.data?.INFO) {
+            $sentry.captureException(
+              new Error(error.response.data.INFO),
+              (scope) => {
+                scope.setLevel("info");
+                scope.setTransactionName("Ошибка 520");
+                return scope;
+              }
+            );
+          }
+          if (error.response?.data?.MESSAGE && !error.response?.data?.INFO) {
+            $sentry.captureException(
+              new Error(error.response.data.MESSAGE),
+              (scope) => {
+                scope.setLevel("error");
+                scope.setTransactionName("Ошибка 520");
+                return scope;
+              }
+            );
+          }
+          if (error.response.status === 500) {
+            $sentry.captureException(
+              new Error(error.response.data),
+              (scope) => {
+                scope.setLevel("fatal");
+                scope.setTransactionName("Ошибка 500");
+                return scope;
+              }
+            );
+          }
           if (
             !originalRequest.__isRetryRequest &&
             error.response.data?.MESSAGE
@@ -71,13 +99,16 @@ export default function ({ app, redirect, $auth, $sentry }) {
             }
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
     }
   });
   app.$axios.onRequest((config) => {
     console.log(`Making request to ${config.url}`);
   });
   $auth.onError((error, name, endpoint) => {
+    console.log(error);
     $sentry.captureException(error);
   });
 }

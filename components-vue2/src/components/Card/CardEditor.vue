@@ -199,9 +199,6 @@ export default {
           })
           .catch(async (e) => {
             console.error(e);
-            Sentry.captureException(
-              `Ошибка загрузки скрипта JS.Текст ошибки: ${e}`
-            );
             this.eventHandler = await this.loadScript();
           });
       }
@@ -211,9 +208,9 @@ export default {
       ]).catch((e) => {
         console.error(e);
         Sentry.captureException(
-          new Error("Ошибка выполнения запроса."),
+          new Error(e?.response?.data?.MESSAGE || e),
           (scope) => {
-            scope.setTransactionName(e?.response?.data?.MESSAGE || e);
+            scope.setTransactionName("Ошибка выполнения запроса.");
             return scope;
           }
         );
@@ -322,9 +319,6 @@ export default {
             return;
           }
           await this.callScript(e, "afterSave");
-          Sentry.captureMessage(
-            `Действие компонента "${this.menuId}" успешно выполнено.`
-          );
         }
         if (resp.status === 500 || resp.status === 520) {
           console.error(resp);

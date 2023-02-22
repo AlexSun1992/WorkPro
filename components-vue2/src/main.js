@@ -21,7 +21,7 @@ Vue.use(Vue2TouchEvents);
 
 Sentry.init({
   Vue,
-  dsn: "https://fca88a91b8d24be68356c28c1c625893@sentry.reso.ru/2",
+  dsn: "https://50d4ea7c6f2f4aba9502689368f0fc63@sentry.reso.ru/9",
   integrations: [new BrowserTracing()],
   trackComponents: ["CardEditor"],
   hooks: ["create", "mount"],
