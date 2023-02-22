@@ -97,7 +97,7 @@ module.exports = {
     dsn: "https://a4361f5b792b485684f3c14070509b8f@sentry.reso.ru/8", // Enter your project's DSN here
     // Additional Module Options go here
     // https://sentry.nuxtjs.org/sentry/options
-    disabled: true,
+    disabled: process.env.NODE_ENV !== "production",
     config: {
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
