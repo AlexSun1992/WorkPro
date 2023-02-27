@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { getErrorNumber } from "../plugins/auth/toast.helper";
+import { getErrorNumber } from "@/plugins/auth/toast.helper";
 const MAX_ORA_ERROR = "ORA-10000";
 
 export default function ({ app, redirect, $auth, $sentry }) {

@@ -68,7 +68,7 @@ module.exports = {
     "~/plugins/carousel.js",
     "~/plugins/selectValue.js",
     "~/plugins/slick-carousel.js",
-    "~/plugins/tooltip.js",
+    { src: "~/plugins/tooltip.js", ssr: false },
     "~/plugins/vueLog.js",
     "~/plugins/Vue2TouchEvents.js",
     { src: "~/plugins/YandexMetrika.js", ssr: false },
