@@ -24,7 +24,10 @@ app.use(routerRefresh);
 app.use(routerDadata);
 app.use(routerMenu);
 app.use(routerHealthcheck);
-app.use(routerVersion);
+app.use(routerVersion, (req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 
 module.exports = {
   path: "/api",
