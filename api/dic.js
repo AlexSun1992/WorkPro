@@ -10,6 +10,10 @@ const app = express();
 const router = express.Router();
 
 router.use(express.json());
+router.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 router.use(cookieParser());
 
 router.get("/dic/:moduleId/:itemId/:name", (req, res) => {

@@ -10,6 +10,10 @@ const app = express();
 const router = express.Router();
 
 router.use(express.json());
+router.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 router.use(cookieParser());
 const requestIp = require("request-ip");
 
