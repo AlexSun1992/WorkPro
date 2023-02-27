@@ -3,6 +3,7 @@ import vueCustomElement from "vue-custom-element";
 import { ModalPlugin, DropdownPlugin, BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 import * as Sentry from "@sentry/vue";
+import { CaptureConsole } from "@sentry/integrations";
 import { BrowserTracing } from "@sentry/tracing";
 import Vue2TouchEvents from "vue2-touch-events";
 /* eslint-disable */
@@ -22,7 +23,12 @@ Vue.use(Vue2TouchEvents);
 Sentry.init({
   Vue,
   dsn: "https://50d4ea7c6f2f4aba9502689368f0fc63@sentry.reso.ru/9",
-  integrations: [new BrowserTracing()],
+  integrations: [
+    new BrowserTracing(),
+    new CaptureConsole({
+      levels: ["error"],
+    }),
+  ],
   trackComponents: ["CardEditor"],
   hooks: ["create", "mount"],
   tracesSampleRate: 1.0,

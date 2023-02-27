@@ -184,7 +184,7 @@ export default {
             Object.values(json.metaData.addFields)
           );
         })
-        .catch((e) => console.error(e));
+        .catch((e) => console.warn(e));
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
         this.$axios.defaults.headers.common.Authorization = token;

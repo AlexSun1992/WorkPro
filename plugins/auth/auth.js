@@ -1,5 +1,6 @@
 /* eslint-disable */
-import { makeToast } from "./toast";
+import { getErrorNumber } from "../plugins/auth/toast.helper";
+const MAX_ORA_ERROR = "ORA-10000";
 
 export default function ({ app, redirect, $auth, $sentry }) {
   app.$axios.onResponseError((error) => {
@@ -51,33 +52,14 @@ export default function ({ app, redirect, $auth, $sentry }) {
     }
     if (error.response.status !== 401) {
       try {
-        if (error.response.status === 520) {
-          if (error.response?.data?.MESSAGE && error.response?.data?.INFO) {
+        if (error.response.status === 520 && error.response?.data?.MESSAGE) {
+          const errNumber = getErrorNumber(error.response?.data?.MESSAGE);
+          if (MAX_ORA_ERROR > errNumber) {
             $sentry.captureException(
-              new Error(error.response.data.INFO),
-              (scope) => {
-                scope.setLevel("info");
-                scope.setTransactionName("Ошибка 520");
-                return scope;
-              }
-            );
-          }
-          if (error.response?.data?.MESSAGE && !error.response?.data?.INFO) {
-            $sentry.captureException(
-              new Error(error.response.data.MESSAGE),
+              new Error(error.response?.data?.MESSAGE),
               (scope) => {
                 scope.setLevel("error");
                 scope.setTransactionName("Ошибка 520");
-                return scope;
-              }
-            );
-          }
-          if (error.response.status === 500) {
-            $sentry.captureException(
-              new Error(error.response.data),
-              (scope) => {
-                scope.setLevel("fatal");
-                scope.setTransactionName("Ошибка 500");
                 return scope;
               }
             );
@@ -98,6 +80,13 @@ export default function ({ app, redirect, $auth, $sentry }) {
               return app.$axios(originalRequest);
             }
           }
+        }
+        if (error.response.status === 500) {
+          $sentry.captureException(new Error(error.response.data), (scope) => {
+            scope.setLevel("fatal");
+            scope.setTransactionName("Ошибка 500");
+            return scope;
+          });
         }
       } catch (e) {
         console.error(e);
