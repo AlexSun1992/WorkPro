@@ -50,7 +50,14 @@ describe("Пишем компонентные тесты на FilterBlock", () =
     );
   });
   ///
-  it("проверяем механзм переключения классов у кнопки 'Действующие'", async () => {
+  it("Проверяем наличие атрибута disabled у кнопки фильтра 'Проекты',а также url(не должен содержать переданных фильтров)", () => {
+    createComponent(storaNoFilters, filter);
+    const getButton = wrapper.find("[disabled='disabled']");
+    expect(window.location.href).toBe("http://localhost/");
+    expect(getButton.text()).toContain("Проекты");
+  });
+  ///
+  it("проверяем механзм переключения классов у кнопки 'Действующие'", () => {
     createComponent(storaWithFilters, activeFilterItem);
     const getActivePolices = wrapper.find("[data-activeitems='3']");
     const getAllpolicesButton = wrapper.find("[data-activeitems='11']");
@@ -58,11 +65,26 @@ describe("Пишем компонентные тесты на FilterBlock", () =
     expect(getActivePolices.classes()).toContain("filter-checked");
   });
   //
-  it("проверяем механзм переключения классов у кнопки 'Архивные'", async () => {
+  it("проверяем механзм переключения классов у кнопки 'Архивные'", () => {
     createComponent(storaWithFilters, archiveFilterItem);
     const getAllpolicesButton = wrapper.find("[data-activeitems='11']");
     const getArchivePolices = wrapper.find("[data-activeitems='8']");
+    getArchivePolices.trigger("click");
     expect(getAllpolicesButton.classes()).not.toContain("filter-checked");
     expect(getArchivePolices.classes()).toContain("filter-checked");
+  });
+  //
+  it("проверяем изменения url после нажатия на кнопку 'Архивные'", () => {
+    createComponent(storaWithFilters, archiveFilterItem);
+    const getUrlAfterClick = window.location.href;
+    expect(getUrlAfterClick).toContain("propertyName");
+    expect(getUrlAfterClick).toContain("filter");
+  });
+  //
+  it("проверяем изменения url после нажатия на кнопку'Действующие'", () => {
+    createComponent(storaWithFilters, activeFilterItem);
+    const getUrlAfterClick = window.location.href;
+    expect(getUrlAfterClick).toContain("propertyName");
+    expect(getUrlAfterClick).toContain("filter");
   });
 });
