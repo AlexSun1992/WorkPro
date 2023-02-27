@@ -164,7 +164,7 @@ export default {
             console.log("load", this.urlScript);
           })
           .catch(() => {
-            console.error("load", this.urlScript);
+            console.warn("load", this.urlScript);
           });
         this.isLoadedScript = true;
       }
