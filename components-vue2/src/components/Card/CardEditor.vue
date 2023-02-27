@@ -162,27 +162,29 @@ export default {
       if (process?.env?.NODE_ENV === "development" || this.params.cache) {
         this.eventHandler = await this.loadScript();
       }
-      this.cacheDataLocal().then((json) => {
-        this.$store.commit(
-          "data_card/setForm",
-          Object.values(json.metaData.data)
-        );
-        this.$store.commit("setCaptions", json.metaData.captions);
-        this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
-        this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
-        this.$store.commit(
-          "data_card/setCardCaption",
-          json.metaData.cardCaption
-        );
-        this.$store.commit(
-          "data_card/setVisible",
-          Object.values(json.metaData.visible)
-        );
-        this.$store.commit(
-          "data_card/setAddFields",
-          Object.values(json.metaData.addFields)
-        );
-      });
+      this.cacheDataLocal()
+        .then((json) => {
+          this.$store.commit(
+            "data_card/setForm",
+            Object.values(json.metaData.data)
+          );
+          this.$store.commit("setCaptions", json.metaData.captions);
+          this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
+          this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
+          this.$store.commit(
+            "data_card/setCardCaption",
+            json.metaData.cardCaption
+          );
+          this.$store.commit(
+            "data_card/setVisible",
+            Object.values(json.metaData.visible)
+          );
+          this.$store.commit(
+            "data_card/setAddFields",
+            Object.values(json.metaData.addFields)
+          );
+        })
+        .catch((e) => console.warn(e));
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
         this.$axios.defaults.headers.common.Authorization = token;
@@ -199,9 +201,6 @@ export default {
           })
           .catch(async (e) => {
             console.error(e);
-            Sentry.captureException(
-              `Ошибка загрузки скрипта JS.Текст ошибки: ${e}`
-            );
             this.eventHandler = await this.loadScript();
           });
       }
@@ -211,9 +210,9 @@ export default {
       ]).catch((e) => {
         console.error(e);
         Sentry.captureException(
-          new Error("Ошибка выполнения запроса."),
+          new Error(e?.response?.data?.MESSAGE || e),
           (scope) => {
-            scope.setTransactionName(e?.response?.data?.MESSAGE || e);
+            scope.setTransactionName("Ошибка выполнения запроса.");
             return scope;
           }
         );
@@ -322,9 +321,6 @@ export default {
             return;
           }
           await this.callScript(e, "afterSave");
-          Sentry.captureMessage(
-            `Действие компонента "${this.menuId}" успешно выполнено.`
-          );
         }
         if (resp.status === 500 || resp.status === 520) {
           console.error(resp);
@@ -465,7 +461,7 @@ export default {
               zone: this.zone,
             }
           );
-          if (response?.data) {
+          if (response?.status === 200) {
             if (response.data.POUTVALUE) {
               if (response.data.POUTVALUE.includes("/")) {
                 window.open(
@@ -474,6 +470,15 @@ export default {
                 );
               }
             }
+          }
+          if (response?.status !== 200) {
+            Sentry.captureException(
+              new Error(this.getErrorMessage),
+              (scope) => {
+                scope.setTransactionName(`Ошибка выполнения действия`);
+                return scope;
+              }
+            );
           }
         }
       }
