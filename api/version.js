@@ -6,6 +6,11 @@ const childProcess = require("child_process");
 const startDate = new Date();
 
 const router = express.Router();
+router.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
+
 router.get("/version", async (req, res) => {
   const appVersion =
     process.env.APP_VERSION ||
