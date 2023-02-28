@@ -233,15 +233,13 @@ document.addEventListener('DOMContentLoaded', function(){
             element.classList.remove("show");
               localStorage.removeItem(element.id);
               clickButton.classList.remove("btn-primary");
-              clickButton.classList.add("btn-secondary")
-              console.log("bbb");
+              clickButton.classList.add("btn-secondary")    
           }
           else {
             element.classList.add("show");
             localStorage.setItem(element.id,"true");
             clickButton.classList.remove("btn-secondary");
             clickButton.classList.add("btn-primary");
-            console.log("aaa");
           }
 
           
