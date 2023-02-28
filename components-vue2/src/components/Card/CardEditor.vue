@@ -61,13 +61,13 @@ import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
+import { isCriticalError } from "/../plugins/auth/toast.helper";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
-const startTime = Date.now();
-const limitTime = 10000;
+
 export default {
   name: "CardEditor",
   components: { FormBlock, Form },
@@ -322,17 +322,21 @@ export default {
           }
           await this.callScript(e, "afterSave");
         }
-        if (resp.status === 500 || resp.status === 520) {
-          console.error(resp);
-          Sentry.captureException(
-            new Error("Ошибка выполнения действия"),
-            (scope) => {
-              scope.setTransactionName(
-                `Ошибка выполнения действия компонента "${this.menuId} Текст ошибки: ${resp?.data}"`
-              );
+        if (resp.status === 520 && resp?.data?.MESSAGE) {
+          if (isCriticalError(resp?.data?.MESSAGE)) {
+            Sentry.captureException(new Error(resp?.data?.MESSAGE), (scope) => {
+              scope.setLevel("error");
+              scope.setTransactionName(`Ошибка 520 компонента "${this.menuId}`);
               return scope;
-            }
-          );
+            });
+          }
+        }
+        if (resp.status === 500) {
+          Sentry.captureException(new Error(resp?.data), (scope) => {
+            scope.setLevel("error");
+            scope.setTransactionName(`Ошибка 500 компонента "${this.menuId}"`);
+            return scope;
+          });
         }
       }
     },
@@ -471,14 +475,28 @@ export default {
               }
             }
           }
-          if (response?.status !== 200) {
-            Sentry.captureException(
-              new Error(this.getErrorMessage),
-              (scope) => {
-                scope.setTransactionName(`Ошибка выполнения действия`);
-                return scope;
-              }
-            );
+          if (response.status === 520 && response?.data?.MESSAGE) {
+            if (isCriticalError(response?.data?.MESSAGE)) {
+              Sentry.captureException(
+                new Error(response?.data?.MESSAGE),
+                (scope) => {
+                  scope.setLevel("error");
+                  scope.setTransactionName(
+                    `Ошибка 520 компонента "${this.menuId}"`
+                  );
+                  return scope;
+                }
+              );
+            }
+          }
+          if (response?.status === 500) {
+            Sentry.captureException(new Error(response?.data), (scope) => {
+              scope.setLevel("fatal");
+              scope.setTransactionName(
+                `Ошибка 500 компонента "${this.menuId}"`
+              );
+              return scope;
+            });
           }
         }
       }
