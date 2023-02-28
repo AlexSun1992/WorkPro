@@ -74,24 +74,26 @@ export const actions = {
   },
   async fetchMenuById({ commit, dispatch, state }, params) {
     try {
-      const URL =
-        params?.zone === "free"
-          ? `/api/module/55/${params.idItem}?zone=free`
-          : `/api/module/55/${params.idItem}`;
-      await this.$axios.get(URL).then((res) => {
-        commit("setMenuById", res.data);
-        if (process.server) {
-          commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
+      if (params !== null) {
+        const URL =
+          params?.zone === "free"
+            ? `/api/module/55/${params.idItem}?zone=free`
+            : `/api/module/55/${params.idItem}`;
+        await this.$axios.get(URL).then((res) => {
+          commit("setMenuById", res.data);
+          if (process.server) {
+            commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
+          }
+        });
+        if (params?.idWizard) {
+          await this.$axios
+            .get(`/api/module/55/${params.idWizard}`)
+            .then((res) => {
+              if (res.data?.settings && res.data?.subSettings) {
+                commit("setMenuById", res.data);
+              }
+            });
         }
-      });
-      if (params.idWizard) {
-        await this.$axios
-          .get(`/api/module/55/${params.idWizard}`)
-          .then((res) => {
-            if (res.data?.settings && res.data?.subSettings) {
-              commit("setMenuById", res.data);
-            }
-          });
       }
     } catch (e) {
       console.error(e);
