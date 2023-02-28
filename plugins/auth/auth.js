@@ -1,6 +1,4 @@
-/* eslint-disable */
-import { getErrorNumber } from "@/plugins/auth/toast.helper";
-const MAX_ORA_ERROR = "ORA-10000";
+import { isCriticalError } from "@/plugins/auth/toast.helper";
 
 export default function ({ app, redirect, $auth, $sentry }) {
   app.$axios.onResponseError((error) => {
@@ -53,8 +51,7 @@ export default function ({ app, redirect, $auth, $sentry }) {
     if (error.response.status !== 401) {
       try {
         if (error.response.status === 520 && error.response?.data?.MESSAGE) {
-          const errNumber = getErrorNumber(error.response?.data?.MESSAGE);
-          if (MAX_ORA_ERROR > errNumber) {
+          if (isCriticalError(error.response?.data?.MESSAGE)) {
             $sentry.captureException(
               new Error(error.response?.data?.MESSAGE),
               (scope) => {
@@ -63,21 +60,21 @@ export default function ({ app, redirect, $auth, $sentry }) {
                 return scope;
               }
             );
-          }
-          if (
-            !originalRequest.__isRetryRequest &&
-            error.response.data?.MESSAGE
-          ) {
             if (
-              error.response.data?.MESSAGE.includes(
-                "ограничение уникальности"
-              ) ||
-              error.response.data?.MESSAGE.includes(
-                "количество открытых курсоров превысило допустимый максимум"
-              )
+              !originalRequest.__isRetryRequest &&
+              error.response.data?.MESSAGE
             ) {
-              originalRequest.__isRetryRequest = true;
-              return app.$axios(originalRequest);
+              if (
+                error.response.data?.MESSAGE.includes(
+                  "ограничение уникальности"
+                ) ||
+                error.response.data?.MESSAGE.includes(
+                  "количество открытых курсоров превысило допустимый максимум"
+                )
+              ) {
+                originalRequest.__isRetryRequest = true;
+                return app.$axios(originalRequest);
+              }
             }
           }
         }
@@ -96,8 +93,7 @@ export default function ({ app, redirect, $auth, $sentry }) {
   app.$axios.onRequest((config) => {
     console.log(`Making request to ${config.url}`);
   });
-  $auth.onError((error, name, endpoint) => {
-    console.log(error);
-    $sentry.captureException(error);
+  $auth.onError((error) => {
+    console.warn(error);
   });
 }

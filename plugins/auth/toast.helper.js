@@ -43,6 +43,14 @@ export function getErrorNumber(errorMessage) {
   return getORAnumber;
 }
 
+export function isCriticalError(errorMessage) {
+  const errorNumber = getErrorNumber(errorMessage);
+  if (MAX_ORA_ERROR > errorNumber) {
+    return true;
+  }
+  return false;
+}
+
 export function getErrorMessage(errorMessage, h) {
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
