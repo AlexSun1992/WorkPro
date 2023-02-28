@@ -101,6 +101,7 @@
     ></script>
 
     <div class="container">
+    
       <!-- <component-card-editor
 
      <div class="container">
@@ -136,11 +137,39 @@
       <!-- <div class="d-block">
               <component-reg-form></component-reg-form>
             </div> -->
+<style>
+.block-block > div {display: none;}
+.block-block > div.show {display: block;}
+</style>
+
+<div class="container">
+  <div class="row">
+     <div class="col-12 block-block">
+      <div id="component-auth-form" data-namebutton="Авторизация"><component-auth-form></component-auth-form></div>
+      <div id="component-password-confirm" data-namebutton="Подтверждения пароля"><component-password-confirm></component-password-confirm></div>
+      <div id="component-offices-map" data-namebutton="Карта офисов"><component-offices-map></component-offices-map></div> 
+      <div id="component-reg-form" data-namebutton="Регистрации"><component-reg-form></component-reg-form></div>
+      <div id="component-show-city" data-namebutton="Выбор города"><component-show-city></component-show-city></div>
+      <div id="component-card-editor-777" data-namebutton="ОСАГО"><component-card-editor        module-id="55"        menu-id="777"        zone="free"></component-card-editor></div>
+    </div>
+    <div class="button-block">
+    </div>
+  </div>
+</div>
+
+
+ 
+ 
+<!--
+<label for="component-auth-form">component-auth-form</label>
 
       <div class="d-block">
+        <label><input type="checkbox" id="login">login-form</label>
+        <component-auth-form></component-auth-form>
+        <label><input type="checkbox" id="password_recovery">password-recovery-form</label>
         <component-auth-form></component-auth-form>
       </div>
-
+-->
       <!-- <div>
             <component-password-confirm></component-password-confirm>
           </div> -->
@@ -149,9 +178,9 @@
               <component-auth-form></component-auth-form>
             </div> -->
 
-      <!--      <div class="d-block">-->
+      <!--      <div class="d-block">
              <component-password-recovery-form></component-password-recovery-form>
-      <!--      </div>-->
+         </div>-->
 
       <!-- <div class="d-block">
         <component-auth-form></component-auth-form>
@@ -178,32 +207,50 @@
 
     <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
     <script>
-      const target = document.getElementById("osago");
 
-      const startTime = Date.now();
 
-      // Конфигурация observer (за какими изменениями наблюдать)
-      const config = {
-        attributes: true,
-        childList: true,
-        subtree: true,
-      };
-
-      // Колбэк-функция при срабатывании мутации
-      const callback = function (mutationsList, observer) {
-        console.log(mutationsList.length);
-        if (mutationsList.length === 12 || mutationsList.length === 13) {
-          const endTime = Date.now();
-          const duration = endTime - startTime;
-          console.log(duration);
-          alert(duration);
+document.addEventListener('DOMContentLoaded', function(){
+      let AuthFormBlock = document.querySelectorAll('.block-block > div ');
+      AuthFormBlock.forEach(function(element,i){
+        let localStorageId =  localStorage.getItem(element.id);
+        if (localStorageId === "true"){
+          element.classList.add("show");
         }
-      };
-      // Создаём экземпляр наблюдателя с указанной функцией колбэка
-      const observer = new MutationObserver(callback);
+        let clickButton = document.createElement("button");
+        clickButton.setAttribute('type','button');
+        clickButton.textContent = element.dataset.namebutton;
+        if (localStorageId === "true"){
+          clickButton.classList.add("btn-primary");
 
-      // Начинаем наблюдение за настроенными изменениями целевого элемента
-      observer.observe(target, config);
+        }
+        else {
+          clickButton.classList.add("btn-secondary");
+        }
+
+
+        clickButton.addEventListener('click', function (){
+          if (element.className === "show") {
+            element.classList.remove("show");
+              localStorage.removeItem(element.id);
+              clickButton.classList.remove("btn-primary");
+              clickButton.classList.add("btn-secondary")
+              console.log("bbb");
+          }
+          else {
+            element.classList.add("show");
+            localStorage.setItem(element.id,"true");
+            clickButton.classList.remove("btn-secondary");
+            clickButton.classList.add("btn-primary");
+            console.log("aaa");
+          }
+
+          
+        });
+      document.querySelector(".button-block").appendChild(clickButton);
+      });
+});
+
+
     </script>
   </body>
 </html>
