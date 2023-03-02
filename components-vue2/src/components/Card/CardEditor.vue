@@ -61,13 +61,13 @@ import Cookies from "js-cookie";
 import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
+import { isCriticalError } from "/../plugins/auth/toast.helper";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
-const startTime = Date.now();
-const limitTime = 10000;
+
 export default {
   name: "CardEditor",
   components: { FormBlock, Form },
@@ -162,27 +162,29 @@ export default {
       if (process?.env?.NODE_ENV === "development" || this.params.cache) {
         this.eventHandler = await this.loadScript();
       }
-      this.cacheDataLocal().then((json) => {
-        this.$store.commit(
-          "data_card/setForm",
-          Object.values(json.metaData.data)
-        );
-        this.$store.commit("setCaptions", json.metaData.captions);
-        this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
-        this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
-        this.$store.commit(
-          "data_card/setCardCaption",
-          json.metaData.cardCaption
-        );
-        this.$store.commit(
-          "data_card/setVisible",
-          Object.values(json.metaData.visible)
-        );
-        this.$store.commit(
-          "data_card/setAddFields",
-          Object.values(json.metaData.addFields)
-        );
-      });
+      this.cacheDataLocal()
+        .then((json) => {
+          this.$store.commit(
+            "data_card/setForm",
+            Object.values(json.metaData.data)
+          );
+          this.$store.commit("setCaptions", json.metaData.captions);
+          this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
+          this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
+          this.$store.commit(
+            "data_card/setCardCaption",
+            json.metaData.cardCaption
+          );
+          this.$store.commit(
+            "data_card/setVisible",
+            Object.values(json.metaData.visible)
+          );
+          this.$store.commit(
+            "data_card/setAddFields",
+            Object.values(json.metaData.addFields)
+          );
+        })
+        .catch((e) => console.warn(e));
       const token = Cookies.get(TOKEN_NAME);
       if (token) {
         this.$axios.defaults.headers.common.Authorization = token;
@@ -199,9 +201,6 @@ export default {
           })
           .catch(async (e) => {
             console.error(e);
-            Sentry.captureException(
-              `Ошибка загрузки скрипта JS.Текст ошибки: ${e}`
-            );
             this.eventHandler = await this.loadScript();
           });
       }
@@ -211,9 +210,9 @@ export default {
       ]).catch((e) => {
         console.error(e);
         Sentry.captureException(
-          new Error("Ошибка выполнения запроса."),
+          new Error(e?.response?.data?.MESSAGE || e),
           (scope) => {
-            scope.setTransactionName(e?.response?.data?.MESSAGE || e);
+            scope.setTransactionName("Ошибка выполнения запроса.");
             return scope;
           }
         );
@@ -322,21 +321,22 @@ export default {
             return;
           }
           await this.callScript(e, "afterSave");
-          Sentry.captureMessage(
-            `Действие компонента "${this.menuId}" успешно выполнено.`
-          );
         }
-        if (resp.status === 500 || resp.status === 520) {
-          console.error(resp);
-          Sentry.captureException(
-            new Error("Ошибка выполнения действия"),
-            (scope) => {
-              scope.setTransactionName(
-                `Ошибка выполнения действия компонента "${this.menuId} Текст ошибки: ${resp?.data}"`
-              );
+        if (resp.status === 520 && resp?.data?.MESSAGE) {
+          if (isCriticalError(resp?.data?.MESSAGE)) {
+            Sentry.captureException(new Error(resp?.data?.MESSAGE), (scope) => {
+              scope.setLevel("error");
+              scope.setTransactionName(`Ошибка 520 компонента "${this.menuId}`);
               return scope;
-            }
-          );
+            });
+          }
+        }
+        if (resp.status === 500) {
+          Sentry.captureException(new Error(resp?.data), (scope) => {
+            scope.setLevel("error");
+            scope.setTransactionName(`Ошибка 500 компонента "${this.menuId}"`);
+            return scope;
+          });
         }
       }
     },
@@ -368,6 +368,58 @@ export default {
       }
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
+    isLikeSQL(s) {
+      return /const|select/i.test(s);
+    },
+    getConfirmOptionsForAction(action) {
+      const opts = {
+        needsConfirm: false,
+        question: `Вы действительно хотите выполнить действие" ${action.SNAME}"?`,
+        title: "Подтверждение выполнения действия",
+        okTitle: "Да",
+        cancelTitle: "Нет",
+      };
+      if (action.LHIDEDLG === false) {
+        opts.needsConfirm = true;
+      }
+      if (action.SCAPTIONSQL && !this.isLikeSQL(action.SCAPTIONSQL)) {
+        opts.question = action.SCAPTIONSQL;
+      }
+      if (action.ID === 39692) {
+        opts.title = "Вы уверены?";
+        opts.okTitle = "Да, вернуться на Госуслуги";
+        opts.cancelTitle = "Нет, продолжить";
+      }
+      return opts;
+    },
+    async showConfirmActionDlg(opts) {
+      return this.$bvModal
+        .msgBoxConfirm(opts.question, {
+          title: opts.title,
+          size: "md",
+          buttonSize: "md",
+          okVariant: "success",
+          okTitle: opts.okTitle,
+          cancelTitle: opts.cancelTitle,
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          modalClass: ["cabinet"],
+          centered: true,
+        })
+        .then((res) => res)
+        .catch((err) => {
+          console.error(err);
+          return false;
+        });
+    },
+    async goThroughConfirmStep(action) {
+      const confStepOpts = this.getConfirmOptionsForAction(action);
+      if (confStepOpts.needsConfirm) {
+        return this.showConfirmActionDlg(confStepOpts);
+      }
+      return true;
+    },
+
     async updateValue(e) {
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
@@ -399,6 +451,9 @@ export default {
           await this.fetchCard();
         }
         if (actionExecute?.ID === actionId) {
+          if (!(await this.goThroughConfirmStep(actionExecute))) {
+            return;
+          }
           const response = await this.$store.dispatch(
             "data_card/executeAction",
             {
@@ -407,14 +462,41 @@ export default {
               relId: this.rel,
               rowId: this.cardId,
               body: this.$store.getters["data_card/getActionParams"],
+              zone: this.zone,
             }
           );
-          if (response?.data) {
+          if (response?.status === 200) {
             if (response.data.POUTVALUE) {
               if (response.data.POUTVALUE.includes("/")) {
-                window.open(response.data.POUTVALUE);
+                window.open(
+                  response.data.POUTVALUE,
+                  actionExecute?.LCURWINDOW ? "_self" : "_blank"
+                );
               }
             }
+          }
+          if (response.status === 520 && response?.data?.MESSAGE) {
+            if (isCriticalError(response?.data?.MESSAGE)) {
+              Sentry.captureException(
+                new Error(response?.data?.MESSAGE),
+                (scope) => {
+                  scope.setLevel("error");
+                  scope.setTransactionName(
+                    `Ошибка 520 компонента "${this.menuId}"`
+                  );
+                  return scope;
+                }
+              );
+            }
+          }
+          if (response?.status === 500) {
+            Sentry.captureException(new Error(response?.data), (scope) => {
+              scope.setLevel("fatal");
+              scope.setTransactionName(
+                `Ошибка 500 компонента "${this.menuId}"`
+              );
+              return scope;
+            });
           }
         }
       }

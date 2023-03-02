@@ -18,6 +18,10 @@ const IP = require("ip");
 let controller;
 
 router.use(express.json());
+router.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 router.use(cookieParser());
 
 router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
@@ -326,15 +330,18 @@ router.post(
         mobile2ServiceInstance.defaults.headers.common.Authorization =
           req.headers.authorization;
       } else {
-        if (req.cookies) {
+        if (req.cookies && req.cookies["auth._token.local"]) {
           mobile2ServiceInstance.defaults.headers.common.Authorization =
             req.cookies["auth._token.local"];
         }
       }
       const body = formConverter.save(req.body);
-      const url = `${consts.ACTIONEXEC}/${req.params.rowId}/${
-        req.params.actionId
-      }${req.params.relId !== "undefined" ? `?rel=${req.params.relId}&` : "?"}${
+
+      const url = `${
+        req.query.zone === "free" ? consts.FREEACTIONEXEC : consts.ACTIONEXEC
+      }/${req.params.rowId}/${req.params.actionId}${
+        req.params.relId !== "undefined" ? `?rel=${req.params.relId}&` : "?"
+      }${
         req.params.relActionId !== "undefined"
           ? `relaction=${req.params.relActionId}`
           : ""

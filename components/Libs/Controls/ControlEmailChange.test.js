@@ -1,13 +1,15 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import ControlEmailChange from "./ControlEmailChange.vue";
 
-import { state as stateStore } from "../../../store/data_card";
-import { getters as gettersStore } from "../../../store/data_card";
-import { actions as actionsStore } from "../../../store/data_card";
-import { mutations as mutationsStore } from "../../../store/data_card";
+import {
+  state as stateStore,
+  getters as gettersStore,
+  actions as actionsStore,
+  mutations as mutationsStore,
+} from "../../../store/data_card";
 
 describe("ControlemailChange", () => {
   let wrapper;
@@ -39,47 +41,6 @@ describe("ControlemailChange", () => {
     value: "hhh@mail.ru",
   };
 
-  const paramsProps = {
-    text: "Верифицировать e-mail",
-    active: true,
-    compType: 9,
-    recordLoad: true,
-    newRecord: false,
-    filters: [],
-    actions: [
-      {
-        label: "Выслат код",
-        id: 36297,
-        type: 4,
-        command: "Mobile.ClientUtils.SendEmail",
-        relaction: "92FD4856E5006CA158B5BA8236962DA2",
-        isDialog: false,
-        isCurrentWindow: true,
-        field: "id",
-        refresh: false,
-        closeAfter: false,
-      },
-    ],
-    tabs: [],
-    add: false,
-    edit: true,
-    delete: false,
-    cols: 1,
-    wizard: [],
-    isCard: false,
-    isForm: true,
-    isWizard: false,
-    isPortal: false,
-    portalgrid: null,
-    cardgrid: null,
-    cardtemplate: null,
-    isModal: false,
-    parentMenu: null,
-    idItem: 718,
-    idParent: 0,
-    newCount: null,
-  };
-
   let store;
   let state;
   let getters;
@@ -104,7 +65,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        params: paramsProps,
+        // params: paramsProps,
       },
       mocks: {
         $store: store,
@@ -123,7 +84,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        params: paramsProps,
+        // params: paramsProps,
       },
       mocks: {
         $store: store,
@@ -141,7 +102,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        params: paramsProps,
+        // params: paramsProps,
       },
       mocks: {
         $store: store,
@@ -160,7 +121,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        params: paramsProps,
+        // params: paramsProps,
       },
       mocks: {
         $store: store,
@@ -179,7 +140,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        params: paramsProps,
+        //  params: paramsProps,
       },
       mocks: {
         $store: store,
@@ -201,7 +162,7 @@ describe("ControlemailChange", () => {
     wrapper = mount(ControlEmailChange, {
       propsData: {
         data: dataProps,
-        params: paramsProps,
+        //  params: paramsProps,
       },
       mocks: {
         $store: store,

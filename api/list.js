@@ -26,6 +26,10 @@ router.use(
   })
 );
 router.use(express.json({ limit: "50mb" }));
+router.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 
 router.use(cookieParser());
 

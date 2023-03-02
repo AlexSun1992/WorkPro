@@ -10,6 +10,10 @@ const router = express.Router();
 
 router.use(express.json());
 router.use(cookieParser());
+router.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 
 router.get("/userinfo", async (req, res) => {
   try {

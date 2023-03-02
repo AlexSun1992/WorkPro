@@ -36,6 +36,7 @@ export default {
       username: this.$auth.user.SUSERNAME,
       id: this.$auth.user.ID,
       email: this.$auth.user.SEMAIL,
+      yandexID: this.$cookiz.get("_ym_uid"),
     });
   },
 };
