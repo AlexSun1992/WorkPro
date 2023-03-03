@@ -10,7 +10,8 @@ const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
 const uppercaseLetter = /[A-Z]/;
 const lowercaseLetter = /[a-z]/;
 const numeric = /[0-9]/i;
-const forbiddeCharacters = /^[^!"#$%&'()*+,-./:;|<=>?@[_`{}~]*$/i;
+const space = /[\s]/;
+const forbiddeCharacters = /^[^':<>_`~]*$/i;
 
 /** Функция создания ошибок валидации пароля */
 function createErrorMessage(errorValue) {
@@ -44,6 +45,11 @@ export function passwordValidationDetail(password) {
         )
       );
     }
+  }
+  if (space.test(password) === true) {
+    errorMessagepasswordValidation.push(
+      createErrorMessage("Пароль не должен содержать пробел.")
+    );
   }
   if (
     forbiddeCharacters.test(password) === false ||
