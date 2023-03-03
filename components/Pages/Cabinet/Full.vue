@@ -17,7 +17,6 @@ export default {
       if (data?.data && data?.data?.STATUS !== 401) {
         const user = data.data[0]._data[0];
         app.$auth.setUser(user);
-        $sentry.setUser(user);
       }
       const setting = store.getters["menu/breadcrumbs"].slice(-1).pop();
       if (setting.isCard || setting.isWizard) {
@@ -32,10 +31,7 @@ export default {
   },
   mounted() {
     this.$sentry.setUser({
-      ...this.$auth.user,
-      username: this.$auth.user.SUSERNAME,
       id: this.$auth.user.ID,
-      email: this.$auth.user.SEMAIL,
       yandexID: this.$cookiz.get("_ym_uid"),
     });
   },
