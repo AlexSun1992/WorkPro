@@ -5,7 +5,7 @@ module.exports = {
   devServer: {
     proxy: {
       "^/free": {
-        target: "https://lk.reso.ru",
+        target: "https://reso.ru",
       },
       "^/am": {
         target: "https://lk.reso.ru",
