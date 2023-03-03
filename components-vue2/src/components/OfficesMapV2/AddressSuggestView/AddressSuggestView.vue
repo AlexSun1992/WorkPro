@@ -44,7 +44,7 @@ export default {
     },
   },
   methods: {
-    async search(input) {
+    async search(input, onlyCity) {
       this.group = [];
       if (input.length < 1) {
         return [];
@@ -53,6 +53,13 @@ export default {
       let body = {
           query: input,
         };
+      if (onlyCity) {
+        body = {
+          query: input,
+          from_bound: {value: "city"},
+          to_bound: {value: "settlement"},
+        }
+      }
       if (this.isMetro) {
         body = {
           query: input,
@@ -117,6 +124,9 @@ export default {
     isInputEmpty() {
       return !(this.input);
     },
+    cityData() {
+      return this.$store.getters["map/getCity"];
+    },
   },
   watch: {
     isMetro(newVal) {
@@ -126,6 +136,15 @@ export default {
       } else {
         this.$refs.autocomplete.value = this.textMap;
         this.input = this.textMap;
+      }
+    },
+    async cityData() {
+      let city = this.$store.getters["map/getCity"]?.city;
+      if (this.isInputEmpty && city) {
+        let result = await this.search(city, true);
+        this.textMap = result[0].value;
+        this.$refs.autocomplete.value = this.textMap;
+        this.$emit("update", result[0]);
       }
     },
   },
