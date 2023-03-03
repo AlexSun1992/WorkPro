@@ -52,7 +52,7 @@
           <div v-show="cardVisible" ref="card" class="card">
             <metro-office-card
               @open="openOnMap"
-              @close="closeCard"
+              @close="closeMetroCard"
               :offices="stationOffices"
             />
           </div>
@@ -188,16 +188,6 @@ export default {
         }).catch((e) => console.log(e));
 
       this.filteredOffices = this.allOffices;
-
-      if (this.tabMetroVisible) {
-        const offices = this.filteredOffices?.reduce((acc, office) => {
-          if (office.IDUNDERGROUND.length > 0) {
-            this.getOfficesByStations(acc, office);
-          }
-          return acc;
-        }, {});
-        this.changeStationAttribute(offices);
-      }
 
       await this.$loadScript(
         `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
@@ -340,7 +330,7 @@ export default {
         }
       });
     },
-    closeCard() {
+    closeMetroCard() {
       this.circleClicked = false;
 
       const gsvg = document.querySelector('use[href="#balloon-select"]');
@@ -355,11 +345,23 @@ export default {
       document.body.classList.remove("overflow-hidden");
     },
 
-    openOnMap(office) {
+    async openOnMap(office) {
       this.currentTab = 0;
       this.myMap.setZoom(15);
-      this.myMap.setCenter([office.NLAT, office.NLONG]);
-      //this.objectManager.objects.balloon.open(office.ID);
+
+      await this.objectManager.objects.balloon.open(office.ID);
+      this.updateYandexBalloon();
+
+      if (this.isMobile) {
+        this.myMap.setCenter([office.NLAT, office.NLONG]);
+        let gpc = this.myMap.getGlobalPixelCenter();
+        gpc[1] += 128;
+        this.myMap.setGlobalPixelCenter(gpc);
+      }
+    },
+
+    updateYandexBalloon() {
+      this.objectManager.objects.balloon.setData(this.objectManager.objects.balloon.getData());
     },
 
     setMouseCoords(e) {
@@ -543,7 +545,7 @@ export default {
       const step = 0.2;
       if (param == "+") {
         if (this.svgScale < 1.9) {
-          this.closeCard();
+          this.closeMetroCard();
           this.svgScale += step;
           this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
           this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
@@ -552,7 +554,7 @@ export default {
         this.fitToViewportMetro();
       } else if (param == "-") {
         if (this.svgScale > 0.3) {
-          this.closeCard();
+          this.closeMetroCard();
           this.svgScale -= step;
           this.gScaleTransformX = (this.gWidth * (1 - this.svgScale)) / 2;
           this.gScaleTransformY = (this.gHeight * (1 - this.svgScale)) / 2;
@@ -618,9 +620,19 @@ export default {
             'overflow-x: hidden;\n' +
             'overflow-y: auto;">',
             '{% for geoObject in properties.geoObjects %}',
-              '{{ geoObject.properties.balloonContentBody|raw }}',
+              '{{ geoObject.properties.balloonContent|raw }}',
             '{% endfor %}',
           '</div>',
+        '</div>',
+      ].join(''));
+      let customBalloonPanelContentLayout = ymaps.templateLayoutFactory.createClass([
+        '<div style="height: 100%;' +
+        'display: block;\n' +
+        'overflow-x: hidden;\n' +
+        'overflow-y: auto;">',
+          '{% for geoObject in properties.geoObjects %}',
+            '{{ geoObject.properties.balloonContent|raw }}',
+          '{% endfor %}',
         '</div>',
       ].join(''));
 
@@ -631,6 +643,7 @@ export default {
         preset: 'islands#darkGreenClusterIcons',
         balloonMaxHeight: 430,
         balloonContentLayout: customBalloonContentLayout,
+        balloonPanelContentLayout: customBalloonPanelContentLayout,
       });
 
       objectManager.add(this.getGeoObjects(this.filteredOffices));
@@ -661,6 +674,8 @@ export default {
       this.myMap = new ymaps.Map("map", this.mapState, {
         yandexMapDisablePoiInteractivity: true,
         hideIconOnBalloonOpen: false,
+        balloonPanelMaxMapArea: 496000,
+        balloonPanelMaxHeightRatio: 0.5,
       });
       this.myMap.behaviors.disable("scrollZoom");
       this.myMap.behaviors.enable(["dblClickZoom", "multiTouch"]);
@@ -674,10 +689,6 @@ export default {
       });
       this.objectManager = objectManager;
       this.myMap.geoObjects.add(objectManager);
-
-      if (this.isMobile) {
-        this.myMap.options.set("balloonAutoPan", false);
-      }
 
       this.updateMap();
     },
@@ -699,6 +710,7 @@ export default {
       this.filteredOffices.sort((a, b) => this.getDistance([a.NLAT, a.NLONG], this.centerCoords) > this.getDistance([b.NLAT, b.NLONG], this.centerCoords) ? 1 : -1);
 
       if (this.tabMetroVisible) {
+        this.closeMetroCard();
         const offices = this.filteredOffices?.reduce((acc, office) => {
           if (office.IDUNDERGROUND.length > 0) {
             this.getOfficesByStations(acc, office);
@@ -731,10 +743,9 @@ export default {
               coordinates: [office.NLAT, office.NLONG],
             },
             properties: {
-              balloonContentBody: this.getHtmlOfficeCard(office),
+              balloonContent: this.getHtmlOfficeCard(office),
               hintContent: `${office.SSHORTNAME ?? "Офис продаж"}`,
               balloonShadowPane: "outerBalloon",
-              clusterCaption: `${office.SSHORTNAME ?? "Офис продаж"}`,
 
               LOMS: office.LOMS,
               LREG_CENTER: office.LREG_CENTER,
@@ -783,7 +794,11 @@ export default {
         maxLong = this.centerCoords[1];
       }
       let bounds = [[minLat, minLong], [maxLat, maxLong]];
-      let newState = ymaps.util.bounds.getCenterAndZoom(bounds, this.myMap.container.getSize());
+      let mapSize = this.myMap.container.getSize();
+      if (mapSize[0] == 0 || mapSize[1] == 0) {
+        mapSize = [this.width, this.height];
+      }
+      let newState = ymaps.util.bounds.getCenterAndZoom(bounds, mapSize);
 
       if (newState.zoom <= zoom) {
         this.myMap.setCenter(newState.center);
@@ -800,8 +815,10 @@ export default {
 
     async showOnMap(data) {
       if (data) {
-        if (this.tabMetroSelected) {
-          this.closeCard();
+        this.regionId = data.data.kladr_id.substring(0, 2);
+
+        if (this.tabMetroVisible) {
+          this.closeMetroCard();
           const _this = this;
           const map = document.querySelector(".g-svg-metromap");
 
@@ -812,24 +829,21 @@ export default {
               _this.positionSelectBalloon();
             }
           });
+        }
 
+        if (data.data.qc_geo < 5) {
+          this.updateMap({center: [data.data.geo_lat, data.data.geo_lon], zoom: 12});
         } else {
-          this.regionId = data.data.kladr_id.substring(0, 2);
+          let myMap = this.myMap;
 
-          if (data.data.qc_geo < 5) {
-            this.updateMap({center: [data.data.geo_lat, data.data.geo_lon], zoom: 12});
-          } else {
-            let myMap = this.myMap;
-
-            ymaps.geocode(data.value, {
-              results: 1
-            }).then(function (res) {
-              let bounds = res.geoObjects.get(0).properties.get('boundedBy');
-              myMap.setBounds(bounds, {
-                checkZoomRange: true
-              });
+          ymaps.geocode(data.value, {
+            results: 1
+          }).then(function (res) {
+            let bounds = res.geoObjects.get(0).properties.get('boundedBy');
+            myMap.setBounds(bounds, {
+              checkZoomRange: true
             });
-          }
+          });
         }
       }
     },
@@ -925,6 +939,20 @@ export default {
 
     cardVisible() {
       return this.circleClicked && this.stationOffices.length;
+    },
+  },
+
+  watch: {
+    tabMetroSelected() {
+      if (this.tabMetroSelected) {
+        const offices = this.filteredOffices?.reduce((acc, office) => {
+          if (office.IDUNDERGROUND.length > 0) {
+            this.getOfficesByStations(acc, office);
+          }
+          return acc;
+        }, {});
+        this.changeStationAttribute(offices);
+      }
     },
   },
 };

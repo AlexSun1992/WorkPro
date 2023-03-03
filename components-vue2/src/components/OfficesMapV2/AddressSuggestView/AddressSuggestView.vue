@@ -36,6 +36,7 @@ export default {
       input: "",
       textMap: '',
       textMetro: '',
+      isInputEmpty: true,
     };
   },
   props: {
@@ -53,13 +54,6 @@ export default {
       let body = {
           query: input,
         };
-      if (onlyCity) {
-        body = {
-          query: input,
-          from_bound: {value: "city"},
-          to_bound: {value: "settlement"},
-        }
-      }
       if (this.isMetro) {
         body = {
           query: input,
@@ -69,6 +63,13 @@ export default {
               street_type_full: "метро",
             }
           ],
+        }
+      }
+      if (onlyCity) {
+        body = {
+          query: input,
+          from_bound: {value: "city"},
+          to_bound: {value: "settlement"},
         }
       }
       const response = await fetch(`/api/suggestions/${query}`, {
@@ -99,8 +100,13 @@ export default {
       return item.value;
     },
     handleSubmit(result) {
-      this.input = result?.value;
-      this.$emit("update", result);
+      if (result) {
+        this.input = result.value;
+        this.isInputEmpty = false;
+        this.$emit("update", result);
+      } else {
+        this.isInputEmpty = true;
+      }
     },
     handleBlur() {
       const find = this.group.find((i) =>
@@ -118,12 +124,10 @@ export default {
       }
       this.input = '';
       this.$refs.autocomplete.value = '';
+      this.isInputEmpty = true;
     },
   },
   computed: {
-    isInputEmpty() {
-      return !(this.input);
-    },
     cityData() {
       return this.$store.getters["map/getCity"];
     },
@@ -132,17 +136,18 @@ export default {
     isMetro(newVal) {
       if (newVal) {
         this.$refs.autocomplete.value = this.textMetro;
-        this.input = this.textMetro;
+        this.isInputEmpty = !this.textMetro;
       } else {
         this.$refs.autocomplete.value = this.textMap;
-        this.input = this.textMap;
+        this.isInputEmpty = !this.textMap;
       }
     },
     async cityData() {
       let city = this.$store.getters["map/getCity"]?.city;
-      if (this.isInputEmpty && city) {
+      if (!(this.input) && city) {
         let result = await this.search(city, true);
         this.textMap = result[0].value;
+        this.isInputEmpty = false;
         this.$refs.autocomplete.value = this.textMap;
         this.$emit("update", result[0]);
       }
