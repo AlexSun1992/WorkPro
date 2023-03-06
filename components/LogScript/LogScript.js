@@ -222,28 +222,25 @@ async function logEvent(object) {
       generalObject.formName = formName;
       // generalObject.resending = 0;
       // generalObject.events = objectDataArray;
+
+      let urlApiLog = "/am/free/v2/lk/log";
+      const fetchOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Application": "VueJS",
+        },
+        body: JSON.stringify({ ...generalObject, ...object }),
+      };
       const token = Cookies.get("auth._token.local");
-      if (token !== "false") {
-        const urlApiLog = "/am/main/v2/lk/log";
-        fetch(urlApiLog, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Application": "VueJS",
-            Authorization: token,
-          },
-          body: JSON.stringify({ ...generalObject, ...object }),
-        });
-      } else {
-        const urlApiLog = "/am/free/v2/lk/log";
-        fetch(urlApiLog, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Application": "VueJS",
-          },
-          body: JSON.stringify({ ...generalObject, ...object }),
-        });
+      const isAuthorised = token !== "false";
+      if (token === "false") {
+        fetch(urlApiLog, fetchOptions);
+      }
+      if (isAuthorised) {
+        urlApiLog = "/am/main/v2/lk/log";
+        fetchOptions.headers.Authorization = token;
+        fetch(urlApiLog, fetchOptions);
       }
     }
   } catch (error) {
