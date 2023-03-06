@@ -352,7 +352,7 @@ router.post(
           res.send(resp.data[0]);
         })
         .catch((err) => {
-          res.status(err.response.data.STATUS).send(err.response.data);
+          res.status(err?.response?.data.STATUS || 520).send(err.response.data);
         });
     } catch (e) {
       res.send(e);
