@@ -125,16 +125,16 @@ router.get("/module/:moduleId/:itemId", (req, res) => {
       : null;
     mobile2ServiceInstance({
       url: `${
-        req.query.zone === "free" ? consts.CLIENTFREEMENU : consts.CLIENTMENU
+        req.query.zone === "main" ? consts.CLIENTFREEMENU : consts.CLIENTMENU
       }/${req.params.moduleId}/${req.params.itemId}`,
       method: "GET",
     })
       .then((resp) => {
         const { data } = resp;
         res.send({
-          settings: req.query.zone === "free" ? data[0]._data[0] : data[0],
+          settings: req.query.zone === "main" ? data[0]._data[0] : data[0],
           subSettings: menuConverter.menuObject(
-            req.query.zone === "free" ? data[0]._data[0] : data[0]
+            req.query.zone === "main" ? data[0]._data[0] : data[0]
           ),
         });
       })

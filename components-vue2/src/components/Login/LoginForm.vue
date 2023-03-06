@@ -302,17 +302,17 @@ export default {
     },
 
     async fetchToken() {
-      if (typeof this.$LogEvent === "function") {
-        this.$LogEvent({
-          formName: "Authorization",
-          idEventType: this.$v.user.code.$model ? 45 : 4,
-          controlName: "Button",
-          message: `Нажал на кнопку "${
-            this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"
-          }"`,
-          timeUser: new Date(),
-        });
-      }
+      // if (typeof this.$LogEvent === "function") {
+      //   this.$LogEvent({
+      //     formName: "Authorization",
+      //     idEventType: this.$v.user.code.$model ? 45 : 4,
+      //     controlName: "Button",
+      //     message: `Нажал на кнопку "${
+      //       this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"
+      //     }"`,
+      //     timeUser: new Date(),
+      //   });
+      // }
       this.$v.user.username.$touch();
       this.$v.user.password.$touch();
       if (
@@ -361,6 +361,17 @@ export default {
 
         window.location.href = "/cabinet/55/0/701";
         const attempt = new URL(window.location.href);
+        if (typeof this.$LogEvent === "function") {
+          this.$LogEvent({
+            formName: "Authorization",
+            idEventType: this.$v.user.code.$model ? 45 : 4,
+            controlName: "Button",
+            message: `Нажал на кнопку "${
+              this.$v.user.code.$model ? "Продолжить" : "Авторизоваться"
+            }"`,
+            timeUser: new Date(),
+          });
+        }
 
         if (attempt.searchParams.has("ref")) {
           window.location.href = `${attempt.searchParams.get("ref")}`;
