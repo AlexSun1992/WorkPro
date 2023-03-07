@@ -26,18 +26,18 @@ const isOpened = (office) => {
 };
 
 const showWorkingHours = (agency) => {
+  if (!agency.GRAF) return "";
+
   const dateNow = new Date();
+  const dateNext = new Date();
+  dateNext.setDate(dateNext.getDate() + 1);
   let day = dateNow.getDay();
   const dateEnd = new Date();
   day = day == 0 ? 7 : day;
 
-  if (!agency.GRAF) return "";
-
   const dayObj = agency.GRAF?.find((item) => item.NDAY == day);
   const nexDayObj = agency.GRAF?.find((item) => item.NDAY == day + 1);
-  const closedString = `Закрыт до ${`0${dateNow.getDate() + 1}`.slice(
-    -2
-  )}.${`0${dateNow.getMonth() + 1}`.slice(-2)}.${dateNow.getFullYear()}`;
+  const closedString = `Закрыт до ${`0${dateNext.getDate()}`.slice(-2)}.${`0${dateNext.getMonth() + 1}`.slice(-2)}.${dateNext.getFullYear()}`;
 
   if (dayObj) {
     const [endHour, endMinute] = dayObj?.SEND.split(".");

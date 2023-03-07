@@ -12,12 +12,12 @@ export const actions = {
     try {
       commit("setLoading", true);
       const { data } = await this.$axios.get(
-        `/free/v2/agencies/${params.id}?lat=${params.coords[0]}&long=${params.coords[1]}`
+        `/free/v2/agencies${params.id ? ('/').concat(params.id) : ''}?lat=${params.coords[0]}&long=${params.coords[1]}`
       );
       commit("setLoading", false);
       commit("setRegionOffices", data);
     } catch (e) {
-      commit("setloading", false);
+      commit("setLoading", false);
       console.log(e);
     }
   },
