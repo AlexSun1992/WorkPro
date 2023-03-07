@@ -4528,3 +4528,24 @@ i.dropdown.icon {
     display: none;
   }
 }
+
+.color-l-green {
+  color: #43b02a;
+}
+a.color-l-green {
+  text-decoration: none;
+}
+a.color-l-green:hover {
+  color: #43b02a;
+  text-decoration: underline;
+}
+.btn-green:hover,
+.btn-green {
+  background-color: green;
+  color: #fff;
+}
+.btn-red:hover,
+.btn-red {
+  background-color: red;
+  color: #fff;
+}

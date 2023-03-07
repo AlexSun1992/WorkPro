@@ -64,11 +64,48 @@ describe("Валидация компонента passwordValidationDetail in Re
 
   it("Если поле содержит специальный символ , то выводит ошибку", () => {
     const passwordValidationMessage =
-      passwordValidationDetail("1kkkkkRkkkkkkkk!");
+      passwordValidationDetail("1kkkkkRkkkkkkkk@");
+    expect(passwordValidationMessage).toEqual([]);
+  });
+
+  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+    const passwordValidationMessage =
+      passwordValidationDetail("1kkkkkRkkkkkkkk:");
     expect(passwordValidationMessage).toEqual([
       {
         errorText:
           "Пароль не должен содержать русских букв в специальных символов.",
+      },
+    ]);
+  });
+
+  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+    const passwordValidationMessage =
+      passwordValidationDetail(":1kkkkkRkkkkkkkk:");
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText:
+          "Пароль не должен содержать русских букв в специальных символов.",
+      },
+    ]);
+  });
+
+  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+    const passwordValidationMessage =
+      passwordValidationDetail("1kkkkkRkkkkkkkk  ");
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "Пароль не должен содержать пробел.",
+      },
+    ]);
+  });
+
+  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+    const passwordValidationMessage =
+      passwordValidationDetail(" 1kkkkkRkkkkkkkk");
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "Пароль не должен содержать пробел.",
       },
     ]);
   });

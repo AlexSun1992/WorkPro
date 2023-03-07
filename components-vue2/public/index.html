@@ -169,34 +169,45 @@
     </div>
     <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
     <script>
+      function saveState(arr) {
+        localStorage.setItem("components", JSON.stringify(Array.from(arr)));
+      }
+
+      function getState() {
+        const arr = localStorage.getItem("components");
+        return new Set(arr ? JSON.parse(arr) : []);
+      }
+
       document.addEventListener("DOMContentLoaded", function () {
         let AuthFormBlock = document.querySelectorAll(".block-block > div ");
         AuthFormBlock.forEach(function (element, i) {
-          let localStorageId = localStorage.getItem(element.id);
-          if (localStorageId === "true") {
+          const state = getState();
+          if (state.has(element.id)) {
             element.classList.add("show");
           }
           let clickButton = document.createElement("button");
           clickButton.setAttribute("type", "button");
           clickButton.textContent = element.dataset.namebutton;
-          if (localStorageId === "true") {
+          if (state.has(element.id)) {
             clickButton.classList.add("btn-primary");
           } else {
             clickButton.classList.add("btn-secondary");
           }
 
           clickButton.addEventListener("click", function () {
+            const state = getState();
             if (element.className === "show") {
               element.classList.remove("show");
-              localStorage.removeItem(element.id);
+              state.delete(element.id);
               clickButton.classList.remove("btn-primary");
               clickButton.classList.add("btn-secondary");
             } else {
               element.classList.add("show");
-              localStorage.setItem(element.id, "true");
+              state.add(element.id);
               clickButton.classList.remove("btn-secondary");
               clickButton.classList.add("btn-primary");
             }
+            saveState(state);
           });
           document.querySelector(".button-block").appendChild(clickButton);
         });
