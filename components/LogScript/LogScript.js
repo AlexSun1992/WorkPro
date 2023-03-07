@@ -220,9 +220,6 @@ async function logEvent(object) {
 
     if (objectDataArray.length > 0) {
       generalObject.formName = formName;
-      // generalObject.resending = 0;
-      // generalObject.events = objectDataArray;
-
       let urlApiLog = "/am/free/v2/lk/log";
       const fetchOptions = {
         method: "POST",
