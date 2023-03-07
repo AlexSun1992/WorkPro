@@ -10,7 +10,7 @@ describe("Валидация passwordValidation in RegForm.vue", () => {
     const passwordValidationMessage = passwordValidation("Reso");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Требования к паролю: от 6 до 20 символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`,
+        errorText: `Требования к паролю: от 6 до 20 символов, без кириллицы, содержит цифру, одну прописную и строчную буквы, может содержать спецсимволы: !@#$%^&*()-=+[]{};\"|,./? (Пробел исключен).`,
       },
     ]);
   });
