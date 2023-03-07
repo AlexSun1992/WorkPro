@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 async function logEvent(object) {
   try {
     let formName;
@@ -219,18 +220,22 @@ async function logEvent(object) {
 
     if (objectDataArray.length > 0) {
       generalObject.formName = formName;
-      // generalObject.resending = 0;
-      // generalObject.events = objectDataArray;
-
-      const urlApiLog = "/am/free/v2/lk/log";
-      fetch(urlApiLog, {
+      let urlApiLog = "/am/free/v2/lk/log";
+      const fetchOptions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Application": "VueJS",
         },
         body: JSON.stringify({ ...generalObject, ...object }),
-      });
+      };
+      const token = Cookies.get("auth._token.local");
+      const isAuthorised = token !== "false";
+      if (isAuthorised) {
+        urlApiLog = "/am/main/v2/lk/log";
+        fetchOptions.headers.Authorization = token;
+      }
+      fetch(urlApiLog, fetchOptions);
     }
   } catch (error) {
     console.error(error);
