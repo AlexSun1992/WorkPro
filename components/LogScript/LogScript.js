@@ -234,14 +234,11 @@ async function logEvent(object) {
       };
       const token = Cookies.get("auth._token.local");
       const isAuthorised = token !== "false";
-      if (token === "false") {
-        fetch(urlApiLog, fetchOptions);
-      }
       if (isAuthorised) {
         urlApiLog = "/am/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
-        fetch(urlApiLog, fetchOptions);
       }
+      fetch(urlApiLog, fetchOptions);
     }
   } catch (error) {
     console.error(error);
