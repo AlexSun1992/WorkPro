@@ -28,17 +28,20 @@ export default function ({ app, redirect, $auth, $sentry }) {
         .then((data) => {
           if (data?.data) {
             if (data?.data?.STATUS === 401) {
-              $auth.logout();
-              if (process.client) {
-                if (window !== undefined) {
-                  window.location.href = "/login";
+              $auth.logout().then(() => {
+                if (process.client) {
+                  if (window !== undefined) {
+                    window.location.href = "/login";
+                  }
+                } else {
+                  redirect(`/login?ref=${app.router.history.current.fullPath}`);
                 }
-              } else {
-                redirect(`/login?ref=${app.router.history.current.fullPath}`);
-              }
+              });
+              return null;
             }
           } else {
             redirect(`/login?ref=${app.router.history.current.fullPath}`);
+            return null;
           }
           return app.$axios(originalRequest);
         })
