@@ -46,7 +46,6 @@ export default function ({ app, redirect, $auth, $sentry }) {
           return app.$axios(originalRequest);
         })
         .catch((err) => {
-          console.error(err);
           if (err?.response?.data?.STATUS === 401) {
             $auth.logout();
           }

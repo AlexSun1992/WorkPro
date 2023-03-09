@@ -4,11 +4,12 @@ export const state = () => ({
 });
 
 export const actions = {
-  async nuxtServerInit({ dispatch, store }, { params, $cookiz, $auth }) {
+  async nuxtServerInit({ dispatch, store }, { params, $auth }) {
     try {
-      if ($cookiz.get("auth._token.local")) {
-        await dispatch("menu/fetchMenu", params);
-        await dispatch("menu/fetchCounters", null);
+      if ($auth.loggedIn) {
+        if (await dispatch("menu/fetchMenu", params)) {
+          await dispatch("menu/fetchCounters", null);
+        }
       }
     } catch (e) {
       console.error(e);
