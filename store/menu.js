@@ -55,12 +55,24 @@ export const actions = {
           ? `/api/menu/55/${params.idItem}?zone=free`
           : "/api/menu/55/null";
       if (params?.zone !== "free") {
-        await this.$axios.get("/api/module").then((res) => {
-          commit("setMenu", res.data);
-          if (params) {
-            commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
-          }
-        });
+        const module = await this.$axios
+          .get("/api/module")
+          .then((res) => {
+            console.log(res);
+            if (res) {
+              commit("setMenu", res.data);
+              if (params) {
+                commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
+              }
+              return res;
+            } else {
+              return null;
+            }
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+        console.log("module", module);
       }
       await this.$axios.get(URL).then((res) => {
         commit(
