@@ -173,7 +173,7 @@ export default {
           )}`
         );
       }
-      return null;
+      return "";
     },
     updateBlock() {
       this.$store.dispatch("blocks/updateBlock", this.itemId);
