@@ -230,8 +230,7 @@ async function logEvent(object) {
         body: JSON.stringify({ ...generalObject, ...object }),
       };
       const token = Cookies.get("auth._token.local");
-      const isAuthorised = token !== "false";
-      if (isAuthorised) {
+      if (token.length > 10) {
         urlApiLog = "/am/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
       }
