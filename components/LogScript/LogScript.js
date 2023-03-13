@@ -1,4 +1,3 @@
-import axios from "axios";
 import Cookies from "js-cookie";
 async function logEvent(object) {
   try {
@@ -235,8 +234,16 @@ async function logEvent(object) {
       if (isAuthorised) {
         urlApiLog = "/am/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
-        axios.get(urlApiLog).catch((urlApiLog = "/am/free/v2/lk/log"));
       }
+      await fetch("/am/main/v2/lk/log")
+        .then((response) => {
+          if (response.status === 401) {
+            fetch("/am/free/v2/lk/log", fetchOptions);
+          }
+        })
+        .catch((err) => {
+          throw err;
+        });
       fetch(urlApiLog, fetchOptions);
     }
   } catch (error) {
