@@ -235,15 +235,11 @@ async function logEvent(object) {
         urlApiLog = "/am/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
       }
-      await fetch("/am/main/v2/lk/log")
-        .then((response) => {
-          if (response.status === 401) {
-            fetch("/am/free/v2/lk/log", fetchOptions);
-          }
-        })
-        .catch((err) => {
-          throw err;
-        });
+      await fetch("/am/main/v2/lk/log").then((response) => {
+        if (response.status === 401) {
+          return fetch("/am/free/v2/lk/log", fetchOptions);
+        }
+      });
       fetch(urlApiLog, fetchOptions);
     }
   } catch (error) {
