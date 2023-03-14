@@ -614,13 +614,6 @@ export default {
       }
       if (response?.status === 200) {
         this.$bvModal.hide("confirmAction");
-        this.$root.$bvToast.toast(response.data?.MESSAGE, {
-          title: "",
-          variant: "success",
-          solid: true,
-          autoHideDelay: 5000,
-          toaster: "b-toaster-top-full",
-        });
         if (this.$route.query?.ref && this.actionSettings?.closeAfter) {
           this.$router.push(this.$route.query?.ref);
         }
@@ -637,6 +630,14 @@ export default {
                 );
               });
             }
+          } else {
+            this.$root.$bvToast.toast(response.data.POUTVALUE, {
+              title: "",
+              variant: "success",
+              solid: true,
+              autoHideDelay: 5000,
+              toaster: "b-toaster-top-full",
+            });
           }
         }
         if (this.actionSettings?.refresh) {
