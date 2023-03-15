@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import Vue from "vue";
-import { getErrorMessage } from "./toast.helper";
+import { getErrorMessage, isCriticalError } from "./toast.helper";
 
 describe("Модуль вывода сообщения об ошибке", () => {
   it("Должен обрабатывать сообщения с ORA в тексте без скобок", () => {
@@ -118,6 +118,20 @@ describe("Модуль вывода сообщения об ошибке", () =>
     expect(errorMessageWithOutORA).toBe(
       "Приносим извинения, в Личном Кабинете что-то пошло не так."
     );
+  });
+
+  it("Ошибка критична", () => {
+    const errorMessageText =
+      'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';
+    const errorMessageWithOutORA = isCriticalError(errorMessageText);
+    expect(errorMessageWithOutORA).toBe(true);
+  });
+
+  it("Ошибка не критична", () => {
+    const errorMessageText =
+      'ORA-20105: [Данный номер уже использован в другом личном кабинете]\nORA-06512: на  "MOBILE.CLIENTUTILS", line 954\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 3018\nORA-06512: на  line 1\n';
+    const errorMessageWithOutORA = isCriticalError(errorMessageText);
+    expect(errorMessageWithOutORA).toBe(false);
   });
 
   it("Строка, содержащая два ORA", () => {

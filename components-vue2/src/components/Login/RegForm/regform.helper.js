@@ -3,14 +3,15 @@ export const minLengthPassword = 6;
 /** Максимальная длина пароля */
 export const maxLengthPassword = 20;
 /** Текст подсказки для валидации пароля */
-export const tooltipTextForDetailFunc = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву. Пароль не должен содержать русских букв и специальных символов.`;
-export const tooltipText = `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`;
+export const tooltipTextForDetailFunc = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву. Пароль не должен содержать русских букв. Пароль может содержать спецсимволы:!@#$%^&*()-=+[]{};"|,./? (Пробел исключен).`;
+export const tooltipText = `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы, содержит цифру, одну прописную и строчную буквы, может содержать спецсимволы:!@#$%^&*()-=+[]{};"|,./? (Пробел исключен).`;
 
 const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
 const uppercaseLetter = /[A-Z]/;
 const lowercaseLetter = /[a-z]/;
 const numeric = /[0-9]/i;
-const forbiddeCharacters = /^[^!"#$%&'()*+,-./:;|<=>?@[_`{}~]*$/i;
+const space = /[\s]/;
+const forbiddeCharacters = /^[^':<>_`~]*$/i;
 
 /** Функция создания ошибок валидации пароля */
 function createErrorMessage(errorValue) {
@@ -45,6 +46,11 @@ export function passwordValidationDetail(password) {
       );
     }
   }
+  if (space.test(password) === true) {
+    errorMessagepasswordValidation.push(
+      createErrorMessage("Пароль не должен содержать пробел.")
+    );
+  }
   if (
     forbiddeCharacters.test(password) === false ||
     forbiddenRussianSign.test(password) === false
@@ -71,7 +77,7 @@ export function passwordValidation(password) {
   if (passwordValidationDetail(password).length > 0) {
     errorMessagepasswordValidation.push(
       createErrorMessage(
-        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`
+        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы, содержит цифру, одну прописную и строчную буквы, может содержать спецсимволы: !@#$%^&*()-=+[]{};"|,./? (Пробел исключен).`
       )
     );
   }

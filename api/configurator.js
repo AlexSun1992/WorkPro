@@ -13,6 +13,10 @@ const router = express.Router();
 const requestIp = require("request-ip");
 
 router.use(express.json());
+router.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 router.use(cookieParser());
 
 const modules = {};
@@ -43,7 +47,9 @@ router.get("/module", (req, res) => {
           })
           .catch((err) => {
             if (err?.response?.data) {
-              res.status(500).send(err.response.data);
+              res
+                .status(err?.response?.data.STATUS || 500)
+                .send(err.response.data);
             } else {
               res.status(500).send(err);
             }
@@ -63,7 +69,9 @@ router.get("/module", (req, res) => {
           )
           .catch((err) => {
             if (err?.response?.data) {
-              res.status(500).send(err.response.data);
+              res
+                .status(err?.response?.data.STATUS || 500)
+                .send(err.response.data);
             } else {
               res.status(500).send(err);
             }
@@ -78,7 +86,9 @@ router.get("/module", (req, res) => {
         })
         .catch((err) => {
           if (err?.response?.data) {
-            res.status(500).send(err.response.data);
+            res
+              .status(err?.response?.data.STATUS || 500)
+              .send(err.response.data);
           } else {
             res.status(500).send(err);
           }

@@ -18,6 +18,10 @@ const IP = require("ip");
 let controller;
 
 router.use(express.json());
+router.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 router.use(cookieParser());
 
 router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
@@ -318,6 +322,10 @@ router.post(
         mobile2ServiceInstance.defaults.headers.common.Referer =
           req.headers.referer;
       }
+      mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
+        ?.cookie
+        ? req.headers.cookie
+        : null;
       mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
         ipAddress || null;
       mobile2ServiceInstance.defaults.headers.common["user-agent"] =
@@ -326,15 +334,18 @@ router.post(
         mobile2ServiceInstance.defaults.headers.common.Authorization =
           req.headers.authorization;
       } else {
-        if (req.cookies) {
+        if (req.cookies && req.cookies["auth._token.local"]) {
           mobile2ServiceInstance.defaults.headers.common.Authorization =
             req.cookies["auth._token.local"];
         }
       }
       const body = formConverter.save(req.body);
-      const url = `${consts.ACTIONEXEC}/${req.params.rowId}/${
-        req.params.actionId
-      }${req.params.relId !== "undefined" ? `?rel=${req.params.relId}&` : "?"}${
+
+      const url = `${
+        req.query.zone === "free" ? consts.FREEACTIONEXEC : consts.ACTIONEXEC
+      }/${req.params.rowId}/${req.params.actionId}${
+        req.params.relId !== "undefined" ? `?rel=${req.params.relId}&` : "?"
+      }${
         req.params.relActionId !== "undefined"
           ? `relaction=${req.params.relActionId}`
           : ""
@@ -345,7 +356,7 @@ router.post(
           res.send(resp.data[0]);
         })
         .catch((err) => {
-          res.status(err.response.data.STATUS).send(err.response.data);
+          res.status(err?.response?.data.STATUS || 500).send(err.response.data);
         });
     } catch (e) {
       res.send(e);
@@ -400,7 +411,7 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       })
       .catch((err) => {
         if (err?.response?.data) {
-          res.status(500).send(err.response.data);
+          res.status(err?.response?.data.STATUS || 500).send(err.response.data);
         } else {
           res.status(500).send(err);
         }

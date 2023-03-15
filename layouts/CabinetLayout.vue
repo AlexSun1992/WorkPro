@@ -98,7 +98,7 @@ export default {
     },
   },
   watch: {
-    $route(to, from) {
+    $route(to) {
       if (to.meta === "Cabinet") {
         this.sideBarMobileMini = false;
         this.setParams();

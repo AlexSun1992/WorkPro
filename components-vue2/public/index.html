@@ -100,110 +100,118 @@
       src="https://reso.ru/export/system/modules/ru.reso.v2/resources/js/common-functions-site.js_62207.js"
     ></script>
 
+    <style>
+      .block-block > div {
+        display: none;
+      }
+      .block-block > div.show {
+        display: block;
+      }
+      .button-block > button {
+        margin: 0 10px 10px 0;
+      }
+    </style>
+
     <div class="container">
-      <!-- <component-card-editor
-
-     <div class="container">
-            <component-card-editor
-
-=======
-    <div class="container">
-      <component-card-editor
-
-              module-id="55"
-              menu-id="123"
-              card-id="40"
-              rel="BD6192E9B661E43D43616518A7FFC251"
-              zone="free"
-            /> -->
-      <!--      <component-card-editor module-id="55" menu-id="777" zone="free" />-->
-      <!-- <div class="d-block">-->
-      <!-- <component-password-recovery-form></component-password-recovery-form> -->
-      <!-- </div> -->
-      <!--        <div class="d-none">-->
-      <!--            <component-header>/</component-header>-->
-      <!--        </div>-->
-
-      <!--        <div class="d-none">-->
-      <!--            <component-footer>/</component-footer>-->
-      <!--        </div>-->
-
-      <!--        <div class="d-none">-->
-      <!--            <component-login-form></component-login-form>-->
-      <!--        </div>-->
-
-      <!-- <component-login-button /> -->
-      <!-- <div class="d-block">
-              <component-reg-form></component-reg-form>
-            </div> -->
-
-      <div class="d-block">
-        <component-auth-form></component-auth-form>
-      </div>
-
-      <!-- <div>
+      <div class="row">
+        <div class="col-12 block-block">
+          <div id="component-auth-form" data-namebutton="Авторизация">
+            <component-auth-form></component-auth-form>
+          </div>
+          <div
+            id="component-password-confirm"
+            data-namebutton="Подтверждения пароля"
+          >
             <component-password-confirm></component-password-confirm>
-          </div> -->
-
-      <!-- <div class="d-block">
-              <component-auth-form></component-auth-form>
-            </div> -->
-
-      <!--      <div class="d-block">-->
-             <component-password-recovery-form></component-password-recovery-form>
-      <!--      </div>-->
-
-      <!-- <div class="d-block">
-        <component-auth-form></component-auth-form>
+          </div>
+          <div id="component-offices-map-v2" data-namebutton="Карта офисов">
+            <component-offices-map-v2 />
+          </div>
+          <div id="component-reg-form" data-namebutton="Регистрации">
+            <component-reg-form></component-reg-form>
+          </div>
+          <div id="component-show-city" data-namebutton="Выбор города">
+            <component-show-city></component-show-city>
+          </div>
+          <div id="component-card-editor-777" data-namebutton="ОСАГО">
+            <component-card-editor module-id="55" menu-id="777" zone="free" />
+          </div>
+          <div
+            id="component-password-recovery-form"
+            data-namebutton="Восстановление пароля"
+          >
+            <component-password-recovery-form></component-password-recovery-form>
+          </div>
+          <div id="component-login-button" data-namebutton="Логин баттон">
+            <component-login-button />
+          </div>
+          <div id="component-login-form" data-namebutton="Форма логина">
+            <component-login-form></component-login-form>
+          </div>
+          <div id="component-footer" data-namebutton="Футер">
+            <component-footer></component-footer>
+          </div>
+          <div id="component-header" data-namebutton="Хедер">
+            <component-header></component-header>
+          </div>
+          <!--          <div id="component-card-editor-123" data-namebutton="Мигранты ЕСИА">-->
+          <!--            <component-card-editor-->
+          <!--              module-id="55"-->
+          <!--              menu-id="123"-->
+          <!--              card-id="40"-->
+          <!--              rel="BD6192E9B661E43D43616518A7FFC251"-->
+          <!--              zone="free"-->
+          <!--            />-->
+          <!--          </div>-->
+        </div>
+        <div class="button-block mt-5"></div>
       </div>
-
-         <div class="d-block">-->
-      <!--        <component-show-city class="mb-4" />-->
-      <!--      </div>-->
-
-      <!--        <div class="d-block">-->
-      <!--            <component-card-editor module-id="55" menu-id="780" zone="token" card-id="1906432255" rel="19B4DC3FA9416AFD5B2094CD7BF7DD26"></component-card-editor>-->
-      <!--        </div>-->
-      <!--      <div class="d-block">-->
-      <!--        <component-card-editor-->
-      <!--          module-id="55"-->
-      <!--          menu-id="777"-->
-      <!--        ></component-card-editor>-->
-      <!--      </div>-->
     </div>
-
-    <!--    <div>-->
-    <!--      <component-offices-map></component-offices-map>-->
-    <!--    </div>-->
-
     <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
     <script>
-      const target = document.getElementById("osago");
+      function saveState(arr) {
+        localStorage.setItem("components", JSON.stringify(Array.from(arr)));
+      }
 
-      const startTime = Date.now();
+      function getState() {
+        const arr = localStorage.getItem("components");
+        return new Set(arr ? JSON.parse(arr) : []);
+      }
 
-      // Конфигурация observer (за какими изменениями наблюдать)
-      const config = {
-        attributes: true,
-        childList: true,
-        subtree: true,
-      };
+      document.addEventListener("DOMContentLoaded", function () {
+        let AuthFormBlock = document.querySelectorAll(".block-block > div ");
+        AuthFormBlock.forEach(function (element, i) {
+          const state = getState();
+          if (state.has(element.id)) {
+            element.classList.add("show");
+          }
+          let clickButton = document.createElement("button");
+          clickButton.setAttribute("type", "button");
+          clickButton.textContent = element.dataset.namebutton;
+          if (state.has(element.id)) {
+            clickButton.classList.add("btn-primary");
+          } else {
+            clickButton.classList.add("btn-secondary");
+          }
 
-      // Колбэк-функция при срабатывании мутации
-      const callback = function (mutationsList, observer) {
-        console.log(mutationsList.length);
-        if (mutationsList.length === 12 || mutationsList.length === 13) {
-          const endTime = Date.now();
-          const duration = endTime - startTime;
-          console.log(duration);
-          alert(duration);
-        }
-      };
-      // Создаём экземпляр наблюдателя с указанной функцией колбэка
-      const observer = new MutationObserver(callback);
-
-      // Начинаем наблюдение за настроенными изменениями целевого элемента
-      observer.observe(target, config);
+          clickButton.addEventListener("click", function () {
+            const state = getState();
+            if (element.className === "show") {
+              element.classList.remove("show");
+              state.delete(element.id);
+              clickButton.classList.remove("btn-primary");
+              clickButton.classList.add("btn-secondary");
+            } else {
+              element.classList.add("show");
+              state.add(element.id);
+              clickButton.classList.remove("btn-secondary");
+              clickButton.classList.add("btn-primary");
+            }
+            saveState(state);
+          });
+          document.querySelector(".button-block").appendChild(clickButton);
+        });
+      });
     </script>
   </body>
 </html>

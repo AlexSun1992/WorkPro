@@ -4,15 +4,12 @@ export const state = () => ({
 });
 
 export const actions = {
-  async nuxtServerInit({ dispatch, store }, { params, $cookiz, $auth }) {
+  async nuxtServerInit({ dispatch, store }, { params, $auth }) {
     try {
-      if ($cookiz.get("auth._token.local")) {
-        const fetchMenu = await dispatch("menu/fetchMenu", params);
-        if (fetchMenu?.STATUS === 401) {
-          await $auth.refreshTokens();
-          await dispatch("menu/fetchMenu", params);
+      if ($auth.loggedIn) {
+        if (await dispatch("menu/fetchMenu", params)) {
+          await dispatch("menu/fetchCounters", null);
         }
-        await dispatch("menu/fetchCounters", null);
       }
     } catch (e) {
       console.error(e);
@@ -87,7 +84,8 @@ export const actions = {
     try {
       const response = await this.$axios.post(
         "/am/free/v2/restorepassword",
-        params
+        params,
+        config
       );
       return response;
     } catch (e) {

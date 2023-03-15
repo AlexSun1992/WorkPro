@@ -11,6 +11,10 @@ const router = express.Router();
 const requestIp = require("request-ip");
 
 router.use(express.json());
+router.use((req, res, next) => {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 router.use(cookieParser());
 
 router.get("/menu/:idModule/?:idItem", (req, res) => {

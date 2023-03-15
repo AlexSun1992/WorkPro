@@ -1,5 +1,4 @@
-/* eslint-disable */
-import { makeToast } from "./toast";
+import { isCriticalError } from "@/plugins/auth/toast.helper";
 
 export default function ({ app, redirect, $auth, $sentry }) {
   app.$axios.onResponseError((error) => {
@@ -29,17 +28,20 @@ export default function ({ app, redirect, $auth, $sentry }) {
         .then((data) => {
           if (data?.data) {
             if (data?.data?.STATUS === 401) {
-              $auth.logout();
-              if (process.client) {
-                if (window !== undefined) {
-                  window.location.href = "/login";
+              $auth.logout().then(() => {
+                if (process.client) {
+                  if (window !== undefined) {
+                    window.location.href = "/login";
+                  }
+                } else {
+                  redirect(`/login?ref=${app.router.history.current.fullPath}`);
                 }
-              } else {
-                redirect(`/login?ref=${app.router.history.current.fullPath}`);
-              }
+              });
+              return null;
             }
           } else {
             redirect(`/login?ref=${app.router.history.current.fullPath}`);
+            return null;
           }
           return app.$axios(originalRequest);
         })
@@ -51,33 +53,50 @@ export default function ({ app, redirect, $auth, $sentry }) {
     }
     if (error.response.status !== 401) {
       try {
-        if ($nuxt) {
-          makeToast(error.response.data);
-          $sentry.captureException(error.response.data);
-          if (
-            !originalRequest.__isRetryRequest &&
-            error.response.data?.MESSAGE
-          ) {
+        if (error.response.status === 520 && error.response?.data?.MESSAGE) {
+          if (isCriticalError(error.response?.data?.MESSAGE)) {
+            $sentry.captureException(
+              new Error(error.response?.data?.MESSAGE),
+              (scope) => {
+                scope.setLevel("error");
+                scope.setTransactionName("Ошибка 520");
+                return scope;
+              }
+            );
             if (
-              error.response.data?.MESSAGE.includes(
-                "ограничение уникальности"
-              ) ||
-              error.response.data?.MESSAGE.includes(
-                "количество открытых курсоров превысило допустимый максимум"
-              )
+              !originalRequest.__isRetryRequest &&
+              error.response.data?.MESSAGE
             ) {
-              originalRequest.__isRetryRequest = true;
-              return app.$axios(originalRequest);
+              if (
+                error.response.data?.MESSAGE.includes(
+                  "ограничение уникальности"
+                ) ||
+                error.response.data?.MESSAGE.includes(
+                  "количество открытых курсоров превысило допустимый максимум"
+                )
+              ) {
+                originalRequest.__isRetryRequest = true;
+                return app.$axios(originalRequest);
+              }
             }
           }
         }
-      } catch (e) {}
+        if (error.response.status === 500) {
+          $sentry.captureException(new Error(error.response.data), (scope) => {
+            scope.setLevel("fatal");
+            scope.setTransactionName("Ошибка 500");
+            return scope;
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   });
   app.$axios.onRequest((config) => {
     console.log(`Making request to ${config.url}`);
   });
-  $auth.onError((error, name, endpoint) => {
-    $sentry.captureException(error);
+  $auth.onError((error) => {
+    console.warn(error);
   });
 }

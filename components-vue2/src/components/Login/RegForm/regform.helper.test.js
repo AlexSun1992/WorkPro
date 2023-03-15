@@ -10,7 +10,7 @@ describe("Валидация passwordValidation in RegForm.vue", () => {
     const passwordValidationMessage = passwordValidation("Reso");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Требования к паролю: от 6 до 20 символов, без кириллицы и специальных символов, содержит цифру, одну прописную и строчную буквы.`,
+        errorText: `Требования к паролю: от 6 до 20 символов, без кириллицы, содержит цифру, одну прописную и строчную буквы, может содержать спецсимволы: !@#$%^&*()-=+[]{};\"|,./? (Пробел исключен).`,
       },
     ]);
   });
@@ -64,11 +64,48 @@ describe("Валидация компонента passwordValidationDetail in Re
 
   it("Если поле содержит специальный символ , то выводит ошибку", () => {
     const passwordValidationMessage =
-      passwordValidationDetail("1kkkkkRkkkkkkkk!");
+      passwordValidationDetail("1kkkkkRkkkkkkkk@");
+    expect(passwordValidationMessage).toEqual([]);
+  });
+
+  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+    const passwordValidationMessage =
+      passwordValidationDetail("1kkkkkRkkkkkkkk:");
     expect(passwordValidationMessage).toEqual([
       {
         errorText:
           "Пароль не должен содержать русских букв в специальных символов.",
+      },
+    ]);
+  });
+
+  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+    const passwordValidationMessage =
+      passwordValidationDetail(":1kkkkkRkkkkkkkk:");
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText:
+          "Пароль не должен содержать русских букв в специальных символов.",
+      },
+    ]);
+  });
+
+  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+    const passwordValidationMessage =
+      passwordValidationDetail("1kkkkkRkkkkkkkk  ");
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "Пароль не должен содержать пробел.",
+      },
+    ]);
+  });
+
+  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+    const passwordValidationMessage =
+      passwordValidationDetail(" 1kkkkkRkkkkkkkk");
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "Пароль не должен содержать пробел.",
       },
     ]);
   });

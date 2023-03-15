@@ -299,9 +299,15 @@ export default {
       try {
         this.isErrorMessage = false;
         this.errorMessage = null;
+        const config = {
+          headers: {
+            "X-Application": "VueJS",
+          },
+        };
         const response = await axios.post(
           "/am/free/v2/restorepassword",
-          params
+          params,
+          config
         );
 
         if (response.data[0].MESSAGE_CODE === "200") {
@@ -363,7 +369,7 @@ export default {
           });
         }
       } catch (e) {
-        if (e.response.data.STATUS === 500) {
+        if (e.response.data.STATUS === 500 || e.response.data.STATUS === 520) {
           this.isErrorMessage = true;
           this.errorMessage = e.response.data.INFO;
           this.$LogEvent({

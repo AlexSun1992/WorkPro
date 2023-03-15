@@ -1,12 +1,6 @@
 import { isBlackListOfRoute } from "./router.helper";
-export default async function ({
-  app,
-  store,
-  redirect,
-  route,
-  $auth,
-  $sentry,
-}) {
+
+export default async function ({ app, store, redirect, route }) {
   store.commit("data_card/clearFormData");
   store.commit("data_card/clearFilters");
   store.commit("blocks/clearBlock");

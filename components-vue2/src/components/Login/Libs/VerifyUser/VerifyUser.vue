@@ -250,6 +250,15 @@ export default {
       const visibleCaptchas = Array.from(document.querySelectorAll("body>div"))
         .filter((elem) => elem.querySelector("iframe[title*='reCAPTCHA']"))
         .filter((item) => item.style.visibility === "visible");
+      this.$LogEvent({
+        formName: "VerifyUser errorMessage",
+        idEventType: this.loginType === "phone" ? 294 : 295,
+        controlName: "VerifyUser.vue",
+        message: `Показало капчу через ${
+          this.loginType === "phone" ? "номер" : "EMAIL"
+        }"`,
+        timeUser: new Date(),
+      });
       if (visibleCaptchas.length === 0) {
         this.loading = false;
       }
@@ -367,11 +376,15 @@ export default {
 
             response = response1;
             const getResponseMessageCodeErr = response?.data[0]?.MESSAGE_CODE;
-
             const isAlertShown = isAlertShouldBeShown(
               this.modeType,
               this.loginType,
-              getResponseMessageCodeErr,
+              getResponseMessageCodeErr
+            );
+            if (isAlertShown) {
+              this.codeFieldShown = false;
+              this.errorMessage =
+                "В Личном кабинете отсутствует профиль с данным номером телефона";
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
                 idEventType: this.loginType === "phone" ? 153 : 164,
@@ -380,12 +393,7 @@ export default {
                   this.loginType === "phone" ? "номере" : "EMAIL"
                 }"`,
                 timeUser: new Date(),
-              })
-            );
-            if (isAlertShown) {
-              this.codeFieldShown = false;
-              this.errorMessage =
-                "В Личном кабинете отсутствует профиль с данным номером телефона";
+              });
               this.isSendCode = false;
               return;
             }
@@ -396,7 +404,10 @@ export default {
               this.isSendCode = true;
             }
 
-            if (response1.data.STATUS === 500) {
+            if (
+              response1.data.STATUS === 500 ||
+              response1.data.STATUS === 520
+            ) {
               this.loading = false;
               this.isSendCode = false;
               this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
@@ -407,7 +418,8 @@ export default {
               await this.executeRecaptcha();
               return;
             }
-          } else {
+          }
+          if (isCaptcha === true) {
             params = {
               ...params,
               token,
@@ -431,10 +443,23 @@ export default {
               this.codeFieldShown = false;
               this.errorMessage =
                 "В Личном кабинете отсутствует профиль с данным номером телефона";
+              this.$LogEvent({
+                formName: "VerifyUser errorMessage",
+                idEventType: this.loginType === "phone" ? 153 : 164,
+                controlName: "VerifyUser.vue",
+                message: `Показало сообщение об ошибке на ${
+                  this.loginType === "phone" ? "номере" : "EMAIL"
+                }"`,
+                timeUser: new Date(),
+              });
               this.isSendCode = false;
               return;
             }
-            if (response2?.status === 500 || response2?.data[0]?.ERRORCODE) {
+            if (
+              response2?.status === 500 ||
+              response2?.status === 520 ||
+              response2?.data[0]?.ERRORCODE
+            ) {
               this.loading = false;
               this.isSendCode = false;
             } else {
@@ -444,7 +469,9 @@ export default {
             }
           }
           const isError = Boolean(
-            response?.data[0]?.ERRORCODE || response.data.STATUS === 500
+            response?.data[0]?.ERRORCODE ||
+              response.data.STATUS === 500 ||
+              response.data.STATUS === 520
           );
           const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
 
@@ -513,6 +540,15 @@ export default {
               this.$emit("sendCode", true);
             }
           } else if (isErrorList === true) {
+            this.$LogEvent({
+              formName: "VerifyUser errorMessage",
+              idEventType: this.loginType === "phone" ? 153 : 164,
+              controlName: "VerifyUser.vue",
+              message: `Показало сообщение об ошибке на ${
+                this.loginType === "phone" ? "номере" : "EMAIL"
+              }"`,
+              timeUser: new Date(),
+            });
             if (response?.data[0]?.ERRORCODE === 106) return;
             this.errorMessage =
               response?.data[0]?.ERRORLIST[0].ERRORTEXT.replace(
@@ -524,6 +560,7 @@ export default {
           this.isUserDisabled = false;
         }
       } catch (e) {
+        console.log(e);
         this.loading = false;
         this.$LogEvent({
           formName: "VerifyUser errorMessage",

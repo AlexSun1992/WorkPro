@@ -2,6 +2,10 @@ const express = require("express");
 const consola = require("consola");
 const { Nuxt, Builder } = require("nuxt");
 const app = express();
+app.use(function (req, res, next) {
+  res.removeHeader("X-Powered-By");
+  next();
+});
 
 // Import and Set Nuxt.js options
 const config = require("../nuxt.config.js");
@@ -31,5 +35,5 @@ async function start() {
     badge: true,
   });
 }
-app.disable("x-powered-by");
+
 start();
