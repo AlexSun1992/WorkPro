@@ -177,7 +177,6 @@ async function logEvent(object) {
     function createGeneralObject() {
       const objectData = {};
 
-      try {
         try {
           if (getCookie("_ym_uid") !== undefined) {
             objectData.yandexId = getCookie("_ym_uid");
