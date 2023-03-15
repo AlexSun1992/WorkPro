@@ -41,12 +41,12 @@ export default {
   },
   async created() {
     const url = "/free/v2/question";
-    let response = await fetch(url);
-    let data = await response.json();
+    const response = await fetch(url);
+    const data = await response.json();
     this.data = data;
   },
   computed: {
-    questions: function () {
+    questions() {
       return this.data
         .filter(
           (item) => item.IDRMPRODUCT === (this.productId || item.IDRMPRODUCT)
@@ -54,9 +54,8 @@ export default {
         .filter((item) => {
           if (this.isTop === true) {
             return item.LTOP === true;
-          } else {
-            return item;
           }
+          return item;
         })
         .sort((a, b) => {
           if (a.LTOP === true && b.LTOP === true) {
@@ -67,9 +66,8 @@ export default {
               return -1;
             }
             return a.NTOPSORT - b.NTOPSORT;
-          } else {
-            return 0;
           }
+          return 0;
         })
         .reduce((acc, value) => {
           if (this.isGroup === false) {

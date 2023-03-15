@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+
 async function logEvent(object) {
   try {
     let formName;
@@ -177,15 +178,11 @@ async function logEvent(object) {
       const objectData = {};
 
       try {
-        if (getCookie("_ym_uid") == undefined) {
-          objectData.yandexId =
-            yaCounter25356824.getClientID() == undefined
-              ? ""
-              : yaCounter25356824.getClientID();
-        } else {
-          objectData.yandexId = getCookie("_ym_uid");
-        }
-      } catch (error) {}
+        try {
+          if (getCookie("_ym_uid") !== undefined) {
+            objectData.yandexId = getCookie("_ym_uid");
+          }
+        } catch (error) {}
 
       const deviceType = getDeviceType();
       if (deviceType.iphone) objectData.idDevice = 2;
