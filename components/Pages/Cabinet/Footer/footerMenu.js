@@ -26,7 +26,7 @@ const footerMenu = [
     titleRef: "/individual/",
 
     items: [
-      { title: "ДМС", ref: "/individual/property/flat/" },
+      { title: "ДМС", ref: "/individual/medicine/" },
       { title: "Туризм", ref: "/individual/travel/" },
       { title: "Несчастный случай", ref: "/individual/accident/" },
       {
@@ -40,20 +40,24 @@ const footerMenu = [
     title: "О компании",
     titleRef: "/about/",
     items: [
-      { title: "Новости", ref: "/about/news/" },
-      { title: "Вакансии", ref: "/about/career/" },
+      { title: "Новости", ref: "https://old.reso.ru/About/Media/News/" },
+      { title: "Вакансии", ref: "https://old.reso.ru/Career/" },
       { title: "Закупки", ref: "/about/tenders/" },
       {
         title: "Раскрытие сведений",
-        ref: "/investors/disclosure/",
+        ref: "https://old.reso.ru/Shareholders/Finance/",
       },
       {
         title: "Информация для потребителей",
-        ref: "/about/consumer-information/",
+        ref: "https://old.reso.ru/About/Company/",
       },
-      { title: "Правила и тарифы", ref: "/about/consumer-information/rules/" },
+      {
+        title: "Правила и тарифы",
+        ref: "https://old.reso.ru/About/Tariffs_rules/",
+      },
       { title: "Обратная связь", ref: "/feedback/" },
-      { title: "Карта сайта", ref: "/sitemap" },
+      { title: "Заказать полис", ref: "/sitemap" },
+      { title: "Карта сайта", ref: "https://old.reso.ru/Aux/invokeAgent.html" },
     ],
   },
 
