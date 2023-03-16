@@ -228,16 +228,17 @@ async function logEvent(object) {
 
       const token = Cookies.get("auth._token.local");
       const isAuthorised = token && token.length > 10;
+
       if (isAuthorised) {
         urlApiLog = "/am/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
       }
-      await fetch("/am/main/v2/lk/log").then((response) => {
+      fetch(urlApiLog, fetchOptions).then((response) => {
         if (response.status === 401) {
-          return fetch("/am/free/v2/lk/log", fetchOptions);
+          urlApiLog = "/am/free/v2/lk/log";
+          fetch(urlApiLog, fetchOptions);
         }
       });
-      fetch(urlApiLog, fetchOptions);
     }
   } catch (error) {
     console.error(error);
