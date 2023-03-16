@@ -100,11 +100,6 @@ export default {
             `Для обновления данных необходимо поставить в пункте ${this.action.NITEM} опцию  "Обновлять после действия"`
           );
         }
-        this.$bvToast.toast("Успешно выполнено", {
-          title: "",
-          variant: "success",
-          solid: true,
-        });
         return result;
       } catch (err) {
         this.$bvToast.toast(getErrorMessage(err.response.data.MESSAGE), {
@@ -141,6 +136,12 @@ export default {
                 );
               });
             }
+          } else {
+            this.$bvToast.toast(result?.POUTVALUE, {
+              title: "",
+              variant: "success",
+              solid: true,
+            });
           }
         }
       } else {
