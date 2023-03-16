@@ -229,11 +229,13 @@ async function logEvent(object) {
         },
         body: JSON.stringify({ ...generalObject, ...object }),
       };
-      const token = String(Cookies.get("auth._token.local"));
-      const isAuthorised = token.length > 10;
+
+      const token = Cookies.get("auth._token.local");
+      const isAuthorised = token && token.length > 10;
       if (isAuthorised) {
         urlApiLog = "/am/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
+        fetch(urlApiLog, fetchOptions);
       }
       await fetch("/am/main/v2/lk/log").then((response) => {
         if (response.status === 401) {
