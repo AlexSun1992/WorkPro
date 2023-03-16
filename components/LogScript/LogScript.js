@@ -177,11 +177,11 @@ async function logEvent(object) {
     function createGeneralObject() {
       const objectData = {};
 
-        try {
-          if (getCookie("_ym_uid") !== undefined) {
-            objectData.yandexId = getCookie("_ym_uid");
-          }
-        } catch (error) {}
+      try {
+        if (getCookie("_ym_uid") !== undefined) {
+          objectData.yandexId = getCookie("_ym_uid");
+        }
+      } catch (error) {}
 
       const deviceType = getDeviceType();
       if (deviceType.iphone) objectData.idDevice = 2;
@@ -225,18 +225,20 @@ async function logEvent(object) {
         },
         body: JSON.stringify({ ...generalObject, ...object }),
       };
+
       const token = Cookies.get("auth._token.local");
-      const isAuthorised = token.length > 10;
+      const isAuthorised = token && token.length > 10;
+
       if (isAuthorised) {
         urlApiLog = "/am/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
       }
-      await fetch("/am/main/v2/lk/log").then((response) => {
+      await fetch(urlApiLog, fetchOptions).then((response) => {
         if (response.status === 401) {
-          return fetch("/am/free/v2/lk/log", fetchOptions);
+          urlApiLog = "/am/free/v2/lk/log";
         }
+        return fetch(urlApiLog, fetchOptions);
       });
-      fetch(urlApiLog, fetchOptions);
     }
   } catch (error) {
     console.error(error);
