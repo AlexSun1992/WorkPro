@@ -4,7 +4,7 @@
       <div class="card-office-adress row">
         <div v-if="office.SPATH1" class="col-4 pe-0">
           <div class="position-relative">
-            <img :src="'/export/sites/reso/galleries/branches/' + office.SPATH1" />
+            <img :src="'/export/sites/reso' + office.SPATH1" />
             <button class="office-image-zoom" type="button"></button>
           </div>
         </div>
