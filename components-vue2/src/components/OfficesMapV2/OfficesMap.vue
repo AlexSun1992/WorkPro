@@ -72,7 +72,7 @@
 
         <b-pagination
           v-if="filteredOffices && filteredOffices.length > 15"
-          v-show="filteredOffices && !isMobile"
+          v-show="filteredOffices && !isMobile && !currentStation"
           v-model="page"
           :total-rows="filteredOffices.length > 100 ? 100 : filteredOffices.length"
           :per-page="15"
@@ -819,20 +819,23 @@ export default {
 
         if (this.tabMetroVisible) {
           this.closeMetroCard();
-          const _this = this;
-          const map = document.querySelector(".g-svg-metromap");
+          this.currentStation = data.data.metro != null ? data.data.metro[0].name.replace("ё", "е") : null;
 
-          map?.children.forEach((child) => {
-            // console.log(data.data.metro[0].name + ' : ' + child.dataset.station);
-            if (child.tagName === "use" && data.data.metro[0].name.replace("ё", "е") === child.dataset.station.replace("ё", "е")) {
-              child.setAttribute("href", "#balloon-select");
-              _this.positionSelectBalloon();
-            }
-          });
+          if (this.tabMetroSelected) {
+            const _this = this;
+            const map = document.querySelector(".g-svg-metromap");
+
+            map?.children.forEach((child) => {
+              if (child.tagName === "use" && data.data.metro[0].name.replace("ё", "е") === child.dataset.station.replace("ё", "е")) {
+                child.setAttribute("href", "#balloon-select");
+                _this.positionSelectBalloon();
+              }
+            });
+          }
         }
 
         if (data.data.qc_geo < 5) {
-          this.updateMap({center: [data.data.geo_lat, data.data.geo_lon], zoom: 12});
+          this.updateMap({center: [data.data.geo_lat, data.data.geo_lon], zoom: (data.data.qc_geo < 3 ? 15 : 12)});
         } else {
           let myMap = this.myMap;
 
@@ -845,6 +848,9 @@ export default {
             });
           });
         }
+      } else {
+        this.closeMetroCard();
+        this.currentStation = null;
       }
     },
 
@@ -868,12 +874,16 @@ export default {
       });
     },
 
-    changeStationAttribute(offices) {
+    changeStationAttribute(offices, activeStation) {
       const useNodes = document.getElementsByTagName("use");
       for (const use of useNodes) {
         const station = use.getAttribute("data-station");
         if (offices[station]) {
-          use.setAttribute("href", "#balloon-open");
+          if (station == activeStation) {
+            use.setAttribute("href", "#balloon-select");
+          } else {
+            use.setAttribute("href", "#balloon-open");
+          }
         } else {
           use.setAttribute("href", "");
         }
@@ -924,6 +934,12 @@ export default {
             (a, b) => a.info[0].NDISTANSE - b.info[0].NDISTANSE
           );
 
+          if (this.currentStation) {
+            officesArr = officesArr.filter(
+              (item) => item.station == this.currentStation
+            );
+          }
+
           if (!this.isShownMore) {
             return officesArr.slice(0, 6);
           }
@@ -932,6 +948,26 @@ export default {
         } else {
           const start = (this.page - 1) * this.pagesCount;
           const end = start + this.pagesCount;
+
+          if (this.currentStation) {
+            const filteredByStation = [];
+            this.filteredOffices.forEach((item) => {
+              item.IDUNDERGROUND.forEach((s) => {
+                const station = s.SNAME.toLowerCase().replace("ё", "е");
+                const currentStation = this.currentStation
+                  .toLowerCase()
+                  .replace("ё", "е");
+                if (
+                  station === currentStation &&
+                  station.length === currentStation.length
+                ) {
+                  filteredByStation.push(item);
+                }
+              });
+            });
+            return filteredByStation;
+          }
+
           return this.filteredOffices.slice(start, end);
         }
       }
@@ -951,7 +987,11 @@ export default {
           }
           return acc;
         }, {});
-        this.changeStationAttribute(offices);
+        this.changeStationAttribute(offices, this.currentStation);
+
+        this.$nextTick(() => {
+          this.positionSelectBalloon();
+        });
       }
     },
   },
