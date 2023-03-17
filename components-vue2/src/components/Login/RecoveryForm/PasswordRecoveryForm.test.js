@@ -345,7 +345,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.find("#password1").setValue("12345");
     expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password1").setValue("12345hH");
+    await wrapper.find("#password1").setValue("12345hH!");
     expect(wrapper.find("#password1").classes()).not.toContain("is-invalid");
   });
 
