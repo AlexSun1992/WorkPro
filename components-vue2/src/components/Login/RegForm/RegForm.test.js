@@ -107,13 +107,13 @@ describe("RegForm", () => {
     await wrapper.find("#password1").setValue("12345");
     expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password1").setValue("Aa1234");
+    await wrapper.find("#password1").setValue("Aa1234rl");
     expect(wrapper.find("#password1").classes()).toContain("is-valid");
 
     await wrapper.find("#password2").setValue("12345");
     expect(wrapper.find("#password2").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password2").setValue("Aa1234");
+    await wrapper.find("#password2").setValue("Aa1234rl");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
@@ -216,13 +216,13 @@ describe("RegForm", () => {
     await wrapper.find("#password1").setValue("12345");
     expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password1").setValue("Aa1234");
+    await wrapper.find("#password1").setValue("Aa1234!4");
     expect(wrapper.find("#password1").classes()).toContain("is-valid");
 
     await wrapper.find("#password2").setValue("12345");
     expect(wrapper.find("#password2").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password2").setValue("Aa1234");
+    await wrapper.find("#password2").setValue("Aa1234!4");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
@@ -322,13 +322,13 @@ describe("RegForm", () => {
     await wrapper.find("#password1").setValue("12345");
     expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password1").setValue("Aa1234");
+    await wrapper.find("#password1").setValue("Aa123478");
     expect(wrapper.find("#password1").classes()).toContain("is-valid");
 
     await wrapper.find("#password2").setValue("12345");
     expect(wrapper.find("#password2").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password2").setValue("Aa1234");
+    await wrapper.find("#password2").setValue("Aa123478");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
@@ -443,13 +443,13 @@ describe("RegForm", () => {
     await wrapper.find("#password1").setValue("12345");
     expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password1").setValue("Aa1234");
+    await wrapper.find("#password1").setValue("Aa123438");
     expect(wrapper.find("#password1").classes()).toContain("is-valid");
 
     await wrapper.find("#password2").setValue("12345");
     expect(wrapper.find("#password2").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password2").setValue("Aa1234");
+    await wrapper.find("#password2").setValue("Aa123438");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     expect(
@@ -643,13 +643,13 @@ describe("RegForm", () => {
     await wrapper.find("#password1").setValue("12345");
     expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password1").setValue("Aa1234");
+    await wrapper.find("#password1").setValue("Aa1234!5");
     expect(wrapper.find("#password1").classes()).toContain("is-valid");
 
     await wrapper.find("#password2").setValue("12345");
     expect(wrapper.find("#password2").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password2").setValue("Aa1234");
+    await wrapper.find("#password2").setValue("Aa1234!5");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
@@ -666,8 +666,8 @@ describe("RegForm", () => {
         BIRTHDATE: "2022-12-21",
         FIRSTNAME: "П",
         GUID: null,
-        PASSWORD: "Aa1234",
-        PASSWORD_CONFIRM: "Aa1234",
+        PASSWORD: "Aa1234!5",
+        PASSWORD_CONFIRM: "Aa1234!5",
         PHONE: "+7(910)-123-22-33",
         POLICY_NUMBER: "123",
         SECONDNAME: "П",
@@ -727,8 +727,8 @@ describe("RegForm", () => {
         BIRTHDATE: "2022-12-21",
         CODE: "12345",
         FIRSTNAME: "П",
-        PASSWORD: "Aa1234",
-        PASSWORD_CONFIRM: "Aa1234",
+        PASSWORD: "Aa1234!5",
+        PASSWORD_CONFIRM: "Aa1234!5",
         PHONE: "+7(910)-123-22-33",
         POLICY_NUMBER: "123",
         SECONDNAME: "П",
@@ -913,13 +913,13 @@ describe("RegForm", () => {
     await wrapper.find("#password1").setValue("12345");
     expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password1").setValue("Aa1234");
+    await wrapper.find("#password1").setValue("Aa1234!5");
     expect(wrapper.find("#password1").classes()).toContain("is-valid");
 
     await wrapper.find("#password2").setValue("12345");
     expect(wrapper.find("#password2").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password2").setValue("Aa1234");
+    await wrapper.find("#password2").setValue("Aa1234!5");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);
@@ -936,8 +936,8 @@ describe("RegForm", () => {
         BIRTHDATE: "2022-12-21",
         FIRSTNAME: "П",
         GUID: null,
-        PASSWORD: "Aa1234",
-        PASSWORD_CONFIRM: "Aa1234",
+        PASSWORD: "Aa1234!5",
+        PASSWORD_CONFIRM: "Aa1234!5",
         PHONE: "+7(910)-123-22-33",
         POLICY_NUMBER: "123",
         SECONDNAME: "П",
@@ -997,8 +997,8 @@ describe("RegForm", () => {
         BIRTHDATE: "2022-12-21",
         CODE: "12345",
         FIRSTNAME: "П",
-        PASSWORD: "Aa1234",
-        PASSWORD_CONFIRM: "Aa1234",
+        PASSWORD: "Aa1234!5",
+        PASSWORD_CONFIRM: "Aa1234!5",
         PHONE: "+7(910)-123-22-33",
         POLICY_NUMBER: "123",
         SECONDNAME: "П",
@@ -1116,10 +1116,10 @@ describe("RegForm", () => {
     dataPickerInput.setValue("27.06.1989");
     dataPickerInput.trigger("change");
 
-    await wrapper.find("#password1").setValue("Aa1234");
+    await wrapper.find("#password1").setValue("Aa1234!5");
     expect(wrapper.find("#password1").classes()).toContain("is-valid");
 
-    await wrapper.find("#password2").setValue("Aa1234");
+    await wrapper.find("#password2").setValue("Aa1234!5");
     expect(wrapper.find("#password2").classes()).toContain("is-valid");
 
     await wrapper.find("#agreement-check-box").setChecked(true);

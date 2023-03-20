@@ -1,10 +1,10 @@
 /** Минимальная длина пароля */
-export const minLengthPassword = 6;
+export const minLengthPassword = 8;
 /** Максимальная длина пароля */
 export const maxLengthPassword = 20;
 /** Текст подсказки для валидации пароля */
-export const tooltipTextForDetailFunc = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву. Пароль не должен содержать русских букв. Пароль может содержать спецсимволы:!@#$%^&*()-=+[]{};"|,./? (Пробел исключен).`;
-export const tooltipText = `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы, содержит цифру, одну прописную и строчную буквы, может содержать спецсимволы:!@#$%^&*()-=+[]{};"|,./? (Пробел исключен).`;
+export const tooltipTextForDetailFunc = `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};|,./? (Пробел исключен)`;
+export const tooltipText = `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};|,./? (Пробел исключен)`;
 
 const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
 const uppercaseLetter = /[A-Z]/;
@@ -77,7 +77,7 @@ export function passwordValidation(password) {
   if (passwordValidationDetail(password).length > 0) {
     errorMessagepasswordValidation.push(
       createErrorMessage(
-        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов, без кириллицы, содержит цифру, одну прописную и строчную буквы, может содержать спецсимволы: !@#$%^&*()-=+[]{};"|,./? (Пробел исключен).`
+        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};|,./? (Пробел исключен)`
       )
     );
   }
