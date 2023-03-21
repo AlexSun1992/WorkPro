@@ -26,6 +26,14 @@
           </button>
         </div>
       </div>
+      <div class="mt-2">
+        <div
+          class="green-tags"
+          v-if="office.LSPR === true || office.LREG_CENTER === true"
+        >
+          Урегулирование страховых случаев
+        </div>
+      </div>
       <div v-if="office.SDADATAMETRO" class="card-office-undeground">
         <div v-for="(item, i) in office.SDADATAMETRO" :key="i">
           <span :class="'undeground-color_'" :data-line="item.LINE"></span>
@@ -59,7 +67,7 @@
           <a
             v-bind:href="'mailto:' + office.SEMAIL"
             class="card-office-e-mail"
-          >{{ office.SEMAIL }}</a
+            >{{ office.SEMAIL }}</a
           >
         </div>
       </div>
@@ -96,4 +104,18 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.green-tags {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 20px;
+  align-items: center;
+  color: #ffffff;
+  padding: 4px 12px;
+  background: #43b02a;
+  border-radius: 100px;
+  display: table;
+}
+</style>
