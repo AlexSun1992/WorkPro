@@ -343,9 +343,15 @@ export default {
         } = await axios.post("/am/authw/v2/authorize", body, headers);
 
         this.isModalVisible = false;
-        document.cookie = `auth.strategy=local;`;
-        document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN};`;
-        document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN};`;
+        document.cookie = `auth.strategy=local; expires=${new Date(
+          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+        ).toGMTString()}`;
+        document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN}; expires=${new Date(
+          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+        ).toGMTString()}`;
+        document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN}; expires=${new Date(
+          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+        ).toGMTString()}`;
         this.authInProcess = false;
 
         window.location.href = "/cabinet/55/0/701";
