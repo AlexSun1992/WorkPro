@@ -82,6 +82,12 @@
                 </button>
               </div>
             </div>
+            <div
+              class="green-tags mt-2"
+              v-if="office.LSPR === true || office.LREG_CENTER === true"
+            >
+              Урегулирование страховых случаев
+            </div>
             <div v-if="office.SDADATAMETRO" class="card-office-undeground">
               <div v-for="(item, i) in office.SDADATAMETRO" :key="i">
                 <span
@@ -150,16 +156,38 @@ export default {
   methods: {
     phones(officePhones) {
       const phones = [];
-      Object.values(JSON.parse(officePhones)).forEach(phone => {
+      Object.values(JSON.parse(officePhones)).forEach((phone) => {
         phones.push({
           clear: phone,
-          view: `${phone.substring(0, 2)}(${phone.substring(2, 5)})${phone.substring(5, 8)}-${phone.substring(8, 10)}-${phone.substring(10, 12)}${phone.includes(',') ? ` доб. ${phone.split(',')[1]}` : ''}`,
+          view: `${phone.substring(0, 2)}(${phone.substring(
+            2,
+            5
+          )})${phone.substring(5, 8)}-${phone.substring(
+            8,
+            10
+          )}-${phone.substring(10, 12)}${
+            phone.includes(",") ? ` доб. ${phone.split(",")[1]}` : ""
+          }`,
         });
       });
-      return phones
+      return phones;
     },
-  }
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.green-tags {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 20px;
+  align-items: center;
+  color: #ffffff;
+  padding: 4px 12px;
+  background: #43b02a;
+  border-radius: 100px;
+  display: table;
+}
+</style>

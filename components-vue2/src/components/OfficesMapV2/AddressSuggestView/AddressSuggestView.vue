@@ -95,7 +95,7 @@ export default {
         this.textMap = item.value;
         return item.data.street;
       }
-      this.textMetro = '';
+      this.textMetro = item.data.metro == null ? '' : item.data.street;
       this.textMap = item.value;
       return item.value;
     },
@@ -125,6 +125,7 @@ export default {
       this.input = '';
       this.$refs.autocomplete.value = '';
       this.isInputEmpty = true;
+      this.$emit("update", null);
     },
   },
   computed: {

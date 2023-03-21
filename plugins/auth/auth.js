@@ -58,7 +58,7 @@ export default function ({ app, redirect, $auth, $sentry }) {
             $sentry.captureException(
               new Error(error.response?.data?.MESSAGE),
               (scope) => {
-                scope.setLevel("error");
+                scope.setLevel("fatal");
                 scope.setTransactionName("Ошибка 520");
                 return scope;
               }

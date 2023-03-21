@@ -53,6 +53,12 @@
                 </button>
               </div>
             </div>
+            <div
+              class="green-tags mt-2"
+              v-if="office.LSPR === true || office.LREG_CENTER === true"
+            >
+              Урегулирование страховых случаев
+            </div>
             <div v-if="office.station" class="card-office-undeground">
               <div>
                 <span
@@ -136,5 +142,18 @@ export default {
 .name {
   display: flex;
   justify-content: space-between;
+}
+.green-tags {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 20px;
+  align-items: center;
+  color: #ffffff;
+  padding: 4px 12px;
+  background: #43b02a;
+  border-radius: 100px;
+  display: table;
 }
 </style>

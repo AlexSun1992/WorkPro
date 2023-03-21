@@ -325,7 +325,7 @@ export default {
         if (resp.status === 520 && resp?.data?.MESSAGE) {
           if (isCriticalError(resp?.data?.MESSAGE)) {
             Sentry.captureException(new Error(resp?.data?.MESSAGE), (scope) => {
-              scope.setLevel("error");
+              scope.setLevel("fatal");
               scope.setTransactionName(`Ошибка 520 компонента "${this.menuId}`);
               return scope;
             });
@@ -333,7 +333,7 @@ export default {
         }
         if (resp.status === 500) {
           Sentry.captureException(new Error(resp?.data), (scope) => {
-            scope.setLevel("error");
+            scope.setLevel("fatal");
             scope.setTransactionName(`Ошибка 500 компонента "${this.menuId}"`);
             return scope;
           });

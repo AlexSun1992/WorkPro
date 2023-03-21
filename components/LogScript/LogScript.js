@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+
 async function logEvent(object) {
   try {
     let formName;
@@ -177,12 +178,7 @@ async function logEvent(object) {
       const objectData = {};
 
       try {
-        if (getCookie("_ym_uid") == undefined) {
-          objectData.yandexId =
-            yaCounter25356824.getClientID() == undefined
-              ? ""
-              : yaCounter25356824.getClientID();
-        } else {
+        if (getCookie("_ym_uid") !== undefined) {
           objectData.yandexId = getCookie("_ym_uid");
         }
       } catch (error) {}
@@ -229,13 +225,20 @@ async function logEvent(object) {
         },
         body: JSON.stringify({ ...generalObject, ...object }),
       };
+
       const token = Cookies.get("auth._token.local");
-      const isAuthorised = token !== "false";
+      const isAuthorised = token && token.length > 10;
+
       if (isAuthorised) {
         urlApiLog = "/am/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
       }
-      fetch(urlApiLog, fetchOptions);
+      await fetch(urlApiLog, fetchOptions).then((response) => {
+        if (response.status === 401) {
+          urlApiLog = "/am/free/v2/lk/log";
+        }
+        return fetch(urlApiLog, fetchOptions);
+      });
     }
   } catch (error) {
     console.error(error);

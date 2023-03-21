@@ -322,6 +322,10 @@ router.post(
         mobile2ServiceInstance.defaults.headers.common.Referer =
           req.headers.referer;
       }
+      mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
+        ?.cookie
+        ? req.headers.cookie
+        : null;
       mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
         ipAddress || null;
       mobile2ServiceInstance.defaults.headers.common["user-agent"] =
