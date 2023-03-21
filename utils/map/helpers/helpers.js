@@ -37,7 +37,9 @@ const showWorkingHours = (agency) => {
 
   const dayObj = agency.GRAF?.find((item) => item.NDAY == day);
   const nexDayObj = agency.GRAF?.find((item) => item.NDAY == day + 1);
-  const closedString = `Закрыт до ${`0${dateNext.getDate()}`.slice(-2)}.${`0${dateNext.getMonth() + 1}`.slice(-2)}.${dateNext.getFullYear()}`;
+  const closedString = `Закрыт до ${`0${dateNext.getDate()}`.slice(-2)}.${`0${
+    dateNext.getMonth() + 1
+  }`.slice(-2)}.${dateNext.getFullYear()}`;
 
   if (dayObj) {
     const [endHour, endMinute] = dayObj?.SEND.split(".");
@@ -88,6 +90,7 @@ const getTemplate = (agency) => {
             <div class="card-office-opened">Открыт до</div>
           </div>
         </div>
+        <div class="tags-block"></div>
         <div class="card-office-undeground">
           <span class="undeground-color"></span>
           <span>Ленинский проспект</span>
@@ -106,6 +109,13 @@ const getTemplate = (agency) => {
           </div>
         </div>
       </div>`;
+  template = template.replace(
+    /<div class="tags-block">[^<]*?<\/div[^>]*>\n/g,
+    () =>
+      agency.LSPR || agency.LREG_CENTER
+        ? '<div class="tags-block"><div class="green-tags mt-2">Урегулирование страховых случаев</div></div>'
+        : "111"
+  );
   template = template.replace(
     /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
     () => {

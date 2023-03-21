@@ -82,13 +82,11 @@
                 </button>
               </div>
             </div>
-            <div class="mt-2">
-              <div
-                class="green-tags"
-                v-if="office.LSPR === true || office.LREG_CENTER === true"
-              >
-                Урегулирование страховых случаев
-              </div>
+            <div
+              class="green-tags mt-2"
+              v-if="office.LSPR === true || office.LREG_CENTER === true"
+            >
+              Урегулирование страховых случаев
             </div>
             <div v-if="office.SDADATAMETRO" class="card-office-undeground">
               <div v-for="(item, i) in office.SDADATAMETRO" :key="i">
