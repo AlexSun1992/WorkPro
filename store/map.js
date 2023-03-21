@@ -12,7 +12,7 @@ export const actions = {
     try {
       commit("setLoading", true);
       const { data } = await this.$axios.get(
-        `/am/free/v2/siteapi/std/agencies/list?lat=${params.coords[0]}&long=${params.coords[1]}${params.id ? ('&idregion=').concat(params.id) : ''}`
+        `/am/free/v2/siteapi/agencies?lat=${params.coords[0]}&long=${params.coords[1]}${params.id ? ('&idregion=').concat(params.id) : ''}`
       );
       commit("setLoading", false);
       commit("setRegionOffices", data);
