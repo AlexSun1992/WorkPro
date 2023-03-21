@@ -64,7 +64,7 @@ export const actions = {
             }
             return res;
           } else {
-            throw new Error("Error");
+            throw new Error("Error /api/module");
           }
         });
       }
