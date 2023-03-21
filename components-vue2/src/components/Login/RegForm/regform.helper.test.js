@@ -10,7 +10,7 @@ describe("Валидация passwordValidation in regform.helper", () => {
     const passwordValidationMessage = passwordValidation("Reso");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Требования к паролю: от 8 до 20 символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};|,./? (Пробел исключен)`,
+        errorText: `Требования к паролю: от 8 до 20 символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};,./? (Пробел исключен)`,
       },
     ]);
   });
@@ -64,7 +64,7 @@ describe("Валидация компонента passwordValidationDetail in Re
 
   it("Если поле содержит специальный символ , то выводит ошибку", () => {
     const passwordValidationMessage =
-      passwordValidationDetail("1kkkkkRkkkkkkkk@");
+      passwordValidationDetail("1kkkkkRkkkkkkkk)");
     expect(passwordValidationMessage).toEqual([]);
   });
 
