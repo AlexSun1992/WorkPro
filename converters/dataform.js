@@ -158,8 +158,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "LabelMoney";
     } else if (webFields[i].IDCONTROL == 34) {
       obj.type = "Uploader";
-    } else if (webFields[i].IDCONTROL == 35) {
-      obj.type = "DadataSelect";
+    } else if (webFields[i].IDCONTROL == 35 || webFields[i].IDCONTROL == 381) {
+      obj.type = "DadataSelect2";
     } else if (webFields[i].IDCONTROL == 40) {
       obj.type = "CustomDouble";
     } else if (webFields[i].IDCONTROL == 39) {

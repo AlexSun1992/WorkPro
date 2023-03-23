@@ -46,6 +46,7 @@ import ControlProgressbar from "./ControlProgressbar";
 import ControlEmpty from "./ControlEmpty";
 import ControlLabelMoney from "./ControlLabelMoney";
 import ControlDadataSelect from "./ControlDadataSelect.vue";
+import ControlDadataSelect2 from "./ControlDadataSelect2.vue";
 import ControlCustomCombobox from "./ControlCustomCombobox.vue";
 import ControlCustomDouble from "./ControlCustomDouble.vue";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha.vue";
@@ -61,6 +62,7 @@ export default {
   name: "Control",
   components: {
     ControlDadataSelect,
+    ControlDadataSelect2,
     ControlProgressbar,
     ControlString,
     ControlText,
