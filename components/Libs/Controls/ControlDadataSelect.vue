@@ -184,6 +184,7 @@ export default {
           name: this.data.name,
           value: null,
         });
+        this.$refs.autocomplete.value = null;
       } else {
         this.$refs.autocomplete.value = this.group[0].value;
         this.handleSubmit(this.group[0]);
