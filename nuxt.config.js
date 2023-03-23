@@ -108,6 +108,7 @@ module.exports = {
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
       environment: process.env.NODE_ENV,
     },
+    denyUrls: [/cabinet\.new.reso\.ru/i, /cabinet\.test-new.reso\.ru\//i],
   },
   recaptcha: {
     hideBadge: false,
