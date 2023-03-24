@@ -158,7 +158,9 @@ converter.form = async (data, params, instance) => {
       obj.type = "LabelMoney";
     } else if (webFields[i].IDCONTROL == 34) {
       obj.type = "Uploader";
-    } else if (webFields[i].IDCONTROL == 35 || webFields[i].IDCONTROL == 381) {
+    } else if (webFields[i].IDCONTROL == 35) {
+      obj.type = "DadataSelect";
+    } else if (webFields[i].IDCONTROL == 381) {
       obj.type = "DadataSelect2";
     } else if (webFields[i].IDCONTROL == 40) {
       obj.type = "CustomDouble";
@@ -549,6 +551,12 @@ converter.save = (data) => {
                 )
               );
             }
+          }
+          if (data[i].type === "DadataSelect2") {
+            res[data[i].name] =
+              data[i].value !== null && data[i].value !== undefined
+                ? JSON.stringify(data[i].value)
+                : "NULL";
           }
           if (data[i].structType === "boolrus") {
             res[data[i].name] =

@@ -113,10 +113,10 @@ export default {
     getCurrentValue() {
       if (
         this.data.value !== undefined &&
-        this.data.value !== null &&
-        this.data.name === "SVEHICLE_MODEL"
+        this.data.value !== null
       ) {
-        return this.data.value.split("|")[1];
+        const data = JSON.parse(this.data.value)
+        return data.value;
       }
       return this.data.value;
     },
