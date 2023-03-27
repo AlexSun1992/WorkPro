@@ -84,7 +84,7 @@ export default {
     },
 
     removeFile(elem, index) {
-      this.filesHub = this.filesHub.filter((item) => item !== elem);
+      this.filesHub = this.filesHub.filter((item, id) => id !== index);
     },
   },
 };
