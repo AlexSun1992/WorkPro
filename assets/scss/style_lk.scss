@@ -1641,9 +1641,18 @@ input.checkbox-hide + label:after {
   position: absolute;
 }
 
-.checkbox-hide input:disabled + label:after {
+.checkbox-hide input:disabled + label:after,
+.checkbox-hide input:disabled:checked + label:after {
   background: #f2f2f2;
   cursor: default;
+}
+
+.checkbox-hide input:disabled:checked + label:after {
+  border-color: #f2f2f2;
+}
+.checkbox-hide input:checked:disabled + label:before {
+  border-left: 3px solid #c3c3c3;
+  border-bottom: 3px solid #c3c3c3;
 }
 
 .checkbox-hide input:checked + label:after,

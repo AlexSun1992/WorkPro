@@ -1,8 +1,8 @@
 import { passwordValidation, passwordValidationDetail } from "./regform.helper";
 
-describe("Валидация passwordValidation in RegForm.vue", () => {
+describe("Валидация passwordValidation in regform.helper", () => {
   it("Успешный пароль", () => {
-    const passwordValidationMessage = passwordValidation("Reso1991");
+    const passwordValidationMessage = passwordValidation("Reso19910");
     expect(passwordValidationMessage).toEqual([]);
   });
 
@@ -10,7 +10,7 @@ describe("Валидация passwordValidation in RegForm.vue", () => {
     const passwordValidationMessage = passwordValidation("Reso");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Требования к паролю: от 6 до 20 символов, без кириллицы, содержит цифру, одну прописную и строчную буквы, может содержать спецсимволы: !@#$%^&*()-=+[]{};\"|,./? (Пробел исключен).`,
+        errorText: `Требования к паролю: от 8 до 20 символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};,./? (пробел исключён)`,
       },
     ]);
   });
@@ -18,7 +18,7 @@ describe("Валидация passwordValidation in RegForm.vue", () => {
 
 describe("Валидация компонента passwordValidationDetail in RegForm.vue", () => {
   it("Успешный пароль", () => {
-    const passwordValidationMessage = passwordValidationDetail("Reso1991");
+    const passwordValidationMessage = passwordValidationDetail("Reso19910*y");
     expect(passwordValidationMessage).toEqual([]);
   });
 
@@ -26,16 +26,16 @@ describe("Валидация компонента passwordValidationDetail in Re
     const passwordValidationMessage = passwordValidationDetail("");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 6 до 20 символов.`,
+        errorText: `Пароль должен содержать от 8 до 20 символов.`,
       },
     ]);
   });
 
-  it("Если поле содержит меньше 6 символов , то выводит ошибку", () => {
+  it("Если поле содержит меньше 8 символов , то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationDetail("1pR");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 6 до 20 символов.`,
+        errorText: `Пароль должен содержать от 8 до 20 символов.`,
       },
     ]);
   });
@@ -46,7 +46,7 @@ describe("Валидация компонента passwordValidationDetail in Re
     );
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 6 до 20 символов.`,
+        errorText: `Пароль должен содержать от 8 до 20 символов.`,
       },
     ]);
   });
@@ -64,7 +64,7 @@ describe("Валидация компонента passwordValidationDetail in Re
 
   it("Если поле содержит специальный символ , то выводит ошибку", () => {
     const passwordValidationMessage =
-      passwordValidationDetail("1kkkkkRkkkkkkkk@");
+      passwordValidationDetail("1kkkkkRkkkkkkkk)");
     expect(passwordValidationMessage).toEqual([]);
   });
 
@@ -121,11 +121,11 @@ describe("Валидация компонента passwordValidationDetail in Re
     ]);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и содержит меньше 6 символов, то выводит ошибку", () => {
+  it("Если поле содержит русские буквы, специальный символ и содержит меньше 8 символов, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationDetail("1Rkз!");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 6 до 20 символов.`,
+        errorText: `Пароль должен содержать от 8 до 20 символов.`,
       },
       {
         errorText:
@@ -140,7 +140,7 @@ describe("Валидация компонента passwordValidationDetail in Re
     );
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 6 до 20 символов.`,
+        errorText: `Пароль должен содержать от 8 до 20 символов.`,
       },
       {
         errorText:
@@ -181,7 +181,7 @@ describe("Валидация компонента passwordValidationDetail in Re
     const passwordValidationMessage = passwordValidationDetail("gR");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 6 до 20 символов.`,
+        errorText: `Пароль должен содержать от 8 до 20 символов.`,
       },
       {
         errorText:
@@ -191,7 +191,7 @@ describe("Валидация компонента passwordValidationDetail in Re
   });
 
   it("Если поле не содержит заглавную латинскую букву, то выводит ошибку", () => {
-    const passwordValidationMessage = passwordValidationDetail("reso1991");
+    const passwordValidationMessage = passwordValidationDetail("reso1991w");
     expect(passwordValidationMessage).toEqual([
       {
         errorText:

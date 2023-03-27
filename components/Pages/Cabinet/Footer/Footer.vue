@@ -98,8 +98,13 @@
         >
           <div class="title mt-0 mb-0 mb-lg-3">
             <a href="tel:+78002341802" class="footer-tel">8 (800) 234-18-02</a>
-            <br /><span class="footer-tel-ph">Круглосуточно</span>
+            <br /><span class="footer-tel-ph">Круглосуточно</span> <br /><a
+              href="tel:+78002341802"
+              class="footer-tel"
+              >8 (495) 730-30-00</a
+            >
           </div>
+
           <div class="footer-app-btn">
             <a
               v-for="(item, index) in appGoogleStoreRefs[0].items"

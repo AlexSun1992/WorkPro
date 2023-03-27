@@ -1,10 +1,13 @@
 <template>
-  <b-card :title="office.SSHORTNAME ? office.SSHORTNAME : 'Офис продаж'" class="mb-2">
+  <b-card
+    :title="office.SSHORTNAME ? office.SSHORTNAME : 'Офис продаж'"
+    class="mb-2"
+  >
     <b-card-text>
       <div class="card-office-adress row">
         <div v-if="office.SPATH1" class="col-4 pe-0">
           <div class="position-relative">
-            <img :src="'/export/sites/reso/galleries/branches/' + office.SPATH1" />
+            <img :src="'/export/sites/reso' + office.SPATH1" />
             <button class="office-image-zoom" type="button"></button>
           </div>
         </div>
@@ -24,6 +27,14 @@
           >
             Показать на карте
           </button>
+        </div>
+      </div>
+      <div class="mt-2">
+        <div
+          class="green-tags"
+          v-if="office.LSPR === true || office.LREG_CENTER === true"
+        >
+          Урегулирование страховых случаев
         </div>
       </div>
       <div v-if="office.SDADATAMETRO" class="card-office-undeground">
@@ -58,7 +69,7 @@
           <a
             v-bind:href="'mailto:' + office.SEMAIL"
             class="card-office-e-mail"
-          >{{ office.SEMAIL }}</a
+            >{{ office.SEMAIL }}</a
           >
         </div>
       </div>
@@ -100,16 +111,38 @@ export default {
   methods: {
     phones(officePhones) {
       const phones = [];
-      Object.values(JSON.parse(officePhones)).forEach(phone => {
+      Object.values(JSON.parse(officePhones)).forEach((phone) => {
         phones.push({
           clear: phone,
-          view: `${phone.substring(0, 2)}(${phone.substring(2, 5)})${phone.substring(5, 8)}-${phone.substring(8, 10)}-${phone.substring(10, 12)}${phone.includes(',') ? ` доб. ${phone.split(',')[1]}` : ''}`,
+          view: `${phone.substring(0, 2)}(${phone.substring(
+            2,
+            5
+          )})${phone.substring(5, 8)}-${phone.substring(
+            8,
+            10
+          )}-${phone.substring(10, 12)}${
+            phone.includes(",") ? ` доб. ${phone.split(",")[1]}` : ""
+          }`,
         });
       });
-      return phones
+      return phones;
     },
-  }
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.green-tags {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 20px;
+  align-items: center;
+  color: #ffffff;
+  padding: 4px 12px;
+  background: #43b02a;
+  border-radius: 100px;
+  display: table;
+}
+</style>

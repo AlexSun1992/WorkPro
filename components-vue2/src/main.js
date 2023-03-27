@@ -34,6 +34,7 @@ Sentry.init({
   tracesSampleRate: 1.0,
   enabled: process.env.NODE_ENV === "production",
   environment: process.env.NODE_ENV,
+  allowUrls: [/https?:\/\/reso\.ru/],
 });
 
 Vue.customElement(
