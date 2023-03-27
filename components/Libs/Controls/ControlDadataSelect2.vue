@@ -111,12 +111,13 @@ export default {
       return "";
     },
     getCurrentValue() {
-      if (
-        this.data.value !== undefined &&
-        this.data.value !== null
-      ) {
-        const data = JSON.parse(this.data.value)
-        return data.value;
+      if (this.data.value !== undefined && this.data.value !== null) {
+        try {
+          const data = JSON.parse(this.data.value);
+          return data.value;
+        } catch (e) {
+          return this.data.value;
+        }
       }
       return this.data.value;
     },
