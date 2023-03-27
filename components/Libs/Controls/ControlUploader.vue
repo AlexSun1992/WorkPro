@@ -3,19 +3,31 @@
     <b-button @click="$refs.file.click()" class="btn-doc-add">{{
       data.label
     }}</b-button>
-    <input
-      ref="file"
-      type="file"
-      style="display: none"
-      v-on:change="handleFileUpload($event)"
-      multiple
-    />
+    <div>
+      <input
+        ref="file"
+        type="file"
+        multiple
+        @change="getFileNames(), handleFileUpload()"
+      />
+    </div>
+    <ul>
+      <li v-for="(item, index) in filesHub" :key="index">
+        {{ item.name }} {{ item.size + " кб" }}
+        <b-button @click="removeFile(item, index)">Удалить</b-button>
+      </li>
+    </ul>
     {{ fileSize }}
   </div>
 </template>
 
 <script>
+import { BButton } from "bootstrap-vue";
+
 export default {
+  components: {
+    BButton,
+  },
   name: "ControlUploader",
   props: {
     data: {
@@ -26,34 +38,53 @@ export default {
   },
   data() {
     return {
-      uploadPercentage: 0,
-      percentsVisible: false,
       file: null,
-      size: null,
+      filesHub: [],
     };
   },
 
   computed: {
     fileSize() {
-      return this.file !== null ? this.size + "кб" : null;
+      const collectionOfFilesSize = [];
+
+      this.filesHub.forEach((item) => collectionOfFilesSize.push(item.size));
+
+      const getFullSize = collectionOfFilesSize.reduce(function (
+        firstEl,
+        secondEl
+      ) {
+        return firstEl + secondEl;
+      },
+      0);
+      return getFullSize + " кб";
     },
   },
 
   methods: {
     handleFileUpload() {
-      this.file = this.$refs.file.files;
-      this.size = Object.values(this.file).reduce((sum, item) => {
-        return sum + item.size;
-      }, 0);
-
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.file,
       });
     },
-    submitFile() {
-      return true;
+
+    getFileNames() {
+      const transformedObjectToArrayOfLoadedFiles = Object.entries(
+        this.$refs.file.files
+      );
+
+      const pureArrayOfFiles = transformedObjectToArrayOfLoadedFiles.map(
+        (item) => item.filter((elem) => typeof elem !== "string")
+      );
+
+      pureArrayOfFiles.forEach((item) =>
+        item.forEach((elem) => this.filesHub.push(elem))
+      );
+    },
+
+    removeFile(elem, index) {
+      this.filesHub = this.filesHub.filter((item) => item !== elem);
     },
   },
 };
