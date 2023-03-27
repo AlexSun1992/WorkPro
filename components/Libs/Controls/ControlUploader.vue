@@ -73,18 +73,33 @@ export default {
       const transformedObjectToArrayOfLoadedFiles = Object.entries(
         this.$refs.file.files
       );
-
       const pureArrayOfFiles = transformedObjectToArrayOfLoadedFiles.map(
         (item) => item.filter((elem) => typeof elem !== "string")
       );
-
       pureArrayOfFiles.forEach((item) =>
         item.forEach((elem) => this.filesHub.push(elem))
       );
+
+      const dt = new DataTransfer();
+      this.filesHub.forEach((item) => {
+        const file = new File([item], `${item.name}`, { type: `${item.type}` });
+        dt.items.add(file);
+      });
+
+      const fileList = dt.files;
+      this.$refs.file.files = fileList;
     },
 
     removeFile(elem, index) {
       this.filesHub = this.filesHub.filter((item, id) => id !== index);
+
+      const dt = new DataTransfer();
+      this.filesHub.forEach((item) => {
+        const file = new File([item], `${item.name}`, { type: `${item.type}` });
+        dt.items.add(file);
+      });
+      const fileList = dt.files;
+      this.$refs.file.files = fileList;
     },
   },
 };
