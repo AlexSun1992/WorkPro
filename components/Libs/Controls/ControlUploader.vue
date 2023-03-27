@@ -3,18 +3,18 @@
     <b-button @click="$refs.file.click()" class="btn-doc-add">{{
       data.label
     }}</b-button>
-    <div class="inp">
+    <div>
       <input
         ref="file"
         type="file"
-        v-on:change="handleFileUpload($event), getFileNames()"
         multiple
+        @change="getFileNames(), handleFileUpload()"
       />
     </div>
     <ul>
-      <li v-for="item in filesHub" :key="item.id">
+      <li v-for="(item, index) in filesHub" :key="index">
         {{ item.name }} {{ item.size + " кб" }}
-        <b-button @click="removeFile(item)">Удалить</b-button>
+        <b-button @click="removeFile(item, index)">Удалить</b-button>
       </li>
     </ul>
     {{ fileSize }}
@@ -56,15 +56,14 @@ export default {
 
   methods: {
     handleFileUpload() {
-      // this.$emit("update", {
-      //   fieldId: this.data.fieldId,
-      //   name: this.data.name,
-      //   value: this.file,
-      // });
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.file,
+      });
     },
 
     getFileNames() {
-      console.log("this.$refs:", this.$refs);
       const rebuildObj = Object.entries(this.$refs.file.files);
       const result = rebuildObj.map((item) =>
         item.filter((elem) => typeof elem !== "string")
@@ -74,12 +73,8 @@ export default {
       );
     },
 
-    removeFile(elem) {
+    removeFile(elem, index) {
       this.filesHub = this.filesHub.filter((item) => item !== elem);
-    },
-
-    submitFile() {
-      return true;
     },
   },
 };
@@ -104,10 +99,5 @@ export default {
   font-style: italic;
   font-weight: 300;
   font-size: 15px;
-}
-.inp {
-  display: block;
-  width: 200px;
-  border: 2px solid red;
 }
 </style>
