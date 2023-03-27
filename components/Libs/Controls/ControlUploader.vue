@@ -45,11 +45,17 @@ export default {
 
   computed: {
     fileSize() {
-      const getSize = [];
-      this.filesHub.forEach((item) => getSize.push(item.size));
-      const getFullSize = getSize.reduce(function (firstEl, secondEl) {
+      const collectionOfFilesSize = [];
+
+      this.filesHub.forEach((item) => collectionOfFilesSize.push(item.size));
+
+      const getFullSize = collectionOfFilesSize.reduce(function (
+        firstEl,
+        secondEl
+      ) {
         return firstEl + secondEl;
-      }, 0);
+      },
+      0);
       return getFullSize + " кб";
     },
   },
@@ -64,11 +70,15 @@ export default {
     },
 
     getFileNames() {
-      const rebuildObj = Object.entries(this.$refs.file.files);
-      const result = rebuildObj.map((item) =>
-        item.filter((elem) => typeof elem !== "string")
+      const transformedObjectToArrayOfLoadedFiles = Object.entries(
+        this.$refs.file.files
       );
-      result.forEach((item) =>
+
+      const pureArrayOfFiles = transformedObjectToArrayOfLoadedFiles.map(
+        (item) => item.filter((elem) => typeof elem !== "string")
+      );
+
+      pureArrayOfFiles.forEach((item) =>
         item.forEach((elem) => this.filesHub.push(elem))
       );
     },
