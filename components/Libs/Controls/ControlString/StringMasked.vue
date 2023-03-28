@@ -48,7 +48,7 @@ export default {
         X: { pattern: /[0-9a-zA-Z]/ },
         S: { pattern: /[a-zA-Z]/ },
         A: { pattern: /[a-zA-Z]/, transform: (v) => v.toLocaleUpperCase() },
-        R: { pattern: /[а-яА-я]/, transform: (v) => v.toLocaleUpperCase() },
+        R: { pattern: /[а-яёАЁ-Я]/, transform: (v) => v.toLocaleUpperCase() },
         a: { pattern: /[a-zA-Z]/, transform: (v) => v.toLocaleLowerCase() },
         "!": { escape: true },
       },

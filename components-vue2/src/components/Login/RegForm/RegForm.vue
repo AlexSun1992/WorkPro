@@ -257,13 +257,7 @@
 <script>
 import axios from "axios";
 import { validationMixin } from "vuelidate";
-import {
-  required,
-  minLength,
-  sameAs,
-  helpers,
-  maxLength,
-} from "vuelidate/lib/validators";
+import { required, minLength, sameAs, helpers } from "vuelidate/lib/validators";
 
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
@@ -286,8 +280,6 @@ import {
 } from "./dadata.helper";
 
 import { passwordValidation } from "./regform.helper";
-
-const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
 
 export default {
   components: {
@@ -643,7 +635,7 @@ export default {
         this.isPatronymicValidSignsErrorMessage = null;
         return;
       }
-      const regex = /^[а-яА-Я- ]*$/;
+      const regex = /^[а-яёАЁ-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (input.charAt(0) === " ") {
@@ -711,7 +703,7 @@ export default {
     // Запрос на подсказки по фамилии
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
-      const regex = /^[а-яА-Я- ]*$/;
+      const regex = /^[а-яёАЁ-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (input.charAt(0) === " ") {
@@ -780,7 +772,7 @@ export default {
     // Запрос на подсказки по именам
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
-      const regex = /^[а-яА-Я- ]*$/;
+      const regex = /^[а-яёАЁ-Я- ]*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (input.charAt(0) === " ") {

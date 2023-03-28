@@ -104,15 +104,15 @@ describe("Модуль тестирования подсказок по ФИО d
   });
 
   it("Валидируем водимый текст в поля ФИО", () => {
-    const fieldFIOValue = isFieldFIONotValid("ан", /^[а-яА-Я- ]*$/);
+    const fieldFIOValue = isFieldFIONotValid("ан", /^[а-яёАЁ-Я- ]*$/);
     expect(fieldFIOValue).toBe(false);
   });
   it("Валидируем водимый текст в поля ФИО", () => {
-    const fieldFIOValue = isFieldFIONotValid("test", /^[а-яА-Я- ]*$/);
+    const fieldFIOValue = isFieldFIONotValid("test", /^[а-яёАЁ-Я- ]*$/);
     expect(fieldFIOValue).toBe(true);
   });
   it("Валидируем водимый текст в поля ФИО", () => {
-    const fieldFIOValue = isFieldFIONotValid("!!!1111 --", /^[а-яА-Я- ]*$/);
+    const fieldFIOValue = isFieldFIONotValid("!!!1111 --", /^[а-яёАЁ-Я- ]*$/);
     expect(fieldFIOValue).toBe(true);
   });
 
