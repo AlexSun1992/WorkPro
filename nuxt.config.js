@@ -107,8 +107,9 @@ module.exports = {
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
       environment: process.env.NODE_ENV,
+      allowUrls: [/https?:\/\/reso\.ru/],
+      release: process.env.APP_VERSION,
     },
-    allowUrls: [/https?:\/\/reso\.ru/],
   },
   recaptcha: {
     hideBadge: false,
