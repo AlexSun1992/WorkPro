@@ -14,9 +14,9 @@ RUN npm config set registry https://nexus.reso.ru/repository/npm/ && npm ci
 COPY --from=preparation /home/node/app/static/js ./static/js
 ENV TZ=Europe/Moscow
 COPY . ./
-RUN npm run build
 ARG APP_VERSION
 ENV APP_VERSION=$APP_VERSION
+RUN npm run build
 EXPOSE 8000
 CMD [ "npm", "start" ]
 HEALTHCHECK --interval=12s --timeout=12s --start-period=30s --retries=3 CMD curl --fail http://localhost:8000/api/healthcheck || exit 1
