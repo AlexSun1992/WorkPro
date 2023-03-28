@@ -1640,7 +1640,7 @@ input.checkbox-hide + label:after {
   transform: translateY(-52%);
   position: absolute;
 }
-
+/*
 .checkbox-hide input:disabled + label:after,
 .checkbox-hide input:disabled:checked + label:after {
   background: #f2f2f2;
@@ -1654,7 +1654,7 @@ input.checkbox-hide + label:after {
   border-left: 3px solid #c3c3c3;
   border-bottom: 3px solid #c3c3c3;
 }
-
+*/
 .checkbox-hide input:checked + label:after,
 .checkbox-hide:checked + label:after {
   border-color: $lgreen;
