@@ -30,24 +30,14 @@ describe("ControlUploader", () => {
     isTab: false,
   };
 
-  const data = "Здесь текст для файла или положите в переменную Blob";
-  const file = new File([data], "primer.txt", { type: "text/plain" });
-  //
+  //  mocks: {
+  //     $refs: {file: {files: dt.files},},
+  //   },
 
-  const dt = new DataTransfer();
-  dt.items.add(file);
-  //
   const createComponent = () => {
     wrapper = mount(ControlUploader, {
       propsData: {
         data: dataProps,
-      },
-      mocks: {
-        $refs: {
-          file: {
-            files: dt.files,
-          },
-        },
       },
     });
   };
@@ -56,13 +46,10 @@ describe("ControlUploader", () => {
     wrapper.destroy();
   });
 
-  it("testus", () => {
+  it("Проверяем отображение компонента", () => {
     createComponent();
     const getBtnSelector = "[type=button]";
     const getBtn = wrapper.find(getBtnSelector);
-    // console.log("getBtn:", getBtn.html());
-    //
-    console.log("wrapper:", wrapper.html());
     getBtn.trigger("click");
     expect(wrapper).not.toBe(null);
   });

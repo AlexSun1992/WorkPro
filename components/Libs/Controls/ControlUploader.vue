@@ -66,7 +66,7 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.file,
+        value: this.$refs.file.files,
       });
     },
 
@@ -83,7 +83,6 @@ export default {
 
       const result = getSynchronizedFileList(this.filesHub);
       this.$refs.file.files = result;
-      console.log("this.$refs.file.files:", this.$refs.file.files);
     },
 
     removeFile(elem, index) {
