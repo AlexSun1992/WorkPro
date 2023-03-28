@@ -29,6 +29,8 @@ const footerMenu = [
       { title: "ДМС", ref: "/individual/medicine/" },
       { title: "Туризм", ref: "/individual/travel/" },
       { title: "Несчастный случай", ref: "/individual/accident/" },
+      { title: "Антиклещ", ref: "/individual/medicine/tick/" },
+      { title: "Телемедицина", ref: "/individual/medicine/telemedicine/" },
       {
         title: "Накопительное и инвестиционное страхование",
         ref: "/individual/life/",
@@ -45,7 +47,7 @@ const footerMenu = [
       { title: "Закупки", ref: "/about/tenders/" },
       {
         title: "Раскрытие сведений",
-        ref: "https://old.reso.ru/Shareholders/Finance/",
+        ref: "/shareholders/",
       },
       {
         title: "Информация для потребителей",
@@ -53,11 +55,14 @@ const footerMenu = [
       },
       {
         title: "Правила и тарифы",
-        ref: "https://old.reso.ru/About/Tariffs_rules/",
+        ref: "/about/rules/",
       },
       { title: "Обратная связь", ref: "/feedback/" },
-      { title: "Заказать полис", ref: "/sitemap" },
-      { title: "Карта сайта", ref: "https://old.reso.ru/Aux/invokeAgent.html" },
+      { title: "Карта сайта", ref: "/sitemap/" },
+      {
+        title: "Заказать полис",
+        ref: "https://old.reso.ru/Aux/invokeAgent.html",
+      },
     ],
   },
 
