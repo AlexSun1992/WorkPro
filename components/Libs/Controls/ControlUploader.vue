@@ -23,6 +23,7 @@
 
 <script>
 import { BButton } from "bootstrap-vue";
+import { getSynchronizedFileList } from "./ControlUploader.helper";
 
 export default {
   components: {
@@ -80,26 +81,15 @@ export default {
         item.forEach((elem) => this.filesHub.push(elem))
       );
 
-      const dt = new DataTransfer();
-      this.filesHub.forEach((item) => {
-        const file = new File([item], `${item.name}`, { type: `${item.type}` });
-        dt.items.add(file);
-      });
-
-      const fileList = dt.files;
-      this.$refs.file.files = fileList;
+      const result = getSynchronizedFileList(this.filesHub);
+      this.$refs.file.files = result;
+      console.log("this.$refs.file.files:", this.$refs.file.files);
     },
 
     removeFile(elem, index) {
       this.filesHub = this.filesHub.filter((item, id) => id !== index);
-
-      const dt = new DataTransfer();
-      this.filesHub.forEach((item) => {
-        const file = new File([item], `${item.name}`, { type: `${item.type}` });
-        dt.items.add(file);
-      });
-      const fileList = dt.files;
-      this.$refs.file.files = fileList;
+      const result = getSynchronizedFileList(this.filesHub);
+      this.$refs.file.files = result;
     },
   },
 };
