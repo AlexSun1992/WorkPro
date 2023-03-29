@@ -835,6 +835,50 @@ describe("RegForm", () => {
     expect(surenameInput.element.value.length).toBe(0);
   });
 
+  it("Проверка на возможность введения буквы ё в поля ФИО", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+        },
+      ],
+    });
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Королёв   ");
+    expect(surnameComponent.classes()).toContain("is-valid");
+
+    const patronymicComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const patronymicInput = patronymicComponent.find("input");
+    await patronymicInput.setValue("Королёв   ");
+    expect(patronymicComponent.classes()).toContain("is-valid");
+
+    const nameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const nameInput = nameComponent.find("input");
+    await nameInput.setValue("Королёв   ");
+    expect(nameComponent.classes()).toContain("is-valid");
+  });
+
   ///
   it("должен корректно заполнять форму", async () => {
     const localVue = createLocalVue();
