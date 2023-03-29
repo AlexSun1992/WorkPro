@@ -208,7 +208,7 @@ import VerifyUser from "../../../Libs/VerifyUser/VerifyUser";
 import VerifyPassword from "../../../Libs/VerifyPassword/VerifyPassword";
 import ConfirmModal from "./ConfirmModal";
 
-const alpha = helpers.regex("alpha", /^[а-яА-Я- ]*$/);
+const alpha = helpers.regex("alpha", /^[а-яА-ЯёЁ]*$/);
 
 export default {
   components: { birthdayPicker, VerifyUser, VerifyPassword, ConfirmModal },
