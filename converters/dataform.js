@@ -313,10 +313,20 @@ converter.form = async (data, params, instance) => {
           const oneToManyData = webFieldsArr.find(
             (webField) => webField.menudic === item.value.metaData.itemId
           );
-          const dataCardValuesArray = oneToManyData.value;
+          let dataCardValuesArray;
           const dataCardWebFieldsArray = item.value.metaData.data;
+          if (Array.isArray(oneToManyData.value)) {
+            dataCardValuesArray = oneToManyData.value;
+          }
+          if (typeof oneToManyData.value === "string") {
+            try {
+              dataCardValuesArray = JSON.parse(oneToManyData.value);
+            } catch (e) {
+              dataCardValuesArray = null;
+            }
+          }
           const resultOneToMany = [];
-          if (Array.isArray(dataCardValuesArray)) {
+          if (dataCardValuesArray) {
             dataCardValuesArray.forEach((itemValue) => {
               resultOneToMany.push(
                 converter.type(
@@ -350,6 +360,7 @@ converter.form = async (data, params, instance) => {
     // Метаданные для отображения JSONWEBFIELDS
     metaData: {
       data: converter.type(webFieldsArr, meta_readonly),
+      defaultValues: meta_value,
       captions: data[0]._meta.SPAGECAPTION,
       cardCaption: data[0]._meta.SCARDCAPTION,
       btnSave: meta_visible?.BTNSAVE !== "N",
