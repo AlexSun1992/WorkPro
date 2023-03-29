@@ -635,7 +635,7 @@ export default {
         this.isPatronymicValidSignsErrorMessage = null;
         return;
       }
-      const regex = /^[а-яёАЁ-Я- ]*$/;
+      const regex = /^[а-яА-ЯёЁ]+\s*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (input.charAt(0) === " ") {
@@ -703,7 +703,7 @@ export default {
     // Запрос на подсказки по фамилии
     async getSuggestionsSurname(input) {
       this.suggestionsHub = [];
-      const regex = /^[а-яёАЁ-Я- ]*$/;
+      const regex = /^[а-яА-ЯёЁ]+\s*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (input.charAt(0) === " ") {
@@ -772,7 +772,7 @@ export default {
     // Запрос на подсказки по именам
     async getSuggestionsName(input) {
       this.suggestionsHub = [];
-      const regex = /^[а-яёАЁ-Я- ]*$/;
+      const regex = /^[а-яА-ЯёЁ]+\s*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (input.charAt(0) === " ") {
