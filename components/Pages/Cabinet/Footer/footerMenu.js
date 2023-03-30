@@ -42,8 +42,8 @@ const footerMenu = [
     title: "О компании",
     titleRef: "/about/",
     items: [
-      { title: "Новости", ref: "/about/media/news/" },
-      { title: "Вакансии", ref: "/career/" },
+      { title: "Новости", ref: "https://old.reso.ru/About/Media/News/" },
+      { title: "Вакансии", ref: "https://old.reso.ru/About/Media/News/" },
       { title: "Закупки", ref: "/about/tenders/" },
       {
         title: "Раскрытие сведений",
@@ -51,7 +51,7 @@ const footerMenu = [
       },
       {
         title: "Информация для потребителей",
-        ref: "/about/company/",
+        ref: "https://old.reso.ru/About/Company/",
       },
       {
         title: "Правила и тарифы",
@@ -61,7 +61,7 @@ const footerMenu = [
       { title: "Карта сайта", ref: "/sitemap/" },
       {
         title: "Заказать полис",
-        ref: "/aux/invokeagent.html",
+        ref: "https://old.reso.ru/Aux/invokeAgent.html",
       },
     ],
   },
