@@ -80,7 +80,6 @@ export default {
       pureArrayOfFiles.forEach((item) =>
         item.forEach((elem) => this.filesHub.push(elem))
       );
-
       const result = getSynchronizedFileList(this.filesHub);
       this.$refs.file.files = result;
     },

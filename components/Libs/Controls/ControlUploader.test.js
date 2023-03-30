@@ -1,9 +1,15 @@
 import { mount } from "@vue/test-utils";
 import ControlUploader from "./ControlUploader.vue";
 
+// function DataTransfer() {
+//     this.items = new Set();
+//     this.files = this.items;
+//   }
+// jest.mock(DataTransfer);
+//
+
 describe("ControlUploader", () => {
   let wrapper;
-
   const dataProps = {
     label: "Добавить файл",
     type: "Uploader",
@@ -30,14 +36,25 @@ describe("ControlUploader", () => {
     isTab: false,
   };
 
-  //  mocks: {
-  //     $refs: {file: {files: dt.files},},
-  //   },
+  const data = "Здесь текст для файла или положите в переменную Blob";
+  const elem = new File([data], "primer.txt", { type: "text/plain" });
+  //
+  // const blob = new Blob(["Hello, world!"], { type: "text/plain" });
+  //
+  // const dt = new DataTransfer();
+  // dt.items.add(file);
 
   const createComponent = () => {
     wrapper = mount(ControlUploader, {
       propsData: {
         data: dataProps,
+      },
+      mocks: {
+        $refs: {
+          file: {
+            files: elem,
+          },
+        },
       },
     });
   };
@@ -48,9 +65,15 @@ describe("ControlUploader", () => {
 
   it("Проверяем отображение компонента", () => {
     createComponent();
-    const getBtnSelector = "[type=button]";
-    const getBtn = wrapper.find(getBtnSelector);
-    getBtn.trigger("click");
+    // Находим кнопку по селектору
+    // const getBtnSelector = "[type=button]";
+    // const getBtn = wrapper.find(getBtnSelector);
+    // getBtn.trigger("click");
+    //
+    console.log("wrapper:", wrapper.html());
+    // const data = "Здесь текст для файла или положите в переменную Blob";
+    // const elem = new File([data], "primer.txt", { type: "text/plain" });
+    console.log("elem:", elem);
     expect(wrapper).not.toBe(null);
   });
 });
