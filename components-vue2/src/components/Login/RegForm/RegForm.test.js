@@ -1237,4 +1237,87 @@ describe("RegForm", () => {
 
     expect(bvModal).toHaveBeenCalled();
   });
+
+  it("Выводит ошибку (что-то пошло не так)", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+
+    axios.post.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: [
+          {
+            MESSAGE: "Введите код подтверждения из SMS",
+            MESSAGE_CODE: 200,
+            GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+          },
+        ],
+        status: 200,
+      })
+    );
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Казимиров");
+
+    const patronymicComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const patronymicInput = patronymicComponent.find("input");
+    await patronymicInput.setValue("Александрович");
+
+    const nameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const nameInput = nameComponent.find("input");
+    await nameInput.setValue("Андрей");
+
+    const dataPickerInput = wrapper
+      .findComponent("#birthday-picker")
+      .find("input");
+
+    dataPickerInput.setValue("27.06.1989");
+    dataPickerInput.trigger("change");
+
+    await wrapper.find("#password1").setValue("Aa1234!5");
+    await wrapper.find("#password2").setValue("Aa1234!5");
+
+    await wrapper.find("#agreement-check-box").setChecked(true);
+
+    await wrapper.find("#phone").setValue("+7(985)-686-81-48");
+
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#sms-confirm").setValue("1111");
+
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE:
+            'ORA-04063: package body "I3.PKG_LK_UTILS" имеет ошибки\nORA-06508: PL/SQL: невозможно найти вызываемый блок программы: "I3.PKG_LK_UTILS"\nORA-06512: на  line 1\nORA-06512: на  "MOBILE.AMUTILSREST", line 944\nORA-06512: на  line 1\n',
+          STATUS: 500,
+          REASON: "Internal Server Error",
+          INFO: "PL/SQL: невозможно найти вызываемый блок программы",
+        },
+      };
+      throw wrongAuthError;
+    });
+
+    await wrapper.find("#btn_chek_registration_lk").trigger("click");
+    expect(wrapper.find("#error-message").text()).toContain(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
+  });
 });

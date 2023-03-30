@@ -258,6 +258,7 @@
 import axios from "axios";
 import { validationMixin } from "vuelidate";
 import { required, minLength, sameAs, helpers } from "vuelidate/lib/validators";
+import { getErrorMessage } from "../../../../../plugins/auth/toast.helper";
 
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
@@ -950,7 +951,7 @@ export default {
         }
       } catch (e) {
         this.isErrorMessage = true;
-        this.errorMessage = e?.response?.data?.INFO ?? "Неизвестная ошибка";
+        this.errorMessage = getErrorMessage(e?.response?.data?.MESSAGE);
         this.registrationInProcess = false;
       }
     },

@@ -120,15 +120,6 @@ describe("Модуль вывода сообщения об ошибке", () =>
     );
   });
 
-  it("API вернуло ошибку", () => {
-    const errorMessageText =
-      'ORA-04063: package body "I3.PKG_LK_UTILS" имеет ошибки\nORA-06508: PL/SQL: невозможно найти вызываемый блок программы: "I3.PKG_LK_UTILS"\nORA-06512: на  line 1\nORA-06512: на  "MOBILE.AMUTILSREST", line 944\nORA-06512: на  line 1\n';
-    const errorMessageWithOutORA = getErrorMessage(errorMessageText);
-    expect(errorMessageWithOutORA).toBe(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так."
-    );
-  });
-
   it("Ошибка критична", () => {
     const errorMessageText =
       'ORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1686\nORA-06512: на  "MOBILE.AMUTILSREST", line 1315\nORA-06512: на  line 1\n';

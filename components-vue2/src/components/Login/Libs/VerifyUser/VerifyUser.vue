@@ -153,7 +153,6 @@ import {
   getMessageFromMessageCode,
   isAlertShouldBeShown,
 } from "./verifyUser.helper";
-import { getErrorMessage } from "../../../../../../plugins/auth/toast.helper";
 
 export default {
   components: {
@@ -411,7 +410,7 @@ export default {
             ) {
               this.loading = false;
               this.isSendCode = false;
-              this.errorMessage = getErrorMessage(response1.data?.INFO);
+              this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
               return;
             }
 
@@ -463,7 +462,6 @@ export default {
             ) {
               this.loading = false;
               this.isSendCode = false;
-              this.errorMessage = getErrorMessage(response2.data?.INFO);
             } else {
               this.codeFieldShown = true;
               this.loading = false;
