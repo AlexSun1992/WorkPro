@@ -4558,3 +4558,22 @@ a.color-l-green:hover {
   background-color: red;
   color: #fff;
 }
+
+.btn-icon-download {
+  padding: 11px 24px 11px 54px;
+  border: none;
+  outline: none;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  background-color: #eff1f3;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #292929;
+  min-width: 180px;
+  background-image: url("/galleries/icons/main/icon-btn-load.svg");
+  background-repeat: no-repeat;
+  background-position: top 50% left 25px;
+}
