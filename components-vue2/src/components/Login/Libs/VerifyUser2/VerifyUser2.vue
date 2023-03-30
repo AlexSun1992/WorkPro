@@ -91,6 +91,7 @@
 
 <script>
 import axios from "axios";
+import { getErrorMessage } from "../../../../../../plugins/auth/toast.helper";
 import _ from "lodash";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
@@ -339,11 +340,7 @@ export default {
             ) {
               this.loading = false;
               this.isSendCode = false;
-              this.errorMessage = response1.data?.INFO ?? "Неизвестная ошибка";
-              if (this.errorMessage.match(/PL\/SQL/).length) {
-                this.errorMessage =
-                  "Приносим извинения, в Личном Кабинете что-то пошло не так.";
-              }
+              this.errorMessage = getErrorMessage(response1.data?.INFO);
               this.$LogEvent({
                 formName: "VerifyUser errorMessage",
                 idEventType: this.loginType === "phone" ? 153 : 164,
@@ -405,14 +402,11 @@ export default {
             ) {
               this.loading = false;
               this.isSendCode = false;
+              this.errorMessage = getErrorMessage(response2.data?.INFO);
             } else {
               this.loading = false;
               this.isSendCode = true;
               this.successMessage = response?.data[0]?.MESSAGE;
-              if (this.errorMessage.match(/PL\/SQL/).length) {
-                this.errorMessage =
-                  "Приносим извинения, в Личном Кабинете что-то пошло не так.";
-              }
             }
           }
           const isError = Boolean(
