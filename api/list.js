@@ -47,9 +47,6 @@ router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
       req.headers["user-agent"];
     let URL_ADDRESS;
     let settings = null;
-    const filters = listConverter.getFilterParams(
-      formConverter.save(JSON.parse(req.params.filters))
-    );
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
       ?.cookie
@@ -74,32 +71,22 @@ router.get("/list/:idModule/:idItem/:filters", async (req, res, next) => {
     } else {
       URL_ADDRESS = `${consts.FREEDATA}/${req.params.idModule}/${req.params.idItem}/0/0`;
     }
-    mobile2ServiceInstance({
-      url: URL_ADDRESS,
-      method: "GET",
-    })
-      .then((resp) => {
-        res.send({
-          ...listConverter.list(resp.data),
-          settings: settings?.data[0],
-          subSettings: settings
-            ? menuConverter.menuObject(settings?.data[0])
-            : undefined,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err?.response?.data.STATUS == 401) {
-          res.status(err.response.data.STATUS).send(err.response.data);
-        } else {
-          res
-            .status(err?.response?.data.STATUS || 500)
-            .send(err?.response?.data || err);
-        }
-      });
-  } catch (e) {
-    console.log(e);
-    res.send(e);
+    const list = await mobile2ServiceInstance.get(URL_ADDRESS);
+    res.send({
+      ...listConverter.list(list.data),
+      settings: settings?.data[0],
+      subSettings: settings
+        ? menuConverter.menuObject(settings?.data[0])
+        : undefined,
+    });
+  } catch (err) {
+    if (err?.response?.data.STATUS == 401) {
+      res.status(err.response.data.STATUS).send(err.response.data);
+    } else {
+      res
+        .status(err?.response?.data.STATUS || 500)
+        .send(err?.response?.data || err);
+    }
   }
 });
 
@@ -136,55 +123,51 @@ router.get("/onetomanylist/:idItem/:id/:rel", (req, res) => {
 
 router.get("/wizardlist/:idModule/:idWizard/:idItem", async (req, res) => {
   try {
-    const mobile2ServiceInstance = mobile2Service();
-    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    let mobile2ServiceInstance = mobile2Service();
     const ipAddress = requestIp.getClientIp(req);
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || null;
     if (req.headers.referer) {
       mobile2ServiceInstance.defaults.headers.common.Referer =
         req.headers.referer;
     }
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
       ?.cookie
       ? req.headers.cookie
       : null;
-    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
-      ipAddress || null;
-    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
-      req.headers["user-agent"];
-    if (req.headers.authorization) {
+    if (req?.headers?.authorization) {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.headers.authorization;
     } else {
-      if (req.cookies) {
+      if (req?.cookies["auth._token.local"]) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+          req?.cookies["auth._token.local"];
       }
     }
     const settings = await mobile2ServiceInstance.get(
       `${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idWizard}`
     );
-    console.log(
-      `${consts.CLIENTMENU}/${req.params.idModule}/${req.params.idWizard}`,
-      settings
+    const wizardList = await mobile2ServiceInstance.get(
+      `${consts.DATA}/${req.params.idModule}/${req.params.idWizard}/0/${req.params.idItem}?json={}`
     );
-    mobile2ServiceInstance({
-      url: `${consts.DATA}/${req.params.idModule}/${req.params.idWizard}/0/${req.params.idItem}?json={}`,
-      method: "GET",
-    })
-      .then((resp) => {
-        res.send({
-          ...listConverter.list(resp.data),
-          settings: settings?.data[0],
-          subSettings: settings
-            ? menuConverter.menuObject(settings?.data[0])
-            : undefined,
-        });
-      })
-      .catch((err) => {
-        res.status(err.response.data.STATUS).send(err.response.data);
-      });
-  } catch (e) {
-    res.send(e);
+    res.send({
+      ...listConverter.list(wizardList.data),
+      settings: settings?.data[0],
+      subSettings: settings
+        ? menuConverter.menuObject(settings?.data[0])
+        : undefined,
+    });
+  } catch (err) {
+    if (err?.response?.data.STATUS == 401) {
+      res.status(err.response.data.STATUS).send(err.response.data);
+    } else {
+      res
+        .status(err?.response?.data.STATUS || 500)
+        .send(err?.response?.data || err);
+    }
   }
 });
 
