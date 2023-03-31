@@ -251,7 +251,7 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.getItem("auth._token.local").length > 10) {
+    if (/Bearer/.test(localStorage.getItem("auth._token.local"))) {
       window.location.href = "/cabinet";
     }
     this.$nextTick(() => {
