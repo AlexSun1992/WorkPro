@@ -4577,3 +4577,34 @@ a.color-l-green:hover {
   background-repeat: no-repeat;
   background-position: top 50% left 25px;
 }
+
+.label {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #686868;
+}
+.text {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.25rem;
+}
+.label-confirmed {
+  padding: 4px 12px;
+  background: #edf8ea;
+  border-radius: 100px;
+  font-family: "SF Pro Display";
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 23px;
+  text-align: center;
+  color: #43b02a;
+}
+.btn-change {
+  border: 0;
+  background: transparent url(/img/icon-change.svg) 0 0 no-repeat;
+  width: 24px;
+  height: 24px;
+}
