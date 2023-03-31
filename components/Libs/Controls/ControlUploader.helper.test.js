@@ -30,25 +30,15 @@ const test = [
   },
 ];
 
-// jest.mock("DataTransfer");
-
 describe("компонент ControlUploader(объект FileList)", () => {
   it("Объект FileList", () => {
+    // const dataTransferSpy = jest
+    //   .spyOn(DataTransfer.prototype)
+    //   .mockImplementation(() => null);
+
     // const dataTransfer = new DataTransfer();
     const getArr = getSynchronizedFileList(test);
-    console.log("getArr:", getArr);
+    // console.log("getArr:", getArr);
     expect(getArr).not.toBe(null);
-
-    //
-    // const blob = new Blob(['Hello, world!'], {type: 'text/plain'});
-    //
-    // const data = "Здесь текст для файла или положите в переменную Blob";
-    // const elem = new File([data], "primer.txt", { type: "text/plain" });
-    //
-    //
-    // console.log("elem:func", elem);
-    //
-    // const rest = "test";
-    // expect(rest).not.toBe(null);
   });
 });

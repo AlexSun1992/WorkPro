@@ -1,13 +1,6 @@
 import { mount } from "@vue/test-utils";
 import ControlUploader from "./ControlUploader.vue";
 
-// function DataTransfer() {
-//     this.items = new Set();
-//     this.files = this.items;
-//   }
-// jest.mock(DataTransfer);
-//
-
 describe("ControlUploader", () => {
   let wrapper;
   const dataProps = {
@@ -36,23 +29,29 @@ describe("ControlUploader", () => {
     isTab: false,
   };
 
-  const data = "Здесь текст для файла или положите в переменную Blob";
-  const elem = new File([data], "primer.txt", { type: "text/plain" });
-  //
-  // const blob = new Blob(["Hello, world!"], { type: "text/plain" });
-  //
-  // const dt = new DataTransfer();
-  // dt.items.add(file);
+  const createComponent = (filesHubData) => {
+    wrapper = mount(ControlUploader, {
+      data() {
+        return {
+          filesHub: filesHubData,
+        };
+      },
+      propsData: {
+        data: dataProps,
+      },
+    });
+  };
 
-  const createComponent = () => {
+  const makeComponent = () => {
     wrapper = mount(ControlUploader, {
       propsData: {
         data: dataProps,
       },
+
       mocks: {
         $refs: {
           file: {
-            files: elem,
+            files: { 0: { name: "dron.txt", size: 10, type: "text/plain" } },
           },
         },
       },
@@ -64,16 +63,38 @@ describe("ControlUploader", () => {
   });
 
   it("Проверяем отображение компонента", () => {
-    createComponent();
-    // Находим кнопку по селектору
-    // const getBtnSelector = "[type=button]";
-    // const getBtn = wrapper.find(getBtnSelector);
-    // getBtn.trigger("click");
-    //
-    console.log("wrapper:", wrapper.html());
-    // const data = "Здесь текст для файла или положите в переменную Blob";
-    // const elem = new File([data], "primer.txt", { type: "text/plain" });
-    console.log("elem:", elem);
+    const mockDataList = [
+      { name: "first.txt", size: 100 },
+      { name: "second.txt", size: 200 },
+      { name: "third.txt", size: 300 },
+    ];
+    createComponent(mockDataList);
+    expect(wrapper).not.toBe(null);
+  });
+
+  it("Проверяем отображение компонента 2", () => {
+    const mockDataList = [
+      { name: "first.txt", size: 100 },
+      { name: "second.txt", size: 200 },
+    ];
+    createComponent(mockDataList);
+    expect(wrapper).not.toBe(null);
+  });
+
+  it("тестируем c добавлением refs", () => {
+    makeComponent();
+    expect(wrapper).not.toBe(null);
+  });
+
+  it("Не получается проверить удаление выбранного документа (жесткая заглушка mockDataList)", () => {
+    const mockDataList = [
+      { name: "first.txt", size: 100 },
+      { name: "second.txt", size: 200 },
+      { name: "third.txt", size: 300 },
+    ];
+    createComponent(mockDataList);
+    const getBtns = wrapper.find("button");
+    getBtns.trigger("click");
     expect(wrapper).not.toBe(null);
   });
 });
