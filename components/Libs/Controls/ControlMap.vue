@@ -1,18 +1,29 @@
 <template>
-  <div id="map" class="max-size"></div>
+  <yandex-map style="height: 500px; width: 100%" :coords="coords">
+    <ymap-marker
+      marker-id="123"
+      :coords="coords"
+      :balloon-template="balloonTemplate"
+    />
+  </yandex-map>
 </template>
 
 <script>
 export default {
   name: "ControlMap",
-  data() {
-    return {
-      myPlacemark: null,
-      myMap: null,
-      url: "https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU",
-    };
-  },
-
+  data: () => ({
+    coords: [55.737938, 37.244098],
+    markerIcon: {
+      layout: "default#imageWithContent",
+      imageHref: "https://image.flaticon.com/icons/png/512/33/33447.png",
+      imageSize: [43, 43],
+      imageOffset: [0, 0],
+      content: "123 v12",
+      contentOffset: [0, 15],
+      contentLayout:
+        '<div style="background: red; width: 50px; color: #FFFFFF; font-weight: bold;">$[properties.iconContent]</div>',
+    },
+  }),
   props: {
     Lattitude: {
       type: Number,
@@ -25,40 +36,20 @@ export default {
       default: () => null,
     },
   },
-
-  async created() {
-    if (process.client) {
-      await this.$loadScript(
-        `https://api-maps.yandex.ru/2.1/?apikey=95a56d05-41db-462a-a2ea-2c49ff3417a1&lang=ru_RU`
-      ).then(() => ymaps.ready(this.init));
-    }
+  computed: {
+    balloonTemplate() {
+      return `
+        <h1 class="red">Hi, everyone!</h1>
+        <p>I am here: ${this.coords}</p>
+      `;
+    },
   },
-
   methods: {
-    init() {
-      this.myMap = new ymaps.Map("map", {
-        center: [this.Lattitude, this.Longetude],
-        zoom: 12,
-        controls: [],
-      });
-
-      this.myPlacemark = new ymaps.GeoObject({
-        geometry: {
-          type: "Point", // тип геометрии - точка
-          coordinates: [this.Lattitude, this.Longetude], // координаты точки
-        },
-      });
-
-      this.myMap.geoObjects.add(this.myPlacemark);
+    onClick(e) {
+      this.coords = e.get("coords");
     },
   },
 };
 </script>
 
-<style lang="less" scoped>
-.max-size {
-  width: 100%;
-  height: 100px;
-  box-shadow: 0 0 1px 1px black;
-}
-</style>
+<style></style>
