@@ -353,8 +353,9 @@ export default {
           new Date().getTime() + 1000 * 60 * 60 * 24 * 365
         ).toGMTString()}`;
         this.authInProcess = false;
-
-        window.location.href = "/cabinet/55/0/701";
+        if (localStorage.getItem("auth._token.local").length > 10) {
+          window.location.href = "/cabinet/55/0/701";
+        }
         const attempt = new URL(window.location.href);
 
         if (attempt.searchParams.has("ref")) {
