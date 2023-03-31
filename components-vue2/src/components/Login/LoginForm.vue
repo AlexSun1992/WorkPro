@@ -251,6 +251,9 @@ export default {
     };
   },
   mounted() {
+    if (/Bearer/.test(localStorage.getItem("auth._token.local"))) {
+      window.location.href = "/cabinet";
+    }
     this.$nextTick(() => {
       if (typeof this.$LogEvent === "function") {
         const currentURL = window.location.pathname;
@@ -353,7 +356,6 @@ export default {
           new Date().getTime() + 1000 * 60 * 60 * 24 * 365
         ).toGMTString()}`;
         this.authInProcess = false;
-
         window.location.href = "/cabinet/55/0/701";
         const attempt = new URL(window.location.href);
 
