@@ -251,8 +251,8 @@ export default {
     };
   },
   mounted() {
-    const isAuthorization = /Bearer/.test(document.cookie);
-    if (isAuthorization) {
+    const getAuthorizationCookie = /Bearer/.test(document.cookie);
+    if (getAuthorizationCookie) {
       window.location.href = "/cabinet";
     }
     this.$nextTick(() => {
