@@ -251,7 +251,8 @@ export default {
     };
   },
   mounted() {
-    if (/Bearer/.test(localStorage.getItem("auth._token.local"))) {
+    const isAuthorization = /Bearer/.test(document.cookie);
+    if (isAuthorization) {
       window.location.href = "/cabinet";
     }
     this.$nextTick(() => {
