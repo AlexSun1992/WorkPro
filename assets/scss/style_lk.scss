@@ -4607,9 +4607,37 @@ a.color-l-green:hover {
   background: transparent url(/img/icon-change.svg) 0 0 no-repeat;
   width: 24px;
   height: 24px;
+  display: inline-block;
 }
 
 .my-profile .conf-block {
   border: 1px solid #f2f4f5;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.18);
+}
+.warning-profile {
+  background: #f2f4f5;
+  border-radius: 16px;
+  padding: 20px;
+  font-size: 1.125rem;
+  color: #292929;
+}
+.my-profile .btn-action {
+  display: inline-block;
+  text-align: center;
+  padding: 11px 24px;
+  background: #ffffff;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #292929;
+  text-decoration: none;
+  border: 0;
+}
+
+.my-profile .btn-action:hover {
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.08);
+  color: #686868;
+}
+.my-profile .btn-action:active {
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.08);
 }
