@@ -114,7 +114,7 @@ const getTemplate = (agency) => {
     () =>
       agency.LSPR || agency.LREG_CENTER
         ? '<div class="tags-block"><div class="green-tags mt-2">Урегулирование страховых случаев</div></div>'
-        : "111"
+        : ""
   );
   template = template.replace(
     /<div class="card-office-times">[^<]*?<\/div[^>]*>\n/g,
@@ -160,14 +160,14 @@ const getTemplate = (agency) => {
         if (agency.SDADATAMETRO && Array.isArray(agency.SDADATAMETRO)) {
           agency.SDADATAMETRO.forEach((item) => {
             temp += `<div>
-                    <span class=${"undeground-color_"} data-line=${
+                      <span class=${"undeground-color_"} data-line=${
               item.LINE
             }></span>
-                    <span>${item.SNAME}</span>
-                    <span class="card-office-distance">
-                    ${getTime(item.DISTANCE)} </span>
-                    </div>
-                  `;
+                      <span>${item.SNAME}</span>
+                      <span class="card-office-distance">
+                      ${getTime(item.DISTANCE)} </span>
+                      </div>
+                    `;
           });
           temp += "</div>";
         }
@@ -184,17 +184,17 @@ const getTemplate = (agency) => {
     () =>
       agency.SPATH1
         ? `<div class="col-8">
+                  <div>${agency.SADDRESS}</div>
+                  <div class="card-office-${
+                    isOpened(agency) ? "opened" : "closed"
+                  }">${showWorkingHours(agency)}</div>
+                </div>`
+        : `<div class="col-12">
                 <div>${agency.SADDRESS}</div>
                 <div class="card-office-${
                   isOpened(agency) ? "opened" : "closed"
                 }">${showWorkingHours(agency)}</div>
-              </div>`
-        : `<div class="col-12">
-              <div>${agency.SADDRESS}</div>
-              <div class="card-office-${
-                isOpened(agency) ? "opened" : "closed"
-              }">${showWorkingHours(agency)}</div>
-          </div>`
+            </div>`
   );
   return template;
 };
