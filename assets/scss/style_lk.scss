@@ -4602,6 +4602,18 @@ a.color-l-green:hover {
   text-align: center;
   color: #43b02a;
 }
+.label-not_confirmed {
+  padding: 4px 12px;
+  background: #ffebeb;
+  border-radius: 100px;
+  font-family: "SF Pro Display";
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 23px;
+  text-align: center;
+  color: #eb5757;
+}
+
 .btn-change {
   border: 0;
   background: transparent url(/img/icon-change.svg) 0 0 no-repeat;
