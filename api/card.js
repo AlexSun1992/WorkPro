@@ -424,13 +424,27 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
 router.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
-    if (req.headers.authorization) {
+    const ipAddress = requestIp.getClientIp(req);
+    if (req.headers.referer) {
+      mobile2ServiceInstance.defaults.headers.common.Referer =
+        req.headers.referer;
+    }
+    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
+    mobile2ServiceInstance.defaults.headers.common["Cookie"] = req.headers
+      ?.cookie
+      ? req.headers.cookie
+      : null;
+    mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
+      ipAddress || null;
+    mobile2ServiceInstance.defaults.headers.common["user-agent"] =
+      req.headers["user-agent"];
+    if (req?.headers?.authorization) {
       mobile2ServiceInstance.defaults.headers.common.Authorization =
         req.headers.authorization;
     } else {
-      if (req.cookies) {
+      if (req?.cookies["auth._token.local"]) {
         mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req.cookies["auth._token.local"];
+          req?.cookies["auth._token.local"];
       }
     }
     const params = await mobile2ServiceInstance.get(
