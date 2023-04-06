@@ -1127,14 +1127,12 @@ footer .menu-link a:hover {
 .footer-vk {
   background: #fff url(/img/vk.svg) 50% 50% no-repeat;
 }
-.footer-tg {
-  background: #fff url(/img/tg.svg) 50% 50% no-repeat;
-  background-size: 30px;
-}
-
-
 .footer-in {
   background: #fff url(/img/inst.svg) 50% 50% no-repeat;
+}
+.footer-tg {
+  background: #fff url(/img/tg.svg) 50% 50%no-repeat;
+  background-size: 30px;
 }
 
 .h-line-footer:after {
@@ -4583,14 +4581,14 @@ a.color-l-green:hover {
   background-position: top 50% left 25px;
 }
 
-.label {
+.my-profile .label {
   font-family: "SF Pro Display";
   font-style: normal;
   font-weight: 700;
   font-size: 0.875rem;
   color: #686868;
 }
-.text {
+.my-profile .text {
   font-family: "SF Pro Display";
   font-style: normal;
   font-weight: 400;
