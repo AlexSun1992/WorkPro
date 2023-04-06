@@ -4657,3 +4657,18 @@ a.color-l-green:hover {
 .my-profile .btn-action:active {
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.08);
 }
+
+@media (max-width: 992px) {
+  .my-profile .conf-block {
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+  .my-profile .label {
+    color: #c3c3c3;
+    font-size: 0.75rem;
+  }
+  .my-profile .text {
+    font-size: 0.875rem;
+  }
+}
