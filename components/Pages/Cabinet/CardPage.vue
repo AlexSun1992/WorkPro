@@ -47,9 +47,12 @@
     </div>
     <div class="row">
       <div :class="isShowCardTemplate">
-        <b-alert :show="isShowSavedError" variant="danger" class="mt-3 mb-0">
-          {{ errorMessage }}
-        </b-alert>
+        <b-alert
+          :show="isShowSavedError"
+          variant="danger"
+          class="mt-3 mb-0"
+          v-html="errorMessage"
+        />
       </div>
     </div>
     <div
@@ -374,6 +377,7 @@ export default {
           name: step ? "Continue" : "Save",
           value: "CLICKED",
         });
+        console.log("Cardpage saveDataCard!!!");
         await this.$refs.cardEditor.saveDataCard(step);
         this.$store.commit("data_card/setValueByName", {
           name: step ? "Continue" : "Save",
@@ -387,6 +391,7 @@ export default {
       }
     },
     async execAction(action) {
+      console.log("execAtion");
       this.error = null;
       const response = await this.$store.dispatch("data_card/executeAction", {
         actionId: action.ID,
@@ -396,6 +401,7 @@ export default {
         itemId: action.NITEM,
       });
       if (response?.response) {
+        console.log("!!!");
         if (this.$route.path.includes("55/0/19")) {
           this.error = response.response.data.MESSAGE;
         } else {
