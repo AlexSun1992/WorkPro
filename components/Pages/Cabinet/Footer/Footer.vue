@@ -132,20 +132,23 @@
           </button>
           <div class="footer-info">
             <div class="info mb-2">
-              САО «РЕСО-Гарантия» раскрывает информацию на странице в сети
-              Интернет информационного агентства, аккредитованного ЦБ РФ на
-              раскрытие информации, по адресу:
-              <a href="http://www.disclosure.ru/issuer/7710045520/"
-                >http://www.disclosure.ru/issuer/7710045520/</a
+              <a
+                href="https://old.reso.ru/About/Informaciya-o-prave-potrebitelej-finansovyh-uslug-na-napravlenie-obrashcheniya-finansovomu-upolnomochennomu.pdf"
+              >
+                Информация о праве потребителей финансовых услуг на направление
+                обращения финансовому уполномоченному</a
               >
             </div>
             <div class="info info_ppl mb-2 mt-4 mt-lg-0">
-              <a
-                href="https://reso.ru/About/Shareholders/list-of-participants-28072021.pdf"
-                >Информация об акционерах и лицах, под контролем или
-                значительным влиянием которых находится страховщик на 28.07.2021
-                год</a
+              <a href="https://old.reso.ru/About/Company/"
+                >Информация о компании по Базовым стандартам защиты прав и
+                интересов физических и юридических лиц</a
               >
+            </div>
+            <div class="info mb-2">
+              При проблемах с доступом к сайтам и нужным онлайн-сервисам
+              необходимо установить браузеры, которые поддерживают российский
+              сертификат безопасности.
             </div>
             <div>
               Сайт защищён reCAPTCHA с применением
@@ -159,9 +162,10 @@
               от Google.
             </div>
             <div class="copyright">
-              © 2022, «РЕСО-Гарантия»&nbsp;&nbsp;&nbsp;&nbsp;<a
-                href="https://www.reso.ru/regulations/personal-information.html"
-                >Конфиденциальность</a
+              © 2023, «РЕСО-Гарантия» Сайт использует персональные данные.
+              <a
+                href="https://reso.ru/about/normative/personal-information.html"
+                >Подробнее</a
               >
             </div>
           </div>
