@@ -1,16 +1,19 @@
 <template>
   <yandex-map
     style="height: 500px; width: 100%"
-    :coords="coords"
+    :zoom="10"
+    :coords="[55.76, 37.64]"
     :controls="['fullscreenControl']"
-    :use-object-manager="false"
+    :use-object-manager="true"
     @map-was-initialized="handleMapInit"
     @markers-was-change="changeMarkers"
     :options="mapOptions"
   >
     <ymap-marker
-      :marker-id="1"
-      :coords="coords"
+      v-for="item in markers"
+      :key="item.ID"
+      :marker-id="item.ID"
+      :coords="item.COORDS"
       :balloon-template="balloonTemplate"
       @balloonopen="baloonOpen($event)"
       @balloonclose="baloonClose($event)"
@@ -24,19 +27,21 @@
 export default {
   name: "ControlMap",
   data: () => ({
-    coords: [55.737938, 37.244098],
     markerType: "Polygon",
+    isActiveMarkerId: null,
+    coords: null,
   }),
   props: {
-    Lattitude: {
-      type: Number,
-      required: false,
-      default: () => null,
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
     },
-    Longetude: {
-      type: Number,
-      required: false,
-      default: () => null,
+
+    edit: {
+      type: Boolean,
+      required: true,
+      default: () => false,
     },
   },
   computed: {
@@ -50,8 +55,8 @@ export default {
       return {
         layout: "default#imageWithContent",
         imageSize: [43, 43],
-        imageOffset: [0, 0],
-        contentOffset: [0, 0],
+        imageOffset: [-22, 0],
+        contentOffset: [-22, -43],
         imageHref:
           "https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
       };
@@ -66,6 +71,40 @@ export default {
         hideIconOnBalloonOpen: false,
       };
     },
+    markerFilters() {
+      return this.$store.getters["data_card/getFilters"];
+    },
+    dataContent() {
+      return this.$store.getters["blocks/getUnfilteredBlockById"](
+        this.data.menudic
+      );
+    },
+    markers() {
+      if (this.dataContent?.data.items) {
+        return this.dataContent?.data.items
+          .filter((item) => item.ID !== 0)
+          .map((item) => ({
+            ...item,
+            COORDS: [item.NLAT, item.NLON],
+          }));
+      }
+      return [];
+    },
+    markerContent() {
+      if (this.isActiveMarkerId) {
+        return this.markers.find((item) => item.ID === this.isActiveMarkerId);
+      }
+      return {};
+    },
+  },
+  watch: {
+    async markerFilters() {
+      await this.$store.dispatch("blocks/fetchBlock", {
+        id: this.data.menudic,
+        query: this.$store.getters["data_card/getFilters"],
+        ...this.$route.params,
+      });
+    },
   },
   methods: {
     handleMapInit(e) {
@@ -75,11 +114,14 @@ export default {
       console.log("markers", e);
     },
     baloonOpen(e) {
+      console.log(this.markers);
       const marker = e.get("target");
+      console.log(marker.properties.get("markerId"));
       marker.options.set(
         "iconImageHref",
         "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
       );
+      // this.isActiveMarkerId = marker.properties.get("markerId");
     },
     baloonClose(e) {
       const marker = e.get("target");
