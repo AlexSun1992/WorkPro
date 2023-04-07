@@ -27,35 +27,41 @@
       </div>
     </component>
     <div>
-      <b-alert :show="getSavedError" class="mt-3" variant="danger">
-        {{ errorMessage }}
+      <b-alert
+        :show="getSavedError"
+        class="mt-3"
+        variant="danger"
+        v-html="errorMessage"
+      >
       </b-alert>
     </div>
-    <div v-if="isButtonSave && params.settings.edit" class="mt-3 row button-container">
-        <div class="col-auto">
-          <b-button
-            pill
-            type="button"
-            variant="success"
-            class="col-12 col-md-auto mr-4"
-            :style="isButtonDisabled"
-            @click="saveDataCard"
-          >
-            Сохранить
-          </b-button>
-        </div>
-        <div class="col-auto">
-          <b-button
-            pill
-            type="button"
-            variant="outline-success"
-            class="col-12 col-md-auto mt-2 mt-md-0"
-            :style="isButtonDisabled"
-            @click="cancelDataCard"
-          >
-            Отменить
-          </b-button>
-        </div>
+    <div
+      v-if="isButtonSave && params.settings.edit"
+      class="mt-3 row button-container"
+    >
+      <div class="col-auto">
+        <b-button
+          pill
+          type="button"
+          variant="success"
+          class="col-12 col-md-auto mr-4"
+          :style="isButtonDisabled"
+          @click="saveDataCard"
+        >
+          Сохранить
+        </b-button>
+      </div>
+      <div class="col-auto">
+        <b-button
+          pill
+          type="button"
+          variant="outline-success"
+          class="col-12 col-md-auto mt-2 mt-md-0"
+          :style="isButtonDisabled"
+          @click="cancelDataCard"
+        >
+          Отменить
+        </b-button>
       </div>
     </div>
   </div>
