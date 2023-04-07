@@ -3,8 +3,8 @@
     style="height: 500px; width: 100%"
     :zoom="10"
     :coords="[55.76, 37.64]"
-    :controls="['fullscreenControl']"
-    :use-object-manager="true"
+    :controls="[]"
+    :use-object-manager="false"
     @map-was-initialized="handleMapInit"
     @markers-was-change="changeMarkers"
     :options="mapOptions"
@@ -14,22 +14,29 @@
       :key="item.ID"
       :marker-id="item.ID"
       :coords="item.COORDS"
-      :balloon-template="balloonTemplate"
       @balloonopen="baloonOpen($event)"
       @balloonclose="baloonClose($event)"
       :icon="markerIcon"
       :options="markerOptions"
-    />
+    >
+      <baloon-map
+        :data="item"
+        :selected="markerSelected"
+        slot="balloon"
+      ></baloon-map>
+    </ymap-marker>
   </yandex-map>
 </template>
 
 <script>
+import BaloonMap from "./BaloonMap.vue";
+
 export default {
   name: "ControlMap",
+  components: { BaloonMap },
   data: () => ({
     markerType: "Polygon",
-    isActiveMarkerId: null,
-    coords: null,
+    selectMarkerId: null,
   }),
   props: {
     data: {
@@ -45,12 +52,6 @@ export default {
     },
   },
   computed: {
-    balloonTemplate() {
-      return `
-        <h1 class="red">Hi, everyone!</h1>
-        <p>I am here: ${this.coords}</p>
-      `;
-    },
     markerIcon() {
       return {
         layout: "default#imageWithContent",
@@ -74,6 +75,9 @@ export default {
     markerFilters() {
       return this.$store.getters["data_card/getFilters"];
     },
+    markerSelected() {
+      return { id: this.isIdActiveMarker };
+    },
     dataContent() {
       return this.$store.getters["blocks/getUnfilteredBlockById"](
         this.data.menudic
@@ -89,12 +93,6 @@ export default {
           }));
       }
       return [];
-    },
-    markerContent() {
-      if (this.isActiveMarkerId) {
-        return this.markers.find((item) => item.ID === this.isActiveMarkerId);
-      }
-      return {};
     },
   },
   watch: {
@@ -114,14 +112,17 @@ export default {
       console.log("markers", e);
     },
     baloonOpen(e) {
-      console.log(this.markers);
       const marker = e.get("target");
-      console.log(marker.properties.get("markerId"));
       marker.options.set(
         "iconImageHref",
         "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent_active.svg"
       );
-      // this.isActiveMarkerId = marker.properties.get("markerId");
+      const markerId = marker.properties.get("markerId");
+      document.getElementById("btn").addEventListener("click", this.handler);
+      document.getElementById("btn").markerId = markerId;
+      if (this.selectMarkerId === markerId) {
+        document.querySelector("#btn").textContent = "Выбрано";
+      }
     },
     baloonClose(e) {
       const marker = e.get("target");
@@ -129,6 +130,11 @@ export default {
         "iconImageHref",
         "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg"
       );
+      document.getElementById("btn").removeEventListener("click", this.handler);
+    },
+    handler(e) {
+      document.querySelector("#btn").textContent = "Выбрано";
+      this.selectMarkerId = e.target.markerId;
     },
   },
 };
