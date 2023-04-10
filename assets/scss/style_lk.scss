@@ -1127,9 +1127,12 @@ footer .menu-link a:hover {
 .footer-vk {
   background: #fff url(/img/vk.svg) 50% 50% no-repeat;
 }
-
 .footer-in {
   background: #fff url(/img/inst.svg) 50% 50% no-repeat;
+}
+.footer-tg {
+  background: #fff url(/img/tg.svg) 50% 50%no-repeat;
+  background-size: 30px;
 }
 
 .h-line-footer:after {
@@ -4576,4 +4579,95 @@ a.color-l-green:hover {
   background-image: url("/galleries/icons/main/icon-btn-load.svg");
   background-repeat: no-repeat;
   background-position: top 50% left 25px;
+}
+
+.my-profile .label {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #686868;
+}
+.my-profile .text {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.25rem;
+}
+.label-confirmed {
+  padding: 4px 12px;
+  background: #edf8ea;
+  border-radius: 100px;
+  font-family: "SF Pro Display";
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 23px;
+  text-align: center;
+  color: #43b02a;
+}
+.label-not_confirmed {
+  padding: 4px 12px;
+  background: #ffebeb;
+  border-radius: 100px;
+  font-family: "SF Pro Display";
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 23px;
+  text-align: center;
+  color: #eb5757;
+}
+
+.btn-change {
+  border: 0;
+  background: transparent url(/img/icon-change.svg) 0 0 no-repeat;
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+}
+
+.my-profile .conf-block {
+  border: 1px solid #f2f4f5;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.18);
+}
+.warning-profile {
+  background: #f2f4f5;
+  border-radius: 16px;
+  padding: 20px;
+  font-size: 1.125rem;
+  color: #292929;
+}
+.my-profile .btn-action {
+  display: inline-block;
+  text-align: center;
+  padding: 11px 24px;
+  background: #ffffff;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #292929;
+  text-decoration: none;
+  border: 0;
+}
+
+.my-profile .btn-action:hover {
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.08);
+  color: #686868;
+}
+.my-profile .btn-action:active {
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 992px) {
+  .my-profile .conf-block {
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+  .my-profile .label {
+    color: #c3c3c3;
+    font-size: 0.75rem;
+  }
+  .my-profile .text {
+    font-size: 0.875rem;
+  }
 }

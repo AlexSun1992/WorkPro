@@ -372,12 +372,14 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
-        // data[i].checked = true;
         if (
           data[i].required &&
           !data[i].hidden &&
           data[i].visible &&
-          (value === null || value === undefined || value === "") &&
+          (value === null ||
+            value === undefined ||
+            value === "" ||
+            data[i].error) &&
           value !== 0
         ) {
           console.log("error", data[i]);
