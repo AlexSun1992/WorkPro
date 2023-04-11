@@ -1763,7 +1763,7 @@ a.btn-outline-success,
 a.btn-secondary {
   border: 2px solid #fe7333;
   color: #fe7333;
-  background: #fff;
+  background: transparent;
 }
 
 .btn-outline-success:active,
@@ -2323,7 +2323,7 @@ a.free {
 .step {
   width: 48px;
   height: 48px;
-  background-color: #f0f0f0;
+  background-color: #dfe3e5;
   border-radius: 100px;
   margin: 0 auto;
   background-position: 50% 50%;
