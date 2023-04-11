@@ -15,7 +15,6 @@ header {
   z-index: 3;
   padding-top: 60px;
   padding-bottom: 9px;
-  background: #fff;
 }
 
 @media (max-width: 1500px) {
@@ -184,10 +183,10 @@ header:before {
   position: absolute;
   height: 8px;
   left: 0;
-  bottom: -8px;
+  bottom: 0;
   background: linear-gradient(
     180deg,
-    rgba(224, 224, 224, 0.4) 0%,
+    rgba(224, 224, 224, 0.4) 0,
     rgba(224, 224, 224, 0) 100%
   );
 }
@@ -255,8 +254,7 @@ li.breadcrumb-item:not(:last-of-type):after {
 }
 
 .sidebar_client {
-  background: #fff;
-  border-radius: 24px;
+  box-shadow: 0 4px 26px rgba(0, 0, 0, 0.08);
   padding-bottom: 20px;
 }
 
@@ -510,10 +508,9 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .anonsed-blocks .anonsed-block {
   padding: 12px 24px;
-  border: 1px solid #fff;
+  border: 1px solid #f0f0f0;
   border-radius: 16px;
   cursor: pointer;
-  background: #fff;
 }
 
 .anonsed-blocks .anonsed-block .title {
@@ -548,10 +545,9 @@ li.breadcrumb-item:not(:last-of-type):after {
 }
 
 .border-block {
-  //border: 1px solid #dfe3e5;
+  border: 1px solid #dfe3e5;
   border-radius: 16px;
   padding: 20px;
-  background-color: #fff;
 }
 
 .align-items-center {
@@ -617,7 +613,6 @@ a.lgreen {
   position: relative;
   padding: 40px;
   text-align: center;
-  background-color: #fff;
 }
 
 .block-policy:after {
@@ -961,7 +956,7 @@ a.lgreen {
 }
 
 .color-footer {
-  background: #fff;
+  background: #f2f4f5;
   position: relative;
   font-size: 0.75rem;
   padding: 60px 32px 32px;
@@ -1132,7 +1127,6 @@ footer .menu-link a:hover {
 .footer-vk {
   background: #fff url(/img/vk.svg) 50% 50% no-repeat;
 }
-
 .footer-in {
   background: #fff url(/img/inst.svg) 50% 50% no-repeat;
 }
@@ -1413,7 +1407,7 @@ a.link:hover span {
 }
 
 .feedback {
-  background: #fff;
+  border: 1px solid #dfe3e5;
   border-radius: 16px;
   padding: 20px;
 }
@@ -1800,10 +1794,9 @@ a.btn-warning {
 }
 
 .conf-block {
-  //border: 1px solid #a6aeb6;
+  border: 1px solid #a6aeb6;
   border-radius: 16px;
   padding: 24px 20px;
-  background-color: #fff;
 }
 
 .title-conf-block {
@@ -4054,7 +4047,6 @@ h6 {
 
 .blk-shadow {
   box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
-  background-color: #fff;
 }
 
 .border-none {
@@ -4634,9 +4626,8 @@ a.color-l-green:hover {
 }
 
 .my-profile .conf-block {
-  //border: 1px solid #f2f4f5;
-  //box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.18);
-  background: #fff;
+  border: 1px solid #f2f4f5;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.18);
 }
 .warning-profile {
   background: #f2f4f5;
