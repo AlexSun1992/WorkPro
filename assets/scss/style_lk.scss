@@ -1081,7 +1081,7 @@ a.btn-light {
   display: inline-block;
   line-height: 44px;
   text-decoration: none;
-  border: 2px solid transparent;
+  border: 2px solid #e1e1e1;
   font-weight: 600;
 }
 
@@ -1128,18 +1128,23 @@ footer .menu-link a:hover {
 
 .footer-fb {
   background: #fff url(/img/fb.svg) 50% 50% no-repeat;
+  border: 2px solid #e1e1e1;
 }
 
 .footer-vk {
   background: #fff url(/img/vk.svg) 50% 50% no-repeat;
+  border: 2px solid #e1e1e1;
 }
 
 .footer-in {
   background: #fff url(/img/inst.svg) 50% 50% no-repeat;
+  border: 2px solid #e1e1e1;
 }
+
 .footer-tg {
   background: #fff url(/img/tg.svg) 50% 50%no-repeat;
   background-size: 30px;
+  border: 2px solid #e1e1e1;
 }
 
 .h-line-footer:after {
