@@ -267,6 +267,10 @@ import VerifyUser from "../Libs/VerifyUser2/VerifyUser2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import ConfirmModal from "./ConfirmModal.vue";
 import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
+const phoneStartsAt9 = helpers.regex(
+  "phoneStartsAt9",
+  /^[+][7][(][9][0-9]{2}[)]/
+);
 
 import {
   isGenderReveal,
@@ -397,6 +401,7 @@ export default {
       phone: {
         required,
         minLength: minLength(17),
+        phoneStartsAt9,
       },
     },
   },
