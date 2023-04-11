@@ -37,6 +37,7 @@ export default {
   data: () => ({
     markerType: "Polygon",
     selectMarkerId: null,
+    dataContent: null,
   }),
   props: {
     data: {
@@ -78,11 +79,6 @@ export default {
     markerSelected() {
       return { id: this.isIdActiveMarker };
     },
-    dataContent() {
-      return this.$store.getters["blocks/getUnfilteredBlockById"](
-        this.data.menudic
-      );
-    },
     markers() {
       if (this.dataContent?.data.items) {
         return this.dataContent?.data.items
@@ -95,18 +91,20 @@ export default {
       return [];
     },
   },
-  watch: {
-    async markerFilters() {
-      await this.$store.dispatch("blocks/fetchBlock", {
-        id: this.data.menudic,
-        query: this.$store.getters["data_card/getFilters"],
-        ...this.$route.params,
-      });
-    },
+  async created() {
+    await this.$store.dispatch("blocks/fetchBlock", {
+      id: this.data.menudic,
+      query: this.$store.getters["data_card/getFilters"],
+      ...this.$route.params,
+    });
+    this.dataContent = this.$store.getters["blocks/getUnfilteredBlockById"](
+      this.data.menudic
+    );
+    console.log(this.dataContent);
   },
   methods: {
-    handleMapInit(e) {
-      console.log(e.geoObjects.getMap());
+    async handleMapInit(e) {
+      console.log("ymapsinit", e);
     },
     changeMarkers(e) {
       console.log("markers", e);
@@ -135,6 +133,18 @@ export default {
     handler(e) {
       document.querySelector("#btn").textContent = "Выбрано";
       this.selectMarkerId = e.target.markerId;
+      const marker = this.markers.find(
+        (item) => item.ID === this.selectMarkerId
+      );
+      this.$store.commit("data_card/setFilters", { ...marker });
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: {
+          value: { ...marker },
+          text: marker.SADDRESS,
+        },
+      });
     },
   },
 };
