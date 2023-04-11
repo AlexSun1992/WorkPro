@@ -887,6 +887,7 @@ a.lgreen {
 
 .block-visit {
   border: 1px solid #eff1f3;
+  background-color: #fff;
   border-radius: 30px;
   padding: 24px;
   height: 100%;
@@ -1903,6 +1904,7 @@ input:disabled + .mx-icon-calendar {
 
 .agent-blocks {
   border: 1px solid #f0f0f0;
+  background-color: #fff;
   border-radius: 24px;
   height: 100%;
   width: 100%;
@@ -3195,6 +3197,7 @@ input.is-invalid {
   .block-visit,
   .insured-events {
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
   }
   .insured-events {
     min-height: 150px;
