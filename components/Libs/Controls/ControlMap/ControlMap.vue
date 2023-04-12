@@ -100,7 +100,6 @@ export default {
     this.dataContent = this.$store.getters["blocks/getUnfilteredBlockById"](
       this.data.menudic
     );
-    console.log(this.dataContent);
   },
   methods: {
     async handleMapInit(e) {
@@ -136,13 +135,19 @@ export default {
       const marker = this.markers.find(
         (item) => item.ID === this.selectMarkerId
       );
-      this.$store.commit("data_card/setFilters", { ...marker });
+      const valuePrepare = Object.keys(marker)
+        .filter((key) => Number.isInteger(marker[key]))
+        .reduce((acc, key) => {
+          acc[key] = marker[key];
+          return acc;
+        }, {});
+      this.$store.commit("data_card/setFilters", valuePrepare);
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: {
           value: { ...marker },
-          text: marker.SADDRESS,
+          text: marker.ID,
         },
       });
     },
