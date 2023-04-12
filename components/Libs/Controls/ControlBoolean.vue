@@ -13,7 +13,11 @@
           (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
             <span v-html="data.helpText"></span></vue-easy-tooltip></span
       ></template>
+
       <b-form-invalid-feedback :state="data.state"
+        >Необходимо указать этот параметр</b-form-invalid-feedback
+      >
+      <b-form-invalid-feedback :state="getCurrentCheckBox"
         >Необходимо указать этот параметр</b-form-invalid-feedback
       >
     </b-form-checkbox>
@@ -37,6 +41,21 @@ export default {
   },
 
   computed: {
+    getCurrentCheckBox() {
+      const getCheckBoxNameBaccept = this.data.name === "BACCEPT";
+      const getSavedError = this.$store.getters[`data_card/getSavedError`];
+      if (getCheckBoxNameBaccept && getSavedError) {
+        if (
+          this.data.value === false &&
+          this.data.checked === true &&
+          this.data.state === true
+        ) {
+          return false;
+        }
+      }
+      return true;
+    },
+
     fieldValue: {
       get() {
         if (this.data.structType === "boolrus") {
