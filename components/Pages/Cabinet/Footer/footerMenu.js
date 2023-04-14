@@ -93,6 +93,10 @@ const footerMenu = [
         class: "footer-vk",
         ref: "http://vk.com/reso_garantia",
       },
+      {
+        class: "footer-tg",
+        ref: "http://t.me/reso_ru_official",
+      },
       // {
       //   class: "footer-in",
       //   ref: "https://www.instagram.com/reso.ru_official/",

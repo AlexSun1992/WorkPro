@@ -47,9 +47,12 @@
     </div>
     <div class="row">
       <div :class="isShowCardTemplate">
-        <b-alert :show="isShowSavedError" variant="danger" class="mt-3 mb-0">
-          {{ errorMessage }}
-        </b-alert>
+        <b-alert
+          :show="isShowSavedError"
+          variant="danger"
+          class="mt-3 mb-0"
+          v-html="errorMessage"
+        />
       </div>
     </div>
     <div
@@ -374,6 +377,7 @@ export default {
           name: step ? "Continue" : "Save",
           value: "CLICKED",
         });
+
         await this.$refs.cardEditor.saveDataCard(step);
         this.$store.commit("data_card/setValueByName", {
           name: step ? "Continue" : "Save",

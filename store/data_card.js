@@ -100,7 +100,13 @@ export const getters = {
       if (currentValue.type === "listSelect") {
         return {
           ...accumulator,
-          ...currentValue.value?.value,
+          ...state.filters,
+        };
+      }
+      if (currentValue.type === "Map") {
+        return {
+          ...accumulator,
+          ...state.filters,
         };
       }
       if (currentValue.type === "timestamp") {
