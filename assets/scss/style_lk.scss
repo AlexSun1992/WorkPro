@@ -4672,3 +4672,27 @@ a.color-l-green:hover {
     font-size: 0.875rem;
   }
 }
+
+.btn-checkbox-map .checkbox-hide .custom-control-label {
+  padding: 12px 30px;
+  background-color: #f2f4f5;
+  border-radius: 15px;
+  color: #686868;
+  font-family: SF Pro Display;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1rem;
+  background-repeat: no-repeat;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-checkbox-map .checkbox-hide input:checked + .custom-control-label {
+  color: #fff;
+  background: #43b02a;
+}
+
+.btn-checkbox-map .custom-control-label:after,
+.btn-checkbox-map .custom-control-label:before {
+  display: none;
+}
