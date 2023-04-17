@@ -71,7 +71,7 @@ module.exports = {
     { src: "~/plugins/tooltip.js", ssr: false },
     "~/plugins/vueLog.js",
     "~/plugins/Vue2TouchEvents.js",
-    { src: "~/plugins/YandexMetrika.js", ssr: false },
+    // { src: "~/plugins/YandexMetrika.js", ssr: false },
     { src: "~/plugins/YandexMap.js", mode: "client" },
   ],
   /*
