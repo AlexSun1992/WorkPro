@@ -32,10 +32,9 @@ Sentry.init({
   trackComponents: ["CardEditor"],
   hooks: ["create", "mount"],
   tracesSampleRate: 1.0,
-  enabled: process.env.NODE_ENV === "production",
+  enabled: false,
   environment: process.env.NODE_ENV,
   release: process.env.APP_VERSION,
-  allowUrls: [/https?:\/\/reso\.ru/],
 });
 
 Vue.customElement(
