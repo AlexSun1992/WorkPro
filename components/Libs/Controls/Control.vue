@@ -50,7 +50,7 @@ import ControlDadataSelect2 from "./ControlDadataSelect2.vue";
 import ControlCustomCombobox from "./ControlCustomCombobox.vue";
 import ControlCustomDouble from "./ControlCustomDouble.vue";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha.vue";
-import ControlMap from "./ControlMap.vue";
+import ControlMap from "./ControlMap/ControlMap.vue";
 import ControlListSelect from "./ControlListSelect/ControlListSelect.vue";
 import ControlRegNumber from "./ControlRegNumber/ControlRegNumber.vue";
 import ControlRadioButton from "./ControlRadioButton.vue";
