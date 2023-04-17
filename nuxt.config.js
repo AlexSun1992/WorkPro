@@ -71,7 +71,8 @@ module.exports = {
     { src: "~/plugins/tooltip.js", ssr: false },
     "~/plugins/vueLog.js",
     "~/plugins/Vue2TouchEvents.js",
-    { src: "~/plugins/YandexMetrika.js", ssr: false },
+    // { src: "~/plugins/YandexMetrika.js", ssr: false },
+    { src: "~/plugins/YandexMap.js", mode: "client" },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -91,13 +92,13 @@ module.exports = {
   ],
   gtm: {
     id: "GTM-TVNGH3X",
-    enabled: true,
+    enabled: false,
   },
   sentry: {
     dsn: "https://a4361f5b792b485684f3c14070509b8f@sentry.reso.ru/8", // Enter your project's DSN here
     // Additional Module Options go here
     // https://sentry.nuxtjs.org/sentry/options
-    disabled: process.env.NODE_ENV !== "production",
+    disabled: true,
     clientIntegrations: {
       CaptureConsole: {
         levels: ["error"],
