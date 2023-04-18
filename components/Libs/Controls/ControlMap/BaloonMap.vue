@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="map-balloon">
     <div class="map-balloon-title">
       {{ data.SLPU }}
     </div>
     <div class="map-balloon-adress">{{ data.SADDRESS }}</div>
-    <button id="btn" type="button" class="btn-secondary mt-3">Выбрать</button>
+    <button id="btn" type="button" class="btn-secondary mt-4">Выбрать</button>
   </div>
 </template>
 
@@ -22,6 +22,9 @@ export default {
 </script>
 
 <style scoped>
+.map-balloon {
+  padding: 10px;
+}
 .map-balloon-title {
   font-feature-settings: "pnum" on, "lnum" on;
   font-weight: 700;
@@ -44,9 +47,7 @@ ymaps[class*="-balloon_layout_normal "] {
   box-sizing: border-box;
   border-radius: 30px;
   overflow: hidden;
-  width: 360px;
   box-sizing: border-box !important;
-  padding: 10px;
 }
 
 .ymaps-2-1-79-balloon__close-button {
@@ -76,13 +77,16 @@ ymaps[class*="balloon__close-button"] {
   position: absolute;
   width: 17px;
   height: 15px;
-  right: 5px;
+  right: 10px;
   display: block;
   border: 0;
   background: 0 0;
-  top: 0px;
+  top: 10px;
   padding: 0;
   cursor: pointer;
   opacity: 1;
+}
+.ymaps-2-1-79-balloon__tail {
+  display: none;
 }
 </style>
