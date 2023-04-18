@@ -87,6 +87,6 @@ ymaps[class*="balloon__close-button"] {
   opacity: 1;
 }
 .ymaps-2-1-79-balloon__tail {
-  display: none;
+  display: none !important;
 }
 </style>
