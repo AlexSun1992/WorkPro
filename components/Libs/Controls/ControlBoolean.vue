@@ -17,7 +17,7 @@
       <b-form-invalid-feedback :state="data.state"
         >Необходимо указать этот параметр</b-form-invalid-feedback
       >
-      <b-form-invalid-feedback :state="getCurrentCheckBox"
+      <b-form-invalid-feedback :state="isRequiredPersonalDataCheckBox"
         >Необходимо указать этот параметр</b-form-invalid-feedback
       >
     </b-form-checkbox>
@@ -41,10 +41,14 @@ export default {
   },
 
   computed: {
-    getCurrentCheckBox() {
+    isRequiredPersonalDataCheckBox() {
       const getCheckBoxNameBaccept = this.data.name === "BACCEPT";
+      const getCheckBoxNameBKID = this.data.name === "BKID";
       const getSavedError = this.$store.getters[`data_card/getSavedError`];
-      if (getCheckBoxNameBaccept && getSavedError) {
+      if (
+        (getCheckBoxNameBaccept && getSavedError) ||
+        (getCheckBoxNameBKID && getSavedError)
+      ) {
         if (
           this.data.value === false &&
           this.data.checked === true &&
@@ -64,6 +68,18 @@ export default {
         return this.data.value === "Y" || this.data.value === true;
       },
       set(value) {
+        if (
+          (this.data.name === "BACCEPT" && value === false) ||
+          (this.data.name === "BKID" && value === false)
+        ) {
+          this.$emit("update", {
+            fieldId: this.data.fieldId,
+            name: this.data.name,
+            value: undefined,
+          });
+          return;
+        }
+
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
