@@ -579,7 +579,7 @@ export default {
     changeMask() {
       if (this.loginType === "phone") {
         this.placeholder = "+7(___)-___-__-__";
-        return (this.mask = "+7(###)-###-##-##");
+        return (this.mask = "+7(9##)-###-##-##");
       }
       this.placeholder = "";
       return (this.mask = "X".repeat(50));
