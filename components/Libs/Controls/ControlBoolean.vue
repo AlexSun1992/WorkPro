@@ -13,14 +13,14 @@
           (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
             <span v-html="data.helpText"></span></vue-easy-tooltip></span
       ></template>
-
-      <b-form-invalid-feedback :state="data.state"
-        >Необходимо указать этот параметр</b-form-invalid-feedback
-      >
-      <b-form-invalid-feedback :state="isRequiredPersonalDataCheckBox"
-        >Необходимо указать этот параметр</b-form-invalid-feedback
-      >
     </b-form-checkbox>
+
+    <b-form-invalid-feedback :state="data.state"
+      >Необходимо указать этот параметр</b-form-invalid-feedback
+    >
+    <b-form-invalid-feedback :state="isRequiredPersonalDataCheckBox"
+      >Необходимо указать этот параметр</b-form-invalid-feedback
+    >
   </div>
 </template>
 
