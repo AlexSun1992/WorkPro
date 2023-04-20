@@ -139,7 +139,7 @@ router.get("/card/:idModule/:idItem", (req, res) => {
     res.send(e);
   }
 });
-router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
+router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idList", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
     const ipAddress = requestIp.getClientIp(req);
@@ -166,7 +166,9 @@ router.get("/card/:idModule/:idItem/:idWizard/:idCard/:idRel", (req, res) => {
       }
     }
     const url = encodeURI(
-      `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${req.params.idCard}/${req.params.idWizard}`
+      `${consts.DATACARD}/${req.params.idModule}/${req.params.idItem}/${
+        req.params.idCard
+      }/${req.params.idList ? req.params.idList : req.params.idWizard}`
     );
     mobile2ServiceInstance({
       url: url,
