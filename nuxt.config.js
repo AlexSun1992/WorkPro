@@ -2,6 +2,10 @@
 module.exports = {
   target: "universal",
   telemetry: false,
+  env: {
+    NODE_ENV: process.env.NODE_ENV || "development",
+    APP_VERSION: process.env.APP_VERSION,
+  },
   generate: {
     minify: {
       collapseWhitespace: false,
@@ -110,22 +114,6 @@ module.exports = {
       environment: process.env.NODE_ENV,
       release: process.env.APP_VERSION,
     },
-  },
-  publicRuntimeConfig: {
-    sentry: {
-      disabled: process.env.NODE_ENV !== "production",
-      config: {
-        environment: process.env.NODE_ENV,
-        release: process.env.APP_VERSION,
-      },
-      serverConfig: {
-        // Any server-specific config
-      },
-      clientConfig: {
-        // Any client-specific config
-      },
-    },
-  },
   recaptcha: {
     hideBadge: false,
     siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
