@@ -114,6 +114,7 @@ module.exports = {
       environment: process.env.NODE_ENV,
       release: process.env.APP_VERSION,
     },
+  },
   recaptcha: {
     hideBadge: false,
     siteKey: "6LcR59kUAAAAAN9gdxm2TWPCTey73RTAKGIOkTTV",
