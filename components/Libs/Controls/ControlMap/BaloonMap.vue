@@ -92,4 +92,21 @@ ymaps[class*="balloon__close-button"] {
 .ymaps-2-1-79-balloon__tail {
   display: none !important;
 }
+@media (max-width: 992px) {
+  .map-balloon-title {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .map-balloon-adress {
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.2;
+  }
+}
+@media (max-width: 992px) and (min-width: 393px) {
+  .ymaps-2-1-79-balloon {
+    margin-left: -33px;
+    max-width: calc(100vw - 75px);
+  }
+}
 </style>
