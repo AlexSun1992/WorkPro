@@ -144,8 +144,7 @@ export default {
           this.$refs.autocomplete.value = find.text;
           this.handleSubmit(find);
         } else {
-          this.validationErrorText =
-            "Выберите значение из справочника, из выпадающего списка";
+          this.validationErrorText = "Выберите значение из выпадающего списка";
           this.$refs.autocomplete.value = "";
           this.placeholderValue = "";
           this.handleSubmit(null);
