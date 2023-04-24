@@ -1643,6 +1643,10 @@ input.checkbox-hide + label:after {
   transform: translateY(-52%);
   position: absolute;
 }
+.checkbox-hide input.is-invalid + label:after {
+  border: 2px solid #eb5757;
+}
+
 /*
 .checkbox-hide input:disabled + label:after,
 .checkbox-hide input:disabled:checked + label:after {
