@@ -25,8 +25,8 @@
       @submit="handleSubmit"
       @blur="handleBlur"
     />
-    <b-form-invalid-feedback :state="data.state">
-      {{ data.error ? data.error : "Обязательно для заполнения" }}
+    <b-form-invalid-feedback :state="isErr">
+      {{ data.error ? data.error : validationErrorText }}
     </b-form-invalid-feedback>
   </b-form-group>
 </template>
@@ -55,13 +55,23 @@ export default {
   data() {
     return {
       placeholderValue: null,
+      validationErrorText: null,
+      isErr: null,
     };
   },
   computed: {
     validClass() {
+      if (this.isErr === false) {
+        return "is-invalid";
+      }
+      if (this.isErr === true) {
+        return "is-valid";
+      }
+
       if (this.data.state !== null && this.data.state !== undefined) {
         return this.data.state === true ? "is-valid" : "is-invalid";
       }
+
       return "";
     },
     placeholder() {
@@ -81,6 +91,18 @@ export default {
   },
   methods: {
     search(value) {
+      const findValueInList = this.data.options.find((i) =>
+        i.text.includes(this.$refs.autocomplete?.value)
+      );
+
+      if (findValueInList === undefined) {
+        this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
+        this.isErr = false;
+      }
+
+      if (findValueInList !== undefined) {
+        this.isErr = true;
+      }
       if (
         value.length < 1 ||
         this.data.options.find((item) => item.value === this.data?.value)
@@ -90,6 +112,7 @@ export default {
         this.$refs.autocomplete.value = "";
         return this.data.options;
       }
+
       return this.data.options.filter((item) => item.text.includes(value));
     },
     getResultValue(item) {
@@ -108,6 +131,7 @@ export default {
         const value = this.data.options.find(
           (item) => item.value === this.data?.value
         );
+
         if (value) {
           this.$refs.autocomplete.value = value.text;
           this.handleSubmit(value);
@@ -120,6 +144,7 @@ export default {
           this.$refs.autocomplete.value = find.text;
           this.handleSubmit(find);
         } else {
+          this.validationErrorText = "Выберите значение из выпадающего списка";
           this.$refs.autocomplete.value = "";
           this.placeholderValue = "";
           this.handleSubmit(null);
