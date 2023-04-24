@@ -109,11 +109,11 @@ export default {
       }
     },
     handleBlur() {
-      const find = this.group.find((i) =>
-        this.$refs.autocomplete?.value.includes(i.value)
-      );
-      if (find === undefined) {
-        this.handleSubmit(null);
+      if (this.group.length > 0) {
+        this.$refs.autocomplete.value = this.getResultValue(this.group[0]);
+        this.handleSubmit(this.group[0]);
+      } else {
+        this.clearSuggest();
       }
     },
     clearSuggest() {
