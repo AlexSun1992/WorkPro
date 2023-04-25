@@ -109,11 +109,19 @@ export default {
       }
     },
     handleBlur() {
-      if (this.group.length > 0) {
-        this.$refs.autocomplete.value = this.getResultValue(this.group[0]);
-        this.handleSubmit(this.group[0]);
+      const find = this.group.find((i) =>
+        this.$refs.autocomplete?.value === i.value
+      );
+      if (find === undefined) {
+        if (this.group.length > 0) {
+          this.$refs.autocomplete.value = this.getResultValue(this.group[0]);
+          this.handleSubmit(this.group[0]);
+        } else {
+          this.clearSuggest();
+        }
       } else {
-        this.clearSuggest();
+        this.$refs.autocomplete.value = this.getResultValue(find);
+        this.handleSubmit(find);
       }
     },
     clearSuggest() {
