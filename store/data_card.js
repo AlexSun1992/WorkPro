@@ -103,6 +103,11 @@ export const getters = {
           ...state.filters,
         };
       }
+      if (currentValue.type === "DoctorSchedule") {
+        return {
+          ...accumulator,
+        };
+      }
       if (currentValue.type === "Map") {
         return {
           ...accumulator,
