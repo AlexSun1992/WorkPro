@@ -133,14 +133,14 @@
           <div class="footer-info">
             <div class="info mb-2">
               <a
-                href="https://old.reso.ru/About/Informaciya-o-prave-potrebitelej-finansovyh-uslug-na-napravlenie-obrashcheniya-finansovomu-upolnomochennomu.pdf"
+                href="/about/normative/files/o-prave-potrebitelej-fin-uslug-na-napravlenie-obrashcheniya-fin-upolnomochennomu.pdf"
               >
                 Информация о праве потребителей финансовых услуг на направление
                 обращения финансовому уполномоченному</a
               >
             </div>
             <div class="info info_ppl mb-2 mt-4 mt-lg-0">
-              <a href="https://old.reso.ru/About/Company/"
+              <a href="/about/bazoviy_standart_zaschiti_prav.pdf "
                 >Информация о компании по Базовым стандартам защиты прав и
                 интересов физических и юридических лиц</a
               >
