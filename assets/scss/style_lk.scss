@@ -4708,3 +4708,33 @@ a.color-l-green:hover {
 .otm-block .row > [class*="col-"] {
   margin-top: 1rem;
 }
+
+.block-allert {
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 2px solid #eb5757;
+  border-radius: 30px;
+  padding: 20px;
+}
+.block-allert-title {
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.5rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #292929;
+}
+.block-allert-description {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  color: #292929;
+}
+@media (max-width: 992px) {
+  .block-allert-title {
+    font-size: 1.25rem;
+  }
+  .block-allert-description {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
