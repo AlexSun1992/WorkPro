@@ -32,7 +32,7 @@ Sentry.init({
   trackComponents: ["CardEditor"],
   hooks: ["create", "mount"],
   tracesSampleRate: 1.0,
-  enabled: false,
+  enabled: process.env.NODE_ENV === "production",
   environment: process.env.NODE_ENV,
   release: process.env.APP_VERSION,
 });
