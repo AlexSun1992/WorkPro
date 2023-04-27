@@ -13,7 +13,7 @@
         </button>
       </div>
       <form-block
-        class="mt-4"
+        class="mt-2"
         :key="i"
         :data="item"
         :edit="editable"
@@ -25,7 +25,7 @@
       :disabled="!editable"
       class="btn btn-secondary btn-add mt-4"
     >
-      Добавить
+      Добавить застрахованного
     </button>
   </div>
 </template>
@@ -102,19 +102,21 @@ export default {
   position: absolute;
   background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTguMDc0MjIgMy44ODU5N0g3Ljg2NzU5QzcuOTgxMjQgMy44ODU5NyA4LjA3NDIyIDMuNzk2OTIgOC4wNzQyMiAzLjY4ODA3VjMuODg1OTdIMTUuOTI2MVYzLjY4ODA3QzE1LjkyNjEgMy43OTY5MiAxNi4wMTkgMy44ODU5NyAxNi4xMzI3IDMuODg1OTdIMTUuOTI2MVY1LjY2NzA5SDE3Ljc4NTdWMy42ODgwN0MxNy43ODU3IDIuODE0ODMgMTcuMDQ0NCAyLjEwNDg2IDE2LjEzMjcgMi4xMDQ4Nkg3Ljg2NzU5QzYuOTU1ODUgMi4xMDQ4NiA2LjIxNDU4IDIuODE0ODMgNi4yMTQ1OCAzLjY4ODA3VjUuNjY3MDlIOC4wNzQyMlYzLjg4NTk3Wk0yMS4wOTE3IDUuNjY3MDlIMi45MDg1NEMyLjQ1MTM4IDUuNjY3MDkgMi4wODIwMyA2LjAyMDg0IDIuMDgyMDMgNi40NTg2OVY3LjI1MDNDMi4wODIwMyA3LjM1OTE1IDIuMTc1MDEgNy40NDgyIDIuMjg4NjYgNy40NDgySDMuODQ4NjlMNC40ODY2NiAyMC4zODZDNC41Mjc5OCAyMS4yMjk2IDUuMjU2MzQgMjEuODk1IDYuMTM3MDkgMjEuODk1SDE3Ljg2MzJDMTguNzQ2NSAyMS44OTUgMTkuNDcyMyAyMS4yMzIxIDE5LjUxMzYgMjAuMzg2TDIwLjE1MTYgNy40NDgySDIxLjcxMTZDMjEuODI1MyA3LjQ0ODIgMjEuOTE4MiA3LjM1OTE1IDIxLjkxODIgNy4yNTAzVjYuNDU4NjlDMjEuOTE4MiA2LjAyMDg0IDIxLjU0ODkgNS42NjcwOSAyMS4wOTE3IDUuNjY3MDlaTTE3LjY2NDMgMjAuMTEzOUg2LjMzNTk3TDUuNzEwOTIgNy40NDgySDE4LjI4OTRMMTcuNjY0MyAyMC4xMTM5WiIgZmlsbD0iIzQzQjAyQSIvPgo8L3N2Zz4K")
     50% 50% no-repeat;
-  top: 0;
+  top: 3px;
   right: 0;
+  font-size: 0;
+  border: 0;
 }
-.icon-add {
+.btn-add {
   padding-left: 70px;
   padding-right: 40px;
   background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwLjQ1ODMgMi4wNTU2NEMxMC40NTgzIDEuMjg4NTcgOS44MDU0MiAwLjY2Njc0OCA5IDAuNjY2NzQ4QzguMTk0NTggMC42NjY3NDggNy41NDE2NyAxLjI4ODU3IDcuNTQxNjcgMi4wNTU2NFY3LjYxMTE5SDEuNzA4MzNDMC45MDI5MTcgNy42MTExOSAwLjI1IDguMjMzMDIgMC4yNSA5LjAwMDA4QzAuMjUgOS43NjcxNCAwLjkwMjkxNyAxMC4zODkgMS43MDgzMyAxMC4zODlINy41NDE2N1YxNS45NDQ1QzcuNTQxNjcgMTYuNzExNiA4LjE5NDU4IDE3LjMzMzQgOSAxNy4zMzM0QzkuODA1NDIgMTcuMzMzNCAxMC40NTgzIDE2LjcxMTYgMTAuNDU4MyAxNS45NDQ1VjEwLjM4OUgxNi4yOTE3QzE3LjA5NzEgMTAuMzg5IDE3Ljc1IDkuNzY3MTQgMTcuNzUgOS4wMDAwOEMxNy43NSA4LjIzMzAyIDE3LjA5NzEgNy42MTExOSAxNi4yOTE3IDcuNjExMTlIMTAuNDU4M1YyLjA1NTY0WiIgZmlsbD0iI0ZFNzMzMyIvPgo8L3N2Zz4K")
     40px 50% no-repeat;
 }
-
-.otm-block .row > [class*="col-"] {
-  margin-top: 1rem;
+.otm-block + .otm-block {
+  margin-top: 20px;
 }
+
 @media (max-width: 992px) {
   .inner-title-otm-block {
     font-weight: 600;
@@ -122,6 +124,9 @@ export default {
   }
   .icon-add {
     background-size: 13px;
+  }
+  .otm-block + .otm-block {
+    margin-top: 10px;
   }
 }
 </style>
