@@ -10,6 +10,12 @@
         <OfficeCard v-else @open="$emit('open', $event)" :office="office" :showOnMapButton="true"/>
       </div>
     </div>
+    <div v-else>
+      <div class="search-no-result-img"></div>
+      <div class="search-no-result-txt">
+        По вашему запросу ничего не найдено
+      </div>
+    </div>
     <button
       v-if="mobile && data.length >= 6"
       class="mobile-pagination"
