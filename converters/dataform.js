@@ -333,6 +333,12 @@ converter.form = async (data, params, instance) => {
                   dataCardWebFieldsArray.map((itemWebField) => ({
                     ...itemWebField,
                     value: itemValue[itemWebField.name],
+                    state:
+                      (itemValue[itemWebField.name] ||
+                        itemValue[itemWebField.name] === 0) &&
+                      itemWebField.required
+                        ? true
+                        : null,
                   })),
                   {}
                 )
