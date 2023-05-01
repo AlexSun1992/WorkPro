@@ -95,7 +95,11 @@ export default {
         i.text.includes(this.$refs.autocomplete?.value)
       );
 
-      if (findValueInList === undefined) {
+      if (
+        findValueInList === undefined &&
+        this.$refs.autocomplete?.value !== undefined &&
+        this.getCurrentValu === undefined
+      ) {
         this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
         this.isErr = false;
       }
