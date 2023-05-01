@@ -205,7 +205,7 @@ export default {
           rowId: this.$route.params.idCard,
           body: [actionParams],
         });
-        if (response?.status === 500) {
+        if (response?.status === 500 || response?.status === 520) {
           this.loading = false;
           this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);

@@ -249,8 +249,8 @@ converter.form = async (data, params, instance) => {
       values.forEach(async (item, i) => {
         if (item.status === "rejected") {
           errors.push({
-            url: item.reason.response.config,
-            data: item.reason.response.data,
+            url: item.reason.response?.config,
+            data: item.reason.response?.data,
           });
         }
         if (item.status == "fulfilled" && item.value.data) {
@@ -333,6 +333,12 @@ converter.form = async (data, params, instance) => {
                   dataCardWebFieldsArray.map((itemWebField) => ({
                     ...itemWebField,
                     value: itemValue[itemWebField.name],
+                    state:
+                      (itemValue[itemWebField.name] ||
+                        itemValue[itemWebField.name] === 0) &&
+                      itemWebField.required
+                        ? true
+                        : null,
                   })),
                   {}
                 )

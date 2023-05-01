@@ -1798,7 +1798,8 @@ a.btn-warning {
 }
 
 .conf-block {
-  border: 1px solid #a6aeb6;
+  border: 1px solid #f2f4f5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   border-radius: 16px;
   padding: 24px 20px;
 }
@@ -4596,7 +4597,7 @@ a.color-l-green:hover {
   font-family: "SF Pro Display";
   font-style: normal;
   font-weight: 400;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 .label-confirmed {
   padding: 4px 12px;
@@ -4629,10 +4630,6 @@ a.color-l-green:hover {
   display: inline-block;
 }
 
-.my-profile .conf-block {
-  border: 1px solid #f2f4f5;
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.18);
-}
 .warning-profile {
   background: #f2f4f5;
   border-radius: 16px;
@@ -4662,16 +4659,25 @@ a.color-l-green:hover {
 }
 
 @media (max-width: 992px) {
-  .my-profile .conf-block {
-    border: 0;
-    box-shadow: none;
-    padding: 0;
+  .warning-profile {
+    font-size: 0.875rem;
   }
   .my-profile .label {
-    color: #c3c3c3;
     font-size: 0.75rem;
   }
   .my-profile .text {
+    font-size: 0.875rem;
+  }
+  .my-profile .btn-action {
+    padding: 11px 24px;
+    font-size: 0.875rem;
+    height: 40px;
+  }
+  .btn-outline-success,
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-warning {
     font-size: 0.875rem;
   }
 }
@@ -4698,4 +4704,37 @@ a.color-l-green:hover {
 .btn-checkbox-map .custom-control-label:after,
 .btn-checkbox-map .custom-control-label:before {
   display: none;
+}
+.otm-block .row > [class*="col-"] {
+  margin-top: 1rem;
+}
+
+.block-allert {
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 2px solid #eb5757;
+  border-radius: 30px;
+  padding: 20px;
+}
+.block-allert-title {
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.5rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #292929;
+}
+.block-allert-description {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  color: #292929;
+}
+@media (max-width: 992px) {
+  .block-allert-title {
+    font-size: 1.25rem;
+  }
+  .block-allert-description {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
 }
