@@ -192,6 +192,9 @@ converter.form = async (data, params, instance) => {
             }/0`
           )
         );
+      } else {
+        obj.value = [];
+        obj.schema = [];
       }
       obj.type = "OneToMany";
     } else {
@@ -264,13 +267,15 @@ converter.form = async (data, params, instance) => {
               }
               return false;
             });
-            promisesOfOneToMany.push(
-              converter.form(
-                item.value.data,
-                { idItem: dataCardSettings.NITEMDIC },
-                instance
-              )
-            );
+            if (dataCardSettings?.NITEMDIC) {
+              promisesOfOneToMany.push(
+                converter.form(
+                  item.value.data,
+                  { idItem: dataCardSettings.NITEMDIC },
+                  instance
+                )
+              );
+            }
           } else {
             const options = selectConverter.select(item.value.data);
             let fieldName = null;
