@@ -136,6 +136,11 @@ export default {
           (item) => item.value === this.data?.value
         );
 
+        if (value === undefined) {
+          this.validationErrorText = "Обязательно для заполнения";
+          this.isErr = false;
+          this.$refs.autocomplete.value = "";
+        }
         if (value) {
           this.$refs.autocomplete.value = value.text;
           this.handleSubmit(value);
@@ -146,6 +151,8 @@ export default {
         );
         if (find !== undefined) {
           this.$refs.autocomplete.value = find.text;
+          this.isErr = true;
+
           this.handleSubmit(find);
         } else {
           this.validationErrorText = "Выберите значение из выпадающего списка";
