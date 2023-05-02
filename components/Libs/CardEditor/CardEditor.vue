@@ -158,6 +158,7 @@ export default {
       this.urlScript = `/api/card/js/${this.$route.params.idModule}/${
         this.$route.params.idItem
       }?time=${Date.now()}`;
+
       if (process.client) {
         await this.$loadScript(this.urlScript)
           .then(() => {
@@ -249,10 +250,11 @@ export default {
           cardId,
         });
         this.actionParamsTitle = field.label;
-        this.actionParamsId = parseInt(actionId);
+
+        this.actionParamsId = parseInt(actionId, 10);
         if (CUR.NTYPE == 38) {
           this.saveSuccess = false;
-          const data = eventHandler(
+          const data = await eventHandler(
             this.data.map((a) => ({ ...a })),
             e,
             "beforeSave"
@@ -262,6 +264,7 @@ export default {
             this.$store.commit("data_card/setForm", data || this.data);
           }
           await this.saveDataCard();
+
           if (this.saveSuccess) {
             await this.$store.dispatch("data_card/fetchForm", params);
             this.$store.commit("data_card/setDisabled", false);
@@ -275,6 +278,7 @@ export default {
               this.$store.commit("data_card/setForm", data || this.data);
             }
           }
+
           this.$store.commit("data_card/setLoading", false);
           return;
         }
@@ -309,6 +313,7 @@ export default {
             return;
           }
         }
+
         if (this.actionSettings.isDialog) {
           this.$store.commit("data_card/setLoading", false);
           this.$bvModal.show("confirmAction");
@@ -320,6 +325,7 @@ export default {
           this.data.map((a) => ({ ...a })),
           e
         );
+
         if (data) {
           this.$store.commit("data_card/setForm", data || this.data);
         }
@@ -342,6 +348,7 @@ export default {
           e,
           this.callbackAction
         );
+
         if (data) {
           this.$store.commit("data_card/setForm", data);
         }
@@ -372,6 +379,7 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
+
         if (
           data[i].required &&
           !data[i].hidden &&
@@ -427,6 +435,7 @@ export default {
           }
         }
       }
+
       return valid;
     },
     async saveDataCard(step = 1) {
@@ -435,6 +444,7 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
+
       if (this.validateData(fields)) {
         try {
           let itemId;
@@ -501,7 +511,7 @@ export default {
               const nextIdItem =
                 this.$store.getters["wizard/getWizardPages"].split(";")[step];
               const tab = this.wizardTabs.find(
-                (w) => w.idItem === parseInt(nextIdItem)
+                (w) => w.idItem === parseInt(nextIdItem, 10)
               );
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
               this.$router.push(

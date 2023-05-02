@@ -95,7 +95,11 @@ export default {
         i.text.includes(this.$refs.autocomplete?.value)
       );
 
-      if (findValueInList === undefined) {
+      if (
+        findValueInList === undefined &&
+        this.$refs.autocomplete?.value !== undefined &&
+        this.getCurrentValu === undefined
+      ) {
         this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
         this.isErr = false;
       }
@@ -132,6 +136,11 @@ export default {
           (item) => item.value === this.data?.value
         );
 
+        if (value === undefined) {
+          this.validationErrorText = "Обязательно для заполнения";
+          this.isErr = false;
+          this.$refs.autocomplete.value = "";
+        }
         if (value) {
           this.$refs.autocomplete.value = value.text;
           this.handleSubmit(value);
@@ -142,6 +151,8 @@ export default {
         );
         if (find !== undefined) {
           this.$refs.autocomplete.value = find.text;
+          this.isErr = true;
+
           this.handleSubmit(find);
         } else {
           this.validationErrorText = "Выберите значение из выпадающего списка";
