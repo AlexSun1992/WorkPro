@@ -75,8 +75,25 @@ describe("ControlCustomCombobox", () => {
       mutations,
     });
   });
+  it("когда загрузилась страница, input с серией стал is-valid", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
 
-  it("когда только открылась страница,то класс у инпута с серией стал is-valid", async () => {
+    wrapper = mount(ControlCustomCombobox, {
+      localVue,
+      propsData: {
+        data: dataProps,
+        edit: true,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+
+    expect(wrapper.html()).toContain("is-valid");
+  });
+
+  it("ввели невалидное значение в инпут с серией, два раза сработал blur и появился текст с ошибкой", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
 
@@ -91,11 +108,13 @@ describe("ControlCustomCombobox", () => {
       },
     });
     const getCodeInput = wrapper.findComponent(".autocomplete-input");
-    await getCodeInput.setValue("");
-    expect(wrapper.find(".is-valid").exists()).toBe(true);
+    await getCodeInput.setValue("ggg");
+    await getCodeInput.trigger("blur");
+    await getCodeInput.trigger("blur");
+    expect(wrapper.html()).toContain(`Обязательно для заполнения`);
   });
 
-  it("ввели невалидное значение в инпута с серией и появился текст с ошибкой", async () => {
+  it("ввели невалидное значение в инпут с серией, появился текст с ошибкой", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
 
@@ -133,7 +152,7 @@ describe("ControlCustomCombobox", () => {
     expect(wrapper.find(".is-valid").exists()).toBe(true);
   });
 
-  it("ввели невалидное значение в инпут с серией и появился текст ошибки", async () => {
+  it("ввели невалидное значение в инпут с серией, появился текст ошибки", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
 
@@ -152,7 +171,7 @@ describe("ControlCustomCombobox", () => {
     await getCodeInput.trigger("blur");
     expect(wrapper.html()).toContain("Выберите значение из выпадающего списка");
   });
-  it("сначала ввели невалидное значение в инпут с серией и появился текст ошибки, затем выбрали валидное значение и текст с ошибкой исчез", async () => {
+  it("сначала ввели невалидное значение в инпут с серией, появился текст ошибки, затем выбрали валидное значение и текст с ошибкой исчез", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
 
