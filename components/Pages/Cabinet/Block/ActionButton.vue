@@ -3,6 +3,7 @@
     v-if="action"
     @click.stop="action.LREQUESTCODE === true ? confirmAction() : startAction()"
     :variant="variant"
+    :id="id"
   >
     <slot><div v-text="action.SNAME"></div></slot>
   </b-button>
@@ -25,6 +26,11 @@ export default {
       default: () => null,
     },
     variant: {
+      type: String,
+      required: false,
+      default: () => null,
+    },
+    id: {
       type: String,
       required: false,
       default: () => null,
