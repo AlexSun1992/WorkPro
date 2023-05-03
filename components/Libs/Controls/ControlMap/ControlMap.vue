@@ -118,6 +118,8 @@ export default {
       document.getElementById("btn").addEventListener("click", this.handler);
       document.getElementById("btn").markerId = markerId;
       if (this.selectMarkerId === markerId) {
+        document.querySelector("#btn").classList.remove("btn-secondary");
+        document.querySelector("#btn").classList.add("btn-primary");
         document.querySelector("#btn").textContent = "Выбрано";
       }
     },
@@ -130,6 +132,8 @@ export default {
       document.getElementById("btn").removeEventListener("click", this.handler);
     },
     handler(e) {
+      document.querySelector("#btn").classList.remove("btn-secondary");
+      document.querySelector("#btn").classList.add("btn-primary");
       document.querySelector("#btn").textContent = "Выбрано";
       this.selectMarkerId = e.target.markerId;
       const marker = this.markers.find(
