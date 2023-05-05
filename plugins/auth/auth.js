@@ -26,21 +26,16 @@ export default function ({ app, redirect, $auth, $sentry }) {
       return app.$auth
         .refreshTokens()
         .then((data) => {
-          if (data?.data) {
-            if (data?.data?.STATUS === 401) {
-              $auth.logout().then(() => {
-                if (process.client) {
-                  if (window !== undefined) {
-                    window.location.href = "/login";
-                  }
-                } else {
-                  redirect(`/login?ref=${app.router.history.current.fullPath}`);
+          if (!data?.data || data?.data?.STATUS === 401) {
+            $auth.logout().then(() => {
+              if (process.client) {
+                if (window !== undefined) {
+                  window.location.href = "/login";
                 }
-              });
-              return null;
-            }
-          } else {
-            redirect(`/login?ref=${app.router.history.current.fullPath}`);
+              } else {
+                redirect(`/login?ref=${app.router.history.current.fullPath}`);
+              }
+            });
             return null;
           }
           return app.$axios(originalRequest);
