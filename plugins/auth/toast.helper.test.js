@@ -1,6 +1,10 @@
 import { mount } from "@vue/test-utils";
 import Vue from "vue";
-import { getErrorMessage, isCriticalError } from "./toast.helper";
+import {
+  getErrorMessage,
+  getErrorNumber,
+  isCriticalError,
+} from "./toast.helper";
 
 describe("Модуль вывода сообщения об ошибке", () => {
   it("Должен обрабатывать сообщения с ORA в тексте без скобок", () => {
@@ -163,5 +167,16 @@ describe("Модуль вывода сообщения об ошибке", () =>
     expect(errorMessage).toBe(
       "Сохранение профиля невозможно, обратитесь в офис"
     );
+  });
+
+  it("корректно определяет ключевое ORA", () => {
+    const errorNumber =
+      getErrorNumber(`ORA-20100: ORA-20199: Для отправления справки, внесите свой e-mail в Настройках профиля.
+    ORA-06512: на  "I3.PKG_LK_UTILS", line 10867
+    ORA-06512: на  line 1
+    ORA-06512: на  "SYS.DBMS_SQL", line 1721
+    ORA-06512: на  "MOBILE.AMUTILSREST", line 3183`);
+
+    expect(errorNumber).toBe("ORA-20199");
   });
 });
