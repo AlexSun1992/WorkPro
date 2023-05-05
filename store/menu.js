@@ -89,7 +89,11 @@ export const actions = {
             ? `/api/module/55/${params.idItem}?zone=free`
             : `/api/module/55/${params.idItem}`;
         await this.$axios.get(URL).then((res) => {
-          commit("setMenuById", res.data);
+          if (res) {
+            commit("setMenuById", res.data);
+          } else {
+            throw new Error("Error /api/module");
+          }
           if (process.server) {
             commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
           }
