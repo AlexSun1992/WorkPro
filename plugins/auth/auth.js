@@ -83,7 +83,7 @@ export default function ({ app, redirect, $auth, $sentry, error: nuxtError }) {
               message: error.response?.data?.message,
             });
           }
-          $sentry.captureException(new Error(error.response.data), (scope) => {
+          $sentry.captureException(new Error(JSON.stringify(error.response?.data)), (scope) => {
             scope.setLevel("fatal");
             scope.setTransactionName("Ошибка 500");
           });
