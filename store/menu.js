@@ -78,7 +78,7 @@ export const actions = {
       }
       return module;
     } catch (e) {
-      return e?.response?.data;
+      return null;
     }
   },
   async fetchMenuById({ commit, dispatch, state }, params) {

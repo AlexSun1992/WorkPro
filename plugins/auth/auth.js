@@ -1,6 +1,6 @@
 import { isCriticalError } from "@/plugins/auth/toast.helper";
 
-export default function ({ app, redirect, $auth, $sentry }) {
+export default function ({ app, redirect, $auth, $sentry, error: nuxtError }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
       return;
@@ -77,10 +77,15 @@ export default function ({ app, redirect, $auth, $sentry }) {
           }
         }
         if (error.response.status === 500) {
+          if (process.server) {
+            nuxtError({
+              statusCode: 500,
+              message: error.response?.data?.message,
+            });
+          }
           $sentry.captureException(new Error(error.response.data), (scope) => {
             scope.setLevel("fatal");
             scope.setTransactionName("Ошибка 500");
-            return scope;
           });
         }
       } catch (e) {
