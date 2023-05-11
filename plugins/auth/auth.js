@@ -83,10 +83,13 @@ export default function ({ app, redirect, $auth, $sentry, error: nuxtError }) {
               message: error.response?.data?.message,
             });
           }
-          $sentry.captureException(new Error(JSON.stringify(error.response?.data)), (scope) => {
-            scope.setLevel("fatal");
-            scope.setTransactionName("Ошибка 500");
-          });
+          $sentry.captureException(
+            new Error(JSON.stringify(error.response?.data)),
+            (scope) => {
+              scope.setLevel("fatal");
+              scope.setTransactionName(`Ошибка ${error.response.status}`);
+            }
+          );
         }
       } catch (e) {
         console.error(e);

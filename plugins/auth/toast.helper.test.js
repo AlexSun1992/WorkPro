@@ -179,4 +179,113 @@ describe("Модуль вывода сообщения об ошибке", () =>
 
     expect(errorNumber).toBe("ORA-20199");
   });
+  it("корректно определяет WAF", () => {
+    const errorNumber = getErrorMessage(
+      "<HTML>\n" +
+        "\n" +
+        "<HEAD>\n" +
+        '\t<base href="/" />\n' +
+        '\t<script type="text/javascript">\n' +
+        "\t\tvar _event_transid='3051586736';\n" +
+        "\t</script>\n" +
+        "\n" +
+        "\t<TITLE>Request Blocked</TITLE>\n" +
+        '\t<META HTTP-EQUIV="Content-Type" Content="text/html; charset=UTF-8">\n' +
+        '\t<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />\n' +
+        '\t<meta http-equiv="Pragma" content="no-cache" />\n' +
+        '\t<meta http-equiv="Expires" content="0" />\n' +
+        "</HEAD>\n" +
+        "\n" +
+        "<BODY>\n" +
+        "\t<BR>\n" +
+        '\t<TABLE align=center cellpadding="0" cellspacing="0" border="0">\n' +
+        "\t\t<TR>\n" +
+        "\t\t</TR>\n" +
+        "\t</TABLE>\n" +
+        "\t<BR>\n" +
+        '\t<TABLE width="700" align=center cellpadding="0" cellspacing="0" border="0">\n' +
+        "\t\t<TR>\n" +
+        '\t\t\t<TD width="60" align="left" valign="top" rowspan="3"></TD>\n' +
+        '\t\t\t<TD id="mainTitleAlign" valign="middle" align="left" width="*">\n' +
+        "\t\t\t\t<H1>Обнаружена аномальная активность</H1>\n" +
+        "\t\t\t</TD>\n" +
+        "\t\t</TR>\n" +
+        "\t\t<TR>\n" +
+        "\t\t\t<TD>&nbsp;</TD>\n" +
+        "\t\t</TR>\n" +
+        "\t\t<TR>\n" +
+        "\t\t\t<TD>\n" +
+        '\t\t\t\t<DIV class="divider"></DIV><BR><BR></TD>\n' +
+        "\t\t</TR>\n" +
+        "\t\t<TR>\n" +
+        "\t\t\t<TD></TD>\n" +
+        "\t\t\t<TD>\n" +
+        "\t\t\t\t<H3>Вы видите эту страницу, потому что с вашего ip адреса обнаружена аномальная активность.\n" +
+        "\n" +
+        "\t\t\t\t\t<P>\n" +
+        '\t\t\t\t\t\t<table border="0">\n' +
+        "\t\t\t\t\t\t\t<tr>\n" +
+        "\t\t\t\t\t\t\t\t<td>Событие:</td>\n" +
+        "\t\t\t\t\t\t\t\t<td>\n" +
+        '\t\t\t\t\t\t\t\t\t<script language="javascript">\n' +
+        "\t\t\t\t\t\t\t\t\t\tif (window._event_transid !== undefined) document.write(window._event_transid);\n" +
+        "\t\t\t\t\t\t\t\t\t</script>\n" +
+        "\t\t\t\t\t\t\t\t</td>\n" +
+        "\t\t\t\t\t\t\t</tr>\n" +
+        "\t\t\t\t\t\t</table>\n" +
+        "\t\t\t\t</H3><BR><BR>\n" +
+        "\t\t</TD>\n" +
+        "\t\t</TR>\n" +
+        "\t</TABLE>\n" +
+        "</BODY>\n" +
+        "<STYLE>\n" +
+        "\tbody {\n" +
+        '\t\tfont-family: "Segoe UI", "verdana", "Arial";\n' +
+        "\t\tbackground-repeat: repeat-x;\n" +
+        "\t\tmargin-top: 20px;\n" +
+        "\t\tmargin-left: 20px;\n" +
+        "\t}\n" +
+        "\n" +
+        "\th1 {\n" +
+        "\t\t< !-- color: #FF0000;\n" +
+        "\t\tcolor2: #4465A2;\n" +
+        "\t\t-->font-size: 1.8em;\n" +
+        "\t\tfont-weight: normal;\n" +
+        "\t\tvertical-align: bottom;\n" +
+        "\t\tmargin-top: 7px;\n" +
+        "\t\tmargin-bottom: 4px;\n" +
+        "\t}\n" +
+        "\n" +
+        "\th2\n" +
+        "\n" +
+        "\t/* used for Heading in Main Body */\n" +
+        "\t\t{\n" +
+        "\t\tfont-size: 0.9em;\n" +
+        "\t\tfont-weight: normal;\n" +
+        "\t\tmargin-top: 20px;\n" +
+        "\t\tmargin-bottom: 1px;\n" +
+        "\t}\n" +
+        "\n" +
+        "\th3\n" +
+        "\n" +
+        "\t/* used for text in main body */\n" +
+        "\t\t{\n" +
+        "\t\tfont-size: 0.9em;\n" +
+        "\t\tfont-weight: normal;\n" +
+        "\t\tmargin-top: 10px;\n" +
+        "\t\tmargin-bottom: 1px;\n" +
+        "\t}\n" +
+        "\n" +
+        "\t.divider {\n" +
+        "\t\tborder-bottom: #B6BCC6 1px solid;\n" +
+        "\t}\n" +
+        "</STYLE>\n" +
+        "\n" +
+        "</HTML>"
+    );
+
+    expect(errorNumber).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
+  });
 });
