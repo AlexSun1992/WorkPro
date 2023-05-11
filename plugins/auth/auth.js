@@ -76,10 +76,10 @@ export default function ({ app, redirect, $auth, $sentry, error: nuxtError }) {
             }
           }
         }
-        if (error.response.status === 500) {
+        if (error.response.status >= 500) {
           if (process.server) {
             nuxtError({
-              statusCode: 500,
+              statusCode: error.response.status,
               message: error.response?.data?.message,
             });
           }
