@@ -288,4 +288,15 @@ describe("Модуль вывода сообщения об ошибке", () =>
       "Приносим извинения, в Личном Кабинете что-то пошло не так."
     );
   });
+
+  it("определяет текст ошибки, обёрнутый в системную", () => {
+    const errorMessageText =
+      'ORA-02055: сбой распределенной операции обновления; требуется откат\nORA-20105:  [\r\nЗастрахованный не является страхователем.]\nORA-06512: на  "V4.TM_UTILS_WEB", line 2007\nORA-06512: на  "V4.TM_UTILS_WEB", line 2479\nORA-06512: на  "V4.TM_UTILS", line 799\nORA-06512: на  "V4.TM_UTILS_WEB", line 2476\nORA-06512: на  "V4.TM_UTILS_WEB", line 2004\nORA-06512: на  line 1\nORA-06512: на  "MOBILE.AMUTILSREST", line 1332\nORA-06512: на  line 1\n';
+    const errorMessage = getErrorMessage(errorMessageText);
+
+    // Конфликт с другим правилом [Метод: "select \'742;740\' as result from dual1"], поэтому реализация как есть
+    expect(errorMessage).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
+  });
 });
