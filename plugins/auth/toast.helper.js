@@ -62,7 +62,7 @@ export function getErrorMessage(errorMessage, h) {
     return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
   }
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
-  const stringWithBrackets = errMessageString.match(/\[(.+)]/);
+  const stringWithBrackets = errMessageString.match(/\[(.+)\]/s);
 
   const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
 
@@ -85,18 +85,18 @@ export function getErrorMessage(errorMessage, h) {
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
     const transformErrorTextToArray =
-      getErrorTextWithBrackets.match(/\[.+?\]/g);
+      getErrorTextWithBrackets.match(/\[.+?\]/gs);
 
     const getStringFromErrorText = transformErrorTextToArray.join("");
     if (getErrorTextWithBrackets === getStringFromErrorText) {
       const getStringMessageWithErrBrackets = stringWithBrackets[0];
       const getArrWithErrBrackets =
-        getStringMessageWithErrBrackets.match(/\[.+?\]/);
-      const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
+        getStringMessageWithErrBrackets.match(/\[.+?\]/s);
+      const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)\]/s);
 
-      return pureMessageText[1];
+      return pureMessageText[1].trim();
     }
-    return stringWithBrackets[1];
+    return stringWithBrackets[1].trim();
   }
 
   if (
