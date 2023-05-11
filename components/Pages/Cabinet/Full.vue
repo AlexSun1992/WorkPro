@@ -11,13 +11,8 @@ export default {
   name: "Full",
   layout: "CabinetLayout",
   middleware: "guest",
-  async fetch({ store, route, app, $sentry }) {
+  async fetch({ store, route }) {
     try {
-      const data = await app.$axios.get(`${consts.USERPROFILE}`);
-      if (data?.data && data?.data?.STATUS !== 401) {
-        const user = data.data[0]._data[0];
-        app.$auth.setUser(user);
-      }
       const setting = store.getters["menu/breadcrumbs"].slice(-1).pop();
       if (setting.isCard || setting.isWizard) {
         await store.dispatch("card/setCard", {

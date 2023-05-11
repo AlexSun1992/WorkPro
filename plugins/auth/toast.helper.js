@@ -47,6 +47,20 @@ export function isCriticalError(errorMessage) {
 }
 
 export function getErrorMessage(errorMessage, h) {
+  const isWAF = errorMessage.includes("Request Blocked");
+  if (isWAF) {
+    if (h) {
+      const vnode = h("div", {
+        domProps: {
+          innerHTML:
+            "<p>Приносим извинения, в личном кабинете что-то пошло не так.\n" +
+            "Просим обновить страницу или перейти на <a href='/cabinet'>главную личного кабинета.</a></p>",
+        },
+      });
+      return [vnode];
+    }
+    return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
+  }
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
   const stringWithBrackets = errMessageString.match(/\[(.+)]/);
 

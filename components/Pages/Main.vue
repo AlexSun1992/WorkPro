@@ -13,6 +13,7 @@
 <script>
 import DynamicRoutesRenderer from "~/components/Libs/DynamicRoutesRenderer/DynamicRoutesRenderer";
 import consts from "@/api/urls";
+
 export default {
   scrollToTop: true,
   layout: "MainLayout",
