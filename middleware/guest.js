@@ -25,4 +25,9 @@ export default async function ({ app, store, redirect, route }) {
       }
     }
   }
+  if (process.server) {
+    if (!app.$cookiz.get("auth._token.local")) {
+      redirect(`/login`);
+    }
+  }
 }

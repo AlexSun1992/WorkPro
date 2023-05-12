@@ -1,7 +1,7 @@
 import consts from "../api/urls";
 
 export const actions = {
-  async nuxtServerInit({ dispatch }, { params, $auth, $axios, redirect }) {
+  async nuxtServerInit({ dispatch }, { params, $auth, $axios }) {
     try {
       if ($auth.loggedIn) {
         if (await dispatch("menu/fetchMenu", params)) {
@@ -12,8 +12,6 @@ export const actions = {
           }
           await dispatch("menu/fetchCounters", null);
         }
-      } else {
-        redirect(`/login`);
       }
     } catch (e) {
       console.error(e);
