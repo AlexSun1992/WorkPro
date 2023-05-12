@@ -39,16 +39,20 @@ export function getErrorNumber(errorMessage) {
  * Критичной является ошибка с ORA меньше константы
  */
 export function isCriticalError(errorMessage) {
-  const errorNumber = getErrorNumber(errorMessage);
+  const errorString = String(errorMessage);
+  const errorNumber = getErrorNumber(errorString);
   if (errorNumber < MAX_ORA_ERROR) {
+    return true;
+  }
+  const isWAF = errorString.includes("Request Blocked");
+  if (isWAF) {
     return true;
   }
   return false;
 }
 
 export function getErrorMessage(errorMessage, h) {
-  const isWAF = errorMessage.includes("Request Blocked");
-  if (isWAF) {
+  if (isCriticalError(errorMessage)) {
     if (h) {
       const vnode = h("div", {
         domProps: {
@@ -61,42 +65,25 @@ export function getErrorMessage(errorMessage, h) {
     }
     return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
   }
+
   const [errMessageString] = convertErrorMessageToArray(errorMessage);
-  const stringWithBrackets = errMessageString.match(/\[(.+)]/);
+  const stringWithBrackets = errMessageString.match(/\[(.+)\]/s);
 
-  const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
-
-  if (getORAnumber) {
-    const errNumber = getErrorNumber(errorMessage);
-    if (MAX_ORA_ERROR > errNumber) {
-      if (h) {
-        const vnode = h("div", {
-          domProps: {
-            innerHTML:
-              "<p>Приносим извинения, в личном кабинете что-то пошло не так.\n" +
-              "Просим обновить страницу или перейти на <a href='/cabinet'>главную личного кабинета.</a></p>",
-          },
-        });
-        return [vnode];
-      }
-      return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
-    }
-  }
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
     const transformErrorTextToArray =
-      getErrorTextWithBrackets.match(/\[.+?\]/g);
+      getErrorTextWithBrackets.match(/\[.+?\]/gs);
 
     const getStringFromErrorText = transformErrorTextToArray.join("");
     if (getErrorTextWithBrackets === getStringFromErrorText) {
       const getStringMessageWithErrBrackets = stringWithBrackets[0];
       const getArrWithErrBrackets =
-        getStringMessageWithErrBrackets.match(/\[.+?\]/);
-      const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
+        getStringMessageWithErrBrackets.match(/\[.+?\]/s);
+      const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)\]/s);
 
-      return pureMessageText[1];
+      return pureMessageText[1].trim();
     }
-    return stringWithBrackets[1];
+    return stringWithBrackets[1].trim();
   }
 
   if (
