@@ -17,77 +17,73 @@ export function convertErrorMessageToArray(errorMessage) {
 }
 
 /**
- * При наличии ORA в "errorMessage" возвращает текст после ORA, при отсутствии ORA дефолтный текст
- * @param {string} errorMessage Строка с ошибкой, содержащая ORA и квадратные скобки, или не содержащая таковых.
+ * Получает номер ошибки вида ORA-00000 (исключая обёртку в юзерскую)
+ * @param {string} errorMessage Строка с ошибкой, содержащая ORA
  * @returns {string}
  */
-
 export function getErrorNumber(errorMessage) {
-  const getDoubleCloseMistake = errorMessage.match(
-    /^\s?ORA-\d{5}:\s?ORA-\d{5}/
-  );
-  if (getDoubleCloseMistake) {
-    const getArrWithMistakes = errorMessage.match(/\s?ORA-\d{5}/g);
-    const onlyPureMistakesName = getArrWithMistakes.filter(
-      (item) => !item.includes("\n")
-    );
+  const ORA_PATTERN = /^ORA-\d{5}$/;
+  const oraPatterns = String(errorMessage)
+    .split(": ")
+    .filter((ora, idx) => {
+      if (ORA_PATTERN.test(ora) && idx <= 1) {
+        return true;
+      }
+      return false;
+    });
 
-    let compareNumber;
-    if (onlyPureMistakesName.length >= 2) {
-      [, compareNumber] = onlyPureMistakesName;
-    }
-
-    return compareNumber;
-  }
-  const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
-  return getORAnumber;
+  return oraPatterns.pop();
 }
 
+/**
+ * Критичной является ошибка с ORA меньше константы
+ */
 export function isCriticalError(errorMessage) {
-  const errorNumber = getErrorNumber(errorMessage);
-  if (MAX_ORA_ERROR > errorNumber) {
+  const errorString = String(errorMessage);
+  const errorNumber = getErrorNumber(errorString);
+  if (errorNumber < MAX_ORA_ERROR) {
+    return true;
+  }
+  const isWAF = errorString.includes("Request Blocked");
+  if (isWAF) {
     return true;
   }
   return false;
 }
 
 export function getErrorMessage(errorMessage, h) {
-  const [errMessageString] = convertErrorMessageToArray(errorMessage);
-  const stringWithBrackets = errMessageString.match(/\[(.+)]/);
-
-  const getORAnumber = errorMessage.match(/\s?ORA-\d{5}/);
-
-  if (getORAnumber) {
-    const errNumber = getErrorNumber(errorMessage);
-    if (MAX_ORA_ERROR > errNumber) {
-      if (h) {
-        const vnode = h("div", {
-          domProps: {
-            innerHTML:
-              "<p>Приносим извинения, в личном кабинете что-то пошло не так.\n" +
-              "Просим обновить страницу или перейти на <a href='/cabinet'>главную личного кабинета.</a></p>",
-          },
-        });
-        return [vnode];
-      }
-      return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
+  if (isCriticalError(errorMessage)) {
+    if (h) {
+      const vnode = h("div", {
+        domProps: {
+          innerHTML:
+            "<p>Приносим извинения, в личном кабинете что-то пошло не так.\n" +
+            "Просим обновить страницу или перейти на <a href='/cabinet'>главную личного кабинета.</a></p>",
+        },
+      });
+      return [vnode];
     }
+    return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
   }
+
+  const [errMessageString] = convertErrorMessageToArray(errorMessage);
+  const stringWithBrackets = errMessageString.match(/\[(.+)\]/s);
+
   if (stringWithBrackets) {
     const getErrorTextWithBrackets = stringWithBrackets[0];
     const transformErrorTextToArray =
-      getErrorTextWithBrackets.match(/\[.+?\]/g);
+      getErrorTextWithBrackets.match(/\[.+?\]/gs);
 
     const getStringFromErrorText = transformErrorTextToArray.join("");
     if (getErrorTextWithBrackets === getStringFromErrorText) {
       const getStringMessageWithErrBrackets = stringWithBrackets[0];
       const getArrWithErrBrackets =
-        getStringMessageWithErrBrackets.match(/\[.+?\]/);
-      const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)]/);
+        getStringMessageWithErrBrackets.match(/\[.+?\]/s);
+      const pureMessageText = getArrWithErrBrackets[0].match(/\[(.+)\]/s);
 
-      return pureMessageText[1];
+      return pureMessageText[1].trim();
     }
-    return stringWithBrackets[1];
+    return stringWithBrackets[1].trim();
   }
 
   if (
