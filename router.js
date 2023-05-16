@@ -11,6 +11,7 @@ import Telemed from "@/components/Pages/Telemed/Telemed";
 import AuthFormWrapper from "~/components-vue2/src/components/Login/AuthForm/AuthFormWrapper";
 import PasswordRecoveryFormWrapper from "~/components-vue2/src/components/Login/RecoveryForm/PasswordRecoveryFormWrapper";
 import ErrorPage from "@/layouts/error";
+import ShortLink from "@/components/Pages/Cabinet/ShortLink";
 import olddms from "@/components/Pages/OLDDMS/olddms.vue";
 Vue.use(Router);
 
@@ -112,6 +113,7 @@ export function createRouter() {
         path: "/idesia",
         component: LoginEsia,
       },
+      { meta: "ShortLink", path: "/s/:hash", component: ShortLink },
       {
         meta: "Error",
         path: "/error",
