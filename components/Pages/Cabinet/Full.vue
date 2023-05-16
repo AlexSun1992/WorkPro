@@ -11,17 +11,26 @@ export default {
   name: "Full",
   layout: "CabinetLayout",
   middleware: "guest",
-  async fetch({ store, route }) {
+  async fetch({ store, route, error: nuxtError }) {
     try {
-      const setting = store.getters["menu/breadcrumbs"].slice(-1).pop();
-      if (setting.isCard || setting.isWizard) {
-        await store.dispatch("card/setCard", {
-          page: route.params,
-          settings: setting,
+      const settings =
+        store.getters["menu/breadcrumbs"].slice(-1).pop() || null;
+      if (!settings) {
+        nuxtError({
+          statusCode: 500,
+          message: "Не удалось загрузить настройки страницы",
         });
       }
+      if (settings) {
+        if (settings.isCard || settings.isWizard) {
+          await store.dispatch("card/setCard", {
+            page: route.params,
+            settings,
+          });
+        }
+      }
     } catch (error) {
-      console.log(error?.response);
+      console.error(error?.response || error);
     }
   },
   mounted() {
