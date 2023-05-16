@@ -96,16 +96,16 @@ export function createRouter() {
             ],
           },
           {
-            meta: "Telemed",
-            path: "/cabinet/telemed",
-            component: Telemed,
-          },
-          {
             meta: "DMS",
             path: "/cabinet/dms",
             component: olddms,
           },
         ],
+      },
+      {
+        meta: "Telemed",
+        path: "/telemed",
+        component: Telemed,
       },
       {
         meta: "Esia",
