@@ -76,17 +76,22 @@ export default function ({ app, redirect, $auth, $sentry, error: nuxtError }) {
             }
           }
         }
-        if (error.response.status === 500) {
+        if (error.response.status >= 500) {
           if (process.server) {
             nuxtError({
-              statusCode: 500,
+              statusCode: error.response.status,
               message: error.response?.data?.message,
             });
           }
-          $sentry.captureException(new Error(JSON.stringify(error.response?.data)), (scope) => {
-            scope.setLevel("fatal");
-            scope.setTransactionName("Ошибка 500");
-          });
+          if (isCriticalError(error.response?.data)) {
+            $sentry.captureException(
+              new Error(JSON.stringify(error.response?.data)),
+              (scope) => {
+                scope.setLevel("fatal");
+                scope.setTransactionName(`Ошибка ${error.response.status}`);
+              }
+            );
+          }
         }
       } catch (e) {
         console.error(e);

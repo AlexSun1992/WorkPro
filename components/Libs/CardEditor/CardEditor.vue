@@ -489,9 +489,6 @@ export default {
               toaster: "b-toaster-top-full",
             });
           }
-          if (this.$route.params.idItem === "710") {
-            await this.$store.dispatch("updateUser");
-          }
           if (
             this.$route.params.idCard === "0" &&
             !this.$route.query?.ref &&
