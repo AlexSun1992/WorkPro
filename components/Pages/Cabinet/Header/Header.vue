@@ -151,7 +151,7 @@ export default {
       getUrl
         ? window.open(oldUrl.href, "_blank")
         : window.open(
-            "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
+            "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth",
             "_blank"
           );
     },
