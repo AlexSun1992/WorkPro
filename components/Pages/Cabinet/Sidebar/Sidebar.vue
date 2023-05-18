@@ -79,10 +79,7 @@ export default {
 
   created() {
     this.userInfo = this.$auth.user;
-    const token = this.$auth.$storage._state["_token.local"].replace(
-      "Bearer ",
-      ""
-    );
+    const token = this.$auth.strategy.token.get().replace("Bearer ", "");
     this.url = `https://dms.reso.ru/DMSResoRu/reso_iframe?token=${token}`;
     this.openMenuLink = Object.keys(this.groupMenuItems);
   },
@@ -132,7 +129,7 @@ export default {
         const itemMenu = { ...item };
         itemMenu.target = "_self";
         if (itemMenu.isTelemed) {
-          itemMenu.url = "/cabinet/telemed";
+          itemMenu.url = "/telemed";
           itemMenu.target = "_blank";
         }
         group.push(itemMenu);

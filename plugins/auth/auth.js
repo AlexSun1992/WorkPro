@@ -30,7 +30,7 @@ export default function ({ app, redirect, $auth, $sentry, error: nuxtError }) {
             $auth.logout().then(() => {
               if (process.client) {
                 if (window !== undefined) {
-                  window.location.href = "/login";
+                  window.location.href = `/login?ref=${app.router.history.current.fullPath}`;
                 }
               } else {
                 redirect(`/login?ref=${app.router.history.current.fullPath}`);

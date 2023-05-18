@@ -193,7 +193,7 @@ export default {
     async osagoBtn() {
       if (this.isAuthentificated === false) {
         window.open(
-          "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso&utm_medium=button&utm_campaign=lk_notauth",
+          "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_notauth",
           "_blank"
         );
       } else {
@@ -212,7 +212,7 @@ export default {
         getUrl
           ? window.open(oldUrl.href, "_blank")
           : window.open(
-              "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
+              "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth",
               "_blank"
             );
       }
