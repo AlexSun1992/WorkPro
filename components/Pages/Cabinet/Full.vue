@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nuxt-child :key="$route.fullPath" />
+    <nuxt-child :key="urlScript" />
   </div>
 </template>
 
@@ -33,10 +33,32 @@ export default {
       console.error(error?.response || error);
     }
   },
+
+  watch: {
+    urlScript() {
+      this.$store.dispatch("blocks/getScript", {
+        idModule: this.$route.params.idModule,
+        idItem: this.$route.params.idItem,
+      });
+    },
+  },
+
+  computed: {
+    urlScript() {
+      return this.$route.fullPath;
+    },
+  },
+
   mounted() {
     this.$sentry.setUser({
       id: this.$auth.user.ID,
       yandexID: this.$cookiz.get("_ym_uid"),
+    });
+  },
+  created() {
+    this.$store.dispatch("blocks/getScript", {
+      idModule: this.$route.params.idModule,
+      idItem: this.$route.params.idItem,
     });
   },
 };
