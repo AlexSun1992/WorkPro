@@ -206,7 +206,7 @@ export default {
         });
         const getUrl = getToken.data.find((el) => el.SURL);
         const oldUrl = new URL(getUrl.SURL);
-        oldUrl.searchParams.set("utm_source", "reso");
+        oldUrl.searchParams.set("utm_source", "reso.ru");
         oldUrl.searchParams.set("utm_medium", "button");
         oldUrl.searchParams.set("utm_campaign", "lk_auth");
         getUrl
