@@ -20,6 +20,7 @@ export default {
     FormPage,
     FilterBlock,
   },
+
   computed: {
     params() {
       const page = this.$route.params;
