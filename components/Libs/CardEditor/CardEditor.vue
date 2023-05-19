@@ -158,6 +158,12 @@ export default {
 
   async created() {
     try {
+      if (process.client) {
+        await this.$store.dispatch("blocks/getScript", {
+          idModule: this.$route.params.idModule,
+          idItem: this.$route.params.idItem,
+        });
+      }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
 
