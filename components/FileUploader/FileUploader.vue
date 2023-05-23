@@ -40,7 +40,7 @@ export default {
     },
     submitFile() {
       // Костыль
-      let fileName = this.id + "." + this.file.name?.split(".")[1];
+      const fileName = `${this.id}.${this.file.name?.split(".")[1]}`;
       this.$axios
         .$post(
           `/am/main/v2/file/${this.id}?rel=${this.rel}&product=${this.product}`,
@@ -55,7 +55,6 @@ export default {
               this.uploadPercentage = parseInt(
                 Math.round((progressEvent.loaded / progressEvent.total) * 100)
               );
-              console.log(this.uploadPercentage);
             },
           }
         )
