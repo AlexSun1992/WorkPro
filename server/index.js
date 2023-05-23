@@ -1,14 +1,52 @@
 const express = require("express");
+const expressWinston = require("express-winston");
+const winston = require("winston"); // for transports.Console
+const { format } = require("winston");
+const cookieParser = require("cookie-parser");
+
+const { timestamp } = format;
 const consola = require("consola");
 const { Nuxt, Builder } = require("nuxt");
+
 const app = express();
-app.use(function (req, res, next) {
+app.use(cookieParser());
+app.use((req, res, next) => {
   res.removeHeader("X-Powered-By");
   next();
 });
+app.use(
+  expressWinston.logger({
+    meta: true,
+    metaField: null, // this causes the metadata to be stored at the root of the log entry
+    responseField: null,
+    requestField: null,
+    skip(req, res, err) {
+      if (req.url.startsWith("/api")) {
+        return false;
+      }
+      return true;
+    },
+    dynamicMeta: (req, res, err) => {
+      const meta = {};
+      meta.status = res.statusCode;
+      meta.userid = req?.cookies["auth.user_id"];
+      return meta;
+    },
+    transports: [new winston.transports.Console()],
+    format: winston.format.combine(timestamp(), winston.format.json()),
+  })
+);
+app.use(
+  expressWinston.errorLogger({
+    transports: [new winston.transports.Console()],
+    format: winston.format.combine(winston.format.json()),
+  })
+);
 
 // Import and Set Nuxt.js options
+const { RouteFilter } = require("express-winston");
 const config = require("../nuxt.config.js");
+
 config.dev = process.env.NODE_ENV !== "production";
 
 async function start() {
