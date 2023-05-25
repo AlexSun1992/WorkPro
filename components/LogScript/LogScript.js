@@ -233,11 +233,13 @@ async function logEvent(object) {
         urlApiLog = "/am/main/v2/lk/log";
         fetchOptions.headers.Authorization = token;
       }
-      await fetch(urlApiLog, fetchOptions).then((response) => {
-        if (response.status === 401) {
+      await fetch(urlApiLog, fetchOptions).catch((err) => {
+        const { response } = err;
+        if (response?.status === 401) {
           urlApiLog = "/am/free/v2/lk/log";
+          return fetch(urlApiLog, fetchOptions);
         }
-        return fetch(urlApiLog, fetchOptions);
+        throw err;
       });
     }
   } catch (error) {
