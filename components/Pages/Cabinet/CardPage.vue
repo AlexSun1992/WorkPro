@@ -295,6 +295,9 @@ export default {
         this.$store.getters[`data_card/getForm`].data
       );
     },
+    isShowUploader() {
+      return this.settings.isUploader;
+    },
     isShowCardTemplate() {
       return this.settings.cardtemplate
         ? "col-sm-12 col-md-12 col-lg-12 col-xl-9 col-12"

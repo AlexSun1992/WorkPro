@@ -105,6 +105,7 @@ converter.menuObject = (data) => {
     obj.cols = data.NCOLCOUNT;
     obj.isCard = data.IDADMMENUTYPE === 3;
     obj.isWizard = data.IDADMMENUTYPE === 14;
+    obj.isUploader = data.IDADMMENUTYPE === 502;
     obj.isForm = data.IDADMMENUTYPE === 9;
     obj.isPortal = data.IDADMMENUTYPE === 16 || data.IDADMMENUTYPE === 17;
     obj.isTelemed = data.IDADMMENUTYPE === 501;

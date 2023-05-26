@@ -10,6 +10,7 @@ import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
 import CardPage from "~/components/Pages/Cabinet/Card/Card";
 import FormPage from "~/components/Pages/FormPage";
 import FilterBlock from "./Block/FilterBlock/FilterBlock.vue";
+import UploadContainer from "~/components/Pages/Cabinet/UploadContainer/UploadContainer.vue";
 
 export default {
   name: "Fluid",
@@ -19,6 +20,7 @@ export default {
     WizardPage,
     FormPage,
     FilterBlock,
+    UploadContainer,
   },
 
   computed: {
@@ -37,6 +39,9 @@ export default {
       }
       if (settings.isWizard) {
         component = "CardPage";
+      }
+      if (settings.isUploader) {
+        component = "UploadContainer";
       }
       return { page, ...settings, settings, component };
     },
