@@ -1,6 +1,13 @@
 import { isCriticalError } from "@/plugins/auth/toast.helper";
 
-export default function ({ app, redirect, $auth, $sentry, error: nuxtError }) {
+export default function ({
+  app,
+  redirect,
+  $auth,
+  $sentry,
+  error: nuxtError,
+  $winstonLog,
+}) {
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
       return;
@@ -94,14 +101,10 @@ export default function ({ app, redirect, $auth, $sentry, error: nuxtError }) {
           }
         }
       } catch (e) {
-        console.error(e);
+        $winstonLog.log("error", e, {
+          userid: $auth.user.ID,
+        });
       }
     }
-  });
-  app.$axios.onRequest((config) => {
-    console.log(`Making request to ${config.url}`);
-  });
-  $auth.onError((error) => {
-    console.warn(error);
   });
 }
