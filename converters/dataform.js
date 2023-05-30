@@ -375,6 +375,7 @@ converter.form = async (data, params, instance) => {
       captions: data[0]._meta.SPAGECAPTION,
       cardCaption: data[0]._meta.SCARDCAPTION,
       btnSave: meta_visible?.BTNSAVE !== "N",
+      btnCancel: meta_visible?.BTNCANCEL !== "N",
       readonly: meta_readonly?.ALL_FIELDS === "Y",
       visible: meta_visible,
       addFields: meta_addfields,
