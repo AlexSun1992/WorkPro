@@ -13,7 +13,7 @@ import PasswordRecoveryFormWrapper from "~/components-vue2/src/components/Login/
 import ErrorPage from "@/layouts/error";
 import ShortLink from "@/components/Pages/Cabinet/ShortLink";
 import olddms from "@/components/Pages/OLDDMS/olddms.vue";
-import UploadContainer from "@/components/Pages/Cabinet/UploadContainer/UploadContainer.vue";
+import UploadPage from "@/components/Pages/Cabinet/Upload/UploadPage.vue";
 Vue.use(Router);
 
 export function createRouter() {
@@ -62,7 +62,7 @@ export function createRouter() {
           {
             meta: "Cabinet",
             path: ":idModule/:idParent/:idItem/:idCard/:idRel/uploader",
-            component: UploadContainer,
+            component: UploadPage,
           },
           {
             meta: "Cabinet",
