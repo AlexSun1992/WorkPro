@@ -13,15 +13,18 @@
                 {{ file.name }}
               </p>
             </div>
-            <div>
-              <button
-                class="ml-2"
+            <div class="row">
+              <b-button @click="downloadFile(file)" title="Скачать файл"
+                ><b>&#10162;</b></b-button
+              >
+              <b-button
+                class="ml-2 mt-2"
                 type="button"
                 @click="remove(files.indexOf(file))"
-                title="Remove file"
+                title="Удалить файл"
               >
                 <b>&times;</b>
-              </button>
+              </b-button>
             </div>
           </div>
         </div>
@@ -37,7 +40,7 @@
               accept=".pdf,.jpg,.jpeg,.png"
             />
             <label class="file-label">
-              <div>Загрузите файл</div>
+              <div>Перетащите или загрузите файл</div>
             </label>
           </div>
         </div>
@@ -60,6 +63,16 @@ export default {
       this.$emit("update", {
         files: [...this.$refs.file.files],
       });
+    },
+    downloadFile(file) {
+      const url = URL.createObjectURL(file);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
     },
     remove(i) {
       this.files.splice(i, 1);

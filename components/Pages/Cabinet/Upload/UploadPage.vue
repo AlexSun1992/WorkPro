@@ -1,6 +1,6 @@
 <template>
   <div class="col-lg-12">
-    <upload-drop @update="changeFiles($event)" />
+    {{ getData }}
     <upload-drop @update="changeFiles($event)" />
   </div>
 </template>
@@ -24,12 +24,6 @@ export default {
   computed: {
     getData() {
       return this.$store.getters["uploader/getData"];
-    },
-    fileTypes() {
-      return this.$store.getters["uploader/fileTypes"];
-    },
-    files() {
-      return this.$store.getters["uploader/files"];
     },
   },
 };

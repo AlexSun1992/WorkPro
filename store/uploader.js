@@ -5,10 +5,15 @@ export const state = () => ({
 });
 
 export const getters = {
-  getData: (state) => state.data,
-  fileTypes: (state) =>
-    state.data.find((item) => item.name === FILETYPES)?.value,
-  files: (state) => state.data.find((item) => item.name === FILES)?.value,
+  getData: (state) =>
+    state.data
+      .find((type) => type.name === FILETYPES)
+      .value.map((item) => ({
+        ...item,
+        FILES: state.data
+          .find((file) => file.name === FILES)
+          .value.filter((fileType) => fileType.TYPE === item.TYPE),
+      })),
 };
 
 export const actions = {
