@@ -14,3 +14,16 @@ Vue.use(VueYandexMetrika, {
     ecommerce: "dataLayer",
   },
 });
+Vue.use(VueYandexMetrika, {
+  id: "34000840",
+  env: process.env.NODE_ENV,
+  debug: false,
+  options: {
+    webvisor: true,
+    clickmap: true,
+    useCDN: false,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    ecommerce: "dataLayer",
+  },
+});
