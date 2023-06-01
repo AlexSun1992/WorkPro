@@ -157,13 +157,6 @@ export default {
   methods: {
     update() {
       this.$v.newEmail.$touch();
-      if (this.newEmail != "") {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.newEmail,
-        });
-      }
     },
     validateState(name) {
       const { $dirty, $error } = this.$v[name];
@@ -231,8 +224,14 @@ export default {
     },
 
     verifyUser(e) {
-      this.$store.commit("clearAxiosError");
       this.getCode();
+      if (this.newEmail != "") {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.newEmail,
+        });
+      }
     },
 
     changeEmail() {
