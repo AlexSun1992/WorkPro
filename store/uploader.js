@@ -32,4 +32,7 @@ export const mutations = {
   setData(state, data) {
     state.data = data;
   },
+  setFiles(state, data) {
+    const files = (state.data = data);
+  },
 };

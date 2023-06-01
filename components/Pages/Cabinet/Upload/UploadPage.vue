@@ -1,7 +1,9 @@
 <template>
   <div class="col-lg-12">
-    {{ getData }}
-    <upload-drop @update="changeFiles($event)" />
+    <div v-for="(item, i) in getData" :key="i">
+      <b>{{ item.NAME }}</b>
+      <upload-drop @update="changeFiles($event)" :data="item.FILES" />
+    </div>
   </div>
 </template>
 

@@ -1,5 +1,6 @@
 <template>
   <div class="nb-block mb-4">
+    {{ data }}
     <div>
       <div class="row">
         <div
@@ -15,7 +16,7 @@
             </div>
             <div class="row">
               <b-button @click="downloadFile(file)" title="Скачать файл"
-                ><b>&#10162;</b></b-button
+                >Скачать</b-button
               >
               <b-button
                 class="ml-2 mt-2"
@@ -23,7 +24,7 @@
                 @click="remove(files.indexOf(file))"
                 title="Удалить файл"
               >
-                <b>&times;</b>
+                Удалить
               </b-button>
             </div>
           </div>
@@ -56,6 +57,13 @@ export default {
     return {
       files: [],
     };
+  },
+  props: {
+    data: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
   },
   methods: {
     onChange() {
