@@ -1,17 +1,16 @@
 <template>
   <div class="nb-block mb-4">
-    {{ data }}
     <div>
       <div class="row">
         <div
-          v-for="file in files"
-          :key="file.name"
+          v-for="file in data"
+          :key="file.FILENAME"
           class="col-12 col-lg-4 mb-3"
         >
           <div class="preview-card">
             <div>
-              <p :title="file.name">
-                {{ file.name }}
+              <p :title="file.FILENAME">
+                {{ file.FILENAME }}
               </p>
             </div>
             <div class="row">
@@ -21,7 +20,7 @@
               <b-button
                 class="ml-2 mt-2"
                 type="button"
-                @click="remove(files.indexOf(file))"
+                @click="remove(data.indexOf(file))"
                 title="Удалить файл"
               >
                 Удалить
@@ -29,7 +28,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 mb-3" v-bind:class="{ 'col-lg-4': files.length }">
+        <div class="col-12 mb-3" v-bind:class="{ 'col-lg-4': data.length }">
           <div @dragover="dragover" @drop="drop" class="dropzone-container">
             <input
               type="file"
@@ -53,11 +52,6 @@
 <script>
 export default {
   name: "UploadFile",
-  data() {
-    return {
-      files: [],
-    };
-  },
   props: {
     data: {
       type: Array,
@@ -67,10 +61,7 @@ export default {
   },
   methods: {
     onChange() {
-      this.files = [...this.files, ...this.$refs.file.files];
-      this.$emit("update", {
-        files: [...this.$refs.file.files],
-      });
+      this.$emit("update", [...this.$refs.file.files]);
     },
     downloadFile(file) {
       const url = URL.createObjectURL(file);
@@ -82,8 +73,8 @@ export default {
       a.click();
       window.URL.revokeObjectURL(url);
     },
-    remove(i) {
-      this.files.splice(i, 1);
+    remove(index) {
+      this.$emit("remove", index);
     },
     dragover(event) {
       event.preventDefault();

@@ -1,8 +1,12 @@
 <template>
   <div class="col-lg-12">
     <div v-for="(item, i) in getData" :key="i">
-      <b>{{ item.NAME }}</b>
-      <upload-drop @update="changeFiles($event)" :data="item.FILES" />
+      <b>{{ item.DESCRIPTION }}</b>
+      <upload-drop
+        @update="changeFiles(item.NAME, $event)"
+        @remove="removeFile(item.NAME, $event)"
+        :data="item.FILES"
+      />
     </div>
   </div>
 </template>
@@ -19,8 +23,16 @@ export default {
     });
   },
   methods: {
-    changeFiles(e) {
-      console.log("changeFiles", e);
+    changeFiles(name, data) {
+      const files = data.map((item) => ({
+        FILENAME: item.name,
+        SIZE: item.size,
+        NAME: name,
+      }));
+      this.$store.commit("uploader/setFiles", files);
+    },
+    removeFile(name, index) {
+      this.$store.commit("uploader/removeFile", { name, index });
     },
   },
   computed: {

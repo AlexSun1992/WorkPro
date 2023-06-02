@@ -12,7 +12,7 @@ export const getters = {
         ...item,
         FILES: state.data
           .find((file) => file.name === FILES)
-          .value.filter((fileType) => fileType.TYPE === item.TYPE),
+          .value.filter((fileType) => fileType.NAME === item.NAME),
       })),
 };
 
@@ -33,6 +33,16 @@ export const mutations = {
     state.data = data;
   },
   setFiles(state, data) {
-    const files = (state.data = data);
+    const files = state.data.find((file) => file.name === FILES)?.value;
+    if (files && Array.isArray(data)) {
+      data.forEach((item) => files.push(item));
+    }
+  },
+  removeFile(state, data) {
+    console.log(data);
+    // const files = state.data.find((file) => file.name === FILES)?.value;
+    // if (files && index !== undefined) {
+    //   files.splice(index, 1);
+    // }
   },
 };
