@@ -2,6 +2,7 @@ const FILETYPES = "FILE_TYPES";
 const FILES = "FILES";
 export const state = () => ({
   data: null,
+  fileObjects: [],
 });
 
 export const getters = {
@@ -14,6 +15,7 @@ export const getters = {
           .find((file) => file.name === FILES)
           .value.filter((fileType) => fileType.NAME === item.NAME),
       })),
+  getFileObjects: (state) => state.fileObjects,
 };
 
 export const actions = {
@@ -38,11 +40,18 @@ export const mutations = {
       data.forEach((item) => files.push(item));
     }
   },
+  setFileObjects(state, data) {
+    if (Array.isArray(data)) {
+      data.forEach((item) => state.fileObjects.push(item));
+    }
+  },
   removeFile(state, data) {
-    console.log(data);
-    // const files = state.data.find((file) => file.name === FILES)?.value;
-    // if (files && index !== undefined) {
-    //   files.splice(index, 1);
-    // }
+    const files = state.data.find((file) => file.name === FILES)?.value;
+    const { fileObjects } = state;
+    const fileObject = fileObjects.find((item) => item.name === data.FILENAME);
+    files.splice(files.indexOf(data), 1);
+    if (fileObject) {
+      fileObjects.splice(fileObjects.indexOf(fileObject), 1);
+    }
   },
 };

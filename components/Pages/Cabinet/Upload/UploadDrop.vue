@@ -14,13 +14,15 @@
               </p>
             </div>
             <div class="row">
-              <b-button @click="downloadFile(file)" title="Скачать файл"
+              <b-button
+                @click="downloadFile(file.FILENAME)"
+                title="Скачать файл"
                 >Скачать</b-button
               >
               <b-button
                 class="ml-2 mt-2"
                 type="button"
-                @click="remove(data.indexOf(file))"
+                @click="remove(file)"
                 title="Удалить файл"
               >
                 Удалить
@@ -28,9 +30,25 @@
             </div>
           </div>
         </div>
+        <div
+          v-if="isErrorSize"
+          class="col-12 mb-3"
+          v-bind:class="{ 'col-lg-4': data.length }"
+        >
+          <div class="error-container">
+            <div>Превышен суммарный объем файлов.</div>
+            <div>Вес файлов: {{ (size / 1024 / 1024).toFixed(2) }} мб</div>
+          </div>
+        </div>
         <div class="col-12 mb-3" v-bind:class="{ 'col-lg-4': data.length }">
-          <div @dragover="dragover" @drop="drop" class="dropzone-container">
+          <div
+            @dragover="dragover"
+            @drop="drop"
+            class="dropzone-container"
+            v-bind:class="{ 'error-size': isErrorSize }"
+          >
             <input
+              :disabled="isErrorSize"
               type="file"
               multiple
               style="height: 100%"
@@ -39,8 +57,13 @@
               ref="file"
               accept=".pdf,.jpg,.jpeg,.png"
             />
-            <label class="file-label">
+            <label v-if="isErrorSize === false" class="file-label">
+              <div><b>Загрузите файл</b></div>
               <div>Перетащите или загрузите файл</div>
+            </label>
+            <label v-if="isErrorSize === true" class="file-label">
+              <div><b>Максимум загружен</b></div>
+              <div>Удалите загруженный файл если хотите загрузить другой</div>
             </label>
           </div>
         </div>
@@ -58,12 +81,25 @@ export default {
       required: false,
       default: () => [],
     },
+    fileObjects: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
+    limitSize: {
+      type: Number,
+      required: false,
+      default: () => null,
+    },
   },
   methods: {
     onChange() {
-      this.$emit("update", [...this.$refs.file.files]);
+      if (this.isErrorSize === false) {
+        this.$emit("update", [...this.$refs.file.files]);
+      }
     },
-    downloadFile(file) {
+    downloadFile(name) {
+      const file = this.fileObjects.find((item) => item.name === name);
       const url = URL.createObjectURL(file);
       const a = document.createElement("a");
       a.style.display = "none";
@@ -73,8 +109,8 @@ export default {
       a.click();
       window.URL.revokeObjectURL(url);
     },
-    remove(index) {
-      this.$emit("remove", index);
+    remove(file) {
+      this.$emit("remove", file);
     },
     dragover(event) {
       event.preventDefault();
@@ -85,12 +121,33 @@ export default {
       this.onChange();
     },
   },
+  computed: {
+    size() {
+      return this.fileObjects.reduce((acc, curr) => acc + curr.size, 0);
+    },
+    isErrorSize() {
+      return this.size > this.limitSize;
+    },
+  },
 };
 </script>
 
 <style>
 .dropzone-container {
   border: 2px dashed #009639;
+  border-radius: 24px;
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+  padding: 40px;
+  text-align: center;
+}
+.error-size {
+  border: 2px dashed #dee2e6;
+}
+.error-container {
+  border: 2px solid #ed969e;
+  background-color: #f5c6cb;
   border-radius: 24px;
   overflow: hidden;
   height: 100%;

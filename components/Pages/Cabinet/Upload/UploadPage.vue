@@ -4,8 +4,10 @@
       <b>{{ item.DESCRIPTION }}</b>
       <upload-drop
         @update="changeFiles(item.NAME, $event)"
-        @remove="removeFile(item.NAME, $event)"
+        @remove="removeFile($event)"
+        :limit-size="20971520"
         :data="item.FILES"
+        :file-objects="getFileObjects"
       />
     </div>
   </div>
@@ -30,14 +32,18 @@ export default {
         NAME: name,
       }));
       this.$store.commit("uploader/setFiles", files);
+      this.$store.commit("uploader/setFileObjects", data);
     },
-    removeFile(name, index) {
-      this.$store.commit("uploader/removeFile", { name, index });
+    removeFile(file) {
+      this.$store.commit("uploader/removeFile", file);
     },
   },
   computed: {
     getData() {
       return this.$store.getters["uploader/getData"];
+    },
+    getFileObjects() {
+      return this.$store.getters["uploader/getFileObjects"];
     },
   },
 };
