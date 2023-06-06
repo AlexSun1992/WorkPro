@@ -5,7 +5,6 @@
       <upload-drop
         @update="changeFiles(item.NAME, $event)"
         @remove="removeFile($event)"
-        :limit-size="20971520"
         :data="item.FILES"
         :file-objects="getFileObjects"
         :all-size="getAllSize"
@@ -38,6 +37,12 @@ export default {
     },
     removeFile(file) {
       this.$store.commit("uploader/removeFile", file);
+    },
+    async saveDataUploader() {
+      console.log(this.$route.params);
+      await this.$store.dispatch("uploader/saveDataUploader", {
+        ...this.$route.params,
+      });
     },
   },
   computed: {

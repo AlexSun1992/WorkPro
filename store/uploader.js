@@ -1,3 +1,6 @@
+import converter from "@/converters/dataform";
+import { convertUploaderFilesToFormData } from "@/store/data_card.helpers";
+
 const FILETYPES = "FILE_TYPES";
 const FILES = "FILES";
 const FORM_SETTINGS = "FORM_SETTINGS";
@@ -18,16 +21,16 @@ export const getters = {
       })),
   getFileObjects: (state) => state.fileObjects,
   getFiles: (state) => state.data.find((type) => type.name === FILES).value,
-  getFileSettings: (state) =>
+  getFormSettings: (state) =>
     state.data.find((type) => type.name === FORM_SETTINGS).value,
   getAllSize: (state, getters) =>
     getters.getFiles.reduce((acc, curr) => acc + curr.SIZE, 0),
   isErrorSize: (state, getters) =>
-    getters.getAllSize > getters.getFileSettings.TOTAL_LIMIT,
+    getters.getAllSize > getters.getFormSettings.TOTAL_LIMIT,
 };
 
 export const actions = {
-  async fetchData({ commit, getters }, params) {
+  async fetchData({ commit }, params) {
     await this.$axios
       .get(
         `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
@@ -35,6 +38,33 @@ export const actions = {
       .then((res) => {
         commit("setData", res.data.data);
       });
+  },
+  async saveDataUploader({ commit, state, getters }, params) {
+    try {
+      const formData = new FormData();
+      const fileObjects = getters.getFileObjects;
+      const data = getters.getData;
+      data.forEach((item) => {
+        item.FILES.forEach((file) => {
+          const fileObject = fileObjects.find(
+            (obj) => obj.name === file.FILENAME
+          );
+          if (fileObject) {
+            formData.append(item.NAME, fileObject);
+          }
+        });
+      });
+      formData.append("JSON", JSON.stringify(getters.getFiles));
+      const result = await this.$axios.post(
+        `/am/main/v2/datacard2/${params.idModule}/${params.idItem}/${
+          params.idCard
+        }${params.idRel !== "undefined" ? `?rel=${params.idRel}` : ""}`,
+        formData
+      );
+      console.log(result);
+    } catch (e) {
+      console.error(e);
+    }
   },
 };
 

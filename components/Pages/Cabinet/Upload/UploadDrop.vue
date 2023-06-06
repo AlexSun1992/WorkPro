@@ -9,9 +9,9 @@
         >
           <div class="preview-card">
             <div>
-              <p :title="file.FILENAME">
-                {{ file.FILENAME }}
-              </p>
+              {{ file.FILENAME.split(".").slice(0, -1).join(".") }}.<b>{{
+                file.FILENAME.split(".").pop()
+              }}</b>
             </div>
             <div>{{ formatBytes(file.SIZE) }}</div>
             <div class="row">
@@ -104,10 +104,14 @@ export default {
     onChange() {
       if (this.isErrorSize === false) {
         this.$emit("update", [...this.$refs.file.files]);
+        this.$refs.file.value = null;
       }
     },
     downloadFile(name) {
       const file = this.fileObjects.find((item) => item.name === name);
+      if (!file) {
+        return;
+      }
       const url = URL.createObjectURL(file);
       const a = document.createElement("a");
       a.style.display = "none";

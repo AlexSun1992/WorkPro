@@ -99,6 +99,11 @@ export function createRouter() {
                 path: "list/:idModule/:idParent/:idItem/:idCard/:idRel",
                 component: Fluid,
               },
+              {
+                meta: "Cabinet",
+                path: ":idModule/:idParent/:idItem/:idCard/:idRel/uploader",
+                component: UploadPage,
+              },
             ],
           },
           {

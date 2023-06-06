@@ -40,6 +40,7 @@
       </div>
 
       <wizard-buttons
+        v-if="settingsByItem.isUploader === false"
         :current-tab="currentTab"
         :tabs="tabs"
         :qty="settings.wizard.length"
@@ -47,6 +48,11 @@
         @goNext="goNext($event)"
         @goBack="goBack($event)"
         @saveCard="saveCard($event)"
+      />
+      <wizard-uploader-buttons
+        v-if="settingsByItem.isUploader === true"
+        :loading="loading"
+        @saveUploader="saveUploader($event)"
       />
     </div>
     <div v-else>
@@ -59,10 +65,12 @@
 import VRuntimeTemplate from "v-runtime-template";
 import breadcrumbs from "~/converters/breadcrumbs";
 import wizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
+import WizardUploaderButtons from "@/components/Pages/Cabinet/Wizard/WizardUploaderButtons.vue";
 
 export default {
   name: "Wizard",
   components: {
+    WizardUploaderButtons,
     wizardButtons,
     VRuntimeTemplate,
   },
@@ -86,6 +94,11 @@ export default {
           .slice(-1)
           .pop();
       },
+    },
+    settingsByItem() {
+      return this.$store.getters["menu/getSettingsByIdItem"](
+        this.$route.params.idItem || {}
+      );
     },
     rels() {
       const rel = this.$store.getters["wizard/getWizard"]?.REL;
@@ -235,6 +248,9 @@ export default {
         }
       }
       this.loading = false;
+    },
+    async saveUploader() {
+      await this.$refs.child.saveDataUploader();
     },
   },
 };
