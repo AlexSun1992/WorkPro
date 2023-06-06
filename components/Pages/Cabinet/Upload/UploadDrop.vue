@@ -13,6 +13,7 @@
                 {{ file.FILENAME }}
               </p>
             </div>
+            <div>{{ formatBytes(file.SIZE) }}</div>
             <div class="row">
               <b-button
                 @click="downloadFile(file.FILENAME)"
@@ -37,7 +38,7 @@
         >
           <div class="error-container">
             <div>Превышен суммарный объем файлов.</div>
-            <div>Вес файлов: {{ (size / 1024 / 1024).toFixed(2) }} мб</div>
+            <div>Вес файлов: {{ formatBytes(size) }}</div>
           </div>
         </div>
         <div class="col-12 mb-3" v-bind:class="{ 'col-lg-4': data.length }">
@@ -55,13 +56,13 @@
               class="hidden-input"
               @change="onChange"
               ref="file"
-              accept=".pdf,.jpg,.jpeg,.png"
+              accept=".pdf,.jpg,.jpeg,.png,.bmp,.tif,.gif"
             />
-            <label v-if="isErrorSize === false" class="file-label">
+            <label v-if="isError === false" class="file-label">
               <div><b>Загрузите файл</b></div>
               <div>Перетащите или загрузите файл</div>
             </label>
-            <label v-if="isErrorSize === true" class="file-label">
+            <label v-if="isError === true" class="file-label">
               <div><b>Максимум загружен</b></div>
               <div>Удалите загруженный файл если хотите загрузить другой</div>
             </label>
@@ -73,6 +74,8 @@
 </template>
 
 <script>
+import { formatBytes } from "./helpers";
+
 export default {
   name: "UploadFile",
   props: {
@@ -86,10 +89,15 @@ export default {
       required: false,
       default: () => [],
     },
-    limitSize: {
+    allSize: {
       type: Number,
       required: false,
       default: () => null,
+    },
+    isErrorSize: {
+      type: Boolean,
+      required: false,
+      default: () => false,
     },
   },
   methods: {
@@ -120,13 +128,16 @@ export default {
       this.$refs.file.files = event.dataTransfer.files;
       this.onChange();
     },
+    formatBytes(size) {
+      return formatBytes(size);
+    },
   },
   computed: {
     size() {
-      return this.fileObjects.reduce((acc, curr) => acc + curr.size, 0);
+      return this.allSize;
     },
-    isErrorSize() {
-      return this.size > this.limitSize;
+    isError() {
+      return this.isErrorSize;
     },
   },
 };
@@ -168,7 +179,7 @@ export default {
   cursor: pointer;
 }
 .preview-card {
-  border: 1px solid #eff1f3;
+  border: 2px solid #009639;
   border-radius: 24px;
   overflow: hidden;
   height: 100%;

@@ -1,5 +1,6 @@
 const FILETYPES = "FILE_TYPES";
 const FILES = "FILES";
+const FORM_SETTINGS = "FORM_SETTINGS";
 export const state = () => ({
   data: null,
   fileObjects: [],
@@ -16,6 +17,13 @@ export const getters = {
           .value.filter((fileType) => fileType.NAME === item.NAME),
       })),
   getFileObjects: (state) => state.fileObjects,
+  getFiles: (state) => state.data.find((type) => type.name === FILES).value,
+  getFileSettings: (state) =>
+    state.data.find((type) => type.name === FORM_SETTINGS).value,
+  getAllSize: (state, getters) =>
+    getters.getFiles.reduce((acc, curr) => acc + curr.SIZE, 0),
+  isErrorSize: (state, getters) =>
+    getters.getAllSize > getters.getFileSettings.TOTAL_LIMIT,
 };
 
 export const actions = {

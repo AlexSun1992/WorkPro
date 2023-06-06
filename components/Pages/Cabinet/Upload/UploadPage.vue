@@ -8,6 +8,8 @@
         :limit-size="20971520"
         :data="item.FILES"
         :file-objects="getFileObjects"
+        :all-size="getAllSize"
+        :is-error-size="isErrorSize"
       />
     </div>
   </div>
@@ -44,6 +46,12 @@ export default {
     },
     getFileObjects() {
       return this.$store.getters["uploader/getFileObjects"];
+    },
+    getAllSize() {
+      return this.$store.getters["uploader/getAllSize"];
+    },
+    isErrorSize() {
+      return this.$store.getters["uploader/isErrorSize"];
     },
   },
 };
