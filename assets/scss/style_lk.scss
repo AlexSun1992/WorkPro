@@ -1684,6 +1684,20 @@ input.checkbox-hide + label:after {
   margin-top: -8px;
 }
 
+.chck-list .checkbox-hide label:after,
+.chck-list input.checkbox-hide + label:after {
+  content: "";
+  width: 34px;
+  height: 34px;
+  left: 0;
+  border: 0;
+  box-sizing: border-box;
+  top: 50%;
+  transform: translateY(-52%);
+  position: absolute;
+  background: #fff url(/img/list_green.svg) 50% 50% no-repeat !important;
+}
+
 .checkbox-btn {
   position: relative;
 }
@@ -2339,6 +2353,7 @@ a.free {
 
 .step-block.harvestmite,
 .step-block.osago,
+.step-block.apartment,
 .step-block.telemed {
   padding-bottom: 60px;
 }
@@ -2357,7 +2372,8 @@ a.free {
 
 .harvestmite .step[data-step="1"],
 .osago .step[data-step="1"],
-.telemed .step[data-step="1"] {
+.telemed .step[data-step="1"],
+.apartment .step[data-step="1"] {
   background-image: url(/img/osagostap1.svg);
 }
 
@@ -2373,7 +2389,7 @@ a.free {
 .osago .step[data-step="4"] {
   background-image: url(/img/osagostap4.svg);
 }
-
+.apartment .step[data-step="2"],
 .osago .step[data-step="5"] {
   background-image: url(/img/osagostap5.svg);
 }
