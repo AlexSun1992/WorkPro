@@ -26,7 +26,7 @@
         />
       </b-form>
     </b-modal>
-    <div v-if="data.length && isLoadedScript">
+    <div v-if="data.length && isScriptLoaded">
       <Form
         v-if="!isAccordion && !isBlock"
         class="block-profile"
@@ -61,7 +61,7 @@
       />
     </div>
     <SkeletonBox
-      v-if="!data.length || !isLoadedScript"
+      v-if="!data.length || !isScriptLoaded"
       class="mt-5"
       :items="8"
     />
@@ -74,6 +74,7 @@ import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
+import { clearScript } from "~/components/EventHandler/eventHandler.helper";
 
 let controller;
 export default {
@@ -114,8 +115,6 @@ export default {
         color: "#dddbdd",
       },
       saveSuccess: false,
-      isLoadedScript: false,
-      urlScript: null,
     };
   },
   computed: {
@@ -152,43 +151,28 @@ export default {
       return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
         ?.LCLOSEAFTERSAVE;
     },
+    isScriptLoaded() {
+      return this.$store.getters["blocks/getScriptStatus"];
+    },
   },
+
   async created() {
     try {
-      this.urlScript = `/api/card/js/${this.$route.params.idModule}/${
-        this.$route.params.idItem
-      }?time=${Date.now()}`;
-
       if (process.client) {
-        await this.$loadScript(this.urlScript)
-          .then(() => {
-            console.log("load", this.urlScript);
-          })
-          .catch(() => {
-            console.warn("load", this.urlScript);
-          });
-        this.isLoadedScript = true;
+        await this.$store.dispatch("blocks/getScript", {
+          idModule: this.$route.params.idModule,
+          idItem: this.$route.params.idItem,
+        });
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
+
       this.stripeLoaded();
     } catch (e) {
       console.warn(`Ошибка загрузки скрипта`);
     }
   },
-  async beforeDestroy() {
-    try {
-      await this.$unloadScript(this.urlScript)
-        .then(() => {
-          console.log("unload", this.urlScript);
-        })
-        .catch(() => {
-          console.error("unload", this.urlScript);
-        });
-    } catch (e) {
-      console.error(e);
-    }
-  },
+
   unmounted() {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);

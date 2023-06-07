@@ -15,6 +15,14 @@ const requestIp = require("request-ip");
 
 const IP = require("ip");
 
+const { createLogger, format, transports } = require("winston");
+const { combine, timestamp } = format;
+
+const logger = createLogger({
+  format: combine(timestamp(), format.splat(), format.json()),
+  transports: [new transports.Console()],
+});
+
 let controller;
 
 router.use(express.json());
@@ -352,12 +360,22 @@ router.post(
           ? `relaction=${req.params.relActionId}`
           : ""
       }`;
+
+      logger.log("info", `HTTP GET ${url}`, {
+        body: body,
+        userid: req?.cookies["auth.user_id"],
+      });
+
       mobile2ServiceInstance
         .post(url, body)
         .then((resp) => {
           res.send(resp.data[0]);
         })
         .catch((err) => {
+          logger.log("error", `HTTP GET ${url}`, {
+            response: err?.response?.data || err,
+            userid: req?.cookies["auth.user_id"],
+          });
           res.status(err?.response?.data.STATUS || 500).send(err.response.data);
         });
     } catch (e) {
@@ -398,20 +416,28 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       ?.cookie
       ? req.headers.cookie
       : null;
+
     const typeReq = req.params.id === 0 ? "post" : "put";
-    console.log(formConverter.save(req.body));
-    mobile2ServiceInstance[typeReq](
-      `${req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
-        req.params.idModule
-      }/${req.params.idItem}/${req.params.id}${
-        req.params.idRel !== "undefined" ? `?rel=${req.params.idRel}` : ""
-      }`,
-      formConverter.save(req.body)
-    )
+    const body = formConverter.save(req.body);
+    const url = `${
+      req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD
+    }/${req.params.idModule}/${req.params.idItem}/${req.params.id}${
+      req.params.idRel !== "undefined" ? `?rel=${req.params.idRel}` : ""
+    }`;
+    logger.log("info", `HTTP GET ${url}`, {
+      body: body,
+      userid: req?.cookies["auth.user_id"],
+    });
+
+    mobile2ServiceInstance[typeReq](url, body)
       .then((resp) => {
         res.send(resp.data[0]);
       })
       .catch((err) => {
+        logger.log("error", `HTTP GET ${url}`, {
+          response: err?.response?.data || err,
+          userid: req?.cookies["auth.user_id"],
+        });
         if (err?.response?.data) {
           res.status(err?.response?.data.STATUS || 500).send(err.response.data);
         } else {

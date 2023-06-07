@@ -8,7 +8,6 @@
     <slot><div v-text="action.SNAME"></div></slot>
   </b-button>
 </template>
-
 <script>
 import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
 
@@ -117,6 +116,8 @@ export default {
       return null;
     },
     async startAction() {
+      await eventHandler([], { actionId: this.actionId }, "actionClicked");
+
       if (this.action.NTYPE === 2) {
         if (this.action.SCONST) {
           const invalidRowID = this.rowId === null || this.rowId === undefined;
@@ -164,6 +165,7 @@ export default {
       }
     },
   },
+
   computed: {
     action: {
       get() {

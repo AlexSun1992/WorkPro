@@ -1,4 +1,8 @@
 import axios, { Axios } from "axios";
+import {
+  updateScript,
+  clearScript,
+} from "../components/EventHandler/eventHandler.helper";
 
 export const state = () => ({
   blocks: [],
@@ -12,9 +16,12 @@ export const state = () => ({
   searchParams: null,
   PoutValue: "",
   requestFinish: false,
+  isLoadedScript: false,
 });
 
 export const getters = {
+  getScriptStatus: (state) => state.isLoadedScript,
+
   getServerFilters: (state) => state.serverFilters,
 
   getRequestStatus: (state) => state.requestFinish,
@@ -72,7 +79,36 @@ export const getters = {
   getUrl: (state) => state.PoutValue,
 };
 
+let cachedController = null;
+let cacheKey = null;
+let cachedPromised = null;
+
 export const actions = {
+  async getScript({ commit, state }, payload) {
+    if (global.window) {
+      if (cacheKey !== payload.idItem) {
+        cachedController?.abort();
+        await cachedPromised?.catch(() => null);
+        commit("scriptLoaded", false);
+        cacheKey = payload.idItem;
+        cachedController = new AbortController();
+        clearScript();
+        cachedPromised = fetch(
+          `/api/card/js/${payload.idModule}/${
+            payload.idItem
+          }?time=${Date.now()}`,
+          {
+            method: "GET",
+            signal: cachedController.signal,
+          }
+        )
+          .then((res) => res.text())
+          .then((scriptText) => updateScript(scriptText))
+          .then(() => commit("scriptLoaded", true));
+      }
+      await cachedPromised;
+    }
+  },
   async fetchForm({ commit, dispatch }, { moduleId, menuId, itemId }) {
     await this.$axios
       .get(`/api/card/${moduleId}/${menuId}/${itemId}`)
@@ -222,6 +258,10 @@ export const actions = {
 };
 
 export const mutations = {
+  scriptLoaded(state, status) {
+    state.isLoadedScript = status;
+  },
+
   setPoutValue(state, address) {
     state.PoutValue = address;
   },

@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import formatter from "../../../converters/list";
 function getTypeByKey(fields, key) {
   for (let i = 0; i < fields.length; i++) {
@@ -80,9 +79,7 @@ export default {
       selectedIndex: null,
     };
   },
-  components: {
-    PulseLoader,
-  },
+
   props: {
     action: {
       type: Boolean,

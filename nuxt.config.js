@@ -1,4 +1,6 @@
-/* eslint-disable */
+const { format, transports } = require("winston");
+
+const { combine, timestamp, prettyPrint } = format;
 module.exports = {
   target: "universal",
   telemetry: false,
@@ -33,8 +35,8 @@ module.exports = {
         href: "/export/system/modules/ru.reso.v2/resources/img/favicon.svg",
       },
     ],
-    //script: [
-    //],
+    // script: [
+    // ],
   },
   /*
    ** Customize the progress-bar color
@@ -46,12 +48,12 @@ module.exports = {
   css: [
     { src: "~/assets/scss/font2022", lang: "scss" },
     { src: "~/assets/scss/style2022", lang: "scss" },
-    /*{ src: "~/assets/scss/bootstrap/bootstrap", lang: "scss" },
+    /* { src: "~/assets/scss/bootstrap/bootstrap", lang: "scss" },
                     { src: "~/assets/scss/bootstrap/bootstrap-grid", lang: "scss" },
                     { src: "~/assets/scss/bootstrap/bootstrap-reboot", lang: "scss" },
                     { src: "~/assets/scss/bootstrap/modal", lang: "scss" },
                     { src: "~/assets/scss/font", lang: "scss" },
-                    { src: "~/assets/scss/_custom", lang: "scss" },*/
+                    { src: "~/assets/scss/_custom", lang: "scss" }, */
   ],
   /*
    ** Plugins to load before mounting the App
@@ -75,8 +77,12 @@ module.exports = {
     { src: "~/plugins/tooltip.js", ssr: false },
     "~/plugins/vueLog.js",
     "~/plugins/Vue2TouchEvents.js",
-    { src: "~/plugins/YandexMetrika.js", ssr: false },
     { src: "~/plugins/YandexMap.js", mode: "client" },
+    {
+      src: "~/plugins/YandexMetrika",
+      mode: "client",
+      ssr: false,
+    },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -93,10 +99,21 @@ module.exports = {
     ["cookie-universal-nuxt", { alias: "cookiz" }],
     "@nuxtjs/sentry",
     "@nuxtjs/gtm",
+    "nuxt-winston-log",
   ],
   gtm: {
     id: "GTM-TVNGH3X",
     enabled: true,
+  },
+  winstonLog: {
+    useDefaultLogger: false,
+    autoCreateLogPath: false,
+    skipRequestMiddlewareHandler: true,
+    skipErrorMiddlewareHandler: true,
+    loggerOptions: {
+      format: combine(timestamp(), format.splat(), format.json()),
+      transports: [new transports.Console()],
+    },
   },
   sentry: {
     dsn: "https://a4361f5b792b485684f3c14070509b8f@sentry.reso.ru/8", // Enter your project's DSN here
@@ -169,8 +186,8 @@ module.exports = {
           // login: { url: 'http://localhost:8000/api/authorize', method: 'post' },
           login: { url: "/am/auth/v2/authorize", method: "post" },
           refresh: { url: "/api/token_refresh", method: "post" },
-          //user: { url: "/api/userinfo", method: "get" },
-          //user: { url: "/am/main/v2/userinfo", method: "get" },
+          // user: { url: "/api/userinfo", method: "get" },
+          // user: { url: "/am/main/v2/userinfo", method: "get" },
           user: false,
           logout: false,
         },
@@ -185,6 +202,14 @@ module.exports = {
       user: false,
     },
     plugins: ["~/plugins/auth/auth.js"],
+    cookie: {
+      prefix: "auth.",
+      options: {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 400,
+        secure: true,
+      },
+    },
   },
   server: {
     port: 8000,
