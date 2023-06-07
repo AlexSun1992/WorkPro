@@ -45,6 +45,9 @@ export const getters = {
   },
   isInValidFiles: (state, getters) =>
     getters.getData.some((item) => {
+      if (getters.getFileObjects.length === 0) {
+        return true;
+      }
       if (getters.isErrorSize) {
         return true;
       }
