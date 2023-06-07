@@ -10,8 +10,7 @@
           <div
             class="preview-card"
             v-bind:class="{
-              'error-card':
-                file.SIZE === currentMaxFileSize && isErrorMaxFileSize,
+              'error-card': file.SIZE > maxFileSize,
             }"
           >
             <div>
@@ -20,8 +19,8 @@
               }}</b>
             </div>
             <div>{{ formatBytes(file.SIZE) }}</div>
-            <div v-if="file.SIZE === currentMaxFileSize && isErrorMaxFileSize">
-              Размер файла не должен превышать
+            <div v-if="file.SIZE > maxFileSize">
+              Превышен допустимый размер файла -
               {{ formatBytes(maxFileSize) }}
             </div>
             <div class="row">
@@ -48,8 +47,9 @@
           v-bind:class="{ 'col-lg-4': data.length }"
         >
           <div class="error-container">
-            <div>Превышен суммарный объем файлов.</div>
-            <div>Вес файлов: {{ formatBytes(size) }}</div>
+            <div>
+              Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
+            </div>
           </div>
         </div>
         <div
@@ -131,6 +131,10 @@ export default {
       type: Number,
       required: false,
     },
+    totalLimit: {
+      type: Number,
+      required: false,
+    },
   },
   methods: {
     onChange() {
@@ -180,9 +184,6 @@ export default {
     },
     isError() {
       return this.isErrorSize;
-    },
-    isErrorMaxFileSize() {
-      return this.currentMaxFileSize > this.maxFileSize;
     },
     isErrorMaxFileCount() {
       return this.data.length > this.maxFileCount;
@@ -237,5 +238,6 @@ export default {
 }
 .error-card {
   border: 2px solid #ed969e;
+  background-color: #f5c6cb;
 }
 </style>

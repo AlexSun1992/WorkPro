@@ -2,7 +2,7 @@
   <div class="mt-4 buttons row">
     <div class="col-auto">
       <b-button
-        :disabled="loading || !isValidFiles"
+        :disabled="loading || isInValidFiles"
         variant="success"
         @click="saveUploader"
       >
@@ -56,8 +56,8 @@ export default {
     },
   },
   computed: {
-    isValidFiles() {
-      return this.$store.getters["uploader/isValidFiles"];
+    isInValidFiles() {
+      return this.$store.getters["uploader/isInValidFiles"];
     },
   },
 };

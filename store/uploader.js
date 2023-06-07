@@ -43,20 +43,20 @@ export const getters = {
     }
     return getErrorMessage(getters.getDataError);
   },
-  isValidFiles: (state, getters) =>
+  isInValidFiles: (state, getters) =>
     getters.getData.some((item) => {
       if (getters.isErrorSize) {
-        return false;
+        return true;
       }
       if (item.FILES.length > item.MAX_FILE_COUNT) {
-        return false;
+        return true;
       }
       if (
         Math.max(...item.FILES.map((file) => file.SIZE)) > item.MAX_FILE_SIZE
       ) {
-        return false;
+        return true;
       }
-      return true;
+      return false;
     }),
 };
 

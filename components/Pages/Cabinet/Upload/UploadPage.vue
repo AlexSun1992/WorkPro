@@ -1,7 +1,9 @@
 <template>
   <div class="col-lg-12">
+    <h1>Загрузите документы</h1>
     <div v-for="(item, i) in getData" :key="i">
-      <b>{{ item.DESCRIPTION }}</b>
+      <b>{{ item.TITLE }}</b>
+      <p></p>
       <upload-drop
         @update="changeFiles(item.NAME, $event)"
         @remove="removeFile($event)"
@@ -12,6 +14,7 @@
         :is-loading="isLoading"
         :max-file-count="item.MAX_FILE_COUNT"
         :max-file-size="item.MAX_FILE_SIZE"
+        :total-limit="getFormSettings.TOTAL_LIMIT"
       />
     </div>
     <div class="row">
@@ -82,7 +85,10 @@ export default {
       return this.$store.getters["uploader/isLoading"];
     },
     isValidFiles() {
-      return this.$store.getters["uploader/isValidFiles"];
+      return this.$store.getters["uploader/isInValidFiles"];
+    },
+    getFormSettings() {
+      return this.$store.getters["uploader/getFormSettings"];
     },
   },
 };
