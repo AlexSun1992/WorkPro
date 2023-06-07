@@ -1176,6 +1176,9 @@ footer .copyright a:hover {
   margin-top: 31px;
 }
 
+.mt-checkbox {
+  margin-top: 45px;
+}
 .mt-btn-form-3 {
   margin-top: 27px;
 }
@@ -1187,6 +1190,9 @@ footer .copyright a:hover {
 }
 
 @media (max-width: 992px) {
+  .mt-checkbox {
+    margin-top: 0;
+  }
   .border-block > .nav .title,
   .nb-block > .nav .title {
     font-weight: 700;
@@ -1684,6 +1690,10 @@ input.checkbox-hide + label:after {
   margin-top: -8px;
 }
 
+.chck-list .checkbox-hide label:before,
+.chck-list input.checkbox-hide + label:before {
+  display: none;
+}
 .chck-list .checkbox-hide label:after,
 .chck-list input.checkbox-hide + label:after {
   content: "";
