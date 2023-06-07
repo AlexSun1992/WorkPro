@@ -1176,7 +1176,7 @@ footer .copyright a:hover {
   margin-top: 31px;
 }
 
-.mt-checkbox {
+.mt-chck {
   margin-top: 45px;
 }
 .mt-btn-form-3 {
@@ -1190,7 +1190,7 @@ footer .copyright a:hover {
 }
 
 @media (max-width: 992px) {
-  .mt-checkbox {
+  .mt-chck {
     margin-top: 0;
   }
   .border-block > .nav .title,
@@ -2411,6 +2411,7 @@ a.free {
 }
 .apartment .step[data-step="2"] {
   background-image: url(/img/osagostap7.svg);
+  background-size: 24px;
 }
 
 .my-policy {
