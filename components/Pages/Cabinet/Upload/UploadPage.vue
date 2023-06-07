@@ -10,6 +10,8 @@
         :all-size="getAllSize"
         :is-error-size="isErrorSize"
         :is-loading="isLoading"
+        :max-file-count="item.MAX_FILE_COUNT"
+        :max-file-size="item.MAX_FILE_SIZE"
       />
     </div>
     <div class="row">
@@ -78,6 +80,9 @@ export default {
     },
     isLoading() {
       return this.$store.getters["uploader/isLoading"];
+    },
+    isValidFiles() {
+      return this.$store.getters["uploader/isValidFiles"];
     },
   },
 };

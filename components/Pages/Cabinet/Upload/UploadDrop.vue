@@ -7,13 +7,23 @@
           :key="file.FILENAME"
           class="col-12 col-lg-4 mb-3"
         >
-          <div class="preview-card">
+          <div
+            class="preview-card"
+            v-bind:class="{
+              'error-card':
+                file.SIZE === currentMaxFileSize && isErrorMaxFileSize,
+            }"
+          >
             <div>
               {{ file.FILENAME.split(".").slice(0, -1).join(".") }}.<b>{{
                 file.FILENAME.split(".").pop()
               }}</b>
             </div>
             <div>{{ formatBytes(file.SIZE) }}</div>
+            <div v-if="file.SIZE === currentMaxFileSize && isErrorMaxFileSize">
+              Размер файла не должен превышать
+              {{ formatBytes(maxFileSize) }}
+            </div>
             <div class="row">
               <b-button
                 @click="downloadFile(file.FILENAME)"
@@ -33,7 +43,7 @@
           </div>
         </div>
         <div
-          v-if="isErrorSize"
+          v-if="isError"
           class="col-12 mb-3"
           v-bind:class="{ 'col-lg-4': data.length }"
         >
@@ -42,15 +52,19 @@
             <div>Вес файлов: {{ formatBytes(size) }}</div>
           </div>
         </div>
-        <div class="col-12 mb-3" v-bind:class="{ 'col-lg-4': data.length }">
+        <div
+          v-if="isError === false"
+          class="col-12 mb-3"
+          v-bind:class="{ 'col-lg-4': data.length }"
+        >
           <div
             @dragover="dragover"
             @drop="drop"
             class="dropzone-container"
-            v-bind:class="{ 'error-size': isErrorSize }"
+            v-bind:class="{ 'error-size': isError }"
           >
             <input
-              :disabled="isErrorSize || isLoading"
+              :disabled="isError || isLoading || isErrorMaxFileCount"
               type="file"
               multiple
               style="height: 100%"
@@ -59,12 +73,16 @@
               ref="file"
               accept=".pdf,.jpg,.jpeg,.png,.bmp,.tif,.gif"
             />
-            <label v-if="isError === false" class="file-label">
+            <label v-if="isErrorMaxFileCount === false" class="file-label">
               <div><b>Загрузите файл</b></div>
               <div>Перетащите или загрузите файл</div>
             </label>
-            <label v-if="isError === true" class="file-label">
+            <label v-if="isErrorMaxFileCount === true" class="file-label">
               <div><b>Максимум загружен</b></div>
+              <div>
+                Количество файлов для этой группы не должно быть больше
+                {{ maxFileCount }}
+              </div>
               <div>Удалите загруженный файл если хотите загрузить другой</div>
             </label>
           </div>
@@ -104,6 +122,14 @@ export default {
       type: Boolean,
       required: false,
       default: () => false,
+    },
+    maxFileSize: {
+      type: Number,
+      required: false,
+    },
+    maxFileCount: {
+      type: Number,
+      required: false,
     },
   },
   methods: {
@@ -146,8 +172,20 @@ export default {
     size() {
       return this.allSize;
     },
+    sizeGroup() {
+      return this.data.reduce((acc, curr) => acc + curr.SIZE, 0);
+    },
+    currentMaxFileSize() {
+      return Math.max(...this.data.map((item) => item.SIZE));
+    },
     isError() {
       return this.isErrorSize;
+    },
+    isErrorMaxFileSize() {
+      return this.currentMaxFileSize > this.maxFileSize;
+    },
+    isErrorMaxFileCount() {
+      return this.data.length > this.maxFileCount;
     },
   },
 };
@@ -196,5 +234,8 @@ export default {
   position: relative;
   padding: 40px;
   text-align: center;
+}
+.error-card {
+  border: 2px solid #ed969e;
 }
 </style>

@@ -43,6 +43,21 @@ export const getters = {
     }
     return getErrorMessage(getters.getDataError);
   },
+  isValidFiles: (state, getters) =>
+    getters.getData.some((item) => {
+      if (getters.isErrorSize) {
+        return false;
+      }
+      if (item.FILES.length > item.MAX_FILE_COUNT) {
+        return false;
+      }
+      if (
+        Math.max(...item.FILES.map((file) => file.SIZE)) > item.MAX_FILE_SIZE
+      ) {
+        return false;
+      }
+      return true;
+    }),
 };
 
 export const actions = {

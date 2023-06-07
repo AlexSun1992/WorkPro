@@ -1,7 +1,11 @@
 <template>
   <div class="mt-4 buttons row">
     <div class="col-auto">
-      <b-button :disabled="loading" variant="success" @click="saveUploader">
+      <b-button
+        :disabled="loading || !isValidFiles"
+        variant="success"
+        @click="saveUploader"
+      >
         Отправить документы
         <b-spinner v-if="loading" variant="danger" label="Spinning" />
       </b-button>
@@ -49,6 +53,11 @@ export default {
     },
     goBack() {
       global.history.back();
+    },
+  },
+  computed: {
+    isValidFiles() {
+      return this.$store.getters["uploader/isValidFiles"];
     },
   },
 };
