@@ -1,5 +1,4 @@
-import converter from "@/converters/dataform";
-import { convertUploaderFilesToFormData } from "@/store/data_card.helpers";
+import { getErrorMessage } from "../utils/transform";
 
 const FILETYPES = "FILE_TYPES";
 const FILES = "FILES";
@@ -7,6 +6,10 @@ const FORM_SETTINGS = "FORM_SETTINGS";
 export const state = () => ({
   data: null,
   fileObjects: [],
+  isLoading: false,
+  isLoadSuccessFull: null,
+  dataSuccess: null,
+  dataError: null,
 });
 
 export const getters = {
@@ -27,6 +30,19 @@ export const getters = {
     getters.getFiles.reduce((acc, curr) => acc + curr.SIZE, 0),
   isErrorSize: (state, getters) =>
     getters.getAllSize > getters.getFormSettings.TOTAL_LIMIT,
+  isLoadSuccessFull: (state) => state.isLoadSuccessFull,
+  isLoading: (state) => state.isLoading,
+  getDataSuccess: (state) => state.dataSuccess,
+  getDataError: (state) => state.dataError,
+  getErrorMessage: (state, getters) => {
+    if (!getters.getDataError) {
+      return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
+    }
+    if (typeof getErrorMessage(getters.getDataError) === "object") {
+      return getErrorMessage(getters.getDataError)?.description;
+    }
+    return getErrorMessage(getters.getDataError);
+  },
 };
 
 export const actions = {
@@ -50,20 +66,28 @@ export const actions = {
             (obj) => obj.name === file.FILENAME
           );
           if (fileObject) {
-            formData.append(item.NAME, fileObject);
+            const uploadFile = new File([fileObject], fileObject.name, {
+              type: "field/blob",
+            });
+            formData.append(item.NAME, uploadFile);
           }
         });
       });
       formData.append("JSON", JSON.stringify(getters.getFiles));
+      commit("setLoading", true);
       const result = await this.$axios.post(
         `/am/main/v2/datacard2/${params.idModule}/${params.idItem}/${
           params.idCard
         }${params.idRel !== "undefined" ? `?rel=${params.idRel}` : ""}`,
         formData
       );
-      console.log(result);
+      commit("setLoadSuccessFull", true);
+      commit("setDataSuccess", result);
     } catch (e) {
-      console.error(e);
+      commit("setLoadSuccessFull", false);
+      commit("setDataError", e?.response?.data);
+    } finally {
+      commit("setLoading", false);
     }
   },
 };
@@ -91,5 +115,17 @@ export const mutations = {
     if (fileObject) {
       fileObjects.splice(fileObjects.indexOf(fileObject), 1);
     }
+  },
+  setLoadSuccessFull(state, data) {
+    state.isLoadSuccessFull = data;
+  },
+  setDataSuccess(state, data) {
+    state.dataSuccess = data;
+  },
+  setDataError(state, data) {
+    state.dataError = data || null;
+  },
+  setLoading(state, data) {
+    state.isLoading = data;
   },
 };

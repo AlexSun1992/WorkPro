@@ -18,7 +18,37 @@ export default {
   props: ["loading"],
   methods: {
     async saveUploader() {
-      this.$emit("saveUploader");
+      const h = this.$createElement;
+      const titleVNode = h("div", {
+        domProps: {
+          innerHTML:
+            "<b>Вы уверены?</b><br>Убедитесь, что документы прикреплены корректно и Вы ничего не забыли. <br>Повторно отправить документы нельзя.",
+        },
+      });
+      this.$bvModal
+        .msgBoxConfirm(titleVNode, {
+          title: "Вы уверены?",
+          size: "md",
+          buttonSize: "md",
+          okVariant: "success",
+          okTitle: "Да, отправить",
+          cancelTitle: "Нет, передумал",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          modalClass: ["cabinet"],
+          centered: true,
+        })
+        .then((value) => {
+          if (value) {
+            this.$emit("saveUploader");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    goBack() {
+      global.history.back();
     },
   },
 };

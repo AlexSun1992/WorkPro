@@ -21,6 +21,7 @@
                 >Скачать</b-button
               >
               <b-button
+                :disabled="isLoading"
                 class="ml-2 mt-2"
                 type="button"
                 @click="remove(file)"
@@ -49,7 +50,7 @@
             v-bind:class="{ 'error-size': isErrorSize }"
           >
             <input
-              :disabled="isErrorSize"
+              :disabled="isErrorSize || isLoading"
               type="file"
               multiple
               style="height: 100%"
@@ -99,10 +100,15 @@ export default {
       required: false,
       default: () => false,
     },
+    isLoading: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
   },
   methods: {
     onChange() {
-      if (this.isErrorSize === false) {
+      if (this.isErrorSize === false && this.isLoading === false) {
         this.$emit("update", [...this.$refs.file.files]);
         this.$refs.file.value = null;
       }

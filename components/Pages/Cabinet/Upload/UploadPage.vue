@@ -9,8 +9,21 @@
         :file-objects="getFileObjects"
         :all-size="getAllSize"
         :is-error-size="isErrorSize"
+        :is-loading="isLoading"
       />
     </div>
+    <div class="row">
+      <div class="col-12">
+        <b-alert
+          data-testid="danger-alert"
+          :show="isError"
+          variant="danger"
+          class="mt-3 mb-0"
+          v-html="getErrorMessage"
+        />
+      </div>
+    </div>
+    <!--    <button @click="saveDataUploader">Отправить</button>-->
   </div>
 </template>
 
@@ -39,7 +52,6 @@ export default {
       this.$store.commit("uploader/removeFile", file);
     },
     async saveDataUploader() {
-      console.log(this.$route.params);
       await this.$store.dispatch("uploader/saveDataUploader", {
         ...this.$route.params,
       });
@@ -57,6 +69,15 @@ export default {
     },
     isErrorSize() {
       return this.$store.getters["uploader/isErrorSize"];
+    },
+    getErrorMessage() {
+      return this.$store.getters["uploader/getErrorMessage"];
+    },
+    isError() {
+      return this.$store.getters["uploader/isLoadSuccessFull"] === false;
+    },
+    isLoading() {
+      return this.$store.getters["uploader/isLoading"];
     },
   },
 };
