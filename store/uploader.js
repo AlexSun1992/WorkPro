@@ -45,13 +45,13 @@ export const getters = {
   },
   isInValidFiles: (state, getters) =>
     getters.getData.some((item) => {
-      if (getters.getFileObjects.length === 0) {
-        return true;
-      }
       if (getters.isErrorSize) {
         return true;
       }
       if (item.FILES.length > item.MAX_FILE_COUNT) {
+        return true;
+      }
+      if (item.FILES.length < item.MIN_FILE_COUNT) {
         return true;
       }
       if (
