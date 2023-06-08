@@ -1506,6 +1506,7 @@ textarea {
   font-weight: 400;
   font-size: 1rem;
   color: #686868;
+  text-overflow: ellipsis;
 }
 
 .form-control.disabled,
@@ -3409,6 +3410,9 @@ textarea {
   position: absolute;
   margin-left: 6px;
 }
+.checkbox-hide .tooltipster {
+  margin-top: -1px;
+}
 
 @media (max-width: 992px) {
   .btn-primary.btn-download,
@@ -4761,6 +4765,10 @@ a.color-l-green:hover {
   color: #292929;
 }
 @media (max-width: 992px) {
+  [__tooltip__].tooltip--position-top::before,
+  [__tooltip__].tooltip--position-top::after {
+    display: none !important;
+  }
   .block-allert-title {
     font-size: 1.25rem;
   }
@@ -4917,4 +4925,7 @@ a.color-l-green:hover {
   content: "";
   top: 0;
   right: 0;
+}
+.is-valid input.autocomplete-input {
+  padding-right: 40px !important;
 }
