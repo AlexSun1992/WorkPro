@@ -54,3 +54,19 @@ export function isBlackListOfRoute(idModule, idParent, idItem) {
   }
   return false;
 }
+
+export function generateRedirectURLWithRef(redirectUrl, ref) {
+  let url;
+  try {
+    url = new URL(redirectUrl);
+    url.searchParams.set("ref", ref);
+    url = url.href;
+  } catch {
+    url = new URL(redirectUrl, "https://fake.ru");
+    if (ref) {
+      url.searchParams.set("ref", ref);
+    }
+    url = url.pathname + url.search;
+  }
+  return url;
+}

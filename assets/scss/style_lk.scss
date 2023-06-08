@@ -1176,6 +1176,9 @@ footer .copyright a:hover {
   margin-top: 31px;
 }
 
+.mt-chck {
+  margin-top: 45px;
+}
 .mt-btn-form-3 {
   margin-top: 27px;
 }
@@ -1187,6 +1190,9 @@ footer .copyright a:hover {
 }
 
 @media (max-width: 992px) {
+  .mt-chck {
+    margin-top: 0;
+  }
   .border-block > .nav .title,
   .nb-block > .nav .title {
     font-weight: 700;
@@ -1500,6 +1506,7 @@ textarea {
   font-weight: 400;
   font-size: 1rem;
   color: #686868;
+  text-overflow: ellipsis;
 }
 
 .form-control.disabled,
@@ -1682,6 +1689,24 @@ input.checkbox-hide + label:after {
   z-index: 1;
   top: 50%;
   margin-top: -8px;
+}
+
+.chck-list .checkbox-hide label:before,
+.chck-list input.checkbox-hide + label:before {
+  display: none;
+}
+.chck-list .checkbox-hide label:after,
+.chck-list input.checkbox-hide + label:after {
+  content: "";
+  width: 34px;
+  height: 34px;
+  left: 0;
+  border: 0;
+  box-sizing: border-box;
+  top: 50%;
+  transform: translateY(-52%);
+  position: absolute;
+  background: #fff url(/img/list_green.svg) 50% 50% no-repeat !important;
 }
 
 .checkbox-btn {
@@ -2339,6 +2364,7 @@ a.free {
 
 .step-block.harvestmite,
 .step-block.osago,
+.step-block.apartment,
 .step-block.telemed {
   padding-bottom: 60px;
 }
@@ -2357,7 +2383,8 @@ a.free {
 
 .harvestmite .step[data-step="1"],
 .osago .step[data-step="1"],
-.telemed .step[data-step="1"] {
+.telemed .step[data-step="1"],
+.apartment .step[data-step="1"] {
   background-image: url(/img/osagostap1.svg);
 }
 
@@ -2382,6 +2409,10 @@ a.free {
 .osago .step[data-step="6"],
 .telemed .step[data-step="3"] {
   background-image: url(/img/osagostap6.svg);
+}
+.apartment .step[data-step="2"] {
+  background-image: url(/img/osagostap7.svg);
+  background-size: 24px;
 }
 
 .my-policy {
@@ -3374,10 +3405,18 @@ textarea {
   background: url(/img/tooltip.svg) 50% 50% no-repeat;
   font-size: 0;
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   position: absolute;
   margin-left: 6px;
+  background-size: contain;
+  margin-top: -3px;
+}
+.form-group label .tooltipster {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  margin-top: 3px;
 }
 
 @media (max-width: 992px) {
@@ -4360,12 +4399,10 @@ h6 {
     left: 50%;
     top: 55px;
   }
-  .telemed > div,
-  .harvestmite > div {
+  .step-block > div {
     min-height: 55px;
   }
-  .telemed .step,
-  .harvestmite .step {
+  .step-block .step {
     position: absolute;
     left: 50%;
     margin-left: -24px;
@@ -4731,6 +4768,10 @@ a.color-l-green:hover {
   color: #292929;
 }
 @media (max-width: 992px) {
+  [__tooltip__].tooltip--position-top::before,
+  [__tooltip__].tooltip--position-top::after {
+    display: none !important;
+  }
   .block-allert-title {
     font-size: 1.25rem;
   }
@@ -4887,4 +4928,7 @@ a.color-l-green:hover {
   content: "";
   top: 0;
   right: 0;
+}
+.is-valid input.autocomplete-input {
+  padding-right: 40px !important;
 }
