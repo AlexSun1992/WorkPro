@@ -1,4 +1,5 @@
 import { isCriticalError } from "@/plugins/auth/toast.helper";
+import { generateRedirectURLWithRef } from "@/middleware/router.helper";
 
 export default function ({
   app,
@@ -37,10 +38,16 @@ export default function ({
             $auth.logout().then(() => {
               if (process.client) {
                 if (window !== undefined) {
-                  window.location.href = `/login?ref=${app.router.history.current.fullPath}`;
+                  window.location.href = `${generateRedirectURLWithRef(
+                    app.router.history.current.fullPath
+                  )}`;
                 }
               } else {
-                redirect(`/login?ref=${app.router.history.current.fullPath}`);
+                redirect(
+                  `${generateRedirectURLWithRef(
+                    app.router.history.current.fullPath
+                  )}`
+                );
               }
             });
             return null;

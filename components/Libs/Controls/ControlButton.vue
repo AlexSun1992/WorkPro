@@ -46,7 +46,6 @@ export default {
         if (updatedFields) {
           this.$store.commit("data_card/setForm", updatedFields || fields);
           const isError = updatedFields.some((item) => item.error === true);
-
           if (isError) {
             return;
           }
