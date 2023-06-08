@@ -3405,13 +3405,18 @@ textarea {
   background: url(/img/tooltip.svg) 50% 50% no-repeat;
   font-size: 0;
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   position: absolute;
   margin-left: 6px;
+  background-size: contain;
+  margin-top: -3px;
 }
-.checkbox-hide .tooltipster {
-  margin-top: -1px;
+.form-group label .tooltipster {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  margin-top: 3px;
 }
 
 @media (max-width: 992px) {
@@ -4394,12 +4399,10 @@ h6 {
     left: 50%;
     top: 55px;
   }
-  .telemed > div,
-  .harvestmite > div {
+  .step-block > div {
     min-height: 55px;
   }
-  .telemed .step,
-  .harvestmite .step {
+  .step-block .step {
     position: absolute;
     left: 50%;
     margin-left: -24px;
