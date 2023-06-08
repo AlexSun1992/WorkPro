@@ -51,7 +51,7 @@
           Сохранить
         </b-button>
       </div>
-      <div class="col-auto">
+      <div class="col-auto" v-if="isButtonCancel">
         <b-button
           pill
           type="button"
@@ -109,6 +109,9 @@ export default {
     },
     isButtonSave() {
       return this.$store.getters["data_card/getBtnSave"];
+    },
+    isButtonCancel() {
+      return this.$store.getters["data_card/getBtnCancel"];
     },
     isReadOnly() {
       return (
