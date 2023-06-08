@@ -15,6 +15,7 @@
         :max-file-count="item.MAX_FILE_COUNT"
         :max-file-size="item.MAX_FILE_SIZE"
         :total-limit="getFormSettings.TOTAL_LIMIT"
+        :file-extensions="getFormSettings.FILE_EXTENSIONS"
       />
     </div>
     <div class="row">
