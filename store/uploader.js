@@ -94,7 +94,7 @@ export const actions = {
           }
         });
       });
-      formData.append("JSON", JSON.stringify(getters.getFiles));
+      formData.append("JSON", JSON.stringify({ FILES: getters.getFiles }));
       commit("setLoading", true);
       commit("setDataError", null);
       controller = new AbortController();
