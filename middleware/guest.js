@@ -1,4 +1,7 @@
-import { isBlackListOfRoute } from "./router.helper";
+import {
+  isBlackListOfRoute,
+  generateRedirectURLWithRef,
+} from "./router.helper";
 
 export default async function ({ store, redirect, route, $auth, $cookiz }) {
   store.commit("data_card/clearFormData");
@@ -9,13 +12,13 @@ export default async function ({ store, redirect, route, $auth, $cookiz }) {
   if (process.server) {
     if (!$auth.loggedIn) {
       await $auth.logout();
-      redirect(`/login?ref=${route.fullPath}`);
+      redirect(generateRedirectURLWithRef("/login", route.fullPath));
     }
   }
   if (process.client) {
     if (!$cookiz.get("auth._token.local")) {
       await $auth.logout();
-      redirect(`/login?ref=${route.fullPath}`);
+      redirect(generateRedirectURLWithRef("/login", route.fullPath));
     }
   }
   if ($auth.loggedIn) {
@@ -27,7 +30,6 @@ export default async function ({ store, redirect, route, $auth, $cookiz }) {
         route.params.idItem
       ) === true
     ) {
-      re;
       redirect("/error");
     }
   }

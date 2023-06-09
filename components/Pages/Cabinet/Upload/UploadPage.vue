@@ -15,20 +15,34 @@
         :max-file-count="item.MAX_FILE_COUNT"
         :max-file-size="item.MAX_FILE_SIZE"
         :total-limit="getFormSettings.TOTAL_LIMIT"
+        :file-extensions="getFormSettings.FILE_EXTENSIONS"
       />
     </div>
     <div class="row">
       <div class="col-12">
         <b-alert
           data-testid="danger-alert"
-          :show="isError"
+          :show="getErrorMessage"
           variant="danger"
           class="mt-3 mb-0"
           v-html="getErrorMessage"
         />
       </div>
     </div>
-    <!--    <button @click="saveDataUploader">Отправить</button>-->
+    <b-progress v-if="isLoading" class="mt-2" :max="max" show-value>
+      <b-progress-bar
+        :value="getProgressValue"
+        variant="success"
+      ></b-progress-bar>
+    </b-progress>
+    <b-button
+      v-if="isLoading"
+      variant="success"
+      @click="canselUploading"
+      class="mt-3"
+    >
+      Отменить загрузку файлов
+    </b-button>
   </div>
 </template>
 
@@ -42,6 +56,12 @@ export default {
     await store.dispatch("uploader/fetchData", {
       ...route.params,
     });
+  },
+  data() {
+    return {
+      value: 45,
+      max: 100,
+    };
   },
   methods: {
     changeFiles(name, data) {
@@ -60,6 +80,9 @@ export default {
       await this.$store.dispatch("uploader/saveDataUploader", {
         ...this.$route.params,
       });
+    },
+    canselUploading() {
+      this.$store.dispatch("uploader/cancelUploading");
     },
   },
   computed: {
@@ -84,11 +107,14 @@ export default {
     isLoading() {
       return this.$store.getters["uploader/isLoading"];
     },
-    isValidFiles() {
+    isInValidFiles() {
       return this.$store.getters["uploader/isInValidFiles"];
     },
     getFormSettings() {
       return this.$store.getters["uploader/getFormSettings"];
+    },
+    getProgressValue() {
+      return this.$store.getters["uploader/getProgressValue"];
     },
   },
 };
