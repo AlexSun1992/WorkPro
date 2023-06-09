@@ -1,93 +1,75 @@
 <template>
   <div class="nb-block mb-4">
-    <div>
-      <div class="row">
-        <div
-          v-for="file in data"
-          :key="file.FILENAME"
-          class="col-12 col-lg-4 mb-3"
-        >
-          <div
-            class="preview-card"
-            v-bind:class="{
-              'error-card': file.SIZE > maxFileSize,
-            }"
-          >
-            <div>
-              {{ file.FILENAME.split(".").slice(0, -1).join(".") }}.<b>{{
-                file.FILENAME.split(".").pop()
-              }}</b>
-            </div>
-            <div>{{ formatBytes(file.SIZE) }}</div>
-            <div v-if="file.SIZE > maxFileSize">
-              Превышен допустимый размер файла -
-              {{ formatBytes(maxFileSize) }}
-            </div>
-            <div class="row">
-              <b-button
-                @click="downloadFile(file.FILENAME)"
-                title="Скачать файл"
-                >Скачать</b-button
-              >
-              <b-button
-                :disabled="isLoading"
-                class="ml-2 mt-2"
-                type="button"
-                @click="remove(file)"
-                title="Удалить файл"
-              >
-                Удалить
-              </b-button>
-            </div>
+    <div v-for="file in data" :key="file.FILENAME" class="d-inline-block">
+      <div
+        class="preview-card"
+        v-bind:class="{
+          'error-card': file.SIZE > maxFileSize,
+        }"
+      >
+        <div class="file-description">
+          <div class="namefile" :title="file.FILENAME">
+            {{ file.FILENAME.split(".").slice(0, -1).join(".")
+            }}<b>.{{ file.FILENAME.split(".").pop() }}</b>
+          </div>
+          <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
+          <div v-if="file.SIZE > maxFileSize">
+            Превышен допустимый размер файла -
+            {{ formatBytes(maxFileSize) }}
           </div>
         </div>
-        <div
-          v-if="isError"
-          class="col-12 mb-3"
-          v-bind:class="{ 'col-lg-4': data.length }"
-        >
-          <div class="error-container">
-            <div>
-              Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
-            </div>
-          </div>
-        </div>
-        <div
-          v-if="isError === false"
-          class="col-12 mb-3"
-          v-bind:class="{ 'col-lg-4': data.length }"
-        >
-          <div
-            @dragover="dragover"
-            @drop="drop"
-            class="dropzone-container"
-            v-bind:class="{ 'error-size': isError }"
-          >
-            <input
-              :disabled="isError || isLoading || isErrorMaxFileCount"
-              type="file"
-              multiple
-              style="height: 100%"
-              class="hidden-input"
-              @change="onChange"
-              ref="file"
-              :accept="stringExtensions"
-            />
-            <label v-if="isErrorMaxFileCount === false" class="file-label">
-              <div><b>Загрузите файл</b></div>
-              <div>Перетащите или загрузите файл</div>
-            </label>
-            <label v-if="isErrorMaxFileCount === true" class="file-label">
-              <div><b>Максимум загружен</b></div>
-              <div>
-                Количество файлов для этой группы не должно быть больше
-                {{ maxFileCount }}
-              </div>
-              <div>Удалите загруженный файл если хотите загрузить другой</div>
-            </label>
-          </div>
-        </div>
+        <button
+          class="btn-download-file"
+          @click="downloadFile(file.FILENAME)"
+          title="Скачать файл"
+          type="button"
+        ></button>
+        <button
+          type="button"
+          class="btn-delite-file"
+          :disabled="isLoading"
+          @click="remove(file)"
+          title="Удалить файл"
+        ></button>
       </div>
+      <div class="error-blk" v-if="file.SIZE > maxFileSize">
+        Превышен допустимый размер файла - 5МБ
+      </div>
+    </div>
+    <div class="error-container" v-if="isError">
+      Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
+    </div>
+
+    <div
+      v-if="isError === false"
+      @dragover="dragover"
+      @drop="drop"
+      class="dropzone-container file-label"
+      :class="{
+        'disabled-upload': isErrorMaxFileCount === true,
+        'error-size': isError,
+      }"
+    >
+      <input
+        :disabled="isError || isLoading || isErrorMaxFileCount"
+        type="file"
+        multiple
+        class="hidden-input"
+        @change="onChange"
+        ref="file"
+        :accept="stringExtensions"
+      />
+      <span v-if="isErrorMaxFileCount === false"
+        >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
+      >
+
+      <span v-if="isErrorMaxFileCount === true">
+        Максимум загружен<span>
+          Удалите загруженный файл если хотите загрузить другой
+          {{ maxFileCount }}</span
+        >
+        <span>Удалите загруженный файл если хотите загрузить другой</span>
+      </span>
     </div>
   </div>
 </template>
@@ -204,15 +186,6 @@ export default {
 </script>
 
 <style>
-.dropzone-container {
-  border: 2px dashed #009639;
-  border-radius: 24px;
-  overflow: hidden;
-  height: 100%;
-  position: relative;
-  padding: 40px;
-  text-align: center;
-}
 .error-size {
   border: 2px dashed #dee2e6;
 }
@@ -238,17 +211,162 @@ export default {
   display: block;
   cursor: pointer;
 }
+.error-blk,
+.dropzone-container,
 .preview-card {
-  border: 2px solid #009639;
-  border-radius: 24px;
   overflow: hidden;
-  height: 100%;
+  height: 81px;
   position: relative;
-  padding: 40px;
   text-align: center;
+  border: 2px solid #43b02a;
+  border-radius: 30px;
+  width: 251px;
+  padding: 11px 15px 15px 65px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+.preview-card {
+  padding: 15px 15px 15px 120px;
+}
+.preview-card .namefile {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.875rem;
+  text-align: right;
+  padding-right: 26px;
+  position: relative;
+  line-height: 23px;
+}
+.preview-card .namefile b {
+  position: absolute;
+  right: 0;
+}
+
+.preview-card .sizefile {
+  font-size: 0.875rem;
+  line-height: 23px;
+  margin-top: 5px;
+  text-align: right;
+  color: #868686;
+}
+.dropzone-container {
+  background: url(/img/icon-border-file.svg) 0 0 no-repeat;
+  border: 0;
+  background-size: contain;
+  cursor: pointer;
+}
+.dropzone-container:after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 20px;
+  left: 15px;
+  background: url(/img/icon-add-file.svg) 0 0 no-repeat;
+}
+.dropzone-container span {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 23px;
+  color: #292929;
+  display: block;
+  cursor: pointer;
+}
+.dropzone-container span span {
+  display: block;
+  font-weight: 400;
+  line-height: 16px;
+  color: #868686;
+}
+.dropzone-container input {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  cursor: pointer;
+  z-index: 1;
 }
 .error-card {
   border: 2px solid #ed969e;
   background-color: #f5c6cb;
+  padding: 15px 15px 15px 65px;
+}
+.btn-delite-file,
+.btn-download-file {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: url(/img/icon-delite-file.svg) 0 0 no-repeat;
+  border-radius: 20px;
+  position: absolute;
+  top: 20px;
+  left: 65px;
+}
+.btn-download-file {
+  background: url(/img/icon-download-file.svg) 0 0 no-repeat;
+  left: 15px;
+}
+.disabled-upload {
+  padding: 5px 15px 15px 65px;
+  background: url(/img/icon-border-gray-file.svg) 0 0 no-repeat;
+  pointer-events: none;
+}
+.disabled-upload:after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 20px;
+  left: 15px;
+  background: url(/img/icon-border_gray--file.svg) 0 0 no-repeat;
+}
+
+.error-card .btn-download-file {
+  display: none;
+}
+.error-card .btn-delite-file {
+  background: url(/img/icon-delite-file-error.svg) 0 0 no-repeat;
+  left: 15px;
+}
+.error-blk {
+  border: 2px solid #eb5757;
+  background: #ffebeb url(/img/icon-warning-file.svg) 15px center no-repeat;
+  text-align: right;
+  color: #eb5757;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 18px 15px 15px 65px;
+}
+
+@media (max-width: 992px) {
+  .file-description {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+  .error-blk,
+  .dropzone-container,
+  .preview-card {
+    width: 204px;
+    height: 40px;
+    padding: 10px 10px 10px 62px;
+    border: 1px solid #43b02a;
+  }
+  .btn-delite-file,
+  .btn-download-file {
+    width: 20px;
+    height: 20px;
+    border: 0;
+    top: 10px;
+    left: 10px;
+    background-size: cover;
+  }
+  .btn-delite-file {
+    left: 35px;
+  }
 }
 </style>
