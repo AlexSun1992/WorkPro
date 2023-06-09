@@ -1,6 +1,6 @@
 <template>
-  <div class="nb-block mb-4">
-    <div v-for="file in data" :key="file.FILENAME" class="d-inline-block">
+  <div class="nb-block mb-4 row">
+    <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
       <div
         class="preview-card"
         v-bind:class="{
@@ -9,10 +9,15 @@
       >
         <div class="file-description">
           <div class="namefile" :title="file.FILENAME">
-            {{ file.FILENAME.split(".").slice(0, -1).join(".")
-            }}<b>.{{ file.FILENAME.split(".").pop() }}</b>
+            <span>{{ file.FILENAME.split(".").slice(0, -1).join(".") }}</span
+            ><b>.{{ file.FILENAME.split(".").pop() }}</b>
           </div>
           <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
+
+          <div v-if="file.SIZE > maxFileSize">
+            Превышен допустимый <br class="d-block d-lg-none" />размер файла -
+            {{ formatBytes(maxFileSize) }}
+          </div>
         </div>
         <button
           class="btn-download-file"
@@ -29,40 +34,45 @@
         ></button>
       </div>
       <div class="error-blk" v-if="file.SIZE > maxFileSize">
-        Превышен допустимый размер файла - {{ formatBytes(maxFileSize) }}
+        Превышен допустимый <br class="d-block d-lg-none" />размер файла -
+        {{ formatBytes(maxFileSize) }}
       </div>
     </div>
     <div class="error-container" v-if="isError">
       Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
     </div>
 
-    <div
-      v-if="isError === false"
-      @dragover="dragover"
-      @drop="drop"
-      class="dropzone-container file-label"
-      :class="{
-        'disabled-upload': isErrorMaxFileCount === true,
-        'error-size': isError,
-      }"
-    >
-      <input
-        :disabled="isError || isLoading || isErrorMaxFileCount"
-        type="file"
-        multiple
-        class="hidden-input"
-        @change="onChange"
-        ref="file"
-        :accept="stringExtensions"
-      />
-      <span v-if="isErrorMaxFileCount === false"
-        >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
+    <div v-if="isError === false" class="col-9 col-lg-4">
+      <div
+        @dragover="dragover"
+        @drop="drop"
+        class="dropzone-container file-label"
+        :class="{
+          'disabled-upload': isErrorMaxFileCount === true,
+          'error-size': isError,
+        }"
       >
+        <input
+          :disabled="isError || isLoading || isErrorMaxFileCount"
+          type="file"
+          multiple
+          class="hidden-input"
+          @change="onChange"
+          ref="file"
+          :accept="stringExtensions"
+        />
+        <span v-if="isErrorMaxFileCount === false"
+          >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
+        >
 
-      <span v-if="isErrorMaxFileCount === true">
-        Максимум загружен
-        <span>Удалите загруженный файл если хотите загрузить другой</span>
-      </span>
+        <span v-if="isErrorMaxFileCount === true">
+          Максимум загружен<span>
+            Удалите загруженный файл если хотите загрузить<br />другой
+            <!--{{ maxFileCount }}
+            <br />Удалите загруженный файл если хотите загрузить другой--></span
+          >
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -211,16 +221,13 @@ export default {
   height: 81px;
   position: relative;
   text-align: center;
-  border: 2px solid #43b02a;
   border-radius: 30px;
-  width: 251px;
   padding: 11px 15px 15px 65px;
-  margin-right: 15px;
-  margin-bottom: 15px;
-  display: inline-block;
+  margin-bottom: 20px;
 }
 .preview-card {
   padding: 15px 15px 15px 120px;
+  border: 2px solid #43b02a;
 }
 .preview-card .namefile {
   width: 100%;
@@ -229,13 +236,8 @@ export default {
   text-overflow: ellipsis;
   font-size: 0.875rem;
   text-align: right;
-  padding-right: 26px;
   position: relative;
   line-height: 23px;
-}
-.preview-card .namefile b {
-  position: absolute;
-  right: 0;
 }
 
 .preview-card .sizefile {
@@ -246,9 +248,9 @@ export default {
   color: #868686;
 }
 .dropzone-container {
-  background: url(/img/icon-border-file.svg) 0 0 no-repeat;
+  /*background: url(/img/icon-border-file.svg) 0 0 no-repeat;
   border: 0;
-  background-size: contain;
+  background-size: contain;*/
   cursor: pointer;
 }
 .dropzone-container:after {
@@ -290,6 +292,7 @@ export default {
   padding: 15px 15px 15px 65px;
 }
 .btn-delite-file,
+.btn-delite-file:disabled,
 .btn-download-file {
   width: 40px;
   height: 40px;
@@ -300,13 +303,13 @@ export default {
   top: 20px;
   left: 65px;
 }
+
 .btn-download-file {
   background: url(/img/icon-download-file.svg) 0 0 no-repeat;
   left: 15px;
 }
 .disabled-upload {
   padding: 5px 15px 15px 65px;
-  background: url(/img/icon-border-gray-file.svg) 0 0 no-repeat;
   pointer-events: none;
 }
 .disabled-upload:after {
@@ -335,20 +338,82 @@ export default {
   font-size: 0.875rem;
   padding: 18px 15px 15px 65px;
 }
+.file-description {
+  display: grid;
+  grid-template-rows: auto auto;
+}
+.namefile {
+  display: grid;
+  grid-template-columns: auto minmax(20px, max-content);
+}
+.namefile span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropzone-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: repeating-conic-gradient(transparent 0 25%, #69c055 0 50%) 0 0 /
+    18% 29% round;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  border-radius: 30px;
+}
+.dropzone-container.disabled-upload::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: repeating-conic-gradient(transparent 0 25%, #a4a4a4 0 50%) 0 0 /
+    18% 29% round;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  border-radius: 30px;
+}
+.dropzone-container.disabled-upload span span {
+  margin-top: -2px;
+}
 
 @media (max-width: 992px) {
+  .dropzone-container.disabled-upload::before {
+    padding: 1px;
+    background: repeating-conic-gradient(transparent 0 25%, #a4a4a4 0 50%) 0 0 /
+      5% 39% round;
+    border-radius: 15px;
+  }
+  .dropzone-container::before {
+    padding: 1px;
+    background: repeating-conic-gradient(transparent 0 25%, #69c055 0 50%) 0 0 /
+      5% 39% round;
+    border-radius: 15px;
+  }
   .file-description {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto minmax(20px, max-content);
+    grid-gap: 5px;
   }
   .error-blk,
   .dropzone-container,
   .preview-card {
-    width: 204px;
     height: 40px;
     padding: 10px 10px 10px 62px;
+    border-radius: 15px;
+  }
+  .dropzone-container {
+    padding: 9px 10px 10px 40px;
+  }
+  .preview-card {
     border: 1px solid #43b02a;
   }
+  .dropzone-container:after,
   .btn-delite-file,
   .btn-download-file {
     width: 20px;
@@ -360,6 +425,27 @@ export default {
   }
   .btn-delite-file {
     left: 35px;
+  }
+  .dropzone-container span span {
+    display: none;
+  }
+  .preview-card .sizefile,
+  .preview-card .namefile {
+    font-size: 0.75rem;
+    line-height: 19px;
+    margin-top: 0;
+  }
+  .error-blk {
+    border: 1px solid #eb5757;
+    background: #ffebeb url(/img/icon-warning-file.svg) 10px center no-repeat;
+    background-size: 20px;
+    font-size: 0.625rem;
+    padding: 5px 10px 10px 82px;
+    text-align: left;
+  }
+  .error-card .btn-delite-file {
+    background-size: 20px;
+    left: 10px;
   }
 }
 </style>
