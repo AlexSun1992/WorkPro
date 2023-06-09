@@ -38,8 +38,10 @@
         {{ formatBytes(maxFileSize) }}
       </div>
     </div>
-    <div class="error-container" v-if="isError">
-      Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
+    <div class="col-9 col-lg-4" v-if="isError">
+      <div class="error-blk">
+        Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
+      </div>
     </div>
 
     <div v-if="isError === false" class="col-9 col-lg-4">
@@ -446,6 +448,9 @@ export default {
   .error-card .btn-delite-file {
     background-size: 20px;
     left: 10px;
+  }
+  .preview-card .error-card {
+    border: 1px solid #eb5757;
   }
 }
 </style>
