@@ -22,7 +22,7 @@
       <div class="col-12">
         <b-alert
           data-testid="danger-alert"
-          :show="getErrorMessage"
+          :show="Boolean(getErrorMessage)"
           variant="danger"
           class="mt-3 mb-0"
           v-html="getErrorMessage"
