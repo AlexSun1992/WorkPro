@@ -3,6 +3,7 @@ import { getErrorMessage } from "../utils/transform";
 const FILETYPES = "FILE_TYPES";
 const FILES = "FILES";
 const FORM_SETTINGS = "FORM_SETTINGS";
+let controller;
 export const state = () => ({
   data: null,
   fileObjects: [],
@@ -10,6 +11,7 @@ export const state = () => ({
   isLoadSuccessFull: null,
   dataSuccess: null,
   dataError: null,
+  progressValue: null,
 });
 
 export const getters = {
@@ -34,14 +36,15 @@ export const getters = {
   isLoading: (state) => state.isLoading,
   getDataSuccess: (state) => state.dataSuccess,
   getDataError: (state) => state.dataError,
+  getProgressValue: (state) => state.progressValue,
   getErrorMessage: (state, getters) => {
-    if (!getters.getDataError) {
-      return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
+    if (getters.getDataError) {
+      if (typeof getErrorMessage(getters.getDataError) === "object") {
+        return getErrorMessage(getters.getDataError)?.description;
+      }
+      return getErrorMessage(getters.getDataError);
     }
-    if (typeof getErrorMessage(getters.getDataError) === "object") {
-      return getErrorMessage(getters.getDataError)?.description;
-    }
-    return getErrorMessage(getters.getDataError);
+    return null;
   },
   isInValidFiles: (state, getters) =>
     getters.getData.some((item) => {
@@ -93,11 +96,23 @@ export const actions = {
       });
       formData.append("JSON", JSON.stringify(getters.getFiles));
       commit("setLoading", true);
+      commit("setDataError", null);
+      controller = new AbortController();
+      const config = {
+        signal: controller.signal,
+        onUploadProgress: (progressEvent) => {
+          commit(
+            "setProgressValue",
+            (progressEvent.loaded / progressEvent.total) * 100
+          );
+        },
+      };
       const result = await this.$axios.post(
         `/am/main/v2/datacard2/${params.idModule}/${params.idItem}/${
           params.idCard
         }${params.idRel !== "undefined" ? `?rel=${params.idRel}` : ""}`,
-        formData
+        formData,
+        config
       );
       commit("setLoadSuccessFull", true);
       commit("setDataSuccess", result);
@@ -107,6 +122,10 @@ export const actions = {
     } finally {
       commit("setLoading", false);
     }
+  },
+  cancelUploading({ commit }) {
+    controller.abort();
+    commit("setLoading", false);
   },
 };
 
@@ -145,5 +164,8 @@ export const mutations = {
   },
   setLoading(state, data) {
     state.isLoading = data;
+  },
+  setProgressValue(state, data) {
+    state.progressValue = data;
   },
 };
