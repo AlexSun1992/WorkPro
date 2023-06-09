@@ -67,7 +67,7 @@
               class="hidden-input"
               @change="onChange"
               ref="file"
-              accept=".pdf,.jpg,.jpeg,.png,.bmp,.tif,.gif"
+              :accept="stringExtensions"
             />
             <span v-if="isErrorMaxFileCount === false"
               >Загрузите файл<span
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { formatBytes } from "./helpers";
+import { formatBytes, filterDropFilesByExtensions } from "./helpers";
 
 export default {
   name: "UploadFile",
@@ -132,6 +132,10 @@ export default {
       type: Number,
       required: false,
     },
+    fileExtensions: {
+      type: Array,
+      required: true,
+    },
   },
   methods: {
     onChange() {
@@ -162,7 +166,11 @@ export default {
     },
     drop(event) {
       event.preventDefault();
-      this.$refs.file.files = event.dataTransfer.files;
+      const dropFiles = event.dataTransfer.files;
+      this.$refs.file.files = filterDropFilesByExtensions(
+        dropFiles,
+        this.fileExtensions
+      );
       this.onChange();
     },
     formatBytes(size) {
@@ -184,6 +192,9 @@ export default {
     },
     isErrorMaxFileCount() {
       return this.data.length > this.maxFileCount;
+    },
+    stringExtensions() {
+      return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
     },
   },
 };
