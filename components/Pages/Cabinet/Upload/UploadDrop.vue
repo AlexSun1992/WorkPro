@@ -13,6 +13,7 @@
             ><b>.{{ file.FILENAME.split(".").pop() }}</b>
           </div>
           <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
+
           <div v-if="file.SIZE > maxFileSize">
             Превышен допустимый <br class="d-block d-lg-none" />размер файла -
             {{ formatBytes(maxFileSize) }}
@@ -33,7 +34,8 @@
         ></button>
       </div>
       <div class="error-blk" v-if="file.SIZE > maxFileSize">
-        Превышен допустимый <br class="d-block d-lg-none" />размер файла - 5МБ
+        Превышен допустимый <br class="d-block d-lg-none" />размер файла -
+        {{ formatBytes(maxFileSize) }}
       </div>
     </div>
     <div class="error-container" v-if="isError">
