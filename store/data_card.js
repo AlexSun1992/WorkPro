@@ -372,6 +372,7 @@ export const actions = {
     { dispatch, commit, getters },
     { relId, relActionId, rowId, actionId, body, zone }
   ) {
+    console.log({ relId, relActionId, rowId, actionId, body, zone }, "vuex");
     const params = zone === "free" ? "?zone=free" : "";
     try {
       return await this.$axios
