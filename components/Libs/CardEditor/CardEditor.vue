@@ -195,7 +195,6 @@ export default {
     },
 
     async updateValue(e) {
-      console.log(e, "updateValue");
       const field = this.data.find((f) => f.fieldId === e.fieldId);
       if (field.type === "button") {
         this.$store.commit("data_card/setError", false);
@@ -205,7 +204,6 @@ export default {
         this.$store.commit("data_card/cardChanged", true);
       }
       if (field.type === "button" && e.action) {
-        console.log("yes");
         this.isActionApplyError = false;
 
         const actionId = e.value.replace("Item", "");
@@ -231,9 +229,6 @@ export default {
           (item) => item.IDITEM == this.$route.params.idItem
         );
         const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
-        console.log(
-          "(((((((((((((((((((((((((((((((fetchActionParams)))))))))))))))))))))))))))))))))"
-        );
         await this.$store.dispatch("data_card/fetchActionParams", {
           moduleId,
           actionId,
@@ -600,7 +595,6 @@ export default {
           this.$store.getters["data_card/getFormParams"]?.idCard,
         body: this.actionParams,
       });
-      console.log(response, "response");
       this.actionFormDisabled = false;
       if (response?.status === 500 || response?.status === 520) {
         this.$store.commit("data_card/setLoading", false);

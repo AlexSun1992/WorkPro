@@ -111,7 +111,6 @@ export default {
       const menu = this.$store.getters["menu/flatmenu"].find(
         (item) => item.IDITEM == this.currentTab.idItem
       );
-      console.log(menu, "menuWizard");
       const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
       if (action) {
         const response = await this.$store.dispatch("data_card/executeAction", {
@@ -120,7 +119,6 @@ export default {
           relId: this.$route.params.idRel,
           rowId: this.$route.params.idCard,
         });
-        console.log(response, "response");
         if (response.status != 200) {
           this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
           this.$store.commit(
@@ -133,7 +131,6 @@ export default {
       }
       await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
       const tab = this.tabs[this.getCurrentIndex() + 1];
-      console.log(tab, "tab");
       this.$emit("goNext", tab);
     },
     goBack() {

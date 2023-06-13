@@ -431,7 +431,7 @@ export default {
       );
       await this.callScript(e, this.callbackAction);
       if (field.type === "button" && e.action) {
-        const actionId = parseInt(e.value.replace("Item", ""));
+        const actionId = parseInt(e.value.replace("Item", ""), 10);
         const actionRefreshCard = menu.ACTIONSCUR.find(
           (item) => item.NTYPE === 39 && item.ID === actionId
         );
@@ -454,6 +454,11 @@ export default {
           if (!(await this.goThroughConfirmStep(actionExecute))) {
             return;
           }
+          await this.$store.dispatch("data_card/fetchActionParams", {
+            moduleId: this.params.idModule,
+            actionId: parseInt(e.value.replace("Item", ""), 10),
+            cardId: this.params.idCard,
+          });
           const response = await this.$store.dispatch(
             "data_card/executeAction",
             {
