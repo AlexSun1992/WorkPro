@@ -40,6 +40,7 @@
       </div>
 
       <wizard-buttons
+        v-if="settingsByItem.isUploader === false"
         :current-tab="currentTab"
         :tabs="tabs"
         :qty="settings.wizard.length"
@@ -47,6 +48,11 @@
         @goNext="goNext($event)"
         @goBack="goBack($event)"
         @saveCard="saveCard($event)"
+      />
+      <wizard-uploader-buttons
+        v-if="settingsByItem.isUploader === true"
+        :loading="loading"
+        @saveUploader="saveUploader($event)"
       />
     </div>
     <div v-else>
@@ -59,10 +65,12 @@
 import VRuntimeTemplate from "v-runtime-template";
 import breadcrumbs from "~/converters/breadcrumbs";
 import wizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
+import WizardUploaderButtons from "@/components/Pages/Cabinet/Wizard/WizardUploaderButtons.vue";
 
 export default {
   name: "Wizard",
   components: {
+    WizardUploaderButtons,
     wizardButtons,
     VRuntimeTemplate,
   },
@@ -86,6 +94,11 @@ export default {
           .slice(-1)
           .pop();
       },
+    },
+    settingsByItem() {
+      return this.$store.getters["menu/getSettingsByIdItem"](
+        this.$route.params.idItem || {}
+      );
     },
     rels() {
       const rel = this.$store.getters["wizard/getWizard"]?.REL;
@@ -141,6 +154,9 @@ export default {
     isSavedError() {
       return this.$store.getters["data_card/getSavedError"];
     },
+    isLoadSuccessFull() {
+      return this.$store.getters["uploader/isLoadSuccessFull"];
+    },
     isUseCardTemplate() {
       return Boolean(
         this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
@@ -162,7 +178,17 @@ export default {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
   },
   methods: {
-    getURL(item, index) {
+    getURL(item) {
+      const settingsTab = this.$store.getters["menu/getSettingsByIdItem"](
+        item.idItem || {}
+      );
+      if (settingsTab?.isUploader === true) {
+        return `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
+          item.idItem
+        }/${this.$route.params.idCard}/${
+          this.rels.split("|")[item.order - 1]
+        }/uploader`;
+      }
       if (this.$route.params.idCard === "0") {
         return `/cabinet/wizard/${this.$route.params.idWizard}${
           item.list ? `/list/55/0/` : `/55/0/`
@@ -235,6 +261,18 @@ export default {
         }
       }
       this.loading = false;
+    },
+    async saveUploader() {
+      this.loading = true;
+      await this.$refs.child.saveDataUploader();
+      this.loading = false;
+      if (this.isLoadSuccessFull) {
+        const getCurrentIndex = this.tabs.findIndex(
+          (item) => item.idItem === this.currentTab.idItem
+        );
+        const tab = this.tabs[getCurrentIndex + 1];
+        await this.$router.push(this.getURL(tab));
+      }
     },
   },
 };

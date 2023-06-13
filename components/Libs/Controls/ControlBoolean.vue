@@ -40,6 +40,16 @@ export default {
     },
   },
 
+  mounted() {
+    document.querySelectorAll(".checkbox-hide > label").forEach((elm) =>
+      elm.addEventListener("click", (e) => {
+        if (e.target.className === "tooltipster") {
+          e.preventDefault();
+        }
+      })
+    );
+  },
+
   computed: {
     isRequiredPersonalDataCheckBox() {
       const getCheckBoxNameBaccept = this.data.name === "BACCEPT";
