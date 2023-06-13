@@ -4933,3 +4933,7 @@ a.color-l-green:hover {
 .is-valid input.autocomplete-input {
   padding-right: 40px !important;
 }
+
+.ui.search.dropdown > input.search {
+  z-index: 4;
+}

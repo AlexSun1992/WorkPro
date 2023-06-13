@@ -22,27 +22,27 @@
       <div class="col-12">
         <b-alert
           data-testid="danger-alert"
-          :show="getErrorMessage"
+          :show="Boolean(getErrorMessage)"
           variant="danger"
           class="mt-3 mb-0"
           v-html="getErrorMessage"
         />
       </div>
     </div>
-    <b-progress v-if="isLoading" class="mt-2" :max="max" show-value>
-      <b-progress-bar
-        :value="getProgressValue"
-        variant="success"
-      ></b-progress-bar>
-    </b-progress>
-    <b-button
-      v-if="isLoading"
-      variant="success"
-      @click="canselUploading"
-      class="mt-3"
-    >
-      Отменить загрузку файлов
-    </b-button>
+<!--    <b-progress v-if="isLoading" class="mt-2" :max="max" show-value>-->
+<!--      <b-progress-bar-->
+<!--        :value="getProgressValue"-->
+<!--        variant="success"-->
+<!--      ></b-progress-bar>-->
+<!--    </b-progress>-->
+<!--    <b-button-->
+<!--      v-if="isLoading"-->
+<!--      variant="success"-->
+<!--      @click="canselUploading"-->
+<!--      class="mt-3"-->
+<!--    >-->
+<!--      Отменить загрузку файлов-->
+<!--    </b-button>-->
   </div>
 </template>
 
