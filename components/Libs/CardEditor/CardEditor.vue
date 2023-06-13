@@ -20,7 +20,6 @@
       <b-form @submit="applyAction">
         <Form
           v-if="actionParams.length"
-          :params="params"
           :data="actionParams"
           :edit="!actionFormDisabled"
           @update="updateActionParams($event)"

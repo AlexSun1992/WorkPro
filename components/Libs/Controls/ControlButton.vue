@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import { thisExpression } from "@babel/types";
-
 export default {
   name: "ControlButton",
   props: {
@@ -25,9 +23,6 @@ export default {
       type: Object,
       required: true,
       default: () => {},
-    },
-    params: {
-      type: Object,
     },
   },
   data() {
