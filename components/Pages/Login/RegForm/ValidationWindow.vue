@@ -7,7 +7,7 @@
       <li
         v-for="item in validationList"
         :key="item.id"
-        :class="{ success: item.isError }"
+        :class="{ success: !item.isError }"
       >
         {{ item.errorText }}
       </li>

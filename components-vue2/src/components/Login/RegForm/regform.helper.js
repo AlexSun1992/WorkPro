@@ -25,27 +25,27 @@ export function passwordValidationDetail(password) {
   const errorMessagepasswordValidation = [
     {
       errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
-      isError: true,
+      isError: false,
       id: 0,
       indicator: 40,
     },
     {
       errorText:
         "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
-      isError: true,
+      isError: false,
       id: 1,
       indicator: 20,
     },
     {
       errorText: "Пароль не должен содержать пробел.",
-      isError: true,
+      isError: false,
       id: 2,
       indicator: 20,
     },
     {
       errorText:
         "Пароль не должен содержать русских букв в специальных символов.",
-      isError: true,
+      isError: false,
       id: 3,
       indicator: 20,
     },
@@ -55,7 +55,7 @@ export function passwordValidationDetail(password) {
     password.length < minLengthPassword ||
     password.length > maxLengthPassword
   ) {
-    errorMessagepasswordValidation[0].isError = false;
+    errorMessagepasswordValidation[0].isError = true;
     errorMessagepasswordValidation[0].indicator = 0;
   }
   if (
@@ -64,23 +64,23 @@ export function passwordValidationDetail(password) {
     lowercaseLetter.test(password) === false
   ) {
     if (password !== " ") {
-      errorMessagepasswordValidation[1].isError = false;
+      errorMessagepasswordValidation[1].isError = true;
       errorMessagepasswordValidation[1].indicator = 0;
     }
     if (password !== "") {
-      errorMessagepasswordValidation[1].isError = false;
+      errorMessagepasswordValidation[1].isError = true;
       errorMessagepasswordValidation[1].indicator = 0;
     }
   }
   if (space.test(password) === true) {
-    errorMessagepasswordValidation[2].isError = false;
+    errorMessagepasswordValidation[2].isError = true;
     errorMessagepasswordValidation[2].indicator = 0;
   }
   if (
     forbiddeCharacters.test(password) === false ||
     forbiddenRussianSign.test(password) === false
   ) {
-    errorMessagepasswordValidation[3].isError = false;
+    errorMessagepasswordValidation[3].isError = true;
     errorMessagepasswordValidation[3].indicator = 0;
   }
   return errorMessagepasswordValidation;
@@ -95,12 +95,12 @@ export function passwordValidation(password) {
   /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
   const isError = passwordValidationDetail(password).map((item) => {
-    if (item.isError === false) {
-      return true;
+    if (item.isError === true) {
+      return false;
     }
-    return false;
+    return true;
   });
-  const isErrorSort = isError.filter((i) => i === true);
+  const isErrorSort = isError.filter((i) => i === false);
 
   if (isErrorSort.length !== 0) {
     errorMessagepasswordValidation.push(
