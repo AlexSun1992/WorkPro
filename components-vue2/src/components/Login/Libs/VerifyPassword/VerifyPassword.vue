@@ -1,6 +1,10 @@
 <template>
   <div class="row mt-3">
     <div class="col-12 col-lg-6">
+      <validation-window
+        v-if="!toggleVerifyWindow"
+        :validationList="validationForFirstPassword"
+      />
       <b-form-group>
         <legend>
           {{ showLabel }}
@@ -86,7 +90,9 @@ import {
   BCol,
   BRow,
 } from "bootstrap-vue";
+import ValidationWindow from "../../../../../../components/Pages/Login/RegForm/ValidationWindow.vue";
 import { tooltipText } from "../../RegForm/regform.helper";
+import { passwordValidationDetail } from "../../RegForm/regform.helper";
 
 export default {
   props: [
@@ -106,6 +112,7 @@ export default {
       pswVisible2: false,
       pswVisible: false,
       isUserBlured: true,
+      toggleVerifyWindow: true,
     };
   },
   methods: {
@@ -125,6 +132,7 @@ export default {
     },
     updateField(field) {
       this.$emit("checkCodeFieldValid", this.validateState(field));
+      this.toggleVerifyWindow = this.validateState(field);
     },
     changeField(field) {
       if (this.validateState(field)) {
@@ -144,6 +152,7 @@ export default {
     BCol,
     BRow,
     VueEasyTooltip,
+    ValidationWindow,
   },
   computed: {
     showLabel() {
@@ -151,6 +160,9 @@ export default {
     },
     tooltipValidation() {
       return tooltipText;
+    },
+    validationForFirstPassword() {
+      return passwordValidationDetail(this.v.password.$model);
     },
   },
 };

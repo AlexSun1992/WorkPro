@@ -22,46 +22,67 @@ function createErrorMessage(errorValue) {
 
 export function passwordValidationDetail(password) {
   /** Массив ошибок для пароля */
-  const errorMessagepasswordValidation = [];
+  const errorMessagepasswordValidation = [
+    {
+      errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+      isError: true,
+      id: 0,
+      indicator: 40,
+    },
+    {
+      errorText:
+        "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+      isError: true,
+      id: 1,
+      indicator: 20,
+    },
+    {
+      errorText: "Пароль не должен содержать пробел.",
+      isError: true,
+      id: 2,
+      indicator: 20,
+    },
+    {
+      errorText:
+        "Пароль не должен содержать русских букв в специальных символов.",
+      isError: true,
+      id: 3,
+      indicator: 20,
+    },
+  ];
+
   if (
     password.length < minLengthPassword ||
     password.length > maxLengthPassword
   ) {
-    errorMessagepasswordValidation.push(
-      createErrorMessage(
-        `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`
-      )
-    );
+    errorMessagepasswordValidation[0].isError = false;
+    errorMessagepasswordValidation[0].indicator = 0;
   }
   if (
     uppercaseLetter.test(password) === false ||
     numeric.test(password) === false ||
     lowercaseLetter.test(password) === false
   ) {
+    if (password !== " ") {
+      errorMessagepasswordValidation[1].isError = false;
+      errorMessagepasswordValidation[1].indicator = 0;
+    }
     if (password !== "") {
-      errorMessagepasswordValidation.push(
-        createErrorMessage(
-          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву."
-        )
-      );
+      errorMessagepasswordValidation[1].isError = false;
+      errorMessagepasswordValidation[1].indicator = 0;
     }
   }
   if (space.test(password) === true) {
-    errorMessagepasswordValidation.push(
-      createErrorMessage("Пароль не должен содержать пробел.")
-    );
+    errorMessagepasswordValidation[2].isError = false;
+    errorMessagepasswordValidation[2].indicator = 0;
   }
   if (
     forbiddeCharacters.test(password) === false ||
     forbiddenRussianSign.test(password) === false
   ) {
-    errorMessagepasswordValidation.push(
-      createErrorMessage(
-        "Пароль не должен содержать русских букв в специальных символов."
-      )
-    );
+    errorMessagepasswordValidation[3].isError = false;
+    errorMessagepasswordValidation[3].indicator = 0;
   }
-
   return errorMessagepasswordValidation;
 }
 
@@ -73,14 +94,20 @@ export function passwordValidationDetail(password) {
 export function passwordValidation(password) {
   /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
+  const isError = passwordValidationDetail(password).map((item) => {
+    if (item.isError === false) {
+      return true;
+    }
+    return false;
+  });
+  const isErrorSort = isError.filter((i) => i === true);
 
-  if (passwordValidationDetail(password).length > 0) {
+  if (isErrorSort.length !== 0) {
     errorMessagepasswordValidation.push(
       createErrorMessage(
         `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};,.|/? (пробел исключён)`
       )
     );
   }
-
   return errorMessagepasswordValidation;
 }
