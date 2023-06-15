@@ -26,7 +26,7 @@
         />
       </b-form>
     </b-modal>
-    <div v-if="data.length && isLoadedScript">
+    <div v-if="data.length && isScriptLoaded">
       <Form
         v-if="!isAccordion && !isBlock"
         class="block-profile"
@@ -61,7 +61,7 @@
       />
     </div>
     <SkeletonBox
-      v-if="!data.length || !isLoadedScript"
+      v-if="!data.length || !isScriptLoaded"
       class="mt-5"
       :items="8"
     />
@@ -74,6 +74,7 @@ import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
+import { clearScript } from "~/components/EventHandler/eventHandler.helper";
 
 let controller;
 export default {
@@ -114,8 +115,6 @@ export default {
         color: "#dddbdd",
       },
       saveSuccess: false,
-      isLoadedScript: false,
-      urlScript: null,
     };
   },
   computed: {
@@ -152,42 +151,28 @@ export default {
       return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
         ?.LCLOSEAFTERSAVE;
     },
+    isScriptLoaded() {
+      return this.$store.getters["blocks/getScriptStatus"];
+    },
   },
+
   async created() {
     try {
-      this.urlScript = `/api/card/js/${this.$route.params.idModule}/${
-        this.$route.params.idItem
-      }?time=${Date.now()}`;
       if (process.client) {
-        await this.$loadScript(this.urlScript)
-          .then(() => {
-            console.log("load", this.urlScript);
-          })
-          .catch(() => {
-            console.warn("load", this.urlScript);
-          });
-        this.isLoadedScript = true;
+        await this.$store.dispatch("blocks/getScript", {
+          idModule: this.$route.params.idModule,
+          idItem: this.$route.params.idItem,
+        });
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
+
       this.stripeLoaded();
     } catch (e) {
       console.warn(`Ошибка загрузки скрипта`);
     }
   },
-  async beforeDestroy() {
-    try {
-      await this.$unloadScript(this.urlScript)
-        .then(() => {
-          console.log("unload", this.urlScript);
-        })
-        .catch(() => {
-          console.error("unload", this.urlScript);
-        });
-    } catch (e) {
-      console.error(e);
-    }
-  },
+
   unmounted() {
     this.$store.commit("data_card/cardChanged", false);
     this.$store.commit("data_card/setError", false);
@@ -249,10 +234,11 @@ export default {
           cardId,
         });
         this.actionParamsTitle = field.label;
-        this.actionParamsId = parseInt(actionId);
+
+        this.actionParamsId = parseInt(actionId, 10);
         if (CUR.NTYPE == 38) {
           this.saveSuccess = false;
-          const data = eventHandler(
+          const data = await eventHandler(
             this.data.map((a) => ({ ...a })),
             e,
             "beforeSave"
@@ -262,6 +248,7 @@ export default {
             this.$store.commit("data_card/setForm", data || this.data);
           }
           await this.saveDataCard();
+
           if (this.saveSuccess) {
             await this.$store.dispatch("data_card/fetchForm", params);
             this.$store.commit("data_card/setDisabled", false);
@@ -275,6 +262,7 @@ export default {
               this.$store.commit("data_card/setForm", data || this.data);
             }
           }
+
           this.$store.commit("data_card/setLoading", false);
           return;
         }
@@ -309,6 +297,7 @@ export default {
             return;
           }
         }
+
         if (this.actionSettings.isDialog) {
           this.$store.commit("data_card/setLoading", false);
           this.$bvModal.show("confirmAction");
@@ -320,6 +309,7 @@ export default {
           this.data.map((a) => ({ ...a })),
           e
         );
+
         if (data) {
           this.$store.commit("data_card/setForm", data || this.data);
         }
@@ -342,6 +332,7 @@ export default {
           e,
           this.callbackAction
         );
+
         if (data) {
           this.$store.commit("data_card/setForm", data);
         }
@@ -372,6 +363,7 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const value =
           data[i].type === "enum" ? data[i].value.value : data[i].value;
+
         if (
           data[i].required &&
           !data[i].hidden &&
@@ -427,6 +419,7 @@ export default {
           }
         }
       }
+
       return valid;
     },
     async saveDataCard(step = 1) {
@@ -435,6 +428,7 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setErrorMessage", null);
       const fields = this.$store.getters["data_card/getForm"];
+
       if (this.validateData(fields)) {
         try {
           let itemId;
@@ -479,9 +473,6 @@ export default {
               toaster: "b-toaster-top-full",
             });
           }
-          if (this.$route.params.idItem === "710") {
-            await this.$store.dispatch("updateUser");
-          }
           if (
             this.$route.params.idCard === "0" &&
             !this.$route.query?.ref &&
@@ -501,7 +492,7 @@ export default {
               const nextIdItem =
                 this.$store.getters["wizard/getWizardPages"].split(";")[step];
               const tab = this.wizardTabs.find(
-                (w) => w.idItem === parseInt(nextIdItem)
+                (w) => w.idItem === parseInt(nextIdItem, 10)
               );
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
               this.$router.push(

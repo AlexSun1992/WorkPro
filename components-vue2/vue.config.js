@@ -19,6 +19,9 @@ module.exports = {
       "^/idesia": {
         target: "http://localhost:8000",
       },
+      "^/s/:hash": {
+        target: "http://localhost:8000",
+      },
       "^/Branches": {
         target: "https://reso.ru",
       },

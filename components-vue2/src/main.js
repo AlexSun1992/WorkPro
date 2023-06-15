@@ -35,7 +35,6 @@ Sentry.init({
   enabled: process.env.NODE_ENV === "production",
   environment: process.env.NODE_ENV,
   release: process.env.APP_VERSION,
-  allowUrls: [/https?:\/\/reso\.ru/],
 });
 
 Vue.customElement(

@@ -18,7 +18,6 @@
 <script>
 export default {
   name: "ControlButton",
-
   props: {
     data: {
       type: Object,
@@ -33,9 +32,23 @@ export default {
   },
 
   methods: {
-    updateValue() {
+    async updateValue() {
       this.clicked = true;
       if (!this.loading && !this.disabled) {
+        const fields = this.$store.getters["data_card/getForm"];
+
+        const updatedFields = await eventHandler(
+          fields.map((item) => ({ ...item })),
+          this.data,
+          "action"
+        );
+        if (updatedFields) {
+          this.$store.commit("data_card/setForm", updatedFields || fields);
+          const isError = updatedFields.some((item) => item.error === true);
+          if (isError) {
+            return;
+          }
+        }
         this.$emit("update", {
           fieldId: this.data.fieldId,
           value: this.data.name,

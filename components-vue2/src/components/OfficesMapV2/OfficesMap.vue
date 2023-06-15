@@ -837,17 +837,25 @@ export default {
         if (data.data.qc_geo < 5) {
           this.updateMap({center: [data.data.geo_lat, data.data.geo_lon], zoom: (data.data.qc_geo < 3 ? 15 : 12)});
         } else {
-          let myMap = this.myMap;
 
-          ymaps.geocode(data.value, {
+          let res = await ymaps.geocode(data.value, {
             results: 1
-          }).then(function (res) {
-            let bounds = res.geoObjects.get(0).properties.get('boundedBy');
-            myMap.setBounds(bounds, {
-              checkZoomRange: true
-            });
           });
+          let bounds = res.geoObjects.get(0).properties.get('boundedBy');
+          this.myMap.setBounds(bounds, {
+            checkZoomRange: true
+          });
+
+          let mapSize = this.myMap.container.getSize();
+          if (mapSize[0] == 0 || mapSize[1] == 0) {
+            mapSize = [this.width, this.height];
+          }
+          let newState = ymaps.util.bounds.getCenterAndZoom(bounds, mapSize);
+          this.centerCoords = newState.center;
+
+          this.filteredOffices.sort( (a, b) => this.getDistance([a.NLAT, a.NLONG], this.centerCoords) > this.getDistance([b.NLAT, b.NLONG], this.centerCoords) ? 1 : -1);
         }
+
       } else {
         this.closeMetroCard();
         this.currentStation = null;

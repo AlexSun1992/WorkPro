@@ -48,6 +48,7 @@
     <div class="row">
       <div :class="isShowCardTemplate">
         <b-alert
+          data-testid="danger-alert"
           :show="isShowSavedError"
           variant="danger"
           class="mt-3 mb-0"
@@ -107,6 +108,7 @@
           <div v-if="isButtonSave" class="col-12 col-md-auto mt-3 mt-md-0">
             <b-button
               v-if="wizardButtonVisibleContinue"
+              data-testid="saveButton"
               :class="wizardButtonStyleContinue"
               pill
               :disabled="loading"
@@ -125,8 +127,12 @@
               />
             </b-button>
           </div>
-          <div v-if="ref" class="col-12 col-md-auto mt-2 mt-md-0">
+          <div
+            v-if="isButtonCancel && ref"
+            class="col-12 col-md-auto mt-2 mt-md-0"
+          >
             <b-button
+              data-testid="cancelButton"
               pill
               type="button"
               variant="outline-success"
@@ -258,6 +264,9 @@ export default {
     isButtonSave() {
       return this.$store.getters["data_card/getBtnSave"];
     },
+    isButtonCancel() {
+      return this.$store.getters["data_card/getBtnCancel"];
+    },
     isReadOnly() {
       return this.$store.getters["data_card/getReadOnly"];
     },
@@ -294,6 +303,9 @@ export default {
         this.settings.cardtemplate &&
         this.$store.getters[`data_card/getForm`].data
       );
+    },
+    isShowUploader() {
+      return this.settings.isUploader;
     },
     isShowCardTemplate() {
       return this.settings.cardtemplate

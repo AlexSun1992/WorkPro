@@ -145,13 +145,13 @@ export default {
       });
       const getUrl = getToken.data.find((item) => item.SURL);
       const oldUrl = new URL(getUrl.SURL);
-      oldUrl.searchParams.set("utm_source", "reso");
+      oldUrl.searchParams.set("utm_source", "reso.ru");
       oldUrl.searchParams.set("utm_medium", "button");
       oldUrl.searchParams.set("utm_campaign", "lk_auth");
       getUrl
         ? window.open(oldUrl.href, "_blank")
         : window.open(
-            "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso&utm_medium=button&utm_campaign=lk_auth",
+            "https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=button&utm_campaign=lk_auth",
             "_blank"
           );
     },

@@ -157,13 +157,6 @@ export default {
   methods: {
     update() {
       this.$v.newEmail.$touch();
-      if (this.newEmail != "") {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.newEmail,
-        });
-      }
     },
     validateState(name) {
       const { $dirty, $error } = this.$v[name];
@@ -205,7 +198,7 @@ export default {
           rowId: this.$route.params.idCard,
           body: [actionParams],
         });
-        if (response?.status === 500) {
+        if (response?.status === 500 || response?.status === 520) {
           this.loading = false;
           this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
@@ -231,8 +224,14 @@ export default {
     },
 
     verifyUser(e) {
-      this.$store.commit("clearAxiosError");
       this.getCode();
+      if (this.newEmail != "") {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.newEmail,
+        });
+      }
     },
 
     changeEmail() {

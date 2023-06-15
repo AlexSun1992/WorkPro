@@ -266,7 +266,6 @@ import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyUser from "../Libs/VerifyUser2/VerifyUser2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import ConfirmModal from "./ConfirmModal.vue";
-import { getMessageFromSuccessResponse } from "../Libs/VerifyUser/verifyUser.helper";
 
 import {
   isGenderReveal,

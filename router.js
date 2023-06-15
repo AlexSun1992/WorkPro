@@ -11,7 +11,9 @@ import Telemed from "@/components/Pages/Telemed/Telemed";
 import AuthFormWrapper from "~/components-vue2/src/components/Login/AuthForm/AuthFormWrapper";
 import PasswordRecoveryFormWrapper from "~/components-vue2/src/components/Login/RecoveryForm/PasswordRecoveryFormWrapper";
 import ErrorPage from "@/layouts/error";
+import ShortLink from "@/components/Pages/Cabinet/ShortLink";
 import olddms from "@/components/Pages/OLDDMS/olddms.vue";
+import UploadPage from "@/components/Pages/Cabinet/Upload/UploadPage.vue";
 Vue.use(Router);
 
 export function createRouter() {
@@ -59,6 +61,11 @@ export function createRouter() {
           },
           {
             meta: "Cabinet",
+            path: ":idModule/:idParent/:idItem/:idCard/:idRel/uploader",
+            component: UploadPage,
+          },
+          {
+            meta: "Cabinet",
             path: ":idModule/:idParent/:idItem/:idCard",
             component: CardPage,
           },
@@ -72,7 +79,6 @@ export function createRouter() {
             path: ":idModule/:idParent/:idItem/:idWizard/:idCard/:idRel",
             component: CardPage,
           },
-
           {
             meta: "Cabinet",
             path: "wizard/:idWizard",
@@ -85,15 +91,20 @@ export function createRouter() {
               },
               {
                 meta: "Cabinet",
+                path: ":idModule/:idParent/:idItem/:idCard/idlist/:idList",
+                component: CardPage,
+              },
+              {
+                meta: "Cabinet",
                 path: "list/:idModule/:idParent/:idItem/:idCard/:idRel",
                 component: Fluid,
               },
+              {
+                meta: "Cabinet",
+                path: ":idModule/:idParent/:idItem/:idCard/:idRel/uploader",
+                component: UploadPage,
+              },
             ],
-          },
-          {
-            meta: "Telemed",
-            path: "/cabinet/telemed",
-            component: Telemed,
           },
           {
             meta: "DMS",
@@ -103,10 +114,16 @@ export function createRouter() {
         ],
       },
       {
+        meta: "Telemed",
+        path: "/telemed",
+        component: Telemed,
+      },
+      {
         meta: "Esia",
         path: "/idesia",
         component: LoginEsia,
       },
+      { meta: "ShortLink", path: "/s/:hash", component: ShortLink },
       {
         meta: "Error",
         path: "/error",

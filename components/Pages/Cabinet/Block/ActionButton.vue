@@ -3,11 +3,11 @@
     v-if="action"
     @click.stop="action.LREQUESTCODE === true ? confirmAction() : startAction()"
     :variant="variant"
+    :id="id"
   >
     <slot><div v-text="action.SNAME"></div></slot>
   </b-button>
 </template>
-
 <script>
 import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
 
@@ -25,6 +25,11 @@ export default {
       default: () => null,
     },
     variant: {
+      type: String,
+      required: false,
+      default: () => null,
+    },
+    id: {
       type: String,
       required: false,
       default: () => null,
@@ -111,20 +116,31 @@ export default {
       return null;
     },
     async startAction() {
+      await eventHandler([], { actionId: this.actionId }, "actionClicked");
+
       if (this.action.NTYPE === 2) {
         if (this.action.SCONST) {
-          this.$router.push(
-            `/cabinet/55/0/${this.action.SCONST}/0/${this.rowId}`
-          );
+          const invalidRowID = this.rowId === null || this.rowId === undefined;
+          if (invalidRowID) {
+            this.$router.push(
+              `/cabinet/55/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`
+            );
+          }
+          if (!invalidRowID) {
+            this.$router.push(
+              `/cabinet/55/0/${this.action.SCONST}/0/${this.rowId}?ref=${this.$route.fullPath}`
+            );
+          }
         }
       } else if (this.action.LHIDEDLG) {
         const result = await this.executeAction();
         if (result?.POUTVALUE) {
           if (result?.POUTVALUE.includes("/")) {
+            const currentLink = window.location.href;
             if (result?.POUTVALUE.includes("cabinet")) {
               this.$router.push(
-                `${new URL(result?.POUTVALUE).pathname}${
-                  new URL(result?.POUTVALUE).search
+                `${new URL(result?.POUTVALUE, currentLink).pathname}${
+                  new URL(result?.POUTVALUE, currentLink).search
                 }`
               );
             } else {
@@ -149,6 +165,7 @@ export default {
       }
     },
   },
+
   computed: {
     action: {
       get() {

@@ -251,8 +251,9 @@ export default {
     };
   },
   mounted() {
+    const attempt = new URL(window.location.href);
     const isAuthorizationCookie = /Bearer/.test(document.cookie);
-    if (isAuthorizationCookie) {
+    if (isAuthorizationCookie && !attempt.searchParams.has("ref")) {
       window.location.href = "/cabinet";
     }
     this.$nextTick(() => {
@@ -343,17 +344,20 @@ export default {
         };
 
         const {
-          data: { ACCESS_TOKEN, REFRESH_TOKEN },
+          data: { ACCESS_TOKEN, REFRESH_TOKEN, ID },
         } = await axios.post("/am/authw/v2/authorize", body, headers);
 
         this.isModalVisible = false;
-        document.cookie = `auth.strategy=local; expires=${new Date(
+        document.cookie = `auth.strategy=local; Path=/; expires=${new Date(
           new Date().getTime() + 1000 * 60 * 60 * 24 * 365
         ).toGMTString()}`;
-        document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN}; expires=${new Date(
+        document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN}; Path=/; expires=${new Date(
           new Date().getTime() + 1000 * 60 * 60 * 24 * 365
         ).toGMTString()}`;
-        document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN}; expires=${new Date(
+        document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN}; Path=/; expires=${new Date(
+          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+        ).toGMTString()}`;
+        document.cookie = `auth.user_id=${ID}; Path=/; expires=${new Date(
           new Date().getTime() + 1000 * 60 * 60 * 24 * 365
         ).toGMTString()}`;
         this.authInProcess = false;

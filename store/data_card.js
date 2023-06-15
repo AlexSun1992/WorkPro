@@ -24,6 +24,7 @@ export const state = () => ({
   listPath: "",
   actionParams: [],
   isSave: true,
+  isCancel: true,
   isReadOnly: false,
   loading: false,
   moduleId: false,
@@ -62,6 +63,7 @@ export const getters = {
   getCardRelId: (state) => state.cardRelId,
   getCaptions: (state) => state.captions,
   getBtnSave: (state) => state.isSave,
+  getBtnCancel: (state) => state.isCancel,
   getReadOnly: (state) => state.isReadOnly,
   getActionParams: (state) =>
     typeof state.actionParams.map === "function"
@@ -100,7 +102,18 @@ export const getters = {
       if (currentValue.type === "listSelect") {
         return {
           ...accumulator,
-          ...currentValue.value?.value,
+          ...state.filters,
+        };
+      }
+      if (currentValue.type === "DoctorSchedule") {
+        return {
+          ...accumulator,
+        };
+      }
+      if (currentValue.type === "Map") {
+        return {
+          ...accumulator,
+          ...state.filters,
         };
       }
       if (currentValue.type === "timestamp") {
@@ -154,7 +167,9 @@ export const actions = {
       let url;
       if (params.idWizard && params.idCard === "0") {
         url = encodeURI(
-          `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${params.idCard}/0`
+          `/api/card/${params.idModule}/${params.idItem}/${params.idWizard}/${
+            params.idCard
+          }/${params.idList ?? 0}`
         );
       } else if (params.idRel || params.idCard === "0") {
         url = encodeURI(
@@ -171,6 +186,7 @@ export const actions = {
           `/api/card/${params.idModule}/${params.idItem}?${queryString}`
         );
       }
+
       await this.$axios
         .get(url)
         .then((res) => {
@@ -230,6 +246,14 @@ export const actions = {
           if (res.data.metaData.captions) {
             commit("setCaptions", res.data.metaData.captions);
           }
+
+          if (
+            res.data.metaData.btnCancel === true ||
+            res.data.metaData.btnCancel === false
+          ) {
+            commit("setBtnCancel", res.data.metaData.btnCancel);
+          }
+
           if (
             res.data.metaData.btnSave === true ||
             res.data.metaData.btnSave === false
@@ -317,7 +341,7 @@ export const actions = {
       return resp;
     } catch (err) {
       commit("setSavedError", true);
-      commit("setErrorMessage", err.response?.data || err.message);
+      commit("setErrorMessage", err.response.data || err.message);
       commit("setFieldJsonError", getErrorMessage(err.response?.data));
       if (err.response) {
         return err.response;
@@ -363,7 +387,7 @@ export const actions = {
       commit("setLoading", false);
       commit("setDisabled", false);
       commit("setSavedError", true);
-      commit("setErrorMessage", e.response.data);
+      commit("setErrorMessage", e.response?.data);
       commit("setFieldJsonError", getErrorMessage(e.response?.data));
       dispatch("menu/fetchMenuById", null, { root: true });
       return e.response;
@@ -513,6 +537,7 @@ export const mutations = {
   },
   setFormField(state, data) {
     const item = state.form.find((d) => d.fieldId === data.fieldId);
+
     if (item !== undefined) {
       item.value = data.value;
       if (item.required) {
@@ -658,6 +683,9 @@ export const mutations = {
   },
   setBtnSave(state, data) {
     state.isSave = data;
+  },
+  setBtnCancel(state, data) {
+    state.isCancel = data;
   },
 
   reverseBtnIsSave(state) {

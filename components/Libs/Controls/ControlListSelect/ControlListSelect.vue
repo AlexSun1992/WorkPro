@@ -165,7 +165,7 @@ export default {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: {
-          value: { ...valuePrepare },
+          value: { ...value },
           text:
             value[this.data.name.substring(2)] ||
             value[this.dataContent.fields[1].label],

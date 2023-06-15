@@ -49,6 +49,7 @@ bcItem.getData = (data) => {
   obj.isCard = data.isCard;
   obj.isForm = data.isForm;
   obj.isWizard = data.isWizard;
+  obj.isUploader = data.isUploader;
   obj.isPortal = data.isPortal;
   obj.portalgrid = data.portalgrid;
   obj.cardgrid = data.cardgrid;
