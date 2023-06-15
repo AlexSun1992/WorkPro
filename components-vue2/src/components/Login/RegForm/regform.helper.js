@@ -9,85 +9,70 @@ export const tooltipText = `Требования к паролю: от ${minLeng
 const forbiddenRussianSign = /^[^а-яА-ЯёЁ]*$/i;
 const uppercaseLetter = /[A-Z]/;
 const lowercaseLetter = /[a-z]/;
-const numeric = /[0-9]/i;
+const numeric = /[0-9]/;
 const space = /[\s]/;
 const forbiddeCharacters = /^[^':<>_`~@&"]*$/i;
 
 /** Функция создания ошибок валидации пароля */
-function createErrorMessage(errorValue) {
+function createErrorMessage(errorText) {
   return {
-    errorText: errorValue,
+    errorText,
   };
 }
 
 export function passwordValidationWindow(password) {
-  /** Массив ошибок для пароля */
-  const errorMessagepasswordValidation = [
-    {
+  const passwordValidator = {
+    lengthValidation: {
       errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
-      isError: false,
+      isError: (pass) =>
+        pass.length < minLengthPassword || pass.length > maxLengthPassword,
       id: 0,
       indicator: 40,
     },
-    {
+    customValidation: {
       errorText:
         "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
-      isError: false,
+      isError: (pass) =>
+        uppercaseLetter.test(pass) === false ||
+        numeric.test(pass) === false ||
+        lowercaseLetter.test(pass) === false,
       id: 1,
       indicator: 20,
     },
-    {
+    spaceValidation: {
       errorText: "Пароль не должен содержать пробел.",
-      isError: false,
+      isError: (pass) => space.test(pass),
       id: 2,
       indicator: 20,
     },
-    {
+    russianSignValidation: {
       errorText:
         "Пароль не должен содержать русских букв в специальных символов.",
-      isError: false,
+      isError: (pass) =>
+        forbiddeCharacters.test(pass) === false ||
+        forbiddenRussianSign.test(pass) === false,
       id: 3,
       indicator: 20,
     },
-  ];
+  };
 
-  if (
-    password.length < minLengthPassword ||
-    password.length > maxLengthPassword
-  ) {
-    errorMessagepasswordValidation[0].isError = true;
-    errorMessagepasswordValidation[0].indicator = 0;
-  }
-  if (
-    uppercaseLetter.test(password) === false ||
-    numeric.test(password) === false ||
-    lowercaseLetter.test(password) === false
-  ) {
-    if (password !== " ") {
-      errorMessagepasswordValidation[1].isError = true;
-      errorMessagepasswordValidation[1].indicator = 0;
-    }
-    if (password !== "") {
-      errorMessagepasswordValidation[1].isError = true;
-      errorMessagepasswordValidation[1].indicator = 0;
-    }
-  }
-  if (space.test(password) === true) {
-    errorMessagepasswordValidation[2].isError = true;
-    errorMessagepasswordValidation[2].indicator = 0;
-  }
-  if (
-    forbiddeCharacters.test(password) === false ||
-    forbiddenRussianSign.test(password) === false
-  ) {
-    errorMessagepasswordValidation[3].isError = true;
-    errorMessagepasswordValidation[3].indicator = 0;
-  }
-  return errorMessagepasswordValidation;
+  const validationTuple = Object.entries(passwordValidator).map(
+    ([key, item]) => [
+      key,
+      {
+        errorText: item.errorText,
+        isError: item.isError(password),
+        indicator: item.isError(password) ? item.indicator : 0,
+      },
+    ]
+  );
+
+  return Object.fromEntries(validationTuple);
 }
 
 export function passwordValidationDetail(password) {
-  return passwordValidationWindow(password)
+  return Object.entries(passwordValidationWindow(password))
+    .map(([, item]) => item)
     .filter((item) => item.isError)
     .map((item) => createErrorMessage(item.errorText));
 }
