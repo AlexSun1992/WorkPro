@@ -87,13 +87,17 @@ export function passwordValidationWindow(password) {
 }
 
 export function passwordValidationDetail(password) {
-  const errorMessagepasswordValidation = [];
+  // const errorMessagepasswordValidation = [];
   const passwordValidationArray = passwordValidationWindow(password);
-  passwordValidationArray.forEach((item) => {
+  const passwordValidationResult = passwordValidationArray.filter((item) => {
     if (item.isError === true) {
-      errorMessagepasswordValidation.push(createErrorMessage(item.errorText));
+      return item;
     }
+    return undefined;
   });
+  const errorMessagepasswordValidation = passwordValidationResult.map((item) =>
+    createErrorMessage(item.errorText)
+  );
   return errorMessagepasswordValidation;
 }
 
