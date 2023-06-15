@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <h1>Загрузите документы</h1>
     <div v-for="(item, i) in getData" :key="i">
-      <p>getData:{{ getData }}</p>
+      <!-- <p>getData:{{ getData }}</p>
       <p>isErrorSize:{{ isErrorSize }}</p>
       <p>getAllSize:{{ getAllSize }}</p>
       <p>getFileObjects:{{ getFileObjects }}</p>
@@ -11,7 +11,7 @@
       <p>isInValidFiles:{{ isInValidFiles }}</p>
       <p>getFormSettings:{{ getFormSettings }}</p>
       <p>getProgressValue:{{ getProgressValue }}</p>
-      <hr />
+      <hr /> -->
       <b>{{ item.TITLE }}</b>
       <upload-drop
         @update="changeFiles(item.NAME, $event)"
@@ -63,7 +63,6 @@ export default {
   name: "UploaderPage",
   components: { UploadDrop },
   async fetch({ store, route }) {
-    console.log("fetch");
     await store.dispatch("uploader/fetchData", {
       ...route.params,
     });
@@ -86,7 +85,7 @@ export default {
     },
 
     removeAllFiles(data) {
-      this.$store.commit("uploader/removeAllFile", data);
+      this.$store.commit("uploader/removeAllFiles", data);
     },
 
     removeFile(file) {

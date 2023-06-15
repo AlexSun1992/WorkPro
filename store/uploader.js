@@ -1,3 +1,4 @@
+import { indexOf } from "lodash";
 import { getErrorMessage } from "../utils/transform";
 
 const FILETYPES = "FILE_TYPES";
@@ -146,19 +147,31 @@ export const mutations = {
     }
   },
 
-  removeAllFile(state, data) {
-    state.data.find((item) => item.value.length === data.length).value = [];
-    state.fileObjects = [];
+  removeAllFiles(state, data) {
+    state.fileObjects = state.fileObjects.filter(
+      (item) => item.size < data.maxFileSize
+    );
+
+    const files = state.data.find((file) => file.name === FILES)?.value;
+
+    files.forEach((item) => {
+      if (item) {
+        if (item.SIZE > data.maxFileSize) {
+          files.splice(files.indexOf(item));
+        }
+      }
+    });
+
+    if (data.overSizeFile) {
+      const docs = state.data.find((file) => file.name === FILES)?.value;
+      docs.splice(0, docs.length);
+      state.fileObjects = [];
+    }
   },
 
   removeFile(state, data) {
-    console.log("state:", state);
-    console.log("data:", data);
-
-    // код, удаляет файлы выборно
     const files = state.data.find((file) => file.name === FILES)?.value;
     const { fileObjects } = state;
-    console.log("fileObjects:", fileObjects);
     const fileObject = fileObjects.find((item) => item.name === data.FILENAME);
     files.splice(files.indexOf(data), 1);
     if (fileObject) {

@@ -1,9 +1,9 @@
 <template>
   <div class="nb-block mb-4 row">
-    <p>isError: {{ isError }}</p>
+    <!-- <p>isError: {{ isError }}</p>
     <p>maxFileCount:{{ maxFileCount }}</p>
     <p>data{{ data }}</p>
-    <p>fileObjects:{{ fileObjects }}</p>
+    <p>fileObjects:{{ fileObjects }}</p> -->
     <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
       <div
         v-if="!isError && file.SIZE < maxFileSize"
@@ -37,12 +37,15 @@
           title="Удалить файл"
         ></button>
       </div>
+
       <div class="error-blk" v-if="file.SIZE > maxFileSize && !isError">
-        <!-- && !isError -->
-        <!-- {{ file }} -->
         Превышен допустимый <br class="d-block d-lg-none" />размер файла -
         {{ formatBytes(maxFileSize) }}
       </div>
+
+      <!-- <div class="error-blk">
+        Превышен суммарный вес файлов !!!!- {{ formatBytes(totalLimit) }}
+      </div> -->
     </div>
     <div class="col-9 col-lg-4" v-if="isError && maxFileCount >= data.length">
       <div class="error-blk">
@@ -56,18 +59,19 @@
       </div>
     </div>
 
-    <hr />
     <div class="col-9 col-lg-4">
       <!-- v-if="isError === false" -->
       <div
         @dragover="dragover"
         @drop="drop"
         class="dropzone-container file-label"
+        :disabled="maxFileCount === data.length || isLoading"
         :class="{
           'error-size': isError,
+          'disabled-upload': maxFileCount === data.length,
         }"
       >
-        <!-- 'disabled-upload': isErrorMaxFileCount === true, -->
+        <!-- 'disabled-upload': isErrorMaxFileCount === true -->
         <!-- :disabled="isError || isLoading || isErrorMaxFileCount" -->
         <input
           type="file"
@@ -89,7 +93,6 @@
         </span> -->
       </div>
     </div>
-    <hr />
   </div>
 </template>
 
@@ -164,9 +167,11 @@ export default {
     },
 
     removeAllFiles(data) {
-      if (this.isErrorMaxFileCount) {
-        this.$emit("removeAllFiles", data);
-      }
+      this.$emit("removeAllFiles", {
+        files: data,
+        overSizeFile: this.isErrorMaxFileCount,
+        maxFileSize: this.maxFileSize,
+      });
     },
     remove(file) {
       this.$emit("remove", file);
