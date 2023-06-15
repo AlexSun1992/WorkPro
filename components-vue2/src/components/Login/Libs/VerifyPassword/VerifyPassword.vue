@@ -92,7 +92,7 @@ import {
 } from "bootstrap-vue";
 import ValidationWindow from "../../../../../../components/Pages/Login/RegForm/ValidationWindow.vue";
 import { tooltipText } from "../../RegForm/regform.helper";
-import { passwordValidationDetail } from "../../RegForm/regform.helper";
+import { passwordValidationWindow } from "../../RegForm/regform.helper";
 
 export default {
   props: [
@@ -162,7 +162,7 @@ export default {
       return tooltipText;
     },
     validationForFirstPassword() {
-      return passwordValidationDetail(this.v.password.$model);
+      return passwordValidationWindow(this.v.password.$model);
     },
   },
 };
