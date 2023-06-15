@@ -62,11 +62,10 @@ export function passwordValidationWindow(password) {
       {
         errorText: item.errorText,
         isError: item.isError(password),
-        indicator: item.isError(password) ? item.indicator : 0,
+        indicator: item.isError(password) ? 0 : item.indicator,
       },
     ]
   );
-
   return Object.fromEntries(validationTuple);
 }
 

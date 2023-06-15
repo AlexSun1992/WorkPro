@@ -20,7 +20,6 @@ export default {
   props: { validationList: Array },
   data() {
     return {
-      indicator: 0,
       isValidationWindow: false,
     };
   },

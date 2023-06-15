@@ -162,7 +162,9 @@ export default {
       return tooltipText;
     },
     validationForFirstPassword() {
-      return passwordValidationWindow(this.v.password.$model);
+      return Object.entries(
+        passwordValidationWindow(this.v.password.$model)
+      ).map(([, item]) => item);
     },
   },
 };
