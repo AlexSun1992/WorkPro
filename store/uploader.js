@@ -24,6 +24,7 @@ export const getters = {
           .find((file) => file.name === FILES)
           .value.filter((fileType) => fileType.NAME === item.NAME),
       })),
+
   getFileObjects: (state) => state.fileObjects,
   getFiles: (state) => state.data.find((type) => type.name === FILES).value,
   getFormSettings: (state) =>
@@ -144,9 +145,20 @@ export const mutations = {
       data.forEach((item) => state.fileObjects.push(item));
     }
   },
+
+  removeAllFile(state, data) {
+    state.data.find((item) => item.value.length === data.length).value = [];
+    state.fileObjects = [];
+  },
+
   removeFile(state, data) {
+    console.log("state:", state);
+    console.log("data:", data);
+
+    // код, удаляет файлы выборно
     const files = state.data.find((file) => file.name === FILES)?.value;
     const { fileObjects } = state;
+    console.log("fileObjects:", fileObjects);
     const fileObject = fileObjects.find((item) => item.name === data.FILENAME);
     files.splice(files.indexOf(data), 1);
     if (fileObject) {
