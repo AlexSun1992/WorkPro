@@ -20,7 +20,7 @@ function createErrorMessage(errorValue) {
   };
 }
 
-export function passwordValidationDetail(password) {
+export function passwordValidationWindow(password) {
   /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [
     {
@@ -86,6 +86,42 @@ export function passwordValidationDetail(password) {
   return errorMessagepasswordValidation;
 }
 
+export function passwordValidationDetail(password) {
+  const passwordValidationResult = passwordValidationWindow(password);
+  /** Массив ошибок для пароля */
+  const errorMessagepasswordValidation = [];
+  if (passwordValidationResult[0].isError) {
+    errorMessagepasswordValidation.push(
+      createErrorMessage(
+        `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`
+      )
+    );
+  }
+  if (passwordValidationResult[1].isError) {
+    if (password !== "") {
+      errorMessagepasswordValidation.push(
+        createErrorMessage(
+          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву."
+        )
+      );
+    }
+  }
+  if (passwordValidationResult[2].isError) {
+    errorMessagepasswordValidation.push(
+      createErrorMessage("Пароль не должен содержать пробел.")
+    );
+  }
+  if (passwordValidationResult[3].isError) {
+    errorMessagepasswordValidation.push(
+      createErrorMessage(
+        "Пароль не должен содержать русских букв в специальных символов."
+      )
+    );
+  }
+
+  return errorMessagepasswordValidation;
+}
+
 /**
  * Функция валидации пароля
  * @param {string} password входящая переменная
@@ -94,15 +130,8 @@ export function passwordValidationDetail(password) {
 export function passwordValidation(password) {
   /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
-  const isError = passwordValidationDetail(password).map((item) => {
-    if (item.isError === true) {
-      return false;
-    }
-    return true;
-  });
-  const isErrorSort = isError.filter((i) => i === false);
 
-  if (isErrorSort.length !== 0) {
+  if (passwordValidationDetail(password).length > 0) {
     errorMessagepasswordValidation.push(
       createErrorMessage(
         `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};,.|/? (пробел исключён)`
