@@ -35,12 +35,6 @@ export default {
     async updateValue() {
       this.clicked = true;
       if (!this.loading && !this.disabled) {
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          value: this.data.name,
-          action: this.data.name.includes("Item"),
-        });
-
         const fields = this.$store.getters["data_card/getForm"];
 
         const updatedFields = await eventHandler(
@@ -55,6 +49,11 @@ export default {
             return;
           }
         }
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          value: this.data.name,
+          action: this.data.name.includes("Item"),
+        });
       }
     },
   },
