@@ -87,7 +87,6 @@ export function passwordValidationWindow(password) {
 }
 
 export function passwordValidationDetail(password) {
-  // const errorMessagepasswordValidation = [];
   const passwordValidationArray = passwordValidationWindow(password);
   const passwordValidationResult = passwordValidationArray.filter((item) => {
     if (item.isError === true) {
