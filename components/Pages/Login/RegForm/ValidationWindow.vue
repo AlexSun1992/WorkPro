@@ -1,5 +1,5 @@
 <template>
-  <div class="validation">
+  <div v-if="toggleValidationWindow" class="validation">
     <div class="indicator">
       <div class="indicator_color" :style="{ width: goIndicator }"></div>
     </div>
@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       indicator: 0,
+      isValidationWindow: false,
     };
   },
   computed: {
@@ -30,6 +31,12 @@ export default {
         indicator += item.indicator;
       });
       return `${indicator}%`;
+    },
+    toggleValidationWindow() {
+      if (/_ym_debug=1/.test(window.location.href)) {
+        return true;
+      }
+      return false;
     },
   },
 };
