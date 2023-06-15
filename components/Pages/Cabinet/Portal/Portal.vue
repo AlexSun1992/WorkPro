@@ -62,7 +62,7 @@ export default {
       default: () => {},
     },
   },
-  created() {
+  mounted() {
     if (!this.$route.params.idCard) {
       this.$store.dispatch("blocks/fetchBlock", {
         id: this.itemId,
