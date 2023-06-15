@@ -87,38 +87,13 @@ export function passwordValidationWindow(password) {
 }
 
 export function passwordValidationDetail(password) {
-  const passwordValidationResult = passwordValidationWindow(password);
-  /** Массив ошибок для пароля */
   const errorMessagepasswordValidation = [];
-  if (passwordValidationResult[0].isError) {
-    errorMessagepasswordValidation.push(
-      createErrorMessage(
-        `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`
-      )
-    );
-  }
-  if (passwordValidationResult[1].isError) {
-    if (password !== "") {
-      errorMessagepasswordValidation.push(
-        createErrorMessage(
-          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву."
-        )
-      );
+  const passwordValidationArray = passwordValidationWindow(password);
+  passwordValidationArray.forEach((item) => {
+    if (item.isError === true) {
+      errorMessagepasswordValidation.push(createErrorMessage(item.errorText));
     }
-  }
-  if (passwordValidationResult[2].isError) {
-    errorMessagepasswordValidation.push(
-      createErrorMessage("Пароль не должен содержать пробел.")
-    );
-  }
-  if (passwordValidationResult[3].isError) {
-    errorMessagepasswordValidation.push(
-      createErrorMessage(
-        "Пароль не должен содержать русских букв в специальных символов."
-      )
-    );
-  }
-
+  });
   return errorMessagepasswordValidation;
 }
 
