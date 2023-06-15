@@ -1,8 +1,13 @@
 const { format, transports } = require("winston");
 
 const { combine, timestamp, prettyPrint } = format;
-module.exports = {
+/**
+ * @type {import("@nuxt/types").NuxtConfig}
+ * https://v2.nuxt.com/docs/configuration-glossary/
+ */
+const nuxtConfig = {
   target: "universal",
+  // ssr: false,
   telemetry: false,
   env: {
     NODE_ENV: process.env.NODE_ENV || "development",
@@ -216,3 +221,5 @@ module.exports = {
     host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
   },
 };
+
+module.exports = nuxtConfig;
