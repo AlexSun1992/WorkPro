@@ -31,10 +31,7 @@ export default {
       return `${indicator}%`;
     },
     featureFlag() {
-      if (new URL(window.location.href).searchParams.has("LK2-882")) {
-        return true;
-      }
-      return false;
+      return new URL(window.location.href).searchParams.has("LK2-882");
     },
     validationList() {
       return Object.entries(passwordValidationWindow(this.passwordValue)).map(
