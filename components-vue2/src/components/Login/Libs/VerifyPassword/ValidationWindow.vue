@@ -1,12 +1,12 @@
 <template>
-  <div v-if="toggleValidationWindow" class="validation">
+  <div v-if="featureFlag" class="validation">
     <div class="indicator">
       <div class="indicator_color" :style="{ width: goIndicator }"></div>
     </div>
     <ul>
       <li
         v-for="item in validationList"
-        :key="item.id"
+        :key="item.errorText"
         :class="{ success: !item.isError }"
       >
         {{ item.errorText }}
@@ -15,13 +15,12 @@
   </div>
 </template>
 <script>
+import { passwordValidationWindow } from "../../RegForm/regform.helper";
 export default {
   name: "ValidationWindow",
-  props: { validationList: Array },
+  props: { passwordValue: String },
   data() {
-    return {
-      isValidationWindow: false,
-    };
+    return {};
   },
   computed: {
     goIndicator() {
@@ -31,11 +30,16 @@ export default {
       });
       return `${indicator}%`;
     },
-    toggleValidationWindow() {
-      if (/_ym_debug=1/.test(window.location.href)) {
+    featureFlag() {
+      if (new URL(window.location.href).searchParams.has("LK2-882")) {
         return true;
       }
       return false;
+    },
+    validationList() {
+      return Object.entries(passwordValidationWindow(this.passwordValue)).map(
+        ([, item]) => item
+      );
     },
   },
 };

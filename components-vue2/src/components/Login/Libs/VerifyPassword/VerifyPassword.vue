@@ -3,7 +3,7 @@
     <div class="col-12 col-lg-6">
       <validation-window
         v-if="!toggleVerifyWindow"
-        :validationList="validationForFirstPassword"
+        :passwordValue="this.v.password.$model"
       />
       <b-form-group>
         <legend>
@@ -90,9 +90,8 @@ import {
   BCol,
   BRow,
 } from "bootstrap-vue";
-import ValidationWindow from "../../../../../../components/Pages/Login/RegForm/ValidationWindow.vue";
+import ValidationWindow from "./ValidationWindow.vue";
 import { tooltipText } from "../../RegForm/regform.helper";
-import { passwordValidationWindow } from "../../RegForm/regform.helper";
 
 export default {
   props: [
@@ -160,11 +159,6 @@ export default {
     },
     tooltipValidation() {
       return tooltipText;
-    },
-    validationForFirstPassword() {
-      return Object.entries(
-        passwordValidationWindow(this.v.password.$model)
-      ).map(([, item]) => item);
     },
   },
 };

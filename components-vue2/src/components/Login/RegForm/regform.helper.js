@@ -13,6 +13,40 @@ const numeric = /[0-9]/;
 const space = /[\s]/;
 const forbiddeCharacters = /^[^':<>_`~@&"]*$/i;
 
+/**
+ * @type {import("./regform.helper.types").PasswordValidatorы}
+ */
+export const passwordValidator = {
+  lengthValidation: {
+    errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+    isError: (pass) =>
+      pass.length < minLengthPassword || pass.length > maxLengthPassword,
+    indicator: 40,
+  },
+  customValidation: {
+    errorText:
+      "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+    isError: (pass) =>
+      uppercaseLetter.test(pass) === false ||
+      numeric.test(pass) === false ||
+      lowercaseLetter.test(pass) === false,
+    indicator: 20,
+  },
+  spaceValidation: {
+    errorText: "Пароль не должен содержать пробел.",
+    isError: (pass) => space.test(pass),
+    indicator: 20,
+  },
+  russianSignValidation: {
+    errorText:
+      "Пароль не должен содержать русских букв и специальных символов.",
+    isError: (pass) =>
+      forbiddeCharacters.test(pass) === false ||
+      forbiddenRussianSign.test(pass) === false,
+    indicator: 20,
+  },
+};
+
 /** Функция создания ошибок валидации пароля */
 function createErrorMessage(errorText) {
   return {
@@ -21,41 +55,6 @@ function createErrorMessage(errorText) {
 }
 
 export function passwordValidationWindow(password) {
-  const passwordValidator = {
-    lengthValidation: {
-      errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
-      isError: (pass) =>
-        pass.length < minLengthPassword || pass.length > maxLengthPassword,
-      id: 0,
-      indicator: 40,
-    },
-    customValidation: {
-      errorText:
-        "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
-      isError: (pass) =>
-        uppercaseLetter.test(pass) === false ||
-        numeric.test(pass) === false ||
-        lowercaseLetter.test(pass) === false,
-      id: 1,
-      indicator: 20,
-    },
-    spaceValidation: {
-      errorText: "Пароль не должен содержать пробел.",
-      isError: (pass) => space.test(pass),
-      id: 2,
-      indicator: 20,
-    },
-    russianSignValidation: {
-      errorText:
-        "Пароль не должен содержать русских букв в специальных символов.",
-      isError: (pass) =>
-        forbiddeCharacters.test(pass) === false ||
-        forbiddenRussianSign.test(pass) === false,
-      id: 3,
-      indicator: 20,
-    },
-  };
-
   const validationTuple = Object.entries(passwordValidator).map(
     ([key, item]) => [
       key,
