@@ -222,19 +222,14 @@ describe("Валидация компонента passwordValidationDetail in Re
 describe("Валидация компонента passwordValidationWindow in RegForm.vue", () => {
   it("Успешный пароль", () => {
     const passwordValidationMessage = passwordValidationWindow("Reso19910*y");
-
-    expect(
-      passwordValidationMessage.lengthValidation.isError &&
-        passwordValidationMessage.spaceValidation.isError
-    ).toBe(false);
+    expect(passwordValidationMessage.lengthValidation.isError).toBe(false);
+    expect(passwordValidationMessage.spaceValidation.isError).toBe(false);
   });
 
   it("Если поле пустое выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("");
-    expect(
-      passwordValidationMessage.lengthValidation.isError &&
-        passwordValidationMessage.customValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
+    expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
   });
 
   it("Если поле содержит меньше 8 символов , то выводит ошибку", () => {
@@ -258,12 +253,10 @@ describe("Валидация компонента passwordValidationWindow in Re
   it("Если поле содержит специальный символ , то выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationWindow("1kkkkkRkkkkkkkk)");
-    expect(
-      passwordValidationMessage.lengthValidation.isError &&
-        passwordValidationMessage.customValidation.isError &&
-        passwordValidationMessage[2].isError &&
-        passwordValidationMessage.russianSignValidation.isError
-    ).toBe(false);
+    expect(passwordValidationMessage.lengthValidation.isError).toBe(false);
+    expect(passwordValidationMessage.customValidation.isError).toBe(false);
+    expect(passwordValidationMessage.spaceValidation.isError).toBe(false);
+    expect(passwordValidationMessage.russianSignValidation.isError).toBe(false);
   });
 
   it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
@@ -298,20 +291,16 @@ describe("Валидация компонента passwordValidationWindow in Re
 
   it("Если поле содержит русские буквы, специальный символ и содержит меньше 8 символов, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("1Rkз!");
-    expect(
-      passwordValidationMessage.russianSignValidation.isError &&
-        passwordValidationMessage.lengthValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
+    expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
   });
 
   it("Если поле содержит русские буквы, специальный символ и содержит больше 20 символов, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow(
       "1kппппhhhhhhhhRhhhhhhhhhз!"
     );
-    expect(
-      passwordValidationMessage.russianSignValidation.isError &&
-        passwordValidationMessage.lengthValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
+    expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
   });
 
   it("Если поле содержит русские буквы, специальный символ и нет цифр, то выводит ошибку", () => {
@@ -324,18 +313,14 @@ describe("Валидация компонента passwordValidationWindow in Re
 
   it("Если поле содержит русские буквы, специальный символ и нет латинских букв, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("1111111пfппз!");
-    expect(
-      passwordValidationMessage.russianSignValidation.isError &&
-        passwordValidationMessage.customValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
+    expect(passwordValidationMessage.customValidation.isError).toBe(true);
   });
 
   it("Если поле содержит русские буквы, специальный символ и нет латинских букв, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("gR");
-    expect(
-      passwordValidationMessage.lengthValidation.isError &&
-        passwordValidationMessage.customValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.customValidation.isError).toBe(true);
+    expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
   });
 
   it("Если поле не содержит заглавную латинскую букву, то выводит ошибку", () => {
