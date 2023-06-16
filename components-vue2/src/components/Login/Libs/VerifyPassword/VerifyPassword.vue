@@ -1,10 +1,7 @@
 <template>
   <div class="row mt-3">
     <div class="col-12 col-lg-6">
-      <validation-window
-        v-if="!toggleVerifyWindow"
-        :passwordValue="this.v.password.$model"
-      />
+      <validation-window :passwordValue="this.v.password.$model" />
       <b-form-group>
         <legend>
           {{ showLabel }}
@@ -111,7 +108,6 @@ export default {
       pswVisible2: false,
       pswVisible: false,
       isUserBlured: true,
-      toggleVerifyWindow: true,
     };
   },
   methods: {
@@ -131,7 +127,6 @@ export default {
     },
     updateField(field) {
       this.$emit("checkCodeFieldValid", this.validateState(field));
-      this.toggleVerifyWindow = this.validateState(field);
     },
     changeField(field) {
       if (this.validateState(field)) {
