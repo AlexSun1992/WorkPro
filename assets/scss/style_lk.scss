@@ -1201,6 +1201,9 @@ footer .copyright a:hover {
 }
 
 @media (max-width: 992px) {
+  .sidebar_client {
+    border-radius: 0;
+  }
   .mt-chck {
     margin-top: 0;
   }
