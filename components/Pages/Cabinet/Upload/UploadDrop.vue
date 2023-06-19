@@ -1,8 +1,39 @@
 <template>
   <div class="nb-block mb-4 row">
-    <!-- <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
+    <div v-if="isError === false" class="col-9 col-lg-4">
       <div
-        v-if="!isError && file.SIZE < maxFileSize"
+        @dragover="dragover"
+        @drop="drop"
+        class="dropzone-container file-label"
+        :class="{
+          'disabled-upload': isErrorMaxFileCount === true,
+          'error-size': isError,
+        }"
+      >
+        <input
+          :disabled="isError || isLoading || isErrorMaxFileCount"
+          type="file"
+          multiple
+          class="hidden-input"
+          @change="onChange"
+          ref="file"
+          :accept="stringExtensions"
+        />
+        <span v-if="isErrorMaxFileCount === false"
+          >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
+        >
+
+        <span v-if="isErrorMaxFileCount === true">
+          Максимум загружен<span>
+            Удалите загруженный файл если хотите загрузить<br />другой
+            <!--{{ maxFileCount }}
+        <br />Удалите загруженный файл если хотите загрузить другой--></span
+          >
+        </span>
+      </div>
+    </div>
+    <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
+      <div
         class="preview-card"
         v-bind:class="{
           'error-card': file.SIZE > maxFileSize,
@@ -14,6 +45,7 @@
             ><b>.{{ file.FILENAME.split(".").pop() }}</b>
           </div>
           <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
+
           <div v-if="file.SIZE > maxFileSize">
             Превышен допустимый <br class="d-block d-lg-none" />размер файла -
             {{ formatBytes(maxFileSize) }}
@@ -33,60 +65,15 @@
           title="Удалить файл"
         ></button>
       </div>
-
-      <div class="error-blk" v-if="file.SIZE > maxFileSize && !isError">
+      <div class="error-blk" v-if="file.SIZE > maxFileSize">
         Превышен допустимый <br class="d-block d-lg-none" />размер файла -
         {{ formatBytes(maxFileSize) }}
       </div>
-    </div> -->
-
-    <div class="col-9 col-lg-4" v-if="isError && maxFileCount >= data.length">
+    </div>
+    <div class="col-9 col-lg-4" v-if="isError">
       <div class="error-blk">
         Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
       </div>
-    </div>
-
-    <div class="col-9 col-lg-4" v-if="data.length > maxFileCount">
-      <div class="error-blk">
-        <p>maxFileCount:{{ maxFileCount }}</p>
-      </div>
-    </div>
-
-    <div class="col-9 col-lg-4">
-      <!-- v-if="isError === false" -->
-      <div
-        @dragover="dragover"
-        @drop="drop"
-        class="dropzone-container file-label"
-        :disabled="maxFileCount === data.length || isLoading"
-        :class="{
-          'error-size': isError,
-          'disabled-upload': maxFileCount === data.length,
-        }"
-      >
-        <!-- 'disabled-upload': isErrorMaxFileCount === true -->
-        <!-- :disabled="isError || isLoading || isErrorMaxFileCount" -->
-        <input
-          type="file"
-          multiple
-          class="hidden-input"
-          @click="removeAllFiles(data)"
-          @change="onChange"
-          ref="file"
-          :accept="stringExtensions"
-        />
-        <span>
-          <!-- v-if="isErrorMaxFileCount === false" -->
-          Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
-        >
-
-        <!-- <span v-if="isErrorMaxFileCount === true">
-          Максимум загружен<span>
-            Удалите загруженный файл если хотите загрузить<br />другой
-          </span>
-        </span> -->
-      </div>
-      <p>isError:{{ isError }}</p>
     </div>
   </div>
 </template>
@@ -139,28 +126,8 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {};
-  },
   methods: {
     onChange() {
-      // console.log("this.isErrorSize:", this.isErrorSize);
-      // console.log("this.isLoading:", this.isLoading);
-      // console.log("isError:", this.isError);
-      //
-
-      console.log("maxFileCount:", this.maxFileCount);
-      console.log("totalLimit:", this.totalLimit);
-      console.log("maxFileSize:", this.maxFileSize);
-      console.log("allSize:", this.allSize);
-
-      const loadedFiles = [...this.$refs.file.files].map((item) => ({
-        FILENAME: item.name,
-        SIZE: item.size,
-      }));
-
-      console.log("loadedFiles:", loadedFiles);
-
       if (this.isErrorSize === false && this.isLoading === false) {
         this.$emit("update", [...this.$refs.file.files]);
         this.$refs.file.value = null;
@@ -179,14 +146,6 @@ export default {
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
-    },
-
-    removeAllFiles(data) {
-      this.$emit("removeAllFiles", {
-        files: data,
-        overSizeFile: this.isErrorMaxFileCount,
-        maxFileSize: this.maxFileSize,
-      });
     },
     remove(file) {
       this.$emit("remove", file);
