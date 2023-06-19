@@ -1,4 +1,3 @@
-import { indexOf } from "lodash";
 import { getErrorMessage } from "../utils/transform";
 
 const FILETYPES = "FILE_TYPES";
@@ -75,10 +74,12 @@ export const actions = {
         `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
       )
       .then((res) => {
+        console.log("res.data.data:", res.data.data);
         commit("setData", res.data.data);
       });
   },
   async saveDataUploader({ commit, state, getters }, params) {
+    // console.log("saveDataUploader:");
     try {
       const formData = new FormData();
       const fileObjects = getters.getFileObjects;
@@ -137,6 +138,8 @@ export const mutations = {
   },
   setFiles(state, data) {
     const files = state.data.find((file) => file.name === FILES)?.value;
+    // console.log("files:", files);
+    // console.log("data:", data);
     if (files && Array.isArray(data)) {
       data.forEach((item) => files.push(item));
     }

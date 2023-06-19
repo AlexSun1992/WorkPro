@@ -1,10 +1,6 @@
 <template>
   <div class="nb-block mb-4 row">
-    <!-- <p>isError: {{ isError }}</p>
-    <p>maxFileCount:{{ maxFileCount }}</p>
-    <p>data{{ data }}</p>
-    <p>fileObjects:{{ fileObjects }}</p> -->
-    <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
+    <!-- <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
       <div
         v-if="!isError && file.SIZE < maxFileSize"
         class="preview-card"
@@ -42,11 +38,8 @@
         Превышен допустимый <br class="d-block d-lg-none" />размер файла -
         {{ formatBytes(maxFileSize) }}
       </div>
+    </div> -->
 
-      <!-- <div class="error-blk">
-        Превышен суммарный вес файлов !!!!- {{ formatBytes(totalLimit) }}
-      </div> -->
-    </div>
     <div class="col-9 col-lg-4" v-if="isError && maxFileCount >= data.length">
       <div class="error-blk">
         Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
@@ -86,12 +79,14 @@
           <!-- v-if="isErrorMaxFileCount === false" -->
           Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
         >
+
         <!-- <span v-if="isErrorMaxFileCount === true">
           Максимум загружен<span>
             Удалите загруженный файл если хотите загрузить<br />другой
           </span>
         </span> -->
       </div>
+      <p>isError:{{ isError }}</p>
     </div>
   </div>
 </template>
@@ -144,8 +139,28 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {};
+  },
   methods: {
     onChange() {
+      // console.log("this.isErrorSize:", this.isErrorSize);
+      // console.log("this.isLoading:", this.isLoading);
+      // console.log("isError:", this.isError);
+      //
+
+      console.log("maxFileCount:", this.maxFileCount);
+      console.log("totalLimit:", this.totalLimit);
+      console.log("maxFileSize:", this.maxFileSize);
+      console.log("allSize:", this.allSize);
+
+      const loadedFiles = [...this.$refs.file.files].map((item) => ({
+        FILENAME: item.name,
+        SIZE: item.size,
+      }));
+
+      console.log("loadedFiles:", loadedFiles);
+
       if (this.isErrorSize === false && this.isLoading === false) {
         this.$emit("update", [...this.$refs.file.files]);
         this.$refs.file.value = null;

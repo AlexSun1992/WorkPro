@@ -2,17 +2,8 @@
   <div class="col-lg-12">
     <h1>Загрузите документы</h1>
     <div v-for="(item, i) in getData" :key="i">
-      <!-- <p>getData:{{ getData }}</p>
-      <p>isErrorSize:{{ isErrorSize }}</p>
-      <p>getAllSize:{{ getAllSize }}</p>
-      <p>getFileObjects:{{ getFileObjects }}</p>
-      <p>getErrorMessage:{{ getErrorMessage }}</p>
-      <p>isError:{{ isError }}</p>
-      <p>isInValidFiles:{{ isInValidFiles }}</p>
-      <p>getFormSettings:{{ getFormSettings }}</p>
-      <p>getProgressValue:{{ getProgressValue }}</p>
-      <hr /> -->
       <b>{{ item.TITLE }}</b>
+      <p>getData:{{ getData }}</p>
       <upload-drop
         @update="changeFiles(item.NAME, $event)"
         @remove="removeFile($event)"
@@ -80,6 +71,9 @@ export default {
         SIZE: item.size,
         NAME: name,
       }));
+      // console.log("data:", data);
+      // console.log("files:", files);
+      // console.log("data:", data);
       this.$store.commit("uploader/setFiles", files);
       this.$store.commit("uploader/setFileObjects", data);
     },
