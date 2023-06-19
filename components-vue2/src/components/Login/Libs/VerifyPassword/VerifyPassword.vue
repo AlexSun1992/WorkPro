@@ -1,6 +1,7 @@
 <template>
   <div class="row mt-3">
     <div class="col-12 col-lg-6">
+      <validation-window :passwordValue="this.v.password.$model" />
       <b-form-group>
         <legend>
           {{ showLabel }}
@@ -86,6 +87,7 @@ import {
   BCol,
   BRow,
 } from "bootstrap-vue";
+import ValidationWindow from "./ValidationWindow.vue";
 import { tooltipText } from "../../RegForm/regform.helper";
 
 export default {
@@ -144,6 +146,7 @@ export default {
     BCol,
     BRow,
     VueEasyTooltip,
+    ValidationWindow,
   },
   computed: {
     showLabel() {

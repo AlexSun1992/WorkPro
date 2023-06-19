@@ -4937,3 +4937,34 @@ a.color-l-green:hover {
 .ui.search.dropdown > input.search {
   z-index: 4;
 }
+
+.policy_data {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 10px;
+}
+.policy_data [data-row="2"] {
+  grid-row: span 2;
+}
+@media (max-width: 992px) {
+  .policy_data {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .policy_data > div:nth-child(2) {
+    grid-column: span 2;
+    grid-row: 1;
+  }
+  .policy_data > div:nth-child(1) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .policy_data > div:nth-child(5) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .policy_data > div:nth-child(6) {
+    grid-column: 1;
+    grid-row: 3;
+  }
+}
