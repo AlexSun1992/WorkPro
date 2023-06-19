@@ -24,6 +24,7 @@ export const getters = {
           .find((file) => file.name === FILES)
           .value.filter((fileType) => fileType.NAME === item.NAME),
       })),
+
   getFileObjects: (state) => state.fileObjects,
   getFiles: (state) => state.data.find((type) => type.name === FILES).value,
   getFormSettings: (state) =>
@@ -73,10 +74,12 @@ export const actions = {
         `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
       )
       .then((res) => {
+        console.log("res.data.data:", res.data.data);
         commit("setData", res.data.data);
       });
   },
   async saveDataUploader({ commit, state, getters }, params) {
+    // console.log("saveDataUploader:");
     try {
       const formData = new FormData();
       const fileObjects = getters.getFileObjects;
@@ -135,6 +138,8 @@ export const mutations = {
   },
   setFiles(state, data) {
     const files = state.data.find((file) => file.name === FILES)?.value;
+    // console.log("files:", files);
+    // console.log("data:", data);
     if (files && Array.isArray(data)) {
       data.forEach((item) => files.push(item));
     }
@@ -144,6 +149,29 @@ export const mutations = {
       data.forEach((item) => state.fileObjects.push(item));
     }
   },
+
+  removeAllFiles(state, data) {
+    state.fileObjects = state.fileObjects.filter(
+      (item) => item.size < data.maxFileSize
+    );
+
+    const files = state.data.find((file) => file.name === FILES)?.value;
+
+    files.forEach((item) => {
+      if (item) {
+        if (item.SIZE > data.maxFileSize) {
+          files.splice(files.indexOf(item));
+        }
+      }
+    });
+
+    if (data.overSizeFile) {
+      const docs = state.data.find((file) => file.name === FILES)?.value;
+      docs.splice(0, docs.length);
+      state.fileObjects = [];
+    }
+  },
+
   removeFile(state, data) {
     const files = state.data.find((file) => file.name === FILES)?.value;
     const { fileObjects } = state;

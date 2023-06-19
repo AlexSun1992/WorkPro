@@ -3,10 +3,11 @@
     <h1>Загрузите документы</h1>
     <div v-for="(item, i) in getData" :key="i">
       <b>{{ item.TITLE }}</b>
-      <p></p>
+      <p>getData:{{ getData }}</p>
       <upload-drop
         @update="changeFiles(item.NAME, $event)"
         @remove="removeFile($event)"
+        @removeAllFiles="removeAllFiles($event)"
         :data="item.FILES"
         :file-objects="getFileObjects"
         :all-size="getAllSize"
@@ -29,20 +30,20 @@
         />
       </div>
     </div>
-<!--    <b-progress v-if="isLoading" class="mt-2" :max="max" show-value>-->
-<!--      <b-progress-bar-->
-<!--        :value="getProgressValue"-->
-<!--        variant="success"-->
-<!--      ></b-progress-bar>-->
-<!--    </b-progress>-->
-<!--    <b-button-->
-<!--      v-if="isLoading"-->
-<!--      variant="success"-->
-<!--      @click="canselUploading"-->
-<!--      class="mt-3"-->
-<!--    >-->
-<!--      Отменить загрузку файлов-->
-<!--    </b-button>-->
+    <!--    <b-progress v-if="isLoading" class="mt-2" :max="max" show-value>-->
+    <!--      <b-progress-bar-->
+    <!--        :value="getProgressValue"-->
+    <!--        variant="success"-->
+    <!--      ></b-progress-bar>-->
+    <!--    </b-progress>-->
+    <!--    <b-button-->
+    <!--      v-if="isLoading"-->
+    <!--      variant="success"-->
+    <!--      @click="canselUploading"-->
+    <!--      class="mt-3"-->
+    <!--    >-->
+    <!--      Отменить загрузку файлов-->
+    <!--    </b-button>-->
   </div>
 </template>
 
@@ -70,12 +71,21 @@ export default {
         SIZE: item.size,
         NAME: name,
       }));
+      // console.log("data:", data);
+      // console.log("files:", files);
+      // console.log("data:", data);
       this.$store.commit("uploader/setFiles", files);
       this.$store.commit("uploader/setFileObjects", data);
     },
+
+    removeAllFiles(data) {
+      this.$store.commit("uploader/removeAllFiles", data);
+    },
+
     removeFile(file) {
       this.$store.commit("uploader/removeFile", file);
     },
+
     async saveDataUploader() {
       await this.$store.dispatch("uploader/saveDataUploader", {
         ...this.$route.params,
