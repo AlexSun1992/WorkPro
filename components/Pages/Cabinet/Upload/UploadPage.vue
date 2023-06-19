@@ -1,5 +1,6 @@
 <template>
   <div class="col-lg-12">
+    {{ getFileErrors }}
     <h1>Загрузите документы</h1>
     <div v-for="(item, i) in getData" :key="i">
       <b>{{ item.TITLE }}</b>
@@ -65,13 +66,7 @@ export default {
   },
   methods: {
     changeFiles(name, data) {
-      const files = data.map((item) => ({
-        FILENAME: item.name,
-        SIZE: item.size,
-        NAME: name,
-      }));
-      this.$store.commit("uploader/setFiles", files);
-      this.$store.commit("uploader/setFileObjects", data);
+      this.$store.dispatch("uploader/addData", { data, name });
     },
     removeFile(file) {
       this.$store.commit("uploader/removeFile", file);
@@ -115,6 +110,9 @@ export default {
     },
     getProgressValue() {
       return this.$store.getters["uploader/getProgressValue"];
+    },
+    getFileErrors() {
+      return this.$store.getters["uploader/getFileErrors"];
     },
   },
 };
