@@ -26,7 +26,9 @@ export const getters = {
           .value.filter((fileType) => fileType.NAME === item.NAME),
       })),
   getFileObjects: (state) => state.fileObjects,
-  getFileErrors: (state) => state.fileErrors,
+  getFileErrors: (state) => [
+    ...new Map(state.fileErrors.map((item) => [item.type, item])).values(),
+  ],
   getFiles: (state) =>
     state.data.find((type) => type.name === FILES_PROPERTY).value,
   getFormSettings: (state) =>
