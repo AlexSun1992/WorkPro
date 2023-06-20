@@ -1952,6 +1952,7 @@ input:disabled + .mx-icon-calendar {
     );
   grid-template-rows: minmax(25px, max-content) auto minmax(20px, max-content);
   display: grid;
+  background-color: #fff;
 }
 
 .agent-blocks .title {
@@ -3111,6 +3112,7 @@ input.is-invalid {
   border-radius: 12px;
   position: relative;
   min-height: 222px;
+  background-color: #fff;
 }
 
 [data-card-id="705"]:after {
@@ -3888,6 +3890,10 @@ a[data-newcount][data-newcolor="RED"]:after {
   position: absolute;
 }
 
+.my-policy-actions button.action:hover,
+.my-policy-actions button.action {
+  background-color: #fff;
+}
 .my-policy-actions[data-id="2"] .btn-insurance-case:after,
 .my-policy-actions[data-id="3"] .btn-insurance-case:after,
 .my-policy-actions[data-id="5"] .btn-insurance-case:after {
