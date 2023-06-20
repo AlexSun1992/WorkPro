@@ -1,6 +1,5 @@
 <template>
   <div class="col-lg-12">
-    {{ getFileErrors }}
     <h1>Загрузите документы</h1>
     <div v-for="(item, i) in getData" :key="i">
       <b>{{ item.TITLE }}</b>
@@ -9,7 +8,9 @@
         @update="changeFiles(item.NAME, $event)"
         @remove="removeFile($event)"
         :data="item.FILES"
+        :name="item.NAME"
         :file-objects="getFileObjects"
+        :file-errors="getFileErrors"
         :all-size="getAllSize"
         :is-error-size="isErrorSize"
         :is-loading="isLoading"
@@ -69,7 +70,7 @@ export default {
       this.$store.dispatch("uploader/addData", { data, name });
     },
     removeFile(file) {
-      this.$store.commit("uploader/removeFile", file);
+      this.$store.dispatch("uploader/delFile", file);
     },
     async saveDataUploader() {
       await this.$store.dispatch("uploader/saveDataUploader", {

@@ -121,10 +121,10 @@ export const actions = {
             SIZE: item.size,
             NAME: name,
           });
+          commit("setFileObject", item);
         }
       });
     }
-    commit("setFileObjects", data);
   },
   async saveDataUploader({ commit, state, getters }, params) {
     try {
@@ -177,6 +177,10 @@ export const actions = {
     controller.abort();
     commit("setLoading", false);
   },
+  delFile({ commit }, data) {
+    commit("setFileErrors", []);
+    commit("removeFile", data);
+  },
 };
 
 export const mutations = {
@@ -202,33 +206,9 @@ export const mutations = {
       data.forEach((item) => state.fileObjects.push(item));
     }
   },
-
-  removeAllFiles(state, data) {
-    state.fileObjects = state.fileObjects.filter(
-      (item) => item.size < data.maxFileSize
-    );
-
-    const files = state.data.find(
-      (file) => file.name === FILES_PROPERTY
-    )?.value;
-
-    files.forEach((item) => {
-      if (item) {
-        if (item.SIZE > data.maxFileSize) {
-          files.splice(files.indexOf(item));
-        }
-      }
-    });
-
-    if (data.overSizeFile) {
-      const docs = state.data.find(
-        (file) => file.name === FILES_PROPERTY
-      )?.value;
-      docs.splice(0, docs.length);
-      state.fileObjects = [];
-    }
+  setFileObject(state, data) {
+    state.fileObjects.push(data);
   },
-
   removeFile(state, data) {
     const files = state.data.find(
       (file) => file.name === FILES_PROPERTY
