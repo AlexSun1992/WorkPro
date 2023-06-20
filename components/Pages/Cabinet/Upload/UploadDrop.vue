@@ -1,5 +1,45 @@
 <template>
   <div class="nb-block mb-4 row">
+    <div v-if="isError === false" class="col-9 col-lg-4">
+      <div
+        @dragover="dragover"
+        @drop="drop"
+        class="dropzone-container file-label"
+        :class="{
+          'disabled-upload': isMaxFileCount === true,
+          'error-size': isError,
+        }"
+      >
+        <input
+          :disabled="isError || isLoading || isMaxFileCount"
+          type="file"
+          multiple
+          class="hidden-input"
+          @change="onChange"
+          ref="file"
+          :accept="stringExtensions"
+        />
+        <span v-if="isMaxFileCount === false"
+          >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
+        >
+        <span v-if="isMaxFileCount === true">
+          Максим. кол-во файлов загружено<span>
+            Удалите загруженный файл если хотите загрузить<br />другой
+          </span>
+        </span>
+      </div>
+    </div>
+    <div v-for="(error, i) in errors" :key="i" class="col-9 col-lg-4">
+      <div v-if="error.type === 'MAX_FILE_COUNT'" class="error-blk">
+        Не более {{ maxFileCount }} файлов
+      </div>
+      <div v-if="error.type === 'TOTAL_LIMIT'" class="error-blk">
+        Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
+      </div>
+      <div v-if="error.type === 'MAX_FILE_SIZE'" class="error-blk">
+        Превышен максимальный вес файла - {{ formatBytes(maxFileSize) }}
+      </div>
+    </div>
     <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
       <div
         class="preview-card"
@@ -38,44 +78,6 @@
         {{ formatBytes(maxFileSize) }}
       </div>
     </div>
-    <div class="col-9 col-lg-4" v-if="isError">
-      <div class="error-blk">
-        Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
-      </div>
-    </div>
-
-    <div v-if="isError === false" class="col-9 col-lg-4">
-      <div
-        @dragover="dragover"
-        @drop="drop"
-        class="dropzone-container file-label"
-        :class="{
-          'disabled-upload': isErrorMaxFileCount === true,
-          'error-size': isError,
-        }"
-      >
-        <input
-          :disabled="isError || isLoading || isErrorMaxFileCount"
-          type="file"
-          multiple
-          class="hidden-input"
-          @change="onChange"
-          ref="file"
-          :accept="stringExtensions"
-        />
-        <span v-if="isErrorMaxFileCount === false"
-          >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
-        >
-
-        <span v-if="isErrorMaxFileCount === true">
-          Максимум загружен<span>
-            Удалите загруженный файл если хотите загрузить<br />другой
-            <!--{{ maxFileCount }}
-            <br />Удалите загруженный файл если хотите загрузить другой--></span
-          >
-        </span>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -91,6 +93,11 @@ export default {
       default: () => [],
     },
     fileObjects: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
+    fileErrors: {
       type: Array,
       required: false,
       default: () => [],
@@ -126,10 +133,18 @@ export default {
       type: Array,
       required: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     onChange() {
-      if (this.isErrorSize === false && this.isLoading === false) {
+      if (
+        this.isErrorSize === false &&
+        this.isLoading === false &&
+        this.isMaxFileCount === false
+      ) {
         this.$emit("update", [...this.$refs.file.files]);
         this.$refs.file.value = null;
       }
@@ -180,11 +195,14 @@ export default {
     isError() {
       return this.isErrorSize;
     },
-    isErrorMaxFileCount() {
-      return this.data.length > this.maxFileCount;
+    isMaxFileCount() {
+      return this.data.length === this.maxFileCount;
     },
     stringExtensions() {
       return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
+    },
+    errors() {
+      return this.fileErrors.filter((error) => error.name === this.name);
     },
   },
 };
