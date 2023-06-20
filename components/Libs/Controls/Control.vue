@@ -57,6 +57,7 @@ import ControlRadioButton from "./ControlRadioButton.vue";
 import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
 import ControlOneToMany from "./ControlOneToMany/ControlOneToMany";
 import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConfirm.vue";
+import ControlCollapseGroup from "./ControlCollapseGroup.vue";
 
 export default {
   name: "Control",
@@ -95,6 +96,7 @@ export default {
     ControlDoctorSchedule,
     ControlOneToMany,
     ControlPasswordConfirm,
+    ControlCollapseGroup,
   },
   props: {
     data: {
