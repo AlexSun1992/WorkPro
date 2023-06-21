@@ -4,6 +4,7 @@
       <div
         @dragover="dragover"
         @drop="drop"
+        @click="onClick"
         class="dropzone-container file-label"
         :class="{
           'disabled-upload': isMaxFileCount === true,
@@ -149,6 +150,9 @@ export default {
         this.$refs.file.value = null;
       }
     },
+    onClick() {
+      this.$emit("click");
+    },
     downloadFile(name) {
       const file = this.fileObjects.find((item) => item.name === name);
       if (!file) {
@@ -168,6 +172,7 @@ export default {
     },
     dragover(event) {
       event.preventDefault();
+      this.$emit("click");
     },
     drop(event) {
       event.preventDefault();
