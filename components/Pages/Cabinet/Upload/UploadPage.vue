@@ -34,7 +34,8 @@
     </div>
     <b-progress
       v-if="isLoading"
-      class="mt-2 display-none"
+      style="display: none"
+      class="mt-2"
       :max="max"
       show-value
     >
@@ -45,9 +46,10 @@
     </b-progress>
     <b-button
       v-if="isLoading"
+      style="display: none"
       variant="success"
       @click="canselUploading"
-      class="mt-3 display-none"
+      class="mt-3"
     >
       Отменить загрузку файлов
     </b-button>
