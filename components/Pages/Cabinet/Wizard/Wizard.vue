@@ -51,7 +51,10 @@
       />
       <wizard-uploader-buttons
         v-if="settingsByItem.isUploader === true"
+        :current-tab="currentTab"
+        :tabs="tabs"
         :loading="loading"
+        @goBack="goBack($event)"
         @saveUploader="saveUploader($event)"
       />
     </div>
