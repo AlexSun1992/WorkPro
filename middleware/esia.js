@@ -13,6 +13,12 @@ export default function ({ route, redirect, $axios, $cookiz }) {
       const data = res.data[0];
       $cookiz.set("auth._token.local", data.ACCESS_TOKEN);
       $cookiz.set("auth._refresh_token.local", data.REFRESH_TOKEN);
+
+      const ref = $cookiz.get("ref");
+      if (ref) {
+        $cookiz.remove("ref");
+        return redirect(ref);
+      }
       return redirect("/cabinet");
     })
     .catch((error) =>

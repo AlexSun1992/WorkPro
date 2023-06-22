@@ -1,5 +1,4 @@
 import { isCriticalError } from "@/plugins/auth/toast.helper";
-import { generateRedirectURLWithRef } from "@/middleware/router.helper";
 
 export default function ({
   app,
@@ -8,6 +7,7 @@ export default function ({
   $sentry,
   error: nuxtError,
   $winstonLog,
+  $cookiz,
 }) {
   app.$axios.onResponseError((error) => {
     if (!error?.response) {
@@ -31,23 +31,19 @@ export default function ({
     }
     if (error.response.status === 401 && !originalRequest.__isRetryRequest) {
       originalRequest.__isRetryRequest = true;
-      return app.$auth
+      app.$auth
         .refreshTokens()
         .then((data) => {
           if (!data?.data || data?.data?.STATUS === 401) {
             $auth.logout().then(() => {
               if (process.client) {
                 if (window !== undefined) {
-                  window.location.href = `${generateRedirectURLWithRef(
-                    app.router.history.current.fullPath
-                  )}`;
+                  $cookiz.set("ref", app.router.history.current.fullPath);
+                  window.location.href = "/login";
                 }
               } else {
-                redirect(
-                  `${generateRedirectURLWithRef(
-                    app.router.history.current.fullPath
-                  )}`
-                );
+                $cookiz.set("ref", app.router.history.current.fullPath);
+                redirect("/login");
               }
             });
             return null;
@@ -59,6 +55,7 @@ export default function ({
             $auth.logout();
           }
         });
+      return;
     }
     if (error.response.status !== 401) {
       try {
