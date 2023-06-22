@@ -75,6 +75,7 @@ import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import { clearScript } from "~/components/EventHandler/eventHandler.helper";
+import { params } from "@/components/Pages/Cabinet/CardPage.helper.fixtures";
 
 let controller;
 export default {
@@ -327,14 +328,17 @@ export default {
         });
       }
       if (typeof eventHandler === "function" && field.type != "button") {
-        const data = await eventHandler(
-          this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
-          e,
-          this.callbackAction
-        );
-
-        if (data) {
-          this.$store.commit("data_card/setForm", data);
+        try {
+          const data = await eventHandler(
+            this.$store.getters["data_card/getForm"].map((a) => ({ ...a })),
+            e,
+            this.callbackAction
+          );
+          if (data) {
+            this.$store.commit("data_card/setForm", data);
+          }
+        } catch (e) {
+          console.error(e);
         }
       }
     },
@@ -494,14 +498,26 @@ export default {
               const tab = this.wizardTabs.find(
                 (w) => w.idItem === parseInt(nextIdItem, 10)
               );
+              await this.$store.dispatch("menu/fetchMenuById", tab);
+              const settingsTab = this.$store.getters[
+                "menu/getSettingsByIdItem"
+              ](tab.idItem || {});
               const rel = this.$store.getters["wizard/getWizard"]?.REL;
-              this.$router.push(
-                `/cabinet/wizard/${this.$route.params.idWizard}${
+              let url;
+              if (settingsTab?.isUploader === true) {
+                url = `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
+                  tab.idItem
+                }/${cardId}/${rel.split("|")[tab.order - 1]}/uploader`;
+              } else {
+                url = `/cabinet/wizard/${this.$route.params.idWizard}${
                   tab.list ? `/list/` : `/`
                 }${moduleId}/0/${tab.idItem}/${cardId}/${
                   rel.split("|")[tab.order - 1]
-                }`
-              );
+                }`;
+              }
+              if (url) {
+                this.$router.push(url);
+              }
               return;
             }
             if (this.closeAfterSave) {

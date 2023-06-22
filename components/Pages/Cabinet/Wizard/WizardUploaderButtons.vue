@@ -19,8 +19,13 @@
 <script>
 export default {
   name: "WizardUploaderButtons",
-  props: ["loading"],
+  props: ["currentTab", "tabs", "qty", "loading"],
   methods: {
+    getCurrentIndex() {
+      return this.tabs.findIndex(
+        (item) => item.idItem == this.currentTab.idItem
+      );
+    },
     async saveUploader() {
       const h = this.$createElement;
       const titleVNode = h("div", {
@@ -52,7 +57,8 @@ export default {
         });
     },
     goBack() {
-      global.history.back();
+      const tab = this.tabs[this.getCurrentIndex() - 1];
+      this.$emit("goBack", tab);
     },
   },
   computed: {

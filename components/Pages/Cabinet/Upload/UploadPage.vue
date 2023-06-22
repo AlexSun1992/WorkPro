@@ -7,6 +7,7 @@
       <upload-drop
         @update="changeFiles(item.NAME, $event)"
         @remove="removeFile($event)"
+        @click="clickDrop"
         :data="item.FILES"
         :name="item.NAME"
         :file-objects="getFileObjects"
@@ -31,20 +32,27 @@
         />
       </div>
     </div>
-    <!--    <b-progress v-if="isLoading" class="mt-2" :max="max" show-value>-->
-    <!--      <b-progress-bar-->
-    <!--        :value="getProgressValue"-->
-    <!--        variant="success"-->
-    <!--      ></b-progress-bar>-->
-    <!--    </b-progress>-->
-    <!--    <b-button-->
-    <!--      v-if="isLoading"-->
-    <!--      variant="success"-->
-    <!--      @click="canselUploading"-->
-    <!--      class="mt-3"-->
-    <!--    >-->
-    <!--      Отменить загрузку файлов-->
-    <!--    </b-button>-->
+    <b-progress
+      v-if="isLoading"
+      style="display: none"
+      class="mt-2"
+      :max="max"
+      show-value
+    >
+      <b-progress-bar
+        :value="getProgressValue"
+        variant="success"
+      ></b-progress-bar>
+    </b-progress>
+    <b-button
+      v-if="isLoading"
+      style="display: none"
+      variant="success"
+      @click="canselUploading"
+      class="mt-3"
+    >
+      Отменить загрузку файлов
+    </b-button>
   </div>
 </template>
 
@@ -79,6 +87,9 @@ export default {
     },
     canselUploading() {
       this.$store.dispatch("uploader/cancelUploading");
+    },
+    clickDrop() {
+      this.$store.commit("uploader/setFileErrors", []);
     },
   },
   computed: {
