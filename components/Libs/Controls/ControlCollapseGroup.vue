@@ -3,7 +3,8 @@
     <button
       type="button"
       @click="toggleFilterVisibility()"
-      class="CollapseGroup"
+      class="collapsegroup"
+      :class="{ active: !isFilterVisible }"
     >
       Фильтры поиска
     </button>
