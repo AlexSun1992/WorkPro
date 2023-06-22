@@ -2,6 +2,10 @@ $green: #009639;
 $lgreen: #43b02a;
 $black: #292929;
 $lblack: #686868;
+$med: #d8e7f4;
+$auto: #d9efd4;
+$mortgage: #d8d6e8;
+$travel: #fdf1cc;
 html {
   font-size: 16px;
 }
@@ -645,26 +649,22 @@ a.lgreen {
 .block-policy[data-id="1"]:after,
 .block-policy[data-id="10"]:after,
 .block-policy[data-id="8"]:after {
-  background-color: #ecf3fa;
+  background-color: $med;
 }
 
 .block-policy[data-id="2"]:after,
 .block-policy[data-id="3"]:after,
 .block-policy[data-id="5"]:after {
-  background-color: #edf8ea;
+  background-color: $auto;
 }
 
 .block-policy[data-id="4"]:after {
-  background-color: #ecebf4;
-}
-
-.block-policy[data-id="5"]:after {
-  background-color: #edf8ea;
+  background-color: $mortgage;
 }
 
 .block-policy[data-id="6"]:after,
 .block-policy[data-id="7"]:after {
-  background-color: #fff8e6;
+  background-color: $travel;
 }
 
 .block-policy[data-id="1"]:before {
@@ -792,22 +792,22 @@ a.lgreen {
 .insured-events[data-id="1"],
 .insured-events[data-id="10"],
 .insured-events[data-id="8"] {
-  background-color: #ecf3fa;
+  background-color: $med;
 }
 
 .insured-events[data-id="2"],
 .insured-events[data-id="3"],
 .insured-events[data-id="5"] {
-  background-color: #edf8ea;
+  background-color: $auto;
 }
 
 .insured-events[data-id="4"] {
-  background-color: #ecebf4;
+  background-color: $mortgage;
 }
 
 .insured-events[data-id="6"],
 .insured-events[data-id="7"] {
-  background-color: #fff8e6;
+  background-color: $travel;
 }
 
 .insured-events[data-id="1"] .settlement,
@@ -818,7 +818,7 @@ a.lgreen {
 
 .insured-events[data-id="2"] .settlement,
 .insured-events[data-id="3"] .settlement,
-.insured-events[data-id="4"] .settlement {
+.insured-events[data-id="5"] .settlement {
   color: $green;
 }
 
@@ -844,46 +844,47 @@ a.lgreen {
 
 .insured-events[data-id="1"]:after {
   background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
-  border-color: #ecf3fa;
+  border-color: $med;
 }
 
 .insured-events[data-id="2"]:after {
   background: url(/img/icon-insured-events2.svg) 50% 50% no-repeat;
-  border-color: #edf8ea;
+  border-color: $auto;
 }
 
 .insured-events[data-id="3"]:after {
   background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
-  border-color: #edf8ea;
+  border-color: $auto;
 }
 
 .insured-events[data-id="4"]:after {
   background: url(/img/icon-insured-events4.svg) 50% 50% no-repeat;
-  border-color: #ecebf4;
+  border-color: $mortage;
 }
 
 .insured-events[data-id="5"]:after {
   background: url(/img/icon-insured-events2.svg) 50% 50% no-repeat;
-  border-color: #edf8ea;
+  border-color: $auto;
 }
 
 .insured-events[data-id="6"]:after {
   background: url(/img/icon-insured-events6.svg) 50% 50% no-repeat;
-  border-color: #fff8e6;
+  border-color: $travel;
 }
 
 .insured-events[data-id="7"]:after {
   background: url(/img/icon-insured-events7.svg) 50% 50% no-repeat;
-  border-color: #fff8e6;
+  border-color: $travel;
 }
 
 .insured-events[data-id="8"]:after {
   background: url(/img/icon-insured-events8.svg) 50% 50% no-repeat;
+  border-color: $med;
 }
 
 .insured-events[data-id="10"]:after {
   background: url(/img/icon-insured-events10.svg) 50% 50% no-repeat;
-  border-color: #ecf3fa;
+  border-color: $med;
 }
 
 .block-visit {
@@ -2471,7 +2472,7 @@ a.free {
 .my-policy[data-id="5"],
 .my-policy[data-id="2"],
 .my-policy[data-id="3"] {
-  background: #edf8ea;
+  background: $auto;
 }
 
 .my-policy[data-id="5"]:after,
@@ -2483,7 +2484,7 @@ a.free {
 
 .my-policy[data-id="1"],
 .my-policy[data-id="8"] {
-  background: #ecf3fa;
+  background: $med;
 }
 
 .my-policy[data-id="1"]:after,
@@ -2493,7 +2494,7 @@ a.free {
 }
 
 .my-policy[data-id="4"] {
-  background: #ecebf4;
+  background: $mortgage;
 }
 
 .my-policy[data-id="4"]:after {
@@ -2503,7 +2504,7 @@ a.free {
 
 .my-policy[data-id="6"],
 .my-policy[data-id="7"] {
-  background: #fff8e6;
+  background: $travel;
 }
 
 .my-policy[data-id="6"]:after {
@@ -2517,7 +2518,7 @@ a.free {
 }
 
 .my-policy[data-id="10"] {
-  background: #ecebf4;
+  background: $med;
 }
 
 .my-policy[data-id="10"]:after {
@@ -2539,7 +2540,7 @@ a.free {
 .my-policy[data-id="2"] .btn-download,
 .my-policy[data-id="3"] .btn-download,
 .my-policy[data-id="5"] .btn-download {
-  color: $lgreen;
+  color: $auto;
   background: url(/img/icon-download-auto.svg) 40px 50% no-repeat;
   border-color: $lgreen;
 }
@@ -2547,7 +2548,7 @@ a.free {
 .my-policy[data-id="1"] .btn-download,
 .my-policy[data-id="10"] .btn-download,
 .my-policy[data-id="8"] .btn-download {
-  color: #3b86c8;
+  color: $med;
   background: url(/img/icon-download-dms.svg) 40px 50% no-repeat;
   border-color: #3b86c8;
 }
