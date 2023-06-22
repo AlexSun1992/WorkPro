@@ -16,6 +16,7 @@
 </template>
 <script>
 import { passwordValidationWindow } from "../../RegForm/regform.helper";
+
 export default {
   name: "ValidationWindow",
   props: { passwordValue: String },
@@ -31,9 +32,13 @@ export default {
       return `${indicator}%`;
     },
     featureFlag() {
-      return new URL(window.location.href, "https://reso.ru").searchParams.has(
-        "LK2-882"
-      );
+      if (process.client) {
+        return new URL(
+          window.location.href,
+          "https://reso.ru"
+        ).searchParams.has("LK2-882");
+      }
+      return null;
     },
     validationList() {
       return Object.entries(passwordValidationWindow(this.passwordValue)).map(
