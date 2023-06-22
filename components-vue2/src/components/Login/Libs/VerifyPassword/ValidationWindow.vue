@@ -7,7 +7,13 @@
       <li
         v-for="item in validationList"
         :key="item.errorText"
-        :class="{ success: !item.isError }"
+        :class="[
+          passwordValue.length === 0 && v.$anyDirty === false
+            ? 'defaulte'
+            : item.isError
+            ? 'error'
+            : 'success',
+        ]"
       >
         {{ item.errorText }}
       </li>
@@ -18,10 +24,7 @@
 import { passwordValidationWindow } from "../../RegForm/regform.helper";
 export default {
   name: "ValidationWindow",
-  props: { passwordValue: String },
-  data() {
-    return {};
-  },
+  props: { passwordValue: String, v: Object },
   computed: {
     goIndicator() {
       let indicator = 0;
@@ -44,13 +47,23 @@ export default {
 };
 </script>
 <style scoped>
+.defaulte {
+  color: orange;
+}
 .validation {
+  position: absolute;
+  bottom: 55%;
+  left: 0;
   width: 350px !important;
   padding: 5px;
   border: 1px solid black;
+  background-color: white;
 }
 .success {
   color: green;
+}
+.error {
+  color: red;
 }
 .indicator {
   width: 300px;

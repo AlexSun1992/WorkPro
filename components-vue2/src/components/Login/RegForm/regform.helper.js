@@ -17,33 +17,54 @@ const forbiddeCharacters = /^[^':<>_`~@&"]*$/i;
  * @type {import("./regform.helper.types").PasswordValidatorы}
  */
 export const passwordValidator = {
+  spaceValidation: {
+    errorText: "без пробела",
+    isError: (pass) => {
+      if (pass.length > 0 && !space.test(pass)) {
+        return false;
+      }
+      return true;
+    },
+    indicator: 12,
+  },
+
+  numberValidation: {
+    errorText: "минимум одна цифра",
+    isError: (pass) => numeric.test(pass) === false,
+    indicator: 12,
+  },
+
+  uppercaseLetterValidation: {
+    errorText: "минимум одна заглавная буква",
+    isError: (pass) => uppercaseLetter.test(pass) === false,
+    indicator: 12,
+  },
+
+  lowercaseLetterValidation: {
+    errorText: "минимум одна строчная буква",
+    isError: (pass) => lowercaseLetter.test(pass) === false,
+    indicator: 12,
+  },
+
+  russianSignValidation: {
+    errorText: "только латинские буквы",
+    isError: (pass) => {
+      if (pass.length === 0 && forbiddenRussianSign.test(pass)) {
+        return true;
+      }
+      if (pass.length > 0 && !forbiddenRussianSign.test(pass)) {
+        return true;
+      }
+      return false;
+    },
+    indicator: 12,
+  },
+
   lengthValidation: {
-    errorText: `Пароль должен содержать от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+    errorText: `от ${minLengthPassword} до ${maxLengthPassword} символов.`,
     isError: (pass) =>
       pass.length < minLengthPassword || pass.length > maxLengthPassword,
     indicator: 40,
-  },
-  customValidation: {
-    errorText:
-      "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
-    isError: (pass) =>
-      uppercaseLetter.test(pass) === false ||
-      numeric.test(pass) === false ||
-      lowercaseLetter.test(pass) === false,
-    indicator: 20,
-  },
-  spaceValidation: {
-    errorText: "Пароль не должен содержать пробел.",
-    isError: (pass) => space.test(pass),
-    indicator: 20,
-  },
-  russianSignValidation: {
-    errorText:
-      "Пароль не должен содержать русских букв и специальных символов.",
-    isError: (pass) =>
-      forbiddeCharacters.test(pass) === false ||
-      forbiddenRussianSign.test(pass) === false,
-    indicator: 20,
   },
 };
 
