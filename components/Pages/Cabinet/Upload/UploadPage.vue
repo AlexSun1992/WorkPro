@@ -3,12 +3,15 @@
     <h1>Загрузите документы</h1>
     <div v-for="(item, i) in getData" :key="i">
       <b>{{ item.TITLE }}</b>
-      <p></p>
+      <p>{{ item.DESCRIPTION }}</p>
       <upload-drop
         @update="changeFiles(item.NAME, $event)"
         @remove="removeFile($event)"
+        @click="clickDrop"
         :data="item.FILES"
+        :name="item.NAME"
         :file-objects="getFileObjects"
+        :file-errors="getFileErrors"
         :all-size="getAllSize"
         :is-error-size="isErrorSize"
         :is-loading="isLoading"
@@ -29,20 +32,27 @@
         />
       </div>
     </div>
-<!--    <b-progress v-if="isLoading" class="mt-2" :max="max" show-value>-->
-<!--      <b-progress-bar-->
-<!--        :value="getProgressValue"-->
-<!--        variant="success"-->
-<!--      ></b-progress-bar>-->
-<!--    </b-progress>-->
-<!--    <b-button-->
-<!--      v-if="isLoading"-->
-<!--      variant="success"-->
-<!--      @click="canselUploading"-->
-<!--      class="mt-3"-->
-<!--    >-->
-<!--      Отменить загрузку файлов-->
-<!--    </b-button>-->
+    <b-progress
+      v-if="isLoading"
+      style="display: none"
+      class="mt-2"
+      :max="max"
+      show-value
+    >
+      <b-progress-bar
+        :value="getProgressValue"
+        variant="success"
+      ></b-progress-bar>
+    </b-progress>
+    <b-button
+      v-if="isLoading"
+      style="display: none"
+      variant="success"
+      @click="canselUploading"
+      class="mt-3"
+    >
+      Отменить загрузку файлов
+    </b-button>
   </div>
 </template>
 
@@ -65,16 +75,10 @@ export default {
   },
   methods: {
     changeFiles(name, data) {
-      const files = data.map((item) => ({
-        FILENAME: item.name,
-        SIZE: item.size,
-        NAME: name,
-      }));
-      this.$store.commit("uploader/setFiles", files);
-      this.$store.commit("uploader/setFileObjects", data);
+      this.$store.dispatch("uploader/addData", { data, name });
     },
     removeFile(file) {
-      this.$store.commit("uploader/removeFile", file);
+      this.$store.dispatch("uploader/delFile", file);
     },
     async saveDataUploader() {
       await this.$store.dispatch("uploader/saveDataUploader", {
@@ -83,6 +87,9 @@ export default {
     },
     canselUploading() {
       this.$store.dispatch("uploader/cancelUploading");
+    },
+    clickDrop() {
+      this.$store.commit("uploader/setFileErrors", []);
     },
   },
   computed: {
@@ -115,6 +122,9 @@ export default {
     },
     getProgressValue() {
       return this.$store.getters["uploader/getProgressValue"];
+    },
+    getFileErrors() {
+      return this.$store.getters["uploader/getFileErrors"];
     },
   },
 };
