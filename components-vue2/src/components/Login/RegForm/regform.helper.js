@@ -14,13 +14,17 @@ const space = /[\s]/;
 const forbiddeCharacters = /^[^':<>_`~@&"]*$/i;
 
 /**
- * @type {import("./regform.helper.types").PasswordValidatorы}
+ * @type {import("./regform.helper.types").PasswordValidator}
  */
 export const passwordValidator = {
-  spaceValidation: {
-    errorText: "без пробела",
+  spaceAndForbiddeCharactersValidation: {
+    errorText: "без пробела и недопустимых спецсимволов",
     isError: (pass) => {
-      if (pass.length > 0 && !space.test(pass)) {
+      if (
+        pass.length > 0 &&
+        !space.test(pass) &&
+        forbiddeCharacters.test(pass)
+      ) {
         return false;
       }
       return true;
@@ -61,7 +65,7 @@ export const passwordValidator = {
   },
 
   lengthValidation: {
-    errorText: `от ${minLengthPassword} до ${maxLengthPassword} символов.`,
+    errorText: `от ${minLengthPassword} до ${maxLengthPassword} символов`,
     isError: (pass) =>
       pass.length < minLengthPassword || pass.length > maxLengthPassword,
     indicator: 40,
