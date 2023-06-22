@@ -58,7 +58,7 @@
           <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
 
           <div v-if="file.SIZE > maxFileSize">
-            Превышен <b>>допустимый</b><br />размер файла -
+            Превышен <b>допустимый</b><br />размер файла -
             {{ formatBytes(maxFileSize) }}
           </div>
         </div>
