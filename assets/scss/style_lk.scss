@@ -2540,7 +2540,7 @@ a.free {
 .my-policy[data-id="2"] .btn-download,
 .my-policy[data-id="3"] .btn-download,
 .my-policy[data-id="5"] .btn-download {
-  color: $auto;
+  color: $lgreen;
   background: url(/img/icon-download-auto.svg) 40px 50% no-repeat;
   border-color: $lgreen;
 }
@@ -2548,7 +2548,7 @@ a.free {
 .my-policy[data-id="1"] .btn-download,
 .my-policy[data-id="10"] .btn-download,
 .my-policy[data-id="8"] .btn-download {
-  color: $med;
+  color: #3b86c8;
   background: url(/img/icon-download-dms.svg) 40px 50% no-repeat;
   border-color: #3b86c8;
 }
@@ -2561,9 +2561,9 @@ a.free {
 
 .my-policy[data-id="6"] .btn-download,
 .my-policy[data-id="7"] .btn-download {
-  color: #645da2;
+  color: #f7b801;
   background: url(/img/icon-download-travel.svg) 40px 50% no-repeat;
-  border-color: #645da2;
+  border-color: #f7b801;
 }
 
 .my-tabs,
@@ -3892,6 +3892,8 @@ a[data-newcount][data-newcolor="RED"]:after {
   position: absolute;
 }
 
+.my-policy-actions a.action,
+.my-policy-actions a.action:hover,
 .my-policy-actions button.action:hover,
 .my-policy-actions button.action {
   background-color: #fff;
@@ -4834,18 +4836,24 @@ a.color-l-green:hover {
   grid-area: btn;
 }
 
-.buy_blk .osago_blk {
-  background: #edf8ea;
+.buy_blk > div {
   border-radius: 24px 24px 0 0;
   padding: 20px;
   position: relative;
 }
+
+.buy_blk .osago_blk {
+  background: $auto;
+}
+.buy_blk .travel_blk {
+  background: $travel;
+}
+.buy_blk .mortgage_blk {
+  background: $mortgage;
+}
 .buy_blk .telemed_blk,
 .buy_blk .mite_blk {
-  background: #ecf3fa;
-  border-radius: 24px 24px 0 0;
-  padding: 20px;
-  position: relative;
+  background: $med;
 }
 .buy_blk .title {
   font-style: normal;
