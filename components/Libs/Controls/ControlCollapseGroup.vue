@@ -1,6 +1,12 @@
 <template>
   <div>
-    <button type="button" @click="test()" class="button">Фильтры поиска</button>
+    <button
+      type="button"
+      @click="toggleFilterVisibility()"
+      class="CollapseGroup"
+    >
+      Фильтры поиска
+    </button>
   </div>
 </template>
 
@@ -21,16 +27,34 @@ export default {
   },
   data() {
     return {
-      clicked: true,
+      isFilterVisible: true,
     };
   },
+  computed: {
+    getControls() {
+      const getTestData = this.$store.getters["data_card/getForm"];
+      return getTestData;
+    },
+    isFiltersRendered() {
+      const isFiltersVisible =
+        this.$store.getters["data_card/getFiltersVisibleStatus"];
+
+      return isFiltersVisible;
+    },
+  },
+
   methods: {
-    test() {
+    toggleFilterVisibility() {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.clicked,
+        value: this.isFiltersRendered,
       });
+      this.$emit("remove", {
+        value: this.isFilterVisible,
+        name: this.data.name,
+      });
+      this.isFilterVisible = !this.isFilterVisible;
     },
   },
 };

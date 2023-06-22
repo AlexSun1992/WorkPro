@@ -1,5 +1,14 @@
 <template>
-  <b-col :xl="colXl" :lg="data.cols" :md="colMd" :sm="colSm" :cols="colSm">
+  <b-col
+    :xl="colXl"
+    :lg="data.cols"
+    :md="colMd"
+    :sm="colSm"
+    :cols="colSm"
+    :class="{
+      'collapse-filter': data.type === 'CollapseGroup',
+    }"
+  >
     <div
       class="control"
       :class="{ visibility_hidden: data.hidden }"
@@ -18,6 +27,7 @@
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
+        @remove="$emit('remove', $event)"
       />
     </div>
   </b-col>
