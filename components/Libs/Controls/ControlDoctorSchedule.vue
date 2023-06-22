@@ -184,6 +184,8 @@ export default {
     "adress adress"
     "time time";
   grid-template-columns: auto 116px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  background: #fff;
 }
 .doc-expert {
   grid-area: doc;

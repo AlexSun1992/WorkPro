@@ -24,8 +24,8 @@
           >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
         >
         <span v-if="isMaxFileCount === true">
-          Максим. кол-во файлов загружено<span>
-            Удалите загруженный файл если хотите загрузить<br />другой
+          Максимум загружен<span>
+            Удалите загруженный файл если хотите загрузить<br>другой
           </span>
         </span>
       </div>
@@ -35,10 +35,10 @@
         Не более {{ maxFileCount }} файлов
       </div>
       <div v-if="error.type === 'TOTAL_LIMIT'" class="error-blk">
-        Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
+        Превышен <b>суммарный<b><br>вес файлов - {{ formatBytes(totalLimit) }}
       </div>
       <div v-if="error.type === 'MAX_FILE_SIZE'" class="error-blk">
-        Превышен максимальный вес файла - {{ formatBytes(maxFileSize) }}
+        Превышен <b>максимальный</b><br>вес файла - {{ formatBytes(maxFileSize) }}
       </div>
     </div>
     <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
@@ -56,7 +56,7 @@
           <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
 
           <div v-if="file.SIZE > maxFileSize">
-            Превышен допустимый <br class="d-block d-lg-none" />размер файла -
+            Превышен <b>>допустимый</b><br>размер файла -
             {{ formatBytes(maxFileSize) }}
           </div>
         </div>
@@ -75,7 +75,7 @@
         ></button>
       </div>
       <div class="error-blk" v-if="file.SIZE > maxFileSize">
-        Превышен допустимый <br class="d-block d-lg-none" />размер файла -
+        Превышен <b>допустимый</b><br>размер файла -
         {{ formatBytes(maxFileSize) }}
       </div>
     </div>
