@@ -1,6 +1,6 @@
 <template>
-  <div class="col-lg-12">
-    <h1>Загрузите документы</h1>
+  <div class="conf-block">
+    <div class="title-page mb-3">Загрузите документы</div>
     <div v-for="(item, i) in getData" :key="i">
       <b>{{ item.TITLE }}</b>
       <p>{{ item.DESCRIPTION }}</p>
