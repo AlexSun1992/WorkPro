@@ -277,23 +277,23 @@ export default {
 .filterblock > .button,
 .filterblock > button {
   margin-bottom: 1rem;
-  background: #edf8ea;
+  background: #fff;
   border-radius: 100px;
   position: relative;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 30px;
-  color: #292929;
+  color: #43b02a;
   border: 0;
   padding: 0px 12px;
   margin-right: 8px;
   text-decoration: none;
   line-height: 36px;
-  height: 36px;
+  height: 38px;
   &:disabled {
-    background: #eff1f3;
-    color: #c3c3c3;
+    background: #a4a4a4;
+    color: #dfe3e5;
     &:after {
       display: none;
     }
@@ -304,7 +304,7 @@ export default {
     text-align: center;
     height: 23px;
     border-radius: 23px;
-    background: #fff;
+    background: #edf8ea;
     color: #43b02a;
     display: initial;
     padding: 3px 8px;
@@ -321,12 +321,13 @@ export default {
   }
   &.y-btn {
     background-color: #f7b801;
+    color: #292929;
   }
 }
 </style>
 <style>
 .cabinet .btn.btn-secondary .btn-filter-checked {
-  background-color: #008b4e;
+  background-color: #009639;
   color: white;
 }
 
