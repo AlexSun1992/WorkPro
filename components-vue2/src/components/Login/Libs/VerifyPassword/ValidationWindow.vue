@@ -34,12 +34,13 @@ export default {
       return `${indicator}%`;
     },
     featureFlag() {
-      // if (process.client) {
-      return new URL(window.location.href, "https://reso.ru").searchParams.has(
-        "LK2-882"
-      );
-      // }
-      // return null;
+      if (!process.server) {
+        return new URL(
+          window.location.href,
+          "https://reso.ru"
+        ).searchParams.has("LK2-882");
+      }
+      return null;
     },
     validationList() {
       return Object.entries(passwordValidationWindow(this.passwordValue)).map(

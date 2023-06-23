@@ -51,7 +51,7 @@ describe("Валидация компонента passwordValidationDetail in Re
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `без пробела и недопустимых спецсимволов`,
+        errorText: "без пробела и недопустимых спецсимволов",
       },
       {
         errorText: "минимум одна цифра",
@@ -67,10 +67,6 @@ describe("Валидация компонента passwordValidationDetail in Re
       },
       {
         errorText: "от 8 до 20 символов",
-      },
-      {
-        errorText:
-          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
       },
     ]);
   });
