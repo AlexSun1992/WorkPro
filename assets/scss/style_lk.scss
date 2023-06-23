@@ -2625,6 +2625,25 @@ a.free {
 .my-tabs .nav-item a:hover:after,
 .my-policy .nav-item a:hover:after {
   background-color: #dfe3e5;
+  transition: 0.3s;
+}
+
+.my-policy[data-id="1"] .nav-item a:hover:after,
+.my-policy[data-id="8"] .nav-item a:hover:after,
+.my-policy[data-id="10"] .nav-item a:hover:after {
+  background-color: #3b86c8;
+}
+.my-policy[data-id="2"] .nav-item a:hover:after,
+.my-policy[data-id="3"] .nav-item a:hover:after,
+.my-policy[data-id="5"] .nav-item a:hover:after {
+  background-color: #43b02a;
+}
+.my-policy[data-id="4"] .nav-item a:hover:after {
+  background-color: #645da2;
+}
+.my-policy[data-id="6"] .nav-item a:hover:after,
+.my-policy[data-id="7"] .nav-item a:hover:after {
+  background-color: #fe8f5c;
 }
 
 .my-tabs .nav-item + .nav-item,
