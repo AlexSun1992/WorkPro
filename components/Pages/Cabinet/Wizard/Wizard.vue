@@ -51,7 +51,10 @@
       />
       <wizard-uploader-buttons
         v-if="settingsByItem.isUploader === true"
+        :current-tab="currentTab"
+        :tabs="tabs"
         :loading="loading"
+        @goBack="goBack($event)"
         @saveUploader="saveUploader($event)"
       />
     </div>
@@ -238,6 +241,7 @@ export default {
           }
         }
       }
+      await this.$store.dispatch("menu/fetchMenuById", e);
       this.$router.push(this.getURL(e));
     },
     async goBack(e) {

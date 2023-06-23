@@ -9,10 +9,17 @@ export function formatBytes(bytes, decimals = 2) {
 
 export function filterDropFilesByExtensions(files, extensions) {
   const b = new DataTransfer();
-  for (let i = 0, len = files.length; i < len; i++) {
-    if (extensions.includes(files[i].name.split(".").pop())) {
-      b.items.add(files[i]);
+  if (Array.isArray(extensions)) {
+    const upExtensions = extensions.map((item) => item.toUpperCase());
+    for (let i = 0, len = files.length; i < len; i++) {
+      if (
+        upExtensions.includes(files[i].name.split(".").pop().toUpperCase()) &&
+        files[i].size
+      ) {
+        b.items.add(files[i]);
+      }
     }
+    return b.files;
   }
-  return b.files;
+  return files;
 }

@@ -1,5 +1,48 @@
 <template>
   <div class="nb-block mb-4 row">
+    <div v-if="isError === false" class="col-9 col-lg-4">
+      <div
+        @dragover="dragover"
+        @drop="drop"
+        @click="onClick"
+        class="dropzone-container file-label"
+        :class="{
+          'disabled-upload': isMaxFileCount === true,
+          'error-size': isError,
+        }"
+      >
+        <input
+          :disabled="isError || isLoading || isMaxFileCount"
+          type="file"
+          multiple
+          class="hidden-input"
+          @change="onChange"
+          ref="file"
+          :accept="stringExtensions"
+        />
+        <span v-if="isMaxFileCount === false"
+          >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
+        >
+        <span v-if="isMaxFileCount === true">
+          Максимум загружен<span>
+            Удалите загруженный файл если хотите загрузить<br />другой
+          </span>
+        </span>
+      </div>
+    </div>
+    <div v-for="(error, i) in errors" :key="i" class="col-9 col-lg-4">
+      <div v-if="error.type === 'MAX_FILE_COUNT'" class="error-blk">
+        Не более {{ maxFileCount }} файлов
+      </div>
+      <div v-if="error.type === 'TOTAL_LIMIT'" class="error-blk">
+        Превышен <b>суммарный</b><br />вес файлов -
+        {{ formatBytes(totalLimit) }}
+      </div>
+      <div v-if="error.type === 'MAX_FILE_SIZE'" class="error-blk">
+        Превышен <b>максимальный</b><br />вес файла -
+        {{ formatBytes(maxFileSize) }}
+      </div>
+    </div>
     <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
       <div
         class="preview-card"
@@ -15,7 +58,7 @@
           <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
 
           <div v-if="file.SIZE > maxFileSize">
-            Превышен допустимый <br class="d-block d-lg-none" />размер файла -
+            Превышен <b>допустимый</b><br />размер файла -
             {{ formatBytes(maxFileSize) }}
           </div>
         </div>
@@ -34,46 +77,8 @@
         ></button>
       </div>
       <div class="error-blk" v-if="file.SIZE > maxFileSize">
-        Превышен допустимый <br class="d-block d-lg-none" />размер файла -
+        Превышен <b>допустимый</b><br />размер файла -
         {{ formatBytes(maxFileSize) }}
-      </div>
-    </div>
-    <div class="col-9 col-lg-4" v-if="isError">
-      <div class="error-blk">
-        Превышен суммарный вес файлов - {{ formatBytes(totalLimit) }}
-      </div>
-    </div>
-
-    <div v-if="isError === false" class="col-9 col-lg-4">
-      <div
-        @dragover="dragover"
-        @drop="drop"
-        class="dropzone-container file-label"
-        :class="{
-          'disabled-upload': isErrorMaxFileCount === true,
-          'error-size': isError,
-        }"
-      >
-        <input
-          :disabled="isError || isLoading || isErrorMaxFileCount"
-          type="file"
-          multiple
-          class="hidden-input"
-          @change="onChange"
-          ref="file"
-          :accept="stringExtensions"
-        />
-        <span v-if="isErrorMaxFileCount === false"
-          >Загрузите файл<span>Перетащите<br />или загрузите файл</span></span
-        >
-
-        <span v-if="isErrorMaxFileCount === true">
-          Максимум загружен<span>
-            Удалите загруженный файл если хотите загрузить<br />другой
-            <!--{{ maxFileCount }}
-            <br />Удалите загруженный файл если хотите загрузить другой--></span
-          >
-        </span>
       </div>
     </div>
   </div>
@@ -91,6 +96,11 @@ export default {
       default: () => [],
     },
     fileObjects: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
+    fileErrors: {
       type: Array,
       required: false,
       default: () => [],
@@ -126,13 +136,29 @@ export default {
       type: Array,
       required: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     onChange() {
-      if (this.isErrorSize === false && this.isLoading === false) {
-        this.$emit("update", [...this.$refs.file.files]);
+      if (
+        this.isErrorSize === false &&
+        this.isLoading === false &&
+        this.isMaxFileCount === false
+      ) {
+        this.$emit("update", [
+          ...filterDropFilesByExtensions(
+            this.$refs.file.files,
+            this.fileExtensions
+          ),
+        ]);
         this.$refs.file.value = null;
       }
+    },
+    onClick() {
+      this.$emit("click");
     },
     downloadFile(name) {
       const file = this.fileObjects.find((item) => item.name === name);
@@ -153,14 +179,11 @@ export default {
     },
     dragover(event) {
       event.preventDefault();
+      this.$emit("click");
     },
     drop(event) {
       event.preventDefault();
-      const dropFiles = event.dataTransfer.files;
-      this.$refs.file.files = filterDropFilesByExtensions(
-        dropFiles,
-        this.fileExtensions
-      );
+      this.$refs.file.files = event.dataTransfer.files;
       this.onChange();
     },
     formatBytes(size) {
@@ -180,11 +203,14 @@ export default {
     isError() {
       return this.isErrorSize;
     },
-    isErrorMaxFileCount() {
-      return this.data.length > this.maxFileCount;
+    isMaxFileCount() {
+      return this.data.length === this.maxFileCount;
     },
     stringExtensions() {
       return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
+    },
+    errors() {
+      return this.fileErrors.filter((error) => error.name === this.name);
     },
   },
 };

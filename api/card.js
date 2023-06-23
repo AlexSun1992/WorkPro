@@ -476,11 +476,17 @@ router.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
       }
     }
     const params = await mobile2ServiceInstance.get(
-      `${consts.ACTIONPARAM}/${req.params.moduleId}/${req.params.actionId}/${req.params.cardId}`
+      `${
+        req.query.zone === "free" ? consts.FREEACTIONPARAM : consts.ACTIONPARAM
+      }/${req.params.moduleId}/${req.params.actionId}/${req.params.cardId}`
     );
     res.send(filterConverter.filter(params.data[0]._data));
   } catch (err) {
-    res.send(err.response?.data);
+    if (err?.response?.data) {
+      res.status(err?.response?.data.STATUS || 500).send(err.response.data);
+    } else {
+      res.status(500).send(err);
+    }
   }
 });
 

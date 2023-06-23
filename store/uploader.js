@@ -1,12 +1,13 @@
 import { getErrorMessage } from "../utils/transform";
 
 const FILETYPES = "FILE_TYPES";
-const FILES = "FILES";
+const FILES_PROPERTY = "FILES";
 const FORM_SETTINGS = "FORM_SETTINGS";
 let controller;
 export const state = () => ({
   data: null,
   fileObjects: [],
+  fileErrors: [],
   isLoading: false,
   isLoadSuccessFull: null,
   dataSuccess: null,
@@ -21,11 +22,15 @@ export const getters = {
       .value.map((item) => ({
         ...item,
         FILES: state.data
-          .find((file) => file.name === FILES)
+          .find((file) => file.name === FILES_PROPERTY)
           .value.filter((fileType) => fileType.NAME === item.NAME),
       })),
   getFileObjects: (state) => state.fileObjects,
-  getFiles: (state) => state.data.find((type) => type.name === FILES).value,
+  getFileErrors: (state) => [
+    ...new Map(state.fileErrors.map((item) => [item.type, item])).values(),
+  ],
+  getFiles: (state) =>
+    state.data.find((type) => type.name === FILES_PROPERTY).value,
   getFormSettings: (state) =>
     state.data.find((type) => type.name === FORM_SETTINGS).value,
   getAllSize: (state, getters) =>
@@ -75,6 +80,53 @@ export const actions = {
       .then((res) => {
         commit("setData", res.data.data);
       });
+  },
+  addData({ commit, getters }, { data, name }) {
+    const settingsByName = getters.getData.find((item) => item.NAME === name);
+    const { MAX_FILE_SIZE, MIN_FILE_COUNT, MAX_FILE_COUNT, FILES } =
+      settingsByName;
+    const IS_ERROR_MAX_FILE_COUNT = FILES.length + data.length > MAX_FILE_COUNT;
+    const IS_ERROR_MIN_FILE_COUNT = FILES.length + data.length < MIN_FILE_COUNT;
+    commit("setFileErrors", []);
+    if (IS_ERROR_MAX_FILE_COUNT) {
+      commit("setFileError", {
+        name,
+        type: "MAX_FILE_COUNT",
+      });
+    }
+    if (IS_ERROR_MIN_FILE_COUNT) {
+      commit("setFileError", {
+        name,
+        type: "MIN_FILE_COUNT",
+      });
+    }
+    if (!IS_ERROR_MAX_FILE_COUNT && !IS_ERROR_MIN_FILE_COUNT) {
+      data.forEach((item) => {
+        const IS_ERROR_TOTAL_LIMIT =
+          getters.getAllSize + item.size > getters.getFormSettings.TOTAL_LIMIT;
+        const IS_ERROR_MAX_FILE_SIZE = item.size > MAX_FILE_SIZE;
+        if (IS_ERROR_TOTAL_LIMIT) {
+          commit("setFileError", {
+            name,
+            type: "TOTAL_LIMIT",
+          });
+        }
+        if (IS_ERROR_MAX_FILE_SIZE) {
+          commit("setFileError", {
+            name,
+            type: "MAX_FILE_SIZE",
+          });
+        }
+        if (!IS_ERROR_TOTAL_LIMIT && !IS_ERROR_MAX_FILE_SIZE) {
+          commit("setFile", {
+            FILENAME: item.name,
+            SIZE: item.size,
+            NAME: name,
+          });
+          commit("setFileObject", item);
+        }
+      });
+    }
   },
   async saveDataUploader({ commit, state, getters }, params) {
     try {
@@ -127,6 +179,10 @@ export const actions = {
     controller.abort();
     commit("setLoading", false);
   },
+  delFile({ commit }, data) {
+    commit("setFileErrors", []);
+    commit("removeFile", data);
+  },
 };
 
 export const mutations = {
@@ -134,18 +190,31 @@ export const mutations = {
     state.data = data;
   },
   setFiles(state, data) {
-    const files = state.data.find((file) => file.name === FILES)?.value;
+    const files = state.data.find(
+      (file) => file.name === FILES_PROPERTY
+    )?.value;
     if (files && Array.isArray(data)) {
       data.forEach((item) => files.push(item));
     }
+  },
+  setFile(state, data) {
+    const files = state.data.find(
+      (file) => file.name === FILES_PROPERTY
+    )?.value;
+    files.push(data);
   },
   setFileObjects(state, data) {
     if (Array.isArray(data)) {
       data.forEach((item) => state.fileObjects.push(item));
     }
   },
+  setFileObject(state, data) {
+    state.fileObjects.push(data);
+  },
   removeFile(state, data) {
-    const files = state.data.find((file) => file.name === FILES)?.value;
+    const files = state.data.find(
+      (file) => file.name === FILES_PROPERTY
+    )?.value;
     const { fileObjects } = state;
     const fileObject = fileObjects.find((item) => item.name === data.FILENAME);
     files.splice(files.indexOf(data), 1);
@@ -167,5 +236,11 @@ export const mutations = {
   },
   setProgressValue(state, data) {
     state.progressValue = data;
+  },
+  setFileError(state, data) {
+    state.fileErrors.push(data);
+  },
+  setFileErrors(state, data) {
+    state.fileErrors = data;
   },
 };
