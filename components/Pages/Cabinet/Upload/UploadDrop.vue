@@ -148,7 +148,12 @@ export default {
         this.isLoading === false &&
         this.isMaxFileCount === false
       ) {
-        this.$emit("update", [...this.$refs.file.files]);
+        this.$emit("update", [
+          ...filterDropFilesByExtensions(
+            this.$refs.file.files,
+            this.fileExtensions
+          ),
+        ]);
         this.$refs.file.value = null;
       }
     },
@@ -178,11 +183,7 @@ export default {
     },
     drop(event) {
       event.preventDefault();
-      const dropFiles = event.dataTransfer.files;
-      this.$refs.file.files = filterDropFilesByExtensions(
-        dropFiles,
-        this.fileExtensions
-      );
+      this.$refs.file.files = event.dataTransfer.files;
       this.onChange();
     },
     formatBytes(size) {

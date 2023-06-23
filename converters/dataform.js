@@ -172,6 +172,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "Map";
     } else if (webFields[i].IDCONTROL == 43) {
       obj.type = "RegNumber";
+    } else if (webFields[i].IDCONTROL == 401) {
+      obj.type = "CollapseGroup";
     } else if (webFields[i].IDCONTROL == 322) {
       obj.type = "PasswordConfirm";
     } else if (webFields[i].IDCONTROL == 44) {

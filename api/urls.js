@@ -13,6 +13,7 @@ const FREEDATA = `/am/free/${VER}/data`;
 const DATALIST = `/am/main/${VER}/datalist`;
 const FILTER = `/am/main/${VER}/filter`;
 const ACTIONPARAM = `/am/main/${VER}/actionparam`;
+const FREEACTIONPARAM = `/am/free/${VER}/actionparam`;
 const ACTIONEXEC = `/am/main/${VER}/actionexec`;
 const FREEACTIONEXEC = `/am/free/${VER}/actionexec`;
 const ONETOMANYDATA = `/am/main/${VER}/one2manydata`;
@@ -46,6 +47,7 @@ export default {
   DATALIST: DATALIST,
   FILTER: FILTER,
   ACTIONPARAM: ACTIONPARAM,
+  FREEACTIONPARAM: FREEACTIONPARAM,
   ACTIONEXEC: ACTIONEXEC,
   FREEACTIONEXEC: FREEACTIONEXEC,
   ONETOMANYDATA: ONETOMANYDATA,
