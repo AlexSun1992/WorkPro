@@ -904,6 +904,9 @@ a.lgreen {
   background-color: #fff;
 }
 
+.block-visit.vdn {
+  grid-template-areas: "title planned" "name name";
+}
 .pay-page .block-visit {
   grid-template-columns: minmax(30px, auto) 160px;
   grid-template-rows:
@@ -928,6 +931,9 @@ a.lgreen {
   line-height: 1.5rem;
   text-align: right;
 }
+.vdn.block-visit .date {
+  color: #5d737e;
+}
 
 .list-of-services .description,
 .block-visit .clinic {
@@ -935,6 +941,7 @@ a.lgreen {
   font-size: 0.875rem;
   line-height: 1.5rem;
   color: $lblack;
+  font-weight: 400;
 }
 
 .block-visit .name {
@@ -942,6 +949,9 @@ a.lgreen {
   font-size: 0.875rem;
   line-height: 1.5rem;
   margin-top: 10px;
+}
+.block-visit.vdn .name {
+  margin-top: 5px;
 }
 
 .block-visit .planning {

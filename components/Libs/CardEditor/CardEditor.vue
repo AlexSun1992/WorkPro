@@ -196,6 +196,7 @@ export default {
 
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
+
       if (field.type === "button") {
         this.$store.commit("data_card/setError", false);
         this.$store.commit("data_card/setSavedError", false);
