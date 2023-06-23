@@ -2,6 +2,10 @@ $green: #009639;
 $lgreen: #43b02a;
 $black: #292929;
 $lblack: #686868;
+$med: #d8e7f4;
+$auto: #d9efd4;
+$mortgage: #d8d6e8;
+$travel: #fdf1cc;
 html {
   font-size: 16px;
 }
@@ -16,6 +20,7 @@ header {
   z-index: 3;
   padding-top: 60px;
   padding-bottom: 9px;
+  background-color: #fff;
 }
 
 @media (max-width: 1500px) {
@@ -184,7 +189,7 @@ header:before {
   position: absolute;
   height: 8px;
   left: 0;
-  bottom: 0;
+  bottom: -8px;
   background: linear-gradient(
     180deg,
     rgba(224, 224, 224, 0.4) 0,
@@ -255,8 +260,9 @@ li.breadcrumb-item:not(:last-of-type):after {
 }
 
 .sidebar_client {
-  box-shadow: 0 4px 26px rgba(0, 0, 0, 0.08);
   padding-bottom: 20px;
+  background: #fff;
+  border-radius: 24px;
 }
 
 .sidebar_client ul {
@@ -509,9 +515,10 @@ li.breadcrumb-item:not(:last-of-type):after {
 
 .anonsed-blocks .anonsed-block {
   padding: 12px 24px;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #fff;
   border-radius: 16px;
   cursor: pointer;
+  background: #fff;
 }
 
 .anonsed-blocks .anonsed-block .title {
@@ -546,9 +553,10 @@ li.breadcrumb-item:not(:last-of-type):after {
 }
 
 .border-block {
-  border: 1px solid #dfe3e5;
+  //border: 1px solid #dfe3e5;
   border-radius: 16px;
   padding: 20px;
+  background-color: #fff;
 }
 
 .align-items-center {
@@ -614,6 +622,7 @@ a.lgreen {
   position: relative;
   padding: 40px;
   text-align: center;
+  background-color: #fff;
 }
 
 .block-policy:after {
@@ -640,26 +649,22 @@ a.lgreen {
 .block-policy[data-id="1"]:after,
 .block-policy[data-id="10"]:after,
 .block-policy[data-id="8"]:after {
-  background-color: #ecf3fa;
+  background-color: $med;
 }
 
 .block-policy[data-id="2"]:after,
 .block-policy[data-id="3"]:after,
 .block-policy[data-id="5"]:after {
-  background-color: #edf8ea;
+  background-color: $auto;
 }
 
 .block-policy[data-id="4"]:after {
-  background-color: #ecebf4;
-}
-
-.block-policy[data-id="5"]:after {
-  background-color: #edf8ea;
+  background-color: $mortgage;
 }
 
 .block-policy[data-id="6"]:after,
 .block-policy[data-id="7"]:after {
-  background-color: #fff8e6;
+  background-color: $travel;
 }
 
 .block-policy[data-id="1"]:before {
@@ -787,22 +792,22 @@ a.lgreen {
 .insured-events[data-id="1"],
 .insured-events[data-id="10"],
 .insured-events[data-id="8"] {
-  background-color: #ecf3fa;
+  background-color: $med;
 }
 
 .insured-events[data-id="2"],
 .insured-events[data-id="3"],
 .insured-events[data-id="5"] {
-  background-color: #edf8ea;
+  background-color: $auto;
 }
 
 .insured-events[data-id="4"] {
-  background-color: #ecebf4;
+  background-color: $mortgage;
 }
 
 .insured-events[data-id="6"],
 .insured-events[data-id="7"] {
-  background-color: #fff8e6;
+  background-color: $travel;
 }
 
 .insured-events[data-id="1"] .settlement,
@@ -813,7 +818,7 @@ a.lgreen {
 
 .insured-events[data-id="2"] .settlement,
 .insured-events[data-id="3"] .settlement,
-.insured-events[data-id="4"] .settlement {
+.insured-events[data-id="5"] .settlement {
   color: $green;
 }
 
@@ -839,46 +844,47 @@ a.lgreen {
 
 .insured-events[data-id="1"]:after {
   background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
-  border-color: #ecf3fa;
+  border-color: $med;
 }
 
 .insured-events[data-id="2"]:after {
   background: url(/img/icon-insured-events2.svg) 50% 50% no-repeat;
-  border-color: #edf8ea;
+  border-color: $auto;
 }
 
 .insured-events[data-id="3"]:after {
   background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
-  border-color: #edf8ea;
+  border-color: $auto;
 }
 
 .insured-events[data-id="4"]:after {
   background: url(/img/icon-insured-events4.svg) 50% 50% no-repeat;
-  border-color: #ecebf4;
+  border-color: $mortgage;
 }
 
 .insured-events[data-id="5"]:after {
   background: url(/img/icon-insured-events2.svg) 50% 50% no-repeat;
-  border-color: #edf8ea;
+  border-color: $auto;
 }
 
 .insured-events[data-id="6"]:after {
   background: url(/img/icon-insured-events6.svg) 50% 50% no-repeat;
-  border-color: #fff8e6;
+  border-color: $travel;
 }
 
 .insured-events[data-id="7"]:after {
   background: url(/img/icon-insured-events7.svg) 50% 50% no-repeat;
-  border-color: #fff8e6;
+  border-color: $travel;
 }
 
 .insured-events[data-id="8"]:after {
   background: url(/img/icon-insured-events8.svg) 50% 50% no-repeat;
+  border-color: $med;
 }
 
 .insured-events[data-id="10"]:after {
   background: url(/img/icon-insured-events10.svg) 50% 50% no-repeat;
-  border-color: #ecf3fa;
+  border-color: $med;
 }
 
 .block-visit {
@@ -895,6 +901,7 @@ a.lgreen {
   display: grid;
   overflow: hidden;
   position: relative;
+  background-color: #fff;
 }
 
 .block-visit.vdn {
@@ -967,7 +974,7 @@ a.lgreen {
 }
 
 .color-footer {
-  background: #f2f4f5;
+  background: #fff;
   position: relative;
   font-size: 0.75rem;
   padding: 60px 32px 32px;
@@ -1086,7 +1093,7 @@ a.btn-light {
   display: inline-block;
   line-height: 44px;
   text-decoration: none;
-  border: 2px solid transparent;
+  border: 2px solid #e1e1e1;
   font-weight: 600;
 }
 
@@ -1133,17 +1140,22 @@ footer .menu-link a:hover {
 
 .footer-fb {
   background: #fff url(/img/fb.svg) 50% 50% no-repeat;
+  border: 2px solid #e1e1e1;
 }
 
 .footer-vk {
   background: #fff url(/img/vk.svg) 50% 50% no-repeat;
+  border: 2px solid #e1e1e1;
 }
 .footer-in {
   background: #fff url(/img/inst.svg) 50% 50% no-repeat;
+  border: 2px solid #e1e1e1;
 }
+
 .footer-tg {
   background: #fff url(/img/tg.svg) 50% 50%no-repeat;
   background-size: 30px;
+  border: 2px solid #e1e1e1;
 }
 
 .h-line-footer:after {
@@ -1201,6 +1213,9 @@ footer .copyright a:hover {
 }
 
 @media (max-width: 992px) {
+  .sidebar_client {
+    border-radius: 0;
+  }
   .mt-chck {
     margin-top: 0;
   }
@@ -1424,7 +1439,7 @@ a.link:hover span {
 }
 
 .feedback {
-  border: 1px solid #dfe3e5;
+  background-color: #fff;
   border-radius: 16px;
   padding: 20px;
 }
@@ -1791,7 +1806,7 @@ a.btn-outline-success,
 a.btn-secondary {
   border: 2px solid #fe7333;
   color: #fe7333;
-  background: #fff;
+  background: transparent;
 }
 
 .btn-outline-success:active,
@@ -1834,7 +1849,7 @@ a.btn-warning {
 }
 
 .conf-block {
-  border: 1px solid #f2f4f5;
+  background-color: #fff;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   border-radius: 16px;
   padding: 24px 20px;
@@ -1948,6 +1963,7 @@ input:disabled + .mx-icon-calendar {
     );
   grid-template-rows: minmax(25px, max-content) auto minmax(20px, max-content);
   display: grid;
+  background-color: #fff;
 }
 
 .agent-blocks .title {
@@ -2351,7 +2367,7 @@ a.free {
 .step {
   width: 48px;
   height: 48px;
-  background-color: #f0f0f0;
+  background-color: #bec7cb;
   border-radius: 100px;
   margin: 0 auto;
   background-position: 50% 50%;
@@ -2466,7 +2482,7 @@ a.free {
 .my-policy[data-id="5"],
 .my-policy[data-id="2"],
 .my-policy[data-id="3"] {
-  background: #edf8ea;
+  background: $auto;
 }
 
 .my-policy[data-id="5"]:after,
@@ -2478,7 +2494,7 @@ a.free {
 
 .my-policy[data-id="1"],
 .my-policy[data-id="8"] {
-  background: #ecf3fa;
+  background: $med;
 }
 
 .my-policy[data-id="1"]:after,
@@ -2488,7 +2504,7 @@ a.free {
 }
 
 .my-policy[data-id="4"] {
-  background: #ecebf4;
+  background: $mortgage;
 }
 
 .my-policy[data-id="4"]:after {
@@ -2498,7 +2514,7 @@ a.free {
 
 .my-policy[data-id="6"],
 .my-policy[data-id="7"] {
-  background: #fff8e6;
+  background: $travel;
 }
 
 .my-policy[data-id="6"]:after {
@@ -2512,7 +2528,7 @@ a.free {
 }
 
 .my-policy[data-id="10"] {
-  background: #ecebf4;
+  background: $med;
 }
 
 .my-policy[data-id="10"]:after {
@@ -2555,9 +2571,9 @@ a.free {
 
 .my-policy[data-id="6"] .btn-download,
 .my-policy[data-id="7"] .btn-download {
-  color: #645da2;
+  color: #f7b801;
   background: url(/img/icon-download-travel.svg) 40px 50% no-repeat;
-  border-color: #645da2;
+  border-color: #f7b801;
 }
 
 .my-tabs,
@@ -2609,6 +2625,25 @@ a.free {
 .my-tabs .nav-item a:hover:after,
 .my-policy .nav-item a:hover:after {
   background-color: #dfe3e5;
+  transition: 0.3s;
+}
+
+.my-policy[data-id="1"] .nav-item a:hover:after,
+.my-policy[data-id="8"] .nav-item a:hover:after,
+.my-policy[data-id="10"] .nav-item a:hover:after {
+  background-color: #3b86c8;
+}
+.my-policy[data-id="2"] .nav-item a:hover:after,
+.my-policy[data-id="3"] .nav-item a:hover:after,
+.my-policy[data-id="5"] .nav-item a:hover:after {
+  background-color: #43b02a;
+}
+.my-policy[data-id="4"] .nav-item a:hover:after {
+  background-color: #645da2;
+}
+.my-policy[data-id="6"] .nav-item a:hover:after,
+.my-policy[data-id="7"] .nav-item a:hover:after {
+  background-color: #fe8f5c;
 }
 
 .my-tabs .nav-item + .nav-item,
@@ -3108,6 +3143,7 @@ input.is-invalid {
   border-radius: 12px;
   position: relative;
   min-height: 222px;
+  background-color: #fff;
 }
 
 [data-card-id="705"]:after {
@@ -3885,6 +3921,12 @@ a[data-newcount][data-newcolor="RED"]:after {
   position: absolute;
 }
 
+.my-policy-actions a.action,
+.my-policy-actions a.action:hover,
+.my-policy-actions button.action:hover,
+.my-policy-actions button.action {
+  background-color: #fff;
+}
 .my-policy-actions[data-id="2"] .btn-insurance-case:after,
 .my-policy-actions[data-id="3"] .btn-insurance-case:after,
 .my-policy-actions[data-id="5"] .btn-insurance-case:after {
@@ -4103,6 +4145,7 @@ h6 {
 
 .blk-shadow {
   box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
 }
 
 .border-none {
@@ -4118,22 +4161,11 @@ h6 {
   background: url(/img/icon-file-download.svg) center right no-repeat;
 }
 
-.disabled-card:after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: #99999970;
-  position: absolute;
-  border-radius: 24px;
-  z-index: 1;
-}
-
 .disabled-card {
   position: relative;
   overflow: hidden;
   pointer-events: none;
+  opacity: 0.5;
 }
 
 .disabled-card .block-policy[data-id]:before {
@@ -4822,18 +4854,24 @@ a.color-l-green:hover {
   grid-area: btn;
 }
 
-.buy_blk .osago_blk {
-  background: #edf8ea;
+.buy_blk > div {
   border-radius: 24px 24px 0 0;
   padding: 20px;
   position: relative;
 }
+
+.buy_blk .osago_blk {
+  background: $auto;
+}
+.buy_blk .travel_blk {
+  background: $travel;
+}
+.buy_blk .mortgage_blk {
+  background: $mortgage;
+}
 .buy_blk .telemed_blk,
 .buy_blk .mite_blk {
-  background: #ecf3fa;
-  border-radius: 24px 24px 0 0;
-  padding: 20px;
-  position: relative;
+  background: $med;
 }
 .buy_blk .title {
   font-style: normal;
@@ -4866,7 +4904,7 @@ a.color-l-green:hover {
 .buy_blk .osago_blk + .buy_btn {
   border: 2px solid $lgreen;
   border-radius: 0px 0px 15px 15px;
-  background-color: transparent;
+  background-color: #fff;
   font-weight: 700;
   font-size: 1rem;
   line-height: 26px;
