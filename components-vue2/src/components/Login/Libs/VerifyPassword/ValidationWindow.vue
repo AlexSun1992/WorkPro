@@ -7,13 +7,11 @@
       <li
         v-for="item in validationList"
         :key="item.errorText"
-        :class="[
-          passwordValue.length === 0 && v.$anyDirty === false
-            ? 'defaulte'
-            : item.isError
-            ? 'error'
-            : 'success',
-        ]"
+        :class="{
+          default: passwordValue.length === 0 && v.$anyDirty === false,
+          error: item.isError && v.$anyDirty === true,
+          success: !item.isError,
+        }"
       >
         {{ item.errorText }}
       </li>
@@ -51,7 +49,7 @@ export default {
 };
 </script>
 <style scoped>
-.defaulte {
+.default {
   color: orange;
 }
 .validation {
