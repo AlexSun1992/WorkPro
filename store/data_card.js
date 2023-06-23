@@ -395,11 +395,12 @@ export const actions = {
   },
   async fetchActionParams(
     { dispatch, commit },
-    { moduleId, actionId, cardId }
+    { moduleId, actionId, cardId, zone }
   ) {
     try {
+      const params = zone === "free" ? "?zone=free" : "";
       return await this.$axios
-        .get(`/api/action/${moduleId}/${actionId}/${cardId}`)
+        .get(`/api/action/${moduleId}/${actionId}/${cardId}${params}`)
         .then((resp) => {
           commit("setActionParams", resp.data);
           return resp.data;

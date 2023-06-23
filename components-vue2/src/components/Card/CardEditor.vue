@@ -458,6 +458,7 @@ export default {
             moduleId: this.params.idModule,
             actionId: parseInt(e.value.replace("Item", ""), 10),
             cardId: this.params.idCard,
+            zone: this.zone,
           });
           const response = await this.$store.dispatch(
             "data_card/executeAction",

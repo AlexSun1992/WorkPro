@@ -11,13 +11,12 @@ describe("Валидация passwordValidator in regform.helper", () => {
       ([, item]) => item.errorText
     );
     expect(passwordValidatorArray).toEqual([
-      "Пароль должен содержать от 8 до 20 символов.",
-
-      "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
-
-      "Пароль не должен содержать пробел.",
-
-      "Пароль не должен содержать русских букв и специальных символов.",
+      "без пробела и недопустимых спецсимволов",
+      "минимум одна цифра",
+      "минимум одна заглавная буква",
+      "минимум одна строчная буква",
+      "только латинские буквы",
+      "от 8 до 20 символов",
     ]);
   });
 });
@@ -52,11 +51,22 @@ describe("Валидация компонента passwordValidationDetail in Re
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 8 до 20 символов.`,
+        errorText: "без пробела и недопустимых спецсимволов",
       },
       {
-        errorText:
-          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+        errorText: "минимум одна цифра",
+      },
+      {
+        errorText: "минимум одна заглавная буква",
+      },
+      {
+        errorText: "минимум одна строчная буква",
+      },
+      {
+        errorText: "только латинские буквы",
+      },
+      {
+        errorText: "от 8 до 20 символов",
       },
     ]);
   });
@@ -66,7 +76,7 @@ describe("Валидация компонента passwordValidationDetail in Re
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 8 до 20 символов.`,
+        errorText: `от 8 до 20 символов`,
       },
     ]);
   });
@@ -78,7 +88,7 @@ describe("Валидация компонента passwordValidationDetail in Re
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 8 до 20 символов.`,
+        errorText: `от 8 до 20 символов`,
       },
     ]);
   });
@@ -89,13 +99,12 @@ describe("Валидация компонента passwordValidationDetail in Re
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText:
-          "Пароль не должен содержать русских букв и специальных символов.",
+        errorText: "только латинские буквы",
       },
     ]);
   });
 
-  it("Если поле содержит специальный символ , то выводит ошибку", () => {
+  it("Если поле содержит разрешенный специальный символ , то не выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationDetail("1kkkkkRkkkkkkkk)");
 
@@ -108,8 +117,7 @@ describe("Валидация компонента passwordValidationDetail in Re
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText:
-          "Пароль не должен содержать русских букв и специальных символов.",
+        errorText: "без пробела и недопустимых спецсимволов",
       },
     ]);
   });
@@ -120,115 +128,106 @@ describe("Валидация компонента passwordValidationDetail in Re
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText:
-          "Пароль не должен содержать русских букв и специальных символов.",
+        errorText: "без пробела и недопустимых спецсимволов",
       },
     ]);
   });
 
-  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+  it("Если поле содержит запрещенный специальный символ и пробел, то выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationDetail("1kkkkkRkkkkkkkk  ");
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: "Пароль не должен содержать пробел.",
+        errorText: "без пробела и недопустимых спецсимволов",
       },
     ]);
   });
 
-  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+  it("Если поле содержит пробел, то выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationDetail(" 1kkkkkRkkkkkkkk");
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: "Пароль не должен содержать пробел.",
+        errorText: "без пробела и недопустимых спецсимволов",
       },
     ]);
   });
 
-  it("Если поле содержит русские буквы и специальный символ , то выводит ошибку", () => {
+  it("Если поле содержит русские буквы и разрешенный специальный символ , то выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationDetail("1kkkkRkkkkkkkзk!");
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText:
-          "Пароль не должен содержать русских букв и специальных символов.",
+        errorText: "только латинские буквы",
       },
     ]);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и содержит меньше 8 символов, то выводит ошибку", () => {
+  it("Если поле содержит русские буквы, разрешенный специальный символ и содержит меньше 8 символов, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationDetail("1Rkз!");
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 8 до 20 символов.`,
+        errorText: `только латинские буквы`,
       },
       {
-        errorText:
-          "Пароль не должен содержать русских букв и специальных символов.",
+        errorText: "от 8 до 20 символов",
       },
     ]);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и содержит больше 20 символов, то выводит ошибку", () => {
+  it("Если поле содержит русские буквы, разрешенный специальный символ и содержит больше 20 символов, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationDetail(
       "1kппппhhhhhhhhRhhhhhhhhhз!"
     );
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 8 до 20 символов.`,
+        errorText: `только латинские буквы`,
       },
       {
-        errorText:
-          "Пароль не должен содержать русских букв и специальных символов.",
+        errorText: "от 8 до 20 символов",
       },
     ]);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и нет цифр, то выводит ошибку", () => {
+  it("Если поле содержит русские буквы, разрешенный специальный символ и нет цифр, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationDetail("kппппhhhRhhз!");
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText:
-          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+        errorText: "минимум одна цифра",
       },
       {
-        errorText:
-          "Пароль не должен содержать русских букв и специальных символов.",
+        errorText: "только латинские буквы",
       },
     ]);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и нет латинских букв, то выводит ошибку", () => {
+  it("Если поле содержит русские буквы, разрешенный специальный символ и нет латинских букв, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationDetail("1111111пfппз!");
     expect(passwordValidationMessage).toEqual([
       {
-        errorText:
-          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+        errorText: "минимум одна заглавная буква",
       },
       {
-        errorText:
-          "Пароль не должен содержать русских букв и специальных символов.",
+        errorText: "только латинские буквы",
       },
     ]);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и нет латинских букв, то выводит ошибку", () => {
+  it("Если в поле меньше 8 символов и ннт цифры, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationDetail("gR");
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText: `Пароль должен содержать от 8 до 20 символов.`,
+        errorText: `минимум одна цифра`,
       },
       {
-        errorText:
-          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+        errorText: "от 8 до 20 символов",
       },
     ]);
   });
@@ -238,8 +237,7 @@ describe("Валидация компонента passwordValidationDetail in Re
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText:
-          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+        errorText: "минимум одна заглавная буква",
       },
     ]);
   });
@@ -249,8 +247,7 @@ describe("Валидация компонента passwordValidationDetail in Re
 
     expect(passwordValidationMessage).toEqual([
       {
-        errorText:
-          "Новый пароль должен содержать, как минимум, одну цифру, одну прописную и строчную букву.",
+        errorText: "минимум одна строчная буква",
       },
     ]);
   });
@@ -261,7 +258,9 @@ describe("Валидация компонента passwordValidationWindow in Re
     const passwordValidationMessage = passwordValidationWindow("Reso19910*y");
 
     expect(passwordValidationMessage.lengthValidation.isError).toBe(false);
-    expect(passwordValidationMessage.spaceValidation.isError).toBe(false);
+    expect(
+      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
+    ).toBe(false);
   });
 
   it("Если поле пустое выводит ошибку", () => {
@@ -292,59 +291,57 @@ describe("Валидация компонента passwordValidationWindow in Re
     expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
   });
 
-  it("Если поле содержит специальный символ , то выводит ошибку", () => {
-    const passwordValidationMessage =
-      passwordValidationWindow("1kkkkkRkkkkkkkk)");
-
-    expect(passwordValidationMessage.lengthValidation.isError).toBe(false);
-    expect(passwordValidationMessage.customValidation.isError).toBe(false);
-    expect(passwordValidationMessage.spaceValidation.isError).toBe(false);
-    expect(passwordValidationMessage.russianSignValidation.isError).toBe(false);
-  });
-
   it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationWindow("1kkkkkRkkkkkkkk:");
 
-    expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
+    expect(
+      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
+    ).toBe(true);
   });
 
-  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+  it("Если поле содержит запрещенный специальный символ, то выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationWindow(":1kkkkkRkkkkkkkk:");
 
-    expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
+    expect(
+      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
+    ).toBe(true);
   });
 
-  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+  it("Если поле содержит запрещенный специальный символ и пробел, то выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationWindow("1kkkkkRkkkkkkkk  ");
 
-    expect(passwordValidationMessage.spaceValidation.isError).toBe(true);
+    expect(
+      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
+    ).toBe(true);
   });
 
-  it("Если поле содержит запрещенный специальный символ , то выводит ошибку", () => {
+  it("Если поле содержит пробел, то выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationWindow(" 1kkkkkRkkkkkkkk");
 
-    expect(passwordValidationMessage.spaceValidation.isError).toBe(true);
+    expect(
+      passwordValidationMessage.spaceAndForbiddeCharactersValidation.isError
+    ).toBe(true);
   });
 
-  it("Если поле содержит русские буквы и специальный символ , то выводит ошибку", () => {
+  it("Если поле содержит русские буквы и разрешенный специальный символ , то выводит ошибку", () => {
     const passwordValidationMessage =
       passwordValidationWindow("1kkkkRkkkkkkkзk!");
 
     expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и содержит меньше 8 символов, то выводит ошибку", () => {
+  it("Если поле содержит русские буквы, разрешенный специальный символ и содержит меньше 8 символов, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("1Rkз!");
 
     expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
     expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и содержит больше 20 символов, то выводит ошибку", () => {
+  it("Если поле содержит русские буквы, разрешенный специальный символ и содержит больше 20 символов, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow(
       "1kппппhhhhhhhhRhhhhhhhhhз!"
     );
@@ -353,38 +350,40 @@ describe("Валидация компонента passwordValidationWindow in Re
     expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и нет цифр, то выводит ошибку", () => {
+  it("Если поле содержит русские буквы, разрешенный специальный символ и нет цифр, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("kппппhhhRhhз!");
 
-    expect(
-      passwordValidationMessage.russianSignValidation.isError &&
-        passwordValidationMessage.customValidation.isError
-    ).toBe(true);
+    expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
+    expect(passwordValidationMessage.numberValidation.isError).toBe(true);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и нет латинских букв, то выводит ошибку", () => {
+  it("Если поле содержит русские буквы, разрешенный специальный символ и нет латинских букв, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("1111111пfппз!");
 
     expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
-    expect(passwordValidationMessage.customValidation.isError).toBe(true);
+    expect(passwordValidationMessage.russianSignValidation.isError).toBe(true);
   });
 
-  it("Если поле содержит русские буквы, специальный символ и нет латинских букв, то выводит ошибку", () => {
+  it("Если в поле меньше 8 символов и ннт цифры, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("gR");
 
-    expect(passwordValidationMessage.customValidation.isError).toBe(true);
     expect(passwordValidationMessage.lengthValidation.isError).toBe(true);
+    expect(passwordValidationMessage.numberValidation.isError).toBe(true);
   });
 
   it("Если поле не содержит заглавную латинскую букву, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("reso1991w");
 
-    expect(passwordValidationMessage.customValidation.isError).toBe(true);
+    expect(passwordValidationMessage.uppercaseLetterValidation.isError).toBe(
+      true
+    );
   });
 
-  it("Если поле содержит только заглавные латинские буквы, то выводит ошибку", () => {
+  it("Если поле содержит только заглавные латинские буквы b цифру, то выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationWindow("RRRRRRRR1");
 
-    expect(passwordValidationMessage.customValidation.isError).toBe(true);
+    expect(passwordValidationMessage.lowercaseLetterValidation.isError).toBe(
+      true
+    );
   });
 });
