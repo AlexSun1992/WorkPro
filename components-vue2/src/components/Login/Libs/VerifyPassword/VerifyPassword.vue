@@ -1,8 +1,12 @@
 <template>
   <div class="row mt-3">
     <div class="col-12 col-lg-6">
-      <validation-window :passwordValue="this.v.password.$model" />
       <b-form-group>
+        <validation-window
+          v-if="isShowValidationWindow"
+          :passwordValue="this.v.password.$model"
+          :v="v"
+        />
         <legend>
           {{ showLabel }}
           <span class="tooltipster">
@@ -12,12 +16,13 @@
           >
         </legend>
         <b-form-input
+          @focus="showValidationWindow"
           id="password1"
           v-model="v.password.$model"
           :type="pswVisible ? 'text' : 'password'"
           :state="validateState('password')"
           placeholder="Пароль"
-          @blur="v.password.$touch()"
+          @blur="hiddenValidationWindow"
           autocomplete="new-password"
           :disabled="disabled"
           @update="updateField('password')"
@@ -108,9 +113,17 @@ export default {
       pswVisible2: false,
       pswVisible: false,
       isUserBlured: true,
+      isShowValidationWindow: false,
     };
   },
   methods: {
+    showValidationWindow() {
+      this.isShowValidationWindow = true;
+    },
+    hiddenValidationWindow() {
+      this.v.password.$touch();
+      this.isShowValidationWindow = false;
+    },
     visiblePSW() {
       if (this.pswVisible === false) {
         this.pswVisible = true;
