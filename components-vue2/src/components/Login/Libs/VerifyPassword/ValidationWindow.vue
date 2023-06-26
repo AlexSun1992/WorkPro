@@ -1,7 +1,9 @@
 <template>
   <div v-if="featureFlag" class="validation">
     <div class="validation_title">Требования к паролю</div>
-    <div class="validation_description">допускаются спецсимволы !#$%^*()-=+[]{};,.|/?
+    <div class="validation_description">
+      допускаются спецсимволы !#$%^*()-=+[]{};,.|/?
+    </div>
     <div class="indicator">
       <div class="indicator_color" :style="{ width: goIndicator }"></div>
     </div>
@@ -54,31 +56,32 @@ export default {
 .validation_title {
   font-weight: 600;
 }
-.validation_description{
-color:#868686;font-size:0.875rem
+.validation_description {
+  color: #868686;
+  font-size: 0.875rem;
 }
 .default {
   color: orange;
 }
 .validation {
-  color:#434343;
+  color: #434343;
   position: absolute;
   left: 0;
   width: 100%;
   padding: 10px;
   background-color: white;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.20);
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   top: 85px;
 }
 .validation ul li {
-  list-style:circle;
+  list-style: circle;
 }
 .success {
-  list-style-image: url("/img/success-list.svg")
+  list-style-image: url("/img/success-list.svg");
 }
 .error {
-  list-style-image: url("/img/error-list.svg")
+  list-style-image: url("/img/error-list.svg");
 }
 .indicator {
   width: 100%;
