@@ -1,7 +1,7 @@
 <template>
   <div class="row mt-3">
     <div class="col-12 col-lg-6">
-      <b-form-group calass="position-relative">
+      <b-form-group class="position-relative">
         <validation-window
           v-if="isShowValidationWindow"
           :passwordValue="this.v.password.$model"
