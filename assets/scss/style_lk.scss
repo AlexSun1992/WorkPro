@@ -658,6 +658,7 @@ a.lgreen {
   background-color: $auto;
 }
 
+.block-policy[data-id="94"]:after,
 .block-policy[data-id="4"]:after {
   background-color: $mortgage;
 }
@@ -681,6 +682,9 @@ a.lgreen {
 
 .block-policy[data-id="4"]:before {
   background: url(/img/product-id4.png) 50% 50% no-repeat;
+}
+.block-policy[data-id="94"]:before {
+  background: url(/img/product-id94.png) 50% 50% no-repeat;
 }
 
 .block-policy[data-id="5"]:before {
@@ -2796,10 +2800,13 @@ a.action:hover {
   color: #fff;
 }
 
-.block-policy[data-id="4"] .policy-payment:hover,
+.block-policy[data-id="94"] .policy-payment:hover,
+.block-policy[data-id="94"] .settlement,
+.insurance-case[data-id="94"],
+.settlement .block-policy[data-id="4"] .policy-payment:hover,
 .block-policy[data-id="4"] .settlement,
 .insurance-case[data-id="4"] .settlement {
-  background-color: #645da2;
+  background-color: #908ac2;
   color: #fff;
 }
 
