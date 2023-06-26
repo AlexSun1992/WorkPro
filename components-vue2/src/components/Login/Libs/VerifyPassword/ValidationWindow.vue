@@ -61,6 +61,7 @@ export default {
   font-size: 0.875rem;
 }
 .validation {
+  z-index: 1;
   color: #434343;
   position: absolute;
   left: 0;
