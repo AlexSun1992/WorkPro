@@ -60,9 +60,6 @@ export default {
   color: #868686;
   font-size: 0.875rem;
 }
-.default {
-  color: orange;
-}
 .validation {
   color: #434343;
   position: absolute;
