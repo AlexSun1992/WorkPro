@@ -685,6 +685,8 @@ a.lgreen {
 }
 .block-policy[data-id="94"]:before {
   background: url(/img/product-id94.png) 50% 50% no-repeat;
+  height: 127px;
+  top: 36px;
 }
 
 .block-policy[data-id="5"]:before {
@@ -3206,6 +3208,12 @@ input.is-invalid {
     right: 16px;
     left: auto;
     top: 40px;
+  }
+
+  .block-policy[data-id="94"]:before {
+    width: 80px;
+    height: 80px;
+    top: 29px;
   }
   .block-policy:after {
     height: 80px;
