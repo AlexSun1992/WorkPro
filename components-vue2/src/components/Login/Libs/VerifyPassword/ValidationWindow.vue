@@ -71,8 +71,14 @@ export default {
   border-radius: 20px;
   top: 85px;
 }
+.validation ul {
+  padding-left: 20px;
+}
 .validation ul li {
   list-style: circle;
+  position: relative;
+  margin-top: 5px;
+  line-height: 20px;
 }
 .validation ul li.success,
 .validation ul li.error {
@@ -89,9 +95,6 @@ export default {
   background: url(/system/modules/ru.reso.v2/resources/img/icons/success-list.svg)
     50% 50% no-repeat;
 }
-.validation ul li.success {
-  position: relative;
-}
 .validation ul li.error:after {
   top: 50%;
   margin-top: -6px;
@@ -99,7 +102,6 @@ export default {
   position: absolute;
   width: 12px;
   height: 12px;
-  border: 1px solid red;
   left: -20px;
   background: url(/system/modules/ru.reso.v2/resources/img/icons/error-list.svg)
     50% 50% no-repeat;
@@ -109,7 +111,19 @@ export default {
 }
 .indicator_color {
   width: 0%;
-  height: 4px;
-  background-color: blueviolet;
+  height: 2px;
+  background: linear-gradient(90deg, #56ab2f 0%, #a8e063 100%);
+}
+@media (max-width: 992px) {
+  .validation_title {
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+  .validation_description {
+    font-size: 0.75rem;
+  }
+  .validation ul li {
+    font-size: 0.875rem;
+  }
 }
 </style>
