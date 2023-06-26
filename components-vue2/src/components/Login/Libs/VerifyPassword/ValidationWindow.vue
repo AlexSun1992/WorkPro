@@ -74,11 +74,35 @@ export default {
 .validation ul li {
   list-style: circle;
 }
-.success {
-  list-style-image: url("/img/success-list.svg");
+.validation ul li.success,
+.validation ul li.error {
+  list-style: none;
 }
-.error {
-  list-style-image: url("/img/error-list.svg");
+.validation ul li.success:after {
+  top: 50%;
+  margin-top: -6px;
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: -20px;
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/success-list.svg)
+    50% 50% no-repeat;
+}
+.validation ul li.success {
+  position: relative;
+}
+.validation ul li.error:after {
+  top: 50%;
+  margin-top: -6px;
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid red;
+  left: -20px;
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/error-list.svg)
+    50% 50% no-repeat;
 }
 .indicator {
   width: 100%;
