@@ -1,5 +1,9 @@
 <template>
   <div v-if="featureFlag" class="validation">
+    <div class="validation_title">Требования к паролю</div>
+    <div class="validation_description">
+      допускаются спецсимволы !#$%^*()-=+[]{};,.|/?
+    </div>
     <div class="indicator">
       <div class="indicator_color" :style="{ width: goIndicator }"></div>
     </div>
@@ -49,28 +53,35 @@ export default {
 };
 </script>
 <style scoped>
-.default {
-  color: orange;
+.validation_title {
+  font-weight: 600;
+}
+.validation_description {
+  color: #868686;
+  font-size: 0.875rem;
 }
 .validation {
+  color: #434343;
   position: absolute;
-  bottom: 55%;
   left: 0;
-  width: 350px !important;
-  padding: 5px;
-  border: 1px solid black;
+  width: 100%;
+  padding: 10px;
   background-color: white;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  top: 85px;
+}
+.validation ul li {
+  list-style: circle;
 }
 .success {
-  color: green;
+  list-style-image: url("/img/success-list.svg");
 }
 .error {
-  color: red;
+  list-style-image: url("/img/error-list.svg");
 }
 .indicator {
-  width: 300px;
-  justify-content: center;
-  border: 1px solid black;
+  width: 100%;
 }
 .indicator_color {
   width: 0%;
