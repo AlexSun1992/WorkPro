@@ -6,6 +6,7 @@
           v-if="isShowValidationWindow"
           :passwordValue="this.v.password.$model"
           :v="v"
+          @featureFlag="featureFlag"
         />
         <legend>
           {{ showLabel }}
@@ -35,7 +36,15 @@
           @click="visiblePSW()"
           tabindex="-1"
         ></button>
-        <div class="invalid-feedback">
+        <div
+          class="invalid-feedback"
+          v-if="!isShowValidationWindow && featureFlagVerifyPassword"
+        >
+          <b-form-invalid-feedback class="d-block">
+            Пароль не отвечает условиям
+          </b-form-invalid-feedback>
+        </div>
+        <div class="invalid-feedback" v-if="!featureFlagVerifyPassword">
           <b-form-invalid-feedback
             class="d-block"
             v-for="(errMess, index) in errorMessageValidation"
@@ -114,9 +123,13 @@ export default {
       pswVisible: false,
       isUserBlured: true,
       isShowValidationWindow: false,
+      featureFlagVerifyPassword: false,
     };
   },
   methods: {
+    featureFlag(data) {
+      this.featureFlagVerifyPassword = data;
+    },
     showValidationWindow() {
       this.isShowValidationWindow = true;
     },

@@ -37,10 +37,13 @@ export default {
     },
     featureFlag() {
       if (!process.server) {
-        return new URL(
+        const featureFlag = new URL(
           window.location.href,
           "https://reso.ru"
         ).searchParams.has("LK2-882");
+
+        this.$emit("featureFlag", featureFlag);
+        return featureFlag;
       }
       return null;
     },
