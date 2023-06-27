@@ -7,6 +7,11 @@ export default async function ({ store, redirect, route, $auth, $cookiz }) {
   store.commit("blocks/clearFilters");
   store.commit("data_card/setError", false);
   if (process.server) {
+    const ref = $cookiz.get("ref");
+    if ($auth.loggedIn) {
+      $cookiz.remove("ref");
+      redirect(ref);
+    }
     if (!$auth.loggedIn) {
       await $auth.logout();
       $cookiz.set("ref", route.fullPath);
