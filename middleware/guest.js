@@ -1,7 +1,4 @@
-import {
-  isBlackListOfRoute,
-  generateRedirectURLWithRef,
-} from "./router.helper";
+import { isBlackListOfRoute } from "./router.helper";
 
 export default async function ({ store, redirect, route, $auth, $cookiz }) {
   store.commit("data_card/clearFormData");
@@ -10,15 +7,22 @@ export default async function ({ store, redirect, route, $auth, $cookiz }) {
   store.commit("blocks/clearFilters");
   store.commit("data_card/setError", false);
   if (process.server) {
+    const ref = $cookiz.get("ref");
+    if ($auth.loggedIn) {
+      $cookiz.remove("ref");
+      redirect(ref);
+    }
     if (!$auth.loggedIn) {
       await $auth.logout();
-      redirect(generateRedirectURLWithRef("/login", route.fullPath));
+      $cookiz.set("ref", route.fullPath);
+      redirect("/login");
     }
   }
   if (process.client) {
     if (!$cookiz.get("auth._token.local")) {
       await $auth.logout();
-      redirect(generateRedirectURLWithRef("/login", route.fullPath));
+      $cookiz.set("ref", route.fullPath);
+      redirect("/login");
     }
   }
   if ($auth.loggedIn) {
