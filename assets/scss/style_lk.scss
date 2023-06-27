@@ -2060,6 +2060,7 @@ a.free {
   padding: 0;
   border: 0;
   box-shadow: none;
+  background-color: transparent;
 }
 
 [data-card-id="901"] .conf-block + .conf-block .title-conf-block {
@@ -3304,6 +3305,7 @@ input.is-invalid {
   }
   .border-block {
     overflow: visible;
+    background-color: transparent;
   }
   .block-visit {
     padding: 16px;
@@ -5012,6 +5014,9 @@ a.color-l-green:hover {
   grid-row: span 2;
 }
 @media (max-width: 992px) {
+  .buy_flag:after {
+    border-right: 20px solid #f2f4f5;
+  }
   .policy_data {
     grid-template-columns: repeat(2, 1fr);
   }
