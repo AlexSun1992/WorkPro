@@ -41,7 +41,7 @@
           v-if="!isShowValidationWindow && featureFlagVerifyPassword"
         >
           <b-form-invalid-feedback class="d-block">
-            <p>Пароль не отвечает условиям</p>
+            Пароль не отвечает условиям
           </b-form-invalid-feedback>
         </div>
         <div class="invalid-feedback" v-if="!featureFlagVerifyPassword">
