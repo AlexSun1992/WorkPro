@@ -1,23 +1,23 @@
 <template>
   <b-col
     :xl="colXl"
-    :lg="data.cols"
+    :lg="dataCols"
     :md="colMd"
     :sm="colSm"
     :cols="colSm"
     :class="{
-      'collapse-filter': data.type === 'CollapseGroup',
+      'collapse-filter': collapse,
     }"
   >
     <div
       class="control"
-      :class="{ visibility_hidden: data.hidden }"
-      :field-id="data.fieldId"
-      :style="{ width: data.width ? data.width : '100%' }"
+      :class="{ visibility_hidden: hidden }"
+      :field-id="fieldId"
+      :style="{ width: width ? width : '100%' }"
     >
       <component
         :is="comp"
-        :class="data.labelCols"
+        :class="labelCols"
         :data="data"
         :params="params"
         :edit="edit"
@@ -148,18 +148,36 @@ export default {
   },
   computed: {
     comp() {
-      return `Control${this.data.type
+      return `Control${this.data?.type
         .charAt(0)
-        .toUpperCase()}${this.data.type.slice(1)}`;
+        .toUpperCase()}${this.data?.type.slice(1)}`;
     },
     colXl() {
-      return (12 / this.cols) * this.data.col;
+      return (12 / this.cols) * this.data?.col;
     },
     colMd() {
-      return this.data.colMd ? this.data.colMd : 12;
+      return this.data?.colMd ? this.data?.colMd : 12;
     },
     colSm() {
-      return this.data.colSm ? this.data.colSm : 12;
+      return this.data?.colSm ? this.data?.colSm : 12;
+    },
+    collapse() {
+      return this.data?.type === "CollapseGroup";
+    },
+    hidden() {
+      return this.data?.hidden;
+    },
+    width() {
+      return this.data?.width;
+    },
+    fieldId() {
+      return this.data?.fieldId;
+    },
+    labelCols() {
+      return this.data?.labelCols;
+    },
+    dataCols() {
+      return this.data?.cols;
     },
   },
 };
