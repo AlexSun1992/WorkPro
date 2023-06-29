@@ -52,13 +52,10 @@ export default {
 
   computed: {
     isRequiredPersonalDataCheckBox() {
-      const getCheckBoxNameBaccept = this.data.name === "BACCEPT";
-      const getCheckBoxNameBKID = this.data.name === "BKID";
       const getSavedError = this.$store.getters[`data_card/getSavedError`];
-      if (
-        (getCheckBoxNameBaccept && getSavedError) ||
-        (getCheckBoxNameBKID && getSavedError)
-      ) {
+      const requiredCheckBox = this.data.required === true;
+
+      if (requiredCheckBox && getSavedError) {
         if (
           this.data.value === false &&
           this.data.checked === true &&
@@ -78,22 +75,13 @@ export default {
         return this.data.value === "Y" || this.data.value === true;
       },
       set(value) {
-        if (
-          (this.data.name === "BACCEPT" && value === false) ||
-          (this.data.name === "BKID" && value === false)
-        ) {
-          this.$emit("update", {
-            fieldId: this.data.fieldId,
-            name: this.data.name,
-            value: undefined,
-          });
-          return;
-        }
+        const newValue =
+          this.data.required === true && value === false ? undefined : value;
 
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value,
+          newValue,
         });
       },
     },
