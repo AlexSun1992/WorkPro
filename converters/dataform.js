@@ -94,6 +94,19 @@ converter.form = async (data, params, instance) => {
       obj.value = item[webFields[i].SNAME];
     } else if (Object.keys(item).length === 0) {
       obj.value = meta_value[webFields[i].SNAME];
+      if (
+        webFields[i].STYPE === "Double" ||
+        webFields[i].STYPE === "Int64" ||
+        webFields[i].STYPE === "Int16"
+      ) {
+        obj.value = parseInt(meta_value[webFields[i].SNAME], 10);
+      }
+      if (webFields[i].IDCONTROL === 16) {
+        if (webFields[i].STYPE === "boolrus") {
+          obj.value = meta_value[webFields[i].SNAME] === "Д";
+        }
+        obj.value = meta_value[webFields[i].SNAME] === "Y";
+      }
     }
     obj.type = webFields[i].STYPE;
     const fieldOfStruct = fields.find((f) => f.FIELD === webFields[i].SNAME);
