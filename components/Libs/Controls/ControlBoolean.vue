@@ -75,19 +75,13 @@ export default {
         return this.data.value === "Y" || this.data.value === true;
       },
       set(value) {
-        if (this.data.required === true && value === false) {
-          this.$emit("update", {
-            fieldId: this.data.fieldId,
-            name: this.data.name,
-            value: undefined,
-          });
-          return;
-        }
+        const newValue =
+          this.data.required === true && value === false ? undefined : value;
 
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value,
+          newValue,
         });
       },
     },
