@@ -1,3 +1,5 @@
+import { appendFile } from "fs";
+
 /** Минимальная длина пароля */
 export const minLengthPassword = 8;
 /** Максимальная длина пароля */
@@ -11,7 +13,7 @@ const uppercaseLetter = /[A-Z]/;
 const lowercaseLetter = /[a-z]/;
 const numeric = /[0-9]/;
 const space = /[\s]/;
-const forbiddeCharacters = /^[^':<>_`~@&"]*$/i;
+const forbiddeCharacters = /^[^':№\\<>_`~@&"]*$/i;
 
 /**
  * @type {import("./regform.helper.types").PasswordValidator}
@@ -53,7 +55,17 @@ export const passwordValidator = {
   russianSignValidation: {
     errorText: "только латинские буквы",
     isError: (pass) => {
-      if (pass.length === 0 && forbiddenRussianSign.test(pass)) {
+      if (pass.length === 0) {
+        return true;
+      }
+      if (
+        (!uppercaseLetter.test(pass) &&
+          !lowercaseLetter.test(pass) &&
+          !forbiddenRussianSign.test(pass)) ||
+        (!uppercaseLetter.test(pass) &&
+          !lowercaseLetter.test(pass) &&
+          forbiddenRussianSign.test(pass))
+      ) {
         return true;
       }
       if (pass.length > 0 && !forbiddenRussianSign.test(pass)) {
