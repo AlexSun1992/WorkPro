@@ -81,7 +81,7 @@ export default {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          newValue,
+          value: newValue,
         });
       },
     },
