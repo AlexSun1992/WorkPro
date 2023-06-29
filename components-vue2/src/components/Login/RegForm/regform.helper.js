@@ -1,5 +1,3 @@
-import { appendFile } from "fs";
-
 /** Минимальная длина пароля */
 export const minLengthPassword = 8;
 /** Максимальная длина пароля */
