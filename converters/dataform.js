@@ -102,10 +102,16 @@ converter.form = async (data, params, instance) => {
         obj.value = parseInt(meta_value[webFields[i].SNAME], 10);
       }
       if (webFields[i].IDCONTROL === 16) {
+        obj.value = meta_value[webFields[i].SNAME] === "Y";
         if (webFields[i].STYPE === "boolrus") {
           obj.value = meta_value[webFields[i].SNAME] === "Д";
         }
-        obj.value = meta_value[webFields[i].SNAME] === "Y";
+        if (meta_value[webFields[i].SNAME] === "Д") {
+          obj.value = true;
+        }
+        if (meta_value[webFields[i].SNAME] === "Н") {
+          obj.value = false;
+        }
       }
     }
     obj.type = webFields[i].STYPE;
