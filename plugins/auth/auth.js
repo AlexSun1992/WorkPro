@@ -31,7 +31,7 @@ export default function ({
     }
     if (error.response.status === 401 && !originalRequest.__isRetryRequest) {
       originalRequest.__isRetryRequest = true;
-      app.$auth
+      return app.$auth
         .refreshTokens()
         .then((data) => {
           if (!data?.data || data?.data?.STATUS === 401) {
@@ -55,7 +55,6 @@ export default function ({
             $auth.logout();
           }
         });
-      return;
     }
     if (error.response.status !== 401) {
       try {
