@@ -46,6 +46,135 @@ describe("Валидация компонента passwordValidationDetail in Re
     expect(passwordValidationMessage).toEqual([]);
   });
 
+  it("Все пробелы", () => {
+    const passwordValidationMessage = passwordValidationDetail("         ");
+
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "без пробела и недопустимых спецсимволов",
+      },
+      {
+        errorText: "минимум одна цифра",
+      },
+      {
+        errorText: "минимум одна заглавная буква",
+      },
+      {
+        errorText: "минимум одна строчная буква",
+      },
+      {
+        errorText: "только латинские буквы",
+      },
+    ]);
+  });
+
+  it("Один пробел", () => {
+    const passwordValidationMessage = passwordValidationDetail(" ");
+
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "без пробела и недопустимых спецсимволов",
+      },
+      {
+        errorText: "минимум одна цифра",
+      },
+      {
+        errorText: "минимум одна заглавная буква",
+      },
+      {
+        errorText: "минимум одна строчная буква",
+      },
+      {
+        errorText: "только латинские буквы",
+      },
+      {
+        errorText: "от 8 до 20 символов",
+      },
+    ]);
+  });
+
+  it("Одни цифры", () => {
+    const passwordValidationMessage = passwordValidationDetail("11111111111");
+
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "минимум одна заглавная буква",
+      },
+      {
+        errorText: "минимум одна строчная буква",
+      },
+      {
+        errorText: "только латинские буквы",
+      },
+    ]);
+  });
+
+  it("Одна цифра", () => {
+    const passwordValidationMessage = passwordValidationDetail("1");
+
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "минимум одна заглавная буква",
+      },
+      {
+        errorText: "минимум одна строчная буква",
+      },
+      {
+        errorText: "только латинские буквы",
+      },
+      {
+        errorText: "от 8 до 20 символов",
+      },
+    ]);
+  });
+
+  it("Один допустимый цпецсимвол", () => {
+    const passwordValidationMessage = passwordValidationDetail("!");
+
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "минимум одна цифра",
+      },
+      {
+        errorText: "минимум одна заглавная буква",
+      },
+      {
+        errorText: "минимум одна строчная буква",
+      },
+      {
+        errorText: "только латинские буквы",
+      },
+      {
+        errorText: "от 8 до 20 символов",
+      },
+    ]);
+  });
+
+  it("Один недопустимый спецсимвол №", () => {
+    const passwordValidationMessage = passwordValidationDetail("№");
+
+    expect(passwordValidationMessage).toEqual([
+      {
+        errorText: "без пробела и недопустимых спецсимволов",
+      },
+      {
+        errorText: "минимум одна цифра",
+      },
+      {
+        errorText: "минимум одна заглавная буква",
+      },
+      {
+        errorText: "минимум одна строчная буква",
+      },
+      {
+        errorText: "только латинские буквы",
+      },
+      {
+        errorText: "от 8 до 20 символов",
+      },
+    ]);
+  });
+
   it("Если поле пустое выводит ошибку", () => {
     const passwordValidationMessage = passwordValidationDetail("");
 
