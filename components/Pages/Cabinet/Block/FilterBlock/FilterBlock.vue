@@ -307,7 +307,7 @@ export default {
     background: #edf8ea;
     color: #43b02a;
     display: initial;
-    padding: 3px 8px;
+    padding: 4px 8px;
     font-weight: 700;
     font-size: 14px;
     margin-left: 5px;
@@ -322,6 +322,19 @@ export default {
   &.y-btn {
     background-color: #f7b801;
     color: #292929;
+  }
+}
+@media (max-width: 992px) {
+  .filter-mob-flex .filterblock {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .filter-mob-flex .filterblock > button {
+    white-space: nowrap;
+    width: auto;
+    overflow: visible;
   }
 }
 </style>
