@@ -17,9 +17,11 @@ export const state = () => ({
   PoutValue: "",
   requestFinish: false,
   isLoadedScript: false,
+  isCollapseVisible: true,
 });
 
 export const getters = {
+  isCollapseVisible: (state) => state.isCollapseVisible,
   getScriptStatus: (state) => state.isLoadedScript,
 
   getServerFilters: (state) => state.serverFilters,
@@ -30,6 +32,7 @@ export const getters = {
     state.blocks.find((b) => b.blockId === parseInt(id)),
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
+
     if (currentBlock) {
       const items = currentBlock.data.items
         .filter((item) => {
@@ -60,7 +63,6 @@ export const getters = {
           }
           return true;
         });
-
       return {
         ...currentBlock,
         data: {
@@ -84,6 +86,9 @@ let cacheKey = null;
 let cachedPromised = null;
 
 export const actions = {
+  async toggleCollapse({ commit }, payload) {
+    commit("setToggleCollapse", payload);
+  },
   async getScript({ commit, state }, payload) {
     if (global.window) {
       if (cacheKey !== payload.idItem) {
@@ -165,7 +170,6 @@ export const actions = {
     try {
       const response = await this.$axios.get(url);
       const responseData = response.data;
-
       commit(
         "menu/setMenuById",
         {
@@ -175,7 +179,7 @@ export const actions = {
         { root: true }
       );
       commit("addBlock", {
-        blockId: parseInt(params.id),
+        blockId: parseInt(params.id, 10),
         data: responseData,
       });
       if (params.id === params.idItem) {
@@ -184,7 +188,6 @@ export const actions = {
         });
       }
     } catch (err) {
-      console.error(new Error("error:", err));
       return err.response;
     }
   },
@@ -258,6 +261,9 @@ export const actions = {
 };
 
 export const mutations = {
+  setToggleCollapse(state, data) {
+    state.isCollapseVisible = !data;
+  },
   scriptLoaded(state, status) {
     state.isLoadedScript = status;
   },
