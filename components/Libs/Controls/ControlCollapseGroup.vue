@@ -62,7 +62,16 @@ export default {
 </script>
 
 <style>
+.collapse-filter {
+  display: none;
+}
 @media (max-width: 992px) {
+  .collapse-filter {
+    display: block;
+  }
+  .collapse-filter + .conf-block {
+    display: none;
+  }
   .collapse-filter + .conf-block + .conf-block,
   .collapse-filter + .conf-block {
     position: relative;
@@ -71,7 +80,7 @@ export default {
     position: absolute;
     top: -38px;
   }
-  .collapse-filter + .conf-block.d-none + .conf-block .title-conf-block {
+  .collapse-filter + .conf-block:not(.d-block) + .conf-block .title-conf-block {
     position: absolute;
     top: -38px;
   }
@@ -109,7 +118,7 @@ export default {
   }
   .collapse-filter + .conf-block > .row > div:nth-child(2),
   .collapse-filter
-    + .conf-block.d-none
+    + .conf-block:not(.d-block)
     + .conf-block
     > .row
     > div:nth-child(2) {
