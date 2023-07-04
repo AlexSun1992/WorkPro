@@ -1,5 +1,5 @@
 <template>
-  <div v-if="featureFlag" class="validation">
+  <div class="validation">
     <div class="validation_title">Требования к паролю</div>
     <div class="validation_description">
       допускаются спецсимволы !#$%^*()-=+[]{};,.|/?
@@ -34,18 +34,6 @@ export default {
         indicator += item.indicator;
       });
       return `${indicator}%`;
-    },
-    featureFlag() {
-      if (!process.server) {
-        const featureFlag = new URL(
-          window.location.href,
-          "https://reso.ru"
-        ).searchParams.has("LK2-882");
-
-        this.$emit("featureFlag", featureFlag);
-        return featureFlag;
-      }
-      return null;
     },
     validationList() {
       return Object.entries(passwordValidationWindow(this.passwordValue)).map(
