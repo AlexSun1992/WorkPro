@@ -21,7 +21,7 @@
       class="conf-block"
       :class="{
         'mb-4': index < forms.length - 1,
-        'd-none':
+        'd-block':
           isFilterInvisible &&
           indexBlockShouldBeHide == index &&
           forms.length > 1,
