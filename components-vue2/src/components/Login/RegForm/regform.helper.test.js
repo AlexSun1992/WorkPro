@@ -1,5 +1,4 @@
 import {
-  passwordValidation,
   passwordValidationDetail,
   passwordValidationWindow,
   passwordValidator,
@@ -17,24 +16,6 @@ describe("Валидация passwordValidator in regform.helper", () => {
       "минимум одна строчная буква",
       "только латинские буквы",
       "от 8 до 20 символов",
-    ]);
-  });
-});
-
-describe("Валидация passwordValidation in regform.helper", () => {
-  it("Успешный пароль", () => {
-    const passwordValidationMessage = passwordValidation("Reso19910");
-
-    expect(passwordValidationMessage).toEqual([]);
-  });
-
-  it("Не успешный пароль", () => {
-    const passwordValidationMessage = passwordValidation("Reso");
-
-    expect(passwordValidationMessage).toEqual([
-      {
-        errorText: `Требования к паролю: от 8 до 20 символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};,.|/? (пробел исключён)`,
-      },
     ]);
   });
 });

@@ -81,7 +81,7 @@ import {
   maxLengthPassword,
 } from "./regform.helper.fixtures";
 import {
-  passwordValidation,
+  passwordValidationDetail,
   tooltipText,
 } from "../../../../components-vue2/src/components/Login/RegForm/regform.helper";
 
@@ -116,7 +116,7 @@ export default {
       }
     },
     updateValue(val) {
-      if (passwordValidation(val).length === 0) {
+      if (passwordValidationDetail(val).length === 0) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -125,7 +125,7 @@ export default {
             this.executeValidation.map((text) => text.errorText),
         });
       }
-      if (passwordValidation(val).length !== 0) {
+      if (passwordValidationDetail(val).length !== 0) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
@@ -158,7 +158,7 @@ export default {
 
   computed: {
     executeValidation() {
-      return passwordValidation(this.$v.form.password1.$model);
+      return passwordValidationDetail(this.$v.form.password1.$model);
     },
     disabled() {
       if (
@@ -180,7 +180,8 @@ export default {
     form: {
       password1: {
         required,
-        isPasswordValid: (value) => passwordValidation(value).length === 0,
+        isPasswordValid: (value) =>
+          passwordValidationDetail(value).length === 0,
       },
       password2: {
         required,

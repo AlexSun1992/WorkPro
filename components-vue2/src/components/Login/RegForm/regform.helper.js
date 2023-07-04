@@ -109,22 +109,3 @@ export function passwordValidationDetail(password) {
     .filter((item) => item.isError)
     .map((item) => createErrorMessage(item.errorText));
 }
-
-/**
- * Функция валидации пароля
- * @param {string} password входящая переменная
- * @return {{errorText: string}[]}
- */
-export function passwordValidation(password) {
-  /** Массив ошибок для пароля */
-  const errorMessagepasswordValidation = [];
-
-  if (passwordValidationDetail(password).length > 0) {
-    errorMessagepasswordValidation.push(
-      createErrorMessage(
-        `Требования к паролю: от ${minLengthPassword} до ${maxLengthPassword} символов. Пароль должен состоять из латинских букв, содержать минимум одну цифру, одну заглавную и одну строчную буквы; также можно использовать спецсимволы: !#$%^*()-=+[]{};,.|/? (пробел исключён)`
-      )
-    );
-  }
-  return errorMessagepasswordValidation;
-}

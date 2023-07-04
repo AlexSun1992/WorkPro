@@ -56,7 +56,6 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
-                :errorMessageValidation="validationForFirstPassword"
               />
             </div>
           </b-row>
@@ -107,7 +106,6 @@
                 :v="$v.form"
                 :validateState="validateState"
                 :isValid="isSamePassword"
-                :errorMessageValidation="validationForFirstPassword"
               />
             </div>
           </b-row>
@@ -169,7 +167,7 @@ import UserRecoveryForm from "./UserRecoveryForm.vue";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
-import { passwordValidation } from "../RegForm/regform.helper";
+import { passwordValidationDetail } from "../RegForm/regform.helper";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
@@ -426,9 +424,6 @@ export default {
     isSamePassword() {
       return !this.$v.form.password2.$invalid;
     },
-    validationForFirstPassword() {
-      return passwordValidation(this.$v.form.password.$model);
-    },
     tabIndex() {
       return this.currentTab === 0 ? [30, 40] : [20, 30];
     },
@@ -483,7 +478,7 @@ export default {
       password: {
         required,
         errorMessageValidation: (value) =>
-          passwordValidation(value).length === 0,
+          passwordValidationDetail(value).length === 0,
       },
       password2: {
         required,

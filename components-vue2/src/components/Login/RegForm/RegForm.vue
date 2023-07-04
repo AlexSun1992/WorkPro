@@ -139,7 +139,6 @@
             :disabled="isDisabledForm"
             :tab-index="[50, 60]"
             :log-params="logParams"
-            :errorMessageValidation="validationForFirstPassword"
           />
         </div>
         <div class="col-12 mt-4 mt-lg-0">
@@ -279,7 +278,7 @@ import {
   fetchName,
 } from "./dadata.helper";
 
-import { passwordValidation } from "./regform.helper";
+import { passwordValidationDetail } from "./regform.helper";
 
 export default {
   components: {
@@ -387,7 +386,7 @@ export default {
       password: {
         required,
         errorMessageValidation: (value) =>
-          passwordValidation(value).length === 0,
+          passwordValidationDetail(value).length === 0,
       },
       password2: {
         required,
@@ -406,9 +405,6 @@ export default {
     }
   },
   computed: {
-    validationForFirstPassword() {
-      return passwordValidation(this.$v.form.password.$model);
-    },
     formData() {
       const params = {
         SECONDNAME: this.family.trim(),
