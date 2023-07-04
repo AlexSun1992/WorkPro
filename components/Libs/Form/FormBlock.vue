@@ -17,7 +17,7 @@
 
     <div
       v-for="(tab, index) in forms"
-      :key="index"
+      :key="'block' + index"
       class="conf-block"
       :class="{
         'mb-4': index < forms.length - 1,
@@ -30,8 +30,8 @@
       <div class="row">
         <template v-if="tab.length">
           <Control
-            v-for="(item, i) in tab"
-            :key="i"
+            v-for="item in tab"
+            :key="item.fieldId"
             v-if="!item.name.includes('COLLAPSE_GROUP')"
             @update="$emit('update', $event)"
             @clear="$emit('clear', $event)"
