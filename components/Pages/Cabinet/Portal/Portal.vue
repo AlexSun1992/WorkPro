@@ -32,6 +32,8 @@ import ObjectsOnMap from "~/components/Libs/ObjectsOnMap/ObjectsOnMap";
 import ControlMap from "@/components/Libs/Controls/ControlMap/ControlMap.vue";
 import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock.vue";
 import Grid from "../../../Libs/Table/Grid.vue";
+import ControlToggle from "../../../Libs/Controls/ControlToggle.vue";
+import ControlCollapse from "../../../Libs/Controls/ControlCollapse.vue";
 
 export default {
   name: "Wizard",
@@ -54,6 +56,8 @@ export default {
     ControlMap,
     ServerFilterBlock,
     Grid,
+    ControlToggle,
+    ControlCollapse,
   },
   props: {
     params: {

@@ -120,7 +120,6 @@ export default {
       placeHolder: { item: "placeholder", name: "Выберите время посещения" },
     };
   },
-
   computed: {
     filterItems() {
       const block = this.$store.getters["blocks/getUnfilteredBlockById"](

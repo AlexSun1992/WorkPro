@@ -30,9 +30,8 @@ export const getters = {
   getSettingsByIdItem: (state) => (id) => {
     return state.menu[0].children.find((m) => m.idItem === parseInt(id));
   },
-  getMenuById: (state) => (id) => {
-    return state.flatmenu.find((m) => m.IDITEM === parseInt(id));
-  },
+  getMenuById: (state) => (id) =>
+    state.flatmenu.find((m) => m.IDITEM === parseInt(id)),
   getMenuByName: (state) => (name) => {
     return state.flatmenu.find((m) => m.SCARDCAPTION === name);
   },

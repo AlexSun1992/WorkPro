@@ -29,7 +29,6 @@
 <script>
 export default {
   name: "ContentBlock",
-
   props: {
     itemId: {
       required: false,
@@ -109,7 +108,6 @@ export default {
     },
     filters() {
       const servers = this.$store.getters["blocks/getServerFilters"];
-
       return servers;
     },
 
