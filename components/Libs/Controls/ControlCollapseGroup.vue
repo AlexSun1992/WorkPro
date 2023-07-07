@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ isFilterVisible }}
     <button
       type="button"
       @click="toggleFilterVisibility()"
@@ -32,10 +33,6 @@ export default {
     };
   },
   computed: {
-    getControls() {
-      const getTestData = this.$store.getters["data_card/getForm"];
-      return getTestData;
-    },
     isFiltersRendered() {
       const isFiltersVisible =
         this.$store.getters["data_card/getFiltersVisibleStatus"];
@@ -56,6 +53,7 @@ export default {
         name: this.data.name,
       });
       this.isFilterVisible = !this.isFilterVisible;
+      this.$store.commit("data_card/toggleFilterVisible", this.isFilterVisible);
     },
   },
 };
