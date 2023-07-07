@@ -2,6 +2,11 @@
   <div class="row">
     <div class="col-12 col-lg-6">
       <b-form-group class="position-relative">
+        <validation-window
+          v-if="isShowValidationWindow"
+          :passwordValue="$v.form.password1.$model"
+          :v="$v"
+        />
         <legend>
           Новый пароль
           <span class="tooltipster">
@@ -15,7 +20,8 @@
           :type="pswVisible ? 'text' : 'password'"
           placeholder="Пароль"
           v-model="$v.form.password1.$model"
-          @blur="$v.form.password1.$touch()"
+          @focus="showValidationWindow"
+          @blur="hiddenValidationWindow"
           :state="validateState('password1')"
           class="form-control"
           data-testid="password1"
@@ -29,13 +35,9 @@
           @click="visiblePSW()"
           tabindex="-1"
         ></button>
-        <div class="invalid-feedback">
-          <b-form-invalid-feedback
-            class="d-block"
-            v-for="errMess in executeValidation"
-            :key="errMess.errorText"
-          >
-            {{ errMess.errorText }}
+        <div class="invalid-feedback" v-if="!isShowValidationWindow">
+          <b-form-invalid-feedback class="d-block">
+            Пароль не отвечает условиям
           </b-form-invalid-feedback>
         </div>
       </b-form-group>
@@ -84,10 +86,16 @@ import {
   passwordValidationDetail,
   tooltipText,
 } from "../../../../components-vue2/src/components/Login/RegForm/regform.helper";
+import ValidationWindow from "../../../../components-vue2/src/components/Login/Libs/VerifyPassword/ValidationWindow.vue";
 
 export default {
   name: "ControlPasswordConfirm",
-  components: { BFormGroup, BFormInput, BFormInvalidFeedback },
+  components: {
+    BFormGroup,
+    BFormInput,
+    BFormInvalidFeedback,
+    ValidationWindow,
+  },
   mixins: [validationMixin],
   props: {
     data: {
@@ -104,9 +112,17 @@ export default {
         password1: "",
         password2: "",
       },
+      isShowValidationWindow: false,
     };
   },
   methods: {
+    showValidationWindow() {
+      this.isShowValidationWindow = true;
+    },
+    hiddenValidationWindow() {
+      this.$v.form.password1.$touch();
+      this.isShowValidationWindow = false;
+    },
     checkSamePassword() {
       if (
         this.$v.form.password2.sameAsPassword === false &&
