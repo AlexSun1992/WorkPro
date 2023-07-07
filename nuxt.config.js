@@ -130,6 +130,7 @@ const nuxtConfig = {
         levels: ["error"],
       },
     },
+    tracing: true,
     // Add native Sentry config here
     // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
     environment: process.env.NODE_ENV,
