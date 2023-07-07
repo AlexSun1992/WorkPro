@@ -71,6 +71,7 @@ export default {
   position: relative;
   margin-top: 5px;
   line-height: 20px;
+  color: #434343 !important;
 }
 .validation ul li.success,
 .validation ul li.error {
