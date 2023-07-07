@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "postinstall": "git config blame.ignoreRevsFile .git-blame-ignore-revs || true",
-    "dev": "cross-env NODE_ENV=development NODE_EXTRA_CA_CERTS=reso.crt NODE_OPTIONS=--openssl-legacy-provider nodemon server/index.js --watch server converters",
-    "dev-actuary": "cross-env MOBILE_URL=https://mobiletest.reso.ru MOBILE2_URL=https://mobiletest.reso.ru NODE_ENV=development NODE_EXTRA_CA_CERTS=reso.crt NODE_OPTIONS=--openssl-legacy-provider nodemon server/index.js --watch server converters",
+    "dev": "cross-env MOBILE_URL=https://mobiletest.reso.ru MOBILE2_URL=https://mobiletest.reso.ru NODE_ENV=development NODE_EXTRA_CA_CERTS=reso.crt NODE_OPTIONS=--openssl-legacy-provider nodemon server/index.js --watch server converters",
+    "dev-prod": "cross-env NODE_ENV=development NODE_EXTRA_CA_CERTS=reso.crt NODE_OPTIONS=--openssl-legacy-provider nodemon server/index.js --watch server converters",
     "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider nuxt build",
     "start": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider node server/index.js",
     "generate": "nuxt generate",
