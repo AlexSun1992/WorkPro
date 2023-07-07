@@ -376,6 +376,7 @@ export default {
           (value === null ||
             value === undefined ||
             value === "" ||
+            value === false ||
             data[i].error) &&
           value !== 0
         ) {
