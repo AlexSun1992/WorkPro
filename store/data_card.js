@@ -34,8 +34,10 @@ export const state = () => ({
   filters: {},
   visible: {},
   addFields: {},
+  isFilterVisible: false,
 });
 export const getters = {
+  getFiltersVisibleStatus: (state) => state.isFilterVisible,
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
   getForm: (state) => state.form,
@@ -485,6 +487,11 @@ export const actions = {
 };
 
 export const mutations = {
+  toggleFilterVisible(state, payload) {
+    state.isFilterVisible = payload;
+    console.log("state.isFilterVisible:", state.isFilterVisible);
+  },
+
   addBeforeSavePromise(state, func) {
     state.beforeSavePromises.push(func);
   },

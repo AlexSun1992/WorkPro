@@ -2,6 +2,7 @@
   <div>
     <template>
       <Control
+        v-if="getFilters"
         @update="$emit('update', $event)"
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
@@ -10,7 +11,6 @@
         :data="getFilters"
         :edit="edit"
         :cols="cols"
-        :class="CollapseGroup"
       >
       </Control>
     </template>
@@ -22,7 +22,7 @@
       :class="{
         'mb-4': index < forms.length - 1,
         'd-block':
-          isFilterInvisible &&
+          isFiltersRendered &&
           indexBlockShouldBeHide == index &&
           forms.length > 1,
       }"
@@ -90,6 +90,11 @@ export default {
   },
 
   computed: {
+    isFiltersRendered() {
+      const isFiltersVisible =
+        this.$store.getters["data_card/getFiltersVisibleStatus"];
+      return isFiltersVisible;
+    },
     forms() {
       const pages = [...new Set(this.data.map((item) => item.page))];
       return pages
