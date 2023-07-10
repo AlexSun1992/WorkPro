@@ -1,11 +1,10 @@
 <template>
   <div>
-    {{ isFilterVisible }}
     <button
       type="button"
       @click="toggleFilterVisibility()"
       class="collapsegroup"
-      :class="{ active: !isFilterVisible }"
+      :class="{ active: isFiltersRendered }"
     >
       Фильтры поиска
     </button>
@@ -29,7 +28,7 @@ export default {
   },
   data() {
     return {
-      isFilterVisible: true,
+      isFilterVisible: false,
     };
   },
   computed: {
@@ -52,8 +51,9 @@ export default {
         value: this.isFilterVisible,
         name: this.data.name,
       });
-      this.isFilterVisible = !this.isFilterVisible;
-      this.$store.commit("data_card/toggleFilterVisible", this.isFilterVisible);
+
+      const filterVisibleStatus = !this.isFiltersRendered;
+      this.$store.commit("data_card/toggleFilterVisible", filterVisibleStatus);
     },
   },
 };
