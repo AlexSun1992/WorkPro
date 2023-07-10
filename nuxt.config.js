@@ -155,8 +155,7 @@ const nuxtConfig = {
 
     extend(config, { isDev, isClient }) {
       config.resolve.alias.vue = "vue/dist/vue.common";
-      if (isClient) config.devtool = "eval-source-map";
-      else config.devtool = "inline-source-map";
+      config.devtool = "source-map";
     },
     transpile: ["vue-agile", "vue-plugin-load-script"],
   },
