@@ -3,7 +3,7 @@
     <b-form-checkbox
       v-model="fieldValue"
       class="checkbox-hide"
-      :state="data.state"
+      :state="data.state && isRequiredPersonalDataCheckBox"
       :disabled="!edit ? !edit : data.readonly"
       :id="data.webId ? data.webId : ''"
     >
