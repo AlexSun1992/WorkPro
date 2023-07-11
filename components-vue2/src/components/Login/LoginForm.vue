@@ -142,7 +142,7 @@
 
         <div class="col-12 invalid-feedback d-block mt-3" v-if="wrongAuthData">
           Неверный логин или пароль.<br />Проверьте корректность введенных
-          даных.
+          данных.
         </div>
         <div
           class="col-12 invalid-feedback d-block mt-3"
