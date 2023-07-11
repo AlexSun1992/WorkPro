@@ -6,8 +6,6 @@
       :coords="[55.76, 37.64]"
       :controls="[]"
       :use-object-manager="false"
-      @map-was-initialized="handleMapInit"
-      @markers-was-change="changeMarkers"
       :options="mapOptions"
     >
       <ymap-marker
@@ -76,16 +74,8 @@ export default {
         if (block) {
           return block.data.items;
         }
-        return {};
+        return [];
       },
-    },
-  },
-  methods: {
-    async handleMapInit(e) {
-      console.log("ymapsinit", e);
-    },
-    changeMarkers(e) {
-      console.log("markers", e);
     },
   },
 };
