@@ -12,9 +12,9 @@
     >
       <ymap-marker
         v-for="item in dataContent"
-        :key="item.IDMED_EXECUTOR + Math.random()"
-        :marker-id="item.IDMED_EXECUTOR"
-        :coords="[item.NLAT, item.NLONG]"
+        :key="Math.random()"
+        :marker-id="item[markerIdName]"
+        :coords="[item[latitudeName], item[longitudeName]]"
         :icon="markerIcon"
         :options="markerOptions"
       >
@@ -31,6 +31,19 @@ export default {
     itemId: {
       required: false,
       default: () => null,
+    },
+
+    longitudeName: {
+      required: false,
+      default: () => "NLONG",
+    },
+    latitudeName: {
+      required: false,
+      default: () => "NLAT",
+    },
+    markerIdName: {
+      required: false,
+      default: () => "ID",
     },
   },
   data() {
