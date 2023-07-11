@@ -11,7 +11,7 @@ import CardPage from "~/components/Pages/Cabinet/Card/Card";
 import FormPage from "~/components/Pages/FormPage";
 import FilterBlock from "./Block/FilterBlock/FilterBlock.vue";
 import UploadContainer from "@/components/Pages/Cabinet/Upload/UploadPage.vue";
-import ListRender from "./Block/ListRender.vue";
+import OfficeMap from "./Block/OfficeMap.vue";
 
 export default {
   name: "Fluid",
@@ -22,7 +22,7 @@ export default {
     FormPage,
     FilterBlock,
     UploadContainer,
-    ListRender,
+    OfficeMap,
   },
 
   computed: {

@@ -18,16 +18,15 @@
         :icon="markerIcon"
         :options="markerOptions"
       >
+        <slot slot="balloon" :content="item" :list="dataContent" />
       </ymap-marker>
     </yandex-map>
   </div>
 </template>
 <script>
-import ListRenderBaloon from "./ListRenderBaloon.vue";
-
 export default {
-  name: "ListRender",
-  components: { ListRenderBaloon },
+  name: "OfficeMap",
+
   props: {
     itemId: {
       required: false,
@@ -35,14 +34,9 @@ export default {
     },
   },
   data() {
-    return {
-      markerType: "Polygon",
-    };
+    return {};
   },
   computed: {
-    balloonTemplate() {
-      return `<p>!!</p>`;
-    },
     markerIcon() {
       return {
         layout: "default#imageWithContent",
