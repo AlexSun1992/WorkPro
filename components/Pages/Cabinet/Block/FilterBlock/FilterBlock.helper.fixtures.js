@@ -220,13 +220,13 @@ export const getUnfilteredItems = [
     SPROLONGATION: "Нет данных",
   },
 ];
-//
+
 export const storaNoFilters = new Vuex.Store({
   modules: {
     blocks: {
       ...blocks,
       state: {
-        ...blocks.state,
+        ...blocks.state(),
         blocks: [
           {
             blockId: 712,
@@ -239,27 +239,13 @@ export const storaNoFilters = new Vuex.Store({
   },
 });
 
-export const filter = "[]";
-
-export const activeFilterItem =
-  '[{ "propertyName": "SSTATUS", "filter": ["Действующие"], "id": "712" }]';
-
-export const archiveFilterItem =
-  '[{ "propertyName": "SSTATUS", "filter": ["Архивные"], "id": "712" }]';
-
 export const storaWithFilters = new Vuex.Store({
   modules: {
     blocks: {
       ...blocks,
       state: {
         ...blocks.state,
-        filters: [
-          {
-            propertyName: "SSTATUS",
-            filter: ["Действующие"],
-            id: 712,
-          },
-        ],
+        filters: [],
         blocks: [
           {
             blockId: 712,

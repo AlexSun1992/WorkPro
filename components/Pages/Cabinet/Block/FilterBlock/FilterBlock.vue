@@ -177,36 +177,12 @@ export default {
   },
 
   created() {
-    if (this.$route.query.filters) {
-      const filters = JSON.parse(this.$route.query.filters.toString());
-      if (this.filterType === "radiobutton" && this.defaultValue === null) {
-        this.isAllFilters = true;
-      }
-      if (this.filterType === "radiobutton" && this.defaultValue !== null) {
-        this.$store.commit("blocks/setFilter", {
-          propertyName: this.propertyName,
-          filter: this.defaultValue,
-          id: this.itemId,
-        });
-      }
-      if (
-        this.filterType === "radiobutton" &&
-        filters.find((filter) => filter.propertyName === this.propertyName)
-      ) {
-        this.isAllFilters = false;
-      }
-      if (
-        this.filterType === "checkbox" &&
-        filters.find((filter) => filter.propertyName === this.propertyName)
-      ) {
-        this.isAllFilters = false;
-      }
-      this.$store.commit("blocks/setFilter", filters);
-    } else if (this.defaultValue) {
+    const currentFilter = this.$route.query[this.propertyName];
+    if (currentFilter) {
       this.isAllFilters = false;
       this.$store.commit("blocks/setFilter", {
         propertyName: this.propertyName,
-        filter: this.defaultValue,
+        filter: Array.isArray(currentFilter) ? currentFilter : [currentFilter],
         id: this.itemId,
       });
     }
@@ -252,15 +228,20 @@ export default {
     setQueryURL() {
       const urlObject = new URL(window.location.href);
 
-      urlObject.searchParams.set(
-        "filters",
-        JSON.stringify(this.$store.getters["blocks/getFilters"])
-      );
+      [...urlObject.searchParams.keys()].forEach((propertyName) => {
+        urlObject.searchParams.delete(propertyName);
+      });
 
-      window.history.replaceState(null, null, urlObject.search);
+      this.$store.getters["blocks/getFilters"].forEach((item) => {
+        const { propertyName, filter } = item;
+        filter.forEach((filterValue) => {
+          urlObject.searchParams.append(propertyName, filterValue);
+        });
+      });
+
+      window.history.replaceState(null, null, urlObject);
 
       const url = `${this.$route.path}${urlObject.search}`;
-
       this.$store.commit("menu/setQueriesUrlByIdMenu", {
         ...this.$route.params,
         url,
