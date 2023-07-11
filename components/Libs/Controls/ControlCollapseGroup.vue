@@ -4,7 +4,7 @@
       type="button"
       @click="toggleFilterVisibility()"
       class="collapsegroup"
-      :class="{ active: !isFilterVisible }"
+      :class="{ active: isFiltersRendered }"
     >
       Фильтры поиска
     </button>
@@ -28,14 +28,10 @@ export default {
   },
   data() {
     return {
-      isFilterVisible: true,
+      isFilterVisible: false,
     };
   },
   computed: {
-    getControls() {
-      const getTestData = this.$store.getters["data_card/getForm"];
-      return getTestData;
-    },
     isFiltersRendered() {
       const isFiltersVisible =
         this.$store.getters["data_card/getFiltersVisibleStatus"];
@@ -55,7 +51,9 @@ export default {
         value: this.isFilterVisible,
         name: this.data.name,
       });
-      this.isFilterVisible = !this.isFilterVisible;
+
+      const filterVisibleStatus = !this.isFiltersRendered;
+      this.$store.commit("data_card/toggleFilterVisible", filterVisibleStatus);
     },
   },
 };
