@@ -3,7 +3,7 @@
   "data": [
     {
       "label": "Код",
-      "value": 784955,
+      "value": 3862795,
       "id": "777",
       "type": "long",
       "maxlength": 10,
@@ -463,6 +463,7 @@
     },
     {
       "label": "Необходимость капчи для расчёта",
+      "value": false,
       "id": "777",
       "type": "boolrus",
       "maxlength": 1,
@@ -476,7 +477,7 @@
     },
     {
       "label": "Цена",
-      "value": "<div><div class=\"price-block mt-5\"><div class=\"price-description\">Предварительная стоимость полиса</div><div class=\"price\"> <span class=\"rub\" /></div><div class=\"price-info\">Окончательную стоимость полиса вы можете уточнить при обращении к представителю компании или при оформлении в Личном кабинете онлайн. Расчет произведен на основе указанных выше параметров.</div></div><a id=\"btn_issue_calc_main\" class=\"btn-primary d-table w-100 w-lg-auto mt-4 d-none\" href=\"/cabinet/wizard/750/55/0/751/0/0?MAKE_MODEL=&IDBRAND=&FKIDBRAND=&IDMODEL=&FKIDMODEL=&VEHICLE_TYPE=&FKVEHICLE_TYPE=&BUILD_YEAR=&OUTPUT=&POWER_KVT=&CALCID=784955&\">Оформить ОСАГО</a><a id=\"btn_issue_calc_main\" class=\"btn-primary d-table w-100 w-lg-auto mt-4\" href=\"https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=free&utm_campaign=issue_calc_prev\">Оформить ОСАГО</a></div>",
+      "value": "<div><div class=\"price-block mt-5\"><div class=\"price-description\">Предварительная стоимость полиса</div><div class=\"price\" id=\"price_view_osago_calculator\"> <span class=\"rub\" /></div><div class=\"price-info\">Окончательную стоимость полиса вы можете уточнить при обращении к представителю компании или при оформлении в Личном кабинете онлайн. Расчет произведен на основе указанных выше параметров.</div></div><a id=\"btn_issue_calc_main\" class=\"btn-primary d-table w-100 w-lg-auto mt-4 d-none\" href=\"/cabinet/wizard/750/55/0/751/0/0?MAKE_MODEL=&IDBRAND=&FKIDBRAND=&IDMODEL=&FKIDMODEL=&VEHICLE_TYPE=&FKVEHICLE_TYPE=&BUILD_YEAR=&OUTPUT=&POWER_KVT=&CALCID=3862795&\">Оформить ОСАГО</a><button id=\"btn_issue_calc_main\" class=\"btn-primary d-table w-100 w-lg-auto mt-4\"onclick=\"try {logEventVue({formName: 777, idEventType: 1010, controlName: this.id, timeUser: new Date()}); ar_callCounter('btn_issue_calc_main');} catch(e){} window.location = 'https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=free&utm_campaign=issue_calc_prev';\">Оформить ОСАГО</button></div>",
       "id": "777",
       "type": "text",
       "maxlength": 4000,
@@ -610,7 +611,7 @@
         "isTab": true
       },
       {
-        "label": "<span style=\"color:red\" id=\"gosnumb_not_found\">Госномер не найден, укажите данные ТС самостоятельно</span>",
+        "label": "<span style=\"color:red\"  id=\"gosnumb_not_found\">Госномер не найден, укажите данные ТС самостоятельно</span>",
         "type": "empty",
         "id": "777",
         "fieldId": 38489,
@@ -672,7 +673,7 @@
         "colLg": 3,
         "width": "100%",
         "name": "LCHECKREGNUMBER",
-        "cssClass": "mt-lg-3 mt-3 m-lg-auto d-table text-nowrap ps-0 ps-lg-4",
+        "cssClass": "mt-lg-3 mt-3 m-lg-auto d-table text-nowrap ps-0 ps-lg-5 ps-xlg-4",
         "webId": "btn_calculate_nonumb_main",
         "visible": true,
         "required": false,
@@ -797,7 +798,7 @@
         "width": "100%",
         "name": "input_label_Nmber_err_N_F",
         "cssClass": "p4",
-        "webId": "",
+        "webId": "gosnumb_not_found",
         "visible": false,
         "required": false,
         "page": 0,
@@ -1168,6 +1169,12 @@
         "fieldRelation": null,
         "isTab": true,
         "options": [
+          {
+            "SNAME": 2023,
+            "ID": 2023,
+            "text": "2023",
+            "value": 2023
+          },
           {
             "SNAME": 2022,
             "ID": 2022,
@@ -1761,12 +1768,6 @@
             "ID": 1924,
             "text": "1924",
             "value": 1924
-          },
-          {
-            "SNAME": 1923,
-            "ID": 1923,
-            "text": "1923",
-            "value": 1923
           }
         ]
       },
@@ -3595,6 +3596,7 @@
       },
       {
         "label": "BISCAPTCHANEEDED",
+        "value": false,
         "type": "boolean",
         "structType": "boolrus",
         "id": "777",
@@ -3669,7 +3671,7 @@
         "isTab": true
       },
       {
-        "value": "<div><div class=\"price-block mt-5\"><div class=\"price-description\">Предварительная стоимость полиса</div><div class=\"price\"> <span class=\"rub\" /></div><div class=\"price-info\">Окончательную стоимость полиса вы можете уточнить при обращении к представителю компании или при оформлении в Личном кабинете онлайн. Расчет произведен на основе указанных выше параметров.</div></div><a id=\"btn_issue_calc_main\" class=\"btn-primary d-table w-100 w-lg-auto mt-4 d-none\" href=\"/cabinet/wizard/750/55/0/751/0/0?MAKE_MODEL=&IDBRAND=&FKIDBRAND=&IDMODEL=&FKIDMODEL=&VEHICLE_TYPE=&FKVEHICLE_TYPE=&BUILD_YEAR=&OUTPUT=&POWER_KVT=&CALCID=784955&\">Оформить ОСАГО</a><a id=\"btn_issue_calc_main\" class=\"btn-primary d-table w-100 w-lg-auto mt-4\" href=\"https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=free&utm_campaign=issue_calc_prev\">Оформить ОСАГО</a></div>",
+        "value": "<div><div class=\"price-block mt-5\"><div class=\"price-description\">Предварительная стоимость полиса</div><div class=\"price\" id=\"price_view_osago_calculator\"> <span class=\"rub\" /></div><div class=\"price-info\">Окончательную стоимость полиса вы можете уточнить при обращении к представителю компании или при оформлении в Личном кабинете онлайн. Расчет произведен на основе указанных выше параметров.</div></div><a id=\"btn_issue_calc_main\" class=\"btn-primary d-table w-100 w-lg-auto mt-4 d-none\" href=\"/cabinet/wizard/750/55/0/751/0/0?MAKE_MODEL=&IDBRAND=&FKIDBRAND=&IDMODEL=&FKIDMODEL=&VEHICLE_TYPE=&FKVEHICLE_TYPE=&BUILD_YEAR=&OUTPUT=&POWER_KVT=&CALCID=3862795&\">Оформить ОСАГО</a><button id=\"btn_issue_calc_main\" class=\"btn-primary d-table w-100 w-lg-auto mt-4\"onclick=\"try {logEventVue({formName: 777, idEventType: 1010, controlName: this.id, timeUser: new Date()}); ar_callCounter('btn_issue_calc_main');} catch(e){} window.location = 'https://client.reso.ru/wp-reso-ru/login.xhtml?utm_source=reso.ru&utm_medium=free&utm_campaign=issue_calc_prev';\">Оформить ОСАГО</button></div>",
         "type": "empty",
         "structType": "string",
         "id": "777",
@@ -3744,15 +3746,19 @@
         "isTab": true
       }
     ],
+    "defaultValues": {},
     "captions": "\"\";\"\";\"\";\"\";\"\";",
     "cardCaption": "Калькулятор ОСАГО",
     "btnSave": false,
+    "btnCancel": false,
     "readonly": false,
     "visible": {
       "BTNSAVE": "N",
       "BTNCANCEL": "N",
       "": ""
     },
-    "addFields": {}
+    "addFields": {},
+    "breadCrumbs": null,
+    "itemId": "777"
   }
 }
