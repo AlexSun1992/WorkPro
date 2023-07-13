@@ -15,7 +15,7 @@ describe("ControlPasswordConfirm", () => {
     colLg: 12,
     width: "100%",
     name: "SNEWPASSWORDCONFIRM",
-    labelCols: "",
+    cssClass: "",
     webId: "",
     visible: true,
     required: true,

@@ -14,7 +14,7 @@ describe("ControlUploader", () => {
     colLg: 12,
     width: "100%",
     name: "STEXT",
-    labelCols: "",
+    cssClass: "",
     webId: "",
     visible: true,
     required: true,
