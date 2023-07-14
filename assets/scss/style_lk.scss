@@ -4918,6 +4918,8 @@ a.color-l-green:hover {
 
 .buy_blk .telemed_blk + .buy_btn,
 .buy_blk .mite_blk + .buy_btn,
+.buy_blk .travel_blk + .buy_btn,
+.buy_blk .ns_blk + .buy_btn,
 .buy_blk .osago_blk + .buy_btn {
   border: 2px solid $lgreen;
   border-radius: 0px 0px 15px 15px;
@@ -4945,6 +4947,18 @@ a.color-l-green:hover {
 .buy_blk .telemed_blk + .buy_btn:hover,
 .buy_blk .mite_blk + .buy_btn:hover {
   color: #3b86c8;
+  text-decoration: none;
+}
+
+.buy_blk .travel_blk + .buy_btn,
+.buy_blk .ns_blk + .buy_btn {
+  border: 2px solid #f7b801;
+  color: #f7b801;
+}
+
+.buy_blk .travel_blk + .buy_btn:hover,
+.buy_blk .ns_blk + .buy_btn:hover {
+  color: #f7b801;
   text-decoration: none;
 }
 
