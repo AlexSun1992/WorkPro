@@ -42,7 +42,7 @@ header {
 }
 
 .logo {
-  background: url(/img/logo.svg) 0 0 no-repeat;
+  background: url("/img/logo.svg") 0 0 no-repeat;
   width: 168px;
   height: 47px;
   display: block;
@@ -128,7 +128,7 @@ header .menu-link a:hover {
 .select-sity {
   border: 0;
   background: transparent
-    url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg)
+    url("/export/system/modules/ru.reso.v2/resources/img/icons/chevron-down.svg")
     right 7px no-repeat;
   color: $black;
   padding: 0 1rem 0 0;
@@ -155,8 +155,8 @@ header .menu-link a:hover {
   border-radius: 15px;
   padding: 15px 24px 15px 56px;
   background: #f2f4f5
-    url(https://new.reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/Union.svg)
-    24px center no-repeat;
+    url("/export/system/modules/ru.reso.v2/resources/img/icons/Union.svg") 24px
+    center no-repeat;
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.125rem;
@@ -210,14 +210,14 @@ header .anonsed-block {
 }
 
 header .anonsed {
-  background: url(/img/icon-anonsed.svg) 0 0 no-repeat;
+  background: url("/img/icon-anonsed.svg") 0 0 no-repeat;
   height: 24px;
   width: 24px !important;
   border: 0;
 }
 
 header .anonsed.active {
-  background: url(/img/icon-anonsed-active.svg) 0 0 no-repeat;
+  background: url("/img/icon-anonsed-active.svg") 0 0 no-repeat;
   height: 24px;
   width: 24px !important;
   border: 0;
@@ -343,174 +343,174 @@ li.breadcrumb-item:not(:last-of-type):after {
 }
 
 .sidebar-nav-item .menu-icon-notifications {
-  background: url(/img/icon-menu-notifications.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-notifications.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-notifications,
 .sidebar-nav-item:hover .menu-icon-notifications {
-  background: url(/img/icon-menu-notifications-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-notifications-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-buypolicies {
-  background: url(/img/icon-menu-buypolicies.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-buypolicies.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-buypolicies,
 .sidebar-nav-item:hover .menu-icon-buypolicies {
-  background: url(/img/icon-menu-buypolicies-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-buypolicies-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-paypolicies {
-  background: url(/img/icon-menu-paypolicies.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-paypolicies.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-paypolicies,
 .sidebar-nav-item:hover .menu-icon-paypolicies {
-  background: url(/img/icon-menu-paypolicies-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-paypolicies-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-mypolicies {
-  background: url(/img/icon-menu-mypolicies.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-mypolicies.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-mypolicies,
 .sidebar-nav-item:hover .menu-icon-mypolicies {
-  background: url(/img/icon-menu-mypolicies-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-mypolicies-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-myagents {
-  background: url(/img/icon-menu-myagents.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-myagents.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-myagents,
 .sidebar-nav-item:hover .menu-icon-myagents {
-  background: url(/img/icon-menu-myagents-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-myagents-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-profile {
-  background: url(/img/icon-menu-1.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-1.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-profile,
 .sidebar-nav-item:hover .menu-icon-profile {
-  background: url(/img/icon-menu-1-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-1-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-customization {
-  background: url(/img/icon-menu-2.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-2.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-customization,
 .sidebar-nav-item:hover .menu-icon-customization {
-  background: url(/img/icon-menu-2-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-2-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-buy {
-  background: url(/img/icon-menu-3.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-3.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-buy,
 .sidebar-nav-item:hover .menu-icon-buy {
-  background: url(/img/icon-menu-3-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-3-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-promotions {
-  background: url(/img/menu-icon-promotions.svg) 20px 50% no-repeat;
+  background: url("/img/menu-icon-promotions.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-promotions,
 .sidebar-nav-item:hover .menu-icon-promotions {
-  background: url(/img/menu-icon-promotions-active.svg) 20px 50% no-repeat;
+  background: url("/img/menu-icon-promotions-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-insuredevents {
-  background: url(/img/icon-menu-insuredevents.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-insuredevents.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-insuredevents,
 .sidebar-nav-item:hover .menu-icon-insuredevents {
-  background: url(/img/icon-menu-insuredevents-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-insuredevents-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-myobjects {
-  background: url(/img/icon-menu-7.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-7.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-myobjects,
 .sidebar-nav-item:hover .menu-icon-myobjects {
-  background: url(/img/icon-menu-7-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-7-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-calculation {
-  background: url(/img/icon-menu-8.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-8.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-calculation,
 .sidebar-nav-item:hover .menu-icon-calculation {
-  background: url(/img/icon-menu-8-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-8-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-policies {
-  background: url(/img/icon-menu-9.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-9.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-policies,
 .sidebar-nav-item:hover .menu-icon-policies {
-  background: url(/img/icon-menu-9-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-9-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-dms0 {
-  background: url(/img/icon-menu-dms0.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms0.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-dms0,
 .sidebar-nav-item:hover .menu-icon-dms0 {
-  background: url(/img/icon-menu-dms0-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms0-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-dms1 {
-  background: url(/img/icon-menu-dms1.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms1.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-dms1,
 .sidebar-nav-item:hover .menu-icon-dms1 {
-  background: url(/img/icon-menu-dms1-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms1-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-dms3 {
-  background: url(/img/icon-menu-dms3.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms3.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-dms3,
 .sidebar-nav-item:hover .menu-icon-dms3 {
-  background: url(/img/icon-menu-dms3-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms3-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-dms4 {
-  background: url(/img/icon-menu-dms4.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms4.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-dms4,
 .sidebar-nav-item:hover .menu-icon-dms4 {
-  background: url(/img/icon-menu-dms4-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms4-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-dms5 {
-  background: url(/img/icon-menu-dms5.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms5.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-dms5,
 .sidebar-nav-item:hover .menu-icon-dms5 {
-  background: url(/img/icon-menu-dms5-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms5-active.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item .menu-icon-telemed {
-  background: url(/img/icon-menu-dms2.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms2.svg") 20px 50% no-repeat;
 }
 
 .sidebar-nav-item.active .menu-icon-telemed,
 .sidebar-nav-item:hover .menu-icon-telemed {
-  background: url(/img/icon-menu-dms2-active.svg) 20px 50% no-repeat;
+  background: url("/img/icon-menu-dms2-active.svg") 20px 50% no-repeat;
 }
 
 .anonsed-blocks .anonsed-block {
@@ -598,7 +598,7 @@ a.lgreen {
   position: absolute;
   width: 8px;
   height: 14px;
-  background: url(/img/icon-chevron-r.svg) 50% 50% no-repeat;
+  background: url("/img/icon-chevron-r.svg") 50% 50% no-repeat;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
@@ -608,7 +608,7 @@ a.lgreen {
   position: absolute;
   width: 14px;
   height: 14px;
-  background: url(/img/icon-green-plus.svg) 50% 50% no-repeat;
+  background: url("/img/icon-green-plus.svg") 50% 50% no-repeat;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
@@ -669,44 +669,44 @@ a.lgreen {
 }
 
 .block-policy[data-id="1"]:before {
-  background: url(/img/product-id1.png) 50% 50% no-repeat;
+  background: url("/img/product-id1.png") 50% 50% no-repeat;
 }
 
 .block-policy[data-id="2"]:before {
-  background: url(/img/product-id2.png) 50% 50% no-repeat;
+  background: url("/img/product-id2.png") 50% 50% no-repeat;
 }
 
 .block-policy[data-id="3"]:before {
-  background: url(/img/product-id3.png) 50% 50% no-repeat;
+  background: url("/img/product-id3.png") 50% 50% no-repeat;
 }
 
 .block-policy[data-id="4"]:before {
-  background: url(/img/product-id4.png) 50% 50% no-repeat;
+  background: url("/img/product-id4.png") 50% 50% no-repeat;
 }
 .block-policy[data-id="94"]:before {
-  background: url(/img/product-id94.png) 50% 50% no-repeat;
+  background: url("/img/product-id94.png") 50% 50% no-repeat;
   height: 127px;
   top: 36px;
 }
 
 .block-policy[data-id="5"]:before {
-  background: url(/img/product-id5.png) 50% 50% no-repeat;
+  background: url("/img/product-id5.png") 50% 50% no-repeat;
 }
 
 .block-policy[data-id="6"]:before {
-  background: url(/img/product-id6.png) 50% 50% no-repeat;
+  background: url("/img/product-id6.png") 50% 50% no-repeat;
 }
 
 .block-policy[data-id="7"]:before {
-  background: url(/img/product-id7.png) 50% 50% no-repeat;
+  background: url("/img/product-id7.png") 50% 50% no-repeat;
 }
 
 .block-policy[data-id="8"]:before {
-  background: url(/img/product-id1.png) 50% 50% no-repeat;
+  background: url("/img/product-id1.png") 50% 50% no-repeat;
 }
 
 .block-policy[data-id="10"]:before {
-  background: url(/img/product-id10.png) 50% 50% no-repeat;
+  background: url("/img/product-id10.png") 50% 50% no-repeat;
 }
 
 .block-policy .title,
@@ -751,7 +751,7 @@ a.lgreen {
   position: absolute;
   left: 142px;
   top: -360px;
-  background: url(/img/ellipse2.svg) 50% 50% no-repeat;
+  background: url("/img/ellipse2.svg") 50% 50% no-repeat;
 }
 
 .insured-events .title {
@@ -849,47 +849,47 @@ a.lgreen {
 }
 
 .insured-events[data-id="1"]:after {
-  background: url(/img/icon-insured-events1.svg) 50% 50% no-repeat;
+  background: url("/img/icon-insured-events1.svg") 50% 50% no-repeat;
   border-color: $med;
 }
 
 .insured-events[data-id="2"]:after {
-  background: url(/img/icon-insured-events2.svg) 50% 50% no-repeat;
+  background: url("/img/icon-insured-events2.svg") 50% 50% no-repeat;
   border-color: $auto;
 }
 
 .insured-events[data-id="3"]:after {
-  background: url(/img/icon-insured-events3.svg) 50% 50% no-repeat;
+  background: url("/img/icon-insured-events3.svg") 50% 50% no-repeat;
   border-color: $auto;
 }
 
 .insured-events[data-id="4"]:after {
-  background: url(/img/icon-insured-events4.svg) 50% 50% no-repeat;
+  background: url("/img/icon-insured-events4.svg") 50% 50% no-repeat;
   border-color: $mortgage;
 }
 
 .insured-events[data-id="5"]:after {
-  background: url(/img/icon-insured-events2.svg) 50% 50% no-repeat;
+  background: url("/img/icon-insured-events2.svg") 50% 50% no-repeat;
   border-color: $auto;
 }
 
 .insured-events[data-id="6"]:after {
-  background: url(/img/icon-insured-events6.svg) 50% 50% no-repeat;
+  background: url("/img/icon-insured-events6.svg") 50% 50% no-repeat;
   border-color: $travel;
 }
 
 .insured-events[data-id="7"]:after {
-  background: url(/img/icon-insured-events7.svg) 50% 50% no-repeat;
+  background: url("/img/icon-insured-events7.svg") 50% 50% no-repeat;
   border-color: $travel;
 }
 
 .insured-events[data-id="8"]:after {
-  background: url(/img/icon-insured-events8.svg) 50% 50% no-repeat;
+  background: url("/img/icon-insured-events8.svg") 50% 50% no-repeat;
   border-color: $med;
 }
 
 .insured-events[data-id="10"]:after {
-  background: url(/img/icon-insured-events10.svg) 50% 50% no-repeat;
+  background: url("/img/icon-insured-events10.svg") 50% 50% no-repeat;
   border-color: $med;
 }
 
@@ -1087,7 +1087,7 @@ a.btn-light {
 
 .icon-android,
 .icon-ios {
-  background-image: url(/img/ios.png);
+  background-image: url("/img/ios.png");
   background-position: 25px center;
   background-repeat: no-repeat;
   padding: 0 24px 0 47px;
@@ -1104,7 +1104,7 @@ a.btn-light {
 }
 
 .icon-android {
-  background-image: url(/img/android.png);
+  background-image: url("/img/android.png");
 }
 
 .icon-ios + .icon-android {
@@ -1145,21 +1145,21 @@ footer .menu-link a:hover {
 }
 
 .footer-fb {
-  background: #fff url(/img/fb.svg) 50% 50% no-repeat;
+  background: #fff url("/img/fb.svg") 50% 50% no-repeat;
   border: 2px solid #e1e1e1;
 }
 
 .footer-vk {
-  background: #fff url(/img/vk.svg) 50% 50% no-repeat;
+  background: #fff url("/img/vk.svg") 50% 50% no-repeat;
   border: 2px solid #e1e1e1;
 }
 .footer-in {
-  background: #fff url(/img/inst.svg) 50% 50% no-repeat;
+  background: #fff url("/img/inst.svg") 50% 50% no-repeat;
   border: 2px solid #e1e1e1;
 }
 
 .footer-tg {
-  background: #fff url(/img/tg.svg) 50% 50%no-repeat;
+  background: #fff url("/img/tg.svg") 50% 50%no-repeat;
   background-size: 30px;
   border: 2px solid #e1e1e1;
 }
@@ -1441,7 +1441,7 @@ a.link:hover span {
   transform: translateY(-50%);
   position: absolute;
   left: 24px;
-  background: url(/img/feedback.svg) 50% 50% no-repeat;
+  background: url("/img/feedback.svg") 50% 50% no-repeat;
 }
 
 .feedback {
@@ -1511,15 +1511,15 @@ a.link:hover span {
 }
 
 .block-advertising.bg-two {
-  background: #fff url(/img/sale.svg) 50% 50% no-repeat;
+  background: #fff url("/img/sale.svg") 50% 50% no-repeat;
 }
 
 .block-advertising.bg-tree {
-  background: #fff url(/img/car.svg) 50% 50% no-repeat;
+  background: #fff url("/img/car.svg") 50% 50% no-repeat;
 }
 
 .block-advertising.bg-for {
-  background: #fff url(/img/sale.svg) 50% 50% no-repeat;
+  background: #fff url("/img/sale.svg") 50% 50% no-repeat;
 }
 
 .search.selection.dropdown,
@@ -1614,7 +1614,7 @@ input.is-valid:hover,
 input.is-valid {
   padding-right: 40px;
   border: 2px solid $lgreen !important;
-  background: #fff url(/img/input-valid.svg) right center no-repeat !important;
+  background: #fff url("/img/input-valid.svg") right center no-repeat !important;
 }
 
 p.error {
@@ -1738,7 +1738,7 @@ input.checkbox-hide + label:after {
   top: 50%;
   transform: translateY(-52%);
   position: absolute;
-  background: #fff url(/img/list_green.svg) 50% 50% no-repeat !important;
+  background: #fff url("/img/list_green.svg") 50% 50% no-repeat !important;
 }
 
 .checkbox-btn {
@@ -1879,7 +1879,7 @@ a.btn-warning {
   font-size: 0;
   right: 10px;
   top: 52px;
-  background: #fff url(/img/cross-black.svg) 50% 50% no-repeat;
+  background: #fff url("/img/cross-black.svg") 50% 50% no-repeat;
   padding: 0;
 }
 
@@ -1888,7 +1888,7 @@ a.btn-warning {
   width: 100%;
   height: 100%;
   display: block;
-  background: url(/img/chevron-down.svg) 50% 50% no-repeat;
+  background: url("/img/chevron-down.svg") 50% 50% no-repeat;
   position: absolute;
   left: 0;
   top: 0;
@@ -1904,7 +1904,7 @@ a.btn-warning {
 }
 
 .mx-icon-calendar {
-  background: url(/img/calendar.svg) 50% 50% no-repeat;
+  background: url("/img/calendar.svg") 50% 50% no-repeat;
   width: 24px;
   height: 24px;
   right: 10px;
@@ -1923,7 +1923,7 @@ input + .mx-icon-calendar {
 
 .ld_my-location > div {
   padding-left: 30px;
-  background: url(/img/my-location.svg) 0 2px no-repeat;
+  background: url("/img/my-location.svg") 0 2px no-repeat;
 }
 
 .my-location {
@@ -1935,7 +1935,7 @@ input + .mx-icon-calendar {
 
 .my-location:after {
   content: "";
-  background: url(/img/my-location.svg) 50% 50% no-repeat;
+  background: url("/img/my-location.svg") 50% 50% no-repeat;
   width: 24px;
   height: 24px;
   position: absolute;
@@ -2031,7 +2031,7 @@ input:disabled + .mx-icon-calendar {
   width: 24px;
   height: 24px;
   border-radius: 24px;
-  background: #fff url(/img/icon-red-cross.svg) 50% 50% no-repeat;
+  background: #fff url("/img/icon-red-cross.svg") 50% 50% no-repeat;
   border: 1px solid red;
   z-index: 1;
   font-size: 0;
@@ -2090,7 +2090,7 @@ a.free {
     height: 40px;
     border-radius: 40px;
     border: 0;
-    background: #fff url(/img/burger.svg) 50% 50% no-repeat;
+    background: #fff url("/img/burger.svg") 50% 50% no-repeat;
     left: 16px;
     top: 50%;
     transform: translateY(-50%);
@@ -2098,7 +2098,7 @@ a.free {
     position: absolute;
   }
   .menu-burger {
-    background: #fff url(/img/cross.svg) 50% 50% no-repeat;
+    background: #fff url("/img/cross.svg") 50% 50% no-repeat;
     top: 16px;
     transform: none;
   }
@@ -2152,7 +2152,7 @@ a.free {
     position: relative;
   }
   .sidebar-nav-container > a:after {
-    background: url(/img/plus.svg) 50% 50% no-repeat;
+    background: url("/img/plus.svg") 50% 50% no-repeat;
     content: "";
     position: absolute;
     top: 50%;
@@ -2162,7 +2162,7 @@ a.free {
     height: 20px;
   }
   .sidebar-nav-container > a.active:after {
-    background: url(/img/minus.svg) center right no-repeat;
+    background: url("/img/minus.svg") center right no-repeat;
   }
   .sidebar_client ul > li a {
     padding-left: 56px;
@@ -2244,7 +2244,7 @@ a.free {
     width: 24px;
     height: 24px;
     border-radius: 24px;
-    background: #fff url(/img/icon-red-cross.svg) 50% 50% no-repeat;
+    background: #fff url("/img/icon-red-cross.svg") 50% 50% no-repeat;
     border: 1px solid red;
     z-index: 1;
     font-size: 0;
@@ -2408,7 +2408,7 @@ a.free {
   width: 30px;
   height: 2px;
   margin: 0 auto;
-  background: url(/img/osagostap0.svg) 50% 50% no-repeat;
+  background: url("/img/osagostap0.svg") 50% 50% no-repeat;
   margin-top: 24px;
 }
 
@@ -2420,33 +2420,33 @@ a.free {
 .osago .step[data-step="1"],
 .telemed .step[data-step="1"],
 .apartment .step[data-step="1"] {
-  background-image: url(/img/osagostap1.svg);
+  background-image: url("/img/osagostap1.svg");
 }
 
 .osago .step[data-step="2"] {
-  background-image: url(/img/osagostap2.svg);
+  background-image: url("/img/osagostap2.svg");
 }
 
 .osago .step[data-step="3"] {
-  background-image: url(/img/osagostap3.svg);
+  background-image: url("/img/osagostap3.svg");
 }
 
 .step[data-step].docs,
 .osago .step[data-step="4"] {
-  background-image: url(/img/osagostap4.svg);
+  background-image: url("/img/osagostap4.svg");
 }
 
 .osago .step[data-step="5"] {
-  background-image: url(/img/osagostap5.svg);
+  background-image: url("/img/osagostap5.svg");
 }
 
 .harvestmite .step[data-step="3"],
 .osago .step[data-step="6"],
 .telemed .step[data-step="3"] {
-  background-image: url(/img/osagostap6.svg);
+  background-image: url("/img/osagostap6.svg");
 }
 .apartment .step[data-step="2"] {
-  background-image: url(/img/osagostap7.svg);
+  background-image: url("/img/osagostap7.svg");
   background-size: 24px;
 }
 
@@ -2496,7 +2496,7 @@ a.free {
 .my-policy[data-id="2"]:after,
 .my-policy[data-id="3"]:after {
   overflow: hidden;
-  background: url(/img/mypolicy-id2.svg) top right no-repeat;
+  background: url("/img/mypolicy-id2.svg") top right no-repeat;
 }
 
 .my-policy[data-id="1"],
@@ -2507,7 +2507,7 @@ a.free {
 .my-policy[data-id="1"]:after,
 .my-policy[data-id="8"]:after {
   overflow: hidden;
-  background: url(/img/mypolicy-id1.svg) top right no-repeat;
+  background: url("/img/mypolicy-id1.svg") top right no-repeat;
 }
 
 .my-policy[data-id="4"] {
@@ -2516,7 +2516,7 @@ a.free {
 
 .my-policy[data-id="4"]:after {
   overflow: hidden;
-  background: url(/img/mypolicy-id4.svg) top right no-repeat;
+  background: url("/img/mypolicy-id4.svg") top right no-repeat;
 }
 
 .my-policy[data-id="6"],
@@ -2526,12 +2526,12 @@ a.free {
 
 .my-policy[data-id="6"]:after {
   overflow: hidden;
-  background: url(/img/mypolicy-id6.svg) top right no-repeat;
+  background: url("/img/mypolicy-id6.svg") top right no-repeat;
 }
 
 .my-policy[data-id="7"]:after {
   overflow: hidden;
-  background: url(/img/mypolicy-id07.svg) top right no-repeat;
+  background: url("/img/mypolicy-id07.svg") top right no-repeat;
 }
 
 .my-policy[data-id="10"] {
@@ -2540,7 +2540,7 @@ a.free {
 
 .my-policy[data-id="10"]:after {
   overflow: hidden;
-  background: url(/img/mypolicy-id10.svg) top right no-repeat;
+  background: url("/img/mypolicy-id10.svg") top right no-repeat;
 }
 
 .btn-primary.btn-download,
@@ -2558,7 +2558,7 @@ a.free {
 .my-policy[data-id="3"] .btn-download,
 .my-policy[data-id="5"] .btn-download {
   color: $lgreen;
-  background: url(/img/icon-download-auto.svg) 40px 50% no-repeat;
+  background: url("/img/icon-download-auto.svg") 40px 50% no-repeat;
   border-color: $lgreen;
 }
 
@@ -2566,20 +2566,20 @@ a.free {
 .my-policy[data-id="10"] .btn-download,
 .my-policy[data-id="8"] .btn-download {
   color: #3b86c8;
-  background: url(/img/icon-download-dms.svg) 40px 50% no-repeat;
+  background: url("/img/icon-download-dms.svg") 40px 50% no-repeat;
   border-color: #3b86c8;
 }
 
 .my-policy[data-id="4"] .btn-download {
   color: #645da2;
-  background: url(/img/icon-download-mortgage.svg) 40px 50% no-repeat;
+  background: url("/img/icon-download-mortgage.svg") 40px 50% no-repeat;
   border-color: #645da2;
 }
 
 .my-policy[data-id="6"] .btn-download,
 .my-policy[data-id="7"] .btn-download {
   color: #f7b801;
-  background: url(/img/icon-download-travel.svg) 40px 50% no-repeat;
+  background: url("/img/icon-download-travel.svg") 40px 50% no-repeat;
   border-color: #f7b801;
 }
 
@@ -2989,7 +2989,7 @@ a.action:hover {
   right: 0;
   top: 50%;
   margin-top: -11px;
-  background: transparent url(/img/chevron-lk.svg) 50% 50% no-repeat;
+  background: transparent url("/img/chevron-lk.svg") 50% 50% no-repeat;
   transition: rotate 0.2s;
   transform: rotate(180deg);
 }
@@ -3038,11 +3038,11 @@ a.action:hover {
 }
 
 .LoginButton .dropdown.show .dropdown-menu li:nth-child(1) a {
-    background: transparent url(/img/icon-menu-1-black.svg) left center no-repeat !important;
+    background: transparent url("/img/icon-menu-1-black.svg") left center no-repeat !important;
 }
 
 .LoginButton .dropdown.show .dropdown-menu li:nth-child(2) a {
-    background: transparent url(/img/exit.svg) left center no-repeat !important;
+    background: transparent url("/img/exit.svg") left center no-repeat !important;
 }*/
 
 @at-root .LoginButton .dropdown.show .dropdown-menu {
@@ -3103,7 +3103,7 @@ a.action:hover {
 
 .LoginButton .dropdown.show .dropdown-menu li.login-profile a {
   background-color: #ffffff;
-  background-image: url(/img/icon-menu-1-black.svg) !important;
+  background-image: url("/img/icon-menu-1-black.svg") !important;
   background-position: 30px !important;
   background-repeat: no-repeat !important;
   transition: 0.2s;
@@ -3112,7 +3112,7 @@ a.action:hover {
 
 .LoginButton .dropdown.show .dropdown-menu li.login-osago a {
   background-color: #ffffff;
-  background-image: url(/img/login-osago.svg) !important;
+  background-image: url("/img/login-osago.svg") !important;
   background-position: 30px center !important;
   background-repeat: no-repeat !important;
   transition: 0.2s;
@@ -3120,7 +3120,7 @@ a.action:hover {
 
 .LoginButton .dropdown.show .dropdown-menu li.login-exit a {
   background-color: #ffffff;
-  background-image: url(/img/login-exit.svg) !important;
+  background-image: url("/img/login-exit.svg") !important;
   background-position: 30px center !important;
   background-repeat: no-repeat !important;
   transition: 0.2s;
@@ -3128,7 +3128,7 @@ a.action:hover {
 
 .LoginButton .dropdown.show .dropdown-menu li.login-polises a {
   background-color: #ffffff;
-  background-image: url(/img/login-polises.svg) !important;
+  background-image: url("/img/login-polises.svg") !important;
   background-position: 30px center !important;
   background-repeat: no-repeat !important;
   transition: 0.2s;
@@ -3163,7 +3163,7 @@ input.is-invalid {
   top: 20px;
   right: 20px;
   content: "";
-  background: url(/img/anonsedbg.svg) 0 0 no-repeat;
+  background: url("/img/anonsedbg.svg") 0 0 no-repeat;
 }
 
 .anonsed-date {
@@ -3300,7 +3300,7 @@ input.is-invalid {
     position: absolute;
     left: 101px;
     top: -433px;
-    background: url(/img/ellipse2.svg) 50% 50% no-repeat;
+    background: url("/img/ellipse2.svg") 50% 50% no-repeat;
     background-size: contain;
   }
   .border-block {
@@ -3317,7 +3317,7 @@ input.is-invalid {
 
 .select-sity {
   border: 0;
-  background: transparent url(/img/chevron-down.svg) right 7px no-repeat;
+  background: transparent url("/img/chevron-down.svg") right 7px no-repeat;
   color: $black;
   padding: 0 1rem 0 0;
   line-height: 1.5;
@@ -3467,7 +3467,7 @@ textarea {
 }
 
 .tooltipster {
-  background: url(/img/tooltip.svg) 50% 50% no-repeat;
+  background: url("/img/tooltip.svg") 50% 50% no-repeat;
   font-size: 0;
   display: inline-block;
   width: 24px;
@@ -3496,61 +3496,62 @@ textarea {
   }
   .sidebar-nav-item.active .menu-icon-profile,
   .sidebar-nav-item:hover .menu-icon-profile {
-    background: url(/img/icon-menu-1-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-1-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-customization,
   .sidebar-nav-item:hover .menu-icon-customization {
-    background: url(/img/icon-menu-2-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-2-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-notifications,
   .sidebar-nav-item:hover .menu-icon-notifications {
-    background: url(/img/icon-menu-notifications-active-m.svg) 20px 50%
+    background: url("/img/icon-menu-notifications-active-m.svg") 20px 50%
       no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-myagents,
   .sidebar-nav-item:hover .menu-icon-myagents {
-    background: url(/img/icon-menu-myagents-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-myagents-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-promotions,
   .sidebar-nav-item:hover .menu-icon-promotions {
-    background: url(/img/menu-icon-promotions-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/menu-icon-promotions-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-mypolicies,
   .sidebar-nav-item:hover .menu-icon-mypolicies {
-    background: url(/img/icon-menu-mypolicies-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-mypolicies-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-buypolicies,
   .sidebar-nav-item:hover .menu-icon-buypolicies {
-    background: url(/img/icon-menu-buypolicies-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-buypolicies-active-m.svg") 20px 50%
+      no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-insuredevents,
   .sidebar-nav-item:hover .menu-icon-insuredevents {
-    background: url(/img/icon-menu-insuredevents-active-m.svg) 20px 50%
+    background: url("/img/icon-menu-insuredevents-active-m.svg") 20px 50%
       no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-telemed,
   .sidebar-nav-item:hover .menu-icon-telemed {
-    background: url(/img/icon-menu-dms2-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-dms2-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-dms0,
   .sidebar-nav-item:hover .menu-icon-dms0 {
-    background: url(/img/icon-menu-dms0-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-dms0-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-dms1,
   .sidebar-nav-item:hover .menu-icon-dms1 {
-    background: url(/img/icon-menu-dms1-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-dms1-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-dms3,
   .sidebar-nav-item:hover .menu-icon-dms3 {
-    background: url(/img/icon-menu-dms3-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-dms3-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-dms4,
   .sidebar-nav-item:hover .menu-icon-dms4 {
-    background: url(/img/icon-menu-dms4-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-dms4-active-m.svg") 20px 50% no-repeat;
   }
   .sidebar-nav-item.active .menu-icon-dms5,
   .sidebar-nav-item:hover .menu-icon-dms5 {
-    background: url(/img/icon-menu-dms5-active-m.svg) 20px 50% no-repeat;
+    background: url("/img/icon-menu-dms5-active-m.svg") 20px 50% no-repeat;
   }
   [data-card-id="705"]:after {
     position: absolute;
@@ -3560,7 +3561,7 @@ textarea {
     right: 0;
     top: auto;
     content: "";
-    background: url(/img/anonsedbg.svg) 0 0 no-repeat;
+    background: url("/img/anonsedbg.svg") 0 0 no-repeat;
     background-size: contain;
   }
   .my-policy:after {
@@ -3689,7 +3690,7 @@ textarea {
 }
 
 .price .rub {
-  background: url(/img/rub.svg) top right no-repeat;
+  background: url("/img/rub.svg") top right no-repeat;
   width: 30px;
   height: 26px;
   display: inline-block;
@@ -3805,9 +3806,9 @@ a[data-newcount][data-newcolor="RED"]:after {
   color: $lgreen;
   padding-left: 76px;
   padding-right: 40px;
-  background: transparent url(/img/Icon-file-auto.svg) 40px center no-repeat;
+  background: transparent url("/img/Icon-file-auto.svg") 40px center no-repeat;
   &:hover {
-    background: #edf8ea url(/img/Icon-file-auto.svg) 40px center no-repeat;
+    background: #edf8ea url("/img/Icon-file-auto.svg") 40px center no-repeat;
     border: 2px solid $lgreen;
     color: $lgreen;
   }
@@ -3820,9 +3821,9 @@ a[data-newcount][data-newcolor="RED"]:after {
   color: #3b86c8;
   padding-left: 76px;
   padding-right: 40px;
-  background: transparent url(/img/Icon-file-med.svg) 40px center no-repeat;
+  background: transparent url("/img/Icon-file-med.svg") 40px center no-repeat;
   &:hover {
-    background: #ecf3fa url(/img/Icon-file-med.svg) 40px center no-repeat;
+    background: #ecf3fa url("/img/Icon-file-med.svg") 40px center no-repeat;
     border: 2px solid #3b86c8;
     color: #3b86c8;
   }
@@ -3833,9 +3834,9 @@ a[data-newcount][data-newcolor="RED"]:after {
   color: #645da2;
   padding-left: 76px;
   padding-right: 40px;
-  background: transparent url(/img/Icon-file-ins.svg) 40px center no-repeat;
+  background: transparent url("/img/Icon-file-ins.svg") 40px center no-repeat;
   &:hover {
-    background: #ecebf4 url(/img/Icon-file-ins.svg) 40px center no-repeat;
+    background: #ecebf4 url("/img/Icon-file-ins.svg") 40px center no-repeat;
     border: 2px solid #645da2;
     color: #645da2;
   }
@@ -3847,9 +3848,9 @@ a[data-newcount][data-newcolor="RED"]:after {
   color: #f7b801;
   padding-left: 76px;
   padding-right: 40px;
-  background: transparent url(/img/Icon-file-travel.svg) 40px center no-repeat;
+  background: transparent url("/img/Icon-file-travel.svg") 40px center no-repeat;
   &:hover {
-    background: #fff8e6 url(/img/Icon-file-travel.svg) 40px center no-repeat;
+    background: #fff8e6 url("/img/Icon-file-travel.svg") 40px center no-repeat;
     border: 2px solid #f7b801;
     color: #f7b801;
   }
@@ -3879,7 +3880,7 @@ a[data-newcount][data-newcolor="RED"]:after {
 .block-policy_small .pay-notification:after {
   width: 23px;
   height: 23px;
-  background: url(/img/watch.svg) 50% 50% no-repeat;
+  background: url("/img/watch.svg") 50% 50% no-repeat;
   content: "";
   display: block;
   right: 12px;
@@ -3947,75 +3948,75 @@ a[data-newcount][data-newcolor="RED"]:after {
 .my-policy-actions[data-id="2"] .btn-insurance-case:after,
 .my-policy-actions[data-id="3"] .btn-insurance-case:after,
 .my-policy-actions[data-id="5"] .btn-insurance-case:after {
-  background: url(/img/action-osago-5.svg) 50% 50% no-repeat;
+  background: url("/img/action-osago-5.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="2"] .btn-insurance-rules:after,
 .my-policy-actions[data-id="3"] .btn-insurance-rules:after,
 .my-policy-actions[data-id="5"] .btn-insurance-rules:after {
-  background: url(/img/action-osago-1.svg) 50% 50% no-repeat;
+  background: url("/img/action-osago-1.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="2"] .btn-pay-case:after,
 .my-policy-actions[data-id="3"] .btn-pay-case:after,
 .my-policy-actions[data-id="5"] .btn-pay-case:after {
-  background: url(/img/action-osago-3.svg) 50% 50% no-repeat;
+  background: url("/img/action-osago-3.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="1"] .btn-pay-case:after,
 .my-policy-actions[data-id="10"] .btn-pay-case:after,
 .my-policy-actions[data-id="8"] .btn-pay-case:after {
-  background: url(/img/action-dms-6.svg) 50% 50% no-repeat;
+  background: url("/img/action-dms-6.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="1"] .btn-insurance-case:after,
 .my-policy-actions[data-id="10"] .btn-insurance-case:after,
 .my-policy-actions[data-id="8"] .btn-insurance-case:after {
-  background: url(/img/action-dms-5.svg) 50% 50% no-repeat;
+  background: url("/img/action-dms-5.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="1"] .btn-insurance-rules:after,
 .my-policy-actions[data-id="10"] .btn-insurance-rules:after,
 .my-policy-actions[data-id="8"] .btn-insurance-rules:after {
-  background: url(/img/action-dms-1.svg) 50% 50% no-repeat;
+  background: url("/img/action-dms-1.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="4"] .btn-pay-case:after {
-  background: url(/img/action-mortgage-6.svg) 50% 50% no-repeat;
+  background: url("/img/action-mortgage-6.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="4"] .btn-insurance-case:after {
-  background: url(/img/action-mortgage-5.svg) 50% 50% no-repeat;
+  background: url("/img/action-mortgage-5.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="4"] .btn-insurance-rules:after {
-  background: url(/img/action-mortgage-1.svg) 50% 50% no-repeat;
+  background: url("/img/action-mortgage-1.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="6"] .btn-insurance-case:after,
 .my-policy-actions[data-id="7"] .btn-insurance-case:after {
-  background: url(/img/action-travel-5.svg) 50% 50% no-repeat;
+  background: url("/img/action-travel-5.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="6"] .btn-insurance-rules:after,
 .my-policy-actions[data-id="7"] .btn-insurance-rules:after {
-  background: url(/img/action-travel-1.svg) 50% 50% no-repeat;
+  background: url("/img/action-travel-1.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
 .my-policy-actions[data-id="6"] .btn-pay-case:after,
 .my-policy-actions[data-id="7"] .btn-pay-case:after {
-  background: url(/img/action-travel-6.svg) 50% 50% no-repeat;
+  background: url("/img/action-travel-6.svg") 50% 50% no-repeat;
   background-size: contain;
 }
 
@@ -4093,21 +4094,21 @@ a[data-newcount][data-newcolor="RED"]:after {
   font-size: 1rem;
   color: $lgreen;
   padding-right: 30px;
-  background: url(/img/icon-email.svg) center right no-repeat;
+  background: url("/img/icon-email.svg") center right no-repeat;
   background-size: contain;
   text-decoration: none;
   line-height: 1;
 }
 
 .btn.icon-wppl {
-  background-image: url(/img/icon-wppl.svg);
+  background-image: url("/img/icon-wppl.svg");
   background-position: 40px 50%;
   background-repeat: no-repeat;
   padding: 0 40px 0 76px;
 }
 
 .btn.icon-esearch {
-  background-image: url(/img/icon-esearch.svg);
+  background-image: url("/img/icon-esearch.svg");
   background-position: 40px 50%;
   background-repeat: no-repeat;
   padding: 0 40px 0 76px;
@@ -4175,7 +4176,7 @@ h6 {
   text-decoration-line: underline;
   color: $lgreen;
   padding-right: 26px;
-  background: url(/img/icon-file-download.svg) center right no-repeat;
+  background: url("/img/icon-file-download.svg") center right no-repeat;
 }
 
 .disabled-card {
@@ -4268,7 +4269,7 @@ h6 {
   text-decoration: none;
   padding: 0 0 0 32px;
   border: 0 !important;
-  background: #fff url(/img/icon-edit.svg) center left no-repeat;
+  background: #fff url("/img/icon-edit.svg") center left no-repeat;
   line-height: 24px;
 }
 
@@ -4279,7 +4280,7 @@ h6 {
   padding: 0 0 0 32px;
   border: 0 !important;
   color: #ff0000;
-  background: #fff url(/img/icon-del.svg) center left no-repeat;
+  background: #fff url("/img/icon-del.svg") center left no-repeat;
   line-height: 24px;
 }
 
@@ -4317,7 +4318,7 @@ h6 {
   content: "";
   width: 8px;
   height: 14px;
-  background: url(/img/icon-chevron-r.svg) right center no-repeat;
+  background: url("/img/icon-chevron-r.svg") right center no-repeat;
   background-size: contain;
 }
 
@@ -4496,12 +4497,12 @@ input.is-valid:disabled {
   width: 24px;
   height: 24px;
   right: 16px;
-  background: transparent url(/img/icon-psw-visible.svg) 50% 50% no-repeat;
+  background: transparent url("/img/icon-psw-visible.svg") 50% 50% no-repeat;
   border: 0;
 }
 
 input[type="text"] + .btn-psw-visible {
-  background: transparent url(/img/icon-psw-unvisible.svg) 50% 50% no-repeat;
+  background: transparent url("/img/icon-psw-unvisible.svg") 50% 50% no-repeat;
 }
 
 #password1.is-valid,
@@ -4515,7 +4516,7 @@ input.is-valid + .btn-psw-visible:after {
   content: "";
   width: 24px;
   height: 24px;
-  background: transparent url(/img/input-valid.svg) left center no-repeat !important;
+  background: transparent url("/img/input-valid.svg") left center no-repeat !important;
   position: absolute;
   top: 0;
   left: -24px;
@@ -4542,7 +4543,7 @@ input {
 
 .mx-input-wrapper input.is-valid {
   padding-right: 56px;
-  background: #fff url(/img/input-valid.svg) right 16px center no-repeat !important;
+  background: #fff url("/img/input-valid.svg") right 16px center no-repeat !important;
 }
 
 .mx-input-wrapper input.is-valid:disabled,
@@ -4723,7 +4724,7 @@ a.color-l-green:hover {
 
 .btn-change {
   border: 0;
-  background: transparent url(/img/icon-change.svg) 0 0 no-repeat;
+  background: transparent url("/img/icon-change.svg") 0 0 no-repeat;
   width: 24px;
   height: 24px;
   display: inline-block;
@@ -4855,7 +4856,7 @@ a.color-l-green:hover {
   width: 20px;
   height: 20px;
   content: "";
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAyMCAyMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzM3ODhfMTIxMTM1KSI+CjxwYXRoIGQ9Ik0wLjQyNjc4MiAxMC4zODA0QzAuNDI2MzEzIDEyLjA2MDggMC44Njg4MTMgMTMuNzAxNiAxLjcxMDIyIDE1LjE0NzhMMC4zNDYzMTMgMjAuMDg5TDUuNDQyNTYgMTguNzYzMUM2Ljg1MjEyIDE5LjUyNDUgOC40MzE0MiAxOS45MjM1IDEwLjAzNjMgMTkuOTIzNkgxMC4wNDA1QzE1LjMzODYgMTkuOTIzNiAxOS42NTEzIDE1LjY0NTggMTkuNjUzNiAxMC4zODc5QzE5LjY1NDYgNy44NDAxIDE4LjY1NTUgNS40NDQyOCAxNi44NDA0IDMuNjQxOEMxNS4wMjU1IDEuODM5NDggMTIuNjExOSAwLjg0NjM3OCAxMC4wNDAxIDAuODQ1MjE1QzQuNzQxNDcgMC44NDUyMTUgMC40MjkwNDggNS4xMjI3MyAwLjQyNjg2IDEwLjM4MDQiIGZpbGw9IiM2OUMwNTUiLz4KPHBhdGggZD0iTTAuMDgzNTkzOCAxMC4zNzcyQzAuMDgzMDQ2OSAxMi4xMTgxIDAuNTQxNDA2IDEzLjgxNzUgMS40MTI4MSAxNS4zMTU1TDAgMjAuNDMzOUw1LjI3ODk4IDE5LjA2MDVDNi43MzM1MiAxOS44NDc0IDguMzcxMTcgMjAuMjYyMiAxMC4wMzc2IDIwLjI2MjlIMTAuMDQxOUMxNS41MyAyMC4yNjI5IDE5Ljk5NzcgMTUuODMxMiAyMCAxMC4zODUxQzIwLjAwMDkgNy43NDU3NCAxOC45NjU5IDUuMjYzOCAxNy4wODU5IDMuMzk2NzRDMTUuMjA1NyAxLjUyOTkyIDEyLjcwNTcgMC41MDEwODUgMTAuMDQxOSAwLjVDNC41NTI4MSAwLjUgMC4wODU3ODEzIDQuOTMxMDEgMC4wODM1OTM4IDEwLjM3NzJaTTMuMjI3MzQgMTUuMDU3NUwzLjAzMDIzIDE0Ljc0NzFDMi4yMDE2NCAxMy40Mzk4IDEuNzY0MyAxMS45MjkxIDEuNzY0OTIgMTAuMzc3OEMxLjc2NjcyIDUuODUxMDkgNS40Nzk1MyAyLjE2ODIyIDEwLjA0NSAyLjE2ODIyQzEyLjI1NTkgMi4xNjkxNSAxNC4zMzM3IDMuMDI0MzQgMTUuODk2NiA0LjU3NTk3QzE3LjQ1OTMgNi4xMjc3NSAxOC4zMTkyIDguMTkwNTQgMTguMzE4NyAxMC4zODQ1QzE4LjMxNjYgMTQuOTExMiAxNC42MDM3IDE4LjU5NDYgMTAuMDQxOSAxOC41OTQ2SDEwLjAzODZDOC41NTMyIDE4LjU5MzggNy4wOTY0MSAxOC4xOTggNS44MjU5NCAxNy40NUw1LjUyMzU5IDE3LjI3MjFMMi4zOTA5NCAxOC4wODcxTDMuMjI3MzQgMTUuMDU3NFYxNS4wNTc1WiIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyXzM3ODhfMTIxMTM1KSIvPgo8cGF0aCBkPSJNNy41NTI5NyA2LjI0ODAxQzcuMzY2NTYgNS44MzY5MiA3LjE3MDM5IDUuODI4NjMgNi45OTMxMiA1LjgyMTQyQzYuODQ3OTcgNS44MTUyMiA2LjY4MjAzIDUuODE1NjggNi41MTYyNSA1LjgxNTY4QzYuMzUwMzEgNS44MTU2OCA2LjA4MDcgNS44Nzc2MiA1Ljg1MjgxIDYuMTI0NTJDNS42MjQ2OCA2LjM3MTY1IDQuOTgxODcgNi45Njg4NiA0Ljk4MTg3IDguMTgzNTFDNC45ODE4NyA5LjM5ODI0IDUuODczNTEgMTAuNTcyMSA1Ljk5NzgxIDEwLjczN0M2LjEyMjI2IDEwLjkwMTYgNy43MTkxNCAxMy40NzQgMTAuMjQ4MiAxNC40NjM2QzEyLjM1MDEgMTUuMjg2IDEyLjc3NzggMTUuMTIyNCAxMy4yMzQgMTUuMDgxMkMxMy42OTAyIDE1LjA0MDEgMTQuNzA2MiAxNC40ODQxIDE0LjkxMzQgMTMuOTA3NkMxNS4xMjA5IDEzLjMzMTIgMTUuMTIwOSAxMi44MzcxIDE1LjA1ODcgMTIuNzMzOEMxNC45OTY1IDEyLjYzMSAxNC44MzA1IDEyLjU2OTIgMTQuNTgxNyAxMi40NDU4QzE0LjMzMjggMTIuMzIyMyAxMy4xMDk1IDExLjcyNSAxMi44ODE1IDExLjY0MjZDMTIuNjUzNCAxMS41NjAzIDEyLjQ4NzUgMTEuNTE5MiAxMi4zMjE2IDExLjc2NjRDMTIuMTU1NiAxMi4wMTMyIDExLjY3OTEgMTIuNTY5MiAxMS41MzM5IDEyLjczMzhDMTEuMzg4OCAxMi44OTg5IDExLjI0MzYgMTIuOTE5NCAxMC45OTQ4IDEyLjc5NTlDMTAuNzQ1OSAxMi42NzIgOS45NDQ1MyAxMi40MTE2IDguOTkzODMgMTEuNTcwNkM4LjI1NDE0IDEwLjkxNjIgNy43NTQ3NiAxMC4xMDgxIDcuNjA5NjEgOS44NjA4OEM3LjQ2NDQ1IDkuNjE0MDUgNy41OTQwNiA5LjQ4MDI2IDcuNzE4ODMgOS4zNTcyM0M3LjgzMDYyIDkuMjQ2NjEgNy45Njc3MyA5LjA2ODk0IDguMDkyMjYgOC45MjQ4M0M4LjIxNjMzIDguNzgwNjQgOC4yNTc3MyA4LjY3Nzc3IDguMzQwNyA4LjUxMzEyQzguNDIzNzUgOC4zNDgzMiA4LjM4MjE4IDguMjA0MTMgOC4zMjAwOCA4LjA4MDY0QzguMjU3NzMgNy45NTcxNSA3Ljc3NDIyIDYuNzM2MTUgNy41NTI5NyA2LjI0ODAxWiIgZmlsbD0id2hpdGUiLz4KPC9nPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzM3ODhfMTIxMTM1IiB4MT0iMTAwMCIgeTE9IjE5OTMuODkiIHgyPSIxMDAwIiB5Mj0iMC41IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGOUY5RjkiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSJ3aGl0ZSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzM3ODhfMTIxMTM1Ij4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJ3aGl0ZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAwLjUpIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==);
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAyMCAyMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzM3ODhfMTIxMTM1KSI+CjxwYXRoIGQ9Ik0wLjQyNjc4MiAxMC4zODA0QzAuNDI2MzEzIDEyLjA2MDggMC44Njg4MTMgMTMuNzAxNiAxLjcxMDIyIDE1LjE0NzhMMC4zNDYzMTMgMjAuMDg5TDUuNDQyNTYgMTguNzYzMUM2Ljg1MjEyIDE5LjUyNDUgOC40MzE0MiAxOS45MjM1IDEwLjAzNjMgMTkuOTIzNkgxMC4wNDA1QzE1LjMzODYgMTkuOTIzNiAxOS42NTEzIDE1LjY0NTggMTkuNjUzNiAxMC4zODc5QzE5LjY1NDYgNy44NDAxIDE4LjY1NTUgNS40NDQyOCAxNi44NDA0IDMuNjQxOEMxNS4wMjU1IDEuODM5NDggMTIuNjExOSAwLjg0NjM3OCAxMC4wNDAxIDAuODQ1MjE1QzQuNzQxNDcgMC44NDUyMTUgMC40MjkwNDggNS4xMjI3MyAwLjQyNjg2IDEwLjM4MDQiIGZpbGw9IiM2OUMwNTUiLz4KPHBhdGggZD0iTTAuMDgzNTkzOCAxMC4zNzcyQzAuMDgzMDQ2OSAxMi4xMTgxIDAuNTQxNDA2IDEzLjgxNzUgMS40MTI4MSAxNS4zMTU1TDAgMjAuNDMzOUw1LjI3ODk4IDE5LjA2MDVDNi43MzM1MiAxOS44NDc0IDguMzcxMTcgMjAuMjYyMiAxMC4wMzc2IDIwLjI2MjlIMTAuMDQxOUMxNS41MyAyMC4yNjI5IDE5Ljk5NzcgMTUuODMxMiAyMCAxMC4zODUxQzIwLjAwMDkgNy43NDU3NCAxOC45NjU5IDUuMjYzOCAxNy4wODU5IDMuMzk2NzRDMTUuMjA1NyAxLjUyOTkyIDEyLjcwNTcgMC41MDEwODUgMTAuMDQxOSAwLjVDNC41NTI4MSAwLjUgMC4wODU3ODEzIDQuOTMxMDEgMC4wODM1OTM4IDEwLjM3NzJaTTMuMjI3MzQgMTUuMDU3NUwzLjAzMDIzIDE0Ljc0NzFDMi4yMDE2NCAxMy40Mzk4IDEuNzY0MyAxMS45MjkxIDEuNzY0OTIgMTAuMzc3OEMxLjc2NjcyIDUuODUxMDkgNS40Nzk1MyAyLjE2ODIyIDEwLjA0NSAyLjE2ODIyQzEyLjI1NTkgMi4xNjkxNSAxNC4zMzM3IDMuMDI0MzQgMTUuODk2NiA0LjU3NTk3QzE3LjQ1OTMgNi4xMjc3NSAxOC4zMTkyIDguMTkwNTQgMTguMzE4NyAxMC4zODQ1QzE4LjMxNjYgMTQuOTExMiAxNC42MDM3IDE4LjU5NDYgMTAuMDQxOSAxOC41OTQ2SDEwLjAzODZDOC41NTMyIDE4LjU5MzggNy4wOTY0MSAxOC4xOTggNS44MjU5NCAxNy40NUw1LjUyMzU5IDE3LjI3MjFMMi4zOTA5NCAxOC4wODcxTDMuMjI3MzQgMTUuMDU3NFYxNS4wNTc1WiIgZmlsbD0idXJsKCNwYWludDBfbGluZWFyXzM3ODhfMTIxMTM1KSIvPgo8cGF0aCBkPSJNNy41NTI5NyA2LjI0ODAxQzcuMzY2NTYgNS44MzY5MiA3LjE3MDM5IDUuODI4NjMgNi45OTMxMiA1LjgyMTQyQzYuODQ3OTcgNS44MTUyMiA2LjY4MjAzIDUuODE1NjggNi41MTYyNSA1LjgxNTY4QzYuMzUwMzEgNS44MTU2OCA2LjA4MDcgNS44Nzc2MiA1Ljg1MjgxIDYuMTI0NTJDNS42MjQ2OCA2LjM3MTY1IDQuOTgxODcgNi45Njg4NiA0Ljk4MTg3IDguMTgzNTFDNC45ODE4NyA5LjM5ODI0IDUuODczNTEgMTAuNTcyMSA1Ljk5NzgxIDEwLjczN0M2LjEyMjI2IDEwLjkwMTYgNy43MTkxNCAxMy40NzQgMTAuMjQ4MiAxNC40NjM2QzEyLjM1MDEgMTUuMjg2IDEyLjc3NzggMTUuMTIyNCAxMy4yMzQgMTUuMDgxMkMxMy42OTAyIDE1LjA0MDEgMTQuNzA2MiAxNC40ODQxIDE0LjkxMzQgMTMuOTA3NkMxNS4xMjA5IDEzLjMzMTIgMTUuMTIwOSAxMi44MzcxIDE1LjA1ODcgMTIuNzMzOEMxNC45OTY1IDEyLjYzMSAxNC44MzA1IDEyLjU2OTIgMTQuNTgxNyAxMi40NDU4QzE0LjMzMjggMTIuMzIyMyAxMy4xMDk1IDExLjcyNSAxMi44ODE1IDExLjY0MjZDMTIuNjUzNCAxMS41NjAzIDEyLjQ4NzUgMTEuNTE5MiAxMi4zMjE2IDExLjc2NjRDMTIuMTU1NiAxMi4wMTMyIDExLjY3OTEgMTIuNTY5MiAxMS41MzM5IDEyLjczMzhDMTEuMzg4OCAxMi44OTg5IDExLjI0MzYgMTIuOTE5NCAxMC45OTQ4IDEyLjc5NTlDMTAuNzQ1OSAxMi42NzIgOS45NDQ1MyAxMi40MTE2IDguOTkzODMgMTEuNTcwNkM4LjI1NDE0IDEwLjkxNjIgNy43NTQ3NiAxMC4xMDgxIDcuNjA5NjEgOS44NjA4OEM3LjQ2NDQ1IDkuNjE0MDUgNy41OTQwNiA5LjQ4MDI2IDcuNzE4ODMgOS4zNTcyM0M3LjgzMDYyIDkuMjQ2NjEgNy45Njc3MyA5LjA2ODk0IDguMDkyMjYgOC45MjQ4M0M4LjIxNjMzIDguNzgwNjQgOC4yNTc3MyA4LjY3Nzc3IDguMzQwNyA4LjUxMzEyQzguNDIzNzUgOC4zNDgzMiA4LjM4MjE4IDguMjA0MTMgOC4zMjAwOCA4LjA4MDY0QzguMjU3NzMgNy45NTcxNSA3Ljc3NDIyIDYuNzM2MTUgNy41NTI5NyA2LjI0ODAxWiIgZmlsbD0id2hpdGUiLz4KPC9nPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzM3ODhfMTIxMTM1IiB4MT0iMTAwMCIgeTE9IjE5OTMuODkiIHgyPSIxMDAwIiB5Mj0iMC41IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGOUY5RjkiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSJ3aGl0ZSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzM3ODhfMTIxMTM1Ij4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJ3aGl0ZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAwLjUpIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==");
 }
 
 .buy_blk {
@@ -4966,8 +4967,8 @@ a.color-l-green:hover {
   position: absolute;
   width: 71px;
   height: 61px;
-  background: url(/system/modules/ru.reso.v2/resources/img/lk/osago_buy.png) 0 0
-    no-repeat;
+  background: url("/system/modules/ru.reso.v2/resources/img/lk/osago_buy.png") 0
+    0 no-repeat;
   top: 33px;
   right: 0;
   content: "";
@@ -4976,8 +4977,8 @@ a.color-l-green:hover {
   position: absolute;
   width: 113px;
   height: 137px;
-  background: url(/system/modules/ru.reso.v2/resources/img/lk/telemed_buy.png) 0
-    0 no-repeat;
+  background: url("/system/modules/ru.reso.v2/resources/img/lk/telemed_buy.png")
+    0 0 no-repeat;
   top: 19px;
   right: 0;
   content: "";
@@ -4986,8 +4987,8 @@ a.color-l-green:hover {
   position: absolute;
   width: 99px;
   height: 92px;
-  background: url(/system/modules/ru.reso.v2/resources/img/lk/mite_buy.png) 0 0
-    no-repeat;
+  background: url("/system/modules/ru.reso.v2/resources/img/lk/mite_buy.png") 0
+    0 no-repeat;
   top: 0;
   right: 0;
   content: "";
