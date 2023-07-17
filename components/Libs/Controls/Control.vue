@@ -68,7 +68,7 @@ import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
 import ControlOneToMany from "./ControlOneToMany/ControlOneToMany";
 import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConfirm.vue";
 import ControlCollapseGroup from "./ControlCollapseGroup.vue";
-import ControlRange from "./ControlRange.vue";
+import ControlRange from "./ControlRange/ControlRange.vue";
 
 export default {
   name: "Control",
