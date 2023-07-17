@@ -5019,6 +5019,17 @@ a.color-l-green:hover {
   right: 0;
   content: "";
 }
+
+.buy_blk .travel_blk:after {
+  position: absolute;
+  width: 116px;
+  height: 143px;
+  background: url("/system/modules/ru.reso.v2/resources/img/lk/travel_buy.png")
+    0 0 no-repeat;
+  top: 39px;
+  right: -3px;
+  content: "";
+}
 .buy_flag {
   background: #f8c634;
   margin-left: -20px;
