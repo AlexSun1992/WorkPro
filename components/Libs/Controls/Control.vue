@@ -17,7 +17,7 @@
     >
       <component
         :is="comp"
-        :class="labelCols"
+        :class="cssClass"
         :data="data"
         :params="params"
         :edit="edit"
@@ -175,8 +175,8 @@ export default {
     fieldId() {
       return this.data?.fieldId;
     },
-    labelCols() {
-      return this.data?.labelCols;
+    cssClass() {
+      return this.data?.cssClass;
     },
     dataCols() {
       return this.data?.cols;

@@ -27,7 +27,7 @@ describe("ControlCustomCombobox", () => {
     isRelation: true,
     isTab: false,
     label: "Серия",
-    labelCols: "",
+    cssClass: "",
     name: "SSERIES",
     options: [
       {

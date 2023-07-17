@@ -208,10 +208,10 @@ export default {
       return this.wizardButtonTitleSave?.label ?? "Сохранить";
     },
     wizardButtonStyleContinue() {
-      return this.buttonTitle?.labelCols ?? "";
+      return this.buttonTitle?.cssClass ?? "";
     },
     wizardButtonStyleSave() {
-      return this.wizardButtonTitleSave?.labelCols ?? "";
+      return this.wizardButtonTitleSave?.cssClass ?? "";
     },
     wizardButtonVisibleContinue() {
       if (this.buttonTitle) {

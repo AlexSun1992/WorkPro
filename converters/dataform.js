@@ -250,7 +250,7 @@ converter.form = async (data, params, instance) => {
     obj.colLg = webFields[i].NCOLLG ? webFields[i].NCOLLG : 12;
     obj.width = webFields[i].NWIDTH ? `${webFields[i].NWIDTH}%` : "100%";
     obj.name = webFields[i].SNAME;
-    obj.labelCols = webFields[i].SCAPTPOS ? webFields[i].SCAPTPOS : "";
+    obj.cssClass = webFields[i].SCSSCLASS ? webFields[i].SCSSCLASS : "";
     obj.webId = webFields[i].SWEBID ? webFields[i].SWEBID : "";
     if (
       meta_visible[webFields[i].SNAME.toUpperCase()] === "Y" ||

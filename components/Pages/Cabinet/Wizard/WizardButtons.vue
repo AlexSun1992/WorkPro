@@ -59,7 +59,7 @@ export default {
       return this.btnContinue?.label ?? "Продолжить";
     },
     showBtnStyleContinue() {
-      return this.btnContinue?.labelCols ?? "";
+      return this.btnContinue?.cssClass ?? "";
     },
     showBtnVisibleContinue() {
       if (this.btnContinue) {
@@ -81,7 +81,7 @@ export default {
       return this.btnSave?.label ?? "Сохранить";
     },
     showBtnStyleSave() {
-      return this.btnSave?.labelCols ?? "";
+      return this.btnSave?.cssClass ?? "";
     },
     showBtnVisibleSave() {
       if (this.btnSave) {

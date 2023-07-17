@@ -25,7 +25,7 @@ describe("ControlemailChange", () => {
     colLg: 12,
     width: "100%",
     name: "SEMAILNEW",
-    labelCols: "mt-3",
+    cssClass: "mt-3",
     webId: "",
     visible: true,
     required: true,
