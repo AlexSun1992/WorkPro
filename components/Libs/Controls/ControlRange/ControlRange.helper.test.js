@@ -7,11 +7,11 @@ import {
 } from "./ControlRange.helper";
 
 describe("Получение ближайшего значения из массива к введенному значению", () => {
+  const arrayOfValues = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
+  const insertValue = 1700000;
+  const insertMinValue = 1650000;
+
   it("Получаем массив со значениями разниц между вводимым значением и имеющимися значениями", () => {
-    const arrayOfValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
-    const insertValue = 1700000;
     const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(
       arrayOfValues,
       insertValue
@@ -20,16 +20,10 @@ describe("Получение ближайшего значения из масс
     const isNegativeNumberInValues = Boolean(
       newArrayOfValues.find((item) => item < 0)
     );
-
     expect(isNegativeNumberInValues).toBe(false);
   });
 
   it("Получаем миимальное значение из массива", () => {
-    const arrayOfValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
-    const insertValue = 1700000;
-
     const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(
       arrayOfValues,
       insertValue
@@ -45,11 +39,6 @@ describe("Получение ближайшего значения из масс
   });
 
   it("Получаем количесвтво ближайших значений(Должны получить одно значение)", () => {
-    const arrayOfValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
-    const insertValue = 1700000;
-
     const getAmountOfClosestValue = getAmountOfClosestValues(
       arrayOfValues,
       insertValue
@@ -58,48 +47,27 @@ describe("Получение ближайшего значения из масс
     expect(getAmountOfClosestValue.length).toBe(1);
   });
   it("Получаем количесвтво ближайших значений(Должны получить два значения)", () => {
-    const arrayOfValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
-    const insertValue = 1650000;
     const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(
       arrayOfValues,
-      insertValue
+      insertMinValue
     );
-
-    const minValue = getMinValueFromArray(arrayOfValues, insertValue);
-
+    const minValue = getMinValueFromArray(arrayOfValues, insertMinValue);
     const getAmountOfClosestValue = newArrayOfValues.filter(
       (item) => item === minValue
     );
-
     expect(getAmountOfClosestValue.length).toBe(2);
   });
 
   it("Получаем индекс юлижайшего значения(минимальное)", () => {
-    const arrayOfValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
-    const insertValue = 1650000;
-    const getIndexOfMinValue = getMinValueIndex(arrayOfValues, insertValue);
-
+    const getIndexOfMinValue = getMinValueIndex(arrayOfValues, insertMinValue);
     expect(getIndexOfMinValue).toBe(0);
   });
   it("Получаем индекс юлижайшего значения(максимальное)", () => {
-    const arrayOfValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
-    const insertValue = 1700000;
     const getIndexOfMinValue = getMinValueIndex(arrayOfValues, insertValue);
-
     expect(getIndexOfMinValue).toBe(1);
   });
 
   it("Получаем ближайшее значение ко введенному", () => {
-    const arrayOfValues = [
-      1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
-    ];
-    const insertValue = 1700000;
     const getNearestValue = getClosestValue(arrayOfValues, insertValue);
     expect(getNearestValue).toBe(1800000);
   });
