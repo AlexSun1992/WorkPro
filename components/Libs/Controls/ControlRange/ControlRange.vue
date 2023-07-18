@@ -4,21 +4,30 @@
       (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
         <span v-html="data.helpText" /></vue-easy-tooltip
     ></span>
+    <p id="isuredSum">Страховая сумма:{{ insuredSum }}</p>
     <b-form-input
       @input="getNearestValue()"
       type="number"
-      v-model="value"
+      v-model="valueTypeNumber"
     ></b-form-input>
     <b-form-input
       id="inp"
-      v-model="value1"
+      v-model="valueTypeRange"
       type="range"
-      @input="handleValue(value)"
+      @input="handleValue()"
       :min="getMinRangeValue"
       :max="getMaxRangeValue"
     >
     </b-form-input>
-    <p id="isuredSum">Страховая сумма:{{ insuredSum }}</p>
+    <ul :data-amountOfValues="data.options.length">
+      <li
+        v-for="item in data.options"
+        :key="item.ID"
+        :class="item.value === insuredSum ? 'active' : ''"
+      >
+        {{ item.SNAME }}
+      </li>
+    </ul>
   </div>
 </template>
 <script>
@@ -44,8 +53,8 @@ export default {
   },
   data() {
     return {
-      value: "",
-      value1: "0",
+      valueTypeNumber: "",
+      valueTypeRange: "",
       insuredSum: null,
     };
   },
@@ -74,14 +83,17 @@ export default {
 
   methods: {
     getNearestValue() {
-      const closestValue = getClosestValue(this.getAllPricesValue, this.value);
+      const closestValue = getClosestValue(
+        this.getAllPricesValue,
+        this.valueTypeNumber
+      );
       this.insuredSum = closestValue;
       const getIndex = this.getAllPricesValue.indexOf(closestValue);
-      this.value1 = getIndex;
+      this.valueTypeRange = getIndex;
     },
 
     handleValue() {
-      this.insuredSum = this.getAllPricesValue[this.value1];
+      this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -95,5 +107,9 @@ export default {
 <style scoped>
 #inp {
   padding: 0;
+}
+
+.active {
+  color: green;
 }
 </style>
