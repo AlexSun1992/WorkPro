@@ -12,6 +12,7 @@ $med: #d8e7f4;
 $auto: #d9efd4;
 $mortgage: #d8d6e8;
 $travel: #fdf1cc;
+$white: #ffffff;
 html {
   font-size: 16px;
 }
@@ -3114,7 +3115,7 @@ a.action:hover {
 }
 
 .LoginButton .dropdown.show .dropdown-menu li.login-profile a {
-  background-color: #ffffff;
+  background-color: $white;
   background-image: get-asset("/img/icon-menu-1-black.svg") !important;
   background-position: 30px !important;
   background-repeat: no-repeat !important;
@@ -3123,7 +3124,7 @@ a.action:hover {
 }
 
 .LoginButton .dropdown.show .dropdown-menu li.login-osago a {
-  background-color: #ffffff;
+  background-color: $white;
   background-image: get-asset("/img/login-osago.svg") !important;
   background-position: 30px center !important;
   background-repeat: no-repeat !important;
@@ -3131,7 +3132,7 @@ a.action:hover {
 }
 
 .LoginButton .dropdown.show .dropdown-menu li.login-exit a {
-  background-color: #ffffff;
+  background-color: $white;
   background-image: get-asset("/img/login-exit.svg") !important;
   background-position: 30px center !important;
   background-repeat: no-repeat !important;
@@ -3139,7 +3140,7 @@ a.action:hover {
 }
 
 .LoginButton .dropdown.show .dropdown-menu li.login-polises a {
-  background-color: #ffffff;
+  background-color: $white;
   background-image: get-asset("/img/login-polises.svg") !important;
   background-position: 30px center !important;
   background-repeat: no-repeat !important;
@@ -3781,7 +3782,7 @@ a[data-newcount][data-newcolor="RED"]:after {
 .my-policy[data-id="1"] .btn-prolong,
 .my-policy[data-id="10"] .btn-prolong,
 .my-policy[data-id="8"] .btn-prolong {
-  color: #ffffff;
+  color: $white;
   background: #3b86c8 !important;
   border-color: #3b86c8 !important;
   &:hover {
@@ -3792,7 +3793,7 @@ a[data-newcount][data-newcolor="RED"]:after {
 }
 
 .my-policy[data-id="4"] .btn-prolong {
-  color: #ffffff;
+  color: $white;
   background: #645da2 !important;
   border-color: #645da2 !important;
   &:hover {
@@ -3804,11 +3805,11 @@ a[data-newcount][data-newcolor="RED"]:after {
 
 .my-policy[data-id="6"] .btn-prolong,
 .my-policy[data-id="7"] .btn-prolong {
-  color: #ffffff;
+  color: $white;
   background: #f7b801 !important;
   border-color: #f7b801 !important;
   &:hover {
-    color: #ffffff;
+    color: $white;
     background: #f8c634 !important;
     border-color: #f8c634 !important;
   }
@@ -4767,7 +4768,7 @@ a.color-l-green:hover {
   display: inline-block;
   text-align: center;
   padding: 11px 24px;
-  background: #ffffff;
+  background: $white;
   border-radius: 15px;
   font-weight: 700;
   font-size: 1rem;
@@ -4837,7 +4838,7 @@ a.color-l-green:hover {
 
 .block-allert {
   box-sizing: border-box;
-  background: #ffffff;
+  background: $white;
   border: 2px solid #eb5757;
   border-radius: 30px;
   padding: 20px;
@@ -5118,6 +5119,7 @@ a.color-l-green:hover {
 
 .tabs-button li a.active {
   background-color: $lgreen;
+  color: $white;
 }
 .tabs-button li a:after {
   content: "";
