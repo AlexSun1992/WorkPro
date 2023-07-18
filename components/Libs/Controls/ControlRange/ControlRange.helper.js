@@ -1,3 +1,4 @@
+// Функция возвращает объект разностей между вводимым значением и массивом из справочника
 export function getArrayDiffValueWithoutNegativeNumbers(
   arrOfValues,
   insertValue
@@ -11,6 +12,7 @@ export function getArrayDiffValueWithoutNegativeNumbers(
   return arrayWithoutNegativeNumbers;
 }
 
+// Возвращаеи минимальную разницу между вводимым числом и значениеми из массива
 export function getMinValueFromArray(arrOfValues, insertValue) {
   const arrayOfValues = getArrayDiffValueWithoutNegativeNumbers(
     arrOfValues,
@@ -20,6 +22,7 @@ export function getMinValueFromArray(arrOfValues, insertValue) {
   return getMinValue;
 }
 
+// На случай если есть два одинковые разности ( 1500000 <- 16500000 -> 1800000 )
 export function getAmountOfClosestValues(arrOfValues, insertValue) {
   const differenceBetweenValuesInsertValue =
     getArrayDiffValueWithoutNegativeNumbers(arrOfValues, insertValue);
@@ -32,14 +35,15 @@ export function getAmountOfClosestValues(arrOfValues, insertValue) {
   return amountOfValues;
 }
 
+// Получаем индекс числа от которого была минимальная разница
 export function getMinValueIndex(arrOfValues, insertValue) {
   const differenceBetweenValuesInsertValue =
     getArrayDiffValueWithoutNegativeNumbers(arrOfValues, insertValue);
   const getMinValue = getMinValueFromArray(arrOfValues, insertValue);
-
   return differenceBetweenValuesInsertValue.indexOf(getMinValue);
 }
 
+// Возвращаем минимальное ближайшее число и массива (округление происходит в большую сторону)
 export function getClosestValue(arrOfValues, insertValue) {
   const amountOfValues = getAmountOfClosestValues(arrOfValues, insertValue);
 

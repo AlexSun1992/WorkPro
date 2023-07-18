@@ -9,7 +9,9 @@
       @input="getNearestValue()"
       type="number"
       v-model="valueTypeNumber"
+      @focus="valueTypeNumber === 0 ? (valueTypeNumber = '') : valueTypeNumber"
     ></b-form-input>
+
     <b-form-input
       id="inp"
       v-model="valueTypeRange"
@@ -53,14 +55,27 @@ export default {
   },
   data() {
     return {
-      valueTypeNumber: "",
-      valueTypeRange: "",
+      valueTypeNumber: 0,
+      valueTypeRange: 0,
       insuredSum: null,
     };
   },
 
   created() {
-    this.getNearestValue();
+    if (this.data.value) {
+      this.insuredSum = this.data.value;
+      const getIndexOfChoosenValue = this.getAllPricesValue.indexOf(
+        this.insuredSum
+      );
+      this.valueTypeRange = getIndexOfChoosenValue;
+      this.valueTypeNumber = this.getAllPricesValue[getIndexOfChoosenValue];
+    }
+  },
+
+  watch: {
+    insuredSum(value) {
+      this.valueTypeNumber = value;
+    },
   },
 
   computed: {
@@ -71,10 +86,7 @@ export default {
       const numbervalue = this.data.options.length - 1;
       return numbervalue;
     },
-    getAllPrices() {
-      const getPricesFromData = this.data.options.map((item) => item.text);
-      return getPricesFromData;
-    },
+
     getAllPricesValue() {
       const getPricesFromData = this.data.options.map((item) => item.value);
       return getPricesFromData;
@@ -87,9 +99,15 @@ export default {
         this.getAllPricesValue,
         this.valueTypeNumber
       );
-      this.insuredSum = closestValue;
       const getIndex = this.getAllPricesValue.indexOf(closestValue);
       this.valueTypeRange = getIndex;
+      this.insuredSum = closestValue;
+
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.insuredSum,
+      });
     },
 
     handleValue() {
