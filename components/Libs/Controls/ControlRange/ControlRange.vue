@@ -66,7 +66,7 @@ export default {
       valueTypeNumber: 0,
       valueTypeRange: 0,
       insuredSum: null,
-      startFinishValueMock: [1500000, 4100000],
+      startFinishValueMock: [1500000, 4100000, 200000],
     };
   },
 
