@@ -3923,6 +3923,8 @@ a[data-newcount][data-newcolor="RED"]:after {
   overflow-y: auto;
 }
 
+.btn-insurance-inspection,
+.btn-insurance-docs,
 .btn-insurance-rules,
 .btn-pay-case,
 .btn-insurance-case {
@@ -3933,6 +3935,7 @@ a[data-newcount][data-newcolor="RED"]:after {
   box-shadow: 0 3px 8px rgb(0 0 0 / 8%);
   font-family: "SF Pro Display";
   font-style: normal;
+  font-weight: 700;
   color: $black !important;
   background-color: #fff !important;
   text-decoration: none;
@@ -3943,6 +3946,8 @@ a[data-newcount][data-newcolor="RED"]:after {
   line-height: 1;
 }
 
+.btn-insurance-inspection:hover,
+.btn-insurance-docs:hover,
 .btn-insurance-rules:hover,
 .btn-pay-case:hover,
 .btn-insurance-case:hover {
@@ -3952,6 +3957,8 @@ a[data-newcount][data-newcolor="RED"]:after {
   background-color: #fff !important;
 }
 
+.btn-insurance-inspection:after,
+.btn-insurance-docs:after,
 .btn-insurance-rules:after,
 .btn-pay-case:after,
 .btn-insurance-case:after {
@@ -3971,6 +3978,20 @@ a[data-newcount][data-newcolor="RED"]:after {
 .my-policy-actions button.action {
   background-color: #fff;
 }
+.my-policy-actions[data-id="2"] .btn-insurance-docs:after,
+.my-policy-actions[data-id="3"] .btn-insurance-docs:after,
+.my-policy-actions[data-id="5"] .btn-insurance-docs:after {
+  background: url("/img/btn-insurance-docs.svg") 50% 50% no-repeat;
+  background-size: contain;
+}
+
+.my-policy-actions[data-id="2"] .btn-insurance-inspection:after,
+.my-policy-actions[data-id="3"] .btn-insurance-inspection:after,
+.my-policy-actions[data-id="5"] .btn-insurance-inspection:after {
+  background: url("/img/btn-insurance-inspection.svg") 50% 50% no-repeat;
+  background-size: contain;
+}
+
 .my-policy-actions[data-id="2"] .btn-insurance-case:after,
 .my-policy-actions[data-id="3"] .btn-insurance-case:after,
 .my-policy-actions[data-id="5"] .btn-insurance-case:after {
