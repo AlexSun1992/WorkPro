@@ -2775,7 +2775,7 @@ a.action:hover {
 .insurance-case[data-id="2"],
 .insurance-case[data-id="3"],
 .insurance-case[data-id="5"] {
-  background: linear-gradient(180deg, #edf8ea 0, #fff 53.12%);
+  background: linear-gradient(180deg, #bdeed7 0%, #f2f4f5 53.13%);
 }
 
 .insurance-case[data-id="4"] {
@@ -2805,15 +2805,16 @@ a.action:hover {
 }
 
 .block-policy[data-id="2"] .policy-payment:hover,
-.block-policy[data-id="2"] .settlement,
 .block-policy[data-id="3"] .policy-payment:hover,
 .block-policy[data-id="3"] .settlement,
 .block-policy[data-id="5"] .policy-payment:hover,
-.block-policy[data-id="5"] .settlement,
+.block-policy[data-id="5"] .settlement {
+  background-color: $lgreen;
+}
 .insurance-case[data-id="2"] .settlement,
 .insurance-case[data-id="3"] .settlement,
 .insurance-case[data-id="5"] .settlement {
-  background-color: $lgreen;
+  background-color: #fe7333;
   color: #fff;
 }
 
@@ -5212,10 +5213,10 @@ ymaps[class*="balloon__close-button"] {
 .map-balloon a {
   text-decoration: none;
   color: $lgreen;
-  font-size: 1.125rem;
 }
 .map-balloon-description {
   color: $sblack;
+  font-size: 1.125rem;
 }
 .ymaps-2-1-79-balloon__tail {
   display: none !important;
