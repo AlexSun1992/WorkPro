@@ -125,7 +125,6 @@ describe("ControlRange", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     const isuredSum = wrapper.find("#isuredSum");
-
     expect(isuredSum.html().includes("1500000")).toBe(true);
     inputTypeRangeValue.setValue("1");
     await wrapper.vm.$nextTick();
@@ -148,4 +147,6 @@ describe("ControlRange", () => {
     await wrapper.vm.$nextTick();
     expect(isuredSum.html().includes("4100000")).toBe(true);
   });
+
+  it("Плавающий ползунок", () => {});
 });

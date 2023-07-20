@@ -11,14 +11,17 @@
       v-model="valueTypeNumber"
       @focus="valueTypeNumber === 0 ? (valueTypeNumber = '') : valueTypeNumber"
     ></b-form-input>
-
     <b-form-input
       id="inp"
       v-model="valueTypeRange"
       type="range"
       @input="handleValue()"
-      :min="getMinRangeValue"
-      :max="getMaxRangeValue"
+      :min="
+        isOnlyTwoItemsInPrices ? getMinValueFromPricesValue : getMinRangeValue
+      "
+      :max="
+        isOnlyTwoItemsInPrices ? getMaxValueFromPricesValue : getMaxRangeValue
+      "
     >
     </b-form-input>
     <ul :data-amountOfValues="data.options.length">
@@ -52,12 +55,18 @@ export default {
       required: true,
       default: () => {},
     },
+    isFlexibleRange: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
   },
   data() {
     return {
       valueTypeNumber: 0,
       valueTypeRange: 0,
       insuredSum: null,
+      startFinishValueMock: [1500000, 4100000],
     };
   },
 
@@ -70,11 +79,18 @@ export default {
       this.valueTypeRange = getIndexOfChoosenValue;
       this.valueTypeNumber = this.getAllPricesValue[getIndexOfChoosenValue];
     }
+    if (this.isOnlyTwoItemsInPrices) {
+      if (this.data.value) {
+        this.insuredSum = this.data.value;
+        this.valueTypeRange = this.data.value;
+        this.valueTypeNumber = this.data.value;
+      }
+    }
   },
 
   watch: {
     insuredSum(value) {
-      this.valueTypeNumber = value;
+      this.valueTypeNumber = Number(value);
     },
   },
 
@@ -91,17 +107,53 @@ export default {
       const getPricesFromData = this.data.options.map((item) => item.value);
       return getPricesFromData;
     },
+
+    isOnlyTwoItemsInPrices() {
+      // return this.startFinishValueMock; поставил заглушку (массив с двумя значениями)
+      if (this.startFinishValueMock.length === 2) {
+        return true;
+      }
+      return false;
+    },
+
+    getMinValueFromPricesValue() {
+      return Math.min(...this.startFinishValueMock);
+    },
+
+    getMaxValueFromPricesValue() {
+      return Math.max(...this.startFinishValueMock);
+    },
   },
 
   methods: {
     getNearestValue() {
-      const closestValue = getClosestValue(
-        this.getAllPricesValue,
-        this.valueTypeNumber
-      );
-      const getIndex = this.getAllPricesValue.indexOf(closestValue);
-      this.valueTypeRange = getIndex;
-      this.insuredSum = closestValue;
+      if (this.isOnlyTwoItemsInPrices === false) {
+        const closestValue = getClosestValue(
+          this.getAllPricesValue,
+          this.valueTypeNumber
+        );
+
+        const getIndex = this.getAllPricesValue.indexOf(closestValue);
+        this.valueTypeRange = getIndex;
+        this.insuredSum = closestValue;
+      }
+
+      if (this.isOnlyTwoItemsInPrices) {
+        if (this.valueTypeNumber !== "") {
+          this.valueTypeRange = this.valueTypeNumber;
+          this.insuredSum = Number(this.valueTypeNumber);
+        }
+        if (this.valueTypeNumber < this.getMinValueFromPricesValue) {
+          this.valueTypeRange = this.getMinValueFromPricesValue;
+          this.insuredSum = Number(this.getMinValueFromPricesValue);
+          this.valueTypeNumber = this.getMinValueFromPricesValue;
+        }
+        if (this.valueTypeNumber > this.getMaxValueFromPricesValue) {
+          this.valueTypeRange = this.getMaxValueFromPricesValue;
+          this.insuredSum = Number(this.getMaxValueFromPricesValue);
+          this.valueTypeNumber = this.getMaxValueFromPricesValue;
+        }
+      }
 
       this.$emit("update", {
         fieldId: this.data.fieldId,
@@ -111,7 +163,15 @@ export default {
     },
 
     handleValue() {
-      this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      if (this.isOnlyTwoItemsInPrices === false) {
+        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      }
+
+      if (this.isOnlyTwoItemsInPrices === true) {
+        this.valueTypeNumber = this.valueTypeRange;
+        this.insuredSum = Number(this.valueTypeNumber);
+      }
+
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
