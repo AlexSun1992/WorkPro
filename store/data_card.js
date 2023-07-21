@@ -489,7 +489,6 @@ export const actions = {
 export const mutations = {
   toggleFilterVisible(state, payload) {
     state.isFilterVisible = payload;
-    console.log("state.isFilterVisible:", state.isFilterVisible);
   },
 
   addBeforeSavePromise(state, func) {

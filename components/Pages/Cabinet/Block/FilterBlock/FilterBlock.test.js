@@ -23,6 +23,7 @@ describe("Пишем компонентные тесты на FilterBlock", () =
         allItemsButtonName: "Все полисы",
         showButtonAll: true,
       },
+
       store,
       mocks: {
         $route: {

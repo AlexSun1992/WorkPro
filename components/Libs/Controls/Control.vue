@@ -33,7 +33,7 @@
   </b-col>
 </template>
 <script>
-import ControlString from "./ControlString/ControlString";
+import ControlString from "./ControlString/ControlString.vue";
 import ControlText from "./ControlText";
 import ControlBoolean from "./ControlBoolean";
 import ControlDouble from "./ControlDouble";
@@ -68,6 +68,7 @@ import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
 import ControlOneToMany from "./ControlOneToMany/ControlOneToMany";
 import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConfirm.vue";
 import ControlCollapseGroup from "./ControlCollapseGroup.vue";
+import ControlRange from "./ControlRange/ControlRange.vue";
 
 export default {
   name: "Control",
@@ -107,6 +108,7 @@ export default {
     ControlOneToMany,
     ControlPasswordConfirm,
     ControlCollapseGroup,
+    ControlRange,
   },
   props: {
     data: {

@@ -193,6 +193,26 @@ converter.form = async (data, params, instance) => {
       obj.type = "RegNumber";
     } else if (webFields[i].IDCONTROL == 401) {
       obj.type = "CollapseGroup";
+    } else if (webFields[i].IDCONTROL == 421) {
+      obj.type = "Range";
+      if (webFields[i].LDIC === true) {
+        promises.push(
+          instance.get(
+            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
+              webFields[i].ID
+            }`
+          )
+        );
+      }
+      if (webFields[i].LDIC === false) {
+        promises.push(
+          instance.get(
+            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
+              webFields[i].IDADMMODULE
+            }/${itemId}/${webFields[i].SNAME}`
+          )
+        );
+      }
     } else if (webFields[i].IDCONTROL == 322) {
       obj.type = "PasswordConfirm";
     } else if (webFields[i].IDCONTROL == 44) {
@@ -453,7 +473,6 @@ converter.type = (data, isReadOnly) => {
               copy[i].type = `doctorSchedule`;
             }
           }
-
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
           copy[i].dic = data[j].name;
