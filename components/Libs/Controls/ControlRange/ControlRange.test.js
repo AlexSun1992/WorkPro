@@ -3,9 +3,14 @@ import ControlRange from "./ControlRange.vue";
 
 describe("ControlRange", () => {
   let wrapper;
-
-  const createComponent = () => {
+  const createComponent = (mockData) => {
     wrapper = mount(ControlRange, {
+      data() {
+        return {
+          startFinishValueMock: mockData,
+        };
+      },
+
       propsData: {
         data: {
           label: "Страховая сумма на каждого застрахованного",
@@ -83,10 +88,10 @@ describe("ControlRange", () => {
   });
 
   it("Изменение input[type='range'] при заполнении input[type='number']", async () => {
-    createComponent();
+    const mockData = [1500000, 4100000, 200000];
+    createComponent(mockData);
 
     const inputTypeNumberValue = wrapper.find("[type='number']");
-
     inputTypeNumberValue.setValue("1900000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
@@ -119,7 +124,8 @@ describe("ControlRange", () => {
   });
 
   it("Изменение страховой суммы при изменении input[type='range']", async () => {
-    createComponent();
+    const mockData = [1500000, 4100000, 200000];
+    createComponent(mockData);
     const inputTypeRangeValue = wrapper.find("[type='range']");
     inputTypeRangeValue.setValue("0");
     await wrapper.vm.$nextTick();
@@ -148,5 +154,19 @@ describe("ControlRange", () => {
     expect(isuredSum.html().includes("4100000")).toBe(true);
   });
 
-  it("Плавающий ползунок", () => {});
+  it("Плавающий ползунок изменение в компоненте", async () => {
+    const mockData = [1500000, 4100000];
+    createComponent(mockData);
+    const inputTypeRangeValue = wrapper.find("[type='range']");
+    const inputTypeNumberValue = wrapper.find("[type='number']");
+    const isuredSum = wrapper.find("#isuredSum");
+    inputTypeRangeValue.setValue("2543534");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(isuredSum.html().includes("2543534")).toBe(true);
+    expect(isuredSum.html().includes("2543534")).toBe(true);
+
+    expect(inputTypeNumberValue.element.value === "2543534").toBe(true);
+  });
 });
