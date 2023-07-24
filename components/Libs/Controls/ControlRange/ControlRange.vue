@@ -1,10 +1,16 @@
 <template>
-  <div :label="data.label">
-    <span v-if="data.helpText" class="tooltipster">
-      (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-        <span v-html="data.helpText" /></vue-easy-tooltip
-    ></span>
-    <p id="isuredSum">Страховая сумма:{{ insuredSum }}</p>
+  <div>
+    <label v-if="data.label">
+      <span
+        >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">{{
+          insuredSum
+        }}</span>
+        <span v-if="data.helpText" class="tooltipster">
+          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+            <span v-html="data.helpText" /></vue-easy-tooltip
+        ></span>
+      </span>
+    </label>
     <b-form-input
       @input="getNearestValue()"
       type="number"
@@ -24,13 +30,13 @@
       "
     >
     </b-form-input>
-    <ul :data-amountOfValues="data.options.length">
+    <ul :data-amountOfValues="data.options.length" class="range-list">
       <li
         v-for="item in data.options"
         :key="item.ID"
         :class="item.value === insuredSum ? 'active' : ''"
       >
-        {{ item.SNAME }}
+        <span>{{ item.SNAME }}</span>
       </li>
     </ul>
   </div>
@@ -192,87 +198,137 @@ export default {
 }
 input[type="range"] {
   -webkit-appearance: none;
-  margin: 18px 0;
   width: 100%;
+  border: 0;
+  height: 20px;
+  margin-top: 1rem;
+}
+input[type="range"]:hover {
+  border: 0;
 }
 input[type="range"]:focus {
   outline: none;
 }
 input[type="range"]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 8.4px;
+  height: 4px;
   cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background: #3071a9;
+  box-shadow: none; /* 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
+  background: #43b02a;
   border-radius: 1.3px;
-  border: 0.2px solid #010101;
+  border: 0; /*0.2px solid #010101;*/
 }
 input[type="range"]::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
+  box-shadow: none; /* 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
+  border: 0px solid #000000;
+  height: 17px;
+  width: 17px;
+  border-radius: 17px;
+  background: #43b02a;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -14px;
+  margin-top: -7px;
 }
 input[type="range"]:focus::-webkit-slider-runnable-track {
-  background: #367ebd;
+  background: #43b02a;
 }
 input[type="range"]::-moz-range-track {
   width: 100%;
-  height: 8.4px;
+  height: 4px;
   cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background: #3071a9;
-  border-radius: 1.3px;
-  border: 0.2px solid #010101;
+  box-shadow: none;
+  background: #43b02a;
+  border-radius: 0;
+  border: 0;
 }
 input[type="range"]::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
+  box-shadow: none;
+  border: 0;
+  height: 17px;
+  width: 17px;
+  border-radius: 17px;
+  background: #43b02a;
   cursor: pointer;
 }
-input[type="range"]::-ms-track {
+.range-list {
+  display: block;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+.range-list li {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  text-align: center;
+  position: absolute;
+  top: 0;
+}
+
+.range-list li:first-child {
+  text-align: left;
+  left: 0;
+}
+.range-list li:last-child {
+  right: 0;
+  text-align: right;
+}
+.range-list li span {
   width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  border-width: 16px 0;
-  color: transparent;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  overflow: hidden;
 }
-input[type="range"]::-ms-fill-lower {
-  background: #2a6495;
-  border: 0.2px solid #010101;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+.range-list[data-amountofvalues] > li {
+  transform: translateX(-50%);
 }
-input[type="range"]::-ms-fill-upper {
-  background: #3071a9;
-  border: 0.2px solid #010101;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+.range-list[data-amountofvalues] > li:last-child,
+.range-list[data-amountofvalues] > li:first-child {
+  transform: translateX(0%);
 }
-input[type="range"]::-ms-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
-  cursor: pointer;
+.range-list[data-amountofvalues="3"] > li {
+  max-width: calc(100% / 3);
 }
-input[type="range"]:focus::-ms-fill-lower {
-  background: #3071a9;
+.range-list[data-amountofvalues="3"] > li:nth-child(2) {
+  left: 50%;
+  transform: translateX(-50%);
 }
-input[type="range"]:focus::-ms-fill-upper {
-  background: #367ebd;
+.range-list[data-amountofvalues="4"] > li {
+  max-width: calc(100% / 4);
+}
+.range-list[data-amountofvalues="4"] > li:nth-child(2) {
+  left: calc(100% / 3);
+}
+.range-list[data-amountofvalues="4"] > li:nth-child(3) {
+  left: calc((100% / 3) * 2);
+}
+.range-list[data-amountofvalues="5"] > li {
+  max-width: calc(100% / 4);
+}
+.range-list[data-amountofvalues="5"] > li:nth-child(2) {
+  left: calc(100% / 4);
+}
+.range-list[data-amountofvalues="5"] > li:nth-child(3) {
+  left: calc((100% / 4) * 2);
+}
+.range-list[data-amountofvalues="5"] > li:nth-child(4) {
+  left: calc((100% / 4) * 3);
+}
+.range-list[data-amountofvalues="6"] > li {
+  max-width: calc(100% / 6);
+}
+.range-list[data-amountofvalues="6"] > li:nth-child(2) {
+  left: calc(100% / 5);
+}
+.range-list[data-amountofvalues="6"] > li:nth-child(3) {
+  left: calc((100% / 5) * 2);
+}
+.range-list[data-amountofvalues="6"] > li:nth-child(4) {
+  left: calc((100% / 5) * 3);
+}
+.range-list[data-amountofvalues="6"] > li:nth-child(5) {
+  left: calc((100% / 5) * 4);
 }
 </style>
