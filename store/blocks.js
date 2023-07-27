@@ -158,17 +158,13 @@ export const actions = {
   },
   async fetchBlock({ commit, dispatch, state }, params) {
     let url;
-    const urlJsonFilters = JSON.stringify(params.query);
     if (!params.zone) {
-      url = `/api/list/55/${params.id}/${encodeURIComponent(urlJsonFilters)}`;
+      url = `/api/list/55/${params.id}`;
     } else {
-      url = `/api/list/55/${params.id}/${encodeURIComponent(
-        urlJsonFilters
-      )}?zone=free`;
+      url = `/api/list/55/${params.id}?zone=free`;
     }
-
     try {
-      const response = await this.$axios.get(url);
+      const response = await this.$axios.post(url, params.query);
       const responseData = response.data;
       commit(
         "menu/setMenuById",
