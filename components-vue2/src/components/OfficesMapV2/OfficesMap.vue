@@ -583,7 +583,7 @@ export default {
             }
             return item.SNAME === stationName;
           });
-          if (candidate) {
+          if (candidate && office.IDTOWN == 1) {
             this.stationOffices.push(office);
           }
         });
