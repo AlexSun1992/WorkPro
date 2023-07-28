@@ -129,6 +129,11 @@ export const getters = {
             : "",
         };
       }
+      if (currentValue.type === "label") {
+        return {
+          ...accumulator,
+        };
+      }
       return {
         ...accumulator,
         [currentValue.name]: currentValue.value,
