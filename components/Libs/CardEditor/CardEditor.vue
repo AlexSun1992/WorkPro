@@ -119,6 +119,13 @@ export default {
     };
   },
   computed: {
+    getWindowLocation() {
+      if (process.client === true) {
+        return window.location;
+      }
+      return null;
+    },
+
     showBtnBack() {
       const path = this.$store.state.data_card.listPath;
       // Жестко убрали кнопку с полиса осаго (Игорь)
