@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="range-control">
     <label v-if="data.label">
       <span
         >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">{{
@@ -200,7 +200,7 @@ input[type="range"] {
   -webkit-appearance: none;
   width: 100%;
   border: 0;
-  height: 20px;
+  height: 4px;
   margin-top: 1rem;
 }
 input[type="range"]:hover {
@@ -220,14 +220,14 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 input[type="range"]::-webkit-slider-thumb {
   box-shadow: none; /* 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-  border: 0px solid #000000;
-  height: 17px;
-  width: 17px;
-  border-radius: 17px;
+  border: 3px solid #fff;
+  height: 23px;
+  width: 23px;
+  border-radius: 23px;
   background: #43b02a;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -7px;
+  margin-top: -10px;
 }
 input[type="range"]:focus::-webkit-slider-runnable-track {
   background: #43b02a;
@@ -243,10 +243,10 @@ input[type="range"]::-moz-range-track {
 }
 input[type="range"]::-moz-range-thumb {
   box-shadow: none;
-  border: 0;
-  height: 17px;
-  width: 17px;
-  border-radius: 17px;
+  border: 3px solid #fff;
+  height: 23px;
+  width: 23px;
+  border-radius: 23px;
   background: #43b02a;
   cursor: pointer;
 }
@@ -256,14 +256,14 @@ input[type="range"]::-moz-range-thumb {
   padding: 0;
   margin: 0;
   position: relative;
+  z-index: 1;
 }
 .range-list li {
   padding: 0;
   margin: 0;
-  overflow: hidden;
   text-align: center;
   position: absolute;
-  top: 0;
+  top: 10px;
 }
 
 .range-list li:first-child {
@@ -284,6 +284,23 @@ input[type="range"]::-moz-range-thumb {
 .range-list[data-amountofvalues] > li {
   transform: translateX(-50%);
 }
+.range-list[data-amountofvalues] > li span:after {
+  position: absolute;
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: #43b02a;
+  border-radius: 10px;
+  left: 50%;
+  margin-left: -5px;
+  top: -14px;
+}
+.range-list[data-amountofvalues] > li:last-child span:after,
+.range-list[data-amountofvalues] > li:first-child span:after,
+.range-list[data-amountofvalues] > li.active span:after {
+  display: none;
+}
+
 .range-list[data-amountofvalues] > li:last-child,
 .range-list[data-amountofvalues] > li:first-child {
   transform: translateX(0%);
@@ -330,5 +347,18 @@ input[type="range"]::-moz-range-thumb {
 }
 .range-list[data-amountofvalues="6"] > li:nth-child(5) {
   left: calc((100% / 5) * 4);
+}
+.range-control {
+  position: relative;
+  padding-bottom: 40px;
+}
+.custom-range {
+  position: absolute;
+  bottom: 37px;
+  left: 0px;
+}
+input {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 </style>
