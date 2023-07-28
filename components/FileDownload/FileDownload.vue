@@ -27,7 +27,7 @@ export default {
           const getFileList = document.getElementById("fileList");
           link.href = url;
           link.setAttribute("download", fileName);
-          getFileList.appendChild(link);
+          getFileList.insertAdjacentHTML("beforeend", link);
           link.click();
         })
         .catch((e) => {
