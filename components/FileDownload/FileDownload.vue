@@ -1,10 +1,8 @@
 <template>
-  <div id="fileList">
-    <a href="" @click.prevent="downloadItem(id, rel, fileName)">
-      {{ fileName }} (<span class="size">{{ conv_size(fileSize) }}</span
-      >)
-    </a>
-  </div>
+  <a href="" @click.prevent="downloadItem(id, rel, fileName)">
+    {{ fileName }} (<span class="size">{{ conv_size(fileSize) }}</span
+    >)
+  </a>
 </template>
 
 <script>
@@ -24,10 +22,9 @@ export default {
         .then((response) => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement("a");
-          const getFileList = document.querySelector(".btn-doc-add");
           link.href = url;
           link.setAttribute("download", fileName);
-          getFileList.insertAdjacentHTML("afterend", link);
+          document.body.appendChild(link);
           link.click();
         })
         .catch((e) => {
