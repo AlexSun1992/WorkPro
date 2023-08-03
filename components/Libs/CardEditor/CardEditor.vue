@@ -231,7 +231,6 @@ export default {
           idModule: this.$route.params.idModule,
           idRel: this.$store.getters["data_card/getCardRelId"],
         };
-        this.$store.commit("data_card/setLoading", true);
         const flatmenu = this.$store.getters["menu/flatmenu"];
         const menuItem = flatmenu.find(
           (item) => item.IDITEM == this.$route.params.idItem
@@ -259,8 +258,6 @@ export default {
           await this.saveDataCard();
 
           if (this.saveSuccess) {
-            await this.$store.dispatch("data_card/fetchForm", params);
-            this.$store.commit("data_card/setDisabled", false);
             const data = eventHandler(
               this.data.map((a) => ({ ...a })),
               e,
@@ -271,8 +268,6 @@ export default {
               this.$store.commit("data_card/setForm", data || this.data);
             }
           }
-
-          this.$store.commit("data_card/setLoading", false);
           return;
         }
         if (CUR.NTYPE == 39) {
@@ -306,12 +301,13 @@ export default {
             return;
           }
         }
-
         if (this.actionSettings.isDialog) {
           this.$store.commit("data_card/setLoading", false);
           this.$bvModal.show("confirmAction");
-        } else {
-          this.applyAction();
+        } else if (
+          await this.$store.dispatch("data_card/validateActionParams")
+        ) {
+          await this.applyAction();
         }
       } else if (field.type === "button") {
         const data = eventHandler(
@@ -332,6 +328,7 @@ export default {
       } else {
         this.$store.commit("data_card/setFormField", {
           fieldId: e.fieldId,
+          name: e.name,
           value: e.value,
         });
       }
@@ -605,6 +602,7 @@ export default {
       if (evt) evt.preventDefault();
       this.$store.commit("data_card/setError", false);
       this.$store.commit("data_card/setSavedError", false);
+      this.$store.commit("data_card/setLoading", true);
       this.isActionApplyError = false;
       this.actionFormDisabled = true;
       const response = await this.$store.dispatch("data_card/executeAction", {
