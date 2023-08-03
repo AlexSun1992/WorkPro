@@ -70,10 +70,11 @@ export const getters = {
   getActionParams: (state) =>
     typeof state.actionParams.map === "function"
       ? state.actionParams.map((a) => {
-          if (a.fromDataCard === true) {
-            a.value = state.form.find((b) => b.name === a.name)?.value;
+          const obj = { ...a };
+          if (obj.fromDataCard === true) {
+            obj.value = state.form.find((b) => b.name === obj.name)?.value;
           }
-          return { ...a };
+          return { ...obj };
         })
       : [],
   getOneToManyDataTable: (state) => state.oneToManyData.table,
@@ -489,6 +490,22 @@ export const actions = {
       }
     }
   },
+  validateActionParams({ commit, getters }) {
+    const actionParams = getters.getActionParams;
+    if (actionParams && actionParams.length) {
+      actionParams.forEach((item) => {
+        commit("setFormField", item);
+      });
+    }
+    if (getters.getForm.find((item) => item.state === false)) {
+      commit("setSavedError", true);
+      commit("setErrorMessage", {
+        MESSAGE: "Проверьте правильность заполнения формы!",
+      });
+      return false;
+    }
+    return true;
+  },
 };
 
 export const mutations = {
@@ -548,7 +565,7 @@ export const mutations = {
     state.captions = captions;
   },
   setFormField(state, data) {
-    const item = state.form.find((d) => d.fieldId === data.fieldId);
+    const item = state.form.find((d) => d.name === data.name);
 
     if (item !== undefined) {
       item.value = data.value;
