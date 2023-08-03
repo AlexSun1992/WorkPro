@@ -1,44 +1,69 @@
 <template>
   <div class="range-control">
-    <label v-if="data.label">
-      <span
-        >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">{{
-          insuredSum
-        }}</span>
-        <span v-if="data.helpText" class="tooltipster">
-          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-            <span v-html="data.helpText" /></vue-easy-tooltip
-        ></span>
-      </span>
-    </label>
-    <b-form-input
-      @input="getNearestValue()"
-      type="number"
-      v-model="valueTypeNumber"
-      @focus="valueTypeNumber === 0 ? (valueTypeNumber = '') : valueTypeNumber"
-    ></b-form-input>
-    <b-form-input
-      id="inp"
-      v-model="valueTypeRange"
-      type="range"
-      @input="handleValue()"
-      :min="
-        isOnlyTwoItemsInPrices ? getMinValueFromPricesValue : getMinRangeValue
-      "
-      :max="
-        isOnlyTwoItemsInPrices ? getMaxValueFromPricesValue : getMaxRangeValue
-      "
-    >
-    </b-form-input>
-    <ul :data-amountOfValues="data.options.length" class="range-list">
-      <li
-        v-for="item in data.options"
-        :key="item.ID"
-        :class="item.value === insuredSum ? 'active' : ''"
+    <div v-if="isMobileModeActivated === false">
+      <label v-if="data.label">
+        <span
+          >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">{{
+            insuredSum
+          }}</span>
+          <span v-if="data.helpText" class="tooltipster">
+            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+              <span v-html="data.helpText" /></vue-easy-tooltip
+          ></span>
+        </span>
+      </label>
+      <b-form-input
+        @input="getNearestValue()"
+        type="number"
+        v-model="valueTypeNumber"
+        @focus="
+          valueTypeNumber === 0 ? (valueTypeNumber = '') : valueTypeNumber
+        "
+      ></b-form-input>
+      <b-form-input
+        id="inp"
+        v-model="valueTypeRange"
+        type="range"
+        @input="handleValue(valueTypeRange)"
+        :min="
+          isOnlyTwoItemsInPrices ? getMinValueFromPricesValue : getMinRangeValue
+        "
+        :max="
+          isOnlyTwoItemsInPrices ? getMaxValueFromPricesValue : getMaxRangeValue
+        "
       >
-        <span>{{ item.SNAME }}</span>
-      </li>
-    </ul>
+      </b-form-input>
+      <ul :data-amountOfValues="data.options.length" class="range-list">
+        <li
+          v-for="item in data.options"
+          :key="item.ID"
+          :class="item.value === insuredSum ? 'active' : ''"
+        >
+          <span>{{ item.SNAME }}</span>
+        </li>
+      </ul>
+    </div>
+    <div v-if="isMobileModeActivated">
+      {{ insuredSum }}/
+      {{ valueTypeRange }}
+      <b-form-input
+        v-model="valueTypeNumber"
+        @input="getNearestValue"
+        type="number"
+        :min="getMinRangeValue"
+        :max="getMaxRangeValue"
+      ></b-form-input>
+      <button id="add" :disabled="isMaxValueReach" @click="addInsuranceSum">
+        +
+      </button>
+      <button
+        id="subtract"
+        :disabled="isMinValueReach"
+        @click="degradeInsuranceSum"
+      >
+        -
+      </button>
+    </div>
   </div>
 </template>
 <script>
@@ -69,6 +94,7 @@ export default {
   },
   data() {
     return {
+      windowWidth: window.innerWidth,
       valueTypeNumber: 0,
       valueTypeRange: 0,
       insuredSum: null,
@@ -94,6 +120,10 @@ export default {
     }
   },
 
+  mounted() {
+    window.addEventListener("resize", this.updateWidth);
+  },
+
   watch: {
     insuredSum(value) {
       this.valueTypeNumber = Number(value);
@@ -101,6 +131,26 @@ export default {
   },
 
   computed: {
+    isMinValueReach() {
+      if (this.valueTypeRange === this.getMinRangeValue) {
+        return true;
+      }
+      return false;
+    },
+
+    isMaxValueReach() {
+      if (this.valueTypeRange === this.getMaxRangeValue) {
+        return true;
+      }
+      return false;
+    },
+
+    isMobileModeActivated() {
+      if (this.windowWidth <= 1000) {
+        return true;
+      }
+      return false;
+    },
     getMinRangeValue() {
       return 0;
     },
@@ -132,6 +182,36 @@ export default {
   },
 
   methods: {
+    updateWidth() {
+      this.windowWidth = window.innerWidth;
+    },
+
+    addInsuranceSum() {
+      this.valueTypeRange += 1;
+      if (this.valueTypeRange > this.getMaxRangeValue) {
+        this.valueTypeRange = this.getMaxRangeValue;
+      }
+      this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.insuredSum,
+      });
+    },
+
+    degradeInsuranceSum() {
+      this.valueTypeRange -= 1;
+      if (this.valueTypeRange < this.getMinRangeValue) {
+        this.valueTypeRange = this.getMinRangeValue;
+      }
+      this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.insuredSum,
+      });
+    },
+
     getNearestValue() {
       if (this.isOnlyTwoItemsInPrices === false) {
         const closestValue = getClosestValue(
@@ -143,7 +223,6 @@ export default {
         this.valueTypeRange = getIndex;
         this.insuredSum = closestValue;
       }
-
       if (this.isOnlyTwoItemsInPrices) {
         if (this.valueTypeNumber !== "") {
           this.valueTypeRange = this.valueTypeNumber;
@@ -168,13 +247,13 @@ export default {
       });
     },
 
-    handleValue() {
+    handleValue(value) {
       if (this.isOnlyTwoItemsInPrices === false) {
-        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+        this.insuredSum = this.getAllPricesValue[value];
       }
 
       if (this.isOnlyTwoItemsInPrices === true) {
-        this.valueTypeNumber = this.valueTypeRange;
+        this.valueTypeNumber = value;
         this.insuredSum = Number(this.valueTypeNumber);
       }
 
