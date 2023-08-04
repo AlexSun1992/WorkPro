@@ -31,8 +31,6 @@ export default {
     return {
       uploadPercentage: 0,
       percentsVisible: false,
-      wrapperElement: null,
-      btnLoadElement: null,
     };
   },
 
