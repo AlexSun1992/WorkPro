@@ -31,8 +31,11 @@ export default {
     return {
       uploadPercentage: 0,
       percentsVisible: false,
+      wrapperElement: null,
+      btnLoadElement: null,
     };
   },
+
   methods: {
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
