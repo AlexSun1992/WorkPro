@@ -478,7 +478,7 @@ export const actions = {
         relationValue = getters.getDataFieldByName(fieldRelation);
         url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
       } else {
-        url = `/api/dic/55/${id}/${dic}`;
+        url = `/api/dic/55/${id}/${dic}/${state.cardId}`;
       }
       const data = await this.$axios.get(encodeURI(url));
       commit("setEnumOptions", { options: data.data, fieldId });

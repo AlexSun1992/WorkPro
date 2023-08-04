@@ -154,7 +154,7 @@ converter.form = async (data, params, instance) => {
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
               webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}`
+            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id}`
           )
         );
       }
@@ -209,7 +209,7 @@ converter.form = async (data, params, instance) => {
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
               webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}`
+            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id}`
           )
         );
       }
@@ -312,7 +312,7 @@ converter.form = async (data, params, instance) => {
               promisesOfOneToMany.push(
                 converter.form(
                   item.value.data,
-                  { idItem: dataCardSettings.NITEMDIC },
+                  { idItem: dataCardSettings.NITEMDIC, id: null },
                   instance
                 )
               );
@@ -334,10 +334,14 @@ converter.form = async (data, params, instance) => {
                 );
               }
             } else {
-              fieldName = item.value.config.url.replace(
-                `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${itemId}/`,
-                ""
-              );
+              fieldName = item.value.config.url
+                .replace(
+                  `/am/${
+                    zone === "free" ? "free" : "main"
+                  }/v2/dic/55/${itemId}/`,
+                  ""
+                )
+                .split("/", 1)[0];
               if (fieldName) {
                 field1 = values.find((b) =>
                   b.value ? b.value.name === fieldName : null
