@@ -91,7 +91,7 @@ export default {
     },
     validClass(value) {
       if (this.data.state === false && value === "is-invalid") {
-        this.validationErrorText = "Обязательное поле";
+        this.validationErrorText = "Обязательно для заполнения";
       }
     },
   },
