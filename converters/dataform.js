@@ -154,7 +154,7 @@ converter.form = async (data, params, instance) => {
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
               webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id}`
+            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id ?? 0}`
           )
         );
       }
@@ -209,7 +209,7 @@ converter.form = async (data, params, instance) => {
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
               webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id}`
+            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id ?? 0}`
           )
         );
       }
