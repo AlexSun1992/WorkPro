@@ -12,6 +12,7 @@
           ></span>
         </span>
       </label>
+      {{ edit }}
       <b-form-input
         @input="getNearestValue()"
         type="number"
@@ -44,8 +45,6 @@
       </ul>
     </div>
     <div v-if="isMobileModeActivated">
-      {{ insuredSum }}/
-      {{ valueTypeRange }}
       <b-form-input
         v-model="valueTypeNumber"
         @input="getNearestValue"
