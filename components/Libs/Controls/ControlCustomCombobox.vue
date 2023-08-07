@@ -25,6 +25,7 @@
       @submit="handleSubmit"
       @blur="handleBlur"
     />
+
     <b-form-invalid-feedback :state="isErr">
       {{ data.error ? data.error : validationErrorText }}
     </b-form-invalid-feedback>
@@ -87,6 +88,11 @@ export default {
   watch: {
     getCurrentValue(value) {
       this.$refs.autocomplete.value = value;
+    },
+    validClass(value) {
+      if (this.data.state === false && value === "is-invalid") {
+        this.validationErrorText = "Обязательно для заполнения";
+      }
     },
   },
   methods: {
