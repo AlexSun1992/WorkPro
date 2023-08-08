@@ -275,11 +275,11 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 input[type="range"]::-webkit-slider-thumb {
-  /*  width: 15px;
+  /***  width: 15px;
   height: 15px;
   border-radius: 15px;
   background-color: #43b02a;
-  box-shadow: 0 0 0 5px white;*/
+  box-shadow: 0 0 0 5px white;***/
   --thumb-radius: calc((var(--thumb-height) * 0.5) - 1px);
   --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
   --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
