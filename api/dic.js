@@ -16,7 +16,7 @@ router.use((req, res, next) => {
 });
 router.use(cookieParser());
 
-router.get("/dic/:moduleId/:itemId/:name", (req, res) => {
+router.get("/dic/:moduleId/:itemId/:name/:cardId", (req, res) => {
   try {
     const mobile2ServiceInstance = mobile2Service();
     if (req.headers.authorization) {
@@ -27,7 +27,7 @@ router.get("/dic/:moduleId/:itemId/:name", (req, res) => {
         req.cookies["auth._token.local"];
     }
     mobile2ServiceInstance({
-      url: `${consts.DIC}/${req.params.moduleId}/${req.params.itemId}/${req.params.name}`,
+      url: `${consts.DIC}/${req.params.moduleId}/${req.params.itemId}/${req.params.name}/0/null/${req.params.cardId}`,
       method: "GET",
     })
       .then((resp) => {

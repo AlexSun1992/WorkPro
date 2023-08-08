@@ -1,4 +1,5 @@
-$cdn-url: "https://storage.yandexcloud.net/reso-static";
+// $cdn-url: "https://storage.yandexcloud.net/reso-static";
+$cdn-url: "";
 
 @function get-asset($local-path) {
   @return url($cdn-url + $local-path);
