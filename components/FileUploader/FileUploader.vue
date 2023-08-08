@@ -33,6 +33,7 @@ export default {
       percentsVisible: false,
     };
   },
+
   methods: {
     handleFileUpload() {
       this.file = this.$refs.file.files[0];

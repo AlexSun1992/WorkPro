@@ -3,12 +3,12 @@ import ControlRange from "./ControlRange.vue";
 
 describe("ControlRange", () => {
   let wrapper;
-  const createComponent = (mockData) => {
+  const createComponent = (boolean) => {
     wrapper = mount(ControlRange, {
-      data() {
-        return {
-          startFinishValueMock: mockData,
-        };
+      computed: {
+        isMobileModeActivated() {
+          return boolean;
+        },
       },
 
       propsData: {
@@ -79,6 +79,7 @@ describe("ControlRange", () => {
             },
           ],
         },
+        edit: true,
       },
     });
   };
@@ -88,10 +89,8 @@ describe("ControlRange", () => {
   });
 
   it("Изменение input[type='range'] при заполнении input[type='number']", async () => {
-    const mockData = [1500000, 4100000, 200000];
-    createComponent(mockData);
-
-    const inputTypeNumberValue = wrapper.find("[type='number']");
+    createComponent(false);
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
     inputTypeNumberValue.setValue("1900000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
@@ -124,49 +123,130 @@ describe("ControlRange", () => {
   });
 
   it("Изменение страховой суммы при изменении input[type='range']", async () => {
-    const mockData = [1500000, 4100000, 200000];
-    createComponent(mockData);
+    createComponent(false);
     const inputTypeRangeValue = wrapper.find("[type='range']");
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
     inputTypeRangeValue.setValue("0");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    const isuredSum = wrapper.find("#isuredSum");
-    expect(isuredSum.html().includes("1500000")).toBe(true);
+    expect(inputTypeNumberValue.element.value === "1500000").toBe(true);
+    //
     inputTypeRangeValue.setValue("1");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(isuredSum.html().includes("1800000")).toBe(true);
+    expect(inputTypeNumberValue.element.value === "1800000").toBe(true);
+    //
     inputTypeRangeValue.setValue("2");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(isuredSum.html().includes("2000000")).toBe(true);
+    expect(inputTypeNumberValue.element.value === "2000000").toBe(true);
+    //
     inputTypeRangeValue.setValue("3");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(isuredSum.html().includes("2500000")).toBe(true);
+    expect(inputTypeNumberValue.element.value === "2500000").toBe(true);
+    //
     inputTypeRangeValue.setValue("4");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(isuredSum.html().includes("3000000")).toBe(true);
+    expect(inputTypeNumberValue.element.value === "3000000").toBe(true);
     inputTypeRangeValue.setValue("5");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(isuredSum.html().includes("4100000")).toBe(true);
+    expect(inputTypeNumberValue.element.value === "4100000").toBe(true);
   });
 
   it("Плавающий ползунок изменение в компоненте", async () => {
-    const mockData = [1500000, 4100000];
-    createComponent(mockData);
+    createComponent(false);
     const inputTypeRangeValue = wrapper.find("[type='range']");
-    const inputTypeNumberValue = wrapper.find("[type='number']");
-    const isuredSum = wrapper.find("#isuredSum");
-    inputTypeRangeValue.setValue("2543534");
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
+
+    inputTypeNumberValue.setValue("1400000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(isuredSum.html().includes("2543534")).toBe(true);
-    expect(isuredSum.html().includes("2543534")).toBe(true);
+    expect(inputTypeRangeValue.element.value === "0").toBe(true);
+    //
+    inputTypeNumberValue.setValue("1700000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    //
 
-    expect(inputTypeNumberValue.element.value === "2543534").toBe(true);
+    expect(inputTypeRangeValue.element.value === "1").toBe(true);
+    //
+    inputTypeNumberValue.setValue("2000000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(inputTypeRangeValue.element.value === "2").toBe(true);
+    //
+    inputTypeNumberValue.setValue("2300000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(inputTypeRangeValue.element.value === "3").toBe(true);
+    //
+    inputTypeNumberValue.setValue("2900000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(inputTypeRangeValue.element.value === "4").toBe(true);
+    //
+    inputTypeNumberValue.setValue("4000000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(inputTypeRangeValue.element.value === "5").toBe(true);
+  });
+
+  it("Отображение ползунка для мобильной версии", async () => {
+    createComponent(true);
+    const btnAdd = wrapper.find("#add");
+    const btnSubstr = wrapper.find("#subtract");
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
+
+    expect(inputTypeNumberValue.element.value === "1500000");
+    expect(btnSubstr.attributes().disabled).toBe("disabled");
+    btnAdd.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "1800000");
+    btnAdd.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "2000000");
+    btnAdd.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "2500000");
+    btnAdd.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "3000000");
+    btnAdd.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "4100000");
+    expect(btnAdd.attributes().disabled).toBe("disabled");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "3000000");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "2500000");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "2000000");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "1800000");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(btnSubstr.attributes().disabled).toBe("disabled");
   });
 });
