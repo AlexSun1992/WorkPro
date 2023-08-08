@@ -45,8 +45,6 @@
         v-model="valueTypeNumber"
         @input="getNearestValue"
         type="number"
-        :min="getMinRangeValue"
-        :max="getMaxRangeValue"
       ></b-form-input>
       <button id="add" :disabled="isMaxValueReach" @click="addInsuranceSum">
         +

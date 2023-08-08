@@ -157,21 +157,92 @@ describe("ControlRange", () => {
     const inputTypeRangeValue = wrapper.find("[type='range']");
     const inputTypeNumberValue = wrapper.find("[type='number']");
     const isuredSum = wrapper.find("#isuredSum");
-    inputTypeRangeValue.setValue("2543534");
+    inputTypeNumberValue.setValue("1400000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(isuredSum.html().includes("1500000")).toBe(true);
+    expect(inputTypeRangeValue.element.value === "0").toBe(true);
+    //
+    inputTypeNumberValue.setValue("1700000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    //
+    expect(isuredSum.html().includes("1800000")).toBe(true);
+    expect(inputTypeRangeValue.element.value === "1").toBe(true);
+    //
+    inputTypeNumberValue.setValue("2000000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(isuredSum.html().includes("2000000")).toBe(true);
+    expect(inputTypeRangeValue.element.value === "2").toBe(true);
+    //
+    inputTypeNumberValue.setValue("2300000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(isuredSum.html().includes("2500000")).toBe(true);
+    expect(inputTypeRangeValue.element.value === "3").toBe(true);
+    //
+    inputTypeNumberValue.setValue("2900000");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(isuredSum.html().includes("3000000")).toBe(true);
+    expect(inputTypeRangeValue.element.value === "4").toBe(true);
+    //
+    inputTypeNumberValue.setValue("4000000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(isuredSum.html().includes("4100000")).toBe(true);
-    expect(inputTypeNumberValue.element.value === "4100000").toBe(true);
+    expect(inputTypeRangeValue.element.value === "5").toBe(true);
   });
 
   it("Отображение ползунка для мобильной версии", async () => {
     createComponent(true);
     const btnAdd = wrapper.find("#add");
-    const btnSubstr = wrapper.find("#substract");
-    expect(btnAdd).not.toBe(undefined);
-    expect(btnSubstr).not.toBe(undefined);
-    wrapper.find("#add").trigger("click");
+    const btnSubstr = wrapper.find("#subtract");
+    const inputTypeNumberValue = wrapper.find("[type='number']");
+
+    expect(inputTypeNumberValue.element.value === "1500000");
+    expect(btnSubstr.attributes().disabled).toBe("disabled");
+    btnAdd.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "1800000");
+    btnAdd.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "2000000");
+    btnAdd.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "2500000");
+    btnAdd.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "3000000");
+    btnAdd.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "4100000");
+    expect(btnAdd.attributes().disabled).toBe("disabled");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "3000000");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "2500000");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "2000000");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value === "1800000");
+    btnSubstr.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(btnSubstr.attributes().disabled).toBe("disabled");
   });
 });
