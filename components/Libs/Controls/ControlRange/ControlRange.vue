@@ -12,7 +12,6 @@
           ></span>
         </span>
       </label>
-      {{ edit }}
       <b-form-input
         @input="getNearestValue()"
         type="number"
@@ -40,7 +39,7 @@
           :key="item.ID"
           :class="item.value === insuredSum ? 'active' : ''"
         >
-          <span>{{ item.SNAME }}</span>
+          <span>{{ item.SNAME_SHORT }}</span>
         </li>
       </ul>
     </div>
