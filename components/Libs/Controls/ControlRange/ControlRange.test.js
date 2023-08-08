@@ -1,16 +1,10 @@
 import { mount } from "@vue/test-utils";
 import ControlRange from "./ControlRange.vue";
-import { nextTick } from "process";
 
 describe("ControlRange", () => {
   let wrapper;
-  const createComponent = (mockData, boolean) => {
+  const createComponent = (boolean) => {
     wrapper = mount(ControlRange, {
-      data() {
-        return {
-          startFinishValueMock: mockData,
-        };
-      },
       computed: {
         isMobileModeActivated() {
           return boolean;
@@ -95,9 +89,7 @@ describe("ControlRange", () => {
   });
 
   it("Изменение input[type='range'] при заполнении input[type='number']", async () => {
-    const mockData = [1500000, 4100000, 200000];
-    createComponent(mockData, false);
-
+    createComponent(false);
     const inputTypeNumberValue = wrapper.find("[type='number']");
     inputTypeNumberValue.setValue("1900000");
     await wrapper.vm.$nextTick();
@@ -131,8 +123,7 @@ describe("ControlRange", () => {
   });
 
   it("Изменение страховой суммы при изменении input[type='range']", async () => {
-    const mockData = [1500000, 4100000, 200000];
-    createComponent(mockData, false);
+    createComponent(false);
     const inputTypeRangeValue = wrapper.find("[type='range']");
     inputTypeRangeValue.setValue("0");
     await wrapper.vm.$nextTick();
@@ -162,30 +153,25 @@ describe("ControlRange", () => {
   });
 
   it("Плавающий ползунок изменение в компоненте", async () => {
-    const mockData = [1500000, 4100000];
-    createComponent(mockData, false);
+    createComponent(false);
     const inputTypeRangeValue = wrapper.find("[type='range']");
     const inputTypeNumberValue = wrapper.find("[type='number']");
     const isuredSum = wrapper.find("#isuredSum");
     inputTypeRangeValue.setValue("2543534");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(isuredSum.html().includes("2543534")).toBe(true);
-    expect(isuredSum.html().includes("2543534")).toBe(true);
-    expect(inputTypeNumberValue.element.value === "2543534").toBe(true);
+    expect(isuredSum.html().includes("4100000")).toBe(true);
+    expect(inputTypeNumberValue.element.value === "4100000").toBe(true);
   });
 
   it("Отображение ползунка для мобильной версии", async () => {
-    const mockData = [1500000, 4100000, 200000];
-    createComponent(mockData, true);
+    createComponent(true);
     const btnAdd = wrapper.find("#add");
     const btnSubstr = wrapper.find("#substract");
     expect(btnAdd).not.toBe(undefined);
     expect(btnSubstr).not.toBe(undefined);
-    // console.log("wrapper:", wrapper.html());
     wrapper.find("#add").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    console.log("wrapper:", wrapper.html());
   });
 });

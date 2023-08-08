@@ -12,6 +12,7 @@
           ></span>
         </span>
       </label>
+
       <b-form-input
         @input="getNearestValue()"
         type="number"
@@ -25,12 +26,8 @@
         v-model="valueTypeRange"
         type="range"
         @input="handleValue(valueTypeRange)"
-        :min="
-          isOnlyTwoItemsInPrices ? getMinValueFromPricesValue : getMinRangeValue
-        "
-        :max="
-          isOnlyTwoItemsInPrices ? getMaxValueFromPricesValue : getMaxRangeValue
-        "
+        :min="getMinRangeValue"
+        :max="getMaxRangeValue"
       >
       </b-form-input>
       <ul :data-amountOfValues="data.options.length" class="range-list">
@@ -96,7 +93,6 @@ export default {
       valueTypeNumber: 0,
       valueTypeRange: 0,
       insuredSum: null,
-      startFinishValueMock: [1500000, 3000000, 4100000],
     };
   },
 
@@ -108,13 +104,6 @@ export default {
       );
       this.valueTypeRange = getIndexOfChoosenValue;
       this.valueTypeNumber = this.getAllPricesValue[getIndexOfChoosenValue];
-    }
-    if (this.isOnlyTwoItemsInPrices) {
-      if (this.data.value) {
-        this.insuredSum = this.data.value;
-        this.valueTypeRange = this.data.value;
-        this.valueTypeNumber = this.data.value;
-      }
     }
   },
 
@@ -161,22 +150,6 @@ export default {
       const getPricesFromData = this.data.options.map((item) => item.value);
       return getPricesFromData;
     },
-
-    isOnlyTwoItemsInPrices() {
-      // return this.startFinishValueMock; поставил заглушку (массив с двумя значениями)
-      if (this.startFinishValueMock.length === 2) {
-        return true;
-      }
-      return false;
-    },
-
-    getMinValueFromPricesValue() {
-      return Math.min(...this.startFinishValueMock);
-    },
-
-    getMaxValueFromPricesValue() {
-      return Math.max(...this.startFinishValueMock);
-    },
   },
 
   methods: {
@@ -211,32 +184,14 @@ export default {
     },
 
     getNearestValue() {
-      if (this.isOnlyTwoItemsInPrices === false) {
-        const closestValue = getClosestValue(
-          this.getAllPricesValue,
-          this.valueTypeNumber
-        );
+      const closestValue = getClosestValue(
+        this.getAllPricesValue,
+        this.valueTypeNumber
+      );
 
-        const getIndex = this.getAllPricesValue.indexOf(closestValue);
-        this.valueTypeRange = getIndex;
-        this.insuredSum = closestValue;
-      }
-      if (this.isOnlyTwoItemsInPrices) {
-        if (this.valueTypeNumber !== "") {
-          this.valueTypeRange = this.valueTypeNumber;
-          this.insuredSum = Number(this.valueTypeNumber);
-        }
-        if (this.valueTypeNumber < this.getMinValueFromPricesValue) {
-          this.valueTypeRange = this.getMinValueFromPricesValue;
-          this.insuredSum = Number(this.getMinValueFromPricesValue);
-          this.valueTypeNumber = this.getMinValueFromPricesValue;
-        }
-        if (this.valueTypeNumber > this.getMaxValueFromPricesValue) {
-          this.valueTypeRange = this.getMaxValueFromPricesValue;
-          this.insuredSum = Number(this.getMaxValueFromPricesValue);
-          this.valueTypeNumber = this.getMaxValueFromPricesValue;
-        }
-      }
+      const getIndex = this.getAllPricesValue.indexOf(closestValue);
+      this.valueTypeRange = getIndex;
+      this.insuredSum = closestValue;
 
       this.$emit("update", {
         fieldId: this.data.fieldId,
@@ -246,14 +201,7 @@ export default {
     },
 
     handleValue(value) {
-      if (this.isOnlyTwoItemsInPrices === false) {
-        this.insuredSum = this.getAllPricesValue[value];
-      }
-
-      if (this.isOnlyTwoItemsInPrices === true) {
-        this.valueTypeNumber = value;
-        this.insuredSum = Number(this.valueTypeNumber);
-      }
+      this.insuredSum = this.getAllPricesValue[value];
 
       this.$emit("update", {
         fieldId: this.data.fieldId,
