@@ -1,6 +1,6 @@
 <template>
   <div class="range-control">
-    <div v-if="isMobileModeActivated === false">
+    <div>
       <label v-if="data.label">
         <span
           >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">{{

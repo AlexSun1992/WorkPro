@@ -90,7 +90,7 @@ describe("ControlRange", () => {
 
   it("Изменение input[type='range'] при заполнении input[type='number']", async () => {
     createComponent(false);
-    const inputTypeNumberValue = wrapper.find("[type='number']");
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
     inputTypeNumberValue.setValue("1900000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
@@ -155,7 +155,7 @@ describe("ControlRange", () => {
   it("Плавающий ползунок изменение в компоненте", async () => {
     createComponent(false);
     const inputTypeRangeValue = wrapper.find("[type='range']");
-    const inputTypeNumberValue = wrapper.find("[type='number']");
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
     const isuredSum = wrapper.find("#isuredSum");
     inputTypeNumberValue.setValue("1400000");
     await wrapper.vm.$nextTick();
@@ -199,7 +199,7 @@ describe("ControlRange", () => {
     createComponent(true);
     const btnAdd = wrapper.find("#add");
     const btnSubstr = wrapper.find("#subtract");
-    const inputTypeNumberValue = wrapper.find("[type='number']");
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
 
     expect(inputTypeNumberValue.element.value === "1500000");
     expect(btnSubstr.attributes().disabled).toBe("disabled");
