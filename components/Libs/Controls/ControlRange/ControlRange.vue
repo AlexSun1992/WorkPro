@@ -250,6 +250,8 @@ input[type="range"].win10-thumb {
 /* === range commons === */
 input[type="range"] {
   overflow: hidden;
+  z-index: 1;
+  cursor: pointer;
 }
 
 input[type="range"]:active {
@@ -382,7 +384,7 @@ input[type="range"]:disabled::-moz-range-thumb {
   padding: 0;
   margin: 0;
   position: relative;
-  z-index: 1;
+  z-index: 0;
 }
 .range-list li {
   padding: 0;
