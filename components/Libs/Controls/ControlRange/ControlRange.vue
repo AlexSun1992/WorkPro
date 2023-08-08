@@ -3,15 +3,15 @@
     <div>
       <label v-if="data.label">
         <span
-          >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">{{
-            insuredSum
-          }}</span>
+          >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">
+          </span>
           <span v-if="data.helpText" class="tooltipster">
             (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
               <span v-html="data.helpText" /></vue-easy-tooltip
           ></span>
         </span>
       </label>
+
       <b-form-input
         @input="getNearestValue()"
         type="tel"
@@ -112,14 +112,14 @@ export default {
 
   computed: {
     isMinValueReach() {
-      if (this.valueTypeRange === this.getMinRangeValue) {
+      if (this.insuredSum === this.data.options[this.getMinRangeValue].value) {
         return true;
       }
       return false;
     },
 
     isMaxValueReach() {
-      if (this.valueTypeRange === this.getMaxRangeValue) {
+      if (this.insuredSum === this.data.options[this.getMaxRangeValue].value) {
         return true;
       }
       return false;
