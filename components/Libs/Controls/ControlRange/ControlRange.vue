@@ -1,6 +1,6 @@
 <template>
   <div class="range-control">
-    <div v-if="isMobileModeActivated === false">
+    <div>
       <label v-if="data.label">
         <span
           >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">{{
@@ -12,7 +12,6 @@
           ></span>
         </span>
       </label>
-
       <b-form-input
         @input="getNearestValue()"
         type="tel"
@@ -34,18 +33,14 @@
         <li
           v-for="item in data.options"
           :key="item.ID"
-          :class="item.value === insuredSum ? 'active' : ''"
+          :class="{
+            active: item.value === insuredSum,
+            select: item.value < insuredSum,
+          }"
         >
           <span>{{ item.SNAME_SHORT }}</span>
         </li>
       </ul>
-    </div>
-    <div v-if="isMobileModeActivated">
-      <b-form-input
-        v-model="valueTypeNumber"
-        @input="getNearestValue"
-        type="number"
-      ></b-form-input>
       <button id="add" :disabled="isMaxValueReach" @click="addInsuranceSum">
         +
       </button>
