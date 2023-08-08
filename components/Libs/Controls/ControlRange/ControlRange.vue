@@ -151,6 +151,7 @@ export default {
     },
 
     addInsuranceSum() {
+      this.valueTypeRange = Number(this.valueTypeRange);
       this.valueTypeRange += 1;
       if (this.valueTypeRange > this.getMaxRangeValue) {
         this.valueTypeRange = this.getMaxRangeValue;
