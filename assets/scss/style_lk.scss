@@ -5258,6 +5258,7 @@ ymaps[class*="balloon__close-button"] {
     font-size: 1rem;
   }
 }
+
 @media (max-width: 992px) and (min-width: 375px) {
   .ymaps-2-1-79-balloon {
     margin-left: -33px;
@@ -5270,4 +5271,10 @@ ymaps[class*="balloon__close-button"] {
 
 .phb2 + .tooltipster {
   margin-top: 3px;
+}
+
+@media (min-width: 993px) {
+  .btn-link.mt-lg {
+    margin-top: 56px !important;
+  }
 }
