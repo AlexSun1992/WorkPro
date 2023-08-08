@@ -81,6 +81,8 @@ export const getters = {
   getOneToManyDataForm: (state) => state.oneToManyData.form,
   getDataFieldByName: (state) => (name) =>
     state.form.find((b) => b.name === name),
+  getDataFieldsByNames: (state) => (names) =>
+    state.form.filter((b) => names.includes(b.name) && b.name !== "ID"),
   getDataByFieldRelation: (state) => (name) =>
     state.form.find((b) => b.fieldRelation === name),
   getDataFieldByType: (state) => (name) =>
@@ -475,8 +477,23 @@ export const actions = {
       let relationValue;
       let url;
       if (isRelation && fieldRelation) {
-        relationValue = getters.getDataFieldByName(fieldRelation);
-        url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
+        if (fieldRelation.split(";")) {
+          const fieldsRelations = getters
+            .getDataFieldsByNames(fieldRelation.split(";"))
+            .map((item) => ({ key: item.name, value: item.value?.value }));
+          const objectValue = fieldsRelations.reduce((obj, item) => {
+            if (item.value) {
+              return Object.assign(obj, { [item.key]: item.value });
+            }
+            return obj;
+          }, {});
+          url = `/api/dic/55/${id}/${dic}/${state.cardId}?${new URLSearchParams(
+            objectValue
+          ).toString()}`;
+        } else {
+          relationValue = getters.getDataFieldByName(fieldRelation);
+          url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
+        }
       } else {
         url = `/api/dic/55/${id}/${dic}/${state.cardId}`;
       }

@@ -27,7 +27,11 @@ router.get("/dic/:moduleId/:itemId/:name/:cardId", (req, res) => {
         req.cookies["auth._token.local"];
     }
     mobile2ServiceInstance({
-      url: `${consts.DIC}/${req.params.moduleId}/${req.params.itemId}/${req.params.name}/0/null/${req.params.cardId}`,
+      url: `${consts.DIC}/${req.params.moduleId}/${req.params.itemId}/${
+        req.params.name
+      }/0/null/${req.params.cardId}?${new URLSearchParams(
+        req.query
+      ).toString()}`,
       method: "GET",
     })
       .then((resp) => {
