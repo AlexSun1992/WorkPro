@@ -41,16 +41,16 @@
           <span>{{ item.SNAME_SHORT }}</span>
         </li>
       </ul>
-      <button id="add" :disabled="isMaxValueReach" @click="addInsuranceSum">
-        +
-      </button>
+      <button
+        id="add"
+        :disabled="isMaxValueReach"
+        @click="addInsuranceSum"
+      ></button>
       <button
         id="subtract"
         :disabled="isMinValueReach"
         @click="degradeInsuranceSum"
-      >
-        -
-      </button>
+      ></button>
     </div>
   </div>
 </template>
@@ -666,10 +666,49 @@ input {
   border-bottom-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+button {
+  display: none;
+}
 @media (max-width: 992px) {
   input {
     border-bottom-right-radius: 15px !important;
     border-bottom-left-radius: 15px !important;
+    padding-left: 49px !important;
+    padding-right: 49px !important;
+    height: 48px !important;
+  }
+  #inp {
+    display: none;
+  }
+  button {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 42px;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 24px;
+  }
+  button:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  #add {
+    right: 15px;
+    background: url(/img/icon-range-add.svg) 50% 50% no-repeat;
+  }
+  #subtract {
+    left: 15px;
+    background: url(/img/icon-range-subtract.svg) 50% 50% no-repeat;
+  }
+  .range-list[data-amountofvalues] > li {
+    display: none;
+  }
+  .range-list[data-amountofvalues] > li:last-child,
+  .range-list[data-amountofvalues] > li:first-child {
+    display: block;
+    top: 0px;
   }
 }
 </style>
