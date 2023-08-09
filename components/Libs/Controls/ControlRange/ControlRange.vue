@@ -413,25 +413,6 @@ input[type="range"]:disabled::-moz-range-thumb {
 .range-list[data-amountofvalues] > li {
   transform: translateX(-50%);
 }
-.range-list[data-amountofvalues] > li span:after {
-  position: absolute;
-  content: "";
-  width: 10px;
-  height: 10px;
-  background-color: #c3c3c3;
-  border-radius: 10px;
-  left: 50%;
-  margin-left: -5px;
-  top: -14px;
-}
-.range-list[data-amountofvalues] > li.select span:after {
-  background-color: #43b02a;
-}
-.range-list[data-amountofvalues] > li:last-child span:after,
-.range-list[data-amountofvalues] > li:first-child span:after,
-.range-list[data-amountofvalues] > li.active span:after {
-  display: none;
-}
 
 .range-list[data-amountofvalues] > li:last-child,
 .range-list[data-amountofvalues] > li:first-child {
