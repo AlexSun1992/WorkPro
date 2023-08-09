@@ -690,7 +690,7 @@ button {
     display: block;
     position: absolute;
     z-index: 2;
-    bottom: 52px;
+    bottom: 32px;
     width: 24px;
     height: 24px;
     border: 0;
@@ -715,6 +715,13 @@ button {
   .range-list[data-amountofvalues] > li:first-child {
     display: block;
     top: 0px;
+    width: 45%;
+    max-width: 45%;
+    font-size: 0.75rem;
+    color: #868686;
+  }
+  .range-control {
+    padding-bottom: 20px;
   }
 }
 </style>
