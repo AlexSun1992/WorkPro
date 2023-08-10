@@ -4356,6 +4356,10 @@ h6 {
 .btn-link:hover {
   text-decoration: underline;
 }
+.btn-link:disabled {
+  color: #c3c3c3 !important;
+  pointer-events: none;
+}
 
 .btn-collapse {
   position: relative;
