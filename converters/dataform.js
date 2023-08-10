@@ -279,9 +279,7 @@ converter.form = async (data, params, instance) => {
     obj.isRelation = !(
       webFields[i].LDIC === "N" || webFields[i].LDIC === false
     );
-    obj.fieldRelation = webFields[i].SCONNECTFIELD
-      ? `FK${webFields[i].SCONNECTFIELD}`
-      : null;
+    obj.fieldRelation = webFields[i].SCONNECTFIELD ?? null;
     obj.isTab = !!data[0]._meta.SPAGECAPTION;
     if (webFields[i].NITEMDIC) {
       obj.menudic = webFields[i].NITEMDIC;
