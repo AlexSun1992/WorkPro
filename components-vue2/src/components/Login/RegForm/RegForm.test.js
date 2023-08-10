@@ -821,6 +821,19 @@ describe("RegForm", () => {
     surenameInput.setValue("Никола   евич");
     expect(surenameInput.element.value.length).toBe(13);
   });
+ ///
+  it("Проверяем возможность введения тире в поле Отчество в качестве непервого символа", async() => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+  const surnameComponent = wrapper.findComponent({
+    ref: "autocompletePatronymic",
+  });
+  const surnameInput = surnameComponent.find("input");
+  await surnameInput.setValue("П-А");
+  expect(surnameComponent.classes()).toContain("is-valid");
+    
+  });
   ///
 
   it("Проверяем возможность введения пробела в поле Отчество в качестве непервого символа", () => {
@@ -943,7 +956,7 @@ describe("RegForm", () => {
         },
       ],
     });
-
+console.log(wrapper.html())
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
     const surnameComponent = wrapper.findComponent({
