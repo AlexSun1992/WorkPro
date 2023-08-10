@@ -82,7 +82,14 @@ export const getters = {
   getDataFieldByName: (state) => (name) =>
     state.form.find((b) => b.name === name),
   getDataFieldsByNames: (state) => (names) =>
-    state.form.filter((b) => names.includes(b.name) && b.name !== "ID"),
+    state.form.filter((b) => {
+      let name;
+      if (b.name.substring(0, 2) === `FK`) {
+        name = b.name.substring(2);
+        return names.includes(name);
+      }
+      return names.includes(b.name) && b.name !== "ID";
+    }),
   getDataByFieldRelation: (state) => (name) =>
     state.form.find((b) => b.fieldRelation === name),
   getDataFieldByType: (state) => (name) =>
@@ -480,7 +487,13 @@ export const actions = {
         if (fieldRelation.split(";")) {
           const fieldsRelations = getters
             .getDataFieldsByNames(fieldRelation.split(";"))
-            .map((item) => ({ key: item.name, value: item.value?.value }));
+            .map((item) => ({
+              key:
+                item.name.substring(0, 2) === `FK`
+                  ? item.name.substring(2)
+                  : item.name,
+              value: item.value?.value,
+            }));
           const objectValue = fieldsRelations.reduce((obj, item) => {
             if (item.value) {
               return Object.assign(obj, { [item.key]: item.value });
@@ -687,9 +700,17 @@ export const mutations = {
     state.filters = {};
   },
   clearFormRelationField(state, { name }) {
-    let currentFieldName = name;
+    let currentFieldName =
+      name.substring(0, 2) === `FK` ? name.substring(2) : name;
     while (true) {
-      const item = state.form.find((d) => d.fieldRelation === currentFieldName);
+      const item = state.form.find((d) => {
+        if (d.fieldRelation) {
+          if (d.fieldRelation.split(";")) {
+            return d.fieldRelation.split(";").includes(currentFieldName);
+          }
+        }
+        return d.fieldRelation === currentFieldName;
+      });
       if (item) {
         item.value = {};
         item.options = [];
