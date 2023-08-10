@@ -631,7 +631,7 @@ export default {
         this.isPatronymicValidSignsErrorMessage = null;
         return;
       }
-      const regex = /^[а-яА-ЯёЁ]+\s*$/;
+      const regex = /^[а-яА-ЯёЁ-]+\s*$/;
       const isInputNotValid = isFieldFIONotValid(input, regex);
       if (input.length > 0) {
         if (input.charAt(0) === " ") {
