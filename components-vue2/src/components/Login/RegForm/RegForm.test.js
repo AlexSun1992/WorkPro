@@ -788,7 +788,6 @@ describe("RegForm", () => {
       wrapper.findComponent({ ref: "policyNumber" }).classes()
     ).not.toContain("is-invalid");
   });
-  ///
 
   it("Проверяем возможность введения пробела в поле Фамилии в качестве непервого символа", () => {
     const localVue = createLocalVue();
@@ -800,7 +799,6 @@ describe("RegForm", () => {
     expect(surenameInput.element.value.length).toBe(11);
   });
 
-  ///
   it("Проверяем возможность введения пробела в поле Имя в качестве непервого символа", () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
@@ -811,7 +809,6 @@ describe("RegForm", () => {
     expect(surenameInput.element.value.length).toBe(10);
   });
 
-  ///
   it("Проверяем возможность введения пробела в поле Отчество в качестве непервого символа", () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
@@ -821,20 +818,18 @@ describe("RegForm", () => {
     surenameInput.setValue("Никола   евич");
     expect(surenameInput.element.value.length).toBe(13);
   });
- ///
-  it("Проверяем возможность введения тире в поле Отчество в качестве непервого символа", async() => {
+
+  it("Проверяем возможность введения тире в поле Отчество в качестве непервого символа", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
     const wrapper = mount(RegForm, { localVue, attachTo: document.body });
-  const surnameComponent = wrapper.findComponent({
-    ref: "autocompletePatronymic",
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("П-А");
+    expect(surnameComponent.classes()).toContain("is-valid");
   });
-  const surnameInput = surnameComponent.find("input");
-  await surnameInput.setValue("П-А");
-  expect(surnameComponent.classes()).toContain("is-valid");
-    
-  });
-  ///
 
   it("Проверяем возможность введения пробела в поле Отчество в качестве непервого символа", () => {
     const localVue = createLocalVue();
@@ -936,7 +931,6 @@ describe("RegForm", () => {
     expect(nameComponent.classes()).toContain("is-invalid");
   });
 
-  ///
   it("должен корректно заполнять форму", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
@@ -956,7 +950,7 @@ describe("RegForm", () => {
         },
       ],
     });
-console.log(wrapper.html())
+
     expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
 
     const surnameComponent = wrapper.findComponent({
