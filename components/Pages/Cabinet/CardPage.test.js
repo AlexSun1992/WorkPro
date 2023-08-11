@@ -1,6 +1,8 @@
+import "./matchMedia";
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+
 import { createLocalVue, mount } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
 import CardPage from "./CardPage.vue";

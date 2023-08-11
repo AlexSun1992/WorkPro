@@ -193,6 +193,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "RegNumber";
     } else if (webFields[i].IDCONTROL == 401) {
       obj.type = "CollapseGroup";
+    } else if (webFields[i].IDCONTROL == 441) {
+      obj.type = "InsuredBox";
     } else if (webFields[i].IDCONTROL == 421) {
       obj.type = "Range";
       if (webFields[i].LDIC === true) {
@@ -468,13 +470,18 @@ converter.type = (data, isReadOnly) => {
           data[j].type !== "combobox" &&
           data[i].type !== "label"
         ) {
-          copy[i].type = `enum`;
-          if (data[i].menudic) {
-            copy[i].type = `listSelect`;
-            if (data[i].fieldId === 38003) {
-              copy[i].type = `doctorSchedule`;
+          if (data[j].type === "InsuredBox") {
+            copy[i].type = "InsuredBox";
+          } else {
+            copy[i].type = `enum`;
+            if (data[i].menudic) {
+              copy[i].type = `listSelect`;
+              if (data[i].fieldId === 38003) {
+                copy[i].type = `doctorSchedule`;
+              }
             }
           }
+
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
           copy[i].dic = data[j].name;
@@ -579,6 +586,7 @@ converter.save = (data) => {
     if (
       data[i].type !== "enum" &&
       data[i].type !== "multi" &&
+      data[i].type !== "InsuredBox" &&
       data[i].type !== "listSelect" &&
       data[i].type !== "doctorSchedule"
     ) {
