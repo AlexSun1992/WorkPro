@@ -69,6 +69,7 @@ import ControlOneToMany from "./ControlOneToMany/ControlOneToMany";
 import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConfirm.vue";
 import ControlCollapseGroup from "./ControlCollapseGroup.vue";
 import ControlRange from "./ControlRange/ControlRange.vue";
+import ControlInsuredBox from "./ControlInsuredBox/InsuredBox.vue";
 
 export default {
   name: "Control",
@@ -109,6 +110,7 @@ export default {
     ControlPasswordConfirm,
     ControlCollapseGroup,
     ControlRange,
+    ControlInsuredBox,
   },
   props: {
     data: {
