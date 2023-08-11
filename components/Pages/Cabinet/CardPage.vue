@@ -95,7 +95,7 @@
               :style="isButtonDisabled"
               @click="saveDataCard(0)"
             >
-              {{ wizardButtonNameContinue }}
+              {{ wizardButtonNameSave }}
               <b-spinner
                 v-if="loading"
                 style="width: 1rem; height: 1rem"
