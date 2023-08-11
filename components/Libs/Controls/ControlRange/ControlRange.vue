@@ -11,22 +11,35 @@
           ></span>
         </span>
       </label>
-
-      <b-form-input
+      <currency-input
+        :class="
+          this.valueTypeNumber < getMinValueFromPricesValue ? 'is-invalid' : ''
+        "
         @input="getNearestValue()"
         type="tel"
         v-model="valueTypeNumber"
+        :currency="{ suffix: '₽' }"
+        locale="ru"
+        :allowNegative="false"
         @focus="
           valueTypeNumber === 0 ? (valueTypeNumber = '') : valueTypeNumber
         "
-      ></b-form-input>
+        :hideNegligibleDecimalDigitsOnFocus="false"
+        :hideGroupingSeparatorOnFocus="false"
+        :hideCurrencySymbolOnFocus="false"
+        useGrouping="thounsands"
+      ></currency-input>
       <b-form-input
         id="inp"
         v-model="valueTypeRange"
         type="range"
         @input="handleValue(valueTypeRange)"
-        :min="getMinRangeValue"
-        :max="getMaxRangeValue"
+        :min="
+          isOnlyTwoItemsInPrices ? getMinValueFromPricesValue : getMinRangeValue
+        "
+        :max="
+          isOnlyTwoItemsInPrices ? getMaxValueFromPricesValue : getMaxRangeValue
+        "
       >
       </b-form-input>
       <ul :data-amountOfValues="data.options.length" class="range-list">
@@ -37,6 +50,7 @@
             active: item.value === insuredSum,
             select: item.value < insuredSum,
           }"
+          @click="moveToCurrentValue(item)"
         >
           <span>{{ item.SNAME_SHORT }}</span>
         </li>
@@ -46,6 +60,7 @@
         :disabled="isMaxValueReach"
         @click="addInsuranceSum"
       ></button>
+
       <button
         id="subtract"
         :disabled="isMinValueReach"
@@ -56,12 +71,14 @@
 </template>
 <script>
 import { BFormInput } from "bootstrap-vue";
+import { CurrencyInput } from "vue-currency-input";
 import { getClosestValue } from "./ControlRange.helper";
 
 export default {
   name: "ControlRange",
   components: {
     BFormInput,
+    CurrencyInput,
   },
   props: {
     data: {
@@ -90,7 +107,9 @@ export default {
   },
 
   created() {
-    if (this.data.value) {
+    const specialValue = this.data.options.find((item) => item.NVALUE);
+
+    if (this.data.value && !specialValue) {
       this.insuredSum = this.data.value;
       const getIndexOfChoosenValue = this.getAllPricesValue.indexOf(
         this.insuredSum
@@ -98,10 +117,33 @@ export default {
       this.valueTypeRange = getIndexOfChoosenValue;
       this.valueTypeNumber = this.getAllPricesValue[getIndexOfChoosenValue];
     }
-  },
 
-  mounted() {
-    window.addEventListener("resize", this.updateWidth);
+    if (this.data.value && specialValue) {
+      this.insuredSum = specialValue.NVALUE;
+      const getIndexOfChoosenValue = this.getAllPricesValue.indexOf(
+        this.insuredSum
+      );
+      this.valueTypeRange = getIndexOfChoosenValue;
+      this.valueTypeNumber = this.getAllPricesValue[getIndexOfChoosenValue];
+    }
+
+    if (this.isOnlyTwoItemsInPrices) {
+      if (this.data.value && !specialValue) {
+        this.insuredSum = this.data.value;
+        this.valueTypeRange = this.data.value;
+        this.valueTypeNumber = this.data.value;
+      }
+      if (this.data.value && specialValue) {
+        this.insuredSum = specialValue.NVALUE;
+        this.valueTypeRange = specialValue.NVALUE;
+        this.valueTypeNumber = specialValue.NVALUE;
+      }
+    }
+    this.$emit("update", {
+      fieldId: this.data.fieldId,
+      name: this.data.name,
+      value: this.insuredSum,
+    });
   },
 
   watch: {
@@ -112,51 +154,106 @@ export default {
 
   computed: {
     isMinValueReach() {
-      if (this.insuredSum === this.data.options[this.getMinRangeValue].value) {
+      if (this.insuredSum === this.getAllPricesValue[this.getMinRangeValue]) {
         return true;
       }
       return false;
     },
 
     isMaxValueReach() {
-      if (this.insuredSum === this.data.options[this.getMaxRangeValue].value) {
+      if (this.insuredSum === this.getAllPricesValue[this.getMaxRangeValue]) {
         return true;
       }
       return false;
     },
 
-    isMobileModeActivated() {
-      if (this.windowWidth <= 1000) {
-        return true;
-      }
-      return false;
-    },
     getMinRangeValue() {
       return 0;
     },
+
+    getAllPricesValue() {
+      const findSpecialValue = this.data.options.find((item) => item.NVALUE);
+      if (findSpecialValue) {
+        const getSpeciaPriceslData = this.data.options.map(
+          (item) => item.NVALUE
+        );
+        return getSpeciaPriceslData;
+      }
+      const getPricesFromData = this.data.options.map((item) => item.value);
+      return getPricesFromData;
+    },
     getMaxRangeValue() {
-      const numbervalue = this.data.options.length - 1;
+      const numbervalue = this.getAllPricesValue.length - 1;
       return numbervalue;
     },
 
-    getAllPricesValue() {
-      const getPricesFromData = this.data.options.map((item) => item.value);
-      return getPricesFromData;
+    isOnlyTwoItemsInPrices() {
+      if (this.getAllPricesValue.length === 2) {
+        return true;
+      }
+      return false;
+    },
+    getMinValueFromPricesValue() {
+      return Math.min(...this.getAllPricesValue);
+    },
+    getMaxValueFromPricesValue() {
+      return Math.max(...this.getAllPricesValue);
     },
   },
 
   methods: {
-    updateWidth() {
-      this.windowWidth = window.innerWidth;
+    moveToCurrentValue(value) {
+      const getValueId = value.NVALUE;
+
+      if (getValueId) {
+        if (this.isOnlyTwoItemsInPrices === false) {
+          this.insuredSum = getValueId;
+          this.valueTypeNumber = getValueId;
+          const getIndexValue = this.getAllPricesValue.indexOf(getValueId);
+          this.valueTypeRange = getIndexValue;
+        }
+        if (this.isOnlyTwoItemsInPrices === true) {
+          this.insuredSum = getValueId;
+          this.valueTypeNumber = getValueId;
+          this.valueTypeRange = getValueId;
+        }
+      }
+
+      if (!getValueId) {
+        const getId = value.ID;
+        this.insuredSum = getId;
+        this.valueTypeNumber = getId;
+        const getIndex = this.getAllPricesValue.indexOf(getId);
+        this.valueTypeRange = getIndex;
+      }
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.insuredSum,
+      });
     },
 
     addInsuranceSum() {
       this.valueTypeRange = Number(this.valueTypeRange);
-      this.valueTypeRange += 1;
-      if (this.valueTypeRange > this.getMaxRangeValue) {
+      if (
+        this.valueTypeRange > this.getMaxRangeValue &&
+        this.isOnlyTwoItemsInPrices === false
+      ) {
         this.valueTypeRange = this.getMaxRangeValue;
       }
-      this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      if (this.isOnlyTwoItemsInPrices === false) {
+        this.valueTypeRange += 1;
+        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      }
+      if (this.isOnlyTwoItemsInPrices === true) {
+        const closestValue = getClosestValue(
+          this.getAllPricesValue,
+          this.insuredSum
+        );
+        const getIndex = this.getAllPricesValue.indexOf(closestValue);
+        this.valueTypeRange = getIndex + 1;
+        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      }
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -165,9 +262,25 @@ export default {
     },
 
     degradeInsuranceSum() {
-      this.valueTypeRange -= 1;
-      if (this.valueTypeRange < this.getMinRangeValue) {
+      this.valueTypeRange = Number(this.valueTypeRange);
+      if (
+        this.valueTypeRange < this.getMinRangeValue &&
+        this.isOnlyTwoItemsInPrices === false
+      ) {
         this.valueTypeRange = this.getMinRangeValue;
+      }
+      if (this.isOnlyTwoItemsInPrices === false) {
+        this.valueTypeRange -= 1;
+        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      }
+      if (this.isOnlyTwoItemsInPrices === true) {
+        const closestValue = getClosestValue(
+          this.getAllPricesValue,
+          this.insuredSum
+        );
+        const getIndex = this.getAllPricesValue.indexOf(closestValue);
+        this.valueTypeRange = getIndex - 1;
+        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
       }
       this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
       this.$emit("update", {
@@ -182,26 +295,51 @@ export default {
         this.getAllPricesValue,
         this.valueTypeNumber
       );
-
-      const getIndex = this.getAllPricesValue.indexOf(closestValue);
-      this.valueTypeRange = getIndex;
-      this.insuredSum = closestValue;
-
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.insuredSum,
-      });
+      if (this.isOnlyTwoItemsInPrices === false) {
+        const getIndex = this.getAllPricesValue.indexOf(closestValue);
+        this.valueTypeRange = getIndex;
+        this.insuredSum = closestValue;
+      }
+      if (this.isOnlyTwoItemsInPrices === true) {
+        this.valueTypeRange = this.valueTypeNumber;
+        if (this.valueTypeNumber === "") {
+          this.valueTypeRange = this.getMinValueFromPricesValue;
+          this.insuredSum = this.getMinValueFromPricesValue;
+        }
+        if (this.valueTypeNumber < this.getMinValueFromPricesValue) {
+          this.valueTypeRange = this.getMinValueFromPricesValue;
+          this.insuredSum = this.getMinValueFromPricesValue;
+        }
+        if (this.valueTypeNumber > this.getMaxValueFromPricesValue) {
+          this.valueTypeRange = this.getMaxValueFromPricesValue;
+          this.insuredSum = this.getMaxValueFromPricesValue;
+        }
+      }
+      if (this.valueTypeNumber >= this.getMinValueFromPricesValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.insuredSum,
+        });
+      }
     },
 
     handleValue(value) {
-      this.insuredSum = this.getAllPricesValue[value];
+      if (this.isOnlyTwoItemsInPrices === false) {
+        this.insuredSum = this.getAllPricesValue[value];
+      }
 
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.insuredSum,
-      });
+      if (this.isOnlyTwoItemsInPrices === true) {
+        this.valueTypeNumber = value;
+        this.insuredSum = Number(this.valueTypeNumber);
+      }
+      if (this.valueTypeNumber >= this.getMinValueFromPricesValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.insuredSum,
+        });
+      }
     },
   },
 };
@@ -393,6 +531,7 @@ input[type="range"]:disabled::-moz-range-thumb {
   text-align: center;
   position: absolute;
   top: 10px;
+  cursor: pointer;
 }
 
 .range-list li:first-child {

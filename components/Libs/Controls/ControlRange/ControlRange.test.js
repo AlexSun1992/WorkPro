@@ -3,14 +3,13 @@ import ControlRange from "./ControlRange.vue";
 
 describe("ControlRange", () => {
   let wrapper;
-  const createComponent = (boolean) => {
+  const createComponent = () => {
     wrapper = mount(ControlRange, {
-      computed: {
-        isMobileModeActivated() {
-          return boolean;
-        },
-      },
-
+      //   computed: {
+      //     isMobileModeActivated() {
+      //       return boolean;
+      //     },
+      //   },
       propsData: {
         data: {
           label: "Страховая сумма на каждого застрахованного",
@@ -89,12 +88,12 @@ describe("ControlRange", () => {
   });
 
   it("Изменение input[type='range'] при заполнении input[type='number']", async () => {
-    createComponent(false);
+    createComponent();
     const inputTypeNumberValue = wrapper.find("[type='tel']");
-    inputTypeNumberValue.setValue("1900000");
+    inputTypeNumberValue.setValue("1800000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(wrapper.find("[type='range']").element.value).toBe("2");
+    expect(wrapper.find("[type='range']").element.value).toBe("1");
 
     inputTypeNumberValue.setValue("1600000");
     await wrapper.vm.$nextTick();
@@ -129,31 +128,32 @@ describe("ControlRange", () => {
     inputTypeRangeValue.setValue("0");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "1500000").toBe(true);
-    //
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value).toBe("1 500 000,00₽");
+
     inputTypeRangeValue.setValue("1");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "1800000").toBe(true);
-    //
+    expect(inputTypeNumberValue.element.value).toBe("1 800 000,00₽");
+
     inputTypeRangeValue.setValue("2");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "2000000").toBe(true);
-    //
+    expect(inputTypeNumberValue.element.value).toBe("2 000 000,00₽");
+
     inputTypeRangeValue.setValue("3");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "2500000").toBe(true);
-    //
+    expect(inputTypeNumberValue.element.value).toBe("2 500 000,00₽");
+
     inputTypeRangeValue.setValue("4");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "3000000").toBe(true);
+    expect(inputTypeNumberValue.element.value).toBe("3 000 000,00₽");
     inputTypeRangeValue.setValue("5");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "4100000").toBe(true);
+    expect(inputTypeNumberValue.element.value).toBe("4 100 000,00₽");
   });
 
   it("Плавающий ползунок изменение в компоненте", async () => {
@@ -165,38 +165,33 @@ describe("ControlRange", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(inputTypeRangeValue.element.value === "0").toBe(true);
-    //
+    expect(inputTypeRangeValue.element.value).toBe("0");
+
     inputTypeNumberValue.setValue("1700000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    //
+    expect(inputTypeRangeValue.element.value).toBe("1");
 
-    expect(inputTypeRangeValue.element.value === "1").toBe(true);
-    //
     inputTypeNumberValue.setValue("2000000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
+    expect(inputTypeRangeValue.element.value).toBe("2");
 
-    expect(inputTypeRangeValue.element.value === "2").toBe(true);
-    //
     inputTypeNumberValue.setValue("2300000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
+    expect(inputTypeRangeValue.element.value).toBe("3");
 
-    expect(inputTypeRangeValue.element.value === "3").toBe(true);
-    //
     inputTypeNumberValue.setValue("2900000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(inputTypeRangeValue.element.value === "4").toBe(true);
-    //
+    expect(inputTypeRangeValue.element.value).toBe("4");
     inputTypeNumberValue.setValue("4000000");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(inputTypeRangeValue.element.value === "5").toBe(true);
+    expect(inputTypeRangeValue.element.value).toBe("5");
   });
 
   it("Отображение ползунка для мобильной версии", async () => {
@@ -204,46 +199,45 @@ describe("ControlRange", () => {
     const btnAdd = wrapper.find("#add");
     const btnSubstr = wrapper.find("#subtract");
     const inputTypeNumberValue = wrapper.find("[type='tel']");
-
-    expect(inputTypeNumberValue.element.value === "1500000");
+    expect(inputTypeNumberValue.element.value).toBe("1 500 000,00₽");
     expect(btnSubstr.attributes().disabled).toBe("disabled");
     btnAdd.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "1800000");
+    expect(inputTypeNumberValue.element.value).toBe("1 800 000,00₽");
     btnAdd.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "2000000");
+    expect(inputTypeNumberValue.element.value).toBe("2 000 000,00₽");
     btnAdd.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "2500000");
+    expect(inputTypeNumberValue.element.value).toBe("2 500 000,00₽");
     btnAdd.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "3000000");
+    expect(inputTypeNumberValue.element.value).toBe("3 000 000,00₽");
     btnAdd.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "4100000");
+    expect(inputTypeNumberValue.element.value).toBe("4 100 000,00₽");
     expect(btnAdd.attributes().disabled).toBe("disabled");
     btnSubstr.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "3000000");
+    expect(inputTypeNumberValue.element.value).toBe("3 000 000,00₽");
     btnSubstr.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "2500000");
+    expect(inputTypeNumberValue.element.value).toBe("2 500 000,00₽");
     btnSubstr.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "2000000");
+    expect(inputTypeNumberValue.element.value).toBe("2 000 000,00₽");
     btnSubstr.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value === "1800000");
+    expect(inputTypeNumberValue.element.value).toBe("1 800 000,00₽");
     btnSubstr.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
