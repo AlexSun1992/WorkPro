@@ -133,22 +133,51 @@ export default {
         this.valueTypeRange = this.data.value;
         this.valueTypeNumber = this.data.value;
       }
-      if (this.data.value && specialValue) {
+
+      if (!this.data.value && specialValue) {
         this.insuredSum = specialValue.NVALUE;
         this.valueTypeRange = specialValue.NVALUE;
         this.valueTypeNumber = specialValue.NVALUE;
       }
     }
-    this.$emit("update", {
-      fieldId: this.data.fieldId,
-      name: this.data.name,
-      value: this.insuredSum,
-    });
+
+    if (this.insuredSum > this.getMinValueFromPricesValue) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.isOnlyTwoItemsInPrices
+          ? this.insuredSum
+          : this.data.options.find((item) => item.NVALUE === this.insuredSum)
+              ?.ID,
+      });
+    }
   },
 
   watch: {
     insuredSum(value) {
       this.valueTypeNumber = Number(value);
+    },
+    valueTypeNumber(value) {
+      if (
+        value >= this.getMinValueFromPricesValue &&
+        this.isOnlyTwoItemsInPrices === false
+      ) {
+        const closestValue = getClosestValue(
+          this.getAllPricesValue,
+          this.valueTypeNumber
+        );
+        this.insuredSum = closestValue;
+        this.valueTypeNumber = this.insuredSum;
+
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.isOnlyTwoItemsInPrices
+            ? this.insuredSum
+            : this.data.options.find((item) => item.NVALUE === this.insuredSum)
+                ?.ID,
+        });
+      }
     },
   },
 
@@ -226,11 +255,17 @@ export default {
         const getIndex = this.getAllPricesValue.indexOf(getId);
         this.valueTypeRange = getIndex;
       }
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.insuredSum,
-      });
+
+      if (this.insuredSum >= this.getMinValueFromPricesValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.isOnlyTwoItemsInPrices
+            ? this.insuredSum
+            : this.data.options.find((item) => item.NVALUE === this.insuredSum)
+                ?.ID,
+        });
+      }
     },
 
     addInsuranceSum() {
@@ -254,11 +289,17 @@ export default {
         this.valueTypeRange = getIndex + 1;
         this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
       }
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.insuredSum,
-      });
+
+      if (this.insuredSum >= this.getMinValueFromPricesValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.isOnlyTwoItemsInPrices
+            ? this.insuredSum
+            : this.data.options.find((item) => item.NVALUE === this.insuredSum)
+                ?.ID,
+        });
+      }
     },
 
     degradeInsuranceSum() {
@@ -283,11 +324,16 @@ export default {
         this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
       }
       this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.insuredSum,
-      });
+      if (this.insuredSum >= this.getMinValueFromPricesValue) {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.isOnlyTwoItemsInPrices
+            ? this.insuredSum
+            : this.data.options.find((item) => item.NVALUE === this.insuredSum)
+                ?.ID,
+        });
+      }
     },
 
     getNearestValue() {
@@ -295,6 +341,7 @@ export default {
         this.getAllPricesValue,
         this.valueTypeNumber
       );
+
       if (this.isOnlyTwoItemsInPrices === false) {
         const getIndex = this.getAllPricesValue.indexOf(closestValue);
         this.valueTypeRange = getIndex;
@@ -315,11 +362,15 @@ export default {
           this.insuredSum = this.getMaxValueFromPricesValue;
         }
       }
-      if (this.valueTypeNumber >= this.getMinValueFromPricesValue) {
+
+      if (this.insuredSum >= this.getMinValueFromPricesValue) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: this.insuredSum,
+          value: this.isOnlyTwoItemsInPrices
+            ? this.insuredSum
+            : this.data.options.find((item) => item.NVALUE === this.insuredSum)
+                ?.ID,
         });
       }
     },
@@ -337,7 +388,10 @@ export default {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: this.insuredSum,
+          value: this.isOnlyTwoItemsInPrices
+            ? this.insuredSum
+            : this.data.options.find((item) => item.NVALUE === this.insuredSum)
+                ?.ID,
         });
       }
     },
