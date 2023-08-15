@@ -799,6 +799,86 @@ describe("RegForm", () => {
     expect(surenameInput.element.value.length).toBe(11);
   });
 
+  it("Проверяем возможность введения тире в поле Фамилия в качестве непервого символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Па-Аа");
+    expect(surnameComponent.classes()).toContain("is-valid");
+  });
+
+  it("Проверяем возможность введения двух тире в середине в поле Фамилия в качестве непервого символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Па--Аа");
+    expect(surnameComponent.classes()).toContain("is-invalid");
+  });
+
+  it("Проверяем возможность введения тире в поле Фамилия в качестве первого символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+        },
+      ],
+    });
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("-Пыы-Аыыы");
+    expect(surnameComponent.classes()).toContain("is-invalid");
+  });
+
+  it("Проверяем возможность введения тире в поле Фамилия в качестве последнего символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+        },
+      ],
+    });
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteSurname",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Пыы-Аыыы-");
+    expect(surnameComponent.classes()).toContain("is-invalid");
+  });
+
   it("Проверяем возможность введения пробела в поле Имя в качестве непервого символа", () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
@@ -807,6 +887,86 @@ describe("RegForm", () => {
     const surenameInput = wrapper.find(getRegFamilySelector);
     surenameInput.setValue("Алекс   ей");
     expect(surenameInput.element.value.length).toBe(10);
+  });
+
+  it("Проверяем возможность введения тире в поле Имя в качестве непервого символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("П-А");
+    expect(surnameComponent.classes()).toContain("is-valid");
+  });
+
+  it("Проверяем возможность введения двух тире в середине в поле Имя в качестве непервого символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Па--Аа");
+    expect(surnameComponent.classes()).toContain("is-invalid");
+  });
+
+  it("Проверяем возможность введения тире в поле Имя в качестве первого символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+        },
+      ],
+    });
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("-Пыы-Аыыы");
+    expect(surnameComponent.classes()).toContain("is-invalid");
+  });
+
+  it("Проверяем возможность введения тире в поле Имя в качестве последнего символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+        },
+      ],
+    });
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompleteName",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Пыы-Аыыы-");
+    expect(surnameComponent.classes()).toContain("is-invalid");
   });
 
   it("Проверяем возможность введения пробела в поле Отчество в качестве непервого символа", () => {
@@ -829,6 +989,58 @@ describe("RegForm", () => {
     const surnameInput = surnameComponent.find("input");
     await surnameInput.setValue("П-А");
     expect(surnameComponent.classes()).toContain("is-valid");
+  });
+
+  it("Проверяем возможность введения двух тире в середине в поле Отчество в качестве непервого символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Па--Аа");
+    expect(surnameComponent.classes()).toContain("is-invalid");
+  });
+
+  it("Проверяем возможность введения тире в поле Отчество в качестве первого символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, { localVue, attachTo: document.body });
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("-П-А");
+    expect(surnameComponent.classes()).toContain("is-invalid");
+  });
+
+  it("Проверяем возможность введения тире в поле Отчество в качестве последнего символа", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const wrapper = mount(RegForm, {
+      localVue,
+      attachTo: document.body,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE: "Введите код подтверждения из SMS",
+          MESSAGE_CODE: 200,
+          GUID: "68A6B6024E3C03B39C9BFDC78D5E235B",
+        },
+      ],
+    });
+
+    const surnameComponent = wrapper.findComponent({
+      ref: "autocompletePatronymic",
+    });
+    const surnameInput = surnameComponent.find("input");
+    await surnameInput.setValue("Пыы-Аыыы-");
+    expect(surnameComponent.classes()).toContain("is-invalid");
   });
 
   it("Проверяем возможность введения пробела в поле Отчество в качестве непервого символа", () => {
