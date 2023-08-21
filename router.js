@@ -2,7 +2,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Cabinet from "~/components/Pages/Cabinet/Full";
-import Dashboard from "~/components/Pages/Cabinet/Dashboard";
 import Fluid from "~/components/Pages/Cabinet/Fluid";
 import CardPage from "~/components/Pages/Cabinet/CardPage";
 import WizardPage from "@/components/Pages/Cabinet/Wizard/Wizard";
@@ -44,11 +43,6 @@ export function createRouter() {
         component: Cabinet,
         redirect: "/cabinet/55/0/701",
         children: [
-          {
-            meta: "Cabinet",
-            path: "dashboard",
-            component: Dashboard,
-          },
           {
             meta: "Cabinet",
             path: ":idModule/:idParent/:idItem",
