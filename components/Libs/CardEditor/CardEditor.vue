@@ -204,13 +204,13 @@ export default {
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
 
-      // if (field.type === "button") {
-      //   this.$store.commit("data_card/setError", false);
-      //   this.$store.commit("data_card/setSavedError", false);
-      // }
-      // if (field.type !== "button") {
-      //   this.$store.commit("data_card/cardChanged", true);
-      // }
+      if (field.type === "button") {
+        this.$store.commit("data_card/setError", false);
+        this.$store.commit("data_card/setSavedError", false);
+      }
+      if (field.type !== "button") {
+        this.$store.commit("data_card/cardChanged", true);
+      }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
         console.log("!11");
@@ -243,7 +243,7 @@ export default {
         });
         this.actionParamsTitle = field.label;
         this.actionParamsId = parseInt(actionId, 10);
-        //
+
         if (CUR.NTYPE == 38) {
           this.saveSuccess = false;
           const data = await eventHandler(
@@ -625,9 +625,11 @@ export default {
       if (response?.status === 500 || response?.status === 520) {
         this.$store.commit("data_card/setLoading", false);
         if (this.actionSettings.isDialog) {
+          console.log("dialog");
           this.isActionApplyError = true;
           this.actionApplyErrorMessage = getErrorMessage(response.data);
         } else {
+          console.log("else");
           this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
         }

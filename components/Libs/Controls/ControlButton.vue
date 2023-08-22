@@ -14,6 +14,9 @@
         ? `Запросить код можно через ${disablePeriod}`
         : data.label
     }}
+    <!-- {{ loading }}
+    {{ isError }}
+    {{ errorMessage }} -->
     <b-spinner
       v-if="loading && clicked"
       variant="success"
@@ -64,9 +67,24 @@ export default {
           action: this.data.name.includes("Item"),
         });
       }
+      //
+      // const test = this.$store.getters["data_card/getLoading"];
+      // console.log("test:", test);
+      //
+      // const isSavedError = this.$store.getters["data_card/getSavedError"];
+      // console.log("isSavedError:", isSavedError);
+      //
+      const getError = this.$store.getters["data_card/getErrorMessage"];
+      console.log("getError:", getError);
+      //
 
-      const test = this.$store.getters["data_card/getLoading"];
-      //  console.log("test:", test);
+      if (getError !== undefined) {
+        console.log("Есть ошибка");
+      }
+
+      if (getError === undefined) {
+        console.log("Ошибки нет");
+      }
 
       const getIntervalValue = setInterval(() => {
         this.disablePeriod += 1;
@@ -94,13 +112,18 @@ export default {
     disabled() {
       return this.data.readonly;
     },
+    isError() {
+      return this.$store.getters["data_card/getSavedError"];
+    },
+    errorMessage() {
+      return this.$store.getters["data_card/getErrorMessage"];
+    },
   },
   watch: {
     loading() {
       if (!this.loading) {
         this.clicked = false;
-      }
-      // else console.log("loading");
+      } else console.log("loading:", this.loading);
     },
   },
 };
