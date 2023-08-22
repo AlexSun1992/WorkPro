@@ -35,8 +35,10 @@ export const state = () => ({
   visible: {},
   addFields: {},
   isFilterVisible: false,
+  isBtnCurNtype: false,
 });
 export const getters = {
+  getBtnCurNtype: (state) => state.isBtnCurNtype,
   getFiltersVisibleStatus: (state) => state.isFilterVisible,
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
@@ -539,6 +541,10 @@ export const actions = {
 };
 
 export const mutations = {
+  setNewLabelValue(state, payload) {
+    state.isBtnCurNtype = payload;
+  },
+
   toggleFilterVisible(state, payload) {
     state.isFilterVisible = payload;
   },

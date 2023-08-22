@@ -3,10 +3,17 @@
     type="button"
     @click="updateValue()"
     :id="data.webId ? data.webId : ''"
-    :disabled="disabled"
+    :disabled="
+      (isBtnCurLabelNeeded === true && disablePeriod <= 6 && getBtnId) ||
+      disabled
+    "
     :class="loading ? 'spinning' : ''"
   >
-    {{ data.label }}
+    {{
+      isBtnCurLabelNeeded && getBtnId
+        ? `Запросить код можно через ${disablePeriod}`
+        : data.label
+    }}
     <b-spinner
       v-if="loading && clicked"
       variant="success"
@@ -28,6 +35,7 @@ export default {
   data() {
     return {
       clicked: false,
+      disablePeriod: 0,
     };
   },
 
@@ -56,9 +64,30 @@ export default {
           action: this.data.name.includes("Item"),
         });
       }
+
+      const test = this.$store.getters["data_card/getLoading"];
+      //  console.log("test:", test);
+
+      const getIntervalValue = setInterval(() => {
+        this.disablePeriod += 1;
+        if (this.disablePeriod === 60) {
+          this.disablePeriod = 0;
+          clearInterval(getIntervalValue);
+          this.$store.commit("data_card/setNewLabelValue", false);
+        }
+      }, 1000);
     },
   },
   computed: {
+    getBtnId() {
+      if (this.data.fieldId === 51293) {
+        return true;
+      }
+      return false;
+    },
+    isBtnCurLabelNeeded() {
+      return this.$store.getters["data_card/getBtnCurNtype"];
+    },
     loading() {
       return this.$store.getters["data_card/getLoading"];
     },
@@ -71,6 +100,7 @@ export default {
       if (!this.loading) {
         this.clicked = false;
       }
+      // else console.log("loading");
     },
   },
 };
