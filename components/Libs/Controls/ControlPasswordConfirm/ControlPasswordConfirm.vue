@@ -64,7 +64,7 @@
           tabindex="-1"
           @click="visiblePSW2()"
         ></button>
-        <b-form-invalid-feedback> пароли не совпадают </b-form-invalid-feedback>
+        <b-form-invalid-feedback> Пароли не совпадают </b-form-invalid-feedback>
       </b-form-group>
     </div>
   </div>

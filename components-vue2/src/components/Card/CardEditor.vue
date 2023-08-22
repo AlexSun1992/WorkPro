@@ -423,6 +423,7 @@ export default {
     async updateValue(e) {
       this.$store.commit("data_card/setFormField", {
         fieldId: e.fieldId,
+        name: e.name,
         value: e.value,
       });
       const field = this.getForm.find((f) => f.fieldId === e.fieldId);

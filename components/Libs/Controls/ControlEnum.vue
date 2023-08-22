@@ -98,13 +98,25 @@ export default {
     },
     isDisabled() {
       if (this.data.fieldRelation) {
-        return (
-          Boolean(
-            this.$store.getters["data_card/getDataFieldByName"](
-              this.data.fieldRelation
-            )?.value?.value
-          ) === false
-        );
+        const arrayFieldRelation = this.data.fieldRelation.split(";");
+        if (arrayFieldRelation.length) {
+          const fieldsRelations =
+            this.$store.getters["data_card/getDataFieldsByNames"](
+              arrayFieldRelation
+            );
+          if (fieldsRelations) {
+            return fieldsRelations.some((item) => !item.value?.value);
+          }
+        }
+        if (!this.data.fieldRelation.split(";")) {
+          return (
+            Boolean(
+              this.$store.getters["data_card/getDataFieldByName"](
+                this.data.fieldRelation
+              )?.value?.value
+            ) === false
+          );
+        }
       }
       return false;
     },
@@ -138,9 +150,7 @@ export default {
   mounted() {
     if (this.$refs[this.selectId]) {
       this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
-        if (!this.data.fieldRelation) {
-          this.initData();
-        }
+        this.initData();
       };
     }
   },

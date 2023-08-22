@@ -70,16 +70,26 @@ export const getters = {
   getActionParams: (state) =>
     typeof state.actionParams.map === "function"
       ? state.actionParams.map((a) => {
-          if (a.fromDataCard === true) {
-            a.value = state.form.find((b) => b.name === a.name)?.value;
+          const obj = { ...a };
+          if (obj.fromDataCard === true) {
+            obj.value = state.form.find((b) => b.name === obj.name)?.value;
           }
-          return { ...a };
+          return { ...obj };
         })
       : [],
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
   getDataFieldByName: (state) => (name) =>
     state.form.find((b) => b.name === name),
+  getDataFieldsByNames: (state) => (names) =>
+    state.form.filter((b) => {
+      let name;
+      if (b.name.substring(0, 2) === `FK`) {
+        name = b.name.substring(2);
+        return names.includes(name);
+      }
+      return names.includes(b.name) && b.name !== "ID";
+    }),
   getDataByFieldRelation: (state) => (name) =>
     state.form.find((b) => b.fieldRelation === name),
   getDataFieldByType: (state) => (name) =>
@@ -474,10 +484,31 @@ export const actions = {
       let relationValue;
       let url;
       if (isRelation && fieldRelation) {
-        relationValue = getters.getDataFieldByName(fieldRelation);
-        url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
+        if (fieldRelation.split(";")) {
+          const fieldsRelations = getters
+            .getDataFieldsByNames(fieldRelation.split(";"))
+            .map((item) => ({
+              key:
+                item.name.substring(0, 2) === `FK`
+                  ? item.name.substring(2)
+                  : item.name,
+              value: item.value?.value,
+            }));
+          const objectValue = fieldsRelations.reduce((obj, item) => {
+            if (item.value) {
+              return Object.assign(obj, { [item.key]: item.value });
+            }
+            return obj;
+          }, {});
+          url = `/api/dic/55/${id}/${dic}/${state.cardId}?${new URLSearchParams(
+            objectValue
+          ).toString()}`;
+        } else {
+          relationValue = getters.getDataFieldByName(fieldRelation);
+          url = `/api/dicwf/${fieldId}/${relationValue.value.value}`;
+        }
       } else {
-        url = `/api/dic/55/${id}/${dic}`;
+        url = `/api/dic/55/${id}/${dic}/${state.cardId}`;
       }
       const data = await this.$axios.get(encodeURI(url));
       commit("setEnumOptions", { options: data.data, fieldId });
@@ -488,6 +519,22 @@ export const actions = {
         return error.response;
       }
     }
+  },
+  validateActionParams({ commit, getters }) {
+    const actionParams = getters.getActionParams;
+    if (actionParams && actionParams.length) {
+      actionParams.forEach((item) => {
+        commit("setFormField", item);
+      });
+    }
+    if (getters.getForm.find((item) => item.state === false)) {
+      commit("setSavedError", true);
+      commit("setErrorMessage", {
+        MESSAGE: "Проверьте правильность заполнения формы!",
+      });
+      return false;
+    }
+    return true;
   },
 };
 
@@ -548,7 +595,7 @@ export const mutations = {
     state.captions = captions;
   },
   setFormField(state, data) {
-    const item = state.form.find((d) => d.fieldId === data.fieldId);
+    const item = state.form.find((d) => d.name === data.name);
 
     if (item !== undefined) {
       item.value = data.value;
@@ -653,9 +700,17 @@ export const mutations = {
     state.filters = {};
   },
   clearFormRelationField(state, { name }) {
-    let currentFieldName = name;
+    let currentFieldName =
+      name.substring(0, 2) === `FK` ? name.substring(2) : name;
     while (true) {
-      const item = state.form.find((d) => d.fieldRelation === currentFieldName);
+      const item = state.form.find((d) => {
+        if (d.fieldRelation) {
+          if (d.fieldRelation.split(";")) {
+            return d.fieldRelation.split(";").includes(currentFieldName);
+          }
+        }
+        return d.fieldRelation === currentFieldName;
+      });
       if (item) {
         item.value = {};
         item.options = [];

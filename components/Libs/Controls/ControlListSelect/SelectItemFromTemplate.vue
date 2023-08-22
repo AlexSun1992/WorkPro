@@ -10,14 +10,12 @@
 
 <script>
 import FilterBlock from "../../../Pages/Cabinet/Block/FilterBlock/FilterBlock.vue";
-import ObjectsOnMap from "../../ObjectsOnMap/ObjectsOnMap.vue";
 import Loader from "./Loader.vue";
 
 export default {
   name: "SelectItemFromTemplate",
   components: {
     FilterBlock,
-    ObjectsOnMap,
     Loader,
   },
 
@@ -79,23 +77,21 @@ export default {
 
   computed: {
     dataContent: {
-      get: function () {
+      get() {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
           return block.data;
-        } else {
-          return {};
         }
+        return {};
       },
     },
     isEmptyContent: {
-      get: function () {
+      get() {
         const block = this.$store.getters["blocks/getBlockById"](this.itemId);
         if (block) {
           return !block?.data?.items.length;
-        } else {
-          return false;
         }
+        return false;
       },
     },
   },
@@ -122,7 +118,7 @@ export default {
     selectItem(value) {
       const value_prepare = { ...value.data.item };
 
-      Object.keys(value_prepare).map(function (key, index) {
+      Object.keys(value_prepare).map((key, index) => {
         if (Number.isInteger(value_prepare[key]) === false) {
           try {
             JSON.parse(value_prepare[key]);
@@ -147,7 +143,7 @@ export default {
 
   directives: {
     clickOutside: {
-      bind: function (el, binding, vnode) {
+      bind(el, binding, vnode) {
         el.clickOutsideEvent = function (event) {
           if (!(el == event.target || el.contains(event.target))) {
             vnode.context[binding.expression](event);
@@ -155,7 +151,7 @@ export default {
         };
         document.body.addEventListener("click", el.clickOutsideEvent);
       },
-      unbind: function (el) {
+      unbind(el) {
         document.body.removeEventListener("click", el.clickOutsideEvent);
       },
     },

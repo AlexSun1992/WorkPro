@@ -105,7 +105,10 @@
               />
             </b-button>
           </div>
-          <div v-if="isButtonSave" class="col-12 col-md-auto mt-3 mt-md-0">
+          <div
+            v-if="isButtonSave && !isWizard"
+            class="col-12 col-md-auto mt-3 mt-md-0"
+          >
             <b-button
               v-if="wizardButtonVisibleContinue"
               data-testid="saveButton"
@@ -117,7 +120,7 @@
               :style="isButtonDisabled"
               @click="saveDataCard(1)"
             >
-              {{ wizardButtonNameContinue }}
+              {{ wizardButtonNameSave }}
               <b-spinner
                 v-if="loading"
                 style="width: 1rem; height: 1rem"

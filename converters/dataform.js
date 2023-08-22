@@ -154,7 +154,7 @@ converter.form = async (data, params, instance) => {
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
               webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}`
+            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id ?? 0}`
           )
         );
       }
@@ -193,6 +193,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "RegNumber";
     } else if (webFields[i].IDCONTROL == 401) {
       obj.type = "CollapseGroup";
+    } else if (webFields[i].IDCONTROL == 441) {
+      obj.type = "InsuredBox";
     } else if (webFields[i].IDCONTROL == 421) {
       obj.type = "Range";
       if (webFields[i].LDIC === true) {
@@ -209,7 +211,7 @@ converter.form = async (data, params, instance) => {
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
               webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}`
+            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id ?? 0}`
           )
         );
       }
@@ -279,9 +281,7 @@ converter.form = async (data, params, instance) => {
     obj.isRelation = !(
       webFields[i].LDIC === "N" || webFields[i].LDIC === false
     );
-    obj.fieldRelation = webFields[i].SCONNECTFIELD
-      ? `FK${webFields[i].SCONNECTFIELD}`
-      : null;
+    obj.fieldRelation = webFields[i].SCONNECTFIELD ?? null;
     obj.isTab = !!data[0]._meta.SPAGECAPTION;
     if (webFields[i].NITEMDIC) {
       obj.menudic = webFields[i].NITEMDIC;
@@ -312,7 +312,7 @@ converter.form = async (data, params, instance) => {
               promisesOfOneToMany.push(
                 converter.form(
                   item.value.data,
-                  { idItem: dataCardSettings.NITEMDIC },
+                  { idItem: dataCardSettings.NITEMDIC, id: null },
                   instance
                 )
               );
@@ -334,10 +334,14 @@ converter.form = async (data, params, instance) => {
                 );
               }
             } else {
-              fieldName = item.value.config.url.replace(
-                `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${itemId}/`,
-                ""
-              );
+              fieldName = item.value.config.url
+                .replace(
+                  `/am/${
+                    zone === "free" ? "free" : "main"
+                  }/v2/dic/55/${itemId}/`,
+                  ""
+                )
+                .split("/", 1)[0];
               if (fieldName) {
                 field1 = values.find((b) =>
                   b.value ? b.value.name === fieldName : null
@@ -466,13 +470,18 @@ converter.type = (data, isReadOnly) => {
           data[j].type !== "combobox" &&
           data[i].type !== "label"
         ) {
-          copy[i].type = `enum`;
-          if (data[i].menudic) {
-            copy[i].type = `listSelect`;
-            if (data[i].fieldId === 38003) {
-              copy[i].type = `doctorSchedule`;
+          if (data[j].type === "InsuredBox") {
+            copy[i].type = "InsuredBox";
+          } else {
+            copy[i].type = `enum`;
+            if (data[i].menudic) {
+              copy[i].type = `listSelect`;
+              if (data[i].fieldId === 38003) {
+                copy[i].type = `doctorSchedule`;
+              }
             }
           }
+
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
           copy[i].dic = data[j].name;
@@ -577,6 +586,7 @@ converter.save = (data) => {
     if (
       data[i].type !== "enum" &&
       data[i].type !== "multi" &&
+      data[i].type !== "InsuredBox" &&
       data[i].type !== "listSelect" &&
       data[i].type !== "doctorSchedule"
     ) {

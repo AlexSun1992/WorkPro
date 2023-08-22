@@ -10,6 +10,8 @@ describe("Получение ближайшего значения из масс
   const arrayOfValues = [1500000, 1800000, 2000000, 2500000, 3000000, 4100000];
   const insertValue = 1700000;
   const insertMinValue = 1650000;
+  const minValue = 1550000;
+  const overValue = 3000000000;
 
   it("Получаем массив со значениями разниц между вводимым значением и имеющимися значениями", () => {
     const newArrayOfValues = getArrayDiffValueWithoutNegativeNumbers(
@@ -70,5 +72,15 @@ describe("Получение ближайшего значения из масс
   it("Получаем ближайшее значение ко введенному", () => {
     const getNearestValue = getClosestValue(arrayOfValues, insertValue);
     expect(getNearestValue).toBe(1800000);
+  });
+
+  it("Получить ближайшее значение при минимально введенной сумме", () => {
+    const getNearestValue = getClosestValue(arrayOfValues, minValue);
+    expect(getNearestValue).toBe(1500000);
+  });
+
+  it("Получить ближайшее значение при минимально введенной сумме", () => {
+    const getNearestValue = getClosestValue(arrayOfValues, overValue);
+    expect(getNearestValue).toBe(4100000);
   });
 });
