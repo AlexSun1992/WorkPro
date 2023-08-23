@@ -4,19 +4,16 @@
     @click="updateValue()"
     :id="data.webId ? data.webId : ''"
     :disabled="
-      (isBtnCurLabelNeeded === true && disablePeriod <= 6 && getBtnId) ||
+      (isBtnCurLabelNeeded === true &&
+        disablePeriod <= 60 &&
+        getBtnId &&
+        err === false) ||
       disabled
     "
     :class="loading ? 'spinning' : ''"
   >
-    {{
-      isBtnCurLabelNeeded && getBtnId
-        ? `Запросить код можно через ${disablePeriod}`
-        : data.label
-    }}
-    <!-- {{ loading }}
-    {{ isError }}
-    {{ errorMessage }} -->
+    {{ getLabel }}
+
     <b-spinner
       v-if="loading && clicked"
       variant="success"
@@ -39,12 +36,14 @@ export default {
     return {
       clicked: false,
       disablePeriod: 0,
+      error: false,
     };
   },
 
   methods: {
     async updateValue() {
       this.clicked = true;
+
       if (!this.loading && !this.disabled) {
         const fields = this.$store.getters["data_card/getForm"];
         if (typeof eventHandler === "function") {
@@ -67,36 +66,36 @@ export default {
           action: this.data.name.includes("Item"),
         });
       }
-      //
-      // const test = this.$store.getters["data_card/getLoading"];
-      // console.log("test:", test);
-      //
-      // const isSavedError = this.$store.getters["data_card/getSavedError"];
-      // console.log("isSavedError:", isSavedError);
-      //
-      const getError = this.$store.getters["data_card/getErrorMessage"];
-      console.log("getError:", getError);
-      //
 
-      if (getError !== undefined) {
-        console.log("Есть ошибка");
+      if (this.err === false) {
+        const getIntervalValue = setInterval(() => {
+          this.disablePeriod += 1;
+          if (this.disablePeriod === 60) {
+            clearInterval(getIntervalValue);
+            this.$store.commit("data_card/setNewLabelValue", false);
+            this.disablePeriod = 0;
+          }
+        }, 1000);
       }
-
-      if (getError === undefined) {
-        console.log("Ошибки нет");
-      }
-
-      const getIntervalValue = setInterval(() => {
-        this.disablePeriod += 1;
-        if (this.disablePeriod === 60) {
-          this.disablePeriod = 0;
-          clearInterval(getIntervalValue);
-          this.$store.commit("data_card/setNewLabelValue", false);
-        }
-      }, 1000);
     },
   },
+
   computed: {
+    getLabel() {
+      if (
+        this.isBtnCurLabelNeeded === true &&
+        this.err === false &&
+        this.getBtnId &&
+        this.clicked === false
+      ) {
+        return `${this.data.label + " " + this.disablePeriod}`;
+      }
+      return this.data.label;
+    },
+
+    err() {
+      return this.$store.getters["data_card/getSavedError"];
+    },
     getBtnId() {
       if (this.data.fieldId === 51293) {
         return true;
@@ -112,18 +111,12 @@ export default {
     disabled() {
       return this.data.readonly;
     },
-    isError() {
-      return this.$store.getters["data_card/getSavedError"];
-    },
-    errorMessage() {
-      return this.$store.getters["data_card/getErrorMessage"];
-    },
   },
   watch: {
     loading() {
       if (!this.loading) {
         this.clicked = false;
-      } else console.log("loading:", this.loading);
+      }
     },
   },
 };

@@ -588,11 +588,9 @@ export const mutations = {
   },
   setSavedError(state, data) {
     state.isSavedError = data;
-    console.log("setSavedError:", state.setSavedError);
   },
   setErrorMessage(state, data) {
     state.errorMessage = data;
-    console.log("setErrorMessage:", state.errorMessage);
   },
   setCopyForm(state, data) {
     state.copyForm = data;

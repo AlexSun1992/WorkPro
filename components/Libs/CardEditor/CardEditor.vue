@@ -213,7 +213,6 @@ export default {
       }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
-        console.log("!11");
         const actionId = e.value.replace("Item", "");
         let moduleId;
         let cardId;
@@ -625,11 +624,9 @@ export default {
       if (response?.status === 500 || response?.status === 520) {
         this.$store.commit("data_card/setLoading", false);
         if (this.actionSettings.isDialog) {
-          console.log("dialog");
           this.isActionApplyError = true;
           this.actionApplyErrorMessage = getErrorMessage(response.data);
         } else {
-          console.log("else");
           this.$store.commit("data_card/setSavedError", true);
           this.$store.commit("data_card/setErrorMessage", response.data);
         }
