@@ -4,7 +4,6 @@ import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import converter from "../converters/dataform";
 import { convertUploaderFilesToFormData } from "./data_card.helpers";
-import formConverter from "@/converters/dataform";
 
 export const state = () => ({
   options: [],
@@ -344,7 +343,7 @@ export const actions = {
     commit("setLoading", true);
     commit("setDisabled", true);
 
-    const body = formConverter.save(params.form);
+    const body = converter.save(params.form);
 
     try {
       await Promise.all(state.beforeSavePromises.map((func) => func()));
@@ -393,7 +392,7 @@ export const actions = {
     { relId, relActionId, rowId, actionId, body, zone }
   ) {
     const params = zone === "free" ? "?zone=free" : "";
-    const data = formConverter.save(body);
+    const data = converter.save(body);
     try {
       return await this.$axios
         .post(
