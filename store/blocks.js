@@ -3,6 +3,7 @@ import {
   updateScript,
   clearScript,
 } from "../components/EventHandler/eventHandler.helper";
+import formConverter from "@/converters/dataform";
 
 export const state = () => ({
   blocks: [],
@@ -164,7 +165,10 @@ export const actions = {
       url = `/api/list/55/${params.id}?zone=free`;
     }
     try {
-      const response = await this.$axios.post(url, params.query);
+      const response = await this.$axios.post(
+        url,
+        formConverter.cutHTMLFromQueryParams(params.query || {})
+      );
       const responseData = response.data;
       commit(
         "menu/setMenuById",
@@ -244,7 +248,7 @@ export const actions = {
     return await this.$axios
       .post(
         `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
-        body || {}
+        formConverter.save(body) || {}
       )
       .then(async (resp) => {
         if (getters.getBlockById(itemId) && actionRefresh) {
