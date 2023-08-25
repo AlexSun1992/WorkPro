@@ -5,9 +5,9 @@
     :id="data.webId ? data.webId : ''"
     :disabled="
       (isBtnCurLabelNeeded === true &&
-        disablePeriod <= 60 &&
-        getBtnId &&
-        err === false) ||
+        disablePeriod !== dataTimeOut &&
+        getElementId === true &&
+        getSavedError === false) ||
       disabled
     "
     :class="loading ? 'spinning' : ''"
@@ -35,15 +35,26 @@ export default {
   data() {
     return {
       clicked: false,
-      disablePeriod: 0,
+      disablePeriod: 60,
+      dataTimeOut: 0,
       error: false,
+      getIntervalValue: null,
     };
+  },
+
+  created() {
+    this.disablePeriod = 60;
+    clearInterval(this.getIntervalValue);
+    this.getIntervalValue = null;
   },
 
   methods: {
     async updateValue() {
       this.clicked = true;
-
+      this.disablePeriod = 60;
+      if (this.disablePeriod !== this.dataTimeOut) {
+        clearInterval(this.getIntervalValue);
+      }
       if (!this.loading && !this.disabled) {
         const fields = this.$store.getters["data_card/getForm"];
         if (typeof eventHandler === "function") {
@@ -67,13 +78,13 @@ export default {
         });
       }
 
-      if (this.err === false) {
-        const getIntervalValue = setInterval(() => {
-          this.disablePeriod += 1;
-          if (this.disablePeriod === 60) {
-            clearInterval(getIntervalValue);
+      if (this.getSavedError === false) {
+        this.getIntervalValue = setInterval(() => {
+          this.disablePeriod -= 1;
+          if (this.disablePeriod === this.dataTimeOut) {
+            clearInterval(this.getIntervalValue);
             this.$store.commit("data_card/setNewLabelValue", false);
-            this.disablePeriod = 0;
+            this.disablePeriod = 60;
           }
         }, 1000);
       }
@@ -84,24 +95,30 @@ export default {
     getLabel() {
       if (
         this.isBtnCurLabelNeeded === true &&
-        this.err === false &&
-        this.getBtnId &&
-        this.clicked === false
+        this.getSavedError === false &&
+        this.clicked === false &&
+        this.getElementId === true
       ) {
         return `${this.data.label + " " + this.disablePeriod}`;
       }
       return this.data.label;
     },
 
-    err() {
-      return this.$store.getters["data_card/getSavedError"];
-    },
-    getBtnId() {
-      if (this.data.fieldId === 51293) {
+    getElementId() {
+      const elemId = this.$store.getters["data_card/getElementId"];
+
+      const CntrlBtn = this.data.name.replace("Item", "");
+
+      if (elemId == CntrlBtn) {
         return true;
       }
       return false;
     },
+
+    getSavedError() {
+      return this.$store.getters["data_card/getSavedError"];
+    },
+
     isBtnCurLabelNeeded() {
       return this.$store.getters["data_card/getBtnCurNtype"];
     },

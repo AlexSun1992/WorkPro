@@ -36,8 +36,10 @@ export const state = () => ({
   addFields: {},
   isFilterVisible: false,
   isBtnCurNtype: false,
+  getCurrentId: null,
 });
 export const getters = {
+  getElementId: (state) => state.getCurrentId,
   getBtnCurNtype: (state) => state.isBtnCurNtype,
   getFiltersVisibleStatus: (state) => state.isFilterVisible,
   getSuggestions: (state) => state.options,
@@ -392,6 +394,7 @@ export const actions = {
     { relId, relActionId, rowId, actionId, body, zone }
   ) {
     const params = zone === "free" ? "?zone=free" : "";
+
     try {
       return await this.$axios
         .post(
@@ -543,6 +546,10 @@ export const actions = {
 export const mutations = {
   setNewLabelValue(state, payload) {
     state.isBtnCurNtype = payload;
+  },
+
+  setCurrentItemId(state, payload) {
+    state.getCurrentId = payload;
   },
 
   toggleFilterVisible(state, payload) {
