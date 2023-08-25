@@ -203,7 +203,6 @@ export default {
 
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
-      console.log("filed:", field);
       if (field.type === "button") {
         this.$store.commit("data_card/setError", false);
         this.$store.commit("data_card/setSavedError", false);
@@ -300,10 +299,7 @@ export default {
             return;
           }
         }
-        if (CUR.NTYPE === 56) {
-          this.$store.commit("data_card/setNewLabelValue", true);
-          this.$store.commit("data_card/setCurrentItemId", CUR.ID);
-        }
+
         if (this.actionSettings.isDialog) {
           this.$store.commit("data_card/setLoading", false);
           this.$bvModal.show("confirmAction");

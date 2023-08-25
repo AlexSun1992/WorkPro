@@ -4,16 +4,12 @@
     @click="updateValue()"
     :id="data.webId ? data.webId : ''"
     :disabled="
-      (isBtnCurLabelNeeded === true &&
-        disablePeriod !== dataTimeOut &&
-        getElementId === true &&
-        getSavedError === false) ||
+      (disablePeriod !== 60 && getAction === true && getSavedError === false) ||
       disabled
     "
     :class="loading ? 'spinning' : ''"
   >
     {{ getLabel }}
-
     <b-spinner
       v-if="loading && clicked"
       variant="success"
@@ -37,7 +33,6 @@ export default {
       clicked: false,
       disablePeriod: 60,
       dataTimeOut: 0,
-      error: false,
       getIntervalValue: null,
     };
   },
@@ -83,7 +78,6 @@ export default {
           this.disablePeriod -= 1;
           if (this.disablePeriod === this.dataTimeOut) {
             clearInterval(this.getIntervalValue);
-            this.$store.commit("data_card/setNewLabelValue", false);
             this.disablePeriod = 60;
           }
         }, 1000);
@@ -92,36 +86,38 @@ export default {
   },
 
   computed: {
+    getAction() {
+      const actionList = this.$store.getters["menu/flatmenu"];
+
+      const actionId = this.data.name.replace("Item", "");
+
+      const menuItem = actionList.find(
+        (item) => item.IDITEM == this.$route.params.idItem
+      );
+
+      const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
+
+      if (CUR.NTYPE === 56) {
+        return true;
+      }
+      return null;
+    },
+
     getLabel() {
       if (
-        this.isBtnCurLabelNeeded === true &&
-        this.getSavedError === false &&
-        this.clicked === false &&
-        this.getElementId === true
+        this.disablePeriod !== 60 &&
+        this.getAction === true &&
+        this.getSavedError === false
       ) {
         return `${this.data.label + " " + this.disablePeriod}`;
       }
       return this.data.label;
     },
 
-    getElementId() {
-      const elemId = this.$store.getters["data_card/getElementId"];
-
-      const CntrlBtn = this.data.name.replace("Item", "");
-
-      if (elemId == CntrlBtn) {
-        return true;
-      }
-      return false;
-    },
-
     getSavedError() {
       return this.$store.getters["data_card/getSavedError"];
     },
 
-    isBtnCurLabelNeeded() {
-      return this.$store.getters["data_card/getBtnCurNtype"];
-    },
     loading() {
       return this.$store.getters["data_card/getLoading"];
     },
