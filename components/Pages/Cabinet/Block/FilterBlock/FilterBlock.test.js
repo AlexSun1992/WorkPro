@@ -35,7 +35,7 @@ describe("Пишем компонентные тесты на FilterBlock", () =
 
   it("Проверяем отображение передаваемого property uniqueItems и наличие дефолтного класса у кнопки 'Все полисы'", () => {
     createComponent(storaNoFilters);
-    const getPasswordSelector = "[data-activeitems='11']";
+    const getPasswordSelector = "[data-activeitems='11'] > button";
     const getAllpolicesButton = wrapper.find(getPasswordSelector);
     expect(getAllpolicesButton.classes()).toContain("filter-checked");
     expect(wrapper.text()).toContain(
@@ -44,6 +44,134 @@ describe("Пишем компонентные тесты на FilterBlock", () =
       "Действующие",
       "Проекты"
     );
+  });
+
+  it("Проверяем отображение передаваемого property uniqueItems c наличием isOptional  { text: Проекты, isOptional: true } и  отсутствием элементов, которые она может отфильтровать", () => {
+    const createNewComponent = (store) => {
+      wrapper = shallowMount(FilterBlock, {
+        propsData: {
+          uniqueItems: [
+            { text: "Проекты", isOptional: true },
+            "Действующие",
+            "Архивные",
+          ],
+          propertyName: "SSTATUS",
+          itemId: "712",
+          showFilteredItemsCount: true,
+          filterType: "radiobutton",
+          allItemsButtonName: "Все полисы",
+          showButtonAll: true,
+        },
+        store,
+        mocks: {
+          $route: {
+            query: {},
+          },
+        },
+      });
+    };
+
+    createNewComponent(storaNoFilters);
+    expect(wrapper.text()).toContain("Все полисы");
+    expect(wrapper.text()).toContain("Архивные");
+    expect(wrapper.text()).toContain("Действующие");
+    expect(wrapper.text()).not.toContain("Проекты");
+  });
+
+  it("Проверяем отображение передаваемого property uniqueItems c наличием isOptional  { text: Проекты, isOptional: false } и  отсутствием элементов, которые она может отфильтровать", () => {
+    const createNewComponent = (store) => {
+      wrapper = shallowMount(FilterBlock, {
+        propsData: {
+          uniqueItems: [
+            { text: "Проекты", isOptional: false },
+            "Действующие",
+            "Архивные",
+          ],
+          propertyName: "SSTATUS",
+          itemId: "712",
+          showFilteredItemsCount: true,
+          filterType: "radiobutton",
+          allItemsButtonName: "Все полисы",
+          showButtonAll: true,
+        },
+        store,
+        mocks: {
+          $route: {
+            query: {},
+          },
+        },
+      });
+    };
+
+    createNewComponent(storaNoFilters);
+    expect(wrapper.text()).toContain("Все полисы");
+    expect(wrapper.text()).toContain("Архивные");
+    expect(wrapper.text()).toContain("Действующие");
+    expect(wrapper.text()).toContain("Проекты");
+  });
+
+  it("Проверяем отображение передаваемого property uniqueItems c наличием isOptional false на всех кнопках ", () => {
+    const createNewComponent = (store) => {
+      wrapper = shallowMount(FilterBlock, {
+        propsData: {
+          uniqueItems: [
+            { text: "Проекты", isOptional: false },
+            { text: "Действующие", isOptional: false },
+            { text: "Архивные", isOptional: false },
+          ],
+          propertyName: "SSTATUS",
+          itemId: "712",
+          showFilteredItemsCount: true,
+          filterType: "radiobutton",
+          allItemsButtonName: "Все полисы",
+          showButtonAll: true,
+        },
+        store,
+        mocks: {
+          $route: {
+            query: {},
+          },
+        },
+      });
+    };
+
+    createNewComponent(storaNoFilters);
+    expect(wrapper.text()).toContain("Все полисы");
+    expect(wrapper.text()).toContain("Архивные");
+    expect(wrapper.text()).toContain("Действующие");
+    expect(wrapper.text()).toContain("Проекты");
+  });
+
+  it("Проверяем отображение передаваемого property uniqueItems c наличием isOptional true на всех кнопках ", () => {
+    const createNewComponent = (store) => {
+      wrapper = shallowMount(FilterBlock, {
+        propsData: {
+          uniqueItems: [
+            { text: "Проекты", isOptional: true },
+            { text: "Действующие", isOptional: true },
+            { text: "Архивные", isOptional: true },
+          ],
+          propertyName: "SSTATUS",
+          itemId: "712",
+          showFilteredItemsCount: true,
+          filterType: "radiobutton",
+          allItemsButtonName: "Все полисы",
+          showButtonAll: true,
+        },
+        store,
+        mocks: {
+          $route: {
+            query: {},
+          },
+        },
+      });
+    };
+
+    createNewComponent(storaNoFilters);
+    expect(wrapper.text()).toContain("Все полисы");
+    expect(wrapper.text()).toContain("Архивные");
+    expect(wrapper.text()).toContain("Действующие");
+    expect(wrapper.text()).not.toContain("Проекты");
   });
 
   it("Проверяем наличие атрибута disabled у кнопки фильтра 'Проекты',а также url(не должен содержать переданных фильтров)", () => {

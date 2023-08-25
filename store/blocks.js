@@ -31,9 +31,11 @@ export const getters = {
   getRequestStatus: (state) => state.requestFinish,
 
   getUnfilteredBlockById: (state) => (id) =>
-    state.blocks.find((b) => b.blockId === parseInt(id)),
+    state.blocks.find((b) => b.blockId === parseInt(id, 10)),
   getBlockById: (state) => (id) => {
-    const currentBlock = state.blocks.find((b) => b.blockId == parseInt(id));
+    const currentBlock = state.blocks.find(
+      (b) => b.blockId == parseInt(id, 10)
+    );
 
     if (currentBlock) {
       const items = currentBlock.data.items
@@ -207,7 +209,7 @@ export const actions = {
           },
           { root: true }
         );
-        commit("addBlock", { blockId: parseInt(itemId), data: res.data });
+        commit("addBlock", { blockId: parseInt(itemId, 10), data: res.data });
         if (itemId === params.idItem) {
           commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
             root: true,
@@ -219,7 +221,10 @@ export const actions = {
     await this.$axios
       .get(`/api/wizardlist/55/${menuId}/${cardId}`)
       .then((res) => {
-        commit("updateBlock", { blockId: parseInt(menuId), data: res.data });
+        commit("updateBlock", {
+          blockId: parseInt(menuId, 10),
+          data: res.data,
+        });
         commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
           root: true,
         });
@@ -232,7 +237,7 @@ export const actions = {
         )
       : `{}`;
     await this.$axios.get(`/api/list/55/${id}/${filters}`).then((res) => {
-      commit("updateBlock", { blockId: parseInt(id), data: res.data });
+      commit("updateBlock", { blockId: parseInt(id, 10), data: res.data });
       commit("menu/setBreadCrumbs", res.data?.breadCrumbs, {
         root: true,
       });
