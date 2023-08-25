@@ -228,9 +228,11 @@ export default {
     setQueryURL() {
       const urlObject = new URL(window.location.href);
 
-      [...urlObject.searchParams.keys()].forEach((propertyName) => {
-        urlObject.searchParams.delete(propertyName);
-      });
+      [...urlObject.searchParams.keys()]
+        .filter((item) => item !== "q")
+        .forEach((propertyName) => {
+          urlObject.searchParams.delete(propertyName);
+        });
 
       this.$store.getters["blocks/getFilters"].forEach((item) => {
         const { propertyName, filter } = item;
@@ -238,9 +240,7 @@ export default {
           urlObject.searchParams.append(propertyName, filterValue);
         });
       });
-
       window.history.replaceState(null, null, urlObject);
-
       const url = `${this.$route.path}${urlObject.search}`;
       this.$store.commit("menu/setQueriesUrlByIdMenu", {
         ...this.$route.params,

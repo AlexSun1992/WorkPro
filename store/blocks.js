@@ -3,6 +3,7 @@ import {
   updateScript,
   clearScript,
 } from "../components/EventHandler/eventHandler.helper";
+import { isStringInItem } from "../components/Pages/Cabinet/Block/FilterBlock/SearchBlock.helper";
 
 export const state = () => ({
   blocks: [],
@@ -15,6 +16,7 @@ export const state = () => ({
   serverFilters: [],
   searchParams: null,
   PoutValue: "",
+  searchValue: null,
   requestFinish: false,
   isLoadedScript: false,
   isCollapseVisible: true,
@@ -49,6 +51,12 @@ export const getters = {
             isItemShow = filter.filter.includes(value);
           });
           return isItemShow;
+        })
+        .filter((item) => {
+          if (state.searchValue) {
+            return isStringInItem(item, state.searchValue);
+          }
+          return true;
         })
         .filter((item) => {
           if (
@@ -380,5 +388,8 @@ export const mutations = {
   },
   setSearchParams(state, data) {
     state.searchParams = data;
+  },
+  setSearchBlock(state, data) {
+    state.searchValue = data;
   },
 };
