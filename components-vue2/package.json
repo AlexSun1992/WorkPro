@@ -6,7 +6,7 @@
     "serve": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "component": "node invalidateCache.js && cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build --target lib --inline-vue --mode production --name components src/main.js"
+    "component": "node ../invalidateCache.js && cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build --target lib --inline-vue --mode production --name components src/main.js"
   },
   "dependencies": {
     "@sentry/vue": "^7.11.1",
