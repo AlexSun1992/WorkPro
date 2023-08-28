@@ -596,6 +596,9 @@ converter.save = (data) => {
             data[i].value !== null && data[i].value !== undefined
               ? data[i].value
               : "NULL";
+          if (typeof data[i].value === "string" && data[i].value !== "") {
+            res[data[i].name] = data[i].value.replace(/(<([^>]+)>)/gi, "");
+          }
           if (data[i].type === "Uploader") {
             if (res[data[i].name] !== "NULL") {
               res[data[i].name] =
@@ -695,5 +698,15 @@ converter.save = (data) => {
 
   return res;
 };
+
+converter.cutHTMLFromQueryParams = (data) =>
+  Object.fromEntries(
+    Object.entries(data).map(([key, val]) => [
+      key,
+      typeof val === "string" && val !== ""
+        ? val.replace(/(<([^>]+)>)/gi, "")
+        : val,
+    ])
+  );
 
 export default converter;
