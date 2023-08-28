@@ -8,7 +8,7 @@
   >
     {{ getLabel }}
     <b-spinner
-      v-if="isLoading && isClicked"
+      v-if="isLoading && needShowSpinner"
       variant="success"
       label="Spinning"
     ></b-spinner>
@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      isClicked: false,
+      needShowSpinner: false,
       disablePeriod: 0,
       timerId: null,
     };
@@ -40,38 +40,35 @@ export default {
 
   methods: {
     async updateValue() {
-      this.isClicked = true;
-      try {
-        if (!this.isLoading && !this.disabled) {
-          const fields = this.$store.getters["data_card/getForm"];
-          if (typeof eventHandler === "function") {
-            const updatedFields = await eventHandler(
-              fields.map((item) => ({ ...item })),
-              this.data,
-              "action"
-            );
-            if (updatedFields) {
-              this.$store.commit("data_card/setForm", updatedFields || fields);
-              const isError = updatedFields.some((item) => item.error === true);
-              if (isError) {
-                return;
-              }
+      this.needShowSpinner = true;
+
+      if (!this.isLoading && !this.disabled) {
+        const fields = this.$store.getters["data_card/getForm"];
+        if (typeof eventHandler === "function") {
+          const updatedFields = await eventHandler(
+            fields.map((item) => ({ ...item })),
+            this.data,
+            "action"
+          );
+          if (updatedFields) {
+            this.$store.commit("data_card/setForm", updatedFields || fields);
+            const isError = updatedFields.some((item) => item.error === true);
+            if (isError) {
+              return;
             }
           }
-          this.$emit("update", {
-            fieldId: this.data.fieldId,
-            value: this.data.name,
-            action: this.data.name.includes("Item"),
-          });
         }
-      } finally {
-        this.isClicked = false;
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          value: this.data.name,
+          action: this.data.name.includes("Item"),
+        });
       }
     },
   },
 
   computed: {
-    getAction() {
+    isActionWithPause() {
       const actionList = this.$store.getters["menu/flatmenu"];
 
       const actionId = this.data.name.replace("Item", "");
@@ -87,15 +84,11 @@ export default {
       if (CUR.NTYPE === 56) {
         return true;
       }
-      return null;
+      return false;
     },
 
     getLabel() {
-      if (
-        this.disablePeriod > 0 &&
-        this.getAction === true &&
-        this.getSavedError === false
-      ) {
+      if (this.disablePeriod > 0) {
         return `${this.data.label} (${this.disablePeriod} сек.)`;
       }
       return this.data.label;
@@ -114,25 +107,28 @@ export default {
     },
     isDisabled() {
       return (
-        (this.disablePeriod > 0 &&
-          this.getAction === true &&
-          this.getSavedError === false) ||
+        this.disablePeriod > 0 ||
         this.data.readonly ||
         this.isLoading ||
-        this.isClicked
+        this.needShowSpinner
       );
     },
   },
   watch: {
     isLoading() {
       if (!this.isLoading) {
-        if (this.getSavedError === false) {
-          this.disablePeriod = DEFAULT_DISABLE_PERIOD;
-          clearInterval(this.timerId);
-          this.timerId = setInterval(() => {
-            this.disablePeriod -= 1;
-          }, 1000);
-        }
+        this.needShowSpinner = false;
+      }
+      if (
+        this.isActionWithPause &&
+        !this.isLoading &&
+        this.getSavedError === false
+      ) {
+        this.disablePeriod = DEFAULT_DISABLE_PERIOD;
+        clearInterval(this.timerId);
+        this.timerId = setInterval(() => {
+          this.disablePeriod -= 1;
+        }, 1000);
       }
     },
   },
