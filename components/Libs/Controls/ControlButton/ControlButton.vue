@@ -8,7 +8,7 @@
   >
     {{ getLabel }}
     <b-spinner
-      v-if="isLoading && clicked"
+      v-if="isLoading && isClicked"
       variant="success"
       label="Spinning"
     ></b-spinner>
@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      clicked: false,
+      isClicked: false,
       disablePeriod: 0,
       timerId: null,
     };
@@ -40,7 +40,7 @@ export default {
 
   methods: {
     async updateValue() {
-      this.clicked = true;
+      this.isClicked = true;
       try {
         if (!this.isLoading && !this.disabled) {
           const fields = this.$store.getters["data_card/getForm"];
@@ -65,7 +65,7 @@ export default {
           });
         }
       } finally {
-        this.clicked = false;
+        this.isClicked = false;
       }
     },
   },
@@ -119,7 +119,7 @@ export default {
           this.getSavedError === false) ||
         this.data.readonly ||
         this.isLoading ||
-        this.clicked
+        this.isClicked
       );
     },
   },
