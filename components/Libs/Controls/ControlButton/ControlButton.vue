@@ -19,6 +19,7 @@
 </template>
 
 <script>
+const DEFAULT_DISABLE_PERIOD = 60;
 export default {
   name: "ControlButton",
   props: {
@@ -38,7 +39,7 @@ export default {
   },
 
   created() {
-    this.disablePeriod = 60;
+    this.disablePeriod = DEFAULT_DISABLE_PERIOD;
     clearInterval(this.getIntervalValue);
     this.getIntervalValue = null;
   },
@@ -46,7 +47,7 @@ export default {
   methods: {
     async updateValue() {
       this.clicked = true;
-      this.disablePeriod = 60;
+      this.disablePeriod = DEFAULT_DISABLE_PERIOD;
       if (this.disablePeriod !== this.dataTimeOut) {
         clearInterval(this.getIntervalValue);
       }
@@ -78,7 +79,7 @@ export default {
           this.disablePeriod -= 1;
           if (this.disablePeriod === this.dataTimeOut) {
             clearInterval(this.getIntervalValue);
-            this.disablePeriod = 60;
+            this.disablePeriod = DEFAULT_DISABLE_PERIOD;
           }
         }, 1000);
       }
@@ -105,7 +106,7 @@ export default {
 
     getLabel() {
       if (
-        this.disablePeriod !== 60 &&
+        this.disablePeriod !== DEFAULT_DISABLE_PERIOD &&
         this.getAction === true &&
         this.getSavedError === false
       ) {
