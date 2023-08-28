@@ -203,7 +203,6 @@ export default {
 
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
-
       if (field.type === "button") {
         this.$store.commit("data_card/setError", false);
         this.$store.commit("data_card/setSavedError", false);
@@ -213,7 +212,6 @@ export default {
       }
       if (field.type === "button" && e.action) {
         this.isActionApplyError = false;
-
         const actionId = e.value.replace("Item", "");
         let moduleId;
         let cardId;
@@ -242,8 +240,8 @@ export default {
           cardId,
         });
         this.actionParamsTitle = field.label;
-
         this.actionParamsId = parseInt(actionId, 10);
+
         if (CUR.NTYPE == 38) {
           this.saveSuccess = false;
           const data = await eventHandler(
@@ -301,6 +299,7 @@ export default {
             return;
           }
         }
+
         if (this.actionSettings.isDialog) {
           this.$store.commit("data_card/setLoading", false);
           this.$bvModal.show("confirmAction");
@@ -617,6 +616,7 @@ export default {
           this.$store.getters["data_card/getFormParams"]?.idCard,
         body: this.actionParams,
       });
+
       this.actionFormDisabled = false;
       if (response?.status === 500 || response?.status === 520) {
         this.$store.commit("data_card/setLoading", false);
