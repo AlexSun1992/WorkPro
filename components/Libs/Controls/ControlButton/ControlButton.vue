@@ -33,24 +33,22 @@ export default {
     return {
       clicked: false,
       disablePeriod: DEFAULT_DISABLE_PERIOD,
-      dataTimeOut: 0,
-      getIntervalValue: null,
+
+      timerId: null,
     };
   },
 
-  created() {
+  beforeDestroy() {
     this.disablePeriod = DEFAULT_DISABLE_PERIOD;
-    clearInterval(this.getIntervalValue);
-    this.getIntervalValue = null;
+    clearInterval(this.timerId);
+    this.timerId = null;
   },
 
   methods: {
     async updateValue() {
       this.clicked = true;
       this.disablePeriod = DEFAULT_DISABLE_PERIOD;
-      if (this.disablePeriod !== this.dataTimeOut) {
-        clearInterval(this.getIntervalValue);
-      }
+
       if (!this.loading && !this.disabled) {
         const fields = this.$store.getters["data_card/getForm"];
         if (typeof eventHandler === "function") {
@@ -75,10 +73,11 @@ export default {
       }
 
       if (this.getSavedError === false) {
-        this.getIntervalValue = setInterval(() => {
+        clearInterval(this.timerId);
+        this.timerId = setInterval(() => {
           this.disablePeriod -= 1;
-          if (this.disablePeriod === this.dataTimeOut) {
-            clearInterval(this.getIntervalValue);
+          if (this.disablePeriod === 0) {
+            clearInterval(this.timerId);
             this.disablePeriod = DEFAULT_DISABLE_PERIOD;
           }
         }, 1000);
