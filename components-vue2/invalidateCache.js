@@ -7,7 +7,7 @@ const logger = createLogger({
   transports: [new transports.Console()],
 });
 
-const PATH = "/home/node/app/components-vue2/src/components/Card/CacheDataLocal";
+const PATH = "../components-vue2/src/components/Card/CacheDataLocal";
 
 const URL = "https://reso.ru";
 function invalidate(pathToDirectory) {
