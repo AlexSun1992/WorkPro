@@ -42,7 +42,7 @@ import ControlTimestamp from "./ControlTimestamp";
 import ControlPeriod from "./ControlPeriod";
 import ControlClob from "./ControlText";
 import ControlEnum from "./ControlEnum";
-import ControlButton from "./ControlButton";
+import ControlButton from "./ControlButton/ControlButton";
 import ControlLink from "./ControlLink";
 import ControlLabel from "./ControlLabel";
 import ControlSplitter from "./ControlSplitter";
