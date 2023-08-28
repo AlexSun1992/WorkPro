@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       clicked: false,
-      disablePeriod: 60,
+      disablePeriod: DEFAULT_DISABLE_PERIOD,
       dataTimeOut: 0,
       getIntervalValue: null,
     };
