@@ -36,7 +36,6 @@ export default {
 
   beforeDestroy() {
     clearInterval(this.timerId);
-    this.disablePeriod = DEFAULT_DISABLE_PERIOD;
   },
 
   methods: {
