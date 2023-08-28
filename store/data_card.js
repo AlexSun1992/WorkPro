@@ -343,13 +343,15 @@ export const actions = {
     commit("setLoading", true);
     commit("setDisabled", true);
 
+    const body = converter.save(params.form);
+
     try {
       await Promise.all(state.beforeSavePromises.map((func) => func()));
       const resp = await this.$axios.post(
         `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
           params.relId
         }${params.zone === "free" ? "?zone=free" : ""}`,
-        params.form
+        body
       );
 
       commit("setSavedError", false);
@@ -390,11 +392,12 @@ export const actions = {
     { relId, relActionId, rowId, actionId, body, zone }
   ) {
     const params = zone === "free" ? "?zone=free" : "";
+    const data = converter.save(body);
     try {
       return await this.$axios
         .post(
           `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}${params}`,
-          body || {}
+          data || {}
         )
         .then((resp) => {
           commit("setSavedError", false);

@@ -4,41 +4,50 @@
       v-if="filterType !== 'query' && filterType !== 'combobox'"
       class="filterblock"
     >
-      <button
+      <div
         v-if="showButtonAll"
         :data-activeitems="
           showFilteredItemsCount === true
             ? getUnfilteredItemsCount.length
             : null
         "
-        :class="{
-          'filter-checked': isAllFilters,
-        }"
-        @click="clearFilter(propertyName)"
       >
-        {{ allItemsButtonName }}
-      </button>
-      <button
-        v-for="item in filterItems"
-        :key="item.name"
-        :data-activeitems="
-          showFilteredItemsCount === true
-            ? getSameTypeUnitsCount(getUnfilteredItemsCount, item.name)
-            : null
-        "
-        :disabled="
-          getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) === 0
-            ? true
-            : false
-        "
-        :class="{
-          'filter-checked': item.isChecked,
-        }"
-        @click="toggleFilter(propertyName, item.name)"
-      >
-        {{ item.name }}
-      </button>
-      <slot></slot>
+        <button
+          :class="{
+            'filter-checked': isAllFilters,
+          }"
+          @click="clearFilter(propertyName)"
+        >
+          {{ allItemsButtonName }}
+        </button>
+      </div>
+      <div v-for="item in filterItems" :key="item.text">
+        <button
+          v-if="
+            !item.isOptional ||
+            getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) > 0
+          "
+          :data-activeitems="
+            showFilteredItemsCount === true
+              ? getSameTypeUnitsCount(getUnfilteredItemsCount, item.name)
+              : null
+          "
+          :disabled="
+            getSameTypeUnitsCount(getUnfilteredItemsCount, item.name) === 0
+              ? true
+              : false
+          "
+          :class="{
+            'filter-checked': item.isChecked,
+          }"
+          @click="toggleFilter(propertyName, item.name)"
+        >
+          {{ item.name }}
+        </button>
+      </div>
+      <div>
+        <slot></slot>
+      </div>
     </div>
 
     <div v-else-if="filterType === 'combobox'" class="search">
@@ -128,15 +137,27 @@ export default {
 
       if (block) {
         const items = block.data.items.map((item) => item[this.propertyName]);
+
         const uniqueItems = this.uniqueItems || Array.from(new Set(items));
+
         const filter =
           this.$store.getters["blocks/getFilters"].find(
             (item) => item.propertyName === this.propertyName
           )?.filter || [];
-        return uniqueItems.map((name) => ({
-          name,
-          isChecked: filter.includes(name),
-        }));
+
+        return uniqueItems.map((name) => {
+          if (typeof name === "object") {
+            return {
+              name: name.text,
+              isOptional: name.isOptional,
+              isChecked: filter.includes(name.text),
+            };
+          }
+          return {
+            name,
+            isChecked: filter.includes(name),
+          };
+        });
       }
       return [];
     },
@@ -145,6 +166,7 @@ export default {
       const allBlocks = this.$store.getters["blocks/getUnfilteredBlockById"](
         this.itemId
       );
+
       if (allBlocks) {
         return allBlocks.data.items;
       }
@@ -228,9 +250,11 @@ export default {
     setQueryURL() {
       const urlObject = new URL(window.location.href);
 
-      [...urlObject.searchParams.keys()].forEach((propertyName) => {
-        urlObject.searchParams.delete(propertyName);
-      });
+      [...urlObject.searchParams.keys()]
+        .filter((item) => item !== "q")
+        .forEach((propertyName) => {
+          urlObject.searchParams.delete(propertyName);
+        });
 
       this.$store.getters["blocks/getFilters"].forEach((item) => {
         const { propertyName, filter } = item;
@@ -238,9 +262,7 @@ export default {
           urlObject.searchParams.append(propertyName, filterValue);
         });
       });
-
       window.history.replaceState(null, null, urlObject);
-
       const url = `${this.$route.path}${urlObject.search}`;
       this.$store.commit("menu/setQueriesUrlByIdMenu", {
         ...this.$route.params,
@@ -252,10 +274,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.filterblock > .button:hover,
-.filterblock > button:hover,
-.filterblock > .button,
-.filterblock > button {
+.filterblock > div {
+  display: inline-block;
+}
+.filterblock .button:hover,
+.filterblock .button:hover,
+.filterblock .button,
+.filterblock button {
   margin-bottom: 1rem;
   background: #fff;
   border-radius: 100px;
@@ -311,10 +336,13 @@ export default {
     overflow-x: auto;
   }
 
-  .filter-mob-flex .filterblock > button {
+  .filter-mob-flex .filterblock > div {
     white-space: nowrap;
     width: auto;
     overflow: visible;
+  }
+  .filterblock > div {
+    display: flex;
   }
 }
 </style>

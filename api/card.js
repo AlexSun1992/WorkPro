@@ -349,8 +349,7 @@ router.post(
             req.cookies["auth._token.local"];
         }
       }
-      const body = formConverter.save(req.body);
-
+      const body = req.body;
       const url = `${
         req.query.zone === "free" ? consts.FREEACTIONEXEC : consts.ACTIONEXEC
       }/${req.params.rowId}/${req.params.actionId}${
@@ -418,7 +417,7 @@ router.post("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
       : null;
 
     const typeReq = req.params.id === 0 ? "post" : "put";
-    const body = formConverter.save(req.body);
+    const body = req.body;
     const url = `${
       req.query.zone === "free" ? consts.FREEDATACARD : consts.DATACARD
     }/${req.params.idModule}/${req.params.idItem}/${req.params.id}${
