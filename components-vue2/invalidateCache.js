@@ -1,6 +1,14 @@
 const fs = require("fs");
+const { createLogger, format, transports } = require("winston");
 
-const PATH = "./components-vue2/src/components/Card/CacheDataLocal";
+const { combine, timestamp } = format;
+const logger = createLogger({
+  format: combine(timestamp(), format.splat(), format.json()),
+  transports: [new transports.Console()],
+});
+
+const PATH = "./src/components/Card/CacheDataLocal";
+
 const URL = "https://reso.ru";
 function invalidate(pathToDirectory) {
   fs.readdir(pathToDirectory, { withFileTypes: true }, async (error, files) => {
@@ -23,10 +31,9 @@ function invalidate(pathToDirectory) {
           );
           if (card.ok) {
             const data = await card.json();
-            fs.writeFileSync(
-              `${PATH}/${menu}/cache${menu}.json`,
-              JSON.stringify(data)
-            );
+            const file = `${PATH}/${menu}/cache${menu}.json`;
+            fs.writeFileSync(file, JSON.stringify(data));
+            logger.log("info", `Файл ${file} успешно сохранен`);
           } else {
             throw new Error("Не удалось загрузить карточку");
           }
