@@ -7,7 +7,7 @@ const logger = createLogger({
   transports: [new transports.Console()],
 });
 
-const PATH = "./components-vue2/src/components/Card/CacheDataLocal";
+const PATH = "./src/components/Card/CacheDataLocal";
 const URL = "https://reso.ru";
 function invalidate(pathToDirectory) {
   fs.readdir(pathToDirectory, { withFileTypes: true }, async (error, files) => {
