@@ -42,28 +42,31 @@ export default {
   methods: {
     async updateValue() {
       this.clicked = true;
-
-      if (!this.isLoading && !this.disabled) {
-        const fields = this.$store.getters["data_card/getForm"];
-        if (typeof eventHandler === "function") {
-          const updatedFields = await eventHandler(
-            fields.map((item) => ({ ...item })),
-            this.data,
-            "action"
-          );
-          if (updatedFields) {
-            this.$store.commit("data_card/setForm", updatedFields || fields);
-            const isError = updatedFields.some((item) => item.error === true);
-            if (isError) {
-              return;
+      try {
+        if (!this.isLoading && !this.disabled) {
+          const fields = this.$store.getters["data_card/getForm"];
+          if (typeof eventHandler === "function") {
+            const updatedFields = await eventHandler(
+              fields.map((item) => ({ ...item })),
+              this.data,
+              "action"
+            );
+            if (updatedFields) {
+              this.$store.commit("data_card/setForm", updatedFields || fields);
+              const isError = updatedFields.some((item) => item.error === true);
+              if (isError) {
+                return;
+              }
             }
           }
+          this.$emit("update", {
+            fieldId: this.data.fieldId,
+            value: this.data.name,
+            action: this.data.name.includes("Item"),
+          });
         }
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          value: this.data.name,
-          action: this.data.name.includes("Item"),
-        });
+      } finally {
+        this.clicked = false;
       }
     },
   },
@@ -124,7 +127,6 @@ export default {
   watch: {
     isLoading() {
       if (!this.isLoading) {
-        this.clicked = false;
         if (this.getSavedError === false) {
           this.disablePeriod = DEFAULT_DISABLE_PERIOD;
           clearInterval(this.timerId);
