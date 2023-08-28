@@ -3,15 +3,12 @@
     type="button"
     @click="updateValue()"
     :id="data.webId ? data.webId : ''"
-    :disabled="
-      (disablePeriod !== 60 && getAction === true && getSavedError === false) ||
-      disabled
-    "
-    :class="loading ? 'spinning' : ''"
+    :disabled="isDisabled"
+    :class="isLoading ? 'spinning' : ''"
   >
     {{ getLabel }}
     <b-spinner
-      v-if="loading && clicked"
+      v-if="isLoading && clicked"
       variant="success"
       label="Spinning"
     ></b-spinner>
@@ -32,24 +29,21 @@ export default {
   data() {
     return {
       clicked: false,
-      disablePeriod: DEFAULT_DISABLE_PERIOD,
-
+      disablePeriod: 0,
       timerId: null,
     };
   },
 
   beforeDestroy() {
-    this.disablePeriod = DEFAULT_DISABLE_PERIOD;
     clearInterval(this.timerId);
-    this.timerId = null;
+    this.disablePeriod = DEFAULT_DISABLE_PERIOD;
   },
 
   methods: {
     async updateValue() {
       this.clicked = true;
-      this.disablePeriod = DEFAULT_DISABLE_PERIOD;
 
-      if (!this.loading && !this.disabled) {
+      if (!this.isLoading && !this.disabled) {
         const fields = this.$store.getters["data_card/getForm"];
         if (typeof eventHandler === "function") {
           const updatedFields = await eventHandler(
@@ -71,17 +65,6 @@ export default {
           action: this.data.name.includes("Item"),
         });
       }
-
-      if (this.getSavedError === false) {
-        clearInterval(this.timerId);
-        this.timerId = setInterval(() => {
-          this.disablePeriod -= 1;
-          if (this.disablePeriod === 0) {
-            clearInterval(this.timerId);
-            this.disablePeriod = DEFAULT_DISABLE_PERIOD;
-          }
-        }, 1000);
-      }
     },
   },
 
@@ -92,10 +75,12 @@ export default {
       const actionId = this.data.name.replace("Item", "");
 
       const menuItem = actionList.find(
-        (item) => item.IDITEM == this.$route.params.idItem
+        (item) => item.IDITEM === Number(this.$route.params.idItem)
       );
 
-      const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
+      const CUR = menuItem.ACTIONSCUR.find(
+        (item) => item.ID === Number(actionId)
+      );
 
       if (CUR.NTYPE === 56) {
         return true;
@@ -105,11 +90,11 @@ export default {
 
     getLabel() {
       if (
-        this.disablePeriod !== DEFAULT_DISABLE_PERIOD &&
+        this.disablePeriod > 0 &&
         this.getAction === true &&
         this.getSavedError === false
       ) {
-        return `${this.data.label + " " + this.disablePeriod}`;
+        return `${this.data.label} (${this.disablePeriod} сек.)`;
       }
       return this.data.label;
     },
@@ -118,17 +103,35 @@ export default {
       return this.$store.getters["data_card/getSavedError"];
     },
 
-    loading() {
+    getFlatMenu() {
+      return this.$store.getters["data_card/flatmenu"];
+    },
+
+    isLoading() {
       return this.$store.getters["data_card/getLoading"];
     },
-    disabled() {
-      return this.data.readonly;
+    isDisabled() {
+      return (
+        (this.disablePeriod > 0 &&
+          this.getAction === true &&
+          this.getSavedError === false) ||
+        this.data.readonly ||
+        this.isLoading ||
+        this.clicked
+      );
     },
   },
   watch: {
-    loading() {
-      if (!this.loading) {
+    isLoading() {
+      if (!this.isLoading) {
         this.clicked = false;
+        if (this.getSavedError === false) {
+          this.disablePeriod = DEFAULT_DISABLE_PERIOD;
+          clearInterval(this.timerId);
+          this.timerId = setInterval(() => {
+            this.disablePeriod -= 1;
+          }, 1000);
+        }
       }
     },
   },
