@@ -99,6 +99,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.search_input {
+  position: relative;
+}
 .search_input input {
   padding-left: 49px;
   padding-right: 49px;
