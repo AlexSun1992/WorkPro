@@ -107,6 +107,7 @@ export default {
         }
         return result;
       } catch (err) {
+        console.error(err);
         this.$bvToast.toast(getErrorMessage(err.response.data.MESSAGE), {
           title: "",
           variant: "danger",
