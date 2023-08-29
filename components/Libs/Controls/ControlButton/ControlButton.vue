@@ -55,6 +55,7 @@ export default {
             const isError = updatedFields.some((item) => item.error === true);
             if (isError) {
               this.needShowSpinner = false;
+
               return;
             }
           }

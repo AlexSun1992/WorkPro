@@ -5385,3 +5385,6 @@ ymaps[class*="balloon__close-button"] {
   background: url(/img/icon-r-c-checked.svg) 0px 0px no-repeat;
   padding-top: 20px;
 }
+.autocomplete[date-expanded="true"] {
+  z-index: 2;
+}
