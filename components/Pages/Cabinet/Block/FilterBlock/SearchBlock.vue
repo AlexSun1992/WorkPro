@@ -105,7 +105,7 @@ export default {
 .search_input input {
   padding-left: 49px;
   padding-right: 49px;
-  background: #fff url(/img/icon-search.svg) 25px 50% no-repeat;
+  background: #fff url(/img/icon-search.svg) 15px 50% no-repeat;
 }
 .search_input button.search-clear {
   position: absolute;
