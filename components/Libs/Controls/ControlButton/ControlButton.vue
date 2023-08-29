@@ -42,7 +42,7 @@ export default {
     async updateValue() {
       this.needShowSpinner = true;
 
-      if (!this.isLoading && !this.disabled) {
+      if (!this.isLoading && !this.isDisabled) {
         const fields = this.$store.getters["data_card/getForm"];
         if (typeof eventHandler === "function") {
           const updatedFields = await eventHandler(
@@ -55,7 +55,6 @@ export default {
             const isError = updatedFields.some((item) => item.error === true);
             if (isError) {
               this.needShowSpinner = false;
-
               return;
             }
           }
