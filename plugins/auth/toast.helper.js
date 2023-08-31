@@ -75,7 +75,11 @@ export function getErrorMessage(errorMessage, h) {
       getErrorTextWithBrackets.match(/\[.+?\]/gs);
 
     const getStringFromErrorText = transformErrorTextToArray.join("");
-    if (getErrorTextWithBrackets === getStringFromErrorText) {
+
+    if (
+      getErrorTextWithBrackets === getStringFromErrorText ||
+      getErrorTextWithBrackets.replaceAll(" \n", "") === getStringFromErrorText
+    ) {
       const getStringMessageWithErrBrackets = stringWithBrackets[0];
       const getArrWithErrBrackets =
         getStringMessageWithErrBrackets.match(/\[.+?\]/s);
