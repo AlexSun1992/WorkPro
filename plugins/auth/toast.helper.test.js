@@ -299,4 +299,12 @@ describe("Модуль вывода сообщения об ошибке", () =>
       "Приносим извинения, в Личном Кабинете что-то пошло не так."
     );
   });
+
+  it("определяет текст ошибки, обёрнутый в системную", () => {
+    const errorMessageText =
+      'ORA-20105: ORA-20105: [Ошибка] \n[Метод: "SELECT v4.osagoutils_client.OsagoCalcVisibleMethod(:pId, :psParams2) AS sResult FROM DUAL"]\nORA-06512: на "MOBILE.AMUTILS2", line 288\nORA-06512: на "MOBILE.AMUTILS2", line 544\nORA-06512: на "MOBILE.AMUTILS2", line 452\nORA-06512: на line 1\n';
+    const errorMessage = getErrorMessage(errorMessageText);
+
+    expect(errorMessage).toBe("Ошибка");
+  });
 });
