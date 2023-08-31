@@ -78,7 +78,7 @@ export function getErrorMessage(errorMessage, h) {
 
     if (
       getErrorTextWithBrackets === getStringFromErrorText ||
-      getErrorTextWithBrackets.replaceAll(" \n", "") === getStringFromErrorText
+      getErrorTextWithBrackets.replace(" \n", "") === getStringFromErrorText
     ) {
       const getStringMessageWithErrBrackets = stringWithBrackets[0];
       const getArrWithErrBrackets =
