@@ -692,8 +692,10 @@ export const mutations = {
     state.cardCaption = data;
   },
   clearFormData(state) {
-    state.captions = null;
-    state.form = [];
+    if (state.cardRelId !== "0") {
+      state.captions = null;
+      state.form = [];
+    }
   },
   clearFormField(state, data) {
     const item = state.form.find((d) => d.fieldId === data.fieldId);
