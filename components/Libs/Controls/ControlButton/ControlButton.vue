@@ -42,7 +42,7 @@ export default {
     async updateValue() {
       this.needShowSpinner = true;
 
-      if (!this.isLoading && !this.disabled) {
+      if (!this.isLoading && !this.isDisabled) {
         const fields = this.$store.getters["data_card/getForm"];
         if (typeof eventHandler === "function") {
           const updatedFields = await eventHandler(
@@ -106,12 +106,7 @@ export default {
       return this.$store.getters["data_card/getLoading"];
     },
     isDisabled() {
-      return (
-        this.disablePeriod > 0 ||
-        this.data.readonly ||
-        this.isLoading ||
-        this.needShowSpinner
-      );
+      return this.disablePeriod > 0 || this.data.readonly || this.isLoading;
     },
   },
   watch: {

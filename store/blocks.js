@@ -261,7 +261,7 @@ export const actions = {
     return await this.$axios
       .post(
         `/api/card/actionexec/${rowId}/${actionId}/${relId}/${relActionId}`,
-        formConverter.save(body) || {}
+        formConverter.save(body || {})
       )
       .then(async (resp) => {
         if (getters.getBlockById(itemId) && actionRefresh) {
