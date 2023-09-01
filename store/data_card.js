@@ -699,7 +699,7 @@ export const mutations = {
     state.cardCaption = data;
   },
   clearFormData(state) {
-    if (state.cardRelId !== "0") {
+    if (state.cardRelId) {
       state.captions = null;
       state.form = [];
     }
