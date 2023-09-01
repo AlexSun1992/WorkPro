@@ -9,6 +9,7 @@ export const state = () => ({
   options: [],
   form: [],
   copyForm: [],
+  bodyForm: null,
   oneToManyData: { table: {}, form: null },
   cardId: null,
   cardRelId: null,
@@ -60,6 +61,7 @@ export const getters = {
   },
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
+  getBodyForm: (state) => state.bodyForm,
   getCardId: (state) => state.cardId,
   getSource: (state) => state.source,
   getCardRelId: (state) => state.cardRelId,
@@ -343,7 +345,7 @@ export const actions = {
     commit("setLoading", true);
     commit("setDisabled", true);
 
-    const body = converter.save(params.form);
+    const body = getters.getBodyForm;
 
     try {
       await Promise.all(state.beforeSavePromises.map((func) => func()));
@@ -573,6 +575,10 @@ export const mutations = {
   },
   setForm(state, data) {
     state.form = data;
+    state.bodyForm = converter.save(data);
+  },
+  setBodyForm(state, data) {
+    state.bodyForm = data;
   },
   setOneToManyDataTable(state, data) {
     state.oneToManyData.table = data;
@@ -626,6 +632,7 @@ export const mutations = {
           }
         }
       }
+      state.bodyForm[item.name] = converter.save([item])[item.name];
     }
   },
   setFormOneToManyField(state, data) {
