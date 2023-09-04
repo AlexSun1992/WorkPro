@@ -8,6 +8,7 @@ import { convertUploaderFilesToFormData } from "./data_card.helpers";
 export const state = () => ({
   options: [],
   form: [],
+  formCacheKey: null,
   copyForm: [],
   bodyForm: null,
   oneToManyData: { table: {}, form: null },
@@ -38,6 +39,7 @@ export const state = () => ({
   isFilterVisible: false,
 });
 export const getters = {
+  // getMenuId: (state) => state.menuId,
   getFiltersVisibleStatus: (state) => state.isFilterVisible,
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
@@ -179,9 +181,9 @@ export const actions = {
       commit("setLoading", true);
       commit("setDisabled", true);
     }
-    if (state.cardId !== params.idCard || !params.idRel) {
-      commit("clearFormData");
-    }
+
+    commit("clearFormData", params);
+
     try {
       let url;
       if (params.idWizard && params.idCard === "0") {
@@ -217,6 +219,7 @@ export const actions = {
               "setForm",
               res.data.metaData.data.length ? res.data.metaData.data : res.data
             );
+            commit("setCacheKey", state.menuId);
           } else {
             const dataForm = res.data.metaData.data.length
               ? res.data.metaData.data
@@ -544,6 +547,10 @@ export const actions = {
 };
 
 export const mutations = {
+  setCacheKey(state, key) {
+    state.formCacheKey = key;
+  },
+
   toggleFilterVisible(state, payload) {
     state.isFilterVisible = payload;
   },
@@ -698,10 +705,11 @@ export const mutations = {
   setCardCaption(state, data) {
     state.cardCaption = data;
   },
-  clearFormData(state) {
-    if (state.cardRelId) {
+  clearFormData(state, data) {
+    if (state.formCacheKey !== state.menuId) {
       state.captions = null;
       state.form = [];
+      state.formCacheKey = null;
     }
   },
   clearFormField(state, data) {
