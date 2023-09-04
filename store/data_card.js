@@ -39,7 +39,6 @@ export const state = () => ({
   isFilterVisible: false,
 });
 export const getters = {
-  // getMenuId: (state) => state.menuId,
   getFiltersVisibleStatus: (state) => state.isFilterVisible,
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
