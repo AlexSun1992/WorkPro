@@ -96,6 +96,7 @@ import { BTabs, BTab, BPagination } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
+import { getTemplate } from "../../../../utils/map/helpers/helpers2";
 import { filters, filterData } from "../../../../utils/map/filtersV2";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
@@ -725,12 +726,6 @@ export default {
       });
     },
 
-    getHtmlOfficeCard(office) {
-        let vm = new Vue(Object.assign({}, OfficeCard));
-        Vue.set(vm.$props, 'office', office);
-        return vm.$mount().$el.outerHTML;
-    },
-
     getGeoObjects(offices) {
       const myGeoObjects = [];
 
@@ -743,7 +738,7 @@ export default {
               coordinates: [office.NLAT, office.NLONG],
             },
             properties: {
-              balloonContent: this.getHtmlOfficeCard(office),
+              balloonContent: getTemplate(office),
               hintContent: `${office.SSHORTNAME ?? "Офис продаж"}`,
               balloonShadowPane: "outerBalloon",
 
