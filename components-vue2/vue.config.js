@@ -22,6 +22,9 @@ module.exports = {
       "^/s/:hash": {
         target: "http://localhost:8000",
       },
+      "^/system": {
+        target: "https://reso.ru",
+      },
       "^/Branches": {
         target: "https://reso.ru",
       },

@@ -165,6 +165,18 @@ Vue.customElement(
       });
     })
 );
+Vue.customElement(
+  "component-offices-map-v3",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/OfficesMapV3/OfficesMap.vue", "./store/index"], (
+        lazyComponent
+      ) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
 
 Vue.customElement(
   "component-offices-list",
