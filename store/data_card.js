@@ -638,7 +638,7 @@ export const mutations = {
           }
         }
       }
-      state.bodyForm[item.name] = converter.save([item])[item.name];
+      state.bodyForm = { ...state.bodyForm, ...converter.save([item]) };
     }
   },
   setFormOneToManyField(state, data) {
