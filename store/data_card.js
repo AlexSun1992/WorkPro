@@ -704,8 +704,12 @@ export const mutations = {
   setCardCaption(state, data) {
     state.cardCaption = data;
   },
-  clearFormData(state, data) {
-    if (state.formCacheKey !== state.menuId) {
+  clearFormData(state) {
+    if (
+      state.formCacheKey !== state.menuId &&
+      state.menuId !== false &&
+      state.formCacheKey !== null
+    ) {
       state.captions = null;
       state.form = [];
       state.formCacheKey = null;
