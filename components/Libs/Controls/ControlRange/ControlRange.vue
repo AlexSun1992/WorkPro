@@ -857,7 +857,7 @@ button {
   button {
     display: block;
     position: absolute;
-    z-index: 2;
+    z-index: 1;
     bottom: 32px;
     width: 24px;
     height: 24px;
