@@ -684,6 +684,7 @@ export const mutations = {
         }
       }
     }
+    state.bodyForm = { ...state.bodyForm, ...converter.save(state.form) };
   },
   setActionParamsField(state, data) {
     const item = state.actionParams.find((d) => d.name === data.name);
