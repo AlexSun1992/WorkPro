@@ -46,9 +46,7 @@ export function changeKeyboardLayout(str) {
     "/": ".",
   };
 
-  return str.replace(/[A-z/,.;\'\]\[]/g, (x) => {
-    return x == x.toLowerCase()
-      ? replacer[x]
-      : replacer[x.toLowerCase()].toUpperCase();
-  });
+  return str.replace(/[A-z/,.;\'\]\[]/g, (x) =>
+    x == x.toLowerCase() ? replacer[x] : replacer[x.toLowerCase()].toUpperCase()
+  );
 }
