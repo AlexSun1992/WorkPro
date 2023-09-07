@@ -82,7 +82,6 @@ const getPhones = (officePhones) => {
 };
 
 const getTemplate = (agency) => {
-  console.log(agency.PHONES);
   const phonesArr = getPhones(agency.PHONES);
   const grafArr = agency.SGRAF?.split("\n");
   if (phonesArr) {
