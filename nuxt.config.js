@@ -84,6 +84,7 @@ const nuxtConfig = {
       mode: "client",
       ssr: false,
     },
+    { src: "~plugins/maska.js", ssr: false },
   ],
   /*
    ** Nuxt.js dev-modules

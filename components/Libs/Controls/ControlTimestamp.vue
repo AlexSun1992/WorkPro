@@ -16,7 +16,7 @@
       </template>
       <date-picker
         v-model="fieldValue"
-        v-mask="maskTemplate"
+        v-maska="maskTemplate"
         :disabled="!edit ? !edit : data.readonly"
         type="date"
         value-type="DD.MM.YYYY"
@@ -41,14 +41,10 @@
 import DatePicker from "vue2-datepicker";
 import "../../../assets/scss/vue2-datepicker.css";
 import "vue2-datepicker/locale/ru";
-import { applyMask as _mask } from "../../../utils/utils";
 
 export default {
   name: "ControlTimestamp",
   components: { DatePicker },
-  directives: {
-    mask: _mask,
-  },
   props: {
     data: {
       type: Object,
