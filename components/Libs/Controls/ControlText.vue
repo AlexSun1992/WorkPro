@@ -10,12 +10,11 @@
       :max-rows="6"
     />
     <template #label>
-      <span v-html="data.label" /><span
-        v-if="data.helpText"
-        class="tooltipster"
-      >
-        (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-          <span v-html="data.helpText" /></vue-easy-tooltip
+      <span v-html="data.label" />
+      <span v-if="data.helpText">
+        <span class="tooltipster">
+          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+            <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
     <b-form-invalid-feedback>
