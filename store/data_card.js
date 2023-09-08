@@ -638,7 +638,11 @@ export const mutations = {
           }
         }
       }
-      state.bodyForm = { ...state.bodyForm, ...converter.save([item]) };
+      if (item.type === "GoogleCaptcha") {
+        state.bodyForm[item.name] = converter.save([item])[item.name];
+      } else {
+        state.bodyForm = { ...state.bodyForm, ...converter.save([item]) };
+      }
     }
   },
   setFormOneToManyField(state, data) {
