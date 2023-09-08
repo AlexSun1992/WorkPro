@@ -3,9 +3,10 @@
     <b-form-group :class="{ required: data.required }">
       <label>
         {{ data.label }}
-        <span v-if="data.helpText" class="tooltipster">
-          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-            <span v-html="data.helpText" /></vue-easy-tooltip
+        <span v-if="data.helpText">
+          <span class="tooltipster">
+            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+              <span v-html="data.helpText" /></vue-easy-tooltip></span
         ></span>
       </label>
 
