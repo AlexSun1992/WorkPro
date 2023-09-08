@@ -639,33 +639,12 @@ export default {
             if (response.data.POUTVALUE.includes("cabinet")) {
               this.$router.push(response.data.POUTVALUE);
             } else {
-              const url = response.data.POUTVALUE;
-              if (url.includes("/api/file")) {
-                await new JsFileDownloader({
-                  url,
-                  contentTypeDetermination: "header",
-                })
-                  .then((file) => {
-                    const url = window.URL.createObjectURL(file.downloadedFile);
-                    const link = document.createElement("a");
-                    link.href = url;
-                    document.body.appendChild(link);
-                    setTimeout(() => {
-                      window.open(link.href, "_blank");
-                    });
-                  })
-                  .catch((error) => {
-                    throw new Error(`Не удалось загрузить файл`);
-                  });
-              } else {
-                //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
-                setTimeout(() => {
-                  window.open(
-                    response.data.POUTVALUE,
-                    this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
-                  );
-                });
-              }
+              setTimeout(() => {
+                window.open(
+                  response.data.POUTVALUE,
+                  this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
+                );
+              });
             }
           } else {
             this.$root.$bvToast.toast(response.data.POUTVALUE, {
