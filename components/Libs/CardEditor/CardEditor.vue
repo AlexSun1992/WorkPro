@@ -68,6 +68,7 @@
   </div>
 </template>
 <script>
+import JsFileDownloader from "js-file-downloader";
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
@@ -638,13 +639,23 @@ export default {
             if (response.data.POUTVALUE.includes("cabinet")) {
               this.$router.push(response.data.POUTVALUE);
             } else {
-              // Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
-              setTimeout(() => {
-                window.open(
-                  response.data.POUTVALUE,
-                  this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
-                );
-              });
+              const url = response.data.POUTVALUE;
+              if (url.includes("/api/file")) {
+                await new JsFileDownloader({
+                  url,
+                  contentTypeDetermination: "header",
+                }).catch((error) => {
+                  throw new Error(`Не удалось загрузить файл`);
+                });
+              } else {
+                //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
+                setTimeout(() => {
+                  window.open(
+                    response.data.POUTVALUE,
+                    this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
+                  );
+                });
+              }
             }
           } else {
             this.$root.$bvToast.toast(response.data.POUTVALUE, {
