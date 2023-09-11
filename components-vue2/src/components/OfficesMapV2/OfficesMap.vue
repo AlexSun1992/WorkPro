@@ -121,10 +121,10 @@ export default {
     ZoomComponent,
     BPagination,
   },
+  myMap: null,
+  objectManager: null,
   data() {
     return {
-      myMap: null,
-      objectManager: null,
       filters,
       filteredOffices: null,
       page: 1,
@@ -753,7 +753,8 @@ export default {
               iconImageHref:
                 "https://reso.ru/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
               iconImageSize: [56, 56],
-              iconImageOffset: [0, 0],
+              iconImageOffset: [-28, -28],
+              balloonOffset: [66, -10],
             }
           });
       }
