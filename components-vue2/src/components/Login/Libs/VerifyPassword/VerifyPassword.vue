@@ -9,8 +9,8 @@
         />
         <legend>
           {{ showLabel }}
-          <span
-            ><span class="tooltipster">
+          <span class="position-relative"
+            >&nbsp;<span class="tooltipster">
               (?)<vue-easy-tooltip
                 :with-arrow="true"
                 position="top"

@@ -5,7 +5,8 @@
         <span
           >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">
           </span>
-          <span v-if="data.helpText">
+          <span v-if="data.helpText" class="position-relative"
+            >&nbsp;
             <span class="tooltipster">
               (?)<vue-easy-tooltip
                 :with-arrow="true"
