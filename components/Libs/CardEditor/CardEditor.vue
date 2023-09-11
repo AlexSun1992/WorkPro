@@ -642,7 +642,7 @@ export default {
             } else {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
-                this.$axios({
+                await this.$axios({
                   url,
                   method: "GET",
                   responseType: "blob",
