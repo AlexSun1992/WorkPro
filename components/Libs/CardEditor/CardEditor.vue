@@ -642,43 +642,28 @@ export default {
             } else {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
-                await this.$axios({
+                const file = await this.$axios({
                   url,
                   method: "GET",
                   responseType: "blob",
-                })
-                  .then((response) => {
-                    const fileName = response.config.url
-                      .split("/")
-                      .pop()
-                      .split("?")[0];
-                    const url = window.URL.createObjectURL(
-                      new Blob([response.data], {
-                        type: response.headers["content-type"],
-                      })
-                    );
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.setAttribute(
-                      "download",
-                      `${fileName}.${mime.extension(
-                        response.headers["content-type"]
-                      )}`
-                    );
-                    document.body.appendChild(link);
-                    // link.click();
-                    setTimeout(() => {
-                      window.open(link, "_blank");
-                    });
+                });
+                const fileName = url.split("/").pop().split("?")[0];
+                const fileUrl = window.URL.createObjectURL(
+                  new Blob([file.data], {
+                    type: file.headers["content-type"],
                   })
-                  .catch((e) => {
-                    this.$bvToast.toast("Не удалось скачать файл", {
-                      title: "Ошибка",
-                      variant: "danger",
-                      noAutoHide: true,
-                      solid: true,
-                    });
-                  });
+                );
+                const link = document.createElement("a");
+                link.href = fileUrl;
+                link.setAttribute(
+                  "download",
+                  `${fileName}.${mime.extension(file.headers["content-type"])}`
+                );
+                document.body.appendChild(link);
+                // link.click();
+                setTimeout(() => {
+                  window.open(link, "_blank");
+                });
               } else {
                 //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
                 setTimeout(() => {
