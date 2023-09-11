@@ -653,11 +653,12 @@ export default {
                       .pop()
                       .split("?")[0];
                     const url = window.URL.createObjectURL(
-                      new Blob([response.data])
+                      new Blob([response.data], {
+                        type: response.headers["content-type"],
+                      })
                     );
                     const link = document.createElement("a");
                     link.href = url;
-                    link.target = "_blank";
                     link.setAttribute(
                       "download",
                       `${fileName}.${mime.extension(
@@ -665,7 +666,10 @@ export default {
                       )}`
                     );
                     document.body.appendChild(link);
-                    link.click();
+                    // link.click();
+                    setTimeout(() => {
+                      window.open(link, "_blank");
+                    });
                   })
                   .catch((e) => {
                     this.$bvToast.toast("Не удалось скачать файл", {
