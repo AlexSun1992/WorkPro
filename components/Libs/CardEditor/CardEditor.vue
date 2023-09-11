@@ -647,7 +647,11 @@ export default {
                   method: "GET",
                   responseType: "blob",
                 });
+                const reader = new FileReader();
                 const fileName = url.split("/").pop().split("?")[0];
+                const blob = new Blob([file.data], {
+                  type: file.headers["content-type"],
+                });
                 const fileUrl = window.URL.createObjectURL(
                   new Blob([file.data], {
                     type: file.headers["content-type"],
@@ -661,9 +665,12 @@ export default {
                 );
                 document.body.appendChild(link);
                 // link.click();
-                setTimeout(() => {
-                  window.open(link, "_blank");
-                });
+                reader.onloadend = function (e) {
+                  setTimeout(() => {
+                    window.open(link, "_blank");
+                  });
+                };
+                reader.readAsDataURL(blob);
               } else {
                 //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
                 setTimeout(() => {
