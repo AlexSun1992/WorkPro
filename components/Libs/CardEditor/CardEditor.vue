@@ -69,6 +69,7 @@
 </template>
 <script>
 import JsFileDownloader from "js-file-downloader";
+import mime from "mime-types";
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
@@ -639,12 +640,49 @@ export default {
             if (response.data.POUTVALUE.includes("cabinet")) {
               this.$router.push(response.data.POUTVALUE);
             } else {
-              setTimeout(() => {
-                window.open(
-                  response.data.POUTVALUE,
-                  this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
-                );
-              });
+              const url = response.data.POUTVALUE;
+              if (url.includes("/file")) {
+                this.$axios({
+                  url,
+                  method: "GET",
+                  responseType: "blob",
+                })
+                  .then((response) => {
+                    const fileName = response.config.url
+                      .split("/")
+                      .pop()
+                      .split("?")[0];
+                    const url = window.URL.createObjectURL(
+                      new Blob([response.data])
+                    );
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.setAttribute(
+                      "download",
+                      `${fileName}.${mime.extension(
+                        response.headers["content-type"]
+                      )}`
+                    );
+                    document.body.appendChild(link);
+                    link.click();
+                  })
+                  .catch((e) => {
+                    this.$bvToast.toast("Не удалось скачать файл", {
+                      title: "Ошибка",
+                      variant: "danger",
+                      noAutoHide: true,
+                      solid: true,
+                    });
+                  });
+              } else {
+                //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
+                setTimeout(() => {
+                  window.open(
+                    response.data.POUTVALUE,
+                    this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
+                  );
+                });
+              }
             }
           } else {
             this.$root.$bvToast.toast(response.data.POUTVALUE, {
