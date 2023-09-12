@@ -5,12 +5,12 @@
     :label-for="data.name"
   >
     <template #label>
-      <span v-html="data.label" /><span
-        v-if="data.helpText"
-        class="tooltipster"
-      >
-        (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-          <span v-html="data.helpText" /></vue-easy-tooltip
+      <span v-html="data.label" />
+      <span v-if="data.helpText" class="position-relative"
+        >&nbsp;
+        <span class="tooltipster">
+          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+            <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
     <model-list-select

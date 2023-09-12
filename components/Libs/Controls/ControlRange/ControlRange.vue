@@ -5,9 +5,15 @@
         <span
           >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">
           </span>
-          <span v-if="data.helpText" class="tooltipster">
-            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-              <span v-html="data.helpText" /></vue-easy-tooltip
+          <span v-if="data.helpText" class="position-relative"
+            >&nbsp;
+            <span class="tooltipster">
+              (?)<vue-easy-tooltip
+                :with-arrow="true"
+                position="top"
+                :offset="4"
+              >
+                <span v-html="data.helpText" /></vue-easy-tooltip></span
           ></span>
         </span>
       </label>
@@ -858,22 +864,22 @@ button {
     display: block;
     position: absolute;
     z-index: 1;
-    bottom: 32px;
-    width: 24px;
-    height: 24px;
+    bottom: 20px;
+    width: 48px;
+    height: 48px;
     border: 0;
-    border-radius: 24px;
+    border-radius: 0 15px 15px 0;
   }
   button:disabled {
     opacity: 0.5;
     pointer-events: none;
   }
   #add {
-    right: 15px;
+    right: 0;
     background: url(/img/icon-range-add.svg) 50% 50% no-repeat;
   }
   #subtract {
-    left: 15px;
+    left: 0;
     background: url(/img/icon-range-subtract.svg) 50% 50% no-repeat;
   }
   .range-list[data-amountofvalues] > li {

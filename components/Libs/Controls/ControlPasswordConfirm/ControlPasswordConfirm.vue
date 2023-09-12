@@ -9,9 +9,16 @@
         />
         <legend>
           Новый пароль
-          <span class="tooltipster">
-            (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-              <span>{{ tooltipValidation }}</span></vue-easy-tooltip
+          <span class="position-relative"
+            >&nbsp;
+            <span class="tooltipster">
+              (?)<vue-easy-tooltip
+                :with-arrow="true"
+                position="top"
+                :offset="4"
+              >
+                <span>{{ tooltipValidation }}</span></vue-easy-tooltip
+              ></span
             ></span
           >
         </legend>

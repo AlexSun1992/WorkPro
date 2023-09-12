@@ -274,7 +274,9 @@ header {
     max-width: 100%;
   }
 }
-
+label {
+  display: table;
+}
 .menu-container {
   width: 1400px;
   position: relative;
@@ -3720,13 +3722,14 @@ textarea {
 .tooltipster {
   background: get-asset("/img/tooltip.svg") 50% 50% no-repeat;
   font-size: 0;
-  display: inline-block;
+  display: block;
   width: 24px;
   height: 24px;
   position: absolute;
-  margin-left: 6px;
+  margin-left: 0px;
   background-size: contain;
-  margin-top: -3px;
+  top: -2px;
+  left: 0;
 }
 .form-group label .tooltipster {
   width: 16px;
