@@ -650,28 +650,12 @@ export default {
                 const reader = new FileReader();
                 const fileName = url.split("/").pop().split("?")[0];
                 const blob = new Blob([file.data], {
-                  type: "application/pdf",
+                  type: file.headers["content-type"],
                 });
-                reader.onloadend = function (e) {
-                  function base64ToUint8Array(base64) {
-                    const raw = window.atob(base64);
-                    const uint8Array = new Uint8Array(raw.length);
-                    for (let i = 0; i < raw.length; i++) {
-                      uint8Array[i] = raw.charCodeAt(i);
-                    }
-                    return uint8Array;
+                reader.onload = () => {
+                  if (typeof reader.result === "string") {
+                    window.open(reader.result, "_blank");
                   }
-                  const pdfData = base64ToUint8Array(
-                    reader.result.split(",")[1]
-                  );
-                  const byteArray = new Uint8Array(pdfData);
-                  const blob = new Blob([byteArray], {
-                    type: file.headers["content-type"],
-                  });
-                  const fileUrl = window.URL.createObjectURL(blob);
-                  setTimeout(() => {
-                    window.open(fileUrl, "_blank");
-                  });
                 };
                 reader.readAsDataURL(blob);
               } else {
