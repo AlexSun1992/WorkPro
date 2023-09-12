@@ -642,22 +642,29 @@ export default {
             } else {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
-                const file = await this.$axios({
-                  url,
-                  method: "GET",
-                  responseType: "blob",
-                });
-                const reader = new FileReader();
-                const fileName = url.split("/").pop().split("?")[0];
-                const blob = new Blob([file.data], {
-                  type: file.headers["content-type"],
-                });
-                reader.onload = () => {
-                  if (typeof reader.result === "string") {
-                    window.open(reader.result, "_blank");
-                  }
-                };
-                reader.readAsDataURL(blob);
+                try {
+                  const file = await this.$axios({
+                    url,
+                    method: "GET",
+                    responseType: "blob",
+                  });
+                  const fileName = url.split("/").pop().split("?")[0];
+                  const fileUrl = window.URL.createObjectURL(
+                    new Blob([file.data], {
+                      type: file.headers["content-type"],
+                    })
+                  );
+                  setTimeout(() => {
+                    window.location.assign(fileUrl);
+                  });
+                } catch (e) {
+                  this.$bvToast.toast("Не удалось скачать файл", {
+                    title: "Ошибка",
+                    variant: "danger",
+                    noAutoHide: true,
+                    solid: true,
+                  });
+                }
               } else {
                 //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
                 setTimeout(() => {
