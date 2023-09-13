@@ -642,38 +642,29 @@ export default {
             } else {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
-                const file = await this.$axios({
-                  url,
-                  method: "GET",
-                  responseType: "blob",
-                });
-                const reader = new FileReader();
-                const fileName = url.split("/").pop().split("?")[0];
-                const blob = new Blob([file.data], {
-                  type: "application/pdf",
-                });
-                reader.onloadend = function (e) {
-                  function base64ToUint8Array(base64) {
-                    const raw = window.atob(base64);
-                    const uint8Array = new Uint8Array(raw.length);
-                    for (let i = 0; i < raw.length; i++) {
-                      uint8Array[i] = raw.charCodeAt(i);
-                    }
-                    return uint8Array;
-                  }
-                  const pdfData = base64ToUint8Array(
-                    reader.result.split(",")[1]
+                try {
+                  const file = await this.$axios({
+                    url,
+                    method: "GET",
+                    responseType: "blob",
+                  });
+                  const fileName = url.split("/").pop().split("?")[0];
+                  const fileUrl = window.URL.createObjectURL(
+                    new Blob([file.data], {
+                      type: file.headers["content-type"],
+                    })
                   );
-                  const byteArray = new Uint8Array(pdfData);
-                  const blob = new Blob([byteArray], {
-                    type: file.headers["content-type"],
-                  });
-                  const fileUrl = window.URL.createObjectURL(blob);
                   setTimeout(() => {
-                    window.open(fileUrl, "_blank");
+                    window.location.assign(fileUrl);
                   });
-                };
-                reader.readAsDataURL(blob);
+                } catch (e) {
+                  this.$bvToast.toast("Не удалось скачать файл", {
+                    title: "Ошибка",
+                    variant: "danger",
+                    noAutoHide: true,
+                    solid: true,
+                  });
+                }
               } else {
                 //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
                 setTimeout(() => {
