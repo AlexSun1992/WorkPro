@@ -81,8 +81,9 @@ export default {
         : this.data.placeholder;
     },
     getCurrentValue() {
-      return this.data.options.find((item) => item.value === this.data?.value)
-        ?.text;
+      return this.data.options.find(
+        (item) => item.value === Number(this.data?.value)
+      )?.text;
     },
   },
   watch: {
