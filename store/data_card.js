@@ -806,6 +806,7 @@ export const mutations = {
     const field = state.form.find((item) => item.name === data.name);
     if (field) {
       field.value = data.value;
+      state.bodyForm[data.name] = data.value;
     }
   },
   setAddFields(state, params) {
