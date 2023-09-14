@@ -654,9 +654,15 @@ export default {
                       type: file.headers["content-type"],
                     })
                   );
-                  setTimeout(() => {
-                    window.location.assign(fileUrl);
-                  });
+                  const link = document.createElement("a");
+                  link.href = fileUrl;
+                  link.setAttribute("download", fileName);
+                  link.setAttribute("target", "_blank");
+                  document.body.appendChild(link);
+                  link.click();
+                  // setTimeout(() => {
+                  //   window.location.assign(fileUrl);
+                  // });
                 } catch (e) {
                   this.$bvToast.toast("Не удалось скачать файл", {
                     title: "Ошибка",
