@@ -741,7 +741,7 @@ export const mutations = {
       });
       if (item) {
         item.value = {};
-        item.options = [];
+        item.options = null;
         currentFieldName = item.name;
       } else {
         break;
