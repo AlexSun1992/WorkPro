@@ -660,9 +660,6 @@ export default {
                   link.setAttribute("target", "_blank");
                   document.body.appendChild(link);
                   link.click();
-                  // setTimeout(() => {
-                  //   window.location.assign(fileUrl);
-                  // });
                 } catch (e) {
                   this.$bvToast.toast("Не удалось скачать файл", {
                     title: "Ошибка",
