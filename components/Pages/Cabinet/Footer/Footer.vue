@@ -13,15 +13,15 @@
                   :key="index"
                   :href="item.titleRef"
                   @click="toggleClassActive"
-                  >{{ item.title }}</a
-                >
+                  ><span v-html="item.title"
+                /></a>
                 <div class="priduct_link">
                   <a
                     v-for="(item, index) in footerMenuCarSave[0].items"
                     :key="index"
                     :href="item.ref"
                   >
-                    {{ item.title }}
+                    <span v-html="item.title" />
                   </a>
                 </div>
               </div>
@@ -32,15 +32,15 @@
                   :key="index"
                   :href="item.titleRef"
                   @click="toggleClassActive"
-                  >{{ item.title }}</a
-                >
+                  ><span v-html="item.title"
+                /></a>
                 <div class="priduct_link">
                   <a
                     v-for="(item, index) in footerMenuProperty[0].items"
                     :key="index"
                     :href="item.ref"
                   >
-                    {{ item.title }}
+                    <span v-html="item.title" />
                   </a>
                 </div>
               </div>
@@ -51,15 +51,15 @@
                   :key="index"
                   :href="item.titleRef"
                   @click="toggleClassActive"
-                  >{{ item.title }}</a
-                >
+                  ><span v-html="item.title"
+                /></a>
                 <div class="priduct_link">
                   <a
                     v-for="(item, index) in footerMenuHealth[0].items"
                     :key="index"
                     :href="item.ref"
                   >
-                    {{ item.title }}
+                    <span v-html="item.title" />
                   </a>
                 </div>
               </div>
@@ -70,23 +70,23 @@
                 :key="index"
                 :href="item.titleRef"
                 @click="toggleClassActive"
-                >{{ item.title }}</a
-              >
+                ><span v-html="item.title"
+              /></a>
               <div class="product">
                 <a
                   v-for="(item, index) in footerMenuAboutCompany"
                   :key="index"
                   :href="item.titleRef"
                   @click="toggleClassActive"
-                  >{{ item.title }}</a
-                >
+                  ><span v-html="item.title"
+                /></a>
                 <div class="priduct_link">
                   <a
                     v-for="(item, index) in footerMenuAboutCompany[0].items"
                     :key="index"
                     :href="item.ref"
                   >
-                    {{ item.title }}
+                    <span v-html="item.title" />
                   </a>
                 </div>
               </div>
@@ -112,7 +112,7 @@
               :href="item.ref"
               :class="item.class"
             >
-              {{ item.title }}
+              <span v-html="item.title" />
             </a>
           </div>
           <div class="social mt-3 mt-sm-0">
@@ -122,7 +122,7 @@
               :href="item.ref"
               :class="item.class"
             >
-              {{ item.title }}
+              <span v-html="item.title" />
             </a>
           </div>
         </div>
@@ -222,7 +222,6 @@ export default {
       if (this.width < 992) {
         e.preventDefault();
         e.target.parentElement.classList.toggle("active");
-        return;
       }
     },
     toggleClassOpen(e) {
