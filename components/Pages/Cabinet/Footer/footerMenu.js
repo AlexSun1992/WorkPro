@@ -18,6 +18,10 @@ const footerMenu = [
       { title: "Квартира", ref: "/individual/property/flat/" },
       { title: "Дом", ref: "/individual/property/reso-dom/" },
       { title: " Ипотека", ref: "/individual/property/ipoteka/" },
+      {
+        title: "Ответственность перед <br>соседями",
+        ref: "/individual/property/go/",
+      },
     ],
   },
 
