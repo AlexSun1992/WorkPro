@@ -6,7 +6,7 @@ const data = require("./data.js");
 app.use(express.json());
 app.use((req, res, next) => {
   res.removeHeader("X-Powered-By");
-  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.setHeader("Cache-Control", "no-store");
   next();
 });
 
