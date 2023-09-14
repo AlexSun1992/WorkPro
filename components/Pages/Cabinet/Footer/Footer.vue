@@ -125,6 +125,13 @@
               <span v-html="item.title" />
             </a>
           </div>
+          <div class="iconix">
+            Дизайн:
+            <img
+              src="https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/iconix.svg"
+              alt="iconix"
+            />
+          </div>
         </div>
         <div class="col-lg-12 col-12 order-2 order-lg-3 h-line-footer">
           <button @click="toggleClassOpen" class="open-info">
@@ -234,4 +241,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.iconix {
+  margin-top: 3rem;
+  font-size: 0.875rem;
+  color: #686868;
+}
+</style>

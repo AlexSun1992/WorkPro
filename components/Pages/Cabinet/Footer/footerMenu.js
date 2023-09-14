@@ -36,7 +36,7 @@ const footerMenu = [
       { title: "Антиклещ", ref: "/individual/medicine/tick/" },
       { title: "Телемедицина", ref: "/individual/medicine/telemedicine/" },
       {
-        title: "Накопительное и инвестиционное страхование",
+        title: "Накопительное страхование жизни",
         ref: "/individual/life/",
       },
     ],
