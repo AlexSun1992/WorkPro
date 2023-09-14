@@ -12,7 +12,7 @@ const app = express();
 app.use(cookieParser());
 app.use((req, res, next) => {
   res.removeHeader("X-Powered-By");
-  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.setHeader("Cache-Control", "no-store");
   next();
 });
 app.use(
