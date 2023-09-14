@@ -1,10 +1,12 @@
 const express = require("express");
+
 const app = express();
 const data = require("./data.js");
 
 app.use(express.json());
 app.use((req, res, next) => {
   res.removeHeader("X-Powered-By");
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   next();
 });
 
