@@ -13,16 +13,15 @@
                   :key="index"
                   :href="item.titleRef"
                   @click="toggleClassActive"
-                  ><span v-html="item.title"
-                /></a>
+                  v-html="item.title"
+                />
                 <div class="priduct_link">
                   <a
                     v-for="(item, index) in footerMenuCarSave[0].items"
                     :key="index"
                     :href="item.ref"
-                  >
-                    <span v-html="item.title" />
-                  </a>
+                    v-html="item.title"
+                  />
                 </div>
               </div>
 
@@ -32,16 +31,15 @@
                   :key="index"
                   :href="item.titleRef"
                   @click="toggleClassActive"
-                  ><span v-html="item.title"
-                /></a>
+                  v-html="item.title"
+                />
                 <div class="priduct_link">
                   <a
                     v-for="(item, index) in footerMenuProperty[0].items"
                     :key="index"
                     :href="item.ref"
-                  >
-                    <span v-html="item.title" />
-                  </a>
+                    v-html="item.title"
+                  />
                 </div>
               </div>
 
@@ -51,16 +49,15 @@
                   :key="index"
                   :href="item.titleRef"
                   @click="toggleClassActive"
-                  ><span v-html="item.title"
-                /></a>
+                  v-html="item.title"
+                />
                 <div class="priduct_link">
                   <a
                     v-for="(item, index) in footerMenuHealth[0].items"
                     :key="index"
                     :href="item.ref"
-                  >
-                    <span v-html="item.title" />
-                  </a>
+                    v-html="item.title"
+                  />
                 </div>
               </div>
             </div>
@@ -70,24 +67,23 @@
                 :key="index"
                 :href="item.titleRef"
                 @click="toggleClassActive"
-                ><span v-html="item.title"
-              /></a>
+                v-html="item.title"
+              />
               <div class="product">
                 <a
                   v-for="(item, index) in footerMenuAboutCompany"
                   :key="index"
                   :href="item.titleRef"
                   @click="toggleClassActive"
-                  ><span v-html="item.title"
-                /></a>
+                  v-html="item.title"
+                />
                 <div class="priduct_link">
                   <a
                     v-for="(item, index) in footerMenuAboutCompany[0].items"
                     :key="index"
                     :href="item.ref"
-                  >
-                    <span v-html="item.title" />
-                  </a>
+                    v-html="item.title"
+                  />
                 </div>
               </div>
             </div>
@@ -111,9 +107,8 @@
               :key="index"
               :href="item.ref"
               :class="item.class"
-            >
-              <span v-html="item.title" />
-            </a>
+              v-html="item.title"
+            />
           </div>
           <div class="social mt-3 mt-sm-0">
             <a
@@ -121,9 +116,8 @@
               :key="index"
               :href="item.ref"
               :class="item.class"
-            >
-              <span v-html="item.title" />
-            </a>
+              v-html="item.title"
+            />
           </div>
           <div class="iconix">
             Дизайн:
