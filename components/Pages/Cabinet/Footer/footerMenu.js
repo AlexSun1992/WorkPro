@@ -76,7 +76,7 @@ const footerMenu = [
       {
         class: "btn-light btn-icon icon-ios",
         ref: "https://apps.apple.com/us/app/resomobile/id1127266069",
-        title: "Apple Store",
+        title: "App Store",
       },
       {
         class: "btn-light btn-icon icon-android",
