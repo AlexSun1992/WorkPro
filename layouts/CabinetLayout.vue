@@ -36,9 +36,7 @@
       </div>
     </div>
     <div class="color-footer">
-      <div class="container">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   </div>
 </template>

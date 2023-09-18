@@ -7,7 +7,7 @@
             <div class="products_all ps-0">
               <a href>Оформить страховой полис</a>
 
-              <div class="product menu-auto mb-lg-4 pb-lg-4 position-relative">
+              <div class="product menu-auto pb-lg-4 position-relative">
                 <a
                   v-for="(item, index) in footerMenuCarSave"
                   :key="index"
