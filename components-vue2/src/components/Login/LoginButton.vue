@@ -68,6 +68,7 @@ import SkeletonBox from "./Libs/SkeletonBox";
 const TOKEN_NAME = "auth._token.local";
 const EXPIRATION_TOKEN = "auth._token_expiration.local";
 const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
+const AUTH_USER_ID = "auth.user_id";
 const URL_GET_USER_NAME = "/am/main/v2/userinfo";
 const URL_REFRESH_TOKEN = "/am/auth/v2/token_refresh";
 const URL_AUTHORIZE = "/am/auth/v2/authorize";
@@ -269,6 +270,9 @@ export default {
       if (!localStorage.getItem("USER_INFO")) {
         this.getPersonsData(Cookies.get(TOKEN_NAME));
       } else {
+        if (this.personsData.ID !== Number(Cookies.get(AUTH_USER_ID))) {
+          this.getPersonsData(Cookies.get(TOKEN_NAME));
+        }
         this.$store.commit("auth/setLogged", true);
         this.$store.commit("auth/setUser", localStorage.getItem("USER_INFO"));
       }

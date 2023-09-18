@@ -1,6 +1,14 @@
 import { isBlackListOfRoute } from "./router.helper";
+import consts from "@/api/urls";
 
-export default async function ({ store, redirect, route, $auth, $cookiz }) {
+export default async function ({
+  store,
+  redirect,
+  route,
+  $auth,
+  $cookiz,
+  $axios,
+}) {
   store.commit("data_card/clearFormData");
   store.commit("data_card/clearFilters");
   store.commit("blocks/clearBlock");
@@ -27,6 +35,17 @@ export default async function ({ store, redirect, route, $auth, $cookiz }) {
   }
   if ($auth.loggedIn) {
     await store.dispatch("menu/fetchMenuById", route.params);
+    if ($auth.user.ID !== $cookiz.get("auth.user_id")) {
+      try {
+        const data = await $axios.get(`${consts.USERPROFILE}`);
+        const user = data?.data[0]._data[0];
+        if (user) {
+          $auth.setUser(user);
+        }
+      } catch (e) {
+        throw new Error("Не удалось обновить пользователя");
+      }
+    }
     if (
       isBlackListOfRoute(
         route.params.idModule,
