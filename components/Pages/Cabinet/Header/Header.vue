@@ -112,13 +112,13 @@ export default {
     HeaderUserName,
   },
   emits: { "mini-sidebar": null },
-  data() {
-    return {
-      userInfo: null,
-    };
-  },
-  created() {
-    this.userInfo = this.$auth.user;
+  computed: {
+    userInfo() {
+      if (this.$auth.loggedIn && this.$auth.user) {
+        return this.$auth.user;
+      }
+      return null;
+    },
   },
   methods: {
     swipeBottomHandler() {
