@@ -3953,7 +3953,7 @@ textarea {
   display: inline-block;
   background-size: contain;
 }
-
+button.color-black,
 a.color-black,
 .color-black {
   color: $black;
@@ -5621,4 +5621,9 @@ ymaps[class*="balloon__close-button"] {
 }
 .autocomplete[data-expanded="true"] {
   z-index: 2;
+}
+
+.btn-edit-calc {
+  background: transparent url(/img/btn-edit-calc.svg) 40px 50% no-repeat;
+  padding: 0 40px 0 70px;
 }
