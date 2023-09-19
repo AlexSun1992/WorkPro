@@ -111,16 +111,19 @@ export default {
 
     if (this.isOnlyTwoItemsInPrices === false) {
       if (this.data.value) {
+        const value = this.data.options.find((item) =>
+          Number(this.data.value) ? item.ID === Number(this.data.value) : item
+        );
         if (valueNvalue) {
-          this.valueTypeNumber = this.data.options.find(
-            (item) => item.ID === this.data.value
-          ).NVALUE;
+          this.valueTypeNumber = value
+            ? value.NVALUE
+            : this.data.options[0].NVALUE;
         }
 
         if (!valueNvalue) {
-          this.valueTypeNumber = this.data.options.find(
-            (item) => item.ID === this.data.value
-          ).ID;
+          this.valueTypeNumber = value
+            ? value.value
+            : this.data.options[0].value;
         }
 
         this.valueTypeRange = this.getAllPricesValue.indexOf(
@@ -132,16 +135,16 @@ export default {
     if (this.isOnlyTwoItemsInPrices) {
       if (valueNvalue) {
         this.valueTypeNumber = this.data.options.find(
-          (item) => item.ID === this.data.value
+          (item) => item.ID === Number(this.data.value)
         )?.NVALUE;
       }
       if (!valueNvalue) {
         this.valueTypeNumber = this.data.options.find(
-          (item) => item.ID === this.data.value
+          (item) => item.ID === Number(this.data.value)
         ).ID;
       }
       this.valueTypeRange = this.valueTypeNumber;
-      this.insuredSum = this.data.value;
+      this.insuredSum = Number(this.data.value);
     }
     if (valueNvalue) {
       this.$emit("update", {
