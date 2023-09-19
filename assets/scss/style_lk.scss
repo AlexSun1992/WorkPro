@@ -5627,3 +5627,6 @@ ymaps[class*="balloon__close-button"] {
   background: transparent url(/img/btn-edit-calc.svg) 40px 50% no-repeat;
   padding: 0 40px 0 70px;
 }
+.check-collapse + label {
+  display: inline-block;
+}
