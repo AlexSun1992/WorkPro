@@ -1,8 +1,6 @@
 stages:
   - "build"
-  - "deploy_test"
-  - "deploy_actuary"
-  - "deploy_production"
+  - "deploy"
 
 docker-build-master:
   image: docker:latest
@@ -20,54 +18,35 @@ docker-build-master:
   tags:
     - docker
 
-deploy_new.reso.ru:
+new.reso.ru:
   image: curlimages/curl:7.78.0
-  stage: deploy_test
+  stage: deploy
   script:
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_TEST_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   rules:
     - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CI_COMMIT_REF_NAME == "production"
+    - when: manual
   tags:
     - docker
 
-deploy_test-new.reso.ru:
+test-new.reso.ru:
   image: curlimages/curl:7.78.0
-  stage: deploy_actuary
+  stage: deploy
   script:
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_ACTUARY_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
-      when: manual
-    - if: $CI_COMMIT_REF_NAME == "production"
-      when: manual
+  when: manual
   tags:
     - docker
 
-tag_production:
-  image: docker:latest
-  stage: deploy_production
-  services:
-    - name: docker:dind
-      command: ["--registry-mirror", "https://docker.reso.ru"]
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  script:
-    - docker pull "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA"
-    - docker tag "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/nuxt-server:production"
-    - docker push "$CI_REGISTRY_IMAGE/nuxt-server:production"
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "production"
-  tags:
-    - docker
-
-deploy_production:
+reso.ru:
   image: curlimages/curl:7.78.0
-  stage: deploy_production
-  needs: ["tag_production"]
+  stage: deploy
   script:
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_PRODUCTION_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   rules:
     - if: $CI_COMMIT_REF_NAME == "production"
+    - if: $CI_COMMIT_REF_NAME == "master"
+      when: manual
   tags:
     - docker
