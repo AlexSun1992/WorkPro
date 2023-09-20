@@ -18,7 +18,7 @@ docker-build-master:
   tags:
     - docker
 
-new.reso.ru:
+a__new.reso.ru:
   image: curlimages/curl:7.78.0
   stage: deploy
   script:
@@ -26,20 +26,24 @@ new.reso.ru:
   rules:
     - if: $CI_COMMIT_REF_NAME == "master"
     - if: $CI_COMMIT_REF_NAME == "production"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     - when: manual
+      allow_failure: true
   tags:
     - docker
 
-test-new.reso.ru:
+b__test-new.reso.ru:
   image: curlimages/curl:7.78.0
   stage: deploy
   script:
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_ACTUARY_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   when: manual
+  allow_failure: true
   tags:
     - docker
 
-reso.ru:
+c__reso.ru:
   image: curlimages/curl:7.78.0
   stage: deploy
   script:
