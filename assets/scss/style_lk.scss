@@ -4164,6 +4164,7 @@ a[data-newcount][data-newcolor="RED"]:after {
 
 .btn-insurance-inspection,
 .btn-insurance-docs,
+.btn-insurance-signature,
 .btn-insurance-rules,
 .btn-pay-case,
 .btn-insurance-case {
@@ -4184,7 +4185,7 @@ a[data-newcount][data-newcolor="RED"]:after {
   position: relative;
   line-height: 1;
 }
-
+.btn-insurance-signature:hover,
 .btn-insurance-inspection:hover,
 .btn-insurance-docs:hover,
 .btn-insurance-rules:hover,
@@ -4195,7 +4196,7 @@ a[data-newcount][data-newcolor="RED"]:after {
   color: $black !important;
   background-color: #fff !important;
 }
-
+.btn-insurance-signature:after,
 .btn-insurance-inspection:after,
 .btn-insurance-docs:after,
 .btn-insurance-rules:after,
@@ -4277,7 +4278,10 @@ a[data-newcount][data-newcolor="RED"]:after {
   background: get-asset("/img/action-mortgage-6.svg") 50% 50% no-repeat;
   background-size: contain;
 }
-
+.my-policy-actions[data-id="4"] .btn-insurance-signature:after {
+  background: get-asset("/img/action-mortgage-12.svg") 50% 50% no-repeat;
+  background-size: contain;
+}
 .my-policy-actions[data-id="4"] .btn-insurance-case:after {
   background: get-asset("/img/action-mortgage-5.svg") 50% 50% no-repeat;
   background-size: contain;
