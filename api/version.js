@@ -15,6 +15,12 @@ router.get("/version", async (req, res) => {
   const appVersion =
     process.env.APP_VERSION ||
     childProcess.execSync("git rev-parse --short HEAD").toString().trim();
+  const versionDate =
+    process.env.APP_VERSION_DATE ||
+    childProcess
+      .execSync("git show -s --date=format:%Y-%m-%dT%H:%M:%S.000Z --format=%cd")
+      .toString()
+      .trim();
 
   if ("hash" in req.query) {
     return res.send(appVersion);
@@ -22,17 +28,14 @@ router.get("/version", async (req, res) => {
   if ("start" in req.query) {
     return res.send(startDate.toISOString());
   }
-
-  const buildFileName = path.join(__dirname, "..", ".nuxt", "server.js");
-  const fileStat = fs.statSync(buildFileName);
   if ("build" in req.query) {
-    return res.send(fileStat.ctime.toISOString());
+    return res.send(versionDate);
   }
 
   res.status(200).send({
     hash: appVersion,
     start: startDate,
-    build: fileStat.ctime,
+    versionDate: new Date(versionDate).toISOString(),
   });
 });
 
