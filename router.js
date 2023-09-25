@@ -19,6 +19,15 @@ export function createRouter() {
   return new Router({
     mode: "history",
     scrollBehavior(to, from, savedPosition) {
+      if (to.params && from.params) {
+        if (
+          from.params.idItem === to.params.idItem &&
+          from.params.idCard &&
+          from.params.idCard !== to.params.idCard
+        ) {
+          return;
+        }
+      }
       return { x: 0, y: 0 };
     },
     routes: [
