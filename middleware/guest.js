@@ -15,6 +15,7 @@ export default async function ({
   store.commit("blocks/clearFilters");
   store.commit("data_card/setError", false);
   if (process.server) {
+    $axios.setHeader("Referer", route.fullPath);
     const ref = $cookiz.get("ref");
     if ($auth.loggedIn) {
       $cookiz.remove("ref");
