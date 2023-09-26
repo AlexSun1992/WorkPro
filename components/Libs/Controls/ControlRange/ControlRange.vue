@@ -108,7 +108,6 @@ export default {
 
   created() {
     const valueNvalue = this.data.options.find((item) => item.NVALUE);
-
     if (this.isOnlyTwoItemsInPrices === false) {
       if (this.data.value) {
         const value = this.data.options.find((item) =>
@@ -298,7 +297,7 @@ export default {
     },
     moveToCurrentValue(value) {
       const getValue = value.NVALUE;
-      if (getValue) {
+      if (getValue || getValue === 0) {
         if (this.isOnlyTwoItemsInPrices === false) {
           this.insuredSum = getValue;
           this.valueTypeNumber = getValue;
