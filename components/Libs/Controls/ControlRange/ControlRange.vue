@@ -297,10 +297,13 @@ export default {
     },
     moveToCurrentValue(value) {
       const getValue = value.NVALUE;
-      if (getValue || getValue === 0) {
+
+      if (getValue !== undefined) {
         if (this.isOnlyTwoItemsInPrices === false) {
           this.insuredSum = getValue;
+
           this.valueTypeNumber = getValue;
+
           const getIndexValue = this.getAllPricesValue.indexOf(getValue);
           this.valueTypeRange = getIndexValue;
         }
@@ -309,8 +312,7 @@ export default {
           this.valueTypeNumber = getValue;
           this.valueTypeRange = getValue;
         }
-      }
-      if (!getValue) {
+      } else {
         const getId = value.ID;
         this.insuredSum = getId;
         this.valueTypeNumber = getId;
