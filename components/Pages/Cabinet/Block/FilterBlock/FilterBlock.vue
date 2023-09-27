@@ -118,6 +118,13 @@ export default {
       required: true,
       default: () => false,
     },
+
+    // Признак "вторичного" фильтра, который зависит от остальных и сбрасывается, если не найдены элементы
+    isSecondaryFilter: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
   },
 
   data() {
@@ -136,9 +143,13 @@ export default {
       );
 
       if (block) {
-        const items = block.data.items.map((item) => item[this.propertyName]);
+        const dataItems = this.isSecondaryFilter
+          ? this.getMainFilteredItems
+          : block.data.items;
+        const filterItems = dataItems.map((item) => item[this.propertyName]);
 
-        const uniqueItems = this.uniqueItems || Array.from(new Set(items));
+        const uniqueItems =
+          this.uniqueItems || Array.from(new Set(filterItems));
 
         const filter =
           this.$store.getters["blocks/getFilters"].find(
@@ -160,6 +171,10 @@ export default {
         });
       }
       return [];
+    },
+
+    getMainFilteredItems() {
+      return this.$store.getters["blocks/getMainFilteredItems"](this.itemId);
     },
 
     getUnfilteredItemsCount() {
@@ -192,6 +207,18 @@ export default {
         id: this.itemId,
       });
     },
+
+    filterItems(filters) {
+      const isAnyCheckedFilter = filters.some(({ isChecked }) => isChecked);
+      if (
+        this.isSecondaryFilter &&
+        filters.length > 0 &&
+        isAnyCheckedFilter === false &&
+        this.isAllFilters === false
+      ) {
+        this.clearFilter(this.propertyName);
+      }
+    },
   },
 
   unmounted() {
@@ -206,6 +233,8 @@ export default {
         propertyName: this.propertyName,
         filter: Array.isArray(currentFilter) ? currentFilter : [currentFilter],
         id: this.itemId,
+        filterType: this.filterType,
+        isMainFilter: !this.isSecondaryFilter,
       });
     }
     this.$store.commit("blocks/setSearchParams", null);
@@ -220,6 +249,7 @@ export default {
         filterType: this.filterType,
         filterItem: item,
         id: this.itemId,
+        isMainFilter: !this.isSecondaryFilter,
       });
       this.setQueryURL();
       const target = this.$store.getters["blocks/getFilters"].find(
@@ -243,6 +273,8 @@ export default {
         propertyName,
         filter: [item],
         id: this.itemId,
+        filterType: this.filterType,
+        isMainFilter: !this.isSecondaryFilter,
       });
       this.setQueryURL();
     },
