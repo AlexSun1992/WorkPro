@@ -33,6 +33,56 @@ export const getters = {
 
   getUnfilteredBlockById: (state) => (id) =>
     state.blocks.find((b) => b.blockId === parseInt(id, 10)),
+
+  getMainFilteredItems: (state) => (id) => {
+    const currentBlock = state.blocks.find(
+      (b) => b.blockId == parseInt(id, 10)
+    );
+
+    const mainFilters = state.filters.filter(
+      ({ isMainFilter }) => isMainFilter
+    );
+    if (currentBlock) {
+      // @TODO Вынести фильтры в отдельную функцию, т.к. они повторяют те, что в getBlockById
+      return currentBlock.data.items
+        .filter((item) => {
+          let isItemShow = true;
+          mainFilters.forEach((filter) => {
+            if (!isItemShow) {
+              return;
+            }
+            const value = item[filter.propertyName];
+
+            if (filter.filter.length === 0) {
+              return;
+            }
+            isItemShow = filter.filter.includes(value);
+          });
+          return isItemShow;
+        })
+        .filter((item) => {
+          if (state.searchValue) {
+            return isStringInItem(item, state.searchValue);
+          }
+          return true;
+        })
+        .filter((item) => {
+          if (
+            state.searchParams &&
+            state.searchParams.id == currentBlock.blockId
+          ) {
+            return state.searchParams.searchProperty.some((param) =>
+              String(item[param])
+                .toLowerCase()
+                .includes(state.searchParams.searchString.toLowerCase())
+            );
+          }
+          return true;
+        });
+    }
+    return [];
+  },
+
   getBlockById: (state) => (id) => {
     const currentBlock = state.blocks.find(
       (b) => b.blockId == parseInt(id, 10)
@@ -371,13 +421,17 @@ export const mutations = {
     }
   },
 
-  toggleFilter: (state, { propertyName, filterItem, filterType, id }) => {
+  toggleFilter: (
+    state,
+    { propertyName, filterItem, filterType, id, isMainFilter }
+  ) => {
     let currentFilter = state.filters.find(
       (filter) => filter.propertyName === propertyName
     );
     if (currentFilter === undefined) {
       currentFilter = {
         propertyName,
+        isMainFilter,
         filter: [],
         id,
       };
