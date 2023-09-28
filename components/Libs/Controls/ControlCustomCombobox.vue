@@ -116,8 +116,9 @@ export default {
       }
       if (
         value.length < 1 ||
-        this.data.options.find((item) => item.value === this.data?.value)
-          ?.text === value
+        this.data.options.find(
+          (item) => item.value === Number(this.data?.value)
+        )?.text === value
       ) {
         this.placeholderValue = value;
         this.$refs.autocomplete.value = "";
