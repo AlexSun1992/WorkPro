@@ -2649,6 +2649,7 @@ a.free {
   left: 50%;
 }
 
+.step-block.ns,
 .step-block.harvestmite,
 .step-block.osago,
 .step-block.apartment,
@@ -2668,6 +2669,7 @@ a.free {
   font-weight: 700;
 }
 
+.ns .step[data-step="1"],
 .harvestmite .step[data-step="1"],
 .osago .step[data-step="1"],
 .telemed .step[data-step="1"],
@@ -2692,6 +2694,7 @@ a.free {
   background-image: get-asset("/img/osagostap5.svg");
 }
 
+.ns .step[data-step="2"],
 .harvestmite .step[data-step="3"],
 .osago .step[data-step="6"],
 .telemed .step[data-step="3"] {
