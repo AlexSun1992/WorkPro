@@ -98,21 +98,23 @@ export default {
   },
   methods: {
     search(value) {
-      const findValueInList = this.data.options.find((i) =>
-        i.text.includes(this.$refs.autocomplete?.value)
-      );
+      if (value) {
+        const findValueInList = this.data.options.find((i) =>
+          i.text.includes(this.$refs.autocomplete?.value)
+        );
 
-      if (
-        findValueInList === undefined &&
-        this.$refs.autocomplete?.value !== undefined &&
-        this.getCurrentValu === undefined
-      ) {
-        this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
-        this.isErr = false;
-      }
+        if (
+          findValueInList === undefined &&
+          this.$refs.autocomplete?.value !== undefined &&
+          this.getCurrentValu === undefined
+        ) {
+          this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
+          this.isErr = false;
+        }
 
-      if (findValueInList !== undefined) {
-        this.isErr = true;
+        if (findValueInList !== undefined) {
+          this.isErr = true;
+        }
       }
       if (
         value.length < 1 ||
@@ -141,7 +143,7 @@ export default {
     handleBlur() {
       if (Boolean(this.$refs.autocomplete.value) === false) {
         const value = this.data.options.find(
-          (item) => item.value === this.data?.value
+          (item) => item.value === Number(this.data?.value)
         );
 
         if (value === undefined) {
