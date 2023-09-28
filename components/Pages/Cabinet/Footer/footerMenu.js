@@ -47,7 +47,7 @@ const footerMenu = [
     titleRef: "/about/",
     items: [
       { title: "Новости", ref: "https://old.reso.ru/About/Media/News/" },
-      { title: "Вакансии", ref: "https://old.reso.ru/About/Media/News/" },
+      { title: "Карьера в РЕСО", ref: "/about/career/" },
       { title: "Закупки", ref: "/about/tenders/" },
       {
         title: "Раскрытие сведений",
@@ -55,7 +55,7 @@ const footerMenu = [
       },
       {
         title: "Информация для потребителей",
-        ref: "https://old.reso.ru/About/Company/",
+        ref: "/about/bazovuy_standart0823.pdf",
       },
       {
         title: "Правила и тарифы",
