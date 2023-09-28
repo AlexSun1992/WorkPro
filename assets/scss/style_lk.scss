@@ -2000,6 +2000,9 @@ input.checkbox-hide + label:after {
 input.checkbox-btn {
   display: none;
 }
+.chck-list .checkbox-hide label {
+  cursor: text;
+}
 
 .btn-outline-success,
 .btn-primary,
