@@ -265,10 +265,19 @@ export default {
   background-color: #ecf3fa;
   color: #3b86c8;
 }
+.box-blue.active .box-button {
+  background-color: #3b86c8;
+  color: #fff;
+}
+.box-green.active .box-button {
+  background-color: #009639;
+  color: #fff;
+}
 
 .box-blue.active {
   border-color: #3b86c8;
 }
+
 .box-green.active {
   border-color: #009639;
 }
