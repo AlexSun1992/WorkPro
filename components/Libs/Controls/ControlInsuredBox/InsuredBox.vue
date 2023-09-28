@@ -1,5 +1,5 @@
 <template>
-  <div v-if="carouselCards.length">
+  <div v-if="carouselCards.length" class="slider_in_col">
     <VueSlickCarousel v-bind="settings">
       <div v-for="(card, indx) in carouselCards" :key="card.ID">
         <div
@@ -60,15 +60,16 @@ export default {
         focusOnSelect: true,
         slidesToShow: 3,
         speed: 500,
-        infinite: true,
+        infinite: false,
         initialSlide: null,
-        centerMode: true,
+        centerMode: false,
+        centerPadding: "20px",
         responsive: [
           {
             breakpoint: 1200,
             settings: {
               slidesToShow: 3,
-              slidesToScroll: 3,
+              slidesToScroll: 1,
               dots: false,
               arrows: true,
             },
@@ -79,7 +80,7 @@ export default {
               dots: true,
               arrows: false,
               slidesToShow: 2,
-              slidesToScroll: 2,
+              slidesToScroll: 1,
             },
           },
           {
@@ -89,6 +90,8 @@ export default {
               arrows: false,
               slidesToShow: 1,
               slidesToScroll: 1,
+              centerMode: true,
+              centerPadding: "20px",
             },
           },
         ],
@@ -97,6 +100,10 @@ export default {
   },
   async created() {
     await this.fetchData();
+
+    if (this.carouselCards.length > 3) {
+      this.settings.centerMode = true;
+    }
     this.carouselCards.forEach((item, index) => {
       if (this.data.value.value === "undefined") {
         if (item.BDEFAULT === true) {
@@ -157,7 +164,7 @@ export default {
 </script>
 <style>
 .cabinet .slick-slide {
-  padding: 0 10px 20px 10px;
+  border: 10px solid #fff;
 }
 .cabinet .slick-slide:first-of-type {
   padding-left: 0;
@@ -298,5 +305,15 @@ export default {
 }
 .box-green .box-flag {
   background-color: #009639;
+}
+.slider_in_col {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+@media (max-width: 480px) {
+  .slider_in_col {
+    margin-left: -16px;
+    margin-right: -16px;
+  }
 }
 </style>
