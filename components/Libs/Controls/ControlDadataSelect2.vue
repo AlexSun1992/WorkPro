@@ -44,6 +44,14 @@ function getQueryParams(queryType, input) {
       },
     };
   }
+  if (queryType.includes("BANK")) {
+    return {
+      query: "bank",
+      body: {
+        query: input,
+      },
+    };
+  }
   if (queryType === "SCITY_SETTLEMENT") {
     return {
       query: "address",
