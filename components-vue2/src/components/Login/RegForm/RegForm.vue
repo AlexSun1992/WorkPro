@@ -547,6 +547,12 @@ export default {
         return;
       }
       if (field === "isPolicyExist") {
+        this.isPolicyExist = e;
+        if (this.isPolicyExist === false) {
+          this.form.policyNumber = "";
+          this.policyClassHub = [];
+          this.isStatePolicyErrorMessage = null;
+        }
         this.$LogEvent({
           formName: "RegForm",
           idEventType: 11,
@@ -554,12 +560,6 @@ export default {
           message: `Переключил пункт «У меня есть полис РЕСО» при регистрации`,
           timeUser: new Date(),
         });
-        this.isPolicyExist = e;
-        if (this.isPolicyExist === false) {
-          this.form.policyNumber = "";
-          this.policyClassHub = [];
-          this.isStatePolicyErrorMessage = null;
-        }
         return;
       }
       if (field === "policyNumber") {
