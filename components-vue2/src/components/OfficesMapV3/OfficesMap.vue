@@ -104,6 +104,7 @@ import OfficesList from "./OfficesList.vue";
 import OfficeCard from "./OfficeCard.vue";
 import MetroOfficeCard from "./MetroOfficeCard.vue";
 import AddressSuggestView from "./AddressSuggestView/AddressSuggestView";
+import { getTemplate } from "../../../../utils/map/helpers/helpers2";
 
 Vue.use(LoadScript);
 export default {
@@ -120,10 +121,10 @@ export default {
     ZoomComponent,
     BPagination,
   },
+  myMap: null,
+  objectManager: null,
   data() {
     return {
-      myMap: null,
-      objectManager: null,
       filters,
       filteredOffices: null,
       filteredAgentsData: null,
@@ -752,12 +753,6 @@ export default {
       });
     },
 
-    getHtmlOfficeCard(office) {
-        let vm = new Vue(Object.assign({}, OfficeCard));
-        Vue.set(vm.$props, 'office', office);
-        return vm.$mount().$el.outerHTML;
-    },
-
     getGeoObjects(offices) {
       const myGeoObjects = [];
 
@@ -770,7 +765,7 @@ export default {
               coordinates: [office.NLAT, office.NLONG],
             },
             properties: {
-              balloonContent: this.getHtmlOfficeCard(office),
+              balloonContent: getTemplate(office),
               hintContent: `${office.SSHORTNAME ?? "Офис продаж"}`,
               balloonShadowPane: "outerBalloon",
 

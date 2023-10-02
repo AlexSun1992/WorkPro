@@ -20,7 +20,7 @@ export const actions = {
       });
       const promiseAgents = new Promise((resolve,reject) => {
         resolve(this.$axios.get(
-          `/am/free/v2/siteapi/agentsdata?nolimit=y`
+          `/system/modules/ru.reso.v2/elements/RMAPI/api-query.jsp?query=agents`
         ).then(res => { return res.data[0]._data }));
       });
       await Promise.all([promiseOffices, promiseAgents])
