@@ -187,6 +187,7 @@
             :disabled="isDisabledForm"
             v-model="isAgreement"
             :value="!isAgreement"
+            @change="userConfirm"
           >
             Я даю
             <a
@@ -501,6 +502,15 @@ export default {
     },
   },
   methods: {
+    userConfirm() {
+      this.$LogEvent({
+        formName: "RegForm",
+        idEventType: 14,
+        controlName: "RegForm.vue",
+        message: `Подтвердил «Согласия на обработку» при регистрации`,
+        timeUser: new Date(),
+      });
+    },
     sendingCode(value) {
       this.form.code = null;
       this.codeFieldValid = false;
@@ -513,6 +523,13 @@ export default {
       }
     },
     changeFormData() {
+      this.$LogEvent({
+        formName: "RegForm",
+        idEventType: 16,
+        controlName: "RegForm.vue",
+        message: `Нажал «Изменить данные» при регистрации`,
+        timeUser: new Date(),
+      });
       this.isSendCode = null;
       this.codeToken = null;
       this.codeFieldValid = false;
@@ -530,6 +547,13 @@ export default {
         return;
       }
       if (field === "isPolicyExist") {
+        this.$LogEvent({
+          formName: "RegForm",
+          idEventType: 11,
+          controlName: "RegForm.vue",
+          message: `Переключил пункт «У меня есть полис РЕСО» при регистрации`,
+          timeUser: new Date(),
+        });
         this.isPolicyExist = e;
         if (this.isPolicyExist === false) {
           this.form.policyNumber = "";
@@ -583,6 +607,18 @@ export default {
         if (this.form.policyNumber === "") {
           this.isStatePolicyErrorMessage = false;
           this.policyClassHub.push("is-invalid");
+        }
+        if (
+          this.form.policyNumber !== "" &&
+          this.policyClassHub[0] === "is-valid"
+        ) {
+          this.$LogEvent({
+            formName: "RegForm",
+            idEventType: 12,
+            controlName: "RegForm.vue",
+            message: `Заполнил поле «Номер полиса» при регистрации`,
+            timeUser: new Date(),
+          });
         }
       }
 
@@ -952,6 +988,13 @@ export default {
     },
 
     async onSubmit(event) {
+      this.$LogEvent({
+        formName: "RegForm",
+        idEventType: 15,
+        controlName: "RegForm.vue",
+        message: `Нажал «Зарегистрироваться» при регистрации`,
+        timeUser: new Date(),
+      });
       try {
         if (this.isAgreement === false) {
           this.isErrorMessageAgreement = true;
