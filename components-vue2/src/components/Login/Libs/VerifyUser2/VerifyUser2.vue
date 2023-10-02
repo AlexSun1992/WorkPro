@@ -495,12 +495,10 @@ export default {
         this.$emit("sendingCode", false);
       }
       this.$LogEvent({
-        formName: "VerifyUser",
-        idEventType: this.loginType === "phone" ? 155 : 162,
-        controlName: "PasswordRecoveryForm.vue",
-        message: `Нажал на кнопку "Получить код через ${
-          this.loginType === "phone" ? "номер" : "EMAIL"
-        }"`,
+        formName: "RegForm",
+        idEventType: 13,
+        controlName: "VerifyUser.vue",
+        message: `Нажал на кнопку «Получить код» при регистрации`,
         timeUser: new Date(),
       });
     },
