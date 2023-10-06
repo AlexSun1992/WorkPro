@@ -151,4 +151,52 @@ describe("ControlRange", () => {
 
     expect(inputTypeRangeValue.element.value).toBe("5");
   });
+
+  it("Плавающий ползунок не измененяет значение, потому что disabled", async () => {
+    const dataMock = {
+      ...dataMockSeveralItems,
+      ...(dataMockSeveralItems.propsData.data.readonly = true),
+    };
+    createComponent(dataMock);
+    const inputTypeRangeValue = wrapper.find("[type='range']");
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
+
+    inputTypeRangeValue.setValue("1");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value).not.toBe("1 800 000₽");
+
+    inputTypeRangeValue.setValue("2");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(inputTypeNumberValue.element.value).not.toBe("2 000 000₽");
+  });
+
+  it("Не работает кнопка добавить, потому что disabled", async () => {
+    const dataMock = {
+      ...dataMockSeveralItems,
+      ...(dataMockSeveralItems.propsData.data.readonly = true),
+    };
+    createComponent(dataMock);
+    const addButton = wrapper.find("#add");
+
+    await addButton.trigger("click");
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
+
+    expect(inputTypeNumberValue.element.value).not.toBe("1 800 000₽");
+  });
+
+  it("Не работает кнопка вичесть, потому что disabled", async () => {
+    const dataMock = {
+      ...dataMockSeveralItems,
+      ...(dataMockSeveralItems.propsData.data.readonly = true),
+    };
+    createComponent(dataMock);
+    const addButton = wrapper.find("#subtract");
+
+    await addButton.trigger("click");
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
+
+    expect(inputTypeNumberValue.element.value).toBe("1 500 000₽");
+  });
 });
