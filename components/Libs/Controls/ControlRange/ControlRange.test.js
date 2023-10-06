@@ -153,50 +153,58 @@ describe("ControlRange", () => {
   });
 
   it("Плавающий ползунок не измененяет значение, потому что disabled", async () => {
-    const dataMock = {
-      ...dataMockSeveralItems,
-      ...(dataMockSeveralItems.propsData.data.readonly = true),
-    };
+    const dataMock = JSON.parse(JSON.stringify(dataMockSeveralItems));
+    dataMock.propsData.data.readonly = true;
     createComponent(dataMock);
-    const inputTypeRangeValue = wrapper.find("[type='range']");
+
     const inputTypeNumberValue = wrapper.find("[type='tel']");
 
-    inputTypeRangeValue.setValue("1");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value).not.toBe("1 800 000₽");
-
-    inputTypeRangeValue.setValue("2");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(inputTypeNumberValue.element.value).not.toBe("2 000 000₽");
+    expect(inputTypeNumberValue.element.disabled).toBe(true);
   });
 
-  it("Не работает кнопка добавить, потому что disabled", async () => {
-    const dataMock = {
-      ...dataMockSeveralItems,
-      ...(dataMockSeveralItems.propsData.data.readonly = true),
-    };
+  it("Не работает кнопка +, потому что disabled", async () => {
+    const dataMock = JSON.parse(JSON.stringify(dataMockSeveralItems));
+    dataMock.propsData.data.readonly = true;
     createComponent(dataMock);
+
     const addButton = wrapper.find("#add");
 
-    await addButton.trigger("click");
-    const inputTypeNumberValue = wrapper.find("[type='tel']");
-
-    expect(inputTypeNumberValue.element.value).not.toBe("1 800 000₽");
+    expect(addButton.element.disabled).toBe(true);
   });
 
-  it("Не работает кнопка вичесть, потому что disabled", async () => {
-    const dataMock = {
-      ...dataMockSeveralItems,
-      ...(dataMockSeveralItems.propsData.data.readonly = true),
-    };
+  it("Не работает кнопка -, потому что disabled", async () => {
+    const dataMock = JSON.parse(JSON.stringify(dataMockSeveralItems));
+    dataMock.propsData.data.readonly = true;
+
     createComponent(dataMock);
-    const addButton = wrapper.find("#subtract");
+    const subtractButton = wrapper.find("#subtract");
 
-    await addButton.trigger("click");
+    expect(subtractButton.element.disabled).toBe(true);
+  });
+
+  it("При клике на элемент списка, значение [type='tel'] не изменится, потому что disabled", async () => {
+    const dataMock = JSON.parse(JSON.stringify(dataMockTwolItems));
+    dataMock.propsData.data.readonly = true;
+    createComponent(dataMock);
     const inputTypeNumberValue = wrapper.find("[type='tel']");
+    expect(inputTypeNumberValue.element.value).toBe("");
 
-    expect(inputTypeNumberValue.element.value).toBe("1 500 000₽");
+    const list = wrapper.find("li");
+    await list.trigger("click");
+
+    expect(inputTypeNumberValue.element.value).toBe("");
+  });
+
+  it("При клике на элемент списка, значение [type='tel']  изменится", async () => {
+    const dataMock = JSON.parse(JSON.stringify(dataMockTwolItems));
+    dataMock.propsData.data.readonly = false;
+    createComponent(dataMock);
+    const inputTypeNumberValue = wrapper.find("[type='tel']");
+    expect(inputTypeNumberValue.element.value).toBe("");
+
+    const list = wrapper.find("li");
+    await list.trigger("click");
+
+    expect(inputTypeNumberValue.element.value).toBe("100 000₽");
   });
 });
