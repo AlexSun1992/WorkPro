@@ -18,6 +18,7 @@
         </span>
       </label>
       <currency-input
+        :disabled="data.readonly"
         @input="changeValue(valueTypeNumber)"
         @blur="getNearestValue()"
         v-model="valueTypeNumber"
@@ -31,6 +32,7 @@
         type="tel"
       ></currency-input>
       <b-form-input
+        :disabled="data.readonly"
         @input="handleValue(valueTypeRange)"
         id="inp"
         v-model="valueTypeRange"
@@ -58,13 +60,13 @@
       </ul>
       <button
         id="add"
-        :disabled="isMaxValueReach"
+        :disabled="isMaxValueReach || data.readonly"
         @click="addInsuranceSum"
       ></button>
 
       <button
         id="subtract"
-        :disabled="isMinValueReach"
+        :disabled="isMinValueReach || data.readonly"
         @click="degradeInsuranceSum"
       ></button>
     </div>
@@ -296,6 +298,9 @@ export default {
       }
     },
     moveToCurrentValue(value) {
+      if (this.data.readonly) {
+        return;
+      }
       const getValue = value.NVALUE;
 
       if (getValue !== undefined) {
