@@ -12,6 +12,9 @@ router.use((req, res, next) => {
 });
 
 router.get("/version", async (req, res) => {
+  const appBranch =
+    process.env.APP_VERSION_BRANCH ||
+    childProcess.execSync("git rev-parse --abbrev-ref HEAD").toString().trim();
   const appVersion =
     process.env.APP_VERSION ||
     childProcess.execSync("git rev-parse --short HEAD").toString().trim();
@@ -31,12 +34,15 @@ router.get("/version", async (req, res) => {
   if ("build" in req.query) {
     return res.send(versionDate);
   }
-
-  res.status(200).send({
+  const sendData = {
     hash: appVersion,
     start: startDate,
     versionDate: new Date(versionDate).toISOString(),
-  });
+  };
+  if (appBranch !== "master") {
+    sendData.appBranch = appBranch;
+  }
+  res.status(200).send(sendData);
 });
 
 module.exports = {
