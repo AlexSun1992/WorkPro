@@ -127,7 +127,7 @@ export default {
     return {
       filters,
       filteredOffices: null,
-      filteredAgentsData: null,
+      //filteredAgentsData: null,
       page: 1,
       mapState: null,
       regionId: null,
@@ -203,7 +203,7 @@ export default {
       await Promise.all([promiseLoadData, promiseLoadMap]);
 
       this.filteredOffices = this.allOffices;
-      this.filteredAgentsData = this.allAgents.filter((agent) => !agent.IDOKRUG.startsWith('77') && !agent.IDOKRUG.startsWith('50') && !agent.IDOKRUG.startsWith('78') && !agent.IDOKRUG.startsWith('47'));
+      //this.filteredAgentsData = this.allAgents.filter((agent) => !agent.IDOKRUG.startsWith('77') && !agent.IDOKRUG.startsWith('50') && !agent.IDOKRUG.startsWith('78') && !agent.IDOKRUG.startsWith('47'));
 
       if (this.allOffices) {
         ymaps.ready(this.initMap);
@@ -662,7 +662,8 @@ export default {
       });
 
       objectManager.add(this.getGeoObjects(this.filteredOffices));
-      objectManager.add(this.getBalloonAgentsData(this.filteredAgentsData));
+      //objectManager.add(this.getBalloonAgentsData(this.filteredAgentsData));
+      objectManager.add(this.getBalloonAgentsData(this.allAgents));
 
       objectManager.objects.events.add(['balloonopen', 'balloonclose'], function(e) {
         let objectId = e.get('objectId');
