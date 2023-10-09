@@ -849,9 +849,7 @@ export default {
               coordinates:[item.NLATITUDE,item.NLONGITUDE]
             },
             properties:{
-              balloonContentHeader:"",
-              balloonContentBody: this.getTemplateLayoutAgentCard({agent: item, distance: currDistance}, 'balloon'),
-              balloonContentFooter:"",
+              balloonContent: this.getTemplateLayoutAgentCard({agent: item, distance: currDistance}, 'balloon'),
               clusterCaption:"",
               hintContent:item.NAME,
               productList:item.SPRODUCTLIST,
