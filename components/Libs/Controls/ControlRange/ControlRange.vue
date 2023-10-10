@@ -37,12 +37,8 @@
         id="inp"
         v-model="valueTypeRange"
         type="range"
-        :min="
-          isOnlyTwoItemsInPrices ? getMinValueFromPricesValue : getMinRangeValue
-        "
-        :max="
-          isOnlyTwoItemsInPrices ? getMaxValueFromPricesValue : getMaxRangeValue
-        "
+        :min="getMinRangeValue"
+        :max="getMaxRangeValue"
       >
       </b-form-input>
       <ul :data-amountOfValues="data.options.length" class="range-list">
@@ -110,51 +106,33 @@ export default {
 
   created() {
     const valueNvalue = this.data.options.find((item) => item.NVALUE);
-    if (this.isOnlyTwoItemsInPrices === false) {
-      if (this.data.value) {
-        const value = this.data.options.find((item) =>
-          Number(this.data.value) ? item.ID === Number(this.data.value) : item
-        );
-        if (valueNvalue) {
-          this.valueTypeNumber = value
-            ? value.NVALUE
-            : this.data.options[0].NVALUE;
-        }
 
-        if (!valueNvalue) {
-          this.valueTypeNumber = value
-            ? value.value
-            : this.data.options[0].value;
-        }
-
-        this.valueTypeRange = this.getAllPricesValue.indexOf(
-          this.valueTypeNumber
-        );
-        this.insuredSum = this.valueTypeNumber;
-      }
-    }
-    if (this.isOnlyTwoItemsInPrices) {
+    if (this.data.value) {
+      const value = this.data.options.find((item) =>
+        Number(this.data.value) ? item.ID === Number(this.data.value) : item
+      );
       if (valueNvalue) {
-        this.valueTypeNumber = this.data.options.find(
-          (item) => item.ID === Number(this.data.value)
-        )?.NVALUE;
+        this.valueTypeNumber = value
+          ? value.NVALUE
+          : this.data.options[0].NVALUE;
       }
+
       if (!valueNvalue) {
-        this.valueTypeNumber = this.data.options.find(
-          (item) => item.ID === Number(this.data.value)
-        ).ID;
+        this.valueTypeNumber = value ? value.value : this.data.options[0].value;
       }
-      this.valueTypeRange = this.valueTypeNumber;
-      this.insuredSum = Number(this.data.value);
+
+      this.valueTypeRange = this.getAllPricesValue.indexOf(
+        this.valueTypeNumber
+      );
+      this.insuredSum = this.valueTypeNumber;
     }
+
     if (valueNvalue) {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.isOnlyTwoItemsInPrices
-          ? this.insuredSum
-          : this.data.options.find((item) => item.NVALUE === this.insuredSum)
-              .ID,
+        value: this.data.options.find((item) => item.NVALUE === this.insuredSum)
+          .ID,
       });
     }
 
@@ -162,9 +140,8 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.isOnlyTwoItemsInPrices
-          ? this.insuredSum
-          : this.data.options.find((item) => item.ID === this.insuredSum).value,
+        value: this.data.options.find((item) => item.ID === this.insuredSum)
+          .value,
       });
     }
   },
@@ -176,20 +153,17 @@ export default {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: this.isOnlyTwoItemsInPrices
-            ? this.insuredSum
-            : this.data.options.find((item) => item.NVALUE === this.insuredSum)
-                ?.ID,
+          value: this.data.options.find(
+            (item) => item.NVALUE === this.insuredSum
+          )?.ID,
         });
       }
       if (!valueNvalue) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: this.isOnlyTwoItemsInPrices
-            ? this.insuredSum
-            : this.data.options.find((item) => item.ID === this.insuredSum)
-                .value,
+          value: this.data.options.find((item) => item.ID === this.insuredSum)
+            .value,
         });
       }
     },
@@ -206,12 +180,6 @@ export default {
       }
       const getPricesFromData = this.data.options.map((item) => item.value);
       return getPricesFromData;
-    },
-    isOnlyTwoItemsInPrices() {
-      if (this.getAllPricesValue.length === 2) {
-        return true;
-      }
-      return false;
     },
     getRangeValue() {
       return this.$store.getters["data_card/getRangeValue"];
@@ -254,48 +222,25 @@ export default {
         Number(value)
       );
 
-      if (this.isOnlyTwoItemsInPrices === false) {
-        const getIndex = this.getAllPricesValue.indexOf(closestValue);
-        this.valueTypeRange = getIndex;
-        this.insuredSum = closestValue;
-      }
-      if (this.isOnlyTwoItemsInPrices === true) {
-        this.valueTypeRange = this.valueTypeNumber;
-        this.insuredSum = this.valueTypeNumber;
-      }
+      const getIndex = this.getAllPricesValue.indexOf(closestValue);
+      this.valueTypeRange = getIndex;
+      this.insuredSum = closestValue;
     },
     getNearestValue() {
       const closestValue = getClosestValue(
         this.getAllPricesValue,
         this.valueTypeNumber
       );
-      if (this.isOnlyTwoItemsInPrices === false) {
-        const getIndex = this.getAllPricesValue.indexOf(closestValue);
-        this.valueTypeRange = getIndex;
-        this.insuredSum = closestValue;
-        this.valueTypeNumber = closestValue;
-      }
-      if (this.isOnlyTwoItemsInPrices === true) {
-        this.valueTypeRange = this.valueTypeNumber;
-        this.insuredSum = this.valueTypeNumber;
-        if (this.valueTypeNumber < this.getMinValueFromPricesValue) {
-          this.valueTypeNumber = this.getMinValueFromPricesValue;
-        }
-        if (this.valueTypeNumber > this.getMaxValueFromPricesValue) {
-          this.valueTypeNumber = this.getMaxValueFromPricesValue;
-        }
-      }
+
+      const getIndex = this.getAllPricesValue.indexOf(closestValue);
+      this.valueTypeRange = getIndex;
+      this.insuredSum = closestValue;
+      this.valueTypeNumber = closestValue;
     },
 
     handleValue(value) {
-      if (this.isOnlyTwoItemsInPrices === false) {
-        this.insuredSum = this.getAllPricesValue[value];
-        this.valueTypeNumber = this.insuredSum;
-      }
-      if (this.isOnlyTwoItemsInPrices === true) {
-        this.valueTypeNumber = Number(value);
-        this.insuredSum = Number(this.valueTypeNumber);
-      }
+      this.insuredSum = this.getAllPricesValue[value];
+      this.valueTypeNumber = this.insuredSum;
     },
     moveToCurrentValue(value) {
       if (this.data.readonly) {
@@ -304,85 +249,50 @@ export default {
       const getValue = value.NVALUE;
 
       if (getValue !== undefined) {
-        if (this.isOnlyTwoItemsInPrices === false) {
-          this.insuredSum = getValue;
+        this.insuredSum = getValue;
 
-          this.valueTypeNumber = getValue;
+        this.valueTypeNumber = getValue;
 
-          const getIndexValue = this.getAllPricesValue.indexOf(getValue);
-          this.valueTypeRange = getIndexValue;
-        }
-        if (this.isOnlyTwoItemsInPrices === true) {
-          this.insuredSum = getValue;
-          this.valueTypeNumber = getValue;
-          this.valueTypeRange = getValue;
-        }
+        const getIndexValue = this.getAllPricesValue.indexOf(getValue);
+        this.valueTypeRange = getIndexValue;
       } else {
         const getId = value.ID;
         this.insuredSum = getId;
         this.valueTypeNumber = getId;
-        if (this.isOnlyTwoItemsInPrices === true) {
-          this.valueTypeRange = getId;
-        }
-        if (this.isOnlyTwoItemsInPrices === false) {
-          const getIndex = this.getAllPricesValue.indexOf(getId);
-          this.valueTypeRange = getIndex;
-        }
+
+        const getIndex = this.getAllPricesValue.indexOf(getId);
+        this.valueTypeRange = getIndex;
       }
+
       if (this.insuredSum >= this.getMinValueFromPricesValue) {
         this.$emit("update", {
           fieldId: this.data.fieldId,
           name: this.data.name,
-          value: this.isOnlyTwoItemsInPrices
-            ? this.insuredSum
-            : this.data.options.find((item) => item.NVALUE === this.insuredSum)
-                ?.ID,
+          value: this.data.options.find(
+            (item) => item.NVALUE === this.insuredSum
+          )?.ID,
         });
       }
     },
 
     addInsuranceSum() {
       this.valueTypeRange = Number(this.valueTypeRange);
-      if (this.isOnlyTwoItemsInPrices === false) {
-        this.valueTypeRange += 1;
-        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
-        this.valueTypeNumber = this.insuredSum;
-      }
-      if (this.isOnlyTwoItemsInPrices === true) {
-        const closestValue = getClosestValue(
-          this.getAllPricesValue,
-          this.insuredSum
-        );
-        const getIndex = this.getAllPricesValue.indexOf(closestValue);
-        this.valueTypeRange = getIndex + 1;
-        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
-        this.valueTypeNumber = this.insuredSum;
-      }
+
+      this.valueTypeRange += 1;
+      this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      this.valueTypeNumber = this.insuredSum;
     },
 
     degradeInsuranceSum() {
       this.valueTypeRange = Number(this.valueTypeRange);
-      if (
-        this.valueTypeRange < this.getMinRangeValue &&
-        this.isOnlyTwoItemsInPrices === false
-      ) {
+      if (this.valueTypeRange < this.getMinRangeValue) {
         this.valueTypeRange = this.getMinRangeValue;
       }
-      if (this.isOnlyTwoItemsInPrices === false) {
-        this.valueTypeRange -= 1;
-        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
-        this.valueTypeNumber = this.insuredSum;
-      }
-      if (this.isOnlyTwoItemsInPrices === true) {
-        const closestValue = getClosestValue(
-          this.getAllPricesValue,
-          this.insuredSum
-        );
-        const getIndex = this.getAllPricesValue.indexOf(closestValue);
-        this.valueTypeRange = getIndex - 1;
-        this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
-        this.valueTypeNumber = this.insuredSum;
-      }
+
+      this.valueTypeRange -= 1;
+      this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
+      this.valueTypeNumber = this.insuredSum;
+
       this.insuredSum = this.getAllPricesValue[this.valueTypeRange];
     },
   },
