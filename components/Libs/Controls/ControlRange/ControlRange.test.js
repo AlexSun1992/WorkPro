@@ -1,8 +1,5 @@
 import { mount } from "@vue/test-utils";
-import {
-  dataMockSeveralItems,
-  dataMockTwolItems,
-} from "./ControlRange.fixtures";
+import { dataMockSeveralItems } from "./ControlRange.fixtures";
 import ControlRange from "./ControlRange.vue";
 
 describe("ControlRange", () => {
