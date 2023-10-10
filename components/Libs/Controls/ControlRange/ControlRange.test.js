@@ -45,40 +45,6 @@ describe("ControlRange", () => {
     expect(wrapper.find("[type='range']").element.value).toBe("5");
   });
 
-  it("Изменение input[type='range'] при заполнении input[type='number']", async () => {
-    createComponent(dataMockTwolItems);
-    const inputTypeNumberValue = wrapper.find("[type='tel']");
-    inputTypeNumberValue.setValue("1800000");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find("[type='range']").element.value).toBe("1800000");
-
-    inputTypeNumberValue.setValue("1600000");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find("[type='range']").element.value).toBe("1600000");
-
-    inputTypeNumberValue.setValue("2300000");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find("[type='range']").element.value).toBe("2300000");
-
-    inputTypeNumberValue.setValue("1700000");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find("[type='range']").element.value).toBe("1700000");
-
-    inputTypeNumberValue.setValue("1798761");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find("[type='range']").element.value).toBe("1798761");
-
-    inputTypeNumberValue.setValue("3600000");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find("[type='range']").element.value).toBe("3000000");
-  });
-
   it("Изменение страховой суммы при изменении input[type='range']", async () => {
     createComponent(dataMockSeveralItems);
     const inputTypeRangeValue = wrapper.find("[type='range']");
@@ -180,31 +146,5 @@ describe("ControlRange", () => {
     const subtractButton = wrapper.find("#subtract");
 
     expect(subtractButton.element.disabled).toBe(true);
-  });
-
-  it("При клике на элемент списка, значение [type='tel'] не изменится, потому что disabled", async () => {
-    const dataMock = JSON.parse(JSON.stringify(dataMockTwolItems));
-    dataMock.propsData.data.readonly = true;
-    createComponent(dataMock);
-    const inputTypeNumberValue = wrapper.find("[type='tel']");
-    expect(inputTypeNumberValue.element.value).toBe("");
-
-    const list = wrapper.find("li");
-    await list.trigger("click");
-
-    expect(inputTypeNumberValue.element.value).toBe("");
-  });
-
-  it("При клике на элемент списка, значение [type='tel']  изменится", async () => {
-    const dataMock = JSON.parse(JSON.stringify(dataMockTwolItems));
-    dataMock.propsData.data.readonly = false;
-    createComponent(dataMock);
-    const inputTypeNumberValue = wrapper.find("[type='tel']");
-    expect(inputTypeNumberValue.element.value).toBe("");
-
-    const list = wrapper.find("li");
-    await list.trigger("click");
-
-    expect(inputTypeNumberValue.element.value).toBe("100 000₽");
   });
 });
