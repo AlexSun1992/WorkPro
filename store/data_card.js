@@ -383,7 +383,8 @@ export const actions = {
 
     const dataIsReadyToTransfer = convertUploaderFilesToFormData(getFieldData);
 
-    this.$axios.post(
+    const httpMethod = params.idCard === "0" ? "post" : "put";
+    this.$axios[httpMethod](
       `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
         params.cardId
       }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
