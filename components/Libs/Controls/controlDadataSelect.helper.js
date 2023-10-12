@@ -11,7 +11,7 @@ export async function getBrandmodelSuggestions(query, filters) {
 
   const response = await axios({
     method: "post",
-    url: "https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/brandmodel",
+    url: "/suggestions/api/4_1/rs/suggest/brandmodel",
     headers: { "X-Application": "VueJS" },
     data: { query, filters },
   });
