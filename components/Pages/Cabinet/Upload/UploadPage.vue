@@ -3,7 +3,7 @@
     <div class="title-page mb-3">Загрузите документы</div>
     <div v-for="(item, i) in getData" :key="i">
       <b>{{ item.TITLE }}</b>
-      <p>{{ item.DESCRIPTION }}</p>
+      <p v-html="item.DESCRIPTION" />
       <upload-drop
         @update="changeFiles(item.NAME, $event)"
         @remove="removeFile($event)"
