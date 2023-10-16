@@ -47,7 +47,7 @@ const footerMenu = [
     titleRef: "/about/",
     items: [
       { title: "Новости", ref: "https://old.reso.ru/About/Media/News/" },
-      { title: "Карьера в РЕСО", ref: "/about/career/" },
+      { title: "Работа в РЕСО", ref: "/about/career/" },
       { title: "Закупки", ref: "/about/tenders/" },
       {
         title: "Раскрытие сведений",
