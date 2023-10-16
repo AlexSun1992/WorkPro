@@ -1,12 +1,9 @@
 import axios from "axios";
 import { getBrandmodelSuggestions } from "./controlDadataSelect.helper";
 
-jest.mock("axios");
 describe("сравнение значений возвращаемых из справочника dadata", () => {
   it("получение данных с фильтрами", async () => {
-    axios.mockImplementationOnce(() =>
-      Promise.resolve({ data: { suggestions: [] } })
-    );
+    axios.defaults.baseURL = "https://dadata.reso.ru";
 
     const suggestionsWithFilters = await getBrandmodelSuggestions("автобус", [
       {
@@ -30,9 +27,8 @@ describe("сравнение значений возвращаемых из сп
     expect(isBusExist).toBe(false);
   });
   it("получение данных без фильтров", async () => {
-    axios.mockImplementationOnce(() =>
-      Promise.resolve({ data: { suggestions: [{ value: "АВТОБУС" }] } })
-    );
+    axios.defaults.baseURL = "https://dadata.reso.ru";
+
     const suggestionsWithFilters = await getBrandmodelSuggestions("автобус");
     const isBusExist = Boolean(
       suggestionsWithFilters.find((item) => item.value.includes("АВТОБУС"))
