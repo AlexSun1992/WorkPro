@@ -226,18 +226,15 @@ export const actions = {
     const { key } = params;
     delete params.suggestionType;
     delete params.key;
-    const response = await fetch(
-      `https://dadata.reso.ru/suggestions/api/4_1/rs/suggest/${type}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Token ${key}`,
-        },
-        body: JSON.stringify(params),
-      }
-    );
+    const response = await fetch(`/suggestions/api/4_1/rs/suggest/${type}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${key}`,
+      },
+      body: JSON.stringify(params),
+    });
     const result = await response.json();
     return result.suggestions;
     // return result.suggestions.map(item => item.value);
