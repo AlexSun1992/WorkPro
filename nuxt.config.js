@@ -161,12 +161,25 @@ const nuxtConfig = {
     },
     transpile: ["vue-agile", "vue-plugin-load-script"],
   },
-  proxy: {
-    "/free": process.env.MOBILE_URL ?? "https://lk.reso.ru",
-    "/am": process.env.MOBILE2_URL ?? "https://lk.reso.ru",
-    "/main": process.env.MOBILE2_URL ?? "https://lk.reso.ru",
-    "/suggestions": "https://dadata.reso.ru",
-  },
+  proxy: [
+    [["/free"], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" }],
+    [
+      ["/am", "/main"],
+      { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" },
+    ],
+    [
+      [
+        "/suggestions",
+        "/export",
+        "/individual",
+        "/galleries",
+        "/about",
+        "/system",
+        "/corporate",
+      ],
+      { target: "https://reso.ru" },
+    ],
+  ],
   serverMiddleware: ["~/routes/routes.js"],
   auth: {
     strategies: {
