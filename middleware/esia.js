@@ -1,11 +1,21 @@
 import { getErrorMessage } from "../plugins/auth/toast.helper";
 
-export default function ({ route, redirect, $axios, $cookiz }) {
+export default function redirectFromEsia({ route, redirect, $axios, $cookiz }) {
+  const cookieRef = $cookiz.get("ref");
+  const cookieRefError = $cookiz.get("referror");
+  $cookiz.remove("ref");
+  $cookiz.remove("referror");
+
+  const successUrl = new URL(cookieRef || "/cabinet", "https://f.f");
+  const errorUrl = new URL(cookieRefError || "/login", "https://f.f");
+  errorUrl.searchParams.set(
+    "error",
+    "Произошла неизвестная ошибка входа через Госуслуги."
+  );
+
   const url = `/am/free/v2/datacard/55/801`;
   if (route.query?.code === undefined) {
-    return redirect(
-      `/login?error=Произошла неизвестная ошибка входа через Госуслуги.`
-    );
+    return redirect(`${errorUrl.pathname}${errorUrl.search}`);
   }
   return $axios
     .post(url, { code: route.query?.code })
@@ -14,20 +24,15 @@ export default function ({ route, redirect, $axios, $cookiz }) {
       $cookiz.set("auth._token.local", data.ACCESS_TOKEN);
       $cookiz.set("auth._refresh_token.local", data.REFRESH_TOKEN);
 
-      const ref = $cookiz.get("ref");
-      if (ref) {
-        $cookiz.remove("ref");
-        return redirect(ref);
-      }
-      return redirect("/cabinet");
+      return redirect(`${successUrl.pathname}${successUrl.search}`);
     })
-    .catch((error) =>
-      redirect(
-        `/login?error=${
-          error?.response?.data?.MESSAGE
-            ? getErrorMessage(error.response?.data?.MESSAGE)
-            : error
-        }`
-      )
-    );
+    .catch((error) => {
+      errorUrl.searchParams.set(
+        "error",
+        error?.response?.data?.MESSAGE
+          ? getErrorMessage(error.response?.data?.MESSAGE)
+          : error
+      );
+      redirect(`${errorUrl.pathname}${errorUrl.search}`);
+    });
 }
