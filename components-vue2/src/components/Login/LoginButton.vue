@@ -248,6 +248,11 @@ export default {
           this.personsData = null;
         });
     },
+    listenStorage(event) {
+      if (event.key === "USER_INFO" && event.newValue) {
+        this.personsData = JSON.parse(localStorage.getItem("USER_INFO"));
+      }
+    },
   },
 
   computed: {
@@ -262,7 +267,9 @@ export default {
       return `${this.personsData.SFIRSTNAME} ${this.personsData.SSECONDNAME}`;
     },
   },
+
   created() {
+    window.addEventListener("storage", this.listenStorage);
     if (
       Cookies.get(TOKEN_NAME) !== "false" &&
       Cookies.get(TOKEN_NAME) !== undefined
@@ -282,6 +289,9 @@ export default {
     } else {
       this.personsData = null;
     }
+  },
+  beforeDestroyed() {
+    window.removeEventListener("storage", this.listenStorage);
   },
 };
 </script>
