@@ -1,6 +1,28 @@
 stages:
   - "build"
   - "deploy"
+  - "version-bump"
+
+# PROJECT_WRITE_REPOSITORY_TOKEN необходимо создать здесь https://git.reso.ru/web/nuxt-vue/-/settings/access_tokens
+# с ролью maintainer и правами read_repository и write_repository
+# далее добавить сюда https://git.reso.ru/web/nuxt-vue/-/settings/ci_cd как переменную PROJECT_WRITE_REPOSITORY_TOKEN
+version-bump-master:
+  image: node:20
+  stage: version-bump
+  variables:
+    CI_NAME: gitlab
+    CI_EMAIL: ${CI_NAME}@reso.ru
+  script:
+    - env
+    - git config --global user.email $CI_EMAIL
+    - git config --global user.name $CI_NAME
+    - git config receive.advertisePushOptions true
+    - git config --global http.sslVerify false
+    - git checkout -B "$CI_COMMIT_REF_NAME" "$CI_COMMIT_SHA"
+    - npm version patch --allow-same-version
+    - git push "https://$CI_NAME:$PROJECT_WRITE_REPOSITORY_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git" --follow-tags $CI_COMMIT_BRANCH:$CI_COMMIT_BRANCH
+  rules:
+    - if: '$GITLAB_USER_NAME != "PROJECT_WRITE_REPOSITORY_TOKEN" && $CI_COMMIT_REF_NAME == "master" && $CI_PIPELINE_SOURCE == "push"'
 
 docker-build-master:
   image: docker:latest
@@ -15,6 +37,12 @@ docker-build-master:
     - docker pull "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA" || true
     - docker build --pull --build-arg APP_VERSION=$VERSION --build-arg APP_VERSION_BRANCH=$CI_COMMIT_REF_NAME --build-arg APP_VERSION_DATE=$CI_COMMIT_TIMESTAMP --tag "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA" .
     - docker push "$CI_REGISTRY_IMAGE/nuxt-server:$CI_COMMIT_SHORT_SHA"
+  rules:
+    # Защита от выполнения при слиянии
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    # Будет выполняться на каждый коммит в ветку, а в мастере только на любых тэгах (к примеру, v1.0.1)
+    - if: '$CI_COMMIT_REF_NAME != "master"'
   tags:
     - docker
 
@@ -24,7 +52,7 @@ new.reso.ru:
   script:
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_TEST_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   rules:
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME =~ /^v\d.+/
     - if: $CI_COMMIT_REF_NAME == "production"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -50,7 +78,7 @@ reso.ru:
     - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_PRODUCTION_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
   rules:
     - if: $CI_COMMIT_REF_NAME == "production"
-    - if: $CI_COMMIT_REF_NAME == "master"
+    - if: $CI_COMMIT_REF_NAME =~ /^v\d.+/
       when: manual
   tags:
     - docker
