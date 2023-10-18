@@ -37,9 +37,10 @@ router.get("/version", async (req, res) => {
   const sendData = {
     hash: appVersion,
     start: startDate,
+    version: process.env.npm_package_version,
     versionDate: new Date(versionDate).toISOString(),
   };
-  if (appBranch !== "master") {
+  if (!appBranch.startsWith("v")) {
     sendData.appBranch = appBranch;
   }
   res.status(200).send(sendData);
