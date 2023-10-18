@@ -1,6 +1,15 @@
-FROM node:18.12 AS preparation
+FROM node:20-alpine as preparation
+COPY package.json package-lock.json ./
+RUN ["node", "-e", "\
+    const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));\
+    const pkgLock = JSON.parse(fs.readFileSync('package-lock.json', 'utf-8'));\
+    fs.writeFileSync('package.json', JSON.stringify({ ...pkg, version: '0.0.0' }));\
+    fs.writeFileSync('package-lock.json', JSON.stringify({ ...pkgLock, packages: {...pkgLock.packages, '': {...pkgLock.packages[''], version: '0.0.0'}}, version: '0.0.0' }));\
+    "]
+
+FROM node:18.12 AS preparation_js
 WORKDIR /home/node/app
-COPY package*.json ./
+COPY --from=preparation package.json package-lock.json ./
 RUN npm config set registry https://nexus.reso.ru/repository/npm/ && npm ci
 COPY components-vue2/package*.json ./components-vue2/
 RUN (cd components-vue2 && npm ci)
@@ -9,9 +18,9 @@ RUN npm test && cd components-vue2 && npm run component
 
 FROM node:18.12
 WORKDIR /home/node/app
-COPY package*.json ./
+COPY --from=preparation package.json package-lock.json ./
 RUN npm config set registry https://nexus.reso.ru/repository/npm/ && npm ci
-COPY --from=preparation /home/node/app/static/js ./static/js
+COPY --from=preparation_js /home/node/app/static/js ./static/js
 ENV TZ=Europe/Moscow
 COPY . ./
 ARG APP_VERSION
