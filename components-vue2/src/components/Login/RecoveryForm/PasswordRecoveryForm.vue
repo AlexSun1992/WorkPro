@@ -168,6 +168,7 @@ import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import { passwordValidationDetail } from "../RegForm/regform.helper";
+import { redirectSuccess } from "./PasswordRecoveryForm.helper";
 
 const forbiddenRussianSign = helpers.regex(
   "forbiddenRussian",
@@ -336,7 +337,7 @@ export default {
             })
 
             .then((value) => {
-              window.location.href = "/login";
+              window.location.href = redirectSuccess("/login");
             })
             .catch((err) => {
               console.log(err);
