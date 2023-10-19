@@ -459,7 +459,7 @@ describe("PasswordRecoveryForm", () => {
 
   it("Должен отправить log с текстом 'Показало сообщение об ошибке на номере'", async () => {
     const localVue = createLocalVue();
-    let logs = [];
+    const logs = [];
     localVue.use(BootstrapVue);
     const wrapper = mount(PasswordRecoveryForm, {
       localVue,
@@ -493,7 +493,7 @@ describe("PasswordRecoveryForm", () => {
   it("Должен отправить log, что есть ошибка на EMAIL", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    let logs = [];
+    const logs = [];
     const wrapper = mount(PasswordRecoveryForm, {
       localVue,
       mocks: {
@@ -544,7 +544,7 @@ describe("PasswordRecoveryForm", () => {
 
   it("Должен показать log с текстом 'Открыли форму восстановления пароля по телефону'", async () => {
     const localVue = createLocalVue();
-    let logs = [];
+    const logs = [];
     localVue.use(BootstrapVue);
     const wrapper = mount(PasswordRecoveryForm, {
       localVue,
@@ -576,7 +576,7 @@ describe("PasswordRecoveryForm", () => {
 
   it("Не должен показывать  log с текстом об ошибке после капчи на телефоне", async () => {
     const localVue = createLocalVue();
-    let logs = [];
+    const logs = [];
     localVue.use(BootstrapVue);
     const wrapper = mount(PasswordRecoveryForm, {
       localVue,
@@ -616,7 +616,7 @@ describe("PasswordRecoveryForm", () => {
   it("log отправляет ошибку после нажатия на кнопку изменить пароль на телефоне", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
-    let logs = [];
+    const logs = [];
     const wrapper = mount(PasswordRecoveryForm, {
       localVue,
       attachTo: document.body,
