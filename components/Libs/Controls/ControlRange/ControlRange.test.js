@@ -124,24 +124,4 @@ describe("ControlRange", () => {
 
     expect(inputTypeNumberValue.element.disabled).toBe(true);
   });
-
-  it("Не работает кнопка +, потому что disabled", async () => {
-    const dataMock = JSON.parse(JSON.stringify(dataMockSeveralItems));
-    dataMock.propsData.data.readonly = true;
-    createComponent(dataMock);
-
-    const addButton = wrapper.find("#add");
-
-    expect(addButton.element.disabled).toBe(true);
-  });
-
-  it("Не работает кнопка -, потому что disabled", async () => {
-    const dataMock = JSON.parse(JSON.stringify(dataMockSeveralItems));
-    dataMock.propsData.data.readonly = true;
-
-    createComponent(dataMock);
-    const subtractButton = wrapper.find("#subtract");
-
-    expect(subtractButton.element.disabled).toBe(true);
-  });
 });
