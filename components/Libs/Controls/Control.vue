@@ -70,6 +70,7 @@ import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConf
 import ControlCollapseGroup from "./ControlCollapseGroup.vue";
 import ControlRange from "./ControlRange/ControlRange.vue";
 import ControlInsuredBox from "./ControlInsuredBox/InsuredBox.vue";
+import ControlRangeInput from "./ControlRangeInput/ControlRangeInput.vue";
 
 export default {
   name: "Control",
@@ -111,6 +112,7 @@ export default {
     ControlCollapseGroup,
     ControlRange,
     ControlInsuredBox,
+    ControlRangeInput,
   },
   props: {
     data: {
