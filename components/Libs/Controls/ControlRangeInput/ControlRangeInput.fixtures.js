@@ -1,0 +1,134 @@
+export const dataMockSeveralItems = {
+  propsData: {
+    data: {
+      label: "Страховая сумма на каждого застрахованного",
+      value: 1500000,
+      type: "Range",
+      structType: "double",
+      id: "745",
+      fieldId: 31739,
+      cols: 4,
+      colSm: 12,
+      colMd: 12,
+      colLg: 12,
+      width: "100%",
+      name: "IDNINSURED_SUM",
+      labelCols: "",
+      webId: "",
+      visible: true,
+      required: true,
+      page: 4,
+      readonly: false,
+      control: null,
+      state: true,
+      checked: true,
+      error: null,
+      helpText:
+        "Страховая сумма влияет на объем оказания медицинских услуг в стационаре и при амбулаторном лечении.",
+      isRelation: false,
+      fieldRelation: null,
+      isTab: true,
+      options: [
+        {
+          SNAME: "1 500 000 руб.",
+          ID: 1500000,
+          value: 1500000,
+          text: "1 500 000 руб.",
+        },
+        {
+          SNAME: "1 800 000 руб.",
+          ID: 1800000,
+          value: 1800000,
+          text: "1 800 000 руб.",
+        },
+        {
+          SNAME: "2 000 000 руб.",
+          ID: 2000000,
+          value: 2000000,
+          text: "2 000 000 руб.",
+        },
+        {
+          SNAME: "2 500 000 руб.",
+          ID: 2500000,
+          value: 2500000,
+          text: "2 500 000 руб.",
+        },
+        {
+          SNAME: "3 000 000 руб.",
+          ID: 3000000,
+          value: 3000000,
+          text: "3 000 000 руб.",
+        },
+        {
+          SNAME: "4 100 000 руб.",
+          ID: 4100000,
+          value: 4100000,
+          text: "4 100 000 руб.",
+        },
+      ],
+    },
+    edit: true,
+  },
+};
+
+export const dataMockTwolItems = {
+  propsData: {
+    data: {
+      fieldId: 50101,
+      cols: 12,
+      colSm: 12,
+      colMd: 12,
+      colLg: 12,
+      width: "100%",
+      name: "IDNINSURED_SUM",
+      cssClass: "",
+      webId: "",
+      visible: true,
+      required: true,
+      page: 2,
+      readonly: false,
+      control: null,
+      state: true,
+      checked: true,
+      error: null,
+      helpText:
+        "Сумма, в рамках которой будет произведена выплата при наступлении страхового случая",
+      isRelation: false,
+      fieldRelation: null,
+      isTab: true,
+      options: [
+        {
+          SNAME_SHORT: "100 тыс",
+          NVALUE: 100000,
+          SNAME: "100 000 руб.",
+          ID: 13,
+          SUNIT: "RUB",
+          value: 13,
+          text: "RUB",
+        },
+        {
+          SNAME_SHORT: "3 млн",
+          NVALUE: 3000000,
+          SNAME: "3 000 000 руб.",
+          ID: 19,
+          SUNIT: "RUB",
+          value: 19,
+          text: "RUB",
+        },
+      ],
+    },
+    edit: true,
+  },
+};
+
+export const rangeValues = [
+  1500000, 1800000, 2000000, 2500000, 3000000, 4100000,
+];
+
+export const rangeIntervals = {
+  0: "1500000-1800000",
+  1: "1800000-2000000",
+  2: "2000000-2500000",
+  3: "2500000-3000000",
+  4: "3000000-4100000",
+};

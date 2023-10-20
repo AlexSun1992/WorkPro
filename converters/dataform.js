@@ -195,6 +195,26 @@ converter.form = async (data, params, instance) => {
       obj.type = "CollapseGroup";
     } else if (webFields[i].IDCONTROL == 441) {
       obj.type = "InsuredBox";
+    } else if (webFields[i].IDCONTROL == 481) {
+      obj.type = "RangeInput";
+      if (webFields[i].LDIC === true) {
+        promises.push(
+          instance.get(
+            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
+              webFields[i].ID
+            }`
+          )
+        );
+      }
+      if (webFields[i].LDIC === false) {
+        promises.push(
+          instance.get(
+            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
+              webFields[i].IDADMMODULE
+            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id ?? 0}`
+          )
+        );
+      }
     } else if (webFields[i].IDCONTROL == 421) {
       obj.type = "Range";
       if (webFields[i].LDIC === true) {
