@@ -1,5 +1,5 @@
 <template>
-  <div class="range-control" :class="data.readonly ? 'disabled' : ''">
+  <div class="range-control" :class="isDisabled ? 'disabled' : ''">
     <div>
       <label v-if="data.label">
         <span
@@ -30,7 +30,7 @@
         :precision="0"
         locale="ru"
         type="tel"
-        :disabled="data.readonly"
+        :disabled="isDisabled"
       ></currency-input>
 
       <b-form-input
@@ -40,7 +40,7 @@
         type="range"
         :min="0"
         :max="maxValueRange"
-        :disabled="data.readonly"
+        :disabled="isDisabled"
       >
       </b-form-input>
 
@@ -75,8 +75,6 @@ import { BFormInput } from "bootstrap-vue";
 import { CurrencyInput } from "vue-currency-input";
 import { getClosestValue } from "../ControlRange/ControlRange.helper";
 import {
-  getMinimumValueFromArray,
-  getMaxValueFromArray,
   createArrayOfVirtualPoints,
   computedValue,
   moveToCurrentComputedValueTypeNumber,
@@ -157,6 +155,11 @@ export default {
   },
 
   computed: {
+    isDisabled() {
+      const isDisabled = !this.edit ? !this.edit : this.data.readonly;
+      return isDisabled;
+    },
+
     getAllPricesValue() {
       const findvalueNvalue = this.data.options.find((item) => item.NVALUE);
       if (findvalueNvalue) {
@@ -300,9 +303,8 @@ export default {
         (elem) => elem.NVALUE === closestValueFromRealPrices
       );
       if (getStep) {
-        const getMaxValueFromPrice = getMaxValueFromArray(
-          this.getAllPricesValue
-        );
+        const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
+
         const getVirtualPointsAmount = getMaxValueFromPrice / getStep.NSTEP;
         const virtualPoits = createArrayOfVirtualPoints(
           getVirtualPointsAmount,
@@ -341,9 +343,8 @@ export default {
         (elem) => elem.NVALUE === closestValueFromRealPrices
       );
       if (getStep) {
-        const getMaxValueFromPrice = getMaxValueFromArray(
-          this.getAllPricesValue
-        );
+        const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
+
         const getVirtualPointsAmount = getMaxValueFromPrice / getStep.NSTEP;
         const virtualPoits = createArrayOfVirtualPoints(
           getVirtualPointsAmount,
@@ -905,5 +906,10 @@ button {
 }
 .custom-range:disabled {
   border: 0 !important;
+}
+
+.range-control.disabled button {
+  pointer-events: none;
+  opacity: 0.5;
 }
 </style>
