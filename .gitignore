@@ -91,4 +91,4 @@ sw.*
 *.swp
 components-vue2/public/*
 
-static
+static/js
