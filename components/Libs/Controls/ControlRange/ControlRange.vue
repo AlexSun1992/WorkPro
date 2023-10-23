@@ -1,5 +1,5 @@
 <template>
-  <div class="range-control">
+  <div class="range-control" :class="isDisabled ? 'disabled' : ''">
     <div>
       <label v-if="data.label">
         <span
@@ -18,7 +18,7 @@
         </span>
       </label>
       <currency-input
-        :disabled="data.readonly"
+        :disabled="isDisabled"
         @input="changeValue(valueTypeNumber)"
         @blur="getNearestValue()"
         v-model="valueTypeNumber"
@@ -32,7 +32,7 @@
         type="tel"
       ></currency-input>
       <b-form-input
-        :disabled="data.readonly"
+        :disabled="isDisabled"
         @input="handleValue(valueTypeRange)"
         id="inp"
         v-model="valueTypeRange"
@@ -56,13 +56,13 @@
       </ul>
       <button
         id="add"
-        :disabled="isMaxValueReach || data.readonly"
+        :disabled="isMaxValueReach"
         @click="addInsuranceSum"
       ></button>
 
       <button
         id="subtract"
-        :disabled="isMinValueReach || data.readonly"
+        :disabled="isMinValueReach"
         @click="degradeInsuranceSum"
       ></button>
     </div>
@@ -170,6 +170,10 @@ export default {
   },
 
   computed: {
+    isDisabled() {
+      const isDisabled = !this.edit ? !this.edit : this.data.readonly;
+      return isDisabled;
+    },
     getAllPricesValue() {
       const findvalueNvalue = this.data.options.find((item) => item.NVALUE);
       if (findvalueNvalue) {
@@ -816,5 +820,15 @@ button {
   .range-control {
     padding-bottom: 20px;
   }
+}
+.custom-range:disabled {
+  border: 0 !important;
+}
+.range-control.disabled button {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.range-control.disabled .range-list li {
+  pointer-events: none;
 }
 </style>

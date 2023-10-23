@@ -293,9 +293,11 @@ export default {
         }
         if (CUR.NTYPE == 2) {
           if (CUR.SCONST) {
-            this.$router.push(
-              `/cabinet/${this.params.page.idModule}/0/${CUR.SCONST}/0?ref=${this.$route.fullPath}`
-            );
+            const redirectURL = this.$route.params.idCard
+              ? `/cabinet/${this.$route.params.idModule}/0/${CUR.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
+              : `/cabinet/${this.$route.params.idModule}/0/${CUR.SCONST}/0?ref=${this.$route.fullPath}`;
+
+            this.$router.push(redirectURL);
           } else {
             throw new Error(`В опции кнопки не указан идентификатор меню."`);
             return;
