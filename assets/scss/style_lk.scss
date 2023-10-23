@@ -5699,3 +5699,62 @@ input.check-collapse:checked + label > span {
 input.check-collapse:checked + label span + span {
   display: inline-block;
 }
+
+.modal-notification {
+  cursor: pointer;
+}
+.modal-notification .block-policy[data-id]:before {
+  filter: grayscale(100%);
+}
+.modal-notification .block-policy[data-id]:after {
+  background-color: #eff1f3;
+}
+.block-policy .description .question {
+  display: table;
+  margin: 1.5rem auto 0;
+  position: relative;
+  color: #43b02a;
+}
+.question:after {
+  content: "";
+  width: 100%;
+  height: 1px;
+  border-bottom: 1px dotted #43b02a;
+  display: block;
+  margin-top: 5px;
+}
+.modal-notification-popup {
+  padding: 50px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0px 4px 26px 0px rgba(0, 0, 0, 0.08);
+  font-family: Raleway;
+}
+.modal-notification-popup .close-btn {
+  float: right;
+  width: 32px;
+  height: 32px;
+  background: url("/img/mnp-close-btn.svg") 50% 50% no-repeat;
+  border-radius: 32px;
+}
+.modal-notification-popup .title {
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.5rem;
+}
+.modal-notification-popup .description {
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 23px;
+}
+.btn-gos {
+  color: #1466ac;
+  font-family: Raleway;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 20px 24px 20px 40px;
+  background: url(/img/gos.svg) right 24px top 50%;
+  background-size: 24px auto;
+}
