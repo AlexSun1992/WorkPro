@@ -46,6 +46,30 @@ docker-build-master:
   tags:
     - docker
 
+branch.dev.reso.ru:
+  image: curlimages/curl:7.78.0
+  stage: deploy
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: https://$CI_COMMIT_REF_NAME.dev.reso.ru
+    on_stop: stop_branch_site
+  script:
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_BRANCH_NAME]=$CI_COMMIT_REF_NAME" -F "variables[LK2_BRANCH_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+  rules:
+    - if: $CI_COMMIT_REF_NAME =~ /^LK2-\d+$/
+  tags:
+    - docker
+
+stop_branch_site:
+  image: curlimages/curl:7.78.0
+  stage: deploy
+  script:
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_BRANCH_NAME]=$CI_COMMIT_REF_NAME" -F "variables[LK2_BRANCH_STOP]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    action: stop
+  when: manual
+
 new.reso.ru:
   image: curlimages/curl:7.78.0
   stage: deploy
