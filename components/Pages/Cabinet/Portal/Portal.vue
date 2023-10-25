@@ -35,10 +35,12 @@ import ServerFilterBlock from "../Block/ServerFilterBlock/ServerFilterBlock.vue"
 import Grid from "../../../Libs/Table/Grid.vue";
 import ControlToggle from "../../../Libs/Controls/ControlToggle.vue";
 import ControlCollapse from "../../../Libs/Controls/ControlCollapse.vue";
+import ModalBox from "../Block/ModalBox.vue";
 
 export default {
   name: "Wizard",
   components: {
+    ModalBox,
     PortalList,
     NotifyBlock,
     OfferBlock,
