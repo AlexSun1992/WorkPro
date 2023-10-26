@@ -2,6 +2,7 @@ stages:
   - "build"
   - "deploy"
   - "version-bump"
+  - "cleanup"
 
 # PROJECT_WRITE_REPOSITORY_TOKEN необходимо создать здесь https://git.reso.ru/web/nuxt-vue/-/settings/access_tokens
 # с ролью maintainer и правами read_repository и write_repository
@@ -45,6 +46,41 @@ docker-build-master:
     - if: '$CI_COMMIT_REF_NAME != "master"'
   tags:
     - docker
+
+branch.dev.reso.ru:
+  image: curlimages/curl:7.78.0
+  stage: deploy
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: https://$CI_COMMIT_REF_NAME.dev.reso.ru
+    on_stop: stop_branch_site
+    auto_stop_in: 1 week
+  script:
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_BRANCH_NAME]=$CI_COMMIT_REF_NAME" -F "variables[LK2_BRANCH_VERSION]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_REF_NAME =~ /^LK2-\d+$/
+  tags:
+    - docker
+
+stop_branch_site:
+  image: curlimages/curl:7.78.0
+  stage: cleanup
+  needs:
+    - branch.dev.reso.ru
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - curl -X POST -F token=$INFRASTRUCTURE_TRIGGER_TOKEN -F ref=master -F "variables[LK2_BRANCH_NAME]=$CI_COMMIT_REF_NAME" -F "variables[LK2_BRANCH_STOP]=$CI_COMMIT_SHORT_SHA" https://git.reso.ru/api/v4/projects/167/trigger/pipeline
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    action: stop
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_REF_NAME =~ /^LK2-\d+$/
+      when: manual
 
 new.reso.ru:
   image: curlimages/curl:7.78.0
