@@ -2,6 +2,7 @@ stages:
   - "build"
   - "deploy"
   - "version-bump"
+  - "cleanup"
 
 # PROJECT_WRITE_REPOSITORY_TOKEN необходимо создать здесь https://git.reso.ru/web/nuxt-vue/-/settings/access_tokens
 # с ролью maintainer и правами read_repository и write_repository
@@ -65,7 +66,9 @@ branch.dev.reso.ru:
 
 stop_branch_site:
   image: curlimages/curl:7.78.0
-  stage: deploy
+  stage: cleanup
+  needs:
+    - branch.dev.reso.ru
   variables:
     GIT_STRATEGY: none
   script:
