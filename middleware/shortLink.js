@@ -1,4 +1,9 @@
-export default function ({ route, redirect, $axios, $cookiz }) {
+export default function redirectShortLink({
+  route,
+  redirect,
+  $axios,
+  $cookiz,
+}) {
   const url = `/am/free/v2/redirectShortLink`;
   if (route.params.hash === undefined) {
     return redirect(`/tech/link-expired/`);
@@ -7,7 +12,7 @@ export default function ({ route, redirect, $axios, $cookiz }) {
     .post(url, { hash: route.params.hash })
     .then((res) => {
       const data = res.data[0];
-      $cookiz.set("auth._token.local", data.ACCESS_TOKEN);
+      $cookiz.set("auth._token.local", `Bearer ${data.ACCESS_TOKEN}`);
       $cookiz.set("auth._refresh_token.local", data.REFRESH_TOKEN);
       const redirectUrl = data.REDIRECT_URL;
       return redirect(redirectUrl);
