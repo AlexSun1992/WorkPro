@@ -21,7 +21,7 @@ export default function redirectFromEsia({ route, redirect, $axios, $cookiz }) {
     .post(url, { code: route.query?.code })
     .then((res) => {
       const data = res.data[0];
-      $cookiz.set("auth._token.local", data.ACCESS_TOKEN);
+      $cookiz.set("auth._token.local", `Bearer ${data.ACCESS_TOKEN}`);
       $cookiz.set("auth._refresh_token.local", data.REFRESH_TOKEN);
 
       return redirect(`${successUrl.pathname}${successUrl.search}`);
