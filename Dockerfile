@@ -1,4 +1,4 @@
-FROM node:20-alpine as preparation
+FROM node:20.9-alpine as preparation
 COPY package.json package-lock.json ./
 RUN ["node", "-e", "\
     const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));\
@@ -7,7 +7,7 @@ RUN ["node", "-e", "\
     fs.writeFileSync('package-lock.json', JSON.stringify({ ...pkgLock, packages: {...pkgLock.packages, '': {...pkgLock.packages[''], version: '0.0.0'}}, version: '0.0.0' }));\
     "]
 
-FROM node:18.12 AS preparation_js
+FROM node:20.9 AS preparation_js
 WORKDIR /home/node/app
 COPY --from=preparation package.json package-lock.json ./
 RUN npm config set registry https://nexus.reso.ru/repository/npm/ && npm ci
@@ -16,7 +16,7 @@ RUN (cd components-vue2 && npm ci)
 COPY . ./
 RUN npm test && cd components-vue2 && npm run component
 
-FROM node:18.12
+FROM node:20.9
 WORKDIR /home/node/app
 COPY --from=preparation package.json package-lock.json ./
 RUN npm config set registry https://nexus.reso.ru/repository/npm/ && npm ci
