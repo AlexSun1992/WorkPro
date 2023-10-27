@@ -1,41 +1,42 @@
 <template>
   <div>
-    <slot name="card"></slot>
-    <slot :isCardHidden="isCardHidden"></slot>
+    <div @click="toggleModalWindow">
+      <slot v-if="$slots.button" name="button"></slot>
+      <button v-if="$slots.button === undefined" name="buttonClue">
+        Открыть модальное окно
+      </button>
+    </div>
+    <div class="modal-notification-popup" v-if="isCardShown">
+      <div @click="toggleModalWindow" class="close-btn"></div>
+      <slot
+        v-if="$slots.modal"
+        name="modal"
+        :onClick="toggleModalWindow"
+      ></slot>
+      <div v-if="$slots.modal === undefined">
+        Для отображения карточки добавьте код modal
+        <pre>&lt;template #button&gt;&lt;/template&gt;</pre>
+        Для отображения модального окна
+        <pre>&lt;template #modal&gt;&lt;/template&gt;</pre>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
 export default {
   name: "ModalBox",
-  props: {
-    element: {
-      type: String,
-      required: true,
-      default: () => null,
-    },
-    btnClose: {
-      type: String,
-      required: true,
-      default: () => null,
-    },
-  },
+
   data() {
     return {
-      isCardHidden: true,
+      isCardShown: false,
     };
   },
 
-  mounted() {
-    const $el = document.querySelector(`.${this.element}`);
-    const btnHideWindow = document.querySelector(`.${this.btnClose}`);
-
-    $el.addEventListener("click", () => {
-      this.isCardHidden = !this.isCardHidden;
-    });
-
-    btnHideWindow.addEventListener("click", () => {
-      this.isCardHidden = !this.isCardHidden;
-    });
+  methods: {
+    toggleModalWindow() {
+      this.isCardShown = !this.isCardShown;
+    },
   },
 };
 </script>
