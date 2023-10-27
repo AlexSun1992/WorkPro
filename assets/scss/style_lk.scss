@@ -2090,7 +2090,14 @@ a.btn-secondary:hover {
 .btn-success.disabled {
   background-color: #f2f2f2;
   color: #c3c3c3 !important;
+}
+.conf-block .btn-primary:disabled,
+.conf-block .btn-success.disabled {
   border: 2px solid #f2f2f2;
+}
+.btn-primary:disabled,
+.btn-success.disabled {
+  border: 2px solid #c3c3c3;
 }
 
 .btn-warning,
