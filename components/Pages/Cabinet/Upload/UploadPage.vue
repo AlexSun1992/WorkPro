@@ -8,7 +8,7 @@
         @update="changeFiles(item.NAME, $event)"
         @remove="removeFile($event)"
         @click="clickDrop"
-        :data="item.FILES"
+        :files="item.FILES"
         :name="item.NAME"
         :file-objects="getFileObjects"
         :file-errors="getFileErrors"

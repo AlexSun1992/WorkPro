@@ -43,7 +43,7 @@
         {{ formatBytes(maxFileSize) }}
       </div>
     </div>
-    <div v-for="file in data" :key="file.FILENAME" class="col-9 col-lg-4">
+    <div v-for="file in files" :key="file.FILENAME" class="col-9 col-lg-4">
       <div
         class="preview-card"
         v-bind:class="{
@@ -64,7 +64,7 @@
         </div>
         <button
           class="btn-download-file"
-          @click="downloadFile(file.FILENAME)"
+          @click="downloadFile(file)"
           title="Скачать файл"
           type="button"
         ></button>
@@ -90,7 +90,7 @@ import { formatBytes, filterDropFilesByExtensions } from "./helpers";
 export default {
   name: "UploadFile",
   props: {
-    data: {
+    files: {
       type: Array,
       required: false,
       default: () => [],
@@ -160,19 +160,38 @@ export default {
     onClick() {
       this.$emit("click");
     },
-    downloadFile(name) {
-      const file = this.fileObjects.find((item) => item.name === name);
-      if (!file) {
-        return;
+    async downloadFile(file) {
+      try {
+        let fileObject;
+
+        if (file.IDDOCPHOTO && file.REL) {
+          fileObject = await this.$axios({
+            url: `/am/main/v2/file/${file.IDDOCPHOTO}?rel=${file.REL}`,
+            method: "GET",
+            responseType: "blob",
+          }).then((resp) => new Blob([resp.data]));
+        } else {
+          fileObject = this.fileObjects.find(
+            (item) => item.name === file.FILENAME
+          );
+        }
+
+        const a = document.createElement("a");
+        a.style.display = "none";
+        const url = window.URL.createObjectURL(fileObject);
+        a.href = url;
+        a.setAttribute("download", file.FILENAME);
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        this.$bvToast.toast("Не удалось скачать файл", {
+          title: "Ошибка",
+          variant: "danger",
+          noAutoHide: true,
+          solid: true,
+        });
       }
-      const url = URL.createObjectURL(file);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      a.download = file.name;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
     },
     remove(file) {
       this.$emit("remove", file);
@@ -195,16 +214,16 @@ export default {
       return this.allSize;
     },
     sizeGroup() {
-      return this.data.reduce((acc, curr) => acc + curr.SIZE, 0);
+      return this.files.reduce((acc, curr) => acc + curr.SIZE, 0);
     },
     currentMaxFileSize() {
-      return Math.max(...this.data.map((item) => item.SIZE));
+      return Math.max(...this.files.map((item) => item.SIZE));
     },
     isError() {
       return this.isErrorSize;
     },
     isMaxFileCount() {
-      return this.data.length === this.maxFileCount;
+      return this.files.length === this.maxFileCount;
     },
     stringExtensions() {
       return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
