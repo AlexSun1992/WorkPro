@@ -70,8 +70,8 @@ const EXPIRATION_TOKEN = "auth._token_expiration.local";
 const REFRESH_TOKEN_NAME = "auth._refresh_token.local";
 const AUTH_USER_ID = "auth.user_id";
 const URL_GET_USER_NAME = "/am/main/v2/userinfo";
-const URL_REFRESH_TOKEN = "/am/auth/v2/token_refresh";
-const URL_AUTHORIZE = "/am/auth/v2/authorize";
+const URL_REFRESH_TOKEN = "/am/authw/v2/token_refresh";
+const URL_AUTHORIZE = "/am/authw/v2/authorize";
 const DURATION = "100000";
 let failedQueue = [];
 const processQueue = (error, token = null) => {
