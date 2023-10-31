@@ -3,10 +3,7 @@
     <div class="col-auto" v-if="currentTab.order > 1">
       <b-button @click="goBack"> Назад </b-button>
     </div>
-    <div
-      class="col-auto mt-3 mt-lg-0"
-      v-if="currentTab.order != qty && $route.params.idCard != 0"
-    >
+    <div class="col-auto mt-3 mt-lg-0" v-if="$route.params.idCard != 0">
       <b-button
         v-if="showBtnVisibleSave"
         :class="showBtnStyleSave"
