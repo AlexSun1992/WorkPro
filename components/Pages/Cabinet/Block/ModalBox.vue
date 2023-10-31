@@ -104,8 +104,9 @@ export default {
     max-width: 98%;
     max-height: 98vh;
     top: 10px;
-    overflow: auto;
+    left: 0;
     padding: 20px;
+    transform: translate(0%, 0%);
   }
 }
 </style>
