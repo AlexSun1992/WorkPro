@@ -63,14 +63,14 @@ export default {
   height: 1px;
   border-bottom: 1px dotted #43b02a;
   display: block;
-  margin-top: 5px;
+  margin-top: 0;
 }
 .modal-notification-popup {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 800px;
+  max-width: 600px;
   padding: 50px;
   background: #fff;
   border-radius: 16px;
