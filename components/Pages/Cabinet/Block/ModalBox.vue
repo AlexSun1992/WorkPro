@@ -103,10 +103,12 @@ export default {
     z-index: 12;
     max-width: 98%;
     max-height: 98vh;
-    top: 10px;
-    left: 0;
+    top: 1%;
+    left: 1%;
+    overflow: auto;
     padding: 20px;
     transform: translate(0%, 0%);
+    overflow-y: auto;
   }
 }
 </style>
