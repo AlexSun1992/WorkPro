@@ -1,13 +1,32 @@
 import { getErrorMessage } from "../plugins/auth/toast.helper";
 
-export default function redirectFromEsia(params) {
+/** Режим авторизации с установкой ref */
+function authQuery(params) {
   const {
     route,
     redirect,
-    $axios,
     $cookiz,
     req: { headers },
   } = params;
+
+  const esiaAuthUrl = "https://client.reso.ru/loginesia/loginesia/prod";
+
+  const refererHeaderUrl = new URL(headers.referer, "https://f.f");
+  const defaultRefUrl = `${refererHeaderUrl.pathname}${refererHeaderUrl.search}`;
+  const defaultSuccessUrl = headers.referer ? defaultRefUrl : "/cabinet";
+  const defaultErrorUrl = headers.referer ? defaultRefUrl : "/login";
+
+  const succesUrl = "ref" in route.query ? route.query.ref : defaultSuccessUrl;
+  const errorUrl =
+    "referror" in route.query ? route.query.referror : defaultErrorUrl;
+
+  $cookiz.set("ref", succesUrl);
+  $cookiz.set("referror", errorUrl);
+  return redirect(esiaAuthUrl);
+}
+
+export default function redirectFromEsia(params) {
+  const { route, redirect, $axios, $cookiz } = params;
   const cookieRef = $cookiz.get("ref");
   const cookieRefError = $cookiz.get("referror");
   $cookiz.remove("ref");
@@ -20,21 +39,8 @@ export default function redirectFromEsia(params) {
     "Произошла неизвестная ошибка входа через Госуслуги."
   );
 
-  // Режим авторизации с установкой ref
   if ("auth" in route.query) {
-    const esiaAuthUrl = "https://client.reso.ru/loginesia/loginesia/prod";
-    const hasCookieRef = Boolean(cookieRef);
-
-    if ("ref" in route.query) {
-      $cookiz.set("ref", route.query.ref);
-    } else if (!hasCookieRef) {
-      const refUrl = new URL(headers.referer, "https://f.f");
-      $cookiz.set("ref", refUrl.pathname);
-    }
-    if ("referror" in route.query) {
-      $cookiz.set("referror", route.query.ref);
-    }
-    return redirect(esiaAuthUrl);
+    return authQuery(params);
   }
 
   if (route.query?.code === undefined) {
