@@ -37,4 +37,4 @@ stop_branch_site:
       when: never
     - if: $CI_COMMIT_REF_NAME =~ /^LK2-\d+$/
       when: manual
-      allow_failure: true
+  allow_failure: true
