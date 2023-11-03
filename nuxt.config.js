@@ -180,7 +180,10 @@ const nuxtConfig = {
       { target: "https://reso.ru" },
     ],
   ],
-  serverMiddleware: ["~/routes/routes.js"],
+  serverMiddleware: [
+    "~/routes/routes.js",
+    { path: "/idesia", handler: "~/server/esia.js" },
+  ],
   auth: {
     strategies: {
       local: {
