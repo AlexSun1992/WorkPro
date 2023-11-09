@@ -15,6 +15,7 @@ $auto: #d9efd4;
 $mortgage: #d8d6e8;
 $travel: #fdf1cc;
 $white: #ffffff;
+$lkbg: #f2f4f5;
 
 /*-----SLICK-----*/
 .slick-track[data-v-e4caeaf8] {
@@ -5724,4 +5725,12 @@ input.check-collapse:checked + label span + span {
 
 .iconix {
   margin-top: 3rem;
+}
+.invert {
+  -webkit-filter: invert(1);
+  filter: invert(1);
+}
+.text-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
