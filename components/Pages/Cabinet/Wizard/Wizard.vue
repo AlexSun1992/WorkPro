@@ -245,6 +245,7 @@ export default {
       this.$router.push(this.getURL(e));
     },
     async goBack(e) {
+      await this.$store.dispatch("menu/fetchMenuById", e);
       this.$router.push(this.getURL(e));
     },
     async saveCard() {
