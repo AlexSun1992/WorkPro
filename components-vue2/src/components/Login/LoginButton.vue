@@ -64,6 +64,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { BDropdown, BButton, BDropdownItem } from "bootstrap-vue";
 import SkeletonBox from "./Libs/SkeletonBox";
+import { subscribe, unsubscribe } from "./globalStorage";
 
 const TOKEN_NAME = "auth._token.local";
 const EXPIRATION_TOKEN = "auth._token_expiration.local";
@@ -253,6 +254,10 @@ export default {
         this.personsData = JSON.parse(localStorage.getItem("USER_INFO"));
       }
     },
+    setUserInfo(data) {
+      window.localStorage.setItem("USER_INFO", JSON.stringify(data));
+      this.personsData = JSON.parse(localStorage.getItem("USER_INFO"));
+    },
   },
 
   computed: {
@@ -267,8 +272,8 @@ export default {
       return `${this.personsData.SFIRSTNAME} ${this.personsData.SSECONDNAME}`;
     },
   },
-
   created() {
+    subscribe("setUserInfo", this.setUserInfo);
     window.addEventListener("storage", this.listenStorage);
     if (
       Cookies.get(TOKEN_NAME) !== "false" &&
@@ -291,6 +296,7 @@ export default {
     }
   },
   beforeDestroyed() {
+    unsubscribe("setUserInfo", this.setUserInfo);
     window.removeEventListener("storage", this.listenStorage);
   },
 };
