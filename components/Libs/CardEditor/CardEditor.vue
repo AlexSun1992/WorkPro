@@ -561,6 +561,10 @@ export default {
                 "wizard/fetchWizard",
                 this.$route.params
               );
+
+              if (resp.data.POUTVALUE) {
+                this.$router.push(resp.data.POUTVALUE);
+              }
             }
           } else if (resp?.status === 500 || resp?.status === 520) {
             this.$store.commit("data_card/setLoading", false);
