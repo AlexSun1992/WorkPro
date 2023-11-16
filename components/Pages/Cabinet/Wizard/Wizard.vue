@@ -49,14 +49,6 @@
         @goBack="goBack($event)"
         @saveCard="saveCard($event)"
       />
-      <wizard-uploader-buttons
-        v-if="settingsByItem.isUploader === true"
-        :current-tab="currentTab"
-        :tabs="tabs"
-        :loading="loading"
-        @goBack="goBack($event)"
-        @saveUploader="saveUploader($event)"
-      />
     </div>
     <div v-else>
       {{ wizardErrorMessage }}
@@ -67,14 +59,11 @@
 <script>
 import VRuntimeTemplate from "v-runtime-template";
 import breadcrumbs from "~/converters/breadcrumbs";
-import wizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
-import WizardUploaderButtons from "@/components/Pages/Cabinet/Wizard/WizardUploaderButtons.vue";
-
+import WizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
 export default {
   name: "Wizard",
   components: {
-    WizardUploaderButtons,
-    wizardButtons,
+    WizardButtons,
     VRuntimeTemplate,
   },
   data() {
@@ -266,18 +255,6 @@ export default {
         }
       }
       this.loading = false;
-    },
-    async saveUploader() {
-      this.loading = true;
-      await this.$refs.child.saveDataUploader();
-      this.loading = false;
-      if (this.isLoadSuccessFull) {
-        const getCurrentIndex = this.tabs.findIndex(
-          (item) => item.idItem === this.currentTab.idItem
-        );
-        const tab = this.tabs[getCurrentIndex + 1];
-        await this.$router.push(this.getURL(tab));
-      }
     },
   },
 };

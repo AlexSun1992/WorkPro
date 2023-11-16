@@ -16,15 +16,16 @@ export const state = () => ({
 });
 
 export const getters = {
-  getData: (state) =>
-    state.data
-      .find((type) => type.name === FILETYPES)
-      .value.map((item) => ({
-        ...item,
-        FILES: state.data
-          .find((file) => file.name === FILES_PROPERTY)
-          .value.filter((fileType) => fileType.NAME === item.NAME),
-      })),
+  getData: (state) => {
+    const item = state.data.find((type) => type.name === FILETYPES);
+    const el = "value" in item ? item : { ...item, value: [] };
+    return el.value.map((item) => ({
+      ...item,
+      FILES: state.data
+        .find((file) => file.name === FILES_PROPERTY)
+        .value.filter((fileType) => fileType.NAME === item.NAME),
+    }));
+  },
   getFileObjects: (state) => state.fileObjects,
   getFileErrors: (state) => [
     ...new Map(state.fileErrors.map((item) => [item.type, item])).values(),

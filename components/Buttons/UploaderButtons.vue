@@ -1,0 +1,172 @@
+<template>
+  <div class="mt-4 buttons row">
+    <div class="col-auto">
+      <b-button
+        :disabled="loading || isInValidFiles"
+        variant="success"
+        @click="saveUploader()"
+      >
+        Отправить документы
+        <b-spinner v-if="loading" variant="danger" label="Spinning" />
+      </b-button>
+    </div>
+    <div class="col-12 d-lg-none"></div>
+    <div class="col-auto mt-3 mt-lg-0" v-if="isShow">
+      <b-button @click="goBack()"> Назад </b-button>
+    </div>
+  </div>
+</template>
+
+<script>
+import breadcrumbs from "../../converters/breadcrumbs";
+
+export default {
+  name: "UploaderButtons",
+  props: [],
+  data() {
+    return {};
+  },
+  methods: {
+    getURL(item) {
+      const settingsTab = this.$store.getters["menu/getSettingsByIdItem"](
+        item.idItem || {}
+      );
+      if (settingsTab?.isUploader === true) {
+        return `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
+          item.idItem
+        }/${this.$route.params.idCard}/${
+          this.rels.split("|")[item.order - 1]
+        }/uploader`;
+      }
+      if (this.$route.params.idCard === "0") {
+        return `/cabinet/wizard/${this.$route.params.idWizard}${
+          item.list ? `/list/55/0/` : `/55/0/`
+        }${item.idItem}/0/0`;
+      }
+      return `/cabinet/wizard/${this.$route.params.idWizard}${
+        item.list ? `/list/55/0/` : `/55/0/`
+      }${item.idItem}/${this.$route.params.idCard}/${
+        this.rels.split("|")[item.order - 1]
+      }`;
+    },
+
+    getCurrentIndex() {
+      return this.tabs.findIndex(
+        (item) => item.idItem == this.currentTab.idItem
+      );
+    },
+    async saveUploader() {
+      const h = this.$createElement;
+      const titleVNode = h("div", {
+        domProps: {
+          innerHTML:
+            "<b>Вы уверены?</b><br>Убедитесь, что документы прикреплены корректно и Вы ничего не забыли. <br>Повторно отправить документы нельзя.",
+        },
+      });
+      this.$bvModal
+        .msgBoxConfirm(titleVNode, {
+          title: "Вы уверены?",
+          size: "md",
+          buttonSize: "md",
+          okVariant: "success",
+          okTitle: "Да, отправить",
+          cancelTitle: "Нет, передумал",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          modalClass: ["cabinet"],
+          centered: true,
+        })
+        .then((value) => {
+          if (value) {
+            this.saveDataUploader();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+
+    async saveDataUploader() {
+      await this.$store.dispatch("uploader/saveDataUploader", {
+        ...this.$route.params,
+      });
+      await this.$store.dispatch("uploader/fetchData", {
+        ...this.$route.params,
+      });
+
+      if (this.isLoadSuccessFull) {
+        if (this.isShow) {
+          if (this.tabs.length > 0) {
+            this.getCurrentIndex();
+            const tab = this.tabs[this.getCurrentIndex() + 1];
+            await this.$router.push(this.getURL(tab));
+          } else {
+            this.$router.push(
+              `/cabinet/${this.$route.params.idModule}/0/${this.$route.params.idItem}/uploader`
+            );
+          }
+        }
+      }
+    },
+    async goBack(e) {
+      const tab = this.tabs[this.getCurrentIndex() - 1];
+      await this.$store.dispatch("menu/fetchMenuById", e);
+      this.$router.push(this.getURL(tab));
+    },
+  },
+  computed: {
+    isShow() {
+      return (
+        this.$route.path.includes("ref") || this.$route.path.includes("wizard")
+      );
+    },
+    pages() {
+      return this.$store.getters["wizard/getWizardPages"];
+    },
+    tabs() {
+      const t = this.settings.wizard;
+      const arr = [];
+      if (this.pages) {
+        const p_arr = this.pages.split(";");
+        for (let i = 0; i < t.length; i++) {
+          const p_item = p_arr.find((v) => parseInt(v) === t[i].idItem);
+          if (p_item) {
+            arr.push(t[i]);
+          }
+        }
+      }
+      return arr;
+    },
+    settings: {
+      get() {
+        return breadcrumbs
+          .getData(this.$store.getters["menu/menu"], {
+            idModule: 55,
+            idParent: 0,
+            idItem: this.$route.params.idWizard,
+          })
+          .slice(-1)
+          .pop();
+      },
+    },
+    rels() {
+      const rel = this.$store.getters["wizard/getWizard"]?.REL;
+      if (this.$route.params.idCard !== "0" && rel) {
+        return rel;
+      }
+      return "|";
+    },
+    currentTab() {
+      return this.tabs.find((item) => item.idItem == this.$route.params.idItem);
+    },
+    isLoadSuccessFull() {
+      return this.$store.getters["uploader/isLoadSuccessFull"];
+    },
+    isInValidFiles() {
+      return this.$store.getters["uploader/isInValidFiles"];
+    },
+  },
+};
+</script>
+
+<style scoped></style>

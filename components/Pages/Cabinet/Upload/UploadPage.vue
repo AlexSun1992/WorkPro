@@ -1,67 +1,71 @@
 <template>
-  <div class="conf-block">
-    <div class="title-page mb-3">Загрузите документы</div>
-    <div v-for="(item, i) in getData" :key="i">
-      <b>{{ item.TITLE }}</b>
-      <p v-html="item.DESCRIPTION" />
-      <upload-drop
-        @update="changeFiles(item.NAME, $event)"
-        @remove="removeFile($event)"
-        @click="clickDrop"
-        :files="item.FILES"
-        :name="item.NAME"
-        :file-objects="getFileObjects"
-        :file-errors="getFileErrors"
-        :all-size="getAllSize"
-        :is-error-size="isErrorSize"
-        :is-loading="isLoading"
-        :max-file-count="item.MAX_FILE_COUNT"
-        :max-file-size="item.MAX_FILE_SIZE"
-        :total-limit="getFormSettings.TOTAL_LIMIT"
-        :file-extensions="getFormSettings.FILE_EXTENSIONS"
-      />
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <b-alert
-          data-testid="danger-alert"
-          :show="Boolean(getErrorMessage)"
-          variant="danger"
-          class="mt-3 mb-0"
-          v-html="getErrorMessage"
+  <div>
+    <div class="conf-block">
+      <div class="title-page mb-3">Загрузите документы</div>
+      <div v-for="(item, i) in getData" :key="i">
+        <b>{{ item.TITLE }}</b>
+        <p v-html="item.DESCRIPTION" />
+        <upload-drop
+          @update="changeFiles(item.NAME, $event)"
+          @remove="removeFile($event)"
+          @click="clickDrop"
+          :files="item.FILES"
+          :name="item.NAME"
+          :file-objects="getFileObjects"
+          :file-errors="getFileErrors"
+          :all-size="getAllSize"
+          :is-error-size="isErrorSize"
+          :is-loading="isLoading"
+          :max-file-count="item.MAX_FILE_COUNT"
+          :max-file-size="item.MAX_FILE_SIZE"
+          :total-limit="getFormSettings.TOTAL_LIMIT"
+          :file-extensions="getFormSettings.FILE_EXTENSIONS"
         />
       </div>
-    </div>
-    <b-progress
-      v-if="isLoading"
-      style="display: none"
-      class="mt-2"
-      :max="max"
-      show-value
-    >
-      <b-progress-bar
-        :value="getProgressValue"
+      <div class="row">
+        <div class="col-12">
+          <b-alert
+            data-testid="danger-alert"
+            :show="Boolean(getErrorMessage)"
+            variant="danger"
+            class="mt-3 mb-0"
+            v-html="getErrorMessage"
+          />
+        </div>
+      </div>
+      <b-progress
+        v-if="isLoading"
+        style="display: none"
+        class="mt-2"
+        :max="max"
+        show-value
+      >
+        <b-progress-bar
+          :value="getProgressValue"
+          variant="success"
+        ></b-progress-bar>
+      </b-progress>
+      <b-button
+        v-if="isLoading"
+        style="display: none"
         variant="success"
-      ></b-progress-bar>
-    </b-progress>
-    <b-button
-      v-if="isLoading"
-      style="display: none"
-      variant="success"
-      @click="canselUploading"
-      class="mt-3"
-    >
-      Отменить загрузку файлов
-    </b-button>
+        @click="canselUploading"
+        class="mt-3"
+      >
+        Отменить загрузку файлов
+      </b-button>
+    </div>
+    <uploader-buttons ref="uploadButtons" />
   </div>
 </template>
 
 <script>
+import UploaderButtons from "../../../Buttons/UploaderButtons.vue";
 import UploadDrop from "@/components/Pages/Cabinet/Upload/UploadDrop.vue";
 
 export default {
   name: "UploaderPage",
-  components: { UploadDrop },
+  components: { UploadDrop, UploaderButtons },
   async fetch({ store, route }) {
     await store.dispatch("uploader/fetchData", {
       ...route.params,
