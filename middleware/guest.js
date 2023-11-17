@@ -1,4 +1,8 @@
-import { isBlackListOfRoute } from "./router.helper";
+import {
+  isBlackListOfRoute,
+  redirectTo,
+  urlContainedUtms,
+} from "./router.helper";
 import consts from "@/api/urls";
 
 export default async function ({
@@ -14,23 +18,26 @@ export default async function ({
   store.commit("blocks/clearBlock");
   store.commit("blocks/clearFilters");
   store.commit("data_card/setError", false);
+
   if (process.server) {
     $axios.setHeader("Referer", route.fullPath);
     const ref = $cookiz.get("ref");
     if ($auth.loggedIn) {
-      $cookiz.remove("ref");
-      redirect(ref);
+      if (ref) {
+        $cookiz.remove("ref");
+
+        redirect(ref);
+      }
     }
     if (!$auth.loggedIn) {
       await $auth.logout();
       $cookiz.set("ref", route.fullPath);
-      redirect("/login");
+      redirect(redirectTo("/login", route.fullPath));
     }
   }
   if (process.client) {
     if (!$cookiz.get("auth._token.local")) {
       await $auth.logout();
-      $cookiz.set("ref", route.fullPath);
       redirect("/login");
     }
   }

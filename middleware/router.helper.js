@@ -55,18 +55,14 @@ export function isBlackListOfRoute(idModule, idParent, idItem) {
   return false;
 }
 
-export function generateRedirectURLWithRef(redirectUrl, ref) {
-  let url;
-  try {
-    url = new URL(redirectUrl);
-    url.searchParams.set("ref", ref);
-    url = url.href;
-  } catch {
-    url = new URL(redirectUrl, "https://fake.ru");
-    if (ref) {
-      url.searchParams.set("ref", ref);
+export function redirectTo(toUrl, fromUrl = window.location.href) {
+  const fromURL = new URL(fromUrl, "https://fake.ru");
+  const toURL = new URL(toUrl, "https://fake.ru");
+
+  fromURL.searchParams.forEach((value, key) => {
+    if (key.startsWith("utm_") && !toURL.searchParams.has(key)) {
+      toURL.searchParams.set(key, value);
     }
-    url = url.pathname + url.search;
-  }
-  return url;
+  });
+  return `${toURL.pathname}${toURL.search}`;
 }
