@@ -17,20 +17,33 @@ export function convertErrorMessageToArray(errorMessage) {
 }
 
 /**
- * Получает номер ошибки вида ORA-00000 (исключая обёртку в юзерскую)
+ * Получает номер ошибки вида ORA-00000 c максимальным значением (исключая обёртку в юзерскую)
  * @param {string} errorMessage Строка с ошибкой, содержащая ORA
  * @returns {string}
  */
-export function getErrorNumber(errorMessage) {
-  const ORA_PATTERN = /^ORA-\d{5}$/;
-  const oraPatterns = String(errorMessage)
-    .split(": ")
-    .filter((ora, idx) => {
-      if (ORA_PATTERN.test(ora) && idx <= 1) {
-        return true;
-      }
+export function getMaxErrorNumber(errorMessage) {
+  /**
+   * Фильтрация элементов массива поиска
+   * @param {RegExpMatchArray} regExpItem
+   * @param {number} currentItemIndex
+   * @param {RegExpMatchArray[]} fullList
+   * @returns
+   */
+  function filterLastSibling(regExpItem, currentItemIndex, fullList) {
+    const currentItemPosition = regExpItem.index;
+    const nextItemPosition = fullList[currentItemIndex + 1]?.index || 0;
+    const isNextSiblingNear = currentItemPosition + 11 === nextItemPosition;
+    if (isNextSiblingNear) {
       return false;
-    });
+    }
+    return true;
+  }
+
+  const ORA_PATTERN = /ORA-\d{5}/g;
+  const oraPatterns = [...String(errorMessage).matchAll(ORA_PATTERN)]
+    .filter(filterLastSibling)
+    .map(([oraError]) => oraError)
+    .sort((a, b) => (a < b ? -1 : 1));
 
   return oraPatterns.pop();
 }
@@ -40,8 +53,8 @@ export function getErrorNumber(errorMessage) {
  */
 export function isCriticalError(errorMessage) {
   const errorString = String(errorMessage);
-  const errorNumber = getErrorNumber(errorString);
-  if (errorNumber < MAX_ORA_ERROR) {
+  const maxErrorNumber = getMaxErrorNumber(errorString);
+  if (maxErrorNumber < MAX_ORA_ERROR) {
     return true;
   }
   const isWAF = errorString.includes("Request Blocked");

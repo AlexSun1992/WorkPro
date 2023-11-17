@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import Vue from "vue";
 import {
   getErrorMessage,
-  getErrorNumber,
+  getMaxErrorNumber,
   isCriticalError,
 } from "./toast.helper";
 
@@ -138,6 +138,13 @@ describe("Модуль вывода сообщения об ошибке", () =>
     expect(errorMessageWithOutORA).toBe(false);
   });
 
+  it("Ошибка со сбоем распределённой операции не критична", () => {
+    const errorMessageText =
+      'ORA-02055: сбой распределенной операции обновления; требуется откат\nORA-20105: [Чтобы заключить договор и оформить полис онлайн просим заполнить <a href="/cabinet/55/0/979" target="_blank" style="color:darkgreen; font-weight:500; text-decoration:underline;">профиль пользователя</a> .]\nORA-06512: на  "V4.IFLUTILS_WEB", line 398\nORA-06512: на  line 1\nORA-06512: на  "MOBILE.AMUTILSREST", line 1381\nORA-06512: на  line 1\n';
+    const errorMessageWithOutORA = isCriticalError(errorMessageText);
+    expect(errorMessageWithOutORA).toBe(false);
+  });
+
   it("Строка, содержащая два ORA", () => {
     const wrapper = mount(Vue.component("test-component", {}));
 
@@ -160,6 +167,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
       "Приносим извинения, в Личном Кабинете что-то пошло не так."
     );
   });
+
   it("Вернуть сообщение в скобках", () => {
     const errorMessageText =
       'ORA-20105: [Сохранение профиля невозможно, обратитесь в офис]\nORA-06512: на  "MOBILE.CLIENTUTILS", line 1409\nORA-06512: на  "MOBILE.CLIENTUTILS", line 921\nORA-06512: на  line 1\nORA-06512: на  "SYS.DBMS_SQL", line 1721\nORA-06512: на  "MOBILE.AMUTILSREST", line 1692\nORA-06512: на  "MOBILE.AMUTILSREST", line 1321\nORA-06512: на  line 1\n';
@@ -171,7 +179,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
 
   it("корректно определяет ключевое ORA", () => {
     const errorNumber =
-      getErrorNumber(`ORA-20100: ORA-20199: Для отправления справки, внесите свой e-mail в Настройках профиля.
+      getMaxErrorNumber(`ORA-20100: ORA-20199: Для отправления справки, внесите свой e-mail в Настройках профиля.
     ORA-06512: на  "I3.PKG_LK_UTILS", line 10867
     ORA-06512: на  line 1
     ORA-06512: на  "SYS.DBMS_SQL", line 1721
@@ -179,6 +187,15 @@ describe("Модуль вывода сообщения об ошибке", () =>
 
     expect(errorNumber).toBe("ORA-20199");
   });
+
+  it("получает максимальный номер ошибки ORA", () => {
+    const errorNumber = getMaxErrorNumber(
+      'ORA-02055: сбой распределенной операции обновления; требуется откат\nORA-20105: [Чтобы заключить договор и оформить полис онлайн просим заполнить <a href="/cabinet/55/0/979" target="_blank" style="color:darkgreen; font-weight:500; text-decoration:underline;">профиль пользователя</a> .]\nORA-06512: на  "V4.IFLUTILS_WEB", line 398\nORA-06512: на  line 1\nORA-06512: на  "MOBILE.AMUTILSREST", line 1381\nORA-06512: на  line 1\n'
+    );
+
+    expect(errorNumber).toBe("ORA-20105");
+  });
+
   it("корректно определяет WAF", () => {
     const errorNumber = getErrorMessage(
       "<HTML>\n" +
@@ -294,10 +311,7 @@ describe("Модуль вывода сообщения об ошибке", () =>
       'ORA-02055: сбой распределенной операции обновления; требуется откат\nORA-20105:  [\r\nЗастрахованный не является страхователем.]\nORA-06512: на  "V4.TM_UTILS_WEB", line 2007\nORA-06512: на  "V4.TM_UTILS_WEB", line 2479\nORA-06512: на  "V4.TM_UTILS", line 799\nORA-06512: на  "V4.TM_UTILS_WEB", line 2476\nORA-06512: на  "V4.TM_UTILS_WEB", line 2004\nORA-06512: на  line 1\nORA-06512: на  "MOBILE.AMUTILSREST", line 1332\nORA-06512: на  line 1\n';
     const errorMessage = getErrorMessage(errorMessageText);
 
-    // Конфликт с другим правилом [Метод: "select \'742;740\' as result from dual1"], поэтому реализация как есть
-    expect(errorMessage).toBe(
-      "Приносим извинения, в Личном Кабинете что-то пошло не так."
-    );
+    expect(errorMessage).toBe("Застрахованный не является страхователем.");
   });
 
   it("определяет текст ошибки, обёрнутый в системную", () => {
