@@ -195,6 +195,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "CollapseGroup";
     } else if (webFields[i].IDCONTROL == 441) {
       obj.type = "InsuredBox";
+    } else if (webFields[i].IDCONTROL == 502) {
+      obj.type = "Download";
     } else if (webFields[i].IDCONTROL == 481) {
       obj.type = "RangeInput";
       if (webFields[i].LDIC === true) {
