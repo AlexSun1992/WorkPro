@@ -71,6 +71,7 @@ import ControlCollapseGroup from "./ControlCollapseGroup.vue";
 import ControlRange from "./ControlRange/ControlRange.vue";
 import ControlInsuredBox from "./ControlInsuredBox/InsuredBox.vue";
 import ControlRangeInput from "./ControlRangeInput/ControlRangeInput.vue";
+import ControlDownload from "./ControlDownload/ControlDownload.vue";
 
 export default {
   name: "Control",
@@ -113,6 +114,7 @@ export default {
     ControlRange,
     ControlInsuredBox,
     ControlRangeInput,
+    ControlDownload,
   },
   props: {
     data: {
