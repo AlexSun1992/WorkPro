@@ -318,7 +318,17 @@ describe("Модуль вывода сообщения об ошибке", () =>
     const errorMessageText =
       'ORA-20105: ORA-20105: [Ошибка] \n[Метод: "SELECT v4.osagoutils_client.OsagoCalcVisibleMethod(:pId, :psParams2) AS sResult FROM DUAL"]\nORA-06512: на "MOBILE.AMUTILS2", line 288\nORA-06512: на "MOBILE.AMUTILS2", line 544\nORA-06512: на "MOBILE.AMUTILS2", line 452\nORA-06512: на line 1\n';
     const errorMessage = getErrorMessage(errorMessageText);
-
     expect(errorMessage).toBe("Ошибка");
+  });
+
+  it("На случай получения непредусмотренного текста ошибки функция возвращает человекочитаемую строку", () => {
+    const errMess = getErrorMessage(
+      new Error(
+        "TypeError:Cannot read properties of undefined (reading 'status') at eval"
+      )
+    );
+    expect(errMess).toBe(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
   });
 });
