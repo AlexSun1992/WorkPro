@@ -56,34 +56,37 @@ export default {
       );
     },
     async saveUploader() {
-      const h = this.$createElement;
-      const titleVNode = h("div", {
-        domProps: {
-          innerHTML:
-            "<b>Вы уверены?</b><br>Убедитесь, что документы прикреплены корректно и Вы ничего не забыли. <br>Повторно отправить документы нельзя.",
-        },
-      });
-      this.$bvModal
-        .msgBoxConfirm(titleVNode, {
-          title: "Вы уверены?",
-          size: "md",
-          buttonSize: "md",
-          okVariant: "success",
-          okTitle: "Да, отправить",
-          cancelTitle: "Нет, передумал",
-          footerClass: "p-2",
-          hideHeaderClose: false,
-          modalClass: ["cabinet"],
-          centered: true,
-        })
-        .then((value) => {
-          if (value) {
-            this.saveDataUploader();
-          }
-        })
-        .catch((err) => {
-          console.error(err);
+      if (this.getFormSettings.MODAL_OPEN) {
+        const h = this.$createElement;
+        const titleVNode = h("div", {
+          domProps: {
+            innerHTML: this.getFormSettings.MODAL_TEXT
+              ? this.getFormSettings.MODAL_TEXT
+              : "Что-то пошло не так...",
+          },
         });
+        this.$bvModal
+          .msgBoxConfirm(titleVNode, {
+            title: "Вы уверены?",
+            size: "md",
+            buttonSize: "md",
+            okVariant: "success",
+            okTitle: "Да, отправить",
+            cancelTitle: "Нет, передумал",
+            footerClass: "p-2",
+            hideHeaderClose: false,
+            modalClass: ["cabinet"],
+            centered: true,
+          })
+          .then((value) => {
+            if (value) {
+              this.saveDataUploader();
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     },
 
     async saveDataUploader() {
@@ -115,6 +118,9 @@ export default {
     },
   },
   computed: {
+    getFormSettings() {
+      return this.$store.getters["uploader/getFormSettings"];
+    },
     isShow() {
       return (
         this.$route.path.includes("ref") || this.$route.path.includes("wizard")
