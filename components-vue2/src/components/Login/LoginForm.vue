@@ -177,6 +177,11 @@
         Авторизоваться
         <b-spinner v-if="authInProcess" variant="light"></b-spinner>
       </b-button>
+
+      <b-form-invalid-feedback
+        :force-show="extraOrdinaryServiceAnswer ? true : false"
+        >{{ extraOrdinaryServiceAnswer }}</b-form-invalid-feedback
+      >
     </b-form>
   </div>
 </template>
@@ -197,12 +202,13 @@ import {
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import _ from "lodash";
+
+// eslint-disable-next-line import/no-relative-packages
+import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
+
 import Captcha from "./Captcha/Captcha";
 import VerifyTimer from "./Libs/VerifyUser/VerifyTimer";
-import {
-  getRestructuredPhoneNumber,
-  removeNotNumberElements,
-} from "./loginForm.helper";
+import { getRestructuredPhoneNumber } from "./loginForm.helper";
 
 export default {
   name: "LoginForm",
@@ -229,6 +235,8 @@ export default {
         cap: "",
         capid: null,
       },
+      errorMessage: null,
+      extraOrdinaryServiceAnswer: "",
       wrongAuthData: null,
       captchaMessage: null,
       modalTextRequest: "",
@@ -243,7 +251,6 @@ export default {
       isModalVisible: false,
       autofocus: true,
       placeholder: "Телефон или почта",
-      errorMessage: null,
       authInProcess: false,
       pswVisible: false,
       captchaToken: null,
@@ -320,6 +327,7 @@ export default {
       }
       this.$v.user.username.$touch();
       this.$v.user.password.$touch();
+      this.extraOrdinaryServiceAnswer = "";
       if (
         this.$v.user.username.$model === "" ||
         this.$v.user.password.$model === ""
@@ -380,40 +388,49 @@ export default {
         }
       } catch (e) {
         this.authInProcess = false;
-        const data = e.response?.data;
-        if (data) {
-          this.captchaMessage =
-            data.CODENAME === "CaptchaInvalid" ||
-            data.CODENAME === "CaptchaRequest"
-              ? data.MESSAGE
-              : null;
 
-          if (data.CODENAME === "CaptchaRequest") {
-            this.isCaptchaNeeded = true;
-          }
-          if (data.CODENAME === "PhoneCodeRequest") {
-            this.modalTextRequest = `${data.MESSAGE}`;
-            this.wrongAuthData = null;
-            this.isModalVisible = true;
-            return;
-          }
-          if (data.CODENAME === "InvalidPhoneCode") {
-            this.isValidStateCodeSMS = false;
-            return;
-          }
-          if (data.CODENAME === "Invalid") {
-            this.wrongAuthData = true;
-            return;
-          }
+        if (!e.response) {
+          this.extraOrdinaryServiceAnswer = getErrorMessage(e);
+          return;
         }
 
-        if (e?.response?.data.CODE === 105) {
+        const { data } = e.response;
+        if (!data) {
+          this.extraOrdinaryServiceAnswer = getErrorMessage(e);
+          return;
+        }
+
+        this.captchaMessage =
+          data.CODENAME === "CaptchaInvalid" ||
+          data.CODENAME === "CaptchaRequest"
+            ? data.MESSAGE
+            : null;
+
+        if (data.CODENAME === "CaptchaRequest") {
+          this.isCaptchaNeeded = true;
+        }
+        if (data.CODENAME === "PhoneCodeRequest") {
+          this.modalTextRequest = `${data.MESSAGE}`;
+          this.wrongAuthData = null;
+          this.isModalVisible = true;
+          return;
+        }
+        if (data.CODENAME === "InvalidPhoneCode") {
+          this.isValidStateCodeSMS = false;
+          return;
+        }
+        if (data.CODENAME === "Invalid") {
+          this.wrongAuthData = true;
+          return;
+        }
+
+        if (data.CODE === 105) {
           this.isValidStateCodeSMS = false;
           this.user.code = "";
           return;
         }
 
-        this.errorMessage = `Неверный телефон или пароль`;
+        this.extraOrdinaryServiceAnswer = getErrorMessage(data.MESSAGE);
       }
     },
     validateState(name) {

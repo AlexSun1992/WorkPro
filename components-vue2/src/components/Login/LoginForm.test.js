@@ -284,4 +284,51 @@ describe("LoginForm", () => {
       "Неправильная капча"
     );
   });
+
+  it("получили неожиданный серверный ответ", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
+    const wrapper = mount(LoginForm, { localVue });
+    await wrapper.find("#phone").setValue("9032374418");
+    await wrapper.find("#password").setValue("Carter911");
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error("");
+      wrongAuthError.response = {
+        data: {
+          MESSAGE:
+            'ru.reso.rest.auth.helper.AuthExeption: ORA-01722: неверное число\nORA-06512: на  "I3.TBI_SMS_TURN_TEMPLATE", line 15\nORA-04088: ошибка во время выполнения триггера \'I3.TBI_SMS_TURN_TEMPLATE\'\nORA-06512: на  "V4.SMSUTILS", line 313\nORA-06512: на  "V4.SMSUTILS", line 175\nORA-06512: на  "V4.SMSUTILS", line 125\nORA-06512: на  "MOBILE.AMAUTH2", line 1146\nORA-06512: на  "MOBILE.AMAUTH2", line 1091\nORA-06512: на  line 1\n',
+          STATUS: 500,
+          REASON: "Internal Server Error",
+        },
+      };
+      throw wrongAuthError;
+    });
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
+  });
+
+  it("отвалился интернет", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
+    const wrapper = mount(LoginForm, { localVue });
+    await wrapper.find("#phone").setValue("9032374418");
+    await wrapper.find("#password").setValue("Carter911");
+    await wrapper.find("#btn_entry_lk").trigger("click");
+    axios.post.mockImplementationOnce(() => {
+      const wrongAuthError = new Error(
+        "Cannot read properties of undefined (reading 'status') at eval"
+      );
+      throw wrongAuthError;
+    });
+
+    await wrapper.find("#auth-form").trigger("submit.prevent");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.text()).toContain(
+      "Приносим извинения, в Личном Кабинете что-то пошло не так."
+    );
+  });
 });

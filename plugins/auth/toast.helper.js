@@ -2,18 +2,22 @@
 
 const MAX_ORA_ERROR = "ORA-10000";
 
+const DEFAULT_ERROR_MESSAGE =
+  "Приносим извинения, в Личном Кабинете что-то пошло не так.";
+
 /**
  * Разбивает строку в массив по регулярному выражению, содержащему ORA-\d{5}
  * @param {string} errorMessage Строка с ошибкой, содержащая ORA и квадратные скобки, или не содержащая таковых.
- * @returns {string[]} Отфильтрованный массив без пустых строк
+ * @returns {string} текст ошибки
  */
-export function convertErrorMessageToArray(errorMessage) {
+export function extractErrorMessage(errorMessage) {
   const getArrayFromMess = errorMessage.split(/\s?ORA-\d{5}: /g);
-  const arrWithoutEmptyString = getArrayFromMess.filter(
+  const extractedMessage = getArrayFromMess.find(
     (item) =>
       item !== "" && !item.includes("сбой распределенной операции обновления")
   );
-  return arrWithoutEmptyString;
+
+  return extractedMessage;
 }
 
 /**
@@ -76,10 +80,14 @@ export function getErrorMessage(errorMessage, h) {
       });
       return [vnode];
     }
-    return "Приносим извинения, в Личном Кабинете что-то пошло не так.";
+    return DEFAULT_ERROR_MESSAGE;
+  }
+  if (typeof errorMessage !== "string") {
+    return DEFAULT_ERROR_MESSAGE;
   }
 
-  const [errMessageString] = convertErrorMessageToArray(errorMessage);
+  const errMessageString = extractErrorMessage(errorMessage);
+
   const stringWithBrackets = errMessageString.match(/\[(.+)\]/s);
 
   if (stringWithBrackets) {
@@ -110,5 +118,6 @@ export function getErrorMessage(errorMessage, h) {
     const errorMessageText = errMessageString.replace(/\[|\]/g, "");
     return errorMessageText.trim();
   }
+
   return errMessageString;
 }
