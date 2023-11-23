@@ -5,10 +5,7 @@ import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 
 import UploaderPage from "./UploadPage.vue";
-import {
-  returnFetchData,
-  returnDataStatement,
-} from "./UploaderPage.helper.fixtures";
+import { returnFetchData, params } from "./UploaderPage.helper.fixtures";
 
 import * as menu from "../../../../store/menu";
 
@@ -27,13 +24,6 @@ describe("UploaderPage", () => {
     let mockRouter;
 
     beforeEach(async () => {
-      const params = {
-        idCard: "502",
-        idItem: "1000",
-        idModule: "55",
-        idParent: "0",
-        idRel: "E89B40CC5734A78ADFE22496B28B1CE9",
-      };
       mockRoute = {
         params,
         path: "/cabinet/55/0/1000/502/E89B40CC5734A78ADFE22496B28B1CE9/uploader",
@@ -150,6 +140,72 @@ describe("UploaderPage", () => {
       const spy = jest.spyOn(uploadButtons.vm.$bvModal, "msgBoxConfirm");
       spy.mockImplementationOnce(() => Promise.resolve(true));
       const copyOfData = JSON.parse(JSON.stringify(returnFetchData));
+      jest.spyOn(axios, "put").mockResolvedValueOnce({
+        data: [
+          {
+            ID: 502,
+            MESSAGE: "Успешно сохранено",
+            REL: "E1A0C98A84E26B75958E890DE2706B26",
+            RESULT: { ID: 502, REL: "E1A0C98A84E26B75958E890DE2706B26" },
+            STATUS: 0,
+          },
+        ],
+      });
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+
+      const btnSuccess = wrapper.find(".btn-success");
+      await btnSuccess.trigger("click");
+
+      expect(axios.put).toHaveBeenCalledWith(
+        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        expect.any(FormData),
+        expect.anything()
+      );
+    });
+
+    it("Modal отключен", async () => {
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchData));
+      copyOfData.data[0].value.MODAL_OPEN = false;
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      const uploadButtons = wrapper.findComponent({ ref: "uploadButtons" });
+      const spy = jest.spyOn(uploadButtons.vm.$bvModal, "msgBoxConfirm");
+      spy.mockImplementationOnce(() => Promise.resolve(true));
+      jest.spyOn(axios, "put").mockResolvedValueOnce({
+        data: [
+          {
+            ID: 502,
+            MESSAGE: "Успешно сохранено",
+            REL: "E1A0C98A84E26B75958E890DE2706B26",
+            RESULT: { ID: 502, REL: "E1A0C98A84E26B75958E890DE2706B26" },
+            STATUS: 0,
+          },
+        ],
+      });
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+
+      const btnSuccess = wrapper.find(".btn-success");
+      await btnSuccess.trigger("click");
+
+      expect(axios.put).not.toHaveBeenCalledWith(
+        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        expect.any(FormData),
+        expect.anything()
+      );
+    });
+
+    it("Modal подключен", async () => {
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchData));
+      copyOfData.data[0].value.MODAL_OPEN = true;
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      const uploadButtons = wrapper.findComponent({ ref: "uploadButtons" });
+      const spy = jest.spyOn(uploadButtons.vm.$bvModal, "msgBoxConfirm");
+      spy.mockImplementationOnce(() => Promise.resolve(true));
       jest.spyOn(axios, "put").mockResolvedValueOnce({
         data: [
           {

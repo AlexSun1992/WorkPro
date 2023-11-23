@@ -1,3 +1,11 @@
+export const params = {
+  idCard: "502",
+  idItem: "1000",
+  idModule: "55",
+  idParent: "0",
+  idRel: "E89B40CC5734A78ADFE22496B28B1CE9",
+};
+
 export const returnFetchData = {
   data: [
     {
@@ -24,6 +32,7 @@ export const returnFetchData = {
           },
         ],
         TOTAL_LIMIT: 20000000,
+        MODAL_OPEN: true,
       },
       visible: true,
     },
