@@ -2,9 +2,7 @@
   <div class="range-control" :class="isDisabled ? 'disabled' : ''">
     <div>
       <label v-if="data.label">
-        <span
-          >{{ data.label }}
-          <span v-if="data.helpText" class="position-relative"
+        <span>{{ data.label }}<span v-if="data.helpText" class="position-relative"
             >&nbsp;
             <span class="tooltipster">
               (?)<vue-easy-tooltip
