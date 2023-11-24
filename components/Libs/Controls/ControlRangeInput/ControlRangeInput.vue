@@ -3,8 +3,7 @@
     <div>
       <label v-if="data.label">
         <span
-          >{{ data.label }}&nbsp;&nbsp;<span class="phb2" id="isuredSum">
-          </span>
+          >{{ data.label }}
           <span v-if="data.helpText" class="position-relative"
             >&nbsp;
             <span class="tooltipster">
