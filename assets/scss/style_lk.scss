@@ -1241,7 +1241,6 @@ a.lgreen {
 }
 
 .products_all {
-  -moz-columns: 2;
   column-count: 2;
   flex: 0 0 65%;
   max-width: 65%;
@@ -1500,7 +1499,6 @@ footer .copyright a:hover {
     max-width: 100%;
   }
   .products_all {
-    -moz-columns: 1;
     column-count: 1;
     grid-template-columns: 100%;
     grid-template-areas: "auto" "im" "med";
@@ -4689,7 +4687,6 @@ h6 {
     z-index: 1;
     position: relative;
     display: inline-block;
-    float: right;
     margin-top: 20px;
     top: 0;
     transform: none;
@@ -5733,4 +5730,10 @@ input.check-collapse:checked + label span + span {
 .text-ellipsis {
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.w-600 {
+  font-weight: 600;
+}
+.w-500 {
+  font-weight: 500;
 }
