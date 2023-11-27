@@ -123,14 +123,20 @@ export default {
         if (this.action.SCONST) {
           const invalidRowID = this.rowId === null || this.rowId === undefined;
           if (invalidRowID) {
-            this.$router.push(
-              `/cabinet/55/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`
-            );
+            const redirection = `/cabinet/55/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`;
+            if (this.action.LCURWINDOW) {
+              this.$router.push(redirection);
+            } else {
+              window.open(redirection);
+            }
           }
           if (!invalidRowID) {
-            this.$router.push(
-              `/cabinet/55/0/${this.action.SCONST}/0/${this.rowId}?ref=${this.$route.fullPath}`
-            );
+            const redirection = `/cabinet/55/0/${this.action.SCONST}/0/${this.rowId}?ref=${this.$route.fullPath}`;
+            if (this.action.LCURWINDOW) {
+              this.$router.push(redirection);
+            } else {
+              window.open(redirection);
+            }
           }
         }
       } else if (this.action.LHIDEDLG) {
