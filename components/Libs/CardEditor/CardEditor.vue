@@ -517,6 +517,11 @@ export default {
                 url = `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
                   tab.idItem
                 }/${cardId}/${rel.split("|")[tab.order - 1]}/uploader`;
+              } else if (
+                settingsTab?.isWizard === true &&
+                this.actionSettings.type === 38
+              ) {
+                return;
               } else {
                 url = `/cabinet/wizard/${this.$route.params.idWizard}${
                   tab.list ? `/list/` : `/`
