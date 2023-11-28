@@ -939,6 +939,8 @@ export default {
               }
             });
           }
+        } else {
+          this.currentStation = null;
         }
 
         if (data.data.qc_geo < 5) {
@@ -1077,7 +1079,8 @@ export default {
                   .replace("ё", "е");
                 if (
                   station === currentStation &&
-                  station.length === currentStation.length
+                  station.length === currentStation.length &&
+                  item.IDTOWN == 1
                 ) {
                   filteredByStation.push(item);
                 }

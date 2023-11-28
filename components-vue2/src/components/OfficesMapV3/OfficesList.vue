@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="data && data.length" class="offices">
+    <div v-if="data && data.length > 0" class="offices">
       <div v-for="(office, index) in data" :key="index">
         <OfficeCardMobile
           v-if="mobile"
