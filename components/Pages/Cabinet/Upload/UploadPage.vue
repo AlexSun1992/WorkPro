@@ -2,37 +2,42 @@
   <div>
     <div class="conf-block">
       <div class="title-page mb-3">Загрузите документы</div>
-      <div v-for="(item, i) in getData" :key="i">
-        <b>{{ item.TITLE }}</b>
-        <p v-html="item.DESCRIPTION" />
-        <upload-drop
-          @update="changeFiles(item.NAME, $event)"
-          @remove="removeFile($event)"
-          @click="clickDrop"
-          :files="item.FILES"
-          :name="item.NAME"
-          :file-objects="getFileObjects"
-          :file-errors="getFileErrors"
-          :all-size="getAllSize"
-          :is-error-size="isErrorSize"
-          :is-loading="isLoading"
-          :max-file-count="item.MAX_FILE_COUNT"
-          :max-file-size="item.MAX_FILE_SIZE"
-          :total-limit="getFormSettings.TOTAL_LIMIT"
-          :file-extensions="getFormSettings.FILE_EXTENSIONS"
-        />
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <b-alert
-            data-testid="danger-alert"
-            :show="Boolean(getErrorMessage)"
-            variant="danger"
-            class="mt-3 mb-0"
-            v-html="getErrorMessage"
-          />
+      <div v-for="document in getTypesDocumentation" :key="document.TYPE_TITLE" >
+        <b class="p1">{{ document.TYPE_TITLE }}</b>
+        <div v-html="document.TYPE_DESCRIPTION" class="mb-4"/>
+        <div v-for="doc in document.DOCS" :key="doc.NAME">
+          <div>
+            <b>{{ doc.TITLE }}</b>
+            <p v-html="doc.DESCRIPTION" />
+            <upload-drop
+              @update="changeFiles(doc.NAME, $event)"
+              @remove="removeFile($event)"
+              @click="clickDrop"
+              :files="doc.FILES"
+              :name="doc.NAME"
+              :file-objects="getFileObjects"
+              :file-errors="getFileErrors"
+              :all-size="getAllSize"
+              :is-error-size="isErrorSize"
+              :is-loading="isLoading"
+              :max-file-count="doc.MAX_FILE_COUNT"
+              :max-file-size="doc.MAX_FILE_SIZE"
+              :total-limit="getFormSettings.TOTAL_LIMIT"
+              :file-extensions="getFormSettings.FILE_EXTENSIONS"
+            />
+          </div>
         </div>
       </div>
+
+  
+      <b-alert
+        data-testid="danger-alert"
+        :show="Boolean(getErrorMessage)"
+        variant="danger"
+        class="mt-3 mb-0"
+        v-html="getErrorMessage"
+      />
+      
       <b-progress
         v-if="isLoading"
         style="display: none"
@@ -100,6 +105,21 @@ export default {
     getData() {
       return this.$store.getters["uploader/getData"];
     },
+    getTypesDocumentation() {
+      const documents = [];
+      this.getData.forEach((doc) => {
+        if (!documents.some((el) => el.TYPE_TITLE === doc.TYPE_TITLE)) {
+          documents.push({
+            TYPE_TITLE: doc.TYPE_TITLE,
+            TYPE_DESCRIPTION: doc.TYPE_DESCRIPTION,
+            DOCS: [],
+          });
+        }
+        documents.find((el) => el.TYPE_TITLE === doc.TYPE_TITLE).DOCS.push(doc);
+      });
+      return documents;
+    },
+
     getFileObjects() {
       return this.$store.getters["uploader/getFileObjects"];
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="nb-block mb-4 row">
+  <div class="nb-block row">
     <div v-if="isError === false" class="col-9 col-lg-4">
       <div
         @dragover="dragover"
