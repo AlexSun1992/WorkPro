@@ -4686,10 +4686,11 @@ h6 {
   .login-form {
     z-index: 1;
     position: relative;
-    display: inline-block;
     margin-top: 20px;
     top: 0;
     transform: none;
+    float: right;
+    right: 0;
   }
   .btn-login-link {
     margin-top: 7px;
