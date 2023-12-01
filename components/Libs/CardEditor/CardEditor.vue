@@ -231,11 +231,7 @@ export default {
           idModule: this.$route.params.idModule,
           idRel: this.$store.getters["data_card/getCardRelId"],
         };
-        const flatmenu = this.$store.getters["menu/flatmenu"];
-        const menuItem = flatmenu.find(
-          (item) => item.IDITEM == this.$route.params.idItem
-        );
-        const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
+
         await this.$store.dispatch("data_card/fetchActionParams", {
           moduleId,
           actionId,
@@ -244,7 +240,21 @@ export default {
         this.actionParamsTitle = field.label;
         this.actionParamsId = parseInt(actionId, 10);
 
-        if (CUR.NTYPE == 38) {
+        if (this.actionSettings.isDialog) {
+          this.$store.commit("data_card/setLoading", false);
+          this.$bvModal.show("confirmAction");
+        } else if (
+          await this.$store.dispatch("data_card/validateActionParams")
+        ) {
+          await this.applyAction();
+        }
+        const flatmenu = this.$store.getters["menu/flatmenu"];
+        const menuItem = flatmenu.find(
+          (item) => item.IDITEM == this.$route.params.idItem
+        );
+        const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
+
+        if (CUR.NTYPE === 38) {
           this.saveSuccess = false;
           const data = await eventHandler(
             this.data.map((a) => ({ ...a })),
@@ -258,7 +268,7 @@ export default {
           await this.saveDataCard();
 
           if (this.saveSuccess) {
-            const data = eventHandler(
+            const data = await eventHandler(
               this.data.map((a) => ({ ...a })),
               e,
               "afterSave"
@@ -270,10 +280,10 @@ export default {
           }
           return;
         }
-        if (CUR.NTYPE == 39) {
+        if (CUR.NTYPE === 39) {
           this.$store.commit("data_card/setLoading", false);
           this.$store.commit("data_card/setReadOnly", false);
-          const data = eventHandler(
+          const data = await eventHandler(
             this.data.map((a) => ({ ...a })),
             e
           );
@@ -291,29 +301,8 @@ export default {
           await this.$store.dispatch("data_card/fetchForm", params);
           return;
         }
-        if (CUR.NTYPE == 2) {
-          if (CUR.SCONST) {
-            const redirectURL = this.$route.params.idCard
-              ? `/cabinet/${this.$route.params.idModule}/0/${CUR.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
-              : `/cabinet/${this.$route.params.idModule}/0/${CUR.SCONST}/0?ref=${this.$route.fullPath}`;
-
-            this.$router.push(redirectURL);
-          } else {
-            throw new Error(`В опции кнопки не указан идентификатор меню."`);
-            return;
-          }
-        }
-
-        if (this.actionSettings.isDialog) {
-          this.$store.commit("data_card/setLoading", false);
-          this.$bvModal.show("confirmAction");
-        } else if (
-          await this.$store.dispatch("data_card/validateActionParams")
-        ) {
-          await this.applyAction();
-        }
       } else if (field.type === "button") {
-        const data = eventHandler(
+        const data = await eventHandler(
           this.data.map((a) => ({ ...a })),
           e
         );
@@ -612,6 +601,20 @@ export default {
     },
     async applyAction(evt) {
       if (evt) evt.preventDefault();
+
+      if (this.actionSettings.type === 2) {
+        if (this.actionSettings.command) {
+          const redirectURL = this.$route.params.idCard
+            ? `/cabinet/${this.$route.params.idModule}/0/${this.actionSettings.command}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
+            : `/cabinet/${this.$route.params.idModule}/0/${this.actionSettings.command}/0?ref=${this.$route.fullPath}`;
+
+          this.$router.push(redirectURL);
+        } else {
+          throw new Error(`В опции кнопки не указан идентификатор меню."`);
+        }
+        return;
+      }
+
       this.$store.commit("data_card/setError", false);
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setLoading", true);
