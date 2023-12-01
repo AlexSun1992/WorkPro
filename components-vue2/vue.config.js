@@ -17,7 +17,7 @@ module.exports = {
       "^/suggestions": {
         target: "http://localhost:8000",
       },
-      "^/idesia": {
+      "^/sso": {
         target: "http://localhost:8000",
       },
       "^/s/:hash": {

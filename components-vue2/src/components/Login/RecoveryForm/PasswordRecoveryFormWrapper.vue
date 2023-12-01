@@ -21,27 +21,22 @@ export default {
       {
         rel: "stylesheet",
         type: "text/css",
-        href: "https://reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-grid.css",
+        href: "https://reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap.min.3.1.css",
       },
       {
         rel: "stylesheet",
         type: "text/css",
-        href: "https://reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-reboot.css",
+        href: "https://reso.ru/export/system/modules/ru.reso.v2/resources/css/main_site_styles.min.3.13.css",
       },
       {
         rel: "stylesheet",
         type: "text/css",
-        href: "https://reso.ru/system/modules/ru.reso.v2/resources/css/bootstrap-utilities.css",
+        href: "https://reso.ru/export/system/modules/ru.reso.v2/resources/css/vue_components_styles/vue_components_styles.min.3.1.css",
       },
       {
         rel: "stylesheet",
         type: "text/css",
-        href: "https://reso.ru/system/modules/ru.reso.v2/resources/css/style_new.css",
-      },
-      {
-        rel: "stylesheet",
-        type: "text/css",
-        href: "https://reso.ru/system/modules/ru.reso.v2/resources/css/style_main.css",
+        href: "https://reso.ru/export/system/modules/ru.reso.v2/resources/css/formatter_styles/resoContainer.min.3.1.css",
       },
     ],
   },
