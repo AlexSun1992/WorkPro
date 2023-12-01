@@ -182,7 +182,8 @@ const nuxtConfig = {
   ],
   serverMiddleware: [
     "~/routes/routes.js",
-    { path: "/idesia", handler: "~/server/esia.js" },
+    { path: "/sso", handler: "~/server/sso.js" },
+    { path: "/idesia", handler: "~/server/sso.js" },
   ],
   auth: {
     strategies: {

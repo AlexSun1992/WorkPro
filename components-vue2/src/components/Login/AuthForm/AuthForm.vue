@@ -76,8 +76,17 @@ export default {
         message: `Нажал на кнопку «Войти через ГОСУСЛУГИ»`,
         timeUser: new Date(),
       });
-      document.location.href =
-        "https://client.reso.ru/loginesia/loginesia/prod";
+      document.location.href = "/sso?auth&type=esia&ref=/cabinet";
+    },
+    goALFA() {
+      this.$LogEvent({
+        formName: "AuthForm",
+        idEventType: 503,
+        controlName: "AuthForm.vue",
+        message: `Нажал на кнопку «Войти через AlfaID`,
+        timeUser: new Date(),
+      });
+      document.location.href = "/sso?auth&type=alfa&ref=/cabinet";
     },
   },
   mounted() {
