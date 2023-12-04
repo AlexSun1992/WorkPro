@@ -170,9 +170,6 @@ describe("UploaderPage", () => {
       jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
       await store.dispatch("uploader/fetchData", params);
 
-      const uploadButtons = wrapper.findComponent({ ref: "uploadButtons" });
-      const spy = jest.spyOn(uploadButtons.vm.$bvModal, "msgBoxConfirm");
-      spy.mockImplementationOnce(() => Promise.resolve(true));
       jest.spyOn(axios, "put").mockResolvedValueOnce({
         data: [
           {
@@ -189,7 +186,7 @@ describe("UploaderPage", () => {
       const btnSuccess = wrapper.find(".btn-success");
       await btnSuccess.trigger("click");
 
-      expect(axios.put).not.toHaveBeenCalledWith(
+      expect(axios.put).toHaveBeenCalledWith(
         "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
         expect.any(FormData),
         expect.anything()
