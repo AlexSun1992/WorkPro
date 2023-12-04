@@ -65,7 +65,7 @@ export default {
               : "Что-то пошло не так...",
           },
         });
-        this.$bvModal
+        const bvUserChose = await this.$bvModal
           .msgBoxConfirm(titleVNode, {
             title: "Вы уверены?",
             size: "md",
@@ -78,15 +78,14 @@ export default {
             modalClass: ["cabinet"],
             centered: true,
           })
-          .then((value) => {
-            if (value) {
-              this.saveDataUploader();
-            }
-          })
           .catch((err) => {
             console.error(err);
           });
+        if (!bvUserChose) {
+          return;
+        }
       }
+      await this.saveDataUploader();
     },
 
     async saveDataUploader() {
