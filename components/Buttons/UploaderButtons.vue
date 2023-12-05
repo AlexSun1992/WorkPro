@@ -11,8 +11,11 @@
       </b-button>
     </div>
     <div class="col-12 d-lg-none"></div>
-    <div class="col-auto mt-3 mt-lg-0" v-if="isShow">
+    <div class="col-auto mt-3 mt-lg-0" v-if="isWizardMode">
       <b-button @click="goBack()"> Назад </b-button>
+    </div>
+    <div class="col-auto mt-3 mt-lg-0" v-if="isRefInURL && !isWizardMode">
+      <b-button @click="clickCancelButton()"> Отменить </b-button>
     </div>
   </div>
 </template>
@@ -97,7 +100,7 @@ export default {
       });
 
       if (this.isLoadSuccessFull) {
-        if (this.isShow) {
+        if (this.isWizardMode === true) {
           if (this.tabs.length > 0) {
             this.getCurrentIndex();
             const tab = this.tabs[this.getCurrentIndex() + 1];
@@ -108,6 +111,9 @@ export default {
             );
           }
         }
+        if (this.isWizardMode === false && this.isRefInURL === true) {
+          this.$router.push(this.$route.query?.ref);
+        }
       }
     },
     async goBack(e) {
@@ -115,15 +121,19 @@ export default {
       await this.$store.dispatch("menu/fetchMenuById", e);
       this.$router.push(this.getURL(tab));
     },
+    clickCancelButton() {
+      this.$router.push(this.$route.query?.ref);
+    },
   },
   computed: {
     getFormSettings() {
       return this.$store.getters["uploader/getFormSettings"];
     },
-    isShow() {
-      return (
-        this.$route.path.includes("ref") || this.$route.path.includes("wizard")
-      );
+    isWizardMode() {
+      return this.$route.path.includes("wizard");
+    },
+    isRefInURL() {
+      return Boolean(this.$route.query?.ref);
     },
     pages() {
       return this.$store.getters["wizard/getWizardPages"];

@@ -26,7 +26,7 @@ describe("UploaderPage", () => {
     beforeEach(async () => {
       mockRoute = {
         params,
-        path: "/cabinet/55/0/1000/502/E89B40CC5734A78ADFE22496B28B1CE9/uploader",
+        path: "/cabinet/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
         query: {},
       };
       mockRouter = {
@@ -224,6 +224,143 @@ describe("UploaderPage", () => {
         expect.any(FormData),
         expect.anything()
       );
+    });
+  });
+  describe("/cabinet?ref=%2Fcabinet", () => {
+    Vue.use(Vuex, BootstrapVue);
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    let store;
+    let wrapper;
+    let mockRoute;
+    let mockRouter;
+
+    beforeEach(async () => {
+      mockRoute = {
+        params,
+        path: "/cabinet/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
+        query: {
+          ref: "/cabinet",
+        },
+      };
+      mockRouter = {
+        push: jest.fn(),
+      };
+
+      store = new Vuex.Store({
+        modules: {
+          uploader: {
+            ...uploader,
+            namespaced: true,
+          },
+          menu: {
+            ...menu,
+            namespaced: true,
+          },
+        },
+      });
+      process.server = true;
+      store.$axios = axios;
+
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchData));
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      wrapper = mount(UploaderPage, {
+        localVue,
+        mocks: {
+          $store: store,
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      });
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+      jest.resetModules();
+    });
+
+    it("Страница UploaderPage загрузилась с прикрепленными файлами и с двумя кнопками", async () => {
+      const files = wrapper.findAll(".namefile");
+
+      expect(files).toHaveLength(3);
+
+      expect(files.at(0).text()).toBe("PASPORT.pdf");
+      expect(files.at(1).text()).toBe("PTS.pdf");
+      expect(files.at(2).text()).toBe("EPROTOKOL.jpeg");
+
+      expect(wrapper.text()).toContain("Отправить документы");
+      expect(wrapper.text()).toContain("Отменить");
+    });
+  });
+
+  describe("/wizard", () => {
+    Vue.use(Vuex, BootstrapVue);
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    let store;
+    let wrapper;
+    let mockRoute;
+    let mockRouter;
+
+    beforeEach(async () => {
+      mockRoute = {
+        params,
+        path: "/cabinet/wizard/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
+        query: {},
+      };
+      mockRouter = {
+        push: jest.fn(),
+      };
+
+      store = new Vuex.Store({
+        modules: {
+          uploader: {
+            ...uploader,
+            namespaced: true,
+          },
+          menu: {
+            ...menu,
+            namespaced: true,
+          },
+        },
+      });
+      process.server = true;
+      store.$axios = axios;
+
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchData));
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      wrapper = mount(UploaderPage, {
+        localVue,
+        mocks: {
+          $store: store,
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      });
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+      jest.resetModules();
+    });
+
+    it("Страница UploaderPage загрузилась с прикрепленными файлами и с двумя кнопками", async () => {
+      const files = wrapper.findAll(".namefile");
+
+      expect(files).toHaveLength(3);
+
+      expect(files.at(0).text()).toBe("PASPORT.pdf");
+      expect(files.at(1).text()).toBe("PTS.pdf");
+      expect(files.at(2).text()).toBe("EPROTOKOL.jpeg");
+
+      expect(wrapper.text()).toContain("Отправить документы");
+      expect(wrapper.text()).toContain("Назад");
     });
   });
 });
