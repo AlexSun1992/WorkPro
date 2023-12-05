@@ -39,6 +39,13 @@
     >
       Регистрация
     </button>
+
+    <div class="login_more">
+      или войти через<br />
+      <button class="btn-alfa" @click="goALFA()" id="alfa-login">
+        Alfa ID
+      </button>
+    </div>
   </div>
 </template>
 <script>
