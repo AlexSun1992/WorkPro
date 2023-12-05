@@ -6,7 +6,7 @@
         variant="success"
         @click="saveUploader()"
       >
-        Отправить документы
+        {{ saveButtonName }}
         <b-spinner v-if="loading" variant="danger" label="Spinning" />
       </b-button>
     </div>
@@ -56,12 +56,12 @@ export default {
       );
     },
     async saveUploader() {
-      if (this.getFormSettings.MODAL_OPEN) {
+      if (this.formSettings.MODAL_OPEN) {
         const h = this.$createElement;
         const titleVNode = h("div", {
           domProps: {
-            innerHTML: this.getFormSettings.MODAL_TEXT
-              ? this.getFormSettings.MODAL_TEXT
+            innerHTML: this.formSettings.MODAL_TEXT
+              ? this.formSettings.MODAL_TEXT
               : "Что-то пошло не так...",
           },
         });
@@ -118,8 +118,15 @@ export default {
     },
   },
   computed: {
-    getFormSettings() {
-      return this.$store.getters["uploader/getFormSettings"];
+    saveButtonName() {
+      return (
+        this.$store.getters["uploader/metaData"].data.find(
+          (item) => item.name === "Save" && item.type === "button"
+        )?.label ?? "Сохранить"
+      );
+    },
+    formSettings() {
+      return this.$store.getters["uploader/formSettings"];
     },
     isShow() {
       return (

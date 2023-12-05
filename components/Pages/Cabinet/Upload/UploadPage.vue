@@ -2,9 +2,9 @@
   <div>
     <div class="conf-block">
       <div class="title-page mb-3">Загрузите документы</div>
-      <div v-for="document in getTypesDocumentation" :key="document.TYPE_TITLE" >
+      <div v-for="document in getTypesDocumentation" :key="document.TYPE_TITLE">
         <b class="p1">{{ document.TYPE_TITLE }}</b>
-        <div v-html="document.TYPE_DESCRIPTION" class="mb-4"/>
+        <div v-html="document.TYPE_DESCRIPTION" class="mb-4" />
         <div v-for="doc in document.DOCS" :key="doc.NAME">
           <div>
             <b>{{ doc.TITLE }}</b>
@@ -22,14 +22,13 @@
               :is-loading="isLoading"
               :max-file-count="doc.MAX_FILE_COUNT"
               :max-file-size="doc.MAX_FILE_SIZE"
-              :total-limit="getFormSettings.TOTAL_LIMIT"
-              :file-extensions="getFormSettings.FILE_EXTENSIONS"
+              :total-limit="formSettings.TOTAL_LIMIT"
+              :file-extensions="formSettings.FILE_EXTENSIONS"
             />
           </div>
         </div>
       </div>
 
-  
       <b-alert
         data-testid="danger-alert"
         :show="Boolean(getErrorMessage)"
@@ -37,7 +36,7 @@
         class="mt-3 mb-0"
         v-html="getErrorMessage"
       />
-      
+
       <b-progress
         v-if="isLoading"
         style="display: none"
@@ -141,8 +140,8 @@ export default {
     isInValidFiles() {
       return this.$store.getters["uploader/isInValidFiles"];
     },
-    getFormSettings() {
-      return this.$store.getters["uploader/getFormSettings"];
+    formSettings() {
+      return this.$store.getters["uploader/formSettings"];
     },
     getProgressValue() {
       return this.$store.getters["uploader/getProgressValue"];

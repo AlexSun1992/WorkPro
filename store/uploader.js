@@ -13,6 +13,7 @@ export const state = () => ({
   dataSuccess: null,
   dataError: null,
   progressValue: null,
+  metaData: null,
 });
 
 export const getters = {
@@ -26,18 +27,19 @@ export const getters = {
         .value.filter((fileType) => fileType.NAME === item.NAME),
     }));
   },
+  metaData: (state) => state.metaData,
   getFileObjects: (state) => state.fileObjects,
   getFileErrors: (state) => [
     ...new Map(state.fileErrors.map((item) => [item.type, item])).values(),
   ],
   getFiles: (state) =>
     state.data.find((type) => type.name === FILES_PROPERTY).value,
-  getFormSettings: (state) =>
+  formSettings: (state) =>
     state.data.find((type) => type.name === FORM_SETTINGS).value,
   getAllSize: (state, getters) =>
     getters.getFiles.reduce((acc, curr) => acc + curr.SIZE, 0),
   isErrorSize: (state, getters) =>
-    getters.getAllSize > getters.getFormSettings.TOTAL_LIMIT,
+    getters.getAllSize > getters.formSettings.TOTAL_LIMIT,
   isLoadSuccessFull: (state) => state.isLoadSuccessFull,
   isLoading: (state) => state.isLoading,
   getDataSuccess: (state) => state.dataSuccess,
@@ -79,6 +81,7 @@ export const actions = {
         `/api/card/${params.idModule}/${params.idItem}/${params.idCard}/${params.idRel}`
       )
       .then((res) => {
+        commit("setMetaData", res.data.metaData);
         commit("setData", res.data.data);
       });
   },
@@ -104,7 +107,7 @@ export const actions = {
     if (!IS_ERROR_MAX_FILE_COUNT && !IS_ERROR_MIN_FILE_COUNT) {
       data.forEach((item) => {
         const IS_ERROR_TOTAL_LIMIT =
-          getters.getAllSize + item.size > getters.getFormSettings.TOTAL_LIMIT;
+          getters.getAllSize + item.size > getters.formSettings.TOTAL_LIMIT;
         const IS_ERROR_MAX_FILE_SIZE = item.size > MAX_FILE_SIZE;
         if (IS_ERROR_TOTAL_LIMIT) {
           commit("setFileError", {
@@ -190,6 +193,9 @@ export const actions = {
 export const mutations = {
   setData(state, data) {
     state.data = data;
+  },
+  setMetaData(state, data) {
+    state.metaData = data;
   },
   setFiles(state, data) {
     const files = state.data.find(
