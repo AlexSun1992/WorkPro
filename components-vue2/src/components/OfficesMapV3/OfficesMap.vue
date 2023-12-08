@@ -92,11 +92,52 @@
 
 <script>
 /* eslint-disable */
+Window.saveLogAgentOnOfficesMap = async (log) => {
+  const logObject = log;
+  logObject.vizitType = window.innerWidth < 992 ? "Y" : "N";
+
+  try {
+    if(Cookies.get("_ym_uid") == undefined) {
+      logObject.userId = yaCounter25356824.getClientID() == undefined ? "" : yaCounter25356824.getClientID();
+    } else {
+      logObject.userId = Cookies.get("_ym_uid");
+    }
+  } catch (error) {
+    logObject.userId = Cookies.get("_ym_uid") == undefined ? "" : Cookies.get("_ym_uid");
+  }
+
+  let utm = new URLSearchParams(window.location.search);
+  logObject.utm_source = utm.get('utm_source') ? utm.get('utm_source') : undefined;
+  logObject.utm_medium = utm.get('utm_medium') ? utm.get('utm_medium') : undefined;
+  logObject.utm_campaign = utm.get('utm_campaign') ? utm.get('utm_campaign') : undefined;
+  logObject.utm_content = utm.get('utm_content') ? utm.get('utm_content') : undefined;
+  logObject.utm_term = utm.get('utm_term') ? utm.get('utm_term') : undefined;
+
+  logObject.isService = 'N';
+
+  let json = JSON.stringify(logObject);
+
+  try {
+    let response = await fetch("/am/free/v2/siteapi/log/AgentsMap", {
+      method: "POST",
+      body: json
+    });
+
+    let result = await response.json();
+
+    if (result[0].STATUS != 0) {
+      throw new Error(result[0].ERROR);
+    }
+  } catch (error) {
+    logErrorInCms(error, 'agentMap', 'Ошибка логирования действий пользователя на карте офисов.');
+  }
+}
+
 import { BTabs, BTab, BPagination } from "bootstrap-vue";
 import Vue from "vue";
 import LoadScript from "vue-plugin-load-script";
 import Cookies from "js-cookie";
-import { filters, filterData } from "../../../../utils/map/filtersV2";
+import { filters, filterData } from "../../../../utils/map/filtersV3";
 import Mosmetro from "./mosmetro.svg";
 import FilterComponent from "./FilterComponent.vue";
 import ZoomComponent from "./ZoomComponent.vue";
@@ -670,11 +711,14 @@ export default {
         if ((objectManager.objects.getById(objectId)).properties.typeObject == 'agent') {
           if (e.get('type') == 'balloonopen') {
             objectManager.objects.setObjectOptions(objectId, {
-              iconImageHref: '/system/modules/ru.reso.v2/resources/img/ImageMap/point-pos-agent-active.svg'
+              iconImageHref: '/system/modules/ru.reso.v2/resources/img/icons/pin_agent_active.svg'
+            });
+            Window.saveLogAgentOnOfficesMap({
+              pressBubble : "Y"
             });
           } else {
             objectManager.objects.setObjectOptions(objectId, {
-              iconImageHref: '/system/modules/ru.reso.v2/resources/img/ImageMap/pointer-position-agent.png'
+              iconImageHref: '/system/modules/ru.reso.v2/resources/img/icons/pin_agent.svg'
             });
           }
         } else {
@@ -804,16 +848,17 @@ export default {
     },
 
     getPhone() {
-      /*if (agentsMapUtmSource != "" && agentsMapUtmSource != "reso"){
-        return phonePromo;
-      }*/
+      let agentsMapUtmSource = new URLSearchParams(window.location.search).get('utm_source');
+      if (agentsMapUtmSource != null && agentsMapUtmSource != "" && agentsMapUtmSource != "reso"){
+        return this.phonePromo;
+      }
       if (this.width < 768) {
         return this.phoneMobile;
       }
       return this.phoneDesktop;
     },
 
-    getTemplateLayoutAgentCard(item, type){
+    getTemplateLayoutAgentCard(item) {
       let agent = item.agent;
       let urlApiPhoto = "/am/free/v2/siteapi/agentphoto";
       let ratingClass = 'stars' + (this.customRound(agent.SRATING) + "").replace('.', '_');
@@ -824,10 +869,13 @@ export default {
 
       return (`<div class="agent-card-item" data-agent_id="${agent.ID}">
             <span class="agent-card-stars ${ratingClass}"></span>
-            <p class="agent-card-name">${agent.NAME}</p>` +
-        //(item.distance ? `<b class="agent-card-distance">в ${distanceToStr(item.distance)} от Вас</b>` : ``) +
-        `<img ${srcImgAgent} class="agent-card-img">
-            <a class="gent-card-call" href="tel:${this.getPhone()},${listNumbers[1]}">
+            <p class="agent-card-name">${agent.NAME}</p>
+        <span class="agent-card-message">Агент поможет оформить полис</span>
+        <img ${srcImgAgent} class="agent-card-img">
+            <a class="gent-card-call" href="tel:${this.getPhone()},${listNumbers[1]}" onclick="Window.saveLogAgentOnOfficesMap({
+            pressButton: 'Y',
+            phone: this.href.split(',')[1]
+          });">
               <p class="agent-card-tel">${patternTempPhone}<br><span>доб. </span>${listNumbers[1]}</p>
               <div class="agent-card-tel-button"></div>
             </a>
@@ -859,8 +907,8 @@ export default {
             options:{
               openEmptyBalloon:true,
               iconLayout:"default#image",
-              iconImageHref:'/system/modules/ru.reso.v2/resources/img/ImageMap/pointer-position-agent.png',
-              iconImageSize:[35,35],
+              iconImageHref:'/system/modules/ru.reso.v2/resources/img/icons/pin_agent.svg',
+              iconImageSize:[42, 42],
               iconImageOffset:[-17,-17],
               hideIconOnBalloonOpen: false,
               balloonOffset: [57, 0]
