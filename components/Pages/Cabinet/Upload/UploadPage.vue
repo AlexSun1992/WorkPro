@@ -59,7 +59,7 @@
         Отменить загрузку файлов
       </b-button>
     </div>
-    <uploader-buttons ref="uploadButtons" />
+    <uploader-buttons ref="uploadButtons" :isLoading="isLoading" />
   </div>
 </template>
 

@@ -34,10 +34,6 @@
         />
       </div>
       <v-runtime-template
-        v-if="settings.cardtemplate && isShowCardEditor"
-        :template="settings.cardtemplate"
-      />
-      <v-runtime-template
         v-else-if="isShowTemplate"
         :template="settings.cardtemplate"
       />

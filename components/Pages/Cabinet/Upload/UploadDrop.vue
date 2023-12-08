@@ -461,6 +461,7 @@ export default {
     border: 1px solid #43b02a;
   }
   .dropzone-container:after,
+  .btn-delite-file:disabled,
   .btn-delite-file,
   .btn-download-file {
     width: 20px;
@@ -473,6 +474,10 @@ export default {
   .btn-delite-file {
     left: 35px;
   }
+  .btn-delite-file:disabled {
+    filter: grayscale(1);
+  }
+
   .dropzone-container span span {
     display: none;
   }
