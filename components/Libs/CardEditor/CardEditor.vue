@@ -608,7 +608,11 @@ export default {
             ? `/cabinet/${this.$route.params.idModule}/0/${this.actionSettings.command}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
             : `/cabinet/${this.$route.params.idModule}/0/${this.actionSettings.command}/0?ref=${this.$route.fullPath}`;
 
-          this.$router.push(redirectURL);
+          if (this.actionSettings.isCurrentWindow) {
+            this.$router.push(redirectURL);
+          } else {
+            window.open(redirectURL);
+          }
         } else {
           throw new Error(`В опции кнопки не указан идентификатор меню."`);
         }
