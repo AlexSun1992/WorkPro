@@ -2,12 +2,12 @@
   <div class="mt-4 buttons row">
     <div class="col-auto">
       <b-button
-        :disabled="loading || isInValidFiles"
+        :disabled="isLoading || isInValidFiles"
         variant="success"
         @click="saveUploader()"
       >
         {{ saveButtonName }}
-        <b-spinner v-if="loading" variant="danger" label="Spinning" />
+        <b-spinner v-if="isLoading" variant="danger" label="Spinning" />
       </b-button>
     </div>
     <div class="col-12 d-lg-none"></div>
@@ -25,7 +25,7 @@ import breadcrumbs from "../../converters/breadcrumbs";
 
 export default {
   name: "UploaderButtons",
-  props: [],
+  props: ["isLoading"],
   data() {
     return {};
   },
