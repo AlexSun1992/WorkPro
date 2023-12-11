@@ -6,7 +6,9 @@
         class="price"
         v-if="getFieldValue('NDISCOUNTPREMIUM') === getFieldValue('NPREMIUM')"
       >
-        <font>{{ getFieldValue("NPREMIUM") }}</font>
+        <font>{{
+          new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NPREMIUM"))
+        }}</font>
       </div>
       <div
         class="price"
@@ -17,10 +19,25 @@
             : 'use_discount'
         "
       >
-        <font>{{ getFieldValue("NPREMIUM") }}</font>
-        <font>{{ getFieldValue("NDISCOUNTPREMIUM") }}</font>
+
+        <font>{{
+          new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NPREMIUM"))
+        }}</font>
+        <font>{{
+          new Intl.NumberFormat("ru-RU", {}).format(
+            getFieldValue("NDISCOUNTPREMIUM")
+          )
+        }}</font>
       </div>
-      <div v-if="getField('SSTATEPAY').visible" class="payment_status">
+      <div
+        v-if="getField('SSTATEPAY').visible"
+        class="payment_status"
+        :class="
+          getFieldValue('SSTATENAME') === 'Оплачен'
+            ? 'payment_true'
+            : 'payment_fail'
+        "
+      >
         {{ getFieldValue("SSTATENAME") }}
       </div>
     </div>
@@ -88,7 +105,7 @@ font + font {
 }
 
 .use_discount:after {
-  content: "Прbименена скидка!";
+  content: "Применена скидка!";
 }
 
 .payment_fail {
@@ -99,6 +116,9 @@ font + font {
   line-height: 30px;
   display: inline-block;
   padding: 4px 43px 4px 12px;
+  top: -43px;
+  right: 0px;
+  position: absolute;
 }
 .payment_true {
   background: #43b02a url(/img/payment_true.svg) right 12px top 50% no-repeat;
@@ -108,6 +128,9 @@ font + font {
   line-height: 30px;
   display: inline-block;
   padding: 4px 43px 4px 12px;
+  top: -43px;
+  right: 0px;
+  position: absolute;
 }
 @media (max-width: 992px) {
   .btn-link.color-black {
@@ -122,6 +145,12 @@ font + font {
     font-size: 1.5rem;
     white-space: nowrap;
     line-height: 30px;
+  }
+  .payment_fail,
+  .payment_true {
+    font-size: 0.875rem;
+    line-height: 24px;
+    top: -40px;
   }
 }
 </style>
