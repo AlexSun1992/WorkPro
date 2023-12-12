@@ -601,7 +601,6 @@ export default {
     },
     async applyAction(evt) {
       if (evt) evt.preventDefault();
-
       if (this.actionSettings.type === 2) {
         if (this.actionSettings.command) {
           const redirectURL = this.$route.params.idCard
@@ -612,6 +611,9 @@ export default {
             this.$router.push(redirectURL);
           } else {
             window.open(redirectURL);
+            this.$nextTick(() => {
+              this.$bvModal.hide("confirmAction");
+            });
           }
         } else {
           throw new Error(`В опции кнопки не указан идентификатор меню."`);
@@ -649,7 +651,9 @@ export default {
         }
       }
       if (response?.status === 200) {
-        this.$bvModal.hide("confirmAction");
+        this.$nextTick(() => {
+          this.$bvModal.hide("confirmAction");
+        });
         if (this.$route.query?.ref && this.actionSettings?.closeAfter) {
           this.$router.push(this.$route.query?.ref);
         }
