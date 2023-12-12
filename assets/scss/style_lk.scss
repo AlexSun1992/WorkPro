@@ -5738,3 +5738,12 @@ input.check-collapse:checked + label span + span {
 .w-500 {
   font-weight: 500;
 }
+@media (max-width: 768px) {
+  .tooltip.tooltip--anchor.tooltip--position-top.active[style*="left: -"] {
+    left: 16px !important;
+  }
+  [__tooltip__].tooltip--position-top::after,
+  [__tooltip__].tooltip--position-top::before {
+    display: none;
+  }
+}
