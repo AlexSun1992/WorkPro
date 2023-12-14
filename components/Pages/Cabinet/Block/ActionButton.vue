@@ -14,11 +14,6 @@ import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
 export default {
   name: "ActionButton",
   props: {
-    actions: {
-      type: Array,
-      required: true,
-      default: () => [],
-    },
     actionId: {
       type: String,
       required: true,
@@ -34,19 +29,9 @@ export default {
       required: false,
       default: () => null,
     },
-    rowId: {
-      type: Number | String,
-      required: false,
-      default: () => null,
-    },
     body: {
       type: Object | Array,
       required: false,
-    },
-    relId: {
-      type: String,
-      required: false,
-      default: () => "",
     },
     insideContent: {
       type: String,
@@ -174,9 +159,18 @@ export default {
   },
 
   computed: {
+    rowId() {
+      return this.$attrs["row-id"] ?? this.$route.params.idCard;
+    },
+    relId() {
+      return this.$attrs["rel-id"] ?? this.$route.params.idRel;
+    },
     action: {
       get() {
-        const action = this.actions.find(
+        const actions = this.$store.getters["menu/getMenuById"](
+          this.$route.params.idItem
+        ).ACTIONSCUR;
+        const action = actions.find(
           (a) => a.ID === parseInt(this.actionId, 10)
         );
         return action || null;
