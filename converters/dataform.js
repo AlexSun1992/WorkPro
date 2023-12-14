@@ -273,6 +273,9 @@ converter.form = async (data, params, instance) => {
     obj.cols = webFields[i].NCOLSPAN ? webFields[i].NCOLSPAN : 12;
     obj.colSm = webFields[i].NCOLSM ? webFields[i].NCOLSM : 12;
     obj.colMd = webFields[i].NCOLMD ? webFields[i].NCOLMD : 12;
+    obj.isMask = webFields[i].LMASKINCLITTERALS
+      ? webFields[i].LMASKINCLITTERALS
+      : false;
     obj.colLg = webFields[i].NCOLLG ? webFields[i].NCOLLG : 12;
     obj.width = webFields[i].NWIDTH ? `${webFields[i].NWIDTH}%` : "100%";
     obj.name = webFields[i].SNAME;

@@ -10,7 +10,7 @@
       :disabled="!edit ? !edit : data.readonly"
       :value="dataValue"
       type="text"
-      :masked="false"
+      :masked="isMask"
       :tokens="customTokens"
       @input="updateValue($event)"
       @input.native="eventHandlerInputNative($event.target.value)"
@@ -56,6 +56,9 @@ export default {
   },
 
   computed: {
+    isMask() {
+      return this.data.isMask || false;
+    },
     isState() {
       let state = null;
 
