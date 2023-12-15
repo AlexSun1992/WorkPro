@@ -19,8 +19,8 @@
     </div>
   </div>
 </template>
-
 <script>
+import fetchPoutvalue from "../../utils/fetchPoutvalue";
 import breadcrumbs from "../../converters/breadcrumbs";
 
 export default {
@@ -100,6 +100,12 @@ export default {
       });
 
       if (this.isLoadSuccessFull) {
+        fetchPoutvalue(this.getDataSuccess, {
+          router: this.$router,
+          isInNewWindow: false,
+          toaster: this.$bvToast,
+        });
+
         if (this.isWizardMode === true) {
           if (this.tabs.length > 0) {
             this.getCurrentIndex();
@@ -126,6 +132,9 @@ export default {
     },
   },
   computed: {
+    getDataSuccess() {
+      return this.$store.getters["uploader/getDataSuccess"];
+    },
     saveButtonName() {
       return (
         this.$store.getters["uploader/metaData"].data.find(

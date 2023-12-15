@@ -13,6 +13,7 @@ export const state = () => ({
   dataSuccess: null,
   dataError: null,
   progressValue: null,
+  poutValueRoute: null,
   metaData: null,
 });
 
@@ -27,7 +28,11 @@ export const getters = {
         .value.filter((fileType) => fileType.NAME === item.NAME),
     }));
   },
+
+  getPoutValueRoute: (state) => state.poutValueRoute,
+
   metaData: (state) => state.metaData,
+
   getFileObjects: (state) => state.fileObjects,
   getFileErrors: (state) => [
     ...new Map(state.fileErrors.map((item) => [item.type, item])).values(),
@@ -171,6 +176,7 @@ export const actions = {
         formData,
         config
       );
+
       commit("setLoadSuccessFull", true);
       commit("setDataSuccess", result);
     } catch (e) {
@@ -205,6 +211,7 @@ export const mutations = {
       data.forEach((item) => files.push(item));
     }
   },
+
   setFile(state, data) {
     const files = state.data.find(
       (file) => file.name === FILES_PROPERTY
@@ -230,6 +237,7 @@ export const mutations = {
       fileObjects.splice(fileObjects.indexOf(fileObject), 1);
     }
   },
+
   setLoadSuccessFull(state, data) {
     state.isLoadSuccessFull = data;
   },
