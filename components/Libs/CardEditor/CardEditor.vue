@@ -78,6 +78,7 @@ import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import { clearScript } from "~/components/EventHandler/eventHandler.helper";
 import { params } from "@/components/Pages/Cabinet/CardPage.helper.fixtures";
+import fetchPoutvalue from "../../../utils/fetchPoutvalue";
 
 let controller;
 export default {
@@ -556,9 +557,11 @@ export default {
                 this.$route.params
               );
 
-              if (resp.data.POUTVALUE) {
-                this.$router.push(resp.data.POUTVALUE);
-              }
+              fetchPoutvalue(resp.data, {
+                router: this.$router,
+                isInNewWindow: false,
+                toaster: this.$bvToast,
+              });
             }
           } else if (resp?.status === 500 || resp?.status === 520) {
             this.$store.commit("data_card/setLoading", false);
