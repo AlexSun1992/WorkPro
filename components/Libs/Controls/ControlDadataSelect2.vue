@@ -126,7 +126,7 @@ export default {
           const data = JSON.parse(this.data.value);
           return data.value;
         } catch (e) {
-          return this.data.value?.value;
+          return this.data.value?.value ?? this.data.value;
         }
       }
       return this.data.value;
