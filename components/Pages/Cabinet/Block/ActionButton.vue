@@ -152,13 +152,12 @@ export default {
     },
     action: {
       get() {
-        const actions = this.$store.getters["menu/getMenuById"](
-          this.$route.params.idItem
-        ).ACTIONSCUR;
-        const action = actions.find(
-          (a) => a.ID === parseInt(this.actionId, 10)
+        const allActions = this.$store.getters["menu/allActions"];
+        return (
+          allActions.find(
+            (action) => action.ID === parseInt(this.actionId, 10)
+          ) || null
         );
-        return action || null;
       },
     },
   },
