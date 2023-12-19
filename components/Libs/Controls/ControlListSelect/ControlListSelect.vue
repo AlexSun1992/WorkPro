@@ -23,6 +23,7 @@
 </template>
 <script>
 import ControlWrapperSelect from "../ControlWrapperSelect";
+import { detectUniquePropertyName } from "./detectUniquePropertyName";
 
 export default {
   name: "ControlListSelect",
@@ -90,7 +91,7 @@ export default {
     optionsValue: {
       get() {
         if (this.dataContent?.fields?.length > 1) {
-          return this.dataContent?.fields[1].key || "ID";
+          return detectUniquePropertyName(this.dataContent.items) || "ID";
         }
         if (Object.keys(this.itemValue).length !== 0) {
           return Object.keys(this.itemValue)[0];
