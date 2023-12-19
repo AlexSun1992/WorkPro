@@ -78,7 +78,7 @@ import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import { clearScript } from "~/components/EventHandler/eventHandler.helper";
 import { params } from "@/components/Pages/Cabinet/CardPage.helper.fixtures";
-import fetchPoutvalue from "../../../utils/fetchPoutvalue";
+import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
 
 let controller;
 export default {

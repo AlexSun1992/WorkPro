@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
-import fetchPoutvalue from "../../utils/fetchPoutvalue";
+import { fetchPoutvalue } from "../../utils/fetchPoutvalue";
 import breadcrumbs from "../../converters/breadcrumbs";
 
 export default {

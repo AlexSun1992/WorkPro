@@ -1,5 +1,5 @@
 export function extractPoutvalue(response) {
-  if (Object.prototype.hasOwnProperty.call(response, "data")) {
+  if ("data" in response) {
     if (Array.isArray(response.data)) {
       const getPoutvalue = response.data.find((item) => item.POUTVALUE);
       const poutValue = getPoutvalue || null;
@@ -11,7 +11,7 @@ export function extractPoutvalue(response) {
     }
   }
   if (typeof response === "object") {
-    if (Object.prototype.hasOwnProperty.call(response, "POUTVALUE")) {
+    if ("POUTVALUE" in response) {
       return response.POUTVALUE;
     }
   }
