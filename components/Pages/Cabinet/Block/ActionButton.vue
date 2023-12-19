@@ -158,11 +158,13 @@ export default {
     },
     action: {
       get() {
-        const allActions = this.$store.getters["menu/allActions"];
-        const actionSettings = allActions.find(
+        const allActions = this.$store.getters["menu/flatmenu"]
+          .map((menu) => menu.ACTIONSCUR || [])
+          .flat();
+
+        return allActions.find(
           (action) => action.ID === parseInt(this.actionId, 10)
         );
-        return actionSettings || null;
       },
     },
   },
