@@ -48,6 +48,16 @@ export default {
       type: Boolean,
       required: false,
     },
+    relId: {
+      type: String,
+      required: false,
+      default: () => this.$route.params.idRel,
+    },
+    rowId: {
+      type: Number,
+      required: false,
+      default: () => this.$route.params.idCard,
+    },
   },
 
   methods: {
@@ -144,20 +154,13 @@ export default {
   },
 
   computed: {
-    rowId() {
-      return this.$attrs["row-id"] ?? this.$route.params.idCard;
-    },
-    relId() {
-      return this.$attrs["rel-id"] ?? this.$route.params.idRel;
-    },
     action: {
       get() {
         const allActions = this.$store.getters["menu/allActions"];
-        return (
-          allActions.find(
-            (action) => action.ID === parseInt(this.actionId, 10)
-          ) || null
+        const actionSettings = allActions.find(
+          (action) => action.ID === parseInt(this.actionId, 10)
         );
+        return actionSettings || null;
       },
     },
   },
