@@ -51,12 +51,14 @@ export default {
     relId: {
       type: String,
       required: false,
-      default: () => this.$route.params.idRel,
+      // @TODO учитывать rel-id и relId
+      // default: () => this.$route.params.idRel,
     },
     rowId: {
       type: Number,
       required: false,
-      default: () => this.$route.params.idCard,
+      // @TODO учитывать row-id и rowId
+      // default: () => this.$route.params.idCard,
     },
   },
 
