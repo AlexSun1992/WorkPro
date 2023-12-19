@@ -48,18 +48,6 @@ export default {
       type: Boolean,
       required: false,
     },
-    relId: {
-      type: String,
-      required: false,
-      // @TODO учитывать rel-id и relId
-      // default: () => this.$route.params.idRel,
-    },
-    rowId: {
-      type: Number,
-      required: false,
-      // @TODO учитывать row-id и rowId
-      // default: () => this.$route.params.idCard,
-    },
   },
 
   methods: {
@@ -156,6 +144,18 @@ export default {
   },
 
   computed: {
+    relId() {
+      // this.$route не виден в default props, поэтому через $attrs
+      return (
+        this.$attrs.relId ?? this.$attrs["rel-id"] ?? this.$route.params.idRel
+      );
+    },
+    rowId() {
+      // this.$route не виден в default props, поэтому через $attrs
+      return (
+        this.$attrs.rowId ?? this.$attrs["row-id"] ?? this.$route.params.idCard
+      );
+    },
     action: {
       get() {
         const allActions = this.$store.getters["menu/allActions"];
