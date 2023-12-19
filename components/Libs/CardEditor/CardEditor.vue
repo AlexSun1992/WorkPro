@@ -11,13 +11,14 @@
       auto-focus-button="ok"
       no-close-on-backdrop
       no-fade
-      @ok="applyAction"
+      @ok="confirmOkHandler"
+      @cancel="confirmCancelHandler"
     >
       Вы действительно хотите выполнить действие "{{ actionParamsTitle }}"?
       <b-alert :show="isActionApplyError" variant="danger">
         {{ actionApplyErrorMessage }}
       </b-alert>
-      <b-form @submit="applyAction">
+      <b-form @submit="confirmOkHandler">
         <Form
           v-if="actionParams.length"
           :data="actionParams"
@@ -77,10 +78,12 @@ import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import { clearScript } from "~/components/EventHandler/eventHandler.helper";
-import { params } from "@/components/Pages/Cabinet/CardPage.helper.fixtures";
 import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
 
 let controller;
+let confirmPromise = null;
+let confirmResolve = () => null;
+
 export default {
   name: "CardEditor",
   components: { FormBlock, FormAccordion, Form, ActionButton, SkeletonBox },
@@ -204,6 +207,122 @@ export default {
       } catch {}
     },
 
+    confirmAction() {
+      confirmPromise = new Promise((resolve) => {
+        confirmResolve = (result) => resolve(result);
+      });
+      this.$bvModal.show("confirmAction");
+
+      return confirmPromise;
+    },
+    confirmOkHandler() {
+      confirmResolve(true);
+    },
+    confirmCancelHandler() {
+      confirmResolve(false);
+    },
+
+    async startAction(e) {
+      const field = this.data.find((f) => f.fieldId === e.fieldId);
+      this.isActionApplyError = false;
+      const actionId = e.value.replace("Item", "");
+      let moduleId;
+      let cardId;
+
+      if (!this.params.page) {
+        moduleId = this.$route.params.idModule;
+        cardId = this.$route.params.idCard;
+      } else {
+        moduleId = this.params.page.idModule;
+        cardId = this.$store.getters["data_card/getCardId"];
+      }
+      let params = {
+        idCard: this.$store.getters["data_card/getCardId"],
+        idItem: this.$route.params.idItem,
+        idModule: this.$route.params.idModule,
+        idRel: this.$store.getters["data_card/getCardRelId"],
+      };
+
+      await this.$store.dispatch("data_card/fetchActionParams", {
+        moduleId,
+        actionId,
+        cardId,
+      });
+      this.actionParamsTitle = field.label;
+      this.actionParamsId = parseInt(actionId, 10);
+
+      if (this.actionSettings.isDialog) {
+        this.$store.commit("data_card/setLoading", false);
+        const confirmResult = await this.confirmAction();
+        if (!confirmResult) {
+          return;
+        }
+      }
+
+      const isValidParams = await this.$store.dispatch(
+        "data_card/validateActionParams"
+      );
+      if (!isValidParams) {
+        return;
+      }
+
+      const flatmenu = this.$store.getters["menu/flatmenu"];
+      const menuItem = flatmenu.find(
+        (item) => item.IDITEM == this.$route.params.idItem
+      );
+      const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
+
+      if (CUR.NTYPE === 38) {
+        this.saveSuccess = false;
+        const data = await eventHandler(
+          this.data.map((a) => ({ ...a })),
+          e,
+          "beforeSave"
+        );
+
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.data);
+        }
+        // Не понятно как вычислить этот параметр (step), поэтому захардкожен 0
+        await this.saveDataCard(0);
+
+        if (this.saveSuccess) {
+          const data = await eventHandler(
+            this.data.map((a) => ({ ...a })),
+            e,
+            "afterSave"
+          );
+
+          if (data) {
+            this.$store.commit("data_card/setForm", data || this.data);
+          }
+        }
+        return;
+      }
+      if (CUR.NTYPE === 39) {
+        this.$store.commit("data_card/setLoading", false);
+        this.$store.commit("data_card/setReadOnly", false);
+        const data = await eventHandler(
+          this.data.map((a) => ({ ...a })),
+          e
+        );
+
+        if (data) {
+          this.$store.commit("data_card/setForm", data || this.data);
+        }
+        await this.$store.dispatch("data_card/fetchList", params);
+        params = {
+          idCard: this.$store.getters["data_card/getCardId"],
+          idItem: this.$route.params.idItem,
+          idModule: this.$route.params.idModule,
+          idRel: this.$store.getters["data_card/getCardRelId"],
+        };
+        await this.$store.dispatch("data_card/fetchForm", params);
+        return;
+      }
+      await this.applyAction();
+    },
+
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
       if (field.type === "button") {
@@ -214,95 +333,10 @@ export default {
         this.$store.commit("data_card/cardChanged", true);
       }
       if (field.type === "button" && e.action) {
-        this.isActionApplyError = false;
-        const actionId = e.value.replace("Item", "");
-        let moduleId;
-        let cardId;
-
-        if (!this.params.page) {
-          moduleId = this.$route.params.idModule;
-          cardId = this.$route.params.idCard;
-        } else {
-          moduleId = this.params.page.idModule;
-          cardId = this.$store.getters["data_card/getCardId"];
-        }
-        let params = {
-          idCard: this.$store.getters["data_card/getCardId"],
-          idItem: this.$route.params.idItem,
-          idModule: this.$route.params.idModule,
-          idRel: this.$store.getters["data_card/getCardRelId"],
-        };
-
-        await this.$store.dispatch("data_card/fetchActionParams", {
-          moduleId,
-          actionId,
-          cardId,
-        });
-        this.actionParamsTitle = field.label;
-        this.actionParamsId = parseInt(actionId, 10);
-
-        if (this.actionSettings.isDialog) {
-          this.$store.commit("data_card/setLoading", false);
-          this.$bvModal.show("confirmAction");
-        } else if (
-          await this.$store.dispatch("data_card/validateActionParams")
-        ) {
-          await this.applyAction();
-        }
-        const flatmenu = this.$store.getters["menu/flatmenu"];
-        const menuItem = flatmenu.find(
-          (item) => item.IDITEM == this.$route.params.idItem
-        );
-        const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
-
-        if (CUR.NTYPE === 38) {
-          this.saveSuccess = false;
-          const data = await eventHandler(
-            this.data.map((a) => ({ ...a })),
-            e,
-            "beforeSave"
-          );
-
-          if (data) {
-            this.$store.commit("data_card/setForm", data || this.data);
-          }
-          await this.saveDataCard();
-
-          if (this.saveSuccess) {
-            const data = await eventHandler(
-              this.data.map((a) => ({ ...a })),
-              e,
-              "afterSave"
-            );
-
-            if (data) {
-              this.$store.commit("data_card/setForm", data || this.data);
-            }
-          }
-          return;
-        }
-        if (CUR.NTYPE === 39) {
-          this.$store.commit("data_card/setLoading", false);
-          this.$store.commit("data_card/setReadOnly", false);
-          const data = await eventHandler(
-            this.data.map((a) => ({ ...a })),
-            e
-          );
-
-          if (data) {
-            this.$store.commit("data_card/setForm", data || this.data);
-          }
-          await this.$store.dispatch("data_card/fetchList", params);
-          params = {
-            idCard: this.$store.getters["data_card/getCardId"],
-            idItem: this.$route.params.idItem,
-            idModule: this.$route.params.idModule,
-            idRel: this.$store.getters["data_card/getCardRelId"],
-          };
-          await this.$store.dispatch("data_card/fetchForm", params);
-          return;
-        }
-      } else if (field.type === "button") {
+        this.startAction(e);
+        return;
+      }
+      if (field.type === "button") {
         const data = await eventHandler(
           this.data.map((a) => ({ ...a })),
           e
@@ -507,11 +541,6 @@ export default {
                 url = `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
                   tab.idItem
                 }/${cardId}/${rel.split("|")[tab.order - 1]}/uploader`;
-              } else if (
-                settingsTab?.isWizard === true &&
-                this.actionSettings.type === 38
-              ) {
-                return;
               } else {
                 url = `/cabinet/wizard/${this.$route.params.idWizard}${
                   tab.list ? `/list/` : `/`
