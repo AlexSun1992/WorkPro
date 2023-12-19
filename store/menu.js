@@ -23,11 +23,6 @@ export const state = () => ({
 
 export const getters = {
   counters: (state) => state.counters,
-  allActions: (state) =>
-    state.flatmenu
-      .map((menu) => menu.ACTIONSCUR)
-      .filter((actions) => actions)
-      .flat(),
   breadcrumbs: (state) => state.breadcrumbs,
   breadCrumbs: (state) => state.breadCrumbs,
   menu: (state) => state.menu,
