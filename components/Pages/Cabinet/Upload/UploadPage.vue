@@ -2,6 +2,11 @@
   <div>
     <div class="conf-block">
       <div class="title-page mb-3">Загрузите документы</div>
+      <span v-if="isCompressing" class="position-relative pe-5"
+        >Подождите, идёт сжатие файлов
+        <span class="spinner-border btn-link"
+          ><span class="sr-only"></span></span
+      ></span>
       <div v-for="document in getTypesDocumentation" :key="document.TYPE_TITLE">
         <b class="p1">{{ document.TYPE_TITLE }}</b>
         <div v-html="document.TYPE_DESCRIPTION" class="mb-4" />
@@ -59,7 +64,11 @@
         Отменить загрузку файлов
       </b-button>
     </div>
-    <uploader-buttons ref="uploadButtons" :isLoading="isLoading" />
+    <uploader-buttons
+      ref="uploadButtons"
+      :isLoading="isLoading"
+      :isCompressing="isCompressing"
+    />
   </div>
 </template>
 
@@ -79,11 +88,54 @@ export default {
     return {
       value: 45,
       max: 100,
+      compressingFilesCount: 0,
     };
   },
   methods: {
+    compressFile(name, file) {
+      this.compressingFilesCount += 1;
+      const formData = new FormData();
+      formData.append("file", file);
+      let newFile = file;
+
+      return fetch(`https://sc.ya.reso.ru/api/compress`, {
+        method: "POST",
+        body: formData,
+      })
+        .then(async (res) => {
+          if (res.status === 200) {
+            const imageInfo = JSON.parse(res.headers.get("X-Image-Info"));
+            if (imageInfo) {
+              // Не обрабатывать плохо сжатые файлы
+              if (imageInfo.compressionRatio < 2) {
+                return;
+              }
+            }
+
+            const contentDisposition = res.headers.get("Content-Disposition");
+            const newFilename = decodeURIComponent(
+              contentDisposition.split("filename*=UTF-8''")[1]
+            );
+            const blob = await res.blob();
+            newFile = new File([blob], newFilename);
+            return;
+          }
+
+          const text = await res.text();
+          try {
+            const json = JSON.parse(text);
+            throw new Error(`${json.message}`);
+          } catch (err) {
+            throw new Error(text);
+          }
+        })
+        .finally(() => {
+          this.$store.dispatch("uploader/addData", { data: [newFile], name });
+          this.compressingFilesCount -= 1;
+        });
+    },
     changeFiles(name, data) {
-      this.$store.dispatch("uploader/addData", { data, name });
+      data.forEach((file) => this.compressFile(name, file));
     },
     removeFile(file) {
       this.$store.dispatch("uploader/delFile", file);
@@ -148,6 +200,9 @@ export default {
     },
     getFileErrors() {
       return this.$store.getters["uploader/getFileErrors"];
+    },
+    isCompressing() {
+      return this.compressingFilesCount > 0;
     },
   },
 };

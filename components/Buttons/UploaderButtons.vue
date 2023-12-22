@@ -2,7 +2,7 @@
   <div class="mt-4 buttons row">
     <div class="col-auto">
       <b-button
-        :disabled="isLoading || isInValidFiles"
+        :disabled="isLoading || isInValidFiles || isCompressing"
         variant="success"
         @click="saveUploader()"
       >
@@ -25,7 +25,7 @@ import breadcrumbs from "../../converters/breadcrumbs";
 
 export default {
   name: "UploaderButtons",
-  props: ["isLoading"],
+  props: ["isLoading", "isCompressing"],
   data() {
     return {};
   },
