@@ -16,7 +16,7 @@
           type="file"
           multiple
           class="hidden-input"
-          @change="onChange"
+          @change="handleAddFile"
           ref="file"
           :accept="stringExtensions"
         />
@@ -142,18 +142,17 @@ export default {
     },
   },
   methods: {
-    onChange() {
+    handleAddFile() {
       if (
         this.isErrorSize === false &&
         this.isLoading === false &&
         this.isMaxFileCount === false
       ) {
-        this.$emit("update", [
-          ...filterDropFilesByExtensions(
-            this.$refs.file.files,
-            this.fileExtensions
-          ),
-        ]);
+        const filteredFiles = filterDropFilesByExtensions(
+          this.$refs.file.files,
+          this.fileExtensions
+        );
+        this.$emit("update", filteredFiles);
         this.$refs.file.value = null;
       }
     },
@@ -203,7 +202,7 @@ export default {
     drop(event) {
       event.preventDefault();
       this.$refs.file.files = event.dataTransfer.files;
-      this.onChange();
+      this.handleAddFile();
     },
     formatBytes(size) {
       return formatBytes(size);
