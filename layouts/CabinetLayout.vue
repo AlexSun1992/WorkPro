@@ -1,8 +1,8 @@
 <template>
   <div class="app cabinet">
-    <Header @mini-sidebar="changeMobileSidebar" />
+    <Header v-if="isShow" @mini-sidebar="changeMobileSidebar" />
     <div class="container">
-      <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
+      <b-breadcrumb v-if="isShow" :items="breadcrumbs"></b-breadcrumb>
       <div class="row">
         <div class="col-lg-3 col-12 menu">
           <div
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="color-footer">
+    <div v-if="isShow" class="color-footer">
       <Footer />
     </div>
   </div>
@@ -60,6 +60,7 @@ export default {
       isContentVisible: true,
     };
   },
+
   head() {
     return {
       title: this.$store.getters["menu/breadcrumbs"][2]?.text
@@ -75,7 +76,13 @@ export default {
       }
     };
   },
+  created() {
+    this.isWebview = this.$cookiz.get("isWebview") === true;
+  },
   computed: {
+    isShow() {
+      return !this.isWebview;
+    },
     menuWithOutIcon() {
       return this.$store.getters["menu/getMenuWithOutIcon"];
     },
