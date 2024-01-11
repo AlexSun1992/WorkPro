@@ -127,6 +127,16 @@ export default {
       });
       document.location.href = "/sso?auth&type=alfa&ref=/cabinet";
     },
+    goMTS() {
+      this.$LogEvent({
+        formName: "AuthForm",
+        idEventType: 804,
+        controlName: "AuthForm.vue",
+        message: `Нажал на кнопку «Войти через MTS`,
+        timeUser: new Date(),
+      });
+      document.location.href = "/sso?auth&type=mts&ref=/cabinet";
+    },
   },
   mounted() {
     const currentURL = window.location.pathname;
