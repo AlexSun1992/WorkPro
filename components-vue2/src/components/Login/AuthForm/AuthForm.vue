@@ -210,7 +210,7 @@ export default {
     goMobileID() {
       this.$LogEvent({
         formName: "AuthForm",
-        idEventType: 804,
+        idEventType: 521,
         controlName: "AuthForm.vue",
         message: `Нажал на кнопку «Войти через MobileID`,
         timeUser: new Date(),
