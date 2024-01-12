@@ -14,13 +14,14 @@ version-bump-master:
     CI_NAME: gitlab
     CI_EMAIL: ${CI_NAME}@reso.ru
   script:
-    - env
     - git config --global user.email $CI_EMAIL
     - git config --global user.name $CI_NAME
     - git config receive.advertisePushOptions true
     - git config --global http.sslVerify false
     - git checkout -B "$CI_COMMIT_REF_NAME" "$CI_COMMIT_SHA"
-    - npm version patch --allow-same-version
+    - PROJECT_VERSION_PREFIX=$(grep version package.json | awk -F':' '{ print $2 }' | sed 's/[", ]//g' | sed 's/.[^.]*$//')
+    - CURRENT_DATE_PREFIX=$(date +%y.%-m)
+    - if [[ "$PROJECT_VERSION_PREFIX" == "$CURRENT_DATE_PREFIX" ]]; then npm version patch; else npm version "$CURRENT_DATE_PREFIX.1"; fi
     - git push "https://$CI_NAME:$PROJECT_WRITE_REPOSITORY_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git" --follow-tags $CI_COMMIT_BRANCH:$CI_COMMIT_BRANCH
   rules:
     - if: '$GITLAB_USER_NAME != "PROJECT_WRITE_REPOSITORY_TOKEN" && $CI_COMMIT_REF_NAME == "master" && $CI_PIPELINE_SOURCE == "push"'
