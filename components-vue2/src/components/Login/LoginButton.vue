@@ -133,6 +133,7 @@ axios.interceptors.response.use(undefined, (err) => {
         (err) => {
           processQueue(err, null);
           Cookies.set(TOKEN_NAME, "false");
+          isRefreshing = false;
           Cookies.set(REFRESH_TOKEN_NAME, "false");
           window.localStorage.setItem("auth._token.local", "false");
           console.log(err);
