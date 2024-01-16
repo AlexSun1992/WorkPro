@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const expressWinston = require("express-winston");
 const winston = require("winston"); // for transports.Console
 const { format } = require("winston");
@@ -13,6 +14,11 @@ app.use(cookieParser());
 app.use((req, res, next) => {
   res.removeHeader("X-Powered-By");
   res.setHeader("Cache-Control", "no-store");
+  next();
+});
+
+app.use(express.static("../static/js"), (req, res, next) => {
+  res.setHeader("Cache-Control", "no-cache, must-revalidate");
   next();
 });
 app.use(
