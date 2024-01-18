@@ -156,16 +156,6 @@ export default {
       );
     },
   },
-  created() {
-    if (process.client) {
-      if (window.opener) {
-        if (window.location.href === window.opener.location.href) {
-          window.opener.location.reload();
-          window.close();
-        }
-      }
-    }
-  },
   unmounted() {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
   },
