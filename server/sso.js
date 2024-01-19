@@ -1,10 +1,29 @@
 import { getErrorMessage } from "../plugins/auth/toast.helper";
 
+const ESIA_AUTH_URL = "https://client.reso.ru/loginesia/loginesia/prod";
 const ESIA_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/801`;
 const ALFA_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/803`;
+const MOBILEID_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/804`;
 
-function getAuthUrl(callbackDomain, type = "alfa") {
-  return fetch("http://localhost:8000/am/free/v2/data/55/803/0/0", {
+function getDataUrl(type) {
+  if (type === "alfa") {
+    return ALFA_DATA_URL;
+  }
+  if (type === "mobileid") {
+    return MOBILEID_DATA_URL;
+  }
+  if (type === "esia") {
+    return ESIA_DATA_URL;
+  }
+  throw new Error(`Не удалось определить url с данными по типу ${type}`);
+}
+
+function getAuthUrl(callbackDomain, type) {
+  if (!type || type === "esia") {
+    return ESIA_AUTH_URL;
+  }
+  const dataUrl = getDataUrl(type).replace("datacard", "data");
+  return fetch(`${dataUrl}/0/0`, {
     headers: {
       Referer: callbackDomain,
     },
@@ -37,7 +56,6 @@ function getAuthUrl(callbackDomain, type = "alfa") {
  * @param {import("express").Response} res
  */
 async function authQuery(req, res) {
-  const esiaAuthUrl = "https://client.reso.ru/loginesia/loginesia/prod";
   const refererHeaderUrl = new URL(req.get("referer"), "https://f.f");
   const refererDomain = new URL(req.headers.referer || "https://reso.ru");
   const defaultRefUrl = `${refererHeaderUrl.pathname}${refererHeaderUrl.search}`;
@@ -51,10 +69,7 @@ async function authQuery(req, res) {
   res.cookie("ref", succesUrl);
   res.cookie("referror", errorUrl);
 
-  const authUrl =
-    req.query && req.query.type === "alfa"
-      ? await getAuthUrl(refererDomain.origin)
-      : esiaAuthUrl;
+  const authUrl = await getAuthUrl(refererDomain.origin, req.query?.type);
 
   res.send(`
   <script type="text/javascript">
@@ -68,9 +83,6 @@ async function authQuery(req, res) {
  */
 function getAuthType(req) {
   let authType = "";
-  if ("state" in req.query) {
-    authType = "alfa";
-  }
   if ("code" in req.query) {
     authType = "esia";
   }
@@ -91,6 +103,9 @@ function getAuthName(authType) {
   }
   if (authType === "esia") {
     return "Госуслуги";
+  }
+  if (authType === "mobileid") {
+    return "MobileID";
   }
   return "неизвестный тип авторизации";
 }
@@ -114,6 +129,12 @@ export default function redirectFromEsia(req, res) {
   }
   if (cookieRefError) {
     res.clearCookie("referror");
+    if ("error" in req.query) {
+      console.error(
+        new Date(),
+        `Ошибка: ${req.query.error}, ${req.query.state}`
+      );
+    }
   }
 
   const successUrl = new URL(cookieRef || "/cabinet", "https://f.f");
@@ -128,11 +149,11 @@ export default function redirectFromEsia(req, res) {
     return;
   }
 
-  const dataUrl = authType === "alfa" ? ALFA_DATA_URL : ESIA_DATA_URL;
+  const dataUrl = getDataUrl(authType);
   const bodyData =
-    authType === "alfa"
-      ? { state: req.query?.state }
-      : { code: req.query?.code };
+    authType === "esia"
+      ? { code: req.query?.code }
+      : { state: req.query?.state };
   console.log(
     new Date(),
     `Получение данных ${authName}, ${dataUrl}, ${JSON.stringify(bodyData)}`
@@ -171,7 +192,7 @@ export default function redirectFromEsia(req, res) {
       res.redirect(`${successUrl.pathname}${successUrl.search}`);
     })
     .catch((error) => {
-      console.error("Ошибка авторизации через ${authName}", error);
+      console.error(`Ошибка авторизации через ${authName}`, error);
       res.redirect(`${errorUrl.pathname}${errorUrl.search}`);
     });
 }
