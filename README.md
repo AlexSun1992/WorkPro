@@ -1,8 +1,9 @@
 # Личный кабинет v2
 Описание проекта находится по ссылке https://confluence.reso.ru/pages/viewpage.action?pageId=27132060
+
 # Окружение разработчика ЛК2
 Для запуска проекта локально необходимо
-- Установить Node.js 18 https://nodejs.org/
+- Установить Node.js 20 https://nodejs.org/
 - Задать зеркало npm-репозитория `npm config set registry https://nexus.reso.ru/repository/npm/`
 - Установить зависимости в директории components-vue2 `cd components-vue2 && npm install`
 - Установить зависимости в корневой директории `cd .. && npm install`
@@ -17,5 +18,5 @@
 
 # Переключение между базами данных
 Окружение разработчика ЛК2 можно подключить к разным базам данных [nuxt.config.js](nuxt.config.js#L112)
-- `npm run dev` - сервисы подключаются к БД RESO-M, API https://mobile.reso.ru и https://mobile2.reso.ru (в продакшене используется https://lk.reso.ru)
-- `npm run dev-actuary` сервисы подключаются к БД Actuary, API https://mobiletest.reso.ru
+- `npm run dev` сервисы подключаются к БД Actuary, API https://mobiletest.reso.ru
+- `npm run dev-prod` - сервисы подключаются к БД RESO-M, API https://mobile.reso.ru и https://mobile2.reso.ru (в продакшене используется https://lk.reso.ru)
