@@ -238,7 +238,7 @@ export default {
     },
     settings: {
       get() {
-        return this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
+        return this.$store.getters["menu/settings"].slice(-1).pop();
       },
     },
     cardCaption() {

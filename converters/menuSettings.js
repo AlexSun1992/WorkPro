@@ -1,7 +1,7 @@
-const breadcrumbs = {};
+const menuSettings = {};
 const bcItem = {};
 
-breadcrumbs.getData = (data, params) => {
+menuSettings.getData = (data, params) => {
   const arr = [{ text: "Главная", href: "/" }];
   for (let i = 0; i < data.length; i++) {
     if (data[i].id === parseInt(params.idModule)) {
@@ -65,4 +65,4 @@ bcItem.getData = (data) => {
   return obj;
 };
 
-export default breadcrumbs;
+export default menuSettings;

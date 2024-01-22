@@ -44,7 +44,7 @@
 import Header from "~/components/Pages/Cabinet/Header/Header";
 import Footer from "~/components/Pages/Cabinet/Footer/Footer";
 import Sidebar from "~/components/Pages/Cabinet/Sidebar/Sidebar";
-import breadcrumbs from "~/converters/breadcrumbs";
+import menuSettings from "~/converters/menuSettings";
 
 export default {
   name: "Full",
@@ -61,13 +61,6 @@ export default {
     };
   },
 
-  head() {
-    return {
-      title: this.$store.getters["menu/breadcrumbs"][2]?.text
-        ? this.$store.getters["menu/breadcrumbs"][2]?.text
-        : "РЕСО-Гарантия",
-    };
-  },
   mounted() {
     window.onbeforeunload = () => {
       if (!document.activeElement) {
@@ -95,9 +88,6 @@ export default {
     name() {
       return this.$route.name;
     },
-    items() {
-      return this.$store.getters["menu/breadcrumbs"];
-    },
     breadcrumbs() {
       return this.$store.getters["menu/breadCrumbs"];
     },
@@ -112,11 +102,11 @@ export default {
   },
   methods: {
     setParams() {
-      const bc = breadcrumbs.getData(
+      const bc = menuSettings.getData(
         this.$store.getters["menu/menu"],
         this.$route.params
       );
-      this.$store.commit("menu/setBreadcrumbs", bc);
+      this.$store.commit("menu/setSettings", bc);
     },
     changeSidebar() {
       this.sideBarMini = !this.sideBarMini;
