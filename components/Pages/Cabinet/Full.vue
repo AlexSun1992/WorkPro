@@ -13,8 +13,7 @@ export default {
   middleware: "guest",
   async fetch({ store, route, error: nuxtError, $winstonLog }) {
     try {
-      const settings =
-        store.getters["menu/breadcrumbs"].slice(-1).pop() || null;
+      const settings = store.getters["menu/settings"].slice(-1).pop() || null;
       if (!settings) {
         nuxtError({
           statusCode: 500,

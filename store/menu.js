@@ -1,8 +1,5 @@
-/* eslint-disable */
-import breadcrumbs from "../converters/breadcrumbs";
-const BFF_URL_GET_MENU = "/api/module";
-const BFF_URL_GET_FREE_MENU = "/api/module?zone=free";
-const URL_GET_FREE_MENU = "/api/module?zone=free";
+import menuSettings from "../converters/menuSettings";
+
 const DEFAULT_BREADCRUMBS = [
   {
     text: "Главная",
@@ -16,14 +13,14 @@ const DEFAULT_BREADCRUMBS = [
 export const state = () => ({
   menu: [{ children: [] }],
   flatmenu: [],
-  breadcrumbs: [],
+  settings: [],
   breadCrumbs: [],
   counters: [],
 });
 
 export const getters = {
   counters: (state) => state.counters,
-  breadcrumbs: (state) => state.breadcrumbs,
+  settings: (state) => state.settings,
   breadCrumbs: (state) => state.breadCrumbs,
   menu: (state) => state.menu,
   flatmenu: (state) => state.flatmenu,
@@ -59,7 +56,7 @@ export const actions = {
           if (res) {
             commit("setMenu", res.data);
             if (params) {
-              commit("setBreadcrumbs", breadcrumbs.getData(res.data, params));
+              commit("setSettings", menuSettings.getData(res.data, params));
             }
             return res;
           } else {
@@ -94,7 +91,7 @@ export const actions = {
             throw new Error("Error /api/module");
           }
           if (process.server) {
-            commit("setBreadcrumbs", breadcrumbs.getData(state.menu, params));
+            commit("setSettings", menuSettings.getData(state.menu, params));
           }
         });
         if (params?.idWizard) {
@@ -189,8 +186,8 @@ export const mutations = {
   setFlatMenu(state, data) {
     state.flatmenu = data;
   },
-  setBreadcrumbs(state, data) {
-    state.breadcrumbs = data;
+  setSettings(state, data) {
+    state.settings = data;
   },
   setBreadCrumbs(state, data) {
     state.breadCrumbs = data || DEFAULT_BREADCRUMBS;

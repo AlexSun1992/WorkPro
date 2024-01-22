@@ -28,7 +28,7 @@ export default {
   computed: {
     params() {
       const page = this.$route.params;
-      const settings = this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
+      const settings = this.$store.getters["menu/settings"].slice(-1).pop();
       let component = "CardPage";
       if (settings.isCard) {
         component = "CardPage";

@@ -14,7 +14,7 @@ export const state = () => ({
   dataError: null,
   progressValue: null,
   poutValueRoute: null,
-  metaData: null,
+  metaData: [],
 });
 
 export const getters = {
@@ -87,6 +87,9 @@ export const actions = {
       )
       .then((res) => {
         commit("setMetaData", res.data.metaData);
+        commit("menu/setBreadCrumbs", res.data.metaData?.breadCrumbs, {
+          root: true,
+        });
         commit("setData", res.data.data);
       });
   },

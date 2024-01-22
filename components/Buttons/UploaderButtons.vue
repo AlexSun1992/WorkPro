@@ -21,7 +21,7 @@
 </template>
 <script>
 import { fetchPoutvalue } from "../../utils/fetchPoutvalue";
-import breadcrumbs from "../../converters/breadcrumbs";
+import menuSettings from "../../converters/menuSettings";
 
 export default {
   name: "UploaderButtons",
@@ -170,7 +170,7 @@ export default {
     },
     settings: {
       get() {
-        return breadcrumbs
+        return menuSettings
           .getData(this.$store.getters["menu/menu"], {
             idModule: 55,
             idParent: 0,

@@ -58,7 +58,7 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
-import breadcrumbs from "~/converters/breadcrumbs";
+import menuSettings from "~/converters/menuSettings";
 import WizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
 export default {
   name: "Wizard",
@@ -77,7 +77,7 @@ export default {
   computed: {
     settings: {
       get() {
-        return breadcrumbs
+        return menuSettings
           .getData(this.$store.getters["menu/menu"], {
             idModule: 55,
             idParent: 0,

@@ -114,7 +114,7 @@ export default {
       return this.$store.getters["menu/getMenuById"](this.menuId)?.SVJCARDGRID;
     },
     settingsParams: function () {
-      return this.$store.getters["menu/breadcrumbs"].slice(-1).pop();
+      return this.$store.getters["menu/settings"].slice(-1).pop();
     },
     name() {
       return this.settingsParams?.text;
