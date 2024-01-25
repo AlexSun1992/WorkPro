@@ -19,6 +19,7 @@ export const state = () => ({
 });
 
 export const getters = {
+  pageTitle: (state) => state.settings.at(-1)?.text || "РЕСО-Гарантия",
   counters: (state) => state.counters,
   settings: (state) => state.settings,
   breadCrumbs: (state) => state.breadCrumbs,
