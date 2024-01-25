@@ -60,6 +60,11 @@ export default {
       isContentVisible: true,
     };
   },
+  head() {
+    return {
+      title: this.$store.getters["menu/pageTitle"],
+    };
+  },
 
   mounted() {
     window.onbeforeunload = () => {

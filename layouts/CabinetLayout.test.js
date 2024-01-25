@@ -14,6 +14,7 @@ describe("CabinetLayout", () => {
   let wrapper;
   let mockRoute;
   let mockRouter;
+
   it("На сиранице отображаются footer, header и breadcrumb", () => {
     const params = {
       idCard: "2484351389",
@@ -55,6 +56,7 @@ describe("CabinetLayout", () => {
     expect(wrapper.find("b-breadcrumb-stub").exists()).toBe(true);
     expect(wrapper.find("footer-stub").exists()).toBe(true);
   });
+
   it("На сиранице НЕ отображаются footer, header и breadcrumb", () => {
     const params = {
       idCard: "2484351389",
@@ -95,5 +97,26 @@ describe("CabinetLayout", () => {
     expect(wrapper.find("header-stub").exists()).toBe(false);
     expect(wrapper.find("b-breadcrumb-stub").exists()).toBe(false);
     expect(wrapper.find("footer-stub").exists()).toBe(false);
+  });
+
+  it("Отоброжается переданное значение title страницы", () => {
+    const state = {
+      settings: [{}, {}, { text: "Страховые случаи по полису" }],
+    };
+    expect(menu.getters.pageTitle(state)).toBe("Страховые случаи по полису");
+  });
+
+  it("Отоброжается дефолтное значение title страницы", () => {
+    const state = {
+      settings: [{}, {}, {}],
+    };
+    expect(menu.getters.pageTitle(state)).toBe("РЕСО-Гарантия");
+  });
+
+  it("Отоброжается дефолтное значение title страницы", () => {
+    const state = {
+      settings: [],
+    };
+    expect(menu.getters.pageTitle(state)).toBe("РЕСО-Гарантия");
   });
 });
