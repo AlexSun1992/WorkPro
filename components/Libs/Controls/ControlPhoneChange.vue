@@ -24,22 +24,22 @@
           </b-form-invalid-feedback>
         </b-form-group>
         <div class="col-auto">
-          <b-button
+          <button
             type="submit"
-            variant="success"
-            class="mt-btn-form-3"
+            class="btn btn-success mt-btn-form-3"
             :disabled="$v.newPhone.$invalid || loading || isSendCode"
             @click="verifyUser"
           >
             Получить sms-код
-            <b-spinner
+            <span
               v-if="loading"
+              role="status"
+              class="spinner-border text-danger"
               style="width: 1rem; height: 1rem"
-              class="ml-2"
-              variant="danger"
-              label="Spinning"
-            />
-          </b-button>
+            >
+              <span class="sr-only">Spinning</span>
+            </span>
+          </button>
         </div>
         <div v-if="isShowCodeEnter" class="col-auto">
           <label class="d-none d-md-block">&nbsp;</label>

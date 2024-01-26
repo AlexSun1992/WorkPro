@@ -1,13 +1,13 @@
 <template>
   <div>
-    <b-button
-      class="select-sity"
-      variant="link"
+    <button
+      type="button"
+      class="btn btn-link select-sity"
       @click="showModalSelectCity()"
       id="btn_city_head_all"
     >
       {{ city }}
-    </b-button>
+    </button>
     <b-modal id="select-city" size="lg" hide-footer>
       <template #modal-title> Выберите город </template>
       <div>

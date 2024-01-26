@@ -1,5 +1,7 @@
 <template>
-  <b-button @click="addDataToCalendar">{{ title }}</b-button>
+  <button type="button" class="btn btn-secondary" @click="addDataToCalendar">
+    {{ title }}
+  </button>
 </template>
 <script>
 import { createEvent } from "ics";

@@ -65,15 +65,16 @@
           >
             {{ errorMessage }}
           </div>
-          <b-button
+          <button
+            type="button"
             v-if="isCodeFieldValid"
             :disabled="disabled"
-            variant="primary"
+            class="btn btn-primary mt-3"
             @click="resetPassword"
             id="btn_change-password_tel_lk"
-            class="mt-3"
-            >Изменить пароль</b-button
           >
+            Изменить пароль
+          </button>
         </div>
 
         <div v-else class="tab-text active">
@@ -116,15 +117,16 @@
             {{ errorMessage }}
           </div>
 
-          <b-button
+          <button
+            type="button"
             v-if="isCodeFieldValid"
             :disabled="disabled"
-            variant="primary"
+            class="btn btn-primary mt-3"
             @click="resetPassword"
             id="btn_change-password_mail_lk"
-            class="mt-3"
-            >Изменить пароль</b-button
           >
+            Изменить пароль
+          </button>
         </div>
 
         <button

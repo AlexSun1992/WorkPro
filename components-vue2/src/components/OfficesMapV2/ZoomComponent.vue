@@ -1,16 +1,22 @@
 <template>
   <div class="office-zoom-metro">
-    <b-button-group>
-      <b-button @click="$emit('zoom', '+')" variant="office-zoom-up"></b-button>
-      <b-button
+    <div role="group" class="btn-group">
+      <button
+        @click="$emit('zoom', '+')"
+        type="button"
+        class="btn btn-office-zoom-up"
+      ></button>
+      <button
         @click="$emit('zoom', '-')"
-        variant="office-zoom-down"
-      ></b-button>
-      <b-button
+        type="button"
+        class="btn btn-office-zoom-down"
+      ></button>
+      <button
         @click="$emit('zoom', '0')"
-        variant="office-zoom-none"
-      ></b-button>
-    </b-button-group>
+        type="button"
+        class="btn btn-office-zoom-none"
+      ></button>
+    </div>
   </div>
 </template>
 

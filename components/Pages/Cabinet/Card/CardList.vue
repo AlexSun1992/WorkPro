@@ -8,14 +8,20 @@
       :items="data.items"
     >
       <template v-slot:actions="slotProps">
-        <b-button v-on:click="showItem(slotProps)" class="btn-table-open"
-          >Открыть</b-button
+        <button
+          type="button"
+          v-on:click="showItem(slotProps)"
+          class="btn btn-secondary btn-table-open"
         >
-        <b-button
+          Открыть
+        </button>
+        <button
+          type="button"
           v-on:click="deleteItem(slotProps)"
-          class="mt-2 btn-table-delete"
-          >Удалить</b-button
+          class="btn btn-secondary mt-2 btn-table-delete"
         >
+          Удалить
+        </button>
       </template>
     </grid>
   </div>

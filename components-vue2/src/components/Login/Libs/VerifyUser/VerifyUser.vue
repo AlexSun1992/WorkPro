@@ -115,11 +115,11 @@
       {{ errorMessage }}
     </div>
     <div class="col-12 mt-4">
-      <b-button
+      <button
         type="submit"
         :disabled="isDisabledButtonGetCode"
         @click="getCode()"
-        variant="primary"
+        class="btn btn-primary"
         id="btn_code_verification_lk"
         :tabindex="tabIndex[2]"
         v-show="!validateInput('code', isCodeBlured)"
@@ -130,7 +130,7 @@
           <verify-timer @onFinish="stopTimer" :duration="duration" />
           сек.</template
         >
-      </b-button>
+      </button>
     </div>
   </div>
 </template>

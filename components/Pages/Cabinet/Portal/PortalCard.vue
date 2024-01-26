@@ -1,39 +1,42 @@
 <template>
   <div>
-    <b-button @click="saveFile()">Тест</b-button>
+    <button type="button" class="btn btn-secondary" @click="saveFile()">
+      Тест
+    </button>
     <v-runtime-template
       v-if="templateData"
       :template="templateData"
     ></v-runtime-template>
     <b-card v-else class="p-4 bg-six block border-block-one">
-      <b-button
+      <button
         v-on:click="destroyForm"
         type="submit"
-        variant="success"
+        class="btn btn-success"
         pill
         v-b-popover.hover.top="'Назад'"
-        ><i class="fa fa-chevron-left"></i
-      ></b-button>
+      >
+        <i class="fa fa-chevron-left"></i>
+      </button>
       <Form :data="editDataForm" :edit="isEdit"></Form>
       <p class="mb-10 mt-3"></p>
-      <b-button
+      <button
         v-if="isEdit"
         v-on:click="saveForm"
         pill
         type="button"
-        variant="success"
+        class="btn btn-success"
       >
         Сохранить
-      </b-button>
-      <b-button
+      </button>
+      <button
         v-if="isEdit"
         pill
         type="button"
-        variant="outline-success"
+        class="btn btn-outline-success"
         @click="cancelForm()"
       >
         Отменить
-      </b-button>
+      </button>
     </b-card>
   </div>
 </template>

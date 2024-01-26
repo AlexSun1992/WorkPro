@@ -27,13 +27,15 @@
             :disabled="isDisabled"
           />
           <b-input-group-append>
-            <b-button
+            <button
               v-on:click="showDataPicker"
               @focus="setButtonFocus"
               @blur="blurButtonFocus"
-              class="button-datapicker"
-              ><i class="fa fa-calendar"></i
-            ></b-button>
+              class="btn btn-secondary button-datapicker"
+              type="button"
+            >
+              <i class="fa fa-calendar"></i>
+            </button>
           </b-input-group-append>
         </b-input-group>
       </template>

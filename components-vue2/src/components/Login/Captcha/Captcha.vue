@@ -31,13 +31,14 @@
           />
         </div>
         <div class="col-6">
-          <b-button
+          <button
+            type="button"
             @click="refreshDisplayCaptcha"
             :disabled="isLoading"
-            class="reload-captcha"
-            variant="gray"
-            >Обновить</b-button
+            class="btn btn-gray reload-captcha"
           >
+            Обновить
+          </button>
         </div>
       </div>
     </div>

@@ -1,8 +1,12 @@
 <template>
   <div>
-    <b-button @click="$refs.file.click()" class="btn-doc-add">{{
-      data.label
-    }}</b-button>
+    <button
+      @click="$refs.file.click()"
+      type="button"
+      class="btn btn-secondary btn-doc-add"
+    >
+      {{ data.label }}
+    </button>
     <div>
       <input
         ref="file"
@@ -14,7 +18,13 @@
     <ul>
       <li v-for="(item, index) in filesHub" :key="index">
         {{ item.name }} {{ item.size + " кб" }}
-        <b-button @click="removeFile(item, index)">Удалить</b-button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          @click="removeFile(item, index)"
+        >
+          Удалить
+        </button>
       </li>
     </ul>
     {{ fileSize }}

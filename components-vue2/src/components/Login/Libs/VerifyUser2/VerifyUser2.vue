@@ -48,12 +48,11 @@
       </b-form-group>
     </div>
     <div class="col-12 col-lg-4 mt-3 mt-lg-btn-small_hl">
-      <b-button
+      <button
         type="submit"
         :disabled="isDisabledButtonGetCode"
         @click="getCode()"
-        variant="secondary"
-        class="btn-small w-100 p-0"
+        class="btn btn-secondary btn-small w-100 p-0"
         id="btn_code_verification_lk"
       >
         <span v-if="!isSendCode">Получить код</span>
@@ -64,7 +63,7 @@
           />
           с)</template
         >
-      </b-button>
+      </button>
     </div>
     <vue-recaptcha
       ref="recaptcha"
