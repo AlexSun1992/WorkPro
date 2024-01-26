@@ -22,40 +22,46 @@ async function main() {
   const { data } = await axios.get(
     `https://mobile.reso.ru/free/v2/agencies/77?lat=55.7540471&long=37.62040&dfdsf`
   );
-  const svg = await page.evaluate((agencies) => {
-    const g = document.getElementsByTagName("g");
 
+  await page.evaluate((agencies) => {
+    window.agencies = agencies;
+  }, data);
+
+  const svg = await page.evaluate(() => {
+    const g = document.querySelector("svg g");
     const offices = new Set();
     const use = document.createElement("use");
 
-    for (let i = 0; i < g[0].children.length; i++) {
-      let name = g[0].children[i].innerHTML;
+    for (let i = 0; i < g.children.length; i++) {
+      let name = g.children[i].innerHTML;
       agencies.forEach((office) => {
         office.IDUNDERGROUND.forEach((item) => {
           name = name.toLowerCase().replace("ё", "е");
           if (item.SNAME.toLowerCase() === name) {
-            const x = g[0].children[i - 1].getAttribute("cx");
-            const y = g[0].children[i - 1].getAttribute("cy");
+            const x = g.children[i - 1].getAttribute("cx");
+            const y = g.children[i - 1].getAttribute("cy");
 
             use.setAttribute("x", x - 12);
             use.setAttribute("y", y - 12);
             use.setAttribute("href", "#balloon-open");
-            use.setAttribute("data-station", `${g[0].children[i].innerHTML}`);
-            office.add(use.outerHTML);
+            use.setAttribute("data-station", `${g.children[i].innerHTML}`);
+            offices.add(use.outerHTML);
           }
         });
       });
     }
     for (let use of offices) {
-      g[0].insertAdjacentHTML("beforeend", `${use}`);
+      g.insertAdjacentHTML("beforeend", `${use}`);
     }
-    document.body.querySelector("svg").removeAttribute("transform");
-    document.body.querySelector("svg g").classList.add("g-svg-metromap");
-    document.body.querySelector("svg g").removeAttribute("transform");
-    document.body.querySelector("svg").classList.add("svg-metromap");
-    document.body.querySelector("svg>path").remove();
-    return document.body.querySelector("svg").outerHTML;
-  }, data);
+    document.body.querySelector("#mcol>div>svg ").removeAttribute("transform");
+    document.body
+      .querySelector("#mcol>div>svg g")
+      .classList.add("g-svg-metromap");
+    document.body.querySelector("#mcol>div>svg g").removeAttribute("transform");
+    document.body.querySelector("#mcol>div>svg").classList.add("svg-metromap");
+    //      document.body.querySelector("#mcol>div>svg>path").remove();
+    return document.body.querySelector("#mcol>div>svg").outerHTML;
+  });
   writeFileSync(filename, svg);
   await page.waitForTimeout(10000);
   // await browser.close();
