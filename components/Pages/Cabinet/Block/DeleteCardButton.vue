@@ -1,5 +1,9 @@
 <template>
-  <b-button @click="$bvModal.show('confirmDelete' + menuId + itemId)">
+  <button
+    @click="$bvModal.show('confirmDelete' + menuId + itemId)"
+    type="button"
+    class="btn btn-secondary"
+  >
     <b-modal
       :modal-class="myclass"
       :id="'confirmDelete' + menuId + itemId"
@@ -13,7 +17,7 @@
       Вы действительно хотите удалить эту запись?
     </b-modal>
     <slot>Удалить</slot>
-  </b-button>
+  </button>
 </template>
 
 <script>

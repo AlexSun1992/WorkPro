@@ -40,28 +40,26 @@
       class="mt-3 row button-container"
     >
       <div class="col-auto">
-        <b-button
+        <button
           pill
           type="button"
-          variant="success"
-          class="col-12 col-md-auto mr-4"
+          class="btn btn-success col-12 col-md-auto mr-4"
           :style="isButtonDisabled"
           @click="saveDataCard"
         >
           Сохранить
-        </b-button>
+        </button>
       </div>
       <div class="col-auto" v-if="isButtonCancel">
-        <b-button
+        <button
           pill
           type="button"
-          variant="outline-success"
-          class="col-12 col-md-auto mt-2 mt-md-0"
+          class="btn btn-outline-success col-12 col-md-auto mt-2 mt-md-0"
           :style="isButtonDisabled"
           @click="cancelDataCard"
         >
           Отменить
-        </b-button>
+        </button>
       </div>
     </div>
   </div>

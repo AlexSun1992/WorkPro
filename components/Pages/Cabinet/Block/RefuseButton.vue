@@ -1,6 +1,8 @@
 <template>
   <div>
-    <b-button @click="refuseChoice">{{ title }}</b-button>
+    <button type="button" class="btn btn-secondary" @click="refuseChoice">
+      {{ title }}
+    </button>
   </div>
 </template>
 

@@ -48,22 +48,24 @@
           </b-form-invalid-feedback>
         </b-form-group>
         <div class="col-auto">
-          <b-button
+          <button
             type="submit"
             @click="verifyUser"
-            variant="success"
-            class="mt-btn-form-3"
+            class="btn btn-success mt-btn-form-3"
             :disabled="$v.newEmail.$invalid || loading || isSendCode"
             data-testid="getCodeButton"
-            >Получить код
-            <b-spinner
+          >
+            Получить код
+
+            <span
               v-if="loading"
               style="width: 1rem; height: 1rem"
-              class="ml-2"
-              variant="danger"
-              label="Spinning"
-            ></b-spinner>
-          </b-button>
+              role="status"
+              class="spinner-border text-danger ml-2"
+            >
+              <span class="sr-only">Spinning</span>
+            </span>
+          </button>
         </div>
         <div v-if="isShowCodeEnter" class="col-auto">
           <label class="d-none d-md-block">&nbsp;</label>

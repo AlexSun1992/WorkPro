@@ -2,7 +2,9 @@
   <div>
     <grid :load="load" :total="count" :fields="list.fields" :items="list.items">
       <template v-slot:actions="slotProps">
-        <b-button :disabled="true" class="btn btn-success">Открыть</b-button>
+        <button type="button" :disabled="true" class="btn btn-success">
+          Открыть
+        </button>
       </template>
     </grid>
   </div>

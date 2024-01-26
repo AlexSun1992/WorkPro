@@ -61,14 +61,14 @@
     >
       <div v-if="settings.edit" :class="isShowCardTemplate">
         <div v-for="(item, i) in action" :key="i" class="inbuttons">
-          <b-button
+          <button
+            type="button"
             v-if="item.LINBUTTONS"
-            class="button mr-4"
-            variant="outline-success"
+            class="btn btn-outline-success button mr-4"
             @click="execAction(item)"
           >
             {{ item.SNAME }}
-          </b-button>
+          </button>
         </div>
         <div
           v-if="
@@ -81,65 +81,67 @@
             v-if="isButtonSave && isWizard && $route.params.idCard === '0'"
             class="col-12 col-md-auto"
           >
-            <b-button
+            <button
               v-if="wizardButtonVisibleSave"
+              class="btn btn-success"
               :class="wizardButtonStyleSave"
               pill
               :disabled="loading"
               type="button"
-              variant="success"
               :style="isButtonDisabled"
               @click="saveDataCard(0)"
             >
               {{ wizardButtonNameSave }}
-              <b-spinner
+              <span
                 v-if="loading"
+                role="status"
+                class="spinner-border text-danger ml-2"
                 style="width: 1rem; height: 1rem"
-                class="ml-2"
-                variant="danger"
-                label="Spinning"
-              />
-            </b-button>
+              >
+                <span class="sr-only">Spinning</span>
+              </span>
+            </button>
           </div>
           <div
             v-if="isButtonSave && !isWizard"
             class="col-12 col-md-auto mt-3 mt-md-0"
           >
-            <b-button
+            <button
               v-if="wizardButtonVisibleContinue"
               data-testid="saveButton"
               :class="wizardButtonStyleContinue"
               pill
               :disabled="loading"
               type="button"
-              variant="success"
+              class="btn btn-success"
               :style="isButtonDisabled"
               @click="saveDataCard(1)"
             >
               {{ wizardButtonNameSave }}
-              <b-spinner
+              <span
                 v-if="loading"
+                role="status"
+                class="spinner-border text-danger ml-2"
                 style="width: 1rem; height: 1rem"
-                class="ml-2"
-                variant="danger"
-                label="Spinning"
-              />
-            </b-button>
+              >
+                <span class="sr-only">Spinning</span>
+              </span>
+            </button>
           </div>
           <div
             v-if="isButtonCancel && ref"
             class="col-12 col-md-auto mt-2 mt-md-0"
           >
-            <b-button
+            <button
               data-testid="cancelButton"
               pill
               type="button"
-              variant="outline-success"
+              class="btn btn-outline-success"
               :style="isButtonDisabled"
               @click="$router.push(ref)"
             >
               Отменить
-            </b-button>
+            </button>
           </div>
         </div>
       </div>

@@ -41,20 +41,27 @@
             />
           </div>
           <div class="d-block d-lg-table">
-            <b-button
+            <button
+              type="button"
               id="submit-sms-code"
               :disabled="
                 authInProcess ||
                 user.code === '' ||
                 (isCaptchaNeeded && !user.cap)
               "
-              variant="primary"
-              class="mt-4 w-100"
+              class="btn btn-primary mt-4 w-100"
               block
               @click="fetchToken()"
-              >Продолжить
-              <b-spinner v-if="authInProcess" variant="light"></b-spinner
-            ></b-button>
+            >
+              Продолжить
+              <span
+                v-if="authInProcess"
+                role="status"
+                class="spinner-border text-light"
+              >
+                <span class="sr-only">Spinning</span>
+              </span>
+            </button>
           </div>
           <div v-if="!isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
             <button
@@ -71,9 +78,13 @@
             </button>
           </div>
           <div v-if="isRetrySendCodeSMS" class="mt-4 d-block d-lg-table">
-            <b-button @click="retrySendCodeSMS()" class="w-100"
-              >Отправить повторно</b-button
+            <button
+              @click="retrySendCodeSMS()"
+              class="btn btn-secondary w-100"
+              type="button"
             >
+              Отправить повторно
+            </button>
           </div>
         </b-form>
       </div>
@@ -166,17 +177,22 @@
           />
         </div>
       </div>
-      <b-button
+      <button
         v-on:enter="fetchToken()"
-        variant="primary"
         type="submit"
         :disabled="authInProcess"
-        class="mt-3 mt-lg-4"
+        class="btn btn-primary mt-3 mt-lg-4"
         id="btn_entry_lk"
       >
         Авторизоваться
-        <b-spinner v-if="authInProcess" variant="light"></b-spinner>
-      </b-button>
+        <span
+          v-if="authInProcess"
+          role="status"
+          class="spinner-border text-light"
+        >
+          <span class="sr-only">Spinning</span>
+        </span>
+      </button>
 
       <b-form-invalid-feedback
         :force-show="extraOrdinaryServiceAnswer ? true : false"

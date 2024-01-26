@@ -1,6 +1,8 @@
 <template>
   <div>
-    <b-button @click="transferData">{{ title }}</b-button>
+    <button type="button" class="btn btn-secondary" @click="transferData">
+      {{ title }}
+    </button>
   </div>
 </template>
 <script>

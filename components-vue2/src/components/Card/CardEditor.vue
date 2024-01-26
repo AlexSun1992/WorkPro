@@ -28,25 +28,25 @@
       v-if="getBtnSave && isShowButtonSave && !getError"
       class="row mt-4 ml-2"
     >
-      <b-button
+      <button
         pill
         :disabled="isSaving"
         :class="'btn-lg'"
         type="button"
-        variant="success"
-        class="col-12 col-md-auto mt-3 mt-md-0"
+        class="btn btn-success col-12 col-md-auto mt-3 mt-md-0"
         :style="isButtonDisabled"
         @click="saveCard()"
       >
         Сохранить
-        <b-spinner
+        <span
+          role="status"
           v-if="isSaving"
           style="width: 1rem; height: 1rem"
-          class="ml-2"
-          variant="danger"
-          label="Spinning"
-        />
-      </b-button>
+          class="spinner-border text-danger ml-2"
+        >
+          <span class="sr-only">Spinning</span>
+        </span>
+      </button>
     </div>
   </div>
 </template>

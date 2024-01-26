@@ -19,7 +19,13 @@
         </b-form-group>
       </div>
       <div class="col-lg-6 pt-lg-3 text-nowrap">
-        <b-spinner v-if="isLoading" class="ml-4" />
+        <span
+          v-if="isLoading"
+          role="status"
+          class="spinner-border text-light ml-4"
+        >
+          <span class="sr-only">Spinning</span>
+        </span>
         <img
           v-else
           class="captcha"
@@ -27,12 +33,13 @@
           :src="captchaData.CAPTCHA"
           title="Обновить"
         />
-        <b-button
+        <button
           @click="refreshDisplayCaptcha"
-          class="reload-captcha"
-          variant="outline-success"
-          >Обновить</b-button
+          class="btn btn-outline-success reload-captcha"
+          type="button"
         >
+          Обновить
+        </button>
       </div>
     </div>
   </div>

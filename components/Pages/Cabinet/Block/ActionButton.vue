@@ -1,12 +1,14 @@
 <template>
-  <b-button
+  <button
     v-if="action"
     @click.stop="action.LREQUESTCODE === true ? confirmAction() : startAction()"
-    :variant="variant"
+    class="btn"
+    :class="`btn-${variant}`"
     :id="id"
+    type="button"
   >
     <slot><div v-text="action.SNAME"></div></slot>
-  </b-button>
+  </button>
 </template>
 <script>
 import { BButton } from "bootstrap-vue";
@@ -28,7 +30,7 @@ export default {
     variant: {
       type: String,
       required: false,
-      default: () => null,
+      default: () => "secondary",
     },
     id: {
       type: String,

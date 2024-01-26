@@ -1,35 +1,35 @@
 <template>
   <div>
-    <b-button
-      class="select-sity"
-      variant="link"
+    <button
+      type="button"
+      class="btn btn-link select-sity"
       @click="visible = !visible"
       id="btn_city_head_all"
     >
       {{ city }}
-    </b-button>
+    </button>
     <b-collapse v-model="visible" class="sity-question">
       <b-card>
         <div class="close-sity-block" />
         <div class="sity-block-text">
           Ваш город: <b>{{ city }}</b>
         </div>
-        <b-button
-          variant="primary"
-          class="btn-icon-left"
+        <button
+          type="button"
+          class="btn btn-primary btn-icon-left"
           @click="setAutoCity(city)"
           id="btn_yes_city_head_all"
         >
           Да, верно
-        </b-button>
-        <b-button
-          variant="secondary"
-          class="ml-3"
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary ml-3"
           @click="showModalSelectCity()"
           id="btn_change_city_head_all"
         >
           Нет, другой
-        </b-button>
+        </button>
       </b-card>
     </b-collapse>
     <b-modal id="select-city" size="lg" hide-footer>

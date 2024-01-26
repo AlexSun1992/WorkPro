@@ -5,13 +5,14 @@
         style="border-color: #1eb869"
         class="block-border-one block p-1 mb-1 header"
       >
-        <b-button
-          class="btn"
+        <button
+          type="button"
+          class="btn btn-primary"
           v-bind:class="{ error: highlightTab(index) }"
           v-b-toggle="'acc_' + index"
-          variant="primary"
-          >{{ tab }}</b-button
         >
+          {{ tab }}
+        </button>
       </div>
       <b-collapse
         :visible="index == 0"

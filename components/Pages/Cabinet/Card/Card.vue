@@ -1,24 +1,22 @@
 <template>
   <div>
     <div class="animated fadeIn">
-      <b-button
+      <button
         v-if="isAddNewRecord"
-        class="mb-2"
         type="submit"
-        variant="primary"
+        class="btn btn-primary mb-2"
         @click="addNewRecord"
       >
         Добавить новую запись
-      </b-button>
-      <b-button
+      </button>
+      <button
         v-if="isList"
-        class="mb-2"
         type="submit"
-        variant="primary"
+        class="mb-2 btn btn-primary"
         @click="refreshCardList"
       >
         Обновить
-      </b-button>
+      </button>
       <card-list
         v-if="isList"
         :load="isListLoading"

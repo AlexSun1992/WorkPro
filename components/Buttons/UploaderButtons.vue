@@ -1,21 +1,33 @@
 <template>
   <div class="mt-4 buttons row">
     <div class="col-auto">
-      <b-button
+      <button
+        type="button"
         :disabled="isLoading || isInValidFiles || isCompressing"
-        variant="success"
+        class="btn btn-success"
         @click="saveUploader()"
       >
         {{ saveButtonName }}
-        <b-spinner v-if="isLoading" variant="danger" label="Spinning" />
-      </b-button>
+        <span v-if="isLoading" role="status" class="spinner-border text-danger"
+          ><span class="sr-only">Spinning</span></span
+        >
+      </button>
     </div>
+
     <div class="col-12 d-lg-none"></div>
     <div class="col-auto mt-3 mt-lg-0" v-if="isWizardMode">
-      <b-button @click="goBack()"> Назад </b-button>
+      <button type="button" class="btn btn-secondary" @click="goBack()">
+        Назад
+      </button>
     </div>
     <div class="col-auto mt-3 mt-lg-0" v-if="isRefInURL && !isWizardMode">
-      <b-button @click="clickCancelButton()"> Отменить </b-button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        @click="clickCancelButton()"
+      >
+        Отменить
+      </button>
     </div>
   </div>
 </template>

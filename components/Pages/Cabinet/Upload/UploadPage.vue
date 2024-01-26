@@ -54,15 +54,15 @@
           variant="success"
         ></b-progress-bar>
       </b-progress>
-      <b-button
+      <button
+        type="button"
         v-if="isLoading"
         style="display: none"
-        variant="success"
+        class="btn btn-success mt-3"
         @click="canselUploading"
-        class="mt-3"
       >
         Отменить загрузку файлов
-      </b-button>
+      </button>
     </div>
     <uploader-buttons
       ref="uploadButtons"

@@ -1,34 +1,42 @@
 <template>
   <div class="mt-4 buttons row">
     <div class="col-auto" v-if="currentTab.order > 1">
-      <b-button @click="goBack"> Назад </b-button>
+      <button type="button" class="btn btn-secondary" @click="goBack">
+        Назад
+      </button>
     </div>
     <div class="col-auto mt-3 mt-lg-0" v-if="$route.params.idCard != 0">
-      <b-button
+      <button
+        type="button"
         v-if="showBtnVisibleSave"
         :class="showBtnStyleSave"
         :disabled="loading"
-        variant="success"
+        class="btn btn-success"
         @click="saveCard"
       >
         {{ showBtnNameSave }}
-        <b-spinner v-if="loading" variant="danger" label="Spinning" />
-      </b-button>
+        <span v-if="loading" role="status" class="spinner-border text-danger">
+          <span class="sr-only">Spinning</span>
+        </span>
+      </button>
     </div>
     <div
       class="col-auto mt-3 mt-lg-0"
       v-if="currentTab.order != qty && $route.params.idCard != 0"
     >
-      <b-button
+      <button
+        type="button"
         v-if="showBtnVisibleContinue"
         :class="showBtnStyleContinue"
         :disabled="loading"
-        variant="success"
+        class="btn btn-success"
         @click="goNext"
       >
         {{ showBtnNameContinue }}
-        <b-spinner v-if="loading" variant="danger" label="Spinning" />
-      </b-button>
+        <span v-if="loading" role="status" class="spinner-border text-danger">
+          <span class="sr-only">Spinning</span>
+        </span>
+      </button>
     </div>
   </div>
 </template>

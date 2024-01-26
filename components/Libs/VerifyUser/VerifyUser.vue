@@ -72,28 +72,28 @@
           >
         </b-form-group>
         <div class="col-12 col-md-6 mt-2 mt-md-0">
-          <b-button
+          <button
             type="submit"
             :disabled="disabledResend"
             @click="resendCode"
-            variant="success"
+            class="btn btn-success"
           >
             Отправить повторно
-          </b-button>
+          </button>
         </div>
       </div>
     </div>
     <recaptcha @error="onError" @success="onSuccess" @expired="onExpired" />
     <div class="col-12 col-md-6 mt-2 mt-md-0">
-      <b-button
+      <button
         type="submit"
         v-if="!isShowCodeEnter"
         :disabled="loginType === 'phone' ? v.phone.$invalid : v.email.$invalid"
         @click="verifyUser"
-        variant="success"
-        class="btn-sms"
-        >Подтвердить</b-button
+        class="btn btn-success btn-sms"
       >
+        Подтвердить
+      </button>
     </div>
   </div>
 </template>

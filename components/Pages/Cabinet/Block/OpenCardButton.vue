@@ -1,7 +1,7 @@
 <template>
-  <b-button variant="info" @click.stop="openCard()">
+  <button type="button" class="btn btn-info" @click.stop="openCard()">
     <slot>Открыть</slot>
-  </b-button>
+  </button>
 </template>
 
 <script>
