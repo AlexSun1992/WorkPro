@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import consts from "@/api/urls";
+const reqJson = require("../../../package.json");
 
 export default {
   name: "Full",
@@ -55,6 +55,7 @@ export default {
     this.$sentry.setUser({
       id: this.$auth.user.ID,
       yandexID: this.$cookiz.get("_ym_uid"),
+      version: reqJson.version,
     });
   },
   created() {
