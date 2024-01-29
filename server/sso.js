@@ -110,6 +110,30 @@ function getAuthName(authType) {
   return "неизвестный тип авторизации";
 }
 
+function getAuthBody(authType, req) {
+  if (req.query) {
+    if (authType === "esia") {
+      if (req.query.code) {
+        return { code: req.query.code };
+      }
+    }
+
+    if (authType === "mobileid") {
+      if (req.query.state && req.query.passport) {
+        return { state: req.query.state, passport: req.query.passport };
+      }
+    }
+
+    if (authType === "alfa") {
+      if (req.query.state) {
+        return { state: req.query.state };
+      }
+    }
+  }
+
+  throw new Error(`Не удалось сформировать данные для body: ${req.url}`);
+}
+
 /**
  * @param {import("express").Request} req
  * @param {import("express").Response} res
@@ -144,28 +168,23 @@ export default function redirectFromEsia(req, res) {
     `Произошла неизвестная ошибка входа через ${authName}.`
   );
 
-  if (authType === "") {
-    res.redirect(`${errorUrl.pathname}${errorUrl.search}`);
-    return;
-  }
+  Promise.resolve()
+    .then(() => {
+      const dataUrl = getDataUrl(authType);
+      const bodyData = getAuthBody(authType, req);
+      console.log(
+        new Date(),
+        `Получение данных ${authName}, ${dataUrl}, ${JSON.stringify(bodyData)}`
+      );
 
-  const dataUrl = getDataUrl(authType);
-  const bodyData =
-    authType === "esia"
-      ? { code: req.query?.code }
-      : { state: req.query?.state };
-  console.log(
-    new Date(),
-    `Получение данных ${authName}, ${dataUrl}, ${JSON.stringify(bodyData)}`
-  );
-
-  fetch(dataUrl, {
-    method: "POST",
-    body: JSON.stringify(bodyData),
-    headers: {
-      "content-type": "application/json",
-    },
-  })
+      return fetch(dataUrl, {
+        method: "POST",
+        body: JSON.stringify(bodyData),
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    })
     .then(async (response) => {
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
