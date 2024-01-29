@@ -75,7 +75,9 @@ describe("LoginForm", () => {
   it("не должен выводить ошибку логина + пароля", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
-    const wrapper = mount(LoginForm, { localVue });
+    const wrapper = mount(LoginForm, {
+      localVue,
+    });
     await wrapper.find("#phone").setValue("ege@mmd.ru");
     await wrapper.find("#password").setValue("182821");
 
@@ -103,7 +105,10 @@ describe("LoginForm", () => {
   it("должен показывать только неверный код подтверждения", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
-    const wrapper = mount(LoginForm, { localVue, attachTo: document.body });
+    const wrapper = mount(LoginForm, {
+      localVue,
+      attachTo: document.body,
+    });
     const modal = wrapper.findComponent("#sms-confirm-modal");
     await wrapper.find("#phone").setValue("ege@mmd.ru");
     await wrapper.find("#password").setValue("182821");
@@ -160,7 +165,10 @@ describe("LoginForm", () => {
   it("должен показывать текст из API в модалке", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
-    const wrapper = mount(LoginForm, { localVue, attachTo: document.body });
+    const wrapper = mount(LoginForm, {
+      localVue,
+      attachTo: document.body,
+    });
     const modal = wrapper.findComponent("#sms-confirm-modal");
     await wrapper.find("#phone").setValue("ege@mmd.ru");
     await wrapper.find("#password").setValue("182821");
@@ -186,7 +194,7 @@ describe("LoginForm", () => {
   });
 
   it("не должен инвалидировать поля формы при запросе капчи", async () => {
-    const wrapper = mount(LoginForm);
+    const wrapper = mount(LoginForm, {});
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
       wrongAuthError.response = {
@@ -216,7 +224,7 @@ describe("LoginForm", () => {
   });
 
   it("не должен кэшировать ошибку капчи после успешного ввода", async () => {
-    const wrapper = mount(LoginForm);
+    const wrapper = mount(LoginForm, {});
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
       wrongAuthError.response = {
@@ -288,7 +296,9 @@ describe("LoginForm", () => {
   it("получили неожиданный серверный ответ", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
-    const wrapper = mount(LoginForm, { localVue });
+    const wrapper = mount(LoginForm, {
+      localVue,
+    });
     await wrapper.find("#phone").setValue("9032374418");
     await wrapper.find("#password").setValue("Carter911");
     axios.post.mockImplementationOnce(() => {
@@ -313,7 +323,9 @@ describe("LoginForm", () => {
   it("отвалился интернет", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
-    const wrapper = mount(LoginForm, { localVue });
+    const wrapper = mount(LoginForm, {
+      localVue,
+    });
     await wrapper.find("#phone").setValue("9032374418");
     await wrapper.find("#password").setValue("Carter911");
     await wrapper.find("#btn_entry_lk").trigger("click");

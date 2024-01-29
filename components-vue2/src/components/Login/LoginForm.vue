@@ -1,5 +1,17 @@
 <template>
   <div>
+    <dialog ref="favDialog">
+      <form method="GET" action="/sso">
+        <div>
+          <label for="favAnimal">Введите номер паспорта</label>
+          <input type="hidden" name="type" v-model="searchParamType" />
+          <input type="hidden" name="state" v-model="searchParamState" />
+          <input type="text" name="passport" />
+        </div>
+        <button type="submit" id="submit">Отправить</button>
+      </form>
+    </dialog>
+
     <b-modal
       id="sms-confirm-modal"
       v-model="isModalVisible"
@@ -255,6 +267,8 @@ export default {
       pswVisible: false,
       captchaToken: null,
       loginTouchesCount: 0,
+      searchParamType: null,
+      searchParamState: null,
     };
   },
   mounted() {
@@ -277,6 +291,11 @@ export default {
         }
       }
     });
+    if (attempt.searchParams.get("type") === "mobileid") {
+      this.searchParamType = attempt.searchParams.get("type");
+      this.searchParamState = attempt.searchParams.get("state");
+      this.$refs.favDialog.showModal();
+    }
   },
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
@@ -296,6 +315,11 @@ export default {
         this.user.cap = null;
       }
     },
+  },
+  unmounted() {
+    if (this.searchParamType === "mobileid") {
+      this.$refs.favDialog.close();
+    }
   },
 
   methods: {
