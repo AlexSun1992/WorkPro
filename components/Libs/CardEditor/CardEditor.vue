@@ -79,6 +79,7 @@ import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import { clearScript } from "~/components/EventHandler/eventHandler.helper";
 import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
+import { saveFileAxios } from "../../../utils/saveFile";
 
 let controller;
 let confirmPromise = null;
@@ -653,21 +654,63 @@ export default {
         return;
       }
 
+      const relId =
+        this.$route.params.idRel ||
+        this.$route.query.rel ||
+        this.$store.getters["data_card/getFormParams"]?.idRel;
+
+      const rowId =
+        this.$route.params.idCard ||
+        this.$store.getters["data_card/getFormParams"]?.idCard;
+
       this.$store.commit("data_card/setError", false);
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setLoading", true);
+
+      if (this.actionSettings.type === 3) {
+        const requestDownLoadFileUrl = new URL(
+          "/am/main/v2/report2",
+          window.location.origin
+        );
+
+        requestDownLoadFileUrl.searchParams.set("id", rowId);
+        requestDownLoadFileUrl.searchParams.set("rel", relId);
+        requestDownLoadFileUrl.searchParams.set(
+          "idaction",
+          this.actionSettings.id
+        );
+        requestDownLoadFileUrl.searchParams.set(
+          "relaction",
+          this.actionSettings.relaction
+        );
+        this.$axios({
+          url: requestDownLoadFileUrl.href,
+          method: "GET",
+          responseType: "blob",
+        })
+          .then((resp) => {
+            saveFileAxios(resp, !this.actionSettings?.isCurrentWindow);
+          })
+          .catch(() => {
+            this.$store.commit("data_card/setError", true);
+            this.$bvToast.toast("Не удалось скачать файл", {
+              title: "Ошибка",
+              variant: "danger",
+              noAutoHide: true,
+              solid: true,
+            });
+          })
+          .finally(() => this.$store.commit("data_card/setLoading", false));
+        return;
+      }
+
       this.isActionApplyError = false;
       this.actionFormDisabled = true;
       const response = await this.$store.dispatch("data_card/executeAction", {
         actionId: this.actionParamsId,
         relActionId: this.actionSettings.relaction,
-        relId:
-          this.$route.params.idRel ||
-          this.$route.query.rel ||
-          this.$store.getters["data_card/getFormParams"]?.idRel,
-        rowId:
-          this.$route.params.idCard ||
-          this.$store.getters["data_card/getFormParams"]?.idCard,
+        relId,
+        rowId,
         body: this.actionParams,
       });
 
@@ -695,6 +738,7 @@ export default {
               this.$router.push(response.data.POUTVALUE);
             } else {
               const url = response.data.POUTVALUE;
+              // @TODO выпилить в версии 24.6 LK2-1082
               if (url.includes("/file")) {
                 try {
                   const file = await this.$axios({

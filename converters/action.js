@@ -1,23 +1,17 @@
 const converter = {};
 
-converter.action = (data) => {
-  const arr = [];
-  const items = data;
-  for (let i = 0; i < items.length; i++) {
-    const obj = {};
-    obj.label = items[i].SNAME;
-    obj.id = items[i].ID;
-    obj.type = items[i].NTYPE;
-    obj.command = items[i].SCONST;
-    obj.relaction = items[i].REL;
-    obj.isDialog = !items[i].LHIDEDLG;
-    obj.isCurrentWindow = items[i].LCURWINDOW;
-    obj.field = items[i].SFIELD;
-    obj.refresh = items[i].LREFRESH;
-    obj.closeAfter = items[i].LCLOSEAFTER;
-    arr.push(obj);
-  }
-  return arr;
-};
+converter.action = (data) =>
+  data.map((item) => ({
+    label: item.SNAME,
+    id: item.ID,
+    type: item.NTYPE,
+    command: item.SCONST,
+    relaction: item.REL,
+    isDialog: item.LHIDEDLG,
+    isCurrentWindow: item.LCURWINDOW,
+    field: item.SFIELD,
+    refresh: item.LREFRESH,
+    closeAfter: item.LCLOSEAFTER,
+  }));
 
 export default converter;
