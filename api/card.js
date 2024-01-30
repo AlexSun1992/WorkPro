@@ -286,6 +286,10 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
 
 router.get("/file/:idReport/:idCard", (req, res) => {
   try {
+    if (new Date().toISOString() > "2024-03-15") {
+      // @TODO Удалить метод /file после 2024-03-15
+      throw new Error(`Скачивание невозможно`);
+    }
     const mobile2ServiceInstance = mobile2Service();
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
     if (req.query.zone !== "free") {
@@ -319,7 +323,7 @@ router.get("/file/:idReport/:idCard", (req, res) => {
         }
       });
   } catch (e) {
-    res.send(e);
+    res.status(404).send(e);
   }
 });
 router.post(
