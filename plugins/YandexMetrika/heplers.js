@@ -39,12 +39,13 @@ export function loadScript(callback, scriptSrc = config.scriptSrc) {
 }
 
 export function createMetrika(Vue) {
-  if (config.env === "production") {
+  if (config.env === "production" && "Ya" in globalThis) {
     // Creates Metrika
     const init = {
       id: config.id,
       ...config.options,
     };
+
     const metrika = new Ya.Metrika2(init);
     window[`yaCounter${config.id}`] = metrika;
     return (Vue.prototype.$metrika = Vue.$metrika = metrika);
