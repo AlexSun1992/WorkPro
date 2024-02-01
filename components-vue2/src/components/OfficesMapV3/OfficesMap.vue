@@ -96,16 +96,19 @@ Window.saveLogAgentOnOfficesMap = async (log) => {
   const logObject = log;
   logObject.vizitType = window.innerWidth < 992 ? "Y" : "N";
 
-  try {
-    if(Cookies.get("_ym_uid") == undefined) {
-      logObject.userId = yaCounter25356824.getClientID() == undefined ? "" : yaCounter25356824.getClientID();
-    } else {
-      logObject.userId = Cookies.get("_ym_uid");
+  function getUserId() {
+    if (Cookies.get("_ym_uid")) {  
+      return Cookies.get("_ym_uid");
     }
-  } catch (error) {
-    logObject.userId = Cookies.get("_ym_uid") == undefined ? "" : Cookies.get("_ym_uid");
+
+    if ("yaCounter25356824" in globalThis) {
+      return yaCounter25356824.getClientID();
+    }
+
+    return "";
   }
 
+  logObject.userId = getUserId();
   let utm = new URLSearchParams(window.location.search);
   logObject.utm_source = utm.get('utm_source') ? utm.get('utm_source') : undefined;
   logObject.utm_medium = utm.get('utm_medium') ? utm.get('utm_medium') : undefined;
