@@ -7,7 +7,7 @@ converter.action = (data) =>
     type: item.NTYPE,
     command: item.SCONST,
     relaction: item.REL,
-    isDialog: item.LHIDEDLG,
+    isDialog: !item.LHIDEDLG,
     isCurrentWindow: item.LCURWINDOW,
     field: item.SFIELD,
     refresh: item.LREFRESH,
