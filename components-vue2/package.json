@@ -24,6 +24,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
+    "ios_saf >= 14 and ios_saf < 15.4",
     "> 1%",
     "last 2 versions",
     "not dead"

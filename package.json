@@ -120,6 +120,12 @@
     "prettier": "^2.7.1",
     "typescript": "^4.8.4"
   },
+  "browserslist": [
+    "ios_saf >= 14 and ios_saf < 15.4",
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
   "engines": {
     "npm": ">=8.5.0",
     "node": ">=16.14.0"
