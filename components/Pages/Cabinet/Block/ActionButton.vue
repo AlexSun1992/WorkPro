@@ -96,21 +96,22 @@ export default {
     },
 
     confirmAction() {
-      return this.$bvModal.msgBoxConfirm(
-        `Вы действительно хотите выполнить действие" ${this.action.SNAME}"?`,
-        {
-          title: "Подтверждение выполнения действия",
-          size: "md",
-          buttonSize: "md",
-          okVariant: "success",
-          okTitle: "Да",
-          cancelTitle: "Нет",
-          footerClass: "p-2",
-          hideHeaderClose: false,
-          modalClass: ["cabinet"],
-          centered: true,
-        }
-      );
+      const titleVNode = this.action.SQUEST
+        ? this.action.SQUEST
+        : `Вы действительно хотите выполнить действие" ${this.action.SNAME}"?`;
+
+      return this.$bvModal.msgBoxConfirm(titleVNode, {
+        title: "Подтверждение выполнения действия",
+        size: "md",
+        buttonSize: "md",
+        okVariant: "success",
+        okTitle: "Да",
+        cancelTitle: "Нет",
+        footerClass: "p-2",
+        hideHeaderClose: false,
+        modalClass: ["cabinet"],
+        centered: true,
+      });
     },
     async executeAction() {
       try {
