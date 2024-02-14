@@ -153,10 +153,11 @@
 import VRuntimeTemplate from "v-runtime-template";
 import { saveAs } from "file-saver";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
+import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 
 export default {
   name: "CardPage",
-  components: { CardEditor, VRuntimeTemplate },
+  components: { CardEditor, VRuntimeTemplate, ActionButton },
 
   props: {
     wizardTabs: {
