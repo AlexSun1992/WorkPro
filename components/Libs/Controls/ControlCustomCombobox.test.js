@@ -31,10 +31,10 @@ describe("ControlCustomCombobox", () => {
     name: "SSERIES",
     options: [
       {
-        ID: "ААА",
+        ID: 1,
         SNAME: "ААА",
         text: "ААА",
-        value: "ААА",
+        value: 1,
       },
     ],
     page: 0,
@@ -44,7 +44,7 @@ describe("ControlCustomCombobox", () => {
     state: true,
     structType: "string",
     type: "customCombobox",
-    value: "ХХХ",
+    value: 1,
     visible: true,
     webId: "",
     width: "100%",
@@ -75,7 +75,7 @@ describe("ControlCustomCombobox", () => {
       mutations,
     });
   });
-  it("когда загрузилась страница, input с серией стал is-valid", async () => {
+  it("когда загрузилась страница, input с серией стал is-valid, если в value пришли цифры", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);
 
@@ -89,7 +89,39 @@ describe("ControlCustomCombobox", () => {
         $store: store,
       },
     });
+    const getCodeInput = wrapper.findComponent(".autocomplete-input");
 
+    expect(getCodeInput.element.value).toContain("ААА");
+    expect(wrapper.html()).toContain("is-valid");
+  });
+
+  it("когда загрузилась страница, input с серией, если в value пришли буквы", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const dataPropsValueString = { ...dataProps };
+    dataPropsValueString.options = [
+      {
+        ID: "ААА",
+        SNAME: "ААА",
+        text: "ААА",
+        value: "ААА",
+      },
+    ];
+    dataPropsValueString.value = "ААА";
+
+    wrapper = mount(ControlCustomCombobox, {
+      localVue,
+      propsData: {
+        data: dataPropsValueString,
+        edit: true,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+    const getCodeInput = wrapper.findComponent(".autocomplete-input");
+
+    expect(getCodeInput.element.value).not.toContain("ААА");
     expect(wrapper.html()).toContain("is-valid");
   });
 
@@ -111,7 +143,7 @@ describe("ControlCustomCombobox", () => {
     await getCodeInput.setValue("ggg");
     await getCodeInput.trigger("blur");
     await getCodeInput.trigger("blur");
-    expect(wrapper.html()).toContain(`Обязательно для заполнения`);
+    expect(wrapper.html()).toContain(`Выберите значение из выпадающего списка`);
   });
 
   it("ввели невалидное значение в инпут с серией, появился текст с ошибкой", async () => {
