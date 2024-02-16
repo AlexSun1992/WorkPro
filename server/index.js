@@ -4,6 +4,7 @@ const expressWinston = require("express-winston");
 const winston = require("winston"); // for transports.Console
 const { format } = require("winston");
 const cookieParser = require("cookie-parser");
+const requestIp = require("request-ip");
 
 const { timestamp } = format;
 const consola = require("consola");
@@ -53,11 +54,28 @@ app.use(
 // Import and Set Nuxt.js options
 const { RouteFilter } = require("express-winston");
 const config = require("../nuxt.config.js");
+const { isPermittedIp } = require("./index.helper.js");
 
 config.dev = process.env.NODE_ENV !== "production";
-
+config.prod = process.env.NODE_ENV === "production";
 async function start() {
   // Init Nuxt.js
+
+  app.use((req, res, next) => {
+    const ipAddress = requestIp.getClientIp(req);
+
+    const { sentryIp, allowedSubnetList } = config;
+    const isAllowedIp = isPermittedIp(allowedSubnetList, ipAddress, sentryIp);
+
+    if (isAllowedIp === true) {
+      config.devtool = "eval-source-map";
+    }
+    if (isAllowedIp === false) {
+      config.devtool = "nosources-source-map";
+    }
+    next();
+  });
+
   const nuxt = new Nuxt(config);
 
   const { host, port } = nuxt.options.server;

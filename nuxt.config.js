@@ -5,7 +5,10 @@ const { combine, timestamp, prettyPrint } = format;
  * @type {import("@nuxt/types").NuxtConfig}
  * https://v2.nuxt.com/docs/configuration-glossary/
  */
+
 const nuxtConfig = {
+  allowedSubnetList: ["192", "168", "200"],
+  sentryIp: "158.160.100.221",
   target: "universal",
   // ssr: false,
   telemetry: false,
