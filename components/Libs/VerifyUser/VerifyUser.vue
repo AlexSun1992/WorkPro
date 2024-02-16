@@ -194,10 +194,10 @@ export default {
               this.isSendCode = true;
             }
           }
-          let isError = Boolean(response?.data[0]?.ERRORCODE);
-          let isErrorList = Boolean(response?.data[0]?.ERRORLIST);
-          let isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
-          let isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
+          const isError = Boolean(response?.data[0]?.ERRORCODE);
+          const isErrorList = Boolean(response?.data[0]?.ERRORLIST);
+          const isInSystemLogin = response?.data[0]?.MESSAGE_CODE === 201;
+          const isExpiredLogin = response?.data[0]?.MESSAGE_CODE === 202;
           if (isError === false) {
             if (
               this.modeType === "REG" &&
@@ -372,17 +372,15 @@ export default {
       if (this.loginType === "phone") {
         this.placeholder = "+7(___)-___-__-__";
         return (this.mask = "+7(###)-###-##-##");
-      } else {
-        this.placeholder = "";
-        return (this.mask = "X".repeat(50));
       }
+      this.placeholder = "";
+      return (this.mask = "X".repeat(50));
     },
     isShowCodeEnter() {
       if (this.loginType === "phone") {
         return !this.v.phone.$invalid && this.isSendCode;
-      } else {
-        return !this.v.email.$invalid && this.isSendCode;
       }
+      return !this.v.email.$invalid && this.isSendCode;
     },
   },
   watch: {
