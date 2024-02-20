@@ -1,4 +1,6 @@
 /* eslint-disable */
+import * as Sentry from "@sentry/node";
+import { ProfilingIntegration } from "@sentry/profiling-node";
 import formConverter from "../converters/dataform";
 import menuConverter from "../converters/menu";
 import filterConverter from "../converters/filter";
@@ -31,6 +33,17 @@ router.use((req, res, next) => {
   next();
 });
 router.use(cookieParser());
+Sentry.init({
+  dsn: "https://50d4ea7c6f2f4aba9502689368f0fc63@sentry.reso.ru/8",
+  integrations: [new ProfilingIntegration()],
+  tracesSampleRate: 1.0,
+  profilesSampleRate: 1.0,
+  environment: process.env.NODE_ENV,
+  release: process.env.APP_VERSION,
+  beforeSend(event, hint) {
+    return event;
+  },
+});
 
 router.get("/card/:idModule/:idItem/:id/:idRel", (req, res) => {
   try {
@@ -285,10 +298,13 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
 });
 
 router.get("/file/:idReport/:idCard", (req, res) => {
+  Sentry.captureException("Скачивание невозможно", (scope) => {
+    scope.setLevel("info");
+    return scope;
+  });
   try {
     if (new Date().toISOString() > "2024-03-15") {
-      // @TODO Удалить метод /file после 2024-03-15
-      throw new Error(`Скачивание невозможно`);
+      throw new Error(`Заблокировать метод`);
     }
     const mobile2ServiceInstance = mobile2Service();
     mobile2ServiceInstance.defaults.headers.common.Authorization = null;
@@ -323,7 +339,9 @@ router.get("/file/:idReport/:idCard", (req, res) => {
         }
       });
   } catch (e) {
-    res.status(404).send(e);
+    Sentry.captureException(`error: ${e}`);
+    transaction.finish();
+    res.status(404);
   }
 });
 router.post(
@@ -492,7 +510,6 @@ router.get("/action/:moduleId/:actionId/:cardId", async (req, res) => {
     }
   }
 });
-
 module.exports = {
   routerCard: router,
 };

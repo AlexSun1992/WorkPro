@@ -24,6 +24,8 @@
     "@nuxtjs/recaptcha": "^0.6.2",
     "@nuxtjs/sentry": "^5.1.7",
     "@nuxtjs/style-resources": "^1.0.0",
+    "@sentry/node": "^7.101.1",
+    "@sentry/profiling-node": "^7.101.1",
     "@sentry/tracing": "^7.11.1",
     "@trevoreyre/autocomplete-vue": "^2.2.0",
     "@types/webpack-hot-middleware": "^2.25.3",
