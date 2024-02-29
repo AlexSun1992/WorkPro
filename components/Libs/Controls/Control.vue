@@ -48,6 +48,7 @@ import ControlLabel from "./ControlLabel";
 import ControlSplitter from "./ControlSplitter";
 import ControlCombobox from "./ControlCombobox";
 import ControlUploader from "./ControlUploader";
+import ControlUploadFiles from "./ControlUploadFiles/ControlUploadFiles";
 import ControlCaptcha from "./ControlCaptcha";
 import ControlError from "./ControlError";
 import ControlPhoneChange from "./ControlPhoneChange";
@@ -95,6 +96,7 @@ export default {
     ControlCombobox,
     ControlSplitter,
     ControlUploader,
+    ControlUploadFiles,
     ControlCaptcha,
     ControlError,
     ControlPhoneChange,

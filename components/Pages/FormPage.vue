@@ -42,12 +42,21 @@
       <div class="col-auto">
         <button
           pill
+          :disabled="loading"
           type="button"
           class="btn btn-success col-12 col-md-auto mr-4"
           :style="isButtonDisabled"
           @click="saveDataCard"
         >
           Сохранить
+          <span
+            v-if="loading"
+            role="status"
+            class="spinner-border text-danger ml-2"
+            style="width: 1rem; height: 1rem"
+          >
+            <span class="sr-only">Spinning</span>
+          </span>
         </button>
       </div>
       <div class="col-auto" v-if="isButtonCancel">
@@ -81,6 +90,9 @@ export default {
     };
   },
   computed: {
+    loading() {
+      return this.$store.getters["data_card/getLoading"];
+    },
     isButtonDisabled() {
       if (this.$refs.CardEditor) {
         return this.$refs.cardEditor.isButtonDisabled;

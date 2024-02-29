@@ -487,7 +487,9 @@ export default {
           }
 
           const isUploaderFieldValueExist = fields.find(
-            (elem) => elem.type === "Uploader" && elem.value !== undefined
+            (elem) =>
+              (elem.type === "Uploader" || elem.type === "uploadFiles") &&
+              elem.value !== undefined
           );
 
           if (isUploaderFieldValueExist === undefined) {

@@ -28,7 +28,26 @@ export const getters = {
         .value.filter((fileType) => fileType.NAME === item.NAME),
     }));
   },
-
+  getFormData: (state, getters) => {
+    const formData = new FormData();
+    const fileObjects = getters.getFileObjects;
+    const data = getters.getData;
+    data.forEach((item) => {
+      item.FILES.forEach((file) => {
+        const fileObject = fileObjects.find(
+          (obj) => obj.name === file.FILENAME
+        );
+        if (fileObject) {
+          const uploadFile = new File([fileObject], fileObject.name, {
+            type: "field/blob",
+          });
+          formData.append(item.NAME, uploadFile);
+        }
+      });
+    });
+    formData.append("JSON", JSON.stringify({ FILES: getters.getFiles }));
+    return formData;
+  },
   getPoutValueRoute: (state) => state.poutValueRoute,
 
   metaData: (state) => state.metaData,
