@@ -740,11 +740,11 @@ export default {
               this.$router.push(response.data.POUTVALUE);
             } else {
               const url = response.data.POUTVALUE;
-              // @TODO выпилить в версии 24.6 LK2-1082
               if (url.includes("/file")) {
+                const [, , , idReport, idCard] = url.split("/");
                 try {
                   const file = await this.$axios({
-                    url,
+                    url: `/am/main/v2/report?idreport=${idReport}&id=${idCard}`,
                     method: "GET",
                     responseType: "blob",
                   });
