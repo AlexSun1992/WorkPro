@@ -139,7 +139,7 @@ import {
   showWorkingHours,
   getTime,
   getGrafs,
-} from "../../../../utils/map/helpers/helpers";
+} from "../../../../utils/map/helpers/helpers2";
 
 export default {
   name: "MetroOfficeCard",
@@ -156,7 +156,7 @@ export default {
   methods: {
     phones(officePhones) {
       const phones = [];
-      Object.values(JSON.parse(officePhones)).forEach((phone) => {
+      Object.values(officePhones).forEach((phone) => {
         phones.push({
           clear: phone,
           view: `${phone.substring(0, 2)}(${phone.substring(

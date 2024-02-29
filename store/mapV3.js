@@ -15,13 +15,13 @@ export const actions = {
 
       const promiseOffices = new Promise((resolve,reject) => {
         resolve(this.$axios.get(
-          `/am/free/v2/siteapi/agencies?lat=${params.coords[0]}&long=${params.coords[1]}${params.id ? ('&idregion=').concat(params.id) : ''}`
+          `/system/modules/ru.reso.v2/actions/api/siteapi?query=Agencies&lat=${params.coords[0]}&long=${params.coords[1]}${params.id ? ('&idregion=').concat(params.id) : ''}`
         ).then(res => { return res.data }));
       });
       const promiseAgents = new Promise((resolve,reject) => {
         resolve(this.$axios.get(
-          `/system/modules/ru.reso.v2/elements/RMAPI/api-query.jsp?query=agents`
-        ).then(res => { return res.data[0]._data }));
+          `/system/modules/ru.reso.v2/actions/api/siteapi?query=AgentsDataForOfficesMap`
+        ).then(res => { return res.data }));
       });
       await Promise.all([promiseOffices, promiseAgents])
         .then(values => {
