@@ -38,7 +38,7 @@ import OfficeCard from "./OfficeCard.vue";
 import {
   countOffices,
   getUnderlineId,
-} from "../../../../utils/map/helpers/helpers";
+} from "../../../../utils/map/helpers/helpers2";
 
 export default {
   name: "OfficeCardMobile",

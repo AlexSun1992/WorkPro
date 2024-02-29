@@ -97,7 +97,7 @@ Window.saveLogAgentOnOfficesMap = async (log) => {
   logObject.vizitType = window.innerWidth < 992 ? "Y" : "N";
 
   function getUserId() {
-    if (Cookies.get("_ym_uid")) {  
+    if (Cookies.get("_ym_uid")) {
       return Cookies.get("_ym_uid");
     }
 
@@ -132,7 +132,7 @@ Window.saveLogAgentOnOfficesMap = async (log) => {
       throw new Error(result[0].ERROR);
     }
   } catch (error) {
-    logErrorInCms(error, 'agentMap', 'Ошибка логирования действий пользователя на карте офисов.');
+    logErrorSite(error, 'agentMap', 'Ошибка логирования действий пользователя на карте офисов.');
   }
 }
 
@@ -148,7 +148,7 @@ import OfficesList from "./OfficesList.vue";
 import OfficeCard from "./OfficeCard.vue";
 import MetroOfficeCard from "./MetroOfficeCard.vue";
 import AddressSuggestView from "./AddressSuggestView/AddressSuggestView";
-import { getTemplate } from "../../../../utils/map/helpers/helpers2";
+import { getTemplate, sortOffices } from "../../../../utils/map/helpers/helpers2";
 
 Vue.use(LoadScript);
 export default {
@@ -246,8 +246,8 @@ export default {
       });
       await Promise.all([promiseLoadData, promiseLoadMap]);
 
-      this.filteredOffices = this.allOffices;
-      //this.filteredAgentsData = this.allAgents.filter((agent) => !agent.IDOKRUG.startsWith('77') && !agent.IDOKRUG.startsWith('50') && !agent.IDOKRUG.startsWith('78') && !agent.IDOKRUG.startsWith('47'));
+      //Сортируем сразу, чтобы корректно отображался порядок в кластерах
+      this.filteredOffices = sortOffices(this.allOffices, this.centerCoords);
 
       if (this.allOffices) {
         ymaps.ready(this.initMap);
@@ -633,7 +633,7 @@ export default {
         let stationName = e.target.dataset.station;
         const offices = this.filteredOffices; // this.$store.getters["map/getRegionOffices"];
         offices.forEach((office) => {
-          if (!office.NORDER) office.NORDER = 0;
+          if (!office.NORDER) office.NORDER = 1000;
           const candidate = office.IDUNDERGROUND.find((item) => {
             // stationName = stationName.toLowerCase().replace("ё", "е");
             // item.SNAME = item.SNAME.toLowerCase().replace("ё", "е");
@@ -783,7 +783,8 @@ export default {
       }
 
       this.filteredOffices = filterData(this.allOffices, this.currentFilters);
-      this.filteredOffices.sort((a, b) => this.getDistance([a.NLAT, a.NLONG], this.centerCoords) > this.getDistance([b.NLAT, b.NLONG], this.centerCoords) ? 1 : -1);
+      //После фильтрации нужно повторно отсортировать для корректного порядка в кластерах
+      this.filteredOffices = sortOffices(this.filteredOffices, this.centerCoords);
 
       if (this.tabMetroVisible) {
         this.closeMetroCard();
@@ -863,9 +864,9 @@ export default {
 
     getTemplateLayoutAgentCard(item) {
       let agent = item.agent;
-      let urlApiPhoto = "/am/free/v2/siteapi/agentphoto";
+      let urlApiPhoto = "/system/modules/ru.reso.v2/actions/compressAgentPhoto.jpeg?id=" + agent.IDAGENT;
       let ratingClass = 'stars' + (this.customRound(agent.SRATING) + "").replace('.', '_');
-      let srcImgAgent = (agent.NPHOTOSIZE != 0 ? " src='" + urlApiPhoto + "/" + agent.IDAGENT + "' onerror='this.src=\"" + (agent.LSEX ? "/system/modules/ru.reso.v2/resources/img/ImageMap/profile.png" : "/system/modules/ru.reso.v2/resources/img/ImageMap/femaleProfile.png") + "\"'" : " src='" + (agent.LSEX ? "/system/modules/ru.reso.v2/resources/img/ImageMap/profile.png" : "/system/modules/ru.reso.v2/resources/img/ImageMap/femaleProfile.png") + "'");
+      let srcImgAgent = (agent.NPHOTOSIZE != 0 ? " src='" + urlApiPhoto + "' onerror='this.src=\"" + (agent.LSEX ? "/system/modules/ru.reso.v2/resources/img/ImageMap/profile.png" : "/system/modules/ru.reso.v2/resources/img/ImageMap/femaleProfile.png") + "\"'" : " src='" + (agent.LSEX ? "/system/modules/ru.reso.v2/resources/img/ImageMap/profile.png" : "/system/modules/ru.reso.v2/resources/img/ImageMap/femaleProfile.png") + "'");
 
       const listNumbers = agent.PHONE.split(",");
       const patternTempPhone = `${this.getPhone().slice(0, 1)}(${this.getPhone().slice(1, 4)})${this.getPhone().slice(4, 7)}-${this.getPhone().slice(7, 9)}-${this.getPhone().slice(9, 11)}`;
@@ -924,9 +925,9 @@ export default {
       return balloonAgentsData;
     },
 
-    getDistance(a, b) {
+    /*getDistance(a, b) {
       return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2);
-    },
+    },*/
 
     updateMap(state) {
       if (state?.center) {
@@ -937,7 +938,8 @@ export default {
       let zoom = this.myMap.getZoom();
       if (state?.zoom) zoom = state.zoom;
 
-      this.filteredOffices.sort( (a, b) => this.getDistance([a.NLAT, a.NLONG], this.centerCoords) > this.getDistance([b.NLAT, b.NLONG], this.centerCoords) ? 1 : -1);
+      this.filteredOffices = sortOffices(this.filteredOffices, this.centerCoords);
+      //this.filteredOffices.sort( (a, b) => this.getDistance([a.NLAT, a.NLONG], this.centerCoords) > this.getDistance([b.NLAT, b.NLONG], this.centerCoords) ? 1 : -1);
 
       let minLat = this.centerCoords[0];
       let minLong = this.centerCoords[1];
@@ -1013,7 +1015,8 @@ export default {
           let newState = ymaps.util.bounds.getCenterAndZoom(bounds, mapSize);
           this.centerCoords = newState.center;
 
-          this.filteredOffices.sort( (a, b) => this.getDistance([a.NLAT, a.NLONG], this.centerCoords) > this.getDistance([b.NLAT, b.NLONG], this.centerCoords) ? 1 : -1);
+          //this.filteredOffices.sort( (a, b) => this.getDistance([a.NLAT, a.NLONG], this.centerCoords) > this.getDistance([b.NLAT, b.NLONG], this.centerCoords) ? 1 : -1);
+          this.filteredOffices = sortOffices(this.filteredOffices, this.centerCoords);
         }
 
       } else {

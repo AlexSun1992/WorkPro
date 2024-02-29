@@ -64,7 +64,7 @@ const showWorkingHours = (agency) => {
 
 const getPhones = (officePhones) => {
   const phones = [];
-  Object.values(JSON.parse(officePhones)).forEach((phone) => {
+  Object.values(officePhones).forEach((phone) => {
     phones.push({
       clear: phone,
       view: `${phone.substring(0, 2)}(${phone.substring(
@@ -80,6 +80,27 @@ const getPhones = (officePhones) => {
   });
   return phones;
 };
+
+const sortOffices = (offices, centerCoords) => {
+  function getDistance(a, b) {
+    return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2);
+  }
+  return offices.sort( (a, b) => {
+    const distanceA = getDistance([a.NLAT, a.NLONG], centerCoords);
+    const distanceB = getDistance([b.NLAT, b.NLONG], centerCoords);
+
+    if (distanceA > distanceB)
+      return 1;
+    if (distanceA < distanceB)
+      return -1;
+    if (a.NLAT === b.NLAT && a.NLONG === b.NLONG) {
+      const orderA = a.NORDER ? a.NORDER : 1000;
+      const orderB = b.NORDER ? b.NORDER : 1000;
+      return orderA - orderB;
+    }
+    return -1;
+  });
+}
 
 const getTemplate = (agency) => {
   const phonesArr = getPhones(agency.PHONES);
@@ -296,6 +317,7 @@ module.exports = {
   countOffices,
   getUnderlineId,
   getPhones,
+  sortOffices,
   getGrafs,
   checkClusterStatus,
 };
