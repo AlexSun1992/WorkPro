@@ -129,7 +129,13 @@ converter.form = async (data, params, instance) => {
     } else if (webFields[i].IDCONTROL == 2) {
       obj.type = "text";
     } else if (webFields[i].IDCONTROL == 6) {
-      obj.type = "uploader";
+      obj.fileSettings = arr.filter(
+        (field) =>
+          field.label === "FILE_TYPES" ||
+          field.label === "FORM_SETTINGS" ||
+          field.label === "FILES"
+      );
+      obj.type = "uploadFiles";
     } else if (webFields[i].IDCONTROL == 7) {
       obj.type = "label";
     } else if (webFields[i].IDCONTROL == 8) {

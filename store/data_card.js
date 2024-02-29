@@ -3,7 +3,10 @@ import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import converter from "../converters/dataform";
-import { convertUploaderFilesToFormData } from "./data_card.helpers";
+import {
+  convertUploaderFilesToFormData,
+  mergeFormData,
+} from "./data_card.helpers";
 
 export const state = () => ({
   options: [],
@@ -377,6 +380,8 @@ export const actions = {
   },
 
   async saveDataCardUploaders({ commit, state }, params) {
+    commit("setLoading", true);
+    commit("setDisabled", true);
     const copyFieldData = state.form.map((item) => ({ ...item }));
 
     const getFieldData = converter.save(copyFieldData);
@@ -384,12 +389,26 @@ export const actions = {
     const dataIsReadyToTransfer = convertUploaderFilesToFormData(getFieldData);
 
     const httpMethod = params.idCard === "0" ? "post" : "put";
-    this.$axios[httpMethod](
-      `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
-        params.cardId
-      }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
-      dataIsReadyToTransfer
-    );
+    try {
+      const resp = await this.$axios[httpMethod](
+        `/am/main/v2/datacard2/${params.moduleId}/${params.itemId}/${
+          params.cardId
+        }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
+        dataIsReadyToTransfer
+      );
+      return resp;
+    } catch (err) {
+      commit("setSavedError", true);
+      commit("setErrorMessage", err.response.data || err.message);
+      commit("setFieldJsonError", getErrorMessage(err.response?.data));
+      if (err.response) {
+        return err.response;
+      }
+      throw err;
+    } finally {
+      commit("setLoading", false);
+      commit("setDisabled", false);
+    }
   },
 
   async executeAction(
