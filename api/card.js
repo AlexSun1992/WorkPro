@@ -297,53 +297,6 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
   }
 });
 
-router.get("/file/:idReport/:idCard", (req, res) => {
-  Sentry.captureException("Скачивание невозможно", (scope) => {
-    scope.setLevel("info");
-    return scope;
-  });
-  try {
-    if (new Date().toISOString() > "2024-03-15") {
-      throw new Error(`Заблокировать метод`);
-    }
-    const mobile2ServiceInstance = mobile2Service();
-    mobile2ServiceInstance.defaults.headers.common.Authorization = null;
-    if (req.query.zone !== "free") {
-      if (req?.headers?.authorization) {
-        mobile2ServiceInstance.defaults.headers.common.Authorization =
-          req.headers.authorization;
-      } else {
-        if (req?.cookies["auth._token.local"]) {
-          mobile2ServiceInstance.defaults.headers.common.Authorization =
-            req?.cookies["auth._token.local"];
-        }
-      }
-    }
-    mobile2ServiceInstance({
-      url: `${consts.REPORT}?idreport=${req.params.idReport}&id=${req.params.idCard}`,
-      method: "GET",
-      responseType: "arraybuffer",
-    })
-      .then(async (resp) => {
-        res.contentType("application/pdf");
-        res.send(resp.data);
-      })
-      .catch((err) => {
-        res.contentType("application/json");
-        if (err?.response?.data.STATUS == 401) {
-          res.status(err.response.data.STATUS).send(err.response.data);
-        } else {
-          res
-            .status(err?.response?.data.STATUS || 500)
-            .send(err?.response?.data || err);
-        }
-      });
-  } catch (e) {
-    Sentry.captureException(`error: ${e}`);
-    transaction.finish();
-    res.status(404);
-  }
-});
 router.post(
   "/card/actionexec/:rowId/:actionId/:relId?/:relActionId",
   (req, res) => {
