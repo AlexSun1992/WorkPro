@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+
 const expressWinston = require("express-winston");
 const winston = require("winston"); // for transports.Console
 const { format } = require("winston");
@@ -60,19 +61,18 @@ config.dev = process.env.NODE_ENV !== "production";
 config.prod = process.env.NODE_ENV === "production";
 async function start() {
   // Init Nuxt.js
-
   app.use((req, res, next) => {
     const ipAddress = requestIp.getClientIp(req);
-
     const { sentryIp, allowedSubnetList } = config;
     const isAllowedIp = isPermittedIp(allowedSubnetList, ipAddress, sentryIp);
 
-    if (isAllowedIp === true) {
-      config.devtool = "eval-source-map";
+    const pathName = new URL(req.originalUrl, "https://fake.ru").pathname;
+    const extension = path.extname(pathName);
+    if (extension === ".map" && isAllowedIp === false) {
+      res.sendStatus(404);
+      return;
     }
-    if (isAllowedIp === false) {
-      config.devtool = "nosources-source-map";
-    }
+
     next();
   });
 
