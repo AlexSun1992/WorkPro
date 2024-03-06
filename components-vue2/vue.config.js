@@ -2,7 +2,7 @@ module.exports = {
   outputDir: "../static/js/",
   css: { extract: false },
   runtimeCompiler: true,
-  productionSourceMap: false,
+  productionSourceMap: true,
   devServer: {
     proxy: {
       "^/free": {
