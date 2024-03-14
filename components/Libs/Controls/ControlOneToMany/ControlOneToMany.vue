@@ -25,7 +25,7 @@
       :disabled="!editable"
       class="btn btn-secondary btn-add mt-4"
     >
-      Добавить застрахованного
+      {{ getLabel }}
     </button>
   </div>
 </template>
@@ -75,6 +75,16 @@ export default {
     },
     editable() {
       return this.data.readonly === false;
+    },
+    getLabel() {
+      const controlName = this.data.value
+        .flat(Infinity)
+        .find((item) => item.id === this.data.menudic && item.name === "Add");
+
+      if (controlName) {
+        return controlName.label;
+      }
+      return "Добавить застрахованного";
     },
   },
 };
