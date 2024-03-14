@@ -40,6 +40,7 @@ export const state = () => ({
   visible: {},
   addFields: {},
   isFilterVisible: false,
+  fetchingActions: [],
 });
 export const getters = {
   getFiltersVisibleStatus: (state) => state.isFilterVisible,
@@ -52,6 +53,8 @@ export const getters = {
     idCard: state.cardId,
     idRel: state.cardRelId,
   }),
+  isFetchingAction: (state) => (actionId) =>
+    state.fetchingActions.includes(actionId),
   cardChanged: (state) => state.cardChanged,
   saveButtonClicked: (state) => state.saveButtonClicked,
   saveButtonClickedAmount: (state) => state.saveButtonClickedAmount,
@@ -876,5 +879,15 @@ export const mutations = {
   },
   setFilters(state, data) {
     state.filters = { ...state.filters, ...data };
+  },
+  setFetchingAction(state, { actionId, isFetching }) {
+    if (isFetching) {
+      state.fetchingActions.push(actionId);
+    }
+    if (!isFetching) {
+      state.fetchingActions = state.fetchingActions.filter(
+        (id) => id !== actionId
+      );
+    }
   },
 };

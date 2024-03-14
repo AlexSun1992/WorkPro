@@ -8,7 +8,7 @@
   >
     {{ getLabel }}
     <b-spinner
-      v-if="isLoading && needShowSpinner"
+      v-if="isLoading && isFetching"
       variant="success"
       label="Spinning"
     ></b-spinner>
@@ -28,7 +28,6 @@ export default {
   },
   data() {
     return {
-      needShowSpinner: false,
       disablePeriod: 0,
       timerId: null,
     };
@@ -40,8 +39,6 @@ export default {
 
   methods: {
     async updateValue() {
-      this.needShowSpinner = true;
-
       if (!this.isLoading && !this.isDisabled) {
         const fields = this.$store.getters["data_card/getForm"];
         if (typeof eventHandler === "function") {
@@ -68,20 +65,29 @@ export default {
   },
 
   computed: {
-    isActionWithPause() {
-      const actionList = this.$store.getters["menu/flatmenu"];
+    actionId() {
+      return Number(this.data.name.replace("Item", ""));
+    },
 
-      const actionId = this.data.name.replace("Item", "");
+    actionParams() {
+      const actionList = this.$store.getters["menu/flatmenu"];
 
       const menuItem = actionList.find(
         (item) => item.IDITEM === Number(this.$route.params.idItem)
       );
 
-      const CUR = menuItem.ACTIONSCUR.find(
-        (item) => item.ID === Number(actionId)
+      const actionParams = menuItem.ACTIONSCUR.find(
+        (item) => item.ID === this.actionId
       );
+      return actionParams;
+    },
 
-      if (CUR.NTYPE === 56) {
+    isDownloadControlButton() {
+      return Boolean(this.data.isDownloadControl);
+    },
+
+    isActionWithPause() {
+      if (this.actionParams.NTYPE === 56) {
         return true;
       }
       return false;
@@ -103,17 +109,23 @@ export default {
     },
 
     isLoading() {
-      return this.$store.getters["data_card/getLoading"];
+      return this.isDownloadControlButton
+        ? this.isFetching
+        : this.$store.getters["data_card/getLoading"];
     },
+
     isDisabled() {
-      return this.disablePeriod > 0 || this.data.readonly || this.isLoading;
+      return this.isDownloadControlButton
+        ? this.isFetching
+        : this.disablePeriod > 0 || this.data.readonly || this.isLoading;
+    },
+
+    isFetching() {
+      return this.$store.getters["data_card/isFetchingAction"](this.actionId);
     },
   },
   watch: {
-    isLoading() {
-      if (!this.isLoading) {
-        this.needShowSpinner = false;
-      }
+    isFetching() {
       if (
         this.isActionWithPause &&
         !this.isLoading &&
