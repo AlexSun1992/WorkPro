@@ -22,6 +22,7 @@
   </div>
 </template>
 <script>
+import { BFormGroup } from "bootstrap-vue";
 import ControlWrapperSelect from "../ControlWrapperSelect";
 import { detectUniquePropertyName } from "./detectUniquePropertyName";
 
@@ -29,6 +30,7 @@ export default {
   name: "ControlListSelect",
   components: {
     ControlWrapperSelect,
+    BFormGroup,
   },
   props: {
     itemId: {

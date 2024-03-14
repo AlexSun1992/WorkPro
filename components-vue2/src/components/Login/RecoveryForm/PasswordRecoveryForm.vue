@@ -158,7 +158,6 @@ import {
   BAlert,
   BRow,
   BFormGroup,
-  BButton,
   BNav,
   BNavItem,
 } from "bootstrap-vue";
@@ -191,7 +190,6 @@ export default {
     BAlert,
     BRow,
     BFormGroup,
-    BButton,
     BNav,
     BNavItem,
   },

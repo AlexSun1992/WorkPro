@@ -100,10 +100,11 @@
 
 <script>
 import _ from "lodash";
+import { BFormGroup } from "bootstrap-vue";
 import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer";
 
 export default {
-  components: { VerifyTimer },
+  components: { VerifyTimer, BFormGroup },
   props: [
     "count",
     "v",

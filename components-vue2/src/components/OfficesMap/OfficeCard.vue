@@ -74,18 +74,18 @@
 </template>
 
 <script>
-import { BCard, BButton, BCardText } from "bootstrap-vue";
+import { BCard, BCardText } from "bootstrap-vue";
 import {
   getTime,
   getPhones,
   getGrafs,
   showWorkingHours,
 } from "../../../../utils/map/helpers/helpers";
+
 export default {
   name: "OfficeCard",
   components: {
     BCard,
-    BButton,
     BCardText,
   },
   props: ["office"],

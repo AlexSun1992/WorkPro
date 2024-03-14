@@ -19,10 +19,12 @@
 
 <script>
 import { MultiSelect } from "vue-search-select";
+import { BFormGroup } from "bootstrap-vue";
 import select from "@/services/select";
+
 export default {
   name: "ControlEnum",
-  components: { MultiSelect },
+  components: { MultiSelect, BFormGroup },
   data() {
     return {
       options: [],

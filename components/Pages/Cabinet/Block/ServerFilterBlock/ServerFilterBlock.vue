@@ -38,6 +38,7 @@
 </template>
 <script>
 import VRuntimeTemplate from "v-runtime-template";
+import { BFormGroup } from "bootstrap-vue";
 import Multiselect from "../../../../Libs/Multiselect/Multiselect.vue";
 import SelectItemFromTemplate from "../../../../Libs/Controls/ControlListSelect/SelectItemFromTemplate.vue";
 import WrapperItemFromTemplate from "../../../../Libs/Controls/ControlListSelect/WrapperItemFromTemplate.vue";
@@ -52,6 +53,7 @@ export default {
     SelectItemFromTemplate,
     WrapperItemFromTemplate,
     ChooseButton,
+    BFormGroup,
   },
 
   props: {

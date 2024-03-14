@@ -59,8 +59,6 @@ import "vue2-datepicker/locale/ru";
 import moment from "moment/moment";
 import {
   BFormInvalidFeedback,
-  BButton,
-  // BInput,
   BInputGroup,
   BInputGroupAppend,
 } from "bootstrap-vue";
@@ -81,9 +79,7 @@ export default {
     BirthDateInput,
     BInputGroup,
     BFormInvalidFeedback,
-    BButton,
     BInputGroupAppend,
-    // BInput,
   },
   props: {
     state: Boolean,

@@ -41,10 +41,11 @@
 import DatePicker from "vue2-datepicker";
 import "../../../assets/scss/vue2-datepicker.css";
 import "vue2-datepicker/locale/ru";
+import { BFormGroup } from "bootstrap-vue";
 
 export default {
   name: "ControlTimestamp",
-  components: { DatePicker },
+  components: { DatePicker, BFormGroup },
   props: {
     data: {
       type: Object,

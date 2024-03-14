@@ -55,6 +55,7 @@
 </template>
 <script>
 import { isValid, isNumberValid } from "./helpers";
+import { BFormGroup } from "bootstrap-vue";
 
 const isCodeValid = function (value) {
   if (/^\d+$/iu.test(value) && value.length > 1) {
@@ -64,6 +65,7 @@ const isCodeValid = function (value) {
 };
 export default {
   name: "ControlRegNumber",
+  components: { BFormGroup },
   data() {
     return {
       numberValue: "",

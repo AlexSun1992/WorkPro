@@ -32,13 +32,10 @@
 </template>
 
 <script>
-import { BButton } from "bootstrap-vue";
 import { getSynchronizedFileList } from "./ControlUploader.helper";
 
 export default {
-  components: {
-    BButton,
-  },
+  components: {},
   name: "ControlUploader",
   props: {
     data: {

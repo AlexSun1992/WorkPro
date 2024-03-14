@@ -47,8 +47,11 @@
 </template>
 
 <script>
+import { BFormGroup } from "bootstrap-vue";
+
 export default {
   props: ["v", "validateState", "disabled", "recovery", "tabIndex"],
+  components: { BFormGroup },
   data() {
     return {
       password: "",

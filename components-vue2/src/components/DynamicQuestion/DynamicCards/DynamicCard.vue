@@ -29,7 +29,6 @@
 <script>
 import {
   BCollapse,
-  BButton,
   BCard,
   BCardHeader,
   BCardBody,
@@ -49,7 +48,6 @@ export default {
   name: "DynamicCard",
   components: {
     BCollapse,
-    BButton,
     BCard,
     BCardHeader,
     BCardBody,

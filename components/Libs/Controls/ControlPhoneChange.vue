@@ -68,10 +68,11 @@ import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
 import VerifyTimer from "../VerifyUser/VerifyTimer";
+import { BFormGroup } from "bootstrap-vue";
 
 export default {
   name: "ControlPhoneChange",
-  components: { VerifyTimer },
+  components: { VerifyTimer, BFormGroup },
   mixins: [validationMixin],
   props: {
     data: {
