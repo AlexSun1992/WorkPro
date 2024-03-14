@@ -10,7 +10,6 @@
               <span v-html="data.helpText" /></vue-easy-tooltip></span
         ></span>
       </label>
-
       <autocomplete
         ref="autocomplete"
         :placeholder="data.placeholder"
@@ -124,6 +123,9 @@ export default {
       if (this.data.value !== undefined && this.data.value !== null) {
         try {
           const data = JSON.parse(this.data.value);
+          if (typeof data === "string") {
+            return data;
+          }
           return data.value;
         } catch (e) {
           return this.data.value?.value ?? this.data.value;
