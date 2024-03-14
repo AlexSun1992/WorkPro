@@ -13,6 +13,7 @@
       no-fade
       @ok="confirmOkHandler"
       @cancel="confirmCancelHandler"
+      @hidden="confirmCancelHandler"
     >
       Вы действительно хотите выполнить действие "{{ actionParamsTitle }}"?
       <b-alert :show="isActionApplyError" variant="danger">
@@ -334,7 +335,17 @@ export default {
         this.$store.commit("data_card/cardChanged", true);
       }
       if (field.type === "button" && e.action) {
-        this.startAction(e);
+        const actionId = Number(e.value.replace("Item", ""));
+        this.$store.commit("data_card/setFetchingAction", {
+          actionId,
+          isFetching: true,
+        });
+        await this.startAction(e).finally(() => {
+          this.$store.commit("data_card/setFetchingAction", {
+            actionId,
+            isFetching: false,
+          });
+        });
         return;
       }
       if (field.type === "button") {
@@ -685,7 +696,7 @@ export default {
           "relaction",
           this.actionSettings.relaction
         );
-        this.$axios({
+        await this.$axios({
           url: requestDownLoadFileUrl.href,
           method: "GET",
           responseType: "blob",

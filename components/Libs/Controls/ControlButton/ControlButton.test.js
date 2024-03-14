@@ -30,10 +30,15 @@ describe("ControlButton", () => {
     mutations = mutationsStore;
     Vue.use(Vuex);
     store = new Vuex.Store({
-      state,
-      getters,
-      actions,
-      mutations,
+      modules: {
+        data_card: {
+          state,
+          getters,
+          actions,
+          mutations,
+          namespaced: true,
+        },
+      },
     });
   });
 

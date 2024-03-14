@@ -202,7 +202,8 @@ converter.form = async (data, params, instance) => {
     } else if (webFields[i].IDCONTROL == 441) {
       obj.type = "InsuredBox";
     } else if (webFields[i].IDCONTROL == 502) {
-      obj.type = "Download";
+      obj.type = "button";
+      obj.isDownloadControl = true;
     } else if (webFields[i].IDCONTROL == 501) {
       obj.type = "VueComponent";
     } else if (webFields[i].IDCONTROL == 481) {
