@@ -258,10 +258,11 @@
 import axios from "axios";
 import { validationMixin } from "vuelidate";
 import { required, minLength, sameAs, helpers } from "vuelidate/lib/validators";
-import { getErrorMessage } from "../../../../../plugins/auth/toast.helper";
-
+import { BFormGroup, BButton } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import moment from "moment";
+
+import { getErrorMessage } from "../../../../../plugins/auth/toast.helper";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyUser from "../Libs/VerifyUser2/VerifyUser2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
@@ -288,6 +289,8 @@ export default {
     VerifyUser,
     VerifyPassword,
     ConfirmModal,
+    BFormGroup,
+    BButton,
   },
 
   mixins: [validationMixin],

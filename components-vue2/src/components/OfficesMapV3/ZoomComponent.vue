@@ -21,14 +21,9 @@
 </template>
 
 <script>
-import { BButtonGroup, BButton } from "bootstrap-vue";
-
 export default {
   name: "ZoomComponent",
-  components: {
-    BButtonGroup,
-    BButton,
-  },
+  components: {},
 };
 </script>
 

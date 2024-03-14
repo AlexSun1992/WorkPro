@@ -11,9 +11,11 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
+import { BFormGroup } from "bootstrap-vue";
+
 export default {
   name: "ControlLabel",
-  components: { VRuntimeTemplate },
+  components: { VRuntimeTemplate, BFormGroup },
   props: {
     data: {
       type: Object,

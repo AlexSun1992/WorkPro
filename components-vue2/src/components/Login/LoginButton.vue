@@ -62,7 +62,7 @@
 <script>
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BDropdown, BButton, BDropdownItem } from "bootstrap-vue";
+import { BDropdown, BDropdownItem } from "bootstrap-vue";
 import SkeletonBox from "./Libs/SkeletonBox";
 import { subscribe, unsubscribe } from "./globalStorage";
 
@@ -149,7 +149,6 @@ export default {
   name: "LoginButton",
   components: {
     BDropdown,
-    BButton,
     BDropdownItem,
     SkeletonBox,
   },

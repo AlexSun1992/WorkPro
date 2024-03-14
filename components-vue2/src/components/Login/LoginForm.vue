@@ -222,7 +222,6 @@ import {
   BFormInput,
   BFormInvalidFeedback,
   BSpinner,
-  BButton,
   BModal,
   BRow,
 } from "bootstrap-vue";
@@ -246,7 +245,6 @@ export default {
     BFormInput,
     BFormInvalidFeedback,
     BSpinner,
-    BButton,
     BModal,
     BRow,
     VerifyTimer,

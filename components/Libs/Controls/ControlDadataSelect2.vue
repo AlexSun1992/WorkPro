@@ -33,6 +33,7 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+import { BFormGroup } from "bootstrap-vue";
 
 function getQueryParams(queryType, input) {
   if (queryType.includes("ADDRESS")) {
@@ -87,7 +88,7 @@ function getQueryParams(queryType, input) {
 
 export default {
   name: "AutoComplete",
-  components: { Autocomplete },
+  components: { Autocomplete, BFormGroup },
   props: {
     data: {
       type: Object,

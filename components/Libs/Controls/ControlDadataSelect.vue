@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { BFormGroup } from "bootstrap-vue";
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 
@@ -80,7 +81,7 @@ function getQueryParams(queryType, input) {
 
 export default {
   name: "AutoComplete",
-  components: { Autocomplete },
+  components: { Autocomplete, BFormGroup },
   props: {
     data: {
       type: Object,

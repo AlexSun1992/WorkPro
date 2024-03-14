@@ -32,9 +32,11 @@
 
 <script>
 import { CurrencyInput } from "vue-currency-input";
+import { BFormGroup } from "bootstrap-vue";
+
 export default {
   name: "ControlCustomDouble",
-  components: { CurrencyInput },
+  components: { CurrencyInput, BFormGroup },
   props: {
     data: {
       type: Object,

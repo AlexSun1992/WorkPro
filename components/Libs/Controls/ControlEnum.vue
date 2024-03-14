@@ -35,10 +35,11 @@
 <script>
 import "vue-search-select/dist/VueSearchSelect.css";
 import { ModelListSelect } from "vue-search-select";
+import { BFormGroup } from "bootstrap-vue";
 
 export default {
   name: "ControlEnum",
-  components: { ModelListSelect },
+  components: { ModelListSelect, BFormGroup },
   props: {
     data: {
       type: Object,

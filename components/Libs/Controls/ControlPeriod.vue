@@ -18,8 +18,11 @@
 </template>
 
 <script>
+import { BFormGroup } from "bootstrap-vue";
+
 export default {
   name: "ControlPeriod",
+  components: { BFormGroup },
   data() {
     return {
       month: null,
@@ -39,18 +42,7 @@ export default {
         { value: 11, text: "Декабрь" },
       ],
       years: [
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020,
-        2021,
-        2022,
-        2023,
-        2024,
-        2025,
+        2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025,
       ],
     };
   },

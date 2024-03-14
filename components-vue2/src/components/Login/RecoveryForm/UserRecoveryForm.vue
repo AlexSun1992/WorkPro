@@ -47,11 +47,13 @@
 <script>
 import { required, minLength } from "vuelidate/lib/validators";
 import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
+import { BFormGroup } from "bootstrap-vue";
 
 export default {
   props: ["v", "validateState"],
   components: {
     birthdayPicker,
+    BFormGroup,
   },
   validations: {
     name: {

@@ -11,16 +11,13 @@
   </button>
 </template>
 <script>
-import { BButton } from "bootstrap-vue";
 import { getErrorMessage } from "../../../../plugins/auth/toast.helper";
 
 import { fetchPoutvalue } from "../../../../utils/fetchPoutvalue";
 
 export default {
   name: "ActionButton",
-  components: {
-    BButton,
-  },
+  components: {},
   props: {
     actionId: {
       type: String,

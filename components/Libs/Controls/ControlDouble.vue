@@ -32,8 +32,11 @@
 
 <script>
 import { applyMask as _mask } from "../../../utils/utils";
+import { BFormGroup } from "bootstrap-vue";
+
 export default {
   name: "ControlDouble",
+  components: { BFormGroup },
   directives: {
     mask: _mask,
   },

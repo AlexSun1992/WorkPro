@@ -18,10 +18,11 @@
 <script>
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
+import { BFormGroup } from "bootstrap-vue";
 
 export default {
   name: "AddressSuggestView",
-  components: { Autocomplete },
+  components: { Autocomplete, BFormGroup },
   data() {
     return {
       group: [],

@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { BFormGroup } from "bootstrap-vue";
 import StringAutocomplete from "./StringAutocomplete.vue";
 import StringMasked from "./StringMasked.vue";
 import StringSimple from "./StringSimple.vue";
@@ -44,7 +45,7 @@ import { isFieldNameBelogToAutocomplete } from "./StringAutocomplete.helpers";
 
 export default {
   name: "ControlString",
-  components: { StringAutocomplete, StringMasked, StringSimple },
+  components: { StringAutocomplete, StringMasked, StringSimple, BFormGroup },
   props: {
     data: {
       type: Object,

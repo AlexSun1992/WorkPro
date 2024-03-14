@@ -89,12 +89,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, email, helpers } from "vuelidate/lib/validators";
-import {
-  BFormGroup,
-  BFormInput,
-  BFormInvalidFeedback,
-  BButton,
-} from "bootstrap-vue";
+import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import _ from "lodash";
 import VerifyTimer from "../VerifyUser/VerifyTimer";
 
@@ -111,7 +106,6 @@ export default {
     BFormGroup,
     BFormInput,
     BFormInvalidFeedback,
-    BButton,
   },
   mixins: [validationMixin],
   name: "ControlEmailChange",

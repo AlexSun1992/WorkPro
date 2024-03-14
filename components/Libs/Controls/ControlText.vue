@@ -25,8 +25,11 @@
 </template>
 
 <script>
+import { BFormGroup } from "bootstrap-vue";
+
 export default {
   name: "ControlText",
+  components: { BFormGroup },
   props: {
     data: {
       type: Object,

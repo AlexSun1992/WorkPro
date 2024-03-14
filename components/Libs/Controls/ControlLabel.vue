@@ -14,8 +14,11 @@
 </template>
 
 <script>
+import { BFormGroup } from "bootstrap-vue";
+
 export default {
   name: "ControlLabel",
+  components: { BFormGroup },
   props: {
     data: {
       type: Object,

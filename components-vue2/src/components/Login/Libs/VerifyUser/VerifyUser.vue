@@ -140,12 +140,7 @@ import axios from "axios";
 import _ from "lodash";
 import { mask } from "vue-the-mask";
 import VueRecaptcha from "vue-recaptcha";
-import {
-  BFormGroup,
-  BFormInput,
-  BFormInvalidFeedback,
-  BButton,
-} from "bootstrap-vue";
+import { BFormGroup, BFormInput, BFormInvalidFeedback } from "bootstrap-vue";
 import VerifyTimer from "./VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import {
@@ -161,7 +156,6 @@ export default {
     BFormInput,
     BFormInvalidFeedback,
     VueRecaptcha,
-    BButton,
   },
 
   directives: { mask },
