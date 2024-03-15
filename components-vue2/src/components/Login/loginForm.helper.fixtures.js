@@ -1,3 +1,33 @@
+export function createMockMobileId(data) {
+  const json =
+    data.statusCode === 200
+      ? [
+          {
+            ACCESS_TOKEN: "blablabla",
+            REFRESH_TOKEN: "lalalala",
+          },
+        ]
+      : {
+          INFO: data.errorText,
+          MESSAGE: `ORA-20105: [${data.errorText}]\nORA-06512: на  "MOBILE.CLIENTUTILS", line 2500\nORA-06512: на  line 1\nORA-06512: на  "MOBILE.AMUTILSREST", line 1382\nORA-06512: на  "MOBILE.AMUTILSREST", line 1312\nORA-06512: на  "MOBILE.AMUTILSREST", line 1873\nORA-06512: на  line 1\n`,
+          REASON: "Internal Server Error",
+          STATUS: data.statusCode,
+        };
+
+  return {
+    body: { locked: true },
+    bodyUsed: true,
+    headers: {},
+    ok: false,
+    redirected: false,
+    status: data.statusCode,
+    statusText: "CUSTOM",
+    type: "basic",
+    url: "http://localhost:8000/am/free/v2/datacard/55/804",
+    json: () => Promise.resolve(json),
+  };
+}
+
 export const pastedInputValue = "8-911-455-11-11";
 export const pastetValueLargerLength = "375 (029) 111-11-11";
 export const pastedValuePlusSeven = "+7 905 111 11 11";

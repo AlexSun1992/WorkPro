@@ -1,14 +1,225 @@
 import { createLocalVue, mount } from "@vue/test-utils";
 import { ModalPlugin } from "bootstrap-vue";
 import axios from "axios";
-
 import LoginForm from "./LoginForm.vue";
+import { createMockMobileId } from "./loginForm.helper.fixtures";
 
 jest.mock("axios");
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve(),
+  })
+);
 
 describe("LoginForm", () => {
   afterEach(() => {
     jest.resetAllMocks();
+  });
+
+  it("На странице появляется окно для ввода номера паспорта", async () => {
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
+      },
+    });
+
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({ errorText: "Нужен паспорт", statusCode: 520 })
+      )
+    );
+    const wrapper = mount(LoginForm);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(fetch).toHaveBeenCalledWith("/am/free/v2/datacard/55/804", {
+      body: '{"state":"ce5e41e9-69cd-43b9-9e50-f7edd4e53771"}',
+      headers: {
+        "content-type": "application/json",
+      },
+      method: "POST",
+    });
+    expect(wrapper.find(".passport-number").exists()).toBe(true);
+  });
+
+  it("Происходит повторный вызов окна ввода паспорта т.к. пасспорт в 1ый раз был заполнен неправильно", async () => {
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
+      },
+    });
+
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({ errorText: "Нужен паспорт", statusCode: 520 })
+      )
+    );
+    const wrapper = mount(LoginForm);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+
+    await wrapper.findComponent(".passport-number").setValue("1234");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.find("#sendPassport").trigger("submit.prevent");
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({ errorText: "Нужен паспорт", statusCode: 520 })
+      )
+    );
+
+    expect(fetch).toHaveBeenCalledWith("/am/free/v2/datacard/55/804", {
+      body: '{"state":"ce5e41e9-69cd-43b9-9e50-f7edd4e53771","passport":"1234"}',
+      headers: {
+        "content-type": "application/json",
+      },
+      method: "POST",
+    });
+    expect(wrapper.find(".passport-number").exists()).toBe(true);
+  });
+
+  it("Выводим ошибку в dialog", async () => {
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
+      },
+    });
+
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({
+          errorText: "Повторите попытку ввода паспорта",
+          statusCode: 520,
+        })
+      )
+    );
+    const wrapper = mount(LoginForm);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(wrapper.find("[data-testid=dialogErrorInformation]").text()).toBe(
+      "Повторите попытку ввода паспорта"
+    );
+  });
+
+  it("Выводим ошибку в dialog и добавляем disabled на кнопку и инпут", async () => {
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
+      },
+    });
+
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({
+          errorText: "Превышено количество попыток",
+          statusCode: 520,
+        })
+      )
+    );
+    const wrapper = mount(LoginForm);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(wrapper.find("[data-testid=dialogErrorInformation]").text()).toBe(
+      "Превышено количество попыток"
+    );
+    expect(wrapper.find(".passport-number").attributes("disabled")).toBe(
+      "disabled"
+    );
+    expect(wrapper.find("#sendPassport").attributes("disabled")).toBe(
+      "disabled"
+    );
+  });
+
+  it("Закрываем dialog по клику", async () => {
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
+      },
+    });
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({
+          errorText: "Превышено количество попыток",
+          statusCode: 520,
+        })
+      )
+    );
+    const wrapper = mount(LoginForm);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    await wrapper.find("[data-testid=closeDialog]").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find(".passport-number").exists()).toBe(false);
+    expect(fetch).not.toHaveBeenCalledTimes(2);
+  });
+
+  it("На странице не появляется окно для ввода номер паспорта и происходит redirect /cabinet", async () => {
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
+      },
+    });
+
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({
+          statusCode: 200,
+        })
+      )
+    );
+    const wrapper = mount(LoginForm, {
+      mocks: {
+        $cookiz: {
+          get: jest.fn().mockReturnValue("/cabinet"),
+          set: jest.fn(),
+        },
+      },
+    });
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(wrapper.find(".passport-number").exists()).toBe(false);
+    expect(window.location.href).toEqual("/cabinet");
+  });
+
+  it("На странице не появляется окно для ввода номер паспорта ", async () => {
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost/login",
+      },
+    });
+
+    const wrapper = mount(LoginForm);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(fetch).toHaveBeenCalledTimes(0);
+    expect(wrapper.find(".passport-number").exists()).toBe(false);
   });
 
   it("должен показать кнопку авторизоваться", () => {

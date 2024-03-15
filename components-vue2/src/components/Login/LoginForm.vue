@@ -1,16 +1,26 @@
 <template>
   <div>
-    <dialog ref="favDialog">
-      <form method="GET" action="/sso">
+    <div id="favDialog" ref="favDialog" v-if="showPassportDialog">
+      <button data-testid="closeDialog" @click="closeDialog">X</button>
+      <form @submit.prevent="sendPassportNumber">
         <div>
-          <label for="favAnimal">Введите номер паспорта</label>
-          <input type="hidden" name="type" v-model="searchParamType" />
-          <input type="hidden" name="state" v-model="searchParamState" />
-          <input type="text" name="passport" />
+          <label for="dialog">Введите последние 4 цифры номера паспорта</label>
+          <input
+            :disabled="isDisabled"
+            class="passport-number"
+            type="text"
+            name="passport"
+            v-model="searchParamPassport"
+          />
         </div>
-        <button type="submit" id="submit">Отправить</button>
+        <div data-testid="dialogErrorInformation" v-if="dialogErrorInformation">
+          {{ dialogErrorInformation }}
+        </div>
+        <button type="submit" id="sendPassport" :disabled="isDisabled">
+          Отправить
+        </button>
       </form>
-    </dialog>
+    </div>
 
     <b-modal
       id="sms-confirm-modal"
@@ -283,13 +293,18 @@ export default {
       loginTouchesCount: 0,
       searchParamType: null,
       searchParamState: null,
+      searchParamPassport: null,
+      showPassportDialog: null,
+      dialogErrorInformation: null,
+      isDisabled: false,
     };
   },
-  mounted() {
+  async mounted() {
     const attempt = new URL(window.location.href);
-    const isAuthorizationCookie = /Bearer/.test(document.cookie);
-    if (isAuthorizationCookie && !attempt.searchParams.has("ref")) {
-      window.location.href = "/cabinet";
+    if (attempt.searchParams.get("type") === "mobileid") {
+      this.searchParamType = attempt.searchParams.get("type");
+      this.searchParamState = attempt.searchParams.get("state");
+      await this.sendPassportNumber();
     }
     this.$nextTick(() => {
       if (typeof this.$LogEvent === "function") {
@@ -305,11 +320,6 @@ export default {
         }
       }
     });
-    if (attempt.searchParams.get("type") === "mobileid") {
-      this.searchParamType = attempt.searchParams.get("type");
-      this.searchParamState = attempt.searchParams.get("state");
-      this.$refs.favDialog.showModal();
-    }
   },
   created() {
     this.debouncedUpdate = _.debounce(this.blurField, 100);
@@ -330,13 +340,69 @@ export default {
       }
     },
   },
-  unmounted() {
-    if (this.searchParamType === "mobileid") {
-      this.$refs.favDialog.close();
-    }
-  },
 
   methods: {
+    async sendPassportNumber() {
+      try {
+        const params =
+          this.searchParamPassport === null
+            ? { state: this.searchParamState }
+            : {
+                state: this.searchParamState,
+                passport: this.searchParamPassport,
+              };
+
+        const response = await fetch("/am/free/v2/datacard/55/804", {
+          method: "POST",
+          body: JSON.stringify(params),
+          headers: {
+            "content-type": "application/json",
+          },
+        });
+
+        if (response) {
+          const responseData = await response.json();
+
+          if (response.status !== 200) {
+            this.showPassportDialog = true;
+            if (!responseData.INFO.includes("Нужен паспорт")) {
+              this.dialogErrorInformation = responseData.INFO;
+              if (responseData.INFO.includes("Превышено количество попыток")) {
+                this.isDisabled = true;
+              }
+              throw new Error(JSON.stringify(responseData));
+            }
+          }
+
+          if (response.status === 200) {
+            this.showPassportDialog = false;
+            let isAuthorizationCookie;
+            if (responseData[0].ACCESS_TOKEN) {
+              document.cookie = `auth._token.local=Bearer ${responseData[0].ACCESS_TOKEN}`;
+              document.cookie = `auth._refresh_token.local=${responseData[0].REFRESH_TOKEN}`;
+              document.cookie = `auth._token_expiration.local=${responseData[0].REFRESH_TOKEN}`;
+              isAuthorizationCookie = /Bearer/.test(document.cookie);
+              if (isAuthorizationCookie) {
+                const redirect = this.$cookiz.get("ref")
+                  ? this.$cookiz.get("ref")
+                  : "/cabinet";
+                this.showPassportDialog = false;
+                window.location.href = redirect;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      this.searchParamPassport = "";
+    },
+    closeDialog() {
+      this.showPassportDialog = false;
+      if (this.$cookiz.get("referror")) {
+        window.location.href = this.$cookiz.get("referror");
+      }
+    },
     visiblePSW() {
       if (this.pswVisible === false) {
         this.pswVisible = true;
