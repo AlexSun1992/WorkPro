@@ -92,7 +92,7 @@ converter.form = async (data, params, instance) => {
       item[webFields[i].SNAME] === false
     ) {
       obj.value = item[webFields[i].SNAME];
-    } else if (Object.keys(item).length === 0) {
+    } else {
       obj.value = meta_value[webFields[i].SNAME];
       if (
         webFields[i].STYPE === "Double" ||
