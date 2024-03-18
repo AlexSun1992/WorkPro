@@ -34,6 +34,7 @@
     "bootstrap": "^4.6.1",
     "bootstrap-vue": "^2.22.0",
     "compress-json": "^2.0.1",
+    "content-disposition-attachment": "^0.3.1",
     "cookie-parser": "^1.4.6",
     "cookie-universal-nuxt": "^2.1.4",
     "cross-env": "^7.0.3",

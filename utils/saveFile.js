@@ -1,3 +1,5 @@
+import { parse } from "content-disposition-attachment";
+
 export function saveFile(blob, fileName, documentType, isNewWindow = false) {
   const link = document.createElement("a");
   const objectUrl = window.URL.createObjectURL(
@@ -24,9 +26,9 @@ export function saveFileAxios(axiosResponse, isNewWindow) {
 
   const contentDisposition = responseHeaders.get("content-disposition");
 
-  const fileName = decodeURIComponent(
-    contentDisposition.split("filename*=UTF-8''")[1]
-  );
+  const attachmentFilename = parse(contentDisposition);
+
+  const fileName = attachmentFilename.filename || "file.pdf";
 
   const contentType = responseHeaders.get("content-type");
 
