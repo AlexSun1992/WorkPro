@@ -664,9 +664,11 @@ converter.save = (data) => {
           }
           if (data[i].type === "DadataSelect2") {
             res[data[i].name] =
-              data[i].value !== null && data[i].value !== undefined
+              data[i].value !== null &&
+              data[i].value !== undefined &&
+              typeof data[i].value === "object"
                 ? JSON.stringify(data[i].value)
-                : "NULL";
+                : data[i].value || "NULL";
           }
           if (data[i].structType === "boolrus") {
             res[data[i].name] =
