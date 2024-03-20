@@ -319,6 +319,7 @@ export default {
     });
   },
   created() {
+    this.authInProcess = false;
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     // eslint-disable-next-line nuxt/no-globals-in-created
     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -480,6 +481,7 @@ export default {
         this.saveCookies(ACCESS_TOKEN, REFRESH_TOKEN);
         this.authRedirect();
       } catch (e) {
+        this.authInProcess = false;
         if (!e.response) {
           this.extraOrdinaryServiceAnswer = getErrorMessage(e);
           return;
@@ -522,8 +524,6 @@ export default {
         }
 
         this.extraOrdinaryServiceAnswer = getErrorMessage(data.MESSAGE);
-      } finally {
-        this.authInProcess = false;
       }
     },
     validateState(name) {
