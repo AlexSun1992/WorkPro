@@ -297,12 +297,6 @@ export default {
     };
   },
   async mounted() {
-    const attempt = new URL(window.location.href);
-    if (attempt.searchParams.get("type") === "mobileid") {
-      this.searchParamType = attempt.searchParams.get("type");
-      this.searchParamState = attempt.searchParams.get("state");
-      await this.sendPassportNumber();
-    }
     this.$nextTick(() => {
       if (typeof this.$LogEvent === "function") {
         const currentURL = window.location.pathname;
@@ -317,6 +311,16 @@ export default {
         }
       }
     });
+    const currentLocation = new URL(window.location.href);
+    if (currentLocation.searchParams.get("type") === "mobileid") {
+      this.searchParamType = currentLocation.searchParams.get("type");
+      this.searchParamState = currentLocation.searchParams.get("state");
+      await this.sendPassportNumber();
+      return;
+    }
+    if (this.isAuthentificated()) {
+      this.authRedirect();
+    }
   },
   created() {
     this.authInProcess = false;
@@ -340,7 +344,12 @@ export default {
   },
 
   methods: {
+    isAuthentificated() {
+      return String(Cookies.get("auth._refresh_token.local")).length > 20;
+    },
+
     authRedirect() {
+      this.authInProcess = true;
       const currentLocation = new URL(window.location.href);
       const searchParamsRef = currentLocation.searchParams.get("ref");
       const cookiesRef = Cookies.get("ref");
