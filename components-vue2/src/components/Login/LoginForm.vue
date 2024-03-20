@@ -127,7 +127,7 @@
               :state="wrongAuthData ? false : validateState('username')"
               @blur="$v.user.username.$touch()"
               @input="wrongAuthData = false"
-              :disabled="authInProcess"
+              :disabled="isMainFormDisabled"
               class="form-control"
               data-testid="authPhoneEmail"
             >
@@ -150,7 +150,7 @@
               @blur="$v.user.password.$touch()"
               @input="wrongAuthData = null"
               class="form-control"
-              :disabled="authInProcess"
+              :disabled="isMainFormDisabled"
               data-testid="authPassword"
             ></b-form-input>
             <button
@@ -202,7 +202,7 @@
       <button
         v-on:enter="fetchToken()"
         type="submit"
-        :disabled="authInProcess"
+        :disabled="isMainFormDisabled"
         class="btn btn-primary mt-3 mt-lg-4"
         id="btn_entry_lk"
       >
@@ -560,6 +560,10 @@ export default {
     },
   },
   computed: {
+    isMainFormDisabled() {
+      return this.isModalVisible || this.authInProcess;
+    },
+
     queryError() {
       const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop.toString()),
