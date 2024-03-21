@@ -3,6 +3,7 @@ import Axios from "axios";
 import api from "../api/urls";
 import { getErrorMessage } from "../utils/transform";
 import converter from "../converters/dataform";
+import consts from "../api/urls";
 import {
   convertUploaderFilesToFormData,
   mergeFormData,
@@ -356,17 +357,18 @@ export const actions = {
     const body = getters.getBodyForm;
 
     try {
+      const httpMethod = params.cardId === "0" ? "post" : "put";
       await Promise.all(state.beforeSavePromises.map((func) => func()));
-      const resp = await this.$axios.post(
-        `/api/card/${params.moduleId}/${params.itemId}/${params.cardId}/${
-          params.relId
-        }${params.zone === "free" ? "?zone=free" : ""}`,
+      const resp = await this.$axios[httpMethod](
+        `${params.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
+          params.moduleId
+        }/${params.itemId}/${params.cardId}`,
         body
       );
 
       commit("setSavedError", false);
-      commit("setCardId", resp.data.ID);
-      commit("setCardRelId", resp.data.REL);
+      commit("setCardId", resp.data[0].ID);
+      commit("setCardRelId", resp.data[0].REL);
       return resp;
     } catch (err) {
       commit("setSavedError", true);
@@ -399,6 +401,9 @@ export const actions = {
         }${params.relId !== "undefined" ? `?rel=${params.relId}` : ""}`,
         dataIsReadyToTransfer
       );
+      commit("setSavedError", false);
+      commit("setCardId", resp.data[0].ID);
+      commit("setCardRelId", resp.data[0].REL);
       return resp;
     } catch (err) {
       commit("setSavedError", true);

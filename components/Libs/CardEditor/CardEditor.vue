@@ -569,9 +569,9 @@ export default {
             }
             if (this.closeAfterSave) {
               this.$router.push(`/cabinet/${moduleId}/0/${itemId}`);
-            } else if (resp?.data?.RESULT?.POUTVALUE) {
-              if (resp?.data?.RESULT?.POUTVALUE.includes("/")) {
-                this.$router.push(resp?.data?.RESULT?.POUTVALUE);
+            } else if (resp?.data[0]?.RESULT?.POUTVALUE) {
+              if (resp?.data[0]?.RESULT?.POUTVALUE.includes("/")) {
+                this.$router.push(resp?.data[0]?.RESULT?.POUTVALUE);
               }
             } else {
               this.$router.push(
