@@ -357,8 +357,7 @@ export const actions = {
     const body = getters.getBodyForm;
 
     try {
-      const httpMethod =
-        params.cardId === "0" || params.zone === "free" ? "post" : "put";
+      const httpMethod = params.cardId === "0" ? "post" : "put";
       await Promise.all(state.beforeSavePromises.map((func) => func()));
       const resp = await this.$axios[httpMethod](
         `${params.zone === "free" ? consts.FREEDATACARD : consts.DATACARD}/${
