@@ -2,7 +2,7 @@
   <div class="mt-4 buttons row">
     <div class="col-auto" v-if="currentTab.order > 1">
       <button type="button" class="btn btn-secondary" @click="goBack">
-        Назад
+        {{ showBtnNameBack }}
       </button>
     </div>
     <div class="col-auto mt-3 mt-lg-0" v-if="$route.params.idCard != 0">
@@ -82,6 +82,22 @@ export default {
       });
       return wizardButtonSave;
     },
+
+    btnBack() {
+      const formData = this.$store.getters["data_card/getForm"];
+      const fields = formData.length ? formData : formData.data || [];
+      const wizardButtonBack = fields.find((item) => {
+        if (item.type === "WizardButton" && item.name === "Back") {
+          return true;
+        }
+      });
+      return wizardButtonBack;
+    },
+
+    showBtnNameBack() {
+      return this.btnBack?.label ?? "Назад";
+    },
+
     showBtnNameSave() {
       return this.btnSave?.label ?? "Сохранить";
     },
