@@ -95,9 +95,10 @@ converter.form = async (data, params, instance) => {
     } else {
       obj.value = meta_value[webFields[i].SNAME];
       if (
-        webFields[i].STYPE === "Double" ||
-        webFields[i].STYPE === "Int64" ||
-        webFields[i].STYPE === "Int16"
+        (webFields[i].STYPE === "Double" ||
+          webFields[i].STYPE === "Int64" ||
+          webFields[i].STYPE === "Int16") &&
+        meta_value[webFields[i].SNAME] !== undefined
       ) {
         obj.value = parseInt(meta_value[webFields[i].SNAME], 10);
       }

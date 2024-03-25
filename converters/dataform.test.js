@@ -2,6 +2,8 @@ import dataform from "./dataform";
 import {
   dataWithFileParams,
   dataWithoutFileParams,
+  dataDoubleTypeWithoutDefaultValue,
+  dataDoubleTypeWithDefaultValue,
 } from "./dataform.helpers.fixtures";
 
 describe("dataform converter", () => {
@@ -107,6 +109,85 @@ describe("dataform converter", () => {
         isRelation: false,
         fieldRelation: null,
         isTab: false,
+      },
+    ]);
+  });
+  it("Корректно устанавливает значение для типа Double если значение по умолчанию не задано", async () => {
+    const { metaData } = await dataform.form(
+      dataDoubleTypeWithoutDefaultValue,
+      {
+        idItem: 777,
+      }
+    );
+    expect(metaData.data).toEqual([
+      {
+        label: "Возраст",
+        value: undefined,
+        type: "double",
+        structType: "long",
+        id: 777,
+        fieldId: 36356,
+        cols: 3,
+        colSm: 6,
+        colMd: 6,
+        isMask: false,
+        colLg: 2,
+        width: "100%",
+        name: "NDR_AGE_1",
+        cssClass: "r-h-l",
+        webId: "",
+        visible: false,
+        required: true,
+        page: 2,
+        mask: undefined,
+        readonly: false,
+        control: null,
+        state: null,
+        checked: null,
+        error: null,
+        helpText: undefined,
+        placeholder: undefined,
+        isRelation: false,
+        fieldRelation: null,
+        isTab: true,
+      },
+    ]);
+  });
+  it("Корректно устанавливает значение для типа Double если значение по умолчанию  задано", async () => {
+    const { metaData } = await dataform.form(dataDoubleTypeWithDefaultValue, {
+      idItem: 777,
+    });
+    expect(metaData.data).toEqual([
+      {
+        label: "Возраст",
+        value: 30,
+        type: "double",
+        structType: "long",
+        id: 777,
+        fieldId: 36356,
+        cols: 3,
+        colSm: 6,
+        colMd: 6,
+        isMask: false,
+        colLg: 2,
+        width: "100%",
+        name: "NDR_AGE_1",
+        cssClass: "r-h-l",
+        webId: "",
+        visible: false,
+        required: true,
+        page: 2,
+        mask: undefined,
+        readonly: false,
+        control: null,
+        state: true,
+        checked: true,
+        error: null,
+        helpText: undefined,
+        placeholder: undefined,
+        isRelation: false,
+        fieldRelation: null,
+        isTab: true,
       },
     ]);
   });
