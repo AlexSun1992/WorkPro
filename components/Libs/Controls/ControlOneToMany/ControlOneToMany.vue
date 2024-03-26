@@ -76,8 +76,9 @@ export default {
     editable() {
       return this.data.readonly === false;
     },
+
     getLabel() {
-      const controlName = this.data.value
+      const controlName = this.$store.getters["data_card/getCopyForm"]
         .flat(Infinity)
         .find((item) => item.id === this.data.menudic && item.name === "Add");
 
