@@ -5758,3 +5758,41 @@ input.check-collapse:checked + label span + span {
     display: none;
   }
 }
+
+.franchise-small {
+  display: grid;
+  grid-template-rows: 40px minmax(50px, max-content) 25px auto 50px 75px 40px;
+  border: 1px solid #eff1f3;
+  border-radius: 30px;
+  padding: 24px;
+  height: 100%;
+  background-color: $white;
+  transition: 0.3s;
+}
+.franchise-small:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+}
+.franchise-small .title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.franchise-small .name {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.franchise-small .police {
+  font-size: 0.875rem;
+  color: rgba(41, 41, 41, 0.8);
+}
+.franchise-small .description {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+.franchise-small .sum {
+  padding-top: 0.5rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  font-family: Raleway;
+  color: rgba(235, 87, 87, 1);
+  font-size: 2rem;
+}
