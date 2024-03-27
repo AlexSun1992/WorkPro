@@ -196,6 +196,16 @@ export default {
     };
   },
   methods: {
+    redirectWithRef(path) {
+      const url = new URL(path, window.location.origin);
+      const DEFAULT_SUCCESS_REF = "/cabinet";
+      const currentUrl = new URL(window.location.href);
+      url.searchParams.set(
+        "ref",
+        currentUrl.searchParams.get("ref") || DEFAULT_SUCCESS_REF
+      );
+      window.location.href = url.href;
+    },
     toggleForm(address) {
       if (address === "registration") {
         window.location.href = "/login/registration";
@@ -212,7 +222,7 @@ export default {
         message: `Нажал на кнопку «Войти через ГОСУСЛУГИ»`,
         timeUser: new Date(),
       });
-      document.location.href = "/sso?auth&type=esia&ref=/cabinet";
+      this.redirectWithRef("/sso?auth&type=esia");
     },
     goALFA() {
       this.$LogEvent({
@@ -222,7 +232,7 @@ export default {
         message: `Нажал на кнопку «Войти через AlfaID`,
         timeUser: new Date(),
       });
-      document.location.href = "/sso?auth&type=alfa&ref=/cabinet";
+      this.redirectWithRef("/sso?auth&type=alfa");
     },
     goMobileID() {
       this.$LogEvent({
@@ -232,7 +242,7 @@ export default {
         message: `Нажал на кнопку «Войти через MobileID`,
         timeUser: new Date(),
       });
-      document.location.href = "/sso?auth&type=mobileid&ref=/cabinet";
+      this.redirectWithRef("/sso?auth&type=mobileid");
     },
   },
   mounted() {
