@@ -78,9 +78,7 @@ export default {
     },
 
     getLabel() {
-      const controlName = this.$store.getters["data_card/getCopyForm"]
-        .flat(Infinity)
-        .find((item) => item.id === this.data.menudic && item.name === "Add");
+      const controlName = this.data.schema.find((item) => item.name === "Add");
 
       if (controlName) {
         return controlName.label;
