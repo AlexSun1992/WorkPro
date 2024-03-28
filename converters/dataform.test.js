@@ -1,4 +1,4 @@
-import dataform from "./dataform";
+import dataform from "./dataform.mjs";
 import {
   dataWithFileParams,
   dataWithoutFileParams,

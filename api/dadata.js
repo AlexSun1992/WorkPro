@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { mobile2Service } from "./../services/mobile2.services";
+import { mobile2Service } from "../services/mobile2.services.mjs";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");

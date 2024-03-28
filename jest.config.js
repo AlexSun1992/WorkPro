@@ -6,10 +6,11 @@ module.exports = {
     "^vue$": "vue/dist/vue.common.js",
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
-  moduleFileExtensions: ["js", "vue", "json"],
+  moduleFileExtensions: ["js", "mjs", "vue", "json"],
   transform: {
     "^.+\\.js$": "babel-jest",
     ".*\\.(vue)$": "@vue/vue2-jest",
+    "^.+\\.mjs$": "babel-jest",
   },
   collectCoverage: false,
   collectCoverageFrom: [

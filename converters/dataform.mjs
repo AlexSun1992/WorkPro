@@ -1,6 +1,6 @@
-import moment from "moment/moment";
-import controlConverter from "./control";
-import selectConverter from "./select";
+import moment from "moment/moment.js";
+import controlConverter from "./control.mjs";
+import selectConverter from "./select.mjs";
 
 const converter = {};
 
