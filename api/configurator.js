@@ -1,10 +1,10 @@
 import axios from "axios";
-import converter from "../converters/menu";
-import consts from "./urls";
-import { mobile2Service } from "../services/mobile2.services";
-import selectConverter from "../converters/select";
+import converter from "../converters/menu.mjs";
+import consts from "./urls.mjs";
+import { mobile2Service } from "../services/mobile2.services.mjs";
+import selectConverter from "../converters/select.mjs";
 import listConverter from "../converters/list";
-import menuConverter from "../converters/menu";
+import menuConverter from "../converters/menu.mjs";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");

@@ -1,4 +1,4 @@
-import consts from "../api/urls";
+import consts from "../api/urls.mjs";
 
 export const actions = {
   async nuxtServerInit(

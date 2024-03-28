@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
 import Axios from "axios";
-import api from "../api/urls";
+import api from "../api/urls.mjs";
 import { getErrorMessage } from "../utils/transform";
-import converter from "../converters/dataform";
-import consts from "../api/urls";
+import converter from "../converters/dataform.mjs";
+import consts from "../api/urls.mjs";
 import {
   convertUploaderFilesToFormData,
   mergeFormData,

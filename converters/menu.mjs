@@ -1,8 +1,8 @@
-import filterConverter from "./filter";
-import actionConverter from "./action";
-import tabConverter from "./tab";
-import iconConverter from "./icon";
-import wizardConverter from "./wizard";
+import filterConverter from "./filter.mjs";
+import actionConverter from "./action.mjs";
+import tabConverter from "./tab.mjs";
+import iconConverter from "./icon.mjs";
+import wizardConverter from "./wizard.mjs";
 
 const converter = {};
 

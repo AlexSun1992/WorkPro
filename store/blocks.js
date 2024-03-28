@@ -3,7 +3,7 @@ import {
   updateScript,
   clearScript,
 } from "../components/EventHandler/eventHandler.helper";
-import formConverter from "../converters/dataform";
+import formConverter from "../converters/dataform.mjs";
 import { isStringInItem } from "../components/Pages/Cabinet/Block/FilterBlock/SearchBlock.helper";
 
 export const state = () => ({

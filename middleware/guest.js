@@ -3,7 +3,7 @@ import {
   redirectTo,
   urlContainedUtms,
 } from "./router.helper";
-import consts from "@/api/urls";
+import consts from "@/api/urls.mjs";
 
 export default async function ({
   store,

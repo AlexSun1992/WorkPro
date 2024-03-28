@@ -1,12 +1,12 @@
 /* eslint-disable */
 import * as Sentry from "@sentry/node";
 import { ProfilingIntegration } from "@sentry/profiling-node";
-import formConverter from "../converters/dataform";
-import menuConverter from "../converters/menu";
-import filterConverter from "../converters/filter";
+import formConverter from "../converters/dataform.mjs";
+import menuConverter from "../converters/menu.mjs";
+import filterConverter from "../converters/filter.mjs";
 import freeMethodsConverter from "../converters/forfreemethods";
-import consts from "./urls";
-import { mobile2Service } from "./../services/mobile2.services";
+import consts from "./urls.mjs";
+import { mobile2Service } from "../services/mobile2.services.mjs";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");

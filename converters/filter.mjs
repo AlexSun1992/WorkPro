@@ -1,5 +1,5 @@
 /* eslint-disable */
-import moment from "moment/moment";
+import moment from "moment/moment.js";
 const converter = {};
 
 converter.compare = (a, b) => {

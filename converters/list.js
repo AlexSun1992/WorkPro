@@ -1,4 +1,4 @@
-import moment from "moment";
+const moment = require("moment");
 
 const converter = {};
 
@@ -94,4 +94,4 @@ converter.breadcrumbs = (meta) => {
   return null;
 };
 
-export default converter;
+module.exports = converter;

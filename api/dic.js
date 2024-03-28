@@ -1,7 +1,7 @@
-import selectConverter from "../converters/select";
-import consts from "./urls";
+import selectConverter from "../converters/select.mjs";
+import consts from "./urls.mjs";
 
-import { mobile2Service } from "../services/mobile2.services";
+import { mobile2Service } from "../services/mobile2.services.mjs";
 
 const cookieParser = require("cookie-parser");
 const express = require("express");
