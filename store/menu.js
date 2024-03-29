@@ -56,9 +56,11 @@ export const actions = {
         module = await this.$axios.get("/api/module").then((res) => {
           if (res) {
             commit("setMenu", res.data);
+
             if (params) {
               commit("setSettings", menuSettings.getData(res.data, params));
             }
+
             return res;
           } else {
             throw new Error("Error /api/module");
