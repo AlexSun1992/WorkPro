@@ -42,8 +42,18 @@ export const state = () => ({
   addFields: {},
   isFilterVisible: false,
   fetchingActions: [],
+  actionApplyErrorMessage: null,
+  isActionApplyError: false,
+  actionParamsTitle: null,
+  isSaveSuccess: false,
+  isActionFormDisabled: false,
 });
 export const getters = {
+  getIsActionFormDisabled: (state) => state.isActionFormDisabled,
+  getSaveSuccess: (state) => state.isSaveSuccess,
+  getActionParamsTitle: (state) => state.actionParamsTitle,
+  getisActionApplyError: (state) => state.isActionApplyError,
+  getactionApplyErrorMessage: (state) => state.actionApplyErrorMessage,
   getFiltersVisibleStatus: (state) => state.isFilterVisible,
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
@@ -576,10 +586,21 @@ export const actions = {
 };
 
 export const mutations = {
+  setIsActionFormDisabled(state, data) {
+    state.isActionFormDisabled = data;
+  },
+  setSaveSuccess(state, data) {
+    state.isSaveSuccess = data;
+  },
+  setActionParamsTitle(state, data) {
+    state.actionParamsTitle = data;
+  },
   setCacheKey(state, key) {
     state.formCacheKey = key;
   },
-
+  setIsActionApplyError(state, data) {
+    state.isActionApplyError = data;
+  },
   toggleFilterVisible(state, payload) {
     state.isFilterVisible = payload;
   },
@@ -624,6 +645,9 @@ export const mutations = {
   },
   setError(state, data) {
     state.isError = data;
+  },
+  setactionApplyErrorMessage(state, data) {
+    state.actionApplyErrorMessage = data;
   },
   setSavedError(state, data) {
     state.isSavedError = data;

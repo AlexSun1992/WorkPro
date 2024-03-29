@@ -5,7 +5,7 @@
       modal-class="cabinet"
       centered
       :title="actionParamsTitle"
-      :ok-disabled="actionFormDisabled"
+      :ok-disabled="isActionFormDisabled"
       ok-title="Да"
       cancel-title="Нет"
       auto-focus-button="ok"
@@ -23,7 +23,7 @@
         <Form
           v-if="actionParams.length"
           :data="actionParams"
-          :edit="!actionFormDisabled"
+          :edit="!isActionFormDisabled"
           @update="updateActionParams($event)"
         />
       </b-form>
@@ -76,7 +76,6 @@ import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
-import { getErrorMessage } from "@/utils/transform";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import { clearScript } from "~/components/EventHandler/eventHandler.helper";
 import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
@@ -112,11 +111,7 @@ export default {
   },
   data() {
     return {
-      actionParamsTitle: null,
       actionParamsId: null,
-      actionFormDisabled: false,
-      isActionApplyError: false,
-      actionApplyErrorMessage: null,
       disabledButtons: {
         background: "#dddbdd",
         boxShadow: "none",
@@ -127,6 +122,15 @@ export default {
     };
   },
   computed: {
+    isActionFormDisabled() {
+      return this.$store.getters["data_card/getIsActionFormDisabled"];
+    },
+    actionParamsTitle() {
+      return this.$store.getters["data_card/getActionParamsTitle"];
+    },
+    isActionApplyError() {
+      return this.$store.getters["data_card/getisActionApplyError"];
+    },
     getWindowLocation() {
       if (process.client === true) {
         return window.location;
@@ -138,6 +142,9 @@ export default {
       const path = this.$store.state.data_card.listPath;
       // Жестко убрали кнопку с полиса осаго (Игорь)
       return path && !path.includes("/55/0/19") && !path.includes("/55/0/738");
+    },
+    actionApplyErrorMessage() {
+      return this.$store.getters["data_card/getactionApplyErrorMessage"];
     },
     tabs() {
       return this.params.tabs;
@@ -159,9 +166,6 @@ export default {
     },
     actionParams() {
       return this.$store.getters["data_card/getActionParams"];
-    },
-    actionSettings() {
-      return this.params.actions.find((a) => a.id === this.actionParamsId);
     },
     closeAfterSave() {
       return this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
@@ -223,140 +227,14 @@ export default {
     confirmCancelHandler() {
       confirmResolve(false);
     },
-
-    async startAction(e) {
-      const field = this.data.find((f) => f.fieldId === e.fieldId);
-      this.isActionApplyError = false;
-      const actionId = e.value.replace("Item", "");
-      let moduleId;
-      let cardId;
-
-      if (!this.params.page) {
-        moduleId = this.$route.params.idModule;
-        cardId = this.$route.params.idCard;
-      } else {
-        moduleId = this.params.page.idModule;
-        cardId = this.$store.getters["data_card/getCardId"];
-      }
-      let params = {
-        idCard: this.$store.getters["data_card/getCardId"],
-        idItem: this.$route.params.idItem,
-        idModule: this.$route.params.idModule,
-        idRel: this.$store.getters["data_card/getCardRelId"],
-      };
-
-      await this.$store.dispatch("data_card/fetchActionParams", {
-        moduleId,
-        actionId,
-        cardId,
-      });
-      this.actionParamsTitle = field.label;
-      this.actionParamsId = parseInt(actionId, 10);
-
-      if (this.actionSettings.isDialog) {
-        this.$store.commit("data_card/setLoading", false);
-        const confirmResult = await this.confirmAction();
-        if (!confirmResult) {
-          return;
-        }
-      }
-
-      const isValidParams = await this.$store.dispatch(
-        "data_card/validateActionParams"
-      );
-      if (!isValidParams) {
-        return;
-      }
-
-      const flatmenu = this.$store.getters["menu/flatmenu"];
-      const menuItem = flatmenu.find(
-        (item) => item.IDITEM == this.$route.params.idItem
-      );
-      const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
-
-      if (CUR.NTYPE === 38) {
-        this.saveSuccess = false;
-        const data = await eventHandler(
-          this.data.map((a) => ({ ...a })),
-          e,
-          "beforeSave"
-        );
-
-        if (data) {
-          this.$store.commit("data_card/setForm", data || this.data);
-        }
-        // Не понятно как вычислить этот параметр (step), поэтому захардкожен 0
-        await this.saveDataCard(0);
-
-        if (this.saveSuccess) {
-          const data = await eventHandler(
-            this.data.map((a) => ({ ...a })),
-            e,
-            "afterSave"
-          );
-
-          if (data) {
-            this.$store.commit("data_card/setForm", data || this.data);
-          }
-        }
-        return;
-      }
-      if (CUR.NTYPE === 39) {
-        this.$store.commit("data_card/setLoading", false);
-        this.$store.commit("data_card/setReadOnly", false);
-        const data = await eventHandler(
-          this.data.map((a) => ({ ...a })),
-          e
-        );
-
-        if (data) {
-          this.$store.commit("data_card/setForm", data || this.data);
-        }
-        await this.$store.dispatch("data_card/fetchList", params);
-        params = {
-          idCard: this.$store.getters["data_card/getCardId"],
-          idItem: this.$route.params.idItem,
-          idModule: this.$route.params.idModule,
-          idRel: this.$store.getters["data_card/getCardRelId"],
-        };
-        await this.$store.dispatch("data_card/fetchForm", params);
-        return;
-      }
-      await this.applyAction();
-    },
-
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
-      if (field.type === "button") {
-        this.$store.commit("data_card/setError", false);
-        this.$store.commit("data_card/setSavedError", false);
+
+      if (field.type === "button" && e.action) {
+        this.saveDataCard(0);
       }
       if (field.type !== "button") {
         this.$store.commit("data_card/cardChanged", true);
-      }
-      if (field.type === "button" && e.action) {
-        const actionId = Number(e.value.replace("Item", ""));
-        this.$store.commit("data_card/setFetchingAction", {
-          actionId,
-          isFetching: true,
-        });
-        await this.startAction(e).finally(() => {
-          this.$store.commit("data_card/setFetchingAction", {
-            actionId,
-            isFetching: false,
-          });
-        });
-        return;
-      }
-      if (field.type === "button") {
-        const data = await eventHandler(
-          this.data.map((a) => ({ ...a })),
-          e
-        );
-
-        if (data) {
-          this.$store.commit("data_card/setForm", data || this.data);
-        }
       }
       if (field.type === "OneToMany") {
         this.$store.commit("data_card/setFormOneToManyField", {
@@ -423,7 +301,6 @@ export default {
             data[i].error) &&
           value !== 0
         ) {
-          console.log("error", data[i]);
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
         }
@@ -468,7 +345,6 @@ export default {
           }
         }
       }
-
       return valid;
     },
     async saveDataCard(step = 1) {
@@ -583,7 +459,7 @@ export default {
             return;
           }
           if (resp?.status === 200) {
-            this.saveSuccess = true;
+            this.$store.commit("data_card/setSaveSuccess", true);
             if (this.$route.query?.ref && resp) {
               this.$router.push(this.$route.query?.ref);
               return;
@@ -636,6 +512,7 @@ export default {
       }
     },
     cancelDataCard() {
+      // обращается с CardPage
       this.$store.commit("data_card/cardChanged", false);
       this.$store.commit(
         "data_card/setForm",
@@ -645,169 +522,7 @@ export default {
     updateActionParams(e) {
       this.$store.commit("data_card/setActionParamsField", e);
     },
-    async applyAction(evt) {
-      if (evt) evt.preventDefault();
-      if (this.actionSettings.type === 2) {
-        if (this.actionSettings.command) {
-          const redirectURL = this.$route.params.idCard
-            ? `/cabinet/${this.$route.params.idModule}/0/${this.actionSettings.command}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
-            : `/cabinet/${this.$route.params.idModule}/0/${this.actionSettings.command}/0?ref=${this.$route.fullPath}`;
 
-          if (this.actionSettings.isCurrentWindow) {
-            this.$router.push(redirectURL);
-          } else {
-            window.open(redirectURL);
-            this.$nextTick(() => {
-              this.$bvModal.hide("confirmAction");
-            });
-          }
-        } else {
-          throw new Error(`В опции кнопки не указан идентификатор меню."`);
-        }
-        return;
-      }
-
-      const relId =
-        this.$route.params.idRel ||
-        this.$route.query.rel ||
-        this.$store.getters["data_card/getFormParams"]?.idRel;
-
-      const rowId =
-        this.$route.params.idCard ||
-        this.$store.getters["data_card/getFormParams"]?.idCard;
-
-      this.$store.commit("data_card/setError", false);
-      this.$store.commit("data_card/setSavedError", false);
-      this.$store.commit("data_card/setLoading", true);
-
-      if (this.actionSettings.type === 3) {
-        const requestDownLoadFileUrl = new URL(
-          "/am/main/v2/report2",
-          window.location.origin
-        );
-
-        requestDownLoadFileUrl.searchParams.set("id", rowId);
-        requestDownLoadFileUrl.searchParams.set("rel", relId);
-        requestDownLoadFileUrl.searchParams.set(
-          "idaction",
-          this.actionSettings.id
-        );
-        requestDownLoadFileUrl.searchParams.set(
-          "relaction",
-          this.actionSettings.relaction
-        );
-        await this.$axios({
-          url: requestDownLoadFileUrl.href,
-          method: "GET",
-          responseType: "blob",
-        })
-          .then((resp) => {
-            saveFileAxios(resp, !this.actionSettings?.isCurrentWindow);
-          })
-          .catch(() => {
-            this.$store.commit("data_card/setError", true);
-            this.$bvToast.toast("Не удалось скачать файл", {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
-            });
-          })
-          .finally(() => this.$store.commit("data_card/setLoading", false));
-        return;
-      }
-
-      this.isActionApplyError = false;
-      this.actionFormDisabled = true;
-      const response = await this.$store.dispatch("data_card/executeAction", {
-        actionId: this.actionParamsId,
-        relActionId: this.actionSettings.relaction,
-        relId,
-        rowId,
-        body: this.actionParams,
-      });
-
-      this.actionFormDisabled = false;
-      if (response?.status === 500 || response?.status === 520) {
-        this.$store.commit("data_card/setLoading", false);
-        if (this.actionSettings.isDialog) {
-          this.isActionApplyError = true;
-          this.actionApplyErrorMessage = getErrorMessage(response.data);
-        } else {
-          this.$store.commit("data_card/setSavedError", true);
-          this.$store.commit("data_card/setErrorMessage", response.data);
-        }
-      }
-      if (response?.status === 200) {
-        this.$nextTick(() => {
-          this.$bvModal.hide("confirmAction");
-        });
-        if (this.$route.query?.ref && this.actionSettings?.closeAfter) {
-          this.$router.push(this.$route.query?.ref);
-        }
-        if (response.data.POUTVALUE) {
-          if (response.data.POUTVALUE.includes("/")) {
-            if (response.data.POUTVALUE.includes("cabinet")) {
-              this.$router.push(response.data.POUTVALUE);
-            } else {
-              const url = response.data.POUTVALUE;
-              if (url.includes("/file")) {
-                const [, , , idReport, idCard] = url.split("/");
-                try {
-                  const file = await this.$axios({
-                    url: `/am/main/v2/report?idreport=${idReport}&id=${idCard}`,
-                    method: "GET",
-                    responseType: "blob",
-                  });
-                  const fileName = url.split("/").pop().split("?")[0];
-                  const fileUrl = window.URL.createObjectURL(
-                    new Blob([file.data], {
-                      type: file.headers["content-type"],
-                    })
-                  );
-                  const link = document.createElement("a");
-                  link.href = fileUrl;
-                  link.setAttribute("download", fileName);
-                  link.setAttribute("target", "_blank");
-                  document.body.appendChild(link);
-                  link.click();
-                } catch (e) {
-                  this.$bvToast.toast("Не удалось скачать файл", {
-                    title: "Ошибка",
-                    variant: "danger",
-                    noAutoHide: true,
-                    solid: true,
-                  });
-                }
-              } else {
-                //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
-                setTimeout(() => {
-                  window.open(
-                    response.data.POUTVALUE,
-                    this.actionSettings?.isCurrentWindow ? "_self" : "_blank"
-                  );
-                });
-              }
-            }
-          } else {
-            this.$root.$bvToast.toast(response.data.POUTVALUE, {
-              title: "",
-              variant: "success",
-              solid: true,
-              autoHideDelay: 5000,
-              toaster: "b-toaster-top-full",
-            });
-          }
-        }
-        if (this.actionSettings?.refresh) {
-          await this.$store.dispatch("data_card/fetchForm", this.$route.params);
-        }
-        if (this.wizardTabs) {
-          await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
-        }
-        this.$store.commit("data_card/setLoading", false);
-      }
-    },
     async callbackAction(url) {
       try {
         if (controller) {
