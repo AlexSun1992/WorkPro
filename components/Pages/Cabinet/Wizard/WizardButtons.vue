@@ -1,7 +1,12 @@
 <template>
   <div class="mt-4 buttons row">
     <div class="col-auto" v-if="currentTab.order > 1">
-      <button type="button" class="btn btn-secondary" @click="goBack">
+      <button
+        v-if="btnBackVisible"
+        type="button"
+        class="btn btn-secondary"
+        @click="goBack"
+      >
         {{ showBtnNameBack }}
       </button>
     </div>
@@ -92,6 +97,10 @@ export default {
         }
       });
       return wizardButtonBack;
+    },
+
+    btnBackVisible() {
+      return this.btnBack?.visible === true;
     },
 
     showBtnNameBack() {

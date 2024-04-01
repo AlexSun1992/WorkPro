@@ -51,6 +51,7 @@ describe("WizardButtons", () => {
         type: "WizardButton",
         name: "Back",
         label: "В бесконечность и далее",
+        visible: true,
       },
     ]);
     await wrapper.vm.$nextTick();
@@ -62,8 +63,7 @@ describe("WizardButtons", () => {
     createComponent(store);
     store.commit("data_card/setForm", []);
     await wrapper.vm.$nextTick();
-
-    expect(wrapper.text()).toContain("Назад");
+    expect(wrapper.text()).not.toContain("Назад");
     expect(wrapper.text()).not.toContain("В бесконечность и далее");
   });
 });
