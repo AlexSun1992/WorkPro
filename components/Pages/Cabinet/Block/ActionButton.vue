@@ -323,7 +323,8 @@ export default {
           data.fieldId === 38389 ||
           data.fieldId === 36384 ||
           data.fieldId === 37111 ||
-          data.fieldId === 36232
+          data.fieldId === 36232 ||
+          data.fieldId === 36233
         ) {
           this.$emit("update", data);
           return;
