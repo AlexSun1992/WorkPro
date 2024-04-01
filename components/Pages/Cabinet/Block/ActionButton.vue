@@ -77,7 +77,7 @@ export default {
     },
     async fetchAction(e) {
       const field = this.$attrs.data;
-      this.$store.commit("data_card/setisActionApplyError", false);
+      this.$store.commit("data_card/setIsActionApplyError", false);
       const actionId = e.value.replace("Item", "");
       let moduleId;
       let cardId;
@@ -319,6 +319,15 @@ export default {
           value: this.$attrs.data.name,
           action: this.$attrs.data.name.includes("Item"),
         };
+        if (
+          data.fieldId === 38389 ||
+          data.fieldId === 36384 ||
+          data.fieldId === 37111 ||
+          data.fieldId === 36232
+        ) {
+          this.$emit("update", data);
+          return;
+        }
         const field = this.$attrs.data;
         if (field.type === "button") {
           this.$store.commit("data_card/setError", false);
@@ -442,7 +451,9 @@ export default {
 
   computed: {
     defaultButtonClass() {
-      return this.$attrs.data?.cssClass ? "" : "btn-secondary";
+      return this.$attrs.data?.cssClass || this.$vnode.data.staticClass
+        ? ""
+        : "btn-secondary";
     },
     isSaveSuccess() {
       return this.$store.getters["data_card/getSaveSuccess"];
