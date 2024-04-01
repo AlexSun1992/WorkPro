@@ -2086,18 +2086,9 @@ a.btn-secondary:hover {
   color: #fe8f5c;
 }
 
-.btn-primary:disabled,
-.btn-success.disabled {
-  background-color: #f2f2f2;
-  color: #c3c3c3 !important;
-}
 .conf-block .btn-primary:disabled,
 .conf-block .btn-success.disabled {
   border: 2px solid #f2f2f2;
-}
-.btn-primary:disabled,
-.btn-success.disabled {
-  border: 2px solid #c3c3c3;
 }
 
 .btn-warning,
@@ -5795,4 +5786,95 @@ input.check-collapse:checked + label span + span {
   font-family: Raleway;
   color: rgba(235, 87, 87, 1);
   font-size: 2rem;
+}
+
+.text-normal {
+  white-space: normal !important;
+}
+
+.btn-primary:disabled,
+.btn-primary.disabled,
+.btn-success:disabled,
+.btn-success.disabled {
+  background-color: #f0f0f0;
+  color: #c3c3c3 !important;
+  border: 2px solid #f0f0f0;
+  pointer-events: none;
+}
+.btn-secondary:disabled,
+.btn-secondary.disabled {
+  background-color: transparent;
+  color: #c3c3c3 !important;
+  border: 2px solid #f0f0f0;
+  pointer-events: none;
+}
+.btn-primary:disabled .sr-only,
+.btn-primary.disabled .sr-only,
+.btn-success:disabled .sr-only,
+.btn-success.disable .sr-only {
+  background: linear-gradient(90deg, #d0d0d0 10%, transparent 42%);
+}
+.btn-primary:disabled .sr-only:before,
+.btn-primary.disabled .sr-only:before,
+.btn-success:disabled .sr-only:before,
+.btn-success.disable .sr-only:before {
+  background: #d0d0d0;
+}
+
+.btn-primary:disabled .sr-only:after,
+.btn-primary.disabled .sr-only:after,
+.btn-success:disabled .sr-only:after,
+.btn-success.disable .sr-only:after {
+  background: #f0f0f0;
+}
+.btn-secondary:disabled .sr-only,
+.btn-secondary.disabled .sr-only {
+  background: linear-gradient(90deg, #c3c3c3 10%, hsla(0, 0%, 100%, 0) 42%);
+}
+.btn-secondary:disabled .sr-only:before,
+.btn-secondary.disabled .sr-only:before {
+  background: #c3c3c3;
+}
+.btn-secondary:disabled .sr-only:after,
+.btn-secondary.disabled .sr-only:after {
+  background: #f2f4f5;
+}
+
+.conf-block .btn-secondary:disabled .sr-only:after,
+.conf-block .btn-secondary.disabled .sr-only:after {
+  background: #fff;
+}
+
+.btn-secondary:disabled .sr-only,
+.btn-secondary.disabled .sr-only {
+  background: linear-gradient(90deg, #c3c3c3 10%, hsla(0, 0%, 100%, 0) 42%);
+}
+
+.btn-secondary:disabled .sr-only:before,
+.btn-secondary.disabled .sr-only:before {
+  background: #c3c3c3;
+}
+.btn-secondary:disabled .sr-only:after,
+.btn-secondary.disabled .sr-only:after {
+  background: #f2f4f5;
+}
+
+.conf-block .btn-secondary:disabled .sr-only:after,
+.conf-block .btn-secondary.disabled .sr-only:after {
+  background: #fff;
+}
+
+.btn-secondary .sr-only {
+  background: linear-gradient(90deg, #fe7333 10%, hsla(0, 0%, 100%, 0) 42%);
+}
+
+.btn-secondary .sr-only:before {
+  background: #fe7333;
+}
+.btn-secondary .sr-only:after {
+  background: #f2f4f5;
+}
+
+.btn-secondary:hover .sr-only:after {
+  background: #fff1eb;
 }
