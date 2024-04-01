@@ -377,7 +377,6 @@ export const actions = {
         }`,
         body
       );
-
       commit("setSavedError", false);
       commit("setCardId", resp.data[0].ID);
       commit("setCardRelId", resp.data[0].REL);

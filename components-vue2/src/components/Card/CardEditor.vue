@@ -4,12 +4,14 @@
       v-if="isBlock"
       :data="getForm"
       :edit="!isReadOnly"
+      :params="params"
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
     />
     <Form
       v-if="!isBlock && !getError"
       :data="getForm"
+      :params="params"
       :edit="!isReadOnly"
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
@@ -308,6 +310,7 @@ export default {
           zone,
           form: this.getForm,
         });
+
         if (resp.status === 200) {
           await this.$store.dispatch("data_card/fetchForm", {
             ...this.getFormParams,
