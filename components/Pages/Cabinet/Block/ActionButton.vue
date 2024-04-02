@@ -8,7 +8,7 @@
     type="button"
     :disabled="isDisabled"
   >
-    <slot><div v-text="getLabel || action.label"></div></slot>
+    <slot>{{ buttonText }}</slot>
     <b-spinner
       v-if="isLoading && isFetching"
       variant="success"
@@ -451,6 +451,9 @@ export default {
   },
 
   computed: {
+    buttonText() {
+      return this.getLabel || this.action.label;
+    },
     defaultButtonClass() {
       return this.$attrs.data?.cssClass || this.$vnode.data.staticClass
         ? ""
