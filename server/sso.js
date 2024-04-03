@@ -122,6 +122,9 @@ function getAuthBody(authType, req) {
       if (req.query.state && req.query.passport) {
         return { state: req.query.state, passport: req.query.passport };
       }
+      if (req.query.state) {
+        return { state: req.query.state };
+      }
     }
 
     if (authType === "alfa") {
