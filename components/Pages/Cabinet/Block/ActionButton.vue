@@ -22,6 +22,22 @@ import { fetchPoutvalue } from "../../../../utils/fetchPoutvalue";
 import { saveFileAxios } from "../../../../utils/saveFile";
 
 const DEFAULT_DISABLE_PERIOD = 60;
+/**
+ * Выполнить процедуру для строки
+ * @TODO Явно использовать этот тип в коде
+ */
+const ACTION_TYPE_START_ACTION = 4;
+/** Выполнить процедуру для строки (с последующим ожиданием) */
+const ACTION_TYPE_RUN_WITH_PAUSE = 56;
+/** Запустить пункт меню */
+const ACTION_TYPE_START_MENU = 2;
+/** Выполнить отчет для строки */
+const ACTION_TYPE_RUN_REPORT = 3;
+/** Сохранить карточку */
+const ACTION_TYPE_SAVE_CARD = 38;
+/** Обновить карточку */
+const ACTION_TYPE_REFRESH_CARD = 39;
+
 export default {
   name: "ActionButton",
   components: {},
@@ -75,10 +91,101 @@ export default {
       }
       return fields;
     },
-    async fetchAction(e) {
+
+    /** Обработка нажатия на кнопку */
+    async startAction() {
+      if (this.action.LREQUESTCODE) {
+        this.confirmAction();
+      }
+      if (this.$attrs.data) {
+        await this.updatedFields(this.$attrs.data, "actionClicked");
+        const data = {
+          fieldId: this.$attrs.data.fieldId,
+          value: this.$attrs.data.name,
+          action: this.$attrs.data.name.includes("Item"),
+        };
+        if (
+          data.fieldId === 38389 ||
+          data.fieldId === 36384 ||
+          data.fieldId === 37111 ||
+          data.fieldId === 36232 ||
+          data.fieldId === 36233
+        ) {
+          this.$emit("update", data);
+          return;
+        }
+        const field = this.$attrs.data;
+        if (field.type === "button") {
+          this.$store.commit("data_card/setError", false);
+          this.$store.commit("data_card/setSavedError", false);
+        }
+        if (field.type === "button" && data.action) {
+          const actionId = Number(data.value.replace("Item", ""));
+          this.$store.commit("data_card/setFetchingAction", {
+            actionId,
+            isFetching: true,
+          });
+          await this.fetchAction(data).finally(() => {
+            this.$store.commit("data_card/setFetchingAction", {
+              actionId,
+              isFetching: false,
+            });
+          });
+          return;
+        }
+        if (field.type === "button") {
+          await this.updatedFields(data);
+        }
+        this.$store.commit("data_card/setFormField", {
+          fieldId: data.fieldId,
+          name: data.name,
+          value: data.value,
+        });
+        return;
+      }
+      await eventHandler([], { actionId: this.actionID }, "actionClicked");
+
+      if (!this.action.LHIDEDLG) {
+        const confirmResult = await this.confirmAction();
+        if (!confirmResult) {
+          return;
+        }
+      }
+
+      if (this.action.NTYPE === ACTION_TYPE_START_MENU) {
+        if (this.action.SCONST) {
+          const redirectURL = this.$route.params.idCard
+            ? `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
+            : `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`;
+
+          if (this.action.LCURWINDOW) {
+            this.$router.push(redirectURL);
+          } else {
+            window.open(redirectURL);
+            this.$nextTick(() => {
+              this.$bvModal.hide("confirmAction");
+            });
+          }
+        } else {
+          throw new Error(`В опции кнопки не указан идентификатор меню."`);
+        }
+        return;
+      }
+
+      const actionResult = await this.executeAction();
+
+      fetchPoutvalue(actionResult, {
+        router: this.$router,
+        isInNewWindow: !this.action.LCURWINDOW,
+        toaster: this.$bvToast,
+      });
+    },
+
+    /** Непонятно зачем функция */
+    async fetchAction(data) {
       const field = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
-      const actionId = e.value.replace("Item", "");
+      const actionId = data.value.replace("Item", "");
       let moduleId;
       let cardId;
       if (!this.$attrs.params.page) {
@@ -122,20 +229,20 @@ export default {
         (item) => item.IDITEM == this.$route.params.idItem
       );
       const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
-      if (CUR.NTYPE === 38) {
+      if (CUR.NTYPE === ACTION_TYPE_SAVE_CARD) {
         this.$store.commit("data_card/setSaveSuccess", false);
-        await this.updatedFields(e, "beforeSave");
+        await this.updatedFields(data, "beforeSave");
         // Не понятно как вычислить этот параметр (step), поэтому захардкожен 0
-        this.$emit("update", e);
+        this.$emit("update", data);
         if (this.isSaveSuccess) {
-          await this.updatedFields(e, "afterSave");
+          await this.updatedFields(data, "afterSave");
         }
         return;
       }
-      if (CUR.NTYPE === 39) {
+      if (CUR.NTYPE === ACTION_TYPE_REFRESH_CARD) {
         this.$store.commit("data_card/setLoading", false);
         this.$store.commit("data_card/setReadOnly", false);
-        await this.updatedFields(e);
+        await this.updatedFields(data);
         await this.$store.dispatch("data_card/fetchList", params);
         params = {
           idCard: this.$store.getters["data_card/getCardId"],
@@ -148,28 +255,10 @@ export default {
       }
       await this.applyAction();
     },
+
+    /** Непонятно зачем фукнция */
     async applyAction(evt) {
       if (evt) evt.preventDefault();
-      if (this.action.NTYPE === 2) {
-        if (this.action.SCONST) {
-          const redirectURL = this.$route.params.idCard
-            ? `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
-            : `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`;
-
-          if (this.action.LCURWINDOW) {
-            this.$router.push(redirectURL);
-          } else {
-            window.open(redirectURL);
-            this.$nextTick(() => {
-              this.$bvModal.hide("confirmAction");
-            });
-          }
-        } else {
-          throw new Error(`В опции кнопки не указан идентификатор меню."`);
-        }
-        return;
-      }
-
       const relId =
         this.$route.params.idRel ||
         this.$route.query.rel ||
@@ -183,7 +272,7 @@ export default {
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setLoading", true);
 
-      if (this.action.NTYPE === 3) {
+      if (this.action.NTYPE === ACTION_TYPE_RUN_REPORT) {
         const requestDownLoadFileUrl = new URL(
           "/am/main/v2/report2",
           window.location.origin
@@ -308,97 +397,8 @@ export default {
         this.$store.commit("data_card/setLoading", false);
       }
     },
-    async startAction() {
-      if (this.action.LREQUESTCODE) {
-        this.confirmAction();
-      }
-      if (this.$attrs.data) {
-        await this.updatedFields(this.$attrs.data, "actionClicked");
-        const data = {
-          fieldId: this.$attrs.data.fieldId,
-          value: this.$attrs.data.name,
-          action: this.$attrs.data.name.includes("Item"),
-        };
-        if (
-          data.fieldId === 38389 ||
-          data.fieldId === 36384 ||
-          data.fieldId === 37111 ||
-          data.fieldId === 36232 ||
-          data.fieldId === 36233
-        ) {
-          this.$emit("update", data);
-          return;
-        }
-        const field = this.$attrs.data;
-        if (field.type === "button") {
-          this.$store.commit("data_card/setError", false);
-          this.$store.commit("data_card/setSavedError", false);
-        }
-        if (field.type === "button" && data.action) {
-          const actionId = Number(data.value.replace("Item", ""));
-          this.$store.commit("data_card/setFetchingAction", {
-            actionId,
-            isFetching: true,
-          });
-          await this.fetchAction(data).finally(() => {
-            this.$store.commit("data_card/setFetchingAction", {
-              actionId,
-              isFetching: false,
-            });
-          });
-          return;
-        }
-        if (field.type === "button") {
-          await this.updatedFields(data);
-        }
-        this.$store.commit("data_card/setFormField", {
-          fieldId: data.fieldId,
-          name: data.name,
-          value: data.value,
-        });
-        return;
-      }
-      await eventHandler([], { actionId: this.actionID }, "actionClicked");
 
-      if (!this.action.LHIDEDLG) {
-        const confirmResult = await this.confirmAction();
-        if (!confirmResult) {
-          return;
-        }
-      }
-
-      if (this.action.NTYPE === 2) {
-        if (this.action.SCONST) {
-          const invalidRowID = this.rowId === null || this.rowId === undefined;
-          if (invalidRowID) {
-            const redirection = `/cabinet/55/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`;
-            if (this.action.LCURWINDOW) {
-              this.$router.push(redirection);
-            } else {
-              window.open(redirection);
-            }
-          }
-          if (!invalidRowID) {
-            const redirection = `/cabinet/55/0/${this.action.SCONST}/0/${this.rowId}?ref=${this.$route.fullPath}`;
-            if (this.action.LCURWINDOW) {
-              this.$router.push(redirection);
-            } else {
-              window.open(redirection);
-            }
-          }
-        }
-        return;
-      }
-
-      const actionResult = await this.executeAction();
-
-      fetchPoutvalue(actionResult, {
-        router: this.$router,
-        isInNewWindow: !this.action.LCURWINDOW,
-        toaster: this.$bvToast,
-      });
-    },
-
+    /** Окно подтверждения выполнения действия */
     confirmAction() {
       const titleVNode = this.action.SQUEST
         ? this.action.SQUEST
@@ -417,6 +417,8 @@ export default {
         centered: true,
       });
     },
+
+    /** Запрос к API на выполнение действия */
     async executeAction() {
       try {
         const result = await this.$store.dispatch("blocks/executeAction", {
@@ -476,7 +478,7 @@ export default {
     },
 
     isActionWithPause() {
-      if (this.action.NTYPE == 56) {
+      if (this.action.NTYPE === ACTION_TYPE_RUN_WITH_PAUSE) {
         return true;
       }
       return false;
