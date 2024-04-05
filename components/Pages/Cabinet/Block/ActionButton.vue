@@ -91,6 +91,7 @@ export default {
       }
       return fields;
     },
+
     /** Обработка нажатия на кнопку */
     async startAction() {
       if (this.action.LREQUESTCODE) {
@@ -153,23 +154,20 @@ export default {
 
       if (this.action.NTYPE === ACTION_TYPE_START_MENU) {
         if (this.action.SCONST) {
-          const invalidRowID = this.rowId === null || this.rowId === undefined;
-          if (invalidRowID) {
-            const redirection = `/cabinet/55/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`;
-            if (this.action.LCURWINDOW) {
-              this.$router.push(redirection);
-            } else {
-              window.open(redirection);
-            }
+          const redirectURL = this.$route.params.idCard
+            ? `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
+            : `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`;
+
+          if (this.action.LCURWINDOW) {
+            this.$router.push(redirectURL);
+          } else {
+            window.open(redirectURL);
+            this.$nextTick(() => {
+              this.$bvModal.hide("confirmAction");
+            });
           }
-          if (!invalidRowID) {
-            const redirection = `/cabinet/55/0/${this.action.SCONST}/0/${this.rowId}?ref=${this.$route.fullPath}`;
-            if (this.action.LCURWINDOW) {
-              this.$router.push(redirection);
-            } else {
-              window.open(redirection);
-            }
-          }
+        } else {
+          throw new Error(`В опции кнопки не указан идентификатор меню."`);
         }
         return;
       }
@@ -182,10 +180,12 @@ export default {
         toaster: this.$bvToast,
       });
     },
-    async fetchAction(e) {
+
+    /** Непонятно зачем функция */
+    async fetchAction(data) {
       const field = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
-      const actionId = e.value.replace("Item", "");
+      const actionId = data.value.replace("Item", "");
       let moduleId;
       let cardId;
       if (!this.$attrs.params.page) {
@@ -231,18 +231,18 @@ export default {
       const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
       if (CUR.NTYPE === ACTION_TYPE_SAVE_CARD) {
         this.$store.commit("data_card/setSaveSuccess", false);
-        await this.updatedFields(e, "beforeSave");
+        await this.updatedFields(data, "beforeSave");
         // Не понятно как вычислить этот параметр (step), поэтому захардкожен 0
-        this.$emit("update", e);
+        this.$emit("update", data);
         if (this.isSaveSuccess) {
-          await this.updatedFields(e, "afterSave");
+          await this.updatedFields(data, "afterSave");
         }
         return;
       }
       if (CUR.NTYPE === ACTION_TYPE_REFRESH_CARD) {
         this.$store.commit("data_card/setLoading", false);
         this.$store.commit("data_card/setReadOnly", false);
-        await this.updatedFields(e);
+        await this.updatedFields(data);
         await this.$store.dispatch("data_card/fetchList", params);
         params = {
           idCard: this.$store.getters["data_card/getCardId"],
@@ -255,28 +255,10 @@ export default {
       }
       await this.applyAction();
     },
+
+    /** Непонятно зачем фукнция */
     async applyAction(evt) {
       if (evt) evt.preventDefault();
-      if (this.action.NTYPE === ACTION_TYPE_START_MENU) {
-        if (this.action.SCONST) {
-          const redirectURL = this.$route.params.idCard
-            ? `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
-            : `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`;
-
-          if (this.action.LCURWINDOW) {
-            this.$router.push(redirectURL);
-          } else {
-            window.open(redirectURL);
-            this.$nextTick(() => {
-              this.$bvModal.hide("confirmAction");
-            });
-          }
-        } else {
-          throw new Error(`В опции кнопки не указан идентификатор меню."`);
-        }
-        return;
-      }
-
       const relId =
         this.$route.params.idRel ||
         this.$route.query.rel ||
@@ -415,6 +397,7 @@ export default {
         this.$store.commit("data_card/setLoading", false);
       }
     },
+
     /** Окно подтверждения выполнения действия */
     confirmAction() {
       const titleVNode = this.action.SQUEST
@@ -434,6 +417,7 @@ export default {
         centered: true,
       });
     },
+
     /** Запрос к API на выполнение действия */
     async executeAction() {
       try {
