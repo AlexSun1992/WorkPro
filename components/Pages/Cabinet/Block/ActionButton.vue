@@ -4,7 +4,7 @@
     @click.stop="startAction()"
     class="btn"
     :class="defaultButtonClass"
-    :id="id"
+    :id="componentId"
     type="button"
     :disabled="isDisabled"
   >
@@ -453,9 +453,18 @@ export default {
   },
 
   computed: {
+    componentId() {
+      /**
+       * @type {import('../../../../converters/dataform.types').Lk2Webfield}
+       */
+      const field = this.$attrs.data;
+      return field ? field.webId : this.id;
+    },
+
     buttonText() {
       return this.getLabel || this.action.label;
     },
+
     defaultButtonClass() {
       return this.$attrs.data?.cssClass || this.$vnode.data.staticClass
         ? ""
