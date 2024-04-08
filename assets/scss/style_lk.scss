@@ -4129,6 +4129,7 @@ a[data-newcount][data-newcolor="RED"]:after {
   display: none;
 }
 
+.insurance-case .pay-notification,
 .block-policy_small .pay-notification {
   position: absolute;
   background: #fff1eb;
@@ -4146,6 +4147,11 @@ a[data-newcount][data-newcolor="RED"]:after {
   padding-right: 43px;
 }
 
+.insurance-case .pay-notification + .title {
+  max-width: calc(100% - 300px);
+}
+
+.insurance-case .pay-notification:after,
 .block-policy_small .pay-notification:after {
   width: 23px;
   height: 23px;
@@ -5788,6 +5794,47 @@ input.check-collapse:checked + label span + span {
   font-size: 2rem;
 }
 
+@media (max-width: 992px) {
+  .insurance-case .pay-notification {
+    position: relative;
+    top: 0;
+    margin: 0px 0 16px 0;
+    right: 0;
+    width: auto;
+    display: table;
+  }
+
+  .insurance-case .pay-notification + .title {
+    max-width: 100%;
+  }
+}
+
+.insured-events .pay-notification {
+  position: relative;
+  background: #fff1eb;
+  box-shadow: 0px 4px 10px rgb(0 0 0 / 20%);
+  border-radius: 100px;
+  z-index: 1;
+  color: #eb5757;
+  font-size: 1.125rem;
+  margin: 0 0 5px 0;
+  line-height: 28px;
+  text-align: left;
+  padding-left: 12px;
+  padding-right: 43px;
+}
+
+.insured-events .pay-notification:after {
+  width: 23px;
+  height: 23px;
+  background: get-asset("/img/watch.svg") 50% 50% no-repeat;
+  content: "";
+  display: block;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+}
 .text-normal {
   white-space: normal !important;
 }
