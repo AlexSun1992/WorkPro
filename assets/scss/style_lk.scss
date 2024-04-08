@@ -5793,6 +5793,10 @@ input.check-collapse:checked + label span + span {
   color: rgba(235, 87, 87, 1);
   font-size: 2rem;
 }
+.insurance-case .pay-notification {
+  line-height: 31px;
+  font-size: 0.875rem;
+}
 
 @media (max-width: 992px) {
   .insurance-case .pay-notification {
@@ -5816,7 +5820,7 @@ input.check-collapse:checked + label span + span {
   border-radius: 100px;
   z-index: 1;
   color: #eb5757;
-  font-size: 1.125rem;
+  font-size: 0.875rem;
   margin: 0 0 5px 0;
   line-height: 28px;
   text-align: left;
