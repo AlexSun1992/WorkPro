@@ -220,7 +220,7 @@ export default {
       const isValidParams = await this.$store.dispatch(
         "data_card/validateActionParams"
       );
-      if (!isValidParams) {
+      if (!isValidParams && !this.isDownloadControlButton) {
         return;
       }
 
