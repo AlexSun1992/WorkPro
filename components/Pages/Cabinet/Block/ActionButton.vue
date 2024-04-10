@@ -509,9 +509,7 @@ export default {
     },
 
     isLoading() {
-      return this.isDownloadControlButton
-        ? this.isFetching
-        : this.$store.getters["data_card/getLoading"];
+      return this.isFetching;
     },
 
     isDisabled() {
