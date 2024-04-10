@@ -9,37 +9,38 @@
       <span v-if="data.helpText" class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
+          (?)<vue-easy-tooltip position="top" offset="4">
             <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
-    <model-list-select
+    <autocomplete
       :id="selectId"
-      :ref="selectId"
-      v-model="fieldValue"
-      :list="options"
-      option-value="value"
-      option-text="text"
-      :is-disabled="!edit ? !edit : data.readonly || isDisabled"
-      :is-error="isValid == false"
-      placeholder="Выберите из списка"
-      @searchchange="initData"
+      ref="autocomplete"
+      :placeholder="placeholder"
+      :class="validClass"
+      :auto-select="true"
+      :search="search"
+      :get-result-value="getResultValue"
+      :default-value="getCurrentValue"
+      :disabled="!edit ? !edit : data.readonly || isDisabled"
+      @submit="handleSubmit"
+      @blur="handleBlur"
     />
 
-    <div v-if="isValid == false" class="mt-2">
-      <span class="error"> Обязательно для заполнения </span>
-    </div>
+    <b-form-invalid-feedback :state="isErr">
+      {{ data.error ? data.error : validationErrorText }}
+    </b-form-invalid-feedback>
   </b-form-group>
 </template>
 
 <script>
-import "vue-search-select/dist/VueSearchSelect.css";
-import { ModelListSelect } from "vue-search-select";
+import Autocomplete from "@trevoreyre/autocomplete-vue";
+import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BFormGroup } from "bootstrap-vue";
 
 export default {
   name: "ControlEnum",
-  components: { ModelListSelect, BFormGroup },
+  components: { BFormGroup, Autocomplete },
   props: {
     data: {
       type: Object,
@@ -54,48 +55,43 @@ export default {
   },
   data() {
     return {
+      placeholderValue: "Выберите из списка",
+      validationErrorText: null,
+      isErr: null,
       selectId: `id${this.data.fieldId}`,
     };
   },
   created() {
-    if (this.data.fieldRelation) {
-      const relationValue = this.$store.getters["data_card/getDataFieldByName"](
-        this.data.fieldRelation
-      )?.value;
-      if (relationValue?.value) {
-        this.initData();
-      }
-    }
+    this.initData();
   },
   computed: {
-    fieldValue: {
-      get() {
-        return this.$store.getters["data_card/getDataFieldByName"](
-          this.data.name
-        )?.value;
-      },
-      set(value) {
-        if (value?.value !== this.fieldValue?.value) {
-          this.$store.commit("data_card/clearFormRelationField", this.data);
+    placeholder() {
+      return this.placeholderValue
+        ? this.placeholderValue
+        : this.data.placeholder;
+    },
+    validClass() {
+      if (this.data.required) {
+        if (this.isErr === false) {
+          return "is-invalid";
         }
-        this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value,
-        });
-      },
+        if (this.isErr === true) {
+          return "is-valid";
+        }
+
+        if (this.data.state !== null && this.data.state !== undefined) {
+          return this.data.state === true ? "is-valid" : "is-invalid";
+        }
+      }
+
+      return "";
     },
-    relationValue: {
-      get() {
-        return this.$store.getters["data_card/getDataFieldByName"](
-          this.data.fieldRelation
-        )?.value;
-      },
-    },
-    isValid() {
-      return this.$store.getters["data_card/getDataFieldByFieldId"](
-        `${this.data.fieldId}`
-      )?.state;
+    getCurrentValue() {
+      return this.options.find(
+        (item) =>
+          item.value === Number(this.data?.value?.value) ||
+          item.value === Number(this.data?.value)
+      )?.text;
     },
     isDisabled() {
       if (this.data.fieldRelation) {
@@ -140,12 +136,13 @@ export default {
     },
   },
   watch: {
-    relationValue(newVal, oldVal) {
-      if (newVal?.value !== oldVal?.value) {
-        if (newVal?.value) {
-          this.initData();
-        }
+    validClass(value) {
+      if (this.data.state === false && value === "is-invalid") {
+        this.validationErrorText = "Обязательно для заполнения";
       }
+    },
+    getCurrentValue(value) {
+      this.$refs.autocomplete.value = value;
     },
   },
   mounted() {
@@ -156,6 +153,73 @@ export default {
     }
   },
   methods: {
+    handleBlur() {
+      if (Boolean(this.$refs.autocomplete.value) === false) {
+        const value = this.options.find(
+          (item) => item.value == Number(this.data?.value)
+        );
+
+        if (value === undefined) {
+          this.validationErrorText = "Обязательно для заполнения";
+          this.isErr = false;
+          this.$refs.autocomplete.value = "";
+        }
+        if (value) {
+          this.$refs.autocomplete.value = value.text;
+          this.handleSubmit(value);
+        }
+      } else {
+        const find = this.options.find((i) =>
+          i.text.includes(this.$refs.autocomplete?.value)
+        );
+        if (find !== undefined) {
+          this.$refs.autocomplete.value = find.text;
+          this.isErr = true;
+
+          this.handleSubmit(find);
+        } else {
+          this.validationErrorText = "Выберите значение из выпадающего списка";
+          this.$refs.autocomplete.value = "";
+          this.placeholderValue = "";
+          this.handleSubmit(null);
+        }
+      }
+    },
+
+    getResultValue(item) {
+      return item.text;
+    },
+    search(value) {
+      if (value) {
+        const findValueInList = this.options.find((i) =>
+          i.text.includes(this.$refs.autocomplete?.value)
+        );
+
+        if (
+          findValueInList === undefined &&
+          this.$refs.autocomplete?.value !== undefined &&
+          this.getCurrentValu === undefined
+        ) {
+          this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
+          this.isErr = false;
+        }
+
+        if (findValueInList !== undefined) {
+          this.isErr = true;
+        }
+      }
+      if (
+        value.length < 1 ||
+        this.options.find((item) => item.value === Number(this.data?.value))
+          ?.text === value
+      ) {
+        this.placeholderValue = value;
+        this.$refs.autocomplete.value = "";
+        return this.options;
+      }
+
+      return this.options;
+    },
     async initData() {
       await this.$store.dispatch("data_card/fetchDic", this.data);
       if (this.data.fieldRelation) {
@@ -165,6 +229,14 @@ export default {
           value: this.data.value?.value ? this.data.value : {},
         });
       }
+    },
+    handleSubmit(result) {
+      document.activeElement.blur();
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: result || null,
+      });
     },
   },
 };
