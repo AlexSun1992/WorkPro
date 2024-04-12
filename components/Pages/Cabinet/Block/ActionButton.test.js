@@ -50,6 +50,7 @@ describe("ActionButton", () => {
     });
     process.server = true;
     store.$axios = axios;
+    global.eventHandler = () => null;
   });
   afterEach(() => {
     jest.resetAllMocks();
