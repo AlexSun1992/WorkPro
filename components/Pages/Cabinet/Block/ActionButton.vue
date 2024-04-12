@@ -44,7 +44,7 @@ export default {
   props: {
     actionId: {
       type: String,
-      required: true,
+      required: false,
       default: () => null,
     },
     id: {
