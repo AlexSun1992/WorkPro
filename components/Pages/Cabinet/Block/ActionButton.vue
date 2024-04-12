@@ -94,6 +94,7 @@ export default {
 
     /** Обработка нажатия на кнопку */
     async startAction() {
+      const actionId = this.computedActionId;
       if (this.action.LREQUESTCODE) {
         this.confirmAction();
       }
@@ -120,7 +121,6 @@ export default {
           this.$store.commit("data_card/setSavedError", false);
         }
         if (field.type === "button" && data.action) {
-          const actionId = Number(data.value.replace("Item", ""));
           this.$store.commit("data_card/setFetchingAction", {
             actionId,
             isFetching: true,
@@ -143,7 +143,7 @@ export default {
         });
         return;
       }
-      await eventHandler([], { actionId: this.actionID }, "actionClicked");
+      await eventHandler([], { actionId }, "actionClicked");
 
       if (!this.action.LHIDEDLG) {
         const confirmResult = await this.confirmAction();
@@ -181,11 +181,11 @@ export default {
       });
     },
 
-    /** Непонятно зачем функция */
+    /** Основная функция запуска асинхронного действия */
     async fetchAction(data) {
+      const actionId = this.computedActionId;
       const field = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
-      const actionId = data.value.replace("Item", "");
       let moduleId;
       let cardId;
       if (!this.$attrs.params.page) {
@@ -228,7 +228,7 @@ export default {
       const menuItem = flatmenu.find(
         (item) => item.IDITEM == this.$route.params.idItem
       );
-      const CUR = menuItem.ACTIONSCUR.find((item) => item.ID == actionId);
+      const CUR = menuItem.ACTIONSCUR.find((item) => item.ID === actionId);
       if (CUR.NTYPE === ACTION_TYPE_SAVE_CARD) {
         this.$store.commit("data_card/setSaveSuccess", false);
         await this.updatedFields(data, "beforeSave");
@@ -258,6 +258,7 @@ export default {
 
     /** Непонятно зачем фукнция */
     async applyAction(evt) {
+      const actionId = this.computedActionId;
       if (evt) evt.preventDefault();
       const relId =
         this.$route.params.idRel ||
@@ -280,7 +281,7 @@ export default {
 
         requestDownLoadFileUrl.searchParams.set("id", rowId);
         requestDownLoadFileUrl.searchParams.set("rel", relId);
-        requestDownLoadFileUrl.searchParams.set("idaction", this.action.ID);
+        requestDownLoadFileUrl.searchParams.set("idaction", actionId);
         requestDownLoadFileUrl.searchParams.set("relaction", this.action.REL);
         await this.$axios({
           url: requestDownLoadFileUrl.href,
@@ -307,7 +308,7 @@ export default {
       this.$store.commit("data_card/setIsActionFormDisabled", true);
 
       const response = await this.$store.dispatch("data_card/executeAction", {
-        actionId: this.action.ID,
+        actionId,
         relActionId: this.action.REL,
         relId,
         rowId,
@@ -418,13 +419,16 @@ export default {
       });
     },
 
-    /** Запрос к API на выполнение действия */
+    /**
+     * Запрос к API на выполнение действия для blocks
+     * @deprecated
+     */
     async executeAction() {
       try {
         const result = await this.$store.dispatch("blocks/executeAction", {
           relId: this.relId,
           relActionId: this.action.REL,
-          actionId: this.actionID,
+          actionId: this.computedActionId,
           actionRefresh: this.action?.LREFRESH,
           rowId: this.rowId,
           itemId: this.action.NITEM,
@@ -473,9 +477,9 @@ export default {
     isSaveSuccess() {
       return this.$store.getters["data_card/getSaveSuccess"];
     },
-    actionID() {
+    computedActionId() {
       return this.actionId
-        ? this.actionId
+        ? Number(this.actionId)
         : Number(this.$attrs.data.name.replace("Item", ""));
     },
     actionParams() {
@@ -521,7 +525,9 @@ export default {
     },
 
     isFetching() {
-      return this.$store.getters["data_card/isFetchingAction"](this.actionID);
+      return this.$store.getters["data_card/isFetchingAction"](
+        this.computedActionId
+      );
     },
 
     relId() {
@@ -538,12 +544,12 @@ export default {
     },
     action: {
       get() {
-        if (this.actionID) {
+        if (this.computedActionId) {
           const allActions = this.$store.getters["menu/flatmenu"]
             .map((menu) => menu.ACTIONSCUR || [])
             .flat();
           return allActions.find(
-            (action) => action.ID === parseInt(this.actionID, 10)
+            (action) => action.ID === this.computedActionId
           );
         }
 
