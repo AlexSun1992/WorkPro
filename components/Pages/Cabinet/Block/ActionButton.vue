@@ -95,9 +95,6 @@ export default {
     /** Обработка нажатия на кнопку */
     async startAction() {
       const actionId = this.computedActionId;
-      if (this.action.LREQUESTCODE) {
-        this.confirmAction();
-      }
       if (this.$attrs.data) {
         await this.updatedFields(this.$attrs.data, "actionClicked");
         const data = {
@@ -208,14 +205,6 @@ export default {
         cardId,
       });
       this.$store.commit("data_card/setActionParamsTitle", field.label);
-
-      if (this.action.LREQUESTCODE) {
-        this.$store.commit("data_card/setLoading", false);
-        const confirmResult = await this.confirmAction();
-        if (!confirmResult) {
-          return;
-        }
-      }
 
       const isValidParams = await this.$store.dispatch(
         "data_card/validateActionParams"
