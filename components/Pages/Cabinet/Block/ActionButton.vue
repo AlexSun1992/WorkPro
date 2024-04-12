@@ -95,12 +95,19 @@ export default {
     /** Обработка нажатия на кнопку */
     async startAction() {
       const actionId = this.computedActionId;
-      if (this.$attrs.data) {
-        await this.updatedFields(this.$attrs.data, "actionClicked");
+      /** @type {import('../../../../store/menu.types').ActionInfo} */
+      const actionInfo = this.action;
+      /**
+       * @type {import('../../../../converters/dataform.types').Lk2Webfield}
+       */
+      const webfield = this.$attrs.data;
+
+      if (webfield) {
+        await this.updatedFields(webfield, "actionClicked");
         const data = {
-          fieldId: this.$attrs.data.fieldId,
-          value: this.$attrs.data.name,
-          action: this.$attrs.data.name.includes("Item"),
+          fieldId: webfield.fieldId,
+          value: webfield.name,
+          action: webfield.name.startsWith("Item"),
         };
         if (
           data.fieldId === 38389 ||
@@ -112,12 +119,11 @@ export default {
           this.$emit("update", data);
           return;
         }
-        const field = this.$attrs.data;
-        if (field.type === "button") {
+        if (webfield.type === "button") {
           this.$store.commit("data_card/setError", false);
           this.$store.commit("data_card/setSavedError", false);
         }
-        if (field.type === "button" && data.action) {
+        if (webfield.type === "button" && data.action) {
           this.$store.commit("data_card/setFetchingAction", {
             actionId,
             isFetching: true,
@@ -130,7 +136,7 @@ export default {
           });
           return;
         }
-        if (field.type === "button") {
+        if (webfield.type === "button") {
           await this.updatedFields(data);
         }
         this.$store.commit("data_card/setFormField", {
@@ -142,20 +148,20 @@ export default {
       }
       await eventHandler([], { actionId }, "actionClicked");
 
-      if (!this.action.LHIDEDLG) {
+      if (!actionInfo.LHIDEDLG) {
         const confirmResult = await this.confirmAction();
         if (!confirmResult) {
           return;
         }
       }
 
-      if (this.action.NTYPE === ACTION_TYPE_START_MENU) {
-        if (this.action.SCONST) {
+      if (actionInfo.NTYPE === ACTION_TYPE_START_MENU) {
+        if (actionInfo.SCONST) {
           const redirectURL = this.$route.params.idCard
-            ? `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
-            : `/cabinet/${this.$route.params.idModule}/0/${this.action.SCONST}/0?ref=${this.$route.fullPath}`;
+            ? `/cabinet/${this.$route.params.idModule}/0/${actionInfo.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
+            : `/cabinet/${this.$route.params.idModule}/0/${actionInfo.SCONST}/0?ref=${this.$route.fullPath}`;
 
-          if (this.action.LCURWINDOW) {
+          if (actionInfo.LCURWINDOW) {
             this.$router.push(redirectURL);
           } else {
             window.open(redirectURL);
@@ -180,9 +186,12 @@ export default {
 
     /** Основная функция запуска асинхронного действия */
     async fetchAction(data) {
-      const actionId = this.computedActionId;
-      const field = this.$attrs.data;
+      /**
+       * @type {import('../../../../converters/dataform.types').Lk2Webfield | null}
+       */
+      const webfield = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
+      const actionId = this.computedActionId;
       let moduleId;
       let cardId;
       if (!this.$attrs.params.page) {
@@ -204,7 +213,7 @@ export default {
         actionId,
         cardId,
       });
-      this.$store.commit("data_card/setActionParamsTitle", field.label);
+      this.$store.commit("data_card/setActionParamsTitle", webfield?.label);
 
       const isValidParams = await this.$store.dispatch(
         "data_card/validateActionParams"
