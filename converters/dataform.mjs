@@ -73,11 +73,11 @@ converter.form = async (data, params, instance) => {
   const zone = params?.zone;
   const item = data[0]._data.length ? data[0]._data[0] : {};
   const fields = data[0]._struct;
-  const meta_value = converter.meta(data[0]?._meta.SNEWRECORD) || {};
-  const meta_visible = converter.meta(data[0]?._meta.SVISIBLE) || {};
-  const meta_readonly = converter.meta(data[0]?._meta.SREADONLY) || {};
-  const meta_addfields = converter.meta(data[0]?._meta.SADDFIELDS) || {};
-  const meta_breadcrumbs = converter.breadcrumbs(data[0]?._meta.SNAVIG) || null;
+  const metaValue = converter.meta(data[0]?._meta.SNEWRECORD) || {};
+  const metaVisible = converter.meta(data[0]?._meta.SVISIBLE) || {};
+  const metaReadonly = converter.meta(data[0]?._meta.SREADONLY) || {};
+  const metaAddfields = converter.meta(data[0]?._meta.SADDFIELDS) || {};
+  const metaBreadcrumbs = converter.breadcrumbs(data[0]?._meta.SNAVIG) || null;
   const arr = converter.setFieldsParams(itemId, item, fields);
 
   let webFields = data[0]._meta.JSONWEBFIELDS;
@@ -93,24 +93,24 @@ converter.form = async (data, params, instance) => {
     ) {
       obj.value = item[webFields[i].SNAME];
     } else {
-      obj.value = meta_value[webFields[i].SNAME];
+      obj.value = metaValue[webFields[i].SNAME];
       if (
         (webFields[i].STYPE === "Double" ||
           webFields[i].STYPE === "Int64" ||
           webFields[i].STYPE === "Int16") &&
-        meta_value[webFields[i].SNAME] !== undefined
+        metaValue[webFields[i].SNAME] !== undefined
       ) {
-        obj.value = parseInt(meta_value[webFields[i].SNAME], 10);
+        obj.value = parseInt(metaValue[webFields[i].SNAME], 10);
       }
       if (webFields[i].IDCONTROL === 16) {
-        obj.value = meta_value[webFields[i].SNAME] === "Y";
+        obj.value = metaValue[webFields[i].SNAME] === "Y";
         if (webFields[i].STYPE === "boolrus") {
-          obj.value = meta_value[webFields[i].SNAME] === "Д";
+          obj.value = metaValue[webFields[i].SNAME] === "Д";
         }
-        if (meta_value[webFields[i].SNAME] === "Д") {
+        if (metaValue[webFields[i].SNAME] === "Д") {
           obj.value = true;
         }
-        if (meta_value[webFields[i].SNAME] === "Н") {
+        if (metaValue[webFields[i].SNAME] === "Н") {
           obj.value = false;
         }
       }
@@ -290,10 +290,10 @@ converter.form = async (data, params, instance) => {
     obj.cssClass = webFields[i].SCSSCLASS ? webFields[i].SCSSCLASS : "";
     obj.webId = webFields[i].SWEBID ? webFields[i].SWEBID : "";
     if (
-      meta_visible[webFields[i].SNAME.toUpperCase()] === "Y" ||
-      meta_visible[webFields[i].SNAME.toUpperCase()] === "N"
+      metaVisible[webFields[i].SNAME.toUpperCase()] === "Y" ||
+      metaVisible[webFields[i].SNAME.toUpperCase()] === "N"
     ) {
-      obj.visible = meta_visible[webFields[i].SNAME.toUpperCase()] !== "N";
+      obj.visible = metaVisible[webFields[i].SNAME.toUpperCase()] !== "N";
     } else {
       obj.visible = !(
         webFields[i].LVISIBLE === "N" || webFields[i].LVISIBLE === false
@@ -450,16 +450,16 @@ converter.form = async (data, params, instance) => {
     data: converter.type(arr),
     // Метаданные для отображения JSONWEBFIELDS
     metaData: {
-      data: converter.type(webFieldsArr, meta_readonly),
-      defaultValues: meta_value,
+      data: converter.type(webFieldsArr, metaReadonly),
+      defaultValues: metaValue,
       captions: data[0]._meta.SPAGECAPTION,
       cardCaption: data[0]._meta.SCARDCAPTION,
-      btnSave: meta_visible?.BTNSAVE !== "N",
-      btnCancel: meta_visible?.BTNCANCEL !== "N",
-      readonly: meta_readonly?.ALL_FIELDS === "Y",
-      visible: meta_visible,
-      addFields: meta_addfields,
-      breadCrumbs: meta_breadcrumbs,
+      btnSave: metaVisible?.BTNSAVE !== "N",
+      btnCancel: metaVisible?.BTNCANCEL !== "N",
+      readonly: metaReadonly?.ALL_FIELDS === "Y",
+      visible: metaVisible,
+      addFields: metaAddfields,
+      breadCrumbs: metaBreadcrumbs,
       itemId: params.idItem,
     },
   };
