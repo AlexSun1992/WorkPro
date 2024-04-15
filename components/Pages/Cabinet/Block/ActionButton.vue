@@ -97,6 +97,34 @@ export default {
       const actionId = this.computedActionId;
       /** @type {import('../../../../store/menu.types').ActionInfo} */
       const actionInfo = this.action;
+
+      if (!actionInfo.LHIDEDLG) {
+        const confirmResult = await this.confirmAction();
+        if (!confirmResult) {
+          return;
+        }
+      }
+
+      if (actionInfo.NTYPE === ACTION_TYPE_START_MENU) {
+        if (actionInfo.SCONST) {
+          const redirectURL = this.$route.params.idCard
+            ? `/cabinet/${this.$route.params.idModule}/0/${actionInfo.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
+            : `/cabinet/${this.$route.params.idModule}/0/${actionInfo.SCONST}/0?ref=${this.$route.fullPath}`;
+
+          if (actionInfo.LCURWINDOW) {
+            this.$router.push(redirectURL);
+          } else {
+            window.open(redirectURL);
+            this.$nextTick(() => {
+              this.$bvModal.hide("confirmAction");
+            });
+          }
+        } else {
+          throw new Error(`В опции кнопки не указан идентификатор меню."`);
+        }
+        return;
+      }
+
       /**
        * @type {import('../../../../converters/dataform.types').Lk2Webfield}
        */
@@ -147,33 +175,6 @@ export default {
         return;
       }
       await eventHandler([], { actionId }, "actionClicked");
-
-      if (!actionInfo.LHIDEDLG) {
-        const confirmResult = await this.confirmAction();
-        if (!confirmResult) {
-          return;
-        }
-      }
-
-      if (actionInfo.NTYPE === ACTION_TYPE_START_MENU) {
-        if (actionInfo.SCONST) {
-          const redirectURL = this.$route.params.idCard
-            ? `/cabinet/${this.$route.params.idModule}/0/${actionInfo.SCONST}/0/${this.$route.params.idCard}?ref=${this.$route.fullPath}`
-            : `/cabinet/${this.$route.params.idModule}/0/${actionInfo.SCONST}/0?ref=${this.$route.fullPath}`;
-
-          if (actionInfo.LCURWINDOW) {
-            this.$router.push(redirectURL);
-          } else {
-            window.open(redirectURL);
-            this.$nextTick(() => {
-              this.$bvModal.hide("confirmAction");
-            });
-          }
-        } else {
-          throw new Error(`В опции кнопки не указан идентификатор меню."`);
-        }
-        return;
-      }
 
       const actionResult = await this.executeAction();
 

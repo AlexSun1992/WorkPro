@@ -576,7 +576,7 @@ export const fetchMenu = {
     },
   ],
 };
-export const setFletMenu = {
+export const setFlatMenu = {
   data: [
     {
       ACTIONSCUR: [
