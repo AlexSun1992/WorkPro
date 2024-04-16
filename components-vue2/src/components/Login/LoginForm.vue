@@ -127,7 +127,7 @@
               :state="wrongAuthData ? false : validateState('username')"
               @blur="$v.user.username.$touch()"
               @input="wrongAuthData = false"
-              :disabled="authInProcess"
+              :disabled="isMainFormDisabled"
               class="form-control"
               data-testid="authPhoneEmail"
             >
@@ -150,7 +150,7 @@
               @blur="$v.user.password.$touch()"
               @input="wrongAuthData = null"
               class="form-control"
-              :disabled="authInProcess"
+              :disabled="isMainFormDisabled"
               data-testid="authPassword"
             ></b-form-input>
             <button
@@ -202,7 +202,7 @@
       <button
         v-on:enter="fetchToken()"
         type="submit"
-        :disabled="authInProcess"
+        :disabled="isMainFormDisabled"
         class="btn btn-primary mt-3 mt-lg-4"
         id="btn_entry_lk"
       >
@@ -226,14 +226,13 @@
 
 <script>
 import axios from "axios";
+import Cookies from "js-cookie";
 import {
   BForm,
   BFormGroup,
   BFormInput,
   BFormInvalidFeedback,
-  BSpinner,
   BModal,
-  BRow,
 } from "bootstrap-vue";
 
 import { validationMixin } from "vuelidate";
@@ -254,9 +253,7 @@ export default {
     BFormGroup,
     BFormInput,
     BFormInvalidFeedback,
-    BSpinner,
     BModal,
-    BRow,
     VerifyTimer,
     Captcha,
   },
@@ -294,18 +291,12 @@ export default {
       searchParamType: null,
       searchParamState: null,
       searchParamPassport: null,
-      showPassportDialog: null,
+      showPassportDialog: false,
       dialogErrorInformation: null,
       isDisabled: false,
     };
   },
   async mounted() {
-    const attempt = new URL(window.location.href);
-    if (attempt.searchParams.get("type") === "mobileid") {
-      this.searchParamType = attempt.searchParams.get("type");
-      this.searchParamState = attempt.searchParams.get("state");
-      await this.sendPassportNumber();
-    }
     this.$nextTick(() => {
       if (typeof this.$LogEvent === "function") {
         const currentURL = window.location.pathname;
@@ -320,8 +311,19 @@ export default {
         }
       }
     });
+    const currentLocation = new URL(window.location.href);
+    if (currentLocation.searchParams.get("type") === "mobileid") {
+      this.searchParamType = currentLocation.searchParams.get("type");
+      this.searchParamState = currentLocation.searchParams.get("state");
+      await this.sendPassportNumber();
+      return;
+    }
+    if (this.isAuthentificated()) {
+      this.authRedirect();
+    }
   },
   created() {
+    this.authInProcess = false;
     this.debouncedUpdate = _.debounce(this.blurField, 100);
     // eslint-disable-next-line nuxt/no-globals-in-created
     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -342,6 +344,27 @@ export default {
   },
 
   methods: {
+    isAuthentificated() {
+      return String(Cookies.get("auth._refresh_token.local")).length > 20;
+    },
+
+    authRedirect() {
+      this.authInProcess = true;
+      const currentLocation = new URL(window.location.href);
+      const searchParamsRef = currentLocation.searchParams.get("ref");
+      const cookiesRef = Cookies.get("ref");
+      const redirect = searchParamsRef || cookiesRef || "/cabinet";
+      window.location.href = redirect;
+    },
+
+    saveCookies(accessToken, refreshToken) {
+      Cookies.set("auth._token.local", `Bearer ${accessToken}`, {
+        expires: 1 / 24,
+      });
+      Cookies.set("auth._refresh_token.local", refreshToken, { expires: 365 });
+      Cookies.set("auth._token_expiration.local", Date.now() + 100000);
+    },
+
     async sendPassportNumber() {
       try {
         const params =
@@ -376,19 +399,12 @@ export default {
 
           if (response.status === 200) {
             this.showPassportDialog = false;
-            let isAuthorizationCookie;
             if (responseData[0].ACCESS_TOKEN) {
-              document.cookie = `auth._token.local=Bearer ${responseData[0].ACCESS_TOKEN}`;
-              document.cookie = `auth._refresh_token.local=${responseData[0].REFRESH_TOKEN}`;
-              document.cookie = `auth._token_expiration.local=${responseData[0].REFRESH_TOKEN}`;
-              isAuthorizationCookie = /Bearer/.test(document.cookie);
-              if (isAuthorizationCookie) {
-                const redirect = this.$cookiz.get("ref")
-                  ? this.$cookiz.get("ref")
-                  : "/cabinet";
-                this.showPassportDialog = false;
-                window.location.href = redirect;
-              }
+              this.saveCookies(
+                responseData[0].ACCESS_TOKEN,
+                responseData[0].REFRESH_TOKEN
+              );
+              this.authRedirect();
             }
           }
         }
@@ -399,8 +415,8 @@ export default {
     },
     closeDialog() {
       this.showPassportDialog = false;
-      if (this.$cookiz.get("referror")) {
-        window.location.href = this.$cookiz.get("referror");
+      if (Cookies.get("referror")) {
+        window.location.href = Cookies.get("referror");
       }
     },
     visiblePSW() {
@@ -467,32 +483,14 @@ export default {
         };
 
         const {
-          data: { ACCESS_TOKEN, REFRESH_TOKEN, ID },
+          data: { ACCESS_TOKEN, REFRESH_TOKEN },
         } = await axios.post("/am/authw/v2/authorize", body, headers);
 
         this.isModalVisible = false;
-        document.cookie = `auth.strategy=local; Path=/; expires=${new Date(
-          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-        ).toGMTString()}`;
-        document.cookie = `auth._token.local=Bearer%20${ACCESS_TOKEN}; Path=/; expires=${new Date(
-          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-        ).toGMTString()}`;
-        document.cookie = `auth._refresh_token.local=${REFRESH_TOKEN}; Path=/; expires=${new Date(
-          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-        ).toGMTString()}`;
-        document.cookie = `auth.user_id=${ID}; Path=/; expires=${new Date(
-          new Date().getTime() + 1000 * 60 * 60 * 24 * 365
-        ).toGMTString()}`;
-        this.authInProcess = false;
-        window.location.href = "/cabinet/55/0/701";
-        const attempt = new URL(window.location.href);
-
-        if (attempt.searchParams.has("ref")) {
-          window.location.href = `${attempt.searchParams.get("ref")}`;
-        }
+        this.saveCookies(ACCESS_TOKEN, REFRESH_TOKEN);
+        this.authRedirect();
       } catch (e) {
         this.authInProcess = false;
-
         if (!e.response) {
           this.extraOrdinaryServiceAnswer = getErrorMessage(e);
           return;
@@ -571,6 +569,10 @@ export default {
     },
   },
   computed: {
+    isMainFormDisabled() {
+      return this.isModalVisible || this.authInProcess;
+    },
+
     queryError() {
       const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop.toString()),
