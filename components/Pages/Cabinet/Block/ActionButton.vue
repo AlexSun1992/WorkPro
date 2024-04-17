@@ -193,21 +193,12 @@ export default {
       const webfield = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
       const actionId = this.computedActionId;
-      let moduleId;
-      let cardId;
-      if (!this.$attrs.params.page) {
-        moduleId = this.$route.params.idModule;
-        cardId = this.$route.params.idCard;
-      } else {
-        moduleId = this.params.page.idModule;
-        cardId = this.$store.getters["data_card/getCardId"];
-      }
-      let params = {
-        idCard: this.$store.getters["data_card/getCardId"],
-        idItem: this.$route.params.idItem,
-        idModule: this.$route.params.idModule,
-        idRel: this.$store.getters["data_card/getCardRelId"],
-      };
+      const moduleId = this.$attrs.params.page
+        ? this.params.page.idModule
+        : this.$route.params.idModule;
+      const cardId = this.$attrs.params.page
+        ? this.$store.getters["data_card/getCardId"]
+        : this.$route.params.idCard;
 
       await this.$store.dispatch("data_card/fetchActionParams", {
         moduleId,
@@ -239,6 +230,12 @@ export default {
         return;
       }
       if (CUR.NTYPE === ACTION_TYPE_REFRESH_CARD) {
+        let params = {
+          idCard: this.$store.getters["data_card/getCardId"],
+          idItem: this.$route.params.idItem,
+          idModule: this.$route.params.idModule,
+          idRel: this.$store.getters["data_card/getCardRelId"],
+        };
         this.$store.commit("data_card/setLoading", false);
         this.$store.commit("data_card/setReadOnly", false);
         await this.updatedFields(data);
