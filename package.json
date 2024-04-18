@@ -42,7 +42,6 @@
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.16.4",
     "express-winston": "^4.2.0",
-    "file-saver": "^2.0.2",
     "flag-icon-css": "^3.4.6",
     "font-awesome": "^4.7.0",
     "form-data": "^4.0.0",

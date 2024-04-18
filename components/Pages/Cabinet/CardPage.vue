@@ -151,7 +151,6 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
-import { saveAs } from "file-saver";
 import CardEditor from "~/components/Libs/CardEditor/CardEditor";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 
@@ -367,18 +366,6 @@ export default {
         );
       }
       throw new Error("Метод getAddField не может быть выполнен.");
-    },
-    saveFile(idReport, fileName, event) {
-      if (event) {
-        event.preventDefault();
-      }
-      this.$axios({
-        url: `am/main/v2/report?idreport=${idreport}&id=${this.$route.params.idCard}`,
-        method: "GET",
-        responseType: "blob",
-      }).then((response) => {
-        saveAs(response.data, fileName);
-      });
     },
     showBtnBack() {
       const path = this.$store.state.data_card.listPath;

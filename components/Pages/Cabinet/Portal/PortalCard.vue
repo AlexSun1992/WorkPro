@@ -41,9 +41,9 @@
   </div>
 </template>
 <script>
-import Form from "~/components/Libs/Form/Form";
 import VRuntimeTemplate from "v-runtime-template";
-import { saveAs } from "file-saver";
+import Form from "~/components/Libs/Form/Form";
+
 export default {
   name: "WizardList",
   components: { Form, VRuntimeTemplate },
@@ -97,9 +97,6 @@ export default {
     },
     getFieldValue(name, data = undefined) {
       return this.getField(name, data).value;
-    },
-    saveFile() {
-      saveAs("https://httpbin.org/image", "image.jpg");
     },
   },
 };
