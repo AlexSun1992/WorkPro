@@ -125,6 +125,44 @@ export default {
         return;
       }
 
+      if (this.action.NTYPE === ACTION_TYPE_RUN_REPORT) {
+        this.$store.commit("data_card/setFetchingAction", {
+          actionId,
+          isFetching: true,
+        });
+
+        const requestDownLoadFileUrl = new URL(
+          "/am/main/v2/report2",
+          window.location.origin
+        );
+        requestDownLoadFileUrl.searchParams.set("id", this.rowId);
+        requestDownLoadFileUrl.searchParams.set("rel", this.relId);
+        requestDownLoadFileUrl.searchParams.set("idaction", actionId);
+        requestDownLoadFileUrl.searchParams.set("relaction", this.action.REL);
+        await this.$axios({
+          url: requestDownLoadFileUrl.href,
+          method: "GET",
+          responseType: "blob",
+        })
+          .then((resp) => {
+            saveFileAxios(resp, !this.action?.LCURWINDOW);
+          })
+          .catch(() => {
+            this.$bvToast.toast("Не удалось скачать файл", {
+              title: "Ошибка",
+              variant: "danger",
+              noAutoHide: true,
+              solid: true,
+            });
+          })
+          .finally(() => {
+            this.$store.commit("data_card/setFetchingAction", {
+              actionId,
+              isFetching: false,
+            });
+          });
+        return;
+      }
       /**
        * @type {import('../../../../converters/dataform.types').Lk2Webfield}
        */
@@ -261,37 +299,6 @@ export default {
       this.$store.commit("data_card/setError", false);
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setLoading", true);
-
-      if (this.action.NTYPE === ACTION_TYPE_RUN_REPORT) {
-        const requestDownLoadFileUrl = new URL(
-          "/am/main/v2/report2",
-          window.location.origin
-        );
-
-        requestDownLoadFileUrl.searchParams.set("id", this.rowId);
-        requestDownLoadFileUrl.searchParams.set("rel", this.relId);
-        requestDownLoadFileUrl.searchParams.set("idaction", actionId);
-        requestDownLoadFileUrl.searchParams.set("relaction", this.action.REL);
-        await this.$axios({
-          url: requestDownLoadFileUrl.href,
-          method: "GET",
-          responseType: "blob",
-        })
-          .then((resp) => {
-            saveFileAxios(resp, !this.action?.LCURWINDOW);
-          })
-          .catch(() => {
-            this.$store.commit("data_card/setError", true);
-            this.$bvToast.toast("Не удалось скачать файл", {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
-            });
-          })
-          .finally(() => this.$store.commit("data_card/setLoading", false));
-        return;
-      }
 
       this.$store.commit("data_card/setIsActionApplyError", false);
       this.$store.commit("data_card/setIsActionFormDisabled", true);
