@@ -126,11 +126,6 @@ export default {
       }
 
       if (this.action.NTYPE === ACTION_TYPE_RUN_REPORT) {
-        this.$store.commit("data_card/setFetchingAction", {
-          actionId,
-          isFetching: true,
-        });
-
         const requestDownLoadFileUrl = new URL(
           "/am/main/v2/report2",
           window.location.origin
@@ -139,28 +134,8 @@ export default {
         requestDownLoadFileUrl.searchParams.set("rel", this.relId);
         requestDownLoadFileUrl.searchParams.set("idaction", actionId);
         requestDownLoadFileUrl.searchParams.set("relaction", this.action.REL);
-        await this.$axios({
-          url: requestDownLoadFileUrl.href,
-          method: "GET",
-          responseType: "blob",
-        })
-          .then((resp) => {
-            saveFileAxios(resp, !this.action?.LCURWINDOW);
-          })
-          .catch(() => {
-            this.$bvToast.toast("Не удалось скачать файл", {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
-            });
-          })
-          .finally(() => {
-            this.$store.commit("data_card/setFetchingAction", {
-              actionId,
-              isFetching: false,
-            });
-          });
+
+        await this.downloadFile(requestDownLoadFileUrl.href);
         return;
       }
       /**
@@ -339,32 +314,9 @@ export default {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
                 const [, , , idReport, idCard] = url.split("/");
-                try {
-                  const file = await this.$axios({
-                    url: `/am/main/v2/report?idreport=${idReport}&id=${idCard}`,
-                    method: "GET",
-                    responseType: "blob",
-                  });
-                  const fileName = url.split("/").pop().split("?")[0];
-                  const fileUrl = window.URL.createObjectURL(
-                    new Blob([file.data], {
-                      type: file.headers["content-type"],
-                    })
-                  );
-                  const link = document.createElement("a");
-                  link.href = fileUrl;
-                  link.setAttribute("download", fileName);
-                  link.setAttribute("target", "_blank");
-                  document.body.appendChild(link);
-                  link.click();
-                } catch (e) {
-                  this.$bvToast.toast("Не удалось скачать файл", {
-                    title: "Ошибка",
-                    variant: "danger",
-                    noAutoHide: true,
-                    solid: true,
-                  });
-                }
+                await this.downloadFile(
+                  `/am/main/v2/report?idreport=${idReport}&id=${idCard}`
+                );
               } else {
                 //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
                 setTimeout(() => {
@@ -449,6 +401,38 @@ export default {
       }
 
       return null;
+    },
+
+    /** Скачивание файла по переданной ссылке */
+    async downloadFile(url) {
+      const actionId = this.computedActionId;
+      this.$store.commit("data_card/setFetchingAction", {
+        actionId,
+        isFetching: true,
+      });
+
+      await this.$axios({
+        url,
+        method: "GET",
+        responseType: "blob",
+      })
+        .then((resp) => {
+          saveFileAxios(resp, !this.action?.LCURWINDOW);
+        })
+        .catch(() => {
+          this.$bvToast.toast("Не удалось скачать файл", {
+            title: "Ошибка",
+            variant: "danger",
+            noAutoHide: true,
+            solid: true,
+          });
+        })
+        .finally(() => {
+          this.$store.commit("data_card/setFetchingAction", {
+            actionId,
+            isFetching: false,
+          });
+        });
     },
   },
 
