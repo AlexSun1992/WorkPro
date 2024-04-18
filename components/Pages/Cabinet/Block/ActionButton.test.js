@@ -8,7 +8,6 @@ import ActionButton from "./ActionButton.vue";
 import {
   optionModal,
   fetchMenu,
-  params,
   setFlatMenu,
 } from "./ActionButton.helper.fixtures";
 import * as menu from "../../../../store/menu";
@@ -27,13 +26,17 @@ describe("ActionButton", () => {
 
   beforeEach(async () => {
     mockRoute = {
-      params,
+      params: {
+        idRel: "SOMERELVALUE",
+        idCard: "123456",
+        idItem: "712",
+        idModule: "55",
+        idParent: "0",
+      },
       path: "/cabinet/55/0/718/0",
       query: {
         ref: "/cabinet/55/0/979",
       },
-    };
-    mockRouter = {
       push: jest.fn(),
     };
     store = new Vuex.Store({
@@ -62,7 +65,7 @@ describe("ActionButton", () => {
       .spyOn(axios, "get")
       .mockResolvedValueOnce({ ...fetchMenu })
       .mockResolvedValueOnce({ ...setFletMenuCopy });
-    await store.dispatch("menu/fetchMenu", params);
+    await store.dispatch("menu/fetchMenu", mockRoute.params);
 
     wrapper = mount(ActionButton, {
       localVue,
@@ -94,7 +97,7 @@ describe("ActionButton", () => {
       .spyOn(axios, "get")
       .mockResolvedValueOnce({ ...fetchMenu })
       .mockResolvedValueOnce({ ...setFlatMenuCopy });
-    await store.dispatch("menu/fetchMenu", params);
+    await store.dispatch("menu/fetchMenu", mockRoute.params);
 
     wrapper = mount(ActionButton, {
       localVue,
@@ -132,7 +135,7 @@ describe("ActionButton", () => {
       .spyOn(axios, "get")
       .mockResolvedValueOnce({ ...fetchMenu })
       .mockResolvedValueOnce({ ...setFlatMenuCopy });
-    await store.dispatch("menu/fetchMenu", params);
+    await store.dispatch("menu/fetchMenu", mockRoute.params);
 
     wrapper = mount(ActionButton, {
       localVue,
@@ -155,7 +158,78 @@ describe("ActionButton", () => {
     await wrapper.find(".btn").trigger("click");
 
     expect(spyWindowOpen).toHaveBeenCalledWith(
-      "/cabinet/55/0/999/0?ref=undefined"
+      "/cabinet/55/0/999/0/123456?ref=undefined"
+    );
+  });
+
+  it("происходит вызов report2", async () => {
+    const setFlatMenuCopy = JSON.parse(JSON.stringify(setFlatMenu));
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].NTYPE = 3;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LHIDEDLG = true;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LCURWINDOW = false;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].SCONST = "999";
+    jest
+      .spyOn(axios, "get")
+      .mockResolvedValueOnce({ ...fetchMenu })
+      .mockResolvedValueOnce({ ...setFlatMenuCopy });
+
+    const mockedAxios = jest.fn().mockRejectedValue(new Error("some error"));
+    await store.dispatch("menu/fetchMenu", mockRoute.params);
+
+    wrapper = mount(ActionButton, {
+      localVue,
+      propsData: {
+        actionId: "38882",
+        body: undefined,
+        contextChanged: false,
+        id: "buy_section_osago_lk2",
+        insideContent: "",
+        variant: "transparent",
+        params: {},
+        data: {
+          label: "Оплатить полис",
+          type: "button",
+          id: "746",
+          fieldId: 31809,
+          cols: 4,
+          colSm: 12,
+          colMd: 12,
+          isMask: false,
+          colLg: 12,
+          width: "100%",
+          name: "Item38882",
+          cssClass: "btn-primary 111 w-100 px-0",
+          webId: "payBtn",
+          visible: true,
+          required: false,
+          page: 1,
+          readonly: false,
+          control: null,
+          state: null,
+          checked: null,
+          error: null,
+          isRelation: false,
+          fieldRelation: null,
+          isTab: true,
+        },
+      },
+      mocks: {
+        $store: store,
+        $route: mockRoute,
+        $router: mockRouter,
+        $axios: mockedAxios,
+      },
+    });
+
+    await wrapper.find(".btn").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: "http://localhost/am/main/v2/report2?id=123456&rel=SOMERELVALUE&idaction=38882&relaction=445A968215DA21380CD302AAB6668879",
+      })
     );
   });
 });

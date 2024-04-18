@@ -1175,9 +1175,3 @@ export const setFlatMenu = {
     },
   ],
 };
-
-export const params = {
-  idItem: "712",
-  idModule: "55",
-  idParent: "0",
-};

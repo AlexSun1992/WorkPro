@@ -172,17 +172,18 @@ export default {
           name: data.name,
           value: data.value,
         });
+        await eventHandler([], { actionId }, "actionClicked");
         return;
       }
-      await eventHandler([], { actionId }, "actionClicked");
-
       const actionResult = await this.executeAction();
 
-      fetchPoutvalue(actionResult, {
-        router: this.$router,
-        isInNewWindow: !this.action.LCURWINDOW,
-        toaster: this.$bvToast,
-      });
+      if (actionResult) {
+        fetchPoutvalue(actionResult, {
+          router: this.$router,
+          isInNewWindow: !this.action.LCURWINDOW,
+          toaster: this.$bvToast,
+        });
+      }
     },
 
     /** Основная функция запуска асинхронного действия */
