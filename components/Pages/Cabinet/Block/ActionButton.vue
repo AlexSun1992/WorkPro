@@ -125,6 +125,19 @@ export default {
         return;
       }
 
+      if (this.action.NTYPE === ACTION_TYPE_RUN_REPORT) {
+        const requestDownLoadFileUrl = new URL(
+          "/am/main/v2/report2",
+          window.location.origin
+        );
+        requestDownLoadFileUrl.searchParams.set("id", this.rowId);
+        requestDownLoadFileUrl.searchParams.set("rel", this.relId);
+        requestDownLoadFileUrl.searchParams.set("idaction", actionId);
+        requestDownLoadFileUrl.searchParams.set("relaction", this.action.REL);
+
+        await this.downloadFile(requestDownLoadFileUrl.href);
+        return;
+      }
       /**
        * @type {import('../../../../converters/dataform.types').Lk2Webfield}
        */
@@ -172,17 +185,18 @@ export default {
           name: data.name,
           value: data.value,
         });
+        await eventHandler([], { actionId }, "actionClicked");
         return;
       }
-      await eventHandler([], { actionId }, "actionClicked");
-
       const actionResult = await this.executeAction();
 
-      fetchPoutvalue(actionResult, {
-        router: this.$router,
-        isInNewWindow: !this.action.LCURWINDOW,
-        toaster: this.$bvToast,
-      });
+      if (actionResult) {
+        fetchPoutvalue(actionResult, {
+          router: this.$router,
+          isInNewWindow: !this.action.LCURWINDOW,
+          toaster: this.$bvToast,
+        });
+      }
     },
 
     /** Основная функция запуска асинхронного действия */
@@ -193,21 +207,12 @@ export default {
       const webfield = this.$attrs.data;
       this.$store.commit("data_card/setIsActionApplyError", false);
       const actionId = this.computedActionId;
-      let moduleId;
-      let cardId;
-      if (!this.$attrs.params.page) {
-        moduleId = this.$route.params.idModule;
-        cardId = this.$route.params.idCard;
-      } else {
-        moduleId = this.params.page.idModule;
-        cardId = this.$store.getters["data_card/getCardId"];
-      }
-      let params = {
-        idCard: this.$store.getters["data_card/getCardId"],
-        idItem: this.$route.params.idItem,
-        idModule: this.$route.params.idModule,
-        idRel: this.$store.getters["data_card/getCardRelId"],
-      };
+      const moduleId = this.$attrs.params.page
+        ? this.params.page.idModule
+        : this.$route.params.idModule;
+      const cardId = this.$attrs.params.page
+        ? this.$store.getters["data_card/getCardId"]
+        : this.$route.params.idCard;
 
       await this.$store.dispatch("data_card/fetchActionParams", {
         moduleId,
@@ -239,6 +244,12 @@ export default {
         return;
       }
       if (CUR.NTYPE === ACTION_TYPE_REFRESH_CARD) {
+        let params = {
+          idCard: this.$store.getters["data_card/getCardId"],
+          idItem: this.$route.params.idItem,
+          idModule: this.$route.params.idModule,
+          idRel: this.$store.getters["data_card/getCardRelId"],
+        };
         this.$store.commit("data_card/setLoading", false);
         this.$store.commit("data_card/setReadOnly", false);
         await this.updatedFields(data);
@@ -259,49 +270,10 @@ export default {
     async applyAction(evt) {
       const actionId = this.computedActionId;
       if (evt) evt.preventDefault();
-      const relId =
-        this.$route.params.idRel ||
-        this.$route.query.rel ||
-        this.$store.getters["data_card/getFormParams"]?.idRel;
-
-      const rowId =
-        this.$route.params.idCard ||
-        this.$store.getters["data_card/getFormParams"]?.idCard;
 
       this.$store.commit("data_card/setError", false);
       this.$store.commit("data_card/setSavedError", false);
       this.$store.commit("data_card/setLoading", true);
-
-      if (this.action.NTYPE === ACTION_TYPE_RUN_REPORT) {
-        const requestDownLoadFileUrl = new URL(
-          "/am/main/v2/report2",
-          window.location.origin
-        );
-
-        requestDownLoadFileUrl.searchParams.set("id", rowId);
-        requestDownLoadFileUrl.searchParams.set("rel", relId);
-        requestDownLoadFileUrl.searchParams.set("idaction", actionId);
-        requestDownLoadFileUrl.searchParams.set("relaction", this.action.REL);
-        await this.$axios({
-          url: requestDownLoadFileUrl.href,
-          method: "GET",
-          responseType: "blob",
-        })
-          .then((resp) => {
-            saveFileAxios(resp, !this.action?.LCURWINDOW);
-          })
-          .catch(() => {
-            this.$store.commit("data_card/setError", true);
-            this.$bvToast.toast("Не удалось скачать файл", {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
-            });
-          })
-          .finally(() => this.$store.commit("data_card/setLoading", false));
-        return;
-      }
 
       this.$store.commit("data_card/setIsActionApplyError", false);
       this.$store.commit("data_card/setIsActionFormDisabled", true);
@@ -309,8 +281,8 @@ export default {
       const response = await this.$store.dispatch("data_card/executeAction", {
         actionId,
         relActionId: this.action.REL,
-        relId,
-        rowId,
+        relId: this.relId,
+        rowId: this.rowId,
         body: this.actionParams,
       });
       this.$store.commit("data_card/setIsActionFormDisabled", false);
@@ -342,32 +314,9 @@ export default {
               const url = response.data.POUTVALUE;
               if (url.includes("/file")) {
                 const [, , , idReport, idCard] = url.split("/");
-                try {
-                  const file = await this.$axios({
-                    url: `/am/main/v2/report?idreport=${idReport}&id=${idCard}`,
-                    method: "GET",
-                    responseType: "blob",
-                  });
-                  const fileName = url.split("/").pop().split("?")[0];
-                  const fileUrl = window.URL.createObjectURL(
-                    new Blob([file.data], {
-                      type: file.headers["content-type"],
-                    })
-                  );
-                  const link = document.createElement("a");
-                  link.href = fileUrl;
-                  link.setAttribute("download", fileName);
-                  link.setAttribute("target", "_blank");
-                  document.body.appendChild(link);
-                  link.click();
-                } catch (e) {
-                  this.$bvToast.toast("Не удалось скачать файл", {
-                    title: "Ошибка",
-                    variant: "danger",
-                    noAutoHide: true,
-                    solid: true,
-                  });
-                }
+                await this.downloadFile(
+                  `/am/main/v2/report?idreport=${idReport}&id=${idCard}`
+                );
               } else {
                 //  Safari fix https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
                 setTimeout(() => {
@@ -453,6 +402,38 @@ export default {
 
       return null;
     },
+
+    /** Скачивание файла по переданной ссылке */
+    async downloadFile(url) {
+      const actionId = this.computedActionId;
+      this.$store.commit("data_card/setFetchingAction", {
+        actionId,
+        isFetching: true,
+      });
+
+      await this.$axios({
+        url,
+        method: "GET",
+        responseType: "blob",
+      })
+        .then((resp) => {
+          saveFileAxios(resp, !this.action?.LCURWINDOW);
+        })
+        .catch(() => {
+          this.$bvToast.toast("Не удалось скачать файл", {
+            title: "Ошибка",
+            variant: "danger",
+            noAutoHide: true,
+            solid: true,
+          });
+        })
+        .finally(() => {
+          this.$store.commit("data_card/setFetchingAction", {
+            actionId,
+            isFetching: false,
+          });
+        });
+    },
   },
 
   computed: {
@@ -532,13 +513,19 @@ export default {
     relId() {
       // this.$route не виден в default props, поэтому через $attrs
       return (
-        this.$attrs.relId ?? this.$attrs["rel-id"] ?? this.$route.params.idRel
+        this.$attrs.relId ??
+        this.$attrs["rel-id"] ??
+        this.$route.params.idRel ??
+        this.$store.getters["data_card/getFormParams"]?.idRel
       );
     },
     rowId() {
       // this.$route не виден в default props, поэтому через $attrs
       return (
-        this.$attrs.rowId ?? this.$attrs["row-id"] ?? this.$route.params.idCard
+        this.$attrs.rowId ??
+        this.$attrs["row-id"] ??
+        this.$route.params.idCard ??
+        this.$store.getters["data_card/getFormParams"]?.idCard
       );
     },
     action: {
