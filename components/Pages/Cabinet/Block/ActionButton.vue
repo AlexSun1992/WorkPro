@@ -257,14 +257,6 @@ export default {
     async applyAction(evt) {
       const actionId = this.computedActionId;
       if (evt) evt.preventDefault();
-      const relId =
-        this.$route.params.idRel ||
-        this.$route.query.rel ||
-        this.$store.getters["data_card/getFormParams"]?.idRel;
-
-      const rowId =
-        this.$route.params.idCard ||
-        this.$store.getters["data_card/getFormParams"]?.idCard;
 
       this.$store.commit("data_card/setError", false);
       this.$store.commit("data_card/setSavedError", false);
@@ -276,8 +268,8 @@ export default {
           window.location.origin
         );
 
-        requestDownLoadFileUrl.searchParams.set("id", rowId);
-        requestDownLoadFileUrl.searchParams.set("rel", relId);
+        requestDownLoadFileUrl.searchParams.set("id", this.rowId);
+        requestDownLoadFileUrl.searchParams.set("rel", this.relId);
         requestDownLoadFileUrl.searchParams.set("idaction", actionId);
         requestDownLoadFileUrl.searchParams.set("relaction", this.action.REL);
         await this.$axios({
@@ -307,8 +299,8 @@ export default {
       const response = await this.$store.dispatch("data_card/executeAction", {
         actionId,
         relActionId: this.action.REL,
-        relId,
-        rowId,
+        relId: this.relId,
+        rowId: this.rowId,
         body: this.actionParams,
       });
       this.$store.commit("data_card/setIsActionFormDisabled", false);
@@ -530,13 +522,19 @@ export default {
     relId() {
       // this.$route не виден в default props, поэтому через $attrs
       return (
-        this.$attrs.relId ?? this.$attrs["rel-id"] ?? this.$route.params.idRel
+        this.$attrs.relId ??
+        this.$attrs["rel-id"] ??
+        this.$route.params.idRel ??
+        this.$store.getters["data_card/getFormParams"]?.idRel
       );
     },
     rowId() {
       // this.$route не виден в default props, поэтому через $attrs
       return (
-        this.$attrs.rowId ?? this.$attrs["row-id"] ?? this.$route.params.idCard
+        this.$attrs.rowId ??
+        this.$attrs["row-id"] ??
+        this.$route.params.idCard ??
+        this.$store.getters["data_card/getFormParams"]?.idCard
       );
     },
     action: {

@@ -14,6 +14,7 @@ import * as menu from "../../../../store/menu";
 import * as dataCard from "../../../../store/data_card";
 
 jest.mock("axios");
+jest.spyOn(window, "open");
 
 describe("ActionButton", () => {
   Vue.use(Vuex, BootstrapVue);
