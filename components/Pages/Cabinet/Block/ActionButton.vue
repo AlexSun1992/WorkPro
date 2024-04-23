@@ -208,7 +208,7 @@ export default {
       this.$store.commit("data_card/setIsActionApplyError", false);
       const actionId = this.computedActionId;
       const moduleId = this.$attrs.params.page
-        ? this.params.page.idModule
+        ? this.$attrs.params.page.idModule
         : this.$route.params.idModule;
       const cardId = this.$attrs.params.page
         ? this.$store.getters["data_card/getCardId"]
