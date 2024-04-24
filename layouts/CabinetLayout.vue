@@ -218,4 +218,7 @@ export default {
   background: #fff url(/img/close-toaster-success.svg) 50% 50% no-repeat;
   border: 1px solid #009639;
 }
+.cabinet {
+  position: relative;
+}
 </style>

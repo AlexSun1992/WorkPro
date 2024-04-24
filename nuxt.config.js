@@ -71,6 +71,7 @@ const nuxtConfig = {
     "~/plugins/mask.js",
     "~/plugins/validate",
     "~/plugins/axios",
+    "~/plugins/VuePluginModal/PluginModal.js",
     "~/plugins/moment",
     "~/plugins/vue-agile",
     { src: "~plugins/vcalendar.js", ssr: false },

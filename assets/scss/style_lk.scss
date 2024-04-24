@@ -5929,3 +5929,58 @@ input.check-collapse:checked + label span + span {
 .btn-secondary:hover .sr-only:after {
   background: #fff1eb;
 }
+
+#dialogModalWrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#dialogModalWrapper:after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  z-index: 20;
+}
+
+#dialogModalWrapper > div {
+  width: 568px;
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background: #fff;
+  z-index: 21;
+  padding: 120px 50px 62px;
+  border-radius: 16px;
+  transform: translate(-50%, -50%);
+}
+#dialogModalWrapper .btn-modal-close {
+  position: absolute;
+  right: 44px;
+  top: 32px;
+  display: block;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  font-size: 0;
+  padding: 0;
+  background: #edf8ea
+    URL("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xOS43NzA4IDIxLjY1NjRDMjAuMjkxNSAyMi4xNzcxIDIxLjEzNTcgMjIuMTc3MSAyMS42NTY0IDIxLjY1NjRDMjIuMTc3MSAyMS4xMzU3IDIyLjE3NzEgMjAuMjkxNSAyMS42NTY0IDE5Ljc3MDhMMTcuODg1MiAxNS45OTk1TDIxLjY1NjQgMTIuMjI4M0MyMi4xNzcxIDExLjcwNzYgMjIuMTc3MSAxMC44NjM0IDIxLjY1NjQgMTAuMzQyN0MyMS4xMzU3IDkuODIyIDIwLjI5MTUgOS44MjIgMTkuNzcwOCAxMC4zNDI3TDE1Ljk5OTUgMTQuMTEzOUwxMi4yMjgzIDEwLjM0MjdDMTEuNzA3NiA5LjgyMTk3IDEwLjg2MzQgOS44MjE5NyAxMC4zNDI3IDEwLjM0MjdDOS44MjE5NyAxMC44NjM0IDkuODIxOTcgMTEuNzA3NiAxMC4zNDI3IDEyLjIyODNMMTQuMTEzOSAxNS45OTk1TDEwLjM0MjcgMTkuNzcwOEM5LjgyMTk3IDIwLjI5MTUgOS44MjE5NyAyMS4xMzU3IDEwLjM0MjcgMjEuNjU2NEMxMC44NjM0IDIyLjE3NzEgMTEuNzA3NiAyMi4xNzcxIDEyLjIyODMgMjEuNjU2NEwxNS45OTk1IDE3Ljg4NTJMMTkuNzcwOCAyMS42NTY0WiIgZmlsbD0iIzQzQjAyQSIvPgo8L3N2Zz4K")
+    50% 50% no-repeat;
+  border-radius: 32px;
+}
+
+h5.modal-title {
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #292929;
+}

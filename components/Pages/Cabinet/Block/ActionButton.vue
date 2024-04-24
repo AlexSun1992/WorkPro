@@ -175,6 +175,7 @@ export default {
               isFetching: false,
             });
           });
+
           return;
         }
         if (webfield.type === "button") {
@@ -285,6 +286,13 @@ export default {
         rowId: this.rowId,
         body: this.actionParams,
       });
+
+      if (response?.data.POUTMESSAGE) {
+        await this.$modal.alert(response?.data.POUTMESSAGE, {
+          icon: "ok",
+        });
+      }
+
       this.$store.commit("data_card/setIsActionFormDisabled", false);
       if (response?.status === 500 || response?.status === 520) {
         this.$store.commit("data_card/setLoading", false);
