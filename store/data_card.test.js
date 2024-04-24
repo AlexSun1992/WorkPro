@@ -25,4 +25,47 @@ describe("модуль data_card actions", () => {
 
     expect(getters.isFetchingAction(state)(actionId)).toBe(false);
   });
+
+  it("должен вычислять actionParams простые значения", () => {
+    const params = getters.getActionParams({
+      actionParams: [
+        {
+          label: "Полис",
+          name: "FKIDPOLICY",
+          fromDataCard: true,
+        },
+      ],
+      form: [
+        {
+          value: "Полис 1",
+          name: "FKIDPOLICY",
+        },
+      ],
+    });
+
+    expect(params[0].value).toBe("Полис 1");
+  });
+
+  it("должен вычислять actionParams значения объекта в виде JSON", () => {
+    const params = getters.getActionParams({
+      actionParams: [
+        {
+          label: "Полис",
+          name: "FKIDPOLICY",
+          fromDataCard: true,
+        },
+      ],
+      form: [
+        {
+          value: {
+            SNAME: "Полис 1",
+            ID: 1,
+          },
+          name: "FKIDPOLICY",
+        },
+      ],
+    });
+
+    expect(params[0].value).toBe('{"SNAME":"Полис 1","ID":1}');
+  });
 });

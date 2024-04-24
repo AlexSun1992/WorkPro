@@ -88,7 +88,7 @@ export const getters = {
   getBtnCancel: (state) => state.isCancel,
   getReadOnly: (state) => state.isReadOnly,
   getActionParams: (state) =>
-    typeof state.actionParams.map === "function"
+    Array.isArray(state.actionParams)
       ? state.actionParams.map((a) => {
           const obj = { ...a };
           if (obj.fromDataCard === true) {
