@@ -88,11 +88,17 @@ export const getters = {
   getBtnCancel: (state) => state.isCancel,
   getReadOnly: (state) => state.isReadOnly,
   getActionParams: (state) =>
-    typeof state.actionParams.map === "function"
+    Array.isArray(state.actionParams)
       ? state.actionParams.map((a) => {
           const obj = { ...a };
           if (obj.fromDataCard === true) {
-            obj.value = state.form.find((b) => b.name === obj.name)?.value;
+            const dataCardField = state.form.find((b) => b.name === obj.name);
+            if (dataCardField) {
+              obj.value =
+                typeof dataCardField.value === "object"
+                  ? JSON.stringify(dataCardField.value)
+                  : dataCardField.value;
+            }
           }
           return { ...obj };
         })
