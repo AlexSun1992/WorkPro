@@ -31,7 +31,7 @@ const PluginModal = {
                   v-if="args.temp"
                   v-html="args.temp"
                 ></div>
-                <button class="btn-primary" @click="confirmAction(true)">
+                <button class="btn-primary mt-3" @click="confirmAction(true)">
                   {{nameBtn}}
                 </button>
               </div>
