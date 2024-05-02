@@ -25,8 +25,6 @@ const logger = createLogger({
   transports: [new transports.Console()],
 });
 
-let controller;
-
 router.use(express.json());
 router.use((req, res, next) => {
   res.removeHeader("X-Powered-By");
@@ -267,14 +265,9 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
     const URL_ADDRESS = encodeURI(
       `/am/free/v2/vuetemplate/${req.params.idItem}`
     );
-    if (controller) {
-      controller.abort();
-    }
-    controller = new AbortController();
     mobile2ServiceInstance({
       url: URL_ADDRESS,
       method: "GET",
-      signal: controller.signal,
     })
       .then(async (resp) => {
         res.set("Content-Type", "text/javascript");
@@ -284,6 +277,10 @@ router.get("/card/js/:idModule/:idItem", (req, res) => {
         );
       })
       .catch((err) => {
+        console.error(
+          new Date(),
+          `Ошибка загрузки скрипта ${URL_ADDRESS}: ${err.response?.status}, ${err}`
+        );
         if (err?.response?.data.STATUS == 401) {
           res.status(err.response.data.STATUS).send(err.response.data);
         } else {
