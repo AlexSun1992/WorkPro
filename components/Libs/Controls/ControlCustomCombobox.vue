@@ -139,7 +139,7 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: result?.value || null,
+        value: result?.value ?? null,
       });
     },
     handleBlur() {
