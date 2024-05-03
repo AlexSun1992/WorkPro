@@ -22,12 +22,11 @@
       :search="search"
       :get-result-value="getResultValue"
       :default-value="getCurrentValue"
-      :disabled="!edit ? !edit : data.readonly || isDisabled"
+      :disabled="!edit ? !edit : data.readonly || isDisabledByRelation"
       @submit="handleSubmit"
       @blur="handleBlur"
     />
-
-    <b-form-invalid-feedback :state="isErr">
+    <b-form-invalid-feedback :state="!isErr">
       {{ data.error ? data.error : validationErrorText }}
     </b-form-invalid-feedback>
   </b-form-group>
@@ -62,7 +61,9 @@ export default {
     };
   },
   created() {
-    this.initData();
+    if (!this.data.fieldRelation) {
+      this.initData();
+    }
   },
   computed: {
     placeholder() {
@@ -72,10 +73,10 @@ export default {
     },
     validClass() {
       if (this.data.required) {
-        if (this.isErr === false) {
+        if (this.isErr === true) {
           return "is-invalid";
         }
-        if (this.isErr === true) {
+        if (this.isErr === false) {
           return "is-valid";
         }
 
@@ -88,12 +89,11 @@ export default {
     },
     getCurrentValue() {
       return this.options.find(
-        (item) =>
-          item.value === Number(this.data?.value?.value) ||
-          item.value === Number(this.data?.value)
+        (item) => item.value === Number(this.data?.value?.value)
       )?.text;
     },
-    isDisabled() {
+
+    relationValue() {
       if (this.data.fieldRelation) {
         const arrayFieldRelation = this.data.fieldRelation.split(";");
         if (arrayFieldRelation.length) {
@@ -102,17 +102,24 @@ export default {
               arrayFieldRelation
             );
           if (fieldsRelations) {
-            return fieldsRelations.some((item) => !item.value?.value);
+            return fieldsRelations[0].value?.value;
           }
         }
-        if (!this.data.fieldRelation.split(";")) {
-          return (
-            Boolean(
-              this.$store.getters["data_card/getDataFieldByName"](
-                this.data.fieldRelation
-              )?.value?.value
-            ) === false
-          );
+      }
+      return null;
+    },
+
+    isDisabledByRelation() {
+      if (this.data.fieldRelation) {
+        const arrayFieldRelation = this.data.fieldRelation.split(";");
+        if (arrayFieldRelation.length) {
+          const fieldsRelations =
+            this.$store.getters["data_card/getDataFieldsByNames"](
+              arrayFieldRelation
+            );
+          if (fieldsRelations.length > 0) {
+            return !fieldsRelations.every((item) => item.value?.value);
+          }
         }
       }
       return false;
@@ -128,40 +135,39 @@ export default {
             this.data.fieldId
           )?.options;
         }
-        if (this.data.value?.value) {
-          return [this.data.value];
+        if (this.data.value) {
+          return [this.data];
         }
         return [];
       },
     },
   },
   watch: {
+    relationValue(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.initData();
+      }
+    },
     validClass(value) {
-      if (this.data.state === false && value === "is-invalid") {
-        this.validationErrorText = "Обязательно для заполнения";
+      if (this.data.required) {
+        if (this.data.state === false && value === "is-invalid") {
+          this.validationErrorText = "Обязательно для заполнения";
+        }
       }
     },
     getCurrentValue(value) {
       this.$refs.autocomplete.value = value;
     },
   },
-  mounted() {
-    if (this.$refs[this.selectId]) {
-      this.$refs[this.selectId].$el.children[this.selectId].onfocus = () => {
-        this.initData();
-      };
-    }
-  },
   methods: {
     handleBlur() {
       if (Boolean(this.$refs.autocomplete.value) === false) {
         const value = this.options.find(
-          (item) => item.value == Number(this.data?.value)
+          (item) => item.value == Number(this.data?.value?.value)
         );
-
-        if (value === undefined) {
+        if (value === undefined && this.data.required) {
           this.validationErrorText = "Обязательно для заполнения";
-          this.isErr = false;
+          this.isErr = true;
           this.$refs.autocomplete.value = "";
         }
         if (value) {
@@ -174,11 +180,12 @@ export default {
         );
         if (find !== undefined) {
           this.$refs.autocomplete.value = find.text;
-          this.isErr = true;
+          this.isErr = false;
 
           this.handleSubmit(find);
         } else {
           this.validationErrorText = "Выберите значение из выпадающего списка";
+          this.isErr = true;
           this.$refs.autocomplete.value = "";
           this.placeholderValue = "";
           this.handleSubmit(null);
@@ -190,43 +197,52 @@ export default {
       return item.text;
     },
     search(value) {
+      this.initData();
       if (value) {
         const findValueInList = this.options.find((i) =>
           i.text.includes(this.$refs.autocomplete?.value)
         );
-
         if (
           findValueInList === undefined &&
           this.$refs.autocomplete?.value !== undefined &&
-          this.getCurrentValu === undefined
+          this.getCurrentValue === undefined
         ) {
           this.validationErrorText = `По фразе "${this.$refs.autocomplete?.value}" ничего не найдено`;
-          this.isErr = false;
+          this.isErr = true;
         }
 
         if (findValueInList !== undefined) {
-          this.isErr = true;
+          this.isErr = false;
         }
       }
       if (
         value.length < 1 ||
-        this.options.find((item) => item.value === Number(this.data?.value))
-          ?.text === value
+        this.options.find(
+          (item) => item.value === Number(this.data?.value?.value)
+        )?.text === value
       ) {
         this.placeholderValue = value;
         this.$refs.autocomplete.value = "";
         return this.options;
       }
-
-      return this.options;
+      return this.options.filter((item) => item.text.includes(value));
     },
     async initData() {
-      await this.$store.dispatch("data_card/fetchDic", this.data);
+      let data = { ...this.data };
+      if (typeof this.data.value === "number") {
+        data = {
+          ...this.data,
+          value: this.data.options.find(
+            (item) => item.value === this.data.value
+          ),
+        };
+      }
+      await this.$store.dispatch("data_card/fetchDic", { ...data });
       if (this.data.fieldRelation) {
         this.$emit("update", {
-          fieldId: this.data.fieldId,
-          name: this.data.name,
-          value: this.data.value?.value ? this.data.value : {},
+          fieldId: data.fieldId,
+          name: data.name,
+          value: data.value || {},
         });
       }
     },
