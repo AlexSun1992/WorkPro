@@ -1,26 +1,37 @@
 <template>
   <div>
-    <div id="favDialog" ref="favDialog" v-if="showPassportDialog">
-      <button data-testid="closeDialog" @click="closeDialog">X</button>
-      <form @submit.prevent="sendPassportNumber">
+    <b-modal
+      id="passportNumberDialog"
+      hide-footer
+      @hidden="closeDialog"
+      :centered="true"
+      :static="true"
+      content-class="passportNumber"
+    >
+      <b-form @submit.prevent="sendPassportNumber">
         <div>
           <label for="dialog">Введите последние 4 цифры номера паспорта</label>
-          <input
+          <b-form-input
+            autofocus
             :disabled="isDisabled"
             class="passport-number"
             type="text"
+            autocomplete="off"
             name="passport"
             v-model="searchParamPassport"
-          />
+          ></b-form-input>
         </div>
-        <div data-testid="dialogErrorInformation" v-if="dialogErrorInformation">
+        <b-form-invalid-feedback
+          data-testid="dialogErrorInformation"
+          :state="!dialogErrorInformation"
+        >
           {{ dialogErrorInformation }}
-        </div>
+        </b-form-invalid-feedback>
         <button type="submit" id="sendPassport" :disabled="isDisabled">
           Отправить
         </button>
-      </form>
-    </div>
+      </b-form>
+    </b-modal>
 
     <b-modal
       id="sms-confirm-modal"
@@ -291,9 +302,9 @@ export default {
       searchParamType: null,
       searchParamState: null,
       searchParamPassport: null,
-      showPassportDialog: false,
       dialogErrorInformation: null,
       isDisabled: false,
+      showPassport: true,
     };
   },
   async mounted() {
@@ -387,7 +398,7 @@ export default {
           const responseData = await response.json();
 
           if (response.status !== 200) {
-            this.showPassportDialog = true;
+            this.$bvModal.show("passportNumberDialog");
             if (!responseData.INFO.includes("Нужен паспорт")) {
               this.dialogErrorInformation = responseData.INFO;
               if (responseData.INFO.includes("Превышено количество попыток")) {
@@ -398,7 +409,7 @@ export default {
           }
 
           if (response.status === 200) {
-            this.showPassportDialog = false;
+            this.$bvModal.hide("passportNumberDialog");
             if (responseData[0].ACCESS_TOKEN) {
               this.saveCookies(
                 responseData[0].ACCESS_TOKEN,
@@ -414,7 +425,7 @@ export default {
       this.searchParamPassport = "";
     },
     closeDialog() {
-      this.showPassportDialog = false;
+      this.$bvModal.hide("passportNumberDialog");
       if (Cookies.get("referror")) {
         window.location.href = Cookies.get("referror");
       }

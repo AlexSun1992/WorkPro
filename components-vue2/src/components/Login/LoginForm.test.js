@@ -17,23 +17,28 @@ describe("LoginForm", () => {
   });
 
   it("На странице появляется окно для ввода номера паспорта", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
     global.window = Object.create(window);
     Object.defineProperty(window, "location", {
       value: {
         href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
       },
     });
-
     fetch.mockReturnValue(
       Promise.resolve(
-        createMockMobileId({ errorText: "Нужен паспорт", statusCode: 520 })
+        createMockMobileId({
+          errorText: "Нужен паспорт",
+          statusCode: 520,
+        })
       )
     );
-    const wrapper = mount(LoginForm);
-    await wrapper.vm.$nextTick();
+
+    const wrapper = mount(LoginForm, { localVue });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
+    expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch).toHaveBeenCalledWith("/am/free/v2/datacard/55/804", {
       body: '{"state":"ce5e41e9-69cd-43b9-9e50-f7edd4e53771"}',
       headers: {
@@ -41,38 +46,40 @@ describe("LoginForm", () => {
       },
       method: "POST",
     });
-    expect(wrapper.find(".passport-number").exists()).toBe(true);
+    expect(
+      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
+    ).toBe(undefined);
   });
 
   it("Происходит повторный вызов окна ввода паспорта т.к. пасспорт в 1ый раз был заполнен неправильно", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
     global.window = Object.create(window);
     Object.defineProperty(window, "location", {
       value: {
         href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
       },
     });
-
     fetch.mockReturnValue(
       Promise.resolve(
-        createMockMobileId({ errorText: "Нужен паспорт", statusCode: 520 })
+        createMockMobileId({
+          errorText: "Нужен паспорт",
+          statusCode: 520,
+        })
       )
     );
-    const wrapper = mount(LoginForm);
-    await wrapper.vm.$nextTick();
+
+    const wrapper = mount(LoginForm, { localVue });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
+    expect(
+      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
+    ).toBe(undefined);
 
     await wrapper.findComponent(".passport-number").setValue("1234");
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
     await wrapper.find("#sendPassport").trigger("submit.prevent");
-    fetch.mockReturnValue(
-      Promise.resolve(
-        createMockMobileId({ errorText: "Нужен паспорт", statusCode: 520 })
-      )
-    );
 
     expect(fetch).toHaveBeenCalledWith("/am/free/v2/datacard/55/804", {
       body: '{"state":"ce5e41e9-69cd-43b9-9e50-f7edd4e53771","passport":"1234"}',
@@ -81,10 +88,24 @@ describe("LoginForm", () => {
       },
       method: "POST",
     });
-    expect(wrapper.find(".passport-number").exists()).toBe(true);
+
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({
+          errorText: "Повторите попытку ввода паспорта",
+          statusCode: 520,
+        })
+      )
+    );
+
+    expect(
+      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
+    ).toBe(undefined);
   });
 
   it("Выводим ошибку в dialog", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
     global.window = Object.create(window);
     Object.defineProperty(window, "location", {
       value: {
@@ -100,18 +121,22 @@ describe("LoginForm", () => {
         })
       )
     );
-    const wrapper = mount(LoginForm);
+    const wrapper = mount(LoginForm, { localVue });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(wrapper.find("[data-testid=dialogErrorInformation]").text()).toBe(
       "Повторите попытку ввода паспорта"
     );
+    expect(wrapper.find(".passport-number").attributes("aria-hidden")).toBe(
+      undefined
+    );
   });
 
   it("Выводим ошибку в dialog и добавляем disabled на кнопку и инпут", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
     global.window = Object.create(window);
     Object.defineProperty(window, "location", {
       value: {
@@ -127,7 +152,7 @@ describe("LoginForm", () => {
         })
       )
     );
-    const wrapper = mount(LoginForm);
+    const wrapper = mount(LoginForm, { localVue });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
@@ -145,6 +170,8 @@ describe("LoginForm", () => {
   });
 
   it("Закрываем dialog по клику", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
     global.window = Object.create(window);
     Object.defineProperty(window, "location", {
       value: {
@@ -159,21 +186,25 @@ describe("LoginForm", () => {
         })
       )
     );
-    const wrapper = mount(LoginForm);
+    const wrapper = mount(LoginForm, { localVue });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    await wrapper.find("[data-testid=closeDialog]").trigger("click");
+    await wrapper.find("button[aria-label=Close]").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find(".passport-number").exists()).toBe(false);
+    expect(
+      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
+    ).toBe("true");
     expect(fetch).not.toHaveBeenCalledTimes(2);
   });
 
   it("На странице не появляется окно для ввода номер паспорта и происходит redirect /cabinet", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
     global.window = Object.create(window);
     Object.defineProperty(window, "location", {
       value: {
@@ -189,6 +220,7 @@ describe("LoginForm", () => {
       )
     );
     const wrapper = mount(LoginForm, {
+      localVue,
       mocks: {
         $cookiz: {
           get: jest.fn().mockReturnValue("/cabinet"),
@@ -201,11 +233,15 @@ describe("LoginForm", () => {
     await wrapper.vm.$nextTick();
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(wrapper.find(".passport-number").exists()).toBe(false);
+    expect(
+      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
+    ).toBe("true");
     expect(window.location.href).toEqual("/cabinet");
   });
 
-  it("На странице не появляется окно для ввода номер паспорта ", async () => {
+  it("На странице не появляется окно для ввода номера паспорта ", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
     global.window = Object.create(window);
     Object.defineProperty(window, "location", {
       value: {
@@ -213,13 +249,14 @@ describe("LoginForm", () => {
       },
     });
 
-    const wrapper = mount(LoginForm);
+    const wrapper = mount(LoginForm, { localVue });
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-
     expect(fetch).toHaveBeenCalledTimes(0);
-    expect(wrapper.find(".passport-number").exists()).toBe(false);
+    expect(
+      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
+    ).toBe("true");
   });
 
   it("должен показать кнопку авторизоваться", () => {
