@@ -98,7 +98,7 @@ export default {
       /** @type {import('../../../../store/menu.types').ActionInfo} */
       const actionInfo = this.action;
 
-      if (!actionInfo.LHIDEDLG) {
+      if ("LHIDEDLG" in actionInfo && !actionInfo.LHIDEDLG) {
         const confirmResult = await this.confirmAction();
         if (!confirmResult) {
           return;

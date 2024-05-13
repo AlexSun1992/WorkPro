@@ -207,4 +207,42 @@ describe("ActionButton", () => {
       })
     );
   });
+
+  it("Если нет связанного action то не всплывает модалка", async () => {
+    const setFlatMenuCopy = JSON.parse(JSON.stringify(setFlatMenu));
+    setFlatMenuCopy.data[0].ACTIONSCUR = [];
+    jest
+      .spyOn(axios, "get")
+      .mockResolvedValueOnce({ ...fetchMenu })
+      .mockResolvedValueOnce({ ...setFlatMenuCopy });
+    await store.dispatch("menu/fetchMenu", mockRoute.params);
+
+    wrapper = mount(ActionButton, {
+      localVue,
+      propsData: {
+        /** actionId === null - отсутствует связанный Action */
+        actionId: null,
+        body: undefined,
+        contextChanged: false,
+        id: "buy_section_osago_lk2",
+        insideContent: "",
+        variant: "transparent",
+        data: {
+          label: "Рассчитать ОСАГО",
+          name: "SCALCULATEPOLIS",
+        },
+      },
+
+      mocks: {
+        $store: store,
+        $route: mockRoute,
+        $router: mockRouter,
+      },
+    });
+    const spyBvModal = jest.spyOn(wrapper.vm.$bvModal, "msgBoxConfirm");
+
+    await wrapper.find(".btn").trigger("click");
+
+    expect(spyBvModal).not.toHaveBeenCalled();
+  });
 });
