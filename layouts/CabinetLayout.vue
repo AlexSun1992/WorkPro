@@ -221,4 +221,7 @@ export default {
 .cabinet {
   position: relative;
 }
+.modal-open .modal {
+  position: fixed;
+}
 </style>
