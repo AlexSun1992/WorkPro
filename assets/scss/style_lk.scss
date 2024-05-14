@@ -1161,6 +1161,8 @@ a.lgreen {
 
 .block-visit.vdn {
   grid-template-areas: "title planned" "name name";
+  grid-template-rows: auto auto;
+  gap: 5px;
 }
 .pay-page .block-visit {
   grid-template-columns: minmax(30px, auto) 160px;
@@ -1207,6 +1209,7 @@ a.lgreen {
 }
 .block-visit.vdn .name {
   margin-top: 5px;
+  align-self: end;
 }
 
 .block-visit .planning {
