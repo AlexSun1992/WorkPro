@@ -287,8 +287,8 @@ export default {
         body: this.actionParams,
       });
 
-      if (response?.data.POUTMESSAGE) {
-        await this.$modal.alert(response?.data.POUTMESSAGE, {
+      if (this.action?.SMESSAGE) {
+        await this.$modal.alert(this.action?.SMESSAGE, {
           icon: "ok",
         });
       }
