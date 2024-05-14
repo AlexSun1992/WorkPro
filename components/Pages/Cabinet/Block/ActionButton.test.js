@@ -25,6 +25,13 @@ describe("ActionButton", () => {
   let mockRoute;
   let mockRouter;
 
+  function findButtonByText(text) {
+    return wrapper
+      .findAll("button")
+      .filter((elm) => elm.text().includes(text))
+      .at(0);
+  }
+
   beforeEach(async () => {
     mockRoute = {
       params: {
@@ -281,7 +288,7 @@ describe("ActionButton", () => {
       },
     });
 
-    await wrapper.find(".btn").trigger("click");
+    await await findButtonByText("Оформить новый полис ОСАГО").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
