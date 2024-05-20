@@ -872,7 +872,8 @@ export default {
       const patternTempPhone = `${this.getPhone().slice(0, 1)}(${this.getPhone().slice(1, 4)})${this.getPhone().slice(4, 7)}-${this.getPhone().slice(7, 9)}-${this.getPhone().slice(9, 11)}`;
 
       return (`<div class="agent-card-item" data-agent_id="${agent.ID}">
-            <span class="agent-card-stars ${ratingClass}"></span>
+            <!--<span class="agent-card-stars ${ratingClass}"></span>-->
+            ${agent.LEVELID > 2 ? '<p class="agent-card-rating">' + agent.LEVELNAME + '</p>' : ''}
             <p class="agent-card-name">${agent.NAME}</p>
         <span class="agent-card-message">Агент поможет оформить полис</span>
         <img ${srcImgAgent} class="agent-card-img">
