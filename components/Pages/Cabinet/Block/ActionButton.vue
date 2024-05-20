@@ -287,12 +287,6 @@ export default {
         body: this.actionParams,
       });
 
-      if (this.action?.SMESSAGE) {
-        await this.$modal.alert(this.action?.SMESSAGE, {
-          icon: "ok",
-        });
-      }
-
       this.$store.commit("data_card/setIsActionFormDisabled", false);
       if (response?.status === 500 || response?.status === 520) {
         this.$store.commit("data_card/setLoading", false);
@@ -311,6 +305,11 @@ export default {
         this.$nextTick(() => {
           this.$bvModal.hide("confirmAction");
         });
+        if (this.action?.SMESSAGE) {
+          await this.$modal.alert(this.action?.SMESSAGE, {
+            icon: "ok",
+          });
+        }
         if (this.$route.query?.ref && this.action?.LCLOSEAFTER) {
           this.$router.push(this.$route.query?.ref);
         }
