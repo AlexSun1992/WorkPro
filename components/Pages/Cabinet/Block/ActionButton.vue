@@ -291,7 +291,7 @@ export default {
       if (response?.status === 500 || response?.status === 520) {
         this.$store.commit("data_card/setLoading", false);
         if (this.action.LREQUESTCODE) {
-          this.$store.commit("data_card/setisActionApplyError", true);
+          this.$store.commit("data_card/setIsActionApplyError", true);
           this.$store.commit(
             "data_card/setactionApplyErrorMessage",
             getErrorMessage(response.data)

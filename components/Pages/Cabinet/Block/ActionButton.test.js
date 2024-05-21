@@ -263,7 +263,7 @@ describe("ActionButton", () => {
       .mockResolvedValueOnce({ ...fetchMenu })
       .mockResolvedValueOnce({ ...setFlatMenuCopy });
     // Запрос на выполнение действия
-    jest.spyOn(axios, "post").mockResolvedValueOnce({ status: 200 });
+    jest.spyOn(axios, "post").mockResolvedValueOnce({ status: 200, data: {} });
     await store.dispatch("menu/fetchMenu", mockRoute.params);
 
     wrapper = mount(ActionButton, {
@@ -313,9 +313,9 @@ describe("ActionButton", () => {
       .mockResolvedValueOnce({ ...fetchMenu })
       .mockResolvedValueOnce({ ...setFlatMenuCopy });
     // Запрос на выполнение действия
-    jest
-      .spyOn(axios, "post")
-      .mockRejectedValueOnce({ response: { status: 500 } });
+    jest.spyOn(axios, "post").mockRejectedValueOnce({
+      response: { status: 500, data: { MESSAGE: "Ошибка" } },
+    });
     await store.dispatch("menu/fetchMenu", mockRoute.params);
 
     wrapper = mount(ActionButton, {
