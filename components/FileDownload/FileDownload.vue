@@ -28,11 +28,11 @@ export default {
           link.click();
         })
         .catch((e) => {
-          this.$bvToast.toast("Не удалось скачать файл", {
-            title: "Ошибка",
-            variant: "danger",
-            noAutoHide: true,
-            solid: true,
+          this.$modal.alert({
+            title: "Извините, произошла ошибка",
+            msg: "Не удалось скачать файл",
+            icon: "error",
+            btnOk: false,
           });
         });
     },

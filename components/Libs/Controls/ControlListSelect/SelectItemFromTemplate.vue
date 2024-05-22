@@ -66,11 +66,11 @@ export default {
             query: { ...this.$route.query },
           });
     } catch (err) {
-      this.$bvToast.toast(err.response.data.MESSAGE, {
-        title: "Ошибка",
-        variant: "danger",
-        noAutoHide: true,
-        solid: true,
+      this.$modal.alert({
+        title: "Извините произошла ошибка",
+        msg: err.response.data.MESSAGE,
+        icon: "error",
+        btnOk: false,
       });
     }
   },

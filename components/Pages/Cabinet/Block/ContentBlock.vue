@@ -78,11 +78,11 @@ export default {
         });
       }
     } catch (err) {
-      this.$bvToast.toast(err.response.data.MESSAGE, {
+      this.$modal.alert({
         title: "Ошибка",
-        variant: "danger",
-        noAutoHide: true,
-        solid: true,
+        msg: err.response.data.MESSAGE,
+        icon: "error",
+        btnOk: false,
       });
     }
   },
@@ -142,11 +142,11 @@ export default {
           );
         }
       } catch (err) {
-        this.$bvToast.toast(err.response.data.MESSAGE, {
-          title: "Ошибка",
-          variant: "danger",
-          noAutoHide: true,
-          solid: true,
+        this.$modal.alert({
+          title: "Извините, произошла ошибка",
+          icon: "error",
+          msg: err.response.data.MESSAGE,
+          btnOk: false,
         });
       }
     },

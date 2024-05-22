@@ -12,7 +12,9 @@ export function getOptions(param1, param2) {
   if (typeof param1 === "string" && typeof param2 === "object") {
     return {
       msg: param1,
+      title: param2?.title,
       img: param2?.icon,
+      btnOk: param2?.btnOk,
     };
   }
 
@@ -30,8 +32,10 @@ export function getOptions(param1, param2) {
       return template;
     }
     return {
-      msg: "Выполнить действие?",
+      msg: param1?.msg ? param1?.msg : "Выполнить действие?",
       img: param1?.icon,
+      title: param1?.title,
+      btnOk: param1?.btnOk,
     };
   }
 

@@ -33,6 +33,21 @@ describe("Тайпгард для pluginModal", () => {
     expect(data).toMatchObject({ msg: "Выполнить действие?", img: "error" });
   });
 
+  it("Передаем объект (один параметр) параметры btnOk,title,msg,title", () => {
+    const data = getOptions({
+      icon: "alert",
+      title: "Извините произошла ошибка",
+      msg: "Повторите попытку позже",
+      btnOk: false,
+    });
+    expect(data).toMatchObject({
+      msg: "Повторите попытку позже",
+      img: "alert",
+      title: "Извините произошла ошибка",
+      btnOk: false,
+    });
+  });
+
   it("Передаем Vue компонент", () => {
     const actionTemplate = {
       template: `<h5 class="modal-title">Выполнить действие?!</h5>`,

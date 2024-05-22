@@ -65,12 +65,6 @@ export default {
       }
     } catch (err) {
       console.error(err);
-      this.$bvToast.toast(err.response.data.MESSAGE, {
-        title: "Ошибка",
-        variant: "danger",
-        noAutoHide: true,
-        solid: true,
-      });
     }
   },
   computed: {

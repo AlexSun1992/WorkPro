@@ -108,6 +108,7 @@ describe("PluginModal", () => {
   it("Возвращаем false в promise при нажатии кнопки 'Закрыть'", async () => {
     createComponent();
     response = wrapper.vm.$modal.alert();
+
     wrapper.find(".btn-modal-close").trigger("click");
 
     await expect(response).resolves.toBe(false);
@@ -116,22 +117,25 @@ describe("PluginModal", () => {
   it("Передаем Vue компонент в метод alert(), проверяем отображение компонента в шаблоне,ожидаем true", async () => {
     createComponent();
     response = wrapper.vm.$modal.alert(vueComp);
+
     expect(wrapper.find("#isSlotTemplate").exists()).toBe(true);
     expect(wrapper.find("#isSlotTemplate").text()).toEqual(
       "Выполнить действие?!"
     );
-    wrapper.find(".btn-primary").trigger("click");
 
+    wrapper.find(".btn-primary").trigger("click");
     await expect(response).resolves.toBe(true);
   });
 
   it("Передаем Vue компонент в метод alert(), проверяем отображение строки в шаблоне,ожидаем false", async () => {
     createComponent();
     response = wrapper.vm.$modal.alert(vueComp);
+
     expect(wrapper.find("#isSlotTemplate").exists()).toBe(true);
     expect(wrapper.find("#isSlotTemplate").text()).toEqual(
       "Выполнить действие?!"
     );
+
     wrapper.find(".btn-modal-close").trigger("click");
 
     await expect(response).resolves.toBe(false);
@@ -139,46 +143,130 @@ describe("PluginModal", () => {
 
   it("Не отображается иконка", async () => {
     createComponent();
-
     wrapper.vm.$modal.alert();
 
     const img = wrapper.find("img");
+
     expect(img.exists()).toBe(false);
   });
 
   it("Отображается иконка Ок", async () => {
     createComponent();
-
     wrapper.vm.$modal.alert({
       icon: "ok",
     });
 
     const img = wrapper.find("img");
+
     expect(img.exists()).toBe(true);
     expect(img.attributes("src")).toBe("/img/icon-ok.svg");
   });
 
   it("Отображается иконка Ок-2", async () => {
     createComponent();
-
     wrapper.vm.$modal.alert("Hello!", {
       icon: "ok",
     });
 
     const img = wrapper.find("img");
+
     expect(img.exists()).toBe(true);
     expect(img.attributes("src")).toBe("/img/icon-ok.svg");
   });
 
   it("Отображается иконка Error", async () => {
     createComponent();
-
     wrapper.vm.$modal.alert("Hello!", {
       icon: "error",
     });
 
     const img = wrapper.find("img");
+
     expect(img.exists()).toBe(true);
     expect(img.attributes("src")).toBe("/img/icon-error.svg");
+  });
+
+  it("Проверяем отображение кнопки при параметре btnOk===false", () => {
+    createComponent();
+    wrapper.vm.$modal.alert({
+      btnOk: false,
+    });
+
+    const btn = wrapper.find(".btn-primary");
+
+    expect(btn.exists()).toBe(false);
+  });
+
+  it("Проверяем наличие иконки при ее передаче в качестве аргумента", () => {
+    createComponent();
+    wrapper.vm.$modal.alert({
+      icon: "alert",
+    });
+
+    const img = wrapper.find("img");
+
+    expect(img.exists()).toBe(true);
+    expect(img.attributes("src")).toBe("/img/icon-alert.svg");
+  });
+
+  it("Проверяем отсутствие иконки при непередаче ее в качестве аргумента", () => {
+    createComponent();
+    wrapper.vm.$modal.alert({});
+
+    const img = wrapper.find("img");
+
+    expect(img.exists()).toBe(false);
+  });
+
+  it("Проверяем правильность передачу сообщения", () => {
+    createComponent();
+    wrapper.vm.$modal.alert({
+      title: "Извините произошла ошибка",
+    });
+
+    const title = wrapper.find(".modal-title");
+
+    expect(title.text()).toEqual("Извините произошла ошибка");
+  });
+
+  it("Проверяем отображение кнопки при параметре btnOk===true", () => {
+    createComponent();
+    wrapper.vm.$modal.alert({
+      btnOk: true,
+    });
+
+    const btn = wrapper.find(".btn-primary");
+
+    expect(btn.exists()).toBe(true);
+  });
+
+  it("Проверяем отсутствие иконки (в аргументе не передаем)", () => {
+    createComponent();
+    wrapper.vm.$modal.alert({});
+
+    const img = wrapper.find("img");
+
+    expect(img.exists()).toBe(false);
+  });
+
+  it("Проверяем отображение кнопки без параметра btnOk===true", () => {
+    createComponent();
+    wrapper.vm.$modal.alert({});
+
+    const btn = wrapper.find(".btn-primary");
+
+    expect(btn.exists()).toBe(true);
+  });
+
+  it("Проверяем отображение заголовка при передачи его в качестве аргумента", () => {
+    createComponent();
+    wrapper.vm.$modal.alert({
+      icon: "alert",
+      msg: "Повторите попытку позже",
+    });
+
+    const titleModal = wrapper.find("#modalTitle");
+
+    expect(titleModal.exists()).toBe(false);
   });
 });

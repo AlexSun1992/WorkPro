@@ -64,11 +64,11 @@ export default {
         })
         .catch((e) => {
           if (!e.response) {
-            this.$bvToast.toast("Не удалось загрузить файл", {
-              title: "Ошибка",
-              variant: "danger",
-              noAutoHide: true,
-              solid: true,
+            this.$modal.alert({
+              title: "Извините, произошла ошибка",
+              msg: "Не удалось загрузить файл",
+              icon: "error",
+              btnOk: false,
             });
           }
         })

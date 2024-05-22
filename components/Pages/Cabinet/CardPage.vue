@@ -403,11 +403,11 @@ export default {
         if (this.$route.path.includes("55/0/19")) {
           this.error = response.response.data.MESSAGE;
         } else {
-          this.$bvToast.toast(response.response.data.MESSAGE, {
-            title: "Ошибка",
-            variant: "danger",
-            noAutoHide: true,
-            solid: true,
+          this.$modal.alert({
+            title: "Извините, произошла ошибка",
+            msg: response.response.data.MESSAGE,
+            icon: "error",
+            btnOk: false,
           });
         }
       }
