@@ -43,7 +43,11 @@
         {{ formatBytes(maxFileSize) }}
       </div>
     </div>
-    <div v-for="file in files" :key="file.FILENAME" class="col-9 col-lg-4">
+    <div
+      v-for="file in files"
+      :key="file.FILENAME + file.SIZE"
+      class="col-9 col-lg-4"
+    >
       <div
         class="preview-card"
         v-bind:class="{

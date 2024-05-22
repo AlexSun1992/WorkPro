@@ -132,6 +132,7 @@ export default {
             throw new Error(text);
           }
         })
+        .catch((e) => console.error(e))
         .finally(() => {
           this.$store.commit("data_card/setDisabled", false);
           this.$store.commit("data_card/setLoading", false);
@@ -140,13 +141,14 @@ export default {
         });
     },
     async changeFiles(name, data) {
-      for (const file of data) {
-        await this.compressFile(name, file);
-      }
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.$store.getters["uploader/getFormData"],
+      await Promise.all(
+        Array.from(data).map((file) => this.compressFile(name, file))
+      ).finally(() => {
+        this.$emit("update", {
+          fieldId: this.data.fieldId,
+          name: this.data.name,
+          value: this.$store.getters["uploader/getFormData"],
+        });
       });
     },
     removeFile(file) {

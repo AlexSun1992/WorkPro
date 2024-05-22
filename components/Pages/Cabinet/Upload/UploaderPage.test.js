@@ -163,6 +163,83 @@ describe("UploaderPage", () => {
       );
     });
 
+    it("Прикрепление и отправка файлов с одинаковым именем", async () => {
+      const FILE1 = new File(["1"], "EPROTOKOL.jpeg");
+      const FILE2 = new File(["11"], "EPROTOKOL.jpeg");
+      const FILE3 = new File(["111"], "EPROTOKOL.jpeg");
+      const FILE4 = new File(["1111"], "EPROTOKOL.jpeg");
+
+      await store.dispatch("uploader/addData", {
+        data: [FILE1, FILE2],
+        name: "EPROTOKOL",
+      });
+
+      await store.dispatch("uploader/addData", {
+        data: [FILE3],
+        name: "PASPORT",
+      });
+
+      await store.dispatch("uploader/addData", {
+        data: [FILE4],
+        name: "PTS",
+      });
+
+      const files = wrapper.findAll(".namefile");
+
+      expect(files).toHaveLength(7);
+
+      const uploadButtons = wrapper.findComponent({ ref: "uploadButtons" });
+      const spy = jest.spyOn(uploadButtons.vm.$bvModal, "msgBoxConfirm");
+      spy.mockImplementationOnce(() => Promise.resolve(true));
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchData));
+      jest.spyOn(axios, "put").mockResolvedValueOnce({
+        data: [
+          {
+            ID: 502,
+            MESSAGE: "Успешно сохранено",
+            REL: "E1A0C98A84E26B75958E890DE2706B26",
+            RESULT: { ID: 502, REL: "E1A0C98A84E26B75958E890DE2706B26" },
+            STATUS: 0,
+          },
+        ],
+      });
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+
+      const btnSuccess = wrapper.find(".btn-success");
+      await btnSuccess.trigger("click");
+
+      const formData = axios.put.mock.calls[0][1];
+
+      const fileSizes1 = Array.from(formData)
+        .filter((item) => item[0] === "EPROTOKOL")
+        .map((file) => file[1].size);
+
+      expect(fileSizes1).toHaveLength(2);
+      expect(fileSizes1[0]).toBe(1);
+      expect(fileSizes1[1]).toBe(2);
+
+      const fileSizes2 = Array.from(formData)
+        .filter((item) => item[0] === "PASPORT")
+        .map((file) => file[1].size);
+
+      expect(fileSizes2).toHaveLength(1);
+      expect(fileSizes2[0]).toBe(3);
+
+      const fileSizes3 = Array.from(formData)
+        .filter((item) => item[0] === "PTS")
+        .map((file) => file[1].size);
+
+      expect(fileSizes3).toHaveLength(1);
+      expect(fileSizes3[0]).toBe(4);
+
+      expect(axios.put).toHaveBeenCalledWith(
+        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        expect.any(FormData),
+        expect.anything()
+      );
+    });
+
     it("Modal отключен", async () => {
       const copyOfData = JSON.parse(JSON.stringify(returnFetchData));
       copyOfData.data[0].value.MODAL_OPEN = false;
