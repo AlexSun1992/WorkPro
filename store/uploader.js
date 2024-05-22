@@ -35,7 +35,7 @@ export const getters = {
     data.forEach((item) => {
       item.FILES.forEach((file) => {
         const fileObject = fileObjects.find(
-          (obj) => obj.name === file.FILENAME
+          (obj) => obj.name === file.FILENAME && obj.size === file.SIZE
         );
         if (fileObject) {
           const uploadFile = new File([fileObject], fileObject.name, {
@@ -161,23 +161,7 @@ export const actions = {
   },
   async saveDataUploader({ commit, state, getters }, params) {
     try {
-      const formData = new FormData();
-      const fileObjects = getters.getFileObjects;
-      const data = getters.getData;
-      data.forEach((item) => {
-        item.FILES.forEach((file) => {
-          const fileObject = fileObjects.find(
-            (obj) => obj.name === file.FILENAME
-          );
-          if (fileObject) {
-            const uploadFile = new File([fileObject], fileObject.name, {
-              type: "field/blob",
-            });
-            formData.append(item.NAME, uploadFile);
-          }
-        });
-      });
-      formData.append("JSON", JSON.stringify({ FILES: getters.getFiles }));
+      const formData = getters.getFormData;
       commit("setLoading", true);
       commit("setDataError", null);
       controller = new AbortController();
