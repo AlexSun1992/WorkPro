@@ -25,6 +25,13 @@ describe("ActionButton", () => {
   let mockRoute;
   let mockRouter;
 
+  function findButtonByText(text) {
+    return wrapper
+      .findAll("button")
+      .filter((elm) => elm.text().includes(text))
+      .at(0);
+  }
+
   beforeEach(async () => {
     mockRoute = {
       params: {
@@ -244,5 +251,102 @@ describe("ActionButton", () => {
     await wrapper.find(".btn").trigger("click");
 
     expect(spyBvModal).not.toHaveBeenCalled();
+  });
+
+  it("Отображается текст об успешном выполнении действия", async () => {
+    const setFlatMenuCopy = JSON.parse(JSON.stringify(setFlatMenu));
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LHIDEDLG = true;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].SMESSAGE =
+      "Сообщение об успешном выполнении";
+    jest
+      .spyOn(axios, "get")
+      .mockResolvedValueOnce({ ...fetchMenu })
+      .mockResolvedValueOnce({ ...setFlatMenuCopy });
+    // Запрос на выполнение действия
+    jest.spyOn(axios, "post").mockResolvedValueOnce({ status: 200, data: {} });
+    await store.dispatch("menu/fetchMenu", mockRoute.params);
+
+    wrapper = mount(ActionButton, {
+      localVue,
+      propsData: {
+        actionId: "38882",
+        data: {
+          label: "Рассчитать ОСАГО",
+          name: "Item38882",
+          type: "button",
+        },
+        params: {},
+      },
+
+      mocks: {
+        $store: store,
+        $route: mockRoute,
+        $router: mockRouter,
+        $modal: {
+          alert: jest.fn(),
+        },
+      },
+    });
+
+    await await findButtonByText("Оформить новый полис ОСАГО").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.$modal.alert).toHaveBeenCalledWith(
+      "Сообщение об успешном выполнении",
+      {
+        icon: "ok",
+      }
+    );
+  });
+
+  it("Не отображается текст об успешном выполнении действия при ошибке запроса", async () => {
+    const setFlatMenuCopy = JSON.parse(JSON.stringify(setFlatMenu));
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].LHIDEDLG = true;
+    setFlatMenuCopy.data[0].ACTIONSCUR[0].SMESSAGE =
+      "Сообщение об успешном выполнении";
+    jest
+      .spyOn(axios, "get")
+      .mockResolvedValueOnce({ ...fetchMenu })
+      .mockResolvedValueOnce({ ...setFlatMenuCopy });
+    // Запрос на выполнение действия
+    jest.spyOn(axios, "post").mockRejectedValueOnce({
+      response: { status: 500, data: { MESSAGE: "Ошибка" } },
+    });
+    await store.dispatch("menu/fetchMenu", mockRoute.params);
+
+    wrapper = mount(ActionButton, {
+      localVue,
+      propsData: {
+        actionId: "38882",
+        data: {
+          label: "Рассчитать ОСАГО",
+          name: "Item38882",
+          type: "button",
+        },
+        params: {},
+      },
+
+      mocks: {
+        $store: store,
+        $route: mockRoute,
+        $router: mockRouter,
+        $modal: {
+          alert: jest.fn(),
+        },
+      },
+    });
+
+    await await findButtonByText("Оформить новый полис ОСАГО").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.$modal.alert).not.toHaveBeenCalled();
   });
 });

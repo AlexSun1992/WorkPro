@@ -287,17 +287,11 @@ export default {
         body: this.actionParams,
       });
 
-      if (response?.data.POUTMESSAGE) {
-        await this.$modal.alert(response?.data.POUTMESSAGE, {
-          icon: "ok",
-        });
-      }
-
       this.$store.commit("data_card/setIsActionFormDisabled", false);
       if (response?.status === 500 || response?.status === 520) {
         this.$store.commit("data_card/setLoading", false);
         if (this.action.LREQUESTCODE) {
-          this.$store.commit("data_card/setisActionApplyError", true);
+          this.$store.commit("data_card/setIsActionApplyError", true);
           this.$store.commit(
             "data_card/setactionApplyErrorMessage",
             getErrorMessage(response.data)
@@ -311,6 +305,11 @@ export default {
         this.$nextTick(() => {
           this.$bvModal.hide("confirmAction");
         });
+        if (this.action?.SMESSAGE) {
+          await this.$modal.alert(this.action?.SMESSAGE, {
+            icon: "ok",
+          });
+        }
         if (this.$route.query?.ref && this.action?.LCLOSEAFTER) {
           this.$router.push(this.$route.query?.ref);
         }

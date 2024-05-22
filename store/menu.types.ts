@@ -55,6 +55,8 @@ export type ActionInfo = {
   LHIDEINLIST: boolean;
   /** Показывать в toolbar для WEB */
   LTOOLBAR: boolean;
+  /** Сообщение после выполнения действия */
+  SMESSAGE?: string;
 };
 
 const actionTypeTest: ActionInfo[] = [

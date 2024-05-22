@@ -452,14 +452,14 @@ export const actions = {
           commit("setSavedError", false);
           return resp;
         });
-    } catch (e) {
+    } catch (err) {
       commit("setLoading", false);
       commit("setDisabled", false);
       commit("setSavedError", true);
-      commit("setErrorMessage", e.response?.data);
-      commit("setFieldJsonError", getErrorMessage(e.response?.data));
+      commit("setErrorMessage", err.response?.data);
+      commit("setFieldJsonError", getErrorMessage(err.response?.data));
       dispatch("menu/fetchMenuById", null, { root: true });
-      return e.response;
+      return err.response;
     }
   },
   async fetchActionParams(
