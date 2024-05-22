@@ -21,7 +21,7 @@
       :search="search"
       :get-result-value="getResultValue"
       :default-value="getCurrentValue"
-      :disabled="!edit ? !edit : data.readonly"
+      :disabled="!isEditable || data.readonly || isDisabledByRelation"
       @submit="handleSubmit"
       @blur="handleBlur"
     />
@@ -36,6 +36,14 @@
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BFormGroup } from "bootstrap-vue";
+
+export function calcDisabledByRelation(fieldsRelations) {
+  return !fieldsRelations
+    .filter((field) => field.visible && field.required)
+    .every(
+      ({ value }) => value !== undefined && value !== null && value !== ""
+    );
+}
 
 export default {
   name: "ControlCustomCombobox",
@@ -63,6 +71,20 @@ export default {
     };
   },
   computed: {
+    isEditable() {
+      return this.edit;
+    },
+    isDisabledByRelation() {
+      return calcDisabledByRelation(this.fieldsRelations);
+    },
+    fieldsRelations() {
+      if (this.data.fieldRelation) {
+        return this.$store.getters["data_card/getDataFieldsByNames"](
+          this.data.fieldRelation.split(";")
+        );
+      }
+      return [];
+    },
     validClass() {
       if (this.isErr === false) {
         return "is-invalid";
