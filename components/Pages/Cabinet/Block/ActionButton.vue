@@ -401,10 +401,11 @@ export default {
         return result;
       } catch (err) {
         console.error(err);
-        this.$bvToast.toast(getErrorMessage(err.response.data.MESSAGE), {
-          title: "",
-          variant: "danger",
-          solid: true,
+        await this.$modal.alert({
+          icon: "error",
+          title: "Извините, произошла ошибка",
+          msg: getErrorMessage(err.response.data.MESSAGE),
+          btnOk: false,
         });
       }
 
@@ -428,11 +429,11 @@ export default {
           saveFileAxios(resp, !this.action?.LCURWINDOW);
         })
         .catch(() => {
-          this.$bvToast.toast("Не удалось скачать файл", {
-            title: "Ошибка",
-            variant: "danger",
-            noAutoHide: true,
-            solid: true,
+          this.$modal.alert({
+            title: "Извините, произошла ошибка",
+            msg: "Не удалось скачать файл",
+            icon: "error",
+            btnOk: false,
           });
         })
         .finally(() => {

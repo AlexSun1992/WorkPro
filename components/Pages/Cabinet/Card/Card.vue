@@ -160,17 +160,17 @@ export default {
           ...this.$route.params,
           query: { ...this.$route.query },
         });
-        this.$bvToast.toast("Успешно  обновлено", {
+        this.$bvToast.toast("Успешно обновлено", {
           title: "",
           variant: "success",
           solid: true,
         });
       } catch (err) {
-        this.$bvToast.toast(err.response.data.MESSAGE, {
-          title: "Ошибка",
-          variant: "danger",
-          noAutoHide: true,
-          solid: true,
+        this.$modal.alert({
+          title: "Извините, произошла ошибка",
+          msg: err.response.data.MESSAGE,
+          icon: "error",
+          btnOk: false,
         });
       }
     },

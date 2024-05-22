@@ -117,9 +117,7 @@ describe("ActionButton", () => {
       },
     });
     const spyBvModal = jest.spyOn(wrapper.vm.$bvModal, "msgBoxConfirm");
-
     await wrapper.find(".btn").trigger("click");
-
     expect(spyBvModal).toHaveBeenCalledWith(
       'Вы действительно хотите выполнить действие" Оформить новый полис ОСАГО"?',
       optionModal
