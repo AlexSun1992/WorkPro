@@ -2,79 +2,84 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { mount, createLocalVue } from "@vue/test-utils";
 import { BootstrapVue } from "bootstrap-vue";
-import ControlCustomCombobox from "../Controls/ControlCustomCombobox";
-
-import {
-  state as stateStore,
-  getters as gettersStore,
-  actions as actionsStore,
-  mutations as mutationsStore,
-} from "../../../store/data_card";
+import ControlCustomCombobox, {
+  calcDisabledByRelation,
+} from "./ControlCustomCombobox.vue";
+import { dataProps } from "./ControlCustomCombobox.helper.fixuter";
+import * as dataCard from "../../../store/data_card";
 
 describe("ControlCustomCombobox", () => {
   let wrapper;
-  const dataProps = {
-    checked: true,
-    colLg: 13,
-    colMd: 12,
-    colSm: 12,
-    cols: 3,
-    control: null,
-    error: null,
-    fieldId: 37106,
-    fieldRelation: null,
-    id: "765",
-    isRelation: true,
-    isTab: false,
-    label: "Серия",
-    cssClass: "",
-    name: "SSERIES",
-    options: [
-      {
-        ID: 1,
-        SNAME: "ААА",
-        text: "ААА",
-        value: 1,
-      },
-    ],
-    page: 0,
-    placeholder: "Выберите серию",
-    readonly: false,
-    required: true,
-    state: true,
-    structType: "string",
-    type: "customCombobox",
-    value: 1,
-    visible: true,
-    webId: "",
-    width: "100%",
-    disabled: false,
-    edit: true,
-    loading: false,
-    params: undefined,
-    profileFullness: undefined,
-    store: undefined,
-  };
-
   let store;
-  let state;
-  let getters;
-  let actions;
-  let mutations;
 
-  beforeEach(() => {
-    state = stateStore;
-    getters = gettersStore;
-    actions = actionsStore;
-    mutations = mutationsStore;
+  beforeEach(async () => {
     Vue.use(Vuex, BootstrapVue);
     store = new Vuex.Store({
-      state,
-      getters,
-      actions,
-      mutations,
+      modules: {
+        data_card: {
+          ...dataCard,
+          namespaced: true,
+        },
+      },
     });
   });
+
+  it("Поле не связанное, поэтому не disabled", async () => {
+    const isDisabled = calcDisabledByRelation([]);
+
+    expect(isDisabled).toBe(false);
+  });
+
+  it("Поле связанное, а зависимое не обязательным, поэтому disabled", async () => {
+    const isDisabled = calcDisabledByRelation([
+      { required: false, visible: true },
+    ]);
+
+    expect(isDisabled).toBe(false);
+  });
+
+  it("Поле связанное, а зависимое не отображается на странице, поэтому не disabled", async () => {
+    const isDisabled = calcDisabledByRelation([
+      { required: true, visible: false },
+    ]);
+
+    expect(isDisabled).toBe(false);
+  });
+
+  it("Поле связанное, а зависимое не заполнено, поэтому  disabled", async () => {
+    const isDisabled = calcDisabledByRelation([
+      { required: true, visible: true },
+    ]);
+
+    expect(isDisabled).toBe(true);
+  });
+
+  it("Поле связанное, а одно из зависимых не заполнено, поэтому  disabled", async () => {
+    const isDisabled = calcDisabledByRelation([
+      { required: true, visible: true },
+      { required: true, visible: true, value: 123 },
+    ]);
+
+    expect(isDisabled).toBe(true);
+  });
+
+  it("Поле связанное, а зависимое заполнено, поэтому не disabled", async () => {
+    const isDisabled = calcDisabledByRelation([
+      { required: true, visible: true, value: 1 },
+      { required: true, visible: true, value: 123 },
+    ]);
+
+    expect(isDisabled).toBe(false);
+  });
+
+  it("Поле связанное, а зависимое заполнено нулём, поэтому не disabled", async () => {
+    const isDisabled = calcDisabledByRelation([
+      { required: true, visible: true, value: 0 },
+    ]);
+
+    expect(isDisabled).toBe(false);
+  });
+
   it("когда загрузилась страница, input с серией стал is-valid, если в value пришли цифры", async () => {
     const localVue = createLocalVue();
     localVue.use(BootstrapVue);

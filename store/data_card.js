@@ -108,13 +108,14 @@ export const getters = {
   getDataFieldByName: (state) => (name) =>
     state.form.find((b) => b.name === name),
   getDataFieldsByNames: (state) => (names) =>
-    state.form.filter((b) => {
-      let name;
-      if (b.name.substring(0, 2) === `FK`) {
-        name = b.name.substring(2);
-        return names.includes(name);
+    names.map((name) => {
+      const foundField = state.form.find(
+        (field) => field.name === name || field.name === `FK${name}`
+      );
+      if (!foundField) {
+        throw new Error(`Связанное поле не найдено "${name}"`);
       }
-      return names.includes(b.name) && b.name !== "ID";
+      return foundField;
     }),
   getDataByFieldRelation: (state) => (name) =>
     state.form.find((b) => b.fieldRelation === name),
