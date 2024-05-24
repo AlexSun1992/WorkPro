@@ -6028,3 +6028,8 @@ h5.modal-title {
     width: 100%;
   }
 }
+
+.no-arrow input[type="number"]::-webkit-inner-spin-button,
+.no-arrow input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
