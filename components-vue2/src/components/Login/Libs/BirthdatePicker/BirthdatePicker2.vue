@@ -31,6 +31,7 @@ import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/locale/ru";
 import "vue2-datepicker/index.css";
 import { mask } from "vue-the-mask";
+import { BFormInvalidFeedback } from "bootstrap-vue";
 
 function getDate(value) {
   const date = new Date();
@@ -39,7 +40,7 @@ function getDate(value) {
 }
 export default {
   name: "ControlTimestamp",
-  components: { DatePicker },
+  components: { DatePicker, BFormInvalidFeedback },
   directives: { mask },
   props: {
     state: {
