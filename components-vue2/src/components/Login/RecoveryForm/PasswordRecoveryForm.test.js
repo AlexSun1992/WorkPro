@@ -6,6 +6,9 @@ import PasswordRecoveryForm from "./PasswordRecoveryForm.vue";
 jest.mock("axios");
 jest.useFakeTimers();
 
+const CORRECT_PASSWORD = "12345hH!";
+const WRONG_PASSWORD = "русский12345hH!";
+
 describe("PasswordRecoveryForm", () => {
   afterEach(() => {
     jest.restoreAllMocks();
@@ -342,10 +345,10 @@ describe("PasswordRecoveryForm", () => {
     dataPickerInput.trigger("change");
     await wrapper.findComponent("#password1").trigger("focus");
 
-    await wrapper.find("#password1").setValue("12345");
+    await wrapper.find("#password1").setValue(WRONG_PASSWORD);
     expect(wrapper.find("#password1").classes()).toContain("is-invalid");
 
-    await wrapper.find("#password1").setValue("12345hH!");
+    await wrapper.find("#password1").setValue(CORRECT_PASSWORD);
     expect(wrapper.find("#password1").classes()).not.toContain("is-invalid");
   });
 
@@ -377,12 +380,12 @@ describe("PasswordRecoveryForm", () => {
     dataPickerInput.trigger("change");
     await wrapper.findComponent("#password1").trigger("focus");
 
-    await wrapper.find("#password1").setValue("12345hH");
+    await wrapper.find("#password1").setValue(CORRECT_PASSWORD);
 
-    await wrapper.find("#password2").setValue("12345hH");
+    await wrapper.find("#password2").setValue(CORRECT_PASSWORD);
     expect(wrapper.find("#password2").classes()).not.toContain("is-invalid");
 
-    await wrapper.find("#password2").setValue("12345hP");
+    await wrapper.find("#password2").setValue(WRONG_PASSWORD);
     expect(wrapper.find("#password2").classes()).toContain("is-invalid");
   });
 
@@ -438,8 +441,8 @@ describe("PasswordRecoveryForm", () => {
     dataPickerInput.trigger("change");
 
     await wrapper.findComponent("#password1").trigger("focus");
-    await wrapper.find("#password1").setValue("12345hH");
-    await wrapper.find("#password2").setValue("12345hH");
+    await wrapper.find("#password1").setValue(CORRECT_PASSWORD);
+    await wrapper.find("#password2").setValue(CORRECT_PASSWORD);
     await wrapper.find("#btn_change-password_tel_lk").trigger("click");
 
     const spy = jest.spyOn(wrapper.vm.$bvModal, "msgBoxOk");
@@ -529,8 +532,8 @@ describe("PasswordRecoveryForm", () => {
     dataPickerInput.trigger("change");
 
     await wrapper.findComponent("#password1").trigger("focus");
-    await wrapper.find("#password1").setValue("12345hH");
-    await wrapper.find("#password2").setValue("12345hH");
+    await wrapper.find("#password1").setValue(CORRECT_PASSWORD);
+    await wrapper.find("#password2").setValue(CORRECT_PASSWORD);
     await wrapper.find("#btn_change-password_mail_lk").trigger("click");
 
     expect(logs).toEqual([
@@ -668,8 +671,8 @@ describe("PasswordRecoveryForm", () => {
     dataPickerInput.trigger("change");
 
     await wrapper.findComponent("#password1").trigger("focus");
-    await wrapper.find("#password1").setValue("12345hH");
-    await wrapper.find("#password2").setValue("12345hH");
+    await wrapper.find("#password1").setValue(CORRECT_PASSWORD);
+    await wrapper.find("#password2").setValue(CORRECT_PASSWORD);
     await wrapper.find("#btn_change-password_tel_lk").trigger("click");
 
     expect(logs).toEqual([
@@ -678,5 +681,45 @@ describe("PasswordRecoveryForm", () => {
       'Нажал "Изменить пароль через номер"',
       'Показало сообщение об ошибке на номере"',
     ]);
+  });
+
+  it("Должен заблокировать кнопку отправки пароля при невалидном пароле", async () => {
+    await jest.resetAllMocks();
+    const localVue = createLocalVue();
+    const wrapper = mount(PasswordRecoveryForm, {
+      localVue,
+      mocks: {
+        $LogEvent: (v) => v,
+      },
+    });
+
+    axios.post.mockReturnValue({
+      data: [
+        {
+          MESSAGE_CODE: 200,
+        },
+      ],
+    });
+    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    await wrapper.find("#sms-confirm").setValue("11111");
+
+    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.trigger("change");
+    await wrapper.findComponent("#password1").trigger("focus");
+
+    await wrapper.find("#password1").setValue(WRONG_PASSWORD);
+    expect(wrapper.find("#password1").classes()).toContain("is-invalid");
+
+    await wrapper.find("#password2").setValue(WRONG_PASSWORD);
+    expect(wrapper.find("#password2").classes()).not.toContain("is-invalid");
+
+    expect(
+      wrapper.find("#btn_change-password_tel_lk").attributes("disabled")
+    ).toBe("disabled");
   });
 });

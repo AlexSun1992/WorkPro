@@ -68,7 +68,7 @@
           <button
             type="button"
             v-if="isCodeFieldValid"
-            :disabled="disabled"
+            :disabled="sendButtonDisabled"
             class="btn btn-primary mt-3"
             @click="resetPassword"
             id="btn_change-password_tel_lk"
@@ -120,7 +120,7 @@
           <button
             type="button"
             v-if="isCodeFieldValid"
-            :disabled="disabled"
+            :disabled="sendButtonDisabled"
             class="btn btn-primary mt-3"
             @click="resetPassword"
             id="btn_change-password_mail_lk"
@@ -428,12 +428,13 @@ export default {
     tabIndex() {
       return this.currentTab === 0 ? [30, 40] : [20, 30];
     },
-    disabled() {
+    sendButtonDisabled() {
       return (
         Boolean(
           (this.$v.form.phone.$model || this.$v.form.email.$model) &&
             (!this.$v.form.phone.$error || !this.$v.form.email.$error) &&
             !this.$v.form.code.$error &&
+            !this.$v.form.password.$invalid &&
             !this.$v.form.password2.$invalid &&
             this.$v.form.password.$model &&
             this.$v.form.birthdate.$model &&
