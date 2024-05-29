@@ -6033,3 +6033,23 @@ h5.modal-title {
 .no-arrow input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
+@media (max-width: 992px) {
+  .notification_sm.block-policy_small .pay-notification {
+    line-height: 22px;
+    font-size: 0.875rem;
+    top: 6px;
+    padding-right: 37px;
+  }
+  .notification_sm.block-policy_small .pay-notification:after {
+    width: 17px;
+    height: 17px;
+    right: 12px;
+    background-size: cover;
+  }
+  .notification_sm.block-policy .title {
+    top: 50px;
+  }
+  .notification_sm.block-policy_small .date {
+    padding-top: 23px;
+  }
+}
