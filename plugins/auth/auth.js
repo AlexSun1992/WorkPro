@@ -29,6 +29,7 @@ export default function ({
         return;
       }
     }
+
     if (error.response.status === 401 && !originalRequest.__isRetryRequest) {
       originalRequest.__isRetryRequest = true;
       return app.$auth
@@ -53,7 +54,9 @@ export default function ({
         .catch((err) => {
           if (err?.response?.data?.STATUS === 401) {
             $auth.logout();
+            return undefined;
           }
+          throw err;
         });
     }
     if (error.response.status !== 401) {
