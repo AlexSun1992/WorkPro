@@ -475,13 +475,12 @@ export default {
                 "wizard/fetchWizard",
                 this.$route.params
               );
-
-              fetchPoutvalue(resp.data, {
-                router: this.$router,
-                isInNewWindow: false,
-                toaster: this.$bvToast,
-              });
             }
+            fetchPoutvalue(resp?.data[0]?.RESULT, {
+              router: this.$router,
+              isInNewWindow: false,
+              toaster: this.$bvToast,
+            });
           } else if (resp?.status === 500 || resp?.status === 520) {
             this.$store.commit("data_card/setLoading", false);
             this.$store.commit("data_card/setDisabled", false);
