@@ -65,7 +65,7 @@
             @hide="bodySize('unblocksize')"
             data-testid="cabinetLoginDropDown"
           >
-            <template #button-content>
+            <template #button-content v-if="userInfo">
               {{ userInfo.SSECONDNAME }} {{ userInfo.SFIRSTNAME }}
             </template>
             <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
