@@ -1,12 +1,30 @@
+import axios from "axios";
 import dataform from "./dataform.mjs";
 import {
   dataWithFileParams,
   dataWithoutFileParams,
   dataDoubleTypeWithoutDefaultValue,
   dataDoubleTypeWithDefaultValue,
+  dataWithDicParams,
+  dataDic,
 } from "./dataform.helpers.fixtures";
 
+import { mobile2Service } from "../services/mobile2.services.mjs";
+
+const mockAxios = jest.genMockFromModule("axios");
+
+mockAxios.create = jest.fn(() => mockAxios);
+
+jest.mock("axios");
+
+jest.mock("../services/mobile2.services.mjs", () => ({
+  mobile2Service: jest.fn(() => mockAxios),
+}));
+
 describe("dataform converter", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   it("Корректно сохраняет объект в DadataSelect 2", () => {
     const convertedData = dataform.save([
       {
@@ -190,5 +208,46 @@ describe("dataform converter", () => {
         isTab: true,
       },
     ]);
+  });
+  it("Проверка подстановки idlist в справочник", async () => {
+    jest.spyOn(mobile2Service(), "get").mockResolvedValue({
+      data: dataDic,
+      config: { url: "/am/main/v2/dic/55/777/IDRISK/2439626501/null/0" },
+      status: 200,
+    });
+    await dataform.form(
+      dataWithDicParams,
+      {
+        idModule: "55",
+        idItem: "1012",
+        idWizard: "1011",
+        idCard: "0",
+        idList: "2439626501",
+      },
+      mockAxios
+    );
+    expect(mockAxios.get).toHaveBeenCalledWith(
+      "/am/main/v2/dic/55/1012/IDRISK/2439626501/null/0"
+    );
+  });
+  it("Проверка вызова справочника если idlist не задан", async () => {
+    jest.spyOn(mobile2Service(), "get").mockResolvedValue({
+      data: dataDic,
+      config: { url: "/am/main/v2/dic/55/777/IDRISK/2439626501/null/0" },
+      status: 200,
+    });
+    await dataform.form(
+      dataWithDicParams,
+      {
+        idModule: "55",
+        idItem: "1012",
+        idWizard: "1011",
+        idCard: "0",
+      },
+      mockAxios
+    );
+    expect(mockAxios.get).toHaveBeenCalledWith(
+      "/am/main/v2/dic/55/1012/IDRISK/0/null/0"
+    );
   });
 });
