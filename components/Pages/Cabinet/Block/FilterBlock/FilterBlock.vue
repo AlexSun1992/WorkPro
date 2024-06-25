@@ -377,6 +377,22 @@ export default {
     display: flex;
   }
 }
+.filterblock button.arch-btn {
+  color: #0000008e;
+  background: none;
+  padding: 0;
+  position: relative;
+}
+.filterblock button.arch-btn:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 1px;
+  background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iMSIgdmlld0JveD0iMCAwIDkwIDEiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxsaW5lIHkxPSIwLjUiIHgyPSI5MCIgeTI9IjAuNSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLW9wYWNpdHk9IjAuNyIgc3Ryb2tlLWRhc2hhcnJheT0iMiAyIi8+Cjwvc3ZnPgo=")
+    0 0 repeat;
+  bottom: 5px;
+  left: 0;
+}
 </style>
 <style>
 .cabinet .btn.btn-secondary .btn-filter-checked {
