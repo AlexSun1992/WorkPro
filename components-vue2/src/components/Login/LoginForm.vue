@@ -27,7 +27,12 @@
         >
           {{ dialogErrorInformation }}
         </b-form-invalid-feedback>
-        <button type="submit" id="sendPassport" :disabled="isDisabled">
+        <button
+          type="submit"
+          id="sendPassport"
+          :disabled="isDisabled"
+          class="btn-primary mt-3"
+        >
           Отправить
         </button>
       </b-form>
@@ -684,5 +689,10 @@ ul.dropdown-menu.show {
   .btn-dropdown-select {
     height: 50px;
   }
+}
+#passportNumberDialog form {
+  padding: 0;
+  box-shadow: none;
+  border: 0;
 }
 </style>
