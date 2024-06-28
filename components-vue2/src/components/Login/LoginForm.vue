@@ -7,7 +7,7 @@
       :centered="true"
       :static="true"
       content-class="passportNumber"
-      title="Авторизация через Мобильный ID"
+      title="Вход через Мобильный ID"
     >
       <b-form @submit.prevent="sendPassportNumber">
         <div>
