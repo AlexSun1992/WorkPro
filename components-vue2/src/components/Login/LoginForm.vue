@@ -16,7 +16,7 @@
             autofocus
             :disabled="isDisabled"
             class="passport-number"
-            type="text"
+            type="number"
             autocomplete="off"
             name="passport"
             v-model="searchParamPassport"
@@ -237,6 +237,9 @@
         :force-show="extraOrdinaryServiceAnswer ? true : false"
         >{{ extraOrdinaryServiceAnswer }}</b-form-invalid-feedback
       >
+      <b-form-invalid-feedback :state="isMessageContainStr">
+        {{ dialogErrorInformation }}
+      </b-form-invalid-feedback>
     </b-form>
   </div>
 </template>
@@ -358,6 +361,11 @@ export default {
         this.user.cap = null;
       }
     },
+    searchParamPassport(value) {
+      if (value.length > 4) {
+        this.searchParamPassport = value.substring(0, 4);
+      }
+    },
   },
 
   methods: {
@@ -404,11 +412,15 @@ export default {
           const responseData = await response.json();
 
           if (response.status !== 200) {
-            this.$bvModal.show("passportNumberDialog");
+            if (!responseData.INFO.includes("Превышено количество попыток")) {
+              this.$bvModal.show("passportNumberDialog");
+            }
+
             if (!responseData.INFO.includes("Нужен паспорт")) {
               this.dialogErrorInformation = responseData.INFO;
               if (responseData.INFO.includes("Превышено количество попыток")) {
                 this.isDisabled = true;
+                this.authRedirect();
               }
               throw new Error(JSON.stringify(responseData));
             }
@@ -586,6 +598,16 @@ export default {
     },
   },
   computed: {
+    isMessageContainStr() {
+      if (this.dialogErrorInformation) {
+        if (
+          this.dialogErrorInformation.includes("Превышено количество попыток")
+        ) {
+          return true;
+        }
+      }
+      return false;
+    },
     isMainFormDisabled() {
       return this.isModalVisible || this.authInProcess;
     },
