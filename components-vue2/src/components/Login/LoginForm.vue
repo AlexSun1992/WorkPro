@@ -361,9 +361,9 @@ export default {
         this.user.cap = null;
       }
     },
-    searchParamPassport(value) {
-      if (value.length > 4) {
-        this.searchParamPassport = value.substring(0, 4);
+    searchParamPassport() {
+      if (this.searchParamPassport.length > 4) {
+        this.searchParamPassport = this.searchParamPassport.substring(0, 4);
       }
     },
   },
