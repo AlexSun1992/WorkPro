@@ -16,6 +16,16 @@ describe("LoginForm", () => {
     jest.resetAllMocks();
   });
 
+  it("Проверяем ограничение по количеству символов в поле паспорта", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
+    global.window = Object.create(window);
+    const wrapper = mount(LoginForm, { localVue });
+    const $el = wrapper.find('[name="passport"]');
+    await $el.setValue("12346783834");
+    expect($el.element.value).toBe("1234");
+  });
+
   it("На странице появляется окно для ввода номера паспорта", async () => {
     const localVue = createLocalVue();
     localVue.use(ModalPlugin);
@@ -24,6 +34,7 @@ describe("LoginForm", () => {
       value: {
         href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
       },
+      writable: true,
     });
     fetch.mockReturnValue(
       Promise.resolve(
@@ -59,6 +70,7 @@ describe("LoginForm", () => {
       value: {
         href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
       },
+      writable: true,
     });
     fetch.mockReturnValue(
       Promise.resolve(
@@ -111,6 +123,7 @@ describe("LoginForm", () => {
       value: {
         href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
       },
+      writable: true,
     });
 
     fetch.mockReturnValue(
@@ -142,6 +155,7 @@ describe("LoginForm", () => {
       value: {
         href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
       },
+      writable: true,
     });
 
     fetch.mockReturnValue(
@@ -177,6 +191,7 @@ describe("LoginForm", () => {
       value: {
         href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
       },
+      writable: true,
     });
     fetch.mockReturnValue(
       Promise.resolve(
@@ -210,6 +225,7 @@ describe("LoginForm", () => {
       value: {
         href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
       },
+      writable: true,
     });
 
     fetch.mockReturnValue(
@@ -247,6 +263,7 @@ describe("LoginForm", () => {
       value: {
         href: "http://localhost/login",
       },
+      writable: true,
     });
 
     const wrapper = mount(LoginForm, { localVue });
@@ -257,6 +274,86 @@ describe("LoginForm", () => {
     expect(
       wrapper.find("#passportNumberDialog").attributes("aria-hidden")
     ).toBe("true");
+  });
+
+  it("При наличии ошибки 'Повторите попытку ввода паспорта' скрывается окно для ввода номера паспорта, происходит redirect /cabinet, не показывается ошибка 'Превышено количество попыток'", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
+      },
+      writable: true,
+    });
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({
+          errorText: "Повторите попытку ввода паспорта",
+          statusCode: 520,
+        })
+      )
+    );
+    const wrapper = mount(LoginForm, {
+      localVue,
+      mocks: {
+        $cookiz: {
+          get: jest.fn().mockReturnValue("/cabinet"),
+          set: jest.fn(),
+        },
+      },
+    });
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(
+      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
+    ).toBe(undefined);
+    expect(window.location.href).toEqual(
+      "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771"
+    );
+    expect(wrapper.text()).not.toContain("Превышено количество попыток");
+  });
+
+  it("При наличии ошибки 'Превышено количество попыток' скрывается окно для ввода номера паспорта, происходит redirect /cabinet, показывается ошибка 'Превышено количество попыток'", async () => {
+    const localVue = createLocalVue();
+    localVue.use(ModalPlugin);
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
+      },
+      writable: true,
+    });
+    fetch.mockReturnValue(
+      Promise.resolve(
+        createMockMobileId({
+          errorText: "Превышено количество попыток",
+          statusCode: 520,
+        })
+      )
+    );
+    const wrapper = mount(LoginForm, {
+      localVue,
+      mocks: {
+        $cookiz: {
+          get: jest.fn().mockReturnValue("/cabinet"),
+          set: jest.fn(),
+        },
+      },
+    });
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(
+      wrapper.find("#passportNumberDialog").attributes("aria-hidden")
+    ).toBe("true");
+    expect(window.location.href).toEqual("/cabinet");
+    expect(wrapper.text()).toContain("Превышено количество попыток");
   });
 
   it("должен показать кнопку авторизоваться", () => {
