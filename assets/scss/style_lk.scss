@@ -766,6 +766,15 @@ li.breadcrumb-item:not(:last-of-type):after {
   background: get-asset("/img/icon-menu-dms2-active.svg") 20px 50% no-repeat;
 }
 
+.sidebar-nav-item .menu-icon-dms10 {
+  background: get-asset("/img/icon-menu-dms10.svg") 20px 50% no-repeat;
+}
+
+.sidebar-nav-item.active .menu-icon-dms10,
+.sidebar-nav-item:hover .menu-icon-dms10 {
+  background: get-asset("/img/icon-menu-dms10-active.svg") 20px 50% no-repeat;
+}
+
 .anonsed-blocks .anonsed-block {
   padding: 12px 24px;
   border: 1px solid $white;
