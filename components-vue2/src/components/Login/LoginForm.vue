@@ -106,7 +106,7 @@
             <button
               type="button"
               disabled="disabled"
-              class="btn btn-primary w-100"
+              class="btn btn-primary w-100 p-0"
             >
               Отправить повторно (через
               <verify-timer
