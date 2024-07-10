@@ -108,7 +108,7 @@
               disabled="disabled"
               class="btn btn-primary w-100"
             >
-              Отправить повторно(можно через
+              Отправить повторно (через
               <verify-timer
                 @onFinish="isRetrySendCodeSMS = true"
                 :duration="duration"
