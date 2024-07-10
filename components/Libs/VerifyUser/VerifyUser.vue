@@ -44,7 +44,7 @@
         <p class="col-12 col-md-12">
           {{ textMessage }}
           <template v-if="disabledResend"
-            >Отправить повторно можно через
+            >Отправить повторно через
             <verify-timer @onFinish="stopTimer" :duration="duration" />
             сек.</template
           >
