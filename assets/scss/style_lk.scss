@@ -6094,3 +6094,42 @@ h5.modal-title {
   --svg-color-two: #fe7333;
   --svg-color-three: #fff8e6;
 }
+
+.insurance-case[data-id="6"] .check-collapse + label,
+.insurance-case[data-id="7"] .check-collapse + label {
+  color: #f7b801;
+}
+.insurance-case[data-id="1"] .check-collapse + label,
+.insurance-case[data-id="10"] .check-collapse + label,
+.insurance-case[data-id="8"] .check-collapse + label {
+  color: #3b86c8;
+}
+.insurance-case[data-id="2"] .check-collapse + label,
+.insurance-case[data-id="3"] .check-collapse + label,
+.insurance-case[data-id="5"] .check-collapse + label {
+  color: $lgreen;
+}
+
+.insurance-case[data-id="4"] .check-collapse + label {
+  color: #645da2;
+}
+
+.insurance-case[data-id="6"] .check-collapse + label:after,
+.insurance-case[data-id="7"] .check-collapse + label:after {
+  background: url(/img/icon-chevron-1.svg) 50% 50% no-repeat;
+}
+.insurance-case[data-id="1"] .check-collapse + label:after,
+.insurance-case[data-id="10"] .check-collapse + label:after,
+.insurance-case[data-id="8"] .check-collapse + label:after {
+  background: url(/img/icon-chevron-2.svg) 50% 50% no-repeat;
+}
+
+.insurance-case[data-id="2"] .check-collapse + label:after,
+.insurance-case[data-id="3"] .check-collapse + label:after,
+.insurance-case[data-id="5"] .check-collapse + label:after {
+  background: url(/img/icon-chevron-3.svg) 50% 50% no-repeat;
+}
+
+.insurance-case[data-id="4"] .check-collapse + label:after {
+  background: url(/img/icon-chevron-4.svg) 50% 50% no-repeat;
+}
