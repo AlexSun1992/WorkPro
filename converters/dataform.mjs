@@ -147,7 +147,48 @@ converter.form = async (data, params, instance) => {
       obj.type = "progressbar";
     } else if (webFields[i].IDCONTROL == 15 || webFields[i].IDCONTROL == 37) {
       obj.type = webFields[i].IDCONTROL == 15 ? "combobox" : "customCombobox";
-      if (webFields[i].LDIC === true) {
+
+      webFields.forEach((field) => {
+        if (
+          (field.SCONNECTFIELD &&
+            field.SCONNECTFIELD.split(";").some(
+              (item2) => webFields[i].SNAME === item2
+            )) ||
+          webFields[i].SCONNECTFIELD
+        ) {
+          obj.options = [];
+          obj.type = "searchSelect";
+          obj.isLoading = false;
+        }
+      });
+      if (webFields[i].SCONNECTFIELD) {
+        const dicParams = webFields
+          .filter(
+            (field) =>
+              webFields[i].LVISIBLE &&
+              webFields[i].SCONNECTFIELD.split(";").includes(field.SNAME) &&
+              field.LVISIBLE
+          )
+          .reduce((obj, field) => {
+            const value = item[field.SNAME];
+            if (value) {
+              return Object.assign(obj, { [field.SNAME]: value });
+            }
+            return obj;
+          }, {});
+        if (Object.values(dicParams).length) {
+          promises.push(
+            instance.get(
+              `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${
+                params.idItem ?? 0
+              }/${webFields[i].SNAME}/${params.id ?? 0}?${new URLSearchParams(
+                dicParams
+              ).toString()}`
+            )
+          );
+        }
+      }
+      if (webFields[i].LDIC === true && !webFields[i].SCONNECTFIELD) {
         promises.push(
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
@@ -156,12 +197,14 @@ converter.form = async (data, params, instance) => {
           )
         );
       }
-      if (webFields[i].LDIC === false) {
+      if (webFields[i].LDIC === false && !webFields[i].SCONNECTFIELD) {
         promises.push(
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
               webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}/${params.idList ?? 0}/null/${params.id ?? 0}`
+            }/${itemId}/${webFields[i].SNAME}/${params.idList ?? 0}/null/${
+              params.id ?? 0
+            }`
           )
         );
       }

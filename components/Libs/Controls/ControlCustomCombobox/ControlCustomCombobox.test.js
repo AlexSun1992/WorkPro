@@ -5,8 +5,8 @@ import { BootstrapVue } from "bootstrap-vue";
 import ControlCustomCombobox, {
   calcDisabledByRelation,
 } from "./ControlCustomCombobox.vue";
-import { dataProps } from "./ControlCustomCombobox.helper.fixuter";
-import * as dataCard from "../../../store/data_card";
+import { dataProps } from "../ControlCustomCombobox.helper.fixuter";
+import * as dataCard from "../../../../store/data_card";
 
 describe("ControlCustomCombobox", () => {
   let wrapper;
