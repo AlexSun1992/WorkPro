@@ -168,6 +168,7 @@ export default {
         await this.$auth.logout();
         localStorage.removeItem("USER_INFO");
         window.$nuxt.$cookiz?.remove("url");
+        window.$nuxt.$cookiz?.remove('auth._esia');
         window.location.href = "/";
       } catch (e) {
         console.error(e);
