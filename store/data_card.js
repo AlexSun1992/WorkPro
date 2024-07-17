@@ -9,6 +9,8 @@ import {
   mergeFormData,
 } from "./data_card.helpers";
 
+let controller;
+
 export const state = () => ({
   options: [],
   form: [],
@@ -47,6 +49,8 @@ export const state = () => ({
   actionParamsTitle: null,
   isSaveSuccess: false,
   isActionFormDisabled: false,
+  isClearOptions: false,
+  dictionaries: [],
 });
 export const getters = {
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
@@ -109,14 +113,61 @@ export const getters = {
     state.form.find((b) => b.name === name),
   getDataFieldsByNames: (state) => (names) =>
     names.map((name) => {
-      const foundField = state.form.find(
-        (field) => field.name === name || field.name === `FK${name}`
+      const field = state.form.find(
+        (form) => form.name === name || form.name === `FK${name}`
       );
-      if (!foundField) {
-        throw new Error(`Связанное поле не найдено "${name}"`);
-      }
-      return foundField;
+      if (!field) throw new Error(`Связанное поле не найдено "${name}"`);
+      return field;
     }),
+  getDataVisibleFieldsByNames: (state) => (names) =>
+    state.form.filter(
+      (field) => names.includes(field.name) && field.visible === true
+    ),
+  getDataFieldsRelationsByFieldId: (state, getters) => (fieldId) => {
+    const field = state.form.find((d) => d.fieldId === fieldId);
+    const fieldRelations = state.form.filter((f) =>
+      f.fieldRelation ? f.fieldRelation.includes(field.name) : false
+    );
+    return fieldRelations.filter((f) =>
+      getters
+        .getDataFieldsByNames(f.fieldRelation.split(";"))
+        .every(
+          ({ value }) => value !== undefined && value !== null && value !== ""
+        )
+    );
+  },
+  getURLsByFieldsRelations:
+    (state, getters) =>
+    ({ fields }) => {
+      const urls = [];
+      fields.forEach((field) => {
+        if (field.fieldRelation) {
+          const objectValue = getters
+            .getDataVisibleFieldsByNames(field.fieldRelation.split(";"))
+            .map((item) => ({
+              key:
+                item.name.substring(0, 2) === `FK`
+                  ? item.name.substring(2)
+                  : item.name,
+              value: item.value?.value || item.value,
+            }))
+            .reduce((obj, item) => {
+              if (item.value) {
+                return Object.assign(obj, { [item.key]: item.value });
+              }
+              return obj;
+            }, {});
+          const url = {
+            url: `/api/dic/55/${field.id}/${field.name}/${
+              state.cardId
+            }?${new URLSearchParams(objectValue).toString()}`,
+            fieldId: field.fieldId,
+          };
+          urls.push(url);
+        }
+      });
+      return urls;
+    },
   getDataByFieldRelation: (state) => (name) =>
     state.form.find((b) => b.fieldRelation === name),
   getDataFieldByType: (state) => (name) =>
@@ -230,7 +281,6 @@ export const actions = {
           `/api/card/${params.idModule}/${params.idItem}?${queryString}`
         );
       }
-
       await this.$axios
         .get(url)
         .then((res) => {
@@ -528,6 +578,47 @@ export const actions = {
         return error.response;
       }
     }
+  },
+  async setSearchSelectField({ commit, getters, state, dispatch }, data) {
+    const field = state.form.find((d) => d.fieldId === data.fieldId);
+    if (field.options.length) {
+      commit("setValueSearchSelect", data);
+    }
+    const urls = getters.getURLsByFieldsRelations({ fields: [field] });
+    const requests = [...urls]
+      .filter(
+        (url) =>
+          !state.dictionaries.find((dictionary) => dictionary.url === url.url)
+      )
+      .map((r) => r.url);
+    if (controller) {
+      controller.abort();
+    }
+    controller = new AbortController();
+    if (requests.length) {
+      commit("setFieldLoading", data);
+      await Promise.all(
+        requests.map((endpoint) =>
+          this.$axios.get(endpoint, {
+            signal: controller.signal,
+          })
+        )
+      )
+        .then((result) => {
+          result.forEach((item) =>
+            commit("setDictionary", {
+              url: item.config.url,
+              options: item.data,
+            })
+          );
+        })
+        .catch((e) => console.error(e))
+        .finally(() => commit("setFieldLoading", data));
+    }
+    const options = [...urls].filter((url) =>
+      state.dictionaries.find((dictionary) => dictionary.url === url.url)
+    );
+    commit("setDictionaryOptions", options);
   },
   async fetchDic(
     { commit, getters, state },
@@ -853,6 +944,12 @@ export const mutations = {
   setLoading(state, params) {
     state.loading = params;
   },
+  setFieldLoading(state, data) {
+    const field = state.form.find((item) => item.name === data.name);
+    if (field) {
+      field.isLoading = !field.isLoading;
+    }
+  },
   setVisible(state, params) {
     state.visible = params;
   },
@@ -905,8 +1002,32 @@ export const mutations = {
   setUpdateEvent(state, params) {
     state.updateEvent = params;
   },
+  setValueSearchSelect(state, data) {
+    const field = state.form.find((d) => d.fieldId === data.fieldId);
+    const value = field.options.find((item) => item.ID === data.value)?.ID;
+    const fieldRelations = state.form.filter((f) =>
+      f.fieldRelation ? f.fieldRelation.includes(field.name) : false
+    );
+    fieldRelations.forEach((fieldRelation) => {
+      fieldRelation.value = null;
+      fieldRelation.state = null;
+      fieldRelation.options = [];
+      fieldRelation.visible = false;
+    });
+    if (value) {
+      field.value = value;
+      field.state = true;
+    } else {
+      field.value = null;
+      field.state = false;
+    }
+  },
   setEnumOptions(state, params) {
     const item = state.form.find((d) => d.fieldId === params.fieldId);
+    if (state.isClearOptions) {
+      item.options = [];
+      return;
+    }
     item.options = params.options;
     if (!item.value?.value) {
       if (item.options.length === 1) {
@@ -926,5 +1047,16 @@ export const mutations = {
         (id) => id !== actionId
       );
     }
+  },
+  setDictionary(state, data) {
+    state.dictionaries.push(data);
+  },
+  setDictionaryOptions(state, data) {
+    data.forEach((item) => {
+      const dictionary = state.dictionaries.find((dic) => dic.url === item.url);
+      const field = state.form.find((f) => f.fieldId === item.fieldId);
+      field.options = dictionary.options;
+      field.visible = true;
+    });
   },
 };

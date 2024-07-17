@@ -236,12 +236,22 @@ export default {
       if (field.type !== "button") {
         this.$store.commit("data_card/cardChanged", true);
       }
-      if (field.type === "OneToMany") {
-        this.$store.commit("data_card/setFormOneToManyField", {
-          fieldId: e.fieldId,
-          value: e.value,
-          action: e.action,
-        });
+      if (field.type === "OneToMany" || field.type === "searchSelect") {
+        if (field.type === "OneToMany") {
+          this.$store.commit("data_card/setFormOneToManyField", {
+            fieldId: e.fieldId,
+            value: e.value,
+            action: e.action,
+          });
+        }
+        if (field.type === "searchSelect") {
+          await this.$store.dispatch("data_card/setSearchSelectField", {
+            fieldId: e.fieldId,
+            name: e.name,
+            value: e.value,
+            action: e.action,
+          });
+        }
       } else {
         this.$store.commit("data_card/setFormField", {
           fieldId: e.fieldId,

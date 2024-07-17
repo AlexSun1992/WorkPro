@@ -58,7 +58,8 @@ import ControlEmpty from "./ControlEmpty";
 import ControlLabelMoney from "./ControlLabelMoney";
 import ControlDadataSelect from "./ControlDadataSelect.vue";
 import ControlDadataSelect2 from "./ControlDadataSelect2.vue";
-import ControlCustomCombobox from "./ControlCustomCombobox.vue";
+import ControlCustomCombobox from "./ControlCustomCombobox/ControlCustomCombobox.vue";
+import ControlSearchSelect from "./ControlCustomCombobox/ControlSearchSelect.vue";
 import ControlCustomDouble from "./ControlCustomDouble.vue";
 import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha.vue";
 import ControlMap from "./ControlMap/ControlMap.vue";
@@ -103,6 +104,7 @@ export default {
     ControlEmpty,
     ControlLabelMoney,
     ControlCustomCombobox,
+    ControlSearchSelect,
     ControlCustomDouble,
     ControlGoogleCaptcha,
     ControlMap,
