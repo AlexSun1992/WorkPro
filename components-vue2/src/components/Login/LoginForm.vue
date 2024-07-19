@@ -7,7 +7,7 @@
       :centered="true"
       :static="true"
       content-class="passportNumber"
-      title="Вход через Мобильный ID"
+      title="Авторизация через Мобильный ID"
     >
       <b-form @submit.prevent="sendPassportNumber">
         <div>
@@ -410,17 +410,12 @@ export default {
 
         if (response) {
           const responseData = await response.json();
-
           if (response.status !== 200) {
-            if (!responseData.INFO.includes("Превышено количество попыток")) {
-              this.$bvModal.show("passportNumberDialog");
-            }
-
+            this.$bvModal.show("passportNumberDialog");
             if (!responseData.INFO.includes("Нужен паспорт")) {
               this.dialogErrorInformation = responseData.INFO;
               if (responseData.INFO.includes("Превышено количество попыток")) {
                 this.isDisabled = true;
-                this.authRedirect();
               }
               throw new Error(JSON.stringify(responseData));
             }

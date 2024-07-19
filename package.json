@@ -1,6 +1,8 @@
 {
   "name": "nuxt-vue",
+
   "version": "24.7.11",
+
   "description": "test",
   "author": "Ionov",
   "private": true,
