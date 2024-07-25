@@ -21,6 +21,7 @@
       :allowNegative="false"
       :currency="{ suffix: ` ${data.placeholder}` }"
       v-on:blur="eventHandlerBlur"
+      :id="data.name"
     />
 
     <p v-if="data.dangerText" class="danger-text">{{ data.dangerText }}</p>

@@ -14,6 +14,7 @@
       ></span>
     </template>
     <autocomplete
+      :id="data.name"
       ref="autocomplete"
       :placeholder="placeholder"
       :class="validClass"

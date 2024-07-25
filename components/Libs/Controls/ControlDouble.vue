@@ -23,6 +23,7 @@
       :min="0"
       oninput="validity.valid||(value='')"
       v-on:blur="eventHandlerBlur"
+      :id="data.name"
     ></b-form-input>
     <b-form-invalid-feedback :state="data.state">{{
       data.error ? data.error : "Обязательно для заполнения"
