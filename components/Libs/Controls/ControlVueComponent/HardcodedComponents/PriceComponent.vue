@@ -2,6 +2,7 @@
   <div>
     <div class="position-relative">
       <label>Стоимость полиса</label>
+      <!-- Полная цена -->
       <div
         class="price"
         v-if="getFieldValue('NDISCOUNTPREMIUM') === getFieldValue('NPREMIUM')"
@@ -10,6 +11,7 @@
           new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NPREMIUM"))
         }}</font>
       </div>
+      <!-- Цена со скидкой/промокодом -->
       <div
         class="price"
         v-else
@@ -21,11 +23,11 @@
       >
 
         <font>{{
-          new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NPREMIUM"))
+          new Intl.NumberFormat("ru-RU", {}).format(getFieldValue("NDISCOUNTPREMIUM"))
         }}</font>
         <font>{{
           new Intl.NumberFormat("ru-RU", {}).format(
-            getFieldValue("NDISCOUNTPREMIUM")
+            getFieldValue("NPREMIUM")
           )
         }}</font>
       </div>
@@ -105,7 +107,7 @@ font + font {
 }
 
 .use_discount:after {
-  content: "Применена скидка!";
+  content: "Со скидкой";
 }
 
 .payment_fail {
