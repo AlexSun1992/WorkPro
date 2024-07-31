@@ -24,6 +24,7 @@
       :data-loading="isLoading"
       @searchchange="searchChange"
       @blur="handleBlur"
+      :id="data.name"
     >
     </model-select>
     <b-form-invalid-feedback>
