@@ -18,6 +18,7 @@
       :edit="edit"
       @update="updateField($event)"
       @blur="$emit('blur', $event)"
+      :id="data.name"
     />
 
     <string-autocomplete
@@ -25,6 +26,7 @@
       :data="data"
       :edit="edit"
       @update="updateField($event)"
+      :id="data.name"
     />
 
     <string-simple
@@ -32,6 +34,7 @@
       :data="data"
       :edit="edit"
       @update="updateField($event)"
+      :id="data.name"
     />
   </b-form-group>
 </template>

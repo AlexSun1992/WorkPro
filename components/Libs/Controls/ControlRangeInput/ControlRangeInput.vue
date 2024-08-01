@@ -1,10 +1,10 @@
-
 <template>
   <div class="range-control" :class="isDisabled ? 'disabled' : ''">
     <div>
-      <label v-if="data.label">
+      <label v-if="data.label" :for="data.name">
         <span
-          >{{ data.label }}<span v-if="data.helpText" class="position-relative"
+          >{{ data.label
+          }}<span v-if="data.helpText" class="position-relative"
             >&nbsp;
             <span class="tooltipster">
               (?)<vue-easy-tooltip
@@ -30,6 +30,7 @@
         locale="ru"
         type="tel"
         :disabled="isDisabled"
+        :id="data.name"
       ></currency-input>
 
       <b-form-input

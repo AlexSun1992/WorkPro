@@ -6,6 +6,7 @@
           :label="data.label"
           :class="[{ required: data.required }]"
           class="col-12 col-lg-4"
+          :label-for="data.name"
         >
           <b-form-input
             ref="userInput"
@@ -18,6 +19,7 @@
             :disabled="isShowCodeEnter"
             type="tel"
             @blur="update"
+            :id="data.name"
           />
           <b-form-invalid-feedback>
             Пожалуйста, заполните это поле

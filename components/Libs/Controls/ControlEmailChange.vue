@@ -6,6 +6,7 @@
           :label="data.label"
           :class="[{ required: data.required }]"
           class="col-12 col-lg-4"
+          :label-for="data.name"
         >
           <b-form-input
             ref="userInput"
@@ -20,6 +21,7 @@
             :disabled="isShowCodeEnter"
             type="email"
             data-testid="getCodeInput"
+            :id="data.name"
           ></b-form-input>
 
           <b-form-invalid-feedback v-if="!$v.newEmail.$model"

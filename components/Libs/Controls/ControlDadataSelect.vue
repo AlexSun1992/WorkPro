@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form-group :class="{ required: data.required }">
-      <label>
+      <label :for="data.name">
         {{ data.label }}
         <span v-if="data.helpText" class="position-relative"
           >&nbsp;
@@ -23,6 +23,7 @@
         :disabled="!edit ? !edit : data.readonly"
         @submit="handleSubmit"
         @blur="handleBlur"
+        :id="data.name"
       />
       <b-form-invalid-feedback :state="data.state">
         {{ data.error ? data.error : "Обязательно для заполнения" }}

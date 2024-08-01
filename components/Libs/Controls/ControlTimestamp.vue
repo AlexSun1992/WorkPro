@@ -26,6 +26,7 @@
         :lang="lang"
         :input-class="isValid"
         :clearable="!data.required"
+        :id="data.name"
       />
       <p v-if="data.dangerText" class="danger-text">
         {{ data.dangerText }}

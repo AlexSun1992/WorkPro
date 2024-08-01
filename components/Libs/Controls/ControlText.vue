@@ -1,7 +1,7 @@
 <template>
   <b-form-group :label="label" :label-for="data.name">
     <b-form-textarea
-      id="textarea1"
+      :id="data.name"
       v-model="fieldValue"
       :disabled="!edit ? !edit : data.readonly"
       :state="data.state"
