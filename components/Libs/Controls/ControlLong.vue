@@ -19,6 +19,7 @@
       :state="data.state"
       :min="0"
       oninput="validity.valid||(value='')"
+      :id="data.name"
     ></b-form-input>
     <b-form-invalid-feedback>
       Обязательно для заполнения

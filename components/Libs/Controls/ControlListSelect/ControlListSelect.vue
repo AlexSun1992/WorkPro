@@ -14,6 +14,7 @@
         :is-disabled="!edit ? !edit : data.readonly"
         @openList="openList"
         @selectItem="selectItem"
+        :id="data.name"
       />
       <b-form-invalid-feedback>
         Обязательно для заполнения

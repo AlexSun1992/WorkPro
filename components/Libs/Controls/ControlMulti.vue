@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-group :label="data.label">
+    <b-form-group :label="data.label" :label-for="data.name">
       <multi-select
         :options="options"
         :isDisabled="!edit ? !edit : data.readonly"
@@ -8,6 +8,7 @@
         :selected-options="data.value"
         @select="onSelect"
         placeholder="Выберите из списка"
+        :id="data.name"
       >
       </multi-select>
       <span class="error" v-if="data.state === false">
