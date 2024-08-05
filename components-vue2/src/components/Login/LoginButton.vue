@@ -191,6 +191,7 @@ export default {
       window.localStorage.removeItem("USER_INFO");
       this.$store.commit("auth/setLogged", false);
       this.$store.commit("auth/setUser", null);
+      document.body.classList.remove("overflow-hidden");
       if (window.lkLogout) {
         window.lkLogout();
       }
