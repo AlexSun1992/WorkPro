@@ -40,6 +40,8 @@
         ref="unauthentificatedBtn"
         variant="login-btn"
         text="Личный кабинет"
+        @show="bodySize('blocksize')"
+        @hide="bodySize('unblocksize')"
       >
         <b-dropdown-item class="d-lg-none loginclose"></b-dropdown-item>
         <b-dropdown-item
