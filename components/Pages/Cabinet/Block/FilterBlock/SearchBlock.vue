@@ -1,6 +1,6 @@
 <template>
   <div class="search_input">
-    <b-form-input v-model="searchString" placeholder="Поиск по списку" />
+    <b-form-input v-model="searchString" :placeholder="placeholder" />
     <button @click="clearFilter()" class="search-clear"></button>
   </div>
 </template>
@@ -11,47 +11,9 @@ export default {
   name: "SearchBlock",
 
   props: {
-    uniqueItems: {
-      type: Array,
-      required: false,
-      default: () => null,
-    },
-    defaultValue: {
-      type: String,
-      required: false,
-      default: () => null,
-    },
-    propertyName: {
-      type: String | Array[String],
-      required: true,
-      default: () => null,
-    },
-    filterType: {
-      type: String,
-      required: false,
-      default: () => "checkbox",
-    },
-
-    itemId: {
-      required: true,
-      default: () => null,
-    },
-
-    showButtonAll: {
-      type: Boolean,
-      required: false,
-      default: () => false,
-    },
-    allItemsButtonName: {
-      type: String,
-      required: false,
-      default: () => "Все",
-    },
-
-    showFilteredItemsCount: {
-      type: Boolean,
-      required: true,
-      default: () => false,
+    placeholder: {
+      typeof: String,
+      default: "Поиск по списку",
     },
   },
 

@@ -87,7 +87,13 @@ let confirmResolve = () => null;
 
 export default {
   name: "CardEditor",
-  components: { FormBlock, FormAccordion, Form, ActionButton, SkeletonBox },
+  components: {
+    FormBlock,
+    FormAccordion,
+    Form,
+    ActionButton,
+    SkeletonBox,
+  },
   props: {
     params: {
       type: Object,
@@ -120,6 +126,22 @@ export default {
       },
       saveSuccess: false,
     };
+  },
+  async created() {
+    try {
+      if (process.client) {
+        await this.$store.dispatch("blocks/getScript", {
+          idModule: this.$route.params.idModule,
+          idItem: this.$route.params.idItem,
+        });
+      }
+      this.$root.eventHandler =
+        typeof eventHandler === "function" ? eventHandler : null;
+
+      this.stripeLoaded();
+    } catch (e) {
+      console.warn(`Ошибка загрузки скрипта`);
+    }
   },
   computed: {
     isActionFormDisabled() {
@@ -174,23 +196,6 @@ export default {
     isScriptLoaded() {
       return this.$store.getters["blocks/getScriptStatus"];
     },
-  },
-
-  async created() {
-    try {
-      if (process.client) {
-        await this.$store.dispatch("blocks/getScript", {
-          idModule: this.$route.params.idModule,
-          idItem: this.$route.params.idItem,
-        });
-      }
-      this.$root.eventHandler =
-        typeof eventHandler === "function" ? eventHandler : null;
-
-      this.stripeLoaded();
-    } catch (e) {
-      console.warn(`Ошибка загрузки скрипта`);
-    }
   },
 
   unmounted() {
