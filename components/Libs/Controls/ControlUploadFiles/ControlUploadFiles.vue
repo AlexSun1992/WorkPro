@@ -90,8 +90,11 @@ export default {
     };
   },
   created() {
-    this.$store.commit("uploader/setData", this.settings);
+    if (this.getUploader) {
+      this.$store.commit("uploader/setData", this.settings);
+    }
   },
+
   methods: {
     async compressFile(name, file) {
       this.$store.commit("data_card/setDisabled", true);
@@ -172,6 +175,34 @@ export default {
     },
   },
   computed: {
+    getUploader() {
+      const getForm = this.$store.getters["data_card/getForm"];
+
+      if (!getForm) {
+        return true;
+      }
+
+      const uploaderComponent = Array.from(getForm)?.find(
+        (item) => item.type === "uploadFiles"
+      );
+
+      if (!Array.isArray(uploaderComponent?.value)) {
+        if (uploaderComponent.value.has("JSON")) {
+          const loadedDocsJSON = uploaderComponent.value.get("JSON");
+
+          const getLoadedDocs = JSON.parse(loadedDocsJSON).FILES;
+
+          if (getLoadedDocs.length > 0) {
+            return false;
+          }
+          if (getLoadedDocs.length === 0) {
+            return true;
+          }
+        }
+      }
+      return true;
+    },
+
     settings() {
       return this.data.fileSettings;
     },
@@ -215,7 +246,6 @@ export default {
         this.isCompressing ||
         this.edit === false
       );
-      e;
     },
     isInValidFiles() {
       return this.$store.getters["uploader/isInValidFiles"];

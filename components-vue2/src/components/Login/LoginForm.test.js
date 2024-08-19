@@ -33,6 +33,7 @@ describe("LoginForm", () => {
     Object.defineProperty(window, "location", {
       value: {
         href: "http://localhost/login?type=mobileid&state=ce5e41e9-69cd-43b9-9e50-f7edd4e53771",
+        writable: true,
       },
       writable: true,
     });
@@ -314,6 +315,8 @@ describe("LoginForm", () => {
     );
     expect(wrapper.text()).not.toContain("Превышено количество попыток");
   });
+
+
 
   it("должен показать кнопку авторизоваться", () => {
     const wrapper = mount(LoginForm);
