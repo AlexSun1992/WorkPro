@@ -86,7 +86,7 @@
               class="btn btn-success"
               :class="wizardButtonStyleSave"
               pill
-              :disabled="loading"
+              :disabled="isDisabled"
               type="button"
               :style="isButtonDisabled"
               @click="saveDataCard(0)"
@@ -111,7 +111,7 @@
               data-testid="saveButton"
               :class="wizardButtonStyleContinue"
               pill
-              :disabled="loading"
+              :disabled="isDisabled"
               type="button"
               class="btn btn-success"
               :style="isButtonDisabled"
@@ -177,6 +177,9 @@ export default {
     });
   },
   computed: {
+    isDisabled() {
+      return this.$store.getters["data_card/isDisabled"];
+    },
     editable() {
       const flatmenu = this.$store.getters["menu/flatmenu"];
       const menuItem = flatmenu.find(
@@ -237,6 +240,7 @@ export default {
       );
       return formData.length ? formData : formData.data;
     },
+
     settings: {
       get() {
         return this.$store.getters["menu/settings"].slice(-1).pop();

@@ -227,6 +227,72 @@ export const getters = {
         [currentValue.name]: currentValue.value,
       };
     }, {}),
+  isDisabled: (state, getters) => {
+    if (getters.getLoading) {
+      return true;
+    }
+
+    const uploadComponent = getters.getForm.find(
+      (item) => item.type === "uploadFiles"
+    );
+
+    if (uploadComponent === false) {
+      return false;
+    }
+
+    if (uploadComponent) {
+      if (uploadComponent.visible === false) {
+        //  console.log("uploadComponent.visible:", uploadComponent.visible);
+        return false;
+      }
+    }
+
+    const settings = uploadComponent?.fileSettings;
+
+    // console.log("settings:", settings);
+    if (settings === undefined || Array.isArray(settings) === false) {
+      return false;
+    }
+
+    const objectWithDocsDescription = uploadComponent.fileSettings.find((el) =>
+      el?.value.find((item) => Object.hasOwn(item, "NAME"))
+    );
+
+    // console.log("objectWithDocsDescription:", objectWithDocsDescription);
+
+    const onlyRequiredDocs = objectWithDocsDescription.value.filter(
+      (el) => el?.MIN_FILE_COUNT > 0
+    );
+
+    // console.log("onlyRequiredDocs:", onlyRequiredDocs);
+    if (!onlyRequiredDocs) {
+      return false;
+    }
+    if (Array.isArray(uploadComponent.value) === true) {
+      if (uploadComponent.value.length < onlyRequiredDocs.length) {
+        return true;
+      }
+    }
+    if (Array.isArray(uploadComponent.value) === false) {
+      const downlodedDocs = JSON.parse(uploadComponent.value.getAll("JSON")[0])[
+        `${uploadComponent.name}`
+      ];
+
+      const isRequiredDocsLoaded = onlyRequiredDocs.every((el) =>
+        downlodedDocs.find((item) => el.NAME === item.NAME)
+      );
+
+      if (isRequiredDocsLoaded === false) {
+        return true;
+      }
+      if (isRequiredDocsLoaded === true) {
+        // console.log("downlodedDocs:", downlodedDocs);
+        //  console.log("isRequiredDocsLoaded:", isRequiredDocsLoaded);
+        return false;
+      }
+    }
+    return false;
+  },
 };
 
 export const actions = {

@@ -8,6 +8,27 @@ import ControlUploadFiles from "./ControlUploadFiles.vue";
 import { propsData } from "./ControlUploadFiles.hepler.fixtures";
 
 import * as uploader from "../../../../store/uploader";
+import * as dataCard from "../../../../store/data_card";
+
+const formData = new FormData();
+const mockDock = [
+  {
+    FILENAME: "ОСАГО.pdf",
+    SIZE: 195885,
+    NAME: "EPROTOKOLGUILTY1",
+  },
+  {
+    FILENAME: "ОСАГО.pdf",
+    SIZE: 195885,
+    NAME: "EPROTOKOLGUILTY1",
+  },
+  {
+    FILENAME: "ОСАГО.pdf",
+    SIZE: 195885,
+    NAME: "EPROTOKOLGUILTY1",
+  },
+];
+formData.append("JSON", JSON.stringify({ FILES: mockDock }));
 
 jest.mock("axios");
 
@@ -24,17 +45,14 @@ describe("ControlUploadFiles", () => {
           ...uploader,
           namespaced: true,
         },
+        dataCard: {
+          ...dataCard,
+          namespaced: true,
+        },
       },
     });
     process.server = true;
     store.$axios = axios;
-    wrapper = mount(ControlUploadFiles, {
-      localVue,
-      mocks: {
-        $store: store,
-      },
-      propsData,
-    });
   });
 
   afterEach(() => {
@@ -43,7 +61,13 @@ describe("ControlUploadFiles", () => {
   });
 
   it("Проверка прикрепления и отправки файлов с одинаковым именем", async () => {
-
+    wrapper = mount(ControlUploadFiles, {
+      localVue,
+      mocks: {
+        $store: store,
+      },
+      propsData,
+    });
     const FILE1 = new File(["1"], "EPROTOKOLGUILTY1.pdf");
     const FILE2 = new File(["11"], "EPROTOKOLGUILTY1.pdf");
     const FILE3 = new File(["111"], "EPROTOKOLGUILTY1.pdf");
@@ -76,5 +100,82 @@ describe("ControlUploadFiles", () => {
     expect(fileSizes2).toHaveLength(2);
     expect(fileSizes2[0]).toBe(3);
     expect(fileSizes2[1]).toBe(4);
+  });
+  it("Проверка отображения загруженных файлов", async () => {
+    wrapper = mount(ControlUploadFiles, {
+      localVue,
+      mocks: {
+        $store: store,
+      },
+      computed: {
+        getTypesDocumentation() {
+          return [
+            {
+              TYPE_TITLE: "Обязательные документы",
+              TYPE_DESCRIPTION:
+                "pdf, jpg, jpeg, bmp, png, tif, gif не более 20 мб",
+              DOCS: [
+                {
+                  MAX_FILE_SIZE: 3145728,
+                  DESCRIPTION: "",
+                  TITLE: "Лицевая сторона бумажного бланка Извещения о ДТП",
+                  MIN_FILE_COUNT: 1,
+                  MAX_FILE_COUNT: 3,
+                  TYPE_TITLE: "Обязательные документы",
+                  TYPE_DESCRIPTION:
+                    "pdf, jpg, jpeg, bmp, png, tif, gif не более 20 мб",
+                  NAME: "EPROTOKOLGUILTY1",
+                  FILES: [
+                    {
+                      FILENAME: "ОСАГО.pdf",
+                      SIZE: 195885,
+                      NAME: "EPROTOKOLGUILTY1",
+                    },
+                  ],
+                },
+                {
+                  MAX_FILE_SIZE: 3145728,
+                  DESCRIPTION: "",
+                  TITLE: "Оборотная сторона бумажного бланка Извещения о ДТП",
+                  MIN_FILE_COUNT: 1,
+                  MAX_FILE_COUNT: 3,
+                  TYPE_TITLE: "Обязательные документы",
+                  TYPE_DESCRIPTION:
+                    "pdf, jpg, jpeg, bmp, png, tif, gif не более 20 мб",
+                  NAME: "EPROTOKOLGUILTY2",
+                  FILES: [
+                    {
+                      FILENAME: "ОСАГО.pdf",
+                      SIZE: 195885,
+                      NAME: "EPROTOKOLGUILTY2",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              TYPE_TITLE: "Дополнительные документы",
+              TYPE_DESCRIPTION: "",
+              DOCS: [
+                {
+                  MAX_FILE_SIZE: 3145728,
+                  DESCRIPTION: "",
+                  TITLE: "Фото с места ДТП",
+                  MIN_FILE_COUNT: 0,
+                  MAX_FILE_COUNT: 10,
+                  TYPE_TITLE: "Дополнительные документы",
+                  TYPE_DESCRIPTION: "",
+                  NAME: "PHOTO",
+                  FILES: [],
+                },
+              ],
+            },
+          ];
+        },
+      },
+      propsData,
+    });
+
+    expect(wrapper.find("[title='ОСАГО.pdf']").text()).toEqual("ОСАГО.pdf");
   });
 });

@@ -28,6 +28,7 @@ export const getters = {
         .value.filter((fileType) => fileType.NAME === item.NAME),
     }));
   },
+
   getFormData: (state, getters) => {
     const formData = new FormData();
     const fileObjects = getters.getFileObjects;
@@ -45,9 +46,11 @@ export const getters = {
         }
       });
     });
+
     formData.append("JSON", JSON.stringify({ FILES: getters.getFiles }));
     return formData;
   },
+
   getPoutValueRoute: (state) => state.poutValueRoute,
 
   metaData: (state) => state.metaData,
