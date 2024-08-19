@@ -18,7 +18,7 @@
       ref="autocomplete"
       :options="options"
       :placeholder="placeholder"
-      :isDisabled="data.readonly || isLoading"
+      :isDisabled="isDisabled"
       v-model="searchSelectValue"
       :class="validClass"
       :data-loading="isLoading"
@@ -87,13 +87,25 @@ export default {
         });
       },
     },
-    isEditable() {
-      return this.edit;
+    isDisabled() {
+      return (
+        !this.edit ||
+        this.data.readonly ||
+        this.isLoading ||
+        this.options.length === 0
+      );
     },
     placeholder() {
-      return this.placeholderValue
-        ? this.placeholderValue
-        : this.data.placeholder;
+      if (
+        this.options.length === 0 &&
+        this.isLoading === false &&
+        !this.data.placeholder
+      ) {
+        return `${this.data.label} не найден`;
+      }
+      return this.data.placeholder
+        ? this.data.placeholder
+        : this.placeholderValue;
     },
     validClass() {
       if (this.state !== null && this.state !== undefined) {

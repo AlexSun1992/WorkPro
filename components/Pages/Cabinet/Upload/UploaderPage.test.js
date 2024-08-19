@@ -426,7 +426,6 @@ describe("UploaderPage", () => {
       jest.resetAllMocks();
       jest.resetModules();
     });
-
     it("Страница UploaderPage загрузилась с прикрепленными файлами и с двумя кнопками", async () => {
       const files = wrapper.findAll(".namefile");
 
