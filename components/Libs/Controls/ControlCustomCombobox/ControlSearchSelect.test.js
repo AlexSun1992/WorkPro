@@ -103,7 +103,9 @@ describe("ControlSearchSelect", () => {
     });
 
     await wrapper.vm.$nextTick();
-
+    expect(wrapper.find(".form-group").find(".ui").classes()).not.toContain(
+      "disabled"
+    );
     expect(wrapper.find(".text").text()).toContain("ААА");
     expect(wrapper.html()).toContain("is-valid");
   });
@@ -364,5 +366,72 @@ describe("ControlSearchSelect", () => {
     await wrapper.find("input").setValue("ААА");
 
     expect(wrapper.find(".invalid-feedback").text()).toContain("");
+  });
+  it("Справочник вернул пустое значение", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const dataPropsValueString = { ...dataProps };
+    dataPropsValueString.value = null;
+    dataPropsValueString.options = [];
+
+    wrapper = mount(ControlSearchSelect, {
+      localVue,
+      propsData: {
+        data: dataPropsValueString,
+        edit: true,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+    expect(wrapper.find(".form-group").find(".ui").classes()).toContain(
+      "disabled"
+    );
+    expect(wrapper.find(".text").text()).toEqual("Список не найден");
+  });
+  it("Правильно отображается placeholder во время загрузки нового справочника", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const dataPropsValueString = { ...dataProps };
+    dataPropsValueString.value = null;
+    dataPropsValueString.isLoading = true;
+    dataPropsValueString.options = [];
+
+    wrapper = mount(ControlSearchSelect, {
+      localVue,
+      propsData: {
+        data: dataPropsValueString,
+        edit: true,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+
+    expect(wrapper.find(".form-group").find(".ui").classes()).toContain(
+      "disabled"
+    );
+    expect(wrapper.find(".text").text()).toEqual("Выберите из списка");
+  });
+  it("Правильно отображается placeholder при загруженном справочнике", async () => {
+    const localVue = createLocalVue();
+    localVue.use(BootstrapVue);
+    const dataPropsValueString = { ...dataProps };
+    dataPropsValueString.value = null;
+    dataPropsValueString.placeholder = "Test";
+    dataPropsValueString.options = [];
+
+    wrapper = mount(ControlSearchSelect, {
+      localVue,
+      propsData: {
+        data: dataPropsValueString,
+        edit: true,
+      },
+      mocks: {
+        $store: store,
+      },
+    });
+
+    expect(wrapper.find(".text").text()).toEqual("Test");
   });
 });

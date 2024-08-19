@@ -11,7 +11,7 @@ export const dataProps = {
   id: "765",
   isRelation: true,
   isTab: false,
-  label: "Серия",
+  label: "Список",
   cssClass: "",
   name: "SSERIES",
   options: [
@@ -23,7 +23,6 @@ export const dataProps = {
     },
   ],
   page: 0,
-  placeholder: "Выберите серию",
   readonly: false,
   required: true,
   state: true,
@@ -39,4 +38,5 @@ export const dataProps = {
   params: undefined,
   profileFullness: undefined,
   store: undefined,
+  isLoading: false,
 };
