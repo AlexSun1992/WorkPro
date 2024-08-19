@@ -20,7 +20,7 @@ $mortgage: #d8d6e8;
 $travel: #fdf1cc;
 $white: #ffffff;
 $lkbg: #f2f4f5;
-
+$lgray: #5d737e;
 /*-----SLICK-----*/
 .slick-track[data-v-e4caeaf8] {
   position: relative;
@@ -1202,7 +1202,7 @@ a.lgreen {
   text-align: right;
 }
 .vdn.block-visit .date {
-  color: #5d737e;
+  color: $lgray;
 }
 
 .list-of-services .description,
@@ -3181,32 +3181,48 @@ a.action:hover {
 }
 
 .big-spinner {
-  width: 40px !important;
-  height: 40px !important;
+  width: 70px !important;
+  height: 70px !important;
   position: relative;
   display: block;
-  margin-left: 20px;
+  margin: 20px auto;
+  top: 0;
+  transform: translateY(0);
 }
 
 .big-spinner .sr-only {
-  background: linear-gradient(to right, green 5%, rgba(0, 255, 0, 0) 40%);
-  width: 40px;
-  height: 40px;
+  background: transparent;
+  width: 70px;
+  height: 70px;
 }
 
 .big-spinner .sr-only:before {
-  background: green;
+  background: none;
 }
 
 .big-spinner .sr-only:after {
-  background: $white;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  content: "";
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  border-top: 5px solid #198754;
+  border-right: 5px solid transparent;
+  box-sizing: border-box;
+  animation: rotation 5s linear infinite;
+  font-size: 0;
 }
 
 .filters-block-title {
   font-weight: 700;
   font-size: 18px;
   line-height: 30px;
-  color: #5d737e;
+  color: $lgray;
 }
 
 .my-policy[data-id="1"] .nav-item a.active:after,
@@ -5762,6 +5778,9 @@ input.check-collapse:checked + label span + span {
 .w-500 {
   font-weight: 500;
 }
+.w-400 {
+  font-weight: 400;
+}
 @media (max-width: 768px) {
   .tooltip.tooltip--anchor.tooltip--position-top.active[style*="left: -"] {
     left: 16px !important;
@@ -6139,4 +6158,10 @@ h5.modal-title {
 
 .insurance-case[data-id="4"] .check-collapse + label:after {
   background: url(/img/icon-chevron-4.svg) 50% 50% no-repeat;
+}
+.color-lgray {
+  color: $lgray;
+}
+.bg-lgray {
+  background-color: $lgray;
 }

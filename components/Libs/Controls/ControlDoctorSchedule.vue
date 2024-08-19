@@ -253,9 +253,7 @@ export default {
   min-width: 84px;
   text-align: center;
 }
-.recording.time {
-  margin-right: -30px;
-}
+
 @media (max-width: 992px) {
   .docs-searching-results {
     padding: 16px;
