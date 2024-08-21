@@ -66,8 +66,8 @@ import ControlMap from "./ControlMap/ControlMap.vue";
 import ControlListSelect from "./ControlListSelect/ControlListSelect.vue";
 import ControlRegNumber from "./ControlRegNumber/ControlRegNumber.vue";
 import ControlRadioButton from "./ControlRadioButton.vue";
-// import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
-import ControlDoctorSchedule from "./ControlDoctorSchedule/WrapperDoctorSchedule.vue";
+import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
+import ControlNewDoctorSchedule from "./ControlDoctorSchedule/WrapperDoctorSchedule.vue";
 import ControlOneToMany from "./ControlOneToMany/ControlOneToMany";
 import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConfirm.vue";
 import ControlCollapseGroup from "./ControlCollapseGroup.vue";
@@ -113,6 +113,7 @@ export default {
     ControlRegNumber,
     ControlRadioButton,
     ControlDoctorSchedule,
+    ControlNewDoctorSchedule,
     ControlOneToMany,
     ControlPasswordConfirm,
     ControlCollapseGroup,
