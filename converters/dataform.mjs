@@ -557,6 +557,9 @@ converter.type = (data, isReadOnly) => {
               if (data[i].fieldId === 38003) {
                 copy[i].type = `doctorSchedule`;
               }
+              if (data[i].fieldId === 59720) {
+                copy[i].type = `newDoctorSchedule`;
+              }
             }
           }
 
@@ -666,7 +669,8 @@ converter.save = (data) => {
       data[i].type !== "multi" &&
       data[i].type !== "InsuredBox" &&
       data[i].type !== "listSelect" &&
-      data[i].type !== "doctorSchedule"
+      data[i].type !== "doctorSchedule" &&
+      data[i].type !== "newDoctorSchedule"
     ) {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
