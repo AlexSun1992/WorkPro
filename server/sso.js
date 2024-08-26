@@ -3,11 +3,15 @@ import { getErrorMessage } from "../plugins/auth/toast.helper";
 const ESIA_AUTH_URL = "https://client.reso.ru/loginesia/loginesia/prod";
 const ESIA_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/801`;
 const ALFA_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/803`;
+const SBER_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/805`;
 const MOBILEID_DATA_URL = `http://localhost:8000/am/free/v2/datacard/55/804`;
 
 function getDataUrl(type) {
   if (type === "alfa") {
     return ALFA_DATA_URL;
+  }
+  if (type === "sberid") {
+    return SBER_DATA_URL;
   }
   if (type === "mobileid") {
     return MOBILEID_DATA_URL;
@@ -33,12 +37,13 @@ function getAuthUrl(callbackDomain, type) {
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
         if (response.status === 200) {
-          console.log(`Успешная получение адреса для  ${Object.keys(data[0])}`);
+          console.log(`Успешное получение адреса для  ${Object.keys(data[0])}`);
           return data;
         }
         throw new Error(JSON.stringify(data));
       }
       const text = await response.text();
+
       throw new Error(text);
     })
     .then(([data]) => {
@@ -52,8 +57,10 @@ function getAuthUrl(callbackDomain, type) {
  * Примеры вызова
  * http://localhost:8000/sso?auth&type=alfa
  * http://localhost:8000/sso?auth&type=esia
+ * http://localhost:8000/sso?auth&type=sberid
  * @param {import("express").Request} req
  * @param {import("express").Response} res
+ * @param {import("express").Request} req
  */
 async function authQuery(req, res) {
   const refererHeaderUrl = new URL(req.get("referer"), "https://f.f");
@@ -73,7 +80,7 @@ async function authQuery(req, res) {
 
   res.send(`
   <script type="text/javascript">
-    window.location = "${authUrl}"
+  window.location = "${authUrl}"
   </script>
   `);
 }
@@ -101,6 +108,9 @@ function getAuthName(authType) {
   if (authType === "alfa") {
     return "AlfaID";
   }
+  if (authType === "sberid") {
+    return "SberID";
+  }
   if (authType === "esia") {
     return "Госуслуги";
   }
@@ -127,7 +137,7 @@ function getAuthBody(authType, req) {
       }
     }
 
-    if (authType === "alfa") {
+    if (authType === "alfa" || authType === "sberid") {
       if (req.query.state) {
         return { state: req.query.state };
       }
@@ -141,9 +151,9 @@ function getAuthBody(authType, req) {
  * @param {import("express").Request} req
  * @param {import("express").Response} res
  */
-export default function redirectFromEsia(req, res) {
+export default async function redirectFromEsia(req, res) {
   if ("auth" in req.query) {
-    authQuery(req, res);
+    await authQuery(req, res);
     return;
   }
 
@@ -171,7 +181,7 @@ export default function redirectFromEsia(req, res) {
     `Произошла неизвестная ошибка входа через ${authName}.`
   );
 
-  Promise.resolve()
+  await Promise.resolve()
     .then(() => {
       const dataUrl = getDataUrl(authType);
       const bodyData = getAuthBody(authType, req);
@@ -210,7 +220,7 @@ export default function redirectFromEsia(req, res) {
     .then(([data]) => {
       res.cookie("auth._token.local", `Bearer ${data.ACCESS_TOKEN}`);
       res.cookie("auth._refresh_token.local", data.REFRESH_TOKEN);
-      authType === 'esia' && res.cookie('auth._esia', `${ Date.now() }`);
+      authType === "esia" && res.cookie("auth._esia", `${Date.now()}`);
 
       res.redirect(`${successUrl.pathname}${successUrl.search}`);
     })

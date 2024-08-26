@@ -174,6 +174,9 @@
           </g>
         </svg>
       </button>
+      <button class="btn-sberid hide" @click="goSberID()" id="sberid-login">
+        SberID
+      </button>
     </div>
   </div>
 </template>
@@ -244,6 +247,16 @@ export default {
       });
       this.redirectWithRef("/sso?auth&type=mobileid");
     },
+    goSberID() {
+      this.$LogEvent({
+        formName: "AuthForm",
+        idEventType: 521,
+        controlName: "AuthForm.vue",
+        message: `Нажал на кнопку «Войти чере SberID`,
+        timeUser: new Date(),
+      });
+      this.redirectWithRef("/sso?auth&type=sberid");
+    },
   },
   mounted() {
     const currentURL = window.location.pathname;
@@ -254,4 +267,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.btn-sberid {
+  display: none;
+}
+</style>
