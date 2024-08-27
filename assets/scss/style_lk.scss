@@ -6165,3 +6165,22 @@ h5.modal-title {
 .bg-lgray {
   background-color: $lgray;
 }
+
+
+.radio-chk .checkbox-hide input:checked:disabled + label:before {
+  display: none;
+}
+.radio-chk .checkbox-hide input:checked:disabled + label:after {
+  background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHZpZXdCb3g9IjAgMCAzNCAzNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjM0IiBoZWlnaHQ9IjM0IiByeD0iMTciIGZpbGw9IiM0M0IwMkEiLz4KPGNpcmNsZSBjeD0iMTciIGN5PSIxNyIgcj0iNyIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==");
+  border: 0;
+}
+.radio-chk .checkbox-hide input:disabled + label:after {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHZpZXdCb3g9IjAgMCAzNCAzNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMSIgeT0iMSIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iMTYiIGZpbGw9IndoaXRlIi8+CjxyZWN0IHg9IjEiIHk9IjEiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgcng9IjE2IiBzdHJva2U9IiNGMkY0RjUiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K");
+  border: 0;
+}
+.radio-chk .checkbox-hide input:checked:disabled + label {
+  color: #292929;
+}
+.radio-chk .checkbox-hide input:disabled + label {
+  color: #c3c3c3;
+}
