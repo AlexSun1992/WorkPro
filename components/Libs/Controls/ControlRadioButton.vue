@@ -137,7 +137,6 @@ export default {
   min-height: 0;
 }
 .radio-tabs input + label:after {
-  height: 0;
   width: 0;
   background: transparent;
 }
@@ -146,15 +145,17 @@ export default {
   position: absolute;
   bottom: -4px;
   width: 0;
-  height: 2px;
+  height: 3px;
   background: #eee;
   top: auto;
   transform: none;
   transition: width 0.3s;
+  border: 0;
 }
 .radio-tabs input:hover + label:after {
   width: 100%;
   transition: width 0.3s;
+  background: #c3c3c3;
 }
 
 .radio-tabs input:checked + label:after {
