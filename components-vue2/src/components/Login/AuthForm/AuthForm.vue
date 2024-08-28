@@ -175,7 +175,7 @@
         </svg>
       </button>
       <button class="btn-sberid hide" @click="goSberID()" id="sberid-login">
-        SberID
+        Сбер ID
       </button>
     </div>
   </div>
