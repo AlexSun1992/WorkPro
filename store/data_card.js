@@ -52,7 +52,7 @@ export const state = () => ({
   isClearOptions: false,
   dictionaries: [],
   // В начале массива храниться актуальное значение, далее более старые
-  formValuesHistory: {}
+  formValuesHistory: {},
 });
 export const getters = {
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
@@ -244,14 +244,12 @@ export const getters = {
 
     if (uploadComponent) {
       if (uploadComponent.visible === false) {
-        //  console.log("uploadComponent.visible:", uploadComponent.visible);
         return false;
       }
     }
 
     const settings = uploadComponent?.fileSettings;
 
-    // console.log("settings:", settings);
     if (settings === undefined || Array.isArray(settings) === false) {
       return false;
     }
@@ -260,13 +258,10 @@ export const getters = {
       el?.value.find((item) => Object.hasOwn(item, "NAME"))
     );
 
-    // console.log("objectWithDocsDescription:", objectWithDocsDescription);
-
     const onlyRequiredDocs = objectWithDocsDescription.value.filter(
       (el) => el?.MIN_FILE_COUNT > 0
     );
 
-    // console.log("onlyRequiredDocs:", onlyRequiredDocs);
     if (!onlyRequiredDocs) {
       return false;
     }
@@ -288,8 +283,6 @@ export const getters = {
         return true;
       }
       if (isRequiredDocsLoaded === true) {
-        // console.log("downlodedDocs:", downlodedDocs);
-        //  console.log("isRequiredDocsLoaded:", isRequiredDocsLoaded);
         return false;
       }
     }
@@ -832,7 +825,7 @@ export const mutations = {
     const item = state.form.find((d) => d.name === data.name);
 
     if (item !== undefined) {
-      this.commit('data_card/setPreviousFormFieldValue', data);
+      this.commit("data_card/setPreviousFormFieldValue", data);
 
       item.value = data.value;
       if (item.required) {
@@ -873,8 +866,12 @@ export const mutations = {
       return;
     }
 
-    state.formValuesHistory[data.name] = state.formValuesHistory[data.name] ?? [];
-    state.formValuesHistory[data.name] = [data.value, ...state.formValuesHistory[data.name]];
+    state.formValuesHistory[data.name] =
+      state.formValuesHistory[data.name] ?? [];
+    state.formValuesHistory[data.name] = [
+      data.value,
+      ...state.formValuesHistory[data.name],
+    ];
   },
   setFormOneToManyField(state, data) {
     const item = state.form.find((d) => d.fieldId === data.fieldId);
