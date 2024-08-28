@@ -13,6 +13,7 @@
             <span v-html="data.helpText" /></vue-easy-tooltip></span
       ></span>
     </template>
+
     <autocomplete
       :id="data.name"
       ref="autocomplete"
@@ -37,6 +38,7 @@
 import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BFormGroup } from "bootstrap-vue";
+import { findUnSensitiveCaseСoincidence } from "./ControlCustomCombobox.helper";
 
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
@@ -125,7 +127,7 @@ export default {
     search(value) {
       if (value) {
         const findValueInList = this.data.options.find((i) =>
-          i.text.includes(this.$refs.autocomplete?.value)
+          findUnSensitiveCaseСoincidence(i.text, this.$refs.autocomplete?.value)
         );
 
         if (
@@ -152,7 +154,9 @@ export default {
         return this.data.options;
       }
 
-      return this.data.options.filter((item) => item.text.includes(value));
+      return this.data.options.filter((item) =>
+        findUnSensitiveCaseСoincidence(item.text, value)
+      );
     },
     getResultValue(item) {
       return item.text;
@@ -182,7 +186,7 @@ export default {
         }
       } else {
         const find = this.data.options.find((i) =>
-          i.text.includes(this.$refs.autocomplete?.value)
+          findUnSensitiveCaseСoincidence(i.text, this.$refs.autocomplete?.value)
         );
         if (find !== undefined) {
           this.$refs.autocomplete.value = find.text;
