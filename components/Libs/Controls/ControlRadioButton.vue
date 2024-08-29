@@ -107,16 +107,19 @@ export default {
 .radio-group > div:first-child {
   margin-top: 0;
 }
-.radio-group.columns-3 {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-column-gap: 20px;
-}
+
 .radio-group.columns-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 20px;
 }
+
+.radio-group.columns-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 20px;
+}
+
 .radio-group.columns-4 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -136,11 +139,13 @@ export default {
   height: auto;
   min-height: 0;
 }
-.radio-tabs input + label:after {
+.radio-tabs input + label:after,
+.radio-tabs input + label:before {
   width: 0;
   background: transparent;
 }
-.radio-tabs input + label:after {
+.radio-tabs input + label:after,
+.radio-tabs input + label:before {
   content: "";
   position: absolute;
   bottom: -4px;
@@ -149,19 +154,34 @@ export default {
   background: #eee;
   top: auto;
   transform: none;
-  transition: width 0.3s;
+  transition: 0.3s;
   border: 0;
+  left: 50%;
 }
-.radio-tabs input:hover + label:after {
-  width: 100%;
-  transition: width 0.3s;
+.radio-tabs input:hover + label:after,
+.radio-tabs input:hover + label:before {
+  width: 50%;
+  transition: 0.3s;
   background: #c3c3c3;
 }
 
-.radio-tabs input:checked + label:after {
-  width: 100%;
+.radio-tabs input:checked + label:after,
+.radio-tabs input:checked + label:before {
+  width: 50%;
   background: #43b02a;
-  transition: width 0.3s;
+  transition: 0.3s;
+  content: "";
+  display: block;
+}
+.radio-tabs input:hover + label:after,
+.radio-tabs input:checked + label:after {
+  margin-left: -50%;
+}
+
+@media (min-width: 993px) {
+  .radio-group[class*="columns-"] .blk-radio-btn {
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 992px) {
