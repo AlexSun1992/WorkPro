@@ -164,16 +164,16 @@ export default {
       });
       this.visible = false;
       this.$store.commit("data_card/setFilters", valuePrepare);
-
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: {
           value: { ...value },
           text:
-            value[this.data.name.substring(2)] || this.dataContent.fields
+            value[this.data.name.substring(2)] ||
+            (this.dataContent.fields
               ? value[this.dataContent.fields[1].label]
-              : "",
+              : ""),
         },
       });
     },
