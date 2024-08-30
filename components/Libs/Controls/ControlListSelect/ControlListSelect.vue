@@ -171,8 +171,9 @@ export default {
         value: {
           value: { ...value },
           text:
-            value[this.data.name.substring(2)] ||
-            value[this.dataContent.fields[1].label],
+            value[this.data.name.substring(2)] || this.dataContent.fields
+              ? value[this.dataContent.fields[1].label]
+              : "",
         },
       });
     },
