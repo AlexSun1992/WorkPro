@@ -52,7 +52,7 @@ export const state = () => ({
   isClearOptions: false,
   dictionaries: [],
   // В начале массива храниться актуальное значение, далее более старые
-  formValuesHistory: {},
+  formValuesHistory: {}
 });
 export const getters = {
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
@@ -825,7 +825,7 @@ export const mutations = {
     const item = state.form.find((d) => d.name === data.name);
 
     if (item !== undefined) {
-      this.commit("data_card/setPreviousFormFieldValue", data);
+      this.commit('data_card/setPreviousFormFieldValue', data);
 
       item.value = data.value;
       if (item.required) {
@@ -866,12 +866,8 @@ export const mutations = {
       return;
     }
 
-    state.formValuesHistory[data.name] =
-      state.formValuesHistory[data.name] ?? [];
-    state.formValuesHistory[data.name] = [
-      data.value,
-      ...state.formValuesHistory[data.name],
-    ];
+    state.formValuesHistory[data.name] = state.formValuesHistory[data.name] ?? [];
+    state.formValuesHistory[data.name] = [data.value, ...state.formValuesHistory[data.name]];
   },
   setFormOneToManyField(state, data) {
     const item = state.form.find((d) => d.fieldId === data.fieldId);

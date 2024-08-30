@@ -36,6 +36,7 @@
 
 <script>
 import CardDoctorSchedule from "./CardDoctorSchedule.vue";
+import Vue from "vue";
 
 export default {
   name: "ControlDoctorSchedule",
@@ -56,12 +57,20 @@ export default {
       getDataTimeToVisit: {},
       placeholder: "Поиск по ФИО врача, клинике или адресу",
       searchString: "",
+      inProgress: false,
+      datesToShow: Vue.observable({value: 4})
     };
+  },
+  provide() {
+    return {
+      visibleDates: this._datesToShow
+    }
   },
   components: { CardDoctorSchedule },
   emits: ["update"],
 
   async created() {
+    window.addEventListener('resize', this.setDatesToShow);
     this.$store.commit("data_card/setDisabled", true);
     this.$store.commit("blocks/clearBlockById", this.data.menudic);
     this.$store.commit("blocks/isRequestFinish", false);
@@ -96,6 +105,12 @@ export default {
         });
       });
   },
+  mounted() {
+    this.setDatesToShow();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.setDatesToShow);
+  },
   methods: {
     updateActiveSchedule(schedule) {
       this.getDataTimeToVisit = schedule;
@@ -113,6 +128,36 @@ export default {
 
       window.history.replaceState(null, null, urlObject);
     },
+    setDatesToShow() {
+      const currentWidth = window.innerWidth;
+      const size = [
+        {min: 0, max: 400, size: 2},
+        {min: 401, max: 600, size: 3},
+        {min: 600, max: Infinity, size: 4}
+      ];
+      const doUpdate = () => {
+        this.inProgress = true;
+
+        setTimeout(() => {
+          this.inProgress = false;
+        }, 50);
+        for (let item of size) {
+          if (item.max >= currentWidth && item.min <= currentWidth) {
+            this.datesToShow.value = item.size;
+
+            return;
+          }
+        }
+
+        this.datesToShow.value = size.at(-1).size;
+      }
+
+      if (this.inProgress) {
+        return;
+      }
+
+      doUpdate();
+    }
   },
   computed: {
     getMainFilteredItems() {
@@ -205,6 +250,10 @@ export default {
       }
 
       return true;
+    },
+    _datesToShow() {
+      console.log(`_datesToShow = ${this.datesToShow}`);
+      return this.datesToShow;
     }
   },
 };

@@ -7,7 +7,7 @@
         :class="{ active: isPrewButtonActive }"
       ></button>
 
-      <div v-for="item in getGroupDate" :key="item">
+      <div v-for="(item, index) in getGroupDate" :key="item + index">
         <div
           class="doc-date"
           :class="{ active: getActiveDate === item }"
@@ -56,7 +56,7 @@ export default {
     },
     datesToShow: {
       type: Number,
-      required: true,
+      required: false,
       default: 3,
     },
     selectedTime: {
@@ -84,47 +84,35 @@ export default {
       firstIndex: 0,
       lastIndex: 0,
       indexDate: 0,
+      // Сдвиг даты
+      datesShift: 0,
     };
   },
+  inject: ["visibleDates"],
   emits: ["update"],
   mounted() {
+    this.datesShift = 0;
     this.firstIndex = 0;
-    this.lastIndex = this.datesToShow - 1;
+    this.lastIndex = this.datesToShowComputed - 1;
     this.isShowNextButton = true;
 
     this.chooseTimeToVisit(null);
   },
   computed: {
     isNextButtonActive() {
-      let isShowNext = this.isShowNextButton;
-      if (this.allDate.length <= this.datesToShow) {
-        isShowNext = false;
-      }
-      return isShowNext;
+      return this.getLastIndex < this.allDate.length - 1;
     },
     isPrewButtonActive() {
-      let isShowPrew = this.isShowPrewButton;
-      if (this.allDate.length <= this.datesToShow) {
-        isShowPrew = false;
-      }
-      return isShowPrew;
+      return this.getFirstIndex > 0;
     },
     getActiveDate() {
       return this.selectedDate || this.getGroupDate[0];
     },
     getLastIndex() {
-      let lastInd = this.lastIndex;
-      if (lastInd > this.allDate.length - 1) {
-        lastInd = this.allDate.length - 1;
-      }
-      return lastInd;
+      return this.datesShift + (this.datesToShowComputed - 1);
     },
     getFirstIndex() {
-      let firstInd = this.firstIndex;
-      if (firstInd > this.allDate.length - 1) {
-        firstInd = this.getLastIndex - (this.datesToShow - 1);
-      }
-      return firstInd;
+      return this.datesShift;
     },
     getGroupDate() {
       const subarray = this.allDate.filter(
@@ -133,46 +121,64 @@ export default {
       );
       return subarray;
     },
+    datesToShowComputed() {
+      return this.visibleDates?.value ?? 4;
+    },
   },
   methods: {
     prewElement() {
-      this.firstIndex -= this.datesToShow;
-      this.lastIndex -= this.datesToShow;
+      let datesShift = this.datesShift - this.datesToShowComputed;
 
-      if (this.firstIndex < 0) {
-        this.firstIndex = 0;
+      let firstIndex = this.datesShift;
+      let lastIndex = firstIndex + this.datesToShowComputed;
+
+      if (datesShift < 0) {
+        this.datesShift = 0;
+      } else {
+        this.datesShift = datesShift;
+      }
+
+      if (firstIndex < 0) {
+        firstIndex = 0;
         this.isShowNextButton = true;
         this.isShowPrewButton = false;
       }
-      if (this.lastIndex - this.firstIndex !== this.datesToShow) {
-        this.lastIndex = this.firstIndex + (this.datesToShow - 1);
+      if (lastIndex - firstIndex !== this.datesToShowComputed) {
+        lastIndex = firstIndex + (this.datesToShowComputed - 1);
       }
-      if (this.lastIndex !== this.allDate.length - 1) {
+      if (lastIndex !== this.allDate.length - 1) {
         this.isShowNextButton = true;
       }
-      if (this.firstIndex === 0) {
+      if (firstIndex === 0) {
         this.isShowPrewButton = false;
       }
       this.activeDate = this.getGroupDate[this.indexDate];
       this.chooseTimeToVisit(null);
     },
     nextElement() {
-      this.activeIndex += 1;
-      this.firstIndex += this.datesToShow;
-      this.lastIndex += this.firstIndex;
+      let datesShift = this.datesShift + this.datesToShowComputed;
 
-      if (this.lastIndex > this.allDate.length - 1) {
-        this.lastIndex = this.allDate.length - 1;
+      if (datesShift > this.allDate.length) {
+        this.datesShift = this.allDate.length - this.datesToShowComputed;
+      } else {
+        this.datesShift = datesShift;
+      }
+
+      let firstIndex = this.datesShift;
+      let lastIndex = firstIndex + this.datesToShowComputed;
+
+      if (lastIndex > this.allDate.length - 1) {
+        lastIndex = this.allDate.length - 1;
         this.isShowNextButton = false;
         this.isShowPrewButton = true;
       }
-      if (this.lastIndex - this.firstIndex !== this.datesToShow - 1) {
-        this.firstIndex = this.lastIndex - (this.datesToShow - 1);
+      if (lastIndex - firstIndex !== this.datesToShowComputed - 1) {
+        firstIndex = lastIndex - (this.datesToShowComputed - 1);
       }
-      if (this.firstIndex !== 0) {
+      if (firstIndex !== 0) {
         this.isShowPrewButton = true;
       }
-      if (this.lastIndex === this.allDate.length - 1) {
+      if (lastIndex === this.allDate.length - 1) {
         this.isShowNextButton = false;
       }
 
@@ -201,8 +207,9 @@ export default {
   watch: {
     idDoctor(oldVal, newVal) {
       if (oldVal !== newVal) {
+        this.datesShift = 0;
         this.firstIndex = 0;
-        this.lastIndex = this.datesToShow - 1;
+        this.lastIndex = this.datesToShowComputed - 1;
         this.isShowPrewButton = false;
         this.isShowNextButton = true;
       }
@@ -338,5 +345,15 @@ export default {
 .next-date-recording.active:after {
   border-top: 3px solid #000;
   border-left: 3px solid #000;
+}
+@media (max-width: 600px) {
+  .recording-date {
+    grid-template-columns: 20px 1fr 1fr 1fr 15px;
+  }
+}
+@media (max-width: 400px) {
+  .recording-date {
+    grid-template-columns: 20px 1fr 1fr 15px;
+  }
 }
 </style>

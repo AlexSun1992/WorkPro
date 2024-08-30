@@ -47,17 +47,20 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => {
+      },
     },
     options: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => {
+      },
     },
     dataTimeToVisit: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => {
+      },
     },
   },
   components: { DateDoctorShedule },
@@ -65,6 +68,7 @@ export default {
   data() {
     return {
       schedule: {},
+      datesToShow: 4,
     };
   },
   methods: {
@@ -91,12 +95,12 @@ export default {
       return this.schedule.DDATE || this.options.SDATETIMELIST[0].DDATE;
     },
     getTimesData() {
-      return this.options.SDATETIMELIST.find(
+      return this.options.SDATETIMELIST?.find(
         (el) => el.DDATE === this.getActiveDate
       )?.STIMELIST;
     },
     getAllDate() {
-      return this.options.SDATETIMELIST.map((el) => el.DDATE);
+      return this.options.SDATETIMELIST?.map((el) => el.DDATE);
     },
     activeTime() {
       return this.options.ID === this.dataTimeToVisit.ID
@@ -110,6 +114,10 @@ export default {
         this.dataTimeToVisit.DFROM
       );
     },
+    currentWidth() {
+      return window.innerWidth;
+    },
+
   },
   watch: {
     options(oldVal, newVal) {
@@ -117,7 +125,7 @@ export default {
         this.schedule.DDATE = "";
       }
     },
-  },
+  }
 };
 </script>
 
@@ -203,6 +211,7 @@ export default {
   top: 22px;
   left: -3px;
 }
+
 span[class*="undeground-color"] {
   display: inline-block;
   width: 0px;
@@ -282,9 +291,11 @@ span[class*="undeground-color"]:after {
     font-size: 0.875rem;
     min-width: 62px;
   }
+
   .doc-adress .my-location {
     top: 15px;
   }
+
   span[class*="undeground-color"] {
     height: 20px;
   }
