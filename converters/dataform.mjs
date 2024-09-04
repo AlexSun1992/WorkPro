@@ -557,7 +557,7 @@ converter.type = (data, isReadOnly) => {
               if (data[i].fieldId === 38003) {
                 copy[i].type = `doctorSchedule`;
               }
-              if (data[i].fieldId === 59720) {
+              if (data[i].fieldId === 59720 || data[i].fieldId === 60679) {
                 copy[i].type = `newDoctorSchedule`;
               }
             }
