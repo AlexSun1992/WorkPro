@@ -11,12 +11,12 @@ describe("CardDoctorShedule", () => {
     });
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.text()).toContain("17 июля");
-    expect(wrapper.text()).toContain("18 июля");
-    expect(wrapper.text()).toContain("19 июля");
-    expect(wrapper.text()).toContain("22 июля");
+    expect(wrapper.text()).toContain("17.07");
+    expect(wrapper.text()).toContain("18.07");
+    expect(wrapper.text()).toContain("19.07");
+    expect(wrapper.text()).toContain("22.07");
 
-    expect(wrapper.text()).not.toContain("13 июля");
+    expect(wrapper.text()).not.toContain("13.07");
   });
 
   it("Показывается 1 активный каледарный день", async () => {
@@ -25,11 +25,11 @@ describe("CardDoctorShedule", () => {
     });
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find("div.doc-date.active").text()).toBe("17 июля");
+    expect(wrapper.find("div.doc-date.active").text()).toBe("17.07");
 
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("18 июля");
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("19 июля");
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("22 июля");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("18.07");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("19.07");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("22.07");
   });
 
   it("При клике на кнопку '>' даты сдвигаются на 4 элемент, если всего лементов 8", async () => {
@@ -42,15 +42,15 @@ describe("CardDoctorShedule", () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.text()).not.toContain("17 июля");
-    expect(wrapper.text()).not.toContain("18 июля");
-    expect(wrapper.text()).not.toContain("19 июля");
-    expect(wrapper.text()).not.toContain("22 июля");
+    expect(wrapper.text()).not.toContain("17.07");
+    expect(wrapper.text()).not.toContain("18.07");
+    expect(wrapper.text()).not.toContain("19.07");
+    expect(wrapper.text()).not.toContain("22.07");
 
-    expect(wrapper.text()).toContain("25 июля");
-    expect(wrapper.text()).toContain("26 июля");
-    expect(wrapper.text()).toContain("27 июля");
-    expect(wrapper.text()).toContain("28 июля");
+    expect(wrapper.text()).toContain("25.07");
+    expect(wrapper.text()).toContain("26.07");
+    expect(wrapper.text()).toContain("27.07");
+    expect(wrapper.text()).toContain("28.07");
   });
 
   it("При клике на кнопку '>' даты сдвигаются на 4 элемент, если всего лементов 8 и активный первый элемент", async () => {
@@ -63,12 +63,12 @@ describe("CardDoctorShedule", () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find("div.doc-date.active").text()).toBe("25 июля");
+    expect(wrapper.find("div.doc-date.active").text()).toBe("25.07");
 
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("17 июля");
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("26 июля");
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("27 июля");
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("28 июля");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("17.07");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("26.07");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("27.07");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("28.07");
   });
 
   it("При клике на кнопку '<' даты сдвигаются на 4 элемент, если всего лементов 8 и активный первый элемент", async () => {
@@ -81,12 +81,12 @@ describe("CardDoctorShedule", () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find("div.doc-date.active").text()).toBe("17 июля");
+    expect(wrapper.find("div.doc-date.active").text()).toBe("17.07");
 
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("25 июля");
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("26 июля");
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("27 июля");
-    expect(wrapper.find("div.doc-date.active").text()).not.toBe("28 июля");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("25.07");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("26.07");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("27.07");
+    expect(wrapper.find("div.doc-date.active").text()).not.toBe("28.07");
   });
 
   it("Если общее количество дней больше 4, то активная кнопка только '>'", async () => {
