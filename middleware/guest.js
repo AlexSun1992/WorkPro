@@ -25,7 +25,6 @@ export default async function ({
     if ($auth.loggedIn) {
       if (ref) {
         $cookiz.remove("ref");
-
         redirect(ref);
       }
     }
