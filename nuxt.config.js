@@ -243,6 +243,9 @@ const nuxtConfig = {
     port: 8000,
     host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
   },
+  router: {
+    middleware: ["routerRedirect"],
+  },
 };
 
 module.exports = nuxtConfig;
