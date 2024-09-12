@@ -145,8 +145,14 @@ converter.form = async (data, params, instance) => {
       obj.type = "timestamp";
     } else if (webFields[i].IDCONTROL == 5) {
       obj.type = "progressbar";
-    } else if (webFields[i].IDCONTROL == 15 || webFields[i].IDCONTROL == 37) {
-      obj.type = webFields[i].IDCONTROL == 15 ? "combobox" : "customCombobox";
+    } else if (
+      webFields[i].IDCONTROL == 15 ||
+      webFields[i].IDCONTROL == 37 ||
+      webFields[i].IDCONTROL == 441
+    ) {
+      if (webFields[i].IDCONTROL !== 441) {
+        obj.type = webFields[i].IDCONTROL == 15 ? "combobox" : "customCombobox";
+      }
 
       webFields.forEach((field) => {
         if (
@@ -157,7 +163,8 @@ converter.form = async (data, params, instance) => {
           webFields[i].SCONNECTFIELD
         ) {
           obj.options = [];
-          obj.type = "searchSelect";
+          obj.type =
+            webFields[i].IDCONTROL == 441 ? "InsuredBox" : "searchSelect";
           obj.isLoading = false;
         }
       });
@@ -170,24 +177,40 @@ converter.form = async (data, params, instance) => {
               field.LVISIBLE
           )
           .reduce((obj, field) => {
-            const value = item[field.SNAME];
+            const value = converter.queryParams(item)[field.SNAME] ?? metaValue[field.SNAME];
             if (value) {
               return Object.assign(obj, { [field.SNAME]: value });
             }
             return obj;
           }, {});
-        if (Object.values(dicParams).length) {
+        if (webFields[i].LDIC === false && webFields[i].LVISIBLE === true) {
           promises.push(
             instance.get(
               `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${
                 params.idItem ?? 0
-              }/${webFields[i].SNAME}/${params.id ?? 0}?${new URLSearchParams(
-                dicParams
-              ).toString()}`
+              }/${webFields[i].SNAME}/${params.id ?? 0}?${
+                Object.values(dicParams).length
+                  ? new URLSearchParams(dicParams).toString()
+                  : ``
+              }`
+            )
+          );
+        }
+        if (webFields[i].LDIC === true && webFields[i].LVISIBLE === true) {
+          promises.push(
+            instance.get(
+              `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
+                webFields[i].ID
+              }?${
+                Object.values(dicParams).length
+                  ? new URLSearchParams(dicParams).toString()
+                  : ``
+              }`
             )
           );
         }
       }
+
       if (webFields[i].LDIC === true && !webFields[i].SCONNECTFIELD) {
         promises.push(
           instance.get(
@@ -541,12 +564,14 @@ converter.type = (data, isReadOnly) => {
         data[i].value = null;
       }
     }
+
     if (data[i].name.substring(0, 2) === `FK`) {
       for (let j = 0; j < data.length; j++) {
         if (
           data[i].name.substring(2) === data[j].name &&
           data[j].type !== "combobox" &&
-          data[i].type !== "label"
+          data[i].type !== "label" &&
+          data[i].type !== "InsuredBox"
         ) {
           if (data[j].type === "InsuredBox") {
             copy[i].type = "InsuredBox";
@@ -562,7 +587,6 @@ converter.type = (data, isReadOnly) => {
               }
             }
           }
-
           copy[i].label = copy[j].label;
           copy[i].required = copy[j].required;
           copy[i].dic = data[j].name;
@@ -667,7 +691,6 @@ converter.save = (data) => {
     if (
       data[i].type !== "enum" &&
       data[i].type !== "multi" &&
-      data[i].type !== "InsuredBox" &&
       data[i].type !== "listSelect" &&
       data[i].type !== "doctorSchedule" &&
       data[i].type !== "newDoctorSchedule"
@@ -782,6 +805,14 @@ converter.save = (data) => {
 
   return res;
 };
+
+converter.queryParams = (data) =>
+  Object.fromEntries(
+    Object.entries(data).map(([key, val]) => [
+      key,
+      typeof val === "boolean" ? (val === true ? "Y" : "N") : val,
+    ])
+  );
 
 converter.cutHTMLFromQueryParams = (data) =>
   Object.fromEntries(

@@ -1,36 +1,44 @@
 <template>
-  <div v-if="carouselCards.length" class="slider_in_col">
-    <VueSlickCarousel v-bind="settings">
-      <div v-for="(card, indx) in carouselCards" :key="card.ID">
-        <div
-          :class="{
-            box: true,
-            'box-green': indx % 2 === 0,
-            'box-blue': indx % 2 !== 0,
-            active: Number(fieldValue.value) === Number(card.ID),
-          }"
-          @click="changeColorCard(card)"
-        >
-          <div class="box-title">{{ card.SNAME }}</div>
-          <div class="box-description">
-            <div class="box-flag" v-if="card.BDEFAULT">Оптимальный</div>
-            <div class="box-label">Травма</div>
-            <div class="box-text">{{ formattedNum(card.NSUMTN) }} &#8381;</div>
-            <div class="box-label">Инвалидность</div>
-            <div class="box-text">{{ formattedNum(card.NSUMPN) }} &#8381;</div>
-            <div class="box-label">Смерть<br />(за исключением ДТП)</div>
-            <div class="box-text">
-              {{ formattedNum(card.NSUMNODT) }} &#8381;
+  <div>
+    <div v-if="data.options.length" class="slider_in_col">
+      <VueSlickCarousel v-bind="settings">
+        <div v-for="(card, indx) in data.options" :key="card.ID">
+          <div
+            :class="{
+              box: true,
+              'box-green': indx % 2 === 0,
+              'box-blue': indx % 2 !== 0,
+              active: Number(fieldValue.value) === Number(card.ID),
+            }"
+            @click="changeColorCard(card)"
+          >
+            <div class="box-title">{{ card.SNAME }}</div>
+            <div class="box-description">
+              <div class="box-flag" v-if="card.BDEFAULT">Оптимальный</div>
+              <div class="box-label">Травма</div>
+              <div class="box-text">
+                {{ formattedNum(card.NSUMTN) }} &#8381;
+              </div>
+              <div class="box-label">Инвалидность</div>
+              <div class="box-text">
+                {{ formattedNum(card.NSUMPN) }} &#8381;
+              </div>
+              <div class="box-label">Смерть<br />(за исключением ДТП)</div>
+              <div class="box-text">
+                {{ formattedNum(card.NSUMNODT) }} &#8381;
+              </div>
+              <div class="box-label">Смерть в ДТП</div>
+              <div class="box-text">
+                {{ formattedNum(card.NSUMDT) }} &#8381;
+              </div>
             </div>
-            <div class="box-label">Смерть в ДТП</div>
-            <div class="box-text">{{ formattedNum(card.NSUMDT) }} &#8381;</div>
-          </div>
-          <div ref="button" class="box-button">
-            {{ formattedNum(card.NCOST) }} &#8381;
+            <div ref="button" class="box-button">
+              {{ formattedNum(card.NCOST) }} &#8381;
+            </div>
           </div>
         </div>
-      </div>
-    </VueSlickCarousel>
+      </VueSlickCarousel>
+    </div>
   </div>
 </template>
 
@@ -39,7 +47,7 @@ import VueSlickCarousel from "vue-slick-carousel";
 import { formattedNumber } from "./formattedNumber";
 
 export default {
-  name: "InsuredBox",
+  name: "ControlInsuredBox",
   components: { VueSlickCarousel },
   props: {
     data: {
@@ -99,52 +107,22 @@ export default {
     };
   },
   async created() {
-    await this.fetchData();
-
-    if (this.carouselCards.length > 3) {
+    if (this.getData.length > 3) {
       this.settings.centerMode = true;
     }
-    this.carouselCards.forEach((item, index) => {
-      if (this.data.value.value === "undefined") {
-        if (item.BDEFAULT === true) {
-          this.settings.initialSlide = index;
-        }
-      } else if (item.ID === Number(this.data.value.value)) {
-        this.settings.initialSlide = index;
-      }
-    });
   },
   computed: {
-    carouselCards() {
-      const block = this.$store.getters["blocks/getBlockById"](
-        this.data.menudic
-      );
-      if (block) {
-        return block.data.items;
-      }
-      return [];
+    getData() {
+      return this.data.options;
     },
-    fieldValue: {
-      get() {
-        return {
-          text: String(this.data.value.text),
-          value: String(this.data.value.value),
-        };
-      },
+    fieldValue() {
+      return (
+        this.data.options.find((item) => item.ID === Number(this.data.value)) ??
+        {}
+      );
     },
   },
   methods: {
-    async fetchData() {
-      try {
-        await this.$store.dispatch("blocks/fetchBlock", {
-          id: this.data.menudic,
-          query: this.$store.getters["data_card/getFilters"],
-          ...this.$route.params,
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    },
     formattedNum(obj) {
       return Number.isInteger(obj) ? formattedNumber(obj) : obj;
     },
@@ -156,7 +134,7 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: { text: String(card.ID), value: String(card.ID) },
+        value: Number(card.ID),
       });
     },
   },

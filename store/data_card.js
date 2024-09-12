@@ -52,7 +52,7 @@ export const state = () => ({
   isClearOptions: false,
   dictionaries: [],
   // В начале массива храниться актуальное значение, далее более старые
-  formValuesHistory: {}
+  formValuesHistory: {},
 });
 export const getters = {
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
@@ -127,8 +127,11 @@ export const getters = {
     ),
   getDataFieldsRelationsByFieldId: (state, getters) => (fieldId) => {
     const field = state.form.find((d) => d.fieldId === fieldId);
-    const fieldRelations = state.form.filter((f) =>
-      f.fieldRelation ? f.fieldRelation.includes(field.name) : false
+    const fieldRelations = state.form.filter(
+      (f) =>
+        (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
+        f.visible === true &&
+        f.type !== "searchSelect"
     );
     return fieldRelations.filter((f) =>
       getters
@@ -159,13 +162,26 @@ export const getters = {
               }
               return obj;
             }, {});
-          const url = {
-            url: `/api/dic/55/${field.id}/${field.name}/${
-              state.cardId
-            }?${new URLSearchParams(objectValue).toString()}`,
-            fieldId: field.fieldId,
-          };
-          urls.push(url);
+          let url;
+          if (field.type === "searchSelect") {
+            url = {
+              url: `/api/dic/55/${field.id}/${field.name}/${
+                state.cardId
+              }?${new URLSearchParams(objectValue).toString()}`,
+              fieldId: field.fieldId,
+            };
+          }
+          if (field.isRelation) {
+            url = {
+              url: `/api/dicwf/${field.fieldId}/0?${new URLSearchParams(
+                converter.queryParams(objectValue)
+              ).toString()}`,
+              fieldId: field.fieldId,
+            };
+          }
+          if (url) {
+            urls.push(url);
+          }
         }
       });
       return urls;
@@ -640,12 +656,37 @@ export const actions = {
       }
     }
   },
-  async setSearchSelectField({ commit, getters, state, dispatch }, data) {
+  async setActionFormField({ commit, getters, state, dispatch }, data) {
     const field = state.form.find((d) => d.fieldId === data.fieldId);
-    if (field.options.length) {
-      commit("setValueSearchSelect", data);
+    if (field.type === "OneToMany" || field.type === "searchSelect") {
+      if (field.type === "OneToMany") {
+        commit("setFormOneToManyField", data);
+      }
+      if (field.type === "searchSelect") {
+        if (field.options && field.options.length) {
+          commit("setValueSearchSelect", data);
+        }
+      }
+    } else {
+      commit("setFormField", data);
     }
-    const urls = getters.getURLsByFieldsRelations({ fields: [field] });
+    let fields;
+    if (field.type === "searchSelect") {
+      fields = { fields: [field] };
+    } else {
+      fields = {
+        fields: getters.getDataFieldsRelationsByFieldId(field.fieldId),
+      };
+    }
+    if (fields !== undefined) {
+      await dispatch("setOptionsField", { data, fields });
+    }
+  },
+  async setOptionsField(
+    { commit, getters, state, dispatch },
+    { data, fields }
+  ) {
+    const urls = getters.getURLsByFieldsRelations(fields);
     const requests = [...urls]
       .filter(
         (url) =>
@@ -825,7 +866,7 @@ export const mutations = {
     const item = state.form.find((d) => d.name === data.name);
 
     if (item !== undefined) {
-      this.commit('data_card/setPreviousFormFieldValue', data);
+      this.commit("data_card/setPreviousFormFieldValue", data);
 
       item.value = data.value;
       if (item.required) {
@@ -866,8 +907,12 @@ export const mutations = {
       return;
     }
 
-    state.formValuesHistory[data.name] = state.formValuesHistory[data.name] ?? [];
-    state.formValuesHistory[data.name] = [data.value, ...state.formValuesHistory[data.name]];
+    state.formValuesHistory[data.name] =
+      state.formValuesHistory[data.name] ?? [];
+    state.formValuesHistory[data.name] = [
+      data.value,
+      ...state.formValuesHistory[data.name],
+    ];
   },
   setFormOneToManyField(state, data) {
     const item = state.form.find((d) => d.fieldId === data.fieldId);
