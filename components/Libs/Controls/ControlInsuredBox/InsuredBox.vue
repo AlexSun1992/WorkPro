@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div v-if="data.options.length" class="slider_in_col">
+    <div v-if="getData.length" class="slider_in_col">
       <VueSlickCarousel v-bind="settings">
-        <div v-for="(card, indx) in data.options" :key="card.ID">
+        <div v-for="(card, indx) in getData" :key="card.ID">
           <div
             :class="{
               box: true,
               'box-green': indx % 2 === 0,
               'box-blue': indx % 2 !== 0,
-              active: Number(fieldValue.value) === Number(card.ID),
+              active: Number(fieldValue.ID) === Number(card.ID),
             }"
             @click="changeColorCard(card)"
           >
@@ -104,21 +104,30 @@ export default {
           },
         ],
       },
+      options: null,
     };
   },
   async created() {
-    if (this.getData.length > 3) {
+    if (!this.getData.length) {
+      this.options = await this.$axios.post("/api/list/55/766");
+    }
+    if (this.getData && this.getData.length > 3) {
       this.settings.centerMode = true;
     }
   },
   computed: {
     getData() {
-      return this.data.options;
+      if (this.data.options) {
+        return this.data.options;
+      }
+      if (this.options) {
+        return this.options?.data ? this.options?.data.items : [];
+      }
+      return [];
     },
     fieldValue() {
       return (
-        this.data.options.find((item) => item.ID === Number(this.data.value)) ??
-        {}
+        this.getData.find((item) => item.ID === Number(this.data.value)) ?? {}
       );
     },
   },

@@ -81,7 +81,7 @@ converter.form = async (data, params, instance) => {
   const arr = converter.setFieldsParams(itemId, item, fields);
 
   let webFields = data[0]._meta.JSONWEBFIELDS;
-  webFields = webFields.sort((a, b) => a.NORDER - b.NORDER);
+  webFields = webFields.sort((a, b) => a.NORDER - b.NORDER).filter((item)=> item.SNAME !== 'FKIDVARIANT_LIST');
 
   for (let i = 0; i < webFields.length; i++) {
     const obj = {};
@@ -221,15 +221,20 @@ converter.form = async (data, params, instance) => {
         );
       }
       if (webFields[i].LDIC === false && !webFields[i].SCONNECTFIELD) {
-        promises.push(
-          instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
-              webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}/${params.idList ?? 0}/null/${
-              params.id ?? 0
-            }`
-          )
-        );
+        if(webFields[i].SNAME === "IDVARIANT_LIST"){
+          obj.type = "InsuredBox";
+        }
+        if (webFields[i].SNAME !== "IDVARIANT_LIST") {
+          promises.push(
+            instance.get(
+              `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
+                webFields[i].IDADMMODULE
+              }/${itemId}/${webFields[i].SNAME}/${params.idList ?? 0}/null/${
+                params.id ?? 0
+              }`
+            )
+          );
+        }
       }
     } else if (webFields[i].IDCONTROL == 16) {
       obj.type = "boolean";
