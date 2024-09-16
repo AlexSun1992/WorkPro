@@ -250,9 +250,9 @@ export default {
     goSberID() {
       this.$LogEvent({
         formName: "AuthForm",
-        idEventType: 521,
+        idEventType: 861,
         controlName: "AuthForm.vue",
-        message: `Нажал на кнопку «Войти чере SberID`,
+        message: `Нажал на кнопку «Войти чере Сбер ID`,
         timeUser: new Date(),
       });
       this.redirectWithRef("/sso?auth&type=sberid");
