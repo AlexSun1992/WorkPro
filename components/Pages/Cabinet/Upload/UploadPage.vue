@@ -29,6 +29,7 @@
               :max-file-size="doc.MAX_FILE_SIZE"
               :total-limit="formSettings.TOTAL_LIMIT"
               :file-extensions="formSettings.FILE_EXTENSIONS"
+              :file-types="doc.TYPES_FILE"
             />
           </div>
         </div>

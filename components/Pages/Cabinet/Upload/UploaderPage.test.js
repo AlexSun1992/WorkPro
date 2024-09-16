@@ -5,7 +5,11 @@ import { BootstrapVue } from "bootstrap-vue";
 import axios from "axios";
 
 import UploaderPage from "./UploadPage.vue";
-import { returnFetchData, params } from "./UploaderPage.helper.fixtures";
+import {
+  returnFetchData,
+  params,
+  returnFetchDataWithoutFiles,
+} from "./UploaderPage.helper.fixtures";
 
 import * as menu from "../../../../store/menu";
 
@@ -370,6 +374,115 @@ describe("UploaderPage", () => {
 
       expect(wrapper.text()).toContain("Отправить документы");
       expect(wrapper.text()).toContain("Отменить");
+    });
+
+    it("Если указан 1 тип файла, то можно загрузить только его", async () => {
+      const copyOfData = JSON.parse(
+        JSON.stringify(returnFetchDataWithoutFiles)
+      );
+      copyOfData.data[1].value[0].TYPES_FILE = ["pdf"];
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      mockRoute = {
+        params,
+        path: "/cabinet/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
+        query: {
+          ref: "/cabinet",
+        },
+      };
+      mockRouter = {
+        push: jest.fn(),
+      };
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      wrapper = mount(UploaderPage, {
+        localVue,
+        mocks: {
+          $store: store,
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      });
+
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(".pdf,");
+      expect(wrapper.find('input[type="file"]').element.accept).not.toBe(
+        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
+      );
+    });
+
+    it("Если указано 2 типа файла, то можно загрузить только его", async () => {
+      const copyOfData = JSON.parse(
+        JSON.stringify(returnFetchDataWithoutFiles)
+      );
+      copyOfData.data[1].value[0].TYPES_FILE = ["pdf, jpeg"];
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      mockRoute = {
+        params,
+        path: "/cabinet/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
+        query: {
+          ref: "/cabinet",
+        },
+      };
+      mockRouter = {
+        push: jest.fn(),
+      };
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      wrapper = mount(UploaderPage, {
+        localVue,
+        mocks: {
+          $store: store,
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      });
+
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(
+        ".pdf, jpeg,"
+      );
+      expect(wrapper.find('input[type="file"]').element.accept).not.toBe(
+        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
+      );
+    });
+
+    it("Если не указан тип файла, то можно загрузить любой", async () => {
+      const copyOfData = JSON.parse(
+        JSON.stringify(returnFetchDataWithoutFiles)
+      );
+      copyOfData.data[1].value[0].TYPES_FILE = [];
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      mockRoute = {
+        params,
+        path: "/cabinet/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
+        query: {
+          ref: "/cabinet",
+        },
+      };
+      mockRouter = {
+        push: jest.fn(),
+      };
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      wrapper = mount(UploaderPage, {
+        localVue,
+        mocks: {
+          $store: store,
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      });
+
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(
+        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
+      );
+      expect(wrapper.find('input[type="file"]').element.accept).not.toBe(
+        ".pdf, jpeg,"
+      );
     });
   });
 
