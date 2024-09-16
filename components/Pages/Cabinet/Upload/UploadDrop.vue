@@ -140,6 +140,11 @@ export default {
       type: Array,
       required: true,
     },
+    fileTypes: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
     name: {
       type: String,
       required: true,
@@ -154,7 +159,7 @@ export default {
       ) {
         const filteredFiles = filterDropFilesByExtensions(
           this.$refs.file.files,
-          this.fileExtensions
+          this.fileTypes.length > 0 ? this.fileTypes : this.fileExtension
         );
         this.$emit("update", filteredFiles);
         this.$refs.file.value = null;
@@ -229,7 +234,9 @@ export default {
       return this.files.length === this.maxFileCount;
     },
     stringExtensions() {
-      return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
+      return this.fileTypes.length > 0
+        ? this.fileTypes.reduce((acc, curr) => `${acc}.${curr},`, "")
+        : this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
     },
     errors() {
       return this.fileErrors.filter((error) => error.name === this.name);
