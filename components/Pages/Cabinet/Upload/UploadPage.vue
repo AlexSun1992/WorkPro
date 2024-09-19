@@ -15,7 +15,7 @@
             <b>{{ doc.TITLE }}</b>
             <p v-html="doc.DESCRIPTION" />
             <upload-drop
-              @update="changeFiles(doc.NAME, $event)"
+              @update="changeFiles(doc.COMPRESS, doc.NAME, $event)"
               @remove="removeFile($event)"
               @click="clickDrop"
               :files="doc.FILES"
@@ -93,12 +93,19 @@ export default {
     };
   },
   methods: {
-    compressFile(name, file) {
+    compressFile(name, file, isCompressing) {
       this.compressingFilesCount += 1;
       const formData = new FormData();
       formData.append("file", file);
       let newFile = file;
-
+      if (isCompressing === "N") {
+        this.$store.dispatch("uploader/addData", {
+          data: [newFile],
+          name,
+        });
+        this.compressingFilesCount -= 1;
+        return {};
+      }
       return fetch(`https://sc.ya.reso.ru/api/compress`, {
         method: "POST",
         body: formData,
@@ -135,8 +142,8 @@ export default {
           this.compressingFilesCount -= 1;
         });
     },
-    changeFiles(name, data) {
-      data.forEach((file) => this.compressFile(name, file));
+    changeFiles(isCompressing, name, data) {
+      data.forEach((file) => this.compressFile(name, file, isCompressing));
     },
     removeFile(file) {
       this.$store.dispatch("uploader/delFile", file);
