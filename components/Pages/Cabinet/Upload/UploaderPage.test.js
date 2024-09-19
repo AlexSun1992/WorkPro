@@ -411,6 +411,142 @@ describe("UploaderPage", () => {
       );
     });
 
+    it("Если указан '[]'' тип файла, то можно загрузить любой тип файла", async () => {
+      const copyOfData = JSON.parse(
+        JSON.stringify(returnFetchDataWithoutFiles)
+      );
+      copyOfData.data[1].value[0].TYPES_FILE = "[]";
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      mockRoute = {
+        params,
+        path: "/cabinet/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
+        query: {
+          ref: "/cabinet",
+        },
+      };
+      mockRouter = {
+        push: jest.fn(),
+      };
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      wrapper = mount(UploaderPage, {
+        localVue,
+        mocks: {
+          $store: store,
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      });
+
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(
+        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
+      );
+    });
+
+    it("Если указан null тип файла, то можно загрузить любой тип файла", async () => {
+      const copyOfData = JSON.parse(
+        JSON.stringify(returnFetchDataWithoutFiles)
+      );
+      copyOfData.data[1].value[0].TYPES_FILE = null;
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      mockRoute = {
+        params,
+        path: "/cabinet/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
+        query: {
+          ref: "/cabinet",
+        },
+      };
+      mockRouter = {
+        push: jest.fn(),
+      };
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      wrapper = mount(UploaderPage, {
+        localVue,
+        mocks: {
+          $store: store,
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      });
+
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(
+        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
+      );
+    });
+
+    it("Если указан undefined тип файла, то можно загрузить любой тип файла", async () => {
+      const copyOfData = JSON.parse(
+        JSON.stringify(returnFetchDataWithoutFiles)
+      );
+      copyOfData.data[1].value[0].TYPES_FILE = undefined;
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      mockRoute = {
+        params,
+        path: "/cabinet/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
+        query: {
+          ref: "/cabinet",
+        },
+      };
+      mockRouter = {
+        push: jest.fn(),
+      };
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      wrapper = mount(UploaderPage, {
+        localVue,
+        mocks: {
+          $store: store,
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      });
+
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(
+        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
+      );
+    });
+
+    it("Если тип файла вообще не указан, то можно загрузить любой тип файла", async () => {
+      const copyOfData = JSON.parse(
+        JSON.stringify(returnFetchDataWithoutFiles)
+      );
+      delete copyOfData.data[1].value[0].TYPES_FILE;
+
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      mockRoute = {
+        params,
+        path: "/cabinet/55/0/1002/667/B60C1EC6B72506B2591A1EE6F99EEB17/uploader",
+        query: {
+          ref: "/cabinet",
+        },
+      };
+      mockRouter = {
+        push: jest.fn(),
+      };
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+      await store.dispatch("uploader/fetchData", params);
+
+      wrapper = mount(UploaderPage, {
+        localVue,
+        mocks: {
+          $store: store,
+          $route: mockRoute,
+          $router: mockRouter,
+        },
+      });
+
+      expect(wrapper.find('input[type="file"]').element.accept).toBe(
+        ".pdf,.jpg,.jpeg,.bmp,.png,.tif,.gif,"
+      );
+    });
+
     it("Если указано 2 типа файла, то можно загрузить только его", async () => {
       const copyOfData = JSON.parse(
         JSON.stringify(returnFetchDataWithoutFiles)

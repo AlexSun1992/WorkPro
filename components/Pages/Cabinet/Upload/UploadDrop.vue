@@ -157,9 +157,16 @@ export default {
         this.isLoading === false &&
         this.isMaxFileCount === false
       ) {
+        let file = this.fileExtension;
+        if (
+          Array.isArray(this.fileTypes) === true &&
+          this.fileTypes.length > 0
+        ) {
+          file = this.fileTypes;
+        }
         const filteredFiles = filterDropFilesByExtensions(
           this.$refs.file.files,
-          this.fileTypes.length > 0 ? this.fileTypes : this.fileExtension
+          file
         );
         this.$emit("update", filteredFiles);
         this.$refs.file.value = null;
@@ -234,9 +241,10 @@ export default {
       return this.files.length === this.maxFileCount;
     },
     stringExtensions() {
-      return this.fileTypes.length > 0
-        ? this.fileTypes.reduce((acc, curr) => `${acc}.${curr},`, "")
-        : this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
+      if (Array.isArray(this.fileTypes) === true && this.fileTypes.length > 0) {
+        return this.fileTypes.reduce((acc, curr) => `${acc}.${curr},`, "");
+      }
+      return this.fileExtensions.reduce((acc, curr) => `${acc}.${curr},`, "");
     },
     errors() {
       return this.fileErrors.filter((error) => error.name === this.name);
