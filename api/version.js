@@ -10,7 +10,7 @@ router.use((req, res, next) => {
   res.removeHeader("X-Powered-By");
   next();
 });
-
+// Получение данных о запущенной версии
 router.get("/version", async (req, res) => {
   const appBranch =
     process.env.APP_VERSION_BRANCH ||
@@ -24,7 +24,7 @@ router.get("/version", async (req, res) => {
       .execSync("git show -s --date=format:%Y-%m-%dT%H:%M:%S.000Z --format=%cd")
       .toString()
       .trim();
-      
+
   if ("hash" in req.query) {
     return res.send(appVersion);
   }
