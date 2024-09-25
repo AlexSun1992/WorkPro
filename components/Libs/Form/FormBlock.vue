@@ -141,6 +141,10 @@ export default {
       if (invalidField) return true;
     },
   },
+  beforeDestroy() {
+    this.$store.commit("data_card/setFilterActive", null);
+    this.$store.commit("data_card/setPreviousFormFieldValue", null);
+  },
 };
 </script>
 

@@ -53,6 +53,7 @@ export const state = () => ({
   dictionaries: [],
   // В начале массива храниться актуальное значение, далее более старые
   formValuesHistory: {},
+  filterActive: {},
 });
 export const getters = {
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
@@ -867,7 +868,7 @@ export const mutations = {
 
     if (item !== undefined) {
       this.commit("data_card/setPreviousFormFieldValue", data);
-
+      this.commit("data_card/setFilterActive", data);
       item.value = data.value;
       if (item.required) {
         item.state = false;
@@ -901,6 +902,10 @@ export const mutations = {
     }
   },
   setPreviousFormFieldValue(state, data) {
+    if (data === null) {
+      state.formValuesHistory = {};
+      return;
+    }
     const item = state.form.find((d) => d.name === data.name);
 
     if (!item) {
@@ -913,6 +918,20 @@ export const mutations = {
       data.value,
       ...state.formValuesHistory[data.name],
     ];
+  },
+  setFilterActive(state, data) {
+    if (data === null) {
+      state.filterActive = {};
+      return;
+    }
+    const item = state.form.find((d) => d.name === data.name);
+
+    if (!item) {
+      return;
+    }
+
+    state.filterActive[data.name] = state.filterActive[data.name] ?? null;
+    state.filterActive[data.name] = data.value;
   },
   setFormOneToManyField(state, data) {
     const item = state.form.find((d) => d.fieldId === data.fieldId);
