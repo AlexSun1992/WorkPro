@@ -297,7 +297,7 @@ export default {
 .recording-date {
   display: grid;
   grid-template-columns: 20px 1fr 1fr 1fr 1fr 15px;
-  grid-gap: 10px;
+  grid-gap: 5px;
   position: relative;
 }
 .btn-doc-time.active,
@@ -346,7 +346,7 @@ export default {
   border-top: 3px solid #000;
   border-left: 3px solid #000;
 }
-@media (max-width: 600px) {
+@media (max-width: 1219px) {
   .recording-date {
     grid-template-columns: 20px 1fr 1fr 1fr 15px;
   }

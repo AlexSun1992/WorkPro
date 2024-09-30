@@ -58,19 +58,19 @@ export default {
       placeholder: "Поиск по ФИО врача, клинике или адресу",
       searchString: "",
       inProgress: false,
-      datesToShow: Vue.observable({value: 4})
+      datesToShow: Vue.observable({ value: 4 }),
     };
   },
   provide() {
     return {
-      visibleDates: this._datesToShow
-    }
+      visibleDates: this._datesToShow,
+    };
   },
   components: { CardDoctorSchedule },
   emits: ["update"],
 
   async created() {
-    window.addEventListener('resize', this.setDatesToShow);
+    window.addEventListener("resize", this.setDatesToShow);
     this.$store.commit("data_card/setDisabled", true);
     this.$store.commit("blocks/clearBlockById", this.data.menudic);
     this.$store.commit("blocks/isRequestFinish", false);
@@ -109,7 +109,7 @@ export default {
     this.setDatesToShow();
   },
   destroyed() {
-    window.removeEventListener('resize', this.setDatesToShow);
+    window.removeEventListener("resize", this.setDatesToShow);
   },
   methods: {
     updateActiveSchedule(schedule) {
@@ -131,9 +131,9 @@ export default {
     setDatesToShow() {
       const currentWidth = window.innerWidth;
       const size = [
-        {min: 0, max: 400, size: 2},
-        {min: 401, max: 600, size: 3},
-        {min: 600, max: Infinity, size: 4}
+        { min: 0, max: 400, size: 2 },
+        { min: 401, max: 1219, size: 3 },
+        { min: 1219, max: Infinity, size: 4 },
       ];
       const doUpdate = () => {
         this.inProgress = true;
@@ -150,14 +150,14 @@ export default {
         }
 
         this.datesToShow.value = size.at(-1).size;
-      }
+      };
 
       if (this.inProgress) {
         return;
       }
 
       doUpdate();
-    }
+    },
   },
   computed: {
     getMainFilteredItems() {
@@ -236,7 +236,7 @@ export default {
       },
     },
     isSearchDataVisible() {
-      const fields = ['FKIDSPECIALIST', 'FKSPOLICY', 'FKIDTOWN'];
+      const fields = ["FKIDSPECIALIST", "FKSPOLICY", "FKIDTOWN"];
       const state = this.$store.state.data_card?.form ?? null;
 
       if (!state) {
@@ -244,7 +244,7 @@ export default {
       }
 
       for (let fieldName of fields) {
-        if (state.find(field => field.name === fieldName)?.value === null) {
+        if (state.find((field) => field.name === fieldName)?.value === null) {
           return false;
         }
       }
@@ -254,7 +254,7 @@ export default {
     _datesToShow() {
       console.log(`_datesToShow = ${this.datesToShow}`);
       return this.datesToShow;
-    }
+    },
   },
 };
 </script>
