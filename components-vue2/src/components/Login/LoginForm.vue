@@ -130,100 +130,87 @@
     </b-modal>
 
     <b-form id="auth-form" @submit.prevent="onSubmit">
-      <div class="tab-mobile-block">Вход</div>
-      <div class="row">
-        <div class="col-12 col-lg-4">
-          <b-form-group label="Телефон или e-mail" label-cols="12">
-            <b-form-input
-              autofocus
-              id="phone"
-              ref="phoneInput"
-              v-model="$v.user.username.$model"
-              placeholder="Телефон или e-mail"
-              type="text"
-              :state="wrongAuthData ? false : validateState('username')"
-              @blur="$v.user.username.$touch()"
-              @input="wrongAuthData = false"
-              :disabled="isMainFormDisabled"
-              class="form-control"
-              data-testid="authPhoneEmail"
-            >
-            </b-form-input>
-
-            <b-form-invalid-feedback v-if="this.$v.user.username.$model === ''"
-              >Пожалуйста, заполните это поле</b-form-invalid-feedback
-            >
-          </b-form-group>
-        </div>
-
-        <div class="col-12 col-lg-4 mt-3 mt-lg-0">
-          <b-form-group label="Пароль" label-cols="12">
-            <b-form-input
-              v-model="$v.user.password.$model"
-              id="password"
-              placeholder="Пароль"
-              :type="pswVisible ? 'text' : 'password'"
-              :state="wrongAuthData ? false : validateState('password')"
-              @blur="$v.user.password.$touch()"
-              @input="wrongAuthData = null"
-              class="form-control"
-              :disabled="isMainFormDisabled"
-              data-testid="authPassword"
-            ></b-form-input>
-            <button
-              type="button"
-              class="btn-psw-visible"
-              @click="visiblePSW()"
-            ></button>
-            <b-form-invalid-feedback v-if="this.$v.user.password.$model === ''"
-              >Пожалуйста, введите пароль
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </div>
-
-        <div class="col-12 col-lg-4 mt-3 mt-lg-3 pt-lg-1">
-          <a
-            href="/login/password-recovery"
-            id="btn_recovery-password_lk"
-            class="mt-lg-4 d-table btn-link"
-            >Не помните пароль?</a
+      <div class="">
+        <b-form-group label="Телефон или e-mail" label-cols="12">
+          <b-form-input
+            autofocus
+            id="phone"
+            ref="phoneInput"
+            v-model="$v.user.username.$model"
+            placeholder="Телефон или e-mail"
+            type="text"
+            :state="wrongAuthData ? false : validateState('username')"
+            @blur="$v.user.username.$touch()"
+            @input="wrongAuthData = false"
+            :disabled="isMainFormDisabled"
+            class="form-control"
+            data-testid="authPhoneEmail"
           >
-        </div>
+          </b-form-input>
 
-        <div class="col-12 invalid-feedback d-block mt-3" v-if="wrongAuthData">
-          Неверный логин или пароль.<br />Проверьте корректность введенных
-          данных.
-        </div>
-        <div
-          class="col-12 invalid-feedback d-block mt-3"
-          v-if="queryError && !wrongAuthData"
-        >
-          {{ queryError }}
-        </div>
-
-        <div
-          v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
-          class="col-12 mt-3"
-        >
-          <div class="ph4b mb-2">
-            Слишком много попыток с вашего компьютера. Подтвердите, что вы не
-            бот
-          </div>
-          <captcha
-            @update="setIdCaptcha($event)"
-            @updateCode="setCodeCaptcha($event)"
-            :isCaptchaValid="this.captchaMessage"
-          />
-        </div>
+          <b-form-invalid-feedback v-if="this.$v.user.username.$model === ''"
+            >Пожалуйста, заполните это поле</b-form-invalid-feedback
+          >
+        </b-form-group>
       </div>
+
+      <div class="mt-3">
+        <b-form-group label="Пароль" label-cols="12">
+          <b-form-input
+            v-model="$v.user.password.$model"
+            id="password"
+            placeholder="Пароль"
+            :type="pswVisible ? 'text' : 'password'"
+            :state="wrongAuthData ? false : validateState('password')"
+            @blur="$v.user.password.$touch()"
+            @input="wrongAuthData = null"
+            class="form-control"
+            :disabled="isMainFormDisabled"
+            data-testid="authPassword"
+          ></b-form-input>
+          <button
+            type="button"
+            class="btn-psw-visible"
+            @click="visiblePSW()"
+          ></button>
+          <b-form-invalid-feedback v-if="this.$v.user.password.$model === ''"
+            >Пожалуйста, введите пароль
+          </b-form-invalid-feedback>
+        </b-form-group>
+      </div>
+
+      <div class="invalid-feedback d-block mt-3" v-if="wrongAuthData">
+        Неверный логин или пароль.<br />Проверьте корректность введенных данных.
+      </div>
+      <div
+        class="invalid-feedback d-block mt-3"
+        v-if="queryError && !wrongAuthData"
+      >
+        {{ queryError }}
+      </div>
+
+      <div
+        v-if="isCaptchaNeeded && !authInProcess && !isModalVisible"
+        class="col-12 mt-3"
+      >
+        <div class="ph4b mb-2">
+          Слишком много попыток с вашего компьютера. Подтвердите, что вы не бот
+        </div>
+        <captcha
+          @update="setIdCaptcha($event)"
+          @updateCode="setCodeCaptcha($event)"
+          :isCaptchaValid="this.captchaMessage"
+        />
+      </div>
+
       <button
         v-on:enter="fetchToken()"
         type="submit"
         :disabled="isMainFormDisabled"
-        class="btn btn-primary mt-3 mt-lg-4"
+        class="btn btn-primary mt-3 mt-lg-4 w-100"
         id="btn_entry_lk"
       >
-        Авторизоваться
+        Войти
         <span
           v-if="authInProcess"
           role="status"
@@ -232,6 +219,14 @@
           <span class="sr-only">Spinning</span>
         </span>
       </button>
+      <div class="mt-3 mt-lg-5 text-center">
+        <a
+          href="/login/password-recovery"
+          id="btn_recovery-password_lk"
+          class="btn-link"
+          >Не помните пароль?</a
+        >
+      </div>
 
       <b-form-invalid-feedback
         :force-show="extraOrdinaryServiceAnswer ? true : false"
@@ -712,5 +707,19 @@ ul.dropdown-menu.show {
   padding: 0;
   box-shadow: none;
   border: 0;
+}
+
+.login-form-content form {
+  border: 0;
+  border-radius: 0px;
+  padding: 0;
+  display: block;
+  box-shadow: none;
+}
+.login-form-content .login-btn-mobile:before,
+.recovery-form-content .login-btn-mobile:before,
+.reg-form-content .login-btn-mobile:before,
+.login-form-content .login-btn-mobile:after {
+  display: none;
 }
 </style>

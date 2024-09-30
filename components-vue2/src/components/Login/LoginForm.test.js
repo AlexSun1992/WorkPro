@@ -316,11 +316,9 @@ describe("LoginForm", () => {
     expect(wrapper.text()).not.toContain("Превышено количество попыток");
   });
 
-
-
   it("должен показать кнопку авторизоваться", () => {
     const wrapper = mount(LoginForm);
-    expect(wrapper.text()).toContain("Авторизоваться");
+    expect(wrapper.text()).toContain("Войти");
   });
 
   it("должен выводить ошибку логина + пароля", async () => {
