@@ -10,7 +10,6 @@
       inline
       class="align-items-start"
     >
-      <div class="tab-mobile-block">Регистрация</div>
       <div class="row">
         <div class="col-12 ph4b">1. ПЕРСОНАЛЬНЫЕ ДАННЫЕ</div>
         <div class="col-12 col-lg-4 mt-3">
