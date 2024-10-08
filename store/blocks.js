@@ -217,6 +217,7 @@ export const actions = {
         dispatch("updateBlock", state.blockId);
       });
   },
+
   async fetchBlock({ commit, dispatch, state }, params) {
     let url;
     if (!params.zone) {
@@ -344,6 +345,7 @@ export const mutations = {
   },
   addBlock(state, block) {
     const bs = state.blocks.find((b) => b.blockId === block.blockId);
+
     if (bs) {
       bs.data = block.data;
     } else {

@@ -11,7 +11,7 @@
         :item-value="itemValue"
         :options-value="optionsValue"
         :display-text="displayText"
-        :is-disabled="!edit ? !edit : data.readonly"
+        :is-disabled="isDisabled"
         @openList="openList"
         @selectItem="selectItem"
         :id="data.name"
@@ -67,8 +67,50 @@ export default {
       isLoad: false,
     };
   },
+  async created() {
+    if (this.$route.params.idCard === "0") {
+      const queryParams = Object.keys(this.$route.query);
 
+      if (queryParams.length === 0) {
+        return;
+      }
+
+      const params = Object.keys(this.$route.query);
+      if (
+        params.length > 0 &&
+        params.some((param) => this.$route.query[param] === this.data.name)
+      ) {
+        await this.openList();
+      }
+
+      if (this.matchingItem) {
+        this.selectItem(this.matchingItem);
+      }
+    }
+  },
   computed: {
+    matchingItem() {
+      return this.dataContent?.items?.find((item) => {
+        const itemValues = Object.fromEntries(
+          Object.entries(this.$route.query).map(([key, value]) => [
+            key,
+            Number(value) === Number(item[key]),
+          ])
+        );
+        delete itemValues.name;
+
+        return Object.values(itemValues).every(Boolean);
+      });
+    },
+    isDisabled() {
+      if (
+        (this.isLoad && this.$route.query.name === this.data.name) ||
+        (this.$route.query.name === this.data.name && this.matchingItem)
+      ) {
+        return true;
+      }
+      return !this.edit ? !this.edit : this.data.readonly;
+    },
     dataContent: {
       get() {
         const block = this.$store.getters["blocks/getUnfilteredBlockById"](
@@ -94,7 +136,7 @@ export default {
     optionsValue: {
       get() {
         if (this.dataContent?.fields?.length > 1) {
-          return detectUniquePropertyName(this.dataContent.items) || "ID";
+          return detectUniquePropertyName(this.dataContent?.items) || "ID";
         }
         if (Object.keys(this.itemValue).length !== 0) {
           return Object.keys(this.itemValue)[0];
@@ -191,11 +233,9 @@ export default {
     },
     async openList() {
       this.visible = !this.visible;
-
       if (this.visible) {
         try {
           this.isLoad = true;
-
           await this.$store.dispatch("blocks/fetchBlock", {
             id: this.data.menudic,
             query: this.$store.getters["data_card/getFilters"],
