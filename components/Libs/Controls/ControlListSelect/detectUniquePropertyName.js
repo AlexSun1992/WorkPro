@@ -1,5 +1,8 @@
 export function detectUniquePropertyName(list) {
   const arraySize = list.length;
+  if (arraySize === 0) {
+    return "ID";
+  }
   return (
     Object.keys(list[0])
       // Наиболее короткие названия сверху
