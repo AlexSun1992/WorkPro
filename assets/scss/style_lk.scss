@@ -6166,7 +6166,6 @@ h5.modal-title {
   background-color: $lgray;
 }
 
-
 .radio-chk .checkbox-hide input:checked:disabled + label:before {
   display: none;
 }
@@ -6183,4 +6182,9 @@ h5.modal-title {
 }
 .radio-chk .checkbox-hide input:disabled + label {
   color: #c3c3c3;
+}
+@media (min-width: 993px) {
+  .mhs-minus_p-lg {
+    margin-left: -20px;
+  }
 }
