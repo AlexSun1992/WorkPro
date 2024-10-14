@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data.value">
+  <div v-if="this.data.value">
     <button class="btn-pencil" id="btn" @click="redirect()">
       {{ this.data.label }}
     </button>

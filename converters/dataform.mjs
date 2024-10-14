@@ -726,7 +726,8 @@ converter.save = (data) => {
       data[i].type !== "multi" &&
       data[i].type !== "listSelect" &&
       data[i].type !== "doctorSchedule" &&
-      data[i].type !== "newDoctorSchedule"
+      data[i].type !== "newDoctorSchedule" &&
+      data[i].type !== "MultiSelect"
     ) {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
