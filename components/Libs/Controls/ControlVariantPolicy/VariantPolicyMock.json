@@ -1,0 +1,126 @@
+{
+  "features": [
+    {
+      "NSUMNODT": 500000,
+      "NCOST": 3080,
+      "BDEFAULT": false,
+      "NSUMTN": 200000,
+      "SNAME": "Франшиза",
+      "NSUMPN": 200000,
+      "ID": 14,
+      "NSUMDT": 1000000,
+      "text": "Франшиза",
+      "value": 14
+    },
+    {
+      "NSUMNODT": 500000,
+      "NCOST": 3080,
+      "BDEFAULT": false,
+      "NSUMTN": 200000,
+      "SNAME": "Последствия ДТП",
+      "NSUMPN": 200000,
+      "ID": 15,
+      "NSUMDT": 1000000,
+      "text": "Последствия ДТП",
+      "value": 15
+    },
+    {
+      "NSUMNODT": 500000,
+      "NCOST": 3080,
+      "BDEFAULT": false,
+      "NSUMTN": 200000,
+      "SNAME": "Падение или Попадание инородных предметов",
+      "NSUMPN": 200000,
+      "ID": 16,
+      "NSUMDT": 1000000,
+      "text": "Падение или Попадание инородных предметов",
+      "value": 16
+    },
+    {
+      "NSUMNODT": 500000,
+      "NCOST": 3080,
+      "BDEFAULT": false,
+      "NSUMTN": 200000,
+      "SNAME": "Хищение ТС",
+      "NSUMPN": 200000,
+      "ID": 17,
+      "NSUMDT": 1000000,
+      "text": "Хищение ТС",
+      "value": 17
+    },
+    {
+      "NSUMNODT": 500000,
+      "NCOST": 3080,
+      "BDEFAULT": false,
+      "NSUMTN": 200000,
+      "SNAME": "Действия 3-х лиц",
+      "NSUMPN": 200000,
+      "ID": 18,
+      "NSUMDT": 1000000,
+      "text": "Действия 3-х лиц",
+      "value": 18
+    },
+    {
+      "NSUMNODT": 500000,
+      "NCOST": 3080,
+      "BDEFAULT": false,
+      "NSUMTN": 200000,
+      "SNAME": "Ремонт без справок",
+      "NSUMPN": 200000,
+      "ID": 19,
+      "NSUMDT": 1000000,
+      "text": "Ремонт без справок",
+      "value": 19
+    },
+    {
+      "NSUMNODT": 500000,
+      "NCOST": 3080,
+      "BDEFAULT": false,
+      "NSUMTN": 200000,
+      "SNAME": "Без ограничений по страховым событиям",
+      "NSUMPN": 200000,
+      "ID": 20,
+      "NSUMDT": 1000000,
+      "text": "Без ограничений по страховым событиям",
+      "value": 20
+    }
+  ],
+  "variants": [
+    {
+      "NSUMNODT": 500000,
+      "NCOST": 3080,
+      "BDEFAULT": false,
+      "NSUMTN": 200000,
+      "SNAME": "Только Хищение",
+      "NSUMPN": 200000,
+      "ID": 14,
+      "NSUMDT": 1000000,
+      "text": "Вариант1",
+      "value": ["&times;", "&times;", "&check;", "&times;", "&check;", "&check;", "&times;" ]
+    },
+    {
+      "NSUMNODT": 1000000,
+      "NCOST": 5225,
+      "BDEFAULT": true,
+      "NSUMTN": 300000,
+      "SNAME": "Ущерб+Хищение",
+      "NSUMPN": 500000,
+      "ID": 15,
+      "NSUMDT": 1500000,
+      "text": "Вариант2",
+      "value": ["&check;", "&times;", "&check;", "&times;", "&times;", "&check;", "&times;" ]
+    },
+    {
+      "NSUMNODT": 1000000,
+      "NCOST": 6875,
+      "BDEFAULT": false,
+      "NSUMTN": 505000,
+      "SNAME": "Ущерб+Хищение+",
+      "NSUMPN": 750000,
+      "ID": 17,
+      "NSUMDT": 1500000,
+      "text": "Вариант3",
+      "value": ["&times;", "&times;", "&check;", "&check;", "&times;", "&check;", "&times;" ]
+    }
+  ]
+}
