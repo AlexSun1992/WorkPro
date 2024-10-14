@@ -73,6 +73,8 @@ export default {
           sizes.push(item.clientHeight);
         });
 
+        // this.customStore.setRowsSize(sizes);
+
         setTimeout(() => {
           this.calcRowsSize.inProgress = false;
         }, 50);
