@@ -75,15 +75,18 @@ export default {
     clientCars: [],
     value: {
       default: null
+    },
+    numberDisabled: {
+      default: false
     }
   },
   data() {
     return {
       carNumber: null,
       carRegion: null,
-      isWithoutCarNumber: false,
+      isWithoutCarNumber: this.value === 'N',
       isNotFound: false,
-      regNumberDisabled: false,
+      regNumberDisabled: this.value === 'N',
     }
   },
   computed: {
@@ -102,7 +105,11 @@ export default {
       return helpers.isVehicleNumber(this.trimCarNumber, this.carRegion);
     },
     valueComputed() {
-      return this.value || null;
+      if (this.value) {
+        return this.value === 'N' ? null : this.value;
+      }
+
+      return null;
     }
   },
   methods: {

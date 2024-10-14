@@ -10,7 +10,6 @@ import {
   BRow
 } from "bootstrap-vue";
 import RegNumberAutoNumber from "./RegNumberAutoNumber.vue";
-import RegNumberAutoByNumber from "./RegNumberAutoNumber.vue";
 import { clientCarsPropsData } from "./RegNumberAutoNumberTestData";
 
 const clientCars = clientCarsPropsData;
@@ -25,10 +24,9 @@ describe('RegNumberAutoNumber', () => {
       BFormInvalidFeedback,
       BCheckbox: BFormCheckbox,
       BButton,
-      BLink,
-      RegNumberAutoByNumber
+      BLink
     },
-    propsData: { clientCars , value: null }
+    propsData: { clientCars, value: null }
   });
 
   it('Set Reg Number is valid', () => {
@@ -64,5 +62,25 @@ describe('RegNumberAutoNumber', () => {
   it('Only 3 Reg Numbers on form', () => {
     expect(wrapper.vm.clientCars.length).toBeGreaterThan(3);
     expect(wrapper.vm.customerCarNumbers.length).toBe(3);
+  });
+
+  it('Disabled if Rest return "N" value as Number', () => {
+    const wrapper = mount(RegNumberAutoNumber, {
+      stubs: {
+        BInputGroup,
+        BCol,
+        BFormGroup,
+        BRow,
+        BFormInvalidFeedback,
+        BCheckbox: BFormCheckbox,
+        BButton,
+        BLink
+      },
+      propsData: { clientCars, value: 'N' }
+    });
+
+    expect(wrapper.vm.isWithoutCarNumber).toBe(true);
+    expect(wrapper.vm.regNumberDisabled).toBe(true);
+    expect(wrapper.vm.valueComputed).toBe(null);
   });
 });
