@@ -1,5 +1,6 @@
 module.exports = {
   testEnvironment: "jsdom",
+  setupFilesAfterEnv: ['<rootDir>/matchMediaPolyfill.js'],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",
     "^~/(.*)$": "<rootDir>/$1",

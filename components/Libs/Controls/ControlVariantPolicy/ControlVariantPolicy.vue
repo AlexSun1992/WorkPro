@@ -1,0 +1,210 @@
+<template>
+  <div>
+    <div v-html="data && data.label ? data.label : ''" class="mb-3" />
+    <div class="variant-policy-feature-wrapper">
+      <div>
+        <VariantPolicyFeatures
+          :customStore="customStore"
+          :featuresData="featuresData"
+          :featuresList="featuresList"
+        />
+      </div>
+      <div>
+        <div class="variant-policy-features">
+          <VueSlickCarousel ref="carousel"
+                            v-bind="settings">
+            <div v-for="card in variants" :key="card.ID">
+              <VariantPolicyVariant
+                @updateVariant="updateVariant()"
+                :card="card"
+                :customStore="customStore"
+                :data="data"
+                :featuresList="featuresList"
+                :featuresData="featuresData"
+                :variants="variants"
+              />
+            </div>
+          </VueSlickCarousel>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import VueSlickCarousel from "vue-slick-carousel";
+import VariantPolicyVariant from "./VariantPolicyVariant.vue";
+import VariantPolicyFeatures from "./VariantPolicyFeatures.vue";
+import { VariantPolicyStore } from "./VariantPolicyStore";
+
+const featuresList = [
+  "SFRANCHISE",
+  "SACCIDENT",
+  "SFOREIGNOBJECTS",
+  "STHEFTVEH",
+  "SACTIONS",
+  "SREPAIR",
+  "SNOEVENTRESTRICTIONS",
+];
+const defaultSettings = {
+  arrows: true,
+  centerPadding: "16px",
+  focusOnSelect: true,
+  slidesToShow: 3,
+  speed: 500,
+  infinite: false,
+  initialSlide: null,
+  centerMode: false,
+  responsive: [
+    {
+      breakpoint: 1200,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        dots: false,
+        arrows: true,
+      },
+    },
+    {
+      breakpoint: 992,
+      settings: {
+        dots: false,
+        arrows: false,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 0,
+      settings: {
+        dots: false,
+        arrows: false,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        centerMode: true,
+      },
+    },
+  ],
+};
+
+export default {
+  name: "ControlVariantPolicy",
+  components: { VueSlickCarousel, VariantPolicyVariant, VariantPolicyFeatures },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+    edit: {
+      type: Boolean,
+      required: false,
+      default: () => true,
+    },
+  },
+  data() {
+    return {
+      previousVariant: null,
+      customStore: VariantPolicyStore(),
+      selectedVariant: null,
+    };
+  },
+  computed: {
+    customStoreState() {
+      return this.customStore.state;
+    },
+    settings() {
+      return defaultSettings;
+    },
+    featuresList() {
+      return featuresList;
+    },
+    variants() {
+      return this.data?.options.filter((item) => item.ID !== 1);
+    },
+    dataValue() {
+      const {value} = this.data;
+      const result = { IDVARIANT: null, IDFRNANCHISE: null };
+      // TODO этот функционал завязан на получение данных по выбранной франщизе. Пока не работает!
+      Array.isArray(value) && (Object.assign(result, value[0]));
+      typeof (value) === 'string' && (Object.assign(result,  JSON.parse(value)));
+
+      return result;
+      // return this.$store.state.data_card?.form.find(item => item.type === "VariantPolicy")?.value;
+    },
+    featuresData() {
+      return this.data.options?.find((item) => item.SNAME === "scaption");
+    },
+  },
+  methods: {
+    updateVariant() {
+      const currentVal = this.customStoreState.selectedVariant;
+
+      const str = JSON.stringify(currentVal) ?? null;
+
+      if (this.previousVariant === str) {
+        return;
+      }
+
+      this.previousVariant = str;
+
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        type: this.data.type,
+        value: str,
+      });
+    },
+    scrollToActiveVariant() {
+      const selectedVariantId = this.customStore.state.selectedVariant.IDVARIANT;
+      const index = this.variants.findIndex(item => item.ID === selectedVariantId) ?? 0;
+
+      this.$refs.carousel.goTo(index);
+    },
+  },
+  created() {
+    this.customStore.setSelectedVariant(this.dataValue);
+    this.selectedVariant = this.dataValue;
+  },
+  mounted() {
+    this.scrollToActiveVariant();
+  },
+  watch: {
+    dataValue(val) {
+      // TODO этот функционал завязан на получение данных по выбранной франщизе. Пока не работает!
+      this.customStore.setSelectedVariant(val);
+      this.selectedVariant = val;
+    },
+  },
+};
+</script>
+<style scoped>
+.variant-policy-feature-wrapper {
+  border-radius: 30px;
+  background: #fff;
+  background: var(--white, #fff);
+  box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.08);
+  position: relative;
+  cursor: default;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 30% 70%;
+}
+
+.variant-policy-features {
+  --green-color: #43b02a;
+}
+
+.row.nowrap .col-3 {
+  padding-right: 0;
+}
+
+.row.nowrap .col-9 {
+  padding-left: 0;
+}
+@media (max-width: 992px) {
+  .variant-policy-feature-wrapper {
+    grid-template-columns: 50% 50%;
+  }
+}
+</style>

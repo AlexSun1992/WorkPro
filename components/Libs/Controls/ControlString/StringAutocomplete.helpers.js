@@ -1,13 +1,13 @@
 // eslint-disable-next-line import/prefer-default-export
 export function isFieldNameBelogToAutocomplete(compareName) {
-  if (compareName.includes("ADDRESS")) {
+  if (compareName?.includes("ADDRESS")) {
     return true;
   }
   const data = [
     // @TODO перенести поддержку полей в ControlDadataSelect
-    //"SFIRSTNAME",
-    //"SSECONDNAME",
-    //"STHIRDNAME",
+    // "SFIRSTNAME",
+    // "SSECONDNAME",
+    // "STHIRDNAME",
     "ADDRESS",
     "SISSUED_WHERE",
     "SDOCDEP",

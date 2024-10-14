@@ -81,7 +81,9 @@ converter.form = async (data, params, instance) => {
   const arr = converter.setFieldsParams(itemId, item, fields);
 
   let webFields = data[0]._meta.JSONWEBFIELDS;
-  webFields = webFields.sort((a, b) => a.NORDER - b.NORDER).filter((item)=> item.SNAME !== 'FKIDVARIANT_LIST');
+  webFields = webFields
+    .sort((a, b) => a.NORDER - b.NORDER)
+    .filter((item) => item.SNAME !== "FKIDVARIANT_LIST");
 
   for (let i = 0; i < webFields.length; i++) {
     const obj = {};
@@ -148,12 +150,26 @@ converter.form = async (data, params, instance) => {
     } else if (
       webFields[i].IDCONTROL == 15 ||
       webFields[i].IDCONTROL == 37 ||
-      webFields[i].IDCONTROL == 441
+      webFields[i].IDCONTROL == 441 ||
+      webFields[i].IDCONTROL == 663 ||
+      webFields[i].IDCONTROL == 664 ||
+      webFields[i].IDCONTROL == 53
     ) {
-      if (webFields[i].IDCONTROL !== 441) {
+      if (webFields[i].IDCONTROL === 53) {
+        obj.type = "RegNumberAuto";
+      }
+      if (webFields[i].IDCONTROL !== 441 && webFields[i].IDCONTROL !== 53) {
         obj.type = webFields[i].IDCONTROL == 15 ? "combobox" : "customCombobox";
       }
-
+      if (webFields[i].IDCONTROL === 663) {
+        obj.type = "MultiSelect";
+      }
+      if (webFields[i].IDCONTROL === 664) {
+        obj.type = "VariantPolicy";
+        if(Array.isArray(obj.value)){
+          obj.value = JSON.stringify(obj.value[0]);
+        }
+      }
       webFields.forEach((field) => {
         if (
           (field.SCONNECTFIELD &&
@@ -177,7 +193,9 @@ converter.form = async (data, params, instance) => {
               field.LVISIBLE
           )
           .reduce((obj, field) => {
-            const value = converter.queryParams(item)[field.SNAME] ?? metaValue[field.SNAME];
+            const value =
+              converter.queryParams(item)[field.SNAME] ??
+              metaValue[field.SNAME];
             if (value) {
               return Object.assign(obj, { [field.SNAME]: value });
             }
@@ -221,7 +239,7 @@ converter.form = async (data, params, instance) => {
         );
       }
       if (webFields[i].LDIC === false && !webFields[i].SCONNECTFIELD) {
-        if(webFields[i].SNAME === "IDVARIANT_LIST"){
+        if (webFields[i].SNAME === "IDVARIANT_LIST") {
           obj.type = "InsuredBox";
         }
         if (webFields[i].SNAME !== "IDVARIANT_LIST") {
@@ -269,15 +287,21 @@ converter.form = async (data, params, instance) => {
       obj.type = "Map";
     } else if (webFields[i].IDCONTROL == 43) {
       obj.type = "RegNumber";
+    } else if (webFields[i].IDCONTROL == 53) {
+      obj.type = "RegNumberAuto";
     } else if (webFields[i].IDCONTROL == 401) {
       obj.type = "CollapseGroup";
     } else if (webFields[i].IDCONTROL == 441) {
       obj.type = "InsuredBox";
+    } else if (webFields[i].IDCONTROL == 664) {
+      obj.type = "VariantPolicy";
     } else if (webFields[i].IDCONTROL == 502) {
       obj.type = "button";
       obj.isDownloadControl = true;
     } else if (webFields[i].IDCONTROL == 501) {
       obj.type = "VueComponent";
+    } else if (webFields[i].IDCONTROL == 663) {
+      obj.type = "MultiSelect";
     } else if (webFields[i].IDCONTROL == 481) {
       obj.type = "RangeInput";
       if (webFields[i].LDIC === true) {
@@ -343,6 +367,10 @@ converter.form = async (data, params, instance) => {
         obj.schema = [];
       }
       obj.type = "OneToMany";
+    } else if (webFields[i].IDCONTROL == 665) {
+      obj.type = "Separator";
+    } else if (webFields[i].IDCONTROL == 661) {
+      obj.type = "Pencil";
     } else {
       obj.type = "string";
     }
