@@ -111,6 +111,7 @@ export default {
       valueTypeRange: null,
       width: 0,
       maxValueRange: null,
+      timeoutId: null,
     };
   },
 
@@ -142,16 +143,6 @@ export default {
 
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
-  },
-
-  watch: {
-    valueTypeNumber(value) {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.valueTypeNumber,
-      });
-    },
   },
 
   computed: {
@@ -224,6 +215,21 @@ export default {
   },
 
   methods: {
+    emitFunc() {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: this.valueTypeNumber,
+      });
+    },
+    debounce(func, timeout) {
+      return (...args) => {
+        clearTimeout(this.timeoutId);
+        this.timeoutId = setTimeout(() => {
+          func.apply(this, args);
+        }, timeout);
+      };
+    },
     getNearestValue() {
       const closestValue = getClosestValue(
         this.getAllPricesValue,
@@ -264,6 +270,8 @@ export default {
         value
       );
       this.valueTypeNumber = Math.round(revealValue);
+      const debouncedEmit = this.debounce(this.emitFunc, 1500);
+      debouncedEmit(value);
     },
 
     moveToCurrentValue(value) {
@@ -292,6 +300,8 @@ export default {
         value,
         getRangeElementClientWidth
       );
+      const debouncedEmit = this.debounce(this.emitFunc, 1500);
+      debouncedEmit(value);
     },
 
     addInsuranceSum() {
