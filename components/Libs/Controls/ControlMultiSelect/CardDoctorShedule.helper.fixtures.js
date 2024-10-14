@@ -1,0 +1,55 @@
+export const data = {
+  checked: null,
+  fieldId: 61312,
+  fieldRelation: null,
+  id: "1040",
+  isMask: false,
+  isRelation: false,
+  isTab: false,
+  label: "<b>Полезные опции</b>",
+  name: "SOPTIONS",
+  page: 1,
+  readonly: false,
+  required: false,
+  state: null,
+  options: [
+    {
+      ID: 1,
+      IDOPTION: "РЕСОавто-GAP",
+      NCOST: "1 880",
+      SDECRYPTION: "Подсказка 1",
+      text: "1 880",
+      value: 1,
+    },
+
+    {
+      ID: 2,
+      IDOPTION: "Защита от несчастного случая",
+      NCOST: "1 880",
+      SDECRYPTION: "Подсказка 2",
+      text: "1 880",
+      value: 2,
+    },
+
+    {
+      ID: 3,
+      IDOPTION: "РЕСОавто ПОМОЩЬ эконом",
+      NCOST: "1 880",
+      SDECRYPTION: "Подсказка 3",
+      text: "1 880",
+      value: 3,
+    },
+
+    {
+      ID: 4,
+      IDOPTION: "РЕСОавто ПОМОЩЬ комфорт",
+      NCOST: "2 880",
+      SDECRYPTION: "Подсказка 4",
+      text: "2 880",
+      value: 4,
+    },
+  ],
+  type: "MultiSelect",
+  visible: true,
+  webId: "",
+};

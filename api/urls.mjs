@@ -29,6 +29,7 @@ const REPORT = `/am/main/${VER}/report`;
 const FREEDATACARD = `/am/free/${VER}/datacard`;
 const FREEMENU = `/am/free/${VER}/menu`;
 const CAPTCHA = `/am/authw/${VER}/captcha`;
+const AUTO = `/am/main/${VER}/auto`;
 
 export default {
   VER: VER,
@@ -61,4 +62,5 @@ export default {
   REPORT: REPORT,
   CAPTCHA: CAPTCHA,
   USERBFFPROFILE: USERBFFPROFILE,
+  AUTO
 };

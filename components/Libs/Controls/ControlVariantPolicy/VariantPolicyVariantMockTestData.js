@@ -1,0 +1,59 @@
+export const featuresListMock = [ 'SFRANCHISE', 'SACCIDENT', 'SFOREIGNOBJECTS', 'STHEFTVEH', 'SACTIONS', 'SREPAIR', 'SNOEVENTRESTRICTIONS' ];
+export const cardMock = {
+  "IDFRANCHISE": "NULL",
+  "SREPAIR": "N",
+  "SACCIDENT": "N",
+  "SACTIONS": "N",
+  "SNAME": "Только Хищение",
+  "SFOREIGNOBJECTS": "N",
+  "ID": 2,
+  "NPRICE": 10000,
+  "SFRANCHISE": "N",
+  "STHEFTVEH": "Y",
+  "SNOEVENTRESTRICTIONS": "Y",
+  "text": "Только Хищение",
+  "value": 2
+};
+export const variantsMock = [ {
+  "IDFRANCHISE": "NULL",
+  "SREPAIR": "N",
+  "SACCIDENT": "N",
+  "SACTIONS": "N",
+  "SNAME": "Только Хищение",
+  "SFOREIGNOBJECTS": "N",
+  "ID": 2,
+  "NPRICE": 10000,
+  "SFRANCHISE": "N",
+  "STHEFTVEH": "Y",
+  "SNOEVENTRESTRICTIONS": "Y",
+  "text": "Только Хищение",
+  "value": 2
+}, {
+  "IDFRANCHISE": "NULL",
+  "SREPAIR": "Y",
+  "SACCIDENT": "Y",
+  "SACTIONS": "Y",
+  "SNAME": "Ущерб + хищение",
+  "SFOREIGNOBJECTS": "Y",
+  "ID": 3,
+  "NPRICE": 20000,
+  "SFRANCHISE": [ { "sname": "30 000", "id": 1 }, { "sname": "60 000", "id": 2 } ],
+  "STHEFTVEH": "Y",
+  "SNOEVENTRESTRICTIONS": "Y",
+  "text": "Ущерб + хищение",
+  "value": 3
+}, {
+  "IDFRANCHISE": "NULL",
+  "SREPAIR": "Y",
+  "SACCIDENT": "Y",
+  "SACTIONS": "Y",
+  "SNAME": "Ущерб + хищение + ",
+  "SFOREIGNOBJECTS": "Y",
+  "ID": 4,
+  "NPRICE": 30000,
+  "SFRANCHISE": "Y",
+  "STHEFTVEH": "Y",
+  "SNOEVENTRESTRICTIONS": "Y",
+  "text": "Ущерб + хищение + ",
+  "value": 4
+} ]

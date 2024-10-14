@@ -25,10 +25,10 @@ export default {
   },
   computed: {
     countMoneyOne() {
-      return this.data.value.split(".")[0];
+      return "value" in this.data ? this.data?.value?.split(".")[0] : null;
     },
     countMoneyTwo() {
-      return this.data.value.split(".")[1];
+      return "value" in this.data ? this.data?.value?.split(".")[1] : null;
     },
   },
 };

@@ -34,6 +34,7 @@
 </template>
 <script>
 import ControlString from "./ControlString/ControlString.vue";
+import ControlMultiSelect from "./ControlMultiSelect/ControlMultiSelect.vue";
 import ControlText from "./ControlText";
 import ControlBoolean from "./ControlBoolean";
 import ControlDouble from "./ControlDouble";
@@ -65,6 +66,7 @@ import ControlGoogleCaptcha from "./ControlGoogleCaptcha/ControlGoogleCaptcha.vu
 import ControlMap from "./ControlMap/ControlMap.vue";
 import ControlListSelect from "./ControlListSelect/ControlListSelect.vue";
 import ControlRegNumber from "./ControlRegNumber/ControlRegNumber.vue";
+import ControlRegNumberAuto from "./ControlRegNumberAuto/ControlRegNumberAuto.vue";
 import ControlRadioButton from "./ControlRadioButton.vue";
 import ControlDoctorSchedule from "./ControlDoctorSchedule.vue";
 import ControlNewDoctorSchedule from "./ControlDoctorSchedule/WrapperDoctorSchedule.vue";
@@ -76,12 +78,20 @@ import ControlInsuredBox from "./ControlInsuredBox/InsuredBox.vue";
 import ControlRangeInput from "./ControlRangeInput/ControlRangeInput.vue";
 import ControlVueComponent from "./ControlVueComponent/ControlVueComponent.vue";
 
+import ControlSeparator from "./ControlSeparator.vue";
+
+import ControlVariantPolicy from "./ControlVariantPolicy/ControlVariantPolicy.vue";
+import ControlPencil from "./ControlPencil/ControlPencil.vue";
+
 export default {
   name: "Control",
   components: {
+    ControlSeparator,
+    ControlPencil,
     ControlDadataSelect,
     ControlDadataSelect2,
     ControlProgressbar,
+    ControlMultiSelect,
     ControlString,
     ControlText,
     ControlBoolean,
@@ -111,6 +121,7 @@ export default {
     ControlMap,
     ControlListSelect,
     ControlRegNumber,
+    ControlRegNumberAuto,
     ControlRadioButton,
     ControlDoctorSchedule,
     ControlNewDoctorSchedule,
@@ -121,6 +132,7 @@ export default {
     ControlInsuredBox,
     ControlRangeInput,
     ControlVueComponent,
+    ControlVariantPolicy,
   },
   props: {
     data: {
