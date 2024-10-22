@@ -5,11 +5,11 @@
       v-model="dataValue"
       class="form-control"
       autocomplete="off"
-      type="search"
+      type="text"
       :disabled="!edit ? !edit : data.readonly"
       :required="data.required"
       :state="data.state"
-      :placeholder="showPlaceholder(data.name)"
+      :placeholder="data.placeholder"
       @keydown.enter="enter"
       @keydown.tab="enter"
       @keydown.down="down"
@@ -227,18 +227,6 @@ export default {
         obj.values = values;
         this.$set(this.suggestions, "data", obj.values);
         this.$set(this.suggestions, "type", obj.type);
-      }
-    },
-
-    showPlaceholder(name) {
-      if (name === "SNEWPHONE") {
-        return "Введите 10 цифр Вашего телефона";
-      }
-      if (name === "SCODEFIELD") {
-        return "Введите код";
-      }
-      if (name === "SNEWEMAIL") {
-        return "Введите новый email";
       }
     },
   },
