@@ -21,6 +21,11 @@ version-bump-master:
     - git checkout -B "$CI_COMMIT_REF_NAME" "$CI_COMMIT_SHA"
     - PROJECT_VERSION_PREFIX=$(grep version package.json | awk -F':' '{ print $2 }' | sed 's/[", ]//g' | sed 's/.[^.]*$//')
     - CURRENT_DATE_PREFIX=$(date +%y.%-m)
+    - echo "project version is [$PROJECT_VERSION_PREFIX]"
+    - echo "current date is [$CURRENT_DATE_PREFIX]"
+    - echo "git tags list"
+    - git tag
+    - if [[ "$PROJECT_VERSION_PREFIX" == "$CURRENT_DATE_PREFIX" ]]; then echo "npm version patch"; else echo "npm version $CURRENT_DATE_PREFIX.1"; fi
     - if [[ "$PROJECT_VERSION_PREFIX" == "$CURRENT_DATE_PREFIX" ]]; then npm version patch; else npm version "$CURRENT_DATE_PREFIX.1"; fi
     - git push "https://$CI_NAME:$PROJECT_WRITE_REPOSITORY_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git" --follow-tags $CI_COMMIT_BRANCH:$CI_COMMIT_BRANCH
   rules:
