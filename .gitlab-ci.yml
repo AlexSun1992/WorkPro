@@ -23,6 +23,7 @@ version-bump-master:
     - CURRENT_DATE_PREFIX=$(date +%y.%-m)
     - echo "project version is [$PROJECT_VERSION_PREFIX]"
     - echo "current date is [$CURRENT_DATE_PREFIX]"
+    - git tag -d v24.10.9
     - echo "git tags list"
     - git tag
     - if [[ "$PROJECT_VERSION_PREFIX" == "$CURRENT_DATE_PREFIX" ]]; then echo "npm version patch"; else echo "npm version $CURRENT_DATE_PREFIX.1"; fi
