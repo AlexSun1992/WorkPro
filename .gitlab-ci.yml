@@ -23,6 +23,7 @@ version-bump-master:
     - CURRENT_DATE_PREFIX=$(date +%y.%-m)
     - echo "project version is [$PROJECT_VERSION_PREFIX]"
     - echo "current date is [$CURRENT_DATE_PREFIX]"
+    - echo "test"
     - git tag -d v24.10.9
     - echo "git tags list"
     - git tag
