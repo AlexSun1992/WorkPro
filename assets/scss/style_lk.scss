@@ -6383,8 +6383,7 @@ h5.modal-title {
 .healt-blk:hover .healt-btn {
   display: block;
 }
-.healt-blk:nth-child(3n + 4) .healt-blk-btn,
-.healt-blk:nth-child(2n + 3) .healt-blk-btn {
+.healt-blk:nth-child(4n + 4) .healt-blk-btn {
   left: auto;
   right: 0;
 }
