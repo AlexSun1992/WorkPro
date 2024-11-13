@@ -6305,3 +6305,86 @@ h5.modal-title {
   padding: 1rem;
   border-radius: 12px;
 }
+
+.healt-box {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1rem;
+}
+.healt-blk {
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.18);
+  height: 242px;
+  width: 100%;
+  position: relative;
+  border-radius: 24px;
+  background-color: #fff;
+}
+.healt-blk:after {
+  content: "";
+  width: 100%;
+  height: 121px;
+  top: 0;
+  left: 0;
+  background-color: #ecf3fa;
+  display: block;
+  border-radius: 24px 24px 0 0;
+}
+
+.healt-blk img {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.healt-blk-title {
+  position: absolute;
+  top: 163px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 20px;
+  width: 100%;
+  display: block;
+}
+
+.healt-blk-btn {
+  position: absolute;
+  top: 96%;
+  width: 354px;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+  z-index: 1;
+  left: 0;
+}
+.healt-btn {
+  cursor: pointer;
+  padding: 10px 20px;
+  background: #fff;
+  display: none;
+}
+.healt-btn-title {
+  color: #292929;
+  line-height: 1.25rem;
+}
+.healt-btn-dsc {
+  line-height: 1.5rem;
+  font-size: 0.875rem;
+  color: #868686;
+}
+
+.healt-btn + .healt-btn {
+  border-top: 1px solid #f2f4f5;
+}
+.healt-btn:hover {
+  background-color: #f2f4f5;
+}
+.healt-blk:hover .healt-btn {
+  display: block;
+}
+.healt-blk:nth-child(3n + 4) .healt-blk-btn,
+.healt-blk:nth-child(2n + 3) .healt-blk-btn {
+  left: auto;
+  right: 0;
+}
