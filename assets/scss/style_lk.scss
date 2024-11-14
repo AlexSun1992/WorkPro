@@ -6387,3 +6387,10 @@ h5.modal-title {
   left: auto;
   right: 0;
 }
+.conf-block-zero,
+.conf-block.conf-block-zero {
+  box-shadow: none;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+}
