@@ -1,12 +1,12 @@
 const defaultPlatform = 'unknown';
 
-function getFromNavigation() {
+function getFromUserAgentData() {
   const userAgent = navigator?.userAgentData
 
   return userAgent?.platform ? navigator.platform : defaultPlatform;
 }
 
-function getFromNavigator() {
+function getFromPlatform() {
   const platform = navigator?.platform;
 
   return platform ?? defaultPlatform;
@@ -14,10 +14,10 @@ function getFromNavigator() {
 
 export const clientOS = {
   getPlatform() {
-    const getters = [getFromNavigation, getFromNavigator];
+    const getters = [ getFromUserAgentData, getFromPlatform ];
 
     for (const item of getters) {
-      const val =  item();
+      const val = item();
 
       if (val !== defaultPlatform) {
         return val;
@@ -28,10 +28,10 @@ export const clientOS = {
   },
 
   getMobilePlatform() {
-    const mainPlatforms = {'Android': ['Android'], IOS: ['iPad', 'iPhone']};
+    const mainPlatforms = { "Android": [ "Android" ], "IOS": [ "iPad", "iPhone" ] };
     const platform = clientOS.getPlatform();
 
-    for(const [key, values] of Object.entries(mainPlatforms)) {
+    for (const [ key, values ] of Object.entries(mainPlatforms)) {
       const variant = values.find(item => item.toLowerCase().includes(platform.toLowerCase()));
 
       if (variant) {
@@ -39,6 +39,6 @@ export const clientOS = {
       }
     }
 
-    return '';
+    return "";
   }
 }
