@@ -1,20 +1,25 @@
+/**
+ * Есть navigator.platform но это деприкатед и работает как-то специфически
+ *
+ */
+
 const defaultPlatform = 'unknown';
 
 function getFromUserAgentData() {
-  const userAgent = navigator?.userAgentData
+  const userAgent = navigator?.userAgentData;
 
-  return userAgent?.platform ? navigator.platform : defaultPlatform;
+  return userAgent?.platform ?? defaultPlatform;
 }
 
-function getFromPlatform() {
-  const platform = navigator?.platform;
+function getFromUserAgent() {
+  const platform = navigator?.userAgent;
 
   return platform ?? defaultPlatform;
 }
 
 export const clientOS = {
   getPlatform() {
-    const getters = [ getFromUserAgentData, getFromPlatform ];
+    const getters = [ getFromUserAgentData, getFromUserAgent ];
 
     for (const item of getters) {
       const val = item();
@@ -28,11 +33,11 @@ export const clientOS = {
   },
 
   getMobilePlatform() {
-    const mainPlatforms = { "Android": [ "Android" ], "IOS": [ "iPad", "iPhone" ] };
+    const mainPlatforms = { "Android": [ "Android" ], "IOS": [ "iPad", "iPhone", "Macintosh" ] };
     const platform = clientOS.getPlatform();
 
     for (const [ key, values ] of Object.entries(mainPlatforms)) {
-      const variant = values.find(item => item.toLowerCase().includes(platform.toLowerCase()));
+      const variant = values.find(item => platform.toLowerCase().includes(item.toLowerCase()));
 
       if (variant) {
         return key;
