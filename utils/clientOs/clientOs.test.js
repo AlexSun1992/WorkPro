@@ -34,6 +34,6 @@ describe("clientOs utils", () => {
     mock = clientOsTestData.variantD;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOS.getMobilePlatform()).toBe("");
+    expect(clientOS.getMobilePlatform()).toBe(clientOS.getDefaultPlatform());
   });
 });

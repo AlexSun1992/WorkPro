@@ -32,6 +32,10 @@ export const clientOS = {
     return defaultPlatform;
   },
 
+  getDefaultPlatform() {
+    return defaultPlatform;
+  },
+
   getMobilePlatform() {
     const mainPlatforms = { "Android": [ "Android" ], "IOS": [ "iPad", "iPhone", "Macintosh" ] };
     const platform = clientOS.getPlatform();
