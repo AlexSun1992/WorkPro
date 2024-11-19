@@ -3,7 +3,7 @@
  *
  */
 
-const defaultPlatform = 'unknown';
+const defaultPlatform = 'VueJs';
 
 function getFromUserAgentData() {
   const userAgent = navigator?.userAgentData;
@@ -44,6 +44,6 @@ export const clientOS = {
       }
     }
 
-    return "";
+    return defaultPlatform;
   }
 }
