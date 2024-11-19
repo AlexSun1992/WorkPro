@@ -10,7 +10,7 @@ export default function (param) {
     } catch (err) {
       platform = "VueJs";
     } finally {
-      config.headers.common["X-Application"] = platform;
+      config.headers.common["X-OS"] = platform;
     }
   });
 }
