@@ -24,7 +24,7 @@ export const clientOS = {
     for (const item of getters) {
       const val = item();
 
-      if (val !== defaultPlatform) {
+      if (val && val !== defaultPlatform) {
         return val;
       }
     }
