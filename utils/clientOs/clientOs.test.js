@@ -20,20 +20,20 @@ describe("clientOs utils", () => {
     mock = clientOsTestData.variantB;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOs.getMobilePlatform()).toBe('Android');
+    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toBe('Android');
   });
 
   test("getMobilePlatform for Iphone", () => {
     mock = clientOsTestData.variantC;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOs.getMobilePlatform()).toBe('IOS');
+    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toBe('IOS');
   });
 
   test("getMobilePlatform for empty", () => {
     mock = clientOsTestData.variantD;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOs.getMobilePlatform()).toBe(clientOs.getDefaultPlatform());
+    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toBe(clientOs.getDefaultPlatform());
   });
 });
