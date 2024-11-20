@@ -17,7 +17,7 @@ function getFromUserAgent() {
   return platform ?? defaultPlatform;
 }
 
-export const clientOS = {
+export const clientOs = {
   getPlatform() {
     const getters = [ getFromUserAgentData, getFromUserAgent ];
 
@@ -38,7 +38,7 @@ export const clientOS = {
 
   getMobilePlatform() {
     const mainPlatforms = { "Android": [ "Android" ], "IOS": [ "iPad", "iPhone", "Macintosh" ] };
-    const platform = clientOS.getPlatform();
+    const platform = clientOs.getPlatform();
 
     for (const [ key, values ] of Object.entries(mainPlatforms)) {
       const variant = values.find(item => platform.toLowerCase().includes(item.toLowerCase()));
