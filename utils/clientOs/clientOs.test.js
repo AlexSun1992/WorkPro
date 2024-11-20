@@ -1,4 +1,4 @@
-import { clientOS } from "./clientOs";
+import { clientOs } from "./clientOs.mjs";
 import { clientOsTestData } from "./clientOsTestData";
 
 describe("clientOs utils", () => {
@@ -13,27 +13,27 @@ describe("clientOs utils", () => {
     mock = clientOsTestData.variantA;
     Object.defineProperty(navigator, 'userAgentData', { value: mock.navigator.userAgentData, writable: true });
 
-    expect(clientOS.getPlatform()).toBe('Windows');
+    expect(clientOs.getPlatform()).toBe('Windows');
   });
 
   test("getMobilePlatform for Android", () => {
     mock = clientOsTestData.variantB;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOS.getMobilePlatform()).toBe('Android');
+    expect(clientOs.getMobilePlatform()).toBe('Android');
   });
 
   test("getMobilePlatform for Iphone", () => {
     mock = clientOsTestData.variantC;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOS.getMobilePlatform()).toBe('IOS');
+    expect(clientOs.getMobilePlatform()).toBe('IOS');
   });
 
   test("getMobilePlatform for empty", () => {
     mock = clientOsTestData.variantD;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOS.getMobilePlatform()).toBe(clientOS.getDefaultPlatform());
+    expect(clientOs.getMobilePlatform()).toBe(clientOs.getDefaultPlatform());
   });
 });
