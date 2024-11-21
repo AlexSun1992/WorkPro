@@ -17,7 +17,6 @@
             @input="changeField('newEmail')"
             autocomplete="off"
             df
-            autofocus
             :disabled="isShowCodeEnter"
             type="email"
             data-testid="getCodeInput"
@@ -177,7 +176,7 @@ export default {
     async getCode() {
       // Очищаем поле с кодом СМС
       this.$store.commit("data_card/clearFormField", {
-        fieldId: 35622,
+        fieldId: this.getSMSCodeComponent.fieldId,
       });
 
       if (!this.newEmail) return;
@@ -253,6 +252,11 @@ export default {
   },
 
   computed: {
+    getSMSCodeComponent() {
+      return this.$store.getters["data_card/getCopyForm"].find(
+        (el) => el.name === "SCODEFIELD"
+      );
+    },
     isShowCodeEnter() {
       return !this.$v.newEmail.$invalid && this.isSendCode;
     },

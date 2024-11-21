@@ -151,22 +151,38 @@ converter.form = async (data, params, instance) => {
       webFields[i].IDCONTROL == 15 ||
       webFields[i].IDCONTROL == 37 ||
       webFields[i].IDCONTROL == 441 ||
-      webFields[i].IDCONTROL == 663 ||
-      webFields[i].IDCONTROL == 664 ||
-      webFields[i].IDCONTROL == 53
+      webFields[i].IDCONTROL == 56 ||
+      webFields[i].IDCONTROL == 55 ||
+      webFields[i].IDCONTROL == 53 ||
+      webFields[i].IDCONTROL == 57 ||
+      webFields[i].IDCONTROL == 58 ||
+      webFields[i].IDCONTROL == 12
     ) {
-      if (webFields[i].IDCONTROL === 53) {
-        obj.type = "RegNumberAuto";
-      }
       if (webFields[i].IDCONTROL !== 441 && webFields[i].IDCONTROL !== 53) {
         obj.type = webFields[i].IDCONTROL == 15 ? "combobox" : "customCombobox";
       }
+      if (webFields[i].IDCONTROL === 53) {
+        obj.type = "RegNumberAuto";
+      }
+      if (webFields[i].IDCONTROL === 12) {
+        obj.type = "TokenBox";
+        obj.options = [];
+        obj.value = [];
+      }
+      if (webFields[i].IDCONTROL === 58) {
+        obj.type = "SelectButton";
+      }
+
       if (webFields[i].IDCONTROL === 663) {
         obj.type = "MultiSelect";
       }
+
+      if (webFields[i].IDCONTROL === 60) {
+        obj.type = "Collapse";
+      }
       if (webFields[i].IDCONTROL === 664) {
         obj.type = "VariantPolicy";
-        if(Array.isArray(obj.value)){
+        if (Array.isArray(obj.value)) {
           obj.value = JSON.stringify(obj.value[0]);
         }
       }
@@ -184,6 +200,25 @@ converter.form = async (data, params, instance) => {
           obj.isLoading = false;
         }
       });
+      if (webFields[i].IDCONTROL === 53) {
+        obj.type = "RegNumberAuto";
+      }
+      if (webFields[i].IDCONTROL === 57) {
+        obj.type = "DynamicDepend";
+      }
+      if (webFields[i].IDCONTROL === 58) {
+        obj.type = "SelectButton";
+      }
+
+      if (webFields[i].IDCONTROL === 56) {
+        obj.type = "MultiSelect";
+      }
+      if (webFields[i].IDCONTROL === 55) {
+        obj.type = "VariantPolicy";
+        if (Array.isArray(obj.value)) {
+          obj.value = JSON.stringify(obj.value[0]);
+        }
+      }
       if (webFields[i].SCONNECTFIELD) {
         const dicParams = webFields
           .filter(
@@ -192,15 +227,18 @@ converter.form = async (data, params, instance) => {
               webFields[i].SCONNECTFIELD.split(";").includes(field.SNAME) &&
               field.LVISIBLE
           )
-          .reduce((obj, field) => {
-            const value =
-              converter.queryParams(item)[field.SNAME] ??
-              metaValue[field.SNAME];
-            if (value) {
-              return Object.assign(obj, { [field.SNAME]: value });
-            }
-            return obj;
-          }, {});
+          .reduce(
+            (obj, field) => {
+              const value =
+                converter.queryParams(item)[field.SNAME] ??
+                metaValue[field.SNAME];
+              if (value) {
+                return Object.assign(obj, { [field.SNAME]: value });
+              }
+              return obj;
+            },
+            { ID: params.id ?? 0 }
+          );
         if (webFields[i].LDIC === false && webFields[i].LVISIBLE === true) {
           promises.push(
             instance.get(
@@ -219,12 +257,21 @@ converter.form = async (data, params, instance) => {
             instance.get(
               `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
                 webFields[i].ID
-              }?${
+              }/${params.id ?? 0}?${
                 Object.values(dicParams).length
                   ? new URLSearchParams(dicParams).toString()
                   : ``
               }`
             )
+          );
+          console.log(
+            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
+              webFields[i].ID
+            }/${params.id ?? 0}?${
+              Object.values(dicParams).length
+                ? new URLSearchParams(dicParams).toString()
+                : ``
+            }`
           );
         }
       }
@@ -275,6 +322,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "Uploader";
     } else if (webFields[i].IDCONTROL == 35) {
       obj.type = "DadataSelect";
+    } else if (webFields[i].IDCONTROL == 62) {
+      obj.type = "LoadingOverlay";
     } else if (webFields[i].IDCONTROL == 381) {
       obj.type = "DadataSelect2";
     } else if (webFields[i].IDCONTROL == 40) {
@@ -293,15 +342,17 @@ converter.form = async (data, params, instance) => {
       obj.type = "CollapseGroup";
     } else if (webFields[i].IDCONTROL == 441) {
       obj.type = "InsuredBox";
-    } else if (webFields[i].IDCONTROL == 664) {
+    } else if (webFields[i].IDCONTROL == 55) {
       obj.type = "VariantPolicy";
     } else if (webFields[i].IDCONTROL == 502) {
       obj.type = "button";
       obj.isDownloadControl = true;
     } else if (webFields[i].IDCONTROL == 501) {
       obj.type = "VueComponent";
-    } else if (webFields[i].IDCONTROL == 663) {
+    } else if (webFields[i].IDCONTROL == 56) {
       obj.type = "MultiSelect";
+    } else if (webFields[i].IDCONTROL === 60) {
+      obj.type = "Collapse";
     } else if (webFields[i].IDCONTROL == 481) {
       obj.type = "RangeInput";
       if (webFields[i].LDIC === true) {
@@ -309,7 +360,7 @@ converter.form = async (data, params, instance) => {
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
               webFields[i].ID
-            }`
+            }/${params.id ?? 0}?ID=${params.id ?? 0}`
           )
         );
       }
@@ -329,7 +380,7 @@ converter.form = async (data, params, instance) => {
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
               webFields[i].ID
-            }`
+            }/${params.id ?? 0}/?ID=${params.id ?? 0}`
           )
         );
       }
@@ -371,6 +422,10 @@ converter.form = async (data, params, instance) => {
       obj.type = "Separator";
     } else if (webFields[i].IDCONTROL == 661) {
       obj.type = "Pencil";
+    } else if (webFields[i].IDCONTROL == 58) {
+      obj.type = "SelectButton";
+    } else if (webFields[i].IDCONTROL == 59) {
+      obj.type = "Informer";
     } else {
       obj.type = "string";
     }
@@ -540,7 +595,7 @@ converter.form = async (data, params, instance) => {
 
   // ********
   if (errors.length !== 0) {
-    throw { response: { data: errors } };
+    throw { response: { data: JSON.stringify(errors) } };
   }
 
   return {
@@ -727,7 +782,7 @@ converter.save = (data) => {
       data[i].type !== "listSelect" &&
       data[i].type !== "doctorSchedule" &&
       data[i].type !== "newDoctorSchedule" &&
-      data[i].type !== "MultiSelect"
+      data[i].type !== "Collapse"
     ) {
       if (data[i].type !== "boolean") {
         if (data[i].type !== "timestamp") {
@@ -840,13 +895,20 @@ converter.save = (data) => {
   return res;
 };
 
-converter.queryParams = (data) =>
-  Object.fromEntries(
-    Object.entries(data).map(([key, val]) => [
-      key,
-      typeof val === "boolean" ? (val === true ? "Y" : "N") : val,
-    ])
+converter.queryParams = (data) => {
+  function getVal(val) {
+    if (typeof val === "boolean") {
+      return val === true ? "Y" : "N";
+    }
+    if (typeof val === "object") {
+      return JSON.stringify(val);
+    }
+    return val;
+  }
+  return Object.fromEntries(
+    Object.entries(data).map(([key, val]) => [key, getVal(val)])
   );
+};
 
 converter.cutHTMLFromQueryParams = (data) =>
   Object.fromEntries(

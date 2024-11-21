@@ -28,6 +28,9 @@
         @clear="$emit('clear', $event)"
         @open-card="$emit('open-card', $event)"
         @remove="$emit('remove', $event)"
+        @goNext="$emit('goNext', $event)"
+        @goBack="$emit('goBack', $event)"
+        @saveCard="$emit('saveCard', $event)"
       />
     </div>
   </b-col>
@@ -73,19 +76,28 @@ import ControlNewDoctorSchedule from "./ControlDoctorSchedule/WrapperDoctorSched
 import ControlOneToMany from "./ControlOneToMany/ControlOneToMany";
 import ControlPasswordConfirm from "./ControlPasswordConfirm/ControlPasswordConfirm.vue";
 import ControlCollapseGroup from "./ControlCollapseGroup.vue";
+import ControlCollapse from "./Collapse/ControlCollapse.vue";
 import ControlRange from "./ControlRange/ControlRange.vue";
 import ControlInsuredBox from "./ControlInsuredBox/InsuredBox.vue";
 import ControlRangeInput from "./ControlRangeInput/ControlRangeInput.vue";
 import ControlVueComponent from "./ControlVueComponent/ControlVueComponent.vue";
+import ControlWizardButton from "./ControlWizardButton.vue";
+import ControlTokenBox from "./ControlTokenBox/ControlTokenBox.vue";
 
 import ControlSeparator from "./ControlSeparator.vue";
 
 import ControlVariantPolicy from "./ControlVariantPolicy/ControlVariantPolicy.vue";
 import ControlPencil from "./ControlPencil/ControlPencil.vue";
+import ControlLoadingOverlay from "./ControlLoadingOverlay/ControlLoadingOverlay.vue";
+import ControlDynamicDepend from "./ControlDynamicDepend/ControlDynamicDepend.vue";
+
+import ControlSelectButton from "./ControlSelectButton.vue";
+import ControlInformer from "./ControlInformer/ControlInformer.vue";
 
 export default {
   name: "Control",
   components: {
+    ControlWizardButton,
     ControlSeparator,
     ControlPencil,
     ControlDadataSelect,
@@ -120,6 +132,7 @@ export default {
     ControlGoogleCaptcha,
     ControlMap,
     ControlListSelect,
+    ControlLoadingOverlay,
     ControlRegNumber,
     ControlRegNumberAuto,
     ControlRadioButton,
@@ -128,11 +141,16 @@ export default {
     ControlOneToMany,
     ControlPasswordConfirm,
     ControlCollapseGroup,
+    ControlCollapse,
     ControlRange,
     ControlInsuredBox,
     ControlRangeInput,
     ControlVueComponent,
     ControlVariantPolicy,
+    ControlDynamicDepend,
+    ControlSelectButton,
+    ControlInformer,
+    ControlTokenBox,
   },
   props: {
     data: {

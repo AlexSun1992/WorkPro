@@ -60,6 +60,13 @@
         @update="updateValue($event)"
         @clear="clearRelation($event)"
         @open-card="openCard($event)"
+        :current-tab="currentTab"
+        :tabsWizard="tabsWizard"
+        :qty="qty"
+        :loading="loading"
+        @goNext="$emit('goNext', $event)"
+        @goBack="$emit('goBack', $event)"
+        @saveCard="$emit('saveCard', $event)"
       />
     </div>
     <SkeletonBox
@@ -95,6 +102,18 @@ export default {
     SkeletonBox,
   },
   props: {
+    currentTab: {
+      required: false,
+    },
+    tabsWizard: {
+      required: false,
+    },
+    qty: {
+      required: false,
+    },
+    loading: {
+      required: false,
+    },
     params: {
       type: Object,
       required: true,
@@ -137,7 +156,6 @@ export default {
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
-
       this.stripeLoaded();
     } catch (e) {
       console.warn(`Ошибка загрузки скрипта`);
@@ -217,7 +235,6 @@ export default {
         }
       } catch {}
     },
-
     confirmAction() {
       confirmPromise = new Promise((resolve) => {
         confirmResolve = (result) => resolve(result);
@@ -408,12 +425,14 @@ export default {
             relId = this.$store.getters["data_card/getCardRelId"];
             if (this.$route.params.idWizard) {
               this.$store.commit("data_card/setLoading", true);
+              this.$store.dispatch("wizard/isWizardButtonsLoading", true);
               await this.$store.dispatch("wizard/fetchWizard", {
                 idModule: this.$route.params.idModule,
                 idWizard: this.$route.params.idWizard,
                 idCard: cardId,
               });
               this.$store.commit("data_card/setLoading", false);
+              this.$store.dispatch("wizard/isWizardButtonsLoading", false);
               const nextIdItem =
                 this.$store.getters["wizard/getWizardPages"].split(";")[step];
               const tab = this.wizardTabs.find(
@@ -437,7 +456,7 @@ export default {
                 }`;
               }
               if (url) {
-                this.$router.push(url);
+                await this.$router.push(url);
               }
               return;
             }
@@ -481,6 +500,7 @@ export default {
             });
           } else if (resp?.status === 500 || resp?.status === 520) {
             this.$store.commit("data_card/setLoading", false);
+            this.$store.dispatch("wizard/isWizardButtonsLoading", false);
             this.$store.commit("data_card/setDisabled", false);
             this.$store.commit("data_card/setSavedError", true);
             this.$store.commit("data_card/setErrorMessage", resp.data);

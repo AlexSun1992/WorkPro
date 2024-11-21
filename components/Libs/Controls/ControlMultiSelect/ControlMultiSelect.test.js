@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 
 import ControlMultiSelect from "./ControlMultiSelect.vue";
-import { data } from "./CardDoctorShedule.helper.fixtures";
+import { data } from "./ControlMultiSelect.helper.fixtures";
 
-describe("CardDoctorShedule", () => {
+describe("ControlMultiSelect", () => {
   test("Загрузились все элементы на странице", async () => {
     const copyData = JSON.parse(JSON.stringify(data));
     copyData.value = "[]";
@@ -124,6 +124,44 @@ describe("CardDoctorShedule", () => {
     expect(allChecbox.at(0).is(":checked")).toBe(true);
     expect(allChecbox.at(1).is(":checked")).toBe(false);
     expect(allChecbox.at(2).is(":checked")).toBe(true);
+    expect(allChecbox.at(3).is(":checked")).toBe(false);
+  });
+
+  test("Если значения options равны значениям value + произошел клик по одному из этих {}", async () => {
+    const copyData = JSON.parse(JSON.stringify(data));
+    copyData.options[0].RELATIONS[0].relation_value = [2];
+    copyData.options[1].RELATIONS[0].relation_value = [1];
+    copyData.value = "[1,2]";
+    const wrapper = mount(ControlMultiSelect, {
+      propsData: {
+        data: copyData,
+      },
+    });
+    const allChecbox = wrapper.findAll("input[type='checkbox']");
+    await allChecbox.at(0).trigger("click");
+
+    expect(allChecbox.at(0).is(":checked")).toBe(false);
+    expect(allChecbox.at(1).is(":checked")).toBe(true);
+    expect(allChecbox.at(2).is(":checked")).toBe(false);
+    expect(allChecbox.at(3).is(":checked")).toBe(false);
+  });
+
+  test("Если есть options, а value пустой", async () => {
+    const copyData = JSON.parse(JSON.stringify(data));
+    copyData.value = "[]";
+    copyData.options[0].RELATIONS[0].relation_value = [2];
+    copyData.options[1].RELATIONS[0].relation_value = [1];
+    const wrapper = mount(ControlMultiSelect, {
+      propsData: {
+        data: copyData,
+      },
+    });
+
+    const allChecbox = wrapper.findAll("input[type='checkbox']");
+
+    expect(allChecbox.at(0).is(":checked")).toBe(false);
+    expect(allChecbox.at(1).is(":checked")).toBe(false);
+    expect(allChecbox.at(2).is(":checked")).toBe(false);
     expect(allChecbox.at(3).is(":checked")).toBe(false);
   });
 });

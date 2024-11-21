@@ -11,8 +11,7 @@
       </div>
       <div>
         <div class="variant-policy-features">
-          <VueSlickCarousel ref="carousel"
-                            v-bind="settings">
+          <VueSlickCarousel ref="carousel" v-bind="settings">
             <div v-for="card in variants" :key="card.ID">
               <VariantPolicyVariant
                 @updateVariant="updateVariant()"
@@ -123,14 +122,13 @@ export default {
       return this.data?.options.filter((item) => item.ID !== 1);
     },
     dataValue() {
-      const {value} = this.data;
+      const { value } = this.data;
       const result = { IDVARIANT: null, IDFRNANCHISE: null };
-      // TODO этот функционал завязан на получение данных по выбранной франщизе. Пока не работает!
-      Array.isArray(value) && (Object.assign(result, value[0]));
-      typeof (value) === 'string' && (Object.assign(result,  JSON.parse(value)));
+
+      Array.isArray(value) && Object.assign(result, value[0]);
+      typeof value === "string" && Object.assign(result, JSON.parse(value));
 
       return result;
-      // return this.$store.state.data_card?.form.find(item => item.type === "VariantPolicy")?.value;
     },
     featuresData() {
       return this.data.options?.find((item) => item.SNAME === "scaption");
@@ -156,8 +154,10 @@ export default {
       });
     },
     scrollToActiveVariant() {
-      const selectedVariantId = this.customStore.state.selectedVariant.IDVARIANT;
-      const index = this.variants.findIndex(item => item.ID === selectedVariantId) ?? 0;
+      const selectedVariantId =
+        this.customStore.state.selectedVariant.IDVARIANT;
+      const index =
+        this.variants.findIndex((item) => item.ID === selectedVariantId) ?? 0;
 
       this.$refs.carousel.goTo(index);
     },
@@ -171,7 +171,6 @@ export default {
   },
   watch: {
     dataValue(val) {
-      // TODO этот функционал завязан на получение данных по выбранной франщизе. Пока не работает!
       this.customStore.setSelectedVariant(val);
       this.selectedVariant = val;
     },

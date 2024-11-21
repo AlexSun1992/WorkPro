@@ -54,6 +54,8 @@ export const state = () => ({
   // В начале массива храниться актуальное значение, далее более старые
   formValuesHistory: {},
   filterActive: {},
+  formCollapse: [],
+  historyToggleComponents: [],
 });
 export const getters = {
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
@@ -64,7 +66,8 @@ export const getters = {
   getFiltersVisibleStatus: (state) => state.isFilterVisible,
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
-  getForm: (state) => state.form,
+  getForm: (state) =>
+    state.formCollapse?.length || 0 > 0 ? state.formCollapse : state.form,
   getFormParams: (state) => ({
     idModule: state.moduleId,
     idItem: state.menuId,
@@ -113,11 +116,11 @@ export const getters = {
   getOneToManyDataTable: (state) => state.oneToManyData.table,
   getOneToManyDataForm: (state) => state.oneToManyData.form,
   getDataFieldByName: (state) => (name) =>
-    state.form.find((b) => b.name === name),
+    state.form.find((b) => b.name === name.trim()),
   getDataFieldsByNames: (state) => (names) =>
     names.map((name) => {
       const field = state.form.find(
-        (form) => form.name === name || form.name === `FK${name}`
+        (form) => form.name === name.trim() || form.name === `FK${name.trim()}`
       );
       if (!field) throw new Error(`Связанное поле не найдено "${name}"`);
       return field;
@@ -157,12 +160,15 @@ export const getters = {
                   : item.name,
               value: item.value?.value || item.value,
             }))
-            .reduce((obj, item) => {
-              if (item.value) {
-                return Object.assign(obj, { [item.key]: item.value });
-              }
-              return obj;
-            }, {});
+            .reduce(
+              (obj, item) => {
+                if (item.value) {
+                  return Object.assign(obj, { [item.key]: item.value });
+                }
+                return obj;
+              },
+              { ID: state.cardId ?? 0 }
+            );
           let url;
           if (field.type === "searchSelect") {
             url = {
@@ -174,7 +180,9 @@ export const getters = {
           }
           if (field.isRelation) {
             url = {
-              url: `/api/dicwf/${field.fieldId}/0?${new URLSearchParams(
+              url: `/api/dicwf/${field.fieldId}/${
+                state.cardId ?? 0
+              }?${new URLSearchParams(
                 converter.queryParams(objectValue)
               ).toString()}`,
               fieldId: field.fieldId,
@@ -304,6 +312,15 @@ export const getters = {
       }
     }
     return false;
+  },
+  getLoaderVisible(state, getters) {
+    const fields = state.form;
+
+    const loadedFields = fields.find(
+      (item) => item.isLoading && item.type !== "searchSelect"
+    );
+
+    return !!loadedFields;
   },
 };
 
@@ -679,14 +696,13 @@ export const actions = {
         fields: getters.getDataFieldsRelationsByFieldId(field.fieldId),
       };
     }
-    if (fields !== undefined) {
-      await dispatch("setOptionsField", { data, fields });
-    }
+    await dispatch("setOptionsField", { data, fields });
   },
   async setOptionsField(
     { commit, getters, state, dispatch },
     { data, fields }
   ) {
+    const fieldsArray = fields.fields;
     const urls = getters.getURLsByFieldsRelations(fields);
     const requests = [...urls]
       .filter(
@@ -699,7 +715,7 @@ export const actions = {
     }
     controller = new AbortController();
     if (requests.length) {
-      commit("setFieldLoading", data);
+      fieldsArray.forEach((f) => commit("setFieldLoading", f));
       await Promise.all(
         requests.map((endpoint) =>
           this.$axios.get(endpoint, {
@@ -716,7 +732,9 @@ export const actions = {
           );
         })
         .catch((e) => console.error(e))
-        .finally(() => commit("setFieldLoading", data));
+        .finally(() =>
+          fieldsArray.forEach((f) => commit("setFieldLoading", f))
+        );
     }
     const options = [...urls].filter((url) =>
       state.dictionaries.find((dictionary) => dictionary.url === url.url)
@@ -829,6 +847,67 @@ export const mutations = {
       item.error = null;
       return !item.name.match(/^ID/);
     });
+  },
+  toggleComponents(state, data) {
+    if (!state.historyToggleComponents.find((el) => el.name === data.name)) {
+      state.historyToggleComponents.push({
+        name: data.name,
+        hide: data.value,
+        components: data.components,
+      });
+    }
+    const sameElement = state.historyToggleComponents.find(
+      (el) => el.name === data.name
+    );
+
+    if (Object.keys(sameElement).length > 0) {
+      sameElement.hide = data.value;
+    }
+    if (
+      state.form &&
+      Object.keys(data).length > 0 &&
+      data.components.length > 0 &&
+      state.historyToggleComponents.length > 0
+    ) {
+      if (state.historyToggleComponents.every((el) => !el.hide)) {
+        state.formCollapse = [];
+        return;
+      }
+      if (state.historyToggleComponents.every((el) => el.hide)) {
+        const allComponents = state.historyToggleComponents
+          .map((components) => components.components)
+          .flat();
+
+        state.formCollapse = state.form.filter(
+          (el) => !allComponents.some((item) => el.name === item)
+        );
+        return;
+      }
+
+      if (state.historyToggleComponents.some((el) => el.hide)) {
+        const allComponents = state.historyToggleComponents
+          .filter((el) => el.hide)
+          .map((components) => components.components)
+          .flat();
+
+        state.formCollapse = state.form.filter(
+          (el) => !allComponents.some((item) => el.name === item)
+        );
+      }
+
+      if (state.historyToggleComponents.some((el) => !el.hide)) {
+        const allComponents = state.historyToggleComponents
+          .filter((el) => !el.hide)
+          .map((components) => components.components)
+          .flat();
+
+        state.formCollapse = state.form.filter(
+          (el) => !allComponents.some((item) => el.name === item)
+        );
+      }
+    } else {
+      state.formCollapse = [];
+    }
   },
   setForm(state, data) {
     state.form = data;

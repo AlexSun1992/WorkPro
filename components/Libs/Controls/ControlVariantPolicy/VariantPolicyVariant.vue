@@ -57,8 +57,8 @@ export default {
   },
   data() {
     return {
-      selectedFranchise: null,
-      selectedVariant: null
+      selectedFranchise: this.customStore.state.selectedVariant?.IDVARIANT === this.card.ID ?
+        this.customStore.state.selectedVariant?.IDFRNANCHISE : null,
     }
   },
   computed: {
@@ -70,6 +70,14 @@ export default {
     },
     featuresDataComputed() {
       return this.featuresData;
+    }
+  },
+  watch: {
+    isCardSelected(val) {
+      if(!val) {
+        this.customStore?.setFranchise(false);
+        this.selectedFranchise = null;
+      }
     }
   },
   methods: {

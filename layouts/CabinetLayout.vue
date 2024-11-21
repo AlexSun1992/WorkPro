@@ -255,4 +255,8 @@ export default {
 .nuxt-progress + div > .app.cabinet .result_blk > div {
   display: none;
 }
+
+.main {
+  position: relative;
+}
 </style>

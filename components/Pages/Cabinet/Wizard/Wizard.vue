@@ -5,9 +5,15 @@
         {{ cardCaption }}
       </div>
       <template v-if="isShowCardTemplate">
-        <v-runtime-template :template="settings.cardtemplate" />
+        <v-runtime-template :template="settings.cardtemplate"/>
       </template>
-      <b-nav v-else-if="pages" tabs justified class="mb-2 sticky-top">
+
+      <b-nav
+        v-else-if="pages && tabs.length < 9"
+        tabs
+        justified
+        class="mb-2 sticky-top"
+      >
         <b-nav-item
           v-for="(item, index) in tabs"
           :key="item.id"
@@ -18,10 +24,28 @@
           {{ item.name }}
         </b-nav-item>
       </b-nav>
+
+      <template v-else-if="pages && tabs.length > 8">
+        <WizardProgressBar
+          v-if="settingsByItem.isUploader === false"
+          :current-tab="currentTab"
+          :tabs="tabs"
+          :qty="settings.wizard.length"
+          :loading="isLoading"
+        />
+      </template>
+
       <nuxt-child
         ref="child"
         :key="$route.fullPath"
         :wizard-tabs="settings.wizard"
+        :current-tab="currentTab"
+        :tabs="tabs"
+        :qty="settings.wizard.length"
+        :loading="isLoading"
+        @goNext="goNext($event)"
+        @goBack="goBack($event)"
+        @saveCard="saveCard($event)"
       />
       <div class="row">
         <div
@@ -40,11 +64,11 @@
       </div>
 
       <wizard-buttons
-        v-if="settingsByItem.isUploader === false"
+        v-if="settingsByItem.isUploader === false && btnsWizardOutside"
         :current-tab="currentTab"
         :tabs="tabs"
         :qty="settings.wizard.length"
-        :loading="loading"
+        :loading="isLoading"
         @goNext="goNext($event)"
         @goBack="goBack($event)"
         @saveCard="saveCard($event)"
@@ -60,21 +84,35 @@
 import VRuntimeTemplate from "v-runtime-template";
 import menuSettings from "~/converters/menuSettings";
 import WizardButtons from "~/components/Pages/Cabinet/Wizard/WizardButtons";
+import WizardProgressBar from "./WizardProgressBar.vue";
+
 export default {
   name: "Wizard",
   components: {
+    WizardProgressBar,
     WizardButtons,
     VRuntimeTemplate,
   },
   data() {
     return {
-      loading: false,
+      loading: false
     };
   },
   async fetch({ store, route }) {
     await store.dispatch("wizard/fetchWizard", route.params);
   },
   computed: {
+    isLoading() {
+      return this.$store.getters["wizard/getIsWizardButtonsLoading"];
+    },
+    btnsWizardOutside() {
+      const formData = this.$store.getters["data_card/getForm"];
+      const fields = formData.length ? formData : formData.data || [];
+      const wizardButtons = fields.filter(
+        (item) => item.type === "WizardButton"
+      );
+      return wizardButtons.every((button) => button.page === 100);
+    },
     settings: {
       get() {
         return menuSettings
@@ -135,7 +173,13 @@ export default {
       );
     },
     isShowCardTemplate() {
-      return Boolean(this.settings?.cardtemplate);
+      const cardTemplate = this.settings?.cardtemplate.trim();
+
+      return (
+        !!cardTemplate &&
+        cardTemplate.indexOf("<!--") !== 0 &&
+        cardTemplate.lastIndexOf("-->") !== cardTemplate.length - 3
+      );
     },
     isErrorActionExecuteMessage() {
       return this.$store.getters["wizard/getWizardIsErrorActionExecute"];
@@ -155,6 +199,9 @@ export default {
           ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
       );
     },
+    progressComponent() {
+      return this.tabs && this.tabs.length < 9 ? WizardButtons : WizardLine;
+    },
   },
   unmounted() {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
@@ -165,25 +212,25 @@ export default {
         item.idItem || {}
       );
       if (settingsTab?.isUploader === true) {
-        return `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
+        return `/cabinet/wizard/${ this.$route.params.idWizard }/55/0/${
           item.idItem
-        }/${this.$route.params.idCard}/${
+        }/${ this.$route.params.idCard }/${
           this.rels.split("|")[item.order - 1]
         }/uploader`;
       }
       if (this.$route.params.idCard === "0") {
-        return `/cabinet/wizard/${this.$route.params.idWizard}${
+        return `/cabinet/wizard/${ this.$route.params.idWizard }${
           item.list ? `/list/55/0/` : `/55/0/`
-        }${item.idItem}/0/0`;
+        }${ item.idItem }/0/0`;
       }
-      return `/cabinet/wizard/${this.$route.params.idWizard}${
+      return `/cabinet/wizard/${ this.$route.params.idWizard }${
         item.list ? `/list/55/0/` : `/55/0/`
-      }${item.idItem}/${this.$route.params.idCard}/${
+      }${ item.idItem }/${ this.$route.params.idCard }/${
         this.rels.split("|")[item.order - 1]
       }`;
     },
     async goNext(e) {
-      this.loading = true;
+      this.$store.dispatch("wizard/isWizardButtonsLoading", true);
       if (!this.currentTab.list) {
         if (this.$store.getters["data_card/getBtnSave"]) {
           if (this.$refs.child.$refs.cardEditor !== undefined) {
@@ -197,7 +244,7 @@ export default {
               value: null,
             });
             if (this.isSavedError === true) {
-              this.loading = false;
+              this.$store.dispatch("wizard/isWizardButtonsLoading", false);
               return;
             }
           } else {
@@ -214,7 +261,7 @@ export default {
               form: formData.length ? formData : formData.data,
             });
             if (this.isSavedError === true) {
-              this.loading = false;
+              this.$store.dispatch("wizard/isWizardButtonsLoading", true);
               return;
             }
           }
@@ -228,23 +275,23 @@ export default {
       this.$router.push(this.getURL(e));
     },
     async saveCard() {
-      this.loading = true;
+      this.$store.dispatch("wizard/isWizardButtonsLoading", true);
       if (this.$refs.child.$refs.cardEditor !== undefined) {
         this.$store.commit("data_card/setValueByName", {
           name: "Save",
           value: "CLICKED",
         });
-        await this.$refs.child.$refs.cardEditor.saveDataCard();
+        await this.$refs.child.$refs.cardEditor.saveDataCard(0);
         this.$store.commit("data_card/setValueByName", {
           name: "Save",
           value: null,
         });
         if (this.isSavedError === true) {
-          this.loading = false;
+          this.$store.dispatch("wizard/isWizardButtonsLoading", false);
           return;
         }
       }
-      this.loading = false;
+      this.$store.dispatch("wizard/isWizardButtonsLoading", false);
     },
   },
 };
@@ -254,9 +301,11 @@ export default {
 .dropdown > ul {
   min-width: fit-content;
 }
+
 .dropdown-item:hover {
   background-color: #ccc !important;
 }
+
 .dropdown-item:hover > button {
   background-color: #ccc !important;
 }
