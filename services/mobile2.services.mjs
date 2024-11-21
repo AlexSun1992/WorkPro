@@ -26,6 +26,8 @@ export const mobile2Service = (url) => {
 
   instance.interceptors.response.use(response => {
     console.log(response.config);
+
+    return response;
   }, (err) => {
     return err;
   });
