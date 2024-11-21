@@ -30,6 +30,13 @@
           :data="getFormData"
           :edit="editable"
           :params="settings"
+          :current-tab="currentTab"
+          :tabsWizard="tabs"
+          :qty="qty"
+          :loading="loading"
+          @goNext="$emit('goNext', $event)"
+          @goBack="$emit('goBack', $event)"
+          @saveCard="$emit('saveCard', $event)"
           @error="error = $event"
         />
       </div>
@@ -78,11 +85,16 @@
           class="row"
         >
           <div
-            v-if="isButtonSave && isWizard && $route.params.idCard === '0'"
+            v-if="
+              isButtonSave &&
+              isWizard &&
+              $route.params.idCard === '0' &&
+              isWizardButtonSaveOutside
+            "
             class="col-12 col-md-auto"
           >
             <button
-              v-if="wizardButtonVisibleSave"
+              v-if="wizardButtonVisibleSave && isWizardButtonSaveOutside"
               class="btn btn-success"
               :class="wizardButtonStyleSave"
               pill
@@ -159,6 +171,18 @@ export default {
   components: { CardEditor, VRuntimeTemplate, ActionButton },
 
   props: {
+    currentTab: {
+      required: false,
+    },
+    tabs: {
+      required: false,
+    },
+    qty: {
+      required: false,
+    },
+    loading: {
+      required: false,
+    },
     wizardTabs: {
       type: Array,
       required: false,
@@ -206,6 +230,9 @@ export default {
     },
     wizardButtonNameContinue() {
       return this.buttonTitle?.label ?? "Продолжить";
+    },
+    isWizardButtonSaveOutside() {
+      return this.wizardButtonTitleSave?.page === 100;
     },
     wizardButtonNameSave() {
       return this.wizardButtonTitleSave?.label ?? "Сохранить";
@@ -277,9 +304,6 @@ export default {
     isWizard() {
       return this.$route.path.includes("wizard");
     },
-    loading() {
-      return this.$store.getters["data_card/getLoading"];
-    },
     ref() {
       return this.$route.query?.ref;
     },
@@ -320,6 +344,7 @@ export default {
   created() {
     this.$store.dispatch("menu/fetchCounters", null);
     this.$store.commit("data_card/setLoading", false);
+    this.$store.dispatch("wizard/isWizardButtonsLoading", false);
     this.editable;
   },
   mounted() {

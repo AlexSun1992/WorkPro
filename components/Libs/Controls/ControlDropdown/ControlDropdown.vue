@@ -4,7 +4,12 @@
       <slot name="header">
         <span @click="toggleDropdown">{{
             selectedItem ? selectedItem[textKey] : placeholderComputed
-          }}</span>
+          }}
+        <div v-if="showClear"
+              class="clear-btn"
+              @click="clearSelectedItem">×</div>
+        </span>
+
       </slot>
     </div>
 
@@ -43,7 +48,7 @@ export default {
       default: true,
     },
     showClear: {
-      default: true,
+      default: false,
     },
     value: null,
   },
@@ -147,5 +152,22 @@ export default {
       background: #f4f7f5;
     }
   }
+}
+
+.clear-btn {
+  display: inline-block;
+  color: #009639;
+  background-color: ghostwhite;
+  border: 1px solid #009639;
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  padding-left: 0.15em;
+  padding-bottom: 0.2em;
+  line-height: 0.9em;
+}
+
+.clear-btn:hover {
+  font-weight: bold;
 }
 </style>

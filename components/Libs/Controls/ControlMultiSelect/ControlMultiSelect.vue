@@ -6,7 +6,7 @@
         <ControlMultiItem
           :item="item"
           :value="
-            activeInputs.length > 1
+            activeInputs.length > 0
               ? activeInputs.find((el) => el === item.ID)
               : null
           "
@@ -49,15 +49,37 @@ export default {
     label() {
       return `${this.data.label}`;
     },
+    relations() {
+      return this.data.options
+        .map((el) => el.RELATIONS[0])
+        .filter((item) => item !== undefined && item !== null);
+    },
   },
   methods: {
-    updateValue(e) {
-      const index = this.createData.findIndex((item) => item.id === e.id);
+    updateValue(event) {
+      const relationsIdList =
+        this.relations.find((el) => el?.nvalue === event.id)?.relation_value ||
+        [];
 
-      if (index !== -1 && !e.isActive) {
+      if (relationsIdList.length > 0) {
+        this.createData = this.createData.filter(
+          (item) => !relationsIdList.includes(item.id) || item.id === event.id
+        );
+      }
+
+      const index = this.createData.findIndex((item) => item.id === event.id);
+
+      if (index !== -1 && !event.isActive) {
         this.createData.splice(index, 1);
-      } else {
-        this.createData.push({ id: e.id, isActive: e.isActive });
+      } else if (event.isActive) {
+        const existingItem = this.createData.find(
+          (item) => item.id === event.id
+        );
+        if (existingItem) {
+          Object.assign(existingItem, { isActive: event.isActive });
+        } else {
+          this.createData.push({ id: event.id, isActive: event.isActive });
+        }
       }
 
       this.$emit("update", {

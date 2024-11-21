@@ -18,13 +18,14 @@
     <div
       v-for="(tab, index) in forms"
       :key="'block' + index"
-      class="conf-block"
       :class="{
         'mb-4': index < forms.length - 1,
         'd-block':
           isFiltersRendered &&
           indexBlockShouldBeHide == index &&
           forms.length > 1,
+        'conf-block-zero': tab.length === 1 && [tab].type === 'Informer',
+        'conf-block': tab.length > 1,
       }"
     >
       <div class="row">
@@ -40,6 +41,9 @@
             :data="item"
             :edit="edit"
             :cols="cols"
+            @goNext="$emit('goNext', $event)"
+            @goBack="$emit('goBack', $event)"
+            @saveCard="$emit('saveCard', $event)"
           >
           </Control>
         </template>
@@ -55,6 +59,18 @@ export default {
   name: "FormBlock",
   components: { Control },
   props: {
+    currentTab: {
+      required: false,
+    },
+    tabsWizard: {
+      required: false,
+    },
+    qty: {
+      required: false,
+    },
+    loading: {
+      required: false,
+    },
     data: {
       type: Array | null,
       required: true,
@@ -103,7 +119,7 @@ export default {
             (item) =>
               item.page === page &&
               item.visible === true &&
-              item.type !== "WizardButton"
+              !(item.page === 100 && item.type === "WizardButton")
           ),
         ])
         .filter((form) => form.length > 0);

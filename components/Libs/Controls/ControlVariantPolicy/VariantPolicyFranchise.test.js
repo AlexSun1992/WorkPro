@@ -22,18 +22,29 @@ describe('VariantPolicyFranchise', () => {
 
   it('Init value after component init', () => {
     const customStore = VariantPolicyStore();
-    customStore.setFranchise(VariantPolicyFranchiseOptions[0]);
+    customStore.setFranchise(VariantPolicyFranchiseOptions.variants[0]);
 
     const wrapper = mount(VariantPolicyFranchise, {
       stubs: { ControlDropdown },
       propsData: {
-        options,
+        value: VariantPolicyFranchiseOptions.variants[0],
+        options: options.variants,
         customStore
       }
     });
 
-    wrapper.vm.$nextTick();
-
-    expect(wrapper.vm.value.value).toBe(VariantPolicyFranchiseOptions[0].value);
+    expect(wrapper.vm.valueComputed.value).toBe(VariantPolicyFranchiseOptions.variants[0].value);
   });
+
+  it('Plaint text as franchise value', () => {
+    const wrapper = mount(VariantPolicyFranchise, {
+      stubs: { ControlDropdown },
+      propsData: {
+        options: options.text,
+        customStore
+      }
+    });
+
+    expect(wrapper.element.innerHTML).toMatch(VariantPolicyFranchiseOptions.text);
+  })
 });

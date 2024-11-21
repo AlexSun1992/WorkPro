@@ -20,6 +20,7 @@ export const data = {
       SDECRYPTION: "Подсказка 1",
       text: "1 880",
       value: 1,
+      RELATIONS: [{ nvalue: 1, relation_value: null }],
     },
 
     {
@@ -29,6 +30,7 @@ export const data = {
       SDECRYPTION: "Подсказка 2",
       text: "1 880",
       value: 2,
+      RELATIONS: [{ nvalue: 2, relation_value: null }],
     },
 
     {
@@ -38,6 +40,7 @@ export const data = {
       SDECRYPTION: "Подсказка 3",
       text: "1 880",
       value: 3,
+      RELATIONS: [{ nvalue: 3, relation_value: null }],
     },
 
     {
@@ -47,6 +50,7 @@ export const data = {
       SDECRYPTION: "Подсказка 4",
       text: "2 880",
       value: 4,
+      RELATIONS: [{ nvalue: 4, relation_value: null }],
     },
   ],
   type: "MultiSelect",

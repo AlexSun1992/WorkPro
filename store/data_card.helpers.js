@@ -1,5 +1,3 @@
-import { isArray } from "lodash";
-
 export function getFieldsValueTypeIsNotUploader(fieldsValues) {
   const notUploaderTypeFieldsValues = fieldsValues.filter(
     (field) => field.type !== "Uploader"

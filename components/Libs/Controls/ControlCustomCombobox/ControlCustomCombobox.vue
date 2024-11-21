@@ -15,6 +15,7 @@
     </template>
 
     <autocomplete
+      v-mask="data.mask"
       :id="data.name"
       ref="autocomplete"
       :placeholder="placeholder"
@@ -39,6 +40,7 @@ import Autocomplete from "@trevoreyre/autocomplete-vue";
 import "@trevoreyre/autocomplete-vue/dist/style.css";
 import { BFormGroup } from "bootstrap-vue";
 import { findUnSensitiveCaseСoincidence } from "./ControlCustomCombobox.helper";
+import { applyMask as _mask } from "../../../../utils/utils";
 
 export function calcDisabledByRelation(fieldsRelations) {
   return !fieldsRelations
@@ -53,6 +55,9 @@ export default {
   components: {
     Autocomplete,
     BFormGroup,
+  },
+  directives: {
+    mask: _mask,
   },
   props: {
     data: {

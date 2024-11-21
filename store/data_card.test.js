@@ -191,4 +191,224 @@ describe("модуль data_card actions", () => {
       },
     ]);
   });
+
+  it("Если historyToggleComponents пустой, то добавляется новый объект", () => {
+    const state = {
+      historyToggleComponents: [],
+      formCollapse: [],
+      form: data,
+    };
+    mutations.toggleComponents(state, {
+      fieldId: 1,
+      name: "COLLAPSE_DATA",
+      value: true,
+      components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+    });
+    const getForm = getters.getForm(state);
+
+    expect(getForm.length).toBe(15);
+
+    expect(state.historyToggleComponents).toEqual([
+      {
+        components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+        hide: true,
+        name: "COLLAPSE_DATA",
+      },
+    ]);
+  });
+
+  it("Если historyToggleComponents не пустой и приходит объект отличающийся от имеющегося, то добавляется новый объект", () => {
+    const state = {
+      historyToggleComponents: [
+        {
+          components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+          hide: true,
+          name: "COLLAPSE_DATA",
+        },
+      ],
+      formCollapse: [],
+      form: data,
+    };
+    mutations.toggleComponents(state, {
+      fieldId: 1,
+      name: "COLLAPSE_DATA1",
+      value: true,
+      components: ["S_REASON"],
+    });
+    const getForm = getters.getForm(state);
+
+    expect(getForm.length).toBe(14);
+
+    expect(state.historyToggleComponents).toEqual([
+      {
+        components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+        hide: true,
+        name: "COLLAPSE_DATA",
+      },
+      {
+        components: ["S_REASON"],
+        hide: true,
+        name: "COLLAPSE_DATA1",
+      },
+    ]);
+  });
+
+  it("Если historyToggleComponents не пустой и добавляем  такой же объект, то он не добавляется ", () => {
+    const state = {
+      historyToggleComponents: [
+        {
+          components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+          hide: true,
+          name: "COLLAPSE_DATA",
+        },
+      ],
+      formCollapse: [],
+      form: data,
+    };
+    mutations.toggleComponents(state, {
+      fieldId: 1,
+      name: "COLLAPSE_DATA",
+      value: true,
+      components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+    });
+    const getForm = getters.getForm(state);
+
+    expect(getForm.length).toBe(15);
+    expect(state.historyToggleComponents).toEqual([
+      {
+        components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+        hide: true,
+        name: "COLLAPSE_DATA",
+      },
+    ]);
+  });
+
+  it("Если historyToggleComponents не пустой и добавляем  такой же объект, но value изменяется, то value обновится", () => {
+    const state = {
+      historyToggleComponents: [
+        {
+          components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+          hide: true,
+          name: "COLLAPSE_DATA",
+        },
+      ],
+      formCollapse: [],
+      form: data,
+    };
+    mutations.toggleComponents(state, {
+      fieldId: 1,
+      name: "COLLAPSE_DATA",
+      value: false,
+      components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+    });
+    const getForm = getters.getForm(state);
+
+    expect(getForm.length).toBe(17);
+    expect(state.historyToggleComponents).not.toEqual([
+      {
+        components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+        hide: true,
+        name: "COLLAPSE_DATA",
+      },
+    ]);
+    expect(state.historyToggleComponents).toEqual([
+      {
+        components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+        hide: false,
+        name: "COLLAPSE_DATA",
+      },
+    ]);
+  });
+
+  it("Если historyToggleComponents не пустой и добавляем  такой же объект, но value изменяется у второго объект, то value обновляется только у второго объект", () => {
+    const state = {
+      historyToggleComponents: [
+        {
+          components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+          hide: true,
+          name: "COLLAPSE_DATA",
+        },
+        {
+          components: ["S_REASON"],
+          hide: false,
+          name: "COLLAPSE_DATA1",
+        },
+      ],
+      formCollapse: [],
+      form: data,
+    };
+    mutations.toggleComponents(state, {
+      fieldId: 1,
+      name: "COLLAPSE_DATA1",
+      value: true,
+      components: ["S_REASON"],
+    });
+    const getForm = getters.getForm(state);
+
+    expect(getForm.length).toBe(14);
+
+    expect(state.historyToggleComponents).not.toEqual([
+      {
+        components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+        hide: true,
+        name: "COLLAPSE_DATA",
+      },
+      {
+        components: ["S_REASON"],
+        hide: false,
+        name: "COLLAPSE_DATA1",
+      },
+    ]);
+    expect(state.historyToggleComponents).toEqual([
+      {
+        components: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+        hide: true,
+        name: "COLLAPSE_DATA",
+      },
+      {
+        components: ["S_REASON"],
+        hide: true,
+        name: "COLLAPSE_DATA1",
+      },
+    ]);
+  });
+
+  it("Если formCollapse пустой, то возвращаются данные из form", () => {
+    const state = {
+      historyToggleComponents: [],
+      formCollapse: [],
+      form: data,
+    };
+
+    const getForm = getters.getForm(state);
+
+    expect(getForm.length).toBe(17);
+
+    expect(getForm).toEqual(data);
+  });
+
+  it("Если formCollapse не пустой, то возвращаются данные из formCollapse", () => {
+    const state = {
+      historyToggleComponents: [],
+      formCollapse: [
+        {
+          label: "Водительское удостоверение",
+          type: "string",
+          name: "SLICENSE_NUMBER",
+        },
+      ],
+      form: data,
+    };
+    const getForm = getters.getForm(state);
+
+    expect(getForm.length).toBe(1);
+
+    expect(getForm).toEqual([
+      {
+        label: "Водительское удостоверение",
+        type: "string",
+        name: "SLICENSE_NUMBER",
+      },
+    ]);
+  });
 });

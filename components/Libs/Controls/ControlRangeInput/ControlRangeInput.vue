@@ -290,6 +290,8 @@ export default {
         getRangeInputElement,
         getRealValue
       );
+      const debouncedEmit = this.debounce(this.emitFunc, 1500);
+      debouncedEmit(value);
     },
 
     changeValue(value) {

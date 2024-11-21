@@ -10,43 +10,19 @@ import {
   actions as actionsStore,
   mutations as mutationsStore,
 } from "../../../store/data_card";
+import {
+  dataProps,
+  getSMSCodeComponent,
+} from "./ControlEmailChange.helper.fixuter";
 
 describe("ControlemailChange", () => {
   let wrapper;
-  const dataProps = {
-    label: "E-mail",
-    type: "emailChange",
-    structType: "string",
-    id: "718",
-    fieldId: 35724,
-    cols: 12,
-    colSm: 12,
-    colMd: 12,
-    colLg: 12,
-    width: "100%",
-    name: "SEMAILNEW",
-    cssClass: "mt-3",
-    webId: "",
-    visible: true,
-    required: true,
-    page: 0,
-    readonly: false,
-    control: null,
-    state: true,
-    checked: true,
-    error: null,
-    isRelation: false,
-    fieldRelation: null,
-    isTab: true,
-    value: "hhh@mail.ru",
-  };
 
   let store;
   let state;
   let getters;
   let actions;
   let mutations;
-
   beforeEach(() => {
     state = stateStore;
     getters = gettersStore;
@@ -67,6 +43,11 @@ describe("ControlemailChange", () => {
         data: dataProps,
         // params: paramsProps,
       },
+      computed: {
+        getSMSCodeComponent() {
+          return getSMSCodeComponent;
+        },
+      },
       mocks: {
         $store: store,
       },
@@ -86,6 +67,11 @@ describe("ControlemailChange", () => {
         data: dataProps,
         // params: paramsProps,
       },
+      computed: {
+        getSMSCodeComponent() {
+          return getSMSCodeComponent;
+        },
+      },
       mocks: {
         $store: store,
       },
@@ -103,6 +89,11 @@ describe("ControlemailChange", () => {
       propsData: {
         data: dataProps,
         // params: paramsProps,
+      },
+      computed: {
+        getSMSCodeComponent() {
+          return getSMSCodeComponent;
+        },
       },
       mocks: {
         $store: store,
@@ -123,6 +114,11 @@ describe("ControlemailChange", () => {
         data: dataProps,
         // params: paramsProps,
       },
+      computed: {
+        getSMSCodeComponent() {
+          return getSMSCodeComponent;
+        },
+      },
       mocks: {
         $store: store,
       },
@@ -141,6 +137,11 @@ describe("ControlemailChange", () => {
       propsData: {
         data: dataProps,
         //  params: paramsProps,
+      },
+      computed: {
+        getSMSCodeComponent() {
+          return getSMSCodeComponent;
+        },
       },
       mocks: {
         $store: store,
@@ -168,6 +169,11 @@ describe("ControlemailChange", () => {
       propsData: {
         data: dataProps,
         //  params: paramsProps,
+      },
+      computed: {
+        getSMSCodeComponent() {
+          return getSMSCodeComponent;
+        },
       },
       mocks: {
         $store: store,
