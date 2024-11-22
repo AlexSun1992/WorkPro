@@ -58,6 +58,10 @@ export const state = () => ({
   historyToggleComponents: [],
 });
 export const getters = {
+  isHideComponents: (state) => (components) =>
+    state.form
+      .filter((el) => components.some((item) => el.name === item))
+      .every((el) => el.visible === false),
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
   getSaveSuccess: (state) => state.isSaveSuccess,
   getActionParamsTitle: (state) => state.actionParamsTitle,
@@ -66,8 +70,7 @@ export const getters = {
   getFiltersVisibleStatus: (state) => state.isFilterVisible,
   getSuggestions: (state) => state.options,
   getUpdateEvent: (state) => state.updateEvent,
-  getForm: (state) =>
-    state.formCollapse?.length || 0 > 0 ? state.formCollapse : state.form,
+  getForm: (state) => state.form,
   getFormParams: (state) => ({
     idModule: state.moduleId,
     idItem: state.menuId,
@@ -676,6 +679,12 @@ export const actions = {
   },
   async setActionFormField({ commit, getters, state, dispatch }, data) {
     const field = state.form.find((d) => d.fieldId === data.fieldId);
+    if (field.type === "Collapse") {
+      commit("toggleComponents", {
+        ...data,
+        visible: getters.isHideComponents(data.value),
+      });
+    }
     if (field.type === "OneToMany" || field.type === "searchSelect") {
       if (field.type === "OneToMany") {
         commit("setFormOneToManyField", data);
@@ -849,65 +858,12 @@ export const mutations = {
     });
   },
   toggleComponents(state, data) {
-    if (!state.historyToggleComponents.find((el) => el.name === data.name)) {
-      state.historyToggleComponents.push({
-        name: data.name,
-        hide: data.value,
-        components: data.components,
-      });
-    }
-    const sameElement = state.historyToggleComponents.find(
-      (el) => el.name === data.name
-    );
-
-    if (Object.keys(sameElement).length > 0) {
-      sameElement.hide = data.value;
-    }
-    if (
-      state.form &&
-      Object.keys(data).length > 0 &&
-      data.components.length > 0 &&
-      state.historyToggleComponents.length > 0
-    ) {
-      if (state.historyToggleComponents.every((el) => !el.hide)) {
-        state.formCollapse = [];
-        return;
+    state.form = state.form.map((el) => {
+      if (data.value.some((item) => el.name === item)) {
+        return { ...el, visible: data.visible };
       }
-      if (state.historyToggleComponents.every((el) => el.hide)) {
-        const allComponents = state.historyToggleComponents
-          .map((components) => components.components)
-          .flat();
-
-        state.formCollapse = state.form.filter(
-          (el) => !allComponents.some((item) => el.name === item)
-        );
-        return;
-      }
-
-      if (state.historyToggleComponents.some((el) => el.hide)) {
-        const allComponents = state.historyToggleComponents
-          .filter((el) => el.hide)
-          .map((components) => components.components)
-          .flat();
-
-        state.formCollapse = state.form.filter(
-          (el) => !allComponents.some((item) => el.name === item)
-        );
-      }
-
-      if (state.historyToggleComponents.some((el) => !el.hide)) {
-        const allComponents = state.historyToggleComponents
-          .filter((el) => !el.hide)
-          .map((components) => components.components)
-          .flat();
-
-        state.formCollapse = state.form.filter(
-          (el) => !allComponents.some((item) => el.name === item)
-        );
-      }
-    } else {
-      state.formCollapse = [];
-    }
+      return el;
+    });
   },
   setForm(state, data) {
     state.form = data;

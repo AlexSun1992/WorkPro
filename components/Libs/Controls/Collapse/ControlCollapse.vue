@@ -1,15 +1,15 @@
 <template>
   <div>
     <button
-      ref="conversations"
+      ref="buttonCollapse"
       :class="
-        hideComponents
+        isHideComponents
           ? 'btn-link btn-collapse'
           : 'btn-link btn-collapse collapsed'
       "
       @click="toggleComponent()"
     >
-      <span v-if="hideComponents">Развернуть</span>
+      <span v-if="isHideComponents">Развернуть</span>
       <span v-else>Свернуть</span>
     </button>
   </div>
@@ -26,24 +26,21 @@ export default {
     },
   },
   data() {
-    return {
-      hideComponents: false,
-    };
+    return {};
   },
   mounted() {
     this.updateData();
+    if (!this.isHideComponents) {
+      this.updateData();
+    }
+  },
+  computed: {
+    isHideComponents() {
+      return this.$store.getters["data_card/isHideComponents"](this.data.value);
+    },
   },
   methods: {
     updateData() {
-      this.hideComponents = !this.hideComponents;
-
-      this.$store.commit("data_card/toggleComponents", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.hideComponents,
-        components: this.data.value,
-      });
-
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
@@ -52,10 +49,12 @@ export default {
     },
     toggleComponent() {
       this.updateData();
-      if (this.hideComponents) {
+      if (this.isHideComponents) {
         this.$nextTick(() => {
-          const scrollHeight = this.$refs.conversations;
-          window.scrollTo(0, scrollHeight);
+          this.$refs.buttonCollapse.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
         });
       }
     },
