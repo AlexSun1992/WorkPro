@@ -36,7 +36,7 @@ describe('RegNumberAutoNumber', () => {
       wrapper.vm.setCarNumber(num);
       wrapper.vm.$nextTick();
 
-      expect(wrapper.vm.isFullNumberValid).toBe(true);
+      expect(wrapper.vm.isValid).toBe(true);
     }
   });
 
@@ -47,7 +47,7 @@ describe('RegNumberAutoNumber', () => {
       wrapper.vm.setCarNumber(num);
       wrapper.vm.$nextTick();
 
-      expect(wrapper.vm.isFullNumberValid).toBe(false);
+      expect(wrapper.vm.isValid).toBe(false);
     }
   });
 

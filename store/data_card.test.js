@@ -1,5 +1,5 @@
 import { mutations, getters } from "./data_card";
-import { data } from "./data_card.helpers.fixtures";
+import { data, form } from "./data_card.helpers.fixtures";
 
 describe("модуль data_card actions", () => {
   const actionId = 12345;
@@ -188,6 +188,139 @@ describe("модуль data_card actions", () => {
         type: "string",
         visible: true,
         width: "100%",
+      },
+    ]);
+  });
+
+  it("visible: true , если передается в аргументах visible: true", () => {
+    const copyForm = JSON.parse(JSON.stringify(form));
+    const state = {
+      form: copyForm,
+    };
+    mutations.toggleComponents(state, {
+      fieldId: 1,
+      name: "COLLAPSE_DATA",
+      value: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+      visible: true,
+    });
+    const getForm = getters.getForm(state);
+
+    expect(getForm).toEqual([
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "Emptyblock",
+        visible: true,
+      },
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "SDOCUMENT_UPLOADER",
+        visible: true,
+      },
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "UPLOADER",
+        visible: true,
+      },
+    ]);
+  });
+
+  it("visible: false только в тех компонентах, которые указаны в value", () => {
+    const copyForm = JSON.parse(JSON.stringify(form));
+    const state = {
+      form: copyForm,
+    };
+    mutations.toggleComponents(state, {
+      fieldId: 1,
+      name: "COLLAPSE_DATA",
+      value: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+      visible: false,
+    });
+    const getForm = getters.getForm(state);
+
+    expect(getForm).toEqual([
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "Emptyblock",
+        visible: false,
+      },
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "SDOCUMENT_UPLOADER",
+        visible: false,
+      },
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "UPLOADER",
+        visible: true,
+      },
+    ]);
+  });
+
+  it("Подключено 2 компоненто, сначала данные иеняются на false у компонентов которые переданы в value из 1компонента, а потом из другого", () => {
+    const copyForm = JSON.parse(JSON.stringify(form));
+    const state = {
+      form: copyForm,
+    };
+    mutations.toggleComponents(state, {
+      fieldId: 1,
+      name: "COLLAPSE_DATA",
+      value: ["Emptyblock", "SDOCUMENT_UPLOADER"],
+      visible: false,
+    });
+    let getForm = getters.getForm(state);
+
+    expect(getForm).toEqual([
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "Emptyblock",
+        visible: false,
+      },
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "SDOCUMENT_UPLOADER",
+        visible: false,
+      },
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "UPLOADER",
+        visible: true,
+      },
+    ]);
+    mutations.toggleComponents(state, {
+      fieldId: 2,
+      name: "COLLAPSE_DATA2",
+      value: ["UPLOADER"],
+      visible: false,
+    });
+    getForm = getters.getForm(state);
+
+    expect(getForm).toEqual([
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "Emptyblock",
+        visible: false,
+      },
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "SDOCUMENT_UPLOADER",
+        visible: false,
+      },
+      {
+        type: "label",
+        fieldId: 39204,
+        name: "UPLOADER",
+        visible: false,
       },
     ]);
   });

@@ -14,9 +14,8 @@
       <input
         :id="'id_check' + item.ID"
         type="checkbox"
-        v-model="fieldValue"
+        v-model="inputValue"
         ref="input"
-        @change="handleAdd"
       />
       <label :for="'id_check' + item.ID"></label>
     </div>
@@ -44,21 +43,28 @@ export default {
     };
   },
   mounted() {
-    if (this.value) {
+    if (this.valueProps) {
       this.fieldValue = true;
       this.$emit("update", {
         isActive: this.fieldValue,
-        id: this.item.value,
+        id: this.valueProps,
       });
     }
   },
-  computed: {},
-  methods: {
-    handleAdd() {
-      this.$emit("update", {
-        isActive: this.fieldValue,
-        id: this.item.ID,
-      });
+  computed: {
+    inputValue: {
+      get() {
+        return !!this.valueProps;
+      },
+      set(newValue) {
+        this.$emit("update", {
+          isActive: newValue,
+          id: this.item.ID,
+        });
+      },
+    },
+    valueProps() {
+      return this.value;
     },
   },
 };

@@ -1,43 +1,53 @@
 <template>
   <div class="row">
     <div class="col-12 col-lg-6 col-xl-4">
-      <b-input-group
-        class="gos-number"
-        :class="{
-              'is-invalid': fullCarNumber !== null && !isFullNumberValid,
-              'is-valid': isFullNumberValid,
-            }"
-      >
-        <RegNumberInput
-          v-model="carNumber"
-          @input="numberUpdateValue"
-          :formatter="numberFormatter"
-          :disabled="regNumberDisabled"
-          placeholder="А 000 АА"/>
+      <b-input-group class="gos-number"
+                     :class="{
+                              'is-invalid': isValid === false && regNumberDisabled === false,
+                              'is-valid': isValid,
+                              }">
+        <RegNumberInput v-model="numberValue"
+                        @input="numberUpdateValue"
+                        :formatter="numberFormatter"
+                        @keydown="numberKeydown($event)"
+                        @blur="numberBlur"
+                        :disabled="regNumberDisabled"
+                        placeholder="А 000 АА"
+                        autocomplete="off"
+                        ref="number"/>
 
-        <RegNumberInput
-          v-model="carRegion"
-          :formatter="codeFormatter"
-          :disabled="regNumberDisabled"
-          @input="regionUpdateValue"
-          ref="code"
-          placeholder="000"/>
+        <RegNumberInput v-model="codeValue"
+                        @input="codeUpdateValue"
+                        :formatter="codeFormatter"
+                        @blur="codeBlur"
+                        :disabled="regNumberDisabled"
+                        placeholder="000"
+                        autocomplete="off"
+                        ref="code"/>
       </b-input-group>
 
       <b-form-invalid-feedback
-        :state="fullCarNumber === null ? null : isFullNumberValid"
-      >
-        {{ "Пожалуйста, введите корректно госномер" }}
+        v-if="isValid !== null && regNumberDisabled === false"
+        :state="isValid"
+      >{{
+          "Пожалуйста, введите корректно госномер"
+        }}
       </b-form-invalid-feedback>
+
+      <!--      <b-form-invalid-feedback
+              v-else-if="
+                      (!this.isVisitedNumber || !this.isVisitedCode) && regNumberDisabled === false
+                    "
+              :state="data.state"
+            >{{
+                data.error ? data.error : "Пожалуйста, заполните это поле"
+              }}
+            </b-form-invalid-feedback
+            >-->
 
       <!-- Список Рег номеров -->
       <b-row class="w-100">
         <b-col>
-          <b-form-invalid-feedback
-            v-if="isNotFound !== null"
-            :state="!isNotFound">
-            Госномер не найден, укажите данные ТС самостоятельно
-          </b-form-invalid-feedback>
 
           <b-link
             v-for="(item, index) in customerCarNumbers"
@@ -66,7 +76,7 @@
 <script>
 import { BCol, BRow } from "bootstrap-vue";
 import RegNumberInput from "./RegNumberInput.vue";
-import helpers from "./helpers";
+import { isCodeValid, isNumberValid, isValid } from "../ControlRegNumber/helpers";
 
 export default {
   name: 'RegNumberAutoByNumber',
@@ -76,101 +86,169 @@ export default {
     value: {
       default: null
     },
-    numberDisabled: {
-      default: false
+    data: {
+      default: null
     }
   },
   data() {
     return {
-      carNumber: null,
-      carRegion: null,
-      isWithoutCarNumber: this.value === 'N',
-      isNotFound: false,
-      regNumberDisabled: this.value === 'N',
+      isWithoutCarNumber: false,
+      regNumberDisabled: false,
+      numberValue: "",
+      codeValue: "",
+      isVisitedNumber: false,
+      isVisitedCode: false,
+      state: null,
     }
   },
   computed: {
     customerCarNumbers() {
       return this.clientCars?.slice(0, 3);
     },
-    trimCarNumber() {
-      return this.carNumber?.replaceAll(" ", "") ?? this.carNumber;
+    stateNumber() {
+      const number = this.numberValue?.replace(/ /g, "");
+
+      return isNumberValid(number) && number.length === 6;
     },
-    fullCarNumber() {
-      return this.carNumber === null && this.carRegion === null
-        ? null
-        : `${ this.trimCarNumber ?? "" }${ this.carRegion ?? "" }`;
+    stateCode() {
+      return isCodeValid(this.codeValue?.replace(/ /g, ""));
     },
-    isFullNumberValid() {
-      return helpers.isVehicleNumber(this.trimCarNumber, this.carRegion);
+    numberAndCodeValue() {
+      return this.numberValue?.replace(/ /g, "") + this.codeValue;
+    },
+    isValid() {
+      if (this.isVisitedNumber === true && this.isVisitedCode === true) {
+        return this.stateNumber && this.stateCode;
+      }
+      return null;
+    },
+    isDisabled() {
+      return this.data.disabled || this.data.readonly;
     },
     valueComputed() {
-      if (this.value) {
-        return this.value === 'N' ? null : this.value;
-      }
-
-      return null;
+      return this.value === 'N' ? null : this.value;
     }
   },
   methods: {
-    numberFormatter(val) {
-      return helpers.numberFormatter(val);
-    },
-    codeFormatter(val) {
-      return helpers.codeFormatter(val);
-    },
-    regionUpdateValue() {
-    },
-    numberUpdateValue() {
-      this.isNextButtonDisabled = false;
-      this.isNotFound = false;
-
-      helpers.isNumberValid(this.trimCarNumber) && this.$refs.code.$el.focus();
-    },
     goWithoutCarNumber(val) {
       if (val) {
         this.isNotFound = false;
-        this.carNumber = null;
-        this.carRegion = null;
+        this.numberValue = null;
+        this.codeValue = null;
         this.selectedCar = null;
         this.regNumberDisabled = true;
+
+        this.updateCardValue('N');
 
         return;
       }
 
+      this.updateCardValue('');
       this.regNumberDisabled = false;
+      this.setInputsVisited(false);
     },
-    setCarNumber(item) {
+    setCarNumber(item, visited) {
       if (this.regNumberDisabled) {
         return;
       }
 
-      this.carNumber = item === null ? null : this.numberFormatter(item?.slice(0, 6));
-      this.carRegion = item === null ? null : this.codeFormatter(item?.slice(6));
+      this.numberValue = item === null ? null : this.numberFormatter(item?.slice(0, 6));
+      this.codeValue = item === null ? null : this.codeFormatter(item?.slice(6));
 
       this.setWithoutCarNumber(false);
+      this.setInputsVisited(typeof (visited) === 'boolean' ? visited : true);
+      this.updateCardValue();
     },
     setWithoutCarNumber(val) {
       this.isWithoutCarNumber = !!val;
     },
-  },
-  watch: {
-    fullCarNumber(data) {
-      let val = null;
 
-      if (this.isFullNumberValid) {
-        val = data;
+    numberUpdateValue() {
+      // emit на каждый ввод символа, нужен для регуляции скрытия сообщения о несуществующем госномере
+      this.updateCardValue('');
+
+      if (isNumberValid(this.numberValue?.replace(/ /g, ""))) {
+        this.$refs.code.$el.focus();
+
+        if (this.stateNumber && this.stateCode) {
+          this.isVisitedNumber = true;
+
+          this.updateCardValue();
+        }
       }
+    },
+    codeUpdateValue(value) {
+      // emit на каждый ввод символа , нужен для регуляции скрытия сообщения о несуществующем госномере
+      this.updateCardValue('');
 
-      if (!this.isFullNumberValid && !data) {
-        val = '';
+      if (isCodeValid(value)) {
+        if (this.stateNumber && this.stateCode) {
+          this.isVisitedCode = true;
+
+          this.updateCardValue();
+        }
       }
+    },
+    numberFormatter(value) {
+      const formatValue = value.toUpperCase();
+      const withOutSpacesValue = formatValue?.replace(/ /g, "");
+      if (isValid(withOutSpacesValue) === true) {
+        return formatValue?.replace(
+          /[АВЕКМНОРСТУХABEHKMNOPCTYX](?=\d)|\d(?=[АВЕКМНОРСТУХABEHKMNOPCTYX])/gi,
+          "$& "
+        );
+      }
+      if (isValid(withOutSpacesValue) === false) {
+        return formatValue.slice(0, -1);
+      }
+      return formatValue;
+    },
+    codeFormatter(value) {
+      if (/^\d+$/iu.test(value)) {
+        if (value.length > 3) {
+          return value.substring(0, 3);
+        }
+        return value;
+      }
+      return value.substring(0, value.length - 1);
+    },
+    numberKeydown(e) {
+      if (e.key !== "Backspace" && e.key !== "Delete") {
+        if (
+          /^[0-9АаВвЕеКкМмНнОоРрСсТтУуХхABEHKMNOPCTYXabehkmnopctyx]$/iu.test(
+            e.key
+          ) === false
+        ) {
+          e.preventDefault();
+        }
+      }
+    },
+    numberBlur() {
+      this.isVisitedNumber = true;
+      this.state = this.stateNumber && this.stateCode;
+    },
+    codeBlur() {
+      this.isVisitedCode = true;
+      this.state = this.stateNumber && this.stateCode;
+    },
+    updateCardValue(value) {
+      const val = value !== undefined ? value : this.numberAndCodeValue
 
-      this.$emit('update', val);
+      this.$emit("update", val);
+    },
+    setInputsVisited(val) {
+      this.isVisitedNumber = !!val;
+      this.state = this.stateNumber && this.stateCode;
+
+      this.isVisitedCode = !!val;
+      this.state = this.stateNumber && this.stateCode;
     }
   },
+  watch: {
+  },
   mounted() {
-    this.setCarNumber(this.valueComputed);
+    this.value === "N" && (this.setWithoutCarNumber(true), this.goWithoutCarNumber(true));
+    this.value !== "N" && this.setCarNumber(this.valueComputed, false);
   }
 }
 </script>

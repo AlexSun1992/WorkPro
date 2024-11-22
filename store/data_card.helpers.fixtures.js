@@ -436,3 +436,24 @@ export const testData = {
   Save_37420: "NULL",
   Cancel_37421: "NULL",
 };
+
+export const form = [
+  {
+    type: "label",
+    fieldId: 39204,
+    name: "Emptyblock",
+    visible: true,
+  },
+  {
+    type: "label",
+    fieldId: 39204,
+    name: "SDOCUMENT_UPLOADER",
+    visible: true,
+  },
+  {
+    type: "label",
+    fieldId: 39204,
+    name: "UPLOADER",
+    visible: true,
+  },
+];

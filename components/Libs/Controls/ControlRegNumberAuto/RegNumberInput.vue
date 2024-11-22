@@ -3,6 +3,8 @@
          :value="value"
          :disabled="disabledComputed"
          @input="onInput($event)"
+         @blur="$emit('blur')"
+         @keydown="$emit('keydown', $event)"
          autocomplete="off">
 </template>
 

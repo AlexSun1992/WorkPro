@@ -8,9 +8,11 @@ export const state = () => ({
   isErrorActionExecute: false,
   errorActionExecuteMessage: null,
   isError: false,
+  isWizardButtonsLoading: false,
 });
 
 export const getters = {
+  getIsWizardButtonsLoading: (state) => state.isWizardButtonsLoading,
   getWizard: (state) => state.data,
   getWizardPages: (state) => state.pages,
   getWizardCaption: (state) => state.caption,
@@ -18,10 +20,14 @@ export const getters = {
   getWizardErrorActionExecuteMessage: (state) =>
     getErrorMessage(state.errorActionExecuteMessage),
   getWizardIsErrorActionExecute: (state) => state.isErrorActionExecute,
+  getWizardData: (state) => state.data,
   getWizardIsError: (state) => state.isError,
 };
 
 export const actions = {
+  isWizardButtonsLoading({ commit, getters }, params) {
+    commit("setIsWizardButtonsLoading", params);
+  },
   async fetchWizard({ commit, getters }, params) {
     try {
       commit("setWizardIsError", false);
@@ -54,6 +60,9 @@ export const mutations = {
   },
   setWizardIsError(state, data) {
     state.isError = data;
+  },
+  setIsWizardButtonsLoading(state, data) {
+    state.isWizardButtonsLoading = data;
   },
   setWizardIsErrorActionExecute(state, data) {
     state.isErrorActionExecute = data;
