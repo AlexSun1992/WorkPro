@@ -147,6 +147,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "timestamp";
     } else if (webFields[i].IDCONTROL == 5) {
       obj.type = "progressbar";
+    } else if (webFields[i].IDCONTROL == 9) {
+      obj.type = "TimePicker";
     } else if (
       webFields[i].IDCONTROL == 15 ||
       webFields[i].IDCONTROL == 37 ||
