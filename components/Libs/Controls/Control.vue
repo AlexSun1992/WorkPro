@@ -36,6 +36,7 @@
   </b-col>
 </template>
 <script>
+import ControlTimePicker from "./ControlTimePicker/ControlTimePicker.vue";
 import ControlString from "./ControlString/ControlString.vue";
 import ControlMultiSelect from "./ControlMultiSelect/ControlMultiSelect.vue";
 import ControlText from "./ControlText";
@@ -97,6 +98,7 @@ import ControlInformer from "./ControlInformer/ControlInformer.vue";
 export default {
   name: "Control",
   components: {
+    ControlTimePicker,
     ControlWizardButton,
     ControlSeparator,
     ControlPencil,
