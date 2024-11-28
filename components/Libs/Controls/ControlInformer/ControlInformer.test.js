@@ -16,7 +16,7 @@ describe("ControlInformer", () => {
 
   it("Проверяем наличие класса (Warning)", () => {
     const copyDataSet = JSON.parse(JSON.stringify(propsData));
-    copyDataSet.name = "SINFORMER_WARNING";
+    copyDataSet.name = "SWARNING_INFO";
 
     createComponent(copyDataSet);
 
@@ -27,7 +27,7 @@ describe("ControlInformer", () => {
 
   it("Проверяем наличие класса (Succes)", () => {
     const copyDataSet = JSON.parse(JSON.stringify(propsData));
-    copyDataSet.name = "SINFORMER_SUCCESS";
+    copyDataSet.name = "SSUCCESS_INFO";
 
     createComponent(copyDataSet);
 
@@ -39,12 +39,24 @@ describe("ControlInformer", () => {
   it("Проверяем наличие класса (Error)", () => {
     const copyDataSet = JSON.parse(JSON.stringify(propsData));
 
-    copyDataSet.name = "SINFORMER_ERROR";
+    copyDataSet.name = "SERROR_INFO";
 
     createComponent(copyDataSet);
 
     const wrapperDIV = wrapper.find("div");
 
     expect(wrapperDIV.classes()).toContain("htmlStyleError");
+  });
+
+  it("Проверяем наличие класса (HELP)", () => {
+    const copyDataSet = JSON.parse(JSON.stringify(propsData));
+
+    copyDataSet.name = "SHELP_INFO";
+
+    createComponent(copyDataSet);
+
+    const wrapperDIV = wrapper.find("div");
+
+    expect(wrapperDIV.classes()).toContain("htmlStyleInformation");
   });
 });
