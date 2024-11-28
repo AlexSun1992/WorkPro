@@ -22,4 +22,5 @@ export const propsData = {
   isRelation: false,
   fieldRelation: null,
   isTab: true,
+  value: "<div>TEST INFORMER</div>",
 };

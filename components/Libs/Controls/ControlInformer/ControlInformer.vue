@@ -1,5 +1,9 @@
 <template>
-  <div v-html="getValue" :class="classObject"></div>
+  <div
+    v-if="this.data.value !== undefined"
+    v-html="getValue"
+    :class="classObject"
+  ></div>
 </template>
 
 <script>
@@ -22,13 +26,10 @@ export default {
   computed: {
     classObject() {
       return {
-        htmlStyleSuccess: this.data.name === "SINFORMER_SUCCESS",
-        htmlStyleWarning: this.data.name === "SINFORMER_WARNING",
-        htmlStyleError: this.data.name === "SINFORMER_ERROR",
-        htmlStyleInformation:
-          this.data.name !== "SINFORMER_SUCCESS" &&
-          this.data.name !== "SINFORMER_WARNING" &&
-          this.data.name !== "SINFORMER_ERROR",
+        htmlStyleSuccess: this.data.name === "SSUCCESS_INFO",
+        htmlStyleWarning: this.data.name === "SWARNING_INFO",
+        htmlStyleError: this.data.name === "SERROR_INFO",
+        htmlStyleInformation: this.data.name === "SHELP_INFO",
       };
     },
 
@@ -36,7 +37,6 @@ export default {
       if (this.data.value) {
         return this.data.value;
       }
-      return "<div>TEEST INFORMER</div><br><span>Test information message!<span>";
     },
   },
 };
