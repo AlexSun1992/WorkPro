@@ -60,12 +60,12 @@
       <button
         id="add"
         :disabled="isMaxValueReach"
-        @click="addInsuranceSum"
+        @click="addInsuranceSum(valueTypeNumber)"
       ></button>
       <button
         id="subtract"
         :disabled="isMinValueReach"
-        @click="degradeInsuranceSum"
+        @click="degradeInsuranceSum(valueTypeNumber)"
       ></button>
     </div>
   </div>
@@ -123,13 +123,25 @@ export default {
   created() {
     const getValue = this.data.value;
     if (getValue) {
-      this.valueTypeNumber = getValue;
+      if (getValue > this.getMaxValueFromPricesValue) {
+        this.valueTypeNumber = this.getMaxValueFromPricesValue;
+      }
+      if (getValue < this.getMinValueFromPricesValue) {
+        this.valueTypeNumber = this.getMaxValueFromPricesValue;
+      }
+      if (
+        getValue > this.getMinValueFromPricesValue &&
+        getValue < this.getMaxValueFromPricesValue
+      ) {
+        this.valueTypeNumber = getValue;
+      }
+
       this.valueTypeRange = this.valueTypeNumber;
     }
 
     if (!getValue) {
       const valueNvalue = this.data.options.find((item) =>
-        item.hasOwnProperty("NVALUE")
+        Object.hasOwn(item, "NVALUE")
       );
       this.valueTypeRange = valueNvalue.NVALUE;
       this.valueTypeNumber = this.valueTypeRange;
@@ -222,6 +234,7 @@ export default {
         value: this.valueTypeNumber,
       });
     },
+
     debounce(func, timeout) {
       return (...args) => {
         clearTimeout(this.timeoutId);
@@ -311,10 +324,12 @@ export default {
         this.getAllPricesValue,
         this.valueTypeNumber
       );
+
       const getStep = this.data.options.find(
         (elem) => elem.NVALUE === closestValueFromRealPrices
       );
-      if (getStep) {
+
+      if (Object.hasOwn(getStep, "NSTEP")) {
         const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
 
         const getVirtualPointsAmount = getMaxValueFromPrice / getStep.NSTEP;
@@ -333,16 +348,24 @@ export default {
         );
         const indexOfNextVirtualValue = indexOfCurrentVirtualValue + 1;
         this.valueTypeNumber = virtualPoits[indexOfNextVirtualValue];
+
+        const debouncedEmit = this.debounce(this.emitFunc, 1500);
+        debouncedEmit();
       }
-      if (!getStep) {
+
+      if (!Object.hasOwn(getStep, "NSTEP")) {
         this.valueTypeRange = Number(this.valueTypeRange);
         const closestValue = getClosestValue(
           this.getAllPricesValue,
           this.valueTypeNumber
         );
+
         const getIndex = this.getAllPricesValue.indexOf(closestValue);
         const getNexIndex = getIndex + 1;
         this.valueTypeNumber = this.getAllPricesValue[getNexIndex];
+
+        const debouncedEmit = this.debounce(this.emitFunc, 1500);
+        debouncedEmit();
       }
     },
 
@@ -354,28 +377,45 @@ export default {
       const getStep = this.data.options.find(
         (elem) => elem.NVALUE === closestValueFromRealPrices
       );
+
       if (getStep) {
-        const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
+        if (
+          this.getMinValueFromPricesValue > this.valueTypeNumber ||
+          this.getMaxValueFromPricesValue < this.valueTypeNumber
+        ) {
+          this.valueTypeRange = this.getAllPricesValue.indexOf(
+            closestValueFromRealPrices
+          );
 
-        const getVirtualPointsAmount = getMaxValueFromPrice / getStep.NSTEP;
-        const virtualPoits = createArrayOfVirtualPoints(
-          getVirtualPointsAmount,
-          getStep.NSTEP
-        );
+          this.valueTypeNumber = this.getAllPricesValue[this.valueTypeRange];
+        }
 
-        const closestValueFromVirtualPoints = getClosestValue(
-          virtualPoits,
-          this.valueTypeNumber
-        );
+        if (Object.hasOwn(getStep, "NSTEP")) {
+          const getMaxValueFromPrice = Math.max(...this.getAllPricesValue);
 
-        const indexOfCurrentVirtualValue = virtualPoits.indexOf(
-          closestValueFromVirtualPoints
-        );
-        const indexOfNextVirtualValue = indexOfCurrentVirtualValue - 1;
-        this.valueTypeNumber = virtualPoits[indexOfNextVirtualValue];
+          const getVirtualPointsAmount = getMaxValueFromPrice / getStep.NSTEP;
+          const virtualPoits = createArrayOfVirtualPoints(
+            getVirtualPointsAmount,
+            getStep.NSTEP
+          );
+
+          const closestValueFromVirtualPoints = getClosestValue(
+            virtualPoits,
+            this.valueTypeNumber
+          );
+
+          const indexOfCurrentVirtualValue = virtualPoits.indexOf(
+            closestValueFromVirtualPoints
+          );
+          const indexOfNextVirtualValue = indexOfCurrentVirtualValue - 1;
+          this.valueTypeNumber = virtualPoits[indexOfNextVirtualValue];
+
+          const debouncedEmit = this.debounce(this.emitFunc, 1500);
+          debouncedEmit();
+        }
       }
 
-      if (!getStep) {
+      if (!Object.hasOwn(getStep, "NSTEP")) {
         this.valueTypeRange = Number(this.valueTypeRange);
         if (this.valueTypeRange < this.getMinRangeValue) {
           this.valueTypeRange = this.getMinRangeValue;
@@ -388,6 +428,9 @@ export default {
         const getNexIndex = getIndex - 1;
         this.valueTypeNumber = this.getAllPricesValue[getNexIndex];
         this.valueTypeRange = this.valueTypeNumber;
+
+        const debouncedEmit = this.debounce(this.emitFunc, 1500);
+        debouncedEmit();
       }
     },
   },
