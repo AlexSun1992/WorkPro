@@ -6415,3 +6415,23 @@ h5.modal-title {
 .erase_otm-block .otm-block .inner-title-otm-block {
   display: none;
 }
+@media (min-width: 993px) {
+  .healt-box {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .healt-blk:nth-child(2n + 2) .healt-blk-btn {
+    left: auto;
+    right: 0;
+  }
+}
+
+.block-franchise {
+  padding: 16px 24px;
+  border-radius: 24px;
+  background: #fff1eb;
+}
+
+.block-franchise-summ {
+  font-weight: 700;
+  font-size: 2rem;
+}
