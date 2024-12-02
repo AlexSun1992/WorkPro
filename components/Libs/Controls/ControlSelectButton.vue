@@ -1,5 +1,8 @@
 <template>
   <b-form-group
+    v-if="
+      data.options && data.options !== undefined && data.options.length !== 0
+    "
     :label="data.label"
     :class="{ required: data.required }"
     :label-for="data.name"
@@ -71,6 +74,7 @@ button {
   display: inline-block;
   margin-right: 12px;
   margin-bottom: 12px;
+  margin-top: 30px;
 }
 button:hover {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);

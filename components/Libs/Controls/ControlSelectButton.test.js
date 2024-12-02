@@ -35,3 +35,25 @@ describe("ControlSelectButton test", () => {
     expect(firstButton.text()).toBe(dataProps.options.at(0).SNAME);
   });
 });
+
+describe("ControlSelectButton test without objects", () => {
+  const dataProps = {
+    label: "<b>Автомобили из ваших расчетов</b>",
+    options: [],
+    name: "IDOBJECT",
+    type: "SelectButton",
+    fieldId: 62054,
+  };
+  const wrapper = shallowMount(ControlSelectButton, {
+    components: { BFormGroup },
+    propsData: {
+      data: dataProps,
+    },
+  });
+
+  it("Проверяем отображение что компонент не отобразился", () => {
+    expect(wrapper.isVisible()).toBe(false);
+    expect(wrapper.find("label").exists()).toBe(false);
+    expect(wrapper.find("button").exists()).toBe(false);
+  });
+});
