@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import { TokenBoxTestData } from "./ControlTokenBoxTestData";
 
 export default {
   name: "ControlTokenBox",
@@ -77,7 +76,7 @@ export default {
     options() {
       return (
         this.data.options ??
-        [] /* TokenBoxTestData.propsDataCorrect.data.options */
+        []
       );
     },
     selectedItems() {
@@ -241,7 +240,7 @@ header {
   height: 1em;
   content: "";
   background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTQuMjA3IDEuNzA3bC02IDZhLjk5Ny45OTcgMCAwMS0xLjQxNCAwbC02LTZBLjk5OS45OTkgMCAxMTIuMjA3LjI5M0w3LjUgNS41ODYgMTIuNzkzLjI5M2EuOTk5Ljk5OSAwIDExMS40MTQgMS40MTR6IiBmaWxsPSIjNDNCMDJBIi8+PC9zdmc+)
-    100% no-repeat;
+  100% no-repeat;
   position: absolute;
   right: 13px;
   top: 20px;
