@@ -58,10 +58,11 @@ export const state = () => ({
   historyToggleComponents: [],
 });
 export const getters = {
-  isHideComponents: (state) => (components) =>
-    state.form
-      .filter((el) => components.some((item) => el.name === item))
-      .every((el) => el.visible === false),
+  // isHideComponents: (state) => (components) =>
+  //   state.form
+  //     .filter((el) => components.some((item) => el.name === item))
+  //     .every((el) => el.visible === false),
+
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
   getSaveSuccess: (state) => state.isSaveSuccess,
   getActionParamsTitle: (state) => state.actionParamsTitle,
@@ -682,7 +683,6 @@ export const actions = {
     if (field.type === "Collapse") {
       commit("toggleComponents", {
         ...data,
-        visible: getters.isHideComponents(data.value),
       });
     }
     if (field.type === "OneToMany" || field.type === "searchSelect") {
@@ -860,7 +860,7 @@ export const mutations = {
   toggleComponents(state, data) {
     state.form = state.form.map((el) => {
       if (data.value.some((item) => el.name === item)) {
-        return { ...el, visible: data.visible };
+        return { ...el, visible: !el.visible };
       }
       return el;
     });
