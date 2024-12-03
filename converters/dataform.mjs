@@ -169,7 +169,6 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].IDCONTROL === 12) {
         obj.type = "TokenBox";
         obj.options = [];
-        obj.value = [];
       }
       if (webFields[i].IDCONTROL === 58) {
         obj.type = "SelectButton";
