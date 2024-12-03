@@ -26,17 +26,26 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      hideComponents: true,
+    };
   },
-  mounted() {
-    this.updateData();
-    if (!this.isHideComponents) {
-      this.updateData();
-    }
-  },
+
   computed: {
+    hidedComponents() {
+      return this.$store.getters["data_card/getHidedComponents"](
+        this.data.value
+      );
+    },
+
     isHideComponents() {
-      return this.$store.getters["data_card/isHideComponents"](this.data.value);
+      return this.hideComponents;
+    },
+
+    visibleComponents() {
+      return this.$store.getters["data_card/getVisibleComponents"](
+        this.data.value
+      );
     },
   },
   methods: {
@@ -49,7 +58,9 @@ export default {
     },
     toggleComponent() {
       this.updateData();
-      if (this.isHideComponents) {
+      this.hideComponents = !this.hideComponents;
+
+      if (this.hideComponents === true) {
         this.$nextTick(() => {
           this.$refs.buttonCollapse.scrollIntoView({
             behavior: "smooth",

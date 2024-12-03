@@ -210,13 +210,13 @@ describe("модуль data_card actions", () => {
         type: "label",
         fieldId: 39204,
         name: "Emptyblock",
-        visible: true,
+        visible: false,
       },
       {
         type: "label",
         fieldId: 39204,
         name: "SDOCUMENT_UPLOADER",
-        visible: true,
+        visible: false,
       },
       {
         type: "label",
