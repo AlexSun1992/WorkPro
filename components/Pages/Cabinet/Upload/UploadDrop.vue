@@ -157,7 +157,7 @@ export default {
         this.isLoading === false &&
         this.isMaxFileCount === false
       ) {
-        let file = this.fileExtension;
+        let file = this.fileExtensions;
         if (
           Array.isArray(this.fileTypes) === true &&
           this.fileTypes.length > 0
