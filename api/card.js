@@ -308,6 +308,10 @@ router.post(
         ?.cookie
         ? req.headers.cookie
         : null;
+      mobile2ServiceInstance.defaults.headers.common["X-Application"] = req
+        .cookies.isWebview
+        ? "isWebview"
+        : "VueJS";
       mobile2ServiceInstance.defaults.headers.common["x-forwarded-for"] =
         ipAddress || null;
       mobile2ServiceInstance.defaults.headers.common["user-agent"] =

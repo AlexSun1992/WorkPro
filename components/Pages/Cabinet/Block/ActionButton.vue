@@ -524,6 +524,7 @@ export default {
         this.$attrs.relId ??
         this.$attrs["rel-id"] ??
         this.$route.params.idRel ??
+        this.$route.query?.rel ??
         this.$store.getters["data_card/getFormParams"]?.idRel
       );
     },
