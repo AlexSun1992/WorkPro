@@ -61,6 +61,10 @@ export const getters = {
     return formData;
   },
 
+  getAllFilesOnPage(state, getters) {
+    return getters.getData.map((el) => el.FILES).flat();
+  },
+
   getPoutValueRoute: (state) => state.poutValueRoute,
 
   metaData: (state) => state.metaData,
@@ -125,7 +129,7 @@ export const actions = {
         commit("setData", res.data.data);
       });
   },
-  addData({ commit, getters }, { data, name }) {
+  addData({ commit, getters }, { data, name, hash }) {
     const settingsByName = getters.getData.find((item) => item.NAME === name);
     const { MAX_FILE_SIZE, MIN_FILE_COUNT, MAX_FILE_COUNT, FILES } =
       settingsByName;
@@ -166,6 +170,7 @@ export const actions = {
             FILENAME: item.name,
             SIZE: item.size,
             NAME: name,
+            HASH: hash,
           });
           commit("setFileObject", item);
         }
