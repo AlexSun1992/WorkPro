@@ -381,7 +381,7 @@ converter.form = async (data, params, instance) => {
           instance.get(
             `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
               webFields[i].ID
-            }/${params.id ?? 0}/?ID=${params.id ?? 0}`
+            }/${params.id ?? 0}?ID=${params.id ?? 0}`
           )
         );
       }
