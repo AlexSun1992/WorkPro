@@ -78,7 +78,7 @@ export default {
       this.$emit("input", null);
     },
     toggleDropdown(val) {
-      this.isOpen = val !== undefined ? val : !this.isOpen;
+      this.isOpen = typeof (val) === "boolean" ? val : !this.isOpen;
     },
     showClearComputed() {
       return this.value && this.showClear;
