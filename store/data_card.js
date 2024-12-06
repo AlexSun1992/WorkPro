@@ -555,11 +555,8 @@ export const actions = {
     commit("setLoading", true);
     commit("setDisabled", true);
     const copyFieldData = state.form.map((item) => ({ ...item }));
-
     const getFieldData = converter.save(copyFieldData);
-
     const dataIsReadyToTransfer = convertUploaderFilesToFormData(getFieldData);
-
     const httpMethod = params.idCard === "0" ? "post" : "put";
     try {
       const resp = await this.$axios[httpMethod](

@@ -238,7 +238,7 @@ export default {
       return this.isErrorSize;
     },
     isMaxFileCount() {
-      return this.files.length === this.maxFileCount;
+      return this.files.length >= this.maxFileCount;
     },
     stringExtensions() {
       if (Array.isArray(this.fileTypes) === true && this.fileTypes.length > 0) {

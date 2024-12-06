@@ -40,7 +40,10 @@ export const getters = {
     data.forEach((item) => {
       item.FILES.forEach((file) => {
         const fileObject = fileObjects.find(
-          (obj) => obj.name === file.FILENAME && obj.size === file.SIZE
+          (obj) =>
+            obj.name === file.FILENAME &&
+            obj.size === file.SIZE &&
+            !file.IDDOCPHOTO
         );
         if (fileObject) {
           const uploadFile = new File([fileObject], fileObject.name, {

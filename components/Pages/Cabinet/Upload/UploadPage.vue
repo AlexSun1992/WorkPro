@@ -98,6 +98,7 @@ export default {
       const formData = new FormData();
       formData.append("file", file);
       let newFile = file;
+
       if (isCompressing === "N") {
         this.$store.dispatch("uploader/addData", {
           data: [newFile],
@@ -138,7 +139,10 @@ export default {
           }
         })
         .finally(() => {
-          this.$store.dispatch("uploader/addData", { data: [newFile], name });
+          this.$store.dispatch("uploader/addData", {
+            data: [newFile],
+            name,
+          });
           this.compressingFilesCount -= 1;
         });
     },

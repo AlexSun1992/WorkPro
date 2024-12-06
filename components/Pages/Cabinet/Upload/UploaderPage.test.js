@@ -167,6 +167,47 @@ describe("UploaderPage", () => {
       );
     });
 
+    it("Добавляем фото, отправить документ и апи вызывается один раз", async () => {
+      await store.dispatch("uploader/addData", {
+        data: [
+          {
+            lastModified: 1698406945085,
+            lastModifiedDate:
+              "Fri Oct 27 2023 14:42:25 GMT+0300 (Москва, стандартное время)",
+            name: "PASPORT2.pdf",
+            webkitRelativePath: "",
+          },
+        ],
+        name: "PASPORT",
+      });
+      const files = wrapper.findAll(".namefile");
+
+      expect(files).toHaveLength(4);
+      expect(wrapper.text()).toContain("PASPORT2");
+
+      const uploadButtons = wrapper.findComponent({ ref: "uploadButtons" });
+      const spy = jest.spyOn(uploadButtons.vm.$bvModal, "msgBoxConfirm");
+      spy.mockImplementationOnce(() => Promise.resolve(true));
+      const copyOfData = JSON.parse(JSON.stringify(returnFetchData));
+      jest.spyOn(axios, "put").mockResolvedValueOnce({
+        data: [
+          {
+            ID: 502,
+            MESSAGE: "Успешно сохранено",
+            REL: "E1A0C98A84E26B75958E890DE2706B26",
+            RESULT: { ID: 502, REL: "E1A0C98A84E26B75958E890DE2706B26" },
+            STATUS: 0,
+          },
+        ],
+      });
+      jest.spyOn(axios, "get").mockResolvedValueOnce({ data: copyOfData });
+
+      const btnSuccess = wrapper.find(".btn-success");
+      await btnSuccess.trigger("click");
+
+      expect(axios.put).toHaveBeenCalledTimes(1);
+    });
+
     it("Прикрепление и отправка файлов с одинаковым именем", async () => {
       const FILE1 = new File(["1"], "EPROTOKOL.jpeg");
       const FILE2 = new File(["11"], "EPROTOKOL.jpeg");
@@ -236,6 +277,30 @@ describe("UploaderPage", () => {
 
       expect(fileSizes3).toHaveLength(1);
       expect(fileSizes3[0]).toBe(4);
+
+      expect(axios.put).toHaveBeenCalledWith(
+        "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
+        expect.any(FormData),
+        expect.anything()
+      );
+
+      await store.dispatch("uploader/addData", {
+        data: [FILE4],
+        name: "PTS",
+      });
+      spy.mockImplementationOnce(() => Promise.resolve(true));
+
+      jest.spyOn(axios, "put").mockResolvedValueOnce({
+        data: [
+          {
+            ID: 502,
+            MESSAGE: "Успешно сохранено",
+            REL: "E1A0C98A84E26B75958E890DE2706B26",
+            RESULT: { ID: 502, REL: "E1A0C98A84E26B75958E890DE2706B26" },
+            STATUS: 0,
+          },
+        ],
+      });
 
       expect(axios.put).toHaveBeenCalledWith(
         "/am/main/v2/datacard2/55/1000/502?rel=E89B40CC5734A78ADFE22496B28B1CE9",
@@ -675,6 +740,7 @@ describe("UploaderPage", () => {
       jest.resetAllMocks();
       jest.resetModules();
     });
+
     it("Страница UploaderPage загрузилась с прикрепленными файлами и с двумя кнопками", async () => {
       const files = wrapper.findAll(".namefile");
 
