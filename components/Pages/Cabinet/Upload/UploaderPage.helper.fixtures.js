@@ -87,6 +87,7 @@ export const returnFetchData = {
           NAME: "PTS",
           REL: "B4DD7DFAE1FA7C90831E29CD6EB141AE",
           SIZE: 133296,
+          HASH: "12345",
         },
         {
           FILENAME: "file.pdf",
@@ -101,6 +102,7 @@ export const returnFetchData = {
           NAME: "PASPORT",
           REL: "6BC3FB5CFEAF68D937E01D6169812F9E",
           SIZE: 133296,
+          HASH: "12399",
         },
         {
           FILENAME: "EPROTOKOL.jpeg",
@@ -108,6 +110,7 @@ export const returnFetchData = {
           NAME: "EPROTOKOL",
           REL: "DA03480D25D2BAEFDFC849C6CE72E6E0",
           SIZE: 33287,
+          HASH: "4545",
         },
       ],
       visible: true,

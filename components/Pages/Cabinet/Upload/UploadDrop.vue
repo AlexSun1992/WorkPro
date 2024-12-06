@@ -42,6 +42,9 @@
         Превышен <b>максимальный</b><br />вес файла -
         {{ formatBytes(maxFileSize) }}
       </div>
+      <div v-if="error.type === 'SAME_FILE'" class="error-blk">
+        Файл <b>уже есть</b> на странице. <br />
+      </div>
     </div>
     <div
       v-for="file in files"

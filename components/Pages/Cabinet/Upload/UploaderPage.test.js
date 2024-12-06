@@ -10,12 +10,14 @@ import {
   params,
   returnFetchDataWithoutFiles,
 } from "./UploaderPage.helper.fixtures";
+import { getHash } from "./helpers";
 
 import * as menu from "../../../../store/menu";
 
 import * as uploader from "../../../../store/uploader";
 
 jest.mock("axios");
+jest.mock("./helpers");
 
 describe("UploaderPage", () => {
   describe("/cabinet", () => {
@@ -476,7 +478,7 @@ describe("UploaderPage", () => {
       );
     });
 
-    it("Если указан '[]'' тип файла, то можно загрузить любой тип файла", async () => {
+    it("Если указан '[]' тип файла, то можно загрузить любой тип файла", async () => {
       const copyOfData = JSON.parse(
         JSON.stringify(returnFetchDataWithoutFiles)
       );
@@ -774,6 +776,24 @@ describe("UploaderPage", () => {
         JSON.parse(store.getters["uploader/getFormData"].get("JSON")).FILES
           .length
       ).not.toBe(4);
+    });
+
+    it("Если файлы с одинвковым хэшом, то новый файл не отображается на странице", async () => {
+      expect(wrapper.find(".error-blk").exists()).toBe(false);
+
+      getHash.mockImplementation(() => "12345");
+      const files = wrapper.findAll(".namefile");
+
+      expect(files).toHaveLength(3);
+
+      expect(files.at(0).text()).toBe("PASPORT.pdf");
+      expect(files.at(1).text()).toBe("PTS.pdf");
+      expect(files.at(2).text()).toBe("EPROTOKOL.jpeg");
+
+      await wrapper.vm.compressFile("PASPORT", "1", "N");
+
+      expect(wrapper.find(".error-blk").exists()).toBe(true);
+      expect(files).toHaveLength(3);
     });
   });
 });

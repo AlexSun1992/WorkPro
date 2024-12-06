@@ -76,6 +76,7 @@
 <script>
 import UploaderButtons from "../../../Buttons/UploaderButtons.vue";
 import UploadDrop from "@/components/Pages/Cabinet/Upload/UploadDrop.vue";
+import { getHash } from "./helpers";
 
 export default {
   name: "UploaderPage",
@@ -93,7 +94,17 @@ export default {
     };
   },
   methods: {
-    compressFile(name, file, isCompressing) {
+    isFindHash(hash) {
+      return !!this.getAllFilesOnPage.find((el) => el.HASH === hash);
+    },
+    async compressFile(name, file, isCompressing) {
+      const hash = await getHash(file);
+      if (this.isFindHash(hash)) {
+        return this.$store.commit("uploader/setFileError", {
+          name,
+          type: "SAME_FILE",
+        });
+      }
       this.compressingFilesCount += 1;
       const formData = new FormData();
       formData.append("file", file);
@@ -103,6 +114,7 @@ export default {
         this.$store.dispatch("uploader/addData", {
           data: [newFile],
           name,
+          hash,
         });
         this.compressingFilesCount -= 1;
         return {};
@@ -141,7 +153,10 @@ export default {
         .finally(() => {
           this.$store.dispatch("uploader/addData", {
             data: [newFile],
+
             name,
+
+            hash,
           });
           this.compressingFilesCount -= 1;
         });
@@ -165,6 +180,9 @@ export default {
     },
   },
   computed: {
+    getAllFilesOnPage() {
+      return this.$store.getters["uploader/getAllFilesOnPage"];
+    },
     getData() {
       return this.$store.getters["uploader/getData"];
     },
