@@ -687,5 +687,27 @@ describe("UploaderPage", () => {
       expect(wrapper.text()).toContain("Отправить документы");
       expect(wrapper.text()).toContain("Назад");
     });
+
+    it("Получили 4 файла, а на странице отображается 3 файла и они же записываются в JSON", async () => {
+      const files = wrapper.findAll(".namefile");
+
+      expect(returnFetchData.data[2].value.length).toBe(4);
+
+      expect(files).toHaveLength(3);
+
+      expect(files.at(0).text()).toBe("PASPORT.pdf");
+      expect(files.at(1).text()).toBe("PTS.pdf");
+      expect(files.at(2).text()).toBe("EPROTOKOL.jpeg");
+
+      expect(
+        JSON.parse(store.getters["uploader/getFormData"].get("JSON")).FILES
+          .length
+      ).toBe(3);
+
+      expect(
+        JSON.parse(store.getters["uploader/getFormData"].get("JSON")).FILES
+          .length
+      ).not.toBe(4);
+    });
   });
 });

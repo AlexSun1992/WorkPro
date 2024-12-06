@@ -29,6 +29,10 @@ export const getters = {
     }));
   },
 
+  getAllFilesOnPage(state, getters) {
+    return getters.getData.map((el) => el.FILES).flat();
+  },
+
   getFormData: (state, getters) => {
     const formData = new FormData();
     const fileObjects = getters.getFileObjects;
@@ -47,7 +51,10 @@ export const getters = {
       });
     });
 
-    formData.append("JSON", JSON.stringify({ FILES: getters.getFiles }));
+    formData.append(
+      "JSON",
+      JSON.stringify({ FILES: getters.getAllFilesOnPage })
+    );
     return formData;
   },
 
