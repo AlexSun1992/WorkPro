@@ -47,6 +47,7 @@ export const returnFetchData = {
           NAME: "PASPORT",
           TITLE: "Паспорт",
         },
+
         {
           DESCRIPTION:
             "Договор купли-продажи ТС, СТС, ПТС или ЭПТС<br />Требуется отдельное фото каждой страницы/стороны документа",
@@ -86,6 +87,13 @@ export const returnFetchData = {
           NAME: "PTS",
           REL: "B4DD7DFAE1FA7C90831E29CD6EB141AE",
           SIZE: 133296,
+        },
+        {
+          FILENAME: "file.pdf",
+          IDDOCPHOTO: 12326422422,
+          NAME: "doesn't exist",
+          REL: "B4DD7DFAE1FA7C90831E29CD6EB141AE2",
+          SIZE: 1332962,
         },
         {
           FILENAME: "PASPORT.pdf",
