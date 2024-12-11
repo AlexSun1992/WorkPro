@@ -125,9 +125,19 @@ export default {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-column-gap: 20px;
 }
-
+.radio-btn .blk-radio-btn,
+.radio-btn > div {
+  margin-right: 20px;
+  display: inline-block;
+}
+.radio-btn > div:last-child {
+  margin-right: 0;
+}
 .radio-tabs > div {
   display: inline-block;
+}
+.radio-btn > div > label {
+  padding: 0 12px;
 }
 .radio-tabs > div > label {
   padding-left: 0px;
@@ -135,10 +145,47 @@ export default {
 .radio-tabs > div + div {
   margin-left: 20px;
 }
+.radio-btn .blk-radio-btn,
 .radio-tabs .blk-radio-btn {
   height: auto;
   min-height: 0;
 }
+.radio-btn input + label:after,
+.radio-btn input + label:before {
+  display: none;
+}
+.radio-btn input + label {
+  margin-bottom: 1rem;
+  background: #fff;
+  border-radius: 100px;
+  position: relative;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 30px;
+  color: #43b02a;
+  border: 0;
+  padding: 3px 16px 2px 16px;
+  text-decoration: none;
+  height: 38px;
+  box-sizing: border-box;
+  margin: 0;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+.radio-btn input:checked + label {
+  background: #009639;
+  color: #fff;
+  transition: 0.3s;
+}
+.conf-block .radio-btn input + label {
+  border: 1px solid #43b02a;
+}
+.radio-btn input + label:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
 .radio-tabs input + label:after,
 .radio-tabs input + label:before {
   width: 0;
