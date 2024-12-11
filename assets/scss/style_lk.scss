@@ -6415,7 +6415,7 @@ h5.modal-title {
 .erase_otm-block .otm-block .inner-title-otm-block {
   display: none;
 }
-@media (min-width: 993px) {
+@media (max-width: 992px) {
   .healt-box {
     grid-template-columns: repeat(2, 1fr);
   }
