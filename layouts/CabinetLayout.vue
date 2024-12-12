@@ -1,5 +1,5 @@
 <template>
-  <div class="app cabinet">
+  <div class="app cabinet" :class="isShow ? '' : 'mobile-mode'">
     <Header v-if="isShow" @mini-sidebar="changeMobileSidebar" />
     <div class="container">
       <b-breadcrumb v-if="isShow" :items="breadcrumbs"></b-breadcrumb>
@@ -124,6 +124,11 @@ export default {
   },
 };
 </script>
+<style scooped>
+.mobile-mode {
+  padding-top: 1rem;
+}
+</style>
 <style lang="scss">
 .cabinet {
   @import "~/assets/scss/style_lk.scss";
