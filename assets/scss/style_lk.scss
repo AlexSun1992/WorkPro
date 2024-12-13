@@ -6435,4 +6435,48 @@ h5.modal-title {
   font-weight: 700;
   font-size: 2rem;
 }
-/*  */
+
+.block-allert-title {
+  margin-left: -50px;
+}
+
+h5.listing:after {
+  content: attr(data-listnumber);
+  position: absolute;
+  top: -8px;
+  left: -50px;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  border: 3px solid var(--resopeco-green-100, #43b02a);
+  background: var(--RESO-white, #fff);
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.1);
+  line-height: 35px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+}
+button.btn-link.link-arrow {
+  padding: 0 20px 0 0;
+  position: relative;
+}
+button.btn-link.link-arrow:after {
+  content: "\2197";
+  position: absolute;
+  right: 4px;
+  bottom: -2px;
+}
+h5.listing {
+  position: relative;
+}
+@media (max-width: 992px) {
+  .block-allert-title {
+    margin-left: 0px;
+  }
+  h5.listing {
+    padding-left: 50px;
+  }
+  h5.listing:after {
+    left: 0px;
+  }
+}
