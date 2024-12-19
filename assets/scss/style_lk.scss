@@ -5546,14 +5546,16 @@ ymaps[class*="balloon__close-button"] {
 
 @media (max-width: 992px) {
   .ymaps-2-1-79-balloon {
-    margin-left: -33px;
+    margin-left: 0px;
     width: 400px;
+    border-radius: 24px 24px 0px 0px;
   }
 }
 @media (max-width: 768px) {
   .ymaps-2-1-79-balloon {
-    margin-left: -33px;
-    width: 285px;
+    margin-left: 0px;
+    width: 100%;
+    border-radius: 24px 24px 0px 0px;
   }
   .ymaps-2-1-79-balloon ymaps[style] {
     width: 100% !important;
@@ -6478,5 +6480,8 @@ h5.listing {
   }
   h5.listing:after {
     left: 0px;
+  }
+  .ymaps-2-1-79-balloon__close + .ymaps-2-1-79-balloon__content {
+    margin-right: 0px;
   }
 }
