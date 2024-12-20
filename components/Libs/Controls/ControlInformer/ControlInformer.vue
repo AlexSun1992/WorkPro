@@ -78,6 +78,7 @@ export default {
   background: #edf8ea url(/img/informer-sc.svg) left 16px top 16px no-repeat;
   border-radius: 30px;
   padding: 16px 32px 16px 64px;
+  box-shadow: none;
   color: #292929;
 }
 .conf-block .htmlStyleWarning {
@@ -85,17 +86,20 @@ export default {
   border-radius: 30px;
   padding: 16px 32px 16px 64px;
   color: #292929;
+  box-shadow: none;
 }
 .conf-block .htmlStyleError {
   background: #ffebeb url(/img/informer-er.svg) left 16px top 16px no-repeat;
   border-radius: 30px;
   padding: 16px 32px 16px 64px;
   color: #292929;
+  box-shadow: none;
 }
 .conf-block .htmlStyleInformation {
   background: #ecf3fa url(/img/informer-info.svg) left 16px top 16px no-repeat;
   border-radius: 30px;
   padding: 16px 32px 16px 64px;
   color: #292929;
+  box-shadow: none;
 }
 </style>
