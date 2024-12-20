@@ -2,7 +2,7 @@
   <yandex-map
     style="height: 500px; width: 100%"
     :zoom="10"
-    :coords="[55.76, 37.64]"
+    :coords="coordinates"
     :controls="[]"
     :use-object-manager="false"
     @map-was-initialized="handleMapInit"
@@ -38,18 +38,17 @@ export default {
     markerType: "Polygon",
     selectMarkerId: null,
     dataContent: null,
+    coordinates: [],
   }),
   props: {
     data: {
       type: Object,
       required: true,
-      default: () => {},
     },
 
     edit: {
       type: Boolean,
-      required: true,
-      default: () => false,
+      default: false,
     },
   },
   computed: {
@@ -75,6 +74,11 @@ export default {
     },
     markerFilters() {
       return this.$store.getters["data_card/getFilters"];
+    },
+    selectedCity() {
+      const allForms = this.$store.getters["data_card/getForm"];
+      const field = allForms?.find((item) => item.dic === "IDTOWN");
+      return field?.value?.value?.SNAME || "";
     },
     markerSelected() {
       return { id: this.isIdActiveMarker };
@@ -104,6 +108,20 @@ export default {
   methods: {
     async handleMapInit(e) {
       console.log("ymapsinit", e);
+      this.getCoordinates();
+    },
+    async getCoordinates() {
+      const basicCoords = [55.76, 37.64];
+      if (this.selectedCity) {
+        const geoObject = await ymaps.geocode(this.selectedCity);
+        const coordinates =
+          // eslint-disable-next-line no-underscore-dangle
+          geoObject.geoObjects?.get(0)?.geometry?._coordinates;
+        this.coordinates = coordinates?.length ? coordinates : basicCoords;
+      }
+      if (!this.coordinates.length) {
+        this.coordinates = basicCoords;
+      }
     },
     changeMarkers(e) {
       console.log("markers", e);
