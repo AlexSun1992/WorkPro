@@ -16,7 +16,7 @@
 import menuSettings from "../../../converters/menuSettings";
 
 export default {
-  name: "ControlWizardButtons",
+  name: "ControlWizardButton",
   props: {
     data: {
       type: Object,

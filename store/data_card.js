@@ -138,8 +138,7 @@ export const getters = {
     const fieldRelations = state.form.filter(
       (f) =>
         (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
-        f.visible === true &&
-        f.type !== "searchSelect"
+        f.visible === true
     );
     return fieldRelations.filter((f) =>
       getters
@@ -695,7 +694,10 @@ export const actions = {
       commit("setFormField", data);
     }
     let fields;
-    if (field.type === "searchSelect") {
+    if (
+      field.type === "searchSelect" &&
+      getters.getDataFieldsRelationsByFieldId(field.fieldId).length === 0
+    ) {
       fields = { fields: [field] };
     } else {
       fields = {
@@ -1178,10 +1180,12 @@ export const mutations = {
       f.fieldRelation ? f.fieldRelation.includes(field.name) : false
     );
     fieldRelations.forEach((fieldRelation) => {
-      fieldRelation.value = null;
-      fieldRelation.state = null;
-      fieldRelation.options = [];
-      fieldRelation.visible = false;
+      if (fieldRelation.type === "searchSelect") {
+        fieldRelation.value = null;
+        fieldRelation.state = null;
+        fieldRelation.options = [];
+        fieldRelation.visible = false;
+      }
     });
     if (value) {
       field.value = value;

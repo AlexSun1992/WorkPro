@@ -1,4 +1,4 @@
-import { mutations, getters } from "./data_card";
+import { mutations, getters, actions } from "./data_card";
 import { data, form } from "./data_card.helpers.fixtures";
 
 describe("модуль data_card actions", () => {
@@ -262,7 +262,7 @@ describe("модуль data_card actions", () => {
     ]);
   });
 
-  it("Подключено 2 компоненто, сначала данные иеняются на false у компонентов которые переданы в value из 1компонента, а потом из другого", () => {
+  it("Подключено 2 компонента, сначала данные иеняются на false у компонентов которые переданы в value из 1компонента, а потом из другого", () => {
     const copyForm = JSON.parse(JSON.stringify(form));
     const state = {
       form: copyForm,
@@ -323,5 +323,190 @@ describe("модуль data_card actions", () => {
         visible: false,
       },
     ]);
+  });
+
+  it("Если связь между двумя компонентами CustomCombobox, то управляем видимостью полей", () => {
+    const state = {
+      form: [
+        {
+          checked: null,
+          fieldId: 63961,
+          fieldRelation: "IDFRAN",
+          id: "1070",
+          isLoading: false,
+          isMask: false,
+          isRelation: true,
+          isTab: true,
+          name: "NCOST",
+          options: [
+            { ID: 155275, SNAME: 155275, text: "155275", value: 155275 },
+          ],
+          page: 2,
+          readonly: false,
+          required: false,
+          state: null,
+          type: "searchSelect",
+          visible: true,
+          webId: "",
+        },
+        {
+          fieldId: 64200,
+          fieldRelation: null,
+          id: "1070",
+          label: "Размер франшизы",
+          name: "IDFRAN",
+          placeholder: "руб.",
+          readonly: false,
+          required: false,
+          state: null,
+          structType: "double",
+          type: "searchSelect",
+          value: 6,
+          visible: true,
+          options: [
+            { ID: 1, NFRANCHISE: 0, text: "0", value: 1 },
+            { ID: 2, NFRANCHISE: 3000, text: "3000", value: 2 },
+          ],
+        },
+      ],
+    };
+
+    expect(state.form[0].visible).toBe(true);
+    expect(state.form[0].visible).not.toBe(false);
+
+    mutations.setValueSearchSelect(state, {
+      fieldId: 64200,
+      fieldRelation: null,
+      id: "1070",
+      label: "Размер франшизы",
+      name: "IDFRAN",
+      placeholder: "руб.",
+      readonly: false,
+      required: false,
+      state: null,
+      structType: "double",
+      type: "searchSelect",
+      value: 6,
+      visible: true,
+      options: [
+        { ID: 1, NFRANCHISE: 0, text: "0", value: 1 },
+        { ID: 2, NFRANCHISE: 3000, text: "3000", value: 2 },
+      ],
+    });
+
+    expect(state.form[0].visible).toBe(false);
+    expect(state.form[0].visible).not.toBe(true);
+  });
+
+  it("Если связь между двумя компонентами CustomCombobox и каким-то другим компонентом, то не управляем видимостью компонентов", () => {
+    const state = {
+      form: [
+        {
+          checked: null,
+          fieldId: 63961,
+          fieldRelation: "IDFRAN",
+          id: "1070",
+          isLoading: false,
+          isMask: false,
+          isRelation: true,
+          isTab: true,
+          name: "NCOST",
+          options: [
+            { ID: 155275, SNAME: 155275, text: "155275", value: 155275 },
+          ],
+          page: 2,
+          readonly: false,
+          required: false,
+          state: null,
+          type: "DynamicDepend",
+          visible: true,
+          webId: "",
+        },
+        {
+          fieldId: 64200,
+          fieldRelation: null,
+          id: "1070",
+          label: "Размер франшизы",
+          name: "IDFRAN",
+          placeholder: "руб.",
+          readonly: false,
+          required: false,
+          state: null,
+          structType: "double",
+          type: "searchSelect",
+          value: 6,
+          visible: true,
+          options: [
+            { ID: 1, NFRANCHISE: 0, text: "0", value: 1 },
+            { ID: 2, NFRANCHISE: 3000, text: "3000", value: 2 },
+          ],
+        },
+      ],
+    };
+
+    expect(state.form[0].visible).toBe(true);
+    expect(state.form[0].visible).not.toBe(false);
+
+    mutations.setValueSearchSelect(state, {
+      fieldId: 64200,
+      fieldRelation: null,
+      id: "1070",
+      label: "Размер франшизы",
+      name: "IDFRAN",
+      placeholder: "руб.",
+      readonly: false,
+      required: false,
+      state: null,
+      structType: "double",
+      type: "searchSelect",
+      value: 6,
+      visible: true,
+      options: [
+        { ID: 1, NFRANCHISE: 0, text: "0", value: 1 },
+        { ID: 2, NFRANCHISE: 3000, text: "3000", value: 2 },
+      ],
+    });
+
+    expect(state.form[0].visible).toBe(true);
+    expect(state.form[0].visible).not.toBe(false);
+  });
+
+  it("Отправляются нужные данные", async () => {
+    const state = {
+      form: [
+        {
+          fieldId: 63961,
+          type: "DynamicDepend",
+          value: null,
+        },
+        {
+          fieldId: 64200,
+          type: "searchSelect",
+          value: 6,
+        },
+      ],
+    };
+
+    const getters = {
+      getDataFieldsRelationsByFieldId: jest
+        .fn()
+        .mockReturnValue([{ fieldId: 63961, type: "DynamicDepend" }]),
+    };
+
+    const commit = jest.fn();
+    const dispatch = jest.fn();
+
+    const context = { state, getters, commit, dispatch };
+
+    const data = { fieldId: 64200, value: 2 };
+
+    await actions.setActionFormField(context, data);
+
+    expect(getters.getDataFieldsRelationsByFieldId).toHaveBeenCalledWith(64200);
+    expect(getters.getDataFieldsRelationsByFieldId.length).toBe(0);
+    expect(dispatch).toHaveBeenCalledWith("setOptionsField", {
+      data,
+      fields: { fields: [{ fieldId: 63961, type: "DynamicDepend" }] },
+    });
   });
 });
