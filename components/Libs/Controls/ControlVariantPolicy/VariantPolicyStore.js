@@ -3,7 +3,8 @@ export function VariantPolicyStore() {
     state: {
       rowsSize: [],
       ref: null,
-      selectedVariant: { IDVARIANT: null, IDFRNANCHISE: null }
+      selectedVariant: { IDVARIANT: null, IDFRNANCHISE: null },
+      featuresList: []
     }
   };
 
@@ -22,6 +23,10 @@ export function VariantPolicyStore() {
   result.setSelectedVariant = (val) => {
     typeof(val) === "string" && Object.assign(result.state.selectedVariant, JSON.parse(val));
     typeof(val) === "object" && Object.assign(result.state.selectedVariant, val);
+  }
+
+  result.setFeaturesList = (val) => {
+    result.state.featuresList = val;
   }
 
   return result;

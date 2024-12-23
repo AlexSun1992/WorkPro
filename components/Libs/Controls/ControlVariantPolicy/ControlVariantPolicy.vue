@@ -115,8 +115,13 @@ export default {
     settings() {
       return defaultSettings;
     },
-    featuresList() {
-      return featuresList;
+    featuresList: {
+      get() {
+        return this.customStore.state.featuresList;
+      },
+      set(val) {
+        this.customStore.setFeaturesList(val);
+      }
     },
     variants() {
       return this.data?.options.filter((item) => item.ID !== 1);
@@ -167,6 +172,7 @@ export default {
     this.selectedVariant = this.dataValue;
   },
   mounted() {
+    this.customStore.setFeaturesList(featuresList);
     this.scrollToActiveVariant();
   },
   watch: {
