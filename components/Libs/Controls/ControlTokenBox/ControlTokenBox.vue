@@ -11,6 +11,7 @@
         @click="toggleDropdown"
       >
         <SearchBox v-if="isSearchVisibleComputed"
+                   @input="updateSearchValue"
                    v-model="searchValue"/>
 
         <div v-if="!selectedItems.length" class="placeholder">
@@ -42,7 +43,7 @@
     </div>
 
     <ul class="control-dropdown-menu" :class="{ visible: isOpen }">
-      <template v-for="item in options">
+      <template v-for="item in filteredOptions">
         <li
           v-if="item.invisible !== true"
           :key="item[valueKey]"
@@ -92,6 +93,9 @@ export default {
         this.data.options ??
         []
       );
+    },
+    filteredOptions() {
+      return this.options.filter(item => item[this.textKey].includes(this.searchValue));
     },
     selectedItems() {
       return this.value.map((item) =>
@@ -156,6 +160,9 @@ export default {
 
       return currentValue.includes(idValue);
     },
+    updateSearchValue(val) {
+      this.toggleDropdown(true);
+    }
   },
   mounted() {
     document.addEventListener("mouseup", (e) => {
