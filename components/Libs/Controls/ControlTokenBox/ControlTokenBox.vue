@@ -19,6 +19,9 @@
           class="selected-value"
           :key="item[valueKey]"
         >
+
+          <SearchBox v-model="searchValue"/>
+
           <slot name="selectedItem" :item="item">
             <span> {{ item ? item[textKey] : "" }}&nbsp; </span>
           </slot>
@@ -59,8 +62,11 @@
 
 <script>
 
+import SearchBox from "./SearchBox.vue";
+
 export default {
   name: "ControlTokenBox",
+  components: { SearchBox },
   props: {
     data: {
       default: { value: [] },
@@ -70,6 +76,7 @@ export default {
   data() {
     return {
       isOpen: false,
+      searchValue: "",
     };
   },
   computed: {
