@@ -2,29 +2,32 @@
   <div class="dropdown-wrapper" ref="menu">
     <div class="header">
       <slot name="header">
-        <span @click="toggleDropdown">{{
-            selectedItem ? selectedItem[textKey] : placeholderComputed
-          }}
-        <div v-if="showClear"
-              class="clear-btn"
-              @click="clearSelectedItem">×</div>
+        <span @click="toggleDropdown"
+          >{{ selectedItem ? selectedItem[textKey] : placeholderComputed }}
+          <div v-if="showClear" class="clear-btn" @click="clearSelectedItem">
+            ×
+          </div>
         </span>
-
       </slot>
     </div>
 
-    <ul class="control-dropdown-menu" :class="{ visible: isOpen }">
+    <ul
+      class="control-dropdown-menu"
+      :class="{ visible: isOpen }"
+      :data-visible-items="visibleOptions"
+    >
       <template v-for="item in optionsComputed">
-        <li v-if="item.invisible !== true"
-            :key="item[valueKey]"
-            @click="selectItem(item)">
+        <li
+          v-if="item.invisible !== true"
+          :key="item[valueKey]"
+          @click="selectItem(item)"
+        >
           <slot name="item">
             {{ item[textKey] || "" }}
           </slot>
         </li>
       </template>
     </ul>
-
   </div>
 </template>
 
@@ -50,7 +53,12 @@ export default {
     showClear: {
       default: false,
     },
-    value: null,
+    value: {
+      default: null,
+    },
+    visibleOptions: {
+      default: null,
+    },
   },
   data() {
     return {
@@ -62,11 +70,13 @@ export default {
       return this.options;
     },
     selectedItem() {
-      return this.optionsComputed.find(item => item[this.valueKey] === this.value);
+      return this.optionsComputed.find(
+        (item) => item[this.valueKey] === this.value
+      );
     },
     placeholderComputed() {
-      return this.placeholder
-    }
+      return this.placeholder;
+    },
   },
   methods: {
     selectItem(val) {
@@ -78,7 +88,7 @@ export default {
       this.$emit("input", null);
     },
     toggleDropdown(val) {
-      this.isOpen = typeof (val) === "boolean" ? val : !this.isOpen;
+      this.isOpen = typeof val === "boolean" ? val : !this.isOpen;
     },
     showClearComputed() {
       return this.value && this.showClear;
@@ -125,7 +135,8 @@ export default {
 .header span {
   cursor: pointer;
   padding-right: 30px;
-  background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE1IDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xNC4yMDY5IDEuNzA3MzFMOC4yMDY5NSA3LjcwNzMxQzguMDExOTUgNy45MDIzMSA3Ljc1NTk4IDguMDAwMjggNy40OTk5OCA4LjAwMDI4QzcuMjQzOTggOC4wMDAyOCA2Ljk4ODAxIDcuOTAyMzEgNi43OTMwMSA3LjcwNzMxTDAuNzkzMDA2IDEuNzA3MzFDMC40MDIwMDYgMS4zMTYzMSAwLjQwMjAwNiAwLjY4NDI1IDAuNzkzMDA2IDAuMjkzMjVDMS4xODQwMSAtMC4wOTc3NDk5IDEuODE1OTUgLTAuMDk3NzQ5OSAyLjIwNjk1IDAuMjkzMjVMNy40OTk5OCA1LjU4NjM0TDEyLjc5MyAwLjI5MzI1QzEzLjE4NCAtMC4wOTc3NSAxMy44MTU5IC0wLjA5Nzc1IDE0LjIwNjkgMC4yOTMyNUMxNC41OTc5IDAuNjg0MjUgMTQuNTk3OSAxLjMxNjMxIDE0LjIwNjkgMS43MDczMVoiIGZpbGw9IiM0M0IwMkEiLz4KPC9zdmc+Cg==") right center no-repeat;
+  background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE1IDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xNC4yMDY5IDEuNzA3MzFMOC4yMDY5NSA3LjcwNzMxQzguMDExOTUgNy45MDIzMSA3Ljc1NTk4IDguMDAwMjggNy40OTk5OCA4LjAwMDI4QzcuMjQzOTggOC4wMDAyOCA2Ljk4ODAxIDcuOTAyMzEgNi43OTMwMSA3LjcwNzMxTDAuNzkzMDA2IDEuNzA3MzFDMC40MDIwMDYgMS4zMTYzMSAwLjQwMjAwNiAwLjY4NDI1IDAuNzkzMDA2IDAuMjkzMjVDMS4xODQwMSAtMC4wOTc3NDk5IDEuODE1OTUgLTAuMDk3NzQ5OSAyLjIwNjk1IDAuMjkzMjVMNy40OTk5OCA1LjU4NjM0TDEyLjc5MyAwLjI5MzI1QzEzLjE4NCAtMC4wOTc3NSAxMy44MTU5IC0wLjA5Nzc1IDE0LjIwNjkgMC4yOTMyNUMxNC41OTc5IDAuNjg0MjUgMTQuNTk3OSAxLjMxNjMxIDE0LjIwNjkgMS43MDczMVoiIGZpbGw9IiM0M0IwMkEiLz4KPC9zdmc+Cg==")
+    right center no-repeat;
 }
 
 .control-dropdown-menu {
@@ -169,5 +180,35 @@ export default {
 
 .clear-btn:hover {
   font-weight: bold;
+}
+[data-visible-items] {
+  max-height: 300px;
+}
+[data-visible-items="3"] {
+  max-height: 100px;
+}
+[data-visible-items="4"] {
+  max-height: 150px;
+}
+[data-visible-items="5"] {
+  max-height: 200px;
+}
+[data-visible-items="6"] {
+  max-height: 250px;
+}
+
+[data-visible-items]::-webkit-scrollbar-thumb {
+  background: #009639;
+  width: 2px;
+  border: 2px solid #ffff;
+  border-radius: 5px;
+}
+
+[data-visible-items]::-webkit-scrollbar {
+  width: 2px;
+}
+[data-visible-items]::-webkit-scrollbar:vertical {
+  border: 3px solid transparent;
+  width: 6px;
 }
 </style>
