@@ -10,17 +10,19 @@
         :class="{ open: isOpen }"
         @click="toggleDropdown"
       >
+        <SearchBox v-if="isSearchVisibleComputed"
+                   v-model="searchValue"/>
+
         <div v-if="!selectedItems.length" class="placeholder">
           {{ placeholder }}
         </div>
+
         <div
           v-else
           v-for="item in selectedItems"
           class="selected-value"
           :key="item[valueKey]"
         >
-
-          <SearchBox v-model="searchValue"/>
 
           <slot name="selectedItem" :item="item">
             <span> {{ item ? item[textKey] : "" }}&nbsp; </span>
@@ -36,7 +38,7 @@
         </div>
       </div>
 
-      <span class="toggle-btn" @click="toggleDropdown" />
+      <span class="toggle-btn" @click="toggleDropdown"/>
     </div>
 
     <ul class="control-dropdown-menu" :class="{ visible: isOpen }">
@@ -69,9 +71,14 @@ export default {
   components: { SearchBox },
   props: {
     data: {
-      default: { value: [] },
+      default: {
+        value: [],
+      },
       required: true,
     },
+    isSearchVisible: {
+      default: true
+    }
   },
   data() {
     return {
@@ -111,10 +118,13 @@ export default {
     value() {
       return this.data?.value ?? [];
     },
+    isSearchVisibleComputed() {
+      return this.isSearchVisible;
+    }
   },
   methods: {
     selectItem(item) {
-      const currentValue = [...this.value];
+      const currentValue = [ ...this.value ];
       const idValue = item[this.valueKey];
 
       if (this.isSelectedItem(item)) {
@@ -141,7 +151,7 @@ export default {
       this.isOpen = typeof val === "boolean" ? val : !this.isOpen;
     },
     isSelectedItem(item) {
-      const currentValue = [...this.value];
+      const currentValue = [ ...this.value ];
       const idValue = item[this.valueKey];
 
       return currentValue.includes(idValue);
@@ -246,8 +256,7 @@ header {
   width: 1em;
   height: 1em;
   content: "";
-  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTQuMjA3IDEuNzA3bC02IDZhLjk5Ny45OTcgMCAwMS0xLjQxNCAwbC02LTZBLjk5OS45OTkgMCAxMTIuMjA3LjI5M0w3LjUgNS41ODYgMTIuNzkzLjI5M2EuOTk5Ljk5OSAwIDExMS40MTQgMS40MTR6IiBmaWxsPSIjNDNCMDJBIi8+PC9zdmc+)
-  100% no-repeat;
+  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTQuMjA3IDEuNzA3bC02IDZhLjk5Ny45OTcgMCAwMS0xLjQxNCAwbC02LTZBLjk5OS45OTkgMCAxMTIuMjA3LjI5M0w3LjUgNS41ODYgMTIuNzkzLjI5M2EuOTk5Ljk5OSAwIDExMS40MTQgMS40MTR6IiBmaWxsPSIjNDNCMDJBIi8+PC9zdmc+) 100% no-repeat;
   position: absolute;
   right: 13px;
   top: 20px;

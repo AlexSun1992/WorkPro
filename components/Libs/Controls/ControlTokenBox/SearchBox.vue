@@ -1,7 +1,7 @@
 <template>
   <div>
     <input type="text"
-           @input="$emit('input', $event)">
+           @input="updateValue">
   </div>
 </template>
 
@@ -11,6 +11,11 @@ export default {
   props: {
     value: {
       default: ""
+    }
+  },
+  methods: {
+    updateValue(ev) {
+      this.$emit('input', ev.target.value);
     }
   }
 }
