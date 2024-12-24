@@ -42,7 +42,10 @@ export default {
 
 <style lang="scss" scoped>
 .search-input {
-
+  padding: 1em 0 1em 1em;
+  height: 2em;
+  margin: 0.5em 0;
+  border-radius: 0.5em;
 }
 
 .button-wrapper {
