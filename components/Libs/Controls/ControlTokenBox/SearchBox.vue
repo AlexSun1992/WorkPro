@@ -64,4 +64,8 @@ button {
   background-color: inherit;
   color: #000;
 }
+
+button:hover {
+  font-weight: bold;
+}
 </style>
