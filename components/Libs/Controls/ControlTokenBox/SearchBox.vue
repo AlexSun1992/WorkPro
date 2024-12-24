@@ -5,6 +5,7 @@
            :value="value"
            ref="searchInput"
            @keyup.stop.esc="clearInput"
+           @keyup.stop.enter="searchComplete"
            @click="$emit('click')"
            @input="updateValue($event.target.value)">
 
@@ -35,6 +36,9 @@ export default {
 
       this.$refs.searchInput.focus();
       this.$emit('clear');
+    },
+    searchComplete() {
+      this.$emit('searchComplete')
     }
   },
   mounted() {

@@ -11,10 +11,11 @@
         @click="toggleDropdown"
       >
         <SearchBox v-if="showSearchBox && isOpen"
+                   v-model="searchValue"
                    @input="updateSearchValue"
                    @click="isSearchActive = true"
                    @clear="isSearchActive = true"
-                   v-model="searchValue"/>
+                   @searchComplete="searchComplete"/>
 
         <div v-if="!selectedItems.length" class="placeholder">
           {{ placeholder }}
@@ -198,6 +199,11 @@ export default {
     },
     updateSearchValue(val) {
       this.toggleDropdown(true);
+    },
+    searchComplete() {
+      const options = this.availableOptions;
+
+      options.length === 1 && this.selectItem(options[0]);
     },
     outOfClick(e) {
       const container = this.$refs.menu;
