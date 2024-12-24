@@ -10,7 +10,7 @@
         :class="{ open: isOpen }"
         @click="toggleDropdown"
       >
-        <SearchBox v-if="isSearchVisibleComputed"
+        <SearchBox v-if="searchableComputed"
                    @input="updateSearchValue"
                    v-model="searchValue"/>
 
@@ -43,7 +43,7 @@
     </div>
 
     <ul class="control-dropdown-menu" :class="{ visible: isOpen }">
-      <template v-for="item in filteredOptions">
+      <template v-for="item in availableOptions">
         <li
           v-if="item.invisible !== true"
           :key="item[valueKey]"
@@ -55,7 +55,7 @@
           @click="!item.disabled && selectItem(item)"
         >
           <slot name="optionItem" :item="item">
-            {{ item[textKey] || "" }}
+            <span v-html="item[textKey]"/>
           </slot>
         </li>
       </template>
@@ -77,7 +77,7 @@ export default {
       },
       required: true,
     },
-    isSearchVisible: {
+    searchable: {
       default: true
     }
   },
@@ -96,6 +96,25 @@ export default {
     },
     filteredOptions() {
       return this.options.filter(item => item[this.textKey].includes(this.searchValue));
+    },
+    optionsWithHelp() {
+      const options = this.filteredOptions;
+      const {searchValue} = this;
+
+      if (!searchValue) {
+        return  options;
+      }
+
+      return options.map(item => {
+        const newItem = { ...item };
+
+        newItem[this.textKey] = newItem[this.textKey].replaceAll(searchValue, `<b>${ searchValue }</b>`);
+
+        return newItem;
+      });
+    },
+    availableOptions() {
+      return this.searchable ? this.optionsWithHelp : this.filteredOptions;
     },
     selectedItems() {
       return this.value.map((item) =>
@@ -122,8 +141,8 @@ export default {
     value() {
       return this.data?.value ?? [];
     },
-    isSearchVisibleComputed() {
-      return this.isSearchVisible;
+    searchableComputed() {
+      return this.searchable;
     }
   },
   methods: {
