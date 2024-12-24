@@ -10,8 +10,10 @@
         :class="{ open: isOpen }"
         @click="toggleDropdown"
       >
-        <SearchBox v-if="searchableComputed"
+        <SearchBox v-if="showSearchBox && isOpen"
                    @input="updateSearchValue"
+                   @click="isSearchActive = true"
+                   @clear="isSearchActive = true"
                    v-model="searchValue"/>
 
         <div v-if="!selectedItems.length" class="placeholder">
@@ -70,6 +72,7 @@
 
 <script>
 
+import { nextTick } from "process";
 import SearchBox from "./SearchBox.vue";
 
 export default {
@@ -93,6 +96,7 @@ export default {
     return {
       isOpen: false,
       searchValue: "",
+      isSearchActive: true
     };
   },
   computed: {
@@ -149,11 +153,12 @@ export default {
     value() {
       return this.data?.value ?? [];
     },
-    searchableComputed() {
-      return this.searchable;
+    showSearchBox() {
+      return this.searchable && this.isOpen;
     }
   },
   methods: {
+    nextTick,
     selectItem(item) {
       const currentValue = [ ...this.value ];
       const idValue = item[this.valueKey];
@@ -179,7 +184,11 @@ export default {
       });
     },
     toggleDropdown(val) {
-      this.isOpen = typeof val === "boolean" ? val : !this.isOpen;
+      const value = typeof val === "boolean" ? val : !this.isOpen;
+      this.isOpen = value || this.isSearchActive;
+
+      this.isOpen === false && (this.searchValue = "");
+      this.isSearchActive = false;
     },
     isSelectedItem(item) {
       const currentValue = [ ...this.value ];
@@ -189,17 +198,21 @@ export default {
     },
     updateSearchValue(val) {
       this.toggleDropdown(true);
-    }
-  },
-  mounted() {
-    document.addEventListener("mouseup", (e) => {
+    },
+    outOfClick(e) {
       const container = this.$refs.menu;
 
       if (!container?.contains(e.target)) {
         this.toggleDropdown(false);
       }
-    });
+    }
   },
+  mounted() {
+    document.addEventListener("mouseup", this.outOfClick);
+  },
+  beforeDestroy() {
+    document.removeEventListener("mouseup", this.outOfClick);
+  }
 };
 </script>
 

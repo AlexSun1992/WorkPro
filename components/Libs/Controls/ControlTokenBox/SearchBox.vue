@@ -3,6 +3,9 @@
     <input type="text"
            class="search-input"
            :value="value"
+           ref="searchInput"
+           @keyup.stop.esc="clearInput"
+           @click="$emit('click')"
            @input="updateValue($event.target.value)">
 
     <div class="button-wrapper">
@@ -29,6 +32,9 @@ export default {
     },
     clearInput() {
       this.updateValue("");
+
+      this.$refs.searchInput.focus();
+      this.$emit('clear');
     }
   }
 }
