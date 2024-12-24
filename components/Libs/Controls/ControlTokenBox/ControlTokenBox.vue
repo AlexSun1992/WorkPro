@@ -59,6 +59,11 @@
           </slot>
         </li>
       </template>
+
+      <li v-if="!availableOptions.length"
+          class="disabled">
+        {{ noOptionsText }}
+      </li>
     </ul>
   </div>
 </template>
@@ -79,6 +84,9 @@ export default {
     },
     searchable: {
       default: true
+    },
+    noOptionsText: {
+      default: "Нет подходящих значений"
     }
   },
   data() {
@@ -99,10 +107,10 @@ export default {
     },
     optionsWithHelp() {
       const options = this.filteredOptions;
-      const {searchValue} = this;
+      const { searchValue } = this;
 
       if (!searchValue) {
-        return  options;
+        return options;
       }
 
       return options.map(item => {
