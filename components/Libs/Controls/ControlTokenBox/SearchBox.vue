@@ -36,6 +36,9 @@ export default {
       this.$refs.searchInput.focus();
       this.$emit('clear');
     }
+  },
+  mounted() {
+    this.clearInput();
   }
 }
 </script>
