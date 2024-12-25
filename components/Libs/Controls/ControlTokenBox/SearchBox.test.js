@@ -32,4 +32,10 @@ describe("SearchBox", () => {
 
     expect(wrapper.emitted().input.length).toBe(2);
   });
+
+  it('Clear input value', () => {
+    wrapper.vm.clearInput();
+
+    expect(wrapper.vm.value === "");
+  });
 });
