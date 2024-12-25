@@ -12,4 +12,18 @@ describe("SearchBox", () => {
 
     expect(wrapper.vm.$refs.searchInput.value).toBe(value);
   });
+
+  it('Emit updated input value', () => {
+    const value = "Serach";
+    const wrapper = mount(SearchBox, {
+
+    });
+    const input = wrapper.find('input');
+
+    expect(wrapper.emitted().input.length).toBe(1);
+
+    input.trigger('input', {value});
+
+    expect(wrapper.emitted().input.length).toBe(2);
+  });
 });
