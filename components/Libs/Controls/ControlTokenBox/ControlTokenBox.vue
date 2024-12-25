@@ -97,7 +97,7 @@ export default {
     return {
       isOpen: false,
       searchValue: "",
-      isSearchActive: true
+      isSearchActive: false
     };
   },
   computed: {
@@ -185,8 +185,13 @@ export default {
       });
     },
     toggleDropdown(val) {
-      const value = typeof val === "boolean" ? val : !this.isOpen;
-      this.isOpen = value || this.isSearchActive;
+      const value = typeof val === "boolean" ? val : null;
+
+      if (value !== null) {
+        this.isOpen = value;
+      } else {
+        this.isOpen = !this.isOpen || this.isSearchActive;
+      }
 
       this.isOpen === false && (this.searchValue = "");
       this.isSearchActive = false;

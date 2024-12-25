@@ -34,13 +34,13 @@ describe("ControlTokenBox", () => {
     expect(value).toEqual(expect.arrayContaining(props));
   });
 
-  /* it("Open/close dropdown menu", async () => {
-    await wrapper.vm.toggleDropdown();
+   it("Open/close dropdown menu", async () => {
+    await wrapper.vm.toggleDropdown(true);
     expect(wrapper.element.querySelector(".selected-items.open")).toBeTruthy();
 
-    await wrapper.vm.toggleDropdown();
+    await wrapper.vm.toggleDropdown(false);
     expect(wrapper.element.querySelector(".selected-items.open")).toBeFalsy();
-  }); */
+  });
 
   it("Set value from dropdown", async () => {
     await wrapper.vm.toggleDropdown();
