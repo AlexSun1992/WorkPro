@@ -2,8 +2,9 @@ import { mount } from "@vue/test-utils";
 import SearchBox from "./SearchBox.vue";
 
 describe("SearchBox", () => {
-  it('Set init input value', () => {
+  it('Set input value', () => {
     const value = "Serach";
+    const updatedValue = "Serach";
     const wrapper = mount(SearchBox, {
       propsData: {
         value
@@ -11,6 +12,10 @@ describe("SearchBox", () => {
     })
 
     expect(wrapper.vm.$refs.searchInput.value).toBe(value);
+
+    wrapper.setProps({value: updatedValue});
+
+    expect(wrapper.vm.$refs.searchInput.value).toBe(updatedValue);
   });
 
   it('Emit updated input value', () => {
