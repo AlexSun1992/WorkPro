@@ -35,7 +35,6 @@ export default {
     clearInput() {
       this.updateValue("");
 
-      this.activateInput();
       this.$emit('clear');
     },
     activateInput() {
