@@ -4,6 +4,7 @@
            class="search-input"
            :value="value"
            ref="searchInput"
+           @blur="activateInput"
            @keyup.stop.esc="clearInput"
            @keyup.stop.enter="searchComplete"
            @click="$emit('click')"
@@ -34,8 +35,14 @@ export default {
     clearInput() {
       this.updateValue("");
 
-      this.$refs.searchInput.focus();
+      this.activateInput();
       this.$emit('clear');
+    },
+    activateInput() {
+      console.log('?????');
+      this.$nextTick(() => {
+        this.$refs.searchInput.focus();
+      });
     },
     searchComplete() {
       this.$emit('searchComplete')
