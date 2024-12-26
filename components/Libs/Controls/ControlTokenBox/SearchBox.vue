@@ -39,9 +39,8 @@ export default {
       this.$emit('clear');
     },
     activateInput() {
-      console.log('?????');
       this.$nextTick(() => {
-        this.$refs.searchInput.focus();
+        this.$refs.searchInput?.focus();
       });
     },
     searchComplete() {
