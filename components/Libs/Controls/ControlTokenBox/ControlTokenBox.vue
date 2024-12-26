@@ -8,7 +8,7 @@
       <div
         class="selected-items"
         :class="{ open: isOpen }"
-        @click="toggleDropdown"
+        @click="clickSelectedBox"
       >
         <SearchBox v-if="showSearchBox && isOpen"
                    v-model="searchValue"
@@ -184,17 +184,11 @@ export default {
         value: this.value.filter((val) => val !== item[this.valueKey]),
       });
     },
+    clickSelectedBox(ev) {
+      ev.target.tagName !== 'INPUT' && this.toggleDropdown();
+    },
     toggleDropdown(val) {
-      const value = typeof val === "boolean" ? val : null;
-
-      if (value !== null) {
-        this.isOpen = value;
-      } else {
-        this.isOpen = !this.isOpen || this.isSearchActive;
-      }
-
-      this.isOpen === false && (this.searchValue = "");
-      this.isSearchActive = false;
+      this.isOpen = typeof val === "boolean" ? val : !this.isOpen;
     },
     isSelectedItem(item) {
       const currentValue = [ ...this.value ];
