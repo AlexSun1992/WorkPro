@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import ControlTokenBox from "./ControlTokenBox.vue";
 import { TokenBoxTestData } from "./ControlTokenBoxTestData";
+import SearchBox from "./SearchBox.vue";
 
 describe("ControlTokenBox", () => {
   let wrapper;
@@ -9,6 +10,7 @@ describe("ControlTokenBox", () => {
   beforeEach(() => {
     wrapper = mount(ControlTokenBox, {
       propsData: TokenBoxTestData.propsDataCorrect,
+      stubs: { SearchBox }
     });
     initValue = TokenBoxTestData.propsDataCorrect.data.value;
   });
@@ -34,7 +36,7 @@ describe("ControlTokenBox", () => {
     expect(value).toEqual(expect.arrayContaining(props));
   });
 
-   it("Open/close dropdown menu", async () => {
+  it("Open/close dropdown menu", async () => {
     await wrapper.vm.toggleDropdown(true);
     expect(wrapper.element.querySelector(".selected-items.open")).toBeTruthy();
 
@@ -68,5 +70,15 @@ describe("ControlTokenBox", () => {
     expect(initValue.length - wrapper.emitted().update[0][0].value.length).toBe(
       1
     );
+  });
+
+  it("Show search box", async () => {
+    wrapper.setProps({
+      searchable: true
+    });
+
+    await wrapper.vm.toggleDropdown(true);
+
+    expect(wrapper.findAll("input").length).toBeTruthy();
   });
 });
