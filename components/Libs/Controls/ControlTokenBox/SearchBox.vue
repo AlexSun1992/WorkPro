@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-row">
+  <div class="d-flex flex-row search-box">
     <input type="text"
            class="search-input"
            :value="value"
@@ -10,7 +10,7 @@
            @input="updateValue($event.target.value)">
 
     <div class="button-wrapper">
-      <button v-if="value"
+      <button v-show="value"
               class="h-100"
               @click="clearInput">X
       </button>

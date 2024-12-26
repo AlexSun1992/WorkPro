@@ -13,7 +13,6 @@
         <SearchBox v-if="showSearchBox && isOpen"
                    v-model="searchValue"
                    @input="updateSearchValue"
-                   @click="isSearchActive = true"
                    @clear="isSearchActive = true"
                    @searchComplete="searchComplete"/>
 
@@ -184,8 +183,11 @@ export default {
         value: this.value.filter((val) => val !== item[this.valueKey]),
       });
     },
+    clickSearchBox() {
+      this.isSearchActive = true;
+    },
     clickSelectedBox(ev) {
-      ev.target.tagName !== 'INPUT' && this.toggleDropdown();
+      !ev.target.closest('.search-box') && this.toggleDropdown();
     },
     toggleDropdown(val) {
       this.isOpen = typeof val === "boolean" ? val : !this.isOpen;
