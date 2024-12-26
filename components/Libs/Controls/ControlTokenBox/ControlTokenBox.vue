@@ -10,11 +10,7 @@
         :class="{ open: isOpen }"
         @click="clickSelectedBox"
       >
-        <SearchBox v-if="showSearchBox && isOpen"
-                   v-model="searchValue"
-                   @input="updateSearchValue"
-                   @clear="isSearchActive = true"
-                   @searchComplete="searchComplete"/>
+
 
         <div v-if="!selectedItems.length" class="placeholder">
           {{ placeholder }}
@@ -39,6 +35,12 @@
             X
           </div>
         </div>
+
+        <SearchBox v-if="showSearchBox && isOpen"
+                   v-model="searchValue"
+                   @input="updateSearchValue"
+                   @clear="isSearchActive = true"
+                   @searchComplete="searchComplete"/>
       </div>
 
       <span class="toggle-btn" @click="toggleDropdown"/>
