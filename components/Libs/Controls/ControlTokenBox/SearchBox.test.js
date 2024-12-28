@@ -39,7 +39,7 @@ describe("SearchBox", () => {
     expect(wrapper.vm.value === "");
   });
 
-  it('Clear input value', () => {
+  it('Search complete emitted', () => {
     wrapper.vm.searchComplete();
 
     expect(wrapper.emitted().searchComplete.length).toBe(1);
