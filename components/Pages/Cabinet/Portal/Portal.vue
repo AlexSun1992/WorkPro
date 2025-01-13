@@ -21,6 +21,7 @@ import NotifyBlock from "../Block/NotifyBlock";
 import OfferBlock from "../Block/OfferBlock";
 import PolicyBlock from "../Block/PolicyBlock";
 import ContentBlock from "../Block/ContentBlock";
+import DownloadFile from "../Block/DownloadFile";
 import ActionButton from "../Block/ActionButton";
 import AddToCalendarButton from "../Block/AddToCalendarButton.vue";
 import FormPage from "~/components/Pages/FormPage";
@@ -47,6 +48,7 @@ export default {
     PolicyBlock,
     VRuntimeTemplate,
     ContentBlock,
+    DownloadFile,
     FilterBlock,
     SearchBlock,
     OfficeMap,
