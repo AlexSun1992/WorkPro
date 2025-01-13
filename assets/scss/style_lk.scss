@@ -6485,3 +6485,40 @@ h5.listing {
     margin-right: 0px;
   }
 }
+
+.tabs-vis-btn {
+  background: #f2f4f5;
+  display: table;
+  width: auto;
+  margin: 0 auto;
+  padding: 2px;
+  border-radius: 8px;
+}
+
+.tabs-vis-btn .nav-item {
+  list-style: none;
+  display: inline-block;
+}
+.tabs-vis-btn .nav-item a {
+  display: block;
+  padding: 7px 25px;
+  color: #686868;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+.tabs-vis-btn .nav-item a.active {
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  color: #009639;
+}
+.bg-transparent {
+  background: transparent !important;
+}
+
+.insurance-case[data-id].bg-transparent .label {
+  color: #868686;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
