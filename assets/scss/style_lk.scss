@@ -5548,14 +5548,22 @@ ymaps[class*="balloon__close-button"] {
   .ymaps-2-1-79-balloon {
     margin-left: 0px;
     width: 400px;
-    border-radius: 24px 24px 0px 0px;
+    border-radius: 24px;
   }
 }
 @media (max-width: 768px) {
+  .ymaps-2-1-79-balloon-pane {
+    width: 100%;
+  }
+  ymaps.ymaps-2-1-79-balloon-overlay {
+    width: 100% !important;
+    height: auto !important;
+    left: 57px !important;
+  }
   .ymaps-2-1-79-balloon {
     margin-left: 0px;
     width: 100%;
-    border-radius: 24px 24px 0px 0px;
+    border-radius: 24px !important;
   }
   .ymaps-2-1-79-balloon ymaps[style] {
     width: 100% !important;
