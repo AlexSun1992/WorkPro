@@ -47,20 +47,17 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {
-      },
+      default: () => {},
     },
     options: {
       type: Object,
       required: true,
-      default: () => {
-      },
+      default: () => {},
     },
     dataTimeToVisit: {
       type: Object,
       required: true,
-      default: () => {
-      },
+      default: () => {},
     },
   },
   components: { DateDoctorShedule },
@@ -117,7 +114,6 @@ export default {
     currentWidth() {
       return window.innerWidth;
     },
-
   },
   watch: {
     options(oldVal, newVal) {
@@ -125,7 +121,7 @@ export default {
         this.schedule.DDATE = "";
       }
     },
-  }
+  },
 };
 </script>
 
@@ -304,22 +300,28 @@ span[class*="undeground-color"]:after {
     margin-top: -1px;
   }
 }
-
 .undeground-color_15:after,
 .undeground-color_1:after,
+.undeground-color_20:after,
+.undeground-color_22:after,
+.undeground-color_24:after,
+.undeground-color_27:after,
+.undeground-color_35:after,
 [data-line="Сокольническая"]:after {
   background-color: #e42313;
 }
 
-.undeground-color_12:after,
 .undeground-color_17:after,
 .undeground-color_2:after,
+.undeground-color_23:after,
+.undeground-color_26:after,
 [data-line="Замоскворецкая"]:after {
   background-color: #4fb04f;
 }
 
 .undeground-color_16:after,
 .undeground-color_3:after,
+.undeground-color_21,
 [data-line="Арбатско-Покровская"]:after {
   background-color: #0072ba;
 }
@@ -361,10 +363,6 @@ span[class*="undeground-color"]:after {
   background-color: #bed12c;
 }
 
-.undeground-color_12:after {
-  background-color: #44b85c;
-}
-
 .undeground-color_13:after,
 [data-line="Бутовская"]:after {
   background-color: #bac8e8;
@@ -372,34 +370,45 @@ span[class*="undeground-color"]:after {
 
 .undeground-color_31:after,
 [data-line="МЦК"]:after {
-  background-color: #f9bcd1;
+  background-color: #faebf0;
 }
 
-.undeground-color_32:after {
+.undeground-color_32:after,
+[data-line="Большая кольцевая линия"]:after {
   background-color: #79cdcd;
 }
 
 .undeground-color_33:after,
 [data-line="Некрасовская"]:after {
-  background-color: #c06;
+  background-color: #de64a1;
 }
 
+.undeground-color_34:after,
+[data-line="Троицкая"]:after {
+  background-color: #03795f;
+}
+
+.undeground-color_36:after,
 [data-line="Белорусско-Савеловский"]:after {
-  background-color: #ff6000;
+  background-color: #f6a700;
 }
 
+.undeground-color_37:after,
 [data-line="Курско-Рижский"]:after {
-  background-color: #ff009f;
+  background-color: #ea4083;
 }
 
-[data-line="Большая кольцевая линия"]:after {
-  background-color: #4facb0;
+.undeground-color_38:after,
+[data-line="Ленинградско-Казанский"]:after {
+  background-color: #ea5b04;
 }
 
-[data-line="Калининская"]:after {
-  background-color: #ffcd1c;
+.undeground-color_39:after,
+[data-line="Калужско-Нижегородский"]:after {
+  background-color: #3fb485;
 }
 
+.undeground-color_14:after,
 [data-line="Монорельс"]:after {
   background-color: #006da8;
 }
