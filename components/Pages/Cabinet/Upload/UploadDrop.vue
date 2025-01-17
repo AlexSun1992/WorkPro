@@ -50,8 +50,48 @@
       v-for="file in files"
       :key="file.FILENAME + file.SIZE"
       class="col-9 col-lg-4"
+      :class="{ 'col-lg-8': file.ERROR }"
     >
+      <div v-if="file.ERROR" class="row">
+        <div class="col-12 col-lg-6">
+          <div class="preview-card">
+            <div class="file-description">
+              <div class="namefile" :title="file.FILENAME">
+                <span>{{ getFileName(file.FILENAME) }}</span
+                ><b>.{{ getFileType(file.FILENAME) }}</b>
+              </div>
+              <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
+
+              <div v-if="file.SIZE > maxFileSize">
+                Превышен <b>допустимый</b><br />размер файла -
+                {{ formatBytes(maxFileSize) }}
+              </div>
+            </div>
+            <button
+              class="btn-download-file"
+              @click="downloadFile(file)"
+              title="Скачать файл"
+              type="button"
+            ></button>
+            <button
+              type="button"
+              class="btn-delite-file"
+              :disabled="isLoading"
+              @click="remove(file)"
+              title="Удалить файл"
+            ></button>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="error-blk" v-if="file.ERROR">
+            <div class="error-blk-title">{{ file.ERROR.title }}</div>
+            <div class="error-blk-dec">{{ file.ERROR.text }}</div>
+          </div>
+        </div>
+      </div>
+
       <div
+        v-else
         class="preview-card"
         v-bind:class="{
           'error-card': file.SIZE > maxFileSize,
@@ -59,9 +99,10 @@
       >
         <div class="file-description">
           <div class="namefile" :title="file.FILENAME">
-            <span>{{ file.FILENAME.split(".").slice(0, -1).join(".") }}</span
-            ><b>.{{ file.FILENAME.split(".").pop() }}</b>
+            <span>{{ getFileName(file.FILENAME) }}</span
+            ><b>.{{ getFileType(file.FILENAME) }}</b>
           </div>
+
           <div class="sizefile">{{ formatBytes(file.SIZE) }}</div>
 
           <div v-if="file.SIZE > maxFileSize">
@@ -83,6 +124,7 @@
           title="Удалить файл"
         ></button>
       </div>
+
       <div class="error-blk" v-if="file.SIZE > maxFileSize">
         Превышен <b>допустимый</b><br />размер файла -
         {{ formatBytes(maxFileSize) }}
@@ -154,6 +196,19 @@ export default {
     },
   },
   methods: {
+    getFileName(value) {
+      if (typeof value === "string") {
+        const dotPosition = value.lastIndexOf(".");
+        return dotPosition !== -1 ? value.substring(0, dotPosition) : value;
+      }
+      throw new Error(`Значение не является строкой - ${value}`);
+    },
+    getFileType(value) {
+      if (typeof value === "string" && value.includes(".")) {
+        return value.split(".").pop();
+      }
+      throw new Error(`Некорректное значение - ${value}`);
+    },
     handleAddFile() {
       if (
         this.isErrorSize === false &&
@@ -406,6 +461,15 @@ export default {
   font-size: 0.875rem;
   padding: 18px 15px 15px 65px;
 }
+.error-blk .error-blk-title {
+  text-align: left;
+  display: block;
+}
+.error-blk .error-blk-dec {
+  text-align: left;
+  color: #868686;
+  display: block;
+}
 .file-description {
   display: grid;
   grid-template-rows: auto auto;
@@ -513,7 +577,7 @@ export default {
     background: #ffebeb url(/img/icon-warning-file.svg) 10px center no-repeat;
     background-size: 20px;
     font-size: 0.625rem;
-    padding: 5px 10px 10px 82px;
+    padding: 5px 10px 10px 40px;
     text-align: left;
   }
   .error-card .btn-delite-file {
