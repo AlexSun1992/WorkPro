@@ -124,7 +124,7 @@ export default {
   },
 };
 </script>
-<style scooped>
+<style scoped>
 .mobile-mode {
   padding-top: 1rem;
 }
@@ -133,43 +133,6 @@ export default {
 .cabinet {
   @import "~/assets/scss/style_lk.scss";
 }
-/*
-.cabinet {
-  display: grid;
-  grid-template-rows: 80px auto min-content;
-  min-height: 100vh;
-  overflow-x: hidden;
-  margin: 0 auto;
-}
-@media (max-width: 992px) {
-  .cabinet {
-    grid-template-rows: auto auto min-content;
-  }
-}
-
-.toast {
-  padding: 20px !important;
-}
-
-.toast .toast-header {
-  background-color: transparent !important;
-}
-.toast .close {
-  float: right;
-  border-radius: 20px;
-  border: 0;
-  background: transparent;
-  font-size: 26px;
-  font-weight: 700;
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  cursor: pointer;
-}
-.toast button:focus {
-  outline: 0px;
-  outline: 0px auto transparent;
-}*/
 
 .b-toast {
   padding: 12px 24px;
@@ -263,5 +226,67 @@ export default {
 
 .main {
   position: relative;
+}
+
+.lg-actions .lg-prev,
+.lg-actions .lg-next {
+  width: 40px;
+  height: 40px;
+}
+.lg-actions .lg-prev:after {
+  background: #fff url("/img/lg-actions-left.svg") 50% 50% no-repeat;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 16px;
+  content: "" !important;
+}
+.lg-actions .lg-next:after {
+  background: #fff url("/img/lg-actions-right.svg") 50% 50% no-repeat;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 16px;
+  content: "" !important;
+}
+.lg-toolbar .lg-download {
+  width: 142px !important;
+  height: 38px !important;
+  display: block !important;
+  background: #fff !important;
+  border-radius: 15px !important;
+  position: absolute;
+  left: 50%;
+  margin-left: -71px;
+  top: 4px;
+}
+
+.lg-toolbar .lg-download:after {
+  content: "" !important;
+  position: absolute;
+  top: 10px;
+  left: 22px;
+  width: 20px;
+  height: 20px;
+  background: url("/img/lg-actions-download.svg") 50% 50% no-repeat;
+}
+.lg-toolbar .lg-download:before {
+  content: "Скачать" !important;
+  position: absolute;
+  top: 6px;
+  right: 22px;
+  color: #292929;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: "SF Pro Display", Helvetica, Arial, system-ui, -apple-system,
+    Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, sans-serif,
+    "Apple Color Emoji";
+}
+.lg-toolbar .lg-icon {
+  color: #fff !important;
 }
 </style>
