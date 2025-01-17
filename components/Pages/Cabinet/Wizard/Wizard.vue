@@ -5,7 +5,7 @@
         {{ cardCaption }}
       </div>
       <template v-if="isShowCardTemplate">
-        <v-runtime-template :template="settings.cardtemplate"/>
+        <v-runtime-template :template="settings.cardtemplate" />
       </template>
 
       <b-nav
@@ -95,7 +95,7 @@ export default {
   },
   data() {
     return {
-      loading: false
+      loading: false,
     };
   },
   async fetch({ store, route }) {
@@ -212,20 +212,20 @@ export default {
         item.idItem || {}
       );
       if (settingsTab?.isUploader === true) {
-        return `/cabinet/wizard/${ this.$route.params.idWizard }/55/0/${
+        return `/cabinet/wizard/${this.$route.params.idWizard}/55/0/${
           item.idItem
-        }/${ this.$route.params.idCard }/${
+        }/${this.$route.params.idCard}/${
           this.rels.split("|")[item.order - 1]
         }/uploader`;
       }
       if (this.$route.params.idCard === "0") {
-        return `/cabinet/wizard/${ this.$route.params.idWizard }${
+        return `/cabinet/wizard/${this.$route.params.idWizard}${
           item.list ? `/list/55/0/` : `/55/0/`
-        }${ item.idItem }/0/0`;
+        }${item.idItem}/0/0`;
       }
-      return `/cabinet/wizard/${ this.$route.params.idWizard }${
+      return `/cabinet/wizard/${this.$route.params.idWizard}${
         item.list ? `/list/55/0/` : `/55/0/`
-      }${ item.idItem }/${ this.$route.params.idCard }/${
+      }${item.idItem}/${this.$route.params.idCard}/${
         this.rels.split("|")[item.order - 1]
       }`;
     },
