@@ -10,11 +10,11 @@ export const clientOs = {
   isWebview: null,
   platformData: null,
   getMobilePlatform(userAgent) {
-    const result = { isWebview: false, platform: "" };
+    const result = { isWebview: false, platform: -1 };
     const platformData = this.deviceDetector.parse(userAgent);
-    const platformOs = platformData?.brand;
+    const platformOs = platformData.os?.name;
 
-    if (platformData) {
+    if (Boolean(platformData?.client)) {
       result.isWebview = platformData.device.type.toLowerCase() !== "desktop";
       result.platform = this.getOsPlatform(platformOs);
     }
@@ -27,6 +27,6 @@ export const clientOs = {
       return -1;
     }
 
-    return platformOs.toLowerCase() === "apple" ? 7 : 8;
+    return platformOs.toLowerCase() === "ios" ? 7 : 8;
   }
 }

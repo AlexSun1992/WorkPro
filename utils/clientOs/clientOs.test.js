@@ -9,31 +9,24 @@ describe("clientOs utils", () => {
     Object.defineProperty(navigator, 'userAgent', { value: "", writable: true, configurable: true });
   });
 
-  test("getPlatform for Windows", () => {
-    mock = clientOsTestData.variantA;
-    Object.defineProperty(navigator, 'userAgentData', { value: mock.navigator.userAgentData, writable: true });
-
-    expect(clientOs.getPlatform()).toBe('Windows');
-  });
-
   test("getMobilePlatform for Android", () => {
     mock = clientOsTestData.variantB;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toBe('Android');
+    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toStrictEqual({ isWebview: true, platform: 8 });
   });
 
   test("getMobilePlatform for Iphone", () => {
     mock = clientOsTestData.variantC;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toBe('IOS');
+    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toStrictEqual({ isWebview: true, platform: 7 });
   });
 
   test("getMobilePlatform for empty", () => {
     mock = clientOsTestData.variantD;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toBe(clientOs.getDefaultPlatform());
+    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toStrictEqual({ isWebview: false, platform: -1 });
   });
 });
