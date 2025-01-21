@@ -1,64 +1,32 @@
-/**
- * Есть navigator.platform но это деприкатед и работает как-то специфически
- *
- */
-
-const defaultPlatform = 'VueJs';
-
-function getFromUserAgentData() {
-  const userAgent = navigator?.userAgentData;
-
-  return userAgent?.platform ?? defaultPlatform;
-}
-
-function getFromUserAgent() {
-  const platform = navigator?.userAgent;
-
-  return platform ?? defaultPlatform;
-}
+import DeviceDetector from "device-detector-js";
 
 export const clientOs = {
-  getPlatform() {
-    const getters = [ getFromUserAgentData, getFromUserAgent ];
-
-    try {
-      for (const item of getters) {
-        const val = item();
-
-        if (val && val !== defaultPlatform) {
-          return val;
-        }
-      }
-    } catch (err) {
-      console.log(err);
-
-      return defaultPlatform;
-    }
-
-    return defaultPlatform;
-  },
-
-  getDefaultPlatform() {
-    return defaultPlatform;
-  },
-
+  deviceDetector: new DeviceDetector(),
   /**
    *
    * @param userAgent {string} - либо передать вызов метода clientOs.getPlatform() который должен быть выполнент на клиенте
    * @returns {string}
    */
+  isWebview: null,
+  platformData: null,
   getMobilePlatform(userAgent) {
-    const mainPlatforms = { "Android": [ "Android" ], "IOS": [ "iPad", "iPhone", "Macintosh" ] };
-    const platform = userAgent ?? "";
+    const result = { isWebview: false, platform: "" };
+    const platformData = this.deviceDetector.parse(userAgent);
+    const platformOs = platformData?.brand;
 
-    for (const [ key, values ] of Object.entries(mainPlatforms)) {
-      const variant = values.find(item => platform.toLowerCase().includes(item.toLowerCase()));
-
-      if (variant) {
-        return key;
-      }
+    if (platformData) {
+      result.isWebview = platformData.device.type.toLowerCase() !== "desktop";
+      result.platform = this.getOsPlatform(platformOs);
     }
 
-    return defaultPlatform;
+    return result;
+  },
+
+  getOsPlatform(platformOs) {
+    if (Boolean(platformOs) === false) {
+      return -1;
+    }
+
+    return platformOs.toLowerCase() === "apple" ? 7 : 8;
   }
 }
