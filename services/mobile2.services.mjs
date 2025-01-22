@@ -8,7 +8,8 @@ export const mobile2Service = (url) => {
   instance.defaults.baseURL =
     url || process.env.MOBILE2_URL || "https://lk.reso.ru";
   instance.defaults.headers.common["X-Application"] = "VueJS";
-  instance.defaults.headers.common["X-Os"] = "VueJS";
+  instance.defaults.headers.common["X-OS"] = "";
+  instance.defaults.headers.common["X-DEV"] = "";
 
   instance.interceptors.request.use(config => {
     const newConfig = Object.assign({}, config);
@@ -17,8 +18,10 @@ export const mobile2Service = (url) => {
 
     if (userAgent) {
       platform = clientOs.getMobilePlatform(userAgent);
-      newConfig.headers["X-Os"] = platform;
-      newConfig.headers.common["X-Os"] = platform;
+      newConfig.headers["X-DEV"] = platform.platform;
+      newConfig.headers.common["X-DEV"] = platform.platform;
+      newConfig.headers["X-OS"] = platform.isWebview;
+      newConfig.headers.common["X-OS"] = platform.isWebview;
     }
 
     return newConfig;
