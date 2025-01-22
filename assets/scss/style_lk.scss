@@ -6551,3 +6551,9 @@ h5.listing {
   font-size: 0.875rem;
   font-weight: 400;
 }
+@media (min-width: 400px) {
+  ymaps[class*="balloon__close-button"] {
+    right: 10px;
+    top: 10px;
+  }
+}
