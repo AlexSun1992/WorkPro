@@ -11,7 +11,7 @@ export const clientOs = {
   platformData: null,
   getMobilePlatform(userAgent) {
     const mobilePlatforms = ["smartphone", "tablet", "phablet", "feature phone"]
-    const result = { isWebview: false, platform: -1 };
+    const result = { isWebview: "", platform: "" };
     const platformData = this.deviceDetector.parse(userAgent);
     const platformOs = platformData.os?.name;
 

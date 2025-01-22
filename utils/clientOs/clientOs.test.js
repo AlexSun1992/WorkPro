@@ -13,20 +13,20 @@ describe("clientOs utils", () => {
     mock = clientOsTestData.variantB;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toStrictEqual({ isWebview: true, platform: 8 });
+    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toStrictEqual({ isWebview: "isWebview", platform: 8 });
   });
 
   test("getMobilePlatform for Iphone", () => {
     mock = clientOsTestData.variantC;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toStrictEqual({ isWebview: true, platform: 7 });
+    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toStrictEqual({ isWebview: "isWebview", platform: 7 });
   });
 
   test("getMobilePlatform for empty", () => {
     mock = clientOsTestData.variantD;
     Object.defineProperty(navigator, 'userAgent', { value: mock.navigator.userAgent, writable: true });
 
-    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toStrictEqual({ isWebview: false, platform: -1 });
+    expect(clientOs.getMobilePlatform(mock.navigator.userAgent)).toStrictEqual({ isWebview: "", platform: "" });
   });
 });
