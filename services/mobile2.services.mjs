@@ -16,7 +16,7 @@ export const mobile2Service = (url) => {
     const userAgent = newConfig.headers.common["user-agent"];
     let platform;
 
-    if (userAgent) {
+    if (Boolean(userAgent)) {
       platform = clientOs.getMobilePlatform(userAgent);
       newConfig.headers["X-DEV"] = platform.platform;
       newConfig.headers.common["X-DEV"] = platform.platform;
