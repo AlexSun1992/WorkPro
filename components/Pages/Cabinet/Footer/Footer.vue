@@ -13,11 +13,9 @@ export default {
     };
   },
 
-  async fetch() {
+  async mounted() {
     this.footerHTML = await axios
-      .get(
-        "https://reso.ru/system/modules/ru.reso.v2/templates/common/footer.jsp"
-      )
+      .get(`/system/modules/ru.reso.v2/templates/common/footer.jsp`)
       .then((res) => res.data);
   },
 };
