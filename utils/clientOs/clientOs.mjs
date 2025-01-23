@@ -1,5 +1,5 @@
-import { clientOsData } from "./clientOsData";
-import { clientOsPlatforms } from "./clientOsPlatforms";
+import { clientOsData } from "./clientOsData.js";
+import { clientOsPlatforms } from "./clientOsPlatforms.js";
 
 export default {
   /**
