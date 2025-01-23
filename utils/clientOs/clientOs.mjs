@@ -1,5 +1,5 @@
-import clientOsData from "./clientOs.js";
-import clientOsPlatforms from "./clientOsPlatforms.js"
+import clientOsData from "./clientOsData";
+import clientOsPlatforms from "./clientOsPlatforms.json" assert { type: "json" }
 
 export const clientOs = {
   /**
