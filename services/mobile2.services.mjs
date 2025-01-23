@@ -1,5 +1,5 @@
 import axios from "axios";
-import { clientOs } from "../utils/clientOs/clientOs.js";
+import clientOs from "../utils/clientOs/clientOs.js";
 
 export const mobile2Service = (url) => {
   const instance = axios.create({});

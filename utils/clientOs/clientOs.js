@@ -1,7 +1,7 @@
 import clientOsData from "./clientOsData.json";
 import clientOsPlatforms from "./clientOsPlatforms.json"
 
-export const clientOs = {
+export default {
   /**
    *
    * @param userAgent {string} - либо передать вызов метода clientOs.getPlatform() который должен быть выполнент на клиенте
