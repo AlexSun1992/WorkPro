@@ -1,0 +1,27 @@
+{
+  "mobileOs": [
+    "Android",
+    "Bada",
+    "BlackBerry",
+    "Maemo",
+    "MeeGo",
+    "Symbian",
+    "Symbian OS",
+    "Symbian OS Series 40",
+    "Symbian OS Series 60",
+    "Symbian^3",
+    "Tizen",
+    "Windows CE",
+    "Windows Mobile",
+    "Windows Phone",
+    "iOS"
+  ],
+  "android": [
+    "Android",
+    "Bada",
+    "Tizen"
+  ],
+  "ios": [
+    "iOS"
+  ]
+}
