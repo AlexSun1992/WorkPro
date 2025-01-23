@@ -257,6 +257,17 @@ export const getters = {
         [currentValue.name]: currentValue.value,
       };
     }, {}),
+  isShowWizardButton:
+    (state, getters, rootState, rootGetters) => (isUploader) => {
+      const allControlsData = getters.getForm;
+      const isControlsDataLoaded =
+        allControlsData.length > 0 &&
+        !allControlsData.every((el) => el.visible === false);
+      const notUploader = isUploader === false;
+      const isScriptsLoaded = rootGetters["blocks/getScriptStatus"];
+
+      return Boolean(notUploader && isScriptsLoaded && isControlsDataLoaded);
+    },
   isDisabled: (state, getters) => {
     if (getters.getLoading) {
       return true;
