@@ -1,4 +1,4 @@
-export const clientOsPlatforms = {
+export default  {
   "android": [
     "Android",
     "Bada",
