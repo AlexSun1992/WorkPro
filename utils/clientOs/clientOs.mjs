@@ -1,5 +1,5 @@
-import clientOsData from "./clientOs.json";
-import clientOsPlatforms from "./clientOsPlatforms.json"
+import clientOsData from "./clientOs.js";
+import clientOsPlatforms from "./clientOsPlatforms.js"
 
 export const clientOs = {
   /**
