@@ -1,4 +1,4 @@
-[
+export const clientOsData = [
   {
     "regex": "Grid OS (\\d+[\\.\\d]+)",
     "name": "GridOS",
