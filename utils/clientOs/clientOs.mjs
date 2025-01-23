@@ -1,5 +1,5 @@
-import clientOsData from "./clientOsData.js";
-import clientOsPlatforms from "./clientOsPlatforms.js";
+import clientOsData from "./clientOsData.mjs";
+import clientOsPlatforms from "./clientOsPlatforms.mjs";
 
 export default {
   /**
