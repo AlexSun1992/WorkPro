@@ -315,7 +315,11 @@ export default {
         }
         if (response.data.POUTVALUE) {
           if (response.data.POUTVALUE.includes("/")) {
-            if (response.data.POUTVALUE.includes("cabinet")) {
+            if (
+              response.data.POUTVALUE.includes("cabinet") &&
+              this.action?.LCURWINDOW !== false &&
+              this.action?.NTYPE === 4
+            ) {
               this.$router.push(response.data.POUTVALUE);
             } else {
               const url = response.data.POUTVALUE;
