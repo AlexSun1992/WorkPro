@@ -18,7 +18,7 @@ export const mobile2Service = (url) => {
 
     if (Boolean(userAgent)) {
       platform = clientOs.getMobilePlatform(userAgent);
-      console.log(`--------Platform: ${JSON.stringify(platform)}`);
+
       newConfig.headers["X-DEV"] = platform.platform;
       newConfig.headers.common["X-DEV"] = platform.platform;
       newConfig.headers["X-OS"] = platform.isWebview;

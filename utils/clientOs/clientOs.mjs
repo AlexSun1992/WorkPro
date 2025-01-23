@@ -8,12 +8,9 @@ export const clientOs = {
    * @returns {{isWebview: string, platform: string}}
    */
   getMobilePlatform(userAgent) {
-    const mobilePlatforms = [ "smartphone", "tablet", "phablet", "feature phone" ];
     const result = { isWebview: "", platform: "" };
-    // const platformData = this.getOsInfo(userAgent);
-    // const platformOs = platformData.os?.name;
     const platformOs = this.getOsInfo(userAgent);
-    console.log(`********** PlatformOs ${ platformOs }`);
+
     if (Boolean(platformOs)) {
       result.platform = this.getOsPlatform(platformOs);
       result.isWebview = this.isWebview(platformOs) ? "isWebview" : "";
