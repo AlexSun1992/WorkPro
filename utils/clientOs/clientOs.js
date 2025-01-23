@@ -1,5 +1,5 @@
-const clientOsData = require("./clientOsData.json");
-const clientOsPlatforms = require("./clientOsPlatforms.json");
+import clientOsData from "./clientOsData.json";
+import clientOsPlatforms from "./clientOsPlatforms.json"
 
 export const clientOs = {
   /**
@@ -11,7 +11,7 @@ export const clientOs = {
     const result = { isWebview: "", platform: "" };
     const platformOs = this.getOsInfo(userAgent);
 
-    if (Boolean(platformOs)) {
+    if (platformOs) {
       result.platform = this.getOsPlatform(platformOs);
       result.isWebview = this.isWebview(platformOs) ? "isWebview" : "";
     }
