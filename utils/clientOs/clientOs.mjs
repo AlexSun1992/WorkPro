@@ -1,5 +1,5 @@
-import clientOsData from "./clientOsData";
-import clientOsPlatforms from "./clientOsPlatforms.json" assert { type: "json" }
+const clientOsData = require("./clientOsData.json");
+const clientOsPlatforms = require("./clientOsPlatforms.json");
 
 export const clientOs = {
   /**

@@ -1,4 +1,4 @@
-import { clientOs } from "./clientOs.mjs";
+import { clientOs } from "./clientOs";
 import { clientOsTestData } from "./clientOsTestData";
 
 describe("clientOs utils", () => {
