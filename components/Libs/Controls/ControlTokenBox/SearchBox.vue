@@ -1,22 +1,20 @@
 <template>
   <div class="d-flex flex-row search-box">
-    <input type="text"
-           class="search-input"
-           :value="value"
-           ref="searchInput"
-           @blur="activateInput"
-           @keyup.stop.esc="clearInput"
-           @keyup.stop.enter="searchComplete"
-           @click="$emit('click')"
-           @input="updateValue($event.target.value)">
+    <input
+      type="text"
+      class="search-input"
+      :value="value"
+      ref="searchInput"
+      @blur="activateInput"
+      @keyup.stop.esc="clearInput"
+      @keyup.stop.enter="searchComplete"
+      @click="$emit('click')"
+      @input="updateValue($event.target.value)"
+    />
 
     <div class="button-wrapper">
-      <button v-show="value"
-              class="h-100"
-              @click="clearInput">X
-      </button>
+      <button v-show="value" class="h-100" @click="clearInput">X</button>
     </div>
-
   </div>
 </template>
 
@@ -25,16 +23,16 @@ export default {
   name: "SearchBox",
   props: {
     value: {
-      default: ""
-    }
+      default: "",
+    },
   },
   methods: {
     updateValue(val) {
-      this.$emit('input', val);
+      this.$emit("input", val);
     },
     clearInput() {
       this.updateValue("");
-      this.$emit('clear');
+      this.$emit("clear");
     },
     activateInput() {
       this.$nextTick(() => {
@@ -42,14 +40,14 @@ export default {
       });
     },
     searchComplete() {
-      this.$emit('searchComplete')
-    }
+      this.$emit("searchComplete");
+    },
   },
   mounted() {
     this.clearInput();
     this.activateInput();
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -71,6 +69,6 @@ button {
 }
 
 button:hover {
-  font-weight: bold;
+  font-weight: 600;
 }
 </style>
