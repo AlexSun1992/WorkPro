@@ -43,6 +43,10 @@ export default {
   components: { DatePicker, BFormInvalidFeedback },
   directives: { mask },
   props: {
+    value: {
+      type: String,
+      default: ''
+    },
     state: {
       required: true,
       default: () => null,
@@ -60,6 +64,11 @@ export default {
       maskTemplate: "##.##.####",
       defaultDate: getDate(18),
     };
+  },
+  mounted() {
+    if (this.value) {
+      this.birthdate = this.value;
+    }
   },
   methods: {
     setDateValue(date) {

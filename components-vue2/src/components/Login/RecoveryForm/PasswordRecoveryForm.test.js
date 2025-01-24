@@ -8,6 +8,29 @@ jest.useFakeTimers();
 
 const CORRECT_PASSWORD = "12345hH!";
 const WRONG_PASSWORD = "русский12345hH!";
+const PHONE = "+7(910)-123-22-33";
+const EMAIL = "test@test.ru";
+const CODE = "11111";
+const DATE = "21.12.2022";
+
+const generateWrapper = (MESSAGE_CODE = 200) => {
+  const localVue = createLocalVue();
+  const wrapper = mount(PasswordRecoveryForm, {
+    localVue,
+    mocks: {
+      $LogEvent: (v) => v,
+    },
+  });
+
+  axios.post.mockReturnValue({
+    data: [
+      {
+        MESSAGE_CODE,
+      },
+    ],
+  });
+  return wrapper;
+};
 
 describe("PasswordRecoveryForm", () => {
   afterEach(() => {
@@ -16,22 +39,7 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать сообщение об отсутствии профиля с указанным номером телефона", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 203,
-        },
-      ],
-    });
+    const wrapper = generateWrapper(203);
 
     await wrapper.find("#phone").setValue("+7(902)-000-10-00");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
@@ -44,21 +52,7 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Необходимо раздизабливать поле 'Получить код' при отсутствии номера телефона в базе", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 203,
-        },
-      ],
-    });
+    const wrapper = generateWrapper(203);
 
     await wrapper.find("#phone").setValue("+7(902)-000-10-00");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
@@ -71,24 +65,10 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Необходимо раздизабливать поле 'Получить код' при отсутствии email в базе", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = generateWrapper(203);
 
     const buttonSelector = "[data-testid=btn_email]";
     await wrapper.find(buttonSelector).trigger("click");
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 203,
-        },
-      ],
-    });
 
     await wrapper.find("#email").setValue("kjdsflslkjgdvdlkmk@mail.ru");
     await wrapper.find("#btn_code_verification_lk").trigger("click");
@@ -100,11 +80,8 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показывать сообщение об ошибке при наличии русского символа", async () => {
-    const wrapper = mount(PasswordRecoveryForm, {
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = generateWrapper();
+
     await wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.find("#email").setValue("русскийсимвол@mail.ru");
     const emailInput = await wrapper.find("#email");
@@ -113,11 +90,8 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показывать сообщение об ошибке при наличии знака +", async () => {
-    const wrapper = mount(PasswordRecoveryForm, {
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = generateWrapper();
+
     await wrapper.find("#tab_mail_lk").trigger("click");
     const emailInput = await wrapper.find("#email");
     await wrapper.find("#email").setValue("Vasya+Katya@mail.ru");
@@ -126,11 +100,8 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Не должен показывать сообщение об ошибке при корректном email", async () => {
-    const wrapper = mount(PasswordRecoveryForm, {
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = generateWrapper();
+
     await wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.find("#email").setValue("test@mail.ru");
     const emailInput = await wrapper.find("#email");
@@ -139,11 +110,8 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Валидация правильности ввода телефона", async () => {
-    const wrapper = mount(PasswordRecoveryForm, {
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = generateWrapper();
+
     const verificationButton = await wrapper.find("#btn_code_verification_lk");
     expect(verificationButton.attributes("disabled")).toBe("disabled");
     await wrapper.find("#phone").setValue("+7(499)-000-00-02");
@@ -194,26 +162,11 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать поле код подверждения", async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    const wrapper = mount(PasswordRecoveryForm, {
-      mocks: {
-        localVue,
-        $LogEvent: (v) => v,
-      },
-    });
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
+    const wrapper = generateWrapper();
 
     expect(wrapper.find("#sms-confirm").exists()).toBe(false);
 
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
@@ -222,52 +175,24 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать поля 'Дата рождения', 'Пароль','Повторите пароль' и кнопку 'Изменить пароль'", async () => {
-    const localVue = createLocalVue();
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    const wrapper = generateWrapper();
+    await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("11111");
+    await wrapper.find("#sms-confirm").setValue(CODE);
     expect(wrapper.find("#birth-date").exists()).toBe(true);
   });
 
   it("Должен показать валидное поле 'Дата рождения'", async () => {
-    const localVue = createLocalVue();
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    const wrapper = generateWrapper();
+    await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("11111");
+    await wrapper.find("#sms-confirm").setValue(CODE);
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue("21.12.2052");
@@ -280,34 +205,20 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.findComponent("#password1").trigger("focus");
     expect(dataPickerInput.classes()).not.toContain("is-valid");
 
-    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
     await wrapper.findComponent("#password1").trigger("focus");
     expect(dataPickerInput.classes()).toContain("is-valid");
   });
 
   it("При клике на кнопку 'изменить номер' скрывается форма для ввода кода подтверждения", async () => {
-    const localVue = createLocalVue();
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    const wrapper = generateWrapper();
+    await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("11111");
+    await wrapper.find("#sms-confirm").setValue(CODE);
 
     await wrapper.find("#change_phone").trigger("click");
     await wrapper.vm.$nextTick();
@@ -317,31 +228,16 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать валидный пароль", async () => {
-    let wrapper = null;
-    const localVue = createLocalVue();
-    wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
+    const wrapper = generateWrapper();
 
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
-
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    await wrapper.findComponent("#sms-confirm").setValue("11111");
+    await wrapper.findComponent("#sms-confirm").setValue(CODE);
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
-    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
     await wrapper.findComponent("#password1").trigger("focus");
 
@@ -353,30 +249,16 @@ describe("PasswordRecoveryForm", () => {
   });
 
   it("Должен показать, что пароли одинаковые", async () => {
-    const localVue = createLocalVue();
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    const wrapper = generateWrapper();
+    await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("11111");
+    await wrapper.find("#sms-confirm").setValue(CODE);
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
-    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
     await wrapper.findComponent("#password1").trigger("focus");
 
@@ -407,13 +289,13 @@ describe("PasswordRecoveryForm", () => {
         },
       ],
     });
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("11111");
+    await wrapper.find("#sms-confirm").setValue(CODE);
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -437,7 +319,7 @@ describe("PasswordRecoveryForm", () => {
     );
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
-    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
 
     await wrapper.findComponent("#password1").trigger("focus");
@@ -515,7 +397,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("11111");
+    await wrapper.find("#sms-confirm").setValue(CODE);
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -528,7 +410,7 @@ describe("PasswordRecoveryForm", () => {
     });
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
-    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
 
     await wrapper.findComponent("#password1").trigger("focus");
@@ -577,7 +459,7 @@ describe("PasswordRecoveryForm", () => {
     ]);
   });
 
-  it("Не должен показывать  log с текстом об ошибке после капчи на телефоне", async () => {
+  it("Не должен показывать log с текстом об ошибке после капчи на телефоне", async () => {
     const localVue = createLocalVue();
     const logs = [];
     localVue.use(BootstrapVue);
@@ -638,13 +520,13 @@ describe("PasswordRecoveryForm", () => {
         },
       ],
     });
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
 
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("11111");
+    await wrapper.find("#sms-confirm").setValue(CODE);
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -667,7 +549,7 @@ describe("PasswordRecoveryForm", () => {
     );
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
-    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
 
     await wrapper.findComponent("#password1").trigger("focus");
@@ -685,30 +567,16 @@ describe("PasswordRecoveryForm", () => {
 
   it("Должен заблокировать кнопку отправки пароля при невалидном пароле", async () => {
     await jest.resetAllMocks();
-    const localVue = createLocalVue();
-    const wrapper = mount(PasswordRecoveryForm, {
-      localVue,
-      mocks: {
-        $LogEvent: (v) => v,
-      },
-    });
-
-    axios.post.mockReturnValue({
-      data: [
-        {
-          MESSAGE_CODE: 200,
-        },
-      ],
-    });
-    await wrapper.find("#phone").setValue("+7(910)-123-22-33");
+    const wrapper = generateWrapper();
+    await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("11111");
+    await wrapper.find("#sms-confirm").setValue(CODE);
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
-    dataPickerInput.setValue("21.12.2022");
+    dataPickerInput.setValue(DATE);
     dataPickerInput.trigger("change");
     await wrapper.findComponent("#password1").trigger("focus");
 
@@ -721,5 +589,125 @@ describe("PasswordRecoveryForm", () => {
     expect(
       wrapper.find("#btn_change-password_tel_lk").attributes("disabled")
     ).toBe("disabled");
+  });
+
+  it("Телефон и емейл остались заполнены после смены таба", async () => {
+    const wrapper = generateWrapper();
+
+    await wrapper.find("#phone").setValue(PHONE);
+    wrapper.find("#tab_mail_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.find("#email").setValue(EMAIL);
+    wrapper.find("#tab_tel_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#phone").element.value).toEqual(PHONE);
+    expect(wrapper.find("#phone").classes()).toContain("is-valid");
+
+    wrapper.find("#tab_mail_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#email").element.value).toEqual(EMAIL);
+    expect(wrapper.find("#email").classes()).toContain("is-valid");
+  });
+
+  it("Подтверждение телефона сохраняется при смене таба", async () => {
+    const wrapper = generateWrapper();
+
+    await wrapper.find("#phone").setValue(PHONE);
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const smsConfirm = wrapper.findComponent("#sms-confirm");
+
+    expect(smsConfirm.exists()).toBe(true);
+
+    await smsConfirm.setValue(CODE);
+
+    wrapper.find("#tab_mail_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+
+    wrapper.find("#tab_tel_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#phone").attributes("disabled")).toBe("disabled");
+    expect(wrapper.find("#change_phone").exists()).toBe(true);
+    const codeVerfificationBtn = wrapper.find("#btn_code_verification_lk");
+    expect(codeVerfificationBtn.isVisible()).toBe(false);
+
+    expect(wrapper).toBe(wrapper);
+  });
+
+  it("Подтверждение емейла сохраняется при смене таба", async () => {
+    const wrapper = generateWrapper();
+
+    wrapper.find("#tab_mail_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.find("#email").setValue(EMAIL);
+
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const smsConfirm = wrapper.findComponent("#sms-confirm");
+
+    expect(smsConfirm.exists()).toBe(true);
+
+    await smsConfirm.setValue(CODE);
+
+    wrapper.find("#tab_tel_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+
+    wrapper.find("#tab_mail_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("#email").attributes("disabled")).toBe("disabled");
+    expect(wrapper.find("#change_phone").exists()).toBe(true);
+    const codeVerfificationBtn = wrapper.find("#btn_code_verification_lk");
+    expect(codeVerfificationBtn.isVisible()).toBe(false);
+
+    expect(wrapper).toBe(wrapper);
+  });
+
+  it("Данные сохраняются при смене таба", async () => {
+    const wrapper = generateWrapper();
+
+    await wrapper.find("#phone").setValue(PHONE);
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
+
+    await wrapper.find("#sms-confirm").setValue(CODE);
+
+    const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
+    dataPickerInput.setValue(DATE);
+    dataPickerInput.trigger("change");
+
+    await wrapper.findComponent("#password1").trigger("focus");
+    await wrapper.find("#password1").setValue(CORRECT_PASSWORD);
+    await wrapper.find("#password2").setValue(CORRECT_PASSWORD);
+
+    wrapper.find("#tab_mail_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.find("#email").setValue(EMAIL);
+    
+    await wrapper.find("#btn_code_verification_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    wrapper.find("#change_phone").trigger("click");
+
+    wrapper.find("#tab_tel_lk").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const dataPickerInput2 = wrapper.find("[data-testid=regBornDate]");
+    expect(dataPickerInput2.classes()).toContain("is-valid");
+    expect(wrapper.find("#password1").classes()).toContain("is-valid");
+    expect(wrapper.find("#password1").element.value).toBe(CORRECT_PASSWORD);
+    expect(wrapper.find("#password2").classes()).toContain("is-valid");
+    expect(wrapper.find("#password2").element.value).toBe(CORRECT_PASSWORD);
   });
 });

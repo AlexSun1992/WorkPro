@@ -31,6 +31,7 @@
             @error="showError"
             :error="errorMessage"
             @getLoginType="loginType"
+            :isCodeFieldValid="isCodeFieldValid"
             :loginType="'phone'"
             :mode-type="'RECOVERY'"
             :v="$v.form"
@@ -89,6 +90,7 @@
             :v="$v.form"
             :count="60"
             :validateState="validateState"
+            :isCodeFieldValid="isCodeFieldValid"
             :tab-index="[10, 15]"
             @isPhoneChangedButtonClicked="checkIfButtonClicked"
             @checkCodeFieldValid="setCodeFieldValid"
@@ -147,25 +149,14 @@ import {
   required,
   email,
   minLength,
-  maxLength,
   sameAs,
   helpers,
 } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
-import {
-  BTabs,
-  BTab,
-  BAlert,
-  BRow,
-  BFormGroup,
-  BNav,
-  BNavItem,
-} from "bootstrap-vue";
+import { BRow, BFormGroup, BNav, BNavItem } from "bootstrap-vue";
 import axios from "axios";
 import moment from "moment/moment";
 import VerifyUser from "../Libs/VerifyUser/VerifyUser.vue";
-import UserRecoveryForm from "./UserRecoveryForm.vue";
-import birthdayPicker from "../Libs/BirthdatePicker/BirthdatePicker.vue";
 import birthdayPicker2 from "../Libs/BirthdatePicker/BirthdatePicker2.vue";
 import VerifyPassword from "../Libs/VerifyPassword/VerifyPassword.vue";
 import { passwordValidationDetail } from "../RegForm/regform.helper";
@@ -176,18 +167,24 @@ const forbiddenRussianSign = helpers.regex(
   /^[^а-яА-ЯёЁ]*$/i
 );
 const forbiddenPlusSign = helpers.regex("forbiddenPlusSign", /^[^+]*$/i);
+const EmptyForm = {
+  phone: "",
+  code: "",
+  email: "",
+  surname: "",
+  name: "",
+  patronymic: "",
+  birthdate: "",
+  password: "",
+  password2: "",
+};
 
 export default {
   layout: "MainLayout",
   components: {
     VerifyUser,
-    UserRecoveryForm,
-    birthdayPicker,
     birthdayPicker2,
     VerifyPassword,
-    BTabs,
-    BTab,
-    BAlert,
     BRow,
     BFormGroup,
     BNav,
@@ -196,7 +193,7 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
-      form: {},
+      form: { ...EmptyForm },
       phoneLabel: "Введите номер телефона указанный при регистрации",
       emailLabel: "Введите email указанный при регистрации",
       isEmailValid: false,
@@ -210,6 +207,8 @@ export default {
       myclass: ["cabinet okrecovery"],
       visibleForm: "phone",
       isCodeFieldValid: false,
+      isPhoneCodeValid: false,
+      isEmailCodeValid: false,
     };
   },
   mounted() {
@@ -231,11 +230,12 @@ export default {
     setCodeFieldValid(data) {
       if (data) {
         this.isCodeFieldValid = data;
+        if (this.visibleForm === "phone") this.isPhoneCodeValid = data;
+        if (this.visibleForm === "email") this.isEmailCodeValid = data;
       }
     },
     toggleForm(tabs) {
       if (this.visibleForm === tabs) {
-        this.clearForm();
         this.isCodeFieldValid = false;
         this.visibleForm = tabs === "phone" ? "email" : "phone";
         this.$LogEvent({
@@ -247,6 +247,16 @@ export default {
           }`,
           timeUser: new Date(),
         });
+      }
+      if (this.visibleForm === "phone") {
+        this.isCodeFieldValid = this.isPhoneCodeValid;
+      }
+      if (this.visibleForm === "email") {
+        this.isCodeFieldValid = this.isEmailCodeValid;
+      }
+
+      if (!this.isCodeFieldValid) {
+        this.$v.form.code.$reset();
       }
     },
 
@@ -336,7 +346,7 @@ export default {
               autoFocusButton: "ok",
             })
 
-            .then((value) => {
+            .then(() => {
               window.location.href = redirectSuccess("/login");
             })
             .catch((err) => {
@@ -385,17 +395,7 @@ export default {
       }
     },
     clearForm() {
-      this.form = {
-        phone: "",
-        code: "",
-        email: "",
-        surname: "",
-        name: "",
-        patronymic: "",
-        birthdate: "",
-        password: "",
-        password2: "",
-      };
+      this.form = { ...EmptyForm };
       this.isErrorMessage = false;
       this.$v.form.$reset();
     },
@@ -419,6 +419,9 @@ export default {
     },
     async checkIfButtonClicked(data) {
       this.changePhoneButtonClicked = data;
+      if (this.visibleForm === "phone") this.isPhoneCodeValid = false;
+      if (this.visibleForm === "email") this.isEmailCodeValid = false;
+      this.isCodeFieldValid = false;
     },
   },
   computed: {
@@ -443,12 +446,13 @@ export default {
       );
     },
     textMessage() {
-      if (this.currentTab == 0) {
+      if (this.currentTab === 0) {
         return "Если Ваш номер телефона существует в нашей базе, то вы получите код, который нужно ввести.";
       }
-      if (this.currentTab == 1) {
+      if (this.currentTab === 1) {
         return "Если ваш адрес электронной почты существует в нашей базе, то вы получите код, который нужно ввести.";
       }
+      return undefined;
     },
   },
 
