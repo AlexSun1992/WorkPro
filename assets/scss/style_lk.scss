@@ -5532,6 +5532,13 @@ ymaps[class*="balloon__close-button"] {
   display: none !important;
 }
 @media (max-width: 992px) {
+  ymaps[class*="balloon__close-button"] {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    right: 0px;
+    top: 5px;
+  }
   .map-balloon {
     font-size: 1.125rem;
   }
@@ -5548,14 +5555,22 @@ ymaps[class*="balloon__close-button"] {
   .ymaps-2-1-79-balloon {
     margin-left: 0px;
     width: 400px;
-    border-radius: 24px 24px 0px 0px;
+    border-radius: 24px;
   }
 }
 @media (max-width: 768px) {
+  .ymaps-2-1-79-balloon-pane {
+    width: 100%;
+  }
+  ymaps.ymaps-2-1-79-balloon-overlay {
+    width: 100% !important;
+    height: auto !important;
+    left: 57px !important;
+  }
   .ymaps-2-1-79-balloon {
     margin-left: 0px;
     width: 100%;
-    border-radius: 24px 24px 0px 0px;
+    border-radius: 0px;
   }
   .ymaps-2-1-79-balloon ymaps[style] {
     width: 100% !important;
@@ -6483,5 +6498,62 @@ h5.listing {
   }
   .ymaps-2-1-79-balloon__close + .ymaps-2-1-79-balloon__content {
     margin-right: 0px;
+  }
+
+  .ymaps-2-1-79-balloon__content {
+    padding: 0;
+  }
+  .ymaps-2-1-79-copyrights-pane {
+    inset: auto 0px 0px !important;
+    z-index: 6000 !important;
+  }
+  .map-balloon-adress {
+    font-size: 1rem;
+  }
+  .cabinet .map-balloon-title {
+    margin-bottom: 1.2rem;
+  }
+}
+
+.tabs-vis-btn {
+  background: #f2f4f5;
+  display: table;
+  width: auto;
+  margin: 0 auto;
+  padding: 2px;
+  border-radius: 8px;
+}
+
+.tabs-vis-btn .nav-item {
+  list-style: none;
+  display: inline-block;
+}
+.tabs-vis-btn .nav-item a {
+  display: block;
+  padding: 7px 25px;
+  color: #686868;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+.tabs-vis-btn .nav-item a.active {
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  color: #009639;
+}
+.bg-transparent {
+  background: transparent !important;
+}
+
+.insurance-case[data-id].bg-transparent .label {
+  color: #868686;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+@media (min-width: 400px) {
+  ymaps[class*="balloon__close-button"] {
+    right: 10px;
+    top: 10px;
   }
 }

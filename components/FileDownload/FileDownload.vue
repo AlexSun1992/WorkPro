@@ -14,36 +14,38 @@ export default {
   },
   methods: {
     async downloadItem(id, rel, fileName) {
-      this.$axios({
-        url: `/am/main/v2/file/${id}?rel=${rel}`,
-        method: "GET",
-        responseType: "blob",
-      })
-        .then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-        })
-        .catch((e) => {
-          this.$modal.alert({
-            title: "Извините, произошла ошибка",
-            msg: "Не удалось скачать файл",
-            icon: "error",
-            btnOk: false,
-          });
+      try {
+        const response = await this.$axios({
+          url: `/am/main/v2/file/${id}?rel=${rel}`,
+          method: "GET",
+          responseType: "blob",
         });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+      } catch (err) {
+        this.$modal.alert({
+          title: "Извините, произошла ошибка",
+          msg: "Не удалось скачать файл",
+          icon: "error",
+          btnOk: false,
+        });
+      }
     },
     conv_size(b) {
       let fsize;
-      let fsizekb = b / 1024;
-      let fsizemb = fsizekb / 1024;
+      const fsizekb = b / 1024;
+      const fsizemb = fsizekb / 1024;
+
       if (fsizekb <= 1024) {
-        fsize = fsizekb.toFixed(1) + " кб";
+        fsize = `${fsizekb.toFixed(1)} кб`;
       } else if (fsizekb >= 1024 && fsizemb <= 1024) {
-        fsize = fsizemb.toFixed(1) + " мб";
+        fsize = `${fsizemb.toFixed(1)} мб`;
       }
       return fsize;
     },
@@ -56,16 +58,20 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   & > div {
     min-width: 135px;
   }
 }
+
 .button {
   height: fit-content;
 }
+
 .file {
   max-width: 500px;
 }
+
 .size {
   font-style: italic;
   font-weight: 300;

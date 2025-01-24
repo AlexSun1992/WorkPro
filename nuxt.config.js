@@ -83,6 +83,7 @@ const nuxtConfig = {
     { src: "~/plugins/tooltip.js", ssr: false },
     "~/plugins/vueLog.js",
     "~/plugins/Vue2TouchEvents.js",
+    "~/plugins/lightGallery.client.js",
     { src: "~/plugins/YandexMap.js", mode: "client" },
     {
       src: "~/plugins/YandexMetrika",

@@ -3,6 +3,7 @@
        :class="{'overflow-hidden': !Array.isArray(options)}">
     <ControlDropdown v-if="Array.isArray(options)"
                      :options="optionsComputed"
+                     :visibleOptions="customStore.state.featuresList.length"
                      v-model="valueComputed"
                      placeholder="Выберете..."
     />

@@ -44,14 +44,14 @@ export default {
 
 <style scoped>
 .htmlStyleSuccess {
-  background: #fff url(/img/informer-sc.svg) left 16px top 16px no-repeat;
+  background: #fff url(/img/informer-sc.svg) left 16px top 12px no-repeat;
   padding: 16px 32px 16px 64px;
   color: #292929;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   border-radius: 16px;
 }
 .htmlStyleWarning {
-  background: #fff url(/img/informer-war.svg) left 16px top 16px no-repeat;
+  background: #fff url(/img/informer-war.svg) left 16px top 12px no-repeat;
 
   padding: 16px 32px 16px 64px;
   color: #292929;
@@ -59,7 +59,7 @@ export default {
   border-radius: 16px;
 }
 .htmlStyleError {
-  background: #fff url(/img/informer-er.svg) left 16px top 16px no-repeat;
+  background: #fff url(/img/informer-er.svg) left 16px top 12px no-repeat;
 
   padding: 16px 32px 16px 64px;
   color: #292929;
@@ -67,7 +67,7 @@ export default {
   border-radius: 16px;
 }
 .htmlStyleInformation {
-  background: #fff url(/img/informer-info.svg) left 16px top 16px no-repeat;
+  background: #fff url(/img/informer-info.svg) left 16px top 12px no-repeat;
   padding: 16px 32px 16px 64px;
   color: #292929;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
@@ -75,28 +75,28 @@ export default {
 }
 
 .conf-block .htmlStyleSuccess {
-  background: #edf8ea url(/img/informer-sc.svg) left 16px top 16px no-repeat;
+  background: #edf8ea url(/img/informer-sc.svg) left 16px top 12px no-repeat;
   border-radius: 30px;
   padding: 16px 32px 16px 64px;
   box-shadow: none;
   color: #292929;
 }
 .conf-block .htmlStyleWarning {
-  background: #fff1eb url(/img/informer-war.svg) left 16px top 16px no-repeat;
+  background: #fff1eb url(/img/informer-war.svg) left 16px top 12px no-repeat;
   border-radius: 30px;
   padding: 16px 32px 16px 64px;
   color: #292929;
   box-shadow: none;
 }
 .conf-block .htmlStyleError {
-  background: #ffebeb url(/img/informer-er.svg) left 16px top 16px no-repeat;
+  background: #ffebeb url(/img/informer-er.svg) left 16px top 12px no-repeat;
   border-radius: 30px;
   padding: 16px 32px 16px 64px;
   color: #292929;
   box-shadow: none;
 }
 .conf-block .htmlStyleInformation {
-  background: #ecf3fa url(/img/informer-info.svg) left 16px top 16px no-repeat;
+  background: #ecf3fa url(/img/informer-info.svg) left 16px top 12px no-repeat;
   border-radius: 30px;
   padding: 16px 32px 16px 64px;
   color: #292929;
