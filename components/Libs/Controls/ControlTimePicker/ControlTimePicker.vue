@@ -55,10 +55,23 @@ export default {
 
   data() {
     return {
-      value: this.data.value || "",
+      value: "",
       status: null,
       debouncedSetValue: debounce(this.setValue, 200),
     };
+  },
+
+  computed: {
+    outerState() {
+      return this.data.state;
+    },
+  },
+
+  mounted() {
+    if (this.data.value) {
+      this.value = this.data.value;
+      this.setValue();
+    }
   },
 
   watch: {
@@ -66,11 +79,14 @@ export default {
       this.status = this.value.length > 4;
       this.debouncedSetValue();
     },
+    outerState(newVal) {
+      this.status = newVal;
+    },
   },
 
   methods: {
     timeFormatter($event) {
-      const value = $event.replace(/\D/g, '');
+      const value = $event.replace(/\D/g, "");
 
       let hour = value.substr(0, 2);
       let minutes = value.substr(2, 2);
