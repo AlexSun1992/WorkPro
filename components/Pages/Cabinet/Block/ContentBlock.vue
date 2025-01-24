@@ -17,7 +17,7 @@
     />
     <slot
       :update="update"
-      :list="list"
+      :list="dataContent"
       :filters="filters"
       :getAddField="getAddField"
       :componentKey="componentKey"
@@ -31,24 +31,23 @@ export default {
   name: "ContentBlock",
   props: {
     itemId: {
-      required: false,
-      default: () => null,
+      type: [String, Number],
+      default: "",
     },
     cardId: {
-      required: false,
-      default: () => null,
+      type: [String, Number],
+      default: "",
     },
     isOpenCard: {
       type: Boolean,
-      required: false,
-      default: () => false,
+      default: false,
     },
     propertyId: {
-      type: String,
-      required: false,
-      default: () => null,
+      type: [String, null],
+      default: null,
     },
     params: {
+      type: Object,
       required: false,
     },
   },
@@ -88,42 +87,24 @@ export default {
   },
 
   computed: {
-    actions: {
-      get() {
-        return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
-      },
+    actions() {
+      return this.$store.getters["menu/getMenuById"](this.itemId).ACTIONSCUR;
     },
 
-    dataContent: {
-      get() {
-        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
-        if (block) {
-          return block.data;
-        }
-        return {};
-      },
-    },
-    list() {
-      return this.dataContent;
+    dataContent() {
+      const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+      return block?.data || {};
     },
     filters() {
-      const servers = this.$store.getters["blocks/getServerFilters"];
-      return servers;
+      return this.$store.getters["blocks/getServerFilters"];
     },
 
-    parentMenu: {
-      get() {
-        return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
-      },
+    parentMenu() {
+      return this.$store.getters["menu/getMenuById"](this.itemId).NPARENTMENU;
     },
-    isEmptyContent: {
-      get() {
-        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
-        if (block) {
-          return !block?.data?.items.length;
-        }
-        return false;
-      },
+    isEmptyContent() {
+      const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+      return block ? !block?.data?.items.length : false;
     },
   },
 

@@ -5,6 +5,7 @@
       :options="list"
       v-model="selectedItem"
       :placeholder="placeholder"
+      :isDisabled="isReadonlyAfterSelect"
     >
     </model-select>
   </div>
@@ -21,14 +22,15 @@ export default {
     list: {
       type: Array,
       required: true,
-      default: () => [],
     },
     placeholder: {
       type: String,
-      required: false,
-      default: () => "",
+      default: "",
     },
-
+    isReadonlyAfterSelect: {
+      type: Boolean,
+      default: false,
+    },
     isAutoSelectSingleRow: {
       type: Object,
       required: false,
@@ -36,7 +38,6 @@ export default {
     isAutoOpen: {
       type: Boolean,
       required: true,
-      default: () => true,
     },
   },
 
@@ -62,7 +63,5 @@ export default {
       this.selectedItem = val;
     },
   },
-
-  methods: {},
 };
 </script>
