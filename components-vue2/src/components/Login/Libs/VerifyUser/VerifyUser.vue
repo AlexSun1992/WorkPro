@@ -39,10 +39,7 @@
           id="email"
         ></b-form-input>
 
-        <b-form-invalid-feedback v-if="!v.email"
-          >Пожалуйста, заполните это поле</b-form-invalid-feedback
-        >
-        <b-form-invalid-feedback v-if="v.email && v.email.$model === ''"
+        <b-form-invalid-feedback v-if="!v.email || v.email.$model === ''"
           >Пожалуйста, заполните это поле</b-form-invalid-feedback
         >
 
@@ -89,7 +86,7 @@
     </div>
     <div class="col-12 col-lg-4 mt-3 pt-lg-1">
       <button
-        v-if="codeFieldShown"
+        v-if="codeFieldShown || isCodeFieldValid"
         @click="changeNumber"
         class="btn-link mt-lg-4 d-table"
         type="button"
@@ -145,7 +142,6 @@ import VerifyTimer from "./VerifyTimer.vue";
 import { isCaptchaBecomesHide } from "./captcha.helper";
 import {
   getMessageFromSuccessResponse,
-  getMessageFromMessageCode,
   isAlertShouldBeShown,
 } from "./verifyUser.helper";
 
@@ -597,7 +593,7 @@ export default {
       this.$emit("error", null);
       this.errorMessage = null;
       this.isUserBlured = false;
-      this.v.phone.$model = "";
+      this.v[this.loginType].$model = "";
       this.$refs.userInput.$el.disabled = false;
       this.$refs.userInput.$el.focus();
       this.v.code.$model = null;
@@ -619,6 +615,9 @@ export default {
     validateInput(field) {
       if (field === "code" && this.isCodeError) {
         return false;
+      }
+      if (this.isCodeFieldValid) {
+        return true;
       }
       return this.validateState(field);
     },
@@ -681,10 +680,10 @@ export default {
   },
   watch: {
     errorMessage(value) {
-      const isPhoneExist = value.includes(
+      const isPhoneExist = value?.includes(
         "В Личном кабинете отсутствует профиль с данным номером телефона"
       );
-      const isMailExist = value.includes(
+      const isMailExist = value?.includes(
         "На указанный e-mail отсутствует зарегистрированная уч.запись"
       );
       if (isPhoneExist || isMailExist) {
@@ -702,8 +701,11 @@ export default {
       this.loading = false;
     },
   },
-  destroyed() {
-    this.isSendCode = false;
+  mounted() {
+    if (this.isCodeFieldValid) {
+      this.isSendCode = true;
+      this.meassageWasSend = true;
+    }
   },
 };
 </script>
