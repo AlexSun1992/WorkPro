@@ -77,24 +77,20 @@ export default {
 
   props: {
     uniqueItems: {
-      type: Array,
-      required: false,
+      type: [Array, null],
       default: () => null,
     },
     defaultValue: {
       type: String,
-      required: false,
-      default: () => null,
+      default: "",
     },
     propertyName: {
-      type: String | Array[String],
+      type: [String, Array[String]],
       required: true,
-      default: () => null,
     },
     filterType: {
       type: String,
-      required: false,
-      default: () => "checkbox",
+      default: "checkbox",
     },
 
     itemId: {
@@ -104,26 +100,22 @@ export default {
 
     showButtonAll: {
       type: Boolean,
-      required: false,
-      default: () => false,
+      default: false,
     },
     allItemsButtonName: {
       type: String,
-      required: false,
-      default: () => "Все",
+      default: "Все",
     },
 
     showFilteredItemsCount: {
       type: Boolean,
       required: true,
-      default: () => false,
     },
 
     // Признак "вторичного" фильтра, который зависит от остальных и сбрасывается, если не найдены элементы
     isSecondaryFilter: {
       type: Boolean,
-      required: false,
-      default: () => false,
+      default: false,
     },
   },
 
@@ -209,12 +201,20 @@ export default {
     },
 
     filterItems(filters) {
+      const checkedHiddenItem = filters.some((item) => {
+        const count = this.getSameTypeUnitsCount(
+          this.getUnfilteredItemsCount,
+          item.name
+        );
+        return item.isChecked && count === 0;
+      });
       const isAnyCheckedFilter = filters.some(({ isChecked }) => isChecked);
       if (
-        this.isSecondaryFilter &&
-        filters.length > 0 &&
-        isAnyCheckedFilter === false &&
-        this.isAllFilters === false
+        (this.isSecondaryFilter &&
+          filters.length &&
+          !isAnyCheckedFilter &&
+          !this.isAllFilters) ||
+        checkedHiddenItem
       ) {
         this.clearFilter(this.propertyName);
       }
@@ -282,12 +282,8 @@ export default {
     setQueryURL() {
       const urlObject = new URL(window.location.href);
 
-      [...urlObject.searchParams.keys()]
-        .filter((item) => item !== "q")
-        .forEach((propertyName) => {
-          urlObject.searchParams.delete(propertyName);
-        });
-
+      [...urlObject.searchParams.keys()].filter((item) => item !== "q");
+      urlObject.searchParams.delete(this.propertyName);
       this.$store.getters["blocks/getFilters"].forEach((item) => {
         const { propertyName, filter } = item;
         filter.forEach((filterValue) => {

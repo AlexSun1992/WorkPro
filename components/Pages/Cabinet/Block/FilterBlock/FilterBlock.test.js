@@ -8,21 +8,22 @@ import {
   storaWithFilters,
 } from "./FilterBlock.helper.fixtures";
 
+const defaultProps = {
+  uniqueItems: ["Проекты", "Действующие", "Архивные"],
+  propertyName: "SSTATUS",
+  itemId: "712",
+  showFilteredItemsCount: true,
+  filterType: "radiobutton",
+  allItemsButtonName: "Все полисы",
+  showButtonAll: true,
+};
 describe("Пишем компонентные тесты на FilterBlock", () => {
   Vue.use(Vuex);
   let wrapper;
 
-  const createComponent = (store) => {
+  const createComponent = (store, propsData = defaultProps) => {
     wrapper = shallowMount(FilterBlock, {
-      propsData: {
-        uniqueItems: ["Проекты", "Действующие", "Архивные"],
-        propertyName: "SSTATUS",
-        itemId: "712",
-        showFilteredItemsCount: true,
-        filterType: "radiobutton",
-        allItemsButtonName: "Все полисы",
-        showButtonAll: true,
-      },
+      propsData,
 
       store,
       mocks: {
@@ -32,6 +33,33 @@ describe("Пишем компонентные тесты на FilterBlock", () =
       },
     });
   };
+
+  it("Проверяем наличие ошибок при пустых пропсах", async () => {
+    const emptyProps = {};
+    const consoleErrorSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    createComponent(storaNoFilters, emptyProps);
+    expect(consoleErrorSpy).toBeCalledTimes(3);
+    consoleErrorSpy.mockRestore();
+  });
+
+  it("Проверяем отображение передаваемого property uniqueItems и наличие дефолтного класса у кнопки 'Все полисы'", () => {
+    const errorProps = {
+      uniqueItems: [],
+      propertyName: "ERROR-SSTATUS",
+      itemId: "ERROR-712",
+      showFilteredItemsCount: true,
+      filterType: "error-radiobutton",
+      allItemsButtonName: "Все полисы",
+      showButtonAll: true,
+    };
+
+    
+    createComponent(storaNoFilters, errorProps);
+    expect(wrapper.text()).toContain("Все полисы");
+  });
 
   it("Проверяем отображение передаваемого property uniqueItems и наличие дефолтного класса у кнопки 'Все полисы'", () => {
     createComponent(storaNoFilters);

@@ -31,11 +31,13 @@
         :placeholder="name"
         :is-auto-select-single-row="firstValueFromList"
         :is-auto-open="isAutoOpen"
+        :is-readonly-after-select="isReadonlyMultiselect"
         @update="update"
       />
     </div>
   </div>
 </template>
+
 <script>
 import VRuntimeTemplate from "v-runtime-template";
 import { BFormGroup } from "bootstrap-vue";
@@ -59,13 +61,11 @@ export default {
   props: {
     data: {
       type: Object,
-      required: false,
       default: () => {},
     },
     isShowAsTemplate: {
       type: Boolean,
-      required: false,
-      default: () => false,
+      default: false,
     },
     queryParamName: {
       type: String,
@@ -101,19 +101,20 @@ export default {
     },
     template: {
       type: String,
-      required: false,
-      default: () => "",
+      default: "",
     },
 
     isButtonRender: {
       type: Boolean,
-      required: false,
-      default: () => true,
+      default: true,
     },
     isAutoOpen: {
       type: Boolean,
-      required: false,
-      default: () => false,
+      default: false,
+    },
+    isReadonlyAfterSelect: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -127,34 +128,35 @@ export default {
       firstValueFromList: null,
       InsuredPersonsList: null,
       componentUpdatedCount: 0,
+      isReadonlyMultiselect: false,
     };
   },
 
   computed: {
-    getData: {
-      get() {
-        if (this.itemId !== null) {
-          const data = this.$store.getters["menu/getMenuById"](
-            this.itemId
-          ).SVJCARDGRID;
-          if (data) {
-            return data;
-          }
+    getData() {
+      if (this.itemId !== null) {
+        const data = this.$store.getters["menu/getMenuById"](
+          this.itemId
+        ).SVJCARDGRID;
+        if (data) {
+          return data;
         }
-        return null;
-      },
+      }
+      return null;
     },
-    isEmptyContent: {
-      get() {
-        if (this.itemId !== null) {
-          const block = this.$store.getters["blocks/getBlockById"](this.itemId);
-          if (block) {
-            return !block?.data?.items.length;
-          }
-          return false;
+    isEmptyContent() {
+      if (this.itemId !== null) {
+        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+        if (block) {
+          return !block?.data?.items.length;
         }
-        return null;
-      },
+        return false;
+      }
+      return null;
+    },
+
+    serverFilters() {
+      return this.$store.getters["blocks/getServerFilters"];
     },
   },
 
@@ -169,11 +171,9 @@ export default {
     const defaultItem = this.dictionary?.find((item) => item.isDefault);
 
     if (defaultItem && this.$refs.multiselect) {
-      const serverFilters = this.$store.getters["blocks/getServerFilters"];
-      const selectOptionItems = this.dictionary;
       const choosenElement = elementDateWasChoosenByUser(
-        selectOptionItems,
-        serverFilters
+        this.dictionary,
+        this.serverFilters
       );
 
       if (choosenElement !== undefined) {
@@ -191,23 +191,47 @@ export default {
   },
 
   methods: {
+    getQueryParams() {
+      const url = new URL(window.location.href);
+      const { searchParams } = url;
+
+      if (searchParams.has(this.queryParamName)) {
+        const queryValue = searchParams.get(this.queryParamName);
+        const field = Object.values(this.list).find(
+          ({ value }) => String(value) === String(queryValue)
+        );
+        return field;
+      }
+      return false;
+    },
     openList() {
       this.visible = !this.visible;
     },
+
+    checkQueryParams() {
+      const value = this.$route.query[this.queryParamName];
+      if (!value) return undefined;
+
+      const initialValue = this.list.find(
+        (item) => String(item.value) === String(value)
+      );
+      return initialValue;
+    },
+
     async setOptions() {
       if (this.dictionary?.length) {
-        for (const item of this.dictionary) {
+        this.dictionary.forEach((item) => {
           if (typeof item === "string") {
-            this.list.push({
+          this.list.push({
               text: item,
               value: item,
             });
           } else {
             this.list.push(item);
           }
-        }
+        });
       } else {
-        const { _, items } = await this.$store.dispatch("data_card/fetchList", {
+        const { items } = await this.$store.dispatch("data_card/fetchList", {
           idItem: this.menuDic,
           idModule: this.$route.params.idModule,
         });
@@ -224,12 +248,11 @@ export default {
           });
         }
       }
-      const serverFiltersTest = this.$store.getters["blocks/getServerFilters"];
 
-      if (serverFiltersTest.length > 0) {
+      if (this.serverFilters.length > 0) {
         const choosenElement = elementDateWasChoosenByUser(
           this.list,
-          serverFiltersTest
+          this.serverFilters
         );
         if (choosenElement !== undefined) {
           this.firstValueFromList = choosenElement;
@@ -248,6 +271,10 @@ export default {
         if (getDefaultItem) {
           this.firstValueFromList = getDefaultItem;
         }
+        const valueFromQuery = this.checkQueryParams();
+        if (valueFromQuery) {
+          this.firstValueFromList = valueFromQuery;
+        }
       }
 
       if (this.list.length === 1 && this.isShowAsTemplate === true) {
@@ -255,27 +282,32 @@ export default {
           this.update(this.list[0]);
         }
       }
+
+      const elementFromQuery = this.getQueryParams();
+      if (elementFromQuery) {
+        this.firstValueFromList = elementFromQuery;
+        this.isReadonlyMultiselect = this.isReadonlyAfterSelect;
+      }
     },
 
     setFilter(e) {
       let filterObj;
-      for (const [propertyName, filter] of Object.entries({
+      const queries = Object.entries({
         [this.queryParamName]: this.queryParamValue,
-      })) {
+      });
+      queries.forEach(([propertyName, filter]) => {
         filterObj = {
           propertyName,
           filter,
         };
-      }
+      });
 
-      const foundedFilter = this.$store.getters["blocks/getServerFilters"].find(
-        (filter) => {
-          return filter.propertyName === this.queryParamName;
-        }
+      const foundedFilter = this.serverFilters.find(
+        (filter) => filter.propertyName === this.queryParamName
       );
 
       if (foundedFilter) {
-        if (foundedFilter && e.data) {
+        if (e.data) {
           this.$store.commit("blocks/updateServerFilters", {
             propertyName: this.queryParamName,
             filter: this.queryParamValue,
@@ -283,8 +315,7 @@ export default {
             filterIdNumber: e?.data[this.id],
             filterOptions: e.data,
           });
-        }
-        if (foundedFilter && !e.data) {
+        } else {
           this.$store.commit("blocks/updateServerFilters", {
             propertyName: this.queryParamName,
             filter: this.queryParamValue,
@@ -317,11 +348,9 @@ export default {
         [this.queryParamName]: this.queryParamValue,
       };
 
-      if (this.$store.getters["blocks/getServerFilters"].length > 1) {
+      if (this.serverFilters.length > 1) {
         query = {
-          filters: JSON.stringify(
-            this.$store.getters["blocks/getServerFilters"]
-          ),
+          filters: JSON.stringify(this.serverFilters),
         };
       }
 
@@ -329,6 +358,15 @@ export default {
         id: this.$route.params.idItem,
         query,
       });
+
+      const urlObject = new URL(window.location.href);
+      if (
+        urlObject.searchParams.has(this.queryParamName) &&
+        this.queryParamValue
+      ) {
+        urlObject.searchParams.set(this.queryParamName, this.queryParamValue);
+        window.history.replaceState(null, null, urlObject);
+      }
     },
   },
 };
