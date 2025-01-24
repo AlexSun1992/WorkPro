@@ -9,7 +9,7 @@
 
       <div class="frn">
         <VariantPolicyFranchise
-          :options="card.SFRANCHISE"
+          :options="options"
           v-model="selectedFranchise"
           @input="setFranchise"
           :customStore="customStore"
@@ -40,36 +40,56 @@ export default {
   components: { VariantPolicyFranchise },
   props: {
     customStore: {
+      type: Object,
       default: () => ({})
     },
     variants: {
+      type: Array,
       default: null,
     },
     card: {
+      type: Object,
       default: null
     },
     featuresList: {
+      type: Array,
       default: null
     },
     featuresData: {
+      type: Object,
       default: null
     }
   },
   data() {
     return {
-      selectedFranchise: this.customStore.state.selectedVariant?.IDVARIANT === this.card.ID ?
-        this.customStore.state.selectedVariant?.IDFRNANCHISE : null,
+      selectedFranchise: this.customStore.state?.selectedVariant?.IDVARIANT === this.card.ID ?
+        this.customStore.state?.selectedVariant?.IDFRNANCHISE : null,
     }
   },
   computed: {
+    variantCardId() {
+      return this.card.ID;
+    },
+    selectedCardId() {
+      return this.customStore.state?.selectedVariant?.IDVARIANT;
+    },
     isCardSelected() {
-      return this.customStore.state.selectedVariant?.IDVARIANT === this.card.ID;
+      return this.selectedCardId === this.variantCardId;
     },
     featuresListComputed() {
       return this.featuresList;
     },
     featuresDataComputed() {
       return this.featuresData;
+    },
+    options() {
+      const franchise = this.card.SFRANCHISE;
+      const isFranchiseArray = Array.isArray(franchise);
+
+      return {
+        list: isFranchiseArray ? franchise : null,
+        value: !isFranchiseArray ? franchise : null
+      }
     }
   },
   watch: {
@@ -90,7 +110,7 @@ export default {
       this.updateVariant(this.card);
     },
     updateVariant() {
-      this.$emit('updateVariant', this.customStore.state.selectedVariant);
+      this.$emit('updateVariant', this.customStore.state?.selectedVariant);
     },
 
     getFeatureIcon(value) {
@@ -104,7 +124,7 @@ export default {
 
     setFranchise(val) {
       this.customStore?.setFranchise(val);
-      this.setVariant(this.card?.ID)
+      /* this.setVariant(this.card?.ID); */
     }
   },
 }

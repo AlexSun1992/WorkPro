@@ -28,12 +28,15 @@ export default {
   name: "VariantPolicyFeatures",
   props: {
     customStore: {
+      type: Object,
       default: () => ({}),
     },
     featuresData: {
+      type: Object,
       default: null,
     },
     featuresList: {
+      type: Array,
       default: null,
     },
   },

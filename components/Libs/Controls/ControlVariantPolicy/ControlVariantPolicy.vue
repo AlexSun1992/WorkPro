@@ -117,7 +117,7 @@ export default {
     },
     featuresList: {
       get() {
-        return this.customStore.state.featuresList;
+        return this.customStore.state?.featuresList;
       },
       set(val) {
         this.customStore.setFeaturesList(val);
@@ -160,7 +160,7 @@ export default {
     },
     scrollToActiveVariant() {
       const selectedVariantId =
-        this.customStore.state.selectedVariant.IDVARIANT;
+        this.customStore.state?.selectedVariant?.IDVARIANT;
       const index =
         this.variants.findIndex((item) => item.ID === selectedVariantId) ?? 0;
 

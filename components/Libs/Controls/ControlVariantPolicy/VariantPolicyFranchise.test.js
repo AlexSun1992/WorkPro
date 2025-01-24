@@ -40,7 +40,7 @@ describe('VariantPolicyFranchise', () => {
     const wrapper = mount(VariantPolicyFranchise, {
       stubs: { ControlDropdown },
       propsData: {
-        options: options.text,
+        options: { value: options.text },
         customStore
       }
     });
