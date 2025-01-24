@@ -5,6 +5,21 @@ import vueEasyTooltipEsm from "vue-easy-tooltip";
 import ControlTimePicker from "./ControlTimePicker.vue";
 import { wait } from "../../../../utils/delayUtils";
 
+const createWrapper = (mockData) => {
+  const localVue = createLocalVue();
+  localVue.use(BootstrapVue);
+  localVue.use(VueMask);
+
+  return mount(ControlTimePicker, {
+    stubs: { vueEasyTooltip: vueEasyTooltipEsm },
+    localVue,
+    propsData: {
+      data: mockData,
+      edit: true,
+    },
+  });
+};
+
 describe("ControlTimePicker", () => {
   let wrapper;
   const mockData = {
@@ -14,34 +29,30 @@ describe("ControlTimePicker", () => {
     required: true,
     fieldId: "ControlTimePicker",
   };
+  const emptyMockData = {
+    name: "time",
+    required: true,
+    fieldId: "ControlTimePicker",
+  };
 
-  beforeEach(async () => {
-    const localVue = createLocalVue();
-    localVue.use(BootstrapVue);
-    localVue.use(VueMask);
-
-    wrapper = await mount(ControlTimePicker, {
-      stubs: { vueEasyTooltip: vueEasyTooltipEsm },
-      localVue,
-      propsData: {
-        data: mockData,
-        edit: true,
-      },
-    });
+  afterEach(() => {
+    wrapper.destroy();
+    jest.resetAllMocks();
+    jest.resetModules();
   });
 
   it("renders the component correctly", () => {
+    wrapper = createWrapper(mockData);
     expect(wrapper.exists()).toBe(true);
+    expect(wrapper.vm.value).toBe(mockData.value);
     expect(wrapper.find("label").text()).toContain(mockData.label);
   });
 
-  it("initializes value from props", () => {
-    expect(wrapper.vm.value).toBe(mockData.value);
-  });
-
   it("validates input correctly", async () => {
+    wrapper = createWrapper(emptyMockData);
     const input = wrapper.find("input");
 
+    expect(wrapper.vm.value).toBe("");
     expect(wrapper.vm.status).toBe(null);
 
     await input.setValue("25:00");
@@ -61,6 +72,7 @@ describe("ControlTimePicker", () => {
   });
 
   it("shows error message when input is invalid", async () => {
+    wrapper = createWrapper(mockData);
     const input = wrapper.find("input");
     await input.setValue("123");
     expect(wrapper.vm.value).toBe("12:3");
@@ -88,12 +100,15 @@ describe("ControlTimePicker", () => {
   });
 
   it("emits update event with correct payload", async () => {
+    wrapper = createWrapper(mockData);
     const input = wrapper.find("input");
-    await input.setValue("14:20");
-    await wait(250);
 
+    await input.setValue("14:20");
+    expect(wrapper.vm.value).toBe("14:20");
+
+    await wait(250);
     expect(wrapper.emitted().update).toBeTruthy();
-    expect(wrapper.emitted().update[0][0]).toEqual({
+    expect(wrapper.emitted().update[1][0]).toEqual({
       value: "1420",
       name: mockData.name,
       fieldId: mockData.fieldId,
