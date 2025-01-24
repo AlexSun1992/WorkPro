@@ -265,15 +265,6 @@ converter.form = async (data, params, instance) => {
               }`
             )
           );
-          console.log(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
-              webFields[i].ID
-            }/${params.id ?? 0}?${
-              Object.values(dicParams).length
-                ? new URLSearchParams(dicParams).toString()
-                : ``
-            }`
-          );
         }
       }
 
@@ -853,6 +844,8 @@ converter.save = (data) => {
         }
       } else if (data[i].name.substring(0, 1) === "B") {
         res[data[i].name] = data[i].value ? "Д" : "Н";
+      } else if (data[i].structType === "boolrus") {
+        res[data[i].name] = data[i].value ? "Д" : "Н";
       } else {
         res[data[i].name] = data[i].value ? "Y" : "N";
       }
@@ -892,13 +885,29 @@ converter.save = (data) => {
       }
     }
   }
-
   return res;
 };
 
 converter.queryParams = (data) => {
   function getVal(val) {
     if (typeof val === "boolean") {
+      if (data.structType === "boolrus") {
+        return data.value === true ? "Д" : "Н";
+      }
+
+      const transformedData = Object.entries(data).map(([key, value]) => ({
+        key,
+        value,
+      }));
+
+      const booleanValue = transformedData.find(
+        (item) => typeof item.value === "boolean"
+      );
+      if (Object.hasOwn(booleanValue, "key")) {
+        if (booleanValue.key.startsWith("B")) {
+          return val === true ? "Д" : "Н";
+        }
+      }
       return val === true ? "Y" : "N";
     }
     if (typeof val === "object") {
@@ -906,6 +915,7 @@ converter.queryParams = (data) => {
     }
     return val;
   }
+
   return Object.fromEntries(
     Object.entries(data).map(([key, val]) => [key, getVal(val)])
   );
