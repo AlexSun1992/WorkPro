@@ -48,7 +48,7 @@ describe("ControlTokenBox", () => {
     await wrapper.vm.toggleDropdown();
     expect(wrapper.emitted().update).toBeFalsy();
 
-    await wrapper.findAll("li:not(.selected-option)").at(0).trigger("click");
+    await wrapper.findAll("li:not(.selected-option)").at(1).trigger("click");
     expect(wrapper.emitted().update.length).toBe(1);
     expect(wrapper.emitted().update[0][0].value.length - initValue.length).toBe(
       1
