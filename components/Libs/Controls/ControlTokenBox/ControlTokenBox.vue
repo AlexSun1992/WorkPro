@@ -6,7 +6,6 @@
 
     <div class="header">
       <div
-        class=""
         :class="[{ open: isOpen }, 'selected-items']"
         @click="clickSelectedBox"
       >
