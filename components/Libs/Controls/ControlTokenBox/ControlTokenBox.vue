@@ -6,8 +6,8 @@
 
     <div class="header">
       <div
-        class="selected-items"
-        :class="{ open: isOpen }"
+        class=""
+        :class="[{ open: isOpen }, 'selected-items']"
         @click="clickSelectedBox"
       >
 
@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <SearchBox v-if="showSearchBox && isOpen"
+        <SearchBox v-if="showSearchBox && showSearchIn !== 'dropdown'"
                    v-model="searchValue"
                    @input="updateSearchValue"
                    @clear="isSearchActive = true"
@@ -46,7 +46,14 @@
       <span class="toggle-btn" @click="toggleDropdown"/>
     </div>
 
-    <ul class="control-dropdown-menu" :class="{ visible: isOpen }">
+    <ul :class="[{ visible: isOpen }, 'control-dropdown-menu']">
+      <li>
+        <SearchBox v-if="showSearchBox && showSearchIn === 'dropdown'"
+                   v-model="searchValue"
+                   @input="updateSearchValue"
+                   @clear="isSearchActive = true"
+                   @searchComplete="searchComplete"/>
+      </li>
       <template v-for="item in availableOptions">
         <li
           v-if="item.invisible !== true"
@@ -82,16 +89,22 @@ export default {
   components: { SearchBox },
   props: {
     data: {
-      default: {
+      type: Object,
+      default: () => ({
         value: [],
-      },
+      }),
       required: true,
     },
     searchable: {
+      type: Boolean,
       default: true
     },
     noOptionsText: {
+      type: String,
       default: "Нет подходящих значений"
+    },
+    showSearchIn: {
+      default: "dropdown"
     }
   },
   data() {
