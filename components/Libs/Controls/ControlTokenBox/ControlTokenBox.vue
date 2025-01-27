@@ -104,6 +104,7 @@ export default {
       default: "Нет подходящих значений"
     },
     showSearchIn: {
+      type: String,
       default: "dropdown"
     }
   },
@@ -189,7 +190,9 @@ export default {
         });
       }
 
-      this.closeAfterSelect && this.toggleDropdown();
+      if (this.closeAfterSelect) {
+        this.toggleDropdown();
+      }
     },
     clearSelectedItem(item) {
       this.$emit("update", {
@@ -202,7 +205,9 @@ export default {
       this.isSearchActive = true;
     },
     clickSelectedBox(ev) {
-      !ev.target.closest('.search-box') && this.toggleDropdown();
+      if (Boolean(ev.target.closest('.search-box')) === false) {
+        this.toggleDropdown();
+      }
     },
     toggleDropdown(val) {
       this.isOpen = typeof val === "boolean" ? val : !this.isOpen;
@@ -213,13 +218,15 @@ export default {
 
       return currentValue.includes(idValue);
     },
-    updateSearchValue(val) {
+    updateSearchValue() {
       this.toggleDropdown(true);
     },
     searchComplete() {
       const options = this.availableOptions;
 
-      options.length === 1 && this.selectItem(options[0]);
+      if (options.length === 1) {
+        this.selectItem(options[0]);
+      }
     },
     outOfClick(e) {
       const container = this.$refs.menu;
