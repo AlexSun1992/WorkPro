@@ -14,10 +14,9 @@ export const mobile2Service = (url) => {
   instance.interceptors.request.use(config => {
     const newConfig = Object.assign({}, config);
     const userAgent = newConfig.headers.common["user-agent"];
-    let platform;
 
     if (Boolean(userAgent)) {
-      platform = clientOs.getMobilePlatform(userAgent);
+      const platform = clientOs.getMobilePlatform(userAgent);
 
       newConfig.headers["X-DEV"] = platform.platform;
       newConfig.headers.common["X-DEV"] = platform.platform;
