@@ -8,7 +8,7 @@ export default {
     const userAgent = newConfig.headers.common["user-agent"];
     const cookies = newConfig.headers.common.Cookie;
     const result = { platform: OsTypes.default, webview: WebviewTypes.VueJS };
-console.log(newConfig)
+
     result.platform = this.getMobilePlatform(userAgent);
     result.webview = this.isWebview(cookies) ? WebviewTypes.isWebview : WebviewTypes.VueJS;
 
