@@ -8,7 +8,7 @@ export default {
     const userAgent = newConfig.headers.common["user-agent"];
     const cookies = newConfig.headers.common.Cookie;
     const result = { platform: OsTypes.default, webview: WebviewTypes.VueJS };
-
+console.log(newConfig)
     result.platform = this.getMobilePlatform(userAgent);
     result.webview = this.isWebview(cookies) ? WebviewTypes.isWebview : WebviewTypes.VueJS;
 
@@ -48,17 +48,8 @@ export default {
     return currentOs?.name ?? "";
   },
 
-  isWebview(cookies = "{}") {
-    try {
-      const cookiesObj = JSON.stringify(cookies);
-      const cookiesKeys = Object.keys(cookiesObj);
-
-      return cookiesKeys.includes(WebviewTypes.isWebview);
-    } catch (err) {
-      console.warn(err);
-
-      return WebviewTypes.VueJS;
-    }
+  isWebview(cookies = "") {
+    return cookies.includes("isWebview=");
     // return clientOsPlatforms.android.includes(os) || clientOsPlatforms.ios.includes(os);
   }
 }
