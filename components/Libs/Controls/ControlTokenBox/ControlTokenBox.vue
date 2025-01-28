@@ -53,9 +53,8 @@
     </div>
 
     <ul :class="[{ visible: isOpen }, 'control-dropdown-menu']">
-      <li>
+      <li v-if="getSearchBoxPosition() === SearchBoxType['dropdown']">
         <SearchBox
-          v-if="getSearchBoxPosition() === SearchBoxType['dropdown']"
           v-model="searchValue"
           @input="updateSearchValue"
           @clear="isSearchActive = true"
@@ -79,9 +78,8 @@
         </li>
       </template>
 
-      <li>
+      <li v-if="getSearchBoxPosition() === SearchBoxType['dropdownReverse']">
         <SearchBox
-          v-if="getSearchBoxPosition() === SearchBoxType['dropdownReverse']"
           v-model="searchValue"
           @input="updateSearchValue"
           @clear="isSearchActive = true"
