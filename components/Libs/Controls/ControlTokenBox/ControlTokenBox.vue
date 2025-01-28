@@ -120,9 +120,10 @@ export default {
       type: String,
       default: "Нет подходящих значений",
     },
+    // Возможные значения: inline, inlineReverse, dropdown, dropdownReverse
     showSearchIn: {
       type: String,
-      default: searchBoxType.dropdownReverse,
+      default: searchBoxType.dropdown
     },
   },
   data() {
@@ -225,7 +226,7 @@ export default {
       this.isSearchActive = true;
     },
     clickSelectedBox(ev) {
-      if (Boolean(ev.target.closest(".search-box")) === false) {
+      if (!ev.target.closest(".search-box")) {
         this.toggleDropdown();
       }
     },
