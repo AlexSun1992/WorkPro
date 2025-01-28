@@ -64,7 +64,7 @@
       </div>
 
       <wizard-buttons
-        v-if="btnsWizardOutside && isShowButton"
+        v-if="settingsByItem.isUploader === false && btnsWizardOutside"
         :current-tab="currentTab"
         :tabs="tabs"
         :qty="settings.wizard.length"
@@ -102,11 +102,6 @@ export default {
     await store.dispatch("wizard/fetchWizard", route.params);
   },
   computed: {
-    isShowButton() {
-      return this.$store.getters["data_card/isShowWizardButton"](
-        this.settingsByItem.isUploader
-      );
-    },
     isLoading() {
       return this.$store.getters["wizard/getIsWizardButtonsLoading"];
     },
@@ -272,9 +267,11 @@ export default {
           }
         }
       }
+      await this.$store.dispatch("menu/fetchMenuById", e);
       this.$router.push(this.getURL(e));
     },
     async goBack(e) {
+      await this.$store.dispatch("menu/fetchMenuById", e);
       this.$router.push(this.getURL(e));
     },
     async saveCard() {

@@ -438,6 +438,7 @@ export default {
               const tab = this.wizardTabs.find(
                 (w) => w.idItem === parseInt(nextIdItem, 10)
               );
+              await this.$store.dispatch("menu/fetchMenuById", tab);
               const settingsTab = this.$store.getters[
                 "menu/getSettingsByIdItem"
               ](tab.idItem || {});
@@ -483,6 +484,12 @@ export default {
             if (this.$route.params.idCard) {
               await this.$store.dispatch(
                 "data_card/fetchForm",
+                this.$route.params
+              );
+            }
+            if (this.wizardTabs) {
+              await this.$store.dispatch(
+                "wizard/fetchWizard",
                 this.$route.params
               );
             }
