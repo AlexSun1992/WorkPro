@@ -1,35 +1,48 @@
 import clientOsData from "./clientOsData.mjs";
 import clientOsPlatforms from "./clientOsPlatforms.mjs";
+import { OsTypes, WebviewTypes } from "./clientOsConstants.mjs";
 
 export default {
+  getWebviewData(config) {
+    const newConfig = Object.assign({}, config);
+    const userAgent = newConfig.headers.common["user-agent"];
+    const cookies = newConfig.headers.common.Cookie;
+    const result = { platform: OsTypes.default, webview: WebviewTypes.VueJS };
+
+    if (userAgent) {
+      result.platform = this.getMobilePlatform(userAgent);
+    }
+
+    result.webview = this.isWebview(cookies) ? "isWebview" : WebviewTypes.VueJS;
+
+    return result;
+  },
   /**
    *
    * @param userAgent {string} - либо передать вызов метода clientOs.getPlatform() который должен быть выполнент на клиенте
-   * @returns {{isWebview: string, platform: string}}
+   * @returns {Number}
    */
   getMobilePlatform(userAgent) {
-    const result = { isWebview: "", platform: "" };
     const platformOs = this.getOsInfo(userAgent);
 
     if (platformOs) {
-      result.platform = this.getOsPlatform(platformOs);
-      result.isWebview = this.isWebview(platformOs) ? "isWebview" : "";
+      return this.getOsPlatform(platformOs);
     }
 
-    return result;
+    return OsTypes.default;
   },
 
   getOsPlatform(platformOs) {
     // 7 - IOS; 8 - Android
     if (Boolean(platformOs) && clientOsPlatforms.android.includes(platformOs)) {
-      return 8;
+      return OsTypes.android;
     }
 
     if (Boolean(platformOs) && clientOsPlatforms.ios.includes(platformOs)) {
-      return 7;
+      return OsTypes.ios;
     }
 
-    return "";
+    return OsTypes.default;
   },
 
   getOsInfo(userAgent = "") {
@@ -38,7 +51,8 @@ export default {
     return currentOs?.name ?? "";
   },
 
-  isWebview(os) {
-    return clientOsPlatforms.android.includes(os) || clientOsPlatforms.ios.includes(os);
+  isWebview(cookies = "") {
+    return cookies.includes(WebviewTypes.isWebview);
+    // return clientOsPlatforms.android.includes(os) || clientOsPlatforms.ios.includes(os);
   }
 }
