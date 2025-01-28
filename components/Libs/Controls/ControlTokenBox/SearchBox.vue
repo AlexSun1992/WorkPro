@@ -1,10 +1,11 @@
 <template>
-  <div class="d-flex flex-row search-box">
+  <div class="search-box">
     <input
       type="text"
       class="search-input"
       :value="value"
       ref="searchInput"
+      placeholder="Найти"
       @blur="activateInput"
       @keyup.stop.esc="clearInput"
       @keyup.stop.enter="searchComplete"
@@ -51,21 +52,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search-input {
-  padding: 1em 0 1em 1em;
-  height: 2em;
-  margin: 0.5em 0;
-  border-radius: 0.5em;
-}
-
 .button-wrapper {
   width: 2em;
 }
-
+.search-box input:hover,
+.search-box input {
+  border: 0;
+  padding: 0 40px;
+  background: url(/img/icon-search.svg) 12px center no-repeat;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 30px;
+  text-align: left;
+  margin: -12px -20px;
+}
 button {
   border: none;
-  background-color: inherit;
-  color: #000;
+  right: 1rem;
+  width: 24px;
+  height: 24px;
+  font-size: 0;
+  background: transparent
+    url(/system/modules/ru.reso.v2/resources/img/icons/icon-btn-close.svg)
+    no-repeat center center;
+  position: absolute;
+  top: 1rem;
 }
 
 button:hover {

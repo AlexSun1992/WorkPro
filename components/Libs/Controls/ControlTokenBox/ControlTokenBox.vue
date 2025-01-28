@@ -123,14 +123,14 @@ export default {
     // Возможные значения: inline, inlineReverse, dropdown, dropdownReverse
     showSearchIn: {
       type: String,
-      default: searchBoxType.dropdown
+      default: searchBoxType.dropdown,
     },
   },
   data() {
     return {
       isOpen: false,
       searchValue: "",
-      isSearchActive: false
+      isSearchActive: false,
     };
   },
   computed: {
@@ -192,7 +192,7 @@ export default {
     },
     SearchBoxType() {
       return searchBoxType;
-    }
+    },
   },
   methods: {
     nextTick,
@@ -358,8 +358,8 @@ header {
   width: 1em;
   height: 1em;
   content: "";
-  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTQuMjA3IDEuNzA3bC02IDZhLjk5Ny45OTcgMCAwMS0xLjQxNCAwbC02LTZBLjk5OS45OTkgMCAxMTIuMjA3LjI5M0w3LjUgNS41ODYgMTIuNzkzLjI5M2EuOTk5Ljk5OSAwIDExMS40MTQgMS40MTR6IiBmaWxsPSIjNDNCMDJBIi8+PC9zdmc+)
-    100% no-repeat;
+  /*background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTQuMjA3IDEuNzA3bC02IDZhLjk5Ny45OTcgMCAwMS0xLjQxNCAwbC02LTZBLjk5OS45OTkgMCAxMTIuMjA3LjI5M0w3LjUgNS41ODYgMTIuNzkzLjI5M2EuOTk5Ljk5OSAwIDExMS40MTQgMS40MTR6IiBmaWxsPSIjNDNCMDJBIi8+PC9zdmc+)    100% no-repeat;*/
+  background: url(/img/icon-btn-dropdown.svg) 50% 50% no-repeat;
   position: absolute;
   right: 13px;
   top: 20px;
@@ -404,5 +404,26 @@ header {
   color: gray;
   cursor: pointer;
   padding-right: 0.25em;
+}
+.search-input {
+  border: 0px;
+  padding: 0 40px;
+  background: url(/img/icon-btn-dropdown.svg) 16px center no-repeat;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 30px;
+  text-align: left;
+}
+
+.search-box {
+  display: block;
+  width: 100%;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
 }
 </style>
