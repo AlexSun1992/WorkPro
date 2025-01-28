@@ -9,7 +9,13 @@
         :class="[{ open: isOpen }, 'selected-items']"
         @click="clickSelectedBox"
       >
-
+        <SearchBox
+          v-if="getSearchBoxPosition() === SearchBoxType['inline']"
+          v-model="searchValue"
+          @input="updateSearchValue"
+          @clear="isSearchActive = true"
+          @searchComplete="searchComplete"
+        />
 
         <div v-if="!selectedItems.length" class="placeholder">
           {{ placeholder }}
@@ -21,7 +27,6 @@
           class="selected-value"
           :key="item[valueKey]"
         >
-
           <slot name="selectedItem" :item="item">
             <span> {{ item ? item[textKey] : "" }}&nbsp; </span>
           </slot>
@@ -35,23 +40,27 @@
           </div>
         </div>
 
-        <SearchBox v-if="showSearchBox && showSearchIn !== 'dropdown'"
-                   v-model="searchValue"
-                   @input="updateSearchValue"
-                   @clear="isSearchActive = true"
-                   @searchComplete="searchComplete"/>
+        <SearchBox
+          v-if="getSearchBoxPosition() === SearchBoxType['inlineReverse']"
+          v-model="searchValue"
+          @input="updateSearchValue"
+          @clear="isSearchActive = true"
+          @searchComplete="searchComplete"
+        />
       </div>
 
-      <span class="toggle-btn" @click="toggleDropdown"/>
+      <span class="toggle-btn" @click="toggleDropdown" />
     </div>
 
     <ul :class="[{ visible: isOpen }, 'control-dropdown-menu']">
       <li>
-        <SearchBox v-if="showSearchBox && showSearchIn === 'dropdown'"
-                   v-model="searchValue"
-                   @input="updateSearchValue"
-                   @clear="isSearchActive = true"
-                   @searchComplete="searchComplete"/>
+        <SearchBox
+          v-if="getSearchBoxPosition() === SearchBoxType['dropdown']"
+          v-model="searchValue"
+          @input="updateSearchValue"
+          @clear="isSearchActive = true"
+          @searchComplete="searchComplete"
+        />
       </li>
       <template v-for="item in availableOptions">
         <li
@@ -65,13 +74,22 @@
           @click="!item.disabled && selectItem(item)"
         >
           <slot name="optionItem" :item="item">
-            <span v-html="item[textKey]"/>
+            <span v-html="item[textKey]" />
           </slot>
         </li>
       </template>
 
-      <li v-if="!availableOptions.length"
-          class="disabled">
+      <li>
+        <SearchBox
+          v-if="getSearchBoxPosition() === SearchBoxType['dropdownReverse']"
+          v-model="searchValue"
+          @input="updateSearchValue"
+          @clear="isSearchActive = true"
+          @searchComplete="searchComplete"
+        />
+      </li>
+
+      <li v-if="!availableOptions.length" class="disabled">
         {{ noOptionsText }}
       </li>
     </ul>
@@ -79,9 +97,9 @@
 </template>
 
 <script>
-
 import { nextTick } from "process";
 import SearchBox from "./SearchBox.vue";
+import searchBoxType from "./searchBoxType";
 
 export default {
   name: "ControlTokenBox",
@@ -96,16 +114,16 @@ export default {
     },
     searchable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     noOptionsText: {
       type: String,
-      default: "Нет подходящих значений"
+      default: "Нет подходящих значений",
     },
     showSearchIn: {
       type: String,
-      default: "dropdown"
-    }
+      default: searchBoxType.dropdownReverse,
+    },
   },
   data() {
     return {
@@ -116,13 +134,12 @@ export default {
   },
   computed: {
     options() {
-      return (
-        this.data.options ??
-        []
-      );
+      return this.data.options ?? [];
     },
     filteredOptions() {
-      return this.options.filter(item => item[this.textKey].includes(this.searchValue));
+      return this.options.filter((item) =>
+        item[this.textKey].includes(this.searchValue)
+      );
     },
     optionsWithHelp() {
       const options = this.filteredOptions;
@@ -132,12 +149,13 @@ export default {
         return options;
       }
 
-      return options.map(item => {
-        const newItem = { ...item };
+      return options.map((item) => {
+        const newVal = item[this.textKey].replaceAll(
+          searchValue,
+          `<b>${searchValue}</b>`
+        );
 
-        newItem[this.textKey] = newItem[this.textKey].replaceAll(searchValue, `<b>${ searchValue }</b>`);
-
-        return newItem;
+        return { ...item, [this.textKey]: newVal };
       });
     },
     availableOptions() {
@@ -170,12 +188,15 @@ export default {
     },
     showSearchBox() {
       return this.searchable && this.isOpen;
+    },
+    SearchBoxType() {
+      return searchBoxType;
     }
   },
   methods: {
     nextTick,
     selectItem(item) {
-      const currentValue = [ ...this.value ];
+      const currentValue = [...this.value];
       const idValue = item[this.valueKey];
 
       if (this.isSelectedItem(item)) {
@@ -204,7 +225,7 @@ export default {
       this.isSearchActive = true;
     },
     clickSelectedBox(ev) {
-      if (Boolean(ev.target.closest('.search-box')) === false) {
+      if (Boolean(ev.target.closest(".search-box")) === false) {
         this.toggleDropdown();
       }
     },
@@ -212,7 +233,7 @@ export default {
       this.isOpen = typeof val === "boolean" ? val : !this.isOpen;
     },
     isSelectedItem(item) {
-      const currentValue = [ ...this.value ];
+      const currentValue = [...this.value];
       const idValue = item[this.valueKey];
 
       return currentValue.includes(idValue);
@@ -233,14 +254,19 @@ export default {
       if (!container?.contains(e.target)) {
         this.toggleDropdown(false);
       }
-    }
+    },
+    getSearchBoxPosition() {
+      const val = this.SearchBoxType[this.showSearchIn] ?? null;
+
+      return this.showSearchBox ? val : null;
+    },
   },
   mounted() {
     document.addEventListener("mouseup", this.outOfClick);
   },
   beforeDestroy() {
     document.removeEventListener("mouseup", this.outOfClick);
-  }
+  },
 };
 </script>
 
@@ -331,7 +357,8 @@ header {
   width: 1em;
   height: 1em;
   content: "";
-  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTQuMjA3IDEuNzA3bC02IDZhLjk5Ny45OTcgMCAwMS0xLjQxNCAwbC02LTZBLjk5OS45OTkgMCAxMTIuMjA3LjI5M0w3LjUgNS41ODYgMTIuNzkzLjI5M2EuOTk5Ljk5OSAwIDExMS40MTQgMS40MTR6IiBmaWxsPSIjNDNCMDJBIi8+PC9zdmc+) 100% no-repeat;
+  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTQuMjA3IDEuNzA3bC02IDZhLjk5Ny45OTcgMCAwMS0xLjQxNCAwbC02LTZBLjk5OS45OTkgMCAxMTIuMjA3LjI5M0w3LjUgNS41ODYgMTIuNzkzLjI5M2EuOTk5Ljk5OSAwIDExMS40MTQgMS40MTR6IiBmaWxsPSIjNDNCMDJBIi8+PC9zdmc+)
+    100% no-repeat;
   position: absolute;
   right: 13px;
   top: 20px;

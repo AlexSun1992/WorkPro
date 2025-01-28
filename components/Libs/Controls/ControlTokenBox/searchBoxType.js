@@ -7,4 +7,9 @@
  dropdownReverse - Поиск размещается последним элементом
  */
 
-export default ["inline", "inlineReverse", "dropdown", "dropdownReverse"];
+export default {
+  inline: "inline",
+  inlineReverse: "inlineReverse",
+  dropdown: "dropdown",
+  dropdownReverse: "dropdownReverse",
+};
