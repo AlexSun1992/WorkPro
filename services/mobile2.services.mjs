@@ -15,7 +15,7 @@ export const mobile2Service = (url) => {
   instance.interceptors.request.use(config => {
     const webviewData = clientOs.getWebviewData(config);
     const newConfig = Object.assign({}, config);
-
+    console.log(JSON.stringify(webviewData));
     newConfig.headers["X-DEV"] = webviewData.platform;
     newConfig.headers.common["X-DEV"] = webviewData.platform;
     newConfig.headers["X-Application"] = webviewData.webview;

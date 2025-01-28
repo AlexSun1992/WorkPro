@@ -9,11 +9,8 @@ export default {
     const cookies = newConfig.headers.common.Cookie;
     const result = { platform: OsTypes.default, webview: WebviewTypes.VueJS };
 
-    if (userAgent) {
-      result.platform = this.getMobilePlatform(userAgent);
-    }
-
-    result.webview = this.isWebview(cookies) ? "isWebview" : WebviewTypes.VueJS;
+    result.platform = this.getMobilePlatform(userAgent);
+    result.webview = this.isWebview(cookies) ? WebviewTypes.isWebview : WebviewTypes.VueJS;
 
     return result;
   },
@@ -51,8 +48,17 @@ export default {
     return currentOs?.name ?? "";
   },
 
-  isWebview(cookies = "") {
-    return cookies.includes(WebviewTypes.isWebview);
+  isWebview(cookies = "{}") {
+    try {
+      const cookiesObj = JSON.stringify(cookies);
+      const cookiesKeys = Object.keys(cookiesObj);
+
+      return cookiesKeys.includes(WebviewTypes.isWebview);
+    } catch (err) {
+      console.warn(err);
+
+      return WebviewTypes.VueJS;
+    }
     // return clientOsPlatforms.android.includes(os) || clientOsPlatforms.ios.includes(os);
   }
 }
