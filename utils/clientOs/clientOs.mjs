@@ -3,6 +3,17 @@ import clientOsPlatforms from "./clientOsPlatforms.mjs";
 import { OsTypes, WebviewTypes } from "./clientOsConstants.mjs";
 
 export default {
+  updateMobileViewConfig(config) {
+    const webviewData = this.getWebviewData(config);
+    const newConfig = Object.assign({}, config);
+
+    newConfig.headers["X-DEV"] = webviewData.platform;
+    newConfig.headers.common["X-DEV"] = webviewData.platform;
+    newConfig.headers["X-Application"] = webviewData.webview;
+    newConfig.headers.common["X-Application"] = webviewData.webview;
+
+    return newConfig;
+  },
   getWebviewData(config) {
     const newConfig = Object.assign({}, config);
     const userAgent = newConfig.headers.common["user-agent"];
@@ -49,7 +60,14 @@ export default {
   },
 
   isWebview(cookies = "") {
-    return cookies.includes("isWebview=");
-    // return clientOsPlatforms.android.includes(os) || clientOsPlatforms.ios.includes(os);
+    const partsOfCookies = Boolean(cookies) ? cookies.split("; ") : null;
+
+    if (partsOfCookies) {
+      return partsOfCookies.some(item => {
+        return item.split("=")[0] === "isWebview";
+      });
+    }
+
+    return false;
   }
 }
