@@ -1,6 +1,6 @@
 import clientOs from "./clientOs";
 import { clientOsTestData } from "./clientOsTestData";
-import { OsTypes, WebviewTypes } from "./clientOsConstants.mjs";
+import { OsTypes, WebviewTypes } from "./clientOsConstants";
 
 describe("clientOs utils", () => {
   let mock;
