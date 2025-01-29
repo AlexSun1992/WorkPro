@@ -39,32 +39,33 @@ export default {
 
   getOsPlatform(platformOs) {
     // 7 - IOS; 8 - Android
-    if (Boolean(platformOs) && clientOsPlatforms.android.includes(platformOs)) {
+    if (platformOs && clientOsPlatforms.android.includes(platformOs)) {
       return OsTypes.android;
     }
-
-    if (Boolean(platformOs) && clientOsPlatforms.ios.includes(platformOs)) {
+    if (platformOs && clientOsPlatforms.ios.includes(platformOs)) {
       return OsTypes.ios;
     }
-
     return OsTypes.default;
   },
 
-  getOsInfo(userAgent = "") {
-    const currentOs = clientOsData.find(item => userAgent.search(item.regex) >= 0);
+getOsInfo(userAgent = "")
+{
+  const currentOs = clientOsData.find(item => userAgent.search(item.regex) >= 0);
 
-    return currentOs?.name ?? "";
-  },
+  return currentOs?.name ?? "";
+}
+,
 
-  isWebview(cookies = "") {
-    const partsOfCookies = Boolean(cookies) ? cookies.split("; ") : null;
+isWebview(cookies = "")
+{
+  const partsOfCookies = Boolean(cookies) ? cookies.split("; ") : null;
 
-    if (partsOfCookies) {
-      return partsOfCookies.some(item => {
-        return item.split("=")[0] === "isWebview";
-      });
-    }
-
-    return false;
+  if (partsOfCookies) {
+    return partsOfCookies.some(item => {
+      return item.split("=")[0] === "isWebview";
+    });
   }
+
+  return false;
+}
 }
