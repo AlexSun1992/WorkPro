@@ -72,11 +72,9 @@ button {
   width: 24px;
   height: 24px;
   font-size: 0;
-  background: transparent
-    url(/system/modules/ru.reso.v2/resources/img/icons/icon-btn-close.svg)
-    no-repeat center center;
+  background: transparent url(/img/icon-btn-close.svg) no-repeat center center;
   position: absolute;
-  top: 1rem;
+  top: 1px;
 }
 
 button:hover {
