@@ -26,7 +26,7 @@ export default {
   /**
    *
    * @param userAgent {string} - либо передать вызов метода clientOs.getPlatform() который должен быть выполнент на клиенте
-   * @params iwWebview {boolean}
+   * @params isWebview {boolean}
    * @returns {Number}
    */
   getMobilePlatform(userAgent, iwWebview) {
