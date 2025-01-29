@@ -5,19 +5,16 @@ import { OsTypes, WebviewTypes } from "./clientOsConstants.mjs";
 export default {
   updateMobileViewConfig(config) {
     const webviewData = this.getWebviewData(config);
-    const newConfig = Object.assign({}, config);
+    const newConfig = { ...config };
 
-    newConfig.headers["X-DEV"] = webviewData.platform;
     newConfig.headers.common["X-DEV"] = webviewData.platform;
-    newConfig.headers["X-Application"] = webviewData.webview;
     newConfig.headers.common["X-Application"] = webviewData.webview;
 
     return newConfig;
   },
   getWebviewData(config) {
-    const newConfig = Object.assign({}, config);
-    const userAgent = newConfig.headers.common["user-agent"];
-    const cookies = newConfig.headers.common.Cookie;
+    const userAgent = config?.headers.common["user-agent"] ?? "";
+    const cookies = config?.headers.common.Cookie ?? "";
     const result = { platform: OsTypes.default, webview: WebviewTypes.VueJS };
 
     result.platform = this.getMobilePlatform(userAgent);
