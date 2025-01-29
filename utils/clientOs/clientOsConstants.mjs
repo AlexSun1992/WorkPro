@@ -1,7 +1,10 @@
 export const OsTypes = {
-  android: 8,
-  ios: 7,
-  default: 9
+  web: 1,
+  ios: 2,
+  android:3,
+  webviewIos: 7,
+  webviewAndroid: 8,
+  default: 9,
 }
 
 export const WebviewTypes = {
