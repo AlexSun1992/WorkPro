@@ -16,56 +16,56 @@ export default {
     const userAgent = config?.headers.common["user-agent"] ?? "";
     const cookies = config?.headers.common.Cookie ?? "";
     const result = { platform: OsTypes.default, webview: WebviewTypes.VueJS };
+    const isWebview = this.isWebview(cookies);
 
-    result.platform = this.getMobilePlatform(userAgent);
-    result.webview = this.isWebview(cookies) ? WebviewTypes.isWebview : WebviewTypes.VueJS;
+    result.webview = isWebview ? WebviewTypes.isWebview : WebviewTypes.VueJS;
+    result.platform = this.getMobilePlatform(userAgent, isWebview);
 
     return result;
   },
   /**
    *
    * @param userAgent {string} - либо передать вызов метода clientOs.getPlatform() который должен быть выполнент на клиенте
+   * @params iwWebview {boolean}
    * @returns {Number}
    */
-  getMobilePlatform(userAgent) {
+  getMobilePlatform(userAgent, iwWebview) {
     const platformOs = this.getOsInfo(userAgent);
 
     if (platformOs) {
-      return this.getOsPlatform(platformOs);
+      return this.getOsPlatform(platformOs, iwWebview);
     }
 
     return OsTypes.default;
   },
 
-  getOsPlatform(platformOs) {
+  getOsPlatform(platformOs, isWebview) {
     // 7 - IOS; 8 - Android
     if (platformOs && clientOsPlatforms.android.includes(platformOs)) {
-      return OsTypes.android;
+      return isWebview ? OsTypes.webviewAndroid : OsTypes.android;
     }
     if (platformOs && clientOsPlatforms.ios.includes(platformOs)) {
-      return OsTypes.ios;
+      return isWebview ? OsTypes.webviewIos : OsTypes.ios;
     }
     return OsTypes.default;
   },
 
-getOsInfo(userAgent = "")
-{
-  const currentOs = clientOsData.find(item => userAgent.search(item.regex) >= 0);
+  getOsInfo(userAgent = "") {
+    const currentOs = clientOsData.find(item => userAgent.search(item.regex) >= 0);
 
-  return currentOs?.name ?? "";
-}
-,
-
-isWebview(cookies = "")
-{
-  const partsOfCookies = Boolean(cookies) ? cookies.split("; ") : null;
-
-  if (partsOfCookies) {
-    return partsOfCookies.some(item => {
-      return item.split("=")[0] === "isWebview";
-    });
+    return currentOs?.name ?? "";
   }
+  ,
 
-  return false;
-}
+  isWebview(cookies = "") {
+    const partsOfCookies = Boolean(cookies) ? cookies.split("; ") : null;
+
+    if (partsOfCookies) {
+      return partsOfCookies.some(item => {
+        return item.split("=")[0] === "isWebview";
+      });
+    }
+
+    return false;
+  }
 }
