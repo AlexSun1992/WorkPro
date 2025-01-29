@@ -47,6 +47,14 @@
           @clear="isSearchActive = true"
           @searchComplete="searchComplete"
         />
+
+        <div
+          v-if="showClearAll"
+          class="clear-btn"
+          @click.stop="clearAll()"
+        >
+          X
+        </div>
       </div>
 
       <span class="toggle-btn" @click="toggleDropdown" />
@@ -177,6 +185,9 @@ export default {
     showClear() {
       return this.data?.showClear ?? true;
     },
+    showClearAll() {
+      return Boolean(this.selectedItems.length);
+    },
     closeAfterSelect() {
       const val = this.data.closeAfterSelect;
 
@@ -218,6 +229,13 @@ export default {
         fieldId: this.data.fieldId,
         name: this.data.name,
         value: this.value.filter((val) => val !== item[this.valueKey]),
+      });
+    },
+    clearAll() {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value: [],
       });
     },
     clickSearchBox() {
