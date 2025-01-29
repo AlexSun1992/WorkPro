@@ -1,6 +1,6 @@
 import clientOsData from "./clientOsData.mjs";
 import clientOsPlatforms from "./clientOsPlatforms.mjs";
-import { OsTypes, WebviewTypes } from "./clientOsConstants.mjs";
+import { OS_TYPES, WEBVIEW_TYPES } from "./clientOsConstants.mjs";
 
 export default {
   updateMobileViewConfig(config) {
@@ -15,10 +15,10 @@ export default {
   getWebviewData(config) {
     const userAgent = config?.headers.common["user-agent"] ?? "";
     const cookies = config?.headers.common.Cookie ?? "";
-    const result = { platform: OsTypes.default, webview: WebviewTypes.VueJS };
+    const result = { platform: OS_TYPES.default, webview: WEBVIEW_TYPES.VueJS };
     const isWebview = this.isWebview(cookies);
 
-    result.webview = isWebview ? WebviewTypes.isWebview : WebviewTypes.VueJS;
+    result.webview = isWebview ? WEBVIEW_TYPES.isWebview : WEBVIEW_TYPES.VueJS;
     result.platform = this.getMobilePlatform(userAgent, isWebview);
 
     return result;
@@ -36,26 +36,25 @@ export default {
       return this.getOsPlatform(platformOs, iwWebview);
     }
 
-    return OsTypes.default;
+    return OS_TYPES.default;
   },
 
   getOsPlatform(platformOs, isWebview) {
     // 7 - IOS; 8 - Android
     if (platformOs && clientOsPlatforms.android.includes(platformOs)) {
-      return isWebview ? OsTypes.webviewAndroid : OsTypes.android;
+      return isWebview ? OS_TYPES.webviewAndroid : OS_TYPES.android;
     }
     if (platformOs && clientOsPlatforms.ios.includes(platformOs)) {
-      return isWebview ? OsTypes.webviewIos : OsTypes.ios;
+      return isWebview ? OS_TYPES.webviewIos : OS_TYPES.ios;
     }
-    return OsTypes.default;
+    return OS_TYPES.default;
   },
 
   getOsInfo(userAgent = "") {
     const currentOs = clientOsData.find(item => userAgent.search(item.regex) >= 0);
 
     return currentOs?.name ?? "";
-  }
-  ,
+  },
 
   isWebview(cookies = "") {
     const partsOfCookies = Boolean(cookies) ? cookies.split("; ") : null;

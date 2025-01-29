@@ -1,4 +1,4 @@
-export const OsTypes = {
+export const OS_TYPES = {
   web: 1,
   ios: 2,
   android:3,
@@ -7,7 +7,7 @@ export const OsTypes = {
   default: 9,
 }
 
-export const WebviewTypes = {
+export const WEBVIEW_TYPES = {
   isWebview: "isWebview",
   VueJS: "VueJS"
 }
