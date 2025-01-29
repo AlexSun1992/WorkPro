@@ -7,8 +7,8 @@ export default {
     const webviewData = this.getWebviewData(config);
     const newConfig = { ...config };
 
-    newConfig.headers.common["X-DEV"] = webviewData.platform;
-    newConfig.headers.common["X-Application"] = webviewData.webview;
+    newConfig.headers["X-DEV"] = webviewData.platform;
+    newConfig.headers["X-Application"] = webviewData.webview;
 
     return newConfig;
   },
