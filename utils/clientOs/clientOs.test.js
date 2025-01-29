@@ -8,7 +8,13 @@ describe("clientOs utils", () => {
   test("getMobilePlatform for iOS + isWebview", () => {
     mock = clientOsTestData.variantA;
 
-    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WebviewTypes.isWebview, platform: OsTypes.ios });
+    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WebviewTypes.isWebview, platform: OsTypes.webviewIos });
+  });
+
+  test("getMobilePlatform for Android + isWebview", () => {
+    mock = clientOsTestData.variantAA;
+
+    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WebviewTypes.isWebview, platform: OsTypes.webviewAndroid });
   });
 
   test("getMobilePlatform for Android", () => {
