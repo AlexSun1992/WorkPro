@@ -10,7 +10,7 @@
         @click="clickSelectedBox"
       >
         <SearchBox
-          v-if="getSearchBoxPosition() === SearchBoxType['inline']"
+          v-if="getSearchBoxPosition === SearchBoxType['inline']"
           v-model="searchValue"
           @input="updateSearchValue"
           @clear="isSearchActive = true"
@@ -41,18 +41,14 @@
         </div>
 
         <SearchBox
-          v-if="getSearchBoxPosition() === SearchBoxType['inlineReverse']"
+          v-if="getSearchBoxPosition === SearchBoxType['inlineReverse']"
           v-model="searchValue"
           @input="updateSearchValue"
           @clear="isSearchActive = true"
           @searchComplete="searchComplete"
         />
 
-        <div
-          v-if="showClearAll"
-          class="clear-btn"
-          @click.stop="clearAll()"
-        >
+        <div v-if="showClearAll" class="clear-btn" @click.stop="clearAll()">
           X
         </div>
       </div>
@@ -61,7 +57,7 @@
     </div>
 
     <ul :class="[{ visible: isOpen }, 'control-dropdown-menu']">
-      <li v-if="getSearchBoxPosition() === SearchBoxType['dropdown']">
+      <li v-if="getSearchBoxPosition === SearchBoxType['dropdown']">
         <SearchBox
           v-model="searchValue"
           @input="updateSearchValue"
@@ -86,7 +82,7 @@
         </li>
       </template>
 
-      <li v-if="getSearchBoxPosition() === SearchBoxType['dropdownReverse']">
+      <li v-if="getSearchBoxPosition === SearchBoxType['dropdownReverse']">
         <SearchBox
           v-model="searchValue"
           @input="updateSearchValue"
@@ -104,6 +100,7 @@
 
 <script>
 import { nextTick } from "process";
+import { findIndex } from "lodash";
 import SearchBox from "./SearchBox.vue";
 import searchBoxType from "./searchBoxType";
 
@@ -144,9 +141,12 @@ export default {
       return this.data.options ?? [];
     },
     filteredOptions() {
-      return this.options.filter((item) =>
-        item[this.textKey].includes(this.searchValue)
-      );
+      return this.options.filter((item) => {
+        const searchValue = this.searchValue.toLowerCase();
+        const itemValue = item[this.textKey].toLowerCase();
+
+        return itemValue.includes(searchValue);
+      });
     },
     optionsWithHelp() {
       const options = this.filteredOptions;
@@ -156,14 +156,7 @@ export default {
         return options;
       }
 
-      return options.map((item) => {
-        const newVal = item[this.textKey].replaceAll(
-          searchValue,
-          `<b>${searchValue}</b>`
-        );
-
-        return { ...item, [this.textKey]: newVal };
-      });
+      return options.map((item) => ({ ...item, [this.textKey]: this.replaceAllMatches(item[this.textKey]) }));
     },
     availableOptions() {
       return this.searchable ? this.optionsWithHelp : this.filteredOptions;
@@ -201,6 +194,11 @@ export default {
     },
     SearchBoxType() {
       return searchBoxType;
+    },
+    getSearchBoxPosition() {
+      const val = this.SearchBoxType[this.showSearchIn] ?? null;
+
+      return this.showSearchBox ? val : null;
     },
   },
   methods: {
@@ -272,10 +270,23 @@ export default {
         this.toggleDropdown(false);
       }
     },
-    getSearchBoxPosition() {
-      const val = this.SearchBoxType[this.showSearchIn] ?? null;
+    replaceAllMatches(value = "") {
+      const valueLower = value.toLowerCase();
+      const searchValue = this.searchValue.toLowerCase();
+      let index = valueLower.indexOf(searchValue);
+      let result = value.slice(0, index);
 
-      return this.showSearchBox ? val : null;
+      while (index !== -1) {
+        const valueInTag = `<b>${value.slice(index, index + searchValue.length)}</b>`;
+        const nextIndex = valueLower.indexOf(searchValue, index + 1);
+        const lastIndex = nextIndex === -1 ? value.length : nextIndex;
+        const nextValue = value.slice(index + searchValue.length, lastIndex);
+
+        result += `${valueInTag}${nextValue}`;
+        index = nextIndex;
+      }
+
+      return result;
     },
   },
   mounted() {
@@ -429,6 +440,7 @@ header {
   cursor: pointer;
   padding-right: 0.25em;
 }
+
 .search-input {
   border: 0px;
   padding: 0 40px;
@@ -450,6 +462,7 @@ header {
   background-color: transparent;
   border: 0;
 }
+
 .visible.control-dropdown-menu li span:before {
   content: url(/img/icon-input-valid-disabled.svg);
   position: absolute;
@@ -457,22 +470,27 @@ header {
   width: 1rem;
   height: 1rem;
 }
+
 .visible.control-dropdown-menu li span {
   position: relative;
   display: block;
 }
+
 .visible.control-dropdown-menu li.selected-option span:before {
   content: url(/img/icon-input-valid.svg);
 }
+
 .visible.control-dropdown-menu::-webkit-scrollbar-thumb {
   background: #43b02a;
   width: 2px;
   border: 3px solid #ffff;
   border-radius: 10px;
 }
+
 .visible.control-dropdown-menu::-webkit-scrollbar {
   width: 6px;
 }
+
 .visible.control-dropdown-menu::-webkit-scrollbar:vertical {
   border: 4px solid transparent;
   width: 10px;
