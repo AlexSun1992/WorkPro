@@ -3,14 +3,14 @@
     <yandex-map
       style="height: 500px; width: 100%"
       :zoom="10"
-      :coords="[55.76, 37.64]"
+      :coords="getCoordinates"
       :controls="[]"
       :use-object-manager="false"
       :options="mapOptions"
     >
       <ymap-marker
         v-for="item in dataContent"
-        :key="Math.random()"
+        :key="item[markerIdName]"
         :marker-id="item[markerIdName]"
         :coords="[item[latitudeName], item[longitudeName]]"
         :icon="markerIcon"
@@ -21,31 +21,38 @@
     </yandex-map>
   </div>
 </template>
+
 <script>
+import Cookies from "js-cookie";
+
 export default {
   name: "OfficeMap",
 
   props: {
     itemId: {
-      required: false,
-      default: () => null,
+      type: String,
+      default: "",
     },
-
     longitudeName: {
-      required: false,
-      default: () => "NLONG",
+      type: String,
+      default: "NLONG",
     },
     latitudeName: {
-      required: false,
-      default: () => "NLAT",
+      type: String,
+      default: "NLAT",
     },
     markerIdName: {
-      required: false,
-      default: () => "ID",
+      type: String,
+      default: "ID",
     },
   },
   data() {
-    return {};
+    return {
+      mapOptions: { yandexMapDisablePoiInteractivity: true },
+      markerOptions: { hideIconOnBalloonOpen: false },
+      coordinates: [55.76, 37.64],
+      map: null,
+    };
   },
   computed: {
     markerIcon() {
@@ -58,24 +65,15 @@ export default {
           "https://reso.ru/export/system/modules/ru.reso.v2/resources/img/icons/ya_agent.svg",
       };
     },
-    mapOptions() {
-      return {
-        yandexMapDisablePoiInteractivity: true,
-      };
+    dataContent() {
+      const block = this.$store.getters["blocks/getBlockById"](this.itemId);
+      return block?.data?.items || [];
     },
-    markerOptions() {
-      return {
-        hideIconOnBalloonOpen: false,
-      };
-    },
-    dataContent: {
-      get() {
-        const block = this.$store.getters["blocks/getBlockById"](this.itemId);
-        if (block) {
-          return block.data.items;
-        }
-        return [];
-      },
+    getCoordinates() {
+      const lat = Cookies.get("lat") || 55.76;
+      const lon = Cookies.get("lon") || 37.64;
+
+      return [lat, lon];
     },
   },
 };
