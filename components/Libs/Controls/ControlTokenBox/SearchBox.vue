@@ -6,10 +6,9 @@
       :value="value"
       ref="searchInput"
       placeholder="Найти"
-      @blur="activateInput"
+      @blur.stop.prevent="activateInput"
       @keyup.stop.esc="clearInput"
       @keyup.stop.enter="searchComplete"
-      @click="$emit('click')"
       @input="updateValue($event.target.value)"
     />
 

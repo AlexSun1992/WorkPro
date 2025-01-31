@@ -74,7 +74,7 @@
             disabled: item.disabled,
           }"
           @keydown.prevent.enter="!item.disabled && selectItem(item)"
-          @click="!item.disabled && selectItem(item)"
+          @mousedown.prevent.stop="!item.disabled && selectItem(item)"
         >
           <slot name="optionItem" :item="item">
             <span v-html="item[textKey]" />
@@ -99,8 +99,6 @@
 </template>
 
 <script>
-import { nextTick } from "process";
-import { findIndex } from "lodash";
 import SearchBox from "./SearchBox.vue";
 import searchBoxType from "./searchBoxType";
 
@@ -202,7 +200,6 @@ export default {
     },
   },
   methods: {
-    nextTick,
     selectItem(item) {
       const currentValue = [...this.value];
       const idValue = item[this.valueKey];
