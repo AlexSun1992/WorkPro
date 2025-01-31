@@ -48,7 +48,7 @@ describe("ControlTokenBox", () => {
     await wrapper.vm.toggleDropdown();
     expect(wrapper.emitted().update).toBeFalsy();
 
-    await wrapper.findAll("li:not(.selected-option)").at(1).trigger("click");
+    await wrapper.findAll("li:not(.selected-option)").at(1).trigger("mousedown");
     expect(wrapper.emitted().update.length).toBe(1);
     expect(wrapper.emitted().update[0][0].value.length - initValue.length).toBe(
       1
@@ -66,7 +66,7 @@ describe("ControlTokenBox", () => {
   it("Clear selected item by click on dropdown selected item", async () => {
     expect(initValue.length === wrapper.vm.value.length).toBeTruthy();
     await wrapper.vm.toggleDropdown();
-    await wrapper.findAll(".selected-option").at(0).trigger("click");
+    await wrapper.findAll(".selected-option").at(0).trigger("mousedown");
     expect(initValue.length - wrapper.emitted().update[0][0].value.length).toBe(
       1
     );
