@@ -1,54 +1,33 @@
 <template>
   <div>
-    <div v-if="getData.length" class="slider_in_col">
-      <VueSlickCarousel v-bind="settings">
-        <div v-for="(card, indx) in getData" :key="card.ID">
-          <div
-            :class="{
-              box: true,
-              'box-green': indx % 2 === 0,
-              'box-blue': indx % 2 !== 0,
-              active: Number(fieldValue.ID) === Number(card.ID),
-            }"
-            @click="changeColorCard(card)"
-          >
-            <div class="box-title">{{ card.SNAME }}</div>
-            <div class="box-description">
-              <div class="box-flag" v-if="card.BDEFAULT">Оптимальный</div>
-              <div class="box-label">Травма</div>
-              <div class="box-text">
-                {{ formattedNum(card.NSUMTN) }} &#8381;
-              </div>
-              <div class="box-label">Инвалидность</div>
-              <div class="box-text">
-                {{ formattedNum(card.NSUMPN) }} &#8381;
-              </div>
-              <div class="box-label">Смерть<br />(за исключением ДТП)</div>
-              <div class="box-text">
-                {{ formattedNum(card.NSUMNODT) }} &#8381;
-              </div>
-              <div class="box-label">Смерть в ДТП</div>
-              <div class="box-text">
-                {{ formattedNum(card.NSUMDT) }} &#8381;
-              </div>
-            </div>
-            <div ref="button" class="box-button">
-              {{ formattedNum(card.NCOST) }} &#8381;
-            </div>
+    <div v-if="!data.options[0].S_ORDER">
+      <OldInsuredBox @update="updateField" :data="data" />
+    </div>
+    <div v-if="data.options[0].S_ORDER">
+      <div v-if="getData.length" class="slider_in_col">
+        <VueSlickCarousel v-bind="settings">
+          <div v-for="(card, indx) in getData" :key="data.options[indx + 1].ID">
+            <InsuredBoxCard
+              @update="updateField"
+              :card="card"
+              :index="indx"
+              :data="data"
+            />
           </div>
-        </div>
-      </VueSlickCarousel>
+        </VueSlickCarousel>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import VueSlickCarousel from "vue-slick-carousel";
-import { formattedNumber } from "./formattedNumber";
+import InsuredBoxCard from "./InsuredBoxCard.vue";
+import OldInsuredBox from "./OldControlInsuredBox.vue"; // TODO remove when transition actuary db is over (create date - 30.01.2025)
 
 export default {
   name: "ControlInsuredBox",
-  components: { VueSlickCarousel },
+  components: { VueSlickCarousel, InsuredBoxCard, OldInsuredBox },
   props: {
     data: {
       type: Object,
@@ -107,43 +86,36 @@ export default {
       options: null,
     };
   },
-  async created() {
-    if (!this.getData.length) {
-      this.options = await this.$axios.post("/api/list/55/766");
-    }
-    if (this.getData && this.getData.length > 3) {
-      this.settings.centerMode = true;
-    }
-  },
   computed: {
     getData() {
-      if (this.data.options) {
-        return this.data.options;
+      const { options } = this.data;
+      const firstOption = options?.[0];
+
+      if (firstOption.S_ORDER) {
+        const policyOptions = [];
+        for (let policyCard = 1; policyCard < options.length; policyCard++) {
+          const tempArray = Object.values(firstOption.S_ORDER).map((value) => {
+            const upperedValue = value.toUpperCase();
+            return {
+              [firstOption[upperedValue]]: options[policyCard][upperedValue],
+            };
+          });
+          policyOptions.push(tempArray);
+        }
+        return policyOptions;
       }
       if (this.options) {
         return this.options?.data ? this.options?.data.items : [];
       }
       return [];
     },
-    fieldValue() {
-      return (
-        this.getData.find((item) => item.ID === Number(this.data.value)) ?? {}
-      );
-    },
   },
   methods: {
-    formattedNum(obj) {
-      return Number.isInteger(obj) ? formattedNumber(obj) : obj;
-    },
-
-    changeColorCard(card) {
-      this.updateField(card);
-    },
-    updateField(card) {
+    updateField(updateData) {
       this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: Number(card.ID),
+        fieldId: updateData.fieldId,
+        name: updateData.name,
+        value: updateData.value,
       });
     },
   },
@@ -208,91 +180,6 @@ export default {
 }
 </style>
 <style scoped>
-.box {
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 49px auto 42px;
-  border-radius: 30px;
-  border: 2px solid var(--warmgrey-30, #e1e1e1);
-  background: var(--white, #fff);
-  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
-  padding: 30px 11px 28px;
-  position: relative;
-  cursor: pointer;
-  height: 100%;
-}
-.box-title {
-  font-family: Raleway;
-  font-size: 1.25rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 1.5rem;
-  margin: 0 19px;
-  border-bottom: 1px solid #c3c3c3;
-}
-.box-label {
-  margin-top: 1rem;
-  padding: 0 19px;
-  font-size: 0.875rem;
-  line-height: 1.125rem;
-}
-.box-text {
-  line-height: 1.25rem;
-  font-weight: 700;
-  padding: 0 19px;
-}
-.box-description {
-  margin-bottom: 20px;
-}
-.box-button {
-  padding: 11px 24px;
-  border-radius: 15px;
-  font-weight: 700;
-  line-height: 1.25rem;
-  text-align: center;
-}
-.box-green .box-button {
-  background-color: #edf8ea;
-  color: #009639;
-}
-.box-blue .box-button {
-  background-color: #ecf3fa;
-  color: #3b86c8;
-}
-.box-blue.active .box-button {
-  background-color: #3b86c8;
-  color: #fff;
-}
-.box-green.active .box-button {
-  background-color: #009639;
-  color: #fff;
-}
-
-.box-blue.active {
-  border-color: #3b86c8;
-}
-
-.box-green.active {
-  border-color: #009639;
-}
-.box-flag {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 4px;
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1;
-  padding: 4px 8px;
-}
-.box-blue .box-flag {
-  background-color: #3b86c8;
-}
-.box-green .box-flag {
-  background-color: #009639;
-}
 .slider_in_col {
   margin-left: -10px;
   margin-right: -10px;
