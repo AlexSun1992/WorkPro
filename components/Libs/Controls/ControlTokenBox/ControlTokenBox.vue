@@ -154,7 +154,10 @@ export default {
         return options;
       }
 
-      return options.map((item) => ({ ...item, [this.textKey]: this.replaceAllMatches(item[this.textKey]) }));
+      return options.map((item) => ({
+        ...item,
+        [this.textKey]: this.replaceAllMatches(item[this.textKey]),
+      }));
     },
     availableOptions() {
       return this.searchable ? this.optionsWithHelp : this.filteredOptions;
@@ -274,7 +277,10 @@ export default {
       let result = value.slice(0, index);
 
       while (index !== -1) {
-        const valueInTag = `<b>${value.slice(index, index + searchValue.length)}</b>`;
+        const valueInTag = `<b>${value.slice(
+          index,
+          index + searchValue.length
+        )}</b>`;
         const nextIndex = valueLower.indexOf(searchValue, index + 1);
         const lastIndex = nextIndex === -1 ? value.length : nextIndex;
         const nextValue = value.slice(index + searchValue.length, lastIndex);
@@ -372,7 +378,7 @@ header {
   width: 100%;
   position: relative;
   border: 1px solid #c3c3c3;
-  padding: 6px 32px 4px 16px;
+  padding: 6px 62px 4px 16px;
   border-radius: 15px;
   min-height: 54px;
 }
@@ -491,5 +497,9 @@ header {
 .visible.control-dropdown-menu::-webkit-scrollbar:vertical {
   border: 4px solid transparent;
   width: 10px;
+}
+.selected-items > .clear-btn {
+  right: 34px;
+  top: 18px;
 }
 </style>
