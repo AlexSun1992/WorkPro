@@ -13,7 +13,7 @@
     />
 
     <div class="button-wrapper">
-      <button v-show="value" class="h-100" @click="clearInput">X</button>
+      <button v-show="value" class="h-100" @click="clearInput" type="button">X</button>
     </div>
   </div>
 </template>
