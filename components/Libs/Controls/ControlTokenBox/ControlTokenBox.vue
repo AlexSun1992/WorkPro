@@ -10,7 +10,7 @@
         @click="clickSelectedBox"
       >
         <SearchBox
-          v-if="getSearchBoxPosition === SearchBoxType['inline']"
+          v-if="getSearchBoxPosition === searchBoxType['inline']"
           v-model="searchValue"
           @input="updateSearchValue"
           @clear="isSearchActive = true"
@@ -41,7 +41,7 @@
         </div>
 
         <SearchBox
-          v-if="getSearchBoxPosition === SearchBoxType['inlineReverse']"
+          v-if="getSearchBoxPosition === searchBoxType['inlineReverse']"
           v-model="searchValue"
           @input="updateSearchValue"
           @clear="isSearchActive = true"
@@ -57,7 +57,7 @@
     </div>
 
     <ul :class="[{ visible: isOpen }, 'control-dropdown-menu']">
-      <li v-if="getSearchBoxPosition === SearchBoxType['dropdown']">
+      <li v-if="getSearchBoxPosition === searchBoxType['dropdown']">
         <SearchBox
           v-model="searchValue"
           @input="updateSearchValue"
@@ -82,7 +82,7 @@
         </li>
       </template>
 
-      <li v-if="getSearchBoxPosition === SearchBoxType['dropdownReverse']">
+      <li v-if="getSearchBoxPosition === searchBoxType['dropdownReverse']">
         <SearchBox
           v-model="searchValue"
           @input="updateSearchValue"
@@ -100,7 +100,7 @@
 
 <script>
 import SearchBox from "./SearchBox.vue";
-import searchBoxType from "./searchBoxType";
+import SearchBoxType from "./searchBoxType";
 
 export default {
   name: "ControlTokenBox",
@@ -124,7 +124,7 @@ export default {
     // Возможные значения: inline, inlineReverse, dropdown, dropdownReverse
     showSearchIn: {
       type: String,
-      default: searchBoxType.dropdown,
+      default: SearchBoxType.dropdown,
     },
   },
   data() {
@@ -193,11 +193,11 @@ export default {
     showSearchBox() {
       return this.searchable && this.isOpen;
     },
-    SearchBoxType() {
-      return searchBoxType;
+    searchBoxType() {
+      return SearchBoxType;
     },
     getSearchBoxPosition() {
-      const val = this.SearchBoxType[this.showSearchIn] ?? null;
+      const val = this.searchBoxType[this.showSearchIn] ?? null;
 
       return this.showSearchBox ? val : null;
     },
