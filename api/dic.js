@@ -61,7 +61,9 @@ router.get("/dicwf/:fieldId/:valueId", (req, res) => {
       }
     }
     mobile2ServiceInstance({
-      url: `${consts.DICWF}/${req.params.fieldId}/${req.params.valueId}`,
+      url: `${req.query.zone === "free" ? consts.FREEDICWF : consts.DICWF}/${
+        req.params.fieldId
+      }/${req.params.valueId}`,
       params: req.query,
       method: "GET",
     })

@@ -15,11 +15,5 @@ export const mobile2Service = (url) => {
     return clientOs.updateMobileViewConfig(config);
   });
 
-  instance.interceptors.response.use(response => {
-    return response;
-  }, (err) => {
-    return err;
-  });
-
   return instance;
 };

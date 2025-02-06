@@ -68,7 +68,6 @@ converter.form = async (data, params, instance) => {
   const promisesOfOneToMany = [];
   const webFieldsArr = [];
   const errors = [];
-
   const itemId = params.idItem;
   const zone = params?.zone;
   const item = data[0]._data.length ? data[0]._data[0] : {};

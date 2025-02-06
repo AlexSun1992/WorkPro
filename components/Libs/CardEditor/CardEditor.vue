@@ -263,6 +263,7 @@ export default {
         name: e.name,
         value: e.value,
         action: e.action,
+        params: this.params,
       });
       if (typeof eventHandler === "function" && field.type != "button") {
         try {

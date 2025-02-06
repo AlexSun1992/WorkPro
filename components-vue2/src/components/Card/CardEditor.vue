@@ -100,15 +100,6 @@ export default {
   },
   data() {
     return {
-      params: {
-        idItem: this.menuId,
-        idModule: this.moduleId,
-        idParent: "0",
-        idCard: "0",
-        idRel: "0",
-        zone: this.zone,
-        cache: true,
-      },
       isShowSavedError: false,
       eventHandler: null,
       isButtonDisabled: false,
@@ -147,6 +138,31 @@ export default {
     isCaptchaNeededCheck() {
       return this.isCaptchaNeeded;
     },
+    params() {
+      const params = {
+        idItem: this.menuId,
+        idModule: this.moduleId,
+        idParent: "0",
+        idCard: this.cardId || "0",
+        idRel: this.rel || "0",
+        zone: this.free || "free",
+        cache: true,
+      };
+      const tokenStorage = localStorage.getItem(TOKEN_NAME);
+      const tokenCookies = Cookies.get(TOKEN_NAME);
+      const isAuth =
+        tokenStorage &&
+        tokenCookies &&
+        tokenStorage !== "false" &&
+        tokenCookies !== "false";
+      if (this.menuId !== 777) {
+        params.cache = false;
+      }
+      if (isAuth) {
+        params.zone = "token";
+      }
+      return params;
+    },
   },
 
   watch: {
@@ -158,9 +174,6 @@ export default {
 
   async created() {
     try {
-      if (this.menuId !== 777) {
-        this.params.cache = false;
-      }
       if (process?.env?.NODE_ENV === "development" || this.params.cache) {
         this.eventHandler = await this.loadScript();
       }
@@ -301,7 +314,7 @@ export default {
         const itemId = this.menuId;
         const cardId = this.getFormParams.idCard;
         const relId = this.getFormParams.idRel;
-        const { zone } = this;
+        const { zone } = this.params;
         const resp = await this.$store.dispatch("data_card/saveDataCard", {
           moduleId,
           itemId,
@@ -314,7 +327,7 @@ export default {
         if (resp.status === 200) {
           await this.$store.dispatch("data_card/fetchForm", {
             ...this.getFormParams,
-            zone: this.zone,
+            zone,
           });
           const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
           if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
@@ -424,10 +437,12 @@ export default {
     },
 
     async updateValue(e) {
-      this.$store.commit("data_card/setFormField", {
+      await this.$store.dispatch("data_card/setActionFormField", {
         fieldId: e.fieldId,
         name: e.name,
         value: e.value,
+        action: e.action,
+        zone: this.params.zone,
       });
       const field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(

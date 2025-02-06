@@ -25,6 +25,7 @@ const USERBFFPROFILE = `/api/userinfo`;
 const WEBFIELD = `/am/main/${VER}/webfield`;
 const DIC = `/am/main/${VER}/dic`;
 const DICWF = `/am/main/${VER}/dicwf`;
+const FREEDICWF = `/am/free/${VER}/dicwf`;
 const REPORT = `/am/main/${VER}/report`;
 const FREEDATACARD = `/am/free/${VER}/datacard`;
 const FREEMENU = `/am/free/${VER}/menu`;
@@ -59,6 +60,7 @@ export default {
   WEBFIELD: WEBFIELD,
   DIC: DIC,
   DICWF: DICWF,
+  FREEDICWF: FREEDICWF,
   REPORT: REPORT,
   CAPTCHA: CAPTCHA,
   USERBFFPROFILE: USERBFFPROFILE,
