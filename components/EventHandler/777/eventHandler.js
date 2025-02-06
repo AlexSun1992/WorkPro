@@ -1,4 +1,16 @@
 async function eventHandler(fields, action, func) {
+  if (func === "afterSave" && logEventVue) {
+    try {
+      logEventVue({
+        formName: "777",
+        idEventType: 1001,
+        timeUser: new Date(),
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   function findVisibleDrivers() {
     const driverFieldNames = [
       `DL_BUTTON_`,
@@ -120,7 +132,7 @@ async function eventHandler(fields, action, func) {
 
   const citySettlement = findField("SCITY_SETTLEMENT");
   const ownerAge = findField("NOWNER_AGE");
-  const empty = findField("Empty");
+  const empty = findField("Empty1");
   const vehicleModel = findField("SVEHICLE_MODEL");
   const yearVehicle = findField("NYEAR_VEHICLE");
   const horseVehiclePower = findField("NHORSE_VEHICLE_POWER");
@@ -175,7 +187,7 @@ async function eventHandler(fields, action, func) {
 
   if (isCaptchaNeeded.value === true) {
     //  debugger;
-    checkNotRegNumberForm.push(captcha);
+    // checkNotRegNumberForm.push(captcha);
   }
   if (price.visible) {
     checkNotRegNumberForm.push(price);
@@ -232,10 +244,14 @@ async function eventHandler(fields, action, func) {
     }
     if (!regNumber.value || !action.value) {
       invertPropertyElements(checkNotRegNumberForm, "visible");
+      // Фикс бага с некорректным токеном recaptcha
+      if (isCaptchaNeeded.value === true) {
+        captcha.visible = true;
+      }
     }
     if (!action.value) {
       calculateBtn.visible = false;
-      captcha.visible = false;
+      // captcha.visible = false;
     }
     if (drivers.length === 20) {
       addDriver.visible = false;
@@ -363,6 +379,7 @@ async function eventHandler(fields, action, func) {
   }
 
   /// Дизэйбл и очищение поля RegNumber по нажатию checkbox при наличии ошибки "Госномера еще нет"
+
   if (
     action.name === "LCHECKREGNUMBER" &&
     errRegNumNotFoundMob.visible === true
@@ -877,6 +894,29 @@ async function eventHandler(fields, action, func) {
 
     if (findField("NKH_VEHICLE_POWER").value === undefined) {
       findField("NKH_VEHICLE_POWER").error = "Мощность не указана";
+    }
+
+    if (func == "beforeSave") {
+      try {
+        /*
+         logEventVue({
+           formName: '777',
+           idEventType: 1000,
+           controlName: findField(`Item36585`).webId,
+           timeUser: new Date()
+         });
+         */
+      } catch (e) {
+        console.error(e);
+      }
+      try {
+        if (window.navigator.vibrate) {
+          window.navigator.vibrate([200, 100, 200]);
+          console.log(new Date(), "vibrate");
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 

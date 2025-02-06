@@ -378,6 +378,11 @@ export const actions = {
         url = encodeURI(
           `/api/card/${params.idModule}/${params.idItem}?${queryString}`
         );
+        if (params.zone === "free") {
+          url = encodeURI(
+            `/api/card/${params.idModule}/${params.idItem}/0/0?zone=free`
+          );
+        }
       }
       await this.$axios
         .get(url)
@@ -710,8 +715,17 @@ export const actions = {
     { commit, getters, state, dispatch },
     { data, fields }
   ) {
+    const addZoneToURL = (url) => {
+      const objectURL = new URL(url, "https://reso.ru");
+      if (data.zone) {
+        objectURL.searchParams.append("zone", data.zone);
+      }
+      return `${objectURL.pathname}${objectURL.search}`;
+    };
     const fieldsArray = fields.fields;
-    const urls = getters.getURLsByFieldsRelations(fields);
+    const urls = getters
+      .getURLsByFieldsRelations(fields)
+      .map((i) => ({ ...i, url: addZoneToURL(i.url, data.zone) }));
     const requests = [...urls]
       .filter(
         (url) =>
