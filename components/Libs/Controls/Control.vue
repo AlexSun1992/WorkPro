@@ -95,6 +95,7 @@ import ControlDynamicDepend from "./ControlDynamicDepend/ControlDynamicDepend.vu
 import ControlSelectButton from "./ControlSelectButton.vue";
 import ControlInformer from "./ControlInformer/ControlInformer.vue";
 import ControlGallery from "./ControlGallery/ControlGallery.vue";
+import ControlAuthorization from "./ControlAuthorization/ControlAuthorization.vue";
 
 export default {
   name: "Control",
@@ -154,7 +155,8 @@ export default {
     ControlSelectButton,
     ControlInformer,
     ControlTokenBox,
-    ControlGallery
+    ControlGallery,
+    ControlAuthorization,
   },
   props: {
     data: {
