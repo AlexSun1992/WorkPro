@@ -181,6 +181,11 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].IDCONTROL === 60) {
         obj.type = "Collapse";
       }
+
+      if (webFields[i].IDCONTROL === 65) {
+        obj.type = "Authorization";
+      }
+
       if (webFields[i].IDCONTROL === 664) {
         obj.type = "VariantPolicy";
         if (Array.isArray(obj.value)) {
