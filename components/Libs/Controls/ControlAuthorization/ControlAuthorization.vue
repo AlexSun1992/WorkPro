@@ -12,22 +12,22 @@
       title="Введите код"
     >
       <form :action="submitForm">
+        <input type="text" />
 
-        <input type="text">
+        <input type="text" />
 
-        <input type="text">
+        <button type="button" @click="sendSMS">Отправить СМС</button>
 
-        <button type="button"></button>
+        <button type="button" @click="auth">Авторизоваться</button>
       </form>
     </b-modal>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "ControlAuthorization",
-  components: {  },
+  components: {},
   data: () => ({
     isModalVisible: false,
   }),
@@ -38,9 +38,8 @@ export default {
     hideModal() {
       this.isModalVisible = false;
     },
-    submitForm() {
-
-    }
+    sendSMS() {},
+    auth() {},
   },
 };
 </script>
