@@ -88,7 +88,7 @@ export default {
       this.isModalVisible = false;
     },
     sendSMS() {
-      controlAuthorizationHelper.getSms();
+      controlAuthorizationHelper.sentSmsCode();
 
       this.smsRequested = true;
     },
