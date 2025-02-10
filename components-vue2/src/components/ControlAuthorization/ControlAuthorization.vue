@@ -29,7 +29,7 @@
             id="sendSmsButton"
             @click="sendSMS"
           >
-            Отправить СМС
+            {{ sendSmsBtnName }}
           </button>
 
           <label for="smsCode">Подтверждение СМС</label>
@@ -59,6 +59,7 @@
 
 <script>
 import controlAuthorizationHelper from "./controlAuthorizationHelper";
+import controlAuthorizationConstants from "./controlAuthorizationConstants";
 
 export default {
   name: "ControlAuthorization",
@@ -72,7 +73,17 @@ export default {
     },
     authInputDisabled() {
       return !this.smsRequested;
-    }
+    },
+    isSMSRequestInProgress() {
+      return true;
+    },
+    sendSmsBtnName() {
+      if (this.isSMSRequestInProgress) {
+        return controlAuthorizationConstants.sendSMSAgainBtnName;
+      }
+
+      return controlAuthorizationConstants.sendSMSBtnName;
+    },
   },
   data: () => ({
     isModalVisible: false,
@@ -88,7 +99,7 @@ export default {
       this.isModalVisible = false;
     },
     sendSMS() {
-      controlAuthorizationHelper.getSms();
+      controlAuthorizationHelper.sentSmsCode();
 
       this.smsRequested = true;
     },
