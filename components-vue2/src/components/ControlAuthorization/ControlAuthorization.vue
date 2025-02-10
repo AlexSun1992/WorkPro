@@ -22,6 +22,7 @@
             placeholder="Введите номер телефона"
             required
             v-model="phoneNumber"
+            @input="phoneNumberUpdated"
           />
           <button
             type="button"
@@ -30,6 +31,11 @@
             @click="sendSMS"
           >
             {{ sendSmsBtnName }}
+            <VerifyTimer
+              v-if="smsRequested"
+              :duration="duration"
+              @onFinish="updateSMSRequestState(controlAuthorizationConstants.stopSMSRequestState)"
+            />
           </button>
 
           <label for="smsCode">Подтверждение СМС</label>
@@ -60,16 +66,17 @@
 <script>
 import controlAuthorizationHelper from "./controlAuthorizationHelper";
 import controlAuthorizationConstants from "./controlAuthorizationConstants";
+import VerifyTimer from "@/components/Login/Libs/VerifyUser/VerifyTimer.vue";
 
 export default {
   name: "ControlAuthorization",
-  components: {},
+  components: { VerifyTimer },
   computed: {
+    controlAuthorizationConstants() {
+      return controlAuthorizationConstants;
+    },
     authBtnDisabled() {
       return !this.sms;
-    },
-    sendSmsBtnDisabled() {
-      return !this.phoneNumber;
     },
     authInputDisabled() {
       return !this.smsRequested;
@@ -79,10 +86,10 @@ export default {
     },
     sendSmsBtnName() {
       if (this.isSMSRequestInProgress) {
-        return controlAuthorizationConstants.sendSMSAgainBtnName;
+        return this.controlAuthorizationConstants.sendSMSAgainBtnName;
       }
 
-      return controlAuthorizationConstants.sendSMSBtnName;
+      return this.controlAuthorizationConstants.sendSMSBtnName;
     },
   },
   data: () => ({
@@ -90,6 +97,8 @@ export default {
     smsRequested: false,
     phoneNumber: "",
     sms: "",
+    sendSmsBtnDisabled: true,
+    duration: 60,
   }),
   methods: {
     showModal() {
@@ -101,7 +110,23 @@ export default {
     sendSMS() {
       controlAuthorizationHelper.sentSmsCode();
 
-      this.smsRequested = true;
+      this.updateSMSRequestState(
+        this.controlAuthorizationConstants.startSMSRequestState
+      );
+    },
+    updateSMSRequestState(state) {
+      if (this.phoneNumber) {
+        this.smsRequested = this.controlAuthorizationConstants.startSMSRequestState === state;
+        this.sendSmsBtnDisabled = this.controlAuthorizationConstants.startSMSRequestState === state;
+
+        return;
+      }
+
+      this.smsRequested = false;
+      this.sendSmsBtnDisabled = true;
+    },
+    phoneNumberUpdated(ev) {
+      this.sendSmsBtnDisabled = ev.target.value.length === 0;
     },
     auth() {},
   },
