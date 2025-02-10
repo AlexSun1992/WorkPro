@@ -11,25 +11,74 @@
       content-class="sms-confirm-modal"
       title="Введите код"
     >
-      <form :action="submitForm">
-        <input type="text" />
+      <div class="form-container">
+        <h2>Авторизация</h2>
+        <form id="authForm">
+          <label for="phoneNumber">Номер телефона</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            name="phoneNumber"
+            placeholder="Введите номер телефона"
+            required
+            v-model="phoneNumber"
+          />
+          <button
+            type="button"
+            :disabled="sendSmsBtnDisabled"
+            id="sendSmsButton"
+            @click="sendSMS"
+          >
+            Отправить СМС
+          </button>
 
-        <input type="text" />
+          <label for="smsCode">Подтверждение СМС</label>
+          <input
+            type="text"
+            id="smsCode"
+            name="smsCode"
+            placeholder="Введите код из СМС"
+            :disabled="authInputDisabled"
+            required
+            v-model="sms"
+          />
 
-        <button type="button" @click="sendSMS">Отправить СМС</button>
-
-        <button type="button" @click="auth">Авторизоваться</button>
-      </form>
+          <button
+            type="submit"
+            id="authButton"
+            :disabled="authBtnDisabled"
+            @click="auth"
+          >
+            Авторизация
+          </button>
+        </form>
+      </div>
     </b-modal>
   </div>
 </template>
 
 <script>
+import controlAuthorizationHelper from "./controlAuthorizationHelper";
+
 export default {
   name: "ControlAuthorization",
   components: {},
+  computed: {
+    authBtnDisabled() {
+      return !this.sms;
+    },
+    sendSmsBtnDisabled() {
+      return !this.phoneNumber;
+    },
+    authInputDisabled() {
+      return !this.smsRequested;
+    }
+  },
   data: () => ({
     isModalVisible: false,
+    smsRequested: false,
+    phoneNumber: "",
+    sms: "",
   }),
   methods: {
     showModal() {
@@ -38,7 +87,11 @@ export default {
     hideModal() {
       this.isModalVisible = false;
     },
-    sendSMS() {},
+    sendSMS() {
+      controlAuthorizationHelper.getSms();
+
+      this.smsRequested = true;
+    },
     auth() {},
   },
 };
