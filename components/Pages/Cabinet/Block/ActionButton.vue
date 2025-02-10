@@ -150,13 +150,7 @@ export default {
           value: webfield.name,
           action: webfield.name.startsWith("Item"),
         };
-        if (
-          data.fieldId === 38389 ||
-          data.fieldId === 36384 ||
-          data.fieldId === 37111 ||
-          data.fieldId === 36232 ||
-          data.fieldId === 36233
-        ) {
+        if (!this.$route) {
           this.$emit("update", data);
           return;
         }
@@ -214,7 +208,6 @@ export default {
       const cardId = this.$attrs.params.page
         ? this.$store.getters["data_card/getCardId"]
         : this.$route.params.idCard;
-
       await this.$store.dispatch("data_card/fetchActionParams", {
         moduleId,
         actionId,
