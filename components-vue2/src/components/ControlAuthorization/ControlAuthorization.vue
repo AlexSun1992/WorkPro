@@ -34,7 +34,11 @@
             <VerifyTimer
               v-if="smsRequested"
               :duration="duration"
-              @onFinish="updateSMSRequestState(controlAuthorizationConstants.stopSMSRequestState)"
+              @onFinish="
+                updateSMSRequestState(
+                  controlAuthorizationConstants.stopSMSRequestState
+                )
+              "
             />
           </button>
 
@@ -67,6 +71,7 @@
 import controlAuthorizationHelper from "./controlAuthorizationHelper";
 import controlAuthorizationConstants from "./controlAuthorizationConstants";
 import VerifyTimer from "@/components/Login/Libs/VerifyUser/VerifyTimer.vue";
+import { getRestructuredPhoneNumber } from "@/components/Login/loginForm.helper";
 
 export default {
   name: "ControlAuthorization",
@@ -91,6 +96,9 @@ export default {
 
       return this.controlAuthorizationConstants.sendSMSBtnName;
     },
+    phoneNumberNormalize() {
+      return getRestructuredPhoneNumber(this.phoneNumber);
+    }
   },
   data: () => ({
     isModalVisible: false,
@@ -108,7 +116,14 @@ export default {
       this.isModalVisible = false;
     },
     sendSMS() {
-      controlAuthorizationHelper.sentSmsCode();
+      const smsData = {
+        username: this.phoneNumberNormalize,
+        password: "",
+        cap: null,
+        capid: null,
+        mode: 2
+      }
+      controlAuthorizationHelper.sentSmsCode(smsData);
 
       this.updateSMSRequestState(
         this.controlAuthorizationConstants.startSMSRequestState
@@ -128,7 +143,8 @@ export default {
     phoneNumberUpdated(ev) {
       this.sendSmsBtnDisabled = ev.target.value.length === 0;
     },
-    auth() {},
+    auth() {
+    },
   },
 };
 </script>
