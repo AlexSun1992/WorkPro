@@ -21,12 +21,14 @@
             name="phoneNumber"
             placeholder="Введите номер телефона"
             required
+            :disabled="isPhoneInputDisabled"
             v-model="phoneNumber"
             @input="phoneNumberUpdated"
           />
+          <!-- Кнопка запроса СМС -->
           <button
             type="button"
-            :disabled="sendSmsBtnDisabled"
+            :disabled="isSendSmsBtnDisabled"
             id="sendSmsButton"
             @click="sendSMS"
           >
@@ -34,11 +36,7 @@
             <VerifyTimer
               v-if="smsRequested"
               :duration="duration"
-              @onFinish="
-                updateSMSRequestState(
-                  controlAuthorizationConstants.stopSMSRequestState
-                )
-              "
+              @onFinish="stopSMSRequest"
             />
           </button>
 
@@ -105,8 +103,9 @@ export default {
     smsRequested: false,
     phoneNumber: "",
     sms: "",
-    sendSmsBtnDisabled: true,
-    duration: 60,
+    isSendSmsBtnDisabled: true,
+    isPhoneInputDisabled: false,
+    duration: 5,
   }),
   methods: {
     showModal() {
@@ -118,32 +117,32 @@ export default {
     sendSMS() {
       const smsData = {
         username: this.phoneNumberNormalize,
-        password: "",
+        password: null,
         cap: null,
         capid: null,
         mode: 2
       }
       controlAuthorizationHelper.sentSmsCode(smsData);
 
-      this.updateSMSRequestState(
-        this.controlAuthorizationConstants.startSMSRequestState
-      );
+      this.startSMSRequest();
     },
-    updateSMSRequestState(state) {
-      if (this.phoneNumber) {
-        this.smsRequested = this.controlAuthorizationConstants.startSMSRequestState === state;
-        this.sendSmsBtnDisabled = this.controlAuthorizationConstants.startSMSRequestState === state;
-
-        return;
-      }
-
-      this.smsRequested = false;
-      this.sendSmsBtnDisabled = true;
+    startSMSRequest() {
+      this.isPhoneInputDisabled = true;
+      this.isSendSmsBtnDisabled = true;
+      this.smsRequested = true;
+    },
+    stopSMSRequest() {
+      this.isPhoneInputDisabled = false;
+      this.isSendSmsBtnDisabled = false;
     },
     phoneNumberUpdated(ev) {
-      this.sendSmsBtnDisabled = ev.target.value.length === 0;
+      this.isSendSmsBtnDisabled = ev.target.value.length === 0;
+      this.smsRequested = false;
     },
     auth() {
+      const data = {};
+
+      controlAuthorizationHelper.auth(data);
     },
   },
 };
