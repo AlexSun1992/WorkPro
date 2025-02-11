@@ -92,10 +92,6 @@ export default {
       return this.controlAuthorizationConstants.sendSMSBtnName;
     },
     phoneNumberNormalize() {
-      console.log('1111111111111111111111111111111111111')
-      console.log(controlAuthorizationHelper.getRestructuredPhoneNumber(
-        this.phoneNumber
-      ));
       return controlAuthorizationHelper.getRestructuredPhoneNumber(
         this.phoneNumber
       );
@@ -119,7 +115,6 @@ export default {
       this.isModalVisible = false;
     },
     sendSMS() {
-      debugger
       const smsData = {
         username: this.phoneNumberNormalize,
         password: null,
@@ -127,13 +122,11 @@ export default {
         capid: null,
         mode: 60,
       };
-      console.log('11111111111111111111111111');
       controlAuthorizationHelper.sentSmsCode(smsData);
 
       this.startSMSRequest();
     },
     startSMSRequest() {
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!');
       this.isPhoneInputDisabled = true;
       this.isSendSmsBtnDisabled = true;
       this.smsRequested = true;

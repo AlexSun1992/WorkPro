@@ -44,24 +44,20 @@ export default {
   bringToUniverseType(pastedValue) {
     const firstSymbol = this.getFirstSymbol(pastedValue);
     const pureNumber = pastedValue.replace(/[\(\)+-.\s]/g, "");
-    let universeTypeForm;
 
     const plus = "+";
     const plusSeven = "+7";
 
     if (firstSymbol === "7") {
-      universeTypeForm = plus.concat("", pureNumber);
-      return universeTypeForm;
+      return plus.concat("", pureNumber);
     }
 
     if (firstSymbol === "8") {
-      universeTypeForm = pureNumber.replace("8", "+7");
-      return universeTypeForm;
+      return pureNumber.replace("8", "+7");
     }
 
     if (firstSymbol !== "7" && firstSymbol !== "8") {
-      universeTypeForm = plusSeven.concat("", pureNumber);
-      return universeTypeForm;
+      return plusSeven.concat("", pureNumber);
     }
 
     return pureNumber;
@@ -70,12 +66,13 @@ export default {
   getFirstSymbol(pastedValue) {
     const getArray = this.transformValueToArray(pastedValue);
     const [firstSymbol] = getArray;
+
     return firstSymbol;
   },
 
   transformValueToArray(pastedValue) {
     const purePhoneNumber = pastedValue.replace(/[\(\)+-.\s]/g, "");
-    const arrayFromInputValue = purePhoneNumber.split("");
-    return arrayFromInputValue;
+
+    return purePhoneNumber.split("");
   }
 };
