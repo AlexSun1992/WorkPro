@@ -34,7 +34,7 @@ export default {
   },
 
   isPhoneNumberValid(phoneNumber) {
-    const onlyNumbersInPhoneNumber = removeNotNumberElements(phoneNumber);
+    const onlyNumbersInPhoneNumber = this.removeNotNumberElements(phoneNumber);
     const testPhone =
       /^(\+7|7|8)?[\s\-]?\(?[9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
 
@@ -42,7 +42,7 @@ export default {
   },
 
   bringToUniverseType(pastedValue) {
-    const firstSymbol = getFirstSymbol(pastedValue);
+    const firstSymbol = this.getFirstSymbol(pastedValue);
     const pureNumber = pastedValue.replace(/[\(\)+-.\s]/g, "");
     let universeTypeForm;
 
@@ -65,5 +65,17 @@ export default {
     }
 
     return pureNumber;
+  },
+
+  getFirstSymbol(pastedValue) {
+    const getArray = this.transformValueToArray(pastedValue);
+    const [firstSymbol] = getArray;
+    return firstSymbol;
+  },
+
+  transformValueToArray(pastedValue) {
+    const purePhoneNumber = pastedValue.replace(/[\(\)+-.\s]/g, "");
+    const arrayFromInputValue = purePhoneNumber.split("");
+    return arrayFromInputValue;
   }
 };
