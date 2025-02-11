@@ -100,6 +100,21 @@ export default {
   },
   data() {
     return {
+      params: {
+        idItem: this.menuId,
+        idModule: this.moduleId,
+        idParent: "0",
+        idCard:
+          new URLSearchParams(window.location.search).get("ID") ||
+          this.cardId ||
+          "0",
+        idRel:
+          this.rel ||
+          new URLSearchParams(window.location.search).get("REL") ||
+          "0",
+        zone: this.free || "free",
+        cache: true,
+      },
       isShowSavedError: false,
       eventHandler: null,
       isButtonDisabled: false,
@@ -138,31 +153,6 @@ export default {
     isCaptchaNeededCheck() {
       return this.isCaptchaNeeded;
     },
-    params() {
-      const params = {
-        idItem: this.menuId,
-        idModule: this.moduleId,
-        idParent: "0",
-        idCard: this.cardId || "0",
-        idRel: this.rel || "0",
-        zone: this.free || "free",
-        cache: true,
-      };
-      const tokenStorage = localStorage.getItem(TOKEN_NAME);
-      const tokenCookies = Cookies.get(TOKEN_NAME);
-      const isAuth =
-        tokenStorage &&
-        tokenCookies &&
-        tokenStorage !== "false" &&
-        tokenCookies !== "false";
-      if (this.menuId !== 777) {
-        params.cache = false;
-      }
-      if (isAuth) {
-        params.zone = "token";
-      }
-      return params;
-    },
   },
 
   watch: {
@@ -174,6 +164,19 @@ export default {
 
   async created() {
     try {
+      const tokenStorage = localStorage.getItem(TOKEN_NAME);
+      const tokenCookies = Cookies.get(TOKEN_NAME);
+      const isAuth =
+        tokenStorage &&
+        tokenCookies &&
+        tokenStorage !== "false" &&
+        tokenCookies !== "false";
+      if (this.menuId !== 777) {
+        this.params.cache = false;
+      }
+      if (isAuth) {
+        this.params.zone = "token";
+      }
       if (process?.env?.NODE_ENV === "development" || this.params.cache) {
         this.eventHandler = await this.loadScript();
       }
@@ -325,18 +328,20 @@ export default {
         });
 
         if (resp.status === 200) {
-          await this.$store.dispatch("data_card/fetchForm", {
-            ...this.getFormParams,
-            zone,
-          });
-          const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
-          if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
-            await this.callScript(e, "beforeSave");
-            this.captchaIsDemandedNow = e;
-            this.isCaptchaNeeded = true;
-            return;
+          if (resp.data[0].ACTION !== "redirect") {
+            await this.$store.dispatch("data_card/fetchForm", {
+              ...this.getFormParams,
+              zone,
+            });
+            const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
+            if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
+              await this.callScript(e, "beforeSave");
+              this.captchaIsDemandedNow = e;
+              this.isCaptchaNeeded = true;
+              return;
+            }
           }
-          await this.callScript(e, "afterSave");
+          await this.callScript({ ...e, resp }, "afterSave");
         }
         if (resp.status === 520 && resp?.data?.MESSAGE) {
           if (isCriticalError(resp?.data?.MESSAGE)) {
@@ -379,8 +384,8 @@ export default {
           this.params.idRel = items ? items[0].REL : undefined;
         }
       } else {
-        this.params.idCard = 0;
-        this.params.idRel = undefined;
+        // this.params.idCard = 0;
+        // this.params.idRel = undefined;
       }
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
