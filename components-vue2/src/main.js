@@ -263,7 +263,7 @@ Vue.customElement(
   "component-authorization",
   () =>
     new Promise((resolve) => {
-      require(["./components/ControlAuthorization/ControlAuthorization.vue"], (lazyComponent) => {
+      require(["../../components/Libs/Controls/ControlAuthorization/ControlAuthorization.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

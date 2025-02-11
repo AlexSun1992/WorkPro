@@ -5,10 +5,6 @@ export default {
     "content-type": "application/json",
   },
   async sentSmsCode(data) {
-    const body = { ...data };
-
-    body.mode = body.mode ?? 2;
-
     await axios.post("/am/authw/v2/authorize", data, {
       headers: this.commonHeader,
     });

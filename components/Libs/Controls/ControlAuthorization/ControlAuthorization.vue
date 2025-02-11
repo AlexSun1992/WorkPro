@@ -21,15 +21,23 @@
             name="phoneNumber"
             placeholder="Введите номер телефона"
             required
+            :disabled="isPhoneInputDisabled"
             v-model="phoneNumber"
+            @input="phoneNumberUpdated"
           />
+          <!-- Кнопка запроса СМС -->
           <button
             type="button"
-            :disabled="sendSmsBtnDisabled"
+            :disabled="isSendSmsBtnDisabled"
             id="sendSmsButton"
             @click="sendSMS"
           >
             {{ sendSmsBtnName }}
+            <VerifyTimer
+              v-if="smsRequested"
+              :duration="duration"
+              @onFinish="stopSMSRequest"
+            />
           </button>
 
           <label for="smsCode">Подтверждение СМС</label>
@@ -60,16 +68,18 @@
 <script>
 import controlAuthorizationHelper from "./controlAuthorizationHelper";
 import controlAuthorizationConstants from "./controlAuthorizationConstants";
+import VerifyTimer from "@/components/Login/Libs/VerifyUser/VerifyTimer.vue";
+import { getRestructuredPhoneNumber } from "@/components/Login/loginForm.helper";
 
 export default {
   name: "ControlAuthorization",
-  components: {},
+  components: { VerifyTimer },
   computed: {
+    controlAuthorizationConstants() {
+      return controlAuthorizationConstants;
+    },
     authBtnDisabled() {
       return !this.sms;
-    },
-    sendSmsBtnDisabled() {
-      return !this.phoneNumber;
     },
     authInputDisabled() {
       return !this.smsRequested;
@@ -79,10 +89,13 @@ export default {
     },
     sendSmsBtnName() {
       if (this.isSMSRequestInProgress) {
-        return controlAuthorizationConstants.sendSMSAgainBtnName;
+        return this.controlAuthorizationConstants.sendSMSAgainBtnName;
       }
 
-      return controlAuthorizationConstants.sendSMSBtnName;
+      return this.controlAuthorizationConstants.sendSMSBtnName;
+    },
+    phoneNumberNormalize() {
+      return getRestructuredPhoneNumber(this.phoneNumber);
     },
   },
   data: () => ({
@@ -90,6 +103,9 @@ export default {
     smsRequested: false,
     phoneNumber: "",
     sms: "",
+    isSendSmsBtnDisabled: true,
+    isPhoneInputDisabled: false,
+    duration: 5,
   }),
   methods: {
     showModal() {
@@ -99,11 +115,35 @@ export default {
       this.isModalVisible = false;
     },
     sendSMS() {
-      controlAuthorizationHelper.sentSmsCode();
+      const smsData = {
+        username: this.phoneNumberNormalize,
+        password: null,
+        cap: null,
+        capid: null,
+        mode: 2,
+      };
+      controlAuthorizationHelper.sentSmsCode(smsData);
 
+      this.startSMSRequest();
+    },
+    startSMSRequest() {
+      this.isPhoneInputDisabled = true;
+      this.isSendSmsBtnDisabled = true;
       this.smsRequested = true;
     },
-    auth() {},
+    stopSMSRequest() {
+      this.isPhoneInputDisabled = false;
+      this.isSendSmsBtnDisabled = false;
+    },
+    phoneNumberUpdated(ev) {
+      this.isSendSmsBtnDisabled = ev.target.value.length === 0;
+      this.smsRequested = false;
+    },
+    auth() {
+      const formData = [ ...this.$store.getters("data_card/getForm") ];
+
+      controlAuthorizationHelper.auth(formData);
+    },
   },
 };
 </script>
