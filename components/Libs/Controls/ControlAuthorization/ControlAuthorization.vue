@@ -34,7 +34,7 @@
           >
             {{ sendSmsBtnName }}
             <VerifyTimer
-              v-if="smsRequested"
+              v-if="isSendSmsBtnDisabled"
               :duration="duration"
               @onFinish="stopSMSRequest"
             />
@@ -66,10 +66,9 @@
 </template>
 
 <script>
-import controlAuthorizationHelper from "./controlAuthorizationHelper";
+ import controlAuthorizationHelper from "./controlAuthorizationHelper";
 import controlAuthorizationConstants from "./controlAuthorizationConstants";
-import VerifyTimer from "@/components/Login/Libs/VerifyUser/VerifyTimer.vue";
-import { getRestructuredPhoneNumber } from "@/components/Login/loginForm.helper";
+import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 
 export default {
   name: "ControlAuthorization",
@@ -95,7 +94,7 @@ export default {
       return this.controlAuthorizationConstants.sendSMSBtnName;
     },
     phoneNumberNormalize() {
-      return getRestructuredPhoneNumber(this.phoneNumber);
+      return controlAuthorizationHelper.getRestructuredPhoneNumber(this.phoneNumber);
     },
   },
   data: () => ({
@@ -120,7 +119,7 @@ export default {
         password: null,
         cap: null,
         capid: null,
-        mode: 2,
+        mode: 60,
       };
       controlAuthorizationHelper.sentSmsCode(smsData);
 
