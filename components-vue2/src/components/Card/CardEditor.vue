@@ -340,8 +340,10 @@ export default {
               this.isCaptchaNeeded = true;
               return;
             }
+            await this.callScript({ ...e, resp }, "afterSave");
+          } else {
+            window.location.href = resp.data[0].SURL;
           }
-          await this.callScript({ ...e, resp }, "afterSave");
         }
         if (resp.status === 520 && resp?.data?.MESSAGE) {
           if (isCriticalError(resp?.data?.MESSAGE)) {
