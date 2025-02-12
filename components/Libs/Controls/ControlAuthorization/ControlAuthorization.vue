@@ -30,7 +30,7 @@
           <button
             type="button"
             class="btn btn-secondary"
-            :disabled="isSendSmsBtnDisabled"
+            :disabled="isSendSMSBtnDisabled"
             id="sendSmsButton"
             @click="sendSMS"
           >
@@ -50,7 +50,7 @@
             placeholder="Введите код из СМС"
             :disabled="authInputDisabled"
             required
-            v-model="smsCode"
+            v-model="SMSCode"
           />
 
           <button
@@ -91,13 +91,13 @@ export default {
       return controlAuthorizationConstants;
     },
     authBtnDisabled() {
-      return !this.smsCode;
+      return !this.SMSCode;
     },
     authInputDisabled() {
-      return !this.smsRequested;
+      return !this.isSMSRequested;
     },
     sendSmsBtnName() {
-      if (this.isSMSRequestInProgress) {
+      if (this.isSMSRequested) {
         return this.controlAuthorizationConstants.sendSMSAgainBtnName;
       }
 
@@ -111,10 +111,10 @@ export default {
   },
   data: () => ({
     isModalVisible: false,
-    smsRequested: false,
+    isSMSRequested: false,
     phoneNumber: "",
-    smsCode: "",
-    isSendSmsBtnDisabled: true,
+    SMSCode: "",
+    isSendSMSBtnDisabled: true,
     isPhoneInputDisabled: false,
     isSMSRequestInProgress: false,
     duration: 5,
@@ -134,27 +134,28 @@ export default {
         capid: null,
         mode: 60,
       };
+
       controlAuthorizationHelper.sentSmsCode(smsData);
 
       this.startSMSRequest();
     },
     startSMSRequest() {
       this.isPhoneInputDisabled = true;
-      this.isSendSmsBtnDisabled = true;
-      this.smsRequested = true;
+      this.isSendSMSBtnDisabled = true;
+      this.isSMSRequested = true;
       this.isSMSRequestInProgress = true;
     },
     stopSMSRequest() {
       this.isPhoneInputDisabled = false;
-      this.isSendSmsBtnDisabled = false;
+      this.isSendSMSBtnDisabled = false;
       this.isSMSRequestInProgress = false;
     },
     phoneNumberUpdated(ev) {
-      this.isSendSmsBtnDisabled = ev.target.value.length === 0;
-      this.smsRequested = false;
+      this.isSendSMSBtnDisabled = ev.target.value.length === 0;
+      this.isSMSRequested = false;
     },
     auth() {
-      if (!this.smsCode) {
+      if (!this.SMSCode) {
         return;
       }
 
@@ -171,7 +172,7 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.smsCode,
+        value: this.SMSCode,
       });
     },
   },
