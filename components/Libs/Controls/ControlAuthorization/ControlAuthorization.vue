@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button type="button" class="btn btn-secondary" @click="showModal">Авторизоваться</button>
+    <button type="button" class="btn btn-secondary" @click="showModal">
+      Авторизоваться
+    </button>
 
     <b-modal
       id="sms-auth-confirm-modal"
@@ -12,13 +14,16 @@
       content-class="sms-confirm-modal"
       title="Введите код"
     >
-      <div class="form-container">
+      <div class="form-container" v-if="isModalVisible">
         <h2>Авторизация</h2>
         <form id="authForm">
           <label for="phoneNumber">Номер телефона</label>
           <input
             type="tel"
+            ref="phoneNumber"
             id="phoneNumber"
+            autofocus
+            @keydown.enter="sendSMS"
             name="phoneNumber"
             placeholder="Введите номер телефона"
             required
@@ -47,6 +52,7 @@
             type="text"
             id="smsCode"
             name="smsCode"
+            @keydown.enter="auth"
             placeholder="Введите код из СМС"
             :disabled="authInputDisabled"
             required
