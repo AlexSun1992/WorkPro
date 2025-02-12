@@ -373,7 +373,7 @@ describe("LoginForm", () => {
 
     expect(wrapper.findComponent("#auth-form img.captcha").exists()).toBe(true);
     expect(
-      wrapper.findComponent("#sms-confirm-modal img.captcha").exists()
+      wrapper.findComponent("#smsCode-confirm-modal img.captcha").exists()
     ).toBe(false);
   });
 
@@ -414,7 +414,7 @@ describe("LoginForm", () => {
       localVue,
       attachTo: document.body,
     });
-    const modal = wrapper.findComponent("#sms-confirm-modal");
+    const modal = wrapper.findComponent("#smsCode-confirm-modal");
     await wrapper.find("#phone").setValue("ege@mmd.ru");
     await wrapper.find("#password").setValue("182821");
 
@@ -444,7 +444,7 @@ describe("LoginForm", () => {
     expect(wrapper.find("#phone").classes()).toContain("is-valid");
 
     expect(modal.isVisible()).toBe(true);
-    await modal.find("#sms-code").setValue("12345");
+    await modal.find("#smsCode-code").setValue("12345");
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -460,9 +460,9 @@ describe("LoginForm", () => {
       };
       throw wrongAuthError;
     });
-    await wrapper.find("#sms-form").trigger("submit.prevent");
+    await wrapper.find("#smsCode-form").trigger("submit.prevent");
 
-    expect(modal.find("#sms-code").classes()).toContain("is-invalid");
+    expect(modal.find("#smsCode-code").classes()).toContain("is-invalid");
     expect(wrapper.find("#phone").classes()).not.toContain("is-invalid");
     expect(wrapper.text()).not.toContain("Неверный логин или пароль");
   });
@@ -474,7 +474,7 @@ describe("LoginForm", () => {
       localVue,
       attachTo: document.body,
     });
-    const modal = wrapper.findComponent("#sms-confirm-modal");
+    const modal = wrapper.findComponent("#smsCode-confirm-modal");
     await wrapper.find("#phone").setValue("ege@mmd.ru");
     await wrapper.find("#password").setValue("182821");
     axios.post.mockImplementationOnce(() => {
