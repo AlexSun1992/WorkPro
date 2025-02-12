@@ -37,13 +37,13 @@
           <button
             type="button"
             class="btn btn-secondary"
-            :disabled="!isPhoneValid"
+            :disabled="isSMSButtonDisabled"
             id="sendSmsButton"
             @click="sendSMS"
           >
             {{ sendSmsBtnName }}
             <VerifyTimer
-              v-if="isSMSRequestInProgress"
+              v-if="isShowTimer"
               :duration="duration"
               @onFinish="stopSMSRequest"
             />
@@ -100,9 +100,6 @@ export default {
   computed: {
     controlAuthorizationConstants() {
       return controlAuthorizationConstants;
-    },
-    authBtnDisabled() {
-      return !this.SMSCode;
     },
     authInputDisabled() {
       return !this.isSMSRequested;
@@ -161,14 +158,21 @@ export default {
 
       return isValid ? "is-valid" : "is-invalid";
     },
+    isShowTimer() {
+      return this.isSMSRequestInProgress;
+    },
+    isSMSButtonDisabled() {
+      return this.isSMSRequestInProgress || !this.isPhoneValid;
+    },
+    isPhoneInputDisabled() {
+      return this.isSMSRequestInProgress;
+    }
   },
   data: () => ({
     isModalVisible: false,
     isSMSRequested: false,
     phoneNumber: "",
     SMSCode: "",
-    isSendSMSBtnDisabled: true,
-    isPhoneInputDisabled: false,
     isSMSRequestInProgress: false,
     isPhoneNumberTouched: false,
     isSmsCodeTouched: false,
@@ -195,19 +199,14 @@ export default {
       this.startSMSRequest();
     },
     startSMSRequest() {
-      this.isPhoneInputDisabled = true;
-      this.isSendSMSBtnDisabled = true;
       this.isSMSRequested = true;
       this.isSMSRequestInProgress = true;
     },
     stopSMSRequest() {
-      this.isPhoneInputDisabled = false;
-      this.isSendSMSBtnDisabled = false;
       this.isSMSRequestInProgress = false;
     },
     phoneNumberUpdated(ev) {
       this.touchPhoneNumber();
-      this.isSendSMSBtnDisabled = ev.target.value.length === 0;
       this.isSMSRequested = false;
     },
     auth() {
