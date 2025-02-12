@@ -20,22 +20,24 @@
           <label for="phoneNumber">Номер телефона</label>
           <input
             type="tel"
+            :class="phoneNumberClass"
             ref="phoneNumber"
             id="phoneNumber"
             autofocus
+            @blur="touchPhoneNumber"
             @keydown.enter="sendSMS"
+            @input="phoneNumberUpdated"
             name="phoneNumber"
             placeholder="Введите номер телефона"
             required
             :disabled="isPhoneInputDisabled"
             v-model="phoneNumber"
-            @input="phoneNumberUpdated"
           />
           <!-- Кнопка запроса СМС -->
           <button
             type="button"
             class="btn btn-secondary"
-            :disabled="isSendSMSBtnDisabled"
+            :disabled="!isPhoneValid"
             id="sendSmsButton"
             @click="sendSMS"
           >
@@ -49,10 +51,13 @@
 
           <label for="smsCode">Подтверждение СМС</label>
           <input
-            type="text"
+            type="number"
             id="smsCode"
             name="smsCode"
+            :class="smsCodeClass"
+            @blur="touchSMSCode"
             @keydown.enter="auth"
+            @input="touchSMSCode"
             placeholder="Введите код из СМС"
             :disabled="authInputDisabled"
             required
@@ -63,7 +68,7 @@
             type="button"
             class="btn btn-secondary"
             id="authButton"
-            :disabled="authBtnDisabled"
+            :disabled="!isSmsCodeValid"
             @click="auth"
           >
             Авторизация
@@ -114,6 +119,48 @@ export default {
         this.phoneNumber
       );
     },
+    isPhoneValid() {
+      if (this.phoneNumber) {
+        return true;
+      }
+
+      if (this.isPhoneNumberTouched) {
+        return false;
+      }
+
+      return null;
+    },
+    phoneNumberClass() {
+      const isValid = this.isPhoneValid;
+
+      if (isValid === null) {
+        return "";
+      }
+
+      return isValid ? "is-valid" : "is-invalid";
+    },
+
+    isSmsCodeValid() {
+      if (this.SMSCode) {
+        return true;
+      }
+
+      if (this.isSmsCodeTouched) {
+        return false;
+      }
+
+      return null;
+    },
+
+    smsCodeClass() {
+      const isValid = this.isSmsCodeValid;
+
+      if (isValid === null) {
+        return "";
+      }
+
+      return isValid ? "is-valid" : "is-invalid";
+    },
   },
   data: () => ({
     isModalVisible: false,
@@ -123,7 +170,9 @@ export default {
     isSendSMSBtnDisabled: true,
     isPhoneInputDisabled: false,
     isSMSRequestInProgress: false,
-    duration: 5,
+    isPhoneNumberTouched: false,
+    isSmsCodeTouched: false,
+    duration: 60,
   }),
   methods: {
     showModal() {
@@ -157,6 +206,7 @@ export default {
       this.isSMSRequestInProgress = false;
     },
     phoneNumberUpdated(ev) {
+      this.touchPhoneNumber();
       this.isSendSMSBtnDisabled = ev.target.value.length === 0;
       this.isSMSRequested = false;
     },
@@ -180,6 +230,14 @@ export default {
         name: this.data.name,
         value: this.SMSCode,
       });
+    },
+
+    touchSMSCode() {
+      this.isSmsCodeTouched = true;
+    },
+
+    touchPhoneNumber() {
+      this.isPhoneNumberTouched = true;
     },
   },
 };
