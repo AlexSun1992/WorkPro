@@ -142,7 +142,7 @@ describe("PasswordRecoveryForm", () => {
         },
       ],
     });
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     expect(
       wrapper.find("#btn_code_verification_lk").attributes().disabled
@@ -154,7 +154,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
     expect(wrapper.find("#verify-error-message").exists()).toBe(true);
     expect(
       wrapper.find("#btn_code_verification_lk").attributes().disabled
@@ -164,14 +164,14 @@ describe("PasswordRecoveryForm", () => {
   it("Должен показать поле код подверждения", async () => {
     const wrapper = generateWrapper();
 
-    expect(wrapper.find("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.find("#smsCode-confirm").exists()).toBe(false);
 
     await wrapper.find("#phone").setValue(PHONE);
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(true);
   });
 
   it("Должен показать поля 'Дата рождения', 'Пароль','Повторите пароль' и кнопку 'Изменить пароль'", async () => {
@@ -181,7 +181,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue(CODE);
+    await wrapper.find("#smsCode-confirm").setValue(CODE);
     expect(wrapper.find("#birth-date").exists()).toBe(true);
   });
 
@@ -192,7 +192,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue(CODE);
+    await wrapper.find("#smsCode-confirm").setValue(CODE);
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue("21.12.2052");
@@ -218,13 +218,13 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue(CODE);
+    await wrapper.find("#smsCode-confirm").setValue(CODE);
 
     await wrapper.find("#change_phone").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.find("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.find("#smsCode-confirm").exists()).toBe(false);
   });
 
   it("Должен показать валидный пароль", async () => {
@@ -234,7 +234,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    await wrapper.findComponent("#sms-confirm").setValue(CODE);
+    await wrapper.findComponent("#smsCode-confirm").setValue(CODE);
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue(DATE);
@@ -255,7 +255,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue(CODE);
+    await wrapper.find("#smsCode-confirm").setValue(CODE);
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue(DATE);
@@ -295,7 +295,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue(CODE);
+    await wrapper.find("#smsCode-confirm").setValue(CODE);
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -397,7 +397,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue(CODE);
+    await wrapper.find("#smsCode-confirm").setValue(CODE);
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -526,7 +526,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue(CODE);
+    await wrapper.find("#smsCode-confirm").setValue(CODE);
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -573,7 +573,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue(CODE);
+    await wrapper.find("#smsCode-confirm").setValue(CODE);
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue(DATE);
@@ -619,7 +619,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    const smsConfirm = wrapper.findComponent("#sms-confirm");
+    const smsConfirm = wrapper.findComponent("#smsCode-confirm");
 
     expect(smsConfirm.exists()).toBe(true);
 
@@ -650,7 +650,7 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    const smsConfirm = wrapper.findComponent("#sms-confirm");
+    const smsConfirm = wrapper.findComponent("#smsCode-confirm");
 
     expect(smsConfirm.exists()).toBe(true);
 
@@ -678,9 +678,9 @@ describe("PasswordRecoveryForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(true);
 
-    await wrapper.find("#sms-confirm").setValue(CODE);
+    await wrapper.find("#smsCode-confirm").setValue(CODE);
 
     const dataPickerInput = wrapper.find("[data-testid=regBornDate]");
     dataPickerInput.setValue(DATE);
@@ -693,7 +693,7 @@ describe("PasswordRecoveryForm", () => {
     wrapper.find("#tab_mail_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.find("#email").setValue(EMAIL);
-    
+
     await wrapper.find("#btn_code_verification_lk").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();

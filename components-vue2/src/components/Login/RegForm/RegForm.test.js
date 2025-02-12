@@ -40,7 +40,7 @@ describe("RegForm", () => {
       ],
     });
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     expect(
       wrapper.find("#btn_code_verification_lk").attributes().disabled
@@ -127,7 +127,7 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
     expect(wrapper.find("#verify-error-message").exists()).toBe(true);
     expect(
       wrapper.find("#btn_code_verification_lk").attributes().disabled
@@ -153,7 +153,7 @@ describe("RegForm", () => {
       ],
     });
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
 
@@ -236,7 +236,7 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(true);
   });
   it("должен предупреждать если номер существует", async () => {
     const localVue = createLocalVue();
@@ -263,7 +263,7 @@ describe("RegForm", () => {
       },
     });
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
 
@@ -338,7 +338,7 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login");
 
@@ -349,7 +349,7 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     expect(spy).toHaveBeenCalled();
     expect(window.location.href).toEqual("/login/password-recovery");
@@ -361,7 +361,7 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
     expect(spy).toHaveBeenCalled();
     expect(wrapper.find("#phone").element.value).toBe("+7(910)-123-22-33");
   });
@@ -384,7 +384,7 @@ describe("RegForm", () => {
       ],
     });
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     await wrapper.find("#phone").setValue("+7(910)-123-22-33");
 
@@ -480,7 +480,7 @@ describe("RegForm", () => {
       wrapper.findComponent("#btn_code_verification_lk").attributes().disabled
     ).toBeDefined();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     await checkboxComponent.setChecked(false);
 
@@ -514,9 +514,9 @@ describe("RegForm", () => {
       wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled
     ).toBeDefined();
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(true);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(true);
 
-    await wrapper.find("#sms-confirm").setValue("12345");
+    await wrapper.find("#smsCode-confirm").setValue("12345");
 
     expect(
       wrapper.findComponent("#btn_chek_registration_lk").attributes().disabled
@@ -586,7 +586,7 @@ describe("RegForm", () => {
       ],
     });
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     const surnameComponent = wrapper.findComponent({
       ref: "autocompleteSurname",
@@ -681,7 +681,7 @@ describe("RegForm", () => {
       { headers: { "X-Application": "VueJS", recaptcha: 1 } }
     );
 
-    await wrapper.find("#sms-confirm").setValue("12345");
+    await wrapper.find("#smsCode-confirm").setValue("12345");
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -1075,7 +1075,7 @@ describe("RegForm", () => {
       ],
     });
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     const surnameComponent = wrapper.findComponent({
       ref: "autocompleteSurname",
@@ -1119,7 +1119,7 @@ describe("RegForm", () => {
       ],
     });
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     const surnameComponent = wrapper.findComponent({
       ref: "autocompleteSurname",
@@ -1163,7 +1163,7 @@ describe("RegForm", () => {
       ],
     });
 
-    expect(wrapper.findComponent("#sms-confirm").exists()).toBe(false);
+    expect(wrapper.findComponent("#smsCode-confirm").exists()).toBe(false);
 
     const surnameComponent = wrapper.findComponent({
       ref: "autocompleteSurname",
@@ -1258,7 +1258,7 @@ describe("RegForm", () => {
       { headers: { "X-Application": "VueJS", recaptcha: 1 } }
     );
 
-    await wrapper.find("#sms-confirm").setValue("12345");
+    await wrapper.find("#smsCode-confirm").setValue("12345");
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
@@ -1438,7 +1438,7 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("1111");
+    await wrapper.find("#smsCode-confirm").setValue("1111");
 
     const bvModal = jest.spyOn(wrapper.vm.$bvModal, "msgBoxConfirm");
 
@@ -1518,7 +1518,7 @@ describe("RegForm", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
 
-    await wrapper.find("#sms-confirm").setValue("1111");
+    await wrapper.find("#smsCode-confirm").setValue("1111");
 
     axios.post.mockImplementationOnce(() => {
       const wrongAuthError = new Error("");
