@@ -32,7 +32,7 @@
             :disabled="$v.newPhone.$invalid || loading || isSendCode"
             @click="verifyUser"
           >
-            Получить smsCode-код
+            Получить sms-код
             <span
               v-if="loading"
               role="status"
@@ -54,7 +54,7 @@
     <div v-if="isShowCodeEnter" class="resend-block">
       <p>
         <template v-if="disabledResend">
-          На указанный номер мы направили smsCode-код, просим ввести его в поле
+          На указанный номер мы направили sms-код, просим ввести его в поле
           ниже.<br />
           Повторный код можно запросить через
           <verify-timer :duration="duration" @onFinish="stopTimer" />
@@ -69,8 +69,8 @@
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 import _ from "lodash";
-import { BFormGroup } from "bootstrap-vue";
 import VerifyTimer from "../VerifyUser/VerifyTimer";
+import { BFormGroup } from "bootstrap-vue";
 
 export default {
   name: "ControlPhoneChange",

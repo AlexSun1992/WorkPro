@@ -9,7 +9,7 @@
       @close="resetForm"
       :centered="true"
       :static="true"
-      content-class="smsCode-confirm-modal"
+      content-class="sms-confirm-modal"
       title="Введите код"
     >
       <div class="form-container">
@@ -49,7 +49,7 @@
             placeholder="Введите код из СМС"
             :disabled="authInputDisabled"
             required
-            v-model="smsCode"
+            v-model="sms"
           />
 
           <button
@@ -74,22 +74,12 @@ import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 export default {
   name: "ControlAuthorization",
   components: { VerifyTimer },
-  props: {
-    data: {
-      type: Object,
-      default: () => ({
-        fieldId: null,
-          name: null,
-          value: null,
-      })
-    },
-  },
   computed: {
     controlAuthorizationConstants() {
       return controlAuthorizationConstants;
     },
     authBtnDisabled() {
-      return !this.smsCode;
+      return !this.sms;
     },
     authInputDisabled() {
       return !this.smsRequested;
@@ -111,7 +101,7 @@ export default {
     isModalVisible: false,
     smsRequested: false,
     phoneNumber: "",
-    smsCode: "",
+    sms: "",
     isSendSmsBtnDisabled: true,
     isPhoneInputDisabled: false,
     isSMSRequestInProgress: false,
@@ -152,16 +142,9 @@ export default {
       this.smsRequested = false;
     },
     auth() {
-      this.updateStoreValue();
+      const formData = [...this.$store.getters("data_card/getForm")];
 
-      controlAuthorizationHelper.auth([...this.$store.getters("data_card/getForm")]);
-    },
-    updateStoreValue() {
-      this.$emit("update", {
-        fieldId: this.data.fieldId,
-        name: this.data.name,
-        value: this.smsCode,
-      })
+      controlAuthorizationHelper.auth(formData);
     },
     resetForm() {
       Object.assign(this.$data, this.$options.data());

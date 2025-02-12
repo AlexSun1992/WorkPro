@@ -47,7 +47,7 @@
       @hidden="closeModalConfirmSMSCode"
       :centered="true"
       :static="true"
-      content-class="smsCode-confirm-modal"
+      content-class="sms-confirm-modal"
       title="Введите код"
     >
       <div>
