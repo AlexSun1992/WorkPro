@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button type="button" @click="showModal">Авторизоваться</button>
+    <button type="button" class="btn btn-secondary" @click="showModal">Авторизоваться</button>
 
     <b-modal
       id="sms-auth-confirm-modal"
@@ -29,6 +29,7 @@
           <!-- Кнопка запроса СМС -->
           <button
             type="button"
+            class="btn btn-secondary"
             :disabled="isSendSmsBtnDisabled"
             id="sendSmsButton"
             @click="sendSMS"
@@ -53,7 +54,8 @@
           />
 
           <button
-            type="submit"
+            type="button"
+            class="btn btn-secondary"
             id="authButton"
             :disabled="authBtnDisabled"
             @click="auth"
