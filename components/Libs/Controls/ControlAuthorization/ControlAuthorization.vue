@@ -228,7 +228,7 @@ export default {
       this.wrongAuthData = false;
 
       controlAuthorizationHelper.auth([
-        ...this.$store.getters("data_card/getForm"),
+        ...this.$store.getters["data_card/getForm"],
       ]);
     },
     resetForm() {
