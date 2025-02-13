@@ -201,9 +201,11 @@ export default {
       this.isPhoneNumberUpdated = false;
       this.startSMSRequest();
 
-      const result = await controlAuthorizationHelper.requestSmsCode(smsData);
+      const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
 
-      this.wrongAuthData = result.data.appCodeName === "Invalid";
+      if (authResp.error?.appCodeName) {
+        this.wrongAuthData = true;
+      }
     },
     startSMSRequest() {
       this.isSMSRequested = true;
@@ -223,6 +225,7 @@ export default {
       }
 
       this.updateStoreValue();
+      this.wrongAuthData = false;
 
       controlAuthorizationHelper.auth([
         ...this.$store.getters("data_card/getForm"),

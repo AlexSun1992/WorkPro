@@ -5,9 +5,16 @@ export default {
     "content-type": "application/json",
   },
   async requestSmsCode(data) {
-    return axios.post("/am/authw/v2/authorize", data, {
-      headers: this.commonHeader,
-    });
+    const result = { success: null, error: null };
+    try {
+      result.success = axios.post("/am/authw/v2/authorize", data, {
+        headers: this.commonHeader,
+      });
+    } catch (e) {
+      result.error = e;
+    }
+
+    return result;
   },
 
   async auth(data) {
@@ -72,5 +79,5 @@ export default {
     const purePhoneNumber = pastedValue.replace(/[\(\)+-.\s]/g, "");
 
     return purePhoneNumber.split("");
-  }
+  },
 };
