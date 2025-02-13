@@ -30,7 +30,6 @@
             name="phoneNumber"
             placeholder="Введите номер телефона"
             required
-            :disabled="isPhoneInputDisabled"
             v-model="phoneNumber"
           />
           <!-- Кнопка запроса СМС -->
@@ -42,11 +41,9 @@
             @click="sendSMS"
           >
             {{ sendSmsBtnName }}
-            <VerifyTimer
-              v-if="isShowTimer"
-              :duration="duration"
-              @onFinish="stopSMSRequest"
-            />
+            <template v-if="isShowTimer">
+              (через <VerifyTimer :duration="duration" @onFinish="stopSMSRequest" /> секунд)
+            </template>
           </button>
 
           <div class="invalid-feedback d-block mt-3" v-if="wrongAuthData">
@@ -72,7 +69,7 @@
             type="button"
             class="btn btn-secondary"
             id="authButton"
-            :disabled="!isSmsCodeValid"
+            :disabled="isAuthButtonDisabled"
             @click="auth"
           >
             Авторизация
@@ -153,6 +150,10 @@ export default {
       return null;
     },
 
+    isAuthButtonDisabled() {
+      return this.isPhoneNumberUpdated && !this.isSmsCodeValid;
+    },
+
     smsCodeClass() {
       const isValid = this.isSmsCodeValid;
 
@@ -168,9 +169,6 @@ export default {
     isSMSButtonDisabled() {
       return this.isSMSRequestInProgress || !this.isPhoneValid;
     },
-    isPhoneInputDisabled() {
-      return this.isSMSRequestInProgress;
-    }
   },
   data: () => ({
     isModalVisible: false,
@@ -181,6 +179,7 @@ export default {
     isPhoneNumberTouched: false,
     isSmsCodeTouched: false,
     wrongAuthData: false,
+    isPhoneNumberUpdated: false,
     duration: 60,
   }),
   methods: {
@@ -199,11 +198,12 @@ export default {
         mode: 60,
       };
 
+      this.isPhoneNumberUpdated = false;
       this.startSMSRequest();
 
       const result = await controlAuthorizationHelper.requestSmsCode(smsData);
 
-      this.wrongAuthData = result.data.appCodeName === "Invalid"
+      this.wrongAuthData = result.data.appCodeName === "Invalid";
     },
     startSMSRequest() {
       this.isSMSRequested = true;
@@ -215,6 +215,7 @@ export default {
     phoneNumberUpdated() {
       this.touchPhoneNumber();
       this.isSMSRequested = false;
+      this.isPhoneNumberUpdated = true;
     },
     auth() {
       if (!this.SMSCode) {
@@ -234,7 +235,7 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: this.SMSCode,
+        value: { code: this.SMSCode, phone: this.phoneNumber },
       });
     },
 
