@@ -49,6 +49,10 @@
             />
           </button>
 
+          <div class="invalid-feedback d-block mt-3" v-if="wrongAuthData">
+            Проверьте корректность введенных данных.
+          </div>
+
           <label for="smsCode">Подтверждение СМС</label>
           <input
             type="number"
@@ -176,6 +180,7 @@ export default {
     isSMSRequestInProgress: false,
     isPhoneNumberTouched: false,
     isSmsCodeTouched: false,
+    wrongAuthData: false,
     duration: 60,
   }),
   methods: {
@@ -185,7 +190,7 @@ export default {
     hideModal() {
       this.isModalVisible = false;
     },
-    sendSMS() {
+    async sendSMS() {
       const smsData = {
         username: this.phoneNumberNormalize,
         password: null,
@@ -194,9 +199,11 @@ export default {
         mode: 60,
       };
 
-      controlAuthorizationHelper.sentSmsCode(smsData);
-
       this.startSMSRequest();
+
+      const result = await controlAuthorizationHelper.requestSmsCode(smsData);
+
+      this.wrongAuthData = result.data.appCodeName === "Invalid"
     },
     startSMSRequest() {
       this.isSMSRequested = true;
@@ -205,7 +212,7 @@ export default {
     stopSMSRequest() {
       this.isSMSRequestInProgress = false;
     },
-    phoneNumberUpdated(ev) {
+    phoneNumberUpdated() {
       this.touchPhoneNumber();
       this.isSMSRequested = false;
     },

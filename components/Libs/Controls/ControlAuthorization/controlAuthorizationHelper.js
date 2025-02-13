@@ -4,12 +4,10 @@ export default {
   commonHeader: {
     "content-type": "application/json",
   },
-  async sentSmsCode(data) {
-    await axios.post("/am/authw/v2/authorize", data, {
+  async requestSmsCode(data) {
+    return axios.post("/am/authw/v2/authorize", data, {
       headers: this.commonHeader,
     });
-
-    return "";
   },
 
   async auth(data) {
