@@ -103,7 +103,7 @@ export default {
       return controlAuthorizationConstants;
     },
     authInputDisabled() {
-      return !this.isSMSRequested;
+      return !this.isSMSRequested || this.wrongAuthData;
     },
     sendSmsBtnName() {
       if (this.isSMSRequested) {
@@ -151,7 +151,7 @@ export default {
     },
 
     isAuthButtonDisabled() {
-      return this.isPhoneNumberUpdated && !this.isSmsCodeValid;
+      return this.isPhoneNumberUpdated || !this.isSmsCodeValid || this.wrongAuthData;
     },
 
     smsCodeClass() {
@@ -219,6 +219,7 @@ export default {
       this.isSMSRequested = false;
       this.isPhoneNumberUpdated = true;
       this.wrongAuthData = false;
+      this.SMSCode = "";
     },
     auth() {
       if (!this.SMSCode) {
