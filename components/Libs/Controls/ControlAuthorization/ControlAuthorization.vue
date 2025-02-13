@@ -180,7 +180,7 @@ export default {
     isSmsCodeTouched: false,
     wrongAuthData: false,
     isPhoneNumberUpdated: false,
-    duration: 3,
+    duration: 60,
   }),
   methods: {
     showModal() {
@@ -195,7 +195,7 @@ export default {
         password: null,
         cap: null,
         capid: null,
-        mode: 60,
+        mode: 2,
       };
 
       this.isPhoneNumberUpdated = false;
