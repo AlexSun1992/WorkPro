@@ -7,7 +7,7 @@ export default {
   async requestSmsCode(data) {
     const result = { success: null, error: null };
     try {
-      result.success = axios.post("/am/authw/v2/authorize", data, {
+      result.success = await axios.post("/am/authw/v2/authorize", data, {
         headers: this.commonHeader,
       });
     } catch (e) {

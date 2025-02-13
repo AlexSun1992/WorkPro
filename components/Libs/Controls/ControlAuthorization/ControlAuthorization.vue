@@ -46,7 +46,7 @@
             </template>
           </button>
 
-          <div class="invalid-feedback d-block mt-3" v-if="wrongAuthData">
+          <div class="d-block mt-3" v-if="wrongAuthData">
             Проверьте корректность введенных данных.
           </div>
 
@@ -58,7 +58,7 @@
             :class="smsCodeClass"
             @blur="touchSMSCode"
             @keydown.enter="auth"
-            @input="touchSMSCode"
+            @input="phoneNumberUpdated"
             placeholder="Введите код из СМС"
             :disabled="authInputDisabled"
             required
@@ -180,7 +180,7 @@ export default {
     isSmsCodeTouched: false,
     wrongAuthData: false,
     isPhoneNumberUpdated: false,
-    duration: 60,
+    duration: 3,
   }),
   methods: {
     showModal() {
@@ -203,7 +203,7 @@ export default {
 
       const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
 
-      if (authResp.error?.appCodeName) {
+      if (authResp.error) {
         this.wrongAuthData = true;
       }
     },
@@ -218,6 +218,7 @@ export default {
       this.touchPhoneNumber();
       this.isSMSRequested = false;
       this.isPhoneNumberUpdated = true;
+      this.wrongAuthData = false;
     },
     auth() {
       if (!this.SMSCode) {
@@ -225,7 +226,6 @@ export default {
       }
 
       this.updateStoreValue();
-      this.wrongAuthData = false;
 
       controlAuthorizationHelper.auth([
         ...this.$store.getters["data_card/getForm"],
