@@ -18,7 +18,7 @@ export default {
     const result = { platform: OS_TYPES.default, webview: WEBVIEW_TYPES.VueJS };
     const isWebview = this.isWebview(cookies);
 
-    result.webview = this.getWebview(isWebview);
+    result.webview = this.getWebview(isWebview, cookies);
     result.platform = this.getMobilePlatform(userAgent, isWebview);
 
     return result;
@@ -51,8 +51,8 @@ export default {
     }
     return OS_TYPES.web;
   },
-  getWebview(isWebview) {
-    return isWebview ? WEBVIEW_TYPES.isWebview : WEBVIEW_TYPES.VueJS;
+  getWebview(isWebview, cookies) {
+    return isWebview ? this.getWebviewApp(cookies) : WEBVIEW_TYPES.VueJS;
   },
   getOsInfo(userAgent = "") {
     const currentOs = clientOsData.find(item => userAgent.search(item.regex) >= 0);
@@ -70,5 +70,17 @@ export default {
     }
 
     return false;
+  },
+
+  getWebviewApp(cookies) {
+    const versions = ["app=rm1", "app=rm2"];
+    const cookiesLower = cookies.toLowerCase();
+    const app = [
+      { cookie: "app=rm1", name: WEBVIEW_TYPES.RM1 },
+      { cookie: "app=rm1", name: WEBVIEW_TYPES.RM1 }
+    ];
+    const currentVersion = versions.find(item => cookiesLower.match(`/\b${item}\b/g`));
+
+    return currentVersion ? app[currentVersion] : WEBVIEW_TYPES.isWebview;
   }
 }
