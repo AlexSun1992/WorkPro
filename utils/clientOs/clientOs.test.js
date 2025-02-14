@@ -51,4 +51,10 @@ describe("clientOs utils", () => {
 
     expect(clientOs.getWebviewApp(mock.headers.common.Cookie)).toBe(WEBVIEW_TYPES.isWebview);
   });
+
+  test("getMobilePlatform for Webview with RM1 type", () => {
+    mock = clientOsTestData.variantG;
+
+    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WEBVIEW_TYPES.RM1, platform: OS_TYPES.webviewAndroid });
+  });
 });
