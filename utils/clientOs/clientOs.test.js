@@ -40,9 +40,15 @@ describe("clientOs utils", () => {
     expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WEBVIEW_TYPES.VueJS, platform: OS_TYPES.web });
   });
 
-  test("getVersion mobile platform", () => {
+  test("getVersion mobile platform for RM1", () => {
     mock = clientOsTestData.variantF;
 
     expect(clientOs.getWebviewApp(mock.headers.common.Cookie)).toBe(WEBVIEW_TYPES.RM1);
+  });
+
+  test("getVersion mobile platform for Default", () => {
+    mock = clientOsTestData.variantE;
+
+    expect(clientOs.getWebviewApp(mock.headers.common.Cookie)).toBe(WEBVIEW_TYPES.isWebview);
   });
 });
