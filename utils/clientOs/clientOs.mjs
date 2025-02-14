@@ -73,13 +73,17 @@ export default {
   },
 
   getWebviewApp(cookies) {
-    const versions = ["app=rm1", "app=rm2"];
-    const cookiesLower = cookies.toLowerCase();
-    const app = [
-      { cookie: "app=rm1", name: WEBVIEW_TYPES.RM1 },
-      { cookie: "app=rm1", name: WEBVIEW_TYPES.RM1 }
-    ];
-    const currentVersion = versions.find(item => cookiesLower.match(`/\b${item}\b/g`));
+    const versions = [ "app=rm1", "app=rm2" ];
+    const cookiesLower = cookies.toLowerCase().replace(" ", "");
+    const app = {
+        "app=rm1": WEBVIEW_TYPES.RM1,
+        "app=rm2": WEBVIEW_TYPES.RM2
+      };
+    const currentVersion = versions.find(item => {
+      const reg = new RegExp(`\\b${item}\\b`, 'gi');
+
+      return reg.test(cookiesLower);
+    });
 
     return currentVersion ? app[currentVersion] : WEBVIEW_TYPES.isWebview;
   }

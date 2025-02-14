@@ -11,5 +11,5 @@ export const WEBVIEW_TYPES = {
   isWebview: "isWebview",
   VueJS: "VueJS",
   RM1: "isWebview_RM1",
-  RM2: "isWebview_RM1"
+  RM2: "isWebview_RM2"
 }
