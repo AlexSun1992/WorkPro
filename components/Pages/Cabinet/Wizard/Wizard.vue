@@ -198,8 +198,7 @@ export default {
       return this.$store.getters["uploader/isLoadSuccessFull"];
     },
     maxTabsForIconWizard() {
-      // TODO нужно вернуть из сторы число элементов которое будет овечать за переключение прогрессбара визарда
-      return 8;
+      return this.$store.getters["wizard/iconTabsCount"];
     },
     isUseCardTemplate() {
       return Boolean(
