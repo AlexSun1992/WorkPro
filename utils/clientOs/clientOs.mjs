@@ -73,12 +73,12 @@ export default {
   },
 
   getWebviewApp(cookies) {
-    const versions = [ "app=rm1", "app=rm2" ];
-    const cookiesLower = cookies.toLowerCase().replace(" ", "");
     const app = {
         "app=rm1": WEBVIEW_TYPES.RM1,
         "app=rm2": WEBVIEW_TYPES.RM2
       };
+    const versions = Object.keys(app);
+    const cookiesLower = cookies.toLowerCase().replace(" ", "");
     const currentVersion = versions.find(item => {
       const reg = new RegExp(`\\b${item}\\b`, 'gi');
 
