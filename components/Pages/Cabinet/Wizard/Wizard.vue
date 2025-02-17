@@ -197,6 +197,10 @@ export default {
     isLoadSuccessFull() {
       return this.$store.getters["uploader/isLoadSuccessFull"];
     },
+    maxTabsForIconWizard() {
+      // TODO нужно вернуть из сторы число элементов которое будет овечать за переключение прогрессбара визарда
+      return 8;
+    },
     isUseCardTemplate() {
       return Boolean(
         this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
@@ -204,7 +208,7 @@ export default {
       );
     },
     isWizardProgressBar() {
-      return this.tabs.length > 8;
+      return this.tabs.length > this.maxTabsForIconWizard;
     }
   },
   unmounted() {
