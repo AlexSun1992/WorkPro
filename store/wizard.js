@@ -22,7 +22,7 @@ export const getters = {
   getWizardIsErrorActionExecute: (state) => state.isErrorActionExecute,
   getWizardData: (state) => state.data,
   getWizardIsError: (state) => state.isError,
-  iconTabsCount: (state) => state.data.ICONTABSCOUNT ?? 8,
+  iconTabsCount: (state) => state.data?.ICONTABSCOUNT ?? 8,
 };
 
 export const actions = {
