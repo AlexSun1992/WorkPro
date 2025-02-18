@@ -148,13 +148,8 @@ export default {
         zone: this.free || "free",
         cache: true,
       };
-      const tokenStorage = localStorage.getItem(TOKEN_NAME);
       const tokenCookies = Cookies.get(TOKEN_NAME);
-      const isAuth =
-        tokenStorage &&
-        tokenCookies &&
-        tokenStorage !== "false" &&
-        tokenCookies !== "false";
+      const isAuth = tokenCookies && tokenCookies !== "false";
       if (this.menuId !== 777) {
         params.cache = false;
       }
