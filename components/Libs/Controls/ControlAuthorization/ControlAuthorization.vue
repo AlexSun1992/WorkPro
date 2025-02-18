@@ -194,18 +194,26 @@ export default {
       this.isModalVisible = false;
     },
     async sendSMS() {
-      const smsData = {
-        SPHOLDER_PHONE: this.phoneNumberNormalize,
-        id: 1,
+      // TODO Удалить HARDCODE и убрать комментарий. Либо вставить новий объект если появится новый запрос
+      const HARDCODE = {
+        username: this.phoneNumberNormalize,
+        password: "485381",
+        cap: null,
+        capid: null,
+        mode: 2,
       };
-
+      const smsData = HARDCODE; /* {
+        SPHOLDER_PHONE: this.phoneNumberNormalize,
+        ID: null,
+      } */
       this.isPhoneNumberUpdated = false;
       this.startSMSRequest();
 
       const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
 
       if (authResp.error) {
-        this.wrongAuthData = true;
+        // TODO это блокировка ввода кода СМС если запрос завершился ошибкой
+        // this.wrongAuthData = true;
       }
     },
     startSMSRequest() {
