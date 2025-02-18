@@ -72,32 +72,39 @@ export default {
       this.$emit("saveCard");
     },
     async goNext() {
-      this.$store.dispatch("wizard/isWizardButtonsLoading", true);
-      this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
-      const menu = this.$store.getters["menu/flatmenu"].find(
-        (item) => item.IDITEM == this.currentTab.idItem
-      );
-      const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
-      if (action) {
-        const response = await this.$store.dispatch("data_card/executeAction", {
-          actionId: action.ID,
-          relActionId: action.REL,
-          relId: this.$route.params.idRel,
-          rowId: this.$route.params.idCard,
-        });
-        if (response.status != 200) {
-          this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
-          this.$store.commit(
-            "wizard/setWizardErrorActionExecuteMessage",
-            response.data
+      if (this.$route) {
+        this.$store.dispatch("wizard/isWizardButtonsLoading", true);
+        this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
+        const menu = this.$store.getters["menu/flatmenu"].find(
+          (item) => item.IDITEM == this.currentTab.idItem
+        );
+        const action = menu.ACTIONSCUR.find((item) => item.NTYPE == 35);
+        if (action) {
+          const response = await this.$store.dispatch(
+            "data_card/executeAction",
+            {
+              actionId: action.ID,
+              relActionId: action.REL,
+              relId: this.$route.params.idRel,
+              rowId: this.$route.params.idCard,
+            }
           );
-          this.$store.dispatch("wizard/isWizardButtonsLoading", false);
-          return;
+          if (response.status != 200) {
+            this.$store.commit("wizard/setWizardIsErrorActionExecute", true);
+            this.$store.commit(
+              "wizard/setWizardErrorActionExecuteMessage",
+              response.data
+            );
+            this.$store.dispatch("wizard/isWizardButtonsLoading", false);
+            return;
+          }
         }
+        await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
+        const tab = this.tabs[this.getCurrentIndex() + 1];
+        this.$emit("goNext", tab);
+      } else {
+        this.$emit("goNext");
       }
-      await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
-      const tab = this.tabs[this.getCurrentIndex() + 1];
-      this.$emit("goNext", tab);
     },
   },
   computed: {
@@ -125,7 +132,7 @@ export default {
           .getData(this.$store.getters["menu/menu"], {
             idModule: 55,
             idParent: 0,
-            idItem: this.$route.params.idWizard,
+            idItem: this.$route ? this.$route.params.idWizard : null,
           })
           .slice(-1)
           .pop();
