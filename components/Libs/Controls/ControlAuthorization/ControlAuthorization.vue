@@ -59,7 +59,7 @@
             name="smsCode"
             :class="smsCodeClass"
             @blur="touchSMSCode"
-            @keydown.enter="auth"
+            @keydown.enter="sendAuthData"
             @input="touchSMSCode"
             placeholder="Введите код из СМС"
             :disabled="authInputDisabled"
@@ -72,7 +72,7 @@
             class="btn btn-secondary"
             id="authButton"
             :disabled="isAuthButtonDisabled"
-            @click="auth"
+            @click="sendAuthData"
           >
             Авторизация
           </button>
@@ -230,16 +230,14 @@ export default {
       this.wrongAuthData = false;
       this.SMSCode = "";
     },
-    auth() {
+    sendAuthData() {
       if (!this.SMSCode) {
         return;
       }
 
       this.updateStoreValue();
 
-      controlAuthorizationHelper.auth([
-        ...this.$store.getters["data_card/getForm"],
-      ]);
+      controlAuthorizationHelper.saveCard();
     },
     resetForm() {
       Object.assign(this.$data, this.$options.data());
