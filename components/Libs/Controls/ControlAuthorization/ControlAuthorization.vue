@@ -42,7 +42,9 @@
           >
             {{ sendSmsBtnName }}
             <template v-if="isShowTimer">
-              (через <VerifyTimer :duration="duration" @onFinish="stopSMSRequest" /> секунд)
+              (через
+              <VerifyTimer :duration="duration" @onFinish="stopSMSRequest" />
+              секунд)
             </template>
           </button>
 
@@ -58,7 +60,7 @@
             :class="smsCodeClass"
             @blur="touchSMSCode"
             @keydown.enter="auth"
-            @input="phoneNumberUpdated"
+            @input="touchSMSCode"
             placeholder="Введите код из СМС"
             :disabled="authInputDisabled"
             required
@@ -151,7 +153,9 @@ export default {
     },
 
     isAuthButtonDisabled() {
-      return this.isPhoneNumberUpdated || !this.isSmsCodeValid || this.wrongAuthData;
+      return (
+        this.isPhoneNumberUpdated || !this.isSmsCodeValid || this.wrongAuthData
+      );
     },
 
     smsCodeClass() {
@@ -191,11 +195,8 @@ export default {
     },
     async sendSMS() {
       const smsData = {
-        username: this.phoneNumberNormalize,
-        password: null,
-        cap: null,
-        capid: null,
-        mode: 2,
+        SPHOLDER_PHONE: this.phoneNumberNormalize,
+        id: 1,
       };
 
       this.isPhoneNumberUpdated = false;
