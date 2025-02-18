@@ -7,6 +7,8 @@
       :params="params"
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
+      @goNext="goNext($event)"
+      @goBack="goBack($event)"
     />
     <Form
       v-if="!isBlock && !getError"
@@ -59,7 +61,7 @@
         class="btn btn-success col-12 col-md-auto mt-3 mt-md-0"
         @click="next()"
       >
-        Далее
+        Далее (тест)
         <span
           role="status"
           style="width: 1rem; height: 1rem"
@@ -188,9 +190,9 @@ export default {
     async init() {
       try {
         this.params = getParams({ ...this.$props });
-
         if (process?.env?.NODE_ENV === "development" || this.params.cache) {
           this.eventHandler = await this.loadScript();
+          this.initHandler = await this.loadInitScript();
         }
         this.cacheDataLocal()
           .then((json) => {
@@ -252,6 +254,9 @@ export default {
         );
         this.isShowButtonSave = true;
         this.params.cache = false;
+        if (typeof this.initHandler === "function") {
+          this.initHandler(this.getForm);
+        }
       } catch (e) {
         console.error(e);
         if (this.menuId !== 777) {
@@ -274,11 +279,17 @@ export default {
         this.$store.commit("data_card/setDisabled", false);
       }
     },
+    goNext() {
+      console.log("next");
+    },
+    goBack() {
+      console.log("back");
+    },
     next() {
       const url = new URL(window.location.href);
-      url.searchParams.append("ID", "2763068875");
-      url.searchParams.append("REL", "800FCD2B5957A009A7C4D9E926B3C08D");
-      url.searchParams.append("IDMENU", "745");
+      url.searchParams.set("ID", "857");
+      url.searchParams.set("REL", "CE5997B2963ED6CC5754A3E54C1A5542");
+      url.searchParams.set("IDMENU", "1093");
       window.history.replaceState(null, null, url);
       this.init();
     },
@@ -292,6 +303,9 @@ export default {
     },
     async loadScript() {
       return this.eventLocalHandler().then((script) => script.eventHandler);
+    },
+    async loadInitScript() {
+      return this.eventLocalHandler().then((script) => script.initHandler);
     },
     async callbackAction(url) {
       try {
@@ -393,7 +407,7 @@ export default {
       }
     },
     async fetchCard() {
-      if (this.params.idCard !== "0") {
+      if (!this.cardId && this.cardId !== 0) {
         const { items } = await this.$store.dispatch(
           "data_card/fetchList",
           this.params
@@ -463,6 +477,7 @@ export default {
     },
 
     async updateValue(e) {
+      console.log("updateValue", e);
       await this.$store.dispatch("data_card/setActionFormField", {
         fieldId: e.fieldId,
         name: e.name,
