@@ -50,6 +50,25 @@
         </span>
       </button>
     </div>
+    <div>
+      <button
+        pill
+        :disabled="isSaving"
+        :class="'btn-lg'"
+        type="button"
+        class="btn btn-success col-12 col-md-auto mt-3 mt-md-0"
+        @click="next()"
+      >
+        Далее
+        <span
+          role="status"
+          style="width: 1rem; height: 1rem"
+          class="spinner-border text-danger ml-2"
+        >
+          <span class="sr-only">Spinning</span>
+        </span>
+      </button>
+    </div>
   </div>
 </template>
 <script>
@@ -64,6 +83,7 @@ import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 import { isCriticalError } from "/../plugins/auth/toast.helper";
+import { getParams } from "./helpers";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -104,14 +124,8 @@ export default {
         idItem: this.menuId,
         idModule: this.moduleId,
         idParent: "0",
-        idCard:
-          new URLSearchParams(window.location.search).get("ID") ||
-          this.cardId ||
-          "0",
-        idRel:
-          this.rel ||
-          new URLSearchParams(window.location.search).get("REL") ||
-          "0",
+        idCard: this.cardId,
+        idRel: this.rel,
         zone: this.free || "free",
         cache: true,
       },
@@ -140,15 +154,20 @@ export default {
       return this.$store.getters["data_card/getReadOnly"];
     },
     isBlock() {
-      return this.$store.getters["menu/getMenuById"](this.menuId)?.LUSEBLOCK;
+      return this.$store.getters["menu/getMenuById"](this.params.idItem)
+        ?.LUSEBLOCK;
     },
     eventLocalHandler() {
       return () =>
-        import(`/../components/EventHandler/${this.menuId}/eventHandler`);
+        import(
+          `/../components/EventHandler/${this.params.idItem}/eventHandler`
+        );
     },
     cacheDataLocal() {
       return () =>
-        import(`./CacheDataLocal/${this.menuId}/cache${this.menuId}.json`);
+        import(
+          `./CacheDataLocal/${this.menuId}/cache${this.params.idItem}.json`
+        );
     },
     isCaptchaNeededCheck() {
       return this.isCaptchaNeeded;
@@ -162,107 +181,107 @@ export default {
     },
   },
 
-  async created() {
-    try {
-      const tokenStorage = localStorage.getItem(TOKEN_NAME);
-      const tokenCookies = Cookies.get(TOKEN_NAME);
-      const isAuth =
-        tokenStorage &&
-        tokenCookies &&
-        tokenStorage !== "false" &&
-        tokenCookies !== "false";
-      if (this.menuId !== 777) {
-        this.params.cache = false;
-      }
-      if (isAuth) {
-        this.params.zone = "token";
-      }
-      if (process?.env?.NODE_ENV === "development" || this.params.cache) {
-        this.eventHandler = await this.loadScript();
-      }
-      this.cacheDataLocal()
-        .then((json) => {
-          this.$store.commit(
-            "data_card/setForm",
-            Object.values(json.metaData.data)
-          );
-          this.$store.commit("setCaptions", json.metaData.captions);
-          this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
-          this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
-          this.$store.commit(
-            "data_card/setCardCaption",
-            json.metaData.cardCaption
-          );
-          this.$store.commit(
-            "data_card/setVisible",
-            Object.values(json.metaData.visible)
-          );
-          this.$store.commit(
-            "data_card/setAddFields",
-            Object.values(json.metaData.addFields)
-          );
-        })
-        .catch((e) => console.warn(e));
-      const token = Cookies.get(TOKEN_NAME);
-      if (token) {
-        this.$axios.defaults.headers.common.Authorization = token;
-      }
-      if (process?.env?.NODE_ENV === "production") {
-        await this.$loadScript(
-          `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
-            this.zone
-          }&time=${Date.now()}`
-        )
-          .then(() => {
-            this.eventHandler =
-              typeof eventHandler === "function" ? eventHandler : null;
-          })
-          .catch(async (e) => {
-            console.error(e);
-            this.eventHandler = await this.loadScript();
-          });
-      }
-      await Promise.all([
-        this.$store.dispatch("menu/fetchMenuById", this.params),
-        this.fetchCard(),
-      ]).catch((e) => {
-        console.error(e);
-        Sentry.captureException(
-          new Error(e?.response?.data?.MESSAGE || e),
-          (scope) => {
-            scope.setTransactionName("Ошибка выполнения запроса.");
-            return scope;
-          }
-        );
-      });
-      this.setting = this.$store.getters["menu/getSettingsByIdItem"](
-        this.params.idItem
-      );
-      this.isShowButtonSave = true;
-      this.params.cache = false;
-    } catch (e) {
-      console.error(e);
-      if (this.menuId !== 777) {
-        this.$store.commit("data_card/setError", true);
-        this.$store.commit(
-          "data_card/setErrorMessage",
-          e?.response?.data || {
-            MESSAGE: `Ошибка отображения компонента`,
-          }
-        );
-      }
-      Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
-        scope.setTransactionName(
-          `Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`
-        );
-        return scope;
-      });
-    } finally {
-      this.$store.commit("data_card/setLoading", false);
-      this.$store.commit("data_card/setDisabled", false);
-    }
+  created() {
+    this.init();
   },
   methods: {
+    async init() {
+      try {
+        this.params = getParams({ ...this.$props });
+
+        if (process?.env?.NODE_ENV === "development" || this.params.cache) {
+          this.eventHandler = await this.loadScript();
+        }
+        this.cacheDataLocal()
+          .then((json) => {
+            this.$store.commit(
+              "data_card/setForm",
+              Object.values(json.metaData.data)
+            );
+            this.$store.commit("setCaptions", json.metaData.captions);
+            this.$store.commit("data_card/setBtnSave", json.metaData.btnSave);
+            this.$store.commit("data_card/setReadOnly", json.metaData.readonly);
+            this.$store.commit(
+              "data_card/setCardCaption",
+              json.metaData.cardCaption
+            );
+            this.$store.commit(
+              "data_card/setVisible",
+              Object.values(json.metaData.visible)
+            );
+            this.$store.commit(
+              "data_card/setAddFields",
+              Object.values(json.metaData.addFields)
+            );
+          })
+          .catch((e) => console.warn(e));
+        const token = Cookies.get(TOKEN_NAME);
+        if (token) {
+          this.$axios.defaults.headers.common.Authorization = token;
+        }
+        if (process?.env?.NODE_ENV === "production") {
+          await this.$loadScript(
+            `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
+              this.zone
+            }&time=${Date.now()}`
+          )
+            .then(() => {
+              this.eventHandler =
+                typeof eventHandler === "function" ? eventHandler : null;
+            })
+            .catch(async (e) => {
+              console.error(e);
+              this.eventHandler = await this.loadScript();
+            });
+        }
+        await Promise.all([
+          this.$store.dispatch("menu/fetchMenuById", this.params),
+          this.fetchCard(),
+        ]).catch((e) => {
+          console.error(e);
+          Sentry.captureException(
+            new Error(e?.response?.data?.MESSAGE || e),
+            (scope) => {
+              scope.setTransactionName("Ошибка выполнения запроса.");
+              return scope;
+            }
+          );
+        });
+        this.setting = this.$store.getters["menu/getSettingsByIdItem"](
+          this.params.idItem
+        );
+        this.isShowButtonSave = true;
+        this.params.cache = false;
+      } catch (e) {
+        console.error(e);
+        if (this.menuId !== 777) {
+          this.$store.commit("data_card/setError", true);
+          this.$store.commit(
+            "data_card/setErrorMessage",
+            e?.response?.data || {
+              MESSAGE: `Ошибка отображения компонента`,
+            }
+          );
+        }
+        Sentry.captureException(new Error(this.getErrorMessage), (scope) => {
+          scope.setTransactionName(
+            `Ошибка отображения компонента "${this.menuId} Текст ошибки: ${e}"`
+          );
+          return scope;
+        });
+      } finally {
+        this.$store.commit("data_card/setLoading", false);
+        this.$store.commit("data_card/setDisabled", false);
+      }
+    },
+    next() {
+      const url = new URL(window.location.href);
+      url.searchParams.append("ID", "2763068875");
+      url.searchParams.append("REL", "800FCD2B5957A009A7C4D9E926B3C08D");
+      url.searchParams.append("IDMENU", "745");
+      window.history.replaceState(null, null, url);
+      this.init();
+    },
     scrollToError() {
       const divWithInvalidClass =
         document.getElementsByClassName("is-invalid")[0];
@@ -374,7 +393,7 @@ export default {
       }
     },
     async fetchCard() {
-      if (this.cardId !== 0) {
+      if (this.params.idCard !== "0") {
         const { items } = await this.$store.dispatch(
           "data_card/fetchList",
           this.params
