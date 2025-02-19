@@ -154,7 +154,7 @@ export default {
 
     isAuthButtonDisabled() {
       return (
-        this.isPhoneNumberUpdated || !this.isSmsCodeValid || this.wrongAuthData
+        this.isPhoneNumberUpdated || !this.isSmsCodeValid || this.wrongAuthData || this.isSendDataInProgress
       );
     },
 
@@ -184,6 +184,7 @@ export default {
     isSmsCodeTouched: false,
     wrongAuthData: false,
     isPhoneNumberUpdated: false,
+    isSendDataInProgress: false,
     duration: 60,
   }),
   methods: {
@@ -195,17 +196,17 @@ export default {
     },
     async sendSMS() {
       // TODO Удалить HARDCODE и убрать комментарий. Либо вставить новий объект если появится новый запрос
-      const HARDCODE = {
+/*      const HARDCODE = {
         username: this.phoneNumberNormalize,
         password: "485381",
         cap: null,
         capid: null,
         mode: 2,
-      };
-      const smsData = HARDCODE; /* {
+      }; */
+      const smsData = {
         SPHOLDER_PHONE: this.phoneNumberNormalize,
         ID: null,
-      } */
+      };
       this.isPhoneNumberUpdated = false;
       this.startSMSRequest();
 
@@ -230,14 +231,17 @@ export default {
       this.wrongAuthData = false;
       this.SMSCode = "";
     },
-    sendAuthData() {
+    async sendAuthData() {
       if (!this.SMSCode) {
         return;
       }
 
+      this.isSendDataInProgress = true;
       this.updateStoreValue();
 
-      controlAuthorizationHelper.saveCard();
+      await controlAuthorizationHelper.saveCard();
+
+      this.isSendDataInProgress = false;
     },
     resetForm() {
       Object.assign(this.$data, this.$options.data());

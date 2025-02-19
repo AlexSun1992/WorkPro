@@ -7,7 +7,7 @@ export default {
   async requestSmsCode(data) {
     const result = { success: null, error: null };
     try {
-      result.success = await axios.post("/am/authw/v2/authorize", data, {
+      result.success = await axios.post("/am/free/v2/SendSmsForAuth", data, {
         headers: this.commonHeader,
       });
     } catch (e) {
@@ -23,8 +23,8 @@ export default {
     });
   },
 
-  saveCard() {
-    this.$emit("saveCard");
+  async saveCard() {
+    await this.$emit("saveCard");
   },
 
   getRestructuredPhoneNumber(inputPastedValue) {
