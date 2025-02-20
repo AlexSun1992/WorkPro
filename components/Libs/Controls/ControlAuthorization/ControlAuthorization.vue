@@ -24,6 +24,7 @@
             ref="phoneNumber"
             id="phoneNumber"
             autofocus
+            :disabled="isPhoneNumberDisabled"
             @blur="touchPhoneNumber"
             @keydown.enter="sendSMS"
             @input="phoneNumberUpdated"
@@ -105,7 +106,10 @@ export default {
       return controlAuthorizationConstants;
     },
     authInputDisabled() {
-      return !this.isSMSRequested || this.wrongAuthData;
+      return !this.isSMSRequested || this.wrongAuthData || this.isAuthDataRequestInProgress;
+    },
+    isPhoneNumberDisabled() {
+      return this.isAuthDataRequestInProgress;
     },
     sendSmsBtnName() {
       if (this.isSMSRequested) {
@@ -154,7 +158,11 @@ export default {
 
     isAuthButtonDisabled() {
       return (
-        this.isPhoneNumberUpdated || !this.isSmsCodeValid || this.wrongAuthData || this.isSendDataInProgress
+        this.isPhoneNumberUpdated ||
+        !this.isSmsCodeValid ||
+        this.wrongAuthData ||
+        this.isSendDataInProgress ||
+        this.isAuthDataRequestInProgress
       );
     },
 
@@ -171,7 +179,7 @@ export default {
       return this.isSMSRequestInProgress;
     },
     isSMSButtonDisabled() {
-      return this.isSMSRequestInProgress || !this.isPhoneValid;
+      return this.isSMSRequestInProgress || !this.isPhoneValid || this.isAuthDataRequestInProgress;
     },
   },
   data: () => ({
@@ -182,6 +190,7 @@ export default {
     isSMSRequestInProgress: false,
     isPhoneNumberTouched: false,
     isSmsCodeTouched: false,
+    isAuthDataRequestInProgress: false,
     wrongAuthData: false,
     isPhoneNumberUpdated: false,
     isSendDataInProgress: false,
@@ -217,6 +226,11 @@ export default {
     stopSMSRequest() {
       this.isSMSRequestInProgress = false;
     },
+    startSendAuthData() {
+      this.isSendDataInProgress = true;
+      this.isAuthDataRequestInProgress = true;
+      this.updateStoreValue();
+    },
     phoneNumberUpdated() {
       this.touchPhoneNumber();
       this.isSMSRequested = false;
@@ -230,8 +244,7 @@ export default {
         return;
       }
 
-      this.isSendDataInProgress = true;
-      this.updateStoreValue();
+      this.startSendAuthData();
 
       await controlAuthorizationHelper.saveCard();
 
