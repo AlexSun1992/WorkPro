@@ -14,3 +14,4 @@ export const featuresDataMock = {
   "value": 1
 };
 export const featuresListMock = [ "SFRANCHISE", "SACCIDENT", "SFOREIGNOBJECTS", "STHEFTVEH", "SACTIONS", "SREPAIR", "SNOEVENTRESTRICTIONS" ];
+export const featuresHintMock = ["Тест1","Тест2","Тест3","Тест4","Тест5","Тест6","Тест7"];
