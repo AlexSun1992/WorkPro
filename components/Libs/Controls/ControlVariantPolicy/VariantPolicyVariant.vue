@@ -12,6 +12,7 @@
           :options="options"
           v-model="selectedFranchise"
           @input="setFranchise"
+          :defaultValue="defaultFranchiseValue"
           :customStore="customStore"
         />
       </div>
@@ -86,13 +87,15 @@ export default {
         list: isFranchiseArray ? franchise : null,
         value: !isFranchiseArray ? franchise : null
       }
+    },
+    defaultFranchiseValue() {
+      return this.card.ID_DEFAULT_FRAN;
     }
   },
   watch: {
     isCardSelected(val) {
       if (!val) {
-        this.customStore?.setFranchise(false);
-        this.selectedFranchise = null;
+        this.selectedFranchise = this.defaultFranchiseValue;
       }
     }
   },
