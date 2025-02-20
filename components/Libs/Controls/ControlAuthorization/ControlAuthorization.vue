@@ -199,7 +199,7 @@ export default {
         SPHONE: this.phoneNumber,
         ID: null,
       };
-      this.isPhoneNumberUpdated = false;
+
       this.startSMSRequest();
 
       const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
@@ -209,6 +209,8 @@ export default {
       }
     },
     startSMSRequest() {
+      this.isPhoneNumberUpdated = false;
+      this.wrongAuthData = false;
       this.isSMSRequested = true;
       this.isSMSRequestInProgress = true;
     },
