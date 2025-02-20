@@ -19,7 +19,7 @@
         <form id="authForm">
           <label for="phoneNumber">Номер телефона</label>
           <input
-            type="tel"
+            type="number"
             :class="phoneNumberClass"
             ref="phoneNumber"
             id="phoneNumber"
@@ -28,7 +28,7 @@
             @keydown.enter="sendSMS"
             @input="phoneNumberUpdated"
             name="phoneNumber"
-            placeholder="Введите номер телефона"
+            placeholder="9007654321"
             required
             v-model="phoneNumber"
           />
@@ -195,16 +195,8 @@ export default {
       this.isModalVisible = false;
     },
     async sendSMS() {
-      // TODO Удалить HARDCODE и убрать комментарий. Либо вставить новий объект если появится новый запрос
-/*      const HARDCODE = {
-        username: this.phoneNumberNormalize,
-        password: "485381",
-        cap: null,
-        capid: null,
-        mode: 2,
-      }; */
       const smsData = {
-        SPHOLDER_PHONE: this.phoneNumberNormalize,
+        SPHONE: this.phoneNumber,
         ID: null,
       };
       this.isPhoneNumberUpdated = false;
@@ -213,8 +205,7 @@ export default {
       const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
 
       if (authResp.error) {
-        // TODO это блокировка ввода кода СМС если запрос завершился ошибкой
-        // this.wrongAuthData = true;
+        this.wrongAuthData = true;
       }
     },
     startSMSRequest() {
@@ -229,6 +220,7 @@ export default {
       this.isSMSRequested = false;
       this.isPhoneNumberUpdated = true;
       this.wrongAuthData = false;
+      this.phoneNumber = this.phoneNumber.substring(0, 10);
       this.SMSCode = "";
     },
     async sendAuthData() {
