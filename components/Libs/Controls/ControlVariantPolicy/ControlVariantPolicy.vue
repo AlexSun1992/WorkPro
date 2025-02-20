@@ -6,7 +6,8 @@
         <VariantPolicyFeatures
           :customStore="customStore"
           :featuresData="featuresData"
-          :featuresList="featuresList"
+          :featuresOrder="featuresOrder"
+          :featuresHint="featuresHint"
         />
       </div>
       <div>
@@ -18,8 +19,7 @@
                 :card="card"
                 :customStore="customStore"
                 :data="data"
-                :featuresList="featuresList"
-                :featuresData="featuresData"
+                :featuresOrder="featuresOrder"
                 :variants="variants"
               />
             </div>
@@ -35,16 +35,8 @@ import VueSlickCarousel from "vue-slick-carousel";
 import VariantPolicyVariant from "./VariantPolicyVariant.vue";
 import VariantPolicyFeatures from "./VariantPolicyFeatures.vue";
 import { VariantPolicyStore } from "./VariantPolicyStore";
+import { variantPolicyUtils } from "../../../../utils/variant_policy/variantPolicyUtils";
 
-const featuresList = [
-  "SFRANCHISE",
-  "SACCIDENT",
-  "SFOREIGNOBJECTS",
-  "STHEFTVEH",
-  "SACTIONS",
-  "SREPAIR",
-  "SNOEVENTRESTRICTIONS",
-];
 const defaultSettings = {
   arrows: true,
   centerPadding: "16px",
@@ -93,7 +85,9 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
+      default: () => ({
+        options: []
+      }),
     },
     edit: {
       type: Boolean,
@@ -115,16 +109,21 @@ export default {
     settings() {
       return defaultSettings;
     },
-    featuresList: {
-      get() {
-        return this.customStore.state?.featuresList;
-      },
-      set(val) {
-        this.customStore.setFeaturesList(val);
-      }
+    options() {
+      return this.data?.options ?? [];
     },
     variants() {
-      return this.data?.options.filter((item) => item.ID !== 1);
+      return this.options.filter((item) => item.ID !== 1);
+    },
+    featuresOrder() {
+      const order = this.options.find(item => item.ID === 1)?.S_ORDER ?? [];
+
+      return order.map(item => item.toUpperCase());
+    },
+    featuresHint() {
+      const hintArr = this.options.find(item => item.ID === 1)?.S_INFO ?? [];
+
+      return hintArr.map((item, index) => ({ [this.featuresOrder[index]]: item }));
     },
     dataValue() {
       const { value } = this.data;
@@ -136,8 +135,8 @@ export default {
       return result;
     },
     featuresData() {
-      return this.data.options?.find((item) => item.SNAME === "scaption");
-    },
+      return this.options.find((item) => item.SNAME === "scaption");
+    }
   },
   methods: {
     updateVariant() {
@@ -164,7 +163,7 @@ export default {
       const index =
         this.variants.findIndex((item) => item.ID === selectedVariantId) ?? 0;
 
-      this.$refs.carousel.goTo(index);
+      this.$refs.carousel?.goTo(index);
     },
   },
   created() {
@@ -172,7 +171,7 @@ export default {
     this.selectedVariant = this.dataValue;
   },
   mounted() {
-    this.customStore.setFeaturesList(featuresList);
+    this.customStore.setFeaturesList(this.featuresOrder);
     this.scrollToActiveVariant();
   },
   watch: {

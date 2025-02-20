@@ -1,7 +1,6 @@
 <template>
   <div
-    :class="{ 'overflow-hidden': !isHaveListData, 'w-100': true }"
-  >
+    :class="{ 'overflow-hidden': !isHaveListData, 'w-100': true }">
     <ControlDropdown
       v-if="isHaveListData"
       :options="optionsComputed"
@@ -44,7 +43,7 @@ export default {
       default: null,
     },
     value: {
-      type: Number,
+      type: [String, Number],
       default: null,
     },
     options: {
@@ -68,6 +67,10 @@ export default {
           text: item.sname,
         }));
 
+        if(!options.find((item) => item.id === 0)) {
+          options.push({ text: "Без франшизы", value: 0, invisible: true });
+        }
+
         return options;
       }
 
@@ -82,6 +85,9 @@ export default {
       set(val) {
         this.$emit("input", val);
       },
+    },
+    selectedFranchise() {
+      return this.customStore.state.selectedVariant.IDFRNANCHISE ?? null;
     },
     isTrueFalse() {
       return ["Y", "N"].includes(this.options.value);
@@ -98,7 +104,7 @@ export default {
 
     isHaveListData() {
       return Array.isArray(this.options.list);
-    }
+    },
   },
   methods: {
     setFranchise(val) {
