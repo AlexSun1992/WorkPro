@@ -1,60 +1,31 @@
 import clientOs from "./clientOs";
-import { clientOsTestData } from "./clientOsTestData";
-import { OS_TYPES, WEBVIEW_TYPES } from "./clientOsConstants";
+import clientOsTestData from "./clientOsTestData";
+import { WEBVIEW_TYPES } from "./clientOsConstants";
 
 describe("clientOs utils", () => {
   let mock;
 
-  test("getMobilePlatform for iOS + isWebview", () => {
-    mock = clientOsTestData.variantA;
+  test("WebView must be VueJS", () => {
+    mock = clientOsTestData.cookiesA;
 
-    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WEBVIEW_TYPES.isWebview, platform: OS_TYPES.webviewIos });
+    expect(clientOs.getWebview(mock)).toStrictEqual(WEBVIEW_TYPES.VueJS);
   });
 
-  test("getMobilePlatform for Android + isWebview", () => {
-    mock = clientOsTestData.variantAA;
+  test("WebView must be isWebview", () => {
+    mock = clientOsTestData.cookiesB;
 
-    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WEBVIEW_TYPES.isWebview, platform: OS_TYPES.webviewAndroid });
+    expect(clientOs.getWebview(mock)).toStrictEqual(WEBVIEW_TYPES.isWebview);
   });
 
-  test("getMobilePlatform for Android", () => {
-    mock = clientOsTestData.variantB;
+  test("WebView must be isWebview_RM1", () => {
+    mock = clientOsTestData.cookiesC;
 
-    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WEBVIEW_TYPES.VueJS, platform: OS_TYPES.android });
+    expect(clientOs.getWebview(mock)).toStrictEqual(WEBVIEW_TYPES.RM1);
   });
 
-  test("getMobilePlatform for Iphone", () => {
-    mock = clientOsTestData.variantC;
+  test("WebView must be isWebview_RM2", () => {
+    mock = clientOsTestData.cookiesD;
 
-    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WEBVIEW_TYPES.VueJS, platform: OS_TYPES.ios });
-  });
-
-  test("getMobilePlatform for empty", () => {
-    mock = clientOsTestData.variantD;
-
-    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WEBVIEW_TYPES.VueJS, platform: OS_TYPES.default });
-  });
-  test("getMobilePlatform for Web", () => {
-    mock = clientOsTestData.variantE;
-
-    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WEBVIEW_TYPES.VueJS, platform: OS_TYPES.web });
-  });
-
-  test("getVersion mobile platform for RM1", () => {
-    mock = clientOsTestData.variantF;
-
-    expect(clientOs.getWebviewApp(mock.headers.common.Cookie)).toBe(WEBVIEW_TYPES.RM1);
-  });
-
-  test("getVersion mobile platform for Default", () => {
-    mock = clientOsTestData.variantE;
-
-    expect(clientOs.getWebviewApp(mock.headers.common.Cookie)).toBe(WEBVIEW_TYPES.isWebview);
-  });
-
-  test("getMobilePlatform for Webview with RM1 type", () => {
-    mock = clientOsTestData.variantG;
-
-    expect(clientOs.getWebviewData(mock)).toStrictEqual({ webview: WEBVIEW_TYPES.RM1, platform: OS_TYPES.webviewAndroid });
+    expect(clientOs.getWebview(mock)).toStrictEqual(WEBVIEW_TYPES.RM2);
   });
 });

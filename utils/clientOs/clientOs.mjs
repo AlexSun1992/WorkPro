@@ -21,7 +21,7 @@ export default {
 
     if (partsOfCookies) {
       return partsOfCookies.some(item => {
-        return item.split("=")[0] === "isWebview";
+        return item.split("=")[0] === WEBVIEW_TYPES.isWebview;
       });
     }
 
@@ -37,6 +37,7 @@ export default {
 
     return versions.find(item => {
       const reg = new RegExp(`\\b${item}\\b`, 'gi');
+
       return reg.test(cookiesLower);
     });
   },
