@@ -1,6 +1,4 @@
-import clientOsData from "./clientOsData.mjs";
-import clientOsPlatforms from "./clientOsPlatforms.mjs";
-import { OS_TYPES, WEBVIEW_TYPES } from "./clientOsConstants.mjs";
+import { WEBVIEW_TYPES } from "./clientOsConstants.mjs";
 
 export default {
   updateMobileViewConfig(config) {
@@ -30,18 +28,26 @@ export default {
     return false;
   },
 
-  getWebviewApp(cookies) {
-    const app = {
-        "app=rm1": WEBVIEW_TYPES.RM1,
-        "app=rm2": WEBVIEW_TYPES.RM2
-      };
-    const versions = Object.keys(app);
-    const cookiesLower = cookies.toLowerCase().replace(" ", "");
-    const currentVersion = versions.find(item => {
-      const reg = new RegExp(`\\b${item}\\b`, 'gi');
+  processCookies(cookies) {
+    return cookies.toLowerCase().replace(" ", "");
+  },
 
+  findCurrentVersion(cookiesLower, app) {
+    const versions = Object.keys(app);
+
+    return versions.find(item => {
+      const reg = new RegExp(`\\b${item}\\b`, 'gi');
       return reg.test(cookiesLower);
     });
+  },
+
+  getWebviewApp(cookies) {
+    const app = {
+      "app=rm1": WEBVIEW_TYPES.RM1,
+      "app=rm2": WEBVIEW_TYPES.RM2
+    };
+    const cookiesLower = this.processCookies(cookies);
+    const currentVersion = this.findCurrentVersion(cookiesLower, app);
 
     return currentVersion ? app[currentVersion] : WEBVIEW_TYPES.isWebview;
   }
