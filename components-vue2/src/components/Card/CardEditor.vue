@@ -422,6 +422,9 @@ export default {
         // this.params.idCard = 0;
         // this.params.idRel = undefined;
       }
+      if (this.params.idWizard) {
+        await this.$store.dispatch("wizard/fetchWizard", this.params);
+      }
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
     isLikeSQL(s) {
@@ -477,7 +480,6 @@ export default {
     },
 
     async updateValue(e) {
-      console.log("updateValue", e);
       await this.$store.dispatch("data_card/setActionFormField", {
         fieldId: e.fieldId,
         name: e.name,
