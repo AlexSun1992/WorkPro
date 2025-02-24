@@ -43,4 +43,32 @@ describe("ControlAuthorization", () => {
 
     expect(wrapper.vm.phoneNumber).toBe("");
   });
+
+  test("is smsCode valid", () => {
+    wrapper = mount(ControlAuthorization, {});
+
+    wrapper.vm.showModal();
+    wrapper.vm.$nextTick(() => {
+      wrapper.setData({
+        SMSCode: controlAuthorizationTestData.validSMSCode
+      });
+
+      expect(wrapper.vm.isPhoneValid).toBeTruthy();
+      expect(wrapper.contains("#smsCode").classList).toBe("is-valid");
+    });
+  });
+
+  test("is smsCode valid", () => {
+    wrapper = mount(ControlAuthorization, {});
+
+    wrapper.vm.showModal();
+    wrapper.vm.$nextTick(() => {
+      wrapper.setData({
+        SMSCode: ""
+      });
+
+      expect(wrapper.vm.isPhoneValid).toBeTruthy();
+      expect(wrapper.contains("#smsCode").classList).toBe("is-invalid");
+    });
+  });
 });
