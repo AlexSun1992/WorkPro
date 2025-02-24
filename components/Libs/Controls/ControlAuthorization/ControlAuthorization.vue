@@ -50,7 +50,7 @@
           </button>
 
           <div class="d-block mt-3" v-if="wrongAuthData">
-            Проверьте корректность введенных данных.
+            {{ errorMessage }}
           </div>
 
           <label for="smsCode">Подтверждение СМС</label>
@@ -195,6 +195,7 @@ export default {
     isPhoneNumberUpdated: false,
     isSendDataInProgress: false,
     duration: 60,
+    errorMessage: "Проверьте корректность введенных данных."
   }),
   methods: {
     showModal() {
@@ -214,6 +215,7 @@ export default {
       const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
 
       if (authResp.error) {
+        this.errorMessage = authResp.error?.response.data?.INFO ?? this.errorMessage;
         this.wrongAuthData = true;
       }
     },
