@@ -52,7 +52,7 @@ export default {
 
   bringToUniverseType(pastedValue) {
     const firstSymbol = this.getFirstSymbol(pastedValue);
-    const pureNumber = pastedValue.replace(/[\(\)+-.\s]/g, "");
+    const pureNumber = this.getPureNumber(pastedValue);
 
     const plus = "+";
     const plusSeven = "+7";
@@ -80,8 +80,12 @@ export default {
   },
 
   transformValueToArray(pastedValue) {
-    const purePhoneNumber = pastedValue.replace(/[\(\)+-.\s]/g, "");
+    const purePhoneNumber = this.getPureNumber(pastedValue);
 
     return purePhoneNumber.split("");
   },
+
+  getPureNumber(value = "") {
+    return value.replace(/[\(\)+-.\s]/g, "");
+  }
 };
