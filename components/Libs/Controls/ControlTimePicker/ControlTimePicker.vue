@@ -28,6 +28,7 @@
       :formatter="timeFormatter"
       autocomplete="off"
       @blur="handleBlur"
+      :id="data.name"
     />
     <b-form-invalid-feedback :state="status">{{
       data.error ? data.error : "Обязательно для заполнения"

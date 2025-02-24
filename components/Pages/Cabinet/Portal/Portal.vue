@@ -37,6 +37,7 @@ import Grid from "../../../Libs/Table/Grid.vue";
 import ControlToggle from "../../../Libs/Controls/ControlToggle.vue";
 import ControlCollapse from "../../../Libs/Controls/ControlCollapse.vue";
 import ModalBox from "../Block/ModalBox.vue";
+import ControlSlider from "../../../Libs/Controls/ControlSlider/ControlSlider.vue";
 
 export default {
   name: "Wizard",
@@ -64,6 +65,7 @@ export default {
     Grid,
     ControlToggle,
     ControlCollapse,
+    ControlSlider
   },
   props: {
     params: {

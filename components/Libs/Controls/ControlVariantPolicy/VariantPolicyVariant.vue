@@ -12,15 +12,18 @@
           :options="options"
           v-model="selectedFranchise"
           @input="setFranchise"
+          :defaultValue="defaultFranchiseValue"
           :customStore="customStore"
         />
       </div>
 
       <div class="variant-policy-column">
-        <template v-for="(item, index) in featuresListComputed">
-          <div v-if="index" :key="item" :class="getFeatureIcon(card[item])">
-            {{ featuresDataComputed && featuresDataComputed[item] || "" }}
-          </div>
+        <template v-for="(item, index) in variantsList">
+          <div
+            v-if="index"
+            :key="item.field"
+            :class="getFeatureIcon(item.text)"
+          />
         </template>
       </div>
 
@@ -32,6 +35,7 @@
 <script lang="js">
 import { formattedNumber } from "../ControlInsuredBox/formattedNumber";
 import VariantPolicyFranchise from "./VariantPolicyFranchise.vue";
+import { variantPolicyUtils } from "../../../../utils/variant_policy/variantPolicyUtils";
 
 const featureIcons = { Y: "attr_no", N: "attr_yes" };
 
@@ -51,12 +55,8 @@ export default {
       type: Object,
       default: null
     },
-    featuresList: {
+    featuresOrder: {
       type: Array,
-      default: null
-    },
-    featuresData: {
-      type: Object,
       default: null
     }
   },
@@ -74,13 +74,10 @@ export default {
       return this.customStore.state?.selectedVariant?.IDVARIANT;
     },
     isCardSelected() {
-      return this.selectedCardId === this.variantCardId;
+      return this.selectedCardId === this.card.ID;
     },
-    featuresListComputed() {
-      return this.featuresList;
-    },
-    featuresDataComputed() {
-      return this.featuresData;
+    variantsList() {
+      return variantPolicyUtils.getFeaturesList(this.featuresOrder, this.card, null);
     },
     options() {
       const franchise = this.card.SFRANCHISE;
@@ -90,13 +87,15 @@ export default {
         list: isFranchiseArray ? franchise : null,
         value: !isFranchiseArray ? franchise : null
       }
+    },
+    defaultFranchiseValue() {
+      return this.card.ID_DEFAULT_FRAN;
     }
   },
   watch: {
     isCardSelected(val) {
-      if(!val) {
-        this.customStore?.setFranchise(false);
-        this.selectedFranchise = null;
+      if (!val) {
+        this.selectedFranchise = this.defaultFranchiseValue;
       }
     }
   },
