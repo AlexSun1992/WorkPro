@@ -2,6 +2,14 @@
   <div>
     <div class="box-label">
       {{ getOptionLabel }}
+      <span v-if="tooltip" class="position-relative"
+        >&nbsp;
+        <span class="tooltipster">
+          (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
+            <span>{{ tooltip }}</span></vue-easy-tooltip
+          >
+        </span>
+      </span>
     </div>
     <div class="box-text">{{ getOptionText }} &#8381;</div>
   </div>
@@ -17,6 +25,10 @@ export default {
     policyOption: {
       type: Object,
       default: null,
+    },
+    tooltip: {
+      type: String,
+      default: "",
     },
   },
   data() {
@@ -35,6 +47,12 @@ export default {
   methods: {},
 };
 </script>
+<style scoped>
+.tooltipster {
+  width: 16px;
+  height: 21px;
+}
+</style>
 <style>
 .box-label {
   margin-top: 1rem;
