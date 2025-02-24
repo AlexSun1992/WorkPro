@@ -26,7 +26,7 @@
             autofocus
             :disabled="isPhoneNumberDisabled"
             @blur="touchPhoneNumber"
-            @keydown.enter="sendSMS"
+            @keydown.enter="requestSMS"
             @input="phoneNumberUpdated"
             name="phoneNumber"
             placeholder="9007654321"
@@ -39,7 +39,7 @@
             class="btn btn-secondary"
             :disabled="isSMSButtonDisabled"
             id="sendSmsButton"
-            @click="sendSMS"
+            @click="requestSMS"
           >
             {{ sendSmsBtnName }}
             <template v-if="isShowTimer">
@@ -67,7 +67,7 @@
             required
             v-model="SMSCode"
           />
-
+          <!-- Кнопка отправки формы с кодом -->
           <button
             type="button"
             class="btn btn-secondary"
@@ -204,7 +204,7 @@ export default {
     hideModal() {
       this.isModalVisible = false;
     },
-    async sendSMS() {
+    async requestSMS() {
       const smsData = {
         SPHONE: this.phoneNumber,
         ID: null,
