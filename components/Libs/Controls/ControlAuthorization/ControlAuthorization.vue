@@ -44,13 +44,13 @@
             {{ sendSmsBtnName }}
             <template v-if="isShowTimer">
               (через
-              <VerifyTimer :duration="duration" @onFinish="stopSMSRequest" />
+              <VerifyTimer :duration="duration" @onFinish="stopSMSRequest" :key="verifyTimerKey"/>
               секунд)
             </template>
           </button>
 
-          <div class="d-block mt-3" v-if="wrongAuthData">
-            {{ errorMessage }}
+          <div class="error-block d-block mt-3" v-if="wrongAuthData">
+            {{ smsErrorMessage }}
           </div>
 
           <label for="smsCode">Подтверждение СМС</label>
@@ -61,9 +61,9 @@
             :class="smsCodeClass"
             @blur="touchSMSCode"
             @keydown.enter="sendAuthData"
-            @input="touchSMSCode"
+            @input="updateSMSCode"
             placeholder="Введите код из СМС"
-            :disabled="authInputDisabled"
+            :disabled="isAuthInputDisabled"
             required
             v-model="SMSCode"
           />
@@ -78,6 +78,9 @@
             Авторизация
           </button>
         </form>
+        <div v-if="isFormErrorMessage" class="error-block d-block mt-3">
+          Что-то пошло не так &#128557; Попробуйте повторить попытку позже.
+        </div>
       </div>
     </b-modal>
   </div>
@@ -105,7 +108,7 @@ export default {
     controlAuthorizationConstants() {
       return controlAuthorizationConstants;
     },
-    authInputDisabled() {
+    isAuthInputDisabled() {
       return !this.isSMSRequested || this.wrongAuthData || this.isAuthDataRequestInProgress;
     },
     isPhoneNumberDisabled() {
@@ -195,13 +198,16 @@ export default {
     isPhoneNumberUpdated: false,
     isSendDataInProgress: false,
     duration: 60,
-    errorMessage: "Проверьте корректность введенных данных."
+    smsErrorMessage: "Проверьте корректность введенных данных.",
+    isFormErrorMessage: false,
+    verifyTimerKey: 1,
   }),
   methods: {
     showModal() {
+      this.resetForm();
       this.isModalVisible = true;
     },
-    hideModal() {
+    closeModal() {
       this.isModalVisible = false;
     },
     async requestSMS() {
@@ -215,7 +221,7 @@ export default {
       const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
 
       if (authResp.error) {
-        this.errorMessage = authResp.error?.response.data?.INFO ?? this.errorMessage;
+        this.smsErrorMessage = authResp.error?.response.data?.INFO ?? this.smsErrorMessage;
         this.wrongAuthData = true;
       }
     },
@@ -228,11 +234,6 @@ export default {
     stopSMSRequest() {
       this.isSMSRequestInProgress = false;
     },
-    startSendAuthData() {
-      this.isSendDataInProgress = true;
-      this.isAuthDataRequestInProgress = true;
-      this.updateStoreValue();
-    },
     phoneNumberUpdated() {
       this.touchPhoneNumber();
       this.isSMSRequested = false;
@@ -240,20 +241,28 @@ export default {
       this.wrongAuthData = false;
       this.phoneNumber = this.phoneNumber.substring(0, 10);
       this.SMSCode = "";
+      this.isFormErrorMessage = false;
     },
     async sendAuthData() {
-      if (!this.SMSCode) {
-        return;
+      this.isSendDataInProgress = true;
+      this.isAuthDataRequestInProgress = true;
+
+      this.updateStoreValue();
+
+      try {
+        this.$emit("saveCard");
+        this.closeModal();
+      } catch (err) {
+        this.isFormErrorMessage = true;
+        this.isAuthDataRequestInProgress = false;
+
+        console.error(`sendAuthData: ${err}`);
       }
-
-      this.startSendAuthData();
-
-      await controlAuthorizationHelper.saveCard();
-
-      this.isSendDataInProgress = false;
     },
     resetForm() {
       Object.assign(this.$data, this.$options.data());
+
+      this.verifyTimerKey += 1;
     },
     updateStoreValue() {
       this.$emit("update", {
@@ -265,6 +274,11 @@ export default {
 
     touchSMSCode() {
       this.isSmsCodeTouched = true;
+    },
+
+    updateSMSCode() {
+      this.touchSMSCode();
+      this.isFormErrorMessage = false
     },
 
     touchPhoneNumber() {

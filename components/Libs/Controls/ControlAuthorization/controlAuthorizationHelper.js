@@ -23,10 +23,6 @@ export default {
     });
   },
 
-  async saveCard() {
-    await this.$emit("saveCard");
-  },
-
   getRestructuredPhoneNumber(inputPastedValue) {
     const getOnlyNumbers = this.removeNotNumberElements(inputPastedValue);
     const isPastedNumber = this.isPhoneNumberValid(inputPastedValue);
