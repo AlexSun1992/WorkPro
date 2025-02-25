@@ -123,11 +123,11 @@ export default {
   created() {
     const getValue = this.data.value;
     if (getValue) {
-      if (getValue > this.getMaxValueFromPricesValue) {
+      if (getValue >= this.getMaxValueFromPricesValue) {
         this.valueTypeNumber = this.getMaxValueFromPricesValue;
       }
-      if (getValue < this.getMinValueFromPricesValue) {
-        this.valueTypeNumber = this.getMaxValueFromPricesValue;
+      if (getValue <= this.getMinValueFromPricesValue) {
+        this.valueTypeNumber = this.getMinValueFromPricesValue;
       }
       if (
         getValue > this.getMinValueFromPricesValue &&
@@ -263,6 +263,7 @@ export default {
       if (this.valueTypeNumber === "") {
         this.valueTypeNumber = this.getAllPricesValue[this.getMinRangeValue];
       }
+      this.emitFunc();
     },
     handleResize() {
       this.width = window.innerWidth;
