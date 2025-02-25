@@ -6,6 +6,7 @@ export default {
   },
   async requestSmsCode(data) {
     const result = { success: null, error: null };
+
     try {
       result.success = await axios.post("/am/free/v2/SendSmsForAuth", data, {
         headers: this.commonHeader,
@@ -49,7 +50,6 @@ export default {
   bringToUniverseType(pastedValue) {
     const firstSymbol = this.getFirstSymbol(pastedValue);
     const pureNumber = this.getPureNumber(pastedValue);
-
     const plus = "+";
     const plusSeven = "+7";
 

@@ -29,7 +29,7 @@
             @keydown.enter="requestSMS"
             @input="phoneNumberUpdated"
             name="phoneNumber"
-            placeholder="9007654321"
+            placeholder="9991234567"
             required
             v-model="phoneNumber"
           />
@@ -44,7 +44,11 @@
             {{ sendSmsBtnName }}
             <template v-if="isShowTimer">
               (через
-              <VerifyTimer :duration="duration" @onFinish="stopSMSRequest" :key="verifyTimerKey"/>
+              <VerifyTimer
+                :duration="duration"
+                @onFinish="stopSMSRequest"
+                :key="verifyTimerKey"
+              />
               секунд)
             </template>
           </button>
@@ -79,7 +83,9 @@
           </button>
         </form>
         <div v-if="isFormErrorMessage" class="error-block d-block mt-3">
-          Что-то пошло не так &#128557; Попробуйте повторить попытку позже.
+          <transition name="fade" mode="out-in">
+            <p :key="currentErrorKey" v-html="currentErrorMessage"/>
+          </transition>
         </div>
       </div>
     </b-modal>
@@ -109,7 +115,11 @@ export default {
       return controlAuthorizationConstants;
     },
     isAuthInputDisabled() {
-      return !this.isSMSRequested || this.wrongAuthData || this.isAuthDataRequestInProgress;
+      return (
+        !this.isSMSRequested ||
+        this.wrongAuthData ||
+        this.isAuthDataRequestInProgress
+      );
     },
     isPhoneNumberDisabled() {
       return this.isAuthDataRequestInProgress;
@@ -182,7 +192,14 @@ export default {
       return this.isSMSRequestInProgress;
     },
     isSMSButtonDisabled() {
-      return this.isSMSRequestInProgress || !this.isPhoneValid || this.isAuthDataRequestInProgress;
+      return (
+        this.isSMSRequestInProgress ||
+        !this.isPhoneValid ||
+        this.isAuthDataRequestInProgress
+      );
+    },
+    currentErrorMessage() {
+      return this.saveFormErrorMessages[this.currentErrorKey];
     },
   },
   data: () => ({
@@ -201,6 +218,12 @@ export default {
     smsErrorMessage: "Проверьте корректность введенных данных.",
     isFormErrorMessage: false,
     verifyTimerKey: 1,
+    currentErrorKey: 0,
+    saveFormErrorMessages: [
+      "Что-то пошло не так &#128557;",
+      "Попробуйте повторить попытку позже",
+      "Всё обязательно получится!&#128521;",
+    ],
   }),
   methods: {
     showModal() {
@@ -221,7 +244,8 @@ export default {
       const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
 
       if (authResp.error) {
-        this.smsErrorMessage = authResp.error?.response.data?.INFO ?? this.smsErrorMessage;
+        this.smsErrorMessage =
+          authResp.error?.response.data?.INFO ?? this.smsErrorMessage;
         this.wrongAuthData = true;
       }
     },
@@ -256,6 +280,7 @@ export default {
         this.isFormErrorMessage = true;
         this.isAuthDataRequestInProgress = false;
 
+        this.updateFormDataErrorMessage();
         console.error(`sendAuthData: ${err}`);
       }
     },
@@ -278,14 +303,35 @@ export default {
 
     updateSMSCode() {
       this.touchSMSCode();
-      this.isFormErrorMessage = false
+      this.isFormErrorMessage = false;
     },
 
     touchPhoneNumber() {
       this.isPhoneNumberTouched = true;
     },
+    updateFormDataErrorMessage() {
+      setTimeout(() => {
+        this.currentErrorKey += 1;
+
+        if (this.currentErrorKey + 1 < this.saveFormErrorMessages.length) {
+          this.updateFormDataErrorMessage();
+        }
+      }, 3000);
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.error-block {
+  color: #eb5757;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>
