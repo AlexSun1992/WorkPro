@@ -232,6 +232,11 @@ export default {
       return this.data?.cols;
     },
   },
+  methods: {
+    testBack() {
+      console.log("111111");
+    },
+  },
 };
 </script>
 
