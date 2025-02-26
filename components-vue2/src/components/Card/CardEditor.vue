@@ -1,7 +1,8 @@
 <template>
   <div>
+    <div v-if="isSaving">Загрузка...</div>
     <FormBlock
-      v-if="isBlock"
+      v-if="isBlock && !isSaving"
       :data="getForm"
       :edit="!isReadOnly"
       :params="params"
@@ -20,16 +21,14 @@
     />
 
     <div>
-      <b-alert
-        :show="getSavedError || getError"
-        variant="danger"
-        class="mt-3 mb-0"
-      >
+      <b-alert :show="getSavedError" variant="danger" class="mt-3 mb-0">
         {{ getErrorMessage }}
       </b-alert>
     </div>
     <div
-      v-if="getBtnSave && isShowButtonSave && !getError"
+      v-if="
+        getBtnSave && isShowButtonSave && !getError && !this.params.idWizard
+      "
       class="row mt-4 ml-2"
     >
       <button
@@ -53,23 +52,23 @@
       </button>
     </div>
     <div>
-      <button
-        pill
-        :disabled="isSaving"
-        :class="'btn-lg'"
-        type="button"
-        class="btn btn-success col-12 col-md-auto mt-3 mt-md-0"
-        @click="next()"
-      >
-        Далее (тест)
-        <span
-          role="status"
-          style="width: 1rem; height: 1rem"
-          class="spinner-border text-danger ml-2"
-        >
-          <span class="sr-only">Spinning</span>
-        </span>
-      </button>
+      <!--      <button-->
+      <!--        pill-->
+      <!--        :disabled="isSaving"-->
+      <!--        :class="'btn-lg'"-->
+      <!--        type="button"-->
+      <!--        class="btn btn-success col-12 col-md-auto mt-3 mt-md-0"-->
+      <!--        @click="next()"-->
+      <!--      >-->
+      <!--        Далее (тест)-->
+      <!--        <span-->
+      <!--          role="status"-->
+      <!--          style="width: 1rem; height: 1rem"-->
+      <!--          class="spinner-border text-danger ml-2"-->
+      <!--        >-->
+      <!--          <span class="sr-only">Spinning</span>-->
+      <!--        </span>-->
+      <!--      </button>-->
     </div>
   </div>
 </template>
@@ -85,7 +84,7 @@ import VueEasyTooltip from "vue-easy-tooltip";
 import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 import { isCriticalError } from "/../plugins/auth/toast.helper";
-import { getParams } from "./helpers";
+import { getParams, saveCookies, setURLParams } from "./helpers";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -159,6 +158,72 @@ export default {
       return this.$store.getters["menu/getMenuById"](this.params.idItem)
         ?.LUSEBLOCK;
     },
+    wizardRELS() {
+      if (this.params.idWizard) {
+        const stringWizardRELS = this.$store.getters["wizard/getWizard"]?.REL;
+        if (stringWizardRELS) {
+          return stringWizardRELS.split("|");
+        }
+      }
+      return null;
+    },
+    wizardCursor() {
+      if (this.params.idWizard) {
+        return this.$store.getters["menu/getMenuById"](this.params.idWizard)
+          ?.WIZARDCUR;
+      }
+      return null;
+    },
+    wizardIDCARDS() {
+      if (this.params.idWizard) {
+        const stringWizardCARDS = this.$store.getters["wizard/getWizardPages"];
+        if (stringWizardCARDS) {
+          return stringWizardCARDS.split(";").map(Number);
+        }
+      }
+      return null;
+    },
+    wizardNavigation() {
+      if (this.params.idWizard && this.wizardIDCARDS) {
+        const currentCardId = Number(this.params.idItem);
+        const currentCardIndex = this.wizardIDCARDS.findIndex(
+          (card) => card === currentCardId
+        );
+        const nextCardId = this.wizardIDCARDS[currentCardIndex + 1];
+        const backCardId = this.wizardIDCARDS[currentCardIndex - 1];
+        const nextWizardCursor = this.wizardCursor.find(
+          (item) => item.NITEM === nextCardId
+        );
+        const backWizardCursor = this.wizardCursor.find(
+          (item) => item.NITEM === backCardId
+        );
+        const currentWizardCursor = this.wizardCursor.find(
+          (item) => item.NITEM === currentCardId
+        );
+        if (this.wizardRELS)
+          return {
+            current: currentWizardCursor
+              ? {
+                  REL: this.wizardRELS[currentWizardCursor.NORDER - 1],
+                  IDCARD: currentCardId,
+                }
+              : null,
+            next: nextWizardCursor
+              ? {
+                  REL: this.wizardRELS[nextWizardCursor.NORDER - 1],
+                  IDCARD: nextCardId,
+                }
+              : null,
+            back: backWizardCursor
+              ? {
+                  REL: this.wizardRELS[backWizardCursor.NORDER - 1],
+                  IDCARD: backCardId,
+                }
+              : null,
+          };
+      }
+      return null;
+    },
     eventLocalHandler() {
       return () =>
         import(
@@ -190,7 +255,11 @@ export default {
     async init() {
       try {
         this.params = getParams({ ...this.$props });
-        if (process?.env?.NODE_ENV === "development" || this.params.cache) {
+        if (
+          process?.env?.NODE_ENV === "development" ||
+          process?.env?.NODE_ENV === "production" ||
+          this.params.cache
+        ) {
           this.eventHandler = await this.loadScript();
           this.initHandler = await this.loadInitScript();
         }
@@ -221,23 +290,23 @@ export default {
         if (token) {
           this.$axios.defaults.headers.common.Authorization = token;
         }
-        if (process?.env?.NODE_ENV === "production") {
-          await this.$loadScript(
-            `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
-              this.zone
-            }&time=${Date.now()}`
-          )
-            .then(() => {
-              this.eventHandler =
-                typeof eventHandler === "function" ? eventHandler : null;
-            })
-            .catch(async (e) => {
-              console.error(e);
-              this.eventHandler = await this.loadScript();
-            });
-        }
+        // if (process?.env?.NODE_ENV === "production") {
+        //   await this.$loadScript(
+        //     `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
+        //       this.zone
+        //     }&time=${Date.now()}`
+        //   )
+        //     .then(() => {
+        //       this.eventHandler =
+        //         typeof eventHandler === "function" ? eventHandler : null;
+        //     })
+        //     .catch(async (e) => {
+        //       console.error(e);
+        //       this.eventHandler = await this.loadScript();
+        //     });
+        // }
         await Promise.all([
-          this.$store.dispatch("menu/fetchMenuById", this.params),
+          await this.$store.dispatch("menu/fetchMenuById", this.params),
           this.fetchCard(),
         ]).catch((e) => {
           console.error(e);
@@ -279,11 +348,26 @@ export default {
         this.$store.commit("data_card/setDisabled", false);
       }
     },
-    goNext() {
-      console.log("next");
+    async goNext() {
+      if (this.validateData(this.getForm)) {
+        this.isSaving = true;
+        await this.saveCard();
+        if (!this.getSavedError) {
+          if (this.wizardNavigation?.next) {
+            setURLParams(this.wizardNavigation.next);
+          }
+          await this.init();
+        }
+        this.isSaving = false;
+      }
     },
     goBack() {
-      console.log("back");
+      if (this.wizardNavigation.back) {
+        if (this.wizardNavigation?.back) {
+          setURLParams(this.wizardNavigation.back);
+        }
+        this.init();
+      }
     },
     next() {
       const url = new URL(window.location.href);
@@ -347,9 +431,9 @@ export default {
       if (this.validateData(this.getForm)) {
         this.isShowSavedError = false;
         const { moduleId } = this;
-        const itemId = this.menuId;
-        const cardId = this.getFormParams.idCard;
-        const relId = this.getFormParams.idRel;
+        const itemId = this.params.idItem;
+        const cardId = this.params.idCard;
+        const relId = this.params.idRel;
         const { zone } = this.params;
         const resp = await this.$store.dispatch("data_card/saveDataCard", {
           moduleId,
@@ -361,7 +445,7 @@ export default {
         });
 
         if (resp.status === 200) {
-          if (resp.data[0].ACTION !== "redirect") {
+          if (resp.data[0].ACTION !== "redirect" && !resp.data[0].IDWIZARD) {
             await this.$store.dispatch("data_card/fetchForm", {
               ...this.getFormParams,
               zone,
@@ -374,8 +458,18 @@ export default {
               return;
             }
             await this.callScript({ ...e, resp }, "afterSave");
-          } else {
+          }
+          if (resp.data[0].ACTION === "redirect") {
             window.location.href = resp.data[0].SURL;
+          }
+          if (resp.data[0].IDWIZARD) {
+            setURLParams(resp.data[0]);
+            if (resp.data[0].ACCESS_TOKEN) {
+              saveCookies(
+                resp.data[0].ACCESS_TOKEN,
+                resp.data[0].REFRESH_TOKEN
+              );
+            }
           }
         }
         if (resp.status === 520 && resp?.data?.MESSAGE) {
@@ -424,6 +518,7 @@ export default {
       }
       if (this.params.idWizard) {
         await this.$store.dispatch("wizard/fetchWizard", this.params);
+        this.params.idRel = this.wizardNavigation.current.REL;
       }
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },

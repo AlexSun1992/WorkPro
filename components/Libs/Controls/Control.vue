@@ -154,7 +154,7 @@ export default {
     ControlSelectButton,
     ControlInformer,
     ControlTokenBox,
-    ControlGallery
+    ControlGallery,
   },
   props: {
     data: {
@@ -226,6 +226,11 @@ export default {
     },
     dataCols() {
       return this.data?.cols;
+    },
+  },
+  methods: {
+    testBack() {
+      console.log("111111");
     },
   },
 };

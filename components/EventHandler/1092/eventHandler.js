@@ -323,26 +323,29 @@ async function eventHandler(data, item, callback) {
 }
 
 function initHandler(data, item) {
+  console.log(data, item);
   const TRANSPORT_BLOCK = 2;
   const HOLDER_BLOCK = 3;
   const OWNER_BLOCK = 4;
 
   const BUTTON_NEXT = "BUTTON_NEXT";
-  const isSaved = window.location.pathname.split("/").pop() !== "0";
+  const isSaved = true;
 
   function setVisibleByPage(page) {
     data.forEach((item) => {
       if (item.page === page && item.name !== BUTTON_NEXT) {
         item.visible = true;
         item.readonly = false;
+      } else {
+        item.visible = false;
       }
     });
   }
 
   if (isSaved) {
-    setVisibleByPage(TRANSPORT_BLOCK);
+    // setVisibleByPage(TRANSPORT_BLOCK);
   }
   return data;
 }
 
-export { eventHandler };
+export { eventHandler, initHandler };

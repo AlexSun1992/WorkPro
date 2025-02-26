@@ -63,9 +63,13 @@ export default {
       }
     },
     goBack() {
-      this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
-      const tab = this.tabs[this.getCurrentIndex() - 1];
-      this.$emit("goBack", tab);
+      if (this.$route) {
+        this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
+        const tab = this.tabs[this.getCurrentIndex() - 1];
+        this.$emit("goBack", tab);
+      } else {
+        this.$emit("goBack");
+      }
     },
     saveCard() {
       this.$store.dispatch("wizard/isWizardButtonsLoading", true);

@@ -3,13 +3,8 @@ import Cookies from "js-cookie";
 const TOKEN_NAME = "auth._token.local";
 
 export function getParams(props) {
-  const tokenStorage = localStorage.getItem(TOKEN_NAME);
   const tokenCookies = Cookies.get(TOKEN_NAME);
-  const isAuth =
-    tokenStorage &&
-    tokenCookies &&
-    tokenStorage !== "false" &&
-    tokenCookies !== "false";
+  const isAuth = tokenCookies && tokenCookies !== "false";
 
   const getIdCard = () => {
     const queryId = new URLSearchParams(window.location.search).get("ID");
@@ -70,4 +65,29 @@ export function getParams(props) {
     params.zone = "token";
   }
   return params;
+}
+export function setURLParams(params) {
+  const { ID, IDWIZARD, IDCARD, REL } = params;
+  const url = new URL(window.location.href);
+  if (ID) {
+    url.searchParams.set("ID", ID);
+  }
+  if (IDWIZARD) {
+    url.searchParams.set("IDWIZARD", IDWIZARD);
+    url.searchParams.delete("REL");
+  }
+  if (IDCARD) {
+    url.searchParams.set("IDMENU", IDCARD);
+  }
+  if (REL && !IDWIZARD) {
+    url.searchParams.set("REL", REL);
+  }
+  window.history.replaceState(null, null, url);
+}
+export function saveCookies(accessToken, refreshToken) {
+  Cookies.set("auth._token.local", `Bearer ${accessToken}`, {
+    expires: 1 / 24,
+  });
+  Cookies.set("auth._refresh_token.local", refreshToken, { expires: 365 });
+  Cookies.set("auth._token_expiration.local", Date.now() + 100000);
 }
