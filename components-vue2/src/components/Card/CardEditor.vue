@@ -7,6 +7,7 @@
       :params="params"
       @update="updateValue($event)"
       @blur="updateBlurValue($event)"
+      @saveCard="saveCard($event)"
     />
     <Form
       v-if="!isBlock && !getError"
