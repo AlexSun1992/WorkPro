@@ -198,10 +198,7 @@ export default {
         this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
           ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
       );
-    },
-    progressComponent() {
-      return this.tabs && this.tabs.length < 9 ? WizardButtons : WizardLine;
-    },
+    }
   },
   unmounted() {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
