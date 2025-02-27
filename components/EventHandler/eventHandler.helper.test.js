@@ -56,13 +56,5 @@ describe("Загрузка скрипта(eventHandler)", () => {
 
     const getEventHandlerValueAfterClear = await window.eventHandler();
     expect(getEventHandlerValueAfterClear).toBe(null);
-    wait wrapper.find({ ref: "messageInput" }).setValue("deposition");
-    wait wrapper.find('[data-test="send-data"]').trigger("click");
-    await wrapper.find({ ref: "messageInput" }).setValue("depositional");
-    await wrapper.find('[data-test="send-data"]').trigger("click");
-    await wrapper.find({ ref: "messageInput" }).setValue("depositions");
-    await wrapper.find('[data-test="send-data"]').trigger("click");
-    await wrapper.find({ ref: "messageInput" }).setValue("depositive");
-    wait
   });
 });
