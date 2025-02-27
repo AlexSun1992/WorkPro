@@ -14,14 +14,14 @@ describe("Загрузка скрипта(eventHandler)", () => {
           }
         return null;
     }
-    
+
      async function eventHandler(actions){
         return actions
       }
-      
+
      async function initHandler(actions){
        return actions
-     }  
+     }
       `;
 
     updateScript(mockScript);
@@ -40,7 +40,7 @@ describe("Загрузка скрипта(eventHandler)", () => {
   });
 
   it("Переопределяем значения скриптов", async () => {
-    const mockScript = `  
+    const mockScript = `
    async function eventHandler(actions){
       return actions
     }
@@ -56,5 +56,13 @@ describe("Загрузка скрипта(eventHandler)", () => {
 
     const getEventHandlerValueAfterClear = await window.eventHandler();
     expect(getEventHandlerValueAfterClear).toBe(null);
+    wait wrapper.find({ ref: "messageInput" }).setValue("deposition");
+    wait wrapper.find('[data-test="send-data"]').trigger("click");
+    await wrapper.find({ ref: "messageInput" }).setValue("depositional");
+    await wrapper.find('[data-test="send-data"]').trigger("click");
+    await wrapper.find({ ref: "messageInput" }).setValue("depositions");
+    await wrapper.find('[data-test="send-data"]').trigger("click");
+    await wrapper.find({ ref: "messageInput" }).setValue("depositive");
+    wait
   });
 });

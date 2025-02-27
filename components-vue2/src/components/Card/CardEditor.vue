@@ -1,5 +1,11 @@
 <template>
   <div>
+    <Progress-bar
+      :wizard-cursor="wizardCursor"
+      :wizard-rels="wizardRELS"
+      :wizard-i-d-c-a-r-d-s="wizardIDCARDS"
+      :wizard-navigation="wizardNavigation"
+    />
     <div v-if="isSaving">Загрузка...</div>
     <FormBlock
       v-if="isBlock && !isSaving"
@@ -10,6 +16,7 @@
       @blur="updateBlurValue($event)"
       @goNext="goNext($event)"
       @goBack="goBack($event)"
+      @saveCard="wizardSave($event)"
     />
     <Form
       v-if="!isBlock && !getError"
@@ -85,6 +92,7 @@ import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 import { isCriticalError } from "/../plugins/auth/toast.helper";
 import { getParams, saveCookies, setURLParams } from "./helpers";
+import ProgressBar from "./ProgressBar.vue";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -93,7 +101,7 @@ const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "CardEditor",
-  components: { FormBlock, Form },
+  components: { ProgressBar, FormBlock, Form },
   props: {
     moduleId: {
       type: Number,
@@ -165,14 +173,14 @@ export default {
           return stringWizardRELS.split("|");
         }
       }
-      return null;
+      return [];
     },
     wizardCursor() {
       if (this.params.idWizard) {
         return this.$store.getters["menu/getMenuById"](this.params.idWizard)
           ?.WIZARDCUR;
       }
-      return null;
+      return [];
     },
     wizardIDCARDS() {
       if (this.params.idWizard) {
@@ -181,7 +189,7 @@ export default {
           return stringWizardCARDS.split(";").map(Number);
         }
       }
-      return null;
+      return [];
     },
     wizardNavigation() {
       if (this.params.idWizard && this.wizardIDCARDS) {
@@ -222,7 +230,7 @@ export default {
               : null,
           };
       }
-      return null;
+      return {};
     },
     eventLocalHandler() {
       return () =>
@@ -369,6 +377,13 @@ export default {
         this.init();
       }
     },
+    wizardSave() {
+      this.$store.commit("data_card/setValueByName", {
+        name: "Save",
+        value: "CLICKED",
+      });
+      this.saveCard(null, "wizardSave");
+    },
     next() {
       const url = new URL(window.location.href);
       url.searchParams.set("ID", "857");
@@ -428,7 +443,9 @@ export default {
     async saveCard(e = {}, action = null) {
       await this.callScript(e, "beforeSave");
       const isReCapthcaNeededBeforeSave = isCaptchaNeeded(this.getForm);
-      if (this.validateData(this.getForm)) {
+      const isValid =
+        action === "wizardSave" ? true : this.validateData(this.getForm);
+      if (isValid) {
         this.isShowSavedError = false;
         const { moduleId } = this;
         const itemId = this.params.idItem;
@@ -447,7 +464,7 @@ export default {
         if (resp.status === 200) {
           if (resp.data[0].ACTION !== "redirect" && !resp.data[0].IDWIZARD) {
             await this.$store.dispatch("data_card/fetchForm", {
-              ...this.getFormParams,
+              ...this.params,
               zone,
             });
             const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);

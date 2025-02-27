@@ -72,7 +72,9 @@ export default {
       }
     },
     saveCard() {
-      this.$store.dispatch("wizard/isWizardButtonsLoading", true);
+      if (this.$route) {
+        this.$store.dispatch("wizard/isWizardButtonsLoading", true);
+      }
       this.$emit("saveCard");
     },
     async goNext() {
