@@ -14,14 +14,14 @@ describe("Загрузка скрипта(eventHandler)", () => {
           }
         return null;
     }
-    
+
      async function eventHandler(actions){
         return actions
       }
-      
+
      async function initHandler(actions){
        return actions
-     }  
+     }
       `;
 
     updateScript(mockScript);
@@ -40,7 +40,7 @@ describe("Загрузка скрипта(eventHandler)", () => {
   });
 
   it("Переопределяем значения скриптов", async () => {
-    const mockScript = `  
+    const mockScript = `
    async function eventHandler(actions){
       return actions
     }
