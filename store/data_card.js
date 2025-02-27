@@ -206,6 +206,24 @@ export const getters = {
     state.form.find((b) => b.fieldId == id),
   getLoading: (state) => state.loading,
   getFilters: (state) => state.filters,
+  getSelectedValues: (state) => {
+    const findMapComponent = state.form.find(
+      (component) => component.type === "Map" && component.fieldRelation
+    );
+
+    const getMapFieldRelation = findMapComponent?.fieldRelation?.split(";");
+
+    if (!getMapFieldRelation) {
+      return {};
+    }
+
+    return state.form.reduce((acc, val) => {
+      if (getMapFieldRelation.find((name) => name === val.name)) {
+        return { ...acc, [val.name]: val.value };
+      }
+      return { ...acc };
+    }, {});
+  },
   getVisible: (state) => state.visible,
   getAddFields: (state) => state.addFields,
   getFiltersAllFields: (state) =>
@@ -681,17 +699,18 @@ export const actions = {
   },
   async setActionFormField({ commit, getters, state, dispatch }, data) {
     const field = state.form.find((d) => d.fieldId === data.fieldId);
-    if (field.type === "Collapse") {
+
+    if (field?.type === "Collapse") {
       commit("toggleComponents", {
         ...data,
       });
     }
-    if (field.type === "OneToMany" || field.type === "searchSelect") {
-      if (field.type === "OneToMany") {
+    if (field?.type === "OneToMany" || field?.type === "searchSelect") {
+      if (field?.type === "OneToMany") {
         commit("setFormOneToManyField", data);
       }
-      if (field.type === "searchSelect") {
-        if (field.options && field.options.length) {
+      if (field?.type === "searchSelect") {
+        if (field?.options && field?.options.length) {
           commit("setValueSearchSelect", data);
         }
       }
@@ -700,13 +719,13 @@ export const actions = {
     }
     let fields;
     if (
-      field.type === "searchSelect" &&
-      getters.getDataFieldsRelationsByFieldId(field.fieldId).length === 0
+      field?.type === "searchSelect" &&
+      getters.getDataFieldsRelationsByFieldId(field?.fieldId).length === 0
     ) {
       fields = { fields: [field] };
     } else {
       fields = {
-        fields: getters.getDataFieldsRelationsByFieldId(field.fieldId),
+        fields: getters.getDataFieldsRelationsByFieldId(field?.fieldId),
       };
     }
     await dispatch("setOptionsField", { data, fields });

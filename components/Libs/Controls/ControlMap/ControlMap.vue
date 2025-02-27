@@ -98,7 +98,7 @@ export default {
   async created() {
     await this.$store.dispatch("blocks/fetchBlock", {
       id: this.data.menudic,
-      query: this.$store.getters["data_card/getFilters"],
+      query: this.$store.getters["data_card/getSelectedValues"],
       ...this.$route.params,
     });
     this.dataContent = this.$store.getters["blocks/getUnfilteredBlockById"](
