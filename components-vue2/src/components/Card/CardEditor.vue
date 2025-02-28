@@ -371,9 +371,7 @@ export default {
     },
     goBack() {
       if (this.wizardNavigation.back) {
-        if (this.wizardNavigation?.back) {
-          setURLParams(this.wizardNavigation.back);
-        }
+        setURLParams(this.wizardNavigation.back);
         this.init();
       }
     },
@@ -382,15 +380,7 @@ export default {
         name: "Save",
         value: "CLICKED",
       });
-      this.saveCard(null, "wizardSave");
-    },
-    next() {
-      const url = new URL(window.location.href);
-      url.searchParams.set("ID", "857");
-      url.searchParams.set("REL", "CE5997B2963ED6CC5754A3E54C1A5542");
-      url.searchParams.set("IDMENU", "1093");
-      window.history.replaceState(null, null, url);
-      this.init();
+      this.saveCard({}, "wizardSave");
     },
     scrollToError() {
       const divWithInvalidClass =
@@ -462,7 +452,10 @@ export default {
         });
 
         if (resp.status === 200) {
-          if (resp.data[0].ACTION !== "redirect" && !resp.data[0].IDWIZARD) {
+          if (
+            (resp.data[0].ACTION !== "redirect" && !resp.data[0].IDWIZARD) ||
+            action === "wizardSave"
+          ) {
             await this.$store.dispatch("data_card/fetchForm", {
               ...this.params,
               zone,
@@ -479,7 +472,7 @@ export default {
           if (resp.data[0].ACTION === "redirect") {
             window.location.href = resp.data[0].SURL;
           }
-          if (resp.data[0].IDWIZARD) {
+          if (resp.data[0].IDWIZARD && action !== "wizardSave") {
             setURLParams(resp.data[0]);
             if (resp.data[0].ACCESS_TOKEN) {
               saveCookies(
