@@ -4682,7 +4682,8 @@ h6 {
 }
 
 .btn-gray {
-  background: $greya;
+
+  background-color: $greya;
   border-radius: 15px;
   border: 2px solid $greya;
   padding: 0 24px;
@@ -4699,22 +4700,22 @@ h6 {
 }
 
 .btn-gray:hover {
-  background: $greyb;
+  background-color: $greyb;
   border: 2px solid $greyb;
 }
 
 .btn-gray:active {
-  background: $greyc;
+  background-color: $greyc;
   border: 2px solid $greyc;
 }
 
 .btn-gray:focus {
-  background: $greyc;
+  background-color: $greyc;
   border: 2px solid $greyd;
 }
 
 .btn-gray:disabled {
-  background: $greya;
+  background-color: $greya;
   border: 2px solid $greya;
   color: $greyc;
   pointer-events: none;
