@@ -1,7 +1,5 @@
 <template>
-  <div
-    :class="{ 'overflow-hidden': !isHaveListData, 'w-100': true }"
-  >
+  <div :class="{ 'overflow-hidden': !isHaveListData, 'w-100': true }">
     <ControlDropdown
       v-if="isHaveListData"
       :options="optionsComputed"
@@ -44,6 +42,10 @@ export default {
       default: null,
     },
     value: {
+      type: [String, Number],
+      default: null,
+    },
+    defaultValue: {
       type: Number,
       default: null,
     },
@@ -65,8 +67,12 @@ export default {
       if (Array.isArray(list)) {
         const options = list.map((item) => ({
           value: item.id,
-          text: item.sname,
+          text: this.toCurrency(item.sname),
         }));
+
+        if(!options.find((item) => item.id === 0)) {
+          options.push({ text: "Без франшизы", value: 0, invisible: true });
+        }
 
         return options;
       }
@@ -77,18 +83,21 @@ export default {
     },
     valueComputed: {
       get() {
-        return this.value ?? this.firstVisibleValue;
+        return this.value || this.defaultValue || this.firstVisibleValue;
       },
       set(val) {
         this.$emit("input", val);
       },
     },
+    selectedFranchise() {
+      return this.customStore.state.selectedVariant.IDFRNANCHISE ?? null;
+    },
     isTrueFalse() {
-      return ["Y", "N"].includes(this.options.value);
+      return [ "Y", "N" ].includes(this.options.value);
     },
     firstVisibleValue() {
       const { list } = this.options;
-      const visibleValue = list?.find(val => !val.invisible);
+      const visibleValue = list?.find((val) => !val.invisible);
 
       return visibleValue ? visibleValue.id : null;
     },
@@ -98,17 +107,26 @@ export default {
 
     isHaveListData() {
       return Array.isArray(this.options.list);
-    }
+    },
+  },
+  mounted() {
+    this.$emit("input", this.valueComputed);
   },
   methods: {
     setFranchise(val) {
       this.customStore?.setFranchise(val);
       this.$emit("input", val);
     },
-  },
-  mounted() {
-    this.$emit("input", this.valueComputed);
-  },
+    toCurrency(val = "") {
+      const value = val.toString().trim();
+
+      if (isNaN(value) || !isFinite(value)) {
+        return val;
+      }
+
+      return `${new Intl.NumberFormat("ru-RU", { stale: "currency, " }).format(value)}\u00A0₽`
+    }
+  }
 };
 </script>
 

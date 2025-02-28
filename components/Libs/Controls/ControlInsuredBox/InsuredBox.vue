@@ -12,6 +12,7 @@
               :card="card"
               :index="indx"
               :data="data"
+              :tooltipData="getTooltipsData"
             />
           </div>
         </VueSlickCarousel>
@@ -87,6 +88,9 @@ export default {
     };
   },
   computed: {
+    getTooltipsData() {
+      return this.data.options[0]?.S_INFO || [];
+    },
     getData() {
       const { options } = this.data;
       const firstOption = options?.[0];

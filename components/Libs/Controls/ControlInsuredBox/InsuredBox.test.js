@@ -15,6 +15,7 @@ describe("ControlInsuredBox test", () => {
         SFOREIGNOBJECTS: "Падение или Попадание инородных предметов",
         SFRANCHISE: "Франшиза",
         SNAME: "scaption",
+        S_INFO: ["Тест1", "Тест2", "", "Тест4"],
         S_ORDER: ["NSUMTN", "NSUMPN", "NSUMDT", "NSUMNODT"],
         SNOEVENTRESTRICTIONS: "Без ограничений по страховым событиям",
         SREPAIR: "Ремонт без справок",

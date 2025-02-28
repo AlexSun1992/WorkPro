@@ -95,6 +95,7 @@ import ControlDynamicDepend from "./ControlDynamicDepend/ControlDynamicDepend.vu
 import ControlSelectButton from "./ControlSelectButton.vue";
 import ControlInformer from "./ControlInformer/ControlInformer.vue";
 import ControlGallery from "./ControlGallery/ControlGallery.vue";
+import ControlSlider from "./ControlSlider/ControlSlider.vue";
 
 export default {
   name: "Control",
@@ -154,7 +155,8 @@ export default {
     ControlSelectButton,
     ControlInformer,
     ControlTokenBox,
-    ControlGallery,
+    ControlSlider,
+    ControlGallery
   },
   props: {
     data: {
@@ -226,11 +228,6 @@ export default {
     },
     dataCols() {
       return this.data?.cols;
-    },
-  },
-  methods: {
-    testBack() {
-      console.log("111111");
     },
   },
 };
