@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Progress-bar
+    <ProgressBar
       :wizard-cursor="wizardCursor"
       :wizard-rels="wizardRELS"
       :wizard-i-d-c-a-r-d-s="wizardIDCARDS"
