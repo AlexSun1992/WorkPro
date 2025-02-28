@@ -227,6 +227,11 @@ export default {
       default: null,
     },
   },
+  data() {
+    return {
+      value: 4526
+    }
+  },
   computed: {
     currentId() {
       return this.wizardNavigation.current?.IDCARD;
@@ -308,9 +313,11 @@ export default {
       return result;
     },
   },
+
   methods: {
     getURL(itemId) {
-      const { params } = this.$route;
+      return "";
+      /* const { params } = this.$route;
       const _itemId = itemId ?? "";
       const cardId = params.idCard ?? 0;
       const realId = this.getRelByCardId(itemId);
@@ -319,7 +326,7 @@ export default {
         !!realId &&
         !!cardId &&
         `/cabinet/wizard/${params.idWizard}/${params.idModule}/0/${_itemId}/${cardId}/${realId}`
-      );
+      ); */
     },
     goToTab() {
       const { params } = this.$route;
