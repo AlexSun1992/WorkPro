@@ -29,11 +29,11 @@
           <ControlDropdown
             v-if="availableTabs.length > 1"
             :options="availableTabs"
-            value-key="id"
+            value-key="ID"
             placeholder="Текущий этап"
             @input="goToTab($event)"
             v-model="value"
-            text-key="name"
+            text-key="SNAME"
           />
 
           <span v-else>
@@ -64,15 +64,15 @@
           <div
             @click="$router.push(getURL(item, index))"
             class="col-1 text-center position-relative"
-            :class="{ active: item.order <= currentTab.order }"
+            :class="{ active: item.NORDER <= currentTab.NORDER }"
           >
-            <div class="step" :data-step="item.order" />
+            <div class="step" :data-step="item.NORDER" />
             <span class="step-text">{{ item.name }}</span>
           </div>
           <div
             v-if="tabs.length !== index + 1"
             class="col-auto"
-            :class="{ active: item.order < currentTab.order }"
+            :class="{ active: item.NORDER < currentTab.NORDER }"
           >
             <div class="dotted"></div>
           </div>
@@ -81,7 +81,7 @@
 
       <div class="d-none">
         <h3>
-          {{ currentTab.name }} - шаг {{ currentTab.order }} из
+          {{ currentTabName }} - шаг {{ currentTabOrder }} из
           {{ tabs.length }}
         </h3>
       </div>
@@ -115,126 +115,129 @@ export default {
       required: false,
       default: null,
     },
-    currentTab: {
+    /* currentTab: {
       default() {
         return {
           name: "Расчет",
           idItem: 1040,
           id: 4526,
           list: false,
-          order: 3,
+          NORDER: 3,
         };
       },
       type: Object,
-    },
-    tabs: {
-      default() {
-        return [
-          {
-            name: "Тип расчета",
-            idItem: 1037,
-            id: 4528,
-            list: false,
-            order: 1,
+    }, */
+    /*    tabs: {
+          default() {
+            return [
+              {
+                name: "Тип расчета",
+                idItem: 1037,
+                id: 4528,
+                list: false,
+                NORDER: 1,
+              },
+              {
+                name: "Данные об авто",
+                idItem: 1039,
+                id: 4530,
+                list: false,
+                NORDER: 2,
+              },
+              {
+                name: "Расчет",
+                idItem: 1040,
+                id: 4526,
+                list: false,
+                NORDER: 3,
+              },
+              {
+                name: "Личные данные",
+                idItem: 1041,
+                id: 4529,
+                list: false,
+                NORDER: 4,
+              },
+              {
+                name: "Сведения о ТС",
+                idItem: 1064,
+                id: 4527,
+                list: false,
+                NORDER: 5,
+              },
+              {
+                name: "Доп сведения о ТС",
+                idItem: 1065,
+                id: 4538,
+                list: false,
+                NORDER: 6,
+              },
+              {
+                name: "Документы ТС",
+                idItem: 1066,
+                id: 4531,
+                list: false,
+                NORDER: 7,
+              },
+              {
+                name: "Водители",
+                idItem: 1068,
+                id: 4532,
+                list: false,
+                NORDER: 8,
+              },
+              {
+                name: "Параметры полиса",
+                idItem: 1069,
+                id: 4533,
+                list: false,
+                NORDER: 9,
+              },
+              {
+                name: "Точный расчет",
+                idItem: 1070,
+                id: 4534,
+                list: false,
+                NORDER: 10,
+              },
+              {
+                name: "Сканы документов",
+                idItem: 1048,
+                id: 4535,
+                list: false,
+                NORDER: 11,
+              },
+              {
+                name: "Осмотр",
+                idItem: 1049,
+                id: 4536,
+                list: false,
+                NORDER: 12,
+              },
+              { name: "Оплата", idItem: 1085, id: 4537, list: false, NORDER: 13 },
+            ];
           },
-          {
-            name: "Данные об авто",
-            idItem: 1039,
-            id: 4530,
-            list: false,
-            order: 2,
-          },
-          {
-            name: "Расчет",
-            idItem: 1040,
-            id: 4526,
-            list: false,
-            order: 3,
-          },
-          {
-            name: "Личные данные",
-            idItem: 1041,
-            id: 4529,
-            list: false,
-            order: 4,
-          },
-          {
-            name: "Сведения о ТС",
-            idItem: 1064,
-            id: 4527,
-            list: false,
-            order: 5,
-          },
-          {
-            name: "Доп сведения о ТС",
-            idItem: 1065,
-            id: 4538,
-            list: false,
-            order: 6,
-          },
-          {
-            name: "Документы ТС",
-            idItem: 1066,
-            id: 4531,
-            list: false,
-            order: 7,
-          },
-          {
-            name: "Водители",
-            idItem: 1068,
-            id: 4532,
-            list: false,
-            order: 8,
-          },
-          {
-            name: "Параметры полиса",
-            idItem: 1069,
-            id: 4533,
-            list: false,
-            order: 9,
-          },
-          {
-            name: "Точный расчет",
-            idItem: 1070,
-            id: 4534,
-            list: false,
-            order: 10,
-          },
-          {
-            name: "Сканы документов",
-            idItem: 1048,
-            id: 4535,
-            list: false,
-            order: 11,
-          },
-          {
-            name: "Осмотр",
-            idItem: 1049,
-            id: 4536,
-            list: false,
-            order: 12,
-          },
-          { name: "Оплата", idItem: 1085, id: 4537, list: false, order: 13 },
-        ];
-      },
-      type: Array,
-    },
+          type: Array,
+        }, */
     qty: {
       default: 13,
-      type: Number
-    },
-    loading: {
-      default: null,
+      type: Number,
     },
   },
   data() {
     return {
-      value: 4526
-    }
+      value: 4526,
+    };
   },
   computed: {
+    tabs() {
+      return this.wizardCursor;
+    },
+    currentTab() {
+      return this.wizardNavigation;
+    },
     currentId() {
-      return this.wizardNavigation.current?.IDCARD;
+      return this.wizardNavigation?.IDCARD;
     },
     step() {
       return this.wizardCursor.find((item) => item.NITEM === this.currentId);
@@ -243,19 +246,20 @@ export default {
       return this.step?.SNAME;
     },
     nextStep() {
-      const currentTab = this.tabs.find((item) => item.id === this.value);
-      const currentOrder = currentTab?.order;
-      const orders = this.tabs.map((item) => item.order);
+      debugger;
+      const { currentTab } = this;
+      const currentOrder = this.currentTabOrder;
+      const orders = this.tabs.map((item) => item.NORDER);
       const maxOrder = Math.max(...orders);
       const nextTab =
         currentTab &&
         currentOrder < maxOrder &&
-        this.tabs.find((item) => item.order === currentOrder + 1);
-      const result = { name: "", url: this.getURL(currentTab.idItem) };
+        this.tabs.find((item) => item.NORDER === currentOrder + 1);
+      const result = { name: "", url: "" };
 
       if (nextTab) {
-        result.name = nextTab.name;
-        result.url = this.getURL(nextTab.idItem);
+        result.name = nextTab.SNAME;
+        result.url = "";
       }
 
       if (currentTab && currentOrder === maxOrder) {
@@ -274,7 +278,7 @@ export default {
     },
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
-      const currentOrder = this.currentTabComputed?.order ?? 0;
+      const currentOrder = this.currentTabComputed?.NORDER ?? 0;
 
       if (totalTabs && currentOrder) {
         return `${(100 / totalTabs) * (currentOrder - 1)}%`;
@@ -282,35 +286,29 @@ export default {
 
       return "0%";
     },
+    currentTabOrder() {
+      return (
+        this.tabs.find((item) => item.NITEM === this.currentTab.IDCARD)
+          ?.NORDER ?? 0
+      );
+    },
+    currentTabName() {
+      return (
+        this.tabs.find((item) => item.NITEM === this.currentTab.IDCARD)
+          ?.SNAME ?? ""
+      );
+    },
     availableTabs() {
       const { tabs } = this;
-      const currentTab = this.currentTabComputed;
-      let dropDownTabs = tabs.filter((item) => item.order <= currentTab.order);
+      const { currentTabOrder } = this;
+      const dropDownTabs = tabs.filter(
+        (item) => item.NORDER <= currentTabOrder
+      );
 
-      dropDownTabs = dropDownTabs.map((item) => ({
-        invisible: item.order === currentTab.order,
+      return dropDownTabs.map((item) => ({
+        invisible: item.NORDER === currentTabOrder,
         ...item,
       }));
-
-      return dropDownTabs;
-    },
-    stepsList() {
-      let tabs = this.$store.getters["wizard/getWizardPages"] ?? "";
-      let reals = this.$store.getters["wizard/getWizardData"]?.REL ?? "";
-      const result = [];
-
-      tabs = tabs?.split
-        ? tabs.split(";").map((item) => item.replaceAll(" ", ""))
-        : [];
-      reals = reals?.split
-        ? reals.split("|").map((item) => item.replaceAll(" ", ""))
-        : [];
-
-      tabs.forEach((item, index) => {
-        result.push({ cardId: item, idReal: reals[index] ?? null });
-      });
-
-      return result;
     },
   },
 
@@ -330,10 +328,9 @@ export default {
     },
     goToTab() {
       const { params } = this.$route;
-      const itemId = this.currentTabComputed?.idItem ?? params.idItem;
-      const url = this.getURL(itemId);
+      const idItem = this.currentTabComputed?.idItem ?? params.idItem;
 
-      url && this.currentTabComputed?.idItem && this.$router.push(url);
+      this.$emit("update", { idItem });
     },
     getRelByCardId(id) {
       const { stepsList } = this;
