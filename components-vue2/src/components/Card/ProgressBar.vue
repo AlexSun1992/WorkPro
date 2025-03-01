@@ -342,4 +342,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.next-step-button {
+  text-decoration: none;
+  color: inherit;
+}
+</style>
