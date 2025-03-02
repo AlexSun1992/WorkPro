@@ -113,7 +113,12 @@ export default {
     wizardNavigation: {
       type: Object,
       required: false,
-      default: null,
+      default() {
+        return {
+          REL: "",
+          IDCARD: -1,
+        }
+      },
     },
     /* currentTab: {
       default() {
@@ -246,7 +251,6 @@ export default {
       return this.step?.SNAME;
     },
     nextStep() {
-      debugger;
       const { currentTab } = this;
       const currentOrder = this.currentTabOrder;
       const orders = this.tabs.map((item) => item.NORDER);
@@ -326,11 +330,8 @@ export default {
         `/cabinet/wizard/${params.idWizard}/${params.idModule}/0/${_itemId}/${cardId}/${realId}`
       ); */
     },
-    goToTab() {
-      const { params } = this.$route;
-      const idItem = this.currentTabComputed?.idItem ?? params.idItem;
-
-      this.$emit("update", { idItem });
+    goToTab(ev) {
+      this.$emit("update", ev);
     },
     getRelByCardId(id) {
       const { stepsList } = this;

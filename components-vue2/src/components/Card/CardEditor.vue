@@ -174,7 +174,9 @@ export default {
           return stringWizardRELS.split("|");
         }
       }
-      return [];
+      // TODO убрать хардкод вернуть возврат пустого массива
+      // return [];
+      return [1,2,3,4,5,6,7,8,9,10,11,12,13]
     },
     wizardCursor() {
       if (this.params.idWizard) {
@@ -695,7 +697,11 @@ export default {
       this.callScript($event, $event);
     },
     updateStep(ev) {
-      this.params.idItem = ev;
+      const paramData = this.wizardCursor.find(item => item.ID === ev);
+
+      this.params.idItem = paramData.ID;
+      // TODO Возможно, нужно как-то более правильно определить IDREL
+      this.params.idRel = this.wizardRELS[paramData?.NORDER - 1]
     }
   },
 };
