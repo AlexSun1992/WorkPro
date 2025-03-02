@@ -278,7 +278,7 @@ export default {
     },
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
-      const currentOrder = this.currentTabComputed?.NORDER ?? 0;
+      const currentOrder = this.currentTabOrder ?? 0;
 
       if (totalTabs && currentOrder) {
         return `${(100 / totalTabs) * (currentOrder - 1)}%`;
