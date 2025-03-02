@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <div v-if="tabs.length > 1">
+<!--    <div v-if="tabs.length > 1">
       <div
         class="d-none row mt-4 step-block osago"
         style="
@@ -85,7 +85,7 @@
           {{ tabs.length }}
         </h3>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -119,114 +119,6 @@ export default {
           IDCARD: -1,
         }
       },
-    },
-    /* currentTab: {
-      default() {
-        return {
-          name: "Расчет",
-          idItem: 1040,
-          id: 4526,
-          list: false,
-          NORDER: 3,
-        };
-      },
-      type: Object,
-    }, */
-    /*    tabs: {
-          default() {
-            return [
-              {
-                name: "Тип расчета",
-                idItem: 1037,
-                id: 4528,
-                list: false,
-                NORDER: 1,
-              },
-              {
-                name: "Данные об авто",
-                idItem: 1039,
-                id: 4530,
-                list: false,
-                NORDER: 2,
-              },
-              {
-                name: "Расчет",
-                idItem: 1040,
-                id: 4526,
-                list: false,
-                NORDER: 3,
-              },
-              {
-                name: "Личные данные",
-                idItem: 1041,
-                id: 4529,
-                list: false,
-                NORDER: 4,
-              },
-              {
-                name: "Сведения о ТС",
-                idItem: 1064,
-                id: 4527,
-                list: false,
-                NORDER: 5,
-              },
-              {
-                name: "Доп сведения о ТС",
-                idItem: 1065,
-                id: 4538,
-                list: false,
-                NORDER: 6,
-              },
-              {
-                name: "Документы ТС",
-                idItem: 1066,
-                id: 4531,
-                list: false,
-                NORDER: 7,
-              },
-              {
-                name: "Водители",
-                idItem: 1068,
-                id: 4532,
-                list: false,
-                NORDER: 8,
-              },
-              {
-                name: "Параметры полиса",
-                idItem: 1069,
-                id: 4533,
-                list: false,
-                NORDER: 9,
-              },
-              {
-                name: "Точный расчет",
-                idItem: 1070,
-                id: 4534,
-                list: false,
-                NORDER: 10,
-              },
-              {
-                name: "Сканы документов",
-                idItem: 1048,
-                id: 4535,
-                list: false,
-                NORDER: 11,
-              },
-              {
-                name: "Осмотр",
-                idItem: 1049,
-                id: 4536,
-                list: false,
-                NORDER: 12,
-              },
-              { name: "Оплата", idItem: 1085, id: 4537, list: false, NORDER: 13 },
-            ];
-          },
-          type: Array,
-        }, */
-    qty: {
-      default: 13,
-      type: Number,
     },
   },
   data() {
@@ -271,14 +163,6 @@ export default {
       }
 
       return result;
-    },
-    currentTabComputed() {
-      return (
-        (this.value &&
-          this.tabs &&
-          this.tabs.find((item) => item.id === this.value)) ??
-        null
-      );
     },
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
@@ -333,11 +217,10 @@ export default {
     goToTab(ev) {
       this.$emit("update", ev);
     },
-    getRelByCardId(id) {
+    getRelByCardId(id = -1) {
       const { stepsList } = this;
-      const _id = isNaN(+id) ? 0 : +id;
 
-      return stepsList.find((item) => _id === +item.cardId)?.idReal ?? null;
+      return stepsList.find((item) => id === +item.cardId)?.idReal ?? null;
     },
   },
 };

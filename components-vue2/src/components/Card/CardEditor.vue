@@ -701,7 +701,7 @@ export default {
 
       this.params.idItem = paramData.ID;
       // TODO Возможно, нужно как-то более правильно определить IDREL
-      this.params.idRel = this.wizardRELS[paramData?.NORDER - 1]
+      this.params.idRel = this.wizardRELS[paramData?.NORDER ?? 0 - 1]
     }
   },
 };
