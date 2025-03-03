@@ -86,7 +86,7 @@ export default {
       type: Object,
       required: true,
       default: () => ({
-        options: []
+        options: [],
       }),
     },
     edit: {
@@ -113,17 +113,22 @@ export default {
       return this.data?.options ?? [];
     },
     variants() {
-      return this.options.filter((item) => item.ID !== 1);
+      return this.options.filter((item) => item.SDESCRIPTION === "false");
     },
     featuresOrder() {
-      const order = this.options.find(item => item.ID === 1)?.S_ORDER ?? [];
+      const order =
+        this.options.find((item) => item.SDESCRIPTION === "true")?.S_ORDER ??
+        [];
 
-      return order.map(item => item.toUpperCase());
+      return order.map((item) => item.toUpperCase());
     },
     featuresHint() {
-      const hintArr = this.options.find(item => item.ID === 1)?.S_INFO ?? [];
+      const hintArr =
+        this.options.find((item) => item.SDESCRIPTION === "true")?.S_INFO ?? [];
 
-      return hintArr.map((item, index) => ({ [this.featuresOrder[index]]: item }));
+      return hintArr.map((item, index) => ({
+        [this.featuresOrder[index]]: item,
+      }));
     },
     dataValue() {
       const { value } = this.data;
@@ -136,7 +141,7 @@ export default {
     },
     featuresData() {
       return this.options.find((item) => item.SNAME === "scaption");
-    }
+    },
   },
   methods: {
     updateVariant() {
