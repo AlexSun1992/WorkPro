@@ -1,5 +1,4 @@
-import { createLocalVue, mount } from "@vue/test-utils";
-import Vuex from "vuex";
+import { mount } from "@vue/test-utils";
 import ProgressBar from "./ProgressBar.vue";
 import progressBarMock from "./progressBar.mock";
 // eslint-disable-next-line
@@ -8,9 +7,6 @@ import ControlDropdown from "../../../../components/Libs/Controls/ControlDropdow
 const propsData = progressBarMock;
 describe("Wizard ProgressBar", () => {
   let wrapper;
-  const localVue = createLocalVue();
-
-  localVue.use(Vuex);
 
   test("Show progressBar with data", () => {
     wrapper = mount(ProgressBar, {
@@ -20,13 +16,14 @@ describe("Wizard ProgressBar", () => {
 
     expect(htmlData).toContain("Данные об авто");
     expect(htmlData).toContain("<h2>Личные данные</h2>");
+    expect(htmlData).toContain(" - шаг ");
   });
 
   test("Change current step", async () => {
     const newId = propsData.wizardCursor[0].ID;
     wrapper = mount(ProgressBar, {
       propsData,
-      stubs: {ControlDropdown}
+      stubs: { ControlDropdown },
     });
 
     expect(wrapper.emitted().update).toBeFalsy();
@@ -46,5 +43,21 @@ describe("Wizard ProgressBar", () => {
     const result = (100 / totalTabs) * (currentOrder - 1);
 
     expect(wrapper.html()).toContain(`width: ${Math.trunc(result)}`);
+  });
+
+  test("Progress bar with empty data", () => {
+    wrapper = mount(ProgressBar, {
+      propsData: {
+        wizardRels: [],
+        wizardCursor: [],
+        wizardIDCARDS: [],
+        wizardNavigation: {},
+      },
+    });
+    const htmlData = wrapper.html();
+
+    expect(htmlData).toContain("Текущий этап");
+    expect(htmlData).toContain("Следующий этап");
+    expect(htmlData).not.toContain(" - шаг ");
   });
 });

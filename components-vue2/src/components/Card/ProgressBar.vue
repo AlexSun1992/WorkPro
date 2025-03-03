@@ -128,7 +128,7 @@ export default {
   },
   computed: {
     tabs() {
-      return this.wizardCursor;
+      return this.wizardCursor ?? [];
     },
     currentTab() {
       return this.wizardNavigation;
