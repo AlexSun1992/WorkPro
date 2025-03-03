@@ -750,7 +750,7 @@ export default {
       IDADMMODULE: 55,
     },
   ],
-  wizardIDCARDS: [4528, 4530, 4526, 4529, 4527, 6, 7, 8, 9, 10, 11, 12, 13],
+  wizardIDCARDS: [4528, 4530, 4526, 4529, 4527, 4538, 4531, 4532, 4533, 4534, 4535, 4536, 4537],
   wizardNavigation: {
     REL: "2",
     IDCARD: 4529,

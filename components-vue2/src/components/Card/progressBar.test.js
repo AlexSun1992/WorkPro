@@ -34,6 +34,17 @@ describe("Wizard ProgressBar", () => {
     wrapper.vm.goToTab(newId);
 
     expect(wrapper.emitted().update).toBeTruthy();
-    expect(wrapper.emitted().update[0][0]).toEqual(newId);
+    expect(wrapper.emitted().update[0]).toEqual([newId]);
+  });
+
+  test("Progress bar position", () => {
+    wrapper = mount(ProgressBar, {
+      propsData,
+    });
+    const totalTabs = wrapper.vm.tabs.length;
+    const currentOrder = wrapper.vm.currentTabOrder;
+    const result = (100 / totalTabs) * (currentOrder - 1);
+
+    expect(wrapper.html()).toContain(`width: ${Math.trunc(result)}`);
   });
 });
