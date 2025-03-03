@@ -134,7 +134,7 @@ export default {
       return this.wizardNavigation;
     },
     currentId() {
-      return this.wizardNavigation?.IDCARD;
+      return this.wizardNavigation?.IDCARD ?? -1;
     },
     currentStep() {
       return this.wizardCursor.find((item) => item.ID === this.currentId);
@@ -179,13 +179,13 @@ export default {
     },
     currentTabOrder() {
       return (
-        this.tabs.find((item) => item.NITEM === this.currentTab.IDCARD)
+        this.tabs.find((item) => item.ID === this.currentTab.IDCARD)
           ?.NORDER ?? 0
       );
     },
     currentTabName() {
       return (
-        this.tabs.find((item) => item.NITEM === this.currentTab.IDCARD)
+        this.tabs.find((item) => item.ID === this.currentTab.IDCARD)
           ?.SNAME ?? ""
       );
     },
