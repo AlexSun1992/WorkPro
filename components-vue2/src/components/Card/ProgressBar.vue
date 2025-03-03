@@ -37,7 +37,7 @@
           />
 
           <span v-else>
-            {{ availableTabs[0].name }}
+            {{ firstAvailableStep.name }}
           </span>
         </div>
         <div class="col-6">
@@ -136,11 +136,14 @@ export default {
     currentId() {
       return this.wizardNavigation?.IDCARD;
     },
-    step() {
-      return this.wizardCursor.find((item) => item.NITEM === this.currentId);
+    currentStep() {
+      return this.wizardCursor.find((item) => item.ID === this.currentId);
+    },
+    firstAvailableStep() {
+      return this.availableTabs[0] ?? {name: ""}
     },
     name() {
-      return this.step?.SNAME;
+      return this.currentStep?.SNAME ?? "";
     },
     nextStep() {
       const { currentTab } = this;
