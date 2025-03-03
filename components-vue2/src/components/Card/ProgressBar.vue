@@ -50,7 +50,7 @@
       </div>
     </div>
 
-<!--    <div v-if="tabs.length > 1">
+    <div v-if="tabs.length > 1">
       <div
         class="d-none row mt-4 step-block osago"
         style="
@@ -85,7 +85,7 @@
           {{ tabs.length }}
         </h3>
       </div>
-    </div>-->
+    </div>
   </div>
 </template>
 
