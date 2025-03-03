@@ -84,7 +84,7 @@
         </form>
         <div v-if="isFormErrorMessage" class="error-block d-block mt-3">
           <transition name="fade" mode="out-in">
-            <p :key="currentErrorKey" v-html="currentErrorMessage"/>
+            <p :key="currentErrorKey" v-html="currentErrorMessage" />
           </transition>
         </div>
       </div>
@@ -274,7 +274,7 @@ export default {
       this.updateStoreValue();
 
       try {
-        this.$emit("saveCard");
+        this.$emit("saveCard", "Auth");
         this.closeModal();
       } catch (err) {
         this.isFormErrorMessage = true;
@@ -327,11 +327,13 @@ export default {
   color: #eb5757;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
