@@ -1,10 +1,10 @@
 import { mount } from "@vue/test-utils";
 import VariantPolicyFranchise from "./VariantPolicyFranchise.vue";
 import ControlDropdown from "../ControlDropdown/ControlDropdown.vue";
-import { VariantPolicyFranchiseOptions } from "./VariantPolicyFranchiseTestData";
+import { VariantPolicyFranchiseOptionsA } from "./VariantPolicyFranchiseTestData";
 import { VariantPolicyStore } from "./VariantPolicyStore";
 
-const options = VariantPolicyFranchiseOptions;
+const options = VariantPolicyFranchiseOptionsA;
 const customStore = VariantPolicyStore();
 
 describe('VariantPolicyFranchise', () => {
@@ -21,22 +21,21 @@ describe('VariantPolicyFranchise', () => {
   });
 
   it('Init value after component init', () => {
-    const customStore = VariantPolicyStore();
-    customStore.setFranchise(VariantPolicyFranchiseOptions.variants[0]);
+    customStore.setFranchise(VariantPolicyFranchiseOptionsA.variants[0]);
 
     const wrapper = mount(VariantPolicyFranchise, {
       stubs: { ControlDropdown },
       propsData: {
-        value: VariantPolicyFranchiseOptions.variants[0],
+        value: VariantPolicyFranchiseOptionsA.variants[0],
         options: options.variants,
         customStore
       }
     });
 
-    expect(wrapper.vm.valueComputed.value).toBe(VariantPolicyFranchiseOptions.variants[0].value);
+    expect(wrapper.vm.valueComputed).toBe(VariantPolicyFranchiseOptionsA.variants.list[0].id);
   });
 
-  it('Plaint text as franchise value', () => {
+  it('Plain text as franchise value', () => {
     const wrapper = mount(VariantPolicyFranchise, {
       stubs: { ControlDropdown },
       propsData: {
@@ -45,6 +44,32 @@ describe('VariantPolicyFranchise', () => {
       }
     });
 
-    expect(wrapper.element.innerHTML).toMatch(VariantPolicyFranchiseOptions.text);
-  })
+    expect(wrapper.element.innerHTML).toMatch(VariantPolicyFranchiseOptionsA.text);
+  });
+
+  it("Currency format for dropdown", () => {
+    const wrapper = mount(VariantPolicyFranchise, {
+      stubs: { ControlDropdown },
+      propsData: {
+        options: options.variants,
+        customStore
+      }
+    });
+
+    expect(wrapper.vm.optionsComputed[0].text).toBe("30\u00A0000\u00A0₽");
+    expect(wrapper.vm.optionsComputed[1].text).toBe("60\u00A0000\u00A0₽");
+  });
+
+  it("Init component with default value", () => {
+    const wrapper = mount(VariantPolicyFranchise, {
+      stubs: { ControlDropdown },
+      propsData: {
+        options: options.variants,
+        defaultValue: 3,
+        customStore
+      }
+    });
+
+    expect(wrapper.vm.valueComputed).toBe(3);
+  });
 });

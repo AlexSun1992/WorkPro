@@ -68,14 +68,14 @@ export default {
         const tab = this.tabs[this.getCurrentIndex() - 1];
         this.$emit("goBack", tab);
       } else {
-        this.$emit("goBack");
+        this.$emit("goBack", "Back");
       }
     },
     saveCard() {
       if (this.$route) {
         this.$store.dispatch("wizard/isWizardButtonsLoading", true);
       }
-      this.$emit("saveCard");
+      this.$emit("saveCard", "Save");
     },
     async goNext() {
       if (this.$route) {
@@ -109,7 +109,7 @@ export default {
         const tab = this.tabs[this.getCurrentIndex() + 1];
         this.$emit("goNext", tab);
       } else {
-        this.$emit("goNext");
+        this.$emit("goNext", "Next");
       }
     },
   },

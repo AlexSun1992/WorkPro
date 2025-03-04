@@ -12,7 +12,7 @@
           <span class="position-relative">
             <span class="tooltipster">
               <vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
-                <div>{{ item.text }}</div>
+                <div>{{ item.hint }}</div>
               </vue-easy-tooltip>
             </span>
           </span>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { variantPolicyUtils } from "../../../../utils/variant_policy/variantPolicyUtils";
+
 export default {
   name: "VariantPolicyFeatures",
   props: {
@@ -35,23 +37,18 @@ export default {
       type: Object,
       default: null,
     },
-    featuresList: {
+    featuresOrder: {
+      type: Array,
+      default: null,
+    },
+    featuresHint: {
       type: Array,
       default: null,
     },
   },
   computed: {
-    featuresListComputed() {
-      return this.featuresList;
-    },
-    featuresDataComputed() {
-      return this.featuresData;
-    },
     features() {
-      const featuresList = this.featuresListComputed;
-      const featuresData = this.featuresDataComputed;
-
-      return featuresList?.map((item) => ({ text: featuresData[item] }));
+      return variantPolicyUtils.getFeaturesList(this.featuresOrder, this.featuresData, this.featuresHint);
     },
     columnData() {
       return [...this.features];
@@ -76,30 +73,12 @@ export default {
           sizes.push(item.clientHeight);
         });
 
-        // this.customStore.setRowsSize(sizes);
-
         setTimeout(() => {
           this.calcRowsSize.inProgress = false;
         }, 50);
       }
     },
-
-    initCalculate() {
-      this.calcRowsSize();
-
-      window.addEventListener("resize", this.calcRowsSize);
-    },
-
-    stopCalculate() {
-      window.removeEventListener("resize", this.calcRowsSize);
-    },
-  },
-  created() {
-    // this.initCalculate();
-  },
-  unmounted() {
-    // this.stopCalculate();
-  },
+  }
 };
 </script>
 
@@ -108,13 +87,16 @@ export default {
   height: 50px;
   display: flex;
   padding: 0 12px;
+
   &:nth-child(even) {
     background-color: #ecf3fa;
   }
+
   &:first-child {
     height: 57px;
   }
 }
+
 @media (max-width: 992px) {
   .variant-policy-feature {
     height: auto;

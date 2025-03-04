@@ -13,7 +13,8 @@ export const TokenBoxTestData = {
       valueKey: "value",
       textKey: "text",
       showClear: true,
-      placeholder: "Placeholder!!!"
+      placeholder: "Placeholder!!!",
+      searchable: false
     }
   },
   propsDataError: {

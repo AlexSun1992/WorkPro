@@ -249,6 +249,7 @@ export default {
     confirmCancelHandler() {
       confirmResolve(false);
     },
+
     async updateValue(e) {
       const field = this.data.find((f) => f.fieldId === e.fieldId);
 
