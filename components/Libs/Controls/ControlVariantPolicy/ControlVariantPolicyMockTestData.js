@@ -37,7 +37,9 @@ export const ControlVariantPolicyProps = {
     "STHEFTVEH": "Хищение ТС",
     "SNOEVENTRESTRICTIONS": "Без ограничений по страховым событиям",
     "text": "scaption",
-    "value": 1
+    "value": 1,
+    "S_ORDER": ["sfranchise","saccident","sforeignobjects","stheftveh","sactions","srepair","snoeventrestrictions"],
+    "S_INFO": ["Тест1","Тест2","Тест3","Тест4","Тест5","Тест6","Тест7"]
   }, {
     "IDFRANCHISE": "NULL",
     "SREPAIR": "N",

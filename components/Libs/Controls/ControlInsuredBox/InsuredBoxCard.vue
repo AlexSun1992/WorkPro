@@ -7,7 +7,10 @@
       <div class="box-title">{{ getPolicyCardOptions.SNAME }}</div>
       <div class="box-description">
         <div v-for="(policyOption, index) in card" :key="index">
-          <InsuredBoxField :policyOption="policyOption" />
+          <InsuredBoxField
+            :policyOption="policyOption"
+            :tooltip="tooltipData[index]"
+          />
         </div>
       </div>
       <div ref="button" class="box-button">
@@ -35,6 +38,10 @@ export default {
     },
     index: {
       type: Number,
+      default: null,
+    },
+    tooltipData: {
+      type: Array,
       default: null,
     },
   },
