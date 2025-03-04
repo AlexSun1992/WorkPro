@@ -29,7 +29,7 @@
           <ControlDropdown
             v-if="availableTabs.length > 1"
             :options="availableTabs"
-            value-key="ID"
+            value-key="NITEM"
             placeholder="Текущий этап"
             @input="goToTab($event)"
             v-model="value"
@@ -131,13 +131,13 @@ export default {
       return this.wizardCursor ?? [];
     },
     currentTab() {
-      return this.wizardNavigation;
+      return this.wizardNavigation?.current ?? {};
     },
     currentId() {
-      return this.wizardNavigation?.IDCARD ?? -1;
+      return this.currentTab?.IDCARD ?? -1;
     },
     currentStep() {
-      return this.wizardCursor.find((item) => item.ID === this.currentId);
+      return this.wizardCursor.find((item) => item.NITEM === this.currentId);
     },
     firstAvailableStep() {
       return this.availableTabs[0] ?? {name: ""}
@@ -179,13 +179,13 @@ export default {
     },
     currentTabOrder() {
       return (
-        this.tabs.find((item) => item.ID === this.currentTab.IDCARD)
+        this.tabs.find((item) => item.NITEM === this.currentTab.IDCARD)
           ?.NORDER ?? 0
       );
     },
     currentTabName() {
       return (
-        this.tabs.find((item) => item.ID === this.currentTab.IDCARD)
+        this.tabs.find((item) => item.NITEM === this.currentTab.IDCARD)
           ?.SNAME ?? ""
       );
     },
