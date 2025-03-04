@@ -752,7 +752,11 @@ export default {
   ],
   wizardIDCARDS: [4528, 4530, 4526, 4529, 4527, 4538, 4531, 4532, 4533, 4534, 4535, 4536, 4537],
   wizardNavigation: {
-    REL: "2",
-    IDCARD: 4529,
+    back: {},
+    current: {
+      REL: "2",
+      IDCARD: 1041,
+    },
+    next: {},
   },
 }

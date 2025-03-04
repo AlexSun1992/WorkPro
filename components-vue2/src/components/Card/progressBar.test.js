@@ -20,7 +20,7 @@ describe("Wizard ProgressBar", () => {
   });
 
   test("Change current step", async () => {
-    const newId = propsData.wizardCursor[0].ID;
+    const newId = propsData.wizardCursor[0].NITEM;
     wrapper = mount(ProgressBar, {
       propsData,
       stubs: { ControlDropdown },
