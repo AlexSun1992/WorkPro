@@ -62,7 +62,6 @@
       >
         <div v-for="(item, index) in tabs" :key="index">
           <div
-            @click="$router.push(getURL(item, index))"
             class="col-1 text-center position-relative"
             :class="{ active: item.NORDER <= currentTab.NORDER }"
           >
@@ -113,12 +112,7 @@ export default {
     wizardNavigation: {
       type: Object,
       required: false,
-      default() {
-        return {
-          REL: "",
-          IDCARD: -1,
-        }
-      },
+      default() {},
     },
   },
   data() {
@@ -140,7 +134,7 @@ export default {
       return this.wizardCursor.find((item) => item.NITEM === this.currentId);
     },
     firstAvailableStep() {
-      return this.availableTabs[0] ?? {name: ""}
+      return this.availableTabs[0] ?? { name: "" };
     },
     name() {
       return this.currentStep?.SNAME ?? "";
@@ -204,26 +198,8 @@ export default {
   },
 
   methods: {
-    getURL(itemId) {
-      return "";
-      /* const { params } = this.$route;
-      const _itemId = itemId ?? "";
-      const cardId = params.idCard ?? 0;
-      const realId = this.getRelByCardId(itemId);
-
-      return (
-        !!realId &&
-        !!cardId &&
-        `/cabinet/wizard/${params.idWizard}/${params.idModule}/0/${_itemId}/${cardId}/${realId}`
-      ); */
-    },
     goToTab(ev) {
       this.$emit("update", ev);
-    },
-    getRelByCardId(id = -1) {
-      const { stepsList } = this;
-
-      return stepsList.find((item) => id === +item.cardId)?.idReal ?? null;
     },
   },
 };
