@@ -1,10 +1,10 @@
 <template>
   <div>
     <ProgressBar
-      :wizard-cursor="wizardCursor"
-      :wizard-rels="wizardRELS"
-      :wizard-i-d-c-a-r-d-s="wizardIDCARDS"
-      :wizard-navigation="wizardNavigation"
+      :wizard-cursor="progressBarDemo.wizardCursor"
+      :wizard-rels="progressBarDemo.wizardRELS"
+      :wizard-i-d-c-a-r-d-s="progressBarDemo.wizardIDCARDS"
+      :wizard-navigation="progressBarDemo.wizardNavigation"
       @update="updateStep"
     />
     <div v-if="isSaving">Загрузка...</div>
@@ -94,6 +94,7 @@ import { isCaptchaNeeded } from "./isCaptchaNeeded";
 import { isCriticalError } from "/../plugins/auth/toast.helper";
 import { getParams, saveCookies, setURLParams } from "./helpers";
 import ProgressBar from "./ProgressBar.vue";
+import progressBarDemo from "./progressBar.demo";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -149,6 +150,9 @@ export default {
     };
   },
   computed: {
+    progressBarDemo() {
+      return progressBarDemo
+    },
     ...mapGetters("data_card", [
       "getForm",
       "getFormParams",
