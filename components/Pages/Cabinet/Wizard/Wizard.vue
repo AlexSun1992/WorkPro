@@ -4,36 +4,40 @@
       <div v-if="cardCaption" class="title-page position-relative ml-0">
         {{ cardCaption }}
       </div>
+
       <template v-if="isShowCardTemplate">
         <v-runtime-template :template="settings.cardtemplate" />
       </template>
 
-      <b-nav
-        v-else-if="pages && tabs.length < 9"
-        tabs
-        justified
-        class="mb-2 sticky-top"
-      >
-        <b-nav-item
-          v-for="(item, index) in tabs"
-          :key="item.id"
-          :to="getURL(item, index)"
-          exact
-          exact-active-class="active"
+      <template v-else-if="pages">
+        <b-nav
+          v-if="!isWizardProgressBar"
+          tabs
+          justified
+          class="mb-2 sticky-top"
         >
-          {{ item.name }}
-        </b-nav-item>
-      </b-nav>
+          <b-nav-item
+            v-for="(item, index) in tabs"
+            :key="item.id"
+            :to="getURL(item, index)"
+            exact
+            exact-active-class="active"
+          >
+            {{ item.name }}
+          </b-nav-item>
+        </b-nav>
 
-      <template v-else-if="pages && tabs.length > 8">
-        <WizardProgressBar
-          v-if="settingsByItem.isUploader === false"
-          :current-tab="currentTab"
-          :tabs="tabs"
-          :qty="settings.wizard.length"
-          :loading="isLoading"
-        />
+        <template v-else>
+          <WizardProgressBar
+            v-if="settingsByItem.isUploader === false"
+            :current-tab="currentTab"
+            :tabs="tabs"
+            :qty="settings.wizard.length"
+            :loading="isLoading"
+          />
+        </template>
       </template>
+
 
       <nuxt-child
         ref="child"
@@ -193,11 +197,17 @@ export default {
     isLoadSuccessFull() {
       return this.$store.getters["uploader/isLoadSuccessFull"];
     },
+    maxTabsForIconWizard() {
+      return this.$store.getters["wizard/iconTabsCount"];
+    },
     isUseCardTemplate() {
       return Boolean(
         this.$store.getters["menu/getMenuById"](this.$route.params.idItem)
           ?.SVJCARDTEMPLATE && !this.$store.getters[`data_card/getForm`]?.data
       );
+    },
+    isWizardProgressBar() {
+      return this.tabs.length > this.maxTabsForIconWizard;
     }
   },
   unmounted() {

@@ -495,6 +495,7 @@ export default {
                 this.$route.params
               );
             }
+            this.stripeLoaded();
             fetchPoutvalue(resp?.data[0]?.RESULT, {
               router: this.$router,
               isInNewWindow: false,
