@@ -84,7 +84,7 @@
         </form>
         <div v-if="isFormErrorMessage" class="error-block d-block mt-3">
           <transition name="fade" mode="out-in">
-            <p :key="currentErrorKey" v-html="currentErrorMessage" />
+            <p :key="currentErrorKey" v-html="currentErrorMessage"/>
           </transition>
         </div>
       </div>
@@ -227,16 +227,16 @@ export default {
     },
     isSaveCardInProgress() {
       return this.$store.state.data_card.loading;
-    }
+    },
   },
   watch: {
     isSaveCardInProgress(val) {
-      if(!val && this.isSaveDataInProgress) {
+      if (!val && this.isSaveDataInProgress) {
         this.isSaveDataInProgress = false;
 
         this.afterSaveAction();
       }
-    }
+    },
   },
   methods: {
     showModal() {
