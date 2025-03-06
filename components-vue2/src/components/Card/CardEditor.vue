@@ -2,7 +2,7 @@
   <div>
     <ProgressBar
       :wizard-cursor="progressBarDemo.wizardCursor"
-      :wizard-rels="progressBarDemo.wizardRELS"
+      :wizard-rels="progressBarDemo.wizardRels"
       :wizard-i-d-c-a-r-d-s="progressBarDemo.wizardIDCARDS"
       :wizard-navigation="progressBarDemo.wizardNavigation"
       @update="updateStep"
@@ -172,6 +172,7 @@ export default {
         ?.LUSEBLOCK;
     },
     wizardRELS() {
+      debugger
       if (this.params.idWizard) {
         const stringWizardRELS = this.$store.getters["wizard/getWizard"]?.REL;
         if (stringWizardRELS) {
