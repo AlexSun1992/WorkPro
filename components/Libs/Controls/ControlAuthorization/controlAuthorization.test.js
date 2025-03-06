@@ -5,9 +5,15 @@ import controlAuthorizationTestData from "./controlAuthorizationTestData";
 describe("ControlAuthorization", () => {
   let wrapper;
 
-  test("is phoneNumber valid", () => {
-    wrapper = mount(ControlAuthorization, {});
+  beforeEach(() => {
+    wrapper = mount(ControlAuthorization, {
+      mocks: {
+        $store: { state: { data_card: { loading: false } } },
+      },
+    });
+  })
 
+  test("is phoneNumber valid", () => {
     wrapper.vm.showModal();
     wrapper.vm.$nextTick(() => {
       wrapper.setData({
@@ -20,8 +26,6 @@ describe("ControlAuthorization", () => {
   });
 
   test("is phoneNumber Invalid", () => {
-    wrapper = mount(ControlAuthorization, {});
-
     wrapper.vm.showModal();
     wrapper.vm.$nextTick(() => {
       wrapper.setData({ phoneNumber: "" });
@@ -32,8 +36,6 @@ describe("ControlAuthorization", () => {
   });
 
   test("is form data reset", () => {
-    wrapper = mount(ControlAuthorization, {});
-
     wrapper.vm.showModal();
     wrapper.setData({
       phoneNumber: controlAuthorizationTestData.validPhoneNumber,
@@ -45,12 +47,10 @@ describe("ControlAuthorization", () => {
   });
 
   test("is smsCode valid", () => {
-    wrapper = mount(ControlAuthorization, {});
-
     wrapper.vm.showModal();
     wrapper.vm.$nextTick(() => {
       wrapper.setData({
-        SMSCode: controlAuthorizationTestData.validSMSCode
+        SMSCode: controlAuthorizationTestData.validSMSCode,
       });
 
       expect(wrapper.vm.isPhoneValid).toBeTruthy();
@@ -59,12 +59,10 @@ describe("ControlAuthorization", () => {
   });
 
   test("is smsCode valid", () => {
-    wrapper = mount(ControlAuthorization, {});
-
     wrapper.vm.showModal();
     wrapper.vm.$nextTick(() => {
       wrapper.setData({
-        SMSCode: ""
+        SMSCode: "",
       });
 
       expect(wrapper.vm.isPhoneValid).toBeTruthy();
