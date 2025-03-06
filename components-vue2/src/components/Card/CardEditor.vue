@@ -359,6 +359,10 @@ export default {
     async goNext() {
       if (this.validateData(this.getForm)) {
         this.isSaving = true;
+        this.$store.commit("data_card/setValueByName", {
+          name: "Save",
+          value: "NULL",
+        });
         await this.saveCard();
         if (!this.getSavedError) {
           if (this.wizardNavigation?.next) {
@@ -375,12 +379,14 @@ export default {
         this.init();
       }
     },
-    wizardSave() {
-      this.$store.commit("data_card/setValueByName", {
-        name: "Save",
-        value: "CLICKED",
-      });
-      this.saveCard({}, "wizardSave");
+    async wizardSave(e) {
+      if (e === "Save") {
+        this.$store.commit("data_card/setValueByName", {
+          name: "Save",
+          value: "CLICKED",
+        });
+      }
+      await this.saveCard({}, "wizardSave");
     },
     scrollToError() {
       const divWithInvalidClass =
@@ -423,6 +429,7 @@ export default {
             value !== 0) ||
           (error && data[i].visible)
         ) {
+          console.log(data[i]);
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
           this.$store.commit("data_card/saveButtonClicked", false);
@@ -452,12 +459,13 @@ export default {
         });
 
         if (resp.status === 200) {
-          if (
-            (resp.data[0].ACTION !== "redirect" && !resp.data[0].IDWIZARD) ||
-            action === "wizardSave"
-          ) {
+          setURLParams(resp.data[0]);
+          if (resp.data[0].ACCESS_TOKEN) {
+            saveCookies(resp.data[0].ACCESS_TOKEN, resp.data[0].REFRESH_TOKEN);
+          }
+          if (resp.data[0].ACTION !== "redirect" || action === "wizardSave") {
             await this.$store.dispatch("data_card/fetchForm", {
-              ...this.params,
+              ...this.getFormParams,
               zone,
             });
             const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
@@ -471,15 +479,6 @@ export default {
           }
           if (resp.data[0].ACTION === "redirect") {
             window.location.href = resp.data[0].SURL;
-          }
-          if (resp.data[0].IDWIZARD && action !== "wizardSave") {
-            setURLParams(resp.data[0]);
-            if (resp.data[0].ACCESS_TOKEN) {
-              saveCookies(
-                resp.data[0].ACCESS_TOKEN,
-                resp.data[0].REFRESH_TOKEN
-              );
-            }
           }
         }
         if (resp.status === 520 && resp?.data?.MESSAGE) {
@@ -606,7 +605,8 @@ export default {
           (item) => item.NTYPE === 38 && item.ID === actionId
         );
         const actionExecute = menu.ACTIONSCUR.find(
-          (item) => item.NTYPE === 4 && item.ID === actionId
+          (item) =>
+            item.NTYPE === 4 || (item.NTYPE === 56 && item.ID === actionId)
         );
         if (actionSaveCard?.ID === actionId) {
           this.$store.commit("data_card/saveButtonClicked", true);
@@ -632,8 +632,8 @@ export default {
             {
               actionId: actionExecute?.ID,
               relActionId: actionExecute?.REL,
-              relId: this.rel,
-              rowId: this.cardId,
+              relId: this.params.idRel,
+              rowId: this.params.idCard,
               body: this.$store.getters["data_card/getActionParams"],
               zone: this.zone,
             }
