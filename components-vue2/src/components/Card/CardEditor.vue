@@ -172,7 +172,6 @@ export default {
         ?.LUSEBLOCK;
     },
     wizardRELS() {
-      debugger
       if (this.params.idWizard) {
         const stringWizardRELS = this.$store.getters["wizard/getWizard"]?.REL;
         if (stringWizardRELS) {
