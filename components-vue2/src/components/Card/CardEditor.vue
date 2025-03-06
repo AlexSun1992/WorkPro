@@ -1,10 +1,10 @@
 <template>
   <div>
     <ProgressBar
-      :wizard-cursor="progressBarDemo.wizardCursor"
-      :wizard-rels="progressBarDemo.wizardRels"
-      :wizard-i-d-c-a-r-d-s="progressBarDemo.wizardIDCARDS"
-      :wizard-navigation="progressBarDemo.wizardNavigation"
+      :wizard-cursor="wizardCursor"
+      :wizard-rels="wizardRels"
+      :wizard-i-d-c-a-r-d-s="wizardIDCARDS"
+      :wizard-navigation="wizardNavigation"
       @update="updateStep"
     />
     <div v-if="isSaving">Загрузка...</div>
@@ -179,14 +179,14 @@ export default {
           return stringWizardRELS.split("|");
         }
       }
-      return [];
+      return this.progressBarDemo.wizardRels;
     },
     wizardCursor() {
       if (this.params.idWizard) {
         return this.$store.getters["menu/getMenuById"](this.params.idWizard)
           ?.WIZARDCUR;
       }
-      return [];
+      return this.progressBarDemo.wizardCursor;
     },
     wizardIDCARDS() {
       if (this.params.idWizard) {
@@ -195,7 +195,7 @@ export default {
           return stringWizardCARDS.split(";").map(Number);
         }
       }
-      return [];
+      return this.progressBarDemo.wizardIDCARDS;
     },
     wizardNavigation() {
       if (this.params.idWizard && this.wizardIDCARDS) {
@@ -236,7 +236,7 @@ export default {
               : null,
           };
       }
-      return {};
+      return this.progressBarDemo.wizardNavigation;
     },
     eventLocalHandler() {
       return () =>
