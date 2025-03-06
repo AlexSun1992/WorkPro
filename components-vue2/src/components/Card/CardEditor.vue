@@ -685,9 +685,10 @@ export default {
     updateStep(ev) {
       const paramData = this.wizardCursor.find((item) => item.ID === ev);
 
-      this.params.idItem = paramData.ID;
+      this.params.idItem = ev;
+      // this.params.idItem = paramData.ID;
       // TODO Возможно, нужно как-то более правильно определить IDREL
-      this.params.idRel = this.wizardRELS[paramData?.NORDER ?? 0 - 1];
+      // this.params.idRel = this.wizardRELS[paramData?.NORDER ?? 0 - 1];
     },
   },
 };
