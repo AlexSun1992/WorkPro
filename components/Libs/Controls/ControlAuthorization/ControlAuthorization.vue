@@ -304,6 +304,8 @@ export default {
         return true;
       }
 
+      this.closeModal();
+
       return false;
     },
     resetForm() {
