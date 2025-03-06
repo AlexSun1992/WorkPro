@@ -4,7 +4,6 @@ import { OS_TYPES, WEBVIEW_TYPES } from "../utils/clientOs/clientOsConstants.mjs
 
 export const mobile2Service = (url) => {
   const instance = axios.create({});
-
   instance.defaults.timeout = 60000;
   instance.defaults.timeoutErrorMessage = "Запрос выполняется больше 60 секунд";
   instance.defaults.baseURL =

@@ -38,7 +38,6 @@
         </template>
       </template>
 
-
       <nuxt-child
         ref="child"
         :key="$route.fullPath"
@@ -208,7 +207,10 @@ export default {
     },
     isWizardProgressBar() {
       return this.tabs.length > this.maxTabsForIconWizard;
-    }
+    },
+    progressComponent() {
+      return this.tabs && this.tabs.length < 9 ? WizardButtons : WizardLine;
+    },
   },
   unmounted() {
     this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
