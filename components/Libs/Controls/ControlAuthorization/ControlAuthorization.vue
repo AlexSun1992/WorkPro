@@ -84,7 +84,7 @@
         </form>
         <div v-if="isFormErrorMessage" class="error-block d-block mt-3">
           <transition name="fade" mode="out-in">
-            <p :key="currentErrorKey" v-html="currentErrorMessage"/>
+            <p :key="currentErrorKey" v-html="currentErrorMessage" />
           </transition>
         </div>
       </div>
@@ -110,6 +110,30 @@ export default {
       }),
     },
   },
+  data: () => ({
+    isModalVisible: false,
+    isSMSRequested: false,
+    phoneNumber: "",
+    SMSCode: "",
+    isSMSRequestInProgress: false,
+    isPhoneNumberTouched: false,
+    isSmsCodeTouched: false,
+    isAuthDataRequestInProgress: false,
+    wrongAuthData: false,
+    isPhoneNumberUpdated: false,
+    isSendDataInProgress: false,
+    duration: 60,
+    smsErrorMessage: "Проверьте корректность введенных данных.",
+    isFormErrorMessage: false,
+    verifyTimerKey: 1,
+    currentErrorKey: 0,
+    isSaveDataInProgress: false,
+    saveFormErrorMessages: [
+      "Что-то пошло не так &#128557;",
+      "Попробуйте повторить попытку позже",
+      "Всё обязательно получится!&#128521;",
+    ],
+  }),
   computed: {
     controlAuthorizationConstants() {
       return controlAuthorizationConstants;
@@ -201,30 +225,19 @@ export default {
     currentErrorMessage() {
       return this.saveFormErrorMessages[this.currentErrorKey];
     },
+    isSaveCardInProgress() {
+      return this.$store.state.data_card.loading;
+    }
   },
-  data: () => ({
-    isModalVisible: false,
-    isSMSRequested: false,
-    phoneNumber: "",
-    SMSCode: "",
-    isSMSRequestInProgress: false,
-    isPhoneNumberTouched: false,
-    isSmsCodeTouched: false,
-    isAuthDataRequestInProgress: false,
-    wrongAuthData: false,
-    isPhoneNumberUpdated: false,
-    isSendDataInProgress: false,
-    duration: 60,
-    smsErrorMessage: "Проверьте корректность введенных данных.",
-    isFormErrorMessage: false,
-    verifyTimerKey: 1,
-    currentErrorKey: 0,
-    saveFormErrorMessages: [
-      "Что-то пошло не так &#128557;",
-      "Попробуйте повторить попытку позже",
-      "Всё обязательно получится!&#128521;",
-    ],
-  }),
+  watch: {
+    isSaveCardInProgress(val) {
+      if(!val && this.isSaveDataInProgress) {
+        this.isSaveDataInProgress = false;
+
+        this.afterSaveAction();
+      }
+    }
+  },
   methods: {
     showModal() {
       this.resetForm();
@@ -267,22 +280,31 @@ export default {
       this.SMSCode = "";
       this.isFormErrorMessage = false;
     },
-    async sendAuthData() {
+    sendAuthData() {
       this.isSendDataInProgress = true;
       this.isAuthDataRequestInProgress = true;
 
       this.updateStoreValue();
+      this.isSaveDataInProgress = true;
+      this.$emit("saveCard");
+    },
+    afterSaveAction() {
+      const isSaveError = this.$store.getters["data_card/getSavedError"];
+      const errorMessage = this.$store.getters["data_card/getErrorMessage"];
 
-      try {
-        this.$emit("saveCard");
-        this.closeModal();
-      } catch (err) {
+      this.isAuthDataRequestInProgress = false;
+      this.isSendDataInProgress = false;
+
+      if (isSaveError) {
+        this.saveFormErrorMessages = [errorMessage];
         this.isFormErrorMessage = true;
-        this.isAuthDataRequestInProgress = false;
 
-        this.updateFormDataErrorMessage();
-        console.error(`sendAuthData: ${err}`);
+        console.error(`sendAuthData: ${errorMessage}`);
+
+        return true;
       }
+
+      return false;
     },
     resetForm() {
       Object.assign(this.$data, this.$options.data());
@@ -327,11 +349,13 @@ export default {
   color: #eb5757;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
