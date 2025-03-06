@@ -2,7 +2,7 @@
   <div>
     <ProgressBar
       :wizard-cursor="wizardCursor"
-      :wizard-rels="wizardRels"
+      :wizard-rels="wizardRELS"
       :wizard-i-d-c-a-r-d-s="wizardIDCARDS"
       :wizard-navigation="wizardNavigation"
       @update="updateStep"
