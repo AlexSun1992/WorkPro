@@ -1,10 +1,11 @@
 <template>
   <div>
-    <Progress-bar
-      :wizard-cursor="wizardCursor"
-      :wizard-rels="wizardRELS"
-      :wizard-i-d-c-a-r-d-s="wizardIDCARDS"
-      :wizard-navigation="wizardNavigation"
+    <ProgressBar
+      :wizard-cursor="progressBarDemo.wizardCursor"
+      :wizard-rels="progressBarDemo.wizardRELS"
+      :wizard-i-d-c-a-r-d-s="progressBarDemo.wizardIDCARDS"
+      :wizard-navigation="progressBarDemo.wizardNavigation"
+      @update="updateStep"
     />
     <div v-if="isSaving">Загрузка...</div>
     <FormBlock
@@ -93,6 +94,7 @@ import { isCaptchaNeeded } from "./isCaptchaNeeded";
 import { isCriticalError } from "/../plugins/auth/toast.helper";
 import { getParams, saveCookies, setURLParams } from "./helpers";
 import ProgressBar from "./ProgressBar.vue";
+import progressBarDemo from "./progressBar.demo";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -148,6 +150,9 @@ export default {
     };
   },
   computed: {
+    progressBarDemo() {
+      return progressBarDemo
+    },
     ...mapGetters("data_card", [
       "getForm",
       "getFormParams",
@@ -676,6 +681,13 @@ export default {
     },
     updateBlurValue($event) {
       this.callScript($event, $event);
+    },
+    updateStep(ev) {
+      const paramData = this.wizardCursor.find((item) => item.ID === ev);
+
+      this.params.idItem = paramData.ID;
+      // TODO Возможно, нужно как-то более правильно определить IDREL
+      this.params.idRel = this.wizardRELS[paramData?.NORDER ?? 0 - 1];
     },
   },
 };
