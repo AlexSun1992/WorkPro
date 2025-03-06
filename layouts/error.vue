@@ -1,47 +1,26 @@
 <template>
   <div class="container">
     <h1>Ошибка</h1>
-    <div v-if="errorComputed">
-      <JsonViewer :value="errorComputed"
-                  :expand-depth="2"
-                  :expanded="true"
-                  :show-array-index="true"
-      />
-    </div>
-
+    <div v-if="error">{{ errorMessage }}</div>
   </div>
 </template>
 
 <script>
-import JsonViewer from 'vue-json-viewer/ssr'
-import 'vue-json-viewer/style.css'
+import { getErrorMessage } from "@/utils/transform";
 
 export default {
-  name: "ErrorLayout",
-  layout: "ErrorLayout",
   head: {
     title: "Страница не найдена",
   },
-  components: { JsonViewer },
-  props: {
-    error: {
-      type: String,
-      default: ""
-    }
-  },
+  props: ["error"],
+  layout: "ErrorLayout",
   computed: {
-    errorComputed() {
-      if (this.isHaveStoreError) {
-        return this.$store.getters["custom_error_message/errors"];
+    errorMessage() {
+      if (this.error === undefined) {
+        return false;
       }
-
-      return this.error || "Что-то пошло не так 😪";
+      return getErrorMessage(this.error);
     },
-    isHaveStoreError() {
-      const storeError = this.$store.getters["custom_error_message/errors"];
-
-      return Boolean(storeError?.length);
-    }
   },
 };
 </script>

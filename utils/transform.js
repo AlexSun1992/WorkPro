@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { getErrorMessage as aErrorMessage } from "../plugins/auth/toast.helper";
-
 const getErrorMessage = (data) => {
   if (data?.INFO) {
     const isJson =
