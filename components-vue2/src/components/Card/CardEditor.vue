@@ -1,6 +1,7 @@
 <template>
   <div>
     <ProgressBar
+      v-if="isShowProgressBar"
       :wizard-cursor="wizardCursor"
       :wizard-rels="wizardRELS"
       :wizard-i-d-c-a-r-d-s="wizardIDCARDS"
@@ -95,6 +96,7 @@ import { isCriticalError } from "/../plugins/auth/toast.helper";
 import { getParams, saveCookies, setURLParams } from "./helpers";
 import ProgressBar from "./ProgressBar.vue";
 import progressBarDemo from "./progressBar.demo";
+import { PROGRESS_BAR_CARDS_ID, ZONES } from "./cardEditorConst";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -252,6 +254,9 @@ export default {
     isCaptchaNeededCheck() {
       return this.isCaptchaNeeded;
     },
+    isShowProgressBar() {
+      return PROGRESS_BAR_CARDS_ID.includes(this.params.idItem) && ZONES.includes(this.params.zone);
+    }
   },
 
   watch: {
