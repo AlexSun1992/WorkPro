@@ -1,63 +1,19 @@
-import clientOsData from "./clientOsData.mjs";
-import clientOsPlatforms from "./clientOsPlatforms.mjs";
-import { OS_TYPES, WEBVIEW_TYPES } from "./clientOsConstants.mjs";
+import { WEBVIEW_TYPES } from "./clientOsConstants.mjs";
 
 export default {
   updateMobileViewConfig(config) {
-    const webviewData = this.getWebviewData(config);
+    const cookies = config?.headers.common.Cookie ?? "";
     const newConfig = { ...config };
 
-    newConfig.headers["X-DEV"] = webviewData.platform;
-    newConfig.headers["X-Application"] = webviewData.webview;
+    newConfig.headers["X-Application"] = this.getWebview(cookies);
 
     return newConfig;
   },
-  getWebviewData(config) {
-    const userAgent = config?.headers.common["user-agent"] ?? "";
-    const cookies = config?.headers.common.Cookie ?? "";
-    const result = { platform: OS_TYPES.default, webview: WEBVIEW_TYPES.VueJS };
+
+  getWebview(cookies) {
     const isWebview = this.isWebview(cookies);
 
-    result.webview = this.getWebview(isWebview);
-    result.platform = this.getMobilePlatform(userAgent, isWebview);
-
-    return result;
-  },
-  /**
-   *
-   * @param userAgent {string} - либо передать вызов метода clientOs.getPlatform() который должен быть выполнент на клиенте
-   * @param isWebview {boolean}
-   * @returns {Number}
-   */
-  getMobilePlatform(userAgent, isWebview) {
-    const platformOs = this.getOsInfo(userAgent);
-
-    if (platformOs) {
-      return this.getOsPlatform(platformOs, isWebview);
-    }
-
-    return OS_TYPES.default;
-  },
-
-  getOsPlatform(platformOs, isWebview) {
-    if (!platformOs) {
-      return OS_TYPES.default;
-    }
-    if (clientOsPlatforms.android.includes(platformOs)) {
-      return isWebview ? OS_TYPES.webviewAndroid : OS_TYPES.android;
-    }
-    if (clientOsPlatforms.ios.includes(platformOs)) {
-      return isWebview ? OS_TYPES.webviewIos : OS_TYPES.ios;
-    }
-    return OS_TYPES.web;
-  },
-  getWebview(isWebview) {
-    return isWebview ? WEBVIEW_TYPES.isWebview : WEBVIEW_TYPES.VueJS;
-  },
-  getOsInfo(userAgent = "") {
-    const currentOs = clientOsData.find(item => userAgent.search(item.regex) >= 0);
-
-    return currentOs?.name ?? "";
+    return isWebview ? this.getWebviewApp(cookies) : WEBVIEW_TYPES.VueJS;
   },
 
   isWebview(cookies = "") {
@@ -65,10 +21,35 @@ export default {
 
     if (partsOfCookies) {
       return partsOfCookies.some(item => {
-        return item.split("=")[0] === "isWebview";
+        return item.split("=")[0] === WEBVIEW_TYPES.isWebview;
       });
     }
 
     return false;
+  },
+
+  processCookies(cookies) {
+    return cookies.toLowerCase().replace(" ", "");
+  },
+
+  findCurrentVersion(cookiesLower, app) {
+    const versions = Object.keys(app);
+
+    return versions.find(item => {
+      const reg = new RegExp(`\\b${item}\\b`, 'gi');
+
+      return reg.test(cookiesLower);
+    });
+  },
+
+  getWebviewApp(cookies) {
+    const app = {
+      "app=rm1": WEBVIEW_TYPES.RM1,
+      "app=rm2": WEBVIEW_TYPES.RM2
+    };
+    const cookiesLower = this.processCookies(cookies);
+    const currentVersion = this.findCurrentVersion(cookiesLower, app);
+
+    return currentVersion ? app[currentVersion] : WEBVIEW_TYPES.isWebview;
   }
 }
