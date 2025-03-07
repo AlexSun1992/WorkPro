@@ -90,7 +90,7 @@
 
 <script>
 // eslint-disable-next-line
-import ControlDropdown from "../../../../components/Libs/Controls/ControlDropdown/ControlDropdown.vue";
+import ControlDropdown from "../../../../../components/Libs/Controls/ControlDropdown/ControlDropdown.vue";
 
 export default {
   name: "ProgressBar",

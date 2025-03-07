@@ -94,8 +94,8 @@ import * as Sentry from "@sentry/vue";
 import { isCaptchaNeeded } from "./isCaptchaNeeded";
 import { isCriticalError } from "/../plugins/auth/toast.helper";
 import { getParams, saveCookies, setURLParams } from "./helpers";
-import ProgressBar from "./ProgressBar.vue";
-import progressBarDemo from "./progressBar.demo";
+import ProgressBar from "./ProgressBar/ProgressBar.vue";
+import progressBarDemo from "./ProgressBar/progressBar.demo";
 import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 
 Vue.use(LoadScript);

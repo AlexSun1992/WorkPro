@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import ProgressBar from "./ProgressBar.vue";
 import progressBarMock from "./progressBar.mock";
 // eslint-disable-next-line
-import ControlDropdown from "../../../../components/Libs/Controls/ControlDropdown/ControlDropdown.vue";
+import ControlDropdown from "../../../../../components/Libs/Controls/ControlDropdown/ControlDropdown.vue";
 
 const propsData = progressBarMock;
 describe("Wizard ProgressBar", () => {
