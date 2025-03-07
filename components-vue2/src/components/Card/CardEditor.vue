@@ -96,7 +96,7 @@ import { isCriticalError } from "/../plugins/auth/toast.helper";
 import { getParams, saveCookies, setURLParams } from "./helpers";
 import ProgressBar from "./ProgressBar.vue";
 import progressBarDemo from "./progressBar.demo";
-import { PROGRESS_BAR_CARDS_ID, ZONES } from "./cardEditorConst";
+import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
@@ -255,7 +255,7 @@ export default {
       return this.isCaptchaNeeded;
     },
     isShowProgressBar() {
-      return PROGRESS_BAR_CARDS_ID.includes(this.params.idItem) && ZONES.includes(this.params.zone);
+      return PROGRESS_BAR_CARDS_ID.includes(this.params.idItem) && PROGRESS_BAR_ZONES.includes(this.params.zone);
     }
   },
 
