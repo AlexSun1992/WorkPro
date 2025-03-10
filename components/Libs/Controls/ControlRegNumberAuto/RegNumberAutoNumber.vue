@@ -1,5 +1,5 @@
 <template>
-  <div class="row align-self-center">
+  <div class="row align-items-center">
     <div class="col-12 col-lg-auto order-1 order-lg-1">
       <b-input-group
         class="gos-number"
@@ -33,7 +33,7 @@
       </b-input-group>
     </div>
 
-    <div class="col-12 col-lg-auto order-4 order-lg-2">
+    <div class="col-12 col-lg-auto mt-3 mt-lg-0 order-4 order-lg-2">
       <b-checkbox
         class="checkbox-hide"
         v-model="isWithoutCarNumber"
