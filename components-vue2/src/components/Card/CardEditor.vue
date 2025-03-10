@@ -255,7 +255,7 @@ export default {
       return this.isCaptchaNeeded;
     },
     isShowProgressBar() {
-      return PROGRESS_BAR_CARDS_ID.includes(this.params.idItem) && PROGRESS_BAR_ZONES.includes(this.params.zone);
+      return PROGRESS_BAR_CARDS_ID.includes(this.menuId) && PROGRESS_BAR_ZONES.includes(this.zone);
     }
   },
 
