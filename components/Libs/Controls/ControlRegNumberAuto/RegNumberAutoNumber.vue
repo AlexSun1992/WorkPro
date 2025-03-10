@@ -1,54 +1,59 @@
 <template>
-  <div class="row">
-    <div class="col-12 col-lg-6 col-xl-4">
-      <b-input-group class="gos-number"
-                     :class="{
-                              'is-invalid': isValid === false && regNumberDisabled === false,
-                              'is-valid': isValid,
-                              }">
-        <RegNumberInput v-model="numberValue"
-                        @input="numberUpdateValue"
-                        :formatter="numberFormatter"
-                        @keydown="numberKeydown($event)"
-                        @blur="numberBlur"
-                        :disabled="regNumberDisabled"
-                        placeholder="А 000 АА"
-                        autocomplete="off"
-                        ref="number"/>
+  <div class="row align-self-center">
+    <div class="col-12 col-lg-auto order-1 order-lg-1">
+      <b-input-group
+        class="gos-number"
+        :class="{
+          'is-invalid': isValid === false && regNumberDisabled === false,
+          'is-valid': isValid,
+        }"
+      >
+        <RegNumberInput
+          v-model="numberValue"
+          @input="numberUpdateValue"
+          :formatter="numberFormatter"
+          @keydown="numberKeydown($event)"
+          @blur="numberBlur"
+          :disabled="regNumberDisabled"
+          placeholder="А 000 АА"
+          autocomplete="off"
+          ref="number"
+        />
 
-        <RegNumberInput v-model="codeValue"
-                        @input="codeUpdateValue"
-                        :formatter="codeFormatter"
-                        @blur="codeBlur"
-                        :disabled="regNumberDisabled"
-                        placeholder="000"
-                        autocomplete="off"
-                        ref="code"/>
+        <RegNumberInput
+          v-model="codeValue"
+          @input="codeUpdateValue"
+          :formatter="codeFormatter"
+          @blur="codeBlur"
+          :disabled="regNumberDisabled"
+          placeholder="000"
+          autocomplete="off"
+          ref="code"
+        />
       </b-input-group>
+    </div>
 
+    <div class="col-12 col-lg-auto order-4 order-lg-2">
+      <b-checkbox
+        class="checkbox-hide"
+        v-model="isWithoutCarNumber"
+        @change="goWithoutCarNumber($event)"
+      >
+        Госномера ещё нет
+        <br />
+        <span class="text-success">заполню данные вручную</span>
+      </b-checkbox>
+    </div>
+    <div class="col-12 order-2 order-lg-3">
       <b-form-invalid-feedback
         v-if="isValid !== null && regNumberDisabled === false"
         :state="isValid"
-      >{{
-          "Пожалуйста, введите корректно госномер"
-        }}
+        >{{ "Пожалуйста, введите корректно госномер" }}
       </b-form-invalid-feedback>
-
-      <!--      <b-form-invalid-feedback
-              v-else-if="
-                      (!this.isVisitedNumber || !this.isVisitedCode) && regNumberDisabled === false
-                    "
-              :state="data.state"
-            >{{
-                data.error ? data.error : "Пожалуйста, заполните это поле"
-              }}
-            </b-form-invalid-feedback
-            >-->
-
-      <!-- Список Рег номеров -->
+    </div>
+    <div class="col-12 order-3 order-lg-4">
       <b-row class="w-100">
         <b-col>
-
           <b-link
             v-for="(item, index) in customerCarNumbers"
             :key="index"
@@ -60,35 +65,29 @@
         </b-col>
       </b-row>
     </div>
-
-    <div class="col-12 col-lg-6 col-xl-4 pt-3">
-      <b-checkbox class="checkbox-hide"
-                  v-model="isWithoutCarNumber"
-                  @change="goWithoutCarNumber($event)">
-        Госномера ещё нет
-        <br/>
-        <span class="text-success">заполню данные вручную</span>
-      </b-checkbox>
-    </div>
   </div>
 </template>
 
 <script>
 import { BCol, BRow } from "bootstrap-vue";
 import RegNumberInput from "./RegNumberInput.vue";
-import { isCodeValid, isNumberValid, isValid } from "../ControlRegNumber/helpers";
+import {
+  isCodeValid,
+  isNumberValid,
+  isValid,
+} from "../ControlRegNumber/helpers";
 
 export default {
-  name: 'RegNumberAutoByNumber',
+  name: "RegNumberAutoByNumber",
   components: { RegNumberInput, BCol, BRow },
   props: {
     clientCars: [],
     value: {
-      default: null
+      default: null,
     },
     data: {
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
@@ -99,7 +98,7 @@ export default {
       isVisitedNumber: false,
       isVisitedCode: false,
       state: null,
-    }
+    };
   },
   computed: {
     customerCarNumbers() {
@@ -126,8 +125,8 @@ export default {
       return this.data.disabled || this.data.readonly;
     },
     valueComputed() {
-      return this.value === 'N' ? null : this.value;
-    }
+      return this.value === "N" ? null : this.value;
+    },
   },
   methods: {
     goWithoutCarNumber(val) {
@@ -138,12 +137,12 @@ export default {
         this.selectedCar = null;
         this.regNumberDisabled = true;
 
-        this.updateCardValue('N');
+        this.updateCardValue("N");
 
         return;
       }
 
-      this.updateCardValue('');
+      this.updateCardValue("");
       this.regNumberDisabled = false;
       this.setInputsVisited(false);
     },
@@ -152,11 +151,13 @@ export default {
         return;
       }
 
-      this.numberValue = item === null ? null : this.numberFormatter(item?.slice(0, 6));
-      this.codeValue = item === null ? null : this.codeFormatter(item?.slice(6));
+      this.numberValue =
+        item === null ? null : this.numberFormatter(item?.slice(0, 6));
+      this.codeValue =
+        item === null ? null : this.codeFormatter(item?.slice(6));
 
       this.setWithoutCarNumber(false);
-      this.setInputsVisited(typeof (visited) === 'boolean' ? visited : true);
+      this.setInputsVisited(typeof visited === "boolean" ? visited : true);
       this.updateCardValue();
     },
     setWithoutCarNumber(val) {
@@ -165,7 +166,7 @@ export default {
 
     numberUpdateValue() {
       // emit на каждый ввод символа, нужен для регуляции скрытия сообщения о несуществующем госномере
-      this.updateCardValue('');
+      this.updateCardValue("");
 
       if (isNumberValid(this.numberValue?.replace(/ /g, ""))) {
         this.$refs.code.$el.focus();
@@ -179,7 +180,7 @@ export default {
     },
     codeUpdateValue(value) {
       // emit на каждый ввод символа , нужен для регуляции скрытия сообщения о несуществующем госномере
-      this.updateCardValue('');
+      this.updateCardValue("");
 
       if (isCodeValid(value)) {
         if (this.stateNumber && this.stateCode) {
@@ -232,7 +233,7 @@ export default {
       this.state = this.stateNumber && this.stateCode;
     },
     updateCardValue(value) {
-      const val = value !== undefined ? value : this.numberAndCodeValue
+      const val = value !== undefined ? value : this.numberAndCodeValue;
 
       this.$emit("update", val);
     },
@@ -242,17 +243,19 @@ export default {
 
       this.isVisitedCode = !!val;
       this.state = this.stateNumber && this.stateCode;
-    }
+    },
   },
-  watch: {
-  },
+  watch: {},
   mounted() {
-    this.value === "N" && (this.setWithoutCarNumber(true), this.goWithoutCarNumber(true));
+    this.value === "N" &&
+      (this.setWithoutCarNumber(true), this.goWithoutCarNumber(true));
     this.value !== "N" && this.setCarNumber(this.valueComputed, false);
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
+.mt-chck-num {
+  margin-top: 13px;
+}
 </style>
