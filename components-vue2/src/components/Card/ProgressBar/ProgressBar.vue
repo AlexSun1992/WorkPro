@@ -145,7 +145,7 @@ export default {
       const result = { name: "", url: "" };
 
       if (nextTab) {
-        result.name = nextTab.SNAME;
+        result.name = nextTab?.SNAME ?? "";
         result.url = "";
       }
 
