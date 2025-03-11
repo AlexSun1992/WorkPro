@@ -141,13 +141,7 @@ export default {
     },
     nextStep() {
       const { currentTab } = this;
-      const currentOrder = this.currentTabOrder;
-      const orders = this.tabs.map((item) => item.NORDER);
-      const maxOrder = Math.max(...orders);
-      const nextTab =
-        currentTab &&
-        currentOrder < maxOrder &&
-        this.tabs.find((item) => item.NORDER === currentOrder + 1);
+      const { nextTab } = this;
       const result = { name: "", url: "" };
 
       if (nextTab) {
@@ -155,11 +149,25 @@ export default {
         result.url = "";
       }
 
-      if (currentTab && currentOrder === maxOrder) {
+      if (currentTab && this.currentTabOrder === this.maxOrder) {
         return currentTab;
       }
 
       return result;
+    },
+    maxOrder() {
+      const orders = this.tabs.map((item) => item.NORDER);
+
+      return Math.max(...orders);
+    },
+    nextTab() {
+      if (this.currentTab && this.currentTabOrder < this.maxOrder) {
+        return this?.tabs.find(
+          (item) => item.NORDER === this.currentTabOrder + 1
+        );
+      }
+
+      return null;
     },
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
