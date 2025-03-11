@@ -76,14 +76,6 @@ export default {
   computed: {
     searchSelectValue: {
       get() {
-        if (this.data.options) {
-          const choosenElement = this.data.options.find(
-            (item) => item.value === Number(this.data.value)
-          );
-          if (choosenElement) {
-            return choosenElement;
-          }
-        }
         return this.data.value;
       },
       set(value) {

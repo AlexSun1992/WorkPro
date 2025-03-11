@@ -131,14 +131,16 @@ export const getters = {
     }),
   getDataVisibleFieldsByNames: (state) => (names) =>
     state.form.filter(
-      (field) => names.includes(field.name) && field.visible === true
+      (field) =>
+        names.includes(field.name) &&
+        (field.visible === true || field.fieldId === 66047)
     ),
   getDataFieldsRelationsByFieldId: (state, getters) => (fieldId) => {
     const field = state.form.find((d) => d.fieldId === fieldId);
     const fieldRelations = state.form.filter(
       (f) =>
         (f.fieldRelation ? f.fieldRelation.includes(field.name) : false) &&
-        f.visible === true
+        (f.visible === true || f.fieldId === 66047)
     );
     return fieldRelations.filter((f) =>
       getters
@@ -1262,7 +1264,7 @@ export const mutations = {
       const dictionary = state.dictionaries.find((dic) => dic.url === item.url);
       const field = state.form.find((f) => f.fieldId === item.fieldId);
       field.options = dictionary.options;
-      field.visible = true;
+      field.visible = field.fieldId !== 66047;
     });
   },
 };
