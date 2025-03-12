@@ -321,7 +321,7 @@ export default {
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
         }
-        if (data[i].type === "OneToMany") {
+        if (data[i].type === "OneToMany" && data[i].visible === true) {
           const valueOneToMany = data[i].value;
           if (Array.isArray(valueOneToMany)) {
             valueOneToMany.forEach((webFields, indexWebFields) => {
