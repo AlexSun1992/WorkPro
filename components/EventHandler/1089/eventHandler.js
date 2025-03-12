@@ -1,5 +1,6 @@
 async function eventHandler(data, item, callback) {
-  console.log("item:", item);
+  console.log("item:", item, callback);
+
   if (data.length === 0) {
     return;
   }
@@ -37,6 +38,23 @@ async function eventHandler(data, item, callback) {
       }
     });
   }
+
+  function isFilledByPage(page) {
+    const filtered = data.filter(
+      (item) =>
+        item.page === page &&
+        item.visible === true &&
+        item.required === true &&
+        item.name !== "DATA_VEHICLE" &&
+        item.name !== "BNO_VIN" &&
+        item.name !== "BUSED_TRAILER"
+    );
+    if (filtered.length === 0) {
+      return false;
+    }
+    return filtered.every((item) => item.value);
+  }
+
   function isVisibleFieldsState(page) {
     const filtered = data.filter(
       (item) =>
@@ -104,6 +122,7 @@ async function eventHandler(data, item, callback) {
   const IDDOCTYPE = findField("IDPHOLDER_DOCTYPE");
   const BUTTON_NEXT = findField("BUTTON_NEXT");
   const button_nextToPolicy = findField("BUTTON_NEXT_POLICYHOLDER");
+  // const BUTTON_BACK = findField("BUTTON_BACK");
   const svin = findField("SVIN");
   const sModel = findField("SMODEL");
   const model = findField("IDMODEL");
@@ -113,7 +132,9 @@ async function eventHandler(data, item, callback) {
   const INFO_TS = findField("INFO_TS");
   const saveBtn = findField("Save");
   const regNum = findField("SREGNUM");
+  // const chips = findField("IDVEHICLE_POLICY");
 
+  // const SREG_NUMBER = findField("SREG_NUMBER");
   const SREG_NUMBER = {
     name: "SREG_NUMBER MOCK",
     label: "SREG_NUMBER MOCK",
@@ -126,6 +147,7 @@ async function eventHandler(data, item, callback) {
   const vehDocDate = findField("DVEHDOCDATE");
   const bodyNumber = findField("SBODYNUMBER");
   const isSaved = window.location.pathname.split("/").pop() !== "0";
+  const vehicleChips = findField("IDVEHICLE_POLICY");
   const writeDownSnils = findField("BPHOLDER_SNILS");
   const snilsField = findField("SPHOLDER_SNILS");
   const writeDownOwnerSnils = findField("BOWNER_SNILS");
@@ -139,13 +161,18 @@ async function eventHandler(data, item, callback) {
   const insuredPerson = findField("ITEM_Devider_PHOLDER");
 
   const dataVehdoc = findField("DATA_VEHDOC");
+  const regNumber = findField("SREG_NUMBER");
+  const dataVehicle = findField("DATA_VEHICLE");
 
   const TRANSPORT_BLOCK = 2;
   const HOLDER_BLOCK = 3;
   const POLICY_HOLDER = 4;
   const OWNER_BLOCK = 5;
 
+  const pHolder = findField("ITEM_Devider_PHOLDER");
   const phoneOwner = findField("SPHOLDER_PHONE");
+
+  const isHolderBlock = revealPage(HOLDER_BLOCK);
 
   const alwaysVisibleFieldsTransportBlock = [
     "SREGNUMTITLE",
@@ -155,6 +182,14 @@ async function eventHandler(data, item, callback) {
     "input_label_err_regnum_not_fou",
     "EMPTY_01",
   ];
+
+  const visibleFieldsTransportBlockNumberNotExist = [
+    "SREGNUMTITLE",
+    "SREGNUM",
+    "IDVEHICLE_POLICY",
+    "input_label_err_regnum_not_fou",
+  ];
+
   const visibleFieldsTransportBlockNoNumber = [
     "SREGNUMTITLE",
     "SREGNUM",
@@ -163,14 +198,22 @@ async function eventHandler(data, item, callback) {
     "EMPTY_01",
   ];
 
+  // Управляем видимостью полей во вкладке TRANSPORT_BLOCK
+  // if(revealFieldVisibilityReverseMode(TRANSPORT_BLOCK,alwaysVisibleFieldsTransportBlock)){
+
   if (item.name === "SREGNUM") {
     if (!Object.hasOwn(regNum, "afterSave")) {
+      // Признак afterSave добавлен потому что, после сразу загрузки SREGNUM дергает eventHandler, что мешает корректной обработке формы
       if (item.value === "N") {
+        // В конце функции eventHandler  afterSave удаляется, компонент SREGNUM можно обрабатывать  по нажатию, а не сразу после отображения страницы(без нажатия)
+        console.log("here");
         setVisibleByPage(HOLDER_BLOCK, false);
         setVisibleByPage(POLICY_HOLDER, false);
         setVisibleByPage(OWNER_BLOCK, false);
 
-        const visibleFieldsVehicleBlock = [
+        let visibleFieldsVehicleBlock;
+
+        visibleFieldsVehicleBlock = [
           "SREGNUMTITLE",
           "SREGNUM",
           "IDVEHICLE_POLICY",
@@ -447,12 +490,20 @@ async function eventHandler(data, item, callback) {
     }
   }
 
+  // Поле марка-модель стало обязательным
+  // console.log("sModel:", sModel);
+  // console.log('Object.hasOwn(sModel,"value"):', Object.hasOwn(sModel, "value"));
+
   if (Object.hasOwn(sModel, "value")) {
+    // console.log("sModel.value.length:", sModel.value.length);
     if (sModel.value.length > 1 && sModel.value.length <= 160) {
       sModel.state = true;
       sModel.error = null;
     }
   }
+
+  // Настраиваем видимость поля Номер кузова
+  // Показываем поле при наличии значения (предзаполнение)
 
   if (Object.hasOwn(bodyNumber, "value")) {
     const page = revealPage(TRANSPORT_BLOCK);
@@ -555,6 +606,7 @@ async function eventHandler(data, item, callback) {
       fieldNHORSE.state = false;
     } else {
       const fieldNKH = findField("NKVT_POWER");
+      console.log("fieldNKH:", fieldNKH);
       fieldNKH.value = Math.round((Number(item.value) * 100) / 1.3596) / 100;
       fieldNKH.state = true;
       delete fieldNKH.error;
@@ -804,7 +856,7 @@ async function eventHandler(data, item, callback) {
     saveBtn.visible = false;
   }
 
-  if (item.name === "BUTTON_NEXT") {
+  if (item.name === "BUTTON_NEXT" || item.value === "BUTTON_NEXT") {
     // Скрываем поле Номер кузова
     bodyNumber.visible = false;
 
@@ -906,7 +958,7 @@ async function eventHandler(data, item, callback) {
     });
   }
 
-  if (item.name === "BACK_GENERAL_INFO") {
+  if (item.name === "BACK_GENERAL_INFO" || item.value === "BACK_GENERAL_INFO") {
     let fieldsInVisible;
     const fieldsVisible = ["NWEIGHT", "NTONNAGE", "NSEATS_COUNT"];
 
@@ -930,7 +982,10 @@ async function eventHandler(data, item, callback) {
     }
   }
 
-  if (item.name === "BUTTON_NEXT_POLICYHOLDER") {
+  if (
+    item.name === "BUTTON_NEXT_POLICYHOLDER" ||
+    item.value === "BUTTON_NEXT_POLICYHOLDER"
+  ) {
     setExcludeFieldsVisibility(data, [], POLICY_HOLDER, true);
     setExcludeFieldsVisibility(data, [], HOLDER_BLOCK, false);
     //
@@ -1047,7 +1102,7 @@ async function eventHandler(data, item, callback) {
     }
   }
 
-  if (item.name === "OWNER_BACK_TS") {
+  if (item.name === "OWNER_BACK_TS" || item.value === "OWNER_BACK_TS") {
     let controls;
     if (BNO_VIN.value === true) {
       controls = [
@@ -1111,6 +1166,25 @@ async function eventHandler(data, item, callback) {
     }
     return e;
   });
+
+  if (callback === "afterSave") {
+    const fieldsShouldNotBeShown = [
+      "SBODYNUMBER",
+      "BUTTON_NEXT",
+      "Save",
+      "NWEIGHT",
+      "NTONNAGE",
+      "NSEATS_COUNT",
+    ];
+
+    setExcludeFieldsVisibility(
+      data,
+      fieldsShouldNotBeShown,
+      TRANSPORT_BLOCK,
+      true
+    );
+    return data;
+  }
 
   return dataSet;
 }

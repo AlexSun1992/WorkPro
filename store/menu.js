@@ -25,23 +25,19 @@ export const getters = {
   breadCrumbs: (state) => state.breadCrumbs,
   menu: (state) => state.menu,
   flatmenu: (state) => state.flatmenu,
-  getSettingsByIdItem: (state) => (id) => {
-    return state.menu[0].children.find((m) => m.idItem === parseInt(id));
-  },
+  getSettingsByIdItem: (state) => (id) =>
+    state.menu[0].children.find((m) => m.idItem === parseInt(id)),
   getMenuById: (state) => (id) =>
     state.flatmenu.find((m) => m.IDITEM === parseInt(id)),
-  getMenuByName: (state) => (name) => {
-    return state.flatmenu.find((m) => m.SCARDCAPTION === name);
-  },
-  getMenuWithOutIcon: (state) => {
-    return state.menu[0].children.filter(
+  getMenuByName: (state) => (name) =>
+    state.flatmenu.find((m) => m.SCARDCAPTION === name),
+  getMenuWithOutIcon: (state) =>
+    state.menu[0].children.filter(
       (m) =>
         m.iconFileName !== undefined && m.iconFileName !== "" && m.isVisible
-    );
-  },
-  getVisibleShowMenu: (state) => {
-    return state.menu[0].children.filter((m) => m.isVisible == true);
-  },
+    ),
+  getVisibleShowMenu: (state) =>
+    state.menu[0].children.filter((m) => m.isVisible == true),
 };
 
 export const actions = {
@@ -62,9 +58,8 @@ export const actions = {
             }
 
             return res;
-          } else {
-            throw new Error("Error /api/module");
           }
+          throw new Error("Error /api/module");
         });
       }
       if (module || params?.zone === "free") {
@@ -99,7 +94,11 @@ export const actions = {
         });
         if (params?.idWizard) {
           await this.$axios
-            .get(`/api/module/55/${params.idWizard}`)
+            .get(
+              `/api/module/55/${params.idWizard}${
+                params?.zone === "free" ? "?zone=free" : ""
+              }`
+            )
             .then((res) => {
               if (res.data?.settings && res.data?.subSettings) {
                 commit("setMenuById", res.data);

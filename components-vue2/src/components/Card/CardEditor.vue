@@ -153,7 +153,7 @@ export default {
   },
   computed: {
     progressBarDemo() {
-      return progressBarDemo
+      return progressBarDemo;
     },
     ...mapGetters("data_card", [
       "getForm",
@@ -255,8 +255,11 @@ export default {
       return this.isCaptchaNeeded;
     },
     isShowProgressBar() {
-      return PROGRESS_BAR_CARDS_ID.includes(this.menuId) && PROGRESS_BAR_ZONES.includes(this.zone);
-    }
+      return (
+        PROGRESS_BAR_CARDS_ID.includes(this.menuId) &&
+        PROGRESS_BAR_ZONES.includes(this.zone)
+      );
+    },
   },
 
   watch: {
