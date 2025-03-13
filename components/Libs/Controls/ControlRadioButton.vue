@@ -17,6 +17,14 @@
         }"
         >{{ item.text }}
       </label>
+      <span v-if="item.TOOLTIP" class="position-relative"
+        >&nbsp;
+        <span class="tooltipster">
+          (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
+            <span>{{ item.TOOLTIP }}</span></vue-easy-tooltip
+          >
+        </span>
+      </span>
     </div>
   </div>
 </template>
