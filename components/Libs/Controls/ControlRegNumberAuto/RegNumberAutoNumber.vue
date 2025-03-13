@@ -52,18 +52,18 @@
       </b-form-invalid-feedback>
     </div>
     <div class="col-12 order-3 order-lg-4">
-      <b-row class="w-100">
-        <b-col>
-          <b-link
-            v-for="(item, index) in customerCarNumbers"
-            :key="index"
-            class="lgreen text-decoration-none"
-            @click="setCarNumber(item.SNAME)"
-          >
-            <small>{{ index ? ",&nbsp;" : "" }} {{ item.SNAME }}</small>
-          </b-link>
-        </b-col>
-      </b-row>
+      <div v-if="customerCarNumbers && customerCarNumbers.length">
+        <a
+          href="#"
+          v-for="(item, index) in customerCarNumbers"
+          :key="index"
+          class="lgreen text-decoration-none"
+          @click="setCarNumber(item.SNAME)"
+          target="_self"
+        >
+          <small>{{ index ? ",&nbsp;" : "" }} {{ item.SNAME }}</small>
+        </a>
+      </div>
     </div>
   </div>
 </template>

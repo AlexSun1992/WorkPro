@@ -25,19 +25,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.btn-pencil {
-  background: transparent url(/img/icon-change.svg) left center no-repeat;
-  padding: 0px 0px 0px 32px;
-  font-weight: 700;
-  font-size: 1rem;
-  line-height: 1.25rem;
-  color: #43b02a;
-  position: relative;
-  cursor: pointer;
-  border: 0;
-}
-.btn-pencil:hover {
-  text-decoration: underline;
-}
-</style>
+<style scoped></style>

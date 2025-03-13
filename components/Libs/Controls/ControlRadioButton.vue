@@ -6,9 +6,8 @@
         :id="data.name + item.value"
         :value="item.value"
         :name="data.name"
-        v-model="id"
-        @change="update(id)"
-        :checked="item.value === id"
+        @change="update(item.value)"
+        :checked="item.value == id"
         :disabled="data.readonly === true"
       />
       <label
@@ -16,18 +15,21 @@
         :class="{
           active: item.value == id,
         }"
-        >{{ item.text }}</label
-      >
+        >{{ item.text }}
+      </label>
+      <span v-if="item.TOOLTIP" class="position-relative"
+        >&nbsp;
+        <span class="tooltipster">
+          (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
+            <span>{{ item.TOOLTIP }}</span></vue-easy-tooltip
+          >
+        </span>
+      </span>
     </div>
   </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      id: this.data.value,
-    };
-  },
   props: {
     data: {
       type: Object,
@@ -40,11 +42,14 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: String(value),
+        value,
       });
     },
   },
   computed: {
+    id() {
+      return this.data.value;
+    },
     options() {
       return this.data.options;
     },
