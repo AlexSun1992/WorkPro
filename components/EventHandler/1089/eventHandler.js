@@ -914,15 +914,15 @@ async function eventHandler(data, item, callback) {
   `;
   }
 
-  // управляем видимостью кнопки "Далее" блока второй вкладки
-  if (isVisibleFieldsState(HOLDER_BLOCK)) {
-    button_nextToPolicy.readonly = false;
-  }
+  // // управляем видимостью кнопки "Далее" блока второй вкладки
+  // if (isVisibleFieldsState(HOLDER_BLOCK)) {
+  //   button_nextToPolicy.readonly = false;
+  // }
 
-  // если поле на странице не прошло валидацию делаем кнопку readOnly
-  if (isVisibleFieldsState(HOLDER_BLOCK) === false) {
-    button_nextToPolicy.readonly = true;
-  }
+  // // если поле на странице не прошло валидацию делаем кнопку readOnly
+  // if (isVisibleFieldsState(HOLDER_BLOCK) === false) {
+  //   button_nextToPolicy.readonly = true;
+  // }
 
   const allData = document.querySelector(`[field-id="${dataVehdoc.fieldId}"]`);
 
@@ -1157,6 +1157,16 @@ async function eventHandler(data, item, callback) {
     setVisibleByPage(POLICY_HOLDER, false);
   }
 
+  // управляем видимостью кнопки "Далее" блока второй вкладки
+  if (isVisibleFieldsState(HOLDER_BLOCK)) {
+    button_nextToPolicy.readonly = false;
+  }
+
+  // если поле на странице не прошло валидацию делаем кнопку readOnly
+  if (isVisibleFieldsState(HOLDER_BLOCK) === false) {
+    button_nextToPolicy.readonly = true;
+  }
+
   const dataCopy = JSON.parse(JSON.stringify(data));
   const dataSet = dataCopy.map((e) => {
     if (e.name === "SREGNUM") {
@@ -1166,6 +1176,8 @@ async function eventHandler(data, item, callback) {
     }
     return e;
   });
+
+  console.log("callback:", callback);
 
   if (callback === "afterSave") {
     const fieldsShouldNotBeShown = [
