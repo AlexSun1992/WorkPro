@@ -558,8 +558,10 @@ export const actions = {
         body
       );
       commit("setSavedError", false);
-      commit("setCardId", resp.data[0].ID);
-      commit("setCardRelId", resp.data[0].REL);
+      if (resp.data[0].ID && resp.data[0].REL) {
+        commit("setCardId", resp.data[0].ID);
+        commit("setCardRelId", resp.data[0].REL);
+      }
       return resp;
     } catch (err) {
       commit("setSavedError", true);
