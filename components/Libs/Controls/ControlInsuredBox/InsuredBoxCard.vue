@@ -13,7 +13,7 @@
           />
         </div>
       </div>
-      <div ref="button" class="box-button">
+      <div v-if="getPolicyCardOptions.NCOST" ref="button" class="box-button">
         {{ formattedNum(getPolicyCardOptions.NCOST) }} &#8381;
       </div>
     </div>
