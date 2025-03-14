@@ -1,6 +1,4 @@
 async function eventHandler(data, item, callback) {
-  console.log("item:", item, callback);
-
   if (data.length === 0) {
     return;
   }
