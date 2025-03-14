@@ -470,7 +470,6 @@ export default {
           zone,
           form: this.getForm,
         });
-
         if (resp.status === 200) {
           setURLParams(resp.data[0]);
           if (resp.data[0].ACCESS_TOKEN) {
@@ -606,7 +605,7 @@ export default {
       });
       const field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(
-        (item) => item.IDITEM === this.menuId
+        (item) => item.IDITEM === Number(this.params.idItem)
       );
       await this.callScript(e, this.callbackAction);
       if (field.type === "button" && e.action) {
@@ -623,7 +622,7 @@ export default {
         );
         if (actionSaveCard?.ID === actionId) {
           this.$store.commit("data_card/saveButtonClicked", true);
-          await this.saveCard(e);
+          await this.saveCard(e, this.params.idWizard ? "wizardSave" : null);
           this.scrollToError();
           this.$store.commit("data_card/saveButtonClicked", false);
         }

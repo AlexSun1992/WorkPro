@@ -547,20 +547,20 @@ async function eventHandler(data, item, callback) {
 
   // определяем видимость поля страхователь и делаем поля ридонли при их заполненности
 
-  if (isVisibleFieldsState(POLICY_HOLDER)) {
-    data.forEach((item) => {
-      if (
-        (item.page === POLICY_HOLDER &&
-          item.state === true &&
-          item.visible === true &&
-          item.name !== "SPHOLDER_PHONE" &&
-          item.name !== "SPHOLDER_EMAIL") ||
-        item.name === "SPHOLDER_THIRD"
-      ) {
-        item.readonly = true;
-      }
-    });
-  }
+  // if (isVisibleFieldsState(POLICY_HOLDER)) {
+  //   data.forEach((item) => {
+  //     if (
+  //       (item.page === POLICY_HOLDER &&
+  //         item.state === true &&
+  //         item.visible === true &&
+  //         item.name !== "SPHOLDER_PHONE" &&
+  //         item.name !== "SPHOLDER_EMAIL") ||
+  //       item.name === "SPHOLDER_THIRD"
+  //     ) {
+  //       item.readonly = true;
+  //     }
+  //   });
+  // }
 
   // Переключаем видимость у полей тоннаж,кол-во мест,грузо-сть
   // "IDVEHICLETYPE"
@@ -916,46 +916,12 @@ async function eventHandler(data, item, callback) {
 
   // управляем видимостью кнопки "Далее" блока второй вкладки
   if (isVisibleFieldsState(HOLDER_BLOCK)) {
-    button_nextToPolicy.readonly = false;
+    // button_nextToPolicy.readonly = false;
   }
 
   // если поле на странице не прошло валидацию делаем кнопку readOnly
   if (isVisibleFieldsState(HOLDER_BLOCK) === false) {
-    button_nextToPolicy.readonly = true;
-  }
-
-  const allData = document.querySelector(`[field-id="${dataVehdoc.fieldId}"]`);
-
-  const docsVehicle = document.querySelector(
-    `[field-id="${dataVehdoc.fieldId}"]`
-  );
-
-  const pHolderData = document.querySelector(
-    `[field-id="${phoneOwner.fieldId}"]`
-  );
-
-  // скролл до Общие сведения о ТС
-  if (allData) {
-    allData.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
-  }
-
-  // скролл до Документы ТС
-  if (docsVehicle) {
-    docsVehicle.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-
-  // скролл до Страхователя
-  if (pHolderData) {
-    pHolderData.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
+    // button_nextToPolicy.readonly = true;
   }
 
   if (item.name === "BACK_GENERAL_INFO" || item.value === "BACK_GENERAL_INFO") {
