@@ -127,7 +127,7 @@ async function eventHandler(data, item, callback) {
   const IDBRAND = findField("IDBRAND");
   const IDMODEL = findField("IDMODEL");
   const BNO_VIN = findField("BNO_VIN");
-  const INFO_TS = findField("INFO_TS");
+
   const saveBtn = findField("Save");
   const regNum = findField("SREGNUM");
   // const chips = findField("IDVEHICLE_POLICY");
@@ -867,8 +867,6 @@ async function eventHandler(data, item, callback) {
       setVisibleByPage(HOLDER_BLOCK);
     }
 
-    // Скрываем  поле INFO_TS
-    INFO_TS.visible = false;
     const fieldsNext = ["SREGNUMTITLE", "SREGNUM", "IDVEHICLE_POLICY"];
     setReverseVisibleForSomeFieldsOnCurPage(
       data,
@@ -876,40 +874,6 @@ async function eventHandler(data, item, callback) {
       TRANSPORT_BLOCK,
       true
     );
-
-    INFO_TS.value = ` <div class="row">
-  <div class="col-sm-12 col-md-12 col-lg-4 col-xl-nan col-12">
-  <div role="group" class="form-group">
-  <label for="${SREG_NUMBER.name}" class="d-block"
-  ><span>${SREG_NUMBER.label}</span></label
-  >
-  <div>
-  <div>${SREG_NUMBER.value}</div>
-  </div>
-  </div>
-  </div>
-  <div class="col-sm-12 col-md-12 col-lg-4 col-xl-nan col-12">
-  <div role="group" class="form-group">
-  <label for="${NPOWER.name}" class="d-block"
-  ><span>${NPOWER.label}</span></label
-  >
-  <div>
-  <div>${NPOWER.value}</div>
-  </div>
-  </div>
-  </div>
-  <div class="col-sm-12 col-md-12 col-lg-4 col-xl-nan col-12">
-  <div role="group" class="form-group">
-  <label for="${NKVT_POWER.name}" class="d-block"
-  ><span>${NKVT_POWER.label}</span></label
-  >
-  <div>
-  <div>${NKVT_POWER.value}</div>
-  </div>
-  </div>
-  </div>
-  </div>
-  `;
   }
 
   if (item.name === "BACK_GENERAL_INFO" || item.value === "BACK_GENERAL_INFO") {
