@@ -152,7 +152,7 @@ async function eventHandler(data, item, callback) {
   const snilsOwnerField = findField("SOWNER_SNILS");
   const ts_type = findField("IDVEHICLETYPE");
   const weight = findField("NWEIGHT");
-  const tonnage = findField("NTONNAGE");
+  // const tonnage = findField("NTONNAGE");
   const seatsCount = findField("NSEATS_COUNT");
   const personType = findField("NPERSONTYPE");
   const snilsHolder = findField("SPHOLDER_SNILS");
@@ -218,7 +218,7 @@ async function eventHandler(data, item, callback) {
           "Save",
           "input_label_err_regnum_not_fou",
           "NWEIGHT",
-          "NTONNAGE",
+          // "NTONNAGE",
           "NSEATS_COUNT",
         ];
 
@@ -265,14 +265,22 @@ async function eventHandler(data, item, callback) {
         if (ts_type.value === 4 || ts_type.value === 17) {
           setIncludesFieldsVisibility(
             data,
-            ["NWEIGHT", "NTONNAGE", "NSEATS_COUNT"],
+            [
+              "NWEIGHT",
+              // "NTONNAGE",
+              "NSEATS_COUNT",
+            ],
             TRANSPORT_BLOCK,
             true
           );
         } else if (ts_type.value !== 4 || ts_type.value !== 17) {
           setIncludesFieldsVisibility(
             data,
-            ["NWEIGHT", "NTONNAGE", "NSEATS_COUNT"],
+            [
+              "NWEIGHT",
+              // "NTONNAGE",
+              "NSEATS_COUNT",
+            ],
             TRANSPORT_BLOCK,
             false
           );
@@ -321,7 +329,7 @@ async function eventHandler(data, item, callback) {
             "Save",
             "input_label_err_regnum_not_fou",
             "NWEIGHT",
-            "NTONNAGE",
+            // "NTONNAGE",
             "NSEATS_COUNT",
           ];
 
@@ -368,14 +376,22 @@ async function eventHandler(data, item, callback) {
           if (ts_type.value === 4 || ts_type.value === 17) {
             setIncludesFieldsVisibility(
               data,
-              ["NWEIGHT", "NTONNAGE", "NSEATS_COUNT"],
+              [
+                "NWEIGHT",
+                // "NTONNAGE",
+                "NSEATS_COUNT",
+              ],
               TRANSPORT_BLOCK,
               true
             );
           } else if (ts_type.value !== 4 || ts_type.value !== 17) {
             setIncludesFieldsVisibility(
               data,
-              ["NWEIGHT", "NTONNAGE", "NSEATS_COUNT"],
+              [
+                "NWEIGHT",
+                // "NTONNAGE",
+                "NSEATS_COUNT",
+              ],
               TRANSPORT_BLOCK,
               false
             );
@@ -566,11 +582,11 @@ async function eventHandler(data, item, callback) {
   if (item.name === "IDVEHICLETYPE") {
     if (item.value === 4 || item.value === 17) {
       weight.visible = true;
-      tonnage.visible = true;
+      //  tonnage.visible = true;
       seatsCount.visible = true;
     } else {
       weight.visible = false;
-      tonnage.visible = false;
+      // tonnage.visible = false;
       seatsCount.visible = false;
     }
   }
@@ -914,7 +930,11 @@ async function eventHandler(data, item, callback) {
 
   if (item.name === "BACK_GENERAL_INFO" || item.value === "BACK_GENERAL_INFO") {
     let fieldsInVisible;
-    const fieldsVisible = ["NWEIGHT", "NTONNAGE", "NSEATS_COUNT"];
+    const fieldsVisible = [
+      "NWEIGHT",
+      // "NTONNAGE",
+      "NSEATS_COUNT",
+    ];
 
     // отображаем / не отображаем svin при переходе на вкладку  TRANSPORT_BLOCK
     if (BNO_VIN.value === false) {
@@ -1068,7 +1088,7 @@ async function eventHandler(data, item, callback) {
         "SVIN",
         "Continue",
         "NWEIGHT",
-        "NTONNAGE",
+        // "NTONNAGE",
         "NSEATS_COUNT",
       ];
     }
@@ -1083,7 +1103,7 @@ async function eventHandler(data, item, callback) {
         "SBODYNUMBER",
         "Continue",
         "NWEIGHT",
-        "NTONNAGE",
+        // "NTONNAGE",
         "NSEATS_COUNT",
       ];
     }
@@ -1137,7 +1157,7 @@ async function eventHandler(data, item, callback) {
       "BUTTON_NEXT",
       "Save",
       "NWEIGHT",
-      "NTONNAGE",
+      // "NTONNAGE",
       "NSEATS_COUNT",
     ];
 
@@ -1278,7 +1298,7 @@ function initHandler(data, item) {
         "BUTTON_NEXT",
         "Save",
         "NWEIGHT",
-        "NTONNAGE",
+        // "NTONNAGE",
         "NSEATS_COUNT",
       ];
 
