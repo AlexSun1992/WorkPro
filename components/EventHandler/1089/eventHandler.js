@@ -1310,3 +1310,5 @@ function initHandler(data, item) {
 
   return dataSet;
 }
+
+export { eventHandler, initHandler };
