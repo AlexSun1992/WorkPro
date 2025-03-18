@@ -702,44 +702,44 @@ async function eventHandler(data, item, callback) {
         const fieldsVisible =
           writeDownOwnerSnils.value === true
             ? [
-                "Continue",
-                "LISOWNER",
-                "NPERSONTYPE",
-                "OWNER_BACK_TS",
-                "ITEM_Devider_OWNER",
-                "SOWNER_SECOND",
-                "SOWNER_FIRST",
-                "DOWNER_BIRTHDATE",
-                "SOWNER_THIRD",
-                "SOWNER_PHONE",
-                "SOWNER_EMAIL",
-                "IDOWNER_COUNTRY",
-                "IDOWNER_DOCTYPE",
-                "SOWNER_SERIES",
-                "SOWNER_PNUMBER",
-                "SFULLOWNER_ADDRESS",
-                "BOWNER_SNILS",
-                "SOWNER_SNILS",
-              ]
+              "Continue",
+              "LISOWNER",
+              "NPERSONTYPE",
+              "OWNER_BACK_TS",
+              "ITEM_Devider_OWNER",
+              "SOWNER_SECOND",
+              "SOWNER_FIRST",
+              "DOWNER_BIRTHDATE",
+              "SOWNER_THIRD",
+              "SOWNER_PHONE",
+              "SOWNER_EMAIL",
+              "IDOWNER_COUNTRY",
+              "IDOWNER_DOCTYPE",
+              "SOWNER_SERIES",
+              "SOWNER_PNUMBER",
+              "SFULLOWNER_ADDRESS",
+              "BOWNER_SNILS",
+              "SOWNER_SNILS",
+            ]
             : [
-                "Continue",
-                "LISOWNER",
-                "NPERSONTYPE",
-                "OWNER_BACK_TS",
-                "ITEM_Devider_OWNER",
-                "SOWNER_SECOND",
-                "SOWNER_FIRST",
-                "DOWNER_BIRTHDATE",
-                "SOWNER_THIRD",
-                "SOWNER_PHONE",
-                "SOWNER_EMAIL",
-                "IDOWNER_COUNTRY",
-                "IDOWNER_DOCTYPE",
-                "SOWNER_SERIES",
-                "SOWNER_PNUMBER",
-                "SFULLOWNER_ADDRESS",
-                "BOWNER_SNILS",
-              ];
+              "Continue",
+              "LISOWNER",
+              "NPERSONTYPE",
+              "OWNER_BACK_TS",
+              "ITEM_Devider_OWNER",
+              "SOWNER_SECOND",
+              "SOWNER_FIRST",
+              "DOWNER_BIRTHDATE",
+              "SOWNER_THIRD",
+              "SOWNER_PHONE",
+              "SOWNER_EMAIL",
+              "IDOWNER_COUNTRY",
+              "IDOWNER_DOCTYPE",
+              "SOWNER_SERIES",
+              "SOWNER_PNUMBER",
+              "SFULLOWNER_ADDRESS",
+              "BOWNER_SNILS",
+            ];
 
         setReverseVisibleForSomeFieldsOnCurPage(
           data,
@@ -940,44 +940,44 @@ async function eventHandler(data, item, callback) {
         const fieldsVisible =
           writeDownOwnerSnils.value === true
             ? [
-                "Continue",
-                "LISOWNER",
-                "NPERSONTYPE",
-                "OWNER_BACK_TS",
-                "ITEM_Devider_OWNER",
-                "SOWNER_SECOND",
-                "SOWNER_FIRST",
-                "DOWNER_BIRTHDATE",
-                "SOWNER_THIRD",
-                "SOWNER_PHONE",
-                "SOWNER_EMAIL",
-                "IDOWNER_COUNTRY",
-                "IDOWNER_DOCTYPE",
-                "SOWNER_SERIES",
-                "SOWNER_PNUMBER",
-                "SFULLOWNER_ADDRESS",
-                "BOWNER_SNILS",
-                "SOWNER_SNILS",
-              ]
+              "Continue",
+              "LISOWNER",
+              "NPERSONTYPE",
+              "OWNER_BACK_TS",
+              "ITEM_Devider_OWNER",
+              "SOWNER_SECOND",
+              "SOWNER_FIRST",
+              "DOWNER_BIRTHDATE",
+              "SOWNER_THIRD",
+              "SOWNER_PHONE",
+              "SOWNER_EMAIL",
+              "IDOWNER_COUNTRY",
+              "IDOWNER_DOCTYPE",
+              "SOWNER_SERIES",
+              "SOWNER_PNUMBER",
+              "SFULLOWNER_ADDRESS",
+              "BOWNER_SNILS",
+              "SOWNER_SNILS",
+            ]
             : [
-                "Continue",
-                "LISOWNER",
-                "NPERSONTYPE",
-                "OWNER_BACK_TS",
-                "ITEM_Devider_OWNER",
-                "SOWNER_SECOND",
-                "SOWNER_FIRST",
-                "DOWNER_BIRTHDATE",
-                "SOWNER_THIRD",
-                "SOWNER_PHONE",
-                "SOWNER_EMAIL",
-                "IDOWNER_COUNTRY",
-                "IDOWNER_DOCTYPE",
-                "SOWNER_SERIES",
-                "SOWNER_PNUMBER",
-                "SFULLOWNER_ADDRESS",
-                "BOWNER_SNILS",
-              ];
+              "Continue",
+              "LISOWNER",
+              "NPERSONTYPE",
+              "OWNER_BACK_TS",
+              "ITEM_Devider_OWNER",
+              "SOWNER_SECOND",
+              "SOWNER_FIRST",
+              "DOWNER_BIRTHDATE",
+              "SOWNER_THIRD",
+              "SOWNER_PHONE",
+              "SOWNER_EMAIL",
+              "IDOWNER_COUNTRY",
+              "IDOWNER_DOCTYPE",
+              "SOWNER_SERIES",
+              "SOWNER_PNUMBER",
+              "SFULLOWNER_ADDRESS",
+              "BOWNER_SNILS",
+            ];
 
         setReverseVisibleForSomeFieldsOnCurPage(
           data,
@@ -1137,6 +1137,29 @@ async function eventHandler(data, item, callback) {
   return dataSet;
 }
 
+function getQueryPages() {
+  const url = new URL(window.location.href);
+  const queryPages = url.searchParams.get("page").split(",");
+
+  return queryPages?.length ? queryPages.map((item) => Number(item)) : null;
+}
+
+function setFieldsVisibleByPages(data, pages) {
+  return data.map((item) => {
+    if (pages.includes(item.page)) {
+      return { ...item, visible: true, readonly: false };
+    }
+
+    return { ...item };
+  });
+}
+
+function filterFieldsByQueryPage(data) {
+  const queryPages = getQueryPages();
+
+  return setFieldsVisibleByPages(data, queryPages);
+}
+
 function initHandler(data, item) {
   const TRANSPORT_BLOCK = 2;
   const HOLDER_BLOCK = 3;
@@ -1276,8 +1299,9 @@ function initHandler(data, item) {
   }
 
   const dataCopy = JSON.parse(JSON.stringify(data));
+  const dataByQueryPage = filterFieldsByQueryPage(dataCopy);
 
-  const dataSet = dataCopy.map((item) => {
+  const dataSet = dataByQueryPage.map((item) => {
     if (item.name === "SREGNUM") {
       return { ...item, afterSave: true };
     }
@@ -1286,5 +1310,3 @@ function initHandler(data, item) {
 
   return dataSet;
 }
-
-export { eventHandler, initHandler };
