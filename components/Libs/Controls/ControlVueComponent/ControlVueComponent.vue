@@ -22,7 +22,7 @@ export default {
     return {};
   },
   created() {
-    const componentConfig = {
+    this.$options.components.vueCustomComponent = {
       ...this.currentComponentConfig,
       components: {
         ActionButton,
@@ -47,8 +47,6 @@ export default {
         },
       },
     };
-
-    Vue.component("vue-custom-component", componentConfig);
   },
 
   computed: {
@@ -79,11 +77,21 @@ export default {
         });
       return hardcodedComponentConfig;
     },
+
+    isSlotInCardtemplate() {
+      return this.componentRegExp.test(this.cardtemplate);
+    },
+    cardtemplate() {
+      return this.$store.getters["menu/getSettingsByIdItem"](
+        this?.$route?.params?.idItem || {}
+      )?.cardtemplate;
+    },
     currentComponentConfig() {
       if (this.isSlotInCardtemplate) {
         const [, componentText] = this.cardtemplate.match(this.componentRegExp);
         return { template: componentText };
       }
+      // Если убрать этот if, то цена будет отображаться
       if (this.data.label) {
         return { template: this.data.label };
       }
@@ -101,14 +109,6 @@ export default {
             </li></div>`,
         }
       );
-    },
-    isSlotInCardtemplate() {
-      return this.componentRegExp.test(this.cardtemplate);
-    },
-    cardtemplate() {
-      return this.$store.getters["menu/getSettingsByIdItem"](
-        this.$route.params.idItem || {}
-      )?.cardtemplate;
     },
   },
 };
