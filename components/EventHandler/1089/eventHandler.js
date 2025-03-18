@@ -1139,12 +1139,16 @@ async function eventHandler(data, item, callback) {
 
 function getQueryPages() {
   const url = new URL(window.location.href);
-  const queryPages = url.searchParams.get("page").split(",");
+  const queryPages = url.searchParams.get("page")?.split(",");
 
   return queryPages?.length ? queryPages.map((item) => Number(item)) : null;
 }
 
 function setFieldsVisibleByPages(data, pages) {
+  if (!pages) {
+    return data;
+  }
+
   return data.map((item) => {
     if (pages.includes(item.page)) {
       return { ...item, visible: true, readonly: false };
@@ -1161,6 +1165,7 @@ function filterFieldsByQueryPage(data) {
 }
 
 function initHandler(data, item) {
+  console.log('!!!!!!!!!!');
   const TRANSPORT_BLOCK = 2;
   const HOLDER_BLOCK = 3;
   const OWNER_BLOCK = 4;
@@ -1172,7 +1177,6 @@ function initHandler(data, item) {
   const idModel = data.find((f) => f.name === "IDMODEL");
   const doctype = data.find((f) => f.name === "IDVEHDOCTYPE");
   const vehical = data.find((f) => f.name === "IDVEHICLETYPE");
-
   // doctype.visible = false;
   // vehical.visible = false;
 
@@ -1310,5 +1314,6 @@ function initHandler(data, item) {
 
   return dataSet;
 }
+
 
 export { eventHandler, initHandler };
