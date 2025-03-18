@@ -15,11 +15,11 @@
     <currency-input
       class="form-control"
       :class="validClass"
-      :placeholder="data.placeholder"
+      :placeholder="placeholder"
       :disabled="!edit ? !edit : data.readonly"
       v-model="fieldValue"
       :allowNegative="false"
-      :currency="{ suffix: ` ${data.placeholder}` }"
+      :currency="{ suffix: `${placeholder}` }"
       v-on:blur="eventHandlerBlur"
       :id="data.name"
     />
@@ -62,6 +62,9 @@ export default {
   },
 
   computed: {
+    placeholder() {
+      return this.data.placeholder || "";
+    },
     fieldValue: {
       get: function () {
         if (this.data.value !== 0) {
