@@ -37,7 +37,7 @@
           />
 
           <span v-else>
-            {{ firstAvailableStep.name }}
+            {{ name }}
           </span>
         </div>
         <div class="col-6">
@@ -132,9 +132,6 @@ export default {
     },
     currentStep() {
       return this.wizardCursor.find((item) => item.NITEM === this.currentId);
-    },
-    firstAvailableStep() {
-      return this.availableTabs[0] ?? { name: "" };
     },
     name() {
       return this.currentStep?.SNAME ?? "";
