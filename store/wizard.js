@@ -34,7 +34,9 @@ export const actions = {
       commit("setWizardIsError", false);
       return await this.$axios
         .get(
-          `/api/wizard/${params.idModule}/${params.idWizard}/${params.idCard}`
+          `/api/wizard/${params.idModule}/${params.idWizard}/${params.idCard}${
+            params?.zone === "free" ? "?zone=free" : ""
+          }`
         )
         .then((res) => {
           commit("setWizard", res.data.data);
