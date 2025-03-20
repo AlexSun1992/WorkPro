@@ -1,9 +1,8 @@
 <template>
   <div>
-    <button type="button" class="btn btn-secondary" @click="showModal">
+    <button type="button" class="btn-secondary" @click="showModal">
       Авторизоваться
     </button>
-
     <b-modal
       id="sms-auth-confirm-modal"
       v-model="isModalVisible"
@@ -11,13 +10,12 @@
       @close="resetForm"
       :centered="true"
       :static="true"
+      title="Авторизация"
       content-class="sms-confirm-modal"
-      title="Введите код"
     >
       <div class="form-container" v-if="isModalVisible">
-        <h2>Авторизация</h2>
-        <form id="authForm">
-          <label for="phoneNumber">Номер телефона</label>
+        <b-form id="authForm">
+          <label for="phoneNumber">Введите номер телефона</label>
           <input
             type="number"
             :class="phoneNumberClass"
@@ -33,10 +31,36 @@
             required
             v-model="phoneNumber"
           />
+
+          <div class="error-block d-block mt-1" v-if="wrongAuthData">
+            {{ smsErrorMessage }}
+          </div>
+
+          <label for="smsCode" class="mt-3"
+            >Введите код подтверждения из SMS</label
+          >
+          <input
+            type="number"
+            id="smsCode"
+            name="smsCode"
+            :class="smsCodeClass"
+            @blur="touchSMSCode"
+            @keydown.enter="sendAuthData"
+            @input="updateSMSCode"
+            placeholder="Введите код из СМС"
+            :disabled="isAuthInputDisabled"
+            required
+            v-model="SMSCode"
+          />
+
           <!-- Кнопка запроса СМС -->
           <button
             type="button"
-            class="btn btn-secondary"
+            class="mt-3"
+            :class="{
+              'btn-primary': isAuthButtonDisabled,
+              'btn-secondary': !isAuthButtonDisabled,
+            }"
             :disabled="isSMSButtonDisabled"
             id="sendSmsButton"
             @click="requestSMS"
@@ -53,35 +77,17 @@
             </template>
           </button>
 
-          <div class="error-block d-block mt-3" v-if="wrongAuthData">
-            {{ smsErrorMessage }}
-          </div>
-
-          <label for="smsCode">Подтверждение СМС</label>
-          <input
-            type="number"
-            id="smsCode"
-            name="smsCode"
-            :class="smsCodeClass"
-            @blur="touchSMSCode"
-            @keydown.enter="sendAuthData"
-            @input="updateSMSCode"
-            placeholder="Введите код из СМС"
-            :disabled="isAuthInputDisabled"
-            required
-            v-model="SMSCode"
-          />
           <!-- Кнопка отправки формы с кодом -->
           <button
             type="button"
-            class="btn btn-secondary"
+            class="btn-primary mt-3"
             id="authButton"
             :disabled="isAuthButtonDisabled"
             @click="sendAuthData"
           >
             Авторизация
           </button>
-        </form>
+        </b-form>
         <div v-if="isFormErrorMessage" class="error-block d-block mt-3">
           <transition name="fade" mode="out-in">
             <p :key="currentErrorKey" v-html="currentErrorMessage" />
@@ -161,7 +167,10 @@ export default {
       );
     },
     isPhoneValid() {
-      if (this.phoneNumber) {
+      if (
+        this.phoneNumber.length ===
+        this.controlAuthorizationConstants.phoneNumberLength
+      ) {
         return true;
       }
 
@@ -182,7 +191,10 @@ export default {
     },
 
     isSmsCodeValid() {
-      if (this.SMSCode) {
+      if (
+        this.SMSCode?.length ===
+        this.controlAuthorizationConstants.smsCodeLength
+      ) {
         return true;
       }
 
@@ -276,7 +288,10 @@ export default {
       this.isSMSRequested = false;
       this.isPhoneNumberUpdated = true;
       this.wrongAuthData = false;
-      this.phoneNumber = this.phoneNumber.substring(0, 10);
+      this.phoneNumber = this.phoneNumber.substring(
+        0,
+        this.controlAuthorizationConstants.phoneNumberLength
+      );
       this.SMSCode = "";
       this.isFormErrorMessage = false;
     },
@@ -327,6 +342,10 @@ export default {
 
     updateSMSCode() {
       this.touchSMSCode();
+      this.SMSCode = this.SMSCode.substring(
+        0,
+        this.controlAuthorizationConstants.smsCodeLength
+      );
       this.isFormErrorMessage = false;
     },
 
