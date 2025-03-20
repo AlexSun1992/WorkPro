@@ -30,7 +30,7 @@
             v-if="availableTabs.length > 1"
             :options="availableTabs"
             value-key="NITEM"
-            placeholder="Текущий этап"
+            :placeholder="name"
             @input="goToTab($event)"
             v-model="value"
             text-key="SNAME"
@@ -101,8 +101,11 @@ export default {
       required: true,
     },
     wizardCursor: {
-      type: Array || undefined,
+      type: [Array, undefined],
       required: true,
+      default() {
+        return [];
+      },
     },
     wizardIDCARDS: {
       type: Array,

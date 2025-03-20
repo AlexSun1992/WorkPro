@@ -206,13 +206,13 @@ export default {
         );
         const nextCardId = this.wizardIDCARDS[currentCardIndex + 1];
         const backCardId = this.wizardIDCARDS[currentCardIndex - 1];
-        const nextWizardCursor = this.wizardCursor.find(
+        const nextWizardCursor = this.wizardCursor?.find(
           (item) => item.NITEM === nextCardId
         );
-        const backWizardCursor = this.wizardCursor.find(
+        const backWizardCursor = this.wizardCursor?.find(
           (item) => item.NITEM === backCardId
         );
-        const currentWizardCursor = this.wizardCursor.find(
+        const currentWizardCursor = this.wizardCursor?.find(
           (item) => item.NITEM === currentCardId
         );
         if (this.wizardRELS)
@@ -392,6 +392,29 @@ export default {
         this.init();
       }
     },
+    updateStep(ev) {
+      if (ev) {
+        this.goToPage(ev);
+      }
+    },
+    goToPage(cardId) {
+      const navigation = this.getNavigationPositionByCardId(cardId);
+
+      if (navigation) {
+        setURLParams(navigation);
+        this.init();
+      }
+    },
+    getNavigationPositionByCardId(cardId) {
+      const currentWizardCursor = this.wizardCursor.find(
+        (item) => item.NITEM === cardId
+      );
+
+      return {
+        REL: this.wizardRELS[currentWizardCursor.NORDER],
+        IDCARD: cardId,
+      };
+    },
     async wizardSave(e) {
       if (e === "Save") {
         this.$store.commit("data_card/setValueByName", {
@@ -539,7 +562,7 @@ export default {
       }
       if (this.params.idWizard) {
         await this.$store.dispatch("wizard/fetchWizard", this.params);
-        this.params.idRel = this.wizardNavigation.current.REL;
+        this.params.idRel = this.wizardNavigation.current?.REL;
       }
       await this.$store.dispatch("data_card/fetchForm", this.params);
     },
@@ -688,15 +711,6 @@ export default {
     },
     updateBlurValue($event) {
       this.callScript($event, $event);
-    },
-    updateStep(ev) {
-      /* const paramData = this.wizardCursor.find((item) => item.ID === ev);
-
-      this.params.idItem = ev; */
-      this.$emit("update", { idItem: ev });
-      // this.params.idItem = paramData.ID;
-      // TODO Возможно, нужно как-то более правильно определить IDREL
-      // this.params.idRel = this.wizardRELS[paramData?.NORDER ?? 0 - 1];
     },
   },
 };
