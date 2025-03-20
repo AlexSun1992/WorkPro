@@ -394,10 +394,10 @@ export default {
     },
     updateStep(ev) {
       if (ev) {
-        this.goToPage(ev);
+        this.backToPage(ev);
       }
     },
-    goToPage(cardId) {
+    backToPage(cardId) {
       const navigation = this.getNavigationPositionByCardId(cardId);
 
       if (navigation) {
