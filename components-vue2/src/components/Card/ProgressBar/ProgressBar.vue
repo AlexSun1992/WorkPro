@@ -142,7 +142,7 @@ export default {
     nextStep() {
       const { currentTab } = this;
       const { nextTab } = this;
-      const result = { name: "", url: "" };
+      const result = { name: "", url: "", order: nextTab?.NORDER ?? -1 };
 
       if (nextTab) {
         result.name = nextTab?.SNAME ?? "";
@@ -162,9 +162,12 @@ export default {
     },
     nextTab() {
       if (this.currentTab && this.currentTabOrder < this.maxOrder) {
-        return this?.tabs.find(
-          (item) => item.NORDER === this.currentTabOrder + 1
-        );
+        const temp = this.tabs?.filter(
+          (item) => item.NORDER > this.currentTabOrder
+        )
+          const temp2 = temp?.sort((a, b) => a - b)[0];
+
+        return temp2;
       }
 
       return null;
