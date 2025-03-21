@@ -32,7 +32,7 @@
             value-key="NITEM"
             :placeholder="name"
             @input="goToTab($event)"
-            v-model="value"
+            :value="currentCardId"
             text-key="SNAME"
           />
 
@@ -114,12 +114,10 @@ export default {
       default() {},
     },
   },
-  data() {
-    return {
-      value: this.wizardNavigation?.current.IDCARD ?? -1,
-    };
-  },
   computed: {
+    currentCardId() {
+      return this.wizardNavigation?.current.IDCARD ?? -1;
+    },
     tabs() {
       if (this.wizardIDCARDS?.length) {
         return this.wizardCursor.filter((item) =>
