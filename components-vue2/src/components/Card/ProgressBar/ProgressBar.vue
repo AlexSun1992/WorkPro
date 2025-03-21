@@ -101,11 +101,9 @@ export default {
       required: true,
     },
     wizardCursor: {
-      type: [Array, undefined],
+      type: Array,
       required: true,
-      default() {
-        return [];
-      },
+      default: () => [],
     },
     wizardIDCARDS: {
       type: Array,
@@ -126,7 +124,9 @@ export default {
   computed: {
     tabs() {
       if (this.wizardIDCARDS?.length) {
-        return this.wizardCursor.filter(item => this.wizardIDCARDS.includes(item.NITEM));
+        return this.wizardCursor.filter((item) =>
+          this.wizardIDCARDS.includes(item.NITEM)
+        );
       }
 
       return this.wizardCursor;
@@ -166,12 +166,9 @@ export default {
     },
     nextTab() {
       if (this.currentTab && this.currentTabOrder < this.maxOrder) {
-        const temp = this.tabs?.filter(
-          (item) => item.NORDER > this.currentTabOrder
-        )
-          const temp2 = temp?.sort((a, b) => a - b)[0];
-
-        return temp2;
+        return this.tabs
+          ?.filter((item) => item.NORDER > this.currentTabOrder)
+          .sort((a, b) => a - b)[0];
       }
 
       return null;
