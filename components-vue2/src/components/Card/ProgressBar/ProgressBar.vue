@@ -102,12 +102,10 @@ export default {
     },
     wizardCursor: {
       type: Array,
-      required: true,
       default: () => [],
     },
     wizardIDCARDS: {
       type: Array,
-      required: false,
       default: null,
     },
     wizardNavigation: {
