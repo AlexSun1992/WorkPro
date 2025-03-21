@@ -87,5 +87,6 @@ describe("Wizard ProgressBar", () => {
 
     expect(wrapper.vm.currentStep.NORDER).toBe(4);
     expect(wrapper.vm.nextStep.order).toBe(6);
+    expect(wrapper.vm.nextStep.name).toBe("Доп сведения о ТС");
   });
 });
