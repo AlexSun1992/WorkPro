@@ -30,14 +30,14 @@
             v-if="availableTabs.length > 1"
             :options="availableTabs"
             value-key="NITEM"
-            placeholder="Текущий этап"
+            :placeholder="name"
             @input="goToTab($event)"
             v-model="value"
             text-key="SNAME"
           />
 
           <span v-else>
-            {{ firstAvailableStep.name }}
+            {{ name }}
           </span>
         </div>
         <div class="col-6">
@@ -101,12 +101,11 @@ export default {
       required: true,
     },
     wizardCursor: {
-      type: Array || undefined,
-      required: true,
+      type: Array,
+      default: () => [],
     },
     wizardIDCARDS: {
       type: Array,
-      required: false,
       default: null,
     },
     wizardNavigation: {
@@ -122,7 +121,13 @@ export default {
   },
   computed: {
     tabs() {
-      return this.wizardCursor ?? [];
+      if (this.wizardIDCARDS?.length) {
+        return this.wizardCursor.filter((item) =>
+          this.wizardIDCARDS.includes(item.NITEM)
+        );
+      }
+
+      return this.wizardCursor;
     },
     currentTab() {
       return this.wizardNavigation?.current ?? {};
@@ -131,10 +136,7 @@ export default {
       return this.currentTab?.IDCARD ?? -1;
     },
     currentStep() {
-      return this.wizardCursor.find((item) => item.NITEM === this.currentId);
-    },
-    firstAvailableStep() {
-      return this.availableTabs[0] ?? { name: "" };
+      return this.tabs.find((item) => item.NITEM === this.currentId);
     },
     name() {
       return this.currentStep?.SNAME ?? "";
@@ -142,7 +144,7 @@ export default {
     nextStep() {
       const { currentTab } = this;
       const { nextTab } = this;
-      const result = { name: "", url: "" };
+      const result = { name: "", url: "", order: nextTab?.NORDER ?? -1 };
 
       if (nextTab) {
         result.name = nextTab?.SNAME ?? "";
@@ -162,9 +164,9 @@ export default {
     },
     nextTab() {
       if (this.currentTab && this.currentTabOrder < this.maxOrder) {
-        return this?.tabs.find(
-          (item) => item.NORDER === this.currentTabOrder + 1
-        );
+        return this.tabs
+          ?.filter((item) => item.NORDER > this.currentTabOrder)
+          .sort((a, b) => a - b)[0];
       }
 
       return null;
