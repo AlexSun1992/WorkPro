@@ -125,7 +125,11 @@ export default {
   },
   computed: {
     tabs() {
-      return this.wizardCursor ?? [];
+      if (this.wizardIDCARDS?.length) {
+        return this.wizardCursor.filter(item => this.wizardIDCARDS.includes(item.NITEM));
+      }
+
+      return this.wizardCursor;
     },
     currentTab() {
       return this.wizardNavigation?.current ?? {};
@@ -134,7 +138,7 @@ export default {
       return this.currentTab?.IDCARD ?? -1;
     },
     currentStep() {
-      return this.wizardCursor.find((item) => item.NITEM === this.currentId);
+      return this.tabs.find((item) => item.NITEM === this.currentId);
     },
     name() {
       return this.currentStep?.SNAME ?? "";
