@@ -1,4 +1,5 @@
-async function eventHandler(data, item, callback) {
+function eventHandler(data, item, callback) {
+  console.log("item:----", item);
   if (data.length === 0) {
     return;
   }
@@ -109,8 +110,6 @@ async function eventHandler(data, item, callback) {
         }
         if (!someFields.includes(item.name)) {
           item.visible = !visibility;
-          if (item.name === "NWEIGHT") {
-          }
         }
       }
     });
@@ -1164,6 +1163,7 @@ function filterFieldsByQueryPage(data) {
   return setFieldsVisibleByPages(data, queryPages);
 }
 
+
 function initHandler(data, item) {
   console.log('!!!!!!!!!!');
   const TRANSPORT_BLOCK = 2;
@@ -1172,7 +1172,7 @@ function initHandler(data, item) {
   const BUTTON_OPEN = "BUTTON_OPEN";
   const BUTTON_NEXT = "BUTTON_NEXT";
   const isSaved = window.location.pathname.split("/").pop() !== "0";
-  const idBrand = data.find(({ name }) => name === "IDBRAND");
+  const idBrand = data.find(({name}) => name === "IDBRAND");
   const sModel = data.find((f) => f.name === "SMODEL");
   const idModel = data.find((f) => f.name === "IDMODEL");
   const doctype = data.find((f) => f.name === "IDVEHDOCTYPE");
@@ -1300,20 +1300,20 @@ function initHandler(data, item) {
         true
       );
     }
+
+    const dataCopy = JSON.parse(JSON.stringify(data));
+    const dataByQueryPage = filterFieldsByQueryPage(dataCopy);
+
+    const dataSet = dataByQueryPage.map((item) => {
+      if (item.name === "SREGNUM") {
+        return {...item, afterSave: true};
+      }
+      return item;
+    });
+
+    return dataSet;
   }
-
-  const dataCopy = JSON.parse(JSON.stringify(data));
-  const dataByQueryPage = filterFieldsByQueryPage(dataCopy);
-
-  const dataSet = dataByQueryPage.map((item) => {
-    if (item.name === "SREGNUM") {
-      return { ...item, afterSave: true };
-    }
-    return item;
-  });
-
-  return dataSet;
 }
 
-
 export { eventHandler, initHandler };
+

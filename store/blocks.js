@@ -1,8 +1,3 @@
-import axios, { Axios } from "axios";
-import {
-  updateScript,
-  clearScript,
-} from "../components/EventHandler/eventHandler.helper";
 import formConverter from "../converters/dataform.mjs";
 import { isStringInItem } from "../components/Pages/Cabinet/Block/FilterBlock/SearchBlock.helper";
 
@@ -142,38 +137,9 @@ export const getters = {
   getUrl: (state) => state.PoutValue,
 };
 
-let cachedController = null;
-let cacheKey = null;
-let cachedPromised = null;
-
 export const actions = {
   async toggleCollapse({ commit }, payload) {
     commit("setToggleCollapse", payload);
-  },
-  async getScript({ commit, state }, payload) {
-    if (global.window) {
-      if (cacheKey !== payload.idItem) {
-        cachedController?.abort();
-        await cachedPromised?.catch(() => null);
-        commit("scriptLoaded", false);
-        cacheKey = payload.idItem;
-        cachedController = new AbortController();
-        clearScript();
-        cachedPromised = fetch(
-          `/api/card/js/${payload.idModule}/${
-            payload.idItem
-          }?time=${Date.now()}`,
-          {
-            method: "GET",
-            signal: cachedController.signal,
-          }
-        )
-          .then((res) => res.text())
-          .then((scriptText) => updateScript(scriptText))
-          .then(() => commit("scriptLoaded", true));
-      }
-      await cachedPromised;
-    }
   },
   async fetchForm({ commit, dispatch }, { moduleId, menuId, itemId }) {
     await this.$axios
