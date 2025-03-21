@@ -4913,10 +4913,6 @@ input:disabled,
   }
 }
 
-i.dropdown.icon {
-  display: none;
-}
-
 .ui.fluid.search.dropdown {
   padding: 0;
   margin: 0;
@@ -6518,7 +6514,7 @@ h5.listing {
   .map-balloon-adress {
     font-size: 1rem;
   }
-  .cabinet .map-balloon-title {
+  .map-balloon-title {
     margin-bottom: 1.2rem;
   }
 }
@@ -6687,4 +6683,76 @@ h5.listing {
 }
 .btn-pencil:hover {
   text-decoration: underline;
+}
+
+.ui.selection.dropdown > .dropdown.icon {
+  top: 26px;
+  right: 23px;
+}
+.ui.dropdown > .dropdown.icon:before {
+  background: url(/system/modules/ru.reso.v2/resources/img/icons/Icon.svg) 50%
+    50% no-repeat;
+}
+
+.ui.fluid.search.selection.dropdown {
+  border: 1px solid #c3c3c3;
+  border-radius: 15px !important;
+}
+.ui.fluid.search.selection.dropdown:hover {
+  border: 1px solid #686868;
+}
+
+.ui.fluid.search.selection.dropdown i {
+  display: block;
+}
+.ui.fluid.search.selection.dropdown i:before {
+  background: url(/img/icon-dropdown.svg) 50% 50% no-repeat;
+}
+.autocomplete-input {
+  background: url(/img/icon-dropdown.svg) right 14px 50% no-repeat;
+}
+
+.ui.fluid.search.selection.dropdown.is-valid {
+  border: 2px solid #43b02a !important;
+  background: #fff url(/img/input-valid.svg) 100% no-repeat !important;
+  border-radius: 15px;
+}
+.ui.fluid.search.selection.dropdown.is-invalid {
+  border: 2px solid #eb5757 !important;
+  border-radius: 15px;
+}
+.ui.fluid.search.selection.dropdown.disabled i,
+.ui.fluid.search.selection.dropdown.is-valid i {
+  display: none;
+}
+.ui.fluid.search.dropdown:hover .text {
+  background-color: transparent;
+  outline: none;
+  box-shadow: none;
+  border: 0;
+  border-radius: 15px !important;
+}
+.ui.search.dropdown.is-invalid > input.search,
+.ui.search.dropdown.is-valid > input.search {
+  border: 0 !important;
+  background: transparent !important;
+}
+.ui.fluid.search.dropdown .text {
+  border: 0px;
+}
+.ui.fluid.search.dropdown.active .menu.visible {
+  margin: 0 0 0 -2px;
+  width: calc(100% + 4px);
+}
+
+.ui.selection.dropdown > .dropdown.icon {
+  top: 26px;
+  right: 19px;
+}
+
+.autocomplete-input {
+  background: url(/img/icon-dropdown.svg) right 13px top 15px no-repeat;
+}
+.no_arrow .autocomplete-input {
+  background: #fff;
 }
