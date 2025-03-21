@@ -116,7 +116,7 @@ export default {
   },
   data() {
     return {
-      value: 4526,
+      value: this.wizardNavigation?.current.IDCARD ?? -1,
     };
   },
   computed: {
