@@ -1193,6 +1193,27 @@ function initHandler(data, item) {
     });
   }
 
+  function isFreeZone() {
+    const pathNames = window.location.pathname.split("/");
+
+    return pathNames.includes("cabinet");
+  }
+
+  function getFieldByName(name) {
+    return data.find(item => item.name === name);
+  }
+
+  function setPublicAttr() {
+    const freeZone = isFreeZone() ? "N" : "Y";
+    const field = getFieldByName("LPUBLIC");
+
+    if (field) {
+      field.value = freeZone;
+    }
+  }
+
+  setPublicAttr();
+
   function setReverseVisibleForSomeFieldsOnCurPage(
     data,
     someFields,
