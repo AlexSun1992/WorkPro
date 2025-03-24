@@ -1196,7 +1196,7 @@ function initHandler(data, item) {
   function isFreeZone() {
     const pathNames = window.location.pathname.split("/");
 
-    return pathNames.includes("cabinet");
+    return !pathNames.includes("cabinet");
   }
 
   function getFieldByName(name) {
@@ -1204,7 +1204,7 @@ function initHandler(data, item) {
   }
 
   function setPublicAttr() {
-    const freeZone = isFreeZone() ? "N" : "Y";
+    const freeZone = isFreeZone() ? "Y" : "N";
     const field = getFieldByName("LPUBLIC");
 
     if (field) {
