@@ -86,6 +86,7 @@
         >
           <div
             v-if="
+              isShowButtons &&
               isButtonSave &&
               isWizard &&
               $route.params.idCard === '0' &&
@@ -171,6 +172,10 @@ export default {
   components: { CardEditor, VRuntimeTemplate, ActionButton },
 
   props: {
+    isShowButton: {
+      type: Boolean,
+      default: true,
+    },
     currentTab: {
       required: false,
     },
@@ -201,6 +206,9 @@ export default {
     });
   },
   computed: {
+    isShowButtons() {
+      return this.isShowButton;
+    },
     isDisabled() {
       return this.$store.getters["data_card/isDisabled"];
     },

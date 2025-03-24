@@ -81,17 +81,17 @@ import { getHash } from "./helpers";
 export default {
   name: "UploaderPage",
   components: { UploadDrop, UploaderButtons },
-  async fetch({ store, route }) {
-    await store.dispatch("uploader/fetchData", {
-      ...route.params,
-    });
-  },
   data() {
     return {
       value: 45,
       max: 100,
       compressingFilesCount: 0,
     };
+  },
+  async created() {
+    await this.$store.dispatch("uploader/fetchData", {
+      ...this.$route.params,
+    });
   },
   methods: {
     isFindHash(hash) {
