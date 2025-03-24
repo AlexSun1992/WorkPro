@@ -19,7 +19,10 @@ export const state = () => ({
 
 export const getters = {
   getData: (state) => {
-    const item = state.data.find((type) => type.name === FILETYPES);
+    const item = state.data?.find((type) => type.name === FILETYPES);
+    if (!item) {
+      return [];
+    }
     const el = "value" in item ? item : { ...item, value: [] };
     return el.value.map((item) => ({
       ...item,
