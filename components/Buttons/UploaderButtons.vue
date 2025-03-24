@@ -149,7 +149,7 @@ export default {
     },
     saveButtonName() {
       return (
-        this.$store.getters["uploader/metaData"].data.find(
+        this.$store.getters["uploader/metaData"]?.data?.find(
           (item) => item.name === "Save" && item.type === "button"
         )?.label ?? "Сохранить"
       );
