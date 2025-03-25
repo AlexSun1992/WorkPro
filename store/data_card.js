@@ -1193,12 +1193,15 @@ export const mutations = {
     const fieldRelations = state.form.filter((f) =>
       f.fieldRelation ? f.fieldRelation.includes(field.name) : false
     );
+
     fieldRelations.forEach((fieldRelation) => {
       if (fieldRelation.type === "searchSelect") {
-        fieldRelation.value = null;
-        fieldRelation.state = null;
-        fieldRelation.options = [];
-        fieldRelation.visible = false;
+        if (fieldRelation.required === false) {
+          fieldRelation.value = null;
+          fieldRelation.state = null;
+          fieldRelation.options = [];
+          fieldRelation.visible = false;
+        }
       }
     });
     if (value) {
