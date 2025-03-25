@@ -1194,9 +1194,7 @@ function initHandler(data, item) {
   }
 
   function isFreeZone() {
-    const pathNames = window.location.pathname.split("/");
-
-    return !pathNames.includes("cabinet");
+    return !window.location.pathname.includes("/cabinet/");
   }
 
   function getFieldByName(name) {
