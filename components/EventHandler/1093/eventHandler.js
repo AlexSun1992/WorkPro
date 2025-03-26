@@ -42,7 +42,7 @@ async function eventHandler(data, item, callback) {
   // Номер ВУ
   function validateSNUMBER_LICENSE(item) {
     if (!isValidValueLength(item, 6)) {
-      console.log(`~~~~~ validateSNUMBER_LICENSE isValid: FASLE`);
+      console.log(`~~~~~ validateSNUMBER_LICENSE isValid: FALSE`);
 
       return false;
     }
@@ -51,9 +51,24 @@ async function eventHandler(data, item, callback) {
   }
 
   function validateDINSURED_STAGEDATE(item, data) {
-    const insuredList = findField(data, "INSURED_LIST");
-    /* const DINSURED_STAGEDATE = findField(data, "DINSURED_STAGEDATE");
-    const DINSURED_BIRTHDATE = findField( data,"DINSURED_BIRTHDATE"); */
+    const insuredList = findField("INSURED_LIST")?.value;
+    const DINSURED_STAGEDATE = findFieldInInxuredList(insuredList[0], "DINSURED_STAGEDATE") ;
+    const DINSURED_BIRTHDATE = findFieldInInxuredList( insuredList[0],"DINSURED_BIRTHDATE");
+    const stageDate = getDate(DINSURED_STAGEDATE.value);
+    const birthDate = getDate(DINSURED_BIRTHDATE.value);
+
+    if (!stageDate || !stageDate) {
+      console.log(`------ validateDINSURED_STAGEDATE not all dates is set`)
+      return;
+    }
+
+    if (isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
+      console.log(`------ validateDINSURED_STAGEDATE dates is OK`);
+
+      return;
+    }
+
+    console.log(`------ validateDINSURED_STAGEDATE dates is NOT OK`);
   }
 
   function validateForm(data, item) {
@@ -75,12 +90,33 @@ async function eventHandler(data, item, callback) {
   const SHELP_INFO = copyData.find((f) => f.name === "SHELP_INFO");
   const BMULTI = data.find(({ name }) => name === "BMULTI");
 
-  function findField(data, name) {
+  function findField(name) {
     const field = copyData.find((item) => item.name === name);
     if (field) {
       return field;
     }
     throw new Error(`Поле ${ name } не найдено в данных`);
+  }
+
+  function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {g
+    debugger
+    const modifyMinDate = (new Date()).setFullYear(minDate.getFullYear() + years);
+    const test = maxDate >= modifyMinDate;
+    return maxDate >= modifyMinDate;
+  }
+
+  function getDate(str) {
+    const splitSrt = str?.split(".");
+
+    if (Array.isArray(splitSrt) && splitSrt.length === 3) {
+      return new Date(splitSrt.reverse());
+    }
+
+    return null;
+  }
+
+  function findFieldInInxuredList(list = [], name) {
+    return list.find(item => item.name === name);
   }
 
   function findDeepBasedField(dataSet, name, index) {
