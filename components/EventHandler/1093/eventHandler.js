@@ -1,4 +1,5 @@
 async function eventHandler(data, item, callback) {
+  const copyData = JSON.parse(JSON.stringify(data));
   const fieldsDescription = {
     SSERIA_LICENSE: { valueLength: 4 },
     SPREV_LICSERIA: { valueLength: 4 },
@@ -17,7 +18,7 @@ async function eventHandler(data, item, callback) {
     while (nextItem) {
       const keys = Object.keys(nextItem);
 
-      if (keys.every((key) => ["value", "name", "fieldId"].includes(key) )) {
+      if (keys.every((key) => [ "value", "name", "fieldId" ].includes(key))) {
         return nextItem;
       }
 
@@ -27,37 +28,59 @@ async function eventHandler(data, item, callback) {
     return nextItem;
   }
 
+  // Серия ВУ
   function validateSSERIA_LICENSE(item) {
     if (!isValidValueLength(item, 4)) {
-      console.log(`validateSSERIA_LICENSE isValid: FASLE`);
+      console.log(`~~~~~ validateSSERIA_LICENSE isValid: FASLE`);
+
+      return false;
     }
+
+    console.log(`~~~~~ validateSSERIA_LICENSE isValid: TRUE`);
+  }
+
+  // Номер ВУ
+  function validateSNUMBER_LICENSE(item) {
+    if (!isValidValueLength(item, 6)) {
+      console.log(`~~~~~ validateSNUMBER_LICENSE isValid: FASLE`);
+
+      return false;
+    }
+
+    console.log(`~~~~~ validateSNUMBER_LICENSE isValid: TRUE`);
+  }
+
+  function validateDINSURED_STAGEDATE(item, data) {
+    const insuredList = findField(data, "INSURED_LIST");
+    /* const DINSURED_STAGEDATE = findField(data, "DINSURED_STAGEDATE");
+    const DINSURED_BIRTHDATE = findField( data,"DINSURED_BIRTHDATE"); */
   }
 
   function validateForm(data, item) {
     const fieldsValidators = {
       SSERIA_LICENSE: validateSSERIA_LICENSE,
+      SNUMBER_LICENSE: validateSNUMBER_LICENSE,
+      DINSURED_STAGEDATE: validateDINSURED_STAGEDATE
     };
     const field = getFieldFromItem(item);
 
     if (fieldsValidators[field.name]) {
-      fieldsValidators[field.name](field);
+      fieldsValidators[field.name](field, data);
     }
   }
 
-
   validateForm(data, item);
-  const copyData = JSON.parse(JSON.stringify(data));
 
   const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
   const SHELP_INFO = copyData.find((f) => f.name === "SHELP_INFO");
   const BMULTI = data.find(({ name }) => name === "BMULTI");
 
-  function findField(name) {
+  function findField(data, name) {
     const field = copyData.find((item) => item.name === name);
     if (field) {
       return field;
     }
-    throw new Error(`Поле ${name} не найдено в данных`);
+    throw new Error(`Поле ${ name } не найдено в данных`);
   }
 
   function findDeepBasedField(dataSet, name, index) {
@@ -66,7 +89,7 @@ async function eventHandler(data, item, callback) {
     if (field !== undefined) {
       return field;
     }
-    throw new Error(`Поле ${name} не найдено в ${dataSet}`);
+    throw new Error(`Поле ${ name } не найдено в ${ dataSet }`);
   }
 
   if (item.value?.name === "INSURED_LIST") {
@@ -130,8 +153,10 @@ function initHandler(data) {
     if (field) {
       return field;
     }
-    throw new Error(`Поле ${name} не найдено в данных`);
+    throw new Error(`Поле ${ name } не найдено в данных`);
   }
+
+  eventHandler.findField = findField;
 
   const INSURED_LIST = findField(copyData, "INSURED_LIST");
 
