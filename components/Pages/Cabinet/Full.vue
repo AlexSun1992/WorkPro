@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import getScript from "../../../utils/getScript";
+
 const reqJson = require("../../../package.json");
 
 export default {
@@ -37,11 +39,14 @@ export default {
   },
 
   watch: {
-    urlScript() {
-      this.$store.dispatch("blocks/getScript", {
-        idModule: this.$route.params.idModule,
-        idItem: this.$route.params.idItem,
-      });
+    async urlScript() {
+      await getScript(
+        {
+          idModule: this.$route.params.idModule,
+          idItem: this.$route.params.idItem,
+        },
+        this.$store
+      );
     },
   },
 
@@ -58,11 +63,14 @@ export default {
       version: reqJson.version,
     });
   },
-  created() {
-    this.$store.dispatch("blocks/getScript", {
-      idModule: this.$route.params.idModule,
-      idItem: this.$route.params.idItem,
-    });
+  async created() {
+    await getScript(
+      {
+        idModule: this.$route.params.idModule,
+        idItem: this.$route.params.idItem,
+      },
+      this.$store
+    );
   },
 };
 </script>

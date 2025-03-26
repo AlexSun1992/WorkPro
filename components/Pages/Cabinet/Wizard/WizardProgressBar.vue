@@ -97,7 +97,8 @@ export default {
       const currentOrder = currentTab?.order;
       const orders = this.tabs.map(item => item.order);
       const maxOrder = Math.max(...orders);
-      const nextTab = currentTab && currentOrder < maxOrder && this.tabs.find(item => item.order === (currentOrder + 1));
+      const nextTab = currentTab && (currentOrder < maxOrder) &&
+        this.tabs?.filter((item) => item.order > currentOrder).sort((a, b) => a - b)[0];
       const result = { name: '', url: this.getURL(currentTab.idItem) };
 
       if (nextTab) {

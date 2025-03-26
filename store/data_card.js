@@ -62,7 +62,6 @@ export const getters = {
   //   state.form
   //     .filter((el) => components.some((item) => el.name === item))
   //     .every((el) => el.visible === false),
-
   getIsActionFormDisabled: (state) => state.isActionFormDisabled,
   getSaveSuccess: (state) => state.isSaveSuccess,
   getActionParamsTitle: (state) => state.actionParamsTitle,
@@ -91,6 +90,16 @@ export const getters = {
     }
     return getErrorMessage(state.errorMessage);
   },
+  isShowWizardButton:
+    (state, getters, rootState, rootGetters) => (isUploader) => {
+      const allControlsData = getters.getForm;
+      const isControlsDataLoaded =
+        allControlsData.length > 0 && allControlsData.some((el) => !el.visible);
+      const notUploader = isUploader === false;
+      const isScriptsLoaded = rootGetters["blocks/getScriptStatus"];
+
+      return Boolean(notUploader && isScriptsLoaded && isControlsDataLoaded);
+    },
   cardCaption: (state) => state.cardCaption,
   getCopyForm: (state) => state.copyForm,
   getBodyForm: (state) => state.bodyForm,
@@ -369,6 +378,7 @@ export const actions = {
     commit("setCardRelId", params.idRel);
     commit("setModuleId", params.idModule);
     commit("setMenuId", params.idItem);
+
     if (!params.cache) {
       commit("setLoading", true);
       commit("setDisabled", true);
@@ -1216,12 +1226,15 @@ export const mutations = {
     const fieldRelations = state.form.filter((f) =>
       f.fieldRelation ? f.fieldRelation.includes(field.name) : false
     );
+
     fieldRelations.forEach((fieldRelation) => {
       if (fieldRelation.type === "searchSelect") {
-        fieldRelation.value = null;
-        fieldRelation.state = null;
-        fieldRelation.options = [];
-        fieldRelation.visible = false;
+        if (fieldRelation.required === false) {
+          fieldRelation.value = null;
+          fieldRelation.state = null;
+          fieldRelation.options = [];
+          fieldRelation.visible = false;
+        }
       }
     });
     if (value) {
