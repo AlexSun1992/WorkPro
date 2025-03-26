@@ -1,4 +1,51 @@
 async function eventHandler(data, item, callback) {
+  const fieldsDescription = {
+    SSERIA_LICENSE: { valueLength: 4 },
+    SPREV_LICSERIA: { valueLength: 4 },
+    SNUMBER_LICENSE: { valueLength: 6 },
+    SPREV_LICNUMBER: { valueLength: 6 },
+    DINSURED_STAGEDATE: {},
+  };
+
+  function isValidValueLength(item, length) {
+    return item.value?.length === length;
+  }
+
+  function getFieldFromItem(item) {
+    let nextItem = item;
+
+    while (nextItem) {
+      const keys = Object.keys(nextItem);
+
+      if (keys.every((key) => ["value", "name", "fieldId"].includes(key) )) {
+        return nextItem;
+      }
+
+      nextItem = nextItem?.value ?? null;
+    }
+
+    return nextItem;
+  }
+
+  function validateSSERIA_LICENSE(item) {
+    if (!isValidValueLength(item, 4)) {
+      console.log(`validateSSERIA_LICENSE isValid: FASLE`);
+    }
+  }
+
+  function validateForm(data, item) {
+    const fieldsValidators = {
+      SSERIA_LICENSE: validateSSERIA_LICENSE,
+    };
+    const field = getFieldFromItem(item);
+
+    if (fieldsValidators[field.name]) {
+      fieldsValidators[field.name](field);
+    }
+  }
+
+
+  validateForm(data, item);
   const copyData = JSON.parse(JSON.stringify(data));
 
   const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
@@ -48,7 +95,6 @@ async function eventHandler(data, item, callback) {
       "LPREV_LICENSE",
       item.value.index
     );
-    console.log(previousLicense.value);
 
     if (item.value.value.value === true) {
       previousSecondName.visible = true;
@@ -78,7 +124,6 @@ async function eventHandler(data, item, callback) {
 
 function initHandler(data) {
   const copyData = JSON.parse(JSON.stringify(data));
-  console.log(JSON.stringify(data));
 
   function findField(dataSet, name) {
     const field = dataSet.find((item) => item.name === name);
