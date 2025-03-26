@@ -56,13 +56,15 @@ async function eventHandler(data, item, callback) {
     const DINSURED_BIRTHDATE = findFieldInInxuredList( insuredList[0],"DINSURED_BIRTHDATE");
     const stageDate = getDate(DINSURED_STAGEDATE.value);
     const birthDate = getDate(DINSURED_BIRTHDATE.value);
+    const temp = new Date();
+    const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
 
     if (!stageDate || !stageDate) {
       console.log(`------ validateDINSURED_STAGEDATE not all dates is set`)
       return;
     }
 
-    if (isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
+    if (stageDate <= currentDate && isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
       console.log(`------ validateDINSURED_STAGEDATE dates is OK`);
 
       return;
@@ -98,10 +100,10 @@ async function eventHandler(data, item, callback) {
     throw new Error(`Поле ${ name } не найдено в данных`);
   }
 
-  function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {g
-    debugger
+  function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
     const modifyMinDate = (new Date()).setFullYear(minDate.getFullYear() + years);
     const test = maxDate >= modifyMinDate;
+
     return maxDate >= modifyMinDate;
   }
 
