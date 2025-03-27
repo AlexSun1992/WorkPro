@@ -60,4 +60,33 @@ describe("Wizard ProgressBar", () => {
     expect(htmlData).toContain("Следующий этап");
     expect(htmlData).not.toContain(" - шаг ");
   });
+
+  test("nextTab method must return next tab if next order is +1", () => {
+    wrapper = mount(ProgressBar, {
+      propsData: {
+        wizardRels: [],
+        wizardCursor: progressBarMock.wizardCursor,
+        wizardIDCARDS: [],
+        wizardNavigation: progressBarMock.wizardNavigation,
+      },
+    });
+
+    expect(wrapper.vm.currentStep.NORDER).toBe(4);
+    expect(wrapper.vm.nextStep.order).toBe(5);
+  });
+
+  test("nextTab method must return next tab if next order is not +1", () => {
+    wrapper = mount(ProgressBar, {
+      propsData: {
+        wizardRels: [],
+        wizardCursor: progressBarMock.wizardCursor.filter(item => item.NORDER !== 5),
+        wizardIDCARDS: [],
+        wizardNavigation: progressBarMock.wizardNavigation,
+      },
+    });
+
+    expect(wrapper.vm.currentStep.NORDER).toBe(4);
+    expect(wrapper.vm.nextStep.order).toBe(6);
+    expect(wrapper.vm.nextStep.name).toBe("Доп сведения о ТС");
+  });
 });

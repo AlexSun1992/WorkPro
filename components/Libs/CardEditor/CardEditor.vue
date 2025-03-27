@@ -76,6 +76,7 @@
     />
   </div>
 </template>
+
 <script>
 import JsFileDownloader from "js-file-downloader";
 import mime from "mime-types";
@@ -84,9 +85,9 @@ import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 import SkeletonBox from "~/components/Libs/SkeletonBox";
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import FormBlock from "@/components/Libs/Form/FormBlock";
-import { clearScript } from "~/components/EventHandler/eventHandler.helper";
 import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
 import { saveFileAxios } from "../../../utils/saveFile";
+import getScript from "../../../utils/getScript";
 
 let controller;
 let confirmPromise = null;
@@ -149,10 +150,11 @@ export default {
   async created() {
     try {
       if (process.client) {
-        await this.$store.dispatch("blocks/getScript", {
+        await getScript({
           idModule: this.$route.params.idModule,
           idItem: this.$route.params.idItem,
-        });
+        },
+        this.$store);
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
@@ -440,7 +442,6 @@ export default {
               const tab = this.wizardTabs.find(
                 (w) => w.idItem === parseInt(nextIdItem, 10)
               );
-              await this.$store.dispatch("menu/fetchMenuById", tab);
               const settingsTab = this.$store.getters[
                 "menu/getSettingsByIdItem"
               ](tab.idItem || {});
@@ -483,17 +484,13 @@ export default {
               this.$router.push(this.$route.query?.ref);
               return;
             }
-            if (this.$route.params.idCard) {
-              await this.$store.dispatch(
-                "data_card/fetchForm",
-                this.$route.params
-              );
-            }
-            if (this.wizardTabs) {
-              await this.$store.dispatch(
-                "wizard/fetchWizard",
-                this.$route.params
-              );
+            if (!this.$store.getters["data_card/cardChanged"]) {
+              if (this.$route.params.idCard) {
+                await this.$store.dispatch(
+                  "data_card/fetchForm",
+                  this.$route.params
+                );
+              }
             }
             this.stripeLoaded();
             fetchPoutvalue(resp?.data[0]?.RESULT, {

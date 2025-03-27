@@ -1,4 +1,5 @@
-async function eventHandler(data, item, callback) {
+function eventHandler(data, item, callback) {
+  console.log("item:----", item);
   if (data.length === 0) {
     return;
   }
@@ -109,8 +110,6 @@ async function eventHandler(data, item, callback) {
         }
         if (!someFields.includes(item.name)) {
           item.visible = !visibility;
-          if (item.name === "NWEIGHT") {
-          }
         }
       }
     });
@@ -702,44 +701,44 @@ async function eventHandler(data, item, callback) {
         const fieldsVisible =
           writeDownOwnerSnils.value === true
             ? [
-                "Continue",
-                "LISOWNER",
-                "NPERSONTYPE",
-                "OWNER_BACK_TS",
-                "ITEM_Devider_OWNER",
-                "SOWNER_SECOND",
-                "SOWNER_FIRST",
-                "DOWNER_BIRTHDATE",
-                "SOWNER_THIRD",
-                "SOWNER_PHONE",
-                "SOWNER_EMAIL",
-                "IDOWNER_COUNTRY",
-                "IDOWNER_DOCTYPE",
-                "SOWNER_SERIES",
-                "SOWNER_PNUMBER",
-                "SFULLOWNER_ADDRESS",
-                "BOWNER_SNILS",
-                "SOWNER_SNILS",
-              ]
+              "Continue",
+              "LISOWNER",
+              "NPERSONTYPE",
+              "OWNER_BACK_TS",
+              "ITEM_Devider_OWNER",
+              "SOWNER_SECOND",
+              "SOWNER_FIRST",
+              "DOWNER_BIRTHDATE",
+              "SOWNER_THIRD",
+              "SOWNER_PHONE",
+              "SOWNER_EMAIL",
+              "IDOWNER_COUNTRY",
+              "IDOWNER_DOCTYPE",
+              "SOWNER_SERIES",
+              "SOWNER_PNUMBER",
+              "SFULLOWNER_ADDRESS",
+              "BOWNER_SNILS",
+              "SOWNER_SNILS",
+            ]
             : [
-                "Continue",
-                "LISOWNER",
-                "NPERSONTYPE",
-                "OWNER_BACK_TS",
-                "ITEM_Devider_OWNER",
-                "SOWNER_SECOND",
-                "SOWNER_FIRST",
-                "DOWNER_BIRTHDATE",
-                "SOWNER_THIRD",
-                "SOWNER_PHONE",
-                "SOWNER_EMAIL",
-                "IDOWNER_COUNTRY",
-                "IDOWNER_DOCTYPE",
-                "SOWNER_SERIES",
-                "SOWNER_PNUMBER",
-                "SFULLOWNER_ADDRESS",
-                "BOWNER_SNILS",
-              ];
+              "Continue",
+              "LISOWNER",
+              "NPERSONTYPE",
+              "OWNER_BACK_TS",
+              "ITEM_Devider_OWNER",
+              "SOWNER_SECOND",
+              "SOWNER_FIRST",
+              "DOWNER_BIRTHDATE",
+              "SOWNER_THIRD",
+              "SOWNER_PHONE",
+              "SOWNER_EMAIL",
+              "IDOWNER_COUNTRY",
+              "IDOWNER_DOCTYPE",
+              "SOWNER_SERIES",
+              "SOWNER_PNUMBER",
+              "SFULLOWNER_ADDRESS",
+              "BOWNER_SNILS",
+            ];
 
         setReverseVisibleForSomeFieldsOnCurPage(
           data,
@@ -940,44 +939,44 @@ async function eventHandler(data, item, callback) {
         const fieldsVisible =
           writeDownOwnerSnils.value === true
             ? [
-                "Continue",
-                "LISOWNER",
-                "NPERSONTYPE",
-                "OWNER_BACK_TS",
-                "ITEM_Devider_OWNER",
-                "SOWNER_SECOND",
-                "SOWNER_FIRST",
-                "DOWNER_BIRTHDATE",
-                "SOWNER_THIRD",
-                "SOWNER_PHONE",
-                "SOWNER_EMAIL",
-                "IDOWNER_COUNTRY",
-                "IDOWNER_DOCTYPE",
-                "SOWNER_SERIES",
-                "SOWNER_PNUMBER",
-                "SFULLOWNER_ADDRESS",
-                "BOWNER_SNILS",
-                "SOWNER_SNILS",
-              ]
+              "Continue",
+              "LISOWNER",
+              "NPERSONTYPE",
+              "OWNER_BACK_TS",
+              "ITEM_Devider_OWNER",
+              "SOWNER_SECOND",
+              "SOWNER_FIRST",
+              "DOWNER_BIRTHDATE",
+              "SOWNER_THIRD",
+              "SOWNER_PHONE",
+              "SOWNER_EMAIL",
+              "IDOWNER_COUNTRY",
+              "IDOWNER_DOCTYPE",
+              "SOWNER_SERIES",
+              "SOWNER_PNUMBER",
+              "SFULLOWNER_ADDRESS",
+              "BOWNER_SNILS",
+              "SOWNER_SNILS",
+            ]
             : [
-                "Continue",
-                "LISOWNER",
-                "NPERSONTYPE",
-                "OWNER_BACK_TS",
-                "ITEM_Devider_OWNER",
-                "SOWNER_SECOND",
-                "SOWNER_FIRST",
-                "DOWNER_BIRTHDATE",
-                "SOWNER_THIRD",
-                "SOWNER_PHONE",
-                "SOWNER_EMAIL",
-                "IDOWNER_COUNTRY",
-                "IDOWNER_DOCTYPE",
-                "SOWNER_SERIES",
-                "SOWNER_PNUMBER",
-                "SFULLOWNER_ADDRESS",
-                "BOWNER_SNILS",
-              ];
+              "Continue",
+              "LISOWNER",
+              "NPERSONTYPE",
+              "OWNER_BACK_TS",
+              "ITEM_Devider_OWNER",
+              "SOWNER_SECOND",
+              "SOWNER_FIRST",
+              "DOWNER_BIRTHDATE",
+              "SOWNER_THIRD",
+              "SOWNER_PHONE",
+              "SOWNER_EMAIL",
+              "IDOWNER_COUNTRY",
+              "IDOWNER_DOCTYPE",
+              "SOWNER_SERIES",
+              "SOWNER_PNUMBER",
+              "SFULLOWNER_ADDRESS",
+              "BOWNER_SNILS",
+            ];
 
         setReverseVisibleForSomeFieldsOnCurPage(
           data,
@@ -1137,19 +1136,47 @@ async function eventHandler(data, item, callback) {
   return dataSet;
 }
 
+function getQueryPages() {
+  const url = new URL(window.location.href);
+  const queryPages = url.searchParams.get("page")?.split(",");
+
+  return queryPages?.length ? queryPages.map((item) => Number(item)) : null;
+}
+
+function setFieldsVisibleByPages(data, pages) {
+  if (!pages) {
+    return data;
+  }
+
+  return data.map((item) => {
+    if (pages.includes(item.page)) {
+      return { ...item, visible: true, readonly: false };
+    }
+
+    return { ...item };
+  });
+}
+
+function filterFieldsByQueryPage(data) {
+  const queryPages = getQueryPages();
+
+  return setFieldsVisibleByPages(data, queryPages);
+}
+
+
 function initHandler(data, item) {
+  console.log('!!!!!!!!!!');
   const TRANSPORT_BLOCK = 2;
   const HOLDER_BLOCK = 3;
   const OWNER_BLOCK = 4;
   const BUTTON_OPEN = "BUTTON_OPEN";
   const BUTTON_NEXT = "BUTTON_NEXT";
   const isSaved = window.location.pathname.split("/").pop() !== "0";
-  const idBrand = data.find(({ name }) => name === "IDBRAND");
+  const idBrand = data.find(({name}) => name === "IDBRAND");
   const sModel = data.find((f) => f.name === "SMODEL");
   const idModel = data.find((f) => f.name === "IDMODEL");
   const doctype = data.find((f) => f.name === "IDVEHDOCTYPE");
   const vehical = data.find((f) => f.name === "IDVEHICLETYPE");
-
   // doctype.visible = false;
   // vehical.visible = false;
 
@@ -1165,6 +1192,25 @@ function initHandler(data, item) {
       }
     });
   }
+
+  function isFreeZone() {
+    return !window.location.pathname.includes("/cabinet/");
+  }
+
+  function getFieldByName(name) {
+    return data.find(item => item.name === name);
+  }
+
+  function setPublicAttr() {
+    const freeZone = isFreeZone() ? "Y" : "N";
+    const field = getFieldByName("LPUBLIC");
+
+    if (field) {
+      field.value = freeZone;
+    }
+  }
+
+  setPublicAttr();
 
   function setReverseVisibleForSomeFieldsOnCurPage(
     data,
@@ -1273,18 +1319,20 @@ function initHandler(data, item) {
         true
       );
     }
+
+    const dataCopy = JSON.parse(JSON.stringify(data));
+    const dataByQueryPage = filterFieldsByQueryPage(dataCopy);
+
+    const dataSet = dataByQueryPage.map((item) => {
+      if (item.name === "SREGNUM") {
+        return {...item, afterSave: true};
+      }
+      return item;
+    });
+
+    return dataSet;
   }
-
-  const dataCopy = JSON.parse(JSON.stringify(data));
-
-  const dataSet = dataCopy.map((item) => {
-    if (item.name === "SREGNUM") {
-      return { ...item, afterSave: true };
-    }
-    return item;
-  });
-
-  return dataSet;
 }
 
 export { eventHandler, initHandler };
+
