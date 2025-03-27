@@ -1,12 +1,5 @@
 async function eventHandler(data, item, callback) {
   const copyData = JSON.parse(JSON.stringify(data));
-  const fieldsDescription = {
-    SSERIA_LICENSE: { valueLength: 4 },
-    SPREV_LICSERIA: { valueLength: 4 },
-    SNUMBER_LICENSE: { valueLength: 6 },
-    SPREV_LICNUMBER: { valueLength: 6 },
-    DINSURED_STAGEDATE: {},
-  };
 
   function isValidValueLength(item, length) {
     return item.value?.length === length;
@@ -51,13 +44,11 @@ async function eventHandler(data, item, callback) {
     const field = findFieldInInsuredList(insuredList, item.name);
 
     if (!isValidValueLength(item, length)) {
-      console.log(`~~~~~ validateSNUMBER_LICENSE isValid: FALSE`);
-      setFieldState(field, false, null);
+      setFieldState(field, false, `Должно быть введено не более ${length} символов`);
       return false;
     }
 
     setFieldState(field, true, null);
-    console.log(`~~~~~ validateSNUMBER_LICENSE isValid: TRUE`);
   }
 
   function validateDINSURED_STAGEDATE(item, data) {
@@ -71,22 +62,21 @@ async function eventHandler(data, item, callback) {
 
     if (!stageDate || !stageDate) {
       setFieldState(DINSURED_STAGEDATE, true, null);
-      console.log(`------ validateDINSURED_STAGEDATE not all dates is set`);
-      return;
+      setFieldState(DINSURED_BIRTHDATE, true, null);
     }
-
-    if (stageDate <= currentDate && isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
+    else if (currentDate <= stageDate) {
+      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
+    }
+    else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
+      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
+    }
+    else {
       setFieldState(DINSURED_STAGEDATE, true, null);
-      console.log(`------ validateDINSURED_STAGEDATE dates is OK`);
-
-      return;
+      setFieldState(DINSURED_BIRTHDATE, true, null);
     }
-
-    setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
-    console.log(`------ validateDINSURED_STAGEDATE dates is NOT OK`);
   }
 
-  function validateForm(data, item) {
+  function validateFormField(item) {
     const fieldsValidators = {
       SSERIA_LICENSE: validateSSERIA_LICENSE,
       SNUMBER_LICENSE: validateSNUMBER_LICENSE,
@@ -108,7 +98,7 @@ async function eventHandler(data, item, callback) {
     }
   }
 
-  validateForm(data, item);
+  validateFormField(item);
 
   const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
   const SHELP_INFO = copyData.find((f) => f.name === "SHELP_INFO");
@@ -124,13 +114,8 @@ async function eventHandler(data, item, callback) {
 
   function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
     const modifyMinDate = (new Date()).setFullYear(minDate.getFullYear() + years);
-    const test = maxDate >= modifyMinDate;
 
     return maxDate >= modifyMinDate;
-  }
-
-  function updateFieldState(field, state) {
-
   }
 
   function getDate(str) {
