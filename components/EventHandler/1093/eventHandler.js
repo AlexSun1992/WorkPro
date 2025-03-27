@@ -6,19 +6,10 @@ async function eventHandler(data, item, callback) {
   }
 
   function getFieldFromItem(item) {
-    let nextItem = item;
+    const result = {...item?.value?.value};
+    result.index = item?.value.index;
 
-    while (nextItem) {
-      const keys = Object.keys(nextItem);
-
-      if (keys.every((key) => [ "value", "name", "fieldId" ].includes(key))) {
-        return nextItem;
-      }
-
-      nextItem = nextItem?.value ?? null;
-    }
-
-    return nextItem;
+    return result;
   }
 
   // Серия ВУ
@@ -40,12 +31,12 @@ async function eventHandler(data, item, callback) {
   }
 
   function validFieldByLength(item, length) {
-    const insuredList = findField("INSURED_LIST")?.value[0];
-    const field = findFieldInInsuredList(insuredList, item.name);
+    const insuredList = findField("INSURED_LIST")?.value;
+    const field = insuredList[item.index]?.find(field => field.name === item.name);
 
-    if (!isValidValueLength(item, length)) {
+    if (item.value && !isValidValueLength(item, length)) {
       setFieldState(field, false, `Должно быть введено не более ${length} символов`);
-      return false;
+      return;
     }
 
     setFieldState(field, true, null);
@@ -53,27 +44,30 @@ async function eventHandler(data, item, callback) {
 
   function validateDINSURED_STAGEDATE(item, data) {
     const insuredList = findField("INSURED_LIST")?.value;
-    const DINSURED_STAGEDATE = findFieldInInsuredList(insuredList[0], "DINSURED_STAGEDATE") ;
-    const DINSURED_BIRTHDATE = findFieldInInsuredList( insuredList[0],"DINSURED_BIRTHDATE");
-    const stageDate = getDate(DINSURED_STAGEDATE.value);
-    const birthDate = getDate(DINSURED_BIRTHDATE.value);
-    const temp = new Date();
-    const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
 
-    if (!stageDate || !stageDate) {
-      setFieldState(DINSURED_STAGEDATE, true, null);
-      setFieldState(DINSURED_BIRTHDATE, true, null);
-    }
-    else if (currentDate < stageDate) {
-      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
-    }
-    else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
-      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
-    }
-    else {
-      setFieldState(DINSURED_STAGEDATE, true, null);
-      setFieldState(DINSURED_BIRTHDATE, true, null);
-    }
+    insuredList?.forEach(list => {
+      const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE") ;
+      const DINSURED_BIRTHDATE = findFieldInInsuredList( list,"DINSURED_BIRTHDATE");
+      const stageDate = getDate(DINSURED_STAGEDATE.value);
+      const birthDate = getDate(DINSURED_BIRTHDATE.value);
+      const temp = new Date();
+      const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
+
+      if (stageDate && currentDate < stageDate) {
+        setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
+      }
+      else if (!stageDate || !birthDate) {
+        setFieldState(DINSURED_STAGEDATE, true, null);
+        setFieldState(DINSURED_BIRTHDATE, true, null);
+      }
+      else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
+        setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
+      }
+      else {
+        setFieldState(DINSURED_STAGEDATE, true, null);
+        setFieldState(DINSURED_BIRTHDATE, true, null);
+      }
+    });
   }
 
   function validateFormField(item) {
@@ -82,7 +76,8 @@ async function eventHandler(data, item, callback) {
       SNUMBER_LICENSE: validateSNUMBER_LICENSE,
       SPREV_LICSERIA: validateSPREV_LICSERIA,
       SPREV_LICNUMBER: validateSPREV_LICNUMBER,
-      DINSURED_STAGEDATE: validateDINSURED_STAGEDATE
+      DINSURED_STAGEDATE: validateDINSURED_STAGEDATE,
+      DINSURED_BIRTHDATE: validateDINSURED_STAGEDATE
     };
     const field = getFieldFromItem(item);
 
@@ -94,11 +89,7 @@ async function eventHandler(data, item, callback) {
   function isFormValid() {
     const insuredList = findField("INSURED_LIST")?.value;
 
-    if (insuredList?.length) {
-      return !insuredList[0].some(item => item.visible === true && item.state === false);
-    }
-
-    return true;
+    return !insuredList?.some(list => list.some(item => item.visible === true && item.state === false));
   }
 
   function setNextButtonState() {
