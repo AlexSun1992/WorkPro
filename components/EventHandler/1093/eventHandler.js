@@ -95,8 +95,9 @@ async function eventHandler(data, item, callback) {
 
   function setNextButtonState() {
     const nextButton = copyData.find(item => item.name === "Continue");
+    const multiDrive = findField("BMULTI");
 
-    nextButton.visible = isFormValid();
+    nextButton.visible = isFormValid() || multiDrive?.value;
   }
 
   function setFieldState(field, state, errMessage) {
@@ -201,7 +202,7 @@ async function eventHandler(data, item, callback) {
   }
 
   validateFormField(item);
-  setNextButtonState();
+  setNextButtonState(item);
 
   return copyData;
 }
