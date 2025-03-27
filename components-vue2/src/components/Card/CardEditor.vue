@@ -490,7 +490,18 @@ export default {
         const cardId = this.params.idCard;
         const relId = this.params.idRel;
         const { zone } = this.params;
-        const resp = await this.$store.dispatch("data_card/saveDataCard", {
+
+        const isUploaderFieldValueExist = this.getForm.find(
+          (elem) =>
+            ["Uploader", "uploadFiles"].includes(elem.type) &&
+            elem.value !== undefined
+        );
+        const storeAction =
+          isUploaderFieldValueExist === undefined
+            ? "saveDataCard"
+            : "saveDataCardUploaders";
+
+        const resp = await this.$store.dispatch(`data_card/${storeAction}`, {
           moduleId,
           itemId,
           cardId,
@@ -505,7 +516,7 @@ export default {
           }
           if (resp.data[0].ACTION !== "redirect" || action === "wizardSave") {
             await this.$store.dispatch("data_card/fetchForm", {
-              ...this.getFormParams,
+              ...this.params,
               zone,
             });
             const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
