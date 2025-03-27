@@ -112,10 +112,12 @@ async function eventHandler(data, item, callback) {
 
   function findField(name) {
     const field = copyData.find((item) => item.name === name);
+
     if (field) {
       return field;
     }
-    throw new Error(`Поле ${ name } не найдено в данных`);
+
+    console.warn(`Поле ${ name } не найдено в данных`);
   }
 
   function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
@@ -135,16 +137,17 @@ async function eventHandler(data, item, callback) {
   }
 
   function findFieldInInsuredList(list = [], name) {
-    return list.find(item => item.name === name);
+    return list?.find(item => item.name === name);
   }
 
   function findDeepBasedField(dataSet, name, index) {
-    const field = dataSet[index].find((el) => el.name === name);
+    const field = dataSet[index]?.find((el) => el.name === name);
 
     if (field !== undefined) {
       return field;
     }
-    throw new Error(`Поле ${ name } не найдено в ${ dataSet }`);
+
+    console.warn(`Поле ${ name } не найдено в ${ dataSet }`);
   }
 
   if (item.value?.name === "INSURED_LIST") {
@@ -174,14 +177,14 @@ async function eventHandler(data, item, callback) {
       item.value.index
     );
 
-    if (item.value.value.value === true) {
+    if (item?.value?.value?.value === true) {
       previousSecondName.visible = true;
       previousCountry.visible = true;
       previousSeries.visible = true;
       previousNumber.visible = true;
     }
 
-    if (item.value.value.value === false) {
+    if (item?.value?.value?.value === false) {
       previousSecondName.visible = false;
       previousCountry.visible = false;
       previousSeries.visible = false;
@@ -189,7 +192,7 @@ async function eventHandler(data, item, callback) {
     }
   }
 
-  if (BMULTI.value === true) {
+  if (BMULTI?.value === true) {
     INSURED_LIST.visible = false;
     SHELP_INFO.visible = true;
   } else {
