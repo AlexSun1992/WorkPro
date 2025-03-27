@@ -42,7 +42,7 @@ async function eventHandler(data, item, callback) {
     setFieldState(field, true, null);
   }
 
-  function validateDINSURED_STAGEDATE(item, data) {
+  function validateDINSURED_STAGEDATE(item) {
     const insuredList = findField("INSURED_LIST")?.value;
     const list = insuredList[item.insuredIndex];
     const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE") ;
@@ -95,11 +95,8 @@ async function eventHandler(data, item, callback) {
 
   function setNextButtonState() {
     const nextButton = copyData.find(item => item.name === "Continue");
-    const formState = isFormValid();
 
-    /* nextButton.readonly = !formState;
-    nextButton.disabled = !formState; */
-    nextButton.visible = formState;
+    nextButton.visible = isFormValid();
   }
 
   function setFieldState(field, state, errMessage) {
