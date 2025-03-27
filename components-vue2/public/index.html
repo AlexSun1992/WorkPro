@@ -1,115 +1,117 @@
 <!DOCTYPE html>
 <html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"
+    />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" ></script>  -->
+    <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>  -->
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport"
-    content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
-  <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-  <title>
-    <%= htmlWebpackPlugin.options.title %>
-  </title>
-  <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" ></script>  -->
-  <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>  -->
-</head>
-
-<body class="app_body">
-  <noscript>
-    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+  <body class="app_body">
+    <noscript>
+      <strong
+        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
         properly without JavaScript enabled. Please enable it to
-        continue..</strong>
-  </noscript>
+        continue..</strong
+      >
+    </noscript>
 
-  <link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap.min.6.1.css" />
-  <link rel="stylesheet" href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/main_site_styles.css" />
-  <link rel="stylesheet"
-    href="https://test-new.reso.ru/export/system/modules/ru.reso.v2/resources/css/vue_components_styles/vue_components_styles.css" />
-  <link rel="stylesheet"
-    href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/formatter_styles/resoContainer.css" />
+    <link
+      rel="stylesheet"
+      href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap.min.6.1.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/main_site_styles.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://test-new.reso.ru/export/system/modules/ru.reso.v2/resources/css/vue_components_styles/vue_components_styles.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/formatter_styles/resoContainer.css"
+    />
 
-  <script type="text/javascript"
-    src="https://reso.ru/export/system/modules/ru.reso.v2/resources/scripts/libs.site.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://reso.ru/export/system/modules/ru.reso.v2/resources/scripts/libs.site.min.js"
+    ></script>
 
-  <style>
-    .block-block>div {
-      display: none;
-    }
+    <style>
+      .block-block > div {
+        display: none;
+      }
 
-    .block-block>div.show {
-      display: block;
-    }
+      .block-block > div.show {
+        display: block;
+      }
 
-    .button-block>button {
-      margin: 0 10px 10px 0;
-    }
-  </style>
+      .button-block > button {
+        margin: 0 10px 10px 0;
+      }
+    </style>
 
-<<<<<<< HEAD
     <div class="container">
       <div class="row">
         <div class="col-12 block-block">
-          <component-card-editor module-id="55" menu-id="1107" card-id="0" />
+          <component-card-editor module-id="55" menu-id="1089" card-id="0" />
         </div>
+
         <div class="button-block mt-5"></div>
-=======
-  <div class="container">
-    <div class="row">
-      <div class="col-12 block-block">
-        <component-card-editor module-id="55" menu-id="1089" card-id="0" />
->>>>>>> d5adb7fc9483a638c8a0c18c15de7a0554e6ce9c
       </div>
-
-
-      <div class="button-block mt-5"></div>
     </div>
-  </div>
-  <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
-  <script>
-    function saveState(arr) {
-      localStorage.setItem("components", JSON.stringify(Array.from(arr)));
-    }
+    <!-- <script src="https://google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async ></script>  -->
+    <script>
+      function saveState(arr) {
+        localStorage.setItem("components", JSON.stringify(Array.from(arr)));
+      }
 
-    function getState() {
-      const arr = localStorage.getItem("components");
-      return new Set(arr ? JSON.parse(arr) : []);
-    }
+      function getState() {
+        const arr = localStorage.getItem("components");
+        return new Set(arr ? JSON.parse(arr) : []);
+      }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      let AuthFormBlock = document.querySelectorAll(".block-block > div ");
-      AuthFormBlock.forEach(function (element, i) {
-        const state = getState();
-        if (state.has(element.id)) {
-          element.classList.add("show");
-        }
-        let clickButton = document.createElement("button");
-        clickButton.setAttribute("type", "button");
-        clickButton.textContent = element.dataset.namebutton;
-        if (state.has(element.id)) {
-          clickButton.classList.add("btn-primary");
-        } else {
-          clickButton.classList.add("btn-secondary");
-        }
-
-        clickButton.addEventListener("click", function () {
+      document.addEventListener("DOMContentLoaded", function () {
+        let AuthFormBlock = document.querySelectorAll(".block-block > div ");
+        AuthFormBlock.forEach(function (element, i) {
           const state = getState();
-          if (element.className === "show") {
-            element.classList.remove("show");
-            state.delete(element.id);
-            clickButton.classList.remove("btn-primary");
-            clickButton.classList.add("btn-secondary");
-          } else {
+          if (state.has(element.id)) {
             element.classList.add("show");
-            state.add(element.id);
-            clickButton.classList.remove("btn-secondary");
-            clickButton.classList.add("btn-primary");
           }
-          saveState(state);
-        });
-        document.querySelector(".button-block").appendChild(clickButton);
-      });
-    });
-  </script>
-</body>
+          let clickButton = document.createElement("button");
+          clickButton.setAttribute("type", "button");
+          clickButton.textContent = element.dataset.namebutton;
+          if (state.has(element.id)) {
+            clickButton.classList.add("btn-primary");
+          } else {
+            clickButton.classList.add("btn-secondary");
+          }
 
+          clickButton.addEventListener("click", function () {
+            const state = getState();
+            if (element.className === "show") {
+              element.classList.remove("show");
+              state.delete(element.id);
+              clickButton.classList.remove("btn-primary");
+              clickButton.classList.add("btn-secondary");
+            } else {
+              element.classList.add("show");
+              state.add(element.id);
+              clickButton.classList.remove("btn-secondary");
+              clickButton.classList.add("btn-primary");
+            }
+            saveState(state);
+          });
+          document.querySelector(".button-block").appendChild(clickButton);
+        });
+      });
+    </script>
+  </body>
 </html>
