@@ -82,6 +82,7 @@
   </div>
 </template>
 <script>
+import vMaska from "maska";
 import { mapGetters } from "vuex";
 import Form from "/../components/Libs/Form/Form.vue";
 import FormBlock from "/../components/Libs/Form/FormBlock.vue";
@@ -100,12 +101,16 @@ import { PROGRESS_BAR_CARDS_ID, PROGRESS_BAR_ZONES } from "./cardEditorConst";
 
 Vue.use(LoadScript);
 Vue.use(IconsPlugin);
+Vue.use(vMaska);
 Vue.component("VueEasyTooltip", VueEasyTooltip);
 const TOKEN_NAME = "auth._token.local";
 
 export default {
   name: "CardEditor",
   components: { ProgressBar, FormBlock, Form },
+  directives: {
+    maska: vMaska,
+  },
   props: {
     moduleId: {
       type: Number,

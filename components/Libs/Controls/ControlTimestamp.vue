@@ -14,7 +14,6 @@
               <span v-html="data.helpText" /></vue-easy-tooltip></span
         ></span>
       </template>
-      {{ data }}
       <date-picker
         v-model="fieldValue"
         v-maska="maskTemplate"
