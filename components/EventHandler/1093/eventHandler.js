@@ -64,7 +64,7 @@ async function eventHandler(data, item, callback) {
       setFieldState(DINSURED_STAGEDATE, true, null);
       setFieldState(DINSURED_BIRTHDATE, true, null);
     }
-    else if (currentDate <= stageDate) {
+    else if (currentDate < stageDate) {
       setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
     }
     else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
@@ -91,14 +91,31 @@ async function eventHandler(data, item, callback) {
     }
   }
 
+  function isFormValid() {
+    const insuredList = findField("INSURED_LIST")?.value;
+
+    if (insuredList?.length) {
+      return !insuredList[0].some(item => item.visible === true && item.state === false);
+    }
+
+    return true;
+  }
+
+  function setNextButtonState() {
+    const nextButton = copyData.find(item => item.name === "Continue");
+    const formState = isFormValid();
+
+    /* nextButton.readonly = !formState;
+    nextButton.disabled = !formState; */
+    nextButton.visible = formState;
+  }
+
   function setFieldState(field, state, errMessage) {
     if (field) {
       field.state = state;
       field.error = errMessage;
     }
   }
-
-  validateFormField(item);
 
   const INSURED_LIST = copyData.find((f) => f.name === "INSURED_LIST");
   const SHELP_INFO = copyData.find((f) => f.name === "SHELP_INFO");
@@ -190,6 +207,9 @@ async function eventHandler(data, item, callback) {
     INSURED_LIST.visible = true;
     SHELP_INFO.visible = false;
   }
+
+  validateFormField(item);
+  setNextButtonState();
 
   return copyData;
 }
