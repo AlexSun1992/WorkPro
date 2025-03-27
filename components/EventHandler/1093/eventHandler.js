@@ -7,7 +7,7 @@ async function eventHandler(data, item, callback) {
 
   function getFieldFromItem(item) {
     const result = {...item?.value?.value};
-    result.index = item?.value.index;
+    result.insuredIndex = item?.value.index;
 
     return result;
   }
@@ -32,7 +32,7 @@ async function eventHandler(data, item, callback) {
 
   function validFieldByLength(item, length) {
     const insuredList = findField("INSURED_LIST")?.value;
-    const field = insuredList[item.index]?.find(field => field.name === item.name);
+    const field = insuredList[item.insuredIndex]?.find(field => field.name === item.name);
 
     if (item.value && !isValidValueLength(item, length)) {
       setFieldState(field, false, `Должно быть введено не более ${length} символов`);
@@ -44,30 +44,31 @@ async function eventHandler(data, item, callback) {
 
   function validateDINSURED_STAGEDATE(item, data) {
     const insuredList = findField("INSURED_LIST")?.value;
+    const list = insuredList[item.insuredIndex];
+    const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE") ;
+    const DINSURED_BIRTHDATE = findFieldInInsuredList( list,"DINSURED_BIRTHDATE");
+    const stageDate = getDate(DINSURED_STAGEDATE.value);
+    const birthDate = getDate(DINSURED_BIRTHDATE.value);
+    const temp = new Date();
+    const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
 
-    insuredList?.forEach(list => {
-      const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE") ;
-      const DINSURED_BIRTHDATE = findFieldInInsuredList( list,"DINSURED_BIRTHDATE");
-      const stageDate = getDate(DINSURED_STAGEDATE.value);
-      const birthDate = getDate(DINSURED_BIRTHDATE.value);
-      const temp = new Date();
-      const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
-
-      if (stageDate && currentDate < stageDate) {
-        setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
-      }
-      else if (!stageDate || !birthDate) {
-        setFieldState(DINSURED_STAGEDATE, true, null);
-        setFieldState(DINSURED_BIRTHDATE, true, null);
-      }
-      else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
-        setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
-      }
-      else {
-        setFieldState(DINSURED_STAGEDATE, true, null);
-        setFieldState(DINSURED_BIRTHDATE, true, null);
-      }
-    });
+    if (stageDate && currentDate < stageDate) {
+      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
+    }
+    if (birthDate && currentDate < birthDate) {
+      setFieldState(DINSURED_BIRTHDATE, false, "Дата рождения не может быть позже текущей даты");
+    }
+    else if (!stageDate || !birthDate) {
+      setFieldState(DINSURED_STAGEDATE, true, null);
+      setFieldState(DINSURED_BIRTHDATE, true, null);
+    }
+    else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
+      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
+    }
+    else {
+      setFieldState(DINSURED_STAGEDATE, true, null);
+      setFieldState(DINSURED_BIRTHDATE, true, null);
+    }
   }
 
   function validateFormField(item) {
