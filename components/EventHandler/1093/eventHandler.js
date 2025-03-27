@@ -30,41 +30,53 @@ async function eventHandler(data, item, callback) {
 
   // Серия ВУ
   function validateSSERIA_LICENSE(item) {
-    if (!isValidValueLength(item, 4)) {
-      console.log(`~~~~~ validateSSERIA_LICENSE isValid: FASLE`);
-
-      return false;
-    }
-
-    console.log(`~~~~~ validateSSERIA_LICENSE isValid: TRUE`);
+    validFieldByLength(item, 4);
   }
 
   // Номер ВУ
   function validateSNUMBER_LICENSE(item) {
-    if (!isValidValueLength(item, 6)) {
-      console.log(`~~~~~ validateSNUMBER_LICENSE isValid: FALSE`);
+    validFieldByLength(item, 6);
+  }
 
+  function validateSPREV_LICSERIA(item) {
+    validFieldByLength(item, 4);
+  }
+
+  function validateSPREV_LICNUMBER(item) {
+    validFieldByLength(item, 6);
+  }
+
+  function validFieldByLength(item, length) {
+    const insuredList = findField("INSURED_LIST")?.value[0];
+    const field = findFieldInInsuredList(insuredList, item.name);
+
+    if (!isValidValueLength(item, length)) {
+      console.log(`~~~~~ validateSNUMBER_LICENSE isValid: FALSE`);
+      setFieldState(field, false, null);
       return false;
     }
 
+    setFieldState(field, true, null);
     console.log(`~~~~~ validateSNUMBER_LICENSE isValid: TRUE`);
   }
 
   function validateDINSURED_STAGEDATE(item, data) {
     const insuredList = findField("INSURED_LIST")?.value;
-    const DINSURED_STAGEDATE = findFieldInInxuredList(insuredList[0], "DINSURED_STAGEDATE") ;
-    const DINSURED_BIRTHDATE = findFieldInInxuredList( insuredList[0],"DINSURED_BIRTHDATE");
+    const DINSURED_STAGEDATE = findFieldInInsuredList(insuredList[0], "DINSURED_STAGEDATE") ;
+    const DINSURED_BIRTHDATE = findFieldInInsuredList( insuredList[0],"DINSURED_BIRTHDATE");
     const stageDate = getDate(DINSURED_STAGEDATE.value);
     const birthDate = getDate(DINSURED_BIRTHDATE.value);
     const temp = new Date();
     const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
-debugger
+
     if (!stageDate || !stageDate) {
-      console.log(`------ validateDINSURED_STAGEDATE not all dates is set`)
+      setFieldState(DINSURED_STAGEDATE, true, null);
+      console.log(`------ validateDINSURED_STAGEDATE not all dates is set`);
       return;
     }
 
     if (stageDate <= currentDate && isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
+      setFieldState(DINSURED_STAGEDATE, true, null);
       console.log(`------ validateDINSURED_STAGEDATE dates is OK`);
 
       return;
@@ -78,12 +90,14 @@ debugger
     const fieldsValidators = {
       SSERIA_LICENSE: validateSSERIA_LICENSE,
       SNUMBER_LICENSE: validateSNUMBER_LICENSE,
+      SPREV_LICSERIA: validateSPREV_LICSERIA,
+      SPREV_LICNUMBER: validateSPREV_LICNUMBER,
       DINSURED_STAGEDATE: validateDINSURED_STAGEDATE
     };
     const field = getFieldFromItem(item);
 
     if (fieldsValidators[field.name]) {
-      fieldsValidators[field.name](field, data);
+      fieldsValidators[field.name](field);
     }
   }
 
@@ -129,7 +143,7 @@ debugger
     return null;
   }
 
-  function findFieldInInxuredList(list = [], name) {
+  function findFieldInInsuredList(list = [], name) {
     return list.find(item => item.name === name);
   }
 
