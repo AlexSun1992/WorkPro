@@ -75,6 +75,18 @@ function getQueryParams(queryType, input) {
       id: "brand_model_code",
     };
   }
+
+  if (queryType === "SPHOLDER_SECOND_DADATA") {
+    return {
+      query: "fio",
+      body: {
+        query: input,
+        suggestionType: "fio",
+        parts: ["SURNAME"],
+      },
+    };
+  }
+
   throw new Error(
     `Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`
   );
