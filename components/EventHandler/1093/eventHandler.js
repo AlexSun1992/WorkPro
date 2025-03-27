@@ -58,7 +58,7 @@ async function eventHandler(data, item, callback) {
     const birthDate = getDate(DINSURED_BIRTHDATE.value);
     const temp = new Date();
     const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
-
+debugger
     if (!stageDate || !stageDate) {
       console.log(`------ validateDINSURED_STAGEDATE not all dates is set`)
       return;
@@ -70,6 +70,7 @@ async function eventHandler(data, item, callback) {
       return;
     }
 
+    setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
     console.log(`------ validateDINSURED_STAGEDATE dates is NOT OK`);
   }
 
@@ -83,6 +84,13 @@ async function eventHandler(data, item, callback) {
 
     if (fieldsValidators[field.name]) {
       fieldsValidators[field.name](field, data);
+    }
+  }
+
+  function setFieldState(field, state, errMessage) {
+    if (field) {
+      field.state = state;
+      field.error = errMessage;
     }
   }
 
@@ -105,6 +113,10 @@ async function eventHandler(data, item, callback) {
     const test = maxDate >= modifyMinDate;
 
     return maxDate >= modifyMinDate;
+  }
+
+  function updateFieldState(field, state) {
+
   }
 
   function getDate(str) {
