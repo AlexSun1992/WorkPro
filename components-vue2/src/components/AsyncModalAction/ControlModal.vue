@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dialog ref="modal">
+    <dialog ref="modal" :open="isOpen">
       <header>
         <span>{{ data.label }}</span>
         <button type="button" @click="closeModal">&#10006;</button>
@@ -12,8 +12,6 @@
 
       <footer></footer>
     </dialog>
-
-    <button @click="openModal">Open</button>
   </div>
 </template>
 
@@ -29,11 +27,11 @@ export default {
           title: "Пожалуйста подождите",
         };
       },
-      isOpen: {
-        type: Boolean,
-        default() {
-          return false;
-        },
+    },
+    isOpen: {
+      type: Boolean,
+      default() {
+        return false;
       },
     },
   },
@@ -46,7 +44,6 @@ export default {
       this.$refs.modal.close();
     },
     openModal() {
-      debugger
       this.$refs.modal.showModal();
     },
     toggleModal() {

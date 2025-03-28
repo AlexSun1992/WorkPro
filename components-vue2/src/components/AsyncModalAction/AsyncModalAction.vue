@@ -35,7 +35,7 @@ export default {
   <div>
     <button type="button" @click="openModal">Кнопка</button>
 
-    <control-modal :isOpen="isOpen" :data="data" @close="closeModal" />
+    <control-modal :is-open="isOpen" :data="data" @close="closeModal" />
   </div>
 </template>
 
