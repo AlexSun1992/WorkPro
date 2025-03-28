@@ -269,3 +269,14 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-async-modal-action",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/AsyncModalAction/AsyncModalAction"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
