@@ -222,7 +222,9 @@ export default async function redirectFromEsia(req, res) {
       res.cookie("auth._refresh_token.local", data.REFRESH_TOKEN);
       authType === "esia" && res.cookie("auth._esia", `${Date.now()}`);
 
-      res.redirect(`${successUrl.pathname}${successUrl.search}`);
+      res.redirect(
+        decodeURIComponent(`${successUrl.pathname}${successUrl.search}`)
+      );
     })
     .catch((error) => {
       console.error(`Ошибка авторизации через ${authName}`, error);
