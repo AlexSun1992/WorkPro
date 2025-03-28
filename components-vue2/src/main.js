@@ -280,3 +280,14 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "control-modal",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/AsyncModalAction/ControlModal"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
