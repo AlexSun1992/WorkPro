@@ -570,7 +570,7 @@ export default {
       url.searchParams.set(
         "ref",
         encodeURIComponent(
-          currentUrl.origin + currentUrl.pathname + currentUrl.search
+          currentUrl.host + currentUrl.pathname + currentUrl.search
         )
       );
       window.location.href = url.href;
