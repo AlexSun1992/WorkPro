@@ -19,7 +19,7 @@
           Личный кабинет
         </button>
       </div>
-      <div class="col-auto col-xl-4 mb-3" v-if="gosidodelani">
+      <div class="col-auto col-xl-4 mb-3" @click="goESIA">
         <button type="button" class="btn-gosuslugi">
           <svg
             data-v-5e3cce17=""
@@ -563,6 +563,15 @@ export default {
           this.updateFormDataErrorMessage();
         }
       }, 3000);
+    },
+    goESIA() {
+      const url = new URL("/sso?auth&type=esia", window.location.origin);
+      const currentUrl = new URL(window.location.href);
+      url.searchParams.set(
+        "ref",
+        encodeURIComponent(currentUrl.pathname + currentUrl.search)
+      );
+      window.location.href = url.href;
     },
   },
 };
