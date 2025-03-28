@@ -1,5 +1,5 @@
 <script>
-import ControlModal from "@/components/AsyncModalAction/ControlModal.vue";
+import ControlModal from "./ControlModal.vue";
 
 export default {
   name: "AsyncModalAction",
@@ -24,7 +24,9 @@ export default {
     closeModal() {
       this.isOpen = false;
     },
-    openModal() {},
+    openModal() {
+      this.isOpen = true;
+    },
   },
 };
 </script>
@@ -33,7 +35,7 @@ export default {
   <div>
     <button type="button" @click="openModal">Кнопка</button>
 
-    <ControlModal :isOpen="isOpen" :data="data" @close="closeModal" />
+    <control-modal :isOpen="isOpen" :data="data" @close="closeModal" />
   </div>
 </template>
 

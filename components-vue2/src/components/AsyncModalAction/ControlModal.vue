@@ -1,16 +1,20 @@
 <template>
-  <dialog>
-    <header>
-      <span>{{ data.label }}</span>
-      <button type="button" @click="closeModal">&#2715;</button>
-    </header>
+  <div>
+    <dialog ref="modal">
+      <header>
+        <span>{{ data.label }}</span>
+        <button type="button" @click="closeModal">&#10006;</button>
+      </header>
 
-    <main>
-      {{ data.value }}
-    </main>
+      <main>
+        {{ data.value }}
+      </main>
 
-    <footer></footer>
-  </dialog>
+      <footer></footer>
+    </dialog>
+
+    <button @click="openModal">Open</button>
+  </div>
 </template>
 
 <script>
@@ -25,16 +29,40 @@ export default {
           title: "Пожалуйста подождите",
         };
       },
+      isOpen: {
+        type: Boolean,
+        default() {
+          return false;
+        },
+      },
     },
   },
   data() {
-    return {
-      isOpen: false,
-    };
+    return {};
   },
+  computed: {},
   methods: {
     closeModal() {
-      this.$emit("close");
+      this.$refs.modal.close();
+    },
+    openModal() {
+      debugger
+      this.$refs.modal.showModal();
+    },
+    toggleModal() {
+      if (this.isOpen) {
+        this.openModal();
+      }
+      if (!this.isOpen) {
+        this.closeModal();
+      }
+    }
+  },
+  watch: {
+    isOpen(val) {
+      if (val) {
+        this.openModal();
+      }
     },
   },
 };
