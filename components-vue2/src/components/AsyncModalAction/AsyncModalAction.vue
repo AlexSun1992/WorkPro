@@ -1,36 +1,40 @@
 <script>
+import ControlModal from "@/components/AsyncModalAction/ControlModal.vue";
+
 export default {
   name: "AsyncModalAction",
+  components: { ControlModal },
   props: {
     data: {
       type: Object,
       default() {
         return {
           value: "",
-          label:"",
+          label: "Пожалуйста подождите",
         };
       },
     },
   },
   data() {
     return {
-      isDialogOpen: false
-    }
-  }
+      isOpen: false,
+    };
+  },
+  methods: {
+    closeModal() {
+      this.isOpen = false;
+    },
+    openModal() {},
+  },
 };
 </script>
 
 <template>
-  <dialog :open="isDialogOpen">
-    <header>
-      <span>{{ data.label }}</span>
-      <button type="button">&#2715;</button>
-    </header>
-    <main>
-      {{ data.value }}
-    </main>
-    <footer></footer>
-  </dialog>
+  <div>
+    <button type="button" @click="openModal">Кнопка</button>
+
+    <ControlModal :isOpen="isOpen" :data="data" @close="closeModal" />
+  </div>
 </template>
 
 <style scoped></style>
