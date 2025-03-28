@@ -569,7 +569,9 @@ export default {
       const currentUrl = new URL(window.location.href);
       url.searchParams.set(
         "ref",
-        encodeURIComponent(currentUrl.pathname + currentUrl.search)
+        encodeURIComponent(
+          currentUrl.origin + currentUrl.pathname + currentUrl.search
+        )
       );
       window.location.href = url.href;
     },
