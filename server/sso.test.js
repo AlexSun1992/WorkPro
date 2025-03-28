@@ -94,6 +94,6 @@ describe("SSO", () => {
       clearCookie: jest.fn(),
     };
     await redirectFromEsia(req, res);
-    expect(res.redirect).toHaveBeenCalledWith("/cabinet");
+    expect(res.redirect).toHaveBeenCalledWith("https://demo.reso.ru/cabinet");
   });
 });
