@@ -3874,7 +3874,8 @@ textarea {
   .btn-primary,
   .btn-secondary,
   .btn-success,
-  .btn-warning {
+  .btn-warning,
+  .btn-big {
     height: 50px;
     line-height: 46px;
   }
@@ -5120,7 +5121,8 @@ a.color-l-green:hover {
   .btn-primary,
   .btn-secondary,
   .btn-success,
-  .btn-warning {
+  .btn-warning,
+  .btn-big {
     font-size: 0.875rem;
   }
 }
@@ -6648,11 +6650,19 @@ h5.listing {
   background-position: left 24px center;
   background-repeat: no-repeat;
 }
-
+.btn-icon-back {
+  background-image: url(/img/icon-back.svg);
+  background-position: left 24px center;
+  background-repeat: no-repeat;
+}
+.btn-big.btn-icon-back,
 .btn-big.btn-icon-print,
 .btn-big.btn-icon-dwd,
 .btn-big.btn-icon-change {
   background-position: left 40px center;
+}
+.btn-icon-back:disabled {
+  background-image: url(/img/icon-back_d.svg);
 }
 .w-auto {
   width: auto;
