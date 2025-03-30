@@ -2,7 +2,7 @@
   <div>
     <button type="button" @click="openModal">Кнопка</button>
 
-    <control-modal :is-open="isOpen" :data="data" @close="closeModal" />
+    <control-modal ref="modal" :data="data" @close="closeModal" />
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
       type: Object,
       default() {
         return {
-          value: "",
+          value: "Идёт обработка сурового запроса!",
           label: "Пожалуйста подождите",
         };
       },
@@ -30,10 +30,9 @@ export default {
   },
   methods: {
     closeModal() {
-      this.isOpen = false;
     },
     openModal() {
-      this.isOpen = true;
+      this.$refs.modal.openModal();
     },
   },
 };
