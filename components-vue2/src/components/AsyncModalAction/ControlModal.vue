@@ -1,16 +1,22 @@
 <template>
   <div>
-    <dialog ref="modal" :open="isOpen">
+    <dialog ref="modal">
       <header>
-        <span>{{ data.label }}</span>
+        <slot name="title">
+          <span>{{ data.label }}</span>
+        </slot>
         <button type="button" @click="closeModal">&#10006;</button>
       </header>
 
       <main>
-        {{ data.value }}
+        <slot name="default">
+          {{ data.value }}
+        </slot>
       </main>
 
-      <footer></footer>
+      <footer>
+        <slot name="title"></slot>
+      </footer>
     </dialog>
   </div>
 </template>
@@ -42,9 +48,10 @@ export default {
   methods: {
     closeModal() {
       this.$refs.modal.close();
+      this.$emit("close");
     },
     openModal() {
-      this.$refs.modal.showModal();
+      this.$refs.modal.show();
     },
     toggleModal() {
       if (this.isOpen) {
