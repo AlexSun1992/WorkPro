@@ -42,15 +42,19 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      isModalOpen: false,
+    };
   },
   computed: {},
   methods: {
     closeModal() {
+      this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("close");
     },
     openModal() {
+      this.isModalOpen = true;
       this.$refs.modal.showModal();
       this.$emit("open");
     },

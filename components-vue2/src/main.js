@@ -274,7 +274,7 @@ Vue.customElement(
   "component-async-modal-action",
   () =>
     new Promise((resolve) => {
-      require(["./components/AsyncModalAction/AsyncModalAction"], (lazyComponent) => {
+      require(["../../components/Libs/Controls/AsyncModalAction/AsyncModalAction"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
@@ -285,7 +285,7 @@ Vue.customElement(
   "control-modal",
   () =>
     new Promise((resolve) => {
-      require(["./components/AsyncModalAction/ControlModal"], (lazyComponent) => {
+      require(["../../components/Libs/Controls/AsyncModalAction/ControlModal"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });
