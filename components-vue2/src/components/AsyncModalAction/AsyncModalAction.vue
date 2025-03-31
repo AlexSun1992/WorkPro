@@ -19,9 +19,23 @@ export default {
         return {
           value: "Идёт обработка сурового запроса!",
           label: "Пожалуйста подождите",
+          // число попыток выполнить один запрос
+          attempts: 6,
+          // секунды на выполнение одного запроса
+          interval: 5
         };
       },
     },
+  },
+  computed: {
+    attemptsComputed() {
+      return this.data?.attempts ?? 6
+    },
+    intervalComputed() {
+      const interval = this.data?.interval ?? 5;
+
+      return interval * 1000;
+    }
   },
   data() {
     return {
@@ -34,6 +48,9 @@ export default {
     openModal() {
       this.$refs.modal.openModal();
     },
+    executeAction() {
+
+    }
   },
 };
 </script>
