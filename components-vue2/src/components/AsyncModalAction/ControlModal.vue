@@ -52,6 +52,7 @@ export default {
     },
     openModal() {
       this.$refs.modal.showModal();
+      this.$emit("open");
     },
     toggleModal() {
       if (this.isOpen) {
