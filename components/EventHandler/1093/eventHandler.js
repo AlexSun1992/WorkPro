@@ -6,7 +6,7 @@ async function eventHandler(data, item, callback) {
   }
 
   function getFieldFromItem(item) {
-    const result = {...item?.value?.value};
+    const result = { ...item?.value?.value };
     result.insuredIndex = item?.value.index;
 
     return result;
@@ -32,10 +32,16 @@ async function eventHandler(data, item, callback) {
 
   function validFieldByLength(item, length) {
     const insuredList = findField("INSURED_LIST")?.value;
-    const field = insuredList[item.insuredIndex]?.find(field => field.name === item.name);
+    const field = insuredList[item.insuredIndex]?.find(
+      (field) => field.name === item.name
+    );
 
     if (item.value && !isValidValueLength(item, length)) {
-      setFieldState(field, false, `Должно быть введено не более ${length} символов`);
+      setFieldState(
+        field,
+        false,
+        `Должно быть введено не более ${length} символов`
+      );
       return;
     }
 
@@ -45,27 +51,46 @@ async function eventHandler(data, item, callback) {
   function validateDINSURED_STAGEDATE(item) {
     const insuredList = findField("INSURED_LIST")?.value;
     const list = insuredList[item.insuredIndex];
-    const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE") ;
-    const DINSURED_BIRTHDATE = findFieldInInsuredList( list,"DINSURED_BIRTHDATE");
+    const DINSURED_STAGEDATE = findFieldInInsuredList(
+      list,
+      "DINSURED_STAGEDATE"
+    );
+    const DINSURED_BIRTHDATE = findFieldInInsuredList(
+      list,
+      "DINSURED_BIRTHDATE"
+    );
     const stageDate = getDate(DINSURED_STAGEDATE.value);
     const birthDate = getDate(DINSURED_BIRTHDATE.value);
     const temp = new Date();
-    const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
+    const currentDate = new Date(
+      temp.getFullYear(),
+      temp.getMonth(),
+      temp.getDate()
+    );
 
     if (stageDate && currentDate < stageDate) {
-      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
+      setFieldState(
+        DINSURED_STAGEDATE,
+        false,
+        "Дата начала стажа не может быть позже текущей даты"
+      );
     }
     if (birthDate && currentDate < birthDate) {
-      setFieldState(DINSURED_BIRTHDATE, false, "Дата рождения не может быть позже текущей даты");
-    }
-    else if (!stageDate || !birthDate) {
+      setFieldState(
+        DINSURED_BIRTHDATE,
+        false,
+        "Дата рождения не может быть позже текущей даты"
+      );
+    } else if (!stageDate || !birthDate) {
       setFieldState(DINSURED_STAGEDATE, true, null);
       setFieldState(DINSURED_BIRTHDATE, true, null);
-    }
-    else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
-      setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть раньше 16 лет");
-    }
-    else {
+    } else if (!isDatesLatestThenSomeYears(birthDate, stageDate, 16)) {
+      setFieldState(
+        DINSURED_STAGEDATE,
+        false,
+        "Дата начала стажа не может быть раньше 16 лет"
+      );
+    } else {
       setFieldState(DINSURED_STAGEDATE, true, null);
       setFieldState(DINSURED_BIRTHDATE, true, null);
     }
@@ -78,7 +103,7 @@ async function eventHandler(data, item, callback) {
       SPREV_LICSERIA: validateSPREV_LICSERIA,
       SPREV_LICNUMBER: validateSPREV_LICNUMBER,
       DINSURED_STAGEDATE: validateDINSURED_STAGEDATE,
-      DINSURED_BIRTHDATE: validateDINSURED_STAGEDATE
+      DINSURED_BIRTHDATE: validateDINSURED_STAGEDATE,
     };
     const field = getFieldFromItem(item);
 
@@ -90,11 +115,13 @@ async function eventHandler(data, item, callback) {
   function isFormValid() {
     const insuredList = findField("INSURED_LIST")?.value;
 
-    return !insuredList?.some(list => list.some(item => item.visible === true && item.state === false));
+    return !insuredList?.some((list) =>
+      list.some((item) => item.visible === true && item.state === false)
+    );
   }
 
   function setNextButtonState() {
-    const nextButton = copyData.find(item => item.name === "Continue");
+    const nextButton = copyData.find((item) => item.name === "Continue");
     const multiDrive = findField("BMULTI");
 
     nextButton.visible = isFormValid() || multiDrive?.value;
@@ -118,11 +145,11 @@ async function eventHandler(data, item, callback) {
       return field;
     }
 
-    console.warn(`Поле ${ name } не найдено в данных`);
+    console.warn(`Поле ${name} не найдено в данных`);
   }
 
   function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
-    const modifyMinDate = (new Date()).setFullYear(minDate.getFullYear() + years);
+    const modifyMinDate = new Date().setFullYear(minDate.getFullYear() + years);
 
     return maxDate >= modifyMinDate;
   }
@@ -138,7 +165,7 @@ async function eventHandler(data, item, callback) {
   }
 
   function findFieldInInsuredList(list = [], name) {
-    return list?.find(item => item.name === name);
+    return list?.find((item) => item.name === name);
   }
 
   function findDeepBasedField(dataSet, name, index) {
@@ -148,7 +175,7 @@ async function eventHandler(data, item, callback) {
       return field;
     }
 
-    console.warn(`Поле ${ name } не найдено в ${ dataSet }`);
+    console.warn(`Поле ${name} не найдено в ${dataSet}`);
   }
 
   if (item.value?.name === "INSURED_LIST") {
@@ -215,7 +242,7 @@ function initHandler(data) {
     if (field) {
       return field;
     }
-    throw new Error(`Поле ${ name } не найдено в данных`);
+    throw new Error(`Поле ${name} не найдено в данных`);
   }
 
   eventHandler.findField = findField;
@@ -269,3 +296,4 @@ function initHandler(data) {
 
   return copyData;
 }
+export { eventHandler };

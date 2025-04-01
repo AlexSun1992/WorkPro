@@ -120,10 +120,13 @@ function getAuthName(authType) {
   return "неизвестный тип авторизации";
 }
 
-function getAuthBody(authType, req) {
+function getAuthBody(authType, req, url) {
   if (req.query) {
     if (authType === "esia") {
       if (req.query.code) {
+        if (url.searchParams.get("ID")) {
+          return { code: req.query.code, ID: url.searchParams.get("ID") };
+        }
         return { code: req.query.code };
       }
     }
@@ -161,6 +164,7 @@ export default async function redirectFromEsia(req, res) {
   const authName = getAuthName(authType);
   const cookieRef = req.cookies.ref;
   const cookieRefError = req.cookies.referror;
+  const { hostname } = req;
   if (cookieRef) {
     res.clearCookie("ref");
   }
@@ -184,7 +188,7 @@ export default async function redirectFromEsia(req, res) {
   await Promise.resolve()
     .then(() => {
       const dataUrl = getDataUrl(authType);
-      const bodyData = getAuthBody(authType, req);
+      const bodyData = getAuthBody(authType, req, successUrl);
       console.log(
         new Date(),
         `Получение данных ${authName}, ${dataUrl}, ${JSON.stringify(bodyData)}`
@@ -223,7 +227,7 @@ export default async function redirectFromEsia(req, res) {
       authType === "esia" && res.cookie("auth._esia", `${Date.now()}`);
       res.redirect(
         decodeURIComponent(
-          `https://demo.reso.ru${successUrl.pathname}${successUrl.search}`
+          `https://${hostname}${successUrl.pathname}${successUrl.search}`
         )
       );
     })
