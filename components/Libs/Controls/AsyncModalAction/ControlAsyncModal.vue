@@ -48,6 +48,8 @@ export default {
   data() {
     return {
       isOpen: false,
+      abortController: null,
+      responseData: null,
     };
   },
   methods: {
@@ -59,8 +61,29 @@ export default {
       this.executeAction();
     },
     executeAction() {
-      this.$axios.post("am/main/v1/osago/CreatePolicySendNsis", {"ID": null});
+      this.abortController = new AbortController();
+      this.$axios.post(
+        "am/main/v2/osago/CreatePolicySendNsis",
+        { ID: 3080 },
+        { signal: this.abortController.signal }
+      ).then(data => this.setData(data.data))
+        .catch(err => console.warn(err));
+
+      setTimeout(() => {
+        this.abortController?.abort();
+      }, this.intervalComputed)
     },
+    executeWithTimeout(attempts = this.attemptsComputed) {
+      if (attempts) {
+        this.executeAction();
+      }
+      setTimeout(() => {
+
+      }, this.intervalComputed);
+    },
+    setData(data) {
+
+    }
   },
 };
 </script>
