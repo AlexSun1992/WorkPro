@@ -7,6 +7,9 @@
       :data="data"
       @open="openModalHandler"
       @close="closeModal"
+      :show-cancel="false"
+      :show-close="false"
+      :show-ok="false"
     />
   </div>
 </template>

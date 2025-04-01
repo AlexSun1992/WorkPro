@@ -18,8 +18,8 @@
         <slot name="footer">
 
         </slot>
-        <button type="button" v-if="showOk">Ок</button>
-        <button type="button" v-if="showCancel">Отмена</button>
+        <button type="button" v-if="showOk" @click="ok">Ок</button>
+        <button type="button" v-if="showCancel" @click="cancel">Отмена</button>
       </footer>
     </dialog>
   </div>
@@ -79,6 +79,16 @@ export default {
       this.isModalOpen = true;
       this.$refs.modal.showModal();
       this.$emit("open");
+    },
+    cancel() {
+      this.isModalOpen = false;
+      this.$refs.modal.close();
+      this.$emit("cancel");
+    },
+    ok() {
+      this.isModalOpen = false;
+      this.$refs.modal.close();
+      this.$emit("ok");
     },
     toggleModal() {
       if (this.isOpen) {
