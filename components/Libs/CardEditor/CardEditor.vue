@@ -1,5 +1,6 @@
 <template>
   <div :data-card-id="$route.params.idItem">
+    <control-async-modal></control-async-modal>
     <b-modal
       :id="'confirmAction'"
       modal-class="cabinet"
@@ -88,6 +89,7 @@ import FormBlock from "@/components/Libs/Form/FormBlock";
 import { fetchPoutvalue } from "../../../utils/fetchPoutvalue";
 import { saveFileAxios } from "../../../utils/saveFile";
 import getScript from "../../../utils/getScript";
+import ControlAsyncModal from "@/components/Libs/Controls/AsyncModalAction/ControlAsyncModal.vue";
 
 let controller;
 let confirmPromise = null;
@@ -96,6 +98,7 @@ let confirmResolve = () => null;
 export default {
   name: "CardEditor",
   components: {
+    ControlAsyncModal,
     FormBlock,
     FormAccordion,
     Form,

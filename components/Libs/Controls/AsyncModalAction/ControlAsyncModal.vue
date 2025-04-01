@@ -10,7 +10,11 @@
       :show-cancel="false"
       :show-close="false"
       :show-ok="false"
-    />
+    >
+      <template>
+        {{ dialogBodyText }}
+      </template>
+    </control-modal>
   </div>
 </template>
 
@@ -25,7 +29,7 @@ export default {
       type: Object,
       default() {
         return {
-          value: "Идёт обработка сурового запроса!",
+          value: "Проверяем данные в АИС Страхование, дождитесь завершения операции",
           label: "Пожалуйста подождите",
           // число попыток выполнить один запрос
           attempts: 6,
@@ -48,6 +52,9 @@ export default {
       const id = this.$store.state.data_card.cardId;
 
       return id ? Number(id) : null;
+    },
+    dialogBodyText() {
+      return this.responseData?.SMESSAGE ?? this.data.value;
     }
   },
   data() {
@@ -87,7 +94,7 @@ export default {
       }, this.intervalComputed);
     },
     setData(data) {
-
+      this.responseData = data[0] ? { ...data[0] } : null;
     }
   },
 };
