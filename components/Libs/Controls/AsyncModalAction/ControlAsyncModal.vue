@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import ControlModal from "./ControlModal.vue";
+import ControlModal from "./ControlModal";
 
 export default {
-  name: "AsyncModalAction",
+  name: "ControlAsyncModal",
   components: { ControlModal },
   props: {
     data: {

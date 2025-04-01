@@ -5,7 +5,7 @@
         <slot name="title">
           <span>{{ data.label }}</span>
         </slot>
-        <button type="button" @click="closeModal">&#10006;</button>
+        <button type="button" @click="closeModal" v-if="showClose">&#10006;</button>
       </header>
 
       <main>
@@ -15,7 +15,11 @@
       </main>
 
       <footer>
-        <slot name="title"></slot>
+        <slot name="footer">
+
+        </slot>
+        <button type="button" v-if="showOk">Ок</button>
+        <button type="button" v-if="showCancel">Отмена</button>
       </footer>
     </dialog>
   </div>
@@ -33,6 +37,24 @@ export default {
           title: "Пожалуйста подождите",
         };
       },
+    },
+    showClose: {
+      type: Boolean,
+      default() {
+        return true;
+      }
+    },
+    showCancel: {
+      type: Boolean,
+      default() {
+        return true;
+      }
+    },
+    showOk: {
+      type: Boolean,
+      default() {
+        return true;
+      }
     },
     isOpen: {
       type: Boolean,
@@ -74,7 +96,7 @@ export default {
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>
