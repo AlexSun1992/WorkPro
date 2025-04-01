@@ -38,6 +38,7 @@ describe("SSO", () => {
     const req = {
       get: jest.fn().mockReturnValue("http://test/login"),
       headers: { referer: "http://test/login" },
+      hostname: "f.f",
       query: {
         auth: "",
         type: "alfa",
@@ -80,6 +81,7 @@ describe("SSO", () => {
     );
     const req = {
       get: jest.fn().mockReturnValue("http://test/cabinet"),
+      hostname: "f.f",
       cookies: {
         ref: "/cabinet",
         referror:
@@ -94,6 +96,6 @@ describe("SSO", () => {
       clearCookie: jest.fn(),
     };
     await redirectFromEsia(req, res);
-    expect(res.redirect).toHaveBeenCalledWith("https://demo.reso.ru/cabinet");
+    expect(res.redirect).toHaveBeenCalledWith(`https://f.f/cabinet`);
   });
 });
