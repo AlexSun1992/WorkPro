@@ -44,6 +44,11 @@ export default {
 
       return interval * 1000;
     },
+    cardId() {
+      const id = this.$store.state.data_card.cardId;
+
+      return id ? Number(id) : null;
+    }
   },
   data() {
     return {
@@ -64,10 +69,10 @@ export default {
       this.abortController = new AbortController();
       this.$axios.post(
         "am/main/v2/osago/CreatePolicySendNsis",
-        { ID: 3080 },
+        { ID: this.cardId },
         { signal: this.abortController.signal }
       ).then(data => this.setData(data.data))
-        .catch(err => console.warn(err));
+        .catch(err => console.warn(`Ошибка при попытке получить данные по текущей карточке: ${err}`));
 
       setTimeout(() => {
         this.abortController?.abort();
