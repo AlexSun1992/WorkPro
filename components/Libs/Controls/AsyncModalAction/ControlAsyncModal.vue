@@ -93,12 +93,6 @@ export default {
           { ID: this.cardId },
           { signal: this.abortController.signal }
         )
-        /* .then((data) => this.setData(data.data))
-        .catch((err) =>
-          console.warn(
-            `Ошибка при попытке получить данные по текущей карточке: ${err}`
-          )
-        ); */
     },
     closeActiveRequest() {
       this.abortController?.abort();
@@ -123,7 +117,7 @@ export default {
       this.successMessage = "Проверка выполнена успешно";
       this.setData(data.data);
 
-      this.closeModalWithTimeout(2);
+      this.closeModalWithTimeout(3);
     },
     setData(data) {
       this.responseData = data[0] ? { ...data[0] } : null;
