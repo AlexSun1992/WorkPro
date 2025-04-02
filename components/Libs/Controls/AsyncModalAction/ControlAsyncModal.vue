@@ -26,7 +26,7 @@ import {
   ERROR_ID_STATUS,
   AWAIT_ERROR_MESSAGE,
   COMMON_ERROR_MESSAGE,
-  SUCCESS_REQUEST_MESSAGE
+  SUCCESS_REQUEST_MESSAGE,
 } from "./asyncModal.constant";
 
 export default {
@@ -37,8 +37,7 @@ export default {
       type: Object,
       default() {
         return {
-          value:
-            "Пожалуйста подождите&#8230",
+          value: "Пожалуйста подождите&#8230",
           label: "Проверка данных",
           // число попыток выполнить один запрос
           attempts: 6,
@@ -63,11 +62,13 @@ export default {
       return id ? Number(id) : null;
     },
     dialogBodyText() {
-      return this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.data.value;
+      return (
+        this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.data.value
+      );
     },
     isFinishResponse() {
-      return this.isRequestError || this.isRequestSuccess
-    }
+      return this.isRequestError || this.isRequestSuccess;
+    },
   },
   data() {
     return {
@@ -92,8 +93,16 @@ export default {
       this.isRequestError = false;
       this.isRequestSuccess = false;
     },
-    closeModalWithTimeout(timeout = 0) {
-      setTimeout(() => this.closeModal(), timeout * 1000);
+    afterSuccessDataCheck() {
+      setTimeout(() => {
+        const url = this.responseData.SURL;
+
+        // this.closeModal();
+
+        if (url) {
+          this.$router.push(url);
+        }
+      }, 3000);
     },
     openModal() {
       this.$refs.modal.openModal();
@@ -107,12 +116,11 @@ export default {
       this.executeRequestWithTimeout();
     },
     async executeRequest() {
-      return this.$axios
-        .post(
-          "am/main/v2/osago/CreatePolicySendNsis",
-          { ID: this.cardId },
-          { signal: AbortSignal.timeout(this.intervalComputed) }
-        )
+      return this.$axios.post(
+        "am/main/v2/osago/CreatePolicySendNsis",
+        { ID: this.cardId },
+        { signal: AbortSignal.timeout(this.intervalComputed) }
+      );
     },
     executeRequestWithTimeout(attempts = this.attemptsComputed) {
       if (!attempts || this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
@@ -121,11 +129,13 @@ export default {
         return;
       }
 
-      this.executeRequest().then((data) => {
-        this.successDataHandler(data?.data);
-      }).catch(err => {
-        this.errorDataHandler(COMMON_ERROR_MESSAGE);
-      });
+      this.executeRequest()
+        .then((data) => {
+          this.successDataHandler(data?.data);
+        })
+        .catch((err) => {
+          this.errorDataHandler(COMMON_ERROR_MESSAGE);
+        });
 
       setTimeout(() => {
         if (!this.isFinishResponse) {
@@ -140,7 +150,7 @@ export default {
         this.isRequestSuccess = true;
         this.dialogMessage = SUCCESS_REQUEST_MESSAGE;
 
-        this.closeModalWithTimeout(3);
+        this.afterSuccessDataCheck();
       }
     },
     errorDataHandler(msg) {
