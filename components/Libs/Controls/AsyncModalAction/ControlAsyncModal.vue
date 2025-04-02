@@ -9,10 +9,10 @@
       @close="closeModal"
       :show-cancel="false"
       :show-close="false"
-      :show-ok="false"
+      :show-ok="isRequestError"
     >
       <template>
-        {{ dialogBodyText }}
+        <span v-html="dialogBodyText"></span>
       </template>
     </control-modal>
   </div>
@@ -30,8 +30,8 @@ export default {
       default() {
         return {
           value:
-            "Проверяем данные в АИС Страхование, дождитесь завершения операции",
-          label: "Пожалуйста подождите",
+            "Пожалуйста подождите&#8230",
+          label: "Проверка данных",
           // число попыток выполнить один запрос
           attempts: 6,
           // секунды на выполнение одного запроса
@@ -55,20 +55,26 @@ export default {
       return id ? Number(id) : null;
     },
     dialogBodyText() {
-      return this.successMessage ?? this.responseData?.SMESSAGE ?? this.data.value;
+      return this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.data.value;
     },
   },
   data() {
     return {
       isOpen: false,
-      abortController: null,
       responseData: null,
-      successMessage: null
+      dialogMessage: null,
+      isRequestError: false,
     };
   },
   methods: {
     closeModal() {
       this.$refs.modal.closeModal();
+      this.resetForm();
+    },
+    resetForm() {
+      this.responseData = null;
+      this.dialogMessage = null;
+      this.isRequestError = false;
     },
     closeModalWithTimeout(timeout = 0) {
       setTimeout(() => this.closeModal(), timeout * 1000);
@@ -85,21 +91,18 @@ export default {
       this.executeRequestWithTimeout();
     },
     async executeRequest() {
-      this.abortController = new AbortController();
-
       return this.$axios
         .post(
           "am/main/v2/osago/CreatePolicySendNsis",
           { ID: this.cardId },
-          { signal: this.abortController.signal }
+          { signal: AbortSignal.timeout(this.intervalComputed) }
         )
-    },
-    closeActiveRequest() {
-      this.abortController?.abort();
     },
     executeRequestWithTimeout(attempts = this.attemptsComputed) {
       console.log(`!!!! ${attempts}`);
       if (!attempts || this.responseData) {
+        this.errorDataHandler();
+
         return;
       }
 
@@ -108,16 +111,18 @@ export default {
       });
 
       setTimeout(() => {
-        this.closeActiveRequest();
-
         this.executeRequestWithTimeout(attempts - 1);
       }, this.intervalComputed);
     },
     successDataHandler(data) {
-      this.successMessage = "Проверка выполнена успешно";
+      this.dialogMessage = "Проверка выполнена успешно";
       this.setData(data.data);
 
       this.closeModalWithTimeout(3);
+    },
+    errorDataHandler() {
+      this.dialogMessage = "Кажется, потребуется ещё немного времени. Пожалуйста, повторите попытку чуть поже.";
+      this.isRequestError = true;
     },
     setData(data) {
       this.responseData = data[0] ? { ...data[0] } : null;
