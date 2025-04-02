@@ -74,6 +74,12 @@ export default {
         state = !this.data.error;
       }
 
+      if (this.data.mask && this.data.value) {
+        if (this.data.mask.length > this.data.value.length) {
+          state = false;
+        }
+      }
+
       return state;
     },
     validClass() {
