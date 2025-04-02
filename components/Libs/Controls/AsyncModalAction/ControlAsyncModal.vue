@@ -7,6 +7,7 @@
       :data="data"
       @open="openModalHandler"
       @close="closeModal"
+      @ok="refreshPage"
       :show-cancel="false"
       :show-close="false"
       :show-ok="isRequestError"
@@ -21,6 +22,7 @@
 <script>
 import ControlModal from "./ControlModal";
 import { SUCCESS_ID_STATUS, ERROR_ID_STATUS } from "./asyncModal.constant";
+import { AWAIT_ERROR_MESSAGE, COMMON_ERROR_MESSAGE } from "@/components-vue2/src/components/Card/cardEditorConst";
 
 export default {
   name: "ControlAsyncModal",
@@ -58,6 +60,9 @@ export default {
     dialogBodyText() {
       return this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.data.value;
     },
+    isFinishResponse() {
+      return this.isRequestError || this.isRequestSuccess
+    }
   },
   data() {
     return {
@@ -65,6 +70,7 @@ export default {
       responseData: null,
       dialogMessage: null,
       isRequestError: false,
+      isRequestSuccess: false,
     };
   },
   methods: {
@@ -72,10 +78,14 @@ export default {
       this.$refs.modal.closeModal();
       this.resetForm();
     },
+    refreshPage() {
+      this.$router.go(null);
+    },
     resetForm() {
       this.responseData = null;
       this.dialogMessage = null;
       this.isRequestError = false;
+      this.isRequestSuccess = false;
     },
     closeModalWithTimeout(timeout = 0) {
       setTimeout(() => this.closeModal(), timeout * 1000);
@@ -101,30 +111,35 @@ export default {
     },
     executeRequestWithTimeout(attempts = this.attemptsComputed) {
       if (!attempts || this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
-        this.errorDataHandler();
+        this.errorDataHandler(AWAIT_ERROR_MESSAGE);
 
         return;
       }
 
       this.executeRequest().then((data) => {
         this.successDataHandler(data?.data);
+      }).catch(err => {
+        this.errorDataHandler(COMMON_ERROR_MESSAGE);
       });
 
       setTimeout(() => {
-        this.executeRequestWithTimeout(attempts - 1);
+        if (!this.isFinishResponse) {
+          this.executeRequestWithTimeout(attempts - 1);
+        }
       }, this.intervalComputed);
     },
     successDataHandler(data) {
       this.setData(data);
 
       if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
+        this.isRequestSuccess = true;
         this.dialogMessage = "Проверка выполнена успешно";
 
         this.closeModalWithTimeout(3);
       }
     },
-    errorDataHandler() {
-      this.dialogMessage = "Кажется, потребуется ещё немного времени. Пожалуйста, повторите попытку чуть поже.";
+    errorDataHandler(msg) {
+      this.dialogMessage = msg ?? COMMON_ERROR_MESSAGE;
       this.isRequestError = true;
     },
     setData(data) {
