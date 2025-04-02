@@ -55,7 +55,7 @@ export default {
       return id ? Number(id) : null;
     },
     dialogBodyText() {
-      return this.responseData?.SMESSAGE ?? this.data.value;
+      return this.successMessage ?? this.responseData?.SMESSAGE ?? this.data.value;
     },
   },
   data() {
@@ -63,11 +63,16 @@ export default {
       isOpen: false,
       abortController: null,
       responseData: null,
-      currentAttempt: this.data.attempts,
+      successMessage: null
     };
   },
   methods: {
-    closeModal() {},
+    closeModal() {
+      this.$refs.modal.closeModal();
+    },
+    closeModalWithTimeout(timeout = 0) {
+      setTimeout(() => this.closeModal(), timeout * 1000);
+    },
     openModal() {
       this.$refs.modal.openModal();
     },
@@ -77,38 +82,48 @@ export default {
     getRequestData() {
       this.responseData = null;
 
-      this.executeRequest();
+      this.executeRequestWithTimeout();
     },
-    executeRequest() {
+    async executeRequest() {
       this.abortController = new AbortController();
-      this.$axios
+
+      return this.$axios
         .post(
           "am/main/v2/osago/CreatePolicySendNsis",
           { ID: this.cardId },
           { signal: this.abortController.signal }
         )
-        .then((data) => this.setData(data.data))
+        /* .then((data) => this.setData(data.data))
         .catch((err) =>
           console.warn(
             `Ошибка при попытке получить данные по текущей карточке: ${err}`
           )
-        );
+        ); */
     },
-    closeRequest() {
+    closeActiveRequest() {
       this.abortController?.abort();
     },
-    executeWithTimeout(attempts = this.attemptsComputed) {
+    executeRequestWithTimeout(attempts = this.attemptsComputed) {
+      console.log(`!!!! ${attempts}`);
       if (!attempts || this.responseData) {
         return;
       }
 
-      this.executeRequest();
+      this.executeRequest().then((data) => {
+        this.successDataHandler(data);
+      });
 
       setTimeout(() => {
-        this.closeRequest();
+        this.closeActiveRequest();
 
-        this.executeWithTimeout(attempts - 1);
+        this.executeRequestWithTimeout(attempts - 1);
       }, this.intervalComputed);
+    },
+    successDataHandler(data) {
+      this.successMessage = "Проверка выполнена успешно";
+      this.setData(data.data);
+
+      this.closeModalWithTimeout(2);
     },
     setData(data) {
       this.responseData = data[0] ? { ...data[0] } : null;
