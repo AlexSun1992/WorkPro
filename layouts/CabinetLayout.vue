@@ -21,7 +21,7 @@
           <div class="feedback mt-4 d-none d-lg-block">
             <div class="title">Обратная связь</div>
             <div class="description">
-              Напишите нам и мы оперативно<br />свяжемся с вами
+              Напишите нам и мы <br />свяжемся с вами
             </div>
             <a href="/feedback/" class="btn_one icon-feedback"> Написать </a>
           </div>
