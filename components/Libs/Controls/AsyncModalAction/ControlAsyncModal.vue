@@ -20,6 +20,7 @@
 
 <script>
 import ControlModal from "./ControlModal";
+import { SUCCESS_ID_STATUS, ERROR_ID_STATUS } from "./asyncModal.constant";
 
 export default {
   name: "ControlAsyncModal",
@@ -99,15 +100,14 @@ export default {
         )
     },
     executeRequestWithTimeout(attempts = this.attemptsComputed) {
-      console.log(`!!!! ${attempts}`);
-      if (!attempts || this.responseData) {
+      if (!attempts || this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
         this.errorDataHandler();
 
         return;
       }
 
       this.executeRequest().then((data) => {
-        this.successDataHandler(data);
+        this.successDataHandler(data?.data);
       });
 
       setTimeout(() => {
@@ -115,10 +115,13 @@ export default {
       }, this.intervalComputed);
     },
     successDataHandler(data) {
-      this.dialogMessage = "Проверка выполнена успешно";
-      this.setData(data.data);
+      this.setData(data);
 
-      this.closeModalWithTimeout(3);
+      if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
+        this.dialogMessage = "Проверка выполнена успешно";
+
+        this.closeModalWithTimeout(3);
+      }
     },
     errorDataHandler() {
       this.dialogMessage = "Кажется, потребуется ещё немного времени. Пожалуйста, повторите попытку чуть поже.";
