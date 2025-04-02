@@ -21,8 +21,13 @@
 
 <script>
 import ControlModal from "./ControlModal";
-import { SUCCESS_ID_STATUS, ERROR_ID_STATUS } from "./asyncModal.constant";
-import { AWAIT_ERROR_MESSAGE, COMMON_ERROR_MESSAGE } from "@/components-vue2/src/components/Card/cardEditorConst";
+import {
+  SUCCESS_ID_STATUS,
+  ERROR_ID_STATUS,
+  AWAIT_ERROR_MESSAGE,
+  COMMON_ERROR_MESSAGE,
+  SUCCESS_REQUEST_MESSAGE
+} from "./asyncModal.constant";
 
 export default {
   name: "ControlAsyncModal",
@@ -133,7 +138,7 @@ export default {
 
       if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
         this.isRequestSuccess = true;
-        this.dialogMessage = "Проверка выполнена успешно";
+        this.dialogMessage = SUCCESS_REQUEST_MESSAGE;
 
         this.closeModalWithTimeout(3);
       }
