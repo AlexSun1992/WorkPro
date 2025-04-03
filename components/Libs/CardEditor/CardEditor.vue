@@ -154,7 +154,12 @@ export default {
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
-      this.stripeLoaded();
+      this.$root.initHandler =
+        typeof initHandler === "function" ? initHandler : null;
+      setTimeout(() => {
+        this.stripeLoaded();
+
+      }, 400)
     } catch (e) {
       console.warn(`Ошибка загрузки скрипта`);
     }
@@ -239,7 +244,9 @@ export default {
             ) || this.data
           );
         }
-      } catch {}
+      } catch(e) {
+        console.log(e);
+      }
     },
     confirmAction() {
       confirmPromise = new Promise((resolve) => {
