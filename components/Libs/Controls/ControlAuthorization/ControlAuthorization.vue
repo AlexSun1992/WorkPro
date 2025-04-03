@@ -306,10 +306,6 @@ import controlAuthorizationHelper from "./controlAuthorizationHelper";
 import controlAuthorizationConstants from "./controlAuthorizationConstants";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 
-const authSuccessEvent = new CustomEvent("auth-success-event", {
-  status: true,
-});
-
 export default {
   name: "ControlAuthorization",
   components: { VerifyTimer },
@@ -525,7 +521,12 @@ export default {
 
         return true;
       }
-      window.dispatchEvent(authSuccessEvent);
+      if (process.client) {
+        const authSuccessEvent = new window.CustomEvent("auth-success-event", {
+          status: true,
+        });
+        window.dispatchEvent(authSuccessEvent);
+      }
       this.closeModal();
 
       return false;
