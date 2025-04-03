@@ -224,7 +224,7 @@ async function eventHandler(data, item, callback) {
     SHELP_INFO.visible = false;
   }
 
-  validateFormField(item);
+  // validateFormField(item);
   setNextButtonState(item);
 
   return copyData;
