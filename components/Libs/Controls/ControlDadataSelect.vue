@@ -87,13 +87,24 @@ function getQueryParams(queryType, input) {
     };
   }
 
-  if (queryType === "SPHOLDER_SECOND_DADATA") {
+  if (queryType === "SPHOLDER_THIRD_DADATA") {
     return {
       query: "fio",
       body: {
         query: input,
         suggestionType: "fio",
-        parts: ["SURNAME"],
+        parts: ["PATRONYMIC"],
+      },
+    };
+  }
+
+  if (queryType === "SPHOLDER_FIRST_DADATA") {
+    return {
+      query: "fio",
+      body: {
+        query: input,
+        suggestionType: "fio",
+        parts: ["NAME"],
       },
     };
   }
