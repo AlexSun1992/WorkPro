@@ -7,7 +7,7 @@ async function eventHandler(data, item, callback) {
 
   function getFieldFromItem(item) {
     const result = {...item?.value?.value};
-    result.insuredIndex = item?.value.index;
+    result.insuredIndex = item?.value?.index;
 
     return result;
   }
@@ -48,6 +48,7 @@ async function eventHandler(data, item, callback) {
   }
 
   function validateDates(item) {
+    debugger
     const insuredList = findField("INSURED_LIST")?.value;
     const list = insuredList[item.insuredIndex];
     const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE") ;
@@ -105,7 +106,7 @@ async function eventHandler(data, item, callback) {
     };
     const field = getFieldFromItem(item);
 
-    if (fieldsValidators[field.name]) {
+    if (fieldsValidators[field?.name]) {
       fieldsValidators[field.name](field);
     }
   }
@@ -224,7 +225,7 @@ async function eventHandler(data, item, callback) {
     SHELP_INFO.visible = false;
   }
 
-  // validateFormField(item);
+  validateFormField(item);
   setNextButtonState(item);
 
   return copyData;
