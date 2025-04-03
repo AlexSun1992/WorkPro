@@ -81,23 +81,19 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$refs.modal.closeModal();
-      this.resetForm();
+      this.$refs?.modal?.closeModal();
     },
     refreshPage() {
       this.$router.go(null);
     },
     resetForm() {
-      this.responseData = null;
-      this.dialogMessage = null;
-      this.isRequestError = false;
-      this.isRequestSuccess = false;
+
     },
     afterSuccessDataCheck() {
       setTimeout(() => {
         const url = this.responseData.SURL;
 
-        // this.closeModal();
+        this.closeModal();
 
         if (url) {
           this.$router.push(url);
@@ -105,6 +101,11 @@ export default {
       }, 3000);
     },
     openModal() {
+      this.responseData = null;
+      this.dialogMessage = null;
+      this.isRequestError = false;
+      this.isRequestSuccess = false;
+
       this.$refs.modal.openModal();
     },
     openModalHandler() {

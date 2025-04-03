@@ -72,7 +72,7 @@ export default {
   methods: {
     closeModal() {
       this.isModalOpen = false;
-      this.$refs.modal.close();
+      this.$refs?.modal?.close();
       this.$emit("close");
     },
     openModal() {
