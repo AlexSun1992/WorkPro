@@ -286,8 +286,8 @@ export default {
           process?.env?.NODE_ENV === "production" ||
           this.params.cache
         ) {
-          this.eventHandler = await this.loadScript();
-          this.initHandler = await this.loadInitScript();
+          // this.eventHandler = await this.loadScript();
+          // this.initHandler = await this.loadInitScript();
         }
         this.cacheDataLocal()
           .then((json) => {
@@ -317,19 +317,19 @@ export default {
           this.$axios.defaults.headers.common.Authorization = token;
         }
         // if (process?.env?.NODE_ENV === "production") {
-        //   await this.$loadScript(
-        //     `/api/card/js/${this.moduleId}/${this.menuId}?zone=${
-        //       this.zone
-        //     }&time=${Date.now()}`
-        //   )
-        //     .then(() => {
-        //       this.eventHandler =
-        //         typeof eventHandler === "function" ? eventHandler : null;
-        //     })
-        //     .catch(async (e) => {
-        //       console.error(e);
-        //       this.eventHandler = await this.loadScript();
-        //     });
+           await this.$loadScript(
+             `/api/card/js/${this.moduleId}/${this.params.idItem}?zone=${
+               this.zone
+             }&time=${Date.now()}`
+           )
+             .then(() => {
+               this.eventHandler =
+                 typeof eventHandler === "function" ? eventHandler : null;
+             })
+             .catch(async (e) => {
+               console.error(e);
+               this.eventHandler = await this.loadScript();
+             });
         // }
         await Promise.all([
           await this.$store.dispatch("menu/fetchMenuById", this.params),
@@ -349,8 +349,8 @@ export default {
         );
         this.isShowButtonSave = true;
         this.params.cache = false;
-        if (typeof this.initHandler === "function") {
-          this.initHandler(this.getForm);
+        if (typeof initHandler === "function") {
+          initHandler(this.getForm);
         }
       } catch (e) {
         console.error(e);

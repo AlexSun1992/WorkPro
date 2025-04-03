@@ -135,4 +135,3 @@ function initHandler(data) {
   return data;
 }
 
-export { eventHandler, initHandler };

@@ -6,4 +6,3 @@ function initHandler(data, item, action) {
   console.log("init", "1096");
   return data;
 }
-export { eventHandler, initHandler };
