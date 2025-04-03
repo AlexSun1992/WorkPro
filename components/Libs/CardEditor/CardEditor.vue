@@ -150,11 +150,13 @@ export default {
   async created() {
     try {
       if (process.client) {
-        await getScript({
-          idModule: this.$route.params.idModule,
-          idItem: this.$route.params.idItem,
-        },
-        this.$store);
+        await getScript(
+          {
+            idModule: this.$route.params.idModule,
+            idItem: this.$route.params.idItem,
+          },
+          this.$store
+        );
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
@@ -224,6 +226,12 @@ export default {
     this.$store.commit("data_card/setSavedError", false);
   },
   methods: {
+    async loadScript() {
+      return this.eventLocalHandler().then((script) => script.eventHandler);
+    },
+    async loadInitScript() {
+      return this.eventLocalHandler().then((script) => script.initHandler);
+    },
     stripeLoaded() {
       try {
         if (typeof initHandler === "function") {

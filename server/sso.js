@@ -178,8 +178,14 @@ export default async function redirectFromEsia(req, res) {
     }
   }
 
-  const successUrl = new URL(cookieRef || "/cabinet", "https://f.f");
-  const errorUrl = new URL(cookieRefError || "/login", "https://f.f");
+  const successUrl = new URL(
+    decodeURIComponent(cookieRef) || "/cabinet",
+    "https://f.f"
+  );
+  const errorUrl = new URL(
+    decodeURIComponent(cookieRefError) || "/login",
+    "https://f.f"
+  );
   errorUrl.searchParams.set(
     "error",
     `Произошла неизвестная ошибка входа через ${authName}.`
