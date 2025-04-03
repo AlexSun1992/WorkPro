@@ -48,7 +48,6 @@ async function eventHandler(data, item, callback) {
   }
 
   function validateDates(item) {
-    debugger
     const insuredList = findField("INSURED_LIST")?.value;
     const list = insuredList[item.insuredIndex];
     const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE") ;
