@@ -150,13 +150,7 @@ export default {
   async created() {
     try {
       if (process.client) {
-        await getScript(
-          {
-            idModule: this.$route.params.idModule,
-            idItem: this.$route.params.idItem,
-          },
-          this.$store
-        );
+        await this.loadScript();
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
@@ -227,10 +221,12 @@ export default {
   },
   methods: {
     async loadScript() {
-      return this.eventLocalHandler().then((script) => script.eventHandler);
-    },
-    async loadInitScript() {
-      return this.eventLocalHandler().then((script) => script.initHandler);
+      this.$store.commit("blocks/scriptLoaded", false);
+      await getScript({
+          idModule: this.$route.params.idModule,
+          idItem: this.$route.params.idItem,
+        });
+      this.$store.commit("blocks/scriptLoaded", true);
     },
     stripeLoaded() {
       try {

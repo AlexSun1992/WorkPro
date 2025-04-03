@@ -101,4 +101,3 @@ function eventHandler(data, item) {
   return data;
 }
 
-export { eventHandler, initHandler }
