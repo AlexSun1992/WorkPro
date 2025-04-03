@@ -293,4 +293,3 @@ function initHandler(data) {
   return copyData;
 }
 
-export { eventHandler, initHandler }
