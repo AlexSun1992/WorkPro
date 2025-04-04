@@ -6763,8 +6763,14 @@ h5.listing {
 .autocomplete-input {
   background: url(/img/icon-dropdown.svg) right 13px top 15px no-repeat;
 }
+.autocomplete[data-loading="true"] .autocomplete-input {
+  background-image: none;
+}
 .no_arrow .autocomplete-input {
   background: #fff;
+}
+.autocomplete[data-loading="true"]:after {
+  right: 16px;
 }
 
 .ui.fluid.search.selection.dropdown.disabled.is-valid {
