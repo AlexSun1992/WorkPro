@@ -8,8 +8,6 @@
       :wizard-navigation="wizardNavigation"
       @update="updateStep"
     />
-    Zone: {{ this.zone }};
-    MenuId: {{ this.menuId }}
     <div v-if="isSaving">Загрузка...</div>
     <FormBlock
       v-if="isBlock && !isSaving"
