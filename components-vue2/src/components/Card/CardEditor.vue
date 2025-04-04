@@ -8,8 +8,9 @@
       :wizard-navigation="wizardNavigation"
       @update="updateStep"
     />
-    Zone: {{ this.zone }}
+    Zone: {{ this.zone }};
     MenuId: {{ this.menuId }}
+    idItem: {{ this.params.idItem }}
     <div v-if="isSaving">Загрузка...</div>
     <FormBlock
       v-if="isBlock && !isSaving"
@@ -263,7 +264,7 @@ export default {
     },
     isShowProgressBar() {
       return (
-        PROGRESS_BAR_CARDS_ID.includes(this.cardId) &&
+        PROGRESS_BAR_CARDS_ID.includes(this.params.idItem) &&
         PROGRESS_BAR_ZONES.includes(this.zone)
       );
     },
