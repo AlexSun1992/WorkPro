@@ -62,8 +62,21 @@ async function eventHandler(data, item, callback) {
 
       // Ограничиваем количество Валидных символов до 10 (не считая пробела)
       // rawValue = rawValue.slice(0, 10);
+      // seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
+      // Оставляем только буквы и цифры
+      let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
 
-      seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
+      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
+      rawValue = rawValue.slice(0, 10);
+
+      // Формируем строку с пробелом после 4-го символа
+      let formattedValue =
+        rawValue.length > 4
+          ? rawValue.slice(0, 4) + " " + rawValue.slice(4)
+          : rawValue;
+
+      // Обновляем значение в поле
+      seriesNumberDoc.value = formattedValue;
     }
   }
 
@@ -125,13 +138,26 @@ function initHandler(data) {
 
     if (IDVEHDOCTYPE.value === 30 && countryDoc.value === 179) {
       // Оставляем только буквы и цифры
+      let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
+
+      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
+      rawValue = rawValue.slice(0, 10);
+
+      // Формируем строку с пробелом после 4-го символа
+      let formattedValue =
+        rawValue.length > 4
+          ? rawValue.slice(0, 4) + " " + rawValue.slice(4)
+          : rawValue;
+
+      // Обновляем значение в поле
+      seriesNumberDoc.value = formattedValue;
+      // Оставляем только буквы и цифры
       // let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
       // Ограничиваем количество Валидных символов до 10 (не считая пробела)
       // rawValue = rawValue.slice(0, 10);
-      seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
+      // seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
     }
   }
 
   return data;
 }
-
