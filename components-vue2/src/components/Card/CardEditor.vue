@@ -263,7 +263,7 @@ export default {
     },
     isShowProgressBar() {
       return (
-        PROGRESS_BAR_CARDS_ID.includes(this.menuId) &&
+        PROGRESS_BAR_CARDS_ID.includes(this.cardId) &&
         PROGRESS_BAR_ZONES.includes(this.zone)
       );
     },
