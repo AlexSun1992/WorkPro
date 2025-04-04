@@ -19,7 +19,7 @@
       :disabled="!edit ? !edit : data.readonly"
       v-model="fieldValue"
       :allowNegative="false"
-      :currency="{ suffix: `${placeholder}` }"
+      :currency="{ suffix: ` ${placeholder}` }"
       v-on:blur="eventHandlerBlur"
       :id="data.name"
     />

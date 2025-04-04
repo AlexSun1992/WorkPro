@@ -75,6 +75,40 @@ function getQueryParams(queryType, input) {
       id: "brand_model_code",
     };
   }
+
+  if (queryType === "SPHOLDER_SECOND_DADATA") {
+    return {
+      query: "fio",
+      body: {
+        query: input,
+        suggestionType: "fio",
+        parts: ["SURNAME"],
+      },
+    };
+  }
+
+  if (queryType === "SPHOLDER_THIRD_DADATA") {
+    return {
+      query: "fio",
+      body: {
+        query: input,
+        suggestionType: "fio",
+        parts: ["PATRONYMIC"],
+      },
+    };
+  }
+
+  if (queryType === "SPHOLDER_FIRST_DADATA") {
+    return {
+      query: "fio",
+      body: {
+        query: input,
+        suggestionType: "fio",
+        parts: ["NAME"],
+      },
+    };
+  }
+
   throw new Error(
     `Неизвестное название поля для компонента ControlDadataSelect.vue: ${queryType}`
   );

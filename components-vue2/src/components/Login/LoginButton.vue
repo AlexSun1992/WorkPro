@@ -270,7 +270,6 @@ export default {
     getTokenFromCookie() {
       return Cookies.get(TOKEN_NAME);
     },
-
     isAuthentificated() {
       return Boolean(this.personsData);
     },
@@ -278,8 +277,10 @@ export default {
       return `${this.personsData.SFIRSTNAME} ${this.personsData.SSECONDNAME}`;
     },
   },
+
   created() {
     subscribe("setUserInfo", this.setUserInfo);
+    window.addEventListener("auth-success-event", this.getPersonsData);
     window.addEventListener("storage", this.listenStorage);
     if (
       Cookies.get(TOKEN_NAME) !== "false" &&
@@ -303,6 +304,7 @@ export default {
   },
   beforeDestroyed() {
     unsubscribe("setUserInfo", this.setUserInfo);
+    window.removeEventListener("auth-success-event", this.getPersonsData);
     window.removeEventListener("storage", this.listenStorage);
   },
 };

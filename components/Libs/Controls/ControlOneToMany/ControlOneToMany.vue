@@ -20,12 +20,7 @@
         @update="updateItem($event, i)"
       />
     </div>
-    <button
-      @click="addItem"
-      :disabled="!editable"
-      class="btn btn-secondary btn-add mt-4"
-    >
-      {{ getLabel }}
+    <button @click="addItem" :disabled="!editable" :class="getClass">{{ getLabel }}
     </button>
   </div>
 </template>
@@ -76,7 +71,13 @@ export default {
     editable() {
       return this.data.readonly === false;
     },
-
+    getClass() {
+      const controlName = this.data.schema.find((item) => item.name === "Add");
+      if (controlName && controlName.cssClass) {
+        return controlName.cssClass;
+      }
+      return "btn btn-secondary btn-add mt-4";
+    },
     getLabel() {
       const controlName = this.data.schema.find((item) => item.name === "Add");
 
@@ -116,7 +117,7 @@ export default {
   font-size: 0;
   border: 0;
 }
-.btn-add {
+.btn-secondary.btn-add {
   padding-left: 70px;
   padding-right: 40px;
   background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwLjQ1ODMgMi4wNTU2NEMxMC40NTgzIDEuMjg4NTcgOS44MDU0MiAwLjY2Njc0OCA5IDAuNjY2NzQ4QzguMTk0NTggMC42NjY3NDggNy41NDE2NyAxLjI4ODU3IDcuNTQxNjcgMi4wNTU2NFY3LjYxMTE5SDEuNzA4MzNDMC45MDI5MTcgNy42MTExOSAwLjI1IDguMjMzMDIgMC4yNSA5LjAwMDA4QzAuMjUgOS43NjcxNCAwLjkwMjkxNyAxMC4zODkgMS43MDgzMyAxMC4zODlINy41NDE2N1YxNS45NDQ1QzcuNTQxNjcgMTYuNzExNiA4LjE5NDU4IDE3LjMzMzQgOSAxNy4zMzM0QzkuODA1NDIgMTcuMzMzNCAxMC40NTgzIDE2LjcxMTYgMTAuNDU4MyAxNS45NDQ1VjEwLjM4OUgxNi4yOTE3QzE3LjA5NzEgMTAuMzg5IDE3Ljc1IDkuNzY3MTQgMTcuNzUgOS4wMDAwOEMxNy43NSA4LjIzMzAyIDE3LjA5NzEgNy42MTExOSAxNi4yOTE3IDcuNjExMTlIMTAuNDU4M1YyLjA1NTY0WiIgZmlsbD0iI0ZFNzMzMyIvPgo8L3N2Zz4K")
@@ -124,6 +125,9 @@ export default {
 }
 .otm-block + .otm-block {
   margin-top: 20px;
+}
+.btn-link.btn-add::first-letter {
+  font-size: 20px;
 }
 
 @media (max-width: 992px) {
@@ -137,7 +141,7 @@ export default {
   .otm-block + .otm-block {
     margin-top: 10px;
   }
-  .btn-add {
+  .btn-secondary.btn-add {
     padding-left: 54px;
     padding-right: 24px;
     background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwLjQ1ODMgMi4wNTU2NEMxMC40NTgzIDEuMjg4NTcgOS44MDU0MiAwLjY2Njc0OCA5IDAuNjY2NzQ4QzguMTk0NTggMC42NjY3NDggNy41NDE2NyAxLjI4ODU3IDcuNTQxNjcgMi4wNTU2NFY3LjYxMTE5SDEuNzA4MzNDMC45MDI5MTcgNy42MTExOSAwLjI1IDguMjMzMDIgMC4yNSA5LjAwMDA4QzAuMjUgOS43NjcxNCAwLjkwMjkxNyAxMC4zODkgMS43MDgzMyAxMC4zODlINy41NDE2N1YxNS45NDQ1QzcuNTQxNjcgMTYuNzExNiA4LjE5NDU4IDE3LjMzMzQgOSAxNy4zMzM0QzkuODA1NDIgMTcuMzMzNCAxMC40NTgzIDE2LjcxMTYgMTAuNDU4MyAxNS45NDQ1VjEwLjM4OUgxNi4yOTE3QzE3LjA5NzEgMTAuMzg5IDE3Ljc1IDkuNzY3MTQgMTcuNzUgOS4wMDAwOEMxNy43NSA4LjIzMzAyIDE3LjA5NzEgNy42MTExOSAxNi4yOTE3IDcuNjExMTlIMTAuNDU4M1YyLjA1NTY0WiIgZmlsbD0iI0ZFNzMzMyIvPgo8L3N2Zz4K")

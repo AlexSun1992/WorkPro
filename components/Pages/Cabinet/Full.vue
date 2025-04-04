@@ -40,13 +40,7 @@ export default {
 
   watch: {
     async urlScript() {
-      await getScript(
-        {
-          idModule: this.$route.params.idModule,
-          idItem: this.$route.params.idItem,
-        },
-        this.$store
-      );
+      this.loadScript();
     },
   },
 
@@ -64,14 +58,21 @@ export default {
     });
   },
   async created() {
-    await getScript(
-      {
-        idModule: this.$route.params.idModule,
-        idItem: this.$route.params.idItem,
-      },
-      this.$store
-    );
+    this.loadScript()
   },
+
+  methods: {
+    async loadScript() {
+      this.$store.commit("blocks/scriptLoaded", false);
+      await getScript(
+        {
+          idModule: this.$route.params.idModule,
+          idItem: this.$route.params.idItem,
+        }
+      );
+      this.$store.commit("blocks/scriptLoaded", true);
+    }
+  }
 };
 </script>
 

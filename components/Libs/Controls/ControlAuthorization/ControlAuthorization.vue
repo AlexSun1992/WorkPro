@@ -521,7 +521,12 @@ export default {
 
         return true;
       }
-
+      if (process.client) {
+        const authSuccessEvent = new window.CustomEvent("auth-success-event", {
+          status: true,
+        });
+        window.dispatchEvent(authSuccessEvent);
+      }
       this.closeModal();
 
       return false;
