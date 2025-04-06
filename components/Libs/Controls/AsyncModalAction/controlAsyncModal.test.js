@@ -1,17 +1,18 @@
-import { mount, shallowMount } from "@vue/test-utils";
-import { nextTick } from "process";
+import { mount } from "@vue/test-utils";
+import axios from "axios";
 import ControlAsyncModal from "./ControlAsyncModal.vue";
 import ControlModal from "./ControlModal.vue";
+import { testData } from "./controlAsuncModal.testData";
 
-const requestData = [
-  {
-    IDSTATUS: 1,
-    ID: 3279,
-    SURL: "/cabinet/wizard/1081/55/0/1101/3279/3275D7BD5755C8FC3DB00813E6BAF5AE",
-    SMESSAGE:
-      "Проверяем данные в АИС Страхование, дождитесь завершения операции",
-  },
-];
+jest.mock("axios");
+AbortSignal.timeout = (ms) => {
+  const controller = new AbortController();
+
+  setTimeout(() => controller.abort(new DOMException("TimeoutError")), ms);
+
+  return controller.signal;
+};
+
 describe("ControlAsyncModal", () => {
   let wrapper;
 
@@ -37,6 +38,7 @@ describe("ControlAsyncModal", () => {
           push: jest.fn(),
           go: jest.fn(),
         },
+        $axios: axios
       },
       stubs: {
         "control-modal": ControlModal,
@@ -94,11 +96,19 @@ describe("ControlAsyncModal", () => {
     expect(wrapper.vm.executeRequest).toHaveBeenCalled();
   });
 
-  test("Success request handler", async () => {
-    const executeRequestMock = jest.fn().mockReturnValue(new Promise((resolve) => { resolve({data: requestData}) }));
+  test("Success request with success status", async () => {
+    axios.post.mockResolvedValue({ data: [testData.succesaData] });
 
-    wrapper.vm.executeRequest = executeRequestMock;
-    await wrapper.vm.executeRequestWithTimeout();
+    await wrapper.vm.executeRequest();
+
     expect(wrapper.vm.isRequestSuccess).toBeTruthy();
+  });
+
+  test("Success request with error status", async () => {
+    axios.post.mockResolvedValue({ data: [testData.rejectData] });
+
+    await wrapper.vm.executeRequest();
+
+    expect(wrapper.vm.isRequestError).toBeTruthy();
   });
 });

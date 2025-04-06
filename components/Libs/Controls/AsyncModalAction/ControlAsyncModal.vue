@@ -28,6 +28,7 @@ import {
   COMMON_ERROR_MESSAGE,
   SUCCESS_REQUEST_MESSAGE,
 } from "./asyncModal.constant";
+import { testData } from "./controlAsuncModal.testData";
 
 export default {
   name: "ControlAsyncModal",
@@ -57,7 +58,7 @@ export default {
       return interval * 1000;
     },
     cardId() {
-      const id = this.$store.state.data_card.cardId;
+      const id = this.$store.state.data_card?.cardId ?? -1;
 
       return id ? Number(id) : null;
     },
@@ -86,9 +87,7 @@ export default {
     refreshPage() {
       this.$router.go(null);
     },
-    resetForm() {
-
-    },
+    resetForm() {},
     afterSuccessDataCheck() {
       setTimeout(() => {
         const url = this.responseData.SURL;
@@ -117,11 +116,18 @@ export default {
       this.executeRequestWithTimeout();
     },
     async executeRequest() {
-      return this.$axios.post(
-        "am/main/v2/osago/CreatePolicySendNsis",
-        { ID: this.cardId },
-        { signal: AbortSignal.timeout(this.intervalComputed) }
-      );
+      this.$axios
+        .post(
+          "am/main/v2/osago/CreatePolicySendNsis",
+          { ID: this.cardId },
+          { signal: AbortSignal.timeout(this.intervalComputed) }
+        )
+        .then((data) => {
+          this.successDataHandler(data?.data);
+        })
+        .catch((err) => {
+          this.errorDataHandler(COMMON_ERROR_MESSAGE);
+        });
     },
     executeRequestWithTimeout(attempts = this.attemptsComputed) {
       if (!attempts || this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
@@ -130,13 +136,7 @@ export default {
         return;
       }
 
-      this.executeRequest()
-        .then((data) => {
-          this.successDataHandler(data?.data);
-        })
-        .catch((err) => {
-          this.errorDataHandler(COMMON_ERROR_MESSAGE);
-        });
+      this.executeRequest();
 
       setTimeout(() => {
         if (!this.isFinishResponse) {
@@ -152,7 +152,11 @@ export default {
         this.dialogMessage = SUCCESS_REQUEST_MESSAGE;
 
         this.afterSuccessDataCheck();
+
+        return;
       }
+
+      this.errorDataHandler(COMMON_ERROR_MESSAGE);
     },
     errorDataHandler(msg) {
       this.dialogMessage = msg ?? COMMON_ERROR_MESSAGE;
