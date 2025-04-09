@@ -16,6 +16,13 @@ function findAllFields(data, arr) {
   }, []);
 }
 
+function validateMaskedFieldOnlyNumberSymbol(field) {
+  field.state = field.mask.replace(/[^#]/g, "").length === field.value.length;
+  field.error = field.state
+    ? null
+    : `Значение должно быть не меньше ${field.mask.length} символов`;
+}
+
 // управляем полями СНИЛС
 function checkSnilsFields(data) {
   const [
@@ -100,27 +107,19 @@ function changeVisibleFields(data = false) {
   }
 }
 
-function validateMaskedFieldOnlyNumberSymbol(field) {
-  field.state = field.mask.replace(/[^#]/g, "").length === field.value.length;
-  field.error =
-    field.mask.replace(/[^#]/g, "").length === field.value.length
-      ? null
-      : `Значение должно быть не меньше ${field.mask.length} символов`;
-}
-
 function initHandler(data) {
+  const phoneAuth = findField(data, "SPHOLDER_PHONENOAUTH");
+  if (phoneAuth.mask) {
+    validateMaskedFieldOnlyNumberSymbol(phoneAuth);
+  }
   changeVisibleFields(data);
   checkSnilsFields(data);
-  const phone = findField(data, "SPHOLDER_PHONE");
-
-  if (phone.mask) {
-    validateMaskedFieldOnlyNumberSymbol(phone);
-  }
-
   return data;
 }
 
 function eventHandler(data, item) {
+  const phoneAuth = findField(data, "SPHOLDER_PHONENOAUTH");
+
   if (["BPHOLDER_SNILS", "BOWNER_SNILS"].includes(item.name)) {
     checkSnilsFields(data);
   }
@@ -128,10 +127,10 @@ function eventHandler(data, item) {
     changeVisibleFields(data);
   }
 
-  const phone = findField(data, "SPHOLDER_PHONE");
-
-  if (item.name === "SPHOLDER_PHONE") {
-    validateMaskedFieldOnlyNumberSymbol(phone);
+  if (item.name === "SPHOLDER_PHONENOAUTH") {
+    if (phoneAuth.mask) {
+      validateMaskedFieldOnlyNumberSymbol(phoneAuth);
+    }
   }
 
   return data;

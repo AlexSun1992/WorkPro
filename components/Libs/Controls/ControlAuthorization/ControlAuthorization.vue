@@ -220,7 +220,6 @@
         <b-form id="authForm">
           <label for="phoneNumber">Введите номер телефона</label>
           <input
-            type="number"
             :class="phoneNumberClass"
             ref="phoneNumber"
             id="phoneNumber"
@@ -230,9 +229,10 @@
             @keydown.enter="requestSMS"
             @input="phoneNumberUpdated"
             name="phoneNumber"
-            placeholder="9991234567"
+            placeholder="+7(___)-___-__-__"
             required
             v-model="phoneNumber"
+            v-mask="mask"
           />
 
           <div class="error-block d-block mt-1" v-if="wrongAuthData">
@@ -302,6 +302,7 @@
 </template>
 
 <script>
+import { mask } from "vue-the-mask";
 import controlAuthorizationHelper from "./controlAuthorizationHelper";
 import controlAuthorizationConstants from "./controlAuthorizationConstants";
 import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
@@ -309,6 +310,7 @@ import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 export default {
   name: "ControlAuthorization",
   components: { VerifyTimer },
+  directives: { mask },
   props: {
     data: {
       type: Object,
@@ -331,6 +333,8 @@ export default {
     wrongAuthData: false,
     isPhoneNumberUpdated: false,
     isSendDataInProgress: false,
+    placeholder: "+7(___)-___-__-__",
+    mask: "+7(9##)-###-##-##",
     duration: 60,
     smsErrorMessage: "Проверьте корректность введенных данных.",
     isFormErrorMessage: false,
@@ -491,10 +495,7 @@ export default {
       this.isSMSRequested = false;
       this.isPhoneNumberUpdated = true;
       this.wrongAuthData = false;
-      this.phoneNumber = this.phoneNumber.substring(
-        0,
-        this.controlAuthorizationConstants.phoneNumberLength
-      );
+
       this.SMSCode = "";
       this.isFormErrorMessage = false;
     },
