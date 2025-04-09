@@ -15,7 +15,9 @@
       :show-ok="isRequestError"
     >
       <template v-slot:title>
-        <VerifyTimer :duration="timerSeconds" />
+        <VerifyTimer
+          v-if="timerSeconds"
+          :duration="timerSeconds" />
         <div>{{ data.label }}</div>
       </template>
 
@@ -79,6 +81,10 @@ export default {
       return this.isRequestError || this.isRequestSuccess;
     },
     timerSeconds() {
+      if (this.isFinishResponse) {
+        return 0;
+      }
+
       return this.attemptsComputed * this.data.secondsInterval;
     },
   },
