@@ -21,8 +21,9 @@
     >
       <template v-slot:title>
         <VerifyTimer
-          v-if="timerSeconds"
-          :duration="timerSeconds"
+          :key="timerKey"
+          v-if="!isFinishResponse"
+          :duration="getTimerSeconds()"
           class="verify_timer"
         />
         <div>{{ data.label }}</div>
@@ -87,17 +88,10 @@ export default {
     isFinishResponse() {
       return this.isRequestError || this.isRequestSuccess;
     },
-    timerSeconds() {
-      if (this.isFinishResponse) {
-        return 0;
-      }
-
-      return this.attemptsComputed * this.data.secondsInterval;
-    },
   },
   data() {
     return {
-      isOpen: false,
+      timerKey: 1,
       responseData: null,
       dialogMessage: null,
       isRequestError: false,
@@ -132,6 +126,7 @@ export default {
       this.isRequestError = false;
       this.isRequestSuccess = false;
       this.isOpenModalDisabled = false;
+      this.timerKey += 1;
 
       this.$refs.modal.openModal();
     },
@@ -195,6 +190,9 @@ export default {
     },
     setOpenModalBtnDisabled(state = false) {
       this.isOpenModalDisabled = state;
+    },
+    getTimerSeconds() {
+      return this.attemptsComputed * this.data.secondsInterval;
     },
   },
 };
