@@ -1,8 +1,6 @@
 <template>
   <div>
-    <button type="button"
-            @click="openModal"
-            :disabled="isOpenModalDisabled">
+    <button type="button" @click="openModal" :disabled="isOpenModalDisabled">
       Оформить полис
     </button>
 
@@ -16,6 +14,11 @@
       :show-close="false"
       :show-ok="isRequestError"
     >
+      <template v-slot:title>
+        <VerifyTimer :duration="timerSeconds" />
+        <div>{{ data.label }}</div>
+      </template>
+
       <template>
         <span v-html="dialogBodyText"></span>
       </template>
@@ -25,6 +28,7 @@
 
 <script>
 import ControlModal from "./ControlModal";
+import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer.vue";
 import {
   SUCCESS_ID_STATUS,
   ERROR_ID_STATUS,
@@ -32,22 +36,22 @@ import {
   COMMON_ERROR_MESSAGE,
   SUCCESS_REQUEST_MESSAGE,
 } from "./asyncModal.constant";
-import { testData } from "./controlAsyncModal.testData";
 
 export default {
   name: "ControlAsyncModal",
-  components: { ControlModal },
+  components: { VerifyTimer, ControlModal },
   props: {
     data: {
       type: Object,
       default() {
         return {
-          value: "Проверяем данные в АИС Страхование, дождитесь завершения операции",
-          label: "Проверка данных",
+          value:
+            "Проверяем данные в АИС Страхование, дождитесь завершения операции",
+          label: "Пожалуйста, подождите",
           // число попыток выполнить один запрос
           attempts: 6,
           // секунды на выполнение одного запроса
-          interval: 5,
+          secondsInterval: 5,
         };
       },
     },
@@ -56,8 +60,8 @@ export default {
     attemptsComputed() {
       return this.data?.attempts ?? 6;
     },
-    intervalComputed() {
-      const interval = this.data?.interval ?? 5;
+    msIntervalComputed() {
+      const interval = this.data?.secondsInterval ?? 5;
 
       return interval * 1000;
     },
@@ -73,6 +77,9 @@ export default {
     },
     isFinishResponse() {
       return this.isRequestError || this.isRequestSuccess;
+    },
+    timerSeconds() {
+      return this.attemptsComputed * this.data.secondsInterval;
     },
   },
   data() {
@@ -128,7 +135,7 @@ export default {
         .post(
           "am/main/v2/osago/CreatePolicySendNsis",
           { ID: this.cardId },
-          { signal: AbortSignal.timeout(this.intervalComputed) }
+          { signal: AbortSignal.timeout(this.msIntervalComputed) }
         )
         .then((data) => {
           this.successDataHandler(data?.data);
@@ -150,7 +157,7 @@ export default {
         if (!this.isFinishResponse) {
           this.executeRequestWithTimeout(attempts - 1);
         }
-      }, this.intervalComputed);
+      }, this.msIntervalComputed);
     },
     successDataHandler(data) {
       this.setData(data);
@@ -175,7 +182,7 @@ export default {
     },
     setOpenModalBtnDisabled(state = false) {
       this.isOpenModalDisabled = state;
-    }
+    },
   },
 };
 </script>
