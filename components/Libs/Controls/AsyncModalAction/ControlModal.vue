@@ -18,8 +18,8 @@
 
       <footer>
         <slot name="footer"> </slot>
-        <button type="button" v-if="showOk" @click="ok">Ок</button>
-        <button type="button" v-if="showCancel" @click="cancel">Отмена</button>
+        <button class="btn-primary" type="button" v-if="showOk" @click="ok">Ок</button>
+        <button class="btn-secondary" type="button" v-if="showCancel" @click="cancel">Отмена</button>
       </footer>
     </dialog>
   </div>
