@@ -32,7 +32,7 @@ import {
   COMMON_ERROR_MESSAGE,
   SUCCESS_REQUEST_MESSAGE,
 } from "./asyncModal.constant";
-import { testData } from "./controlAsuncModal.testData";
+import { testData } from "./controlAsyncModal.testData";
 
 export default {
   name: "ControlAsyncModal",

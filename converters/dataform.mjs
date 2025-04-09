@@ -422,6 +422,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "Informer";
     } else if (webFields[i].IDCONTROL === 65) {
       obj.type = "Authorization";
+    } else if (webFields[i].IDCONTROL === 68) {
+      obj.type = "AsyncModal";
     } else {
       obj.type = "string";
     }

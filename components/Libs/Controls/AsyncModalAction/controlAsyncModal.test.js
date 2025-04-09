@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import axios from "axios";
 import ControlAsyncModal from "./ControlAsyncModal.vue";
 import ControlModal from "./ControlModal.vue";
-import { testData } from "./controlAsuncModal.testData";
+import { testData } from "./controlAsyncModal.testData";
 
 jest.mock("axios");
 AbortSignal.timeout = (ms) => {
