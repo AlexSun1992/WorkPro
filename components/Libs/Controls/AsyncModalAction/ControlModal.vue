@@ -123,7 +123,7 @@ dialog {
   background: #ffffff;
   border: 1px solid #dfe3e5;
   box-sizing: border-box;
-  box-shadow: 0px 4px 26px rgb(0 0 0 / 8%);
+  box-shadow: 0px 4px 26px rgb(0, 0, 0, 0.08);
   border-radius: 30px;
   padding: 107px 50px 62px 50px;
   max-width: 568px;
