@@ -38,7 +38,7 @@
 
 <script>
 import ControlModal from "./ControlModal";
-import VerifyTimer from "@/components/Libs/VerifyUser/VerifyTimer.vue";
+import VerifyTimer from "../../VerifyUser/VerifyTimer.vue";
 import {
   SUCCESS_ID_STATUS,
   ERROR_ID_STATUS,
