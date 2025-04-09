@@ -1,17 +1,25 @@
 <template>
   <div>
-    <RegNumberAutoByNumber @update="$emit('update',{ fieldId: data.fieldId, name: data.name, value: $event })"
-                           :value="dataRegNumberValueComputed"
-                           :clientCars="carsShortData"/>
+    <RegNumberAutoNumber
+      @update="
+        $emit('update', {
+          fieldId: data.fieldId,
+          name: data.name,
+          value: $event,
+        })
+      "
+      :value="dataRegNumberValueComputed"
+      :clientCars="carsShortData"
+    />
   </div>
 </template>
 
 <script>
-import RegNumberAutoByNumber from "./RegNumberAutoNumber.vue";
+import RegNumberAutoNumber from "./RegNumberAutoNumber.vue";
 
 export default {
   name: "ControlRegNumberAuto",
-  components: { RegNumberAutoByNumber },
+  components: { RegNumberAutoNumber },
   data() {
     return {
       carNumber: null,
@@ -21,13 +29,13 @@ export default {
       findNumberControllers: [],
       isNextButtonDisabled: false,
       selectedCar: null,
-      cache: {}
+      cache: {},
     };
   },
   props: {
     data: {
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     dataRegNumberValueComputed() {
@@ -35,16 +43,11 @@ export default {
     },
     carsShortData() {
       return this.data?.options ?? [];
-    }
+    },
   },
-  methods: {
-
-  },
-  mounted() {
-
-  }
+  methods: {},
+  mounted() {},
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
