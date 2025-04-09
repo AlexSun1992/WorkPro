@@ -38,6 +38,7 @@ describe("SSO", () => {
     const req = {
       get: jest.fn().mockReturnValue("http://test/login"),
       headers: { referer: "http://test/login" },
+      hostname: "f.f",
       query: {
         auth: "",
         type: "alfa",
@@ -80,6 +81,7 @@ describe("SSO", () => {
     );
     const req = {
       get: jest.fn().mockReturnValue("http://test/cabinet"),
+      hostname: "f.f",
       cookies: {
         ref: "/cabinet",
         referror:
@@ -94,6 +96,37 @@ describe("SSO", () => {
       clearCookie: jest.fn(),
     };
     await redirectFromEsia(req, res);
-    expect(res.redirect).toHaveBeenCalledWith("https://demo.reso.ru/cabinet");
+    expect(res.redirect).toHaveBeenCalledWith(`https://f.f/cabinet`);
+  });
+  it("Происходит корректная передача данных c сайта партнера на РЕСО", async () => {
+    const req = {
+      get: jest.fn().mockReturnValue("http://test/cabinet"),
+      hostname: "f.f",
+      cookies: {
+        ref: encodeURIComponent("/test?ID=123"),
+        referror:
+          "/login?error=%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0%20%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8",
+      },
+      query: { type: "esia", code: "345" },
+    };
+    const res = {
+      cookie: jest.fn(),
+      send: jest.fn(),
+      redirect: jest.fn(),
+      clearCookie: jest.fn(),
+    };
+    await redirectFromEsia(req, res);
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      "http://localhost:8000/am/free/v2/datacard/55/801",
+      {
+        body: '{"code":"345","ID":"123"}',
+        headers: {
+          "content-type": "application/json",
+        },
+        method: "POST",
+      }
+    );
+    expect(res.redirect).toHaveBeenCalledWith(`https://f.f/test?ID=123`);
   });
 });

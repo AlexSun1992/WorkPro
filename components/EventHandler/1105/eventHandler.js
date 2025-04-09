@@ -1,5 +1,4 @@
 async function eventHandler(data, item, callback) {
-  console.log(item);
   function findField(name) {
     const field = data.find((item) => item.name === name);
     if (field) {
@@ -17,6 +16,8 @@ async function eventHandler(data, item, callback) {
   const Save = findField("Save");
   const NWEIGHT = findField("NWEIGHT");
   const NSEATS_COUNT = findField("NSEATS_COUNT");
+  const regNum = findField("SREGNUM");
+  const idType = findField("IDVEHICLETYPE");
 
   const arrFieldsTS = [
     "DATA_VEHICLE",
@@ -69,28 +70,101 @@ async function eventHandler(data, item, callback) {
     if (!IDBRAND.value) {
       IDMODEL.visible = true;
     }
+
     if (IDBRAND.value) {
       IDMODEL.visible = true;
+    }
+    if (IDMODEL.value) {
+      idType.visible = true;
+    }
+
+    if (IDBRAND.state === false || !sModel?.value?.includes(IDBRAND.value)) {
+      sModel.value = "";
+      sModel.state = null;
+      // очищаем модель, если нет марки
+      model.value = "";
+      model.state = null;
+      //очищаем тип ТС, если нет модели
+      idType.value = "";
+      idType.state = null;
     }
   }
 
   // Модель (не нашли в списке)
   if (item.name === "IDMODEL") {
     if (model.value) {
+      idType.visible = true;
+
       const idModelText = IDMODEL.options.find(
         (item) => item.value === IDMODEL.value
-      ).text;
+      );
+
       const brandValue = IDBRAND.options.find(
         (item) => item.value === IDBRAND.value
-      ).text;
+      );
 
-      if (brandValue === sModel.value) {
-        sModel.value = `${sModel.value} ${idModelText}`;
-      }
+      if (brandValue && idModelText) {
+        if (
+          brandValue.hasOwnProperty("text") &&
+          idModelText.hasOwnProperty("text")
+        ) {
+          if (brandValue.text === sModel.value) {
+            sModel.value = sModel.value + " " + idModelText.text;
+          }
 
-      if (brandValue !== sModel.value) {
-        sModel.value = `${brandValue} ${idModelText}`;
+          if (brandValue !== sModel.value) {
+            sModel.value = `${brandValue.text} ${idModelText.text}`;
+          }
+        }
       }
+    }
+
+    if (!model.value) {
+      idType.visible = true;
+    }
+
+    if (IDMODEL.state === false) {
+      sModel.value = "";
+      sModel.state = null;
+    }
+  }
+
+  if (item.name === "SMODEL") {
+    // Валидируем поле (не более 160 символов)
+    if (item.value.length > 160) {
+      sModel.state = false;
+      sModel.error = "Значение поля не должно превышать 160 символов";
+      sModel.value = sModel.value.slice(0, 160);
+    }
+
+    if (item.value.length <= 160) {
+      sModel.state = null;
+      sModel.error = null;
+    }
+
+    if (item.value === "") {
+      sModel.state = null;
+      sModel.error = null;
+    }
+  }
+
+  // Поле марка-модель стало обязательным
+
+  if (Object.hasOwn(sModel, "value")) {
+    if (sModel.value.length > 1 && sModel.value.length <= 160) {
+      sModel.state = true;
+      sModel.error = null;
+    }
+  }
+
+  if (idType && idType.value && idType.options && idType.options.length) {
+    const validSelectedValue = idType.options.find(
+      (option) => option.value === idType.value
+    );
+    if (!validSelectedValue) {
+      idType.value = undefined;
+      idType.state = null;
+      idType.ckecked = false;
     }
   }
 
@@ -187,4 +261,35 @@ async function eventHandler(data, item, callback) {
 
   return data;
 }
-export { eventHandler };
+
+function initHandler(data) {
+  function findField(name) {
+    const field = data.find((item) => item.name === name);
+    if (field) {
+      return field;
+    }
+    throw new Error(`Поле ${name} не найдено в данных`);
+  }
+
+  const regNum = findField("SREGNUM");
+
+  const idType = data.find((f) => f.name === "IDVEHICLETYPE");
+  if (idType && idType.value && idType.options && idType.options.length) {
+    const validSelectedValue = idType.options.find(
+      (option) => option.value === idType.value
+    );
+    if (!validSelectedValue) {
+      idType.value = undefined;
+      idType.state = null;
+      idType.ckecked = false;
+    }
+  }
+
+  const IDMODEL = findField("IDMODEL");
+
+  if (IDMODEL.value > 0) {
+    IDMODEL.visible = true;
+  }
+
+  return data;
+}

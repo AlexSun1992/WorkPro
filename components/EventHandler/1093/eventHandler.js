@@ -7,7 +7,7 @@ async function eventHandler(data, item, callback) {
 
   function getFieldFromItem(item) {
     const result = {...item?.value?.value};
-    result.insuredIndex = item?.value.index;
+    result.insuredIndex = item?.value?.index;
 
     return result;
   }
@@ -34,15 +34,20 @@ async function eventHandler(data, item, callback) {
     const insuredList = findField("INSURED_LIST")?.value;
     const field = insuredList[item.insuredIndex]?.find(field => field.name === item.name);
 
-    if (item.value && !isValidValueLength(item, length)) {
-      setFieldState(field, false, `Должно быть введено не более ${length} символов`);
+    if ("value" in item  && !isValidValueLength(item, length)) {
+      if (length < 5) {
+        setFieldState(field, false, `Должно быть введено ${length} символа`);
+      }
+      else {
+        setFieldState(field, false, `Должно быть введено ${length} символов`);
+      }
       return;
     }
 
     setFieldState(field, true, null);
   }
 
-  function validateDINSURED_STAGEDATE(item) {
+  function validateDates(item) {
     const insuredList = findField("INSURED_LIST")?.value;
     const list = insuredList[item.insuredIndex];
     const DINSURED_STAGEDATE = findFieldInInsuredList(list, "DINSURED_STAGEDATE") ;
@@ -51,12 +56,30 @@ async function eventHandler(data, item, callback) {
     const birthDate = getDate(DINSURED_BIRTHDATE.value);
     const temp = new Date();
     const currentDate = new Date(temp.getFullYear(), temp.getMonth(), temp.getDate());
+    let fieldsBaseState = true;
 
+    if (!stageDate && DINSURED_STAGEDATE.required) {
+      setFieldState(DINSURED_STAGEDATE, false, "Поле обязательно к заполнению");
+
+      fieldsBaseState = false;
+    }
+    if (!birthDate && DINSURED_BIRTHDATE.required) {
+      setFieldState(DINSURED_BIRTHDATE, false, "Поле обязательно к заполнению");
+
+      fieldsBaseState = false;
+    }
     if (stageDate && currentDate < stageDate) {
       setFieldState(DINSURED_STAGEDATE, false, "Дата начала стажа не может быть позже текущей даты");
+
+      fieldsBaseState = false;
     }
     if (birthDate && currentDate < birthDate) {
       setFieldState(DINSURED_BIRTHDATE, false, "Дата рождения не может быть позже текущей даты");
+
+      fieldsBaseState = false;
+    }
+    if (!fieldsBaseState) {
+
     }
     else if (!stageDate || !birthDate) {
       setFieldState(DINSURED_STAGEDATE, true, null);
@@ -77,12 +100,12 @@ async function eventHandler(data, item, callback) {
       SNUMBER_LICENSE: validateSNUMBER_LICENSE,
       SPREV_LICSERIA: validateSPREV_LICSERIA,
       SPREV_LICNUMBER: validateSPREV_LICNUMBER,
-      DINSURED_STAGEDATE: validateDINSURED_STAGEDATE,
-      DINSURED_BIRTHDATE: validateDINSURED_STAGEDATE
+      DINSURED_STAGEDATE: validateDates,
+      DINSURED_BIRTHDATE: validateDates
     };
     const field = getFieldFromItem(item);
 
-    if (fieldsValidators[field.name]) {
+    if (fieldsValidators[field?.name]) {
       fieldsValidators[field.name](field);
     }
   }
@@ -122,7 +145,7 @@ async function eventHandler(data, item, callback) {
   }
 
   function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
-    const modifyMinDate = (new Date()).setFullYear(minDate.getFullYear() + years);
+    const modifyMinDate = minDate.setFullYear(minDate.getFullYear() + years);
 
     return maxDate >= modifyMinDate;
   }
@@ -269,3 +292,4 @@ function initHandler(data) {
 
   return copyData;
 }
+

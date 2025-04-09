@@ -1,4 +1,4 @@
-async function eventHandler(data, item, func) {
+function eventHandler(data, item, func) {
   if (item.value === "Item45282") {
     if (item.resp) {
       const { ID, REL } = item.resp.data[0];
@@ -8,4 +8,3 @@ async function eventHandler(data, item, func) {
   }
   return data;
 }
-export { eventHandler };

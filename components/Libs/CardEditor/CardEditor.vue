@@ -153,15 +153,16 @@ export default {
   async created() {
     try {
       if (process.client) {
-        await getScript({
-          idModule: this.$route.params.idModule,
-          idItem: this.$route.params.idItem,
-        },
-        this.$store);
+        await this.loadScript();
       }
       this.$root.eventHandler =
         typeof eventHandler === "function" ? eventHandler : null;
-      this.stripeLoaded();
+      this.$root.initHandler =
+        typeof initHandler === "function" ? initHandler : null;
+      setTimeout(() => {
+        this.stripeLoaded();
+
+      }, 400)
     } catch (e) {
       console.warn(`Ошибка загрузки скрипта`);
     }
@@ -227,6 +228,14 @@ export default {
     this.$store.commit("data_card/setSavedError", false);
   },
   methods: {
+    async loadScript() {
+      this.$store.commit("blocks/scriptLoaded", false);
+      await getScript({
+        idModule: this.$route.params.idModule,
+        idItem: this.$route.params.idItem,
+      });
+      this.$store.commit("blocks/scriptLoaded", true);
+    },
     stripeLoaded() {
       try {
         if (typeof initHandler === "function") {
@@ -238,7 +247,9 @@ export default {
             ) || this.data
           );
         }
-      } catch {}
+      } catch(e) {
+        console.log(e);
+      }
     },
     confirmAction() {
       confirmPromise = new Promise((resolve) => {
@@ -486,6 +497,9 @@ export default {
             if (this.$route.query?.ref && resp) {
               this.$router.push(this.$route.query?.ref);
               return;
+            }
+            if (resp?.data[0]?.SURL) {
+              this.$router.push(resp?.data[0]?.SURL);
             }
             if (!this.$store.getters["data_card/cardChanged"]) {
               if (this.$route.params.idCard) {

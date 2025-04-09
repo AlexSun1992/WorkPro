@@ -1,8 +1,7 @@
 import axios from "axios";
-import * as localScript from "../components/EventHandler/1089/eventHandler";
 
 let cachedController = null;
-let cachedPromised = null;
+let cachedPromised = Promise.resolve();
 let cacheKey = null;
 
 export function setScript(scriptText) {
@@ -45,35 +44,22 @@ const loadScriptFromApi = async (idModule, idItem) => {
   }
 };
 
-const getScript = async (payload, store) => {
+const getScript = async (payload) => {
   if (!global.window || cacheKey === payload.idItem) return;
-  store.commit("blocks/scriptLoaded", false);
   cachedController?.abort();
-  await cachedPromised?.catch(() => null);
 
   cacheKey = payload.idItem;
 
   cachedController = new AbortController();
 
-  if (payload.idItem == 1089) {
-    console.log(1089, localScript);
-    window.eventHandler = localScript.eventHandler;
-    window.initHandler = localScript.initHandler;
-    store.commit("blocks/scriptLoaded", true);
-    return
-  } else {
-    cachedPromised = loadScriptFromApi(payload.idModule, payload.idItem);
-  }
 
   try {
-    const scriptText = await cachedPromised;
-    updateScript(scriptText);
+      cachedPromised = loadScriptFromApi(payload.idModule, payload.idItem);
+      const scriptText = await cachedPromised;
+      updateScript(scriptText);
   } catch (error) {
     clearScript();
   }
-
-  await cachedPromised;
-  store.commit("blocks/scriptLoaded", true);
 };
 
 export default getScript;
