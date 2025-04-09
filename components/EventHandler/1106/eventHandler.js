@@ -1,3 +1,11 @@
+function validateMaskedField(field) {
+  field.state = field.mask.length === field.value.length;
+  field.error =
+    field.mask.length === field.value.length
+      ? null
+      : `Значение должно быть не меньше ${field.mask.length} символов`;
+}
+
 async function eventHandler(data, item, callback) {
   function findField(name) {
     const field = data.find((item) => item.name === name);
@@ -58,20 +66,31 @@ async function eventHandler(data, item, callback) {
 
     if (IDVEHDOCTYPE.value === 30 && countryDoc.value === 179) {
       // Оставляем только буквы и цифры
-      //let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
+      // let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
 
       // Ограничиваем количество Валидных символов до 10 (не считая пробела)
       // rawValue = rawValue.slice(0, 10);
+      // seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
+      // Оставляем только буквы и цифры
+      let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
 
-      seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
+      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
+      rawValue = rawValue.slice(0, 10);
+
+      // Формируем строку с пробелом после 4-го символа
+      let formattedValue =
+        rawValue.length > 4
+          ? rawValue.slice(0, 4) + " " + rawValue.slice(4)
+          : rawValue;
+
+      // Обновляем значение в поле
+      seriesNumberDoc.value = formattedValue;
     }
   }
 
-  //if(item.name === 'SVEHEPTS'){
-  // if(docNumber.mask.length > item.value.length){
-  //  docNumber.state = false
-  //}
-  //}
+  if (item.name === "SVEHEPTS") {
+    validateMaskedField(docNumber);
+  }
 
   return data;
 }
@@ -125,13 +144,34 @@ function initHandler(data) {
 
     if (IDVEHDOCTYPE.value === 30 && countryDoc.value === 179) {
       // Оставляем только буквы и цифры
+      let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
+
+      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
+      rawValue = rawValue.slice(0, 10);
+
+      // Формируем строку с пробелом после 4-го символа
+      let formattedValue =
+        rawValue.length > 4
+          ? rawValue.slice(0, 4) + " " + rawValue.slice(4)
+          : rawValue;
+
+      // Обновляем значение в поле
+      seriesNumberDoc.value = formattedValue;
+      // Оставляем только буквы и цифры
       // let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
       // Ограничиваем количество Валидных символов до 10 (не считая пробела)
       // rawValue = rawValue.slice(0, 10);
-      seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
+      // seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
     }
+  }
+
+  if (
+    docNumber &&
+    Object.hasOwn(docNumber, "value") &&
+    Object.hasOwn(docNumber, "mask")
+  ) {
+    validateMaskedField(docNumber);
   }
 
   return data;
 }
-

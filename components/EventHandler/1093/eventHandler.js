@@ -7,7 +7,7 @@ async function eventHandler(data, item, callback) {
 
   function getFieldFromItem(item) {
     const result = {...item?.value?.value};
-    result.insuredIndex = item?.value.index;
+    result.insuredIndex = item?.value?.index;
 
     return result;
   }
@@ -105,7 +105,7 @@ async function eventHandler(data, item, callback) {
     };
     const field = getFieldFromItem(item);
 
-    if (fieldsValidators[field.name]) {
+    if (fieldsValidators[field?.name]) {
       fieldsValidators[field.name](field);
     }
   }
@@ -224,7 +224,7 @@ async function eventHandler(data, item, callback) {
     SHELP_INFO.visible = false;
   }
 
-  // validateFormField(item);
+  validateFormField(item);
   setNextButtonState(item);
 
   return copyData;

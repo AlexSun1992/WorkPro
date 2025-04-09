@@ -12,6 +12,8 @@ function eventHandler(data, item, callback) {
   const dFromDate = data.find((f) => f.name === "DFROM_DATE");
   const dtoDateYear = data.find((f) => f.name === "DTO_DATE_YEAR");
 
+  if (!field) return data;
+
   validateDates(item, data, dFromDate, dtoDateYear);
 
   if (field.name === "DFROM_DATE") {

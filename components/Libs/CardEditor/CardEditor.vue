@@ -228,9 +228,9 @@ export default {
     async loadScript() {
       this.$store.commit("blocks/scriptLoaded", false);
       await getScript({
-          idModule: this.$route.params.idModule,
-          idItem: this.$route.params.idItem,
-        });
+        idModule: this.$route.params.idModule,
+        idItem: this.$route.params.idItem,
+      });
       this.$store.commit("blocks/scriptLoaded", true);
     },
     stripeLoaded() {
@@ -494,6 +494,9 @@ export default {
             if (this.$route.query?.ref && resp) {
               this.$router.push(this.$route.query?.ref);
               return;
+            }
+            if (resp?.data[0]?.SURL) {
+              this.$router.push(resp?.data[0]?.SURL);
             }
             if (!this.$store.getters["data_card/cardChanged"]) {
               if (this.$route.params.idCard) {
