@@ -42,7 +42,7 @@ function checkSnilsFields(data) {
   }
   if (ownerSnilsField) {
     ownerSnilsField.visible = Boolean(
-      ownerSnilsControl?.value && !isOwner?.value
+      ownerSnilsControl?.visible && ownerSnilsControl?.value && !isOwner?.value
     );
   }
 }
@@ -125,6 +125,7 @@ function eventHandler(data, item) {
   }
   if (["NPERSONTYPE", "LISOWNER"].includes(item.name)) {
     changeVisibleFields(data);
+    checkSnilsFields(data);
   }
 
   if (item.name === "SPHOLDER_PHONE") {
