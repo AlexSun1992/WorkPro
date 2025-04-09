@@ -108,7 +108,7 @@ function changeVisibleFields(data = false) {
 }
 
 function initHandler(data) {
-  const phoneAuth = findField(data, "SPHOLDER_PHONENOAUTH");
+  const phoneAuth = findField(data, "SPHOLDER_PHONE");
   if (phoneAuth.mask) {
     validateMaskedFieldOnlyNumberSymbol(phoneAuth);
   }
@@ -118,7 +118,7 @@ function initHandler(data) {
 }
 
 function eventHandler(data, item) {
-  const phoneAuth = findField(data, "SPHOLDER_PHONENOAUTH");
+  const phoneAuth = findField(data, "SPHOLDER_PHONE");
 
   if (["BPHOLDER_SNILS", "BOWNER_SNILS"].includes(item.name)) {
     checkSnilsFields(data);
@@ -127,7 +127,7 @@ function eventHandler(data, item) {
     changeVisibleFields(data);
   }
 
-  if (item.name === "SPHOLDER_PHONENOAUTH") {
+  if (item.name === "SPHOLDER_PHONE") {
     if (phoneAuth.mask) {
       validateMaskedFieldOnlyNumberSymbol(phoneAuth);
     }
