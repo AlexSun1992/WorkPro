@@ -125,7 +125,7 @@ dialog {
   box-sizing: border-box;
   box-shadow: 0px 4px 26px rgb(0 0 0 / 8%);
   border-radius: 30px;
-  padding: 130px 30px 30px 30px;
+  padding: 107px 50px 62px 50px;
   max-width: 568px;
   z-index: 12;
 }
@@ -144,6 +144,13 @@ dialog header {
   font-feature-settings: "pnum" on, "lnum" on;
   color: #292929;
 }
+dialog main {
+  font-family: SF Pro Display;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 30px;
+  color: #868686;
+}
 dialog header:before,
 dialog header:after {
   display: none;
@@ -153,7 +160,6 @@ dialog header:after {
     padding: 30px;
   }
   dialog header {
-    text-align: center;
     font-size: 1rem;
     font-weight: 600;
     margin: 0 auto;

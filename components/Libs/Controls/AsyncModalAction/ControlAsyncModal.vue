@@ -1,6 +1,11 @@
 <template>
   <div>
-    <button type="button" @click="openModal" :disabled="isOpenModalDisabled">
+    <button
+      class="btn-primary"
+      type="button"
+      @click="openModal"
+      :disabled="isOpenModalDisabled"
+    >
       Оформить полис
     </button>
 
@@ -17,7 +22,9 @@
       <template v-slot:title>
         <VerifyTimer
           v-if="timerSeconds"
-          :duration="timerSeconds" />
+          :duration="timerSeconds"
+          class="verify_timer"
+        />
         <div>{{ data.label }}</div>
       </template>
 
@@ -193,4 +200,23 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.verify_timer {
+  font-family: Raleway;
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 65px;
+  color: #a4a4a4;
+  padding-left: 52px;
+  background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCA0MCA0MSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDMuODMzMzRDMTYuNzAzNyAzLjgzMzM0IDEzLjQ4MTMgNC44MTA4MiAxMC43NDA1IDYuNjQyMThDNy45OTk2OCA4LjQ3MzUzIDUuODYzNDcgMTEuMDc2NSA0LjYwMjAxIDE0LjEyMTlDMy4zNDA1NSAxNy4xNjc0IDMuMDEwNSAyMC41MTg1IDMuNjUzNTggMjMuNzUxNUM0LjI5NjY3IDI2Ljk4NDUgNS44ODQwMiAyOS45NTQyIDguMjE0ODkgMzIuMjg1MUMxMC41NDU4IDM0LjYxNiAxMy41MTU1IDM2LjIwMzMgMTYuNzQ4NSAzNi44NDY0QzE5Ljk4MTUgMzcuNDg5NSAyMy4zMzI2IDM3LjE1OTUgMjYuMzc4MSAzNS44OThDMjkuNDIzNSAzNC42MzY1IDMyLjAyNjUgMzIuNTAwMyAzMy44NTc4IDI5Ljc1OTVDMzUuNjg5MiAyNy4wMTg3IDM2LjY2NjcgMjMuNzk2NCAzNi42NjY3IDIwLjVDMzYuNjY2NyAxOC4zMTEzIDM2LjIzNTYgMTYuMTQ0IDM1LjM5OCAxNC4xMjE5QzM0LjU2MDQgMTIuMDk5OSAzMy4zMzI4IDEwLjI2MjUgMzEuNzg1MSA4LjcxNDg5QzMwLjIzNzUgNy4xNjcyNSAyOC40MDAyIDUuOTM5NTkgMjYuMzc4MSA1LjEwMjAxQzI0LjM1NiA0LjI2NDQzIDIyLjE4ODcgMy44MzMzNCAyMCAzLjgzMzM0Wk0yMCAzMy44MzMzQzE3LjM2MjkgMzMuODMzMyAxNC43ODUxIDMzLjA1MTMgMTIuNTkyNCAzMS41ODYzQzEwLjM5OTcgMzAuMTIxMiA4LjY5MDc4IDI4LjAzODggNy42ODE2MSAyNS42MDI0QzYuNjcyNDQgMjMuMTY2MSA2LjQwODQgMjAuNDg1MiA2LjkyMjg3IDE3Ljg5ODhDNy40MzczNCAxNS4zMTI0IDguNzA3MjIgMTIuOTM2NiAxMC41NzE5IDExLjA3MTlDMTIuNDM2NiA5LjIwNzIxIDE0LjgxMjQgNy45MzczNCAxNy4zOTg4IDcuNDIyODdDMTkuOTg1MiA2LjkwODQgMjIuNjY2MSA3LjE3MjQ0IDI1LjEwMjUgOC4xODE2MUMyNy41Mzg4IDkuMTkwNzggMjkuNjIxMiAxMC44OTk3IDMxLjA4NjMgMTMuMDkyNEMzMi41NTEzIDE1LjI4NTEgMzMuMzMzMyAxNy44NjI5IDMzLjMzMzMgMjAuNUMzMy4zMzMzIDI0LjAzNjIgMzEuOTI4NiAyNy40Mjc2IDI5LjQyODEgMjkuOTI4MUMyNi45Mjc2IDMyLjQyODYgMjMuNTM2MiAzMy44MzMzIDIwIDMzLjgzMzNaTTI1LjE2NjcgMjEuNTVMMjEuNjY2NyAxOS41MzMzVjEyLjE2NjdDMjEuNjY2NyAxMS43MjQ2IDIxLjQ5MTEgMTEuMzAwNyAyMS4xNzg1IDEwLjk4ODJDMjAuODY2IDEwLjY3NTYgMjAuNDQyIDEwLjUgMjAgMTAuNUMxOS41NTggMTAuNSAxOS4xMzQxIDEwLjY3NTYgMTguODIxNSAxMC45ODgyQzE4LjUwODkgMTEuMzAwNyAxOC4zMzMzIDExLjcyNDYgMTguMzMzMyAxMi4xNjY3VjIwLjVDMTguMzMzMyAyMC41IDE4LjMzMzMgMjAuNjMzMyAxOC4zMzMzIDIwLjdDMTguMzQzMiAyMC44MTQ4IDE4LjM3MTMgMjAuOTI3NCAxOC40MTY3IDIxLjAzMzNDMTguNDUxIDIxLjEzMjIgMTguNDk1NyAyMS4yMjcyIDE4LjU1IDIxLjMxNjdDMTguNTk1NiAyMS40MTE0IDE4LjY1MTUgMjEuNTAwOCAxOC43MTY3IDIxLjU4MzNMMTguOTgzMyAyMS44TDE5LjEzMzMgMjEuOTVMMjMuNDY2NyAyNC40NUMyMy43MjA3IDI0LjU5NCAyNC4wMDggMjQuNjY4NyAyNC4zIDI0LjY2NjdDMjQuNjY5IDI0LjY2OTMgMjUuMDI4NSAyNC41NDkzIDI1LjMyMiAyNC4zMjU2QzI1LjYxNTUgMjQuMTAxOSAyNS44MjY0IDIzLjc4NzEgMjUuOTIxOCAyMy40MzA2QzI2LjAxNzEgMjMuMDc0IDI1Ljk5MTQgMjIuNjk2IDI1Ljg0ODcgMjIuMzU1NkMyNS43MDYgMjIuMDE1MyAyNS40NTQ0IDIxLjczMTkgMjUuMTMzMyAyMS41NUgyNS4xNjY3WiIgZmlsbD0iI0E0QTRBNCIvPgo8L3N2Zz4K")
+    left center no-repeat;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+@media (max-width: 568px) {
+  .verify_timer {
+    font-size: 1.5rem;
+    line-height: 40px;
+  }
+}
+</style>
