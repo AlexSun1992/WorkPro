@@ -1,6 +1,10 @@
 <template>
   <div>
-    <button type="button" @click="openModal">Кнопка</button>
+    <button type="button"
+            @click="openModal"
+            :disabled="isOpenModalDisabled">
+      Оформить полис
+    </button>
 
     <control-modal
       ref="modal"
@@ -78,6 +82,7 @@ export default {
       dialogMessage: null,
       isRequestError: false,
       isRequestSuccess: false,
+      isOpenModalDisabled: false,
     };
   },
   methods: {
@@ -86,6 +91,7 @@ export default {
     },
     refreshPage() {
       this.$router.go(null);
+      this.setOpenModalBtnDisabled(true);
     },
     resetForm() {},
     afterSuccessDataCheck() {
@@ -95,6 +101,7 @@ export default {
         this.closeModal();
 
         if (url) {
+          this.setOpenModalBtnDisabled(true);
           this.$router.push(url);
         }
       }, 10);
@@ -104,6 +111,7 @@ export default {
       this.dialogMessage = null;
       this.isRequestError = false;
       this.isRequestSuccess = false;
+      this.isOpenModalDisabled = false;
 
       this.$refs.modal.openModal();
     },
@@ -165,6 +173,9 @@ export default {
     setData(data) {
       this.responseData = data[0] ? { ...data[0] } : null;
     },
+    setOpenModalBtnDisabled(state = false) {
+      this.isOpenModalDisabled = state;
+    }
   },
 };
 </script>
