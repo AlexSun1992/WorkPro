@@ -10,7 +10,6 @@
       >
         <RegNumberInput
           v-model="numberValue"
-          @input="numberUpdateValue"
           :formatter="numberFormatter"
           @keydown="numberKeydown($event)"
           @blur="numberBlur"
@@ -22,7 +21,6 @@
 
         <RegNumberInput
           v-model="codeValue"
-          @input="codeUpdateValue"
           :formatter="codeFormatter"
           @blur="codeBlur"
           :disabled="regNumberDisabled"
@@ -78,7 +76,7 @@ import {
 } from "../ControlRegNumber/helpers";
 
 export default {
-  name: "RegNumberAutoByNumber",
+  name: "RegNumberAutoNumber",
   components: { RegNumberInput, BCol, BRow },
   props: {
     clientCars: [],
@@ -104,12 +102,12 @@ export default {
     customerCarNumbers() {
       return this.clientCars?.slice(0, 3);
     },
-    stateNumber() {
+    isStateNumber() {
       const number = this.numberValue?.replace(/ /g, "");
 
       return isNumberValid(number) && number.length === 6;
     },
-    stateCode() {
+    isStateCode() {
       return isCodeValid(this.codeValue?.replace(/ /g, ""));
     },
     numberAndCodeValue() {
@@ -117,32 +115,29 @@ export default {
     },
     isValid() {
       if (this.isVisitedNumber === true && this.isVisitedCode === true) {
-        return this.stateNumber && this.stateCode;
+        return this.isStateNumber && this.isStateCode;
       }
       return null;
     },
     isDisabled() {
-      return this.data.disabled || this.data.readonly;
+      return this.data?.disabled || this.data?.readonly || false;
     },
     valueComputed() {
-      return this.value === "N" ? null : this.value;
+      return this.value === "N" || this.value === null ? null : this.value;
     },
   },
   methods: {
     goWithoutCarNumber(val) {
       if (val) {
         this.isNotFound = false;
-        this.numberValue = null;
-        this.codeValue = null;
-        this.selectedCar = null;
         this.regNumberDisabled = true;
 
-        this.updateCardValue("N");
+        this.updateCardValue();
 
         return;
       }
 
-      this.updateCardValue("");
+      this.updateCardValue();
       this.regNumberDisabled = false;
       this.setInputsVisited(false);
     },
@@ -150,9 +145,9 @@ export default {
       if (this.regNumberDisabled) {
         return;
       }
-
       this.numberValue =
         item === null ? null : this.numberFormatter(item?.slice(0, 6));
+
       this.codeValue =
         item === null ? null : this.codeFormatter(item?.slice(6));
 
@@ -162,33 +157,6 @@ export default {
     },
     setWithoutCarNumber(val) {
       this.isWithoutCarNumber = !!val;
-    },
-
-    numberUpdateValue() {
-      // emit на каждый ввод символа, нужен для регуляции скрытия сообщения о несуществующем госномере
-      this.updateCardValue("");
-
-      if (isNumberValid(this.numberValue?.replace(/ /g, ""))) {
-        this.$refs.code.$el.focus();
-
-        if (this.stateNumber && this.stateCode) {
-          this.isVisitedNumber = true;
-
-          this.updateCardValue();
-        }
-      }
-    },
-    codeUpdateValue(value) {
-      // emit на каждый ввод символа , нужен для регуляции скрытия сообщения о несуществующем госномере
-      this.updateCardValue("");
-
-      if (isCodeValid(value)) {
-        if (this.stateNumber && this.stateCode) {
-          this.isVisitedCode = true;
-
-          this.updateCardValue();
-        }
-      }
     },
     numberFormatter(value) {
       const formatValue = value.toUpperCase();
@@ -202,16 +170,16 @@ export default {
       if (isValid(withOutSpacesValue) === false) {
         return formatValue.slice(0, -1);
       }
-      return formatValue;
+      return formatValue || "";
     },
     codeFormatter(value) {
       if (/^\d+$/iu.test(value)) {
         if (value.length > 3) {
           return value.substring(0, 3);
         }
-        return value;
+        return value || "";
       }
-      return value.substring(0, value.length - 1);
+      return value.substring(0, value.length - 1) || "";
     },
     numberKeydown(e) {
       if (e.key !== "Backspace" && e.key !== "Delete") {
@@ -226,26 +194,58 @@ export default {
     },
     numberBlur() {
       this.isVisitedNumber = true;
-      this.state = this.stateNumber && this.stateCode;
+      this.state = this.isStateNumber && this.isStateCode;
     },
     codeBlur() {
       this.isVisitedCode = true;
-      this.state = this.stateNumber && this.stateCode;
+      this.state = this.isStateNumber && this.isStateCode;
     },
-    updateCardValue(value) {
-      const val = value !== undefined ? value : this.numberAndCodeValue;
-
-      this.$emit("update", val);
+    updateCardValue() {
+      const updateData = this.isWithoutCarNumber
+        ? "N"
+        : this.numberAndCodeValue || null;
+      this.$emit("update", updateData);
     },
     setInputsVisited(val) {
       this.isVisitedNumber = !!val;
-      this.state = this.stateNumber && this.stateCode;
+      this.state = this.isStateNumber && this.isStateCode;
 
       this.isVisitedCode = !!val;
-      this.state = this.stateNumber && this.stateCode;
+      this.state = this.isStateNumber && this.isStateCode;
     },
   },
-  watch: {},
+  watch: {
+    numberValue(oldvalue, newValue) {
+      if (oldvalue !== newValue) {
+        // emit на каждый ввод символа, нужен для регуляции скрытия сообщения о несуществующем госномере
+        this.updateCardValue();
+        if (this.isStateNumber) {
+          this.$refs.code.$el.focus();
+          if (this.isStateNumber && this.isStateCode) {
+            this.isVisitedNumber = true;
+            this.isVisitedCode = true;
+          }
+        }
+      }
+    },
+    valueComputed(newVal) {
+      if (!newVal) {
+        this.codeValue = "";
+        this.numberValue = "";
+      }
+      if (this.value === "N") {
+        this.setCarNumber("", false);
+      }
+    },
+    codeValue(oldvalue, newValue) {
+      if (oldvalue !== newValue) {
+        if (this.isStateCode) {
+          this.isVisitedCode = true;
+        }
+        this.updateCardValue();
+      }
+    },
+  },
   mounted() {
     this.value === "N" &&
       (this.setWithoutCarNumber(true), this.goWithoutCarNumber(true));
@@ -254,8 +254,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.mt-chck-num {
-  margin-top: 13px;
-}
-</style>
+<style lang="scss" scoped></style>
