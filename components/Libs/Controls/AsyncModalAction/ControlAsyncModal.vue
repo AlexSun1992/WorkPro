@@ -38,7 +38,7 @@ export default {
       type: Object,
       default() {
         return {
-          value: "Пожалуйста подождите&#8230",
+          value: "Проверяем данные в АИС Страхование, дождитесь завершения операции",
           label: "Проверка данных",
           // число попыток выполнить один запрос
           attempts: 6,
@@ -97,7 +97,7 @@ export default {
         if (url) {
           this.$router.push(url);
         }
-      }, 3000);
+      }, 10);
     },
     openModal() {
       this.responseData = null;
