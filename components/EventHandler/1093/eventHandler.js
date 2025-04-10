@@ -116,6 +116,9 @@ async function eventHandler(data, item, callback) {
     return !insuredList?.some(list => list.some(item => item.visible === true && item.state === false));
   }
 
+  /**
+   * @description Доступность кнопки далее на форме исходя из валидности формы
+   */
   function setNextButtonState() {
     const nextButton = copyData.find(item => item.name === "Continue");
     const multiDrive = findField("BMULTI");
@@ -225,7 +228,6 @@ async function eventHandler(data, item, callback) {
   }
 
   validateFormField(item);
-  setNextButtonState(item);
 
   return copyData;
 }

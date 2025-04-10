@@ -1,3 +1,22 @@
+function setValueEmptyStateNull(field) {
+  field.value = "";
+  field.state = null;
+}
+
+function setValueModelBrand(brand, model, brandmodel) {
+  const brandValue = brand.options.find((item) => item.value === brand.value);
+  const idModelText = model.options.find((item) => item.value === model.value);
+
+  if (
+    idModelText &&
+    Object.hasOwn(idModelText, "text") &&
+    brandValue &&
+    Object.hasOwn(brandValue, "text")
+  ) {
+    brandmodel.value = `${brandValue.text} ${idModelText.text}`;
+  }
+}
+
 async function eventHandler(data, item, callback) {
   function findField(name) {
     const field = data.find((item) => item.name === name);
@@ -79,14 +98,15 @@ async function eventHandler(data, item, callback) {
     }
 
     if (IDBRAND.state === false || !sModel?.value?.includes(IDBRAND.value)) {
-      sModel.value = "";
-      sModel.state = null;
+      setValueEmptyStateNull(sModel);
+
+      sModel.checked = false;
       // очищаем модель, если нет марки
-      model.value = "";
-      model.state = null;
-      //очищаем тип ТС, если нет модели
-      idType.value = "";
-      idType.state = null;
+      setValueEmptyStateNull(model);
+
+      // очищаем тип ТС, если нет модели
+
+      setValueEmptyStateNull(idType);
     }
   }
 
@@ -104,17 +124,8 @@ async function eventHandler(data, item, callback) {
       );
 
       if (brandValue && idModelText) {
-        if (
-          brandValue.hasOwnProperty("text") &&
-          idModelText.hasOwnProperty("text")
-        ) {
-          if (brandValue.text === sModel.value) {
-            sModel.value = sModel.value + " " + idModelText.text;
-          }
-
-          if (brandValue !== sModel.value) {
-            sModel.value = `${brandValue.text} ${idModelText.text}`;
-          }
+        if (brandValue !== sModel.value) {
+          setValueModelBrand(IDBRAND, model, sModel);
         }
       }
     }
@@ -124,8 +135,24 @@ async function eventHandler(data, item, callback) {
     }
 
     if (IDMODEL.state === false) {
-      sModel.value = "";
-      sModel.state = null;
+      setValueEmptyStateNull(sModel);
+    }
+  }
+
+  // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели
+  if (model.state === false) {
+    setValueEmptyStateNull(sModel);
+  }
+
+  if (IDBRAND.state === false) {
+    setValueEmptyStateNull(sModel);
+  }
+
+  //  Добавляем значение в поле Марка-Модель при валидной марке и модели
+
+  if (item.name === "IDVEHICLETYPE") {
+    if (model.state === true && IDBRAND.state === true) {
+      setValueModelBrand(IDBRAND, model, sModel);
     }
   }
 
@@ -272,6 +299,9 @@ function initHandler(data) {
   }
 
   const regNum = findField("SREGNUM");
+  const sModel = findField("SMODEL");
+  const model = findField("IDMODEL");
+  const IDBRAND = findField("IDBRAND");
 
   const idType = data.find((f) => f.name === "IDVEHICLETYPE");
   if (idType && idType.value && idType.options && idType.options.length) {
@@ -289,6 +319,21 @@ function initHandler(data) {
 
   if (IDMODEL.value > 0) {
     IDMODEL.visible = true;
+  }
+
+  // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели
+  if (model.state === false) {
+    setValueEmptyStateNull(sModel);
+  }
+
+  if (IDBRAND.state === false) {
+    setValueEmptyStateNull(sModel);
+  }
+
+  //  Добавляем значение в поле Марка-Модель при валидной марке и модели
+
+  if (model.state === true && IDBRAND.state === true) {
+    setValueModelBrand(IDBRAND, model, sModel);
   }
 
   return data;

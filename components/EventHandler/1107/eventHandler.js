@@ -16,15 +16,34 @@ function findAllFields(data, arr) {
   }, []);
 }
 
+function validateMaskedFieldOnlyNumberSymbol(field) {
+  field.state = field.mask.replace(/[^#]/g, "").length === field.value.length;
+  field.error = field.state
+    ? null
+    : `Значение должно быть не меньше ${field.mask.length} символов`;
+}
+
 // управляем полями СНИЛС
 function checkSnilsFields(data) {
-  const [holderSnilsField, holderSnilsControl, ownerSnilsField, ownerSnilsControl] = findAllFields(data, ["SPHOLDER_SNILS", "BPHOLDER_SNILS", "SOWNER_SNILS", "BOWNER_SNILS"]);
+  const [
+    holderSnilsField,
+    holderSnilsControl,
+    ownerSnilsField,
+    ownerSnilsControl,
+  ] = findAllFields(data, [
+    "SPHOLDER_SNILS",
+    "BPHOLDER_SNILS",
+    "SOWNER_SNILS",
+    "BOWNER_SNILS",
+  ]);
   const isOwner = findField(data, "LISOWNER");
   if (holderSnilsField) {
     holderSnilsField.visible = Boolean(holderSnilsControl?.value);
   }
   if (ownerSnilsField) {
-    ownerSnilsField.visible = Boolean(ownerSnilsControl?.value && !isOwner?.value);
+    ownerSnilsField.visible = Boolean(
+      ownerSnilsControl?.visible && ownerSnilsControl?.value && !isOwner?.value
+    );
   }
 }
 
@@ -54,16 +73,21 @@ function changeVisibleFields(data = false) {
     "SJUR_ADDRESS",
   ];
 
-  const [ownerSnilsField, ownerSnilsControl] = findAllFields(data, ["SOWNER_SNILS", "BOWNER_SNILS"]);
+  const [ownerSnilsField, ownerSnilsControl] = findAllFields(data, [
+    "SOWNER_SNILS",
+    "BOWNER_SNILS",
+  ]);
 
   const isIndividual = findField(data, "NPERSONTYPE");
   const isOwner = findField(data, "LISOWNER");
   const jurFields = findAllFields(data, JUR_FIELDS_NAME);
   const ownerFields = findAllFields(data, OWNER_FIELDS_NAME);
   if (isOwner?.value) {
-    [...ownerFields, ...jurFields, isIndividual, ownerSnilsField].forEach((field) => {
-      field.visible = false;
-    })
+    [...ownerFields, ...jurFields, isIndividual, ownerSnilsField].forEach(
+      (field) => {
+        field.visible = false;
+      }
+    );
   } else {
     const isShowJur = isIndividual?.value === 1;
     if (isIndividual) {
@@ -76,28 +100,39 @@ function changeVisibleFields(data = false) {
       field.visible = Boolean(isShowJur);
     });
     if (ownerSnilsField) {
-      ownerSnilsField.visible = Boolean(ownerSnilsControl?.value && !isOwner?.value);
+      ownerSnilsField.visible = Boolean(
+        ownerSnilsControl?.value && !isOwner?.value
+      );
     }
   }
 }
 
-
 function initHandler(data) {
-  console.log(data);
+  const phoneAuth = findField(data, "SPHOLDER_PHONE");
+  if (phoneAuth.mask) {
+    validateMaskedFieldOnlyNumberSymbol(phoneAuth);
+  }
   changeVisibleFields(data);
   checkSnilsFields(data);
   return data;
 }
 
-
 function eventHandler(data, item) {
+  const phoneAuth = findField(data, "SPHOLDER_PHONE");
+
   if (["BPHOLDER_SNILS", "BOWNER_SNILS"].includes(item.name)) {
     checkSnilsFields(data);
   }
   if (["NPERSONTYPE", "LISOWNER"].includes(item.name)) {
     changeVisibleFields(data);
+    checkSnilsFields(data);
+  }
+
+  if (item.name === "SPHOLDER_PHONE") {
+    if (phoneAuth.mask) {
+      validateMaskedFieldOnlyNumberSymbol(phoneAuth);
+    }
   }
 
   return data;
 }
-
