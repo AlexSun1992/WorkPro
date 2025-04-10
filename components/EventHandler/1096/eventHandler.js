@@ -12,6 +12,87 @@ function eventHandler(data, item, callback) {
   const dFromDate = data.find((f) => f.name === "DFROM_DATE");
   const dtoDateYear = data.find((f) => f.name === "DTO_DATE_YEAR");
 
+  function validateDates(item, data, dFromDate, dtoDateYear) {
+    console.log(item, data, dFromDate, dtoDateYear);
+
+    const listDFROMNamesDate = ["DFROM_DATE1", "DFROM_DATE2", "DFROM_DATE3"];
+    const listDTONamesDate = ["DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
+
+    // Проверяем, относится ли поле к датам начала или окончания срока
+    const isDFROMDateExists = listDFROMNamesDate.some(
+      (name) => name === item.name
+    );
+    const isDTODateExists = listDTONamesDate.some((name) => name === item.name);
+
+    if (!isDFROMDateExists && !isDTODateExists) return;
+
+    // Форматируем даты в стандартный формат
+    const formatDate = (dateStr) => {
+      const [day, month, year] = dateStr.split(".");
+      return `${year}-${month}-${day}`;
+    };
+
+    const dateExistsReplace = formatDate(item.value);
+    const dFromDateReplace = formatDate(dFromDate.value);
+    const dtoDateYearReplace = formatDate(dtoDateYear.value);
+
+    // Преобразуем строки в объекты Date для сравнения
+    const dateInListValid = new Date(dateExistsReplace).setHours(0, 0, 0, 0);
+    const dFromDateValid = new Date(dFromDateReplace).setHours(0, 0, 0, 0);
+    const dtoDateYearValid = new Date(dtoDateYearReplace).setHours(0, 0, 0, 0);
+
+    // Очищаем предыдущие ошибки и состояния
+    const currentItem = data.find((f) => f.name === item.name);
+    currentItem.error = null;
+    currentItem.state = true;
+    // Проверяем разницу между месяцами начала и конца полиса
+    const prevDTOIndex = parseInt(item.name.replace("DFROM_DATE", ""), 10);
+    const prevDFROMIndex = parseInt(item.name.replace("DTO_DATE", ""), 10);
+    const prevDTODateName = prevDTOIndex
+      ? `DTO_DATE${prevDTOIndex}`
+      : `DFROM_DATE${prevDFROMIndex}`;
+
+    const [dFrom, mFrom, yFrom] = item.value.split(".");
+    const dateToDate = new Date(yFrom, +mFrom + 2, dFrom);
+    const toDateField = data.find((f) => f.name === prevDTODateName);
+
+    if (toDateField.value) {
+      const [dInput, mInput, yInput] = toDateField.value.split(".");
+      const dateTo = new Date(yInput, +mInput - 1, +dInput + 1);
+    }
+
+    // Проверяем границы полиса
+    if (dateInListValid > dtoDateYearValid) {
+      currentItem.error = "Дата вне границ полиса";
+      currentItem.state = false;
+      return;
+    }
+    if (dateInListValid < dFromDateValid) {
+      currentItem.error = "Дата вне границ полиса";
+      currentItem.state = false;
+
+      return;
+    }
+
+    // Если это дата начала срока (DFROM_DATE), проверяем последовательность
+    if (isDFROMDateExists && item.name !== "DFROM_DATE1") {
+      const prevDTOIndex =
+        parseInt(item.name.replace("DFROM_DATE", ""), 10) - 1;
+      const prevDTODateName = `DTO_DATE${prevDTOIndex}`;
+
+      const prevDTOItem = data.find((f) => f.name === prevDTODateName);
+      if (!prevDTOItem) return;
+
+      const prevDTODateReplace = formatDate(prevDTOItem.value);
+      const prevDTODateValid = new Date(prevDTODateReplace);
+
+      if (dateInListValid <= prevDTODateValid) {
+        currentItem.error = "Сроки не последовательны";
+        currentItem.state = false;
+      }
+    }
+  }
+
   if (!field) return data;
 
   validateDates(item, data, dFromDate, dtoDateYear);
@@ -164,10 +245,11 @@ function eventHandler(data, item, callback) {
       data.find((f) => f.name === "DTO_DATE2").visible = true;
       //data.find((f) => f.name === 'BADD_THIRD').visible = true;
     } else {
+      data.find((f) => f.name === "DFROM_DATE3").visible = false;
       data.find((f) => f.name === "SSECOND_PERIOD").visible = false;
       data.find((f) => f.name === "DFROM_DATE2").visible = false;
       data.find((f) => f.name === "DTO_DATE2").visible = false;
-      //data.find((f) => f.name === 'BADD_THIRD').visible = false;
+      data.find((f) => f.name === "BADD_THIRD").visible = false;
       data.find((f) => f.name === "DFROM_DATE2").value = null;
       data.find((f) => f.name === "DTO_DATE2").value = null;
       //data.find((f) => f.name === 'BADD_THIRD').value = 0;
@@ -178,7 +260,7 @@ function eventHandler(data, item, callback) {
       data.find((f) => f.name === "DTO_DATE3").visible = true;
     } else {
       data.find((f) => f.name === "STHIRD_PERIOD").visible = false;
-      data.find((f) => f.name === "DFROM_DATE3").visible = false;
+      data.find((f) => f.name === "BADD_THIRD").visible = false;
       data.find((f) => f.name === "DTO_DATE3").visible = false;
       data.find((f) => f.name === "DFROM_DATE3").value = null;
       data.find((f) => f.name === "DTO_DATE3").value = null;
@@ -566,86 +648,6 @@ function eventHandler(data, item, callback) {
     console.log(formattedDate, "formattedDate NOSAGO_TYPE");
   }
 
-  function validateDates(item, data, dFromDate, dtoDateYear) {
-    console.log(item, data, dFromDate, dtoDateYear);
-
-    const listDFROMNamesDate = ["DFROM_DATE1", "DFROM_DATE2", "DFROM_DATE3"];
-    const listDTONamesDate = ["DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
-
-    // Проверяем, относится ли поле к датам начала или окончания срока
-    const isDFROMDateExists = listDFROMNamesDate.some(
-      (name) => name === item.name
-    );
-    const isDTODateExists = listDTONamesDate.some((name) => name === item.name);
-
-    if (!isDFROMDateExists && !isDTODateExists) return;
-
-    // Форматируем даты в стандартный формат
-    const formatDate = (dateStr) => {
-      const [day, month, year] = dateStr.split(".");
-      return `${year}-${month}-${day}`;
-    };
-
-    const dateExistsReplace = formatDate(item.value);
-    const dFromDateReplace = formatDate(dFromDate.value);
-    const dtoDateYearReplace = formatDate(dtoDateYear.value);
-
-    // Преобразуем строки в объекты Date для сравнения
-    const dateInListValid = new Date(dateExistsReplace).setHours(0, 0, 0, 0);
-    const dFromDateValid = new Date(dFromDateReplace).setHours(0, 0, 0, 0);
-    const dtoDateYearValid = new Date(dtoDateYearReplace).setHours(0, 0, 0, 0);
-
-    // Очищаем предыдущие ошибки и состояния
-    const currentItem = data.find((f) => f.name === item.name);
-    currentItem.error = null;
-    currentItem.state = true;
-    // Проверяем разницу между месяцами начала и конца полиса
-    const prevDTOIndex = parseInt(item.name.replace("DFROM_DATE", ""), 10);
-    const prevDFROMIndex = parseInt(item.name.replace("DTO_DATE", ""), 10);
-    const prevDTODateName = prevDTOIndex
-      ? `DTO_DATE${prevDTOIndex}`
-      : `DFROM_DATE${prevDFROMIndex}`;
-
-    const [dFrom, mFrom, yFrom] = item.value.split(".");
-    const dateToDate = new Date(yFrom, +mFrom + 2, dFrom);
-    const toDateField = data.find((f) => f.name === prevDTODateName);
-
-    if (toDateField.value) {
-      const [dInput, mInput, yInput] = toDateField.value.split(".");
-      const dateTo = new Date(yInput, +mInput - 1, +dInput + 1);
-    }
-
-    // Проверяем границы полиса
-    if (dateInListValid > dtoDateYearValid) {
-      currentItem.error = "Дата вне границ полиса";
-      currentItem.state = false;
-      return;
-    }
-    if (dateInListValid < dFromDateValid) {
-      currentItem.error = "Дата вне границ полиса";
-      currentItem.state = false;
-
-      return;
-    }
-
-    // Если это дата начала срока (DFROM_DATE), проверяем последовательность
-    if (isDFROMDateExists && item.name !== "DFROM_DATE1") {
-      const prevDTOIndex =
-        parseInt(item.name.replace("DFROM_DATE", ""), 10) - 1;
-      const prevDTODateName = `DTO_DATE${prevDTOIndex}`;
-
-      const prevDTOItem = data.find((f) => f.name === prevDTODateName);
-      if (!prevDTOItem) return;
-
-      const prevDTODateReplace = formatDate(prevDTOItem.value);
-      const prevDTODateValid = new Date(prevDTODateReplace);
-
-      if (dateInListValid <= prevDTODateValid) {
-        currentItem.error = "Сроки не последовательны";
-        currentItem.state = false;
-      }
-    }
-  }
   data.map((el) => {
     if (el.name.includes("DTO_DATE") || el.name.includes("DFROM_DATE")) {
       console.log(el);
