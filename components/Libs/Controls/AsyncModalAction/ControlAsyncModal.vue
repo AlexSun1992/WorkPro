@@ -67,9 +67,6 @@ export default {
     },
   },
   computed: {
-    attemptsComputed() {
-      return Number.isInteger(this.data?.attempts) ? this.data.attempts :  6;
-    },
     msIntervalComputed() {
       const interval = this.data?.secondsInterval ?? 5;
 
@@ -136,7 +133,7 @@ export default {
     getRequestData() {
       this.responseData = null;
 
-      this.executeRequestWithTimeout(this.attemptsComputed);
+      this.executeRequestWithTimeout(this.data.attempts);
     },
     async executeRequest() {
       this.$axios
@@ -188,7 +185,7 @@ export default {
       this.isOpenModalDisabled = state;
     },
     getTimerSeconds() {
-      return this.attemptsComputed * this.data.secondsInterval;
+      return this.data.attempts * this.data.secondsInterval;
     },
   },
 };
