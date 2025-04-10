@@ -7,7 +7,7 @@ const { combine, timestamp, prettyPrint } = format;
  */
 
 const nuxtConfig = {
-  allowedSubnetList: [ "192", "168", "200" ],
+  allowedSubnetList: ["192", "168", "200"],
   sentryIp: "158.160.100.221",
   target: "universal",
   // ssr: false,
@@ -67,12 +67,16 @@ const nuxtConfig = {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    "~/plugins/lottie-vue-player.client.js",
     "~/plugins/captcha.js",
     "~/plugins/mask.js",
     "~/plugins/validate",
     "~/plugins/axios",
     "~/plugins/VuePluginModal/PluginModal.js",
-    { src: "~/plugins/PluginLoadingOverlay/PluginLoadingOverlay.js", ssr: false },
+    {
+      src: "~/plugins/PluginLoadingOverlay/PluginLoadingOverlay.js",
+      ssr: false,
+    },
     "~/plugins/moment",
     "~/plugins/vue-agile",
     { src: "~plugins/vcalendar.js", ssr: false },
@@ -95,16 +99,16 @@ const nuxtConfig = {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [ "@nuxtjs/router", "@nuxtjs/proxy" ],
+  buildModules: ["@nuxtjs/router", "@nuxtjs/proxy"],
   /*
    ** Nuxt.js modules
    */
   modules: [
     // Doc: https://bootstrap-vue.js.org
-    [ "bootstrap-vue/nuxt", { css: false } ],
-    [ "@nuxtjs/axios", { proxy: true } ],
+    ["bootstrap-vue/nuxt", { css: false }],
+    ["@nuxtjs/axios", { proxy: true }],
     "@nuxtjs/auth-next",
-    [ "cookie-universal-nuxt", { alias: "cookiz" } ],
+    ["cookie-universal-nuxt", { alias: "cookiz" }],
     "@nuxtjs/sentry",
     "@nuxtjs/gtm",
     "nuxt-winston-log",
@@ -120,7 +124,7 @@ const nuxtConfig = {
     skipErrorMiddlewareHandler: true,
     loggerOptions: {
       format: combine(timestamp(), format.splat(), format.json()),
-      transports: [ new transports.Console() ],
+      transports: [new transports.Console()],
     },
   },
   sentry: {
@@ -130,7 +134,7 @@ const nuxtConfig = {
     disabled: process.env.NODE_ENV !== "production",
     clientIntegrations: {
       CaptureConsole: {
-        levels: [ "error" ],
+        levels: ["error"],
       },
     },
     tracing: true,
@@ -138,7 +142,7 @@ const nuxtConfig = {
     // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
     environment: process.env.NODE_ENV,
     release: process.env.APP_VERSION,
-    allowUrls: [ /https?:\\\\reso\.ru/ ],
+    allowUrls: [/https?:\\\\reso\.ru/],
   },
   recaptcha: {
     hideBadge: false,
@@ -154,7 +158,7 @@ const nuxtConfig = {
     /*
      ** You can extend webpack config here
      */
-    vendor: [ "axios" ],
+    vendor: ["axios"],
 
     extend(config, { isDev, isClient }) {
       config.resolve.alias.vue = "vue/dist/vue.common";
@@ -165,12 +169,12 @@ const nuxtConfig = {
         config.devtool = "nosources-source-map";
       }
     },
-    transpile: [ "vue-agile", "vue-plugin-load-script" ],
+    transpile: ["vue-agile", "vue-plugin-load-script"],
   },
   proxy: [
-    [ [ "/free" ], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" } ],
+    [["/free"], { target: process.env.MOBILE_URL ?? "https://lk.reso.ru" }],
     [
-      [ "/am", "/main" ],
+      ["/am", "/main"],
       { target: process.env.MOBILE2_URL ?? "https://lk.reso.ru" },
     ],
     [
@@ -231,7 +235,7 @@ const nuxtConfig = {
       home: false,
       user: false,
     },
-    plugins: [ "~/plugins/auth/auth.js" ],
+    plugins: ["~/plugins/auth/auth.js"],
     cookie: {
       prefix: "auth.",
       options: {
@@ -246,7 +250,7 @@ const nuxtConfig = {
     host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
   },
   router: {
-    middleware: [ "routerRedirect" ],
+    middleware: ["routerRedirect"],
   },
 };
 

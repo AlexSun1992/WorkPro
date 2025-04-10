@@ -64,6 +64,7 @@ export const mutations = {
   },
   setIsWizardButtonsLoading(state, data) {
     state.isWizardButtonsLoading = data;
+    this.commit("data_card/setLoading", data);
   },
   setWizardIsErrorActionExecute(state, data) {
     state.isErrorActionExecute = data;

@@ -69,11 +69,14 @@
         @saveCard="$emit('saveCard', $event)"
       />
     </div>
-    <SkeletonBox
-      v-if="!data.length || !isScriptLoaded"
-      class="mt-5"
-      :items="8"
-    />
+    <lottie-vue-player
+      v-if="isShowSkeletonBox"
+      :src="'/img/loader.json'"
+      :player-controls="false"
+      :autoplay="true"
+      :loop="true"
+    >
+    </lottie-vue-player>
   </div>
 </template>
 <script>
@@ -81,7 +84,7 @@ import JsFileDownloader from "js-file-downloader";
 import mime from "mime-types";
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
-import SkeletonBox from "~/components/Libs/SkeletonBox";
+
 import FormAccordion from "@/components/Libs/Form/FormAccordion";
 import FormBlock from "@/components/Libs/Form/FormBlock";
 import { clearScript } from "~/components/EventHandler/eventHandler.helper";
@@ -99,7 +102,6 @@ export default {
     FormAccordion,
     Form,
     ActionButton,
-    SkeletonBox,
   },
   props: {
     currentTab: {
@@ -162,6 +164,12 @@ export default {
     }
   },
   computed: {
+    isShowSkeletonBox() {
+      return (
+        !this.data.length ||
+        (!this.isScriptLoaded && !this.$route.params.idWizard)
+      );
+    },
     isActionFormDisabled() {
       return this.$store.getters["data_card/getIsActionFormDisabled"];
     },

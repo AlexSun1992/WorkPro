@@ -6,9 +6,6 @@
     @click="action"
   >
     {{ buttonName }}
-    <span v-if="isLoading" role="status" class="spinner-border text-danger">
-      <span class="sr-only">Spinning</span>
-    </span>
   </button>
 </template>
 
@@ -52,6 +49,7 @@ export default {
       );
     },
     action() {
+      this.$store.commit("data_card/setLoading", true);
       if (this.data.name === "Continue") {
         this.goNext();
       }
