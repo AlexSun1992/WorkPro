@@ -20,9 +20,6 @@
         @click="saveCard"
       >
         {{ showBtnNameSave }}
-        <span v-if="loading" role="status" class="spinner-border text-danger">
-          <span class="sr-only">Spinning</span>
-        </span>
       </button>
     </div>
     <div
@@ -38,9 +35,6 @@
         @click="goNext"
       >
         {{ showBtnNameContinue }}
-        <span v-if="loading" role="status" class="spinner-border text-danger">
-          <span class="sr-only">Spinning</span>
-        </span>
       </button>
     </div>
   </div>
@@ -136,6 +130,7 @@ export default {
       );
     },
     async goNext() {
+      this.$store.commit("data_card/setLoading", true);
       this.$parent.loading = true;
       this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
       const menu = this.$store.getters["menu/flatmenu"].find(
@@ -164,11 +159,13 @@ export default {
       this.$emit("goNext", tab);
     },
     goBack() {
+      this.$store.commit("data_card/setLoading", true);
       this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
       const tab = this.tabs[this.getCurrentIndex() - 1];
       this.$emit("goBack", tab);
     },
     saveCard() {
+      this.$store.commit("data_card/setLoading", true);
       this.$parent.loading = true;
       this.$emit("saveCard");
     },

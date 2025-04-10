@@ -16,6 +16,7 @@
     "fix": "prettier --write ."
   },
   "dependencies": {
+    "@lottiefiles/vue-lottie-player": "^1.1.0",
     "@nuxt/types": "^2.15.2",
     "@nuxt/typescript-runtime": "^0.4.8",
     "@nuxtjs/auth-next": "^5.0.0-1591630887.eba51b3",
