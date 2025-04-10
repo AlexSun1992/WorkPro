@@ -14,15 +14,14 @@
       :data="data"
       @open="getRequestData"
       @close="closeModal"
-      @ok="refreshPage"
+      @ok="refreshData"
       :show-cancel="false"
       :show-close="false"
       :show-ok="isRequestError"
     >
       <template v-slot:title>
         <VerifyTimer
-          :key="timerKey"
-          v-if="!isFinishResponse"
+          v-if="isRequestInProgress"
           :duration="getTimerSeconds()"
           class="verify_timer"
         />
@@ -88,21 +87,21 @@ export default {
   },
   data() {
     return {
-      timerKey: 1,
       responseData: null,
       dialogMessage: null,
       isRequestError: false,
       isRequestSuccess: false,
       isOpenModalDisabled: false,
+      isRequestInProgress: false
     };
   },
   methods: {
     closeModal() {
       this.$refs?.modal?.closeModal();
     },
-    refreshPage() {
-      this.$router.go(null);
-      this.setOpenModalBtnDisabled(true);
+    refreshData() {
+      this.$store.dispatch("data_card/fetchForm");
+      this.setOpenModalBtnDisabled(false);
     },
     afterSuccessDataCheck() {
       const url = this.responseData.SURL;
@@ -120,13 +119,14 @@ export default {
       this.isRequestError = false;
       this.isRequestSuccess = false;
       this.isOpenModalDisabled = false;
-      this.timerKey += 1;
+      this.isRequestInProgress = false;
 
       this.$refs.modal.openModal();
     },
     getRequestData() {
       this.responseData = null;
 
+      this.isRequestInProgress = true;
       this.executeRequestWithTimeout(this.data.attempts);
     },
     async executeRequest() {
@@ -142,6 +142,7 @@ export default {
     },
     executeRequestWithTimeout(attempts) {
       if (!attempts) {
+        this.isRequestInProgress = false;
         this.errorDataHandler(AWAIT_ERROR_MESSAGE);
 
         return;
