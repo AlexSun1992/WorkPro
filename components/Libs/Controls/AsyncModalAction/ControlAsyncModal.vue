@@ -12,7 +12,7 @@
     <control-modal
       ref="modal"
       :data="data"
-      @open="openModalHandler"
+      @open="getRequestData"
       @close="closeModal"
       @ok="refreshPage"
       :show-cancel="false"
@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     msIntervalComputed() {
-      const interval = this.data?.secondsInterval ?? 5;
+      const interval = this.data.secondsInterval ?? 5;
 
       return interval * 1000;
     },
@@ -104,18 +104,15 @@ export default {
       this.$router.go(null);
       this.setOpenModalBtnDisabled(true);
     },
-    resetForm() {},
     afterSuccessDataCheck() {
-      setTimeout(() => {
-        const url = this.responseData.SURL;
+      const url = this.responseData.SURL;
 
-        this.closeModal();
+      this.closeModal();
 
-        if (url) {
-          this.setOpenModalBtnDisabled(true);
-          this.$router.push(url);
-        }
-      }, 10);
+      if (url) {
+        this.setOpenModalBtnDisabled(true);
+        this.$router.push(url);
+      }
     },
     openModal() {
       this.responseData = null;
@@ -127,27 +124,21 @@ export default {
 
       this.$refs.modal.openModal();
     },
-    openModalHandler() {
-      this.getRequestData();
-    },
     getRequestData() {
       this.responseData = null;
 
       this.executeRequestWithTimeout(this.data.attempts);
     },
     async executeRequest() {
-      this.$axios
+      const result = await this.$axios
         .post(
           "am/main/v2/osago/CreatePolicySendNsis",
           { ID: this.cardId },
           { signal: AbortSignal.timeout(this.msIntervalComputed) }
         )
-        .then((data) => {
-          this.successDataHandler(data?.data);
-        })
-        .catch((err) => {
-          this.errorDataHandler(COMMON_ERROR_MESSAGE);
-        });
+      if (result.status === 200) {
+        this.successDataHandler(result?.data);
+      }
     },
     executeRequestWithTimeout(attempts) {
       if (!attempts) {
@@ -165,7 +156,7 @@ export default {
       }, this.msIntervalComputed);
     },
     successDataHandler(data) {
-      this.setData(data);
+      this.setData(data[0]);
 
       if (this.responseData?.IDSTATUS === SUCCESS_ID_STATUS) {
         this.isRequestSuccess = true;
@@ -179,9 +170,9 @@ export default {
       this.isRequestError = true;
     },
     setData(data) {
-      this.responseData = data[0] ? { ...data[0] } : null;
+      this.responseData = data ? { ...data } : null;
     },
-    setOpenModalBtnDisabled(state = false) {
+    setOpenModalBtnDisabled(state) {
       this.isOpenModalDisabled = state;
     },
     getTimerSeconds() {

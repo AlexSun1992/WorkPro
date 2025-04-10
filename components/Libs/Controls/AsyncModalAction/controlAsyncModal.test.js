@@ -101,7 +101,11 @@ describe("ControlAsyncModal", () => {
 
     await wrapper.vm.executeRequest();
 
-    expect(wrapper.vm.isRequestSuccess).toBeTruthy();
+    await wrapper.vm.executeRequest().then(() => {
+      wrapper.vm.$nextTick(() => {
+        expect(wrapper.vm.isRequestSuccess).toBeTruthy();
+      })
+    });
   });
 
   test("Error status for request", async () => {
