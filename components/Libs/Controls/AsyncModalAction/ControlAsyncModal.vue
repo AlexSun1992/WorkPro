@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     attemptsComputed() {
-      return this.data?.attempts ?? 6;
+      return Number.isInteger(this.data?.attempts) ? this.data.attempts :  6;
     },
     msIntervalComputed() {
       const interval = this.data?.secondsInterval ?? 5;
@@ -136,7 +136,7 @@ export default {
     getRequestData() {
       this.responseData = null;
 
-      this.executeRequestWithTimeout();
+      this.executeRequestWithTimeout(this.attemptsComputed);
     },
     async executeRequest() {
       this.$axios
@@ -152,8 +152,8 @@ export default {
           this.errorDataHandler(COMMON_ERROR_MESSAGE);
         });
     },
-    executeRequestWithTimeout(attempts = this.attemptsComputed) {
-      if (!attempts || this.responseData?.IDSTATUS === ERROR_ID_STATUS) {
+    executeRequestWithTimeout(attempts) {
+      if (!attempts) {
         this.errorDataHandler(AWAIT_ERROR_MESSAGE);
 
         return;
@@ -175,11 +175,7 @@ export default {
         this.dialogMessage = SUCCESS_REQUEST_MESSAGE;
 
         this.afterSuccessDataCheck();
-
-        return;
       }
-
-      this.errorDataHandler(COMMON_ERROR_MESSAGE);
     },
     errorDataHandler(msg) {
       this.dialogMessage = msg ?? COMMON_ERROR_MESSAGE;

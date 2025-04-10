@@ -38,7 +38,7 @@ describe("ControlAsyncModal", () => {
           push: jest.fn(),
           go: jest.fn(),
         },
-        $axios: axios
+        $axios: axios,
       },
       stubs: {
         "control-modal": ControlModal,
@@ -104,10 +104,27 @@ describe("ControlAsyncModal", () => {
     expect(wrapper.vm.isRequestSuccess).toBeTruthy();
   });
 
-  test("Success request with error status", async () => {
+  test("Error status for request", async () => {
+    axios.post.mockRejectedValue({ data: [testData.rejectData] });
+
+    await wrapper.vm.executeRequest().catch(() => {
+      wrapper.vm.$nextTick(() => {
+        expect(wrapper.vm.isRequestError).toBeTruthy();
+      })
+    });
+  });
+
+  test("Error status if attempts is end", async () => {
+    wrapper.setProps({
+      data: {
+        value: "Пожалуйста подождите&#8230",
+        label: "Проверка данных",
+        attempts: 0,
+      },
+    });
     axios.post.mockResolvedValue({ data: [testData.rejectData] });
 
-    await wrapper.vm.executeRequest();
+    wrapper.vm.executeRequestWithTimeout(0);
 
     expect(wrapper.vm.isRequestError).toBeTruthy();
   });
