@@ -57,7 +57,6 @@ describe("Wizard ProgressBar", () => {
     const htmlData = wrapper.html();
 
     expect(htmlData).toContain("Текущий этап");
-    expect(htmlData).toContain("Следующий этап");
     expect(htmlData).not.toContain(" - шаг ");
   });
 

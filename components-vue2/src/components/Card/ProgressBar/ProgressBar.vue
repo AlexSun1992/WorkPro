@@ -21,7 +21,9 @@
           <div style="font-size: 0.875rem; color: #868686">Текущий этап</div>
         </div>
         <div class="col-6">
-          <div class="text-end" style="font-size: 0.875rem; color: #868686">
+          <div v-if="nextStep.name"
+               class="text-end"
+               style="font-size: 0.875rem; color: #868686">
             Следующий этап
           </div>
         </div>
@@ -140,17 +142,12 @@ export default {
       return this.currentStep?.SNAME ?? "";
     },
     nextStep() {
-      const { currentTab } = this;
       const { nextTab } = this;
       const result = { name: "", url: "", order: nextTab?.NORDER ?? -1 };
 
       if (nextTab) {
         result.name = nextTab?.SNAME ?? "";
         result.url = "";
-      }
-
-      if (currentTab && this.currentTabOrder === this.maxOrder) {
-        return currentTab;
       }
 
       return result;
