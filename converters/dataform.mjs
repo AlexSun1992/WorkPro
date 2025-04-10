@@ -176,6 +176,9 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].IDCONTROL === 663) {
         obj.type = "MultiSelect";
       }
+      if (webFields[i].IDCONTROL === 66) {
+        obj.type = "DynamicList";
+      }
 
       if (webFields[i].IDCONTROL === 60) {
         obj.type = "Collapse";
@@ -213,6 +216,9 @@ converter.form = async (data, params, instance) => {
 
       if (webFields[i].IDCONTROL === 56) {
         obj.type = "MultiSelect";
+      }
+      if (webFields[i].IDCONTROL === 66) {
+        obj.type = "DynamicList";
       }
       if (webFields[i].IDCONTROL === 55) {
         obj.type = "VariantPolicy";
@@ -345,6 +351,8 @@ converter.form = async (data, params, instance) => {
       obj.type = "VueComponent";
     } else if (webFields[i].IDCONTROL == 56) {
       obj.type = "MultiSelect";
+    } else if (webFields[i].IDCONTROL === 66) {
+      obj.type = "DynamicList";
     } else if (webFields[i].IDCONTROL === 60) {
       obj.type = "Collapse";
     } else if (webFields[i].IDCONTROL == 481) {

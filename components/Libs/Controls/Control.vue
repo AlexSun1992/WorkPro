@@ -91,6 +91,7 @@ import ControlVariantPolicy from "./ControlVariantPolicy/ControlVariantPolicy.vu
 import ControlPencil from "./ControlPencil/ControlPencil.vue";
 import ControlLoadingOverlay from "./ControlLoadingOverlay/ControlLoadingOverlay.vue";
 import ControlDynamicDepend from "./ControlDynamicDepend/ControlDynamicDepend.vue";
+import ControlDynamicList from "./ControlDynamicDepend/ControlDynamicList.vue";
 
 import ControlSelectButton from "./ControlSelectButton.vue";
 import ControlInformer from "./ControlInformer/ControlInformer.vue";
@@ -153,6 +154,7 @@ export default {
     ControlVueComponent,
     ControlVariantPolicy,
     ControlDynamicDepend,
+    ControlDynamicList,
     ControlSelectButton,
     ControlInformer,
     ControlTokenBox,
@@ -230,11 +232,6 @@ export default {
     },
     dataCols() {
       return this.data?.cols;
-    },
-  },
-  methods: {
-    testBack() {
-      console.log("111111");
     },
   },
 };

@@ -6763,8 +6763,14 @@ h5.listing {
 .autocomplete-input {
   background: url(/img/icon-dropdown.svg) right 13px top 15px no-repeat;
 }
+.autocomplete[data-loading="true"] .autocomplete-input {
+  background-image: none;
+}
 .no_arrow .autocomplete-input {
   background: #fff;
+}
+.autocomplete[data-loading="true"]:after {
+  right: 16px;
 }
 
 .ui.fluid.search.selection.dropdown.disabled.is-valid {
@@ -6772,4 +6778,29 @@ h5.listing {
   background: #f2f2f2 !important;
   color: #c3c3c3 !important;
   pointer-events: none;
+}
+
+.vue-lottie-player {
+  position: relative;
+  background: transparent;
+  border-radius: 30px;
+  width: 200px;
+  height: 200px;
+  box-shadow: none;
+}
+.vue-lottie-player:after {
+  content: "";
+  width: 132px;
+  height: 132px;
+  border-radius: 30px;
+  box-shadow: 0px 6px 30px 0px rgba(28, 28, 28, 0.16);
+  position: absolute;
+  top: 36px;
+  left: 34px;
+  display: block;
+  z-index: -1;
+  background-color: #fff;
+}
+.vue-lottie-player .lf-spinner {
+  display: none;
 }

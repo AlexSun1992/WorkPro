@@ -1,6 +1,10 @@
 <template>
   <div>
-    <span v-html="data.label" />
+    <div
+      v-if="data.label"
+      v-html="data && data.label ? data.label : ''"
+      class="mb-3"
+    />
     <div class="position">
       <div class="item" v-for="item in data.options" :key="item.ID">
         <ControlMultiItem
@@ -105,7 +109,7 @@ export default {
   display: grid;
   align-items: center;
 }
-@media (max-width: 778px) {
+@media (max-width: 1240px) {
   .position {
     grid-template-columns: 100%;
   }
