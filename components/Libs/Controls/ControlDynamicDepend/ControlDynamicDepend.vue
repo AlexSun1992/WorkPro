@@ -1,10 +1,18 @@
 <template>
-  <div class="price">
-    <font size="16">{{ value }}</font>
+  <div>
+    <div class="price">
+      <font size="16">{{ value }}</font>
+    </div>
+    <control-dynamic-list
+      v-if="textForDynamicList"
+      :data="createData"
+    ></control-dynamic-list>
   </div>
 </template>
 
 <script>
+import ControlDynamicList from "./ControlDynamicList.vue";
+
 export default {
   name: "ControlDynamicDepend",
   data() {
@@ -14,16 +22,57 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {},
     },
+  },
+  components: { ControlDynamicList },
+  watch: {
+    value(newV, oldV) {
+      if (oldV !== newV) {
+        this.updateValue(newV);
+      }
+    },
+  },
+  methods: {
+    updateValue(value) {
+      this.$emit("update", {
+        fieldId: this.data.fieldId,
+        name: this.data.name,
+        value,
+      });
+    },
+  },
+  created() {
+    if ("options" in this.data) {
+      this.updateValue(this.data.options[0]?.value);
+    }
   },
   computed: {
     value() {
-      return new Intl.NumberFormat("ru-RU", {}).format(
-        Array.isArray(this.data.options)
-          ? this.data.options[0]?.value
-          : this.data.value
+      return (
+        new Intl.NumberFormat("ru-RU", {}).format(
+          Array.isArray(this.data.options)
+            ? this.data.options[0]?.value
+            : this.data.value
+        ) || this.data.value
       );
+    },
+    createData() {
+      return {
+        options: [
+          {
+            text: this.textForDynamicList,
+          },
+        ],
+      };
+    },
+
+    textForDynamicList() {
+      if ("options" in this.data && this.data.options.length) {
+        return "SCOMMENT" in this.data.options[0]
+          ? this.data.options[0]?.SCOMMENT
+          : "";
+      }
+      return "";
     },
   },
 };
