@@ -40,27 +40,19 @@ export default {
     },
     showClose: {
       type: Boolean,
-      default() {
-        return true;
-      },
+      default: true
     },
     showCancel: {
       type: Boolean,
-      default() {
-        return true;
-      },
+      default: true,
     },
     showOk: {
       type: Boolean,
-      default() {
-        return true;
-      },
+      default: true,
     },
     isOpen: {
       type: Boolean,
-      default() {
-        return false;
-      },
+      default: false,
     },
   },
   data() {
@@ -89,14 +81,6 @@ export default {
       this.isModalOpen = false;
       this.$refs.modal.close();
       this.$emit("ok");
-    },
-    toggleModal() {
-      if (this.isOpen) {
-        this.openModal();
-      }
-      if (!this.isOpen) {
-        this.closeModal();
-      }
     },
   },
   watch: {

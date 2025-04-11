@@ -72,9 +72,9 @@ export default {
       return interval * 1000;
     },
     cardId() {
-      const id = this.$store.state.data_card?.cardId ?? -1;
+      const cardId = this.$store.state.data_card?.cardId;
 
-      return id ? Number(id) : null;
+      return Number.isInteger(cardId) ? cardId : -1;
     },
     dialogBodyText() {
       return (
@@ -130,14 +130,18 @@ export default {
       this.executeRequestWithTimeout(this.data.attempts);
     },
     async executeRequest() {
-      const result = await this.$axios
-        .post(
-          "am/main/v2/osago/CreatePolicySendNsis",
-          { ID: this.cardId },
-          { signal: AbortSignal.timeout(this.msIntervalComputed) }
-        )
-      if (result.status === 200) {
-        this.successDataHandler(result?.data);
+      try {
+        const result = await this.$axios
+          .post(
+            "am/main/v2/osago/CreatePolicySendNsis",
+            { ID: this.cardId },
+            { signal: AbortSignal.timeout(this.msIntervalComputed) }
+          )
+        if (result.status === 200) {
+          this.successDataHandler(result?.data);
+        }
+      } catch (err) {
+        console.error(`executeRequest. Error: ${err}`);
       }
     },
     executeRequestWithTimeout(attempts) {
