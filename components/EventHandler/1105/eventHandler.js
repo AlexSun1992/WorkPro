@@ -33,6 +33,7 @@ async function eventHandler(data, item, callback) {
   const IDMODEL = findField("IDMODEL");
   const BNO_VIN = findField("BNO_VIN");
   const Save = findField("Save");
+  const Continue = findField("Continue");
   const NWEIGHT = findField("NWEIGHT");
   const NSEATS_COUNT = findField("NSEATS_COUNT");
   const regNum = findField("SREGNUM");
@@ -63,6 +64,9 @@ async function eventHandler(data, item, callback) {
   if (item.name === "SREGNUM") {
     helpInformer.visible = item?.value === null;
   }
+
+  Continue.visible = IDMODEL.options.length > 0;
+  Save.visible = IDMODEL.options.length <= 0;
 
   function visibleTS(visible) {
     // eslint-disable-next-line no-param-reassign,no-return-assign
@@ -306,8 +310,13 @@ function initHandler(data) {
 
     return null;
   }
-
   const IDMODEL = findField("IDMODEL");
+  const Save = findField("Save");
+  const Continue = findField("Continue");
+
+  Continue.visible = IDMODEL.options.length > 0;
+  Save.visible = IDMODEL.options.length <= 0;
+
   ["IDMODEL", "IDBRAND", "IDVEHICLETYPE"].forEach((field) => {
     const curField = findField(field);
     if (curField) {
