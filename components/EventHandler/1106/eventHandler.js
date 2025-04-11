@@ -10,7 +10,11 @@ function getDocAndCountryValue(docField, docValue, CountryField, countryValue) {
   return docField.value === docValue && CountryField.value === countryValue;
 }
 
-async function eventHandler(data, item, callback) {
+const REGNUM_MASK = 'A###AA###';
+
+function eventHandler(data, item, callback) {
+  console.log(item);
+
   function findField(name) {
     const field = data.find((item) => item.name === name);
     if (field) {
@@ -27,17 +31,25 @@ async function eventHandler(data, item, callback) {
 
   if (item.name === "SREG_NUMBER") {
     SREG_NUMBER.value = item.value.toUpperCase();
+    if (Boolean(SREG_NUMBER.mask)) {
+      SREG_NUMBER.state = SREG_NUMBER.value.length > 7;
+    } else {
+      SREG_NUMBER.state = null;
+    }
   }
 
   if (item.name === "IDVEHDOCTYPE" && item.value === 31) {
     SREG_NUMBER.required = true;
+    SREG_NUMBER.mask = REGNUM_MASK;
     if (!SREG_NUMBER.value) {
       SREG_NUMBER.state = false;
     }
     if (SREG_NUMBER.value) {
       SREG_NUMBER.state = true;
     }
-  } else {
+  }
+  if (item.name === "IDVEHDOCTYPE" && item.value !== 31) {
+    SREG_NUMBER.mask = null;
     SREG_NUMBER.required = false;
     SREG_NUMBER.state = null;
   }
@@ -84,6 +96,10 @@ function initHandler(data) {
 
   if (IDVEHDOCTYPE.value !== 31) {
     SREG_NUMBER.required = false;
+  }
+
+  if (IDVEHDOCTYPE.value === 31) {
+    SREG_NUMBER.mask = REGNUM_MASK;
   }
 
   if (IDVEHDOCTYPE.value === 41) {
