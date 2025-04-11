@@ -178,7 +178,7 @@ export default {
         return "100%";
       }
 
-      if (totalTabs && currentOrder) {
+      if (totalTabs > 0 && currentOrder > 0) {
         return `${(100 / totalTabs) * (currentOrder - 1)}%`;
       }
 

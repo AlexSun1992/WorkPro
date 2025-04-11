@@ -100,5 +100,6 @@ describe("Wizard ProgressBar", () => {
     });
 
     expect(wrapper.vm.progressPosition).toBe("100%");
+    expect(wrapper.html()).not.toContain("Следующий этап");
   });
 });
