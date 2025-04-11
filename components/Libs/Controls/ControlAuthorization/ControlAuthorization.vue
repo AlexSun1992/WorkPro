@@ -373,6 +373,14 @@ export default {
         this.phoneNumber
       );
     },
+
+    correctPhoneNumber() {
+      if (this.phoneNumberNormalize) {
+        return this.phoneNumberNormalize.replace(/^\+./, "");
+      }
+      return this.phoneNumber;
+    },
+
     isPhoneValid() {
       if (
         this.phoneNumber.length ===
@@ -465,9 +473,10 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
+
     async requestSMS() {
       const smsData = {
-        SPHONE: this.phoneNumber,
+        SPHONE: this.correctPhoneNumber,
         ID: null,
       };
 
@@ -541,7 +550,7 @@ export default {
       this.$emit("update", {
         fieldId: this.data.fieldId,
         name: this.data.name,
-        value: { code: this.SMSCode, phone: this.phoneNumber },
+        value: { code: this.SMSCode, phone: this.correctPhoneNumber },
       });
     },
 

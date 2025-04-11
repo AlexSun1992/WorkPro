@@ -18,8 +18,9 @@ function findAllFields(data, arr) {
 
 function validateMaskedFieldOnlyNumberSymbol(field) {
   const maskOnlyNumberSymbols = field.mask.replace(/[^#]/g, "");
-  field.state = maskOnlyNumberSymbols.length === field.value.length;
-  field.error = field.state ? null : `Введите корректное значение`;
+
+  field.state = maskOnlyNumberSymbols.length + 1 === `9${field.value}`.length;
+  field.error = field.state ? null : "Введите корректное значение";
 }
 
 // управляем полями СНИЛС
@@ -107,16 +108,28 @@ function changeVisibleFields(data = false) {
 }
 
 function initHandler(data) {
+  const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
-  if (phoneAuth.mask) {
+
+  if (phoneNoAuth && phoneNoAuth.mask) {
+    validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
+    if (phoneNoAuth.state) {
+      phoneNoAuth.value = `9${phoneNoAuth.value}`;
+    }
+  }
+
+  if (phoneAuth && phoneAuth.mask) {
     validateMaskedFieldOnlyNumberSymbol(phoneAuth);
   }
+
   changeVisibleFields(data);
   checkSnilsFields(data);
   return data;
 }
 
 function eventHandler(data, item) {
+  const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
+
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
 
   if (["BPHOLDER_SNILS", "BOWNER_SNILS"].includes(item.name)) {
@@ -127,8 +140,18 @@ function eventHandler(data, item) {
     checkSnilsFields(data);
   }
 
+  if (item.name === "SPHOLDER_PHONENOAUTH") {
+    if (phoneNoAuth && phoneNoAuth.mask) {
+      validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
+    }
+
+    if (phoneNoAuth.state) {
+      phoneNoAuth.value = `9${phoneNoAuth.value}`;
+    }
+  }
+
   if (item.name === "SPHOLDER_PHONE") {
-    if (phoneAuth.mask) {
+    if (phoneAuth && phoneAuth.mask) {
       validateMaskedFieldOnlyNumberSymbol(phoneAuth);
     }
   }
