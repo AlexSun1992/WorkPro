@@ -88,4 +88,17 @@ describe("Wizard ProgressBar", () => {
     expect(wrapper.vm.nextStep.order).toBe(6);
     expect(wrapper.vm.nextStep.name).toBe("Доп сведения о ТС");
   });
+
+  test("Progress bar position for single step", () => {
+    wrapper = mount(ProgressBar, {
+      propsData: {
+        wizardRels: [],
+        wizardCursor: [progressBarMock.wizardCursor[3]],
+        wizardIDCARDS: [],
+        wizardNavigation: progressBarMock.wizardNavigation,
+      },
+    });
+
+    expect(wrapper.vm.progressPosition).toBe("100%");
+  });
 });

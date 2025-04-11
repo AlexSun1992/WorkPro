@@ -174,6 +174,10 @@ export default {
       const totalTabs = this.tabs?.length ?? 0;
       const currentOrder = this.currentTabOrderPosition;
 
+      if (totalTabs === 1) {
+        return "100%";
+      }
+
       if (totalTabs && currentOrder) {
         return `${(100 / totalTabs) * (currentOrder - 1)}%`;
       }
