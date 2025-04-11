@@ -1,9 +1,13 @@
-function validateMaskedField(field) {
-  field.state = field.mask.length === field.value.length;
-  field.error =
-    field.mask.length === field.value.length
-      ? null
-      : `Значение должно быть не меньше ${field.mask.length} символов`;
+function validateMaskedFieldOnlySymbols(field) {
+  const maskSize = field.mask.replace(/\s+/g, "");
+  field.state = maskSize.length === field.value.length;
+  field.error = field.state
+    ? null
+    : `Должно быть введено ${maskSize.length} символов`;
+}
+
+function getDocAndCountryValue(docField, docValue, CountryField, countryValue) {
+  return docField.value === docValue && CountryField.value === countryValue;
 }
 
 async function eventHandler(data, item, callback) {
@@ -16,7 +20,6 @@ async function eventHandler(data, item, callback) {
   }
 
   const SREG_NUMBER = findField("SREG_NUMBER");
-  const registrDocTS = findField("IDVEHDOCTYPE");
   const seriesNumberDoc = findField("SVEHDOC");
   const docNumber = findField("SVEHEPTS");
   const countryDoc = findField("IDCOUNTRYDOC");
@@ -46,50 +49,15 @@ async function eventHandler(data, item, callback) {
     }
   }
 
-  // Настраиваем поле Серия и номер документа
-  if (item.name === "SVEHDOC") {
-    if (IDVEHDOCTYPE.value === 31 && countryDoc.value === 179) {
-      // Оставляем только буквы и цифры
-      let rawValue = item.value.replace(/[^а-яА-Я0-9]/g, "");
-
-      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
-      rawValue = rawValue.slice(0, 10);
-
-      // Формируем строку с пробелом после 4-го символа
-      let formattedValue =
-        rawValue.length > 4
-          ? rawValue.slice(0, 4) + " " + rawValue.slice(4)
-          : rawValue;
-
-      seriesNumberDoc.value = formattedValue;
-    }
-
-    if (IDVEHDOCTYPE.value === 30 && countryDoc.value === 179) {
-      // Оставляем только буквы и цифры
-      // let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
-
-      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
-      // rawValue = rawValue.slice(0, 10);
-      // seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
-      // Оставляем только буквы и цифры
-      let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
-
-      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
-      rawValue = rawValue.slice(0, 10);
-
-      // Формируем строку с пробелом после 4-го символа
-      let formattedValue =
-        rawValue.length > 4
-          ? rawValue.slice(0, 4) + " " + rawValue.slice(4)
-          : rawValue;
-
-      // Обновляем значение в поле
-      seriesNumberDoc.value = formattedValue;
-    }
+  if (
+    getDocAndCountryValue(countryDoc, 179, IDVEHDOCTYPE, 31) ||
+    getDocAndCountryValue(countryDoc, 179, IDVEHDOCTYPE, 30)
+  ) {
+    validateMaskedFieldOnlySymbols(seriesNumberDoc);
   }
 
-  if (item.name === "SVEHEPTS") {
-    validateMaskedField(docNumber);
+  if (docNumber.value) {
+    validateMaskedFieldOnlySymbols(docNumber);
   }
 
   return data;
@@ -124,53 +92,15 @@ function initHandler(data) {
     docNumber.visible = false;
   }
 
-  if (seriesNumberDoc.value) {
-    if (IDVEHDOCTYPE.value === 31 && countryDoc.value === 179) {
-      // Оставляем только буквы и цифры
-      let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
-
-      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
-      rawValue = rawValue.slice(0, 10);
-
-      // Формируем строку с пробелом после 4-го символа
-      let formattedValue =
-        rawValue.length > 4
-          ? rawValue.slice(0, 4) + " " + rawValue.slice(4)
-          : rawValue;
-
-      // Обновляем значение в поле
-      seriesNumberDoc.value = formattedValue;
-    }
-
-    if (IDVEHDOCTYPE.value === 30 && countryDoc.value === 179) {
-      // Оставляем только буквы и цифры
-      let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
-
-      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
-      rawValue = rawValue.slice(0, 10);
-
-      // Формируем строку с пробелом после 4-го символа
-      let formattedValue =
-        rawValue.length > 4
-          ? rawValue.slice(0, 4) + " " + rawValue.slice(4)
-          : rawValue;
-
-      // Обновляем значение в поле
-      seriesNumberDoc.value = formattedValue;
-      // Оставляем только буквы и цифры
-      // let rawValue = seriesNumberDoc.value.replace(/[^а-яА-Я0-9]/g, "");
-      // Ограничиваем количество Валидных символов до 10 (не считая пробела)
-      // rawValue = rawValue.slice(0, 10);
-      // seriesNumberDoc.value = seriesNumberDoc.value.slice(0, 10);
-    }
+  if (
+    getDocAndCountryValue(countryDoc, 179, IDVEHDOCTYPE, 31) ||
+    getDocAndCountryValue(countryDoc, 179, IDVEHDOCTYPE, 30)
+  ) {
+    validateMaskedFieldOnlySymbols(seriesNumberDoc);
   }
 
-  if (
-    docNumber &&
-    Object.hasOwn(docNumber, "value") &&
-    Object.hasOwn(docNumber, "mask")
-  ) {
-    validateMaskedField(docNumber);
+  if (docNumber.value) {
+    validateMaskedFieldOnlySymbols(docNumber);
   }
 
   return data;
