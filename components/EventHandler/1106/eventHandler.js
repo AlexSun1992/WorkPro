@@ -6,10 +6,6 @@ function validateMaskedFieldOnlySymbols(field) {
     : `Должно быть введено ${maskSize.length} символов`;
 }
 
-function getDocAndCountryValue(docField, docValue, CountryField, countryValue) {
-  return docField.value === docValue && CountryField.value === countryValue;
-}
-
 const REGNUM_MASK = 'A###AA###';
 
 function eventHandler(data, item, callback) {
@@ -38,24 +34,31 @@ function eventHandler(data, item, callback) {
     }
   }
 
-  if (item.name === "IDVEHDOCTYPE" && item.value === 31) {
-    SREG_NUMBER.required = true;
-    SREG_NUMBER.mask = REGNUM_MASK;
-    if (!SREG_NUMBER.value) {
-      SREG_NUMBER.state = false;
-    }
-    if (SREG_NUMBER.value) {
-      SREG_NUMBER.state = true;
-    }
-  }
-  if (item.name === "IDVEHDOCTYPE" && item.value !== 31) {
-    SREG_NUMBER.mask = null;
-    SREG_NUMBER.required = false;
-    SREG_NUMBER.state = null;
+
+  if (item.name === "SVEHDOC") {
+    const field = findField("SVEHDOC");
+    console.log(field, 1);
+    field.value = item.value.toUpperCase();
+    console.log(field, 2);
   }
 
-  // Настраиваем видимость поля Серия и номер/Номер документа
   if (item.name === "IDVEHDOCTYPE") {
+    if (item.value === 31) {
+      SREG_NUMBER.required = true;
+      SREG_NUMBER.mask = REGNUM_MASK;
+      if (!SREG_NUMBER.value) {
+        SREG_NUMBER.state = false;
+      }
+      if (SREG_NUMBER.value) {
+        SREG_NUMBER.state = true;
+      }
+    }
+    if (item.value !== 31) {
+      SREG_NUMBER.mask = null;
+      SREG_NUMBER.required = false;
+      SREG_NUMBER.state = null;
+    }
+    // Настраиваем видимость поля Серия и номер/Номер документа
     if (item.value === 41) {
       seriesNumberDoc.visible = false;
       docNumber.visible = true;
@@ -65,14 +68,24 @@ function eventHandler(data, item, callback) {
     }
   }
 
+  // Для России только цифры
+  if (["IDCOUNTRYDOC", "IDVEHDOCTYPE"].includes(item.name)) {
+    if (countryDoc.value !== 179) {
+      seriesNumberDoc.mask = null;
+    }
+    if (countryDoc.value === 179) {
+      const mask = IDVEHDOCTYPE.value === 31 ? '#### ######' : 'YYYY YYYYYY';
+      seriesNumberDoc.mask = mask;
+    }
+  }
+
   if (
-    getDocAndCountryValue(countryDoc, 179, IDVEHDOCTYPE, 31) ||
-    getDocAndCountryValue(countryDoc, 179, IDVEHDOCTYPE, 30)
+    ([31, 30].includes(IDVEHDOCTYPE.value) && countryDoc.value === 179)
   ) {
     validateMaskedFieldOnlySymbols(seriesNumberDoc);
   }
 
-  if (docNumber.value) {
+  if (docNumber.value && countryDoc.value === 179) {
     validateMaskedFieldOnlySymbols(docNumber);
   }
 
@@ -80,7 +93,7 @@ function eventHandler(data, item, callback) {
 }
 
 function initHandler(data) {
-  function findField(name) {
+  function findFieldfindField(name) {
     const field = data.find((item) => item.name === name);
     if (field) {
       return field;
@@ -102,19 +115,12 @@ function initHandler(data) {
     SREG_NUMBER.mask = REGNUM_MASK;
   }
 
-  if (IDVEHDOCTYPE.value === 41) {
-    seriesNumberDoc.visible = false;
-    docNumber.visible = true;
-  }
+  seriesNumberDoc.visible = IDVEHDOCTYPE.value !== 41;
+  docNumber.visible = IDVEHDOCTYPE.value === 41;
 
-  if (IDVEHDOCTYPE.value !== 41) {
-    seriesNumberDoc.visible = true;
-    docNumber.visible = false;
-  }
 
   if (
-    getDocAndCountryValue(countryDoc, 179, IDVEHDOCTYPE, 31) ||
-    getDocAndCountryValue(countryDoc, 179, IDVEHDOCTYPE, 30)
+    ([31, 30].includes(IDVEHDOCTYPE.value) && countryDoc.value === 179)
   ) {
     validateMaskedFieldOnlySymbols(seriesNumberDoc);
   }
