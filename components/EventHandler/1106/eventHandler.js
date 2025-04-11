@@ -25,6 +25,10 @@ async function eventHandler(data, item, callback) {
   const countryDoc = findField("IDCOUNTRYDOC");
   const IDVEHDOCTYPE = findField("IDVEHDOCTYPE");
 
+  if (item.name === "SREG_NUMBER") {
+    SREG_NUMBER.value = item.value.toUpperCase();
+  }
+
   if (item.name === "IDVEHDOCTYPE" && item.value === 31) {
     SREG_NUMBER.required = true;
     if (!SREG_NUMBER.value) {
