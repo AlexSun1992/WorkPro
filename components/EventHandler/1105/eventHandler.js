@@ -37,6 +37,7 @@ async function eventHandler(data, item, callback) {
   const NSEATS_COUNT = findField("NSEATS_COUNT");
   const regNum = findField("SREGNUM");
   const idType = findField("IDVEHICLETYPE");
+  const helpInformer = findField("SHELP_INFO");
 
   const arrFieldsTS = [
     "DATA_VEHICLE",
@@ -59,6 +60,10 @@ async function eventHandler(data, item, callback) {
 
   const objectFieldsTS = arrFieldsTS.map((field) => findField(field));
 
+  if (item.name === "SREGNUM") {
+    helpInformer.visible = item?.value === null;
+  }
+
   function visibleTS(visible) {
     // eslint-disable-next-line no-param-reassign,no-return-assign
     objectFieldsTS.forEach((f) => (f.visible = visible));
@@ -79,7 +84,7 @@ async function eventHandler(data, item, callback) {
   }
   if (
     item.name === "IDVEHICLE_POLICY" ||
-    (item.name === "SREGNUM" && item.value.length <= 1)
+    (item.name === "SREGNUM" && item.value?.length <= 1)
   ) {
     Save.visible = true;
     visibleTS(false);
@@ -297,11 +302,20 @@ function initHandler(data) {
     if (field) {
       return field;
     }
-    console.error(`findField. Поле ${name} не найдено в данных`)
+    console.error(`findField. Поле ${name} не найдено в данных`);
 
     return null;
   }
 
+  const IDMODEL = findField("IDMODEL");
+  ["IDMODEL", "IDBRAND", "IDVEHICLETYPE"].forEach((field) => {
+    const curField = findField(field);
+    if (curField) {
+      curField.visible = IDMODEL?.value > 0;
+    }
+  });
+
+  const regNum = findField("SREGNUM");
   function isFreeZone() {
     return !window.location.pathname.includes("/cabinet/");
   }
@@ -332,8 +346,6 @@ function initHandler(data) {
     }
   }
 
-  const IDMODEL = findField("IDMODEL");
-
   if (IDMODEL?.value > 0) {
     IDMODEL.visible = true;
   }
@@ -352,6 +364,5 @@ function initHandler(data) {
   if (model.state === true && IDBRAND.state === true) {
     setValueModelBrand(IDBRAND, model, sModel);
   }
-
   return data;
 }
