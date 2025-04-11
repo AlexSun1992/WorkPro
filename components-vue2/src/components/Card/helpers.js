@@ -69,6 +69,7 @@ export function getParams(props) {
 export function setURLParams(params) {
   const { ID, IDWIZARD, IDCARD, REL } = params;
   const url = new URL(window.location.href);
+  url.searchParams.delete("error");
   if (ID) {
     url.searchParams.set("ID", ID);
   }

@@ -206,6 +206,13 @@
         </button>
       </div>
     </div>
+    <div
+      v-if="gosuslugiErrorMessage"
+      class="mt-3 error-block"
+      id="errorMessage"
+    >
+      {{ gosuslugiErrorMessage }}
+    </div>
     <b-modal
       id="sms-auth-confirm-modal"
       v-model="isModalVisible"
@@ -337,6 +344,7 @@ export default {
     mask: "+7(9##)-###-##-##",
     duration: 60,
     smsErrorMessage: "Проверьте корректность введенных данных.",
+    gosuslugiErrorMessage: null,
     isFormErrorMessage: false,
     verifyTimerKey: 1,
     currentErrorKey: 0,
@@ -347,6 +355,11 @@ export default {
       "Всё обязательно получится!&#128521;",
     ],
   }),
+  mounted() {
+    this.gosuslugiErrorMessage = new URLSearchParams(
+      window.location.search
+    ).get("error");
+  },
   computed: {
     controlAuthorizationConstants() {
       return controlAuthorizationConstants;
