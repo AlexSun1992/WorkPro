@@ -1,7 +1,7 @@
 import { createLocalVue, mount, RouterLinkStub } from "@vue/test-utils";
 import Vuex from "vuex";
 import WizardProgressBar from "./WizardProgressBar.vue";
-import { propsWizardProgressBar, routeWizardProgressBar, storeWizardProgressBar } from "./WizardProgressBarTestData";
+import { propsWizardProgressBar, storeWizardProgressBar } from "./WizardProgressBarTestData";
 
 
 describe('WizardProgressBar', () => {
@@ -63,5 +63,23 @@ describe('WizardProgressBar', () => {
 
     expect(wrapper.vm.$router.push).toBeCalled();
     expect(wrapper.vm.$router.push.mock.calls[0][0]).toBe(prevUrl);
+  });
+
+  test("Progress bar position for single step", () => {
+    const propsData = {...propsWizardProgressBar};
+    propsData.tabs = [propsData.tabs[2]];
+    const wrapper = mount(WizardProgressBar, {
+      propsData,
+      localVue,
+      mocks: {
+        $route: mockRoute,
+        $router: mockRouter,
+        $store: store
+      },
+      stubs: { NuxtLink: RouterLinkStub }
+    });
+
+    expect(wrapper.vm.progressPosition).toBe("100%");
+    expect(wrapper.html()).not.toContain("Следующий этап");
   });
 });

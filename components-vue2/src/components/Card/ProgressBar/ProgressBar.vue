@@ -166,15 +166,28 @@ export default {
 
       return null;
     },
+    /**
+     * @description Положение прогресс бара расчитывается не от значения order а от индекса в упорядоченном массиве текущего шага!
+     * @return {string}
+     */
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
-      const currentOrder = this.currentTabOrder ?? 0;
+      const currentOrder = this.currentTabOrderPosition;
 
-      if (totalTabs && currentOrder) {
+      if (totalTabs === 1) {
+        return "100%";
+      }
+
+      if (totalTabs > 0 && currentOrder > 0) {
         return `${(100 / totalTabs) * (currentOrder - 1)}%`;
       }
 
       return "0%";
+    },
+    currentTabOrderPosition() {
+      const sortedTabs = [...this.tabs].sort((a, b) => a.NORDER - b.NORDER);
+
+      return sortedTabs.findIndex(item => item.NORDER === this.currentTabOrder) + 1;
     },
     currentTabOrder() {
       return (
