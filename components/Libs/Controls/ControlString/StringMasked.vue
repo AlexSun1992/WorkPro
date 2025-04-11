@@ -40,10 +40,14 @@ export default {
       default: () => false,
     },
   },
+
   data() {
     return {
       customTokens: {
         "#": { pattern: /\d/ },
+        Y: {
+          pattern: /^[a-zA-Za-яА-ЯёЁ0-9]+$/,
+        },
         N: { pattern: /[0-9]/ },
         X: { pattern: /[0-9a-zA-Z]/ },
         S: { pattern: /[a-zA-Z]/ },
