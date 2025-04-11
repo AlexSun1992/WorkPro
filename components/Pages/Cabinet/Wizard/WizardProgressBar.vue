@@ -127,10 +127,9 @@ export default {
       return '0%';
     },
     currentTabOrderPosition() {
-      const currentOrder = this.currentTab.order;
       const sortedTabs = [...this.tabs].sort((a, b) => a.order - b.order);
 
-      return sortedTabs.findIndex(item => item.order === currentOrder) + 1;
+      return sortedTabs.findIndex(item => item.order === this.currentTab.order) + 1;
     },
     availableTabs() {
       const { tabs } = this;
