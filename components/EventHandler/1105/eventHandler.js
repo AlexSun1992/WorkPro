@@ -65,8 +65,8 @@ async function eventHandler(data, item, callback) {
     helpInformer.visible = item?.value === null;
   }
 
-  Continue.visible = IDMODEL.options.length > 0;
-  Save.visible = IDMODEL.options.length <= 0;
+  Continue.visible = IDMODEL.visible;
+  Save.visible = !IDMODEL.visible;
 
   function visibleTS(visible) {
     // eslint-disable-next-line no-param-reassign,no-return-assign
@@ -313,18 +313,18 @@ function initHandler(data) {
   const IDMODEL = findField("IDMODEL");
   const Save = findField("Save");
   const Continue = findField("Continue");
+  const regNum = findField("SREGNUM");
 
-  Continue.visible = IDMODEL.options.length > 0;
-  Save.visible = IDMODEL.options.length <= 0;
+  Continue.visible = IDMODEL.visible;
+  Save.visible = !IDMODEL.visible;
 
   ["IDMODEL", "IDBRAND", "IDVEHICLETYPE"].forEach((field) => {
     const curField = findField(field);
     if (curField) {
-      curField.visible = IDMODEL?.value > 0;
+      curField.visible = IDMODEL?.value > 0 || regNum.value?.length > 0 || regNum.value === 'N';
     }
   });
 
-  const regNum = findField("SREGNUM");
   function isFreeZone() {
     return !window.location.pathname.includes("/cabinet/");
   }
