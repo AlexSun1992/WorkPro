@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div v-if="isShowWizardLoader" class="overlay">
+      <lottie-vue-player
+        :src="'/img/loader.json'"
+        :player-controls="false"
+        :autoplay="true"
+        :loop="true"
+      >
+      </lottie-vue-player>
+    </div>
     <b-modal
       v-if="!isError && settings.isModal"
       id="modal"
@@ -300,6 +309,14 @@ export default {
     captions() {
       return this.$store.getters["data_card/getCaptions"];
     },
+    isShowWizardLoader() {
+      return (
+        this.$store.getters["data_card/getLoading"] ||
+        this.$store.getters["wizard/getIsWizardButtonsLoading"] ||
+        !this.getFormData ||
+        !this.getFormData.length
+      );
+    },
     isButtonSave() {
       return this.$store.getters["data_card/getBtnSave"];
     },
@@ -461,5 +478,19 @@ export default {
 .btn-right {
   display: flex;
   justify-content: flex-end;
+}
+.overlay {
+  position: fixed; /* Закрепляем элемент поверх всей страницы */
+  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Для покрытия всего экрана */
+  background-color: rgba(239, 239, 240, 0.6); /* Затемнение */
+  z-index: 1000; /* На переднем плане */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: all; /* Блокируем взаимодействие с другими элементами страницы */
 }
 </style>

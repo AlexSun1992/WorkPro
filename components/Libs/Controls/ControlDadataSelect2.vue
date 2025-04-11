@@ -82,7 +82,7 @@ function getQueryParams(queryType, input) {
       id: "brand_model_code",
     };
   }
-  if (queryType === "SPHOLDER_SECOND_DADATA") {
+  if (queryType.includes("SECONDNAME")) {
     return {
       query: "fio",
       body: {
@@ -93,7 +93,7 @@ function getQueryParams(queryType, input) {
     };
   }
 
-  if (queryType === "SPHOLDER_THIRD_DADATA") {
+  if (queryType.includes("THIRDNAME")) {
     return {
       query: "fio",
       body: {
@@ -104,7 +104,7 @@ function getQueryParams(queryType, input) {
     };
   }
 
-  if (queryType === "SPHOLDER_FIRST_DADATA") {
+  if (queryType.includes("FIRSTNAME")) {
     return {
       query: "fio",
       body: {

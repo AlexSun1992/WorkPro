@@ -6,9 +6,6 @@
     @click="action"
   >
     {{ buttonName }}
-    <span v-if="isLoading" role="status" class="spinner-border text-danger">
-      <span class="sr-only">Spinning</span>
-    </span>
   </button>
 </template>
 
@@ -52,6 +49,7 @@ export default {
       );
     },
     action() {
+      this.$store.commit("data_card/setLoading", true);
       if (this.data.name === "Continue") {
         this.goNext();
       }
@@ -91,8 +89,8 @@ export default {
             {
               actionId: action.ID,
               relActionId: action.REL,
-              relId: this.$route.params.idRel,
-              rowId: this.$route.params.idCard,
+              relId: this.$route?.params.idRel,
+              rowId: this.$route?.params.idCard,
             }
           );
           if (response.status != 200) {
@@ -105,7 +103,7 @@ export default {
             return;
           }
         }
-        await this.$store.dispatch("wizard/fetchWizard", this.$route.params);
+        await this.$store.dispatch("wizard/fetchWizard", this.$route?.params);
         const tab = this.tabs[this.getCurrentIndex() + 1];
         this.$emit("goNext", tab);
       } else {
@@ -138,7 +136,7 @@ export default {
           .getData(this.$store.getters["menu/menu"], {
             idModule: 55,
             idParent: 0,
-            idItem: this.$route ? this.$route.params.idWizard : null,
+            idItem: this.$route ? this.$route?.params.idWizard : null,
           })
           .slice(-1)
           .pop();
@@ -162,7 +160,7 @@ export default {
       return arr;
     },
     currentTab() {
-      return this.tabs.find((item) => item.idItem == this.$route.params.idItem);
+      return this.tabs.find((item) => item.idItem == this.$route?.params.idItem);
     },
   },
 };

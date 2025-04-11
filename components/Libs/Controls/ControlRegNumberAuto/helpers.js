@@ -11,16 +11,21 @@ export default {
     return this.isNumberValid(num) && this.isRegionCode(code);
   },
   isNumberValid(val) {
-    return isNumberValid(val)
+    return isNumberValid(val);
   },
   isRegionCode(code) {
     const _code = +code;
 
-    return !isNaN(_code) && isFinite(_code) && (code + '').length >= 2 && (code + '').length <= 3;
+    return (
+      !isNaN(_code) &&
+      isFinite(_code) &&
+      (code + "").length >= 2 &&
+      (code + "").length <= 3
+    );
   },
   numberFormatter(value) {
     const formatValue = value?.toUpperCase();
-    const withOutSpacesValue = formatValue?.replaceAll(' ', '');
+    const withOutSpacesValue = formatValue?.replaceAll(" ", "");
 
     if (!withOutSpacesValue) {
       return formatValue;
@@ -51,15 +56,15 @@ export default {
    * @param {object} params
    */
   paramsToString(params) {
-  let result = '';
-  let separator = '';
+    let result = "";
+    let separator = "";
 
-  for (let item in params) {
-    result += `${separator}${item}=${params[item]}`;
+    for (let item in params) {
+      result += `${separator}${item}=${params[item]}`;
 
-    separator = '&';
-  }
+      separator = "&";
+    }
 
-  return result;
-}
-}
+    return result;
+  },
+};

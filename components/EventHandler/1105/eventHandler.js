@@ -276,6 +276,7 @@ async function eventHandler(data, item, callback) {
 
   // Проверка VIN на количество символов
   if (item.name === "SVIN") {
+    svin.value = svin.value.toUpperCase();
     if (svin.mask.length > svin.value.length) {
       svin.error = "VIN должен состоять из 17 символов";
       svin.state = false;
@@ -292,13 +293,29 @@ async function eventHandler(data, item, callback) {
 function initHandler(data) {
   function findField(name) {
     const field = data.find((item) => item.name === name);
+
     if (field) {
       return field;
     }
-    throw new Error(`Поле ${name} не найдено в данных`);
+    console.error(`findField. Поле ${name} не найдено в данных`)
+
+    return null;
   }
 
-  const regNum = findField("SREGNUM");
+  function isFreeZone() {
+    return !window.location.pathname.includes("/cabinet/");
+  }
+
+  function setPublicAttr() {
+    const freeZone = isFreeZone() ? "Y" : "N";
+    const field = findField("LPUBLIC");
+
+    if (field) {
+      field.value = freeZone;
+    }
+  }
+
+  setPublicAttr();
   const sModel = findField("SMODEL");
   const model = findField("IDMODEL");
   const IDBRAND = findField("IDBRAND");
@@ -317,7 +334,7 @@ function initHandler(data) {
 
   const IDMODEL = findField("IDMODEL");
 
-  if (IDMODEL.value > 0) {
+  if (IDMODEL?.value > 0) {
     IDMODEL.visible = true;
   }
 

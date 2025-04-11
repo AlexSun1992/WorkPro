@@ -17,10 +17,9 @@ function findAllFields(data, arr) {
 }
 
 function validateMaskedFieldOnlyNumberSymbol(field) {
-  field.state = field.mask.replace(/[^#]/g, "").length === field.value.length;
-  field.error = field.state
-    ? null
-    : `Значение должно быть не меньше ${field.mask.length} символов`;
+  const maskOnlyNumberSymbols = field.mask.replace(/[^#]/g, "");
+  field.state = maskOnlyNumberSymbols.length === field.value.length;
+  field.error = field.state ? null : `Введите корректное значение`;
 }
 
 // управляем полями СНИЛС

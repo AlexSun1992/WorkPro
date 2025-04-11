@@ -143,7 +143,6 @@ function eventHandler(data, item, callback) {
       ]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
-      console.log();
       console.log(formattedDate, "formattedDate");
 
       dtoDateField.value = formattedDate;
@@ -438,7 +437,6 @@ function eventHandler(data, item, callback) {
         } else {
           toDateField.state = true;
           toDateField.error = null;
-          console.log("field:", field);
           validateDates(item, data, dFromDate, dtoDateYear);
         }
       }
@@ -449,6 +447,26 @@ function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DTO_DATE").visible = true;
     data.find((f) => f.name === "PERIOD_LIST").visible = false;
     periods.visible = false;
+
+    if (field.name === "NOSAGO_TYPE") {
+      data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
+      data.find((f) => f.name === "DTO_DATE").visible = true;
+      let [dFrom, mFrom, yFrom] = data
+        .find((f) => f.name === "DFROM_DATE")
+        .value.split(".");
+      let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+      dateFrom.setFullYear(dateFrom.getFullYear() + 1);
+      dateFrom.setDate(dateFrom.getDate() - 1);
+      let formattedDate = [
+        dateFrom.getDate(),
+        dateFrom.getMonth() + 4,
+        dateFrom.getFullYear() - 1,
+      ]
+        .map((n) => (n < 10 ? `0${n}` : `${n}`))
+        .join(".");
+      dtoDateField.value = formattedDate;
+    }
+
     if (field.name === "DFROM_DATE" && item.value) {
       let [dFrom, mFrom, yFrom] = item.value.split(".");
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
@@ -461,9 +479,45 @@ function eventHandler(data, item, callback) {
       ]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
+
       dtoDateField.value = formattedDate;
       console.log(formattedDate, "formattedDate111111");
     }
+
+    const createDate = dateCreator(
+      data.find((f) => f.name === "DCALC_DATE")?.value
+    );
+    const createDatePlus4 = new Date(createDate);
+    createDatePlus4.setDate(createDatePlus4.getDate() + 4);
+
+    const fromDate = dateCreator(
+      data.find((f) => f.name === "DFROM_DATE")?.value
+    );
+    const fromDatePlus3M = new Date(fromDate);
+    fromDatePlus3M.setMonth(fromDatePlus3M.getMonth() + 3);
+    fromDatePlus3M.setDate(fromDatePlus3M.getDate() - 1);
+
+    const toDate = dateCreator(data.find((f) => f.name === "DTO_DATE")?.value);
+
+    if (createDatePlus4 > fromDate) {
+      dFromDate.error =
+        "Дата начала не может быть ранее четырех дней с даты оформления";
+      dFromDate.state = false;
+    } else {
+      dFromDate.state = true;
+      dFromDate.error = null;
+      validateDates(item, data, dFromDate, dtoDateYear);
+    }
+
+    if (fromDatePlus3M < toDate) {
+      dtoDateField.error = "Срок страхования от 1 дня до 3 месяцев";
+      dtoDateField.state = false;
+    } else {
+      dtoDateField.state = true;
+      dtoDateField.error = null;
+      validateDates(item, data, dFromDate, dtoDateYear);
+    }
+
     data.find((f) => f.name === "SFIRST_PERIOD").visible = false;
     data.find((f) => f.name === "DFROM_DATE1").visible = false;
     data.find((f) => f.name === "DTO_DATE1").visible = false;
@@ -481,6 +535,27 @@ function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DTO_DATE").visible = true;
     data.find((f) => f.name === "PERIOD_LIST").visible = false;
     periods.visible = false;
+
+    if (field.name === "NOSAGO_TYPE") {
+      data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
+      data.find((f) => f.name === "DTO_DATE").visible = true;
+      let [dFrom, mFrom, yFrom] = data
+        .find((f) => f.name === "DFROM_DATE")
+        .value.split(".");
+      let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+      dateFrom.setFullYear(dateFrom.getFullYear() + 1);
+      dateFrom.setDate(dateFrom.getDate() - 1);
+      let formattedDate = [
+        dateFrom.getDate() + 20,
+        dateFrom.getMonth() + 1,
+        dateFrom.getFullYear() - 1,
+      ]
+        .map((n) => (n < 10 ? `0${n}` : `${n}`))
+        .join(".");
+      dtoDateField.value = formattedDate;
+      console.log(formattedDate, "formattedDate NOSAGO_TYPE");
+    }
+
     if (field.name === "DFROM_DATE" && item.value) {
       let [dFrom, mFrom, yFrom] = item.value.split(".");
       let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
@@ -496,6 +571,36 @@ function eventHandler(data, item, callback) {
       dtoDateField.value = formattedDate;
       console.log(formattedDate, "formattedDate44444");
     }
+
+    const createDate = dateCreator(data.find((f) => f.name === "DCALC_DATE"));
+    const createDatePlus5 = new Date(createDate);
+    createDatePlus5.setDate(createDatePlus5.getDate() + 5);
+
+    const fromDate = dateCreator(data.find((f) => f.name === "DFROM_DATE"));
+    const fromDatePlus19D = new Date(fromDate);
+    fromDatePlus19D.setDate(fromDatePlus19D.getDate() + 19);
+
+    const toDate = dateCreator(data.find((f) => f.name === "DTO_DATE"));
+
+    if (createDatePlus5 > fromDate) {
+      dFromDate.error =
+        "Дата начала не может быть ранее пяти дней с даты оформления";
+      dFromDate.state = false;
+    } else {
+      dFromDate.state = true;
+      dFromDate.error = null;
+      validateDates(item, data, dFromDate, dtoDateYear);
+    }
+
+    if (toDate > fromDatePlus19D) {
+      dtoDateField.error = "Срок страхования от 1 дня до 20 дней";
+      dtoDateField.state = false;
+    } else {
+      dtoDateField.state = true;
+      dtoDateField.error = null;
+      validateDates(item, data, dFromDate, dtoDateYear);
+    }
+
     data.find((f) => f.name === "SFIRST_PERIOD").visible = false;
     data.find((f) => f.name === "DFROM_DATE1").visible = false;
     data.find((f) => f.name === "DTO_DATE1").visible = false;
@@ -527,6 +632,7 @@ function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DTO_DATE_YEAR").value = formattedDate;
     console.log(formattedDate, "formattedDate999999999");
   }
+
   if (field.name === "NOSAGO_TYPE" && item.value == 2) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
     data.find((f) => f.name === "DTO_DATE").visible = true;
@@ -646,6 +752,12 @@ function eventHandler(data, item, callback) {
       }
     }
   }
+  function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
+    const [dateDay, dateMonth, dateYear] = dateString.split(".");
+    const date = new Date(dateYear, dateMonth - 1, dateDay);
+    return date;
+  }
+
   data.map((el) => {
     if (el.name.includes("DTO_DATE") || el.name.includes("DFROM_DATE")) {
       console.log(el);

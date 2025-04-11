@@ -7,14 +7,14 @@ import {
   BFormInvalidFeedback,
   BInputGroup,
   BLink,
-  BRow
+  BRow,
 } from "bootstrap-vue";
 import RegNumberAutoNumber from "./RegNumberAutoNumber.vue";
 import { clientCarsPropsData } from "./RegNumberAutoNumberTestData";
 
 const clientCars = clientCarsPropsData;
 
-describe('RegNumberAutoNumber', () => {
+describe("RegNumberAutoNumber", () => {
   const wrapper = mount(RegNumberAutoNumber, {
     stubs: {
       BInputGroup,
@@ -24,13 +24,13 @@ describe('RegNumberAutoNumber', () => {
       BFormInvalidFeedback,
       BCheckbox: BFormCheckbox,
       BButton,
-      BLink
+      BLink,
     },
-    propsData: { clientCars, value: null }
+    propsData: { clientCars, value: null },
   });
 
-  it('Set Reg Number is valid', () => {
-    const numbers = [ 'A111AA333', 'B123AA11' ];
+  it("Set Reg Number is valid", () => {
+    const numbers = ["A111AA333", "B123AA11"];
 
     for (const num of numbers) {
       wrapper.vm.setCarNumber(num);
@@ -40,8 +40,8 @@ describe('RegNumberAutoNumber', () => {
     }
   });
 
-  it('Set Reg Number is Invalid', () => {
-    const numbers = [ 'Ф111AA123', 'A', '123456789', 'asdfqwezx', '' ];
+  it("Set Reg Number is Invalid", () => {
+    const numbers = ["Ф111AA123", "A", "123456789", "asdfqwezx", ""];
 
     for (const num of numbers) {
       wrapper.vm.setCarNumber(num);
@@ -51,7 +51,7 @@ describe('RegNumberAutoNumber', () => {
     }
   });
 
-  it('Disable number input', () => {
+  it("Disable number input", () => {
     /* wrapper.findComponent(BFormCheckbox).setChecked();
     wrapper.vm.$nextTick(); */
     wrapper.vm.goWithoutCarNumber(true);
@@ -59,7 +59,7 @@ describe('RegNumberAutoNumber', () => {
     expect(wrapper.vm.regNumberDisabled).toBe(true);
   });
 
-  it('Only 3 Reg Numbers on form', () => {
+  it("Only 3 Reg Numbers on form", () => {
     expect(wrapper.vm.clientCars.length).toBeGreaterThan(3);
     expect(wrapper.vm.customerCarNumbers.length).toBe(3);
   });
@@ -74,9 +74,9 @@ describe('RegNumberAutoNumber', () => {
         BFormInvalidFeedback,
         BCheckbox: BFormCheckbox,
         BButton,
-        BLink
+        BLink,
       },
-      propsData: { clientCars, value: 'N' }
+      propsData: { clientCars, value: "N" },
     });
 
     expect(wrapper.vm.isWithoutCarNumber).toBe(true);
