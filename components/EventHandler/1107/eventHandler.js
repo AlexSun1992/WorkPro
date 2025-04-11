@@ -18,8 +18,7 @@ function findAllFields(data, arr) {
 
 function validateMaskedFieldOnlyNumberSymbol(field) {
   const maskOnlyNumberSymbols = field.mask.replace(/[^#]/g, "");
-
-  field.state = maskOnlyNumberSymbols.length + 1 === `9${field.value}`.length;
+  field.state = maskOnlyNumberSymbols.length + 1 === `${field.value}`.length;
   field.error = field.state ? null : "Введите корректное значение";
 }
 
@@ -112,13 +111,14 @@ function initHandler(data) {
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
 
   if (phoneNoAuth && phoneNoAuth.mask) {
-    validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
     if (phoneNoAuth.state) {
       phoneNoAuth.value = `9${phoneNoAuth.value}`;
+      validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
     }
   }
 
   if (phoneAuth && phoneAuth.mask) {
+    phoneAuth.value = `9${phoneAuth.value}`;
     validateMaskedFieldOnlyNumberSymbol(phoneAuth);
   }
 
@@ -142,16 +142,14 @@ function eventHandler(data, item) {
 
   if (item.name === "SPHOLDER_PHONENOAUTH") {
     if (phoneNoAuth && phoneNoAuth.mask) {
+      phoneNoAuth.value = `9${item.value}`;
       validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
-    }
-
-    if (phoneNoAuth.state) {
-      phoneNoAuth.value = `9${phoneNoAuth.value}`;
     }
   }
 
   if (item.name === "SPHOLDER_PHONE") {
     if (phoneAuth && phoneAuth.mask) {
+      phoneAuth.value = `9${item.value}`;
       validateMaskedFieldOnlyNumberSymbol(phoneAuth);
     }
   }

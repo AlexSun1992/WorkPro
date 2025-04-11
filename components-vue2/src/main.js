@@ -269,3 +269,25 @@ Vue.customElement(
       });
     })
 );
+
+Vue.customElement(
+  "component-async-modal-action",
+  () =>
+    new Promise((resolve) => {
+      require(["../../components/Libs/Controls/AsyncModalAction/ControlAsyncModal.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
+  "control-modal",
+  () =>
+    new Promise((resolve) => {
+      require(["../../components/Libs/Controls/AsyncModalAction/ControlModal"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);

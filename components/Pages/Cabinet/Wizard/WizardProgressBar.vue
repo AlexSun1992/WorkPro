@@ -114,13 +114,22 @@ export default {
     },
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
-      const currentOrder = this.currentTabComputed?.order ?? 0;
+      const currentOrder = this.currentTabOrderPosition;
 
-      if (totalTabs && currentOrder) {
+      if (totalTabs === 1) {
+        return "100%";
+      }
+
+      if (totalTabs > 0 && currentOrder > 0) {
         return `${ ((100 / totalTabs) * (currentOrder - 1)) }%`;
       }
 
       return '0%';
+    },
+    currentTabOrderPosition() {
+      const sortedTabs = [...this.tabs].sort((a, b) => a.order - b.order);
+
+      return sortedTabs.findIndex(item => item.order === this.currentTab.order) + 1;
     },
     availableTabs() {
       const { tabs } = this;

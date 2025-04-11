@@ -98,6 +98,7 @@ import ControlInformer from "./ControlInformer/ControlInformer.vue";
 import ControlGallery from "./ControlGallery/ControlGallery.vue";
 import ControlSlider from "./ControlSlider/ControlSlider.vue";
 import ControlAuthorization from "./ControlAuthorization/ControlAuthorization.vue";
+import ControlAsyncModal from "./AsyncModalAction/ControlAsyncModal.vue";
 
 export default {
   name: "Control",
@@ -161,6 +162,7 @@ export default {
     ControlSlider,
     ControlGallery,
     ControlAuthorization,
+    ControlAsyncModal,
   },
   props: {
     data: {

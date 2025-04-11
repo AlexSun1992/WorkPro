@@ -404,7 +404,6 @@ export default {
     },
     backToPage(cardId) {
       const navigation = this.getNavigationPositionByCardId(cardId);
-
       if (navigation) {
         setURLParams(navigation);
         this.init();
@@ -512,7 +511,9 @@ export default {
           form: this.getForm,
         });
         if (resp.status === 200) {
-          setURLParams(resp.data[0]);
+          if (resp.data[0].ACTION !== "redirect") {
+            setURLParams(resp.data[0]);
+          }
           if (resp.data[0].ACCESS_TOKEN) {
             saveCookies(resp.data[0].ACCESS_TOKEN, resp.data[0].REFRESH_TOKEN);
           }
