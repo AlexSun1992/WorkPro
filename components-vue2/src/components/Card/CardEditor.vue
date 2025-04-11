@@ -428,6 +428,9 @@ export default {
         });
       }
       await this.saveCard({}, "wizardSave");
+      if (!this.params.idWizard && !this.getSavedError) {
+        await this.init();
+      }
     },
     scrollToError() {
       const divWithInvalidClass =
@@ -490,17 +493,16 @@ export default {
         const cardId = this.params.idCard;
         const relId = this.params.idRel;
         const { zone } = this.params;
-
         const isUploaderFieldValueExist = this.getForm.find(
           (elem) =>
             ["Uploader", "uploadFiles"].includes(elem.type) &&
             elem.value !== undefined
         );
+
         const storeAction =
           isUploaderFieldValueExist === undefined
             ? "saveDataCard"
             : "saveDataCardUploaders";
-
         const resp = await this.$store.dispatch(`data_card/${storeAction}`, {
           moduleId,
           itemId,

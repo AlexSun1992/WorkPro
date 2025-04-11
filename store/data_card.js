@@ -766,7 +766,7 @@ export const actions = {
       )
       .map((r) => r.url);
     if (controller) {
-      controller.abort();
+      // controller.abort();
     }
     controller = new AbortController();
     if (requests.length) {
