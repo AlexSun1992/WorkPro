@@ -73,16 +73,20 @@ async function eventHandler(data, item, callback) {
     objectFieldsTS.forEach((f) => (f.visible = visible));
   }
 
-  if (item.name === "IDVEHICLETYPE" && item.value !== 4 && item.value !== 3) {
+  if (!idType.options.length) {
+    idType.value = null;
+  }
+
+  if (["IDVEHICLETYPE", 'IDMODEL'].includes(item.name) && idType.value !== 4 && idType.value !== 3) {
     NWEIGHT.visible = false;
     NSEATS_COUNT.visible = false;
   }
 
-  if (item.name === "IDVEHICLETYPE" && item.value === 4) {
+  if (item.name === "IDVEHICLETYPE" && idType.value === 4) {
     NWEIGHT.visible = true;
     NSEATS_COUNT.visible = false;
   }
-  if (item.name === "IDVEHICLETYPE" && item.value === 3) {
+  if (item.name === "IDVEHICLETYPE" && idType.value === 3) {
     NSEATS_COUNT.visible = true;
     NWEIGHT.visible = false;
   }
