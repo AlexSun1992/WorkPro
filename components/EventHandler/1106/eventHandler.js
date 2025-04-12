@@ -1,3 +1,4 @@
+(() => {
 function validateMaskedFieldOnlySymbols(field) {
   const maskSize = field.mask.replace(/\s+/g, "");
   field.state = maskSize.length === field.value.length;
@@ -5,25 +6,22 @@ function validateMaskedFieldOnlySymbols(field) {
     ? null
     : `Должно быть введено ${maskSize.length} символов`;
 }
+function findField(data, name) {
+  const field = data.find((item) => item.name === name);
+  if (field) {
+    return field;
+  }
+  throw new Error(`Поле ${name} не найдено в данных`);
+}
 
-const REGNUM_MASK = 'A###AA###';
+const REGNUM_MASK = 'Y###YY###';
 
 function eventHandler(data, item, callback) {
-  console.log(item);
-
-  function findField(name) {
-    const field = data.find((item) => item.name === name);
-    if (field) {
-      return field;
-    }
-    throw new Error(`Поле ${name} не найдено в данных`);
-  }
-
-  const SREG_NUMBER = findField("SREG_NUMBER");
-  const seriesNumberDoc = findField("SVEHDOC");
-  const docNumber = findField("SVEHEPTS");
-  const countryDoc = findField("IDCOUNTRYDOC");
-  const IDVEHDOCTYPE = findField("IDVEHDOCTYPE");
+  const SREG_NUMBER = findField(data, "SREG_NUMBER");
+  const seriesNumberDoc = findField(data, "SVEHDOC");
+  const docNumber = findField(data, "SVEHEPTS");
+  const countryDoc = findField(data, "IDCOUNTRYDOC");
+  const IDVEHDOCTYPE = findField(data, "IDVEHDOCTYPE");
 
   if (item.name === "SREG_NUMBER") {
     SREG_NUMBER.value = item.value.toUpperCase();
@@ -36,7 +34,7 @@ function eventHandler(data, item, callback) {
 
 
   if (item.name === "SVEHDOC") {
-    const field = findField("SVEHDOC");
+    const field = findField(data, "SVEHDOC");
     console.log(field, 1);
     field.value = item.value.toUpperCase();
     console.log(field, 2);
@@ -93,31 +91,24 @@ function eventHandler(data, item, callback) {
 }
 
 function initHandler(data) {
-  function findFieldfindField(name) {
-    const field = data.find((item) => item.name === name);
-    if (field) {
-      return field;
-    }
-    throw new Error(`Поле ${name} не найдено в данных`);
-  }
-
-  const IDVEHDOCTYPE = findField("IDVEHDOCTYPE");
-  const SREG_NUMBER = findField("SREG_NUMBER");
-  const seriesNumberDoc = findField("SVEHDOC");
-  const countryDoc = findField("IDCOUNTRYDOC");
-  const docNumber = findField("SVEHEPTS");
-
-  if (IDVEHDOCTYPE.value !== 31) {
-    SREG_NUMBER.required = false;
-  }
-
-  if (IDVEHDOCTYPE.value === 31) {
-    SREG_NUMBER.mask = REGNUM_MASK;
-  }
+  const IDVEHDOCTYPE = findField(data, "IDVEHDOCTYPE");
+  const SREG_NUMBER = findField(data, "SREG_NUMBER");
+  const seriesNumberDoc = findField(data, "SVEHDOC");
+  const countryDoc = findField(data, "IDCOUNTRYDOC");
+  const docNumber = findField(data, "SVEHEPTS");
 
   seriesNumberDoc.visible = IDVEHDOCTYPE.value !== 41;
   docNumber.visible = IDVEHDOCTYPE.value === 41;
 
+  if (countryDoc.value !== 179) {
+    seriesNumberDoc.mask = null;
+    SREG_NUMBER.mask = null;
+  }
+  if (countryDoc.value === 179) {
+    const mask = IDVEHDOCTYPE.value === 31 ? '#### ######' : 'YYYY YYYYYY';
+    seriesNumberDoc.mask = mask;
+    SREG_NUMBER.mask = IDVEHDOCTYPE.value === 31 ? REGNUM_MASK : null;
+  }
 
   if (
     ([31, 30].includes(IDVEHDOCTYPE.value) && countryDoc.value === 179)
@@ -131,3 +122,6 @@ function initHandler(data) {
 
   return data;
 }
+  window.eventHandler = eventHandler;
+  window.initHandler = initHandler;
+})();

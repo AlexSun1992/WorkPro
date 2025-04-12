@@ -1,44 +1,56 @@
+(() => {
+
 function setValueEmptyStateNull(field) {
   field.value = "";
   field.state = null;
 }
 
-function setValueModelBrand(brand, model, brandmodel) {
+function setValueModelBrand(data) {
+  const brand = findField(data, "IDBRAND");
+  const model = findField(data, "IDMODEL");
+  const brandmodel = findField(data, "SMODEL");
+
   const brandValue = brand.options.find((item) => item.value === brand.value);
   const idModelText = model.options.find((item) => item.value === model.value);
 
-  if (
-    idModelText &&
-    Object.hasOwn(idModelText, "text") &&
-    brandValue &&
-    Object.hasOwn(brandValue, "text")
-  ) {
+  if (idModelText?.text && brandValue?.text && model.state && brand.state) {
     brandmodel.value = `${brandValue.text} ${idModelText.text}`;
   }
 }
 
-async function eventHandler(data, item, callback) {
-  function findField(name) {
+  function findField(data, name) {
     const field = data.find((item) => item.name === name);
+
     if (field) {
       return field;
     }
-    throw new Error(`Поле ${name} не найдено в данных`);
+    console.error(`findField. Поле ${name} не найдено в данных`);
+
+    return null;
   }
 
-  const svin = findField("SVIN");
-  const sModel = findField("SMODEL");
-  const model = findField("IDMODEL");
-  const IDBRAND = findField("IDBRAND");
-  const IDMODEL = findField("IDMODEL");
-  const BNO_VIN = findField("BNO_VIN");
-  const Save = findField("Save");
-  const Continue = findField("Continue");
-  const NWEIGHT = findField("NWEIGHT");
-  const NSEATS_COUNT = findField("NSEATS_COUNT");
-  const regNum = findField("SREGNUM");
-  const idType = findField("IDVEHICLETYPE");
-  const helpInformer = findField("SHELP_INFO");
+let ONLY_ONCE_INITED = false;
+
+function eventHandler(data, item, callback) {
+  if (!ONLY_ONCE_INITED) {
+    setTimeout(() => {
+      ONLY_ONCE_INITED = true;
+    }, 1000)
+  }
+
+  const svin = findField(data, "SVIN");
+  const sModel = findField(data, "SMODEL");
+  const model = findField(data, "IDMODEL");
+  const IDBRAND = findField(data, "IDBRAND");
+  const IDMODEL = findField(data, "IDMODEL");
+  const BNO_VIN = findField(data, "BNO_VIN");
+  const Save = findField(data, "Save");
+  const Continue = findField(data, "Continue");
+  const NWEIGHT = findField(data, "NWEIGHT");
+  const NSEATS_COUNT = findField(data, "NSEATS_COUNT");
+  const regNum = findField(data, "SREGNUM");
+  const idType = findField(data, "IDVEHICLETYPE");
+  const helpInformer = findField(data, "SHELP_INFO");
 
   const arrFieldsTS = [
     "DATA_VEHICLE",
@@ -59,7 +71,16 @@ async function eventHandler(data, item, callback) {
     "Continue",
   ];
 
-  const objectFieldsTS = arrFieldsTS.map((field) => findField(field));
+  const objectFieldsTS = arrFieldsTS.map((field) => findField(data, field));
+
+  function visibleTS(visible) {
+    // eslint-disable-next-line no-param-reassign,no-return-assign
+    objectFieldsTS.forEach((f) => (f.visible = visible));
+  }
+
+  if (item.resp) {
+    setValueModelBrand(data);
+  }
 
   if (item.name === "SREGNUM") {
     helpInformer.visible = item?.value === null;
@@ -67,11 +88,6 @@ async function eventHandler(data, item, callback) {
 
   Continue.visible = IDMODEL.visible;
   Save.visible = !IDMODEL.visible;
-
-  function visibleTS(visible) {
-    // eslint-disable-next-line no-param-reassign,no-return-assign
-    objectFieldsTS.forEach((f) => (f.visible = visible));
-  }
 
   if (!idType.options.length) {
     idType.value = null;
@@ -90,12 +106,12 @@ async function eventHandler(data, item, callback) {
     NSEATS_COUNT.visible = true;
     NWEIGHT.visible = false;
   }
-  if (
-    item.name === "IDVEHICLE_POLICY" ||
-    (item.name === "SREGNUM" && item.value?.length <= 1)
-  ) {
+  if (item.name === "IDVEHICLE_POLICY") {
     Save.visible = true;
+  }
+  if (item.name === "SREGNUM" && ONLY_ONCE_INITED) {
     visibleTS(false);
+    Save.visible = true;
   }
 
   if (item.name === "IDBRAND") {
@@ -128,19 +144,7 @@ async function eventHandler(data, item, callback) {
     if (model.value) {
       idType.visible = true;
 
-      const idModelText = IDMODEL.options.find(
-        (item) => item.value === IDMODEL.value
-      );
-
-      const brandValue = IDBRAND.options.find(
-        (item) => item.value === IDBRAND.value
-      );
-
-      if (brandValue && idModelText) {
-        if (brandValue !== sModel.value) {
-          setValueModelBrand(IDBRAND, model, sModel);
-        }
-      }
+      setValueModelBrand(data);
     }
 
     if (!model.value) {
@@ -164,9 +168,7 @@ async function eventHandler(data, item, callback) {
   //  Добавляем значение в поле Марка-Модель при валидной марке и модели
 
   if (item.name === "IDVEHICLETYPE") {
-    if (model.state === true && IDBRAND.state === true) {
-      setValueModelBrand(IDBRAND, model, sModel);
-    }
+    setValueModelBrand(data);
   }
 
   if (item.name === "SMODEL") {
@@ -211,7 +213,7 @@ async function eventHandler(data, item, callback) {
   // Валидация полей мощности
   // лошадиные силы
   if (item.name === "NPOWER") {
-    const fieldNHORSE = findField("NPOWER");
+    const fieldNHORSE = findField(data, "NPOWER");
     // Условие если пользователь ввел больше 999
     if (item.value > 999) {
       fieldNHORSE.state = false;
@@ -219,7 +221,7 @@ async function eventHandler(data, item, callback) {
     }
     // условие если пользователь ввел 0
     else if (item.value < 1) {
-      const fieldNKH = findField("NKVT_POWER");
+      const fieldNKH = findField(data, "NKVT_POWER");
       fieldNKH.value = null;
       if (fieldNHORSE.state !== null) {
         fieldNKH.state = null;
@@ -230,7 +232,7 @@ async function eventHandler(data, item, callback) {
     } else if (!item.value) {
       fieldNHORSE.state = false;
     } else {
-      const fieldNKH = findField("NKVT_POWER");
+      const fieldNKH = findField(data, "NKVT_POWER");
       fieldNKH.value = Math.round((Number(item.value) * 100) / 1.3596) / 100;
       fieldNKH.state = true;
       delete fieldNKH.error;
@@ -241,14 +243,14 @@ async function eventHandler(data, item, callback) {
 
   // КВТ
   if (item.name === "NKVT_POWER") {
-    const fieldNKH = findField("NKVT_POWER");
+    const fieldNKH = findField(data, "NKVT_POWER");
     // условие если пользователь ввел число больше 734.77
     if (item.value > 734.77) {
       fieldNKH.state = false;
       fieldNKH.error = "Значение должно быть от 1 до 734.77";
       // условие если пользователь ввел 0
     } else if (item.value < 1) {
-      const fieldNHORSE = findField("NPOWER");
+      const fieldNHORSE = findField(data, "NPOWER");
       fieldNHORSE.value = null;
       if (fieldNKH.state !== null) {
         fieldNHORSE.state = null;
@@ -259,7 +261,7 @@ async function eventHandler(data, item, callback) {
     } else if (!item.value) {
       fieldNKH.state = false;
     } else {
-      const fieldNHORSE = findField("NPOWER");
+      const fieldNHORSE = findField(data, "NPOWER");
       fieldNHORSE.value = Math.round(Number(item.value) * 100 * 1.3596) / 100;
       fieldNHORSE.state = true;
       delete fieldNHORSE.error;
@@ -268,22 +270,14 @@ async function eventHandler(data, item, callback) {
     }
   }
 
-  if (item.name === "BNO_VIN") {
-    if (BNO_VIN.value === true) {
-      findField("SBODYNUMBER").visible = true;
-    } else {
-      findField("SBODYNUMBER").visible = false;
-    }
-  }
-
   // При отсутствии VIN скрываем поле
   if (item.name === "BNO_VIN") {
     if (BNO_VIN.value === true) {
-      findField("SBODYNUMBER").visible = true;
-      findField("SVIN").visible = false;
+      findField(data, "SBODYNUMBER").visible = true;
+      findField(data, "SVIN").visible = false;
     } else {
-      findField("SBODYNUMBER").visible = false;
-      findField("SVIN").visible = true;
+      findField(data, "SBODYNUMBER").visible = false;
+      findField(data, "SVIN").visible = true;
     }
   }
 
@@ -304,26 +298,19 @@ async function eventHandler(data, item, callback) {
 }
 
 function initHandler(data) {
-  function findField(name) {
-    const field = data.find((item) => item.name === name);
-
-    if (field) {
-      return field;
-    }
-    console.error(`findField. Поле ${name} не найдено в данных`);
-
-    return null;
-  }
-  const IDMODEL = findField("IDMODEL");
-  const Save = findField("Save");
-  const Continue = findField("Continue");
-  const regNum = findField("SREGNUM");
+  const IDMODEL = findField(data, "IDMODEL");
+  const Save = findField(data, "Save");
+  const Continue = findField(data, "Continue");
+  const regNum = findField(data, "SREGNUM");
+  const sModel = findField(data, "SMODEL");
+  const IDBRAND = findField(data, "IDBRAND");
+  const lPublic = findField(data, "LPUBLIC");
 
   Continue.visible = IDMODEL.visible;
   Save.visible = !IDMODEL.visible;
 
   ["IDMODEL", "IDBRAND", "IDVEHICLETYPE"].forEach((field) => {
-    const curField = findField(field);
+    const curField = findField(data, field);
     if (curField) {
       curField.visible = IDMODEL?.value > 0 || regNum.value?.length > 0 || regNum.value === 'N';
     }
@@ -333,19 +320,10 @@ function initHandler(data) {
     return !window.location.pathname.includes("/cabinet/");
   }
 
-  function setPublicAttr() {
-    const freeZone = isFreeZone() ? "Y" : "N";
-    const field = findField("LPUBLIC");
-
-    if (field) {
-      field.value = freeZone;
-    }
+  if (lPublic) {
+    lPublic.value = isFreeZone() ? "Y" : "N";
   }
 
-  setPublicAttr();
-  const sModel = findField("SMODEL");
-  const model = findField("IDMODEL");
-  const IDBRAND = findField("IDBRAND");
 
   const idType = data.find((f) => f.name === "IDVEHICLETYPE");
   if (idType && idType.value && idType.options && idType.options.length) {
@@ -364,7 +342,7 @@ function initHandler(data) {
   }
 
   // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели
-  if (model.state === false) {
+  if (IDMODEL.state === false) {
     setValueEmptyStateNull(sModel);
   }
 
@@ -374,8 +352,13 @@ function initHandler(data) {
 
   //  Добавляем значение в поле Марка-Модель при валидной марке и модели
 
-  if (model.state === true && IDBRAND.state === true) {
-    setValueModelBrand(IDBRAND, model, sModel);
+  if (!sModel.value) {
+    setValueModelBrand(data);
   }
   return data;
 }
+
+window.eventHandler = eventHandler;
+window.initHandler = initHandler;
+})();
+
