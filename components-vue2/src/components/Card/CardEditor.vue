@@ -472,7 +472,6 @@ export default {
             value !== 0) ||
           (error && data[i].visible)
         ) {
-          console.log(data[i]);
           valid = false;
           this.$store.commit("data_card/setFormField", data[i]);
           this.$store.commit("data_card/saveButtonClicked", false);
@@ -516,6 +515,8 @@ export default {
           }
           if (resp.data[0].ACCESS_TOKEN) {
             saveCookies(resp.data[0].ACCESS_TOKEN, resp.data[0].REFRESH_TOKEN);
+
+            this.emitUserLoggedInEvent();
           }
           if (
             (resp.data[0].ACTION !== "redirect" || action === "wizardSave") &&
@@ -743,6 +744,9 @@ export default {
     updateBlurValue($event) {
       this.callScript($event, $event);
     },
+    emitUserLoggedInEvent() {
+      window.dispatchEvent(new CustomEvent("user-logged-in", {detail: true}));
+    }
   },
 };
 </script>

@@ -233,6 +233,7 @@
             autofocus
             :disabled="isPhoneNumberDisabled"
             @blur="touchPhoneNumber"
+            @keydown="preventForNumberInput"
             @keydown.enter="requestSMS"
             @input="phoneNumberUpdated"
             name="phoneNumber"
@@ -255,6 +256,7 @@
             name="smsCode"
             :class="smsCodeClass"
             @blur="touchSMSCode"
+            @keydown="preventForNumberInput"
             @keydown.enter="sendAuthData"
             @input="updateSMSCode"
             placeholder="Введите код из СМС"
@@ -356,6 +358,8 @@ export default {
     ],
   }),
   mounted() {
+    this.addLoggedInListener();
+
     this.gosuslugiErrorMessage = new URLSearchParams(
       window.location.search
     ).get("error");
@@ -396,8 +400,7 @@ export default {
 
     isPhoneValid() {
       if (
-        this.phoneNumber.length ===
-        this.controlAuthorizationConstants.phoneNumberLength
+        this.phoneNumber.length === this.controlAuthorizationConstants.phoneNumberLength
       ) {
         return true;
       }
@@ -420,8 +423,7 @@ export default {
 
     isSmsCodeValid() {
       if (
-        this.SMSCode?.length ===
-        this.controlAuthorizationConstants.smsCodeLength
+        this.SMSCode?.length === this.controlAuthorizationConstants.smsCodeLength
       ) {
         return true;
       }
@@ -465,20 +467,15 @@ export default {
     currentErrorMessage() {
       return this.saveFormErrorMessages[this.currentErrorKey];
     },
-    isSaveCardInProgress() {
-      return this.$store.state.data_card.loading;
-    },
-  },
-  watch: {
-    isSaveCardInProgress(val) {
-      if (!val && this.isSaveDataInProgress) {
-        this.isSaveDataInProgress = false;
-
-        this.afterSaveAction();
-      }
-    },
   },
   methods: {
+    addLoggedInListener() {
+      window.addEventListener("user-logged-in", (ev) => {
+        if (ev.detail) {
+          this.afterSaveAction();
+        }
+      })
+    },
     showModal() {
       this.resetForm();
       this.isModalVisible = true;
@@ -517,9 +514,14 @@ export default {
       this.isSMSRequested = false;
       this.isPhoneNumberUpdated = true;
       this.wrongAuthData = false;
-
+      this.phoneNumber = this.phoneNumber.substring(0, this.controlAuthorizationConstants.phoneNumberLength);
       this.SMSCode = "";
       this.isFormErrorMessage = false;
+    },
+    preventForNumberInput(ev) {
+      if (ev.key === "-" || ev.key === "+") {
+        ev.preventDefault();
+      }
     },
     sendAuthData() {
       this.isSendDataInProgress = true;
