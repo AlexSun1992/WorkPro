@@ -22,6 +22,12 @@ function validateMaskedFieldOnlyNumberSymbol(field) {
   field.error = field.state ? null : "Введите корректное значение";
 }
 
+function checkFormValid(data) {
+  const requiredFields = data.filter((field) => field.visible && field.required);
+  const validFields = requiredFields.some((field) => field.error || !field.state);
+  return !validFields
+}
+
 // управляем полями СНИЛС
 function checkSnilsFields(data) {
   const [
@@ -109,6 +115,7 @@ function changeVisibleFields(data = false) {
 function initHandler(data) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
+  const emptyBlock = findField(data, "Empty_1");
 
   if (phoneNoAuth && phoneNoAuth.mask) {
     if (phoneNoAuth.state) {
@@ -124,11 +131,13 @@ function initHandler(data) {
 
   changeVisibleFields(data);
   checkSnilsFields(data);
+  emptyBlock.visible = phoneNoAuth.visible;
   return data;
 }
 
 function eventHandler(data, item) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
+  const Confirm = findField(data, "Item45937");
 
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
 
@@ -152,6 +161,17 @@ function eventHandler(data, item) {
       phoneAuth.value = `9${item.value}`;
       validateMaskedFieldOnlyNumberSymbol(phoneAuth);
     }
+  }
+
+  const formValid = checkFormValid(data);
+  Confirm.readonly = !formValid; // нужно валидировать всю форму
+
+  if (item.name === 'Item45937') {
+    const smsCode = findField(data, "SCODE");
+    const emptyBlock = findField(data, "Empty_1"); // хак для вёрстки
+    Confirm.label = 'Запросить код повторно';
+    smsCode.visible = true;
+    emptyBlock.visible = false;
   }
 
   return data;
