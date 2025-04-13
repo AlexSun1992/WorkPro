@@ -11,12 +11,14 @@ function findField(data, name) {
   if (field) {
     return field;
   }
-  throw new Error(`Поле ${name} не найдено в данных`);
+  console.error(`Поле ${name} не найдено в данных`)
+  return {};
 }
 
 const REGNUM_MASK = 'Y###YY###';
 
 function eventHandler(data, item, callback) {
+  console.log('eventHandler, 1106')
   const SREG_NUMBER = findField(data, "SREG_NUMBER");
   const seriesNumberDoc = findField(data, "SVEHDOC");
   const docNumber = findField(data, "SVEHEPTS");
@@ -91,6 +93,7 @@ function eventHandler(data, item, callback) {
 }
 
 function initHandler(data) {
+  console.log('initHandler, 1106')
   const IDVEHDOCTYPE = findField(data, "IDVEHDOCTYPE");
   const SREG_NUMBER = findField(data, "SREG_NUMBER");
   const seriesNumberDoc = findField(data, "SVEHDOC");

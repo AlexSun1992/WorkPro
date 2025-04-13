@@ -1,4 +1,6 @@
+(() => {
 function findField(data, name) {
+  console.log('card 1107');
   const field = data.find((item) => item.name === name);
   if (field) {
     return field;
@@ -23,9 +25,15 @@ function validateMaskedFieldOnlyNumberSymbol(field) {
 }
 
 function checkFormValid(data) {
-  const requiredFields = data.filter((field) => field.visible && field.required);
-  const validFields = requiredFields.some((field) => field.error || !field.state);
-  return !validFields
+  return data.some((field) => {
+    const notRequiredField = Boolean(!field.visible || !field.required || field.name === 'SCODE');
+    if (notRequiredField) {
+      return false;
+    }
+    if (field.error || !field.state) {
+      return true;
+    }
+  });
 }
 
 // управляем полями СНИЛС
@@ -176,3 +184,6 @@ function eventHandler(data, item) {
 
   return data;
 }
+  window.eventHandler = eventHandler;
+  window.initHandler = initHandler;
+})();
