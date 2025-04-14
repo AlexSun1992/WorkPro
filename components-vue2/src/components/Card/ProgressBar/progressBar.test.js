@@ -40,7 +40,7 @@ describe("Wizard ProgressBar", () => {
     });
     const totalTabs = wrapper.vm.tabs.length;
     const currentOrder = wrapper.vm.currentTabOrder;
-    const result = (100 / totalTabs) * (currentOrder - 1);
+    const result = (100 / totalTabs) * (currentOrder);
 
     expect(wrapper.html()).toContain(`width: ${Math.trunc(result)}`);
   });
