@@ -1,7 +1,16 @@
 <template>
   <div>
+    <div v-if="!isDataLoaded" class="overlay">
+      <lottie-vue-player
+        :src="'/img/loader.json'"
+        :player-controls="false"
+        :autoplay="true"
+        :loop="true"
+      />
+    </div>
+
     <ProgressBar
-      v-if="isShowProgressBar"
+      v-if="isShowProgressBar && isDataLoaded"
       :wizard-cursor="wizardCursor"
       :wizard-rels="wizardRELS"
       :wizard-i-d-c-a-r-d-s="wizardIDCARDS"
@@ -157,6 +166,9 @@ export default {
     };
   },
   computed: {
+    isDataLoaded() {
+      return !this.getLoading && this.getForm.length;
+    },
     progressBarDemo() {
       return progressBarDemo;
     },
