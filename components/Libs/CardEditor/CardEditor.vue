@@ -69,14 +69,15 @@
         @saveCard="$emit('saveCard', $event)"
       />
     </div>
-    <lottie-vue-player
-      v-if="isShowSkeletonBox"
-      :src="'/img/loader.json'"
-      :player-controls="false"
-      :autoplay="true"
-      :loop="true"
-    >
-    </lottie-vue-player>
+    <div class="overlay" v-if="isShowSkeletonBox">
+      <lottie-vue-player
+        :src="'/img/loader.json'"
+        :player-controls="false"
+        :autoplay="true"
+        :loop="true"
+      >
+      </lottie-vue-player>
+    </div>
   </div>
 </template>
 <script>
@@ -575,5 +576,19 @@ export default {
 }
 .error-message {
   padding: 15px;
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(239, 239, 240, 0.6);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: all;
 }
 </style>
