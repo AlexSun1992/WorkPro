@@ -10,8 +10,7 @@
           <div style="font-size:0.875rem;color:#868686">Текущий этап</div>
         </div>
         <div class="col-6">
-          <div v-if="nextStep.name"
-            class="text-end"
+          <div v-if="nextStep.name" class="text-end"
                style="font-size:0.875rem; color:#868686">Следующий этап
           </div>
         </div>
@@ -104,9 +103,8 @@ export default {
 
       if (nextTab) {
         result.name = nextTab.name;
-        result.url = this.getURL(nextTab.idItem)
+        result.url = this.getURL(nextTab.idItem);
       }
-
       return result;
     },
     currentTabComputed() {
@@ -115,13 +113,20 @@ export default {
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
       const currentOrder = this.currentTabOrderPosition;
+      const currentOrderIndex = [ ...this.tabs ]
+        .sort((tabA, tabB) => tabA.order - tabB.order)
+        .findIndex(item => item.order === currentOrder);
+
+      if ((totalTabs - 1) === currentOrderIndex) {
+        return "100%";
+      }
 
       if (totalTabs === 1) {
         return "100%";
       }
 
       if (totalTabs > 0 && currentOrder > 0) {
-        return `${ ((100 / totalTabs) * (currentOrder - 1)) }%`;
+        return `${(100 / totalTabs) * (currentOrderIndex )}%`;
       }
 
       return '0%';
@@ -156,26 +161,27 @@ export default {
     }
   },
   methods: {
-    getURL(itemId) {
+    getURL(itemId = "") {
       const { params } = this.$route;
-      const _itemId = itemId ?? '';
       const cardId = params.idCard ?? 0;
       const realId = this.getRelByCardId(itemId);
 
-      return !!realId && !!cardId && `/cabinet/wizard/${ params.idWizard }/${ params.idModule }/0/${ _itemId }/${ cardId }/${ realId }`;
+      return !!realId && !!cardId && `/cabinet/wizard/${ params.idWizard }/${ params.idModule }/0/${ itemId }/${ cardId }/${ realId }`;
     },
     goToTab() {
       const { params } = this.$route;
       const itemId = this.currentTabComputed?.idItem ?? params.idItem;
       const url = this.getURL(itemId);
 
-      url && this.currentTabComputed?.idItem && this.$router.push(url);
+      if (url && this.currentTabComputed?.idItem) {
+        this.$router.push(url);
+      }
     },
     getRelByCardId(id) {
       const { stepsList } = this;
-      const _id = isNaN(+id) ? 0 : +id
+      const idNum = Number.isNaN(id) ? 0 : Number(id);
 
-      return stepsList.find(item => _id === +item.cardId)?.idReal ?? null;
+      return stepsList.find(item => idNum === +item.cardId)?.idReal ?? null;
     }
   }
 }

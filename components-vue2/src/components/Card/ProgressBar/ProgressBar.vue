@@ -21,10 +21,11 @@
           <div style="font-size: 0.875rem; color: #868686">Текущий этап</div>
         </div>
         <div class="col-6">
-          <div v-if="nextStep.name"
-               class="text-end"
-               style="font-size: 0.875rem; color: #868686">
-            Следующий этап
+          <div
+           v-if="nextStep.name" class="text-end"
+            style="font-size: 0.875rem; color: #868686"
+          >
+            <template v-if="nextStep.order > -1">Следующий этап</template>
           </div>
         </div>
         <div class="col-6">
@@ -143,11 +144,12 @@ export default {
     },
     nextStep() {
       const { nextTab } = this;
-      const result = { name: "", url: "", order: nextTab?.NORDER ?? -1 };
+      const result = { name: "", url: "", order: -1 };
 
       if (nextTab) {
         result.name = nextTab?.SNAME ?? "";
         result.url = "";
+        result.order = nextTab?.NORDER ?? - 1;
       }
 
       return result;
@@ -173,13 +175,20 @@ export default {
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
       const currentOrder = this.currentTabOrderPosition;
+      const currentOrderIndex = [ ...this.tabs ]
+        .sort((tabA, tabB) => tabA.NORDER - tabB.NORDER)
+        .findIndex(item => item.NORDER === currentOrder);
+
+      if ((totalTabs - 1) === currentOrderIndex) {
+        return "100%";
+      }
 
       if (totalTabs === 1) {
         return "100%";
       }
 
       if (totalTabs > 0 && currentOrder > 0) {
-        return `${(100 / totalTabs) * (currentOrder - 1)}%`;
+        return `${(100 / totalTabs) * (currentOrderIndex)}%`;
       }
 
       return "0%";
