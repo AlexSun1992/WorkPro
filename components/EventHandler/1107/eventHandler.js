@@ -18,7 +18,9 @@ function findAllFields(data, arr) {
 
 function validateMaskedFieldOnlyNumberSymbol(field) {
   const maskOnlyNumberSymbols = field.mask.replace(/[^#]/g, "");
+
   field.state = maskOnlyNumberSymbols.length + 1 === `${field.value}`.length;
+
   field.error = field.state ? null : "Введите корректное значение";
 }
 
@@ -110,16 +112,15 @@ function initHandler(data) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
 
-  if (phoneNoAuth && phoneNoAuth.mask) {
-    if (phoneNoAuth.state) {
-      phoneNoAuth.value = `9${phoneNoAuth.value}`;
-      validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
-    }
-  }
-
   if (phoneAuth && phoneAuth.mask) {
     phoneAuth.value = `9${phoneAuth.value}`;
     validateMaskedFieldOnlyNumberSymbol(phoneAuth);
+  }
+
+  if (phoneNoAuth && phoneNoAuth.mask) {
+    if (!phoneNoAuth.value) {
+      phoneNoAuth.value = null;
+    }
   }
 
   changeVisibleFields(data);
