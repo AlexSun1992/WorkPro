@@ -1,7 +1,7 @@
 (() => {
 function validateMaskedFieldOnlySymbols(field) {
-  const maskSize = field.mask.replace(/\s+/g, "");
-  field.state = maskSize.length === field.value.length;
+  const maskSize = field.mask?.replace(/\s+/g, "");
+  field.state = maskSize?.length === field.value.length;
   field.error = field.state
     ? null
     : `Должно быть введено ${maskSize.length} символов`;
@@ -16,9 +16,10 @@ function findField(data, name) {
 }
 
 const REGNUM_MASK = 'Y###YY###';
+const STS_MASK = '#### ######';
+const PTS_MASK = 'YYYY YYYYYY';
 
 function eventHandler(data, item, callback) {
-  console.log('eventHandler, 1106')
   const SREG_NUMBER = findField(data, "SREG_NUMBER");
   const seriesNumberDoc = findField(data, "SVEHDOC");
   const docNumber = findField(data, "SVEHEPTS");
@@ -74,7 +75,7 @@ function eventHandler(data, item, callback) {
       seriesNumberDoc.mask = null;
     }
     if (countryDoc.value === 179) {
-      const mask = IDVEHDOCTYPE.value === 31 ? '#### ######' : 'YYYY YYYYYY';
+      const mask = IDVEHDOCTYPE.value === 31 ? STS_MASK : PTS_MASK;
       seriesNumberDoc.mask = mask;
     }
   }
@@ -108,7 +109,7 @@ function initHandler(data) {
     SREG_NUMBER.mask = null;
   }
   if (countryDoc.value === 179) {
-    const mask = IDVEHDOCTYPE.value === 31 ? '#### ######' : 'YYYY YYYYYY';
+    const mask = IDVEHDOCTYPE.value === 31 ? STS_MASK : PTS_MASK;
     seriesNumberDoc.mask = mask;
     SREG_NUMBER.mask = IDVEHDOCTYPE.value === 31 ? REGNUM_MASK : null;
   }

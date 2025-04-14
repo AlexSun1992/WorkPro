@@ -195,7 +195,9 @@ function eventHandler(data, item) {
   }
 
   const formInvalid = isFormInvaild(data);
-  Confirm.readonly = formInvalid; // нужно валидировать всю форму
+  if (Confirm) {
+    Confirm.readonly = formInvalid; // нужно валидировать всю форму
+  }
 
   if (item.name === 'Item45937') {
     const smsCode = findField(data, "SCODE");
