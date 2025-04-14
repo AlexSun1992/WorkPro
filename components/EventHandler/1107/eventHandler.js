@@ -21,14 +21,15 @@ function findAllFields(data, arr) {
 function validateMaskedFieldOnlyNumberSymbol(field) {
   const maskOnlyNumberSymbols = field.mask.replace(/[^#]/g, "");
 
-  field.state = maskOnlyNumberSymbols.length + 1 === `${field.value}`.length;
+  field.state = maskOnlyNumberSymbols.length === `${field.value}`.length;
 
   field.error = field.state ? null : "Введите корректное значение";
 }
 
-function checkFormValid(data) {
+function isFormInvaild(data) {
   return data.some((field) => {
     const notRequiredField = Boolean(!field.visible || !field.required || field.name === 'SCODE');
+
     if (notRequiredField) {
       return false;
     }
@@ -177,21 +178,19 @@ function eventHandler(data, item) {
   }
 
   if (item.name === "SPHOLDER_PHONENOAUTH") {
-    if (phoneNoAuth && phoneNoAuth.mask) {
-      phoneNoAuth.value = `9${item.value}`;
+    if (phoneNoAuth?.mask) {
       validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
     }
   }
 
   if (item.name === "SPHOLDER_PHONE") {
-    if (phoneAuth && phoneAuth.mask) {
-      phoneAuth.value = `9${item.value}`;
+    if (phoneAuth?.mask) {
       validateMaskedFieldOnlyNumberSymbol(phoneAuth);
     }
   }
 
-  const formValid = checkFormValid(data);
-  Confirm.readonly = !formValid; // нужно валидировать всю форму
+  const formInvalid = isFormInvaild(data);
+  Confirm.readonly = formInvalid; // нужно валидировать всю форму
 
   if (item.name === 'Item45937') {
     const smsCode = findField(data, "SCODE");
