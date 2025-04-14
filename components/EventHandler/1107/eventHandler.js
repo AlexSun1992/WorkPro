@@ -128,12 +128,11 @@ function initHandler(data) {
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
   const emptyBlock = findField(data, "Empty_1");
 
-  if (phoneAuth && phoneAuth.mask) {
-    phoneAuth.value = `9${phoneAuth.value}`;
+  if (phoneAuth?.mask) {
     validateMaskedFieldOnlyNumberSymbol(phoneAuth);
   }
 
-  if (phoneNoAuth && phoneNoAuth.mask) {
+  if (phoneNoAuth?.mask) {
     if (!phoneNoAuth.value) {
       phoneNoAuth.value = null;
     }
@@ -147,6 +146,7 @@ function initHandler(data) {
 
 function eventHandler(data, item) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
+  const ownerPhone = findField(data, "SOWNER_PHONE");
   const Confirm = findField(data, "Item45937");
 
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
@@ -177,6 +177,11 @@ function eventHandler(data, item) {
     }
   }
 
+  if (item.name === "SOWNER_PHONE") {
+    if (phoneNoAuth?.mask) {
+      validateMaskedFieldOnlyNumberSymbol(ownerPhone);
+    }
+  }
   if (item.name === "SPHOLDER_PHONENOAUTH") {
     if (phoneNoAuth?.mask) {
       validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
