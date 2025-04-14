@@ -157,6 +157,9 @@ export default {
     };
   },
   computed: {
+    getZone() {
+      return this.params.zone;
+    },
     progressBarDemo() {
       return progressBarDemo;
     },
@@ -427,7 +430,7 @@ export default {
         });
       }
       await this.saveCard({}, "wizardSave");
-      if (!this.params.idWizard && !this.getSavedError) {
+      if ((!this.params.idWizard && !this.getSavedError) || e === "Auth") {
         await this.init();
       }
     },
@@ -490,7 +493,6 @@ export default {
         const itemId = this.params.idItem;
         const cardId = this.params.idCard;
         const relId = this.params.idRel;
-        const { zone } = this.params;
         const isUploaderFieldValueExist = this.getForm.find(
           (elem) =>
             ["Uploader", "uploadFiles"].includes(elem.type) &&
@@ -506,7 +508,7 @@ export default {
           itemId,
           cardId,
           relId,
-          zone,
+          zone: this.getZone,
           form: this.getForm,
         });
         if (resp.status === 200) {
@@ -515,7 +517,6 @@ export default {
           }
           if (resp.data[0].ACCESS_TOKEN) {
             saveCookies(resp.data[0].ACCESS_TOKEN, resp.data[0].REFRESH_TOKEN);
-
             this.emitUserLoggedInEvent();
           }
           if (
@@ -524,7 +525,7 @@ export default {
           ) {
             await this.$store.dispatch("data_card/fetchForm", {
               ...this.params,
-              zone,
+              zone: this.getZone,
             });
             const isReCapthcaNeededAfterSave = isCaptchaNeeded(this.getForm);
             if (isReCapthcaNeededBeforeSave !== isReCapthcaNeededAfterSave) {
@@ -656,7 +657,7 @@ export default {
         name: e.name,
         value: e.value,
         action: e.action,
-        zone: this.params.zone,
+        zone: this.getZone,
       });
       const field = this.getForm.find((f) => f.fieldId === e.fieldId);
       const menu = this.$store.getters["menu/flatmenu"].find(
@@ -745,8 +746,8 @@ export default {
       this.callScript($event, $event);
     },
     emitUserLoggedInEvent() {
-      window.dispatchEvent(new CustomEvent("user-logged-in", {detail: true}));
-    }
+      window.dispatchEvent(new CustomEvent("user-logged-in", { detail: true }));
+    },
   },
 };
 </script>
