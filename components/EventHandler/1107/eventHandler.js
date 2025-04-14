@@ -158,6 +158,24 @@ function eventHandler(data, item) {
     checkSnilsFields(data);
   }
 
+  if (['IDPHOLDER_COUNTRY', 'IDOWNER_COUNTRY'].includes(item.name)) {
+    const countryDoctypeMap = {
+      IDPHOLDER_COUNTRY: 'IDPHOLDER_DOCTYPE',
+      IDOWNER_COUNTRY: 'IDOWNER_DOCTYPE'
+    }
+    const doctypeField = findField(data, countryDoctypeMap[item.name]);
+    if (!doctypeField.options?.length) {
+      doctypeField.state = null;
+      doctypeField.value = null;
+    }
+    if(doctypeField.options?.length) {
+      const validValue = doctypeField.options.some((option) => option.value === doctypeField.value);
+      if (!validValue) {
+        doctypeField.value = doctypeField.options[0].value;
+      }
+    }
+  }
+
   if (item.name === "SPHOLDER_PHONENOAUTH") {
     if (phoneNoAuth && phoneNoAuth.mask) {
       phoneNoAuth.value = `9${item.value}`;
