@@ -12,9 +12,144 @@ function eventHandler(data, item, callback) {
   const dFromDate = data.find((f) => f.name === "DFROM_DATE");
   const dtoDateYear = data.find((f) => f.name === "DTO_DATE_YEAR");
 
+  console.log(item, "item");
+
+  function validateDates(item, data, dFromDate, dtoDateYear) {
+    console.log(item, data, dFromDate, dtoDateYear);
+
+    const listDFROMNamesDate = ["DFROM_DATE1", "DFROM_DATE2", "DFROM_DATE3"];
+    const listDTONamesDate = ["DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
+
+    // Проверяем, относится ли поле к датам начала или окончания срока
+    const isDFROMDateExists = listDFROMNamesDate.some(
+      (name) => name === item.name
+    );
+    const isDTODateExists = listDTONamesDate.some((name) => name === item.name);
+
+    if (!isDFROMDateExists && !isDTODateExists) return;
+
+    // Форматируем даты в стандартный формат
+    const formatDate = (dateStr) => {
+      const [day, month, year] = dateStr.split(".");
+      return `${year}-${month}-${day}`;
+    };
+
+    const dateExistsReplace = formatDate(item.value);
+    const dFromDateReplace = formatDate(dFromDate.value);
+    const dtoDateYearReplace = formatDate(dtoDateYear.value);
+
+    // Преобразуем строки в объекты Date для сравнения
+    const dateInListValid = new Date(dateExistsReplace).setHours(0, 0, 0, 0);
+    const dFromDateValid = new Date(dFromDateReplace).setHours(0, 0, 0, 0);
+    const dtoDateYearValid = new Date(dtoDateYearReplace).setHours(0, 0, 0, 0);
+
+    // Очищаем предыдущие ошибки и состояния
+    const currentItem = data.find((f) => f.name === item.name);
+    currentItem.error = null;
+    currentItem.state = true;
+    // Проверяем разницу между месяцами начала и конца полиса
+    const prevDTOIndex = parseInt(item.name.replace("DFROM_DATE", ""), 10);
+    const prevDFROMIndex = parseInt(item.name.replace("DTO_DATE", ""), 10);
+    const prevDTODateName = prevDTOIndex
+      ? `DTO_DATE${prevDTOIndex}`
+      : `DFROM_DATE${prevDFROMIndex}`;
+
+    const [dFrom, mFrom, yFrom] = item.value.split(".");
+    const dateToDate = new Date(yFrom, +mFrom + 2, dFrom);
+    const toDateField = data.find((f) => f.name === prevDTODateName);
+
+    if (toDateField.value) {
+      console.log(toDateField, "toDateField");
+
+      const [dInput, mInput, yInput] = toDateField.value.split(".");
+      const dateTo = new Date(yInput, +mInput - 1, +dInput + 1);
+    }
+
+    // Проверяем границы полиса
+    if (dateInListValid > dtoDateYearValid) {
+      currentItem.error = "Дата вне границ полиса";
+      currentItem.state = false;
+      return;
+    }
+    if (dateInListValid < dFromDateValid) {
+      currentItem.error = "Дата вне границ полиса";
+      currentItem.state = false;
+
+      return;
+    }
+
+    // Если это дата начала срока (DFROM_DATE), проверяем последовательность
+    if (isDFROMDateExists && item.name !== "DFROM_DATE1") {
+      const prevDTOIndex =
+        parseInt(item.name.replace("DFROM_DATE", ""), 10) - 1;
+      const prevDTODateName = `DTO_DATE${prevDTOIndex}`;
+
+      const prevDTOItem = data.find((f) => f.name === prevDTODateName);
+      if (!prevDTOItem || !prevDTOItem.value) return;
+
+      const prevDTODateReplace = formatDate(prevDTOItem.value);
+      const prevDTODateValid = new Date(prevDTODateReplace).setHours(
+        0,
+        0,
+        0,
+        0
+      );
+      console.log(dateInListValid, " dateInListValid 1");
+      console.log(prevDTODateValid, "prevDTODateValid1");
+
+      if (dateInListValid <= prevDTODateValid) {
+        currentItem.error = "Сроки не последовательны";
+        currentItem.state = false;
+        return;
+      }
+    }
+
+    // Если это дата начала срока (DTO_DATE), проверяем последовательность
+    console.log(isDTODateExists, "isDTODateExists");
+    console.log(item.name, "item.name ");
+
+    if (isDTODateExists) {
+      console.log("tyt");
+
+      const prevDTOIndex = parseInt(item.name.replace("DTO_DATE", ""), 10) + 1;
+      const prevDTODateName = `DFROM_DATE${prevDTOIndex}`;
+
+      const prevDTOItem = data.find((f) => f.name === prevDTODateName);
+      console.log(prevDTOItem, "prevDTOItem");
+
+      if (!prevDTOItem || !prevDTOItem.value) return;
+
+      const prevDTODateReplace = formatDate(prevDTOItem.value);
+      const prevDTODateValid = new Date(prevDTODateReplace).setHours(
+        0,
+        0,
+        0,
+        0
+      );
+
+      console.log(dateInListValid, "prevDTODateReplace");
+      console.log(prevDTODateValid, "prevDTODateValid");
+
+      if (dateInListValid >= prevDTODateValid) {
+        data.find((f) => f.name === prevDTODateName).error =
+          "Сроки не последовательны";
+        data.find((f) => f.name === prevDTODateName).state = false;
+      } else {
+        data.find((f) => f.name === prevDTODateName).error = null;
+        data.find((f) => f.name === prevDTODateName).state = true;
+      }
+    }
+  }
+
+  function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
+    const [dateDay, dateMonth, dateYear] = dateString.split(".");
+    const date = new Date(dateYear, dateMonth - 1, dateDay);
+    return date;
+  }
+
   if (!field) return data;
 
-  validateDates(item, data, dFromDate, dtoDateYear);
+  console.log("after func");
 
   if (field.name === "DFROM_DATE") {
     console.log("field.name:", field.name);
@@ -90,6 +225,8 @@ function eventHandler(data, item, callback) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = true;
     data.find((f) => f.name === "DTO_DATE").visible = false;
     if (periods.value == 1) {
+      console.log("periods.value == 1");
+
       //data.find((f) => f.name === 'PERIOD_LIST').visible = true;
       if (field.name === "BPERIODS") {
         if (data.find((f) => f.name === "DFROM_DATE").value) {
@@ -107,6 +244,7 @@ function eventHandler(data, item, callback) {
             .map((n) => (n < 10 ? `0${n}` : `${n}`))
             .join(".");
           dfromDate1Field.value = formattedDate;
+          dfromDate1Field.state = true;
           let formattedDate2 = [
             dateFrom.getDate(),
             dateFrom.getMonth() + 4,
@@ -115,6 +253,7 @@ function eventHandler(data, item, callback) {
             .map((n) => (n < 10 ? `0${n}` : `${n}`))
             .join(".");
           dtoDate1Field.value = formattedDate2;
+          dtoDate1Field.state = true;
         }
       }
       data.find((f) => f.name === "SFIRST_PERIOD").visible = true;
@@ -157,30 +296,36 @@ function eventHandler(data, item, callback) {
 
       dfromDate1Field.value = formattedDate2;
     }
-    if (badd2.value == 1 && badd2.visible == true) {
+    if (badd2.value && badd2.visible == true) {
       data.find((f) => f.name === "SSECOND_PERIOD").visible = true;
       data.find((f) => f.name === "DFROM_DATE2").visible = true;
       data.find((f) => f.name === "DTO_DATE2").visible = true;
       //data.find((f) => f.name === 'BADD_THIRD').visible = true;
     } else {
+      data.find((f) => f.name === "DFROM_DATE3").visible = false;
       data.find((f) => f.name === "SSECOND_PERIOD").visible = false;
       data.find((f) => f.name === "DFROM_DATE2").visible = false;
       data.find((f) => f.name === "DTO_DATE2").visible = false;
-      //data.find((f) => f.name === 'BADD_THIRD').visible = false;
+      data.find((f) => f.name === "BADD_THIRD").visible = false;
       data.find((f) => f.name === "DFROM_DATE2").value = null;
       data.find((f) => f.name === "DTO_DATE2").value = null;
+      data.find((f) => f.name === "DFROM_DATE2").state = null;
+      data.find((f) => f.name === "DTO_DATE2").state = null;
       //data.find((f) => f.name === 'BADD_THIRD').value = 0;
     }
-    if (badd3.value == 1 && badd3.visible == true) {
+    if (badd3.value && badd3.visible == true) {
       data.find((f) => f.name === "STHIRD_PERIOD").visible = true;
       data.find((f) => f.name === "DFROM_DATE3").visible = true;
       data.find((f) => f.name === "DTO_DATE3").visible = true;
     } else {
       data.find((f) => f.name === "STHIRD_PERIOD").visible = false;
-      data.find((f) => f.name === "DFROM_DATE3").visible = false;
+      data.find((f) => f.name === "BADD_THIRD").visible = false;
       data.find((f) => f.name === "DTO_DATE3").visible = false;
       data.find((f) => f.name === "DFROM_DATE3").value = null;
+      data.find((f) => f.name === "DFROM_DATE3").visible = null;
       data.find((f) => f.name === "DTO_DATE3").value = null;
+      data.find((f) => f.name === "DFROM_DATE3").state = null;
+      data.find((f) => f.name === "DTO_DATE3").state = null;
     }
   }
   if (field.name === "DTO_DATE1") {
@@ -274,7 +419,6 @@ function eventHandler(data, item, callback) {
           toDateField.state = true;
           toDateField.error = null;
           console.log("field:", field);
-          validateDates(item, data, dFromDate, dtoDateYear);
         }
 
         if (dateToDate2 < dateTo) {
@@ -295,8 +439,11 @@ function eventHandler(data, item, callback) {
         }
       }
     }
+    validateDates(item, data, dFromDate, dtoDateYear);
   }
   if (field.name === "DTO_DATE2") {
+    console.log("DTO_DATE2");
+
     console.log("field.name:", field.name);
     if (!item.value) {
       field.error = null;
@@ -317,6 +464,8 @@ function eventHandler(data, item, callback) {
         let dateFrom = new Date(yInput, +mInput - 1, +dInput + 1);
 
         if (dateFromDate < dateFrom) {
+          console.log("Срок не менее 3 месяцев 22");
+
           // item.value = null
           field.error = "Срок не менее 3 месяцев";
           field.state = false;
@@ -330,6 +479,8 @@ function eventHandler(data, item, callback) {
     }
   }
   if (data.find((f) => f.name === "DTO_DATE2").value) {
+    console.log("ili DTO_DATE2");
+
     let [dTo, mTo, yTo] = data
       .find((f) => f.name === "DTO_DATE2")
       .value.split(".");
@@ -343,6 +494,7 @@ function eventHandler(data, item, callback) {
         data.find((f) => f.name === "STHIRD_PERIOD").visible = false;
         data.find((f) => f.name === "BADD_THIRD").visible = false;
         data.find((f) => f.name === "BADD_THIRD").value = 0;
+        data.find((f) => f.name === "BADD_THIRD").state = null;
         data.find((f) => f.name === "DFROM_DATE3").visible = false;
         data.find((f) => f.name === "DTO_DATE3").visible = false;
         data.find((f) => f.name === "DFROM_DATE3").value = null;
@@ -351,6 +503,9 @@ function eventHandler(data, item, callback) {
         data.find((f) => f.name === "BADD_THIRD").visible = true;
       }
     }
+  } else {
+    // data.find((f) => f.name === "DTO_DATE2").state = null;
+    // data.find((f) => f.name === "DFROM_DATE2").state = null;
   }
   if (field.name === "DFROM_DATE2") {
     console.log("field.name:", field.name);
@@ -379,10 +534,10 @@ function eventHandler(data, item, callback) {
           toDateField.state = true;
           toDateField.error = null;
           console.log("field:", field);
-          validateDates(item, data, dFromDate, dtoDateYear);
         }
       }
     }
+    validateDates(item, data, dFromDate, dtoDateYear);
   }
   if (field.name === "DTO_DATE3") {
     console.log("field.name:", field.name);
@@ -402,6 +557,8 @@ function eventHandler(data, item, callback) {
         let dateFrom = new Date(yInput, +mInput - 1, +dInput + 1);
 
         if (dateFromDate < dateFrom) {
+          console.log("Срок не менее 3 месяцев");
+
           // item.value = null
           field.error = "Срок не менее 3 месяцев";
           field.state = false;
@@ -412,6 +569,9 @@ function eventHandler(data, item, callback) {
         }
       }
     }
+  } else {
+    // data.find((f) => f.name === "DTO_DATE3").state = null;
+    // data.find((f) => f.name === "DFROM_DATE3").state = null;
   }
   if (field.name === "DFROM_DATE3") {
     console.log("field.name:", field.name);
@@ -437,10 +597,11 @@ function eventHandler(data, item, callback) {
         } else {
           toDateField.state = true;
           toDateField.error = null;
-          validateDates(item, data, dFromDate, dtoDateYear);
+          console.log("field:", field);
         }
       }
     }
+    validateDates(item, data, dFromDate, dtoDateYear);
   }
   if (policyType.value == 2) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = false;
@@ -672,95 +833,9 @@ function eventHandler(data, item, callback) {
     console.log(formattedDate, "formattedDate NOSAGO_TYPE");
   }
 
-  function validateDates(item, data, dFromDate, dtoDateYear) {
-    console.log(item, data, dFromDate, dtoDateYear);
-
-    const listDFROMNamesDate = ["DFROM_DATE1", "DFROM_DATE2", "DFROM_DATE3"];
-    const listDTONamesDate = ["DTO_DATE1", "DTO_DATE2", "DTO_DATE3"];
-
-    // Проверяем, относится ли поле к датам начала или окончания срока
-    const isDFROMDateExists = listDFROMNamesDate.some(
-      (name) => name === item.name
-    );
-    const isDTODateExists = listDTONamesDate.some((name) => name === item.name);
-
-    if (!isDFROMDateExists && !isDTODateExists) return;
-
-    // Форматируем даты в стандартный формат
-    const formatDate = (dateStr) => {
-      const [day, month, year] = dateStr.split(".");
-      return `${year}-${month}-${day}`;
-    };
-
-    const dateExistsReplace = formatDate(item.value);
-    const dFromDateReplace = formatDate(dFromDate.value);
-    const dtoDateYearReplace = formatDate(dtoDateYear.value);
-
-    // Преобразуем строки в объекты Date для сравнения
-    const dateInListValid = new Date(dateExistsReplace).setHours(0, 0, 0, 0);
-    const dFromDateValid = new Date(dFromDateReplace).setHours(0, 0, 0, 0);
-    const dtoDateYearValid = new Date(dtoDateYearReplace).setHours(0, 0, 0, 0);
-
-    // Очищаем предыдущие ошибки и состояния
-    const currentItem = data.find((f) => f.name === item.name);
-    currentItem.error = null;
-    currentItem.state = true;
-    // Проверяем разницу между месяцами начала и конца полиса
-    const prevDTOIndex = parseInt(item.name.replace("DFROM_DATE", ""), 10);
-    const prevDFROMIndex = parseInt(item.name.replace("DTO_DATE", ""), 10);
-    const prevDTODateName = prevDTOIndex
-      ? `DTO_DATE${prevDTOIndex}`
-      : `DFROM_DATE${prevDFROMIndex}`;
-
-    const [dFrom, mFrom, yFrom] = item.value.split(".");
-    const dateToDate = new Date(yFrom, +mFrom + 2, dFrom);
-    const toDateField = data.find((f) => f.name === prevDTODateName);
-
-    if (toDateField.value) {
-      const [dInput, mInput, yInput] = toDateField.value.split(".");
-      const dateTo = new Date(yInput, +mInput - 1, +dInput + 1);
-    }
-
-    // Проверяем границы полиса
-    if (dateInListValid > dtoDateYearValid) {
-      currentItem.error = "Дата вне границ полиса";
-      currentItem.state = false;
-      return;
-    }
-    if (dateInListValid < dFromDateValid) {
-      currentItem.error = "Дата вне границ полиса";
-      currentItem.state = false;
-
-      return;
-    }
-
-    // Если это дата начала срока (DFROM_DATE), проверяем последовательность
-    if (isDFROMDateExists && item.name !== "DFROM_DATE1") {
-      const prevDTOIndex =
-        parseInt(item.name.replace("DFROM_DATE", ""), 10) - 1;
-      const prevDTODateName = `DTO_DATE${prevDTOIndex}`;
-
-      const prevDTOItem = data.find((f) => f.name === prevDTODateName);
-      if (!prevDTOItem) return;
-
-      const prevDTODateReplace = formatDate(prevDTOItem.value);
-      const prevDTODateValid = new Date(prevDTODateReplace);
-
-      if (dateInListValid <= prevDTODateValid) {
-        currentItem.error = "Сроки не последовательны";
-        currentItem.state = false;
-      }
-    }
-  }
-  function dateCreator(dateString = new Date().toLocaleDateString("ru-RU")) {
-    const [dateDay, dateMonth, dateYear] = dateString.split(".");
-    const date = new Date(dateYear, dateMonth - 1, dateDay);
-    return date;
-  }
-
   data.map((el) => {
     if (el.name.includes("DTO_DATE") || el.name.includes("DFROM_DATE")) {
-      console.log(el);
+      console.log(el.name, el, "el");
     }
     return el;
   });
