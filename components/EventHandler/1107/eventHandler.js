@@ -65,9 +65,9 @@ function checkSnilsFields(data) {
 // управляем полями Собственник
 function changeVisibleFields(data = false) {
   const OWNER_FIELDS_NAME = [
-    "SOWNER_SECOND",
-    "SOWNER_FIRST",
-    "SOWNER_THIRD",
+    "SOWNER_SECONDNAME",
+    "SOWNER_FIRSTNAME",
+    "SOWNER_THIRDNAME",
     "DOWNER_BIRTHDATE",
     "SOWNER_PHONE",
     "SOWNER_EMAIL",
