@@ -40,12 +40,12 @@
     field.state = null;
   }
 
-  function clearType(idType, model) {
+  function clearType(idType) {
     if (idType?.value) {
       const validSelectedValue = idType.options?.find(
         (option) => option.value === idType.value
       );
-      if (!validSelectedValue || !model.value) {
+      if (!validSelectedValue) {
         idType.value = undefined;
         idType.state = null;
         idType.ckecked = false;
@@ -97,12 +97,6 @@
       lastRegNum = item.value;
     }
 
-    if (["IDVEHICLETYPE", 'IDMODEL', 'IDBRAND'].includes(item.name)) {
-      clearType(idType, IDMODEL);
-      NSEATS_COUNT.visible = idType.value === 3;
-      NWEIGHT.visible = idType.value === 4;
-    }
-
     const validRegnum = item.name === 'SREGNUM' && (regNum.value?.length < 7 || regNum.value !== 'N');
     const chips = item.name === 'IDVEHICLE_POLICY' && item.value;
 
@@ -144,6 +138,13 @@
       if (IDMODEL.state === false) {
         setValueEmptyStateNull(sModel);
       }
+    }
+
+    // Скрываем поля Вес и Пассажиры если тип не 3 и 4
+    if (["IDVEHICLETYPE", 'IDMODEL', 'IDBRAND'].includes(item.name)) {
+      clearType(idType);
+      NSEATS_COUNT.visible = idType.value === 3;
+      NWEIGHT.visible = idType.value === 4;
     }
 
     // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели
@@ -282,7 +283,7 @@
       lPublic.value = isFreeZone ? "Y" : "N";
     }
 
-    clearType(idType, IDMODEL);
+    clearType(idType);
 
     if (!IDMODEL.state || !IDBRAND.state) {
        // Сбрасываем значение в поле Марка-Модель при невалидной марке или модели

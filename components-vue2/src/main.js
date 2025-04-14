@@ -9,6 +9,7 @@ import Vue2TouchEvents from "vue2-touch-events";
 /* eslint-disable */
 import LogEvent from "../../components/LogScript/LogScript";
 import { store } from "./store/index";
+import LottieVuePlayer from "@lottiefiles/vue-lottie-player";
 
 store.$axios = axios;
 Vue.prototype.$axios = axios;
@@ -19,6 +20,7 @@ Vue.use(vueCustomElement);
 Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 Vue.use(Vue2TouchEvents);
+Vue.use(LottieVuePlayer);
 
 Sentry.init({
   Vue,

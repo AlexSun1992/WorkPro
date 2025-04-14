@@ -21,14 +21,15 @@ function findAllFields(data, arr) {
 function validateMaskedFieldOnlyNumberSymbol(field) {
   const maskOnlyNumberSymbols = field.mask.replace(/[^#]/g, "");
 
-  field.state = maskOnlyNumberSymbols.length + 1 === `${field.value}`.length;
+  field.state = maskOnlyNumberSymbols.length === `${field.value}`.length;
 
   field.error = field.state ? null : "Введите корректное значение";
 }
 
-function checkFormValid(data) {
+function isFormInvaild(data) {
   return data.some((field) => {
     const notRequiredField = Boolean(!field.visible || !field.required || field.name === 'SCODE');
+
     if (notRequiredField) {
       return false;
     }
@@ -65,9 +66,9 @@ function checkSnilsFields(data) {
 // управляем полями Собственник
 function changeVisibleFields(data = false) {
   const OWNER_FIELDS_NAME = [
-    "SOWNER_SECOND",
-    "SOWNER_FIRST",
-    "SOWNER_THIRD",
+    "SOWNER_SECONDNAME",
+    "SOWNER_FIRSTNAME",
+    "SOWNER_THIRDNAME",
     "DOWNER_BIRTHDATE",
     "SOWNER_PHONE",
     "SOWNER_EMAIL",
@@ -127,12 +128,11 @@ function initHandler(data) {
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
   const emptyBlock = findField(data, "Empty_1");
 
-  if (phoneAuth && phoneAuth.mask) {
-    phoneAuth.value = `9${phoneAuth.value}`;
+  if (phoneAuth?.mask) {
     validateMaskedFieldOnlyNumberSymbol(phoneAuth);
   }
 
-  if (phoneNoAuth && phoneNoAuth.mask) {
+  if (phoneNoAuth?.mask) {
     if (!phoneNoAuth.value) {
       phoneNoAuth.value = null;
     }
@@ -146,6 +146,7 @@ function initHandler(data) {
 
 function eventHandler(data, item) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
+  const ownerPhone = findField(data, "SOWNER_PHONE");
   const Confirm = findField(data, "Item45937");
 
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
@@ -158,22 +159,45 @@ function eventHandler(data, item) {
     checkSnilsFields(data);
   }
 
+  if (['IDPHOLDER_COUNTRY', 'IDOWNER_COUNTRY'].includes(item.name)) {
+    const countryDoctypeMap = {
+      IDPHOLDER_COUNTRY: 'IDPHOLDER_DOCTYPE',
+      IDOWNER_COUNTRY: 'IDOWNER_DOCTYPE'
+    }
+    const doctypeField = findField(data, countryDoctypeMap[item.name]);
+    if (!doctypeField.options?.length) {
+      doctypeField.state = null;
+      doctypeField.value = null;
+    }
+    if(doctypeField.options?.length) {
+      const validValue = doctypeField.options.some((option) => option.value === doctypeField.value);
+      if (!validValue) {
+        doctypeField.value = doctypeField.options[0].value;
+      }
+    }
+  }
+
+  if (item.name === "SOWNER_PHONE") {
+    if (phoneNoAuth?.mask) {
+      validateMaskedFieldOnlyNumberSymbol(ownerPhone);
+    }
+  }
   if (item.name === "SPHOLDER_PHONENOAUTH") {
-    if (phoneNoAuth && phoneNoAuth.mask) {
-      phoneNoAuth.value = `9${item.value}`;
+    if (phoneNoAuth?.mask) {
       validateMaskedFieldOnlyNumberSymbol(phoneNoAuth);
     }
   }
 
   if (item.name === "SPHOLDER_PHONE") {
-    if (phoneAuth && phoneAuth.mask) {
-      phoneAuth.value = `9${item.value}`;
+    if (phoneAuth?.mask) {
       validateMaskedFieldOnlyNumberSymbol(phoneAuth);
     }
   }
 
-  const formValid = checkFormValid(data);
-  Confirm.readonly = !formValid; // нужно валидировать всю форму
+  const formInvalid = isFormInvaild(data);
+  if (Confirm) {
+    Confirm.readonly = formInvalid; // нужно валидировать всю форму
+  }
 
   if (item.name === 'Item45937') {
     const smsCode = findField(data, "SCODE");
