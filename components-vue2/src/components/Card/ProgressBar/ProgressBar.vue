@@ -174,10 +174,9 @@ export default {
      */
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
-      const currentOrder = this.currentTabOrderPosition;
       const currentOrderIndex = [ ...this.tabs ]
         .sort((tabA, tabB) => tabA.NORDER - tabB.NORDER)
-        .findIndex(item => item.NORDER === currentOrder);
+        .findIndex(item => item.NORDER === this.currentTabOrder);
 
       if ((totalTabs - 1) === currentOrderIndex) {
         return "100%";
@@ -187,7 +186,7 @@ export default {
         return "100%";
       }
 
-      if (totalTabs > 0 && currentOrder > 0) {
+      if (totalTabs > 0 && this.currentTabOrderPosition > 0) {
         return `${(100 / totalTabs) * (currentOrderIndex)}%`;
       }
 
