@@ -9,19 +9,35 @@
     "NBUILD_YEAR",
     "NPOWER",
     "NKVT_POWER",
-    "SVIN",
-    "SBODYNUMBER",
-    "BNO_VIN",
     "BUSED_TRAILER",
+  ];
+  const changedVisibleFields = [
+    "SBODYNUMBER",
+    "SVIN",
+    "BNO_VIN", // control
     "NWEIGHT",
     "NSEATS_COUNT",
-  ];
+    ]
 
   lastRegNum = '';
 
-  function visibleTS(data, visible) {
-    const objectFieldsTS = arrFieldsTS.map((field) => findField(data, field));
-    objectFieldsTS.forEach((field) => (field.visible = visible));
+  function toggleVisibleFields(data) {
+    const objectFieldsTS = [...arrFieldsTS, ...changedVisibleFields].map((field) => findField(data, field));
+    objectFieldsTS.forEach((field) => (field.visible = false));
+  }
+  function showFields(data) {
+    const idType = findField(data, "IDVEHICLETYPE");
+    const visibleFields = arrFieldsTS.map((field) => findField(data, field));
+    visibleFields.forEach((field) => {
+      field.visible = true;
+    });
+
+    const [bodyNumber, vin, vinToggler, weight, seatsCount] = changedVisibleFields.map((field) => findField(data, field));
+    bodyNumber.visible = vinToggler.value;
+    vin.visible = !vinToggler.value;
+    vinToggler.visible = true;
+    weight.visible = idType.value === 4;
+    seatsCount.visible = idType.value === 3;
   }
 
   function findField(data, name) {
@@ -73,7 +89,6 @@
     if (['IDMODEL', 'IDBRAND', 'IDVEHICLETYPE'].includes(item.name) && IDBRAND.value === null && IDMODEL.value === null) {
       return data;
     }
-    console.log('event', item);
     const svin = findField(data, "SVIN");
     const sModel = findField(data, "SMODEL");
     const BNO_VIN = findField(data, "BNO_VIN");
@@ -88,27 +103,39 @@
     if (item.resp) {
       setValueModelBrand(data);
     }
-    const checkRegnum = item.name === 'SREGNUM' && lastRegNum === item.value;
-    if (checkRegnum) {
-      return data;
+
+    helpInformer.visible = !IDBRAND.visible && !regNum.value;
+
+    if (item.name === 'IDVEHICLE_POLICY') {
+      if (item.value) {
+        toggleVisibleFields(data);
+        Continue.visible = false;
+        Save.visible = true;
+        return data;
+      } else if (regNum.value === 'N') {
+        showFields(data)
+        Continue.visible = true;
+        Save.visible = false;
+        return data;
+      }
     }
 
-    if (item.name === 'SREGNUM' && item.value !== lastRegNum) {
+    if (item.name === 'SREGNUM') {
       lastRegNum = item.value;
+
+      if (item.value === 'N') {
+        showFields(data)
+        Continue.visible = true;
+        Save.visible = false;
+        return data;
+      } else if (regNum.value === null || regNum.value?.length < 7) {
+        toggleVisibleFields(data);
+        Continue.visible = false;
+        Save.visible = true;
+        return data;
+      }
     }
 
-    const validRegnum = item.name === 'SREGNUM' && (regNum.value?.length < 7 || regNum.value !== 'N');
-    const chips = item.name === 'IDVEHICLE_POLICY' && item.value;
-
-    if (validRegnum || chips) {
-      visibleTS(data, false);
-      Continue.visible = false;
-      Save.visible = true;
-      helpInformer.visible = true;
-      return data;
-    }
-
-    helpInformer.visible = !Continue.visible;
     Save.visible = !Continue.visible;
 
     if (item.name === "IDBRAND") {
