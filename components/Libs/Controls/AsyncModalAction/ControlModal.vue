@@ -1,26 +1,35 @@
 <template>
   <div>
     <dialog ref="modal">
-      <header>
+      <div class="dialog-header">
         <slot name="title">
           <span>{{ data.label }}</span>
         </slot>
         <button type="button" @click="closeModal" v-if="showClose">
           &#10006;
         </button>
-      </header>
+      </div>
 
-      <main>
+      <div class="dialog-main">
         <slot name="default">
           {{ data.value }}
         </slot>
-      </main>
+      </div>
 
-      <footer>
+      <div class="dialog-footer">
         <slot name="footer"> </slot>
-        <button class="btn-primary" type="button" v-if="showOk" @click="ok">Ок</button>
-        <button class="btn-secondary" type="button" v-if="showCancel" @click="cancel">Отмена</button>
-      </footer>
+        <button class="btn-primary" type="button" v-if="showOk" @click="ok">
+          Ок
+        </button>
+        <button
+          class="btn-secondary"
+          type="button"
+          v-if="showCancel"
+          @click="cancel"
+        >
+          Отмена
+        </button>
+      </div>
     </dialog>
   </div>
 </template>
@@ -40,7 +49,7 @@ export default {
     },
     showClose: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showCancel: {
       type: Boolean,
@@ -117,7 +126,7 @@ dialog {
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
-dialog header {
+.dialog-header {
   padding-top: 0;
   padding-bottom: 1rem;
   font-family: Raleway;
@@ -128,22 +137,25 @@ dialog header {
   font-feature-settings: "pnum" on, "lnum" on;
   color: #292929;
 }
-dialog main {
+.dialog-main {
   font-family: SF Pro Display;
   font-weight: 400;
   font-size: 1.125rem;
   line-height: 30px;
   color: #868686;
 }
-dialog header:before,
-dialog header:after {
+.dialog-header:before,
+.dialog-header:after {
   display: none;
+}
+.dialog-footer {
+  margin-top: 1.5rem;
 }
 @media (max-width: 568px) {
   dialog {
     padding: 30px;
   }
-  dialog header {
+  .dialog-header {
     font-size: 1rem;
     font-weight: 600;
     margin: 0 auto;
