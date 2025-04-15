@@ -1,10 +1,10 @@
 (() => {
 function validateMaskedFieldOnlySymbols(field) {
   const maskSize = field.mask?.replace(/\s+/g, "");
-  field.state = maskSize?.length === field.value.length;
+  field.state = maskSize?.length === field.value?.length;
   field.error = field.state
     ? null
-    : `Должно быть введено ${maskSize.length} символов`;
+    : `Должно быть введено ${maskSize?.length} символов`;
 }
 function findField(data, name) {
   const field = data.find((item) => item.name === name);
@@ -27,9 +27,9 @@ function eventHandler(data, item, callback) {
   const IDVEHDOCTYPE = findField(data, "IDVEHDOCTYPE");
 
   if (item.name === "SREG_NUMBER") {
-    SREG_NUMBER.value = item.value.toUpperCase();
+    SREG_NUMBER.value = item.value?.toUpperCase();
     if (Boolean(SREG_NUMBER.mask)) {
-      SREG_NUMBER.state = SREG_NUMBER.value.length > 7;
+      SREG_NUMBER.state = SREG_NUMBER.value?.length > 7;
     } else {
       SREG_NUMBER.state = null;
     }
@@ -38,9 +38,7 @@ function eventHandler(data, item, callback) {
 
   if (item.name === "SVEHDOC") {
     const field = findField(data, "SVEHDOC");
-    console.log(field, 1);
     field.value = item.value.toUpperCase();
-    console.log(field, 2);
   }
 
   if (item.name === "IDVEHDOCTYPE") {
