@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div v-if="!isDataLoaded" class="overlay">
+    <div v-if="!isDataLoaded && isShowProgressBar && !getError"
+         class="overlay">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"

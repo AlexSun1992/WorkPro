@@ -69,7 +69,7 @@
         @saveCard="$emit('saveCard', $event)"
       />
     </div>
-    <div class="overlay" v-if="isShowSkeletonBox">
+    <div class="overlay" v-if="isShowSkeletonBox && !getError">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"
@@ -84,6 +84,7 @@
 <script>
 import JsFileDownloader from "js-file-downloader";
 import mime from "mime-types";
+import { mapGetters } from "vuex";
 import Form from "~/components/Libs/Form/Form";
 import ActionButton from "~/components/Pages/Cabinet/Block/ActionButton";
 
@@ -168,6 +169,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters("data_card", [
+      "getError",
+    ]),
     isShowSkeletonBox() {
       return (
         !this.data.length ||
