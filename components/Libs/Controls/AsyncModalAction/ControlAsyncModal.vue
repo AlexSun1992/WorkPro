@@ -54,8 +54,6 @@ export default {
       type: Object,
       default() {
         return {
-          value:
-            "Проверяем данные в АИС Страхование, дождитесь завершения операции",
           label: "Пожалуйста, подождите",
         };
       },
@@ -72,6 +70,9 @@ export default {
     },
   },
   computed: {
+    valueComputed() {
+      return this.data?.value ?? "Проверяем данные в АИС Страхование, дождитесь завершения операции";
+    },
     msIntervalComputed() {
       return this.secondsInterval * 1000;
     },
@@ -82,7 +83,7 @@ export default {
     },
     dialogBodyText() {
       return (
-        this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.data.value
+        this.dialogMessage ?? this.responseData?.SMESSAGE ?? this.valueComputed
       );
     },
     isFinishResponse() {
