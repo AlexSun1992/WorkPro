@@ -57,22 +57,26 @@ export default {
           value:
             "Проверяем данные в АИС Страхование, дождитесь завершения операции",
           label: "Пожалуйста, подождите",
-          // число попыток выполнить один запрос
-          attempts: 6,
-          // секунды на выполнение одного запроса
-          secondsInterval: 5,
         };
       },
+    },
+    // число попыток выполнить один запрос
+    attempts: {
+      type: Number,
+      default: 6
+    },
+    // секунды на выполнение одного запроса
+    secondsInterval: {
+      type: Number,
+      default: 5
     },
   },
   computed: {
     msIntervalComputed() {
-      const interval = this.data.secondsInterval ?? 5;
-
-      return interval * 1000;
+      return this.secondsInterval * 1000;
     },
     cardId() {
-      const cardId = this.$store.state.data_card?.cardId;
+      const cardId = Number(this.$store.state.data_card?.cardId);
 
       return Number.isInteger(cardId) ? cardId : -1;
     },
@@ -127,7 +131,7 @@ export default {
       this.responseData = null;
 
       this.isRequestInProgress = true;
-      this.executeRequestWithTimeout(this.data.attempts);
+      this.executeRequestWithTimeout(this.attempts);
     },
     async executeRequest() {
       try {
@@ -181,7 +185,7 @@ export default {
       this.isOpenModalDisabled = state;
     },
     getTimerSeconds() {
-      return this.data.attempts * this.data.secondsInterval;
+      return this.attempts * this.secondsInterval;
     },
   },
 };
