@@ -1,9 +1,9 @@
 <template>
-  <div v-if="tabs.length > 1">
+  <div v-if="tabs.length > 0">
     <div class="wzd mt-3 mb-4">
       <div style="background-color:#D9EFD4; height:8px; width:100%; border-radius:4px;">
         <div style="background-color:#43B02A; border-radius:4px; height:8px;"
-             :style="{width: progressPosition} "/>
+             :style="{ width: progressPosition } "/>
       </div>
       <div class=row>
         <div class="col-6">
@@ -112,10 +112,9 @@ export default {
     },
     progressPosition() {
       const totalTabs = this.tabs?.length ?? 0;
-      const currentOrder = this.currentTabOrderPosition;
       const currentOrderIndex = [ ...this.tabs ]
         .sort((tabA, tabB) => tabA.order - tabB.order)
-        .findIndex(item => item.order === currentOrder);
+        .findIndex(item => item.order === this.currentTabComputed.order);
 
       if ((totalTabs - 1) === currentOrderIndex) {
         return "100%";
@@ -125,7 +124,7 @@ export default {
         return "100%";
       }
 
-      if (totalTabs > 0 && currentOrder > 0) {
+      if (totalTabs > 0 && this.currentTabOrderPosition > 0) {
         return `${(100 / totalTabs) * (currentOrderIndex )}%`;
       }
 
