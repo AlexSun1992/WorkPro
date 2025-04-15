@@ -673,6 +673,9 @@ function eventHandler(data, item, callback) {
     if (fromDatePlus3M < toDate) {
       dtoDateField.error = "Срок страхования от 1 дня до 3 месяцев";
       dtoDateField.state = false;
+    } else if (toDate < fromDate) {
+      dtoDateField.error = "Дата окончания не может быть раньше даты начала";
+      dtoDateField.state = false;
     } else {
       dtoDateField.state = true;
       dtoDateField.error = null;
