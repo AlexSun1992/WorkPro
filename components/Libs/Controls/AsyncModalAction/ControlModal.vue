@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dialog ref="modal">
+    <dialog ref="modal" @close="escPressed">
       <div class="dialog-header">
         <slot name="title">
           <span>{{ data.label }}</span>
@@ -49,7 +49,7 @@ export default {
     },
     showClose: {
       type: Boolean,
-      default: true,
+      default: true
     },
     showCancel: {
       type: Boolean,
@@ -63,6 +63,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    closeOnESC: {
+      type: Boolean,
+      default: true,
+    }
   },
   data() {
     return {
@@ -71,6 +75,17 @@ export default {
   },
   computed: {},
   methods: {
+    escPressed(ev) {
+      if (ev.code !== "Escape") {
+        return;
+      }
+
+      ev.preventDefault();
+
+      if (this.closeOnESC) {
+        this.closeModal();
+      }
+    },
     closeModal() {
       this.isModalOpen = false;
       this.$refs?.modal?.close();
@@ -91,6 +106,12 @@ export default {
       this.$refs.modal.close();
       this.$emit("ok");
     },
+  },
+  mounted() {
+    window.addEventListener('keydown', this.escPressed);
+  },
+  destroyed() {
+    window.removeEventListener("keydown", this.escPressed);
   },
   watch: {
     isOpen(val) {

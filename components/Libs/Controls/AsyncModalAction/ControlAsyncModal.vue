@@ -6,7 +6,7 @@
       @click="openModal"
       :disabled="isOpenModalDisabled"
     >
-      Оформить полис
+      {{ data.label }}
     </button>
 
     <control-modal
@@ -15,6 +15,7 @@
       @open="getRequestData"
       @close="closeModal"
       @ok="refreshData"
+      :closeOnESC="false"
       :show-cancel="false"
       :show-close="false"
       :show-ok="isRequestError"
@@ -25,7 +26,7 @@
           :duration="getTimerSeconds()"
           class="verify_timer"
         />
-        <div>{{ data.label }}</div>
+        <div>{{ modalTitle }}</div>
       </template>
 
       <template>
@@ -54,7 +55,7 @@ export default {
       type: Object,
       default() {
         return {
-          label: "Пожалуйста, подождите",
+          label: "Оформить полис",
         };
       },
     },
@@ -68,6 +69,10 @@ export default {
       type: Number,
       default: 5
     },
+    modalTitle: {
+      type: String,
+      default: "Пожалуйста, подождите"
+    }
   },
   computed: {
     valueComputed() {
