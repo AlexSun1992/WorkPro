@@ -3,7 +3,12 @@
     <div v-if="data.label != null" class="mb-3">{{ data.label }}</div>
     <div class="row">
       <div class="col-auto col-xl-4 mb-3">
-        <button type="button" class="btn-secondary" @click="showModal">
+        <button
+          type="button"
+          class="btn-secondary"
+          @click="showModal"
+          id="btn_osago_form_auth"
+        >
           <svg
             width="24"
             height="24"
@@ -20,7 +25,7 @@
         </button>
       </div>
       <div class="col-auto col-xl-4 mb-3" @click="goESIA">
-        <button type="button" class="btn-gosuslugi">
+        <button type="button" class="btn-gosuslugi" id="btn_osago_form_esia">
           <svg
             data-v-5e3cce17=""
             width="25"
@@ -400,7 +405,8 @@ export default {
 
     isPhoneValid() {
       if (
-        this.phoneNumber.length === this.controlAuthorizationConstants.phoneNumberLength
+        this.phoneNumber.length ===
+        this.controlAuthorizationConstants.phoneNumberLength
       ) {
         return true;
       }
@@ -423,7 +429,8 @@ export default {
 
     isSmsCodeValid() {
       if (
-        this.SMSCode?.length === this.controlAuthorizationConstants.smsCodeLength
+        this.SMSCode?.length ===
+        this.controlAuthorizationConstants.smsCodeLength
       ) {
         return true;
       }
@@ -474,7 +481,7 @@ export default {
         if (ev.detail) {
           this.afterSaveAction();
         }
-      })
+      });
     },
     showModal() {
       this.resetForm();
@@ -514,7 +521,10 @@ export default {
       this.isSMSRequested = false;
       this.isPhoneNumberUpdated = true;
       this.wrongAuthData = false;
-      this.phoneNumber = this.phoneNumber.substring(0, this.controlAuthorizationConstants.phoneNumberLength);
+      this.phoneNumber = this.phoneNumber.substring(
+        0,
+        this.controlAuthorizationConstants.phoneNumberLength
+      );
       this.SMSCode = "";
       this.isFormErrorMessage = false;
     },
