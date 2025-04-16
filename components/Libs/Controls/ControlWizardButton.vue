@@ -3,6 +3,7 @@
     type="button"
     :disabled="isLoading"
     :class="classStyle"
+    :id="this.data.webId"
     @click="action"
   >
     {{ buttonName }}
