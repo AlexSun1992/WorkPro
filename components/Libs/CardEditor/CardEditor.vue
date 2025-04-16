@@ -69,7 +69,7 @@
         @saveCard="$emit('saveCard', $event)"
       />
     </div>
-    <div class="overlay" v-if="isShowSkeletonBox && !getError">
+    <div class="overlay" v-if="isShowLoader">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"
@@ -171,12 +171,19 @@ export default {
   computed: {
     ...mapGetters("data_card", [
       "getError",
+      "getLoading"
+    ]),
+    ...mapGetters("wizard", [
+      "getIsWizardButtonsLoading"
     ]),
     isShowSkeletonBox() {
       return (
         !this.data.length ||
         (!this.isScriptLoaded && !this.$route.params.idWizard)
       );
+    },
+    isShowLoader() {
+      return this.getLoading || this.isSaving || this.getIsWizardButtonsLoading;
     },
     isActionFormDisabled() {
       return this.$store.getters["data_card/getIsActionFormDisabled"];

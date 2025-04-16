@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!isDataLoaded && isShowProgressBar && !getError"
+    <div v-if="isShowLoader"
          class="overlay">
       <lottie-vue-player
         :src="'/img/loader.json'"
@@ -173,6 +173,9 @@ export default {
     isDataLoaded() {
       return !this.getLoading && this.getForm.length;
     },
+    isShowLoader() {
+      return (this.getLoading || this.isSaving || this.getIsWizardButtonsLoading) && this.params.idWizard;
+    },
     progressBarDemo() {
       return progressBarDemo;
     },
@@ -187,6 +190,9 @@ export default {
       "getLoading",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
+    ...mapGetters("wizard", [
+      "getIsWizardButtonsLoading"
+    ]),
     isReadOnly() {
       return this.$store.getters["data_card/getReadOnly"];
     },
