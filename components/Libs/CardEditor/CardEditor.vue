@@ -168,6 +168,10 @@ export default {
       console.warn(`Ошибка загрузки скрипта`);
     }
   },
+  beforeDestroy() {
+    console.log('!!!! ****** !!!!!!!')
+    this.$store.commit("data_card/clearCachedUrls");
+  },
   computed: {
     ...mapGetters("data_card", [
       "getError",

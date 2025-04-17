@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div v-if="isShowLoader"
-         class="overlay">
+    <div v-if="isShowLoader" class="overlay">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"
@@ -298,6 +297,10 @@ export default {
 
   created() {
     this.init();
+  },
+  beforeDestroy() {
+
+    this.$store.commit("data_card/clearCachedUrls");
   },
   methods: {
     async init() {

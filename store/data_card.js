@@ -1282,4 +1282,8 @@ export const mutations = {
       field.visible = field.fieldId !== 66047;
     });
   },
+  clearCachedUrls(state) {
+    state.form = state.form?.map(item => ({...item, options: null})) ?? [];
+    state.dictionaries = [];
+  }
 };
