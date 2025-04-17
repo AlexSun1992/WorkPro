@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div v-if="!isDataLoaded && isShowProgressBar && !getError" class="overlay">
+    <div v-if="isShowLoader"
+         class="overlay">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"
@@ -172,6 +173,9 @@ export default {
     isDataLoaded() {
       return !this.getLoading && this.getForm.length;
     },
+    isShowLoader() {
+      return (this.getLoading || this.isSaving || this.getIsWizardButtonsLoading) && this.params.idWizard;
+    },
     progressBarDemo() {
       return progressBarDemo;
     },
@@ -186,6 +190,9 @@ export default {
       "getLoading",
     ]),
     ...mapGetters("auth", ["getLogged", "getUser"]),
+    ...mapGetters("wizard", [
+      "getIsWizardButtonsLoading"
+    ]),
     isReadOnly() {
       return this.$store.getters["data_card/getReadOnly"];
     },
@@ -664,7 +671,6 @@ export default {
     },
 
     async updateValue(e) {
-      console.log("here", e);
       await this.$store.dispatch("data_card/setActionFormField", {
         fieldId: e.fieldId,
         name: e.name,

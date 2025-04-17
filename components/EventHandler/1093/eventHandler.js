@@ -1,4 +1,5 @@
 async function eventHandler(data, item, callback) {
+  console.log(item.name, item.value)
   const copyData = JSON.parse(JSON.stringify(data));
 
   function isValidValueLength(item, length) {
@@ -233,6 +234,7 @@ async function eventHandler(data, item, callback) {
 }
 
 function initHandler(data) {
+  console.log('init, ', data)
   const copyData = JSON.parse(JSON.stringify(data));
 
   function findField(dataSet, name) {

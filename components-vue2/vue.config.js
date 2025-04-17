@@ -6,10 +6,10 @@ module.exports = {
   devServer: {
     proxy: {
       "^/free": {
-        target: "https://demo.reso.ru",
+        target: "https://demo-actuary.reso.ru",
       },
       "^/am": {
-        target: "https://demo.reso.ru",
+        target: "https://demo-actuary.reso.ru",
       },
       "^/cabinet|^/img|^/fonts|^/js|^/_nuxt|^/api": {
         target: "http://localhost:8000",
