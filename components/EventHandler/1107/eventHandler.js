@@ -147,7 +147,7 @@ function initHandler(data) {
 function eventHandler(data, item) {
   const phoneNoAuth = findField(data, "SPHOLDER_PHONENOAUTH");
   const ownerPhone = findField(data, "SOWNER_PHONE");
-  const Confirm = findField(data, "Item45937");
+  const Confirm = findField(data, "Item45937") || findField(data, "Item46218");
 
   const phoneAuth = findField(data, "SPHOLDER_PHONE");
 
@@ -199,7 +199,7 @@ function eventHandler(data, item) {
     Confirm.readonly = formInvalid; // нужно валидировать всю форму
   }
 
-  if (item.name === 'Item45937') {
+  if (['Item45937', 'Item46218'].includes(item.name)) {
     const smsCode = findField(data, "SCODE");
     const emptyBlock = findField(data, "Empty_1"); // хак для вёрстки
     Confirm.label = 'Запросить код повторно';
