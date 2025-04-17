@@ -299,7 +299,6 @@ export default {
     this.init();
   },
   beforeDestroy() {
-
     this.$store.commit("data_card/clearCachedUrls");
   },
   methods: {

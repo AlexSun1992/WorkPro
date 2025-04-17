@@ -169,7 +169,6 @@ export default {
     }
   },
   beforeDestroy() {
-    console.log('!!!! ****** !!!!!!!')
     this.$store.commit("data_card/clearCachedUrls");
   },
   computed: {
