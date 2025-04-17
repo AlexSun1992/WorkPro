@@ -179,11 +179,11 @@ export default async function redirectFromEsia(req, res) {
   }
 
   const successUrl = new URL(
-    decodeURIComponent(cookieRef) || "/cabinet",
+    decodeURIComponent(decodeURIComponent(cookieRef)) || "/cabinet",
     "https://f.f"
   );
   const errorUrl = new URL(
-    decodeURIComponent(cookieRefError) || "/login",
+    decodeURIComponent(decodeURIComponent(cookieRefError)) || "/login",
     "https://f.f"
   );
   errorUrl.searchParams.set(

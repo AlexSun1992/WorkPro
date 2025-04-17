@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div v-if="!isDataLoaded && isShowProgressBar && !getError"
-         class="overlay">
+    <div v-if="!isDataLoaded && isShowProgressBar && !getError" class="overlay">
       <lottie-vue-player
         :src="'/img/loader.json'"
         :player-controls="false"
@@ -665,6 +664,7 @@ export default {
     },
 
     async updateValue(e) {
+      console.log("here", e);
       await this.$store.dispatch("data_card/setActionFormField", {
         fieldId: e.fieldId,
         name: e.name,
@@ -687,7 +687,7 @@ export default {
         );
         const actionExecute = menu.ACTIONSCUR.find(
           (item) =>
-            item.NTYPE === 4 || (item.NTYPE === 56 && item.ID === actionId)
+            (item.NTYPE === 4 || item.NTYPE === 56) && item.ID === actionId
         );
         if (actionSaveCard?.ID === actionId) {
           this.$store.commit("data_card/saveButtonClicked", true);
@@ -706,7 +706,7 @@ export default {
             moduleId: this.params.idModule,
             actionId: parseInt(e.value.replace("Item", ""), 10),
             cardId: this.params.idCard,
-            zone: this.zone,
+            zone: this.getZone,
           });
           const response = await this.$store.dispatch(
             "data_card/executeAction",
@@ -716,7 +716,7 @@ export default {
               relId: this.params.idRel,
               rowId: this.params.idCard,
               body: this.$store.getters["data_card/getActionParams"],
-              zone: this.zone,
+              zone: this.getZone,
             }
           );
           if (response?.status === 200) {
