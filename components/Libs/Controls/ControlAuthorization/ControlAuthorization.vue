@@ -497,6 +497,10 @@ export default {
         ID: null,
       };
 
+      if (this.isSMSButtonDisabled) {
+        return;
+      }
+
       this.startSMSRequest();
 
       const authResp = await controlAuthorizationHelper.requestSmsCode(smsData);
@@ -534,6 +538,10 @@ export default {
       }
     },
     sendAuthData() {
+      if(this.isAuthButtonDisabled) {
+        return;
+      }
+
       this.isSendDataInProgress = true;
       this.isAuthDataRequestInProgress = true;
 
