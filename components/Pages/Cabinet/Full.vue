@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nuxt-child :key="urlScript" />
+    <nuxt-child />
   </div>
 </template>
 
