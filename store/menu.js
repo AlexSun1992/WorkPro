@@ -81,6 +81,7 @@ export const actions = {
     }
   },
   async fetchMenuById({ commit, dispatch, state }, params) {
+    await dispatch("wizard/isWizardButtonsLoading", true);
     try {
       if (params !== null) {
         const URL =
