@@ -1,3 +1,15 @@
+function validateBoolean(value) {
+  if (!value) return false;
+  if (typeof value === "boolean") return value;
+
+  if (["Y", "Д", "true"].includes(value)) {
+    return true;
+  }
+  if (["N", "Н", "false"].includes(value)) {
+    return false;
+  }
+}
+
 async function eventHandler(data, item, callback) {
   console.log(item.name, item.value)
   const copyData = JSON.parse(JSON.stringify(data));
@@ -257,7 +269,8 @@ function initHandler(data) {
           "LPREV_LICENSE"
         );
 
-        if (LPREV_LICENSE.value == "Y") {
+        const lprevTrue = validateBoolean(LPREV_LICENSE.value);
+        if (lprevTrue) {
           LPREV_LICENSE.value = true;
           findField(
             INSURED_LIST.value[index],
@@ -271,7 +284,7 @@ function initHandler(data) {
           ).visible = true;
         }
 
-        if (LPREV_LICENSE.value == "N") {
+        if (!lprevTrue) {
           LPREV_LICENSE.value = false;
           findField(
             INSURED_LIST.value[index],

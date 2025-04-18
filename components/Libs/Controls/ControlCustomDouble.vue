@@ -9,7 +9,7 @@
       <span v-if="data.helpText" class="position-relative"
         >&nbsp;
         <span class="tooltipster">
-          (?)<vue-easy-tooltip with-arrow="true" position="top" offset="4">
+          (?)<vue-easy-tooltip :with-arrow="true" position="top" :offset="4">
             <span v-html="data.helpText"></span></vue-easy-tooltip></span></span
     ></template>
     <currency-input
