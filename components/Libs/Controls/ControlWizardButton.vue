@@ -50,7 +50,9 @@ export default {
       );
     },
     action() {
-      this.$store.commit("data_card/setLoading", true);
+      // При возникновении ошибки валидации для components-vue2 CardEditor если фронт не пропускает далее
+      // на запрос форму появляется лоудер и не пропадает. Перенёс признак установку статуса загрузки в методы
+      // this.$store.commit("data_card/setLoading", true);
       if (this.data.name === "Continue") {
         this.goNext();
       }
@@ -63,6 +65,7 @@ export default {
     },
     goBack() {
       if (this.$route) {
+        this.$store.commit("data_card/setLoading", true);
         this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
         const tab = this.tabs[this.getCurrentIndex() - 1];
         this.$emit("goBack", tab);
@@ -72,12 +75,14 @@ export default {
     },
     saveCard() {
       if (this.$route) {
+        this.$store.commit("data_card/setLoading", true);
         this.$store.dispatch("wizard/isWizardButtonsLoading", true);
       }
       this.$emit("saveCard", "Save");
     },
     async goNext() {
       if (this.$route) {
+        this.$store.commit("data_card/setLoading", true);
         this.$store.dispatch("wizard/isWizardButtonsLoading", true);
         this.$store.commit("wizard/setWizardIsErrorActionExecute", false);
         const menu = this.$store.getters["menu/flatmenu"].find(
