@@ -49,7 +49,7 @@ export default {
     },
     showClose: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showCancel: {
       type: Boolean,
@@ -66,7 +66,7 @@ export default {
     closeOnESC: {
       type: Boolean,
       default: true,
-    }
+    },
   },
   data() {
     return {
@@ -108,7 +108,7 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('keydown', this.escPressed);
+    window.addEventListener("keydown", this.escPressed);
   },
   destroyed() {
     window.removeEventListener("keydown", this.escPressed);

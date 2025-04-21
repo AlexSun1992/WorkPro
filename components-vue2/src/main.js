@@ -9,6 +9,7 @@ import Vue2TouchEvents from "vue2-touch-events";
 /* eslint-disable */
 import LogEvent from "../../components/LogScript/LogScript";
 import { store } from "./store/index";
+import LottieVuePlayer from "@lottiefiles/vue-lottie-player";
 
 store.$axios = axios;
 Vue.prototype.$axios = axios;
@@ -19,6 +20,7 @@ Vue.use(vueCustomElement);
 Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 Vue.use(Vue2TouchEvents);
+Vue.use(LottieVuePlayer);
 
 Sentry.init({
   Vue,
@@ -56,6 +58,16 @@ Vue.customElement(
     new Promise((resolve) => {
       require(["./components/Login/LoginButton.vue"], (lazyComponent) => {
         lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
+  "component-auth-form",
+  () =>
+    new Promise((resolve) => {
+      require(["./components/Login/AuthForm/AuthForm"], (lazyComponent) => {
         resolve(lazyComponent.default);
       });
     })
@@ -141,6 +153,7 @@ Vue.customElement(
       });
     })
 );
+
 Vue.customElement(
   "component-offices-map",
   () =>
@@ -253,6 +266,28 @@ Vue.customElement(
   () =>
     new Promise((resolve) => {
       require(["./components/PaymentMap/ShowCityPayment"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
+  "component-async-modal-action",
+  () =>
+    new Promise((resolve) => {
+      require(["../../components/Libs/Controls/AsyncModalAction/ControlAsyncModal.vue"], (lazyComponent) => {
+        lazyComponent.default.store = store;
+        resolve(lazyComponent.default);
+      });
+    })
+);
+
+Vue.customElement(
+  "control-modal",
+  () =>
+    new Promise((resolve) => {
+      require(["../../components/Libs/Controls/AsyncModalAction/ControlModal"], (lazyComponent) => {
         lazyComponent.default.store = store;
         resolve(lazyComponent.default);
       });

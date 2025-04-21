@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
     "lint": "vue-cli-service lint",
     "component": "node invalidateCache.mjs && cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build --target lib --inline-vue --mode production --name components src/main.js"
   },
@@ -13,6 +13,7 @@
     "bootstrap-vue": "^2.22.0",
     "core-js": "^3.6.5",
     "marked": "^3.0.7",
+    "maska": "^1.5.2",
     "vue-custom-element": "^3.3.0",
     "vue-plugin-load-script": "^1.3.6",
     "vue-recaptcha": "^1.3.0",

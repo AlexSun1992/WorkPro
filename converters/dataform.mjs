@@ -24,10 +24,10 @@ converter.setFieldsParams = (itemId, item, fields) => {
       fields[i].TYPE != "resultset"
         ? item[fields[i].FIELD]
         : converter.setArrayOfObjectFields(
-            itemId,
-            item[fields[i].FIELD],
-            fields[i].FIELDS
-          );
+          itemId,
+          item[fields[i].FIELD],
+          fields[i].FIELDS
+        );
     obj.id = itemId;
     obj.type = fields[i].TYPE;
     obj.maxlength = fields[i].PRECISION;
@@ -183,6 +183,7 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].IDCONTROL === 60) {
         obj.type = "Collapse";
       }
+
       if (webFields[i].IDCONTROL === 664) {
         obj.type = "VariantPolicy";
         if (Array.isArray(obj.value)) {
@@ -248,9 +249,9 @@ converter.form = async (data, params, instance) => {
         if (webFields[i].LDIC === false && webFields[i].LVISIBLE === true) {
           promises.push(
             instance.get(
-              `/am/${zone === "free" ? "free" : "main"}/v2/dic/55/${
+              `/am/${ zone === "free" ? "free" : "main" }/v2/dic/55/${
                 params.idItem ?? 0
-              }/${webFields[i].SNAME}/${params.id ?? 0}?${
+              }/${ webFields[i].SNAME }/${ params.id ?? 0 }?${
                 Object.values(dicParams).length
                   ? new URLSearchParams(dicParams).toString()
                   : ``
@@ -261,9 +262,9 @@ converter.form = async (data, params, instance) => {
         if (webFields[i].LDIC === true && webFields[i].LVISIBLE === true) {
           promises.push(
             instance.get(
-              `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
+              `/am/${ zone === "free" ? "free" : "main" }/v2/dicwf/${
                 webFields[i].ID
-              }/${params.id ?? 0}?${
+              }/${ params.id ?? 0 }?${
                 Object.values(dicParams).length
                   ? new URLSearchParams(dicParams).toString()
                   : ``
@@ -276,7 +277,7 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].LDIC === true && !webFields[i].SCONNECTFIELD) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
+            `/am/${ zone === "free" ? "free" : "main" }/v2/dicwf/${
               webFields[i].ID
             }`
           )
@@ -289,9 +290,9 @@ converter.form = async (data, params, instance) => {
         if (webFields[i].SNAME !== "IDVARIANT_LIST") {
           promises.push(
             instance.get(
-              `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
+              `/am/${ zone === "free" ? "free" : "main" }/v2/dic/${
                 webFields[i].IDADMMODULE
-              }/${itemId}/${webFields[i].SNAME}/${params.idList ?? 0}/null/${
+              }/${ itemId }/${ webFields[i].SNAME }/${ params.idList ?? 0 }/null/${
                 params.id ?? 0
               }`
             )
@@ -359,18 +360,18 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].LDIC === true) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
+            `/am/${ zone === "free" ? "free" : "main" }/v2/dicwf/${
               webFields[i].ID
-            }/${params.id ?? 0}?ID=${params.id ?? 0}`
+            }/${ params.id ?? 0 }?ID=${ params.id ?? 0 }`
           )
         );
       }
       if (webFields[i].LDIC === false) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
+            `/am/${ zone === "free" ? "free" : "main" }/v2/dic/${
               webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id ?? 0}`
+            }/${ itemId }/${ webFields[i].SNAME }/0/null/${ params.id ?? 0 }`
           )
         );
       }
@@ -379,18 +380,18 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].LDIC === true) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${
+            `/am/${ zone === "free" ? "free" : "main" }/v2/dicwf/${
               webFields[i].ID
-            }/${params.id ?? 0}?ID=${params.id ?? 0}`
+            }/${ params.id ?? 0 }?ID=${ params.id ?? 0 }`
           )
         );
       }
       if (webFields[i].LDIC === false) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/dic/${
+            `/am/${ zone === "free" ? "free" : "main" }/v2/dic/${
               webFields[i].IDADMMODULE
-            }/${itemId}/${webFields[i].SNAME}/0/null/${params.id ?? 0}`
+            }/${ itemId }/${ webFields[i].SNAME }/0/null/${ params.id ?? 0 }`
           )
         );
       }
@@ -400,7 +401,7 @@ converter.form = async (data, params, instance) => {
       obj.type = "RadioButton";
       promises.push(
         instance.get(
-          `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/${webFields[i].ID}`
+          `/am/${ zone === "free" ? "free" : "main" }/v2/dicwf/${ webFields[i].ID }`
         )
       );
     } else if (webFields[i].IDCONTROL == 46) {
@@ -409,7 +410,7 @@ converter.form = async (data, params, instance) => {
       if (webFields[i].NITEMDIC) {
         promises.push(
           instance.get(
-            `/am/${zone === "free" ? "free" : "main"}/v2/datacard/55/${
+            `/am/${ zone === "free" ? "free" : "main" }/v2/datacard/55/${
               webFields[i].NITEMDIC
             }/0`
           )
@@ -427,6 +428,10 @@ converter.form = async (data, params, instance) => {
       obj.type = "SelectButton";
     } else if (webFields[i].IDCONTROL == 59) {
       obj.type = "Informer";
+    } else if (webFields[i].IDCONTROL === 65) {
+      obj.type = "Authorization";
+    } else if (webFields[i].IDCONTROL === 68) {
+      obj.type = "AsyncModal";
     } else {
       obj.type = "string";
     }
@@ -440,7 +445,7 @@ converter.form = async (data, params, instance) => {
       ? webFields[i].LMASKINCLITTERALS
       : false;
     obj.colLg = webFields[i].NCOLLG ? webFields[i].NCOLLG : 12;
-    obj.width = webFields[i].NWIDTH ? `${webFields[i].NWIDTH}%` : "100%";
+    obj.width = webFields[i].NWIDTH ? `${ webFields[i].NWIDTH }%` : "100%";
     obj.name = webFields[i].SNAME;
     obj.cssClass = webFields[i].SCSSCLASS ? webFields[i].SCSSCLASS : "";
     obj.webId = webFields[i].SWEBID ? webFields[i].SWEBID : "";
@@ -514,7 +519,7 @@ converter.form = async (data, params, instance) => {
             if (isDicwf) {
               const fieldId = parseInt(
                 item.value.config.url.replace(
-                  `/am/${zone === "free" ? "free" : "main"}/v2/dicwf/`,
+                  `/am/${ zone === "free" ? "free" : "main" }/v2/dicwf/`,
                   ""
                 )
               );
@@ -528,7 +533,7 @@ converter.form = async (data, params, instance) => {
                 .replace(
                   `/am/${
                     zone === "free" ? "free" : "main"
-                  }/v2/dic/55/${itemId}/`,
+                  }/v2/dic/55/${ itemId }/`,
                   ""
                 )
                 .split("/", 1)[0];
@@ -711,7 +716,7 @@ converter.meta = (meta) => {
     const arr_split = meta.split(`\r`);
     for (let i = 0; i < arr_split.length; i++) {
       const field_meta = arr_split[i].split(`=`);
-      const value_meta = arr_split[i].replace(`${field_meta[0]}=`, "");
+      const value_meta = arr_split[i].replace(`${ field_meta[0] }=`, "");
       convert_meta[field_meta[0].toUpperCase()] = value_meta;
     }
     return convert_meta;
@@ -740,9 +745,9 @@ converter.getValue = (data) => {
     }
     if (data.type === "timestamp") {
       return data.value
-        ? moment(data.value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
-            "YYYY-MM-DD HH:mm:ss"
-          )
+        ? moment(data.value, [ "DD-MM-YYYY", "YYYY-MM-DD" ]).format(
+          "YYYY-MM-DD HH:mm:ss"
+        )
         : "NULL";
     }
     if (data.type === "enum") {
@@ -799,11 +804,11 @@ converter.save = (data) => {
               res[data[i].name] =
                 data[i].value !== null && data[i].value !== undefined
                   ? Object.values(data[i].value).map(
-                      (item) =>
-                        (item = new File([item], item.name, {
-                          type: "field/blob",
-                        }))
-                    )
+                    (item) =>
+                      (item = new File([ item ], item.name, {
+                        type: "field/blob",
+                      }))
+                  )
                   : "NULL";
             }
           }
@@ -846,9 +851,9 @@ converter.save = (data) => {
           }
         } else {
           res[data[i].name] = data[i].value
-            ? moment(data[i].value, ["DD-MM-YYYY", "YYYY-MM-DD"]).format(
-                "YYYY-MM-DD HH:mm:ss"
-              )
+            ? moment(data[i].value, [ "DD-MM-YYYY", "YYYY-MM-DD" ]).format(
+              "YYYY-MM-DD HH:mm:ss"
+            )
             : "NULL";
         }
       } else if (data[i].name.substring(0, 1) === "B") {
@@ -904,7 +909,7 @@ converter.queryParams = (data) => {
         return data.value === true ? "Д" : "Н";
       }
 
-      const transformedData = Object.entries(data).map(([key, value]) => ({
+      const transformedData = Object.entries(data).map(([ key, value ]) => ({
         key,
         value,
       }));
@@ -926,13 +931,13 @@ converter.queryParams = (data) => {
   }
 
   return Object.fromEntries(
-    Object.entries(data).map(([key, val]) => [key, getVal(val)])
+    Object.entries(data).map(([ key, val ]) => [ key, getVal(val) ])
   );
 };
 
 converter.cutHTMLFromQueryParams = (data) =>
   Object.fromEntries(
-    Object.entries(data).map(([key, val]) => [
+    Object.entries(data).map(([ key, val ]) => [
       key,
       typeof val === "string" && val !== ""
         ? val.replace(/(<([^>]+)>)/gi, "")
