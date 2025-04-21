@@ -125,7 +125,7 @@ export default {
         }
       }
       console.warn(
-        `В методе getVisible свойство ${property}  не сущесвует или задано неверно.`
+        `В методе getVisible свойство ${property} не сущесвует или задано неверно.`
       );
       return null;
     },
@@ -136,7 +136,7 @@ export default {
           return addFields[property];
         }
         console.warn(
-          `В методе getAddField свойство ${property}  не сущесвует или задано неверно. Доступные свойства: ${JSON.stringify(
+          `В методе getAddField свойство ${property} не сущесвует или задано неверно. Доступные свойства: ${JSON.stringify(
             addFields
           )}`
         );
