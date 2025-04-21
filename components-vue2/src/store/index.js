@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Vue from "vue";
 import Vuex from "vuex";
 import * as data_card from "../../../store/data_card";
