@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import * as data_card from "../../../store/data_card";
+import * as uploader from "../../../store/uploader";
+import * as wizard from "../../../store/wizard";
 import * as card from "../../../store/card";
 import * as menu from "../../../store/menu";
 import * as blocks from "../../../store/blocks";
@@ -16,6 +18,14 @@ export const store = new Vuex.Store({
     data_card: {
       namespaced: true,
       ...data_card,
+    },
+    uploader: {
+      namespaced: true,
+      ...uploader,
+    },
+    wizard: {
+      namespaced: true,
+      ...wizard,
     },
     card: {
       namespaced: true,
