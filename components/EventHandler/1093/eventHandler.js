@@ -1,4 +1,14 @@
 (() => {
+  function findField(dataSet, name) {
+    console.log(dataSet, Array.isArray(dataSet), name);
+    if (!Array.isArray(dataSet)) return {};
+    const field = dataSet.find((item) => item.name === name);
+    if (field) {
+      return field;
+    }
+    throw new Error(`Поле ${name} не найдено в данных`);
+  }
+
   function validateBoolean(value) {
     if (!value) return false;
     if (typeof value === "boolean") return value;
@@ -11,12 +21,18 @@
     }
   }
 
-  async function eventHandler(data, item) {
-    console.log(item.name, item.value);
-
-    function isValidValueLength(item, length) {
-      return item.value?.length === length;
+  function setVisibleSafety(data, name, value) {
+    console.log(data, name, 'safety')
+    const field = findField(data, name);
+    if (field) {
+      console.log(field);
+      field.visible = value;
     }
+    console.log('setVisibleSafety, end');
+  }
+
+  function eventHandler(data, item, callback) {
+    console.log(item.name, item.value, item);
 
     function getFieldFromItem(item) {
       const result = { ...item?.value?.value };
@@ -44,12 +60,14 @@
     }
 
     function validFieldByLength(item, length) {
-      const insuredList = findField("INSURED_LIST")?.value;
+      const insuredList = findField(data, "INSURED_LIST")?.value;
       const field = insuredList[item.insuredIndex]?.find(
         (field) => field.name === item.name
       );
 
-      if ("value" in item && !isValidValueLength(item, length)) {
+      const isValidValueLength = item.value?.length === length;
+
+      if ("value" in item && !isValidValueLength) {
         if (length < 5) {
           setFieldState(field, false, `Должно быть введено ${length} символа`);
         } else {
@@ -62,7 +80,7 @@
     }
 
     function validateDates(item) {
-      const insuredList = findField("INSURED_LIST")?.value;
+      const insuredList = findField(data, "INSURED_LIST")?.value;
       const list = insuredList[item.insuredIndex];
       const DINSURED_STAGEDATE = findFieldInInsuredList(
         list,
@@ -151,7 +169,7 @@
     }
 
     function isFormValid() {
-      const insuredList = findField("INSURED_LIST")?.value;
+      const insuredList = findField(data, "INSURED_LIST")?.value;
 
       return !insuredList?.some((list) =>
         list.some((item) => item.visible === true && item.state === false)
@@ -163,9 +181,9 @@
      */
     function setNextButtonState() {
       const nextButton = data.find((item) => item.name === "Continue");
-      const multiDrive = findField("BMULTI");
+      const multiDrive = findField(data, "BMULTI");
 
-      nextButton.visible = isFormValid() || multiDrive?.value;
+      setVisibleSafety(nextButton, isFormValid() || multiDrive?.value)
     }
 
     function setFieldState(field, state, errMessage) {
@@ -178,16 +196,6 @@
     const INSURED_LIST = data.find((f) => f.name === "INSURED_LIST");
     const SHELP_INFO = data.find((f) => f.name === "SHELP_INFO");
     const BMULTI = data.find(({ name }) => name === "BMULTI");
-
-    function findField(name) {
-      const field = data.find((item) => item.name === name);
-
-      if (field) {
-        return field;
-      }
-
-      console.warn(`Поле ${name} не найдено в данных`);
-    }
 
     function isDatesLatestThenSomeYears(minDate, maxDate, years = 0) {
       const modifyMinDate = minDate.setFullYear(minDate.getFullYear() + years);
@@ -209,59 +217,22 @@
       return list?.find((item) => item.name === name);
     }
 
-    function findDeepBasedField(dataSet, name, index) {
-      const field = dataSet[index]?.find((el) => el.name === name);
-
-      if (field !== undefined) {
-        return field;
-      }
-
-      console.warn(`Поле ${name} не найдено в ${dataSet}`);
-    }
-
     if (item.value?.name === "INSURED_LIST") {
-      const previousSecondName = findDeepBasedField(
-        INSURED_LIST.value,
-        "SPREV_SECONDNAME",
-        item.value.index
-      );
-      const previousCountry = findDeepBasedField(
-        INSURED_LIST.value,
-        "IDCOUNTRY_PREV",
-        item.value.index
-      );
-      const previousSeries = findDeepBasedField(
-        INSURED_LIST.value,
-        "SPREV_LICSERIA",
-        item.value.index
-      );
-      const previousNumber = findDeepBasedField(
-        INSURED_LIST.value,
-        "SPREV_LICNUMBER",
-        item.value.index
-      );
-
-      if (item?.value?.value?.value === true) {
-        previousSecondName.visible = true;
-        previousCountry.visible = true;
-        previousSeries.visible = true;
-        previousNumber.visible = true;
-      }
-
-      if (item?.value?.value?.value === false) {
-        previousSecondName.visible = false;
-        previousCountry.visible = false;
-        previousSeries.visible = false;
-        previousNumber.visible = false;
-      }
+      console.log('111111111111', INSURED_LIST.value[item?.value?.index])
+      setVisibleSafety(INSURED_LIST.value[item?.value?.index], 'SPREV_SECONDNAME', item?.value?.value?.value === true);
+      setVisibleSafety(INSURED_LIST.value[item?.value?.index], 'IDCOUNTRY_PREV', item?.value?.value?.value === true);
+      setVisibleSafety(INSURED_LIST.value[item?.value?.index], 'SPREV_LICSERIA', item?.value?.value?.value === true);
+      setVisibleSafety(INSURED_LIST.value[item?.value?.index], 'SPREV_LICNUMBER', item?.value?.value?.value === true);
     }
 
+
+    console.log(INSURED_LIST, '*')
     if (BMULTI?.value === true) {
-      INSURED_LIST.visible = false;
-      SHELP_INFO.visible = true;
+      setVisibleSafety(data, 'INSURED_LIST', false)
+      setVisibleSafety(SHELP_INFO, 'SHELP_INFO', true);
     } else {
-      INSURED_LIST.visible = true;
-      SHELP_INFO.visible = false;
+      setVisibleSafety(data, 'INSURED_LIST', true)
+      setVisibleSafety(SHELP_INFO, 'SHELP_INFO', false);
     }
 
     validateFormField(item);
@@ -271,16 +242,6 @@
 
   function initHandler(data) {
     console.log("init, ", data);
-
-    function findField(dataSet, name) {
-      const field = dataSet.find((item) => item.name === name);
-      if (field) {
-        return field;
-      }
-      throw new Error(`Поле ${name} не найдено в данных`);
-    }
-
-    eventHandler.findField = findField;
 
     const INSURED_LIST = findField(data, "INSURED_LIST");
 
@@ -293,45 +254,10 @@
           );
 
           const lprevChecked = validateBoolean(LPREV_LICENSE.value);
-          if (lprevChecked) {
-            LPREV_LICENSE.value = true;
-            findField(
-              INSURED_LIST.value[index],
-              "SPREV_SECONDNAME"
-            ).visible = true;
-            findField(
-              INSURED_LIST.value[index],
-              "IDCOUNTRY_PREV"
-            ).visible = true;
-            findField(
-              INSURED_LIST.value[index],
-              "SPREV_LICSERIA"
-            ).visible = true;
-            findField(
-              INSURED_LIST.value[index],
-              "SPREV_LICNUMBER"
-            ).visible = true;
-          }
-
-          if (!lprevChecked) {
-            LPREV_LICENSE.value = false;
-            findField(
-              INSURED_LIST.value[index],
-              "SPREV_SECONDNAME"
-            ).visible = false;
-            findField(
-              INSURED_LIST.value[index],
-              "IDCOUNTRY_PREV"
-            ).visible = false;
-            findField(
-              INSURED_LIST.value[index],
-              "SPREV_LICSERIA"
-            ).visible = false;
-            findField(
-              INSURED_LIST.value[index],
-              "SPREV_LICNUMBER"
-            ).visible = false;
-          }
+          setVisibleSafety(INSURED_LIST.value[index], 'SPREV_SECONDNAME', lprevChecked);
+          setVisibleSafety(INSURED_LIST.value[index], 'IDCOUNTRY_PREV', lprevChecked);
+          setVisibleSafety(INSURED_LIST.value[index], 'SPREV_LICSERIA', lprevChecked);
+          setVisibleSafety(INSURED_LIST.value[index], 'SPREV_LICSERIA', lprevChecked);
         }
       })
     );
