@@ -201,8 +201,6 @@ function eventHandler(data, item, callback) {
 
   if (!field) return data;
 
-  console.log("after func");
-
   if (field.name === "DFROM_DATE") {
     console.log("field.name:", field.name);
     if (!item.value) {
@@ -229,7 +227,6 @@ function eventHandler(data, item, callback) {
       toDate.value = formattedDate;
       let toDate1 = data.find((f) => f.name === "DTO_DATE_YEAR");
       toDate1.value = formattedDate;
-      console.log(formattedDate, "formattedDate DFORMDATE");
       dateFrom = new Date(dFrom, mFrom, yFrom);
       const inputDateField = data.find((f) => f.name === "DCALC_DATE");
       if (inputDateField.value) {
@@ -241,7 +238,6 @@ function eventHandler(data, item, callback) {
         const MinInputDate = new Date(yInput, +mInput - 1, +dInput + 1);
 
         if (dateInputDate < MinInputDate) {
-          // item.value = null
           field.error =
             "Дата начала должна быть позже даты заключения на 1 дня";
           field.state = false;
@@ -251,7 +247,6 @@ function eventHandler(data, item, callback) {
         } else {
           field.state = true;
           field.error = null;
-          console.log("field:", field);
         }
       }
     }
@@ -297,7 +292,6 @@ function eventHandler(data, item, callback) {
     if (periods.value == 1) {
       console.log("periods.value == 1");
 
-      //data.find((f) => f.name === 'PERIOD_LIST').visible = true;
       if (field.name === "BPERIODS") {
         if (data.find((f) => f.name === "DFROM_DATE").value) {
           let [dFrom, mFrom, yFrom] = data
@@ -331,7 +325,6 @@ function eventHandler(data, item, callback) {
       data.find((f) => f.name === "DTO_DATE1").visible = true;
       data.find((f) => f.name === "BADD_SECOND").visible = true;
     } else {
-      //data.find((f) => f.name === 'PERIOD_LIST').visible = false;
       data.find((f) => f.name === "SFIRST_PERIOD").visible = false;
       data.find((f) => f.name === "DFROM_DATE1").visible = false;
       data.find((f) => f.name === "DTO_DATE1").visible = false;
@@ -352,7 +345,6 @@ function eventHandler(data, item, callback) {
       ]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
-      console.log(formattedDate, "formattedDate");
 
       dtoDateField.value = formattedDate;
       let formattedDate2 = [
@@ -362,7 +354,6 @@ function eventHandler(data, item, callback) {
       ]
         .map((n) => (n < 10 ? `0${n}` : `${n}`))
         .join(".");
-      console.log(formattedDate2, "formattedDate2");
 
       dfromDate1Field.value = formattedDate2;
     }
@@ -370,7 +361,6 @@ function eventHandler(data, item, callback) {
       data.find((f) => f.name === "SSECOND_PERIOD").visible = true;
       data.find((f) => f.name === "DFROM_DATE2").visible = true;
       data.find((f) => f.name === "DTO_DATE2").visible = true;
-      //data.find((f) => f.name === 'BADD_THIRD').visible = true;
     } else {
       data.find((f) => f.name === "DFROM_DATE3").visible = false;
       data.find((f) => f.name === "SSECOND_PERIOD").visible = false;
@@ -381,7 +371,6 @@ function eventHandler(data, item, callback) {
       data.find((f) => f.name === "DTO_DATE2").value = null;
       data.find((f) => f.name === "DFROM_DATE2").state = null;
       data.find((f) => f.name === "DTO_DATE2").state = null;
-      //data.find((f) => f.name === 'BADD_THIRD').value = 0;
     }
     if (badd3.value && badd3.visible == true) {
       data.find((f) => f.name === "STHIRD_PERIOD").visible = true;
@@ -522,8 +511,6 @@ function eventHandler(data, item, callback) {
   }
   if (field.name === "DTO_DATE2") {
     console.log("DTO_DATE2");
-
-    console.log("field.name:", field.name);
     if (!item.value) {
       field.error = null;
       return data;
@@ -537,16 +524,12 @@ function eventHandler(data, item, callback) {
       let dateTo = new Date(yTo, +mTo - 1, +dTo + 1);
       const fromDateField = data.find((f) => f.name === "DFROM_DATE2");
       const fromDate1Field = data.find((f) => f.name === "DFROM_DATE1");
-      console.log(fromDateField.value, "fromDateField.value");
 
       if (fromDateField.value) {
         let [dInput, mInput, yInput] = fromDateField.value.split(".");
         let dateFrom = new Date(yInput, +mInput - 1, +dInput + 1);
 
         if (dateFromDate < dateFrom) {
-          console.log("Срок не менее 3 месяцев 22");
-
-          // item.value = null
           field.error = "Срок не менее 3 месяцев";
           field.state = false;
         } else if (!checkDateRange(fromDate1Field.value, item.value, 9)) {
@@ -554,15 +537,12 @@ function eventHandler(data, item, callback) {
         } else {
           field.state = true;
           field.error = null;
-          console.log("field:", field);
           validateDates(item, data, dFromDate, dtoDateYear);
         }
       }
     }
   }
   if (data.find((f) => f.name === "DTO_DATE2").value) {
-    console.log("ili DTO_DATE2");
-
     let [dTo, mTo, yTo] = data
       .find((f) => f.name === "DTO_DATE2")
       .value.split(".");
@@ -585,12 +565,8 @@ function eventHandler(data, item, callback) {
         data.find((f) => f.name === "BADD_THIRD").visible = true;
       }
     }
-  } else {
-    // data.find((f) => f.name === "DTO_DATE2").state = null;
-    // data.find((f) => f.name === "DFROM_DATE2").state = null;
   }
   if (field.name === "DFROM_DATE2") {
-    console.log("field.name:", field.name);
     if (!item.value) {
       field.error = null;
       return data;
@@ -651,9 +627,6 @@ function eventHandler(data, item, callback) {
         }
       }
     }
-  } else {
-    // data.find((f) => f.name === "DTO_DATE3").state = null;
-    // data.find((f) => f.name === "DFROM_DATE3").state = null;
   }
   if (field.name === "DFROM_DATE3") {
     console.log("field.name:", field.name);
@@ -881,21 +854,35 @@ function eventHandler(data, item, callback) {
   if (field.name === "NOSAGO_TYPE" && item.value == 1) {
     data.find((f) => f.name === "DTO_DATE_YEAR").visible = true;
     data.find((f) => f.name === "DTO_DATE").visible = false;
+
+    const [dCreate, mCreate, yCreate] = data
+      .find((f) => f.name === "DCALC_DATE")
+      .value.split(".");
+    const dateCreate = new Date(yCreate, +mCreate, dCreate);
+    dateCreate.setDate(dateCreate.getDate() + 1);
+    const formattedCreateDate = [
+      dateCreate.getDate(),
+      dateCreate.getMonth(),
+      dateCreate.getFullYear(),
+    ]
+      .map((n) => (n < 10 ? `0${n}` : `${n}`))
+      .join(".");
+    dFromDate.value = formattedCreateDate;
+
     let [dFrom, mFrom, yFrom] = data
       .find((f) => f.name === "DFROM_DATE")
       .value.split(".");
-    let dateFrom = new Date(yFrom, +mFrom - 1, dFrom);
+    let dateFrom = new Date(yFrom, +mFrom, dFrom);
     dateFrom.setFullYear(dateFrom.getFullYear() + 1);
     dateFrom.setDate(dateFrom.getDate() - 1);
     let formattedDate = [
       dateFrom.getDate(),
-      dateFrom.getMonth() + 1,
+      dateFrom.getMonth(),
       dateFrom.getFullYear(),
     ]
       .map((n) => (n < 10 ? `0${n}` : `${n}`))
       .join(".");
     data.find((f) => f.name === "DTO_DATE_YEAR").value = formattedDate;
-    console.log(formattedDate, "formattedDate999999999");
   }
 
   data.map((el) => {
