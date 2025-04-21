@@ -6771,6 +6771,8 @@ h5.listing {
 }
 .autocomplete[data-loading="true"]:after {
   right: 16px;
+  transform: none;
+  margin-top: -10px;
 }
 
 .ui.fluid.search.selection.dropdown.disabled.is-valid {
@@ -6787,7 +6789,6 @@ h5.listing {
   width: 200px;
   height: 200px;
   box-shadow: none;
-  display: block;
 }
 .vue-lottie-player:after {
   content: "";

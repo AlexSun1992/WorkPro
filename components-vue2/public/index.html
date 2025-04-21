@@ -24,7 +24,7 @@
 
     <link
       rel="stylesheet"
-      href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap.min.3.1.css"
+      href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/bootstrap.min.6.1.css"
     />
     <link
       rel="stylesheet"
@@ -32,7 +32,7 @@
     />
     <link
       rel="stylesheet"
-      href="https://reso.ru/export/system/modules/ru.reso.v2/resources/css/vue_components_styles/vue_components_styles.css"
+      href="https://test-new.reso.ru/export/system/modules/ru.reso.v2/resources/css/vue_components_styles/vue_components_styles.css"
     />
     <link
       rel="stylesheet"
@@ -61,61 +61,14 @@
     <div class="container">
       <div class="row">
         <div class="col-12 block-block">
-          <div id="component-auth-form" data-namebutton="Авторизация">
-            <component-auth-form></component-auth-form>
-          </div>
-          <div
-            id="component-password-confirm"
-            data-namebutton="Подтверждения пароля"
-          >
-            <component-password-confirm></component-password-confirm>
-          </div>
-          <div id="component-offices-map-v2" data-namebutton="Карта офисов v2">
-            <component-offices-map-v2 />
-          </div>
-          <div id="component-offices-map" data-namebutton="Карта офисов">
-            <component-offices-map />
-          </div>
-          <div id="component-reg-form" data-namebutton="Регистрации">
-            <component-reg-form></component-reg-form>
-          </div>
-          <div id="component-show-city" data-namebutton="Выбор города">
-            <component-show-city></component-show-city>
-          </div>
-          <div id="component-card-editor-1092" data-namebutton="ОСАГО">
-            <component-card-editor module-id="55" menu-id="777" />
-          </div>
-          <!--          <div id="component-card-editor-765" data-namebutton="Проверка полиса">-->
-          <!--            <component-card-editor module-id="55" menu-id="765" />-->
-          <!--          </div>-->
-          <div
-            id="component-password-recovery-form"
-            data-namebutton="Восстановление пароля"
-          >
-            <component-password-recovery-form></component-password-recovery-form>
-          </div>
-          <div id="component-login-button" data-namebutton="Логин баттон">
-            <component-login-button />
-          </div>
-          <div id="component-login-form" data-namebutton="Форма логина">
-            <component-login-form></component-login-form>
-          </div>
-          <div id="component-footer" data-namebutton="Футер">
-            <component-footer></component-footer>
-          </div>
-          <div id="component-header" data-namebutton="Хедер">
-            <component-header></component-header>
-          </div>
-          <!--          <div id="component-card-editor-123" data-namebutton="Мигранты ЕСИА">-->
-          <!--            <component-card-editor-->
-          <!--              module-id="55"-->
-          <!--              menu-id="123"-->
-          <!--              card-id="40"-->
-          <!--              rel="BD6192E9B661E43D43616518A7FFC251"-->
-          <!--              zone="free"-->
-          <!--            />-->
-          <!--          </div>-->
+          <component-card-editor
+            module-id="55"
+            osago="true"
+            menu-id="1095"
+            card-id="0"
+          />
         </div>
+
         <div class="button-block mt-5"></div>
       </div>
     </div>
