@@ -125,15 +125,10 @@ export default {
 
 <style lang="scss" scoped>
 dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   flex-direction: column;
   width: 100%;
   pointer-events: auto;
   outline: 0;
-  margin: 0 auto;
   background: #ffffff;
   border: 1px solid #dfe3e5;
   box-sizing: border-box;
@@ -185,11 +180,8 @@ dialog::backdrop {
 
   dialog {
     width: 100%;
-    top: auto;
     bottom: 0;
     border-radius: 30px 30px 0 0;
-    transform: none;
-    left: 0;
     z-index: 1;
   }
 }

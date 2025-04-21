@@ -19,7 +19,11 @@ export default {
   computed: {},
   methods: {
     redirect() {
-      this.$router.push(this.data.value);
+      if (this.$router) {
+        this.$router.push(this.data.value);
+      } else {
+        window.location.replace(this.data.value);
+      }
     },
   },
 };
