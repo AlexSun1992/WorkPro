@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nuxt-child :key="urlScript"/>
+    <nuxt-child :key="urlScript" />
   </div>
 </template>
 
@@ -58,21 +58,19 @@ export default {
     });
   },
   async created() {
-    this.loadScript()
+    this.loadScript();
   },
 
   methods: {
     async loadScript() {
       this.$store.commit("blocks/scriptLoaded", false);
-      await getScript(
-        {
-          idModule: this.$route.params.idModule,
-          idItem: this.$route.params.idItem,
-        }
-      );
+      await getScript({
+        idModule: this.$route.params.idModule,
+        idItem: this.$route.params.idItem,
+      });
       this.$store.commit("blocks/scriptLoaded", true);
-    }
-  }
+    },
+  },
 };
 </script>
 
