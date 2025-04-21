@@ -183,7 +183,7 @@ export default {
       );
     },
     isShowLoader() {
-      return this.getLoading || this.isSaving || this.getIsWizardButtonsLoading;
+      return this.getLoading || this.getIsWizardButtonsLoading;
     },
     isActionFormDisabled() {
       return this.$store.getters["data_card/getIsActionFormDisabled"];
