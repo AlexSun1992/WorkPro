@@ -19,7 +19,6 @@ export default {
   computed: {},
   methods: {
     redirect() {
-      // TODO add router to components-vue2
       if (this.$router) {
         this.$router.push(this.data.value);
       } else {
