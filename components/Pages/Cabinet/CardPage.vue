@@ -384,7 +384,10 @@ export default {
   },
   watch: {
     getFormData(newValue, oldValue) {
-      if (JSON.stringify(newValue) === JSON.stringify(oldValue)) {
+      if (
+        JSON.stringify(newValue) === JSON.stringify(oldValue) ||
+        newValue === undefined
+      ) {
         this.$store.dispatch("wizard/isWizardButtonsLoading", false);
       }
     },
