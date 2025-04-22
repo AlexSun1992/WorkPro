@@ -656,11 +656,9 @@ export default {
 .bg-auth-information .main-blk {
   background: #ecf3fa;
 }
-
 .bg-auth-grey .main-blk {
   background: #f2f4f5;
 }
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
@@ -709,6 +707,8 @@ button {
 }
 button svg {
   margin-right: 10px;
+  width: 20px;
+  margin-top: -2px;
 }
 button:hover {
   box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.08);
